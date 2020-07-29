@@ -1,5 +1,6 @@
 package cats.tests
 
+import cats.{Contravariant, ContravariantMonoidal, Decidable}
 import cats.arrow._
 import cats.data.{Kleisli, Op}
 import cats.kernel.Eq
@@ -19,6 +20,34 @@ class OpSuite extends CatsSuite {
     implicit val catsDataCategoryForOp: Category[Op[Function1, *, *]] = Op.catsDataCategoryForOp[Function1]
     checkAll("Op[Function1, *, *]", CategoryTests[Op[Function1, *, *]].category[Char, MiniInt, Char, Boolean])
     checkAll("Category[Op[Function1, *, *]]", SerializableTests.serializable(Category[Op[Function1, *, *]]))
+  }
+
+  {
+    implicit val catsDataDecidableForOp = Op.catsDataDecidableForOp[Function1, Int]
+    checkAll("Op[Function1, Monoid, ?]", DecidableTests[Op[Function1, Int, *]].decidable[MiniInt, MiniInt, MiniInt])
+    checkAll("Decidable[Op[Function1, Monoid, ?]]", SerializableTests.serializable(Decidable[Op[Function1, Int, *]]))
+  }
+
+  {
+    implicit val catsDataContravariantMonoidalForOp = Op.catsDataContravariantMonoidalForOp[Function1, Int]
+    checkAll("Op[Function1, Monoid, ?]",
+             ContravariantMonoidalTests[Op[Function1, Int, *]].contravariantMonoidal[MiniInt, MiniInt, MiniInt]
+    )
+    checkAll("ContravariantMonoidal[Op[Function1, Monoid, ?]]",
+             SerializableTests.serializable(ContravariantMonoidal[Op[Function1, Int, *]])
+    )
+
+  }
+
+  {
+    implicit val catsDataContravariantForOp = Op.catsDataContravariantMonoidalForOp[Function1, Unit]
+    checkAll("Op[Function1, Unit, ?]",
+             ContravariantTests[Op[Function1, Unit, *]].contravariant[MiniInt, MiniInt, MiniInt]
+    )
+    checkAll("Contravariant[Op[Function1, Unit, ?]]",
+             SerializableTests.serializable(Contravariant[Op[Function1, Int, *]])
+    )
+
   }
 
   /**

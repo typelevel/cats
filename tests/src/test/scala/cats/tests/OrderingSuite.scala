@@ -6,7 +6,6 @@ import cats.laws.discipline._
 import cats.laws.discipline.eq._
 
 class OrderingSuite extends CatsSuite {
-
   Invariant[Ordering]
   Contravariant[Ordering]
   Semigroupal[Ordering]

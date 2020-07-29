@@ -4,7 +4,6 @@ package instances
 import cats.kernel.instances.unit._
 
 trait OrderInstances extends kernel.instances.OrderInstances {
-
   implicit val catsContravariantMonoidalForOrder: ContravariantMonoidal[Order] =
     new ContravariantMonoidal[Order] {
 

@@ -1,5 +1,7 @@
 package cats
 
+import cats.data.INothing
+
 private[cats] trait ComposedDistributive[F[_], G[_]] extends Distributive[λ[α => F[G[α]]]] with ComposedFunctor[F, G] {
   outer =>
   def F: Distributive[F]
@@ -131,6 +133,18 @@ private[cats] trait ComposedContravariantCovariant[F[_], G[_]] extends Contravar
 
   override def contramap[A, B](fga: F[G[A]])(f: B => A): F[G[B]] =
     F.contramap(fga)(gb => G.map(gb)(f))
+}
+
+private[cats] trait ComposedApplicativeDecidable[F[_], G[_]]
+    extends Decidable[λ[α => F[G[α]]]]
+    with ComposedApplicativeContravariantMonoidal[F, G] { outer =>
+  def F: Applicative[F]
+  def G: Decidable[G]
+
+  def sum[A, B](fa: F[G[A]], fb: F[G[B]]): F[G[Either[A, B]]] =
+    F.map(F.product(fa, fb))(Function.tupled(G.sum))
+
+  override def zero[A]: F[G[INothing]] = F.pure(G.zero)
 }
 
 private[cats] trait ComposedApplicativeContravariantMonoidal[F[_], G[_]]

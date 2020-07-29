@@ -66,6 +66,11 @@ class IdTSuite extends CatsSuite {
   }
 
   {
+    checkAll("IdT[* => Boolean], ?]", DecidableTests[IdT[Predicate, *]].decidable[MiniInt, MiniInt, MiniInt])
+    checkAll("Decidable[IdT[* => Boolean, ?], ?]]", SerializableTests.serializable(Decidable[IdT[Predicate, *]]))
+  }
+
+  {
     implicit val F: FlatMap[ListWrapper] = ListWrapper.flatMap
 
     checkAll("IdT[ListWrapper, Int]", FlatMapTests[IdT[ListWrapper, *]].flatMap[Int, Int, Int])

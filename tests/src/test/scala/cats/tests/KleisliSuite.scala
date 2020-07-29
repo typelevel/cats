@@ -2,14 +2,13 @@ package cats.tests
 
 import cats._
 import cats.arrow._
-import cats.data.{Const, EitherT, Kleisli, Reader, ReaderT}
+import cats.data._
+import cats.implicits._
 import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests}
-import cats.laws.discipline._
+import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
-import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import cats.laws.discipline.{DeferTests, MonoidKTests, SemigroupKTests}
-import cats.implicits._
+import cats.laws.discipline.{DeferTests, MonoidKTests, SemigroupKTests, _}
 import cats.platform.Platform
 import cats.tests.Helpers.CSemi
 
@@ -105,12 +104,28 @@ class KleisliSuite extends CatsSuite {
   checkAll("Kleisli[Option, MiniInt, *]", AlternativeTests[Kleisli[Option, MiniInt, *]].alternative[Int, Int, Int])
   checkAll("Alternative[Kleisli[Option, Int, *]]", SerializableTests.serializable(Alternative[Kleisli[Option, Int, *]]))
 
-  checkAll("Kleisli[Const[String, *], MiniInt, *]",
-           ContravariantMonoidalTests[Kleisli[Const[String, *], MiniInt, *]].contravariantMonoidal[Int, Int, Int]
-  )
-  checkAll("ContravariantMonoidal[Kleisli[Option, Int, *]]",
-           SerializableTests.serializable(ContravariantMonoidal[Kleisli[Const[String, *], Int, *]])
-  )
+  {
+    checkAll("Kleisli[Predicate, MiniInt, MiniInt]",
+             DecidableTests[Kleisli[Predicate, MiniInt, *]].decidable[MiniInt, MiniInt, MiniInt]
+    )
+    checkAll(
+      "Decidable[Kleisli[Option, Int, ?]]",
+      SerializableTests.serializable[Decidable[Kleisli[Predicate, MiniInt, *]]](
+        Decidable[Kleisli[Predicate, MiniInt, *]]
+      )
+    )
+  }
+
+  {
+    implicit val catsDataContravariantMonoidalForKleisli =
+      Kleisli.catsDataContravariantMonoidalForKleisli[Const[String, *], Int]
+    checkAll("Kleisli[Const[String, ?], MiniInt, ?]",
+             ContravariantMonoidalTests[Kleisli[Const[String, *], MiniInt, *]].contravariantMonoidal[Int, Int, Int]
+    )
+    checkAll("ContravariantMonoidal[Kleisli[Option, Int, ?]]",
+             SerializableTests.serializable(ContravariantMonoidal[Kleisli[Const[String, ?], Int, ?]])
+    )
+  }
 
   checkAll("Kleisli[Option, MiniInt, Int]", ApplicativeTests[Kleisli[Option, MiniInt, *]].applicative[Int, Int, Int])
   checkAll("Applicative[Kleisli[Option, Int, *]]", SerializableTests.serializable(Applicative[Kleisli[Option, Int, *]]))

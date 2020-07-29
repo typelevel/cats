@@ -22,7 +22,7 @@ class OrderSuite extends CatsSuite {
   checkAll("Long", OrderTests[Long].order)
 
   checkAll("Order", ContravariantMonoidalTests[Order].contravariantMonoidal[MiniInt, Boolean, Boolean])
-  checkAll("ContravariantMonoidal[Order]", SerializableTests.serializable(ContravariantMonoidal[Order]))
+  checkAll("Decidable[Order]", SerializableTests.serializable(ContravariantMonoidal[Order]))
 
   test("order ops syntax") {
     forAll { (i: Ord, j: Ord) =>

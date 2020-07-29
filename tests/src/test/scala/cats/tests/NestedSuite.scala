@@ -104,11 +104,24 @@ class NestedSuite extends CatsSuite {
 
   {
     // Applicative + ContravariantMonoidal functor composition
-    checkAll("Nested[Option, Const[String, *], *]",
-             ContravariantMonoidalTests[Nested[Option, Const[String, *], *]].contravariantMonoidal[Int, Int, Int]
+//    implicit val isos = Isomorphisms.invariant[Nested[Option, Const[String, *], *]]
+    checkAll(
+      "Nested[Option, Const[String, *], *]",
+      ContravariantMonoidalTests[λ[α => Nested[Option, Const[String, *], α]]].contravariantMonoidal[Int, Int, Int]
     )
-    checkAll("ContravariantMonoidal[Nested[Option, Const[String, *], *]",
-             SerializableTests.serializable(ContravariantMonoidal[Nested[Option, Const[String, *], *]])
+    checkAll(
+      "ContravariantMonoidal[Nested[Option, Const[String, *], *]",
+      SerializableTests.serializable(ContravariantMonoidal[λ[α => Nested[Option, Const[String, *], α]]])
+    )
+  }
+
+  {
+    // Applicative + Decidable functor composition
+    checkAll("Nested[Option, Predicate, ?]",
+             DecidableTests[Nested[Option, Predicate, *]].decidable[MiniInt, MiniInt, MiniInt]
+    )
+    checkAll("Decidable[Nested[Option, Predicate, ?]]",
+             SerializableTests.serializable(Decidable[Nested[Option, Predicate, *]])
     )
   }
 

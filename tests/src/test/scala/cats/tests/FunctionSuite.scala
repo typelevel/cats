@@ -5,6 +5,7 @@ import cats.{
   Bimonad,
   Contravariant,
   ContravariantMonoidal,
+  Decidable,
   Defer,
   Distributive,
   Endo,
@@ -14,6 +15,7 @@ import cats.{
   Semigroupal
 }
 import cats.arrow.{ArrowChoice, Choice, CommutativeArrow}
+import cats.instances.function._
 import cats.kernel._
 import cats.kernel.laws.HashLaws
 import cats.kernel.laws.discipline.{
@@ -158,6 +160,11 @@ class FunctionSuite extends CatsSuite {
   checkAll("Function1[*, Monoid]",
            ContravariantMonoidalTests[Function1[*, Long]].contravariantMonoidal[MiniInt, MiniInt, MiniInt]
   )
+
+  // Isos for Decidable
+  implicit val isoCodomainBoolean = SemigroupalTests.Isomorphisms.invariant[Function1[*, Boolean]]
+  checkAll("Function1[?, Boolean]", DecidableTests[Function1[*, Boolean]].decidable[MiniInt, MiniInt, MiniInt])
+  checkAll("Decidable[? => Boolean]", SerializableTests.serializable(Decidable[Function1[*, Boolean]]))
 
   // serialization tests for the various Function1-related instances
   checkAll("Semigroup[String => Semi]", SerializableTests.serializable(Semigroup[String => Semi]))
