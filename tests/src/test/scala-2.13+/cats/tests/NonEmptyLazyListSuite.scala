@@ -15,6 +15,8 @@ import cats.laws.discipline.{
 import cats.laws.discipline.arbitrary._
 import cats.syntax.either._
 import cats.syntax.foldable._
+import cats.syntax.eq._
+import org.scalacheck.Prop._
 
 class NonEmptyLazyListSuite extends NonEmptyCollectionSuite[LazyList, NonEmptyLazyList, NonEmptyLazyListOps] {
   protected def toList[A](value: NonEmptyLazyList[A]): List[A] = value.toList

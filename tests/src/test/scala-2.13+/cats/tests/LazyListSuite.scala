@@ -16,7 +16,8 @@ import cats.laws.discipline.{
 }
 import cats.laws.discipline.arbitrary._
 import cats.syntax.show._
-import org.scalatest.funsuite.AnyFunSuiteLike
+import cats.syntax.eq._
+import org.scalacheck.Prop._
 
 class LazyListSuite extends CatsSuite {
   checkAll("LazyList[Int]", SemigroupalTests[LazyList].semigroupal[Int, Int, Int])
@@ -70,7 +71,7 @@ class LazyListSuite extends CatsSuite {
 
 }
 
-final class LazyListInstancesSuite extends AnyFunSuiteLike {
+final class LazyListInstancesSuite extends munit.FunSuite {
 
   test("parallel instance in cats.instances.lazyList") {
     import cats.instances.lazyList._

@@ -14,7 +14,9 @@ import cats.laws.discipline.{
 }
 import cats.laws.discipline.arbitrary._
 import cats.syntax.show._
+import cats.syntax.eq._
 import scala.collection.immutable.ArraySeq
+import org.scalacheck.Prop._
 
 class ArraySeqSuite extends CatsSuite {
   checkAll("ArraySeq[Int]", MonoidTests[ArraySeq[Int]].monoid)
