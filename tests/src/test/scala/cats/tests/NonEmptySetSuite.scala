@@ -216,7 +216,7 @@ class NonEmptySetSuite extends CatsSuite {
 
   test("NonEmptySet#zipWithIndex is consistent with Set#zipWithIndex") {
     forAll { (nes: NonEmptySet[Int]) =>
-      assert(nes.zipWithIndex.toSortedSet === (nes.toSortedSet.zipWithIndex))
+      assert(nes.toSortedSet.zipWithIndex === nes.zipWithIndex.toSortedSet)
     }
   }
 
