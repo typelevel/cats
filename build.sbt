@@ -23,7 +23,7 @@ val scalaCheckVersion = "1.14.3"
 val scalatestVersion = "3.2.0"
 val scalatestplusScalaCheckVersion = "3.2.0.0"
 
-val disciplineVersion = "1.0.2"
+val disciplineVersion = "1.0.3"
 
 val disciplineScalatestVersion = "2.0.0"
 
