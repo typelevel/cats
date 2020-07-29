@@ -2,7 +2,6 @@ package alleycats.tests
 
 import org.scalacheck.Test.Parameters
 
-
 trait TestSettings {
 
   lazy val checkConfiguration: Parameters =

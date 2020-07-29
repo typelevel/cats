@@ -12,11 +12,7 @@ import org.scalacheck.Test.Parameters
  * An opinionated stack of traits to improve consistency and reduce
  * boilerplate in Alleycats tests. Derived from Cats.
  */
-trait AlleycatsSuite
-    extends munit.DisciplineSuite
-    with TestSettings
-    with TestInstances
-    with MapInstances {
+trait AlleycatsSuite extends munit.DisciplineSuite with TestSettings with TestInstances with MapInstances {
   implicit override def scalaCheckTestParameters: Parameters =
     checkConfiguration
 
