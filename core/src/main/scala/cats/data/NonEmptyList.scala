@@ -528,8 +528,11 @@ object NonEmptyList extends NonEmptyListInstances {
 
 sealed abstract private[data] class NonEmptyListInstances extends NonEmptyListInstances0 {
 
-  implicit val catsDataInstancesForNonEmptyList
-    : SemigroupK[NonEmptyList] with Bimonad[NonEmptyList] with NonEmptyTraverse[NonEmptyList] with Align[NonEmptyList] =
+  implicit val catsDataInstancesForNonEmptyList: NonEmptyReducible[NonEmptyList, List]
+    with SemigroupK[NonEmptyList]
+    with Bimonad[NonEmptyList]
+    with NonEmptyTraverse[NonEmptyList]
+    with Align[NonEmptyList] =
     new NonEmptyReducible[NonEmptyList, List]
       with SemigroupK[NonEmptyList]
       with Bimonad[NonEmptyList]

@@ -1,7 +1,7 @@
 package cats.tests
 
 import cats.{Eval, NonEmptyReducible, Now, Reducible}
-import cats.data.NonEmptyList
+import cats.data.{NonEmptyList, NonEmptyVector}
 import cats.kernel.Eq
 import cats.syntax.either._
 import cats.syntax.foldable._
@@ -9,6 +9,7 @@ import cats.syntax.list._
 import cats.syntax.option._
 import cats.syntax.reducible._
 import org.scalacheck.Arbitrary
+import org.scalactic.CanEqual
 
 import scala.collection.mutable
 
@@ -37,13 +38,20 @@ class ReducibleSuiteAdditional extends CatsSuite {
     }
 
   test("Reducible[NonEmptyList] default get/size implementation") {
-    val R = new NonEmptyReducible[NonEmptyList, List] {
-      def split[A](nel: NonEmptyList[A]): (A, List[A]) = (nel.head, nel.tail)
-    }
-    val nel = NonEmptyList.of(1, 2, 3)
-    R.get(nel)(1L) should ===(nel.get(1L))
-    R.size(nel) should ===(nel.size.toLong)
-    R.get(nel)(4L) should ===(None)
+    testDefaultGetAndSize(1, 2, 3) { (head, tail) => NonEmptyList(head, tail.toList) }
+  }
+
+  test("Reducible[NonEmptyVector] default get/size implementation") {
+    testDefaultGetAndSize(1, 2, 3) { (head, tail) => NonEmptyVector(head, tail.toVector) }
+  }
+
+  def testDefaultGetAndSize[F[_], G[_]](head: Int, tail: Int*)(
+    c: (Int, Seq[Int]) => F[Int]
+  )(implicit R: NonEmptyReducible[F, G]) = {
+    val f: F[Int] = c(head, tail)
+    R.get(f)(1L) should ===(f.get(1L))
+    R.size(f) should ===(f.size.toLong)
+    R.get(f)(4L) should ===(None)
   }
 
   test("Reducible[NonEmptyList]") {
