@@ -68,6 +68,7 @@ lazy val commonSettings = commonScalaVersionSettings ++ Seq(
   Test / unmanagedSourceDirectories ++= scalaVersionSpecificFolders("test", baseDirectory.value, scalaVersion.value),
   resolvers ++= Seq(Resolver.sonatypeRepo("releases"), Resolver.sonatypeRepo("snapshots")),
   parallelExecution in Test := false,
+  testFrameworks += new TestFramework("munit.Framework"),
   scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings")
 ) ++ warnUnusedImport
 
@@ -569,10 +570,7 @@ lazy val tests = crossProject(JSPlatform, JVMPlatform)
   .settings(testingDependencies)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
-  .settings(
-    scalacOptions in Test := (scalacOptions in Test).value.filter(_ != "-Xfatal-warnings"),
-    testFrameworks += new TestFramework("munit.Framework")
-  )
+  .settings(scalacOptions in Test := (scalacOptions in Test).value.filter(_ != "-Xfatal-warnings"))
 
 lazy val testkit = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)

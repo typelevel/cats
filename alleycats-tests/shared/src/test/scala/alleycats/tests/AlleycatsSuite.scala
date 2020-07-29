@@ -3,29 +3,21 @@ package alleycats.tests
 import alleycats.std.MapInstances
 import cats._
 import cats.instances.all._
-import cats.tests.StrictCatsEquality
-import org.scalatest.funsuite.AnyFunSuiteLike
-import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
-import org.typelevel.discipline.scalatest.FunSuiteDiscipline
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalacheck.Arbitrary.arbitrary
-import org.scalatest.matchers.should.Matchers
 import scala.util.{Failure, Success, Try}
+import org.scalacheck.Test.Parameters
 
 /**
  * An opinionated stack of traits to improve consistency and reduce
  * boilerplate in Alleycats tests. Derived from Cats.
  */
 trait AlleycatsSuite
-    extends AnyFunSuiteLike
-    with Matchers
-    with ScalaCheckDrivenPropertyChecks
-    with FunSuiteDiscipline
+    extends munit.DisciplineSuite
     with TestSettings
     with TestInstances
-    with StrictCatsEquality
     with MapInstances {
-  implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
+  implicit override def scalaCheckTestParameters: Parameters =
     checkConfiguration
 
   implicit def EqIterable[A: Eq]: Eq[Iterable[A]] = Eq.by(_.toList)

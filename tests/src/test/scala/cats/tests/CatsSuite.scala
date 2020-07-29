@@ -29,10 +29,6 @@ trait CatsSuite extends munit.DisciplineSuite with TestSettings {
 
   implicit override def scalaCheckTestParameters: ScalaCheckTest.Parameters =
     checkConfiguration
-
-  def even(i: Int): Boolean = i % 2 == 0
-
-  val evenPf: PartialFunction[Int, Int] = { case i if even(i) => i }
 }
 
 trait SlowCatsSuite extends CatsSuite {
