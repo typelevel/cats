@@ -87,7 +87,7 @@ class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonE
 
   test("Show is not empty and is formatted as expected") {
     forAll { (nel: NonEmptyList[Int]) =>
-      assert(nel.show.nonEmpty === (true))
+      assert(nel.show.nonEmpty)
       assert(nel.show.startsWith("NonEmptyList(") === (true))
       assert(nel.show === (implicitly[Show[NonEmptyList[Int]]].show(nel)))
       assert(nel.show.contains(nel.head.show) === (true))
@@ -349,8 +349,8 @@ class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonE
       val sorted = nel.map(f).sorted
       val ior = Reducible[NonEmptyList].nonEmptyPartition(sorted)(identity)
 
-      assert(ior.left.map(xs => xs.sorted === (xs)).getOrElse(true))
-      assert(ior.right.map(xs => xs.sorted === (xs)).getOrElse(true))
+      assert(ior.left.forall(xs => xs.sorted === xs))
+      assert(ior.right.forall(xs => xs.sorted === xs))
     }
   }
 
