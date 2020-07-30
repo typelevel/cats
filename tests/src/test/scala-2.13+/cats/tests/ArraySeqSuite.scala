@@ -62,7 +62,7 @@ class ArraySeqSuite extends CatsSuite {
   }
 
   test("show") {
-    assert(ArraySeq(1, 2, 3).show === (s"ArraySeq(1, 2, 3)"))
+    assert(ArraySeq(1, 2, 3).show === s"ArraySeq(1, 2, 3)")
     assert(ArraySeq.empty[Int].show === (s"ArraySeq()"))
   }
 
