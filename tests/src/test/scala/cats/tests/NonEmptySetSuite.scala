@@ -52,7 +52,7 @@ class NonEmptySetSuite extends CatsSuite {
 
   test("Show is not empty and is formatted as expected") {
     forAll { (nes: NonEmptySet[Int]) =>
-      assert(nes.show.nonEmpty === (true))
+      assert(nes.show.nonEmpty)
       assert(nes.show.startsWith("NonEmptySortedSet(") === (true))
       assert(nes.show === (implicitly[Show[NonEmptySet[Int]]].show(nes)))
       assert(nes.show.contains(nes.head.show))
