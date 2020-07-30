@@ -103,7 +103,7 @@ class NonEmptyChainSuite extends NonEmptyCollectionSuite[Chain, NonEmptyChain, N
 
   test("Always nonempty after cons") {
     forAll { (ci: NonEmptyChain[Int], i: Int) =>
-      assert((i +: ci).nonEmpty === (true))
+      assert((i +: ci).nonEmpty)
     }
   }
 
