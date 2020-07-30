@@ -100,7 +100,7 @@ private[cats] object ArraySeqInstances {
             case h :: tail if h.isEmpty =>
               loop(state = tail)
             case h :: tail =>
-              h.next match {
+              h.next() match {
                 case Right(b) =>
                   buf += b
                   loop(state)

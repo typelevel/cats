@@ -11,8 +11,8 @@ jdk:
   - openjdk8
 
 
-scala_version_212: &scala_version_212 2.12.11
-scala_version_213: &scala_version_213 2.13.2
+scala_version_212: &scala_version_212 2.12.12
+scala_version_213: &scala_version_213 2.13.3
 dotty_version: &dotty_version 0.24.0
 
 before_install:

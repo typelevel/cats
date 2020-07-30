@@ -46,7 +46,7 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
                 }
               }
             case Nil =>
-              bldr.result
+              bldr.result()
           }
         go(f(a) :: Nil)
       }
@@ -54,7 +54,7 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
       def coflatMap[A, B](fa: Queue[A])(f: Queue[A] => B): Queue[B] = {
         val bldr = Queue.newBuilder[B]
         @tailrec def loop(as: Queue[A]): Queue[B] =
-          if (as.isEmpty) bldr.result
+          if (as.isEmpty) bldr.result()
           else {
             val (_, rest) = as.dequeue
             bldr += f(as)
@@ -89,7 +89,7 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
       override def mapWithIndex[A, B](fa: Queue[A])(f: (A, Int) => B): Queue[B] = {
         val b = Queue.newBuilder[B]
         fa.iterator.zipWithIndex.map(ai => f(ai._1, ai._2)).foreach(b += _)
-        b.result
+        b.result()
       }
 
       override def zipWithIndex[A](fa: Queue[A]): Queue[(A, Int)] =
