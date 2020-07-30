@@ -109,7 +109,7 @@ class NonEmptyStreamSuite extends CatsSuite {
       val sortedNes = OneAnd(sortedStream.head, sortedStream.tail)
       val ior = Reducible[NonEmptyStream].nonEmptyPartition(sortedNes)(identity)
 
-      assert(ior.left.map(xs => xs.sorted === (xs)).getOrElse(true))
+      assert(ior.left.forall(xs => xs.sorted === xs))
       assert(ior.right.map(xs => xs.sorted === (xs)).getOrElse(true))
     }
   }
