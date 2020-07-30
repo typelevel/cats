@@ -55,7 +55,7 @@ class NonEmptySetSuite extends CatsSuite {
       assert(nes.show.nonEmpty === (true))
       assert(nes.show.startsWith("NonEmptySortedSet(") === (true))
       assert(nes.show === (implicitly[Show[NonEmptySet[Int]]].show(nes)))
-      assert(nes.show.contains(nes.head.show) === (true))
+      assert(nes.show.contains(nes.head.show))
     }
   }
 
