@@ -46,7 +46,7 @@ class SortedMapSuite extends CatsSuite {
 
   test("show isn't empty and is formatted as expected") {
     forAll { (map: SortedMap[Int, String]) =>
-      assert(map.show.nonEmpty === (true))
+      assert(map.show.nonEmpty)
       assert(map.show.startsWith("SortedMap("))
       assert(map.show === (implicitly[Show[SortedMap[Int, String]]].show(map)))
     }
