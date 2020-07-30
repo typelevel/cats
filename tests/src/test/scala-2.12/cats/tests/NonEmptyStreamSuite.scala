@@ -116,7 +116,7 @@ class NonEmptyStreamSuite extends CatsSuite {
 
   test("reduceLeft consistent with foldLeft") {
     forAll { (nel: NonEmptyStream[Int], f: (Int, Int) => Int) =>
-      assert(nel.reduceLeft(f) === (nel.tail.foldLeft(nel.head)(f)))
+      assert(nel.reduceLeft(f) === nel.tail.foldLeft(nel.head)(f))
     }
   }
 

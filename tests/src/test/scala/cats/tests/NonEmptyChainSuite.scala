@@ -79,7 +79,7 @@ class NonEmptyChainSuite extends NonEmptyCollectionSuite[Chain, NonEmptyChain, N
 
   test("filter and then forall should always be true") {
     forAll { (ci: NonEmptyChain[Int], f: Int => Boolean) =>
-      assert(ci.filter(f).forall(f) === (true))
+      assert(ci.filter(f).forall(f))
     }
   }
 
