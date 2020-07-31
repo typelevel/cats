@@ -369,7 +369,7 @@ class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonE
     }
   }
 
-  // ensure absence fo implicit resolution conflict
+  // ensure absence of implicit resolution conflict
   implicitly[Reducible[NonEmptyList]]
   implicitly[Foldable[NonEmptyList]]
   implicitly[UnorderedFoldable[NonEmptyList]]

@@ -82,7 +82,7 @@ class NonEmptyVectorSuite extends NonEmptyCollectionSuite[Vector, NonEmptyVector
   implicitly[Comonad[NonEmptyVector]]
   implicitly[Bimonad[NonEmptyVector]]
 
-  // ensure absence fo implicit resolution conflict
+  // ensure absence of implicit resolution conflict
   implicitly[Reducible[NonEmptyVector]]
   implicitly[Foldable[NonEmptyVector]]
   implicitly[UnorderedFoldable[NonEmptyVector]]
