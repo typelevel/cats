@@ -696,9 +696,10 @@ sealed abstract private[data] class NonEmptyListInstances0 extends NonEmptyListI
       val A0 = A
     }
 
-  implicit val catsDataNonEmptyReducibleNonEmptyList = new NonEmptyReducible[NonEmptyList, List]() {
-    override def split[A](fa: NonEmptyList[A]): (A, List[A]) = (fa.head, fa.tail)
-  }
+  implicit val catsDataNonEmptyReducibleNonEmptyList: NonEmptyReducible[NonEmptyList, List] =
+    new NonEmptyReducible[NonEmptyList, List]() {
+      override def split[A](fa: NonEmptyList[A]): (A, List[A]) = (fa.head, fa.tail)
+    }
 }
 
 sealed abstract private[data] class NonEmptyListInstances1 {

@@ -330,9 +330,10 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
 }
 
 sealed abstract private[data] class NonEmptyVectorInstances0 {
-  implicit val catsDataNonEmptyReducibleNonEmptyVector = new NonEmptyReducible[NonEmptyVector, Vector]() {
-    override def split[A](fa: NonEmptyVector[A]): (A, Vector[A]) = (fa.head, fa.tail)
-  }
+  implicit val catsDataNonEmptyReducibleNonEmptyVector: NonEmptyReducible[NonEmptyVector, Vector] =
+    new NonEmptyReducible[NonEmptyVector, Vector]() {
+      override def split[A](fa: NonEmptyVector[A]): (A, Vector[A]) = (fa.head, fa.tail)
+    }
 }
 
 @suppressUnusedImportWarningForScalaVersionSpecific
