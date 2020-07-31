@@ -37,6 +37,16 @@ class ReducibleSuiteAdditional extends CatsSuite {
       if (a === goal) Now(true) else lb
     }
 
+  {
+    import cats.Foldable
+    import cats.UnorderedFoldable
+
+    implicitly[Reducible[NonEmptyList]]
+    implicitly[Foldable[NonEmptyList]]
+    implicitly[UnorderedFoldable[NonEmptyList]]
+
+  }
+
   test("Reducible[NonEmptyList] default get/size implementation") {
     testDefaultGetAndSize(1, 2, 3) { (head, tail) => NonEmptyList(head, tail.toList) }
   }

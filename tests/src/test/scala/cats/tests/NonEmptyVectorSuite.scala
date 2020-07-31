@@ -14,7 +14,8 @@ import cats.{
   Reducible,
   SemigroupK,
   Show,
-  Traverse
+  Traverse,
+  UnorderedFoldable
 }
 import cats.data.NonEmptyVector
 import cats.data.NonEmptyVector.ZipNonEmptyVector
@@ -80,6 +81,11 @@ class NonEmptyVectorSuite extends NonEmptyCollectionSuite[Vector, NonEmptyVector
   implicitly[Monad[NonEmptyVector]]
   implicitly[Comonad[NonEmptyVector]]
   implicitly[Bimonad[NonEmptyVector]]
+
+  // ensure absence fo implicit resolution conflict
+  implicitly[Reducible[NonEmptyVector]]
+  implicitly[Foldable[NonEmptyVector]]
+  implicitly[UnorderedFoldable[NonEmptyVector]]
 
   checkAll("NonEmptyVector[Int]", BimonadTests[NonEmptyVector].bimonad[Int, Int, Int])
   checkAll("Bimonad[NonEmptyVector]", SerializableTests.serializable(Bimonad[NonEmptyVector]))

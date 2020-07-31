@@ -329,11 +329,16 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
     NonEmptySet.of(head, tail: _*)
 }
 
-@suppressUnusedImportWarningForScalaVersionSpecific
-sealed abstract private[data] class NonEmptyVectorInstances {
+sealed abstract private[data] class NonEmptyVectorInstances0 {
+  implicit val catsDataNonEmptyReducibleNonEmptyVector = new NonEmptyReducible[NonEmptyVector, Vector]() {
+    override def split[A](fa: NonEmptyVector[A]): (A, Vector[A]) = (fa.head, fa.tail)
+  }
+}
 
-  implicit val catsDataInstancesForNonEmptyVector: NonEmptyReducible[NonEmptyVector, Vector]
-    with SemigroupK[NonEmptyVector]
+@suppressUnusedImportWarningForScalaVersionSpecific
+sealed abstract private[data] class NonEmptyVectorInstances extends NonEmptyVectorInstances0 {
+
+  implicit val catsDataInstancesForNonEmptyVector: SemigroupK[NonEmptyVector]
     with Bimonad[NonEmptyVector]
     with NonEmptyTraverse[NonEmptyVector]
     with Align[NonEmptyVector] =

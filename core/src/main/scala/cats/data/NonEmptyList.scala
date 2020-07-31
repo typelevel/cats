@@ -528,11 +528,8 @@ object NonEmptyList extends NonEmptyListInstances {
 
 sealed abstract private[data] class NonEmptyListInstances extends NonEmptyListInstances0 {
 
-  implicit val catsDataInstancesForNonEmptyList: NonEmptyReducible[NonEmptyList, List]
-    with SemigroupK[NonEmptyList]
-    with Bimonad[NonEmptyList]
-    with NonEmptyTraverse[NonEmptyList]
-    with Align[NonEmptyList] =
+  implicit val catsDataInstancesForNonEmptyList
+    : SemigroupK[NonEmptyList] with Bimonad[NonEmptyList] with NonEmptyTraverse[NonEmptyList] with Align[NonEmptyList] =
     new NonEmptyReducible[NonEmptyList, List]
       with SemigroupK[NonEmptyList]
       with Bimonad[NonEmptyList]
@@ -698,6 +695,10 @@ sealed abstract private[data] class NonEmptyListInstances0 extends NonEmptyListI
     new NonEmptyListPartialOrder[A] {
       val A0 = A
     }
+
+  implicit val catsDataNonEmptyReducibleNonEmptyList = new NonEmptyReducible[NonEmptyList, List]() {
+    override def split[A](fa: NonEmptyList[A]): (A, List[A]) = (fa.head, fa.tail)
+  }
 }
 
 sealed abstract private[data] class NonEmptyListInstances1 {

@@ -1,6 +1,6 @@
 package cats.tests
 
-import cats.{Align, Bimonad, Eval, NonEmptyTraverse, Now, Reducible, SemigroupK, Show}
+import cats.{Align, Bimonad, Eval, Foldable, NonEmptyTraverse, Now, Reducible, SemigroupK, Show, UnorderedFoldable}
 import cats.data.{NonEmptyList, NonEmptyMap, NonEmptySet, NonEmptyVector}
 import cats.data.NonEmptyList.ZipNonEmptyList
 import cats.kernel.{Eq, Order, PartialOrder, Semigroup}
@@ -368,6 +368,11 @@ class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonE
       nel.toNev should ===(NonEmptyVector.fromVectorUnsafe(Vector.empty[Int] ++ nel.toList.toVector))
     }
   }
+
+  // ensure absence fo implicit resolution conflict
+  implicitly[Reducible[NonEmptyList]]
+  implicitly[Foldable[NonEmptyList]]
+  implicitly[UnorderedFoldable[NonEmptyList]]
 }
 
 @deprecated("to be able to test deprecated methods", since = "1.0.0-RC1")
