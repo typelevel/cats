@@ -25,7 +25,7 @@ val munitVersion = "0.7.10"
 val disciplineVersion = "1.0.3"
 
 val disciplineScalatestVersion = "2.0.0"
-val disciplineMunitVersion = "0.2.2"
+val disciplineMunitVersion = "0.2.3"
 
 val kindProjectorVersion = "0.11.0"
 
