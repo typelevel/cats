@@ -226,18 +226,18 @@ class ChainSuite extends CatsSuite {
     forAll { (a: Chain[Int]) =>
       val it = a.iterator
 
-      while (it.hasNext) it.next
+      while (it.hasNext) it.next()
 
       intercept[java.util.NoSuchElementException] {
-        it.next
+        it.next()
       }
 
       val rit = a.reverseIterator
 
-      while (rit.hasNext) rit.next
+      while (rit.hasNext) rit.next()
 
       intercept[java.util.NoSuchElementException] {
-        rit.next
+        rit.next()
       }
       ()
     }

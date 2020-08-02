@@ -72,7 +72,7 @@ trait LazyListInstances extends cats.kernel.instances.LazyListInstances {
         val kernel = Iterator.unfold[Option[B], Iterator[Either[A, B]]](Iterator(Left(a))) { it =>
           if (!it.hasNext) None
           else
-            it.next match {
+            it.next() match {
               case Left(a)  => Some((None, fn(a).iterator ++ it))
               case Right(b) => Some((Some(b), it))
             }

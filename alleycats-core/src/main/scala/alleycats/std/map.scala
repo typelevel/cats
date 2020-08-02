@@ -35,7 +35,7 @@ trait MapInstances {
         else {
           val n = idx.toInt
           if (n >= fa.size) None
-          else Some(fa.valuesIterator.drop(n).next)
+          else Some(fa.valuesIterator.drop(n).next())
         }
 
       override def isEmpty[A](fa: Map[K, A]): Boolean = fa.isEmpty

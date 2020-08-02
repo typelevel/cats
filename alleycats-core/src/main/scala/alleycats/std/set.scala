@@ -91,9 +91,9 @@ trait SetInstances {
         @tailrec
         def go(idx: Int, it: Iterator[A]): Option[A] =
           if (it.hasNext) {
-            if (idx == 0) Some(it.next)
+            if (idx == 0) Some(it.next())
             else {
-              it.next
+              it.next()
               go(idx - 1, it)
             }
           } else None

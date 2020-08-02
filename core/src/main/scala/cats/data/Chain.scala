@@ -148,7 +148,7 @@ sealed abstract class Chain[+A] {
   final def flatMap[B](f: A => Chain[B]): Chain[B] = {
     var result = empty[B]
     val iter = iterator
-    while (iter.hasNext) { result = result ++ f(iter.next) }
+    while (iter.hasNext) { result = result ++ f(iter.next()) }
     result
   }
 
@@ -158,7 +158,7 @@ sealed abstract class Chain[+A] {
   final def foldLeft[B](z: B)(f: (B, A) => B): B = {
     var result = z
     val iter = iterator
-    while (iter.hasNext) { result = f(result, iter.next) }
+    while (iter.hasNext) { result = f(result, iter.next()) }
     result
   }
 
@@ -202,7 +202,7 @@ sealed abstract class Chain[+A] {
   final def foldRight[B](z: B)(f: (A, B) => B): B = {
     var result = z
     val iter = reverseIterator
-    while (iter.hasNext) { result = f(iter.next, result) }
+    while (iter.hasNext) { result = f(iter.next(), result) }
     result
   }
 
@@ -347,7 +347,7 @@ sealed abstract class Chain[+A] {
     val iter = iterator
 
     while (iter.hasNext) {
-      val elem = iter.next
+      val elem = iter.next()
       val k = f(elem)
 
       m.get(k) match {
@@ -411,7 +411,7 @@ sealed abstract class Chain[+A] {
         case Wrap(seq) =>
           val iterator = seq.iterator
           while (iterator.hasNext) {
-            val b = f(iterator.next)
+            val b = f(iterator.next())
             if (b) return ()
           }
           c =
@@ -444,7 +444,7 @@ sealed abstract class Chain[+A] {
   final def length: Long = {
     val iter = iterator
     var i: Long = 0
-    while (iter.hasNext) { i += 1; iter.next; }
+    while (iter.hasNext) { i += 1; iter.next(); }
     i
   }
 
@@ -479,7 +479,7 @@ sealed abstract class Chain[+A] {
       val iterY = that.iterator
       while (iterX.hasNext && iterY.hasNext) {
         // scalastyle:off return
-        if (!A.eqv(iterX.next, iterY.next)) return false
+        if (!A.eqv(iterX.next(), iterY.next())) return false
         // scalastyle:on return
       }
 
@@ -515,7 +515,7 @@ sealed abstract class Chain[+A] {
       ()
     }
     builder += ')'
-    builder.result
+    builder.result()
   }
 
   def hash[AA >: A](implicit hashA: Hash[AA]): Int = StaticMethods.orderedHash((this: Chain[AA]).iterator)
@@ -761,7 +761,7 @@ object Chain extends ChainInstances {
                 else rights.reduceLeft((x, y) => Append(y, x))
               rights.clear()
               currentIterator = seq.iterator
-              currentIterator.next
+              currentIterator.next()
             case null | Empty =>
               throw new java.util.NoSuchElementException("next called on empty iterator")
           }
@@ -804,7 +804,7 @@ object Chain extends ChainInstances {
                 else lefts.reduceLeft((x, y) => Append(x, y))
               lefts.clear()
               currentIterator = seq.reverseIterator
-              currentIterator.next
+              currentIterator.next()
             case null | Empty =>
               throw new java.util.NoSuchElementException("next called on empty iterator")
           }
@@ -936,7 +936,7 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
           val iterX = x.iterator
           val iterY = y.iterator
           while (iterX.hasNext && iterY.hasNext) {
-            val n = A0.compare(iterX.next, iterY.next)
+            val n = A0.compare(iterX.next(), iterY.next())
             // scalastyle:off return
             if (n != 0) return n
             // scalastyle:on return
@@ -1006,7 +1006,7 @@ private[data] trait ChainPartialOrder[A] extends PartialOrder[Chain[A]] {
       val iterX = x.iterator
       val iterY = y.iterator
       while (iterX.hasNext && iterY.hasNext) {
-        val n = A.partialCompare(iterX.next, iterY.next)
+        val n = A.partialCompare(iterX.next(), iterY.next())
         // scalastyle:off return
         if (n != 0.0) return n
         // scalastyle:on return
