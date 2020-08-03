@@ -92,7 +92,16 @@ class ReducibleSuiteAdditional extends CatsSuite {
 
     notAllEven.reduceMapA { a => out += a; if (a % 2 == 0) Some(a) else None }
 
-    assert(out.toList === (List(2, 4, 6, 9)))
+    assert(out.toList === List(2, 4, 6, 9))
+  }
+
+  test("Reducible[NonEmptyList].nonEmptyTraverse_ can breakout") {
+    val notAllEven = NonEmptyList.of(2, 4, 6, 9, 10, 12, 14)
+    val out = mutable.ListBuffer[Int]()
+
+    notAllEven.nonEmptyTraverse_ { a => out += a; if (a % 2 == 0) Some(a) else None }
+
+    assert(out.toList === List(2, 4, 6, 9))
   }
 
   // A simple non-empty stream with lazy `foldRight` and `reduceRightTo` implementations.
