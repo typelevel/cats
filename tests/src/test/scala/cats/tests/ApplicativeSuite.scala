@@ -7,36 +7,38 @@ import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests}
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.{AlignTests, CoflatMapTests}
 import cats.syntax.applicative._
+import cats.syntax.eq._
+import org.scalacheck.Prop._
 
 class ApplicativeSuite extends CatsSuite {
 
   test("replicateA creates a List of 'n' copies of given Applicative 'fa'") {
     val A = Applicative[Option]
     val fa = A.pure(1)
-    fa.replicateA(5) should ===(Some(List(1, 1, 1, 1, 1)))
+    assert(fa.replicateA(5) === (Some(List(1, 1, 1, 1, 1))))
   }
 
   test("whenA return given argument when cond is true") {
     forAll { (l: List[Int]) =>
-      l.whenA(true) should ===(List.fill(l.length)(()))
+      assert(l.whenA(true) === (List.fill(l.length)(())))
     }
   }
 
   test("whenA lift Unit to F when cond is false") {
     forAll { (l: List[Int]) =>
-      l.whenA(false) should ===(List(()))
+      assert(l.whenA(false) === (List(())))
     }
   }
 
   test("unlessA return given argument when cond is false") {
     forAll { (l: List[Int]) =>
-      l.unlessA(false) should ===(List.fill(l.length)(()))
+      assert(l.unlessA(false) === (List.fill(l.length)(())))
     }
   }
 
   test("unlessA lift Unit to F when cond is true") {
     forAll { (l: List[Int]) =>
-      l.unlessA(true) should ===(List(()))
+      assert(l.unlessA(true) === (List(())))
     }
   }
 

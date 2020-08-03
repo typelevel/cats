@@ -4,12 +4,10 @@ package laws
 import cats.kernel.laws.discipline._
 import cats.platform.Platform
 
-import org.typelevel.discipline.scalatest.FunSuiteDiscipline
-import org.scalacheck.{Arbitrary, Cogen, Gen}
+import munit.DisciplineSuite
+import org.scalacheck.{Arbitrary, Cogen, Gen, Prop}
+import Prop.forAll
 import Arbitrary.arbitrary
-import org.scalactic.anyvals.{PosInt, PosZInt}
-import org.scalatest.funsuite.AnyFunSuiteLike
-import org.scalatestplus.scalacheck.Checkers
 
 import scala.concurrent.duration.{Duration, FiniteDuration}
 import scala.collection.immutable.{BitSet, Queue, SortedMap, SortedSet}
@@ -17,6 +15,8 @@ import scala.util.Random
 import java.util.UUID
 import java.util.concurrent.TimeUnit.{DAYS, HOURS, MICROSECONDS, MILLISECONDS, MINUTES, NANOSECONDS, SECONDS}
 import compat.scalaVersionSpecific._
+import munit.ScalaCheckSuite
+import org.scalacheck.Test.Parameters
 
 @suppressUnusedImportWarningForScalaVersionSpecific
 object KernelCheck {
@@ -133,17 +133,20 @@ object KernelCheck {
     }
 }
 
-class TestsConfig extends Checkers {
+class TestsConfig extends ScalaCheckSuite {
   // The ScalaCheck defaults (100,100) are too high for Scala.js.
-  final val PropMaxSize: PosZInt = if (Platform.isJs) 10 else 100
-  final val PropMinSuccessful: PosInt = if (Platform.isJs) 10 else 100
-  final val PropWorkers: PosInt = if (Platform.isJvm) PosInt(2) else PosInt(1)
+  final val PropMaxSize = if (Platform.isJs) 10 else 100
+  final val PropMinSuccessful = if (Platform.isJs) 10 else 100
+  final val PropWorkers = if (Platform.isJvm) 2 else 1
 
-  implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
-    PropertyCheckConfiguration(minSuccessful = PropMinSuccessful, sizeRange = PropMaxSize, workers = PropWorkers)
+  implicit override def scalaCheckTestParameters: Parameters =
+    Parameters.default
+      .withMinSuccessfulTests(PropMinSuccessful)
+      .withMaxSize(PropMaxSize)
+      .withWorkers(PropWorkers)
 }
 
-class Tests extends TestsConfig with AnyFunSuiteLike with FunSuiteDiscipline with ScalaVersionSpecificTests {
+class Tests extends TestsConfig with DisciplineSuite {
 
   import KernelCheck._
 
@@ -328,7 +331,7 @@ class Tests extends TestsConfig with AnyFunSuiteLike with FunSuiteDiscipline wit
     val combineRight = xs.reduceRight(CommutativeGroup[BigDecimal].combine)
     val combineLeft = xs.reduceLeft(CommutativeGroup[BigDecimal].combine)
 
-    assert(combineRight === combineLeft)
+    assert(Eq[BigDecimal].eqv(combineRight, combineLeft))
   }
 
   test("CommutativeGroup[BigDecimal]'s combine should be commutative for known problematic cases (#3303)") {
@@ -337,7 +340,11 @@ class Tests extends TestsConfig with AnyFunSuiteLike with FunSuiteDiscipline wit
     val one = BigDecimal("1")
     val small = BigDecimal("1e-7", MathContext.DECIMAL32)
 
-    assert(CommutativeGroup[BigDecimal].combine(one, small) === CommutativeGroup[BigDecimal].combine(small, one))
+    assert(
+      Eq[BigDecimal].eqv(CommutativeGroup[BigDecimal].combine(one, small),
+                         CommutativeGroup[BigDecimal].combine(small, one)
+      )
+    )
   }
 
   checkAll("Band[(Int, Int)]", BandTests[(Int, Int)].band)
@@ -400,16 +407,16 @@ class Tests extends TestsConfig with AnyFunSuiteLike with FunSuiteDiscipline wit
     eqv.eqv(po.partialComparison(Set(1, 2), Set(2, 3)), None)
   }
 
-  test("sign . toInt . comparison = sign . compare") {
-    check { (i: Int, j: Int) =>
+  property("sign . toInt . comparison = sign . compare") {
+    forAll { (i: Int, j: Int) =>
       val found = Order[Int].comparison(i, j)
       val expected = Order[Int].compare(i, j)
       Eq[Int].eqv(found.toInt.sign, expected.sign)
     }
   }
 
-  test("sign . toDouble . partialComparison = sign . partialCompare") {
-    check { (x: Set[Int], y: Set[Int]) =>
+  property("sign . toDouble . partialComparison = sign . partialCompare") {
+    forAll { (x: Set[Int], y: Set[Int]) =>
       val found = subsetPartialOrder[Int].partialComparison(x, y).map(_.toDouble.sign)
       val expected = Some(subsetPartialOrder[Int].partialCompare(x, y)).filter(d => !d.isNaN).map(_.sign)
       Eq[Option[Double]].eqv(found, expected)

@@ -17,6 +17,8 @@ import cats.laws.discipline.{
 }
 import cats.laws.discipline.arbitrary._
 import cats.syntax.show._
+import cats.syntax.eq._
+import org.scalacheck.Prop._
 
 class MapSuite extends CatsSuite {
 
@@ -51,9 +53,9 @@ class MapSuite extends CatsSuite {
 
   test("show isn't empty and is formatted as expected") {
     forAll { (map: Map[Int, String]) =>
-      map.show.nonEmpty should ===(true)
-      map.show.startsWith("Map(") should ===(true)
-      map.show should ===(implicitly[Show[Map[Int, String]]].show(map))
+      assert(map.show.nonEmpty === (true))
+      assert(map.show.startsWith("Map(") === (true))
+      assert(map.show === (implicitly[Show[Map[Int, String]]].show(map)))
     }
   }
 

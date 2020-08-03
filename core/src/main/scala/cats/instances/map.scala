@@ -78,7 +78,7 @@ trait MapInstances extends cats.kernel.instances.MapInstances {
           }
 
         f(a).foreach { case (k, a) => descend(k, a) }
-        bldr.result
+        bldr.result()
       }
 
       override def isEmpty[A](fa: Map[K, A]): Boolean = fa.isEmpty

@@ -65,5 +65,5 @@ object ExhaustiveCheck {
    * in the domain of `Set[A]`, so use this only on small domains.
    */
   def forSet[A](implicit A: ExhaustiveCheck[A]): ExhaustiveCheck[Set[A]] =
-    instance(A.allValues.toSet.subsets.toList)
+    instance(A.allValues.toSet.subsets().toList)
 }

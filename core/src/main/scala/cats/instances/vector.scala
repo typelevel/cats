@@ -68,7 +68,7 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
               state = tail
               loop()
             case h :: tail =>
-              h.next match {
+              h.next() match {
                 case Right(b) =>
                   buf += b
                   loop()
@@ -78,7 +78,7 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
               }
           }
         loop()
-        buf.result
+        buf.result()
       }
 
       override def size[A](fa: Vector[A]): Long = fa.size.toLong

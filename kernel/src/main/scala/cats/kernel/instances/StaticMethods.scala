@@ -22,8 +22,8 @@ object StaticMethods extends cats.kernel.compat.HashCompat {
     while (true) {
       if (xs.hasNext) {
         if (ys.hasNext) {
-          val x = xs.next
-          val y = ys.next
+          val x = xs.next()
+          val y = ys.next()
           val cmp = ev.compare(x, y)
           if (cmp != 0) return cmp
         } else {
@@ -40,8 +40,8 @@ object StaticMethods extends cats.kernel.compat.HashCompat {
     while (true) {
       if (xs.hasNext) {
         if (ys.hasNext) {
-          val x = xs.next
-          val y = ys.next
+          val x = xs.next()
+          val y = ys.next()
           val cmp = ev.partialCompare(x, y)
           if (cmp != 0.0) return cmp
         } else {
@@ -58,7 +58,7 @@ object StaticMethods extends cats.kernel.compat.HashCompat {
     while (true) {
       if (xs.hasNext) {
         if (ys.hasNext) {
-          if (ev.neqv(xs.next, ys.next)) return false
+          if (ev.neqv(xs.next(), ys.next())) return false
         } else {
           return false
         }
@@ -73,12 +73,12 @@ object StaticMethods extends cats.kernel.compat.HashCompat {
   def combineNIterable[A, R](b: mutable.Builder[A, R], x: Iterable[A], n: Int): R = {
     var i = n
     while (i > 0) { b ++= x; i -= 1 }
-    b.result
+    b.result()
   }
 
   def combineAllIterable[A, R](b: mutable.Builder[A, R], xs: IterableOnce[Iterable[A]]): R = {
     xs.iterator.foreach(b ++= _)
-    b.result
+    b.result()
   }
 
   // Adapted from scala.util.hashing.MurmurHash#productHash.

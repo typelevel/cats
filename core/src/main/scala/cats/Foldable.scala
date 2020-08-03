@@ -774,13 +774,13 @@ import scala.annotation.implicitNotFound
     val bld = List.newBuilder[A]
     val it = xs.iterator
     if (it.hasNext) {
-      bld += it.next
+      bld += it.next()
       while (it.hasNext) {
         bld += x
-        bld += it.next
+        bld += it.next()
       }
     }
-    bld.result
+    bld.result()
   }
 
   def compose[G[_]: Foldable]: Foldable[λ[α => F[G[α]]]] =
@@ -879,7 +879,7 @@ object Foldable {
 
   def iterateRight[A, B](iterable: Iterable[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = {
     def loop(it: Iterator[A]): Eval[B] =
-      Eval.defer(if (it.hasNext) f(it.next, loop(it)) else lb)
+      Eval.defer(if (it.hasNext) f(it.next(), loop(it)) else lb)
 
     Eval.always(iterable.iterator).flatMap(loop)
   }

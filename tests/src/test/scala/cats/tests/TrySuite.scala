@@ -9,6 +9,8 @@ import cats.laws.discipline.arbitrary._
 import cats.syntax.apply._
 import cats.syntax.show._
 import scala.util.{Success, Try}
+import cats.syntax.eq._
+import org.scalacheck.Prop._
 
 class TrySuite extends CatsSuite {
   implicit val eqThrow: Eq[Throwable] = Eq.allEqual
@@ -40,7 +42,7 @@ class TrySuite extends CatsSuite {
 
   test("show") {
     forAll { (fs: Try[String]) =>
-      fs.show should ===(fs.toString)
+      assert(fs.show === (fs.toString))
     }
   }
 
@@ -50,7 +52,7 @@ class TrySuite extends CatsSuite {
       val res = MonadError[Try, Throwable].catchNonFatal(str.toInt)
       // the above should just never cause an uncaught exception
       // this is a somewhat bogus test:
-      res should not be (null)
+      assert(res != null)
     }
   }
 
@@ -60,7 +62,7 @@ class TrySuite extends CatsSuite {
       val res = MonadError[Try, Throwable].catchNonFatalEval(Eval.later(str.toInt))
       // the above should just never cause an uncaught exception
       // this is a somewhat bogus test:
-      res should not be (null)
+      assert(res != null)
     }
   }
 
@@ -70,19 +72,19 @@ class TrySuite extends CatsSuite {
       val res = MonadError[Try, Throwable].catchOnly[NumberFormatException](str.toInt)
       // the above should just never cause an uncaught exception
       // this is a somewhat bogus test:
-      res should not be (null)
+      assert(res != null)
     }
   }
 
   test("catchOnly catches only a specified type") {
-    a[NumberFormatException] should be thrownBy {
+    intercept[NumberFormatException] {
       MonadError[Try, Throwable].catchOnly[UnsupportedOperationException]("str".toInt)
     }
   }
 
   test("fromTry works") {
     forAll { (t: Try[Int]) =>
-      (MonadError[Try, Throwable].fromTry(t)) should ===(t)
+      assert((MonadError[Try, Throwable].fromTry(t)) === (t))
     }
   }
 
@@ -94,21 +96,21 @@ class TrySuite extends CatsSuite {
   test("Kleisli associativity") {
     forAll { (l: Long, f: Long => Try[Int], g: Int => Try[Char], h: Char => Try[String]) =>
       val isEq = FlatMapLaws[Try].kleisliAssociativity(f, g, h, l)
-      isEq.lhs should ===(isEq.rhs)
+      assert(isEq.lhs === (isEq.rhs))
     }
   }
 
   test("Cokleisli associativity") {
     forAll { (l: Try[Long], f: Try[Long] => Int, g: Try[Int] => Char, h: Try[Char] => String) =>
       val isEq = CoflatMapLaws[Try].cokleisliAssociativity(f, g, h, l)
-      isEq.lhs should ===(isEq.rhs)
+      assert(isEq.lhs === (isEq.rhs))
     }
   }
 
   test("applicative composition") {
     forAll { (fa: Try[Int], fab: Try[Int => Long], fbc: Try[Long => Char]) =>
       val isEq = ApplicativeLaws[Try].applicativeComposition(fa, fab, fbc)
-      isEq.lhs should ===(isEq.rhs)
+      assert(isEq.lhs === (isEq.rhs))
     }
   }
 
@@ -117,14 +119,14 @@ class TrySuite extends CatsSuite {
   test("Kleisli left identity") {
     forAll { (a: Int, f: Int => Try[Long]) =>
       val isEq = monadLaws.kleisliLeftIdentity(a, f)
-      isEq.lhs should ===(isEq.rhs)
+      assert(isEq.lhs === (isEq.rhs))
     }
   }
 
   test("Kleisli right identity") {
     forAll { (a: Int, f: Int => Try[Long]) =>
       val isEq = monadLaws.kleisliRightIdentity(a, f)
-      isEq.lhs should ===(isEq.rhs)
+      assert(isEq.lhs === (isEq.rhs))
     }
   }
 
@@ -132,6 +134,6 @@ class TrySuite extends CatsSuite {
     var evals = 0
     val bomb: Eval[Try[Int]] = Later { evals += 1; Success(1) }
     Try[Int](sys.error("boom0")).map2Eval(bomb)(_ + _).value
-    evals should ===(0)
+    assert(evals === (0))
   }
 }

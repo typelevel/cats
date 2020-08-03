@@ -166,7 +166,7 @@ sealed abstract class Chain[+A] {
   final def flatMap[B](f: A => Chain[B]): Chain[B] = {
     var result = empty[B]
     val iter = iterator
-    while (iter.hasNext) { result = result ++ f(iter.next) }
+    while (iter.hasNext) { result = result ++ f(iter.next()) }
     result
   }
 
@@ -176,7 +176,7 @@ sealed abstract class Chain[+A] {
   final def foldLeft[B](z: B)(f: (B, A) => B): B = {
     var result = z
     val iter = iterator
-    while (iter.hasNext) { result = f(result, iter.next) }
+    while (iter.hasNext) { result = f(result, iter.next()) }
     result
   }
 
@@ -220,7 +220,7 @@ sealed abstract class Chain[+A] {
   final def foldRight[B](z: B)(f: (A, B) => B): B = {
     var result = z
     val iter = reverseIterator
-    while (iter.hasNext) { result = f(iter.next, result) }
+    while (iter.hasNext) { result = f(iter.next(), result) }
     result
   }
 
@@ -364,7 +364,7 @@ sealed abstract class Chain[+A] {
     val iter = iterator
 
     while (iter.hasNext) {
-      val elem = iter.next
+      val elem = iter.next()
       val k = f(elem)
 
       m.get(k) match {
@@ -474,7 +474,7 @@ sealed abstract class Chain[+A] {
   final def length: Long = {
     val iter = iterator
     var i: Long = 0
-    while (iter.hasNext) { i += 1; iter.next; }
+    while (iter.hasNext) { i += 1; iter.next(); }
     i
   }
 
@@ -519,7 +519,7 @@ sealed abstract class Chain[+A] {
       val iterY = that.iterator
       while (iterX.hasNext && iterY.hasNext) {
         // scalastyle:off return
-        if (!A.eqv(iterX.next, iterY.next)) return false
+        if (!A.eqv(iterX.next(), iterY.next())) return false
         // scalastyle:on return
       }
 
@@ -555,7 +555,7 @@ sealed abstract class Chain[+A] {
       ()
     }
     builder += ')'
-    builder.result
+    builder.result()
   }
 
   def hash[AA >: A](implicit hashA: Hash[AA]): Int = StaticMethods.orderedHash((this: Chain[AA]).iterator)
@@ -917,13 +917,11 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
         fa.foldLeft(b)(f)
       def foldRight[A, B](fa: Chain[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = {
         def loop(as: Chain[A]): Eval[B] =
-          // In Scala 2 the compiler silently ignores the fact that it can't
-          // prove that this match is exhaustive, but Dotty warns, so we
-          // explicitly mark it as unchecked.
-          (as: @unchecked) match {
-            case Chain.nil => lb
-            case h ==: t   => f(h, Eval.defer(loop(t)))
+          as.uncons match {
+            case Some((h, t)) => f(h, Eval.defer(loop(t)))
+            case None         => lb
           }
+
         Eval.defer(loop(fa))
       }
 
@@ -1020,7 +1018,7 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
           val iterX = x.iterator
           val iterY = y.iterator
           while (iterX.hasNext && iterY.hasNext) {
-            val n = A0.compare(iterX.next, iterY.next)
+            val n = A0.compare(iterX.next(), iterY.next())
             // scalastyle:off return
             if (n != 0) return n
             // scalastyle:on return
@@ -1090,7 +1088,7 @@ private[data] trait ChainPartialOrder[A] extends PartialOrder[Chain[A]] {
       val iterX = x.iterator
       val iterY = y.iterator
       while (iterX.hasNext && iterY.hasNext) {
-        val n = A.partialCompare(iterX.next, iterY.next)
+        val n = A.partialCompare(iterX.next(), iterY.next())
         // scalastyle:off return
         if (n != 0.0) return n
         // scalastyle:on return

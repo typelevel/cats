@@ -49,7 +49,7 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
             case Nil         => ()
           }
         go(f(a) :: Nil)
-        buf.result
+        buf.result()
       }
 
       def coflatMap[A, B](fa: List[A])(f: List[A] => B): List[B] = {

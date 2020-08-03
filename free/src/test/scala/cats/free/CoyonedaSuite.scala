@@ -7,6 +7,8 @@ import cats.kernel.Eq
 import cats.laws.discipline.{FunctorTests, SerializableTests}
 import cats.tests.CatsSuite
 import org.scalacheck.Arbitrary
+import cats.syntax.eq._
+import org.scalacheck.Prop._
 
 class CoyonedaSuite extends CatsSuite {
   implicit def coyonedaArbitrary[F[_]: Functor, A: Arbitrary](implicit F: Arbitrary[F[A]]): Arbitrary[Coyoneda[F, A]] =
@@ -22,7 +24,7 @@ class CoyonedaSuite extends CatsSuite {
 
   test("toYoneda and then toCoyoneda is identity") {
     forAll { (y: Coyoneda[Option, Int]) =>
-      y.toYoneda.toCoyoneda should ===(y)
+      assert(y === y.toYoneda.toCoyoneda)
     }
   }
 
@@ -30,7 +32,7 @@ class CoyonedaSuite extends CatsSuite {
     val nt = new FunctionK[Option, List] { def apply[A](a: Option[A]): List[A] = a.toList }
     val o = Option("hello")
     val c = Coyoneda.lift(o)
-    c.mapK(nt).run should ===(nt(o))
+    assert(c.mapK(nt).run === nt(o))
   }
 
   test("map order") {
