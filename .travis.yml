@@ -36,7 +36,7 @@ jobs:
       env: TEST="JS tests"
       # http://austinpray.com/ops/2015/09/20/change-travis-node-version.html
       install: rm -rf ~/.nvm && git clone https://github.com/creationix/nvm.git ~/.nvm && (cd ~/.nvm && git checkout `git describe --abbrev=0 --tags`) && source ~/.nvm/nvm.sh && nvm install $TRAVIS_NODE_VERSION
-      script: sbt ++$TRAVIS_SCALA_VERSION! validateJS && sbt ++$TRAVIS_SCALA_VERSION! validateKernelJS && sbt ++$TRAVIS_SCALA_VERSION! validateFreeJS
+      script: sbt ++$TRAVIS_SCALA_VERSION! validateJS validateKernelJS validateFreeJS validateAlleycatsJS
       scala: *scala_version_212
     - <<: *js_tests
       name: Js tests 2.13
@@ -78,8 +78,7 @@ jobs:
       scala: *scala_version_213
 
     # Note that we're currently only building some modules on Dotty, not running tests.
-    - &dotty_tests
-      stage: test
+    - stage: test
       name: Dotty tests
       env: TEST="Dotty tests"
       script: sbt ++$TRAVIS_SCALA_VERSION! alleycatsLawsJVM/compile
@@ -104,7 +103,7 @@ notifications:
     - ${GITTER_WEBHOOK_URL}
     on_success: change
     on_failure: always
-    on_start: false
+    on_start: never
 
 env:
   global:
