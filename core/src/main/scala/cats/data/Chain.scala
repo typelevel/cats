@@ -436,7 +436,7 @@ sealed abstract class Chain[+A] {
             case Wrap(seq) =>
               val iterator = seq.iterator
               while (iterator.hasNext) {
-                val b = f(iterator.next)
+                val b = f(iterator.next())
                 if (b) return ()
               }
               c =
@@ -836,7 +836,7 @@ object Chain extends ChainInstances {
                   head
                 }
               currentIterator = seq.iterator
-              currentIterator.next
+              currentIterator.next()
             case null =>
               throw new java.util.NoSuchElementException("next called on empty iterator")
           }
@@ -891,7 +891,7 @@ object Chain extends ChainInstances {
                   head
                 }
               currentIterator = seq.reverseIterator
-              currentIterator.next
+              currentIterator.next()
             case null =>
               throw new java.util.NoSuchElementException("next called on empty iterator")
           }
