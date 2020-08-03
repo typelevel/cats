@@ -2,8 +2,10 @@ package cats
 package kernel
 package instances
 
+import scala.collection.immutable.{IndexedSeq => ImIndexedSeq}
 import scala.collection.mutable
 import compat.scalaVersionSpecific._
+
 @suppressUnusedImportWarningForScalaVersionSpecific
 object StaticMethods extends cats.kernel.compat.HashCompat {
 
@@ -15,6 +17,22 @@ object StaticMethods extends cats.kernel.compat.HashCompat {
     override def size: Int = m.size
     def get(k: K): Option[V] = m.get(k)
     def iterator: Iterator[(K, V)] = m.iterator
+  }
+
+  /**
+   * When you "own" this m, and will not mutate it again, this
+   * is safe to call. It is unsafe to call this, then mutate
+   * the original collection.
+   *
+   * You are giving up ownership when calling this method
+   */
+  def wrapMutableIndexedSeq[A](m: mutable.IndexedSeq[A]): ImIndexedSeq[A] =
+    new WrappedIndexedSeq(m)
+
+  private[kernel] class WrappedIndexedSeq[A](m: mutable.IndexedSeq[A]) extends ImIndexedSeq[A] {
+    override def length: Int = m.length
+    override def apply(i: Int): A = m(i)
+    override def iterator: Iterator[A] = m.iterator
   }
 
   // scalastyle:off return

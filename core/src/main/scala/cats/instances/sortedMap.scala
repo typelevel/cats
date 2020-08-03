@@ -3,6 +3,7 @@ package cats.instances
 import cats._
 import cats.data.{Chain, Ior}
 import cats.kernel.{CommutativeMonoid, CommutativeSemigroup}
+import cats.kernel.instances.StaticMethods.wrapMutableIndexedSeq
 
 import scala.annotation.tailrec
 import scala.collection.immutable.SortedMap
@@ -35,7 +36,11 @@ trait SortedMapInstances extends SortedMapInstances2 {
         implicit val ordering: Ordering[K] = fa.ordering
         if (fa.isEmpty) G.pure(SortedMap.empty[K, B])
         else
-          G.map(Chain.traverseViaChain(fa.iterator) {
+          G.map(Chain.traverseViaChain {
+            val as = collection.mutable.ArrayBuffer[(K, A)]()
+            as ++= fa
+            wrapMutableIndexedSeq(as)
+          } {
             case (k, a) => G.map(f(a))((k, _))
           }) { chain => chain.foldLeft(SortedMap.empty[K, B]) { case (m, (k, b)) => m.updated(k, b) } }
       }
@@ -194,7 +199,11 @@ private[instances] trait SortedMapInstancesBinCompat0 {
         implicit val ordering: Ordering[K] = fa.ordering
         if (fa.isEmpty) G.pure(SortedMap.empty[K, B])
         else
-          G.map(Chain.traverseFilterViaChain(fa.iterator) {
+          G.map(Chain.traverseFilterViaChain {
+            val as = collection.mutable.ArrayBuffer[(K, A)]()
+            as ++= fa
+            wrapMutableIndexedSeq(as)
+          } {
             case (k, a) =>
               G.map(f(a)) { optB =>
                 if (optB.isDefined) Some((k, optB.get))
