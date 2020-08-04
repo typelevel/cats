@@ -181,8 +181,10 @@ import scala.annotation.implicitNotFound
    * available for `G` and want to take advantage of short-circuiting
    * the traversal.
    */
-  def nonEmptyTraverse_[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Apply[G]): G[Unit] =
-    G.void(reduceRightTo(fa)(f)((x, y) => G.map2Eval(f(x), y)((_, b) => b)).value)
+  def nonEmptyTraverse_[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Apply[G]): G[Unit] = {
+    val f1 = f.andThen(G.void)
+    reduceRightTo(fa)(f1)((x, y) => G.map2Eval(f1(x), y)((_, b) => b)).value
+  }
 
   /**
    * Sequence `F[G[A]]` using `Apply[G]`.
