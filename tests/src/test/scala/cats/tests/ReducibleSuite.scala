@@ -69,7 +69,7 @@ class ReducibleSuiteAdditional extends CatsSuite {
     val large = NonEmptyList(1, (2 to 10000).toList)
     assert(contains(large, 10000).value)
   }
-  
+
   // A simple non-empty stream with lazy `foldRight` and `reduceRightTo` implementations.
   case class NES[A](h: A, t: Stream[A]) {
     def toStream: Stream[A] = h #:: t
@@ -212,6 +212,15 @@ abstract class ReducibleSuite[F[_]: Reducible](name: String)(implicit
     val out = mutable.ListBuffer[Int]()
 
     notAllEven.reduceRightTo(identity) { case (a, r) => out += a; if (a % 2 == 0) r.map(_ + a) else Eval.now(0) }.value
+
+    assert(out.toList === List(2, 4, 6, 9))
+  }
+
+  test(s"Reducible[$name].nonEmptyTraverse_ can breakout") {
+    val notAllEven = fromValues(2, 4, 6, 9, 10, 12, 14)
+    val out = mutable.ListBuffer[Int]()
+
+    notAllEven.nonEmptyTraverse_ { a => out += a; if (a % 2 == 0) Some(a) else None }
 
     assert(out.toList === List(2, 4, 6, 9))
   }
