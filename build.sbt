@@ -772,10 +772,11 @@ addCommandAlias("buildAlleycatsJVM", ";alleycatsCoreJVM/test;alleycatsLawsJVM/te
 addCommandAlias("buildJVM", ";buildKernelJVM;buildCoreJVM;buildTestsJVM;buildFreeJVM;buildAlleycatsJVM")
 addCommandAlias("validateBC", ";binCompatTest/test;mimaReportBinaryIssues")
 addCommandAlias("validateJVM", ";fmtCheck;buildJVM;bench/test;validateBC;makeMicrosite")
-addCommandAlias("validateJS", ";catsJS/compile;testsJS/test;js/test")
+addCommandAlias("validateJS", ";testsJS/test;js/test")
 addCommandAlias("validateKernelJS", "kernelLawsJS/test")
-addCommandAlias("validateFreeJS", "freeJS/test") //separated due to memory constraint on travis
+addCommandAlias("validateFreeJS", "freeJS/test")
 addCommandAlias("validateAlleycatsJS", "alleycatsTestsJS/test")
+addCommandAlias("validateAllJS", "all testsJS/test js/test kernelLawsJS/test freeJS/test alleycatsTestsJS/test")
 addCommandAlias("validateDotty", ";++0.24.0!;alleycatsLawsJVM/compile")
 addCommandAlias("validate", ";clean;validateJS;validateKernelJS;validateFreeJS;validateJVM;validateDotty")
 
