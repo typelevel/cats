@@ -16,22 +16,6 @@ import org.scalacheck.Prop._
 
 class ReducibleSuiteAdditional extends CatsSuite {
 
-  test("Reducible[NonEmptyList].reduceLeftM stack safety") {
-    def nonzero(acc: Long, x: Long): Option[Long] =
-      if (x == 0) None else Some(acc + x)
-
-    val n = 100000L
-    val expected = n * (n + 1) / 2
-    val actual = (1L to n).toList.toNel.flatMap(_.reduceLeftM(Option.apply)(nonzero))
-    assert(actual === (Some(expected)))
-  }
-
-  test("Reducible[NonEmptyList].reduceRightTo stack safety") {
-    val n = 100000L
-    val actual = (1L to n).toList.toNel.get.reduceRightTo(identity) { case (a, r) => r.map(_ + a) }.value
-    assert(actual === ((1L to n).sum))
-  }
-
   // exists method written in terms of reduceRightTo
   def contains[F[_]: Reducible, A: Eq](as: F[A], goal: A): Eval[Boolean] =
     as.reduceRightTo(_ === goal) { (a, lb) =>
@@ -85,25 +69,7 @@ class ReducibleSuiteAdditional extends CatsSuite {
     val large = NonEmptyList(1, (2 to 10000).toList)
     assert(contains(large, 10000).value)
   }
-
-  test("Reducible[NonEmptyList].reduceMapA can breakout") {
-    val notAllEven = NonEmptyList.of(2, 4, 6, 9, 10, 12, 14)
-    val out = mutable.ListBuffer[Int]()
-
-    notAllEven.reduceMapA { a => out += a; if (a % 2 == 0) Some(a) else None }
-
-    assert(out.toList === List(2, 4, 6, 9))
-  }
-
-  test("Reducible[NonEmptyList].nonEmptyTraverse_ can breakout") {
-    val notAllEven = NonEmptyList.of(2, 4, 6, 9, 10, 12, 14)
-    val out = mutable.ListBuffer[Int]()
-
-    notAllEven.nonEmptyTraverse_ { a => out += a; if (a % 2 == 0) Some(a) else None }
-
-    assert(out.toList === List(2, 4, 6, 9))
-  }
-
+  
   // A simple non-empty stream with lazy `foldRight` and `reduceRightTo` implementations.
   case class NES[A](h: A, t: Stream[A]) {
     def toStream: Stream[A] = h #:: t
@@ -156,6 +122,12 @@ abstract class ReducibleSuite[F[_]: Reducible](name: String)(implicit
 
   def range(start: Long, endInclusive: Long): F[Long]
   def fromValues[A](el: A, els: A*): F[A]
+
+  test(s"Reducible[$name].reduceRightTo stack safety") {
+    val n = 100000L
+    val actual = range(1L, n).reduceRightTo(identity) { case (a, r) => r.map(_ + a) }.value
+    assert(actual === (1L to n).sum)
+  }
 
   test(s"Reducible[$name].reduceLeftM stack safety") {
     def nonzero(acc: Long, x: Long): Option[Long] =
@@ -226,4 +198,21 @@ abstract class ReducibleSuite[F[_]: Reducible](name: String)(implicit
     }
   }
 
+  test(s"Reducible[$name].reduceMapA can breakout") {
+    val notAllEven = fromValues(2, 4, 6, 9, 10, 12, 14)
+    val out = mutable.ListBuffer[Int]()
+
+    notAllEven.reduceMapA { a => out += a; if (a % 2 == 0) Some(a) else None }
+
+    assert(out.toList === List(2, 4, 6, 9))
+  }
+
+  test(s"Reducible[$name].reduceRightTo can breakout") {
+    val notAllEven = fromValues(2, 4, 6, 9, 10, 12, 14)
+    val out = mutable.ListBuffer[Int]()
+
+    notAllEven.reduceRightTo(identity) { case (a, r) => out += a; if (a % 2 == 0) r.map(_ + a) else Eval.now(0) }.value
+
+    assert(out.toList === List(2, 4, 6, 9))
+  }
 }
