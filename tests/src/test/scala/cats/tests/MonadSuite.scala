@@ -1,6 +1,7 @@
 package cats.tests
 
 import cats.{Id, Monad}
+import cats.catsInstancesForId
 import cats.data.{IndexedStateT, StateT}
 import cats.syntax.apply._
 import cats.syntax.monad._
@@ -41,7 +42,7 @@ class MonadSuite extends CatsSuite {
   test("untilM") {
     forAll(smallPosInt) { (max: Int) =>
       val (result, aggregation) = incrementAndGet.untilM[Vector](StateT.inspect(_ >= max)).run(-1)
-      assert(result === (max))
+      assert(result === max)
       assert(aggregation === ((0 to max).toVector))
     }
   }

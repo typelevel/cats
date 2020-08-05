@@ -154,17 +154,15 @@ lazy val includeGeneratedSrc: Setting[_] = {
 
 lazy val disciplineDependencies = Seq(
   libraryDependencies ++= Seq(
-    "org.scalacheck" %%% "scalacheck" % scalaCheckVersion,
+    ("org.scalacheck" %%% "scalacheck" % scalaCheckVersion).withDottyCompat(scalaVersion.value),
     "org.typelevel" %%% "discipline-core" % disciplineVersion
-  ).map(_.withDottyCompat(scalaVersion.value))
+  )
 )
 
 lazy val testingDependencies = Seq(
   libraryDependencies ++= Seq(
     "org.scalameta" %%% "munit-scalacheck" % munitVersion % Test,
     "org.typelevel" %%% "discipline-munit" % disciplineMunitVersion % Test
-  ).map(
-    _.withDottyCompat(scalaVersion.value)
   )
 )
 

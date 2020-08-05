@@ -1,6 +1,6 @@
 package cats.tests
 
-import cats.{~>, Bifunctor, Eval, Foldable, Functor, Id, Monad, MonadError, Traverse}
+import cats._
 import cats.data.{Ior, IorT}
 import cats.kernel.{Eq, Monoid, Semigroup}
 import cats.kernel.laws.discipline.{EqTests, MonoidTests, SemigroupTests}

@@ -10,6 +10,7 @@ import cats.syntax.parallel._
 import cats.syntax.traverse._
 import cats.syntax.eq._
 import org.scalacheck.Prop._
+import cats.catsInstancesForId
 
 trait ScalaVersionSpecificFoldableSuite { self: FoldableSuiteAdditional =>
   test("Foldable[LazyList].foldM stack safety") {

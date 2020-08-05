@@ -122,7 +122,6 @@ object Invariant extends ScalaVersionSpecificInvariantInstances with InvariantIn
   implicit def catsFlatMapForSortedMap[K]: FlatMap[SortedMap[K, *]] =
     cats.instances.sortedMap.catsStdInstancesForSortedMap[K]
   implicit def catsBimonadForFunction0: Bimonad[Function0] = cats.instances.function.catsStdBimonadForFunction0
-  implicit def catsMonadForFunction1[I]: Monad[I => *] = cats.instances.function.catsStdMonadForFunction1[I]
   implicit def catsContravariantMonoidalForFunction1[R: Monoid]: ContravariantMonoidal[* => R] =
     cats.instances.function.catsStdContravariantMonoidalForFunction1[R]
   implicit def catsFunctorForPair: Functor[λ[P => (P, P)]] = cats.instances.tuple.catsDataFunctorForPair
@@ -290,6 +289,8 @@ private[cats] trait InvariantInstances0 extends TupleInstances0 {
     cats.instances.function.catsStdDistributiveForFunction1[I]
   implicit def catsApplicativeForArrow[F[_, _], A](implicit F: Arrow[F]): Applicative[F[A, *]] =
     new ArrowApplicative[F, A](F)
+
+  implicit def catsMonadForFunction1[I]: Monad[I => *] = cats.instances.function.catsStdMonadForFunction1[I]
 }
 
 private trait TupleInstances0 extends TupleInstances1 {
