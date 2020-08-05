@@ -102,9 +102,4 @@ package object data extends ScalaVersionSpecificPackage {
       ContT.tailRecM(a)(f)
   }
 
-  type INothing <: Nothing
-  object INothing {
-    def absurd[A](n: INothing): A = throw new Exception("Somehow instantiated a value of INothing, this is a bug.")
-  }
-
 }

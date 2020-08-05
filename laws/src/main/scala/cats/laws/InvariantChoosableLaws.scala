@@ -1,8 +1,6 @@
 package cats
 package laws
 
-import cats.data.INothing
-
 /**
  * Laws that must be obeyed by any `cats.InvariantChoosable`.
  */
@@ -11,16 +9,16 @@ trait InvariantChoosableLaws[F[_]] extends InvariantChoiceLaws[F] {
   import cats.syntax.invariant._
 
   def choiceZeroLeftIdentity[A, B](fa: F[A]): IsEq[F[A]] =
-    I.choice(I.zero, fa).imap(leftNothing)(Right(_)) <-> fa
+    I.choice[Nothing, A](I.zero, fa).imap(leftNothing)(Right(_)) <-> fa
 
   def choiceZeroRightIdentity[A, B](fa: F[A]): IsEq[F[A]] =
-    I.choice(fa, I.zero).imap(rightNothing)(Left(_)) <-> fa
+    I.choice[A, Nothing](fa, I.zero).imap(rightNothing)(Left(_)) <-> fa
 
-  private def leftNothing[A](e: Either[INothing, A]): A =
-    e.fold(INothing.absurd, identity)
+  private def leftNothing[A](e: Either[Nothing, A]): A =
+    e.fold(identity, identity)
 
-  private def rightNothing[A](e: Either[A, INothing]): A =
-    e.fold(identity, INothing.absurd)
+  private def rightNothing[A](e: Either[A, Nothing]): A =
+    e.fold(identity, identity)
 
 }
 

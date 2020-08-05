@@ -83,7 +83,7 @@ import scala.annotation.implicitNotFound
   def guard(condition: Boolean): F[Unit] =
     if (condition) unit else empty
 
-  override def zero: F[cats.data.INothing] = empty
+  override def zero: F[Nothing] = empty
 
   override def choice[A, B](fa: F[A], fb: F[B]): F[Either[A, B]] = sum(fa, fb)(self)
 

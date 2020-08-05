@@ -1,6 +1,5 @@
 package cats
 
-import cats.data.INothing
 import simulacrum.typeclass
 
 /**
@@ -9,8 +8,8 @@ import simulacrum.typeclass
  * Must obey the laws defined in cats.laws.ContravariantChoosableLaws.
  */
 @typeclass trait ContravariantChoosable[F[_]] extends InvariantChoosable[F] with ContravariantChoice[F] {
-  def lose[A](f: A => INothing): F[A] =
-    contravariant.contramap(zero)(f)
+  def lose[A](f: A => Nothing): F[A] =
+    contravariant.contramap[Nothing, A](zero)(f)
 }
 
 object ContravariantChoosable {

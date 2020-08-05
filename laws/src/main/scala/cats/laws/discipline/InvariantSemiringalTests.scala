@@ -2,7 +2,6 @@ package cats
 package laws
 package discipline
 
-import cats.data.INothing
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import org.scalacheck.{Arbitrary, Cogen}
 import org.scalacheck.Prop._
@@ -24,7 +23,7 @@ trait InvariantSemiringalTests[F[_]] extends InvariantChoosableTests[F] with Inv
     EqFETABC: Eq[F[(Either[A, B], C)]],
     EqFABC: Eq[F[(A, (B, C))]],
     EqFABC2: Eq[F[(A, B, C)]],
-    EqINothing: Eq[F[INothing]],
+    EqINothing: Eq[F[Nothing]],
     iso: Isomorphisms[F]
   ): RuleSet =
     new RuleSet {

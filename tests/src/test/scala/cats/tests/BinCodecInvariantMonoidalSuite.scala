@@ -7,7 +7,6 @@ import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests}
 import cats.laws.discipline.{ExhaustiveCheck, InvariantSemiringalTests, MiniInt, SerializableTests}
 import cats.syntax.all._
 import org.scalacheck.{Arbitrary, Gen}
-import cats.data.INothing
 
 @suppressUnusedImportWarningForScalaVersionSpecific
 object BinCodecInvariantMonoidalSuite {
@@ -130,13 +129,13 @@ object BinCodecInvariantMonoidalSuite {
     }
 
     trait CCZero {
-      def zero: BinCodec[INothing] =
-        new BinCodec[INothing] {
-          def read(s: Bin): (Option[INothing], Bin) = (None, s)
+      def zero: BinCodec[Nothing] =
+        new BinCodec[Nothing] {
+          def read(s: Bin): (Option[Nothing], Bin) = (None, s)
 
           def write(a: INothing): Bin = MiniList.nil
 
-          def supported: Set[cats.data.INothing] = Set.empty
+          def supported: Set[Nothing] = Set.empty
         }
     }
 
@@ -213,7 +212,17 @@ class BinCodecInvariantMonoidalSuite extends CatsSuite {
   // Everything is defined in a companion object to be serializable.
   import BinCodecInvariantMonoidalSuite._
 
-  implicit val eqBinCodecNothing: Eq[BinCodec[INothing]] = Eq.allEqual
+  implicit val eqBinCodecNothing: Eq[BinCodec[Nothing]] = Eq.allEqual
+
+  type F[A] = Int
+
+  def zero[A]: F[A]
+
+  def map[A, B](fa: F[A])(f: A => B): F[B]
+
+  def contramap[A, B](fa: F[A])(f: B => A): F[B]
+
+  def imap[A, B](fa: F[A])(f: B => A)(g: A => B): F[B]
 
   checkAll("InvariantSemiringal[BinCodec]",
            InvariantSemiringalTests[BinCodec].invariantSemiringal[Boolean, Boolean, Boolean]

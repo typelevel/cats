@@ -4,12 +4,16 @@ import simulacrum.typeclass
 
 /**
  * [[InvariantChoice]] captures the idea of composing independent effectful values into a sum type.
- * It can be seen as an [[InvariantSemigroupal]] that produces a sum type instead of a product type, hence the name.
+ * It can be seen as an [[InvariantSemigroupal]] that produces a sum type instead of a product type.
  *
  * Must obey the laws defined in cats.laws.InvariantChoiceLaws.
  */
 @typeclass trait InvariantChoice[F[_]] extends Serializable {
   def invariant: Invariant[F]
+
+  /**
+   * Combine two effectful values into an Either, must be associative.
+   */
   def choice[A, B](fa: F[A], fb: F[B]): F[Either[A, B]]
 }
 

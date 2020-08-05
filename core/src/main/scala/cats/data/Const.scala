@@ -162,7 +162,7 @@ sealed abstract private[data] class ConstInstances0 extends ConstInstances1 {
       def contravariant: Contravariant[Const[D, *]] = catsDataContravariantForConst
       def choice[A, B](fa: Const[D, A], fb: Const[D, B]): Const[D, Either[A, B]] =
         fa.retag[Either[A, B]].combine(fb.retag[Either[A, B]])
-      def zero: Const[D, INothing] = Const(Monoid[D].empty)
+      def zero: Const[D, Nothing] = Const(Monoid[D].empty)
     }
 
   implicit def catsDataCommutativeApplicativeForConst[C](implicit
