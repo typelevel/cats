@@ -6,13 +6,14 @@ import cats.laws.discipline._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
+import org.scalacheck.Test.Parameters
 
 class NestedSuite extends CatsSuite {
   // we have a lot of generated lists of lists in these tests. We have to tell
   // ScalaCheck to calm down a bit so we don't hit memory and test duration
   // issues.
-  implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
-    PropertyCheckConfiguration(minSuccessful = 20, sizeRange = 5)
+  implicit override val scalaCheckTestParameters: Parameters =
+    Parameters.default.withMinSuccessfulTests(20).withMaxSize(Parameters.default.minSize + 5)
 
   checkAll("Nested[Eval, List, *]", DeferTests[Nested[Eval, List, *]].defer[Int])
 

@@ -1,5 +1,6 @@
 package cats
 
+import cats.Foldable.Source
 import cats.data.{Ior, NonEmptyList}
 import simulacrum.{noop, typeclass}
 import scala.annotation.implicitNotFound
@@ -180,8 +181,10 @@ import scala.annotation.implicitNotFound
    * available for `G` and want to take advantage of short-circuiting
    * the traversal.
    */
-  def nonEmptyTraverse_[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Apply[G]): G[Unit] =
-    G.void(reduceLeftTo(fa)(f)((x, y) => G.map2(x, f(y))((_, b) => b)))
+  def nonEmptyTraverse_[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Apply[G]): G[Unit] = {
+    val f1 = f.andThen(G.void)
+    reduceRightTo(fa)(f1)((x, y) => G.map2Eval(f1(x), y)((_, b) => b)).value
+  }
 
   /**
    * Sequence `F[G[A]]` using `Apply[G]`.
@@ -191,7 +194,7 @@ import scala.annotation.implicitNotFound
    * [[nonEmptyTraverse_]] documentation for a description of the differences.
    */
   def nonEmptySequence_[G[_], A](fga: F[G[A]])(implicit G: Apply[G]): G[Unit] =
-    G.void(reduceLeft(fga)((x, y) => G.map2(x, y)((_, b) => b)))
+    nonEmptyTraverse_(fga)(identity)
 
   def toNonEmptyList[A](fa: F[A]): NonEmptyList[A] =
     reduceRightTo(fa)(a => NonEmptyList(a, Nil)) { (a, lnel) =>
@@ -386,14 +389,18 @@ abstract class NonEmptyReducible[F[_], G[_]](implicit G: Foldable[G]) extends Re
     G.foldLeft(ga, f(a))((b, a) => g(b, a))
   }
 
-  def reduceRightTo[A, B](fa: F[A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B] =
+  def reduceRightTo[A, B](fa: F[A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B] = {
+    def loop(now: A, source: Source[A]): Eval[B] =
+      source.uncons match {
+        case Some((next, s)) => g(now, Eval.defer(loop(next, s.value)))
+        case None            => Eval.later(f(now))
+      }
+
     Always(split(fa)).flatMap {
       case (a, ga) =>
-        G.reduceRightToOption(ga)(f)(g).flatMap {
-          case Some(b) => g(a, Now(b))
-          case None    => Later(f(a))
-        }
+        Eval.defer(loop(a, Foldable.Source.fromFoldable(ga)))
     }
+  }
 
   override def size[A](fa: F[A]): Long = {
     val (_, tail) = split(fa)

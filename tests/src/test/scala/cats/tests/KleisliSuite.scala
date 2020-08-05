@@ -12,6 +12,7 @@ import cats.laws.discipline.{DeferTests, MonoidKTests, SemigroupKTests}
 import cats.implicits._
 import cats.platform.Platform
 import cats.tests.Helpers.CSemi
+import org.scalacheck.Prop._
 
 class KleisliSuite extends CatsSuite {
   implicit def kleisliEq[F[_], A, B](implicit ev: Eq[A => F[B]]): Eq[Kleisli[F, A, B]] =
@@ -186,81 +187,81 @@ class KleisliSuite extends CatsSuite {
 
   test("local composes functions") {
     forAll { (f: Int => Option[String], g: Int => Int, i: Int) =>
-      f(g(i)) should ===(Kleisli.local[Option, String, Int](g)(Kleisli(f)).run(i))
+      assert(f(g(i)) === (Kleisli.local[Option, String, Int](g)(Kleisli(f)).run(i)))
     }
   }
 
   test("pure consistent with ask") {
     forAll { (i: Int) =>
-      Kleisli.pure[Option, Int, Int](i).run(i) should ===(Kleisli.ask[Option, Int].run(i))
+      assert(Kleisli.pure[Option, Int, Int](i).run(i) === (Kleisli.ask[Option, Int].run(i)))
     }
   }
 
   test("mapF") {
     forAll { (f: Kleisli[List, Int, Int], t: List[Int] => List[Int], i: Int) =>
-      t(f.run(i)) should ===(f.mapF(t).run(i))
+      assert(t(f.run(i)) === (f.mapF(t).run(i)))
     }
   }
 
   test("mapK") {
     val t: List ~> Option = new (List ~> Option) { def apply[A](a: List[A]): Option[A] = a.headOption }
     forAll { (f: Kleisli[List, Int, Int], i: Int) =>
-      t(f.run(i)) should ===(f.mapK(t).run(i))
+      assert(t(f.run(i)) === (f.mapK(t).run(i)))
     }
   }
 
   test("liftFunctionK consistent with mapK") {
     val t: List ~> Option = new (List ~> Option) { def apply[A](a: List[A]): Option[A] = a.headOption }
     forAll { (f: Kleisli[List, Int, Int], i: Int) =>
-      (f.mapK(t).run(i)) should ===(Kleisli.liftFunctionK(t)(f).run(i))
+      assert((f.mapK(t).run(i)) === (Kleisli.liftFunctionK(t)(f).run(i)))
     }
   }
 
   test("flatMapF") {
     forAll { (f: Kleisli[List, Int, Int], t: Int => List[Int], i: Int) =>
-      f.run(i).flatMap(t) should ===(f.flatMapF(t).run(i))
+      assert(f.run(i).flatMap(t) === (f.flatMapF(t).run(i)))
     }
   }
 
   test("lower") {
     forAll { (f: Kleisli[List, Int, Int], i: Int) =>
-      f.run(i) should ===(f.lower.run(i).flatten)
+      assert(f.run(i) === (f.lower.run(i).flatten))
     }
   }
 
   test("tap") {
     forAll { (f: Kleisli[List, Int, String], i: Int) =>
-      f.run(i).as(i) should ===(f.tap.run(i))
+      assert(f.run(i).as(i) === (f.tap.run(i)))
     }
   }
 
   test("tapWith") {
     forAll { (f: Kleisli[List, Int, String], g: (Int, String) => Boolean, i: Int) =>
-      f.run(i).map(s => g(i, s)) should ===(f.tapWith(g).run(i))
+      assert(f.run(i).map(s => g(i, s)) === (f.tapWith(g).run(i)))
     }
   }
 
   test("toReader") {
     forAll { (f: Kleisli[List, Int, String], i: Int) =>
-      f.run(i) should ===(f.toReader.run(i))
+      assert(f.run(i) === (f.toReader.run(i)))
     }
   }
 
   test("tapWithF") {
     forAll { (f: Kleisli[List, Int, String], g: (Int, String) => List[Boolean], i: Int) =>
-      f.run(i).flatMap(s => g(i, s)) should ===(f.tapWithF(g).run(i))
+      assert(f.run(i).flatMap(s => g(i, s)) === (f.tapWithF(g).run(i)))
     }
   }
 
   test("apply") {
     forAll { (f: Kleisli[List, Int, Int], i: Int) =>
-      f.run(i) should ===(f(i))
+      assert(f.run(i) === (f(i)))
     }
   }
 
   test("traverse") {
     forAll { (f: Kleisli[List, Int, Int], i: Int) =>
-      f.traverse(Some(i): Option[Int]) should ===((Some(i): Option[Int]).traverse(f(_)))
+      assert(f.traverse(Some(i): Option[Int]) === ((Some(i): Option[Int]).traverse(f(_))))
     }
   }
 
@@ -269,7 +270,7 @@ class KleisliSuite extends CatsSuite {
       (Some(x + 1): Option[Int])
     }
     val l = f.lift[List]
-    (List(1, 2, 3) >>= l.run) should ===(List(Some(2), Some(3), Some(4)))
+    assert((List(1, 2, 3) >>= l.run) === (List(Some(2), Some(3), Some(4))))
   }
 
   test("local") {
@@ -284,7 +285,7 @@ class KleisliSuite extends CatsSuite {
     }
 
     val config = Config(0, "cats")
-    kconfig1.run(config) should ===(kconfig2.run(config))
+    assert(kconfig1.run(config) === (kconfig2.run(config)))
   }
 
   test("local for Reader") {
@@ -297,7 +298,7 @@ class KleisliSuite extends CatsSuite {
     }
 
     val config = 10
-    rint1local.run(config) should ===(rint2.run(config))
+    assert(rint1local.run(config) === (rint2.run(config)))
 
   }
 
@@ -325,7 +326,7 @@ class KleisliSuite extends CatsSuite {
 
     l.map2Eval(Eval.now(l))(_ + _).value.run(0)
 
-    count shouldBe 1
+    assertEquals(count, 1)
   }
 
   test("combineKEval is lazy") {
@@ -334,7 +335,7 @@ class KleisliSuite extends CatsSuite {
 
     l.combineKEval(Eval.now(l)).value.run(0)
 
-    count shouldBe 1
+    assertEquals(count, 1)
   }
 
   test("auto contravariant") {
@@ -350,7 +351,7 @@ class KleisliSuite extends CatsSuite {
       k3 <- Kleisli((a: A3) => List(true))
     } yield (k1, k2, k3)
 
-    program.run(A123) shouldBe (List((1, "2", true)))
+    assertEquals(program.run(A123), List((1, "2", true)))
   }
 
   /**

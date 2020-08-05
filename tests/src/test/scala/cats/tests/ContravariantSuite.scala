@@ -10,6 +10,7 @@ import cats.laws.discipline.eq._
 import org.scalacheck.{Arbitrary, Cogen}
 import cats.ContravariantChoosable
 import cats.laws.discipline.ContravariantChoosableTests
+import org.scalacheck.Prop._
 
 class ContravariantSuite extends CatsSuite {
 
@@ -18,7 +19,7 @@ class ContravariantSuite extends CatsSuite {
     forAll { (i: Int) =>
       val const: Const[Int, Option[Int]] = Const[Int, Option[Int]](i)
       val narrowed: Const[Int, Some[Int]] = constInst.narrow[Option[Int], Some[Int]](const)
-      narrowed should ===(constInst.contramap(const)(identity[Option[Int]](_: Some[Int])))
+      assert(narrowed === (constInst.contramap(const)(identity[Option[Int]](_: Some[Int]))))
       assert(narrowed eq const)
     }
   }

@@ -4,11 +4,16 @@ import compat.scalaVersionSpecific._
 
 @suppressUnusedImportWarningForScalaVersionSpecific
 trait UnitInstances {
-  implicit val catsKernelStdOrderForUnit: Order[Unit] with Hash[Unit] with LowerBounded[Unit] with UpperBounded[Unit] =
+  implicit val catsKernelStdOrderForUnit: Order[Unit] with Hash[Unit] with BoundedEnumerable[Unit] =
     new UnitOrder
 
   implicit val catsKernelStdAlgebraForUnit: BoundedSemilattice[Unit] with CommutativeGroup[Unit] =
     new UnitAlgebra
+}
+
+trait UnitEnumerable extends BoundedEnumerable[Unit] {
+  override def partialNext(x: Unit): Option[Unit] = None
+  override def partialPrevious(x: Unit): Option[Unit] = None
 }
 
 trait UnitBounded extends LowerBounded[Unit] with UpperBounded[Unit] {
@@ -16,7 +21,7 @@ trait UnitBounded extends LowerBounded[Unit] with UpperBounded[Unit] {
   override def maxBound: Unit = ()
 }
 
-class UnitOrder extends Order[Unit] with Hash[Unit] with UnitBounded { self =>
+class UnitOrder extends Order[Unit] with Hash[Unit] with UnitBounded with UnitEnumerable { self =>
   def compare(x: Unit, y: Unit): Int = 0
 
   def hash(x: Unit): Int = 0 // ().hashCode() == 0
@@ -31,7 +36,7 @@ class UnitOrder extends Order[Unit] with Hash[Unit] with UnitBounded { self =>
   override def min(x: Unit, y: Unit): Unit = ()
   override def max(x: Unit, y: Unit): Unit = ()
 
-  override val partialOrder: PartialOrder[Unit] = self
+  override val order: Order[Unit] = self
 }
 
 class UnitAlgebra extends BoundedSemilattice[Unit] with CommutativeGroup[Unit] {

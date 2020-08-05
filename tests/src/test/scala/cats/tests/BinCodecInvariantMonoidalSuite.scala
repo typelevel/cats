@@ -214,16 +214,6 @@ class BinCodecInvariantMonoidalSuite extends CatsSuite {
 
   implicit val eqBinCodecNothing: Eq[BinCodec[Nothing]] = Eq.allEqual
 
-  type F[A] = Int
-
-  def zero[A]: F[A]
-
-  def map[A, B](fa: F[A])(f: A => B): F[B]
-
-  def contramap[A, B](fa: F[A])(f: B => A): F[B]
-
-  def imap[A, B](fa: F[A])(f: B => A)(g: A => B): F[B]
-
   checkAll("InvariantSemiringal[BinCodec]",
            InvariantSemiringalTests[BinCodec].invariantSemiringal[Boolean, Boolean, Boolean]
   )

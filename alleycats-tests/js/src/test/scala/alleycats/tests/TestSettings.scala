@@ -1,17 +1,12 @@
 package alleycats.tests
 
-import org.scalactic.anyvals.{PosInt, PosZDouble, PosZInt}
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.prop.Configuration
+import org.scalacheck.Test
 
-trait TestSettings extends Configuration with Matchers {
-
-  lazy val checkConfiguration: PropertyCheckConfiguration =
-    PropertyCheckConfiguration(
-      minSuccessful = PosInt(5),
-      maxDiscardedFactor = PosZDouble(50.0),
-      minSize = PosZInt(0),
-      sizeRange = PosZInt(5),
-      workers = PosInt(1)
-    )
+trait TestSettings {
+  lazy val checkConfiguration: Test.Parameters =
+    Test.Parameters.default
+      .withMinSuccessfulTests(5)
+      .withMaxDiscardRatio(50.0f)
+      .withMinSize(0)
+      .withWorkers(1)
 }

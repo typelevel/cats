@@ -1,8 +1,9 @@
 package cats.instances
 
 import cats._
-import cats.data.Ior
+import cats.data.{Chain, Ior}
 import cats.kernel.{CommutativeMonoid, CommutativeSemigroup}
+import cats.kernel.instances.StaticMethods.wrapMutableIndexedSeq
 
 import scala.annotation.tailrec
 import scala.collection.immutable.SortedMap
@@ -32,14 +33,16 @@ trait SortedMapInstances extends SortedMapInstances2 {
     new Traverse[SortedMap[K, *]] with FlatMap[SortedMap[K, *]] with Align[SortedMap[K, *]] {
 
       def traverse[G[_], A, B](fa: SortedMap[K, A])(f: A => G[B])(implicit G: Applicative[G]): G[SortedMap[K, B]] = {
-        val gba: Eval[G[SortedMap[K, B]]] = Always(G.pure(SortedMap.empty(fa.ordering)))
-        Foldable
-          .iterateRight(fa, gba) { (kv, lbuf) =>
-            G.map2Eval(f(kv._2), lbuf) { (b, buf) =>
-              buf + (kv._1 -> b)
-            }
-          }
-          .value
+        implicit val ordering: Ordering[K] = fa.ordering
+        if (fa.isEmpty) G.pure(SortedMap.empty[K, B])
+        else
+          G.map(Chain.traverseViaChain {
+            val as = collection.mutable.ArrayBuffer[(K, A)]()
+            as ++= fa
+            wrapMutableIndexedSeq(as)
+          } {
+            case (k, a) => G.map(f(a))((k, _))
+          }) { chain => chain.foldLeft(SortedMap.empty[K, B]) { case (m, (k, b)) => m.updated(k, b) } }
       }
 
       def flatMap[A, B](fa: SortedMap[K, A])(f: A => SortedMap[K, B]): SortedMap[K, B] = {
@@ -93,7 +96,7 @@ trait SortedMapInstances extends SortedMapInstances2 {
           }
 
         fa.foreach { case (k, a) => descend(k, a) }
-        bldr.result
+        bldr.result()
       }
 
       override def size[A](fa: SortedMap[K, A]): Long = fa.size.toLong
@@ -103,7 +106,7 @@ trait SortedMapInstances extends SortedMapInstances2 {
         else {
           val n = idx.toInt
           if (n >= fa.size) None
-          else Some(fa.valuesIterator.drop(n).next)
+          else Some(fa.valuesIterator.drop(n).next())
         }
 
       override def isEmpty[A](fa: SortedMap[K, A]): Boolean = fa.isEmpty
@@ -193,14 +196,20 @@ private[instances] trait SortedMapInstancesBinCompat0 {
       override def traverseFilter[G[_], A, B](
         fa: SortedMap[K, A]
       )(f: A => G[Option[B]])(implicit G: Applicative[G]): G[SortedMap[K, B]] = {
-        val gba: Eval[G[SortedMap[K, B]]] = Always(G.pure(SortedMap.empty(fa.ordering)))
-        Foldable
-          .iterateRight(fa, gba) { (kv, lbuf) =>
-            G.map2Eval(f(kv._2), lbuf) { (ob, buf) =>
-              ob.fold(buf)(b => buf + (kv._1 -> b))
-            }
-          }
-          .value
+        implicit val ordering: Ordering[K] = fa.ordering
+        if (fa.isEmpty) G.pure(SortedMap.empty[K, B])
+        else
+          G.map(Chain.traverseFilterViaChain {
+            val as = collection.mutable.ArrayBuffer[(K, A)]()
+            as ++= fa
+            wrapMutableIndexedSeq(as)
+          } {
+            case (k, a) =>
+              G.map(f(a)) { optB =>
+                if (optB.isDefined) Some((k, optB.get))
+                else None
+              }
+          }) { chain => chain.foldLeft(SortedMap.empty[K, B]) { case (m, (k, b)) => m.updated(k, b) } }
       }
 
       override def mapFilter[A, B](fa: SortedMap[K, A])(f: A => Option[B]): SortedMap[K, B] = {

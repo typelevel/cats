@@ -7,6 +7,7 @@ import cats.kernel.Eq
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
+import cats.syntax.eq._
 
 class FuncSuite extends CatsSuite {
   import cats.laws.discipline.eq._
@@ -68,7 +69,7 @@ class FuncSuite extends CatsSuite {
     }
     val h = f.product(g)
     val x = h.run(1)
-    (x.first, x.second) should ===((Some(11), List(2)))
+    assert((x.first, x.second) === ((Some(11), List(2))))
   }
 
   test("traverse") {
@@ -76,6 +77,6 @@ class FuncSuite extends CatsSuite {
       (Some(x + 10): Option[Int])
     }
     val xs = f.traverse(List(1, 2, 3))
-    xs should ===(Some(List(11, 12, 13)))
+    assert(xs === (Some(List(11, 12, 13))))
   }
 }

@@ -16,6 +16,8 @@ import cats.laws.discipline.{
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.laws.discipline.arbitrary._
 import cats.syntax.show._
+import cats.syntax.eq._
+import org.scalacheck.Prop._
 
 import scala.collection.immutable.SortedMap
 
@@ -44,9 +46,9 @@ class SortedMapSuite extends CatsSuite {
 
   test("show isn't empty and is formatted as expected") {
     forAll { (map: SortedMap[Int, String]) =>
-      map.show.nonEmpty should ===(true)
-      map.show.startsWith("SortedMap(") should ===(true)
-      map.show should ===(implicitly[Show[SortedMap[Int, String]]].show(map))
+      assert(map.show.nonEmpty)
+      assert(map.show.startsWith("SortedMap("))
+      assert(map.show === (implicitly[Show[SortedMap[Int, String]]].show(map)))
     }
   }
 
@@ -62,4 +64,15 @@ class SortedMapSuite extends CatsSuite {
 
   checkAll("SortedMap[String, String]", MonoidKTests[SortedMap[String, *]].monoidK[String])
   checkAll("MonoidK[SortedMap[String, *]]", SerializableTests.serializable(MonoidK[SortedMap[String, *]]))
+
+  test("traverse is stack-safe") {
+    val items = SortedMap((0 until 100000).map { i => (i.toString, i) }: _*)
+    val sumAll = Traverse[SortedMap[String, *]]
+      .traverse(items) { i => () => i }
+      .apply
+      .values
+      .sum
+
+    assert(sumAll == items.values.sum)
+  }
 }

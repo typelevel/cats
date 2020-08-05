@@ -1,7 +1,7 @@
 package cats
 package instances
 
-import cats.data.ZipVector
+import cats.data.{Chain, ZipVector}
 import cats.syntax.show._
 
 import scala.annotation.tailrec
@@ -30,8 +30,10 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
         if (fb.isEmpty) Vector.empty // do O(1) work if either is empty
         else fa.flatMap(a => fb.map(b => f(a, b))) // already O(1) if fa is empty
 
+      private[this] val evalEmpty: Eval[Vector[Nothing]] = Eval.now(Vector.empty)
+
       override def map2Eval[A, B, Z](fa: Vector[A], fb: Eval[Vector[B]])(f: (A, B) => Z): Eval[Vector[Z]] =
-        if (fa.isEmpty) Eval.now(Vector.empty) // no need to evaluate fb
+        if (fa.isEmpty) evalEmpty // no need to evaluate fb
         else fb.map(fb => map2(fa, fb)(f))
 
       def coflatMap[A, B](fa: Vector[A])(f: Vector[A] => B): Vector[B] = {
@@ -66,7 +68,7 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
               state = tail
               loop()
             case h :: tail =>
-              h.next match {
+              h.next() match {
                 case Right(b) =>
                   buf += b
                   loop()
@@ -76,7 +78,7 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
               }
           }
         loop()
-        buf.result
+        buf.result()
       }
 
       override def size[A](fa: Vector[A]): Long = fa.size.toLong
@@ -90,11 +92,8 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
         loop(0).value
       }
 
-      final override def traverse[G[_], A, B](fa: Vector[A])(f: A => G[B])(implicit G: Applicative[G]): G[Vector[B]] = {
-        def loop(i: Int): Eval[G[List[B]]] =
-          if (i < fa.length) G.map2Eval(f(fa(i)), Eval.defer(loop(i + 1)))(_ :: _) else Eval.now(G.pure(Nil))
-        G.map(loop(0).value)(_.toVector)
-      }
+      final override def traverse[G[_], A, B](fa: Vector[A])(f: A => G[B])(implicit G: Applicative[G]): G[Vector[B]] =
+        G.map(Chain.traverseViaChain(fa)(f))(_.toVector)
 
       override def mapWithIndex[A, B](fa: Vector[A])(f: (A, Int) => B): Vector[B] =
         fa.iterator.zipWithIndex.map(ai => f(ai._1, ai._2)).toVector
@@ -181,11 +180,7 @@ private[instances] trait VectorInstancesBinCompat0 {
     override def flattenOption[A](fa: Vector[Option[A]]): Vector[A] = fa.flatten
 
     def traverseFilter[G[_], A, B](fa: Vector[A])(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[Vector[B]] =
-      traverse
-        .foldRight(fa, Eval.now(G.pure(Vector.empty[B])))((x, xse) =>
-          G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o))
-        )
-        .value
+      G.map(Chain.traverseFilterViaChain(fa)(f))(_.toVector)
 
     override def filterA[G[_], A](fa: Vector[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[Vector[A]] =
       traverse

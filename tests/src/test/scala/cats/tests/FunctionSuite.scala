@@ -37,6 +37,7 @@ import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
 import cats.syntax.foldable._
 import org.scalacheck.Gen
+import org.scalacheck.Prop._
 
 class FunctionSuite extends CatsSuite {
 
@@ -60,7 +61,7 @@ class FunctionSuite extends CatsSuite {
   // TODO: make an binary compatible way to do this
   // checkAll("Function1[Int => *]", DeferTests[Function1[Int, *]].defer[Int])
 
-  test("Defer[Function1[Int, *]].fix computing sum") {
+  property("Defer[Function1[Int, *]].fix computing sum") {
     val sum2 = Defer[Function1[Int, *]].fix[Int] { rec => (n: Int) =>
       if (n <= 0) 0 else n * n + rec(n - 1)
     }
@@ -115,7 +116,7 @@ class FunctionSuite extends CatsSuite {
   checkAll("Function0[CGrp]", CommutativeGroupTests[Function0[CGrp]].commutativeGroup)
   checkAll("Function0[Distributive]", DistributiveTests[Function0].distributive[Int, Int, Int, Id, Function0])
 
-  test("Function0[Hsh]") {
+  property("Function0[Hsh]") {
     forAll { (x: Function0[Hsh], y: Function0[Hsh]) =>
       HashLaws[Function0[Hsh]].hashCompatibility(x, y)
     }

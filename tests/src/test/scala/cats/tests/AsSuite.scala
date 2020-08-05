@@ -41,6 +41,15 @@ class AsSuite extends CatsSuite {
     implicitly[String <~< AnyRef]
     implicitly[(String, Int) <~< (AnyRef, Any)]
     implicitly[scala.collection.immutable.List[String] <~< scala.collection.Seq[Any]]
+
+    {
+      trait Foo
+      trait Bar
+      implicit def subFooBar: Foo <:< Bar = implicitly[Foo <:< Foo].asInstanceOf[Foo <:< Bar]
+      // make sure the above is found
+      implicitly[As[Foo, Bar]]
+      val res: Foo <:< Bar = implicitly[As[Foo, Bar]].toPredef
+    }
   }
 
   trait Top {

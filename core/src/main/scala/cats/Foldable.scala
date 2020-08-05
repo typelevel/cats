@@ -3,7 +3,8 @@ package cats
 import scala.collection.mutable
 import cats.kernel.CommutativeMonoid
 import simulacrum.{noop, typeclass}
-import Foldable.sentinel
+import Foldable.{sentinel, Source}
+
 import scala.annotation.implicitNotFound
 
 /**
@@ -98,7 +99,7 @@ import scala.annotation.implicitNotFound
 
   def foldRightDefer[G[_]: Defer, A, B](fa: F[A], gb: G[B])(fn: (A, G[B]) => G[B]): G[B] =
     Defer[G].defer(
-      this.foldLeft(fa, (z: G[B]) => z) { (acc, elem) => z =>
+      foldLeft(fa, (z: G[B]) => z) { (acc, elem) => z =>
         Defer[G].defer(acc(fn(elem, z)))
       }(gb)
     )
@@ -109,13 +110,19 @@ import scala.annotation.implicitNotFound
       case (None, a)    => Some(f(a))
     }
 
-  def reduceRightToOption[A, B](fa: F[A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[Option[B]] =
-    foldRight(fa, Now(Option.empty[B])) { (a, lb) =>
-      lb.flatMap {
-        case Some(b) => g(a, Now(b)).map(Some(_))
-        case None    => Later(Some(f(a)))
-      }
+  def reduceRightToOption[A, B](fa: F[A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[Option[B]] = {
+    Source.fromFoldable(fa)(self).uncons match {
+      case Some((first, s)) =>
+        def loop(now: A, source: Source[A]): Eval[B] =
+          source.uncons match {
+            case Some((next, s)) => g(now, Eval.defer(loop(next, s.value)))
+            case None            => Eval.later(f(now))
+          }
+
+        Eval.defer(loop(first, s.value).map(Some(_)))
+      case None => Eval.now(None)
     }
+  }
 
   /**
    * Reduce the elements of this structure down to a single value by applying
@@ -767,13 +774,13 @@ import scala.annotation.implicitNotFound
     val bld = List.newBuilder[A]
     val it = xs.iterator
     if (it.hasNext) {
-      bld += it.next
+      bld += it.next()
       while (it.hasNext) {
         bld += x
-        bld += it.next
+        bld += it.next()
       }
     }
-    bld.result
+    bld.result()
   }
 
   def compose[G[_]: Foldable]: Foldable[λ[α => F[G[α]]]] =
@@ -872,7 +879,7 @@ object Foldable {
 
   def iterateRight[A, B](iterable: Iterable[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = {
     def loop(it: Iterator[A]): Eval[B] =
-      Eval.defer(if (it.hasNext) f(it.next, loop(it)) else lb)
+      Eval.defer(if (it.hasNext) f(it.next(), loop(it)) else lb)
 
     Eval.always(iterable.iterator).flatMap(loop)
   }

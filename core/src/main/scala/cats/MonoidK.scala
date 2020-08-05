@@ -40,6 +40,13 @@ import scala.annotation.implicitNotFound
 
   /**
    * Given a type A, create a concrete Monoid[F[A]].
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> MonoidK[List].algebra[Long].empty
+   * res0: List[Long] = List()
+   * }}}
    */
   override def algebra[A]: Monoid[F[A]] =
     new Monoid[F[A]] {
@@ -47,9 +54,20 @@ import scala.annotation.implicitNotFound
       def combine(x: F[A], y: F[A]): F[A] = self.combineK(x, y)
     }
 
+  /**
+   * Given a kind G, create an "composed" MonoidK[F[G[_]]
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> val monoidK = MonoidK[List].compose[Option]
+   * scala> monoidK.combineK(List(Some(1)), List(Some(2), None))
+   * res0: List[Option[Int]] = List(Some(1), Some(2), None)
+   * }}}
+   */
   override def compose[G[_]]: MonoidK[λ[α => F[G[α]]]] =
     new ComposedMonoidK[F, G] {
-      val F = self
+      val F: MonoidK[F] = self
     }
 }
 

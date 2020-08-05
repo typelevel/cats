@@ -9,6 +9,8 @@ import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.syntax.invariant._
 import cats.syntax.semigroupal._
+import cats.syntax.eq._
+import org.scalacheck.Prop._
 import cats.tests.BinCodecInvariantMonoidalSuite._
 import cats.tests.CatsSuite
 import org.scalacheck.{Arbitrary, Gen}
@@ -52,7 +54,7 @@ class FreeInvariantMonoidalSuite extends CatsSuite {
       val f2 = FreeInvariantMonoidal.pure[BinCodec, MiniInt](n)
       val fExpr = f1.product(f2.imap(_ * n)(_ / n))
 
-      fExpr.fold should ===(iExpr)
+      assert(fExpr.fold === iExpr)
     }
   }
 
@@ -69,7 +71,7 @@ class FreeInvariantMonoidalSuite extends CatsSuite {
     val nt = FunctionK.id[Id]
     val r1 = y.product(p)
     val r2 = r1.compile(nt)
-    r1.foldMap(nt) should ===(r2.foldMap(nt))
+    assert(r1.foldMap(nt) === r2.foldMap(nt))
   }
 
   test("FreeInvariantMonoidal#analyze") {
@@ -77,9 +79,9 @@ class FreeInvariantMonoidalSuite extends CatsSuite {
     val countingNT = new FunctionK[List, G] { def apply[A](la: List[A]): G[A] = List(la.length) }
 
     val fli1 = FreeInvariantMonoidal.lift[List, Int](List(1, 3, 5, 7))
-    fli1.analyze[G[Int]](countingNT) should ===(List(4))
+    assert(fli1.analyze[G[Int]](countingNT) === List(4))
 
     val fli2 = FreeInvariantMonoidal.lift[List, Int](List.empty)
-    fli2.analyze[G[Int]](countingNT) should ===(List(0))
+    assert(fli2.analyze[G[Int]](countingNT) === List(0))
   }
 }

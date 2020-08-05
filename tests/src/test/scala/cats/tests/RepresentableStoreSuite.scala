@@ -6,6 +6,8 @@ import cats.kernel.Eq
 import cats.laws.discipline.{ComonadTests, SerializableTests}
 import cats.laws.discipline.arbitrary._
 import org.scalacheck.{Arbitrary, Cogen}
+import cats.syntax.eq._
+import org.scalacheck.Prop._
 
 class RepresentableStoreSuite extends CatsSuite {
 
@@ -26,10 +28,10 @@ class RepresentableStoreSuite extends CatsSuite {
       cats.laws.discipline.eq
         .catsLawsEqForRepresentableStore[λ[P => (P, P)], Boolean, RepresentableStore[λ[P => (P, P)], Boolean, Int]]
     implicit val eqStoreStoreStore: Eq[
-      RepresentableStore[λ[P => (P, P)], Boolean, RepresentableStore[λ[P => (P, P)],
-                                                                     Boolean,
-                                                                     RepresentableStore[λ[P => (P, P)], Boolean, Int]
-      ]]
+      RepresentableStore[λ[P => (P, P)],
+                         Boolean,
+                         RepresentableStore[λ[P => (P, P)], Boolean, RepresentableStore[λ[P => (P, P)], Boolean, Int]]
+      ]
     ] =
       cats.laws.discipline.eq.catsLawsEqForRepresentableStore[λ[P => (P, P)], Boolean, RepresentableStore[λ[
         P => (P, P)
@@ -45,14 +47,14 @@ class RepresentableStoreSuite extends CatsSuite {
 
   test("extract and peek are consistent") {
     forAll { (store: Store[String, String]) =>
-      store.extract should ===(store.peek(store.index))
+      assert(store.extract === (store.peek(store.index)))
     }
   }
 
   test("use store alias constructor") {
     forAll { (f: String => Int, s: String) =>
       val store = Store(f, s)
-      store.extract should ===(f(s))
+      assert(store.extract === (f(s)))
     }
   }
 }

@@ -77,6 +77,33 @@ trait MonadError[F[_], E] extends ApplicativeError[F, E] with Monad[F] {
   def redeemWith[A, B](fa: F[A])(recover: E => F[B], bind: A => F[B]): F[B] =
     flatMap(attempt(fa))(_.fold(recover, bind))
 
+  /**
+   * Reifies the value or error of the source and performs an effect on the result,
+   * then recovers the original value or error back into `F`.
+   *
+   * Note that if the effect returned by `f` fails, the resulting effect will fail too.
+   *
+   * Alias for `fa.attempt.flatTap(f).rethrow` for convenience.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import scala.util.{Try, Success, Failure}
+   *
+   * scala> def checkError(result: Either[Throwable, Int]): Try[String] = result.fold(_ => Failure(new java.lang.Exception), _ => Success("success"))
+   *
+   * scala> val a: Try[Int] = Failure(new Throwable("failed"))
+   * scala> a.attemptTap(checkError)
+   * res0: scala.util.Try[Int] = Failure(java.lang.Exception)
+   *
+   * scala> val b: Try[Int] = Success(1)
+   * scala> b.attemptTap(checkError)
+   * res1: scala.util.Try[Int] = Success(1)
+   * }}}
+   */
+  def attemptTap[A, B](fa: F[A])(f: Either[E, A] => F[B]): F[A] =
+    rethrow(flatTap(attempt(fa))(f))
+
   override def adaptError[A](fa: F[A])(pf: PartialFunction[E, E]): F[A] =
     recoverWith(fa)(pf.andThen(raiseError[A] _))
 }

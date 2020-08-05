@@ -2,7 +2,6 @@ package cats
 package data
 
 import NonEmptyChainImpl.create
-import cats.{Order, Semigroup}
 import cats.kernel._
 import scala.collection.immutable.SortedMap
 
@@ -286,8 +285,8 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
    */
   final def reduceLeft(f: (A, A) => A): A = {
     val iter = toChain.iterator
-    var result = iter.next
-    while (iter.hasNext) { result = f(result, iter.next) }
+    var result = iter.next()
+    while (iter.hasNext) { result = f(result, iter.next()) }
     result
   }
 
@@ -303,8 +302,8 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
    */
   final def reduceLeftTo[B](f: A => B)(g: (B, A) => B): B = {
     val iter = toChain.iterator
-    var result = f(iter.next)
-    while (iter.hasNext) { result = g(result, iter.next) }
+    var result = f(iter.next())
+    while (iter.hasNext) { result = g(result, iter.next()) }
     result
   }
 
@@ -319,8 +318,8 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
    */
   final def reduceRight(f: (A, A) => A): A = {
     val iter = toChain.reverseIterator
-    var result = iter.next
-    while (iter.hasNext) { result = f(result, iter.next) }
+    var result = iter.next()
+    while (iter.hasNext) { result = f(result, iter.next()) }
     result
   }
 
@@ -336,8 +335,8 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
    */
   final def reduceRightTo[B](f: A => B)(g: (A, B) => B): B = {
     val iter = toChain.reverseIterator
-    var result = f(iter.next)
-    while (iter.hasNext) { result = g(iter.next, result) }
+    var result = f(iter.next())
+    while (iter.hasNext) { result = g(iter.next(), result) }
     result
   }
 
@@ -458,6 +457,8 @@ sealed abstract private[data] class NonEmptyChainInstances extends NonEmptyChain
 
       override def alignWith[A, B, C](fa: NonEmptyChain[A], fb: NonEmptyChain[B])(f: Ior[A, B] => C): NonEmptyChain[C] =
         alignInstance.alignWith(fa, fb)(f)
+
+      override def toNonEmptyList[A](fa: NonEmptyChain[A]): NonEmptyList[A] = fa.toNonEmptyList
     }
 
   implicit def catsDataOrderForNonEmptyChain[A: Order]: Order[NonEmptyChain[A]] =

@@ -4,12 +4,10 @@ package laws
 import cats.kernel.laws.discipline._
 import cats.platform.Platform
 
-import org.typelevel.discipline.scalatest.FunSuiteDiscipline
-import org.scalacheck.{Arbitrary, Cogen, Gen}
+import munit.DisciplineSuite
+import org.scalacheck.{Arbitrary, Cogen, Gen, Prop}
+import Prop.forAll
 import Arbitrary.arbitrary
-import org.scalactic.anyvals.{PosInt, PosZInt}
-import org.scalatest.funsuite.AnyFunSuiteLike
-import org.scalatestplus.scalacheck.Checkers
 
 import scala.concurrent.duration.{Duration, FiniteDuration}
 import scala.collection.immutable.{BitSet, Queue, SortedMap, SortedSet}
@@ -17,6 +15,8 @@ import scala.util.Random
 import java.util.UUID
 import java.util.concurrent.TimeUnit.{DAYS, HOURS, MICROSECONDS, MILLISECONDS, MINUTES, NANOSECONDS, SECONDS}
 import compat.scalaVersionSpecific._
+import munit.ScalaCheckSuite
+import org.scalacheck.Test.Parameters
 
 @suppressUnusedImportWarningForScalaVersionSpecific
 object KernelCheck {
@@ -133,17 +133,20 @@ object KernelCheck {
     }
 }
 
-class TestsConfig extends Checkers {
+class TestsConfig extends ScalaCheckSuite {
   // The ScalaCheck defaults (100,100) are too high for Scala.js.
-  final val PropMaxSize: PosZInt = if (Platform.isJs) 10 else 100
-  final val PropMinSuccessful: PosInt = if (Platform.isJs) 10 else 100
-  final val PropWorkers: PosInt = if (Platform.isJvm) PosInt(2) else PosInt(1)
+  final val PropMaxSize = if (Platform.isJs) 10 else 100
+  final val PropMinSuccessful = if (Platform.isJs) 10 else 100
+  final val PropWorkers = if (Platform.isJvm) 2 else 1
 
-  implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
-    PropertyCheckConfiguration(minSuccessful = PropMinSuccessful, sizeRange = PropMaxSize, workers = PropWorkers)
+  implicit override def scalaCheckTestParameters: Parameters =
+    Parameters.default
+      .withMinSuccessfulTests(PropMinSuccessful)
+      .withMaxSize(PropMaxSize)
+      .withWorkers(PropWorkers)
 }
 
-class Tests extends TestsConfig with AnyFunSuiteLike with FunSuiteDiscipline with ScalaVersionSpecificTests {
+class Tests extends TestsConfig with DisciplineSuite {
 
   import KernelCheck._
 
@@ -189,15 +192,9 @@ class Tests extends TestsConfig with AnyFunSuiteLike with FunSuiteDiscipline wit
            PartialOrderTests(Semilattice.asJoinPartialOrder[Set[Int]]).partialOrder
   )
 
-  checkAll("Order[Unit]", OrderTests[Unit].order)
-  checkAll("Order[Boolean]", OrderTests[Boolean].order)
   checkAll("Order[String]", OrderTests[String].order)
   checkAll("Order[Symbol]", OrderTests[Symbol].order)
   checkAll("Order[Byte]", OrderTests[Byte].order)
-  checkAll("Order[Short]", OrderTests[Short].order)
-  checkAll("Order[Char]", OrderTests[Char].order)
-  checkAll("Order[Int]", OrderTests[Int].order)
-  checkAll("Order[Long]", OrderTests[Long].order)
   checkAll("PartialOrder[BitSet]", PartialOrderTests[BitSet].partialOrder)
   checkAll("Order[BigInt]", OrderTests[BigInt].order)
   checkAll("Order[Duration]", OrderTests[Duration].order)
@@ -215,29 +212,24 @@ class Tests extends TestsConfig with AnyFunSuiteLike with FunSuiteDiscipline wit
   checkAll("Order.reverse(Order.reverse(Order[Int]))", OrderTests(Order.reverse(Order.reverse(Order[Int]))).order)
   checkAll("Order.fromLessThan[Int](_ < _)", OrderTests(Order.fromLessThan[Int](_ < _)).order)
 
-  checkAll("LowerBounded[Unit]", LowerBoundedTests[Unit].lowerBounded)
-  checkAll("LowerBounded[Boolean]", LowerBoundedTests[Boolean].lowerBounded)
   checkAll("LowerBounded[Byte]", LowerBoundedTests[Byte].lowerBounded)
-  checkAll("LowerBounded[Short]", LowerBoundedTests[Short].lowerBounded)
-  checkAll("LowerBounded[Char]", LowerBoundedTests[Char].lowerBounded)
-  checkAll("LowerBounded[Int]", LowerBoundedTests[Int].lowerBounded)
-  checkAll("LowerBounded[Long]", LowerBoundedTests[Long].lowerBounded)
   checkAll("LowerBounded[Duration]", LowerBoundedTests[Duration].lowerBounded)
   checkAll("LowerBounded[FiniteDuration]", LowerBoundedTests[FiniteDuration].lowerBounded)
   checkAll("LowerBounded[UUID]", LowerBoundedTests[UUID].lowerBounded)
   checkAll("LowerBounded[String]", LowerBoundedTests[String].lowerBounded)
   checkAll("LowerBounded[Symbol]", LowerBoundedTests[Symbol].lowerBounded)
 
-  checkAll("UpperBounded[Unit]", UpperBoundedTests[Unit].upperBounded)
-  checkAll("UpperBounded[Boolean]", UpperBoundedTests[Boolean].upperBounded)
   checkAll("UpperBounded[Byte]", UpperBoundedTests[Byte].upperBounded)
-  checkAll("UpperBounded[Short]", UpperBoundedTests[Short].upperBounded)
-  checkAll("UpperBounded[Char]", UpperBoundedTests[Char].upperBounded)
-  checkAll("UpperBounded[Int]", UpperBoundedTests[Int].upperBounded)
-  checkAll("UpperBounded[Long]", UpperBoundedTests[Long].upperBounded)
   checkAll("UpperBounded[Duration]", UpperBoundedTests[Duration].upperBounded)
   checkAll("UpperBounded[FiniteDuration]", UpperBoundedTests[FiniteDuration].upperBounded)
   checkAll("UpperBounded[UUID]", UpperBoundedTests[UUID].upperBounded)
+
+  checkAll("BoundedEnumerable[Unit]", BoundedEnumerableTests[Unit].boundedEnumerable)
+  checkAll("BoundedEnumerable[Boolean]", BoundedEnumerableTests[Boolean].boundedEnumerable)
+  checkAll("BoundedEnumerable[Short]", BoundedEnumerableTests[Short].boundedEnumerable)
+  checkAll("BoundedEnumerable[Int]", BoundedEnumerableTests[Int].boundedEnumerable)
+  checkAll("BoundedEnumerable[Char]", BoundedEnumerableTests[Char].boundedEnumerable)
+  checkAll("BoundedEnumerable[Long]", BoundedEnumerableTests[Long].boundedEnumerable)
 
   checkAll("Monoid[String]", MonoidTests[String].monoid)
   checkAll("Monoid[String]", SerializableTests.serializable(Monoid[String]))
@@ -339,7 +331,7 @@ class Tests extends TestsConfig with AnyFunSuiteLike with FunSuiteDiscipline wit
     val combineRight = xs.reduceRight(CommutativeGroup[BigDecimal].combine)
     val combineLeft = xs.reduceLeft(CommutativeGroup[BigDecimal].combine)
 
-    assert(combineRight === combineLeft)
+    assert(Eq[BigDecimal].eqv(combineRight, combineLeft))
   }
 
   test("CommutativeGroup[BigDecimal]'s combine should be commutative for known problematic cases (#3303)") {
@@ -348,7 +340,11 @@ class Tests extends TestsConfig with AnyFunSuiteLike with FunSuiteDiscipline wit
     val one = BigDecimal("1")
     val small = BigDecimal("1e-7", MathContext.DECIMAL32)
 
-    assert(CommutativeGroup[BigDecimal].combine(one, small) === CommutativeGroup[BigDecimal].combine(small, one))
+    assert(
+      Eq[BigDecimal].eqv(CommutativeGroup[BigDecimal].combine(one, small),
+                         CommutativeGroup[BigDecimal].combine(small, one)
+      )
+    )
   }
 
   checkAll("Band[(Int, Int)]", BandTests[(Int, Int)].band)
@@ -411,16 +407,16 @@ class Tests extends TestsConfig with AnyFunSuiteLike with FunSuiteDiscipline wit
     eqv.eqv(po.partialComparison(Set(1, 2), Set(2, 3)), None)
   }
 
-  test("sign . toInt . comparison = sign . compare") {
-    check { (i: Int, j: Int) =>
+  property("sign . toInt . comparison = sign . compare") {
+    forAll { (i: Int, j: Int) =>
       val found = Order[Int].comparison(i, j)
       val expected = Order[Int].compare(i, j)
       Eq[Int].eqv(found.toInt.sign, expected.sign)
     }
   }
 
-  test("sign . toDouble . partialComparison = sign . partialCompare") {
-    check { (x: Set[Int], y: Set[Int]) =>
+  property("sign . toDouble . partialComparison = sign . partialCompare") {
+    forAll { (x: Set[Int], y: Set[Int]) =>
       val found = subsetPartialOrder[Int].partialComparison(x, y).map(_.toDouble.sign)
       val expected = Some(subsetPartialOrder[Int].partialCompare(x, y)).filter(d => !d.isNaN).map(_.sign)
       Eq[Option[Double]].eqv(found, expected)

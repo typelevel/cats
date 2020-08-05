@@ -17,7 +17,8 @@ import cats.laws.discipline.{
 import cats.laws.discipline.arbitrary._
 import cats.syntax.show._
 import cats.syntax.vector._
-import org.scalatest.funsuite.AnyFunSuiteLike
+import cats.syntax.eq._
+import org.scalacheck.Prop._
 
 class VectorSuite extends CatsSuite {
   checkAll("Vector[Int]", SemigroupalTests[Vector].semigroupal[Int, Int, Int])
@@ -47,12 +48,12 @@ class VectorSuite extends CatsSuite {
   checkAll("ZipVector[Int]", CommutativeApplyTests[ZipVector].commutativeApply[Int, Int, Int])
 
   test("show") {
-    Vector(1, 2, 3).show should ===("Vector(1, 2, 3)")
+    assert(Vector(1, 2, 3).show === ("Vector(1, 2, 3)"))
 
-    Vector.empty[Int].show should ===("Vector()")
+    assert(Vector.empty[Int].show === ("Vector()"))
 
     forAll { (vec: Vector[String]) =>
-      vec.show should ===(vec.toString)
+      assert(vec.show === (vec.toString))
     }
   }
 
@@ -65,9 +66,19 @@ class VectorSuite extends CatsSuite {
   test("toNev on empty vector returns None") {
     assert(Vector.empty[Int].toNev == None)
   }
+
+  test("traverse is stack-safe") {
+    val vec = (0 until 100000).toVector
+    val sumAll = Traverse[Vector]
+      .traverse(vec) { i => () => i }
+      .apply
+      .sum
+
+    assert(sumAll == vec.sum)
+  }
 }
 
-final class VectorInstancesSuite extends AnyFunSuiteLike {
+final class VectorInstancesSuite extends munit.FunSuite {
 
   test("NonEmptyParallel instance in cats.instances.vector") {
     import cats.instances.vector._

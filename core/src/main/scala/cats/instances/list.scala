@@ -1,7 +1,8 @@
 package cats
 package instances
 
-import cats.data.ZipList
+import cats.data.{Chain, ZipList}
+import cats.kernel.instances.StaticMethods.wrapMutableIndexedSeq
 import cats.syntax.show._
 
 import scala.annotation.tailrec
@@ -30,8 +31,10 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
         if (fb.isEmpty) Nil // do O(1) work if fb is empty
         else fa.flatMap(a => fb.map(b => f(a, b))) // already O(1) if fa is empty
 
+      private[this] val evalNil: Eval[List[Nothing]] = Eval.now(Nil)
+
       override def map2Eval[A, B, Z](fa: List[A], fb: Eval[List[B]])(f: (A, B) => Z): Eval[List[Z]] =
-        if (fa.isEmpty) Eval.now(Nil) // no need to evaluate fb
+        if (fa.isEmpty) evalNil // no need to evaluate fb
         else fb.map(fb => map2(fa, fb)(f))
 
       def tailRecM[A, B](a: A)(f: A => List[Either[A, B]]): List[B] = {
@@ -47,7 +50,7 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
             case Nil         => ()
           }
         go(f(a) :: Nil)
-        buf.result
+        buf.result()
       }
 
       def coflatMap[A, B](fa: List[A])(f: List[A] => B): List[B] = {
@@ -83,14 +86,14 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
         loop(fa).value
       }
 
-      def traverse[G[_], A, B](fa: List[A])(f: A => G[B])(implicit G: Applicative[G]): G[List[B]] = {
-        def loop(fa: List[A]): Eval[G[List[B]]] =
-          fa match {
-            case h :: t => G.map2Eval(f(h), Eval.defer(loop(t)))(_ :: _)
-            case Nil    => Eval.now(G.pure(Nil))
-          }
-        loop(fa).value
-      }
+      def traverse[G[_], A, B](fa: List[A])(f: A => G[B])(implicit G: Applicative[G]): G[List[B]] =
+        if (fa.isEmpty) G.pure(Nil)
+        else
+          G.map(Chain.traverseViaChain {
+            val as = collection.mutable.ArrayBuffer[A]()
+            as ++= fa
+            wrapMutableIndexedSeq(as)
+          }(f))(_.toList)
 
       def functor: Functor[List] = this
 
@@ -116,7 +119,7 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
 
       override def partitionEither[A, B, C](
         fa: List[A]
-      )(f: (A) => Either[B, C])(implicit A: Alternative[List]): (List[B], List[C]) =
+      )(f: A => Either[B, C])(implicit A: Alternative[List]): (List[B], List[C]) =
         fa.foldRight((List.empty[B], List.empty[C]))((a, acc) =>
           f(a) match {
             case Left(b)  => (b :: acc._1, acc._2)
@@ -214,9 +217,13 @@ private[instances] trait ListInstancesBinCompat0 {
     override def flattenOption[A](fa: List[Option[A]]): List[A] = fa.flatten
 
     def traverseFilter[G[_], A, B](fa: List[A])(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[List[B]] =
-      traverse
-        .foldRight(fa, Eval.now(G.pure(List.empty[B])))((x, xse) => G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ :: o)))
-        .value
+      if (fa.isEmpty) G.pure(Nil)
+      else
+        G.map(Chain.traverseFilterViaChain {
+          val as = collection.mutable.ArrayBuffer[A]()
+          as ++= fa
+          wrapMutableIndexedSeq(as)
+        }(f))(_.toList)
 
     override def filterA[G[_], A](fa: List[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[List[A]] =
       traverse

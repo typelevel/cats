@@ -41,6 +41,36 @@ import scala.annotation.implicitNotFound
    */
   def rmap[A, B, C](fab: F[A, B])(f: B => C): F[A, C] =
     dimap[A, B, A, C](fab)(identity)(f)
+
+  /**
+   * Narrows A into a subtype AA.
+   * Example:
+   * {{{
+   * scala> import cats.syntax.profunctor._
+   * scala> import cats.instances.function._
+   * scala>
+   * scala> sealed trait Foo
+   * scala> case object Bar extends Foo
+   * scala> val x1: Foo => Int = _ => 1
+   * scala> val x2: Bar.type => Int = x1.leftNarrow
+   * }}}
+   */
+  def leftNarrow[A, B, AA <: A](fab: F[A, B]): F[AA, B] = fab.asInstanceOf[F[AA, B]]
+
+  /**
+   * Widens B into a supertype BB.
+   * Example:
+   * {{{
+   * scala> import cats.syntax.profunctor._
+   * scala> import cats.instances.function._
+   * scala>
+   * scala> sealed trait Foo
+   * scala> case object Bar extends Foo
+   * scala> val x1: Int => Bar.type = _ => Bar
+   * scala> val x2: Int => Foo = x1.rightWiden
+   * }}}
+   */
+  def rightWiden[A, B, BB >: B](fab: F[A, B]): F[A, BB] = fab.asInstanceOf[F[A, BB]]
 }
 
 object Profunctor {
@@ -77,6 +107,8 @@ object Profunctor {
     def dimap[C, D](f: C => A)(g: B => D): F[C, D] = typeClassInstance.dimap[A, B, C, D](self)(f)(g)
     def lmap[C](f: C => A): F[C, B] = typeClassInstance.lmap[A, B, C](self)(f)
     def rmap[C](f: B => C): F[A, C] = typeClassInstance.rmap[A, B, C](self)(f)
+    def leftNarrow[C <: A]: F[C, B] = typeClassInstance.leftNarrow[A, B, C](self)
+    def rightWiden[C >: B]: F[A, C] = typeClassInstance.rightWiden[A, B, C](self)
   }
   trait AllOps[F[_, _], A, B] extends Ops[F, A, B]
   trait ToProfunctorOps extends Serializable {

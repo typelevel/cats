@@ -2,8 +2,7 @@ package cats.kernel
 package instances
 
 trait ShortInstances {
-  implicit val catsKernelStdOrderForShort
-    : Order[Short] with Hash[Short] with LowerBounded[Short] with UpperBounded[Short] = new ShortOrder
+  implicit val catsKernelStdOrderForShort: Order[Short] with Hash[Short] with BoundedEnumerable[Short] = new ShortOrder
   implicit val catsKernelStdGroupForShort: CommutativeGroup[Short] = new ShortGroup
 }
 
@@ -14,12 +13,19 @@ class ShortGroup extends CommutativeGroup[Short] {
   override def remove(x: Short, y: Short): Short = (x - y).toShort
 }
 
+trait ShortEnumerable extends BoundedEnumerable[Short] {
+  override def partialNext(a: Short): Option[Short] =
+    if (order.eqv(a, maxBound)) None else Some((a + 1).toShort)
+  override def partialPrevious(a: Short): Option[Short] =
+    if (order.eqv(a, minBound)) None else Some((a - 1).toShort)
+}
+
 trait ShortBounded extends LowerBounded[Short] with UpperBounded[Short] {
   override def minBound: Short = Short.MinValue
   override def maxBound: Short = Short.MaxValue
 }
 
-class ShortOrder extends Order[Short] with Hash[Short] with ShortBounded { self =>
+class ShortOrder extends Order[Short] with Hash[Short] with ShortBounded with ShortEnumerable { self =>
 
   def hash(x: Short): Int = x.hashCode()
   // use java.lang.Short.compare if we can rely on java >= 1.7
@@ -38,5 +44,5 @@ class ShortOrder extends Order[Short] with Hash[Short] with ShortBounded { self 
   override def max(x: Short, y: Short): Short =
     java.lang.Math.max(x.toInt, y.toInt).toShort
 
-  override val partialOrder: PartialOrder[Short] = self
+  override val order: Order[Short] = self
 }
