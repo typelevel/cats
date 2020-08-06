@@ -484,7 +484,7 @@ sealed abstract private[data] class NonEmptyLazyListInstances extends NonEmptyLa
       def reduceLeftTo[A, B](fa: NonEmptyLazyList[A])(f: A => B)(g: (B, A) => B): B = fa.reduceLeftTo(f)(g)
 
       def reduceRightTo[A, B](fa: NonEmptyLazyList[A])(f: A => B)(g: (A, cats.Eval[B]) => cats.Eval[B]): cats.Eval[B] =
-        Eval.defer(fa.reduceRightTo(a => Eval.now(f(a))) { (a, b) =>
+        Eval.defer(fa.reduceRightTo(a => Eval.later(f(a))) { (a, b) =>
           Eval.defer(g(a, b))
         })
 
