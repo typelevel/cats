@@ -259,13 +259,13 @@ class ChainSuite extends CatsSuite {
 
   test("== returns false for non-Chains") {
     forAll { (a: Chain[Int], b: Int) =>
-      assert((a equals b) === (false))
+      assert((a.equals(b)) === (false))
     }
   }
 
   test("== returns false for Chains of different element types") {
     forAll { (a: Chain[Option[String]], b: Chain[String]) =>
-      assert((a equals b) === (a.isEmpty && b.isEmpty))
+      assert((a.equals(b)) === (a.isEmpty && b.isEmpty))
     }
   }
 

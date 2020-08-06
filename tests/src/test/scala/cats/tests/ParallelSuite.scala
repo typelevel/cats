@@ -58,13 +58,16 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
 
   test("ParTraverse_ syntax should be equivalent to Parallel.parTraverse_") {
     forAll { (es: SortedSet[Either[String, Int]]) =>
-      assert(Parallel.parTraverse_[SortedSet, Either[String, *], Either[String, Int], Int](es)(identity) === (es.parTraverse_(identity)))
+      assert(
+        Parallel.parTraverse_[SortedSet, Either[String, *], Either[String, Int], Int](es)(identity) === (es
+          .parTraverse_(identity))
+      )
     }
   }
 
   test("ParSequence_ syntax should be equivalent to Parallel.parSequence_") {
     forAll { (es: SortedSet[Either[String, Int]]) =>
-      assert(Parallel.parSequence_(es) === (es.parSequence_))
+      assert(Parallel.parSequence_[SortedSet, Either[String, *], Int](es) === (es.parSequence_))
     }
   }
 
@@ -99,8 +102,11 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
     )(f: A => G[C], g: B => G[D])(implicit G: Applicative[G]): G[ListTuple2[C, D]] = {
       def loop(abs: ListTuple2[A, B]): Eval[G[ListTuple2[C, D]]] =
         abs.value match {
-          case Nil         => Now(G.pure(ListTuple2(List.empty)))
-          case (a, b) :: t => G.map2Eval(G.product(f(a), g(b)), Eval.defer(loop(ListTuple2(t))))((cur, acc) => ListTuple2(cur :: acc.value))
+          case Nil => Now(G.pure(ListTuple2(List.empty)))
+          case (a, b) :: t =>
+            G.map2Eval(G.product(f(a), g(b)), Eval.defer(loop(ListTuple2(t))))((cur, acc) =>
+              ListTuple2(cur :: acc.value)
+            )
         }
       loop(fab).value
     }
@@ -180,9 +186,9 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
   test("ParLeftSequence Ior should leftSequence values") {
     forAll { (es: List[(Ior[String, Int], Int)]) =>
       val wrapped = ListTuple2(es)
-      implicitly[Parallel[Ior[Int, *]]]
-      def x[T[_, _]: Bitraverse, M[_]: Parallel, A, B](tmab: T[Either[Int, String], B]) = tmab.leftSequence
-      assert(wrapped.parLeftSequence.right.map(_.value) === (wrapped.bimap(_.toOption, identity).leftSequence.map(_.value)))
+      assert(
+        wrapped.parLeftSequence.right.map(_.value) === (wrapped.bimap(_.toOption, identity).leftSequence.map(_.value))
+      )
     }
   }
 

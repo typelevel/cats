@@ -279,7 +279,7 @@ object Invariant extends ScalaVersionSpecificInvariantInstances with InvariantIn
 
 }
 
-private[cats] trait InvariantInstances0 extends TupleInstances0 {
+private[cats] trait InvariantInstances0 extends InvariantInstances1 {
   implicit def catsCommutativeMonadForTuple2[X](implicit X: CommutativeMonoid[X]): CommutativeMonad[(X, *)] =
     cats.instances.tuple.catsStdCommutativeMonadForTuple2[X]
   implicit def catsContravariantForFunction1[R]: Contravariant[* => R] =
@@ -287,23 +287,27 @@ private[cats] trait InvariantInstances0 extends TupleInstances0 {
   implicit def catsDistributiveForFunction0: Distributive[Function0] = cats.instances.function.function0Distributive
   implicit def catsDistributiveForFunction1[I]: Distributive[I => *] =
     cats.instances.function.catsStdDistributiveForFunction1[I]
-  implicit def catsApplicativeForArrow[F[_, _], A](implicit F: Arrow[F]): Applicative[F[A, *]] =
-    new ArrowApplicative[F, A](F)
 
+}
+
+private[cats] trait InvariantInstances1 extends InvariantInstances2 {
   implicit def catsMonadForFunction1[I]: Monad[I => *] = cats.instances.function.catsStdMonadForFunction1[I]
 }
 
-private trait TupleInstances0 extends TupleInstances1 {
+private trait InvariantInstances2 extends TupleInstances0 {
   implicit def catsCommutativeFlatMapForTuple2[X](implicit X: CommutativeSemigroup[X]): CommutativeFlatMap[(X, *)] =
     cats.instances.tuple.catsStdCommutativeFlatMapForTuple2[X]
+
+  implicit def catsApplicativeForArrow[F[_, _], A](implicit F: Arrow[F]): Applicative[F[A, *]] =
+    new ArrowApplicative[F, A](F)
 }
 
-private trait TupleInstances1 extends TupleInstances2 {
+private trait TupleInstances0 extends TupleInstances1 {
   implicit def catsMonadForTuple2[X](implicit X: Monoid[X]): Monad[(X, *)] =
     cats.instances.tuple.catsStdMonadForTuple2[X]
 }
 
-private trait TupleInstances2 {
+private trait TupleInstances1 {
   implicit def catsFlatMapForTuple2[X](implicit X: Semigroup[X]): FlatMap[(X, *)] =
     cats.instances.tuple.catsStdFlatMapForTuple2[X]
 }
