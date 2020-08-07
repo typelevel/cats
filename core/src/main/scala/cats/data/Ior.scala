@@ -710,16 +710,16 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
 
   final def compare[AA >: A, BB >: B](that: AA Ior BB)(implicit AA: Order[AA], BB: Order[BB]): Int =
     (this, that) match {
-      case (Ior.Left(a1), Ior.Left(a2)) => AA.compare(a1, a2)
-      case (Ior.Left(_), _)             => -1
+      case (Ior.Left(a1), Ior.Left(a2))   => AA.compare(a1, a2)
+      case (Ior.Left(_), _)               => -1
+      case (Ior.Right(b1), Ior.Right(b2)) => BB.compare(b1, b2)
+      case (Ior.Right(_), Ior.Left(_))    => 1
+      case (Ior.Right(_), Ior.Both(_, _)) => -1
       case (Ior.Both(a1, b1), Ior.Both(a2, b2)) => {
         val r = AA.compare(a1, a2)
         if (r == 0) BB.compare(b1, b2) else r
       }
-      case (Ior.Both(_, _), Ior.Left(_))  => 1
-      case (Ior.Both(_, _), Ior.Right(_)) => -1
-      case (Ior.Right(b1), Ior.Right(b2)) => BB.compare(b1, b2)
-      case (Ior.Right(_), _)              => 1
+      case (Ior.Both(_, _), _) => 1
     }
 
   final def show[AA >: A, BB >: B](implicit AA: Show[AA], BB: Show[BB]): String =
