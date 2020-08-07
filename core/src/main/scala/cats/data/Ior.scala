@@ -752,9 +752,20 @@ sealed abstract private[data] class IorInstances extends IorInstances0 {
       }
   }
 
-  implicit def catsDataEqForIor[A: Eq, B: Eq]: Eq[A Ior B] =
-    new Eq[A Ior B] {
-      def eqv(x: A Ior B, y: A Ior B): Boolean = x === y
+  implicit def catsDataEqForIor[A: Order, B: Order]: Order[A Ior B] =
+    new Order[A Ior B] {
+
+      def compare(x: Ior[A, B], y: Ior[A, B]): Int =
+        (x, y) match {
+          case (Ior.Left(a1), Ior.Left(a2))         => Order[A].compare(a1, a2)
+          case (Ior.Left(_), _)                     => -1
+          case (Ior.Both(a1, b1), Ior.Both(a2, b2)) => Order[(A, B)].compare((a1, b1), (a2, b2))
+          case (Ior.Both(_, _), Ior.Left(_))        => 1
+          case (Ior.Both(_, _), Ior.Right(_))       => -1
+          case (Ior.Right(b1), Ior.Right(b2))       => Order[B].compare(b1, b2)
+          case (Ior.Right(_), _)                    => 1
+        }
+
     }
 
   implicit def catsDataShowForIor[A: Show, B: Show]: Show[A Ior B] =
@@ -878,6 +889,12 @@ sealed abstract private[data] class IorInstances0 {
 
       override def map[B, C](fa: A Ior B)(f: B => C): A Ior C =
         fa.map(f)
+    }
+
+  implicit def catsDataEqForIor[A: Eq, B: Eq]: Eq[A Ior B] =
+    new Eq[A Ior B] {
+
+      def eqv(x: A Ior B, y: A Ior B): Boolean = x === y
     }
 }
 

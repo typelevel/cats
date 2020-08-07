@@ -3,7 +3,7 @@ package cats.tests
 import cats.{Bitraverse, MonadError, Semigroupal, Show, Traverse}
 import cats.data.{EitherT, Ior, NonEmptyChain, NonEmptyList, NonEmptySet}
 import cats.kernel.{Eq, Semigroup}
-import cats.kernel.laws.discipline.SemigroupTests
+import cats.kernel.laws.discipline.{OrderTests, SemigroupTests}
 import cats.laws.discipline.{
   BifunctorTests,
   BitraverseTests,
@@ -36,6 +36,8 @@ class IorSuite extends CatsSuite {
 
   checkAll("BitraverseTests Ior[*, *]", BitraverseTests[Ior].bitraverse[Option, Int, Int, Int, String, String, String])
   checkAll("Bitraverse[Ior]", SerializableTests.serializable(Bitraverse[Ior]))
+
+  checkAll("Order[Ior[A: Order, B: Order]]", OrderTests[Ior[Int, Int]].order)
 
   checkAll("Semigroup[Ior[A: Semigroup, B: Semigroup]]", SemigroupTests[Ior[List[Int], List[Int]]].semigroup)
   checkAll("SerializableTest Semigroup[Ior[A: Semigroup, B: Semigroup]]",
