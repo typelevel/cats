@@ -11,6 +11,7 @@ import cats.syntax.option._
 import cats.syntax.eq._
 import org.scalacheck.Prop._
 import org.scalacheck.Test.Parameters
+import cats.kernel.laws.discipline.OrderTests
 
 class WriterTSuite extends CatsSuite {
   type Logged[A] = Writer[ListWrapper[Int], A]
@@ -384,6 +385,20 @@ class WriterTSuite extends CatsSuite {
 
     Semigroup[Writer[Int, Int]]
     checkAll("Writer[Int, Int]", SemigroupTests[Writer[Int, Int]].semigroup)
+  }
+
+  {
+    // F[(L, V)] has a semigroup
+    implicit val FLV: Order[ListWrapper[(Int, Int)]] = ListWrapper.order[(Int, Int)]
+
+    Order[WriterT[ListWrapper, Int, Int]]
+    checkAll("WriterT[ListWrapper, Int, Int]", OrderTests[WriterT[ListWrapper, Int, Int]].order)
+    checkAll("Order[WriterT[ListWrapper, Int, Int]]",
+             SerializableTests.serializable(Order[WriterT[ListWrapper, Int, Int]])
+    )
+
+    Order[Writer[Int, Int]]
+    checkAll("Writer[Int, Int]", OrderTests[Writer[Int, Int]].order)
   }
 
   {
