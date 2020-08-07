@@ -708,6 +708,17 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
       (a, b) => that.fold(a2 => false, b2 => false, (a2, b2) => AA.eqv(a, a2) && BB.eqv(b, b2))
     )
 
+  final def compare[AA >: A, BB >: B](that: AA Ior BB)(implicit AA: Order[AA], BB: Order[BB]): Int =
+    (this, that) match {
+      case (Ior.Left(a1), Ior.Left(a2))         => AA.compare(a1, a2)
+      case (Ior.Left(_), _)                     => -1
+      case (Ior.Both(a1, b1), Ior.Both(a2, b2)) => Order[(AA, BB)].compare((a1, b1), (a2, b2))
+      case (Ior.Both(_, _), Ior.Left(_))        => 1
+      case (Ior.Both(_, _), Ior.Right(_))       => -1
+      case (Ior.Right(b1), Ior.Right(b2))       => BB.compare(b1, b2)
+      case (Ior.Right(_), _)                    => 1
+    }
+
   final def show[AA >: A, BB >: B](implicit AA: Show[AA], BB: Show[BB]): String =
     fold(
       a => s"Ior.Left(${AA.show(a)})",
@@ -755,17 +766,7 @@ sealed abstract private[data] class IorInstances extends IorInstances0 {
   implicit def catsDataEqForIor[A: Order, B: Order]: Order[A Ior B] =
     new Order[A Ior B] {
 
-      def compare(x: Ior[A, B], y: Ior[A, B]): Int =
-        (x, y) match {
-          case (Ior.Left(a1), Ior.Left(a2))         => Order[A].compare(a1, a2)
-          case (Ior.Left(_), _)                     => -1
-          case (Ior.Both(a1, b1), Ior.Both(a2, b2)) => Order[(A, B)].compare((a1, b1), (a2, b2))
-          case (Ior.Both(_, _), Ior.Left(_))        => 1
-          case (Ior.Both(_, _), Ior.Right(_))       => -1
-          case (Ior.Right(b1), Ior.Right(b2))       => Order[B].compare(b1, b2)
-          case (Ior.Right(_), _)                    => 1
-        }
-
+      def compare(x: Ior[A, B], y: Ior[A, B]): Int = x.compare(y)
     }
 
   implicit def catsDataShowForIor[A: Show, B: Show]: Show[A Ior B] =
