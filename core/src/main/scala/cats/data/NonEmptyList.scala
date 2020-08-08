@@ -539,7 +539,7 @@ sealed abstract private[data] class NonEmptyListInstances extends NonEmptyListIn
       def combineK[A](a: NonEmptyList[A], b: NonEmptyList[A]): NonEmptyList[A] =
         a.concatNel(b)
 
-      override def split[A](fa: NonEmptyList[A]): (A, List[A]) = (fa.head, fa.tail)
+      override def split[A](fa: NonEmptyList[A]): (A, List[A]) = catsDataNonEmptyReducibleNonEmptyList.split(fa)
 
       override def reduceLeft[A](fa: NonEmptyList[A])(f: (A, A) => A): A =
         fa.reduceLeft(f)
