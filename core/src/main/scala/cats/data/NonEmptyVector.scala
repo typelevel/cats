@@ -329,13 +329,6 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
     NonEmptySet.of(head, tail: _*)
 }
 
-sealed abstract private[data] class NonEmptyVectorInstances0 {
-  implicit val catsDataNonEmptyReducibleNonEmptyVector: NonEmptyReducible[NonEmptyVector, Vector] =
-    new NonEmptyReducible[NonEmptyVector, Vector]() {
-      override def split[A](fa: NonEmptyVector[A]): (A, Vector[A]) = (fa.head, fa.tail)
-    }
-}
-
 @suppressUnusedImportWarningForScalaVersionSpecific
 sealed abstract private[data] class NonEmptyVectorInstances extends NonEmptyVectorInstances0 {
 
@@ -504,6 +497,15 @@ sealed abstract private[data] class NonEmptyVectorInstances extends NonEmptyVect
     }
 
 }
+
+
+sealed abstract private[data] class NonEmptyVectorInstances0 {
+  implicit val catsDataNonEmptyReducibleNonEmptyVector: NonEmptyReducible[NonEmptyVector, Vector] =
+    new NonEmptyReducible[NonEmptyVector, Vector]() {
+      override def split[A](fa: NonEmptyVector[A]): (A, Vector[A]) = (fa.head, fa.tail)
+    }
+}
+
 
 object NonEmptyVector extends NonEmptyVectorInstances with Serializable {
 
