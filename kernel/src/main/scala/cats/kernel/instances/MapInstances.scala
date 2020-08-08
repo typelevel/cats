@@ -79,7 +79,7 @@ class MapMonoid[K, V](implicit V: Semigroup[V]) extends Monoid[Map[K, V]] {
     xss.iterator.foreach { m =>
       val it = m.iterator
       while (it.hasNext) {
-        val (k, v) = it.next
+        val (k, v) = it.next()
         acc(k) = Semigroup.maybeCombine(acc.get(k), v)
       }
     }

@@ -16,16 +16,16 @@ scalafixDependencies in ThisBuild += "org.typelevel" %% "simulacrum-scalafix" % 
 
 val isTravisBuild = settingKey[Boolean]("Flag indicating whether the current build is running under Travis")
 val crossScalaVersionsFromTravis = settingKey[Seq[String]]("Scala versions set in .travis.yml as scala_version_XXX")
-isTravisBuild in Global := sys.env.get("TRAVIS").isDefined
+isTravisBuild in Global := sys.env.contains("TRAVIS")
 
 val scalaCheckVersion = "1.14.3"
 
-val scalatestVersion = "3.2.0"
-val scalatestplusScalaCheckVersion = "3.2.0.0"
+val munitVersion = "0.7.10"
 
 val disciplineVersion = "1.0.3"
 
 val disciplineScalatestVersion = "2.0.0"
+val disciplineMunitVersion = "0.2.3"
 
 val kindProjectorVersion = "0.11.0"
 
@@ -68,6 +68,7 @@ lazy val commonSettings = commonScalaVersionSettings ++ Seq(
   Test / unmanagedSourceDirectories ++= scalaVersionSpecificFolders("test", baseDirectory.value, scalaVersion.value),
   resolvers ++= Seq(Resolver.sonatypeRepo("releases"), Resolver.sonatypeRepo("snapshots")),
   parallelExecution in Test := false,
+  testFrameworks += new TestFramework("munit.Framework"),
   scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings")
 ) ++ warnUnusedImport
 
@@ -126,6 +127,7 @@ lazy val commonJsSettings = Seq(
   jsEnv := new org.scalajs.jsenv.nodejs.NodeJSEnv(),
   // batch mode decreases the amount of memory needed to compile Scala.js code
   scalaJSLinkerConfig := scalaJSLinkerConfig.value.withBatchMode(isTravisBuild.value),
+  scalaJSLinkerConfig ~= (_.withModuleKind(ModuleKind.CommonJSModule)),
   // currently sbt-doctest doesn't work in JS builds
   // https://github.com/tkawachi/sbt-doctest/issues/52
   doctestGenTests := Seq.empty,
@@ -159,17 +161,10 @@ lazy val disciplineDependencies = Seq(
 
 lazy val testingDependencies = Seq(
   libraryDependencies ++= Seq(
-    "org.scalatest" %%% "scalatest-shouldmatchers" % scalatestVersion % Test,
-    "org.scalatest" %%% "scalatest-funsuite" % scalatestVersion % Test,
-    "org.scalatestplus" %%% "scalacheck-1-14" % scalatestplusScalaCheckVersion % Test
-  ),
-  libraryDependencies ++= Seq(
-    ("org.typelevel" %%% "discipline-scalatest" % disciplineScalatestVersion % Test)
+    "org.scalameta" %%% "munit-scalacheck" % munitVersion % Test,
+    "org.typelevel" %%% "discipline-munit" % disciplineMunitVersion % Test
   ).map(
-    _.exclude("org.scalatestplus", "scalacheck-1-14_2.13")
-      .exclude("org.scalactic", "scalactic_2.13")
-      .exclude("org.scalatest", "scalatest_2.13")
-      .withDottyCompat(scalaVersion.value)
+    _.withDottyCompat(scalaVersion.value)
   )
 )
 
@@ -254,19 +249,18 @@ def mimaPrevious(moduleName: String, scalaVer: String, ver: String, includeCats1
       else if (currentMinVersion != minor) List(0)
       else Range(0, patch - 1).inclusive.toList
 
-    val versions = for {
+    for {
       maj <- majorVersions
       min <- minorVersions
       pat <- patchVersions(min)
     } yield (maj, min, pat)
-    versions.toList
   }
 
   val mimaVersions: List[String] = {
     Version(ver) match {
       case Some(Version(major, Seq(minor, patch), _)) =>
         semverBinCompatVersions(major.toInt, minor.toInt, patch.toInt)
-          .map { case (maj, min, pat) => s"${maj}.${min}.${pat}" }
+          .map { case (maj, min, pat) => s"$maj.$min.$pat" }
       case _ =>
         List.empty[String]
     }
@@ -565,6 +559,7 @@ lazy val free = crossProject(JSPlatform, JVMPlatform)
   .settings(moduleName := "cats-free", name := "Cats Free")
   .settings(catsSettings)
   .jsSettings(commonJsSettings)
+  .jsSettings(scalaJSStage in Test := FastOptStage)
   .jvmSettings(commonJvmSettings ++ mimaSettings("cats-free"))
 
 lazy val tests = crossProject(JSPlatform, JVMPlatform)
@@ -684,7 +679,7 @@ lazy val publishSettings = Seq(
   scmInfo := Some(ScmInfo(url("https://github.com/typelevel/cats"), "scm:git:git@github.com:typelevel/cats.git")),
   autoAPIMappings := true,
   apiURL := Some(url("http://typelevel.org/cats/api/")),
-  pomExtra := (
+  pomExtra :=
     <developers>
       <developer>
         <id>ceedubs</id>
@@ -762,7 +757,6 @@ lazy val publishSettings = Seq(
         <url>https://github.com/kailuowang/</url>
       </developer>
     </developers>
-  )
 ) ++ credentialSettings ++ sharedPublishSettings ++ sharedReleaseProcess
 
 // Scalafmt
@@ -778,9 +772,11 @@ addCommandAlias("buildAlleycatsJVM", ";alleycatsCoreJVM/test;alleycatsLawsJVM/te
 addCommandAlias("buildJVM", ";buildKernelJVM;buildCoreJVM;buildTestsJVM;buildFreeJVM;buildAlleycatsJVM")
 addCommandAlias("validateBC", ";binCompatTest/test;mimaReportBinaryIssues")
 addCommandAlias("validateJVM", ";fmtCheck;buildJVM;bench/test;validateBC;makeMicrosite")
-addCommandAlias("validateJS", ";catsJS/compile;testsJS/test;js/test")
+addCommandAlias("validateJS", ";testsJS/test;js/test")
 addCommandAlias("validateKernelJS", "kernelLawsJS/test")
-addCommandAlias("validateFreeJS", "freeJS/test") //separated due to memory constraint on travis
+addCommandAlias("validateFreeJS", "freeJS/test")
+addCommandAlias("validateAlleycatsJS", "alleycatsTestsJS/test")
+addCommandAlias("validateAllJS", "all testsJS/test js/test kernelLawsJS/test freeJS/test alleycatsTestsJS/test")
 addCommandAlias("validateDotty", ";++0.24.0!;alleycatsLawsJVM/compile")
 addCommandAlias("validate", ";clean;validateJS;validateKernelJS;validateFreeJS;validateJVM;validateDotty")
 

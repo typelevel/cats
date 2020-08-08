@@ -285,8 +285,8 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
    */
   final def reduceLeft(f: (A, A) => A): A = {
     val iter = toChain.iterator
-    var result = iter.next
-    while (iter.hasNext) { result = f(result, iter.next) }
+    var result = iter.next()
+    while (iter.hasNext) { result = f(result, iter.next()) }
     result
   }
 
@@ -302,8 +302,8 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
    */
   final def reduceLeftTo[B](f: A => B)(g: (B, A) => B): B = {
     val iter = toChain.iterator
-    var result = f(iter.next)
-    while (iter.hasNext) { result = g(result, iter.next) }
+    var result = f(iter.next())
+    while (iter.hasNext) { result = g(result, iter.next()) }
     result
   }
 
@@ -318,8 +318,8 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
    */
   final def reduceRight(f: (A, A) => A): A = {
     val iter = toChain.reverseIterator
-    var result = iter.next
-    while (iter.hasNext) { result = f(result, iter.next) }
+    var result = iter.next()
+    while (iter.hasNext) { result = f(result, iter.next()) }
     result
   }
 
@@ -335,8 +335,8 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
    */
   final def reduceRightTo[B](f: A => B)(g: (A, B) => B): B = {
     val iter = toChain.reverseIterator
-    var result = f(iter.next)
-    while (iter.hasNext) { result = g(iter.next, result) }
+    var result = f(iter.next())
+    while (iter.hasNext) { result = g(iter.next(), result) }
     result
   }
 
@@ -441,7 +441,7 @@ sealed abstract private[data] class NonEmptyChainInstances extends NonEmptyChain
       def reduceLeftTo[A, B](fa: NonEmptyChain[A])(f: A => B)(g: (B, A) => B): B = fa.reduceLeftTo(f)(g)
 
       def reduceRightTo[A, B](fa: NonEmptyChain[A])(f: A => B)(g: (A, cats.Eval[B]) => cats.Eval[B]): cats.Eval[B] =
-        Eval.defer(fa.reduceRightTo(a => Eval.now(f(a))) { (a, b) =>
+        Eval.defer(fa.reduceRightTo(a => Eval.later(f(a))) { (a, b) =>
           Eval.defer(g(a, b))
         })
 

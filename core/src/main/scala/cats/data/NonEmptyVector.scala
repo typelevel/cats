@@ -279,7 +279,7 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
     }
 
     m.map {
-      case (k, v) => (k, NonEmptyVector.fromVectorUnsafe(v.result))
+      case (k, v) => (k, NonEmptyVector.fromVectorUnsafe(v.result()))
     }: TreeMap[B, NonEmptyVector[A]]
   }
 
@@ -514,7 +514,7 @@ object NonEmptyVector extends NonEmptyVectorInstances with Serializable {
     val buf = Vector.newBuilder[A]
     buf += head
     tail.foreach(buf += _)
-    new NonEmptyVector(buf.result)
+    new NonEmptyVector(buf.result())
   }
 
   def one[A](head: A): NonEmptyVector[A] = apply(head, Vector.empty[A])

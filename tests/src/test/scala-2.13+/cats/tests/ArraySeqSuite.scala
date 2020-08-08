@@ -14,7 +14,9 @@ import cats.laws.discipline.{
 }
 import cats.laws.discipline.arbitrary._
 import cats.syntax.show._
+import cats.syntax.eq._
 import scala.collection.immutable.ArraySeq
+import org.scalacheck.Prop._
 
 class ArraySeqSuite extends CatsSuite {
   checkAll("ArraySeq[Int]", MonoidTests[ArraySeq[Int]].monoid)
@@ -60,13 +62,13 @@ class ArraySeqSuite extends CatsSuite {
   }
 
   test("show") {
-    ArraySeq(1, 2, 3).show should ===(s"ArraySeq(1, 2, 3)")
-    ArraySeq.empty[Int].show should ===(s"ArraySeq()")
+    assert(ArraySeq(1, 2, 3).show === s"ArraySeq(1, 2, 3)")
+    assert(ArraySeq.empty[Int].show === (s"ArraySeq()"))
   }
 
   test("MonoidK.algebra consistent with Monoid") {
     forAll { (xs: ArraySeq[Int], ys: ArraySeq[Int]) =>
-      MonoidK[ArraySeq].algebra[Int].combine(xs, ys) should ===(Monoid[ArraySeq[Int]].combine(xs, ys))
+      assert(MonoidK[ArraySeq].algebra[Int].combine(xs, ys) === (Monoid[ArraySeq[Int]].combine(xs, ys)))
     }
   }
 }

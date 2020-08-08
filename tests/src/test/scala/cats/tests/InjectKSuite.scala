@@ -5,6 +5,8 @@ import cats.data.EitherK
 import cats.kernel.Eq
 import cats.laws.discipline.InjectKTests
 import org.scalacheck._
+import cats.syntax.eq._
+import org.scalacheck.Prop._
 
 class InjectKSuite extends CatsSuite {
 
@@ -73,7 +75,7 @@ class InjectKSuite extends CatsSuite {
       val expr1: T[Int] = InjectK[Test1Algebra, T].inj(Test1(x, _ + 1))
       val expr2: T[Int] = InjectK[Test2Algebra, T].inj(Test2(y, _ * 2))
       val res = distr[T, Int](expr1, expr2)
-      res should ===(Some(x + y))
+      assert(res === (Some(x + y)))
     }
   }
 
@@ -90,26 +92,26 @@ class InjectKSuite extends CatsSuite {
       val expr1: T[Int] = InjectK[Test1Algebra, T].apply(Test1(x, _ + 1))
       val expr2: T[Int] = InjectK[Test2Algebra, T].apply(Test2(y, _ * 2))
       val res = distr[T, Int](expr1, expr2)
-      res should ===(Some(x + y))
+      assert(res === (Some(x + y)))
     }
   }
 
   test("apply in left") {
     forAll { (y: Test1Algebra[Int]) =>
-      InjectK[Test1Algebra, T].inj(y) == EitherK(Left(y)) should ===(true)
+      assert(InjectK[Test1Algebra, T].inj(y) == EitherK(Left(y)) === (true))
     }
   }
 
   test("apply in right") {
     forAll { (y: Test2Algebra[Int]) =>
-      InjectK[Test2Algebra, T].inj(y) == EitherK(Right(y)) should ===(true)
+      assert(InjectK[Test2Algebra, T].inj(y) == EitherK(Right(y)) === (true))
     }
   }
 
   test("null identity") {
     val listIntNull = null.asInstanceOf[List[Int]]
-    InjectK.catsReflexiveInjectKInstance[List].inj[Int](listIntNull) should ===(listIntNull)
-    InjectK.catsReflexiveInjectKInstance[List].prj[Int](listIntNull) should ===(Some(listIntNull))
+    assert(InjectK.catsReflexiveInjectKInstance[List].inj[Int](listIntNull) === (listIntNull))
+    assert(InjectK.catsReflexiveInjectKInstance[List].prj[Int](listIntNull) === (Some(listIntNull)))
   }
 
   checkAll("InjectK[Test1Algebra, T]", InjectKTests[Test1Algebra, T].injectK[String])

@@ -17,6 +17,8 @@ import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.laws.discipline.arbitrary._
 import cats.syntax.show._
 import cats.tests.Helpers.{CMono, CSemi}
+import cats.syntax.eq._
+import org.scalacheck.Prop._
 
 class ConstSuite extends CatsSuite {
 
@@ -92,13 +94,13 @@ class ConstSuite extends CatsSuite {
 
   test("show") {
 
-    Const(1).show should ===("Const(1)")
+    assert(Const(1).show === ("Const(1)"))
 
     forAll { (const: Const[Int, String]) =>
-      const.show.startsWith("Const(") should ===(true)
+      assert(const.show.startsWith("Const(") === (true))
       const.show.contains(const.getConst.show)
-      const.show should ===(implicitly[Show[Const[Int, String]]].show(const))
-      const.show should ===(const.retag[Boolean].show)
+      assert(const.show === (implicitly[Show[Const[Int, String]]].show(const)))
+      assert(const.show === (const.retag[Boolean].show))
     }
   }
 

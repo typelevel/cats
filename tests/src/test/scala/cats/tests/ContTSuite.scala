@@ -6,6 +6,8 @@ import cats.kernel.Eq
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import org.scalacheck.{Arbitrary, Gen}
+import cats.syntax.eq._
+import org.scalacheck.Prop._
 
 class ContTSuite extends CatsSuite {
 
@@ -77,10 +79,10 @@ class ContTSuite extends CatsSuite {
         didSideEffect = true
         b
       }
-      didSideEffect should ===(false)
+      assert(didSideEffect === (false))
 
       contT.run(cb)
-      didSideEffect should ===(true)
+      assert(didSideEffect === (true))
     }
   }
 

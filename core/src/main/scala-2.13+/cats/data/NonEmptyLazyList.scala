@@ -264,8 +264,8 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
    */
   final def reduceLeftTo[B](f: A => B)(g: (B, A) => B): B = {
     val iter = toLazyList.iterator
-    var result = f(iter.next)
-    while (iter.hasNext) { result = g(result, iter.next) }
+    var result = f(iter.next())
+    while (iter.hasNext) { result = g(result, iter.next()) }
     result
   }
 
@@ -281,8 +281,8 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
    */
   final def reduceRightTo[B](f: A => B)(g: (A, B) => B): B = {
     val iter = toLazyList.reverseIterator
-    var result = f(iter.next)
-    while (iter.hasNext) { result = g(iter.next, result) }
+    var result = f(iter.next())
+    while (iter.hasNext) { result = g(iter.next(), result) }
     result
   }
 
@@ -395,7 +395,7 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
     }
 
     m.map {
-      case (k, v) => (k, create(v.result))
+      case (k, v) => (k, create(v.result()))
     }: TreeMap[B, NonEmptyLazyList[A]]
   }
 
@@ -484,7 +484,7 @@ sealed abstract private[data] class NonEmptyLazyListInstances extends NonEmptyLa
       def reduceLeftTo[A, B](fa: NonEmptyLazyList[A])(f: A => B)(g: (B, A) => B): B = fa.reduceLeftTo(f)(g)
 
       def reduceRightTo[A, B](fa: NonEmptyLazyList[A])(f: A => B)(g: (A, cats.Eval[B]) => cats.Eval[B]): cats.Eval[B] =
-        Eval.defer(fa.reduceRightTo(a => Eval.now(f(a))) { (a, b) =>
+        Eval.defer(fa.reduceRightTo(a => Eval.later(f(a))) { (a, b) =>
           Eval.defer(g(a, b))
         })
 

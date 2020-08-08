@@ -9,13 +9,16 @@ import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import cats.syntax.bifunctor._
 import cats.syntax.binested._
+import cats.syntax.eq._
+import org.scalacheck.Prop._
+import org.scalacheck.Test.Parameters
 
 class BinestedSuite extends CatsSuite {
   // we have a lot of generated lists of lists in these tests. We have to tell
   // ScalaCheck to calm down a bit so we don't hit memory and test duration
   // issues.
-  implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
-    PropertyCheckConfiguration(minSuccessful = 20, sizeRange = 5)
+  implicit override val scalaCheckTestParameters: Parameters =
+    Parameters.default.withMinSuccessfulTests(20).withMaxSize(Parameters.default.minSize + 5)
 
   {
     // Bifunctor + Functor + Functor = Bifunctor
@@ -72,7 +75,7 @@ class BinestedSuite extends CatsSuite {
 
   test("simple syntax-based usage") {
     forAll { (value: (Option[Int], List[Int])) =>
-      value.binested.bimap(_.toString, _.toString).value should ===(value.bimap(_.map(_.toString), _.map(_.toString)))
+      assert(value.binested.bimap(_.toString, _.toString).value === (value.bimap(_.map(_.toString), _.map(_.toString))))
     }
   }
 }

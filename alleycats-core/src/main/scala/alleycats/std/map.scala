@@ -3,6 +3,7 @@ package std
 
 import cats._
 import cats.data.Chain
+import cats.kernel.instances.StaticMethods.wrapMutableIndexedSeq
 
 object map extends MapInstances
 
@@ -15,7 +16,11 @@ trait MapInstances {
       def traverse[G[_], A, B](fa: Map[K, A])(f: A => G[B])(implicit G: Applicative[G]): G[Map[K, B]] =
         if (fa.isEmpty) G.pure(Map.empty[K, B])
         else
-          G.map(Chain.traverseViaChain(fa.iterator) {
+          G.map(Chain.traverseViaChain {
+            val as = collection.mutable.ArrayBuffer[(K, A)]()
+            as ++= fa
+            wrapMutableIndexedSeq(as)
+          } {
             case (k, a) => G.map(f(a))((k, _))
           }) { chain => chain.foldLeft(Map.empty[K, B]) { case (m, (k, b)) => m.updated(k, b) } }
 
@@ -35,7 +40,7 @@ trait MapInstances {
         else {
           val n = idx.toInt
           if (n >= fa.size) None
-          else Some(fa.valuesIterator.drop(n).next)
+          else Some(fa.valuesIterator.drop(n).next())
         }
 
       override def isEmpty[A](fa: Map[K, A]): Boolean = fa.isEmpty
@@ -62,7 +67,11 @@ trait MapInstances {
       def traverseFilter[G[_], A, B](fa: Map[K, A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Map[K, B]] =
         if (fa.isEmpty) G.pure(Map.empty[K, B])
         else
-          G.map(Chain.traverseFilterViaChain(fa.iterator) {
+          G.map(Chain.traverseFilterViaChain {
+            val as = collection.mutable.ArrayBuffer[(K, A)]()
+            as ++= fa
+            wrapMutableIndexedSeq(as)
+          } {
             case (k, a) =>
               G.map(f(a)) { optB =>
                 if (optB.isDefined) Some((k, optB.get))

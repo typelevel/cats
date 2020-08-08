@@ -2,6 +2,7 @@ package cats
 package instances
 
 import cats.data.{Chain, ZipList}
+import cats.kernel.instances.StaticMethods.wrapMutableIndexedSeq
 import cats.syntax.show._
 
 import scala.annotation.tailrec
@@ -49,7 +50,7 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
             case Nil         => ()
           }
         go(f(a) :: Nil)
-        buf.result
+        buf.result()
       }
 
       def coflatMap[A, B](fa: List[A])(f: List[A] => B): List[B] = {
@@ -87,7 +88,12 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
 
       def traverse[G[_], A, B](fa: List[A])(f: A => G[B])(implicit G: Applicative[G]): G[List[B]] =
         if (fa.isEmpty) G.pure(Nil)
-        else G.map(Chain.traverseViaChain(fa.iterator)(f))(_.toList)
+        else
+          G.map(Chain.traverseViaChain {
+            val as = collection.mutable.ArrayBuffer[A]()
+            as ++= fa
+            wrapMutableIndexedSeq(as)
+          }(f))(_.toList)
 
       def functor: Functor[List] = this
 
@@ -212,7 +218,12 @@ private[instances] trait ListInstancesBinCompat0 {
 
     def traverseFilter[G[_], A, B](fa: List[A])(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[List[B]] =
       if (fa.isEmpty) G.pure(Nil)
-      else G.map(Chain.traverseFilterViaChain(fa.iterator)(f))(_.toList)
+      else
+        G.map(Chain.traverseFilterViaChain {
+          val as = collection.mutable.ArrayBuffer[A]()
+          as ++= fa
+          wrapMutableIndexedSeq(as)
+        }(f))(_.toList)
 
     override def filterA[G[_], A](fa: List[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[List[A]] =
       traverse

@@ -16,7 +16,8 @@ import cats.laws.discipline.{
 }
 import cats.laws.discipline.arbitrary._
 import cats.syntax.show._
-import org.scalatest.funsuite.AnyFunSuiteLike
+import cats.syntax.eq._
+import org.scalacheck.Prop._
 
 class LazyListSuite extends CatsSuite {
   checkAll("LazyList[Int]", SemigroupalTests[LazyList].semigroupal[Int, Int, Int])
@@ -47,8 +48,8 @@ class LazyListSuite extends CatsSuite {
   checkAll("ZipLazyList[Int]", CommutativeApplyTests[ZipLazyList].apply[Int, Int, Int])
 
   test("show") {
-    LazyList(1, 2, 3).show should ===(s"LazyList(1, ?)")
-    LazyList.empty[Int].show should ===(s"LazyList()")
+    assert(LazyList(1, 2, 3).show === (s"LazyList(1, ?)"))
+    assert(LazyList.empty[Int].show === (s"LazyList()"))
   }
 
   test("Show[LazyList] is referentially transparent, unlike LazyList.toString") {
@@ -61,16 +62,16 @@ class LazyListSuite extends CatsSuite {
         // depending on the internal state of the LazyList. Show[LazyList] should return
         // consistent values independent of internal state.
         unevaluatedLL.tail
-        initialShow should ===(unevaluatedLL.show)
+        assert(initialShow === (unevaluatedLL.show))
       } else {
-        lazyList.show should ===(lazyList.toString)
+        assert(lazyList.show === (lazyList.toString))
       }
     }
   }
 
 }
 
-final class LazyListInstancesSuite extends AnyFunSuiteLike {
+final class LazyListInstancesSuite extends munit.FunSuite {
 
   test("parallel instance in cats.instances.lazyList") {
     import cats.instances.lazyList._

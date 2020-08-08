@@ -80,11 +80,13 @@ object arbitraries {
 ```
 
 Now we can convert these `ScalaCheck` `Properties` into tests that the test framework can run.  [discipline](https://github.com/typelevel/discipline) provides a helper `checkAll` function that performs
-this conversion for two test frameworks: `ScalaTest` and `Specs2`.
+this conversion for three test frameworks: `ScalaTest`, `Specs2` and `MUnit`.
 
 * If you are using `Specs2`, extend your test class with `org.typelevel.discipline.specs2.Discipline` (provided by `discipline-specs2`).
 
 * If you are using `ScalaTest`, extend your test class with `org.typelevel.discipline.scalatest.FunSuiteDiscipline` (provided by `discipline-scalatest`) and `org.scalatest.funsuite.AnyFunSuiteLike`.
+
+* If you are using `MUnit`, extend your test class with `munit.DisciplineSuite` (provided by `discipline-munit`).
 
 * For other test frameworks, you need to resort to their integration with `ScalaCheck` to test
 the `ScalaCheck` `Properties` provided by `cats-laws`.
@@ -111,7 +113,7 @@ class TreeLawTests extends AnyFunSuite with FunSuiteDiscipline with Checkers {
 * `arbitraries._` imports the `Arbitrary[Tree[_]]` instances needed to check the laws.
 
 Alternatively, you can use the `CatsSuite` provided by [Cats-testkit-scalatest](https://github.com/typelevel/cats-testkit-scalatest),
-which is the same `CatsSuite` used in Cats to test all instances.
+which used to be what Cats used internally to test all instances.
 
 Now when we run `test` in our sbt console, ScalaCheck will test if the `Functor` laws hold for our `Tree` type.
 You should see something like this:
@@ -167,7 +169,7 @@ import org.typelevel.discipline.scalatest.FunSuiteDiscipline
 import arbitraries._
 
 class TreeLawTests extends AnyFunSuite with FunSuiteDiscipline with Checkers {
-  checkAll("Tree[Int].SemigroupLaws", SemigroupTests[Tree[Int]].semigroup)
   checkAll("Tree.FunctorLaws", FunctorTests[Tree].functor[Int, Int, String])
+  checkAll("Tree[Int].SemigroupLaws", SemigroupTests[Tree[Int]].semigroup)
 }
 ```

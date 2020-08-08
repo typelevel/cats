@@ -1,23 +1,24 @@
 package cats.tests
 
 import cats.kernel.BoundedEnumerable
+import cats.syntax.eq._
 
 class BoundedEnumerableSuite extends CatsSuite {
 
   test("membersAscending") {
-    BoundedEnumerable[Boolean].membersAscending.toList should ===(List(false, true))
+    assert(BoundedEnumerable[Boolean].membersAscending.toList === (List(false, true)))
   }
 
   test("membersDescending") {
-    BoundedEnumerable[Boolean].membersDescending.toList should ===(List(true, false))
+    assert(BoundedEnumerable[Boolean].membersDescending.toList === (List(true, false)))
   }
 
   test("cycleNext") {
-    BoundedEnumerable[Boolean].cycleNext(false) should ===(true)
+    assert(BoundedEnumerable[Boolean].cycleNext(false) === (true))
   }
 
   test("cyclePrevious") {
-    BoundedEnumerable[Boolean].cyclePrevious(false) should ===(true)
+    assert(BoundedEnumerable[Boolean].cyclePrevious(false) === (true))
   }
 
 }

@@ -10,7 +10,7 @@ abstract private[data] class OneAndLowPriority4 {
     new Comonad[OneAnd[Stream, *]] {
       def coflatMap[A, B](fa: OneAnd[Stream, A])(f: OneAnd[Stream, A] => B): OneAnd[Stream, B] = {
         @tailrec def consume(as: Stream[A], buf: Builder[B, Stream[B]]): Stream[B] =
-          if (as.isEmpty) buf.result
+          if (as.isEmpty) buf.result()
           else {
             val tail = as.tail
             consume(tail, buf += f(OneAnd(as.head, tail)))
@@ -29,7 +29,7 @@ abstract private[data] class OneAndLowPriority4 {
     new Comonad[OneAnd[LazyList, *]] {
       def coflatMap[A, B](fa: OneAnd[LazyList, A])(f: OneAnd[LazyList, A] => B): OneAnd[LazyList, B] = {
         @tailrec def consume(as: LazyList[A], buf: Builder[B, LazyList[B]]): LazyList[B] =
-          if (as.isEmpty) buf.result
+          if (as.isEmpty) buf.result()
           else {
             val tail = as.tail
             consume(tail, buf += f(OneAnd(as.head, tail)))
