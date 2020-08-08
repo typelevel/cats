@@ -133,8 +133,8 @@ class ReducibleSuiteAdditional extends CatsSuite {
 }
 
 abstract class ReducibleSuite[F[_]: Reducible](name: String)(implicit
-                                                             ArbFInt: Arbitrary[F[Int]],
-                                                             ArbFString: Arbitrary[F[String]]
+  ArbFInt: Arbitrary[F[Int]],
+  ArbFString: Arbitrary[F[String]]
 ) extends FoldableSuite[F](name) {
 
   def range(start: Long, endInclusive: Long): F[Long]
