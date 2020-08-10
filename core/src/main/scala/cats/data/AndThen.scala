@@ -70,21 +70,49 @@ sealed abstract class AndThen[-T, +R] extends (T => R) with Product with Seriali
   override def andThen[A](g: R => A): AndThen[T, A] =
     // Fusing calls up to a certain threshold, using the fusion
     // technique implemented for `cats.effect.IO#map`
-    this match {
-      case Single(f, index) if index != fusionMaxStackDepth =>
-        Single(f.andThen(g), index + 1)
+    g match {
+      case atg: AndThen[R, A] =>
+        (this, atg) match {
+          case (Single(f, indexf), Single(gs, indexg)) if indexf + indexg < fusionMaxStackDepth =>
+            Single(f.andThen(gs), indexf + indexg + 1)
+          case (Concat(left, Single(f, indexf)), Single(gs, indexg)) if indexf + indexg < fusionMaxStackDepth =>
+            Concat(left, Single(f.andThen(gs), indexf + indexg + 1))
+          case _ =>
+            Concat(this, atg)
+        }
       case _ =>
-        andThenF(AndThen(g))
+        this match {
+          case Single(f, index) if index != fusionMaxStackDepth =>
+            Single(f.andThen(g), index + 1)
+          case Concat(left, Single(f, index)) if index != fusionMaxStackDepth =>
+            Concat(left, Single(f.andThen(g), index + 1))
+          case _ =>
+            Concat(this, Single(g, 0))
+        }
     }
 
   override def compose[A](g: A => T): AndThen[A, R] =
     // Fusing calls up to a certain threshold, using the fusion
     // technique implemented for `cats.effect.IO#map`
-    this match {
-      case Single(f, index) if index != fusionMaxStackDepth =>
-        Single(f.compose(g), index + 1)
+    g match {
+      case atg: AndThen[A, T] =>
+        (this, atg) match {
+          case (Single(f, indexf), Single(gs, indexg)) if indexf + indexg < fusionMaxStackDepth =>
+            Single(f.compose(gs), indexf + indexg + 1)
+          case (Concat(Single(f, indexf), right), Single(gs, indexg)) if indexf + indexg < fusionMaxStackDepth =>
+            Concat(Single(f.compose(gs), indexf + indexg + 1), right)
+          case _ =>
+            Concat(atg, this)
+        }
       case _ =>
-        composeF(AndThen(g))
+        this match {
+          case Single(f, index) if index != fusionMaxStackDepth =>
+            Single(f.compose(g), index + 1)
+          case Concat(Single(f, index), right) if index != fusionMaxStackDepth =>
+            Concat(Single(f.compose(g), index + 1), right)
+          case _ =>
+            Concat(Single(g, 0), this)
+        }
     }
 
   private def runLoop(start: T): R = {
@@ -102,11 +130,6 @@ sealed abstract class AndThen[-T, +R] extends (T => R) with Product with Seriali
 
     loop(this, start)
   }
-
-  final private def andThenF[X](right: AndThen[R, X]): AndThen[T, X] =
-    Concat(this, right)
-  final private def composeF[X](right: AndThen[X, T]): AndThen[X, R] =
-    Concat(right, this)
 
   // converts left-leaning to right-leaning
   final protected def rotateAccum[E](_right: AndThen[R, E]): AndThen[T, E] = {
