@@ -7,6 +7,8 @@ import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.tests.Helpers.CSemi
+import cats.syntax.eq._
+import org.scalacheck.Prop._
 
 class IdTSuite extends CatsSuite {
 
@@ -108,14 +110,14 @@ class IdTSuite extends CatsSuite {
 
   test("flatMap and flatMapF consistent") {
     forAll { (idT: IdT[Option, Int], f: Int => IdT[Option, Int]) =>
-      idT.flatMap(f) should ===(idT.flatMapF(f(_).value))
+      assert(idT.flatMap(f) === (idT.flatMapF(f(_).value)))
     }
   }
 
   test("mapK consistent with f(value)+pure") {
     val f: List ~> Option = new (List ~> Option) { def apply[A](a: List[A]): Option[A] = a.headOption }
     forAll { (idT: IdT[List, Int]) =>
-      idT.mapK(f) should ===(IdT(f(idT.value)))
+      assert(idT.mapK(f) === (IdT(f(idT.value))))
     }
   }
 

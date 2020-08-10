@@ -16,7 +16,7 @@ class MapSuite extends AlleycatsSuite {
     val items = Map((0 until 100000).map { i => (i.toString, i) }: _*)
     val sumAll = Traverse[Map[String, *]]
       .traverse(items) { i => () => i }
-      .apply
+      .apply()
       .values
       .sum
 

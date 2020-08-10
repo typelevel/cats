@@ -11,24 +11,10 @@ import cats.syntax.reducible._
 import org.scalacheck.Arbitrary
 
 import scala.collection.mutable
+import cats.syntax.eq._
+import org.scalacheck.Prop._
 
 class ReducibleSuiteAdditional extends CatsSuite {
-
-  test("Reducible[NonEmptyList].reduceLeftM stack safety") {
-    def nonzero(acc: Long, x: Long): Option[Long] =
-      if (x == 0) None else Some(acc + x)
-
-    val n = 100000L
-    val expected = n * (n + 1) / 2
-    val actual = (1L to n).toList.toNel.flatMap(_.reduceLeftM(Option.apply)(nonzero))
-    actual should ===(Some(expected))
-  }
-
-  test("Reducible[NonEmptyList].reduceRightTo stack safety") {
-    val n = 100000L
-    val actual = (1L to n).toList.toNel.get.reduceRightTo(identity) { case (a, r) => r.map(_ + a) }.value
-    actual should ===((1L to n).sum)
-  }
 
   // exists method written in terms of reduceRightTo
   def contains[F[_]: Reducible, A: Eq](as: F[A], goal: A): Eval[Boolean] =
@@ -41,9 +27,9 @@ class ReducibleSuiteAdditional extends CatsSuite {
       def split[A](nel: NonEmptyList[A]): (A, List[A]) = (nel.head, nel.tail)
     }
     val nel = NonEmptyList.of(1, 2, 3)
-    R.get(nel)(1L) should ===(nel.get(1L))
-    R.size(nel) should ===(nel.size.toLong)
-    R.get(nel)(4L) should ===(None)
+    assert(R.get(nel)(1L) === (nel.get(1L)))
+    assert(R.size(nel) === (nel.size.toLong))
+    assert(R.get(nel)(4L) === (None))
   }
 
   test("Reducible[NonEmptyList]") {
@@ -53,15 +39,15 @@ class ReducibleSuiteAdditional extends CatsSuite {
     val tail = (2 to 10).toList
     val total = 1 + tail.sum
     val nel = NonEmptyList(1, tail)
-    R.reduceLeft(nel)(_ + _) should ===(total)
-    R.reduceRight(nel)((x, ly) => ly.map(x + _)).value should ===(total)
-    R.reduce(nel) should ===(total)
+    assert(R.reduceLeft(nel)(_ + _) === (total))
+    assert(R.reduceRight(nel)((x, ly) => ly.map(x + _)).value === (total))
+    assert(R.reduce(nel) === (total))
 
     // more basic checks
     val names = NonEmptyList.of("Aaron", "Betty", "Calvin", "Deirdra")
     val totalLength = names.toList.map(_.length).sum
-    R.reduceLeftTo(names)(_.length)((sum, s) => s.length + sum) should ===(totalLength)
-    R.reduceMap(names)(_.length) should ===(totalLength)
+    assert(R.reduceLeftTo(names)(_.length)((sum, s) => s.length + sum) === (totalLength))
+    assert(R.reduceMap(names)(_.length) === (totalLength))
     val sumLeftM = R.reduceLeftM(names)(Some(_): Option[String]) { (acc, x) =>
       (Some(acc + x): Option[String])
     }
@@ -82,15 +68,6 @@ class ReducibleSuiteAdditional extends CatsSuite {
     // test trampolining
     val large = NonEmptyList(1, (2 to 10000).toList)
     assert(contains(large, 10000).value)
-  }
-
-  test("Reducible[NonEmptyList].reduceMapA can breakout") {
-    val notAllEven = NonEmptyList.of(2, 4, 6, 9, 10, 12, 14)
-    val out = mutable.ListBuffer[Int]()
-
-    notAllEven.reduceMapA { a => out += a; if (a % 2 == 0) Some(a) else None }
-
-    out.toList should ===(List(2, 4, 6, 9))
   }
 
   // A simple non-empty stream with lazy `foldRight` and `reduceRightTo` implementations.
@@ -134,7 +111,7 @@ class ReducibleSuiteAdditional extends CatsSuite {
     val n = 100000
     val xs = NES(Right(0), Stream.from(1).map(i => if (i < n) Right(i) else Left(i)))
 
-    xs.reduceA should ===(Left(n))
+    assert(xs.reduceA === (Left(n)))
   }
 }
 
@@ -146,6 +123,12 @@ abstract class ReducibleSuite[F[_]: Reducible](name: String)(implicit
   def range(start: Long, endInclusive: Long): F[Long]
   def fromValues[A](el: A, els: A*): F[A]
 
+  test(s"Reducible[$name].reduceRightTo stack safety") {
+    val n = 100000L
+    val actual = range(1L, n).reduceRightTo(identity) { case (a, r) => r.map(_ + a) }.value
+    assert(actual === (1L to n).sum)
+  }
+
   test(s"Reducible[$name].reduceLeftM stack safety") {
     def nonzero(acc: Long, x: Long): Option[Long] =
       if (x == 0) None else Some(acc + x)
@@ -153,26 +136,26 @@ abstract class ReducibleSuite[F[_]: Reducible](name: String)(implicit
     val n = 100000L
     val expected = n * (n + 1) / 2
     val actual = range(1L, n).reduceLeftM(Option.apply)(nonzero)
-    actual should ===(Some(expected))
+    assert(actual === (Some(expected)))
   }
 
   test(s"Reducible[$name].reduceA successful case") {
     val expected = 6
     val actual = fromValues(1.asRight[String], 2.asRight[String], 3.asRight[String]).reduceA
-    actual should ===(expected.asRight[String])
+    assert(actual === (expected.asRight[String]))
   }
 
   test(s"Reducible[$name].reduceA failure case") {
     val expected = "boom!!!"
     val actual = fromValues(1.asRight, "boom!!!".asLeft, 3.asRight).reduceA
-    actual should ===(expected.asLeft[Int])
+    assert(actual === (expected.asLeft[Int]))
   }
 
   test(s"Reducible[$name].reduceMapA successful case") {
     val expected = "123"
     val actual = range(1, 3).reduceMapA(_.toString.some)
 
-    actual should ===(expected.some)
+    assert(actual === (expected.some))
   }
 
   test(s"Reducible[$name].reduceMapA failure case") {
@@ -180,12 +163,12 @@ abstract class ReducibleSuite[F[_]: Reducible](name: String)(implicit
 
     val expected = "boom!!!"
     val actual = range(1, 3).reduceMapA(intToString)
-    actual should ===(expected.asLeft[Int])
+    assert(actual === (expected.asLeft[Int]))
   }
 
   test(s"Reducible[$name].toNonEmptyList/toList consistency") {
     forAll { (fa: F[Int]) =>
-      fa.toList.toNel should ===(Some(fa.toNonEmptyList))
+      assert(fa.toList.toNel === (Some(fa.toNonEmptyList)))
     }
   }
 
@@ -198,7 +181,7 @@ abstract class ReducibleSuite[F[_]: Reducible](name: String)(implicit
   test("Reducible#nonEmptyPartition retains size") {
     forAll { (fi: F[Int], f: Int => Either[String, String]) =>
       val folded = fi.nonEmptyPartition(f).fold(identity, identity, _ ++ _.toList)
-      folded.size.toLong should ===(fi.size)
+      assert(folded.size.toLong === (fi.size))
     }
   }
 
@@ -208,11 +191,37 @@ abstract class ReducibleSuite[F[_]: Reducible](name: String)(implicit
       val h: Int => Either[String, Double] = f.andThen(Left.apply)
 
       val withG = fi.nonEmptyPartition(g).right.getOrElse(NonEmptyList.one(""))
-      withG should ===(Reducible[F].toNonEmptyList(fi).map(f))
+      assert(withG === (Reducible[F].toNonEmptyList(fi).map(f)))
 
       val withH = fi.nonEmptyPartition(h).left.getOrElse(NonEmptyList.one(""))
-      withH should ===(Reducible[F].toNonEmptyList(fi).map(f))
+      assert(withH === (Reducible[F].toNonEmptyList(fi).map(f)))
     }
   }
 
+  test(s"Reducible[$name].reduceMapA can breakout") {
+    val notAllEven = fromValues(2, 4, 6, 9, 10, 12, 14)
+    val out = mutable.ListBuffer[Int]()
+
+    notAllEven.reduceMapA { a => out += a; if (a % 2 == 0) Some(a) else None }
+
+    assert(out.toList === List(2, 4, 6, 9))
+  }
+
+  test(s"Reducible[$name].reduceRightTo can breakout") {
+    val notAllEven = fromValues(2, 4, 6, 9, 10, 12, 14)
+    val out = mutable.ListBuffer[Int]()
+
+    notAllEven.reduceRightTo(identity) { case (a, r) => out += a; if (a % 2 == 0) r.map(_ + a) else Eval.now(0) }.value
+
+    assert(out.toList === List(2, 4, 6, 9))
+  }
+
+  test(s"Reducible[$name].nonEmptyTraverse_ can breakout") {
+    val notAllEven = fromValues(2, 4, 6, 9, 10, 12, 14)
+    val out = mutable.ListBuffer[Int]()
+
+    notAllEven.nonEmptyTraverse_ { a => out += a; if (a % 2 == 0) Some(a) else None }
+
+    assert(out.toList === List(2, 4, 6, 9))
+  }
 }

@@ -6,11 +6,14 @@ import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.syntax.foldable._
+import cats.syntax.eq._
+import org.scalacheck.Prop._
+import org.scalacheck.Test.Parameters
 
 class OneAndSuite extends CatsSuite {
   // Lots of collections here.. telling ScalaCheck to calm down a bit
-  implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
-    PropertyCheckConfiguration(minSuccessful = 20, sizeRange = 5)
+  implicit override val scalaCheckTestParameters: Parameters =
+    Parameters.default.withMinSuccessfulTests(20).withMaxSize(Parameters.default.minSize + 5)
 
   {
     implicit val traverse: Traverse[OneAnd[ListWrapper, *]] = OneAnd.catsDataTraverseForOneAnd(ListWrapper.traverse)
@@ -57,7 +60,7 @@ class OneAndSuite extends CatsSuite {
 
   test("size is consistent with toList.size") {
     forAll { (oa: OneAnd[Vector, Int]) =>
-      oa.size should ===(oa.toList.size.toLong)
+      assert(oa.size === (oa.toList.size.toLong))
     }
   }
 

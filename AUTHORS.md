@@ -275,6 +275,7 @@ possible:
  * Trond Bjerkestrand
  * Tya
  * Valentin Willscher
+ * Valeriy Avanesov
  * Valy Diarrassouba
  * Vasileios Lampridis
  * Vasilis Nicolaou

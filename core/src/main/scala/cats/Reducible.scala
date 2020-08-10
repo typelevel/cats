@@ -181,8 +181,10 @@ import scala.annotation.implicitNotFound
    * available for `G` and want to take advantage of short-circuiting
    * the traversal.
    */
-  def nonEmptyTraverse_[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Apply[G]): G[Unit] =
-    G.void(reduceLeftTo(fa)(f)((x, y) => G.map2(x, f(y))((_, b) => b)))
+  def nonEmptyTraverse_[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Apply[G]): G[Unit] = {
+    val f1 = f.andThen(G.void)
+    reduceRightTo(fa)(f1)((x, y) => G.map2Eval(f1(x), y)((_, b) => b)).value
+  }
 
   /**
    * Sequence `F[G[A]]` using `Apply[G]`.
@@ -192,7 +194,7 @@ import scala.annotation.implicitNotFound
    * [[nonEmptyTraverse_]] documentation for a description of the differences.
    */
   def nonEmptySequence_[G[_], A](fga: F[G[A]])(implicit G: Apply[G]): G[Unit] =
-    G.void(reduceLeft(fga)((x, y) => G.map2(x, y)((_, b) => b)))
+    nonEmptyTraverse_(fga)(identity)
 
   def toNonEmptyList[A](fa: F[A]): NonEmptyList[A] =
     reduceRightTo(fa)(a => NonEmptyList(a, Nil)) { (a, lnel) =>

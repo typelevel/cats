@@ -2,6 +2,7 @@ package cats
 package instances
 
 import cats.data.Chain
+import cats.kernel.instances.StaticMethods.wrapMutableIndexedSeq
 import cats.syntax.show._
 import scala.annotation.tailrec
 import scala.collection.immutable.Queue
@@ -46,7 +47,7 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
                 }
               }
             case Nil =>
-              bldr.result
+              bldr.result()
           }
         go(f(a) :: Nil)
       }
@@ -54,7 +55,7 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
       def coflatMap[A, B](fa: Queue[A])(f: Queue[A] => B): Queue[B] = {
         val bldr = Queue.newBuilder[B]
         @tailrec def loop(as: Queue[A]): Queue[B] =
-          if (as.isEmpty) bldr.result
+          if (as.isEmpty) bldr.result()
           else {
             val (_, rest) = as.dequeue
             bldr += f(as)
@@ -82,14 +83,18 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
       def traverse[G[_], A, B](fa: Queue[A])(f: A => G[B])(implicit G: Applicative[G]): G[Queue[B]] =
         if (fa.isEmpty) G.pure(Queue.empty[B])
         else
-          G.map(Chain.traverseViaChain(fa.iterator)(f)) { chain =>
+          G.map(Chain.traverseViaChain {
+            val as = collection.mutable.ArrayBuffer[A]()
+            as ++= fa
+            wrapMutableIndexedSeq(as)
+          }(f)) { chain =>
             chain.foldLeft(Queue.empty[B])(_ :+ _)
           }
 
       override def mapWithIndex[A, B](fa: Queue[A])(f: (A, Int) => B): Queue[B] = {
         val b = Queue.newBuilder[B]
         fa.iterator.zipWithIndex.map(ai => f(ai._1, ai._2)).foreach(b += _)
-        b.result
+        b.result()
       }
 
       override def zipWithIndex[A](fa: Queue[A]): Queue[(A, Int)] =
@@ -177,7 +182,11 @@ private object QueueInstances {
     def traverseFilter[G[_], A, B](fa: Queue[A])(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[Queue[B]] =
       if (fa.isEmpty) G.pure(Queue.empty[B])
       else
-        G.map(Chain.traverseFilterViaChain(fa.iterator)(f)) { chain =>
+        G.map(Chain.traverseFilterViaChain {
+          val as = collection.mutable.ArrayBuffer[A]()
+          as ++= fa
+          wrapMutableIndexedSeq(as)
+        }(f)) { chain =>
           chain.foldLeft(Queue.empty[B])(_ :+ _)
         }
 

@@ -10,6 +10,8 @@ import cats.syntax.functor._
 import cats.syntax.show._
 import cats.syntax.reducible._
 import scala.collection.immutable.SortedMap
+import cats.syntax.eq._
+import org.scalacheck.Prop._
 
 class NonEmptyMapSuite extends CatsSuite {
 
@@ -29,75 +31,75 @@ class NonEmptyMapSuite extends CatsSuite {
 
   test("Show is not empty and is formatted as expected") {
     forAll { (nem: NonEmptyMap[String, Int]) =>
-      nem.show.nonEmpty should ===(true)
-      nem.show.startsWith("NonEmptySortedMap(") should ===(true)
-      nem.show should ===(implicitly[Show[NonEmptyMap[String, Int]]].show(nem))
-      nem.show.contains(nem.head._2.show) should ===(true)
+      assert(nem.show.nonEmpty === (true))
+      assert(nem.show.startsWith("NonEmptySortedMap(") === (true))
+      assert(nem.show === (implicitly[Show[NonEmptyMap[String, Int]]].show(nem)))
+      assert(nem.show.contains(nem.head._2.show) === (true))
     }
   }
 
   test("Show is formatted correctly") {
     val nonEmptyMap = NonEmptyMap.one("Key", "Test")
-    nonEmptyMap.show should ===("NonEmptySortedMap(Key -> Test)")
+    assert(nonEmptyMap.show === ("NonEmptySortedMap(Key -> Test)"))
   }
 
   test("NonEmptyMap#filter is consistent with Map#filter") {
     forAll { (nem: NonEmptyMap[String, Int], p: Int => Boolean) =>
       val map = nem.toSortedMap
-      nem.filter(p) should ===(map.filter(t => p(t._2)))
+      assert(nem.filter(p) === (map.filter(t => p(t._2))))
     }
   }
 
   test("NonEmptyMap#filterNot is consistent with Map#filterNot") {
     forAll { (nem: NonEmptyMap[String, Int], p: Int => Boolean) =>
       val map = nem.toSortedMap
-      nem.filterNot(p) should ===(map.filterNot(t => p(t._2)))
+      assert(nem.filterNot(p) === (map.filterNot(t => p(t._2))))
     }
   }
 
   test("NonEmptyMap#find is consistent with Map#find") {
     forAll { (nem: NonEmptyMap[String, Int], p: Int => Boolean) =>
       val map = nem.toSortedMap
-      nem.find(p) should ===(map.find(p))
+      assert(nem.find(p) === (map.find(p)))
     }
   }
 
   test("NonEmptyMap#exists is consistent with Map#exists") {
     forAll { (nem: NonEmptyMap[String, Int], p: Int => Boolean) =>
       val map = nem.toSortedMap
-      nem.exists(p) should ===(map.exists(p))
+      assert(nem.exists(p) === (map.exists(p)))
     }
   }
 
   test("NonEmptyMap#forall is consistent with Map#forall") {
     forAll { (nem: NonEmptyMap[String, Int], p: Int => Boolean) =>
       val map = nem.toSortedMap
-      nem.forall(p) should ===(map.forall(p))
+      assert(nem.forall(p) === (map.forall(p)))
     }
   }
 
   test("NonEmptyMap#map is consistent with Map#map") {
     forAll { (nem: NonEmptyMap[String, Int], p: Int => String) =>
       val map = nem.toSortedMap
-      nem.map(p).toSortedMap should ===(map.fmap(p))
+      assert(nem.map(p).toSortedMap === (map.fmap(p)))
     }
   }
 
   test("lookup is consistent with contains") {
     forAll { (nem: NonEmptyMap[String, Int], key: String) =>
-      nem(key).isDefined should ===(nem.contains(key))
+      assert(nem(key).isDefined === (nem.contains(key)))
     }
   }
 
   test("keys.contains is consistent with contains") {
     forAll { (nem: NonEmptyMap[String, Int], key: String) =>
-      nem(key).isDefined should ===(nem.keys.contains(key))
+      assert(nem(key).isDefined === (nem.keys.contains(key)))
     }
   }
 
   test("reduceLeft consistent with foldLeft") {
     forAll { (nem: NonEmptyMap[String, Int], f: (Int, Int) => Int) =>
-      nem.reduceLeft(f) should ===(Foldable[SortedMap[String, *]].foldLeft(nem.tail, nem.head._2)(f))
+      assert(nem.reduceLeft(f) === (Foldable[SortedMap[String, *]].foldLeft(nem.tail, nem.head._2)(f)))
     }
   }
 
@@ -109,19 +111,19 @@ class NonEmptyMapSuite extends CatsSuite {
       val expected = Foldable[SortedMap[String, *]]
         .foldRight(rev, Now(last._2))((a, b) => f(a, b))
         .value
-      got should ===(expected)
+      assert(got === (expected))
     }
   }
 
   test("reduce consistent with fold") {
     forAll { (nem: NonEmptyMap[String, Int]) =>
-      nem.reduce should ===(nem.fold)
+      assert(nem.reduce === (nem.fold))
     }
   }
 
   test("reduce consistent with reduceK") {
     forAll { (nem: NonEmptyMap[String, Option[Int]]) =>
-      nem.reduce(SemigroupK[Option].algebra[Int]) should ===(nem.reduceK)
+      assert(nem.reduce(SemigroupK[Option].algebra[Int]) === (nem.reduceK))
     }
   }
 
@@ -130,7 +132,7 @@ class NonEmptyMapSuite extends CatsSuite {
       val expected = nem.tail.foldLeft(Option(f(nem.head._2))) { (opt, i) =>
         opt.map(s => g(s, i._2))
       }
-      nem.reduceLeftToOption(f)(g) should ===(expected)
+      assert(nem.reduceLeftToOption(f)(g) === (expected))
     }
   }
 
@@ -142,7 +144,7 @@ class NonEmptyMapSuite extends CatsSuite {
       val expected = rev.foldRight(Option(f(last._2))) { (i, opt) =>
         opt.map(s => g(i._2, Now(s)).value)
       }
-      got should ===(expected)
+      assert(got === (expected))
     }
   }
 
@@ -152,29 +154,29 @@ class NonEmptyMapSuite extends CatsSuite {
       val expected = f(nem.head._2).flatMap { hd =>
         nem.tail.foldM(hd)((acc, i) => f(i).map(acc + _))
       }
-      got should ===(expected)
+      assert(got === (expected))
     }
   }
 
   test("reduceMapM consistent with foldMapM") {
     forAll { (nem: NonEmptyMap[String, Int], f: Int => Option[Int]) =>
-      nem.reduceMapM(f) should ===(nem.foldMapM(f))
+      assert(nem.reduceMapM(f) === (nem.foldMapM(f)))
     }
   }
 
   test("fromMap round trip") {
     forAll { (l: SortedMap[String, Int]) =>
-      NonEmptyMap.fromMap(l).map(_.toSortedMap).getOrElse(SortedMap.empty[String, Int]) should ===(l)
+      assert(NonEmptyMap.fromMap(l).map(_.toSortedMap).getOrElse(SortedMap.empty[String, Int]) === (l))
     }
 
     forAll { (nem: NonEmptyMap[String, Int]) =>
-      NonEmptyMap.fromMap(nem.toSortedMap) should ===(Some(nem))
+      assert(NonEmptyMap.fromMap(nem.toSortedMap) === (Some(nem)))
     }
   }
 
   test("fromMapUnsafe/fromMap consistency") {
     forAll { (nem: NonEmptyMap[String, Int]) =>
-      NonEmptyMap.fromMap(nem.toSortedMap) should ===(Some(NonEmptyMap.fromMapUnsafe(nem.toSortedMap)))
+      assert(NonEmptyMap.fromMap(nem.toSortedMap) === (Some(NonEmptyMap.fromMapUnsafe(nem.toSortedMap))))
     }
   }
 
@@ -186,38 +188,38 @@ class NonEmptyMapSuite extends CatsSuite {
 
   test("+ consistent with Map") {
     forAll { (nem: NonEmptyMap[String, Int], i: (String, Int)) =>
-      nem.add(i).toSortedMap should ===(nem.toSortedMap + i)
+      assert(nem.add(i).toSortedMap === (nem.toSortedMap + i))
     }
   }
 
   test("NonEmptyMap#size and length is consistent with Map#size") {
     forAll { (nem: NonEmptyMap[String, Int]) =>
-      nem.size should ===(nem.toSortedMap.size.toLong)
-      nem.length should ===(nem.toSortedMap.size)
+      assert(nem.size === (nem.toSortedMap.size.toLong))
+      assert(nem.length === (nem.toSortedMap.size))
     }
   }
 
   test("NonEmptyMap#toNonEmptyList is consistent with Map#toList and creating NonEmptyList from it") {
     forAll { (nem: NonEmptyMap[String, Int]) =>
-      nem.toNel should ===(NonEmptyList.fromListUnsafe(nem.toSortedMap.toList))
+      assert(nem.toNel === (NonEmptyList.fromListUnsafe(nem.toSortedMap.toList)))
     }
   }
 
   test("NonEmptyMap#updateWith identity should be a no-op") {
     forAll { (nem: NonEmptyMap[String, Int], i: (String, Int)) =>
-      nem.add(i) should ===(nem.add(i).updateWith(i._1)(identity))
+      assert(nem.add(i) === (nem.add(i).updateWith(i._1)(identity)))
     }
   }
 
   test("NonEmptyMap#updateWith on existing value should behave like Option#map on the same value") {
     forAll { (nem: NonEmptyMap[String, Int], i: (String, Int)) =>
-      nem.add(i).lookup(i._1).map(_ + 1) should ===(nem.add(i).updateWith(i._1)(_ + 1).lookup(i._1))
+      assert(nem.add(i).lookup(i._1).map(_ + 1) === (nem.add(i).updateWith(i._1)(_ + 1).lookup(i._1)))
     }
   }
 
   test("NonEmptyMap#updateWith should not act when key is missing") {
     val single = NonEmptyMap[String, Int](("here", 1), SortedMap())
-    single.lookup("notHere") should ===(single.updateWith("notHere")(_ => 1).lookup("notHere"))
+    assert(single.lookup("notHere") === (single.updateWith("notHere")(_ => 1).lookup("notHere")))
   }
 
 }

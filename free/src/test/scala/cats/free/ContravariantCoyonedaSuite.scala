@@ -7,6 +7,8 @@ import cats.kernel.Eq
 import cats.laws.discipline.{ContravariantTests, SerializableTests}
 import cats.tests.CatsSuite
 import org.scalacheck.{Arbitrary}
+import cats.syntax.eq._
+import org.scalacheck.Prop._
 
 class ContravariantCoyonedaSuite extends CatsSuite {
 

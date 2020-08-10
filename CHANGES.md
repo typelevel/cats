@@ -1,3 +1,25 @@
+## Version 2.2.0-RC2
+
+_2020 July 21
+
+### 7 API / feature enhancements
+
+* [#3524](https://github.com/typelevel/cats/pull/3524) A method `StateT.fromState` turning `State[A, F[B]]` into `StateT[F,A, B]` is added.  by @akopich
+* [#3498](https://github.com/typelevel/cats/pull/3498) Enable breakout in functions reduceRightToOption and reduceRightTo.  by @takayahilton
+* [#3519](https://github.com/typelevel/cats/pull/3519) remove casts from Eval, fix stack overflow in Eval  by @johnynek
+* [#3521](https://github.com/typelevel/cats/pull/3521) make collection traversals stack safe  by @johnynek
+* [#3516](https://github.com/typelevel/cats/pull/3516) Override some Option Apply/Applicative methods  by @johnynek
+* [#3518](https://github.com/typelevel/cats/pull/3518) remove some casts in AndThen  by @johnynek
+* [#3515](https://github.com/typelevel/cats/pull/3515) Add some more implementations to Function0 and Function1 Monads  by @johnynek
+
+
+### 3 build improvements
+
+* [#3525](https://github.com/typelevel/cats/pull/3525) Update scalafmt-core to 2.6.4  by @scala-steward
+* [#3520](https://github.com/typelevel/cats/pull/3520) Update sbt-scalafix to 0.9.19  by @scala-steward
+* [#3514](https://github.com/typelevel/cats/pull/3514) Scalafmt-core 2.6.3  by @barambani
+
+
 ## Version 2.2.0-RC1
 
 _2020 July 6_

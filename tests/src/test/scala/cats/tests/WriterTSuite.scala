@@ -8,6 +8,9 @@ import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import cats.syntax.option._
+import cats.syntax.eq._
+import org.scalacheck.Prop._
+import org.scalacheck.Test.Parameters
 
 class WriterTSuite extends CatsSuite {
   type Logged[A] = Writer[ListWrapper[Int], A]
@@ -15,8 +18,8 @@ class WriterTSuite extends CatsSuite {
   // we have a lot of generated lists of lists in these tests. We have to tell
   // ScalaCheck to calm down a bit so we don't hit memory and test duration
   // issues.
-  implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
-    checkConfiguration.copy(sizeRange = 5)
+  implicit override val scalaCheckTestParameters: Parameters =
+    checkConfiguration.withMaxSize(checkConfiguration.minSize + 5)
 
   checkAll("WriterT[Eval, Int, *]", DeferTests[WriterT[Eval, Int, *]].defer[Int])
   checkAll("WriterT[List, Int, Int]", EqTests[WriterT[List, Int, Int]].eqv)
@@ -34,51 +37,51 @@ class WriterTSuite extends CatsSuite {
 
   test("double swap is a noop") {
     forAll { (w: WriterT[List, Int, Int]) =>
-      w.swap.swap should ===(w)
+      assert(w.swap.swap === (w))
     }
   }
 
   test("reset on pure is a noop") {
     forAll { (i: Int) =>
       val w = Monad[WriterT[List, Int, *]].pure(i)
-      w should ===(w.reset)
+      assert(w === (w.reset))
     }
   }
 
   test("reset consistency") {
     forAll { (i: Int, w1: WriterT[Id, Int, Int], w2: WriterT[Id, Int, Int]) =>
       // if the value is the same, everything should be the same
-      w1.map(_ => i).reset should ===(w2.map(_ => i).reset)
+      assert(w1.map(_ => i).reset === (w2.map(_ => i).reset))
     }
   }
 
   test("tell + written is identity") {
     forAll { (i: Int) =>
-      WriterT.tell[Id, Int](i).written should ===(i)
+      assert(WriterT.tell[Id, Int](i).written === (i))
     }
   }
 
   test("value + value is identity") {
     forAll { (i: Int) =>
-      WriterT.value[Id, Int, Int](i).value should ===(i)
+      assert(WriterT.value[Id, Int, Int](i).value === (i))
     }
   }
 
   test("valueT + value is identity") {
     forAll { (i: Int) =>
-      WriterT.valueT[Id, Int, Int](i).value should ===(i)
+      assert(WriterT.valueT[Id, Int, Int](i).value === (i))
     }
   }
 
   test("value + listen + map(_._1) + value is identity") {
     forAll { (i: Int) =>
-      WriterT.value[Id, Int, Int](i).listen.map(_._1).value should ===(i)
+      assert(WriterT.value[Id, Int, Int](i).listen.map(_._1).value === (i))
     }
   }
 
   test("tell + listen + map(_._2) + value is identity") {
     forAll { (i: Int) =>
-      WriterT.tell[Id, Int](i).listen.map(_._2).value should ===(i)
+      assert(WriterT.tell[Id, Int](i).listen.map(_._2).value === (i))
     }
   }
 
@@ -86,35 +89,35 @@ class WriterTSuite extends CatsSuite {
     forAll { (i: Int) =>
       val writer: Writer[String, Int] = Writer.value(i)
       val writerT: WriterT[Option, String, Int] = WriterT.liftF(Some(i))
-      writer.run.some should ===(writerT.run)
+      assert(writer.run.some === (writerT.run))
     }
   }
 
   test("show") {
     val writerT: WriterT[Id, List[String], String] = WriterT.put("foo")(List("Some log message"))
-    writerT.show should ===("(List(Some log message),foo)")
+    assert(writerT.show === ("(List(Some log message),foo)"))
   }
 
   test("tell appends to log") {
     val w1: Writer[String, Int] = Writer.value(3)
     val w2 = w1.tell("foo")
-    w2 should ===(Writer("foo", 3))
-    w2.tell("bar") should ===(Writer("foobar", 3))
+    assert(w2 === (Writer("foo", 3)))
+    assert(w2.tell("bar") === (Writer("foobar", 3)))
   }
 
   test("tell instantiates a Writer") {
-    Writer.tell("foo").written should ===("foo")
+    assert(Writer.tell("foo").written === ("foo"))
   }
 
   test("listen returns a tuple of value and log") {
     val w: Writer[String, Int] = Writer("foo", 3)
-    w.listen should ===(Writer("foo", (3, "foo")))
+    assert(w.listen === (Writer("foo", (3, "foo"))))
   }
 
   test("mapK consistent with f(value)+pure") {
     val f: List ~> Option = new (List ~> Option) { def apply[A](a: List[A]): Option[A] = a.headOption }
     forAll { (writert: WriterT[List, String, Int]) =>
-      writert.mapK(f) should ===(WriterT(f(writert.run)))
+      assert(writert.mapK(f) === (WriterT(f(writert.run))))
     }
   }
 

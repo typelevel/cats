@@ -5,6 +5,8 @@ import cats.kernel.CommutativeMonoid
 import cats.laws.discipline.UnorderedFoldableTests
 import cats.syntax.unorderedFoldable._
 import org.scalacheck.Arbitrary
+import cats.syntax.eq._
+import org.scalacheck.Prop._
 
 sealed abstract class UnorderedFoldableSuite[F[_]](name: String)(implicit
   ArbFString: Arbitrary[F[String]],
@@ -22,27 +24,27 @@ sealed abstract class UnorderedFoldableSuite[F[_]](name: String)(implicit
 
   test(s"UnorderedFoldable[$name].isEmpty") {
     forAll { (fa: F[String]) =>
-      instance.isEmpty(fa) should ===(instance.size(fa) === 0L)
+      assert(instance.isEmpty(fa) === (instance.size(fa) === 0L))
     }
   }
 
   test(s"UnorderedFoldable[$name].nonEmpty") {
     forAll { (fa: F[String]) =>
-      instance.nonEmpty(fa) should ===(instance.size(fa) > 0L)
+      assert(instance.nonEmpty(fa) === (instance.size(fa) > 0L))
     }
   }
 
   test(s"UnorderedFoldable[$name].count") {
     forAll { (fa: F[String], p: String => Boolean) =>
       implicit val F: UnorderedFoldable[F] = instance
-      fa.count(p) should ===(iterator(fa).count(p).toLong)
+      assert(fa.count(p) === (iterator(fa).count(p).toLong))
     }
   }
 
   test(s"UnorderedFoldable[$name].size") {
     forAll { (fa: F[String]) =>
       implicit val F: UnorderedFoldable[F] = instance
-      fa.count(Function.const(true)) should ===(fa.size)
+      assert(fa.count(Function.const(true)) === (fa.size))
     }
   }
   checkAll("F[Int]", UnorderedFoldableTests[F](instance).unorderedFoldable[Int, Int])
@@ -68,7 +70,7 @@ sealed abstract class SpecializedUnorderedFoldableSuite[F[_]: UnorderedFoldable]
 
   test(s"Specialized UnorderedFoldable[$name].count") {
     forAll { (fa: F[String], p: String => Boolean) =>
-      fa.count(p) should ===(iterator(fa).count(p).toLong)
+      assert(fa.count(p) === (iterator(fa).count(p).toLong))
     }
   }
 }

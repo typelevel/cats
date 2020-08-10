@@ -1,9 +1,7 @@
 
 ### ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) Community Announcements ![#f03c15](https://placehold.it/15/f03c15/000000?text=+)
+* **Jul 21 2020** [Cats 2.2.0-RC2 is released](https://github.com/typelevel/cats/releases/tag/v2.2.0-RC2)
 * **Jul 6 2020** [Cats 2.2.0-RC1 is released](https://github.com/typelevel/cats/releases/tag/v2.2.0-RC1)
-* **Jun 17 2020** [Cats 2.2.0-M3 is released](https://github.com/typelevel/cats/releases/tag/v2.2.0-M3)
-* **May 25 2020** [Cats 2.2.0-M2 is released](https://github.com/typelevel/cats/releases/tag/v2.2.0-M2)
-* **Mar 31 2020** [Cats 2.2.0-M1 is released](https://github.com/typelevel/cats/releases/tag/v2.2.0-M1)
 * **Dec 18 2019** [Cats 2.1.0 is released](https://github.com/typelevel/cats/releases/tag/v2.1.0)
 * **Sep 9 2019** [Cats 2.0.0 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0)
 * **Jun 3 2019** [Cats 1.6.1 is released](https://github.com/typelevel/cats/releases/tag/v1.6.1) with backported bug fixes
@@ -208,6 +206,7 @@ By sharing the same set of type classes, instances and data types provided by Ca
  * [seals](https://github.com/durban/seals): tools for schema evolution and language-integrated schemata
  * [sup](https://github.com/kubukoz/sup): Composable, purely functional healthchecks in Scala
  * [tsec](https://github.com/jmcardon/tsec/): Typesafe, functional, general purpose cryptography and security library
+ * [coulomb-cats](https://github.com/erikerlandson/coulomb/tree/develop/coulomb-cats): cats typeclass instances for coulomb Quantity
 
 Your project talks Cats too? [Submit a PR to add it here!](https://github.com/typelevel/cats/edit/master/README.md)
 
@@ -313,6 +312,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Free2Move](https://free2move.com)
 - [HelloSoda](https://hellosoda.com)
 - [HomeAway](https://www.homeaway.com)
+- [Hootsuite Inc.](https://hootsuite.com/)
 - [iHeartRadio](https://iheart.com)
 - [ImmobilienScout24](https://www.immobilienscout24.de/)
 - [Immozentral](https://www.immozentral.com/)

@@ -325,10 +325,10 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
     var idx = 1
     val it = tail.iterator
     while (it.hasNext) {
-      bldr += ((it.next, idx))
+      bldr += ((it.next(), idx))
       idx += 1
     }
-    NonEmptyList((head, 0), bldr.result)
+    NonEmptyList((head, 0), bldr.result())
   }
 
   /**
@@ -390,7 +390,7 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
     }
 
     m.map {
-      case (k, v) => (k, NonEmptyList.fromListUnsafe(v.result))
+      case (k, v) => (k, NonEmptyList.fromListUnsafe(v.result()))
     }: TreeMap[B, NonEmptyList[A]]
   }
 

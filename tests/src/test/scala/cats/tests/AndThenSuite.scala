@@ -8,10 +8,11 @@ import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import cats.platform.Platform
-import org.scalatestplus.scalacheck.Checkers
-import org.scalacheck.{Arbitrary, Cogen, Gen, Prop}
+import munit.ScalaCheckSuite
+import org.scalacheck.{Arbitrary, Cogen, Gen}
+import org.scalacheck.Prop._
 
-class AndThenSuite extends CatsSuite with Checkers {
+class AndThenSuite extends CatsSuite with ScalaCheckSuite {
   checkAll("AndThen[MiniInt, Int]", SemigroupalTests[AndThen[MiniInt, *]].semigroupal[Int, Int, Int])
   checkAll("Semigroupal[AndThen[Int, *]]", SerializableTests.serializable(Semigroupal[AndThen[Int, *]]))
 
@@ -43,8 +44,8 @@ class AndThenSuite extends CatsSuite with Checkers {
   checkAll("AndThen[*, Int]", ContravariantTests[AndThen[*, Int]].contravariant[MiniInt, Int, Boolean])
   checkAll("Contravariant[AndThen[*, Int]]", SerializableTests.serializable(Contravariant[AndThen[*, Int]]))
 
-  test("compose a chain of functions with andThen") {
-    check { (i: Int, fs: List[Int => Int]) =>
+  property("compose a chain of functions with andThen") {
+    forAll { (i: Int, fs: List[Int => Int]) =>
       val result = fs.map(AndThen(_)).reduceOption(_.andThen(_)).map(_(i))
       val expect = fs.reduceOption(_.andThen(_)).map(_(i))
 
@@ -52,8 +53,8 @@ class AndThenSuite extends CatsSuite with Checkers {
     }
   }
 
-  test("compose a chain of functions with compose") {
-    check { (i: Int, fs: List[Int => Int]) =>
+  property("compose a chain of functions with compose") {
+    forAll { (i: Int, fs: List[Int => Int]) =>
       val result = fs.map(AndThen(_)).reduceOption(_.compose(_)).map(_(i))
       val expect = fs.reduceOption(_.compose(_)).map(_(i))
 
@@ -66,7 +67,7 @@ class AndThenSuite extends CatsSuite with Checkers {
     val fs = (0 until count).map(_ => (i: Int) => i + 1)
     val result = fs.foldLeft(AndThen((x: Int) => x))(_.andThen(_))(42)
 
-    result shouldEqual (count + 42)
+    assertEquals(result, (count + 42))
   }
 
   test("compose is stack safe") {
@@ -74,7 +75,7 @@ class AndThenSuite extends CatsSuite with Checkers {
     val fs = (0 until count).map(_ => (i: Int) => i + 1)
     val result = fs.foldLeft(AndThen((x: Int) => x))(_.compose(_))(42)
 
-    result shouldEqual (count + 42)
+    assertEquals(result, (count + 42))
   }
 
   test("Function1 andThen is stack safe") {
@@ -83,11 +84,11 @@ class AndThenSuite extends CatsSuite with Checkers {
     val fs = (0 until count).foldLeft(start) { (acc, _) =>
       acc.andThen(_ + 1)
     }
-    fs(0) shouldEqual count
+    assertEquals(fs(0), count)
   }
 
   test("toString") {
-    AndThen((x: Int) => x).toString should startWith("AndThen$")
+    assert(AndThen((x: Int) => x).toString.startsWith("AndThen$"))
   }
 
   // generate a general AndThen which may not be right associated
@@ -147,29 +148,26 @@ class AndThenSuite extends CatsSuite with Checkers {
       }
   }
 
-  test("toRightAssociated works") {
+  property("toRightAssociated works") {
     // we pass explicit Gens here rather than use the Arbitrary
     // instance which just wraps a function
 
     // Right associated should be identity
-    check(Prop.forAll(genRight[Int]) { at =>
+    forAll(genRight[Int]) { at =>
       AndThen.toRightAssociated(at) == at
-    })
-
+    } &&
     // Left associated is never right associated
-    check(Prop.forAll(genLeft[Int]) { at =>
+    forAll(genLeft[Int]) { at =>
       AndThen.toRightAssociated(at) != at
-    })
-
+    } &&
     // check that right associating doesn't change the function value
-    check(Prop.forAll(genAndThen[Int], Gen.choose(Int.MinValue, Int.MaxValue)) { (at, i) =>
+    forAll(genAndThen[Int], Gen.choose(Int.MinValue, Int.MaxValue)) { (at, i) =>
       AndThen.toRightAssociated(at)(i) == at(i)
-    })
-
+    } &&
     // in the worst case of a left associated AndThen, values should still match
-    check(Prop.forAll(genLeft[Int], Gen.choose(Int.MinValue, Int.MaxValue)) { (at, i) =>
+    forAll(genLeft[Int], Gen.choose(Int.MinValue, Int.MaxValue)) { (at, i) =>
       AndThen.toRightAssociated(at)(i) == at(i)
-    })
+    }
   }
 
 }
