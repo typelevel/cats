@@ -2,12 +2,13 @@ package cats.tests
 
 import cats.{~>, Bifunctor, Eval, Foldable, Functor, Id, Monad, MonadError, Traverse}
 import cats.data.{Ior, IorT}
-import cats.kernel.{Eq, Monoid, Semigroup}
+import cats.kernel.{Eq, Monoid, Order, Semigroup}
 import cats.kernel.laws.discipline.{EqTests, MonoidTests, SemigroupTests}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.syntax.eq._
 import org.scalacheck.Prop._
+import cats.kernel.laws.discipline.OrderTests
 
 class IorTSuite extends CatsSuite {
 
@@ -59,6 +60,15 @@ class IorTSuite extends CatsSuite {
 
     checkAll("IorT[ListWrapper, Int, *]", FoldableTests[IorT[ListWrapper, Int, *]].foldable[Int, Int])
     checkAll("Foldable[IorT[ListWrapper, Int, *]]", SerializableTests.serializable(Foldable[IorT[ListWrapper, Int, *]]))
+  }
+
+  {
+    implicit val F: Order[ListWrapper[Ior[String, Int]]] = ListWrapper.order[Ior[String, Int]]
+
+    checkAll("IorT[ListWrapper, String, Int]", OrderTests[IorT[ListWrapper, String, Int]].order)
+    checkAll("Order[IorT[ListWrapper, String, Int]]",
+             SerializableTests.serializable(Order[IorT[ListWrapper, String, Int]])
+    )
   }
 
   {
