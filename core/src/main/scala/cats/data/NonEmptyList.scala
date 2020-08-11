@@ -528,6 +528,12 @@ object NonEmptyList extends NonEmptyListInstances {
 
 sealed abstract private[data] class NonEmptyListInstances extends NonEmptyListInstances0 {
 
+  /**
+   * This is not a bug. The declared type of `catsDataInstancesForNonEmptyList` intentionally ignores
+   * `NonEmptyReducible` trait for it not being a typeclass.
+   *
+   * Also see the discussion: PR #3541 and issue #3069.
+   */
   implicit val catsDataInstancesForNonEmptyList
     : SemigroupK[NonEmptyList] with Bimonad[NonEmptyList] with NonEmptyTraverse[NonEmptyList] with Align[NonEmptyList] =
     new NonEmptyReducible[NonEmptyList, List]
