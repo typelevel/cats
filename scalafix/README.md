@@ -4,16 +4,10 @@
 
 [Install the Scalafix sbt plugin](https://scalacenter.github.io/scalafix/docs/users/installation)
 
-To run all rules that apply to version `1.0.0-RC1` run
+To run all rules that apply to version `1.0.0` run
 
 ```sh
-sbt scalafix github:typelevel/cats/v1.0.0?sha=v1.0.0-RC1
-```
-
-to run all rules that apply to the current `1.0.0-SNAPSHOT` run
-
-```sh
-sbt scalafix github:typelevel/cats/v1.0.0
+sbt scalafix github:typelevel/cats/Cats_v1_0_0
 ```
 
 ## Available rules
