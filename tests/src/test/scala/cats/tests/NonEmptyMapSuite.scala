@@ -31,16 +31,16 @@ class NonEmptyMapSuite extends CatsSuite {
 
   test("Show is not empty and is formatted as expected") {
     forAll { (nem: NonEmptyMap[String, Int]) =>
-      assert(nem.show.nonEmpty === (true))
-      assert(nem.show.startsWith("NonEmptySortedMap(") === (true))
+      assert(nem.show.nonEmpty === true)
+      assert(nem.show.startsWith("NonEmptySortedMap(") === true)
       assert(nem.show === (implicitly[Show[NonEmptyMap[String, Int]]].show(nem)))
-      assert(nem.show.contains(nem.head._2.show) === (true))
+      assert(nem.show.contains(nem.head._2.show) === true)
     }
   }
 
   test("Show is formatted correctly") {
     val nonEmptyMap = NonEmptyMap.one("Key", "Test")
-    assert(nonEmptyMap.show === ("NonEmptySortedMap(Key -> Test)"))
+    assert(nonEmptyMap.show === "NonEmptySortedMap(Key -> Test)")
   }
 
   test("NonEmptyMap#filter is consistent with Map#filter") {
@@ -111,7 +111,7 @@ class NonEmptyMapSuite extends CatsSuite {
       val expected = Foldable[SortedMap[String, *]]
         .foldRight(rev, Now(last._2))((a, b) => f(a, b))
         .value
-      assert(got === (expected))
+      assert(got === expected)
     }
   }
 
@@ -132,7 +132,7 @@ class NonEmptyMapSuite extends CatsSuite {
       val expected = nem.tail.foldLeft(Option(f(nem.head._2))) { (opt, i) =>
         opt.map(s => g(s, i._2))
       }
-      assert(nem.reduceLeftToOption(f)(g) === (expected))
+      assert(nem.reduceLeftToOption(f)(g) === expected)
     }
   }
 
@@ -144,7 +144,7 @@ class NonEmptyMapSuite extends CatsSuite {
       val expected = rev.foldRight(Option(f(last._2))) { (i, opt) =>
         opt.map(s => g(i._2, Now(s)).value)
       }
-      assert(got === (expected))
+      assert(got === expected)
     }
   }
 
@@ -154,7 +154,7 @@ class NonEmptyMapSuite extends CatsSuite {
       val expected = f(nem.head._2).flatMap { hd =>
         nem.tail.foldM(hd)((acc, i) => f(i).map(acc + _))
       }
-      assert(got === (expected))
+      assert(got === expected)
     }
   }
 
@@ -166,7 +166,7 @@ class NonEmptyMapSuite extends CatsSuite {
 
   test("fromMap round trip") {
     forAll { (l: SortedMap[String, Int]) =>
-      assert(NonEmptyMap.fromMap(l).map(_.toSortedMap).getOrElse(SortedMap.empty[String, Int]) === (l))
+      assert(NonEmptyMap.fromMap(l).map(_.toSortedMap).getOrElse(SortedMap.empty[String, Int]) === l)
     }
 
     forAll { (nem: NonEmptyMap[String, Int]) =>

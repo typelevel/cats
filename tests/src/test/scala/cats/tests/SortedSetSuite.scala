@@ -53,7 +53,7 @@ class SortedSetSuite extends CatsSuite {
     // an implementation implemented as set.map(_.show).mkString(", ") would
     // only show one entry in the result instead of 3, because SortedSet.map combines
     // duplicate items in the codomain.
-    assert(SortedSet(1, 2, 3).show === ("SortedSet(1, 1, 1)"))
+    assert(SortedSet(1, 2, 3).show === "SortedSet(1, 1, 1)")
   }
 }
 

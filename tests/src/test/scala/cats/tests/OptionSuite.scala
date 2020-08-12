@@ -47,8 +47,8 @@ class OptionSuite extends CatsSuite {
   checkAll("Align[Option]", SerializableTests.serializable(Align[Option]))
 
   test("show") {
-    assert(none[Int].show === ("None"))
-    assert(1.some.show === ("Some(1)"))
+    assert(none[Int].show === "None")
+    assert(1.some.show === "Some(1)")
 
     forAll { (fs: Option[String]) =>
       assert(fs.show === (fs.toString))
@@ -102,12 +102,12 @@ class OptionSuite extends CatsSuite {
   test(".some with null argument still results in Some #871") {
     val s: String = null
     // can't use `s.some ===  (Some(null))` here, because it leads to NullPointerException)
-    assert(s.some.exists(_ == null) === (true))
+    assert(s.some.exists(_ == null) === true)
   }
 
   test("map2Eval is lazy") {
     val bomb: Eval[Option[Int]] = Later(sys.error("boom"))
-    assert(none[Int].map2Eval(bomb)(_ + _).value === (None))
+    assert(none[Int].map2Eval(bomb)(_ + _).value === None)
   }
 
   test("toOptionT consistency") {

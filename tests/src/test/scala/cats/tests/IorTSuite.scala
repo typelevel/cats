@@ -337,19 +337,19 @@ class IorTSuite extends CatsSuite {
 
   test("IorT.fromIor with Id is noop") {
     forAll { (ior: Ior[String, Int]) =>
-      assert(IorT.fromIor[Id](ior).value === (ior))
+      assert(IorT.fromIor[Id](ior).value === ior)
     }
   }
 
   test("IorT.fromEither toEither is noop") {
     forAll { (either: Either[String, Int]) =>
-      assert(IorT.fromEither[Id](either).value.toEither === (either))
+      assert(IorT.fromEither[Id](either).value.toEither === either)
     }
   }
 
   test("IorT.fromEitherF toEither is noop") {
     forAll { (either: Either[String, Int]) =>
-      assert(IorT.fromEitherF[Id, String, Int](either).value.toEither === (either))
+      assert(IorT.fromEitherF[Id, String, Int](either).value.toEither === either)
     }
   }
 

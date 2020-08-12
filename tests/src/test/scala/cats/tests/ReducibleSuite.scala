@@ -29,7 +29,7 @@ class ReducibleSuiteAdditional extends CatsSuite {
     val nel = NonEmptyList.of(1, 2, 3)
     assert(R.get(nel)(1L) === (nel.get(1L)))
     assert(R.size(nel) === (nel.size.toLong))
-    assert(R.get(nel)(4L) === (None))
+    assert(R.get(nel)(4L) === None)
   }
 
   test("Reducible[NonEmptyList]") {
@@ -39,15 +39,15 @@ class ReducibleSuiteAdditional extends CatsSuite {
     val tail = (2 to 10).toList
     val total = 1 + tail.sum
     val nel = NonEmptyList(1, tail)
-    assert(R.reduceLeft(nel)(_ + _) === (total))
-    assert(R.reduceRight(nel)((x, ly) => ly.map(x + _)).value === (total))
-    assert(R.reduce(nel) === (total))
+    assert(R.reduceLeft(nel)(_ + _) === total)
+    assert(R.reduceRight(nel)((x, ly) => ly.map(x + _)).value === total)
+    assert(R.reduce(nel) === total)
 
     // more basic checks
     val names = NonEmptyList.of("Aaron", "Betty", "Calvin", "Deirdra")
     val totalLength = names.toList.map(_.length).sum
-    assert(R.reduceLeftTo(names)(_.length)((sum, s) => s.length + sum) === (totalLength))
-    assert(R.reduceMap(names)(_.length) === (totalLength))
+    assert(R.reduceLeftTo(names)(_.length)((sum, s) => s.length + sum) === totalLength)
+    assert(R.reduceMap(names)(_.length) === totalLength)
     val sumLeftM = R.reduceLeftM(names)(Some(_): Option[String]) { (acc, x) =>
       (Some(acc + x): Option[String])
     }

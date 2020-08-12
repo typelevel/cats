@@ -437,7 +437,7 @@ class OptionTSuite extends CatsSuite {
 
   test("show") {
     val either: Either[String, Option[Int]] = Either.right(Some(1))
-    assert(OptionT[Either[String, *], Int](either).show === ("Right(Some(1))"))
+    assert(OptionT[Either[String, *], Int](either).show === "Right(Some(1))")
   }
 
   test("none") {

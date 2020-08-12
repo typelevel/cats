@@ -104,7 +104,7 @@ class IorSuite extends CatsSuite {
   test("isLeft consistent with forall and exists") {
     forAll { (i: Int Ior String, p: String => Boolean) =>
       if (i.isLeft) {
-        assert((i.forall(p) && !i.exists(p)) === (true))
+        assert((i.forall(p) && !i.exists(p)) === true)
       }
     }
   }
@@ -138,7 +138,7 @@ class IorSuite extends CatsSuite {
     val iorShow = implicitly[Show[Int Ior String]]
 
     forAll { (i: Int Ior String) =>
-      assert(iorShow.show(i).nonEmpty === (true))
+      assert(iorShow.show(i).nonEmpty === true)
     }
   }
 
@@ -167,7 +167,7 @@ class IorSuite extends CatsSuite {
           Ior.left(2)
         else
           Ior.both(2, i.right.get)
-      assert(i.putLeft(2) === (expectedResult))
+      assert(i.putLeft(2) === expectedResult)
     }
   }
 
@@ -178,7 +178,7 @@ class IorSuite extends CatsSuite {
           Ior.right(2)
         else
           Ior.both(i.left.get, 2)
-      assert(i.putRight(2) === (expectedResult))
+      assert(i.putRight(2) === expectedResult)
     }
   }
 
@@ -197,8 +197,8 @@ class IorSuite extends CatsSuite {
   test("fromOptions left/right consistent with input options") {
     forAll { (oa: Option[String], ob: Option[Int]) =>
       val x = Ior.fromOptions(oa, ob)
-      assert(x.flatMap(_.left) === (oa))
-      assert(x.flatMap(_.right) === (ob))
+      assert(x.flatMap(_.left) === oa)
+      assert(x.flatMap(_.right) === ob)
     }
   }
 

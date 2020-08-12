@@ -61,7 +61,7 @@ class NonEmptySetSuite extends CatsSuite {
 
   test("Show is formatted correctly") {
     val nonEmptySet = NonEmptySet("Test", SortedSet.empty[String])
-    assert(nonEmptySet.show === ("NonEmptySortedSet(Test)"))
+    assert(nonEmptySet.show === "NonEmptySortedSet(Test)")
   }
 
   test("Creating NonEmptySet + toSet is identity") {
@@ -133,7 +133,7 @@ class NonEmptySetSuite extends CatsSuite {
       val last = nes.last
       val rev = nes - last
       val expected = rev.foldRight(last)((a, b) => f(a, Now(b)).value)
-      assert(got === (expected))
+      assert(got === expected)
     }
   }
 
@@ -154,7 +154,7 @@ class NonEmptySetSuite extends CatsSuite {
       val expected = nes.tail.foldLeft(Option(f(nes.head))) { (opt, i) =>
         opt.map(s => g(s, i))
       }
-      assert(nes.reduceLeftToOption(f)(g) === (expected))
+      assert(nes.reduceLeftToOption(f)(g) === expected)
     }
   }
 
@@ -166,7 +166,7 @@ class NonEmptySetSuite extends CatsSuite {
       val expected = rev.foldRight(Option(f(last))) { (i, opt) =>
         opt.map(s => g(i, Now(s)).value)
       }
-      assert(got === (expected))
+      assert(got === expected)
     }
   }
 
@@ -176,7 +176,7 @@ class NonEmptySetSuite extends CatsSuite {
       val expected = f(nes.head).flatMap { hd =>
         nes.tail.foldM(hd)((acc, i) => f(i).map(acc + _))
       }
-      assert(got === (expected))
+      assert(got === expected)
     }
   }
 
@@ -188,7 +188,7 @@ class NonEmptySetSuite extends CatsSuite {
 
   test("fromSet round trip") {
     forAll { (l: SortedSet[Int]) =>
-      assert(NonEmptySet.fromSet(l).map(_.toSortedSet).getOrElse(SortedSet.empty[Int]) === (l))
+      assert(NonEmptySet.fromSet(l).map(_.toSortedSet).getOrElse(SortedSet.empty[Int]) === l)
     }
 
     forAll { (nes: NonEmptySet[Int]) =>

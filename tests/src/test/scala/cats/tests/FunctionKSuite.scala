@@ -45,15 +45,15 @@ class FunctionKSuite extends CatsSuite {
 
   test("id is identity") {
     forAll { (list: List[Int]) =>
-      assert(FunctionK.id[List].apply(list) === (list))
+      assert(FunctionK.id[List].apply(list) === list)
     }
   }
 
   test("or") {
     val combinedInterpreter = Test1FK.or(Test2FK)
     forAll { (a: Int, b: Int) =>
-      assert(combinedInterpreter(EitherK.left(Test1(a))) === (a))
-      assert(combinedInterpreter(EitherK.right(Test2(b))) === (b))
+      assert(combinedInterpreter(EitherK.left(Test1(a))) === a)
+      assert(combinedInterpreter(EitherK.right(Test2(b))) === b)
     }
   }
 

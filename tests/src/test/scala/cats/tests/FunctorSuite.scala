@@ -59,10 +59,10 @@ class FunctorSuite extends CatsSuite {
 
   test("ifF equals map(if(_) ifTrue else ifFalse) for concrete lists and options") {
     assert(Functor[List].ifF(List(true, false, false, true))(1, 0) === (List(1, 0, 0, 1)))
-    assert(Functor[List].ifF(List.empty[Boolean])(1, 0) === (Nil))
+    assert(Functor[List].ifF(List.empty[Boolean])(1, 0) === Nil)
     assert(Functor[Option].ifF(Some(true))(1, 0) === (Some(1)))
     assert(Functor[Option].ifF(Some(false))(1, 0) === (Some(0)))
-    assert(Functor[Option].ifF(None)(1, 0) === (None))
+    assert(Functor[Option].ifF(None)(1, 0) === None)
 
   }
 

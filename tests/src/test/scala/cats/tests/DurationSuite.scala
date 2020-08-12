@@ -9,12 +9,12 @@ class DurationSuite extends CatsSuite {
   checkAll("Show[Duration]", SerializableTests.serializable(Show[Duration]))
 
   test("show works for FiniteDuration") {
-    assert(Show[Duration].show(23.minutes) === ("23 minutes"))
+    assert(Show[Duration].show(23.minutes) === "23 minutes")
   }
 
   test("show works for non-finite durations") {
-    assert(Show[Duration].show(Duration.Inf) === ("Duration.Inf"))
-    assert(Show[Duration].show(Duration.MinusInf) === ("Duration.MinusInf"))
-    assert(Show[Duration].show(Duration.Undefined) === ("Duration.Undefined"))
+    assert(Show[Duration].show(Duration.Inf) === "Duration.Inf")
+    assert(Show[Duration].show(Duration.MinusInf) === "Duration.MinusInf")
+    assert(Show[Duration].show(Duration.Undefined) === "Duration.Undefined")
   }
 }

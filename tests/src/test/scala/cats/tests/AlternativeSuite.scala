@@ -9,7 +9,7 @@ class AlternativeSuite extends CatsSuite {
     forAll { (list: List[Option[String]]) =>
       val expected = list.collect { case Some(s) => s }
 
-      assert(Alternative[List].unite(list) === (expected))
+      assert(Alternative[List].unite(list) === expected)
     }
   }
 
@@ -19,7 +19,7 @@ class AlternativeSuite extends CatsSuite {
       val strings = list.collect { case Right(s) => s }
       val expected = (ints, strings)
 
-      assert(Alternative[List].separate(list) === (expected))
+      assert(Alternative[List].separate(list) === expected)
     }
   }
 
@@ -29,7 +29,7 @@ class AlternativeSuite extends CatsSuite {
       val strings = list.collect { case Right(s) => s }
       val expected = (ints, strings)
 
-      assert(Alternative[List].separateFoldable(list) === (expected))
+      assert(Alternative[List].separateFoldable(list) === expected)
     }
   }
 

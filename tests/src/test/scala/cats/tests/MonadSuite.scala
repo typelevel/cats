@@ -34,26 +34,26 @@ class MonadSuite extends CatsSuite {
   test("untilM_") {
     forAll(smallPosInt) { (max: Int) =>
       val (result, _) = increment.untilM_(StateT.inspect(_ >= max)).run(-1)
-      assert(result === (max))
+      assert(result === max)
     }
   }
 
   test("untilM") {
     forAll(smallPosInt) { (max: Int) =>
       val (result, aggregation) = incrementAndGet.untilM[Vector](StateT.inspect(_ >= max)).run(-1)
-      assert(result === (max))
+      assert(result === max)
       assert(aggregation === ((0 to max).toVector))
     }
   }
 
   test("whileM_ stack safety") {
     val (result, _) = increment.whileM_(StateT.inspect(i => !(i >= 50000))).run(0)
-    assert(result === (50000))
+    assert(result === 50000)
   }
 
   test("whileM stack safety") {
     val (result, _) = incrementAndGet.whileM[Vector](StateT.inspect(i => !(i >= 50000))).run(0)
-    assert(result === (50000))
+    assert(result === 50000)
   }
 
   test("iterateWhile") {
@@ -65,7 +65,7 @@ class MonadSuite extends CatsSuite {
 
   test("iterateWhile stack safety") {
     val (result, _) = incrementAndGet.iterateWhile(_ < 50000).run(-1)
-    assert(result === (50000))
+    assert(result === 50000)
   }
 
   test("iterateUntil") {
@@ -77,7 +77,7 @@ class MonadSuite extends CatsSuite {
 
   test("iterateUntil stack safety") {
     val (result, _) = incrementAndGet.iterateUntil(_ == 50000).run(-1)
-    assert(result === (50000))
+    assert(result === 50000)
   }
 
   test("iterateWhileM") {

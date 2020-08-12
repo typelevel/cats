@@ -41,19 +41,19 @@ class InjectSuite extends CatsSuite {
 
   test("apply in left") {
     forAll { (y: String) =>
-      assert(Inject[String, StringOrInt].inj(y) == Left(y) === (true))
+      assert(Inject[String, StringOrInt].inj(y) == Left(y) === true)
     }
   }
 
   test("apply in right") {
     forAll { (y: Int) =>
-      assert(Inject[Int, StringOrInt].inj(y) == Right(y) === (true))
+      assert(Inject[Int, StringOrInt].inj(y) == Right(y) === true)
     }
   }
 
   test("null identity") {
     val stringNull = null.asInstanceOf[String]
-    assert(Inject.catsReflexiveInjectInstance[String].inj(stringNull) === (stringNull))
+    assert(Inject.catsReflexiveInjectInstance[String].inj(stringNull) === stringNull)
     assert(Inject.catsReflexiveInjectInstance[String].prj(stringNull) === (Some(stringNull)))
   }
 
