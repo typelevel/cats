@@ -179,7 +179,7 @@ class Tuple2KSuite extends CatsSuite {
     forAll { (l1: Option[String], l2: List[String]) =>
       val tuple = Tuple2K(l1, l2)
 
-      assert(tuple.swap.swap === (tuple))
+      assert(tuple.swap.swap === tuple)
     }
   }
 

@@ -51,7 +51,7 @@ class NonEmptyLazyListSuite extends NonEmptyCollectionSuite[LazyList, NonEmptyLa
   checkAll("NonEmptyLazyList[Int]", ShortCircuitingTests[NonEmptyLazyList].nonEmptyTraverse[Int])
 
   test("show") {
-    assert(Show[NonEmptyLazyList[Int]].show(NonEmptyLazyList(1, 2, 3)) === ("NonEmptyLazyList(1, ?)"))
+    assert(Show[NonEmptyLazyList[Int]].show(NonEmptyLazyList(1, 2, 3)) === "NonEmptyLazyList(1, ?)")
   }
   checkAll("Show[NonEmptyLazyList[Int]]", SerializableTests.serializable(Show[NonEmptyLazyList[Int]]))
 
@@ -79,13 +79,13 @@ class NonEmptyLazyListSuite extends NonEmptyCollectionSuite[LazyList, NonEmptyLa
 
   test("filterNot and then exists should always be false") {
     forAll { (ci: NonEmptyLazyList[Int], f: Int => Boolean) =>
-      assert(ci.filterNot(f).exists(f) === (false))
+      assert(ci.filterNot(f).exists(f) === false)
     }
   }
 
   test("filter and then forall should always be true") {
     forAll { (ci: NonEmptyLazyList[Int], f: Int => Boolean) =>
-      assert(ci.filter(f).forall(f) === (true))
+      assert(ci.filter(f).forall(f) === true)
     }
   }
 
@@ -97,19 +97,19 @@ class NonEmptyLazyListSuite extends NonEmptyCollectionSuite[LazyList, NonEmptyLa
 
   test("filterNot element and then contains should be false") {
     forAll { (ci: NonEmptyLazyList[Int], i: Int) =>
-      assert(ci.filterNot(_ === i).contains(i) === (false))
+      assert(ci.filterNot(_ === i).contains(i) === false)
     }
   }
 
   test("fromNonEmptyVector . toNonEmptyVector is id") {
     forAll { (ci: NonEmptyLazyList[Int]) =>
-      assert(NonEmptyLazyList.fromNonEmptyVector(ci.toNonEmptyVector) === (ci))
+      assert(NonEmptyLazyList.fromNonEmptyVector(ci.toNonEmptyVector) === ci)
     }
   }
 
   test("fromNonEmptyList . toNonEmptyList is id") {
     forAll { (ci: NonEmptyLazyList[Int]) =>
-      assert(NonEmptyLazyList.fromNonEmptyList(ci.toNonEmptyList) === (ci))
+      assert(NonEmptyLazyList.fromNonEmptyList(ci.toNonEmptyList) === ci)
     }
   }
 
@@ -120,7 +120,7 @@ class NonEmptyLazyListSuite extends NonEmptyCollectionSuite[LazyList, NonEmptyLa
   }
 
   test("fromLazyListUnsafe throws exception when used with empty LazyList") {
-    assert(Either.catchNonFatal(NonEmptyLazyList.fromLazyListUnsafe(LazyList.empty[Int])).isLeft === (true))
+    assert(Either.catchNonFatal(NonEmptyLazyList.fromLazyListUnsafe(LazyList.empty[Int])).isLeft === true)
   }
 
   test("fromLazyListAppend is consistent with LazyList#:+") {
@@ -143,7 +143,7 @@ class NonEmptyLazyListSuite extends NonEmptyCollectionSuite[LazyList, NonEmptyLa
 
   test("reverse . reverse is id") {
     forAll { (ci: NonEmptyLazyList[Int]) =>
-      assert(ci.reverse.reverse === (ci))
+      assert(ci.reverse.reverse === ci)
     }
   }
 

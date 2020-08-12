@@ -265,7 +265,7 @@ class EitherTSuite extends CatsSuite {
 
   test("double swap is noop") {
     forAll { (eithert: EitherT[List, String, Int]) =>
-      assert(eithert.swap.swap === (eithert))
+      assert(eithert.swap.swap === eithert)
     }
   }
 
@@ -289,41 +289,41 @@ class EitherTSuite extends CatsSuite {
 
   test("recover recovers handled values") {
     val eithert = EitherT.leftT[Id, Int]("eithert")
-    assert(eithert.recover { case "eithert" => 5 }.isRight === (true))
+    assert(eithert.recover { case "eithert" => 5 }.isRight === true)
   }
 
   test("recover ignores unhandled values") {
     val eithert = EitherT.leftT[Id, Int]("eithert")
-    assert(eithert.recover { case "noteithert" => 5 } === (eithert))
+    assert(eithert.recover { case "noteithert" => 5 } === eithert)
   }
 
   test("recover ignores the right side") {
     val eithert = EitherT.pure[Id, String](10)
-    assert(eithert.recover { case "eithert" => 5 } === (eithert))
+    assert(eithert.recover { case "eithert" => 5 } === eithert)
   }
 
   test("recoverWith recovers handled values") {
     val eithert = EitherT.leftT[Id, Int]("eithert")
-    assert(eithert.recoverWith { case "eithert" => EitherT.pure[Id, String](5) }.isRight === (true))
+    assert(eithert.recoverWith { case "eithert" => EitherT.pure[Id, String](5) }.isRight === true)
   }
 
   test("recoverWith ignores unhandled values") {
     val eithert = EitherT.leftT[Id, Int]("eithert")
-    assert(eithert.recoverWith { case "noteithert" => EitherT.pure[Id, String](5) } === (eithert))
+    assert(eithert.recoverWith { case "noteithert" => EitherT.pure[Id, String](5) } === eithert)
   }
 
   test("rethrowT is inverse of attemptT when applied to a successful value") {
     implicit val eqThrow: Eq[Throwable] = Eq.fromUniversalEquals
     val success: Try[Int] = Success(42)
 
-    assert(success.attemptT.rethrowT === (success))
+    assert(success.attemptT.rethrowT === success)
   }
 
   test("rethrowT is inverse of attemptT when applied to a failed value") {
     implicit val eqThrow: Eq[Throwable] = Eq.fromUniversalEquals
     val failed: Try[Int] = Failure(new IllegalArgumentException("error"))
 
-    assert(failed.attemptT.rethrowT === (failed))
+    assert(failed.attemptT.rethrowT === failed)
   }
 
   test("rethrowT works with specialized failures") {
@@ -332,7 +332,7 @@ class EitherTSuite extends CatsSuite {
 
     val t: EitherT[Try, IllegalArgumentException, Int] =
       failed.attemptT.leftMap(_.asInstanceOf[IllegalArgumentException])
-    assert(t.rethrowT === (failed))
+    assert(t.rethrowT === failed)
   }
 
   test("transform consistent with value.map") {
@@ -416,7 +416,7 @@ class EitherTSuite extends CatsSuite {
       var evals = 0
       val eithert = EitherT(Eval.always { evals += 1; either }).orElse(fallback)
       eithert.value.value
-      assert(evals === (1))
+      assert(evals === 1)
     }
   }
 
@@ -502,7 +502,7 @@ class EitherTSuite extends CatsSuite {
   test("ensure on left is identity") {
     forAll { (x: EitherT[Id, String, Int], s: String, p: Int => Boolean) =>
       if (x.isLeft) {
-        assert(x.ensure(s)(p) === (x))
+        assert(x.ensure(s)(p) === x)
       }
     }
   }
@@ -510,7 +510,7 @@ class EitherTSuite extends CatsSuite {
   test("ensure on right is identity if predicate satisfied") {
     forAll { (x: EitherT[Id, String, Int], s: String, p: Int => Boolean) =>
       if (x.isRight && p(x.getOrElse(0))) {
-        assert(x.ensure(s)(p) === (x))
+        assert(x.ensure(s)(p) === x)
       }
     }
   }

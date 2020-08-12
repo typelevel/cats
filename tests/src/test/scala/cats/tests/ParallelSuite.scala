@@ -30,7 +30,7 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
         }
         .foldMap(identity)
 
-      assert(es.parSequence.fold(identity, i => Monoid[String].empty) === (lefts))
+      assert(es.parSequence.fold(identity, i => Monoid[String].empty) === lefts)
     }
   }
 
@@ -42,7 +42,7 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
           case Some(e) => e
         }
         .foldMap(identity)
-      assert(es.parSequence.left.getOrElse(Monoid[String].empty) === (lefts))
+      assert(es.parSequence.left.getOrElse(Monoid[String].empty) === lefts)
     }
   }
 
@@ -125,7 +125,7 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
         }
         .foldMap(identity)
 
-      assert(es.parBisequence.fold(identity, i => Monoid[String].empty) === (lefts))
+      assert(es.parBisequence.fold(identity, i => Monoid[String].empty) === lefts)
     }
   }
 
@@ -141,7 +141,7 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
         }
         .foldMap(identity)
 
-      assert(es.parBisequence.left.getOrElse(Monoid[String].empty) === (lefts))
+      assert(es.parBisequence.left.getOrElse(Monoid[String].empty) === lefts)
     }
   }
 
@@ -165,7 +165,7 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
         }
         .foldMap(identity)
 
-      assert(es.parLeftSequence.fold(identity, i => Monoid[String].empty) === (lefts))
+      assert(es.parLeftSequence.fold(identity, i => Monoid[String].empty) === lefts)
     }
   }
 
@@ -180,7 +180,7 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
         }
         .foldMap(identity)
 
-      assert(es.parLeftSequence.left.getOrElse(Monoid[String].empty) === (lefts))
+      assert(es.parLeftSequence.left.getOrElse(Monoid[String].empty) === lefts)
     }
   }
 
@@ -305,7 +305,7 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
           case (a, b) => a + b
         }
 
-      assert((as, bs, cs).parMapN(_ + _ + _) === (zipped))
+      assert((as, bs, cs).parMapN(_ + _ + _) === zipped)
     }
   }
 
@@ -321,7 +321,7 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
           case (a, b) => a + b
         }
 
-      assert((as, bs, cs).parMapN(_ + _ + _) === (zipped))
+      assert((as, bs, cs).parMapN(_ + _ + _) === zipped)
     }
   }
 
@@ -337,7 +337,7 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
           case (a, b) => a + b
         }
 
-      assert((as, bs, cs).parMapN(_ + _ + _) === (zipped))
+      assert((as, bs, cs).parMapN(_ + _ + _) === zipped)
     }
   }
 

@@ -46,7 +46,7 @@ class IndexedStateTSuite extends CatsSuite {
   test("traversing state is stack-safe") {
     val ns = (0 to 70000).toList
     val x = ns.traverse(_ => add1)
-    assert(x.runS(0).value === (70001))
+    assert(x.runS(0).value === 70001)
   }
 
   test("State.pure, StateT.pure and IndexedStateT.pure are consistent") {
@@ -161,7 +161,7 @@ class IndexedStateTSuite extends CatsSuite {
 
   test("Semigroupal syntax is usable on State") {
     val x = add1 *> add1
-    assert(x.runS(0).value === (2))
+    assert(x.runS(0).value === 2)
   }
 
   test("Singleton and instance inspect are consistent") {
@@ -184,7 +184,7 @@ class IndexedStateTSuite extends CatsSuite {
 
   test("modify identity is a noop") {
     forAll { (f: StateT[List, MiniInt, Int]) =>
-      assert(f.modify(identity) === (f))
+      assert(f.modify(identity) === f)
     }
   }
 
@@ -209,7 +209,7 @@ class IndexedStateTSuite extends CatsSuite {
 
       val s2 = State.modify(f)
 
-      assert(s1 === (s2))
+      assert(s1 === s2)
     }
   }
 
@@ -232,7 +232,7 @@ class IndexedStateTSuite extends CatsSuite {
   test(".get and then .run produces same state as value") {
     forAll { (s: State[Long, Int], initial: Long) =>
       val (finalS, finalA) = s.get.run(initial).value
-      assert(finalS === (finalA))
+      assert(finalS === finalA)
     }
   }
 
@@ -244,7 +244,7 @@ class IndexedStateTSuite extends CatsSuite {
 
   test("StateT#transformS with identity is identity") {
     forAll { (s: StateT[List, MiniInt, Int]) =>
-      assert(s.transformS[MiniInt](identity, (s, i) => i) === (s))
+      assert(s.transformS[MiniInt](identity, (s, i) => i) === s)
     }
   }
 
@@ -263,7 +263,7 @@ class IndexedStateTSuite extends CatsSuite {
 
     val got = x.run(input)
     val expected = xx.run(Env(input, "hello")).map { case (e, i) => (e.int, i) }
-    assert(got === (expected))
+    assert(got === expected)
   }
 
   private val stackSafeTestSize =

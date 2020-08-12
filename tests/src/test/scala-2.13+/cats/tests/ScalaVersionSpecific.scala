@@ -50,7 +50,7 @@ trait ScalaVersionSpecificFoldableSuite { self: FoldableSuiteAdditional =>
   }
 
   test("Foldable[LazyList] laziness of foldM") {
-    assert(dangerous.foldM(0)((acc, a) => if (a < 2) Some(acc + a) else None) === (None))
+    assert(dangerous.foldM(0)((acc, a) => if (a < 2) Some(acc + a) else None) === None)
   }
 
   def foldableLazyListWithDefaultImpl: Foldable[LazyList] =
@@ -112,7 +112,7 @@ trait ScalaVersionSpecificParallelSuite { self: ParallelSuite =>
           case (a, b) => a + b
         }
 
-      assert((as, bs, cs).parMapN(_ + _ + _) === (zipped))
+      assert((as, bs, cs).parMapN(_ + _ + _) === zipped)
     }
   }
 
@@ -143,7 +143,7 @@ trait ScalaVersionSpecificRegressionSuite { self: RegressionSuite =>
     }
 
     def checkAndResetCount(expected: Int): Unit = {
-      assert(count === (expected))
+      assert(count === expected)
       count = 0
     }
 
