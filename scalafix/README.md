@@ -20,7 +20,7 @@ sbt scalafix github:typelevel/cats/Cats_v2_2_0
 
 ### Available rules
 
-- Type class instances are now available in implicit scope, so there is arule to
+- Type class instances are now available in implicit scope, so there is a rule to
   remove imports that are no longer needed
 
 ## Migration to Cats v1.0.0
