@@ -92,7 +92,7 @@ case class RemoveInstanceImports(index: SemanticdbIndex)
   }
 
   /*
-   * Any "import cats.instances.foo._ is definitely safe to remove,
+   * Any "import cats.instances.foo._" is definitely safe to remove,
    * apart from the following:
    *
    * - import cats.instances.future._
@@ -106,46 +106,7 @@ case class RemoveInstanceImports(index: SemanticdbIndex)
    *   This might be used to import Future instances. Further checking
    *   of the surrounding code is needed to see whether that is the case.
    */
-  private val definitelySafeToRemove = Set(
-    "bigDecimal",
-    "bigInt",
-    "bitSet",
-    "boolean",
-    "byte",
-    "char",
-    "double",
-    "duration",
-    "either",
-    "eq",
-    "equiv",
-    "finiteDuration",
-    "float",
-    "function",
-    "int",
-    "invariant",
-    "lazyList",
-    "list",
-    "long",
-    "map",
-    "option",
-    "order",
-    "ordering",
-    "parallel",
-    "partialOrder",
-    "partialOrdering",
-    "queue",
-    "set",
-    "short",
-    "sortedMap",
-    "sortedSet",
-    "string",
-    "symbol",
-    "tailRec",
-    "try_",
-    "tuple",
-    "unit",
-    "uuid",
-    "vector",
-  )
+  private def definitelySafeToRemove(name: String) =
+    name != "future" && name != "all"
 
 }
