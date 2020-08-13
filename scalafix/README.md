@@ -1,16 +1,35 @@
 # Scalafix rules for cats
 
-## Try this!
+## How to use
 
-[Install the Scalafix sbt plugin](https://scalacenter.github.io/scalafix/docs/users/installation)
+1. [Install the Scalafix sbt plugin](https://scalacenter.github.io/scalafix/docs/users/installation)
 
-To run all rules that apply to version `1.0.0` run
+2. Configure the SemanticDB compiler plugin to enable synthetics:
+
+   ```
+   scalacOptions += "-P:semanticdb:synthetics:on"
+   ```
+
+3. Run the rules appropriate to your Cats version (see below)
+
+## Migration to Cats v2.2.0
+
+```sh
+sbt scalafix github:typelevel/cats/Cats_v2_2_0
+```
+
+### Available rules
+
+- Type class instances are now available in implicit scope, so there is arule to
+  remove imports that are no longer needed
+
+## Migration to Cats v1.0.0
 
 ```sh
 sbt scalafix github:typelevel/cats/Cats_v1_0_0
 ```
 
-## Available rules
+### Available rules
 
 - [x] All Unapply enabled methods, e.g. sequenceU, traverseU, etc. are removed. Unapply enabled syntax ops are also removed. Please use the partial unification SI-2712 fix instead. The easiest way might be this sbt-plugin.
 
@@ -34,7 +53,7 @@ sbt scalafix github:typelevel/cats/Cats_v1_0_0
 
 - [x] Split is removed, and the method split is moved to Arrow. Note that only under CommutativeArrow does it guarantee the non-interference between the effects. see #1567
 
-# WIP
+### WIP
 
 - [ ] cats no longer publishes the all-inclusive bundle package "org.typelevel" % "cats", use cats-core, cats-free, or cats-law accordingly instead. If you need cats.free, use "org.typelevel" % "cats-free", if you need cats-laws use "org.typelevel" % "cats-laws", if neither, use "org.typelevel" % "cats-core".
 
@@ -50,7 +69,6 @@ sbt scalafix github:typelevel/cats/Cats_v1_0_0
 ## To test scala fix
 
 ```bash
-sbt coreJVM/publishLocal freeJVM/publishLocal
 cd scalafix
 sbt test
 ```
