@@ -19,13 +19,14 @@ case class RemoveInstanceImports(index: SemanticdbIndex)
     // "import cats.instances.all._"
     case i @ Import(Importer(Select(Select(Name("cats"), Name("instances")), Name("all")), _) :: _) =>
       val boundary = findLexicalBoundary(i)
+
+      // Find all synthetics between the import statement and the end of the lexical boundary
       val lexicalStart = i.pos.end
       val lexicalEnd = boundary.pos.end
-
       val relevantSynthetics =
         ctx.index.synthetics.filter(x => x.position.start >= lexicalStart && x.position.end <= lexicalEnd)
 
-      val usesFutureInstance = relevantSynthetics.exists(containsFutureInstance)
+      val usesFutureInstance = relevantSynthetics.exists(containsCatsFutureInstance)
       if (usesFutureInstance) {
         // the import is (probably) being used to import instances for Future,
         // so we can't remove it
@@ -37,21 +38,40 @@ case class RemoveInstanceImports(index: SemanticdbIndex)
 
     // "import cats.implicits._"
     case i @ Import(Importer(Select(Name("cats"), Name("implicits")), _) :: _) =>
-      // TODO find lexical boundary of the import
-      // TODO look for any use of Future instances within the boundary
-      // TODO look for any use of syntax extensions within the boundary
-      // TODO if none of either, remove the import
-      Patch.empty
+      val boundary = findLexicalBoundary(i)
+
+      // Find all synthetics between the import statement and the end of the lexical boundary
+      val lexicalStart = i.pos.end
+      val lexicalEnd = boundary.pos.end
+      val relevantSynthetics =
+        ctx.index.synthetics.filter(x => x.position.start >= lexicalStart && x.position.end <= lexicalEnd)
+
+      val usesFutureInstance = relevantSynthetics.exists(containsCatsFutureInstance)
+      val usesSyntax = relevantSynthetics.exists(containsCatsSyntax)
+      if (usesFutureInstance || usesSyntax) {
+        // the import is being used either to import a Future instance
+        // or to enable an extension method, so we can't remove it
+        Patch.empty
+      } else {
+        // safe to remove
+        removeImportLine(ctx)(i)
+      }
   }.asPatch
 
   private def removeImportLine(ctx: RuleCtx)(i: Import): Patch =
     ctx.removeTokens(i.tokens) + removeWhitespaceAndNewlineBefore(ctx)(i.tokens.start)
 
-  private def containsFutureInstance(synthetic: Synthetic) =
-    synthetic.names.exists(x => isFutureInstance(x.symbol))
+  private def containsCatsFutureInstance(synthetic: Synthetic) =
+    synthetic.names.exists(x => isCatsFutureInstance(x.symbol))
 
-  private def isFutureInstance(symbol: Symbol) =
+  private def isCatsFutureInstance(symbol: Symbol) =
     symbol.syntax.contains("cats") && symbol.syntax.contains("Future")
+
+  private def containsCatsSyntax(synthetic: Synthetic) =
+    synthetic.names.exists(x => isCatsSyntax(x.symbol))
+
+  private def isCatsSyntax(symbol: Symbol) =
+    symbol.syntax.contains("cats") && symbol.syntax.contains("syntax")
 
   private def findLexicalBoundary(t: Tree): Tree = {
     t.parent match {
