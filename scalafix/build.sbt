@@ -48,7 +48,7 @@ lazy val v2_2_0_input = project.in(file("v2_2_0/input"))
     libraryDependencies ++= Seq(
       "org.typelevel" %% "cats-core" % "2.1.0"
     ),
-    scalacOptions += "-language:higherKinds"
+    scalacOptions ++= Seq("-language:higherKinds", "-P:semanticdb:synthetics:on")
   )
 
 lazy val v2_2_0_output = project.in(file("v2_2_0/output"))

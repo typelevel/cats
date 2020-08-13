@@ -5,20 +5,61 @@ import scalafix.v0._
 import scalafix.syntax._
 import scala.meta._
 import scala.meta.contrib._
+import scala.meta.Term.Apply
 
 // ref: https://github.com/typelevel/cats/issues/3563
 case class RemoveInstanceImports(index: SemanticdbIndex)
   extends SemanticRule(index, "RemoveInstanceImports") {
 
-  override def fix(ctx: RuleCtx): Patch = {
+  override def fix(ctx: RuleCtx): Patch = ctx.tree.collect {
+    // e.g. "import cats.instances.int._"
+    case i @ Import(Importer(Select(Select(Name("cats"), Name("instances")), x), _) :: _) if definitelySafeToRemove(x.value) =>
+      removeImportLine(ctx)(i)
 
-    println(ctx.tree.structureLabeled)
+    // "import cats.instances.all._"
+    case i @ Import(Importer(Select(Select(Name("cats"), Name("instances")), Name("all")), _) :: _) =>
+      val boundary = findLexicalBoundary(i)
+      val lexicalStart = i.pos.end
+      val lexicalEnd = boundary.pos.end
 
-    ctx.tree.collect {
-      // e.g. "import cats.instances.int._"
-      case i @ Import(Importer(Select(Select(Name("cats"), Name("instances")), x), _) :: _) if definitelySafeToRemove(x.value) =>
-        ctx.removeTokens(i.tokens) + removeWhitespaceAndNewlineBefore(ctx)(i.tokens.start)
-    }.asPatch
+      val relevantSynthetics =
+        ctx.index.synthetics.filter(x => x.position.start >= lexicalStart && x.position.end <= lexicalEnd)
+
+      val usesFutureInstance = relevantSynthetics.exists(containsFutureInstance)
+      if (usesFutureInstance) {
+        // the import is (probably) being used to import instances for Future,
+        // so we can't remove it
+        Patch.empty
+      } else {
+        // no usage of Future instances, so it's safe to remove the import
+        removeImportLine(ctx)(i)
+      }
+
+    // "import cats.implicits._"
+    case i @ Import(Importer(Select(Name("cats"), Name("implicits")), _) :: _) =>
+      // TODO find lexical boundary of the import
+      // TODO look for any use of Future instances within the boundary
+      // TODO look for any use of syntax extensions within the boundary
+      // TODO if none of either, remove the import
+      Patch.empty
+  }.asPatch
+
+  private def removeImportLine(ctx: RuleCtx)(i: Import): Patch =
+    ctx.removeTokens(i.tokens) + removeWhitespaceAndNewlineBefore(ctx)(i.tokens.start)
+
+  private def containsFutureInstance(synthetic: Synthetic) =
+    synthetic.names.exists(x => isFutureInstance(x.symbol))
+
+  private def isFutureInstance(symbol: Symbol) =
+    symbol.syntax.contains("cats") && symbol.syntax.contains("Future")
+
+  private def findLexicalBoundary(t: Tree): Tree = {
+    t.parent match {
+      case Some(b: Term.Block) => b
+      case Some(t: Template) => t
+      case Some(parent) => findLexicalBoundary(parent)
+      case None => t
+    }
   }
 
   private def removeWhitespaceAndNewlineBefore(ctx: RuleCtx)(index: Int): Patch = {

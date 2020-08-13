@@ -10,8 +10,6 @@ object RemoveInstanceImportsTests {
   }
 
   {
-    // TODO this import should be removed
-    import cats.instances.all._
     Semigroup[Option[Int]].combine(Some(1), Some(2))
   }
 
