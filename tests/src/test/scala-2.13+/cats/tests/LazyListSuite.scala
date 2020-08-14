@@ -17,7 +17,10 @@ import cats.laws.discipline.{
 import cats.laws.discipline.arbitrary._
 import cats.syntax.show._
 import cats.syntax.eq._
+import cats.syntax.foldable._
 import org.scalacheck.Prop._
+
+import scala.util.control.TailCalls
 
 class LazyListSuite extends CatsSuite {
   checkAll("LazyList[Int]", SemigroupalTests[LazyList].semigroupal[Int, Int, Int])
@@ -50,6 +53,16 @@ class LazyListSuite extends CatsSuite {
   test("show") {
     assert(LazyList(1, 2, 3).show === (s"LazyList(1, ?)"))
     assert(LazyList.empty[Int].show === (s"LazyList()"))
+  }
+
+  test("Avoid all evaluation of LazyList#foldRightDefer") {
+    val sum = LazyList
+      .from(1)
+      .foldRightDefer(TailCalls.done(0)) { (elem, acc) =>
+        if (elem <= 100) acc.map(_ + elem) else TailCalls.done(0)
+      }
+      .result
+    (1 to 100).sum === sum
   }
 
   test("Show[LazyList] is referentially transparent, unlike LazyList.toString") {
