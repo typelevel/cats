@@ -72,19 +72,12 @@ sealed abstract class AndThen[-T, +R] extends (T => R) with Product with Seriali
     // technique implemented for `cats.effect.IO#map`
     g match {
       case atg: AndThen[R, A] =>
-        (this, atg) match {
-          case (Single(f, indexf), Single(gs, indexg)) if indexf + indexg < fusionMaxStackDepth =>
-            Single(f.andThen(gs), indexf + indexg + 1)
-          case (Concat(left, Single(f, indexf)), Single(gs, indexg)) if indexf + indexg < fusionMaxStackDepth =>
-            Concat(left, Single(f.andThen(gs), indexf + indexg + 1))
-          case _ =>
-            Concat(this, atg)
-        }
+        AndThen.andThen(this, atg)
       case _ =>
         this match {
-          case Single(f, index) if index != fusionMaxStackDepth =>
+          case Single(f, index) if index < fusionMaxStackDepth =>
             Single(f.andThen(g), index + 1)
-          case Concat(left, Single(f, index)) if index != fusionMaxStackDepth =>
+          case Concat(left, Single(f, index)) if index < fusionMaxStackDepth =>
             Concat(left, Single(f.andThen(g), index + 1))
           case _ =>
             Concat(this, Single(g, 0))
@@ -95,20 +88,12 @@ sealed abstract class AndThen[-T, +R] extends (T => R) with Product with Seriali
     // Fusing calls up to a certain threshold, using the fusion
     // technique implemented for `cats.effect.IO#map`
     g match {
-      case atg: AndThen[A, T] =>
-        (this, atg) match {
-          case (Single(f, indexf), Single(gs, indexg)) if indexf + indexg < fusionMaxStackDepth =>
-            Single(f.compose(gs), indexf + indexg + 1)
-          case (Concat(Single(f, indexf), right), Single(gs, indexg)) if indexf + indexg < fusionMaxStackDepth =>
-            Concat(Single(f.compose(gs), indexf + indexg + 1), right)
-          case _ =>
-            Concat(atg, this)
-        }
+      case atg: AndThen[A, T] => AndThen.andThen(atg, this)
       case _ =>
         this match {
-          case Single(f, index) if index != fusionMaxStackDepth =>
+          case Single(f, index) if index < fusionMaxStackDepth =>
             Single(f.compose(g), index + 1)
-          case Concat(Single(f, index), right) if index != fusionMaxStackDepth =>
+          case Concat(Single(f, index), right) if index < fusionMaxStackDepth =>
             Concat(Single(f.compose(g), index + 1), right)
           case _ =>
             Concat(Single(g, 0), this)
@@ -166,15 +151,14 @@ object AndThen extends AndThenInstances0 {
    * Establishes the maximum stack depth when fusing `andThen` or
    * `compose` calls.
    *
-   * The default is `128`, from which we subtract one as an optimization,
-   * a "!=" comparison being slightly more efficient than a "<".
+   * The default is `128`.
    *
    * This value was reached by taking into account the default stack
    * size as set on 32 bits or 64 bits, Linux or Windows systems,
    * being enough to notice performance gains, but not big enough
    * to be in danger of triggering a stack-overflow error.
    */
-  final private val fusionMaxStackDepth = 127
+  final private val fusionMaxStackDepth = 128
 
   /**
    * If you are going to call this function many times, right associating it
@@ -187,13 +171,20 @@ object AndThen extends AndThenInstances0 {
         // end is right associated
         middle match {
           case sm @ Single(_, _) =>
-            val newEnd = Concat(sm, end)
+            // here we use andThen to fuse singles below
+            // the threshold that may have been hidden
+            // by Concat structure previously
+            val newEnd = AndThen.andThen(sm, end)
             beg match {
-              case sb @ Single(_, _)  => Concat(sb, newEnd)
-              case Concat(begA, begB) => loop(begA, begB, newEnd, true)
+              case sb @ Single(_, _) =>
+                AndThen.andThen(sb, newEnd)
+              case Concat(begA, begB) =>
+                loop(begA, begB, newEnd, true)
             }
           case Concat(mA, mB) =>
             // rotate mA onto beg:
+            // we don't need to use andThen here since we
+            // are still preparing to put onto the end
             loop(Concat(beg, mA), mB, end, true)
         }
       } else {
@@ -210,6 +201,46 @@ object AndThen extends AndThenInstances0 {
       case Concat(Single(_, _), Single(_, _)) | Single(_, _) => fn
     }
   }
+
+  /**
+   * true if this fn is already right associated, which is the faster
+   * for calling
+   */
+  @tailrec
+  final def isRightAssociated[A, B](fn: AndThen[A, B]): Boolean =
+    fn match {
+      case Single(_, _)                => true
+      case Concat(Single(_, _), right) => isRightAssociated(right)
+      case _                           => false
+    }
+
+  final def andThen[A, B, C](ab: AndThen[A, B], bc: AndThen[B, C]): AndThen[A, C] =
+    ab match {
+      case Single(f, indexf) =>
+        bc match {
+          case Single(g, indexg) =>
+            if (indexf + indexg < fusionMaxStackDepth) Single(f.andThen(g), indexf + indexg + 1)
+            else Concat(ab, bc)
+
+          case Concat(Single(g, indexg), right) if indexf + indexg < fusionMaxStackDepth =>
+            Concat(Single(f.andThen(g), indexf + indexg + 1), right)
+
+          case _ => Concat(ab, bc)
+        }
+      case Concat(leftf, Single(f, indexf)) =>
+        bc match {
+          case Single(g, indexg) =>
+            if (indexf + indexg < fusionMaxStackDepth) Concat(leftf, Single(f.andThen(g), indexf + indexg + 1))
+            else Concat(ab, bc)
+
+          case Concat(Single(g, indexg), right) if indexf + indexg < fusionMaxStackDepth =>
+            Concat(leftf, Concat(Single(f.andThen(g), indexf + indexg + 1), right))
+
+          case _ =>
+            Concat(ab, bc)
+        }
+      case _ => Concat(ab, bc)
+    }
 }
 
 abstract private[data] class AndThenInstances0 extends AndThenInstances1 {
@@ -276,7 +307,7 @@ abstract private[data] class AndThenInstances0 extends AndThenInstances1 {
         AndThen(fn1.split(f, g))
 
       def compose[A, B, C](f: AndThen[B, C], g: AndThen[A, B]): AndThen[A, C] =
-        f.compose(g)
+        AndThen.andThen(g, f)
     }
 }
 

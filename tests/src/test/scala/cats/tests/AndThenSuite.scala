@@ -154,11 +154,13 @@ class AndThenSuite extends CatsSuite with ScalaCheckSuite {
 
     // Right associated should be identity
     forAll(genRight[Int]) { at =>
-      AndThen.toRightAssociated(at) == at
+      AndThen.isRightAssociated(AndThen.toRightAssociated(at))
     } &&
     // Left associated is never right associated
     forAll(genLeft[Int]) { at =>
-      AndThen.toRightAssociated(at) != at
+      val notInit = AndThen.isRightAssociated(at)
+      val done = AndThen.isRightAssociated(AndThen.toRightAssociated(at))
+      (!notInit && done)
     } &&
     // check that right associating doesn't change the function value
     forAll(genAndThen[Int], Gen.choose(Int.MinValue, Int.MaxValue)) { (at, i) =>
