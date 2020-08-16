@@ -14,10 +14,6 @@ lazy val scoverageSettings = Seq(
 organization in ThisBuild := "org.typelevel"
 scalafixDependencies in ThisBuild += "org.typelevel" %% "simulacrum-scalafix" % "0.5.0"
 
-val isTravisBuild = settingKey[Boolean]("Flag indicating whether the current build is running under Travis")
-val crossScalaVersionsFromTravis = settingKey[Seq[String]]("Scala versions set in .travis.yml as scala_version_XXX")
-isTravisBuild in Global := sys.env.contains("TRAVIS")
-
 val scalaCheckVersion = "1.15.0"
 
 val disciplineVersion = "1.1.0"
@@ -27,15 +23,48 @@ val disciplineMunitVersion = "1.0.0-RC1"
 
 val kindProjectorVersion = "0.11.0"
 
-crossScalaVersionsFromTravis in Global := {
-  val manifest = (baseDirectory in ThisBuild).value / ".travis.yml"
-  import collection.JavaConverters._
-  Using.fileInputStream(manifest) { fis =>
-    new org.yaml.snakeyaml.Yaml().loadAs(fis, classOf[java.util.Map[_, _]]).asScala.toList.collect {
-      case (k: String, v: String) if k.contains("scala_version_") => v
-    }
-  }
-}
+val Scala212 = "2.12.12"
+ThisBuild / crossScalaVersions := Seq(Scala212, "2.13.3")
+
+ThisBuild / githubWorkflowPublishTargetBranches := Seq() // disable publication for now
+
+ThisBuild / githubWorkflowBuildMatrixAdditions +=
+  "platform" -> List("jvm", "js", "scalafix")
+
+val Dotty = "0.24.0"
+
+ThisBuild / githubWorkflowBuildMatrixInclusions +=
+  MatrixInclude(Map("platform" -> "jvm"), Map("scala" -> Dotty))
+
+val JvmCond = s"$${{ matrix.platform }} == 'jvm' && $${{ matrix.scala }} != '$Dotty'"
+val JvmScala212Cond = JvmCond + s" && $${{ matrix.scala }} == '$Scala212'"
+
+ThisBuild / githubWorkflowBuild := Seq(
+  WorkflowStep.Sbt(List("fmtCheck"), name = Some("Linting"), cond = Some("${{ matrix.platform }} != 'scalafix'")),
+  WorkflowStep.Run(List("cd scalafix", "sbt tests/test"), name = Some("Scalafix tests")),
+  WorkflowStep.Sbt(List("validateAllJS"),
+                   name = Some("Validate JavaScript"),
+                   cond = Some("${{ matrix.platform }} == 'js'")
+  ),
+  WorkflowStep.Use("actions", "setup-python", "v2", params = Map("python-version" -> "3.x"), cond = Some(JvmCond)),
+  WorkflowStep.Run(List("pip install codecov"), cond = Some(JvmCond)),
+  WorkflowStep.Sbt(List("coverage", "buildJVM", "bench/test", "coverageReport"),
+                   name = Some("Validate JVM"),
+                   cond = Some(JvmCond)
+  ),
+  WorkflowStep.Sbt(List("alleycatsLawsJVM/compile"),
+                   name = Some("Validate JVM (dotty)"),
+                   cond = Some(s"$${{ matrix.scala }} == '$Dotty'")
+  ),
+  WorkflowStep.Run(List("codecov -F ${{ matrix.scala }}"), name = Some("Upload Codecov Results"), cond = Some(JvmCond)),
+  WorkflowStep.Sbt(List("clean", "validateBC"), // cleaning here to avoid issues with codecov
+                   name = Some("Binary compatibility ${{ matrix.scala }}"),
+                   cond = Some(JvmCond)
+  ),
+  WorkflowStep.Use("actions", "setup-ruby", "v1", cond = Some(JvmScala212Cond)),
+  WorkflowStep.Run(List("gem install jekyll -v 4.0.0"), cond = Some(JvmScala212Cond)),
+  WorkflowStep.Sbt(List("docs/makeMicrosite"), cond = Some(JvmScala212Cond))
+)
 
 def scalaVersionSpecificFolders(srcName: String, srcBaseDir: java.io.File, scalaVersion: String) = {
   def extraDirs(suffix: String) =
@@ -48,19 +77,12 @@ def scalaVersionSpecificFolders(srcName: String, srcBaseDir: java.io.File, scala
   }
 }
 
-lazy val commonScalaVersionSettings = Seq(
-  crossScalaVersions := (crossScalaVersionsFromTravis in Global).value,
-  scalaVersion := crossScalaVersions.value.find(_.contains("2.12")).get
-)
-
-commonScalaVersionSettings
-
 ThisBuild / mimaFailOnNoPrevious := false
 
 def doctestGenTestsDottyCompat(isDotty: Boolean, genTests: Seq[File]): Seq[File] =
   if (isDotty) Nil else genTests
 
-lazy val commonSettings = commonScalaVersionSettings ++ Seq(
+lazy val commonSettings = Seq(
   scalacOptions ++= commonScalacOptions(scalaVersion.value, isDotty.value),
   Compile / unmanagedSourceDirectories ++= scalaVersionSpecificFolders("main", baseDirectory.value, scalaVersion.value),
   Test / unmanagedSourceDirectories ++= scalaVersionSpecificFolders("test", baseDirectory.value, scalaVersion.value),
@@ -124,7 +146,7 @@ lazy val commonJsSettings = Seq(
   parallelExecution := false,
   jsEnv := new org.scalajs.jsenv.nodejs.NodeJSEnv(),
   // batch mode decreases the amount of memory needed to compile Scala.js code
-  scalaJSLinkerConfig := scalaJSLinkerConfig.value.withBatchMode(isTravisBuild.value),
+  scalaJSLinkerConfig := scalaJSLinkerConfig.value.withBatchMode(githubIsWorkflowBuild.value),
   scalaJSLinkerConfig ~= (_.withModuleKind(ModuleKind.CommonJSModule)),
   // currently sbt-doctest doesn't work in JS builds
   // https://github.com/tkawachi/sbt-doctest/issues/52
@@ -134,7 +156,7 @@ lazy val commonJsSettings = Seq(
 
 lazy val commonJvmSettings = Seq(
   testOptions in Test += {
-    val flag = if ((isTravisBuild in Global).value) "-oCI" else "-oDF"
+    val flag = if (githubIsWorkflowBuild.value) "-oCI" else "-oDF"
     Tests.Argument(TestFrameworks.ScalaTest, flag)
   },
   Test / fork := true,
@@ -649,7 +671,6 @@ lazy val binCompatTest = project
     // see https://github.com/typelevel/cats/pull/3079#discussion_r327181584
     // see https://github.com/typelevel/cats/pull/3026#discussion_r321984342
     useCoursier := false,
-    commonScalaVersionSettings,
     addCompilerPlugin(("org.typelevel" %% "kind-projector" % kindProjectorVersion).cross(CrossVersion.full)),
     libraryDependencies += mimaPrevious("cats-core", scalaVersion.value, version.value).last % Provided,
     scalacOptions ++= (if (priorTo2_13(scalaVersion.value)) Seq("-Ypartial-unification") else Nil)
