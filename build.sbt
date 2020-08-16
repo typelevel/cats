@@ -451,7 +451,7 @@ lazy val docs = project
 
 lazy val cats = project
   .in(file("."))
-  .settings(moduleName := "root", crossScalaVersions := Nil)
+  .settings(moduleName := "root")
   .settings(publishSettings) // these settings are needed to release all aggregated modules under this root module
   .settings(noPublishSettings) // this is to exclude the root module itself from being published.
   .aggregate(catsJVM, catsJS)
