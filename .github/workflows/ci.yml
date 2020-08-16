@@ -26,7 +26,9 @@ jobs:
         java: [adopt@1.8]
         platform: [jvm, js, scalafix]
         include:
-          - platform: jvm
+          - os: ubuntu-latest
+            java: adopt@1.8
+            platform: jvm
             scala: 0.24.0
     runs-on: ${{ matrix.os }}
     steps:
