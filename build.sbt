@@ -44,16 +44,16 @@ val Dotty = "0.24.0"
 ThisBuild / githubWorkflowBuildMatrixInclusions +=
   MatrixInclude(Map("os" -> PrimaryOS, "java" -> PrimaryJava, "platform" -> "jvm"), Map("scala" -> Dotty))
 
-val JvmCond = s"$${{ matrix.platform }} == 'jvm' && $${{ matrix.scala }} != '$Dotty'"
-val JvmScala212Cond = JvmCond + s" && $${{ matrix.scala }} == '$Scala212'"
+val JvmCond = s"matrix.platform == 'jvm' && matrix.scala != '$Dotty'"
+val JvmScala212Cond = JvmCond + s" && matrix.scala == '$Scala212'"
 
 ThisBuild / githubWorkflowBuild := Seq(
-  WorkflowStep.Sbt(List("fmtCheck"), name = Some("Linting"), cond = Some("${{ matrix.platform }} != 'scalafix'")),
-  WorkflowStep.Run(List("cd scalafix", "sbt tests/test"), name = Some("Scalafix tests")),
-  WorkflowStep.Sbt(List("validateAllJS"),
-                   name = Some("Validate JavaScript"),
-                   cond = Some("${{ matrix.platform }} == 'js'")
+  WorkflowStep.Sbt(List("fmtCheck"), name = Some("Linting"), cond = Some("matrix.platform != 'scalafix'")),
+  WorkflowStep.Run(List("cd scalafix", "sbt tests/test"),
+                   name = Some("Scalafix tests"),
+                   cond = Some("matrix.platform == 'scalafix'")
   ),
+  WorkflowStep.Sbt(List("validateAllJS"), name = Some("Validate JavaScript"), cond = Some("matrix.platform == 'js'")),
   WorkflowStep.Use("actions", "setup-python", "v2", params = Map("python-version" -> "3.x"), cond = Some(JvmCond)),
   WorkflowStep.Run(List("pip install codecov"), cond = Some(JvmCond)),
   WorkflowStep.Sbt(List("coverage", "buildJVM", "bench/test", "coverageReport"),
