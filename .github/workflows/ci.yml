@@ -109,7 +109,7 @@ jobs:
         run: sbt ++${{ matrix.scala }} coverage buildJVM bench/test coverageReport
 
       - name: Validate JVM (dotty)
-        if: ${{ matrix.scala }} == '0.24.0'
+        if: matrix.scala == '0.24.0'
         run: sbt ++${{ matrix.scala }} alleycatsLawsJVM/compile
 
       - name: Upload Codecov Results

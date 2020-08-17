@@ -62,7 +62,7 @@ ThisBuild / githubWorkflowBuild := Seq(
   ),
   WorkflowStep.Sbt(List("alleycatsLawsJVM/compile"),
                    name = Some("Validate JVM (dotty)"),
-                   cond = Some(s"$${{ matrix.scala }} == '$Dotty'")
+                   cond = Some(s"matrix.scala == '$Dotty'")
   ),
   WorkflowStep.Run(List("codecov -F ${{ matrix.scala }}"), name = Some("Upload Codecov Results"), cond = Some(JvmCond)),
   WorkflowStep.Sbt(List("clean", "validateBC"), // cleaning here to avoid issues with codecov
