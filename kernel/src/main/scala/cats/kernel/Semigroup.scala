@@ -2,6 +2,7 @@ package cats.kernel
 
 import scala.annotation.tailrec
 import scala.collection.immutable.{BitSet, Queue, SortedMap, SortedSet}
+import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration.{Duration, FiniteDuration}
 import scala.{specialized => sp}
 import scala.util.{Failure, Success, Try}
@@ -250,6 +251,8 @@ private[kernel] trait MonoidInstances extends BandInstances {
     cats.kernel.instances.either.catsDataMonoidForEither[A, B]
   implicit def catsKernelMonoidForTry[A: Monoid]: Monoid[Try[A]] =
     new TryMonoid[A](Monoid[A])
+  implicit def catsKernelMonoidForFuture[A](implicit A: Monoid[A], ec: ExecutionContext): Monoid[Future[A]] =
+    new FutureMonoid[A](A, ec)
   implicit def catsKernelMonoidForOption[A: Semigroup]: Monoid[Option[A]] =
     cats.kernel.instances.option.catsKernelStdMonoidForOption[A]
 }
@@ -277,6 +280,8 @@ private[kernel] trait SemigroupInstances {
     cats.kernel.instances.either.catsDataSemigroupForEither[A, B]
   implicit def catsKernelSemigroupForTry[A: Semigroup]: Semigroup[Try[A]] =
     new TrySemigroup[A](Semigroup[A])
+  implicit def catsKernelSemigroupForFuture[A](implicit A: Semigroup[A], ec: ExecutionContext): Semigroup[Future[A]] =
+    new FutureSemigroup[A](A, ec)
 }
 
 private class TryMonoid[A](A: Monoid[A]) extends TrySemigroup[A](A) with Monoid[Try[A]] {
@@ -290,4 +295,14 @@ private class TrySemigroup[A](A: Semigroup[A]) extends Semigroup[Try[A]] {
       case (f @ Failure(_), _)        => f
       case (_, f)                     => f
     }
+}
+
+private class FutureMonoid[A](A: Monoid[A], ec: ExecutionContext)
+    extends FutureSemigroup[A](A, ec)
+    with Monoid[Future[A]] {
+  def empty: Future[A] = Future.successful(A.empty)
+}
+
+private class FutureSemigroup[A](A: Semigroup[A], ec: ExecutionContext) extends Semigroup[Future[A]] {
+  def combine(x: Future[A], y: Future[A]): Future[A] = x.flatMap(xv => y.map(A.combine(xv, _))(ec))(ec)
 }
