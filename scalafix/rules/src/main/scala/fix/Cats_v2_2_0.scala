@@ -28,10 +28,12 @@ case class RemoveInstanceImports(index: SemanticdbIndex)
 
       val usesSyntax = relevantSynthetics.exists(containsCatsSyntax)
       if (usesSyntax) {
-        // the import is being used to enable an extension method, so we can't remove it
-        Patch.empty
+        // the import is being used to enable an extension method,
+        // so replace it with "import cats.syntax.all._"
+        ctx.replaceTree(i, "import cats.syntax.all._")
       } else {
-        // safe to remove
+        // the import is only used to import instances,
+        // so it's safe to remove
         removeImportLine(ctx)(i)
       }
   }.asPatch

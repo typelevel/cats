@@ -23,7 +23,7 @@ object RemoveInstanceImportsTests {
   }
 
   {
-    import cats.implicits._
+    import cats.syntax.all._
     1.some |+| 2.some
   }
 
