@@ -28,19 +28,16 @@ object RemoveInstanceImportsTests {
   }
 
   {
-    import cats.instances.future._
     import scala.concurrent.ExecutionContext.Implicits.global
     Semigroup[Future[Int]]
   }
 
   {
-    import cats.instances.all._
     import scala.concurrent.ExecutionContext.Implicits.global
     Semigroup[Future[Int]]
   }
 
   {
-    import cats.implicits._
     import scala.concurrent.ExecutionContext.Implicits.global
     Semigroup[Future[Int]]
   }
