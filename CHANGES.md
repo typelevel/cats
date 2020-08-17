@@ -1,3 +1,54 @@
+## Version 2.2.0-RC3
+
+_2020 August 15_
+
+### 1 bug fix
+
+* [#3565](https://github.com/typelevel/cats/pull/3565) Fix ReducibleLaws causing stack overflow by calling `Eval.now` early  by @bastewart
+
+
+### 15 API / feature enhancements
+
+* [#3569](https://github.com/typelevel/cats/pull/3569) Change AndThen to directly check isRightAssociated  by @johnynek
+* [#3567](https://github.com/typelevel/cats/pull/3567) Avoid all evaluation of LazyList#foldRightDefer  by @takayahilton
+* [#3560](https://github.com/typelevel/cats/pull/3560) Improve AndThen use of Single  by @johnynek
+* [#3553](https://github.com/typelevel/cats/pull/3553) add ifElseM  by @mtomko
+* [#3556](https://github.com/typelevel/cats/pull/3556) Order for writert  by @TimWSpence
+* [#3527](https://github.com/typelevel/cats/pull/3527) Add toRightAssociated to AndThen  by @johnynek
+* [#3555](https://github.com/typelevel/cats/pull/3555) Order for IorT  by @TimWSpence
+* [#3554](https://github.com/typelevel/cats/pull/3554) Order for Ior  by @TimWSpence
+* [#3540](https://github.com/typelevel/cats/pull/3540) Remove traverseForEither in Traverse companion object  by @LukaJCB
+* [#3549](https://github.com/typelevel/cats/pull/3549) Enable breakout in Reducible[NonEmptyVector].reduceMapA  by @takayahilton
+* [#3545](https://github.com/typelevel/cats/pull/3545) Enable breakout in functions nonEmptyTraverse_ and nonEmptySequence_  by @takayahilton
+* [#3533](https://github.com/typelevel/cats/pull/3533) Improve invariants and performance in Chain  by @johnynek
+* [#3535](https://github.com/typelevel/cats/pull/3535) Improve traverseViaChain API  by @johnynek
+* [#3538](https://github.com/typelevel/cats/pull/3538) Preliminary Munit port  by @LukaJCB
+* [#3528](https://github.com/typelevel/cats/pull/3528) Optimize toNonEmptyList of Reducible[NonEmptyChain]  by @takayahilton
+
+
+### 4 documentation improvements
+
+* [#3562](https://github.com/typelevel/cats/pull/3562) Comments on NonEmptyReducible not being a typeclass  by @akopich
+* [#3537](https://github.com/typelevel/cats/pull/3537) add coulomb-cats to ecosystem list  by @erikerlandson
+* [#3531](https://github.com/typelevel/cats/pull/3531) adding Hootsuite Inc. to the list of Adopters  by @jyoo980
+* [#3526](https://github.com/typelevel/cats/pull/3526) Update README.md  by @Immozentral
+
+
+### 11 build improvements
+
+* [#3564](https://github.com/typelevel/cats/pull/3564) Remove redundant parentheses  by @barambani
+* [#3561](https://github.com/typelevel/cats/pull/3561) Update munit-scalacheck to 0.7.11  by @scala-steward
+* [#3558](https://github.com/typelevel/cats/pull/3558) Update sbt-doctest to 0.9.7  by @scala-steward
+* [#3557](https://github.com/typelevel/cats/pull/3557) Update sbt-buildinfo to 0.10.0  by @scala-steward
+* [#3546](https://github.com/typelevel/cats/pull/3546) Fix alleycats-tests on Scala.js  by @joroKr21
+* [#3548](https://github.com/typelevel/cats/pull/3548) Test freeJS with FastOptStage to save some CO2  by @joroKr21
+* [#3544](https://github.com/typelevel/cats/pull/3544) Scala 2.12.3 and 2.12.12  by @barambani
+* [#3543](https://github.com/typelevel/cats/pull/3543) Update discipline-munit to 0.2.3  by @scala-steward
+* [#3542](https://github.com/typelevel/cats/pull/3542) Update sbt-scalafmt to 2.4.2  by @scala-steward
+* [#3539](https://github.com/typelevel/cats/pull/3539) Update discipline-core to 1.0.3  by @scala-steward
+* [#3530](https://github.com/typelevel/cats/pull/3530) Update discipline-scalatest to 2.0.0  by @scala-steward
+
+
 ## Version 2.2.0-RC2
 
 _2020 July 21
