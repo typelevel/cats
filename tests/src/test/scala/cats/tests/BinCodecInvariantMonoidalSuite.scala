@@ -133,7 +133,7 @@ object BinCodecInvariantMonoidalSuite {
         new BinCodec[Nothing] {
           def read(s: Bin): (Option[Nothing], Bin) = (None, s)
 
-          def write(a: INothing): Bin = MiniList.nil
+          def write(a: Nothing): Bin = MiniList.nil
 
           def supported: Set[Nothing] = Set.empty
         }
@@ -212,10 +212,10 @@ class BinCodecInvariantMonoidalSuite extends CatsSuite {
   // Everything is defined in a companion object to be serializable.
   import BinCodecInvariantMonoidalSuite._
 
-  implicit val eqBinCodecNothing: Eq[BinCodec[Nothing]] = Eq.allEqual
+  implicit val eqBinCodecNothing: Eq[Nothing] = Eq.allEqual
 
   checkAll("InvariantSemiringal[BinCodec]",
-           InvariantSemiringalTests[BinCodec].invariantSemiringal[Boolean, Boolean, Boolean]
+           InvariantSemiringalTests[BinCodec].invariantSemiringal[Boolean, Boolean, Boolean](Eq[BinCodec[Nothing]](binCodecsEq[Nothing]))
   )
   checkAll("InvariantSemiringal[BinCodec]", SerializableTests.serializable(InvariantSemiringal[BinCodec]))
 

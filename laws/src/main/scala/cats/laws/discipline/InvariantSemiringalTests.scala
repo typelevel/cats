@@ -9,7 +9,7 @@ import org.scalacheck.Prop._
 trait InvariantSemiringalTests[F[_]] extends InvariantChoosableTests[F] with InvariantMonoidalTests[F] {
   def laws: InvariantSemiringalLaws[F]
 
-  def invariantSemiringal[A: Arbitrary, B: Arbitrary, C: Arbitrary](implicit
+  def invariantSemiringal[A: Arbitrary, B: Arbitrary, C: Arbitrary](eqNothing: Eq[F[Nothing]])(implicit
     arbFA: Arbitrary[F[A]],
     arbFB: Arbitrary[F[B]],
     arbFC: Arbitrary[F[C]],
@@ -23,10 +23,10 @@ trait InvariantSemiringalTests[F[_]] extends InvariantChoosableTests[F] with Inv
     EqFETABC: Eq[F[(Either[A, B], C)]],
     EqFABC: Eq[F[(A, (B, C))]],
     EqFABC2: Eq[F[(A, B, C)]],
-    EqINothing: Eq[F[Nothing]],
     iso: Isomorphisms[F]
   ): RuleSet =
     new RuleSet {
+      implicit val nothingEq = eqNothing
       val name = "invariantSemiringal"
       val parents = Seq(invariantChoosable[A, B, C], invariantMonoidal[A, B, C])
       val bases = Seq.empty
