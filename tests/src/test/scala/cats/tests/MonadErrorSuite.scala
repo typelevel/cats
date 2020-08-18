@@ -16,29 +16,29 @@ class MonadErrorSuite extends CatsSuite {
   val failed: Try[Int] = Failure(failedValue)
 
   test("ensure raises an error if the predicate fails") {
-    assert(successful.ensure(failedValue)(_ => false) === (failed))
+    assert(successful.ensure(failedValue)(_ => false) === failed)
   }
 
   test("ensure returns the successful value if the predicate succeeds") {
-    assert(successful.ensure(failedValue)(_ => true) === (successful))
+    assert(successful.ensure(failedValue)(_ => true) === successful)
   }
 
   test("ensure returns the original failure, when applied to a failure") {
-    assert(failed.ensure(otherValue)(_ => false) === (failed))
-    assert(failed.ensure(otherValue)(_ => true) === (failed))
+    assert(failed.ensure(otherValue)(_ => false) === failed)
+    assert(failed.ensure(otherValue)(_ => true) === failed)
   }
 
   test("ensureOr raises an error if the predicate fails") {
-    assert(successful.ensureOr(_ => failedValue)(_ => false) === (failed))
+    assert(successful.ensureOr(_ => failedValue)(_ => false) === failed)
   }
 
   test("ensureOr returns the successful value if the predicate succeeds") {
-    assert(successful.ensureOr(_ => failedValue)(_ => true) === (successful))
+    assert(successful.ensureOr(_ => failedValue)(_ => true) === successful)
   }
 
   test("ensureOr returns the original failure, when applied to a failure") {
-    assert(failed.ensureOr(_ => otherValue)(_ => false) === (failed))
-    assert(failed.ensureOr(_ => otherValue)(_ => true) === (failed))
+    assert(failed.ensureOr(_ => otherValue)(_ => false) === failed)
+    assert(failed.ensureOr(_ => otherValue)(_ => true) === failed)
   }
 
   test("reject returns the successful value if the partial function is not defined") {
@@ -60,18 +60,18 @@ class MonadErrorSuite extends CatsSuite {
   }
 
   test("rethrow returns the failure, when applied to a Left of a failure") {
-    assert(failed.attempt.rethrow === (failed))
+    assert(failed.attempt.rethrow === failed)
   }
 
   test("rethrow returns the successful value, when applied to a Right of a successful value") {
-    assert(successful.attempt.rethrow === (successful))
+    assert(successful.attempt.rethrow === successful)
   }
 
   test("rethrow returns the failure, when applied to a Left of a specialized failure") {
-    assert(failed.attempt.asInstanceOf[Try[Either[IllegalArgumentException, Int]]].rethrow === (failed))
+    assert(failed.attempt.asInstanceOf[Try[Either[IllegalArgumentException, Int]]].rethrow === failed)
   }
 
   test("rethrow returns the successful value, when applied to a Right of a specialized successful value") {
-    assert(successful.attempt.asInstanceOf[Try[Either[IllegalArgumentException, Int]]].rethrow === (successful))
+    assert(successful.attempt.asInstanceOf[Try[Either[IllegalArgumentException, Int]]].rethrow === successful)
   }
 }

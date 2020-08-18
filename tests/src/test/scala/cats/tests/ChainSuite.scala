@@ -71,8 +71,8 @@ class ChainSuite extends CatsSuite {
   }
 
   test("show") {
-    assert(Show[Chain[Int]].show(Chain(1, 2, 3)) === ("Chain(1, 2, 3)"))
-    assert(Chain.empty[Int].show === ("Chain()"))
+    assert(Show[Chain[Int]].show(Chain(1, 2, 3)) === "Chain(1, 2, 3)")
+    assert(Chain.empty[Int].show === "Chain()")
     forAll { (l: Chain[String]) =>
       assert(l.show === (l.toString))
     }
@@ -113,13 +113,13 @@ class ChainSuite extends CatsSuite {
 
   test("filterNot and then exists should always be false") {
     forAll { (ci: Chain[Int], f: Int => Boolean) =>
-      assert(ci.filterNot(f).exists(f) === (false))
+      assert(ci.filterNot(f).exists(f) === false)
     }
   }
 
   test("filter and then forall should always be true") {
     forAll { (ci: Chain[Int], f: Int => Boolean) =>
-      assert(ci.filter(f).forall(f) === (true))
+      assert(ci.filter(f).forall(f) === true)
     }
   }
 
@@ -137,25 +137,25 @@ class ChainSuite extends CatsSuite {
 
   test("filterNot element and then contains should be false") {
     forAll { (ci: Chain[Int], i: Int) =>
-      assert(ci.filterNot(_ === i).contains(i) === (false))
+      assert(ci.filterNot(_ === i).contains(i) === false)
     }
   }
 
   test("Always nonempty after cons") {
     forAll { (ci: Chain[Int], i: Int) =>
-      assert((i +: ci).nonEmpty === (true))
+      assert((i +: ci).nonEmpty === true)
     }
   }
 
   test("fromSeq . toVector is id") {
     forAll { (ci: Chain[Int]) =>
-      assert(Chain.fromSeq(ci.toVector) === (ci))
+      assert(Chain.fromSeq(ci.toVector) === ci)
     }
   }
 
   test("fromSeq . toList . iterator is id") {
     forAll { (ci: Chain[Int]) =>
-      assert(Chain.fromSeq(ci.iterator.toList) === (ci))
+      assert(Chain.fromSeq(ci.iterator.toList) === ci)
     }
   }
 
@@ -191,7 +191,7 @@ class ChainSuite extends CatsSuite {
 
   test("reverse . reverse is id") {
     forAll { (ci: Chain[Int]) =>
-      assert(ci.reverse.reverse === (ci))
+      assert(ci.reverse.reverse === ci)
     }
   }
 
@@ -259,7 +259,7 @@ class ChainSuite extends CatsSuite {
 
   test("== returns false for non-Chains") {
     forAll { (a: Chain[Int], b: Int) =>
-      assert((a.equals(b)) === (false))
+      assert((a.equals(b)) === false)
     }
   }
 

@@ -45,10 +45,10 @@ class EvalSuite extends CatsSuite {
       val (spooky, lz) = init(value)
       (0 until n).foreach { _ =>
         val result = lz.value
-        assert(result === (value))
+        assert(result === value)
         spin ^= result.##
       }
-      assert(spooky.counter === (numEvals))
+      assert(spooky.counter === numEvals)
       ()
     }
     (0 to 2).foreach(n => nTimes(n, numCalls(n)))
@@ -89,13 +89,13 @@ class EvalSuite extends CatsSuite {
     val i2 = Eval.always(spooky.increment()).memoize
     val i3 = Eval.now(()).flatMap(_ => Eval.later(spooky.increment())).memoize
     i2.value
-    assert(spooky.counter === (1))
+    assert(spooky.counter === 1)
     i2.value
-    assert(spooky.counter === (1))
+    assert(spooky.counter === 1)
     i3.value
-    assert(spooky.counter === (2))
+    assert(spooky.counter === 2)
     i3.value
-    assert(spooky.counter === (2))
+    assert(spooky.counter === 2)
   }
 
   test("Defer and FlatMap compose without blowing the stack") {

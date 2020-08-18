@@ -332,6 +332,12 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
 @suppressUnusedImportWarningForScalaVersionSpecific
 sealed abstract private[data] class NonEmptyVectorInstances {
 
+  /**
+   * This is not a bug. The declared type of `catsDataInstancesForNonEmptyVector` intentionally ignores
+   * `NonEmptyReducible` trait for it not being a typeclass.
+   *
+   * Also see the discussion: PR #3541 and issue #3069.
+   */
   implicit val catsDataInstancesForNonEmptyVector: SemigroupK[NonEmptyVector]
     with Bimonad[NonEmptyVector]
     with NonEmptyTraverse[NonEmptyVector]

@@ -84,7 +84,7 @@ class TrySuite extends CatsSuite {
 
   test("fromTry works") {
     forAll { (t: Try[Int]) =>
-      assert((MonadError[Try, Throwable].fromTry(t)) === (t))
+      assert((MonadError[Try, Throwable].fromTry(t)) === t)
     }
   }
 
@@ -134,6 +134,6 @@ class TrySuite extends CatsSuite {
     var evals = 0
     val bomb: Eval[Try[Int]] = Later { evals += 1; Success(1) }
     Try[Int](sys.error("boom0")).map2Eval(bomb)(_ + _).value
-    assert(evals === (0))
+    assert(evals === 0)
   }
 }

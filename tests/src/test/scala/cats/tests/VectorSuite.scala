@@ -48,9 +48,9 @@ class VectorSuite extends CatsSuite {
   checkAll("ZipVector[Int]", CommutativeApplyTests[ZipVector].commutativeApply[Int, Int, Int])
 
   test("show") {
-    assert(Vector(1, 2, 3).show === ("Vector(1, 2, 3)"))
+    assert(Vector(1, 2, 3).show === "Vector(1, 2, 3)")
 
-    assert(Vector.empty[Int].show === ("Vector()"))
+    assert(Vector.empty[Int].show === "Vector()")
 
     forAll { (vec: Vector[String]) =>
       assert(vec.show === (vec.toString))
