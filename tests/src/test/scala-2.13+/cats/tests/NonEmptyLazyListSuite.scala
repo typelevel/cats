@@ -16,6 +16,8 @@ import cats.laws.discipline.arbitrary._
 import cats.syntax.either._
 import cats.syntax.foldable._
 import cats.syntax.eq._
+import cats.Reducible
+import cats.Eval
 import org.scalacheck.Prop._
 
 class NonEmptyLazyListSuite extends NonEmptyCollectionSuite[LazyList, NonEmptyLazyList, NonEmptyLazyListOps] {
@@ -163,6 +165,19 @@ class NonEmptyLazyListSuite extends NonEmptyCollectionSuite[LazyList, NonEmptyLa
     forAll { (ci: NonEmptyLazyList[Int]) =>
       assert(ci.toNev === (NonEmptyVector.fromVectorUnsafe(Vector.empty[Int] ++ ci.toList.toVector)))
     }
+  }
+
+  test("Avoid all evaluation of NonEmptyLazyList#reduceRightTo") {
+    val sum = implicitly[Reducible[NonEmptyLazyList]]
+      .reduceRightTo(
+        NonEmptyLazyList
+          .fromLazyListPrepend(1, LazyList.from(2))
+      )(identity) { (elem, acc) =>
+        if (elem <= 100) acc.map(_ + elem) else Eval.later(0)
+      }
+      .value
+
+    (1 to 100).sum === sum
   }
 }
 
