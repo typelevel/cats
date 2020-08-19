@@ -56,8 +56,10 @@ lazy val v2_2_0_input = project.in(file("v2_2_0/input"))
 
 lazy val v2_2_0_output = project.in(file("v2_2_0/output"))
   .settings(
+    // TODO use 2.2.0-RC4 or 2.2.0 when it's released
+    resolvers += Resolver.sonatypeRepo("snapshots"),
     libraryDependencies ++= Seq(
-      "org.typelevel" %% "cats-core" % "2.2.0-RC2"
+      "org.typelevel" %% "cats-core" % "2.2.0-RC3-5-g99c2aef-SNAPSHOT"
     ),
     scalacOptions += "-language:higherKinds"
   )
