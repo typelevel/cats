@@ -117,11 +117,9 @@ sealed private[instances] trait Function1Instances extends Function1Instances0 {
       def unit: Unit => R = Function.const(Monoid[R].empty)
       def contramap[A, B](fa: A => R)(f: B => A): B => R =
         fa.compose(f)
-      def product[A, B](fa: A => R, fb: B => R): ((A, B)) => R =
-        (ab: (A, B)) =>
-          ab match {
-            case (a, b) => Monoid[R].combine(fa(a), fb(b))
-          }
+      def product[A, B](fa: A => R, fb: B => R): ((A, B)) => R = {
+        case (a, b) => Monoid[R].combine(fa(a), fb(b))
+      }
     }
 
   implicit def catsStdMonadForFunction1[T1]: Monad[T1 => *] =
