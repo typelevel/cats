@@ -155,7 +155,7 @@ with [Discipline](https://github.com/typelevel/discipline) for law checking, and
  that the `Validated` data type supports.
  - An exception to this is serializability tests, where the type class name is also included in the name.
  For example, in the case of `Validated`, the serializability test would take the form,
- *"Applicative[Validated[String, Int]"*, to indicate that this test is verifying that the `Applicative`
+ *"Applicative[Validated[String, Int]]"*, to indicate that this test is verifying that the `Applicative`
  type class instance for the `Validated` data type is serializable.
  - This convention helps to ensure clear and easy to understand output, with minimal duplication in the output.
 - It is also a goal that, for every combination of data type and supported type class instance:
