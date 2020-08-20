@@ -9,7 +9,7 @@ trait InvariantSemiringalLaws[F[_]] extends InvariantMonoidalLaws[F] with Invari
   override def F: InvariantSemiringal[F] = I
 
   def semiringalRightAbsorption[A](fa: F[A]): IsEq[F[INothing]] =
-    I.product[A, INothing](fa, I.zero).imap(_._2)(identity) <-> I.zero
+    I.product[A, INothing](fa, I.zero).imap(_._2)(identity[(A, INothing)]) <-> I.zero
 }
 
 object InvariantSemiringalLaws {
