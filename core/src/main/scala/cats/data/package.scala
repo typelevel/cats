@@ -103,8 +103,8 @@ package object data extends ScalaVersionSpecificPackage {
   }
 
   /**
-    * Alias for `Nothing` which works better with type inference.
-    */
+   * Alias for `Nothing` which works better with type inference.
+   */
   type INothing <: Nothing
 
 }
