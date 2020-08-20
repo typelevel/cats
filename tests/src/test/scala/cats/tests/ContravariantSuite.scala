@@ -43,7 +43,7 @@ class ContravariantSuite extends CatsSuite {
           case Right(b) => fb.run(b)
         }
 
-      def zero: Predicate[Nothing] = Predicate(Function.const(false))
+      def zero: Predicate[cats.data.INothing] = Predicate(Function.const(false))
 
       def contravariant: Contravariant[Predicate] = contravariantMonoidalPredicate
 

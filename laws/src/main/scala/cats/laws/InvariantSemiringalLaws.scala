@@ -1,15 +1,15 @@
 package cats
 package laws
 
+import cats.data.INothing
 import cats.syntax.all._
 
 trait InvariantSemiringalLaws[F[_]] extends InvariantMonoidalLaws[F] with InvariantChoosableLaws[F] {
   implicit override def I: InvariantSemiringal[F]
   override def F: InvariantSemiringal[F] = I
 
-  def semiringalRightAbsorption[A](fa: F[A]): IsEq[F[Nothing]] =
-    I.product[A, Nothing](fa, I.zero).imap[Nothing](_._2)(identity) <-> I.zero
-
+  def semiringalRightAbsorption[A](fa: F[A]): IsEq[F[INothing]] =
+    I.product[A, INothing](fa, I.zero).imap(_._2)(identity) <-> I.zero
 }
 
 object InvariantSemiringalLaws {

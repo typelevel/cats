@@ -102,4 +102,6 @@ package object data extends ScalaVersionSpecificPackage {
       ContT.tailRecM(a)(f)
   }
 
+  type INothing <: Nothing
+
 }

@@ -4,7 +4,6 @@ import simulacrum.typeclass
 
 /**
  * An [[InvariantSemiringal]] is both an Additive and Multiplicative Invariant Monoidal.
- * `zero` must absorb `product`.
  *
  * Must obey the laws defined in cats.laws.InvariantSemiringalLaws.
  */

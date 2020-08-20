@@ -1,6 +1,7 @@
 package cats
 
 import simulacrum.typeclass
+import cats.data.INothing
 
 /**
  * An Invariant Additive Monoidal.
@@ -9,7 +10,7 @@ import simulacrum.typeclass
  * Must obey the laws defined in cats.laws.InvariantChoosableLaws.
  */
 @typeclass trait InvariantChoosable[F[_]] extends InvariantChoice[F] {
-  def zero: F[Nothing]
+  def zero: F[INothing]
 }
 
 object InvariantChoosable {
