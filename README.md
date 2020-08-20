@@ -153,7 +153,6 @@ By sharing the same set of type classes, instances and data types provided by Ca
 
 #### General purpose libraries to support pure functional programming
 
- * [cats-par](https://github.com/ChristopherDavenport/cats-par): Abstract type member Parallel instances
  * [cats-retry](https://github.com/cb372/cats-retry): composable retry logic for Cats and Cats Effect
  * [droste](https://github.com/andyscott/droste): recursion schemes for Cats
  * [dsl-domains-cats](https://github.com/ThoughtWorksInc/dsl-domains-cats): The `!`-notation for creating Cats monadic expressions
@@ -198,6 +197,7 @@ By sharing the same set of type classes, instances and data types provided by Ca
  * [phony](https://github.com/alirezameskin/phony): Fake data generator
  * [pureconfig](https://github.com/pureconfig/pureconfig): A boilerplate-free library for loading configuration files
  * [rainier](https://github.com/stripe/rainier): Bayesian inference in Scala
+ * [redis4cats](https://github.com/profunktor/redis4cats): a Redis client library.
  * [scala-forex](https://github.com/snowplow/scala-forex): exchange rate lookups
  * [scala-maxmind-ip-lookups](https://github.com/snowplow/scala-maxmind-iplookups): IP geolocation through [the Maxmind database](https://www.maxmind.com/en/home)
  * [scala-referer-parser](https://github.com/snowplow-referer-parser/scala-referer-parser): referer parsing
@@ -206,6 +206,7 @@ By sharing the same set of type classes, instances and data types provided by Ca
  * [scanamo](https://github.com/guardian/scanamo): simpler DynamoDB access for Scala
  * [seals](https://github.com/durban/seals): tools for schema evolution and language-integrated schemata
  * [sup](https://github.com/kubukoz/sup): Composable, purely functional healthchecks in Scala
+ * [skunk](https://github.com/tpolecat/skunk): a data access library for Scala + Postgres.
  * [tsec](https://github.com/jmcardon/tsec/): Typesafe, functional, general purpose cryptography and security library
  * [coulomb-cats](https://github.com/erikerlandson/coulomb/tree/develop/coulomb-cats): cats typeclass instances for coulomb Quantity
 
