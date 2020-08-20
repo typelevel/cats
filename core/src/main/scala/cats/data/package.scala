@@ -102,6 +102,9 @@ package object data extends ScalaVersionSpecificPackage {
       ContT.tailRecM(a)(f)
   }
 
+  /**
+    * Alias for `Nothing` which works better with type inference.
+    */
   type INothing <: Nothing
 
 }
