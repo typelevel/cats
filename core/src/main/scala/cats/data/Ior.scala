@@ -1,7 +1,6 @@
 package cats
 package data
 
-import cats.Bifunctor
 import cats.arrow.FunctionK
 import cats.data.Validated.{Invalid, Valid}
 
