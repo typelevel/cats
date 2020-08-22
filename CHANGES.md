@@ -1,3 +1,18 @@
+## Version 2.2.0-RC4
+
+_2020 August 22_
+
+### 2 API / feature enhancements
+
+* [#3572](https://github.com/typelevel/cats/pull/3572) Add Future instances to implicit scope  by @travisbrown
+* [#3573](https://github.com/typelevel/cats/pull/3573) Avoid all evaluation of NonEmptyLazyList#reduceRightTo  by @takayahilton
+
+### 2 documentation improvements
+
+* [#3575](https://github.com/typelevel/cats/pull/3575) Missing a "]" in CONTRIBUTING.md  by @benkio
+* [#3574](https://github.com/typelevel/cats/pull/3574) Update README.md  by @diesalbla
+
+
 ## Version 2.2.0-RC3
 
 _2020 August 15_
