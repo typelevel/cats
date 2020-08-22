@@ -89,6 +89,7 @@ possible:
  * Earl St Sauver
  * Edd Steel
  * Endre Galaczi
+ * Enrico Benini
  * enzief
  * Eric Torreborre
  * ericaovo
