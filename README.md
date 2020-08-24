@@ -192,6 +192,7 @@ By sharing the same set of type classes, instances and data types provided by Ca
  * [log4cats](https://github.com/ChristopherDavenport/log4cats): functional logging
  * [monadic-html](https://github.com/OlivierBlanvillain/monadic-html): Tiny DOM binding library for Scala.js
  * [Monix](https://github.com/monix/monix): high-performance library for composing asynchronous and event-based programs
+ * [Monix BIO](https://github.com/monix/monix-bio): `IO` alternative with typed errors
  * [morphling](https://github.com/danslapman/morphling): free applicative schemas & instance derivation
  * [natchez](https://github.com/tpolecat/natchez): an opentracing library, to use with Jaegger, Honeycomb, OpenCensus, and Lightstep.
  * [phony](https://github.com/alirezameskin/phony): Fake data generator
