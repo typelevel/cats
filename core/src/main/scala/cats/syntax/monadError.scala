@@ -35,6 +35,9 @@ final class MonadErrorOps[F[_], E, A](private val fa: F[A]) extends AnyVal {
 
   def attemptTap[B](f: Either[E, A] => F[B])(implicit F: MonadError[F, E]): F[A] =
     F.attemptTap(fa)(f)
+
+  def flatTapOnError[B](f: E => F[B])(implicit F: MonadError[F, E]): F[A] =
+    F.flatTapOnError(fa)(f)
 }
 
 final class MonadErrorRethrowOps[F[_], E, A](private val fea: F[Either[E, A]]) extends AnyVal {

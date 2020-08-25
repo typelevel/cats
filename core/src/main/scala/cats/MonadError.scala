@@ -104,6 +104,15 @@ trait MonadError[F[_], E] extends ApplicativeError[F, E] with Monad[F] {
   def attemptTap[A, B](fa: F[A])(f: Either[E, A] => F[B]): F[A] =
     rethrow(flatTap(attempt(fa))(f))
 
+  /**
+   * Reifies the error, if there is one, of the source and performs an effect
+   * on the result, then recovers the original value or error back into `F`.
+   *
+   * Note that if the effect returned by `f` fails, the resulting effect will fail too.
+   */
+  def flatTapOnError[A, B](fa: F[A])(f: E => F[B]): F[A] =
+    handleErrorWith(fa) { case e => flatMap(f(e))(_ => raiseError(e)) }
+
   override def adaptError[A](fa: F[A])(pf: PartialFunction[E, E]): F[A] =
     recoverWith(fa)(pf.andThen(raiseError[A] _))
 }
