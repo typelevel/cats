@@ -1,6 +1,5 @@
 package cats.tests
 
-
 import cats.{Eval, Id, Monad}
 import cats.catsInstancesForId
 import cats.data.{IndexedStateT, StateT}
