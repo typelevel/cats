@@ -1,6 +1,6 @@
 package cats.free
 
-import cats.{:<:, Foldable, Functor, Id, Monad, Traverse}
+import cats._
 import cats.arrow.FunctionK
 import cats.data.EitherK
 import cats.instances.all._

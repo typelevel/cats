@@ -20,12 +20,12 @@ isTravisBuild in Global := sys.env.contains("TRAVIS")
 
 val scalaCheckVersion = "1.14.3"
 
-val munitVersion = "0.7.10"
+val munitVersion = "0.7.12"
 
 val disciplineVersion = "1.0.3"
 
 val disciplineScalatestVersion = "2.0.0"
-val disciplineMunitVersion = "0.2.3"
+val disciplineMunitVersion = "0.2.4"
 
 val kindProjectorVersion = "0.11.0"
 
@@ -154,7 +154,6 @@ lazy val includeGeneratedSrc: Setting[_] = {
 
 lazy val disciplineDependencies = Seq(
   libraryDependencies ++= Seq(
-    ("org.scalacheck" %%% "scalacheck" % scalaCheckVersion).withDottyCompat(scalaVersion.value),
     "org.typelevel" %%% "discipline-core" % disciplineVersion
   )
 )

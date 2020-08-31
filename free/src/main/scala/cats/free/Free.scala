@@ -80,12 +80,12 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
   final def foldStep[B](
     onPure: A => B,
     onSuspend: S[A] => B,
-    onFlatMapped: ((S[X], X => Free[S, A]) forSome { type X }) => B
+    onFlatMapped: ((S[Any], Any => Free[S, A])) => B
   ): B =
     this.step match {
       case Pure(a)                    => onPure(a)
       case Suspend(a)                 => onSuspend(a)
-      case FlatMapped(Suspend(fa), f) => onFlatMapped((fa, f))
+      case FlatMapped(Suspend(fa), f) => onFlatMapped((fa.asInstanceOf[S[Any]], f.asInstanceOf[Any => Free[S, A]]))
       case _                          => sys.error("FlatMapped should be right associative after step")
     }
 
