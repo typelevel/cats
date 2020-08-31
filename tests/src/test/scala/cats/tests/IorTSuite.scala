@@ -2,12 +2,13 @@ package cats.tests
 
 import cats._
 import cats.data.{Ior, IorT}
-import cats.kernel.{Eq, Monoid, Semigroup}
+import cats.kernel.{Eq, Monoid, Order, Semigroup}
 import cats.kernel.laws.discipline.{EqTests, MonoidTests, SemigroupTests}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.syntax.eq._
 import org.scalacheck.Prop._
+import cats.kernel.laws.discipline.OrderTests
 
 class IorTSuite extends CatsSuite {
 
@@ -59,6 +60,15 @@ class IorTSuite extends CatsSuite {
 
     checkAll("IorT[ListWrapper, Int, *]", FoldableTests[IorT[ListWrapper, Int, *]].foldable[Int, Int])
     checkAll("Foldable[IorT[ListWrapper, Int, *]]", SerializableTests.serializable(Foldable[IorT[ListWrapper, Int, *]]))
+  }
+
+  {
+    implicit val F: Order[ListWrapper[Ior[String, Int]]] = ListWrapper.order[Ior[String, Int]]
+
+    checkAll("IorT[ListWrapper, String, Int]", OrderTests[IorT[ListWrapper, String, Int]].order)
+    checkAll("Order[IorT[ListWrapper, String, Int]]",
+             SerializableTests.serializable(Order[IorT[ListWrapper, String, Int]])
+    )
   }
 
   {
@@ -327,19 +337,19 @@ class IorTSuite extends CatsSuite {
 
   test("IorT.fromIor with Id is noop") {
     forAll { (ior: Ior[String, Int]) =>
-      assert(IorT.fromIor[Id](ior).value === (ior))
+      assert(IorT.fromIor[Id](ior).value === ior)
     }
   }
 
   test("IorT.fromEither toEither is noop") {
     forAll { (either: Either[String, Int]) =>
-      assert(IorT.fromEither[Id](either).value.toEither === (either))
+      assert(IorT.fromEither[Id](either).value.toEither === either)
     }
   }
 
   test("IorT.fromEitherF toEither is noop") {
     forAll { (either: Either[String, Int]) =>
-      assert(IorT.fromEitherF[Id, String, Int](either).value.toEither === (either))
+      assert(IorT.fromEitherF[Id, String, Int](either).value.toEither === either)
     }
   }
 

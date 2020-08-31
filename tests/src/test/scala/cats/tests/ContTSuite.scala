@@ -79,10 +79,10 @@ class ContTSuite extends CatsSuite {
         didSideEffect = true
         b
       }
-      assert(didSideEffect === (false))
+      assert(didSideEffect === false)
 
       contT.run(cb)
-      assert(didSideEffect === (true))
+      assert(didSideEffect === true)
     }
   }
 

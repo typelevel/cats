@@ -46,6 +46,7 @@ possible:
  * Ben Hutchison
  * Ben Kirwin
  * Ben Plommer
+ * Ben Stewart
  * Benjamin Thuillier
  * Binh Nguyen
  * Bjørn Madsen
@@ -91,6 +92,7 @@ possible:
  * enzief
  * Eric Torreborre
  * ericaovo
+ * Erik Erlandson
  * Erik LaBianca
  * Erik Osheim
  * Eugene Burmako
@@ -267,6 +269,7 @@ possible:
  * Takayuki Sakai
  * Tanaka Takaya
  * Taylor Brown
+ * Tim Spence
  * Tom Switzer
  * Tomas Mikula
  * Tongfei Chen
@@ -275,6 +278,7 @@ possible:
  * Trond Bjerkestrand
  * Tya
  * Valentin Willscher
+ * Valeriy Avanesov
  * Valy Diarrassouba
  * Vasileios Lampridis
  * Vasilis Nicolaou

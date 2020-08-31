@@ -369,6 +369,9 @@ object Reducible {
  *
  * This class can be used on any type where the first value (`A`) and
  * the "rest" of the values (`G[A]`) can be easily found.
+ *
+ * This class is only a helper, does not define a typeclass and should not be used outside of Cats.
+ * Also see the discussion: PR #3541 and issue #3069.
  */
 abstract class NonEmptyReducible[F[_], G[_]](implicit G: Foldable[G]) extends Reducible[F] {
   def split[A](fa: F[A]): (A, G[A])

@@ -98,19 +98,19 @@ class InjectKSuite extends CatsSuite {
 
   test("apply in left") {
     forAll { (y: Test1Algebra[Int]) =>
-      assert(InjectK[Test1Algebra, T].inj(y) == EitherK(Left(y)) === (true))
+      assert(InjectK[Test1Algebra, T].inj(y) == EitherK(Left(y)) === true)
     }
   }
 
   test("apply in right") {
     forAll { (y: Test2Algebra[Int]) =>
-      assert(InjectK[Test2Algebra, T].inj(y) == EitherK(Right(y)) === (true))
+      assert(InjectK[Test2Algebra, T].inj(y) == EitherK(Right(y)) === true)
     }
   }
 
   test("null identity") {
     val listIntNull = null.asInstanceOf[List[Int]]
-    assert(InjectK.catsReflexiveInjectKInstance[List].inj[Int](listIntNull) === (listIntNull))
+    assert(InjectK.catsReflexiveInjectKInstance[List].inj[Int](listIntNull) === listIntNull)
     assert(InjectK.catsReflexiveInjectKInstance[List].prj[Int](listIntNull) === (Some(listIntNull)))
   }
 

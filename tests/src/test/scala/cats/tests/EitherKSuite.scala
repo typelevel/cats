@@ -43,7 +43,7 @@ class EitherKSuite extends CatsSuite {
 
   test("double swap is identity") {
     forAll { (x: EitherK[Option, Option, Int]) =>
-      assert(x.swap.swap === (x))
+      assert(x.swap.swap === x)
     }
   }
 

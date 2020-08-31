@@ -11,6 +11,7 @@ import cats.syntax.option._
 import cats.syntax.eq._
 import org.scalacheck.Prop._
 import org.scalacheck.Test.Parameters
+import cats.kernel.laws.discipline.OrderTests
 
 class WriterTSuite extends CatsSuite {
   type Logged[A] = Writer[ListWrapper[Int], A]
@@ -37,7 +38,7 @@ class WriterTSuite extends CatsSuite {
 
   test("double swap is a noop") {
     forAll { (w: WriterT[List, Int, Int]) =>
-      assert(w.swap.swap === (w))
+      assert(w.swap.swap === w)
     }
   }
 
@@ -57,31 +58,31 @@ class WriterTSuite extends CatsSuite {
 
   test("tell + written is identity") {
     forAll { (i: Int) =>
-      assert(WriterT.tell[Id, Int](i).written === (i))
+      assert(WriterT.tell[Id, Int](i).written === i)
     }
   }
 
   test("value + value is identity") {
     forAll { (i: Int) =>
-      assert(WriterT.value[Id, Int, Int](i).value === (i))
+      assert(WriterT.value[Id, Int, Int](i).value === i)
     }
   }
 
   test("valueT + value is identity") {
     forAll { (i: Int) =>
-      assert(WriterT.valueT[Id, Int, Int](i).value === (i))
+      assert(WriterT.valueT[Id, Int, Int](i).value === i)
     }
   }
 
   test("value + listen + map(_._1) + value is identity") {
     forAll { (i: Int) =>
-      assert(WriterT.value[Id, Int, Int](i).listen.map(_._1).value === (i))
+      assert(WriterT.value[Id, Int, Int](i).listen.map(_._1).value === i)
     }
   }
 
   test("tell + listen + map(_._2) + value is identity") {
     forAll { (i: Int) =>
-      assert(WriterT.tell[Id, Int](i).listen.map(_._2).value === (i))
+      assert(WriterT.tell[Id, Int](i).listen.map(_._2).value === i)
     }
   }
 
@@ -95,7 +96,7 @@ class WriterTSuite extends CatsSuite {
 
   test("show") {
     val writerT: WriterT[Id, List[String], String] = WriterT.put("foo")(List("Some log message"))
-    assert(writerT.show === ("(List(Some log message),foo)"))
+    assert(writerT.show === "(List(Some log message),foo)")
   }
 
   test("tell appends to log") {
@@ -106,7 +107,7 @@ class WriterTSuite extends CatsSuite {
   }
 
   test("tell instantiates a Writer") {
-    assert(Writer.tell("foo").written === ("foo"))
+    assert(Writer.tell("foo").written === "foo")
   }
 
   test("listen returns a tuple of value and log") {
@@ -384,6 +385,20 @@ class WriterTSuite extends CatsSuite {
 
     Semigroup[Writer[Int, Int]]
     checkAll("Writer[Int, Int]", SemigroupTests[Writer[Int, Int]].semigroup)
+  }
+
+  {
+    // F[(L, V)] has a semigroup
+    implicit val FLV: Order[ListWrapper[(Int, Int)]] = ListWrapper.order[(Int, Int)]
+
+    Order[WriterT[ListWrapper, Int, Int]]
+    checkAll("WriterT[ListWrapper, Int, Int]", OrderTests[WriterT[ListWrapper, Int, Int]].order)
+    checkAll("Order[WriterT[ListWrapper, Int, Int]]",
+             SerializableTests.serializable(Order[WriterT[ListWrapper, Int, Int]])
+    )
+
+    Order[Writer[Int, Int]]
+    checkAll("Writer[Int, Int]", OrderTests[Writer[Int, Int]].order)
   }
 
   {

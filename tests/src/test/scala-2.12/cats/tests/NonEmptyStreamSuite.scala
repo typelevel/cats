@@ -54,10 +54,10 @@ class NonEmptyStreamSuite extends CatsSuite {
 
   test("Show is not empty and is formatted as expected") {
     forAll { (nel: NonEmptyStream[Int]) =>
-      assert(nel.show.nonEmpty === (true))
-      assert(nel.show.startsWith("OneAnd(") === (true))
+      assert(nel.show.nonEmpty === true)
+      assert(nel.show.startsWith("OneAnd(") === true)
       assert(nel.show === (implicitly[Show[NonEmptyStream[Int]]].show(nel)))
-      assert(nel.show.contains(nel.head.show) === (true))
+      assert(nel.show.contains(nel.head.show) === true)
     }
   }
 
@@ -110,7 +110,7 @@ class NonEmptyStreamSuite extends CatsSuite {
       val ior = Reducible[NonEmptyStream].nonEmptyPartition(sortedNes)(identity)
 
       assert(ior.left.forall(xs => xs.sorted === xs))
-      assert(ior.right.map(xs => xs.sorted === (xs)).getOrElse(true))
+      assert(ior.right.map(xs => xs.sorted === xs).getOrElse(true))
     }
   }
 
@@ -125,7 +125,7 @@ class NonEmptyStreamSuite extends CatsSuite {
       val got = nel.reduceRight(f).value
       val last :: rev = nel.unwrap.toList.reverse
       val expected = rev.reverse.foldRight(last)((a, b) => f(a, Now(b)).value)
-      assert(got === (expected))
+      assert(got === expected)
     }
   }
 
@@ -146,7 +146,7 @@ class NonEmptyStreamSuite extends CatsSuite {
       val expected = nel.tail.foldLeft(Option(f(nel.head))) { (opt, i) =>
         opt.map(s => g(s, i))
       }
-      assert(nel.reduceLeftToOption(f)(g) === (expected))
+      assert(nel.reduceLeftToOption(f)(g) === expected)
     }
   }
 
@@ -157,7 +157,7 @@ class NonEmptyStreamSuite extends CatsSuite {
       val expected = rev.reverse.foldRight(Option(f(last))) { (i, opt) =>
         opt.map(s => g(i, Now(s)).value)
       }
-      assert(got === (expected))
+      assert(got === expected)
     }
   }
 

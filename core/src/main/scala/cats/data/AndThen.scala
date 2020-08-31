@@ -70,26 +70,39 @@ sealed abstract class AndThen[-T, +R] extends (T => R) with Product with Seriali
   override def andThen[A](g: R => A): AndThen[T, A] =
     // Fusing calls up to a certain threshold, using the fusion
     // technique implemented for `cats.effect.IO#map`
-    this match {
-      case Single(f, index) if index != fusionMaxStackDepth =>
-        Single(f.andThen(g), index + 1)
+    g match {
+      case atg: AndThen[R, A] =>
+        AndThen.andThen(this, atg)
       case _ =>
-        andThenF(AndThen(g))
+        this match {
+          case Single(f, index) if index < fusionMaxStackDepth =>
+            Single(f.andThen(g), index + 1)
+          case Concat(left, Single(f, index)) if index < fusionMaxStackDepth =>
+            Concat(left, Single(f.andThen(g), index + 1))
+          case _ =>
+            Concat(this, Single(g, 0))
+        }
     }
 
   override def compose[A](g: A => T): AndThen[A, R] =
     // Fusing calls up to a certain threshold, using the fusion
     // technique implemented for `cats.effect.IO#map`
-    this match {
-      case Single(f, index) if index != fusionMaxStackDepth =>
-        Single(f.compose(g), index + 1)
+    g match {
+      case atg: AndThen[A, T] => AndThen.andThen(atg, this)
       case _ =>
-        composeF(AndThen(g))
+        this match {
+          case Single(f, index) if index < fusionMaxStackDepth =>
+            Single(f.compose(g), index + 1)
+          case Concat(Single(f, index), right) if index < fusionMaxStackDepth =>
+            Concat(Single(f.compose(g), index + 1), right)
+          case _ =>
+            Concat(Single(g, 0), this)
+        }
     }
 
   private def runLoop(start: T): R = {
     @tailrec
-    def loop[A, B](self: AndThen[A, B], current: A): B =
+    def loop[A](self: AndThen[A, R], current: A): R =
       self match {
         case Single(f, _) => f(current)
 
@@ -103,15 +116,10 @@ sealed abstract class AndThen[-T, +R] extends (T => R) with Product with Seriali
     loop(this, start)
   }
 
-  final private def andThenF[X](right: AndThen[R, X]): AndThen[T, X] =
-    Concat(this, right)
-  final private def composeF[X](right: AndThen[X, T]): AndThen[X, R] =
-    Concat(right, this)
-
   // converts left-leaning to right-leaning
   final protected def rotateAccum[E](_right: AndThen[R, E]): AndThen[T, E] = {
     @tailrec
-    def loop[A, B, C](left: AndThen[A, B], right: AndThen[B, C]): AndThen[A, C] =
+    def loop[A](left: AndThen[T, A], right: AndThen[A, E]): AndThen[T, E] =
       left match {
         case Concat(left1, right1) =>
           loop(left1, Concat(right1, right))
@@ -143,15 +151,96 @@ object AndThen extends AndThenInstances0 {
    * Establishes the maximum stack depth when fusing `andThen` or
    * `compose` calls.
    *
-   * The default is `128`, from which we subtract one as an optimization,
-   * a "!=" comparison being slightly more efficient than a "<".
+   * The default is `128`.
    *
    * This value was reached by taking into account the default stack
    * size as set on 32 bits or 64 bits, Linux or Windows systems,
    * being enough to notice performance gains, but not big enough
    * to be in danger of triggering a stack-overflow error.
    */
-  final private val fusionMaxStackDepth = 127
+  final private val fusionMaxStackDepth = 128
+
+  /**
+   * If you are going to call this function many times, right associating it
+   * once can be a significant performance improvement for VERY long chains.
+   */
+  def toRightAssociated[A, B](fn: AndThen[A, B]): AndThen[A, B] = {
+    @tailrec
+    def loop[X, Y](beg: AndThen[A, X], middle: AndThen[X, Y], end: AndThen[Y, B], endDone: Boolean): AndThen[A, B] =
+      if (endDone) {
+        // end is right associated
+        middle match {
+          case sm @ Single(_, _) =>
+            // here we use andThen to fuse singles below
+            // the threshold that may have been hidden
+            // by Concat structure previously
+            val newEnd = AndThen.andThen(sm, end)
+            beg match {
+              case sb @ Single(_, _) =>
+                AndThen.andThen(sb, newEnd)
+              case Concat(begA, begB) =>
+                loop(begA, begB, newEnd, true)
+            }
+          case Concat(mA, mB) =>
+            // rotate mA onto beg:
+            // we don't need to use andThen here since we
+            // are still preparing to put onto the end
+            loop(Concat(beg, mA), mB, end, true)
+        }
+      } else {
+        // we are still right-associating the end
+        end match {
+          case se @ Single(_, _)  => loop(beg, middle, se, true)
+          case Concat(endA, endB) => loop(beg, Concat(middle, endA), endB, false)
+        }
+      }
+
+    fn match {
+      case Concat(Concat(a, b), c)                           => loop(a, b, c, false)
+      case Concat(a, Concat(b, c))                           => loop(a, b, c, false)
+      case Concat(Single(_, _), Single(_, _)) | Single(_, _) => fn
+    }
+  }
+
+  /**
+   * true if this fn is already right associated, which is the faster
+   * for calling
+   */
+  @tailrec
+  final def isRightAssociated[A, B](fn: AndThen[A, B]): Boolean =
+    fn match {
+      case Single(_, _)                => true
+      case Concat(Single(_, _), right) => isRightAssociated(right)
+      case _                           => false
+    }
+
+  final def andThen[A, B, C](ab: AndThen[A, B], bc: AndThen[B, C]): AndThen[A, C] =
+    ab match {
+      case Single(f, indexf) =>
+        bc match {
+          case Single(g, indexg) =>
+            if (indexf + indexg < fusionMaxStackDepth) Single(f.andThen(g), indexf + indexg + 1)
+            else Concat(ab, bc)
+
+          case Concat(Single(g, indexg), right) if indexf + indexg < fusionMaxStackDepth =>
+            Concat(Single(f.andThen(g), indexf + indexg + 1), right)
+
+          case _ => Concat(ab, bc)
+        }
+      case Concat(leftf, Single(f, indexf)) =>
+        bc match {
+          case Single(g, indexg) =>
+            if (indexf + indexg < fusionMaxStackDepth) Concat(leftf, Single(f.andThen(g), indexf + indexg + 1))
+            else Concat(ab, bc)
+
+          case Concat(Single(g, indexg), right) if indexf + indexg < fusionMaxStackDepth =>
+            Concat(leftf, Concat(Single(f.andThen(g), indexf + indexg + 1), right))
+
+          case _ =>
+            Concat(ab, bc)
+        }
+      case _ => Concat(ab, bc)
+    }
 }
 
 abstract private[data] class AndThenInstances0 extends AndThenInstances1 {
@@ -218,7 +307,7 @@ abstract private[data] class AndThenInstances0 extends AndThenInstances1 {
         AndThen(fn1.split(f, g))
 
       def compose[A, B, C](f: AndThen[B, C], g: AndThen[A, B]): AndThen[A, C] =
-        f.compose(g)
+        AndThen.andThen(g, f)
     }
 }
 

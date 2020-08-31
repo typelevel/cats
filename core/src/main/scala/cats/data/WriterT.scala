@@ -320,6 +320,9 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
     G.map(
       F.traverse(run)(lv => G.tupleLeft(f(lv._2), lv._1))
     )(WriterT.apply)
+
+  def compare(that: WriterT[F, L, V])(implicit Ord: Order[F[(L, V)]]): Int =
+    Ord.compare(run, that.run)
 }
 
 object WriterT extends WriterTInstances with WriterTFunctions with WriterTFunctions0 {
@@ -377,6 +380,11 @@ sealed abstract private[data] class WriterTInstances1 extends WriterTInstances2 
 
   implicit def catsDataFoldableForWriterTId[L](implicit F: Foldable[Id]): Foldable[WriterT[Id, L, *]] =
     catsDataFoldableForWriterT[Id, L](F)
+
+  implicit def catsDataOrderForWriterT[F[_], L, V](implicit Ord: Order[F[(L, V)]]): Order[WriterT[F, L, V]] =
+    new Order[WriterT[F, L, V]] {
+      def compare(x: WriterT[F, L, V], y: WriterT[F, L, V]): Int = x.compare(y)
+    }
 }
 
 sealed abstract private[data] class WriterTInstances2 extends WriterTInstances3 {

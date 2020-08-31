@@ -62,7 +62,7 @@ class NonEmptyChainSuite extends NonEmptyCollectionSuite[Chain, NonEmptyChain, N
   }
 
   test("show") {
-    assert(Show[NonEmptyChain[Int]].show(NonEmptyChain(1, 2, 3)) === ("NonEmptyChain(1, 2, 3)"))
+    assert(Show[NonEmptyChain[Int]].show(NonEmptyChain(1, 2, 3)) === "NonEmptyChain(1, 2, 3)")
   }
 
   test("size is consistent with toChain.size") {
@@ -73,7 +73,7 @@ class NonEmptyChainSuite extends NonEmptyCollectionSuite[Chain, NonEmptyChain, N
 
   test("filterNot and then exists should always be false") {
     forAll { (ci: NonEmptyChain[Int], f: Int => Boolean) =>
-      assert(ci.filterNot(f).exists(f) === (false))
+      assert(ci.filterNot(f).exists(f) === false)
     }
   }
 
@@ -97,7 +97,7 @@ class NonEmptyChainSuite extends NonEmptyCollectionSuite[Chain, NonEmptyChain, N
 
   test("filterNot element and then contains should be false") {
     forAll { (ci: NonEmptyChain[Int], i: Int) =>
-      assert(ci.filterNot(_ === i).contains(i) === (false))
+      assert(ci.filterNot(_ === i).contains(i) === false)
     }
   }
 
@@ -109,13 +109,13 @@ class NonEmptyChainSuite extends NonEmptyCollectionSuite[Chain, NonEmptyChain, N
 
   test("fromNonEmptyVector . toNonEmptyVector is id") {
     forAll { (ci: NonEmptyChain[Int]) =>
-      assert(NonEmptyChain.fromNonEmptyVector(ci.toNonEmptyVector) === (ci))
+      assert(NonEmptyChain.fromNonEmptyVector(ci.toNonEmptyVector) === ci)
     }
   }
 
   test("fromNonEmptyList . toNonEmptyList is id") {
     forAll { (ci: NonEmptyChain[Int]) =>
-      assert(NonEmptyChain.fromNonEmptyList(ci.toNonEmptyList) === (ci))
+      assert(NonEmptyChain.fromNonEmptyList(ci.toNonEmptyList) === ci)
     }
   }
 
@@ -126,7 +126,7 @@ class NonEmptyChainSuite extends NonEmptyCollectionSuite[Chain, NonEmptyChain, N
   }
 
   test("fromChainUnsafe throws exception when used with empty chain") {
-    assert(Either.catchNonFatal(NonEmptyChain.fromChainUnsafe(Chain.empty[Int])).isLeft === (true))
+    assert(Either.catchNonFatal(NonEmptyChain.fromChainUnsafe(Chain.empty[Int])).isLeft === true)
   }
 
   test("fromSeq . toList . iterator is id") {
@@ -149,7 +149,7 @@ class NonEmptyChainSuite extends NonEmptyCollectionSuite[Chain, NonEmptyChain, N
 
   test("reverse . reverse is id") {
     forAll { (ci: NonEmptyChain[Int]) =>
-      assert(ci.reverse.reverse === (ci))
+      assert(ci.reverse.reverse === ci)
     }
   }
 

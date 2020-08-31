@@ -125,24 +125,24 @@ class ValidatedSuite extends CatsSuite {
   test("ValidatedNel") {
     forAll { (e: String) =>
       val manual = Validated.invalid[NonEmptyList[String], Int](NonEmptyList.of(e))
-      assert(Validated.invalidNel[String, Int](e) === (manual))
-      assert(Validated.invalid[String, Int](e).toValidatedNel === (manual))
+      assert(Validated.invalidNel[String, Int](e) === manual)
+      assert(Validated.invalid[String, Int](e).toValidatedNel === manual)
     }
   }
 
   test("ValidatedNec") {
     forAll { (e: String) =>
       val manual = Validated.invalid[NonEmptyChain[String], Int](NonEmptyChain.one(e))
-      assert(Validated.invalidNec[String, Int](e) === (manual))
-      assert(Validated.invalid[String, Int](e).toValidatedNec === (manual))
+      assert(Validated.invalidNec[String, Int](e) === manual)
+      assert(Validated.invalid[String, Int](e).toValidatedNec === manual)
     }
   }
 
   test("isInvalid consistent with forall and exists") {
     forAll { (v: Validated[String, Int], p: Int => Boolean) =>
       if (v.isInvalid) {
-        assert(v.forall(p) === (true))
-        assert(v.exists(p) === (false))
+        assert(v.forall(p) === true)
+        assert(v.exists(p) === false)
       } else {
         assert(v.forall(p) === (v.exists(p)))
       }
@@ -197,7 +197,7 @@ class ValidatedSuite extends CatsSuite {
 
   test("toEither then fromEither is identity") {
     forAll { (v: Validated[String, Int]) =>
-      assert(Validated.fromEither(v.toEither) === (v))
+      assert(Validated.fromEither(v.toEither) === v)
     }
   }
 
@@ -211,7 +211,7 @@ class ValidatedSuite extends CatsSuite {
   test("show isn't empty") {
     forAll { (v: Validated[String, Int]) =>
       val show = implicitly[Show[Validated[String, Int]]]
-      assert(show.show(v).nonEmpty === (true))
+      assert(show.show(v).nonEmpty === true)
     }
   }
 
@@ -239,7 +239,7 @@ class ValidatedSuite extends CatsSuite {
 
   test("fromOption consistent with toOption") {
     forAll { (o: Option[Int], s: String) =>
-      assert(Validated.fromOption(o, s).toOption === (o))
+      assert(Validated.fromOption(o, s).toOption === o)
     }
   }
 
@@ -251,7 +251,7 @@ class ValidatedSuite extends CatsSuite {
 
   test("toIor then fromEither is identity") {
     forAll { (v: Validated[String, Int]) =>
-      assert(Validated.fromIor(v.toIor) === (v))
+      assert(Validated.fromIor(v.toIor) === v)
     }
   }
 
@@ -269,7 +269,7 @@ class ValidatedSuite extends CatsSuite {
 
   test("double swap is identity") {
     forAll { (x: Validated[String, Int]) =>
-      assert(x.swap.swap === (x))
+      assert(x.swap.swap === x)
     }
   }
 
@@ -292,7 +292,7 @@ class ValidatedSuite extends CatsSuite {
   test("ensure on Invalid is identity") {
     forAll { (x: Validated[Int, String], i: Int, p: String => Boolean) =>
       if (x.isInvalid) {
-        assert(x.ensure(i)(p) === (x))
+        assert(x.ensure(i)(p) === x)
       }
     }
   }
@@ -308,7 +308,7 @@ class ValidatedSuite extends CatsSuite {
   test("ensureOr on Invalid is identity") {
     forAll { (x: Validated[Int, String], f: String => Int, p: String => Boolean) =>
       if (x.isInvalid) {
-        assert(x.ensureOr(f)(p) === (x))
+        assert(x.ensureOr(f)(p) === x)
       }
     }
   }

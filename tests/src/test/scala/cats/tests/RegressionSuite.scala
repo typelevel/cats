@@ -61,10 +61,10 @@ class RegressionSuite extends CatsSuite with ScalaVersionSpecificRegressionSuite
     val state = Traverse[List].sequence[State[Int, *], Person](allocated)
     val (people, counter) = state.run(0)
     assert(people === (List(Person(0, "Alice"), Person(1, "Bob"), Person(2, "Claire"))))
-    assert(counter === (3))
+    assert(counter === 3)
 
     // ensure that side-effects occurred in "correct" order
-    assert(buf.toList === (names))
+    assert(buf.toList === names)
   }
 
   test("#167: confirm ap2 order") {
@@ -75,7 +75,7 @@ class RegressionSuite extends CatsSuite with ScalaVersionSpecificRegressionSuite
       )
       .run("")
       ._2
-    assert(twelve === ("12"))
+    assert(twelve === "12")
   }
 
   test("#167: confirm map2 order") {
@@ -86,7 +86,7 @@ class RegressionSuite extends CatsSuite with ScalaVersionSpecificRegressionSuite
       )((_: Unit, _: Unit) => ())
       .run("")
       ._2
-    assert(twelve === ("12"))
+    assert(twelve === "12")
   }
 
   test("#167: confirm map3 order") {
@@ -98,7 +98,7 @@ class RegressionSuite extends CatsSuite with ScalaVersionSpecificRegressionSuite
       )((_: Unit, _: Unit, _: Unit) => ())
       .run("")
       ._2
-    assert(oneTwoThree === ("123"))
+    assert(oneTwoThree === "123")
   }
 
   test("#500: foldMap - traverse consistency") {
@@ -115,7 +115,7 @@ class RegressionSuite extends CatsSuite with ScalaVersionSpecificRegressionSuite
     }
 
     def checkAndResetCount(expected: Int): Unit = {
-      assert(count === (expected))
+      assert(count === expected)
       count = 0
     }
 

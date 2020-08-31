@@ -117,6 +117,35 @@ import scala.annotation.implicitNotFound
   def iterateUntilM[A](init: A)(f: A => F[A])(p: A => Boolean): F[A] =
     iterateWhileM(init)(f)(!p(_))
 
+  /**
+   * Simulates an if/else-if/else in the context of an F. It evaluates conditions until
+   * one evaluates to true, and returns the associated F[A]. If no condition is true,
+   * returns els.
+   *
+   * {{{
+   * scala> import cats._
+   * scala> Monad[Eval].ifElseM(Eval.later(false) -> Eval.later(1), Eval.later(true) -> Eval.later(2))(Eval.later(5)).value
+   * res0: Int = 2
+   * }}}
+   *
+   * Based on a [[https://gist.github.com/1b92a6e338f4e1537692e748c54b9743 gist]] by Daniel Spiewak with a stack-safe
+   * [[https://github.com/typelevel/cats/pull/3553#discussion_r468121480 implementation]] due to P. Oscar Boykin
+   * @see See [[https://gitter.im/typelevel/cats-effect?at=5f297e4314c413356f56d230]] for the discussion.
+   */
+  @noop
+  def ifElseM[A](branches: (F[Boolean], F[A])*)(els: F[A]): F[A] = {
+    type Branches = List[(F[Boolean], F[A])]
+
+    def step(branches: Branches): F[Either[Branches, A]] =
+      branches match {
+        case (cond, conseq) :: tail =>
+          flatMap(cond) { b => if (b) map(conseq)(Right(_)) else pure(Left(tail)) }
+        case Nil =>
+          map(els)(Right(_))
+      }
+
+    tailRecM(branches.toList)(step)
+  }
 }
 
 object Monad {

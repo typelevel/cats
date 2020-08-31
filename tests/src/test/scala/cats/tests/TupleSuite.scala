@@ -67,10 +67,10 @@ class TupleSuite extends CatsSuite {
   test("eqv") {
     val eq = Eq[(Int, Long)]
     forAll { (t: (Int, Long)) =>
-      assert(eq.eqv(t, t) === (true))
+      assert(eq.eqv(t, t) === true)
     }
     forAll { (t: (Int, Long)) =>
-      assert(eq.eqv(t, t._1 -> (t._2 + 1)) === (false))
+      assert(eq.eqv(t, t._1 -> (t._2 + 1)) === false)
     }
   }
 
@@ -82,7 +82,7 @@ class TupleSuite extends CatsSuite {
   }
 
   test("show") {
-    assert((1, 2).show === ("(1,2)"))
+    assert((1, 2).show === "(1,2)")
 
     forAll { (fs: (String, String)) =>
       assert(fs.show === (fs.toString))

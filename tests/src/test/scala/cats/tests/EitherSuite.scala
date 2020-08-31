@@ -92,14 +92,14 @@ class EitherSuite extends CatsSuite {
 
   test("show isn't empty") {
     forAll { (e: Either[Int, String]) =>
-      assert(show.show(e).nonEmpty === (true))
+      assert(show.show(e).nonEmpty === true)
     }
   }
 
   test("map2Eval is lazy") {
     val bomb: Eval[Either[String, Int]] = Later(sys.error("boom"))
     val x: Either[String, Int] = Left("l")
-    assert(x.map2Eval(bomb)(_ + _).value === (x))
+    assert(x.map2Eval(bomb)(_ + _).value === x)
   }
 
   test("catchOnly lets non-matching exceptions escape") {
@@ -139,7 +139,7 @@ class EitherSuite extends CatsSuite {
 
   test("double swap is identity") {
     forAll { (x: Either[Int, String]) =>
-      assert(x.swap.swap === (x))
+      assert(x.swap.swap === x)
     }
   }
 
@@ -199,38 +199,38 @@ class EitherSuite extends CatsSuite {
   test("orElse") {
     forAll { (x: Either[Int, String], y: Either[Int, String]) =>
       val z = x.orElse(y)
-      assert((z === (x)) || (z === (y)) === (true))
+      assert((z === x) || (z === y) === true)
     }
   }
 
   test("recover recovers handled values") {
     val either = Either.left[String, Int]("either")
-    assert(either.recover { case "either" => 5 }.isRight === (true))
+    assert(either.recover { case "either" => 5 }.isRight === true)
   }
 
   test("recover ignores unhandled values") {
     val either = Either.left[String, Int]("either")
-    assert(either.recover { case "noteither" => 5 } === (either))
+    assert(either.recover { case "noteither" => 5 } === either)
   }
 
   test("recover ignores the right side") {
     val either = Either.right[String, Int](10)
-    assert(either.recover { case "either" => 5 } === (either))
+    assert(either.recover { case "either" => 5 } === either)
   }
 
   test("recoverWith recovers handled values") {
     val either = Either.left[String, Int]("either")
-    assert(either.recoverWith { case "either" => Either.right[String, Int](5) }.isRight === (true))
+    assert(either.recoverWith { case "either" => Either.right[String, Int](5) }.isRight === true)
   }
 
   test("recoverWith ignores unhandled values") {
     val either = Either.left[String, Int]("either")
-    assert(either.recoverWith { case "noteither" => Either.right[String, Int](5) } === (either))
+    assert(either.recoverWith { case "noteither" => Either.right[String, Int](5) } === either)
   }
 
   test("recoverWith ignores the right side") {
     val either = Either.right[String, Int](10)
-    assert(either.recoverWith { case "either" => Either.right[String, Int](5) } === (either))
+    assert(either.recoverWith { case "either" => Either.right[String, Int](5) } === either)
   }
 
   test("valueOr consistent with swap then map then merge") {
@@ -242,7 +242,7 @@ class EitherSuite extends CatsSuite {
   test("isLeft implies forall") {
     forAll { (x: Either[Int, String], p: String => Boolean) =>
       if (x.isLeft) {
-        assert(x.forall(p) === (true))
+        assert(x.forall(p) === true)
       }
     }
   }
@@ -250,14 +250,14 @@ class EitherSuite extends CatsSuite {
   test("isLeft implies exists is false") {
     forAll { (x: Either[Int, String], p: String => Boolean) =>
       if (x.isLeft) {
-        assert(x.exists(p) === (false))
+        assert(x.exists(p) === false)
       }
     }
   }
 
   test("toIor then toEither is identity") {
     forAll { (x: Either[Int, String]) =>
-      assert(x.toIor.toEither === (x))
+      assert(x.toIor.toEither === x)
     }
   }
 
@@ -265,7 +265,7 @@ class EitherSuite extends CatsSuite {
     implicit def eqTh: Eq[Throwable] = Eq.allEqual
 
     forAll { (x: Throwable Either String) =>
-      assert(Either.fromTry(x.toTry) === (x))
+      assert(Either.fromTry(x.toTry) === x)
     }
   }
 
@@ -330,12 +330,12 @@ class EitherSuite extends CatsSuite {
 
   test("show Right") {
     val either = Either.right[String, Int](10)
-    assert(either.show === ("Right(10)"))
+    assert(either.show === "Right(10)")
   }
 
   test("show Left") {
     val either = Either.left[String, Int]("string")
-    assert(either.show === ("Left(string)"))
+    assert(either.show === "Left(string)")
   }
 
   test("toEitherNel Left") {
