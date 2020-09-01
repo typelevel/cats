@@ -23,18 +23,27 @@ case class RemoveInstanceImports(index: SemanticdbIndex)
       // Find all synthetics between the import statement and the end of the lexical boundary
       val lexicalStart = i.pos.end
       val lexicalEnd = boundary.pos.end
-      val relevantSynthetics =
-        ctx.index.synthetics.filter(x => x.position.start >= lexicalStart && x.position.end <= lexicalEnd)
+      try {
+        val relevantSynthetics =
+          ctx.index.synthetics.filter(x => x.position.start >= lexicalStart && x.position.end <= lexicalEnd)
 
-      val usesSyntax = relevantSynthetics.exists(containsCatsSyntax)
-      if (usesSyntax) {
-        // the import is being used to enable an extension method,
-        // so replace it with "import cats.syntax.all._"
-        ctx.replaceTree(i, "import cats.syntax.all._")
-      } else {
-        // the import is only used to import instances,
-        // so it's safe to remove
-        removeImportLine(ctx)(i)
+        val usesSyntax = relevantSynthetics.exists(containsCatsSyntax)
+        if (usesSyntax) {
+          // the import is being used to enable an extension method,
+          // so replace it with "import cats.syntax.all._"
+          ctx.replaceTree(i, "import cats.syntax.all._")
+        } else {
+          // the import is only used to import instances,
+          // so it's safe to remove
+          removeImportLine(ctx)(i)
+        }
+      } catch {
+        case e: scalafix.v1.MissingSymbolException =>
+          // see https://github.com/typelevel/cats/pull/3566#issuecomment-684007028
+          // and https://github.com/scalacenter/scalafix/issues/1123
+          println(s"Skipping rewrite of 'import cats.implicits._' in file ${ctx.input.label} because we ran into a Scalafix bug. $e")
+          e.printStackTrace()
+          Patch.empty
       }
   }.asPatch
 
