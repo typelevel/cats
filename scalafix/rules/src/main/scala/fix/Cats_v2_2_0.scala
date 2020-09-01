@@ -27,9 +27,15 @@ case class RemoveInstanceImports(index: SemanticdbIndex)
         val relevantSynthetics =
           ctx.index.synthetics.filter(x => x.position.start >= lexicalStart && x.position.end <= lexicalEnd)
 
+        val usesImplicitConversion = relevantSynthetics.exists(containsImplicitConversion)
         val usesSyntax = relevantSynthetics.exists(containsCatsSyntax)
-        if (usesSyntax) {
-          // the import is being used to enable an extension method,
+
+        if (usesImplicitConversion) {
+          // the import is used to enable an implicit conversion,
+          // so we have to keep it
+          Patch.empty
+        } else if (usesSyntax) {
+          // the import is used to enable an extension method,
           // so replace it with "import cats.syntax.all._"
           ctx.replaceTree(i, "import cats.syntax.all._")
         } else {
@@ -49,6 +55,12 @@ case class RemoveInstanceImports(index: SemanticdbIndex)
 
   private def removeImportLine(ctx: RuleCtx)(i: Import): Patch =
     ctx.removeTokens(i.tokens) + removeWhitespaceAndNewlineBefore(ctx)(i.tokens.start)
+
+  private def containsImplicitConversion(synthetic: Synthetic) =
+    synthetic.names.exists(x => isCatsKernelConversion(x.symbol))
+
+  private def isCatsKernelConversion(symbol: Symbol) =
+    symbol.syntax.contains("cats/kernel") && symbol.syntax.contains("Conversion")
 
   private def containsCatsSyntax(synthetic: Synthetic) =
     synthetic.names.exists(x => isCatsSyntax(x.symbol))
