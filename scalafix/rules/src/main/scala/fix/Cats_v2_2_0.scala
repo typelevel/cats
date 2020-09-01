@@ -54,7 +54,7 @@ case class RemoveInstanceImports(index: SemanticdbIndex)
     synthetic.names.exists(x => isCatsSyntax(x.symbol))
 
   private def isCatsSyntax(symbol: Symbol) =
-    symbol.syntax.contains("cats") && symbol.syntax.contains("syntax")
+    symbol.syntax.contains("cats") && (symbol.syntax.contains("syntax") || symbol.syntax.contains("Ops"))
 
   private def findLexicalBoundary(t: Tree): Tree = {
     t.parent match {
