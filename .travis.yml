@@ -63,7 +63,7 @@ jobs:
     - stage: test
       name: Scalafix tests
       env: TEST="scalafix"
-      script: cd scalafix && sbt tests/test
+      script: cd scalafix && sbt test
 
     - &bincompat
       stage: test
