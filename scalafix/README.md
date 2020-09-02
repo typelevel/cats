@@ -4,15 +4,17 @@
 
 1. [Install the Scalafix sbt plugin](https://scalacenter.github.io/scalafix/docs/users/installation)
 
-2. Configure the SemanticDB compiler plugin to enable synthetics:
-
-   ```
-   scalacOptions += "-P:semanticdb:synthetics:on"
-   ```
-
-3. Run the rules appropriate to your Cats version (see below)
+2. Run the rules appropriate to your Cats version (see below)
 
 ## Migration to Cats v2.2.0
+
+First configure the SemanticDB compiler plugin to enable synthetics:
+
+```
+ThisBuild / scalacOptions += "-P:semanticdb:synthetics:on"
+```
+
+Then run Scalafix:
 
 ```sh
 sbt scalafix github:typelevel/cats/Cats_v2_2_0
@@ -66,7 +68,7 @@ sbt scalafix github:typelevel/cats/Cats_v1_0_0
 - [ ] iteratorFoldM was removed from Foldable due to #1716
 
 
-## To test scala fix
+## To test the Scalafix rules
 
 ```bash
 cd scalafix
