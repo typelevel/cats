@@ -15,6 +15,7 @@ possible:
  * 3rdLaw
  * Aaron Levin
  * Adam Fisher
+ * Adam Rosien
  * Adelbert Chang
  * Adrian Ramirez Fornell
  * Aldo Stracquadanio
@@ -271,6 +272,7 @@ possible:
  * Tanaka Takaya
  * Taylor Brown
  * Tim Spence
+ * Timothy McCarthy
  * Tom Switzer
  * Tomas Mikula
  * Tongfei Chen

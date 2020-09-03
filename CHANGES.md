@@ -1,6 +1,30 @@
+## Version 2.2.0
+
+_2020 September 3_
+
+### 3 API / feature enhancements
+
+* [#3566](https://github.com/typelevel/cats/pull/3566) Scalafix rule to remove instance imports when upgrading to 2.2.0  by @cb372
+* [#3579](https://github.com/typelevel/cats/pull/3579) Add `toValidated` to TrySyntax  by @gagandeepkalra
+* [#3576](https://github.com/typelevel/cats/pull/3576) Remove unused private method  by @takayahilton
+
+### 3 documentation improvements
+
+* [#3586](https://github.com/typelevel/cats/pull/3586) Fix typo in FoldableTests (constistency -> consistency)  by @tmccarthy
+* [#3581](https://github.com/typelevel/cats/pull/3581) Add monix-bio to related projects  by @Avasil
+* [#3580](https://github.com/typelevel/cats/pull/3580) Add Parallel typeclass diagram to docs.  by @izeigerman
+
+### 5 build improvements
+
+* [#3591](https://github.com/typelevel/cats/pull/3591) Update sbt-scalafix to 0.9.20  by @scala-steward
+* [#3589](https://github.com/typelevel/cats/pull/3589) Update discipline-munit to 0.2.4  by @scala-steward
+* [#3588](https://github.com/typelevel/cats/pull/3588) Update munit-scalacheck to 0.7.12  by @scala-steward
+* [#3585](https://github.com/typelevel/cats/pull/3585) Update sbt-dotty to 0.4.2  by @scala-steward
+* [#3578](https://github.com/typelevel/cats/pull/3578) Update discipline-scalatest to 2.0.1  by @scala-steward
+
 ## Version 2.2.0-RC4
 
-_2020 August 22_
+_2020 August 21_
 
 ### 2 API / feature enhancements
 
