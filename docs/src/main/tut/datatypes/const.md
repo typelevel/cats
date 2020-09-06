@@ -13,14 +13,14 @@ have its uses, which serve as a nice example of the consistency and elegance of 
 ## Thinking about `Const`
 The `Const` data type can be thought of similarly to the `const` function, but as a data type.
 
-```tut:silent
+```scala mdoc:silent
 def const[A, B](a: A)(b: => B): A = a
 ```
 
 The `const` function takes two arguments and simply returns the first argument, ignoring the second.
 
-```tut:silent
-final case class Const[A, B](getConst: A)
+```scala mdoc:silent
+case class Const[A, B](getConst: A)
 ```
 
 The `Const` data type takes two type parameters, but only ever stores a value of the first type parameter.
@@ -44,7 +44,7 @@ to use a lens.
 A lens can be thought of as a first class getter/setter. A `Lens[S, A]` is a data type that knows how to get
 an `A` out of an `S`, or set an `A` in an `S`.
 
-```tut:silent
+```scala mdoc:silent
 trait Lens[S, A] {
   def get(s: S): A
 
@@ -58,7 +58,7 @@ trait Lens[S, A] {
 It can be useful to have effectful modifications as well - perhaps our modification can fail (`Option`) or
 can return several values (`List`).
 
-```tut:silent
+```scala mdoc:nest:silent
 trait Lens[S, A] {
   def get(s: S): A
 
@@ -78,7 +78,7 @@ trait Lens[S, A] {
 Note that both `modifyOption` and `modifyList` share the *exact* same implementation. If we look closely, the
 only thing we need is a `map` operation on the data type. Being good functional programmers, we abstract.
 
-```tut:silent
+```scala mdoc:nest:silent
 import cats.Functor
 import cats.implicits._
 
@@ -99,7 +99,7 @@ We can redefine `modify` in terms of `modifyF` by using `cats.Id`. We can also t
 that simply ignores the current value. Due to these modifications however, we must leave `modifyF` abstract
 since having it defined in terms of `set` would lead to infinite circular calls.
 
-```tut:silent
+```scala mdoc:nest:silent
 import cats.Id
 
 trait Lens[S, A] {
@@ -136,7 +136,8 @@ define a `Functor` instance for `Const`, where the first type parameter is fixed
 
 *Note*: the example below assumes usage of the [kind-projector compiler plugin](https://github.com/typelevel/kind-projector) and will not compile if it is not being used in a project.
 
-```tut:silent
+```scala mdoc:reset:silent
+import cats.Functor
 import cats.data.Const
 
 implicit def constFunctor[X]: Functor[Const[X, *]] =
@@ -149,7 +150,9 @@ implicit def constFunctor[X]: Functor[Const[X, *]] =
 
 Now that that's taken care of, let's substitute and see what happens.
 
-```tut:silent
+```scala mdoc:silent
+import cats.Id
+
 trait Lens[S, A] {
   def modifyF[F[_] : Functor](s: S)(f: A => F[A]): F[S]
 
@@ -176,7 +179,7 @@ In the popular [The Essence of the Iterator Pattern](https://www.cs.ox.ac.uk/jer
 paper, Jeremy Gibbons and Bruno C. d. S. Oliveria describe a functional approach to iterating over a collection of
 data. Among the abstractions presented are `Foldable` and `Traverse`, replicated below (also available in Cats).
 
-```tut:silent
+```scala mdoc:silent
 import cats.{Applicative, Monoid}
 
 trait Foldable[F[_]] {
@@ -196,7 +199,7 @@ These two type classes seem unrelated - one reduces a collection down to a singl
 a collection with an effectful function, collecting results. It may be surprising to see that in fact `Traverse`
 subsumes `Foldable`.
 
-```tut:silent
+```scala mdoc:nest:silent
 trait Traverse[F[_]] extends Foldable[F] {
   def traverse[G[_] : Applicative, A, X](fa: F[A])(f: A => G[X]): G[F[X]]
 
@@ -213,7 +216,7 @@ However, if we imagine `G[_]` to be a sort of type-level constant function, wher
 `F[X]` is the value we want to ignore, we treat it as the second type parameter and hence, leave it as the free
 one.
 
-```tut:silent
+```scala mdoc:nest:silent
 import cats.data.Const
 
 implicit def constApplicative[Z]: Applicative[Const[Z, *]] =
@@ -237,7 +240,7 @@ should try to do something more useful. This suggests composition of `Z`s, which
 So now we need a constant `Z` value, and a binary function that takes two `Z`s and produces a `Z`. Sound familiar?
 We want `Z` to have a `Monoid` instance!
 
-```tut:silent
+```scala mdoc:nest:silent
 implicit def constApplicative[Z : Monoid]: Applicative[Const[Z, *]] =
   new Applicative[Const[Z, *]] {
     def pure[A](a: A): Const[Z, A] = Const(Monoid[Z].empty)
@@ -263,7 +266,7 @@ So to summarize, what we want is a function `A => Const[B, Nothing]`, and we hav
 that `Const[B, Z]` (for any `Z`) is the moral equivalent of just `B`, so `A => Const[B, Nothing]` is equivalent
 to `A => B`, which is exactly what we have, we just need to wrap it.
 
-```tut:silent
+```scala mdoc:nest:silent
 trait Traverse[F[_]] extends Foldable[F] {
   def traverse[G[_] : Applicative, A, X](fa: F[A])(f: A => G[X]): G[F[X]]
 

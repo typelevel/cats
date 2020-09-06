@@ -19,7 +19,7 @@ In the example of `Either` and `Validated` it is trivial albeit cumbersome to co
 Below is a short example of a situation where we might run into this.
 For simplicity, we'll use `String` as our type to represent errors.
 
-```tut:book
+```scala mdoc
 import cats.implicits._
 import cats.data._
 
@@ -46,7 +46,7 @@ def validateName(n: String): Either[NonEmptyList[String], Name] = {
 
 Now we want to parse two Strings into a value of `Person`:
 
-```tut:book
+```scala mdoc
 def parsePerson(ageString: String, nameString: String) =
   for {
     age <- parse(ageString)
@@ -79,7 +79,7 @@ Where `M[_]` has to have an instance of `Monad` and `F[_]` an instance of `Appli
 Recall that `~>` is just an alias for [`FunctionK`](../datatypes/functionk.html).
 This allows us to get rid of most of our boilerplate from earlier:
 
-```tut:book
+```scala mdoc:nest
 def parsePerson(ageString: String, nameString: String) =
   for {
     age <- parse(ageString)
@@ -89,7 +89,7 @@ def parsePerson(ageString: String, nameString: String) =
 
 We can also traverse over a `Traverse` using `Parallel`:
 
-```tut
+```scala mdoc
 List(Either.right(42), Either.left(NonEmptyList.one("Error 1")), Either.left(NonEmptyList.one("Error 2"))).parSequence
 ```
 
@@ -98,14 +98,14 @@ List(Either.right(42), Either.left(NonEmptyList.one("Error 1")), Either.left(Non
 Parallel is also really useful for `zipping` collections. The standard `Applicative` instance for `List`, `Vector`, etc.
 behaves like the cartesian product of the individual collections:
 
-```tut
+```scala mdoc
 (List(1, 2, 3), List(4, 5, 6)).mapN(_ + _)
 ```
 
 However often we will want to `zip` two or more collections together.
 We can define a different `ap` for most of them and use the `parMapN` syntax for that:
 
-```tut
+```scala mdoc
 (List(1, 2, 3), List(4, 5, 6)).parMapN(_ + _)
 ```
 

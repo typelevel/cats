@@ -48,7 +48,7 @@ are missing from it. Instead, you call `.right` or `.left` to get a `RightProjec
 `LeftProjection` (respectively) which does have the combinators. The direction of the projection indicates the direction
 of bias. For instance, calling `map` on a `RightProjection` acts on the `Right` of an `Either`.
 
-```tut:book
+```scala mdoc
 val e1: Either[String, Int] = Right(5)
 e1.right.map(_ + 1)
 
@@ -68,7 +68,7 @@ the right side is most often chosen. In Scala 2.12.x this convention
 in the standard library. Since Cats builds on 2.10.x and 2.11.x, the gaps have been filled via syntax
 enrichments available under `cats.syntax.either._` or `cats.implicits._`.
 
-```tut:book
+```scala mdoc
 import cats.implicits._
 
 val right: Either[String, Int] = Right(5)
@@ -87,7 +87,7 @@ and leave the right one free.
 
 *Note*: the example below assumes usage of the [kind-projector compiler plugin](https://github.com/typelevel/kind-projector) and will not compile if it is not being used in a project.
 
-```tut:silent
+```scala mdoc:silent
 import cats.Monad
 
 implicit def eitherMonad[Err]: Monad[Either[Err, ?]] =
@@ -113,7 +113,7 @@ take the reciprocal, and then turn the reciprocal into a string.
 
 In exception-throwing code, we would have something like this:
 
-```tut:silent
+```scala mdoc:silent
 object ExceptionStyle {
   def parse(s: String): Int =
     if (s.matches("-?[0-9]+")) s.toInt
@@ -129,7 +129,7 @@ object ExceptionStyle {
 
 Instead, let's make the fact that some of our functions can fail explicit in the return type.
 
-```tut:silent
+```scala mdoc:silent
 object EitherStyle {
   def parse(s: String): Either[Exception, Int] =
     if (s.matches("-?[0-9]+")) Either.right(s.toInt)
@@ -145,7 +145,7 @@ object EitherStyle {
 
 Now, using combinators like `flatMap` and `map`, we can compose our functions together.
 
-```tut:silent
+```scala mdoc:silent
 import EitherStyle._
 
 def magic(s: String): Either[Exception, String] =
@@ -156,7 +156,7 @@ With the composite function that we actually care about, we can pass in strings 
 match on the exception. Because `Either` is a sealed type (often referred to as an algebraic data type,
 or ADT), the compiler will complain if we do not check both the `Left` and `Right` case.
 
-```tut:book
+```scala mdoc
 magic("123") match {
   case Left(_: NumberFormatException) => println("not a number!")
   case Left(_: IllegalArgumentException) => println("can't take reciprocal of 0!")
@@ -176,7 +176,9 @@ This implies that there is still room to improve.
 Instead of using exceptions as our error value, let's instead enumerate explicitly the things that
 can go wrong in our program.
 
-```tut:silent
+```scala mdoc:reset:silent
+import cats.implicits._
+
 object EitherStyle {
   sealed abstract class Error
   final case class NotANumber(string: String) extends Error
@@ -202,7 +204,7 @@ exception classes as error values, we use one of the enumerated cases. Now when 
 match, we get much nicer matching. Moreover, since `Error` is `sealed`, no outside code can
 add additional subtypes which we might fail to handle.
 
-```tut:book
+```scala mdoc
 import EitherStyle._
 
 magic("123") match {
@@ -216,7 +218,7 @@ magic("123") match {
 Once you start using `Either` for all your error-handling, you may quickly run into an issue where
 you need to call into two separate modules which give back separate kinds of errors.
 
-```tut:silent
+```scala mdoc:silent
 sealed abstract class DatabaseError
 trait DatabaseValue
 
@@ -259,7 +261,7 @@ type of the left side, as it is in this case.
 ### Solution 1: Application-wide errors
 We may then be tempted to make our entire application share an error data type.
 
-```tut:silent
+```scala mdoc:nest:silent
 sealed abstract class AppError
 case object DatabaseError1 extends AppError
 case object DatabaseError2 extends AppError
@@ -288,7 +290,7 @@ must inspect **all** the `AppError` cases, even though it was only intended for 
 Instead of lumping all our errors into one big ADT, we can instead keep them local to each module, and have
 an application-wide error ADT that wraps each error ADT we need.
 
-```tut:silent
+```scala mdoc:nest:silent
 sealed abstract class DatabaseError
 trait DatabaseValue
 
@@ -314,7 +316,7 @@ Now in our outer application, we can wrap/lift each module-specific error into `
 call our combinators as usual. `Either` provides a convenient method to assist with this, called `Either.leftMap` -
 it can be thought of as the same as `map`, but for the `Left` side.
 
-```tut:silent
+```scala mdoc:silent
 def doApp: Either[AppError, ServiceValue] =
   Database.databaseThings().leftMap[AppError](AppError.Database).
   flatMap(dv => Service.serviceThings(dv).leftMap(AppError.Service))
@@ -324,7 +326,7 @@ Hurrah! Each module only cares about its own errors as it should be, and more co
 own error ADT that encapsulates each constituent module's error ADT. Doing this also allows us to take action
 on entire classes of errors instead of having to pattern match on each individual one.
 
-```tut:silent
+```scala mdoc:silent
 def awesome =
   doApp match {
     case Left(AppError.Database(_)) => "something in the database went wrong"
@@ -338,7 +340,7 @@ def awesome =
 There will inevitably come a time when your nice `Either` code will have to interact with exception-throwing
 code. Handling such situations is easy enough.
 
-```tut:book
+```scala mdoc
 val either: Either[NumberFormatException, Int] =
   try {
     Either.right("abc".toInt)
@@ -351,13 +353,13 @@ However, this can get tedious quickly. `Either` has a `catchOnly` method on its 
 (via syntax enrichment) that allows you to pass it a function, along with the type of exception you want to catch, and does the
 above for you.
 
-```tut:book
+```scala mdoc:nest
 val either: Either[NumberFormatException, Int] =
   Either.catchOnly[NumberFormatException]("abc".toInt)
 ```
 
 If you want to catch all (non-fatal) throwables, you can use `catchNonFatal`.
 
-```tut:book
+```scala mdoc:nest
 val either: Either[Throwable, Int] = Either.catchNonFatal("abc".toInt)
 ```

@@ -23,7 +23,7 @@ Having an `Arrow` instance for a type constructor `F[_, _]` means that an `F[_, 
 
 Suppose we want to write a function `meanAndVar`, that takes a `List[Int]` and returns the pair of mean and variance. To do so, we first define a `combine` function that combines two arrows into a single arrow, which takes an input and processes two copies of it with two arrows. `combine` can be defined in terms of `Arrow` operations `lift`, `>>>` and `***`:
 
-```tut:book:silent
+```scala mdoc:silent
 import cats.arrow.Arrow
 import cats.implicits._
 
@@ -33,7 +33,7 @@ def combine[F[_, _]: Arrow, A, B, C](fab: F[A, B], fac: F[A, C]): F[A, (B, C)] =
 
 We can then create functions `mean: List[Int] => Double`, `variance: List[Int] => Double` and `meanAndVar: List[Int] => (Double, Double)` using the `combine` method and `Arrow` operations:
 
-```tut:book:silent
+```scala mdoc:silent
 val mean: List[Int] => Double =
     combine((_: List[Int]).sum, (_: List[Int]).size) >>> {case (x, y) => x.toDouble / y}
 
@@ -44,13 +44,13 @@ val variance: List[Int] => Double =
 val meanAndVar: List[Int] => (Double, Double) = combine(mean, variance)
 ```
 
-```tut:book
+```scala mdoc
 meanAndVar(List(1, 2, 3, 4))
 ```
 
 Of course, a more natural way to implement `mean` and `variance` would be:
 
-```tut:book:silent
+```scala mdoc:silent
 val mean2: List[Int] => Double = xs => xs.sum.toDouble / xs.size
 
 val variance2: List[Int] => Double = xs => mean2(xs.map(x => x * x)) - scala.math.pow(mean2(xs), 2.0)
@@ -66,7 +66,7 @@ A `Kleisli[F[_], A, B]` represents a function `A => F[B]`. You cannot directly c
 
 Suppose you want to take a `List[Int]`, and return the sum of the first and the last element (if exists). To do so, we can create two `Kleisli`s that find the `headOption` and `lastOption` of a `List[Int]`, respectively:
 
-```tut:book:silent
+```scala mdoc:silent
 import cats.data.Kleisli
 
 val headK = Kleisli((_: List[Int]).headOption)
@@ -75,11 +75,11 @@ val lastK = Kleisli((_: List[Int]).lastOption)
 
 With `headK` and `lastK`, we can obtain the `Kleisli` arrow we want by combining them, and composing it with `_ + _`:
 
-```tut:book:silent
+```scala mdoc:silent
 val headPlusLast = combine(headK, lastK) >>> Arrow[Kleisli[Option, *, *]].lift(((_: Int) + (_: Int)).tupled)
 ```
 
-```tut:book
+```scala mdoc
 headPlusLast.run(List(2, 3, 5, 8))
 headPlusLast.run(Nil)
 ```
@@ -88,7 +88,7 @@ headPlusLast.run(Nil)
 
 In this example let's create our own `Arrow`. We shall create a fancy version of `Function1` called `FancyFunction`, that is capable of maintaining states. We then create an `Arrow` instance for `FancyFunction` and use it to compute the moving average of a list of numbers.
 
-```tut:book:silent
+```scala mdoc:silent
 case class FancyFunction[A, B](run: A => (FancyFunction[A, B], B))
 ```
 
@@ -96,7 +96,7 @@ That is, given an `A`, it not only returns a `B`, but also returns a new `FancyF
 
 To run a stateful computation using a `FancyFunction` on a list of inputs, and collect the output into another list, we can define the following `runList` helper function:
 
-```tut:book:silent
+```scala mdoc:silent
 def runList[A, B](ff: FancyFunction[A, B], as: List[A]): List[B] = as match {
   case h :: t =>
     val (ff2, b) = ff.run(h)
@@ -122,7 +122,7 @@ def first[A, B, C](fa: F[A, B]): F[(A, C), (B, C)]
 Thus the `Arrow` instance for `FancyFunction` would be:
 
 
-```tut:book:silent
+```scala mdoc:silent
 implicit val arrowInstance: Arrow[FancyFunction] = new Arrow[FancyFunction] {
 
   override def lift[A, B](f: A => B): FancyFunction[A, B] = FancyFunction(lift(f) -> f(_))
@@ -145,14 +145,14 @@ implicit val arrowInstance: Arrow[FancyFunction] = new Arrow[FancyFunction] {
 
 Once we have an `Arrow[FancyFunction]`, we can start to do interesting things with it. First, let's create a method `accum` that returns a `FancyFunction`, which accumulates values fed to it using the accumulation function `f` and the starting value `b`:
 
-```tut:book:silent
+```scala mdoc:silent
 def accum[A, B](b: B)(f: (A, B) => B): FancyFunction[A, B] = FancyFunction {a =>
   val b2 = f(a, b)
   (accum(b2)(f), b2)
 }
 ```
 
-```tut:book
+```scala mdoc
 runList(accum[Int, Int](0)(_ + _), List(6, 5, 4, 3, 2, 1))
 ```
 
@@ -160,7 +160,7 @@ To make the aformentioned `avg` arrow, we need to keep track of both the count a
 
 We first define arrow `sum` in terms of `accum`, and define arrow `count` by composing `_ => 1` with `sum`:
 
-```tut:book:silent
+```scala mdoc:silent
 import cats.kernel.Monoid
 
 def sum[A: Monoid]: FancyFunction[A, A] = accum(Monoid[A].empty)(_ |+| _)
@@ -169,11 +169,11 @@ def count[A]: FancyFunction[A, Int] = Arrow[FancyFunction].lift((_: A) => 1) >>>
 
 Finally, we create the `avg` arrow in terms of the arrows we have so far:
 
-```tut:book:silent
+```scala mdoc:silent
 def avg: FancyFunction[Int, Double] =
   combine(sum[Int], count[Int]) >>> Arrow[FancyFunction].lift{case (x, y) => x.toDouble / y}
 ```
 
-```tut:book
+```scala mdoc
 runList(avg, List(1, 10, 100, 1000))
 ```

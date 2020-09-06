@@ -28,7 +28,7 @@ The only real difference is that the value is already upcast to `Option[T]` from
 Using `obj.some` instead of `Some(obj)` can sometimes e.g. improve readability when you need to provide dummy implementation for service methods for the purpose of testing.
 For example, if you put the following implicit class into the scope:
 
-```tut:silent
+```scala mdoc:silent
 import scala.concurrent.Future
 
 implicit class ToFutureSuccessful[T](obj: T) {
@@ -38,7 +38,7 @@ implicit class ToFutureSuccessful[T](obj: T) {
 
 then you can use the chained syntax shown below:
 
-```tut:silent
+```scala mdoc:silent
 import cats.syntax.option._
 
 class Account { /* ... */ }
@@ -70,7 +70,7 @@ Providing a more specialized type sometimes helps the Scala compiler properly in
 In both cases the type of returned value is widened from `Right` or `Left` to `Either`.
 Just as was the case with `.some`, these helpers are handy to combine with `.asFuture` to improve readability:
 
-```tut:silent
+```scala mdoc:silent
 import cats.syntax.either._
 
 case class User(accountId: Long) { /* ... */ }
@@ -121,7 +121,7 @@ The `apply` package provides `(..., ..., ...).mapN` syntax, which allows for an 
 
 Let's say we have 3 futures, one of type `Int`, one of type `String`, one of type `User` and a method accepting three parameters — `Int`, `String` and `User`.
 
-```tut:silent
+```scala mdoc:silent
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class ProcessingResult { /* ... */ }
@@ -136,7 +136,7 @@ def process(value: Int, contents: String, user: User): ProcessingResult = { /* .
 Our goal is to apply the function to the values computed by those 3 futures.
 With `apply` syntax this becomes very easy and concise:
 
-```tut:silent
+```scala mdoc:silent
 import cats.instances.future._
 import cats.syntax.apply._
 
@@ -154,7 +154,7 @@ you should import `cats.instances.future._`.
 
 This above idea can be expressed even shorter, just:
 
-```tut:silent
+```scala mdoc:silent
 def processAsync2: Future[ProcessingResult] = (intFuture, stringFuture, userFuture).mapN(process)
 ```
 
@@ -162,7 +162,7 @@ If any of the chained futures fails, the resulting future will also fail with th
 
 What's important, all futures will run in parallel, as opposed to what would happen in a `for` comprehension:
 
-```tut:silent
+```scala mdoc:silent
 def processAsync3: Future[ProcessingResult] = {
   for {
     value <- intFuture
@@ -190,7 +190,7 @@ In many common real-life cases, like when `F` is `Option` and `G` is `Future`, y
 `traverse` comes as a solution here.
 If you call `traverse` instead of `map`, like `obj.traverse(fun)`, you'll get `G[F[A]]`, which will be `Future[Option[B]]` in our case; this is much more useful and easier to process than `Option[Future[B]]`.
 
-```tut:silent
+```scala mdoc:silent
 import cats.syntax.traverse._
 import cats.instances.future._
 import cats.instances.list._
@@ -209,7 +209,7 @@ but the Cats version is far more readable and can easily work on any structure f
 
 `sequence` represents an even simpler concept: it can be thought of as simply swapping the types from `F[G[A]]` to `G[F[A]]` without even mapping the enclosed value like `traverse` does.
 
-```tut:silent
+```scala mdoc:silent
 import cats.syntax.traverse._
 import cats.instances.future._
 import cats.instances.list._
@@ -229,7 +229,7 @@ If you have an `obj` of type `F[A]` and a function `fun` of type `A => G[F[B]]`,
 Traversing the `obj` instead of mapping helps a little — you'll get `G[F[F[B]]` instead.
 Since `G` is usually something like `Future` and `F` is `List` or `Option`, you would end up with `Future[Option[Option[A]]` or `Future[List[List[A]]]` — a bit awkward to process.
 
-```tut:silent
+```scala mdoc:silent
 import cats.syntax.traverse._
 import cats.instances.future._
 import cats.instances.option._
@@ -240,13 +240,13 @@ def computeOverValue: Future[Option[Option[Int]]] = valueOpt.traverse(compute) /
 ```
 
 The solution could be to map the result with a ```_.flatten``` call like:
-```tut:silent
+```scala mdoc:silent
 def computeOverValue2: Future[Option[Int]] = valueOpt.traverse(compute).map(_.flatten)
 ```
 and this way you'll get the desired type `G[F[B]]` at the end.
 
 However, there is a neat shortcut for this called `flatTraverse`:
-```tut:silent
+```scala mdoc:silent
 def computeOverValue3: Future[Option[Int]] = valueOpt.flatTraverse(compute)
 ```
 and that solves our problem for good.
@@ -264,7 +264,7 @@ Wrappers such as `OptionT` are generally known as _monad transformers_.
 
 A quite common pattern is mapping the inner value stored inside an instance of `F[Option[A]]` to an instance of `F[Option[B]]` with a function of type `A => B`.
 This can be done with rather verbose syntax like:
-```tut:silent
+```scala mdoc:silent
 lazy val resultFuture: Future[Option[Int]] = ???
 
 def mappedResultFuture: Future[Option[String]] = resultFuture.map { maybeValue =>
@@ -277,7 +277,7 @@ def mappedResultFuture: Future[Option[String]] = resultFuture.map { maybeValue =
 
 With the use of `OptionT`, this can be simplified as follows:
 
-```tut:silent
+```scala mdoc:silent
 import cats.data.OptionT
 import cats.instances.future._
 
@@ -321,7 +321,7 @@ In practice, you're most likely to use `map` and `semiflatMap`.
 
 As is always the case with `flatMap` and `map`, you can use it not only explicitly, but also under the hood in `for` comprehensions, as in the example below:
 
-```tut:silent
+```scala mdoc:silent
 import cats.data.OptionT
 import cats.instances.future._
 
@@ -362,7 +362,7 @@ Let's have a quick look at how to create an `EitherT` instance:
 
 Another useful way to construct an `EitherT` instance is to use `OptionT`'s methods `toLeft` and `toRight`:
 
-```tut:silent
+```scala mdoc:silent
 import cats.data.EitherT
 
 abstract class BaseException(message: String) extends Exception(message)
@@ -408,7 +408,7 @@ As a side note, there are also certain methods in `EitherT` (that you're likely 
 
 `EitherT` is very useful for fail-fast chained verifications:
 
-```tut:silent
+```scala mdoc:silent
 
 case class Item(state: String)
 class ItemOrder  { /* ... */ }

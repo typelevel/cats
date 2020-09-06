@@ -32,7 +32,7 @@ timestamp.  Let's say that we want to create a `Semigroup[Date]`, by
 If `Semigroup` had an instance for the standard covariant [`Functor`](functor.html)
 type class, we could use `map` to apply a function `longToDate`:
 
-```tut:silent
+```scala mdoc:silent
 import java.util.Date
 def longToDate: Long => Date = new Date(_)
 ```
@@ -50,7 +50,7 @@ On the other side, if `Semigroup` would form a *contravariant* functor
 by having an instance for [`Contravariant`](contravariant.html), we could make use of
 `contramap` to apply a function `dateToLong`:
 
-```tut:silent
+```scala mdoc:silent
 import java.util.Date
 def dateToLong: Date => Long = _.getTime
 ```
@@ -79,7 +79,7 @@ Reusing the example of turning `Semigroup[Long]` into
 convert the result back into a `Date` using the `f` parameter of
 `imap`:
 
-```tut:silent
+```scala mdoc:silent:reset
 import java.util.Date
 
 // import everything for simplicity:
@@ -96,6 +96,6 @@ val today: Date = longToDate(1449088684104l)
 val timeLeft: Date = longToDate(1900918893l)
 ```
 
-```tut:book
+```scala mdoc
 today |+| timeLeft
 ```

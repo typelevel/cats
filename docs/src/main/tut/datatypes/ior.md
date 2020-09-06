@@ -20,7 +20,7 @@ def map[B, C](fa: A Ior B)(f: B => C): A Ior C
 
 We can create `Ior` values using `Ior.left`, `Ior.right` and `Ior.both`:
 
-```tut
+```scala mdoc
 import cats.data._
 
 val right = Ior.right[String, Int](3)
@@ -32,7 +32,7 @@ val both = Ior.both("Warning", 3)
 
 Cats also offers syntax enrichment for `Ior`. The `leftIor` and `rightIor` functions can be imported from `cats.syntax.ior._`:
 
-```tut
+```scala mdoc:nest
 import cats.implicits._
 
 val right = 3.rightIor
@@ -47,9 +47,10 @@ This means we can accumulate data on the left side while also being able to shor
 For example, sometimes, we might want to accumulate warnings together with a valid result and only halt the computation on a "hard error"
 Here's an example of how we might be able to do that:
 
-```tut:silent
+```scala mdoc:reset-object:silent
 import cats.implicits._
-import cats.data.{ NonEmptyChain => Nec }
+import cats.data.{ NonEmptyChain => Nec, Ior}
+
 
 type Failures = Nec[String]
 
@@ -83,7 +84,7 @@ def validateUser(name: String, password: String): Failures Ior User =
 
 Now we're able to validate user data and also accumulate non-fatal warnings:
 
-```tut
+```scala mdoc
 
 validateUser("John", "password12")
 
@@ -95,7 +96,7 @@ validateUser("jane", "short")
 
 To extract the values, we can use the `fold` method, which expects a function for each case the `Ior` can represent:
 
-```tut
+```scala mdoc
 
 validateUser("john.doe", "password").fold(
   errorNec => s"Error: ${errorNec.head}",
@@ -106,12 +107,14 @@ validateUser("john.doe", "password").fold(
 ```
 Similar to [Validated](validated.html), there is also a type alias for using a `NonEmptyChain` on the left side.
 
-```tut:silent
+```scala mdoc:silent
+import cats.data.NonEmptyChain
+
 type IorNec[B, A] = Ior[NonEmptyChain[B], A]
 ```
 
 
-```tut
+```scala mdoc:nest
 import cats.implicits._, cats.data.NonEmptyChain
 
 val left: IorNec[String, Int] = Ior.fromEither("Error".leftNec[Int])
@@ -122,6 +125,6 @@ val left: IorNec[String, Int] = Ior.fromEither("Error".leftNec[Int])
 We can also convert our `Ior` to `Either`, `Validated` or `Option`.
 All of these conversions will discard the left side value if both are available:
 
-```tut
+```scala mdoc
 Ior.both("Warning", 42).toEither
 ```

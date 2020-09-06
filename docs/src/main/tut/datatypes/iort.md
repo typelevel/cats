@@ -17,7 +17,7 @@ directly.
 Consider the following program that uses `Ior` to propagate log messages when
 validating an address:
 
-```tut:silent
+```scala mdoc:silent
 import cats.data.Ior
 import cats.data.{ NonEmptyChain => Nec }
 import cats.implicits._
@@ -58,7 +58,7 @@ Due to the monadic nature of `Ior` combining the results of `parseNumber`,
 As the following examples demonstrate, log messages of the different processing
 steps are combined when using `flatMap`.
 
-```tut:book
+```scala mdoc
 addressProgram("7", "Buckingham Palace Rd")
 addressProgram("SW1W", "Buckingham Palace Rd")
 addressProgram("SW1W", "")
@@ -70,7 +70,7 @@ can no longer be used since `addressProgram` must now compose `Future` and
 `Ior` together, which means that the error handling must be performed
 explicitly to ensure that the proper types are returned:
 
-```tut:silent
+```scala mdoc:silent
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -106,7 +106,7 @@ would be repeated. Note that when `parseNumberAsync` returns an `Ior.Both` it
 is necessary to combine it with the result of `programHelper`, otherwise some
 log messages would be lost.
 
-```tut:book
+```scala mdoc
 import scala.concurrent.Await
 import scala.concurrent.duration._
 
@@ -119,10 +119,10 @@ Await.result(addressProgramAsync("SW1W", ""), 1.second)
 
 The program of the previous section can be re-written using `IorT` as follows:
 
-```tut:silent
+```scala mdoc:silent
 import cats.data.IorT
 
-def addressProgramAsync(numberInput: String, streetInput: String): IorT[Future, Logs, String] =
+def addressProgramAsyncIorT(numberInput: String, streetInput: String): IorT[Future, Logs, String] =
   for {
     number <- IorT(parseNumberAsync(numberInput))
     street <- IorT(parseStreetAsync(streetInput))
@@ -135,10 +135,10 @@ non-asynchronous version. Note that when `F` is a monad, then `IorT` will also
 form a monad, allowing monadic combinators such as `flatMap` to be used in
 composing `IorT` values.
 
-```tut:book
-Await.result(addressProgramAsync("7", "Buckingham Palace Rd").value, 1.second)
-Await.result(addressProgramAsync("SW1W", "Buckingham Palace Rd").value, 1.second)
-Await.result(addressProgramAsync("SW1W", "").value, 1.second)
+```scala mdoc
+Await.result(addressProgramAsyncIorT("7", "Buckingham Palace Rd").value, 1.second)
+Await.result(addressProgramAsyncIorT("SW1W", "Buckingham Palace Rd").value, 1.second)
+Await.result(addressProgramAsyncIorT("SW1W", "").value, 1.second)
 ```
 
 Looking back at the implementation of `parseStreet` the return type could be
@@ -161,12 +161,12 @@ Note the two styles for providing the `IorT` missing type parameters. The first
 three expressions only specify not inferable types, while the last expression
 specifies all types.
 
-```tut:book
+```scala mdoc:nest
 val number = IorT.rightT[Option, String](5)
 val error = IorT.leftT[Option, Int]("Not a number")
 val weirdNumber = IorT.bothT[Option]("Not positive", -1)
 
-val number: IorT[Option, String, Int] = IorT.pure(5)
+val numberPure: IorT[Option, String, Int] = IorT.pure(5)
 ```
 
 ## From `F[A]` and/or `F[B]` to `IorT[F, A, B]`
@@ -175,7 +175,7 @@ Similarly, use `IorT.left`, `IorT.right`, `IorT.both` to convert an `F[A]`
 and/or `F[B]` into an `IorT`. It is also possible to use `IorT.liftF` as an
 alias for `IorT.right`.
 
-```tut:silent
+```scala mdoc:silent:nest
 val numberF: Option[Int] = Some(5)
 val errorF: Option[String] = Some("Not a number")
 
@@ -192,7 +192,7 @@ val weirdNumber: IorT[Option, String, Int] = IorT.both(warningF, weirdNumberF)
 Use `IorT.fromIor` to a lift a value of `Ior[A, B]` into `IorT[F, A, B]`. An
 `F[Ior[A, B]]` can be converted into `IorT` using the `IorT` constructor.
 
-```tut:silent
+```scala mdoc:silent:nest
 val numberIor: Ior[String, Int] = Ior.Right(5)
 val errorIor: Ior[String, Int] = Ior.Left("Not a number")
 val weirdNumberIor: Ior[String, Int] = Ior.both("Not positive", -1)
@@ -209,7 +209,7 @@ val numberF: IorT[Option, String, Int] = IorT(numberFIor)
 Use `IorT.fromEither` or `IorT.fromEitherF` to create a value of
 `IorT[F, A, B]` from an `Either[A, B]` or a `F[Either[A, B]]`, respectively.
 
-```tut:silent
+```scala mdoc:silent:nest
 val numberEither: Either[String, Int] = Right(5)
 val errorEither: Either[String, Int] = Left("Not a number")
 val numberFEither: Option[Either[String, Int]] = Option(Right(5))
@@ -225,7 +225,7 @@ An `Option[B]` or an `F[Option[B]]`, along with a default value, can be passed
 to `IorT.fromOption` and `IorT.fromOptionF`, respectively, to produce an
 `IorT`. For `F[Option[B]]` and default `F[A]`, there is `IorT.fromOptionM`.
 
-```tut:silent
+```scala mdoc:silent:nest
 val numberOption: Option[Int] = None
 val numberFOption: List[Option[Int]] = List(None, Some(2), None, Some(5))
 
@@ -239,7 +239,7 @@ val numberM = IorT.fromOptionM(numberFOption, List("Not defined"))
 `IorT.cond` allows concise creation of an `IorT[F, A, B]` based on a `Boolean`
 test, an `A` and a `B`. Similarly, `IorT.condF` uses `F[A]` and `F[B]`.
 
-```tut:silent
+```scala mdoc:silent:nest
 val number: Int = 10
 val informedNumber: IorT[Option, String, Int] = IorT.cond(number % 10 != 0, number, "Number is multiple of 10")
 val uninformedNumber: IorT[Option, String, Int] = IorT.condF(number % 10 != 0, Some(number), None)
@@ -250,7 +250,7 @@ val uninformedNumber: IorT[Option, String, Int] = IorT.condF(number % 10 != 0, S
 Use the `value` method defined on `IorT` to retrieve the underlying
 `F[Ior[A, B]]`:
 
-```tut:silent
+```scala mdoc:silent:nest
 val errorT: IorT[Option, String, Int] = IorT.leftT("Not a number")
 
 val error: Option[Ior[String, Int]] = errorT.value

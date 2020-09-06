@@ -28,7 +28,7 @@ libraryDependencies ++= Seq(
 ## Example: Testing a Functor instance
 
 We'll begin by creating a data type and its Functor instance.
-```tut:book
+```scala mdoc
 import cats._
 
 sealed trait Tree[+A]
@@ -44,7 +44,7 @@ object Tree {
   }
 }
 ```
-```tut:invisible
+```scala mdoc:invisible
 import Tree._ //there is no real companion object in REPL
 ```
 
@@ -60,13 +60,13 @@ cats.laws.discipline.FunctorTests[Tree].functor[Int, Int, String].all
 We will also need to create an `Eq` instance, as most laws will need to compare values of a type to properly test for correctness.
 For simplicity we'll just use `Eq.fromUniversalEquals`:
 
-```tut:book
+```scala mdoc
 implicit def eqTree[A: Eq]: Eq[Tree[A]] = Eq.fromUniversalEquals
 ```
 ScalaCheck requires `Arbitrary` instances for data types being tested. We have defined an `Arbitrary` instance for `Tree` here,
 but you won't need it if you import `org.scalacheck.ScalacheckShapeless._`).
 
-```tut:silent
+```scala mdoc:silent
 
 import org.scalacheck.{Arbitrary, Gen}
 
@@ -93,7 +93,7 @@ the `ScalaCheck` `Properties` provided by `cats-laws`.
 
 The following example is for ScalaTest.
 
-```tut:book
+```scala mdoc
 import cats.implicits._
 import cats.laws.discipline.FunctorTests
 import org.scalatest.funsuite.AnyFunSuite
@@ -144,7 +144,7 @@ So we have to import from there to test type classes like `Semigroup`, `Monoid`,
 
 Let's test it out by defining a `Semigroup` instance for our `Tree` type.
 
-```tut:book
+```scala mdoc
 import cats.implicits._
 
 implicit def semigroupTree[A: Semigroup]: Semigroup[Tree[A]] = new Semigroup[Tree[A]] {
@@ -159,7 +159,7 @@ implicit def semigroupTree[A: Semigroup]: Semigroup[Tree[A]] = new Semigroup[Tre
 
 Then we can add the Semigroup tests to our suite:
 
-```tut:book
+```scala mdoc:nest
 import cats.implicits._
 import cats.kernel.laws.discipline.SemigroupTests
 import cats.laws.discipline.FunctorTests

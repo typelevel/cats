@@ -14,14 +14,14 @@ computation of the final result.
 
 For example:
 
-```tut:silent
+```scala mdoc:silent
 case class User(id: Int, name: String, age: Int)
 sealed abstract class UserUpdateResult
 case class Succeeded(updatedUserId: Int) extends UserUpdateResult
 case object Failed extends UserUpdateResult
 ```
 
-```tut:book
+```scala mdoc
 import cats.Eval
 
 def updateUser(persistToDatabase: User => Eval[UserUpdateResult])
@@ -54,7 +54,7 @@ Note the following characteristics:
 
 In Cats we can encode this pattern using the `ContT` data type:
 
-```tut:book
+```scala mdoc
 import cats.data.ContT
 
 def updateUserCont(existingUser: User,
@@ -71,7 +71,7 @@ def updateUserCont(existingUser: User,
 
 We can construct a computation as follows:
 
-```tut:book
+```scala mdoc
 val existingUser = User(100, "Alice", 42)
 
 val computation = updateUserCont(existingUser, "Bob", 200)
@@ -80,7 +80,7 @@ val computation = updateUserCont(existingUser, "Bob", 200)
 And then call `run` on it, passing in a function of type `User =>
 Eval[UserUpdateResult]` as the continuation:
 
-```tut:book
+```scala mdoc
 val eval = computation.run { user =>
   Eval.later {
     println(s"Persisting updated user to the DB: $user")
@@ -91,7 +91,7 @@ val eval = computation.run { user =>
 
 Finally we can run the resulting `Eval` to actually execute the computation:
 
-```tut:book
+```scala mdoc
 eval.value
 ```
 
@@ -106,7 +106,7 @@ The point is that `ContT` is a monad, so by rewriting our function into a
 
 For example we can `map` over a `ContT`:
 
-```tut:book
+```scala mdoc
 val anotherComputation = computation.map { user =>
   Map(
     "id" -> user.id.toString,
@@ -132,7 +132,7 @@ update the user model, one to persist the updated user to the database, and one
 to publish a message saying the user was updated. It then chains them together
 in continuation-passing style using `flatMap` and runs the whole computation.
 
-```tut:book
+```scala mdoc:nest
 val updateUserModel: ContT[Eval, UserUpdateResult, User] =
   updateUserCont(existingUser, "Bob", 200).map { updatedUser =>
     println("Updated user model")
