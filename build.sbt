@@ -186,6 +186,7 @@ lazy val docSettings = Seq(
   micrositeDocumentationUrl := "/cats/api/cats/index.html",
   micrositeDocumentationLabelDescription := "API Documentation",
   micrositeGithubOwner := "typelevel",
+  micrositeExtraMdFilesOutput := resourceManaged.value / "main" / "jekyll",
   micrositeExtraMdFiles := Map(
     file("CONTRIBUTING.md") -> ExtraMdFileConfig(
       "contributing.md",
