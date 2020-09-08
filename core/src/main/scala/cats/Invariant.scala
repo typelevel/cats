@@ -4,10 +4,11 @@ import cats.arrow.Arrow
 import cats.kernel._
 import simulacrum.typeclass
 import cats.kernel.compat.scalaVersionSpecific._
+import scala.annotation.implicitNotFound
 import scala.collection.immutable.{Queue, SortedMap}
+import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 import scala.util.control.TailCalls.TailRec
-import scala.annotation.implicitNotFound
 
 /**
  * Must obey the laws defined in cats.laws.InvariantLaws.
@@ -128,6 +129,10 @@ object Invariant extends ScalaVersionSpecificInvariantInstances with InvariantIn
 
   implicit def catsInstancesForTry: MonadError[Try, Throwable] with CoflatMap[Try] =
     cats.instances.try_.catsStdInstancesForTry
+  implicit def catsInstancesForFuture(implicit
+    ec: ExecutionContext
+  ): MonadError[Future, Throwable] with CoflatMap[Future] =
+    cats.instances.future.catsStdInstancesForFuture(ec)
 
   implicit def catsContravariantMonoidalForOrder: ContravariantMonoidal[Order] =
     cats.instances.order.catsContravariantMonoidalForOrder
