@@ -537,20 +537,20 @@ val personConfig = Config(Map(("name", "cat"), ("age", "not a number"), ("houseN
 case class Address(houseNumber: Int, street: String)
 case class Person(name: String, age: Int, address: Address)
 
-// val personFromConfig: ValidatedNec[ConfigError, Person] =
-//   Apply[ValidatedNec[ConfigError, *]].map4(personConfig.parse[String]("name").toValidatedNec,
-//                                            personConfig.parse[Int]("age").toValidatedNec,
-//                                            personConfig.parse[Int]("house_number").toValidatedNec,
-//                                            personConfig.parse[String]("street").toValidatedNec) {
-//     case (name, age, houseNumber, street) => Person(name, age, Address(houseNumber, street))
-//   }
+val personFromConfig: ValidatedNec[ConfigError, Person] =
+  Apply[ValidatedNec[ConfigError, *]].map4(personConfig.parse[String]("name").toValidatedNec,
+                                           personConfig.parse[Int]("age").toValidatedNec,
+                                           personConfig.parse[Int]("house_number").toValidatedNec,
+                                           personConfig.parse[String]("street").toValidatedNec) {
+    case (name, age, houseNumber, street) => Person(name, age, Address(houseNumber, street))
+  }
 ```
 
 ## Of `flatMap`s and `Either`s
 `Option` has `flatMap`, `Either` has `flatMap`, where's `Validated`'s? Let's try to implement it - better yet,
 let's implement the `Monad` type class.
 
-```scala mdoc:silent
+```scala mdoc:silent:nest
 import cats.Monad
 
 implicit def validatedMonad[E]: Monad[Validated[E, *]] =
