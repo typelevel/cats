@@ -53,11 +53,6 @@ jobs:
       scala: *scala_version_213
       after_success: codecov -F scala_version_213
 
-    - <<: *jvm_tests
-      name: Jvm tests Dotty
-      scala: *dotty_version
-
-
     - stage: test
       name: Make Microsite on 2.12.10
       env: TEST="docs"
@@ -78,6 +73,12 @@ jobs:
     - <<: *bincompat
       name: Binary compatibility 2.13
       scala: *scala_version_213
+
+    - stage: test
+      name: Dotty tests
+      env: TEST="Dotty tests"
+      script: sbt ++$TRAVIS_SCALA_VERSION! buildJVM bench/test
+      scala: *dotty_version
 
     - stage: styling
       name: Linting
