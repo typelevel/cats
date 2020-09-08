@@ -15,7 +15,6 @@ import cats.syntax.traverse._
 import cats.syntax.eq._
 import org.scalacheck.Prop._
 import org.scalacheck.Test.Parameters
-import cats.laws.SemigroupalLaws
 
 class IndexedStateTSuite extends CatsSuite {
 

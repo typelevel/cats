@@ -295,24 +295,26 @@ private[cats] trait InvariantInstances0 extends InvariantInstances1 {
 
 }
 
-private[cats] trait InvariantInstances1 extends InvariantInstances2 {
+private trait InvariantInstances1 extends InvariantInstances2 {
   implicit def catsMonadForFunction1[I]: Monad[I => *] = cats.instances.function.catsStdMonadForFunction1[I]
 }
 
-private trait InvariantInstances2 extends TupleInstances0 {
-  implicit def catsCommutativeFlatMapForTuple2[X](implicit X: CommutativeSemigroup[X]): CommutativeFlatMap[(X, *)] =
-    cats.instances.tuple.catsStdCommutativeFlatMapForTuple2[X]
-
+private[cats] trait InvariantInstances2 extends TupleInstances0 {
   implicit def catsApplicativeForArrow[F[_, _], A](implicit F: Arrow[F]): Applicative[F[A, *]] =
     new ArrowApplicative[F, A](F)
 }
 
-private trait TupleInstances0 extends TupleInstances1 {
+private[cats] trait TupleInstances0 extends TupleInstances1 {
+  implicit def catsCommutativeFlatMapForTuple2[X](implicit X: CommutativeSemigroup[X]): CommutativeFlatMap[(X, *)] =
+    cats.instances.tuple.catsStdCommutativeFlatMapForTuple2[X]
+}
+
+private trait TupleInstances1 extends TupleInstances2 {
   implicit def catsMonadForTuple2[X](implicit X: Monoid[X]): Monad[(X, *)] =
     cats.instances.tuple.catsStdMonadForTuple2[X]
 }
 
-private trait TupleInstances1 {
+private trait TupleInstances2 {
   implicit def catsFlatMapForTuple2[X](implicit X: Semigroup[X]): FlatMap[(X, *)] =
     cats.instances.tuple.catsStdFlatMapForTuple2[X]
 }
