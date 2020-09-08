@@ -112,7 +112,7 @@ class MonadSuite extends CatsSuite {
         i <- smallPosInt
       } yield b -> i
 
-    forAll(Gen.listOf(tupleGen)) { xs: List[(Boolean, Int)] =>
+    forAll(Gen.listOf(tupleGen)) { (xs: List[(Boolean, Int)]) =>
       val expected = xs.collectFirst { case (true, x) => x }.getOrElse(-1)
       val branches = xs.map { case (b, x) => (Eval.now(b), Eval.now(x)) }
       assert(Monad[Eval].ifElseM(branches: _*)(Eval.now(-1)).value === expected)
@@ -120,7 +120,7 @@ class MonadSuite extends CatsSuite {
   }
 
   test("ifElseM resorts to default") {
-    forAll(Gen.listOf(smallPosInt)) { xs: List[Int] =>
+    forAll(Gen.listOf(smallPosInt)) { (xs: List[Int]) =>
       val branches = xs.map(x => (Eval.now(false), Eval.now(x)))
       assert(Monad[Eval].ifElseM(branches: _*)(Eval.now(-1)).value === -1)
     }
