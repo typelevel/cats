@@ -237,7 +237,7 @@ lazy val docSettings = Seq(
   git.remoteRepo := "git@github.com:typelevel/cats.git",
   includeFilter in makeSite := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.yml" | "*.md" | "*.svg",
   includeFilter in Jekyll := (includeFilter in makeSite).value,
-  mdocIn := baseDirectory.in(LocalRootProject).value / "docs",
+  mdocIn := baseDirectory.in(LocalRootProject).value / "docs" / "src" / "main" / "mdoc",
   mdocExtraArguments := Seq("--no-link-hygiene")
 )
 
