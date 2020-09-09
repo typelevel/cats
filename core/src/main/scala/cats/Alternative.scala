@@ -59,12 +59,11 @@ import scala.annotation.implicitNotFound
    * }}}
    */
   def separateFoldable[G[_, _], A, B](fgab: F[G[A, B]])(implicit G: Bifoldable[G], FF: Foldable[F]): (F[A], F[B]) =
-    FF.foldLeft(fgab, (empty[A], empty[B])) {
-      case (mamb, gab) =>
-        G.bifoldLeft(gab, mamb)(
-          (t, a) => (combineK(t._1, pure(a)), t._2),
-          (t, b) => (t._1, combineK(t._2, pure(b)))
-        )
+    FF.foldLeft(fgab, (empty[A], empty[B])) { case (mamb, gab) =>
+      G.bifoldLeft(gab, mamb)(
+        (t, a) => (combineK(t._1, pure(a)), t._2),
+        (t, b) => (t._1, combineK(t._2, pure(b)))
+      )
     }
 
   /**

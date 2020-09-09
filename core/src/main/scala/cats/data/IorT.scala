@@ -556,15 +556,14 @@ sealed private[data] trait IorTMonad[F[_], A] extends Monad[IorT[F, A, *]] with 
   override def flatMap[B, D](iort: IorT[F, A, B])(f: B => IorT[F, A, D]): IorT[F, A, D] = iort.flatMap(f)
 
   override def tailRecM[B, D](b: B)(f: B => IorT[F, A, Either[B, D]]): IorT[F, A, D] =
-    IorT(F0.tailRecM(Tuple2[B, Option[A]](b, None)) {
-      case (b0, optionA) =>
-        F0.map(f(b0).value) {
-          case Ior.Left(aa)           => Right(Ior.Left(Semigroup.maybeCombine(optionA, aa)))
-          case Ior.Right(Left(b1))    => Left(b1 -> optionA)
-          case Ior.Right(Right(d))    => Right(optionA.fold(Ior.right[A, D](d))(Ior.both(_, d)))
-          case Ior.Both(aa, Right(d)) => Right(Ior.both(Semigroup.maybeCombine(optionA, aa), d))
-          case Ior.Both(aa, Left(b1)) => Left(b1 -> Some(Semigroup.maybeCombine(optionA, aa)))
-        }
+    IorT(F0.tailRecM(Tuple2[B, Option[A]](b, None)) { case (b0, optionA) =>
+      F0.map(f(b0).value) {
+        case Ior.Left(aa)           => Right(Ior.Left(Semigroup.maybeCombine(optionA, aa)))
+        case Ior.Right(Left(b1))    => Left(b1 -> optionA)
+        case Ior.Right(Right(d))    => Right(optionA.fold(Ior.right[A, D](d))(Ior.both(_, d)))
+        case Ior.Both(aa, Right(d)) => Right(Ior.both(Semigroup.maybeCombine(optionA, aa), d))
+        case Ior.Both(aa, Left(b1)) => Left(b1 -> Some(Semigroup.maybeCombine(optionA, aa)))
+      }
     })
 }
 

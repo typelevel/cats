@@ -48,13 +48,12 @@ class SortedMapHash[K, V](implicit V: Hash[V], K: Hash[K]) extends SortedMapEq[K
   def hash(x: SortedMap[K, V]): Int = {
     var a, b, n = 0
     var c = 1
-    x.foreach {
-      case (k, v) =>
-        val h = StaticMethods.product2HashWithPrefix(K.hash(k), V.hash(v), "Tuple2")
-        a += h
-        b ^= h
-        c = StaticMethods.updateUnorderedHashC(c, h)
-        n += 1
+    x.foreach { case (k, v) =>
+      val h = StaticMethods.product2HashWithPrefix(K.hash(k), V.hash(v), "Tuple2")
+      a += h
+      b ^= h
+      c = StaticMethods.updateUnorderedHashC(c, h)
+      n += 1
     }
     var h = mapSeed
     h = mix(h, a)
@@ -72,12 +71,11 @@ class SortedMapEq[K, V](implicit V: Eq[V]) extends Eq[SortedMap[K, V]] {
   def eqv(x: SortedMap[K, V], y: SortedMap[K, V]): Boolean =
     if (x eq y) true
     else
-      x.size == y.size && x.forall {
-        case (k, v1) =>
-          y.get(k) match {
-            case Some(v2) => V.eqv(v1, v2)
-            case None     => false
-          }
+      x.size == y.size && x.forall { case (k, v1) =>
+        y.get(k) match {
+          case Some(v2) => V.eqv(v1, v2)
+          case None     => false
+        }
       }
 }
 
@@ -93,14 +91,12 @@ class SortedMapSemigroup[K, V](implicit V: Semigroup[V]) extends Semigroup[Sorte
 
   def combine(xs: SortedMap[K, V], ys: SortedMap[K, V]): SortedMap[K, V] =
     if (xs.size <= ys.size) {
-      xs.foldLeft(ys) {
-        case (my, (k, x)) =>
-          my.updated(k, Semigroup.maybeCombine(x, my.get(k)))
+      xs.foldLeft(ys) { case (my, (k, x)) =>
+        my.updated(k, Semigroup.maybeCombine(x, my.get(k)))
       }
     } else {
-      ys.foldLeft(xs) {
-        case (mx, (k, y)) =>
-          mx.updated(k, Semigroup.maybeCombine(mx.get(k), y))
+      ys.foldLeft(xs) { case (mx, (k, y)) =>
+        mx.updated(k, Semigroup.maybeCombine(mx.get(k), y))
       }
     }
 }

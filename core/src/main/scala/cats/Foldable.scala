@@ -395,12 +395,11 @@ import scala.annotation.implicitNotFound
    */
   def foldM[G[_], A, B](fa: F[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] = {
     val src = Foldable.Source.fromFoldable(fa)(self)
-    G.tailRecM((z, src)) {
-      case (b, src) =>
-        src.uncons match {
-          case Some((a, src)) => G.map(f(b, a))(b => Left((b, src.value)))
-          case None           => G.pure(Right(b))
-        }
+    G.tailRecM((z, src)) { case (b, src) =>
+      src.uncons match {
+        case Some((a, src)) => G.map(f(b, a))(b => Left((b, src.value)))
+        case None           => G.pure(Right(b))
+      }
     }
   }
 

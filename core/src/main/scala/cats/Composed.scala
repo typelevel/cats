@@ -166,9 +166,8 @@ private[cats] trait ComposedInvariantApplySemigroupal[F[_], G[_]]
   def G: Apply[G]
 
   def product[A, B](fa: F[G[A]], fb: F[G[B]]): F[G[(A, B)]] =
-    F.imap(F.product(fa, fb)) {
-      case (ga, gb) =>
-        G.map2(ga, gb)(_ -> _)
+    F.imap(F.product(fa, fb)) { case (ga, gb) =>
+      G.map2(ga, gb)(_ -> _)
     } { (g: G[(A, B)]) =>
       (G.map(g)(_._1), G.map(g)(_._2))
     }

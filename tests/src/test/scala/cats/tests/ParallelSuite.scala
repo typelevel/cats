@@ -25,8 +25,8 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
   test("ParSequence Either should accumulate errors") {
     forAll { (es: List[Either[String, Int]]) =>
       val lefts = es
-        .collect {
-          case Left(e) => e
+        .collect { case Left(e) =>
+          e
         }
         .foldMap(identity)
 
@@ -38,8 +38,8 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
     forAll { (es: List[Ior[String, Int]]) =>
       val lefts = es
         .map(_.left)
-        .collect {
-          case Some(e) => e
+        .collect { case Some(e) =>
+          e
         }
         .foldMap(identity)
       assert(es.parSequence.left.getOrElse(Monoid[String].empty) === lefts)
@@ -117,11 +117,11 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
   test("ParBisequence Either should accumulate errors") {
     forAll { (es: ListTuple2[Either[String, Int], Either[String, Int]]) =>
       val lefts = es
-        .flatMap {
-          case (a, b) => List(a, b)
+        .flatMap { case (a, b) =>
+          List(a, b)
         }
-        .collect {
-          case Left(e) => e
+        .collect { case Left(e) =>
+          e
         }
         .foldMap(identity)
 
@@ -132,12 +132,12 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
   test("ParBisequence Ior should accumulate errors") {
     forAll { (es: ListTuple2[Ior[String, Int], Ior[String, Int]]) =>
       val lefts = es
-        .flatMap {
-          case (a, b) => List(a, b)
+        .flatMap { case (a, b) =>
+          List(a, b)
         }
         .map(_.left)
-        .collect {
-          case Some(e) => e
+        .collect { case Some(e) =>
+          e
         }
         .foldMap(identity)
 
@@ -160,8 +160,8 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
   test("ParLeftSequence Either should accumulate errors") {
     forAll { (es: ListTuple2[Either[String, Int], Int]) =>
       val lefts = es
-        .collect {
-          case (Left(e), _) => e
+        .collect { case (Left(e), _) =>
+          e
         }
         .foldMap(identity)
 
@@ -172,11 +172,11 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
   test("ParLeftSequence Ior should accumulate errors") {
     forAll { (es: ListTuple2[Ior[String, Int], Int]) =>
       val lefts = es
-        .map {
-          case (a, b) => a.left
+        .map { case (a, b) =>
+          a.left
         }
-        .collect {
-          case Some(e) => e
+        .collect { case Some(e) =>
+          e
         }
         .foldMap(identity)
 
@@ -297,12 +297,12 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
     forAll { (as: List[Int], bs: List[Int], cs: List[Int]) =>
       val zipped = as
         .zip(bs)
-        .map {
-          case (a, b) => a + b
+        .map { case (a, b) =>
+          a + b
         }
         .zip(cs)
-        .map {
-          case (a, b) => a + b
+        .map { case (a, b) =>
+          a + b
         }
 
       assert((as, bs, cs).parMapN(_ + _ + _) === zipped)
@@ -313,12 +313,12 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
     forAll { (as: Vector[Int], bs: Vector[Int], cs: Vector[Int]) =>
       val zipped = as
         .zip(bs)
-        .map {
-          case (a, b) => a + b
+        .map { case (a, b) =>
+          a + b
         }
         .zip(cs)
-        .map {
-          case (a, b) => a + b
+        .map { case (a, b) =>
+          a + b
         }
 
       assert((as, bs, cs).parMapN(_ + _ + _) === zipped)
@@ -329,12 +329,12 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
     forAll { (as: Stream[Int], bs: Stream[Int], cs: Stream[Int]) =>
       val zipped = as
         .zip(bs)
-        .map {
-          case (a, b) => a + b
+        .map { case (a, b) =>
+          a + b
         }
         .zip(cs)
-        .map {
-          case (a, b) => a + b
+        .map { case (a, b) =>
+          a + b
         }
 
       assert((as, bs, cs).parMapN(_ + _ + _) === zipped)
