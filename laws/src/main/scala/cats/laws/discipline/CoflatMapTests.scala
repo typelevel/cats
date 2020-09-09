@@ -10,17 +10,18 @@ trait CoflatMapTests[F[_]] extends Laws with FunctorTests[F] {
   def laws: CoflatMapLaws[F]
 
   def coflatMap[A: Arbitrary, B: Arbitrary, C: Arbitrary](implicit
-                                                          ArbFA: Arbitrary[F[A]],
-                                                          CogenA: Cogen[A],
-                                                          CogenB: Cogen[B],
-                                                          CogenC: Cogen[C],
-                                                          CogenFA: Cogen[F[A]],
-                                                          CogenFB: Cogen[F[B]],
-                                                          EqFA: Eq[F[A]],
-                                                          EqFC: Eq[F[C]],
-                                                          EqFFA: Eq[F[F[A]]],
-                                                          EqFB: Eq[F[B]],
-                                                          EqFFFA: Eq[F[F[F[A]]]]): RuleSet =
+    ArbFA: Arbitrary[F[A]],
+    CogenA: Cogen[A],
+    CogenB: Cogen[B],
+    CogenC: Cogen[C],
+    CogenFA: Cogen[F[A]],
+    CogenFB: Cogen[F[B]],
+    EqFA: Eq[F[A]],
+    EqFC: Eq[F[C]],
+    EqFFA: Eq[F[F[A]]],
+    EqFB: Eq[F[B]],
+    EqFFFA: Eq[F[F[F[A]]]]
+  ): RuleSet =
     new DefaultRuleSet(
       name = "coflatMap",
       parent = Some(functor[A, B, C]),

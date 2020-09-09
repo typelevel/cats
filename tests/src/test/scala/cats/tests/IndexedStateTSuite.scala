@@ -3,7 +3,6 @@ package cats.tests
 import cats._
 import cats.arrow.{Profunctor, Strong}
 import cats.data.{EitherT, IndexedStateT, State, StateT}
-import cats.instances.all._
 import cats.kernel.Eq
 import cats.laws.discipline._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
@@ -13,16 +12,19 @@ import cats.platform.Platform
 import cats.syntax.apply._
 import cats.syntax.flatMap._
 import cats.syntax.traverse._
+import cats.syntax.eq._
+import org.scalacheck.Prop._
+import org.scalacheck.Test.Parameters
 
 class IndexedStateTSuite extends CatsSuite {
 
-  implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
-    checkConfiguration.copy(sizeRange = 5)
+  implicit override val scalaCheckTestParameters: Parameters =
+    checkConfiguration.withMaxSize(checkConfiguration.minSize + 5)
 
   import IndexedStateTSuite._
 
   test("basic state usage") {
-    add1.run(1).value should ===(2 -> 1)
+    assert(add1.run(1).value === (2 -> 1))
   }
 
   test("basic IndexedStateT usage") {
@@ -37,14 +39,14 @@ class IndexedStateTSuite extends CatsSuite {
       r <- IndexedStateT.get[Id, String]
     } yield r
 
-    composite.run(List(1, 2, 3)) should ===(("1", "1"))
-    composite.run(Nil) should ===(("0", "0"))
+    assert(composite.run(List(1, 2, 3)) === (("1", "1")))
+    assert(composite.run(Nil) === (("0", "0")))
   }
 
   test("traversing state is stack-safe") {
     val ns = (0 to 70000).toList
     val x = ns.traverse(_ => add1)
-    x.runS(0).value should ===(70001)
+    assert(x.runS(0).value === 70001)
   }
 
   test("State.pure, StateT.pure and IndexedStateT.pure are consistent") {
@@ -53,8 +55,8 @@ class IndexedStateTSuite extends CatsSuite {
       val stateT: State[String, Int] = StateT.pure(i)
       val indexedStateT: State[String, Int] = IndexedStateT.pure(i)
 
-      state.run(s) should ===(stateT.run(s))
-      state.run(s) should ===(indexedStateT.run(s))
+      assert(state.run(s) === (stateT.run(s)))
+      assert(state.run(s) === (indexedStateT.run(s)))
     }
   }
 
@@ -64,8 +66,8 @@ class IndexedStateTSuite extends CatsSuite {
       val stateT: State[String, Int] = StateT.empty
       val indexedStateT: State[String, Int] = IndexedStateT.empty
 
-      state.run(s) should ===(stateT.run(s))
-      state.run(s) should ===(indexedStateT.run(s))
+      assert(state.run(s) === (stateT.run(s)))
+      assert(state.run(s) === (indexedStateT.run(s)))
     }
   }
 
@@ -75,8 +77,8 @@ class IndexedStateTSuite extends CatsSuite {
       val stateT: State[String, String] = StateT.get
       val indexedStateT: State[String, String] = IndexedStateT.get
 
-      state.run(s) should ===(stateT.run(s))
-      state.run(s) should ===(indexedStateT.run(s))
+      assert(state.run(s) === (stateT.run(s)))
+      assert(state.run(s) === (indexedStateT.run(s)))
     }
   }
 
@@ -86,8 +88,8 @@ class IndexedStateTSuite extends CatsSuite {
       val stateT: State[String, Int] = StateT.inspect(f)
       val indexedStateT: State[String, Int] = IndexedStateT.inspect(f)
 
-      state.run(s) should ===(stateT.run(s))
-      state.run(s) should ===(indexedStateT.run(s))
+      assert(state.run(s) === (stateT.run(s)))
+      assert(state.run(s) === (indexedStateT.run(s)))
     }
   }
 
@@ -97,8 +99,8 @@ class IndexedStateTSuite extends CatsSuite {
       val stateT: State[String, Int] = StateT.inspectF(f.andThen(Eval.now))
       val indexedStateT: State[String, Int] = IndexedStateT.inspectF(f.andThen(Eval.now))
 
-      state.run(s) should ===(stateT.run(s))
-      state.run(s) should ===(indexedStateT.run(s))
+      assert(state.run(s) === (stateT.run(s)))
+      assert(state.run(s) === (indexedStateT.run(s)))
     }
   }
 
@@ -108,8 +110,8 @@ class IndexedStateTSuite extends CatsSuite {
       val stateT: State[String, Unit] = StateT.modify(f)
       val indexedStateT: State[String, Unit] = IndexedStateT.modify(f)
 
-      state.run(s) should ===(stateT.run(s))
-      state.run(s) should ===(indexedStateT.run(s))
+      assert(state.run(s) === (stateT.run(s)))
+      assert(state.run(s) === (indexedStateT.run(s)))
     }
   }
 
@@ -119,8 +121,8 @@ class IndexedStateTSuite extends CatsSuite {
       val stateT: State[String, Unit] = StateT.modifyF(f.andThen(Eval.now))
       val indexedStateT: State[String, Unit] = IndexedStateT.modifyF(f.andThen(Eval.now))
 
-      state.run(s) should ===(stateT.run(s))
-      state.run(s) should ===(indexedStateT.run(s))
+      assert(state.run(s) === (stateT.run(s)))
+      assert(state.run(s) === (indexedStateT.run(s)))
     }
   }
 
@@ -130,8 +132,8 @@ class IndexedStateTSuite extends CatsSuite {
       val stateT: State[String, Int] = StateT.liftF(Eval.now(i))
       val indexedStateT: State[String, Int] = IndexedStateT.liftF(Eval.now(i))
 
-      state.run(s) should ===(stateT.run(s))
-      state.run(s) should ===(indexedStateT.run(s))
+      assert(state.run(s) === (stateT.run(s)))
+      assert(state.run(s) === (indexedStateT.run(s)))
     }
   }
 
@@ -141,8 +143,8 @@ class IndexedStateTSuite extends CatsSuite {
       val stateT: StateT[Eval, String, Unit] = StateT.set(s)
       val indexedStateT: StateT[Eval, String, Unit] = IndexedStateT.set(s)
 
-      state.run(init) should ===(stateT.run(init))
-      state.run(init) should ===(indexedStateT.run(init))
+      assert(state.run(init) === (stateT.run(init)))
+      assert(state.run(init) === (indexedStateT.run(init)))
     }
   }
 
@@ -152,49 +154,49 @@ class IndexedStateTSuite extends CatsSuite {
       val stateT: StateT[Eval, String, Unit] = StateT.setF(Eval.now(s))
       val indexedStateT: StateT[Eval, String, Unit] = IndexedStateT.setF(Eval.now(s))
 
-      state.run(init) should ===(stateT.run(init))
-      state.run(init) should ===(indexedStateT.run(init))
+      assert(state.run(init) === (stateT.run(init)))
+      assert(state.run(init) === (indexedStateT.run(init)))
     }
   }
 
   test("Semigroupal syntax is usable on State") {
     val x = add1 *> add1
-    x.runS(0).value should ===(2)
+    assert(x.runS(0).value === 2)
   }
 
   test("Singleton and instance inspect are consistent") {
     forAll { (s: String, i: Int) =>
-      State.inspect[Int, String](_.toString).run(i) should ===(State.pure[Int, Unit](()).inspect(_.toString).run(i))
+      assert(State.inspect[Int, String](_.toString).run(i) === (State.pure[Int, Unit](()).inspect(_.toString).run(i)))
     }
   }
 
   test("flatMap and flatMapF consistent") {
     forAll { (stateT: StateT[Option, MiniInt, Int], f: Int => Option[Int]) =>
-      stateT.flatMap(a => StateT(s => f(a).map(b => (s, b)))) should ===(stateT.flatMapF(f))
+      assert(stateT.flatMap(a => StateT(s => f(a).map(b => (s, b)))) === (stateT.flatMapF(f)))
     }
   }
 
   test("runEmpty, runEmptyS, and runEmptyA consistent") {
     forAll { (f: StateT[List, Long, Int]) =>
-      (f.runEmptyS.zip(f.runEmptyA)) should ===(f.runEmpty)
+      assert((f.runEmptyS.zip(f.runEmptyA)) === (f.runEmpty))
     }
   }
 
   test("modify identity is a noop") {
     forAll { (f: StateT[List, MiniInt, Int]) =>
-      f.modify(identity) should ===(f)
+      assert(f.modify(identity) === f)
     }
   }
 
   test("modify modifies state") {
     forAll { (f: StateT[List, Long, Int], g: Long => Long, initial: Long) =>
-      f.modify(g).runS(initial) should ===(f.runS(initial).map(g))
+      assert(f.modify(g).runS(initial) === (f.runS(initial).map(g)))
     }
   }
 
   test("modify doesn't affect A value") {
     forAll { (f: StateT[List, Long, Int], g: Long => Long, initial: Long) =>
-      f.modify(g).runA(initial) should ===(f.runA(initial))
+      assert(f.modify(g).runA(initial) === (f.runA(initial)))
     }
   }
 
@@ -207,7 +209,7 @@ class IndexedStateTSuite extends CatsSuite {
 
       val s2 = State.modify(f)
 
-      s1 should ===(s2)
+      assert(s1 === s2)
     }
   }
 
@@ -215,7 +217,7 @@ class IndexedStateTSuite extends CatsSuite {
     forAll { (init: String, update: String) =>
       val s1 = StateT.modify[Eval, String](_ => update)
       val s2 = StateT.set[Eval, String](update)
-      s1.run(init) should ===(s2.run(init))
+      assert(s1.run(init) === (s2.run(init)))
     }
   }
 
@@ -223,33 +225,33 @@ class IndexedStateTSuite extends CatsSuite {
     forAll { (init: String, update: String) =>
       val s1 = StateT.modifyF[Eval, String](_ => Eval.now(update))
       val s2 = StateT.setF(Eval.now(update))
-      s1.run(init) should ===(s2.run(init))
+      assert(s1.run(init) === (s2.run(init)))
     }
   }
 
   test(".get and then .run produces same state as value") {
     forAll { (s: State[Long, Int], initial: Long) =>
       val (finalS, finalA) = s.get.run(initial).value
-      finalS should ===(finalA)
+      assert(finalS === finalA)
     }
   }
 
   test(".get equivalent to flatMap with State.get") {
     forAll { (s: State[MiniInt, Int]) =>
-      s.get should ===(s.flatMap(_ => State.get))
+      assert(s.get === (s.flatMap(_ => State.get)))
     }
   }
 
   test("StateT#transformS with identity is identity") {
     forAll { (s: StateT[List, MiniInt, Int]) =>
-      s.transformS[MiniInt](identity, (s, i) => i) should ===(s)
+      assert(s.transformS[MiniInt](identity, (s, i) => i) === s)
     }
   }
 
   test("StateT#mapK transforms effect") {
-    val f: Eval ~> Id = λ[Eval ~> Id](_.value)
+    val f: Eval ~> Id = new (Eval ~> Id) { def apply[A](a: Eval[A]): A = a.value }
     forAll { (state: StateT[Eval, Long, Int], initial: Long) =>
-      state.mapK(f).runA(initial) should ===(state.runA(initial).value)
+      assert(state.mapK(f).runA(initial) === (state.runA(initial).value))
     }
   }
 
@@ -261,7 +263,7 @@ class IndexedStateTSuite extends CatsSuite {
 
     val got = x.run(input)
     val expected = xx.run(Env(input, "hello")).map { case (e, i) => (e.int, i) }
-    got should ===(expected)
+    assert(got === expected)
   }
 
   private val stackSafeTestSize =
@@ -273,7 +275,7 @@ class IndexedStateTSuite extends CatsSuite {
     val result = (0 until count).foldLeft(unit) { (acc, _) =>
       acc.map(_ + 1)
     }
-    result.run(()).value should ===(((), count))
+    assert(result.run(()).value === (((), count)))
   }
 
   test("flatMap is stack safe on repeated left binds when F is") {
@@ -282,7 +284,7 @@ class IndexedStateTSuite extends CatsSuite {
     val result = (0 until count).foldLeft(unit) { (acc, _) =>
       acc.flatMap(_ => unit)
     }
-    result.run(()).value should ===(((), ()))
+    assert(result.run(()).value === (((), ())))
   }
 
   test("flatMap is stack safe on repeated right binds when F is") {
@@ -291,7 +293,7 @@ class IndexedStateTSuite extends CatsSuite {
     val result = (0 until count).foldLeft(unit) { (acc, _) =>
       unit.flatMap(_ => acc)
     }
-    result.run(()).value should ===(((), ()))
+    assert(result.run(()).value === (((), ())))
   }
 
   test("untilDefinedM works") {
@@ -300,7 +302,7 @@ class IndexedStateTSuite extends CatsSuite {
       (i + 1, res)
     }
 
-    counter.untilDefinedM.run(0).value should ===((stackSafeTestSize + 2, stackSafeTestSize + 1))
+    assert(counter.untilDefinedM.run(0).value === ((stackSafeTestSize + 2, stackSafeTestSize + 1)))
   }
 
   test("foreverM works") {
@@ -308,7 +310,7 @@ class IndexedStateTSuite extends CatsSuite {
       if (i > stackSafeTestSize) Left(i) else Right((i + 1, ()))
     }
     step.foreverM.run(0) match {
-      case Left(big)     => big should ===(stackSafeTestSize + 1)
+      case Left(big)     => assert(big === stackSafeTestSize + 1)
       case Right((_, _)) => fail("unreachable code due to Nothing, but scalac won't let us match on it")
     }
   }
@@ -320,8 +322,19 @@ class IndexedStateTSuite extends CatsSuite {
       }
     }
     result.run(0) match {
-      case Left(sum)     => sum should ===(stackSafeTestSize + 1)
+      case Left(sum)     => assert(sum === stackSafeTestSize + 1)
       case Right((_, _)) => fail("unreachable code due to Nothing, but scalac won't let us match on it")
+    }
+  }
+
+  test("fromState correctly turns State[A, F[B]] into StateT[F, A, B]") {
+    val state: State[Int, Option[Int]] = add1.map(Some.apply)
+    import cats.implicits.catsStdInstancesForOption
+    forAll { (initial: Int) =>
+      assert(StateT.fromState(state).run(initial).get === {
+        val (s, Some(result)) = state.run(initial).value
+        (s, result)
+      })
     }
   }
 
@@ -363,9 +376,11 @@ class IndexedStateTSuite extends CatsSuite {
     implicit val FS: Functor[IndexedStateT[ListWrapper, String, Int, *]] = IndexedStateT.catsDataFunctorForIndexedStateT
 
     checkAll("IndexedStateT[ListWrapper, MiniInt, Int, Int]",
-             FunctorTests[IndexedStateT[ListWrapper, MiniInt, Int, *]].functor[Int, Int, Int])
+             FunctorTests[IndexedStateT[ListWrapper, MiniInt, Int, *]].functor[Int, Int, Int]
+    )
     checkAll("Functor[IndexedStateT[ListWrapper, Int, *]]",
-             SerializableTests.serializable(Functor[IndexedStateT[ListWrapper, String, Int, *]]))
+             SerializableTests.serializable(Functor[IndexedStateT[ListWrapper, String, Int, *]])
+    )
 
     Functor[IndexedStateT[ListWrapper, String, Int, *]]
   }
@@ -375,9 +390,11 @@ class IndexedStateTSuite extends CatsSuite {
     implicit val FF: FunctorFilter[ListWrapper] = ListWrapper.functorFilter
 
     checkAll("IndexedStateT[ListWrapper, MiniInt, Int, *]",
-             FunctorFilterTests[IndexedStateT[ListWrapper, MiniInt, Int, *]].functorFilter[Int, Int, Int])
+             FunctorFilterTests[IndexedStateT[ListWrapper, MiniInt, Int, *]].functorFilter[Int, Int, Int]
+    )
     checkAll("FunctorFilter[IndexedStateT[ListWrapper, MiniInt, Int, *]]",
-             SerializableTests.serializable(FunctorFilter[IndexedStateT[ListWrapper, MiniInt, Int, *]]))
+             SerializableTests.serializable(FunctorFilter[IndexedStateT[ListWrapper, MiniInt, Int, *]])
+    )
 
     FunctorFilter[IndexedStateT[ListWrapper, String, Int, *]]
   }
@@ -388,9 +405,11 @@ class IndexedStateTSuite extends CatsSuite {
       IndexedStateT.catsDataContravariantForIndexedStateT
 
     checkAll("IndexedStateT[ListWrapper, *, Int, Boolean]",
-             ContravariantTests[IndexedStateT[ListWrapper, *, Int, Int]].contravariant[MiniInt, Int, Boolean])
+             ContravariantTests[IndexedStateT[ListWrapper, *, Int, Int]].contravariant[MiniInt, Int, Boolean]
+    )
     checkAll("Contravariant[IndexedStateT[ListWrapper, *, Int, Int]]",
-             SerializableTests.serializable(Contravariant[IndexedStateT[ListWrapper, *, Int, Int]]))
+             SerializableTests.serializable(Contravariant[IndexedStateT[ListWrapper, *, Int, Int]])
+    )
 
     Contravariant[IndexedStateT[ListWrapper, *, Int, Int]]
   }
@@ -400,9 +419,11 @@ class IndexedStateTSuite extends CatsSuite {
     implicit val FS: Bifunctor[IndexedStateT[ListWrapper, Int, *, *]] = IndexedStateT.catsDataBifunctorForIndexedStateT
 
     checkAll("IndexedStateT[ListWrapper, MiniInt, String, Int]",
-             BifunctorTests[IndexedStateT[ListWrapper, MiniInt, *, *]].bifunctor[String, String, String, Int, Int, Int])
+             BifunctorTests[IndexedStateT[ListWrapper, MiniInt, *, *]].bifunctor[String, String, String, Int, Int, Int]
+    )
     checkAll("Bifunctor[IndexedStateT[ListWrapper, Int, *, *]]",
-             SerializableTests.serializable(Bifunctor[IndexedStateT[ListWrapper, Int, *, *]]))
+             SerializableTests.serializable(Bifunctor[IndexedStateT[ListWrapper, Int, *, *]])
+    )
 
     Bifunctor[IndexedStateT[ListWrapper, Int, *, *]]
   }
@@ -413,9 +434,11 @@ class IndexedStateTSuite extends CatsSuite {
       IndexedStateT.catsDataProfunctorForIndexedStateT
 
     checkAll("IndexedStateT[ListWrapper, String, Int, Int]",
-             ProfunctorTests[IndexedStateT[ListWrapper, *, *, Int]].profunctor[MiniInt, String, String, Int, Int, Int])
+             ProfunctorTests[IndexedStateT[ListWrapper, *, *, Int]].profunctor[MiniInt, String, String, Int, Int, Int]
+    )
     checkAll("Profunctor[IndexedStateT[ListWrapper, *, *, Int]]",
-             SerializableTests.serializable(Profunctor[IndexedStateT[ListWrapper, *, *, Int]]))
+             SerializableTests.serializable(Profunctor[IndexedStateT[ListWrapper, *, *, Int]])
+    )
 
     Profunctor[IndexedStateT[ListWrapper, *, *, Int]]
   }
@@ -425,9 +448,11 @@ class IndexedStateTSuite extends CatsSuite {
     implicit val FS: Strong[IndexedStateT[ListWrapper, *, *, Int]] = IndexedStateT.catsDataStrongForIndexedStateT
 
     checkAll("IndexedStateT[ListWrapper, *, *, Int]",
-             StrongTests[IndexedStateT[ListWrapper, *, *, Int]].strong[MiniInt, Int, Boolean, Boolean, Boolean, String])
+             StrongTests[IndexedStateT[ListWrapper, *, *, Int]].strong[MiniInt, Int, Boolean, Boolean, Boolean, String]
+    )
     checkAll("Strong[IndexedStateT[ListWrapper, *, *, Int]]",
-             SerializableTests.serializable(Strong[IndexedStateT[ListWrapper, *, *, Int]]))
+             SerializableTests.serializable(Strong[IndexedStateT[ListWrapper, *, *, Int]])
+    )
 
     Strong[IndexedStateT[ListWrapper, *, *, Int]]
   }
@@ -437,9 +462,11 @@ class IndexedStateTSuite extends CatsSuite {
     implicit val F: Monad[ListWrapper] = ListWrapper.monad
 
     checkAll("IndexedStateT[ListWrapper, MiniInt, Int, *]",
-             MonadTests[IndexedStateT[ListWrapper, MiniInt, MiniInt, *]].monad[Int, Int, Int])
+             MonadTests[IndexedStateT[ListWrapper, MiniInt, MiniInt, *]].monad[Int, Int, Int]
+    )
     checkAll("Monad[IndexedStateT[ListWrapper, Int, Int, *]]",
-             SerializableTests.serializable(Monad[IndexedStateT[ListWrapper, Int, Int, *]]))
+             SerializableTests.serializable(Monad[IndexedStateT[ListWrapper, Int, Int, *]])
+    )
 
     Monad[IndexedStateT[ListWrapper, Int, Int, *]]
     FlatMap[IndexedStateT[ListWrapper, Int, Int, *]]
@@ -454,9 +481,11 @@ class IndexedStateTSuite extends CatsSuite {
     implicit val S: SemigroupK[ListWrapper] = ListWrapper.semigroupK
 
     checkAll("IndexedStateT[ListWrapper, MiniInt, Int, *]",
-             SemigroupKTests[IndexedStateT[ListWrapper, MiniInt, Int, *]].semigroupK[Int])
+             SemigroupKTests[IndexedStateT[ListWrapper, MiniInt, Int, *]].semigroupK[Int]
+    )
     checkAll("SemigroupK[IndexedStateT[ListWrapper, Int, *]]",
-             SerializableTests.serializable(SemigroupK[IndexedStateT[ListWrapper, String, Int, *]]))
+             SerializableTests.serializable(SemigroupK[IndexedStateT[ListWrapper, String, Int, *]])
+    )
   }
 
   {
@@ -468,7 +497,8 @@ class IndexedStateTSuite extends CatsSuite {
         .catsDataAlternativeForIndexedStateT[ListWrapper, MiniInt](ListWrapper.monad, ListWrapper.alternative)
 
     checkAll("IndexedStateT[ListWrapper, MiniInt, Int, Int]",
-             AlternativeTests[IndexedStateT[ListWrapper, MiniInt, MiniInt, *]](SA).alternative[Int, Int, Int])
+             AlternativeTests[IndexedStateT[ListWrapper, MiniInt, MiniInt, *]](SA).alternative[Int, Int, Int]
+    )
     checkAll("Alternative[IndexedStateT[ListWrapper, Int, Int, *]]", SerializableTests.serializable(SA))
 
     Monad[IndexedStateT[ListWrapper, Int, Int, *]]
@@ -495,9 +525,11 @@ class IndexedStateTSuite extends CatsSuite {
       EitherT.catsDataEqForEitherT[StateT[Option, MiniInt, *], Unit, Int]
 
     checkAll("StateT[Option, MiniInt, Int]",
-             MonadErrorTests[StateT[Option, MiniInt, *], Unit].monadError[Int, Int, Int])
+             MonadErrorTests[StateT[Option, MiniInt, *], Unit].monadError[Int, Int, Int]
+    )
     checkAll("MonadError[StateT[Option, Int, *], Unit]",
-             SerializableTests.serializable(MonadError[StateT[Option, Int, *], Unit]))
+             SerializableTests.serializable(MonadError[StateT[Option, Int, *], Unit])
+    )
   }
 
 }
@@ -511,8 +543,10 @@ object IndexedStateTSuite extends IndexedStateTSuiteInstances {
 
 sealed trait IndexedStateTSuiteInstances {
 
-  implicit def indexedStateTEq[F[_], SA, SB, A](implicit SA: ExhaustiveCheck[SA],
-                                                FSB: Eq[F[(SB, A)]],
-                                                F: FlatMap[F]): Eq[IndexedStateT[F, SA, SB, A]] =
+  implicit def indexedStateTEq[F[_], SA, SB, A](implicit
+    SA: ExhaustiveCheck[SA],
+    FSB: Eq[F[(SB, A)]],
+    F: FlatMap[F]
+  ): Eq[IndexedStateT[F, SA, SB, A]] =
     Eq.by[IndexedStateT[F, SA, SB, A], SA => F[(SB, A)]](state => s => state.run(s))
 }

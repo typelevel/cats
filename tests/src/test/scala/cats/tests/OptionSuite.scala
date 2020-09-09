@@ -1,13 +1,25 @@
 package cats.tests
 
-import cats.{Alternative, CoflatMap, CommutativeMonad, Eval, Later, MonadError, Semigroupal, Traverse, TraverseFilter}
-import cats.instances.all._
-import cats.laws.{ApplicativeLaws, CoflatMapLaws, FlatMapLaws, MonadLaws}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
+import cats.laws.{ApplicativeLaws, CoflatMapLaws, FlatMapLaws, MonadLaws}
 import cats.syntax.apply._
 import cats.syntax.option._
 import cats.syntax.show._
+import cats.{
+  Align,
+  Alternative,
+  CoflatMap,
+  CommutativeMonad,
+  Eval,
+  Later,
+  MonadError,
+  Semigroupal,
+  Traverse,
+  TraverseFilter
+}
+import cats.syntax.eq._
+import org.scalacheck.Prop._
 
 class OptionSuite extends CatsSuite {
   checkAll("Option[Int]", SemigroupalTests[Option].semigroupal[Int, Int, Int])
@@ -31,12 +43,15 @@ class OptionSuite extends CatsSuite {
   checkAll("Option with Unit", MonadErrorTests[Option, Unit].monadError[Int, Int, Int])
   checkAll("MonadError[Option, Unit]", SerializableTests.serializable(MonadError[Option, Unit]))
 
+  checkAll("Option[Int]", AlignTests[Option].align[Int, Int, Int, Int])
+  checkAll("Align[Option]", SerializableTests.serializable(Align[Option]))
+
   test("show") {
-    none[Int].show should ===("None")
-    1.some.show should ===("Some(1)")
+    assert(none[Int].show === "None")
+    assert(1.some.show === "Some(1)")
 
     forAll { (fs: Option[String]) =>
-      fs.show should ===(fs.toString)
+      assert(fs.show === (fs.toString))
     }
   }
 
@@ -48,21 +63,21 @@ class OptionSuite extends CatsSuite {
   test("Kleisli associativity") {
     forAll { (l: Long, f: Long => Option[Int], g: Int => Option[Char], h: Char => Option[String]) =>
       val isEq = FlatMapLaws[Option].kleisliAssociativity(f, g, h, l)
-      isEq.lhs should ===(isEq.rhs)
+      assert(isEq.lhs === (isEq.rhs))
     }
   }
 
   test("Cokleisli associativity") {
     forAll { (l: Option[Long], f: Option[Long] => Int, g: Option[Int] => Char, h: Option[Char] => String) =>
       val isEq = CoflatMapLaws[Option].cokleisliAssociativity(f, g, h, l)
-      isEq.lhs should ===(isEq.rhs)
+      assert(isEq.lhs === (isEq.rhs))
     }
   }
 
   test("applicative composition") {
     forAll { (fa: Option[Int], fab: Option[Int => Long], fbc: Option[Long => Char]) =>
       val isEq = ApplicativeLaws[Option].applicativeComposition(fa, fab, fbc)
-      isEq.lhs should ===(isEq.rhs)
+      assert(isEq.lhs === (isEq.rhs))
     }
   }
 
@@ -71,14 +86,14 @@ class OptionSuite extends CatsSuite {
   test("Kleisli left identity") {
     forAll { (a: Int, f: Int => Option[Long]) =>
       val isEq = monadLaws.kleisliLeftIdentity(a, f)
-      isEq.lhs should ===(isEq.rhs)
+      assert(isEq.lhs === (isEq.rhs))
     }
   }
 
   test("Kleisli right identity") {
     forAll { (a: Int, f: Int => Option[Long]) =>
       val isEq = monadLaws.kleisliRightIdentity(a, f)
-      isEq.lhs should ===(isEq.rhs)
+      assert(isEq.lhs === (isEq.rhs))
     }
   }
 
@@ -86,17 +101,17 @@ class OptionSuite extends CatsSuite {
 
   test(".some with null argument still results in Some #871") {
     val s: String = null
-    // can't use `s.some should === (Some(null))` here, because it leads to NullPointerException
-    s.some.exists(_ == null) should ===(true)
+    // can't use `s.some ===  (Some(null))` here, because it leads to NullPointerException)
+    assert(s.some.exists(_ == null) === true)
   }
 
   test("map2Eval is lazy") {
     val bomb: Eval[Option[Int]] = Later(sys.error("boom"))
-    none[Int].map2Eval(bomb)(_ + _).value should ===(None)
+    assert(none[Int].map2Eval(bomb)(_ + _).value === None)
   }
 
   test("toOptionT consistency") {
-    List(false) should ===(1.some.toOptionT[List].isEmpty)
-    List(true) should ===(Option.empty[Int].toOptionT[List].isEmpty)
+    assert(List(false) === (1.some.toOptionT[List].isEmpty))
+    assert(List(true) === (Option.empty[Int].toOptionT[List].isEmpty))
   }
 }

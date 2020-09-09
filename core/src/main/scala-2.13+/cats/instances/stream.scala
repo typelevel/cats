@@ -69,36 +69,39 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
           var state: Either[Unit, Option[B]] = Left(())
 
           @tailrec
-          def advance(): Unit = stack match {
-            case Right(b) #:: tail =>
-              stack = tail
-              state = Right(Some(b))
-            case Left(a) #:: tail =>
-              stack = fn(a) #::: tail
-              advance()
-            case empty =>
-              state = Right(None)
-          }
+          def advance(): Unit =
+            stack match {
+              case Right(b) #:: tail =>
+                stack = tail
+                state = Right(Some(b))
+              case Left(a) #:: tail =>
+                stack = fn(a) #::: tail
+                advance()
+              case empty =>
+                state = Right(None)
+            }
 
           @tailrec
-          def hasNext: Boolean = state match {
-            case Left(()) =>
-              advance()
-              hasNext
-            case Right(o) =>
-              o.isDefined
-          }
+          def hasNext: Boolean =
+            state match {
+              case Left(()) =>
+                advance()
+                hasNext
+              case Right(o) =>
+                o.isDefined
+            }
 
           @tailrec
-          def next(): B = state match {
-            case Left(()) =>
-              advance()
-              next()
-            case Right(o) =>
-              val b = o.get
-              advance()
-              b
-          }
+          def next(): B =
+            state match {
+              case Left(()) =>
+                advance()
+                next()
+              case Right(o) =>
+                val b = o.get
+                advance()
+                b
+            }
         }
 
         it.toStream
@@ -179,10 +182,10 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
       def applicative: Applicative[ZipStream] = ZipStream.catsDataAlternativeForZipStream
 
       def sequential: ZipStream ~> Stream =
-        λ[ZipStream ~> Stream](_.value)
+        new (ZipStream ~> Stream) { def apply[A](a: ZipStream[A]): Stream[A] = a.value }
 
       def parallel: Stream ~> ZipStream =
-        λ[Stream ~> ZipStream](v => new ZipStream(v))
+        new (Stream ~> ZipStream) { def apply[A](v: Stream[A]): ZipStream[A] = new ZipStream(v) }
     }
 }
 
@@ -201,12 +204,16 @@ private[instances] trait StreamInstancesBinCompat0 {
     override def flattenOption[A](fa: Stream[Option[A]]): Stream[A] = fa.flatten
 
     def traverseFilter[G[_], A, B](fa: Stream[A])(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[Stream[B]] =
-      fa.foldRight(Eval.now(G.pure(Stream.empty[B])))((x, xse) => G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o)))
+      traverse
+        .foldRight(fa, Eval.now(G.pure(Stream.empty[B])))((x, xse) =>
+          G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ #:: o))
+        )
         .value
 
     override def filterA[G[_], A](fa: Stream[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[Stream[A]] =
-      fa.foldRight(Eval.now(G.pure(Stream.empty[A])))((x, xse) =>
-          G.map2Eval(f(x), xse)((b, as) => if (b) x +: as else as)
+      traverse
+        .foldRight(fa, Eval.now(G.pure(Stream.empty[A])))((x, xse) =>
+          G.map2Eval(f(x), xse)((b, stream) => if (b) x #:: stream else stream)
         )
         .value
 

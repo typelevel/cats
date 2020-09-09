@@ -2,7 +2,6 @@ package cats
 package data
 
 import cats.data.NonEmptyVector.ZipNonEmptyVector
-import cats.instances.vector._
 
 import scala.annotation.tailrec
 import scala.collection.mutable
@@ -20,14 +19,20 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
     extends AnyVal
     with NonEmptyCollection[A, Vector, NonEmptyVector] {
 
-  /** Gets the element at the index, if it exists */
+  /**
+   * Gets the element at the index, if it exists
+   */
   def get(i: Int): Option[A] =
     toVector.lift(i)
 
-  /** Gets the element at the index, or throws an exception if none exists */
+  /**
+   * Gets the element at the index, or throws an exception if none exists
+   */
   def getUnsafe(i: Int): A = toVector(i)
 
-  /** Updates the element at the index, if it exists */
+  /**
+   * Updates the element at the index, if it exists
+   */
   def updated[AA >: A](i: Int, a: AA): Option[NonEmptyVector[AA]] =
     if (toVector.isDefinedAt(i)) Some(new NonEmptyVector(toVector.updated(i, a))) else None
 
@@ -116,6 +121,12 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
   def prepend[AA >: A](a: AA): NonEmptyVector[AA] = new NonEmptyVector(a +: toVector)
 
   /**
+   * Prepend a `Vector` to this, producing a new `NonEmptyVector`.
+   */
+  def prependVector[AA >: A](vector: Vector[AA]): NonEmptyVector[AA] =
+    new NonEmptyVector(vector ++ this.toVector)
+
+  /**
    * Alias for [[prepend]]
    */
   def +:[AA >: A](a: AA): NonEmptyVector[AA] = prepend(a)
@@ -154,7 +165,7 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
     new NonEmptyVector(toVector.map(f))
 
   /**
-   *  Applies f to all elements and combines the result
+   * Applies f to all elements and combines the result
    */
   def flatMap[B](f: A => NonEmptyVector[B]): NonEmptyVector[B] =
     new NonEmptyVector(toVector.flatMap(a => f(a).toVector))
@@ -268,7 +279,7 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
     }
 
     m.map {
-      case (k, v) => (k, NonEmptyVector.fromVectorUnsafe(v.result))
+      case (k, v) => (k, NonEmptyVector.fromVectorUnsafe(v.result()))
     }: TreeMap[B, NonEmptyVector[A]]
   }
 
@@ -291,7 +302,7 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
 
   /**
    * Creates new `NonEmptyMap`, similarly to List#toMap from scala standard library.
-   *{{{
+   * {{{
    * scala> import cats.data.{NonEmptyMap, NonEmptyVector}
    * scala> import cats.implicits._
    * scala> val nev = NonEmptyVector((0, "a"), Vector((1, "b"),(0, "c"), (2, "d")))
@@ -299,21 +310,20 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
    * scala> val result = nev.toNem
    * scala> result === expectedResult
    * res0: Boolean = true
-   *}}}
-   *
+   * }}}
    */
   final def toNem[T, U](implicit ev: A <:< (T, U), order: Order[T]): NonEmptyMap[T, U] =
     NonEmptyMap.fromMapUnsafe(SortedMap(toVector.map(ev): _*)(order.toOrdering))
 
   /**
    * Creates new `NonEmptySet`, similarly to List#toSet from scala standard library.
-   *{{{
+   * {{{
    * scala> import cats.data._
    * scala> import cats.instances.int._
    * scala> val nev = NonEmptyVector(1, Vector(2,2,3,4))
    * scala> nev.toNes
    * res0: cats.data.NonEmptySet[Int] = TreeSet(1, 2, 3, 4)
-   *}}}
+   * }}}
    */
   final def toNes[B >: A](implicit order: Order[B]): NonEmptySet[B] =
     NonEmptySet.of(head, tail: _*)
@@ -322,6 +332,12 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
 @suppressUnusedImportWarningForScalaVersionSpecific
 sealed abstract private[data] class NonEmptyVectorInstances {
 
+  /**
+   * This is not a bug. The declared type of `catsDataInstancesForNonEmptyVector` intentionally ignores
+   * `NonEmptyReducible` trait for it not being a typeclass.
+   *
+   * Also see the discussion: PR #3541 and issue #3069.
+   */
   implicit val catsDataInstancesForNonEmptyVector: SemigroupK[NonEmptyVector]
     with Bimonad[NonEmptyVector]
     with NonEmptyTraverse[NonEmptyVector]
@@ -366,17 +382,15 @@ sealed abstract private[data] class NonEmptyVectorInstances {
       def extract[A](fa: NonEmptyVector[A]): A = fa.head
 
       def nonEmptyTraverse[G[_], A, B](
-        nel: NonEmptyVector[A]
-      )(f: A => G[B])(implicit G: Apply[G]): G[NonEmptyVector[B]] =
-        Foldable[Vector]
-          .reduceRightToOption[A, G[Vector[B]]](nel.tail)(a => G.map(f(a))(_ +: Vector.empty)) { (a, lglb) =>
-            G.map2Eval(f(a), lglb)(_ +: _)
-          }
-          .map {
-            case None        => G.map(f(nel.head))(NonEmptyVector(_, Vector.empty))
-            case Some(gtail) => G.map2(f(nel.head), gtail)(NonEmptyVector(_, _))
-          }
-          .value
+        nev: NonEmptyVector[A]
+      )(f: A => G[B])(implicit G: Apply[G]): G[NonEmptyVector[B]] = {
+        def loop(head: A, tail: Vector[A]): Eval[G[NonEmptyVector[B]]] =
+          tail.headOption.fold(Eval.now(G.map(f(head))(NonEmptyVector(_, Vector.empty[B]))))(h =>
+            G.map2Eval(f(head), Eval.defer(loop(h, tail.tail)))((b, acc) => b +: acc)
+          )
+
+        loop(nev.head, nev.tail).value
+      }
 
       override def traverse[G[_], A, B](
         fa: NonEmptyVector[A]
@@ -419,15 +433,16 @@ sealed abstract private[data] class NonEmptyVectorInstances {
 
       def tailRecM[A, B](a: A)(f: A => NonEmptyVector[Either[A, B]]): NonEmptyVector[B] = {
         val buf = new VectorBuilder[B]
-        @tailrec def go(v: NonEmptyVector[Either[A, B]]): Unit = v.head match {
-          case Right(b) =>
-            buf += b
-            NonEmptyVector.fromVector(v.tail) match {
-              case Some(t) => go(t)
-              case None    => ()
-            }
-          case Left(a) => go(f(a).concat(v.tail))
-        }
+        @tailrec def go(v: NonEmptyVector[Either[A, B]]): Unit =
+          v.head match {
+            case Right(b) =>
+              buf += b
+              NonEmptyVector.fromVector(v.tail) match {
+                case Some(t) => go(t)
+                case None    => ()
+              }
+            case Left(a) => go(f(a).concat(v.tail))
+          }
         go(f(a))
         NonEmptyVector.fromVectorUnsafe(buf.result())
       }
@@ -454,8 +469,9 @@ sealed abstract private[data] class NonEmptyVectorInstances {
       def align[A, B](fa: NonEmptyVector[A], fb: NonEmptyVector[B]): NonEmptyVector[Ior[A, B]] =
         NonEmptyVector.fromVectorUnsafe(Align[Vector].align(fa.toVector, fb.toVector))
 
-      override def alignWith[A, B, C](fa: NonEmptyVector[A],
-                                      fb: NonEmptyVector[B])(f: Ior[A, B] => C): NonEmptyVector[C] =
+      override def alignWith[A, B, C](fa: NonEmptyVector[A], fb: NonEmptyVector[B])(
+        f: Ior[A, B] => C
+      ): NonEmptyVector[C] =
         NonEmptyVector.fromVectorUnsafe(Align[Vector].alignWith(fa.toVector, fb.toVector)(f))
     }
 
@@ -478,10 +494,12 @@ sealed abstract private[data] class NonEmptyVectorInstances {
       def flatMap: FlatMap[NonEmptyVector] = NonEmptyVector.catsDataInstancesForNonEmptyVector
 
       def sequential: ZipNonEmptyVector ~> NonEmptyVector =
-        λ[ZipNonEmptyVector ~> NonEmptyVector](_.value)
+        new (ZipNonEmptyVector ~> NonEmptyVector) { def apply[A](a: ZipNonEmptyVector[A]): NonEmptyVector[A] = a.value }
 
       def parallel: NonEmptyVector ~> ZipNonEmptyVector =
-        λ[NonEmptyVector ~> ZipNonEmptyVector](nev => new ZipNonEmptyVector(nev))
+        new (NonEmptyVector ~> ZipNonEmptyVector) {
+          def apply[A](nev: NonEmptyVector[A]): ZipNonEmptyVector[A] = new ZipNonEmptyVector(nev)
+        }
     }
 
 }
@@ -495,7 +513,7 @@ object NonEmptyVector extends NonEmptyVectorInstances with Serializable {
     val buf = Vector.newBuilder[A]
     buf += head
     tail.foreach(buf += _)
-    new NonEmptyVector(buf.result)
+    new NonEmptyVector(buf.result())
   }
 
   def one[A](head: A): NonEmptyVector[A] = apply(head, Vector.empty[A])

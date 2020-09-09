@@ -1,8 +1,8 @@
 package cats.tests
 
 import cats.{Invariant, InvariantSemigroupal}
-import cats.instances.all._
 import cats.kernel.Monoid
+import cats.syntax.eq._
 
 class MonoidSuite extends CatsSuite {
   {
@@ -11,9 +11,9 @@ class MonoidSuite extends CatsSuite {
   }
 
   test("companion object syntax") {
-    Monoid.empty[Int] should ===(0)
-    Monoid.isEmpty(1) should ===(false)
-    Monoid.isEmpty(0) should ===(true)
+    assert(Monoid.empty[Int] === 0)
+    assert(Monoid.isEmpty(1) === false)
+    assert(Monoid.isEmpty(0) === true)
   }
 }
 

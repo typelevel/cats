@@ -9,11 +9,13 @@ trait EquivInstances {
        * Defaults to trivially contracting the type
        * to a point
        */
-      def unit: Equiv[Unit] = new Equiv[Unit] {
-        def equiv(x: Unit, y: Unit): Boolean = true
-      }
+      def unit: Equiv[Unit] =
+        new Equiv[Unit] {
+          def equiv(x: Unit, y: Unit): Boolean = true
+        }
 
-      /** Derive an `Equiv` for `B` given an `Equiv[A]` and a function `B => A`.
+      /**
+       * Derive an `Equiv` for `B` given an `Equiv[A]` and a function `B => A`.
        *
        * Note: resulting instances are law-abiding only when the functions used are injective (represent a one-to-one mapping)
        */

@@ -1,14 +1,14 @@
 package cats.tests
 
 import cats.{Contravariant, ContravariantMonoidal, Invariant}
-import cats.instances.all._
 import cats.kernel.{Order, PartialOrder}
 import cats.kernel.laws.discipline.{OrderTests, SerializableTests}
 import cats.laws.discipline.{ContravariantMonoidalTests, MiniInt}
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
-import cats.syntax.order._
 import cats.tests.Helpers.Ord
+import cats.implicits._
+import org.scalacheck.Prop._
 
 class OrderSuite extends CatsSuite {
   {
@@ -27,27 +27,26 @@ class OrderSuite extends CatsSuite {
 
   test("order ops syntax") {
     forAll { (i: Ord, j: Ord) =>
-      (i.compare(j)) should ===(Order.compare(i, j))
-      (i.min(j)) should ===(Order.min(i, j))
-      (i.max(j)) should ===(Order.max(i, j))
-      (i.comparison(j)) should ===(Order.comparison(i, j))
+      assert((i.compare(j)) === (Order.compare(i, j)))
+      assert((i.min(j)) === (Order.min(i, j)))
+      assert((i.max(j)) === (Order.max(i, j)))
+      assert((i.comparison(j)) === (Order.comparison(i, j)))
 
       // partial order syntax should also work when an Order instance exists
-      (i > j) should ===(PartialOrder.gt(i, j))
-      (i >= j) should ===(PartialOrder.gteqv(i, j))
-      (i < j) should ===(PartialOrder.lt(i, j))
-      (i <= j) should ===(PartialOrder.lteqv(i, j))
-      (i.partialCompare(j)) should ===(PartialOrder.partialCompare(i, j))
-      (i.tryCompare(j)) should ===(PartialOrder.tryCompare(i, j))
-      (i.pmin(j)) should ===(PartialOrder.pmin(i, j))
-      (i.pmax(j)) should ===(PartialOrder.pmax(i, j))
+      assert((i > j) === (PartialOrder.gt(i, j)))
+      assert((i >= j) === (PartialOrder.gteqv(i, j)))
+      assert((i < j) === (PartialOrder.lt(i, j)))
+      assert((i <= j) === (PartialOrder.lteqv(i, j)))
+      assert((i.partialCompare(j)) === (PartialOrder.partialCompare(i, j)))
+      assert((i.tryCompare(j)) === (PartialOrder.tryCompare(i, j)))
+      assert((i.pmin(j)) === (PartialOrder.pmin(i, j)))
+      assert((i.pmax(j)) === (PartialOrder.pmax(i, j)))
     }
   }
 }
 
 object OrderSuite {
   def summonInstance(): Unit = {
-    import cats.instances.order._
     Invariant[Order]
     Contravariant[Order]
     ContravariantMonoidal[Order]
@@ -58,7 +57,6 @@ object OrderSuite {
   // the Ordering instance from the Order instance should be trumped
   // by the one provided in the Ordering companion object
   {
-    import cats.instances.all._
     Ordering[String]
     class C
     implicit val ording: Ordering[C] = new Ordering[C] {

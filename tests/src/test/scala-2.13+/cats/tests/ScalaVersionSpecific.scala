@@ -2,13 +2,14 @@ package cats.tests
 
 import cats.{Eval, Foldable, Id, Now}
 import cats.data.NonEmptyLazyList
-import cats.instances.all._
 import cats.laws.discipline.{NonEmptyParallelTests, ParallelTests}
 import cats.laws.discipline.arbitrary._
 import cats.syntax.either._
 import cats.syntax.foldable._
 import cats.syntax.parallel._
 import cats.syntax.traverse._
+import cats.syntax.eq._
+import org.scalacheck.Prop._
 
 trait ScalaVersionSpecificFoldableSuite { self: FoldableSuiteAdditional =>
   test("Foldable[LazyList].foldM stack safety") {
@@ -49,16 +50,17 @@ trait ScalaVersionSpecificFoldableSuite { self: FoldableSuiteAdditional =>
   }
 
   test("Foldable[LazyList] laziness of foldM") {
-    dangerous.foldM(0)((acc, a) => if (a < 2) Some(acc + a) else None) should ===(None)
+    assert(dangerous.foldM(0)((acc, a) => if (a < 2) Some(acc + a) else None) === None)
   }
 
-  def foldableLazyListWithDefaultImpl: Foldable[LazyList] = new Foldable[LazyList] {
-    def foldLeft[A, B](fa: LazyList[A], b: B)(f: (B, A) => B): B =
-      Foldable[LazyList].foldLeft(fa, b)(f)
+  def foldableLazyListWithDefaultImpl: Foldable[LazyList] =
+    new Foldable[LazyList] {
+      def foldLeft[A, B](fa: LazyList[A], b: B)(f: (B, A) => B): B =
+        Foldable[LazyList].foldLeft(fa, b)(f)
 
-    def foldRight[A, B](fa: LazyList[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
-      Foldable[LazyList].foldRight(fa, lb)(f)
-  }
+      def foldRight[A, B](fa: LazyList[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
+        Foldable[LazyList].foldRight(fa, lb)(f)
+    }
 
   test("Foldable[LazyList].foldLeftM short-circuiting") {
     implicit val F: Foldable[LazyList] = foldableLazyListWithDefaultImpl
@@ -110,19 +112,19 @@ trait ScalaVersionSpecificParallelSuite { self: ParallelSuite =>
           case (a, b) => a + b
         }
 
-      (as, bs, cs).parMapN(_ + _ + _) should ===(zipped)
+      assert((as, bs, cs).parMapN(_ + _ + _) === zipped)
     }
   }
 
   test("ParTupled of LazyList should be consistent with ParMap of Tuple.apply") {
     forAll { (fa: LazyList[Int], fb: LazyList[Int], fc: LazyList[Int], fd: LazyList[Int]) =>
-      (fa, fb, fc, fd).parTupled should ===((fa, fb, fc, fd).parMapN(Tuple4.apply))
+      assert((fa, fb, fc, fd).parTupled === ((fa, fb, fc, fd).parMapN(Tuple4.apply)))
     }
   }
 
   test("ParTupled of LazyList should be consistent with zip") {
     forAll { (fa: LazyList[Int], fb: LazyList[Int], fc: LazyList[Int], fd: LazyList[Int]) =>
-      (fa, fb, fc, fd).parTupled should ===(fa.zip(fb).zip(fc).zip(fd).map { case (((a, b), c), d) => (a, b, c, d) })
+      assert((fa, fb, fc, fd).parTupled === (fa.zip(fb).zip(fc).zip(fd).map { case (((a, b), c), d) => (a, b, c, d) }))
     }
   }
 
@@ -141,15 +143,15 @@ trait ScalaVersionSpecificRegressionSuite { self: RegressionSuite =>
     }
 
     def checkAndResetCount(expected: Int): Unit = {
-      count should ===(expected)
+      assert(count === expected)
       count = 0
     }
 
-    LazyList(1, 2, 6, 8).traverse(validate) should ===(Either.left("6 is greater than 5"))
+    assert(LazyList(1, 2, 6, 8).traverse(validate) === (Either.left("6 is greater than 5")))
     // shouldn't have ever evaluated validate(8)
     checkAndResetCount(3)
 
-    LazyList(1, 2, 6, 8).traverse_(validate) should ===(Either.left("6 is greater than 5"))
+    assert(LazyList(1, 2, 6, 8).traverse_(validate) === (Either.left("6 is greater than 5")))
     checkAndResetCount(3)
   }
 }

@@ -2,11 +2,12 @@ package cats.tests
 
 import cats.Eval
 import cats.data.ContT
-import cats.instances.all._
 import cats.kernel.Eq
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import org.scalacheck.{Arbitrary, Gen}
+import cats.syntax.eq._
+import org.scalacheck.Prop._
 
 class ContTSuite extends CatsSuite {
 
@@ -31,10 +32,12 @@ class ContTSuite extends CatsSuite {
   /**
    * c.mapCont(f).run(g) == f(c.run(g))
    */
-  def mapContLaw[M[_], A, B](implicit eqma: Eq[M[A]],
-                             cArb: Arbitrary[ContT[M, A, B]],
-                             fnArb: Arbitrary[M[A] => M[A]],
-                             gnArb: Arbitrary[B => M[A]]) =
+  def mapContLaw[M[_], A, B](implicit
+    eqma: Eq[M[A]],
+    cArb: Arbitrary[ContT[M, A, B]],
+    fnArb: Arbitrary[M[A] => M[A]],
+    gnArb: Arbitrary[B => M[A]]
+  ) =
     forAll { (cont: ContT[M, A, B], fn: M[A] => M[A], gn: B => M[A]) =>
       assert(eqma.eqv(cont.mapCont(fn).run(gn), fn(cont.run(gn))))
     }
@@ -42,10 +45,12 @@ class ContTSuite extends CatsSuite {
   /**
    * cont.withCont(f).run(g) == cont.run(f(g))
    */
-  def withContLaw[M[_], A, B, C](implicit eqma: Eq[M[A]],
-                                 cArb: Arbitrary[ContT[M, A, B]],
-                                 fnArb: Arbitrary[(C => M[A]) => B => M[A]],
-                                 gnArb: Arbitrary[C => M[A]]) =
+  def withContLaw[M[_], A, B, C](implicit
+    eqma: Eq[M[A]],
+    cArb: Arbitrary[ContT[M, A, B]],
+    fnArb: Arbitrary[(C => M[A]) => B => M[A]],
+    gnArb: Arbitrary[C => M[A]]
+  ) =
     forAll { (cont: ContT[M, A, B], fn: (C => M[A]) => B => M[A], gn: C => M[A]) =>
       assert(eqma.eqv(cont.withCont(fn).run(gn), cont.run(fn(gn))))
     }
@@ -74,10 +79,10 @@ class ContTSuite extends CatsSuite {
         didSideEffect = true
         b
       }
-      didSideEffect should ===(false)
+      assert(didSideEffect === false)
 
       contT.run(cb)
-      didSideEffect should ===(true)
+      assert(didSideEffect === true)
     }
   }
 

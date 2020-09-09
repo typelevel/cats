@@ -22,13 +22,17 @@ sealed abstract class Func[F[_], A, B] { self =>
 
 object Func extends FuncInstances {
 
-  /** function `A => F[B]`. */
+  /**
+   * function `A => F[B]`.
+   */
   def func[F[_], A, B](run0: A => F[B]): Func[F, A, B] =
     new Func[F, A, B] {
       def run: A => F[B] = run0
     }
 
-  /** applicative function. */
+  /**
+   * applicative function.
+   */
   def appFunc[F[_], A, B](run0: A => F[B])(implicit FF: Applicative[F]): AppFunc[F, A, B] =
     new AppFunc[F, A, B] {
       def F: Applicative[F] = FF
@@ -57,8 +61,8 @@ abstract private[data] class FuncInstances1 {
       def F: Functor[F] = FF
     }
 
-  implicit def catsDataContravariantForFunc[F[_], C](
-    implicit FC: Contravariant[F]
+  implicit def catsDataContravariantForFunc[F[_], C](implicit
+    FC: Contravariant[F]
   ): Contravariant[λ[α => Func[F, α, C]]] =
     new FuncContravariant[F, C] {
       def F: Contravariant[F] = FC

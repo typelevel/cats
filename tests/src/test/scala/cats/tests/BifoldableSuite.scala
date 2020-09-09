@@ -1,9 +1,9 @@
 package cats.tests
 
 import cats.Bifoldable
-import cats.instances.all._
 import cats.laws.discipline.{BifoldableTests, SerializableTests}
 import cats.syntax.either._
+import cats.syntax.eq._
 
 class BifoldableSuite extends CatsSuite {
   type EitherEither[A, B] = Either[Either[A, B], Either[A, B]]
@@ -14,7 +14,7 @@ class BifoldableSuite extends CatsSuite {
   checkAll("Bifoldable[Either compose Either]", SerializableTests.serializable(eitherComposeEither))
 
   test("bifold works for 2 monoids") {
-    Bifoldable[Either].bifold(Either.right[Int, String]("something")) should ===((0, "something"))
-    Bifoldable[Either].bifold(Either.left[Int, String](5)) should ===((5, ""))
+    assert(Bifoldable[Either].bifold(Either.right[Int, String]("something")) === ((0, "something")))
+    assert(Bifoldable[Either].bifold(Either.left[Int, String](5)) === ((5, "")))
   }
 }

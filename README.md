@@ -1,20 +1,10 @@
 
 ### ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) Community Announcements ![#f03c15](https://placehold.it/15/f03c15/000000?text=+)
+* **Sept 3 2020** [Cats 2.2.0 is released](https://github.com/typelevel/cats/releases/tag/v2.2.0)
 * **Dec 18 2019** [Cats 2.1.0 is released](https://github.com/typelevel/cats/releases/tag/v2.1.0)
-* **Dec 11 2019** [Cats 2.1.0-RC3 is released](https://github.com/typelevel/cats/releases/tag/v2.1.0-RC3)
-* **Nov 26 2019** [Cats 2.1.0-RC2 is released](https://github.com/typelevel/cats/releases/tag/v2.1.0-RC2)
-* **Nov 15 2019** [Cats 2.1.0-RC1 is released](https://github.com/typelevel/cats/releases/tag/v2.1.0-RC1)
 * **Sep 9 2019** [Cats 2.0.0 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0)
-* **Sep 7 2019** [Cats 2.0.0-RC3 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0-RC3)
-* **Aug 26 2019** [Cats 2.0.0-RC2 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0-RC2)
-* **Aug 2 2019** [Cats 2.0.0-RC1 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0-RC1)
-* **Jun 11 2019** [Cats 2.0.0-M4 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0-M4) with support for Scala 2.13
 * **Jun 3 2019** [Cats 1.6.1 is released](https://github.com/typelevel/cats/releases/tag/v1.6.1) with backported bug fixes
-* **Jun 1 2019** [Cats 2.0.0-M3 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0-M3) with support for Scala 2.13.0-RC3
-* **May 25 2019** [Cats 2.0.0-M2 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0-M2) with support for Scala 2.13.0-RC2
 * **Apr 26 2019** [We launched a sustainability program](https://typelevel.org/blog/2019/04/24/typelevel-sustainability-program-announcement.html). Please consider supporting us.
-* **Apr 25 2019** [Cats 2.0.0-M1 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0-M1) with binary compatibility with 1.x on `cats-kernel`, `cats-core` and `cats-free`
-* **Feb 15 2019** [Cats 2019 roadmap](https://github.com/typelevel/cats/blob/master/ROADMAP_2019.md) is published.
 
 ## Cats
 
@@ -114,7 +104,7 @@ addSbtPlugin("org.lyranthe.sbt" % "partial-unification" % "1.1.2")
 And then create the Cats dependency, by adding the following to your `build.sbt`:
 
 ```scala
-libraryDependencies += "org.typelevel" %% "cats-core" % "2.1.0"
+libraryDependencies += "org.typelevel" %% "cats-core" % "2.1.1"
 ```
 
 This will pull in the cats-core module. If you require some other
@@ -161,7 +151,6 @@ By sharing the same set of type classes, instances and data types provided by Ca
 
 #### General purpose libraries to support pure functional programming
 
- * [cats-par](https://github.com/ChristopherDavenport/cats-par): Abstract type member Parallel instances
  * [cats-retry](https://github.com/cb372/cats-retry): composable retry logic for Cats and Cats Effect
  * [droste](https://github.com/andyscott/droste): recursion schemes for Cats
  * [dsl-domains-cats](https://github.com/ThoughtWorksInc/dsl-domains-cats): The `!`-notation for creating Cats monadic expressions
@@ -202,10 +191,13 @@ By sharing the same set of type classes, instances and data types provided by Ca
  * [log4cats](https://github.com/ChristopherDavenport/log4cats): functional logging
  * [monadic-html](https://github.com/OlivierBlanvillain/monadic-html): Tiny DOM binding library for Scala.js
  * [Monix](https://github.com/monix/monix): high-performance library for composing asynchronous and event-based programs
+ * [Monix BIO](https://github.com/monix/monix-bio): `IO` alternative with typed errors
  * [morphling](https://github.com/danslapman/morphling): free applicative schemas & instance derivation
+ * [natchez](https://github.com/tpolecat/natchez): an opentracing library, to use with Jaegger, Honeycomb, OpenCensus, and Lightstep.
  * [phony](https://github.com/alirezameskin/phony): Fake data generator
  * [pureconfig](https://github.com/pureconfig/pureconfig): A boilerplate-free library for loading configuration files
  * [rainier](https://github.com/stripe/rainier): Bayesian inference in Scala
+ * [redis4cats](https://github.com/profunktor/redis4cats): a Redis client library.
  * [scala-forex](https://github.com/snowplow/scala-forex): exchange rate lookups
  * [scala-maxmind-ip-lookups](https://github.com/snowplow/scala-maxmind-iplookups): IP geolocation through [the Maxmind database](https://www.maxmind.com/en/home)
  * [scala-referer-parser](https://github.com/snowplow-referer-parser/scala-referer-parser): referer parsing
@@ -214,7 +206,9 @@ By sharing the same set of type classes, instances and data types provided by Ca
  * [scanamo](https://github.com/guardian/scanamo): simpler DynamoDB access for Scala
  * [seals](https://github.com/durban/seals): tools for schema evolution and language-integrated schemata
  * [sup](https://github.com/kubukoz/sup): Composable, purely functional healthchecks in Scala
+ * [skunk](https://github.com/tpolecat/skunk): a data access library for Scala + Postgres.
  * [tsec](https://github.com/jmcardon/tsec/): Typesafe, functional, general purpose cryptography and security library
+ * [coulomb-cats](https://github.com/erikerlandson/coulomb/tree/develop/coulomb-cats): cats typeclass instances for coulomb Quantity
 
 Your project talks Cats too? [Submit a PR to add it here!](https://github.com/typelevel/cats/edit/master/README.md)
 
@@ -320,8 +314,11 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Free2Move](https://free2move.com)
 - [HelloSoda](https://hellosoda.com)
 - [HomeAway](https://www.homeaway.com)
+- [Hootsuite Inc.](https://hootsuite.com/)
 - [iHeartRadio](https://iheart.com)
 - [ImmobilienScout24](https://www.immobilienscout24.de/)
+- [Immozentral](https://www.immozentral.com/)
+- [Iterators](https://www.iteratorshq.com/)
 - [ITV](https://www.itv.com/)
 - [Lightform](https://lightform.com/)
 - [Lookout](https://www.lookout.com)
@@ -355,6 +352,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Underscore Consulting](https://underscore.io/)
 - [Waves Platform](https://wavesplatform.com/)
 - [Wegtam GmbH](https://www.wegtam.com)
+- [Wejo](https://www.wejo.com/)
 - [WeWork](https://www.wework.com)
 - [Wix.com](https://www.wix.com)
 - [Zalando](https://zalando.com)
@@ -373,6 +371,7 @@ The current maintainers (people who can merge pull requests) are:
  * [peterneyens](https://github.com/peterneyens) Peter Neyens
  * [tpolecat](https://github.com/tpolecat) Rob Norris
  * [non](https://github.com/non) Erik Osheim
+ * [barambani](https://github.com/barambani) Filippo Mariotti
  * [mpilquist](https://github.com/mpilquist) Michael Pilquist
  * [milessabin](https://github.com/milessabin) Miles Sabin
  * [djspiewak](https://github.com/djspiewak) Daniel Spiewak

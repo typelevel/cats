@@ -1,13 +1,13 @@
 package cats.tests
 
 import cats.{InvariantMonoidal, InvariantSemigroupal}
-import cats.implicits._
 import cats.kernel.{Eq, Monoid, Semigroup}
 import cats.kernel.compat.scalaVersionSpecific._
 import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests}
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.{ExhaustiveCheck, InvariantMonoidalTests, MiniInt, SerializableTests}
+import cats.syntax.all._
 import org.scalacheck.{Arbitrary, Gen}
 
 @suppressUnusedImportWarningForScalaVersionSpecific
@@ -59,7 +59,9 @@ object BinCodecInvariantMonoidalSuite {
       )
   }
 
-  /** A small amount of binary bits */
+  /**
+   * A small amount of binary bits
+   */
   type Bin = MiniList[Boolean]
 
   /**
@@ -71,10 +73,14 @@ object BinCodecInvariantMonoidalSuite {
    */
   trait BinCodec[A] extends Serializable { self =>
 
-    /** Reads the first value of a Bin, returning an optional value of type `A` and the remaining Bin. */
+    /**
+     * Reads the first value of a Bin, returning an optional value of type `A` and the remaining Bin.
+     */
     def read(s: Bin): (Option[A], Bin)
 
-    /** Writes a value of type `A` to Bin format. */
+    /**
+     * Writes a value of type `A` to Bin format.
+     */
     def write(a: A): Bin
   }
 
@@ -82,10 +88,11 @@ object BinCodecInvariantMonoidalSuite {
     // In tut/invariantmonoidal.md pure, product and imap are defined in
     // their own trait to be introduced one by one,
     trait CCPure {
-      def unit: BinCodec[Unit] = new BinCodec[Unit] {
-        def read(s: Bin): (Option[Unit], Bin) = (Some(()), s)
-        def write(a: Unit): Bin = MiniList.empty
-      }
+      def unit: BinCodec[Unit] =
+        new BinCodec[Unit] {
+          def read(s: Bin): (Option[Unit], Bin) = (Some(()), s)
+          def write(a: Unit): Bin = MiniList.empty
+        }
     }
 
     trait CCProduct {

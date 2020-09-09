@@ -12,18 +12,20 @@ lazy val scoverageSettings = Seq(
 )
 
 organization in ThisBuild := "org.typelevel"
+scalafixDependencies in ThisBuild += "org.typelevel" %% "simulacrum-scalafix" % "0.5.0"
 
 val isTravisBuild = settingKey[Boolean]("Flag indicating whether the current build is running under Travis")
 val crossScalaVersionsFromTravis = settingKey[Seq[String]]("Scala versions set in .travis.yml as scala_version_XXX")
-isTravisBuild in Global := sys.env.get("TRAVIS").isDefined
+isTravisBuild in Global := sys.env.contains("TRAVIS")
 
 val scalaCheckVersion = "1.14.3"
 
-val scalatestplusScalaCheckVersion = "3.1.1.1"
+val munitVersion = "0.7.12"
 
-val disciplineVersion = "1.0.2"
+val disciplineVersion = "1.0.3"
 
-val disciplineScalatestVersion = "1.0.1"
+val disciplineScalatestVersion = "2.0.1"
+val disciplineMunitVersion = "0.2.4"
 
 val kindProjectorVersion = "0.11.0"
 
@@ -42,9 +44,9 @@ def scalaVersionSpecificFolders(srcName: String, srcBaseDir: java.io.File, scala
     List(CrossType.Pure, CrossType.Full)
       .flatMap(_.sharedSrcDir(srcBaseDir, srcName).toList.map(f => file(f.getPath + suffix)))
   CrossVersion.partialVersion(scalaVersion) match {
-    case Some((2, y)) if y >= 13 =>
-      extraDirs("-2.13+")
-    case _ => Nil
+    case Some((2, y)) => extraDirs("-2.x") ++ (if (y >= 13) extraDirs("-2.13+") else Nil)
+    case Some((0, _)) => extraDirs("-2.13+") ++ extraDirs("-3.x")
+    case _            => Nil
   }
 }
 
@@ -57,46 +59,51 @@ commonScalaVersionSettings
 
 ThisBuild / mimaFailOnNoPrevious := false
 
+def doctestGenTestsDottyCompat(isDotty: Boolean, genTests: Seq[File]): Seq[File] =
+  if (isDotty) Nil else genTests
+
 lazy val commonSettings = commonScalaVersionSettings ++ Seq(
-  scalacOptions ++= commonScalacOptions(scalaVersion.value),
+  scalacOptions ++= commonScalacOptions(scalaVersion.value, isDotty.value),
   Compile / unmanagedSourceDirectories ++= scalaVersionSpecificFolders("main", baseDirectory.value, scalaVersion.value),
   Test / unmanagedSourceDirectories ++= scalaVersionSpecificFolders("test", baseDirectory.value, scalaVersion.value),
   resolvers ++= Seq(Resolver.sonatypeRepo("releases"), Resolver.sonatypeRepo("snapshots")),
   parallelExecution in Test := false,
+  testFrameworks += new TestFramework("munit.Framework"),
   scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings")
 ) ++ warnUnusedImport
 
 def macroDependencies(scalaVersion: String) =
-  CrossVersion.partialVersion(scalaVersion) match {
-    case Some((2, minor)) if minor < 13 =>
-      Seq(
-        compilerPlugin(("org.scalamacros" %% "paradise" % "2.1.1").cross(CrossVersion.patch))
-      )
-    case _ => Seq()
-  }
+  if (scalaVersion.startsWith("2")) Seq("org.scala-lang" % "scala-reflect" % scalaVersion % Provided) else Nil
 
 lazy val catsSettings = Seq(
   incOptions := incOptions.value.withLogRecompileOnMacro(false),
-  libraryDependencies ++= Seq(
-    compilerPlugin(("org.typelevel" %% "kind-projector" % kindProjectorVersion).cross(CrossVersion.full))
+  libraryDependencies ++= (
+    if (isDotty.value) Nil
+    else
+      Seq(
+        compilerPlugin(("org.typelevel" %% "kind-projector" % kindProjectorVersion).cross(CrossVersion.full))
+      )
   ) ++ macroDependencies(scalaVersion.value)
 ) ++ commonSettings ++ publishSettings ++ scoverageSettings ++ simulacrumSettings
 
 lazy val simulacrumSettings = Seq(
-  libraryDependencies ++= Seq(
-    scalaOrganization.value % "scala-reflect" % scalaVersion.value % Provided,
-    "org.typelevel" %%% "simulacrum" % "1.0.0" % Provided
+  libraryDependencies ++= (if (isDotty.value) Nil else Seq(compilerPlugin(scalafixSemanticdb))),
+  scalacOptions ++= (
+    if (isDotty.value) Nil else Seq(s"-P:semanticdb:targetroot:${baseDirectory.value}/target/.semanticdb", "-Yrangepos")
   ),
+  libraryDependencies +=
+    ("org.typelevel" %% "simulacrum-scalafix-annotations" % "0.5.0" % Provided).withDottyCompat(scalaVersion.value),
   pomPostProcess := { (node: xml.Node) =>
     new RuleTransformer(new RewriteRule {
-      override def transform(node: xml.Node): Seq[xml.Node] = node match {
-        case e: xml.Elem
-            if e.label == "dependency" &&
-              e.child.exists(child => child.label == "groupId" && child.text == "org.typelevel") &&
-              e.child.exists(child => child.label == "artifactId" && child.text.startsWith("simulacrum_")) =>
-          Nil
-        case _ => Seq(node)
-      }
+      override def transform(node: xml.Node): Seq[xml.Node] =
+        node match {
+          case e: xml.Elem
+              if e.label == "dependency" &&
+                e.child.exists(child => child.label == "groupId" && child.text == "org.typelevel") &&
+                e.child.exists(child => child.label == "artifactId" && child.text.startsWith("simulacrum")) =>
+            Nil
+          case _ => Seq(node)
+        }
     }).transform(node).head
   }
 )
@@ -115,14 +122,16 @@ lazy val commonJsSettings = Seq(
     val g = "https://raw.githubusercontent.com/typelevel/cats/" + tagOrHash
     s"-P:scalajs:mapSourceURI:$a->$g/"
   },
-  scalaJSStage in Global := FastOptStage,
+  scalaJSStage in Global := FullOptStage,
   parallelExecution := false,
   jsEnv := new org.scalajs.jsenv.nodejs.NodeJSEnv(),
   // batch mode decreases the amount of memory needed to compile Scala.js code
   scalaJSLinkerConfig := scalaJSLinkerConfig.value.withBatchMode(isTravisBuild.value),
+  scalaJSLinkerConfig ~= (_.withModuleKind(ModuleKind.CommonJSModule)),
   // currently sbt-doctest doesn't work in JS builds
   // https://github.com/tkawachi/sbt-doctest/issues/52
-  doctestGenTests := Seq.empty
+  doctestGenTests := Seq.empty,
+  coverageEnabled := false
 )
 
 lazy val commonJvmSettings = Seq(
@@ -144,14 +153,18 @@ lazy val includeGeneratedSrc: Setting[_] = {
 }
 
 lazy val disciplineDependencies = Seq(
-  libraryDependencies ++= Seq("org.scalacheck" %%% "scalacheck" % scalaCheckVersion,
-                              "org.typelevel" %%% "discipline-core" % disciplineVersion)
+  libraryDependencies ++= Seq(
+    "org.scalacheck" %%% "scalacheck" % scalaCheckVersion,
+    "org.typelevel" %%% "discipline-core" % disciplineVersion
+  ).map(_.withDottyCompat(scalaVersion.value))
 )
 
 lazy val testingDependencies = Seq(
   libraryDependencies ++= Seq(
-    "org.typelevel" %%% "discipline-scalatest" % disciplineScalatestVersion % Test,
-    "org.scalatestplus" %%% "scalacheck-1-14" % scalatestplusScalaCheckVersion % Test
+    "org.scalameta" %%% "munit-scalacheck" % munitVersion % Test,
+    "org.typelevel" %%% "discipline-munit" % disciplineMunitVersion % Test
+  ).map(
+    _.withDottyCompat(scalaVersion.value)
   )
 )
 
@@ -216,7 +229,7 @@ lazy val docSettings = Seq(
   ) ++ (if (priorTo2_13(scalaVersion.value))
           Seq("-Yno-adapted-args")
         else
-          Seq("-Ymacro-annotations")),
+          Nil),
   scalacOptions in Tut ~= (_.filterNot(Set("-Ywarn-unused-import", "-Ywarn-unused:imports", "-Ywarn-dead-code"))),
   git.remoteRepo := "git@github.com:typelevel/cats.git",
   includeFilter in makeSite := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.yml" | "*.md" | "*.svg",
@@ -236,19 +249,18 @@ def mimaPrevious(moduleName: String, scalaVer: String, ver: String, includeCats1
       else if (currentMinVersion != minor) List(0)
       else Range(0, patch - 1).inclusive.toList
 
-    val versions = for {
+    for {
       maj <- majorVersions
       min <- minorVersions
       pat <- patchVersions(min)
     } yield (maj, min, pat)
-    versions.toList
   }
 
   val mimaVersions: List[String] = {
     Version(ver) match {
       case Some(Version(major, Seq(minor, patch), _)) =>
         semverBinCompatVersions(major.toInt, minor.toInt, patch.toInt)
-          .map { case (maj, min, pat) => s"${maj}.${min}.${pat}" }
+          .map { case (maj, min, pat) => s"$maj.$min.$pat" }
       case _ =>
         List.empty[String]
     }
@@ -399,7 +411,8 @@ lazy val docs = project
   .settings(
     libraryDependencies ++= Seq(
       "org.typelevel" %%% "discipline-scalatest" % disciplineScalatestVersion
-    )
+    ),
+    scalacOptions in (ScalaUnidoc, unidoc) ~= { _.filter(_ != "-Xlint:-unused,_") }
   )
   .dependsOn(core.jvm, free.jvm, kernelLaws.jvm, laws.jvm)
 
@@ -428,7 +441,8 @@ lazy val catsJVM = project
              alleycatsLaws.jvm,
              alleycatsTests.jvm,
              jvm,
-             docs)
+             docs
+  )
   .dependsOn(
     kernel.jvm,
     kernelLaws.jvm,
@@ -459,7 +473,8 @@ lazy val catsJS = project
              alleycatsCore.js,
              alleycatsLaws.js,
              alleycatsTests.js,
-             js)
+             js
+  )
   .dependsOn(
     kernel.js,
     kernelLaws.js,
@@ -486,7 +501,10 @@ lazy val kernel = crossProject(JSPlatform, JVMPlatform)
   .settings(includeGeneratedSrc)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings ++ mimaSettings("cats-kernel"))
-  .settings(libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % Test)
+  .settings(
+    libraryDependencies += ("org.scalacheck" %%% "scalacheck" % scalaCheckVersion % Test)
+      .withDottyCompat(scalaVersion.value)
+  )
 
 lazy val kernelLaws = crossProject(JSPlatform, JVMPlatform)
   .in(file("kernel-laws"))
@@ -509,7 +527,18 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
   .settings(catsSettings)
   .settings(sourceGenerators in Compile += (sourceManaged in Compile).map(Boilerplate.gen).taskValue)
   .settings(includeGeneratedSrc)
-  .settings(libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % Test)
+  .settings(
+    libraryDependencies += ("org.scalacheck" %%% "scalacheck" % scalaCheckVersion % Test)
+      .withDottyCompat(scalaVersion.value),
+    doctestGenTests := doctestGenTestsDottyCompat(isDotty.value, doctestGenTests.value)
+  )
+  .settings(
+    scalacOptions in Compile :=
+      (scalacOptions in Compile).value.filter {
+        case "-Xfatal-warnings" if isDotty.value => false
+        case _                                   => true
+      }
+  )
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings ++ mimaSettings("cats-core"))
 
@@ -530,6 +559,7 @@ lazy val free = crossProject(JSPlatform, JVMPlatform)
   .settings(moduleName := "cats-free", name := "Cats Free")
   .settings(catsSettings)
   .jsSettings(commonJsSettings)
+  .jsSettings(scalaJSStage in Test := FastOptStage)
   .jvmSettings(commonJvmSettings ++ mimaSettings("cats-free"))
 
 lazy val tests = crossProject(JSPlatform, JVMPlatform)
@@ -649,7 +679,7 @@ lazy val publishSettings = Seq(
   scmInfo := Some(ScmInfo(url("https://github.com/typelevel/cats"), "scm:git:git@github.com:typelevel/cats.git")),
   autoAPIMappings := true,
   apiURL := Some(url("http://typelevel.org/cats/api/")),
-  pomExtra := (
+  pomExtra :=
     <developers>
       <developer>
         <id>ceedubs</id>
@@ -727,7 +757,6 @@ lazy val publishSettings = Seq(
         <url>https://github.com/kailuowang/</url>
       </developer>
     </developers>
-  )
 ) ++ credentialSettings ++ sharedPublishSettings ++ sharedReleaseProcess
 
 // Scalafmt
@@ -743,10 +772,13 @@ addCommandAlias("buildAlleycatsJVM", ";alleycatsCoreJVM/test;alleycatsLawsJVM/te
 addCommandAlias("buildJVM", ";buildKernelJVM;buildCoreJVM;buildTestsJVM;buildFreeJVM;buildAlleycatsJVM")
 addCommandAlias("validateBC", ";binCompatTest/test;mimaReportBinaryIssues")
 addCommandAlias("validateJVM", ";fmtCheck;buildJVM;bench/test;validateBC;makeMicrosite")
-addCommandAlias("validateJS", ";catsJS/compile;testsJS/test;js/test")
+addCommandAlias("validateJS", ";testsJS/test;js/test")
 addCommandAlias("validateKernelJS", "kernelLawsJS/test")
-addCommandAlias("validateFreeJS", "freeJS/test") //separated due to memory constraint on travis
-addCommandAlias("validate", ";clean;validateJS;validateKernelJS;validateFreeJS;validateJVM")
+addCommandAlias("validateFreeJS", "freeJS/test")
+addCommandAlias("validateAlleycatsJS", "alleycatsTestsJS/test")
+addCommandAlias("validateAllJS", "all testsJS/test js/test kernelLawsJS/test freeJS/test alleycatsTestsJS/test")
+addCommandAlias("validateDotty", ";++0.24.0!;alleycatsLawsJVM/compile")
+addCommandAlias("validate", ";clean;validateJS;validateKernelJS;validateFreeJS;validateJVM;validateDotty")
 
 addCommandAlias("prePR", "fmt")
 
@@ -773,21 +805,14 @@ lazy val crossVersionSharedSources: Seq[Setting[_]] =
     }
   }
 
-def commonScalacOptions(scalaVersion: String) =
+def commonScalacOptions(scalaVersion: String, isDotty: Boolean) =
   Seq(
     "-encoding",
     "UTF-8",
     "-feature",
-    "-language:existentials",
-    "-language:higherKinds",
-    "-language:implicitConversions",
     "-unchecked",
-    "-Ywarn-dead-code",
-    "-Ywarn-numeric-widen",
-    "-Ywarn-value-discard",
     "-Xfatal-warnings",
-    "-deprecation",
-    "-Xlint:-unused,_"
+    "-deprecation"
   ) ++ (if (priorTo2_13(scalaVersion))
           Seq(
             "-Yno-adapted-args",
@@ -795,9 +820,18 @@ def commonScalacOptions(scalaVersion: String) =
             "-Xfuture"
           )
         else
-          Seq(
-            "-Ymacro-annotations"
-          ))
+          Nil) ++ (if (isDotty)
+                     Seq("-language:implicitConversions", "-Ykind-projector", "-Xignore-scala2-macros")
+                   else
+                     Seq(
+                       "-language:existentials",
+                       "-language:higherKinds",
+                       "-language:implicitConversions",
+                       "-Ywarn-dead-code",
+                       "-Ywarn-numeric-widen",
+                       "-Ywarn-value-discard",
+                       "-Xlint:-unused,_"
+                     ))
 
 def priorTo2_13(scalaVersion: String): Boolean =
   CrossVersion.partialVersion(scalaVersion) match {
@@ -838,7 +872,7 @@ lazy val sharedReleaseProcess = Seq(
 )
 
 lazy val warnUnusedImport = Seq(
-  scalacOptions ++= Seq("-Ywarn-unused:imports"),
+  scalacOptions ++= (if (isDotty.value) Nil else Seq("-Ywarn-unused:imports")),
   scalacOptions in (Compile, console) ~= { _.filterNot(Set("-Ywarn-unused-import", "-Ywarn-unused:imports")) },
   scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value
 )

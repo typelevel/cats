@@ -10,14 +10,16 @@ trait NonEmptyParallelTests[M[_]] extends Laws {
   val laws: NonEmptyParallelLaws[M]
   type F[A] = laws.F[A]
 
-  def nonEmptyParallel[A, B](implicit ArbA: Arbitrary[A],
-                             ArbM: Arbitrary[M[A]],
-                             ArbMb: Arbitrary[M[B]],
-                             Arbf: Arbitrary[A => B],
-                             EqMa: Eq[M[A]],
-                             EqMb: Eq[M[B]],
-                             ArbF: Arbitrary[F[A]],
-                             EqFa: Eq[F[A]]): RuleSet =
+  def nonEmptyParallel[A, B](implicit
+    ArbA: Arbitrary[A],
+    ArbM: Arbitrary[M[A]],
+    ArbMb: Arbitrary[M[B]],
+    Arbf: Arbitrary[A => B],
+    EqMa: Eq[M[A]],
+    EqMb: Eq[M[B]],
+    ArbF: Arbitrary[F[A]],
+    EqFa: Eq[F[A]]
+  ): RuleSet =
     new DefaultRuleSet(
       "parallel",
       None,
@@ -33,6 +35,6 @@ object NonEmptyParallelTests {
   def apply[M[_]](implicit ev: NonEmptyParallel[M]): NonEmptyParallelTests.Aux[M, ev.F] =
     apply[M, ev.F](ev, implicitly)
 
-  def apply[M[_], F[_]](implicit ev: NonEmptyParallel.Aux[M, F], D: DummyImplicit): NonEmptyParallelTests.Aux[M, F] =
-    new NonEmptyParallelTests[M] { val laws = NonEmptyParallelLaws[M] }
+  def apply[M[_], F0[_]](implicit ev: NonEmptyParallel.Aux[M, F0], D: DummyImplicit): NonEmptyParallelTests.Aux[M, F0] =
+    new NonEmptyParallelTests[M] { val laws: NonEmptyParallelLaws.Aux[M, F0] = NonEmptyParallelLaws[M](ev) }
 }

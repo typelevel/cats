@@ -115,6 +115,10 @@ options:
     url: typeclasses/arrow.html
     menu_type: typeclasses
 
+  - title: Arrow Choice
+    url: typeclasses/arrowchoice.html
+    menu_type: typeclasses
+
   - title: Law Testing
     url: typeclasses/lawtesting.html
     menu_type: typeclasses

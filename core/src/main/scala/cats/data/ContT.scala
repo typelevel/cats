@@ -40,7 +40,7 @@ sealed abstract class ContT[M[_], A, +B] extends Serializable {
     // allocate/pattern match once
     val fnAndThen = AndThen(fn)
     ContT[M, A, C] { fn2 =>
-      val contRun: ContT[M, A, C] => M[A] = (_.run(fn2))
+      val contRun: ContT[M, A, C] => M[A] = _.run(fn2)
       val fn3: B => M[A] = fnAndThen.andThen(contRun)
       M.defer(run(fn3))
     }
@@ -65,7 +65,9 @@ object ContT {
     lazy val runAndThen: AndThen[B => M[A], M[A]] = loop(next).runAndThen
   }
 
-  /** Lift a pure value into `ContT` */
+  /**
+   * Lift a pure value into `ContT`
+   */
   def pure[M[_], A, B](b: B): ContT[M, A, B] =
     apply { cb =>
       cb(b)
@@ -99,7 +101,9 @@ object ContT {
    * }}}
    */
   def liftK[M[_], B](implicit M: FlatMap[M]): M ~> ContT[M, B, *] =
-    λ[M ~> ContT[M, B, *]](ContT.liftF(_))
+    new (M ~> ContT[M, B, *]) {
+      def apply[A](ma: M[A]): ContT[M, B, A] = ContT.liftF(ma)
+    }
 
   /**
    * Similar to [[pure]] but evaluation of the argument is deferred.
@@ -150,7 +154,9 @@ object ContT {
   def apply[M[_], A, B](fn: (B => M[A]) => M[A]): ContT[M, A, B] =
     FromFn(AndThen(fn))
 
-  /** Similar to [[apply]] but evaluation of the argument is deferred. */
+  /**
+   * Similar to [[apply]] but evaluation of the argument is deferred.
+   */
   def later[M[_], A, B](fn: => (B => M[A]) => M[A]): ContT[M, A, B] =
     DeferCont(() => FromFn(AndThen(fn)))
 

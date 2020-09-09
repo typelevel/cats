@@ -2,7 +2,6 @@ package cats.tests
 
 import cats.{Align, Alternative, CoflatMap, Monad, Semigroupal, Traverse, TraverseFilter}
 import cats.data.ZipLazyList
-import cats.instances.all._
 import cats.laws.discipline.{
   AlignTests,
   AlternativeTests,
@@ -11,12 +10,17 @@ import cats.laws.discipline.{
   MonadTests,
   SemigroupalTests,
   SerializableTests,
+  ShortCircuitingTests,
   TraverseFilterTests,
   TraverseTests
 }
 import cats.laws.discipline.arbitrary._
 import cats.syntax.show._
-import org.scalatest.funsuite.AnyFunSuiteLike
+import cats.syntax.eq._
+import cats.syntax.foldable._
+import org.scalacheck.Prop._
+
+import scala.util.control.TailCalls
 
 class LazyListSuite extends CatsSuite {
   checkAll("LazyList[Int]", SemigroupalTests[LazyList].semigroupal[Int, Int, Int])
@@ -40,12 +44,25 @@ class LazyListSuite extends CatsSuite {
   checkAll("LazyList[Int]", AlignTests[LazyList].align[Int, Int, Int, Int])
   checkAll("Align[LazyList]", SerializableTests.serializable(Align[LazyList]))
 
+  checkAll("LazyList[Int]", ShortCircuitingTests[LazyList].foldable[Int])
+  checkAll("LazyList[Int]", ShortCircuitingTests[LazyList].traverseFilter[Int])
+
   // Can't test applicative laws as they don't terminate
   checkAll("ZipLazyList[Int]", CommutativeApplyTests[ZipLazyList].apply[Int, Int, Int])
 
   test("show") {
-    LazyList(1, 2, 3).show should ===(s"LazyList(1, ?)")
-    LazyList.empty[Int].show should ===(s"LazyList()")
+    assert(LazyList(1, 2, 3).show === (s"LazyList(1, ?)"))
+    assert(LazyList.empty[Int].show === (s"LazyList()"))
+  }
+
+  test("Avoid all evaluation of LazyList#foldRightDefer") {
+    val sum = LazyList
+      .from(1)
+      .foldRightDefer(TailCalls.done(0)) { (elem, acc) =>
+        if (elem <= 100) acc.map(_ + elem) else TailCalls.done(0)
+      }
+      .result
+    (1 to 100).sum === sum
   }
 
   test("Show[LazyList] is referentially transparent, unlike LazyList.toString") {
@@ -58,16 +75,16 @@ class LazyListSuite extends CatsSuite {
         // depending on the internal state of the LazyList. Show[LazyList] should return
         // consistent values independent of internal state.
         unevaluatedLL.tail
-        initialShow should ===(unevaluatedLL.show)
+        assert(initialShow === (unevaluatedLL.show))
       } else {
-        lazyList.show should ===(lazyList.toString)
+        assert(lazyList.show === (lazyList.toString))
       }
     }
   }
 
 }
 
-final class LazyListInstancesSuite extends AnyFunSuiteLike {
+final class LazyListInstancesSuite extends munit.FunSuite {
 
   test("parallel instance in cats.instances.lazyList") {
     import cats.instances.lazyList._

@@ -12,12 +12,13 @@ trait SemigroupalTests[F[_]] extends Laws {
   def laws: SemigroupalLaws[F]
 
   def semigroupal[A: Arbitrary, B: Arbitrary, C: Arbitrary](implicit
-                                                            iso: Isomorphisms[F],
-                                                            ArbFA: Arbitrary[F[A]],
-                                                            ArbFB: Arbitrary[F[B]],
-                                                            ArbFC: Arbitrary[F[C]],
-                                                            EqFA: Eq[F[A]],
-                                                            EqFABC: Eq[F[(A, B, C)]]): RuleSet =
+    iso: Isomorphisms[F],
+    ArbFA: Arbitrary[F[A]],
+    ArbFB: Arbitrary[F[B]],
+    ArbFC: Arbitrary[F[C]],
+    EqFA: Eq[F[A]],
+    EqFABC: Eq[F[(A, B, C)]]
+  ): RuleSet =
     new DefaultRuleSet(
       name = "semigroupal",
       parent = None,
@@ -43,7 +44,7 @@ object SemigroupalTests {
     implicit def invariant[F[_]](implicit F: Invariant[F]): Isomorphisms[F] =
       new Isomorphisms[F] {
         def associativity[A, B, C](fs: (F[(A, (B, C))], F[((A, B), C)])): IsEq[F[(A, B, C)]] =
-          F.imap(fs._1) { case (a, (b, c))   => (a, b, c) } { case (a, b, c) => (a, (b, c)) } <->
+          F.imap(fs._1) { case (a, (b, c)) => (a, b, c) } { case (a, b, c) => (a, (b, c)) } <->
             F.imap(fs._2) { case ((a, b), c) => (a, b, c) } { case (a, b, c) => ((a, b), c) }
 
         def leftIdentity[A](fs: (F[(Unit, A)], F[A])): IsEq[F[A]] =

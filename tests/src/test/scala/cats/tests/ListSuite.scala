@@ -2,7 +2,6 @@ package cats.tests
 
 import cats.{Align, Alternative, CoflatMap, Monad, Semigroupal, Traverse, TraverseFilter}
 import cats.data.{NonEmptyList, ZipList}
-import cats.instances.all._
 import cats.laws.discipline.{
   AlignTests,
   AlternativeTests,
@@ -11,13 +10,15 @@ import cats.laws.discipline.{
   MonadTests,
   SemigroupalTests,
   SerializableTests,
+  ShortCircuitingTests,
   TraverseFilterTests,
   TraverseTests
 }
 import cats.laws.discipline.arbitrary._
 import cats.syntax.list._
 import cats.syntax.show._
-import org.scalatest.funsuite.AnyFunSuiteLike
+import cats.syntax.eq._
+import org.scalacheck.Prop._
 
 class ListSuite extends CatsSuite {
 
@@ -42,34 +43,53 @@ class ListSuite extends CatsSuite {
   checkAll("List[Int]", AlignTests[List].align[Int, Int, Int, Int])
   checkAll("Align[List]", SerializableTests.serializable(Align[List]))
 
+  checkAll("List[Int]", ShortCircuitingTests[List].traverseFilter[Int])
+  checkAll("List[Int]", ShortCircuitingTests[List].foldable[Int])
+
   checkAll("ZipList[Int]", CommutativeApplyTests[ZipList].commutativeApply[Int, Int, Int])
 
   test("nel => list => nel returns original nel")(
     forAll { (fa: NonEmptyList[Int]) =>
-      fa.toList.toNel should ===(Some(fa))
+      assert(fa.toList.toNel === (Some(fa)))
     }
   )
 
   test("toNel on empty list returns None") {
-    List.empty[Int].toNel should ===(None)
+    assert(List.empty[Int].toNel === None)
   }
 
   test("groupByNel should be consistent with groupBy")(
     forAll { (fa: List[Int], f: Int => Int) =>
-      fa.groupByNel(f).map { case (k, v) => (k, v.toList) } should ===(fa.groupBy(f))
+      assert((fa.groupByNel(f).map { case (k, v) => (k, v.toList) }: Map[Int, List[Int]]) === fa.groupBy(f))
+    }
+  )
+
+  test("groupByNelA should be consistent with groupByNel")(
+    forAll { (fa: List[Int], f: Int => Int) =>
+      assert(fa.groupByNelA(f.andThen(Option(_))) === (Option(fa.groupByNel(f))))
     }
   )
 
   test("show") {
-    List(1, 2, 3).show should ===("List(1, 2, 3)")
-    (Nil: List[Int]).show should ===("List()")
+    assert(List(1, 2, 3).show === "List(1, 2, 3)")
+    assert((Nil: List[Int]).show === "List()")
     forAll { (l: List[String]) =>
-      l.show should ===(l.toString)
+      assert(l.show === (l.toString))
     }
+  }
+
+  test("traverse is stack-safe") {
+    val lst = (0 until 100000).toList
+    val sumAll = Traverse[List]
+      .traverse(lst) { i => () => i }
+      .apply
+      .sum
+
+    assert(sumAll == lst.sum)
   }
 }
 
-final class ListInstancesSuite extends AnyFunSuiteLike {
+final class ListInstancesSuite extends munit.FunSuite {
 
   test("NonEmptyParallel instance in cats.instances.list") {
     import cats.instances.list._

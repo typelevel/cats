@@ -16,25 +16,33 @@ sealed abstract class FreeInvariantMonoidal[F[_], A] extends Product with Serial
   def product[B](fb: FA[F, B]): FA[F, (A, B)] =
     Zip(this, fb)
 
-  /** Interprets/Runs the sequence of operations using the semantics of `InvariantMonoidal[G]` */
+  /**
+   * Interprets/Runs the sequence of operations using the semantics of `InvariantMonoidal[G]`
+   */
   def foldMap[G[_]](nt: FunctionK[F, G])(implicit im: InvariantMonoidal[G]): G[A]
   // Note that implementing a concrete `foldMap` here does not work because
   // `Zip extends G[(A, B)]` confuses the type inferance when pattern matching on `this`.
 
-  /** Interpret/run the operations using the semantics of `InvariantMonoidal[F]`. */
+  /**
+   * Interpret/run the operations using the semantics of `InvariantMonoidal[F]`.
+   */
   final def fold(implicit F: InvariantMonoidal[F]): F[A] =
     foldMap(FunctionK.id[F])
 
-  /** Interpret this algebra into another InvariantMonoidal */
+  /**
+   * Interpret this algebra into another InvariantMonoidal
+   */
   final def compile[G[_]](f: FunctionK[F, G]): FA[G, A] =
     foldMap[FA[G, *]] {
-      λ[FunctionK[F, FA[G, *]]](fa => lift(f(fa)))
+      new FunctionK[F, FA[G, *]] { def apply[B](fb: F[B]): FA[G, B] = lift(f(fb)) }
     }
 
-  /** Interpret this algebra into a Monoid */
+  /**
+   * Interpret this algebra into a Monoid
+   */
   final def analyze[M: Monoid](f: FunctionK[F, λ[α => M]]): M =
     foldMap[Const[M, *]](
-      λ[FunctionK[F, Const[M, *]]](x => Const(f(x)))
+      new FunctionK[F, Const[M, *]] { def apply[B](fb: F[B]): Const[M, B] = Const(f(fb)) }
     ).getConst
 }
 
@@ -67,7 +75,9 @@ object FreeInvariantMonoidal {
   def lift[F[_], A](fa: F[A]): FA[F, A] =
     Suspend(fa)
 
-  /** `FreeInvariantMonoidal[S, *]` has a FreeInvariantMonoidal for any type constructor `S[_]`. */
+  /**
+   * `FreeInvariantMonoidal[S, *]` has a FreeInvariantMonoidal for any type constructor `S[_]`.
+   */
   implicit def catsFreeInvariantMonoidal[S[_]]: InvariantMonoidal[FA[S, *]] =
     new InvariantMonoidal[FA[S, *]] {
       def unit: FA[S, Unit] = FreeInvariantMonoidal.pure(())

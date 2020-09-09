@@ -1,6 +1,7 @@
 package cats
 
 import cats.arrow.FunctionK
+import cats.data.{Validated, ZipList, ZipVector}
 
 /**
  * Some types that form a FlatMap, are also capable of forming an Apply that supports parallel composition.
@@ -77,40 +78,50 @@ trait Parallel[M[_]] extends NonEmptyParallel[M] {
    * I.e. if you have a type M[_], that supports parallel composition through type F[_],
    * then you can get `ApplicativeError[F, E]` from `MonadError[M, E]`.
    */
-  def applicativeError[E](implicit E: MonadError[M, E]): ApplicativeError[F, E] = new ApplicativeError[F, E] {
+  def applicativeError[E](implicit E: MonadError[M, E]): ApplicativeError[F, E] =
+    new ApplicativeError[F, E] {
 
-    def raiseError[A](e: E): F[A] =
-      parallel(MonadError[M, E].raiseError(e))
+      def raiseError[A](e: E): F[A] =
+        parallel(MonadError[M, E].raiseError(e))
 
-    def handleErrorWith[A](fa: F[A])(f: E => F[A]): F[A] = {
-      val ma = E.handleErrorWith(sequential(fa))(e => sequential.apply(f(e)))
-      parallel(ma)
+      def handleErrorWith[A](fa: F[A])(f: E => F[A]): F[A] = {
+        val ma = E.handleErrorWith(sequential(fa))(e => sequential.apply(f(e)))
+        parallel(ma)
+      }
+
+      def pure[A](x: A): F[A] = applicative.pure(x)
+
+      def ap[A, B](ff: F[(A) => B])(fa: F[A]): F[B] = applicative.ap(ff)(fa)
+
+      override def map[A, B](fa: F[A])(f: (A) => B): F[B] = applicative.map(fa)(f)
+
+      override def product[A, B](fa: F[A], fb: F[B]): F[(A, B)] = applicative.product(fa, fb)
+
+      override def map2[A, B, Z](fa: F[A], fb: F[B])(f: (A, B) => Z): F[Z] = applicative.map2(fa, fb)(f)
+
+      override def map2Eval[A, B, Z](fa: F[A], fb: Eval[F[B]])(f: (A, B) => Z): Eval[F[Z]] =
+        applicative.map2Eval(fa, fb)(f)
+
+      override def unlessA[A](cond: Boolean)(f: => F[A]): F[Unit] = applicative.unlessA(cond)(f)
+
+      override def whenA[A](cond: Boolean)(f: => F[A]): F[Unit] = applicative.whenA(cond)(f)
     }
-
-    def pure[A](x: A): F[A] = applicative.pure(x)
-
-    def ap[A, B](ff: F[(A) => B])(fa: F[A]): F[B] = applicative.ap(ff)(fa)
-
-    override def map[A, B](fa: F[A])(f: (A) => B): F[B] = applicative.map(fa)(f)
-
-    override def product[A, B](fa: F[A], fb: F[B]): F[(A, B)] = applicative.product(fa, fb)
-
-    override def map2[A, B, Z](fa: F[A], fb: F[B])(f: (A, B) => Z): F[Z] = applicative.map2(fa, fb)(f)
-
-    override def map2Eval[A, B, Z](fa: F[A], fb: Eval[F[B]])(f: (A, B) => Z): Eval[F[Z]] =
-      applicative.map2Eval(fa, fb)(f)
-
-    override def unlessA[A](cond: Boolean)(f: => F[A]): F[Unit] = applicative.unlessA(cond)(f)
-
-    override def whenA[A](cond: Boolean)(f: => F[A]): F[Unit] = applicative.whenA(cond)(f)
-  }
 }
 
-object NonEmptyParallel {
+object NonEmptyParallel extends ScalaVersionSpecificParallelInstances {
   type Aux[M[_], F0[_]] = NonEmptyParallel[M] { type F[x] = F0[x] }
 
   def apply[M[_], F[_]](implicit P: NonEmptyParallel.Aux[M, F]): NonEmptyParallel.Aux[M, F] = P
   def apply[M[_]](implicit P: NonEmptyParallel[M], D: DummyImplicit): NonEmptyParallel.Aux[M, P.F] = P
+
+  implicit def catsParallelForEitherValidated[E: Semigroup]: Parallel.Aux[Either[E, *], Validated[E, *]] =
+    cats.instances.either.catsParallelForEitherAndValidated[E]
+
+  implicit def catsStdNonEmptyParallelForZipList: NonEmptyParallel.Aux[List, ZipList] =
+    cats.instances.list.catsStdNonEmptyParallelForListZipList
+
+  implicit def catsStdNonEmptyParallelForZipVector: NonEmptyParallel.Aux[Vector, ZipVector] =
+    cats.instances.vector.catsStdNonEmptyParallelForVectorZipVector
 }
 
 object Parallel extends ParallelArityFunctions2 {
@@ -118,6 +129,74 @@ object Parallel extends ParallelArityFunctions2 {
 
   def apply[M[_], F[_]](implicit P: Parallel.Aux[M, F]): Parallel.Aux[M, F] = P
   def apply[M[_]](implicit P: Parallel[M], D: DummyImplicit): Parallel.Aux[M, P.F] = P
+
+  /**
+   * Like `TraverseFilter#traverseFilter`, but uses the applicative instance
+   * corresponding to the Parallel instance instead.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.data._
+   * scala> val list: List[Int] = List(1, 2, 3, 4)
+   * scala> def validate(n: Int): EitherNec[String, Option[Int]] =
+   *      | if (n > 100) Left(NonEmptyChain.one("Too large"))
+   *      | else if (n % 3 =!= 0) Right(Some(n))
+   *      | else Right(None)
+   * scala> list.parTraverseFilter(validate)
+   * res0: EitherNec[String, List[Int]] = Right(List(1, 2, 4))
+   * }}}
+   */
+  def parTraverseFilter[T[_], M[_], A, B](
+    ta: T[A]
+  )(f: A => M[Option[B]])(implicit T: TraverseFilter[T], P: Parallel[M]): M[T[B]] = {
+    val ftb: P.F[T[B]] = T.traverseFilter[P.F, A, B](ta)(a => P.parallel(f(a)))(P.applicative)
+
+    P.sequential(ftb)
+  }
+
+  /**
+   * Like `TraverseFilter#sequenceFilter`, but uses the applicative instance
+   * corresponding to the Parallel instance instead.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.data._
+   * scala> val list: List[EitherNec[String, Option[Int]]] = List(Left(NonEmptyChain.one("Error")), Left(NonEmptyChain.one("Warning!")))
+   * scala> list.parSequenceFilter
+   * res0: EitherNec[String, List[Int]] = Left(Chain(Error, Warning!))
+   * }}}
+   */
+  def parSequenceFilter[T[_], M[_], A](ta: T[M[Option[A]]])(implicit T: TraverseFilter[T], P: Parallel[M]): M[T[A]] = {
+    val fta: P.F[T[A]] = T.traverseFilter[P.F, M[Option[A]], A](ta)(P.parallel.apply(_))(P.applicative)
+
+    P.sequential(fta)
+  }
+
+  /**
+   * Like `TraverseFilter#filterA`, but uses the applicative instance
+   * corresponding to the Parallel instance instead.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.data._
+   * scala> val list: List[Int] = List(1, 2, 3, 4)
+   * scala> def validate(n: Int): EitherNec[String, Boolean] =
+   *      | if (n > 100) Left(NonEmptyChain.one("Too large"))
+   *      | else Right(n % 3 =!= 0)
+   * scala> list.parFilterA(validate)
+   * res0: EitherNec[String, List[Int]] = Right(List(1, 2, 4))
+   * }}}
+   */
+  def parFilterA[T[_], M[_], A](
+    ta: T[A]
+  )(f: A => M[Boolean])(implicit T: TraverseFilter[T], P: Parallel[M]): M[T[A]] = {
+    val fta: P.F[T[A]] = T.filterA(ta)(a => P.parallel(f(a)))(P.applicative)
+
+    P.sequential(fta)
+  }
 
   /**
    * Like `Traverse[A].sequence`, but uses the applicative instance
@@ -362,15 +441,16 @@ object Parallel extends ParallelArityFunctions2 {
    * but are required to have an instance of `Parallel` defined,
    * in which case parallel composition will actually be sequential.
    */
-  def identity[M[_]: Monad]: Parallel.Aux[M, M] = new Parallel[M] {
-    type F[x] = M[x]
+  def identity[M[_]: Monad]: Parallel.Aux[M, M] =
+    new Parallel[M] {
+      type F[x] = M[x]
 
-    val monad: Monad[M] = implicitly[Monad[M]]
+      val monad: Monad[M] = implicitly[Monad[M]]
 
-    val applicative: Applicative[M] = implicitly[Monad[M]]
+      val applicative: Applicative[M] = implicitly[Monad[M]]
 
-    val sequential: M ~> M = FunctionK.id
+      val sequential: M ~> M = FunctionK.id
 
-    val parallel: M ~> M = FunctionK.id
-  }
+      val parallel: M ~> M = FunctionK.id
+    }
 }

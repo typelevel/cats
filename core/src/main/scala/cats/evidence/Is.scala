@@ -62,7 +62,15 @@ abstract class Is[A, B] extends Serializable {
    * A value `A Is B` is always sufficient to produce a similar `Predef.=:=`
    * value.
    */
+  @deprecated("Use toPredef for consistency with As", "2.2.0")
   @inline final def predefEq: A =:= B =
+    substitute[=:=[A, *]](implicitly[A =:= A])
+
+  /**
+   * A value `A Is B` is always sufficient to produce a similar `Predef.=:=`
+   * value.
+   */
+  @inline final def toPredef: A =:= B =
     substitute[=:=[A, *]](implicitly[A =:= A])
 }
 
@@ -78,7 +86,7 @@ sealed abstract class IsInstances {
   }
 }
 
-object Is extends IsInstances {
+object Is extends IsInstances with IsSupport {
 
   /**
    * In truth, "all values of `A Is B` are `refl`". `reflAny` is that
@@ -102,11 +110,10 @@ object Is extends IsInstances {
 
   /**
    * It can be convenient to convert a `Predef.=:=` value into an `Is` value.
-   * This is not strictly valid as while it is almost certainly true that
-   * `A =:= B` implies `A Is B` it is not the case that you can create
-   * evidence of `A Is B` except via a coercion. Use responsibly.
+   * This is not actually unsafe, but was previously labeled as such out
+   * of an abundance of caution
    */
+  @deprecated("use Is.isFromPredef", "2.2.0")
   @inline def unsafeFromPredef[A, B](eq: A =:= B): A Is B =
-    reflAny.asInstanceOf[A Is B]
-
+    Is.isFromPredef(eq)
 }

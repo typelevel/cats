@@ -12,28 +12,42 @@ import cats.arrow.FunctionK
  */
 sealed abstract class Coyoneda[F[_], A] extends Serializable { self =>
 
-  /** The pivot between `fi` and `k`, usually existential. */
+  /**
+   * The pivot between `fi` and `k`, usually existential.
+   */
   type Pivot
 
-  /** The underlying value. */
+  /**
+   * The underlying value.
+   */
   val fi: F[Pivot]
 
-  /** The list of transformer functions, to be composed and lifted into `F` by `run`. */
+  /**
+   * The list of transformer functions, to be composed and lifted into `F` by `run`.
+   */
   private[cats] val ks: List[Any => Any]
 
-  /** The list of transformer functions composed into a single function, to be lifted into `F` by `run`. */
+  /**
+   * The list of transformer functions composed into a single function, to be lifted into `F` by `run`.
+   */
   final def k: Pivot => A = Function.chain(ks.reverse)(_).asInstanceOf[A]
 
   import Coyoneda.{unsafeApply, Aux}
 
-  /** Converts to `F[A]` given that `F` is a functor */
+  /**
+   * Converts to `F[A]` given that `F` is a functor
+   */
   final def run(implicit F: Functor[F]): F[A] = F.map(fi)(k)
 
-  /** Converts to `G[A]` given that `G` is a functor */
+  /**
+   * Converts to `G[A]` given that `G` is a functor
+   */
   final def foldMap[G[_]](trans: F ~> G)(implicit G: Functor[G]): G[A] =
     G.map(trans(fi))(k)
 
-  /** Converts to `Yoneda[F,A]` given that `F` is a functor */
+  /**
+   * Converts to `Yoneda[F,A]` given that `F` is a functor
+   */
   final def toYoneda(implicit F: Functor[F]): Yoneda[F, A] =
     new Yoneda[F, A] {
       def apply[B](f: A => B): F[B] = F.map(fi)(k.andThen(f))
@@ -60,19 +74,25 @@ sealed abstract class Coyoneda[F[_], A] extends Serializable { self =>
 
 object Coyoneda {
 
-  /** Lift the `Pivot` type member to a parameter. It is usually more
+  /**
+   * Lift the `Pivot` type member to a parameter. It is usually more
    * convenient to use `Aux` than a structural type.
    */
   type Aux[F[_], A, B] = Coyoneda[F, A] { type Pivot = B }
 
-  /** `F[A]` converts to `Coyoneda[F,A]` for any `F` */
+  /**
+   * `F[A]` converts to `Coyoneda[F,A]` for any `F`
+   */
   def lift[F[_], A](fa: F[A]): Coyoneda[F, A] = apply(fa)(identity[A])
 
-  /** Like `lift(fa).map(k0)`. */
+  /**
+   * Like `lift(fa).map(k0)`.
+   */
   def apply[F[_], A, B](fa: F[A])(k0: A => B): Aux[F, B, A] =
     unsafeApply(fa)(k0.asInstanceOf[Any => Any] :: Nil)
 
-  /** Creates a `Coyoneda[F, A]` for any `F`, taking an `F[A]`
+  /**
+   * Creates a `Coyoneda[F, A]` for any `F`, taking an `F[A]`
    * and a list of [[Functor.map]]ped functions to apply later
    */
   private[cats] def unsafeApply[F[_], A, B](fa: F[A])(ks0: List[Any => Any]): Aux[F, B, A] =

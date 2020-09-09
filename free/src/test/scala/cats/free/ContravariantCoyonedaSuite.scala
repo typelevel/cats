@@ -7,12 +7,14 @@ import cats.kernel.Eq
 import cats.laws.discipline.{ContravariantTests, SerializableTests}
 import cats.tests.CatsSuite
 import org.scalacheck.{Arbitrary}
+import cats.syntax.eq._
+import org.scalacheck.Prop._
 
 class ContravariantCoyonedaSuite extends CatsSuite {
 
   // If we can generate functions we can generate an interesting ContravariantCoyoneda.
-  implicit def contravariantCoyonedaArbitrary[F[_], A, T](
-    implicit F: Arbitrary[A => T]
+  implicit def contravariantCoyonedaArbitrary[F[_], A, T](implicit
+    F: Arbitrary[A => T]
   ): Arbitrary[ContravariantCoyoneda[* => T, A]] =
     Arbitrary(F.arbitrary.map(ContravariantCoyoneda.lift[* => T, A](_)))
 
@@ -31,13 +33,17 @@ class ContravariantCoyonedaSuite extends CatsSuite {
     ContravariantCoyoneda.catsFreeContravariantFunctorForContravariantCoyoneda[* => String]
 
   checkAll("ContravariantCoyoneda[* => String, Int]",
-           ContravariantTests[ContravariantCoyoneda[* => String, *]].contravariant[Int, Int, Int])
+           ContravariantTests[ContravariantCoyoneda[* => String, *]].contravariant[Int, Int, Int]
+  )
   checkAll("Contravariant[ContravariantCoyoneda[Option, *]]",
-           SerializableTests.serializable(Contravariant[ContravariantCoyoneda[Option, *]]))
+           SerializableTests.serializable(Contravariant[ContravariantCoyoneda[Option, *]])
+  )
 
   test("mapK and run is same as applying natural trans") {
     forAll { (b: Boolean) =>
-      val nt = λ[(* => String) ~> (* => Int)](f => s => f(s).length)
+      val nt = new ((* => String) ~> (* => Int)) {
+        def apply[A](f: A => String): A => Int = s => f(s).length
+      }
       val o = (b: Boolean) => b.toString
       val c = ContravariantCoyoneda.lift[* => String, Boolean](o)
       c.mapK[* => Int](nt).run.apply(b) === nt(o).apply(b)

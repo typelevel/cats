@@ -1,7 +1,6 @@
 package cats.tests
 
 import cats.{Defer, Monad}
-import cats.instances.all._
 import cats.kernel.Eq
 import cats.laws.discipline.{DeferTests, MonadTests, SerializableTests}
 import scala.util.control.TailCalls.{done, tailcall, TailRec}
@@ -14,7 +13,7 @@ class TailRecSuite extends CatsSuite {
     Arbitrary(
       Gen.frequency(
         (3, arbitrary[A].map(done(_))),
-        (1, Gen.lzy(arbitrary[(A, A => TailRec[A])].map { case (a, fn)          => tailcall(fn(a)) })),
+        (1, Gen.lzy(arbitrary[(A, A => TailRec[A])].map { case (a, fn) => tailcall(fn(a)) })),
         (1, Gen.lzy(arbitrary[(TailRec[A], A => TailRec[A])].map { case (a, fn) => a.flatMap(fn) }))
       )
     )

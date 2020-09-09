@@ -2,7 +2,6 @@ package cats.tests
 
 import cats.Endo
 import cats.arrow.Category
-import cats.instances.all._
 import cats.kernel.laws.discipline.MonoidTests
 import cats.laws.discipline.{MiniInt, MonoidKTests, SerializableTests}
 import cats.laws.discipline.eq.catsLawsEqForFn1Exhaustive

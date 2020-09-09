@@ -1,15 +1,19 @@
 package cats.tests
 
 import cats._
-import cats.data.{Const, IdT, OptionT}
-import cats.instances.all._
+import cats.data.{Const, IdT, OptionT, State}
 import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
+import cats.syntax.applicative._
 import cats.syntax.either._
+import cats.syntax.flatMap._
+import cats.syntax.functor._
 import cats.syntax.monadError._
+import cats.syntax.eq._
+import org.scalacheck.Prop._
 
 class OptionTSuite extends CatsSuite {
   implicit val iso: Isomorphisms[OptionT[ListWrapper, *]] = Isomorphisms
@@ -24,7 +28,8 @@ class OptionTSuite extends CatsSuite {
 
     checkAll("OptionT[ListWrapper, *]", FunctorFilterTests[OptionT[ListWrapper, *]].functorFilter[Int, Int, Int])
     checkAll("FunctorFilter[OptionT[ListWrapper, *]]",
-             SerializableTests.serializable(FunctorFilter[OptionT[ListWrapper, *]]))
+             SerializableTests.serializable(FunctorFilter[OptionT[ListWrapper, *]])
+    )
 
   }
 
@@ -34,7 +39,8 @@ class OptionTSuite extends CatsSuite {
 
     checkAll("OptionT[ListWrapper, *]", TraverseFilterTests[OptionT[ListWrapper, *]].traverseFilter[Int, Int, Int])
     checkAll("TraverseFilter[OptionT[ListWrapper, *]]",
-             SerializableTests.serializable(TraverseFilter[OptionT[ListWrapper, *]]))
+             SerializableTests.serializable(TraverseFilter[OptionT[ListWrapper, *]])
+    )
 
   }
 
@@ -50,7 +56,8 @@ class OptionTSuite extends CatsSuite {
 
     checkAll("OptionT[ListWrapper, Int]", PartialOrderTests[OptionT[ListWrapper, Int]].partialOrder)
     checkAll("PartialOrder[OptionT[ListWrapper, Int]]",
-             SerializableTests.serializable(PartialOrder[OptionT[ListWrapper, Int]]))
+             SerializableTests.serializable(PartialOrder[OptionT[ListWrapper, Int]])
+    )
 
     Eq[OptionT[ListWrapper, Int]]
   }
@@ -95,9 +102,11 @@ class OptionTSuite extends CatsSuite {
   {
     // F has a ContravariantMonoidal
     checkAll("OptionT[Const[String, *], Int]",
-             ContravariantMonoidalTests[OptionT[Const[String, *], *]].contravariantMonoidal[Int, Int, Int])
+             ContravariantMonoidalTests[OptionT[Const[String, *], *]].contravariantMonoidal[Int, Int, Int]
+    )
     checkAll("ContravariantMonoidal[OptionT[Const[String, *], Int]]",
-             SerializableTests.serializable(ContravariantMonoidal[OptionT[Const[String, *], *]]))
+             SerializableTests.serializable(ContravariantMonoidal[OptionT[Const[String, *], *]])
+    )
   }
 
   {
@@ -155,7 +164,8 @@ class OptionTSuite extends CatsSuite {
     implicit val F: Traverse[ListWrapper] = ListWrapper.traverse
 
     checkAll("OptionT[ListWrapper, Int] with Option",
-             TraverseTests[OptionT[ListWrapper, *]].traverse[Int, Int, Int, Int, Option, Option])
+             TraverseTests[OptionT[ListWrapper, *]].traverse[Int, Int, Int, Int, Option, Option]
+    )
     checkAll("Traverse[OptionT[ListWrapper, *]]", SerializableTests.serializable(Traverse[OptionT[ListWrapper, *]]))
 
     Foldable[OptionT[ListWrapper, *]]
@@ -179,7 +189,8 @@ class OptionTSuite extends CatsSuite {
 
     checkAll("OptionT[ListWrapper, Int]", SemigroupTests[OptionT[ListWrapper, Int]].semigroup)
     checkAll("Semigroup[OptionT[ListWrapper, Int]]",
-             SerializableTests.serializable(Semigroup[OptionT[ListWrapper, Int]]))
+             SerializableTests.serializable(Semigroup[OptionT[ListWrapper, Int]])
+    )
   }
 
   {
@@ -197,89 +208,126 @@ class OptionTSuite extends CatsSuite {
 
   test("fold and cata consistent") {
     forAll { (o: OptionT[List, Int], s: String, f: Int => String) =>
-      o.fold(s)(f) should ===(o.cata(s, f))
+      assert(o.fold(s)(f) === (o.cata(s, f)))
+    }
+  }
+
+  test("foldF and cataF consistent") {
+    forAll { (o: OptionT[List, Int], s: String, f: Int => List[String]) =>
+      assert(o.foldF(List(s))(f) === (o.cataF(List(s), f)))
+    }
+  }
+
+  test("fold and foldF consistent") {
+    forAll { (o: OptionT[List, Int], s: String, f: Int => String) =>
+      val f2 = f.andThen(i => List(i))
+      assert(o.fold(s)(f) === (o.foldF(List(s))(f2)))
+    }
+  }
+
+  test("flatTapNone doesn't change the return value") {
+    type TestEffect[A] = State[List[Int], A]
+    forAll { (optiont: OptionT[TestEffect, Int], f: TestEffect[Int], initial: List[Int]) =>
+      assert(optiont.flatTapNone(f).value.runA(initial) === (optiont.value.runA(initial)))
+    }
+  }
+
+  test("flatTapNone runs the effect") {
+    type TestEffect[A] = State[List[Int], A]
+    forAll { (optiont: OptionT[TestEffect, Int], f: TestEffect[Int], initial: List[Int]) =>
+      assert(
+        optiont.flatTapNone(f).value.runS(initial) ===
+          optiont.value
+            .flatTap {
+              case Some(v) => v.pure[TestEffect]
+              case None    => f
+            }
+            .runS(initial)
+      )
     }
   }
 
   test("OptionT[Id, A].fold consistent with Option.fold") {
     forAll { (o: Option[Int], s: String, f: Int => String) =>
-      o.fold(s)(f) should ===(OptionT[Id, Int](o).fold(s)(f))
+      assert(o.fold(s)(f) === (OptionT[Id, Int](o).fold(s)(f)))
     }
   }
 
   test("OptionT[Id, A].getOrElse consistent with Option.getOrElse") {
     forAll { (o: Option[Int], i: Int) =>
-      o.getOrElse(i) should ===(OptionT[Id, Int](o).getOrElse(i))
+      assert(o.getOrElse(i) === (OptionT[Id, Int](o).getOrElse(i)))
     }
   }
 
   test("OptionT[Id, A].getOrElse consistent with Option.getOrElse, with respect to types") {
     forAll { (o: Option[Int]) =>
-      o.map(Right.apply).getOrElse(Left("error")) should ===(
-        OptionT[Id, Int](o).map(Right.apply).getOrElse("error".asLeft[Int])
+      assert(
+        o.map(Right.apply).getOrElse(Left("error")) ===
+          OptionT[Id, Int](o).map(Right.apply).getOrElse("error".asLeft[Int])
       )
     }
   }
 
   test("OptionT[Id, A].getOrElseF consistent with Option.getOrElse") {
     forAll { (o: Option[Int], i: Int) =>
-      o.getOrElse(i) should ===(OptionT[Id, Int](o).getOrElseF(i))
+      assert(o.getOrElse(i) === (OptionT[Id, Int](o).getOrElseF(i)))
     }
   }
 
   test("OptionT[Id, A].getOrElseF consistent with Option.getOrElse, with respect to types") {
     forAll { (o: Option[Int]) =>
-      o.map(Right.apply).getOrElse(Left("error")) should ===(
-        OptionT[Id, Int](o).map(Right.apply).getOrElseF("error".asLeft[Int])
+      assert(
+        o.map(Right.apply).getOrElse(Left("error")) ===
+          OptionT[Id, Int](o).map(Right.apply).getOrElseF("error".asLeft[Int])
       )
     }
   }
   test("OptionT[Id, A].collect consistent with Option.collect") {
     forAll { (o: Option[Int], f: Int => Option[String]) =>
       val p = Function.unlift(f)
-      o.collect(p) should ===(OptionT[Id, Int](o).collect(p).value)
+      assert(o.collect(p) === (OptionT[Id, Int](o).collect(p).value))
     }
   }
 
   test("OptionT[Id, A].exists consistent with Option.exists") {
     forAll { (o: Option[Int], f: Int => Boolean) =>
-      o.exists(f) should ===(OptionT[Id, Int](o).exists(f))
+      assert(o.exists(f) === (OptionT[Id, Int](o).exists(f)))
     }
   }
 
   test("OptionT[Id, A].filter consistent with Option.filter") {
     forAll { (o: Option[Int], f: Int => Boolean) =>
-      o.filter(f) should ===(OptionT[Id, Int](o).filter(f).value)
+      assert(o.filter(f) === (OptionT[Id, Int](o).filter(f).value))
     }
   }
 
   test("OptionT[Id, A].withFilter consistent with Option.withFilter") {
     forAll { (o: Option[Int], f: Int => Boolean) =>
-      (for { x <- o if f(x) } yield x) should ===((for { x <- OptionT[Id, Int](o) if f(x) } yield x).value)
+      assert((for { x <- o if f(x) } yield x) === ((for { x <- OptionT[Id, Int](o) if f(x) } yield x).value))
     }
   }
 
   test("OptionT[Id, A].filterNot consistent with Option.filterNot") {
     forAll { (o: Option[Int], f: Int => Boolean) =>
-      o.filterNot(f) should ===(OptionT[Id, Int](o).filterNot(f).value)
+      assert(o.filterNot(f) === (OptionT[Id, Int](o).filterNot(f).value))
     }
   }
 
   test("OptionT[Id, A].forall consistent with Option.forall") {
     forAll { (o: Option[Int], f: Int => Boolean) =>
-      o.forall(f) should ===(OptionT[Id, Int](o).forall(f))
+      assert(o.forall(f) === (OptionT[Id, Int](o).forall(f)))
     }
   }
 
   test("OptionT[Id, A].isDefined consistent with Option.isDefined") {
     forAll { (o: Option[Int]) =>
-      o.isDefined should ===(OptionT[Id, Int](o).isDefined)
+      assert(o.isDefined === (OptionT[Id, Int](o).isDefined))
     }
   }
 
   test("OptionT[Id, A].isEmpty consistent with Option.isEmpty") {
     forAll { (o: Option[Int]) =>
-      o.isEmpty should ===(OptionT[Id, Int](o).isEmpty)
+      assert(o.isEmpty === (OptionT[Id, Int](o).isEmpty))
     }
   }
 
@@ -287,7 +335,7 @@ class OptionTSuite extends CatsSuite {
     // Option.when is inlined here because it is not available before Scala 2.13
     def when[A]: (Boolean, A) => Option[A] = (c: Boolean, a: A) => if (c) Some(a) else None
     forAll { (i: Int, b: Boolean) =>
-      OptionT.when[Id, Int](b)(i).value should ===(when(b, i))
+      assert(OptionT.when[Id, Int](b)(i).value === (when(b, i)))
     }
   }
 
@@ -295,13 +343,13 @@ class OptionTSuite extends CatsSuite {
     // Option.when is inlined here because it is not available before Scala 2.13
     def when[A]: (Boolean, A) => Option[A] = (c: Boolean, a: A) => if (c) Some(a) else None
     forAll { (i: Int, b: Boolean) =>
-      OptionT.whenF[Id, Int](b)(i).value should ===(when(b, i))
+      assert(OptionT.whenF[Id, Int](b)(i).value === (when(b, i)))
     }
   }
 
   test("OptionT.whenK and OptionT.whenF consistent") {
     forAll { (li: List[Int], b: Boolean) =>
-      IdT(li).mapK(OptionT.whenK(b)).value should ===(OptionT.whenF(b)(li))
+      assert(IdT(li).mapK(OptionT.whenK(b)).value === (OptionT.whenF(b)(li)))
     }
   }
 
@@ -309,7 +357,7 @@ class OptionTSuite extends CatsSuite {
     // Option.unless is inlined here because it is not available before Scala 2.13
     def unless[A]: (Boolean, A) => Option[A] = (c: Boolean, a: A) => if (!c) Some(a) else None
     forAll { (i: Int, b: Boolean) =>
-      OptionT.unless[Id, Int](b)(i).value should ===(unless(b, i))
+      assert(OptionT.unless[Id, Int](b)(i).value === (unless(b, i)))
     }
   }
 
@@ -317,116 +365,148 @@ class OptionTSuite extends CatsSuite {
     // Option.unless is inlined here because it is not available before Scala 2.13
     def unless[A]: (Boolean, A) => Option[A] = (c: Boolean, a: A) => if (!c) Some(a) else None
     forAll { (i: Int, b: Boolean) =>
-      OptionT.unlessF[Id, Int](b)(i).value should ===(unless(b, i))
+      assert(OptionT.unlessF[Id, Int](b)(i).value === (unless(b, i)))
     }
   }
 
   test("OptionT.unlessK and OptionT.unlessF consistent") {
     forAll { (li: List[Int], b: Boolean) =>
-      IdT(li).mapK(OptionT.unlessK(b)).value should ===(OptionT.unlessF(b)(li))
+      assert(IdT(li).mapK(OptionT.unlessK(b)).value === (OptionT.unlessF(b)(li)))
     }
   }
 
   test("orElse and orElseF consistent") {
     forAll { (o1: OptionT[List, Int], o2: OptionT[List, Int]) =>
-      o1.orElse(o2) should ===(o1.orElseF(o2.value))
+      assert(o1.orElse(o2) === (o1.orElseF(o2.value)))
     }
   }
 
   test("flatMap and flatMapF consistent") {
     forAll { (optionT: OptionT[List, Int], f: Int => OptionT[List, Int]) =>
-      optionT.flatMap(f) should ===(optionT.flatMapF(f(_).value))
+      assert(optionT.flatMap(f) === (optionT.flatMapF(f(_).value)))
     }
   }
 
   test("OptionT[Id, A].toRight consistent with Either.fromOption") {
     forAll { (o: OptionT[Id, Int], s: String) =>
-      o.toRight(s).value should ===(Either.fromOption(o.value, s))
+      assert(o.toRight(s).value === (Either.fromOption(o.value, s)))
     }
   }
 
   test("toRight consistent with isDefined") {
     forAll { (o: OptionT[List, Int], s: String) =>
-      o.toRight(s).isRight should ===(o.isDefined)
+      assert(o.toRight(s).isRight === (o.isDefined))
+    }
+  }
+
+  test("toRight and toRightF consistent") {
+    forAll { (o: OptionT[List, Int], s: String) =>
+      assert(o.toRight(s) === (o.toRightF(List(s))))
     }
   }
 
   test("toLeft consistent with isDefined") {
     forAll { (o: OptionT[List, Int], s: String) =>
-      o.toLeft(s).isLeft should ===(o.isDefined)
+      assert(o.toLeft(s).isLeft === (o.isDefined))
+    }
+  }
+
+  test("toLeft and toLeftF consistent") {
+    forAll { (o: OptionT[List, Int], s: String) =>
+      assert(o.toLeft(s) === (o.toLeftF(List(s))))
     }
   }
 
   test("isDefined is negation of isEmpty") {
     forAll { (o: OptionT[List, Int]) =>
-      o.isDefined should ===(o.isEmpty.map(!_))
+      assert(o.isDefined === (o.isEmpty.map(!_)))
     }
   }
 
   test("fromOption") {
     forAll { (o: Option[Int]) =>
-      List(o) should ===(OptionT.fromOption[List](o).value)
+      assert(List(o) === (OptionT.fromOption[List](o).value))
     }
   }
 
   test("liftF") {
     forAll { (xs: List[Int]) =>
-      xs.map(Option(_)) should ===(OptionT.liftF(xs).value)
+      assert(xs.map(Option(_)) === (OptionT.liftF(xs).value))
     }
   }
 
   test("show") {
     val either: Either[String, Option[Int]] = Either.right(Some(1))
-    OptionT[Either[String, *], Int](either).show should ===("Right(Some(1))")
+    assert(OptionT[Either[String, *], Int](either).show === "Right(Some(1))")
   }
 
   test("none") {
-    OptionT.none[List, Int] should ===(OptionT[List, Int](List(None)))
+    assert(OptionT.none[List, Int] === (OptionT[List, Int](List(None))))
   }
 
   test("implicit Show[OptionT] instance and explicit show method are consistent") {
     forAll { (optionT: OptionT[List, Int]) =>
-      optionT.show should ===(implicitly[Show[OptionT[List, Int]]].show(optionT))
+      assert(optionT.show === (implicitly[Show[OptionT[List, Int]]].show(optionT)))
     }
   }
 
   test("transform consistent with value.map") {
     forAll { (o: OptionT[List, Int], f: Option[Int] => Option[String]) =>
-      o.transform(f) should ===(OptionT(o.value.map(f)))
+      assert(o.transform(f) === (OptionT(o.value.map(f))))
     }
   }
 
   test("flatTransform consistent with value.flatMap") {
     forAll { (o: OptionT[List, Int], f: Option[Int] => List[Option[String]]) =>
-      o.flatTransform(f) should ===(OptionT(o.value.flatMap(f)))
+      assert(o.flatTransform(f) === (OptionT(o.value.flatMap(f))))
     }
   }
 
   test("mapK consistent with f(value)+pure") {
-    val f: List ~> Option = λ[List ~> Option](_.headOption)
+    val f: List ~> Option = new (List ~> Option) { def apply[A](a: List[A]): Option[A] = a.headOption }
     forAll { (optiont: OptionT[List, Int]) =>
-      optiont.mapK(f) should ===(OptionT(f(optiont.value)))
+      assert(optiont.mapK(f) === (OptionT(f(optiont.value))))
     }
   }
 
   test("semiflatMap consistent with value.flatMap+f+pure") {
     forAll { (o: OptionT[List, Int], f: Int => List[String]) =>
-      o.semiflatMap(f) should ===(OptionT(o.value.flatMap {
+      assert(o.semiflatMap(f) === OptionT(o.value.flatMap {
         case None    => List(None)
         case Some(a) => f(a).map(Some(_))
       }))
     }
   }
 
+  test("semiflatTap consistent with semiflatMap") {
+    forAll { (o: OptionT[List, Int], f: Int => List[String]) =>
+      assert(o.semiflatMap(v => f(v).as(v)) === (o.semiflatTap(f)))
+    }
+  }
+
+  test("semiflatTap does not change the return value") {
+    type TestEffect[A] = State[List[Int], A]
+    forAll { (optiont: OptionT[TestEffect, Int], f: Int => TestEffect[Int], initial: List[Int]) =>
+      assert(optiont.semiflatTap(v => f(v)).value.runA(initial) === (optiont.value.runA(initial)))
+    }
+  }
+
+  test("semiflatTap runs the effect") {
+    type TestEffect[A] = State[List[Int], A]
+    forAll { (optiont: OptionT[TestEffect, Int], f: Int => TestEffect[Int], initial: List[Int]) =>
+      assert(optiont.semiflatTap(v => f(v)).value.runS(initial) === (optiont.semiflatMap(f).value.runS(initial)))
+    }
+  }
+
   test("subflatMap consistent with value.map+flatMap") {
     forAll { (o: OptionT[List, Int], f: Int => Option[String]) =>
-      o.subflatMap(f) should ===(OptionT(o.value.map(_.flatMap(f))))
+      assert(o.subflatMap(f) === (OptionT(o.value.map(_.flatMap(f)))))
     }
   }
 
   test("mapFilter consistent with subflatMap") {
     forAll { (o: OptionT[List, Int], f: Int => Option[String]) =>
-      o.mapFilter(f) should ===(o.subflatMap(f))
+      assert(o.mapFilter(f) === (o.subflatMap(f)))
     }
   }
 

@@ -1,7 +1,6 @@
 package cats.js.tests
 
 import cats.Comonad
-import cats.instances.all._
 import cats.js.instances.Await
 import cats.js.instances.future.futureComonad
 import cats.kernel.Eq

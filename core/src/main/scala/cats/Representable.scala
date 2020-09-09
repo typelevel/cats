@@ -124,9 +124,10 @@ object Representable {
   /**
    * Derives a `Monad` instance for any `Representable` functor
    */
-  def monad[F[_]](implicit Rep: Representable[F]): Monad[F] = new RepresentableMonad[F, Rep.Representation] {
-    override def R: Representable.Aux[F, Rep.Representation] = Rep
-  }
+  def monad[F[_]](implicit Rep: Representable[F]): Monad[F] =
+    new RepresentableMonad[F, Rep.Representation] {
+      override def R: Representable.Aux[F, Rep.Representation] = Rep
+    }
 
   /**
    * Derives a `Bimonad` instance for any `Representable` functor whose representation
@@ -145,4 +146,11 @@ object Representable {
     new RepresentableDistributive[F, Rep.Representation] {
       override def R: Aux[F, Rep.Representation] = Rep
     }
+
+  implicit def catsRepresentableForFunction1[E](implicit EF: Functor[E => *]): Representable.Aux[E => *, E] =
+    cats.instances.function.catsStdRepresentableForFunction1[E]
+
+  implicit def catsRepresentableForPair(implicit
+    PF: Functor[λ[P => (P, P)]]
+  ): Representable.Aux[λ[P => (P, P)], Boolean] = cats.instances.tuple.catsDataRepresentableForPair
 }

@@ -12,23 +12,24 @@ trait FoldableTests[F[_]] extends UnorderedFoldableTests[F] {
   def laws: FoldableLaws[F]
 
   def foldable[A: Arbitrary, B: Arbitrary](implicit
-                                           ArbFA: Arbitrary[F[A]],
-                                           A: CommutativeMonoid[A],
-                                           B: CommutativeMonoid[B],
-                                           CogenA: Cogen[A],
-                                           CogenB: Cogen[B],
-                                           EqA: Eq[A],
-                                           EqFA: Eq[F[A]],
-                                           EqB: Eq[B],
-                                           EqOptionB: Eq[Option[B]],
-                                           EqOptionA: Eq[Option[A]]): RuleSet =
+    ArbFA: Arbitrary[F[A]],
+    A: CommutativeMonoid[A],
+    B: CommutativeMonoid[B],
+    CogenA: Cogen[A],
+    CogenB: Cogen[B],
+    EqA: Eq[A],
+    EqFA: Eq[F[A]],
+    EqB: Eq[B],
+    EqOptionB: Eq[Option[B]],
+    EqOptionA: Eq[Option[A]]
+  ): RuleSet =
     new DefaultRuleSet(
       name = "foldable",
       parent = Some(unorderedFoldable[A, B]),
       "foldLeft consistent with foldMap" -> forAll(laws.leftFoldConsistentWithFoldMap[A, B] _),
       "foldRight consistent with foldMap" -> forAll(laws.rightFoldConsistentWithFoldMap[A, B] _),
       "foldRight is lazy" -> forAll(laws.foldRightLazy[A] _),
-      "ordered constistency" -> forAll(laws.orderedConsistency[A] _),
+      "ordered consistency" -> forAll(laws.orderedConsistency[A] _),
       "exists consistent with find" -> forAll(laws.existsConsistentWithFind[A] _),
       "foldM identity" -> forAll(laws.foldMIdentity[A, B] _),
       "reduceLeftOption consistent with reduceLeftToOption" ->

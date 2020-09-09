@@ -1,6 +1,7 @@
 package cats
 
 import simulacrum.{noop, typeclass}
+import scala.annotation.implicitNotFound
 
 /**
  * Functor.
@@ -9,6 +10,7 @@ import simulacrum.{noop, typeclass}
  *
  * Must obey the laws defined in cats.laws.FunctorLaws.
  */
+@implicitNotFound("Could not find an instance of Functor for ${F}")
 @typeclass trait Functor[F[_]] extends Invariant[F] { self =>
   def map[A, B](fa: F[A])(f: A => B): F[B]
 
@@ -100,6 +102,20 @@ import simulacrum.{noop, typeclass}
   def fproduct[A, B](fa: F[A])(f: A => B): F[(A, B)] = map(fa)(a => a -> f(a))
 
   /**
+   *  Pair the result of function application with `A`.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.Functor
+   * scala> import cats.implicits.catsStdInstancesForOption
+   *
+   * scala> Functor[Option].fproductLeft(Option(42))(_.toString)
+   * res0: Option[(String, Int)] = Some((42,42))
+   * }}}
+   */
+  def fproductLeft[A, B](fa: F[A])(f: A => B): F[(B, A)] = map(fa)(a => f(a) -> a)
+
+  /**
    * Replaces the `A` value in `F[A]` with the supplied value.
    *
    * Example:
@@ -156,7 +172,6 @@ import simulacrum.{noop, typeclass}
    * scala> Functor[List].unzip(List((1,2), (3, 4)))
    * res0: (List[Int], List[Int]) = (List(1, 3),List(2, 4))
    * }}}
-   *
    */
   @noop
   def unzip[A, B](fab: F[(A, B)]): (F[A], F[B]) = (map(fab)(_._1), map(fab)(_._2))
@@ -173,6 +188,7 @@ import simulacrum.{noop, typeclass}
    * res0: List[Int] = List(1, 0, 0)
    * }}}
    */
+  @noop
   def ifF[A](fb: F[Boolean])(ifTrue: => A, ifFalse: => A): F[A] = map(fb)(x => if (x) ifTrue else ifFalse)
 
   def compose[G[_]: Functor]: Functor[λ[α => F[G[α]]]] =
@@ -186,4 +202,62 @@ import simulacrum.{noop, typeclass}
       val F = self
       val G = Contravariant[G]
     }
+}
+
+object Functor {
+
+  /* ======================================================================== */
+  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
+  /* ======================================================================== */
+
+  /**
+   * Summon an instance of [[Functor]] for `F`.
+   */
+  @inline def apply[F[_]](implicit instance: Functor[F]): Functor[F] = instance
+
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllFunctorOps[F[_], A](target: F[A])(implicit tc: Functor[F]): AllOps[F, A] {
+      type TypeClassType = Functor[F]
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = Functor[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
+  trait Ops[F[_], A] extends Serializable {
+    type TypeClassType <: Functor[F]
+    def self: F[A]
+    val typeClassInstance: TypeClassType
+    def map[B](f: A => B): F[B] = typeClassInstance.map[A, B](self)(f)
+    final def fmap[B](f: A => B): F[B] = typeClassInstance.fmap[A, B](self)(f)
+    def widen[B >: A]: F[B] = typeClassInstance.widen[A, B](self)
+    def void: F[Unit] = typeClassInstance.void[A](self)
+    def fproduct[B](f: A => B): F[(A, B)] = typeClassInstance.fproduct[A, B](self)(f)
+    def fproductLeft[B](f: A => B): F[(B, A)] = typeClassInstance.fproductLeft[A, B](self)(f)
+    def as[B](b: B): F[B] = typeClassInstance.as[A, B](self, b)
+    def tupleLeft[B](b: B): F[(B, A)] = typeClassInstance.tupleLeft[A, B](self, b)
+    def tupleRight[B](b: B): F[(A, B)] = typeClassInstance.tupleRight[A, B](self, b)
+  }
+  trait AllOps[F[_], A] extends Ops[F, A] with Invariant.AllOps[F, A] {
+    type TypeClassType <: Functor[F]
+  }
+  trait ToFunctorOps extends Serializable {
+    implicit def toFunctorOps[F[_], A](target: F[A])(implicit tc: Functor[F]): Ops[F, A] {
+      type TypeClassType = Functor[F]
+    } =
+      new Ops[F, A] {
+        type TypeClassType = Functor[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object nonInheritedOps extends ToFunctorOps
+
+  /* ======================================================================== */
+  /* END OF SIMULACRUM-MANAGED CODE                                           */
+  /* ======================================================================== */
+
 }

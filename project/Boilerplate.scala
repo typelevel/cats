@@ -33,12 +33,15 @@ object Boilerplate {
 
   val header = "// auto-generated boilerplate by /project/Boilerplate.scala" // TODO: put something meaningful here?
 
-  /** Returns a seq of the generated files.  As a side-effect, it actually generates them... */
-  def gen(dir: File) = for (t <- templates) yield {
-    val tgtFile = t.filename(dir)
-    IO.write(tgtFile, t.body)
-    tgtFile
-  }
+  /**
+   * Returns a seq of the generated files.  As a side-effect, it actually generates them...
+   */
+  def gen(dir: File) =
+    for (t <- templates) yield {
+      val tgtFile = t.filename(dir)
+      IO.write(tgtFile, t.body)
+      tgtFile
+    }
 
   val maxArity = 22
 
@@ -149,10 +152,10 @@ object Boilerplate {
       |
       |
       |@deprecated("replaced by apply syntax", "1.0.0-MF")
-      |private[syntax] final class SemigroupalBuilder[F[_]] {
+      |private[syntax] final class SemigroupalBuilder[F[_]] extends Serializable {
       |  def |@|[A](a: F[A]) = new SemigroupalBuilder1(a)
       |
-        -  private[syntax] final class SemigroupalBuilder$arity[${`A..N`}]($params) {
+        -  private[syntax] final class SemigroupalBuilder$arity[${`A..N`}]($params) extends Serializable {
         -    $next
         -    def apWith[Z](f: F[(${`A..N`}) => Z])(implicit apply: Apply[F]): F[Z] = apply.ap$n(f)(${`a..n`})
         -    $map
@@ -417,7 +420,7 @@ object Boilerplate {
          -  implicit def catsSyntaxTuple${arity}Parallel[M[_], ${`A..N`}]($tupleTpe): Tuple${arity}ParallelOps[M, ${`A..N`}] = new Tuple${arity}ParallelOps(t$arity)
       |}
       |
-         -private[syntax] final class Tuple${arity}ParallelOps[M[_], ${`A..N`}](private val $tupleTpe) {
+         -private[syntax] final class Tuple${arity}ParallelOps[M[_], ${`A..N`}](private val $tupleTpe) extends Serializable {
          -  $parMap
          -  $parTupled
          -}
@@ -487,7 +490,7 @@ object Boilerplate {
         -  implicit def catsSyntaxTuple${arity}Semigroupal[F[_], ${`A..N`}]($tupleTpe): Tuple${arity}SemigroupalOps[F, ${`A..N`}] = new Tuple${arity}SemigroupalOps(t$arity)
       |}
       |
-        -private[syntax] final class Tuple${arity}SemigroupalOps[F[_], ${`A..N`}](private val $tupleTpe) {
+        -private[syntax] final class Tuple${arity}SemigroupalOps[F[_], ${`A..N`}](private val $tupleTpe) extends Serializable {
         -  $map
         -  $contramap
         -  $imap

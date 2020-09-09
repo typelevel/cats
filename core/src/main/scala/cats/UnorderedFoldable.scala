@@ -1,13 +1,16 @@
 package cats
 
-import cats.instances.long._
 import cats.kernel.CommutativeMonoid
+import scala.collection.immutable.{Queue, SortedMap, SortedSet}
+import scala.util.Try
 import simulacrum.{noop, typeclass}
+import scala.annotation.implicitNotFound
 
 /**
  * `UnorderedFoldable` is like a `Foldable` for unordered containers.
  */
-@typeclass trait UnorderedFoldable[F[_]] {
+@implicitNotFound("Could not find an instance of UnorderedFoldable for ${F}")
+@typeclass trait UnorderedFoldable[F[_]] extends Serializable {
 
   def unorderedFoldMap[A, B: CommutativeMonoid](fa: F[A])(f: A => B): B
 
@@ -71,7 +74,7 @@ import simulacrum.{noop, typeclass}
     unorderedFoldMap(fa)(a => if (p(a)) 1L else 0L)
 }
 
-object UnorderedFoldable {
+object UnorderedFoldable extends ScalaVersionSpecificTraverseInstances {
   private val orEvalMonoid: CommutativeMonoid[Eval[Boolean]] = new CommutativeMonoid[Eval[Boolean]] {
     val empty: Eval[Boolean] = Eval.False
 
@@ -91,4 +94,75 @@ object UnorderedFoldable {
         case false => Eval.False
       }
   }
+
+  implicit def catsNonEmptyTraverseForId: NonEmptyTraverse[Id] = catsInstancesForId
+  implicit def catsTraverseForOption: Traverse[Option] = cats.instances.option.catsStdInstancesForOption
+  implicit def catsTraverseForList: Traverse[List] = cats.instances.list.catsStdInstancesForList
+  implicit def catsTraverseForVector: Traverse[Vector] = cats.instances.vector.catsStdInstancesForVector
+  implicit def catsTraverseForQueue: Traverse[Queue] = cats.instances.queue.catsStdInstancesForQueue
+  implicit def catsUnorderedTraverseForSet: UnorderedTraverse[Set] = cats.instances.set.catsStdInstancesForSet
+  implicit def catsFoldableForSortedSet: Foldable[SortedSet] = cats.instances.sortedSet.catsStdInstancesForSortedSet
+  implicit def catsTraverseForSortedMap[K]: Traverse[SortedMap[K, *]] =
+    cats.instances.sortedMap.catsStdInstancesForSortedMap[K]
+
+  implicit def catsUnorderedTraverseForMap[K]: UnorderedTraverse[Map[K, *]] =
+    cats.instances.map.catsStdInstancesForMap[K]
+
+  implicit def catsTraverseForEither[A]: Traverse[Either[A, *]] = cats.instances.either.catsStdInstancesForEither[A]
+  implicit def catsInstancesForTuple[A]: Traverse[(A, *)] with Reducible[(A, *)] =
+    cats.instances.tuple.catsStdInstancesForTuple2[A]
+
+  implicit def catsTraverseForTry: Traverse[Try] = cats.instances.try_.catsStdInstancesForTry
+
+  /* ======================================================================== */
+  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
+  /* ======================================================================== */
+
+  /**
+   * Summon an instance of [[UnorderedFoldable]] for `F`.
+   */
+  @inline def apply[F[_]](implicit instance: UnorderedFoldable[F]): UnorderedFoldable[F] = instance
+
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllUnorderedFoldableOps[F[_], A](target: F[A])(implicit tc: UnorderedFoldable[F]): AllOps[F, A] {
+      type TypeClassType = UnorderedFoldable[F]
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = UnorderedFoldable[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
+  trait Ops[F[_], A] extends Serializable {
+    type TypeClassType <: UnorderedFoldable[F]
+    def self: F[A]
+    val typeClassInstance: TypeClassType
+    def unorderedFoldMap[B](f: A => B)(implicit ev$1: CommutativeMonoid[B]): B =
+      typeClassInstance.unorderedFoldMap[A, B](self)(f)
+    def unorderedFold(implicit ev$1: CommutativeMonoid[A]): A = typeClassInstance.unorderedFold[A](self)
+    def isEmpty: Boolean = typeClassInstance.isEmpty[A](self)
+    def nonEmpty: Boolean = typeClassInstance.nonEmpty[A](self)
+    def exists(p: A => Boolean): Boolean = typeClassInstance.exists[A](self)(p)
+    def forall(p: A => Boolean): Boolean = typeClassInstance.forall[A](self)(p)
+    def size: Long = typeClassInstance.size[A](self)
+  }
+  trait AllOps[F[_], A] extends Ops[F, A]
+  trait ToUnorderedFoldableOps extends Serializable {
+    implicit def toUnorderedFoldableOps[F[_], A](target: F[A])(implicit tc: UnorderedFoldable[F]): Ops[F, A] {
+      type TypeClassType = UnorderedFoldable[F]
+    } =
+      new Ops[F, A] {
+        type TypeClassType = UnorderedFoldable[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object nonInheritedOps extends ToUnorderedFoldableOps
+
+  /* ======================================================================== */
+  /* END OF SIMULACRUM-MANAGED CODE                                           */
+  /* ======================================================================== */
+
 }

@@ -3,11 +3,11 @@ package cats.tests
 import cats.{Applicative, Apply, Contravariant, Functor, Semigroupal, Show}
 import cats.data.{AppFunc, Func}
 import cats.data.Func.appFunc
-import cats.instances.all._
 import cats.kernel.Eq
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
+import cats.syntax.eq._
 
 class FuncSuite extends CatsSuite {
   import cats.laws.discipline.eq._
@@ -44,7 +44,8 @@ class FuncSuite extends CatsSuite {
     implicit val funcContravariant: Contravariant[Func[Show, *, MiniInt]] =
       Func.catsDataContravariantForFunc[Show, MiniInt]
     checkAll("Func[Show, MiniInt, MiniInt]",
-             ContravariantTests[Func[Show, *, MiniInt]].contravariant[MiniInt, MiniInt, MiniInt])
+             ContravariantTests[Func[Show, *, MiniInt]].contravariant[MiniInt, MiniInt, MiniInt]
+    )
     checkAll("Contravariant[Func[Show, *, Int]]", SerializableTests.serializable(Contravariant[Func[Show, *, Int]]))
   }
 
@@ -52,9 +53,11 @@ class FuncSuite extends CatsSuite {
     implicit val appFuncApp: Applicative[AppFunc[Option, Int, *]] = AppFunc.appFuncApplicative[Option, Int]
     implicit val iso: Isomorphisms[AppFunc[Option, Int, *]] = Isomorphisms.invariant[AppFunc[Option, Int, *]]
     checkAll("AppFunc[Option, MiniInt, MiniInt]",
-             ApplicativeTests[AppFunc[Option, MiniInt, *]].applicative[MiniInt, MiniInt, MiniInt])
+             ApplicativeTests[AppFunc[Option, MiniInt, *]].applicative[MiniInt, MiniInt, MiniInt]
+    )
     checkAll("Applicative[AppFunc[Option, Int, *]]",
-             SerializableTests.serializable(Applicative[AppFunc[Option, Int, *]]))
+             SerializableTests.serializable(Applicative[AppFunc[Option, Int, *]])
+    )
   }
 
   test("product") {
@@ -66,7 +69,7 @@ class FuncSuite extends CatsSuite {
     }
     val h = f.product(g)
     val x = h.run(1)
-    (x.first, x.second) should ===((Some(11), List(2)))
+    assert((x.first, x.second) === ((Some(11), List(2))))
   }
 
   test("traverse") {
@@ -74,6 +77,6 @@ class FuncSuite extends CatsSuite {
       (Some(x + 10): Option[Int])
     }
     val xs = f.traverse(List(1, 2, 3))
-    xs should ===(Some(List(11, 12, 13)))
+    assert(xs === (Some(List(11, 12, 13))))
   }
 }

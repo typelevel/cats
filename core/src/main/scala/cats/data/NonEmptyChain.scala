@@ -2,7 +2,6 @@ package cats
 package data
 
 import NonEmptyChainImpl.create
-import cats.{Order, Semigroup}
 import cats.kernel._
 import scala.collection.immutable.SortedMap
 
@@ -286,8 +285,8 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
    */
   final def reduceLeft(f: (A, A) => A): A = {
     val iter = toChain.iterator
-    var result = iter.next
-    while (iter.hasNext) { result = f(result, iter.next) }
+    var result = iter.next()
+    while (iter.hasNext) { result = f(result, iter.next()) }
     result
   }
 
@@ -303,8 +302,8 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
    */
   final def reduceLeftTo[B](f: A => B)(g: (B, A) => B): B = {
     val iter = toChain.iterator
-    var result = f(iter.next)
-    while (iter.hasNext) { result = g(result, iter.next) }
+    var result = f(iter.next())
+    while (iter.hasNext) { result = g(result, iter.next()) }
     result
   }
 
@@ -319,8 +318,8 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
    */
   final def reduceRight(f: (A, A) => A): A = {
     val iter = toChain.reverseIterator
-    var result = iter.next
-    while (iter.hasNext) { result = f(result, iter.next) }
+    var result = iter.next()
+    while (iter.hasNext) { result = f(result, iter.next()) }
     result
   }
 
@@ -336,8 +335,8 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
    */
   final def reduceRightTo[B](f: A => B)(g: (A, B) => B): B = {
     val iter = toChain.reverseIterator
-    var result = f(iter.next)
-    while (iter.hasNext) { result = g(iter.next, result) }
+    var result = f(iter.next())
+    while (iter.hasNext) { result = g(iter.next(), result) }
     result
   }
 
@@ -391,7 +390,9 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
 
   final def reverseIterator: Iterator[A] = toChain.reverseIterator
 
-  /** Reverses this `NonEmptyChain` */
+  /**
+   * Reverses this `NonEmptyChain`
+   */
   final def reverse: NonEmptyChain[A] =
     create(toChain.reverse)
 
@@ -420,16 +421,14 @@ sealed abstract private[data] class NonEmptyChainInstances extends NonEmptyChain
     new AbstractNonEmptyInstances[Chain, NonEmptyChain] with Align[NonEmptyChain] {
       def extract[A](fa: NonEmptyChain[A]): A = fa.head
 
-      def nonEmptyTraverse[G[_]: Apply, A, B](fa: NonEmptyChain[A])(f: A => G[B]): G[NonEmptyChain[B]] =
-        Foldable[Chain]
-          .reduceRightToOption[A, G[Chain[B]]](fa.tail)(a => Apply[G].map(f(a))(Chain.one)) { (a, lglb) =>
-            Apply[G].map2Eval(f(a), lglb)(_ +: _)
+      def nonEmptyTraverse[G[_]: Apply, A, B](fa: NonEmptyChain[A])(f: A => G[B]): G[NonEmptyChain[B]] = {
+        def loop(head: A, tail: Chain[A]): Eval[G[NonEmptyChain[B]]] =
+          tail.uncons.fold(Eval.now(Apply[G].map(f(head))(NonEmptyChain(_)))) {
+            case (h, t) => Apply[G].map2Eval(f(head), Eval.defer(loop(h, t)))((b, acc) => b +: acc)
           }
-          .map {
-            case None        => Apply[G].map(f(fa.head))(NonEmptyChain.one)
-            case Some(gtail) => Apply[G].map2(f(fa.head), gtail)((h, t) => create(Chain.one(h) ++ t))
-          }
-          .value
+
+        loop(fa.head, fa.tail).value
+      }
 
       override def size[A](fa: NonEmptyChain[A]): Long = fa.length
 
@@ -442,7 +441,7 @@ sealed abstract private[data] class NonEmptyChainInstances extends NonEmptyChain
       def reduceLeftTo[A, B](fa: NonEmptyChain[A])(f: A => B)(g: (B, A) => B): B = fa.reduceLeftTo(f)(g)
 
       def reduceRightTo[A, B](fa: NonEmptyChain[A])(f: A => B)(g: (A, cats.Eval[B]) => cats.Eval[B]): cats.Eval[B] =
-        Eval.defer(fa.reduceRightTo(a => Eval.now(f(a))) { (a, b) =>
+        Eval.defer(fa.reduceRightTo(a => Eval.later(f(a))) { (a, b) =>
           Eval.defer(g(a, b))
         })
 
@@ -458,6 +457,8 @@ sealed abstract private[data] class NonEmptyChainInstances extends NonEmptyChain
 
       override def alignWith[A, B, C](fa: NonEmptyChain[A], fb: NonEmptyChain[B])(f: Ior[A, B] => C): NonEmptyChain[C] =
         alignInstance.alignWith(fa, fb)(f)
+
+      override def toNonEmptyList[A](fa: NonEmptyChain[A]): NonEmptyList[A] = fa.toNonEmptyList
     }
 
   implicit def catsDataOrderForNonEmptyChain[A: Order]: Order[NonEmptyChain[A]] =

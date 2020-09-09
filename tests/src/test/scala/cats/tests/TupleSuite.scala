@@ -13,13 +13,14 @@ import cats.{
   Traverse
 }
 import cats.data.NonEmptyList
-import cats.instances.all._
 import cats.kernel.{Eq, Order}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.syntax.show._
 import cats.tests.Helpers.CSemi
+import cats.syntax.eq._
+import org.scalacheck.Prop._
 
 class TupleSuite extends CatsSuite {
 
@@ -43,9 +44,11 @@ class TupleSuite extends CatsSuite {
   checkAll("Monad[(String, *)] serializable", SerializableTests.serializable(Monad[(String, *)]))
 
   checkAll("CommutativeFlatMap[(CSemi, *)]",
-           CommutativeFlatMapTests[(CSemi, *)].commutativeFlatMap[CSemi, CSemi, CSemi])
+           CommutativeFlatMapTests[(CSemi, *)].commutativeFlatMap[CSemi, CSemi, CSemi]
+  )
   checkAll("CommutativeFlatMap[(CSemi, *)] serializable",
-           SerializableTests.serializable(CommutativeFlatMap[(CSemi, *)]))
+           SerializableTests.serializable(CommutativeFlatMap[(CSemi, *)])
+  )
 
   checkAll("CommutativeMonad[(Int, *)]", CommutativeMonadTests[(Int, *)].commutativeMonad[Int, Int, Int])
   checkAll("CommutativeMonad[(Int, *)] serializable", SerializableTests.serializable(CommutativeMonad[(Int, *)]))
@@ -57,32 +60,32 @@ class TupleSuite extends CatsSuite {
     val cart = ContravariantSemigroupal[Eq].composeFunctor[(Int, *)]
     val eq = cart.product(Eq[(Int, String)], Eq[(Int, Int)])
     forAll { (a: (Int, (String, Int)), b: (Int, (String, Int))) =>
-      (a == b) should ===(eq.eqv(a, b))
+      assert((a == b) === (eq.eqv(a, b)))
     }
   }
 
   test("eqv") {
     val eq = Eq[(Int, Long)]
     forAll { (t: (Int, Long)) =>
-      eq.eqv(t, t) should ===(true)
+      assert(eq.eqv(t, t) === true)
     }
     forAll { (t: (Int, Long)) =>
-      eq.eqv(t, t._1 -> (t._2 + 1)) should ===(false)
+      assert(eq.eqv(t, t._1 -> (t._2 + 1)) === false)
     }
   }
 
   test("order") {
     forAll { (t: (Int, Int)) =>
       val u = t.swap
-      Order[(Int, Int)].compare(t, u) should ===(scala.math.Ordering[(Int, Int)].compare(t, u))
+      assert(Order[(Int, Int)].compare(t, u) === (scala.math.Ordering[(Int, Int)].compare(t, u)))
     }
   }
 
   test("show") {
-    (1, 2).show should ===("(1,2)")
+    assert((1, 2).show === "(1,2)")
 
     forAll { (fs: (String, String)) =>
-      fs.show should ===(fs.toString)
+      assert(fs.show === (fs.toString))
     }
 
     // Provide some "non-standard" Show instances to make sure the tuple2 is actually use the Show instances for the
@@ -98,6 +101,6 @@ class TupleSuite extends CatsSuite {
 
     val foo = Foo(1)
     val bar = Bar(2)
-    (foo, bar).show should ===(s"(${fooShow.show(foo)},${barShow.show(bar)})")
+    assert((foo, bar).show === (s"(${fooShow.show(foo)},${barShow.show(bar)})"))
   }
 }

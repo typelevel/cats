@@ -12,13 +12,14 @@ trait UnorderedFoldableTests[F[_]] extends Laws {
   def laws: UnorderedFoldableLaws[F]
 
   def unorderedFoldable[A: Arbitrary, B: Arbitrary](implicit
-                                                    ArbFA: Arbitrary[F[A]],
-                                                    ArbF: Arbitrary[A => B],
-                                                    CogenA: Cogen[A],
-                                                    A: CommutativeMonoid[A],
-                                                    B: CommutativeMonoid[B],
-                                                    EqFA: Eq[A],
-                                                    EqFB: Eq[B]): RuleSet =
+    ArbFA: Arbitrary[F[A]],
+    ArbF: Arbitrary[A => B],
+    CogenA: Cogen[A],
+    A: CommutativeMonoid[A],
+    B: CommutativeMonoid[B],
+    EqFA: Eq[A],
+    EqFB: Eq[B]
+  ): RuleSet =
     new DefaultRuleSet(
       name = "unorderedFoldable",
       parent = None,

@@ -1,6 +1,9 @@
 package cats
 package syntax
 
+import cats.data.Validated
+import cats.data.Validated.{Invalid, Valid}
+
 import scala.util.Try
 
 trait TrySyntax {
@@ -27,5 +30,24 @@ final class TryOps[A](private val self: Try[A]) extends AnyVal {
    */
   def liftTo[F[_]](implicit F: ApplicativeError[F, Throwable]): F[A] =
     F.fromTry(self)
+
+  /**
+   * transforms the try to a Validated[Throwable, A] instance
+   *
+   * {{{
+   * scala> import cats.syntax.try_._
+   * scala> import cats.data.Validated
+   * scala> import util.Try
+   *
+   * scala> val s: Try[Int] = Try(3)
+   * scala> s.toValidated
+   * res0: Validated[Throwable, Int] = Valid(3)
+   *
+   * scala> val f: Try[Int] = Try(throw new Throwable("boo"))
+   * scala> f.toValidated
+   * res0: Validated[Throwable, Int] = Invalid(java.lang.Throwable: boo)
+   * }}}
+   */
+  def toValidated: Validated[Throwable, A] = self.fold(Invalid(_), Valid(_))
 
 }

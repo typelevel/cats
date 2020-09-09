@@ -2,7 +2,7 @@ package cats.kernel
 package instances
 
 trait IntInstances {
-  implicit val catsKernelStdOrderForInt: Order[Int] with Hash[Int] with LowerBounded[Int] with UpperBounded[Int] =
+  implicit val catsKernelStdOrderForInt: Order[Int] with Hash[Int] with BoundedEnumerable[Int] =
     new IntOrder
   implicit val catsKernelStdGroupForInt: CommutativeGroup[Int] = new IntGroup
 }
@@ -14,12 +14,19 @@ class IntGroup extends CommutativeGroup[Int] {
   override def remove(x: Int, y: Int): Int = x - y
 }
 
+trait IntEnumerable extends BoundedEnumerable[Int] {
+  override def partialNext(a: Int): Option[Int] =
+    if (order.eqv(a, maxBound)) None else Some(a + 1)
+  override def partialPrevious(a: Int): Option[Int] =
+    if (order.eqv(a, minBound)) None else Some(a - 1)
+}
+
 trait IntBounded extends LowerBounded[Int] with UpperBounded[Int] {
   override def minBound: Int = Int.MinValue
   override def maxBound: Int = Int.MaxValue
 }
 
-class IntOrder extends Order[Int] with Hash[Int] with IntBounded { self =>
+class IntOrder extends Order[Int] with Hash[Int] with IntBounded with IntEnumerable { self =>
   def hash(x: Int): Int = x.hashCode()
   def compare(x: Int, y: Int): Int =
     if (x < y) -1 else if (x > y) 1 else 0
@@ -36,5 +43,5 @@ class IntOrder extends Order[Int] with Hash[Int] with IntBounded { self =>
   override def max(x: Int, y: Int): Int =
     java.lang.Math.max(x, y)
 
-  override val partialOrder: PartialOrder[Int] = self
+  override val order: Order[Int] = self
 }

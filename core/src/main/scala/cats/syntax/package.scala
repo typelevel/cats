@@ -6,7 +6,7 @@ package object syntax {
   object alternative extends AlternativeSyntax
   object applicative extends ApplicativeSyntax
   object applicativeError extends ApplicativeErrorSyntax
-  object apply extends ApplySyntax
+  object apply extends ApplySyntax with ApplySyntaxBinCompat0
   object arrow extends ArrowSyntax
   object arrowChoice extends ArrowChoiceSyntax
   object bifunctor extends BifunctorSyntax
@@ -49,6 +49,7 @@ package object syntax {
       with ParallelBitraverseSyntax
       with ParallelUnorderedTraverseSyntax
       with ParallelFoldMapASyntax
+      with ParallelTraverseFilterSyntax
   object partialOrder extends PartialOrderSyntax
   object profunctor extends ProfunctorSyntax
   object reducible extends ReducibleSyntax with ReducibleSyntaxBinCompat0
