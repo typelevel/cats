@@ -167,7 +167,8 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
 
   /**
    * Converts this NonEmptyLazyList to a `NonEmptyList`.
-   */ // TODO also add toNonEmptyLazyList to NonEmptyList?
+   */
+  // TODO also add toNonEmptyLazyList to NonEmptyList?
   final def toNonEmptyList: NonEmptyList[A] =
     NonEmptyList.fromListUnsafe(toLazyList.toList)
 
@@ -394,8 +395,8 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
       }
     }
 
-    m.map {
-      case (k, v) => (k, create(v.result()))
+    m.map { case (k, v) =>
+      (k, create(v.result()))
     }: TreeMap[B, NonEmptyLazyList[A]]
   }
 
