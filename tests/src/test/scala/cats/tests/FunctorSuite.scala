@@ -40,29 +40,40 @@ class FunctorSuite extends CatsSuite {
       val l = nel.toList
       val m = nem.toSortedMap
 
-      Functor[List].unzip(l.map(i => (i, i))) === ((l, l))
-      Functor[Option].unzip(o.map(i => (i, i))) === ((o, o))
-      Functor[Map[String, *]].unzip(m.map { case (k, v) => (k, (v, v)) }) === ((m, m))
+      assert(Functor[List].unzip(l.map(i => (i, i))) === ((l, l)))
+      assert(Functor[Option].unzip(o.map(i => (i, i))) === ((o, o)))
+      assert(Functor[Map[String, *]].unzip(m.map { case (k, v) => (k, (v, v)) }) === ((m, m)))
 
       //postfix test for Cats datatypes
-      nel.map(i => (i, i)).unzip === ((nel, nel))
-      nem.map(v => (v, v)).unzip === ((nem, nem))
+      assert(nel.map(i => (i, i)).unzip === ((nel, nel)))
+      assert(nem.map(v => (v, v)).unzip === ((nem, nem)))
     }
 
     //empty test for completeness
     val emptyL = List.empty[Int]
     val emptyM = Map.empty[String, Int]
 
-    Functor[List].unzip(List.empty[(Int, Int)]) === ((emptyL, emptyL))
-    Functor[Map[String, *]].unzip(Map.empty[String, (Int, Int)]) === ((emptyM, emptyM))
+    assert(Functor[List].unzip(List.empty[(Int, Int)]) === ((emptyL, emptyL)))
+    assert(Functor[Map[String, *]].unzip(Map.empty[String, (Int, Int)]) === ((emptyM, emptyM)))
   }
 
-  //TODO: rewrite test with munit
-//  test("unzip only typechecks for Tuple2") {
-//    "(NonEmptyList one 1).unzip" mustNot typeCheck
-//    "(NonEmptyList one ((1, 2))).unzip" must compile
-//    "(NonEmptyList one ((1, 2, 3))).unzip" mustNot typeCheck
-//  }
+  test("unzip only compiles for Tuple2") {
+    assertNoDiff(
+      compileErrors("(NonEmptyList one 1).unzip"),
+      """error: could not find implicit value for parameter ev: Int <~< (X, Y)
+        |(NonEmptyList one 1).unzip
+        |                     ^
+        |""".stripMargin
+    )
+    assertNoDiff(compileErrors("(NonEmptyList one ((1, 2))).unzip"), "")
+    assertNoDiff(
+      compileErrors("(NonEmptyList one ((1, 2, 3))).unzip"),
+      """error: could not find implicit value for parameter ev: (Int, Int, Int) <~< (X, Y)
+        |(NonEmptyList one ((1, 2, 3))).unzip
+        |                               ^
+        |""".stripMargin
+    )
+  }
 
   test("widen equals map(identity)") {
     forAll { (i: Int) =>
