@@ -1140,9 +1140,9 @@ sealed private[data] trait EitherTBifoldable[F[_]] extends Bifoldable[EitherT[F,
   def bifoldLeft[A, B, C](fab: EitherT[F, A, B], c: C)(f: (C, A) => C, g: (C, B) => C): C =
     F0.foldLeft(fab.value, c)((acc, axb) => Bifoldable[Either].bifoldLeft(axb, acc)(f, g))
 
-  def bifoldRight[A, B, C](fab: EitherT[F, A, B],
-                           c: Eval[C]
-  )(f: (A, Eval[C]) => Eval[C], g: (B, Eval[C]) => Eval[C]): Eval[C] =
+  def bifoldRight[A, B, C](fab: EitherT[F, A, B], c: Eval[C])(f: (A, Eval[C]) => Eval[C],
+                                                              g: (B, Eval[C]) => Eval[C]
+  ): Eval[C] =
     F0.foldRight(fab.value, c)((axb, acc) => Bifoldable[Either].bifoldRight(axb, acc)(f, g))
 }
 

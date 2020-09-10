@@ -278,8 +278,8 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
       }
     }
 
-    m.map {
-      case (k, v) => (k, NonEmptyVector.fromVectorUnsafe(v.result()))
+    m.map { case (k, v) =>
+      (k, NonEmptyVector.fromVectorUnsafe(v.result()))
     }: TreeMap[B, NonEmptyVector[A]]
   }
 

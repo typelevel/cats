@@ -20,8 +20,8 @@ trait MapInstances {
             val as = collection.mutable.ArrayBuffer[(K, A)]()
             as ++= fa
             wrapMutableIndexedSeq(as)
-          } {
-            case (k, a) => G.map(f(a))((k, _))
+          } { case (k, a) =>
+            G.map(f(a))((k, _))
           }) { chain => chain.foldLeft(Map.empty[K, B]) { case (m, (k, b)) => m.updated(k, b) } }
 
       override def map[A, B](fa: Map[K, A])(f: A => B): Map[K, B] =
@@ -71,12 +71,11 @@ trait MapInstances {
             val as = collection.mutable.ArrayBuffer[(K, A)]()
             as ++= fa
             wrapMutableIndexedSeq(as)
-          } {
-            case (k, a) =>
-              G.map(f(a)) { optB =>
-                if (optB.isDefined) Some((k, optB.get))
-                else None
-              }
+          } { case (k, a) =>
+            G.map(f(a)) { optB =>
+              if (optB.isDefined) Some((k, optB.get))
+              else None
+            }
           }) { chain => chain.foldLeft(Map.empty[K, B]) { case (m, (k, b)) => m.updated(k, b) } }
     }
 }
