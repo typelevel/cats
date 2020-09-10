@@ -58,11 +58,11 @@ class FunctorSuite extends CatsSuite {
   }
 
   test("_1F, _2F and swapF forms correct list for concrete list of tuples") {
-    forAll { nel: NonEmptyList[(Int, Int)] =>
-      val (nel1, nel2) = nel.unzip
-      assertEquals(nel._1F, nel1)
-      assertEquals(nel._2F, nel2)
-      assertEquals(nel.swapF, nel2.zipWith(nel1)(Tuple2.apply))
+    forAll { l: List[(Int, Int)] =>
+      val (l1, l2) = l.unzip
+      assertEquals(l._1F, l1)
+      assertEquals(l._2F, l2)
+      assertEquals(l.swapF, l2.zip(l1))
     }
   }
 
