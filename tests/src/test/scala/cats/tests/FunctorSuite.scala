@@ -57,22 +57,13 @@ class FunctorSuite extends CatsSuite {
     assert(Functor[Map[String, *]].unzip(Map.empty[String, (Int, Int)]) === ((emptyM, emptyM)))
   }
 
-  test("unzip only compiles for Tuple2") {
-    assertNoDiff(
-      compileErrors("(NonEmptyList one 1).unzip"),
-      """error: could not find implicit value for parameter ev: Int <~< (X, Y)
-        |(NonEmptyList one 1).unzip
-        |                     ^
-        |""".stripMargin
-    )
-    assertNoDiff(compileErrors("(NonEmptyList one ((1, 2))).unzip"), "")
-    assertNoDiff(
-      compileErrors("(NonEmptyList one ((1, 2, 3))).unzip"),
-      """error: could not find implicit value for parameter ev: (Int, Int, Int) <~< (X, Y)
-        |(NonEmptyList one ((1, 2, 3))).unzip
-        |                               ^
-        |""".stripMargin
-    )
+  test("_1F, _2F and swapF forms correct list for concrete list of tuples") {
+    forAll { nel: NonEmptyList[(Int, Int)] =>
+      val (nel1, nel2) = nel.unzip
+      assertEquals(nel._1F, nel1)
+      assertEquals(nel._2F, nel2)
+      assertEquals(nel.swapF, nel2.zipWith(nel1)(Tuple2.apply))
+    }
   }
 
   test("widen equals map(identity)") {
