@@ -164,3 +164,4 @@ trait ScalaVersionSpecificTraverseSuite { self: TraverseSuiteAdditional =>
 
 class TraverseLazyListSuite extends TraverseSuite[LazyList]("LazyList")
 class TraverseLazyListSuiteUnderlying extends TraverseSuite.Underlying[LazyList]("LazyList")
+class TraverseFilterLazyListSuite extends TraverseFilterSuite[LazyList]("LazyList")
