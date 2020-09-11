@@ -12,10 +12,11 @@ final class FunctorTuple2Ops[F[_], A, B](private val fab: F[(A, B)]) extends Any
    * Lifts `Tuple2#_1` to Functor
    *
    * {{{
-   * scala> import cats.Id
+   * scala> import cats.instances.option._
+   * scala> import cats.syntax.option._
    * scala> import cats.syntax.functor._
    *
-   * scala> ((1, 2): Id[(Int, Int)])._1F == 1
+   * scala> (1, 2).some._1F == Some(1)
    * res0: Boolean = true
    * }}}
    */
@@ -25,10 +26,11 @@ final class FunctorTuple2Ops[F[_], A, B](private val fab: F[(A, B)]) extends Any
    * Lifts `Tuple2#_2` to Functor
    *
    * {{{
-   * scala> import cats.Id
+   * scala> import cats.instances.option._
+   * scala> import cats.syntax.option._
    * scala> import cats.syntax.functor._
    *
-   * scala> ((1, 2): Id[(Int, Int)])._2F == 2
+   * scala> (1, 2).some._2F == Some(2)
    * res0: Boolean = true
    * }}}
    */
@@ -38,10 +40,11 @@ final class FunctorTuple2Ops[F[_], A, B](private val fab: F[(A, B)]) extends Any
    * Lifts `Tuple2#swap` to Functor
    *
    * {{{
-   * scala> import cats.Id
+   * scala> import cats.instances.option._
+   * scala> import cats.syntax.option._
    * scala> import cats.syntax.functor._
    *
-   * scala> ((1, 2): Id[(Int, Int)]).swapF == ((2, 1))
+   * scala> (1, 2).some.swapF == Some((2, 1))
    * res0: Boolean = true
    * }}}
    */
@@ -53,10 +56,11 @@ final class FunctorTuple2Ops[F[_], A, B](private val fab: F[(A, B)]) extends Any
    * NOTE: Check for effect duplication, possibly memoize before
    *
    * {{{
-   * scala> import cats.Id
+   * scala> import cats.instances.option._
+   * scala> import cats.syntax.option._
    * scala> import cats.syntax.functor._
    *
-   * scala> (5: Id[Int]).map(i => (i, i)).unzip == ((5, 5))
+   * scala> 5.some.map(i => (i, i)).unzip == ((Some(5), Some(5)))
    * res0: Boolean = true
    * }}}
    */
