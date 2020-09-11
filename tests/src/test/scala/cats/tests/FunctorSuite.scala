@@ -57,7 +57,7 @@ class FunctorSuite extends CatsSuite {
     assert(Functor[Map[String, *]].unzip(Map.empty[String, (Int, Int)]) === ((emptyM, emptyM)))
   }
 
-  test("_1F, _2F and swapF forms correct list for concrete list of tuples") {
+  test("_1F, _2F and swapF form correct lists for concrete list of tuples") {
     forAll { l: List[(Int, Int)] =>
       val (l1, l2) = l.unzip
       assertEquals(l._1F, l1)
