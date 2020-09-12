@@ -25,4 +25,5 @@ There are other libraries that aim to foster Functional Programming in the Scala
 * [Structures](https://github.com/mpilquist/Structures) A project very similar in
 nature to Cats, also derived from scalaz. The Structures and Cats
 projects have had a healthy relationship of sharing both ideas and code.
- 
+
+For a full list of Cats and Typelevel related projects and libraries, take a look at [The Typelevel Ecosystem](https://typelevel.org/cats/typelevelEcosystem.html)
