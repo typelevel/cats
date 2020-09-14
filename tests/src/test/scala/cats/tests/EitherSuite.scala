@@ -10,6 +10,7 @@ import cats.syntax.either._
 import scala.util.Try
 import cats.syntax.eq._
 import org.scalacheck.Prop._
+import cats.implicits.catsTraverseFilter
 
 class EitherSuite extends CatsSuite {
   implicit val iso: Isomorphisms[Either[Int, *]] = Isomorphisms.invariant[Either[Int, *]]
@@ -30,6 +31,9 @@ class EitherSuite extends CatsSuite {
 
   checkAll("Either[Int, Int] with Option", TraverseTests[Either[Int, *]].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[Either[Int, *]", SerializableTests.serializable(Traverse[Either[Int, *]]))
+
+  checkAll("Either[Int, Int]", TraverseFilterTests[Either[Int, *]].traverseFilter[Int, Int, Int])
+  checkAll("TraverseFilter[Either[Int, *]", SerializableTests.serializable(TraverseFilter[Either[Int, *]]))
 
   checkAll("Either[*, *]", BitraverseTests[Either].bitraverse[Option, Int, Int, Int, String, String, String])
   checkAll("Bitraverse[Either]", SerializableTests.serializable(Bitraverse[Either]))

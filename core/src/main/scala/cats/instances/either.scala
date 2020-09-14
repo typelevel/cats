@@ -216,4 +216,21 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
       def parallel: Either[E, *] ~> Validated[E, *] =
         new (Either[E, *] ~> Validated[E, *]) { def apply[A](a: Either[E, A]): Validated[E, A] = a.toValidated }
     }
+
+  implicit def catsTraverseFilter[E: Monoid]: TraverseFilter[Either[E, *]] = new TraverseFilter[Either[E, *]] {
+    def traverse: Traverse[Either[E, *]] = catsStdInstancesForEither
+
+    def traverseFilter[G[_], A, B](
+      fa: Either[E, A]
+    )(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Either[E, B]] = fa match {
+      case left @ Left(_) => G.pure(left.rightCast[B])
+      case Right(a)       => G.map(f(a))(_.fold(Monoid.empty[E].asLeft[B])(_.asRight))
+    }
+
+    override def filterA[G[_], A](fa: Either[E, A])(f: A => G[Boolean])(implicit G: Applicative[G]): G[Either[E, A]] =
+      fa match {
+        case left @ Left(_) => G.pure(left.rightCast[A])
+        case Right(a)       => G.map(f(a))(b => if (b) Right(a) else Left(Monoid.empty[E]))
+      }
+  }
 }

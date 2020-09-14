@@ -41,3 +41,7 @@ class TraverseFilterChainSuite extends TraverseFilterSuite[Chain]("chain")
 class TraverseFilterQueueSuite extends TraverseFilterSuite[Queue]("queue")
 
 class TraverseFilterStreamSuite extends TraverseFilterSuite[Stream]("stream")
+
+class TraverseFilterOptionSuite extends TraverseFilterSuite[Option]("option")
+
+class TraverseFilterEitherSuite extends TraverseFilterSuite[Either[String, *]]("either")
