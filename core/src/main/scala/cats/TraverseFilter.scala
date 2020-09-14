@@ -1,7 +1,10 @@
 package cats
 
+import cats.data.State
 import simulacrum.{noop, typeclass}
+
 import scala.annotation.implicitNotFound
+import scala.collection.immutable.{HashSet, TreeSet}
 
 /**
  * `TraverseFilter`, also known as `Witherable`, represents list-like structures
@@ -85,6 +88,32 @@ trait TraverseFilter[F[_]] extends FunctorFilter[F] {
 
   override def mapFilter[A, B](fa: F[A])(f: A => Option[B]): F[B] =
     traverseFilter[Id, A, B](fa)(f)
+
+  /**
+   * Removes duplicate elements from a list, keeping only the first occurrence.
+   */
+  def ordDistinct[A](fa: F[A])(implicit O: Order[A]): F[A] = {
+    implicit val ord: Ordering[A] = O.toOrdering
+
+    traverseFilter[State[TreeSet[A], *], A, A](fa)(a =>
+      State(alreadyIn => if (alreadyIn(a)) (alreadyIn, None) else (alreadyIn + a, Some(a)))
+    )
+      .run(TreeSet.empty)
+      .value
+      ._2
+  }
+
+  /**
+   * Removes duplicate elements from a list, keeping only the first occurrence.
+   * This is usually faster than ordDistinct, especially for things that have a slow comparion (like String).
+   */
+  def hashDistinct[A](fa: F[A])(implicit H: Hash[A]): F[A] =
+    traverseFilter[State[HashSet[A], *], A, A](fa)(a =>
+      State(alreadyIn => if (alreadyIn(a)) (alreadyIn, None) else (alreadyIn + a, Some(a)))
+    )
+      .run(HashSet.empty)
+      .value
+      ._2
 }
 
 object TraverseFilter {
@@ -119,6 +148,8 @@ object TraverseFilter {
       typeClassInstance.filterA[G, A](self)(f)(G)
     def traverseEither[G[_], B, C](f: A => G[Either[C, B]])(g: (A, C) => G[Unit])(implicit G: Monad[G]): G[F[B]] =
       typeClassInstance.traverseEither[G, A, B, C](self)(f)(g)(G)
+    def ordDistinct(implicit O: Order[A]): F[A] = typeClassInstance.ordDistinct(self)
+    def hashDistinct(implicit H: Hash[A]): F[A] = typeClassInstance.hashDistinct(self)
   }
   trait AllOps[F[_], A] extends Ops[F, A] with FunctorFilter.AllOps[F, A] {
     type TypeClassType <: TraverseFilter[F]

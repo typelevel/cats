@@ -183,12 +183,11 @@ sealed class NonEmptyMapOps[K, A](val value: NonEmptyMap[K, A]) {
    * with every other value using the given function `g`.
    */
   def reduceRightTo[B](f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B] =
-    Always((head, tail)).flatMap {
-      case ((_, a), ga) =>
-        Foldable[SortedMap[K, *]].reduceRightToOption(ga)(f)(g).flatMap {
-          case Some(b) => g(a, Now(b))
-          case None    => Later(f(a))
-        }
+    Always((head, tail)).flatMap { case ((_, a), ga) =>
+      Foldable[SortedMap[K, *]].reduceRightToOption(ga)(f)(g).flatMap {
+        case Some(b) => g(a, Now(b))
+        case None    => Later(f(a))
+      }
     }
 
   /**

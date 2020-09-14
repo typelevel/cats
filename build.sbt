@@ -25,8 +25,7 @@ val munitVersion = "0.7.12"
 val disciplineVersion = "1.0.3"
 
 val disciplineScalatestVersion = "2.0.1"
-
-val disciplineMunitVersion = "0.2.4"
+val disciplineMunitVersion = "0.3.0"
 
 val kindProjectorVersion = "0.11.0"
 
@@ -184,6 +183,7 @@ lazy val docSettings = Seq(
   micrositeDocumentationUrl := "/cats/api/cats/index.html",
   micrositeDocumentationLabelDescription := "API Documentation",
   micrositeGithubOwner := "typelevel",
+  micrositeExtraMdFilesOutput := resourceManaged.value / "main" / "jekyll",
   micrositeExtraMdFiles := Map(
     file("CONTRIBUTING.md") -> ExtraMdFileConfig(
       "contributing.md",
@@ -208,13 +208,13 @@ lazy val docSettings = Seq(
     "gray-lighter" -> "#F4F3F4",
     "white-color" -> "#FFFFFF"
   ),
-  micrositeCompilingDocsTool := WithTut,
+  micrositeCompilingDocsTool := WithMdoc,
   autoAPIMappings := true,
   unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(kernel.jvm, core.jvm, free.jvm),
   docsMappingsAPIDir := "api",
   addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), docsMappingsAPIDir),
   ghpagesNoJekyll := false,
-  fork in tut := true,
+  fork in mdoc := true,
   fork in (ScalaUnidoc, unidoc) := true,
   scalacOptions in (ScalaUnidoc, unidoc) ++= Seq(
     "-Xfatal-warnings",
@@ -228,10 +228,14 @@ lazy val docSettings = Seq(
           Seq("-Yno-adapted-args")
         else
           Nil),
-  scalacOptions in Tut ~= (_.filterNot(Set("-Ywarn-unused-import", "-Ywarn-unused:imports", "-Ywarn-dead-code"))),
+  scalacOptions ~= (_.filterNot(
+    Set("-Ywarn-unused-import", "-Ywarn-unused:imports", "-Ywarn-dead-code", "-Xfatal-warnings")
+  )),
   git.remoteRepo := "git@github.com:typelevel/cats.git",
   includeFilter in makeSite := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.yml" | "*.md" | "*.svg",
-  includeFilter in Jekyll := (includeFilter in makeSite).value
+  includeFilter in Jekyll := (includeFilter in makeSite).value,
+  mdocIn := baseDirectory.in(LocalRootProject).value / "docs" / "src" / "main" / "mdoc",
+  mdocExtraArguments := Seq("--no-link-hygiene")
 )
 
 def mimaPrevious(moduleName: String, scalaVer: String, ver: String, includeCats1: Boolean = true): List[ModuleID] = {
@@ -399,6 +403,8 @@ def mimaSettings(moduleName: String, includeCats1: Boolean = true) =
   )
 
 lazy val docs = project
+  .in(file("cats-docs"))
+  .enablePlugins(MdocPlugin)
   .enablePlugins(MicrositesPlugin)
   .enablePlugins(ScalaUnidocPlugin)
   .settings(moduleName := "cats-docs")

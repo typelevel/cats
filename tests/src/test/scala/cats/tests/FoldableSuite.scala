@@ -92,9 +92,8 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit
   test("Foldable#partitionEitherM retains size") {
     forAll { (fi: F[Int], f: Int => Either[String, String]) =>
       val vector = Foldable[F].toList(fi).toVector
-      val result = Foldable[Vector].partitionEitherM(vector)(f.andThen(Option.apply)).map {
-        case (lefts, rights) =>
-          (lefts <+> rights).size
+      val result = Foldable[Vector].partitionEitherM(vector)(f.andThen(Option.apply)).map { case (lefts, rights) =>
+        (lefts <+> rights).size
       }
       assert(result === (Option(vector.size)))
     }
@@ -607,7 +606,7 @@ class FoldableOneAndSuite extends FoldableSuite[OneAnd[List, *]]("oneAnd") {
 
 class FoldableComposedSuite extends FoldableSuite[Nested[List, Option, *]]("nested") {
   def iterator[T](nested: Nested[List, Option, T]) =
-    nested.value.collect {
-      case Some(t) => t
+    nested.value.collect { case Some(t) =>
+      t
     }.iterator
 }

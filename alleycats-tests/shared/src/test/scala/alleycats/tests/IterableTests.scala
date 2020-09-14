@@ -9,8 +9,8 @@ class IterableTests extends AlleycatsSuite {
 
   test("foldLeft sum == sum") {
     val it = Iterable(1, 2, 3)
-    assertEquals(Foldable[Iterable].foldLeft(it, 0) {
-                   case (b, a) => a + b
+    assertEquals(Foldable[Iterable].foldLeft(it, 0) { case (b, a) =>
+                   a + b
                  },
                  it.sum
     )
