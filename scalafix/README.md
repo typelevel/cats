@@ -17,7 +17,7 @@ ThisBuild / scalacOptions += "-P:semanticdb:synthetics:on"
 Then run Scalafix:
 
 ```sh
-sbt scalafix github:typelevel/cats/Cats_v2_2_0
+sbt scalafixAll github:typelevel/cats/Cats_v2_2_0
 ```
 
 ### Available rules
@@ -28,7 +28,7 @@ sbt scalafix github:typelevel/cats/Cats_v2_2_0
 ## Migration to Cats v1.0.0
 
 ```sh
-sbt scalafix github:typelevel/cats/Cats_v1_0_0
+sbt scalafixAll github:typelevel/cats/Cats_v1_0_0
 ```
 
 ### Available rules
