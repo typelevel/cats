@@ -208,7 +208,7 @@ run `sbt docs/makeMicrosite`
 
 2. In a shell, navigate to the generated site directory in `cats-docs/target/site`
 
-3. Start jekyll with `jekyll serve`
+3. Start jekyll with `jekyll serve -b /cats`
 
 4. Navigate to http://localhost:4000/cats/ in your browser
 
