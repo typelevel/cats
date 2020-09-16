@@ -1,4 +1,3 @@
-
 ### ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) Community Announcements ![#f03c15](https://placehold.it/15/f03c15/000000?text=+)
 * **Sept 3 2020** [Cats 2.2.0 is released](https://github.com/typelevel/cats/releases/tag/v2.2.0)
 * **Dec 18 2019** [Cats 2.1.0 is released](https://github.com/typelevel/cats/releases/tag/v2.1.0)
@@ -33,15 +32,15 @@ For more detail about Cats' motivations, go [here](http://typelevel.org/cats/mot
 
 This project exists thanks to [all the people who contribute](https://github.com/typelevel/cats/graphs/contributors). We welcome contributions to Cats and would love for you to help build
 Cats. See our [contributor guide](https://typelevel.org/cats/contributing.html) for more
-information about how you can get involved as a developer. If you are looking for something to start with, [here is a beginner friendly list](https://github.com/typelevel/cats/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22). 
+information about how you can get involved as a developer. If you are looking for something to start with, [here is a beginner friendly list](https://github.com/typelevel/cats/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22).
 
 ### Financial Contributors
 
-[Become a financial contributor](https://opencollective.com/typelevel) and help us sustain our community. Donations directly support office hour for maintainers, better documentation and strategic initiatives. 
+[Become a financial contributor](https://opencollective.com/typelevel) and help us sustain our community. Donations directly support office hour for maintainers, better documentation and strategic initiatives.
 
 
 
-### Gold Sponsors 
+### Gold Sponsors
 
 Gold Sponsors are those who have pledged $5,000 to $10,000.
 
@@ -116,14 +115,14 @@ functionality, you can pick-and-choose from amongst these modules
  * `cats-laws`: Laws for testing type class instances.
  * `cats-free`: Free structures such as the free monad, and supporting type classes.
  * `cats-testkit`: lib for writing tests for type class instances using laws.
- * `alleycats-core`: Cats instances and classes which are not lawful. 
- 
- There are several other Cats modules that are in separate repos so that they can 
- maintain independent release cycles. 
- 
- * [`cats-effect`](https://github.com/typelevel/cats-effect): standard `IO` type together with `Sync`, `Async` and `Effect` type classes 
+ * `alleycats-core`: Cats instances and classes which are not lawful.
+
+ There are several other Cats modules that are in separate repos so that they can
+ maintain independent release cycles.
+
+ * [`cats-effect`](https://github.com/typelevel/cats-effect): standard `IO` type together with `Sync`, `Async` and `Effect` type classes
  * [`cats-mtl`](https://github.com/typelevel/cats-mtl): transformer typeclasses for Cats' Monads, Applicatives and Functors.
- * [`mouse`](https://github.com/typelevel/mouse): a small companion to Cats that provides convenient syntax (aka extension methods) 
+ * [`mouse`](https://github.com/typelevel/mouse): a small companion to Cats that provides convenient syntax (aka extension methods)
  * [`kittens`](https://github.com/typelevel/kittens): automatic type class instance derivation for Cats and generic utility functions
  * [`cats-tagless`](https://github.com/typelevel/cats-tagless): Utilities for tagless final encoded algebras
  * [`cats-collections`](https://github.com/typelevel/cats-collections): Data structures which facilitate pure functional programming
@@ -143,20 +142,20 @@ Links:
 5. Glossary: [typelevel.org/cats/nomenclature.html](https://typelevel.org/cats/nomenclature.html)
 6. Resources for Learners: [typelevel.org/cats/resources_for_learners.html](https://typelevel.org/cats/resources_for_learners.html)
 7. FAQ: [typelevel.org/cats/faq.html](https://typelevel.org/cats/faq.html)
-8. The Typelevel Ecosystem: [typelevel.org/cats/typelevelEcosystem.html](https://typelevel.org/cats/typelevelEcosystem.html)
+8. The Typelevel Ecosystem: [typelevel.org/cats/colophon#typelevel-ecosystem](https://typelevel.org/cats/colophon#typelevel-ecosystem)
 
 ### Community
 
 Discussion around Cats is currently happening on Github issue and PR pages
-as well as in two Gitter channels: 
+as well as in two Gitter channels:
 
-[Gitter channel cats](https://gitter.im/typelevel/cats) is for general user 
-questions and discussions, and 
+[Gitter channel cats](https://gitter.im/typelevel/cats) is for general user
+questions and discussions, and
 
 [Gitter channel cats-dev](https://gitter.im/typelevel/cats-dev)
-is dedicated for Cats development related discussions. For people who wants to 
-follow closely and/or to participate in the decisions in Cats development, 
-this is the room to join. 
+is dedicated for Cats development related discussions. For people who wants to
+follow closely and/or to participate in the decisions in Cats development,
+this is the room to join.
 
 People are expected to follow the
 [Scala Code of Conduct](https://www.scala-lang.org/conduct/) when
@@ -175,39 +174,39 @@ immediately so that we can support you.
 
 ### Binary compatibility and versioning
 
-After `1.0.0` release, we [decided](https://github.com/typelevel/cats/issues/1233) 
+After `1.0.0` release, we [decided](https://github.com/typelevel/cats/issues/1233)
 to use *MAJOR.MINOR.PATCH* [Semantic Versioning 2.0.0](http://semver.org/)
-going forward, which is different from the *EPOCH.MAJOR.MINOR* scheme common among 
-Java and Scala libraries (including the Scala lang). 
+going forward, which is different from the *EPOCH.MAJOR.MINOR* scheme common among
+Java and Scala libraries (including the Scala lang).
 
 Cats strives to provide a solid and stable foundation for an ecosystem of
-FP libraries. Thus, we treat backward binary compatibility maintenance with a high priority. 
+FP libraries. Thus, we treat backward binary compatibility maintenance with a high priority.
 In semantic versioning, backward breaking change is **ONLY** allowed between *MAJOR* versions.
 We will maintain backward binary compatibility between *PATCH* AND *MINOR* versions.
-For example, when we release Cats `1.1.0`, it will be backward binary compatible 
-with the previous `1.0.x` versions. I.E. the new JAR will be a drop-in replacement for 
+For example, when we release Cats `1.1.0`, it will be backward binary compatible
+with the previous `1.0.x` versions. I.E. the new JAR will be a drop-in replacement for
 the old one. This is critical when your application has a diamond
-dependency on Cats - depending on two or more libraries that all depend on Cats. 
-If one library upgrades to the new `1.1.0` Cats before the other one does, your 
+dependency on Cats - depending on two or more libraries that all depend on Cats.
+If one library upgrades to the new `1.1.0` Cats before the other one does, your
 application still runs thanks to this backward binary compatibility.
 
-Also worth noting is that according to semantic versioning, 
-*MINOR* version Y (x.Y.z | x > 0) MUST be incremented 
-if new, backwards compatible functionality is introduced to the public API. 
+Also worth noting is that according to semantic versioning,
+*MINOR* version Y (x.Y.z | x > 0) MUST be incremented
+if new, backwards compatible functionality is introduced to the public API.
 It MUST be incremented if any public API functionality is marked as deprecated.
 
 Any binary breaking changes will require a *MAJOR* version bump, which we will be very
-cautious about. We will also consider using `organization` and package name for major 
-versioning in the future. But that decision is yet to be made. 
+cautious about. We will also consider using `organization` and package name for major
+versioning in the future. But that decision is yet to be made.
 
 ### Adopters
 
-Here's a (non-exhaustive) list of companies that use Cats in production. Don't see yours? [You can add it in a PR!](https://github.com/typelevel/cats/edit/master/README.md). And if you can, consider [supporting us](https://donorbox.org/typelevel-sustainability-program-2019?default_interval=m). 
+Here's a (non-exhaustive) list of companies that use Cats in production. Don't see yours? [You can add it in a PR!](https://github.com/typelevel/cats/edit/master/README.md). And if you can, consider [supporting us](https://donorbox.org/typelevel-sustainability-program-2019?default_interval=m).
 
 - [Abacus Protocol](https://abacusprotocol.com)
 - [Anduin Transactions](https://anduintransact.com)
 - [Apple Inc. (FEAR team)](https://news.ycombinator.com/item?id=16969118)
-- [AutoScout24](https://www.autoscout24.com) 
+- [AutoScout24](https://www.autoscout24.com)
 - [Avast](https://avast.com)
 - [BabylonHealth](https://www.babylonhealth.com/)
 - [Banno Group inside of Jack Henry & Associates](https://banno.com/)
