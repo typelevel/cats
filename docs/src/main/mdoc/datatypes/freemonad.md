@@ -133,6 +133,8 @@ def update[T](key: String, f: T => T): KVStore[Unit] =
   } yield ()
 ```
 
+If the words in the grammar do not take type parameters, a shorthand is available after importing `cats.free.implicits._`: one can just write `Delete.free("key")` without defining `def delete(key: String)` first.
+
 #### 3. Build a program
 
 Now that we can construct `KVStore[_]` values we can use our DSL to

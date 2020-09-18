@@ -10,45 +10,9 @@ import sbt._
  * @author Miles Sabin
  * @author Kevin Wright
  */
-object KernelBoiler {
-  import scala.StringContext._
-
-  implicit class BlockHelper(private val sc: StringContext) extends AnyVal {
-    def block(args: Any*): String = {
-      val interpolated = sc.standardInterpolator(treatEscapes, args)
-      val rawLines = interpolated.split('\n')
-      val trimmedLines = rawLines.map(_.dropWhile(_.isWhitespace))
-      trimmedLines.mkString("\n")
-    }
-  }
-
+object KernelBoiler extends BoilerPlateHelper {
   val templates: Seq[Template] = Seq(GenTupleInstances)
-
   val header = "// auto-generated boilerplate"
-  val maxArity = 22
-
-  /**
-   * Return a sequence of the generated files.
-   *
-   * As a side-effect, it actually generates them...
-   */
-  def gen(dir: File): Seq[File] =
-    templates.map { template =>
-      val tgtFile = template.filename(dir)
-      IO.write(tgtFile, template.body)
-      tgtFile
-    }
-
-  class TemplateVals(val arity: Int) {
-    val synTypes = (0 until arity).map(n => s"A$n")
-    val synVals = (0 until arity).map(n => s"a$n")
-    val `A..N` = synTypes.mkString(", ")
-    val `a..n` = synVals.mkString(", ")
-    val `_.._` = Seq.fill(arity)("_").mkString(", ")
-    val `(A..N)` = if (arity == 1) "Tuple1[A0]" else synTypes.mkString("(", ", ", ")")
-    val `(_.._)` = if (arity == 1) "Tuple1[_]" else Seq.fill(arity)("_").mkString("(", ", ", ")")
-    val `(a..n)` = if (arity == 1) "Tuple1(a)" else synVals.mkString("(", ", ", ")")
-  }
 
   /**
    * Blocks in the templates below use a custom interpolator, combined with post-processing to
@@ -63,12 +27,10 @@ object KernelBoiler {
    * The block otherwise behaves as a standard interpolated string with regards to variable
    * substitution.
    */
-  trait Template {
-    def filename(root: File): File
+  trait KernelTemplate extends Template {
     def preBody: String
     def instances: Seq[InstanceDef]
-    def range: IndexedSeq[Int] = 1 to maxArity
-    def body: String = {
+    override def body: String = {
       val headerLines = header.split('\n')
       val tvs = range.map(n => new TemplateVals(n))
       (headerLines ++ Seq(preBody) ++ instances.flatMap(_.body(tvs))).mkString("\n")
@@ -122,7 +84,7 @@ object KernelBoiler {
     def content: String
   }
 
-  object GenTupleInstances extends Template {
+  object GenTupleInstances extends KernelTemplate {
     override def range: IndexedSeq[Int] = 1 to maxArity
 
     def filename(root: File): File = root / "cats" / "kernel" / "instances" / "TupleInstances.scala"

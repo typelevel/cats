@@ -9,18 +9,7 @@ import sbt._
  * @author Miles Sabin
  * @author Kevin Wright
  */
-object Boilerplate {
-  import scala.StringContext._
-
-  implicit final class BlockHelper(private val sc: StringContext) extends AnyVal {
-    def block(args: Any*): String = {
-      val interpolated = sc.standardInterpolator(treatEscapes, args)
-      val rawLines = interpolated.split('\n')
-      val trimmedLines = rawLines.map(_.dropWhile(_.isWhitespace))
-      trimmedLines.mkString("\n")
-    }
-  }
-
+object Boilerplate extends BoilerPlateHelper {
   val templates: Seq[Template] = Seq(
     GenSemigroupalBuilders,
     GenSemigroupalArityFunctions,
@@ -32,56 +21,6 @@ object Boilerplate {
   )
 
   val header = "// auto-generated boilerplate by /project/Boilerplate.scala" // TODO: put something meaningful here?
-
-  /**
-   * Returns a seq of the generated files.  As a side-effect, it actually generates them...
-   */
-  def gen(dir: File) =
-    for (t <- templates) yield {
-      val tgtFile = t.filename(dir)
-      IO.write(tgtFile, t.body)
-      tgtFile
-    }
-
-  val maxArity = 22
-
-  final class TemplateVals(val arity: Int) {
-    val synTypes = (0 until arity).map(n => s"A$n")
-    val synVals = (0 until arity).map(n => s"a$n")
-    val synTypedVals = (synVals.zip(synTypes)).map { case (v, t) => v + ":" + t }
-    val `A..N` = synTypes.mkString(", ")
-    val `a..n` = synVals.mkString(", ")
-    val `_.._` = Seq.fill(arity)("_").mkString(", ")
-    val `(A..N)` = if (arity == 1) "Tuple1[A]" else synTypes.mkString("(", ", ", ")")
-    val `(_.._)` = if (arity == 1) "Tuple1[_]" else Seq.fill(arity)("_").mkString("(", ", ", ")")
-    val `(a..n)` = if (arity == 1) "Tuple1(a)" else synVals.mkString("(", ", ", ")")
-    val `a:A..n:N` = synTypedVals.mkString(", ")
-  }
-
-  trait Template {
-    def filename(root: File): File
-    def content(tv: TemplateVals): String
-    def range = 1 to maxArity
-    def body: String = {
-      def expandInstances(contents: IndexedSeq[Array[String]], acc: Array[String] = Array.empty): Array[String] =
-        if (!contents.exists(_.exists(_.startsWith("-"))))
-          acc.map(_.tail)
-        else {
-          val pre = contents.head.takeWhile(_.startsWith("|"))
-          val instances = contents.flatMap(_.dropWhile(_.startsWith("|")).takeWhile(_.startsWith("-")))
-          val next = contents.map(_.dropWhile(_.startsWith("|")).dropWhile(_.startsWith("-")))
-          expandInstances(next, acc ++ pre ++ instances)
-        }
-
-      val rawContents = range.map { n =>
-        content(new TemplateVals(n)).split('\n').filterNot(_.isEmpty)
-      }
-      val headerLines = header.split('\n')
-      val instances = expandInstances(rawContents)
-      val footerLines = rawContents.head.reverse.takeWhile(_.startsWith("|")).map(_.tail).reverse
-      (headerLines ++ instances ++ footerLines).mkString("\n")
-    }
-  }
 
   /*
     Blocks in the templates below use a custom interpolator, combined with post-processing to produce the body
@@ -98,7 +37,7 @@ object Boilerplate {
     The block otherwise behaves as a standard interpolated string with regards to variable substitution.
    */
 
-  object GenSemigroupalBuilders extends Template {
+  object GenSemigroupalBuilders extends DefaultTemplate {
     def filename(root: File) = root / "cats" / "syntax" / "SemigroupalBuilder.scala"
 
     def content(tv: TemplateVals) = {
@@ -168,7 +107,7 @@ object Boilerplate {
     }
   }
 
-  object GenApplyArityFunctions extends Template {
+  object GenApplyArityFunctions extends DefaultTemplate {
     def filename(root: File) = root / "cats" / "ApplyArityFunctions.scala"
     override def range = 3 to maxArity
     def content(tv: TemplateVals) = {
@@ -247,7 +186,7 @@ object Boilerplate {
     val `(a..n)` = (0 until (arity - 2)).foldRight(s"(a${arity - 2}, a${arity - 1})")((i, acc) => s"(a$i, $acc)")
   }
 
-  object GenParallelArityFunctions extends Template {
+  object GenParallelArityFunctions extends DefaultTemplate {
     def filename(root: File) = root / "cats" / "ParallelArityFunctions.scala"
     override def range = 2 to maxArity
     def content(tv: TemplateVals) = {
@@ -280,7 +219,7 @@ object Boilerplate {
     }
   }
 
-  object GenParallelArityFunctions2 extends Template {
+  object GenParallelArityFunctions2 extends DefaultTemplate {
     def filename(root: File) = root / "cats" / "ParallelArityFunctions2.scala"
     override def range = 2 to maxArity
     def content(tv: TemplateVals) = {
@@ -313,7 +252,7 @@ object Boilerplate {
     }
   }
 
-  object GenSemigroupalArityFunctions extends Template {
+  object GenSemigroupalArityFunctions extends DefaultTemplate {
     def filename(root: File) = root / "cats" / "SemigroupalArityFunctions.scala"
     override def range = 2 to maxArity
     def content(tv: TemplateVals) = {
@@ -378,7 +317,7 @@ object Boilerplate {
     }
   }
 
-  object GenTupleParallelSyntax extends Template {
+  object GenTupleParallelSyntax extends DefaultTemplate {
     def filename(root: File) = root / "cats" / "syntax" / "TupleParallelSyntax.scala"
 
     def content(tv: TemplateVals) = {
@@ -429,7 +368,7 @@ object Boilerplate {
     }
   }
 
-  object GenTupleSemigroupalSyntax extends Template {
+  object GenTupleSemigroupalSyntax extends DefaultTemplate {
     def filename(root: File) = root / "cats" / "syntax" / "TupleSemigroupalSyntax.scala"
 
     def content(tv: TemplateVals) = {
@@ -502,5 +441,4 @@ object Boilerplate {
       """
     }
   }
-
 }

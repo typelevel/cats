@@ -6,6 +6,7 @@ import cats.data.EitherK
 import cats.instances.all._
 import cats.kernel.Eq
 import cats.syntax.eq._
+import cats.free.implicits._
 import cats.laws.discipline.{DeferTests, FoldableTests, MonadTests, SerializableTests, TraverseTests}
 import cats.laws.discipline.arbitrary.catsLawsArbitraryForFn0
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
@@ -116,6 +117,11 @@ class FreeSuite extends CatsSuite {
 
   test("toFreeT is stack-safe") {
     assert(FTestApi.a(0).toFreeT[Id].foldMap(FTestApi.runner) === FTestApi.a(0).foldMap(FTestApi.runner))
+  }
+
+  test("shorter syntax for Free.liftF") {
+    val t: FTestApi.FTest[Int] = TB.free(7)
+    // No assertion necessary. If the expression typechecks, the test succeeds.
   }
 
   test(".runTailRec") {
