@@ -321,7 +321,7 @@ class NonEmptyVectorSuite extends NonEmptyCollectionSuite[Vector, NonEmptyVector
 
   test("NonEmptyVector#toString produces correct output") {
     forAll { (nonEmptyVector: NonEmptyVector[Int]) =>
-      assert(nonEmptyVector.toString === (s"NonEmpty${nonEmptyVector.toVector.toString}"))
+      assert(nonEmptyVector.toString === s"NonEmpty${nonEmptyVector.toVector.toString}")
     }
     assert(NonEmptyVector(1, Vector.empty).toString === "NonEmptyVector(1)")
     assert(NonEmptyVector(1, Vector.empty).toVector.toString === "Vector(1)")
