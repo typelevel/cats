@@ -63,7 +63,7 @@ class NonEmptyStreamSuite extends CatsSuite {
 
   test("Show is formatted correctly") {
     val oneAnd = NonEmptyStream("Test")
-    assert(oneAnd.show === (s"OneAnd(Test, Stream())"))
+    assert(oneAnd.show === s"OneAnd(Test, Stream())")
   }
 
   test("Creating OneAnd + unwrap is identity") {

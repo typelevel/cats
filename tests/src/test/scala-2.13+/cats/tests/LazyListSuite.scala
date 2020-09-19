@@ -51,8 +51,8 @@ class LazyListSuite extends CatsSuite {
   checkAll("ZipLazyList[Int]", CommutativeApplyTests[ZipLazyList].apply[Int, Int, Int])
 
   test("show") {
-    assert(LazyList(1, 2, 3).show === (s"LazyList(1, ?)"))
-    assert(LazyList.empty[Int].show === (s"LazyList()"))
+    assert(LazyList(1, 2, 3).show === s"LazyList(1, ?)")
+    assert(LazyList.empty[Int].show === s"LazyList()")
   }
 
   test("Avoid all evaluation of LazyList#foldRightDefer") {
