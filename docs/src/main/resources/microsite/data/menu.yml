@@ -179,6 +179,10 @@ options:
     url: datatypes/writer.html
     menu_type: data
 
+  - title: WriterT
+    url: datatypes/writert.html
+    menu_type: data
+
   - title: Nested
     url: datatypes/nested.html
     menu_type: data
