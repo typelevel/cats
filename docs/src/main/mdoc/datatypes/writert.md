@@ -10,10 +10,72 @@ scaladoc: "#cats.data.WriterT"
 `WriterT[F[_], L, V]` is a light wrapper on an `F[(L,
 V)]`. Speaking technically, it is a monad transformer for `Writer`,
 but you don't need to know what that means for it to be
-useful. `WriterT` can be more convenient to work with than using
-`F[Writer[L, V]]` directly because it exposes operations that allow
-you to work directly with the values of the inner `Writer` (`L` and
-`V`).
+useful. 
+
+## Benefits and Drawbacks
+
+`WriterT` can be more convenient to work with than using
+`F[Writer[L, V]]` directly, this because it exposes operations that allow
+you to work with the values of the inner `Writer` (`L` and
+`V`) abstracting both the `F` and `Writer`.
+
+For example, `map` allow you to transform the inner `V` value, getting
+back a `WriterT` that wraps around it.
+
+```scala mdoc:nest
+import cats.data.{WriterT, Writer}
+
+WriterT[Option, String, Int](Some(("value", 10))).map(x => x * x)
+```
+
+Plus, when composing multiple `WriterT` computations, those will be
+composed following the same behaviour of a `Writer` and the generic `F`.
+Let's see two example with `Option` and `Either`: if one of the
+computations has a `None` or a `Left`, the whole computation will
+return a `None` or a `Left` since the way the two types compose
+typically behaves that way
+
+```scala mdoc
+
+val optionWriterT1 : WriterT[Option, String, Int] = WriterT(Some(("writerT value 1", 123)))
+val optionWriterT2 : WriterT[Option, String, Int] = WriterT(Some(("writerT value 1", 123)))
+val optionWriterT3 : WriterT[Option, String, Int] = WriterT.valueT(None)
+
+// This returns a Some since both are Some
+for {
+    v1 <- optionWriterT1
+    v2 <- optionWriterT2
+} yield v1 + v2
+
+// This returns a None since one is a None
+for {
+    v1 <- optionWriterT1
+    v2 <- optionWriterT2
+    v3 <- optionWriterT3
+} yield v1 + v2 + v3
+
+val eitherWriterT1 : WriterT[Either[String, *], String, Int] = WriterT(Right(("writerT value 1", 123)))
+val eitherWriterT2 : WriterT[Either[String, *], String, Int] = WriterT(Right(("writerT value 1", 123)))
+val eitherWriterT3 : WriterT[Either[String, *], String, Int] = WriterT.valueT(Left("error!!!"))
+
+// This returns a Right since both are Right
+for {
+    v1 <- eitherWriterT1
+    v2 <- eitherWriterT2
+} yield v1 + v2
+
+// This returns a Left since one is a Left
+for {
+    v1 <- eitherWriterT1
+    v2 <- eitherWriterT2
+    v3 <- eitherWriterT3
+} yield v1 + v2 + v3
+
+
+```
+
+
+TODO: talk about performances
 
 ## Construct a WriterT
 
@@ -25,9 +87,7 @@ example.
 :  This is the constructor of the datatype itself. It just builds the
    type starting from the full wrapped value.
 
-```scala mdoc
-
-  import cats.data.{WriterT, Writer}
+```scala mdoc:nest
 
 // Here we use Option as our F[_]
   val value : Option[(String, Int)] = Some(("value", 123))
