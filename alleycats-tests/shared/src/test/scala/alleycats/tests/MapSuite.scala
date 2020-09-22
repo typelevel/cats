@@ -2,8 +2,10 @@ package alleycats.tests
 
 import cats.Traverse
 import cats.instances.all._
+import cats.kernel.laws.GroupLaws
 import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.{SerializableTests, ShortCircuitingTests, TraverseFilterTests}
+import cats.laws.discipline.{SerializableTests, ShortCircuitingTests, TraverseFilterTests, catsLawsIsEqToProp}
+import org.scalacheck.Prop
 
 class MapSuite extends AlleycatsSuite {
   checkAll("Traverse[Map[Int, *]]", SerializableTests.serializable(Traverse[Map[Int, *]]))
@@ -22,4 +24,7 @@ class MapSuite extends AlleycatsSuite {
 
     assert(sumAll == items.values.sum)
   }
+
+  property("group has consistent inverse")(Prop.forAll(GroupLaws[Map[String, Int]].consistentInverse _))
+
 }
