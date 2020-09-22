@@ -80,7 +80,7 @@ trait MapInstances {
           }) { chain => chain.foldLeft(Map.empty[K, B]) { case (m, (k, b)) => m.updated(k, b) } }
     }
 
-  implicit def alleycatsStdMapGroup[K, V : Group]: Group[Map[K, V]] = new MapMonoid[K, V] with Group[Map[K, V]] {
+  implicit def alleycatsStdMapGroup[K, V: Group]: Group[Map[K, V]] = new MapMonoid[K, V] with Group[Map[K, V]] {
     override def inverse(a: Map[K, V]): Map[K, V] = a.map { case (k, v) => (k, Group[V].inverse(v)) }
   }
 

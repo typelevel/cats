@@ -4,7 +4,7 @@ import cats.Traverse
 import cats.instances.all._
 import cats.kernel.laws.GroupLaws
 import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.{SerializableTests, ShortCircuitingTests, TraverseFilterTests, catsLawsIsEqToProp}
+import cats.laws.discipline.{catsLawsIsEqToProp, SerializableTests, ShortCircuitingTests, TraverseFilterTests}
 import org.scalacheck.Prop
 
 class MapSuite extends AlleycatsSuite {
