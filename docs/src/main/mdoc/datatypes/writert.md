@@ -10,9 +10,9 @@ scaladoc: "#cats.data.WriterT"
 `WriterT[F[_], L, V]` is a light wrapper on an `F[(L,
 V)]`. Speaking technically, it is a monad transformer for `Writer`,
 but you don't need to know what that means for it to be
-useful. 
+useful.
 
-## Benefits and Drawbacks
+## Composition
 
 `WriterT` can be more convenient to work with than using
 `F[Writer[L, V]]` directly, this because it exposes operations that allow
@@ -36,7 +36,6 @@ return a `None` or a `Left` since the way the two types compose
 typically behaves that way
 
 ```scala mdoc
-
 val optionWriterT1 : WriterT[Option, String, Int] = WriterT(Some(("writerT value 1", 123)))
 val optionWriterT2 : WriterT[Option, String, Int] = WriterT(Some(("writerT value 1", 123)))
 val optionWriterT3 : WriterT[Option, String, Int] = WriterT.valueT(None)
@@ -71,11 +70,38 @@ for {
     v3 <- eitherWriterT3
 } yield v1 + v2 + v3
 
-
 ```
 
+Just for completeness, we can have a look at the same example, but
+with `Validated` since it as a slightly different behaviour then
+`Either`. Instead of short circuiting when the first error is
+encountered, `Validated` will accumulate all the errors. In the
+following example you can see how this behaviour is respected when
+`Validated` is wrapped as the internal `F` type of a `WriterT`.
 
-TODO: talk about performances
+```scala mdoc
+import cats.data.Validated
+import cats.data.Validated.{Invalid, Valid}
+import cats.implicits._
+
+val validatedWriterT1 : WriterT[Validated[String, *], String, Int] = WriterT(Valid(("writerT value 1", 123)))
+val validatedWriterT2 : WriterT[Validated[String, *], String, Int] = WriterT(Valid(("writerT value 1", 123)))
+val validatedWriterT3 : WriterT[Validated[String, *], String, Int] =
+WriterT(Invalid("error 1!!!") : Validated[String, (String, Int)])
+val validatedWriterT4 : WriterT[Validated[String, *], String, Int] = WriterT(Invalid("error 2!!!"): Validated[String, (String, Int)])
+
+// THIS returns a Right since both are Right
+(validatedWriterT1,
+validatedWriterT2
+).mapN((v1, v2) => v1 + v2)
+
+// This returns a Left since one is a Left
+(validatedWriterT1,
+ validatedWriterT2,
+ validatedWriterT3,
+ validatedWriterT4
+).mapN((v1, v2, v3, v4) => v1 + v2 + v3 + v4)
+```
 
 ## Construct a WriterT
 
@@ -88,7 +114,6 @@ example.
    type starting from the full wrapped value.
 
 ```scala mdoc:nest
-
 // Here we use Option as our F[_]
   val value : Option[(String, Int)] = Some(("value", 123))
   WriterT(value)
