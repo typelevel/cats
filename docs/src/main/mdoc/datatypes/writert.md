@@ -171,3 +171,11 @@ instances are present. Cats still provide a lot of default instances,
 so there's a high chance you could get them for free.
 
 ## Example
+
+As en example we just build a simple naive console application that
+pings mulitple http calls to well known services and collect the time
+spent in each call.
+
+We will user `WriterT` so we can log each step of our application,
+compute the time and work within the `IO` effect, since we will do
+http calls.
