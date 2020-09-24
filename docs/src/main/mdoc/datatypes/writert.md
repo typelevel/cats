@@ -33,13 +33,20 @@ composed following the same behaviour of a `Writer` and the generic `F`.
 Let's see two example with `Option` and `Either`: if one of the
 computations has a `None` or a `Left`, the whole computation will
 return a `None` or a `Left` since the way the two types compose
-typically behaves that way
+typically behaves that way.
 
-```scala mdoc
+```scala mdoc:silent
 val optionWriterT1 : WriterT[Option, String, Int] = WriterT(Some(("writerT value 1", 123)))
 val optionWriterT2 : WriterT[Option, String, Int] = WriterT(Some(("writerT value 1", 123)))
 val optionWriterT3 : WriterT[Option, String, Int] = WriterT.valueT(None)
 
+
+val eitherWriterT1 : WriterT[Either[String, *], String, Int] = WriterT(Right(("writerT value 1", 123)))
+val eitherWriterT2 : WriterT[Either[String, *], String, Int] = WriterT(Right(("writerT value 1", 123)))
+val eitherWriterT3 : WriterT[Either[String, *], String, Int] = WriterT.valueT(Left("error!!!"))
+```
+
+```scala mdoc
 // This returns a Some since both are Some
 for {
     v1 <- optionWriterT1
@@ -53,10 +60,6 @@ for {
     v3 <- optionWriterT3
 } yield v1 + v2 + v3
 
-val eitherWriterT1 : WriterT[Either[String, *], String, Int] = WriterT(Right(("writerT value 1", 123)))
-val eitherWriterT2 : WriterT[Either[String, *], String, Int] = WriterT(Right(("writerT value 1", 123)))
-val eitherWriterT3 : WriterT[Either[String, *], String, Int] = WriterT.valueT(Left("error!!!"))
-
 // This returns a Right since both are Right
 for {
     v1 <- eitherWriterT1
@@ -69,7 +72,6 @@ for {
     v2 <- eitherWriterT2
     v3 <- eitherWriterT3
 } yield v1 + v2 + v3
-
 ```
 
 Just for completeness, we can have a look at the same example, but
@@ -77,9 +79,11 @@ with `Validated` since it as a slightly different behaviour then
 `Either`. Instead of short circuiting when the first error is
 encountered, `Validated` will accumulate all the errors. In the
 following example you can see how this behaviour is respected when
-`Validated` is wrapped as the internal `F` type of a `WriterT`.
+`Validated` is wrapped as the internal `F` type of a `WriterT`. In
+addition, notice how `flatMap` and for comprehension can't be used in
+this case, since `Validated` only extends `Applicative`, but not `Monad`.
 
-```scala mdoc
+```scala mdoc:silent
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import cats.implicits._
@@ -89,7 +93,9 @@ val validatedWriterT2 : WriterT[Validated[String, *], String, Int] = WriterT(Val
 val validatedWriterT3 : WriterT[Validated[String, *], String, Int] =
 WriterT(Invalid("error 1!!!") : Validated[String, (String, Int)])
 val validatedWriterT4 : WriterT[Validated[String, *], String, Int] = WriterT(Invalid("error 2!!!"): Validated[String, (String, Int)])
+```
 
+```scala mdoc
 // THIS returns a Right since both are Right
 (validatedWriterT1,
 validatedWriterT2
@@ -111,7 +117,7 @@ example.
 
 `WriterT[F[_], L, V](run: F[(L, V)])`
 :  This is the constructor of the datatype itself. It just builds the
-   type starting from the full wrapped value.
+type starting from the full wrapped value.
 
 ```scala mdoc:nest
 // Here we use Option as our F[_]
@@ -121,10 +127,10 @@ example.
 
 `liftF[F[_], L, V](fv: F[V])(implicit monoidL: Monoid[L], F: Applicative[F]): WriterT[F, L, V]`
 :  This function allows you to build the datatype starting from the
-   value `V` wrapped into an `F`. Notice how it requires:
-   * `Monoid[L]`, since it uses the `empty` value from the typeclass
-   to fill the `L` value not specified in the input.
-   * `Applicative[F]` to modify the inner value.
+value `V` wrapped into an `F`. Notice how it requires:
+* `Monoid[L]`, since it uses the `empty` value from the typeclass
+to fill the `L` value not specified in the input.
+* `Applicative[F]` to modify the inner value.
 
 ```scala mdoc:nest
   import cats.instances.option._
@@ -136,7 +142,7 @@ example.
 
 `put[F[_], L, V](v: V)(l: L)(implicit applicativeF: Applicative[F]): WriterT[F, L, V]`
 :  As soon as there is an `Applicative` instance of `F`, this function
-   creates the datatype starting from the inner `Writer`'s values.
+creates the datatype starting from the inner `Writer`'s values.
 
 ```scala mdoc:nest
   WriterT.put[Option, String, Int](123)("initial value")
@@ -172,10 +178,44 @@ so there's a high chance you could get them for free.
 
 ## Example
 
-As en example we just build a simple naive console application that
-pings mulitple http calls to well known services and collect the time
-spent in each call.
+As en example, we can consider a simple naive console application that
+pings mulitple http well known services and collect the time
+spent in each call, returning the total time of the whole execution at
+the end. We will simulate the calls by successful `Future` values.
 
-We will user `WriterT` so we can log each step of our application,
-compute the time and work within the `IO` effect, since we will do
-http calls.
+Using `WriterT` we can log each step of our application,
+compute, the time and work within the `Future` effect.
+
+```scala mdoc:silent
+import cats.data.WriterT
+
+import scala.concurrent.{Await, Future}
+import scala.concurrent.duration.Duration
+import scala.concurrent.ExecutionContext.Implicits.global
+
+// Mocked HTTP calls
+def pingService1() : Future[Int] = Future.successful(100)
+def pingService2() : Future[Int] = Future.successful(200)
+def pingService3() : Future[Int] = Future.successful(50)
+def pingService4() : Future[Int] = Future.successful(75)
+
+def pingToWriterT(ping: Future[Int], serviceName: String) : WriterT[Future, String, Int] =
+    WriterT.valueT[Future, String, Int](ping)
+        .tell(s"ping to $serviceName ")
+        .flatMap(pingTime => WriterT.put(pingTime)(s"took $pingTime \n"))
+
+val resultWriterT: WriterT[Future, String, Int] = for {
+    ping1 <- pingToWriterT(pingService1(), "service #1")
+    ping2 <- pingToWriterT(pingService2(), "service #2")
+    ping3 <- pingToWriterT(pingService3(), "service #3")
+    ping4 <- pingToWriterT(pingService4(), "service #4")
+  } yield ping1 + ping2 + ping3 + ping4
+
+val resultFuture: Future[String] = resultWriterT.run.map {
+    case (log: String, totalTime: Int) => s"$log> Total time: $totalTime"
+}
+```
+
+```scala mdoc
+Await.result(resultFuture, Duration.Inf)
+```
