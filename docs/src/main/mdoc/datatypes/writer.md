@@ -124,7 +124,7 @@ type Writer[L, V] = WriterT[Id, L, V]
 
 So, all the [Operations](#operations) defined in the previous section
 are actually coming from the [WriterT
-datatype](https://typelevel.org/cats/datatypes/either.html)
+datatype](https://typelevel.org/cats/datatypes/writert.html)
 
 Most of the `WriterT` functions require a `Functor[F]` or
 `Monad[F]` instance. However, Cats provides all the necessary
