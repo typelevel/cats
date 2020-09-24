@@ -30,7 +30,7 @@ WriterT[Option, String, Int](Some(("value", 10))).map(x => x * x)
 
 Plus, when composing multiple `WriterT` computations, those will be
 composed following the same behaviour of a `Writer` and the generic `F`.
-Let's see two example with `Option` and `Either`: if one of the
+Let's see two examples with `Option` and `Either`: if one of the
 computations has a `None` or a `Left`, the whole computation will
 return a `None` or a `Left` since the way the two types compose
 typically behaves that way.
@@ -76,9 +76,9 @@ for {
 
 Just for completeness, we can have a look at the same example, but
 with `Validated` since it as a slightly different behaviour then
-`Either`. Instead of short circuiting when the first error is
+`Either`. Instead of short-circuiting when the first error is
 encountered, `Validated` will accumulate all the errors. In the
-following example you can see how this behaviour is respected when
+following example, you can see how this behaviour is respected when
 `Validated` is wrapped as the internal `F` type of a `WriterT`. In
 addition, notice how `flatMap` and for comprehension can't be used in
 this case, since `Validated` only extends `Applicative`, but not `Monad`.
@@ -179,7 +179,7 @@ so there's a high chance you could get them for free.
 ## Example
 
 As en example, we can consider a simple naive console application that
-pings mulitple http well known services and collect the time
+pings multiple HTTP well-known services and collect the time
 spent in each call, returning the total time of the whole execution at
 the end. We will simulate the calls by successful `Future` values.
 
