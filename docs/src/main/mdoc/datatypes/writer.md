@@ -126,7 +126,7 @@ So, all the [Operations](#operations) defined in the previous section
 are actually coming from the [WriterT
 datatype](https://typelevel.org/cats/datatypes/writert.html)
 
-Most of the `WriterT` functions require a
+Most of the [`WriterT`](https://typelevel.org/cats/datatypes/writert.html) functions require a
 [`Functor[F]`](https://typelevel.org/cats/typeclasses/functor.html) or
 [`Monad[F]`](https://typelevel.org/cats/typeclasses/monad.html)
 instance. However, Cats provides all the necessary instances for the

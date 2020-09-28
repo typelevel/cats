@@ -7,8 +7,8 @@ scaladoc: "#cats.data.WriterT"
 ---
 # WriterT
 
-`WriterT[F[_], L, V]` is a light wrapper on an `F[(L,
-V)]`. Speaking technically, it is a monad transformer for `Writer`,
+`WriterT[F[_], L, V]` is a type wrapper on an `F[(L,
+V)]`. Speaking technically, it is a monad transformer for [`Writer`](https://typelevel.org/cats/datatypes/writer.html),
 but you don't need to know what that means for it to be
 useful.
 
@@ -16,8 +16,8 @@ useful.
 
 `WriterT` can be more convenient to work with than using
 `F[Writer[L, V]]` directly, this because it exposes operations that allow
-you to work with the values of the inner `Writer` (`L` and
-`V`) abstracting both the `F` and `Writer`.
+you to work with the values of the inner [`Writer`](https://typelevel.org/cats/datatypes/writer.html) (`L` and
+`V`) abstracting both the `F` and [`Writer`](https://typelevel.org/cats/datatypes/writer.html).
 
 For example, `map` allow you to transform the inner `V` value, getting
 back a `WriterT` that wraps around it.
@@ -29,11 +29,15 @@ WriterT[Option, String, Int](Some(("value", 10))).map(x => x * x)
 ```
 
 Plus, when composing multiple `WriterT` computations, those will be
-composed following the same behaviour of a `Writer` and the generic `F`.
-Let's see two examples with `Option` and `Either`: if one of the
-computations has a `None` or a `Left`, the whole computation will
-return a `None` or a `Left` since the way the two types compose
-typically behaves that way.
+composed following the same behaviour of a
+[`Writer`](https://typelevel.org/cats/datatypes/writer.html) and the
+generic `F`.  Let's see two examples with `Option` and [`Either`](https://typelevel.org/cats/datatypes/either.html): if
+one of the computations has a `None` or a `Left`, the whole
+computation will return a `None` or a `Left` since the way the two
+types compose typically behaves that way. Moreover, when the
+computation succeed, the logging side of the
+[`Writer`](https://typelevel.org/cats/datatypes/writer.html)s will be
+combined.
 
 ```scala mdoc:silent
 val optionWriterT1 : WriterT[Option, String, Int] = WriterT(Some(("writerT value 1", 123)))
@@ -75,13 +79,19 @@ for {
 ```
 
 Just for completeness, we can have a look at the same example, but
-with `Validated` since it as a slightly different behaviour then
-`Either`. Instead of short-circuiting when the first error is
-encountered, `Validated` will accumulate all the errors. In the
-following example, you can see how this behaviour is respected when
-`Validated` is wrapped as the internal `F` type of a `WriterT`. In
-addition, notice how `flatMap` and for comprehension can't be used in
-this case, since `Validated` only extends `Applicative`, but not `Monad`.
+with
+[`Validated`](https://typelevel.org/cats/datatypes/validated.html)
+since it as a slightly different behaviour then
+[`Either`](https://typelevel.org/cats/datatypes/either.html). Instead
+of short-circuiting when the first error is encountered,
+[`Validated`](https://typelevel.org/cats/datatypes/validated.html)
+will accumulate all the errors. In the following example, you can see
+how this behaviour is respected when
+[`Validated`](https://typelevel.org/cats/datatypes/validated.html) is
+wrapped as the `F` type of a `WriterT`. In addition, notice
+how `flatMap` and for comprehension can't be used in this case, since
+[`Validated`](https://typelevel.org/cats/datatypes/validated.html)
+only extends [`Applicative`](https://typelevel.org/cats/typeclasses/applicative.html), but not [`Monad`](https://typelevel.org/cats/typeclasses/monad.html).
 
 ```scala mdoc:silent
 import cats.data.Validated
@@ -112,8 +122,8 @@ validatedWriterT2
 ## Construct a WriterT
 
 A `WriterT` can be built starting from multiple values. Here is the
-list of available constructors with a brief explanation and an
-example.
+list of the main available constructors with a brief explanation and
+an example.
 
 `WriterT[F[_], L, V](run: F[(L, V)])`
 :  This is the constructor of the datatype itself. It just builds the
@@ -128,9 +138,9 @@ type starting from the full wrapped value.
 `liftF[F[_], L, V](fv: F[V])(implicit monoidL: Monoid[L], F: Applicative[F]): WriterT[F, L, V]`
 :  This function allows you to build the datatype starting from the
 value `V` wrapped into an `F`. Notice how it requires:
-* `Monoid[L]`, since it uses the `empty` value from the typeclass
+* [`Monoid[L]`](https://typelevel.org/cats/typeclasses/monoid.html), since it uses the `empty` value from the typeclass.
 to fill the `L` value not specified in the input.
-* `Applicative[F]` to modify the inner value.
+* [`Applicative[F]`](https://typelevel.org/cats/typeclasses/applicative.html) to modify the inner value.
 
 ```scala mdoc:nest
   import cats.instances.option._
@@ -141,8 +151,8 @@ to fill the `L` value not specified in the input.
 ```
 
 `put[F[_], L, V](v: V)(l: L)(implicit applicativeF: Applicative[F]): WriterT[F, L, V]`
-:  As soon as there is an `Applicative` instance of `F`, this function
-creates the datatype starting from the inner `Writer`'s values.
+:  As soon as there is an [`Applicative`](https://typelevel.org/cats/typeclasses/applicative.html) instance of `F`, this function
+creates the datatype starting from the inner [`Writer`](https://typelevel.org/cats/datatypes/writer.html)'s values.
 
 ```scala mdoc:nest
   WriterT.put[Option, String, Int](123)("initial value")
@@ -158,23 +168,24 @@ creates the datatype starting from the inner `Writer`'s values.
 ## Operations
 
 Into the [Writer
-definition](https://typelevel.org/cats/datatypes/writer.html#definition),
-we showed how it is actually a `WriterT`.
-Therefore, all the operations described into [Writer
+definition](https://typelevel.org/cats/datatypes/writer.html#definition)
+section, we showed how it is actually a `WriterT`. Therefore, all the
+operations described into [Writer
 operations](https://typelevel.org/cats/datatypes/writer.html#operations)
 are valid for `WriterT` as well.
 
-The only aspect we want to remark is the following sentence from
-`Writer`'s page:
+The only aspect we want to remark here is the following sentence from
+[`Writer`](https://typelevel.org/cats/datatypes/writer.html)'s page:
 
 > Most of the `WriterT` functions require a `Functor[F]` or
 > `Monad[F]` instance. However, Cats provides all the necessary
 > instances for the `Id` type, therefore we don't have to worry about
 > them.
 
-In the case of the `WriterT`, the user needs to ensure the required
+In the case of `WriterT`, the user needs to ensure the required
 instances are present. Cats still provide a lot of default instances,
-so there's a high chance you could get them for free.
+so there's a high chance you could find what you are searching for
+with the right `import`.
 
 ## Example
 
@@ -215,6 +226,8 @@ val resultFuture: Future[String] = resultWriterT.run.map {
     case (log: String, totalTime: Int) => s"$log> Total time: $totalTime"
 }
 ```
+
+And the final result as expected:
 
 ```scala mdoc
 Await.result(resultFuture, Duration.Inf)
