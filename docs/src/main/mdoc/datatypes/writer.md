@@ -7,26 +7,30 @@ scaladoc: "#cats.data.Writer"
 ---
 # Writer
 
-The `Writer[L, A]` monad represents a computation that produce a tuple
-containing a value of type `L` and one of type `A`. Usually, the value
-`L` represents a description of the computation, a Log for
-instance. Meanwhile, the value `A` is the actual output of the
+The `Writer[L, A]` datatype represents a computation that produce a
+tuple containing a value of type `L` and one of type `A`. Usually, the
+value `L` represents a description of the computation. A typical
+example of an `L` value could be a logging `String` and that's why
+from now on we will refer to it as the _Logging side_ of the
+datatype. Meanwhile, the value `A` is the actual output of the
 computation.
 
 The main features the `Writer` provides are:
-- The flexibility regarding Log management. It can be modified
+- The flexibility regarding Log value management. It can be modified
 in multiple ways. See the [Operations section](#operations)
 - When two functions are composed together, eg using `flatMap`, the
-  logs of both functions will be combined using a `Semigroup`.
+  logs of both functions will be combined using an implicit [Semigroup](https://typelevel.org/cats/typeclasses/semigroup.html).
 
 ## Operations
 
 The `Writer` datatype provides a set of functions that are quite
-identical to the ones from the monad typeclass. In fact, they share
+identical to the ones from the [Monad](https://typelevel.org/cats/typeclasses/monad.html) typeclass. In fact, they share
 the same name and the same signature, but for the requirement of a
-`Semigroup[L]` that allows the log merging.
+[`Semigroup[L]`](https://typelevel.org/cats/typeclasses/semigroup.html) that allows the log merging.
 
-`map` has an effect only on the value, keeping the log untouched.
+`map` effects only the value, keeping the log side untouched. Plus, here we show `run`
+that just unwrap the datatype, returning its content.
+
 ```scala mdoc
 import cats.data.Writer
 import cats.instances._
@@ -38,11 +42,9 @@ mapExample.run
 
 `ap` allows applying a function, wrapped into a Writer. It works
 exactly like the `Applicative` as expected, but notice how the logs
-are combined using the `Semigroup[String]`. Plus, here we show `run`
-that just unwrap the datatype, returning its content.
+are combined using the [`Semigroup[String]`](https://typelevel.org/cats/typeclasses/semigroup.html).
 
 ```scala mdoc
-
 val apExampleValue = Writer("ap value", 10)
 val apExampleFunc = Writer("ap function ", (i: Int) => i % 7)
 
@@ -52,7 +54,6 @@ apExampleValue.ap(apExampleFunc).run
 Same thing for `flatMap`
 
 ```scala mdoc
-
 val flatMapExample1 = Writer("flatmap value", 5)
 val flatMapExample2 = (x: Int) => Writer("flatmap function ", x * x)
 
@@ -67,17 +68,17 @@ val flatMapForResult = for {
 flatMapForResult.run
 ```
 
-Apart from those, `Writer` comes with some specific function to manage
+Apart from those, `Writer` comes with some specific functions to manage
 the log side of the computation:
 
 `tell`
-:  Append a value to the log side. It requires a `Semigroup[L]`.
+:  Append a value to the log side. It requires a [`Semigroup[L]`](https://typelevel.org/cats/typeclasses/semigroup.html).
 
 `swap`
 :  Exchange the two values of the `Writer`.
 
 `reset`
-:  Delete the log side. It requires a `Monoid[L]`
+:  Delete the log side. It requires a [`Monoid[L]`](https://typelevel.org/cats/typeclasses/monoid.html) since it uses the `empty` value of the monoid.
 
 `value`
 :  Returns only the value of the `Writer`
@@ -87,7 +88,6 @@ the log side of the computation:
    current value and the current log.
 
 ```scala mdoc
-
 val tellExample = Writer("tell example", 1).tell("log append")
 
 tellExample.run
@@ -126,19 +126,20 @@ So, all the [Operations](#operations) defined in the previous section
 are actually coming from the [WriterT
 datatype](https://typelevel.org/cats/datatypes/writert.html)
 
-Most of the `WriterT` functions require a `Functor[F]` or
-`Monad[F]` instance. However, Cats provides all the necessary
-instances for the `Id` type, therefore we don't have to worry about
-them.
+Most of the `WriterT` functions require a
+[`Functor[F]`](https://typelevel.org/cats/typeclasses/functor.html) or
+[`Monad[F]`](https://typelevel.org/cats/typeclasses/monad.html)
+instance. However, Cats provides all the necessary instances for the
+[`Id`](https://typelevel.org/cats/datatypes/id.html) type, therefore
+we don't have to worry about them.
 
 ## Example
 
 The example showed in here is taken from the [Rosetta Code
 site](https://rosettacode.org/wiki/Monads/Writer_monad). It simply
-apply a bunch of path operations, logging each of them with a log
+applies a bunch of math operations, logging each one of them.
 
 ```scala mdoc:silent:reset
-
 import cats.data.Writer
 import scala.math.sqrt
 
