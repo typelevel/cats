@@ -6,7 +6,7 @@ import cats.data.NonEmptyList.ZipNonEmptyList
 import cats.data.NonEmptyVector.ZipNonEmptyVector
 
 import scala.util.{Failure, Success, Try}
-import scala.collection.immutable.{SortedMap, SortedSet}
+import scala.collection.immutable.{SortedMap, SortedSet, Seq}
 import cats.data._
 import org.scalacheck.{Arbitrary, Cogen, Gen}
 import org.scalacheck.Arbitrary.{arbitrary => getArbitrary}
@@ -51,6 +51,12 @@ object arbitrary extends ArbitraryInstances0 with ScalaVersionSpecific.Arbitrary
 
   implicit def catsLawsCogenForOneAnd[F[_], A](implicit A: Cogen[A], F: Cogen[F[A]]): Cogen[OneAnd[F, A]] =
     Cogen((seed, x) => F.perturb(A.perturb(seed, x.head), x.tail))
+
+  implicit def catsLawsArbitraryForNonEmptySeq[A](implicit A: Arbitrary[A]): Arbitrary[NonEmptySeq[A]] =
+    Arbitrary(implicitly[Arbitrary[Seq[A]]].arbitrary.flatMap(fa => A.arbitrary.map(a => NonEmptySeq(a, fa))))
+
+  implicit def catsLawsCogenForNonEmptySeq[A](implicit A: Cogen[A]): Cogen[NonEmptySeq[A]] =
+    Cogen[Seq[A]].contramap(_.toSeq)
 
   implicit def catsLawsArbitraryForNonEmptyVector[A](implicit A: Arbitrary[A]): Arbitrary[NonEmptyVector[A]] =
     Arbitrary(implicitly[Arbitrary[Vector[A]]].arbitrary.flatMap(fa => A.arbitrary.map(a => NonEmptyVector(a, fa))))
