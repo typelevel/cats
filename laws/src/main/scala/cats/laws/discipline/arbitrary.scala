@@ -6,7 +6,7 @@ import cats.data.NonEmptyList.ZipNonEmptyList
 import cats.data.NonEmptyVector.ZipNonEmptyVector
 
 import scala.util.{Failure, Success, Try}
-import scala.collection.immutable.{SortedMap, SortedSet, Seq}
+import scala.collection.immutable.{Seq, SortedMap, SortedSet}
 import cats.data._
 import org.scalacheck.{Arbitrary, Cogen, Gen}
 import org.scalacheck.Arbitrary.{arbitrary => getArbitrary}
