@@ -5,7 +5,7 @@ import cats.kernel._
 import simulacrum.typeclass
 import cats.kernel.compat.scalaVersionSpecific._
 import scala.annotation.implicitNotFound
-import scala.collection.immutable.{Queue, SortedMap}
+import scala.collection.immutable.{Queue, Seq, SortedMap}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 import scala.util.control.TailCalls.TailRec
@@ -113,6 +113,8 @@ object Invariant extends ScalaVersionSpecificInvariantInstances with InvariantIn
     cats.instances.option.catsStdInstancesForOption
   implicit def catsInstancesForList: Monad[List] with Alternative[List] with CoflatMap[List] =
     cats.instances.list.catsStdInstancesForList
+  implicit def catsInstancesForSeq: Monad[Seq] with Alternative[Seq] with CoflatMap[Seq] =
+    cats.instances.seq.catsStdInstancesForSeq
   implicit def catsInstancesForVector: Monad[Vector] with Alternative[Vector] with CoflatMap[Vector] =
     cats.instances.vector.catsStdInstancesForVector
   implicit def catsInstancesForQueue: Monad[Queue] with Alternative[Queue] with CoflatMap[Queue] =

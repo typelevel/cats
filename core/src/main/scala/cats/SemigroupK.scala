@@ -1,6 +1,6 @@
 package cats
 
-import scala.collection.immutable.{SortedMap, SortedSet}
+import scala.collection.immutable.{Seq, SortedMap, SortedSet}
 import simulacrum.typeclass
 import cats.data.Ior
 import scala.annotation.implicitNotFound
@@ -122,6 +122,7 @@ object SemigroupK extends ScalaVersionSpecificMonoidKInstances {
 
   implicit def catsMonoidKForOption: MonoidK[Option] = cats.instances.option.catsStdInstancesForOption
   implicit def catsMonoidKForList: MonoidK[List] = cats.instances.list.catsStdInstancesForList
+  implicit def catsMonoidKForSeq: MonoidK[Seq] = cats.instances.seq.catsStdInstancesForSeq
   implicit def catsMonoidKForVector: MonoidK[Vector] = cats.instances.vector.catsStdInstancesForVector
   implicit def catsMonoidKForSet: MonoidK[Set] = cats.instances.set.catsStdInstancesForSet
   implicit def catsMonoidKForMap[K]: MonoidK[Map[K, *]] = cats.instances.map.catsStdMonoidKForMap[K]
