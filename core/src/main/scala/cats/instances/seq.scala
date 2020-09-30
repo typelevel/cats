@@ -2,7 +2,6 @@ package cats
 package instances
 
 import cats.data.{Chain, ZipSeq}
-import cats.syntax.show._
 
 import scala.annotation.tailrec
 import scala.collection.{+:, mutable}
@@ -170,7 +169,7 @@ trait SeqInstances extends cats.kernel.instances.SeqInstances {
   implicit def catsStdShowForSeq[A: Show]: Show[Seq[A]] =
     new Show[Seq[A]] {
       def show(fa: Seq[A]): String =
-        fa.iterator.map(_.show).mkString("Seq(", ", ", ")")
+        fa.toString()
     }
 
   implicit def catsStdNonEmptyParallelForSeqZipSeq: NonEmptyParallel.Aux[Seq, ZipSeq] =

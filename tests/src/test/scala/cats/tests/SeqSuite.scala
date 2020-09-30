@@ -49,10 +49,6 @@ class SeqSuite extends CatsSuite {
   checkAll("ZipSeq[Int]", CommutativeApplyTests[ZipSeq].commutativeApply[Int, Int, Int])
 
   test("show") {
-    assert(Seq(1, 2, 3).show === "Seq(1, 2, 3)")
-
-    assert(Seq.empty[Int].show === "Seq()")
-
     forAll { (seq: Seq[String]) =>
       assert(seq.show === (seq.toString))
     }

@@ -70,6 +70,9 @@ object arbitrary extends ArbitraryInstances0 with ScalaVersionSpecific.Arbitrary
   implicit def catsLawsCogenForNonEmptySet[A: Order: Cogen]: Cogen[NonEmptySet[A]] =
     Cogen[SortedSet[A]].contramap(_.toSortedSet)
 
+  implicit def catsLawsArbitraryForZipSeq[A](implicit A: Arbitrary[A]): Arbitrary[ZipSeq[A]] =
+    Arbitrary(implicitly[Arbitrary[Seq[A]]].arbitrary.map(v => new ZipSeq(v)))
+
   implicit def catsLawsArbitraryForZipVector[A](implicit A: Arbitrary[A]): Arbitrary[ZipVector[A]] =
     Arbitrary(implicitly[Arbitrary[Vector[A]]].arbitrary.map(v => new ZipVector(v)))
 
