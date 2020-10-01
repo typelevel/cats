@@ -401,6 +401,20 @@ def mimaSettings(moduleName: String, includeCats1: Boolean = true) =
         ) ++ // Only narrowing of types allowed here
         Seq(
           exclude[IncompatibleSignatureProblem]("*")
+        ) ++ // Added to get a feedback
+        Seq(
+          exclude[DirectMissingMethodProblem]("cats.data.WriterTFunctions.putT"),
+          exclude[DirectMissingMethodProblem]("cats.data.WriterTFunctions.put"),
+          exclude[DirectMissingMethodProblem]("cats.data.WriterTFunctions.tell"),
+          exclude[DirectMissingMethodProblem]("cats.data.WriterTFunctions.value"),
+          exclude[DirectMissingMethodProblem]("cats.data.WriterTFunctions.valueT"),
+          exclude[DirectMissingMethodProblem]("cats.data.WriterTFunctions.putT"),
+          exclude[DirectMissingMethodProblem]("cats.data.WriterT.put"),
+          exclude[DirectMissingMethodProblem]("cats.data.WriterT.putT"),
+          exclude[DirectMissingMethodProblem]("cats.data.WriterT.tell"),
+          exclude[DirectMissingMethodProblem]("cats.data.WriterT.value"),
+          exclude[DirectMissingMethodProblem]("cats.data.WriterT.valueT"),
+          exclude[DirectMissingMethodProblem]("cats.data.package#Writer.value"),
         )
     }
   )
