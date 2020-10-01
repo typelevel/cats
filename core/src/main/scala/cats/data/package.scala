@@ -33,9 +33,13 @@ package object data extends ScalaVersionSpecificPackage {
 
   type Writer[L, V] = WriterT[Id, L, V]
   object Writer {
+    final class ValuePartiallyApplied[L](private val dummy: Boolean = true) extends AnyVal {
+      def apply[V](v: V)(implicit monoid: Monoid[L]): Writer[L, V] = WriterT.value(v)
+    }
+
     def apply[L, V](l: L, v: V): WriterT[Id, L, V] = WriterT[Id, L, V]((l, v))
 
-    def value[L: Monoid, V](v: V): Writer[L, V] = WriterT.value(v)
+    def value[L] = new ValuePartiallyApplied[L]
 
     def tell[L](l: L): Writer[L, Unit] = WriterT.tell(l)
 

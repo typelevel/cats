@@ -678,7 +678,7 @@ sealed private[data] trait WriterTApplicative[F[_], L] extends WriterTApply[F, L
   implicit override def L0: Monoid[L]
 
   def pure[A](a: A): WriterT[F, L, A] =
-    WriterT.value[F, L, A](a)
+    WriterT.value[F, L](a)
 }
 
 sealed private[data] trait WriterTMonad[F[_], L]
@@ -797,19 +797,43 @@ private[data] trait WriterTFunctions0 {
     writerTFLV.listen
 }
 
+private[data] object WriterTFunctions {
+  final class PutTPartiallyApplied[F[_]](private val dummy: Boolean = true) extends AnyVal {
+    def apply[L, V](vf: F[V])(l: L)(implicit functorF: Functor[F]): WriterT[F, L, V] =
+      WriterT(functorF.map(vf)(v => (l, v)))
+  }
+
+  final class PutPartiallyApplied[F[_]](private val dummy: Boolean = true) extends AnyVal {
+    def apply[L, V](v: V)(l: L)(implicit applicativeF: Applicative[F]): WriterT[F, L, V] =
+      WriterT.putT[F](applicativeF.pure(v))(l)
+  }
+
+  final class TellPartiallyApplied[F[_]](private val dummy: Boolean = true) extends AnyVal {
+    def apply[L](l: L)(implicit applicativeF: Applicative[F]): WriterT[F, L, Unit] =
+      WriterT.put[F](())(l)
+  }
+
+  final class ValuePartiallyApplied[F[_], L](private val dummy: Boolean = true) extends AnyVal {
+    def apply[V](v: V)(implicit applicativeF: Applicative[F], monoidL: Monoid[L]): WriterT[F, L, V] =
+      WriterT.put[F](v)(monoidL.empty)
+  }
+
+  final class ValueTPartiallyApplied[F[_], L](private val dummy: Boolean = true) extends AnyVal {
+    def apply[V](vf: F[V])(implicit functorF: Functor[F], monoidL: Monoid[L]): WriterT[F, L, V] =
+      WriterT.putT[F](vf)(monoidL.empty)
+  }
+}
+
 private[data] trait WriterTFunctions {
-  def putT[F[_], L, V](vf: F[V])(l: L)(implicit functorF: Functor[F]): WriterT[F, L, V] =
-    WriterT(functorF.map(vf)(v => (l, v)))
+  import WriterTFunctions._
 
-  def put[F[_], L, V](v: V)(l: L)(implicit applicativeF: Applicative[F]): WriterT[F, L, V] =
-    WriterT.putT[F, L, V](applicativeF.pure(v))(l)
+  def putT[F[_]] = new PutTPartiallyApplied[F]
 
-  def tell[F[_], L](l: L)(implicit applicativeF: Applicative[F]): WriterT[F, L, Unit] =
-    WriterT.put[F, L, Unit](())(l)
+  def put[F[_]] = new PutPartiallyApplied[F]
 
-  def value[F[_], L, V](v: V)(implicit applicativeF: Applicative[F], monoidL: Monoid[L]): WriterT[F, L, V] =
-    WriterT.put[F, L, V](v)(monoidL.empty)
+  def tell[F[_]] = new TellPartiallyApplied[F]
 
-  def valueT[F[_], L, V](vf: F[V])(implicit functorF: Functor[F], monoidL: Monoid[L]): WriterT[F, L, V] =
-    WriterT.putT[F, L, V](vf)(monoidL.empty)
+  def value[F[_], L] = new ValuePartiallyApplied[F, L]
+
+  def valueT[F[_], L] = new ValueTPartiallyApplied[F, L]
 }

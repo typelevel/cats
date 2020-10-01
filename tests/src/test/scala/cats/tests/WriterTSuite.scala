@@ -58,49 +58,49 @@ class WriterTSuite extends CatsSuite {
 
   test("tell + written is identity") {
     forAll { (i: Int) =>
-      assert(WriterT.tell[Id, Int](i).written === i)
+      assert(WriterT.tell[Id](i).written === i)
     }
   }
 
   test("value + value is identity") {
     forAll { (i: Int) =>
-      assert(WriterT.value[Id, Int, Int](i).value === i)
+      assert(WriterT.value[Id, Int](i).value === i)
     }
   }
 
   test("valueT + value is identity") {
     forAll { (i: Int) =>
-      assert(WriterT.valueT[Id, Int, Int](i).value === i)
+      assert(WriterT.valueT[Id, Int](i).value === i)
     }
   }
 
   test("value + listen + map(_._1) + value is identity") {
     forAll { (i: Int) =>
-      assert(WriterT.value[Id, Int, Int](i).listen.map(_._1).value === i)
+      assert(WriterT.value[Id, Int](i).listen.map(_._1).value === i)
     }
   }
 
   test("tell + listen + map(_._2) + value is identity") {
     forAll { (i: Int) =>
-      assert(WriterT.tell[Id, Int](i).listen.map(_._2).value === i)
+      assert(WriterT.tell[Id](i).listen.map(_._2).value === i)
     }
   }
 
   test("Writer.pure and WriterT.liftF are consistent") {
     forAll { (i: Int) =>
-      val writer: Writer[String, Int] = Writer.value(i)
+      val writer = Writer.value[String](i)
       val writerT: WriterT[Option, String, Int] = WriterT.liftF(Some(i))
-      assert(writer.run.some === (writerT.run))
+      assert(writer.run.some === writerT.run)
     }
   }
 
   test("show") {
-    val writerT: WriterT[Id, List[String], String] = WriterT.put("foo")(List("Some log message"))
+    val writerT = WriterT.put[Id]("foo")(List("Some log message"))
     assert(writerT.show === "(List(Some log message),foo)")
   }
 
   test("tell appends to log") {
-    val w1: Writer[String, Int] = Writer.value(3)
+    val w1 = Writer.value[String](3)
     val w2 = w1.tell("foo")
     assert(w2 === (Writer("foo", 3)))
     assert(w2.tell("bar") === (Writer("foobar", 3)))
@@ -111,7 +111,7 @@ class WriterTSuite extends CatsSuite {
   }
 
   test("listen returns a tuple of value and log") {
-    val w: Writer[String, Int] = Writer("foo", 3)
+    val w = Writer("foo", 3)
     assert(w.listen === (Writer("foo", (3, "foo"))))
   }
 
