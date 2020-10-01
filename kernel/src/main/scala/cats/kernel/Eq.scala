@@ -4,7 +4,7 @@ import java.util.UUID
 
 import cats.kernel.compat.scalaVersionSpecific._
 
-import scala.collection.immutable.{BitSet, Queue, SortedMap, SortedSet}
+import scala.collection.immutable.{BitSet, Queue, Seq, SortedMap, SortedSet}
 import scala.concurrent.duration.{Duration, FiniteDuration}
 import scala.math.Equiv
 import scala.util.{Failure, Success, Try}
@@ -194,6 +194,8 @@ object Eq
     cats.kernel.instances.option.catsKernelStdOrderForOption[A]
   implicit def catsKernelOrderForList[A: Order]: Order[List[A]] =
     cats.kernel.instances.list.catsKernelStdOrderForList[A]
+  implicit def catsKernelOrderForSeq[A: Order]: Order[Seq[A]] =
+    cats.kernel.instances.seq.catsKernelStdOrderForSeq[A]
   implicit def catsKernelOrderForVector[A: Order]: Order[Vector[A]] =
     cats.kernel.instances.vector.catsKernelStdOrderForVector[A]
   implicit def catsKernelOrderForQueue[A: Order]: Order[Queue[A]] =
@@ -224,6 +226,8 @@ private[kernel] trait PartialOrderInstances extends HashInstances {
     cats.kernel.instances.option.catsKernelStdPartialOrderForOption[A]
   implicit def catsKernelPartialOrderForList[A: PartialOrder]: PartialOrder[List[A]] =
     cats.kernel.instances.list.catsKernelStdPartialOrderForList[A]
+  implicit def catsKernelPartialOrderForSeq[A: PartialOrder]: PartialOrder[Seq[A]] =
+    cats.kernel.instances.seq.catsKernelStdPartialOrderForSeq[A]
   implicit def catsKernelPartialOrderForVector[A: PartialOrder]: PartialOrder[Vector[A]] =
     cats.kernel.instances.vector.catsKernelStdPartialOrderForVector[A]
   implicit def catsKernelPartialOrderForQueue[A: PartialOrder]: PartialOrder[Queue[A]] =
@@ -237,6 +241,7 @@ private[kernel] trait HashInstances extends EqInstances {
   implicit def catsKernelHashForOption[A: Hash]: Hash[Option[A]] =
     cats.kernel.instances.option.catsKernelStdHashForOption[A]
   implicit def catsKernelHashForList[A: Hash]: Hash[List[A]] = cats.kernel.instances.list.catsKernelStdHashForList[A]
+  implicit def catsKernelHashForSeq[A: Hash]: Hash[Seq[A]] = cats.kernel.instances.seq.catsKernelStdHashForSeq[A]
   implicit def catsKernelHashForVector[A: Hash]: Hash[Vector[A]] =
     cats.kernel.instances.vector.catsKernelStdHashForVector[A]
   implicit def catsKernelHashForQueue[A: Hash]: Hash[Queue[A]] =
@@ -256,6 +261,7 @@ private[kernel] trait HashInstances extends EqInstances {
 private[kernel] trait EqInstances {
   implicit def catsKernelEqForOption[A: Eq]: Eq[Option[A]] = cats.kernel.instances.option.catsKernelStdEqForOption[A]
   implicit def catsKernelEqForList[A: Eq]: Eq[List[A]] = cats.kernel.instances.list.catsKernelStdEqForList[A]
+  implicit def catsKernelEqForSeq[A: Eq]: Eq[Seq[A]] = cats.kernel.instances.seq.catsKernelStdEqForSeq[A]
   implicit def catsKernelEqForVector[A: Eq]: Eq[Vector[A]] = cats.kernel.instances.vector.catsKernelStdEqForVector[A]
   implicit def catsKernelEqForQueue[A: Eq]: Eq[Queue[A]] = cats.kernel.instances.queue.catsKernelStdEqForQueue[A]
   implicit def catsKernelEqForFunction0[A: Eq]: Eq[() => A] = cats.kernel.instances.function.catsKernelEqForFunction0[A]

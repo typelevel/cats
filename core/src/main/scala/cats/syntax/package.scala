@@ -57,6 +57,7 @@ package object syntax {
   object semigroup extends SemigroupSyntax
   object semigroupal extends SemigroupalSyntax
   object semigroupk extends SemigroupKSyntax
+  object seq extends SeqSyntax
   object show extends ShowSyntax
   object strong extends StrongSyntax
   object try_ extends TrySyntax

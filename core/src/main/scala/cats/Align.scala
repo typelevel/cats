@@ -3,7 +3,7 @@ package cats
 import simulacrum.typeclass
 
 import cats.data.Ior
-import scala.collection.immutable.SortedMap
+import scala.collection.immutable.{Seq, SortedMap}
 import scala.annotation.implicitNotFound
 
 /**
@@ -111,6 +111,7 @@ object Align extends ScalaVersionSpecificAlignInstances {
 
   implicit def catsAlignForList: Align[List] = cats.instances.list.catsStdInstancesForList
   implicit def catsAlignForOption: Align[Option] = cats.instances.option.catsStdInstancesForOption
+  implicit def catsAlignForSeq: Align[Seq] = cats.instances.seq.catsStdInstancesForSeq
   implicit def catsAlignForVector: Align[Vector] = cats.instances.vector.catsStdInstancesForVector
   implicit def catsAlignForMap[K]: Align[Map[K, *]] = cats.instances.map.catsStdInstancesForMap[K]
   implicit def catsAlignForSortedMap[K]: Align[SortedMap[K, *]] =
