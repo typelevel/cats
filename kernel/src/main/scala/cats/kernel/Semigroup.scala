@@ -1,7 +1,7 @@
 package cats.kernel
 
 import scala.annotation.tailrec
-import scala.collection.immutable.{BitSet, Queue, SortedMap, SortedSet, Seq}
+import scala.collection.immutable.{BitSet, Queue, Seq, SortedMap, SortedSet}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration.{Duration, FiniteDuration}
 import scala.{specialized => sp}
