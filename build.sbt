@@ -414,7 +414,7 @@ def mimaSettings(moduleName: String, includeCats1: Boolean = true) =
           exclude[DirectMissingMethodProblem]("cats.data.WriterT.tell"),
           exclude[DirectMissingMethodProblem]("cats.data.WriterT.value"),
           exclude[DirectMissingMethodProblem]("cats.data.WriterT.valueT"),
-          exclude[DirectMissingMethodProblem]("cats.data.package#Writer.value"),
+          exclude[DirectMissingMethodProblem]("cats.data.package#Writer.value")
         )
     }
   )
