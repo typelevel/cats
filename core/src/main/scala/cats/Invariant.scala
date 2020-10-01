@@ -113,8 +113,6 @@ object Invariant extends ScalaVersionSpecificInvariantInstances with InvariantIn
     cats.instances.option.catsStdInstancesForOption
   implicit def catsInstancesForList: Monad[List] with Alternative[List] with CoflatMap[List] =
     cats.instances.list.catsStdInstancesForList
-  implicit def catsInstancesForSeq: Monad[Seq] with Alternative[Seq] with CoflatMap[Seq] =
-    cats.instances.seq.catsStdInstancesForSeq
   implicit def catsInstancesForVector: Monad[Vector] with Alternative[Vector] with CoflatMap[Vector] =
     cats.instances.vector.catsStdInstancesForVector
   implicit def catsInstancesForQueue: Monad[Queue] with Alternative[Queue] with CoflatMap[Queue] =
@@ -297,6 +295,8 @@ private[cats] trait InvariantInstances0 extends TupleInstances0 {
     cats.instances.function.catsStdDistributiveForFunction1[I]
   implicit def catsApplicativeForArrow[F[_, _], A](implicit F: Arrow[F]): Applicative[F[A, *]] =
     new ArrowApplicative[F, A](F)
+  implicit def catsInstancesForSeq: Monad[Seq] with Alternative[Seq] with CoflatMap[Seq] =
+    cats.instances.seq.catsStdInstancesForSeq
 }
 
 private trait TupleInstances0 extends TupleInstances1 {

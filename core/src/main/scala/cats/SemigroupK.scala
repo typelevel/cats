@@ -112,7 +112,7 @@ import scala.annotation.implicitNotFound
     combineK(F.map(fa)(Left(_)), F.map(fb)(Right(_)))
 }
 
-object SemigroupK extends ScalaVersionSpecificMonoidKInstances {
+object SemigroupK extends ScalaVersionSpecificMonoidKInstances with SemigroupKInstances0 {
   def align[F[_]: SemigroupK: Functor]: Align[F] =
     new Align[F] {
       def align[A, B](fa: F[A], fb: F[B]): F[Ior[A, B]] =
@@ -122,7 +122,6 @@ object SemigroupK extends ScalaVersionSpecificMonoidKInstances {
 
   implicit def catsMonoidKForOption: MonoidK[Option] = cats.instances.option.catsStdInstancesForOption
   implicit def catsMonoidKForList: MonoidK[List] = cats.instances.list.catsStdInstancesForList
-  implicit def catsMonoidKForSeq: MonoidK[Seq] = cats.instances.seq.catsStdInstancesForSeq
   implicit def catsMonoidKForVector: MonoidK[Vector] = cats.instances.vector.catsStdInstancesForVector
   implicit def catsMonoidKForSet: MonoidK[Set] = cats.instances.set.catsStdInstancesForSet
   implicit def catsMonoidKForMap[K]: MonoidK[Map[K, *]] = cats.instances.map.catsStdMonoidKForMap[K]
@@ -181,5 +180,11 @@ object SemigroupK extends ScalaVersionSpecificMonoidKInstances {
   /* ======================================================================== */
   /* END OF SIMULACRUM-MANAGED CODE                                           */
   /* ======================================================================== */
+
+}
+
+trait SemigroupKInstances0 {
+
+  implicit def catsMonoidKForSeq: MonoidK[Seq] = cats.instances.seq.catsStdInstancesForSeq
 
 }

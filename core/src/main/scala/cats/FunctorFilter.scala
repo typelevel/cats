@@ -78,11 +78,10 @@ trait FunctorFilter[F[_]] extends Serializable {
     mapFilter(fa)(Some(_).filterNot(f))
 }
 
-object FunctorFilter extends ScalaVersionSpecificTraverseFilterInstances {
+object FunctorFilter extends ScalaVersionSpecificTraverseFilterInstances with FunctorFilterInstances0 {
   implicit def catsTraverseFilterForOption: TraverseFilter[Option] =
     cats.instances.option.catsStdTraverseFilterForOption
   implicit def catsTraverseFilterForList: TraverseFilter[List] = cats.instances.list.catsStdTraverseFilterForList
-  implicit def catsTraverseFilterForSeq: TraverseFilter[Seq] = cats.instances.seq.catsStdTraverseFilterForSeq
   implicit def catsTraverseFilterForVector: TraverseFilter[Vector] =
     cats.instances.vector.catsStdTraverseFilterForVector
   implicit def catsFunctorFilterForMap[K]: FunctorFilter[Map[K, *]] =
@@ -140,5 +139,11 @@ object FunctorFilter extends ScalaVersionSpecificTraverseFilterInstances {
   /* ======================================================================== */
   /* END OF SIMULACRUM-MANAGED CODE                                           */
   /* ======================================================================== */
+
+}
+
+trait FunctorFilterInstances0 {
+
+  implicit def catsTraverseFilterForSeq: TraverseFilter[Seq] = cats.instances.seq.catsStdTraverseFilterForSeq
 
 }
