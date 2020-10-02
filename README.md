@@ -313,6 +313,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [formation.ai](https://formation.ai)
 - [Free2Move](https://free2move.com)
 - [HelloSoda](https://hellosoda.com)
+- [HiFi](https://hi.fi)
 - [HomeAway](https://www.homeaway.com)
 - [Hootsuite Inc.](https://hootsuite.com/)
 - [iHeartRadio](https://iheart.com)
