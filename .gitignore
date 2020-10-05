@@ -1,5 +1,6 @@
 .hydra
 .bloop
+.bsp
 .metals
 project/boot
 target
