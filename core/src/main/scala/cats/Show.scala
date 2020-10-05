@@ -102,7 +102,11 @@ object Show extends ScalaVersionSpecificShowInstances with ShowInstances {
     cats.instances.sortedMap.catsStdShowForSortedMap[K, V]
 }
 
-private[cats] trait ShowInstances {
+private[cats] trait ShowInstances extends LowPriorityShowInstances { this: Show.type =>
   implicit def catsShowForFiniteDuration: Show[FiniteDuration] =
     cats.instances.finiteDuration.catsStdShowForFiniteDurationUnambiguous
+}
+
+private[cats] trait LowPriorityShowInstances { this: Show.type =>
+  implicit def catsShowFromUniversalToString[A]: Show[A] = fromToString[A]
 }
