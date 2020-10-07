@@ -60,8 +60,14 @@ trait FunctionK[F[_], G[_]] extends Serializable { self =>
   def and[H[_]](h: FunctionK[F, H]): FunctionK[F, Tuple2K[G, H, *]] =
     new FunctionK[F, Tuple2K[G, H, *]] { def apply[A](fa: F[A]): Tuple2K[G, H, A] = Tuple2K(self(fa), h(fa)) }
 
+  /**
+   * Widens the output type of this `FunctionK` from `G` to `G0`
+   */
   def widen[G0[x] >: G[x]]: FunctionK[F, G0] = this.asInstanceOf[FunctionK[F, G0]]
 
+  /**
+   * Narrows the input type of this `FunctionK` from `F` to `F0`
+   */
   def narrow[F0[x] <: F[x]]: FunctionK[F0, G] = this.asInstanceOf[FunctionK[F0, G]]
 }
 
