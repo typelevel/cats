@@ -1,7 +1,7 @@
 package cats.kernel
 
 import scala.annotation.tailrec
-import scala.collection.immutable.{BitSet, Queue, SortedMap, SortedSet}
+import scala.collection.immutable.{BitSet, Queue, Seq, SortedMap, SortedSet}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration.{Duration, FiniteDuration}
 import scala.{specialized => sp}
@@ -255,6 +255,8 @@ private[kernel] trait MonoidInstances extends BandInstances {
     new FutureMonoid[A](A, ec)
   implicit def catsKernelMonoidForOption[A: Semigroup]: Monoid[Option[A]] =
     cats.kernel.instances.option.catsKernelStdMonoidForOption[A]
+  implicit def catsKernelMonoidForSeq[A]: Monoid[Seq[A]] =
+    cats.kernel.instances.seq.catsKernelStdMonoidForSeq[A]
 }
 
 private[kernel] trait BandInstances extends CommutativeSemigroupInstances {
