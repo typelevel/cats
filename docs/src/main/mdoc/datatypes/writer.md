@@ -7,7 +7,7 @@ scaladoc: "#cats.data.Writer"
 ---
 # Writer
 
-The `Writer[L, A]` datatype represents a computation that produce a
+The `Writer[L, A]` datatype represents a computation that produces a
 tuple containing a value of type `L` and one of type `A`. Usually, the
 value `L` represents a description of the computation. A typical
 example of an `L` value could be a logging `String` and that's why
@@ -15,18 +15,24 @@ from now on we will refer to it as the _Logging side_ of the
 datatype. Meanwhile, the value `A` is the actual output of the
 computation.
 
-The main features the `Writer` provides are:
-- The flexibility regarding Log value management. It can be modified
-in multiple ways. See the [Operations section](#operations)
-- When two functions are composed together, eg using `flatMap`, the
-  logs of both functions will be combined using an implicit [Semigroup](https://typelevel.org/cats/typeclasses/semigroup.html).
+The main features that `Writer` provides are:
+
+The flexibility regarding Log value management. It can be modified in
+multiple ways. See the [Operations section](#operations)
+
+When two functions are composed together, e.g. using `flatMap`, the logs
+  of both functions will be combined using an implicit
+  [Semigroup](https://typelevel.org/cats/typeclasses/semigroup.html).
 
 ## Operations
 
-The `Writer` datatype provides a set of functions that are quite
-identical to the ones from the [Monad](https://typelevel.org/cats/typeclasses/monad.html) typeclass. In fact, they share
-the same name and the same signature, but for the requirement of a
-[`Semigroup[L]`](https://typelevel.org/cats/typeclasses/semigroup.html) that allows the log merging.
+The `Writer` datatype provides a set of functions that are similar to
+the ones from the
+[Monad](https://typelevel.org/cats/typeclasses/monad.html)
+typeclass. In fact, they share the same name and the same signature,
+but have an additional requirement of a
+[`Semigroup[L]`](https://typelevel.org/cats/typeclasses/semigroup.html)
+that allows the log merging.
 
 `map` effects only the value, keeping the log side untouched. Plus, here we show `run`
 that just unwrap the datatype, returning its content.
@@ -137,7 +143,7 @@ we don't have to worry about them.
 
 The example showed in here is taken from the [Rosetta Code
 site](https://rosettacode.org/wiki/Monads/Writer_monad). It simply
-applies a bunch of math operations, logging each one of them.
+applies a bunch of Math operations, logging each one of them.
 
 ```scala mdoc:silent:reset
 import cats.data.Writer

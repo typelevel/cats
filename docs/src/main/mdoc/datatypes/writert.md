@@ -15,7 +15,7 @@ useful.
 ## Composition
 
 `WriterT` can be more convenient to work with than using
-`F[Writer[L, V]]` directly, this because it exposes operations that allow
+`F[Writer[L, V]]` directly, because it exposes operations that allow
 you to work with the values of the inner [`Writer`](https://typelevel.org/cats/datatypes/writer.html) (`L` and
 `V`) abstracting both the `F` and [`Writer`](https://typelevel.org/cats/datatypes/writer.html).
 
@@ -81,7 +81,7 @@ for {
 Just for completeness, we can have a look at the same example, but
 with
 [`Validated`](https://typelevel.org/cats/datatypes/validated.html)
-since it as a slightly different behaviour then
+since it as a slightly different behaviour than
 [`Either`](https://typelevel.org/cats/datatypes/either.html). Instead
 of short-circuiting when the first error is encountered,
 [`Validated`](https://typelevel.org/cats/datatypes/validated.html)
@@ -106,12 +106,12 @@ val validatedWriterT4 : WriterT[Validated[String, *], String, Int] = WriterT(Inv
 ```
 
 ```scala mdoc
-// THIS returns a Right since both are Right
+// This returns a Right since both are Right
 (validatedWriterT1,
 validatedWriterT2
 ).mapN((v1, v2) => v1 + v2)
 
-// This returns a Left since one is a Left
+// This returns a Left since there are several Left
 (validatedWriterT1,
  validatedWriterT2,
  validatedWriterT3,
@@ -121,7 +121,7 @@ validatedWriterT2
 
 ## Construct a WriterT
 
-A `WriterT` can be built starting from multiple values. Here is the
+A `WriterT` can be constructed in different ways. Here is the
 list of the main available constructors with a brief explanation and
 an example.
 
@@ -167,7 +167,7 @@ creates the datatype starting from the inner [`Writer`](https://typelevel.org/ca
 
 ## Operations
 
-Into the [Writer
+In the [Writer
 definition](https://typelevel.org/cats/datatypes/writer.html#definition)
 section, we showed how it is actually a `WriterT`. Therefore, all the
 operations described into [Writer
@@ -189,7 +189,7 @@ with the right `import`.
 
 ## Example
 
-As en example, we can consider a simple naive console application that
+As an example, we can consider a simple naive console application that
 pings multiple HTTP well-known services and collect the time
 spent in each call, returning the total time of the whole execution at
 the end. We will simulate the calls by successful `Future` values.
