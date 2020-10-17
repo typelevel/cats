@@ -1,6 +1,6 @@
 package cats
 
-import scala.collection.immutable.{Queue, SortedMap}
+import scala.collection.immutable.{Queue, Seq, SortedMap}
 import simulacrum.typeclass
 import scala.annotation.implicitNotFound
 
@@ -78,7 +78,7 @@ trait FunctorFilter[F[_]] extends Serializable {
     mapFilter(fa)(Some(_).filterNot(f))
 }
 
-object FunctorFilter extends ScalaVersionSpecificTraverseFilterInstances {
+object FunctorFilter extends ScalaVersionSpecificTraverseFilterInstances with FunctorFilterInstances0 {
   implicit def catsTraverseFilterForOption: TraverseFilter[Option] =
     cats.instances.option.catsStdTraverseFilterForOption
   implicit def catsTraverseFilterForList: TraverseFilter[List] = cats.instances.list.catsStdTraverseFilterForList
@@ -139,5 +139,11 @@ object FunctorFilter extends ScalaVersionSpecificTraverseFilterInstances {
   /* ======================================================================== */
   /* END OF SIMULACRUM-MANAGED CODE                                           */
   /* ======================================================================== */
+
+}
+
+trait FunctorFilterInstances0 {
+
+  implicit def catsTraverseFilterForSeq: TraverseFilter[Seq] = cats.instances.seq.catsStdTraverseFilterForSeq
 
 }

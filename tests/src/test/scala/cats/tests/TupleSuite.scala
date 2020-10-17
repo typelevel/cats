@@ -101,6 +101,6 @@ class TupleSuite extends CatsSuite {
 
     val foo = Foo(1)
     val bar = Bar(2)
-    assert((foo, bar).show === (s"(${fooShow.show(foo)},${barShow.show(bar)})"))
+    assert((foo, bar).show === s"(${fooShow.show(foo)},${barShow.show(bar)})")
   }
 }

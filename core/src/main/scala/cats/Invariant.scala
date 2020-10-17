@@ -5,7 +5,7 @@ import cats.kernel._
 import simulacrum.typeclass
 import cats.kernel.compat.scalaVersionSpecific._
 import scala.annotation.implicitNotFound
-import scala.collection.immutable.{Queue, SortedMap}
+import scala.collection.immutable.{Queue, Seq, SortedMap}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 import scala.util.control.TailCalls.TailRec
@@ -302,6 +302,8 @@ private trait InvariantInstances1 extends InvariantInstances2 {
 private[cats] trait InvariantInstances2 extends TupleInstances0 {
   implicit def catsApplicativeForArrow[F[_, _], A](implicit F: Arrow[F]): Applicative[F[A, *]] =
     new ArrowApplicative[F, A](F)
+  implicit def catsInstancesForSeq: Monad[Seq] with Alternative[Seq] with CoflatMap[Seq] =
+    cats.instances.seq.catsStdInstancesForSeq
 }
 
 private[cats] trait TupleInstances0 extends TupleInstances1 {

@@ -1,6 +1,6 @@
 package cats
 
-import scala.collection.immutable.{SortedMap, SortedSet}
+import scala.collection.immutable.{Seq, SortedMap, SortedSet}
 import simulacrum.typeclass
 import cats.data.Ior
 import scala.annotation.implicitNotFound
@@ -112,7 +112,7 @@ import scala.annotation.implicitNotFound
     combineK(F.map(fa)(Left(_)), F.map(fb)(Right(_)))
 }
 
-object SemigroupK extends ScalaVersionSpecificMonoidKInstances {
+object SemigroupK extends ScalaVersionSpecificMonoidKInstances with SemigroupKInstances0 {
   def align[F[_]: SemigroupK: Functor]: Align[F] =
     new Align[F] {
       def align[A, B](fa: F[A], fb: F[B]): F[Ior[A, B]] =
@@ -180,5 +180,11 @@ object SemigroupK extends ScalaVersionSpecificMonoidKInstances {
   /* ======================================================================== */
   /* END OF SIMULACRUM-MANAGED CODE                                           */
   /* ======================================================================== */
+
+}
+
+trait SemigroupKInstances0 {
+
+  implicit def catsMonoidKForSeq: MonoidK[Seq] = cats.instances.seq.catsStdInstancesForSeq
 
 }

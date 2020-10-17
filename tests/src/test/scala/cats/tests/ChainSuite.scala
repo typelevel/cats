@@ -177,6 +177,12 @@ class ChainSuite extends CatsSuite {
     }
   }
 
+  test("zipWithIndex is stack-safe for a large chain constructed using concatenations") {
+    val list = List.fill(10000)(1)
+    val chain = list.foldLeft(Chain.empty[Int]) { case (acc, next) => acc.concat(Chain(next)) }
+    chain.zipWithIndex.toList === (list.zipWithIndex)
+  }
+
   test("sortBy is consistent with toList.sortBy") {
     forAll { (ci: Chain[Int], f: Int => String) =>
       assert(ci.sortBy(f).toList === (ci.toList.sortBy(f)))

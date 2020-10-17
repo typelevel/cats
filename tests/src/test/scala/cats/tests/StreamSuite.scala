@@ -48,8 +48,8 @@ class StreamSuite extends CatsSuite {
   checkAll("ZipStream[Int]", CommutativeApplyTests[ZipStream].apply[Int, Int, Int])
 
   test("show") {
-    assert(Stream(1, 2, 3).show === (s"Stream(1, ?)"))
-    assert(Stream.empty[Int].show === (s"Stream()"))
+    assert(Stream(1, 2, 3).show === s"Stream(1, ?)")
+    assert(Stream.empty[Int].show === s"Stream()")
   }
 
   test("Show[Stream] is referentially transparent, unlike Stream.toString") {

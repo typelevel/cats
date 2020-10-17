@@ -14,7 +14,7 @@
 [![Financial Contributors on Open Collective](https://opencollective.com/typelevel/all/badge.svg?label=financial+contributors)](https://opencollective.com/typelevel) [![Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/typelevel/cats)
 [![codecov.io](http://codecov.io/github/typelevel/cats/coverage.svg?branch=master)](http://codecov.io/github/typelevel/cats?branch=master)
 [![Latest version](https://index.scala-lang.org/typelevel/cats/cats-core/latest.svg?color=orange&v=1)](https://index.scala-lang.org/typelevel/cats/cats-core)
-[![Scala.js](http://scala-js.org/assets/badges/scalajs-0.6.14.svg)](http://scala-js.org)
+[![Scala.js](http://scala-js.org/assets/badges/scalajs-1.2.0.svg)](http://scala-js.org)
 
 
 ### Overview
@@ -313,6 +313,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [formation.ai](https://formation.ai)
 - [Free2Move](https://free2move.com)
 - [HelloSoda](https://hellosoda.com)
+- [HiFi](https://hi.fi)
 - [HomeAway](https://www.homeaway.com)
 - [Hootsuite Inc.](https://hootsuite.com/)
 - [iHeartRadio](https://iheart.com)
