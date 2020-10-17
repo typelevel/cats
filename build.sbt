@@ -154,17 +154,14 @@ lazy val includeGeneratedSrc: Setting[_] = {
 
 lazy val disciplineDependencies = Seq(
   libraryDependencies ++= Seq(
-    "org.scalacheck" %%% "scalacheck" % scalaCheckVersion,
     "org.typelevel" %%% "discipline-core" % disciplineVersion
-  ).map(_.withDottyCompat(scalaVersion.value))
+  )
 )
 
 lazy val testingDependencies = Seq(
   libraryDependencies ++= Seq(
     "org.scalameta" %%% "munit-scalacheck" % munitVersion % Test,
     "org.typelevel" %%% "discipline-munit" % disciplineMunitVersion % Test
-  ).map(
-    _.withDottyCompat(scalaVersion.value)
   )
 )
 
@@ -784,7 +781,7 @@ addCommandAlias("validateKernelJS", "kernelLawsJS/test")
 addCommandAlias("validateFreeJS", "freeJS/test")
 addCommandAlias("validateAlleycatsJS", "alleycatsTestsJS/test")
 addCommandAlias("validateAllJS", "all testsJS/test js/test kernelLawsJS/test freeJS/test alleycatsTestsJS/test")
-addCommandAlias("validateDotty", ";++0.24.0!;alleycatsLawsJVM/compile")
+addCommandAlias("validateDotty", ";++0.27.0-RC1!;alleycatsLawsJVM/compile")
 addCommandAlias("validate", ";clean;validateJS;validateKernelJS;validateFreeJS;validateJVM;validateDotty")
 
 addCommandAlias("prePR", "fmt")

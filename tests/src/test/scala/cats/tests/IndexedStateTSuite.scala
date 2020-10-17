@@ -496,6 +496,8 @@ class IndexedStateTSuite extends CatsSuite {
       IndexedStateT
         .catsDataAlternativeForIndexedStateT[ListWrapper, MiniInt](ListWrapper.monad, ListWrapper.alternative)
 
+    implicit val f: Isomorphisms[IndexedStateT[ListWrapper, MiniInt, MiniInt, *]] = Isomorphisms.invariant(SA)
+
     checkAll("IndexedStateT[ListWrapper, MiniInt, Int, Int]",
              AlternativeTests[IndexedStateT[ListWrapper, MiniInt, MiniInt, *]](SA).alternative[Int, Int, Int]
     )
@@ -506,7 +508,7 @@ class IndexedStateTSuite extends CatsSuite {
     Alternative[IndexedStateT[ListWrapper, Int, Int, *]]
     Applicative[IndexedStateT[ListWrapper, Int, Int, *]]
     Apply[IndexedStateT[ListWrapper, Int, Int, *]]
-    Functor[IndexedStateT[ListWrapper, Int, Int, *]]
+    //Functor[IndexedStateT[ListWrapper, Int, Int, *]]
     MonoidK[IndexedStateT[ListWrapper, Int, Int, *]]
     SemigroupK[IndexedStateT[ListWrapper, Int, Int, *]]
   }

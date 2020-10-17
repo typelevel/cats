@@ -1,6 +1,6 @@
 package cats.tests
 
-import cats.{Eval, Foldable, Id, Now}
+import cats._
 import cats.data.{Const, EitherK, IdT, Ior, Nested, NonEmptyList, NonEmptyStream, NonEmptyVector, OneAnd, Validated}
 import cats.instances.order._
 import cats.kernel.{Eq, Monoid}

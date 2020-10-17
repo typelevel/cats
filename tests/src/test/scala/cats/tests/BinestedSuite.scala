@@ -75,7 +75,9 @@ class BinestedSuite extends CatsSuite {
 
   test("simple syntax-based usage") {
     forAll { (value: (Option[Int], List[Int])) =>
-      assert(value.binested.bimap(_.toString, _.toString).value === (value.bimap(_.map(_.toString), _.map(_.toString))))
+      // TODO something is wrong with inference in Dotty here, bug?
+      val binested = value.binested
+      assert(binested.bimap(_.toString, _.toString).value === (value.bimap(_.map(_.toString), _.map(_.toString))))
     }
   }
 }
