@@ -437,7 +437,7 @@ class OptionTSuite extends CatsSuite {
 
   test("show") {
     val either: Either[String, Option[Int]] = Either.right(Some(1))
-    assert(OptionT[Either[String, *], Int](either).show === ("Right(Some(1))"))
+    assert(OptionT[Either[String, *], Int](either).show === "Right(Some(1))")
   }
 
   test("none") {
@@ -536,7 +536,7 @@ class OptionTSuite extends CatsSuite {
     Traverse[OptionT[List, *]]
 
     implicit val T: Traverse[ListWrapper] = ListWrapper.traverse
-    implicit val M: Monad[ListWrapper] = ListWrapper.monad
+    //implicit val M: Monad[ListWrapper] = ListWrapper.monad
     Functor[OptionT[ListWrapper, *]]
   }
 

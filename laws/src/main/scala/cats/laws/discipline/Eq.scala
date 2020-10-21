@@ -241,8 +241,8 @@ object eq {
     arbAA: Arbitrary[(A, A)],
     eqA: Eq[A]
   ): Eq[CommutativeSemigroup[A]] = {
-    implicit val eqABool: Eq[(A, Boolean)] = Eq.instance {
-      case ((x, boolX), (y, boolY)) => x === y && boolX === boolY
+    implicit val eqABool: Eq[(A, Boolean)] = Eq.instance { case ((x, boolX), (y, boolY)) =>
+      x === y && boolX === boolY
     }
 
     Eq.by[CommutativeSemigroup[A], ((A, A)) => (A, Boolean)](f =>
@@ -264,8 +264,8 @@ object eq {
     eqMA: Eq[Monoid[A]],
     eqA: Eq[A]
   ): Eq[Group[A]] = {
-    implicit val eqABool: Eq[(A, Boolean)] = Eq.instance {
-      case ((x, boolX), (y, boolY)) => x === y && boolX === boolY
+    implicit val eqABool: Eq[(A, Boolean)] = Eq.instance { case ((x, boolX), (y, boolY)) =>
+      x === y && boolX === boolY
     }
 
     val inverseEq = Eq.by[Group[A], ((A, A)) => (A, Boolean)](f =>

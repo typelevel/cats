@@ -14,11 +14,11 @@ class BoundedEnumerableSuite extends CatsSuite {
   }
 
   test("cycleNext") {
-    assert(BoundedEnumerable[Boolean].cycleNext(false) === (true))
+    assert(BoundedEnumerable[Boolean].cycleNext(false) === true)
   }
 
   test("cyclePrevious") {
-    assert(BoundedEnumerable[Boolean].cyclePrevious(false) === (true))
+    assert(BoundedEnumerable[Boolean].cyclePrevious(false) === true)
   }
 
 }

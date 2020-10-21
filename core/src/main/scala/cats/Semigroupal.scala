@@ -1,7 +1,8 @@
 package cats
 
 import cats.kernel.CommutativeSemigroup
-import scala.collection.immutable.{Queue, SortedMap, SortedSet}
+import scala.collection.immutable.{Queue, Seq, SortedMap, SortedSet}
+import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 import simulacrum.typeclass
 import scala.annotation.implicitNotFound
@@ -50,7 +51,10 @@ import scala.annotation.implicitNotFound
 object Semigroupal extends ScalaVersionSpecificSemigroupalInstances with SemigroupalArityFunctions {
   implicit def catsSemigroupalForOption: Semigroupal[Option] = cats.instances.option.catsStdInstancesForOption
   implicit def catsSemigroupalForTry: Semigroupal[Try] = cats.instances.try_.catsStdInstancesForTry
+  implicit def catsSemigroupalForFuture(implicit ec: ExecutionContext): Semigroupal[Future] =
+    cats.instances.future.catsStdInstancesForFuture(ec)
   implicit def catsSemigroupalForList: Semigroupal[List] = cats.instances.list.catsStdInstancesForList
+  implicit def catsSemigroupalForSeq: Semigroupal[Seq] = cats.instances.seq.catsStdInstancesForSeq
   implicit def catsSemigroupalForVector: Semigroupal[Vector] = cats.instances.vector.catsStdInstancesForVector
   implicit def catsSemigroupalForQueue: Semigroupal[Queue] = cats.instances.queue.catsStdInstancesForQueue
   implicit def catsSemigroupalForMap[K]: Semigroupal[Map[K, *]] = cats.instances.map.catsStdInstancesForMap[K]

@@ -117,11 +117,9 @@ sealed private[instances] trait Function1Instances extends Function1Instances0 {
       def unit: Unit => R = Function.const(Monoid[R].empty)
       def contramap[A, B](fa: A => R)(f: B => A): B => R =
         fa.compose(f)
-      def product[A, B](fa: A => R, fb: B => R): ((A, B)) => R =
-        (ab: (A, B)) =>
-          ab match {
-            case (a, b) => Monoid[R].combine(fa(a), fb(b))
-          }
+      def product[A, B](fa: A => R, fb: B => R): ((A, B)) => R = { case (a, b) =>
+        Monoid[R].combine(fa(a), fb(b))
+      }
     }
 
   implicit def catsStdMonadForFunction1[T1]: Monad[T1 => *] =
@@ -164,12 +162,12 @@ sealed private[instances] trait Function1Instances extends Function1Instances0 {
 
       def lift[A, B](f: A => B): A => B = f
 
-      def first[A, B, C](fa: A => B): ((A, C)) => (B, C) = {
-        case (a, c) => (fa(a), c)
+      def first[A, B, C](fa: A => B): ((A, C)) => (B, C) = { case (a, c) =>
+        (fa(a), c)
       }
 
-      override def split[A, B, C, D](f: A => B, g: C => D): ((A, C)) => (B, D) = {
-        case (a, c) => (f(a), g(c))
+      override def split[A, B, C, D](f: A => B, g: C => D): ((A, C)) => (B, D) = { case (a, c) =>
+        (f(a), g(c))
       }
 
       def compose[A, B, C](f: B => C, g: A => B): A => C = f.compose(g)

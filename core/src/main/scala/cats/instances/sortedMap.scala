@@ -40,8 +40,8 @@ trait SortedMapInstances extends SortedMapInstances2 {
             val as = collection.mutable.ArrayBuffer[(K, A)]()
             as ++= fa
             wrapMutableIndexedSeq(as)
-          } {
-            case (k, a) => G.map(f(a))((k, _))
+          } { case (k, a) =>
+            G.map(f(a))((k, _))
           }) { chain => chain.foldLeft(SortedMap.empty[K, B]) { case (m, (k, b)) => m.updated(k, b) } }
       }
 
@@ -67,9 +67,8 @@ trait SortedMapInstances extends SortedMapInstances2 {
         fb: SortedMap[K, B]
       ): SortedMap[K, Z] = {
         implicit val ordering: Ordering[K] = f.ordering
-        f.flatMap {
-          case (k, f) =>
-            for { a <- fa.get(k); b <- fb.get(k) } yield (k, f(a, b))
+        f.flatMap { case (k, f) =>
+          for { a <- fa.get(k); b <- fb.get(k) } yield (k, f(a, b))
         }
       }
 
@@ -203,12 +202,11 @@ private[instances] trait SortedMapInstancesBinCompat0 {
             val as = collection.mutable.ArrayBuffer[(K, A)]()
             as ++= fa
             wrapMutableIndexedSeq(as)
-          } {
-            case (k, a) =>
-              G.map(f(a)) { optB =>
-                if (optB.isDefined) Some((k, optB.get))
-                else None
-              }
+          } { case (k, a) =>
+            G.map(f(a)) { optB =>
+              if (optB.isDefined) Some((k, optB.get))
+              else None
+            }
           }) { chain => chain.foldLeft(SortedMap.empty[K, B]) { case (m, (k, b)) => m.updated(k, b) } }
       }
 

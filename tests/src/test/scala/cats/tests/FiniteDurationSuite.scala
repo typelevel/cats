@@ -9,7 +9,7 @@ class FiniteDurationSuite extends CatsSuite {
   checkAll("Show[FiniteDuration]", SerializableTests.serializable(Show[FiniteDuration]))
 
   test("show works for FiniteDuration") {
-    assert(Show[FiniteDuration].show(23.minutes) === ("23 minutes"))
-    assert(Show[FiniteDuration].show(10.seconds) === ("10 seconds"))
+    assert(Show[FiniteDuration].show(23.minutes) === "23 minutes")
+    assert(Show[FiniteDuration].show(10.seconds) === "10 seconds")
   }
 }

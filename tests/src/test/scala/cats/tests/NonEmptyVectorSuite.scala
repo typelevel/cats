@@ -99,19 +99,19 @@ class NonEmptyVectorSuite extends NonEmptyCollectionSuite[Vector, NonEmptyVector
 
   test("Show is not empty and is formatted as expected") {
     forAll { (nonEmptyVector: NonEmptyVector[Int]) =>
-      assert(nonEmptyVector.show.nonEmpty === (true))
-      assert(nonEmptyVector.show.startsWith("NonEmptyVector(") === (true))
+      assert(nonEmptyVector.show.nonEmpty === true)
+      assert(nonEmptyVector.show.startsWith("NonEmptyVector(") === true)
       assert(nonEmptyVector.show === (implicitly[Show[NonEmptyVector[Int]]].show(nonEmptyVector)))
-      assert(nonEmptyVector.show.contains(nonEmptyVector.head.show) === (true))
+      assert(nonEmptyVector.show.contains(nonEmptyVector.head.show) === true)
     }
   }
 
   test("Show is formatted correctly") {
     val v1 = NonEmptyVector("Test", Vector.empty)
-    assert(v1.show === ("NonEmptyVector(Test)"))
+    assert(v1.show === "NonEmptyVector(Test)")
 
     val v2 = NonEmptyVector.of("foo", "bar", "baz")
-    assert(v2.show === ("NonEmptyVector(foo, bar, baz)"))
+    assert(v2.show === "NonEmptyVector(foo, bar, baz)")
   }
 
   test("Creating NonEmptyVector + toVector is identity") {
@@ -178,7 +178,7 @@ class NonEmptyVectorSuite extends NonEmptyCollectionSuite[Vector, NonEmptyVector
       val got = nonEmptyVector.reduceRight(f).value
       val (first, last) = excise(nonEmptyVector.toVector)
       val expected = first.foldRight(last)((a, b) => f(a, Now(b)).value)
-      assert(got === (expected))
+      assert(got === expected)
     }
   }
 
@@ -199,7 +199,7 @@ class NonEmptyVectorSuite extends NonEmptyCollectionSuite[Vector, NonEmptyVector
       val expected = nonEmptyVector.tail.foldLeft(Option(f(nonEmptyVector.head))) { (opt, i) =>
         opt.map(s => g(s, i))
       }
-      assert(nonEmptyVector.reduceLeftToOption(f)(g) === (expected))
+      assert(nonEmptyVector.reduceLeftToOption(f)(g) === expected)
     }
   }
 
@@ -209,7 +209,7 @@ class NonEmptyVectorSuite extends NonEmptyCollectionSuite[Vector, NonEmptyVector
       val expected = first.foldRight(Option(f(last))) { (i, opt) =>
         opt.map(s => g(i, Now(s)).value)
       }
-      assert(nonEmptyVector.reduceRightToOption(f)(g).value === (expected))
+      assert(nonEmptyVector.reduceRightToOption(f)(g).value === expected)
     }
   }
 
@@ -265,7 +265,7 @@ class NonEmptyVectorSuite extends NonEmptyCollectionSuite[Vector, NonEmptyVector
 
   test("prependVector with an empty Vector is the same as the original NonEmptyVector") {
     forAll { (nonEmptyVector: NonEmptyVector[Int]) =>
-      assert(nonEmptyVector.prependVector(Vector.empty) === (nonEmptyVector))
+      assert(nonEmptyVector.prependVector(Vector.empty) === nonEmptyVector)
     }
   }
 
@@ -278,7 +278,7 @@ class NonEmptyVectorSuite extends NonEmptyCollectionSuite[Vector, NonEmptyVector
   test("NonEmptyVector#get returns a None when the element does not exist") {
     forAll { (nonEmptyVector: NonEmptyVector[Int]) =>
       val size = nonEmptyVector.toVector.size
-      assert(nonEmptyVector.get(size) === (None))
+      assert(nonEmptyVector.get(size) === None)
     }
   }
 
@@ -294,7 +294,7 @@ class NonEmptyVectorSuite extends NonEmptyCollectionSuite[Vector, NonEmptyVector
   test("NonEmptyVector#updated returns a None when the element does not exist") {
     forAll { (nonEmptyVector: NonEmptyVector[Int], element: Int) =>
       val size = nonEmptyVector.toVector.size
-      assert(nonEmptyVector.updated(size, element) === (None))
+      assert(nonEmptyVector.updated(size, element) === None)
     }
   }
 
@@ -321,10 +321,10 @@ class NonEmptyVectorSuite extends NonEmptyCollectionSuite[Vector, NonEmptyVector
 
   test("NonEmptyVector#toString produces correct output") {
     forAll { (nonEmptyVector: NonEmptyVector[Int]) =>
-      assert(nonEmptyVector.toString === (s"NonEmpty${nonEmptyVector.toVector.toString}"))
+      assert(nonEmptyVector.toString === s"NonEmpty${nonEmptyVector.toVector.toString}")
     }
-    assert(NonEmptyVector(1, Vector.empty).toString === ("NonEmptyVector(1)"))
-    assert(NonEmptyVector(1, Vector.empty).toVector.toString === ("Vector(1)"))
+    assert(NonEmptyVector(1, Vector.empty).toString === "NonEmptyVector(1)")
+    assert(NonEmptyVector(1, Vector.empty).toVector.toString === "Vector(1)")
   }
 
   test("NonEmptyVector.unapply supports pattern matching") {
@@ -372,7 +372,7 @@ class NonEmptyVectorSuite extends NonEmptyCollectionSuite[Vector, NonEmptyVector
   test("NonEmptyVector#zipWith is consistent with #zipWithIndex") {
     forAll { (nev: NonEmptyVector[Int]) =>
       val zw = nev.zipWith(NonEmptyVector.fromVectorUnsafe((0 until nev.length).toVector))(Tuple2.apply)
-      assert(nev.zipWithIndex === (zw))
+      assert(nev.zipWithIndex === zw)
     }
   }
 
@@ -381,8 +381,8 @@ class NonEmptyVectorSuite extends NonEmptyCollectionSuite[Vector, NonEmptyVector
       val sorted = NonEmptyVector.fromVectorUnsafe(nev.map(f).toVector.sorted)
       val ior = Reducible[NonEmptyVector].nonEmptyPartition(sorted)(identity)
 
-      assert(ior.left.map(xs => xs.sorted === (xs)).getOrElse(true))
-      assert(ior.right.map(xs => xs.sorted === (xs)).getOrElse(true))
+      assert(ior.left.map(xs => xs.sorted === xs).getOrElse(true))
+      assert(ior.right.map(xs => xs.sorted === xs).getOrElse(true))
     }
   }
 
@@ -423,8 +423,8 @@ class NonEmptyVectorSuite extends NonEmptyCollectionSuite[Vector, NonEmptyVector
   test("NonEmptyVector#zipWithIndex is consistent with Vector#zipWithIndex") {
     forAll { (nonEmptyVector: NonEmptyVector[Int]) =>
       val expected = NonEmptyVector.fromVectorUnsafe(nonEmptyVector.toVector.zipWithIndex)
-      assert(nonEmptyVector.zipWithIndex === (expected))
-      assert(Traverse[NonEmptyVector].zipWithIndex(nonEmptyVector) === (expected))
+      assert(nonEmptyVector.zipWithIndex === expected)
+      assert(Traverse[NonEmptyVector].zipWithIndex(nonEmptyVector) === expected)
     }
   }
 

@@ -423,8 +423,8 @@ sealed abstract private[data] class NonEmptyChainInstances extends NonEmptyChain
 
       def nonEmptyTraverse[G[_]: Apply, A, B](fa: NonEmptyChain[A])(f: A => G[B]): G[NonEmptyChain[B]] = {
         def loop(head: A, tail: Chain[A]): Eval[G[NonEmptyChain[B]]] =
-          tail.uncons.fold(Eval.now(Apply[G].map(f(head))(NonEmptyChain(_)))) {
-            case (h, t) => Apply[G].map2Eval(f(head), Eval.defer(loop(h, t)))((b, acc) => b +: acc)
+          tail.uncons.fold(Eval.now(Apply[G].map(f(head))(NonEmptyChain(_)))) { case (h, t) =>
+            Apply[G].map2Eval(f(head), Eval.defer(loop(h, t)))((b, acc) => b +: acc)
           }
 
         loop(fa.head, fa.tail).value
@@ -441,7 +441,7 @@ sealed abstract private[data] class NonEmptyChainInstances extends NonEmptyChain
       def reduceLeftTo[A, B](fa: NonEmptyChain[A])(f: A => B)(g: (B, A) => B): B = fa.reduceLeftTo(f)(g)
 
       def reduceRightTo[A, B](fa: NonEmptyChain[A])(f: A => B)(g: (A, cats.Eval[B]) => cats.Eval[B]): cats.Eval[B] =
-        Eval.defer(fa.reduceRightTo(a => Eval.now(f(a))) { (a, b) =>
+        Eval.defer(fa.reduceRightTo(a => Eval.later(f(a))) { (a, b) =>
           Eval.defer(g(a, b))
         })
 

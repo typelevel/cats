@@ -1,7 +1,6 @@
 package cats
 package data
 
-import cats.Bifunctor
 import cats.arrow.FunctionK
 import cats.data.Validated.{Invalid, Valid}
 
@@ -708,6 +707,20 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
       (a, b) => that.fold(a2 => false, b2 => false, (a2, b2) => AA.eqv(a, a2) && BB.eqv(b, b2))
     )
 
+  final def compare[AA >: A, BB >: B](that: AA Ior BB)(implicit AA: Order[AA], BB: Order[BB]): Int =
+    (this, that) match {
+      case (Ior.Left(a1), Ior.Left(a2))   => AA.compare(a1, a2)
+      case (Ior.Left(_), _)               => -1
+      case (Ior.Right(b1), Ior.Right(b2)) => BB.compare(b1, b2)
+      case (Ior.Right(_), Ior.Left(_))    => 1
+      case (Ior.Right(_), Ior.Both(_, _)) => -1
+      case (Ior.Both(a1, b1), Ior.Both(a2, b2)) => {
+        val r = AA.compare(a1, a2)
+        if (r == 0) BB.compare(b1, b2) else r
+      }
+      case (Ior.Both(_, _), _) => 1
+    }
+
   final def show[AA >: A, BB >: B](implicit AA: Show[AA], BB: Show[BB]): String =
     fold(
       a => s"Ior.Left(${AA.show(a)})",
@@ -752,9 +765,10 @@ sealed abstract private[data] class IorInstances extends IorInstances0 {
       }
   }
 
-  implicit def catsDataEqForIor[A: Eq, B: Eq]: Eq[A Ior B] =
-    new Eq[A Ior B] {
-      def eqv(x: A Ior B, y: A Ior B): Boolean = x === y
+  implicit def catsDataOrderForIor[A: Order, B: Order]: Order[A Ior B] =
+    new Order[A Ior B] {
+
+      def compare(x: Ior[A, B], y: Ior[A, B]): Int = x.compare(y)
     }
 
   implicit def catsDataShowForIor[A: Show, B: Show]: Show[A Ior B] =
@@ -878,6 +892,12 @@ sealed abstract private[data] class IorInstances0 {
 
       override def map[B, C](fa: A Ior B)(f: B => C): A Ior C =
         fa.map(f)
+    }
+
+  implicit def catsDataEqForIor[A: Eq, B: Eq]: Eq[A Ior B] =
+    new Eq[A Ior B] {
+
+      def eqv(x: A Ior B, y: A Ior B): Boolean = x === y
     }
 }
 

@@ -1,7 +1,7 @@
 package cats
 
 import cats.kernel.CommutativeMonoid
-import scala.collection.immutable.{Queue, SortedMap, SortedSet}
+import scala.collection.immutable.{Queue, Seq, SortedMap, SortedSet}
 import scala.util.Try
 import simulacrum.{noop, typeclass}
 import scala.annotation.implicitNotFound
@@ -98,6 +98,7 @@ object UnorderedFoldable extends ScalaVersionSpecificTraverseInstances {
   implicit def catsNonEmptyTraverseForId: NonEmptyTraverse[Id] = catsInstancesForId
   implicit def catsTraverseForOption: Traverse[Option] = cats.instances.option.catsStdInstancesForOption
   implicit def catsTraverseForList: Traverse[List] = cats.instances.list.catsStdInstancesForList
+  implicit def catsTraverseForSeq: Traverse[Seq] = cats.instances.seq.catsStdInstancesForSeq
   implicit def catsTraverseForVector: Traverse[Vector] = cats.instances.vector.catsStdInstancesForVector
   implicit def catsTraverseForQueue: Traverse[Queue] = cats.instances.queue.catsStdInstancesForQueue
   implicit def catsUnorderedTraverseForSet: UnorderedTraverse[Set] = cats.instances.set.catsStdInstancesForSet

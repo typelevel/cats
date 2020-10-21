@@ -88,15 +88,15 @@ class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonE
   test("Show is not empty and is formatted as expected") {
     forAll { (nel: NonEmptyList[Int]) =>
       assert(nel.show.nonEmpty)
-      assert(nel.show.startsWith("NonEmptyList(") === (true))
+      assert(nel.show.startsWith("NonEmptyList(") === true)
       assert(nel.show === (implicitly[Show[NonEmptyList[Int]]].show(nel)))
-      assert(nel.show.contains(nel.head.show) === (true))
+      assert(nel.show.contains(nel.head.show) === true)
     }
   }
 
   test("Show is formatted correctly") {
     val nonEmptyList = NonEmptyList("Test", Nil)
-    assert(nonEmptyList.show === ("NonEmptyList(Test)"))
+    assert(nonEmptyList.show === "NonEmptyList(Test)")
   }
 
   test("Creating NonEmptyList + toList is identity") {
@@ -176,7 +176,7 @@ class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonE
       nel.toList.reverse match {
         case last :: rev =>
           val expected = rev.reverse.foldRight(last)((a, b) => f(a, Now(b)).value)
-          assert(got === (expected))
+          assert(got === expected)
         case _ => fail("nonempty turns out to be empty")
       }
 
@@ -200,7 +200,7 @@ class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonE
       val expected = nel.tail.foldLeft(Option(f(nel.head))) { (opt, i) =>
         opt.map(s => g(s, i))
       }
-      assert(nel.reduceLeftToOption(f)(g) === (expected))
+      assert(nel.reduceLeftToOption(f)(g) === expected)
     }
   }
 
@@ -212,7 +212,7 @@ class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonE
           val expected = rev.reverse.foldRight(Option(f(last))) { (i, opt) =>
             opt.map(s => g(i, Now(s)).value)
           }
-          assert(got === (expected))
+          assert(got === expected)
         case _ => fail("nonempty turns out to be empty")
       }
 
@@ -225,7 +225,7 @@ class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonE
       val expected = f(nel.head).flatMap { hd =>
         nel.tail.foldM(hd)((acc, i) => f(i).map(acc + _))
       }
-      assert(got === (expected))
+      assert(got === expected)
     }
   }
 
@@ -237,7 +237,7 @@ class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonE
 
   test("fromList round trip") {
     forAll { (l: List[Int]) =>
-      assert(NonEmptyList.fromList(l).map(_.toList).getOrElse(List.empty) === (l))
+      assert(NonEmptyList.fromList(l).map(_.toList).getOrElse(List.empty) === l)
     }
 
     forAll { (nel: NonEmptyList[Int]) =>

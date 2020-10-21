@@ -183,12 +183,11 @@ sealed class NonEmptyMapOps[K, A](val value: NonEmptyMap[K, A]) {
    * with every other value using the given function `g`.
    */
   def reduceRightTo[B](f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B] =
-    Always((head, tail)).flatMap {
-      case ((_, a), ga) =>
-        Foldable[SortedMap[K, *]].reduceRightToOption(ga)(f)(g).flatMap {
-          case Some(b) => g(a, Now(b))
-          case None    => Later(f(a))
-        }
+    Always((head, tail)).flatMap { case ((_, a), ga) =>
+      Foldable[SortedMap[K, *]].reduceRightToOption(ga)(f)(g).flatMap {
+        case Some(b) => g(a, Now(b))
+        case None    => Later(f(a))
+      }
     }
 
   /**
@@ -196,16 +195,6 @@ sealed class NonEmptyMapOps[K, A](val value: NonEmptyMap[K, A]) {
    */
   def reduce(implicit S: Semigroup[A]): A =
     reduceLeft(S.combine)
-
-  private def reduceRightToOptionWithKey[V, B](
-    fa: SortedMap[K, V]
-  )(f: (K, V) => B)(g: ((K, V), Eval[B]) => Eval[B]): Eval[Option[B]] =
-    Foldable.iterateRight(fa.toIterable, Now(Option.empty[B])) { (a, lb) =>
-      lb.flatMap {
-        case Some(b) => g(a, Now(b)).map(Some(_))
-        case None    => Later(Some(f.tupled(a)))
-      }
-    }
 
   /**
    * Given a function which returns a G effect, thread this effect

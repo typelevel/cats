@@ -1,7 +1,6 @@
 package cats.js.tests
 
 import cats.Comonad
-import cats.instances.FutureInstances
 import cats.js.instances.Await
 import cats.js.instances.future.futureComonad
 import cats.kernel.Eq
@@ -15,7 +14,7 @@ import org.scalacheck.Arbitrary.arbitrary
 import scala.concurrent.{ExecutionContextExecutor, Future}
 import scala.concurrent.duration._
 
-class FutureTests extends CatsSuite with FutureInstances {
+class FutureTests extends CatsSuite {
   // Replaces Scala.js's `JSExecutionContext.runNow`, which is removed in 1.0.
   // TODO: We shouldn't do this! See: https://github.com/scala-js/scala-js/issues/2102
   implicit private object RunNowExecutionContext extends ExecutionContextExecutor {

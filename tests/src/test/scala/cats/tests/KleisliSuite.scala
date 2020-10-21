@@ -9,7 +9,7 @@ import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.laws.discipline.{DeferTests, MonoidKTests, SemigroupKTests}
-import cats.implicits._
+import cats.syntax.all._
 import cats.platform.Platform
 import cats.tests.Helpers.CSemi
 import org.scalacheck.Prop._
@@ -179,11 +179,6 @@ class KleisliSuite extends CatsSuite {
   checkAll("Contravariant[Kleisli[Option, *, Int]]",
            SerializableTests.serializable(Contravariant[Kleisli[Option, *, Int]])
   )
-
-  test("Functor[Kleisli[F, Int, *]] is not ambiguous when an ApplicativeError and a FlatMap are in scope for F") {
-    def shouldCompile1[F[_], E](implicit F: ApplicativeError[F, E], FM: FlatMap[F]): Functor[Kleisli[F, Int, *]] =
-      Functor[Kleisli[F, Int, *]]
-  }
 
   test("local composes functions") {
     forAll { (f: Int => Option[String], g: Int => Int, i: Int) =>

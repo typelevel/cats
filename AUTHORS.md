@@ -15,6 +15,7 @@ possible:
  * 3rdLaw
  * Aaron Levin
  * Adam Fisher
+ * Adam Rosien
  * Adelbert Chang
  * Adrian Ramirez Fornell
  * Aldo Stracquadanio
@@ -46,6 +47,7 @@ possible:
  * Ben Hutchison
  * Ben Kirwin
  * Ben Plommer
+ * Ben Stewart
  * Benjamin Thuillier
  * Binh Nguyen
  * Bjørn Madsen
@@ -88,9 +90,11 @@ possible:
  * Earl St Sauver
  * Edd Steel
  * Endre Galaczi
+ * Enrico Benini
  * enzief
  * Eric Torreborre
  * ericaovo
+ * Erik Erlandson
  * Erik LaBianca
  * Erik Osheim
  * Eugene Burmako
@@ -267,6 +271,8 @@ possible:
  * Takayuki Sakai
  * Tanaka Takaya
  * Taylor Brown
+ * Tim Spence
+ * Timothy McCarthy
  * Tom Switzer
  * Tomas Mikula
  * Tongfei Chen
@@ -275,6 +281,7 @@ possible:
  * Trond Bjerkestrand
  * Tya
  * Valentin Willscher
+ * Valeriy Avanesov
  * Valy Diarrassouba
  * Vasileios Lampridis
  * Vasilis Nicolaou

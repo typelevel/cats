@@ -12,6 +12,7 @@ import cats.syntax.eq._
 import org.scalacheck.Prop._
 import cats.tests.CatsSuite
 import org.scalacheck.{Arbitrary, Gen}
+import cats._
 
 class FreeApplicativeSuite extends CatsSuite {
   import FreeApplicativeSuite._

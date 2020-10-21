@@ -12,8 +12,8 @@ class BitSetSuite extends CatsSuite {
     Arbitrary(arbitrary[List[Short]].map(ns => BitSet(ns.map(_ & 0xffff): _*)))
 
   test("show BitSet") {
-    assert(BitSet(1, 1, 2, 3).show === ("BitSet(1, 2, 3)"))
-    assert(BitSet.empty.show === ("BitSet()"))
+    assert(BitSet(1, 1, 2, 3).show === "BitSet(1, 2, 3)")
+    assert(BitSet.empty.show === "BitSet()")
 
     forAll { (fs: BitSet) =>
       assert(fs.show === (fs.toString))

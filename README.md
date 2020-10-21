@@ -1,9 +1,6 @@
 
 ### ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) Community Announcements ![#f03c15](https://placehold.it/15/f03c15/000000?text=+)
-* **Jul 6 2020** [Cats 2.2.0-RC1 is released](https://github.com/typelevel/cats/releases/tag/v2.2.0-RC1)
-* **Jun 17 2020** [Cats 2.2.0-M3 is released](https://github.com/typelevel/cats/releases/tag/v2.2.0-M3)
-* **May 25 2020** [Cats 2.2.0-M2 is released](https://github.com/typelevel/cats/releases/tag/v2.2.0-M2)
-* **Mar 31 2020** [Cats 2.2.0-M1 is released](https://github.com/typelevel/cats/releases/tag/v2.2.0-M1)
+* **Sept 3 2020** [Cats 2.2.0 is released](https://github.com/typelevel/cats/releases/tag/v2.2.0)
 * **Dec 18 2019** [Cats 2.1.0 is released](https://github.com/typelevel/cats/releases/tag/v2.1.0)
 * **Sep 9 2019** [Cats 2.0.0 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0)
 * **Jun 3 2019** [Cats 1.6.1 is released](https://github.com/typelevel/cats/releases/tag/v1.6.1) with backported bug fixes
@@ -17,7 +14,7 @@
 [![Financial Contributors on Open Collective](https://opencollective.com/typelevel/all/badge.svg?label=financial+contributors)](https://opencollective.com/typelevel) [![Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/typelevel/cats)
 [![codecov.io](http://codecov.io/github/typelevel/cats/coverage.svg?branch=master)](http://codecov.io/github/typelevel/cats?branch=master)
 [![Latest version](https://index.scala-lang.org/typelevel/cats/cats-core/latest.svg?color=orange&v=1)](https://index.scala-lang.org/typelevel/cats/cats-core)
-[![Scala.js](http://scala-js.org/assets/badges/scalajs-0.6.14.svg)](http://scala-js.org)
+[![Scala.js](http://scala-js.org/assets/badges/scalajs-1.2.0.svg)](http://scala-js.org)
 
 
 ### Overview
@@ -154,7 +151,6 @@ By sharing the same set of type classes, instances and data types provided by Ca
 
 #### General purpose libraries to support pure functional programming
 
- * [cats-par](https://github.com/ChristopherDavenport/cats-par): Abstract type member Parallel instances
  * [cats-retry](https://github.com/cb372/cats-retry): composable retry logic for Cats and Cats Effect
  * [droste](https://github.com/andyscott/droste): recursion schemes for Cats
  * [dsl-domains-cats](https://github.com/ThoughtWorksInc/dsl-domains-cats): The `!`-notation for creating Cats monadic expressions
@@ -195,10 +191,13 @@ By sharing the same set of type classes, instances and data types provided by Ca
  * [log4cats](https://github.com/ChristopherDavenport/log4cats): functional logging
  * [monadic-html](https://github.com/OlivierBlanvillain/monadic-html): Tiny DOM binding library for Scala.js
  * [Monix](https://github.com/monix/monix): high-performance library for composing asynchronous and event-based programs
+ * [Monix BIO](https://github.com/monix/monix-bio): `IO` alternative with typed errors
  * [morphling](https://github.com/danslapman/morphling): free applicative schemas & instance derivation
+ * [natchez](https://github.com/tpolecat/natchez): an opentracing library, to use with Jaegger, Honeycomb, OpenCensus, and Lightstep.
  * [phony](https://github.com/alirezameskin/phony): Fake data generator
  * [pureconfig](https://github.com/pureconfig/pureconfig): A boilerplate-free library for loading configuration files
  * [rainier](https://github.com/stripe/rainier): Bayesian inference in Scala
+ * [redis4cats](https://github.com/profunktor/redis4cats): a Redis client library.
  * [scala-forex](https://github.com/snowplow/scala-forex): exchange rate lookups
  * [scala-maxmind-ip-lookups](https://github.com/snowplow/scala-maxmind-iplookups): IP geolocation through [the Maxmind database](https://www.maxmind.com/en/home)
  * [scala-referer-parser](https://github.com/snowplow-referer-parser/scala-referer-parser): referer parsing
@@ -207,6 +206,7 @@ By sharing the same set of type classes, instances and data types provided by Ca
  * [scanamo](https://github.com/guardian/scanamo): simpler DynamoDB access for Scala
  * [seals](https://github.com/durban/seals): tools for schema evolution and language-integrated schemata
  * [sup](https://github.com/kubukoz/sup): Composable, purely functional healthchecks in Scala
+ * [skunk](https://github.com/tpolecat/skunk): a data access library for Scala + Postgres.
  * [tsec](https://github.com/jmcardon/tsec/): Typesafe, functional, general purpose cryptography and security library
  * [coulomb-cats](https://github.com/erikerlandson/coulomb/tree/develop/coulomb-cats): cats typeclass instances for coulomb Quantity
 
@@ -313,6 +313,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [formation.ai](https://formation.ai)
 - [Free2Move](https://free2move.com)
 - [HelloSoda](https://hellosoda.com)
+- [HiFi](https://hi.fi)
 - [HomeAway](https://www.homeaway.com)
 - [Hootsuite Inc.](https://hootsuite.com/)
 - [iHeartRadio](https://iheart.com)

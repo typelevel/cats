@@ -1,6 +1,6 @@
 package cats.tests
 
-import cats.{Eval, Foldable, Id, Now}
+import cats._
 import cats.data.{Const, EitherK, IdT, Ior, Nested, NonEmptyList, NonEmptyStream, NonEmptyVector, OneAnd, Validated}
 import cats.instances.order._
 import cats.kernel.{Eq, Monoid}
@@ -58,8 +58,8 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit
           case Right(_) => false
         })
 
-      assert(lefts.map(_.asLeft[String]) === (ls))
-      assert(rights.map(_.asRight[String]) === (rs))
+      assert(lefts.map(_.asLeft[String]) === ls)
+      assert(rights.map(_.asRight[String]) === rs)
     }
   }
 
@@ -84,17 +84,16 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit
       val sorted = list.map(f).sorted
       val (lefts, rights) = Foldable[List].partitionEither(sorted)(identity)
 
-      assert(lefts.sorted === (lefts))
-      assert(rights.sorted === (rights))
+      assert(lefts.sorted === lefts)
+      assert(rights.sorted === rights)
     }
   }
 
   test("Foldable#partitionEitherM retains size") {
     forAll { (fi: F[Int], f: Int => Either[String, String]) =>
       val vector = Foldable[F].toList(fi).toVector
-      val result = Foldable[Vector].partitionEitherM(vector)(f.andThen(Option.apply)).map {
-        case (lefts, rights) =>
-          (lefts <+> rights).size
+      val result = Foldable[Vector].partitionEitherM(vector)(f.andThen(Option.apply)).map { case (lefts, rights) =>
+        (lefts <+> rights).size
       }
       assert(result === (Option(vector.size)))
     }
@@ -145,10 +144,10 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit
   test(s"Foldable[$name] summation") {
     forAll { (fa: F[Int]) =>
       val total = iterator(fa).sum
-      assert(fa.foldLeft(0)(_ + _) === (total))
-      assert(fa.foldRight(Now(0))((x, ly) => ly.map(x + _)).value === (total))
-      assert(fa.fold === (total))
-      assert(fa.foldMap(identity) === (total))
+      assert(fa.foldLeft(0)(_ + _) === total)
+      assert(fa.foldRight(Now(0))((x, ly) => ly.map(x + _)).value === total)
+      assert(fa.fold === total)
+      assert(fa.foldMap(identity) === total)
     }
   }
 
@@ -205,8 +204,8 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit
       assert(maxOpt === (nelOpt.map(_.toList.max)))
       assert(minOpt === (nelOpt.map(_.minimum)))
       assert(minOpt === (nelOpt.map(_.toList.min)))
-      assert(maxOpt.forall(i => fa.forall(_ <= i)) === (true))
-      assert(minOpt.forall(i => fa.forall(_ >= i)) === (true))
+      assert(maxOpt.forall(i => fa.forall(_ <= i)) === true)
+      assert(minOpt.forall(i => fa.forall(_ >= i)) === true)
     }
   }
 
@@ -219,8 +218,8 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit
       assert(maxOpt === (nelOpt.map(_.toList.maxBy(f)).map(f)))
       assert(minOpt === (nelOpt.map(_.minimumBy(f)).map(f)))
       assert(minOpt === (nelOpt.map(_.toList.minBy(f)).map(f)))
-      assert(maxOpt.forall(i => fa.forall(f(_) <= i)) === (true))
-      assert(minOpt.forall(i => fa.forall(f(_) >= i)) === (true))
+      assert(maxOpt.forall(i => fa.forall(f(_) <= i)) === true)
+      assert(minOpt.forall(i => fa.forall(f(_) >= i)) === true)
     }
   }
 
@@ -298,9 +297,9 @@ class FoldableSuiteAdditional extends CatsSuite with ScalaVersionSpecificFoldabl
     // some basic sanity checks
     val ns = (1 to 10).toList
     val total = ns.sum
-    assert(F.foldLeft(ns, 0)(_ + _) === (total))
-    assert(F.foldRight(ns, Now(0))((x, ly) => ly.map(x + _)).value === (total))
-    assert(F.fold(ns) === (total))
+    assert(F.foldLeft(ns, 0)(_ + _) === total)
+    assert(F.foldRight(ns, Now(0))((x, ly) => ly.map(x + _)).value === total)
+    assert(F.fold(ns) === total)
 
     // more basic checks
     val names = List("Aaron", "Betty", "Calvin", "Deirdra")
@@ -464,7 +463,7 @@ class FoldableSuiteAdditional extends CatsSuite with ScalaVersionSpecificFoldabl
   }
 
   test("Foldable[Stream] laziness of foldM") {
-    assert(dangerous.foldM(0)((acc, a) => if (a < 2) Some(acc + a) else None) === (None))
+    assert(dangerous.foldM(0)((acc, a) => if (a < 2) Some(acc + a) else None) === None)
   }
 
   def foldableStreamWithDefaultImpl: Foldable[Stream] =
@@ -607,7 +606,7 @@ class FoldableOneAndSuite extends FoldableSuite[OneAnd[List, *]]("oneAnd") {
 
 class FoldableComposedSuite extends FoldableSuite[Nested[List, Option, *]]("nested") {
   def iterator[T](nested: Nested[List, Option, T]) =
-    nested.value.collect {
-      case Some(t) => t
+    nested.value.collect { case Some(t) =>
+      t
     }.iterator
 }

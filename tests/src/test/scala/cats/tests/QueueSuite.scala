@@ -38,8 +38,8 @@ class QueueSuite extends CatsSuite {
   checkAll("Queue[Int]", ShortCircuitingTests[Queue].traverseFilter[Int])
 
   test("show") {
-    assert(Queue(1, 2, 3).show === ("Queue(1, 2, 3)"))
-    assert(Queue.empty[Int].show === ("Queue()"))
+    assert(Queue(1, 2, 3).show === "Queue(1, 2, 3)")
+    assert(Queue.empty[Int].show === "Queue()")
   }
 
   test("traverse is stack-safe") {

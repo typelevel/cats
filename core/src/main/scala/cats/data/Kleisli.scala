@@ -365,8 +365,8 @@ sealed abstract private[data] class KleisliInstances0_5 extends KleisliInstances
 
       override val F: Functor[Kleisli[M, E, *]] = FK
 
-      def index[A](f: Kleisli[M, E, A]): Representation => A = {
-        case (e, r) => R.index(f.run(e))(r)
+      def index[A](f: Kleisli[M, E, A]): Representation => A = { case (e, r) =>
+        R.index(f.run(e))(r)
       }
 
       def tabulate[A](f: Representation => A): Kleisli[M, E, A] =

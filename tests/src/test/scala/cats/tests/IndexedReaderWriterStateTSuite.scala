@@ -1,6 +1,6 @@
 package cats.tests
 
-import cats.{~>, Bifunctor, Contravariant, Eval, Functor, Id, Monad, MonadError, SemigroupK}
+import cats._
 import cats.arrow.{Profunctor, Strong}
 import cats.data.{EitherT, IRWST, IndexedReaderWriterStateT, ReaderWriterState, ReaderWriterStateT}
 import cats.kernel.{Eq, Monoid}
@@ -32,7 +32,7 @@ class ReaderWriterStateTSuite extends CatsSuite {
     val ns = (0 to 70000).toList
     val rws = ns.traverse(_ => addLogUnit(1))
 
-    assert(rws.runS("context", 0).value === (70001))
+    assert(rws.runS("context", 0).value === 70001)
   }
 
   test("flatMap is stack-safe on repeated left binds when F is") {
@@ -40,7 +40,7 @@ class ReaderWriterStateTSuite extends CatsSuite {
     val one = addLogUnit(1)
     val rws = ns.foldLeft(one)((acc, _) => acc.flatMap(_ => one))
 
-    assert(rws.runS("context", 0).value === (70002))
+    assert(rws.runS("context", 0).value === 70002)
   }
 
   test("flatMap is stack-safe on repeated right binds when F is") {
@@ -48,7 +48,7 @@ class ReaderWriterStateTSuite extends CatsSuite {
     val one = addLogUnit(1)
     val rws = ns.foldLeft(one)((acc, _) => one.flatMap(_ => acc))
 
-    assert(rws.runS("context", 0).value === (70002))
+    assert(rws.runS("context", 0).value === 70002)
   }
 
   test("map2 combines logs") {
@@ -64,13 +64,13 @@ class ReaderWriterStateTSuite extends CatsSuite {
         val logB = rwsb.runL(c, stateA).value
         val combinedLog = logA |+| logB
 
-        assert(logMap2 === (combinedLog))
+        assert(logMap2 === combinedLog)
     }
   }
 
   test("ReaderWriterState.ask provides the context") {
     forAll { (context: String, initial: Int) =>
-      assert(ReaderWriterState.ask[String, String, Int].runA(context, initial).value === (context))
+      assert(ReaderWriterState.ask[String, String, Int].runA(context, initial).value === context)
     }
   }
 
@@ -223,7 +223,7 @@ class ReaderWriterStateTSuite extends CatsSuite {
 
   test("ReaderWriterState.tell + written is identity") {
     forAll { (context: String, initial: Int, log: String) =>
-      assert(ReaderWriterState.tell[String, String, Int](log).written.runA(context, initial).value === (log))
+      assert(ReaderWriterState.tell[String, String, Int](log).written.runA(context, initial).value === log)
     }
   }
 
@@ -232,8 +232,8 @@ class ReaderWriterStateTSuite extends CatsSuite {
     val (log, state, result) = rws.run("context", 0).value
 
     assert(log === (Vector("context: Added 5", "context: Added 10")))
-    assert(state === (15))
-    assert(result === (15))
+    assert(state === 15)
+    assert(result === 15)
   }
 
   test("flatMap and flatMapF+tell are consistent") {
@@ -330,7 +330,7 @@ class ReaderWriterStateTSuite extends CatsSuite {
     forAll { (c: String, initial: Long, rws: ReaderWriterState[String, String, Long, Long]) =>
       val (_, state, value) = rws.get.run(c, initial).value
 
-      assert(state === (value))
+      assert(state === value)
     }
   }
 

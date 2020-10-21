@@ -4,8 +4,8 @@ import cats.arrow.FunctionK
 import cats.data.{EitherK, NonEmptyList}
 import cats.laws.discipline.arbitrary._
 import cats.syntax.eq._
-import org.scalacheck.Prop._
 import cats.{Applicative, Id}
+import org.scalacheck.Prop._
 
 class FunctionKSuite extends CatsSuite {
   type OptionOfNel[+A] = Option[NonEmptyList[A]]

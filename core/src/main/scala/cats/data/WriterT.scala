@@ -66,8 +66,8 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
    * }}}
    */
   def listen(implicit F: Functor[F]): WriterT[F, L, (V, L)] =
-    WriterT(F.map(run) {
-      case (l, v) => (l, (v, l))
+    WriterT(F.map(run) { case (l, v) =>
+      (l, (v, l))
     })
 
   /**
@@ -88,8 +88,8 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
    * }}}
    */
   def ap[Z](f: WriterT[F, L, V => Z])(implicit F: Apply[F], L: Semigroup[L]): WriterT[F, L, Z] =
-    WriterT(F.map2(f.run, run) {
-      case ((l1, fvz), (l2, v)) => (L.combine(l1, l2), fvz(v))
+    WriterT(F.map2(f.run, run) { case ((l1, fvz), (l2, v)) =>
+      (L.combine(l1, l2), fvz(v))
     })
 
   /**
@@ -320,6 +320,9 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
     G.map(
       F.traverse(run)(lv => G.tupleLeft(f(lv._2), lv._1))
     )(WriterT.apply)
+
+  def compare(that: WriterT[F, L, V])(implicit Ord: Order[F[(L, V)]]): Int =
+    Ord.compare(run, that.run)
 }
 
 object WriterT extends WriterTInstances with WriterTFunctions with WriterTFunctions0 {
@@ -377,6 +380,11 @@ sealed abstract private[data] class WriterTInstances1 extends WriterTInstances2 
 
   implicit def catsDataFoldableForWriterTId[L](implicit F: Foldable[Id]): Foldable[WriterT[Id, L, *]] =
     catsDataFoldableForWriterT[Id, L](F)
+
+  implicit def catsDataOrderForWriterT[F[_], L, V](implicit Ord: Order[F[(L, V)]]): Order[WriterT[F, L, V]] =
+    new Order[WriterT[F, L, V]] {
+      def compare(x: WriterT[F, L, V], y: WriterT[F, L, V]): Int = x.compare(y)
+    }
 }
 
 sealed abstract private[data] class WriterTInstances2 extends WriterTInstances3 {

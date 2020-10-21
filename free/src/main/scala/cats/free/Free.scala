@@ -10,7 +10,7 @@ import cats.arrow.FunctionK
  * using the heap instead of the stack, allowing tail-call
  * elimination.
  */
-sealed abstract class Free[S[_], A] extends Product with Serializable {
+sealed abstract class Free[S[_], A] extends Product with Serializable with FreeFoldStep[S, A] {
 
   import Free.{FlatMapped, Pure, Suspend}
 
@@ -71,22 +71,6 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
           case Suspend(t)       => Left(S.map(t)(f))
           case FlatMapped(d, g) => d.flatMap(dd => g(dd).flatMap(f)).resume
         }
-    }
-
-  /**
-   * A combination of step and fold. May be used to define interpreters with custom
-   * (non-monoidial) control flow.
-   */
-  final def foldStep[B](
-    onPure: A => B,
-    onSuspend: S[A] => B,
-    onFlatMapped: ((S[X], X => Free[S, A]) forSome { type X }) => B
-  ): B =
-    this.step match {
-      case Pure(a)                    => onPure(a)
-      case Suspend(a)                 => onSuspend(a)
-      case FlatMapped(Suspend(fa), f) => onFlatMapped((fa, f))
-      case _                          => sys.error("FlatMapped should be right associative after step")
     }
 
   /**
@@ -315,18 +299,10 @@ private trait FreeFoldable[F[_]] extends Foldable[Free[F, *]] {
   implicit def F: Foldable[F]
 
   final override def foldLeft[A, B](fa: Free[F, A], b: B)(f: (B, A) => B): B =
-    fa.foldStep(
-      a => f(b, a),
-      fa => F.foldLeft(fa, b)(f),
-      { case (fx, g) => F.foldLeft(fx, b)((bb, x) => foldLeft(g(x), bb)(f)) }
-    )
+    fa.foldLeft(fa, b)(f)
 
   final override def foldRight[A, B](fa: Free[F, A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
-    fa.foldStep(
-      a => f(a, lb),
-      fa => F.foldRight(fa, lb)(f),
-      { case (fx, g) => F.foldRight(fx, lb)((a, lbb) => foldRight(g(a), lbb)(f)) }
-    )
+    fa.foldRight(fa, lb)(f)
 }
 
 private trait FreeTraverse[F[_]] extends Traverse[Free[F, *]] with FreeFoldable[F] {

@@ -94,10 +94,10 @@ class ConstSuite extends CatsSuite {
 
   test("show") {
 
-    assert(Const(1).show === ("Const(1)"))
+    assert(Const(1).show === "Const(1)")
 
     forAll { (const: Const[Int, String]) =>
-      assert(const.show.startsWith("Const(") === (true))
+      assert(const.show.startsWith("Const(") === true)
       const.show.contains(const.getConst.show)
       assert(const.show === (implicitly[Show[Const[Int, String]]].show(const)))
       assert(const.show === (const.retag[Boolean].show))

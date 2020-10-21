@@ -97,12 +97,15 @@ import scala.annotation.implicitNotFound
    */
   def foldRight[A, B](fa: F[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B]
 
-  def foldRightDefer[G[_]: Defer, A, B](fa: F[A], gb: G[B])(fn: (A, G[B]) => G[B]): G[B] =
-    Defer[G].defer(
-      foldLeft(fa, (z: G[B]) => z) { (acc, elem) => z =>
-        Defer[G].defer(acc(fn(elem, z)))
-      }(gb)
-    )
+  def foldRightDefer[G[_]: Defer, A, B](fa: F[A], gb: G[B])(fn: (A, G[B]) => G[B]): G[B] = {
+    def loop(source: Source[A]): G[B] = {
+      source.uncons match {
+        case Some((next, s)) => fn(next, Defer[G].defer(loop(s.value)))
+        case None            => gb
+      }
+    }
+    Defer[G].defer(loop(Source.fromFoldable(fa)(self)))
+  }
 
   def reduceLeftToOption[A, B](fa: F[A])(f: A => B)(g: (B, A) => B): Option[B] =
     foldLeft(fa, Option.empty[B]) {
@@ -392,12 +395,11 @@ import scala.annotation.implicitNotFound
    */
   def foldM[G[_], A, B](fa: F[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] = {
     val src = Foldable.Source.fromFoldable(fa)(self)
-    G.tailRecM((z, src)) {
-      case (b, src) =>
-        src.uncons match {
-          case Some((a, src)) => G.map(f(b, a))(b => Left((b, src.value)))
-          case None           => G.pure(Right(b))
-        }
+    G.tailRecM((z, src)) { case (b, src) =>
+      src.uncons match {
+        case Some((a, src)) => G.map(f(b, a))(b => Left((b, src.value)))
+        case None           => G.pure(Right(b))
+      }
     }
   }
 
