@@ -257,6 +257,18 @@ sealed private[data] trait KleisliFunctions {
    */
   def local[M[_], A, R](f: R => R)(fa: Kleisli[M, R, A]): Kleisli[M, R, A] =
     Kleisli(r => fa.run(f(r)))
+
+  /**
+   * Lifts a function to a Kleisli.
+   * {{{
+   * scala> import cats.data.Kleisli
+   * scala> val stringify = Kleisli.fromFunction[Option, Int, String](_.toString)
+   * scala> stringify.run(42)
+   * res0: Option[String] = Some(42)
+   * }}}
+   */
+  def fromFunction[M[_]: Applicative, A, R](f: R => A): Kleisli[M, R, A] =
+    Kleisli(r => Applicative[M].pure(f(r)))
 }
 
 sealed private[data] trait KleisliFunctionsBinCompat {
