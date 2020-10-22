@@ -38,7 +38,7 @@ The name `Monoid` is taken from abstract algebra which specifies precisely this 
 We can now write the functions above against this interface.
 
 ```scala
-def combineAll[A](list: List[A], A: Monoid[A]): A = list.foldRight(A.empty)(A.combine)
+def combineAll[A](list: List[A], m: Monoid[A]): A = list.foldRight(m.empty)(m.combine)
 ```
 
 ## Type classes vs. subtyping
@@ -86,7 +86,7 @@ final case class Pair[A, B](first: A, second: B) extends Monoid[Pair[A, B]] {
 
   def combine(x: Pair[A, B], y: Pair[A, B])(implicit eva: A <:< Monoid[A], evb: B <:< Monoid[B]): Pair[A, B] = ???
 }
-// <console>:15: error: class Pair needs to be abstract, since:
+// error: class Pair needs to be abstract, since:
 // it has 2 unimplemented members.
 // /** As seen from class Pair, the missing signatures are as follows.
 //  *  For convenience, these are usable as stub implementations.
@@ -94,8 +94,8 @@ final case class Pair[A, B](first: A, second: B) extends Monoid[Pair[A, B]] {
 //   def combine(x: Pair[A,B],y: Pair[A,B]): Pair[A,B] = ???
 //   def empty: Pair[A,B] = ???
 // 
-//        final case class Pair[A, B](first: A, second: B) extends Monoid[Pair[A, B]] {
-//                         ^
+// final case class Pair[A, B](first: A, second: B) extends Monoid[Pair[A, B]] {
+// ^
 ```
 
 But now these don't conform to the interface of `Monoid` due to the implicit constraints.
@@ -120,7 +120,9 @@ One of the most powerful features of type classes is the ability to do this kind
 We can do this through Scala's implicit mechanism.
 
 ```scala
-object Demo { // needed for tut, irrelevant to demonstration
+import cats.Monoid
+
+object Demo { 
   final case class Pair[A, B](first: A, second: B)
 
   object Pair {
@@ -147,7 +149,7 @@ implicit val intAdditionMonoid: Monoid[Int] = new Monoid[Int] {
 def combineAll[A](list: List[A])(implicit A: Monoid[A]): A = list.foldRight(A.empty)(A.combine)
 ```
 
-Now we can also `combineAll` a list of `Pair`s so long as `Pair`'s type parameters themselves have `Monoid`
+Now we can also `combineAll` a list of `Pair`s as long as `Pair`'s type parameters themselves have `Monoid`
 instances.
 
 ```scala
@@ -159,10 +161,9 @@ implicit val stringMonoid: Monoid[String] = new Monoid[String] {
 
 ```scala
 import Demo.{Pair => Paired}
-// import Demo.{Pair=>Paired}
 
 combineAll(List(Paired(1, "hello"), Paired(2, " "), Paired(3, "world")))
-// res2: Demo.Pair[Int,String] = Pair(6,hello world)
+// res2: Demo.Pair[Int, String] = Pair(6, "hello world")
 ```
 
 ## A note on syntax
@@ -175,6 +176,8 @@ def combineAll[A : Monoid](list: List[A]): A = ???
 While nicer to read as a user, it comes at a cost for the implementer.
 
 ```scala
+import cats.Monoid
+
 // Defined in the standard library, shown for illustration purposes
 // Implicitly looks in implicit scope for a value of type `A` and just hands it back
 def implicitly[A](implicit ev: A): A = ev
@@ -225,7 +228,6 @@ val (left, right) = list.splitAt(2)
 // Imagine the following two operations run in parallel
 val sumLeft = combineAll(left)
 // sumLeft: Int = 3
-
 val sumRight = combineAll(right)
 // sumRight: Int = 12
 
@@ -274,4 +276,4 @@ Originally from [@alexknvl](https://gist.github.com/alexknvl/d63508ddb6a728015ac
 
 
 [fbounds]: http://tpolecat.github.io/2015/04/29/f-bounds.html "Returning the "Current" Type in Scala"
-[simulacrum]: https://github.com/mpilquist/simulacrum "First class syntax support for type classes in Scala"
+[simulacrum]: https://github.com/typelevel/simulacrum "First class syntax support for type classes in Scala"

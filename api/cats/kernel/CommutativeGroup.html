@@ -81,10 +81,32 @@
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <a title="Symbolic aliases for various types are defined here." href="../index.html"><span class="name">cats</span></a>
+        <a title="The cats root package contains all the trait signatures of most Scala type classes." href="../index.html"><span class="name">cats</span></a>
       </span>
       
-      <p class="shortcomment cmt">Symbolic aliases for various types are defined here.</p><div class="fullcomment"><div class="comment cmt"><p>Symbolic aliases for various types are defined here.
+      <p class="shortcomment cmt">The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><p>Cats type classes are implemented using the approach from the
+ <a href="https://ropas.snu.ac.kr/~bruno/papers/TypeClasses.pdf" target="_blank">Type classes as objects and implicits</a> article.</p><p>For each type class, <code>cats</code> provides three pieces:
+- Its <b>signature</b>: a trait that is polymorphic on a type parameter.
+  Type class traits inherit from other type classes to indicate that any implementation of the lower type class (e.g. <code>Applicative</code>)
+  can also serve as an instance for the higuer type class (e.g. <code>Functor</code>).
+- Type class <b>'instances</b>, which are classes and objects that implement one or more type class signatures for some specific types.
+  Type class instances for several data types from the Java or Scala standard libraries are declared in the subpackage <code>cats.instances</code>.
+- <b>Syntax extensions</b>, each of which provides the methods of the type class defines as extension methods
+  (which in Scala 2 are encoded as implicit classes) for values of any type <code>F</code>; given that an instance of the type class
+  for the receiver type (<code>this</code>) is in the implicit scope.
+  Symtax extensions are declared in the <code>cats.syntax</code> package.
+- A set of <b>laws</b>, that are also generic on the type of the class, and are only defined on the operations of the type class.
+  The purpose of these laws is to declare some algebraic relations (equations) between Scala expressions involving the operations
+  of the type class, and test (but not verify) that implemented instances satisfy those equations.
+  Laws are defined in the <code>cats-laws</code> package.</p><p>Although most of cats type classes are declared in this package, some are declared in other packages:
+- type classes that operate on base types (kind <code>*</code>), and their implementations for standard library types,
+  are contained in <code>cats.kernel</code>, which is a different SBT project. However, they are re-exported from this package.
+- type classes of kind <code>F[_, _]</code>, such as <a href="../arrow/Profunctor.html" class="extype" name="cats.arrow.Profunctor">cats.arrow.Profunctor</a>&quot; or <a href="../arrow/Arrow.html" class="extype" name="cats.arrow.Arrow">cats.arrow.Arrow</a>, which are relevant for
+  Functional Reactive Programming or optics, are declared in the <code>cats.arrow</code> package.
+- Also, those type classes that abstract over (pure or impure) functional runtime effects are declared
+  in the <a href="https://typelevel.org/cats-effect/" target="_blank">cats-effect library</a>.
+- Some type classes for which no laws can be provided are left out of the main road, in a small and dirty alley.
+  These are the <code>alleycats</code>.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
     </li><li name="cats.kernel" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="kernel"></a><a id="kernel:kernel"></a>
@@ -122,6 +144,10 @@
                         <a class="object" href="Band$.html" title=""></a>
                         <a class="trait" href="Band.html" title="Bands are semigroups whose operation (i.e."></a>
                         <a href="Band.html" title="Bands are semigroups whose operation (i.e.">Band</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="BoundedEnumerable$.html" title=""></a>
+                        <a class="trait" href="BoundedEnumerable.html" title=""></a>
+                        <a href="BoundedEnumerable.html" title="">BoundedEnumerable</a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="BoundedSemilattice$.html" title=""></a>
                         <a class="trait" href="BoundedSemilattice.html" title=""></a>
@@ -180,6 +206,10 @@
                         <a href="LowerBounded.html" title="A type class used to name the lower limit of a type.">LowerBounded</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
+                        <a class="trait" href="LowerBoundedEnumerable.html" title=""></a>
+                        <a href="LowerBoundedEnumerable.html" title="">LowerBoundedEnumerable</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
                         <a class="trait" href="LowerBoundedFunctions.html" title=""></a>
                         <a href="LowerBoundedFunctions.html" title="">LowerBoundedFunctions</a>
                       </li><li class="current-entities indented2">
@@ -190,6 +220,10 @@
                         <span class="separator"></span>
                         <a class="class" href="MonoidFunctions.html" title=""></a>
                         <a href="MonoidFunctions.html" title="">MonoidFunctions</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="Next.html" title="A typeclass with an operation which returns a member which is always greater than the one supplied."></a>
+                        <a href="Next.html" title="A typeclass with an operation which returns a member which is always greater than the one supplied.">Next</a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="Order$.html" title=""></a>
                         <a class="trait" href="Order.html" title="The Order type class is used to define a total ordering on some type A."></a>
@@ -203,6 +237,14 @@
                         <a class="trait" href="OrderToOrderingConversion.html" title=""></a>
                         <a href="OrderToOrderingConversion.html" title="">OrderToOrderingConversion</a>
                       </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="PartialNext.html" title="A typeclass with an operation which returns a member which is greater or None than the one supplied."></a>
+                        <a href="PartialNext.html" title="A typeclass with an operation which returns a member which is greater or None than the one supplied.">PartialNext</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="PartialNextLowerBounded.html" title=""></a>
+                        <a href="PartialNextLowerBounded.html" title="">PartialNextLowerBounded</a>
+                      </li><li class="current-entities indented2">
                         <a class="object" href="PartialOrder$.html" title=""></a>
                         <a class="trait" href="PartialOrder.html" title="The PartialOrder type class is used to define a partial ordering on some type A."></a>
                         <a href="PartialOrder.html" title="The PartialOrder type class is used to define a partial ordering on some type A.">PartialOrder</a>
@@ -214,6 +256,18 @@
                         <span class="separator"></span>
                         <a class="trait" href="PartialOrderToPartialOrderingConversion.html" title=""></a>
                         <a href="PartialOrderToPartialOrderingConversion.html" title="">PartialOrderToPartialOrderingConversion</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="PartialPrevious.html" title="A typeclass with an operation which returns a member which is smaller or None than the one supplied."></a>
+                        <a href="PartialPrevious.html" title="A typeclass with an operation which returns a member which is smaller or None than the one supplied.">PartialPrevious</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="PartialPreviousUpperBounded.html" title=""></a>
+                        <a href="PartialPreviousUpperBounded.html" title="">PartialPreviousUpperBounded</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="Previous.html" title="A typeclass with an operation which returns a member which is always smaller than the one supplied."></a>
+                        <a href="Previous.html" title="A typeclass with an operation which returns a member which is always smaller than the one supplied.">Previous</a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="Semigroup$.html" title=""></a>
                         <a class="trait" href="Semigroup.html" title="A semigroup is any set A with an associative operation (combine)."></a>
@@ -231,9 +285,17 @@
                         <a class="class" href="SemilatticeFunctions.html" title=""></a>
                         <a href="SemilatticeFunctions.html" title="">SemilatticeFunctions</a>
                       </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="UnboundedEnumerable.html" title="A typeclass which has both previous and next operations such that next . previous == identity."></a>
+                        <a href="UnboundedEnumerable.html" title="A typeclass which has both previous and next operations such that next . previous == identity.">UnboundedEnumerable</a>
+                      </li><li class="current-entities indented2">
                         <a class="object" href="UpperBounded$.html" title=""></a>
                         <a class="trait" href="UpperBounded.html" title="A type class used to name the upper limit of a type."></a>
                         <a href="UpperBounded.html" title="A type class used to name the upper limit of a type.">UpperBounded</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="UpperBoundedEnumerable.html" title=""></a>
+                        <a href="UpperBoundedEnumerable.html" title="">UpperBoundedEnumerable</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="trait" href="UpperBoundedFunctions.html" title=""></a>
@@ -280,7 +342,17 @@ whose combine operation is commutative.
               Known Subclasses
             </span>
             <div class="subClasses hiddenContent"><a href="instances/BigDecimalGroup.html" class="extype" name="cats.kernel.instances.BigDecimalGroup">BigDecimalGroup</a>, <a href="instances/BigIntGroup.html" class="extype" name="cats.kernel.instances.BigIntGroup">BigIntGroup</a>, <a href="instances/ByteGroup.html" class="extype" name="cats.kernel.instances.ByteGroup">ByteGroup</a>, <a href="instances/DoubleGroup.html" class="extype" name="cats.kernel.instances.DoubleGroup">DoubleGroup</a>, <a href="instances/DurationGroup.html" class="extype" name="cats.kernel.instances.DurationGroup">DurationGroup</a>, <a href="instances/FiniteDurationGroup.html" class="extype" name="cats.kernel.instances.FiniteDurationGroup">FiniteDurationGroup</a>, <a href="instances/FloatGroup.html" class="extype" name="cats.kernel.instances.FloatGroup">FloatGroup</a>, <a href="instances/IntGroup.html" class="extype" name="cats.kernel.instances.IntGroup">IntGroup</a>, <a href="instances/LongGroup.html" class="extype" name="cats.kernel.instances.LongGroup">LongGroup</a>, <a href="instances/ShortGroup.html" class="extype" name="cats.kernel.instances.ShortGroup">ShortGroup</a>, <a href="instances/UnitAlgebra.html" class="extype" name="cats.kernel.instances.UnitAlgebra">UnitAlgebra</a></div>
-          </div></div>
+          </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
+                <span class="toggle diagram-link">
+                  Type Hierarchy
+                </span>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph1" viewBox="0.00 0.00 1269.00 155.00" height="155pt" width="1269pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 151)" class="graph" id="page0,1_graph0"><polygon points="-4,4 -4,-151 1265,-151 1265,4 -4,4" stroke="transparent" fill="white"></polygon><g class="cluster" id="clust1"></g><g class="cluster" id="clust2"></g><!-- node0 --><g class="node this trait" id="graph1_0"><g id="a_this trait|graph1_0"><a xlink:title="cats.kernel.CommutativeGroup (this trait)" xlink:href="#inheritance-diagram"><path d="M713.67,-86C713.67,-86 598.33,-86 598.33,-86 594.17,-86 590,-81.83 590,-77.67 590,-77.67 590,-69.33 590,-69.33 590,-65.17 594.17,-61 598.33,-61 598.33,-61 713.67,-61 713.67,-61 717.83,-61 722,-65.17 722,-69.33 722,-69.33 722,-77.67 722,-77.67 722,-81.83 717.83,-86 713.67,-86" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-80.5" x="600" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-71.1" x="621" text-anchor="start">CommutativeGroup[A]</text></a></g></g><!-- node1 --><g class="node class" id="graph1_1"><g id="a_class|graph1_1"><a xlink:title="cats.kernel.instances.BigDecimalGroup" xlink:href="instances/BigDecimalGroup.html#inheritance-diagram"><path d="M105.67,-25C105.67,-25 8.33,-25 8.33,-25 4.17,-25 0,-20.83 0,-16.67 0,-16.67 0,-8.33 0,-8.33 0,-4.17 4.17,0 8.33,0 8.33,0 105.67,0 105.67,0 109.83,0 114,-4.17 114,-8.33 114,-8.33 114,-16.67 114,-16.67 114,-20.83 109.83,-25 105.67,-25" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-19.5" x="10" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="31" text-anchor="start">BigDecimalGroup</text></a></g></g><!-- node0&#45;&gt;node1 --><g class="edge inheritance" id="graph1_0_1"><g id="a_inheritance|graph1_0_1"><a xlink:title="BigDecimalGroup is a subtype of CommutativeGroup[A]"><path d="M582.49,-67.9C479.48,-61.01 286.48,-46.49 123,-25 120.12,-24.62 117.17,-24.21 114.19,-23.77" stroke="#d4d4d4" fill="none"></path><polygon points="582.6,-70.36 589.75,-68.38 582.92,-65.47 582.6,-70.36" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node2 --><g class="node class" id="graph1_2"><g id="a_class|graph1_2"><a xlink:title="cats.kernel.instances.BigIntGroup" xlink:href="instances/BigIntGroup.html#inheritance-diagram"><path d="M219.67,-25C219.67,-25 140.33,-25 140.33,-25 136.17,-25 132,-20.83 132,-16.67 132,-16.67 132,-8.33 132,-8.33 132,-4.17 136.17,0 140.33,0 140.33,0 219.67,0 219.67,0 223.83,0 228,-4.17 228,-8.33 228,-8.33 228,-16.67 228,-16.67 228,-20.83 223.83,-25 219.67,-25" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-19.5" x="142" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="163" text-anchor="start">BigIntGroup</text></a></g></g><!-- node0&#45;&gt;node2 --><g class="edge inheritance" id="graph1_0_2"><g id="a_inheritance|graph1_0_2"><a xlink:title="BigIntGroup is a subtype of CommutativeGroup[A]"><path d="M582.54,-66.11C498.68,-58.36 357.52,-43.95 237,-25 234.11,-24.55 231.14,-24.05 228.15,-23.52" stroke="#d4d4d4" fill="none"></path><polygon points="582.53,-68.56 589.72,-66.77 582.98,-63.69 582.53,-68.56" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node3 --><g class="node class" id="graph1_3"><g id="a_class|graph1_3"><a xlink:title="cats.kernel.instances.ByteGroup" xlink:href="instances/ByteGroup.html#inheritance-diagram"><path d="M325.17,-25C325.17,-25 254.83,-25 254.83,-25 250.67,-25 246.5,-20.83 246.5,-16.67 246.5,-16.67 246.5,-8.33 246.5,-8.33 246.5,-4.17 250.67,0 254.83,0 254.83,0 325.17,0 325.17,0 329.33,0 333.5,-4.17 333.5,-8.33 333.5,-8.33 333.5,-16.67 333.5,-16.67 333.5,-20.83 329.33,-25 325.17,-25" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-19.5" x="257" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="278" text-anchor="start">ByteGroup</text></a></g></g><!-- node0&#45;&gt;node3 --><g class="edge inheritance" id="graph1_0_3"><g id="a_inheritance|graph1_0_3"><a xlink:title="ByteGroup is a subtype of CommutativeGroup[A]"><path d="M582.64,-62.7C519.07,-53.89 424.71,-40.05 343,-25 339.94,-24.44 336.8,-23.83 333.63,-23.19" stroke="#d4d4d4" fill="none"></path><polygon points="582.58,-65.16 589.85,-63.7 583.25,-60.31 582.58,-65.16" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node4 --><g class="node class" id="graph1_4"><g id="a_class|graph1_4"><a xlink:title="cats.kernel.instances.DoubleGroup" xlink:href="instances/DoubleGroup.html#inheritance-diagram"><path d="M439.67,-25C439.67,-25 360.33,-25 360.33,-25 356.17,-25 352,-20.83 352,-16.67 352,-16.67 352,-8.33 352,-8.33 352,-4.17 356.17,0 360.33,0 360.33,0 439.67,0 439.67,0 443.83,0 448,-4.17 448,-8.33 448,-8.33 448,-16.67 448,-16.67 448,-20.83 443.83,-25 439.67,-25" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-19.5" x="362" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="383" text-anchor="start">DoubleGroup</text></a></g></g><!-- node0&#45;&gt;node4 --><g class="edge inheritance" id="graph1_0_4"><g id="a_inheritance|graph1_0_4"><a xlink:title="DoubleGroup is a subtype of CommutativeGroup[A]"><path d="M599.19,-59.41C553.84,-48.96 491,-34.47 448.11,-24.59" stroke="#d4d4d4" fill="none"></path><polygon points="598.66,-61.8 606.03,-60.98 599.76,-57.02 598.66,-61.8" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node5 --><g class="node class" id="graph1_5"><g id="a_class|graph1_5"><a xlink:title="cats.kernel.instances.DurationGroup" xlink:href="instances/DurationGroup.html#inheritance-diagram"><path d="M563.17,-25C563.17,-25 474.83,-25 474.83,-25 470.67,-25 466.5,-20.83 466.5,-16.67 466.5,-16.67 466.5,-8.33 466.5,-8.33 466.5,-4.17 470.67,0 474.83,0 474.83,0 563.17,0 563.17,0 567.33,0 571.5,-4.17 571.5,-8.33 571.5,-8.33 571.5,-16.67 571.5,-16.67 571.5,-20.83 567.33,-25 563.17,-25" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-19.5" x="477" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="498" text-anchor="start">DurationGroup</text></a></g></g><!-- node0&#45;&gt;node5 --><g class="edge inheritance" id="graph1_0_5"><g id="a_inheritance|graph1_0_5"><a xlink:title="DurationGroup is a subtype of CommutativeGroup[A]"><path d="M622.54,-58.09C599.07,-47.98 568.08,-34.64 546.14,-25.19" stroke="#d4d4d4" fill="none"></path><polygon points="621.86,-60.47 629.26,-60.98 623.8,-55.97 621.86,-60.47" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node6 --><g class="node class" id="graph1_6"><g id="a_class|graph1_6"><a xlink:title="cats.kernel.instances.FiniteDurationGroup" xlink:href="instances/FiniteDurationGroup.html#inheritance-diagram"><path d="M713.67,-25C713.67,-25 598.33,-25 598.33,-25 594.17,-25 590,-20.83 590,-16.67 590,-16.67 590,-8.33 590,-8.33 590,-4.17 594.17,0 598.33,0 598.33,0 713.67,0 713.67,0 717.83,0 722,-4.17 722,-8.33 722,-8.33 722,-16.67 722,-16.67 722,-20.83 717.83,-25 713.67,-25" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-19.5" x="600" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="621" text-anchor="start">FiniteDurationGroup</text></a></g></g><!-- node0&#45;&gt;node6 --><g class="edge inheritance" id="graph1_0_6"><g id="a_inheritance|graph1_0_6"><a xlink:title="FiniteDurationGroup is a subtype of CommutativeGroup[A]"><path d="M656,-53.76C656,-44.37 656,-33.29 656,-25.13" stroke="#d4d4d4" fill="none"></path><polygon points="653.55,-53.84 656,-60.84 658.45,-53.84 653.55,-53.84" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node7 --><g class="node class" id="graph1_7"><g id="a_class|graph1_7"><a xlink:title="cats.kernel.instances.FloatGroup" xlink:href="instances/FloatGroup.html#inheritance-diagram"><path d="M823.17,-25C823.17,-25 748.83,-25 748.83,-25 744.67,-25 740.5,-20.83 740.5,-16.67 740.5,-16.67 740.5,-8.33 740.5,-8.33 740.5,-4.17 744.67,0 748.83,0 748.83,0 823.17,0 823.17,0 827.33,0 831.5,-4.17 831.5,-8.33 831.5,-8.33 831.5,-16.67 831.5,-16.67 831.5,-20.83 827.33,-25 823.17,-25" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-19.5" x="751" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="772" text-anchor="start">FloatGroup</text></a></g></g><!-- node0&#45;&gt;node7 --><g class="edge inheritance" id="graph1_0_7"><g id="a_inheritance|graph1_0_7"><a xlink:title="FloatGroup is a subtype of CommutativeGroup[A]"><path d="M688.03,-57.96C710.27,-47.87 739.52,-34.6 760.25,-25.19" stroke="#d4d4d4" fill="none"></path><polygon points="686.74,-55.86 681.37,-60.98 688.76,-60.32 686.74,-55.86" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node8 --><g class="node class" id="graph1_8"><g id="a_class|graph1_8"><a xlink:title="cats.kernel.instances.IntGroup" xlink:href="instances/IntGroup.html#inheritance-diagram"><path d="M923.67,-25C923.67,-25 858.33,-25 858.33,-25 854.17,-25 850,-20.83 850,-16.67 850,-16.67 850,-8.33 850,-8.33 850,-4.17 854.17,0 858.33,0 858.33,0 923.67,0 923.67,0 927.83,0 932,-4.17 932,-8.33 932,-8.33 932,-16.67 932,-16.67 932,-20.83 927.83,-25 923.67,-25" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-19.5" x="860" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="881" text-anchor="start">IntGroup</text></a></g></g><!-- node0&#45;&gt;node8 --><g class="edge inheritance" id="graph1_0_8"><g id="a_inheritance|graph1_0_8"><a xlink:title="IntGroup is a subtype of CommutativeGroup[A]"><path d="M708.84,-59.23C751.54,-48.51 810.78,-33.64 849.96,-23.8" stroke="#d4d4d4" fill="none"></path><polygon points="708.06,-56.9 701.87,-60.98 709.25,-61.66 708.06,-56.9" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node9 --><g class="node class" id="graph1_9"><g id="a_class|graph1_9"><a xlink:title="cats.kernel.instances.LongGroup" xlink:href="instances/LongGroup.html#inheritance-diagram"><path d="M1029.17,-25C1029.17,-25 958.83,-25 958.83,-25 954.67,-25 950.5,-20.83 950.5,-16.67 950.5,-16.67 950.5,-8.33 950.5,-8.33 950.5,-4.17 954.67,0 958.83,0 958.83,0 1029.17,0 1029.17,0 1033.33,0 1037.5,-4.17 1037.5,-8.33 1037.5,-8.33 1037.5,-16.67 1037.5,-16.67 1037.5,-20.83 1033.33,-25 1029.17,-25" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-19.5" x="961" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="982" text-anchor="start">LongGroup</text></a></g></g><!-- node0&#45;&gt;node9 --><g class="edge inheritance" id="graph1_0_9"><g id="a_inheritance|graph1_0_9"><a xlink:title="LongGroup is a subtype of CommutativeGroup[A]"><path d="M729.36,-61.28C787.03,-52.21 869.31,-38.74 941,-25 944.05,-24.41 947.2,-23.79 950.36,-23.14" stroke="#d4d4d4" fill="none"></path><polygon points="728.64,-58.91 722.1,-62.41 729.4,-63.75 728.64,-58.91" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node10 --><g class="node class" id="graph1_10"><g id="a_class|graph1_10"><a xlink:title="cats.kernel.instances.ShortGroup" xlink:href="instances/ShortGroup.html#inheritance-diagram"><path d="M1138.17,-25C1138.17,-25 1063.83,-25 1063.83,-25 1059.67,-25 1055.5,-20.83 1055.5,-16.67 1055.5,-16.67 1055.5,-8.33 1055.5,-8.33 1055.5,-4.17 1059.67,0 1063.83,0 1063.83,0 1138.17,0 1138.17,0 1142.33,0 1146.5,-4.17 1146.5,-8.33 1146.5,-8.33 1146.5,-16.67 1146.5,-16.67 1146.5,-20.83 1142.33,-25 1138.17,-25" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-19.5" x="1066" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="1087" text-anchor="start">ShortGroup</text></a></g></g><!-- node0&#45;&gt;node10 --><g class="edge inheritance" id="graph1_0_10"><g id="a_inheritance|graph1_0_10"><a xlink:title="ShortGroup is a subtype of CommutativeGroup[A]"><path d="M729.32,-65.56C808.1,-57.64 936.84,-43.38 1047,-25 1049.74,-24.54 1052.56,-24.04 1055.39,-23.51" stroke="#d4d4d4" fill="none"></path><polygon points="729.05,-63.12 722.33,-66.26 729.53,-68 729.05,-63.12" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node11 --><g class="node class" id="graph1_11"><g id="a_class|graph1_11"><a xlink:title="cats.kernel.instances.UnitAlgebra" xlink:href="instances/UnitAlgebra.html#inheritance-diagram"><path d="M1252.67,-25C1252.67,-25 1173.33,-25 1173.33,-25 1169.17,-25 1165,-20.83 1165,-16.67 1165,-16.67 1165,-8.33 1165,-8.33 1165,-4.17 1169.17,0 1173.33,0 1173.33,0 1252.67,0 1252.67,0 1256.83,0 1261,-4.17 1261,-8.33 1261,-8.33 1261,-16.67 1261,-16.67 1261,-20.83 1256.83,-25 1252.67,-25" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-19.5" x="1175" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="1196" text-anchor="start">UnitAlgebra</text></a></g></g><!-- node0&#45;&gt;node11 --><g class="edge inheritance" id="graph1_0_11"><g id="a_inheritance|graph1_0_11"><a xlink:title="UnitAlgebra is a subtype of CommutativeGroup[A]"><path d="M729.37,-67.94C827.08,-61.31 1005.16,-47.32 1156,-25 1158.9,-24.57 1161.87,-24.09 1164.86,-23.58" stroke="#d4d4d4" fill="none"></path><polygon points="729,-65.51 722.18,-68.42 729.33,-70.39 729,-65.51" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node12 --><g class="node trait" id="graph1_12"><g id="a_trait|graph1_12"><a xlink:title="cats.kernel.Group" xlink:href="Group.html#inheritance-diagram"><path d="M625.67,-147C625.67,-147 560.33,-147 560.33,-147 556.17,-147 552,-142.83 552,-138.67 552,-138.67 552,-130.33 552,-130.33 552,-126.17 556.17,-122 560.33,-122 560.33,-122 625.67,-122 625.67,-122 629.83,-122 634,-126.17 634,-130.33 634,-130.33 634,-138.67 634,-138.67 634,-142.83 629.83,-147 625.67,-147" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-141.5" x="562" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="583" text-anchor="start">Group[A]</text></a></g></g><!-- node12&#45;&gt;node0 --><g class="edge inheritance" id="graph1_12_0"><g id="a_inheritance|graph1_12_0"><a xlink:title="CommutativeGroup[A] is a subtype of Group[A]"><path d="M610.66,-116.96C621.15,-107.14 634.18,-94.93 643.58,-86.13" stroke="#d4d4d4" fill="none"></path><polygon points="608.88,-115.27 605.45,-121.84 612.23,-118.85 608.88,-115.27" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node13 --><g class="node trait" id="graph1_13"><g id="a_trait|graph1_13"><a xlink:title="cats.kernel.CommutativeMonoid" xlink:href="CommutativeMonoid.html#inheritance-diagram"><path d="M779.67,-147C779.67,-147 660.33,-147 660.33,-147 656.17,-147 652,-142.83 652,-138.67 652,-138.67 652,-130.33 652,-130.33 652,-126.17 656.17,-122 660.33,-122 660.33,-122 779.67,-122 779.67,-122 783.83,-122 788,-126.17 788,-130.33 788,-130.33 788,-138.67 788,-138.67 788,-142.83 783.83,-147 779.67,-147" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-141.5" x="662" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="683" text-anchor="start">CommutativeMonoid[A]</text></a></g></g><!-- node13&#45;&gt;node0 --><g class="edge inheritance" id="graph1_13_0"><g id="a_inheritance|graph1_13_0"><a xlink:title="CommutativeGroup[A] is a subtype of CommutativeMonoid[A]"><path d="M702.06,-116.96C691.41,-107.14 678.17,-94.93 668.62,-86.13" stroke="#d4d4d4" fill="none"></path><polygon points="700.55,-118.9 707.36,-121.84 703.87,-115.3 700.55,-118.9" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
+                <div id="diagram-controls" class="hiddenContent">
+                  <button id="diagram-zoom-out" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button id="diagram-zoom-in" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button title="Toggle full-screen" id="diagram-fs" class="diagram-btn to-full"><i class="material-icons"></i></button>
+                </div>
+              </div></div>
         
 
       <div id="mbrsel">
@@ -575,6 +647,25 @@ this returns <code>inverse(a)</code> appended to itself <code>n</code> times.
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.kernel.CommutativeSemigroup#intercalate" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="intercalate(middle:A):cats.kernel.CommutativeSemigroup[A]"></a><a id="intercalate(A):CommutativeSemigroup[A]"></a>
+      <span class="permalink">
+      <a href="../../cats/kernel/CommutativeGroup.html#intercalate(middle:A):cats.kernel.CommutativeSemigroup[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">intercalate</span><span class="params">(<span name="middle">middle: <span class="extype" name="cats.kernel.CommutativeGroup.A">A</span></span>)</span><span class="result">: <a href="CommutativeSemigroup.html" class="extype" name="cats.kernel.CommutativeSemigroup">CommutativeSemigroup</a>[<span class="extype" name="cats.kernel.CommutativeGroup.A">A</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Between each pair of elements insert middle
+This name matches the term used in Foldable and Reducible and a similar Haskell function.</p><div class="fullcomment"><div class="comment cmt"><p>Between each pair of elements insert middle
+This name matches the term used in Foldable and Reducible and a similar Haskell function.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="CommutativeSemigroup.html" class="extype" name="cats.kernel.CommutativeSemigroup">CommutativeSemigroup</a> → <a href="Semigroup.html" class="extype" name="cats.kernel.Semigroup">Semigroup</a></dd></dl></div>
     </li><li name="cats.kernel.Monoid#isEmpty" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isEmpty(a:A)(implicitev:cats.kernel.Eq[A]):Boolean"></a><a id="isEmpty(A)(Eq[A]):Boolean"></a>
       <span class="permalink">
@@ -649,6 +740,26 @@ res0: <span class="std">Int</span> = <span class="num">3</span></pre></div><dl c
       
       <p class="shortcomment cmt">Return <code>a</code> combined with itself more than once.</p><div class="fullcomment"><div class="comment cmt"><p>Return <code>a</code> combined with itself more than once.
 </p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd><a href="Semigroup.html" class="extype" name="cats.kernel.Semigroup">Semigroup</a></dd></dl></div>
+    </li><li name="cats.kernel.CommutativeMonoid#reverse" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="reverse:cats.kernel.CommutativeMonoid[A]"></a><a id="reverse:CommutativeMonoid[A]"></a>
+      <span class="permalink">
+      <a href="../../cats/kernel/CommutativeGroup.html#reverse:cats.kernel.CommutativeMonoid[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">reverse</span><span class="result">: <a href="CommutativeMonoid.html" class="extype" name="cats.kernel.CommutativeMonoid">CommutativeMonoid</a>[<span class="extype" name="cats.kernel.CommutativeGroup.A">A</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">return a semigroup that reverses the order
+so combine(a, b) == reverse.combine(b, a)
+</p><div class="fullcomment"><div class="comment cmt"><p>return a semigroup that reverses the order
+so combine(a, b) == reverse.combine(b, a)
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="CommutativeMonoid.html" class="extype" name="cats.kernel.CommutativeMonoid">CommutativeMonoid</a> → <a href="CommutativeSemigroup.html" class="extype" name="cats.kernel.CommutativeSemigroup">CommutativeSemigroup</a> → <a href="Monoid.html" class="extype" name="cats.kernel.Monoid">Monoid</a> → <a href="Semigroup.html" class="extype" name="cats.kernel.Semigroup">Semigroup</a></dd></dl></div>
     </li><li name="scala.Any#toString" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <span class="permalink">

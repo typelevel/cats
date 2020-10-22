@@ -81,10 +81,32 @@
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <a title="Symbolic aliases for various types are defined here." href="../index.html"><span class="name">cats</span></a>
+        <a title="The cats root package contains all the trait signatures of most Scala type classes." href="../index.html"><span class="name">cats</span></a>
       </span>
       
-      <p class="shortcomment cmt">Symbolic aliases for various types are defined here.</p><div class="fullcomment"><div class="comment cmt"><p>Symbolic aliases for various types are defined here.
+      <p class="shortcomment cmt">The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><p>Cats type classes are implemented using the approach from the
+ <a href="https://ropas.snu.ac.kr/~bruno/papers/TypeClasses.pdf" target="_blank">Type classes as objects and implicits</a> article.</p><p>For each type class, <code>cats</code> provides three pieces:
+- Its <b>signature</b>: a trait that is polymorphic on a type parameter.
+  Type class traits inherit from other type classes to indicate that any implementation of the lower type class (e.g. <code>Applicative</code>)
+  can also serve as an instance for the higuer type class (e.g. <code>Functor</code>).
+- Type class <b>'instances</b>, which are classes and objects that implement one or more type class signatures for some specific types.
+  Type class instances for several data types from the Java or Scala standard libraries are declared in the subpackage <code>cats.instances</code>.
+- <b>Syntax extensions</b>, each of which provides the methods of the type class defines as extension methods
+  (which in Scala 2 are encoded as implicit classes) for values of any type <code>F</code>; given that an instance of the type class
+  for the receiver type (<code>this</code>) is in the implicit scope.
+  Symtax extensions are declared in the <code>cats.syntax</code> package.
+- A set of <b>laws</b>, that are also generic on the type of the class, and are only defined on the operations of the type class.
+  The purpose of these laws is to declare some algebraic relations (equations) between Scala expressions involving the operations
+  of the type class, and test (but not verify) that implemented instances satisfy those equations.
+  Laws are defined in the <code>cats-laws</code> package.</p><p>Although most of cats type classes are declared in this package, some are declared in other packages:
+- type classes that operate on base types (kind <code>*</code>), and their implementations for standard library types,
+  are contained in <code>cats.kernel</code>, which is a different SBT project. However, they are re-exported from this package.
+- type classes of kind <code>F[_, _]</code>, such as <a href="Profunctor.html" class="extype" name="cats.arrow.Profunctor">cats.arrow.Profunctor</a>&quot; or <a href="Arrow.html" class="extype" name="cats.arrow.Arrow">cats.arrow.Arrow</a>, which are relevant for
+  Functional Reactive Programming or optics, are declared in the <code>cats.arrow</code> package.
+- Also, those type classes that abstract over (pure or impure) functional runtime effects are declared
+  in the <a href="https://typelevel.org/cats-effect/" target="_blank">cats-effect library</a>.
+- Some type classes for which no laws can be provided are left out of the main road, in a small and dirty alley.
+  These are the <code>alleycats</code>.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
     </li><li name="cats.arrow" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="arrow"></a><a id="arrow:arrow"></a>
@@ -163,7 +185,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">Choice</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Category.html" class="extype" name="cats.arrow.Category">Category</a>[<span class="extype" name="cats.arrow.Choice.F">F</span>] with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <span class="name">Choice</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Category.html" class="extype" name="cats.arrow.Category">Category</a>[<span class="extype" name="cats.arrow.Choice.F">F</span>]</span>
       </span>
       </h4>
 
@@ -172,6 +194,14 @@
                 <span class="name">@implicitNotFound</span><span class="args">(<span>
       
       <span class="defval" name="&quot;Could not find an instance of Choice for ${F}&quot;">...</span>
+    </span>)</span>
+              
+                <span class="name">@typeclass</span><span class="args">(<span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$1">...</span>
+    </span>, <span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$2">...</span>
     </span>)</span>
               
         </dd><dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/arrow/Choice.scala" target="_blank">Choice.scala</a></dd></dl><div class="toggleContainer block">
@@ -184,7 +214,17 @@
               Known Subclasses
             </span>
             <div class="subClasses hiddenContent"><a href="ArrowChoice.html" class="extype" name="cats.arrow.ArrowChoice">ArrowChoice</a></div>
-          </div></div>
+          </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
+                <span class="toggle diagram-link">
+                  Type Hierarchy
+                </span>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph1" viewBox="0.00 0.00 144.00 155.00" height="155pt" width="144pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 151)" class="graph" id="page0,1_graph0"><polygon points="-4,4 -4,-151 140,-151 140,4 -4,4" stroke="transparent" fill="white"></polygon><g class="cluster" id="clust1"></g><g class="cluster" id="clust2"></g><!-- node0 --><g class="node this trait" id="graph1_0"><g id="a_this trait|graph1_0"><a xlink:title="cats.arrow.Choice (this trait)" xlink:href="#inheritance-diagram"><path d="M103.17,-86C103.17,-86 32.83,-86 32.83,-86 28.67,-86 24.5,-81.83 24.5,-77.67 24.5,-77.67 24.5,-69.33 24.5,-69.33 24.5,-65.17 28.67,-61 32.83,-61 32.83,-61 103.17,-61 103.17,-61 107.33,-61 111.5,-65.17 111.5,-69.33 111.5,-69.33 111.5,-77.67 111.5,-77.67 111.5,-81.83 107.33,-86 103.17,-86" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-80.5" x="35" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-71.1" x="56" text-anchor="start">Choice[F]</text></a></g></g><!-- node1 --><g class="node trait" id="graph1_1"><g id="a_trait|graph1_1"><a xlink:title="cats.arrow.ArrowChoice" xlink:href="ArrowChoice.html#inheritance-diagram"><path d="M114.17,-25C114.17,-25 21.83,-25 21.83,-25 17.67,-25 13.5,-20.83 13.5,-16.67 13.5,-16.67 13.5,-8.33 13.5,-8.33 13.5,-4.17 17.67,0 21.83,0 21.83,0 114.17,0 114.17,0 118.33,0 122.5,-4.17 122.5,-8.33 122.5,-8.33 122.5,-16.67 122.5,-16.67 122.5,-20.83 118.33,-25 114.17,-25" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-19.5" x="24" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="45" text-anchor="start">ArrowChoice[F]</text></a></g></g><!-- node0&#45;&gt;node1 --><g class="edge inheritance" id="graph1_0_1"><g id="a_inheritance|graph1_0_1"><a xlink:title="ArrowChoice[F] is a subtype of Choice[F]"><path d="M68,-53.76C68,-44.37 68,-33.29 68,-25.13" stroke="#d4d4d4" fill="none"></path><polygon points="65.55,-53.84 68,-60.84 70.45,-53.84 65.55,-53.84" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node2 --><g class="node trait" id="graph1_2"><g id="a_trait|graph1_2"><a xlink:title="cats.arrow.Category" xlink:href="Category.html#inheritance-diagram"><path d="M107.67,-147C107.67,-147 28.33,-147 28.33,-147 24.17,-147 20,-142.83 20,-138.67 20,-138.67 20,-130.33 20,-130.33 20,-126.17 24.17,-122 28.33,-122 28.33,-122 107.67,-122 107.67,-122 111.83,-122 116,-126.17 116,-130.33 116,-130.33 116,-138.67 116,-138.67 116,-142.83 111.83,-147 107.67,-147" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-141.5" x="30" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="51" text-anchor="start">Category[F]</text></a></g></g><!-- node2&#45;&gt;node0 --><g class="edge inheritance" id="graph1_2_0"><g id="a_inheritance|graph1_2_0"><a xlink:title="Choice[F] is a subtype of Category[F]"><path d="M68,-114.76C68,-105.37 68,-94.29 68,-86.13" stroke="#d4d4d4" fill="none"></path><polygon points="65.55,-114.84 68,-121.84 70.45,-114.84 65.55,-114.84" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
+                <div id="diagram-controls" class="hiddenContent">
+                  <button id="diagram-zoom-out" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button id="diagram-zoom-in" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button title="Toggle full-screen" id="diagram-fs" class="diagram-btn to-full"><i class="material-icons"></i></button>
+                </div>
+              </div></div>
         
 
       <div id="mbrsel">
@@ -253,8 +293,8 @@ with the same target type, but with a source type of either <code>f</code>'s sou
 type OR <code>g</code>'s source type.</p><div class="fullcomment"><div class="comment cmt"><p>Given two <code>F</code>s (<code>f</code> and <code>g</code>) with a common target type, create a new <code>F</code>
 with the same target type, but with a source type of either <code>f</code>'s source
 type OR <code>g</code>'s source type.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
-scala&gt; <span class="kw">val</span> b: <span class="std">Boolean</span> <span class="kw">=&gt;</span> <span class="std">String</span> = _ + <span class="lit">" is a boolean"</span>
-scala&gt; <span class="kw">val</span> i: <span class="std">Int</span> <span class="kw">=&gt;</span> <span class="std">String</span> =  _ + <span class="lit">" is an integer"</span>
+scala&gt; <span class="kw">val</span> b: <span class="std">Boolean</span> <span class="kw">=&gt;</span> <span class="std">String</span> = _.toString + <span class="lit">" is a boolean"</span>
+scala&gt; <span class="kw">val</span> i: <span class="std">Int</span> <span class="kw">=&gt;</span> <span class="std">String</span> =  _.toString + <span class="lit">" is an integer"</span>
 scala&gt; <span class="kw">val</span> f: (Either[<span class="std">Boolean</span>, <span class="std">Int</span>]) <span class="kw">=&gt;</span> <span class="std">String</span> = b ||| i
 
 scala&gt; f(Right(<span class="num">3</span>))
@@ -286,7 +326,16 @@ res0: <span class="std">String</span> = <span class="kw">false</span> is a boole
         <span class="name">compose</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="f">f: <span class="extype" name="cats.arrow.Choice.F">F</span>[<span class="extype" name="cats.arrow.Compose.compose.B">B</span>, <span class="extype" name="cats.arrow.Compose.compose.C">C</span>]</span>, <span name="g">g: <span class="extype" name="cats.arrow.Choice.F">F</span>[<span class="extype" name="cats.arrow.Compose.compose.A">A</span>, <span class="extype" name="cats.arrow.Compose.compose.B">B</span>]</span>)</span><span class="result">: <span class="extype" name="cats.arrow.Choice.F">F</span>[<span class="extype" name="cats.arrow.Compose.compose.A">A</span>, <span class="extype" name="cats.arrow.Compose.compose.C">C</span>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Compose.html" class="extype" name="cats.arrow.Compose">Compose</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Compose.html" class="extype" name="cats.arrow.Compose">Compose</a></dd><dt>Annotations</dt><dd>
+                <span class="name">@op</span><span class="args">(<span>
+      
+      <span class="symbol">&quot;&lt;&lt;&lt;&quot;</span>
+    </span>, <span>
+      
+      <span class="symbol">true</span>
+    </span>)</span>
+              
+        </dd></dl></div>
     </li><li name="cats.arrow.Category#id" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="id[A]:F[A,A]"></a>
       <span class="permalink">
@@ -404,7 +453,16 @@ res0: <span class="std">String</span> = <span class="kw">false</span> is a boole
         <span class="name">andThen</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="f">f: <span class="extype" name="cats.arrow.Choice.F">F</span>[<span class="extype" name="cats.arrow.Compose.andThen.A">A</span>, <span class="extype" name="cats.arrow.Compose.andThen.B">B</span>]</span>, <span name="g">g: <span class="extype" name="cats.arrow.Choice.F">F</span>[<span class="extype" name="cats.arrow.Compose.andThen.B">B</span>, <span class="extype" name="cats.arrow.Compose.andThen.C">C</span>]</span>)</span><span class="result">: <span class="extype" name="cats.arrow.Choice.F">F</span>[<span class="extype" name="cats.arrow.Compose.andThen.A">A</span>, <span class="extype" name="cats.arrow.Compose.andThen.C">C</span>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Compose.html" class="extype" name="cats.arrow.Compose">Compose</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Compose.html" class="extype" name="cats.arrow.Compose">Compose</a></dd><dt>Annotations</dt><dd>
+                <span class="name">@op</span><span class="args">(<span>
+      
+      <span class="symbol">&quot;&gt;&gt;&gt;&quot;</span>
+    </span>, <span>
+      
+      <span class="symbol">true</span>
+    </span>)</span>
+              
+        </dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <span class="permalink">
@@ -443,6 +501,8 @@ res0: <span class="std">String</span> = <span class="kw">false</span> is a boole
     </span>)</span>
               
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="cats.arrow.Choice#codiagonal" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -502,28 +562,6 @@ res1: <span class="std">Int</span> = <span class="num">3</span></pre></div></div
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="finalize():Unit"></a>
-      <span class="permalink">
-      <a href="../../cats/arrow/Choice.html#finalize():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="symbol">classOf[java.lang.Throwable]</span>
-    </span>)</span>
-              
-        </dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
@@ -541,6 +579,8 @@ res1: <span class="std">Int</span> = <span class="num">3</span></pre></div></div
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -560,6 +600,8 @@ res1: <span class="std">Int</span> = <span class="num">3</span></pre></div></div
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -612,6 +654,8 @@ res1: <span class="std">Int</span> = <span class="num">3</span></pre></div></div
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
@@ -630,6 +674,8 @@ res1: <span class="std">Int</span> = <span class="num">3</span></pre></div></div
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -664,28 +710,6 @@ res1: <span class="std">Int</span> = <span class="num">3</span></pre></div></div
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait():Unit"></a>
-      <span class="permalink">
-      <a href="../../cats/arrow/Choice.html#wait():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
-    </span>)</span>
-              
-        </dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <span class="permalink">
@@ -732,13 +756,64 @@ res1: <span class="std">Int</span> = <span class="num">3</span></pre></div></div
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/arrow/Choice.html#wait():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
     </li>
               </ol>
             </div>
 
         
 
-        
+        <div class="values members">
+              <h3>Deprecated Value Members</h3>
+              <ol><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/arrow/Choice.html#finalize():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version ) see corresponding Javadoc for more information.">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+                <span class="name">@Deprecated</span>
+              
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version )</i> see corresponding Javadoc for more information.</p></dd></dl></div>
+    </li></ol>
+            </div>
         </div>
 
         <div id="inheritedMembers">

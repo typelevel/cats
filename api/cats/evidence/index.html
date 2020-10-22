@@ -81,10 +81,32 @@
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <a title="Symbolic aliases for various types are defined here." href="../index.html"><span class="name">cats</span></a>
+        <a title="The cats root package contains all the trait signatures of most Scala type classes." href="../index.html"><span class="name">cats</span></a>
       </span>
       
-      <p class="shortcomment cmt">Symbolic aliases for various types are defined here.</p><div class="fullcomment"><div class="comment cmt"><p>Symbolic aliases for various types are defined here.
+      <p class="shortcomment cmt">The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><p>Cats type classes are implemented using the approach from the
+ <a href="https://ropas.snu.ac.kr/~bruno/papers/TypeClasses.pdf" target="_blank">Type classes as objects and implicits</a> article.</p><p>For each type class, <code>cats</code> provides three pieces:
+- Its <b>signature</b>: a trait that is polymorphic on a type parameter.
+  Type class traits inherit from other type classes to indicate that any implementation of the lower type class (e.g. <code>Applicative</code>)
+  can also serve as an instance for the higuer type class (e.g. <code>Functor</code>).
+- Type class <b>'instances</b>, which are classes and objects that implement one or more type class signatures for some specific types.
+  Type class instances for several data types from the Java or Scala standard libraries are declared in the subpackage <code>cats.instances</code>.
+- <b>Syntax extensions</b>, each of which provides the methods of the type class defines as extension methods
+  (which in Scala 2 are encoded as implicit classes) for values of any type <code>F</code>; given that an instance of the type class
+  for the receiver type (<code>this</code>) is in the implicit scope.
+  Symtax extensions are declared in the <code>cats.syntax</code> package.
+- A set of <b>laws</b>, that are also generic on the type of the class, and are only defined on the operations of the type class.
+  The purpose of these laws is to declare some algebraic relations (equations) between Scala expressions involving the operations
+  of the type class, and test (but not verify) that implemented instances satisfy those equations.
+  Laws are defined in the <code>cats-laws</code> package.</p><p>Although most of cats type classes are declared in this package, some are declared in other packages:
+- type classes that operate on base types (kind <code>*</code>), and their implementations for standard library types,
+  are contained in <code>cats.kernel</code>, which is a different SBT project. However, they are re-exported from this package.
+- type classes of kind <code>F[_, _]</code>, such as <a href="../arrow/Profunctor.html" class="extype" name="cats.arrow.Profunctor">cats.arrow.Profunctor</a>&quot; or <a href="../arrow/Arrow.html" class="extype" name="cats.arrow.Arrow">cats.arrow.Arrow</a>, which are relevant for
+  Functional Reactive Programming or optics, are declared in the <code>cats.arrow</code> package.
+- Also, those type classes that abstract over (pure or impure) functional runtime effects are declared
+  in the <a href="https://typelevel.org/cats-effect/" target="_blank">cats-effect library</a>.
+- Some type classes for which no laws can be provided are left out of the main road, in a small and dirty alley.
+  These are the <code>alleycats</code>.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
     </li><li name="cats.arrow" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="arrow"></a><a id="arrow:arrow"></a>
@@ -99,6 +121,22 @@
       </span>
       <span class="symbol">
         <a title="" href="../arrow/index.html"><span class="name">arrow</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="cats">cats</a></dd></dl></div>
+    </li><li name="cats.conversions" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="conversions"></a><a id="conversions:conversions"></a>
+      <span class="permalink">
+      <a href="../../cats/conversions/index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../conversions/index.html"><span class="name">conversions</span></a>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="cats">cats</a></dd></dl></div>
@@ -247,7 +285,17 @@
             Linear Supertypes
           </span>
           <div class="superTypes hiddenContent"><a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
-        </div></div>
+        </div><div class="toggleContainer block diagram-container" id="content-diagram-container">
+                <span class="toggle diagram-link">
+                  Content Hierarchy
+                </span>
+                <div class="diagram" id="content-diagram"><svg class="package-diagram" id="graph1" viewBox="0.00 0.00 218.00 94.00" height="94pt" width="218pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 90)" class="graph" id="page0,1_graph0"><polygon points="-4,4 -4,-90 214,-90 214,4 -4,4" stroke="transparent" fill="white"></polygon><!-- node0 --><g class="node class" id="graph1_0"><g id="a_class|graph1_0"><a xlink:title="cats.evidence.IsInstances" xlink:href="IsInstances.html#inheritance-diagram"><path d="M87.67,-86C87.67,-86 8.33,-86 8.33,-86 4.17,-86 0,-81.83 0,-77.67 0,-77.67 0,-69.33 0,-69.33 0,-65.17 4.17,-61 8.33,-61 8.33,-61 87.67,-61 87.67,-61 91.83,-61 96,-65.17 96,-69.33 96,-69.33 96,-77.67 96,-77.67 96,-81.83 91.83,-86 87.67,-86" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-80.5" x="10" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-71.1" x="31" text-anchor="start">IsInstances</text></a></g></g><!-- node1 --><g class="node object" id="graph1_1"><g id="a_object|graph1_1"><a xlink:title="cats.evidence.Is" xlink:href="Is$.html#inheritance-diagram"><path d="M67.17,-25C67.17,-25 28.83,-25 28.83,-25 24.67,-25 20.5,-20.83 20.5,-16.67 20.5,-16.67 20.5,-8.33 20.5,-8.33 20.5,-4.17 24.67,0 28.83,0 28.83,0 67.17,0 67.17,0 71.33,0 75.5,-4.17 75.5,-8.33 75.5,-8.33 75.5,-16.67 75.5,-16.67 75.5,-20.83 71.33,-25 67.17,-25" stroke="#103a51" fill="#103a51"></path><image xlink:href="../../lib/object_diagram.png" y="-19.5" x="31" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="52" text-anchor="start">Is</text></a></g></g><!-- node0&#45;&gt;node1 --><g class="edge inheritance" id="graph1_0_1"><g id="a_inheritance|graph1_0_1"><a xlink:title="Is is a subtype of IsInstances"><path d="M48,-53.76C48,-44.37 48,-33.29 48,-25.13" stroke="#d4d4d4" fill="none"></path><polygon points="45.55,-53.84 48,-60.84 50.45,-53.84 45.55,-53.84" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node2 --><g class="node class" id="graph1_2"><g id="a_class|graph1_2"><a xlink:title="cats.evidence.AsInstances" xlink:href="AsInstances.html#inheritance-diagram"><path d="M201.67,-86C201.67,-86 122.33,-86 122.33,-86 118.17,-86 114,-81.83 114,-77.67 114,-77.67 114,-69.33 114,-69.33 114,-65.17 118.17,-61 122.33,-61 122.33,-61 201.67,-61 201.67,-61 205.83,-61 210,-65.17 210,-69.33 210,-69.33 210,-77.67 210,-77.67 210,-81.83 205.83,-86 201.67,-86" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-80.5" x="124" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-71.1" x="145" text-anchor="start">AsInstances</text></a></g></g><!-- node3 --><g class="node object" id="graph1_3"><g id="a_object|graph1_3"><a xlink:title="cats.evidence.As" xlink:href="As$.html#inheritance-diagram"><path d="M181.17,-25C181.17,-25 142.83,-25 142.83,-25 138.67,-25 134.5,-20.83 134.5,-16.67 134.5,-16.67 134.5,-8.33 134.5,-8.33 134.5,-4.17 138.67,0 142.83,0 142.83,0 181.17,0 181.17,0 185.33,0 189.5,-4.17 189.5,-8.33 189.5,-8.33 189.5,-16.67 189.5,-16.67 189.5,-20.83 185.33,-25 181.17,-25" stroke="#103a51" fill="#103a51"></path><image xlink:href="../../lib/object_diagram.png" y="-19.5" x="145" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="166" text-anchor="start">As</text></a></g></g><!-- node2&#45;&gt;node3 --><g class="edge inheritance" id="graph1_2_3"><g id="a_inheritance|graph1_2_3"><a xlink:title="As is a subtype of AsInstances"><path d="M162,-53.76C162,-44.37 162,-33.29 162,-25.13" stroke="#d4d4d4" fill="none"></path><polygon points="159.55,-53.84 162,-60.84 164.45,-53.84 159.55,-53.84" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
+                <div id="diagram-controls" class="hiddenContent">
+                  <button id="diagram-zoom-out" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button id="diagram-zoom-in" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button title="Toggle full-screen" id="diagram-fs" class="diagram-btn to-full"><i class="material-icons"></i></button>
+                </div>
+              </div></div>
         
 
       <div id="mbrsel">
@@ -366,7 +414,7 @@ relationships, which can be applied in other context to widen other
 type</p><p><code>A As B</code> holds whenever <code>A</code> could be used in any negative context
 that expects a <code>B</code>.  (e.g. if you could pass an <code>A</code> into any
 function that expects a <code>B</code> as input.)</p><p>This code was ported directly from scalaz to cats using this version from scalaz:
-https://github.com/scalaz/scalaz/blob/a89b6d63/core/src/main/scala/scalaz/As.scala</p><p> The original contribution to scalaz came from Jason Zaugg
+https://github.com/scalaz/scalaz/blob/a89b6d63/core/src/main/scala/scalaz/Liskov.scala</p><p> The original contribution to scalaz came from Jason Zaugg
 </p></div></div>
     </li><li name="cats.evidence.AsInstances" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="AsInstancesextendsAnyRef"></a><a id="AsInstances:AsInstances"></a>
@@ -480,7 +528,7 @@ https://en.wikipedia.org/wiki/Barbara_Liskov
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a title="" href="As$.html"><span class="name">As</span></a><span class="result"> extends <a href="AsInstances.html" class="extype" name="cats.evidence.AsInstances">AsInstances</a> with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="" href="As$.html"><span class="name">As</span></a><span class="result"> extends <a href="AsInstances.html" class="extype" name="cats.evidence.AsInstances">AsInstances</a> with <span class="extype" name="cats.evidence.AsSupport">AsSupport</span> with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
@@ -496,7 +544,7 @@ https://en.wikipedia.org/wiki/Barbara_Liskov
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a title="" href="Is$.html"><span class="name">Is</span></a><span class="result"> extends <a href="IsInstances.html" class="extype" name="cats.evidence.IsInstances">IsInstances</a> with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="" href="Is$.html"><span class="name">Is</span></a><span class="result"> extends <a href="IsInstances.html" class="extype" name="cats.evidence.IsInstances">IsInstances</a> with <span class="extype" name="cats.evidence.IsSupport">IsSupport</span> with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       

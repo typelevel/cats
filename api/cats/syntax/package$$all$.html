@@ -81,10 +81,32 @@
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <a title="Symbolic aliases for various types are defined here." href="../index.html"><span class="name">cats</span></a>
+        <a title="The cats root package contains all the trait signatures of most Scala type classes." href="../index.html"><span class="name">cats</span></a>
       </span>
       
-      <p class="shortcomment cmt">Symbolic aliases for various types are defined here.</p><div class="fullcomment"><div class="comment cmt"><p>Symbolic aliases for various types are defined here.
+      <p class="shortcomment cmt">The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><p>Cats type classes are implemented using the approach from the
+ <a href="https://ropas.snu.ac.kr/~bruno/papers/TypeClasses.pdf" target="_blank">Type classes as objects and implicits</a> article.</p><p>For each type class, <code>cats</code> provides three pieces:
+- Its <b>signature</b>: a trait that is polymorphic on a type parameter.
+  Type class traits inherit from other type classes to indicate that any implementation of the lower type class (e.g. <code>Applicative</code>)
+  can also serve as an instance for the higuer type class (e.g. <code>Functor</code>).
+- Type class <b>'instances</b>, which are classes and objects that implement one or more type class signatures for some specific types.
+  Type class instances for several data types from the Java or Scala standard libraries are declared in the subpackage <code>cats.instances</code>.
+- <b>Syntax extensions</b>, each of which provides the methods of the type class defines as extension methods
+  (which in Scala 2 are encoded as implicit classes) for values of any type <code>F</code>; given that an instance of the type class
+  for the receiver type (<code>this</code>) is in the implicit scope.
+  Symtax extensions are declared in the <code>cats.syntax</code> package.
+- A set of <b>laws</b>, that are also generic on the type of the class, and are only defined on the operations of the type class.
+  The purpose of these laws is to declare some algebraic relations (equations) between Scala expressions involving the operations
+  of the type class, and test (but not verify) that implemented instances satisfy those equations.
+  Laws are defined in the <code>cats-laws</code> package.</p><p>Although most of cats type classes are declared in this package, some are declared in other packages:
+- type classes that operate on base types (kind <code>*</code>), and their implementations for standard library types,
+  are contained in <code>cats.kernel</code>, which is a different SBT project. However, they are re-exported from this package.
+- type classes of kind <code>F[_, _]</code>, such as <a href="../arrow/Profunctor.html" class="extype" name="cats.arrow.Profunctor">cats.arrow.Profunctor</a>&quot; or <a href="../arrow/Arrow.html" class="extype" name="cats.arrow.Arrow">cats.arrow.Arrow</a>, which are relevant for
+  Functional Reactive Programming or optics, are declared in the <code>cats.arrow</code> package.
+- Also, those type classes that abstract over (pure or impure) functional runtime effects are declared
+  in the <a href="https://typelevel.org/cats-effect/" target="_blank">cats-effect library</a>.
+- Some type classes for which no laws can be provided are left out of the main road, in a small and dirty alley.
+  These are the <code>alleycats</code>.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
     </li><li name="cats.syntax" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="syntax"></a><a id="syntax:syntax"></a>
@@ -142,6 +164,10 @@
                         <span class="separator"></span>
                         <a class="trait" href="AllSyntaxBinCompat6.html" title=""></a>
                         <a href="AllSyntaxBinCompat6.html" title="">AllSyntaxBinCompat6</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="AllSyntaxBinCompat7.html" title=""></a>
+                        <a href="AllSyntaxBinCompat7.html" title="">AllSyntaxBinCompat7</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="trait" href="AlternativeSyntax.html" title=""></a>
@@ -520,6 +546,10 @@
                         <a href="ParallelLeftTraverseOps.html" title="">ParallelLeftTraverseOps</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
+                        <a class="class" href="ParallelSequenceFilterOps.html" title=""></a>
+                        <a href="ParallelSequenceFilterOps.html" title="">ParallelSequenceFilterOps</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
                         <a class="class" href="ParallelSequenceOps.html" title=""></a>
                         <a href="ParallelSequenceOps.html" title="">ParallelSequenceOps</a>
                       </li><li class="current-entities indented2">
@@ -538,6 +568,14 @@
                         <span class="separator"></span>
                         <a class="class" href="ParallelTraversable_Ops.html" title=""></a>
                         <a href="ParallelTraversable_Ops.html" title="">ParallelTraversable_Ops</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="ParallelTraverseFilterOps.html" title=""></a>
+                        <a href="ParallelTraverseFilterOps.html" title="">ParallelTraverseFilterOps</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="ParallelTraverseFilterSyntax.html" title=""></a>
+                        <a href="ParallelTraverseFilterSyntax.html" title="">ParallelTraverseFilterSyntax</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="trait" href="ParallelTraverseSyntax.html" title=""></a>
@@ -610,6 +648,14 @@
                         <span class="separator"></span>
                         <a class="class" href="SeparateOps.html" title=""></a>
                         <a href="SeparateOps.html" title="">SeparateOps</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="SeqOps.html" title=""></a>
+                        <a href="SeqOps.html" title="">SeqOps</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="SeqSyntax.html" title=""></a>
+                        <a href="SeqSyntax.html" title="">SeqSyntax</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="class" href="SequenceFilterOps.html" title=""></a>
@@ -820,6 +866,10 @@
                         <a href="package$$group$.html" title="">group</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
+                        <a class="object" href="package$$hash$.html" title=""></a>
+                        <a href="package$$hash$.html" title="">hash</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
                         <a class="object" href="package$$invariant$.html" title=""></a>
                         <a href="package$$invariant$.html" title="">invariant</a>
                       </li><li class="current-entities indented2">
@@ -890,6 +940,10 @@
                         <span class="separator"></span>
                         <a class="object" href="package$$semigroupk$.html" title=""></a>
                         <a href="package$$semigroupk$.html" title="">semigroupk</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$seq$.html" title=""></a>
+                        <a href="package$$seq$.html" title="">seq</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="object" href="package$$set$.html" title=""></a>
@@ -966,7 +1020,7 @@
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="AllSyntaxBinCompat.html" class="extype" name="cats.syntax.AllSyntaxBinCompat">AllSyntaxBinCompat</a>, <a href="AllSyntaxBinCompat6.html" class="extype" name="cats.syntax.AllSyntaxBinCompat6">AllSyntaxBinCompat6</a>, <a href="ParallelUnorderedTraverseSyntax.html" class="extype" name="cats.syntax.ParallelUnorderedTraverseSyntax">ParallelUnorderedTraverseSyntax</a>, <a href="AllSyntaxBinCompat5.html" class="extype" name="cats.syntax.AllSyntaxBinCompat5">AllSyntaxBinCompat5</a>, <a href="ParallelBitraverseSyntax.html" class="extype" name="cats.syntax.ParallelBitraverseSyntax">ParallelBitraverseSyntax</a>, <a href="AllSyntaxBinCompat4.html" class="extype" name="cats.syntax.AllSyntaxBinCompat4">AllSyntaxBinCompat4</a>, <span class="extype" name="cats.syntax.BitraverseSyntaxBinCompat0">BitraverseSyntaxBinCompat0</span>, <span class="extype" name="cats.syntax.FoldableSyntaxBinCompat1">FoldableSyntaxBinCompat1</span>, <span class="extype" name="cats.syntax.ReducibleSyntaxBinCompat0">ReducibleSyntaxBinCompat0</span>, <span class="extype" name="cats.syntax.FoldableSyntaxBinCompat0">FoldableSyntaxBinCompat0</span>, <a href="ParallelApplySyntax.html" class="extype" name="cats.syntax.ParallelApplySyntax">ParallelApplySyntax</a>, <span class="extype" name="cats.syntax.ApplySyntaxBinCompat0">ApplySyntaxBinCompat0</span>, <span class="extype" name="cats.syntax.TraverseFilterSyntaxBinCompat0">TraverseFilterSyntaxBinCompat0</span>, <a href="AllSyntaxBinCompat3.html" class="extype" name="cats.syntax.AllSyntaxBinCompat3">AllSyntaxBinCompat3</a>, <a href="Function1Syntax.html" class="extype" name="cats.syntax.Function1Syntax">Function1Syntax</a>, <a href="UnorderedFoldableSyntax.html" class="extype" name="cats.syntax.UnorderedFoldableSyntax">UnorderedFoldableSyntax</a>, <a href="AllSyntaxBinCompat2.html" class="extype" name="cats.syntax.AllSyntaxBinCompat2">AllSyntaxBinCompat2</a>, <span class="extype" name="cats.syntax.ValidatedSyntaxBincompat0">ValidatedSyntaxBincompat0</span>, <span class="extype" name="cats.syntax.ListSyntaxBinCompat0">ListSyntaxBinCompat0</span>, <span class="extype" name="cats.syntax.EitherSyntaxBinCompat0">EitherSyntaxBinCompat0</span>, <a href="FunctorFilterSyntax.html" class="extype" name="cats.syntax.FunctorFilterSyntax">FunctorFilterSyntax</a>, <a href="../FunctorFilter$$ToFunctorFilterOps.html" class="extype" name="cats.FunctorFilter.ToFunctorFilterOps">ToFunctorFilterOps</a>, <a href="TraverseFilterSyntax.html" class="extype" name="cats.syntax.TraverseFilterSyntax">TraverseFilterSyntax</a>, <a href="../TraverseFilter$$ToTraverseFilterOps.html" class="extype" name="cats.TraverseFilter.ToTraverseFilterOps">ToTraverseFilterOps</a>, <a href="ParallelTraverseSyntax.html" class="extype" name="cats.syntax.ParallelTraverseSyntax">ParallelTraverseSyntax</a>, <a href="AllSyntaxBinCompat1.html" class="extype" name="cats.syntax.AllSyntaxBinCompat1">AllSyntaxBinCompat1</a>, <a href="RepresentableSyntax.html" class="extype" name="cats.syntax.RepresentableSyntax">RepresentableSyntax</a>, <a href="ValidatedExtensionSyntax.html" class="extype" name="cats.syntax.ValidatedExtensionSyntax">ValidatedExtensionSyntax</a>, <a href="SetSyntax.html" class="extype" name="cats.syntax.SetSyntax">SetSyntax</a>, <a href="ParallelFlatSyntax.html" class="extype" name="cats.syntax.ParallelFlatSyntax">ParallelFlatSyntax</a>, <a href="BinestedSyntax.html" class="extype" name="cats.syntax.BinestedSyntax">BinestedSyntax</a>, <a href="NestedSyntax.html" class="extype" name="cats.syntax.NestedSyntax">NestedSyntax</a>, <a href="ChoiceSyntax.html" class="extype" name="cats.syntax.ChoiceSyntax">ChoiceSyntax</a>, <a href="../arrow/Choice$$ToChoiceOps.html" class="extype" name="cats.arrow.Choice.ToChoiceOps">ToChoiceOps</a>, <a href="FlatMapOptionSyntax.html" class="extype" name="cats.syntax.FlatMapOptionSyntax">FlatMapOptionSyntax</a>, <a href="AllSyntaxBinCompat0.html" class="extype" name="cats.syntax.AllSyntaxBinCompat0">AllSyntaxBinCompat0</a>, <a href="TrySyntax.html" class="extype" name="cats.syntax.TrySyntax">TrySyntax</a>, <span class="extype" name="cats.syntax.ApplicativeErrorExtension">ApplicativeErrorExtension</span>, <a href="UnorderedTraverseSyntax.html" class="extype" name="cats.syntax.UnorderedTraverseSyntax">UnorderedTraverseSyntax</a>, <a href="../UnorderedTraverse$$ToUnorderedTraverseOps.html" class="extype" name="cats.UnorderedTraverse.ToUnorderedTraverseOps">ToUnorderedTraverseOps</a>, <a href="AllSyntax.html" class="extype" name="cats.syntax.AllSyntax">AllSyntax</a>, <a href="ParallelFoldMapASyntax.html" class="extype" name="cats.syntax.ParallelFoldMapASyntax">ParallelFoldMapASyntax</a>, <a href="WriterSyntax.html" class="extype" name="cats.syntax.WriterSyntax">WriterSyntax</a>, <a href="VectorSyntax.html" class="extype" name="cats.syntax.VectorSyntax">VectorSyntax</a>, <a href="ValidatedSyntax.html" class="extype" name="cats.syntax.ValidatedSyntax">ValidatedSyntax</a>, <a href="NonEmptyTraverseSyntax.html" class="extype" name="cats.syntax.NonEmptyTraverseSyntax">NonEmptyTraverseSyntax</a>, <a href="../NonEmptyTraverse$$ToNonEmptyTraverseOps.html" class="extype" name="cats.NonEmptyTraverse.ToNonEmptyTraverseOps">ToNonEmptyTraverseOps</a>, <a href="TraverseSyntax.html" class="extype" name="cats.syntax.TraverseSyntax">TraverseSyntax</a>, <a href="../Traverse$$ToTraverseOps.html" class="extype" name="cats.Traverse.ToTraverseOps">ToTraverseOps</a>, <a href="StrongSyntax.html" class="extype" name="cats.syntax.StrongSyntax">StrongSyntax</a>, <a href="../arrow/Strong$$ToStrongOps.html" class="extype" name="cats.arrow.Strong.ToStrongOps">ToStrongOps</a>, <a href="ShowSyntax.html" class="extype" name="cats.syntax.ShowSyntax">ShowSyntax</a>, <a href="../Show$$ToShowOps.html" class="extype" name="cats.Show.ToShowOps">ToShowOps</a>, <a href="SemigroupKSyntax.html" class="extype" name="cats.syntax.SemigroupKSyntax">SemigroupKSyntax</a>, <a href="../SemigroupK$$ToSemigroupKOps.html" class="extype" name="cats.SemigroupK.ToSemigroupKOps">ToSemigroupKOps</a>, <a href="ReducibleSyntax.html" class="extype" name="cats.syntax.ReducibleSyntax">ReducibleSyntax</a>, <a href="../Reducible$$ToReducibleOps.html" class="extype" name="cats.Reducible.ToReducibleOps">ToReducibleOps</a>, <a href="ProfunctorSyntax.html" class="extype" name="cats.syntax.ProfunctorSyntax">ProfunctorSyntax</a>, <a href="../arrow/Profunctor$$ToProfunctorOps.html" class="extype" name="cats.arrow.Profunctor.ToProfunctorOps">ToProfunctorOps</a>, <a href="ParallelSyntax.html" class="extype" name="cats.syntax.ParallelSyntax">ParallelSyntax</a>, <a href="TupleParallelSyntax.html" class="extype" name="cats.syntax.TupleParallelSyntax">TupleParallelSyntax</a>, <a href="OrderSyntax.html" class="extype" name="cats.syntax.OrderSyntax">OrderSyntax</a>, <a href="PartialOrderSyntax.html" class="extype" name="cats.syntax.PartialOrderSyntax">PartialOrderSyntax</a>, <a href="OptionSyntax.html" class="extype" name="cats.syntax.OptionSyntax">OptionSyntax</a>, <a href="MonoidSyntax.html" class="extype" name="cats.syntax.MonoidSyntax">MonoidSyntax</a>, <a href="MonadSyntax.html" class="extype" name="cats.syntax.MonadSyntax">MonadSyntax</a>, <a href="MonadErrorSyntax.html" class="extype" name="cats.syntax.MonadErrorSyntax">MonadErrorSyntax</a>, <a href="ListSyntax.html" class="extype" name="cats.syntax.ListSyntax">ListSyntax</a>, <a href="IorSyntax.html" class="extype" name="cats.syntax.IorSyntax">IorSyntax</a>, <a href="InvariantSyntax.html" class="extype" name="cats.syntax.InvariantSyntax">InvariantSyntax</a>, <a href="../Invariant$$ToInvariantOps.html" class="extype" name="cats.Invariant.ToInvariantOps">ToInvariantOps</a>, <a href="HashSyntax.html" class="extype" name="cats.syntax.HashSyntax">HashSyntax</a>, <a href="GroupSyntax.html" class="extype" name="cats.syntax.GroupSyntax">GroupSyntax</a>, <a href="SemigroupSyntax.html" class="extype" name="cats.syntax.SemigroupSyntax">SemigroupSyntax</a>, <a href="FunctorSyntax.html" class="extype" name="cats.syntax.FunctorSyntax">FunctorSyntax</a>, <a href="../Functor$$ToFunctorOps.html" class="extype" name="cats.Functor.ToFunctorOps">ToFunctorOps</a>, <a href="FoldableSyntax.html" class="extype" name="cats.syntax.FoldableSyntax">FoldableSyntax</a>, <a href="../UnorderedFoldable$$ToUnorderedFoldableOps.html" class="extype" name="cats.UnorderedFoldable.ToUnorderedFoldableOps">ToUnorderedFoldableOps</a>, <a href="../Foldable$$ToFoldableOps.html" class="extype" name="cats.Foldable.ToFoldableOps">ToFoldableOps</a>, <a href="FlatMapSyntax.html" class="extype" name="cats.syntax.FlatMapSyntax">FlatMapSyntax</a>, <a href="../FlatMap$$ToFlatMapOps.html" class="extype" name="cats.FlatMap.ToFlatMapOps">ToFlatMapOps</a>, <a href="EqSyntax.html" class="extype" name="cats.syntax.EqSyntax">EqSyntax</a>, <a href="EitherSyntax.html" class="extype" name="cats.syntax.EitherSyntax">EitherSyntax</a>, <a href="EitherKSyntax.html" class="extype" name="cats.syntax.EitherKSyntax">EitherKSyntax</a>, <a href="ContravariantSemigroupalSyntax.html" class="extype" name="cats.syntax.ContravariantSemigroupalSyntax">ContravariantSemigroupalSyntax</a>, <a href="ContravariantMonoidalSyntax.html" class="extype" name="cats.syntax.ContravariantMonoidalSyntax">ContravariantMonoidalSyntax</a>, <a href="DistributiveSyntax.html" class="extype" name="cats.syntax.DistributiveSyntax">DistributiveSyntax</a>, <a href="../Distributive$$ToDistributiveOps.html" class="extype" name="cats.Distributive.ToDistributiveOps">ToDistributiveOps</a>, <a href="ContravariantSyntax.html" class="extype" name="cats.syntax.ContravariantSyntax">ContravariantSyntax</a>, <a href="../Contravariant$$ToContravariantOps.html" class="extype" name="cats.Contravariant.ToContravariantOps">ToContravariantOps</a>, <a href="ComposeSyntax.html" class="extype" name="cats.syntax.ComposeSyntax">ComposeSyntax</a>, <a href="../arrow/Compose$$ToComposeOps.html" class="extype" name="cats.arrow.Compose.ToComposeOps">ToComposeOps</a>, <a href="ComonadSyntax.html" class="extype" name="cats.syntax.ComonadSyntax">ComonadSyntax</a>, <a href="../Comonad$$ToComonadOps.html" class="extype" name="cats.Comonad.ToComonadOps">ToComonadOps</a>, <a href="CoflatMapSyntax.html" class="extype" name="cats.syntax.CoflatMapSyntax">CoflatMapSyntax</a>, <a href="../CoflatMap$$ToCoflatMapOps.html" class="extype" name="cats.CoflatMap.ToCoflatMapOps">ToCoflatMapOps</a>, <a href="SemigroupalSyntax.html" class="extype" name="cats.syntax.SemigroupalSyntax">SemigroupalSyntax</a>, <a href="BitraverseSyntax.html" class="extype" name="cats.syntax.BitraverseSyntax">BitraverseSyntax</a>, <span class="extype" name="cats.syntax.BitraverseSyntax1">BitraverseSyntax1</span>, <a href="BifoldableSyntax.html" class="extype" name="cats.syntax.BifoldableSyntax">BifoldableSyntax</a>, <a href="../Bifoldable$$ToBifoldableOps.html" class="extype" name="cats.Bifoldable.ToBifoldableOps">ToBifoldableOps</a>, <a href="BifunctorSyntax.html" class="extype" name="cats.syntax.BifunctorSyntax">BifunctorSyntax</a>, <a href="../Bifunctor$$ToBifunctorOps.html" class="extype" name="cats.Bifunctor.ToBifunctorOps">ToBifunctorOps</a>, <a href="ArrowChoiceSyntax.html" class="extype" name="cats.syntax.ArrowChoiceSyntax">ArrowChoiceSyntax</a>, <a href="../arrow/ArrowChoice$$ToArrowChoiceOps.html" class="extype" name="cats.arrow.ArrowChoice.ToArrowChoiceOps">ToArrowChoiceOps</a>, <a href="ArrowSyntax.html" class="extype" name="cats.syntax.ArrowSyntax">ArrowSyntax</a>, <a href="../arrow/Arrow$$ToArrowOps.html" class="extype" name="cats.arrow.Arrow.ToArrowOps">ToArrowOps</a>, <a href="ApplySyntax.html" class="extype" name="cats.syntax.ApplySyntax">ApplySyntax</a>, <a href="TupleSemigroupalSyntax.html" class="extype" name="cats.syntax.TupleSemigroupalSyntax">TupleSemigroupalSyntax</a>, <a href="ApplicativeErrorSyntax.html" class="extype" name="cats.syntax.ApplicativeErrorSyntax">ApplicativeErrorSyntax</a>, <a href="ApplicativeSyntax.html" class="extype" name="cats.syntax.ApplicativeSyntax">ApplicativeSyntax</a>, <a href="AlignSyntax.html" class="extype" name="cats.syntax.AlignSyntax">AlignSyntax</a>, <a href="../Align$$ToAlignOps.html" class="extype" name="cats.Align.ToAlignOps">ToAlignOps</a>, <a href="AlternativeSyntax.html" class="extype" name="cats.syntax.AlternativeSyntax">AlternativeSyntax</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="AllSyntaxBinCompat.html" class="extype" name="cats.syntax.AllSyntaxBinCompat">AllSyntaxBinCompat</a>, <a href="AllSyntaxBinCompat7.html" class="extype" name="cats.syntax.AllSyntaxBinCompat7">AllSyntaxBinCompat7</a>, <a href="SeqSyntax.html" class="extype" name="cats.syntax.SeqSyntax">SeqSyntax</a>, <a href="AllSyntaxBinCompat6.html" class="extype" name="cats.syntax.AllSyntaxBinCompat6">AllSyntaxBinCompat6</a>, <a href="ParallelUnorderedTraverseSyntax.html" class="extype" name="cats.syntax.ParallelUnorderedTraverseSyntax">ParallelUnorderedTraverseSyntax</a>, <a href="AllSyntaxBinCompat5.html" class="extype" name="cats.syntax.AllSyntaxBinCompat5">AllSyntaxBinCompat5</a>, <a href="ParallelBitraverseSyntax.html" class="extype" name="cats.syntax.ParallelBitraverseSyntax">ParallelBitraverseSyntax</a>, <a href="AllSyntaxBinCompat4.html" class="extype" name="cats.syntax.AllSyntaxBinCompat4">AllSyntaxBinCompat4</a>, <span class="extype" name="cats.syntax.BitraverseSyntaxBinCompat0">BitraverseSyntaxBinCompat0</span>, <span class="extype" name="cats.syntax.FoldableSyntaxBinCompat1">FoldableSyntaxBinCompat1</span>, <span class="extype" name="cats.syntax.ReducibleSyntaxBinCompat0">ReducibleSyntaxBinCompat0</span>, <span class="extype" name="cats.syntax.FoldableSyntaxBinCompat0">FoldableSyntaxBinCompat0</span>, <a href="ParallelApplySyntax.html" class="extype" name="cats.syntax.ParallelApplySyntax">ParallelApplySyntax</a>, <span class="extype" name="cats.syntax.ApplySyntaxBinCompat0">ApplySyntaxBinCompat0</span>, <span class="extype" name="cats.syntax.TraverseFilterSyntaxBinCompat0">TraverseFilterSyntaxBinCompat0</span>, <a href="AllSyntaxBinCompat3.html" class="extype" name="cats.syntax.AllSyntaxBinCompat3">AllSyntaxBinCompat3</a>, <a href="Function1Syntax.html" class="extype" name="cats.syntax.Function1Syntax">Function1Syntax</a>, <a href="UnorderedFoldableSyntax.html" class="extype" name="cats.syntax.UnorderedFoldableSyntax">UnorderedFoldableSyntax</a>, <a href="AllSyntaxBinCompat2.html" class="extype" name="cats.syntax.AllSyntaxBinCompat2">AllSyntaxBinCompat2</a>, <span class="extype" name="cats.syntax.ValidatedSyntaxBincompat0">ValidatedSyntaxBincompat0</span>, <span class="extype" name="cats.syntax.ListSyntaxBinCompat0">ListSyntaxBinCompat0</span>, <span class="extype" name="cats.syntax.EitherSyntaxBinCompat0">EitherSyntaxBinCompat0</span>, <a href="FunctorFilterSyntax.html" class="extype" name="cats.syntax.FunctorFilterSyntax">FunctorFilterSyntax</a>, <a href="../FunctorFilter$$ToFunctorFilterOps.html" class="extype" name="cats.FunctorFilter.ToFunctorFilterOps">ToFunctorFilterOps</a>, <a href="TraverseFilterSyntax.html" class="extype" name="cats.syntax.TraverseFilterSyntax">TraverseFilterSyntax</a>, <a href="../TraverseFilter$$ToTraverseFilterOps.html" class="extype" name="cats.TraverseFilter.ToTraverseFilterOps">ToTraverseFilterOps</a>, <a href="ParallelTraverseSyntax.html" class="extype" name="cats.syntax.ParallelTraverseSyntax">ParallelTraverseSyntax</a>, <a href="AllSyntaxBinCompat1.html" class="extype" name="cats.syntax.AllSyntaxBinCompat1">AllSyntaxBinCompat1</a>, <a href="RepresentableSyntax.html" class="extype" name="cats.syntax.RepresentableSyntax">RepresentableSyntax</a>, <a href="ValidatedExtensionSyntax.html" class="extype" name="cats.syntax.ValidatedExtensionSyntax">ValidatedExtensionSyntax</a>, <a href="SetSyntax.html" class="extype" name="cats.syntax.SetSyntax">SetSyntax</a>, <a href="ParallelFlatSyntax.html" class="extype" name="cats.syntax.ParallelFlatSyntax">ParallelFlatSyntax</a>, <a href="BinestedSyntax.html" class="extype" name="cats.syntax.BinestedSyntax">BinestedSyntax</a>, <a href="NestedSyntax.html" class="extype" name="cats.syntax.NestedSyntax">NestedSyntax</a>, <a href="ChoiceSyntax.html" class="extype" name="cats.syntax.ChoiceSyntax">ChoiceSyntax</a>, <a href="../arrow/Choice$$ToChoiceOps.html" class="extype" name="cats.arrow.Choice.ToChoiceOps">ToChoiceOps</a>, <a href="FlatMapOptionSyntax.html" class="extype" name="cats.syntax.FlatMapOptionSyntax">FlatMapOptionSyntax</a>, <a href="AllSyntaxBinCompat0.html" class="extype" name="cats.syntax.AllSyntaxBinCompat0">AllSyntaxBinCompat0</a>, <a href="TrySyntax.html" class="extype" name="cats.syntax.TrySyntax">TrySyntax</a>, <span class="extype" name="cats.syntax.ApplicativeErrorExtension">ApplicativeErrorExtension</span>, <a href="UnorderedTraverseSyntax.html" class="extype" name="cats.syntax.UnorderedTraverseSyntax">UnorderedTraverseSyntax</a>, <a href="../UnorderedTraverse$$ToUnorderedTraverseOps.html" class="extype" name="cats.UnorderedTraverse.ToUnorderedTraverseOps">ToUnorderedTraverseOps</a>, <a href="AllSyntax.html" class="extype" name="cats.syntax.AllSyntax">AllSyntax</a>, <a href="ParallelTraverseFilterSyntax.html" class="extype" name="cats.syntax.ParallelTraverseFilterSyntax">ParallelTraverseFilterSyntax</a>, <a href="ParallelFoldMapASyntax.html" class="extype" name="cats.syntax.ParallelFoldMapASyntax">ParallelFoldMapASyntax</a>, <a href="WriterSyntax.html" class="extype" name="cats.syntax.WriterSyntax">WriterSyntax</a>, <a href="VectorSyntax.html" class="extype" name="cats.syntax.VectorSyntax">VectorSyntax</a>, <a href="ValidatedSyntax.html" class="extype" name="cats.syntax.ValidatedSyntax">ValidatedSyntax</a>, <a href="NonEmptyTraverseSyntax.html" class="extype" name="cats.syntax.NonEmptyTraverseSyntax">NonEmptyTraverseSyntax</a>, <a href="../NonEmptyTraverse$$ToNonEmptyTraverseOps.html" class="extype" name="cats.NonEmptyTraverse.ToNonEmptyTraverseOps">ToNonEmptyTraverseOps</a>, <a href="TraverseSyntax.html" class="extype" name="cats.syntax.TraverseSyntax">TraverseSyntax</a>, <a href="../Traverse$$ToTraverseOps.html" class="extype" name="cats.Traverse.ToTraverseOps">ToTraverseOps</a>, <a href="StrongSyntax.html" class="extype" name="cats.syntax.StrongSyntax">StrongSyntax</a>, <a href="../arrow/Strong$$ToStrongOps.html" class="extype" name="cats.arrow.Strong.ToStrongOps">ToStrongOps</a>, <a href="ShowSyntax.html" class="extype" name="cats.syntax.ShowSyntax">ShowSyntax</a>, <a href="../Show$$ToShowOps.html" class="extype" name="cats.Show.ToShowOps">ToShowOps</a>, <a href="SemigroupKSyntax.html" class="extype" name="cats.syntax.SemigroupKSyntax">SemigroupKSyntax</a>, <a href="../SemigroupK$$ToSemigroupKOps.html" class="extype" name="cats.SemigroupK.ToSemigroupKOps">ToSemigroupKOps</a>, <a href="ReducibleSyntax.html" class="extype" name="cats.syntax.ReducibleSyntax">ReducibleSyntax</a>, <a href="../Reducible$$ToReducibleOps.html" class="extype" name="cats.Reducible.ToReducibleOps">ToReducibleOps</a>, <a href="ProfunctorSyntax.html" class="extype" name="cats.syntax.ProfunctorSyntax">ProfunctorSyntax</a>, <a href="../arrow/Profunctor$$ToProfunctorOps.html" class="extype" name="cats.arrow.Profunctor.ToProfunctorOps">ToProfunctorOps</a>, <a href="ParallelSyntax.html" class="extype" name="cats.syntax.ParallelSyntax">ParallelSyntax</a>, <a href="TupleParallelSyntax.html" class="extype" name="cats.syntax.TupleParallelSyntax">TupleParallelSyntax</a>, <a href="OrderSyntax.html" class="extype" name="cats.syntax.OrderSyntax">OrderSyntax</a>, <a href="PartialOrderSyntax.html" class="extype" name="cats.syntax.PartialOrderSyntax">PartialOrderSyntax</a>, <a href="OptionSyntax.html" class="extype" name="cats.syntax.OptionSyntax">OptionSyntax</a>, <a href="MonoidSyntax.html" class="extype" name="cats.syntax.MonoidSyntax">MonoidSyntax</a>, <a href="MonadSyntax.html" class="extype" name="cats.syntax.MonadSyntax">MonadSyntax</a>, <a href="MonadErrorSyntax.html" class="extype" name="cats.syntax.MonadErrorSyntax">MonadErrorSyntax</a>, <a href="ListSyntax.html" class="extype" name="cats.syntax.ListSyntax">ListSyntax</a>, <a href="IorSyntax.html" class="extype" name="cats.syntax.IorSyntax">IorSyntax</a>, <a href="InvariantSyntax.html" class="extype" name="cats.syntax.InvariantSyntax">InvariantSyntax</a>, <a href="../Invariant$$ToInvariantOps.html" class="extype" name="cats.Invariant.ToInvariantOps">ToInvariantOps</a>, <a href="HashSyntax.html" class="extype" name="cats.syntax.HashSyntax">HashSyntax</a>, <a href="GroupSyntax.html" class="extype" name="cats.syntax.GroupSyntax">GroupSyntax</a>, <a href="SemigroupSyntax.html" class="extype" name="cats.syntax.SemigroupSyntax">SemigroupSyntax</a>, <a href="FunctorSyntax.html" class="extype" name="cats.syntax.FunctorSyntax">FunctorSyntax</a>, <a href="../Functor$$ToFunctorOps.html" class="extype" name="cats.Functor.ToFunctorOps">ToFunctorOps</a>, <a href="FoldableSyntax.html" class="extype" name="cats.syntax.FoldableSyntax">FoldableSyntax</a>, <a href="../UnorderedFoldable$$ToUnorderedFoldableOps.html" class="extype" name="cats.UnorderedFoldable.ToUnorderedFoldableOps">ToUnorderedFoldableOps</a>, <a href="../Foldable$$ToFoldableOps.html" class="extype" name="cats.Foldable.ToFoldableOps">ToFoldableOps</a>, <a href="FlatMapSyntax.html" class="extype" name="cats.syntax.FlatMapSyntax">FlatMapSyntax</a>, <a href="../FlatMap$$ToFlatMapOps.html" class="extype" name="cats.FlatMap.ToFlatMapOps">ToFlatMapOps</a>, <a href="EqSyntax.html" class="extype" name="cats.syntax.EqSyntax">EqSyntax</a>, <a href="EitherSyntax.html" class="extype" name="cats.syntax.EitherSyntax">EitherSyntax</a>, <a href="EitherKSyntax.html" class="extype" name="cats.syntax.EitherKSyntax">EitherKSyntax</a>, <a href="ContravariantSemigroupalSyntax.html" class="extype" name="cats.syntax.ContravariantSemigroupalSyntax">ContravariantSemigroupalSyntax</a>, <a href="ContravariantMonoidalSyntax.html" class="extype" name="cats.syntax.ContravariantMonoidalSyntax">ContravariantMonoidalSyntax</a>, <a href="DistributiveSyntax.html" class="extype" name="cats.syntax.DistributiveSyntax">DistributiveSyntax</a>, <a href="../Distributive$$ToDistributiveOps.html" class="extype" name="cats.Distributive.ToDistributiveOps">ToDistributiveOps</a>, <a href="ContravariantSyntax.html" class="extype" name="cats.syntax.ContravariantSyntax">ContravariantSyntax</a>, <a href="../Contravariant$$ToContravariantOps.html" class="extype" name="cats.Contravariant.ToContravariantOps">ToContravariantOps</a>, <a href="ComposeSyntax.html" class="extype" name="cats.syntax.ComposeSyntax">ComposeSyntax</a>, <a href="../arrow/Compose$$ToComposeOps.html" class="extype" name="cats.arrow.Compose.ToComposeOps">ToComposeOps</a>, <a href="ComonadSyntax.html" class="extype" name="cats.syntax.ComonadSyntax">ComonadSyntax</a>, <a href="../Comonad$$ToComonadOps.html" class="extype" name="cats.Comonad.ToComonadOps">ToComonadOps</a>, <a href="CoflatMapSyntax.html" class="extype" name="cats.syntax.CoflatMapSyntax">CoflatMapSyntax</a>, <a href="../CoflatMap$$ToCoflatMapOps.html" class="extype" name="cats.CoflatMap.ToCoflatMapOps">ToCoflatMapOps</a>, <a href="SemigroupalSyntax.html" class="extype" name="cats.syntax.SemigroupalSyntax">SemigroupalSyntax</a>, <a href="BitraverseSyntax.html" class="extype" name="cats.syntax.BitraverseSyntax">BitraverseSyntax</a>, <span class="extype" name="cats.syntax.BitraverseSyntax1">BitraverseSyntax1</span>, <a href="BifoldableSyntax.html" class="extype" name="cats.syntax.BifoldableSyntax">BifoldableSyntax</a>, <a href="../Bifoldable$$ToBifoldableOps.html" class="extype" name="cats.Bifoldable.ToBifoldableOps">ToBifoldableOps</a>, <a href="BifunctorSyntax.html" class="extype" name="cats.syntax.BifunctorSyntax">BifunctorSyntax</a>, <a href="../Bifunctor$$ToBifunctorOps.html" class="extype" name="cats.Bifunctor.ToBifunctorOps">ToBifunctorOps</a>, <a href="ArrowChoiceSyntax.html" class="extype" name="cats.syntax.ArrowChoiceSyntax">ArrowChoiceSyntax</a>, <a href="../arrow/ArrowChoice$$ToArrowChoiceOps.html" class="extype" name="cats.arrow.ArrowChoice.ToArrowChoiceOps">ToArrowChoiceOps</a>, <a href="ArrowSyntax.html" class="extype" name="cats.syntax.ArrowSyntax">ArrowSyntax</a>, <a href="../arrow/Arrow$$ToArrowOps.html" class="extype" name="cats.arrow.Arrow.ToArrowOps">ToArrowOps</a>, <a href="ApplySyntax.html" class="extype" name="cats.syntax.ApplySyntax">ApplySyntax</a>, <a href="TupleSemigroupalSyntax.html" class="extype" name="cats.syntax.TupleSemigroupalSyntax">TupleSemigroupalSyntax</a>, <a href="ApplicativeErrorSyntax.html" class="extype" name="cats.syntax.ApplicativeErrorSyntax">ApplicativeErrorSyntax</a>, <a href="ApplicativeSyntax.html" class="extype" name="cats.syntax.ApplicativeSyntax">ApplicativeSyntax</a>, <a href="AlignSyntax.html" class="extype" name="cats.syntax.AlignSyntax">AlignSyntax</a>, <a href="../Align$$ToAlignOps.html" class="extype" name="cats.Align.ToAlignOps">ToAlignOps</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="AlternativeSyntax.html" class="extype" name="cats.syntax.AlternativeSyntax">AlternativeSyntax</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
         </div></div>
         
 
@@ -992,7 +1046,7 @@
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="cats.syntax.all"><span>all</span></li><li class="in" name="cats.syntax.AllSyntaxBinCompat"><span>AllSyntaxBinCompat</span></li><li class="in" name="cats.syntax.AllSyntaxBinCompat6"><span>AllSyntaxBinCompat6</span></li><li class="in" name="cats.syntax.ParallelUnorderedTraverseSyntax"><span>ParallelUnorderedTraverseSyntax</span></li><li class="in" name="cats.syntax.AllSyntaxBinCompat5"><span>AllSyntaxBinCompat5</span></li><li class="in" name="cats.syntax.ParallelBitraverseSyntax"><span>ParallelBitraverseSyntax</span></li><li class="in" name="cats.syntax.AllSyntaxBinCompat4"><span>AllSyntaxBinCompat4</span></li><li class="in" name="cats.syntax.BitraverseSyntaxBinCompat0"><span>BitraverseSyntaxBinCompat0</span></li><li class="in" name="cats.syntax.FoldableSyntaxBinCompat1"><span>FoldableSyntaxBinCompat1</span></li><li class="in" name="cats.syntax.ReducibleSyntaxBinCompat0"><span>ReducibleSyntaxBinCompat0</span></li><li class="in" name="cats.syntax.FoldableSyntaxBinCompat0"><span>FoldableSyntaxBinCompat0</span></li><li class="in" name="cats.syntax.ParallelApplySyntax"><span>ParallelApplySyntax</span></li><li class="in" name="cats.syntax.ApplySyntaxBinCompat0"><span>ApplySyntaxBinCompat0</span></li><li class="in" name="cats.syntax.TraverseFilterSyntaxBinCompat0"><span>TraverseFilterSyntaxBinCompat0</span></li><li class="in" name="cats.syntax.AllSyntaxBinCompat3"><span>AllSyntaxBinCompat3</span></li><li class="in" name="cats.syntax.Function1Syntax"><span>Function1Syntax</span></li><li class="in" name="cats.syntax.UnorderedFoldableSyntax"><span>UnorderedFoldableSyntax</span></li><li class="in" name="cats.syntax.AllSyntaxBinCompat2"><span>AllSyntaxBinCompat2</span></li><li class="in" name="cats.syntax.ValidatedSyntaxBincompat0"><span>ValidatedSyntaxBincompat0</span></li><li class="in" name="cats.syntax.ListSyntaxBinCompat0"><span>ListSyntaxBinCompat0</span></li><li class="in" name="cats.syntax.EitherSyntaxBinCompat0"><span>EitherSyntaxBinCompat0</span></li><li class="in" name="cats.syntax.FunctorFilterSyntax"><span>FunctorFilterSyntax</span></li><li class="in" name="cats.FunctorFilter.ToFunctorFilterOps"><span>ToFunctorFilterOps</span></li><li class="in" name="cats.syntax.TraverseFilterSyntax"><span>TraverseFilterSyntax</span></li><li class="in" name="cats.TraverseFilter.ToTraverseFilterOps"><span>ToTraverseFilterOps</span></li><li class="in" name="cats.syntax.ParallelTraverseSyntax"><span>ParallelTraverseSyntax</span></li><li class="in" name="cats.syntax.AllSyntaxBinCompat1"><span>AllSyntaxBinCompat1</span></li><li class="in" name="cats.syntax.RepresentableSyntax"><span>RepresentableSyntax</span></li><li class="in" name="cats.syntax.ValidatedExtensionSyntax"><span>ValidatedExtensionSyntax</span></li><li class="in" name="cats.syntax.SetSyntax"><span>SetSyntax</span></li><li class="in" name="cats.syntax.ParallelFlatSyntax"><span>ParallelFlatSyntax</span></li><li class="in" name="cats.syntax.BinestedSyntax"><span>BinestedSyntax</span></li><li class="in" name="cats.syntax.NestedSyntax"><span>NestedSyntax</span></li><li class="in" name="cats.syntax.ChoiceSyntax"><span>ChoiceSyntax</span></li><li class="in" name="cats.arrow.Choice.ToChoiceOps"><span>ToChoiceOps</span></li><li class="in" name="cats.syntax.FlatMapOptionSyntax"><span>FlatMapOptionSyntax</span></li><li class="in" name="cats.syntax.AllSyntaxBinCompat0"><span>AllSyntaxBinCompat0</span></li><li class="in" name="cats.syntax.TrySyntax"><span>TrySyntax</span></li><li class="in" name="cats.syntax.ApplicativeErrorExtension"><span>ApplicativeErrorExtension</span></li><li class="in" name="cats.syntax.UnorderedTraverseSyntax"><span>UnorderedTraverseSyntax</span></li><li class="in" name="cats.UnorderedTraverse.ToUnorderedTraverseOps"><span>ToUnorderedTraverseOps</span></li><li class="in" name="cats.syntax.AllSyntax"><span>AllSyntax</span></li><li class="in" name="cats.syntax.ParallelFoldMapASyntax"><span>ParallelFoldMapASyntax</span></li><li class="in" name="cats.syntax.WriterSyntax"><span>WriterSyntax</span></li><li class="in" name="cats.syntax.VectorSyntax"><span>VectorSyntax</span></li><li class="in" name="cats.syntax.ValidatedSyntax"><span>ValidatedSyntax</span></li><li class="in" name="cats.syntax.NonEmptyTraverseSyntax"><span>NonEmptyTraverseSyntax</span></li><li class="in" name="cats.NonEmptyTraverse.ToNonEmptyTraverseOps"><span>ToNonEmptyTraverseOps</span></li><li class="in" name="cats.syntax.TraverseSyntax"><span>TraverseSyntax</span></li><li class="in" name="cats.Traverse.ToTraverseOps"><span>ToTraverseOps</span></li><li class="in" name="cats.syntax.StrongSyntax"><span>StrongSyntax</span></li><li class="in" name="cats.arrow.Strong.ToStrongOps"><span>ToStrongOps</span></li><li class="in" name="cats.syntax.ShowSyntax"><span>ShowSyntax</span></li><li class="in" name="cats.Show.ToShowOps"><span>ToShowOps</span></li><li class="in" name="cats.syntax.SemigroupKSyntax"><span>SemigroupKSyntax</span></li><li class="in" name="cats.SemigroupK.ToSemigroupKOps"><span>ToSemigroupKOps</span></li><li class="in" name="cats.syntax.ReducibleSyntax"><span>ReducibleSyntax</span></li><li class="in" name="cats.Reducible.ToReducibleOps"><span>ToReducibleOps</span></li><li class="in" name="cats.syntax.ProfunctorSyntax"><span>ProfunctorSyntax</span></li><li class="in" name="cats.arrow.Profunctor.ToProfunctorOps"><span>ToProfunctorOps</span></li><li class="in" name="cats.syntax.ParallelSyntax"><span>ParallelSyntax</span></li><li class="in" name="cats.syntax.TupleParallelSyntax"><span>TupleParallelSyntax</span></li><li class="in" name="cats.syntax.OrderSyntax"><span>OrderSyntax</span></li><li class="in" name="cats.syntax.PartialOrderSyntax"><span>PartialOrderSyntax</span></li><li class="in" name="cats.syntax.OptionSyntax"><span>OptionSyntax</span></li><li class="in" name="cats.syntax.MonoidSyntax"><span>MonoidSyntax</span></li><li class="in" name="cats.syntax.MonadSyntax"><span>MonadSyntax</span></li><li class="in" name="cats.syntax.MonadErrorSyntax"><span>MonadErrorSyntax</span></li><li class="in" name="cats.syntax.ListSyntax"><span>ListSyntax</span></li><li class="in" name="cats.syntax.IorSyntax"><span>IorSyntax</span></li><li class="in" name="cats.syntax.InvariantSyntax"><span>InvariantSyntax</span></li><li class="in" name="cats.Invariant.ToInvariantOps"><span>ToInvariantOps</span></li><li class="in" name="cats.syntax.HashSyntax"><span>HashSyntax</span></li><li class="in" name="cats.syntax.GroupSyntax"><span>GroupSyntax</span></li><li class="in" name="cats.syntax.SemigroupSyntax"><span>SemigroupSyntax</span></li><li class="in" name="cats.syntax.FunctorSyntax"><span>FunctorSyntax</span></li><li class="in" name="cats.Functor.ToFunctorOps"><span>ToFunctorOps</span></li><li class="in" name="cats.syntax.FoldableSyntax"><span>FoldableSyntax</span></li><li class="in" name="cats.UnorderedFoldable.ToUnorderedFoldableOps"><span>ToUnorderedFoldableOps</span></li><li class="in" name="cats.Foldable.ToFoldableOps"><span>ToFoldableOps</span></li><li class="in" name="cats.syntax.FlatMapSyntax"><span>FlatMapSyntax</span></li><li class="in" name="cats.FlatMap.ToFlatMapOps"><span>ToFlatMapOps</span></li><li class="in" name="cats.syntax.EqSyntax"><span>EqSyntax</span></li><li class="in" name="cats.syntax.EitherSyntax"><span>EitherSyntax</span></li><li class="in" name="cats.syntax.EitherKSyntax"><span>EitherKSyntax</span></li><li class="in" name="cats.syntax.ContravariantSemigroupalSyntax"><span>ContravariantSemigroupalSyntax</span></li><li class="in" name="cats.syntax.ContravariantMonoidalSyntax"><span>ContravariantMonoidalSyntax</span></li><li class="in" name="cats.syntax.DistributiveSyntax"><span>DistributiveSyntax</span></li><li class="in" name="cats.Distributive.ToDistributiveOps"><span>ToDistributiveOps</span></li><li class="in" name="cats.syntax.ContravariantSyntax"><span>ContravariantSyntax</span></li><li class="in" name="cats.Contravariant.ToContravariantOps"><span>ToContravariantOps</span></li><li class="in" name="cats.syntax.ComposeSyntax"><span>ComposeSyntax</span></li><li class="in" name="cats.arrow.Compose.ToComposeOps"><span>ToComposeOps</span></li><li class="in" name="cats.syntax.ComonadSyntax"><span>ComonadSyntax</span></li><li class="in" name="cats.Comonad.ToComonadOps"><span>ToComonadOps</span></li><li class="in" name="cats.syntax.CoflatMapSyntax"><span>CoflatMapSyntax</span></li><li class="in" name="cats.CoflatMap.ToCoflatMapOps"><span>ToCoflatMapOps</span></li><li class="in" name="cats.syntax.SemigroupalSyntax"><span>SemigroupalSyntax</span></li><li class="in" name="cats.syntax.BitraverseSyntax"><span>BitraverseSyntax</span></li><li class="in" name="cats.syntax.BitraverseSyntax1"><span>BitraverseSyntax1</span></li><li class="in" name="cats.syntax.BifoldableSyntax"><span>BifoldableSyntax</span></li><li class="in" name="cats.Bifoldable.ToBifoldableOps"><span>ToBifoldableOps</span></li><li class="in" name="cats.syntax.BifunctorSyntax"><span>BifunctorSyntax</span></li><li class="in" name="cats.Bifunctor.ToBifunctorOps"><span>ToBifunctorOps</span></li><li class="in" name="cats.syntax.ArrowChoiceSyntax"><span>ArrowChoiceSyntax</span></li><li class="in" name="cats.arrow.ArrowChoice.ToArrowChoiceOps"><span>ToArrowChoiceOps</span></li><li class="in" name="cats.syntax.ArrowSyntax"><span>ArrowSyntax</span></li><li class="in" name="cats.arrow.Arrow.ToArrowOps"><span>ToArrowOps</span></li><li class="in" name="cats.syntax.ApplySyntax"><span>ApplySyntax</span></li><li class="in" name="cats.syntax.TupleSemigroupalSyntax"><span>TupleSemigroupalSyntax</span></li><li class="in" name="cats.syntax.ApplicativeErrorSyntax"><span>ApplicativeErrorSyntax</span></li><li class="in" name="cats.syntax.ApplicativeSyntax"><span>ApplicativeSyntax</span></li><li class="in" name="cats.syntax.AlignSyntax"><span>AlignSyntax</span></li><li class="in" name="cats.Align.ToAlignOps"><span>ToAlignOps</span></li><li class="in" name="cats.syntax.AlternativeSyntax"><span>AlternativeSyntax</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="cats.syntax.all"><span>all</span></li><li class="in" name="cats.syntax.AllSyntaxBinCompat"><span>AllSyntaxBinCompat</span></li><li class="in" name="cats.syntax.AllSyntaxBinCompat7"><span>AllSyntaxBinCompat7</span></li><li class="in" name="cats.syntax.SeqSyntax"><span>SeqSyntax</span></li><li class="in" name="cats.syntax.AllSyntaxBinCompat6"><span>AllSyntaxBinCompat6</span></li><li class="in" name="cats.syntax.ParallelUnorderedTraverseSyntax"><span>ParallelUnorderedTraverseSyntax</span></li><li class="in" name="cats.syntax.AllSyntaxBinCompat5"><span>AllSyntaxBinCompat5</span></li><li class="in" name="cats.syntax.ParallelBitraverseSyntax"><span>ParallelBitraverseSyntax</span></li><li class="in" name="cats.syntax.AllSyntaxBinCompat4"><span>AllSyntaxBinCompat4</span></li><li class="in" name="cats.syntax.BitraverseSyntaxBinCompat0"><span>BitraverseSyntaxBinCompat0</span></li><li class="in" name="cats.syntax.FoldableSyntaxBinCompat1"><span>FoldableSyntaxBinCompat1</span></li><li class="in" name="cats.syntax.ReducibleSyntaxBinCompat0"><span>ReducibleSyntaxBinCompat0</span></li><li class="in" name="cats.syntax.FoldableSyntaxBinCompat0"><span>FoldableSyntaxBinCompat0</span></li><li class="in" name="cats.syntax.ParallelApplySyntax"><span>ParallelApplySyntax</span></li><li class="in" name="cats.syntax.ApplySyntaxBinCompat0"><span>ApplySyntaxBinCompat0</span></li><li class="in" name="cats.syntax.TraverseFilterSyntaxBinCompat0"><span>TraverseFilterSyntaxBinCompat0</span></li><li class="in" name="cats.syntax.AllSyntaxBinCompat3"><span>AllSyntaxBinCompat3</span></li><li class="in" name="cats.syntax.Function1Syntax"><span>Function1Syntax</span></li><li class="in" name="cats.syntax.UnorderedFoldableSyntax"><span>UnorderedFoldableSyntax</span></li><li class="in" name="cats.syntax.AllSyntaxBinCompat2"><span>AllSyntaxBinCompat2</span></li><li class="in" name="cats.syntax.ValidatedSyntaxBincompat0"><span>ValidatedSyntaxBincompat0</span></li><li class="in" name="cats.syntax.ListSyntaxBinCompat0"><span>ListSyntaxBinCompat0</span></li><li class="in" name="cats.syntax.EitherSyntaxBinCompat0"><span>EitherSyntaxBinCompat0</span></li><li class="in" name="cats.syntax.FunctorFilterSyntax"><span>FunctorFilterSyntax</span></li><li class="in" name="cats.FunctorFilter.ToFunctorFilterOps"><span>ToFunctorFilterOps</span></li><li class="in" name="cats.syntax.TraverseFilterSyntax"><span>TraverseFilterSyntax</span></li><li class="in" name="cats.TraverseFilter.ToTraverseFilterOps"><span>ToTraverseFilterOps</span></li><li class="in" name="cats.syntax.ParallelTraverseSyntax"><span>ParallelTraverseSyntax</span></li><li class="in" name="cats.syntax.AllSyntaxBinCompat1"><span>AllSyntaxBinCompat1</span></li><li class="in" name="cats.syntax.RepresentableSyntax"><span>RepresentableSyntax</span></li><li class="in" name="cats.syntax.ValidatedExtensionSyntax"><span>ValidatedExtensionSyntax</span></li><li class="in" name="cats.syntax.SetSyntax"><span>SetSyntax</span></li><li class="in" name="cats.syntax.ParallelFlatSyntax"><span>ParallelFlatSyntax</span></li><li class="in" name="cats.syntax.BinestedSyntax"><span>BinestedSyntax</span></li><li class="in" name="cats.syntax.NestedSyntax"><span>NestedSyntax</span></li><li class="in" name="cats.syntax.ChoiceSyntax"><span>ChoiceSyntax</span></li><li class="in" name="cats.arrow.Choice.ToChoiceOps"><span>ToChoiceOps</span></li><li class="in" name="cats.syntax.FlatMapOptionSyntax"><span>FlatMapOptionSyntax</span></li><li class="in" name="cats.syntax.AllSyntaxBinCompat0"><span>AllSyntaxBinCompat0</span></li><li class="in" name="cats.syntax.TrySyntax"><span>TrySyntax</span></li><li class="in" name="cats.syntax.ApplicativeErrorExtension"><span>ApplicativeErrorExtension</span></li><li class="in" name="cats.syntax.UnorderedTraverseSyntax"><span>UnorderedTraverseSyntax</span></li><li class="in" name="cats.UnorderedTraverse.ToUnorderedTraverseOps"><span>ToUnorderedTraverseOps</span></li><li class="in" name="cats.syntax.AllSyntax"><span>AllSyntax</span></li><li class="in" name="cats.syntax.ParallelTraverseFilterSyntax"><span>ParallelTraverseFilterSyntax</span></li><li class="in" name="cats.syntax.ParallelFoldMapASyntax"><span>ParallelFoldMapASyntax</span></li><li class="in" name="cats.syntax.WriterSyntax"><span>WriterSyntax</span></li><li class="in" name="cats.syntax.VectorSyntax"><span>VectorSyntax</span></li><li class="in" name="cats.syntax.ValidatedSyntax"><span>ValidatedSyntax</span></li><li class="in" name="cats.syntax.NonEmptyTraverseSyntax"><span>NonEmptyTraverseSyntax</span></li><li class="in" name="cats.NonEmptyTraverse.ToNonEmptyTraverseOps"><span>ToNonEmptyTraverseOps</span></li><li class="in" name="cats.syntax.TraverseSyntax"><span>TraverseSyntax</span></li><li class="in" name="cats.Traverse.ToTraverseOps"><span>ToTraverseOps</span></li><li class="in" name="cats.syntax.StrongSyntax"><span>StrongSyntax</span></li><li class="in" name="cats.arrow.Strong.ToStrongOps"><span>ToStrongOps</span></li><li class="in" name="cats.syntax.ShowSyntax"><span>ShowSyntax</span></li><li class="in" name="cats.Show.ToShowOps"><span>ToShowOps</span></li><li class="in" name="cats.syntax.SemigroupKSyntax"><span>SemigroupKSyntax</span></li><li class="in" name="cats.SemigroupK.ToSemigroupKOps"><span>ToSemigroupKOps</span></li><li class="in" name="cats.syntax.ReducibleSyntax"><span>ReducibleSyntax</span></li><li class="in" name="cats.Reducible.ToReducibleOps"><span>ToReducibleOps</span></li><li class="in" name="cats.syntax.ProfunctorSyntax"><span>ProfunctorSyntax</span></li><li class="in" name="cats.arrow.Profunctor.ToProfunctorOps"><span>ToProfunctorOps</span></li><li class="in" name="cats.syntax.ParallelSyntax"><span>ParallelSyntax</span></li><li class="in" name="cats.syntax.TupleParallelSyntax"><span>TupleParallelSyntax</span></li><li class="in" name="cats.syntax.OrderSyntax"><span>OrderSyntax</span></li><li class="in" name="cats.syntax.PartialOrderSyntax"><span>PartialOrderSyntax</span></li><li class="in" name="cats.syntax.OptionSyntax"><span>OptionSyntax</span></li><li class="in" name="cats.syntax.MonoidSyntax"><span>MonoidSyntax</span></li><li class="in" name="cats.syntax.MonadSyntax"><span>MonadSyntax</span></li><li class="in" name="cats.syntax.MonadErrorSyntax"><span>MonadErrorSyntax</span></li><li class="in" name="cats.syntax.ListSyntax"><span>ListSyntax</span></li><li class="in" name="cats.syntax.IorSyntax"><span>IorSyntax</span></li><li class="in" name="cats.syntax.InvariantSyntax"><span>InvariantSyntax</span></li><li class="in" name="cats.Invariant.ToInvariantOps"><span>ToInvariantOps</span></li><li class="in" name="cats.syntax.HashSyntax"><span>HashSyntax</span></li><li class="in" name="cats.syntax.GroupSyntax"><span>GroupSyntax</span></li><li class="in" name="cats.syntax.SemigroupSyntax"><span>SemigroupSyntax</span></li><li class="in" name="cats.syntax.FunctorSyntax"><span>FunctorSyntax</span></li><li class="in" name="cats.Functor.ToFunctorOps"><span>ToFunctorOps</span></li><li class="in" name="cats.syntax.FoldableSyntax"><span>FoldableSyntax</span></li><li class="in" name="cats.UnorderedFoldable.ToUnorderedFoldableOps"><span>ToUnorderedFoldableOps</span></li><li class="in" name="cats.Foldable.ToFoldableOps"><span>ToFoldableOps</span></li><li class="in" name="cats.syntax.FlatMapSyntax"><span>FlatMapSyntax</span></li><li class="in" name="cats.FlatMap.ToFlatMapOps"><span>ToFlatMapOps</span></li><li class="in" name="cats.syntax.EqSyntax"><span>EqSyntax</span></li><li class="in" name="cats.syntax.EitherSyntax"><span>EitherSyntax</span></li><li class="in" name="cats.syntax.EitherKSyntax"><span>EitherKSyntax</span></li><li class="in" name="cats.syntax.ContravariantSemigroupalSyntax"><span>ContravariantSemigroupalSyntax</span></li><li class="in" name="cats.syntax.ContravariantMonoidalSyntax"><span>ContravariantMonoidalSyntax</span></li><li class="in" name="cats.syntax.DistributiveSyntax"><span>DistributiveSyntax</span></li><li class="in" name="cats.Distributive.ToDistributiveOps"><span>ToDistributiveOps</span></li><li class="in" name="cats.syntax.ContravariantSyntax"><span>ContravariantSyntax</span></li><li class="in" name="cats.Contravariant.ToContravariantOps"><span>ToContravariantOps</span></li><li class="in" name="cats.syntax.ComposeSyntax"><span>ComposeSyntax</span></li><li class="in" name="cats.arrow.Compose.ToComposeOps"><span>ToComposeOps</span></li><li class="in" name="cats.syntax.ComonadSyntax"><span>ComonadSyntax</span></li><li class="in" name="cats.Comonad.ToComonadOps"><span>ToComonadOps</span></li><li class="in" name="cats.syntax.CoflatMapSyntax"><span>CoflatMapSyntax</span></li><li class="in" name="cats.CoflatMap.ToCoflatMapOps"><span>ToCoflatMapOps</span></li><li class="in" name="cats.syntax.SemigroupalSyntax"><span>SemigroupalSyntax</span></li><li class="in" name="cats.syntax.BitraverseSyntax"><span>BitraverseSyntax</span></li><li class="in" name="cats.syntax.BitraverseSyntax1"><span>BitraverseSyntax1</span></li><li class="in" name="cats.syntax.BifoldableSyntax"><span>BifoldableSyntax</span></li><li class="in" name="cats.Bifoldable.ToBifoldableOps"><span>ToBifoldableOps</span></li><li class="in" name="cats.syntax.BifunctorSyntax"><span>BifunctorSyntax</span></li><li class="in" name="cats.Bifunctor.ToBifunctorOps"><span>ToBifunctorOps</span></li><li class="in" name="cats.syntax.ArrowChoiceSyntax"><span>ArrowChoiceSyntax</span></li><li class="in" name="cats.arrow.ArrowChoice.ToArrowChoiceOps"><span>ToArrowChoiceOps</span></li><li class="in" name="cats.syntax.ArrowSyntax"><span>ArrowSyntax</span></li><li class="in" name="cats.arrow.Arrow.ToArrowOps"><span>ToArrowOps</span></li><li class="in" name="cats.syntax.ApplySyntax"><span>ApplySyntax</span></li><li class="in" name="cats.syntax.TupleSemigroupalSyntax"><span>TupleSemigroupalSyntax</span></li><li class="in" name="cats.syntax.ApplicativeErrorSyntax"><span>ApplicativeErrorSyntax</span></li><li class="in" name="cats.syntax.ApplicativeSyntax"><span>ApplicativeSyntax</span></li><li class="in" name="cats.syntax.AlignSyntax"><span>AlignSyntax</span></li><li class="in" name="cats.Align.ToAlignOps"><span>ToAlignOps</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="cats.syntax.AlternativeSyntax"><span>AlternativeSyntax</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -1014,7 +1068,23 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="cats.syntax.Function1Syntax.Function1Ops" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+              <ol><li name="cats.syntax.Function1Syntax.Function1FlatMapOps" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Function1FlatMapOps[F[_],A,B]extendsAnyRef"></a><a id="Function1FlatMapOps[F[_],A,B]:Function1FlatMapOps[F,A,B]"></a>
+      <span class="permalink">
+      <a href="../../cats/syntax/Function1Syntax$Function1FlatMapOps.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="Function1Syntax$Function1FlatMapOps.html"><span class="name">Function1FlatMapOps</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Function1Syntax.html" class="extype" name="cats.syntax.Function1Syntax">Function1Syntax</a></dd></dl></div>
+    </li><li name="cats.syntax.Function1Syntax.Function1Ops" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="Function1Ops[F[_],A,B]extendsAnyRef"></a><a id="Function1Ops[F[_],A,B]:Function1Ops[F,A,B]"></a>
       <span class="permalink">
       <a href="../../cats/syntax/Function1Syntax$Function1Ops.html" title="Permalink">
@@ -1437,7 +1507,9 @@
         <span class="name">catsSyntaxEq</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="a">a: <span class="extype" name="cats.syntax.EqSyntax.catsSyntaxEq.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../index.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.syntax.EqSyntax.catsSyntaxEq.A">A</span>]</span>)</span><span class="result">: <a href="EqOps.html" class="extype" name="cats.syntax.EqOps">EqOps</a>[<span class="extype" name="cats.syntax.EqSyntax.catsSyntaxEq.A">A</span>]</span>
       </span>
       
-      <p class="shortcomment cmt">not final so it can be disabled in favor of scalactic equality in tests</p><div class="fullcomment"><div class="comment cmt"><p>not final so it can be disabled in favor of scalactic equality in tests</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="EqSyntax.html" class="extype" name="cats.syntax.EqSyntax">EqSyntax</a></dd></dl></div>
+      <p class="shortcomment cmt">not final so it can be disabled in favor of scalactic equality in tests
+</p><div class="fullcomment"><div class="comment cmt"><p>not final so it can be disabled in favor of scalactic equality in tests
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="EqSyntax.html" class="extype" name="cats.syntax.EqSyntax">EqSyntax</a></dd></dl></div>
     </li><li name="cats.syntax.FlatMapSyntax#catsSyntaxFlatMapIdOps" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="catsSyntaxFlatMapIdOps[A](a:A):cats.syntax.FlatMapIdOps[A]"></a><a id="catsSyntaxFlatMapIdOps[A](A):FlatMapIdOps[A]"></a>
       <span class="permalink">
@@ -1547,6 +1619,22 @@
       </span>
       <span class="symbol">
         <span class="name">catsSyntaxFunction1</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fab">fab: <span class="extype" name="cats.syntax.Function1Syntax.catsSyntaxFunction1.F">F</span>[(<span class="extype" name="cats.syntax.Function1Syntax.catsSyntaxFunction1.A">A</span>) ⇒ <span class="extype" name="cats.syntax.Function1Syntax.catsSyntaxFunction1.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.syntax.Function1Syntax.catsSyntaxFunction1.F">F</span>]</span>)</span><span class="result">: <a href="#Function1Ops[F[_],A,B]extendsAnyRef" class="extmbr" name="cats.syntax.Function1Syntax.Function1Ops">Function1Ops</a>[<span class="extype" name="cats.syntax.Function1Syntax.catsSyntaxFunction1.F">F</span>, <span class="extype" name="cats.syntax.Function1Syntax.catsSyntaxFunction1.A">A</span>, <span class="extype" name="cats.syntax.Function1Syntax.catsSyntaxFunction1.B">B</span>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Function1Syntax.html" class="extype" name="cats.syntax.Function1Syntax">Function1Syntax</a></dd></dl></div>
+    </li><li name="cats.syntax.Function1Syntax#catsSyntaxFunction1FlatMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsSyntaxFunction1FlatMap[F[_],A,B](fab:A=&gt;F[B])(implicitevidence$2:cats.FlatMap[F]):Function1Syntax.this.Function1FlatMapOps[F,A,B]"></a><a id="catsSyntaxFunction1FlatMap[F[_],A,B]((A)⇒F[B])(FlatMap[F]):Function1FlatMapOps[F,A,B]"></a>
+      <span class="permalink">
+      <a href="../../cats/syntax/package$$all$.html#catsSyntaxFunction1FlatMap[F[_],A,B](fab:A=&gt;F[B])(implicitevidence$2:cats.FlatMap[F]):Function1Syntax.this.Function1FlatMapOps[F,A,B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsSyntaxFunction1FlatMap</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fab">fab: (<span class="extype" name="cats.syntax.Function1Syntax.catsSyntaxFunction1FlatMap.A">A</span>) ⇒ <span class="extype" name="cats.syntax.Function1Syntax.catsSyntaxFunction1FlatMap.F">F</span>[<span class="extype" name="cats.syntax.Function1Syntax.catsSyntaxFunction1FlatMap.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a>[<span class="extype" name="cats.syntax.Function1Syntax.catsSyntaxFunction1FlatMap.F">F</span>]</span>)</span><span class="result">: <a href="#Function1FlatMapOps[F[_],A,B]extendsAnyRef" class="extmbr" name="cats.syntax.Function1Syntax.Function1FlatMapOps">Function1FlatMapOps</a>[<span class="extype" name="cats.syntax.Function1Syntax.catsSyntaxFunction1FlatMap.F">F</span>, <span class="extype" name="cats.syntax.Function1Syntax.catsSyntaxFunction1FlatMap.A">A</span>, <span class="extype" name="cats.syntax.Function1Syntax.catsSyntaxFunction1FlatMap.B">B</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Function1Syntax.html" class="extype" name="cats.syntax.Function1Syntax">Function1Syntax</a></dd></dl></div>
@@ -1935,9 +2023,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ParallelApplySyntax.html" class="extype" name="cats.syntax.ParallelApplySyntax">ParallelApplySyntax</a></dd></dl></div>
     </li><li name="cats.syntax.ParallelBitraverseSyntax#catsSyntaxParallelBisequence" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsSyntaxParallelBisequence[T[_,_],M[_],A,B](tmamb:T[M[A],M[B]])(implicitevidence$13:cats.Bitraverse[T]):cats.syntax.ParallelBisequenceOps[T,M,A,B]"></a><a id="catsSyntaxParallelBisequence[T[_,_],M[_],A,B](T[M[A],M[B]])(Bitraverse[T]):ParallelBisequenceOps[T,M,A,B]"></a>
+      <a id="catsSyntaxParallelBisequence[T[_,_],M[_],A,B](tmamb:T[M[A],M[B]])(implicitevidence$16:cats.Bitraverse[T]):cats.syntax.ParallelBisequenceOps[T,M,A,B]"></a><a id="catsSyntaxParallelBisequence[T[_,_],M[_],A,B](T[M[A],M[B]])(Bitraverse[T]):ParallelBisequenceOps[T,M,A,B]"></a>
       <span class="permalink">
-      <a href="../../cats/syntax/package$$all$.html#catsSyntaxParallelBisequence[T[_,_],M[_],A,B](tmamb:T[M[A],M[B]])(implicitevidence$13:cats.Bitraverse[T]):cats.syntax.ParallelBisequenceOps[T,M,A,B]" title="Permalink">
+      <a href="../../cats/syntax/package$$all$.html#catsSyntaxParallelBisequence[T[_,_],M[_],A,B](tmamb:T[M[A],M[B]])(implicitevidence$16:cats.Bitraverse[T]):cats.syntax.ParallelBisequenceOps[T,M,A,B]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1951,9 +2039,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ParallelBitraverseSyntax.html" class="extype" name="cats.syntax.ParallelBitraverseSyntax">ParallelBitraverseSyntax</a></dd></dl></div>
     </li><li name="cats.syntax.ParallelBitraverseSyntax#catsSyntaxParallelBitraverse" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsSyntaxParallelBitraverse[T[_,_],A,B](tab:T[A,B])(implicitevidence$12:cats.Bitraverse[T]):cats.syntax.ParallelBitraverseOps[T,A,B]"></a><a id="catsSyntaxParallelBitraverse[T[_,_],A,B](T[A,B])(Bitraverse[T]):ParallelBitraverseOps[T,A,B]"></a>
+      <a id="catsSyntaxParallelBitraverse[T[_,_],A,B](tab:T[A,B])(implicitevidence$15:cats.Bitraverse[T]):cats.syntax.ParallelBitraverseOps[T,A,B]"></a><a id="catsSyntaxParallelBitraverse[T[_,_],A,B](T[A,B])(Bitraverse[T]):ParallelBitraverseOps[T,A,B]"></a>
       <span class="permalink">
-      <a href="../../cats/syntax/package$$all$.html#catsSyntaxParallelBitraverse[T[_,_],A,B](tab:T[A,B])(implicitevidence$12:cats.Bitraverse[T]):cats.syntax.ParallelBitraverseOps[T,A,B]" title="Permalink">
+      <a href="../../cats/syntax/package$$all$.html#catsSyntaxParallelBitraverse[T[_,_],A,B](tab:T[A,B])(implicitevidence$15:cats.Bitraverse[T]):cats.syntax.ParallelBitraverseOps[T,A,B]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2015,9 +2103,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ParallelFoldMapASyntax.html" class="extype" name="cats.syntax.ParallelFoldMapASyntax">ParallelFoldMapASyntax</a></dd></dl></div>
     </li><li name="cats.syntax.ParallelBitraverseSyntax#catsSyntaxParallelLeftSequence" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsSyntaxParallelLeftSequence[T[_,_],M[_],A,B](tmab:T[M[A],B])(implicitevidence$15:cats.Bitraverse[T]):cats.syntax.ParallelLeftSequenceOps[T,M,A,B]"></a><a id="catsSyntaxParallelLeftSequence[T[_,_],M[_],A,B](T[M[A],B])(Bitraverse[T]):ParallelLeftSequenceOps[T,M,A,B]"></a>
+      <a id="catsSyntaxParallelLeftSequence[T[_,_],M[_],A,B](tmab:T[M[A],B])(implicitevidence$18:cats.Bitraverse[T]):cats.syntax.ParallelLeftSequenceOps[T,M,A,B]"></a><a id="catsSyntaxParallelLeftSequence[T[_,_],M[_],A,B](T[M[A],B])(Bitraverse[T]):ParallelLeftSequenceOps[T,M,A,B]"></a>
       <span class="permalink">
-      <a href="../../cats/syntax/package$$all$.html#catsSyntaxParallelLeftSequence[T[_,_],M[_],A,B](tmab:T[M[A],B])(implicitevidence$15:cats.Bitraverse[T]):cats.syntax.ParallelLeftSequenceOps[T,M,A,B]" title="Permalink">
+      <a href="../../cats/syntax/package$$all$.html#catsSyntaxParallelLeftSequence[T[_,_],M[_],A,B](tmab:T[M[A],B])(implicitevidence$18:cats.Bitraverse[T]):cats.syntax.ParallelLeftSequenceOps[T,M,A,B]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2031,9 +2119,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ParallelBitraverseSyntax.html" class="extype" name="cats.syntax.ParallelBitraverseSyntax">ParallelBitraverseSyntax</a></dd></dl></div>
     </li><li name="cats.syntax.ParallelBitraverseSyntax#catsSyntaxParallelLeftTraverse" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsSyntaxParallelLeftTraverse[T[_,_],A,B](tab:T[A,B])(implicitevidence$14:cats.Bitraverse[T]):cats.syntax.ParallelLeftTraverseOps[T,A,B]"></a><a id="catsSyntaxParallelLeftTraverse[T[_,_],A,B](T[A,B])(Bitraverse[T]):ParallelLeftTraverseOps[T,A,B]"></a>
+      <a id="catsSyntaxParallelLeftTraverse[T[_,_],A,B](tab:T[A,B])(implicitevidence$17:cats.Bitraverse[T]):cats.syntax.ParallelLeftTraverseOps[T,A,B]"></a><a id="catsSyntaxParallelLeftTraverse[T[_,_],A,B](T[A,B])(Bitraverse[T]):ParallelLeftTraverseOps[T,A,B]"></a>
       <span class="permalink">
-      <a href="../../cats/syntax/package$$all$.html#catsSyntaxParallelLeftTraverse[T[_,_],A,B](tab:T[A,B])(implicitevidence$14:cats.Bitraverse[T]):cats.syntax.ParallelLeftTraverseOps[T,A,B]" title="Permalink">
+      <a href="../../cats/syntax/package$$all$.html#catsSyntaxParallelLeftTraverse[T[_,_],A,B](tab:T[A,B])(implicitevidence$17:cats.Bitraverse[T]):cats.syntax.ParallelLeftTraverseOps[T,A,B]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2062,10 +2150,26 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ParallelSyntax.html" class="extype" name="cats.syntax.ParallelSyntax">ParallelSyntax</a></dd></dl></div>
-    </li><li name="cats.syntax.ParallelTraverseSyntax#catsSyntaxParallelSequence_" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsSyntaxParallelSequence_[T[_],M[_],A](tma:T[M[A]])(implicitevidence$11:cats.Foldable[T]):cats.syntax.ParallelSequence_Ops[T,M,A]"></a><a id="catsSyntaxParallelSequence_[T[_],M[_],A](T[M[A]])(Foldable[T]):ParallelSequence_Ops[T,M,A]"></a>
+    </li><li name="cats.syntax.ParallelTraverseFilterSyntax#catsSyntaxParallelSequenceFilter" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsSyntaxParallelSequenceFilter[T[_],M[_],A](tmoa:T[M[Option[A]]])(implicitevidence$11:cats.TraverseFilter[T],implicitevidence$12:cats.Parallel[M]):cats.syntax.ParallelSequenceFilterOps[T,M,A]"></a><a id="catsSyntaxParallelSequenceFilter[T[_],M[_],A](T[M[Option[A]]])(TraverseFilter[T],Parallel[M]):ParallelSequenceFilterOps[T,M,A]"></a>
       <span class="permalink">
-      <a href="../../cats/syntax/package$$all$.html#catsSyntaxParallelSequence_[T[_],M[_],A](tma:T[M[A]])(implicitevidence$11:cats.Foldable[T]):cats.syntax.ParallelSequence_Ops[T,M,A]" title="Permalink">
+      <a href="../../cats/syntax/package$$all$.html#catsSyntaxParallelSequenceFilter[T[_],M[_],A](tmoa:T[M[Option[A]]])(implicitevidence$11:cats.TraverseFilter[T],implicitevidence$12:cats.Parallel[M]):cats.syntax.ParallelSequenceFilterOps[T,M,A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsSyntaxParallelSequenceFilter</span><span class="tparams">[<span name="T">T<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="tmoa">tmoa: <span class="extype" name="cats.syntax.ParallelTraverseFilterSyntax.catsSyntaxParallelSequenceFilter.T">T</span>[<span class="extype" name="cats.syntax.ParallelTraverseFilterSyntax.catsSyntaxParallelSequenceFilter.M">M</span>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.syntax.ParallelTraverseFilterSyntax.catsSyntaxParallelSequenceFilter.A">A</span>]]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../TraverseFilter.html" class="extype" name="cats.TraverseFilter">TraverseFilter</a>[<span class="extype" name="cats.syntax.ParallelTraverseFilterSyntax.catsSyntaxParallelSequenceFilter.T">T</span>]</span>, <span name="arg1">arg1: <a href="../Parallel.html" class="extype" name="cats.Parallel">Parallel</a>[<span class="extype" name="cats.syntax.ParallelTraverseFilterSyntax.catsSyntaxParallelSequenceFilter.M">M</span>]</span>)</span><span class="result">: <a href="ParallelSequenceFilterOps.html" class="extype" name="cats.syntax.ParallelSequenceFilterOps">ParallelSequenceFilterOps</a>[<span class="extype" name="cats.syntax.ParallelTraverseFilterSyntax.catsSyntaxParallelSequenceFilter.T">T</span>, <span class="extype" name="cats.syntax.ParallelTraverseFilterSyntax.catsSyntaxParallelSequenceFilter.M">M</span>, <span class="extype" name="cats.syntax.ParallelTraverseFilterSyntax.catsSyntaxParallelSequenceFilter.A">A</span>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ParallelTraverseFilterSyntax.html" class="extype" name="cats.syntax.ParallelTraverseFilterSyntax">ParallelTraverseFilterSyntax</a></dd></dl></div>
+    </li><li name="cats.syntax.ParallelTraverseSyntax#catsSyntaxParallelSequence_" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsSyntaxParallelSequence_[T[_],M[_],A](tma:T[M[A]])(implicitevidence$14:cats.Foldable[T]):cats.syntax.ParallelSequence_Ops[T,M,A]"></a><a id="catsSyntaxParallelSequence_[T[_],M[_],A](T[M[A]])(Foldable[T]):ParallelSequence_Ops[T,M,A]"></a>
+      <span class="permalink">
+      <a href="../../cats/syntax/package$$all$.html#catsSyntaxParallelSequence_[T[_],M[_],A](tma:T[M[A]])(implicitevidence$14:cats.Foldable[T]):cats.syntax.ParallelSequence_Ops[T,M,A]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2094,10 +2198,26 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ParallelSyntax.html" class="extype" name="cats.syntax.ParallelSyntax">ParallelSyntax</a></dd></dl></div>
-    </li><li name="cats.syntax.ParallelTraverseSyntax#catsSyntaxParallelTraverse_" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsSyntaxParallelTraverse_[T[_],A](ta:T[A])(implicitevidence$10:cats.Foldable[T]):cats.syntax.ParallelTraversable_Ops[T,A]"></a><a id="catsSyntaxParallelTraverse_[T[_],A](T[A])(Foldable[T]):ParallelTraversable_Ops[T,A]"></a>
+    </li><li name="cats.syntax.ParallelTraverseFilterSyntax#catsSyntaxParallelTraverseFilter" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsSyntaxParallelTraverseFilter[T[_],A](ta:T[A])(implicitevidence$10:cats.TraverseFilter[T]):cats.syntax.ParallelTraverseFilterOps[T,A]"></a><a id="catsSyntaxParallelTraverseFilter[T[_],A](T[A])(TraverseFilter[T]):ParallelTraverseFilterOps[T,A]"></a>
       <span class="permalink">
-      <a href="../../cats/syntax/package$$all$.html#catsSyntaxParallelTraverse_[T[_],A](ta:T[A])(implicitevidence$10:cats.Foldable[T]):cats.syntax.ParallelTraversable_Ops[T,A]" title="Permalink">
+      <a href="../../cats/syntax/package$$all$.html#catsSyntaxParallelTraverseFilter[T[_],A](ta:T[A])(implicitevidence$10:cats.TraverseFilter[T]):cats.syntax.ParallelTraverseFilterOps[T,A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsSyntaxParallelTraverseFilter</span><span class="tparams">[<span name="T">T<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="ta">ta: <span class="extype" name="cats.syntax.ParallelTraverseFilterSyntax.catsSyntaxParallelTraverseFilter.T">T</span>[<span class="extype" name="cats.syntax.ParallelTraverseFilterSyntax.catsSyntaxParallelTraverseFilter.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../TraverseFilter.html" class="extype" name="cats.TraverseFilter">TraverseFilter</a>[<span class="extype" name="cats.syntax.ParallelTraverseFilterSyntax.catsSyntaxParallelTraverseFilter.T">T</span>]</span>)</span><span class="result">: <a href="ParallelTraverseFilterOps.html" class="extype" name="cats.syntax.ParallelTraverseFilterOps">ParallelTraverseFilterOps</a>[<span class="extype" name="cats.syntax.ParallelTraverseFilterSyntax.catsSyntaxParallelTraverseFilter.T">T</span>, <span class="extype" name="cats.syntax.ParallelTraverseFilterSyntax.catsSyntaxParallelTraverseFilter.A">A</span>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ParallelTraverseFilterSyntax.html" class="extype" name="cats.syntax.ParallelTraverseFilterSyntax">ParallelTraverseFilterSyntax</a></dd></dl></div>
+    </li><li name="cats.syntax.ParallelTraverseSyntax#catsSyntaxParallelTraverse_" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsSyntaxParallelTraverse_[T[_],A](ta:T[A])(implicitevidence$13:cats.Foldable[T]):cats.syntax.ParallelTraversable_Ops[T,A]"></a><a id="catsSyntaxParallelTraverse_[T[_],A](T[A])(Foldable[T]):ParallelTraversable_Ops[T,A]"></a>
+      <span class="permalink">
+      <a href="../../cats/syntax/package$$all$.html#catsSyntaxParallelTraverse_[T[_],A](ta:T[A])(implicitevidence$13:cats.Foldable[T]):cats.syntax.ParallelTraversable_Ops[T,A]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2238,6 +2358,22 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="SemigroupalSyntax.html" class="extype" name="cats.syntax.SemigroupalSyntax">SemigroupalSyntax</a></dd></dl></div>
+    </li><li name="cats.syntax.SeqSyntax#catsSyntaxSeqs" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsSyntaxSeqs[A](va:scala.collection.immutable.Seq[A]):cats.syntax.SeqOps[A]"></a><a id="catsSyntaxSeqs[A](Seq[A]):SeqOps[A]"></a>
+      <span class="permalink">
+      <a href="../../cats/syntax/package$$all$.html#catsSyntaxSeqs[A](va:scala.collection.immutable.Seq[A]):cats.syntax.SeqOps[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsSyntaxSeqs</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="va">va: <a href="https://www.scala-lang.org/api/2.12.10/scala/collection/immutable/Seq.html#scala.collection.immutable.Seq" class="extype" name="scala.collection.immutable.Seq">Seq</a>[<span class="extype" name="cats.syntax.SeqSyntax.catsSyntaxSeqs.A">A</span>]</span>)</span><span class="result">: <a href="SeqOps.html" class="extype" name="cats.syntax.SeqOps">SeqOps</a>[<span class="extype" name="cats.syntax.SeqSyntax.catsSyntaxSeqs.A">A</span>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="SeqSyntax.html" class="extype" name="cats.syntax.SeqSyntax">SeqSyntax</a></dd></dl></div>
     </li><li name="cats.syntax.SetSyntax#catsSyntaxSet" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="catsSyntaxSet[A](se:scala.collection.immutable.SortedSet[A]):cats.syntax.SetOps[A]"></a><a id="catsSyntaxSet[A](SortedSet[A]):SetOps[A]"></a>
       <span class="permalink">
@@ -3125,6 +3261,8 @@
               
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
@@ -3158,28 +3296,6 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="finalize():Unit"></a>
-      <span class="permalink">
-      <a href="../../cats/syntax/package$$all$.html#finalize():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="symbol">classOf[java.lang.Throwable]</span>
-    </span>)</span>
-              
-        </dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
@@ -3197,6 +3313,8 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -3216,6 +3334,8 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -3284,6 +3404,8 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
@@ -3302,6 +3424,8 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="cats.syntax.ShowSyntax#showInterpolator" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -3351,14 +3475,11 @@
         <span class="name">toAlignOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.Align.ToAlignOps.toAlignOps.F">F</span>[<span class="extype" name="cats.Align.ToAlignOps.toAlignOps.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../Align.html" class="extype" name="cats.Align">Align</a>[<span class="extype" name="cats.Align.ToAlignOps.toAlignOps.F">F</span>]</span>)</span><span class="result">: <a href="../Align$$Ops.html" class="extype" name="cats.Align.Ops">Ops</a>[<span class="extype" name="cats.Align.ToAlignOps.toAlignOps.F">F</span>, <span class="extype" name="cats.Align.ToAlignOps.toAlignOps.A">A</span>] { type TypeClassType = cats.Align[F] }</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Align$$ToAlignOps.html" class="extype" name="cats.Align.ToAlignOps">ToAlignOps</a></dd><dt>Annotations</dt><dd>
-                <span class="name">@SuppressWarnings</span><span class="args">()</span>
-              
-        </dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Align$$ToAlignOps.html" class="extype" name="cats.Align.ToAlignOps">ToAlignOps</a></dd></dl></div>
     </li><li name="cats.arrow.ArrowChoice.ToArrowChoiceOps#toArrowChoiceOps" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="toArrowChoiceOps[F[_,_],A,E](target:F[A,E])(implicittc:cats.arrow.ArrowChoice[F]):cats.arrow.ArrowChoice.Ops[F,A,E]{typeTypeClassType=cats.arrow.ArrowChoice[F]}"></a><a id="toArrowChoiceOps[F[_,_],A,E](F[A,E])(ArrowChoice[F]):Ops[F,A,E]{typeTypeClassType=cats.arrow.ArrowChoice[F]}"></a>
+      <a id="toArrowChoiceOps[F[_,_],A,B](target:F[A,B])(implicittc:cats.arrow.ArrowChoice[F]):cats.arrow.ArrowChoice.Ops[F,A,B]{typeTypeClassType=cats.arrow.ArrowChoice[F]}"></a><a id="toArrowChoiceOps[F[_,_],A,B](F[A,B])(ArrowChoice[F]):Ops[F,A,B]{typeTypeClassType=cats.arrow.ArrowChoice[F]}"></a>
       <span class="permalink">
-      <a href="../../cats/syntax/package$$all$.html#toArrowChoiceOps[F[_,_],A,E](target:F[A,E])(implicittc:cats.arrow.ArrowChoice[F]):cats.arrow.ArrowChoice.Ops[F,A,E]{typeTypeClassType=cats.arrow.ArrowChoice[F]}" title="Permalink">
+      <a href="../../cats/syntax/package$$all$.html#toArrowChoiceOps[F[_,_],A,B](target:F[A,B])(implicittc:cats.arrow.ArrowChoice[F]):cats.arrow.ArrowChoice.Ops[F,A,B]{typeTypeClassType=cats.arrow.ArrowChoice[F]}" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -3367,13 +3488,10 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">toArrowChoiceOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="E">E</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.arrow.ArrowChoice.ToArrowChoiceOps.toArrowChoiceOps.F">F</span>[<span class="extype" name="cats.arrow.ArrowChoice.ToArrowChoiceOps.toArrowChoiceOps.A">A</span>, <span class="extype" name="cats.arrow.ArrowChoice.ToArrowChoiceOps.toArrowChoiceOps.E">E</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../arrow/ArrowChoice.html" class="extype" name="cats.arrow.ArrowChoice">ArrowChoice</a>[<span class="extype" name="cats.arrow.ArrowChoice.ToArrowChoiceOps.toArrowChoiceOps.F">F</span>]</span>)</span><span class="result">: <a href="../arrow/ArrowChoice$$Ops.html" class="extype" name="cats.arrow.ArrowChoice.Ops">Ops</a>[<span class="extype" name="cats.arrow.ArrowChoice.ToArrowChoiceOps.toArrowChoiceOps.F">F</span>, <span class="extype" name="cats.arrow.ArrowChoice.ToArrowChoiceOps.toArrowChoiceOps.A">A</span>, <span class="extype" name="cats.arrow.ArrowChoice.ToArrowChoiceOps.toArrowChoiceOps.E">E</span>] { type TypeClassType = cats.arrow.ArrowChoice[F] }</span>
+        <span class="name">toArrowChoiceOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.arrow.ArrowChoice.ToArrowChoiceOps.toArrowChoiceOps.F">F</span>[<span class="extype" name="cats.arrow.ArrowChoice.ToArrowChoiceOps.toArrowChoiceOps.A">A</span>, <span class="extype" name="cats.arrow.ArrowChoice.ToArrowChoiceOps.toArrowChoiceOps.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../arrow/ArrowChoice.html" class="extype" name="cats.arrow.ArrowChoice">ArrowChoice</a>[<span class="extype" name="cats.arrow.ArrowChoice.ToArrowChoiceOps.toArrowChoiceOps.F">F</span>]</span>)</span><span class="result">: <a href="../arrow/ArrowChoice$$Ops.html" class="extype" name="cats.arrow.ArrowChoice.Ops">Ops</a>[<span class="extype" name="cats.arrow.ArrowChoice.ToArrowChoiceOps.toArrowChoiceOps.F">F</span>, <span class="extype" name="cats.arrow.ArrowChoice.ToArrowChoiceOps.toArrowChoiceOps.A">A</span>, <span class="extype" name="cats.arrow.ArrowChoice.ToArrowChoiceOps.toArrowChoiceOps.B">B</span>] { type TypeClassType = cats.arrow.ArrowChoice[F] }</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../arrow/ArrowChoice$$ToArrowChoiceOps.html" class="extype" name="cats.arrow.ArrowChoice.ToArrowChoiceOps">ToArrowChoiceOps</a></dd><dt>Annotations</dt><dd>
-                <span class="name">@SuppressWarnings</span><span class="args">()</span>
-              
-        </dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../arrow/ArrowChoice$$ToArrowChoiceOps.html" class="extype" name="cats.arrow.ArrowChoice.ToArrowChoiceOps">ToArrowChoiceOps</a></dd></dl></div>
     </li><li name="cats.arrow.Arrow.ToArrowOps#toArrowOps" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toArrowOps[F[_,_],A,B](target:F[A,B])(implicittc:cats.arrow.Arrow[F]):cats.arrow.Arrow.Ops[F,A,B]{typeTypeClassType=cats.arrow.Arrow[F]}"></a><a id="toArrowOps[F[_,_],A,B](F[A,B])(Arrow[F]):Ops[F,A,B]{typeTypeClassType=cats.arrow.Arrow[F]}"></a>
       <span class="permalink">
@@ -3389,10 +3507,7 @@
         <span class="name">toArrowOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.arrow.Arrow.ToArrowOps.toArrowOps.F">F</span>[<span class="extype" name="cats.arrow.Arrow.ToArrowOps.toArrowOps.A">A</span>, <span class="extype" name="cats.arrow.Arrow.ToArrowOps.toArrowOps.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../arrow/Arrow.html" class="extype" name="cats.arrow.Arrow">Arrow</a>[<span class="extype" name="cats.arrow.Arrow.ToArrowOps.toArrowOps.F">F</span>]</span>)</span><span class="result">: <a href="../arrow/Arrow$$Ops.html" class="extype" name="cats.arrow.Arrow.Ops">Ops</a>[<span class="extype" name="cats.arrow.Arrow.ToArrowOps.toArrowOps.F">F</span>, <span class="extype" name="cats.arrow.Arrow.ToArrowOps.toArrowOps.A">A</span>, <span class="extype" name="cats.arrow.Arrow.ToArrowOps.toArrowOps.B">B</span>] { type TypeClassType = cats.arrow.Arrow[F] }</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../arrow/Arrow$$ToArrowOps.html" class="extype" name="cats.arrow.Arrow.ToArrowOps">ToArrowOps</a></dd><dt>Annotations</dt><dd>
-                <span class="name">@SuppressWarnings</span><span class="args">()</span>
-              
-        </dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../arrow/Arrow$$ToArrowOps.html" class="extype" name="cats.arrow.Arrow.ToArrowOps">ToArrowOps</a></dd></dl></div>
     </li><li name="cats.Bifoldable.ToBifoldableOps#toBifoldableOps" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toBifoldableOps[F[_,_],A,B](target:F[A,B])(implicittc:cats.Bifoldable[F]):cats.Bifoldable.Ops[F,A,B]{typeTypeClassType=cats.Bifoldable[F]}"></a><a id="toBifoldableOps[F[_,_],A,B](F[A,B])(Bifoldable[F]):Ops[F,A,B]{typeTypeClassType=cats.Bifoldable[F]}"></a>
       <span class="permalink">
@@ -3408,10 +3523,7 @@
         <span class="name">toBifoldableOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.Bifoldable.ToBifoldableOps.toBifoldableOps.F">F</span>[<span class="extype" name="cats.Bifoldable.ToBifoldableOps.toBifoldableOps.A">A</span>, <span class="extype" name="cats.Bifoldable.ToBifoldableOps.toBifoldableOps.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../Bifoldable.html" class="extype" name="cats.Bifoldable">Bifoldable</a>[<span class="extype" name="cats.Bifoldable.ToBifoldableOps.toBifoldableOps.F">F</span>]</span>)</span><span class="result">: <a href="../Bifoldable$$Ops.html" class="extype" name="cats.Bifoldable.Ops">Ops</a>[<span class="extype" name="cats.Bifoldable.ToBifoldableOps.toBifoldableOps.F">F</span>, <span class="extype" name="cats.Bifoldable.ToBifoldableOps.toBifoldableOps.A">A</span>, <span class="extype" name="cats.Bifoldable.ToBifoldableOps.toBifoldableOps.B">B</span>] { type TypeClassType = cats.Bifoldable[F] }</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Bifoldable$$ToBifoldableOps.html" class="extype" name="cats.Bifoldable.ToBifoldableOps">ToBifoldableOps</a></dd><dt>Annotations</dt><dd>
-                <span class="name">@SuppressWarnings</span><span class="args">()</span>
-              
-        </dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Bifoldable$$ToBifoldableOps.html" class="extype" name="cats.Bifoldable.ToBifoldableOps">ToBifoldableOps</a></dd></dl></div>
     </li><li name="cats.Bifunctor.ToBifunctorOps#toBifunctorOps" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toBifunctorOps[F[_,_],A,B](target:F[A,B])(implicittc:cats.Bifunctor[F]):cats.Bifunctor.Ops[F,A,B]{typeTypeClassType=cats.Bifunctor[F]}"></a><a id="toBifunctorOps[F[_,_],A,B](F[A,B])(Bifunctor[F]):Ops[F,A,B]{typeTypeClassType=cats.Bifunctor[F]}"></a>
       <span class="permalink">
@@ -3427,14 +3539,11 @@
         <span class="name">toBifunctorOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.Bifunctor.ToBifunctorOps.toBifunctorOps.F">F</span>[<span class="extype" name="cats.Bifunctor.ToBifunctorOps.toBifunctorOps.A">A</span>, <span class="extype" name="cats.Bifunctor.ToBifunctorOps.toBifunctorOps.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../Bifunctor.html" class="extype" name="cats.Bifunctor">Bifunctor</a>[<span class="extype" name="cats.Bifunctor.ToBifunctorOps.toBifunctorOps.F">F</span>]</span>)</span><span class="result">: <a href="../Bifunctor$$Ops.html" class="extype" name="cats.Bifunctor.Ops">Ops</a>[<span class="extype" name="cats.Bifunctor.ToBifunctorOps.toBifunctorOps.F">F</span>, <span class="extype" name="cats.Bifunctor.ToBifunctorOps.toBifunctorOps.A">A</span>, <span class="extype" name="cats.Bifunctor.ToBifunctorOps.toBifunctorOps.B">B</span>] { type TypeClassType = cats.Bifunctor[F] }</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Bifunctor$$ToBifunctorOps.html" class="extype" name="cats.Bifunctor.ToBifunctorOps">ToBifunctorOps</a></dd><dt>Annotations</dt><dd>
-                <span class="name">@SuppressWarnings</span><span class="args">()</span>
-              
-        </dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Bifunctor$$ToBifunctorOps.html" class="extype" name="cats.Bifunctor.ToBifunctorOps">ToBifunctorOps</a></dd></dl></div>
     </li><li name="cats.arrow.Choice.ToChoiceOps#toChoiceOps" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="toChoiceOps[F[_,_],A,C](target:F[A,C])(implicittc:cats.arrow.Choice[F]):cats.arrow.Choice.Ops[F,A,C]{typeTypeClassType=cats.arrow.Choice[F]}"></a><a id="toChoiceOps[F[_,_],A,C](F[A,C])(Choice[F]):Ops[F,A,C]{typeTypeClassType=cats.arrow.Choice[F]}"></a>
+      <a id="toChoiceOps[F[_,_],A,B](target:F[A,B])(implicittc:cats.arrow.Choice[F]):cats.arrow.Choice.Ops[F,A,B]{typeTypeClassType=cats.arrow.Choice[F]}"></a><a id="toChoiceOps[F[_,_],A,B](F[A,B])(Choice[F]):Ops[F,A,B]{typeTypeClassType=cats.arrow.Choice[F]}"></a>
       <span class="permalink">
-      <a href="../../cats/syntax/package$$all$.html#toChoiceOps[F[_,_],A,C](target:F[A,C])(implicittc:cats.arrow.Choice[F]):cats.arrow.Choice.Ops[F,A,C]{typeTypeClassType=cats.arrow.Choice[F]}" title="Permalink">
+      <a href="../../cats/syntax/package$$all$.html#toChoiceOps[F[_,_],A,B](target:F[A,B])(implicittc:cats.arrow.Choice[F]):cats.arrow.Choice.Ops[F,A,B]{typeTypeClassType=cats.arrow.Choice[F]}" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -3443,13 +3552,10 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">toChoiceOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="C">C</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.arrow.Choice.ToChoiceOps.toChoiceOps.F">F</span>[<span class="extype" name="cats.arrow.Choice.ToChoiceOps.toChoiceOps.A">A</span>, <span class="extype" name="cats.arrow.Choice.ToChoiceOps.toChoiceOps.C">C</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../arrow/Choice.html" class="extype" name="cats.arrow.Choice">Choice</a>[<span class="extype" name="cats.arrow.Choice.ToChoiceOps.toChoiceOps.F">F</span>]</span>)</span><span class="result">: <a href="../arrow/Choice$$Ops.html" class="extype" name="cats.arrow.Choice.Ops">Ops</a>[<span class="extype" name="cats.arrow.Choice.ToChoiceOps.toChoiceOps.F">F</span>, <span class="extype" name="cats.arrow.Choice.ToChoiceOps.toChoiceOps.A">A</span>, <span class="extype" name="cats.arrow.Choice.ToChoiceOps.toChoiceOps.C">C</span>] { type TypeClassType = cats.arrow.Choice[F] }</span>
+        <span class="name">toChoiceOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.arrow.Choice.ToChoiceOps.toChoiceOps.F">F</span>[<span class="extype" name="cats.arrow.Choice.ToChoiceOps.toChoiceOps.A">A</span>, <span class="extype" name="cats.arrow.Choice.ToChoiceOps.toChoiceOps.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../arrow/Choice.html" class="extype" name="cats.arrow.Choice">Choice</a>[<span class="extype" name="cats.arrow.Choice.ToChoiceOps.toChoiceOps.F">F</span>]</span>)</span><span class="result">: <a href="../arrow/Choice$$Ops.html" class="extype" name="cats.arrow.Choice.Ops">Ops</a>[<span class="extype" name="cats.arrow.Choice.ToChoiceOps.toChoiceOps.F">F</span>, <span class="extype" name="cats.arrow.Choice.ToChoiceOps.toChoiceOps.A">A</span>, <span class="extype" name="cats.arrow.Choice.ToChoiceOps.toChoiceOps.B">B</span>] { type TypeClassType = cats.arrow.Choice[F] }</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../arrow/Choice$$ToChoiceOps.html" class="extype" name="cats.arrow.Choice.ToChoiceOps">ToChoiceOps</a></dd><dt>Annotations</dt><dd>
-                <span class="name">@SuppressWarnings</span><span class="args">()</span>
-              
-        </dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../arrow/Choice$$ToChoiceOps.html" class="extype" name="cats.arrow.Choice.ToChoiceOps">ToChoiceOps</a></dd></dl></div>
     </li><li name="cats.CoflatMap.ToCoflatMapOps#toCoflatMapOps" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toCoflatMapOps[F[_],A](target:F[A])(implicittc:cats.CoflatMap[F]):cats.CoflatMap.Ops[F,A]{typeTypeClassType=cats.CoflatMap[F]}"></a><a id="toCoflatMapOps[F[_],A](F[A])(CoflatMap[F]):Ops[F,A]{typeTypeClassType=cats.CoflatMap[F]}"></a>
       <span class="permalink">
@@ -3465,10 +3571,7 @@
         <span class="name">toCoflatMapOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.CoflatMap.ToCoflatMapOps.toCoflatMapOps.F">F</span>[<span class="extype" name="cats.CoflatMap.ToCoflatMapOps.toCoflatMapOps.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../CoflatMap.html" class="extype" name="cats.CoflatMap">CoflatMap</a>[<span class="extype" name="cats.CoflatMap.ToCoflatMapOps.toCoflatMapOps.F">F</span>]</span>)</span><span class="result">: <a href="../CoflatMap$$Ops.html" class="extype" name="cats.CoflatMap.Ops">Ops</a>[<span class="extype" name="cats.CoflatMap.ToCoflatMapOps.toCoflatMapOps.F">F</span>, <span class="extype" name="cats.CoflatMap.ToCoflatMapOps.toCoflatMapOps.A">A</span>] { type TypeClassType = cats.CoflatMap[F] }</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../CoflatMap$$ToCoflatMapOps.html" class="extype" name="cats.CoflatMap.ToCoflatMapOps">ToCoflatMapOps</a></dd><dt>Annotations</dt><dd>
-                <span class="name">@SuppressWarnings</span><span class="args">()</span>
-              
-        </dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../CoflatMap$$ToCoflatMapOps.html" class="extype" name="cats.CoflatMap.ToCoflatMapOps">ToCoflatMapOps</a></dd></dl></div>
     </li><li name="cats.Comonad.ToComonadOps#toComonadOps" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toComonadOps[F[_],A](target:F[A])(implicittc:cats.Comonad[F]):cats.Comonad.Ops[F,A]{typeTypeClassType=cats.Comonad[F]}"></a><a id="toComonadOps[F[_],A](F[A])(Comonad[F]):Ops[F,A]{typeTypeClassType=cats.Comonad[F]}"></a>
       <span class="permalink">
@@ -3484,14 +3587,11 @@
         <span class="name">toComonadOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.Comonad.ToComonadOps.toComonadOps.F">F</span>[<span class="extype" name="cats.Comonad.ToComonadOps.toComonadOps.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../Comonad.html" class="extype" name="cats.Comonad">Comonad</a>[<span class="extype" name="cats.Comonad.ToComonadOps.toComonadOps.F">F</span>]</span>)</span><span class="result">: <a href="../Comonad$$Ops.html" class="extype" name="cats.Comonad.Ops">Ops</a>[<span class="extype" name="cats.Comonad.ToComonadOps.toComonadOps.F">F</span>, <span class="extype" name="cats.Comonad.ToComonadOps.toComonadOps.A">A</span>] { type TypeClassType = cats.Comonad[F] }</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Comonad$$ToComonadOps.html" class="extype" name="cats.Comonad.ToComonadOps">ToComonadOps</a></dd><dt>Annotations</dt><dd>
-                <span class="name">@SuppressWarnings</span><span class="args">()</span>
-              
-        </dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Comonad$$ToComonadOps.html" class="extype" name="cats.Comonad.ToComonadOps">ToComonadOps</a></dd></dl></div>
     </li><li name="cats.arrow.Compose.ToComposeOps#toComposeOps" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="toComposeOps[F[_,_],B,D](target:F[B,D])(implicittc:cats.arrow.Compose[F]):cats.arrow.Compose.Ops[F,B,D]{typeTypeClassType=cats.arrow.Compose[F]}"></a><a id="toComposeOps[F[_,_],B,D](F[B,D])(Compose[F]):Ops[F,B,D]{typeTypeClassType=cats.arrow.Compose[F]}"></a>
+      <a id="toComposeOps[F[_,_],A,B](target:F[A,B])(implicittc:cats.arrow.Compose[F]):cats.arrow.Compose.Ops[F,A,B]{typeTypeClassType=cats.arrow.Compose[F]}"></a><a id="toComposeOps[F[_,_],A,B](F[A,B])(Compose[F]):Ops[F,A,B]{typeTypeClassType=cats.arrow.Compose[F]}"></a>
       <span class="permalink">
-      <a href="../../cats/syntax/package$$all$.html#toComposeOps[F[_,_],B,D](target:F[B,D])(implicittc:cats.arrow.Compose[F]):cats.arrow.Compose.Ops[F,B,D]{typeTypeClassType=cats.arrow.Compose[F]}" title="Permalink">
+      <a href="../../cats/syntax/package$$all$.html#toComposeOps[F[_,_],A,B](target:F[A,B])(implicittc:cats.arrow.Compose[F]):cats.arrow.Compose.Ops[F,A,B]{typeTypeClassType=cats.arrow.Compose[F]}" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -3500,13 +3600,10 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">toComposeOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>, <span name="B">B</span>, <span name="D">D</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.arrow.Compose.ToComposeOps.toComposeOps.F">F</span>[<span class="extype" name="cats.arrow.Compose.ToComposeOps.toComposeOps.B">B</span>, <span class="extype" name="cats.arrow.Compose.ToComposeOps.toComposeOps.D">D</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../arrow/Compose.html" class="extype" name="cats.arrow.Compose">Compose</a>[<span class="extype" name="cats.arrow.Compose.ToComposeOps.toComposeOps.F">F</span>]</span>)</span><span class="result">: <a href="../arrow/Compose$$Ops.html" class="extype" name="cats.arrow.Compose.Ops">Ops</a>[<span class="extype" name="cats.arrow.Compose.ToComposeOps.toComposeOps.F">F</span>, <span class="extype" name="cats.arrow.Compose.ToComposeOps.toComposeOps.B">B</span>, <span class="extype" name="cats.arrow.Compose.ToComposeOps.toComposeOps.D">D</span>] { type TypeClassType = cats.arrow.Compose[F] }</span>
+        <span class="name">toComposeOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.arrow.Compose.ToComposeOps.toComposeOps.F">F</span>[<span class="extype" name="cats.arrow.Compose.ToComposeOps.toComposeOps.A">A</span>, <span class="extype" name="cats.arrow.Compose.ToComposeOps.toComposeOps.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../arrow/Compose.html" class="extype" name="cats.arrow.Compose">Compose</a>[<span class="extype" name="cats.arrow.Compose.ToComposeOps.toComposeOps.F">F</span>]</span>)</span><span class="result">: <a href="../arrow/Compose$$Ops.html" class="extype" name="cats.arrow.Compose.Ops">Ops</a>[<span class="extype" name="cats.arrow.Compose.ToComposeOps.toComposeOps.F">F</span>, <span class="extype" name="cats.arrow.Compose.ToComposeOps.toComposeOps.A">A</span>, <span class="extype" name="cats.arrow.Compose.ToComposeOps.toComposeOps.B">B</span>] { type TypeClassType = cats.arrow.Compose[F] }</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../arrow/Compose$$ToComposeOps.html" class="extype" name="cats.arrow.Compose.ToComposeOps">ToComposeOps</a></dd><dt>Annotations</dt><dd>
-                <span class="name">@SuppressWarnings</span><span class="args">()</span>
-              
-        </dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../arrow/Compose$$ToComposeOps.html" class="extype" name="cats.arrow.Compose.ToComposeOps">ToComposeOps</a></dd></dl></div>
     </li><li name="cats.Contravariant.ToContravariantOps#toContravariantOps" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toContravariantOps[F[_],A](target:F[A])(implicittc:cats.Contravariant[F]):cats.Contravariant.Ops[F,A]{typeTypeClassType=cats.Contravariant[F]}"></a><a id="toContravariantOps[F[_],A](F[A])(Contravariant[F]):Ops[F,A]{typeTypeClassType=cats.Contravariant[F]}"></a>
       <span class="permalink">
@@ -3522,10 +3619,7 @@
         <span class="name">toContravariantOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.Contravariant.ToContravariantOps.toContravariantOps.F">F</span>[<span class="extype" name="cats.Contravariant.ToContravariantOps.toContravariantOps.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../Contravariant.html" class="extype" name="cats.Contravariant">Contravariant</a>[<span class="extype" name="cats.Contravariant.ToContravariantOps.toContravariantOps.F">F</span>]</span>)</span><span class="result">: <a href="../Contravariant$$Ops.html" class="extype" name="cats.Contravariant.Ops">Ops</a>[<span class="extype" name="cats.Contravariant.ToContravariantOps.toContravariantOps.F">F</span>, <span class="extype" name="cats.Contravariant.ToContravariantOps.toContravariantOps.A">A</span>] { type TypeClassType = cats.Contravariant[F] }</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Contravariant$$ToContravariantOps.html" class="extype" name="cats.Contravariant.ToContravariantOps">ToContravariantOps</a></dd><dt>Annotations</dt><dd>
-                <span class="name">@SuppressWarnings</span><span class="args">()</span>
-              
-        </dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Contravariant$$ToContravariantOps.html" class="extype" name="cats.Contravariant.ToContravariantOps">ToContravariantOps</a></dd></dl></div>
     </li><li name="cats.Distributive.ToDistributiveOps#toDistributiveOps" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toDistributiveOps[F[_],A](target:F[A])(implicittc:cats.Distributive[F]):cats.Distributive.Ops[F,A]{typeTypeClassType=cats.Distributive[F]}"></a><a id="toDistributiveOps[F[_],A](F[A])(Distributive[F]):Ops[F,A]{typeTypeClassType=cats.Distributive[F]}"></a>
       <span class="permalink">
@@ -3541,14 +3635,11 @@
         <span class="name">toDistributiveOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.Distributive.ToDistributiveOps.toDistributiveOps.F">F</span>[<span class="extype" name="cats.Distributive.ToDistributiveOps.toDistributiveOps.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../Distributive.html" class="extype" name="cats.Distributive">Distributive</a>[<span class="extype" name="cats.Distributive.ToDistributiveOps.toDistributiveOps.F">F</span>]</span>)</span><span class="result">: <a href="../Distributive$$Ops.html" class="extype" name="cats.Distributive.Ops">Ops</a>[<span class="extype" name="cats.Distributive.ToDistributiveOps.toDistributiveOps.F">F</span>, <span class="extype" name="cats.Distributive.ToDistributiveOps.toDistributiveOps.A">A</span>] { type TypeClassType = cats.Distributive[F] }</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Distributive$$ToDistributiveOps.html" class="extype" name="cats.Distributive.ToDistributiveOps">ToDistributiveOps</a></dd><dt>Annotations</dt><dd>
-                <span class="name">@SuppressWarnings</span><span class="args">()</span>
-              
-        </dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Distributive$$ToDistributiveOps.html" class="extype" name="cats.Distributive.ToDistributiveOps">ToDistributiveOps</a></dd></dl></div>
     </li><li name="cats.FlatMap.ToFlatMapOps#toFlatMapOps" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="toFlatMapOps[F[_],C](target:F[C])(implicittc:cats.FlatMap[F]):cats.FlatMap.Ops[F,C]{typeTypeClassType=cats.FlatMap[F]}"></a><a id="toFlatMapOps[F[_],C](F[C])(FlatMap[F]):Ops[F,C]{typeTypeClassType=cats.FlatMap[F]}"></a>
+      <a id="toFlatMapOps[F[_],A](target:F[A])(implicittc:cats.FlatMap[F]):cats.FlatMap.Ops[F,A]{typeTypeClassType=cats.FlatMap[F]}"></a><a id="toFlatMapOps[F[_],A](F[A])(FlatMap[F]):Ops[F,A]{typeTypeClassType=cats.FlatMap[F]}"></a>
       <span class="permalink">
-      <a href="../../cats/syntax/package$$all$.html#toFlatMapOps[F[_],C](target:F[C])(implicittc:cats.FlatMap[F]):cats.FlatMap.Ops[F,C]{typeTypeClassType=cats.FlatMap[F]}" title="Permalink">
+      <a href="../../cats/syntax/package$$all$.html#toFlatMapOps[F[_],A](target:F[A])(implicittc:cats.FlatMap[F]):cats.FlatMap.Ops[F,A]{typeTypeClassType=cats.FlatMap[F]}" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -3557,17 +3648,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">toFlatMapOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="C">C</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.FlatMap.ToFlatMapOps.toFlatMapOps.F">F</span>[<span class="extype" name="cats.FlatMap.ToFlatMapOps.toFlatMapOps.C">C</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a>[<span class="extype" name="cats.FlatMap.ToFlatMapOps.toFlatMapOps.F">F</span>]</span>)</span><span class="result">: <a href="../FlatMap$$Ops.html" class="extype" name="cats.FlatMap.Ops">Ops</a>[<span class="extype" name="cats.FlatMap.ToFlatMapOps.toFlatMapOps.F">F</span>, <span class="extype" name="cats.FlatMap.ToFlatMapOps.toFlatMapOps.C">C</span>] { type TypeClassType = cats.FlatMap[F] }</span>
+        <span class="name">toFlatMapOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.FlatMap.ToFlatMapOps.toFlatMapOps.F">F</span>[<span class="extype" name="cats.FlatMap.ToFlatMapOps.toFlatMapOps.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a>[<span class="extype" name="cats.FlatMap.ToFlatMapOps.toFlatMapOps.F">F</span>]</span>)</span><span class="result">: <a href="../FlatMap$$Ops.html" class="extype" name="cats.FlatMap.Ops">Ops</a>[<span class="extype" name="cats.FlatMap.ToFlatMapOps.toFlatMapOps.F">F</span>, <span class="extype" name="cats.FlatMap.ToFlatMapOps.toFlatMapOps.A">A</span>] { type TypeClassType = cats.FlatMap[F] }</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../FlatMap$$ToFlatMapOps.html" class="extype" name="cats.FlatMap.ToFlatMapOps">ToFlatMapOps</a></dd><dt>Annotations</dt><dd>
-                <span class="name">@SuppressWarnings</span><span class="args">()</span>
-              
-        </dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../FlatMap$$ToFlatMapOps.html" class="extype" name="cats.FlatMap.ToFlatMapOps">ToFlatMapOps</a></dd></dl></div>
     </li><li name="cats.Foldable.ToFoldableOps#toFoldableOps" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="toFoldableOps[F[_],D](target:F[D])(implicittc:cats.Foldable[F]):cats.Foldable.Ops[F,D]{typeTypeClassType=cats.Foldable[F]}"></a><a id="toFoldableOps[F[_],D](F[D])(Foldable[F]):Ops[F,D]{typeTypeClassType=cats.Foldable[F]}"></a>
+      <a id="toFoldableOps[F[_],A](target:F[A])(implicittc:cats.Foldable[F]):cats.Foldable.Ops[F,A]{typeTypeClassType=cats.Foldable[F]}"></a><a id="toFoldableOps[F[_],A](F[A])(Foldable[F]):Ops[F,A]{typeTypeClassType=cats.Foldable[F]}"></a>
       <span class="permalink">
-      <a href="../../cats/syntax/package$$all$.html#toFoldableOps[F[_],D](target:F[D])(implicittc:cats.Foldable[F]):cats.Foldable.Ops[F,D]{typeTypeClassType=cats.Foldable[F]}" title="Permalink">
+      <a href="../../cats/syntax/package$$all$.html#toFoldableOps[F[_],A](target:F[A])(implicittc:cats.Foldable[F]):cats.Foldable.Ops[F,A]{typeTypeClassType=cats.Foldable[F]}" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -3576,17 +3664,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">toFoldableOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="D">D</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.Foldable.ToFoldableOps.toFoldableOps.F">F</span>[<span class="extype" name="cats.Foldable.ToFoldableOps.toFoldableOps.D">D</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.Foldable.ToFoldableOps.toFoldableOps.F">F</span>]</span>)</span><span class="result">: <a href="../Foldable$$Ops.html" class="extype" name="cats.Foldable.Ops">Ops</a>[<span class="extype" name="cats.Foldable.ToFoldableOps.toFoldableOps.F">F</span>, <span class="extype" name="cats.Foldable.ToFoldableOps.toFoldableOps.D">D</span>] { type TypeClassType = cats.Foldable[F] }</span>
+        <span class="name">toFoldableOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.Foldable.ToFoldableOps.toFoldableOps.F">F</span>[<span class="extype" name="cats.Foldable.ToFoldableOps.toFoldableOps.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.Foldable.ToFoldableOps.toFoldableOps.F">F</span>]</span>)</span><span class="result">: <a href="../Foldable$$Ops.html" class="extype" name="cats.Foldable.Ops">Ops</a>[<span class="extype" name="cats.Foldable.ToFoldableOps.toFoldableOps.F">F</span>, <span class="extype" name="cats.Foldable.ToFoldableOps.toFoldableOps.A">A</span>] { type TypeClassType = cats.Foldable[F] }</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Foldable$$ToFoldableOps.html" class="extype" name="cats.Foldable.ToFoldableOps">ToFoldableOps</a></dd><dt>Annotations</dt><dd>
-                <span class="name">@SuppressWarnings</span><span class="args">()</span>
-              
-        </dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Foldable$$ToFoldableOps.html" class="extype" name="cats.Foldable.ToFoldableOps">ToFoldableOps</a></dd></dl></div>
     </li><li name="cats.FunctorFilter.ToFunctorFilterOps#toFunctorFilterOps" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="toFunctorFilterOps[F[_],C](target:F[C])(implicittc:cats.FunctorFilter[F]):cats.FunctorFilter.Ops[F,C]{typeTypeClassType=cats.FunctorFilter[F]}"></a><a id="toFunctorFilterOps[F[_],C](F[C])(FunctorFilter[F]):Ops[F,C]{typeTypeClassType=cats.FunctorFilter[F]}"></a>
+      <a id="toFunctorFilterOps[F[_],A](target:F[A])(implicittc:cats.FunctorFilter[F]):cats.FunctorFilter.Ops[F,A]{typeTypeClassType=cats.FunctorFilter[F]}"></a><a id="toFunctorFilterOps[F[_],A](F[A])(FunctorFilter[F]):Ops[F,A]{typeTypeClassType=cats.FunctorFilter[F]}"></a>
       <span class="permalink">
-      <a href="../../cats/syntax/package$$all$.html#toFunctorFilterOps[F[_],C](target:F[C])(implicittc:cats.FunctorFilter[F]):cats.FunctorFilter.Ops[F,C]{typeTypeClassType=cats.FunctorFilter[F]}" title="Permalink">
+      <a href="../../cats/syntax/package$$all$.html#toFunctorFilterOps[F[_],A](target:F[A])(implicittc:cats.FunctorFilter[F]):cats.FunctorFilter.Ops[F,A]{typeTypeClassType=cats.FunctorFilter[F]}" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -3595,13 +3680,10 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">toFunctorFilterOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="C">C</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.FunctorFilter.ToFunctorFilterOps.toFunctorFilterOps.F">F</span>[<span class="extype" name="cats.FunctorFilter.ToFunctorFilterOps.toFunctorFilterOps.C">C</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../FunctorFilter.html" class="extype" name="cats.FunctorFilter">FunctorFilter</a>[<span class="extype" name="cats.FunctorFilter.ToFunctorFilterOps.toFunctorFilterOps.F">F</span>]</span>)</span><span class="result">: <a href="../FunctorFilter$$Ops.html" class="extype" name="cats.FunctorFilter.Ops">Ops</a>[<span class="extype" name="cats.FunctorFilter.ToFunctorFilterOps.toFunctorFilterOps.F">F</span>, <span class="extype" name="cats.FunctorFilter.ToFunctorFilterOps.toFunctorFilterOps.C">C</span>] { type TypeClassType = cats.FunctorFilter[F] }</span>
+        <span class="name">toFunctorFilterOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.FunctorFilter.ToFunctorFilterOps.toFunctorFilterOps.F">F</span>[<span class="extype" name="cats.FunctorFilter.ToFunctorFilterOps.toFunctorFilterOps.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../FunctorFilter.html" class="extype" name="cats.FunctorFilter">FunctorFilter</a>[<span class="extype" name="cats.FunctorFilter.ToFunctorFilterOps.toFunctorFilterOps.F">F</span>]</span>)</span><span class="result">: <a href="../FunctorFilter$$Ops.html" class="extype" name="cats.FunctorFilter.Ops">Ops</a>[<span class="extype" name="cats.FunctorFilter.ToFunctorFilterOps.toFunctorFilterOps.F">F</span>, <span class="extype" name="cats.FunctorFilter.ToFunctorFilterOps.toFunctorFilterOps.A">A</span>] { type TypeClassType = cats.FunctorFilter[F] }</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../FunctorFilter$$ToFunctorFilterOps.html" class="extype" name="cats.FunctorFilter.ToFunctorFilterOps">ToFunctorFilterOps</a></dd><dt>Annotations</dt><dd>
-                <span class="name">@SuppressWarnings</span><span class="args">()</span>
-              
-        </dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../FunctorFilter$$ToFunctorFilterOps.html" class="extype" name="cats.FunctorFilter.ToFunctorFilterOps">ToFunctorFilterOps</a></dd></dl></div>
     </li><li name="cats.Functor.ToFunctorOps#toFunctorOps" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toFunctorOps[F[_],A](target:F[A])(implicittc:cats.Functor[F]):cats.Functor.Ops[F,A]{typeTypeClassType=cats.Functor[F]}"></a><a id="toFunctorOps[F[_],A](F[A])(Functor[F]):Ops[F,A]{typeTypeClassType=cats.Functor[F]}"></a>
       <span class="permalink">
@@ -3617,10 +3699,7 @@
         <span class="name">toFunctorOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.Functor.ToFunctorOps.toFunctorOps.F">F</span>[<span class="extype" name="cats.Functor.ToFunctorOps.toFunctorOps.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.Functor.ToFunctorOps.toFunctorOps.F">F</span>]</span>)</span><span class="result">: <a href="../Functor$$Ops.html" class="extype" name="cats.Functor.Ops">Ops</a>[<span class="extype" name="cats.Functor.ToFunctorOps.toFunctorOps.F">F</span>, <span class="extype" name="cats.Functor.ToFunctorOps.toFunctorOps.A">A</span>] { type TypeClassType = cats.Functor[F] }</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Functor$$ToFunctorOps.html" class="extype" name="cats.Functor.ToFunctorOps">ToFunctorOps</a></dd><dt>Annotations</dt><dd>
-                <span class="name">@SuppressWarnings</span><span class="args">()</span>
-              
-        </dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Functor$$ToFunctorOps.html" class="extype" name="cats.Functor.ToFunctorOps">ToFunctorOps</a></dd></dl></div>
     </li><li name="cats.Invariant.ToInvariantOps#toInvariantOps" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toInvariantOps[F[_],A](target:F[A])(implicittc:cats.Invariant[F]):cats.Invariant.Ops[F,A]{typeTypeClassType=cats.Invariant[F]}"></a><a id="toInvariantOps[F[_],A](F[A])(Invariant[F]):Ops[F,A]{typeTypeClassType=cats.Invariant[F]}"></a>
       <span class="permalink">
@@ -3636,14 +3715,11 @@
         <span class="name">toInvariantOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.Invariant.ToInvariantOps.toInvariantOps.F">F</span>[<span class="extype" name="cats.Invariant.ToInvariantOps.toInvariantOps.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../Invariant.html" class="extype" name="cats.Invariant">Invariant</a>[<span class="extype" name="cats.Invariant.ToInvariantOps.toInvariantOps.F">F</span>]</span>)</span><span class="result">: <a href="../Invariant$$Ops.html" class="extype" name="cats.Invariant.Ops">Ops</a>[<span class="extype" name="cats.Invariant.ToInvariantOps.toInvariantOps.F">F</span>, <span class="extype" name="cats.Invariant.ToInvariantOps.toInvariantOps.A">A</span>] { type TypeClassType = cats.Invariant[F] }</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Invariant$$ToInvariantOps.html" class="extype" name="cats.Invariant.ToInvariantOps">ToInvariantOps</a></dd><dt>Annotations</dt><dd>
-                <span class="name">@SuppressWarnings</span><span class="args">()</span>
-              
-        </dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Invariant$$ToInvariantOps.html" class="extype" name="cats.Invariant.ToInvariantOps">ToInvariantOps</a></dd></dl></div>
     </li><li name="cats.NonEmptyTraverse.ToNonEmptyTraverseOps#toNonEmptyTraverseOps" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="toNonEmptyTraverseOps[F[_],C](target:F[C])(implicittc:cats.NonEmptyTraverse[F]):cats.NonEmptyTraverse.Ops[F,C]{typeTypeClassType=cats.NonEmptyTraverse[F]}"></a><a id="toNonEmptyTraverseOps[F[_],C](F[C])(NonEmptyTraverse[F]):Ops[F,C]{typeTypeClassType=cats.NonEmptyTraverse[F]}"></a>
+      <a id="toNonEmptyTraverseOps[F[_],A](target:F[A])(implicittc:cats.NonEmptyTraverse[F]):cats.NonEmptyTraverse.Ops[F,A]{typeTypeClassType=cats.NonEmptyTraverse[F]}"></a><a id="toNonEmptyTraverseOps[F[_],A](F[A])(NonEmptyTraverse[F]):Ops[F,A]{typeTypeClassType=cats.NonEmptyTraverse[F]}"></a>
       <span class="permalink">
-      <a href="../../cats/syntax/package$$all$.html#toNonEmptyTraverseOps[F[_],C](target:F[C])(implicittc:cats.NonEmptyTraverse[F]):cats.NonEmptyTraverse.Ops[F,C]{typeTypeClassType=cats.NonEmptyTraverse[F]}" title="Permalink">
+      <a href="../../cats/syntax/package$$all$.html#toNonEmptyTraverseOps[F[_],A](target:F[A])(implicittc:cats.NonEmptyTraverse[F]):cats.NonEmptyTraverse.Ops[F,A]{typeTypeClassType=cats.NonEmptyTraverse[F]}" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -3652,13 +3728,10 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">toNonEmptyTraverseOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="C">C</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.NonEmptyTraverse.ToNonEmptyTraverseOps.toNonEmptyTraverseOps.F">F</span>[<span class="extype" name="cats.NonEmptyTraverse.ToNonEmptyTraverseOps.toNonEmptyTraverseOps.C">C</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../NonEmptyTraverse.html" class="extype" name="cats.NonEmptyTraverse">NonEmptyTraverse</a>[<span class="extype" name="cats.NonEmptyTraverse.ToNonEmptyTraverseOps.toNonEmptyTraverseOps.F">F</span>]</span>)</span><span class="result">: <a href="../NonEmptyTraverse$$Ops.html" class="extype" name="cats.NonEmptyTraverse.Ops">Ops</a>[<span class="extype" name="cats.NonEmptyTraverse.ToNonEmptyTraverseOps.toNonEmptyTraverseOps.F">F</span>, <span class="extype" name="cats.NonEmptyTraverse.ToNonEmptyTraverseOps.toNonEmptyTraverseOps.C">C</span>] { type TypeClassType = cats.NonEmptyTraverse[F] }</span>
+        <span class="name">toNonEmptyTraverseOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.NonEmptyTraverse.ToNonEmptyTraverseOps.toNonEmptyTraverseOps.F">F</span>[<span class="extype" name="cats.NonEmptyTraverse.ToNonEmptyTraverseOps.toNonEmptyTraverseOps.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../NonEmptyTraverse.html" class="extype" name="cats.NonEmptyTraverse">NonEmptyTraverse</a>[<span class="extype" name="cats.NonEmptyTraverse.ToNonEmptyTraverseOps.toNonEmptyTraverseOps.F">F</span>]</span>)</span><span class="result">: <a href="../NonEmptyTraverse$$Ops.html" class="extype" name="cats.NonEmptyTraverse.Ops">Ops</a>[<span class="extype" name="cats.NonEmptyTraverse.ToNonEmptyTraverseOps.toNonEmptyTraverseOps.F">F</span>, <span class="extype" name="cats.NonEmptyTraverse.ToNonEmptyTraverseOps.toNonEmptyTraverseOps.A">A</span>] { type TypeClassType = cats.NonEmptyTraverse[F] }</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../NonEmptyTraverse$$ToNonEmptyTraverseOps.html" class="extype" name="cats.NonEmptyTraverse.ToNonEmptyTraverseOps">ToNonEmptyTraverseOps</a></dd><dt>Annotations</dt><dd>
-                <span class="name">@SuppressWarnings</span><span class="args">()</span>
-              
-        </dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../NonEmptyTraverse$$ToNonEmptyTraverseOps.html" class="extype" name="cats.NonEmptyTraverse.ToNonEmptyTraverseOps">ToNonEmptyTraverseOps</a></dd></dl></div>
     </li><li name="cats.arrow.Profunctor.ToProfunctorOps#toProfunctorOps" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toProfunctorOps[F[_,_],A,B](target:F[A,B])(implicittc:cats.arrow.Profunctor[F]):cats.arrow.Profunctor.Ops[F,A,B]{typeTypeClassType=cats.arrow.Profunctor[F]}"></a><a id="toProfunctorOps[F[_,_],A,B](F[A,B])(Profunctor[F]):Ops[F,A,B]{typeTypeClassType=cats.arrow.Profunctor[F]}"></a>
       <span class="permalink">
@@ -3674,14 +3747,11 @@
         <span class="name">toProfunctorOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.arrow.Profunctor.ToProfunctorOps.toProfunctorOps.F">F</span>[<span class="extype" name="cats.arrow.Profunctor.ToProfunctorOps.toProfunctorOps.A">A</span>, <span class="extype" name="cats.arrow.Profunctor.ToProfunctorOps.toProfunctorOps.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../arrow/Profunctor.html" class="extype" name="cats.arrow.Profunctor">Profunctor</a>[<span class="extype" name="cats.arrow.Profunctor.ToProfunctorOps.toProfunctorOps.F">F</span>]</span>)</span><span class="result">: <a href="../arrow/Profunctor$$Ops.html" class="extype" name="cats.arrow.Profunctor.Ops">Ops</a>[<span class="extype" name="cats.arrow.Profunctor.ToProfunctorOps.toProfunctorOps.F">F</span>, <span class="extype" name="cats.arrow.Profunctor.ToProfunctorOps.toProfunctorOps.A">A</span>, <span class="extype" name="cats.arrow.Profunctor.ToProfunctorOps.toProfunctorOps.B">B</span>] { type TypeClassType = cats.arrow.Profunctor[F] }</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../arrow/Profunctor$$ToProfunctorOps.html" class="extype" name="cats.arrow.Profunctor.ToProfunctorOps">ToProfunctorOps</a></dd><dt>Annotations</dt><dd>
-                <span class="name">@SuppressWarnings</span><span class="args">()</span>
-              
-        </dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../arrow/Profunctor$$ToProfunctorOps.html" class="extype" name="cats.arrow.Profunctor.ToProfunctorOps">ToProfunctorOps</a></dd></dl></div>
     </li><li name="cats.Reducible.ToReducibleOps#toReducibleOps" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="toReducibleOps[F[_],D](target:F[D])(implicittc:cats.Reducible[F]):cats.Reducible.Ops[F,D]{typeTypeClassType=cats.Reducible[F]}"></a><a id="toReducibleOps[F[_],D](F[D])(Reducible[F]):Ops[F,D]{typeTypeClassType=cats.Reducible[F]}"></a>
+      <a id="toReducibleOps[F[_],A](target:F[A])(implicittc:cats.Reducible[F]):cats.Reducible.Ops[F,A]{typeTypeClassType=cats.Reducible[F]}"></a><a id="toReducibleOps[F[_],A](F[A])(Reducible[F]):Ops[F,A]{typeTypeClassType=cats.Reducible[F]}"></a>
       <span class="permalink">
-      <a href="../../cats/syntax/package$$all$.html#toReducibleOps[F[_],D](target:F[D])(implicittc:cats.Reducible[F]):cats.Reducible.Ops[F,D]{typeTypeClassType=cats.Reducible[F]}" title="Permalink">
+      <a href="../../cats/syntax/package$$all$.html#toReducibleOps[F[_],A](target:F[A])(implicittc:cats.Reducible[F]):cats.Reducible.Ops[F,A]{typeTypeClassType=cats.Reducible[F]}" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -3690,13 +3760,10 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">toReducibleOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="D">D</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.Reducible.ToReducibleOps.toReducibleOps.F">F</span>[<span class="extype" name="cats.Reducible.ToReducibleOps.toReducibleOps.D">D</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../Reducible.html" class="extype" name="cats.Reducible">Reducible</a>[<span class="extype" name="cats.Reducible.ToReducibleOps.toReducibleOps.F">F</span>]</span>)</span><span class="result">: <a href="../Reducible$$Ops.html" class="extype" name="cats.Reducible.Ops">Ops</a>[<span class="extype" name="cats.Reducible.ToReducibleOps.toReducibleOps.F">F</span>, <span class="extype" name="cats.Reducible.ToReducibleOps.toReducibleOps.D">D</span>] { type TypeClassType = cats.Reducible[F] }</span>
+        <span class="name">toReducibleOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.Reducible.ToReducibleOps.toReducibleOps.F">F</span>[<span class="extype" name="cats.Reducible.ToReducibleOps.toReducibleOps.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../Reducible.html" class="extype" name="cats.Reducible">Reducible</a>[<span class="extype" name="cats.Reducible.ToReducibleOps.toReducibleOps.F">F</span>]</span>)</span><span class="result">: <a href="../Reducible$$Ops.html" class="extype" name="cats.Reducible.Ops">Ops</a>[<span class="extype" name="cats.Reducible.ToReducibleOps.toReducibleOps.F">F</span>, <span class="extype" name="cats.Reducible.ToReducibleOps.toReducibleOps.A">A</span>] { type TypeClassType = cats.Reducible[F] }</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Reducible$$ToReducibleOps.html" class="extype" name="cats.Reducible.ToReducibleOps">ToReducibleOps</a></dd><dt>Annotations</dt><dd>
-                <span class="name">@SuppressWarnings</span><span class="args">()</span>
-              
-        </dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Reducible$$ToReducibleOps.html" class="extype" name="cats.Reducible.ToReducibleOps">ToReducibleOps</a></dd></dl></div>
     </li><li name="cats.SemigroupK.ToSemigroupKOps#toSemigroupKOps" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toSemigroupKOps[F[_],A](target:F[A])(implicittc:cats.SemigroupK[F]):cats.SemigroupK.Ops[F,A]{typeTypeClassType=cats.SemigroupK[F]}"></a><a id="toSemigroupKOps[F[_],A](F[A])(SemigroupK[F]):Ops[F,A]{typeTypeClassType=cats.SemigroupK[F]}"></a>
       <span class="permalink">
@@ -3712,10 +3779,7 @@
         <span class="name">toSemigroupKOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.SemigroupK.ToSemigroupKOps.toSemigroupKOps.F">F</span>[<span class="extype" name="cats.SemigroupK.ToSemigroupKOps.toSemigroupKOps.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a>[<span class="extype" name="cats.SemigroupK.ToSemigroupKOps.toSemigroupKOps.F">F</span>]</span>)</span><span class="result">: <a href="../SemigroupK$$Ops.html" class="extype" name="cats.SemigroupK.Ops">Ops</a>[<span class="extype" name="cats.SemigroupK.ToSemigroupKOps.toSemigroupKOps.F">F</span>, <span class="extype" name="cats.SemigroupK.ToSemigroupKOps.toSemigroupKOps.A">A</span>] { type TypeClassType = cats.SemigroupK[F] }</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../SemigroupK$$ToSemigroupKOps.html" class="extype" name="cats.SemigroupK.ToSemigroupKOps">ToSemigroupKOps</a></dd><dt>Annotations</dt><dd>
-                <span class="name">@SuppressWarnings</span><span class="args">()</span>
-              
-        </dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../SemigroupK$$ToSemigroupKOps.html" class="extype" name="cats.SemigroupK.ToSemigroupKOps">ToSemigroupKOps</a></dd></dl></div>
     </li><li name="cats.syntax.TraverseFilterSyntaxBinCompat0#toSequenceFilterOps" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toSequenceFilterOps[F[_],G[_],A](fgoa:F[G[Option[A]]]):cats.syntax.SequenceFilterOps[F,G,A]"></a><a id="toSequenceFilterOps[F[_],G[_],A](F[G[Option[A]]]):SequenceFilterOps[F,G,A]"></a>
       <span class="permalink">
@@ -3779,10 +3843,7 @@
         <span class="name">toStrongOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.arrow.Strong.ToStrongOps.toStrongOps.F">F</span>[<span class="extype" name="cats.arrow.Strong.ToStrongOps.toStrongOps.A">A</span>, <span class="extype" name="cats.arrow.Strong.ToStrongOps.toStrongOps.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../arrow/Strong.html" class="extype" name="cats.arrow.Strong">Strong</a>[<span class="extype" name="cats.arrow.Strong.ToStrongOps.toStrongOps.F">F</span>]</span>)</span><span class="result">: <a href="../arrow/Strong$$Ops.html" class="extype" name="cats.arrow.Strong.Ops">Ops</a>[<span class="extype" name="cats.arrow.Strong.ToStrongOps.toStrongOps.F">F</span>, <span class="extype" name="cats.arrow.Strong.ToStrongOps.toStrongOps.A">A</span>, <span class="extype" name="cats.arrow.Strong.ToStrongOps.toStrongOps.B">B</span>] { type TypeClassType = cats.arrow.Strong[F] }</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../arrow/Strong$$ToStrongOps.html" class="extype" name="cats.arrow.Strong.ToStrongOps">ToStrongOps</a></dd><dt>Annotations</dt><dd>
-                <span class="name">@SuppressWarnings</span><span class="args">()</span>
-              
-        </dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../arrow/Strong$$ToStrongOps.html" class="extype" name="cats.arrow.Strong.ToStrongOps">ToStrongOps</a></dd></dl></div>
     </li><li name="cats.TraverseFilter.ToTraverseFilterOps#toTraverseFilterOps" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toTraverseFilterOps[F[_],A](target:F[A])(implicittc:cats.TraverseFilter[F]):cats.TraverseFilter.Ops[F,A]{typeTypeClassType=cats.TraverseFilter[F]}"></a><a id="toTraverseFilterOps[F[_],A](F[A])(TraverseFilter[F]):Ops[F,A]{typeTypeClassType=cats.TraverseFilter[F]}"></a>
       <span class="permalink">
@@ -3798,14 +3859,11 @@
         <span class="name">toTraverseFilterOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.TraverseFilter.ToTraverseFilterOps.toTraverseFilterOps.F">F</span>[<span class="extype" name="cats.TraverseFilter.ToTraverseFilterOps.toTraverseFilterOps.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../TraverseFilter.html" class="extype" name="cats.TraverseFilter">TraverseFilter</a>[<span class="extype" name="cats.TraverseFilter.ToTraverseFilterOps.toTraverseFilterOps.F">F</span>]</span>)</span><span class="result">: <a href="../TraverseFilter$$Ops.html" class="extype" name="cats.TraverseFilter.Ops">Ops</a>[<span class="extype" name="cats.TraverseFilter.ToTraverseFilterOps.toTraverseFilterOps.F">F</span>, <span class="extype" name="cats.TraverseFilter.ToTraverseFilterOps.toTraverseFilterOps.A">A</span>] { type TypeClassType = cats.TraverseFilter[F] }</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../TraverseFilter$$ToTraverseFilterOps.html" class="extype" name="cats.TraverseFilter.ToTraverseFilterOps">ToTraverseFilterOps</a></dd><dt>Annotations</dt><dd>
-                <span class="name">@SuppressWarnings</span><span class="args">()</span>
-              
-        </dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../TraverseFilter$$ToTraverseFilterOps.html" class="extype" name="cats.TraverseFilter.ToTraverseFilterOps">ToTraverseFilterOps</a></dd></dl></div>
     </li><li name="cats.Traverse.ToTraverseOps#toTraverseOps" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="toTraverseOps[F[_],C](target:F[C])(implicittc:cats.Traverse[F]):cats.Traverse.Ops[F,C]{typeTypeClassType=cats.Traverse[F]}"></a><a id="toTraverseOps[F[_],C](F[C])(Traverse[F]):Ops[F,C]{typeTypeClassType=cats.Traverse[F]}"></a>
+      <a id="toTraverseOps[F[_],A](target:F[A])(implicittc:cats.Traverse[F]):cats.Traverse.Ops[F,A]{typeTypeClassType=cats.Traverse[F]}"></a><a id="toTraverseOps[F[_],A](F[A])(Traverse[F]):Ops[F,A]{typeTypeClassType=cats.Traverse[F]}"></a>
       <span class="permalink">
-      <a href="../../cats/syntax/package$$all$.html#toTraverseOps[F[_],C](target:F[C])(implicittc:cats.Traverse[F]):cats.Traverse.Ops[F,C]{typeTypeClassType=cats.Traverse[F]}" title="Permalink">
+      <a href="../../cats/syntax/package$$all$.html#toTraverseOps[F[_],A](target:F[A])(implicittc:cats.Traverse[F]):cats.Traverse.Ops[F,A]{typeTypeClassType=cats.Traverse[F]}" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -3814,13 +3872,10 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">toTraverseOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="C">C</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.Traverse.ToTraverseOps.toTraverseOps.F">F</span>[<span class="extype" name="cats.Traverse.ToTraverseOps.toTraverseOps.C">C</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<span class="extype" name="cats.Traverse.ToTraverseOps.toTraverseOps.F">F</span>]</span>)</span><span class="result">: <a href="../Traverse$$Ops.html" class="extype" name="cats.Traverse.Ops">Ops</a>[<span class="extype" name="cats.Traverse.ToTraverseOps.toTraverseOps.F">F</span>, <span class="extype" name="cats.Traverse.ToTraverseOps.toTraverseOps.C">C</span>] { type TypeClassType = cats.Traverse[F] }</span>
+        <span class="name">toTraverseOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.Traverse.ToTraverseOps.toTraverseOps.F">F</span>[<span class="extype" name="cats.Traverse.ToTraverseOps.toTraverseOps.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<span class="extype" name="cats.Traverse.ToTraverseOps.toTraverseOps.F">F</span>]</span>)</span><span class="result">: <a href="../Traverse$$Ops.html" class="extype" name="cats.Traverse.Ops">Ops</a>[<span class="extype" name="cats.Traverse.ToTraverseOps.toTraverseOps.F">F</span>, <span class="extype" name="cats.Traverse.ToTraverseOps.toTraverseOps.A">A</span>] { type TypeClassType = cats.Traverse[F] }</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Traverse$$ToTraverseOps.html" class="extype" name="cats.Traverse.ToTraverseOps">ToTraverseOps</a></dd><dt>Annotations</dt><dd>
-                <span class="name">@SuppressWarnings</span><span class="args">()</span>
-              
-        </dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Traverse$$ToTraverseOps.html" class="extype" name="cats.Traverse.ToTraverseOps">ToTraverseOps</a></dd></dl></div>
     </li><li name="cats.UnorderedFoldable.ToUnorderedFoldableOps#toUnorderedFoldableOps" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toUnorderedFoldableOps[F[_],A](target:F[A])(implicittc:cats.UnorderedFoldable[F]):cats.UnorderedFoldable.Ops[F,A]{typeTypeClassType=cats.UnorderedFoldable[F]}"></a><a id="toUnorderedFoldableOps[F[_],A](F[A])(UnorderedFoldable[F]):Ops[F,A]{typeTypeClassType=cats.UnorderedFoldable[F]}"></a>
       <span class="permalink">
@@ -3836,14 +3891,11 @@
         <span class="name">toUnorderedFoldableOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.UnorderedFoldable.ToUnorderedFoldableOps.toUnorderedFoldableOps.F">F</span>[<span class="extype" name="cats.UnorderedFoldable.ToUnorderedFoldableOps.toUnorderedFoldableOps.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../UnorderedFoldable.html" class="extype" name="cats.UnorderedFoldable">UnorderedFoldable</a>[<span class="extype" name="cats.UnorderedFoldable.ToUnorderedFoldableOps.toUnorderedFoldableOps.F">F</span>]</span>)</span><span class="result">: <a href="../UnorderedFoldable$$Ops.html" class="extype" name="cats.UnorderedFoldable.Ops">Ops</a>[<span class="extype" name="cats.UnorderedFoldable.ToUnorderedFoldableOps.toUnorderedFoldableOps.F">F</span>, <span class="extype" name="cats.UnorderedFoldable.ToUnorderedFoldableOps.toUnorderedFoldableOps.A">A</span>] { type TypeClassType = cats.UnorderedFoldable[F] }</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../UnorderedFoldable$$ToUnorderedFoldableOps.html" class="extype" name="cats.UnorderedFoldable.ToUnorderedFoldableOps">ToUnorderedFoldableOps</a></dd><dt>Annotations</dt><dd>
-                <span class="name">@SuppressWarnings</span><span class="args">()</span>
-              
-        </dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../UnorderedFoldable$$ToUnorderedFoldableOps.html" class="extype" name="cats.UnorderedFoldable.ToUnorderedFoldableOps">ToUnorderedFoldableOps</a></dd></dl></div>
     </li><li name="cats.UnorderedTraverse.ToUnorderedTraverseOps#toUnorderedTraverseOps" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="toUnorderedTraverseOps[F[_],C](target:F[C])(implicittc:cats.UnorderedTraverse[F]):cats.UnorderedTraverse.Ops[F,C]{typeTypeClassType=cats.UnorderedTraverse[F]}"></a><a id="toUnorderedTraverseOps[F[_],C](F[C])(UnorderedTraverse[F]):Ops[F,C]{typeTypeClassType=cats.UnorderedTraverse[F]}"></a>
+      <a id="toUnorderedTraverseOps[F[_],A](target:F[A])(implicittc:cats.UnorderedTraverse[F]):cats.UnorderedTraverse.Ops[F,A]{typeTypeClassType=cats.UnorderedTraverse[F]}"></a><a id="toUnorderedTraverseOps[F[_],A](F[A])(UnorderedTraverse[F]):Ops[F,A]{typeTypeClassType=cats.UnorderedTraverse[F]}"></a>
       <span class="permalink">
-      <a href="../../cats/syntax/package$$all$.html#toUnorderedTraverseOps[F[_],C](target:F[C])(implicittc:cats.UnorderedTraverse[F]):cats.UnorderedTraverse.Ops[F,C]{typeTypeClassType=cats.UnorderedTraverse[F]}" title="Permalink">
+      <a href="../../cats/syntax/package$$all$.html#toUnorderedTraverseOps[F[_],A](target:F[A])(implicittc:cats.UnorderedTraverse[F]):cats.UnorderedTraverse.Ops[F,A]{typeTypeClassType=cats.UnorderedTraverse[F]}" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -3852,35 +3904,10 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">toUnorderedTraverseOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="C">C</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.UnorderedTraverse.ToUnorderedTraverseOps.toUnorderedTraverseOps.F">F</span>[<span class="extype" name="cats.UnorderedTraverse.ToUnorderedTraverseOps.toUnorderedTraverseOps.C">C</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../UnorderedTraverse.html" class="extype" name="cats.UnorderedTraverse">UnorderedTraverse</a>[<span class="extype" name="cats.UnorderedTraverse.ToUnorderedTraverseOps.toUnorderedTraverseOps.F">F</span>]</span>)</span><span class="result">: <a href="../UnorderedTraverse$$Ops.html" class="extype" name="cats.UnorderedTraverse.Ops">Ops</a>[<span class="extype" name="cats.UnorderedTraverse.ToUnorderedTraverseOps.toUnorderedTraverseOps.F">F</span>, <span class="extype" name="cats.UnorderedTraverse.ToUnorderedTraverseOps.toUnorderedTraverseOps.C">C</span>] { type TypeClassType = cats.UnorderedTraverse[F] }</span>
+        <span class="name">toUnorderedTraverseOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.UnorderedTraverse.ToUnorderedTraverseOps.toUnorderedTraverseOps.F">F</span>[<span class="extype" name="cats.UnorderedTraverse.ToUnorderedTraverseOps.toUnorderedTraverseOps.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../UnorderedTraverse.html" class="extype" name="cats.UnorderedTraverse">UnorderedTraverse</a>[<span class="extype" name="cats.UnorderedTraverse.ToUnorderedTraverseOps.toUnorderedTraverseOps.F">F</span>]</span>)</span><span class="result">: <a href="../UnorderedTraverse$$Ops.html" class="extype" name="cats.UnorderedTraverse.Ops">Ops</a>[<span class="extype" name="cats.UnorderedTraverse.ToUnorderedTraverseOps.toUnorderedTraverseOps.F">F</span>, <span class="extype" name="cats.UnorderedTraverse.ToUnorderedTraverseOps.toUnorderedTraverseOps.A">A</span>] { type TypeClassType = cats.UnorderedTraverse[F] }</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../UnorderedTraverse$$ToUnorderedTraverseOps.html" class="extype" name="cats.UnorderedTraverse.ToUnorderedTraverseOps">ToUnorderedTraverseOps</a></dd><dt>Annotations</dt><dd>
-                <span class="name">@SuppressWarnings</span><span class="args">()</span>
-              
-        </dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait():Unit"></a>
-      <span class="permalink">
-      <a href="../../cats/syntax/package$$all$.html#wait():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
-    </span>)</span>
-              
-        </dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../UnorderedTraverse$$ToUnorderedTraverseOps.html" class="extype" name="cats.UnorderedTraverse.ToUnorderedTraverseOps">ToUnorderedTraverseOps</a></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <span class="permalink">
@@ -3925,6 +3952,28 @@
     </span>)</span>
               
                 <span class="name">@native</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/syntax/package$$all$.html#wait():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li>
@@ -3973,6 +4022,32 @@
                 <span class="name">@deprecated</span>
               
         </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2.1.0-RC1)</i> Use methods on Foldable</p></dd></dl></div>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/syntax/package$$all$.html#finalize():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version ) see corresponding Javadoc for more information.">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+                <span class="name">@Deprecated</span>
+              
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version )</i> see corresponding Javadoc for more information.</p></dd></dl></div>
     </li></ol>
             </div>
         </div>
@@ -3980,6 +4055,10 @@
         <div id="inheritedMembers">
         <div class="parent" name="cats.syntax.AllSyntaxBinCompat">
               <h3>Inherited from <a href="AllSyntaxBinCompat.html" class="extype" name="cats.syntax.AllSyntaxBinCompat">AllSyntaxBinCompat</a></h3>
+            </div><div class="parent" name="cats.syntax.AllSyntaxBinCompat7">
+              <h3>Inherited from <a href="AllSyntaxBinCompat7.html" class="extype" name="cats.syntax.AllSyntaxBinCompat7">AllSyntaxBinCompat7</a></h3>
+            </div><div class="parent" name="cats.syntax.SeqSyntax">
+              <h3>Inherited from <a href="SeqSyntax.html" class="extype" name="cats.syntax.SeqSyntax">SeqSyntax</a></h3>
             </div><div class="parent" name="cats.syntax.AllSyntaxBinCompat6">
               <h3>Inherited from <a href="AllSyntaxBinCompat6.html" class="extype" name="cats.syntax.AllSyntaxBinCompat6">AllSyntaxBinCompat6</a></h3>
             </div><div class="parent" name="cats.syntax.ParallelUnorderedTraverseSyntax">
@@ -4060,6 +4139,8 @@
               <h3>Inherited from <a href="../UnorderedTraverse$$ToUnorderedTraverseOps.html" class="extype" name="cats.UnorderedTraverse.ToUnorderedTraverseOps">ToUnorderedTraverseOps</a></h3>
             </div><div class="parent" name="cats.syntax.AllSyntax">
               <h3>Inherited from <a href="AllSyntax.html" class="extype" name="cats.syntax.AllSyntax">AllSyntax</a></h3>
+            </div><div class="parent" name="cats.syntax.ParallelTraverseFilterSyntax">
+              <h3>Inherited from <a href="ParallelTraverseFilterSyntax.html" class="extype" name="cats.syntax.ParallelTraverseFilterSyntax">ParallelTraverseFilterSyntax</a></h3>
             </div><div class="parent" name="cats.syntax.ParallelFoldMapASyntax">
               <h3>Inherited from <a href="ParallelFoldMapASyntax.html" class="extype" name="cats.syntax.ParallelFoldMapASyntax">ParallelFoldMapASyntax</a></h3>
             </div><div class="parent" name="cats.syntax.WriterSyntax">
@@ -4204,6 +4285,10 @@
               <h3>Inherited from <a href="AlignSyntax.html" class="extype" name="cats.syntax.AlignSyntax">AlignSyntax</a></h3>
             </div><div class="parent" name="cats.Align.ToAlignOps">
               <h3>Inherited from <a href="../Align$$ToAlignOps.html" class="extype" name="cats.Align.ToAlignOps">ToAlignOps</a></h3>
+            </div><div class="parent" name="scala.Serializable">
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
             </div><div class="parent" name="cats.syntax.AlternativeSyntax">
               <h3>Inherited from <a href="AlternativeSyntax.html" class="extype" name="cats.syntax.AlternativeSyntax">AlternativeSyntax</a></h3>
             </div><div class="parent" name="scala.AnyRef">

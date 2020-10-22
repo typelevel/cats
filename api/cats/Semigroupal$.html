@@ -81,10 +81,32 @@
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <a title="Symbolic aliases for various types are defined here." href="index.html"><span class="name">cats</span></a>
+        <a title="The cats root package contains all the trait signatures of most Scala type classes." href="index.html"><span class="name">cats</span></a>
       </span>
       
-      <p class="shortcomment cmt">Symbolic aliases for various types are defined here.</p><div class="fullcomment"><div class="comment cmt"><p>Symbolic aliases for various types are defined here.
+      <p class="shortcomment cmt">The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><p>Cats type classes are implemented using the approach from the
+ <a href="https://ropas.snu.ac.kr/~bruno/papers/TypeClasses.pdf" target="_blank">Type classes as objects and implicits</a> article.</p><p>For each type class, <code>cats</code> provides three pieces:
+- Its <b>signature</b>: a trait that is polymorphic on a type parameter.
+  Type class traits inherit from other type classes to indicate that any implementation of the lower type class (e.g. <code>Applicative</code>)
+  can also serve as an instance for the higuer type class (e.g. <code>Functor</code>).
+- Type class <b>'instances</b>, which are classes and objects that implement one or more type class signatures for some specific types.
+  Type class instances for several data types from the Java or Scala standard libraries are declared in the subpackage <code>cats.instances</code>.
+- <b>Syntax extensions</b>, each of which provides the methods of the type class defines as extension methods
+  (which in Scala 2 are encoded as implicit classes) for values of any type <code>F</code>; given that an instance of the type class
+  for the receiver type (<code>this</code>) is in the implicit scope.
+  Symtax extensions are declared in the <code>cats.syntax</code> package.
+- A set of <b>laws</b>, that are also generic on the type of the class, and are only defined on the operations of the type class.
+  The purpose of these laws is to declare some algebraic relations (equations) between Scala expressions involving the operations
+  of the type class, and test (but not verify) that implemented instances satisfy those equations.
+  Laws are defined in the <code>cats-laws</code> package.</p><p>Although most of cats type classes are declared in this package, some are declared in other packages:
+- type classes that operate on base types (kind <code>*</code>), and their implementations for standard library types,
+  are contained in <code>cats.kernel</code>, which is a different SBT project. However, they are re-exported from this package.
+- type classes of kind <code>F[_, _]</code>, such as <a href="arrow/Profunctor.html" class="extype" name="cats.arrow.Profunctor">cats.arrow.Profunctor</a>&quot; or <a href="arrow/Arrow.html" class="extype" name="cats.arrow.Arrow">cats.arrow.Arrow</a>, which are relevant for
+  Functional Reactive Programming or optics, are declared in the <code>cats.arrow</code> package.
+- Also, those type classes that abstract over (pure or impure) functional runtime effects are declared
+  in the <a href="https://typelevel.org/cats-effect/" target="_blank">cats-effect library</a>.
+- Some type classes for which no laws can be provided are left out of the main road, in a small and dirty alley.
+  These are the <code>alleycats</code>.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="_root_">root</a></dd></dl></div>
     </li><li name="cats.arrow" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="arrow"></a><a id="arrow:arrow"></a>
@@ -99,6 +121,22 @@
       </span>
       <span class="symbol">
         <a title="" href="arrow/index.html"><span class="name">arrow</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="cats">cats</a></dd></dl></div>
+    </li><li name="cats.conversions" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="conversions"></a><a id="conversions:conversions"></a>
+      <span class="permalink">
+      <a href="../cats/conversions/index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="conversions/index.html"><span class="name">conversions</span></a>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="cats">cats</a></dd></dl></div>
@@ -319,6 +357,10 @@
                         <a class="trait" href="FunctorFilter.html" title="FunctorFilter[F] allows you to map and filter out elements simultaneously."></a>
                         <a href="FunctorFilter.html" title="FunctorFilter[F] allows you to map and filter out elements simultaneously.">FunctorFilter</a>
                       </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="trait" href="FunctorFilterInstances0.html" title=""></a>
+                        <a href="FunctorFilterInstances0.html" title="">FunctorFilterInstances0</a>
+                      </li><li class="current-entities indented1">
                         <a class="object" href="Inject$.html" title=""></a>
                         <a class="class" href="Inject.html" title="Inject is a type class providing an injection from type A into type B."></a>
                         <a href="Inject.html" title="Inject is a type class providing an injection from type A into type B.">Inject</a>
@@ -399,6 +441,10 @@
                         <a class="trait" href="SemigroupK.html" title="SemigroupK is a universal semigroup which operates on kinds."></a>
                         <a href="SemigroupK.html" title="SemigroupK is a universal semigroup which operates on kinds.">SemigroupK</a>
                       </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="trait" href="SemigroupKInstances0.html" title=""></a>
+                        <a href="SemigroupKInstances0.html" title="">SemigroupKInstances0</a>
+                      </li><li class="current-entities indented1">
                         <a class="object" href="" title=""></a>
                         <a class="trait" href="Semigroupal.html" title="Semigroupal captures the idea of composing independent effectful values."></a>
                         <a href="Semigroupal.html" title="Semigroupal captures the idea of composing independent effectful values.">Semigroupal</a>
@@ -459,7 +505,7 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">Semigroupal</span><span class="result"> extends <a href="SemigroupalArityFunctions.html" class="extype" name="cats.SemigroupalArityFunctions">SemigroupalArityFunctions</a> with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <span class="name">Semigroupal</span><span class="result"> extends <span class="extype" name="cats.ScalaVersionSpecificSemigroupalInstances">ScalaVersionSpecificSemigroupalInstances</span> with <a href="SemigroupalArityFunctions.html" class="extype" name="cats.SemigroupalArityFunctions">SemigroupalArityFunctions</a> with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       </h4>
 
@@ -468,8 +514,18 @@
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="SemigroupalArityFunctions.html" class="extype" name="cats.SemigroupalArityFunctions">SemigroupalArityFunctions</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
-        </div></div>
+          <div class="superTypes hiddenContent"><a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="SemigroupalArityFunctions.html" class="extype" name="cats.SemigroupalArityFunctions">SemigroupalArityFunctions</a>, <span class="extype" name="cats.ScalaVersionSpecificSemigroupalInstances">ScalaVersionSpecificSemigroupalInstances</span>, <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+        </div><div class="toggleContainer block diagram-container" id="content-diagram-container">
+                <span class="toggle diagram-link">
+                  Content Hierarchy
+                </span>
+                <div class="diagram" id="content-diagram"><svg class="package-diagram" id="graph1" viewBox="0.00 0.00 242.00 94.00" height="94pt" width="242pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 90)" class="graph" id="page0,1_graph0"><polygon points="-4,4 -4,-90 238,-90 238,4 -4,4" stroke="transparent" fill="white"></polygon><!-- node0 --><g class="node object" id="graph1_0"><g id="a_object|graph1_0"><a xlink:title="cats.Semigroupal.nonInheritedOps" xlink:href="Semigroupal$$nonInheritedOps$.html#inheritance-diagram"><path d="M107.67,-25C107.67,-25 10.33,-25 10.33,-25 6.17,-25 2,-20.83 2,-16.67 2,-16.67 2,-8.33 2,-8.33 2,-4.17 6.17,0 10.33,0 10.33,0 107.67,0 107.67,0 111.83,0 116,-4.17 116,-8.33 116,-8.33 116,-16.67 116,-16.67 116,-20.83 111.83,-25 107.67,-25" stroke="#103a51" fill="#103a51"></path><image xlink:href="../lib/object_diagram.png" y="-19.5" x="12" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="33" text-anchor="start">nonInheritedOps</text></a></g></g><!-- node1 --><g class="node trait" id="graph1_1"><g id="a_trait|graph1_1"><a xlink:title="cats.Semigroupal.ToSemigroupalOps" xlink:href="Semigroupal$$ToSemigroupalOps.html#inheritance-diagram"><path d="M109.67,-86C109.67,-86 8.33,-86 8.33,-86 4.17,-86 0,-81.83 0,-77.67 0,-77.67 0,-69.33 0,-69.33 0,-65.17 4.17,-61 8.33,-61 8.33,-61 109.67,-61 109.67,-61 113.83,-61 118,-65.17 118,-69.33 118,-69.33 118,-77.67 118,-77.67 118,-81.83 113.83,-86 109.67,-86" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-80.5" x="10" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-71.1" x="31" text-anchor="start">ToSemigroupalOps</text></a></g></g><!-- node1&#45;&gt;node0 --><g class="edge inheritance" id="graph1_1_0"><g id="a_inheritance|graph1_1_0"><a xlink:title="nonInheritedOps is a subtype of ToSemigroupalOps"><path d="M59,-53.76C59,-44.37 59,-33.29 59,-25.13" stroke="#d4d4d4" fill="none"></path><polygon points="56.55,-53.84 59,-60.84 61.45,-53.84 56.55,-53.84" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node2 --><g class="node trait" id="graph1_2"><g id="a_trait|graph1_2"><a xlink:title="cats.Semigroupal.AllOps" xlink:href="Semigroupal$$AllOps.html#inheritance-diagram"><path d="M225.67,-25C225.67,-25 142.33,-25 142.33,-25 138.17,-25 134,-20.83 134,-16.67 134,-16.67 134,-8.33 134,-8.33 134,-4.17 138.17,0 142.33,0 142.33,0 225.67,0 225.67,0 229.83,0 234,-4.17 234,-8.33 234,-8.33 234,-16.67 234,-16.67 234,-20.83 229.83,-25 225.67,-25" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-19.5" x="144" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="165" text-anchor="start">AllOps[F, A]</text></a></g></g><!-- node3 --><g class="node trait" id="graph1_3"><g id="a_trait|graph1_3"><a xlink:title="cats.Semigroupal.Ops" xlink:href="Semigroupal$$Ops.html#inheritance-diagram"><path d="M219.17,-86C219.17,-86 148.83,-86 148.83,-86 144.67,-86 140.5,-81.83 140.5,-77.67 140.5,-77.67 140.5,-69.33 140.5,-69.33 140.5,-65.17 144.67,-61 148.83,-61 148.83,-61 219.17,-61 219.17,-61 223.33,-61 227.5,-65.17 227.5,-69.33 227.5,-69.33 227.5,-77.67 227.5,-77.67 227.5,-81.83 223.33,-86 219.17,-86" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-80.5" x="151" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-71.1" x="172" text-anchor="start">Ops[F, A]</text></a></g></g><!-- node3&#45;&gt;node2 --><g class="edge inheritance" id="graph1_3_2"><g id="a_inheritance|graph1_3_2"><a xlink:title="AllOps[F, A] is a subtype of Ops[F, A]"><path d="M184,-53.76C184,-44.37 184,-33.29 184,-25.13" stroke="#d4d4d4" fill="none"></path><polygon points="181.55,-53.84 184,-60.84 186.45,-53.84 181.55,-53.84" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
+                <div id="diagram-controls" class="hiddenContent">
+                  <button id="diagram-zoom-out" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button id="diagram-zoom-in" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button title="Toggle full-screen" id="diagram-fs" class="diagram-btn to-full"><i class="material-icons"></i></button>
+                </div>
+              </div></div>
         
 
       <div id="mbrsel">
@@ -494,7 +550,7 @@
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="cats.Semigroupal"><span>Semigroupal</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="cats.SemigroupalArityFunctions"><span>SemigroupalArityFunctions</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="cats.Semigroupal"><span>Semigroupal</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="cats.SemigroupalArityFunctions"><span>SemigroupalArityFunctions</span></li><li class="in" name="cats.ScalaVersionSpecificSemigroupalInstances"><span>ScalaVersionSpecificSemigroupalInstances</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -533,7 +589,7 @@
       
       
     </li><li name="cats.Semigroupal.Ops" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="Ops[F[_],A]extendsAnyRef"></a><a id="Ops[F[_],A]:Ops[F,A]"></a>
+      <a id="Ops[F[_],A]extendsSerializable"></a><a id="Ops[F[_],A]:Ops[F,A]"></a>
       <span class="permalink">
       <a href="../cats/Semigroupal$$Ops.html" title="Permalink">
         <i class="material-icons"></i>
@@ -544,12 +600,12 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="" href="Semigroupal$$Ops.html"><span class="name">Ops</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+        <a title="" href="Semigroupal$$Ops.html"><span class="name">Ops</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
     </li><li name="cats.Semigroupal.ToSemigroupalOps" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="ToSemigroupalOpsextendsAnyRef"></a><a id="ToSemigroupalOps:ToSemigroupalOps"></a>
+      <a id="ToSemigroupalOpsextendsSerializable"></a><a id="ToSemigroupalOps:ToSemigroupalOps"></a>
       <span class="permalink">
       <a href="../cats/Semigroupal$$ToSemigroupalOps.html" title="Permalink">
         <i class="material-icons"></i>
@@ -560,7 +616,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="" href="Semigroupal$$ToSemigroupalOps.html"><span class="name">ToSemigroupalOps</span></a><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+        <a title="" href="Semigroupal$$ToSemigroupalOps.html"><span class="name">ToSemigroupalOps</span></a><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
@@ -635,7 +691,8 @@
         <span class="name">apply</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="instance">instance: <a href="Semigroupal.html" class="extype" name="cats.Semigroupal">Semigroupal</a>[<span class="extype" name="cats.Semigroupal.apply.F">F</span>]</span>)</span><span class="result">: <a href="Semigroupal.html" class="extype" name="cats.Semigroupal">Semigroupal</a>[<span class="extype" name="cats.Semigroupal.apply.F">F</span>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+      <p class="shortcomment cmt">Summon an instance of <a href="Semigroupal.html" class="extype" name="cats.Semigroupal">Semigroupal</a> for <code>F</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Summon an instance of <a href="Semigroupal.html" class="extype" name="cats.Semigroupal">Semigroupal</a> for <code>F</code>.
+</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@inline</span><span class="args">()</span>
               
         </dd></dl></div>
@@ -655,6 +712,390 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.Semigroupal#catsSemigroupalForCommutativeSemigroup" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="catsSemigroupalForCommutativeSemigroup:cats.Semigroupal[cats.kernel.CommutativeSemigroup]"></a><a id="catsSemigroupalForCommutativeSemigroup:Semigroupal[CommutativeSemigroup]"></a>
+      <span class="permalink">
+      <a href="../cats/Semigroupal$.html#catsSemigroupalForCommutativeSemigroup:cats.Semigroupal[cats.kernel.CommutativeSemigroup]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsSemigroupalForCommutativeSemigroup</span><span class="result">: <a href="Semigroupal.html" class="extype" name="cats.Semigroupal">Semigroupal</a>[<a href="kernel/CommutativeSemigroup.html" class="extype" name="cats.kernel.CommutativeSemigroup">CommutativeSemigroup</a>]</span>
+      </span>
+      
+      
+    </li><li name="cats.Semigroupal#catsSemigroupalForEither" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="catsSemigroupalForEither[A]:cats.Semigroupal[[β$1$]scala.util.Either[A,β$1$]]"></a><a id="catsSemigroupalForEither[A]:Semigroupal[[β$1$]Either[A,β$1$]]"></a>
+      <span class="permalink">
+      <a href="../cats/Semigroupal$.html#catsSemigroupalForEither[A]:cats.Semigroupal[[β$1$]scala.util.Either[A,β$1$]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsSemigroupalForEither</span><span class="tparams">[<span name="A">A</span>]</span><span class="result">: <a href="Semigroupal.html" class="extype" name="cats.Semigroupal">Semigroupal</a>[[β$1$]<a href="https://www.scala-lang.org/api/2.12.10/scala/util/Either.html#scala.util.Either" class="extype" name="scala.util.Either">Either</a>[<span class="extype" name="cats.Semigroupal.catsSemigroupalForEither.A">A</span>, <span class="extype" name="cats.Semigroupal.&lt;refinement&gt;.Λ$.β$1$">β$1$</span>]]</span>
+      </span>
+      
+      
+    </li><li name="cats.Semigroupal#catsSemigroupalForEq" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="catsSemigroupalForEq:cats.Semigroupal[cats.Eq]"></a><a id="catsSemigroupalForEq:Semigroupal[Eq]"></a>
+      <span class="permalink">
+      <a href="../cats/Semigroupal$.html#catsSemigroupalForEq:cats.Semigroupal[cats.Eq]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsSemigroupalForEq</span><span class="result">: <a href="Semigroupal.html" class="extype" name="cats.Semigroupal">Semigroupal</a>[<a href="index.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>]</span>
+      </span>
+      
+      
+    </li><li name="cats.Semigroupal#catsSemigroupalForEquiv" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="catsSemigroupalForEquiv:cats.Semigroupal[Equiv]"></a><a id="catsSemigroupalForEquiv:Semigroupal[Equiv]"></a>
+      <span class="permalink">
+      <a href="../cats/Semigroupal$.html#catsSemigroupalForEquiv:cats.Semigroupal[Equiv]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsSemigroupalForEquiv</span><span class="result">: <a href="Semigroupal.html" class="extype" name="cats.Semigroupal">Semigroupal</a>[<span class="extype" name="scala.Equiv">Equiv</span>]</span>
+      </span>
+      
+      
+    </li><li name="cats.Semigroupal#catsSemigroupalForFunction0" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="catsSemigroupalForFunction0:cats.Semigroupal[Function0]"></a><a id="catsSemigroupalForFunction0:Semigroupal[Function0]"></a>
+      <span class="permalink">
+      <a href="../cats/Semigroupal$.html#catsSemigroupalForFunction0:cats.Semigroupal[Function0]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsSemigroupalForFunction0</span><span class="result">: <a href="Semigroupal.html" class="extype" name="cats.Semigroupal">Semigroupal</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Function0.html#scala.Function0" class="extype" name="scala.Function0">Function0</a>]</span>
+      </span>
+      
+      
+    </li><li name="cats.Semigroupal#catsSemigroupalForFunction1" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="catsSemigroupalForFunction1[A]:cats.Semigroupal[[β$3$]A=&gt;β$3$]"></a><a id="catsSemigroupalForFunction1[A]:Semigroupal[[β$3$](A)⇒β$3$]"></a>
+      <span class="permalink">
+      <a href="../cats/Semigroupal$.html#catsSemigroupalForFunction1[A]:cats.Semigroupal[[β$3$]A=&gt;β$3$]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsSemigroupalForFunction1</span><span class="tparams">[<span name="A">A</span>]</span><span class="result">: <a href="Semigroupal.html" class="extype" name="cats.Semigroupal">Semigroupal</a>[[β$3$](<span class="extype" name="cats.Semigroupal.catsSemigroupalForFunction1.A">A</span>) ⇒ <span class="extype" name="cats.Semigroupal.&lt;refinement&gt;.Λ$.β$3$">β$3$</span>]</span>
+      </span>
+      
+      
+    </li><li name="cats.Semigroupal#catsSemigroupalForFunction1Contravariant" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="catsSemigroupalForFunction1Contravariant[R](implicitevidence$1:cats.Monoid[R]):cats.Semigroupal[[α$4$]α$4$=&gt;R]"></a><a id="catsSemigroupalForFunction1Contravariant[R](Monoid[R]):Semigroupal[[α$4$](α$4$)⇒R]"></a>
+      <span class="permalink">
+      <a href="../cats/Semigroupal$.html#catsSemigroupalForFunction1Contravariant[R](implicitevidence$1:cats.Monoid[R]):cats.Semigroupal[[α$4$]α$4$=&gt;R]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsSemigroupalForFunction1Contravariant</span><span class="tparams">[<span name="R">R</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="cats.Semigroupal.catsSemigroupalForFunction1Contravariant.R">R</span>]</span>)</span><span class="result">: <a href="Semigroupal.html" class="extype" name="cats.Semigroupal">Semigroupal</a>[[α$4$](<span class="extype" name="cats.Semigroupal.&lt;refinement&gt;.Λ$.α$4$">α$4$</span>) ⇒ <span class="extype" name="cats.Semigroupal.catsSemigroupalForFunction1Contravariant.R">R</span>]</span>
+      </span>
+      
+      
+    </li><li name="cats.Semigroupal#catsSemigroupalForFuture" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="catsSemigroupalForFuture(implicitec:scala.concurrent.ExecutionContext):cats.Semigroupal[scala.concurrent.Future]"></a><a id="catsSemigroupalForFuture(ExecutionContext):Semigroupal[Future]"></a>
+      <span class="permalink">
+      <a href="../cats/Semigroupal$.html#catsSemigroupalForFuture(implicitec:scala.concurrent.ExecutionContext):cats.Semigroupal[scala.concurrent.Future]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsSemigroupalForFuture</span><span class="params">(<span class="implicit">implicit </span><span name="ec">ec: <a href="https://www.scala-lang.org/api/2.12.10/scala/concurrent/ExecutionContext.html#scala.concurrent.ExecutionContext" class="extype" name="scala.concurrent.ExecutionContext">ExecutionContext</a></span>)</span><span class="result">: <a href="Semigroupal.html" class="extype" name="cats.Semigroupal">Semigroupal</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/concurrent/Future.html#scala.concurrent.Future" class="extype" name="scala.concurrent.Future">Future</a>]</span>
+      </span>
+      
+      
+    </li><li name="cats.Semigroupal#catsSemigroupalForList" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="catsSemigroupalForList:cats.Semigroupal[List]"></a><a id="catsSemigroupalForList:Semigroupal[List]"></a>
+      <span class="permalink">
+      <a href="../cats/Semigroupal$.html#catsSemigroupalForList:cats.Semigroupal[List]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsSemigroupalForList</span><span class="result">: <a href="Semigroupal.html" class="extype" name="cats.Semigroupal">Semigroupal</a>[<span class="extype" name="scala.List">List</span>]</span>
+      </span>
+      
+      
+    </li><li name="cats.Semigroupal#catsSemigroupalForMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="catsSemigroupalForMap[K]:cats.Semigroupal[[β$0$]scala.collection.immutable.Map[K,β$0$]]"></a><a id="catsSemigroupalForMap[K]:Semigroupal[[β$0$]Map[K,β$0$]]"></a>
+      <span class="permalink">
+      <a href="../cats/Semigroupal$.html#catsSemigroupalForMap[K]:cats.Semigroupal[[β$0$]scala.collection.immutable.Map[K,β$0$]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsSemigroupalForMap</span><span class="tparams">[<span name="K">K</span>]</span><span class="result">: <a href="Semigroupal.html" class="extype" name="cats.Semigroupal">Semigroupal</a>[[β$0$]<a href="https://www.scala-lang.org/api/2.12.10/scala/collection/immutable/Map.html#scala.collection.immutable.Map" class="extype" name="scala.collection.immutable.Map">Map</a>[<span class="extype" name="cats.Semigroupal.catsSemigroupalForMap.K">K</span>, <span class="extype" name="cats.Semigroupal.&lt;refinement&gt;.Λ$.β$0$">β$0$</span>]]</span>
+      </span>
+      
+      
+    </li><li name="cats.Semigroupal#catsSemigroupalForMonoid" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="catsSemigroupalForMonoid:cats.Semigroupal[cats.Monoid]"></a><a id="catsSemigroupalForMonoid:Semigroupal[Monoid]"></a>
+      <span class="permalink">
+      <a href="../cats/Semigroupal$.html#catsSemigroupalForMonoid:cats.Semigroupal[cats.Monoid]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsSemigroupalForMonoid</span><span class="result">: <a href="Semigroupal.html" class="extype" name="cats.Semigroupal">Semigroupal</a>[<a href="index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>]</span>
+      </span>
+      
+      
+    </li><li name="cats.Semigroupal#catsSemigroupalForOption" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="catsSemigroupalForOption:cats.Semigroupal[Option]"></a><a id="catsSemigroupalForOption:Semigroupal[Option]"></a>
+      <span class="permalink">
+      <a href="../cats/Semigroupal$.html#catsSemigroupalForOption:cats.Semigroupal[Option]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsSemigroupalForOption</span><span class="result">: <a href="Semigroupal.html" class="extype" name="cats.Semigroupal">Semigroupal</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>]</span>
+      </span>
+      
+      
+    </li><li name="cats.Semigroupal#catsSemigroupalForOrder" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="catsSemigroupalForOrder:cats.Semigroupal[cats.Order]"></a><a id="catsSemigroupalForOrder:Semigroupal[Order]"></a>
+      <span class="permalink">
+      <a href="../cats/Semigroupal$.html#catsSemigroupalForOrder:cats.Semigroupal[cats.Order]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsSemigroupalForOrder</span><span class="result">: <a href="Semigroupal.html" class="extype" name="cats.Semigroupal">Semigroupal</a>[<a href="index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>]</span>
+      </span>
+      
+      
+    </li><li name="cats.Semigroupal#catsSemigroupalForOrdering" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="catsSemigroupalForOrdering:cats.Semigroupal[Ordering]"></a><a id="catsSemigroupalForOrdering:Semigroupal[Ordering]"></a>
+      <span class="permalink">
+      <a href="../cats/Semigroupal$.html#catsSemigroupalForOrdering:cats.Semigroupal[Ordering]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsSemigroupalForOrdering</span><span class="result">: <a href="Semigroupal.html" class="extype" name="cats.Semigroupal">Semigroupal</a>[<span class="extype" name="scala.Ordering">Ordering</span>]</span>
+      </span>
+      
+      
+    </li><li name="cats.Semigroupal#catsSemigroupalForPartialOrder" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="catsSemigroupalForPartialOrder:cats.Semigroupal[cats.PartialOrder]"></a><a id="catsSemigroupalForPartialOrder:Semigroupal[PartialOrder]"></a>
+      <span class="permalink">
+      <a href="../cats/Semigroupal$.html#catsSemigroupalForPartialOrder:cats.Semigroupal[cats.PartialOrder]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsSemigroupalForPartialOrder</span><span class="result">: <a href="Semigroupal.html" class="extype" name="cats.Semigroupal">Semigroupal</a>[<a href="index.html#PartialOrder[A]=cats.kernel.PartialOrder[A]" class="extmbr" name="cats.PartialOrder">PartialOrder</a>]</span>
+      </span>
+      
+      
+    </li><li name="cats.Semigroupal#catsSemigroupalForPartialOrdering" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="catsSemigroupalForPartialOrdering:cats.Semigroupal[PartialOrdering]"></a><a id="catsSemigroupalForPartialOrdering:Semigroupal[PartialOrdering]"></a>
+      <span class="permalink">
+      <a href="../cats/Semigroupal$.html#catsSemigroupalForPartialOrdering:cats.Semigroupal[PartialOrdering]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsSemigroupalForPartialOrdering</span><span class="result">: <a href="Semigroupal.html" class="extype" name="cats.Semigroupal">Semigroupal</a>[<span class="extype" name="scala.PartialOrdering">PartialOrdering</span>]</span>
+      </span>
+      
+      
+    </li><li name="cats.Semigroupal#catsSemigroupalForQueue" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="catsSemigroupalForQueue:cats.Semigroupal[scala.collection.immutable.Queue]"></a><a id="catsSemigroupalForQueue:Semigroupal[Queue]"></a>
+      <span class="permalink">
+      <a href="../cats/Semigroupal$.html#catsSemigroupalForQueue:cats.Semigroupal[scala.collection.immutable.Queue]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsSemigroupalForQueue</span><span class="result">: <a href="Semigroupal.html" class="extype" name="cats.Semigroupal">Semigroupal</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/collection/immutable/Queue.html#scala.collection.immutable.Queue" class="extype" name="scala.collection.immutable.Queue">Queue</a>]</span>
+      </span>
+      
+      
+    </li><li name="cats.Semigroupal#catsSemigroupalForSemigroup" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="catsSemigroupalForSemigroup:cats.Semigroupal[cats.Semigroup]"></a><a id="catsSemigroupalForSemigroup:Semigroupal[Semigroup]"></a>
+      <span class="permalink">
+      <a href="../cats/Semigroupal$.html#catsSemigroupalForSemigroup:cats.Semigroupal[cats.Semigroup]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsSemigroupalForSemigroup</span><span class="result">: <a href="Semigroupal.html" class="extype" name="cats.Semigroupal">Semigroupal</a>[<a href="index.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>]</span>
+      </span>
+      
+      
+    </li><li name="cats.Semigroupal#catsSemigroupalForSeq" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="catsSemigroupalForSeq:cats.Semigroupal[scala.collection.immutable.Seq]"></a><a id="catsSemigroupalForSeq:Semigroupal[Seq]"></a>
+      <span class="permalink">
+      <a href="../cats/Semigroupal$.html#catsSemigroupalForSeq:cats.Semigroupal[scala.collection.immutable.Seq]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsSemigroupalForSeq</span><span class="result">: <a href="Semigroupal.html" class="extype" name="cats.Semigroupal">Semigroupal</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/collection/immutable/Seq.html#scala.collection.immutable.Seq" class="extype" name="scala.collection.immutable.Seq">Seq</a>]</span>
+      </span>
+      
+      
+    </li><li name="cats.Semigroupal#catsSemigroupalForSortedMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="catsSemigroupalForSortedMap[K]:cats.Semigroupal[[β$2$]scala.collection.immutable.SortedMap[K,β$2$]]"></a><a id="catsSemigroupalForSortedMap[K]:Semigroupal[[β$2$]SortedMap[K,β$2$]]"></a>
+      <span class="permalink">
+      <a href="../cats/Semigroupal$.html#catsSemigroupalForSortedMap[K]:cats.Semigroupal[[β$2$]scala.collection.immutable.SortedMap[K,β$2$]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsSemigroupalForSortedMap</span><span class="tparams">[<span name="K">K</span>]</span><span class="result">: <a href="Semigroupal.html" class="extype" name="cats.Semigroupal">Semigroupal</a>[[β$2$]<a href="https://www.scala-lang.org/api/2.12.10/scala/collection/immutable/SortedMap.html#scala.collection.immutable.SortedMap" class="extype" name="scala.collection.immutable.SortedMap">SortedMap</a>[<span class="extype" name="cats.Semigroupal.catsSemigroupalForSortedMap.K">K</span>, <span class="extype" name="cats.Semigroupal.&lt;refinement&gt;.Λ$.β$2$">β$2$</span>]]</span>
+      </span>
+      
+      
+    </li><li name="cats.Semigroupal#catsSemigroupalForSortedSet" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="catsSemigroupalForSortedSet:cats.Semigroupal[scala.collection.immutable.SortedSet]"></a><a id="catsSemigroupalForSortedSet:Semigroupal[SortedSet]"></a>
+      <span class="permalink">
+      <a href="../cats/Semigroupal$.html#catsSemigroupalForSortedSet:cats.Semigroupal[scala.collection.immutable.SortedSet]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsSemigroupalForSortedSet</span><span class="result">: <a href="Semigroupal.html" class="extype" name="cats.Semigroupal">Semigroupal</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/collection/immutable/SortedSet.html#scala.collection.immutable.SortedSet" class="extype" name="scala.collection.immutable.SortedSet">SortedSet</a>]</span>
+      </span>
+      
+      
+    </li><li name="cats.ScalaVersionSpecificSemigroupalInstances#catsSemigroupalForStream" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsSemigroupalForStream:cats.Semigroupal[Stream]"></a><a id="catsSemigroupalForStream:Semigroupal[Stream]"></a>
+      <span class="permalink">
+      <a href="../cats/Semigroupal$.html#catsSemigroupalForStream:cats.Semigroupal[Stream]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsSemigroupalForStream</span><span class="result">: <a href="Semigroupal.html" class="extype" name="cats.Semigroupal">Semigroupal</a>[<span class="extype" name="scala.Stream">Stream</span>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ScalaVersionSpecificSemigroupalInstances</dd></dl></div>
+    </li><li name="cats.Semigroupal#catsSemigroupalForTry" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="catsSemigroupalForTry:cats.Semigroupal[scala.util.Try]"></a><a id="catsSemigroupalForTry:Semigroupal[Try]"></a>
+      <span class="permalink">
+      <a href="../cats/Semigroupal$.html#catsSemigroupalForTry:cats.Semigroupal[scala.util.Try]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsSemigroupalForTry</span><span class="result">: <a href="Semigroupal.html" class="extype" name="cats.Semigroupal">Semigroupal</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/util/Try.html#scala.util.Try" class="extype" name="scala.util.Try">Try</a>]</span>
+      </span>
+      
+      
+    </li><li name="cats.Semigroupal#catsSemigroupalForVector" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="catsSemigroupalForVector:cats.Semigroupal[Vector]"></a><a id="catsSemigroupalForVector:Semigroupal[Vector]"></a>
+      <span class="permalink">
+      <a href="../cats/Semigroupal$.html#catsSemigroupalForVector:cats.Semigroupal[Vector]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsSemigroupalForVector</span><span class="result">: <a href="Semigroupal.html" class="extype" name="cats.Semigroupal">Semigroupal</a>[<span class="extype" name="scala.Vector">Vector</span>]</span>
+      </span>
+      
+      
     </li><li name="scala.AnyRef#clone" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a><a id="clone():AnyRef"></a>
       <span class="permalink">
@@ -677,6 +1118,8 @@
     </span>)</span>
               
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="cats.SemigroupalArityFunctions#contramap10" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="ContramapArity">
@@ -1047,28 +1490,6 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="finalize():Unit"></a>
-      <span class="permalink">
-      <a href="../cats/Semigroupal$.html#finalize():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="symbol">classOf[java.lang.Throwable]</span>
-    </span>)</span>
-              
-        </dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
@@ -1086,6 +1507,8 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -1105,6 +1528,8 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="cats.SemigroupalArityFunctions#imap10" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="ImapArity">
@@ -1829,6 +2254,8 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
@@ -1847,6 +2274,8 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -2554,28 +2983,6 @@
       
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="SemigroupalArityFunctions.html" class="extype" name="cats.SemigroupalArityFunctions">SemigroupalArityFunctions</a></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait():Unit"></a>
-      <span class="permalink">
-      <a href="../cats/Semigroupal$.html#wait():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
-    </span>)</span>
-              
-        </dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <span class="permalink">
       <a href="../cats/Semigroupal$.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
@@ -2621,7 +3028,63 @@
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="cats.Semigroupal.nonInheritedOps" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <span class="permalink">
+      <a href="../cats/Semigroupal$.html#wait():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li>
+              </ol>
+            </div>
+
+        
+
+        <div class="values members">
+              <h3>Deprecated Value Members</h3>
+              <ol><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <span class="permalink">
+      <a href="../cats/Semigroupal$.html#finalize():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version ) see corresponding Javadoc for more information.">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+                <span class="name">@Deprecated</span>
+              
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version )</i> see corresponding Javadoc for more information.</p></dd></dl></div>
+    </li><li name="cats.Semigroupal.nonInheritedOps" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="nonInheritedOps"></a><a id="nonInheritedOps:nonInheritedOps"></a>
       <span class="permalink">
       <a href="../cats/Semigroupal$$nonInheritedOps$.html" title="Permalink">
@@ -2633,11 +3096,14 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a title="" href="Semigroupal$$nonInheritedOps$.html"><span class="name">nonInheritedOps</span></a><span class="result"> extends <a href="Semigroupal$$ToSemigroupalOps.html" class="extype" name="cats.Semigroupal.ToSemigroupalOps">ToSemigroupalOps</a></span>
+        <a title="" href="Semigroupal$$nonInheritedOps$.html"><span class="name deprecated" title="Deprecated: (Since version 2.2.0) Use cats.syntax object imports">nonInheritedOps</span></a><span class="result"> extends <a href="Semigroupal$$ToSemigroupalOps.html" class="extype" name="cats.Semigroupal.ToSemigroupalOps">ToSemigroupalOps</a></span>
       </span>
       
-      
-    </li><li name="cats.Semigroupal.ops" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2.2.0)</i> Use cats.syntax object imports</p></dd></dl></div>
+    </li><li name="cats.Semigroupal.ops" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ops"></a><a id="ops:ops"></a>
       <span class="permalink">
       <a href="../cats/Semigroupal$$ops$.html" title="Permalink">
@@ -2649,17 +3115,15 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a title="" href="Semigroupal$$ops$.html"><span class="name">ops</span></a>
+        <a title="" href="Semigroupal$$ops$.html"><span class="name deprecated" title="Deprecated: (Since version 2.2.0) Use cats.syntax object imports">ops</span></a>
       </span>
       
-      
-    </li>
-              </ol>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2.2.0)</i> Use cats.syntax object imports</p></dd></dl></div>
+    </li></ol>
             </div>
-
-        
-
-        
         </div>
 
         <div id="inheritedMembers">
@@ -2669,6 +3133,8 @@
               <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
             </div><div class="parent" name="cats.SemigroupalArityFunctions">
               <h3>Inherited from <a href="SemigroupalArityFunctions.html" class="extype" name="cats.SemigroupalArityFunctions">SemigroupalArityFunctions</a></h3>
+            </div><div class="parent" name="cats.ScalaVersionSpecificSemigroupalInstances">
+              <h3>Inherited from <span class="extype" name="cats.ScalaVersionSpecificSemigroupalInstances">ScalaVersionSpecificSemigroupalInstances</span></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">

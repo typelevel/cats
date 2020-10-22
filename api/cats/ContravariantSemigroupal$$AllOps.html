@@ -81,10 +81,32 @@
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <a title="Symbolic aliases for various types are defined here." href="index.html"><span class="name">cats</span></a>
+        <a title="The cats root package contains all the trait signatures of most Scala type classes." href="index.html"><span class="name">cats</span></a>
       </span>
       
-      <p class="shortcomment cmt">Symbolic aliases for various types are defined here.</p><div class="fullcomment"><div class="comment cmt"><p>Symbolic aliases for various types are defined here.
+      <p class="shortcomment cmt">The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><p>Cats type classes are implemented using the approach from the
+ <a href="https://ropas.snu.ac.kr/~bruno/papers/TypeClasses.pdf" target="_blank">Type classes as objects and implicits</a> article.</p><p>For each type class, <code>cats</code> provides three pieces:
+- Its <b>signature</b>: a trait that is polymorphic on a type parameter.
+  Type class traits inherit from other type classes to indicate that any implementation of the lower type class (e.g. <code>Applicative</code>)
+  can also serve as an instance for the higuer type class (e.g. <code>Functor</code>).
+- Type class <b>'instances</b>, which are classes and objects that implement one or more type class signatures for some specific types.
+  Type class instances for several data types from the Java or Scala standard libraries are declared in the subpackage <code>cats.instances</code>.
+- <b>Syntax extensions</b>, each of which provides the methods of the type class defines as extension methods
+  (which in Scala 2 are encoded as implicit classes) for values of any type <code>F</code>; given that an instance of the type class
+  for the receiver type (<code>this</code>) is in the implicit scope.
+  Symtax extensions are declared in the <code>cats.syntax</code> package.
+- A set of <b>laws</b>, that are also generic on the type of the class, and are only defined on the operations of the type class.
+  The purpose of these laws is to declare some algebraic relations (equations) between Scala expressions involving the operations
+  of the type class, and test (but not verify) that implemented instances satisfy those equations.
+  Laws are defined in the <code>cats-laws</code> package.</p><p>Although most of cats type classes are declared in this package, some are declared in other packages:
+- type classes that operate on base types (kind <code>*</code>), and their implementations for standard library types,
+  are contained in <code>cats.kernel</code>, which is a different SBT project. However, they are re-exported from this package.
+- type classes of kind <code>F[_, _]</code>, such as <a href="arrow/Profunctor.html" class="extype" name="cats.arrow.Profunctor">cats.arrow.Profunctor</a>&quot; or <a href="arrow/Arrow.html" class="extype" name="cats.arrow.Arrow">cats.arrow.Arrow</a>, which are relevant for
+  Functional Reactive Programming or optics, are declared in the <code>cats.arrow</code> package.
+- Also, those type classes that abstract over (pure or impure) functional runtime effects are declared
+  in the <a href="https://typelevel.org/cats-effect/" target="_blank">cats-effect library</a>.
+- Some type classes for which no laws can be provided are left out of the main road, in a small and dirty alley.
+  These are the <code>alleycats</code>.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="_root_">root</a></dd></dl></div>
     </li><li name="cats.ContravariantSemigroupal" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ContravariantSemigroupal"></a><a id="ContravariantSemigroupal:ContravariantSemigroupal"></a>
@@ -154,13 +176,23 @@
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="Contravariant$$AllOps.html" class="extype" name="cats.Contravariant.AllOps">Contravariant.AllOps</a>[<span class="extype" name="cats.ContravariantSemigroupal.AllOps.F">F</span>, <span class="extype" name="cats.ContravariantSemigroupal.AllOps.A">A</span>], <a href="Contravariant$$Ops.html" class="extype" name="cats.Contravariant.Ops">Contravariant.Ops</a>[<span class="extype" name="cats.ContravariantSemigroupal.AllOps.F">F</span>, <span class="extype" name="cats.ContravariantSemigroupal.AllOps.A">A</span>], <a href="InvariantSemigroupal$$AllOps.html" class="extype" name="cats.InvariantSemigroupal.AllOps">InvariantSemigroupal.AllOps</a>[<span class="extype" name="cats.ContravariantSemigroupal.AllOps.F">F</span>, <span class="extype" name="cats.ContravariantSemigroupal.AllOps.A">A</span>], <a href="Invariant$$AllOps.html" class="extype" name="cats.Invariant.AllOps">Invariant.AllOps</a>[<span class="extype" name="cats.ContravariantSemigroupal.AllOps.F">F</span>, <span class="extype" name="cats.ContravariantSemigroupal.AllOps.A">A</span>], <a href="Invariant$$Ops.html" class="extype" name="cats.Invariant.Ops">Invariant.Ops</a>[<span class="extype" name="cats.ContravariantSemigroupal.AllOps.F">F</span>, <span class="extype" name="cats.ContravariantSemigroupal.AllOps.A">A</span>], <a href="Semigroupal$$AllOps.html" class="extype" name="cats.Semigroupal.AllOps">Semigroupal.AllOps</a>[<span class="extype" name="cats.ContravariantSemigroupal.AllOps.F">F</span>, <span class="extype" name="cats.ContravariantSemigroupal.AllOps.A">A</span>], <a href="Semigroupal$$Ops.html" class="extype" name="cats.Semigroupal.Ops">Semigroupal.Ops</a>[<span class="extype" name="cats.ContravariantSemigroupal.AllOps.F">F</span>, <span class="extype" name="cats.ContravariantSemigroupal.AllOps.A">A</span>], <a href="InvariantSemigroupal$$Ops.html" class="extype" name="cats.InvariantSemigroupal.Ops">InvariantSemigroupal.Ops</a>[<span class="extype" name="cats.ContravariantSemigroupal.AllOps.F">F</span>, <span class="extype" name="cats.ContravariantSemigroupal.AllOps.A">A</span>], <a href="ContravariantSemigroupal$$Ops.html" class="extype" name="cats.ContravariantSemigroupal.Ops">Ops</a>[<span class="extype" name="cats.ContravariantSemigroupal.AllOps.F">F</span>, <span class="extype" name="cats.ContravariantSemigroupal.AllOps.A">A</span>], <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="Contravariant$$AllOps.html" class="extype" name="cats.Contravariant.AllOps">Contravariant.AllOps</a>[<span class="extype" name="cats.ContravariantSemigroupal.AllOps.F">F</span>, <span class="extype" name="cats.ContravariantSemigroupal.AllOps.A">A</span>], <a href="Contravariant$$Ops.html" class="extype" name="cats.Contravariant.Ops">Contravariant.Ops</a>[<span class="extype" name="cats.ContravariantSemigroupal.AllOps.F">F</span>, <span class="extype" name="cats.ContravariantSemigroupal.AllOps.A">A</span>], <a href="InvariantSemigroupal$$AllOps.html" class="extype" name="cats.InvariantSemigroupal.AllOps">InvariantSemigroupal.AllOps</a>[<span class="extype" name="cats.ContravariantSemigroupal.AllOps.F">F</span>, <span class="extype" name="cats.ContravariantSemigroupal.AllOps.A">A</span>], <a href="Invariant$$AllOps.html" class="extype" name="cats.Invariant.AllOps">Invariant.AllOps</a>[<span class="extype" name="cats.ContravariantSemigroupal.AllOps.F">F</span>, <span class="extype" name="cats.ContravariantSemigroupal.AllOps.A">A</span>], <a href="Invariant$$Ops.html" class="extype" name="cats.Invariant.Ops">Invariant.Ops</a>[<span class="extype" name="cats.ContravariantSemigroupal.AllOps.F">F</span>, <span class="extype" name="cats.ContravariantSemigroupal.AllOps.A">A</span>], <a href="Semigroupal$$AllOps.html" class="extype" name="cats.Semigroupal.AllOps">Semigroupal.AllOps</a>[<span class="extype" name="cats.ContravariantSemigroupal.AllOps.F">F</span>, <span class="extype" name="cats.ContravariantSemigroupal.AllOps.A">A</span>], <a href="Semigroupal$$Ops.html" class="extype" name="cats.Semigroupal.Ops">Semigroupal.Ops</a>[<span class="extype" name="cats.ContravariantSemigroupal.AllOps.F">F</span>, <span class="extype" name="cats.ContravariantSemigroupal.AllOps.A">A</span>], <a href="InvariantSemigroupal$$Ops.html" class="extype" name="cats.InvariantSemigroupal.Ops">InvariantSemigroupal.Ops</a>[<span class="extype" name="cats.ContravariantSemigroupal.AllOps.F">F</span>, <span class="extype" name="cats.ContravariantSemigroupal.AllOps.A">A</span>], <a href="ContravariantSemigroupal$$Ops.html" class="extype" name="cats.ContravariantSemigroupal.Ops">Ops</a>[<span class="extype" name="cats.ContravariantSemigroupal.AllOps.F">F</span>, <span class="extype" name="cats.ContravariantSemigroupal.AllOps.A">A</span>], <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
         </div><div class="toggleContainer block">
             <span class="toggle">
               Known Subclasses
             </span>
             <div class="subClasses hiddenContent"><a href="ContravariantMonoidal$$AllOps.html" class="extype" name="cats.ContravariantMonoidal.AllOps">AllOps</a></div>
-          </div></div>
+          </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
+                <span class="toggle diagram-link">
+                  Type Hierarchy
+                </span>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph1" viewBox="0.00 0.00 489.00 155.00" height="155pt" width="489pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 151)" class="graph" id="page0,1_graph0"><polygon points="-4,4 -4,-151 485,-151 485,4 -4,4" stroke="transparent" fill="white"></polygon><g class="cluster" id="clust1"></g><g class="cluster" id="clust2"></g><!-- node0 --><g class="node this trait" id="graph1_0"><g id="a_this trait|graph1_0"><a xlink:title="cats.ContravariantSemigroupal.AllOps (this trait)" xlink:href="#inheritance-diagram"><path d="M244.17,-86C244.17,-86 160.83,-86 160.83,-86 156.67,-86 152.5,-81.83 152.5,-77.67 152.5,-77.67 152.5,-69.33 152.5,-69.33 152.5,-65.17 156.67,-61 160.83,-61 160.83,-61 244.17,-61 244.17,-61 248.33,-61 252.5,-65.17 252.5,-69.33 252.5,-69.33 252.5,-77.67 252.5,-77.67 252.5,-81.83 248.33,-86 244.17,-86" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-80.5" x="162.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-71.1" x="183.5" text-anchor="start">AllOps[F, A]</text></a></g></g><!-- node1 --><g class="node trait" id="graph1_1"><g id="a_trait|graph1_1"><a xlink:title="cats.ContravariantMonoidal.AllOps" xlink:href="ContravariantMonoidal$$AllOps.html#inheritance-diagram"><path d="M293.67,-25C293.67,-25 111.33,-25 111.33,-25 107.17,-25 103,-20.83 103,-16.67 103,-16.67 103,-8.33 103,-8.33 103,-4.17 107.17,0 111.33,0 111.33,0 293.67,0 293.67,0 297.83,0 302,-4.17 302,-8.33 302,-8.33 302,-16.67 302,-16.67 302,-20.83 297.83,-25 293.67,-25" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-19.5" x="113.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="134.5" text-anchor="start">ContravariantMonoidal.AllOps[F, A]</text></a></g></g><!-- node0&#45;&gt;node1 --><g class="edge inheritance" id="graph1_0_1"><g id="a_inheritance|graph1_0_1"><a xlink:title="ContravariantMonoidal.AllOps[F, A] is a subtype of AllOps[F, A]"><path d="M202.5,-53.76C202.5,-44.37 202.5,-33.29 202.5,-25.13" stroke="#d4d4d4" fill="none"></path><polygon points="200.05,-53.84 202.5,-60.84 204.95,-53.84 200.05,-53.84" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node2 --><g class="node trait" id="graph1_2"><g id="a_trait|graph1_2"><a xlink:title="cats.ContravariantSemigroupal.Ops" xlink:href="ContravariantSemigroupal$$Ops.html#inheritance-diagram"><path d="M78.67,-147C78.67,-147 8.33,-147 8.33,-147 4.17,-147 0,-142.83 0,-138.67 0,-138.67 0,-130.33 0,-130.33 0,-126.17 4.17,-122 8.33,-122 8.33,-122 78.67,-122 78.67,-122 82.83,-122 87,-126.17 87,-130.33 87,-130.33 87,-138.67 87,-138.67 87,-142.83 82.83,-147 78.67,-147" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-141.5" x="10.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="31.5" text-anchor="start">Ops[F, A]</text></a></g></g><!-- node2&#45;&gt;node0 --><g class="edge inheritance" id="graph1_2_0"><g id="a_inheritance|graph1_2_0"><a xlink:title="AllOps[F, A] is a subtype of Ops[F, A]"><path d="M81.3,-119.47C108.76,-109.28 145.47,-95.66 171.27,-86.09" stroke="#d4d4d4" fill="none"></path><polygon points="80.24,-117.25 74.53,-121.98 81.95,-121.85 80.24,-117.25" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node3 --><g class="node trait" id="graph1_3"><g id="a_trait|graph1_3"><a xlink:title="cats.InvariantSemigroupal.AllOps" xlink:href="InvariantSemigroupal$$AllOps.html#inheritance-diagram"><path d="M291.67,-147C291.67,-147 113.33,-147 113.33,-147 109.17,-147 105,-142.83 105,-138.67 105,-138.67 105,-130.33 105,-130.33 105,-126.17 109.17,-122 113.33,-122 113.33,-122 291.67,-122 291.67,-122 295.83,-122 300,-126.17 300,-130.33 300,-130.33 300,-138.67 300,-138.67 300,-142.83 295.83,-147 291.67,-147" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-141.5" x="115.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="136.5" text-anchor="start">InvariantSemigroupal.AllOps[F, A]</text></a></g></g><!-- node3&#45;&gt;node0 --><g class="edge inheritance" id="graph1_3_0"><g id="a_inheritance|graph1_3_0"><a xlink:title="AllOps[F, A] is a subtype of InvariantSemigroupal.AllOps[F, A]"><path d="M202.5,-114.76C202.5,-105.37 202.5,-94.29 202.5,-86.13" stroke="#d4d4d4" fill="none"></path><polygon points="200.05,-114.84 202.5,-121.84 204.95,-114.84 200.05,-114.84" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node4 --><g class="node trait" id="graph1_4"><g id="a_trait|graph1_4"><a xlink:title="cats.Contravariant.AllOps" xlink:href="Contravariant$$AllOps.html#inheritance-diagram"><path d="M472.67,-147C472.67,-147 326.33,-147 326.33,-147 322.17,-147 318,-142.83 318,-138.67 318,-138.67 318,-130.33 318,-130.33 318,-126.17 322.17,-122 326.33,-122 326.33,-122 472.67,-122 472.67,-122 476.83,-122 481,-126.17 481,-130.33 481,-130.33 481,-138.67 481,-138.67 481,-142.83 476.83,-147 472.67,-147" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-141.5" x="328.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="349.5" text-anchor="start">Contravariant.AllOps[F, A]</text></a></g></g><!-- node4&#45;&gt;node0 --><g class="edge inheritance" id="graph1_4_0"><g id="a_inheritance|graph1_4_0"><a xlink:title="AllOps[F, A] is a subtype of Contravariant.AllOps[F, A]"><path d="M353.95,-119.86C319.8,-109.63 273.56,-95.78 241.19,-86.09" stroke="#d4d4d4" fill="none"></path><polygon points="353.64,-122.32 361.05,-121.98 355.05,-117.63 353.64,-122.32" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
+                <div id="diagram-controls" class="hiddenContent">
+                  <button id="diagram-zoom-out" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button id="diagram-zoom-in" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button title="Toggle full-screen" id="diagram-fs" class="diagram-btn to-full"><i class="material-icons"></i></button>
+                </div>
+              </div></div>
         
 
       <div id="mbrsel">
@@ -185,7 +217,7 @@
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="cats.ContravariantSemigroupal.AllOps"><span>AllOps</span></li><li class="in" name="cats.Contravariant.AllOps"><span>AllOps</span></li><li class="in" name="cats.Contravariant.Ops"><span>Ops</span></li><li class="in" name="cats.InvariantSemigroupal.AllOps"><span>AllOps</span></li><li class="in" name="cats.Invariant.AllOps"><span>AllOps</span></li><li class="in" name="cats.Invariant.Ops"><span>Ops</span></li><li class="in" name="cats.Semigroupal.AllOps"><span>AllOps</span></li><li class="in" name="cats.Semigroupal.Ops"><span>Ops</span></li><li class="in" name="cats.InvariantSemigroupal.Ops"><span>Ops</span></li><li class="in" name="cats.ContravariantSemigroupal.Ops"><span>Ops</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="cats.ContravariantSemigroupal.AllOps"><span>AllOps</span></li><li class="in" name="cats.Contravariant.AllOps"><span>AllOps</span></li><li class="in" name="cats.Contravariant.Ops"><span>Ops</span></li><li class="in" name="cats.InvariantSemigroupal.AllOps"><span>AllOps</span></li><li class="in" name="cats.Invariant.AllOps"><span>AllOps</span></li><li class="in" name="cats.Invariant.Ops"><span>Ops</span></li><li class="in" name="cats.Semigroupal.AllOps"><span>AllOps</span></li><li class="in" name="cats.Semigroupal.Ops"><span>Ops</span></li><li class="in" name="cats.InvariantSemigroupal.Ops"><span>Ops</span></li><li class="in" name="cats.ContravariantSemigroupal.Ops"><span>Ops</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -222,7 +254,7 @@
         <span class="name">TypeClassType</span><span class="result"> &lt;: <a href="ContravariantSemigroupal.html" class="extype" name="cats.ContravariantSemigroupal">ContravariantSemigroupal</a>[<span class="extype" name="cats.ContravariantSemigroupal.AllOps.F">F</span>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.ContravariantSemigroupal.AllOps">AllOps</a> → <a href="Contravariant$$AllOps.html" class="extype" name="cats.Contravariant.AllOps">AllOps</a> → <a href="Contravariant$$Ops.html" class="extype" name="cats.Contravariant.Ops">Ops</a> → <a href="InvariantSemigroupal$$AllOps.html" class="extype" name="cats.InvariantSemigroupal.AllOps">AllOps</a> → <a href="Invariant$$AllOps.html" class="extype" name="cats.Invariant.AllOps">AllOps</a> → <a href="Invariant$$Ops.html" class="extype" name="cats.Invariant.Ops">Ops</a> → <a href="Semigroupal$$AllOps.html" class="extype" name="cats.Semigroupal.AllOps">AllOps</a> → <a href="Semigroupal$$Ops.html" class="extype" name="cats.Semigroupal.Ops">Ops</a> → <a href="InvariantSemigroupal$$Ops.html" class="extype" name="cats.InvariantSemigroupal.Ops">Ops</a> → <a href="ContravariantSemigroupal$$Ops.html" class="extype" name="cats.ContravariantSemigroupal.Ops">Ops</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.ContravariantSemigroupal.AllOps">AllOps</a> → <a href="Contravariant$$AllOps.html" class="extype" name="cats.Contravariant.AllOps">AllOps</a> → <a href="Contravariant$$Ops.html" class="extype" name="cats.Contravariant.Ops">Ops</a> → <a href="InvariantSemigroupal$$AllOps.html" class="extype" name="cats.InvariantSemigroupal.AllOps">AllOps</a> → <a href="Invariant$$Ops.html" class="extype" name="cats.Invariant.Ops">Ops</a> → <a href="Semigroupal$$Ops.html" class="extype" name="cats.Semigroupal.Ops">Ops</a> → <a href="InvariantSemigroupal$$Ops.html" class="extype" name="cats.InvariantSemigroupal.Ops">Ops</a> → <a href="ContravariantSemigroupal$$Ops.html" class="extype" name="cats.ContravariantSemigroupal.Ops">Ops</a></dd></dl></div>
     </li></ol>
             </div>
 
@@ -244,10 +276,10 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Contravariant$$Ops.html" class="extype" name="cats.Contravariant.Ops">Ops</a></dd></dl></div>
-    </li><li name="cats.ContravariantSemigroupal.AllOps#typeClassInstance" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="typeClassInstance:AllOps.this.TypeClassType"></a><a id="typeClassInstance:TypeClassType"></a>
+    </li><li name="cats.Contravariant.Ops#typeClassInstance" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="typeClassInstance:Ops.this.TypeClassType"></a><a id="typeClassInstance:TypeClassType"></a>
       <span class="permalink">
-      <a href="../cats/ContravariantSemigroupal$$AllOps.html#typeClassInstance:AllOps.this.TypeClassType" title="Permalink">
+      <a href="../cats/ContravariantSemigroupal$$AllOps.html#typeClassInstance:Ops.this.TypeClassType" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -259,7 +291,7 @@
         <span class="name">typeClassInstance</span><span class="result">: <a href="#TypeClassType&lt;:cats.ContravariantSemigroupal[F]" class="extmbr" name="cats.ContravariantSemigroupal.AllOps.TypeClassType">TypeClassType</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.ContravariantSemigroupal.AllOps">AllOps</a> → <a href="Contravariant$$AllOps.html" class="extype" name="cats.Contravariant.AllOps">AllOps</a> → <a href="Contravariant$$Ops.html" class="extype" name="cats.Contravariant.Ops">Ops</a> → <a href="InvariantSemigroupal$$AllOps.html" class="extype" name="cats.InvariantSemigroupal.AllOps">AllOps</a> → <a href="Invariant$$AllOps.html" class="extype" name="cats.Invariant.AllOps">AllOps</a> → <a href="Invariant$$Ops.html" class="extype" name="cats.Invariant.Ops">Ops</a> → <a href="Semigroupal$$AllOps.html" class="extype" name="cats.Semigroupal.AllOps">AllOps</a> → <a href="Semigroupal$$Ops.html" class="extype" name="cats.Semigroupal.Ops">Ops</a> → <a href="InvariantSemigroupal$$Ops.html" class="extype" name="cats.InvariantSemigroupal.Ops">Ops</a> → <a href="ContravariantSemigroupal$$Ops.html" class="extype" name="cats.ContravariantSemigroupal.Ops">Ops</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Contravariant$$Ops.html" class="extype" name="cats.Contravariant.Ops">Ops</a></dd></dl></div>
     </li></ol>
             </div>
 
@@ -353,6 +385,8 @@
               
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="cats.Contravariant.Ops#contramap" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="contramap[B](f:B=&gt;A):F[B]"></a><a id="contramap[B]((B)⇒A):F[B]"></a>
@@ -402,28 +436,6 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="finalize():Unit"></a>
-      <span class="permalink">
-      <a href="../cats/ContravariantSemigroupal$$AllOps.html#finalize():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="symbol">classOf[java.lang.Throwable]</span>
-    </span>)</span>
-              
-        </dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
@@ -441,6 +453,8 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -460,6 +474,8 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="cats.Invariant.Ops#imap" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -544,6 +560,8 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
@@ -562,6 +580,8 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="cats.Semigroupal.Ops#product" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -613,28 +633,6 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait():Unit"></a>
-      <span class="permalink">
-      <a href="../cats/ContravariantSemigroupal$$AllOps.html#wait():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
-    </span>)</span>
-              
-        </dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <span class="permalink">
       <a href="../cats/ContravariantSemigroupal$$AllOps.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
@@ -680,13 +678,64 @@
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <span class="permalink">
+      <a href="../cats/ContravariantSemigroupal$$AllOps.html#wait():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
     </li>
               </ol>
             </div>
 
         
 
-        
+        <div class="values members">
+              <h3>Deprecated Value Members</h3>
+              <ol><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <span class="permalink">
+      <a href="../cats/ContravariantSemigroupal$$AllOps.html#finalize():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version ) see corresponding Javadoc for more information.">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+                <span class="name">@Deprecated</span>
+              
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version )</i> see corresponding Javadoc for more information.</p></dd></dl></div>
+    </li></ol>
+            </div>
         </div>
 
         <div id="inheritedMembers">
@@ -708,6 +757,10 @@
               <h3>Inherited from <a href="InvariantSemigroupal$$Ops.html" class="extype" name="cats.InvariantSemigroupal.Ops">InvariantSemigroupal.Ops</a>[<span class="extype" name="cats.ContravariantSemigroupal.AllOps.F">F</span>, <span class="extype" name="cats.ContravariantSemigroupal.AllOps.A">A</span>]</h3>
             </div><div class="parent" name="cats.ContravariantSemigroupal.Ops">
               <h3>Inherited from <a href="ContravariantSemigroupal$$Ops.html" class="extype" name="cats.ContravariantSemigroupal.Ops">Ops</a>[<span class="extype" name="cats.ContravariantSemigroupal.AllOps.F">F</span>, <span class="extype" name="cats.ContravariantSemigroupal.AllOps.A">A</span>]</h3>
+            </div><div class="parent" name="scala.Serializable">
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">

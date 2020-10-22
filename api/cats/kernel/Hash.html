@@ -81,10 +81,32 @@
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <a title="Symbolic aliases for various types are defined here." href="../index.html"><span class="name">cats</span></a>
+        <a title="The cats root package contains all the trait signatures of most Scala type classes." href="../index.html"><span class="name">cats</span></a>
       </span>
       
-      <p class="shortcomment cmt">Symbolic aliases for various types are defined here.</p><div class="fullcomment"><div class="comment cmt"><p>Symbolic aliases for various types are defined here.
+      <p class="shortcomment cmt">The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><p>Cats type classes are implemented using the approach from the
+ <a href="https://ropas.snu.ac.kr/~bruno/papers/TypeClasses.pdf" target="_blank">Type classes as objects and implicits</a> article.</p><p>For each type class, <code>cats</code> provides three pieces:
+- Its <b>signature</b>: a trait that is polymorphic on a type parameter.
+  Type class traits inherit from other type classes to indicate that any implementation of the lower type class (e.g. <code>Applicative</code>)
+  can also serve as an instance for the higuer type class (e.g. <code>Functor</code>).
+- Type class <b>'instances</b>, which are classes and objects that implement one or more type class signatures for some specific types.
+  Type class instances for several data types from the Java or Scala standard libraries are declared in the subpackage <code>cats.instances</code>.
+- <b>Syntax extensions</b>, each of which provides the methods of the type class defines as extension methods
+  (which in Scala 2 are encoded as implicit classes) for values of any type <code>F</code>; given that an instance of the type class
+  for the receiver type (<code>this</code>) is in the implicit scope.
+  Symtax extensions are declared in the <code>cats.syntax</code> package.
+- A set of <b>laws</b>, that are also generic on the type of the class, and are only defined on the operations of the type class.
+  The purpose of these laws is to declare some algebraic relations (equations) between Scala expressions involving the operations
+  of the type class, and test (but not verify) that implemented instances satisfy those equations.
+  Laws are defined in the <code>cats-laws</code> package.</p><p>Although most of cats type classes are declared in this package, some are declared in other packages:
+- type classes that operate on base types (kind <code>*</code>), and their implementations for standard library types,
+  are contained in <code>cats.kernel</code>, which is a different SBT project. However, they are re-exported from this package.
+- type classes of kind <code>F[_, _]</code>, such as <a href="../arrow/Profunctor.html" class="extype" name="cats.arrow.Profunctor">cats.arrow.Profunctor</a>&quot; or <a href="../arrow/Arrow.html" class="extype" name="cats.arrow.Arrow">cats.arrow.Arrow</a>, which are relevant for
+  Functional Reactive Programming or optics, are declared in the <code>cats.arrow</code> package.
+- Also, those type classes that abstract over (pure or impure) functional runtime effects are declared
+  in the <a href="https://typelevel.org/cats-effect/" target="_blank">cats-effect library</a>.
+- Some type classes for which no laws can be provided are left out of the main road, in a small and dirty alley.
+  These are the <code>alleycats</code>.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
     </li><li name="cats.kernel" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="kernel"></a><a id="kernel:kernel"></a>
@@ -122,6 +144,10 @@
                         <a class="object" href="Band$.html" title=""></a>
                         <a class="trait" href="Band.html" title="Bands are semigroups whose operation (i.e."></a>
                         <a href="Band.html" title="Bands are semigroups whose operation (i.e.">Band</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="BoundedEnumerable$.html" title=""></a>
+                        <a class="trait" href="BoundedEnumerable.html" title=""></a>
+                        <a href="BoundedEnumerable.html" title="">BoundedEnumerable</a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="BoundedSemilattice$.html" title=""></a>
                         <a class="trait" href="BoundedSemilattice.html" title=""></a>
@@ -180,6 +206,10 @@
                         <a href="LowerBounded.html" title="A type class used to name the lower limit of a type.">LowerBounded</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
+                        <a class="trait" href="LowerBoundedEnumerable.html" title=""></a>
+                        <a href="LowerBoundedEnumerable.html" title="">LowerBoundedEnumerable</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
                         <a class="trait" href="LowerBoundedFunctions.html" title=""></a>
                         <a href="LowerBoundedFunctions.html" title="">LowerBoundedFunctions</a>
                       </li><li class="current-entities indented2">
@@ -190,6 +220,10 @@
                         <span class="separator"></span>
                         <a class="class" href="MonoidFunctions.html" title=""></a>
                         <a href="MonoidFunctions.html" title="">MonoidFunctions</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="Next.html" title="A typeclass with an operation which returns a member which is always greater than the one supplied."></a>
+                        <a href="Next.html" title="A typeclass with an operation which returns a member which is always greater than the one supplied.">Next</a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="Order$.html" title=""></a>
                         <a class="trait" href="Order.html" title="The Order type class is used to define a total ordering on some type A."></a>
@@ -203,6 +237,14 @@
                         <a class="trait" href="OrderToOrderingConversion.html" title=""></a>
                         <a href="OrderToOrderingConversion.html" title="">OrderToOrderingConversion</a>
                       </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="PartialNext.html" title="A typeclass with an operation which returns a member which is greater or None than the one supplied."></a>
+                        <a href="PartialNext.html" title="A typeclass with an operation which returns a member which is greater or None than the one supplied.">PartialNext</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="PartialNextLowerBounded.html" title=""></a>
+                        <a href="PartialNextLowerBounded.html" title="">PartialNextLowerBounded</a>
+                      </li><li class="current-entities indented2">
                         <a class="object" href="PartialOrder$.html" title=""></a>
                         <a class="trait" href="PartialOrder.html" title="The PartialOrder type class is used to define a partial ordering on some type A."></a>
                         <a href="PartialOrder.html" title="The PartialOrder type class is used to define a partial ordering on some type A.">PartialOrder</a>
@@ -214,6 +256,18 @@
                         <span class="separator"></span>
                         <a class="trait" href="PartialOrderToPartialOrderingConversion.html" title=""></a>
                         <a href="PartialOrderToPartialOrderingConversion.html" title="">PartialOrderToPartialOrderingConversion</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="PartialPrevious.html" title="A typeclass with an operation which returns a member which is smaller or None than the one supplied."></a>
+                        <a href="PartialPrevious.html" title="A typeclass with an operation which returns a member which is smaller or None than the one supplied.">PartialPrevious</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="PartialPreviousUpperBounded.html" title=""></a>
+                        <a href="PartialPreviousUpperBounded.html" title="">PartialPreviousUpperBounded</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="Previous.html" title="A typeclass with an operation which returns a member which is always smaller than the one supplied."></a>
+                        <a href="Previous.html" title="A typeclass with an operation which returns a member which is always smaller than the one supplied.">Previous</a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="Semigroup$.html" title=""></a>
                         <a class="trait" href="Semigroup.html" title="A semigroup is any set A with an associative operation (combine)."></a>
@@ -231,9 +285,17 @@
                         <a class="class" href="SemilatticeFunctions.html" title=""></a>
                         <a href="SemilatticeFunctions.html" title="">SemilatticeFunctions</a>
                       </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="UnboundedEnumerable.html" title="A typeclass which has both previous and next operations such that next . previous == identity."></a>
+                        <a href="UnboundedEnumerable.html" title="A typeclass which has both previous and next operations such that next . previous == identity.">UnboundedEnumerable</a>
+                      </li><li class="current-entities indented2">
                         <a class="object" href="UpperBounded$.html" title=""></a>
                         <a class="trait" href="UpperBounded.html" title="A type class used to name the upper limit of a type."></a>
                         <a href="UpperBounded.html" title="A type class used to name the upper limit of a type.">UpperBounded</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="UpperBoundedEnumerable.html" title=""></a>
+                        <a href="UpperBoundedEnumerable.html" title="">UpperBoundedEnumerable</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="trait" href="UpperBoundedFunctions.html" title=""></a>
@@ -279,8 +341,18 @@ equivalence relation defined by this object, <code>hash(x)</code> should equal <
             <span class="toggle">
               Known Subclasses
             </span>
-            <div class="subClasses hiddenContent"><a href="instances/BigDecimalOrder.html" class="extype" name="cats.kernel.instances.BigDecimalOrder">BigDecimalOrder</a>, <a href="instances/BigIntOrder.html" class="extype" name="cats.kernel.instances.BigIntOrder">BigIntOrder</a>, <a href="instances/BitSetPartialOrder.html" class="extype" name="cats.kernel.instances.BitSetPartialOrder">BitSetPartialOrder</a>, <a href="instances/BooleanOrder.html" class="extype" name="cats.kernel.instances.BooleanOrder">BooleanOrder</a>, <a href="instances/ByteOrder.html" class="extype" name="cats.kernel.instances.ByteOrder">ByteOrder</a>, <a href="instances/CharOrder.html" class="extype" name="cats.kernel.instances.CharOrder">CharOrder</a>, <a href="instances/DoubleOrder.html" class="extype" name="cats.kernel.instances.DoubleOrder">DoubleOrder</a>, <a href="instances/DurationOrder.html" class="extype" name="cats.kernel.instances.DurationOrder">DurationOrder</a>, <a href="instances/EitherHash.html" class="extype" name="cats.kernel.instances.EitherHash">EitherHash</a>, <a href="instances/FiniteDurationOrder.html" class="extype" name="cats.kernel.instances.FiniteDurationOrder">FiniteDurationOrder</a>, <a href="instances/FloatOrder.html" class="extype" name="cats.kernel.instances.FloatOrder">FloatOrder</a>, <a href="instances/IntOrder.html" class="extype" name="cats.kernel.instances.IntOrder">IntOrder</a>, <a href="instances/ListHash.html" class="extype" name="cats.kernel.instances.ListHash">ListHash</a>, <a href="instances/LongOrder.html" class="extype" name="cats.kernel.instances.LongOrder">LongOrder</a>, <a href="instances/MapHash.html" class="extype" name="cats.kernel.instances.MapHash">MapHash</a>, <a href="instances/OptionHash.html" class="extype" name="cats.kernel.instances.OptionHash">OptionHash</a>, <a href="instances/QueueHash.html" class="extype" name="cats.kernel.instances.QueueHash">QueueHash</a>, <a href="instances/SetHash.html" class="extype" name="cats.kernel.instances.SetHash">SetHash</a>, <a href="instances/ShortOrder.html" class="extype" name="cats.kernel.instances.ShortOrder">ShortOrder</a>, <a href="instances/SortedMapHash.html" class="extype" name="cats.kernel.instances.SortedMapHash">SortedMapHash</a>, <a href="instances/SortedSetHash.html" class="extype" name="cats.kernel.instances.SortedSetHash">SortedSetHash</a>, <a href="instances/StreamHash.html" class="extype" name="cats.kernel.instances.StreamHash">StreamHash</a>, <a href="instances/StringOrder.html" class="extype" name="cats.kernel.instances.StringOrder">StringOrder</a>, <a href="instances/SymbolOrder.html" class="extype" name="cats.kernel.instances.SymbolOrder">SymbolOrder</a>, <a href="instances/UnitOrder.html" class="extype" name="cats.kernel.instances.UnitOrder">UnitOrder</a>, <a href="instances/VectorHash.html" class="extype" name="cats.kernel.instances.VectorHash">VectorHash</a>, <a href="../instances/SortedMapHash.html" class="extype" name="cats.instances.SortedMapHash">SortedMapHash</a>, <a href="../instances/SortedSetHash.html" class="extype" name="cats.instances.SortedSetHash">SortedSetHash</a></div>
-          </div></div>
+            <div class="subClasses hiddenContent"><a href="instances/BigDecimalOrder.html" class="extype" name="cats.kernel.instances.BigDecimalOrder">BigDecimalOrder</a>, <a href="instances/BigIntOrder.html" class="extype" name="cats.kernel.instances.BigIntOrder">BigIntOrder</a>, <a href="instances/BitSetPartialOrder.html" class="extype" name="cats.kernel.instances.BitSetPartialOrder">BitSetPartialOrder</a>, <a href="instances/BooleanOrder.html" class="extype" name="cats.kernel.instances.BooleanOrder">BooleanOrder</a>, <a href="instances/ByteOrder.html" class="extype" name="cats.kernel.instances.ByteOrder">ByteOrder</a>, <a href="instances/CharOrder.html" class="extype" name="cats.kernel.instances.CharOrder">CharOrder</a>, <a href="instances/DoubleOrder.html" class="extype" name="cats.kernel.instances.DoubleOrder">DoubleOrder</a>, <a href="instances/DurationOrder.html" class="extype" name="cats.kernel.instances.DurationOrder">DurationOrder</a>, <a href="instances/EitherHash.html" class="extype" name="cats.kernel.instances.EitherHash">EitherHash</a>, <a href="instances/FiniteDurationOrder.html" class="extype" name="cats.kernel.instances.FiniteDurationOrder">FiniteDurationOrder</a>, <a href="instances/FloatOrder.html" class="extype" name="cats.kernel.instances.FloatOrder">FloatOrder</a>, <a href="instances/IntOrder.html" class="extype" name="cats.kernel.instances.IntOrder">IntOrder</a>, <a href="instances/ListHash.html" class="extype" name="cats.kernel.instances.ListHash">ListHash</a>, <a href="instances/LongOrder.html" class="extype" name="cats.kernel.instances.LongOrder">LongOrder</a>, <a href="instances/MapHash.html" class="extype" name="cats.kernel.instances.MapHash">MapHash</a>, <a href="instances/OptionHash.html" class="extype" name="cats.kernel.instances.OptionHash">OptionHash</a>, <a href="instances/QueueHash.html" class="extype" name="cats.kernel.instances.QueueHash">QueueHash</a>, <a href="instances/SeqHash.html" class="extype" name="cats.kernel.instances.SeqHash">SeqHash</a>, <a href="instances/SetHash.html" class="extype" name="cats.kernel.instances.SetHash">SetHash</a>, <a href="instances/ShortOrder.html" class="extype" name="cats.kernel.instances.ShortOrder">ShortOrder</a>, <a href="instances/SortedMapHash.html" class="extype" name="cats.kernel.instances.SortedMapHash">SortedMapHash</a>, <a href="instances/SortedSetHash.html" class="extype" name="cats.kernel.instances.SortedSetHash">SortedSetHash</a>, <a href="instances/StreamHash.html" class="extype" name="cats.kernel.instances.StreamHash">StreamHash</a>, <a href="instances/StringOrder.html" class="extype" name="cats.kernel.instances.StringOrder">StringOrder</a>, <a href="instances/SymbolOrder.html" class="extype" name="cats.kernel.instances.SymbolOrder">SymbolOrder</a>, <a href="instances/UnitOrder.html" class="extype" name="cats.kernel.instances.UnitOrder">UnitOrder</a>, <a href="instances/VectorHash.html" class="extype" name="cats.kernel.instances.VectorHash">VectorHash</a>, <a href="../instances/SortedMapHash.html" class="extype" name="cats.instances.SortedMapHash">SortedMapHash</a>, <a href="../instances/SortedSetHash.html" class="extype" name="cats.instances.SortedSetHash">SortedSetHash</a></div>
+          </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
+                <span class="toggle diagram-link">
+                  Type Hierarchy
+                </span>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph1" viewBox="0.00 0.00 195.50 153.00" height="153pt" width="196pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 149)" class="graph" id="page0,1_graph0"><polygon points="-4,4 -4,-149 191.5,-149 191.5,4 -4,4" stroke="transparent" fill="white"></polygon><g class="cluster" id="clust1"></g><g class="cluster" id="clust2"></g><!-- node0 --><g class="node this trait" id="graph1_0"><g id="a_this trait|graph1_0"><a xlink:title="cats.kernel.Hash (this trait)" xlink:href="#inheritance-diagram"><path d="M116.17,-84C116.17,-84 54.83,-84 54.83,-84 50.67,-84 46.5,-79.83 46.5,-75.67 46.5,-75.67 46.5,-67.33 46.5,-67.33 46.5,-63.17 50.67,-59 54.83,-59 54.83,-59 116.17,-59 116.17,-59 120.33,-59 124.5,-63.17 124.5,-67.33 124.5,-67.33 124.5,-75.67 124.5,-75.67 124.5,-79.83 120.33,-84 116.17,-84" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-78.5" x="56.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-69.1" x="77.5" text-anchor="start">Hash[A]</text></a></g></g><!-- node1 --><g class="node default" id="graph1_1"><g id="a_default|graph1_1"><a xlink:title="BigDecimalOrder, BigIntOrder, BitSetPartialOrder, BooleanOrder, ByteOrder, CharOrder, DoubleOrder, DurationOrder, EitherHash[A, B], FiniteDurationOrder, FloatOrder, IntOrder, ListHash[A], LongOrder, MapHash[K, V], OptionHash[A], QueueHash[A], SeqHash[A], SetHash[A], ShortOrder, SortedMapHash[K, V], SortedMapHash[K, V], SortedSetHash[A], StreamHash[A], StringOrder, SymbolOrder, UnitOrder, VectorHash[A]"><path d="M127.33,-23C127.33,-23 43.67,-23 43.67,-23 39.83,-23 36,-19.17 36,-15.33 36,-15.33 36,-7.67 36,-7.67 36,-3.83 39.83,0 43.67,0 43.67,0 127.33,0 127.33,0 131.17,0 135,-3.83 135,-7.67 135,-7.67 135,-15.33 135,-15.33 135,-19.17 131.17,-23 127.33,-23" stroke="#ababab" fill="#e1e1e1"></path><text fill="#7d7d7d" font-size="8.00" font-family="Source Code Pro" y="-9.1" x="47.5" text-anchor="start">28 classes/traits</text></a></g></g><!-- node0&#45;&gt;node1 --><g class="edge inheritance" id="graph1_0_1"><g id="a_inheritance|graph1_0_1"><a xlink:title="28 classes/traits are subtypes of Hash[A]"><path d="M85.5,-51.61C85.5,-42.13 85.5,-31.01 85.5,-23.05" stroke="#d4d4d4" fill="none"></path><polygon points="83.05,-51.76 85.5,-58.76 87.95,-51.76 83.05,-51.76" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node2 --><g class="node trait" id="graph1_2"><g id="a_trait|graph1_2"><a xlink:title="cats.kernel.Eq" xlink:href="Eq.html#inheritance-diagram"><path d="M60.67,-145C60.67,-145 8.33,-145 8.33,-145 4.17,-145 0,-140.83 0,-136.67 0,-136.67 0,-128.33 0,-128.33 0,-124.17 4.17,-120 8.33,-120 8.33,-120 60.67,-120 60.67,-120 64.83,-120 69,-124.17 69,-128.33 69,-128.33 69,-136.67 69,-136.67 69,-140.83 64.83,-145 60.67,-145" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-139.5" x="10.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-130.1" x="31.5" text-anchor="start">Eq[A]</text></a></g></g><!-- node2&#45;&gt;node0 --><g class="edge inheritance" id="graph1_2_0"><g id="a_inheritance|graph1_2_0"><a xlink:title="Hash[A] is a subtype of Eq[A]"><path d="M49.27,-114.42C57.67,-104.69 67.98,-92.77 75.44,-84.13" stroke="#d4d4d4" fill="none"></path><polygon points="47.3,-112.95 44.58,-119.84 51.01,-116.15 47.3,-112.95" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node3 --><g class="node trait" id="graph1_3"><g id="a_trait|graph1_3"><a xlink:title="scala.Serializable"><path d="M179.17,-145C179.17,-145 95.83,-145 95.83,-145 91.67,-145 87.5,-140.83 87.5,-136.67 87.5,-136.67 87.5,-128.33 87.5,-128.33 87.5,-124.17 91.67,-120 95.83,-120 95.83,-120 179.17,-120 179.17,-120 183.33,-120 187.5,-124.17 187.5,-128.33 187.5,-128.33 187.5,-136.67 187.5,-136.67 187.5,-140.83 183.33,-145 179.17,-145" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-139.5" x="97.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-130.1" x="118.5" text-anchor="start">Serializable</text></a></g></g><!-- node3&#45;&gt;node0 --><g class="edge inheritance" id="graph1_3_0"><g id="a_inheritance|graph1_3_0"><a xlink:title="Hash[A] is a subtype of Serializable"><path d="M122.44,-114.42C113.87,-104.69 103.37,-92.77 95.75,-84.13" stroke="#d4d4d4" fill="none"></path><polygon points="120.76,-116.21 127.23,-119.84 124.44,-112.97 120.76,-116.21" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
+                <div id="diagram-controls" class="hiddenContent">
+                  <button id="diagram-zoom-out" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button id="diagram-zoom-in" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button title="Toggle full-screen" id="diagram-fs" class="diagram-btn to-full"><i class="material-icons"></i></button>
+                </div>
+              </div></div>
         
 
       <div id="mbrsel">

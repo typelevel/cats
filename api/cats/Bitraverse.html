@@ -81,10 +81,32 @@
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <a title="Symbolic aliases for various types are defined here." href="index.html"><span class="name">cats</span></a>
+        <a title="The cats root package contains all the trait signatures of most Scala type classes." href="index.html"><span class="name">cats</span></a>
       </span>
       
-      <p class="shortcomment cmt">Symbolic aliases for various types are defined here.</p><div class="fullcomment"><div class="comment cmt"><p>Symbolic aliases for various types are defined here.
+      <p class="shortcomment cmt">The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><p>Cats type classes are implemented using the approach from the
+ <a href="https://ropas.snu.ac.kr/~bruno/papers/TypeClasses.pdf" target="_blank">Type classes as objects and implicits</a> article.</p><p>For each type class, <code>cats</code> provides three pieces:
+- Its <b>signature</b>: a trait that is polymorphic on a type parameter.
+  Type class traits inherit from other type classes to indicate that any implementation of the lower type class (e.g. <code>Applicative</code>)
+  can also serve as an instance for the higuer type class (e.g. <code>Functor</code>).
+- Type class <b>'instances</b>, which are classes and objects that implement one or more type class signatures for some specific types.
+  Type class instances for several data types from the Java or Scala standard libraries are declared in the subpackage <code>cats.instances</code>.
+- <b>Syntax extensions</b>, each of which provides the methods of the type class defines as extension methods
+  (which in Scala 2 are encoded as implicit classes) for values of any type <code>F</code>; given that an instance of the type class
+  for the receiver type (<code>this</code>) is in the implicit scope.
+  Symtax extensions are declared in the <code>cats.syntax</code> package.
+- A set of <b>laws</b>, that are also generic on the type of the class, and are only defined on the operations of the type class.
+  The purpose of these laws is to declare some algebraic relations (equations) between Scala expressions involving the operations
+  of the type class, and test (but not verify) that implemented instances satisfy those equations.
+  Laws are defined in the <code>cats-laws</code> package.</p><p>Although most of cats type classes are declared in this package, some are declared in other packages:
+- type classes that operate on base types (kind <code>*</code>), and their implementations for standard library types,
+  are contained in <code>cats.kernel</code>, which is a different SBT project. However, they are re-exported from this package.
+- type classes of kind <code>F[_, _]</code>, such as <a href="arrow/Profunctor.html" class="extype" name="cats.arrow.Profunctor">cats.arrow.Profunctor</a>&quot; or <a href="arrow/Arrow.html" class="extype" name="cats.arrow.Arrow">cats.arrow.Arrow</a>, which are relevant for
+  Functional Reactive Programming or optics, are declared in the <code>cats.arrow</code> package.
+- Also, those type classes that abstract over (pure or impure) functional runtime effects are declared
+  in the <a href="https://typelevel.org/cats-effect/" target="_blank">cats-effect library</a>.
+- Some type classes for which no laws can be provided are left out of the main road, in a small and dirty alley.
+  These are the <code>alleycats</code>.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="_root_">root</a></dd></dl></div>
     </li><li name="cats.arrow" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="arrow"></a><a id="arrow:arrow"></a>
@@ -99,6 +121,22 @@
       </span>
       <span class="symbol">
         <a title="" href="arrow/index.html"><span class="name">arrow</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="cats">cats</a></dd></dl></div>
+    </li><li name="cats.conversions" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="conversions"></a><a id="conversions:conversions"></a>
+      <span class="permalink">
+      <a href="../cats/conversions/index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="conversions/index.html"><span class="name">conversions</span></a>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="cats">cats</a></dd></dl></div>
@@ -319,6 +357,10 @@
                         <a class="trait" href="FunctorFilter.html" title="FunctorFilter[F] allows you to map and filter out elements simultaneously."></a>
                         <a href="FunctorFilter.html" title="FunctorFilter[F] allows you to map and filter out elements simultaneously.">FunctorFilter</a>
                       </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="trait" href="FunctorFilterInstances0.html" title=""></a>
+                        <a href="FunctorFilterInstances0.html" title="">FunctorFilterInstances0</a>
+                      </li><li class="current-entities indented1">
                         <a class="object" href="Inject$.html" title=""></a>
                         <a class="class" href="Inject.html" title="Inject is a type class providing an injection from type A into type B."></a>
                         <a href="Inject.html" title="Inject is a type class providing an injection from type A into type B.">Inject</a>
@@ -399,6 +441,10 @@
                         <a class="trait" href="SemigroupK.html" title="SemigroupK is a universal semigroup which operates on kinds."></a>
                         <a href="SemigroupK.html" title="SemigroupK is a universal semigroup which operates on kinds.">SemigroupK</a>
                       </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="trait" href="SemigroupKInstances0.html" title=""></a>
+                        <a href="SemigroupKInstances0.html" title="">SemigroupKInstances0</a>
+                      </li><li class="current-entities indented1">
                         <a class="object" href="Semigroupal$.html" title=""></a>
                         <a class="trait" href="Semigroupal.html" title="Semigroupal captures the idea of composing independent effectful values."></a>
                         <a href="Semigroupal.html" title="Semigroupal captures the idea of composing independent effectful values.">Semigroupal</a>
@@ -459,16 +505,24 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">Bitraverse</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Bifoldable.html" class="extype" name="cats.Bifoldable">Bifoldable</a>[<span class="extype" name="cats.Bitraverse.F">F</span>] with <a href="Bifunctor.html" class="extype" name="cats.Bifunctor">Bifunctor</a>[<span class="extype" name="cats.Bitraverse.F">F</span>] with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <span class="name">Bitraverse</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Bifoldable.html" class="extype" name="cats.Bifoldable">Bifoldable</a>[<span class="extype" name="cats.Bitraverse.F">F</span>] with <a href="Bifunctor.html" class="extype" name="cats.Bifunctor">Bifunctor</a>[<span class="extype" name="cats.Bitraverse.F">F</span>]</span>
       </span>
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p> A type class abstracting over types that give rise to two independent <a href="Traverse.html" class="extype" name="cats.Traverse">cats.Traverse</a>s.
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A type class abstracting over types that give rise to two independent <a href="Traverse.html" class="extype" name="cats.Traverse">cats.Traverse</a>s.
 </p></div><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="cats.Bitraverse">Bitraverse</a>[<span class="extype" name="cats.Bitraverse.F">F</span>]</dd><dt>Annotations</dt><dd>
                 <span class="name">@implicitNotFound</span><span class="args">(<span>
       
       <span class="defval" name="&quot;Could not find an instance of Bitraverse for ${F}&quot;">...</span>
+    </span>)</span>
+              
+                <span class="name">@typeclass</span><span class="args">(<span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$1">...</span>
+    </span>, <span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$2">...</span>
     </span>)</span>
               
         </dd><dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/Bitraverse.scala" target="_blank">Bitraverse.scala</a></dd></dl><div class="toggleContainer block">
@@ -481,7 +535,17 @@
               Known Subclasses
             </span>
             <div class="subClasses hiddenContent"><a href="data/BinestedBitraverse.html" class="extype" name="cats.data.BinestedBitraverse">BinestedBitraverse</a></div>
-          </div></div>
+          </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
+                <span class="toggle diagram-link">
+                  Type Hierarchy
+                </span>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph1" viewBox="0.00 0.00 231.50 155.00" height="155pt" width="232pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 151)" class="graph" id="page0,1_graph0"><polygon points="-4,4 -4,-151 227.5,-151 227.5,4 -4,4" stroke="transparent" fill="white"></polygon><g class="cluster" id="clust1"></g><g class="cluster" id="clust2"></g><!-- node0 --><g class="node this trait" id="graph1_0"><g id="a_this trait|graph1_0"><a xlink:title="cats.Bitraverse (this trait)" xlink:href="#inheritance-diagram"><path d="M156.67,-86C156.67,-86 68.33,-86 68.33,-86 64.17,-86 60,-81.83 60,-77.67 60,-77.67 60,-69.33 60,-69.33 60,-65.17 64.17,-61 68.33,-61 68.33,-61 156.67,-61 156.67,-61 160.83,-61 165,-65.17 165,-69.33 165,-69.33 165,-77.67 165,-77.67 165,-81.83 160.83,-86 156.67,-86" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-80.5" x="70.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-71.1" x="91.5" text-anchor="start">Bitraverse[F]</text></a></g></g><!-- node1 --><g class="node class" id="graph1_1"><g id="a_class|graph1_1"><a xlink:title="cats.data.BinestedBitraverse" xlink:href="data/BinestedBitraverse.html#inheritance-diagram"><path d="M188.17,-25C188.17,-25 36.83,-25 36.83,-25 32.67,-25 28.5,-20.83 28.5,-16.67 28.5,-16.67 28.5,-8.33 28.5,-8.33 28.5,-4.17 32.67,0 36.83,0 36.83,0 188.17,0 188.17,0 192.33,0 196.5,-4.17 196.5,-8.33 196.5,-8.33 196.5,-16.67 196.5,-16.67 196.5,-20.83 192.33,-25 188.17,-25" stroke="#418565" fill="#418565"></path><image xlink:href="../lib/class_diagram.png" y="-19.5" x="38.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="59.5" text-anchor="start">BinestedBitraverse[F, G, H]</text></a></g></g><!-- node0&#45;&gt;node1 --><g class="edge inheritance" id="graph1_0_1"><g id="a_inheritance|graph1_0_1"><a xlink:title="BinestedBitraverse[F, G, H] is a subtype of Bitraverse[F]"><path d="M112.5,-53.76C112.5,-44.37 112.5,-33.29 112.5,-25.13" stroke="#d4d4d4" fill="none"></path><polygon points="110.05,-53.84 112.5,-60.84 114.95,-53.84 110.05,-53.84" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node2 --><g class="node trait" id="graph1_2"><g id="a_trait|graph1_2"><a xlink:title="cats.Bifoldable" xlink:href="Bifoldable.html#inheritance-diagram"><path d="M96.67,-147C96.67,-147 8.33,-147 8.33,-147 4.17,-147 0,-142.83 0,-138.67 0,-138.67 0,-130.33 0,-130.33 0,-126.17 4.17,-122 8.33,-122 8.33,-122 96.67,-122 96.67,-122 100.83,-122 105,-126.17 105,-130.33 105,-130.33 105,-138.67 105,-138.67 105,-142.83 100.83,-147 96.67,-147" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-141.5" x="10.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="31.5" text-anchor="start">Bifoldable[F]</text></a></g></g><!-- node2&#45;&gt;node0 --><g class="edge inheritance" id="graph1_2_0"><g id="a_inheritance|graph1_2_0"><a xlink:title="Bitraverse[F] is a subtype of Bifoldable[F]"><path d="M69.6,-116.69C79.53,-106.92 91.8,-94.85 100.67,-86.13" stroke="#d4d4d4" fill="none"></path><polygon points="67.63,-115.19 64.35,-121.84 71.06,-118.68 67.63,-115.19" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node3 --><g class="node trait" id="graph1_3"><g id="a_trait|graph1_3"><a xlink:title="cats.Bifunctor" xlink:href="Bifunctor.html#inheritance-diagram"><path d="M215.17,-147C215.17,-147 131.83,-147 131.83,-147 127.67,-147 123.5,-142.83 123.5,-138.67 123.5,-138.67 123.5,-130.33 123.5,-130.33 123.5,-126.17 127.67,-122 131.83,-122 131.83,-122 215.17,-122 215.17,-122 219.33,-122 223.5,-126.17 223.5,-130.33 223.5,-130.33 223.5,-138.67 223.5,-138.67 223.5,-142.83 219.33,-147 215.17,-147" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-141.5" x="133.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="154.5" text-anchor="start">Bifunctor[F]</text></a></g></g><!-- node3&#45;&gt;node0 --><g class="edge inheritance" id="graph1_3_0"><g id="a_inheritance|graph1_3_0"><a xlink:title="Bitraverse[F] is a subtype of Bifunctor[F]"><path d="M156.4,-116.96C146.25,-107.14 133.63,-94.93 124.53,-86.13" stroke="#d4d4d4" fill="none"></path><polygon points="154.71,-118.74 161.45,-121.84 158.12,-115.22 154.71,-118.74" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
+                <div id="diagram-controls" class="hiddenContent">
+                  <button id="diagram-zoom-out" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button id="diagram-zoom-in" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button title="Toggle full-screen" id="diagram-fs" class="diagram-btn to-full"><i class="material-icons"></i></button>
+                </div>
+              </div></div>
         
 
       <div id="mbrsel">
@@ -545,7 +609,9 @@
         <span class="name">bifoldLeft</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="fab">fab: <span class="extype" name="cats.Bitraverse.F">F</span>[<span class="extype" name="cats.Bifoldable.bifoldLeft.A">A</span>, <span class="extype" name="cats.Bifoldable.bifoldLeft.B">B</span>]</span>, <span name="c">c: <span class="extype" name="cats.Bifoldable.bifoldLeft.C">C</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Bifoldable.bifoldLeft.C">C</span>, <span class="extype" name="cats.Bifoldable.bifoldLeft.A">A</span>) ⇒ <span class="extype" name="cats.Bifoldable.bifoldLeft.C">C</span></span>, <span name="g">g: (<span class="extype" name="cats.Bifoldable.bifoldLeft.C">C</span>, <span class="extype" name="cats.Bifoldable.bifoldLeft.B">B</span>) ⇒ <span class="extype" name="cats.Bifoldable.bifoldLeft.C">C</span></span>)</span><span class="result">: <span class="extype" name="cats.Bifoldable.bifoldLeft.C">C</span></span>
       </span>
       
-      <p class="shortcomment cmt">Collapse the structure with a left-associative function</p><div class="fullcomment"><div class="comment cmt"><p>Collapse the structure with a left-associative function</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Bifoldable.html" class="extype" name="cats.Bifoldable">Bifoldable</a></dd></dl></div>
+      <p class="shortcomment cmt">Collapse the structure with a left-associative function
+</p><div class="fullcomment"><div class="comment cmt"><p>Collapse the structure with a left-associative function
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Bifoldable.html" class="extype" name="cats.Bifoldable">Bifoldable</a></dd></dl></div>
     </li><li name="cats.Bifoldable#bifoldRight" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="bifoldRight[A,B,C](fab:F[A,B],c:cats.Eval[C])(f:(A,cats.Eval[C])=&gt;cats.Eval[C],g:(B,cats.Eval[C])=&gt;cats.Eval[C]):cats.Eval[C]"></a><a id="bifoldRight[A,B,C](F[A,B],Eval[C])((A,Eval[C])⇒Eval[C],(B,Eval[C])⇒Eval[C]):Eval[C]"></a>
       <span class="permalink">
@@ -561,7 +627,9 @@
         <span class="name">bifoldRight</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="fab">fab: <span class="extype" name="cats.Bitraverse.F">F</span>[<span class="extype" name="cats.Bifoldable.bifoldRight.A">A</span>, <span class="extype" name="cats.Bifoldable.bifoldRight.B">B</span>]</span>, <span name="c">c: <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.Bifoldable.bifoldRight.C">C</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Bifoldable.bifoldRight.A">A</span>, <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.Bifoldable.bifoldRight.C">C</span>]) ⇒ <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.Bifoldable.bifoldRight.C">C</span>]</span>, <span name="g">g: (<span class="extype" name="cats.Bifoldable.bifoldRight.B">B</span>, <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.Bifoldable.bifoldRight.C">C</span>]) ⇒ <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.Bifoldable.bifoldRight.C">C</span>]</span>)</span><span class="result">: <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.Bifoldable.bifoldRight.C">C</span>]</span>
       </span>
       
-      <p class="shortcomment cmt">Collapse the structure with a right-associative function</p><div class="fullcomment"><div class="comment cmt"><p>Collapse the structure with a right-associative function</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Bifoldable.html" class="extype" name="cats.Bifoldable">Bifoldable</a></dd></dl></div>
+      <p class="shortcomment cmt">Collapse the structure with a right-associative function
+</p><div class="fullcomment"><div class="comment cmt"><p>Collapse the structure with a right-associative function
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Bifoldable.html" class="extype" name="cats.Bifoldable">Bifoldable</a></dd></dl></div>
     </li><li name="cats.Bitraverse#bitraverse" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="bitraverse[G[_],A,B,C,D](fab:F[A,B])(f:A=&gt;G[C],g:B=&gt;G[D])(implicitevidence$1:cats.Applicative[G]):G[F[C,D]]"></a><a id="bitraverse[G[_],A,B,C,D](F[A,B])((A)⇒G[C],(B)⇒G[D])(Applicative[G]):G[F[C,D]]"></a>
       <span class="permalink">
@@ -687,7 +755,9 @@ res1: <span class="std">Option</span>[(<span class="std">Int</span>, <span class
         <span class="name">bifoldMap</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="fab">fab: <span class="extype" name="cats.Bitraverse.F">F</span>[<span class="extype" name="cats.Bifoldable.bifoldMap.A">A</span>, <span class="extype" name="cats.Bifoldable.bifoldMap.B">B</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Bifoldable.bifoldMap.A">A</span>) ⇒ <span class="extype" name="cats.Bifoldable.bifoldMap.C">C</span></span>, <span name="g">g: (<span class="extype" name="cats.Bifoldable.bifoldMap.B">B</span>) ⇒ <span class="extype" name="cats.Bifoldable.bifoldMap.C">C</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="C">C: <a href="index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="cats.Bifoldable.bifoldMap.C">C</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Bifoldable.bifoldMap.C">C</span></span>
       </span>
       
-      <p class="shortcomment cmt">Collapse the structure by mapping each element to an element of a type that has a <a href="index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">cats.Monoid</a></p><div class="fullcomment"><div class="comment cmt"><p>Collapse the structure by mapping each element to an element of a type that has a <a href="index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">cats.Monoid</a></p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Bifoldable.html" class="extype" name="cats.Bifoldable">Bifoldable</a></dd></dl></div>
+      <p class="shortcomment cmt">Collapse the structure by mapping each element to an element of a type that has a <a href="index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">cats.Monoid</a>
+</p><div class="fullcomment"><div class="comment cmt"><p>Collapse the structure by mapping each element to an element of a type that has a <a href="index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">cats.Monoid</a>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Bifoldable.html" class="extype" name="cats.Bifoldable">Bifoldable</a></dd></dl></div>
     </li><li name="cats.Bitraverse#bimap" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="bimap[A,B,C,D](fab:F[A,B])(f:A=&gt;C,g:B=&gt;D):F[C,D]"></a><a id="bimap[A,B,C,D](F[A,B])((A)⇒C,(B)⇒D):F[C,D]"></a>
       <span class="permalink">
@@ -765,6 +835,8 @@ res3: <span class="std">Option</span>[Either[<span class="std">String</span>, <s
               
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="cats.Bitraverse#compose" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="compose[G[_,_]](implicitev:cats.Bitraverse[G]):cats.Bitraverse[[α,β]F[G[α,β],G[α,β]]]"></a><a id="compose[G[_,_]](Bitraverse[G]):Bitraverse[[α,β]F[G[α,β],G[α,β]]]"></a>
@@ -781,7 +853,8 @@ res3: <span class="std">Option</span>[Either[<span class="std">String</span>, <s
         <span class="name">compose</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="" class="extype" name="cats.Bitraverse">Bitraverse</a>[<span class="extype" name="cats.Bitraverse.compose.G">G</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.Bitraverse">Bitraverse</a>[[α, β]<span class="extype" name="cats.Bitraverse.F">F</span>[<span class="extype" name="cats.Bitraverse.compose.G">G</span>[<span class="extype" name="cats.Bitraverse.&lt;refinement&gt;.Λ$.α">α</span>, <span class="extype" name="cats.Bitraverse.&lt;refinement&gt;.Λ$.β">β</span>], <span class="extype" name="cats.Bitraverse.compose.G">G</span>[<span class="extype" name="cats.Bitraverse.&lt;refinement&gt;.Λ$.α">α</span>, <span class="extype" name="cats.Bitraverse.&lt;refinement&gt;.Λ$.β">β</span>]]]</span>
       </span>
       
-      <p class="shortcomment cmt">If F and G are both <a href="" class="extype" name="cats.Bitraverse">cats.Bitraverse</a> then so is their composition F[G[_, _], G[_, _]]</p>
+      <p class="shortcomment cmt">If F and G are both <a href="" class="extype" name="cats.Bitraverse">cats.Bitraverse</a> then so is their composition F[G[_, _], G[_, _]]
+</p>
     </li><li name="cats.Bifunctor#compose" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="compose[G[_,_]](implicitG0:cats.Bifunctor[G]):cats.Bifunctor[[α,β]F[G[α,β],G[α,β]]]"></a><a id="compose[G[_,_]](Bifunctor[G]):Bifunctor[[α,β]F[G[α,β],G[α,β]]]"></a>
       <span class="permalink">
@@ -797,7 +870,9 @@ res3: <span class="std">Option</span>[Either[<span class="std">String</span>, <s
         <span class="name">compose</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="G0">G0: <a href="Bifunctor.html" class="extype" name="cats.Bifunctor">Bifunctor</a>[<span class="extype" name="cats.Bifunctor.compose.G">G</span>]</span>)</span><span class="result">: <a href="Bifunctor.html" class="extype" name="cats.Bifunctor">Bifunctor</a>[[α, β]<span class="extype" name="cats.Bitraverse.F">F</span>[<span class="extype" name="cats.Bifunctor.compose.G">G</span>[<span class="extype" name="cats.Bifunctor.&lt;refinement&gt;.Λ$.α">α</span>, <span class="extype" name="cats.Bifunctor.&lt;refinement&gt;.Λ$.β">β</span>], <span class="extype" name="cats.Bifunctor.compose.G">G</span>[<span class="extype" name="cats.Bifunctor.&lt;refinement&gt;.Λ$.α">α</span>, <span class="extype" name="cats.Bifunctor.&lt;refinement&gt;.Λ$.β">β</span>]]]</span>
       </span>
       
-      <p class="shortcomment cmt">The composition of two Bifunctors is itself a Bifunctor</p><div class="fullcomment"><div class="comment cmt"><p>The composition of two Bifunctors is itself a Bifunctor</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Bifunctor.html" class="extype" name="cats.Bifunctor">Bifunctor</a></dd></dl></div>
+      <p class="shortcomment cmt">The composition of two Bifunctors is itself a Bifunctor
+</p><div class="fullcomment"><div class="comment cmt"><p>The composition of two Bifunctors is itself a Bifunctor
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Bifunctor.html" class="extype" name="cats.Bifunctor">Bifunctor</a></dd></dl></div>
     </li><li name="cats.Bifoldable#compose" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="compose[G[_,_]](implicitev:cats.Bifoldable[G]):cats.Bifoldable[[α,β]F[G[α,β],G[α,β]]]"></a><a id="compose[G[_,_]](Bifoldable[G]):Bifoldable[[α,β]F[G[α,β],G[α,β]]]"></a>
       <span class="permalink">
@@ -846,28 +921,6 @@ res3: <span class="std">Option</span>[Either[<span class="std">String</span>, <s
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="finalize():Unit"></a>
-      <span class="permalink">
-      <a href="../cats/Bitraverse.html#finalize():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="symbol">classOf[java.lang.Throwable]</span>
-    </span>)</span>
-              
-        </dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
@@ -885,6 +938,8 @@ res3: <span class="std">Option</span>[Either[<span class="std">String</span>, <s
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -904,6 +959,8 @@ res3: <span class="std">Option</span>[Either[<span class="std">String</span>, <s
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -1071,6 +1128,8 @@ scala&gt; <span class="kw">val</span> x2: Either[Foo, <span class="std">Int</spa
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
@@ -1089,6 +1148,8 @@ scala&gt; <span class="kw">val</span> x2: Either[Foo, <span class="std">Int</spa
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="cats.Bifunctor#rightFunctor" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -1140,28 +1201,6 @@ scala&gt; <span class="kw">val</span> x2: Either[Foo, <span class="std">Int</spa
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait():Unit"></a>
-      <span class="permalink">
-      <a href="../cats/Bitraverse.html#wait():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
-    </span>)</span>
-              
-        </dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <span class="permalink">
       <a href="../cats/Bitraverse.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
@@ -1207,13 +1246,64 @@ scala&gt; <span class="kw">val</span> x2: Either[Foo, <span class="std">Int</spa
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <span class="permalink">
+      <a href="../cats/Bitraverse.html#wait():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
     </li>
               </ol>
             </div>
 
         
 
-        
+        <div class="values members">
+              <h3>Deprecated Value Members</h3>
+              <ol><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <span class="permalink">
+      <a href="../cats/Bitraverse.html#finalize():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version ) see corresponding Javadoc for more information.">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+                <span class="name">@Deprecated</span>
+              
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version )</i> see corresponding Javadoc for more information.</p></dd></dl></div>
+    </li></ol>
+            </div>
         </div>
 
         <div id="inheritedMembers">

@@ -84,7 +84,29 @@
         <span class="name">cats</span>
       </span>
       
-      <p class="shortcomment cmt">Symbolic aliases for various types are defined here.</p><div class="fullcomment"><div class="comment cmt"><p>Symbolic aliases for various types are defined here.
+      <p class="shortcomment cmt">The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><p>Cats type classes are implemented using the approach from the
+ <a href="https://ropas.snu.ac.kr/~bruno/papers/TypeClasses.pdf" target="_blank">Type classes as objects and implicits</a> article.</p><p>For each type class, <code>cats</code> provides three pieces:
+- Its <b>signature</b>: a trait that is polymorphic on a type parameter.
+  Type class traits inherit from other type classes to indicate that any implementation of the lower type class (e.g. <code>Applicative</code>)
+  can also serve as an instance for the higuer type class (e.g. <code>Functor</code>).
+- Type class <b>'instances</b>, which are classes and objects that implement one or more type class signatures for some specific types.
+  Type class instances for several data types from the Java or Scala standard libraries are declared in the subpackage <code>cats.instances</code>.
+- <b>Syntax extensions</b>, each of which provides the methods of the type class defines as extension methods
+  (which in Scala 2 are encoded as implicit classes) for values of any type <code>F</code>; given that an instance of the type class
+  for the receiver type (<code>this</code>) is in the implicit scope.
+  Symtax extensions are declared in the <code>cats.syntax</code> package.
+- A set of <b>laws</b>, that are also generic on the type of the class, and are only defined on the operations of the type class.
+  The purpose of these laws is to declare some algebraic relations (equations) between Scala expressions involving the operations
+  of the type class, and test (but not verify) that implemented instances satisfy those equations.
+  Laws are defined in the <code>cats-laws</code> package.</p><p>Although most of cats type classes are declared in this package, some are declared in other packages:
+- type classes that operate on base types (kind <code>*</code>), and their implementations for standard library types,
+  are contained in <code>cats.kernel</code>, which is a different SBT project. However, they are re-exported from this package.
+- type classes of kind <code>F[_, _]</code>, such as <a href="arrow/Profunctor.html" class="extype" name="cats.arrow.Profunctor">cats.arrow.Profunctor</a>&quot; or <a href="arrow/Arrow.html" class="extype" name="cats.arrow.Arrow">cats.arrow.Arrow</a>, which are relevant for
+  Functional Reactive Programming or optics, are declared in the <code>cats.arrow</code> package.
+- Also, those type classes that abstract over (pure or impure) functional runtime effects are declared
+  in the <a href="https://typelevel.org/cats-effect/" target="_blank">cats-effect library</a>.
+- Some type classes for which no laws can be provided are left out of the main road, in a small and dirty alley.
+  These are the <code>alleycats</code>.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="_root_">root</a></dd></dl></div>
     </li><li name="cats.arrow" visbl="pub" class="indented2 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="arrow"></a><a id="arrow:arrow"></a>
@@ -99,6 +121,22 @@
       </span>
       <span class="symbol">
         <a title="" href="arrow/index.html"><span class="name">arrow</span></a>
+      </span>
+      
+      
+    </li><li name="cats.conversions" visbl="pub" class="indented2 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="conversions"></a><a id="conversions:conversions"></a>
+      <span class="permalink">
+      <a href="../cats/conversions/index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="conversions/index.html"><span class="name">conversions</span></a>
       </span>
       
       
@@ -319,6 +357,10 @@
                         <a class="trait" href="FunctorFilter.html" title="FunctorFilter[F] allows you to map and filter out elements simultaneously."></a>
                         <a href="FunctorFilter.html" title="FunctorFilter[F] allows you to map and filter out elements simultaneously.">FunctorFilter</a>
                       </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="trait" href="FunctorFilterInstances0.html" title=""></a>
+                        <a href="FunctorFilterInstances0.html" title="">FunctorFilterInstances0</a>
+                      </li><li class="current-entities indented1">
                         <a class="object" href="Inject$.html" title=""></a>
                         <a class="class" href="Inject.html" title="Inject is a type class providing an injection from type A into type B."></a>
                         <a href="Inject.html" title="Inject is a type class providing an injection from type A into type B.">Inject</a>
@@ -399,6 +441,10 @@
                         <a class="trait" href="SemigroupK.html" title="SemigroupK is a universal semigroup which operates on kinds."></a>
                         <a href="SemigroupK.html" title="SemigroupK is a universal semigroup which operates on kinds.">SemigroupK</a>
                       </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="trait" href="SemigroupKInstances0.html" title=""></a>
+                        <a href="SemigroupKInstances0.html" title="">SemigroupKInstances0</a>
+                      </li><li class="current-entities indented1">
                         <a class="object" href="Semigroupal$.html" title=""></a>
                         <a class="trait" href="Semigroupal.html" title="Semigroupal captures the idea of composing independent effectful values."></a>
                         <a href="Semigroupal.html" title="Semigroupal captures the idea of composing independent effectful values.">Semigroupal</a>
@@ -462,13 +508,45 @@
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Symbolic aliases for various types are defined here.
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><p>Cats type classes are implemented using the approach from the
+ <a href="https://ropas.snu.ac.kr/~bruno/papers/TypeClasses.pdf" target="_blank">Type classes as objects and implicits</a> article.</p><p>For each type class, <code>cats</code> provides three pieces:
+- Its <b>signature</b>: a trait that is polymorphic on a type parameter.
+  Type class traits inherit from other type classes to indicate that any implementation of the lower type class (e.g. <code>Applicative</code>)
+  can also serve as an instance for the higuer type class (e.g. <code>Functor</code>).
+- Type class <b>'instances</b>, which are classes and objects that implement one or more type class signatures for some specific types.
+  Type class instances for several data types from the Java or Scala standard libraries are declared in the subpackage <code>cats.instances</code>.
+- <b>Syntax extensions</b>, each of which provides the methods of the type class defines as extension methods
+  (which in Scala 2 are encoded as implicit classes) for values of any type <code>F</code>; given that an instance of the type class
+  for the receiver type (<code>this</code>) is in the implicit scope.
+  Symtax extensions are declared in the <code>cats.syntax</code> package.
+- A set of <b>laws</b>, that are also generic on the type of the class, and are only defined on the operations of the type class.
+  The purpose of these laws is to declare some algebraic relations (equations) between Scala expressions involving the operations
+  of the type class, and test (but not verify) that implemented instances satisfy those equations.
+  Laws are defined in the <code>cats-laws</code> package.</p><p>Although most of cats type classes are declared in this package, some are declared in other packages:
+- type classes that operate on base types (kind <code>*</code>), and their implementations for standard library types,
+  are contained in <code>cats.kernel</code>, which is a different SBT project. However, they are re-exported from this package.
+- type classes of kind <code>F[_, _]</code>, such as <a href="arrow/Profunctor.html" class="extype" name="cats.arrow.Profunctor">cats.arrow.Profunctor</a>&quot; or <a href="arrow/Arrow.html" class="extype" name="cats.arrow.Arrow">cats.arrow.Arrow</a>, which are relevant for
+  Functional Reactive Programming or optics, are declared in the <code>cats.arrow</code> package.
+- Also, those type classes that abstract over (pure or impure) functional runtime effects are declared
+  in the <a href="https://typelevel.org/cats-effect/" target="_blank">cats-effect library</a>.
+- Some type classes for which no laws can be provided are left out of the main road, in a small and dirty alley.
+  These are the <code>alleycats</code>.
 </p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
           <div class="superTypes hiddenContent"><a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
-        </div></div>
+        </div><div class="toggleContainer block diagram-container" id="content-diagram-container">
+                <span class="toggle diagram-link">
+                  Content Hierarchy
+                </span>
+                <div class="diagram" id="content-diagram"><svg class="package-diagram" id="graph1" viewBox="0.00 0.00 2699.50 338.00" height="338pt" width="2700pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 334)" class="graph" id="graph0"><polygon points="-4,4 -4,-334 2695.5,-334 2695.5,4 -4,4" stroke="transparent" fill="white"></polygon><!-- node0 --><g class="node trait" id="graph1_0"><g id="a_trait|graph1_0"><a xlink:title="cats.UnorderedTraverse" xlink:href="UnorderedTraverse.html#inheritance-diagram"><path d="M127.67,-269C127.67,-269 8.33,-269 8.33,-269 4.17,-269 0,-264.83 0,-260.67 0,-260.67 0,-252.33 0,-252.33 0,-248.17 4.17,-244 8.33,-244 8.33,-244 127.67,-244 127.67,-244 131.83,-244 136,-248.17 136,-252.33 136,-252.33 136,-260.67 136,-260.67 136,-264.83 131.83,-269 127.67,-269" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-263.5" x="10" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-254.1" x="31" text-anchor="start">UnorderedTraverse[F]</text></a></g></g><!-- node3 --><g class="node trait" id="graph1_3"><g id="a_trait|graph1_3"><a xlink:title="cats.Traverse" xlink:href="Traverse.html#inheritance-diagram"><path d="M116.67,-208C116.67,-208 37.33,-208 37.33,-208 33.17,-208 29,-203.83 29,-199.67 29,-199.67 29,-191.33 29,-191.33 29,-187.17 33.17,-183 37.33,-183 37.33,-183 116.67,-183 116.67,-183 120.83,-183 125,-187.17 125,-191.33 125,-191.33 125,-199.67 125,-199.67 125,-203.83 120.83,-208 116.67,-208" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-202.5" x="39" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-193.1" x="60" text-anchor="start">Traverse[F]</text></a></g></g><!-- node0&#45;&gt;node3 --><g class="edge inheritance" id="graph1_0_3"><g id="a_inheritance|graph1_0_3"><a xlink:title="Traverse[F] is a subtype of UnorderedTraverse[F]"><path d="M70.86,-236.76C72.29,-227.37 73.98,-216.29 75.23,-208.13" stroke="#d4d4d4" fill="none"></path><polygon points="68.41,-236.55 69.78,-243.84 73.26,-237.29 68.41,-236.55" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node1 --><g class="node trait" id="graph1_1"><g id="a_trait|graph1_1"><a xlink:title="cats.UnorderedFoldable" xlink:href="UnorderedFoldable.html#inheritance-diagram"><path d="M194.67,-330C194.67,-330 75.33,-330 75.33,-330 71.17,-330 67,-325.83 67,-321.67 67,-321.67 67,-313.33 67,-313.33 67,-309.17 71.17,-305 75.33,-305 75.33,-305 194.67,-305 194.67,-305 198.83,-305 203,-309.17 203,-313.33 203,-313.33 203,-321.67 203,-321.67 203,-325.83 198.83,-330 194.67,-330" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-324.5" x="77" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-315.1" x="98" text-anchor="start">UnorderedFoldable[F]</text></a></g></g><!-- node1&#45;&gt;node0 --><g class="edge inheritance" id="graph1_1_0"><g id="a_inheritance|graph1_1_0"><a xlink:title="UnorderedTraverse[F] is a subtype of UnorderedFoldable[F]"><path d="M116.22,-299.96C105.07,-290.14 91.2,-277.93 81.21,-269.13" stroke="#d4d4d4" fill="none"></path><polygon points="114.89,-302.06 121.76,-304.84 118.13,-298.38 114.89,-302.06" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node30 --><g class="node trait" id="graph1_30"><g id="a_trait|graph1_30"><a xlink:title="cats.Foldable" xlink:href="Foldable.html#inheritance-diagram"><path d="M241.67,-269C241.67,-269 162.33,-269 162.33,-269 158.17,-269 154,-264.83 154,-260.67 154,-260.67 154,-252.33 154,-252.33 154,-248.17 158.17,-244 162.33,-244 162.33,-244 241.67,-244 241.67,-244 245.83,-244 250,-248.17 250,-252.33 250,-252.33 250,-260.67 250,-260.67 250,-264.83 245.83,-269 241.67,-269" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-263.5" x="164" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-254.1" x="185" text-anchor="start">Foldable[F]</text></a></g></g><!-- node1&#45;&gt;node30 --><g class="edge inheritance" id="graph1_1_30"><g id="a_inheritance|graph1_1_30"><a xlink:title="Foldable[F] is a subtype of UnorderedFoldable[F]"><path d="M153.78,-299.96C164.93,-290.14 178.8,-277.93 188.79,-269.13" stroke="#d4d4d4" fill="none"></path><polygon points="151.87,-298.38 148.24,-304.84 155.11,-302.06 151.87,-298.38" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node2 --><g class="node trait" id="graph1_2"><g id="a_trait|graph1_2"><a xlink:title="cats.TraverseFilter" xlink:href="TraverseFilter.html#inheritance-diagram"><path d="M1092.17,-269C1092.17,-269 985.83,-269 985.83,-269 981.67,-269 977.5,-264.83 977.5,-260.67 977.5,-260.67 977.5,-252.33 977.5,-252.33 977.5,-248.17 981.67,-244 985.83,-244 985.83,-244 1092.17,-244 1092.17,-244 1096.33,-244 1100.5,-248.17 1100.5,-252.33 1100.5,-252.33 1100.5,-260.67 1100.5,-260.67 1100.5,-264.83 1096.33,-269 1092.17,-269" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-263.5" x="988" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-254.1" x="1009" text-anchor="start">TraverseFilter[F]</text></a></g></g><!-- node16 --><g class="node trait" id="graph1_16"><g id="a_trait|graph1_16"><a xlink:title="cats.NonEmptyTraverse" xlink:href="NonEmptyTraverse.html#inheritance-diagram"><path d="M124.67,-147C124.67,-147 9.33,-147 9.33,-147 5.17,-147 1,-142.83 1,-138.67 1,-138.67 1,-130.33 1,-130.33 1,-126.17 5.17,-122 9.33,-122 9.33,-122 124.67,-122 124.67,-122 128.83,-122 133,-126.17 133,-130.33 133,-130.33 133,-138.67 133,-138.67 133,-142.83 128.83,-147 124.67,-147" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-141.5" x="11" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="32" text-anchor="start">NonEmptyTraverse[F]</text></a></g></g><!-- node3&#45;&gt;node16 --><g class="edge inheritance" id="graph1_3_16"><g id="a_inheritance|graph1_3_16"><a xlink:title="NonEmptyTraverse[F] is a subtype of Traverse[F]"><path d="M73.82,-175.76C72.23,-166.37 70.35,-155.29 68.97,-147.13" stroke="#d4d4d4" fill="none"></path><polygon points="71.44,-176.35 75.02,-182.84 76.27,-175.53 71.44,-176.35" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node4 --><g class="node trait" id="graph1_4"><g id="a_trait|graph1_4"><a xlink:title="cats.StackSafeMonad" xlink:href="StackSafeMonad.html#inheritance-diagram"><path d="M811.17,-25C811.17,-25 704.83,-25 704.83,-25 700.67,-25 696.5,-20.83 696.5,-16.67 696.5,-16.67 696.5,-8.33 696.5,-8.33 696.5,-4.17 700.67,0 704.83,0 704.83,0 811.17,0 811.17,0 815.33,0 819.5,-4.17 819.5,-8.33 819.5,-8.33 819.5,-16.67 819.5,-16.67 819.5,-20.83 815.33,-25 811.17,-25" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-19.5" x="707" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="728" text-anchor="start">StackSafeMonad[F]</text></a></g></g><!-- node5 --><g class="node trait" id="graph1_5"><g id="a_trait|graph1_5"><a xlink:title="cats.SemigroupalArityFunctions" xlink:href="SemigroupalArityFunctions.html#inheritance-diagram"><path d="M1453.17,-330C1453.17,-330 1310.83,-330 1310.83,-330 1306.67,-330 1302.5,-325.83 1302.5,-321.67 1302.5,-321.67 1302.5,-313.33 1302.5,-313.33 1302.5,-309.17 1306.67,-305 1310.83,-305 1310.83,-305 1453.17,-305 1453.17,-305 1457.33,-305 1461.5,-309.17 1461.5,-313.33 1461.5,-313.33 1461.5,-321.67 1461.5,-321.67 1461.5,-325.83 1457.33,-330 1453.17,-330" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-324.5" x="1313" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-315.1" x="1334" text-anchor="start">SemigroupalArityFunctions</text></a></g></g><!-- node6 --><g class="node object" id="graph1_6"><g id="a_object|graph1_6"><a xlink:title="cats.Semigroupal" xlink:href="Semigroupal$.html#inheritance-diagram"><path d="M1206.67,-269C1206.67,-269 1127.33,-269 1127.33,-269 1123.17,-269 1119,-264.83 1119,-260.67 1119,-260.67 1119,-252.33 1119,-252.33 1119,-248.17 1123.17,-244 1127.33,-244 1127.33,-244 1206.67,-244 1206.67,-244 1210.83,-244 1215,-248.17 1215,-252.33 1215,-252.33 1215,-260.67 1215,-260.67 1215,-264.83 1210.83,-269 1206.67,-269" stroke="#103a51" fill="#103a51"></path><image xlink:href="../lib/object_diagram.png" y="-263.5" x="1129" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-254.1" x="1150" text-anchor="start">Semigroupal</text></a></g></g><!-- node5&#45;&gt;node6 --><g class="edge inheritance" id="graph1_5_6"><g id="a_inheritance|graph1_5_6"><a xlink:title="Semigroupal is a subtype of SemigroupalArityFunctions"><path d="M1333.23,-303.12C1295.86,-292.86 1244.85,-278.86 1209.23,-269.09" stroke="#d4d4d4" fill="none"></path><polygon points="1332.64,-305.49 1340.04,-304.98 1333.93,-300.77 1332.64,-305.49" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node22 --><g class="node object" id="graph1_22"><g id="a_object|graph1_22"><a xlink:title="cats.InvariantSemigroupal" xlink:href="InvariantSemigroupal$.html#inheritance-diagram"><path d="M1360.67,-269C1360.67,-269 1241.33,-269 1241.33,-269 1237.17,-269 1233,-264.83 1233,-260.67 1233,-260.67 1233,-252.33 1233,-252.33 1233,-248.17 1237.17,-244 1241.33,-244 1241.33,-244 1360.67,-244 1360.67,-244 1364.83,-244 1369,-248.17 1369,-252.33 1369,-252.33 1369,-260.67 1369,-260.67 1369,-264.83 1364.83,-269 1360.67,-269" stroke="#103a51" fill="#103a51"></path><image xlink:href="../lib/object_diagram.png" y="-263.5" x="1243" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-254.1" x="1264" text-anchor="start">InvariantSemigroupal</text></a></g></g><!-- node5&#45;&gt;node22 --><g class="edge inheritance" id="graph1_5_22"><g id="a_inheritance|graph1_5_22"><a xlink:title="InvariantSemigroupal is a subtype of SemigroupalArityFunctions"><path d="M1360.03,-300.5C1346.43,-290.59 1329.28,-278.1 1316.97,-269.13" stroke="#d4d4d4" fill="none"></path><polygon points="1358.9,-302.7 1366,-304.84 1361.78,-298.74 1358.9,-302.7" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node36 --><g class="node object" id="graph1_36"><g id="a_object|graph1_36"><a xlink:title="cats.ContravariantSemigroupal" xlink:href="ContravariantSemigroupal$.html#inheritance-diagram"><path d="M1532.67,-269C1532.67,-269 1395.33,-269 1395.33,-269 1391.17,-269 1387,-264.83 1387,-260.67 1387,-260.67 1387,-252.33 1387,-252.33 1387,-248.17 1391.17,-244 1395.33,-244 1395.33,-244 1532.67,-244 1532.67,-244 1536.83,-244 1541,-248.17 1541,-252.33 1541,-252.33 1541,-260.67 1541,-260.67 1541,-264.83 1536.83,-269 1532.67,-269" stroke="#103a51" fill="#103a51"></path><image xlink:href="../lib/object_diagram.png" y="-263.5" x="1397" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-254.1" x="1418" text-anchor="start">ContravariantSemigroupal</text></a></g></g><!-- node5&#45;&gt;node36 --><g class="edge inheritance" id="graph1_5_36"><g id="a_inheritance|graph1_5_36"><a xlink:title="ContravariantSemigroupal is a subtype of SemigroupalArityFunctions"><path d="M1404.24,-300.5C1418.01,-290.59 1435.38,-278.1 1447.83,-269.13" stroke="#d4d4d4" fill="none"></path><polygon points="1402.45,-298.77 1398.2,-304.84 1405.31,-302.74 1402.45,-298.77" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node38 --><g class="node object" id="graph1_38"><g id="a_object|graph1_38"><a xlink:title="cats.ContravariantMonoidal" xlink:href="ContravariantMonoidal$.html#inheritance-diagram"><path d="M1692.17,-269C1692.17,-269 1567.83,-269 1567.83,-269 1563.67,-269 1559.5,-264.83 1559.5,-260.67 1559.5,-260.67 1559.5,-252.33 1559.5,-252.33 1559.5,-248.17 1563.67,-244 1567.83,-244 1567.83,-244 1692.17,-244 1692.17,-244 1696.33,-244 1700.5,-248.17 1700.5,-252.33 1700.5,-252.33 1700.5,-260.67 1700.5,-260.67 1700.5,-264.83 1696.33,-269 1692.17,-269" stroke="#103a51" fill="#103a51"></path><image xlink:href="../lib/object_diagram.png" y="-263.5" x="1570" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-254.1" x="1591" text-anchor="start">ContravariantMonoidal</text></a></g></g><!-- node5&#45;&gt;node38 --><g class="edge inheritance" id="graph1_5_38"><g id="a_inheritance|graph1_5_38"><a xlink:title="ContravariantMonoidal is a subtype of SemigroupalArityFunctions"><path d="M1437.46,-303.31C1480.62,-293.04 1539.95,-278.92 1581.29,-269.09" stroke="#d4d4d4" fill="none"></path><polygon points="1436.65,-300.98 1430.41,-304.98 1437.78,-305.75 1436.65,-300.98" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node7 --><g class="node trait" id="graph1_7"><g id="a_trait|graph1_7"><a xlink:title="cats.Semigroupal" xlink:href="Semigroupal.html#inheritance-diagram"><path d="M732.17,-330C732.17,-330 639.83,-330 639.83,-330 635.67,-330 631.5,-325.83 631.5,-321.67 631.5,-321.67 631.5,-313.33 631.5,-313.33 631.5,-309.17 635.67,-305 639.83,-305 639.83,-305 732.17,-305 732.17,-305 736.33,-305 740.5,-309.17 740.5,-313.33 740.5,-313.33 740.5,-321.67 740.5,-321.67 740.5,-325.83 736.33,-330 732.17,-330" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-324.5" x="642" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-315.1" x="663" text-anchor="start">Semigroupal[F]</text></a></g></g><!-- node23 --><g class="node trait" id="graph1_23"><g id="a_trait|graph1_23"><a xlink:title="cats.InvariantSemigroupal" xlink:href="InvariantSemigroupal.html#inheritance-diagram"><path d="M814.67,-269C814.67,-269 681.33,-269 681.33,-269 677.17,-269 673,-264.83 673,-260.67 673,-260.67 673,-252.33 673,-252.33 673,-248.17 677.17,-244 681.33,-244 681.33,-244 814.67,-244 814.67,-244 818.83,-244 823,-248.17 823,-252.33 823,-252.33 823,-260.67 823,-260.67 823,-264.83 818.83,-269 814.67,-269" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-263.5" x="683" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-254.1" x="704" text-anchor="start">InvariantSemigroupal[F]</text></a></g></g><!-- node7&#45;&gt;node23 --><g class="edge inheritance" id="graph1_7_23"><g id="a_inheritance|graph1_7_23"><a xlink:title="InvariantSemigroupal[F] is a subtype of Semigroupal[F]"><path d="M703.38,-299.96C713.7,-290.14 726.53,-277.93 735.78,-269.13" stroke="#d4d4d4" fill="none"></path><polygon points="701.63,-298.24 698.25,-304.84 705.01,-301.79 701.63,-298.24" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node8 --><g class="node trait" id="graph1_8"><g id="a_trait|graph1_8"><a xlink:title="cats.SemigroupKInstances0" xlink:href="SemigroupKInstances0.html#inheritance-diagram"><path d="M1823.67,-330C1823.67,-330 1704.33,-330 1704.33,-330 1700.17,-330 1696,-325.83 1696,-321.67 1696,-321.67 1696,-313.33 1696,-313.33 1696,-309.17 1700.17,-305 1704.33,-305 1704.33,-305 1823.67,-305 1823.67,-305 1827.83,-305 1832,-309.17 1832,-313.33 1832,-313.33 1832,-321.67 1832,-321.67 1832,-325.83 1827.83,-330 1823.67,-330" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-324.5" x="1706" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-315.1" x="1727" text-anchor="start">SemigroupKInstances0</text></a></g></g><!-- node9 --><g class="node object" id="graph1_9"><g id="a_object|graph1_9"><a xlink:title="cats.SemigroupK" xlink:href="SemigroupK$.html#inheritance-diagram"><path d="M1801.17,-269C1801.17,-269 1726.83,-269 1726.83,-269 1722.67,-269 1718.5,-264.83 1718.5,-260.67 1718.5,-260.67 1718.5,-252.33 1718.5,-252.33 1718.5,-248.17 1722.67,-244 1726.83,-244 1726.83,-244 1801.17,-244 1801.17,-244 1805.33,-244 1809.5,-248.17 1809.5,-252.33 1809.5,-252.33 1809.5,-260.67 1809.5,-260.67 1809.5,-264.83 1805.33,-269 1801.17,-269" stroke="#103a51" fill="#103a51"></path><image xlink:href="../lib/object_diagram.png" y="-263.5" x="1729" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-254.1" x="1750" text-anchor="start">SemigroupK</text></a></g></g><!-- node8&#45;&gt;node9 --><g class="edge inheritance" id="graph1_8_9"><g id="a_inheritance|graph1_8_9"><a xlink:title="SemigroupK is a subtype of SemigroupKInstances0"><path d="M1764,-297.76C1764,-288.37 1764,-277.29 1764,-269.13" stroke="#d4d4d4" fill="none"></path><polygon points="1761.55,-297.84 1764,-304.84 1766.45,-297.84 1761.55,-297.84" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node10 --><g class="node trait" id="graph1_10"><g id="a_trait|graph1_10"><a xlink:title="cats.SemigroupK" xlink:href="SemigroupK.html#inheritance-diagram"><path d="M1099.17,-208C1099.17,-208 1010.83,-208 1010.83,-208 1006.67,-208 1002.5,-203.83 1002.5,-199.67 1002.5,-199.67 1002.5,-191.33 1002.5,-191.33 1002.5,-187.17 1006.67,-183 1010.83,-183 1010.83,-183 1099.17,-183 1099.17,-183 1103.33,-183 1107.5,-187.17 1107.5,-191.33 1107.5,-191.33 1107.5,-199.67 1107.5,-199.67 1107.5,-203.83 1103.33,-208 1099.17,-208" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-202.5" x="1013" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-193.1" x="1034" text-anchor="start">SemigroupK[F]</text></a></g></g><!-- node19 --><g class="node trait" id="graph1_19"><g id="a_trait|graph1_19"><a xlink:title="cats.MonoidK" xlink:href="MonoidK.html#inheritance-diagram"><path d="M1089.17,-147C1089.17,-147 1014.83,-147 1014.83,-147 1010.67,-147 1006.5,-142.83 1006.5,-138.67 1006.5,-138.67 1006.5,-130.33 1006.5,-130.33 1006.5,-126.17 1010.67,-122 1014.83,-122 1014.83,-122 1089.17,-122 1089.17,-122 1093.33,-122 1097.5,-126.17 1097.5,-130.33 1097.5,-130.33 1097.5,-138.67 1097.5,-138.67 1097.5,-142.83 1093.33,-147 1089.17,-147" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-141.5" x="1017" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="1038" text-anchor="start">MonoidK[F]</text></a></g></g><!-- node10&#45;&gt;node19 --><g class="edge inheritance" id="graph1_10_19"><g id="a_inheritance|graph1_10_19"><a xlink:title="MonoidK[F] is a subtype of SemigroupK[F]"><path d="M1054.05,-175.76C1053.57,-166.37 1053.01,-155.29 1052.59,-147.13" stroke="#d4d4d4" fill="none"></path><polygon points="1051.6,-175.98 1054.41,-182.84 1056.5,-175.73 1051.6,-175.98" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node11 --><g class="node trait" id="graph1_11"><g id="a_trait|graph1_11"><a xlink:title="cats.Reducible" xlink:href="Reducible.html#inheritance-diagram"><path d="M243.67,-208C243.67,-208 160.33,-208 160.33,-208 156.17,-208 152,-203.83 152,-199.67 152,-199.67 152,-191.33 152,-191.33 152,-187.17 156.17,-183 160.33,-183 160.33,-183 243.67,-183 243.67,-183 247.83,-183 252,-187.17 252,-191.33 252,-191.33 252,-199.67 252,-199.67 252,-203.83 247.83,-208 243.67,-208" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-202.5" x="162" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-193.1" x="183" text-anchor="start">Reducible[F]</text></a></g></g><!-- node11&#45;&gt;node16 --><g class="edge inheritance" id="graph1_11_16"><g id="a_inheritance|graph1_11_16"><a xlink:title="NonEmptyTraverse[F] is a subtype of Reducible[F]"><path d="M169.03,-180.09C145.9,-169.98 115.36,-156.64 93.74,-147.19" stroke="#d4d4d4" fill="none"></path><polygon points="168.25,-182.43 175.65,-182.98 170.22,-177.94 168.25,-182.43" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node17 --><g class="node class" id="graph1_17"><g id="a_class|graph1_17"><a xlink:title="cats.NonEmptyReducible" xlink:href="NonEmptyReducible.html#inheritance-diagram"><path d="M292.67,-147C292.67,-147 159.33,-147 159.33,-147 155.17,-147 151,-142.83 151,-138.67 151,-138.67 151,-130.33 151,-130.33 151,-126.17 155.17,-122 159.33,-122 159.33,-122 292.67,-122 292.67,-122 296.83,-122 301,-126.17 301,-130.33 301,-130.33 301,-138.67 301,-138.67 301,-142.83 296.83,-147 292.67,-147" stroke="#418565" fill="#418565"></path><image xlink:href="../lib/class_diagram.png" y="-141.5" x="161" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="182" text-anchor="start">NonEmptyReducible[F, G]</text></a></g></g><!-- node11&#45;&gt;node17 --><g class="edge inheritance" id="graph1_11_17"><g id="a_inheritance|graph1_11_17"><a xlink:title="NonEmptyReducible[F, G] is a subtype of Reducible[F]"><path d="M209.4,-176.32C213.26,-166.81 217.88,-155.45 221.27,-147.13" stroke="#d4d4d4" fill="none"></path><polygon points="207.11,-175.44 206.74,-182.84 211.65,-177.28 207.11,-175.44" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node12 --><g class="node class" id="graph1_12"><g id="a_class|graph1_12"><a xlink:title="cats.ParallelArityFunctions2" xlink:href="ParallelArityFunctions2.html#inheritance-diagram"><path d="M1989.67,-269C1989.67,-269 1856.33,-269 1856.33,-269 1852.17,-269 1848,-264.83 1848,-260.67 1848,-260.67 1848,-252.33 1848,-252.33 1848,-248.17 1852.17,-244 1856.33,-244 1856.33,-244 1989.67,-244 1989.67,-244 1993.83,-244 1998,-248.17 1998,-252.33 1998,-252.33 1998,-260.67 1998,-260.67 1998,-264.83 1993.83,-269 1989.67,-269" stroke="#418565" fill="#418565"></path><image xlink:href="../lib/class_diagram.png" y="-263.5" x="1858" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-254.1" x="1879" text-anchor="start">ParallelArityFunctions2</text></a></g></g><!-- node14 --><g class="node object" id="graph1_14"><g id="a_object|graph1_14"><a xlink:title="cats.Parallel" xlink:href="Parallel$.html#inheritance-diagram"><path d="M1955.67,-208C1955.67,-208 1890.33,-208 1890.33,-208 1886.17,-208 1882,-203.83 1882,-199.67 1882,-199.67 1882,-191.33 1882,-191.33 1882,-187.17 1886.17,-183 1890.33,-183 1890.33,-183 1955.67,-183 1955.67,-183 1959.83,-183 1964,-187.17 1964,-191.33 1964,-191.33 1964,-199.67 1964,-199.67 1964,-203.83 1959.83,-208 1955.67,-208" stroke="#103a51" fill="#103a51"></path><image xlink:href="../lib/object_diagram.png" y="-202.5" x="1892" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-193.1" x="1913" text-anchor="start">Parallel</text></a></g></g><!-- node12&#45;&gt;node14 --><g class="edge inheritance" id="graph1_12_14"><g id="a_inheritance|graph1_12_14"><a xlink:title="Parallel is a subtype of ParallelArityFunctions2"><path d="M1923,-236.76C1923,-227.37 1923,-216.29 1923,-208.13" stroke="#d4d4d4" fill="none"></path><polygon points="1920.55,-236.84 1923,-243.84 1925.45,-236.84 1920.55,-236.84" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node13 --><g class="node trait" id="graph1_13"><g id="a_trait|graph1_13"><a xlink:title="cats.ParallelArityFunctions" xlink:href="ParallelArityFunctions.html#inheritance-diagram"><path d="M1987.17,-330C1987.17,-330 1858.83,-330 1858.83,-330 1854.67,-330 1850.5,-325.83 1850.5,-321.67 1850.5,-321.67 1850.5,-313.33 1850.5,-313.33 1850.5,-309.17 1854.67,-305 1858.83,-305 1858.83,-305 1987.17,-305 1987.17,-305 1991.33,-305 1995.5,-309.17 1995.5,-313.33 1995.5,-313.33 1995.5,-321.67 1995.5,-321.67 1995.5,-325.83 1991.33,-330 1987.17,-330" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-324.5" x="1861" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-315.1" x="1882" text-anchor="start">ParallelArityFunctions</text></a></g></g><!-- node13&#45;&gt;node12 --><g class="edge inheritance" id="graph1_13_12"><g id="a_inheritance|graph1_13_12"><a xlink:title="ParallelArityFunctions2 is a subtype of ParallelArityFunctions"><path d="M1923,-297.76C1923,-288.37 1923,-277.29 1923,-269.13" stroke="#d4d4d4" fill="none"></path><polygon points="1920.55,-297.84 1923,-304.84 1925.45,-297.84 1920.55,-297.84" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node15 --><g class="node trait" id="graph1_15"><g id="a_trait|graph1_15"><a xlink:title="cats.Parallel" xlink:href="Parallel.html#inheritance-diagram"><path d="M2119.67,-269C2119.67,-269 2040.33,-269 2040.33,-269 2036.17,-269 2032,-264.83 2032,-260.67 2032,-260.67 2032,-252.33 2032,-252.33 2032,-248.17 2036.17,-244 2040.33,-244 2040.33,-244 2119.67,-244 2119.67,-244 2123.83,-244 2128,-248.17 2128,-252.33 2128,-252.33 2128,-260.67 2128,-260.67 2128,-264.83 2123.83,-269 2119.67,-269" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-263.5" x="2042" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-254.1" x="2063" text-anchor="start">Parallel[M]</text></a></g></g><!-- node18 --><g class="node trait" id="graph1_18"><g id="a_trait|graph1_18"><a xlink:title="cats.NonEmptyParallel" xlink:href="NonEmptyParallel.html#inheritance-diagram"><path d="M2137.67,-330C2137.67,-330 2022.33,-330 2022.33,-330 2018.17,-330 2014,-325.83 2014,-321.67 2014,-321.67 2014,-313.33 2014,-313.33 2014,-309.17 2018.17,-305 2022.33,-305 2022.33,-305 2137.67,-305 2137.67,-305 2141.83,-305 2146,-309.17 2146,-313.33 2146,-313.33 2146,-321.67 2146,-321.67 2146,-325.83 2141.83,-330 2137.67,-330" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-324.5" x="2024" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-315.1" x="2045" text-anchor="start">NonEmptyParallel[M]</text></a></g></g><!-- node18&#45;&gt;node15 --><g class="edge inheritance" id="graph1_18_15"><g id="a_inheritance|graph1_18_15"><a xlink:title="Parallel[M] is a subtype of NonEmptyParallel[M]"><path d="M2080,-297.76C2080,-288.37 2080,-277.29 2080,-269.13" stroke="#d4d4d4" fill="none"></path><polygon points="2077.55,-297.84 2080,-304.84 2082.45,-297.84 2077.55,-297.84" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node55 --><g class="node trait" id="graph1_55"><g id="a_trait|graph1_55"><a xlink:title="cats.Alternative" xlink:href="Alternative.html#inheritance-diagram"><path d="M1092.17,-86C1092.17,-86 999.83,-86 999.83,-86 995.67,-86 991.5,-81.83 991.5,-77.67 991.5,-77.67 991.5,-69.33 991.5,-69.33 991.5,-65.17 995.67,-61 999.83,-61 999.83,-61 1092.17,-61 1092.17,-61 1096.33,-61 1100.5,-65.17 1100.5,-69.33 1100.5,-69.33 1100.5,-77.67 1100.5,-77.67 1100.5,-81.83 1096.33,-86 1092.17,-86" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-80.5" x="1002" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-71.1" x="1023" text-anchor="start">Alternative[F]</text></a></g></g><!-- node19&#45;&gt;node55 --><g class="edge inheritance" id="graph1_19_55"><g id="a_inheritance|graph1_19_55"><a xlink:title="Alternative[F] is a subtype of MonoidK[F]"><path d="M1050.09,-114.76C1049.14,-105.37 1048.01,-94.29 1047.18,-86.13" stroke="#d4d4d4" fill="none"></path><polygon points="1047.67,-115.13 1050.81,-121.84 1052.54,-114.63 1047.67,-115.13" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node20 --><g class="node trait" id="graph1_20"><g id="a_trait|graph1_20"><a xlink:title="cats.MonadError" xlink:href="MonadError.html#inheritance-diagram"><path d="M947.67,-25C947.67,-25 846.33,-25 846.33,-25 842.17,-25 838,-20.83 838,-16.67 838,-16.67 838,-8.33 838,-8.33 838,-4.17 842.17,0 846.33,0 846.33,0 947.67,0 947.67,0 951.83,0 956,-4.17 956,-8.33 956,-8.33 956,-16.67 956,-16.67 956,-20.83 951.83,-25 947.67,-25" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-19.5" x="848" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="869" text-anchor="start">MonadError[F, E]</text></a></g></g><!-- node21 --><g class="node trait" id="graph1_21"><g id="a_trait|graph1_21"><a xlink:title="cats.Monad" xlink:href="Monad.html#inheritance-diagram"><path d="M792.67,-86C792.67,-86 727.33,-86 727.33,-86 723.17,-86 719,-81.83 719,-77.67 719,-77.67 719,-69.33 719,-69.33 719,-65.17 723.17,-61 727.33,-61 727.33,-61 792.67,-61 792.67,-61 796.83,-61 801,-65.17 801,-69.33 801,-69.33 801,-77.67 801,-77.67 801,-81.83 796.83,-86 792.67,-86" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-80.5" x="729" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-71.1" x="750" text-anchor="start">Monad[F]</text></a></g></g><!-- node21&#45;&gt;node4 --><g class="edge inheritance" id="graph1_21_4"><g id="a_inheritance|graph1_21_4"><a xlink:title="StackSafeMonad[F] is a subtype of Monad[F]"><path d="M759.36,-53.76C759.05,-44.37 758.67,-33.29 758.39,-25.13" stroke="#d4d4d4" fill="none"></path><polygon points="756.92,-53.93 759.6,-60.84 761.82,-53.76 756.92,-53.93" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node21&#45;&gt;node20 --><g class="edge inheritance" id="graph1_21_20"><g id="a_inheritance|graph1_21_20"><a xlink:title="MonadError[F, E] is a subtype of Monad[F]"><path d="M793.46,-58.09C816.93,-47.98 847.92,-34.64 869.86,-25.19" stroke="#d4d4d4" fill="none"></path><polygon points="792.2,-55.97 786.74,-60.98 794.14,-60.47 792.2,-55.97" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node42 --><g class="node trait" id="graph1_42"><g id="a_trait|graph1_42"><a xlink:title="cats.CommutativeMonad" xlink:href="CommutativeMonad.html#inheritance-diagram"><path d="M669.67,-25C669.67,-25 554.33,-25 554.33,-25 550.17,-25 546,-20.83 546,-16.67 546,-16.67 546,-8.33 546,-8.33 546,-4.17 550.17,0 554.33,0 554.33,0 669.67,0 669.67,0 673.83,0 678,-4.17 678,-8.33 678,-8.33 678,-16.67 678,-16.67 678,-20.83 673.83,-25 669.67,-25" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-19.5" x="556" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="577" text-anchor="start">CommutativeMonad[F]</text></a></g></g><!-- node21&#45;&gt;node42 --><g class="edge inheritance" id="graph1_21_42"><g id="a_inheritance|graph1_21_42"><a xlink:title="CommutativeMonad[F] is a subtype of Monad[F]"><path d="M724.49,-58.34C698.96,-48.17 664.98,-34.62 641.07,-25.09" stroke="#d4d4d4" fill="none"></path><polygon points="723.7,-60.67 731.11,-60.98 725.52,-56.12 723.7,-60.67" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node48 --><g class="node trait" id="graph1_48"><g id="a_trait|graph1_48"><a xlink:title="cats.Bimonad" xlink:href="Bimonad.html#inheritance-diagram"><path d="M439.17,-25C439.17,-25 364.83,-25 364.83,-25 360.67,-25 356.5,-20.83 356.5,-16.67 356.5,-16.67 356.5,-8.33 356.5,-8.33 356.5,-4.17 360.67,0 364.83,0 364.83,0 439.17,0 439.17,0 443.33,0 447.5,-4.17 447.5,-8.33 447.5,-8.33 447.5,-16.67 447.5,-16.67 447.5,-20.83 443.33,-25 439.17,-25" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-19.5" x="367" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="388" text-anchor="start">Bimonad[F]</text></a></g></g><!-- node21&#45;&gt;node48 --><g class="edge inheritance" id="graph1_21_48"><g id="a_inheritance|graph1_21_48"><a xlink:title="Bimonad[F] is a subtype of Monad[F]"><path d="M711.73,-61.53C710.81,-61.35 709.9,-61.17 709,-61 616.67,-43.47 507.8,-27.8 447.68,-19.57" stroke="#d4d4d4" fill="none"></path><polygon points="711.51,-63.98 718.85,-62.97 712.48,-59.18 711.51,-63.98" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node24 --><g class="node trait" id="graph1_24"><g id="a_trait|graph1_24"><a xlink:title="cats.InvariantMonoidal" xlink:href="InvariantMonoidal.html#inheritance-diagram"><path d="M789.67,-208C789.67,-208 670.33,-208 670.33,-208 666.17,-208 662,-203.83 662,-199.67 662,-199.67 662,-191.33 662,-191.33 662,-187.17 666.17,-183 670.33,-183 670.33,-183 789.67,-183 789.67,-183 793.83,-183 798,-187.17 798,-191.33 798,-191.33 798,-199.67 798,-199.67 798,-203.83 793.83,-208 789.67,-208" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-202.5" x="672" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-193.1" x="693" text-anchor="start">InvariantMonoidal[F]</text></a></g></g><!-- node23&#45;&gt;node24 --><g class="edge inheritance" id="graph1_23_24"><g id="a_inheritance|graph1_23_24"><a xlink:title="InvariantMonoidal[F] is a subtype of InvariantSemigroupal[F]"><path d="M742.37,-237.04C739.48,-227.59 736.06,-216.37 733.55,-208.13" stroke="#d4d4d4" fill="none"></path><polygon points="740.06,-237.86 744.44,-243.84 744.74,-236.43 740.06,-237.86" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node37 --><g class="node trait" id="graph1_37"><g id="a_trait|graph1_37"><a xlink:title="cats.ContravariantSemigroupal" xlink:href="ContravariantSemigroupal.html#inheritance-diagram"><path d="M975.67,-208C975.67,-208 824.33,-208 824.33,-208 820.17,-208 816,-203.83 816,-199.67 816,-199.67 816,-191.33 816,-191.33 816,-187.17 820.17,-183 824.33,-183 824.33,-183 975.67,-183 975.67,-183 979.83,-183 984,-187.17 984,-191.33 984,-191.33 984,-199.67 984,-199.67 984,-203.83 979.83,-208 975.67,-208" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-202.5" x="826" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-193.1" x="847" text-anchor="start">ContravariantSemigroupal[F]</text></a></g></g><!-- node23&#45;&gt;node37 --><g class="edge inheritance" id="graph1_23_37"><g id="a_inheritance|graph1_23_37"><a xlink:title="ContravariantSemigroupal[F] is a subtype of InvariantSemigroupal[F]"><path d="M784.47,-241.34C810.69,-231.17 845.59,-217.62 870.15,-208.09" stroke="#d4d4d4" fill="none"></path><polygon points="783.31,-239.17 777.67,-243.98 785.08,-243.74 783.31,-239.17" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node52 --><g class="node trait" id="graph1_52"><g id="a_trait|graph1_52"><a xlink:title="cats.Apply" xlink:href="Apply.html#inheritance-diagram"><path d="M620.67,-208C620.67,-208 555.33,-208 555.33,-208 551.17,-208 547,-203.83 547,-199.67 547,-199.67 547,-191.33 547,-191.33 547,-187.17 551.17,-183 555.33,-183 555.33,-183 620.67,-183 620.67,-183 624.83,-183 629,-187.17 629,-191.33 629,-191.33 629,-199.67 629,-199.67 629,-203.83 624.83,-208 620.67,-208" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-202.5" x="557" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-193.1" x="578" text-anchor="start">Apply[F]</text></a></g></g><!-- node23&#45;&gt;node52 --><g class="edge inheritance" id="graph1_23_52"><g id="a_inheritance|graph1_23_52"><a xlink:title="Apply[F] is a subtype of InvariantSemigroupal[F]"><path d="M709.96,-241.47C682.33,-231.28 645.38,-217.66 619.42,-208.09" stroke="#d4d4d4" fill="none"></path><polygon points="709.36,-243.86 716.77,-243.98 711.05,-239.26 709.36,-243.86" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node39 --><g class="node trait" id="graph1_39"><g id="a_trait|graph1_39"><a xlink:title="cats.ContravariantMonoidal" xlink:href="ContravariantMonoidal.html#inheritance-diagram"><path d="M958.67,-147C958.67,-147 821.33,-147 821.33,-147 817.17,-147 813,-142.83 813,-138.67 813,-138.67 813,-130.33 813,-130.33 813,-126.17 817.17,-122 821.33,-122 821.33,-122 958.67,-122 958.67,-122 962.83,-122 967,-126.17 967,-130.33 967,-130.33 967,-138.67 967,-138.67 967,-142.83 962.83,-147 958.67,-147" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-141.5" x="823" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="844" text-anchor="start">ContravariantMonoidal[F]</text></a></g></g><!-- node24&#45;&gt;node39 --><g class="edge inheritance" id="graph1_24_39"><g id="a_inheritance|graph1_24_39"><a xlink:title="ContravariantMonoidal[F] is a subtype of InvariantMonoidal[F]"><path d="M768.04,-180.47C795.67,-170.28 832.62,-156.66 858.58,-147.09" stroke="#d4d4d4" fill="none"></path><polygon points="766.95,-178.26 761.23,-182.98 768.64,-182.86 766.95,-178.26" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node54 --><g class="node trait" id="graph1_54"><g id="a_trait|graph1_54"><a xlink:title="cats.Applicative" xlink:href="Applicative.html#inheritance-diagram"><path d="M781.17,-147C781.17,-147 688.83,-147 688.83,-147 684.67,-147 680.5,-142.83 680.5,-138.67 680.5,-138.67 680.5,-130.33 680.5,-130.33 680.5,-126.17 684.67,-122 688.83,-122 688.83,-122 781.17,-122 781.17,-122 785.33,-122 789.5,-126.17 789.5,-130.33 789.5,-130.33 789.5,-138.67 789.5,-138.67 789.5,-142.83 785.33,-147 781.17,-147" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-141.5" x="691" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="712" text-anchor="start">Applicative[F]</text></a></g></g><!-- node24&#45;&gt;node54 --><g class="edge inheritance" id="graph1_24_54"><g id="a_inheritance|graph1_24_54"><a xlink:title="Applicative[F] is a subtype of InvariantMonoidal[F]"><path d="M731.59,-175.76C732.38,-166.37 733.32,-155.29 734.01,-147.13" stroke="#d4d4d4" fill="none"></path><polygon points="729.14,-175.66 730.99,-182.84 734.02,-176.08 729.14,-175.66" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node25 --><g class="node trait" id="graph1_25"><g id="a_trait|graph1_25"><a xlink:title="cats.Invariant" xlink:href="Invariant.html#inheritance-diagram"><path d="M850.67,-330C850.67,-330 767.33,-330 767.33,-330 763.17,-330 759,-325.83 759,-321.67 759,-321.67 759,-313.33 759,-313.33 759,-309.17 763.17,-305 767.33,-305 767.33,-305 850.67,-305 850.67,-305 854.83,-305 859,-309.17 859,-313.33 859,-313.33 859,-321.67 859,-321.67 859,-325.83 854.83,-330 850.67,-330" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-324.5" x="769" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-315.1" x="790" text-anchor="start">Invariant[F]</text></a></g></g><!-- node25&#45;&gt;node23 --><g class="edge inheritance" id="graph1_25_23"><g id="a_inheritance|graph1_25_23"><a xlink:title="InvariantSemigroupal[F] is a subtype of Invariant[F]"><path d="M791.9,-299.96C781.75,-290.14 769.13,-277.93 760.03,-269.13" stroke="#d4d4d4" fill="none"></path><polygon points="790.21,-301.74 796.95,-304.84 793.62,-298.22 790.21,-301.74" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node29 --><g class="node trait" id="graph1_29"><g id="a_trait|graph1_29"><a xlink:title="cats.Functor" xlink:href="Functor.html#inheritance-diagram"><path d="M483.17,-269C483.17,-269 408.83,-269 408.83,-269 404.67,-269 400.5,-264.83 400.5,-260.67 400.5,-260.67 400.5,-252.33 400.5,-252.33 400.5,-248.17 404.67,-244 408.83,-244 408.83,-244 483.17,-244 483.17,-244 487.33,-244 491.5,-248.17 491.5,-252.33 491.5,-252.33 491.5,-260.67 491.5,-260.67 491.5,-264.83 487.33,-269 483.17,-269" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-263.5" x="411" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-254.1" x="432" text-anchor="start">Functor[F]</text></a></g></g><!-- node25&#45;&gt;node29 --><g class="edge inheritance" id="graph1_25_29"><g id="a_inheritance|graph1_25_29"><a xlink:title="Functor[F] is a subtype of Invariant[F]"><path d="M751.76,-305.47C750.83,-305.31 749.91,-305.15 749,-305 638.73,-286.47 610.08,-288.66 500,-269 497.26,-268.51 494.45,-267.99 491.62,-267.44" stroke="#d4d4d4" fill="none"></path><polygon points="751.62,-307.93 758.94,-306.73 752.47,-303.11 751.62,-307.93" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node40 --><g class="node trait" id="graph1_40"><g id="a_trait|graph1_40"><a xlink:title="cats.Contravariant" xlink:href="Contravariant.html#inheritance-diagram"><path d="M950.67,-269C950.67,-269 849.33,-269 849.33,-269 845.17,-269 841,-264.83 841,-260.67 841,-260.67 841,-252.33 841,-252.33 841,-248.17 845.17,-244 849.33,-244 849.33,-244 950.67,-244 950.67,-244 954.83,-244 959,-248.17 959,-252.33 959,-252.33 959,-260.67 959,-260.67 959,-264.83 954.83,-269 950.67,-269" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-263.5" x="851" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-254.1" x="872" text-anchor="start">Contravariant[F]</text></a></g></g><!-- node25&#45;&gt;node40 --><g class="edge inheritance" id="graph1_25_40"><g id="a_inheritance|graph1_25_40"><a xlink:title="Contravariant[F] is a subtype of Invariant[F]"><path d="M832.86,-301.03C848.27,-291.04 867.98,-278.26 882.06,-269.13" stroke="#d4d4d4" fill="none"></path><polygon points="831.52,-298.98 826.98,-304.84 834.19,-303.09 831.52,-298.98" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node26 --><g class="node trait" id="graph1_26"><g id="a_trait|graph1_26"><a xlink:title="cats.FunctorFilterInstances0" xlink:href="FunctorFilterInstances0.html#inheritance-diagram"><path d="M2305.67,-330C2305.67,-330 2172.33,-330 2172.33,-330 2168.17,-330 2164,-325.83 2164,-321.67 2164,-321.67 2164,-313.33 2164,-313.33 2164,-309.17 2168.17,-305 2172.33,-305 2172.33,-305 2305.67,-305 2305.67,-305 2309.83,-305 2314,-309.17 2314,-313.33 2314,-313.33 2314,-321.67 2314,-321.67 2314,-325.83 2309.83,-330 2305.67,-330" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-324.5" x="2174" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-315.1" x="2195" text-anchor="start">FunctorFilterInstances0</text></a></g></g><!-- node27 --><g class="node object" id="graph1_27"><g id="a_object|graph1_27"><a xlink:title="cats.FunctorFilter" xlink:href="FunctorFilter$.html#inheritance-diagram"><path d="M2283.17,-269C2283.17,-269 2194.83,-269 2194.83,-269 2190.67,-269 2186.5,-264.83 2186.5,-260.67 2186.5,-260.67 2186.5,-252.33 2186.5,-252.33 2186.5,-248.17 2190.67,-244 2194.83,-244 2194.83,-244 2283.17,-244 2283.17,-244 2287.33,-244 2291.5,-248.17 2291.5,-252.33 2291.5,-252.33 2291.5,-260.67 2291.5,-260.67 2291.5,-264.83 2287.33,-269 2283.17,-269" stroke="#103a51" fill="#103a51"></path><image xlink:href="../lib/object_diagram.png" y="-263.5" x="2197" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-254.1" x="2218" text-anchor="start">FunctorFilter</text></a></g></g><!-- node26&#45;&gt;node27 --><g class="edge inheritance" id="graph1_26_27"><g id="a_inheritance|graph1_26_27"><a xlink:title="FunctorFilter is a subtype of FunctorFilterInstances0"><path d="M2239,-297.76C2239,-288.37 2239,-277.29 2239,-269.13" stroke="#d4d4d4" fill="none"></path><polygon points="2236.55,-297.84 2239,-304.84 2241.45,-297.84 2236.55,-297.84" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node28 --><g class="node trait" id="graph1_28"><g id="a_trait|graph1_28"><a xlink:title="cats.FunctorFilter" xlink:href="FunctorFilter.html#inheritance-diagram"><path d="M1089.67,-330C1089.67,-330 988.33,-330 988.33,-330 984.17,-330 980,-325.83 980,-321.67 980,-321.67 980,-313.33 980,-313.33 980,-309.17 984.17,-305 988.33,-305 988.33,-305 1089.67,-305 1089.67,-305 1093.83,-305 1098,-309.17 1098,-313.33 1098,-313.33 1098,-321.67 1098,-321.67 1098,-325.83 1093.83,-330 1089.67,-330" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-324.5" x="990" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-315.1" x="1011" text-anchor="start">FunctorFilter[F]</text></a></g></g><!-- node28&#45;&gt;node2 --><g class="edge inheritance" id="graph1_28_2"><g id="a_inheritance|graph1_28_2"><a xlink:title="TraverseFilter[F] is a subtype of FunctorFilter[F]"><path d="M1039,-297.76C1039,-288.37 1039,-277.29 1039,-269.13" stroke="#d4d4d4" fill="none"></path><polygon points="1036.55,-297.84 1039,-304.84 1041.45,-297.84 1036.55,-297.84" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node29&#45;&gt;node3 --><g class="edge inheritance" id="graph1_29_3"><g id="a_inheritance|graph1_29_3"><a xlink:title="Traverse[F] is a subtype of Functor[F]"><path d="M393.11,-247.49C332.6,-238.26 230.58,-222.49 143,-208 137.26,-207.05 131.25,-206.03 125.29,-205.01" stroke="#d4d4d4" fill="none"></path><polygon points="392.99,-249.95 400.27,-248.58 393.72,-245.1 392.99,-249.95" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node35 --><g class="node trait" id="graph1_35"><g id="a_trait|graph1_35"><a xlink:title="cats.Distributive" xlink:href="Distributive.html#inheritance-diagram"><path d="M502.67,-208C502.67,-208 405.33,-208 405.33,-208 401.17,-208 397,-203.83 397,-199.67 397,-199.67 397,-191.33 397,-191.33 397,-187.17 401.17,-183 405.33,-183 405.33,-183 502.67,-183 502.67,-183 506.83,-183 511,-187.17 511,-191.33 511,-191.33 511,-199.67 511,-199.67 511,-203.83 506.83,-208 502.67,-208" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-202.5" x="407" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-193.1" x="428" text-anchor="start">Distributive[F]</text></a></g></g><!-- node29&#45;&gt;node35 --><g class="edge inheritance" id="graph1_29_35"><g id="a_inheritance|graph1_29_35"><a xlink:title="Distributive[F] is a subtype of Functor[F]"><path d="M448.54,-236.76C449.81,-227.37 451.32,-216.29 452.42,-208.13" stroke="#d4d4d4" fill="none"></path><polygon points="446.09,-236.58 447.58,-243.84 450.95,-237.24 446.09,-236.58" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node46 --><g class="node trait" id="graph1_46"><g id="a_trait|graph1_46"><a xlink:title="cats.CoflatMap" xlink:href="CoflatMap.html#inheritance-diagram"><path d="M370.67,-208C370.67,-208 287.33,-208 287.33,-208 283.17,-208 279,-203.83 279,-199.67 279,-199.67 279,-191.33 279,-191.33 279,-187.17 283.17,-183 287.33,-183 287.33,-183 370.67,-183 370.67,-183 374.83,-183 379,-187.17 379,-191.33 379,-191.33 379,-199.67 379,-199.67 379,-203.83 374.83,-208 370.67,-208" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-202.5" x="289" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-193.1" x="310" text-anchor="start">CoflatMap[F]</text></a></g></g><!-- node29&#45;&gt;node46 --><g class="edge inheritance" id="graph1_29_46"><g id="a_inheritance|graph1_29_46"><a xlink:title="CoflatMap[F] is a subtype of Functor[F]"><path d="M416.91,-240.83C396.93,-230.75 370.76,-217.56 352.18,-208.19" stroke="#d4d4d4" fill="none"></path><polygon points="415.81,-243.02 423.16,-243.98 418.02,-238.64 415.81,-243.02" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node29&#45;&gt;node52 --><g class="edge inheritance" id="graph1_29_52"><g id="a_inheritance|graph1_29_52"><a xlink:title="Apply[F] is a subtype of Functor[F]"><path d="M480.36,-241.22C504.73,-231.1 537.03,-217.68 559.87,-208.19" stroke="#d4d4d4" fill="none"></path><polygon points="479.24,-239.04 473.72,-243.98 481.12,-243.56 479.24,-239.04" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node30&#45;&gt;node3 --><g class="edge inheritance" id="graph1_30_3"><g id="a_inheritance|graph1_30_3"><a xlink:title="Traverse[F] is a subtype of Foldable[F]"><path d="M171.2,-240.96C149.81,-230.87 121.7,-217.6 101.76,-208.19" stroke="#d4d4d4" fill="none"></path><polygon points="170.23,-243.21 177.6,-243.98 172.32,-238.78 170.23,-243.21" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node30&#45;&gt;node11 --><g class="edge inheritance" id="graph1_30_11"><g id="a_inheritance|graph1_30_11"><a xlink:title="Reducible[F] is a subtype of Foldable[F]"><path d="M202,-236.76C202,-227.37 202,-216.29 202,-208.13" stroke="#d4d4d4" fill="none"></path><polygon points="199.55,-236.84 202,-243.84 204.45,-236.84 199.55,-236.84" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node31 --><g class="node trait" id="graph1_31"><g id="a_trait|graph1_31"><a xlink:title="cats.FlatMap" xlink:href="FlatMap.html#inheritance-diagram"><path d="M628.17,-147C628.17,-147 553.83,-147 553.83,-147 549.67,-147 545.5,-142.83 545.5,-138.67 545.5,-138.67 545.5,-130.33 545.5,-130.33 545.5,-126.17 549.67,-122 553.83,-122 553.83,-122 628.17,-122 628.17,-122 632.33,-122 636.5,-126.17 636.5,-130.33 636.5,-130.33 636.5,-138.67 636.5,-138.67 636.5,-142.83 632.33,-147 628.17,-147" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-141.5" x="556" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="577" text-anchor="start">FlatMap[F]</text></a></g></g><!-- node31&#45;&gt;node21 --><g class="edge inheritance" id="graph1_31_21"><g id="a_inheritance|graph1_31_21"><a xlink:title="Monad[F] is a subtype of FlatMap[F]"><path d="M630.81,-119.6C660.03,-109.4 699.27,-95.7 726.81,-86.09" stroke="#d4d4d4" fill="none"></path><polygon points="629.79,-117.36 623.99,-121.98 631.4,-121.99 629.79,-117.36" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node43 --><g class="node trait" id="graph1_43"><g id="a_trait|graph1_43"><a xlink:title="cats.CommutativeFlatMap" xlink:href="CommutativeFlatMap.html#inheritance-diagram"><path d="M515.17,-86C515.17,-86 390.83,-86 390.83,-86 386.67,-86 382.5,-81.83 382.5,-77.67 382.5,-77.67 382.5,-69.33 382.5,-69.33 382.5,-65.17 386.67,-61 390.83,-61 390.83,-61 515.17,-61 515.17,-61 519.33,-61 523.5,-65.17 523.5,-69.33 523.5,-69.33 523.5,-77.67 523.5,-77.67 523.5,-81.83 519.33,-86 515.17,-86" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-80.5" x="393" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-71.1" x="414" text-anchor="start">CommutativeFlatMap[F]</text></a></g></g><!-- node31&#45;&gt;node43 --><g class="edge inheritance" id="graph1_31_43"><g id="a_inheritance|graph1_31_43"><a xlink:title="CommutativeFlatMap[F] is a subtype of FlatMap[F]"><path d="M557.6,-119.22C533.92,-109.1 502.53,-95.68 480.34,-86.19" stroke="#d4d4d4" fill="none"></path><polygon points="556.67,-121.49 564.06,-121.98 558.59,-116.98 556.67,-121.49" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node32 --><g class="node trait" id="graph1_32"><g id="a_trait|graph1_32"><a xlink:title="cats.EvalSemigroup" xlink:href="EvalSemigroup.html#inheritance-diagram"><path d="M2441.67,-330C2441.67,-330 2340.33,-330 2340.33,-330 2336.17,-330 2332,-325.83 2332,-321.67 2332,-321.67 2332,-313.33 2332,-313.33 2332,-309.17 2336.17,-305 2340.33,-305 2340.33,-305 2441.67,-305 2441.67,-305 2445.83,-305 2450,-309.17 2450,-313.33 2450,-313.33 2450,-321.67 2450,-321.67 2450,-325.83 2445.83,-330 2441.67,-330" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-324.5" x="2342" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-315.1" x="2363" text-anchor="start">EvalSemigroup[A]</text></a></g></g><!-- node33 --><g class="node trait" id="graph1_33"><g id="a_trait|graph1_33"><a xlink:title="cats.EvalMonoid" xlink:href="EvalMonoid.html#inheritance-diagram"><path d="M2435.17,-269C2435.17,-269 2346.83,-269 2346.83,-269 2342.67,-269 2338.5,-264.83 2338.5,-260.67 2338.5,-260.67 2338.5,-252.33 2338.5,-252.33 2338.5,-248.17 2342.67,-244 2346.83,-244 2346.83,-244 2435.17,-244 2435.17,-244 2439.33,-244 2443.5,-248.17 2443.5,-252.33 2443.5,-252.33 2443.5,-260.67 2443.5,-260.67 2443.5,-264.83 2439.33,-269 2435.17,-269" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-263.5" x="2349" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-254.1" x="2370" text-anchor="start">EvalMonoid[A]</text></a></g></g><!-- node32&#45;&gt;node33 --><g class="edge inheritance" id="graph1_32_33"><g id="a_inheritance|graph1_32_33"><a xlink:title="EvalMonoid[A] is a subtype of EvalSemigroup[A]"><path d="M2391,-297.76C2391,-288.37 2391,-277.29 2391,-269.13" stroke="#d4d4d4" fill="none"></path><polygon points="2388.55,-297.84 2391,-304.84 2393.45,-297.84 2388.55,-297.84" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node34 --><g class="node trait" id="graph1_34"><g id="a_trait|graph1_34"><a xlink:title="cats.EvalGroup" xlink:href="EvalGroup.html#inheritance-diagram"><path d="M2432.67,-208C2432.67,-208 2349.33,-208 2349.33,-208 2345.17,-208 2341,-203.83 2341,-199.67 2341,-199.67 2341,-191.33 2341,-191.33 2341,-187.17 2345.17,-183 2349.33,-183 2349.33,-183 2432.67,-183 2432.67,-183 2436.83,-183 2441,-187.17 2441,-191.33 2441,-191.33 2441,-199.67 2441,-199.67 2441,-203.83 2436.83,-208 2432.67,-208" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-202.5" x="2351" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-193.1" x="2372" text-anchor="start">EvalGroup[A]</text></a></g></g><!-- node33&#45;&gt;node34 --><g class="edge inheritance" id="graph1_33_34"><g id="a_inheritance|graph1_33_34"><a xlink:title="EvalGroup[A] is a subtype of EvalMonoid[A]"><path d="M2391,-236.76C2391,-227.37 2391,-216.29 2391,-208.13" stroke="#d4d4d4" fill="none"></path><polygon points="2388.55,-236.84 2391,-243.84 2393.45,-236.84 2388.55,-236.84" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node37&#45;&gt;node39 --><g class="edge inheritance" id="graph1_37_39"><g id="a_inheritance|graph1_37_39"><a xlink:title="ContravariantMonoidal[F] is a subtype of ContravariantSemigroupal[F]"><path d="M896.82,-175.76C895.23,-166.37 893.35,-155.29 891.97,-147.13" stroke="#d4d4d4" fill="none"></path><polygon points="894.44,-176.35 898.02,-182.84 899.27,-175.53 894.44,-176.35" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node40&#45;&gt;node37 --><g class="edge inheritance" id="graph1_40_37"><g id="a_inheritance|graph1_40_37"><a xlink:title="ContravariantSemigroupal[F] is a subtype of Contravariant[F]"><path d="M900,-236.76C900,-227.37 900,-216.29 900,-208.13" stroke="#d4d4d4" fill="none"></path><polygon points="897.55,-236.84 900,-243.84 902.45,-236.84 897.55,-236.84" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node41 --><g class="node trait" id="graph1_41"><g id="a_trait|graph1_41"><a xlink:title="cats.Comonad" xlink:href="Comonad.html#inheritance-diagram"><path d="M356.17,-86C356.17,-86 281.83,-86 281.83,-86 277.67,-86 273.5,-81.83 273.5,-77.67 273.5,-77.67 273.5,-69.33 273.5,-69.33 273.5,-65.17 277.67,-61 281.83,-61 281.83,-61 356.17,-61 356.17,-61 360.33,-61 364.5,-65.17 364.5,-69.33 364.5,-69.33 364.5,-77.67 364.5,-77.67 364.5,-81.83 360.33,-86 356.17,-86" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-80.5" x="284" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-71.1" x="305" text-anchor="start">Comonad[F]</text></a></g></g><!-- node41&#45;&gt;node48 --><g class="edge inheritance" id="graph1_41_48"><g id="a_inheritance|graph1_41_48"><a xlink:title="Bimonad[F] is a subtype of Comonad[F]"><path d="M341.14,-56.76C355.13,-46.82 372.91,-34.18 385.64,-25.13" stroke="#d4d4d4" fill="none"></path><polygon points="339.68,-54.79 335.4,-60.84 342.52,-58.78 339.68,-54.79" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node43&#45;&gt;node42 --><g class="edge inheritance" id="graph1_43_42"><g id="a_inheritance|graph1_43_42"><a xlink:title="CommutativeMonad[F] is a subtype of CommutativeFlatMap[F]"><path d="M490.8,-58.47C518.26,-48.28 554.97,-34.66 580.77,-25.09" stroke="#d4d4d4" fill="none"></path><polygon points="489.74,-56.25 484.03,-60.98 491.45,-60.85 489.74,-56.25" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node44 --><g class="node trait" id="graph1_44"><g id="a_trait|graph1_44"><a xlink:title="cats.CommutativeApply" xlink:href="CommutativeApply.html#inheritance-diagram"><path d="M518.67,-147C518.67,-147 403.33,-147 403.33,-147 399.17,-147 395,-142.83 395,-138.67 395,-138.67 395,-130.33 395,-130.33 395,-126.17 399.17,-122 403.33,-122 403.33,-122 518.67,-122 518.67,-122 522.83,-122 527,-126.17 527,-130.33 527,-130.33 527,-138.67 527,-138.67 527,-142.83 522.83,-147 518.67,-147" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-141.5" x="405" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="426" text-anchor="start">CommutativeApply[F]</text></a></g></g><!-- node44&#45;&gt;node43 --><g class="edge inheritance" id="graph1_44_43"><g id="a_inheritance|graph1_44_43"><a xlink:title="CommutativeFlatMap[F] is a subtype of CommutativeApply[F]"><path d="M458.46,-114.76C457.19,-105.37 455.68,-94.29 454.58,-86.13" stroke="#d4d4d4" fill="none"></path><polygon points="456.05,-115.24 459.42,-121.84 460.91,-114.58 456.05,-115.24" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node45 --><g class="node trait" id="graph1_45"><g id="a_trait|graph1_45"><a xlink:title="cats.CommutativeApplicative" xlink:href="CommutativeApplicative.html#inheritance-diagram"><path d="M692.17,-86C692.17,-86 549.83,-86 549.83,-86 545.67,-86 541.5,-81.83 541.5,-77.67 541.5,-77.67 541.5,-69.33 541.5,-69.33 541.5,-65.17 545.67,-61 549.83,-61 549.83,-61 692.17,-61 692.17,-61 696.33,-61 700.5,-65.17 700.5,-69.33 700.5,-69.33 700.5,-77.67 700.5,-77.67 700.5,-81.83 696.33,-86 692.17,-86" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-80.5" x="552" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-71.1" x="573" text-anchor="start">CommutativeApplicative[F]</text></a></g></g><!-- node44&#45;&gt;node45 --><g class="edge inheritance" id="graph1_44_45"><g id="a_inheritance|graph1_44_45"><a xlink:title="CommutativeApplicative[F] is a subtype of CommutativeApply[F]"><path d="M499.04,-119.47C526.67,-109.28 563.62,-95.66 589.58,-86.09" stroke="#d4d4d4" fill="none"></path><polygon points="497.95,-117.26 492.23,-121.98 499.64,-121.86 497.95,-117.26" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node45&#45;&gt;node42 --><g class="edge inheritance" id="graph1_45_42"><g id="a_inheritance|graph1_45_42"><a xlink:title="CommutativeMonad[F] is a subtype of CommutativeApplicative[F]"><path d="M618.14,-53.76C616.71,-44.37 615.02,-33.29 613.77,-25.13" stroke="#d4d4d4" fill="none"></path><polygon points="615.74,-54.29 619.22,-60.84 620.59,-53.55 615.74,-54.29" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node46&#45;&gt;node41 --><g class="edge inheritance" id="graph1_46_41"><g id="a_inheritance|graph1_46_41"><a xlink:title="Comonad[F] is a subtype of CoflatMap[F]"><path d="M327.45,-175.86C325.36,-150.8 321.71,-106.99 319.97,-86.15" stroke="#d4d4d4" fill="none"></path><polygon points="325.02,-176.22 328.04,-182.99 329.9,-175.81 325.02,-176.22" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node47 --><g class="node trait" id="graph1_47"><g id="a_trait|graph1_47"><a xlink:title="cats.Bitraverse" xlink:href="Bitraverse.html#inheritance-diagram"><path d="M2623.17,-269C2623.17,-269 2534.83,-269 2534.83,-269 2530.67,-269 2526.5,-264.83 2526.5,-260.67 2526.5,-260.67 2526.5,-252.33 2526.5,-252.33 2526.5,-248.17 2530.67,-244 2534.83,-244 2534.83,-244 2623.17,-244 2623.17,-244 2627.33,-244 2631.5,-248.17 2631.5,-252.33 2631.5,-252.33 2631.5,-260.67 2631.5,-260.67 2631.5,-264.83 2627.33,-269 2623.17,-269" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-263.5" x="2537" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-254.1" x="2558" text-anchor="start">Bitraverse[F]</text></a></g></g><!-- node49 --><g class="node trait" id="graph1_49"><g id="a_trait|graph1_49"><a xlink:title="cats.Bifunctor" xlink:href="Bifunctor.html#inheritance-diagram"><path d="M2559.67,-330C2559.67,-330 2476.33,-330 2476.33,-330 2472.17,-330 2468,-325.83 2468,-321.67 2468,-321.67 2468,-313.33 2468,-313.33 2468,-309.17 2472.17,-305 2476.33,-305 2476.33,-305 2559.67,-305 2559.67,-305 2563.83,-305 2568,-309.17 2568,-313.33 2568,-313.33 2568,-321.67 2568,-321.67 2568,-325.83 2563.83,-330 2559.67,-330" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-324.5" x="2478" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-315.1" x="2499" text-anchor="start">Bifunctor[F]</text></a></g></g><!-- node49&#45;&gt;node47 --><g class="edge inheritance" id="graph1_49_47"><g id="a_inheritance|graph1_49_47"><a xlink:title="Bitraverse[F] is a subtype of Bifunctor[F]"><path d="M2535.1,-299.96C2545.25,-290.14 2557.87,-277.93 2566.97,-269.13" stroke="#d4d4d4" fill="none"></path><polygon points="2533.38,-298.22 2530.05,-304.84 2536.79,-301.74 2533.38,-298.22" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node50 --><g class="node trait" id="graph1_50"><g id="a_trait|graph1_50"><a xlink:title="cats.Bifoldable" xlink:href="Bifoldable.html#inheritance-diagram"><path d="M2683.17,-330C2683.17,-330 2594.83,-330 2594.83,-330 2590.67,-330 2586.5,-325.83 2586.5,-321.67 2586.5,-321.67 2586.5,-313.33 2586.5,-313.33 2586.5,-309.17 2590.67,-305 2594.83,-305 2594.83,-305 2683.17,-305 2683.17,-305 2687.33,-305 2691.5,-309.17 2691.5,-313.33 2691.5,-313.33 2691.5,-321.67 2691.5,-321.67 2691.5,-325.83 2687.33,-330 2683.17,-330" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-324.5" x="2597" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-315.1" x="2618" text-anchor="start">Bifoldable[F]</text></a></g></g><!-- node50&#45;&gt;node47 --><g class="edge inheritance" id="graph1_50_47"><g id="a_inheritance|graph1_50_47"><a xlink:title="Bitraverse[F] is a subtype of Bifoldable[F]"><path d="M2621.9,-299.69C2611.97,-289.92 2599.7,-277.85 2590.83,-269.13" stroke="#d4d4d4" fill="none"></path><polygon points="2620.44,-301.68 2627.15,-304.84 2623.87,-298.19 2620.44,-301.68" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node51 --><g class="node trait" id="graph1_51"><g id="a_trait|graph1_51"><a xlink:title="cats.ApplyArityFunctions" xlink:href="ApplyArityFunctions.html#inheritance-diagram"><path d="M646.17,-269C646.17,-269 517.83,-269 517.83,-269 513.67,-269 509.5,-264.83 509.5,-260.67 509.5,-260.67 509.5,-252.33 509.5,-252.33 509.5,-248.17 513.67,-244 517.83,-244 517.83,-244 646.17,-244 646.17,-244 650.33,-244 654.5,-248.17 654.5,-252.33 654.5,-252.33 654.5,-260.67 654.5,-260.67 654.5,-264.83 650.33,-269 646.17,-269" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-263.5" x="520" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-254.1" x="541" text-anchor="start">ApplyArityFunctions[F]</text></a></g></g><!-- node51&#45;&gt;node52 --><g class="edge inheritance" id="graph1_51_52"><g id="a_inheritance|graph1_51_52"><a xlink:title="Apply[F] is a subtype of ApplyArityFunctions[F]"><path d="M583.91,-236.76C584.86,-227.37 585.99,-216.29 586.82,-208.13" stroke="#d4d4d4" fill="none"></path><polygon points="581.46,-236.63 583.19,-243.84 586.33,-237.13 581.46,-236.63" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node52&#45;&gt;node31 --><g class="edge inheritance" id="graph1_52_31"><g id="a_inheritance|graph1_52_31"><a xlink:title="FlatMap[F] is a subtype of Apply[F]"><path d="M588.95,-175.76C589.43,-166.37 589.99,-155.29 590.41,-147.13" stroke="#d4d4d4" fill="none"></path><polygon points="586.5,-175.73 588.59,-182.84 591.4,-175.98 586.5,-175.73" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node52&#45;&gt;node44 --><g class="edge inheritance" id="graph1_52_44"><g id="a_inheritance|graph1_52_44"><a xlink:title="CommutativeApply[F] is a subtype of Apply[F]"><path d="M556.71,-179.96C534.98,-169.87 506.41,-156.6 486.16,-147.19" stroke="#d4d4d4" fill="none"></path><polygon points="555.83,-182.26 563.21,-182.98 557.9,-177.81 555.83,-182.26" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node52&#45;&gt;node54 --><g class="edge inheritance" id="graph1_52_54"><g id="a_inheritance|graph1_52_54"><a xlink:title="Applicative[F] is a subtype of Apply[F]"><path d="M623.27,-180.34C648.62,-170.17 682.38,-156.62 706.13,-147.09" stroke="#d4d4d4" fill="none"></path><polygon points="622.28,-178.1 616.69,-182.98 624.1,-182.65 622.28,-178.1" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node53 --><g class="node trait" id="graph1_53"><g id="a_trait|graph1_53"><a xlink:title="cats.ApplicativeError" xlink:href="ApplicativeError.html#inheritance-diagram"><path d="M959.17,-86C959.17,-86 830.83,-86 830.83,-86 826.67,-86 822.5,-81.83 822.5,-77.67 822.5,-77.67 822.5,-69.33 822.5,-69.33 822.5,-65.17 826.67,-61 830.83,-61 830.83,-61 959.17,-61 959.17,-61 963.33,-61 967.5,-65.17 967.5,-69.33 967.5,-69.33 967.5,-77.67 967.5,-77.67 967.5,-81.83 963.33,-86 959.17,-86" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-80.5" x="833" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-71.1" x="854" text-anchor="start">ApplicativeError[F, E]</text></a></g></g><!-- node53&#45;&gt;node20 --><g class="edge inheritance" id="graph1_53_20"><g id="a_inheritance|graph1_53_20"><a xlink:title="MonadError[F, E] is a subtype of ApplicativeError[F, E]"><path d="M895.64,-53.76C895.95,-44.37 896.33,-33.29 896.61,-25.13" stroke="#d4d4d4" fill="none"></path><polygon points="893.18,-53.76 895.4,-60.84 898.08,-53.93 893.18,-53.76" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node54&#45;&gt;node21 --><g class="edge inheritance" id="graph1_54_21"><g id="a_inheritance|graph1_54_21"><a xlink:title="Monad[F] is a subtype of Applicative[F]"><path d="M742.7,-115.32C746.73,-105.81 751.55,-94.45 755.07,-86.13" stroke="#d4d4d4" fill="none"></path><polygon points="740.41,-114.44 739.94,-121.84 744.93,-116.35 740.41,-114.44" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node54&#45;&gt;node45 --><g class="edge inheritance" id="graph1_54_45"><g id="a_inheritance|graph1_54_45"><a xlink:title="CommutativeApplicative[F] is a subtype of Applicative[F]"><path d="M706.4,-118.7C686.96,-108.64 661.61,-95.52 643.58,-86.19" stroke="#d4d4d4" fill="none"></path><polygon points="705.41,-120.94 712.75,-121.98 707.66,-116.59 705.41,-120.94" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node54&#45;&gt;node53 --><g class="edge inheritance" id="graph1_54_53"><g id="a_inheritance|graph1_54_53"><a xlink:title="ApplicativeError[F, E] is a subtype of Applicative[F]"><path d="M773.04,-119.47C800.67,-109.28 837.62,-95.66 863.58,-86.09" stroke="#d4d4d4" fill="none"></path><polygon points="771.95,-117.26 766.23,-121.98 773.64,-121.86 771.95,-117.26" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node54&#45;&gt;node55 --><g class="edge inheritance" id="graph1_54_55"><g id="a_inheritance|graph1_54_55"><a xlink:title="Alternative[F] is a subtype of Applicative[F]"><path d="M796.66,-121.8C853.42,-111.03 936.82,-95.21 991.27,-84.88" stroke="#d4d4d4" fill="none"></path><polygon points="795.95,-119.44 789.53,-123.16 796.86,-124.26 795.95,-119.44" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
+                <div id="diagram-controls" class="hiddenContent">
+                  <button id="diagram-zoom-out" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button id="diagram-zoom-in" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button title="Toggle full-screen" id="diagram-fs" class="diagram-btn to-full"><i class="material-icons"></i></button>
+                </div>
+              </div></div>
         
 
       <div id="mbrsel">
@@ -530,7 +608,8 @@
         <span title="gt4s: $colon$less$colon" class="name">:&lt;:</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result alias"> = <a href="InjectK.html" class="extype" name="cats.InjectK">InjectK</a>[<span class="extype" name="cats.:&lt;:.F">F</span>, <span class="extype" name="cats.:&lt;:.G">G</span>]</span>
       </span>
       
-      <p class="shortcomment cmt"><a href="InjectK.html" class="extype" name="cats.InjectK">cats.InjectK</a>[F, G]</p>
+      <p class="shortcomment cmt"><a href="InjectK.html" class="extype" name="cats.InjectK">cats.InjectK</a>[F, G]
+</p>
     </li><li name="cats.:≺:" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id=":≺:[F[_],G[_]]=cats.InjectK[F,G]"></a><a id=":≺:[F[_],G[_]]::≺:[F,G]"></a>
       <span class="permalink">
@@ -546,9 +625,10 @@
         <span title="gt4s: $colon$u227A$colon" class="name">:≺:</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result alias"> = <a href="InjectK.html" class="extype" name="cats.InjectK">InjectK</a>[<span class="extype" name="cats.:≺:.F">F</span>, <span class="extype" name="cats.:≺:.G">G</span>]</span>
       </span>
       
-      <p class="shortcomment cmt"><a href="InjectK.html" class="extype" name="cats.InjectK">cats.InjectK</a>[F, G]</p>
+      <p class="shortcomment cmt"><a href="InjectK.html" class="extype" name="cats.InjectK">cats.InjectK</a>[F, G]
+</p>
     </li><li name="cats.Align" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="Align[F[_]]extendsAnywithSerializable"></a><a id="Align[F[_]]:Align[F]"></a>
+      <a id="Align[F[_]]extendsSerializable"></a><a id="Align[F[_]]:Align[F]"></a>
       <span class="permalink">
       <a href="../cats/Align.html" title="Permalink">
         <i class="material-icons"></i>
@@ -571,9 +651,17 @@ holding the results from either or both structures in an <code>Ior</code>.</p><p
       <span class="defval" name="&quot;Could not find an instance of Align for ${F}&quot;">...</span>
     </span>)</span>
               
+                <span class="name">@typeclass</span><span class="args">(<span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$1">...</span>
+    </span>, <span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$2">...</span>
+    </span>)</span>
+              
         </dd></dl></div>
     </li><li name="cats.Alternative" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="Alternative[F[_]]extendsApplicative[F]withMonoidK[F]withSerializable"></a><a id="Alternative[F[_]]:Alternative[F]"></a>
+      <a id="Alternative[F[_]]extendsApplicative[F]withMonoidK[F]"></a><a id="Alternative[F[_]]:Alternative[F]"></a>
       <span class="permalink">
       <a href="../cats/Alternative.html" title="Permalink">
         <i class="material-icons"></i>
@@ -584,7 +672,7 @@ holding the results from either or both structures in an <code>Ior</code>.</p><p
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="" href="Alternative.html"><span class="name">Alternative</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.Alternative.F">F</span>] with <a href="MonoidK.html" class="extype" name="cats.MonoidK">MonoidK</a>[<span class="extype" name="cats.Alternative.F">F</span>] with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="" href="Alternative.html"><span class="name">Alternative</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.Alternative.F">F</span>] with <a href="MonoidK.html" class="extype" name="cats.MonoidK">MonoidK</a>[<span class="extype" name="cats.Alternative.F">F</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
@@ -593,9 +681,17 @@ holding the results from either or both structures in an <code>Ior</code>.</p><p
       <span class="defval" name="&quot;Could not find an instance of Alternative for ${F}&quot;">...</span>
     </span>)</span>
               
+                <span class="name">@typeclass</span><span class="args">(<span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$1">...</span>
+    </span>, <span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$2">...</span>
+    </span>)</span>
+              
         </dd></dl></div>
     </li><li name="cats.Always" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="Always[A]extendsEval[A]"></a><a id="Always[A]:Always[A]"></a>
+      <a id="Always[A]extendsEval.Leaf[A]"></a><a id="Always[A]:Always[A]"></a>
       <span class="permalink">
       <a href="../cats/Always.html" title="Permalink">
         <i class="material-icons"></i>
@@ -606,7 +702,7 @@ holding the results from either or both structures in an <code>Ior</code>.</p><p
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a title="Construct a lazy Eval[A] instance." href="Always.html"><span class="name">Always</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.Always.A">A</span>]</span>
+        <a title="Construct a lazy Eval[A] instance." href="Always.html"><span class="name">Always</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="Eval$$Leaf.html" class="extype" name="cats.Eval.Leaf">Leaf</a>[<span class="extype" name="cats.Always.A">A</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Construct a lazy Eval[A] instance.</p><div class="fullcomment"><div class="comment cmt"><p>Construct a lazy Eval[A] instance.</p><p>This type can be used for &quot;lazy&quot; values. In some sense it is
@@ -615,7 +711,7 @@ required. It should be avoided except when laziness is required and
 caching must be avoided. Generally, prefer Later.
 </p></div></div>
     </li><li name="cats.Applicative" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="Applicative[F[_]]extendsApply[F]withInvariantMonoidal[F]withSerializable"></a><a id="Applicative[F[_]]:Applicative[F]"></a>
+      <a id="Applicative[F[_]]extendsApply[F]withInvariantMonoidal[F]"></a><a id="Applicative[F[_]]:Applicative[F]"></a>
       <span class="permalink">
       <a href="../cats/Applicative.html" title="Permalink">
         <i class="material-icons"></i>
@@ -626,7 +722,7 @@ caching must be avoided. Generally, prefer Later.
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="Applicative functor." href="Applicative.html"><span class="name">Applicative</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Apply.html" class="extype" name="cats.Apply">Apply</a>[<span class="extype" name="cats.Applicative.F">F</span>] with <a href="InvariantMonoidal.html" class="extype" name="cats.InvariantMonoidal">InvariantMonoidal</a>[<span class="extype" name="cats.Applicative.F">F</span>] with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="Applicative functor." href="Applicative.html"><span class="name">Applicative</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Apply.html" class="extype" name="cats.Apply">Apply</a>[<span class="extype" name="cats.Applicative.F">F</span>] with <a href="InvariantMonoidal.html" class="extype" name="cats.InvariantMonoidal">InvariantMonoidal</a>[<span class="extype" name="cats.Applicative.F">F</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Applicative functor.</p><div class="fullcomment"><div class="comment cmt"><p>Applicative functor.</p><p>Allows application of a function in an Applicative context to a value in an Applicative context</p><p>See: <a href="https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf" target="_blank">The Essence of the Iterator Pattern</a>
@@ -635,6 +731,14 @@ Also: <a href="http://staff.city.ac.uk/~ross/papers/Applicative.pdf" target="_bl
                 <span class="name">@implicitNotFound</span><span class="args">(<span>
       
       <span class="defval" name="&quot;Could not find an instance of Applicative for ${F}&quot;">...</span>
+    </span>)</span>
+              
+                <span class="name">@typeclass</span><span class="args">(<span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$1">...</span>
+    </span>, <span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$2">...</span>
     </span>)</span>
               
         </dd></dl></div>
@@ -656,7 +760,7 @@ Also: <a href="http://staff.city.ac.uk/~ross/papers/Applicative.pdf" target="_bl
       <p class="shortcomment cmt">An applicative that also allows you to raise and or handle an error value.</p><div class="fullcomment"><div class="comment cmt"><p>An applicative that also allows you to raise and or handle an error value.</p><p>This type class allows one to abstract over error-handling applicatives.
 </p></div></div>
     </li><li name="cats.Apply" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="Apply[F[_]]extendsFunctor[F]withInvariantSemigroupal[F]withApplyArityFunctions[F]withSerializable"></a><a id="Apply[F[_]]:Apply[F]"></a>
+      <a id="Apply[F[_]]extendsFunctor[F]withInvariantSemigroupal[F]withApplyArityFunctions[F]"></a><a id="Apply[F[_]]:Apply[F]"></a>
       <span class="permalink">
       <a href="../cats/Apply.html" title="Permalink">
         <i class="material-icons"></i>
@@ -667,7 +771,7 @@ Also: <a href="http://staff.city.ac.uk/~ross/papers/Applicative.pdf" target="_bl
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="Weaker version of Applicative[F]; has apply but not pure." href="Apply.html"><span class="name">Apply</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.Apply.F">F</span>] with <a href="InvariantSemigroupal.html" class="extype" name="cats.InvariantSemigroupal">InvariantSemigroupal</a>[<span class="extype" name="cats.Apply.F">F</span>] with <a href="ApplyArityFunctions.html" class="extype" name="cats.ApplyArityFunctions">ApplyArityFunctions</a>[<span class="extype" name="cats.Apply.F">F</span>] with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="Weaker version of Applicative[F]; has apply but not pure." href="Apply.html"><span class="name">Apply</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.Apply.F">F</span>] with <a href="InvariantSemigroupal.html" class="extype" name="cats.InvariantSemigroupal">InvariantSemigroupal</a>[<span class="extype" name="cats.Apply.F">F</span>] with <a href="ApplyArityFunctions.html" class="extype" name="cats.ApplyArityFunctions">ApplyArityFunctions</a>[<span class="extype" name="cats.Apply.F">F</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Weaker version of Applicative[F]; has apply but not pure.</p><div class="fullcomment"><div class="comment cmt"><p>Weaker version of Applicative[F]; has apply but not pure.</p><p>Must obey the laws defined in cats.laws.ApplyLaws.
@@ -675,6 +779,14 @@ Also: <a href="http://staff.city.ac.uk/~ross/papers/Applicative.pdf" target="_bl
                 <span class="name">@implicitNotFound</span><span class="args">(<span>
       
       <span class="defval" name="&quot;Could not find an instance of Apply for ${F}&quot;">...</span>
+    </span>)</span>
+              
+                <span class="name">@typeclass</span><span class="args">(<span>
+      
+      <span class="symbol">List(&quot;ApplyArityFunctions&quot;)</span>
+    </span>, <span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$2">...</span>
     </span>)</span>
               
         </dd></dl></div>
@@ -695,7 +807,7 @@ Also: <a href="http://staff.city.ac.uk/~ross/papers/Applicative.pdf" target="_bl
       
       <p class="shortcomment cmt"></p>
     </li><li name="cats.Bifoldable" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="Bifoldable[F[_,_]]extendsAnywithSerializable"></a><a id="Bifoldable[F[_,_]]:Bifoldable[F]"></a>
+      <a id="Bifoldable[F[_,_]]extendsSerializable"></a><a id="Bifoldable[F[_,_]]:Bifoldable[F]"></a>
       <span class="permalink">
       <a href="../cats/Bifoldable.html" title="Permalink">
         <i class="material-icons"></i>
@@ -716,9 +828,17 @@ Also: <a href="http://staff.city.ac.uk/~ross/papers/Applicative.pdf" target="_bl
       <span class="defval" name="&quot;Could not find an instance of Bifoldable for ${F}&quot;">...</span>
     </span>)</span>
               
+                <span class="name">@typeclass</span><span class="args">(<span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$1">...</span>
+    </span>, <span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$2">...</span>
+    </span>)</span>
+              
         </dd></dl></div>
     </li><li name="cats.Bifunctor" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="Bifunctor[F[_,_]]extendsAnywithSerializable"></a><a id="Bifunctor[F[_,_]]:Bifunctor[F]"></a>
+      <a id="Bifunctor[F[_,_]]extendsSerializable"></a><a id="Bifunctor[F[_,_]]:Bifunctor[F]"></a>
       <span class="permalink">
       <a href="../cats/Bifunctor.html" title="Permalink">
         <i class="material-icons"></i>
@@ -741,9 +861,17 @@ functors.
       <span class="defval" name="&quot;Could not find an instance of Bifunctor for ${F}&quot;">...</span>
     </span>)</span>
               
+                <span class="name">@typeclass</span><span class="args">(<span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$1">...</span>
+    </span>, <span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$2">...</span>
+    </span>)</span>
+              
         </dd></dl></div>
     </li><li name="cats.Bimonad" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="Bimonad[F[_]]extendsMonad[F]withComonad[F]withSerializable"></a><a id="Bimonad[F[_]]:Bimonad[F]"></a>
+      <a id="Bimonad[F[_]]extendsMonad[F]withComonad[F]"></a><a id="Bimonad[F[_]]:Bimonad[F]"></a>
       <span class="permalink">
       <a href="../cats/Bimonad.html" title="Permalink">
         <i class="material-icons"></i>
@@ -754,7 +882,7 @@ functors.
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="" href="Bimonad.html"><span class="name">Bimonad</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.Bimonad.F">F</span>] with <a href="Comonad.html" class="extype" name="cats.Comonad">Comonad</a>[<span class="extype" name="cats.Bimonad.F">F</span>] with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="" href="Bimonad.html"><span class="name">Bimonad</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.Bimonad.F">F</span>] with <a href="Comonad.html" class="extype" name="cats.Comonad">Comonad</a>[<span class="extype" name="cats.Bimonad.F">F</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
@@ -763,9 +891,17 @@ functors.
       <span class="defval" name="&quot;Could not find an instance of Bimonad for ${F}&quot;">...</span>
     </span>)</span>
               
+                <span class="name">@typeclass</span><span class="args">(<span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$1">...</span>
+    </span>, <span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$2">...</span>
+    </span>)</span>
+              
         </dd></dl></div>
     </li><li name="cats.Bitraverse" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="Bitraverse[F[_,_]]extendsBifoldable[F]withBifunctor[F]withSerializable"></a><a id="Bitraverse[F[_,_]]:Bitraverse[F]"></a>
+      <a id="Bitraverse[F[_,_]]extendsBifoldable[F]withBifunctor[F]"></a><a id="Bitraverse[F[_,_]]:Bitraverse[F]"></a>
       <span class="permalink">
       <a href="../cats/Bitraverse.html" title="Permalink">
         <i class="material-icons"></i>
@@ -776,19 +912,27 @@ functors.
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="A type class abstracting over types that give rise to two independent cats.Traverses." href="Bitraverse.html"><span class="name">Bitraverse</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Bifoldable.html" class="extype" name="cats.Bifoldable">Bifoldable</a>[<span class="extype" name="cats.Bitraverse.F">F</span>] with <a href="Bifunctor.html" class="extype" name="cats.Bifunctor">Bifunctor</a>[<span class="extype" name="cats.Bitraverse.F">F</span>] with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="A type class abstracting over types that give rise to two independent cats.Traverses." href="Bitraverse.html"><span class="name">Bitraverse</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Bifoldable.html" class="extype" name="cats.Bifoldable">Bifoldable</a>[<span class="extype" name="cats.Bitraverse.F">F</span>] with <a href="Bifunctor.html" class="extype" name="cats.Bifunctor">Bifunctor</a>[<span class="extype" name="cats.Bitraverse.F">F</span>]</span>
       </span>
       
-      <p class="shortcomment cmt"> A type class abstracting over types that give rise to two independent <a href="Traverse.html" class="extype" name="cats.Traverse">cats.Traverse</a>s.</p><div class="fullcomment"><div class="comment cmt"><p> A type class abstracting over types that give rise to two independent <a href="Traverse.html" class="extype" name="cats.Traverse">cats.Traverse</a>s.
+      <p class="shortcomment cmt">A type class abstracting over types that give rise to two independent <a href="Traverse.html" class="extype" name="cats.Traverse">cats.Traverse</a>s.</p><div class="fullcomment"><div class="comment cmt"><p>A type class abstracting over types that give rise to two independent <a href="Traverse.html" class="extype" name="cats.Traverse">cats.Traverse</a>s.
 </p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@implicitNotFound</span><span class="args">(<span>
       
       <span class="defval" name="&quot;Could not find an instance of Bitraverse for ${F}&quot;">...</span>
     </span>)</span>
               
+                <span class="name">@typeclass</span><span class="args">(<span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$1">...</span>
+    </span>, <span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$2">...</span>
+    </span>)</span>
+              
         </dd></dl></div>
     </li><li name="cats.CoflatMap" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="CoflatMap[F[_]]extendsFunctor[F]withSerializable"></a><a id="CoflatMap[F[_]]:CoflatMap[F]"></a>
+      <a id="CoflatMap[F[_]]extendsFunctor[F]"></a><a id="CoflatMap[F[_]]:CoflatMap[F]"></a>
       <span class="permalink">
       <a href="../cats/CoflatMap.html" title="Permalink">
         <i class="material-icons"></i>
@@ -799,7 +943,7 @@ functors.
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="CoflatMap is the dual of FlatMap." href="CoflatMap.html"><span class="name">CoflatMap</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.CoflatMap.F">F</span>] with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="CoflatMap is the dual of FlatMap." href="CoflatMap.html"><span class="name">CoflatMap</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.CoflatMap.F">F</span>]</span>
       </span>
       
       <p class="shortcomment cmt"><code>CoflatMap</code> is the dual of <code>FlatMap</code>.</p><div class="fullcomment"><div class="comment cmt"><p><code>CoflatMap</code> is the dual of <code>FlatMap</code>.</p><p>Must obey the laws in cats.laws.CoflatMapLaws
@@ -809,9 +953,17 @@ functors.
       <span class="defval" name="&quot;Could not find an instance of CoflatMap for ${F}&quot;">...</span>
     </span>)</span>
               
+                <span class="name">@typeclass</span><span class="args">(<span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$1">...</span>
+    </span>, <span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$2">...</span>
+    </span>)</span>
+              
         </dd></dl></div>
     </li><li name="cats.CommutativeApplicative" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="CommutativeApplicative[F[_]]extendsApplicative[F]withCommutativeApply[F]withSerializable"></a><a id="CommutativeApplicative[F[_]]:CommutativeApplicative[F]"></a>
+      <a id="CommutativeApplicative[F[_]]extendsApplicative[F]withCommutativeApply[F]"></a><a id="CommutativeApplicative[F[_]]:CommutativeApplicative[F]"></a>
       <span class="permalink">
       <a href="../cats/CommutativeApplicative.html" title="Permalink">
         <i class="material-icons"></i>
@@ -822,7 +974,7 @@ functors.
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="Commutative Applicative." href="CommutativeApplicative.html"><span class="name">CommutativeApplicative</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.CommutativeApplicative.F">F</span>] with <a href="CommutativeApply.html" class="extype" name="cats.CommutativeApply">CommutativeApply</a>[<span class="extype" name="cats.CommutativeApplicative.F">F</span>] with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="Commutative Applicative." href="CommutativeApplicative.html"><span class="name">CommutativeApplicative</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.CommutativeApplicative.F">F</span>] with <a href="CommutativeApply.html" class="extype" name="cats.CommutativeApply">CommutativeApply</a>[<span class="extype" name="cats.CommutativeApplicative.F">F</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Commutative Applicative.</p><div class="fullcomment"><div class="comment cmt"><p>Commutative Applicative.</p><p>Further than an Applicative, which just allows composition of independent effectful functions,
@@ -834,9 +986,17 @@ that their effects do not interfere.</p><p>Must obey the laws defined in cats.la
       <span class="defval" name="&quot;Could not find an instance of CommutativeApplicative for ${F}&quot;">...</span>
     </span>)</span>
               
+                <span class="name">@typeclass</span><span class="args">(<span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$1">...</span>
+    </span>, <span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$2">...</span>
+    </span>)</span>
+              
         </dd></dl></div>
     </li><li name="cats.CommutativeApply" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="CommutativeApply[F[_]]extendsApply[F]withSerializable"></a><a id="CommutativeApply[F[_]]:CommutativeApply[F]"></a>
+      <a id="CommutativeApply[F[_]]extendsApply[F]"></a><a id="CommutativeApply[F[_]]:CommutativeApply[F]"></a>
       <span class="permalink">
       <a href="../cats/CommutativeApply.html" title="Permalink">
         <i class="material-icons"></i>
@@ -847,7 +1007,7 @@ that their effects do not interfere.</p><p>Must obey the laws defined in cats.la
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="Commutative Apply." href="CommutativeApply.html"><span class="name">CommutativeApply</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Apply.html" class="extype" name="cats.Apply">Apply</a>[<span class="extype" name="cats.CommutativeApply.F">F</span>] with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="Commutative Apply." href="CommutativeApply.html"><span class="name">CommutativeApply</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Apply.html" class="extype" name="cats.Apply">Apply</a>[<span class="extype" name="cats.CommutativeApply.F">F</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Commutative Apply.</p><div class="fullcomment"><div class="comment cmt"><p>Commutative Apply.</p><p>Further than an Apply, which just allows composition of independent effectful functions,
@@ -859,9 +1019,17 @@ that their effects do not interfere.</p><p>Must obey the laws defined in cats.la
       <span class="defval" name="&quot;Could not find an instance of CommutativeApply for ${F}&quot;">...</span>
     </span>)</span>
               
+                <span class="name">@typeclass</span><span class="args">(<span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$1">...</span>
+    </span>, <span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$2">...</span>
+    </span>)</span>
+              
         </dd></dl></div>
     </li><li name="cats.CommutativeFlatMap" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="CommutativeFlatMap[F[_]]extendsFlatMap[F]withCommutativeApply[F]withSerializable"></a><a id="CommutativeFlatMap[F[_]]:CommutativeFlatMap[F]"></a>
+      <a id="CommutativeFlatMap[F[_]]extendsFlatMap[F]withCommutativeApply[F]"></a><a id="CommutativeFlatMap[F[_]]:CommutativeFlatMap[F]"></a>
       <span class="permalink">
       <a href="../cats/CommutativeFlatMap.html" title="Permalink">
         <i class="material-icons"></i>
@@ -872,7 +1040,7 @@ that their effects do not interfere.</p><p>Must obey the laws defined in cats.la
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="Commutative FlatMap." href="CommutativeFlatMap.html"><span class="name">CommutativeFlatMap</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a>[<span class="extype" name="cats.CommutativeFlatMap.F">F</span>] with <a href="CommutativeApply.html" class="extype" name="cats.CommutativeApply">CommutativeApply</a>[<span class="extype" name="cats.CommutativeFlatMap.F">F</span>] with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="Commutative FlatMap." href="CommutativeFlatMap.html"><span class="name">CommutativeFlatMap</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a>[<span class="extype" name="cats.CommutativeFlatMap.F">F</span>] with <a href="CommutativeApply.html" class="extype" name="cats.CommutativeApply">CommutativeApply</a>[<span class="extype" name="cats.CommutativeFlatMap.F">F</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Commutative FlatMap.</p><div class="fullcomment"><div class="comment cmt"><p>Commutative FlatMap.</p><p>Further than a FlatMap, which just allows composition of dependent effectful functions,
@@ -884,9 +1052,17 @@ that their effects do not interfere.</p><p>Must obey the laws defined in cats.la
       <span class="defval" name="&quot;Could not find an instance of CommutativeFlatMap for ${F}&quot;">...</span>
     </span>)</span>
               
+                <span class="name">@typeclass</span><span class="args">(<span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$1">...</span>
+    </span>, <span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$2">...</span>
+    </span>)</span>
+              
         </dd></dl></div>
     </li><li name="cats.CommutativeMonad" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="CommutativeMonad[F[_]]extendsMonad[F]withCommutativeFlatMap[F]withCommutativeApplicative[F]withSerializable"></a><a id="CommutativeMonad[F[_]]:CommutativeMonad[F]"></a>
+      <a id="CommutativeMonad[F[_]]extendsMonad[F]withCommutativeFlatMap[F]withCommutativeApplicative[F]"></a><a id="CommutativeMonad[F[_]]:CommutativeMonad[F]"></a>
       <span class="permalink">
       <a href="../cats/CommutativeMonad.html" title="Permalink">
         <i class="material-icons"></i>
@@ -897,7 +1073,7 @@ that their effects do not interfere.</p><p>Must obey the laws defined in cats.la
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="Commutative Monad." href="CommutativeMonad.html"><span class="name">CommutativeMonad</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.CommutativeMonad.F">F</span>] with <a href="CommutativeFlatMap.html" class="extype" name="cats.CommutativeFlatMap">CommutativeFlatMap</a>[<span class="extype" name="cats.CommutativeMonad.F">F</span>] with <a href="CommutativeApplicative.html" class="extype" name="cats.CommutativeApplicative">CommutativeApplicative</a>[<span class="extype" name="cats.CommutativeMonad.F">F</span>] with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="Commutative Monad." href="CommutativeMonad.html"><span class="name">CommutativeMonad</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.CommutativeMonad.F">F</span>] with <a href="CommutativeFlatMap.html" class="extype" name="cats.CommutativeFlatMap">CommutativeFlatMap</a>[<span class="extype" name="cats.CommutativeMonad.F">F</span>] with <a href="CommutativeApplicative.html" class="extype" name="cats.CommutativeApplicative">CommutativeApplicative</a>[<span class="extype" name="cats.CommutativeMonad.F">F</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Commutative Monad.</p><div class="fullcomment"><div class="comment cmt"><p>Commutative Monad.</p><p>Further than a Monad, which just allows composition of dependent effectful functions,
@@ -909,9 +1085,17 @@ that their effects do not interfere.</p><p>Must obey the laws defined in cats.la
       <span class="defval" name="&quot;Could not find an instance of CommutativeMonad for ${F}&quot;">...</span>
     </span>)</span>
               
+                <span class="name">@typeclass</span><span class="args">(<span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$1">...</span>
+    </span>, <span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$2">...</span>
+    </span>)</span>
+              
         </dd></dl></div>
     </li><li name="cats.Comonad" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="Comonad[F[_]]extendsCoflatMap[F]withSerializable"></a><a id="Comonad[F[_]]:Comonad[F]"></a>
+      <a id="Comonad[F[_]]extendsCoflatMap[F]"></a><a id="Comonad[F[_]]:Comonad[F]"></a>
       <span class="permalink">
       <a href="../cats/Comonad.html" title="Permalink">
         <i class="material-icons"></i>
@@ -922,7 +1106,7 @@ that their effects do not interfere.</p><p>Must obey the laws defined in cats.la
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="Comonad" href="Comonad.html"><span class="name">Comonad</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="CoflatMap.html" class="extype" name="cats.CoflatMap">CoflatMap</a>[<span class="extype" name="cats.Comonad.F">F</span>] with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="Comonad" href="Comonad.html"><span class="name">Comonad</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="CoflatMap.html" class="extype" name="cats.CoflatMap">CoflatMap</a>[<span class="extype" name="cats.Comonad.F">F</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Comonad</p><div class="fullcomment"><div class="comment cmt"><p>Comonad</p><p>Comonad is the dual of Monad. Whereas Monads allow for the composition of effectful functions,
@@ -931,6 +1115,14 @@ Comonads allow for composition of functions that extract the value from their co
                 <span class="name">@implicitNotFound</span><span class="args">(<span>
       
       <span class="defval" name="&quot;Could not find an instance of Comonad for ${F}&quot;">...</span>
+    </span>)</span>
+              
+                <span class="name">@typeclass</span><span class="args">(<span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$1">...</span>
+    </span>, <span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$2">...</span>
     </span>)</span>
               
         </dd></dl></div>
@@ -951,7 +1143,7 @@ Comonads allow for composition of functions that extract the value from their co
       
       
     </li><li name="cats.Contravariant" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="Contravariant[F[_]]extendsInvariant[F]withSerializable"></a><a id="Contravariant[F[_]]:Contravariant[F]"></a>
+      <a id="Contravariant[F[_]]extendsInvariant[F]"></a><a id="Contravariant[F[_]]:Contravariant[F]"></a>
       <span class="permalink">
       <a href="../cats/Contravariant.html" title="Permalink">
         <i class="material-icons"></i>
@@ -962,7 +1154,7 @@ Comonads allow for composition of functions that extract the value from their co
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="Must obey the laws defined in cats.laws.ContravariantLaws." href="Contravariant.html"><span class="name">Contravariant</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Invariant.html" class="extype" name="cats.Invariant">Invariant</a>[<span class="extype" name="cats.Contravariant.F">F</span>] with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="Must obey the laws defined in cats.laws.ContravariantLaws." href="Contravariant.html"><span class="name">Contravariant</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Invariant.html" class="extype" name="cats.Invariant">Invariant</a>[<span class="extype" name="cats.Contravariant.F">F</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Must obey the laws defined in cats.laws.ContravariantLaws.</p><div class="fullcomment"><div class="comment cmt"><p>Must obey the laws defined in cats.laws.ContravariantLaws.
@@ -972,9 +1164,17 @@ Comonads allow for composition of functions that extract the value from their co
       <span class="defval" name="&quot;Could not find an instance of Contravariant for ${F}&quot;">...</span>
     </span>)</span>
               
+                <span class="name">@typeclass</span><span class="args">(<span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$1">...</span>
+    </span>, <span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$2">...</span>
+    </span>)</span>
+              
         </dd></dl></div>
     </li><li name="cats.ContravariantMonoidal" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="ContravariantMonoidal[F[_]]extendsContravariantSemigroupal[F]withInvariantMonoidal[F]withSerializable"></a><a id="ContravariantMonoidal[F[_]]:ContravariantMonoidal[F]"></a>
+      <a id="ContravariantMonoidal[F[_]]extendsContravariantSemigroupal[F]withInvariantMonoidal[F]"></a><a id="ContravariantMonoidal[F[_]]:ContravariantMonoidal[F]"></a>
       <span class="permalink">
       <a href="../cats/ContravariantMonoidal.html" title="Permalink">
         <i class="material-icons"></i>
@@ -985,7 +1185,7 @@ Comonads allow for composition of functions that extract the value from their co
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="ContravariantMonoidal functors are functors that supply a unit along the diagonal map for the contramap2 operation." href="ContravariantMonoidal.html"><span class="name">ContravariantMonoidal</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="ContravariantSemigroupal.html" class="extype" name="cats.ContravariantSemigroupal">ContravariantSemigroupal</a>[<span class="extype" name="cats.ContravariantMonoidal.F">F</span>] with <a href="InvariantMonoidal.html" class="extype" name="cats.InvariantMonoidal">InvariantMonoidal</a>[<span class="extype" name="cats.ContravariantMonoidal.F">F</span>] with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="ContravariantMonoidal functors are functors that supply a unit along the diagonal map for the contramap2 operation." href="ContravariantMonoidal.html"><span class="name">ContravariantMonoidal</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="ContravariantSemigroupal.html" class="extype" name="cats.ContravariantSemigroupal">ContravariantSemigroupal</a>[<span class="extype" name="cats.ContravariantMonoidal.F">F</span>] with <a href="InvariantMonoidal.html" class="extype" name="cats.InvariantMonoidal">InvariantMonoidal</a>[<span class="extype" name="cats.ContravariantMonoidal.F">F</span>]</span>
       </span>
       
       <p class="shortcomment cmt"><a href="ContravariantMonoidal.html" class="extype" name="cats.ContravariantMonoidal">ContravariantMonoidal</a> functors are functors that supply
@@ -998,9 +1198,17 @@ https://hackage.haskell.org/package/contravariant-1.4/docs/Data-Functor-Contrava
       <span class="defval" name="&quot;Could not find an instance of ContravariantMonoidal for ${F}&quot;">...</span>
     </span>)</span>
               
+                <span class="name">@typeclass</span><span class="args">(<span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$1">...</span>
+    </span>, <span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$2">...</span>
+    </span>)</span>
+              
         </dd></dl></div>
     </li><li name="cats.ContravariantSemigroupal" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="ContravariantSemigroupal[F[_]]extendsInvariantSemigroupal[F]withContravariant[F]withSerializable"></a><a id="ContravariantSemigroupal[F[_]]:ContravariantSemigroupal[F]"></a>
+      <a id="ContravariantSemigroupal[F[_]]extendsInvariantSemigroupal[F]withContravariant[F]"></a><a id="ContravariantSemigroupal[F[_]]:ContravariantSemigroupal[F]"></a>
       <span class="permalink">
       <a href="../cats/ContravariantSemigroupal.html" title="Permalink">
         <i class="material-icons"></i>
@@ -1011,7 +1219,7 @@ https://hackage.haskell.org/package/contravariant-1.4/docs/Data-Functor-Contrava
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="ContravariantSemigroupal is nothing more than something both contravariant and Semigroupal." href="ContravariantSemigroupal.html"><span class="name">ContravariantSemigroupal</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="InvariantSemigroupal.html" class="extype" name="cats.InvariantSemigroupal">InvariantSemigroupal</a>[<span class="extype" name="cats.ContravariantSemigroupal.F">F</span>] with <a href="Contravariant.html" class="extype" name="cats.Contravariant">Contravariant</a>[<span class="extype" name="cats.ContravariantSemigroupal.F">F</span>] with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="ContravariantSemigroupal is nothing more than something both contravariant and Semigroupal." href="ContravariantSemigroupal.html"><span class="name">ContravariantSemigroupal</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="InvariantSemigroupal.html" class="extype" name="cats.InvariantSemigroupal">InvariantSemigroupal</a>[<span class="extype" name="cats.ContravariantSemigroupal.F">F</span>] with <a href="Contravariant.html" class="extype" name="cats.Contravariant">Contravariant</a>[<span class="extype" name="cats.ContravariantSemigroupal.F">F</span>]</span>
       </span>
       
       <p class="shortcomment cmt"><a href="ContravariantSemigroupal.html" class="extype" name="cats.ContravariantSemigroupal">ContravariantSemigroupal</a> is nothing more than something both contravariant
@@ -1021,6 +1229,14 @@ and Semigroupal. It comes up enough to be useful, and composes well
                 <span class="name">@implicitNotFound</span><span class="args">(<span>
       
       <span class="defval" name="&quot;Could not find an instance of ContravariantSemigroupal for ${F}&quot;">...</span>
+    </span>)</span>
+              
+                <span class="name">@typeclass</span><span class="args">(<span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$1">...</span>
+    </span>, <span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$2">...</span>
     </span>)</span>
               
         </dd></dl></div>
@@ -1058,7 +1274,7 @@ res0: <span class="std">Boolean</span> = <span class="kw">false</span>
 scala&gt; Eq[Eval[<span class="std">Int</span>]].eqv(dfa, Eval.now(<span class="num">21</span>))
 res1: <span class="std">Boolean</span> = <span class="kw">true</span></pre></div></div>
     </li><li name="cats.Distributive" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="Distributive[F[_]]extendsFunctor[F]withSerializable"></a><a id="Distributive[F[_]]:Distributive[F]"></a>
+      <a id="Distributive[F[_]]extendsFunctor[F]"></a><a id="Distributive[F[_]]:Distributive[F]"></a>
       <span class="permalink">
       <a href="../cats/Distributive.html" title="Permalink">
         <i class="material-icons"></i>
@@ -1069,13 +1285,21 @@ res1: <span class="std">Boolean</span> = <span class="kw">true</span></pre></div
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="" href="Distributive.html"><span class="name">Distributive</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.Distributive.F">F</span>] with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="" href="Distributive.html"><span class="name">Distributive</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.Distributive.F">F</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@implicitNotFound</span><span class="args">(<span>
       
       <span class="defval" name="&quot;Could not find an instance of Distributive for ${F}&quot;">...</span>
+    </span>)</span>
+              
+                <span class="name">@typeclass</span><span class="args">(<span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$1">...</span>
+    </span>, <span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$2">...</span>
     </span>)</span>
               
         </dd></dl></div>
@@ -1190,7 +1414,7 @@ overflows.
       
       
     </li><li name="cats.FlatMap" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="FlatMap[F[_]]extendsApply[F]withSerializable"></a><a id="FlatMap[F[_]]:FlatMap[F]"></a>
+      <a id="FlatMap[F[_]]extendsApply[F]"></a><a id="FlatMap[F[_]]:FlatMap[F]"></a>
       <span class="permalink">
       <a href="../cats/FlatMap.html" title="Permalink">
         <i class="material-icons"></i>
@@ -1201,7 +1425,7 @@ overflows.
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="FlatMap type class gives us flatMap, which allows us to have a value in a context (F[A]) and then feed that into a function that takes a normal value and returns a value in a context (A =&gt; F[B])." href="FlatMap.html"><span class="name">FlatMap</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Apply.html" class="extype" name="cats.Apply">Apply</a>[<span class="extype" name="cats.FlatMap.F">F</span>] with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="FlatMap type class gives us flatMap, which allows us to have a value in a context (F[A]) and then feed that into a function that takes a normal value and returns a value in a context (A =&gt; F[B])." href="FlatMap.html"><span class="name">FlatMap</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Apply.html" class="extype" name="cats.Apply">Apply</a>[<span class="extype" name="cats.FlatMap.F">F</span>]</span>
       </span>
       
       <p class="shortcomment cmt">FlatMap type class gives us flatMap, which allows us to have a value
@@ -1219,10 +1443,18 @@ when instantiating the new Map).
       <span class="defval" name="&quot;Could not find an instance of FlatMap for ${F}&quot;">...</span>
     </span>)</span>
               
+                <span class="name">@typeclass</span><span class="args">(<span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$1">...</span>
+    </span>, <span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$2">...</span>
+    </span>)</span>
+              
         </dd><dt>See also</dt><dd><span class="cmt"><p>See <a href="https://github.com/typelevel/cats/issues/3" target="_blank">https://github.com/typelevel/cats/issues/3</a> for some discussion.
 Must obey the laws defined in cats.laws.FlatMapLaws.</p></span></dd></dl></div>
     </li><li name="cats.Foldable" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="Foldable[F[_]]extendsUnorderedFoldable[F]withSerializable"></a><a id="Foldable[F[_]]:Foldable[F]"></a>
+      <a id="Foldable[F[_]]extendsUnorderedFoldable[F]"></a><a id="Foldable[F[_]]:Foldable[F]"></a>
       <span class="permalink">
       <a href="../cats/Foldable.html" title="Permalink">
         <i class="material-icons"></i>
@@ -1233,7 +1465,7 @@ Must obey the laws defined in cats.laws.FlatMapLaws.</p></span></dd></dl></div>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="Data structures that can be folded to a summary value." href="Foldable.html"><span class="name">Foldable</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="UnorderedFoldable.html" class="extype" name="cats.UnorderedFoldable">UnorderedFoldable</a>[<span class="extype" name="cats.Foldable.F">F</span>] with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="Data structures that can be folded to a summary value." href="Foldable.html"><span class="name">Foldable</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="UnorderedFoldable.html" class="extype" name="cats.UnorderedFoldable">UnorderedFoldable</a>[<span class="extype" name="cats.Foldable.F">F</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Data structures that can be folded to a summary value.</p><div class="fullcomment"><div class="comment cmt"><p>Data structures that can be folded to a summary value.</p><p>In the case of a collection (such as <code>List</code> or <code>Vector</code>), these
@@ -1249,9 +1481,17 @@ folding over F[A] values.</p><p>See: <a href="http://www.cs.nott.ac.uk/~pszgmh/f
       <span class="defval" name="&quot;Could not find an instance of Foldable for ${F}&quot;">...</span>
     </span>)</span>
               
+                <span class="name">@typeclass</span><span class="args">(<span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$1">...</span>
+    </span>, <span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$2">...</span>
+    </span>)</span>
+              
         </dd></dl></div>
     </li><li name="cats.Functor" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="Functor[F[_]]extendsInvariant[F]withSerializable"></a><a id="Functor[F[_]]:Functor[F]"></a>
+      <a id="Functor[F[_]]extendsInvariant[F]"></a><a id="Functor[F[_]]:Functor[F]"></a>
       <span class="permalink">
       <a href="../cats/Functor.html" title="Permalink">
         <i class="material-icons"></i>
@@ -1262,7 +1502,7 @@ folding over F[A] values.</p><p>See: <a href="http://www.cs.nott.ac.uk/~pszgmh/f
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="Functor." href="Functor.html"><span class="name">Functor</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Invariant.html" class="extype" name="cats.Invariant">Invariant</a>[<span class="extype" name="cats.Functor.F">F</span>] with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="Functor." href="Functor.html"><span class="name">Functor</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Invariant.html" class="extype" name="cats.Invariant">Invariant</a>[<span class="extype" name="cats.Functor.F">F</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Functor.</p><div class="fullcomment"><div class="comment cmt"><p>Functor.</p><p>The name is short for &quot;covariant functor&quot;.</p><p>Must obey the laws defined in cats.laws.FunctorLaws.
@@ -1270,6 +1510,14 @@ folding over F[A] values.</p><p>See: <a href="http://www.cs.nott.ac.uk/~pszgmh/f
                 <span class="name">@implicitNotFound</span><span class="args">(<span>
       
       <span class="defval" name="&quot;Could not find an instance of Functor for ${F}&quot;">...</span>
+    </span>)</span>
+              
+                <span class="name">@typeclass</span><span class="args">(<span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$1">...</span>
+    </span>, <span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$2">...</span>
     </span>)</span>
               
         </dd></dl></div>
@@ -1295,7 +1543,31 @@ folding over F[A] values.</p><p>See: <a href="http://www.cs.nott.ac.uk/~pszgmh/f
       <span class="defval" name="&quot;Could not find an instance of FunctorFilter for ${F}&quot;">...</span>
     </span>)</span>
               
+                <span class="name">@typeclass</span><span class="args">(<span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$1">...</span>
+    </span>, <span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$2">...</span>
+    </span>)</span>
+              
         </dd></dl></div>
+    </li><li name="cats.FunctorFilterInstances0" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="FunctorFilterInstances0extendsAnyRef"></a><a id="FunctorFilterInstances0:FunctorFilterInstances0"></a>
+      <span class="permalink">
+      <a href="../cats/FunctorFilterInstances0.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="FunctorFilterInstances0.html"><span class="name">FunctorFilterInstances0</span></a><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      
+      
     </li><li name="cats.Group" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Group[A]=cats.kernel.Group[A]"></a><a id="Group[A]:Group[A]"></a>
       <span class="permalink">
@@ -1403,7 +1675,7 @@ are described thoroughly in &quot;Data types a la carte&quot; (Swierstra
 2008).
 </p></div><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>Prior to cats 1.0, InjectK was known as <a href="Inject.html" class="extype" name="cats.Inject">Inject</a>.</p></span></dd><dt>See also</dt><dd><span class="cmt"><p><a href="http://www.staff.science.uu.nl/~swier004/publications/2008-jfp.pdf" target="_blank">http://www.staff.science.uu.nl/~swier004/publications/2008-jfp.pdf</a></p></span><span class="cmt"><p><a href="Inject.html" class="extype" name="cats.Inject">Inject</a> for injection for <code>Either</code></p></span></dd></dl></div>
     </li><li name="cats.Invariant" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="Invariant[F[_]]extendsAnywithSerializable"></a><a id="Invariant[F[_]]:Invariant[F]"></a>
+      <a id="Invariant[F[_]]extendsSerializable"></a><a id="Invariant[F[_]]:Invariant[F]"></a>
       <span class="permalink">
       <a href="../cats/Invariant.html" title="Permalink">
         <i class="material-icons"></i>
@@ -1424,9 +1696,17 @@ are described thoroughly in &quot;Data types a la carte&quot; (Swierstra
       <span class="defval" name="&quot;Could not find an instance of Invariant for ${F}&quot;">...</span>
     </span>)</span>
               
+                <span class="name">@typeclass</span><span class="args">(<span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$1">...</span>
+    </span>, <span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$2">...</span>
+    </span>)</span>
+              
         </dd></dl></div>
     </li><li name="cats.InvariantMonoidal" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="InvariantMonoidal[F[_]]extendsInvariantSemigroupal[F]withSerializable"></a><a id="InvariantMonoidal[F[_]]:InvariantMonoidal[F]"></a>
+      <a id="InvariantMonoidal[F[_]]extendsInvariantSemigroupal[F]"></a><a id="InvariantMonoidal[F[_]]:InvariantMonoidal[F]"></a>
       <span class="permalink">
       <a href="../cats/InvariantMonoidal.html" title="Permalink">
         <i class="material-icons"></i>
@@ -1437,7 +1717,7 @@ are described thoroughly in &quot;Data types a la carte&quot; (Swierstra
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="Invariant version of a Monoidal." href="InvariantMonoidal.html"><span class="name">InvariantMonoidal</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="InvariantSemigroupal.html" class="extype" name="cats.InvariantSemigroupal">InvariantSemigroupal</a>[<span class="extype" name="cats.InvariantMonoidal.F">F</span>] with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="Invariant version of a Monoidal." href="InvariantMonoidal.html"><span class="name">InvariantMonoidal</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="InvariantSemigroupal.html" class="extype" name="cats.InvariantSemigroupal">InvariantSemigroupal</a>[<span class="extype" name="cats.InvariantMonoidal.F">F</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Invariant version of a Monoidal.</p><div class="fullcomment"><div class="comment cmt"><p>Invariant version of a Monoidal.</p><p>Must obey the laws defined in cats.laws.InvariantMonoidalLaws.
@@ -1447,9 +1727,17 @@ are described thoroughly in &quot;Data types a la carte&quot; (Swierstra
       <span class="defval" name="&quot;Could not find an instance of InvariantMonoidal for ${F}&quot;">...</span>
     </span>)</span>
               
+                <span class="name">@typeclass</span><span class="args">(<span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$1">...</span>
+    </span>, <span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$2">...</span>
+    </span>)</span>
+              
         </dd></dl></div>
     </li><li name="cats.InvariantSemigroupal" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="InvariantSemigroupal[F[_]]extendsSemigroupal[F]withInvariant[F]withSerializable"></a><a id="InvariantSemigroupal[F[_]]:InvariantSemigroupal[F]"></a>
+      <a id="InvariantSemigroupal[F[_]]extendsSemigroupal[F]withInvariant[F]"></a><a id="InvariantSemigroupal[F[_]]:InvariantSemigroupal[F]"></a>
       <span class="permalink">
       <a href="../cats/InvariantSemigroupal.html" title="Permalink">
         <i class="material-icons"></i>
@@ -1460,7 +1748,7 @@ are described thoroughly in &quot;Data types a la carte&quot; (Swierstra
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="InvariantSemigroupal is nothing more than something both invariant and Semigroupal." href="InvariantSemigroupal.html"><span class="name">InvariantSemigroupal</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Semigroupal.html" class="extype" name="cats.Semigroupal">Semigroupal</a>[<span class="extype" name="cats.InvariantSemigroupal.F">F</span>] with <a href="Invariant.html" class="extype" name="cats.Invariant">Invariant</a>[<span class="extype" name="cats.InvariantSemigroupal.F">F</span>] with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="InvariantSemigroupal is nothing more than something both invariant and Semigroupal." href="InvariantSemigroupal.html"><span class="name">InvariantSemigroupal</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Semigroupal.html" class="extype" name="cats.Semigroupal">Semigroupal</a>[<span class="extype" name="cats.InvariantSemigroupal.F">F</span>] with <a href="Invariant.html" class="extype" name="cats.Invariant">Invariant</a>[<span class="extype" name="cats.InvariantSemigroupal.F">F</span>]</span>
       </span>
       
       <p class="shortcomment cmt"><a href="InvariantSemigroupal.html" class="extype" name="cats.InvariantSemigroupal">InvariantSemigroupal</a> is nothing more than something both invariant
@@ -1472,9 +1760,17 @@ and Semigroupal. It comes up enough to be useful, and composes well
       <span class="defval" name="&quot;Could not find an instance of InvariantSemigroupal for ${F}&quot;">...</span>
     </span>)</span>
               
+                <span class="name">@typeclass</span><span class="args">(<span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$1">...</span>
+    </span>, <span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$2">...</span>
+    </span>)</span>
+              
         </dd></dl></div>
     </li><li name="cats.Later" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="Later[A]extendsEval[A]"></a><a id="Later[A]:Later[A]"></a>
+      <a id="Later[A]extendsEval.Leaf[A]"></a><a id="Later[A]:Later[A]"></a>
       <span class="permalink">
       <a href="../cats/Later.html" title="Permalink">
         <i class="material-icons"></i>
@@ -1485,7 +1781,7 @@ and Semigroupal. It comes up enough to be useful, and composes well
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a title="Construct a lazy Eval[A] instance." href="Later.html"><span class="name">Later</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.Later.A">A</span>]</span>
+        <a title="Construct a lazy Eval[A] instance." href="Later.html"><span class="name">Later</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="Eval$$Leaf.html" class="extype" name="cats.Eval.Leaf">Leaf</a>[<span class="extype" name="cats.Later.A">A</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Construct a lazy Eval[A] instance.</p><div class="fullcomment"><div class="comment cmt"><p>Construct a lazy Eval[A] instance.</p><p>This type should be used for most &quot;lazy&quot; values. In some sense it
@@ -1496,7 +1792,7 @@ by the closure) will not be retained, and will be available for
 garbage collection.
 </p></div></div>
     </li><li name="cats.Monad" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="Monad[F[_]]extendsFlatMap[F]withApplicative[F]withSerializable"></a><a id="Monad[F[_]]:Monad[F]"></a>
+      <a id="Monad[F[_]]extendsFlatMap[F]withApplicative[F]"></a><a id="Monad[F[_]]:Monad[F]"></a>
       <span class="permalink">
       <a href="../cats/Monad.html" title="Permalink">
         <i class="material-icons"></i>
@@ -1507,7 +1803,7 @@ garbage collection.
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="Monad." href="Monad.html"><span class="name">Monad</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a>[<span class="extype" name="cats.Monad.F">F</span>] with <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.Monad.F">F</span>] with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="Monad." href="Monad.html"><span class="name">Monad</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a>[<span class="extype" name="cats.Monad.F">F</span>] with <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.Monad.F">F</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Monad.</p><div class="fullcomment"><div class="comment cmt"><p>Monad.</p><p>Allows composition of dependent effectful functions.</p><p>See: <a href="http://homepages.inf.ed.ac.uk/wadler/papers/marktoberdorf/baastad.pdf" target="_blank">Monads for functional programming</a></p><p>Must obey the laws defined in cats.laws.MonadLaws.
@@ -1515,6 +1811,14 @@ garbage collection.
                 <span class="name">@implicitNotFound</span><span class="args">(<span>
       
       <span class="defval" name="&quot;Could not find an instance of Monad for ${F}&quot;">...</span>
+    </span>)</span>
+              
+                <span class="name">@typeclass</span><span class="args">(<span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$1">...</span>
+    </span>, <span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$2">...</span>
     </span>)</span>
               
         </dd></dl></div>
@@ -1552,7 +1856,7 @@ garbage collection.
       
       
     </li><li name="cats.MonoidK" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="MonoidK[F[_]]extendsSemigroupK[F]withSerializable"></a><a id="MonoidK[F[_]]:MonoidK[F]"></a>
+      <a id="MonoidK[F[_]]extendsSemigroupK[F]"></a><a id="MonoidK[F[_]]:MonoidK[F]"></a>
       <span class="permalink">
       <a href="../cats/MonoidK.html" title="Permalink">
         <i class="material-icons"></i>
@@ -1563,7 +1867,7 @@ garbage collection.
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="MonoidK is a universal monoid which operates on kinds." href="MonoidK.html"><span class="name">MonoidK</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a>[<span class="extype" name="cats.MonoidK.F">F</span>] with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="MonoidK is a universal monoid which operates on kinds." href="MonoidK.html"><span class="name">MonoidK</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a>[<span class="extype" name="cats.MonoidK.F">F</span>]</span>
       </span>
       
       <p class="shortcomment cmt">MonoidK is a universal monoid which operates on kinds.</p><div class="fullcomment"><div class="comment cmt"><p>MonoidK is a universal monoid which operates on kinds.</p><p>This type class is useful when its type parameter F[_] has a
@@ -1578,6 +1882,14 @@ for kinds (i.e. parametrized types).</p><p>A MonoidK[F] can produce a Monoid[F[A
                 <span class="name">@implicitNotFound</span><span class="args">(<span>
       
       <span class="defval" name="&quot;Could not find an instance of MonoidK for ${F}&quot;">...</span>
+    </span>)</span>
+              
+                <span class="name">@typeclass</span><span class="args">(<span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$1">...</span>
+    </span>, <span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$2">...</span>
     </span>)</span>
               
         </dd></dl></div>
@@ -1617,10 +1929,11 @@ The NonEmptyParallel type class allows us to represent this relationship.
       <p class="shortcomment cmt">This class defines a <code>Reducible[F]</code> in terms of a <code>Foldable[G]</code>
 together with a <code>split</code> method, <code>F[A]</code> =&gt; <code>(A, G[A])</code>.</p><div class="fullcomment"><div class="comment cmt"><p>This class defines a <code>Reducible[F]</code> in terms of a <code>Foldable[G]</code>
 together with a <code>split</code> method, <code>F[A]</code> =&gt; <code>(A, G[A])</code>.</p><p>This class can be used on any type where the first value (<code>A</code>) and
-the &quot;rest&quot; of the values (<code>G[A]</code>) can be easily found.
+the &quot;rest&quot; of the values (<code>G[A]</code>) can be easily found.</p><p>This class is only a helper, does not define a typeclass and should not be used outside of Cats.
+Also see the discussion: PR #3541 and issue #3069.
 </p></div></div>
     </li><li name="cats.NonEmptyTraverse" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="NonEmptyTraverse[F[_]]extendsTraverse[F]withReducible[F]withSerializable"></a><a id="NonEmptyTraverse[F[_]]:NonEmptyTraverse[F]"></a>
+      <a id="NonEmptyTraverse[F[_]]extendsTraverse[F]withReducible[F]"></a><a id="NonEmptyTraverse[F[_]]:NonEmptyTraverse[F]"></a>
       <span class="permalink">
       <a href="../cats/NonEmptyTraverse.html" title="Permalink">
         <i class="material-icons"></i>
@@ -1631,7 +1944,7 @@ the &quot;rest&quot; of the values (<code>G[A]</code>) can be easily found.
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="NonEmptyTraverse, also known as Traversable1." href="NonEmptyTraverse.html"><span class="name">NonEmptyTraverse</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<span class="extype" name="cats.NonEmptyTraverse.F">F</span>] with <a href="Reducible.html" class="extype" name="cats.Reducible">Reducible</a>[<span class="extype" name="cats.NonEmptyTraverse.F">F</span>] with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="NonEmptyTraverse, also known as Traversable1." href="NonEmptyTraverse.html"><span class="name">NonEmptyTraverse</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<span class="extype" name="cats.NonEmptyTraverse.F">F</span>] with <a href="Reducible.html" class="extype" name="cats.Reducible">Reducible</a>[<span class="extype" name="cats.NonEmptyTraverse.F">F</span>]</span>
       </span>
       
       <p class="shortcomment cmt">NonEmptyTraverse, also known as Traversable1.</p><div class="fullcomment"><div class="comment cmt"><p>NonEmptyTraverse, also known as Traversable1.</p><p><code>NonEmptyTraverse</code> is like a non-empty <code>Traverse</code>. In addition to the traverse and sequence
@@ -1640,6 +1953,14 @@ methods it provides nonEmptyTraverse and nonEmptySequence methods which require 
                 <span class="name">@implicitNotFound</span><span class="args">(<span>
       
       <span class="defval" name="&quot;Could not find an instance of NonEmptyTraverse for ${F}&quot;">...</span>
+    </span>)</span>
+              
+                <span class="name">@typeclass</span><span class="args">(<span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$1">...</span>
+    </span>, <span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$2">...</span>
     </span>)</span>
               
         </dd></dl></div>
@@ -1668,7 +1989,7 @@ is an early example of such a trick being used in a similar way to prevent a
 <code>Nothing</code> type.
 </p></div></div>
     </li><li name="cats.Now" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="Now[A]extendsEval[A]withProductwithSerializable"></a><a id="Now[A]:Now[A]"></a>
+      <a id="Now[A]extendsEval.Leaf[A]withProductwithSerializable"></a><a id="Now[A]:Now[A]"></a>
       <span class="permalink">
       <a href="../cats/Now.html" title="Permalink">
         <i class="material-icons"></i>
@@ -1679,7 +2000,7 @@ is an early example of such a trick being used in a similar way to prevent a
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a title="Construct an eager Eval[A] instance." href="Now.html"><span class="name">Now</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="value">value: <span class="extype" name="cats.Now.A">A</span></span>)</span><span class="result"> extends <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.Now.A">A</span>] with <a href="https://www.scala-lang.org/api/2.12.10/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="Construct an eager Eval[A] instance." href="Now.html"><span class="name">Now</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="value">value: <span class="extype" name="cats.Now.A">A</span></span>)</span><span class="result"> extends <a href="Eval$$Leaf.html" class="extype" name="cats.Eval.Leaf">Leaf</a>[<span class="extype" name="cats.Now.A">A</span>] with <a href="https://www.scala-lang.org/api/2.12.10/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       <p class="shortcomment cmt">Construct an eager Eval[A] instance.</p><div class="fullcomment"><div class="comment cmt"><p>Construct an eager Eval[A] instance.</p><p>In some sense it is equivalent to using a val.</p><p>This type should be used when an A value is already in hand, or
@@ -1768,7 +2089,7 @@ The Parallel type class allows us to represent this relationship.
       
       
     </li><li name="cats.Reducible" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="Reducible[F[_]]extendsFoldable[F]withSerializable"></a><a id="Reducible[F[_]]:Reducible[F]"></a>
+      <a id="Reducible[F[_]]extendsFoldable[F]"></a><a id="Reducible[F[_]]:Reducible[F]"></a>
       <span class="permalink">
       <a href="../cats/Reducible.html" title="Permalink">
         <i class="material-icons"></i>
@@ -1779,7 +2100,7 @@ The Parallel type class allows us to represent this relationship.
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="Data structures that can be reduced to a summary value." href="Reducible.html"><span class="name">Reducible</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.Reducible.F">F</span>] with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="Data structures that can be reduced to a summary value." href="Reducible.html"><span class="name">Reducible</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.Reducible.F">F</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Data structures that can be reduced to a summary value.</p><div class="fullcomment"><div class="comment cmt"><p>Data structures that can be reduced to a summary value.</p><p><code>Reducible</code> is like a non-empty <code>Foldable</code>. In addition to the fold
@@ -1790,6 +2111,14 @@ implemented in terms of two methods:</p><ul><li><code>reduceLeftTo(fa)(f)(g)</co
                 <span class="name">@implicitNotFound</span><span class="args">(<span>
       
       <span class="defval" name="&quot;Could not find an instance of Reducible for ${F}&quot;">...</span>
+    </span>)</span>
+              
+                <span class="name">@typeclass</span><span class="args">(<span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$1">...</span>
+    </span>, <span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$2">...</span>
     </span>)</span>
               
         </dd></dl></div>
@@ -1831,7 +2160,7 @@ http://hackage.haskell.org/package/representable-functors-3.2.0.2/docs/Data-Func
       
       
     </li><li name="cats.SemigroupK" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="SemigroupK[F[_]]extendsAnywithSerializable"></a><a id="SemigroupK[F[_]]:SemigroupK[F]"></a>
+      <a id="SemigroupK[F[_]]extendsSerializable"></a><a id="SemigroupK[F[_]]:SemigroupK[F]"></a>
       <span class="permalink">
       <a href="../cats/SemigroupK.html" title="Permalink">
         <i class="material-icons"></i>
@@ -1857,9 +2186,33 @@ types).</p><p>A SemigroupK[F] can produce a Semigroup[F[A]] for any type A.</p><
       <span class="defval" name="&quot;Could not find an instance of SemigroupK for ${F}&quot;">...</span>
     </span>)</span>
               
+                <span class="name">@typeclass</span><span class="args">(<span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$1">...</span>
+    </span>, <span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$2">...</span>
+    </span>)</span>
+              
         </dd></dl></div>
+    </li><li name="cats.SemigroupKInstances0" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="SemigroupKInstances0extendsAnyRef"></a><a id="SemigroupKInstances0:SemigroupKInstances0"></a>
+      <span class="permalink">
+      <a href="../cats/SemigroupKInstances0.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="SemigroupKInstances0.html"><span class="name">SemigroupKInstances0</span></a><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      
+      
     </li><li name="cats.Semigroupal" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="Semigroupal[F[_]]extendsAnywithSerializable"></a><a id="Semigroupal[F[_]]:Semigroupal[F]"></a>
+      <a id="Semigroupal[F[_]]extendsSerializable"></a><a id="Semigroupal[F[_]]:Semigroupal[F]"></a>
       <span class="permalink">
       <a href="../cats/Semigroupal.html" title="Permalink">
         <i class="material-icons"></i>
@@ -1883,6 +2236,14 @@ independent effectful values.</p><p>That same idea is also manifested in the for
                 <span class="name">@implicitNotFound</span><span class="args">(<span>
       
       <span class="defval" name="&quot;Could not find an instance of Semigroupal for ${F}&quot;">...</span>
+    </span>)</span>
+              
+                <span class="name">@typeclass</span><span class="args">(<span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$1">...</span>
+    </span>, <span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$2">...</span>
     </span>)</span>
               
         </dd></dl></div>
@@ -1946,7 +2307,7 @@ trait is only provided because a large number of monads <i>do</i> define a stack
 flatMap, and so this particular implementation was being repeated over and over again.
 </p></div></div>
     </li><li name="cats.Traverse" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="Traverse[F[_]]extendsFunctor[F]withFoldable[F]withUnorderedTraverse[F]withSerializable"></a><a id="Traverse[F[_]]:Traverse[F]"></a>
+      <a id="Traverse[F[_]]extendsFunctor[F]withFoldable[F]withUnorderedTraverse[F]"></a><a id="Traverse[F[_]]:Traverse[F]"></a>
       <span class="permalink">
       <a href="../cats/Traverse.html" title="Permalink">
         <i class="material-icons"></i>
@@ -1957,7 +2318,7 @@ flatMap, and so this particular implementation was being repeated over and over 
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="Traverse, also known as Traversable." href="Traverse.html"><span class="name">Traverse</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.Traverse.F">F</span>] with <a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.Traverse.F">F</span>] with <a href="UnorderedTraverse.html" class="extype" name="cats.UnorderedTraverse">UnorderedTraverse</a>[<span class="extype" name="cats.Traverse.F">F</span>] with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="Traverse, also known as Traversable." href="Traverse.html"><span class="name">Traverse</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.Traverse.F">F</span>] with <a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.Traverse.F">F</span>] with <a href="UnorderedTraverse.html" class="extype" name="cats.UnorderedTraverse">UnorderedTraverse</a>[<span class="extype" name="cats.Traverse.F">F</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Traverse, also known as Traversable.</p><div class="fullcomment"><div class="comment cmt"><p>Traverse, also known as Traversable.</p><p>Traversal over a structure with an effect.</p><p>Traversing with the <a href="#Id[A]=A" class="extmbr" name="cats.Id">cats.Id</a> effect is equivalent to <a href="Functor.html" class="extype" name="cats.Functor">cats.Functor</a>#map.
@@ -1969,9 +2330,17 @@ a <a href="#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">c
       <span class="defval" name="&quot;Could not find an instance of Traverse for ${F}&quot;">...</span>
     </span>)</span>
               
+                <span class="name">@typeclass</span><span class="args">(<span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$1">...</span>
+    </span>, <span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$2">...</span>
+    </span>)</span>
+              
         </dd></dl></div>
     </li><li name="cats.TraverseFilter" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="TraverseFilter[F[_]]extendsFunctorFilter[F]withSerializable"></a><a id="TraverseFilter[F[_]]:TraverseFilter[F]"></a>
+      <a id="TraverseFilter[F[_]]extendsFunctorFilter[F]"></a><a id="TraverseFilter[F[_]]:TraverseFilter[F]"></a>
       <span class="permalink">
       <a href="../cats/TraverseFilter.html" title="Permalink">
         <i class="material-icons"></i>
@@ -1982,7 +2351,7 @@ a <a href="#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">c
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="TraverseFilter, also known as Witherable, represents list-like structures that can essentially have a traverse and a filter applied as a single combined operation (traverseFilter)." href="TraverseFilter.html"><span class="name">TraverseFilter</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="FunctorFilter.html" class="extype" name="cats.FunctorFilter">FunctorFilter</a>[<span class="extype" name="cats.TraverseFilter.F">F</span>] with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="TraverseFilter, also known as Witherable, represents list-like structures that can essentially have a traverse and a filter applied as a single combined operation (traverseFilter)." href="TraverseFilter.html"><span class="name">TraverseFilter</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="FunctorFilter.html" class="extype" name="cats.FunctorFilter">FunctorFilter</a>[<span class="extype" name="cats.TraverseFilter.F">F</span>]</span>
       </span>
       
       <p class="shortcomment cmt"><code>TraverseFilter</code>, also known as <code>Witherable</code>, represents list-like structures
@@ -1996,9 +2365,17 @@ combined operation (<code>traverseFilter</code>).</p><p>Based on Haskell's <a hr
       <span class="defval" name="&quot;Could not find an instance of TraverseFilter for ${F}&quot;">...</span>
     </span>)</span>
               
+                <span class="name">@typeclass</span><span class="args">(<span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$1">...</span>
+    </span>, <span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$2">...</span>
+    </span>)</span>
+              
         </dd></dl></div>
     </li><li name="cats.UnorderedFoldable" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="UnorderedFoldable[F[_]]extendsAnywithSerializable"></a><a id="UnorderedFoldable[F[_]]:UnorderedFoldable[F]"></a>
+      <a id="UnorderedFoldable[F[_]]extendsSerializable"></a><a id="UnorderedFoldable[F[_]]:UnorderedFoldable[F]"></a>
       <span class="permalink">
       <a href="../cats/UnorderedFoldable.html" title="Permalink">
         <i class="material-icons"></i>
@@ -2019,9 +2396,17 @@ combined operation (<code>traverseFilter</code>).</p><p>Based on Haskell's <a hr
       <span class="defval" name="&quot;Could not find an instance of UnorderedFoldable for ${F}&quot;">...</span>
     </span>)</span>
               
+                <span class="name">@typeclass</span><span class="args">(<span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$1">...</span>
+    </span>, <span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$2">...</span>
+    </span>)</span>
+              
         </dd></dl></div>
     </li><li name="cats.UnorderedTraverse" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="UnorderedTraverse[F[_]]extendsUnorderedFoldable[F]withSerializable"></a><a id="UnorderedTraverse[F[_]]:UnorderedTraverse[F]"></a>
+      <a id="UnorderedTraverse[F[_]]extendsUnorderedFoldable[F]"></a><a id="UnorderedTraverse[F[_]]:UnorderedTraverse[F]"></a>
       <span class="permalink">
       <a href="../cats/UnorderedTraverse.html" title="Permalink">
         <i class="material-icons"></i>
@@ -2032,7 +2417,7 @@ combined operation (<code>traverseFilter</code>).</p><p>Based on Haskell's <a hr
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="UnorderedTraverse is like a Traverse for unordered containers." href="UnorderedTraverse.html"><span class="name">UnorderedTraverse</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="UnorderedFoldable.html" class="extype" name="cats.UnorderedFoldable">UnorderedFoldable</a>[<span class="extype" name="cats.UnorderedTraverse.F">F</span>] with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="UnorderedTraverse is like a Traverse for unordered containers." href="UnorderedTraverse.html"><span class="name">UnorderedTraverse</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="UnorderedFoldable.html" class="extype" name="cats.UnorderedFoldable">UnorderedFoldable</a>[<span class="extype" name="cats.UnorderedTraverse.F">F</span>]</span>
       </span>
       
       <p class="shortcomment cmt"><code>UnorderedTraverse</code> is like a <code>Traverse</code> for unordered containers.</p><div class="fullcomment"><div class="comment cmt"><p><code>UnorderedTraverse</code> is like a <code>Traverse</code> for unordered containers.
@@ -2040,6 +2425,14 @@ combined operation (<code>traverseFilter</code>).</p><p>Based on Haskell's <a hr
                 <span class="name">@implicitNotFound</span><span class="args">(<span>
       
       <span class="defval" name="&quot;Could not find an instance of UnorderedTraverse for ${F}&quot;">...</span>
+    </span>)</span>
+              
+                <span class="name">@typeclass</span><span class="args">(<span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$1">...</span>
+    </span>, <span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$2">...</span>
     </span>)</span>
               
         </dd></dl></div>
@@ -2288,7 +2681,7 @@ combined operation (<code>traverseFilter</code>).</p><p>Based on Haskell's <a hr
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a title="" href="Align$.html"><span class="name">Align</span></a><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="" href="Align$.html"><span class="name">Align</span></a><span class="result"> extends <span class="extype" name="cats.ScalaVersionSpecificAlignInstances">ScalaVersionSpecificAlignInstances</span> with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
@@ -2688,7 +3081,7 @@ combined operation (<code>traverseFilter</code>).</p><p>Based on Haskell's <a hr
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a title="" href="FunctorFilter$.html"><span class="name">FunctorFilter</span></a><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="" href="FunctorFilter$.html"><span class="name">FunctorFilter</span></a><span class="result"> extends <span class="extype" name="cats.ScalaVersionSpecificTraverseFilterInstances">ScalaVersionSpecificTraverseFilterInstances</span> with <a href="FunctorFilterInstances0.html" class="extype" name="cats.FunctorFilterInstances0">FunctorFilterInstances0</a> with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
@@ -2736,7 +3129,7 @@ combined operation (<code>traverseFilter</code>).</p><p>Based on Haskell's <a hr
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a title="" href="Invariant$.html"><span class="name">Invariant</span></a><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="" href="Invariant$.html"><span class="name">Invariant</span></a><span class="result"> extends <span class="extype" name="cats.ScalaVersionSpecificInvariantInstances">ScalaVersionSpecificInvariantInstances</span> with <span class="extype" name="cats.InvariantInstances0">InvariantInstances0</span> with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
@@ -2851,7 +3244,7 @@ combined operation (<code>traverseFilter</code>).</p><p>Based on Haskell's <a hr
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a title="" href="NonEmptyParallel$.html"><span class="name">NonEmptyParallel</span></a><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="" href="NonEmptyParallel$.html"><span class="name">NonEmptyParallel</span></a><span class="result"> extends <span class="extype" name="cats.ScalaVersionSpecificParallelInstances">ScalaVersionSpecificParallelInstances</span> with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
@@ -2947,7 +3340,7 @@ combined operation (<code>traverseFilter</code>).</p><p>Based on Haskell's <a hr
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a title="" href="SemigroupK$.html"><span class="name">SemigroupK</span></a><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="" href="SemigroupK$.html"><span class="name">SemigroupK</span></a><span class="result"> extends <span class="extype" name="cats.ScalaVersionSpecificMonoidKInstances">ScalaVersionSpecificMonoidKInstances</span> with <a href="SemigroupKInstances0.html" class="extype" name="cats.SemigroupKInstances0">SemigroupKInstances0</a> with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
@@ -2963,7 +3356,7 @@ combined operation (<code>traverseFilter</code>).</p><p>Based on Haskell's <a hr
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a title="" href="Semigroupal$.html"><span class="name">Semigroupal</span></a><span class="result"> extends <a href="SemigroupalArityFunctions.html" class="extype" name="cats.SemigroupalArityFunctions">SemigroupalArityFunctions</a> with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="" href="Semigroupal$.html"><span class="name">Semigroupal</span></a><span class="result"> extends <span class="extype" name="cats.ScalaVersionSpecificSemigroupalInstances">ScalaVersionSpecificSemigroupalInstances</span> with <a href="SemigroupalArityFunctions.html" class="extype" name="cats.SemigroupalArityFunctions">SemigroupalArityFunctions</a> with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
@@ -2979,7 +3372,7 @@ combined operation (<code>traverseFilter</code>).</p><p>Based on Haskell's <a hr
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a title="Hand rolling the type class boilerplate due to scala/bug#6260 and scala/bug#10458" href="Show$.html"><span class="name">Show</span></a><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="Hand rolling the type class boilerplate due to scala/bug#6260 and scala/bug#10458" href="Show$.html"><span class="name">Show</span></a><span class="result"> extends <span class="extype" name="cats.ScalaVersionSpecificShowInstances">ScalaVersionSpecificShowInstances</span> with <span class="extype" name="cats.ShowInstances">ShowInstances</span> with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       <p class="shortcomment cmt">Hand rolling the type class boilerplate due to scala/bug#6260 and scala/bug#10458
@@ -3028,7 +3421,7 @@ combined operation (<code>traverseFilter</code>).</p><p>Based on Haskell's <a hr
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a title="" href="UnorderedFoldable$.html"><span class="name">UnorderedFoldable</span></a><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="" href="UnorderedFoldable$.html"><span class="name">UnorderedFoldable</span></a><span class="result"> extends <span class="extype" name="cats.ScalaVersionSpecificTraverseInstances">ScalaVersionSpecificTraverseInstances</span> with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       

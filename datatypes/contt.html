@@ -1,4 +1,4 @@
-<html><head><title>Cats: ContT</title><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Cats contributors" /><meta name="description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="og:image" content="/cats/img/poster.png" /><meta name="image" property="og:image" content="/cats/img/poster.png" /><meta name="og:title" content="Cats: ContT" /><meta name="title" property="og:title" content="Cats: ContT" /><meta name="og:site_name" content="Cats" /><meta name="og:url" content="http://typelevel.org/cats/" /><meta name="og:type" content="website" /><meta name="og:description" content="Lightweight, modular, and extensible library for functional programming" /><link rel="icon" type="image/png" href="/cats/img/favicon.png" /><meta name="twitter:title" content="Cats: ContT" /><meta name="twitter:image" content="/cats/img/poster.png" /><meta name="twitter:description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="twitter:card" content="summary_large_image" /><link rel="icon" type="image/png" sizes="16x16" href="/cats/img/favicon16x16.png" /><link rel="icon" type="image/png" sizes="24x24" href="/cats/img/favicon24x24.png" /><link rel="icon" type="image/png" sizes="32x32" href="/cats/img/favicon32x32.png" /><link rel="icon" type="image/png" sizes="48x48" href="/cats/img/favicon48x48.png" /><link rel="icon" type="image/png" sizes="57x57" href="/cats/img/favicon57x57.png" /><link rel="icon" type="image/png" sizes="60x60" href="/cats/img/favicon60x60.png" /><link rel="icon" type="image/png" sizes="64x64" href="/cats/img/favicon64x64.png" /><link rel="icon" type="image/png" sizes="70x70" href="/cats/img/favicon70x70.png" /><link rel="icon" type="image/png" sizes="72x72" href="/cats/img/favicon72x72.png" /><link rel="icon" type="image/png" sizes="76x76" href="/cats/img/favicon76x76.png" /><link rel="icon" type="image/png" sizes="96x96" href="/cats/img/favicon96x96.png" /><link rel="icon" type="image/png" sizes="114x114" href="/cats/img/favicon114x114.png" /><link rel="icon" type="image/png" sizes="120x120" href="/cats/img/favicon120x120.png" /><link rel="icon" type="image/png" sizes="128x128" href="/cats/img/favicon128x128.png" /><link rel="icon" type="image/png" sizes="144x144" href="/cats/img/favicon144x144.png" /><link rel="icon" type="image/png" sizes="150x150" href="/cats/img/favicon150x150.png" /><link rel="icon" type="image/png" sizes="152x152" href="/cats/img/favicon152x152.png" /><link rel="icon" type="image/png" sizes="196x196" href="/cats/img/favicon196x196.png" /><link rel="icon" type="image/png" sizes="310x310" href="/cats/img/favicon310x310.png" /><link rel="icon" type="image/png" sizes="310x150" href="/cats/img/favicon310x150.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" /><link rel="stylesheet" href="/cats/highlight/styles/atom-one-light.css" /><link rel="stylesheet" href="/cats/css/style.css" /><link rel="stylesheet" href="/cats/css/palette.css" /><link rel="stylesheet" href="/cats/css/codemirror.css" /><link rel="stylesheet" href="/cats/css/override.css" /></head><body class="docs"><div id="wrapper"><div id="sidebar-wrapper"><ul id="sidebar" class="sidebar-nav"><li class="sidebar-brand"><a href="/cats/" class="brand"><div class="brand-wrapper"><span>Cats</span></div></a></li>                   <li><a href="/cats/datatypes.html" class="">Data Types</a></li> <li><a href="/cats/datatypes/chain.html" class="">Chain</a></li> <li><a href="/cats/datatypes/const.html" class="">Const</a></li> <li><a href="/cats/datatypes/contt.html" class=" active ">ContT</a></li> <li><a href="/cats/datatypes/either.html" class="">Either</a></li> <li><a href="/cats/datatypes/eval.html" class="">Eval</a></li> <li><a href="/cats/datatypes/freeapplicative.html" class="">FreeApplicatives</a></li> <li><a href="/cats/datatypes/freemonad.html" class="">FreeMonads</a></li> <li><a href="/cats/datatypes/functionk.html" class="">FunctionK</a></li> <li><a href="/cats/datatypes/id.html" class="">Id</a></li> <li><a href="/cats/datatypes/ior.html" class="">Ior</a></li> <li><a href="/cats/datatypes/kleisli.html" class="">Kleisli</a></li> <li><a href="/cats/datatypes/nested.html" class="">Nested</a></li> <li><a href="/cats/datatypes/nel.html" class="">NonEmptyList</a></li> <li><a href="/cats/datatypes/oneand.html" class="">OneAnd</a></li> <li><a href="/cats/datatypes/optiont.html" class="">OptionT</a></li> <li><a href="/cats/datatypes/eithert.html" class="">EitherT</a></li> <li><a href="/cats/datatypes/iort.html" class="">IorT</a></li> <li><a href="/cats/datatypes/state.html" class="">State</a></li> <li><a href="/cats/datatypes/validated.html" class="">Validated</a></li></ul></div><div id="page-content-wrapper"><div class="nav"><div class="container-fluid"><div class="row"><div class="col-lg-12"><div class="action-menu pull-left clearfix"><a href="#menu-toggle" id="menu-toggle"><i class="fa fa-bars" aria-hidden="true"></i></a></div><ul class="pull-right"><li id="gh-eyes-item" class="hidden-xs"><a href="https://github.com/typelevel/cats"><i class="fa fa-eye"></i><span>WATCH<span id="eyes" class="label label-default">--</span></span></a></li><li id="gh-stars-item" class="hidden-xs"><a href="https://github.com/typelevel/cats"><i class="fa fa-star-o"></i><span>STARS<span id="stars" class="label label-default">--</span></span></a></li><li><a href="#" onclick="shareSiteTwitter('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-twitter"></i></a></li><li><a href="#" onclick="shareSiteFacebook('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-facebook"></i></a></li><li><a href="#" onclick="shareSiteGoogle();"><i class="fa fa-google-plus"></i></a></li></ul></div></div></div></div><div id="content" data-github-owner="typelevel" data-github-repo="cats"><div class="content-wrapper"><section><h1 id="contt">ContT</h1>
+<!DOCTYPE html><html><head><title>Cats: ContT</title><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Cats contributors" /><meta name="description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="og:image" content="/cats/img/poster.png" /><meta name="image" property="og:image" content="/cats/img/poster.png" /><meta name="og:title" content="Cats: ContT" /><meta name="title" property="og:title" content="Cats: ContT" /><meta name="og:site_name" content="Cats" /><meta name="og:url" content="http://typelevel.org/cats/" /><meta name="og:type" content="website" /><meta name="og:description" content="Lightweight, modular, and extensible library for functional programming" /><link rel="icon" type="image/png" href="/cats/img/favicon.png" /><meta name="twitter:title" content="Cats: ContT" /><meta name="twitter:image" content="/cats/img/poster.png" /><meta name="twitter:description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="twitter:card" content="summary_large_image" /><link rel="icon" type="image/png" sizes="16x16" href="/cats/img/favicon16x16.png" /><link rel="icon" type="image/png" sizes="24x24" href="/cats/img/favicon24x24.png" /><link rel="icon" type="image/png" sizes="32x32" href="/cats/img/favicon32x32.png" /><link rel="icon" type="image/png" sizes="48x48" href="/cats/img/favicon48x48.png" /><link rel="icon" type="image/png" sizes="57x57" href="/cats/img/favicon57x57.png" /><link rel="icon" type="image/png" sizes="60x60" href="/cats/img/favicon60x60.png" /><link rel="icon" type="image/png" sizes="64x64" href="/cats/img/favicon64x64.png" /><link rel="icon" type="image/png" sizes="70x70" href="/cats/img/favicon70x70.png" /><link rel="icon" type="image/png" sizes="72x72" href="/cats/img/favicon72x72.png" /><link rel="icon" type="image/png" sizes="76x76" href="/cats/img/favicon76x76.png" /><link rel="icon" type="image/png" sizes="96x96" href="/cats/img/favicon96x96.png" /><link rel="icon" type="image/png" sizes="114x114" href="/cats/img/favicon114x114.png" /><link rel="icon" type="image/png" sizes="120x120" href="/cats/img/favicon120x120.png" /><link rel="icon" type="image/png" sizes="128x128" href="/cats/img/favicon128x128.png" /><link rel="icon" type="image/png" sizes="144x144" href="/cats/img/favicon144x144.png" /><link rel="icon" type="image/png" sizes="150x150" href="/cats/img/favicon150x150.png" /><link rel="icon" type="image/png" sizes="152x152" href="/cats/img/favicon152x152.png" /><link rel="icon" type="image/png" sizes="196x196" href="/cats/img/favicon196x196.png" /><link rel="icon" type="image/png" sizes="310x310" href="/cats/img/favicon310x310.png" /><link rel="icon" type="image/png" sizes="310x150" href="/cats/img/favicon310x150.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" /><link rel="stylesheet" href="/cats/highlight/styles/atom-one-light.css" /><link rel="stylesheet" href="/cats/css/pattern-style.css" /></head><body class="docs"><div id="wrapper"><div id="sidebar-wrapper"><ul id="sidebar" class="sidebar-nav"><li class="sidebar-brand"><a href="/cats/" class="brand"><div class="brand-wrapper"><span>Cats</span></div></a></li><li><a href="/cats/datatypes/chain.html" class="">Chain</a></li><li><a href="/cats/datatypes/const.html" class="">Const</a></li><li><a href="/cats/datatypes/contt.html" class=" active ">ContT</a></li><li><a href="/cats/datatypes.html" class="">Data Types</a></li><li><a href="/cats/datatypes/either.html" class="">Either</a></li><li><a href="/cats/datatypes/eithert.html" class="">EitherT</a></li><li><a href="/cats/datatypes/eval.html" class="">Eval</a></li><li><a href="/cats/datatypes/freeapplicative.html" class="">FreeApplicatives</a></li><li><a href="/cats/datatypes/freemonad.html" class="">FreeMonads</a></li><li><a href="/cats/datatypes/functionk.html" class="">FunctionK</a></li><li><a href="/cats/datatypes/id.html" class="">Id</a></li><li><a href="/cats/datatypes/ior.html" class="">Ior</a></li><li><a href="/cats/datatypes/iort.html" class="">IorT</a></li><li><a href="/cats/datatypes/kleisli.html" class="">Kleisli</a></li><li><a href="/cats/datatypes/nel.html" class="">NonEmptyList</a></li><li><a href="/cats/datatypes/nested.html" class="">Nested</a></li><li><a href="/cats/datatypes/oneand.html" class="">OneAnd</a></li><li><a href="/cats/datatypes/optiont.html" class="">OptionT</a></li><li><a href="/cats/datatypes/state.html" class="">State</a></li><li><a href="/cats/datatypes/validated.html" class="">Validated</a></li><li><a href="/cats/datatypes/writer.html" class="">Writer</a></li><li><a href="/cats/datatypes/writert.html" class="">WriterT</a></li></ul></div><div id="page-content-wrapper"><div class="nav"><div class="container-fluid"><div class="row"><div class="col-lg-12"><div class="action-menu pull-left clearfix"><a href="#menu-toggle" id="menu-toggle"><i class="fa fa-bars" aria-hidden="true"></i></a></div><ul class="pull-right"><li id="gh-eyes-item" class="hidden-xs"><a href="https://github.com/typelevel/cats" target="_blank" rel="noopener noreferrer"><i class="fa fa-eye"></i><span>Watchers<span id="eyes" class="label label-default">--</span></span></a></li><li id="gh-stars-item" class="hidden-xs"><a href="https://github.com/typelevel/cats" target="_blank" rel="noopener noreferrer"><i class="fa fa-star-o"></i><span>Stars<span id="stars" class="label label-default">--</span></span></a></li><li><a href="#" onclick="shareSiteTwitter('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-twitter"></i></a></li><li><a href="#" onclick="shareSiteFacebook('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-facebook"></i></a></li><li><a href="#" onclick="shareSiteGoogle();"><i class="fa fa-google-plus"></i></a></li></ul></div></div></div></div><div id="content" data-github-owner="typelevel" data-github-repo="cats"><div class="content-wrapper"><section><h1 id="contt">ContT</h1>
 
 <p>A pattern that appears sometimes in functional programming is that of a function
 first computing some kind of intermediate result and then passing that result to
@@ -7,202 +7,213 @@ computation of the final result.</p>
 
 <p>For example:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">case</span> <span class="k">class</span> <span class="nc">User</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">age</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">case</span> <span class="k">class</span> <span class="nc">User</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">age</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span>
 <span class="k">sealed</span> <span class="k">abstract</span> <span class="k">class</span> <span class="nc">UserUpdateResult</span>
 <span class="k">case</span> <span class="k">class</span> <span class="nc">Succeeded</span><span class="o">(</span><span class="n">updatedUserId</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">UserUpdateResult</span>
 <span class="k">case</span> <span class="k">object</span> <span class="nc">Failed</span> <span class="k">extends</span> <span class="nc">UserUpdateResult</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.Eval</span>
-<span class="c1">// import cats.Eval
-</span>
-<span class="k">def</span> <span class="n">updateUser</span><span class="o">(</span><span class="n">persistToDatabase</span><span class="k">:</span> <span class="kt">User</span> <span class="o">=&gt;</span> <span class="nc">Eval</span><span class="o">[</span><span class="kt">UserUpdateResult</span><span class="o">])</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.Eval</span>
+
+<span class="k">def</span> <span class="nf">updateUser</span><span class="o">(</span><span class="n">persistToDatabase</span><span class="k">:</span> <span class="kt">User</span> <span class="o">=&gt;</span> <span class="nc">Eval</span><span class="o">[</span><span class="kt">UserUpdateResult</span><span class="o">])</span>
               <span class="o">(</span><span class="n">existingUser</span><span class="k">:</span> <span class="kt">User</span><span class="o">,</span> <span class="n">newName</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">newAge</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">Eval</span><span class="o">[</span><span class="kt">UserUpdateResult</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
-  <span class="k">val</span> <span class="n">trimmedName</span> <span class="k">=</span> <span class="n">newName</span><span class="o">.</span><span class="n">trim</span>
-  <span class="k">val</span> <span class="n">cappedAge</span> <span class="k">=</span> <span class="n">newAge</span> <span class="n">max</span> <span class="mi">150</span>
-  <span class="k">val</span> <span class="n">updatedUser</span> <span class="k">=</span> <span class="n">existingUser</span><span class="o">.</span><span class="n">copy</span><span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="n">trimmedName</span><span class="o">,</span> <span class="n">age</span> <span class="k">=</span> <span class="n">cappedAge</span><span class="o">)</span>
+  <span class="k">val</span> <span class="nv">trimmedName</span> <span class="k">=</span> <span class="nv">newName</span><span class="o">.</span><span class="py">trim</span>
+  <span class="k">val</span> <span class="nv">cappedAge</span> <span class="k">=</span> <span class="n">newAge</span> <span class="n">max</span> <span class="mi">150</span>
+  <span class="k">val</span> <span class="nv">updatedUser</span> <span class="k">=</span> <span class="nv">existingUser</span><span class="o">.</span><span class="py">copy</span><span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="n">trimmedName</span><span class="o">,</span> <span class="n">age</span> <span class="k">=</span> <span class="n">cappedAge</span><span class="o">)</span>
 
-  <span class="n">persistToDatabase</span><span class="o">(</span><span class="n">updatedUser</span><span class="o">)</span>
+  <span class="nf">persistToDatabase</span><span class="o">(</span><span class="n">updatedUser</span><span class="o">)</span>
 <span class="o">}</span>
-<span class="c1">// updateUser: (persistToDatabase: User =&gt; cats.Eval[UserUpdateResult])(existingUser: User, newName: String, newAge: Int)cats.Eval[UserUpdateResult]
-</span></code></pre>
-</div>
+</code></pre></div></div>
 
-<p>(Note: We will be using <code class="highlighter-rouge">Eval</code> throughout the examples on this page. If you are not
-familiar with <code class="highlighter-rouge">Eval</code>, it’s worth reading <a href="eval.html">the Eval documentation</a> first.)</p>
+<p>(Note: We will be using <code class="language-plaintext highlighter-rouge">Eval</code> throughout the examples on this page. If you are not
+familiar with <code class="language-plaintext highlighter-rouge">Eval</code>, it’s worth reading <a href="eval.html">the Eval documentation</a> first.)</p>
 
-<p>Our <code class="highlighter-rouge">updateUser</code> function takes in an existing user and some updates to perform.
+<p>Our <code class="language-plaintext highlighter-rouge">updateUser</code> function takes in an existing user and some updates to perform.
 It sanitises the inputs and updates the user model, but it delegates the
 database update to another function which is passed in as an argument.</p>
 
 <p>This pattern is known as “continuation passing style” or CPS, and the function
-passed in (<code class="highlighter-rouge">persistToDatabase</code>) is known as a “continuation”.</p>
+passed in (<code class="language-plaintext highlighter-rouge">persistToDatabase</code>) is known as a “continuation”.</p>
 
 <p>Note the following characteristics:</p>
 
 <ul>
-  <li>The return type of our <code class="highlighter-rouge">updateUser</code> function (<code class="highlighter-rouge">Eval[UserUpdateResult]</code>) is the
+  <li>The return type of our <code class="language-plaintext highlighter-rouge">updateUser</code> function (<code class="language-plaintext highlighter-rouge">Eval[UserUpdateResult]</code>) is the
   same as the return type of the continuation function that was passed in.</li>
   <li>Our function does a bit of work to build an intermediate value, then passes
   that value to the continuation, which takes care of the remainder of the
   work.</li>
 </ul>
 
-<p>In Cats we can encode this pattern using the <code class="highlighter-rouge">ContT</code> data type:</p>
+<p>In Cats we can encode this pattern using the <code class="language-plaintext highlighter-rouge">ContT</code> data type:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.ContT</span>
-<span class="c1">// import cats.data.ContT
-</span>
-<span class="k">def</span> <span class="n">updateUserCont</span><span class="o">(</span><span class="n">existingUser</span><span class="k">:</span> <span class="kt">User</span><span class="o">,</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.ContT</span>
+
+<span class="k">def</span> <span class="nf">updateUserCont</span><span class="o">(</span><span class="n">existingUser</span><span class="k">:</span> <span class="kt">User</span><span class="o">,</span>
                    <span class="n">newName</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span>
                    <span class="n">newAge</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">ContT</span><span class="o">[</span><span class="kt">Eval</span>, <span class="kt">UserUpdateResult</span>, <span class="kt">User</span><span class="o">]</span> <span class="k">=</span>
-  <span class="nc">ContT</span><span class="o">.</span><span class="n">apply</span><span class="o">[</span><span class="kt">Eval</span>, <span class="kt">UserUpdateResult</span>, <span class="kt">User</span><span class="o">]</span> <span class="o">{</span> <span class="n">next</span> <span class="k">=&gt;</span>
-    <span class="k">val</span> <span class="n">trimmedName</span> <span class="k">=</span> <span class="n">newName</span><span class="o">.</span><span class="n">trim</span>
-    <span class="k">val</span> <span class="n">cappedAge</span> <span class="k">=</span> <span class="n">newAge</span> <span class="n">min</span> <span class="mi">150</span>
-    <span class="k">val</span> <span class="n">updatedUser</span> <span class="k">=</span> <span class="n">existingUser</span><span class="o">.</span><span class="n">copy</span><span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="n">trimmedName</span><span class="o">,</span> <span class="n">age</span> <span class="k">=</span> <span class="n">cappedAge</span><span class="o">)</span>
+  <span class="nv">ContT</span><span class="o">.</span><span class="py">apply</span><span class="o">[</span><span class="kt">Eval</span>, <span class="kt">UserUpdateResult</span>, <span class="kt">User</span><span class="o">]</span> <span class="o">{</span> <span class="n">next</span> <span class="k">=&gt;</span>
+    <span class="k">val</span> <span class="nv">trimmedName</span> <span class="k">=</span> <span class="nv">newName</span><span class="o">.</span><span class="py">trim</span>
+    <span class="k">val</span> <span class="nv">cappedAge</span> <span class="k">=</span> <span class="n">newAge</span> <span class="n">min</span> <span class="mi">150</span>
+    <span class="k">val</span> <span class="nv">updatedUser</span> <span class="k">=</span> <span class="nv">existingUser</span><span class="o">.</span><span class="py">copy</span><span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="n">trimmedName</span><span class="o">,</span> <span class="n">age</span> <span class="k">=</span> <span class="n">cappedAge</span><span class="o">)</span>
 
-    <span class="n">next</span><span class="o">(</span><span class="n">updatedUser</span><span class="o">)</span>
+    <span class="nf">next</span><span class="o">(</span><span class="n">updatedUser</span><span class="o">)</span>
   <span class="o">}</span>
-<span class="c1">// updateUserCont: (existingUser: User, newName: String, newAge: Int)cats.data.ContT[cats.Eval,UserUpdateResult,User]
-</span></code></pre>
-</div>
+</code></pre></div></div>
 
 <p>We can construct a computation as follows:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">existingUser</span> <span class="k">=</span> <span class="nc">User</span><span class="o">(</span><span class="mi">100</span><span class="o">,</span> <span class="s">"Alice"</span><span class="o">,</span> <span class="mi">42</span><span class="o">)</span>
-<span class="c1">// existingUser: User = User(100,Alice,42)
-</span>
-<span class="k">val</span> <span class="n">computation</span> <span class="k">=</span> <span class="n">updateUserCont</span><span class="o">(</span><span class="n">existingUser</span><span class="o">,</span> <span class="s">"Bob"</span><span class="o">,</span> <span class="mi">200</span><span class="o">)</span>
-<span class="c1">// computation: cats.data.ContT[cats.Eval,UserUpdateResult,User] = FromFn(AndThen$770319361)
-</span></code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">existingUser</span> <span class="k">=</span> <span class="nc">User</span><span class="o">(</span><span class="mi">100</span><span class="o">,</span> <span class="s">"Alice"</span><span class="o">,</span> <span class="mi">42</span><span class="o">)</span>
+<span class="c1">// existingUser: User = User(100, "Alice", 42)</span>
 
-<p>And then call <code class="highlighter-rouge">run</code> on it, passing in a function of type <code class="highlighter-rouge">User =&gt;
+<span class="k">val</span> <span class="nv">computation</span> <span class="k">=</span> <span class="nf">updateUserCont</span><span class="o">(</span><span class="n">existingUser</span><span class="o">,</span> <span class="s">"Bob"</span><span class="o">,</span> <span class="mi">200</span><span class="o">)</span>
+<span class="c1">// computation: ContT[Eval, UserUpdateResult, User] = FromFn(</span>
+<span class="c1">//   Single(&lt;function1&gt;, 0)</span>
+<span class="c1">// )</span>
+</code></pre></div></div>
+
+<p>And then call <code class="language-plaintext highlighter-rouge">run</code> on it, passing in a function of type <code class="language-plaintext highlighter-rouge">User =&gt;
 Eval[UserUpdateResult]</code> as the continuation:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">eval</span> <span class="k">=</span> <span class="n">computation</span><span class="o">.</span><span class="n">run</span> <span class="o">{</span> <span class="n">user</span> <span class="k">=&gt;</span>
-  <span class="nc">Eval</span><span class="o">.</span><span class="n">later</span> <span class="o">{</span>
-    <span class="n">println</span><span class="o">(</span><span class="n">s</span><span class="s">"Persisting updated user to the DB: $user"</span><span class="o">)</span>
-    <span class="nc">Succeeded</span><span class="o">(</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">eval</span> <span class="k">=</span> <span class="nv">computation</span><span class="o">.</span><span class="py">run</span> <span class="o">{</span> <span class="n">user</span> <span class="k">=&gt;</span>
+  <span class="nv">Eval</span><span class="o">.</span><span class="py">later</span> <span class="o">{</span>
+    <span class="nf">println</span><span class="o">(</span><span class="n">s</span><span class="s">"Persisting updated user to the DB: $user"</span><span class="o">)</span>
+    <span class="nc">Succeeded</span><span class="o">(</span><span class="nv">user</span><span class="o">.</span><span class="py">id</span><span class="o">)</span>
   <span class="o">}</span>
 <span class="o">}</span>
-<span class="c1">// eval: cats.Eval[UserUpdateResult] = cats.Later@7730ee40
-</span></code></pre>
-</div>
+<span class="c1">// eval: Eval[UserUpdateResult] = cats.Later@686c179</span>
+</code></pre></div></div>
 
-<p>Finally we can run the resulting <code class="highlighter-rouge">Eval</code> to actually execute the computation:</p>
+<p>Finally we can run the resulting <code class="language-plaintext highlighter-rouge">Eval</code> to actually execute the computation:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">eval</span><span class="o">.</span><span class="n">value</span>
-<span class="c1">// Persisting updated user to the DB: User(100,Bob,150)
-// res0: UserUpdateResult = Succeeded(100)
-</span></code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">eval</span><span class="o">.</span><span class="py">value</span>
+<span class="c1">// Persisting updated user to the DB: User(100,Bob,150)</span>
+<span class="c1">// res0: UserUpdateResult = Succeeded(100)</span>
+</code></pre></div></div>
 
 <h2 id="composition">Composition</h2>
 
 <p>You might be wondering what the point of all this was, as the function that uses
-<code class="highlighter-rouge">ContT</code> seems to achieve the same thing as the original function, just encoded
+<code class="language-plaintext highlighter-rouge">ContT</code> seems to achieve the same thing as the original function, just encoded
 in a slightly different way.</p>
 
-<p>The point is that <code class="highlighter-rouge">ContT</code> is a monad, so by rewriting our function into a
-<code class="highlighter-rouge">ContT</code> we gain composibility for free.</p>
+<p>The point is that <code class="language-plaintext highlighter-rouge">ContT</code> is a monad, so by rewriting our function into a
+<code class="language-plaintext highlighter-rouge">ContT</code> we gain composibility for free.</p>
 
-<p>For example we can <code class="highlighter-rouge">map</code> over a <code class="highlighter-rouge">ContT</code>:</p>
+<p>For example we can <code class="language-plaintext highlighter-rouge">map</code> over a <code class="language-plaintext highlighter-rouge">ContT</code>:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">anotherComputation</span> <span class="k">=</span> <span class="n">computation</span><span class="o">.</span><span class="n">map</span> <span class="o">{</span> <span class="n">user</span> <span class="k">=&gt;</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">anotherComputation</span> <span class="k">=</span> <span class="nv">computation</span><span class="o">.</span><span class="py">map</span> <span class="o">{</span> <span class="n">user</span> <span class="k">=&gt;</span>
   <span class="nc">Map</span><span class="o">(</span>
-    <span class="s">"id"</span> <span class="o">-&gt;</span> <span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="o">.</span><span class="n">toString</span><span class="o">,</span>
-    <span class="s">"name"</span> <span class="o">-&gt;</span> <span class="n">user</span><span class="o">.</span><span class="n">name</span><span class="o">,</span>
-    <span class="s">"age"</span> <span class="o">-&gt;</span> <span class="n">user</span><span class="o">.</span><span class="n">age</span><span class="o">.</span><span class="n">toString</span>
+    <span class="s">"id"</span> <span class="o">-&gt;</span> <span class="nv">user</span><span class="o">.</span><span class="py">id</span><span class="o">.</span><span class="py">toString</span><span class="o">,</span>
+    <span class="s">"name"</span> <span class="o">-&gt;</span> <span class="nv">user</span><span class="o">.</span><span class="py">name</span><span class="o">,</span>
+    <span class="s">"age"</span> <span class="o">-&gt;</span> <span class="nv">user</span><span class="o">.</span><span class="py">age</span><span class="o">.</span><span class="py">toString</span>
   <span class="o">)</span>
 <span class="o">}</span>
-<span class="c1">// anotherComputation: cats.data.ContT[cats.Eval,UserUpdateResult,scala.collection.immutable.Map[String,String]] = FromFn(AndThen$1953253416)
-</span>
-<span class="k">val</span> <span class="n">anotherEval</span> <span class="k">=</span> <span class="n">anotherComputation</span><span class="o">.</span><span class="n">run</span> <span class="o">{</span> <span class="n">userFields</span> <span class="k">=&gt;</span>
-  <span class="nc">Eval</span><span class="o">.</span><span class="n">later</span> <span class="o">{</span>
-    <span class="n">println</span><span class="o">(</span><span class="n">s</span><span class="s">"Persisting these fields to the DB: $userFields"</span><span class="o">)</span>
-    <span class="nc">Succeeded</span><span class="o">(</span><span class="n">userFields</span><span class="o">(</span><span class="s">"id"</span><span class="o">).</span><span class="n">toInt</span><span class="o">)</span>
+<span class="c1">// anotherComputation: ContT[Eval, UserUpdateResult, Map[String, String]] = FromFn(</span>
+<span class="c1">//   Single(cats.data.ContT$$Lambda$19829/0x000000080442d840@250c21f4, 0)</span>
+<span class="c1">// )</span>
+
+<span class="k">val</span> <span class="nv">anotherEval</span> <span class="k">=</span> <span class="nv">anotherComputation</span><span class="o">.</span><span class="py">run</span> <span class="o">{</span> <span class="n">userFields</span> <span class="k">=&gt;</span>
+  <span class="nv">Eval</span><span class="o">.</span><span class="py">later</span> <span class="o">{</span>
+    <span class="nf">println</span><span class="o">(</span><span class="n">s</span><span class="s">"Persisting these fields to the DB: $userFields"</span><span class="o">)</span>
+    <span class="nc">Succeeded</span><span class="o">(</span><span class="nf">userFields</span><span class="o">(</span><span class="s">"id"</span><span class="o">).</span><span class="py">toInt</span><span class="o">)</span>
   <span class="o">}</span>
 <span class="o">}</span>
-<span class="c1">// anotherEval: cats.Eval[UserUpdateResult] = cats.Eval$$anon$5@2a2a8ea9
-</span>
-<span class="n">anotherEval</span><span class="o">.</span><span class="n">value</span>
-<span class="c1">// Persisting these fields to the DB: Map(id -&gt; 100, name -&gt; Bob, age -&gt; 150)
-// res1: UserUpdateResult = Succeeded(100)
-</span></code></pre>
-</div>
+<span class="c1">// anotherEval: Eval[UserUpdateResult] = cats.Eval$$anon$5@5eacab7</span>
 
-<p>And we can use <code class="highlighter-rouge">flatMap</code> to chain multiple <code class="highlighter-rouge">ContT</code>s together.</p>
+<span class="nv">anotherEval</span><span class="o">.</span><span class="py">value</span>
+<span class="c1">// Persisting these fields to the DB: Map(id -&gt; 100, name -&gt; Bob, age -&gt; 150)</span>
+<span class="c1">// res1: UserUpdateResult = Succeeded(100)</span>
+</code></pre></div></div>
+
+<p>And we can use <code class="language-plaintext highlighter-rouge">flatMap</code> to chain multiple <code class="language-plaintext highlighter-rouge">ContT</code>s together.</p>
 
 <p>The following example builds 3 computations: one to sanitise the inputs and
 update the user model, one to persist the updated user to the database, and one
 to publish a message saying the user was updated. It then chains them together
-in continuation-passing style using <code class="highlighter-rouge">flatMap</code> and runs the whole computation.</p>
+in continuation-passing style using <code class="language-plaintext highlighter-rouge">flatMap</code> and runs the whole computation.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">updateUserModel</span><span class="k">:</span> <span class="kt">ContT</span><span class="o">[</span><span class="kt">Eval</span>, <span class="kt">UserUpdateResult</span>, <span class="kt">User</span><span class="o">]</span> <span class="k">=</span>
-  <span class="n">updateUserCont</span><span class="o">(</span><span class="n">existingUser</span><span class="o">,</span> <span class="s">"Bob"</span><span class="o">,</span> <span class="mi">200</span><span class="o">).</span><span class="n">map</span> <span class="o">{</span> <span class="n">updatedUser</span> <span class="k">=&gt;</span>
-    <span class="n">println</span><span class="o">(</span><span class="s">"Updated user model"</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">updateUserModel</span><span class="k">:</span> <span class="kt">ContT</span><span class="o">[</span><span class="kt">Eval</span>, <span class="kt">UserUpdateResult</span>, <span class="kt">User</span><span class="o">]</span> <span class="k">=</span>
+  <span class="nf">updateUserCont</span><span class="o">(</span><span class="n">existingUser</span><span class="o">,</span> <span class="s">"Bob"</span><span class="o">,</span> <span class="mi">200</span><span class="o">).</span><span class="py">map</span> <span class="o">{</span> <span class="n">updatedUser</span> <span class="k">=&gt;</span>
+    <span class="nf">println</span><span class="o">(</span><span class="s">"Updated user model"</span><span class="o">)</span>
     <span class="n">updatedUser</span>
   <span class="o">}</span>
-<span class="c1">// updateUserModel: cats.data.ContT[cats.Eval,UserUpdateResult,User] = FromFn(AndThen$496617510)
-</span>
-<span class="k">val</span> <span class="n">persistToDb</span><span class="k">:</span> <span class="kt">User</span> <span class="o">=&gt;</span> <span class="nc">ContT</span><span class="o">[</span><span class="kt">Eval</span>, <span class="kt">UserUpdateResult</span>, <span class="kt">UserUpdateResult</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
-  <span class="n">user</span> <span class="k">=&gt;</span>
-    <span class="nc">ContT</span><span class="o">.</span><span class="n">apply</span><span class="o">[</span><span class="kt">Eval</span>, <span class="kt">UserUpdateResult</span>, <span class="kt">UserUpdateResult</span><span class="o">]</span> <span class="o">{</span> <span class="n">next</span> <span class="k">=&gt;</span>
-      <span class="n">println</span><span class="o">(</span><span class="n">s</span><span class="s">"Persisting updated user to the DB: $user"</span><span class="o">)</span>
+<span class="c1">// updateUserModel: ContT[Eval, UserUpdateResult, User] = FromFn(</span>
+<span class="c1">//   Single(cats.data.ContT$$Lambda$19829/0x000000080442d840@8ad10a2, 0)</span>
+<span class="c1">// )</span>
 
-      <span class="n">next</span><span class="o">(</span><span class="nc">Succeeded</span><span class="o">(</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="o">))</span>
+<span class="k">val</span> <span class="nv">persistToDb</span><span class="k">:</span> <span class="kt">User</span> <span class="o">=&gt;</span> <span class="nc">ContT</span><span class="o">[</span><span class="kt">Eval</span>, <span class="kt">UserUpdateResult</span>, <span class="kt">UserUpdateResult</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+  <span class="n">user</span> <span class="k">=&gt;</span>
+    <span class="nv">ContT</span><span class="o">.</span><span class="py">apply</span><span class="o">[</span><span class="kt">Eval</span>, <span class="kt">UserUpdateResult</span>, <span class="kt">UserUpdateResult</span><span class="o">]</span> <span class="o">{</span> <span class="n">next</span> <span class="k">=&gt;</span>
+      <span class="nf">println</span><span class="o">(</span><span class="n">s</span><span class="s">"Persisting updated user to the DB: $user"</span><span class="o">)</span>
+
+      <span class="nf">next</span><span class="o">(</span><span class="nc">Succeeded</span><span class="o">(</span><span class="nv">user</span><span class="o">.</span><span class="py">id</span><span class="o">))</span>
     <span class="o">}</span>
 <span class="o">}</span>
-<span class="c1">// persistToDb: User =&gt; cats.data.ContT[cats.Eval,UserUpdateResult,UserUpdateResult] = $$Lambda$11067/439862813@33c146da
-</span>
-<span class="k">val</span> <span class="n">publishEvent</span><span class="k">:</span> <span class="kt">UserUpdateResult</span> <span class="o">=&gt;</span> <span class="nc">ContT</span><span class="o">[</span><span class="kt">Eval</span>, <span class="kt">UserUpdateResult</span>, <span class="kt">UserUpdateResult</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+<span class="c1">// persistToDb: User =&gt; ContT[Eval, UserUpdateResult, UserUpdateResult] = &lt;function1&gt;</span>
+
+<span class="k">val</span> <span class="nv">publishEvent</span><span class="k">:</span> <span class="kt">UserUpdateResult</span> <span class="o">=&gt;</span> <span class="nc">ContT</span><span class="o">[</span><span class="kt">Eval</span>, <span class="kt">UserUpdateResult</span>, <span class="kt">UserUpdateResult</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
   <span class="n">userUpdateResult</span> <span class="k">=&gt;</span>
-    <span class="nc">ContT</span><span class="o">.</span><span class="n">apply</span><span class="o">[</span><span class="kt">Eval</span>, <span class="kt">UserUpdateResult</span>, <span class="kt">UserUpdateResult</span><span class="o">]</span> <span class="o">{</span> <span class="n">next</span> <span class="k">=&gt;</span>
+    <span class="nv">ContT</span><span class="o">.</span><span class="py">apply</span><span class="o">[</span><span class="kt">Eval</span>, <span class="kt">UserUpdateResult</span>, <span class="kt">UserUpdateResult</span><span class="o">]</span> <span class="o">{</span> <span class="n">next</span> <span class="k">=&gt;</span>
       <span class="n">userUpdateResult</span> <span class="k">match</span> <span class="o">{</span>
         <span class="k">case</span> <span class="nc">Succeeded</span><span class="o">(</span><span class="n">userId</span><span class="o">)</span> <span class="k">=&gt;</span>
-          <span class="n">println</span><span class="o">(</span><span class="n">s</span><span class="s">"Publishing 'user updated' event for user ID $userId"</span><span class="o">)</span>
+          <span class="nf">println</span><span class="o">(</span><span class="n">s</span><span class="s">"Publishing 'user updated' event for user ID $userId"</span><span class="o">)</span>
         <span class="k">case</span> <span class="nc">Failed</span> <span class="k">=&gt;</span>
-          <span class="n">println</span><span class="o">(</span><span class="s">"Not publishing 'user updated' event because update failed"</span><span class="o">)</span>
+          <span class="nf">println</span><span class="o">(</span><span class="s">"Not publishing 'user updated' event because update failed"</span><span class="o">)</span>
       <span class="o">}</span>
 
-      <span class="n">next</span><span class="o">(</span><span class="n">userUpdateResult</span><span class="o">)</span>
+      <span class="nf">next</span><span class="o">(</span><span class="n">userUpdateResult</span><span class="o">)</span>
     <span class="o">}</span>
 <span class="o">}</span>
-<span class="c1">// publishEvent: UserUpdateResult =&gt; cats.data.ContT[cats.Eval,UserUpdateResult,UserUpdateResult] = $$Lambda$11068/97815827@4fd6ae2d
-</span>
-<span class="k">val</span> <span class="n">chainOfContinuations</span> <span class="k">=</span>
+<span class="c1">// publishEvent: UserUpdateResult =&gt; ContT[Eval, UserUpdateResult, UserUpdateResult] = &lt;function1&gt;</span>
+
+<span class="k">val</span> <span class="nv">chainOfContinuations</span> <span class="k">=</span>
   <span class="n">updateUserModel</span> <span class="n">flatMap</span> <span class="n">persistToDb</span> <span class="n">flatMap</span> <span class="n">publishEvent</span>
-<span class="c1">// chainOfContinuations: cats.data.ContT[cats.Eval,UserUpdateResult,UserUpdateResult] = FromFn(AndThen$946122708)
-</span>
-<span class="k">val</span> <span class="n">eval</span> <span class="k">=</span> <span class="n">chainOfContinuations</span><span class="o">.</span><span class="n">run</span> <span class="o">{</span> <span class="n">finalResult</span> <span class="k">=&gt;</span>
-  <span class="nc">Eval</span><span class="o">.</span><span class="n">later</span> <span class="o">{</span>
-    <span class="n">println</span><span class="o">(</span><span class="s">"Finished!"</span><span class="o">)</span>
+<span class="c1">// chainOfContinuations: ContT[Eval, UserUpdateResult, UserUpdateResult] = FromFn(</span>
+<span class="c1">//   Single(cats.data.ContT$$Lambda$19831/0x000000080442c840@64296109, 0)</span>
+<span class="c1">// )</span>
+
+<span class="k">val</span> <span class="nv">eval</span> <span class="k">=</span> <span class="nv">chainOfContinuations</span><span class="o">.</span><span class="py">run</span> <span class="o">{</span> <span class="n">finalResult</span> <span class="k">=&gt;</span>
+  <span class="nv">Eval</span><span class="o">.</span><span class="py">later</span> <span class="o">{</span>
+    <span class="nf">println</span><span class="o">(</span><span class="s">"Finished!"</span><span class="o">)</span>
     <span class="n">finalResult</span>
   <span class="o">}</span>
 <span class="o">}</span>
-<span class="c1">// eval: cats.Eval[UserUpdateResult] = cats.Eval$$anon$5@737c497e
-</span>
-<span class="n">eval</span><span class="o">.</span><span class="n">value</span>
-<span class="c1">// Updated user model
-// Persisting updated user to the DB: User(100,Bob,150)
-// Publishing 'user updated' event for user ID 100
-// Finished!
-// res2: UserUpdateResult = Succeeded(100)
-</span></code></pre>
-</div>
+<span class="c1">// eval: Eval[UserUpdateResult] = cats.Eval$$anon$5@3d14362</span>
+
+<span class="nv">eval</span><span class="o">.</span><span class="py">value</span>
+<span class="c1">// Updated user model</span>
+<span class="c1">// Persisting updated user to the DB: User(100,Bob,150)</span>
+<span class="c1">// Publishing 'user updated' event for user ID 100</span>
+<span class="c1">// Finished!</span>
+<span class="c1">// res2: UserUpdateResult = Succeeded(100)</span>
+</code></pre></div></div>
 
 <h2 id="why-eval">Why Eval?</h2>
 
-<p>If you’re wondering why we used <code class="highlighter-rouge">Eval</code> in our examples above, it’s because the
-<code class="highlighter-rouge">Monad</code> instance for <code class="highlighter-rouge">ContT[M[_], A, B]</code> requires an instance of <code class="highlighter-rouge">cats.Defer</code>
-for <code class="highlighter-rouge">M[_]</code>. This is an implementation detail - it’s needed in order to preserve
+<p>If you’re wondering why we used <code class="language-plaintext highlighter-rouge">Eval</code> in our examples above, it’s because the
+<code class="language-plaintext highlighter-rouge">Monad</code> instance for <code class="language-plaintext highlighter-rouge">ContT[M[_], A, B]</code> requires an instance of <code class="language-plaintext highlighter-rouge">cats.Defer</code>
+for <code class="language-plaintext highlighter-rouge">M[_]</code>. This is an implementation detail - it’s needed in order to preserve
 stack safety.</p>
 
 <p>In a real-world application, you’re more likely to be using something like
-cats-effect <code class="highlighter-rouge">IO</code>, which has a <code class="highlighter-rouge">Defer</code> instance.</p>
-</section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/cats/highlight/highlight.pack.js"></script><script>hljs.configure({languages:['scala','java','bash']});
-hljs.initHighlighting();
-              </script><script>((window.gitter = {}).chat = {}).options = {
+cats-effect <code class="language-plaintext highlighter-rouge">IO</code>, which has a <code class="language-plaintext highlighter-rouge">Defer</code> instance.</p>
+</section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/cats/highlight/highlight.pack.js"></script><script>
+// For all code blocks, copy the language from the containing div
+// to the inner code tag (where hljs expects it to be)
+const langPrefix = 'language-';
+document.querySelectorAll(`div[class^='${langPrefix}']`).forEach(function(div) {
+  div.classList.forEach(function(cssClass) {
+    if (cssClass.startsWith(langPrefix)) {
+      const lang = cssClass.substring(langPrefix.length);
+      div.querySelectorAll('pre code').forEach(function(code) {
+        code.classList.add(lang);
+      });
+    }
+  });
+});
+
+hljs.configure({languages:['scala','java','bash']});
+hljs.initHighlightingOnLoad();
+      </script><script>console.info('\x57\x65\x62\x73\x69\x74\x65\x20\x62\x75\x69\x6c\x74\x20\x77\x69\x74\x68\x3a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x5f\x5f\x20\x20\x20\x20\x5f\x5f\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x5f\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x5f\x20\x5f\x5f\x0a\x20\x20\x20\x5f\x5f\x5f\x5f\x5f\x2f\x20\x2f\x5f\x20\x20\x2f\x20\x2f\x5f\x20\x20\x20\x20\x20\x20\x5f\x5f\x5f\x5f\x20\x5f\x5f\x5f\x20\x20\x28\x5f\x29\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x20\x20\x5f\x5f\x5f\x5f\x5f\x28\x5f\x29\x20\x2f\x5f\x5f\x5f\x5f\x20\x20\x5f\x5f\x5f\x5f\x5f\x0a\x20\x20\x2f\x20\x5f\x5f\x5f\x2f\x20\x5f\x5f\x20\x5c\x2f\x20\x5f\x5f\x2f\x5f\x5f\x5f\x5f\x5f\x2f\x20\x5f\x5f\x20\x60\x5f\x5f\x20\x5c\x2f\x20\x2f\x20\x5f\x5f\x5f\x2f\x20\x5f\x5f\x5f\x2f\x20\x5f\x5f\x20\x5c\x2f\x20\x5f\x5f\x5f\x2f\x20\x2f\x20\x5f\x5f\x2f\x20\x5f\x20\x5c\x2f\x20\x5f\x5f\x5f\x2f\x0a\x20\x28\x5f\x5f\x20\x20\x29\x20\x2f\x5f\x2f\x20\x2f\x20\x2f\x5f\x2f\x5f\x5f\x5f\x5f\x5f\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x5f\x5f\x2f\x20\x2f\x20\x20\x2f\x20\x2f\x5f\x2f\x20\x28\x5f\x5f\x20\x20\x29\x20\x2f\x20\x2f\x5f\x2f\x20\x20\x5f\x5f\x28\x5f\x5f\x20\x20\x29\x0a\x2f\x5f\x5f\x5f\x5f\x2f\x5f\x2e\x5f\x5f\x5f\x2f\x5c\x5f\x5f\x2f\x20\x20\x20\x20\x20\x2f\x5f\x2f\x20\x2f\x5f\x2f\x20\x2f\x5f\x2f\x5f\x2f\x5c\x5f\x5f\x5f\x2f\x5f\x2f\x20\x20\x20\x5c\x5f\x5f\x5f\x5f\x2f\x5f\x5f\x5f\x5f\x2f\x5f\x2f\x5c\x5f\x5f\x2f\x5c\x5f\x5f\x5f\x2f\x5f\x5f\x5f\x5f\x2f\x0a\x0a\x68\x74\x74\x70\x73\x3a\x2f\x2f\x34\x37\x64\x65\x67\x2e\x67\x69\x74\x68\x75\x62\x2e\x69\x6f\x2f\x73\x62\x74\x2d\x6d\x69\x63\x72\x6f\x73\x69\x74\x65\x73')</script><script>((window.gitter = {}).chat = {}).options = {
 room: 'typelevel/cats'};</script><script src="https://sidecar.gitter.im/dist/sidecar.v1.js"></script><script src="/cats/js/main.js"></script></body></html>

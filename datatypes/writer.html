@@ -1,0 +1,229 @@
+<!DOCTYPE html><html><head><title>Cats: Writer</title><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Cats contributors" /><meta name="description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="og:image" content="/cats/img/poster.png" /><meta name="image" property="og:image" content="/cats/img/poster.png" /><meta name="og:title" content="Cats: Writer" /><meta name="title" property="og:title" content="Cats: Writer" /><meta name="og:site_name" content="Cats" /><meta name="og:url" content="http://typelevel.org/cats/" /><meta name="og:type" content="website" /><meta name="og:description" content="Lightweight, modular, and extensible library for functional programming" /><link rel="icon" type="image/png" href="/cats/img/favicon.png" /><meta name="twitter:title" content="Cats: Writer" /><meta name="twitter:image" content="/cats/img/poster.png" /><meta name="twitter:description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="twitter:card" content="summary_large_image" /><link rel="icon" type="image/png" sizes="16x16" href="/cats/img/favicon16x16.png" /><link rel="icon" type="image/png" sizes="24x24" href="/cats/img/favicon24x24.png" /><link rel="icon" type="image/png" sizes="32x32" href="/cats/img/favicon32x32.png" /><link rel="icon" type="image/png" sizes="48x48" href="/cats/img/favicon48x48.png" /><link rel="icon" type="image/png" sizes="57x57" href="/cats/img/favicon57x57.png" /><link rel="icon" type="image/png" sizes="60x60" href="/cats/img/favicon60x60.png" /><link rel="icon" type="image/png" sizes="64x64" href="/cats/img/favicon64x64.png" /><link rel="icon" type="image/png" sizes="70x70" href="/cats/img/favicon70x70.png" /><link rel="icon" type="image/png" sizes="72x72" href="/cats/img/favicon72x72.png" /><link rel="icon" type="image/png" sizes="76x76" href="/cats/img/favicon76x76.png" /><link rel="icon" type="image/png" sizes="96x96" href="/cats/img/favicon96x96.png" /><link rel="icon" type="image/png" sizes="114x114" href="/cats/img/favicon114x114.png" /><link rel="icon" type="image/png" sizes="120x120" href="/cats/img/favicon120x120.png" /><link rel="icon" type="image/png" sizes="128x128" href="/cats/img/favicon128x128.png" /><link rel="icon" type="image/png" sizes="144x144" href="/cats/img/favicon144x144.png" /><link rel="icon" type="image/png" sizes="150x150" href="/cats/img/favicon150x150.png" /><link rel="icon" type="image/png" sizes="152x152" href="/cats/img/favicon152x152.png" /><link rel="icon" type="image/png" sizes="196x196" href="/cats/img/favicon196x196.png" /><link rel="icon" type="image/png" sizes="310x310" href="/cats/img/favicon310x310.png" /><link rel="icon" type="image/png" sizes="310x150" href="/cats/img/favicon310x150.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" /><link rel="stylesheet" href="/cats/highlight/styles/atom-one-light.css" /><link rel="stylesheet" href="/cats/css/pattern-style.css" /></head><body class="docs"><div id="wrapper"><div id="sidebar-wrapper"><ul id="sidebar" class="sidebar-nav"><li class="sidebar-brand"><a href="/cats/" class="brand"><div class="brand-wrapper"><span>Cats</span></div></a></li><li><a href="/cats/datatypes/chain.html" class="">Chain</a></li><li><a href="/cats/datatypes/const.html" class="">Const</a></li><li><a href="/cats/datatypes/contt.html" class="">ContT</a></li><li><a href="/cats/datatypes.html" class="">Data Types</a></li><li><a href="/cats/datatypes/either.html" class="">Either</a></li><li><a href="/cats/datatypes/eithert.html" class="">EitherT</a></li><li><a href="/cats/datatypes/eval.html" class="">Eval</a></li><li><a href="/cats/datatypes/freeapplicative.html" class="">FreeApplicatives</a></li><li><a href="/cats/datatypes/freemonad.html" class="">FreeMonads</a></li><li><a href="/cats/datatypes/functionk.html" class="">FunctionK</a></li><li><a href="/cats/datatypes/id.html" class="">Id</a></li><li><a href="/cats/datatypes/ior.html" class="">Ior</a></li><li><a href="/cats/datatypes/iort.html" class="">IorT</a></li><li><a href="/cats/datatypes/kleisli.html" class="">Kleisli</a></li><li><a href="/cats/datatypes/nel.html" class="">NonEmptyList</a></li><li><a href="/cats/datatypes/nested.html" class="">Nested</a></li><li><a href="/cats/datatypes/oneand.html" class="">OneAnd</a></li><li><a href="/cats/datatypes/optiont.html" class="">OptionT</a></li><li><a href="/cats/datatypes/state.html" class="">State</a></li><li><a href="/cats/datatypes/validated.html" class="">Validated</a></li><li><a href="/cats/datatypes/writer.html" class=" active ">Writer</a></li><li><a href="/cats/datatypes/writert.html" class="">WriterT</a></li></ul></div><div id="page-content-wrapper"><div class="nav"><div class="container-fluid"><div class="row"><div class="col-lg-12"><div class="action-menu pull-left clearfix"><a href="#menu-toggle" id="menu-toggle"><i class="fa fa-bars" aria-hidden="true"></i></a></div><ul class="pull-right"><li id="gh-eyes-item" class="hidden-xs"><a href="https://github.com/typelevel/cats" target="_blank" rel="noopener noreferrer"><i class="fa fa-eye"></i><span>Watchers<span id="eyes" class="label label-default">--</span></span></a></li><li id="gh-stars-item" class="hidden-xs"><a href="https://github.com/typelevel/cats" target="_blank" rel="noopener noreferrer"><i class="fa fa-star-o"></i><span>Stars<span id="stars" class="label label-default">--</span></span></a></li><li><a href="#" onclick="shareSiteTwitter('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-twitter"></i></a></li><li><a href="#" onclick="shareSiteFacebook('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-facebook"></i></a></li><li><a href="#" onclick="shareSiteGoogle();"><i class="fa fa-google-plus"></i></a></li></ul></div></div></div></div><div id="content" data-github-owner="typelevel" data-github-repo="cats"><div class="content-wrapper"><section><h1 id="writer">Writer</h1>
+
+<p>The <code class="language-plaintext highlighter-rouge">Writer[L, A]</code> datatype represents a computation that produces a
+tuple containing a value of type <code class="language-plaintext highlighter-rouge">L</code> and one of type <code class="language-plaintext highlighter-rouge">A</code>. Usually, the
+value <code class="language-plaintext highlighter-rouge">L</code> represents a description of the computation. A typical
+example of an <code class="language-plaintext highlighter-rouge">L</code> value could be a logging <code class="language-plaintext highlighter-rouge">String</code> and that’s why
+from now on we will refer to it as the <em>Logging side</em> of the
+datatype. Meanwhile, the value <code class="language-plaintext highlighter-rouge">A</code> is the actual output of the
+computation.</p>
+
+<p>The main features that <code class="language-plaintext highlighter-rouge">Writer</code> provides are:</p>
+
+<p>The flexibility regarding Log value management. It can be modified in
+multiple ways. See the <a href="#operations">Operations section</a></p>
+
+<p>When two functions are composed together, e.g. using <code class="language-plaintext highlighter-rouge">flatMap</code>, the logs
+  of both functions will be combined using an implicit
+  <a href="https://typelevel.org/cats/typeclasses/semigroup.html">Semigroup</a>.</p>
+
+<h2 id="operations">Operations</h2>
+
+<p>The <code class="language-plaintext highlighter-rouge">Writer</code> datatype provides a set of functions that are similar to
+the ones from the
+<a href="https://typelevel.org/cats/typeclasses/monad.html">Monad</a>
+typeclass. In fact, they share the same name and the same signature,
+but have an additional requirement of a
+<a href="https://typelevel.org/cats/typeclasses/semigroup.html"><code class="language-plaintext highlighter-rouge">Semigroup[L]</code></a>
+that allows the log merging.</p>
+
+<p><code class="language-plaintext highlighter-rouge">map</code> effects only the value, keeping the log side untouched. Plus, here we show <code class="language-plaintext highlighter-rouge">run</code>
+that just unwrap the datatype, returning its content.</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.Writer</span>
+<span class="k">import</span> <span class="nn">cats.instances._</span>
+
+<span class="k">val</span> <span class="nv">mapExample</span> <span class="k">=</span> <span class="nc">Writer</span><span class="o">(</span><span class="s">"map Example"</span><span class="o">,</span> <span class="mi">1</span><span class="o">).</span><span class="py">map</span><span class="o">(</span><span class="k">_</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span>
+<span class="c1">// mapExample: cats.data.WriterT[cats.package.Id, String, Int] = WriterT(</span>
+<span class="c1">//   ("map Example", 2)</span>
+<span class="c1">// )</span>
+
+<span class="nv">mapExample</span><span class="o">.</span><span class="py">run</span>
+<span class="c1">// res0: (String, Int) = ("map Example", 2)</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">ap</code> allows applying a function, wrapped into a Writer. It works
+exactly like the <code class="language-plaintext highlighter-rouge">Applicative</code> as expected, but notice how the logs
+are combined using the <a href="https://typelevel.org/cats/typeclasses/semigroup.html"><code class="language-plaintext highlighter-rouge">Semigroup[String]</code></a>.</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">apExampleValue</span> <span class="k">=</span> <span class="nc">Writer</span><span class="o">(</span><span class="s">"ap value"</span><span class="o">,</span> <span class="mi">10</span><span class="o">)</span>
+<span class="c1">// apExampleValue: cats.data.WriterT[cats.package.Id, String, Int] = WriterT(</span>
+<span class="c1">//   ("ap value", 10)</span>
+<span class="c1">// )</span>
+<span class="k">val</span> <span class="nv">apExampleFunc</span> <span class="k">=</span> <span class="nc">Writer</span><span class="o">(</span><span class="s">"ap function "</span><span class="o">,</span> <span class="o">(</span><span class="n">i</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">7</span><span class="o">)</span>
+<span class="c1">// apExampleFunc: cats.data.WriterT[cats.package.Id, String, Int =&gt; Int] = WriterT(</span>
+<span class="c1">//   ("ap function ", &lt;function1&gt;)</span>
+<span class="c1">// )</span>
+
+<span class="nv">apExampleValue</span><span class="o">.</span><span class="py">ap</span><span class="o">(</span><span class="n">apExampleFunc</span><span class="o">).</span><span class="py">run</span>
+<span class="c1">// res1: (String, Int) = ("ap function ap value", 3)</span>
+</code></pre></div></div>
+
+<p>Same thing for <code class="language-plaintext highlighter-rouge">flatMap</code></p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">flatMapExample1</span> <span class="k">=</span> <span class="nc">Writer</span><span class="o">(</span><span class="s">"flatmap value"</span><span class="o">,</span> <span class="mi">5</span><span class="o">)</span>
+<span class="c1">// flatMapExample1: cats.data.WriterT[cats.package.Id, String, Int] = WriterT(</span>
+<span class="c1">//   ("flatmap value", 5)</span>
+<span class="c1">// )</span>
+<span class="k">val</span> <span class="nv">flatMapExample2</span> <span class="k">=</span> <span class="o">(</span><span class="n">x</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nc">Writer</span><span class="o">(</span><span class="s">"flatmap function "</span><span class="o">,</span> <span class="n">x</span> <span class="o">*</span> <span class="n">x</span><span class="o">)</span>
+<span class="c1">// flatMapExample2: Int =&gt; cats.data.WriterT[cats.package.Id, String, Int] = &lt;function1&gt;</span>
+
+<span class="nv">flatMapExample1</span><span class="o">.</span><span class="py">flatMap</span><span class="o">(</span><span class="n">flatMapExample2</span><span class="o">).</span><span class="py">run</span>
+<span class="c1">// res2: (String, Int) = ("flatmap valueflatmap function ", 25)</span>
+
+<span class="c1">// We can use the for comprehension as well</span>
+<span class="k">val</span> <span class="nv">flatMapForResult</span> <span class="k">=</span> <span class="k">for</span> <span class="o">{</span>
+    <span class="n">value</span> <span class="k">&lt;-</span> <span class="nc">Writer</span><span class="o">(</span><span class="s">"flatmap value"</span><span class="o">,</span> <span class="mi">5</span><span class="o">)</span>
+    <span class="n">result</span> <span class="k">&lt;-</span> <span class="nf">flatMapExample2</span><span class="o">(</span><span class="n">value</span><span class="o">)</span>
+<span class="o">}</span> <span class="k">yield</span> <span class="n">result</span>
+<span class="c1">// flatMapForResult: cats.data.WriterT[cats.package.Id, String, Int] = WriterT(</span>
+<span class="c1">//   ("flatmap valueflatmap function ", 25)</span>
+<span class="c1">// )</span>
+
+<span class="nv">flatMapForResult</span><span class="o">.</span><span class="py">run</span>
+<span class="c1">// res3: (String, Int) = ("flatmap valueflatmap function ", 25)</span>
+</code></pre></div></div>
+
+<p>Apart from those, <code class="language-plaintext highlighter-rouge">Writer</code> comes with some specific functions to manage
+the log side of the computation:</p>
+
+<dl>
+  <dt><code class="language-plaintext highlighter-rouge">tell</code></dt>
+  <dd>Append a value to the log side. It requires a <a href="https://typelevel.org/cats/typeclasses/semigroup.html"><code class="language-plaintext highlighter-rouge">Semigroup[L]</code></a>.</dd>
+  <dt><code class="language-plaintext highlighter-rouge">swap</code></dt>
+  <dd>Exchange the two values of the <code class="language-plaintext highlighter-rouge">Writer</code>.</dd>
+  <dt><code class="language-plaintext highlighter-rouge">reset</code></dt>
+  <dd>Delete the log side. It requires a <a href="https://typelevel.org/cats/typeclasses/monoid.html"><code class="language-plaintext highlighter-rouge">Monoid[L]</code></a> since it uses the <code class="language-plaintext highlighter-rouge">empty</code> value of the monoid.</dd>
+  <dt><code class="language-plaintext highlighter-rouge">value</code></dt>
+  <dd>Returns only the value of the <code class="language-plaintext highlighter-rouge">Writer</code></dd>
+  <dt><code class="language-plaintext highlighter-rouge">listen</code></dt>
+  <dd>Transform the value of the <code class="language-plaintext highlighter-rouge">Writer</code> to a tuple containing the
+current value and the current log.</dd>
+</dl>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">tellExample</span> <span class="k">=</span> <span class="nc">Writer</span><span class="o">(</span><span class="s">"tell example"</span><span class="o">,</span> <span class="mi">1</span><span class="o">).</span><span class="py">tell</span><span class="o">(</span><span class="s">"log append"</span><span class="o">)</span>
+<span class="c1">// tellExample: cats.data.WriterT[cats.package.Id, String, Int] = WriterT(</span>
+<span class="c1">//   ("tell examplelog append", 1)</span>
+<span class="c1">// )</span>
+
+<span class="nv">tellExample</span><span class="o">.</span><span class="py">run</span>
+<span class="c1">// res4: (String, Int) = ("tell examplelog append", 1)</span>
+
+<span class="k">val</span> <span class="nv">swapExample</span> <span class="k">=</span> <span class="nc">Writer</span><span class="o">(</span><span class="s">"new value"</span><span class="o">,</span> <span class="s">"new log"</span><span class="o">).</span><span class="py">swap</span>
+<span class="c1">// swapExample: cats.data.WriterT[cats.package.Id, String, String] = WriterT(</span>
+<span class="c1">//   ("new log", "new value")</span>
+<span class="c1">// )</span>
+
+<span class="nv">swapExample</span><span class="o">.</span><span class="py">run</span>
+<span class="c1">// res5: (String, String) = ("new log", "new value")</span>
+
+<span class="k">val</span> <span class="nv">resetExample</span> <span class="k">=</span> <span class="nc">Writer</span><span class="o">(</span><span class="s">"long log to discard"</span><span class="o">,</span> <span class="mi">42</span><span class="o">).</span><span class="py">reset</span>
+<span class="c1">// resetExample: cats.data.WriterT[cats.package.Id, String, Int] = WriterT(</span>
+<span class="c1">//   ("", 42)</span>
+<span class="c1">// )</span>
+
+<span class="nv">resetExample</span><span class="o">.</span><span class="py">run</span>
+<span class="c1">// res6: (String, Int) = ("", 42)</span>
+
+<span class="k">val</span> <span class="nv">valueExample</span> <span class="k">=</span> <span class="nc">Writer</span><span class="o">(</span><span class="s">"some log"</span><span class="o">,</span> <span class="mi">55</span><span class="o">).</span><span class="py">value</span>
+<span class="c1">// valueExample: cats.package.Id[Int] = 55</span>
+
+<span class="n">valueExample</span>
+<span class="c1">// res7: cats.package.Id[Int] = 55</span>
+
+<span class="k">val</span> <span class="nv">listenExample</span> <span class="k">=</span> <span class="nc">Writer</span><span class="o">(</span><span class="s">"listen log"</span><span class="o">,</span> <span class="mi">10</span><span class="o">).</span><span class="py">listen</span>
+<span class="c1">// listenExample: cats.data.WriterT[cats.package.Id, String, (Int, String)] = WriterT(</span>
+<span class="c1">//   ("listen log", (10, "listen log"))</span>
+<span class="c1">// )</span>
+
+<span class="nv">listenExample</span><span class="o">.</span><span class="py">run</span>
+<span class="c1">// res8: (String, (Int, String)) = ("listen log", (10, "listen log"))</span>
+</code></pre></div></div>
+
+<h3 id="definition">Definition</h3>
+
+<p>If we go looking at how <code class="language-plaintext highlighter-rouge">Writer</code> is actually defined, we will see
+it is just a type alias:</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.WriterT</span>
+<span class="k">import</span> <span class="nn">cats.Id</span>
+<span class="c1">// cats/data/package.scala</span>
+<span class="k">type</span> <span class="kt">Writer</span><span class="o">[</span><span class="kt">L</span>, <span class="kt">V</span><span class="o">]</span> <span class="k">=</span> <span class="nc">WriterT</span><span class="o">[</span><span class="kt">Id</span>, <span class="kt">L</span>, <span class="kt">V</span><span class="o">]</span>
+</code></pre></div></div>
+
+<p>So, all the <a href="#operations">Operations</a> defined in the previous section
+are actually coming from the <a href="https://typelevel.org/cats/datatypes/writert.html">WriterT
+datatype</a></p>
+
+<p>Most of the <a href="https://typelevel.org/cats/datatypes/writert.html"><code class="language-plaintext highlighter-rouge">WriterT</code></a> functions require a
+<a href="https://typelevel.org/cats/typeclasses/functor.html"><code class="language-plaintext highlighter-rouge">Functor[F]</code></a> or
+<a href="https://typelevel.org/cats/typeclasses/monad.html"><code class="language-plaintext highlighter-rouge">Monad[F]</code></a>
+instance. However, Cats provides all the necessary instances for the
+<a href="https://typelevel.org/cats/datatypes/id.html"><code class="language-plaintext highlighter-rouge">Id</code></a> type, therefore
+we don’t have to worry about them.</p>
+
+<h2 id="example">Example</h2>
+
+<p>The example showed in here is taken from the <a href="https://rosettacode.org/wiki/Monads/Writer_monad">Rosetta Code
+site</a>. It simply
+applies a bunch of Math operations, logging each one of them.</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.Writer</span>
+<span class="k">import</span> <span class="nn">scala.math.sqrt</span>
+
+<span class="k">val</span> <span class="nv">writer1</span><span class="k">:</span> <span class="kt">Writer</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Double</span><span class="o">]</span> <span class="k">=</span> <span class="nv">Writer</span><span class="o">.</span><span class="py">value</span><span class="o">(</span><span class="mf">5.0</span><span class="o">).</span><span class="py">tell</span><span class="o">(</span><span class="s">"Initial value "</span><span class="o">)</span>
+<span class="k">val</span> <span class="nv">writer2</span><span class="k">:</span> <span class="kt">Writer</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Double</span> <span class="k">=&gt;</span> <span class="kt">Double</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Writer</span><span class="o">(</span><span class="s">"sqrt "</span><span class="o">,</span> <span class="o">(</span><span class="n">i</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nf">sqrt</span><span class="o">(</span><span class="n">i</span><span class="o">))</span>
+<span class="k">val</span> <span class="nv">writer3</span><span class="k">:</span> <span class="kt">Double</span> <span class="o">=&gt;</span> <span class="nc">Writer</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Double</span><span class="o">]</span> <span class="k">=</span> <span class="o">(</span><span class="n">x</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nc">Writer</span><span class="o">(</span><span class="s">"add 1 "</span><span class="o">,</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span>
+<span class="k">val</span> <span class="nv">writer4</span><span class="k">:</span> <span class="kt">Writer</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Double</span> <span class="k">=&gt;</span> <span class="kt">Double</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Writer</span><span class="o">(</span><span class="s">"divided by 2 "</span><span class="o">,</span> <span class="o">(</span><span class="n">x</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">x</span> <span class="o">/</span> <span class="mi">2</span><span class="o">)</span>
+
+<span class="k">val</span> <span class="nv">writer5</span><span class="k">:</span> <span class="kt">Writer</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Double</span> <span class="k">=&gt;</span> <span class="kt">Double</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Writer</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Double</span> <span class="k">=&gt;</span> <span class="kt">Double</span><span class="o">](</span><span class="nf">writer3</span><span class="o">(</span><span class="mi">0</span><span class="o">).</span><span class="py">written</span><span class="o">,(</span><span class="n">x</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nf">writer3</span><span class="o">(</span><span class="n">x</span><span class="o">).</span><span class="py">value</span><span class="o">)</span>
+</code></pre></div></div>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Pay attention on the ordering of the logs</span>
+
+<span class="n">writer1</span>
+  <span class="o">.</span><span class="py">ap</span><span class="o">(</span><span class="n">writer2</span><span class="o">)</span>
+  <span class="o">.</span><span class="py">flatMap</span><span class="o">(</span><span class="nf">writer3</span><span class="o">(</span><span class="k">_</span><span class="o">))</span>
+  <span class="o">.</span><span class="py">ap</span><span class="o">(</span><span class="n">writer4</span><span class="o">)</span>
+  <span class="o">.</span><span class="py">map</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">toString</span><span class="o">)</span>
+  <span class="o">.</span><span class="py">run</span>
+<span class="c1">// res10: (String, String) = (</span>
+<span class="c1">//   "divided by 2 sqrt Initial value add 1 ",</span>
+<span class="c1">//   "1.618033988749895"</span>
+<span class="c1">// )</span>
+
+<span class="k">import</span> <span class="nn">cats.syntax.compose._</span>
+
+<span class="o">(</span><span class="k">for</span> <span class="o">{</span>
+    <span class="n">initialValue</span> <span class="k">&lt;-</span> <span class="n">writer1</span>
+    <span class="n">sqrt</span> <span class="k">&lt;-</span> <span class="n">writer2</span>
+    <span class="n">addOne</span> <span class="k">&lt;-</span> <span class="n">writer5</span>
+    <span class="n">divideBy2</span> <span class="k">&lt;-</span> <span class="n">writer4</span>
+    <span class="o">}</span> <span class="nf">yield</span> <span class="o">(</span><span class="n">sqrt</span> <span class="o">&gt;&gt;&gt;</span> <span class="n">addOne</span> <span class="o">&gt;&gt;&gt;</span> <span class="n">divideBy2</span><span class="o">)(</span><span class="n">initialValue</span><span class="o">)</span>
+<span class="o">).</span><span class="py">run</span>
+<span class="c1">// res11: (String, Double) = (</span>
+<span class="c1">//   "Initial value sqrt add 1 divided by 2 ",</span>
+<span class="c1">//   1.618033988749895</span>
+<span class="c1">// )</span>
+</code></pre></div></div>
+
+<p>If you are interested in logging solutions, we recommend the library <a href="https://christopherdavenport.github.io/log4cats/">log4cats</a></p>
+</section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/cats/highlight/highlight.pack.js"></script><script>
+// For all code blocks, copy the language from the containing div
+// to the inner code tag (where hljs expects it to be)
+const langPrefix = 'language-';
+document.querySelectorAll(`div[class^='${langPrefix}']`).forEach(function(div) {
+  div.classList.forEach(function(cssClass) {
+    if (cssClass.startsWith(langPrefix)) {
+      const lang = cssClass.substring(langPrefix.length);
+      div.querySelectorAll('pre code').forEach(function(code) {
+        code.classList.add(lang);
+      });
+    }
+  });
+});
+
+hljs.configure({languages:['scala','java','bash']});
+hljs.initHighlightingOnLoad();
+      </script><script>console.info('\x57\x65\x62\x73\x69\x74\x65\x20\x62\x75\x69\x6c\x74\x20\x77\x69\x74\x68\x3a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x5f\x5f\x20\x20\x20\x20\x5f\x5f\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x5f\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x5f\x20\x5f\x5f\x0a\x20\x20\x20\x5f\x5f\x5f\x5f\x5f\x2f\x20\x2f\x5f\x20\x20\x2f\x20\x2f\x5f\x20\x20\x20\x20\x20\x20\x5f\x5f\x5f\x5f\x20\x5f\x5f\x5f\x20\x20\x28\x5f\x29\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x20\x20\x5f\x5f\x5f\x5f\x5f\x28\x5f\x29\x20\x2f\x5f\x5f\x5f\x5f\x20\x20\x5f\x5f\x5f\x5f\x5f\x0a\x20\x20\x2f\x20\x5f\x5f\x5f\x2f\x20\x5f\x5f\x20\x5c\x2f\x20\x5f\x5f\x2f\x5f\x5f\x5f\x5f\x5f\x2f\x20\x5f\x5f\x20\x60\x5f\x5f\x20\x5c\x2f\x20\x2f\x20\x5f\x5f\x5f\x2f\x20\x5f\x5f\x5f\x2f\x20\x5f\x5f\x20\x5c\x2f\x20\x5f\x5f\x5f\x2f\x20\x2f\x20\x5f\x5f\x2f\x20\x5f\x20\x5c\x2f\x20\x5f\x5f\x5f\x2f\x0a\x20\x28\x5f\x5f\x20\x20\x29\x20\x2f\x5f\x2f\x20\x2f\x20\x2f\x5f\x2f\x5f\x5f\x5f\x5f\x5f\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x5f\x5f\x2f\x20\x2f\x20\x20\x2f\x20\x2f\x5f\x2f\x20\x28\x5f\x5f\x20\x20\x29\x20\x2f\x20\x2f\x5f\x2f\x20\x20\x5f\x5f\x28\x5f\x5f\x20\x20\x29\x0a\x2f\x5f\x5f\x5f\x5f\x2f\x5f\x2e\x5f\x5f\x5f\x2f\x5c\x5f\x5f\x2f\x20\x20\x20\x20\x20\x2f\x5f\x2f\x20\x2f\x5f\x2f\x20\x2f\x5f\x2f\x5f\x2f\x5c\x5f\x5f\x5f\x2f\x5f\x2f\x20\x20\x20\x5c\x5f\x5f\x5f\x5f\x2f\x5f\x5f\x5f\x5f\x2f\x5f\x2f\x5c\x5f\x5f\x2f\x5c\x5f\x5f\x5f\x2f\x5f\x5f\x5f\x5f\x2f\x0a\x0a\x68\x74\x74\x70\x73\x3a\x2f\x2f\x34\x37\x64\x65\x67\x2e\x67\x69\x74\x68\x75\x62\x2e\x69\x6f\x2f\x73\x62\x74\x2d\x6d\x69\x63\x72\x6f\x73\x69\x74\x65\x73')</script><script>((window.gitter = {}).chat = {}).options = {
+room: 'typelevel/cats'};</script><script src="https://sidecar.gitter.im/dist/sidecar.v1.js"></script><script src="/cats/js/main.js"></script></body></html>

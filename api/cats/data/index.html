@@ -81,10 +81,32 @@
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <a title="Symbolic aliases for various types are defined here." href="../index.html"><span class="name">cats</span></a>
+        <a title="The cats root package contains all the trait signatures of most Scala type classes." href="../index.html"><span class="name">cats</span></a>
       </span>
       
-      <p class="shortcomment cmt">Symbolic aliases for various types are defined here.</p><div class="fullcomment"><div class="comment cmt"><p>Symbolic aliases for various types are defined here.
+      <p class="shortcomment cmt">The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><p>Cats type classes are implemented using the approach from the
+ <a href="https://ropas.snu.ac.kr/~bruno/papers/TypeClasses.pdf" target="_blank">Type classes as objects and implicits</a> article.</p><p>For each type class, <code>cats</code> provides three pieces:
+- Its <b>signature</b>: a trait that is polymorphic on a type parameter.
+  Type class traits inherit from other type classes to indicate that any implementation of the lower type class (e.g. <code>Applicative</code>)
+  can also serve as an instance for the higuer type class (e.g. <code>Functor</code>).
+- Type class <b>'instances</b>, which are classes and objects that implement one or more type class signatures for some specific types.
+  Type class instances for several data types from the Java or Scala standard libraries are declared in the subpackage <code>cats.instances</code>.
+- <b>Syntax extensions</b>, each of which provides the methods of the type class defines as extension methods
+  (which in Scala 2 are encoded as implicit classes) for values of any type <code>F</code>; given that an instance of the type class
+  for the receiver type (<code>this</code>) is in the implicit scope.
+  Symtax extensions are declared in the <code>cats.syntax</code> package.
+- A set of <b>laws</b>, that are also generic on the type of the class, and are only defined on the operations of the type class.
+  The purpose of these laws is to declare some algebraic relations (equations) between Scala expressions involving the operations
+  of the type class, and test (but not verify) that implemented instances satisfy those equations.
+  Laws are defined in the <code>cats-laws</code> package.</p><p>Although most of cats type classes are declared in this package, some are declared in other packages:
+- type classes that operate on base types (kind <code>*</code>), and their implementations for standard library types,
+  are contained in <code>cats.kernel</code>, which is a different SBT project. However, they are re-exported from this package.
+- type classes of kind <code>F[_, _]</code>, such as <a href="../arrow/Profunctor.html" class="extype" name="cats.arrow.Profunctor">cats.arrow.Profunctor</a>&quot; or <a href="../arrow/Arrow.html" class="extype" name="cats.arrow.Arrow">cats.arrow.Arrow</a>, which are relevant for
+  Functional Reactive Programming or optics, are declared in the <code>cats.arrow</code> package.
+- Also, those type classes that abstract over (pure or impure) functional runtime effects are declared
+  in the <a href="https://typelevel.org/cats-effect/" target="_blank">cats-effect library</a>.
+- Some type classes for which no laws can be provided are left out of the main road, in a small and dirty alley.
+  These are the <code>alleycats</code>.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
     </li><li name="cats.arrow" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="arrow"></a><a id="arrow:arrow"></a>
@@ -99,6 +121,22 @@
       </span>
       <span class="symbol">
         <a title="" href="../arrow/index.html"><span class="name">arrow</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="cats">cats</a></dd></dl></div>
+    </li><li name="cats.conversions" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="conversions"></a><a id="conversions:conversions"></a>
+      <span class="permalink">
+      <a href="../../cats/conversions/index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../conversions/index.html"><span class="name">conversions</span></a>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="cats">cats</a></dd></dl></div>
@@ -154,6 +192,10 @@
                         <a class="object" href="Const$.html" title=""></a>
                         <a class="class" href="Const.html" title="Const is a phantom type, it does not contain a value of its second type parameter B Const can be seen as a type level version of Function.const[A, B]: A =&gt; B =&gt; A"></a>
                         <a href="Const.html" title="Const is a phantom type, it does not contain a value of its second type parameter B Const can be seen as a type level version of Function.const[A, B]: A =&gt; B =&gt; A">Const</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$Cont$.html" title=""></a>
+                        <a href="package$$Cont$.html" title="">Cont</a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="ContT$.html" title=""></a>
                         <a class="class" href="ContT.html" title="This is a continuation transformer based on the ContT in the Haskell package Control.Monad.Cont"></a>
@@ -214,6 +256,10 @@
                         <span class="separator"></span>
                         <a class="class" href="NonEmptyMapOps.html" title=""></a>
                         <a href="NonEmptyMapOps.html" title="">NonEmptyMapOps</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="NonEmptySeq$.html" title=""></a>
+                        <a class="class" href="NonEmptySeq.html" title="A data type which represents a Seq guaranteed to contain at least one element."></a>
+                        <a href="NonEmptySeq.html" title="A data type which represents a Seq guaranteed to contain at least one element.">NonEmptySeq</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="class" href="NonEmptySetOps.html" title=""></a>
@@ -282,6 +328,10 @@
                         <a class="object" href="ZipList$.html" title=""></a>
                         <a class="class" href="ZipList.html" title=""></a>
                         <a href="ZipList.html" title="">ZipList</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="ZipSeq$.html" title=""></a>
+                        <a class="class" href="ZipSeq.html" title=""></a>
+                        <a href="ZipSeq.html" title="">ZipSeq</a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="ZipStream$.html" title=""></a>
                         <a class="class" href="ZipStream.html" title=""></a>
@@ -403,7 +453,17 @@
             Linear Supertypes
           </span>
           <div class="superTypes hiddenContent"><span class="extype" name="cats.data.ScalaVersionSpecificPackage">ScalaVersionSpecificPackage</span>, <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
-        </div></div>
+        </div><div class="toggleContainer block diagram-container" id="content-diagram-container">
+                <span class="toggle diagram-link">
+                  Content Hierarchy
+                </span>
+                <div class="diagram" id="content-diagram"><svg class="package-diagram" id="graph1" viewBox="0.00 0.00 447.00 94.00" height="94pt" width="447pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 90)" class="graph" id="page0,1_graph0"><polygon points="-4,4 -4,-90 443,-90 443,4 -4,4" stroke="transparent" fill="white"></polygon><!-- node0 --><g class="node class" id="graph1_0"><g id="a_class|graph1_0"><a xlink:title="cats.data.Func" xlink:href="Func.html#inheritance-diagram"><path d="M103.17,-86C103.17,-86 14.83,-86 14.83,-86 10.67,-86 6.5,-81.83 6.5,-77.67 6.5,-77.67 6.5,-69.33 6.5,-69.33 6.5,-65.17 10.67,-61 14.83,-61 14.83,-61 103.17,-61 103.17,-61 107.33,-61 111.5,-65.17 111.5,-69.33 111.5,-69.33 111.5,-77.67 111.5,-77.67 111.5,-81.83 107.33,-86 103.17,-86" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-80.5" x="17" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-71.1" x="38" text-anchor="start">Func[F, A, B]</text></a></g></g><!-- node5 --><g class="node class" id="graph1_5"><g id="a_class|graph1_5"><a xlink:title="cats.data.AppFunc" xlink:href="AppFunc.html#inheritance-diagram"><path d="M109.67,-25C109.67,-25 8.33,-25 8.33,-25 4.17,-25 0,-20.83 0,-16.67 0,-16.67 0,-8.33 0,-8.33 0,-4.17 4.17,0 8.33,0 8.33,0 109.67,0 109.67,0 113.83,0 118,-4.17 118,-8.33 118,-8.33 118,-16.67 118,-16.67 118,-20.83 113.83,-25 109.67,-25" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-19.5" x="10" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="31" text-anchor="start">AppFunc[F, A, B]</text></a></g></g><!-- node0&#45;&gt;node5 --><g class="edge inheritance" id="graph1_0_5"><g id="a_inheritance|graph1_0_5"><a xlink:title="AppFunc[F, A, B] is a subtype of Func[F, A, B]"><path d="M59,-53.76C59,-44.37 59,-33.29 59,-25.13" stroke="#d4d4d4" fill="none"></path><polygon points="56.55,-53.84 59,-60.84 61.45,-53.84 56.55,-53.84" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node1 --><g class="node trait" id="graph1_1"><g id="a_trait|graph1_1"><a xlink:title="cats.data.BinestedInstances" xlink:href="BinestedInstances.html#inheritance-diagram"><path d="M244.17,-86C244.17,-86 137.83,-86 137.83,-86 133.67,-86 129.5,-81.83 129.5,-77.67 129.5,-77.67 129.5,-69.33 129.5,-69.33 129.5,-65.17 133.67,-61 137.83,-61 137.83,-61 244.17,-61 244.17,-61 248.33,-61 252.5,-65.17 252.5,-69.33 252.5,-69.33 252.5,-77.67 252.5,-77.67 252.5,-81.83 248.33,-86 244.17,-86" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-80.5" x="140" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-71.1" x="161" text-anchor="start">BinestedInstances</text></a></g></g><!-- node4 --><g class="node object" id="graph1_4"><g id="a_object|graph1_4"><a xlink:title="cats.data.Binested" xlink:href="Binested$.html#inheritance-diagram"><path d="M223.67,-25C223.67,-25 158.33,-25 158.33,-25 154.17,-25 150,-20.83 150,-16.67 150,-16.67 150,-8.33 150,-8.33 150,-4.17 154.17,0 158.33,0 158.33,0 223.67,0 223.67,0 227.83,0 232,-4.17 232,-8.33 232,-8.33 232,-16.67 232,-16.67 232,-20.83 227.83,-25 223.67,-25" stroke="#103a51" fill="#103a51"></path><image xlink:href="../../lib/object_diagram.png" y="-19.5" x="160" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="181" text-anchor="start">Binested</text></a></g></g><!-- node1&#45;&gt;node4 --><g class="edge inheritance" id="graph1_1_4"><g id="a_inheritance|graph1_1_4"><a xlink:title="Binested is a subtype of BinestedInstances"><path d="M191,-53.76C191,-44.37 191,-33.29 191,-25.13" stroke="#d4d4d4" fill="none"></path><polygon points="188.55,-53.84 191,-60.84 193.45,-53.84 188.55,-53.84" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node2 --><g class="node class" id="graph1_2"><g id="a_class|graph1_2"><a xlink:title="cats.data.BinestedBitraverse" xlink:href="BinestedBitraverse.html#inheritance-diagram"><path d="M430.67,-25C430.67,-25 279.33,-25 279.33,-25 275.17,-25 271,-20.83 271,-16.67 271,-16.67 271,-8.33 271,-8.33 271,-4.17 275.17,0 279.33,0 279.33,0 430.67,0 430.67,0 434.83,0 439,-4.17 439,-8.33 439,-8.33 439,-16.67 439,-16.67 439,-20.83 434.83,-25 430.67,-25" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-19.5" x="281" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="302" text-anchor="start">BinestedBitraverse[F, G, H]</text></a></g></g><!-- node3 --><g class="node class" id="graph1_3"><g id="a_class|graph1_3"><a xlink:title="cats.data.BinestedBifoldable" xlink:href="BinestedBifoldable.html#inheritance-diagram"><path d="M430.67,-86C430.67,-86 279.33,-86 279.33,-86 275.17,-86 271,-81.83 271,-77.67 271,-77.67 271,-69.33 271,-69.33 271,-65.17 275.17,-61 279.33,-61 279.33,-61 430.67,-61 430.67,-61 434.83,-61 439,-65.17 439,-69.33 439,-69.33 439,-77.67 439,-77.67 439,-81.83 434.83,-86 430.67,-86" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-80.5" x="281" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-71.1" x="302" text-anchor="start">BinestedBifoldable[F, G, H]</text></a></g></g><!-- node3&#45;&gt;node2 --><g class="edge inheritance" id="graph1_3_2"><g id="a_inheritance|graph1_3_2"><a xlink:title="BinestedBitraverse[F, G, H] is a subtype of BinestedBifoldable[F, G, H]"><path d="M355,-53.76C355,-44.37 355,-33.29 355,-25.13" stroke="#d4d4d4" fill="none"></path><polygon points="352.55,-53.84 355,-60.84 357.45,-53.84 352.55,-53.84" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
+                <div id="diagram-controls" class="hiddenContent">
+                  <button id="diagram-zoom-out" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button id="diagram-zoom-in" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button title="Toggle full-screen" id="diagram-fs" class="diagram-btn to-full"><i class="material-icons"></i></button>
+                </div>
+              </div></div>
         
 
       <div id="mbrsel">
@@ -469,7 +529,7 @@
 (via <code>andThen</code> and <code>compose</code>) in constant stack space with amortized
 linear time application (in the number of constituent functions).</p><div class="fullcomment"><div class="comment cmt"><p>A function type of a single input that can do function composition
 (via <code>andThen</code> and <code>compose</code>) in constant stack space with amortized
-linear time application (in the number of constituent functions).</p><p>Example:</p><pre><span class="kw">val</span> seed = AndThen((x: <span class="std">Int</span>) <span class="kw">=&gt;</span> x + <span class="num">1</span>))
+linear time application (in the number of constituent functions).</p><p>Example:</p><pre><span class="kw">val</span> seed = AndThen((x: <span class="std">Int</span>) <span class="kw">=&gt;</span> x + <span class="num">1</span>)
 <span class="kw">val</span> f = (<span class="num">0</span> until <span class="num">10000</span>).foldLeft(seed)((acc, _) <span class="kw">=&gt;</span> acc.andThen(_ + <span class="num">1</span>))
 
 <span class="cmt">// This should not trigger stack overflow ;-)</span>
@@ -642,6 +702,22 @@ steps takes O(N).
       <p class="shortcomment cmt"><a href="Const.html" class="extype" name="cats.data.Const">Const</a> is a phantom type, it does not contain a value of its second type parameter <code>B</code>
 <a href="Const.html" class="extype" name="cats.data.Const">Const</a> can be seen as a type level version of <code>Function.const[A, B]: A =&gt; B =&gt; A</code>
 </p>
+    </li><li name="cats.data.Cont" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Cont[A,B]=cats.data.ContT[cats.Eval,A,B]"></a><a id="Cont[A,B]:Cont[A,B]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/index.html#Cont[A,B]=cats.data.ContT[cats.Eval,A,B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Cont</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="result alias"> = <a href="ContT.html" class="extype" name="cats.data.ContT">ContT</a>[<a href="../Eval.html" class="extype" name="cats.Eval">Eval</a>, <span class="extype" name="cats.data.Cont.A">A</span>, <span class="extype" name="cats.data.Cont.B">B</span>]</span>
+      </span>
+      
+      
     </li><li name="cats.data.ContT" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="ContT[M[_],A,+B]extendsSerializable"></a><a id="ContT[M[_],A,+B]:ContT[M,A,B]"></a>
       <span class="permalink">
@@ -1003,7 +1079,7 @@ res1: <span class="std">List</span>[<span class="std">Option</span>[<span class=
       
       
     </li><li name="cats.data.NonEmptyChainOps" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="NonEmptyChainOps[A]extendsAnyVal"></a><a id="NonEmptyChainOps[A]:NonEmptyChainOps[A]"></a>
+      <a id="NonEmptyChainOps[A]extendsAnyValwithNonEmptyCollection[A,cats.data.Chain,cats.data.NonEmptyChain]"></a><a id="NonEmptyChainOps[A]:NonEmptyChainOps[A]"></a>
       <span class="permalink">
       <a href="../../cats/data/NonEmptyChainOps.html" title="Permalink">
         <i class="material-icons"></i>
@@ -1014,12 +1090,12 @@ res1: <span class="std">List</span>[<span class="std">Option</span>[<span class=
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a title="" href="NonEmptyChainOps.html"><span class="name">NonEmptyChainOps</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyVal.html#scala.AnyVal" class="extype" name="scala.AnyVal">AnyVal</a></span>
+        <a title="" href="NonEmptyChainOps.html"><span class="name">NonEmptyChainOps</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyVal.html#scala.AnyVal" class="extype" name="scala.AnyVal">AnyVal</a> with <span class="extype" name="cats.data.NonEmptyCollection">NonEmptyCollection</span>[<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>, <a href="Chain.html" class="extype" name="cats.data.Chain">Chain</a>, <a href="#NonEmptyChain[+A]=cats.data.NonEmptyChainImpl.Type[A]" class="extmbr" name="cats.data.NonEmptyChain">NonEmptyChain</a>]</span>
       </span>
       
       
     </li><li name="cats.data.NonEmptyList" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="NonEmptyList[+A]extendsProductwithSerializable"></a><a id="NonEmptyList[+A]:NonEmptyList[A]"></a>
+      <a id="NonEmptyList[+A]extendsNonEmptyCollection[A,List,cats.data.NonEmptyList]withProductwithSerializable"></a><a id="NonEmptyList[+A]:NonEmptyList[A]"></a>
       <span class="permalink">
       <a href="../../cats/data/NonEmptyList.html" title="Permalink">
         <i class="material-icons"></i>
@@ -1030,7 +1106,7 @@ res1: <span class="std">List</span>[<span class="std">Option</span>[<span class=
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a title="A data type which represents a non empty list of A, with single element (head) and optional structure (tail)." href="NonEmptyList.html"><span class="name">NonEmptyList</span></a><span class="tparams">[<span name="A">+A</span>]</span><span class="params">(<span name="head">head: <span class="extype" name="cats.data.NonEmptyList.A">A</span></span>, <span name="tail">tail: <span class="extype" name="scala.List">List</span>[<span class="extype" name="cats.data.NonEmptyList.A">A</span>]</span>)</span><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.10/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="A data type which represents a non empty list of A, with single element (head) and optional structure (tail)." href="NonEmptyList.html"><span class="name">NonEmptyList</span></a><span class="tparams">[<span name="A">+A</span>]</span><span class="params">(<span name="head">head: <span class="extype" name="cats.data.NonEmptyList.A">A</span></span>, <span name="tail">tail: <span class="extype" name="scala.List">List</span>[<span class="extype" name="cats.data.NonEmptyList.A">A</span>]</span>)</span><span class="result"> extends <span class="extype" name="cats.data.NonEmptyCollection">NonEmptyCollection</span>[<span class="extype" name="cats.data.NonEmptyList.A">A</span>, <span class="extype" name="scala.List">List</span>, <a href="NonEmptyList.html" class="extype" name="cats.data.NonEmptyList">NonEmptyList</a>] with <a href="https://www.scala-lang.org/api/2.12.10/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       <p class="shortcomment cmt">A data type which represents a non empty list of A, with
@@ -1067,6 +1143,27 @@ single element (head) and optional structure (tail).</p>
       </span>
       
       
+    </li><li name="cats.data.NonEmptySeq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="NonEmptySeq[+A]extendsAnyValwithNonEmptyCollection[A,scala.collection.immutable.Seq,cats.data.NonEmptySeq]"></a><a id="NonEmptySeq[+A]:NonEmptySeq[A]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/NonEmptySeq.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="A data type which represents a Seq guaranteed to contain at least one element." href="NonEmptySeq.html"><span class="name">NonEmptySeq</span></a><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyVal.html#scala.AnyVal" class="extype" name="scala.AnyVal">AnyVal</a> with <span class="extype" name="cats.data.NonEmptyCollection">NonEmptyCollection</span>[<span class="extype" name="cats.data.NonEmptySeq.A">A</span>, <a href="https://www.scala-lang.org/api/2.12.10/scala/collection/immutable/Seq.html#scala.collection.immutable.Seq" class="extype" name="scala.collection.immutable.Seq">Seq</a>, <a href="NonEmptySeq.html" class="extype" name="cats.data.NonEmptySeq">NonEmptySeq</a>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">A data type which represents a <code>Seq</code> guaranteed to contain at least one element.</p><div class="fullcomment"><div class="comment cmt"><p>A data type which represents a <code>Seq</code> guaranteed to contain at least one element.
+<br/>
+Note that the constructor is <code>private</code> to prevent accidental construction of an empty
+<code>NonEmptySeq</code>. However, due to https://issues.scala-lang.org/browse/SI-6601, on
+Scala 2.10, this may be bypassed due to a compiler bug.
+</p></div></div>
     </li><li name="cats.data.NonEmptySet" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="NonEmptySet[A]=cats.data.NonEmptySetImpl.Type[A]"></a><a id="NonEmptySet[A]:NonEmptySet[A]"></a>
       <span class="permalink">
@@ -1119,7 +1216,7 @@ single element (head) and optional structure (tail).</p>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ScalaVersionSpecificPackage</dd></dl></div>
     </li><li name="cats.data.NonEmptyVector" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="NonEmptyVector[+A]extendsAnyVal"></a><a id="NonEmptyVector[+A]:NonEmptyVector[A]"></a>
+      <a id="NonEmptyVector[+A]extendsAnyValwithNonEmptyCollection[A,Vector,cats.data.NonEmptyVector]"></a><a id="NonEmptyVector[+A]:NonEmptyVector[A]"></a>
       <span class="permalink">
       <a href="../../cats/data/NonEmptyVector.html" title="Permalink">
         <i class="material-icons"></i>
@@ -1130,7 +1227,7 @@ single element (head) and optional structure (tail).</p>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a title="A data type which represents a Vector guaranteed to contain at least one element." href="NonEmptyVector.html"><span class="name">NonEmptyVector</span></a><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyVal.html#scala.AnyVal" class="extype" name="scala.AnyVal">AnyVal</a></span>
+        <a title="A data type which represents a Vector guaranteed to contain at least one element." href="NonEmptyVector.html"><span class="name">NonEmptyVector</span></a><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyVal.html#scala.AnyVal" class="extype" name="scala.AnyVal">AnyVal</a> with <span class="extype" name="cats.data.NonEmptyCollection">NonEmptyCollection</span>[<span class="extype" name="cats.data.NonEmptyVector.A">A</span>, <span class="extype" name="scala.Vector">Vector</span>, <a href="NonEmptyVector.html" class="extype" name="cats.data.NonEmptyVector">NonEmptyVector</a>]</span>
       </span>
       
       <p class="shortcomment cmt">A data type which represents a <code>Vector</code> guaranteed to contain at least one element.</p><div class="fullcomment"><div class="comment cmt"><p>A data type which represents a <code>Vector</code> guaranteed to contain at least one element.
@@ -1474,6 +1571,22 @@ context along with the <code>A</code> value.
       </span>
       
       
+    </li><li name="cats.data.ZipSeq" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ZipSeq[A]extendsAnyVal"></a><a id="ZipSeq[A]:ZipSeq[A]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/ZipSeq.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="ZipSeq.html"><span class="name">ZipSeq</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyVal.html#scala.AnyVal" class="extype" name="scala.AnyVal">AnyVal</a></span>
+      </span>
+      
+      
     </li><li name="cats.data.ZipStream" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ZipStream[A]extendsAnyVal"></a><a id="ZipStream[A]:ZipStream[A]"></a>
       <span class="permalink">
@@ -1754,6 +1867,22 @@ context along with the <code>A</code> value.
       </span>
       
       
+    </li><li name="cats.data.Cont" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Cont"></a><a id="Cont:Cont"></a>
+      <span class="permalink">
+      <a href="../../cats/data/package$$Cont$.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="package$$Cont$.html"><span class="name">Cont</span></a>
+      </span>
+      
+      
     </li><li name="cats.data.ContT" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ContT"></a><a id="ContT:ContT"></a>
       <span class="permalink">
@@ -1959,6 +2088,22 @@ context along with the <code>A</code> value.
       </span>
       <span class="symbol">
         <a title="" href="NonEmptyList$.html"><span class="name">NonEmptyList</span></a><span class="result"> extends <span class="extype" name="cats.data.NonEmptyListInstances">NonEmptyListInstances</span> with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      
+    </li><li name="cats.data.NonEmptySeq" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NonEmptySeq"></a><a id="NonEmptySeq:NonEmptySeq"></a>
+      <span class="permalink">
+      <a href="../../cats/data/NonEmptySeq$.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="NonEmptySeq$.html"><span class="name">NonEmptySeq</span></a><span class="result"> extends <span class="extype" name="cats.data.NonEmptySeqInstances">NonEmptySeqInstances</span> with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
@@ -2215,6 +2360,25 @@ context along with the <code>A</code> value.
       </span>
       <span class="symbol">
         <a title="" href="ZipList$.html"><span class="name">ZipList</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@suppressUnusedImportWarningForScalaVersionSpecific</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="cats.data.ZipSeq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ZipSeq"></a><a id="ZipSeq:ZipSeq"></a>
+      <span class="permalink">
+      <a href="../../cats/data/ZipSeq$.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="ZipSeq$.html"><span class="name">ZipSeq</span></a>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>

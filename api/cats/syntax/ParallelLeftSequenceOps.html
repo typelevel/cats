@@ -81,10 +81,32 @@
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <a title="Symbolic aliases for various types are defined here." href="../index.html"><span class="name">cats</span></a>
+        <a title="The cats root package contains all the trait signatures of most Scala type classes." href="../index.html"><span class="name">cats</span></a>
       </span>
       
-      <p class="shortcomment cmt">Symbolic aliases for various types are defined here.</p><div class="fullcomment"><div class="comment cmt"><p>Symbolic aliases for various types are defined here.
+      <p class="shortcomment cmt">The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><p>Cats type classes are implemented using the approach from the
+ <a href="https://ropas.snu.ac.kr/~bruno/papers/TypeClasses.pdf" target="_blank">Type classes as objects and implicits</a> article.</p><p>For each type class, <code>cats</code> provides three pieces:
+- Its <b>signature</b>: a trait that is polymorphic on a type parameter.
+  Type class traits inherit from other type classes to indicate that any implementation of the lower type class (e.g. <code>Applicative</code>)
+  can also serve as an instance for the higuer type class (e.g. <code>Functor</code>).
+- Type class <b>'instances</b>, which are classes and objects that implement one or more type class signatures for some specific types.
+  Type class instances for several data types from the Java or Scala standard libraries are declared in the subpackage <code>cats.instances</code>.
+- <b>Syntax extensions</b>, each of which provides the methods of the type class defines as extension methods
+  (which in Scala 2 are encoded as implicit classes) for values of any type <code>F</code>; given that an instance of the type class
+  for the receiver type (<code>this</code>) is in the implicit scope.
+  Symtax extensions are declared in the <code>cats.syntax</code> package.
+- A set of <b>laws</b>, that are also generic on the type of the class, and are only defined on the operations of the type class.
+  The purpose of these laws is to declare some algebraic relations (equations) between Scala expressions involving the operations
+  of the type class, and test (but not verify) that implemented instances satisfy those equations.
+  Laws are defined in the <code>cats-laws</code> package.</p><p>Although most of cats type classes are declared in this package, some are declared in other packages:
+- type classes that operate on base types (kind <code>*</code>), and their implementations for standard library types,
+  are contained in <code>cats.kernel</code>, which is a different SBT project. However, they are re-exported from this package.
+- type classes of kind <code>F[_, _]</code>, such as <a href="../arrow/Profunctor.html" class="extype" name="cats.arrow.Profunctor">cats.arrow.Profunctor</a>&quot; or <a href="../arrow/Arrow.html" class="extype" name="cats.arrow.Arrow">cats.arrow.Arrow</a>, which are relevant for
+  Functional Reactive Programming or optics, are declared in the <code>cats.arrow</code> package.
+- Also, those type classes that abstract over (pure or impure) functional runtime effects are declared
+  in the <a href="https://typelevel.org/cats-effect/" target="_blank">cats-effect library</a>.
+- Some type classes for which no laws can be provided are left out of the main road, in a small and dirty alley.
+  These are the <code>alleycats</code>.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
     </li><li name="cats.syntax" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="syntax"></a><a id="syntax:syntax"></a>
@@ -142,6 +164,10 @@
                         <span class="separator"></span>
                         <a class="trait" href="AllSyntaxBinCompat6.html" title=""></a>
                         <a href="AllSyntaxBinCompat6.html" title="">AllSyntaxBinCompat6</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="AllSyntaxBinCompat7.html" title=""></a>
+                        <a href="AllSyntaxBinCompat7.html" title="">AllSyntaxBinCompat7</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="trait" href="AlternativeSyntax.html" title=""></a>
@@ -520,6 +546,10 @@
                         <a href="ParallelLeftTraverseOps.html" title="">ParallelLeftTraverseOps</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
+                        <a class="class" href="ParallelSequenceFilterOps.html" title=""></a>
+                        <a href="ParallelSequenceFilterOps.html" title="">ParallelSequenceFilterOps</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
                         <a class="class" href="ParallelSequenceOps.html" title=""></a>
                         <a href="ParallelSequenceOps.html" title="">ParallelSequenceOps</a>
                       </li><li class="current-entities indented2">
@@ -538,6 +568,14 @@
                         <span class="separator"></span>
                         <a class="class" href="ParallelTraversable_Ops.html" title=""></a>
                         <a href="ParallelTraversable_Ops.html" title="">ParallelTraversable_Ops</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="ParallelTraverseFilterOps.html" title=""></a>
+                        <a href="ParallelTraverseFilterOps.html" title="">ParallelTraverseFilterOps</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="ParallelTraverseFilterSyntax.html" title=""></a>
+                        <a href="ParallelTraverseFilterSyntax.html" title="">ParallelTraverseFilterSyntax</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="trait" href="ParallelTraverseSyntax.html" title=""></a>
@@ -610,6 +648,14 @@
                         <span class="separator"></span>
                         <a class="class" href="SeparateOps.html" title=""></a>
                         <a href="SeparateOps.html" title="">SeparateOps</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="SeqOps.html" title=""></a>
+                        <a href="SeqOps.html" title="">SeqOps</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="SeqSyntax.html" title=""></a>
+                        <a href="SeqSyntax.html" title="">SeqSyntax</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="class" href="SequenceFilterOps.html" title=""></a>
@@ -820,6 +866,10 @@
                         <a href="package$$group$.html" title="">group</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
+                        <a class="object" href="package$$hash$.html" title=""></a>
+                        <a href="package$$hash$.html" title="">hash</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
                         <a class="object" href="package$$invariant$.html" title=""></a>
                         <a href="package$$invariant$.html" title="">invariant</a>
                       </li><li class="current-entities indented2">
@@ -890,6 +940,10 @@
                         <span class="separator"></span>
                         <a class="object" href="package$$semigroupk$.html" title=""></a>
                         <a href="package$$semigroupk$.html" title="">semigroupk</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$seq$.html" title=""></a>
+                        <a href="package$$seq$.html" title="">seq</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="object" href="package$$set$.html" title=""></a>
@@ -967,7 +1021,17 @@
             Linear Supertypes
           </span>
           <div class="superTypes hiddenContent"><a href="https://www.scala-lang.org/api/2.12.10/scala/AnyVal.html#scala.AnyVal" class="extype" name="scala.AnyVal">AnyVal</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
-        </div></div>
+        </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
+                <span class="toggle diagram-link">
+                  Type Hierarchy
+                </span>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph1" viewBox="0.00 0.00 260.00 118.00" height="118pt" width="260pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 114)" class="graph" id="page0,1_graph0"><polygon points="-4,4 -4,-114 256,-114 256,4 -4,4" stroke="transparent" fill="white"></polygon><g class="cluster" id="clust1"></g><g class="cluster" id="clust2"></g><!-- node0 --><g class="node this class" id="graph1_0"><g id="a_this class|graph1_0"><a xlink:title="cats.syntax.ParallelLeftSequenceOps (this class)" xlink:href="#inheritance-diagram"><path d="M219.67,-49C219.67,-49 32.33,-49 32.33,-49 28.17,-49 24,-44.83 24,-40.67 24,-40.67 24,-32.33 24,-32.33 24,-28.17 28.17,-24 32.33,-24 32.33,-24 219.67,-24 219.67,-24 223.83,-24 228,-28.17 228,-32.33 228,-32.33 228,-40.67 228,-40.67 228,-44.83 223.83,-49 219.67,-49" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-43.5" x="34" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-34.1" x="55" text-anchor="start">ParallelLeftSequenceOps[T, M, A, B]</text></a></g></g><!-- node1 --><g class="node class" id="graph1_1"><g id="a_class|graph1_1"><a xlink:title="scala.AnyVal"><path d="M154.17,-110C154.17,-110 97.83,-110 97.83,-110 93.67,-110 89.5,-105.83 89.5,-101.67 89.5,-101.67 89.5,-93.33 89.5,-93.33 89.5,-89.17 93.67,-85 97.83,-85 97.83,-85 154.17,-85 154.17,-85 158.33,-85 162.5,-89.17 162.5,-93.33 162.5,-93.33 162.5,-101.67 162.5,-101.67 162.5,-105.83 158.33,-110 154.17,-110" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-104.5" x="100" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-95.1" x="121" text-anchor="start">AnyVal</text></a></g></g><!-- node1&#45;&gt;node0 --><g class="edge inheritance" id="graph1_1_0"><g id="a_inheritance|graph1_1_0"><a xlink:title="ParallelLeftSequenceOps[T, M, A, B] is a subtype of AnyVal"><path d="M126,-77.76C126,-68.37 126,-57.29 126,-49.13" stroke="#d4d4d4" fill="none"></path><polygon points="123.55,-77.84 126,-84.84 128.45,-77.84 123.55,-77.84" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
+                <div id="diagram-controls" class="hiddenContent">
+                  <button id="diagram-zoom-out" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button id="diagram-zoom-in" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button title="Toggle full-screen" id="diagram-fs" class="diagram-btn to-full"><i class="material-icons"></i></button>
+                </div>
+              </div></div>
         
 
       <div id="mbrsel">

@@ -81,10 +81,32 @@
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <a title="Symbolic aliases for various types are defined here." href="index.html"><span class="name">cats</span></a>
+        <a title="The cats root package contains all the trait signatures of most Scala type classes." href="index.html"><span class="name">cats</span></a>
       </span>
       
-      <p class="shortcomment cmt">Symbolic aliases for various types are defined here.</p><div class="fullcomment"><div class="comment cmt"><p>Symbolic aliases for various types are defined here.
+      <p class="shortcomment cmt">The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><p>Cats type classes are implemented using the approach from the
+ <a href="https://ropas.snu.ac.kr/~bruno/papers/TypeClasses.pdf" target="_blank">Type classes as objects and implicits</a> article.</p><p>For each type class, <code>cats</code> provides three pieces:
+- Its <b>signature</b>: a trait that is polymorphic on a type parameter.
+  Type class traits inherit from other type classes to indicate that any implementation of the lower type class (e.g. <code>Applicative</code>)
+  can also serve as an instance for the higuer type class (e.g. <code>Functor</code>).
+- Type class <b>'instances</b>, which are classes and objects that implement one or more type class signatures for some specific types.
+  Type class instances for several data types from the Java or Scala standard libraries are declared in the subpackage <code>cats.instances</code>.
+- <b>Syntax extensions</b>, each of which provides the methods of the type class defines as extension methods
+  (which in Scala 2 are encoded as implicit classes) for values of any type <code>F</code>; given that an instance of the type class
+  for the receiver type (<code>this</code>) is in the implicit scope.
+  Symtax extensions are declared in the <code>cats.syntax</code> package.
+- A set of <b>laws</b>, that are also generic on the type of the class, and are only defined on the operations of the type class.
+  The purpose of these laws is to declare some algebraic relations (equations) between Scala expressions involving the operations
+  of the type class, and test (but not verify) that implemented instances satisfy those equations.
+  Laws are defined in the <code>cats-laws</code> package.</p><p>Although most of cats type classes are declared in this package, some are declared in other packages:
+- type classes that operate on base types (kind <code>*</code>), and their implementations for standard library types,
+  are contained in <code>cats.kernel</code>, which is a different SBT project. However, they are re-exported from this package.
+- type classes of kind <code>F[_, _]</code>, such as <a href="arrow/Profunctor.html" class="extype" name="cats.arrow.Profunctor">cats.arrow.Profunctor</a>&quot; or <a href="arrow/Arrow.html" class="extype" name="cats.arrow.Arrow">cats.arrow.Arrow</a>, which are relevant for
+  Functional Reactive Programming or optics, are declared in the <code>cats.arrow</code> package.
+- Also, those type classes that abstract over (pure or impure) functional runtime effects are declared
+  in the <a href="https://typelevel.org/cats-effect/" target="_blank">cats-effect library</a>.
+- Some type classes for which no laws can be provided are left out of the main road, in a small and dirty alley.
+  These are the <code>alleycats</code>.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="_root_">root</a></dd></dl></div>
     </li><li name="cats.arrow" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="arrow"></a><a id="arrow:arrow"></a>
@@ -99,6 +121,22 @@
       </span>
       <span class="symbol">
         <a title="" href="arrow/index.html"><span class="name">arrow</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="cats">cats</a></dd></dl></div>
+    </li><li name="cats.conversions" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="conversions"></a><a id="conversions:conversions"></a>
+      <span class="permalink">
+      <a href="../cats/conversions/index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="conversions/index.html"><span class="name">conversions</span></a>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="cats">cats</a></dd></dl></div>
@@ -319,6 +357,10 @@
                         <a class="trait" href="FunctorFilter.html" title="FunctorFilter[F] allows you to map and filter out elements simultaneously."></a>
                         <a href="FunctorFilter.html" title="FunctorFilter[F] allows you to map and filter out elements simultaneously.">FunctorFilter</a>
                       </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="trait" href="FunctorFilterInstances0.html" title=""></a>
+                        <a href="FunctorFilterInstances0.html" title="">FunctorFilterInstances0</a>
+                      </li><li class="current-entities indented1">
                         <a class="object" href="Inject$.html" title=""></a>
                         <a class="class" href="Inject.html" title="Inject is a type class providing an injection from type A into type B."></a>
                         <a href="Inject.html" title="Inject is a type class providing an injection from type A into type B.">Inject</a>
@@ -399,6 +441,10 @@
                         <a class="trait" href="SemigroupK.html" title="SemigroupK is a universal semigroup which operates on kinds."></a>
                         <a href="SemigroupK.html" title="SemigroupK is a universal semigroup which operates on kinds.">SemigroupK</a>
                       </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="trait" href="SemigroupKInstances0.html" title=""></a>
+                        <a href="SemigroupKInstances0.html" title="">SemigroupKInstances0</a>
+                      </li><li class="current-entities indented1">
                         <a class="object" href="Semigroupal$.html" title=""></a>
                         <a class="trait" href="Semigroupal.html" title="Semigroupal captures the idea of composing independent effectful values."></a>
                         <a href="Semigroupal.html" title="Semigroupal captures the idea of composing independent effectful values.">Semigroupal</a>
@@ -459,7 +505,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">ContravariantMonoidal</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="ContravariantSemigroupal.html" class="extype" name="cats.ContravariantSemigroupal">ContravariantSemigroupal</a>[<span class="extype" name="cats.ContravariantMonoidal.F">F</span>] with <a href="InvariantMonoidal.html" class="extype" name="cats.InvariantMonoidal">InvariantMonoidal</a>[<span class="extype" name="cats.ContravariantMonoidal.F">F</span>] with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <span class="name">ContravariantMonoidal</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="ContravariantSemigroupal.html" class="extype" name="cats.ContravariantSemigroupal">ContravariantSemigroupal</a>[<span class="extype" name="cats.ContravariantMonoidal.F">F</span>] with <a href="InvariantMonoidal.html" class="extype" name="cats.InvariantMonoidal">InvariantMonoidal</a>[<span class="extype" name="cats.ContravariantMonoidal.F">F</span>]</span>
       </span>
       </h4>
 
@@ -473,12 +519,30 @@ https://hackage.haskell.org/package/contravariant-1.4/docs/Data-Functor-Contrava
       <span class="defval" name="&quot;Could not find an instance of ContravariantMonoidal for ${F}&quot;">...</span>
     </span>)</span>
               
+                <span class="name">@typeclass</span><span class="args">(<span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$1">...</span>
+    </span>, <span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$2">...</span>
+    </span>)</span>
+              
         </dd><dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/ContravariantMonoidal.scala" target="_blank">ContravariantMonoidal.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
           <div class="superTypes hiddenContent"><a href="InvariantMonoidal.html" class="extype" name="cats.InvariantMonoidal">InvariantMonoidal</a>[<span class="extype" name="cats.ContravariantMonoidal.F">F</span>], <a href="ContravariantSemigroupal.html" class="extype" name="cats.ContravariantSemigroupal">ContravariantSemigroupal</a>[<span class="extype" name="cats.ContravariantMonoidal.F">F</span>], <a href="Contravariant.html" class="extype" name="cats.Contravariant">Contravariant</a>[<span class="extype" name="cats.ContravariantMonoidal.F">F</span>], <a href="InvariantSemigroupal.html" class="extype" name="cats.InvariantSemigroupal">InvariantSemigroupal</a>[<span class="extype" name="cats.ContravariantMonoidal.F">F</span>], <a href="Invariant.html" class="extype" name="cats.Invariant">Invariant</a>[<span class="extype" name="cats.ContravariantMonoidal.F">F</span>], <a href="Semigroupal.html" class="extype" name="cats.Semigroupal">Semigroupal</a>[<span class="extype" name="cats.ContravariantMonoidal.F">F</span>], <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
-        </div></div>
+        </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
+                <span class="toggle diagram-link">
+                  Type Hierarchy
+                </span>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph1" viewBox="0.00 0.00 330.00 118.00" height="118pt" width="330pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 114)" class="graph" id="page0,1_graph0"><polygon points="-4,4 -4,-114 326,-114 326,4 -4,4" stroke="transparent" fill="white"></polygon><g class="cluster" id="clust1"></g><g class="cluster" id="clust2"></g><!-- node0 --><g class="node this trait" id="graph1_0"><g id="a_this trait|graph1_0"><a xlink:title="cats.ContravariantMonoidal (this trait)" xlink:href="#inheritance-diagram"><path d="M237.67,-49C237.67,-49 100.33,-49 100.33,-49 96.17,-49 92,-44.83 92,-40.67 92,-40.67 92,-32.33 92,-32.33 92,-28.17 96.17,-24 100.33,-24 100.33,-24 237.67,-24 237.67,-24 241.83,-24 246,-28.17 246,-32.33 246,-32.33 246,-40.67 246,-40.67 246,-44.83 241.83,-49 237.67,-49" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-43.5" x="102" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-34.1" x="123" text-anchor="start">ContravariantMonoidal[F]</text></a></g></g><!-- node1 --><g class="node trait" id="graph1_1"><g id="a_trait|graph1_1"><a xlink:title="cats.ContravariantSemigroupal" xlink:href="ContravariantSemigroupal.html#inheritance-diagram"><path d="M159.67,-110C159.67,-110 8.33,-110 8.33,-110 4.17,-110 0,-105.83 0,-101.67 0,-101.67 0,-93.33 0,-93.33 0,-89.17 4.17,-85 8.33,-85 8.33,-85 159.67,-85 159.67,-85 163.83,-85 168,-89.17 168,-93.33 168,-93.33 168,-101.67 168,-101.67 168,-105.83 163.83,-110 159.67,-110" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-104.5" x="10" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-95.1" x="31" text-anchor="start">ContravariantSemigroupal[F]</text></a></g></g><!-- node1&#45;&gt;node0 --><g class="edge inheritance" id="graph1_1_0"><g id="a_inheritance|graph1_1_0"><a xlink:title="ContravariantMonoidal[F] is a subtype of ContravariantSemigroupal[F]"><path d="M106.67,-80.76C121,-70.82 139.21,-58.18 152.24,-49.13" stroke="#d4d4d4" fill="none"></path><polygon points="105.15,-78.84 100.79,-84.84 107.94,-82.86 105.15,-78.84" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node2 --><g class="node trait" id="graph1_2"><g id="a_trait|graph1_2"><a xlink:title="cats.InvariantMonoidal" xlink:href="InvariantMonoidal.html#inheritance-diagram"><path d="M313.67,-110C313.67,-110 194.33,-110 194.33,-110 190.17,-110 186,-105.83 186,-101.67 186,-101.67 186,-93.33 186,-93.33 186,-89.17 190.17,-85 194.33,-85 194.33,-85 313.67,-85 313.67,-85 317.83,-85 322,-89.17 322,-93.33 322,-93.33 322,-101.67 322,-101.67 322,-105.83 317.83,-110 313.67,-110" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-104.5" x="196" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-95.1" x="217" text-anchor="start">InvariantMonoidal[F]</text></a></g></g><!-- node2&#45;&gt;node0 --><g class="edge inheritance" id="graph1_2_0"><g id="a_inheritance|graph1_2_0"><a xlink:title="ContravariantMonoidal[F] is a subtype of InvariantMonoidal[F]"><path d="M231.33,-80.76C217,-70.82 198.79,-58.18 185.76,-49.13" stroke="#d4d4d4" fill="none"></path><polygon points="230.06,-82.86 237.21,-84.84 232.85,-78.84 230.06,-82.86" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
+                <div id="diagram-controls" class="hiddenContent">
+                  <button id="diagram-zoom-out" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button id="diagram-zoom-in" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button title="Toggle full-screen" id="diagram-fs" class="diagram-btn to-full"><i class="material-icons"></i></button>
+                </div>
+              </div></div>
         
 
       <div id="mbrsel">
@@ -685,6 +749,8 @@ res3: <span class="std">Option</span>[(<span class="std">Int</span>, <span class
               
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="cats.Contravariant#compose" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="compose[G[_]](implicitevidence$1:cats.Contravariant[G]):cats.Functor[[α]F[G[α]]]"></a><a id="compose[G[_]](Contravariant[G]):Functor[[α]F[G[α]]]"></a>
@@ -717,7 +783,13 @@ res3: <span class="std">Option</span>[(<span class="std">Int</span>, <span class
         <span class="name">compose</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="Invariant.html" class="extype" name="cats.Invariant">Invariant</a>[<span class="extype" name="cats.Invariant.compose.G">G</span>]</span>)</span><span class="result">: <a href="Invariant.html" class="extype" name="cats.Invariant">Invariant</a>[[α]<span class="extype" name="cats.ContravariantMonoidal.F">F</span>[<span class="extype" name="cats.Invariant.compose.G">G</span>[<span class="extype" name="cats.Invariant.&lt;refinement&gt;.Λ$.α">α</span>]]]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Invariant.html" class="extype" name="cats.Invariant">Invariant</a></dd></dl></div>
+      <p class="shortcomment cmt">Compose Invariant <code>F[_]</code> and <code>G[_]</code> then produce <code>Invariant[F[G[_]]]</code> using their <code>imap</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Compose Invariant <code>F[_]</code> and <code>G[_]</code> then produce <code>Invariant[F[G[_]]]</code> using their <code>imap</code>.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">import</span> scala.concurrent.duration._
+
+scala&gt; <span class="kw">val</span> durSemigroupList: Semigroup[<span class="std">List</span>[FiniteDuration]] =
+     | Invariant[Semigroup].compose[<span class="std">List</span>].imap(Semigroup[<span class="std">List</span>[<span class="std">Long</span>]])(Duration.fromNanos)(_.toNanos)
+scala&gt; durSemigroupList.combine(<span class="std">List</span>(<span class="num">2.</span>seconds, <span class="num">3.</span>seconds), <span class="std">List</span>(<span class="num">4.</span>seconds))
+res1: <span class="std">List</span>[FiniteDuration] = <span class="std">List</span>(<span class="num">2</span> seconds, <span class="num">3</span> seconds, <span class="num">4</span> seconds)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Invariant.html" class="extype" name="cats.Invariant">Invariant</a></dd></dl></div>
     </li><li name="cats.InvariantSemigroupal#composeApply" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="composeApply[G[_]](implicitevidence$1:cats.Apply[G]):cats.InvariantSemigroupal[[α]F[G[α]]]"></a><a id="composeApply[G[_]](Apply[G]):InvariantSemigroupal[[α]F[G[α]]]"></a>
       <span class="permalink">
@@ -749,7 +821,19 @@ res3: <span class="std">Option</span>[(<span class="std">Int</span>, <span class
         <span class="name">composeContravariant</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="Contravariant.html" class="extype" name="cats.Contravariant">Contravariant</a>[<span class="extype" name="cats.Invariant.composeContravariant.G">G</span>]</span>)</span><span class="result">: <a href="Invariant.html" class="extype" name="cats.Invariant">Invariant</a>[[α]<span class="extype" name="cats.ContravariantMonoidal.F">F</span>[<span class="extype" name="cats.Invariant.composeContravariant.G">G</span>[<span class="extype" name="cats.Invariant.&lt;refinement&gt;.Λ$.α">α</span>]]]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Invariant.html" class="extype" name="cats.Invariant">Invariant</a></dd></dl></div>
+      <p class="shortcomment cmt">Compose Invariant <code>F[_]</code> and Contravariant <code>G[_]</code> then produce <code>Invariant[F[G[_]]]</code>
+using F's <code>imap</code> and G's <code>contramap</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Compose Invariant <code>F[_]</code> and Contravariant <code>G[_]</code> then produce <code>Invariant[F[G[_]]]</code>
+using F's <code>imap</code> and G's <code>contramap</code>.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">import</span> scala.concurrent.duration._
+
+scala&gt; <span class="kw">type</span> ToInt[T] = T <span class="kw">=&gt;</span> <span class="std">Int</span>
+scala&gt; <span class="kw">val</span> durSemigroupToInt: Semigroup[ToInt[FiniteDuration]] =
+     | Invariant[Semigroup]
+     |   .composeContravariant[ToInt]
+     |   .imap(Semigroup[ToInt[<span class="std">Long</span>]])(Duration.fromNanos)(_.toNanos)
+<span class="cmt">// semantically equal to (2.seconds.toSeconds.toInt + 1) + (2.seconds.toSeconds.toInt * 2) = 7</span>
+scala&gt; durSemigroupToInt.combine(_.toSeconds.toInt + <span class="num">1</span>, _.toSeconds.toInt * <span class="num">2</span>)(<span class="num">2.</span>seconds)
+res1: <span class="std">Int</span> = <span class="num">7</span></pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Invariant.html" class="extype" name="cats.Invariant">Invariant</a></dd></dl></div>
     </li><li name="cats.ContravariantSemigroupal#composeFunctor" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="composeFunctor[G[_]](implicitevidence$1:cats.Functor[G]):cats.ContravariantSemigroupal[[α]F[G[α]]]"></a><a id="composeFunctor[G[_]](Functor[G]):ContravariantSemigroupal[[α]F[G[α]]]"></a>
       <span class="permalink">
@@ -765,7 +849,17 @@ res3: <span class="std">Option</span>[(<span class="std">Int</span>, <span class
         <span class="name">composeFunctor</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.ContravariantSemigroupal.composeFunctor.G">G</span>]</span>)</span><span class="result">: <a href="ContravariantSemigroupal.html" class="extype" name="cats.ContravariantSemigroupal">ContravariantSemigroupal</a>[[α]<span class="extype" name="cats.ContravariantMonoidal.F">F</span>[<span class="extype" name="cats.ContravariantSemigroupal.composeFunctor.G">G</span>[<span class="extype" name="cats.ContravariantSemigroupal.&lt;refinement&gt;.Λ$.α">α</span>]]]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ContravariantSemigroupal.html" class="extype" name="cats.ContravariantSemigroupal">ContravariantSemigroupal</a> → <a href="Contravariant.html" class="extype" name="cats.Contravariant">Contravariant</a> → <a href="Invariant.html" class="extype" name="cats.Invariant">Invariant</a></dd></dl></div>
+      <p class="shortcomment cmt">Compose Invariant <code>F[_]</code> and Functor <code>G[_]</code> then produce <code>Invariant[F[G[_]]]</code>
+using F's <code>imap</code> and G's <code>map</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Compose Invariant <code>F[_]</code> and Functor <code>G[_]</code> then produce <code>Invariant[F[G[_]]]</code>
+using F's <code>imap</code> and G's <code>map</code>.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">import</span> scala.concurrent.duration._
+
+scala&gt; <span class="kw">val</span> durSemigroupList: Semigroup[<span class="std">List</span>[FiniteDuration]] =
+     | Invariant[Semigroup]
+     |   .composeFunctor[<span class="std">List</span>]
+     |   .imap(Semigroup[<span class="std">List</span>[<span class="std">Long</span>]])(Duration.fromNanos)(_.toNanos)
+scala&gt; durSemigroupList.combine(<span class="std">List</span>(<span class="num">2.</span>seconds, <span class="num">3.</span>seconds), <span class="std">List</span>(<span class="num">4.</span>seconds))
+res1: <span class="std">List</span>[FiniteDuration] = <span class="std">List</span>(<span class="num">2</span> seconds, <span class="num">3</span> seconds, <span class="num">4</span> seconds)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ContravariantSemigroupal.html" class="extype" name="cats.ContravariantSemigroupal">ContravariantSemigroupal</a> → <a href="Contravariant.html" class="extype" name="cats.Contravariant">Contravariant</a> → <a href="Invariant.html" class="extype" name="cats.Invariant">Invariant</a></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
       <span class="permalink">
@@ -798,28 +892,6 @@ res3: <span class="std">Option</span>[(<span class="std">Int</span>, <span class
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="finalize():Unit"></a>
-      <span class="permalink">
-      <a href="../cats/ContravariantMonoidal.html#finalize():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="symbol">classOf[java.lang.Throwable]</span>
-    </span>)</span>
-              
-        </dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
@@ -837,6 +909,8 @@ res3: <span class="std">Option</span>[(<span class="std">Int</span>, <span class
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -856,6 +930,8 @@ res3: <span class="std">Option</span>[(<span class="std">Int</span>, <span class
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="cats.Contravariant#imap" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -877,6 +953,7 @@ res3: <span class="std">Option</span>[(<span class="std">Int</span>, <span class
 to <code>B</code> and one from <code>B</code> to <code>A</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Transform an <code>F[A]</code> into an <code>F[B]</code> by providing a transformation from <code>A</code>
 to <code>B</code> and one from <code>B</code> to <code>A</code>.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
 scala&gt; <span class="kw">import</span> scala.concurrent.duration._
+
 scala&gt; <span class="kw">val</span> durSemigroup: Semigroup[FiniteDuration] =
      | Invariant[Semigroup].imap(Semigroup[<span class="std">Long</span>])(Duration.fromNanos)(_.toNanos)
 scala&gt; durSemigroup.combine(<span class="num">2.</span>seconds, <span class="num">3.</span>seconds)
@@ -965,6 +1042,8 @@ could be implemented as contramap(identity), but the Functor laws say this is eq
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
@@ -983,6 +1062,8 @@ could be implemented as contramap(identity), but the Functor laws say this is eq
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="cats.InvariantMonoidal#point" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -1056,28 +1137,6 @@ that is trivial with respect to <code>contramap2</code> along
 the diagonal
 </p>
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait():Unit"></a>
-      <span class="permalink">
-      <a href="../cats/ContravariantMonoidal.html#wait():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
-    </span>)</span>
-              
-        </dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <span class="permalink">
       <a href="../cats/ContravariantMonoidal.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
@@ -1123,13 +1182,64 @@ the diagonal
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <span class="permalink">
+      <a href="../cats/ContravariantMonoidal.html#wait():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
     </li>
               </ol>
             </div>
 
         
 
-        
+        <div class="values members">
+              <h3>Deprecated Value Members</h3>
+              <ol><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <span class="permalink">
+      <a href="../cats/ContravariantMonoidal.html#finalize():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version ) see corresponding Javadoc for more information.">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+                <span class="name">@Deprecated</span>
+              
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version )</i> see corresponding Javadoc for more information.</p></dd></dl></div>
+    </li></ol>
+            </div>
         </div>
 
         <div id="inheritedMembers">

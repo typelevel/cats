@@ -81,10 +81,32 @@
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <a title="Symbolic aliases for various types are defined here." href="index.html"><span class="name">cats</span></a>
+        <a title="The cats root package contains all the trait signatures of most Scala type classes." href="index.html"><span class="name">cats</span></a>
       </span>
       
-      <p class="shortcomment cmt">Symbolic aliases for various types are defined here.</p><div class="fullcomment"><div class="comment cmt"><p>Symbolic aliases for various types are defined here.
+      <p class="shortcomment cmt">The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><p>Cats type classes are implemented using the approach from the
+ <a href="https://ropas.snu.ac.kr/~bruno/papers/TypeClasses.pdf" target="_blank">Type classes as objects and implicits</a> article.</p><p>For each type class, <code>cats</code> provides three pieces:
+- Its <b>signature</b>: a trait that is polymorphic on a type parameter.
+  Type class traits inherit from other type classes to indicate that any implementation of the lower type class (e.g. <code>Applicative</code>)
+  can also serve as an instance for the higuer type class (e.g. <code>Functor</code>).
+- Type class <b>'instances</b>, which are classes and objects that implement one or more type class signatures for some specific types.
+  Type class instances for several data types from the Java or Scala standard libraries are declared in the subpackage <code>cats.instances</code>.
+- <b>Syntax extensions</b>, each of which provides the methods of the type class defines as extension methods
+  (which in Scala 2 are encoded as implicit classes) for values of any type <code>F</code>; given that an instance of the type class
+  for the receiver type (<code>this</code>) is in the implicit scope.
+  Symtax extensions are declared in the <code>cats.syntax</code> package.
+- A set of <b>laws</b>, that are also generic on the type of the class, and are only defined on the operations of the type class.
+  The purpose of these laws is to declare some algebraic relations (equations) between Scala expressions involving the operations
+  of the type class, and test (but not verify) that implemented instances satisfy those equations.
+  Laws are defined in the <code>cats-laws</code> package.</p><p>Although most of cats type classes are declared in this package, some are declared in other packages:
+- type classes that operate on base types (kind <code>*</code>), and their implementations for standard library types,
+  are contained in <code>cats.kernel</code>, which is a different SBT project. However, they are re-exported from this package.
+- type classes of kind <code>F[_, _]</code>, such as <a href="arrow/Profunctor.html" class="extype" name="cats.arrow.Profunctor">cats.arrow.Profunctor</a>&quot; or <a href="arrow/Arrow.html" class="extype" name="cats.arrow.Arrow">cats.arrow.Arrow</a>, which are relevant for
+  Functional Reactive Programming or optics, are declared in the <code>cats.arrow</code> package.
+- Also, those type classes that abstract over (pure or impure) functional runtime effects are declared
+  in the <a href="https://typelevel.org/cats-effect/" target="_blank">cats-effect library</a>.
+- Some type classes for which no laws can be provided are left out of the main road, in a small and dirty alley.
+  These are the <code>alleycats</code>.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="_root_">root</a></dd></dl></div>
     </li><li name="cats.arrow" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="arrow"></a><a id="arrow:arrow"></a>
@@ -99,6 +121,22 @@
       </span>
       <span class="symbol">
         <a title="" href="arrow/index.html"><span class="name">arrow</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="cats">cats</a></dd></dl></div>
+    </li><li name="cats.conversions" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="conversions"></a><a id="conversions:conversions"></a>
+      <span class="permalink">
+      <a href="../cats/conversions/index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="conversions/index.html"><span class="name">conversions</span></a>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="cats">cats</a></dd></dl></div>
@@ -319,6 +357,10 @@
                         <a class="trait" href="FunctorFilter.html" title="FunctorFilter[F] allows you to map and filter out elements simultaneously."></a>
                         <a href="FunctorFilter.html" title="FunctorFilter[F] allows you to map and filter out elements simultaneously.">FunctorFilter</a>
                       </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="trait" href="FunctorFilterInstances0.html" title=""></a>
+                        <a href="FunctorFilterInstances0.html" title="">FunctorFilterInstances0</a>
+                      </li><li class="current-entities indented1">
                         <a class="object" href="Inject$.html" title=""></a>
                         <a class="class" href="Inject.html" title="Inject is a type class providing an injection from type A into type B."></a>
                         <a href="Inject.html" title="Inject is a type class providing an injection from type A into type B.">Inject</a>
@@ -398,6 +440,10 @@
                         <a class="object" href="SemigroupK$.html" title=""></a>
                         <a class="trait" href="SemigroupK.html" title="SemigroupK is a universal semigroup which operates on kinds."></a>
                         <a href="SemigroupK.html" title="SemigroupK is a universal semigroup which operates on kinds.">SemigroupK</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="trait" href="SemigroupKInstances0.html" title=""></a>
+                        <a href="SemigroupKInstances0.html" title="">SemigroupKInstances0</a>
                       </li><li class="current-entities indented1">
                         <a class="object" href="Semigroupal$.html" title=""></a>
                         <a class="trait" href="Semigroupal.html" title="Semigroupal captures the idea of composing independent effectful values."></a>
@@ -680,6 +726,8 @@ then you can get <code>ApplicativeError[F, E]</code> from <code>MonadError[M, E]
               
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
@@ -713,28 +761,6 @@ then you can get <code>ApplicativeError[F, E]</code> from <code>MonadError[M, E]
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="finalize():Unit"></a>
-      <span class="permalink">
-      <a href="../cats/Parallel$.html#finalize():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="symbol">classOf[java.lang.Throwable]</span>
-    </span>)</span>
-              
-        </dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
@@ -752,6 +778,8 @@ then you can get <code>ApplicativeError[F, E]</code> from <code>MonadError[M, E]
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -772,11 +800,13 @@ then you can get <code>ApplicativeError[F, E]</code> from <code>MonadError[M, E]
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="cats.Parallel#identity" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="identity[M[_]](implicitevidence$31:cats.Monad[M]):cats.Parallel.Aux[M,M]"></a><a id="identity[M[_]](Monad[M]):Aux[M,M]"></a>
+      <a id="identity[M[_]](implicitevidence$32:cats.Monad[M]):cats.Parallel.Aux[M,M]"></a><a id="identity[M[_]](Monad[M]):Aux[M,M]"></a>
       <span class="permalink">
-      <a href="../cats/Parallel$.html#identity[M[_]](implicitevidence$31:cats.Monad[M]):cats.Parallel.Aux[M,M]" title="Permalink">
+      <a href="../cats/Parallel$.html#identity[M[_]](implicitevidence$32:cats.Monad[M]):cats.Parallel.Aux[M,M]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -843,6 +873,8 @@ in which case parallel composition will actually be sequential.
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
@@ -861,6 +893,8 @@ in which case parallel composition will actually be sequential.
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="cats.Parallel#parAp" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
@@ -898,9 +932,9 @@ corresponding to the Parallel instance instead.</p>
       <p class="shortcomment cmt">Like <code>Applicative[F].ap2</code>, but uses the applicative instance
 corresponding to the Parallel instance instead.</p>
     </li><li name="cats.Parallel#parBisequence" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="parBisequence[T[_,_],M[_],A,B](tmamb:T[M[A],M[B]])(implicitevidence$28:cats.Bitraverse[T],implicitP:cats.Parallel[M]):M[T[A,B]]"></a><a id="parBisequence[T[_,_],M[_],A,B](T[M[A],M[B]])(Bitraverse[T],Parallel[M]):M[T[A,B]]"></a>
+      <a id="parBisequence[T[_,_],M[_],A,B](tmamb:T[M[A],M[B]])(implicitevidence$29:cats.Bitraverse[T],implicitP:cats.Parallel[M]):M[T[A,B]]"></a><a id="parBisequence[T[_,_],M[_],A,B](T[M[A],M[B]])(Bitraverse[T],Parallel[M]):M[T[A,B]]"></a>
       <span class="permalink">
-      <a href="../cats/Parallel$.html#parBisequence[T[_,_],M[_],A,B](tmamb:T[M[A],M[B]])(implicitevidence$28:cats.Bitraverse[T],implicitP:cats.Parallel[M]):M[T[A,B]]" title="Permalink">
+      <a href="../cats/Parallel$.html#parBisequence[T[_,_],M[_],A,B](tmamb:T[M[A],M[B]])(implicitevidence$29:cats.Bitraverse[T],implicitP:cats.Parallel[M]):M[T[A,B]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -915,9 +949,9 @@ corresponding to the Parallel instance instead.</p>
       <p class="shortcomment cmt">Like <code>Bitraverse[A].bisequence</code>, but uses the applicative instance
 corresponding to the Parallel instance instead.</p>
     </li><li name="cats.Parallel#parBitraverse" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="parBitraverse[T[_,_],M[_],A,B,C,D](tab:T[A,B])(f:A=&gt;M[C],g:B=&gt;M[D])(implicitevidence$27:cats.Bitraverse[T],implicitP:cats.Parallel[M]):M[T[C,D]]"></a><a id="parBitraverse[T[_,_],M[_],A,B,C,D](T[A,B])((A)⇒M[C],(B)⇒M[D])(Bitraverse[T],Parallel[M]):M[T[C,D]]"></a>
+      <a id="parBitraverse[T[_,_],M[_],A,B,C,D](tab:T[A,B])(f:A=&gt;M[C],g:B=&gt;M[D])(implicitevidence$28:cats.Bitraverse[T],implicitP:cats.Parallel[M]):M[T[C,D]]"></a><a id="parBitraverse[T[_,_],M[_],A,B,C,D](T[A,B])((A)⇒M[C],(B)⇒M[D])(Bitraverse[T],Parallel[M]):M[T[C,D]]"></a>
       <span class="permalink">
-      <a href="../cats/Parallel$.html#parBitraverse[T[_,_],M[_],A,B,C,D](tab:T[A,B])(f:A=&gt;M[C],g:B=&gt;M[D])(implicitevidence$27:cats.Bitraverse[T],implicitP:cats.Parallel[M]):M[T[C,D]]" title="Permalink">
+      <a href="../cats/Parallel$.html#parBitraverse[T[_,_],M[_],A,B,C,D](tab:T[A,B])(f:A=&gt;M[C],g:B=&gt;M[D])(implicitevidence$28:cats.Bitraverse[T],implicitP:cats.Parallel[M]):M[T[C,D]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -931,10 +965,35 @@ corresponding to the Parallel instance instead.</p>
       
       <p class="shortcomment cmt">Like <code>Bitraverse[A].bitraverse</code>, but uses the applicative instance
 corresponding to the Parallel instance instead.</p>
-    </li><li name="cats.Parallel#parFlatSequence" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="parFlatSequence[T[_],M[_],A](tma:T[M[T[A]]])(implicitevidence$5:cats.Traverse[T],implicitevidence$6:cats.FlatMap[T],implicitP:cats.Parallel[M]):M[T[A]]"></a><a id="parFlatSequence[T[_],M[_],A](T[M[T[A]]])(Traverse[T],FlatMap[T],Parallel[M]):M[T[A]]"></a>
+    </li><li name="cats.Parallel#parFilterA" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="parFilterA[T[_],M[_],A](ta:T[A])(f:A=&gt;M[Boolean])(implicitT:cats.TraverseFilter[T],implicitP:cats.Parallel[M]):M[T[A]]"></a><a id="parFilterA[T[_],M[_],A](T[A])((A)⇒M[Boolean])(TraverseFilter[T],Parallel[M]):M[T[A]]"></a>
       <span class="permalink">
-      <a href="../cats/Parallel$.html#parFlatSequence[T[_],M[_],A](tma:T[M[T[A]]])(implicitevidence$5:cats.Traverse[T],implicitevidence$6:cats.FlatMap[T],implicitP:cats.Parallel[M]):M[T[A]]" title="Permalink">
+      <a href="../cats/Parallel$.html#parFilterA[T[_],M[_],A](ta:T[A])(f:A=&gt;M[Boolean])(implicitT:cats.TraverseFilter[T],implicitP:cats.Parallel[M]):M[T[A]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">parFilterA</span><span class="tparams">[<span name="T">T<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="ta">ta: <span class="extype" name="cats.Parallel.parFilterA.T">T</span>[<span class="extype" name="cats.Parallel.parFilterA.A">A</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Parallel.parFilterA.A">A</span>) ⇒ <span class="extype" name="cats.Parallel.parFilterA.M">M</span>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="T">T: <a href="TraverseFilter.html" class="extype" name="cats.TraverseFilter">TraverseFilter</a>[<span class="extype" name="cats.Parallel.parFilterA.T">T</span>]</span>, <span name="P">P: <a href="Parallel.html" class="extype" name="cats.Parallel">Parallel</a>[<span class="extype" name="cats.Parallel.parFilterA.M">M</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Parallel.parFilterA.M">M</span>[<span class="extype" name="cats.Parallel.parFilterA.T">T</span>[<span class="extype" name="cats.Parallel.parFilterA.A">A</span>]]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Like <code>TraverseFilter#filterA</code>, but uses the applicative instance
+corresponding to the Parallel instance instead.</p><div class="fullcomment"><div class="comment cmt"><p>Like <code>TraverseFilter#filterA</code>, but uses the applicative instance
+corresponding to the Parallel instance instead.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">import</span> cats.data._
+scala&gt; <span class="kw">val</span> list: <span class="std">List</span>[<span class="std">Int</span>] = <span class="std">List</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>)
+scala&gt; <span class="kw">def</span> validate(n: <span class="std">Int</span>): EitherNec[<span class="std">String</span>, <span class="std">Boolean</span>] =
+     | <span class="kw">if</span> (n &gt; <span class="num">100</span>) Left(NonEmptyChain.one(<span class="lit">"Too large"</span>))
+     | <span class="kw">else</span> Right(n % <span class="num">3</span> =!= <span class="num">0</span>)
+scala&gt; list.parFilterA(validate)
+res0: EitherNec[<span class="std">String</span>, <span class="std">List</span>[<span class="std">Int</span>]] = Right(<span class="std">List</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">4</span>))</pre></div></div>
+    </li><li name="cats.Parallel#parFlatSequence" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="parFlatSequence[T[_],M[_],A](tma:T[M[T[A]]])(implicitevidence$6:cats.Traverse[T],implicitevidence$7:cats.FlatMap[T],implicitP:cats.Parallel[M]):M[T[A]]"></a><a id="parFlatSequence[T[_],M[_],A](T[M[T[A]]])(Traverse[T],FlatMap[T],Parallel[M]):M[T[A]]"></a>
+      <span class="permalink">
+      <a href="../cats/Parallel$.html#parFlatSequence[T[_],M[_],A](tma:T[M[T[A]]])(implicitevidence$6:cats.Traverse[T],implicitevidence$7:cats.FlatMap[T],implicitP:cats.Parallel[M]):M[T[A]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -949,9 +1008,9 @@ corresponding to the Parallel instance instead.</p>
       <p class="shortcomment cmt">Like <code>Traverse[A].flatSequence</code>, but uses the applicative instance
 corresponding to the Parallel instance instead.</p>
     </li><li name="cats.Parallel#parFlatTraverse" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="parFlatTraverse[T[_],M[_],A,B](ta:T[A])(f:A=&gt;M[T[B]])(implicitevidence$3:cats.Traverse[T],implicitevidence$4:cats.FlatMap[T],implicitP:cats.Parallel[M]):M[T[B]]"></a><a id="parFlatTraverse[T[_],M[_],A,B](T[A])((A)⇒M[T[B]])(Traverse[T],FlatMap[T],Parallel[M]):M[T[B]]"></a>
+      <a id="parFlatTraverse[T[_],M[_],A,B](ta:T[A])(f:A=&gt;M[T[B]])(implicitevidence$4:cats.Traverse[T],implicitevidence$5:cats.FlatMap[T],implicitP:cats.Parallel[M]):M[T[B]]"></a><a id="parFlatTraverse[T[_],M[_],A,B](T[A])((A)⇒M[T[B]])(Traverse[T],FlatMap[T],Parallel[M]):M[T[B]]"></a>
       <span class="permalink">
-      <a href="../cats/Parallel$.html#parFlatTraverse[T[_],M[_],A,B](ta:T[A])(f:A=&gt;M[T[B]])(implicitevidence$3:cats.Traverse[T],implicitevidence$4:cats.FlatMap[T],implicitP:cats.Parallel[M]):M[T[B]]" title="Permalink">
+      <a href="../cats/Parallel$.html#parFlatTraverse[T[_],M[_],A,B](ta:T[A])(f:A=&gt;M[T[B]])(implicitevidence$4:cats.Traverse[T],implicitevidence$5:cats.FlatMap[T],implicitP:cats.Parallel[M]):M[T[B]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -983,9 +1042,9 @@ corresponding to the Parallel instance instead.</p>
       <p class="shortcomment cmt">Like <code>Foldable[A].foldMapA</code>, but uses the applicative instance
 corresponding to the Parallel instance instead.</p>
     </li><li name="cats.Parallel#parLeftSequence" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="parLeftSequence[T[_,_],M[_],A,B](tmab:T[M[A],B])(implicitevidence$30:cats.Bitraverse[T],implicitP:cats.Parallel[M]):M[T[A,B]]"></a><a id="parLeftSequence[T[_,_],M[_],A,B](T[M[A],B])(Bitraverse[T],Parallel[M]):M[T[A,B]]"></a>
+      <a id="parLeftSequence[T[_,_],M[_],A,B](tmab:T[M[A],B])(implicitevidence$31:cats.Bitraverse[T],implicitP:cats.Parallel[M]):M[T[A,B]]"></a><a id="parLeftSequence[T[_,_],M[_],A,B](T[M[A],B])(Bitraverse[T],Parallel[M]):M[T[A,B]]"></a>
       <span class="permalink">
-      <a href="../cats/Parallel$.html#parLeftSequence[T[_,_],M[_],A,B](tmab:T[M[A],B])(implicitevidence$30:cats.Bitraverse[T],implicitP:cats.Parallel[M]):M[T[A,B]]" title="Permalink">
+      <a href="../cats/Parallel$.html#parLeftSequence[T[_,_],M[_],A,B](tmab:T[M[A],B])(implicitevidence$31:cats.Bitraverse[T],implicitP:cats.Parallel[M]):M[T[A,B]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1000,9 +1059,9 @@ corresponding to the Parallel instance instead.</p>
       <p class="shortcomment cmt">Like <code>Bitraverse[A].leftSequence</code>, but uses the applicative instance
 corresponding to the Parallel instance instead.</p>
     </li><li name="cats.Parallel#parLeftTraverse" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="parLeftTraverse[T[_,_],M[_],A,B,C](tab:T[A,B])(f:A=&gt;M[C])(implicitevidence$29:cats.Bitraverse[T],implicitP:cats.Parallel[M]):M[T[C,B]]"></a><a id="parLeftTraverse[T[_,_],M[_],A,B,C](T[A,B])((A)⇒M[C])(Bitraverse[T],Parallel[M]):M[T[C,B]]"></a>
+      <a id="parLeftTraverse[T[_,_],M[_],A,B,C](tab:T[A,B])(f:A=&gt;M[C])(implicitevidence$30:cats.Bitraverse[T],implicitP:cats.Parallel[M]):M[T[C,B]]"></a><a id="parLeftTraverse[T[_,_],M[_],A,B,C](T[A,B])((A)⇒M[C])(Bitraverse[T],Parallel[M]):M[T[C,B]]"></a>
       <span class="permalink">
-      <a href="../cats/Parallel$.html#parLeftTraverse[T[_,_],M[_],A,B,C](tab:T[A,B])(f:A=&gt;M[C])(implicitevidence$29:cats.Bitraverse[T],implicitP:cats.Parallel[M]):M[T[C,B]]" title="Permalink">
+      <a href="../cats/Parallel$.html#parLeftTraverse[T[_,_],M[_],A,B,C](tab:T[A,B])(f:A=&gt;M[C])(implicitevidence$30:cats.Bitraverse[T],implicitP:cats.Parallel[M]):M[T[C,B]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1353,9 +1412,9 @@ corresponding to the Parallel instance instead.</p>
       
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ParallelArityFunctions.html" class="extype" name="cats.ParallelArityFunctions">ParallelArityFunctions</a></dd></dl></div>
     </li><li name="cats.Parallel#parNonEmptyFlatSequence" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="parNonEmptyFlatSequence[T[_],M[_],A](tma:T[M[T[A]]])(implicitevidence$23:cats.NonEmptyTraverse[T],implicitevidence$24:cats.FlatMap[T],implicitP:cats.NonEmptyParallel[M]):M[T[A]]"></a><a id="parNonEmptyFlatSequence[T[_],M[_],A](T[M[T[A]]])(NonEmptyTraverse[T],FlatMap[T],NonEmptyParallel[M]):M[T[A]]"></a>
+      <a id="parNonEmptyFlatSequence[T[_],M[_],A](tma:T[M[T[A]]])(implicitevidence$24:cats.NonEmptyTraverse[T],implicitevidence$25:cats.FlatMap[T],implicitP:cats.NonEmptyParallel[M]):M[T[A]]"></a><a id="parNonEmptyFlatSequence[T[_],M[_],A](T[M[T[A]]])(NonEmptyTraverse[T],FlatMap[T],NonEmptyParallel[M]):M[T[A]]"></a>
       <span class="permalink">
-      <a href="../cats/Parallel$.html#parNonEmptyFlatSequence[T[_],M[_],A](tma:T[M[T[A]]])(implicitevidence$23:cats.NonEmptyTraverse[T],implicitevidence$24:cats.FlatMap[T],implicitP:cats.NonEmptyParallel[M]):M[T[A]]" title="Permalink">
+      <a href="../cats/Parallel$.html#parNonEmptyFlatSequence[T[_],M[_],A](tma:T[M[T[A]]])(implicitevidence$24:cats.NonEmptyTraverse[T],implicitevidence$25:cats.FlatMap[T],implicitP:cats.NonEmptyParallel[M]):M[T[A]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1370,9 +1429,9 @@ corresponding to the Parallel instance instead.</p>
       <p class="shortcomment cmt">Like <code>NonEmptyTraverse[A].nonEmptyFlatSequence</code>, but uses the apply instance
 corresponding to the Parallel instance instead.</p>
     </li><li name="cats.Parallel#parNonEmptyFlatTraverse" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="parNonEmptyFlatTraverse[T[_],M[_],A,B](ta:T[A])(f:A=&gt;M[T[B]])(implicitevidence$21:cats.NonEmptyTraverse[T],implicitevidence$22:cats.FlatMap[T],implicitP:cats.NonEmptyParallel[M]):M[T[B]]"></a><a id="parNonEmptyFlatTraverse[T[_],M[_],A,B](T[A])((A)⇒M[T[B]])(NonEmptyTraverse[T],FlatMap[T],NonEmptyParallel[M]):M[T[B]]"></a>
+      <a id="parNonEmptyFlatTraverse[T[_],M[_],A,B](ta:T[A])(f:A=&gt;M[T[B]])(implicitevidence$22:cats.NonEmptyTraverse[T],implicitevidence$23:cats.FlatMap[T],implicitP:cats.NonEmptyParallel[M]):M[T[B]]"></a><a id="parNonEmptyFlatTraverse[T[_],M[_],A,B](T[A])((A)⇒M[T[B]])(NonEmptyTraverse[T],FlatMap[T],NonEmptyParallel[M]):M[T[B]]"></a>
       <span class="permalink">
-      <a href="../cats/Parallel$.html#parNonEmptyFlatTraverse[T[_],M[_],A,B](ta:T[A])(f:A=&gt;M[T[B]])(implicitevidence$21:cats.NonEmptyTraverse[T],implicitevidence$22:cats.FlatMap[T],implicitP:cats.NonEmptyParallel[M]):M[T[B]]" title="Permalink">
+      <a href="../cats/Parallel$.html#parNonEmptyFlatTraverse[T[_],M[_],A,B](ta:T[A])(f:A=&gt;M[T[B]])(implicitevidence$22:cats.NonEmptyTraverse[T],implicitevidence$23:cats.FlatMap[T],implicitP:cats.NonEmptyParallel[M]):M[T[B]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1387,9 +1446,9 @@ corresponding to the Parallel instance instead.</p>
       <p class="shortcomment cmt">Like <code>NonEmptyTraverse[A].nonEmptyFlatTraverse</code>, but uses the apply instance
 corresponding to the Parallel instance instead.</p>
     </li><li name="cats.Parallel#parNonEmptySequence" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="parNonEmptySequence[T[_],M[_],A](tma:T[M[A]])(implicitevidence$19:cats.NonEmptyTraverse[T],implicitP:cats.NonEmptyParallel[M]):M[T[A]]"></a><a id="parNonEmptySequence[T[_],M[_],A](T[M[A]])(NonEmptyTraverse[T],NonEmptyParallel[M]):M[T[A]]"></a>
+      <a id="parNonEmptySequence[T[_],M[_],A](tma:T[M[A]])(implicitevidence$20:cats.NonEmptyTraverse[T],implicitP:cats.NonEmptyParallel[M]):M[T[A]]"></a><a id="parNonEmptySequence[T[_],M[_],A](T[M[A]])(NonEmptyTraverse[T],NonEmptyParallel[M]):M[T[A]]"></a>
       <span class="permalink">
-      <a href="../cats/Parallel$.html#parNonEmptySequence[T[_],M[_],A](tma:T[M[A]])(implicitevidence$19:cats.NonEmptyTraverse[T],implicitP:cats.NonEmptyParallel[M]):M[T[A]]" title="Permalink">
+      <a href="../cats/Parallel$.html#parNonEmptySequence[T[_],M[_],A](tma:T[M[A]])(implicitevidence$20:cats.NonEmptyTraverse[T],implicitP:cats.NonEmptyParallel[M]):M[T[A]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1404,9 +1463,9 @@ corresponding to the Parallel instance instead.</p>
       <p class="shortcomment cmt">Like <code>NonEmptyTraverse[A].nonEmptySequence</code>, but uses the apply instance
 corresponding to the Parallel instance instead.</p>
     </li><li name="cats.Parallel#parNonEmptySequence_" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="parNonEmptySequence_[T[_],M[_],A](tma:T[M[A]])(implicitevidence$25:cats.Reducible[T],implicitP:cats.NonEmptyParallel[M]):M[Unit]"></a><a id="parNonEmptySequence_[T[_],M[_],A](T[M[A]])(Reducible[T],NonEmptyParallel[M]):M[Unit]"></a>
+      <a id="parNonEmptySequence_[T[_],M[_],A](tma:T[M[A]])(implicitevidence$26:cats.Reducible[T],implicitP:cats.NonEmptyParallel[M]):M[Unit]"></a><a id="parNonEmptySequence_[T[_],M[_],A](T[M[A]])(Reducible[T],NonEmptyParallel[M]):M[Unit]"></a>
       <span class="permalink">
-      <a href="../cats/Parallel$.html#parNonEmptySequence_[T[_],M[_],A](tma:T[M[A]])(implicitevidence$25:cats.Reducible[T],implicitP:cats.NonEmptyParallel[M]):M[Unit]" title="Permalink">
+      <a href="../cats/Parallel$.html#parNonEmptySequence_[T[_],M[_],A](tma:T[M[A]])(implicitevidence$26:cats.Reducible[T],implicitP:cats.NonEmptyParallel[M]):M[Unit]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1421,9 +1480,9 @@ corresponding to the Parallel instance instead.</p>
       <p class="shortcomment cmt">Like <code>Reducible[A].nonEmptySequence_</code>, but uses the apply instance
 corresponding to the Parallel instance instead.</p>
     </li><li name="cats.Parallel#parNonEmptyTraverse" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="parNonEmptyTraverse[T[_],M[_],A,B](ta:T[A])(f:A=&gt;M[B])(implicitevidence$20:cats.NonEmptyTraverse[T],implicitP:cats.NonEmptyParallel[M]):M[T[B]]"></a><a id="parNonEmptyTraverse[T[_],M[_],A,B](T[A])((A)⇒M[B])(NonEmptyTraverse[T],NonEmptyParallel[M]):M[T[B]]"></a>
+      <a id="parNonEmptyTraverse[T[_],M[_],A,B](ta:T[A])(f:A=&gt;M[B])(implicitevidence$21:cats.NonEmptyTraverse[T],implicitP:cats.NonEmptyParallel[M]):M[T[B]]"></a><a id="parNonEmptyTraverse[T[_],M[_],A,B](T[A])((A)⇒M[B])(NonEmptyTraverse[T],NonEmptyParallel[M]):M[T[B]]"></a>
       <span class="permalink">
-      <a href="../cats/Parallel$.html#parNonEmptyTraverse[T[_],M[_],A,B](ta:T[A])(f:A=&gt;M[B])(implicitevidence$20:cats.NonEmptyTraverse[T],implicitP:cats.NonEmptyParallel[M]):M[T[B]]" title="Permalink">
+      <a href="../cats/Parallel$.html#parNonEmptyTraverse[T[_],M[_],A,B](ta:T[A])(f:A=&gt;M[B])(implicitevidence$21:cats.NonEmptyTraverse[T],implicitP:cats.NonEmptyParallel[M]):M[T[B]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1438,9 +1497,9 @@ corresponding to the Parallel instance instead.</p>
       <p class="shortcomment cmt">Like <code>NonEmptyTraverse[A].nonEmptyTraverse</code>, but uses the apply instance
 corresponding to the Parallel instance instead.</p>
     </li><li name="cats.Parallel#parNonEmptyTraverse_" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="parNonEmptyTraverse_[T[_],M[_],A,B](ta:T[A])(f:A=&gt;M[B])(implicitevidence$26:cats.Reducible[T],implicitP:cats.NonEmptyParallel[M]):M[Unit]"></a><a id="parNonEmptyTraverse_[T[_],M[_],A,B](T[A])((A)⇒M[B])(Reducible[T],NonEmptyParallel[M]):M[Unit]"></a>
+      <a id="parNonEmptyTraverse_[T[_],M[_],A,B](ta:T[A])(f:A=&gt;M[B])(implicitevidence$27:cats.Reducible[T],implicitP:cats.NonEmptyParallel[M]):M[Unit]"></a><a id="parNonEmptyTraverse_[T[_],M[_],A,B](T[A])((A)⇒M[B])(Reducible[T],NonEmptyParallel[M]):M[Unit]"></a>
       <span class="permalink">
-      <a href="../cats/Parallel$.html#parNonEmptyTraverse_[T[_],M[_],A,B](ta:T[A])(f:A=&gt;M[B])(implicitevidence$26:cats.Reducible[T],implicitP:cats.NonEmptyParallel[M]):M[Unit]" title="Permalink">
+      <a href="../cats/Parallel$.html#parNonEmptyTraverse_[T[_],M[_],A,B](ta:T[A])(f:A=&gt;M[B])(implicitevidence$27:cats.Reducible[T],implicitP:cats.NonEmptyParallel[M]):M[Unit]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1472,9 +1531,9 @@ corresponding to the Parallel instance instead.</p>
       <p class="shortcomment cmt">Like <code>Applicative[F].product</code>, but uses the applicative instance
 corresponding to the Parallel instance instead.</p>
     </li><li name="cats.Parallel#parSequence" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="parSequence[T[_],M[_],A](tma:T[M[A]])(implicitevidence$1:cats.Traverse[T],implicitP:cats.Parallel[M]):M[T[A]]"></a><a id="parSequence[T[_],M[_],A](T[M[A]])(Traverse[T],Parallel[M]):M[T[A]]"></a>
+      <a id="parSequence[T[_],M[_],A](tma:T[M[A]])(implicitevidence$2:cats.Traverse[T],implicitP:cats.Parallel[M]):M[T[A]]"></a><a id="parSequence[T[_],M[_],A](T[M[A]])(Traverse[T],Parallel[M]):M[T[A]]"></a>
       <span class="permalink">
-      <a href="../cats/Parallel$.html#parSequence[T[_],M[_],A](tma:T[M[A]])(implicitevidence$1:cats.Traverse[T],implicitP:cats.Parallel[M]):M[T[A]]" title="Permalink">
+      <a href="../cats/Parallel$.html#parSequence[T[_],M[_],A](tma:T[M[A]])(implicitevidence$2:cats.Traverse[T],implicitP:cats.Parallel[M]):M[T[A]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1488,10 +1547,32 @@ corresponding to the Parallel instance instead.</p>
       
       <p class="shortcomment cmt">Like <code>Traverse[A].sequence</code>, but uses the applicative instance
 corresponding to the Parallel instance instead.</p>
-    </li><li name="cats.Parallel#parSequence_" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="parSequence_[T[_],M[_],A](tma:T[M[A]])(implicitevidence$7:cats.Foldable[T],implicitP:cats.Parallel[M]):M[Unit]"></a><a id="parSequence_[T[_],M[_],A](T[M[A]])(Foldable[T],Parallel[M]):M[Unit]"></a>
+    </li><li name="cats.Parallel#parSequenceFilter" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="parSequenceFilter[T[_],M[_],A](ta:T[M[Option[A]]])(implicitT:cats.TraverseFilter[T],implicitP:cats.Parallel[M]):M[T[A]]"></a><a id="parSequenceFilter[T[_],M[_],A](T[M[Option[A]]])(TraverseFilter[T],Parallel[M]):M[T[A]]"></a>
       <span class="permalink">
-      <a href="../cats/Parallel$.html#parSequence_[T[_],M[_],A](tma:T[M[A]])(implicitevidence$7:cats.Foldable[T],implicitP:cats.Parallel[M]):M[Unit]" title="Permalink">
+      <a href="../cats/Parallel$.html#parSequenceFilter[T[_],M[_],A](ta:T[M[Option[A]]])(implicitT:cats.TraverseFilter[T],implicitP:cats.Parallel[M]):M[T[A]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">parSequenceFilter</span><span class="tparams">[<span name="T">T<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="ta">ta: <span class="extype" name="cats.Parallel.parSequenceFilter.T">T</span>[<span class="extype" name="cats.Parallel.parSequenceFilter.M">M</span>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.Parallel.parSequenceFilter.A">A</span>]]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="T">T: <a href="TraverseFilter.html" class="extype" name="cats.TraverseFilter">TraverseFilter</a>[<span class="extype" name="cats.Parallel.parSequenceFilter.T">T</span>]</span>, <span name="P">P: <a href="Parallel.html" class="extype" name="cats.Parallel">Parallel</a>[<span class="extype" name="cats.Parallel.parSequenceFilter.M">M</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Parallel.parSequenceFilter.M">M</span>[<span class="extype" name="cats.Parallel.parSequenceFilter.T">T</span>[<span class="extype" name="cats.Parallel.parSequenceFilter.A">A</span>]]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Like <code>TraverseFilter#sequenceFilter</code>, but uses the applicative instance
+corresponding to the Parallel instance instead.</p><div class="fullcomment"><div class="comment cmt"><p>Like <code>TraverseFilter#sequenceFilter</code>, but uses the applicative instance
+corresponding to the Parallel instance instead.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">import</span> cats.data._
+scala&gt; <span class="kw">val</span> list: <span class="std">List</span>[EitherNec[<span class="std">String</span>, <span class="std">Option</span>[<span class="std">Int</span>]]] = <span class="std">List</span>(Left(NonEmptyChain.one(<span class="lit">"Error"</span>)), Left(NonEmptyChain.one(<span class="lit">"Warning!"</span>)))
+scala&gt; list.parSequenceFilter
+res0: EitherNec[<span class="std">String</span>, <span class="std">List</span>[<span class="std">Int</span>]] = Left(Chain(Error, Warning!))</pre></div></div>
+    </li><li name="cats.Parallel#parSequence_" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="parSequence_[T[_],M[_],A](tma:T[M[A]])(implicitevidence$8:cats.Foldable[T],implicitP:cats.Parallel[M]):M[Unit]"></a><a id="parSequence_[T[_],M[_],A](T[M[A]])(Foldable[T],Parallel[M]):M[Unit]"></a>
+      <span class="permalink">
+      <a href="../cats/Parallel$.html#parSequence_[T[_],M[_],A](tma:T[M[A]])(implicitevidence$8:cats.Foldable[T],implicitP:cats.Parallel[M]):M[Unit]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1506,9 +1587,9 @@ corresponding to the Parallel instance instead.</p>
       <p class="shortcomment cmt">Like <code>Foldable[A].sequence_</code>, but uses the applicative instance
 corresponding to the Parallel instance instead.</p>
     </li><li name="cats.Parallel#parTraverse" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="parTraverse[T[_],M[_],A,B](ta:T[A])(f:A=&gt;M[B])(implicitevidence$2:cats.Traverse[T],implicitP:cats.Parallel[M]):M[T[B]]"></a><a id="parTraverse[T[_],M[_],A,B](T[A])((A)⇒M[B])(Traverse[T],Parallel[M]):M[T[B]]"></a>
+      <a id="parTraverse[T[_],M[_],A,B](ta:T[A])(f:A=&gt;M[B])(implicitevidence$3:cats.Traverse[T],implicitP:cats.Parallel[M]):M[T[B]]"></a><a id="parTraverse[T[_],M[_],A,B](T[A])((A)⇒M[B])(Traverse[T],Parallel[M]):M[T[B]]"></a>
       <span class="permalink">
-      <a href="../cats/Parallel$.html#parTraverse[T[_],M[_],A,B](ta:T[A])(f:A=&gt;M[B])(implicitevidence$2:cats.Traverse[T],implicitP:cats.Parallel[M]):M[T[B]]" title="Permalink">
+      <a href="../cats/Parallel$.html#parTraverse[T[_],M[_],A,B](ta:T[A])(f:A=&gt;M[B])(implicitevidence$3:cats.Traverse[T],implicitP:cats.Parallel[M]):M[T[B]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1522,10 +1603,36 @@ corresponding to the Parallel instance instead.</p>
       
       <p class="shortcomment cmt">Like <code>Traverse[A].traverse</code>, but uses the applicative instance
 corresponding to the Parallel instance instead.</p>
-    </li><li name="cats.Parallel#parTraverse_" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="parTraverse_[T[_],M[_],A,B](ta:T[A])(f:A=&gt;M[B])(implicitevidence$8:cats.Foldable[T],implicitP:cats.Parallel[M]):M[Unit]"></a><a id="parTraverse_[T[_],M[_],A,B](T[A])((A)⇒M[B])(Foldable[T],Parallel[M]):M[Unit]"></a>
+    </li><li name="cats.Parallel#parTraverseFilter" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="parTraverseFilter[T[_],M[_],A,B](ta:T[A])(f:A=&gt;M[Option[B]])(implicitT:cats.TraverseFilter[T],implicitP:cats.Parallel[M]):M[T[B]]"></a><a id="parTraverseFilter[T[_],M[_],A,B](T[A])((A)⇒M[Option[B]])(TraverseFilter[T],Parallel[M]):M[T[B]]"></a>
       <span class="permalink">
-      <a href="../cats/Parallel$.html#parTraverse_[T[_],M[_],A,B](ta:T[A])(f:A=&gt;M[B])(implicitevidence$8:cats.Foldable[T],implicitP:cats.Parallel[M]):M[Unit]" title="Permalink">
+      <a href="../cats/Parallel$.html#parTraverseFilter[T[_],M[_],A,B](ta:T[A])(f:A=&gt;M[Option[B]])(implicitT:cats.TraverseFilter[T],implicitP:cats.Parallel[M]):M[T[B]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">parTraverseFilter</span><span class="tparams">[<span name="T">T<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="ta">ta: <span class="extype" name="cats.Parallel.parTraverseFilter.T">T</span>[<span class="extype" name="cats.Parallel.parTraverseFilter.A">A</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Parallel.parTraverseFilter.A">A</span>) ⇒ <span class="extype" name="cats.Parallel.parTraverseFilter.M">M</span>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.Parallel.parTraverseFilter.B">B</span>]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="T">T: <a href="TraverseFilter.html" class="extype" name="cats.TraverseFilter">TraverseFilter</a>[<span class="extype" name="cats.Parallel.parTraverseFilter.T">T</span>]</span>, <span name="P">P: <a href="Parallel.html" class="extype" name="cats.Parallel">Parallel</a>[<span class="extype" name="cats.Parallel.parTraverseFilter.M">M</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Parallel.parTraverseFilter.M">M</span>[<span class="extype" name="cats.Parallel.parTraverseFilter.T">T</span>[<span class="extype" name="cats.Parallel.parTraverseFilter.B">B</span>]]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Like <code>TraverseFilter#traverseFilter</code>, but uses the applicative instance
+corresponding to the Parallel instance instead.</p><div class="fullcomment"><div class="comment cmt"><p>Like <code>TraverseFilter#traverseFilter</code>, but uses the applicative instance
+corresponding to the Parallel instance instead.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">import</span> cats.data._
+scala&gt; <span class="kw">val</span> list: <span class="std">List</span>[<span class="std">Int</span>] = <span class="std">List</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>)
+scala&gt; <span class="kw">def</span> validate(n: <span class="std">Int</span>): EitherNec[<span class="std">String</span>, <span class="std">Option</span>[<span class="std">Int</span>]] =
+     | <span class="kw">if</span> (n &gt; <span class="num">100</span>) Left(NonEmptyChain.one(<span class="lit">"Too large"</span>))
+     | <span class="kw">else</span> <span class="kw">if</span> (n % <span class="num">3</span> =!= <span class="num">0</span>) Right(<span class="std">Some</span>(n))
+     | <span class="kw">else</span> Right(<span class="std">None</span>)
+scala&gt; list.parTraverseFilter(validate)
+res0: EitherNec[<span class="std">String</span>, <span class="std">List</span>[<span class="std">Int</span>]] = Right(<span class="std">List</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">4</span>))</pre></div></div>
+    </li><li name="cats.Parallel#parTraverse_" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="parTraverse_[T[_],M[_],A,B](ta:T[A])(f:A=&gt;M[B])(implicitevidence$9:cats.Foldable[T],implicitP:cats.Parallel[M]):M[Unit]"></a><a id="parTraverse_[T[_],M[_],A,B](T[A])((A)⇒M[B])(Foldable[T],Parallel[M]):M[Unit]"></a>
+      <span class="permalink">
+      <a href="../cats/Parallel$.html#parTraverse_[T[_],M[_],A,B](ta:T[A])(f:A=&gt;M[B])(implicitevidence$9:cats.Foldable[T],implicitP:cats.Parallel[M]):M[Unit]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1876,9 +1983,9 @@ corresponding to the Parallel instance instead.</p>
       
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ParallelArityFunctions2.html" class="extype" name="cats.ParallelArityFunctions2">ParallelArityFunctions2</a></dd></dl></div>
     </li><li name="cats.Parallel#parUnorderedFlatSequence" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="parUnorderedFlatSequence[T[_],M[_],F[_],A](ta:T[M[T[A]]])(implicitevidence$16:cats.UnorderedTraverse[T],implicitevidence$17:cats.FlatMap[T],implicitevidence$18:cats.CommutativeApplicative[F],implicitP:cats.Parallel.Aux[M,F]):M[T[A]]"></a><a id="parUnorderedFlatSequence[T[_],M[_],F[_],A](T[M[T[A]]])(UnorderedTraverse[T],FlatMap[T],CommutativeApplicative[F],Aux[M,F]):M[T[A]]"></a>
+      <a id="parUnorderedFlatSequence[T[_],M[_],F[_],A](ta:T[M[T[A]]])(implicitevidence$17:cats.UnorderedTraverse[T],implicitevidence$18:cats.FlatMap[T],implicitevidence$19:cats.CommutativeApplicative[F],implicitP:cats.Parallel.Aux[M,F]):M[T[A]]"></a><a id="parUnorderedFlatSequence[T[_],M[_],F[_],A](T[M[T[A]]])(UnorderedTraverse[T],FlatMap[T],CommutativeApplicative[F],Aux[M,F]):M[T[A]]"></a>
       <span class="permalink">
-      <a href="../cats/Parallel$.html#parUnorderedFlatSequence[T[_],M[_],F[_],A](ta:T[M[T[A]]])(implicitevidence$16:cats.UnorderedTraverse[T],implicitevidence$17:cats.FlatMap[T],implicitevidence$18:cats.CommutativeApplicative[F],implicitP:cats.Parallel.Aux[M,F]):M[T[A]]" title="Permalink">
+      <a href="../cats/Parallel$.html#parUnorderedFlatSequence[T[_],M[_],F[_],A](ta:T[M[T[A]]])(implicitevidence$17:cats.UnorderedTraverse[T],implicitevidence$18:cats.FlatMap[T],implicitevidence$19:cats.CommutativeApplicative[F],implicitP:cats.Parallel.Aux[M,F]):M[T[A]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1892,9 +1999,9 @@ corresponding to the Parallel instance instead.</p>
       
       
     </li><li name="cats.Parallel#parUnorderedFlatTraverse" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="parUnorderedFlatTraverse[T[_],M[_],F[_],A,B](ta:T[A])(f:A=&gt;M[T[B]])(implicitevidence$13:cats.UnorderedTraverse[T],implicitevidence$14:cats.FlatMap[T],implicitevidence$15:cats.CommutativeApplicative[F],implicitP:cats.Parallel.Aux[M,F]):M[T[B]]"></a><a id="parUnorderedFlatTraverse[T[_],M[_],F[_],A,B](T[A])((A)⇒M[T[B]])(UnorderedTraverse[T],FlatMap[T],CommutativeApplicative[F],Aux[M,F]):M[T[B]]"></a>
+      <a id="parUnorderedFlatTraverse[T[_],M[_],F[_],A,B](ta:T[A])(f:A=&gt;M[T[B]])(implicitevidence$14:cats.UnorderedTraverse[T],implicitevidence$15:cats.FlatMap[T],implicitevidence$16:cats.CommutativeApplicative[F],implicitP:cats.Parallel.Aux[M,F]):M[T[B]]"></a><a id="parUnorderedFlatTraverse[T[_],M[_],F[_],A,B](T[A])((A)⇒M[T[B]])(UnorderedTraverse[T],FlatMap[T],CommutativeApplicative[F],Aux[M,F]):M[T[B]]"></a>
       <span class="permalink">
-      <a href="../cats/Parallel$.html#parUnorderedFlatTraverse[T[_],M[_],F[_],A,B](ta:T[A])(f:A=&gt;M[T[B]])(implicitevidence$13:cats.UnorderedTraverse[T],implicitevidence$14:cats.FlatMap[T],implicitevidence$15:cats.CommutativeApplicative[F],implicitP:cats.Parallel.Aux[M,F]):M[T[B]]" title="Permalink">
+      <a href="../cats/Parallel$.html#parUnorderedFlatTraverse[T[_],M[_],F[_],A,B](ta:T[A])(f:A=&gt;M[T[B]])(implicitevidence$14:cats.UnorderedTraverse[T],implicitevidence$15:cats.FlatMap[T],implicitevidence$16:cats.CommutativeApplicative[F],implicitP:cats.Parallel.Aux[M,F]):M[T[B]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1908,9 +2015,9 @@ corresponding to the Parallel instance instead.</p>
       
       
     </li><li name="cats.Parallel#parUnorderedSequence" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="parUnorderedSequence[T[_],M[_],F[_],A](ta:T[M[A]])(implicitevidence$11:cats.UnorderedTraverse[T],implicitevidence$12:cats.CommutativeApplicative[F],implicitP:cats.Parallel.Aux[M,F]):M[T[A]]"></a><a id="parUnorderedSequence[T[_],M[_],F[_],A](T[M[A]])(UnorderedTraverse[T],CommutativeApplicative[F],Aux[M,F]):M[T[A]]"></a>
+      <a id="parUnorderedSequence[T[_],M[_],F[_],A](ta:T[M[A]])(implicitevidence$12:cats.UnorderedTraverse[T],implicitevidence$13:cats.CommutativeApplicative[F],implicitP:cats.Parallel.Aux[M,F]):M[T[A]]"></a><a id="parUnorderedSequence[T[_],M[_],F[_],A](T[M[A]])(UnorderedTraverse[T],CommutativeApplicative[F],Aux[M,F]):M[T[A]]"></a>
       <span class="permalink">
-      <a href="../cats/Parallel$.html#parUnorderedSequence[T[_],M[_],F[_],A](ta:T[M[A]])(implicitevidence$11:cats.UnorderedTraverse[T],implicitevidence$12:cats.CommutativeApplicative[F],implicitP:cats.Parallel.Aux[M,F]):M[T[A]]" title="Permalink">
+      <a href="../cats/Parallel$.html#parUnorderedSequence[T[_],M[_],F[_],A](ta:T[M[A]])(implicitevidence$12:cats.UnorderedTraverse[T],implicitevidence$13:cats.CommutativeApplicative[F],implicitP:cats.Parallel.Aux[M,F]):M[T[A]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1924,9 +2031,9 @@ corresponding to the Parallel instance instead.</p>
       
       
     </li><li name="cats.Parallel#parUnorderedTraverse" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="parUnorderedTraverse[T[_],M[_],F[_],A,B](ta:T[A])(f:A=&gt;M[B])(implicitevidence$9:cats.UnorderedTraverse[T],implicitevidence$10:cats.CommutativeApplicative[F],implicitP:cats.Parallel.Aux[M,F]):M[T[B]]"></a><a id="parUnorderedTraverse[T[_],M[_],F[_],A,B](T[A])((A)⇒M[B])(UnorderedTraverse[T],CommutativeApplicative[F],Aux[M,F]):M[T[B]]"></a>
+      <a id="parUnorderedTraverse[T[_],M[_],F[_],A,B](ta:T[A])(f:A=&gt;M[B])(implicitevidence$10:cats.UnorderedTraverse[T],implicitevidence$11:cats.CommutativeApplicative[F],implicitP:cats.Parallel.Aux[M,F]):M[T[B]]"></a><a id="parUnorderedTraverse[T[_],M[_],F[_],A,B](T[A])((A)⇒M[B])(UnorderedTraverse[T],CommutativeApplicative[F],Aux[M,F]):M[T[B]]"></a>
       <span class="permalink">
-      <a href="../cats/Parallel$.html#parUnorderedTraverse[T[_],M[_],F[_],A,B](ta:T[A])(f:A=&gt;M[B])(implicitevidence$9:cats.UnorderedTraverse[T],implicitevidence$10:cats.CommutativeApplicative[F],implicitP:cats.Parallel.Aux[M,F]):M[T[B]]" title="Permalink">
+      <a href="../cats/Parallel$.html#parUnorderedTraverse[T[_],M[_],F[_],A,B](ta:T[A])(f:A=&gt;M[B])(implicitevidence$10:cats.UnorderedTraverse[T],implicitevidence$11:cats.CommutativeApplicative[F],implicitP:cats.Parallel.Aux[M,F]):M[T[B]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1971,28 +2078,6 @@ corresponding to the Parallel instance instead.</p>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait():Unit"></a>
-      <span class="permalink">
-      <a href="../cats/Parallel$.html#wait():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
-    </span>)</span>
-              
-        </dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <span class="permalink">
@@ -2039,13 +2124,64 @@ corresponding to the Parallel instance instead.</p>
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <span class="permalink">
+      <a href="../cats/Parallel$.html#wait():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
     </li>
               </ol>
             </div>
 
         
 
-        
+        <div class="values members">
+              <h3>Deprecated Value Members</h3>
+              <ol><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <span class="permalink">
+      <a href="../cats/Parallel$.html#finalize():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version ) see corresponding Javadoc for more information.">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+                <span class="name">@Deprecated</span>
+              
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version )</i> see corresponding Javadoc for more information.</p></dd></dl></div>
+    </li></ol>
+            </div>
         </div>
 
         <div id="inheritedMembers">

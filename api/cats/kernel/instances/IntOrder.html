@@ -81,10 +81,32 @@
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <a title="Symbolic aliases for various types are defined here." href="../../index.html"><span class="name">cats</span></a>
+        <a title="The cats root package contains all the trait signatures of most Scala type classes." href="../../index.html"><span class="name">cats</span></a>
       </span>
       
-      <p class="shortcomment cmt">Symbolic aliases for various types are defined here.</p><div class="fullcomment"><div class="comment cmt"><p>Symbolic aliases for various types are defined here.
+      <p class="shortcomment cmt">The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><p>Cats type classes are implemented using the approach from the
+ <a href="https://ropas.snu.ac.kr/~bruno/papers/TypeClasses.pdf" target="_blank">Type classes as objects and implicits</a> article.</p><p>For each type class, <code>cats</code> provides three pieces:
+- Its <b>signature</b>: a trait that is polymorphic on a type parameter.
+  Type class traits inherit from other type classes to indicate that any implementation of the lower type class (e.g. <code>Applicative</code>)
+  can also serve as an instance for the higuer type class (e.g. <code>Functor</code>).
+- Type class <b>'instances</b>, which are classes and objects that implement one or more type class signatures for some specific types.
+  Type class instances for several data types from the Java or Scala standard libraries are declared in the subpackage <code>cats.instances</code>.
+- <b>Syntax extensions</b>, each of which provides the methods of the type class defines as extension methods
+  (which in Scala 2 are encoded as implicit classes) for values of any type <code>F</code>; given that an instance of the type class
+  for the receiver type (<code>this</code>) is in the implicit scope.
+  Symtax extensions are declared in the <code>cats.syntax</code> package.
+- A set of <b>laws</b>, that are also generic on the type of the class, and are only defined on the operations of the type class.
+  The purpose of these laws is to declare some algebraic relations (equations) between Scala expressions involving the operations
+  of the type class, and test (but not verify) that implemented instances satisfy those equations.
+  Laws are defined in the <code>cats-laws</code> package.</p><p>Although most of cats type classes are declared in this package, some are declared in other packages:
+- type classes that operate on base types (kind <code>*</code>), and their implementations for standard library types,
+  are contained in <code>cats.kernel</code>, which is a different SBT project. However, they are re-exported from this package.
+- type classes of kind <code>F[_, _]</code>, such as <a href="../../arrow/Profunctor.html" class="extype" name="cats.arrow.Profunctor">cats.arrow.Profunctor</a>&quot; or <a href="../../arrow/Arrow.html" class="extype" name="cats.arrow.Arrow">cats.arrow.Arrow</a>, which are relevant for
+  Functional Reactive Programming or optics, are declared in the <code>cats.arrow</code> package.
+- Also, those type classes that abstract over (pure or impure) functional runtime effects are declared
+  in the <a href="https://typelevel.org/cats-effect/" target="_blank">cats-effect library</a>.
+- Some type classes for which no laws can be provided are left out of the main road, in a small and dirty alley.
+  These are the <code>alleycats</code>.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
     </li><li name="cats.kernel" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="kernel"></a><a id="kernel:kernel"></a>
@@ -124,8 +146,8 @@
                         <a href="AllInstances.html" title="">AllInstances</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
-                        <a class="class" href="BigDecimalGroup.html" title=""></a>
-                        <a href="BigDecimalGroup.html" title="">BigDecimalGroup</a>
+                        <a class="class" href="BigDecimalGroup.html" title="Note that combining, removing, and inverting BigDecimal values will use unlimited precision operations."></a>
+                        <a href="BigDecimalGroup.html" title="Note that combining, removing, and inverting BigDecimal values will use unlimited precision operations.">BigDecimalGroup</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
                         <a class="trait" href="BigDecimalInstances.html" title=""></a>
@@ -148,6 +170,10 @@
                         <a href="BigIntOrder.html" title="">BigIntOrder</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
+                        <a class="trait" href="BigIntUnboundedEnum.html" title=""></a>
+                        <a href="BigIntUnboundedEnum.html" title="">BigIntUnboundedEnum</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
                         <a class="trait" href="BitSetInstances.html" title=""></a>
                         <a href="BitSetInstances.html" title="">BitSetInstances</a>
                       </li><li class="current-entities indented3">
@@ -162,6 +188,10 @@
                         <span class="separator"></span>
                         <a class="trait" href="BooleanBounded.html" title=""></a>
                         <a href="BooleanBounded.html" title="">BooleanBounded</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="BooleanEnumerable.html" title=""></a>
+                        <a href="BooleanEnumerable.html" title="">BooleanEnumerable</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
                         <a class="trait" href="BooleanInstances.html" title=""></a>
@@ -190,6 +220,10 @@
                         <span class="separator"></span>
                         <a class="trait" href="CharBounded.html" title=""></a>
                         <a href="CharBounded.html" title="">CharBounded</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="CharEnumerable.html" title=""></a>
+                        <a href="CharEnumerable.html" title="">CharEnumerable</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
                         <a class="trait" href="CharInstances.html" title=""></a>
@@ -308,6 +342,10 @@
                         <a href="IntBounded.html" title="">IntBounded</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
+                        <a class="trait" href="IntEnumerable.html" title=""></a>
+                        <a href="IntEnumerable.html" title="">IntEnumerable</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
                         <a class="class" href="IntGroup.html" title=""></a>
                         <a href="IntGroup.html" title="">IntGroup</a>
                       </li><li class="current-entities indented3">
@@ -346,6 +384,10 @@
                         <span class="separator"></span>
                         <a class="trait" href="LongBounded.html" title=""></a>
                         <a href="LongBounded.html" title="">LongBounded</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="LongEnumerable.html" title=""></a>
+                        <a href="LongEnumerable.html" title="">LongEnumerable</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
                         <a class="class" href="LongGroup.html" title=""></a>
@@ -432,6 +474,30 @@
                         <a href="QueuePartialOrder.html" title="">QueuePartialOrder</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
+                        <a class="class" href="SeqEq.html" title=""></a>
+                        <a href="SeqEq.html" title="">SeqEq</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="SeqHash.html" title=""></a>
+                        <a href="SeqHash.html" title="">SeqHash</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="SeqInstances.html" title=""></a>
+                        <a href="SeqInstances.html" title="">SeqInstances</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="SeqMonoid.html" title=""></a>
+                        <a href="SeqMonoid.html" title="">SeqMonoid</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="SeqOrder.html" title=""></a>
+                        <a href="SeqOrder.html" title="">SeqOrder</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="SeqPartialOrder.html" title=""></a>
+                        <a href="SeqPartialOrder.html" title="">SeqPartialOrder</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
                         <a class="class" href="SetHash.html" title=""></a>
                         <a href="SetHash.html" title="">SetHash</a>
                       </li><li class="current-entities indented3">
@@ -452,6 +518,10 @@
                         <a href="ShortBounded.html" title="">ShortBounded</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
+                        <a class="trait" href="ShortEnumerable.html" title=""></a>
+                        <a href="ShortEnumerable.html" title="">ShortEnumerable</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
                         <a class="class" href="ShortGroup.html" title=""></a>
                         <a href="ShortGroup.html" title="">ShortGroup</a>
                       </li><li class="current-entities indented3">
@@ -468,6 +538,10 @@
                         <a href="SortedMapCommutativeMonoid.html" title="">SortedMapCommutativeMonoid</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
+                        <a class="class" href="SortedMapCommutativeSemigroup.html" title=""></a>
+                        <a href="SortedMapCommutativeSemigroup.html" title="">SortedMapCommutativeSemigroup</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
                         <a class="class" href="SortedMapEq.html" title=""></a>
                         <a href="SortedMapEq.html" title="">SortedMapEq</a>
                       </li><li class="current-entities indented3">
@@ -482,6 +556,10 @@
                         <span class="separator"></span>
                         <a class="class" href="SortedMapMonoid.html" title=""></a>
                         <a href="SortedMapMonoid.html" title="">SortedMapMonoid</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="SortedMapSemigroup.html" title=""></a>
+                        <a href="SortedMapSemigroup.html" title="">SortedMapSemigroup</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
                         <a class="class" href="SortedSetHash.html" title=""></a>
@@ -576,6 +654,10 @@
                         <a href="UnitBounded.html" title="">UnitBounded</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
+                        <a class="trait" href="UnitEnumerable.html" title=""></a>
+                        <a href="UnitEnumerable.html" title="">UnitEnumerable</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
                         <a class="trait" href="UnitInstances.html" title=""></a>
                         <a href="UnitInstances.html" title="">UnitInstances</a>
                       </li><li class="current-entities indented3">
@@ -645,7 +727,7 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">IntOrder</span><span class="result"> extends <a href="../Order.html" class="extype" name="cats.kernel.Order">Order</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>] with <a href="../Hash.html" class="extype" name="cats.kernel.Hash">Hash</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>] with <a href="IntBounded.html" class="extype" name="cats.kernel.instances.IntBounded">IntBounded</a></span>
+        <span class="name">IntOrder</span><span class="result"> extends <a href="../Order.html" class="extype" name="cats.kernel.Order">Order</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>] with <a href="../Hash.html" class="extype" name="cats.kernel.Hash">Hash</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>] with <a href="IntBounded.html" class="extype" name="cats.kernel.instances.IntBounded">IntBounded</a> with <a href="IntEnumerable.html" class="extype" name="cats.kernel.instances.IntEnumerable">IntEnumerable</a></span>
       </span>
       </h4>
 
@@ -654,8 +736,18 @@
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="IntBounded.html" class="extype" name="cats.kernel.instances.IntBounded">IntBounded</a>, <a href="../UpperBounded.html" class="extype" name="cats.kernel.UpperBounded">UpperBounded</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>], <a href="../LowerBounded.html" class="extype" name="cats.kernel.LowerBounded">LowerBounded</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>], <a href="../Hash.html" class="extype" name="cats.kernel.Hash">Hash</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>], <a href="../Order.html" class="extype" name="cats.kernel.Order">Order</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>], <a href="../PartialOrder.html" class="extype" name="cats.kernel.PartialOrder">PartialOrder</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>], <a href="../Eq.html" class="extype" name="cats.kernel.Eq">Eq</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>], <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
-        </div></div>
+          <div class="superTypes hiddenContent"><a href="IntEnumerable.html" class="extype" name="cats.kernel.instances.IntEnumerable">IntEnumerable</a>, <a href="../BoundedEnumerable.html" class="extype" name="cats.kernel.BoundedEnumerable">BoundedEnumerable</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>], <a href="../PartialNextLowerBounded.html" class="extype" name="cats.kernel.PartialNextLowerBounded">PartialNextLowerBounded</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>], <a href="../PartialPreviousUpperBounded.html" class="extype" name="cats.kernel.PartialPreviousUpperBounded">PartialPreviousUpperBounded</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>], <a href="../PartialNext.html" class="extype" name="cats.kernel.PartialNext">PartialNext</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>], <a href="../PartialPrevious.html" class="extype" name="cats.kernel.PartialPrevious">PartialPrevious</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>], <a href="IntBounded.html" class="extype" name="cats.kernel.instances.IntBounded">IntBounded</a>, <a href="../UpperBounded.html" class="extype" name="cats.kernel.UpperBounded">UpperBounded</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>], <a href="../LowerBounded.html" class="extype" name="cats.kernel.LowerBounded">LowerBounded</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>], <a href="../Hash.html" class="extype" name="cats.kernel.Hash">Hash</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>], <a href="../Order.html" class="extype" name="cats.kernel.Order">Order</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>], <a href="../PartialOrder.html" class="extype" name="cats.kernel.PartialOrder">PartialOrder</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>], <a href="../Eq.html" class="extype" name="cats.kernel.Eq">Eq</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>], <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+        </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
+                <span class="toggle diagram-link">
+                  Type Hierarchy
+                </span>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph1" viewBox="0.00 0.00 436.00 118.00" height="118pt" width="436pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 114)" class="graph" id="page0,1_graph0"><polygon points="-4,4 -4,-114 432,-114 432,4 -4,4" stroke="transparent" fill="white"></polygon><g class="cluster" id="clust1"></g><g class="cluster" id="clust2"></g><!-- node0 --><g class="node this class" id="graph1_0"><g id="a_this class|graph1_0"><a xlink:title="cats.kernel.instances.IntOrder (this class)" xlink:href="#inheritance-diagram"><path d="M238.17,-49C238.17,-49 172.83,-49 172.83,-49 168.67,-49 164.5,-44.83 164.5,-40.67 164.5,-40.67 164.5,-32.33 164.5,-32.33 164.5,-28.17 168.67,-24 172.83,-24 172.83,-24 238.17,-24 238.17,-24 242.33,-24 246.5,-28.17 246.5,-32.33 246.5,-32.33 246.5,-40.67 246.5,-40.67 246.5,-44.83 242.33,-49 238.17,-49" stroke="#418565" fill="#418565"></path><image xlink:href="../../../lib/class_diagram.png" y="-43.5" x="174.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-34.1" x="195.5" text-anchor="start">IntOrder</text></a></g></g><!-- node1 --><g class="node trait" id="graph1_1"><g id="a_trait|graph1_1"><a xlink:title="cats.kernel.Order" xlink:href="../Order.html#inheritance-diagram"><path d="M82.67,-110C82.67,-110 8.33,-110 8.33,-110 4.17,-110 0,-105.83 0,-101.67 0,-101.67 0,-93.33 0,-93.33 0,-89.17 4.17,-85 8.33,-85 8.33,-85 82.67,-85 82.67,-85 86.83,-85 91,-89.17 91,-93.33 91,-93.33 91,-101.67 91,-101.67 91,-105.83 86.83,-110 82.67,-110" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../../lib/trait_diagram.png" y="-104.5" x="10.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-95.1" x="31.5" text-anchor="start">Order[Int]</text></a></g></g><!-- node1&#45;&gt;node0 --><g class="edge inheritance" id="graph1_1_0"><g id="a_inheritance|graph1_1_0"><a xlink:title="IntOrder is a subtype of Order[Int]"><path d="M83.54,-82.47C111.17,-72.28 148.12,-58.66 174.08,-49.09" stroke="#d4d4d4" fill="none"></path><polygon points="82.45,-80.26 76.73,-84.98 84.14,-84.86 82.45,-80.26" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node2 --><g class="node trait" id="graph1_2"><g id="a_trait|graph1_2"><a xlink:title="cats.kernel.Hash" xlink:href="../Hash.html#inheritance-diagram"><path d="M187.67,-110C187.67,-110 117.33,-110 117.33,-110 113.17,-110 109,-105.83 109,-101.67 109,-101.67 109,-93.33 109,-93.33 109,-89.17 113.17,-85 117.33,-85 117.33,-85 187.67,-85 187.67,-85 191.83,-85 196,-89.17 196,-93.33 196,-93.33 196,-101.67 196,-101.67 196,-105.83 191.83,-110 187.67,-110" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../../lib/trait_diagram.png" y="-104.5" x="119.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-95.1" x="140.5" text-anchor="start">Hash[Int]</text></a></g></g><!-- node2&#45;&gt;node0 --><g class="edge inheritance" id="graph1_2_0"><g id="a_inheritance|graph1_2_0"><a xlink:title="IntOrder is a subtype of Hash[Int]"><path d="M167.85,-79.42C176.58,-69.69 187.29,-57.77 195.05,-49.13" stroke="#d4d4d4" fill="none"></path><polygon points="165.83,-78 162.97,-84.84 169.47,-81.27 165.83,-78" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node3 --><g class="node trait" id="graph1_3"><g id="a_trait|graph1_3"><a xlink:title="cats.kernel.instances.IntBounded" xlink:href="IntBounded.html#inheritance-diagram"><path d="M296.67,-110C296.67,-110 222.33,-110 222.33,-110 218.17,-110 214,-105.83 214,-101.67 214,-101.67 214,-93.33 214,-93.33 214,-89.17 218.17,-85 222.33,-85 222.33,-85 296.67,-85 296.67,-85 300.83,-85 305,-89.17 305,-93.33 305,-93.33 305,-101.67 305,-101.67 305,-105.83 300.83,-110 296.67,-110" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../../lib/trait_diagram.png" y="-104.5" x="224.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-95.1" x="245.5" text-anchor="start">IntBounded</text></a></g></g><!-- node3&#45;&gt;node0 --><g class="edge inheritance" id="graph1_3_0"><g id="a_inheritance|graph1_3_0"><a xlink:title="IntOrder is a subtype of IntBounded"><path d="M243.86,-79.42C234.97,-69.69 224.05,-57.77 216.15,-49.13" stroke="#d4d4d4" fill="none"></path><polygon points="242.3,-81.33 248.83,-84.84 245.91,-78.03 242.3,-81.33" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node4 --><g class="node trait" id="graph1_4"><g id="a_trait|graph1_4"><a xlink:title="cats.kernel.instances.IntEnumerable" xlink:href="IntEnumerable.html#inheritance-diagram"><path d="M419.67,-110C419.67,-110 331.33,-110 331.33,-110 327.17,-110 323,-105.83 323,-101.67 323,-101.67 323,-93.33 323,-93.33 323,-89.17 327.17,-85 331.33,-85 331.33,-85 419.67,-85 419.67,-85 423.83,-85 428,-89.17 428,-93.33 428,-93.33 428,-101.67 428,-101.67 428,-105.83 423.83,-110 419.67,-110" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../../lib/trait_diagram.png" y="-104.5" x="333.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-95.1" x="354.5" text-anchor="start">IntEnumerable</text></a></g></g><!-- node4&#45;&gt;node0 --><g class="edge inheritance" id="graph1_4_0"><g id="a_inheritance|graph1_4_0"><a xlink:title="IntOrder is a subtype of IntEnumerable"><path d="M335.45,-82.6C306.06,-72.4 266.59,-58.7 238.89,-49.09" stroke="#d4d4d4" fill="none"></path><polygon points="334.9,-85 342.32,-84.98 336.51,-80.37 334.9,-85" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
+                <div id="diagram-controls" class="hiddenContent">
+                  <button id="diagram-zoom-out" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button id="diagram-zoom-in" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button title="Toggle full-screen" id="diagram-fs" class="diagram-btn to-full"><i class="material-icons"></i></button>
+                </div>
+              </div></div>
         
 
       <div id="mbrsel">
@@ -680,7 +772,7 @@
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="cats.kernel.instances.IntOrder"><span>IntOrder</span></li><li class="in" name="cats.kernel.instances.IntBounded"><span>IntBounded</span></li><li class="in" name="cats.kernel.UpperBounded"><span>UpperBounded</span></li><li class="in" name="cats.kernel.LowerBounded"><span>LowerBounded</span></li><li class="in" name="cats.kernel.Hash"><span>Hash</span></li><li class="in" name="cats.kernel.Order"><span>Order</span></li><li class="in" name="cats.kernel.PartialOrder"><span>PartialOrder</span></li><li class="in" name="cats.kernel.Eq"><span>Eq</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="cats.kernel.instances.IntOrder"><span>IntOrder</span></li><li class="in" name="cats.kernel.instances.IntEnumerable"><span>IntEnumerable</span></li><li class="in" name="cats.kernel.BoundedEnumerable"><span>BoundedEnumerable</span></li><li class="in" name="cats.kernel.PartialNextLowerBounded"><span>PartialNextLowerBounded</span></li><li class="in" name="cats.kernel.PartialPreviousUpperBounded"><span>PartialPreviousUpperBounded</span></li><li class="in" name="cats.kernel.PartialNext"><span>PartialNext</span></li><li class="in" name="cats.kernel.PartialPrevious"><span>PartialPrevious</span></li><li class="in" name="cats.kernel.instances.IntBounded"><span>IntBounded</span></li><li class="in" name="cats.kernel.UpperBounded"><span>UpperBounded</span></li><li class="in" name="cats.kernel.LowerBounded"><span>LowerBounded</span></li><li class="in" name="cats.kernel.Hash"><span>Hash</span></li><li class="in" name="cats.kernel.Order"><span>Order</span></li><li class="in" name="cats.kernel.PartialOrder"><span>PartialOrder</span></li><li class="in" name="cats.kernel.Eq"><span>Eq</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -813,6 +905,8 @@
               
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="cats.kernel.instances.IntOrder#compare" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="compare(x:Int,y:Int):Int"></a><a id="compare(Int,Int):Int"></a>
@@ -852,6 +946,38 @@
       <p class="shortcomment cmt">Like <code>compare</code>, but returns a <a href="../Comparison.html" class="extype" name="cats.kernel.Comparison">cats.kernel.Comparison</a> instead of an Int.</p><div class="fullcomment"><div class="comment cmt"><p>Like <code>compare</code>, but returns a <a href="../Comparison.html" class="extype" name="cats.kernel.Comparison">cats.kernel.Comparison</a> instead of an Int.
 Has the benefit of being able to pattern match on, but not as performant.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Order.html" class="extype" name="cats.kernel.Order">Order</a></dd></dl></div>
+    </li><li name="cats.kernel.BoundedEnumerable#cycleNext" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="cycleNext(a:A):A"></a><a id="cycleNext(Int):Int"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/IntOrder.html#cycleNext(a:A):A" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">cycleNext</span><span class="params">(<span name="a">a: <a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../BoundedEnumerable.html" class="extype" name="cats.kernel.BoundedEnumerable">BoundedEnumerable</a></dd></dl></div>
+    </li><li name="cats.kernel.BoundedEnumerable#cyclePrevious" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="cyclePrevious(a:A):A"></a><a id="cyclePrevious(Int):Int"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/IntOrder.html#cyclePrevious(a:A):A" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">cyclePrevious</span><span class="params">(<span name="a">a: <a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../BoundedEnumerable.html" class="extype" name="cats.kernel.BoundedEnumerable">BoundedEnumerable</a></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
       <span class="permalink">
@@ -901,28 +1027,6 @@ Has the benefit of being able to pattern match on, but not as performant.
       
       <p class="shortcomment cmt">Returns true if <code>x</code> = <code>y</code>, false otherwise.</p><div class="fullcomment"><div class="comment cmt"><p>Returns true if <code>x</code> = <code>y</code>, false otherwise.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.kernel.instances.IntOrder">IntOrder</a> → <a href="../Order.html" class="extype" name="cats.kernel.Order">Order</a> → <a href="../PartialOrder.html" class="extype" name="cats.kernel.PartialOrder">PartialOrder</a> → <a href="../Eq.html" class="extype" name="cats.kernel.Eq">Eq</a></dd></dl></div>
-    </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="finalize():Unit"></a>
-      <span class="permalink">
-      <a href="../../../cats/kernel/instances/IntOrder.html#finalize():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="symbol">classOf[java.lang.Throwable]</span>
-    </span>)</span>
-              
-        </dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
@@ -940,6 +1044,8 @@ Has the benefit of being able to pattern match on, but not as performant.
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="cats.kernel.instances.IntOrder#gt" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -1010,6 +1116,8 @@ Has the benefit of being able to pattern match on, but not as performant.
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -1096,6 +1204,40 @@ Has the benefit of being able to pattern match on, but not as performant.
       
       <p class="shortcomment cmt">Returns the upper limit of a type.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the upper limit of a type.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="IntBounded.html" class="extype" name="cats.kernel.instances.IntBounded">IntBounded</a> → <a href="../UpperBounded.html" class="extype" name="cats.kernel.UpperBounded">UpperBounded</a></dd></dl></div>
+    </li><li name="cats.kernel.PartialNextLowerBounded#membersAscending" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="membersAscending:scala.collection.immutable.Stream[A]"></a><a id="membersAscending:Stream[Int]"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/IntOrder.html#membersAscending:scala.collection.immutable.Stream[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">membersAscending</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/collection/immutable/Stream.html#scala.collection.immutable.Stream" class="extype" name="scala.collection.immutable.Stream">Stream</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Enumerate the members in ascending order.</p><div class="fullcomment"><div class="comment cmt"><p>Enumerate the members in ascending order.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../PartialNextLowerBounded.html" class="extype" name="cats.kernel.PartialNextLowerBounded">PartialNextLowerBounded</a></dd></dl></div>
+    </li><li name="cats.kernel.PartialPreviousUpperBounded#membersDescending" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="membersDescending:scala.collection.immutable.Stream[A]"></a><a id="membersDescending:Stream[Int]"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/IntOrder.html#membersDescending:scala.collection.immutable.Stream[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">membersDescending</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/collection/immutable/Stream.html#scala.collection.immutable.Stream" class="extype" name="scala.collection.immutable.Stream">Stream</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Enumerate the members in descending order.</p><div class="fullcomment"><div class="comment cmt"><p>Enumerate the members in descending order.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../PartialPreviousUpperBounded.html" class="extype" name="cats.kernel.PartialPreviousUpperBounded">PartialPreviousUpperBounded</a></dd></dl></div>
     </li><li name="cats.kernel.instances.IntOrder#min" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="min(x:Int,y:Int):Int"></a><a id="min(Int,Int):Int"></a>
       <span class="permalink">
@@ -1184,6 +1326,8 @@ See <a href="https://github.com/typelevel/cats/pull/2230#issuecomment-381818633"
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
@@ -1203,7 +1347,25 @@ See <a href="https://github.com/typelevel/cats/pull/2230#issuecomment-381818633"
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
+    </li><li name="cats.kernel.instances.IntOrder#order" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="order:cats.kernel.Order[Int]"></a><a id="order:Order[Int]"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/IntOrder.html#order:cats.kernel.Order[Int]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">order</span><span class="result">: <a href="../Order.html" class="extype" name="cats.kernel.Order">Order</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.kernel.instances.IntOrder">IntOrder</a> → <a href="../BoundedEnumerable.html" class="extype" name="cats.kernel.BoundedEnumerable">BoundedEnumerable</a></dd></dl></div>
     </li><li name="cats.kernel.Order#partialCompare" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="partialCompare(x:A,y:A):Double"></a><a id="partialCompare(Int,Int):Double"></a>
       <span class="permalink">
@@ -1244,22 +1406,54 @@ sign is:
       <p class="shortcomment cmt">Like <code>partialCompare</code>, but returns a <a href="../Comparison.html" class="extype" name="cats.kernel.Comparison">cats.kernel.Comparison</a> instead of an Double.</p><div class="fullcomment"><div class="comment cmt"><p>Like <code>partialCompare</code>, but returns a <a href="../Comparison.html" class="extype" name="cats.kernel.Comparison">cats.kernel.Comparison</a> instead of an Double.
 Has the benefit of being able to pattern match on, but not as performant.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../PartialOrder.html" class="extype" name="cats.kernel.PartialOrder">PartialOrder</a></dd></dl></div>
-    </li><li name="cats.kernel.instances.IntOrder#partialOrder" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="partialOrder:cats.kernel.PartialOrder[Int]"></a><a id="partialOrder:PartialOrder[Int]"></a>
+    </li><li name="cats.kernel.instances.IntEnumerable#partialNext" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="partialNext(a:Int):Option[Int]"></a><a id="partialNext(Int):Option[Int]"></a>
       <span class="permalink">
-      <a href="../../../cats/kernel/instances/IntOrder.html#partialOrder:cats.kernel.PartialOrder[Int]" title="Permalink">
+      <a href="../../../cats/kernel/instances/IntOrder.html#partialNext(a:Int):Option[Int]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">val</span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">partialNext</span><span class="params">(<span name="a">a: <a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="IntEnumerable.html" class="extype" name="cats.kernel.instances.IntEnumerable">IntEnumerable</a> → <a href="../PartialNext.html" class="extype" name="cats.kernel.PartialNext">PartialNext</a></dd></dl></div>
+    </li><li name="cats.kernel.BoundedEnumerable#partialOrder" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="partialOrder:cats.kernel.PartialOrder[A]"></a><a id="partialOrder:PartialOrder[Int]"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/IntOrder.html#partialOrder:cats.kernel.PartialOrder[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
       </span>
       <span class="symbol">
         <span class="name">partialOrder</span><span class="result">: <a href="../PartialOrder.html" class="extype" name="cats.kernel.PartialOrder">PartialOrder</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.kernel.instances.IntOrder">IntOrder</a> → <a href="../UpperBounded.html" class="extype" name="cats.kernel.UpperBounded">UpperBounded</a> → <a href="../LowerBounded.html" class="extype" name="cats.kernel.LowerBounded">LowerBounded</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../BoundedEnumerable.html" class="extype" name="cats.kernel.BoundedEnumerable">BoundedEnumerable</a> → <a href="../LowerBounded.html" class="extype" name="cats.kernel.LowerBounded">LowerBounded</a> → <a href="../UpperBounded.html" class="extype" name="cats.kernel.UpperBounded">UpperBounded</a> → <a href="../PartialNext.html" class="extype" name="cats.kernel.PartialNext">PartialNext</a> → <a href="../PartialPrevious.html" class="extype" name="cats.kernel.PartialPrevious">PartialPrevious</a></dd></dl></div>
+    </li><li name="cats.kernel.instances.IntEnumerable#partialPrevious" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="partialPrevious(a:Int):Option[Int]"></a><a id="partialPrevious(Int):Option[Int]"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/IntOrder.html#partialPrevious(a:Int):Option[Int]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">partialPrevious</span><span class="params">(<span name="a">a: <a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="IntEnumerable.html" class="extype" name="cats.kernel.instances.IntEnumerable">IntEnumerable</a> → <a href="../PartialPrevious.html" class="extype" name="cats.kernel.PartialPrevious">PartialPrevious</a></dd></dl></div>
     </li><li name="cats.kernel.PartialOrder#pmax" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="pmax(x:A,y:A):Option[A]"></a><a id="pmax(Int,Int):Option[Int]"></a>
       <span class="permalink">
@@ -1368,28 +1562,6 @@ where the Int sign is:
 - positive iff <code>x &gt; y</code>
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../PartialOrder.html" class="extype" name="cats.kernel.PartialOrder">PartialOrder</a></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait():Unit"></a>
-      <span class="permalink">
-      <a href="../../../cats/kernel/instances/IntOrder.html#wait():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
-    </span>)</span>
-              
-        </dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <span class="permalink">
       <a href="../../../cats/kernel/instances/IntOrder.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
@@ -1435,17 +1607,80 @@ where the Int sign is:
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/IntOrder.html#wait():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
     </li>
               </ol>
             </div>
 
         
 
-        
+        <div class="values members">
+              <h3>Deprecated Value Members</h3>
+              <ol><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/IntOrder.html#finalize():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version ) see corresponding Javadoc for more information.">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+                <span class="name">@Deprecated</span>
+              
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version )</i> see corresponding Javadoc for more information.</p></dd></dl></div>
+    </li></ol>
+            </div>
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="cats.kernel.instances.IntBounded">
+        <div class="parent" name="cats.kernel.instances.IntEnumerable">
+              <h3>Inherited from <a href="IntEnumerable.html" class="extype" name="cats.kernel.instances.IntEnumerable">IntEnumerable</a></h3>
+            </div><div class="parent" name="cats.kernel.BoundedEnumerable">
+              <h3>Inherited from <a href="../BoundedEnumerable.html" class="extype" name="cats.kernel.BoundedEnumerable">BoundedEnumerable</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>]</h3>
+            </div><div class="parent" name="cats.kernel.PartialNextLowerBounded">
+              <h3>Inherited from <a href="../PartialNextLowerBounded.html" class="extype" name="cats.kernel.PartialNextLowerBounded">PartialNextLowerBounded</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>]</h3>
+            </div><div class="parent" name="cats.kernel.PartialPreviousUpperBounded">
+              <h3>Inherited from <a href="../PartialPreviousUpperBounded.html" class="extype" name="cats.kernel.PartialPreviousUpperBounded">PartialPreviousUpperBounded</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>]</h3>
+            </div><div class="parent" name="cats.kernel.PartialNext">
+              <h3>Inherited from <a href="../PartialNext.html" class="extype" name="cats.kernel.PartialNext">PartialNext</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>]</h3>
+            </div><div class="parent" name="cats.kernel.PartialPrevious">
+              <h3>Inherited from <a href="../PartialPrevious.html" class="extype" name="cats.kernel.PartialPrevious">PartialPrevious</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>]</h3>
+            </div><div class="parent" name="cats.kernel.instances.IntBounded">
               <h3>Inherited from <a href="IntBounded.html" class="extype" name="cats.kernel.instances.IntBounded">IntBounded</a></h3>
             </div><div class="parent" name="cats.kernel.UpperBounded">
               <h3>Inherited from <a href="../UpperBounded.html" class="extype" name="cats.kernel.UpperBounded">UpperBounded</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>]</h3>

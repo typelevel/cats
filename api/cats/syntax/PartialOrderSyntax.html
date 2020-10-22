@@ -81,10 +81,32 @@
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <a title="Symbolic aliases for various types are defined here." href="../index.html"><span class="name">cats</span></a>
+        <a title="The cats root package contains all the trait signatures of most Scala type classes." href="../index.html"><span class="name">cats</span></a>
       </span>
       
-      <p class="shortcomment cmt">Symbolic aliases for various types are defined here.</p><div class="fullcomment"><div class="comment cmt"><p>Symbolic aliases for various types are defined here.
+      <p class="shortcomment cmt">The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><p>Cats type classes are implemented using the approach from the
+ <a href="https://ropas.snu.ac.kr/~bruno/papers/TypeClasses.pdf" target="_blank">Type classes as objects and implicits</a> article.</p><p>For each type class, <code>cats</code> provides three pieces:
+- Its <b>signature</b>: a trait that is polymorphic on a type parameter.
+  Type class traits inherit from other type classes to indicate that any implementation of the lower type class (e.g. <code>Applicative</code>)
+  can also serve as an instance for the higuer type class (e.g. <code>Functor</code>).
+- Type class <b>'instances</b>, which are classes and objects that implement one or more type class signatures for some specific types.
+  Type class instances for several data types from the Java or Scala standard libraries are declared in the subpackage <code>cats.instances</code>.
+- <b>Syntax extensions</b>, each of which provides the methods of the type class defines as extension methods
+  (which in Scala 2 are encoded as implicit classes) for values of any type <code>F</code>; given that an instance of the type class
+  for the receiver type (<code>this</code>) is in the implicit scope.
+  Symtax extensions are declared in the <code>cats.syntax</code> package.
+- A set of <b>laws</b>, that are also generic on the type of the class, and are only defined on the operations of the type class.
+  The purpose of these laws is to declare some algebraic relations (equations) between Scala expressions involving the operations
+  of the type class, and test (but not verify) that implemented instances satisfy those equations.
+  Laws are defined in the <code>cats-laws</code> package.</p><p>Although most of cats type classes are declared in this package, some are declared in other packages:
+- type classes that operate on base types (kind <code>*</code>), and their implementations for standard library types,
+  are contained in <code>cats.kernel</code>, which is a different SBT project. However, they are re-exported from this package.
+- type classes of kind <code>F[_, _]</code>, such as <a href="../arrow/Profunctor.html" class="extype" name="cats.arrow.Profunctor">cats.arrow.Profunctor</a>&quot; or <a href="../arrow/Arrow.html" class="extype" name="cats.arrow.Arrow">cats.arrow.Arrow</a>, which are relevant for
+  Functional Reactive Programming or optics, are declared in the <code>cats.arrow</code> package.
+- Also, those type classes that abstract over (pure or impure) functional runtime effects are declared
+  in the <a href="https://typelevel.org/cats-effect/" target="_blank">cats-effect library</a>.
+- Some type classes for which no laws can be provided are left out of the main road, in a small and dirty alley.
+  These are the <code>alleycats</code>.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
     </li><li name="cats.syntax" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="syntax"></a><a id="syntax:syntax"></a>
@@ -142,6 +164,10 @@
                         <span class="separator"></span>
                         <a class="trait" href="AllSyntaxBinCompat6.html" title=""></a>
                         <a href="AllSyntaxBinCompat6.html" title="">AllSyntaxBinCompat6</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="AllSyntaxBinCompat7.html" title=""></a>
+                        <a href="AllSyntaxBinCompat7.html" title="">AllSyntaxBinCompat7</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="trait" href="AlternativeSyntax.html" title=""></a>
@@ -520,6 +546,10 @@
                         <a href="ParallelLeftTraverseOps.html" title="">ParallelLeftTraverseOps</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
+                        <a class="class" href="ParallelSequenceFilterOps.html" title=""></a>
+                        <a href="ParallelSequenceFilterOps.html" title="">ParallelSequenceFilterOps</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
                         <a class="class" href="ParallelSequenceOps.html" title=""></a>
                         <a href="ParallelSequenceOps.html" title="">ParallelSequenceOps</a>
                       </li><li class="current-entities indented2">
@@ -538,6 +568,14 @@
                         <span class="separator"></span>
                         <a class="class" href="ParallelTraversable_Ops.html" title=""></a>
                         <a href="ParallelTraversable_Ops.html" title="">ParallelTraversable_Ops</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="ParallelTraverseFilterOps.html" title=""></a>
+                        <a href="ParallelTraverseFilterOps.html" title="">ParallelTraverseFilterOps</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="ParallelTraverseFilterSyntax.html" title=""></a>
+                        <a href="ParallelTraverseFilterSyntax.html" title="">ParallelTraverseFilterSyntax</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="trait" href="ParallelTraverseSyntax.html" title=""></a>
@@ -610,6 +648,14 @@
                         <span class="separator"></span>
                         <a class="class" href="SeparateOps.html" title=""></a>
                         <a href="SeparateOps.html" title="">SeparateOps</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="SeqOps.html" title=""></a>
+                        <a href="SeqOps.html" title="">SeqOps</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="SeqSyntax.html" title=""></a>
+                        <a href="SeqSyntax.html" title="">SeqSyntax</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="class" href="SequenceFilterOps.html" title=""></a>
@@ -820,6 +866,10 @@
                         <a href="package$$group$.html" title="">group</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
+                        <a class="object" href="package$$hash$.html" title=""></a>
+                        <a href="package$$hash$.html" title="">hash</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
                         <a class="object" href="package$$invariant$.html" title=""></a>
                         <a href="package$$invariant$.html" title="">invariant</a>
                       </li><li class="current-entities indented2">
@@ -890,6 +940,10 @@
                         <span class="separator"></span>
                         <a class="object" href="package$$semigroupk$.html" title=""></a>
                         <a href="package$$semigroupk$.html" title="">semigroupk</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$seq$.html" title=""></a>
+                        <a href="package$$seq$.html" title="">seq</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="object" href="package$$set$.html" title=""></a>
@@ -972,7 +1026,17 @@
               Known Subclasses
             </span>
             <div class="subClasses hiddenContent"><a href="../implicits$.html" class="extype" name="cats.implicits">implicits</a>, <a href="AllSyntax.html" class="extype" name="cats.syntax.AllSyntax">AllSyntax</a>, <a href="AllSyntaxBinCompat.html" class="extype" name="cats.syntax.AllSyntaxBinCompat">AllSyntaxBinCompat</a>, <a href="OrderSyntax.html" class="extype" name="cats.syntax.OrderSyntax">OrderSyntax</a>, <a href="package$$all$.html" class="extype" name="cats.syntax.all">all</a>, <a href="package$$order$.html" class="extype" name="cats.syntax.order">order</a>, <a href="package$$partialOrder$.html" class="extype" name="cats.syntax.partialOrder">partialOrder</a></div>
-          </div></div>
+          </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
+                <span class="toggle diagram-link">
+                  Type Hierarchy
+                </span>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph1" viewBox="0.00 0.00 327.50 155.00" height="155pt" width="328pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 151)" class="graph" id="page0,1_graph0"><polygon points="-4,4 -4,-151 323.5,-151 323.5,4 -4,4" stroke="transparent" fill="white"></polygon><g class="cluster" id="clust1"></g><g class="cluster" id="clust2"></g><!-- node0 --><g class="node this trait" id="graph1_0"><g id="a_this trait|graph1_0"><a xlink:title="cats.syntax.PartialOrderSyntax (this trait)" xlink:href="#inheritance-diagram"><path d="M208.67,-86C208.67,-86 98.33,-86 98.33,-86 94.17,-86 90,-81.83 90,-77.67 90,-77.67 90,-69.33 90,-69.33 90,-65.17 94.17,-61 98.33,-61 98.33,-61 208.67,-61 208.67,-61 212.83,-61 217,-65.17 217,-69.33 217,-69.33 217,-77.67 217,-77.67 217,-81.83 212.83,-86 208.67,-86" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-80.5" x="100.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-71.1" x="121.5" text-anchor="start">PartialOrderSyntax</text></a></g></g><!-- node1 --><g class="node trait" id="graph1_1"><g id="a_trait|graph1_1"><a xlink:title="cats.syntax.AllSyntax" xlink:href="AllSyntax.html#inheritance-diagram"><path d="M78.67,-25C78.67,-25 8.33,-25 8.33,-25 4.17,-25 0,-20.83 0,-16.67 0,-16.67 0,-8.33 0,-8.33 0,-4.17 4.17,0 8.33,0 8.33,0 78.67,0 78.67,0 82.83,0 87,-4.17 87,-8.33 87,-8.33 87,-16.67 87,-16.67 87,-20.83 82.83,-25 78.67,-25" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-19.5" x="10.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="31.5" text-anchor="start">AllSyntax</text></a></g></g><!-- node0&#45;&gt;node1 --><g class="edge inheritance" id="graph1_0_1"><g id="a_inheritance|graph1_0_1"><a xlink:title="AllSyntax is a subtype of PartialOrderSyntax"><path d="M125.42,-57.44C106.73,-47.41 82.53,-34.43 65.29,-25.19" stroke="#d4d4d4" fill="none"></path><polygon points="124.7,-59.83 132.03,-60.98 127.02,-55.52 124.7,-59.83" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node2 --><g class="node trait" id="graph1_2"><g id="a_trait|graph1_2"><a xlink:title="cats.syntax.OrderSyntax" xlink:href="OrderSyntax.html#inheritance-diagram"><path d="M193.17,-25C193.17,-25 113.83,-25 113.83,-25 109.67,-25 105.5,-20.83 105.5,-16.67 105.5,-16.67 105.5,-8.33 105.5,-8.33 105.5,-4.17 109.67,0 113.83,0 113.83,0 193.17,0 193.17,0 197.33,0 201.5,-4.17 201.5,-8.33 201.5,-8.33 201.5,-16.67 201.5,-16.67 201.5,-20.83 197.33,-25 193.17,-25" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-19.5" x="115.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="136.5" text-anchor="start">OrderSyntax</text></a></g></g><!-- node0&#45;&gt;node2 --><g class="edge inheritance" id="graph1_0_2"><g id="a_inheritance|graph1_0_2"><a xlink:title="OrderSyntax is a subtype of PartialOrderSyntax"><path d="M153.5,-53.76C153.5,-44.37 153.5,-33.29 153.5,-25.13" stroke="#d4d4d4" fill="none"></path><polygon points="151.05,-53.84 153.5,-60.84 155.95,-53.84 151.05,-53.84" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node3 --><g class="node object" id="graph1_3"><g id="a_object|graph1_3"><a xlink:title="cats.syntax.partialOrder" xlink:href="package$$partialOrder$.html#inheritance-diagram"><path d="M311.17,-25C311.17,-25 227.83,-25 227.83,-25 223.67,-25 219.5,-20.83 219.5,-16.67 219.5,-16.67 219.5,-8.33 219.5,-8.33 219.5,-4.17 223.67,0 227.83,0 227.83,0 311.17,0 311.17,0 315.33,0 319.5,-4.17 319.5,-8.33 319.5,-8.33 319.5,-16.67 319.5,-16.67 319.5,-20.83 315.33,-25 311.17,-25" stroke="#103a51" fill="#103a51"></path><image xlink:href="../../lib/object_diagram.png" y="-19.5" x="229.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="250.5" text-anchor="start">partialOrder</text></a></g></g><!-- node0&#45;&gt;node3 --><g class="edge inheritance" id="graph1_0_3"><g id="a_inheritance|graph1_0_3"><a xlink:title="partialOrder is a subtype of PartialOrderSyntax"><path d="M182.6,-57.7C202.38,-47.64 228.18,-34.52 246.52,-25.19" stroke="#d4d4d4" fill="none"></path><polygon points="181.27,-55.63 176.14,-60.98 183.49,-59.99 181.27,-55.63" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node4 --><g class="node trait" id="graph1_4"><g id="a_trait|graph1_4"><a xlink:title="cats.syntax.EqSyntax" xlink:href="EqSyntax.html#inheritance-diagram"><path d="M186.17,-147C186.17,-147 120.83,-147 120.83,-147 116.67,-147 112.5,-142.83 112.5,-138.67 112.5,-138.67 112.5,-130.33 112.5,-130.33 112.5,-126.17 116.67,-122 120.83,-122 120.83,-122 186.17,-122 186.17,-122 190.33,-122 194.5,-126.17 194.5,-130.33 194.5,-130.33 194.5,-138.67 194.5,-138.67 194.5,-142.83 190.33,-147 186.17,-147" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-141.5" x="122.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="143.5" text-anchor="start">EqSyntax</text></a></g></g><!-- node4&#45;&gt;node0 --><g class="edge inheritance" id="graph1_4_0"><g id="a_inheritance|graph1_4_0"><a xlink:title="PartialOrderSyntax is a subtype of EqSyntax"><path d="M153.5,-114.76C153.5,-105.37 153.5,-94.29 153.5,-86.13" stroke="#d4d4d4" fill="none"></path><polygon points="151.05,-114.84 153.5,-121.84 155.95,-114.84 151.05,-114.84" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
+                <div id="diagram-controls" class="hiddenContent">
+                  <button id="diagram-zoom-out" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button id="diagram-zoom-in" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button title="Toggle full-screen" id="diagram-fs" class="diagram-btn to-full"><i class="material-icons"></i></button>
+                </div>
+              </div></div>
         
 
       <div id="mbrsel">
@@ -1103,7 +1167,9 @@
         <span class="name">catsSyntaxEq</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="a">a: <span class="extype" name="cats.syntax.EqSyntax.catsSyntaxEq.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../index.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.syntax.EqSyntax.catsSyntaxEq.A">A</span>]</span>)</span><span class="result">: <a href="EqOps.html" class="extype" name="cats.syntax.EqOps">EqOps</a>[<span class="extype" name="cats.syntax.EqSyntax.catsSyntaxEq.A">A</span>]</span>
       </span>
       
-      <p class="shortcomment cmt">not final so it can be disabled in favor of scalactic equality in tests</p><div class="fullcomment"><div class="comment cmt"><p>not final so it can be disabled in favor of scalactic equality in tests</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="EqSyntax.html" class="extype" name="cats.syntax.EqSyntax">EqSyntax</a></dd></dl></div>
+      <p class="shortcomment cmt">not final so it can be disabled in favor of scalactic equality in tests
+</p><div class="fullcomment"><div class="comment cmt"><p>not final so it can be disabled in favor of scalactic equality in tests
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="EqSyntax.html" class="extype" name="cats.syntax.EqSyntax">EqSyntax</a></dd></dl></div>
     </li><li name="cats.syntax.PartialOrderSyntax#catsSyntaxPartialOrder" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="catsSyntaxPartialOrder[A](a:A)(implicitevidence$1:cats.PartialOrder[A]):cats.syntax.PartialOrderOps[A]"></a><a id="catsSyntaxPartialOrder[A](A)(PartialOrder[A]):PartialOrderOps[A]"></a>
       <span class="permalink">
@@ -1143,6 +1209,8 @@
               
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
@@ -1176,28 +1244,6 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="finalize():Unit"></a>
-      <span class="permalink">
-      <a href="../../cats/syntax/PartialOrderSyntax.html#finalize():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="symbol">classOf[java.lang.Throwable]</span>
-    </span>)</span>
-              
-        </dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
@@ -1215,6 +1261,8 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -1234,6 +1282,8 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -1286,6 +1336,8 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
@@ -1304,6 +1356,8 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -1338,28 +1392,6 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait():Unit"></a>
-      <span class="permalink">
-      <a href="../../cats/syntax/PartialOrderSyntax.html#wait():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
-    </span>)</span>
-              
-        </dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <span class="permalink">
@@ -1406,13 +1438,64 @@
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/syntax/PartialOrderSyntax.html#wait():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
     </li>
               </ol>
             </div>
 
         
 
-        
+        <div class="values members">
+              <h3>Deprecated Value Members</h3>
+              <ol><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/syntax/PartialOrderSyntax.html#finalize():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version ) see corresponding Javadoc for more information.">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+                <span class="name">@Deprecated</span>
+              
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version )</i> see corresponding Javadoc for more information.</p></dd></dl></div>
+    </li></ol>
+            </div>
         </div>
 
         <div id="inheritedMembers">

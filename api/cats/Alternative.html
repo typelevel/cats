@@ -81,10 +81,32 @@
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <a title="Symbolic aliases for various types are defined here." href="index.html"><span class="name">cats</span></a>
+        <a title="The cats root package contains all the trait signatures of most Scala type classes." href="index.html"><span class="name">cats</span></a>
       </span>
       
-      <p class="shortcomment cmt">Symbolic aliases for various types are defined here.</p><div class="fullcomment"><div class="comment cmt"><p>Symbolic aliases for various types are defined here.
+      <p class="shortcomment cmt">The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><p>Cats type classes are implemented using the approach from the
+ <a href="https://ropas.snu.ac.kr/~bruno/papers/TypeClasses.pdf" target="_blank">Type classes as objects and implicits</a> article.</p><p>For each type class, <code>cats</code> provides three pieces:
+- Its <b>signature</b>: a trait that is polymorphic on a type parameter.
+  Type class traits inherit from other type classes to indicate that any implementation of the lower type class (e.g. <code>Applicative</code>)
+  can also serve as an instance for the higuer type class (e.g. <code>Functor</code>).
+- Type class <b>'instances</b>, which are classes and objects that implement one or more type class signatures for some specific types.
+  Type class instances for several data types from the Java or Scala standard libraries are declared in the subpackage <code>cats.instances</code>.
+- <b>Syntax extensions</b>, each of which provides the methods of the type class defines as extension methods
+  (which in Scala 2 are encoded as implicit classes) for values of any type <code>F</code>; given that an instance of the type class
+  for the receiver type (<code>this</code>) is in the implicit scope.
+  Symtax extensions are declared in the <code>cats.syntax</code> package.
+- A set of <b>laws</b>, that are also generic on the type of the class, and are only defined on the operations of the type class.
+  The purpose of these laws is to declare some algebraic relations (equations) between Scala expressions involving the operations
+  of the type class, and test (but not verify) that implemented instances satisfy those equations.
+  Laws are defined in the <code>cats-laws</code> package.</p><p>Although most of cats type classes are declared in this package, some are declared in other packages:
+- type classes that operate on base types (kind <code>*</code>), and their implementations for standard library types,
+  are contained in <code>cats.kernel</code>, which is a different SBT project. However, they are re-exported from this package.
+- type classes of kind <code>F[_, _]</code>, such as <a href="arrow/Profunctor.html" class="extype" name="cats.arrow.Profunctor">cats.arrow.Profunctor</a>&quot; or <a href="arrow/Arrow.html" class="extype" name="cats.arrow.Arrow">cats.arrow.Arrow</a>, which are relevant for
+  Functional Reactive Programming or optics, are declared in the <code>cats.arrow</code> package.
+- Also, those type classes that abstract over (pure or impure) functional runtime effects are declared
+  in the <a href="https://typelevel.org/cats-effect/" target="_blank">cats-effect library</a>.
+- Some type classes for which no laws can be provided are left out of the main road, in a small and dirty alley.
+  These are the <code>alleycats</code>.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="_root_">root</a></dd></dl></div>
     </li><li name="cats.arrow" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="arrow"></a><a id="arrow:arrow"></a>
@@ -99,6 +121,22 @@
       </span>
       <span class="symbol">
         <a title="" href="arrow/index.html"><span class="name">arrow</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="cats">cats</a></dd></dl></div>
+    </li><li name="cats.conversions" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="conversions"></a><a id="conversions:conversions"></a>
+      <span class="permalink">
+      <a href="../cats/conversions/index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="conversions/index.html"><span class="name">conversions</span></a>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="cats">cats</a></dd></dl></div>
@@ -319,6 +357,10 @@
                         <a class="trait" href="FunctorFilter.html" title="FunctorFilter[F] allows you to map and filter out elements simultaneously."></a>
                         <a href="FunctorFilter.html" title="FunctorFilter[F] allows you to map and filter out elements simultaneously.">FunctorFilter</a>
                       </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="trait" href="FunctorFilterInstances0.html" title=""></a>
+                        <a href="FunctorFilterInstances0.html" title="">FunctorFilterInstances0</a>
+                      </li><li class="current-entities indented1">
                         <a class="object" href="Inject$.html" title=""></a>
                         <a class="class" href="Inject.html" title="Inject is a type class providing an injection from type A into type B."></a>
                         <a href="Inject.html" title="Inject is a type class providing an injection from type A into type B.">Inject</a>
@@ -399,6 +441,10 @@
                         <a class="trait" href="SemigroupK.html" title="SemigroupK is a universal semigroup which operates on kinds."></a>
                         <a href="SemigroupK.html" title="SemigroupK is a universal semigroup which operates on kinds.">SemigroupK</a>
                       </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="trait" href="SemigroupKInstances0.html" title=""></a>
+                        <a href="SemigroupKInstances0.html" title="">SemigroupKInstances0</a>
+                      </li><li class="current-entities indented1">
                         <a class="object" href="Semigroupal$.html" title=""></a>
                         <a class="trait" href="Semigroupal.html" title="Semigroupal captures the idea of composing independent effectful values."></a>
                         <a href="Semigroupal.html" title="Semigroupal captures the idea of composing independent effectful values.">Semigroupal</a>
@@ -459,7 +505,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">Alternative</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.Alternative.F">F</span>] with <a href="MonoidK.html" class="extype" name="cats.MonoidK">MonoidK</a>[<span class="extype" name="cats.Alternative.F">F</span>] with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <span class="name">Alternative</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.Alternative.F">F</span>] with <a href="MonoidK.html" class="extype" name="cats.MonoidK">MonoidK</a>[<span class="extype" name="cats.Alternative.F">F</span>]</span>
       </span>
       </h4>
 
@@ -470,12 +516,30 @@
       <span class="defval" name="&quot;Could not find an instance of Alternative for ${F}&quot;">...</span>
     </span>)</span>
               
+                <span class="name">@typeclass</span><span class="args">(<span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$1">...</span>
+    </span>, <span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$2">...</span>
+    </span>)</span>
+              
         </dd><dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/Alternative.scala" target="_blank">Alternative.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
           <div class="superTypes hiddenContent"><a href="MonoidK.html" class="extype" name="cats.MonoidK">MonoidK</a>[<span class="extype" name="cats.Alternative.F">F</span>], <a href="SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a>[<span class="extype" name="cats.Alternative.F">F</span>], <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.Alternative.F">F</span>], <a href="InvariantMonoidal.html" class="extype" name="cats.InvariantMonoidal">InvariantMonoidal</a>[<span class="extype" name="cats.Alternative.F">F</span>], <a href="Apply.html" class="extype" name="cats.Apply">Apply</a>[<span class="extype" name="cats.Alternative.F">F</span>], <a href="ApplyArityFunctions.html" class="extype" name="cats.ApplyArityFunctions">ApplyArityFunctions</a>[<span class="extype" name="cats.Alternative.F">F</span>], <a href="InvariantSemigroupal.html" class="extype" name="cats.InvariantSemigroupal">InvariantSemigroupal</a>[<span class="extype" name="cats.Alternative.F">F</span>], <a href="Semigroupal.html" class="extype" name="cats.Semigroupal">Semigroupal</a>[<span class="extype" name="cats.Alternative.F">F</span>], <a href="Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.Alternative.F">F</span>], <a href="Invariant.html" class="extype" name="cats.Invariant">Invariant</a>[<span class="extype" name="cats.Alternative.F">F</span>], <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
-        </div></div>
+        </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
+                <span class="toggle diagram-link">
+                  Type Hierarchy
+                </span>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph1" viewBox="0.00 0.00 226.00 118.00" height="118pt" width="226pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 114)" class="graph" id="page0,1_graph0"><polygon points="-4,4 -4,-114 222,-114 222,4 -4,4" stroke="transparent" fill="white"></polygon><g class="cluster" id="clust1"></g><g class="cluster" id="clust2"></g><!-- node0 --><g class="node this trait" id="graph1_0"><g id="a_this trait|graph1_0"><a xlink:title="cats.Alternative (this trait)" xlink:href="#inheritance-diagram"><path d="M159.67,-49C159.67,-49 67.33,-49 67.33,-49 63.17,-49 59,-44.83 59,-40.67 59,-40.67 59,-32.33 59,-32.33 59,-28.17 63.17,-24 67.33,-24 67.33,-24 159.67,-24 159.67,-24 163.83,-24 168,-28.17 168,-32.33 168,-32.33 168,-40.67 168,-40.67 168,-44.83 163.83,-49 159.67,-49" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-43.5" x="69.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-34.1" x="90.5" text-anchor="start">Alternative[F]</text></a></g></g><!-- node1 --><g class="node trait" id="graph1_1"><g id="a_trait|graph1_1"><a xlink:title="cats.Applicative" xlink:href="Applicative.html#inheritance-diagram"><path d="M100.67,-110C100.67,-110 8.33,-110 8.33,-110 4.17,-110 0,-105.83 0,-101.67 0,-101.67 0,-93.33 0,-93.33 0,-89.17 4.17,-85 8.33,-85 8.33,-85 100.67,-85 100.67,-85 104.83,-85 109,-89.17 109,-93.33 109,-93.33 109,-101.67 109,-101.67 109,-105.83 104.83,-110 100.67,-110" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-104.5" x="10.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-95.1" x="31.5" text-anchor="start">Applicative[F]</text></a></g></g><!-- node1&#45;&gt;node0 --><g class="edge inheritance" id="graph1_1_0"><g id="a_inheritance|graph1_1_0"><a xlink:title="Alternative[F] is a subtype of Applicative[F]"><path d="M71.31,-79.69C81.08,-69.92 93.15,-57.85 101.87,-49.13" stroke="#d4d4d4" fill="none"></path><polygon points="69.37,-78.16 66.16,-84.84 72.84,-81.63 69.37,-78.16" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node2 --><g class="node trait" id="graph1_2"><g id="a_trait|graph1_2"><a xlink:title="cats.MonoidK" xlink:href="MonoidK.html#inheritance-diagram"><path d="M209.67,-110C209.67,-110 135.33,-110 135.33,-110 131.17,-110 127,-105.83 127,-101.67 127,-101.67 127,-93.33 127,-93.33 127,-89.17 131.17,-85 135.33,-85 135.33,-85 209.67,-85 209.67,-85 213.83,-85 218,-89.17 218,-93.33 218,-93.33 218,-101.67 218,-101.67 218,-105.83 213.83,-110 209.67,-110" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-104.5" x="137.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-95.1" x="158.5" text-anchor="start">MonoidK[F]</text></a></g></g><!-- node2&#45;&gt;node0 --><g class="edge inheritance" id="graph1_2_0"><g id="a_inheritance|graph1_2_0"><a xlink:title="Alternative[F] is a subtype of MonoidK[F]"><path d="M155.69,-79.69C145.92,-69.92 133.85,-57.85 125.13,-49.13" stroke="#d4d4d4" fill="none"></path><polygon points="154.16,-81.63 160.84,-84.84 157.63,-78.16 154.16,-81.63" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
+                <div id="diagram-controls" class="hiddenContent">
+                  <button id="diagram-zoom-out" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button id="diagram-zoom-in" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button title="Toggle full-screen" id="diagram-fs" class="diagram-btn to-full"><i class="material-icons"></i></button>
+                </div>
+              </div></div>
         
 
       <div id="mbrsel">
@@ -676,7 +740,8 @@ res0: <span class="std">Option</span>[<span class="std">Int</span>] = <span clas
         <span title="gt4s: $times$greater" class="name">*&gt;</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Alternative.F">F</span>[<span class="extype" name="cats.Apply.*&gt;.A">A</span>]</span>)</span><span class="params">(<span name="fb">fb: <span class="extype" name="cats.Alternative.F">F</span>[<span class="extype" name="cats.Apply.*&gt;.B">B</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Alternative.F">F</span>[<span class="extype" name="cats.Apply.*&gt;.B">B</span>]</span>
       </span>
       
-      <p class="shortcomment cmt">Alias for <a href="Apply.html#productR[A,B](fa:F[A])(fb:F[B]):F[B]" class="extmbr" name="cats.Apply#productR">productR</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Alias for <a href="Apply.html#productR[A,B](fa:F[A])(fb:F[B]):F[B]" class="extmbr" name="cats.Apply#productR">productR</a>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Apply.html" class="extype" name="cats.Apply">Apply</a></dd><dt>Annotations</dt><dd>
+      <p class="shortcomment cmt">Alias for <a href="Apply.html#productR[A,B](fa:F[A])(fb:F[B]):F[B]" class="extmbr" name="cats.Apply#productR">productR</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Alias for <a href="Apply.html#productR[A,B](fa:F[A])(fb:F[B]):F[B]" class="extmbr" name="cats.Apply#productR">productR</a>.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Apply.html" class="extype" name="cats.Apply">Apply</a></dd><dt>Annotations</dt><dd>
                 <span class="name">@inline</span><span class="args">()</span>
               
         </dd></dl></div>
@@ -695,7 +760,8 @@ res0: <span class="std">Option</span>[<span class="std">Int</span>] = <span clas
         <span title="gt4s: $less$times" class="name">&lt;*</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Alternative.F">F</span>[<span class="extype" name="cats.Apply.&lt;*.A">A</span>]</span>)</span><span class="params">(<span name="fb">fb: <span class="extype" name="cats.Alternative.F">F</span>[<span class="extype" name="cats.Apply.&lt;*.B">B</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Alternative.F">F</span>[<span class="extype" name="cats.Apply.&lt;*.A">A</span>]</span>
       </span>
       
-      <p class="shortcomment cmt">Alias for <a href="Apply.html#productL[A,B](fa:F[A])(fb:F[B]):F[A]" class="extmbr" name="cats.Apply#productL">productL</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Alias for <a href="Apply.html#productL[A,B](fa:F[A])(fb:F[B]):F[A]" class="extmbr" name="cats.Apply#productL">productL</a>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Apply.html" class="extype" name="cats.Apply">Apply</a></dd><dt>Annotations</dt><dd>
+      <p class="shortcomment cmt">Alias for <a href="Apply.html#productL[A,B](fa:F[A])(fb:F[B]):F[A]" class="extmbr" name="cats.Apply#productL">productL</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Alias for <a href="Apply.html#productL[A,B](fa:F[A])(fb:F[B]):F[A]" class="extmbr" name="cats.Apply#productL">productL</a>.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Apply.html" class="extype" name="cats.Apply">Apply</a></dd><dt>Annotations</dt><dd>
                 <span class="name">@inline</span><span class="args">()</span>
               
         </dd></dl></div>
@@ -714,7 +780,8 @@ res0: <span class="std">Option</span>[<span class="std">Int</span>] = <span clas
         <span title="gt4s: $less$times$greater" class="name">&lt;*&gt;</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="ff">ff: <span class="extype" name="cats.Alternative.F">F</span>[(<span class="extype" name="cats.Apply.&lt;*&gt;.A">A</span>) ⇒ <span class="extype" name="cats.Apply.&lt;*&gt;.B">B</span>]</span>)</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Alternative.F">F</span>[<span class="extype" name="cats.Apply.&lt;*&gt;.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Alternative.F">F</span>[<span class="extype" name="cats.Apply.&lt;*&gt;.B">B</span>]</span>
       </span>
       
-      <p class="shortcomment cmt">Alias for <a href="Apply.html#ap[A,B](ff:F[A=&gt;B])(fa:F[A]):F[B]" class="extmbr" name="cats.Apply#ap">ap</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Alias for <a href="Apply.html#ap[A,B](ff:F[A=&gt;B])(fa:F[A]):F[B]" class="extmbr" name="cats.Apply#ap">ap</a>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Apply.html" class="extype" name="cats.Apply">Apply</a></dd><dt>Annotations</dt><dd>
+      <p class="shortcomment cmt">Alias for <a href="Apply.html#ap[A,B](ff:F[A=&gt;B])(fa:F[A]):F[B]" class="extmbr" name="cats.Apply#ap">ap</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Alias for <a href="Apply.html#ap[A,B](ff:F[A=&gt;B])(fa:F[A]):F[B]" class="extmbr" name="cats.Apply#ap">ap</a>.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Apply.html" class="extype" name="cats.Apply">Apply</a></dd><dt>Annotations</dt><dd>
                 <span class="name">@inline</span><span class="args">()</span>
               
         </dd></dl></div>
@@ -749,8 +816,9 @@ res0: <span class="std">Option</span>[<span class="std">Int</span>] = <span clas
         <span class="name">algebra</span><span class="tparams">[<span name="A">A</span>]</span><span class="result">: <a href="index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="cats.Alternative.F">F</span>[<span class="extype" name="cats.MonoidK.algebra.A">A</span>]]</span>
       </span>
       
-      <p class="shortcomment cmt">Given a type A, create a concrete Monoid[F[A]].</p><div class="fullcomment"><div class="comment cmt"><p>Given a type A, create a concrete Monoid[F[A]].
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="MonoidK.html" class="extype" name="cats.MonoidK">MonoidK</a> → <a href="SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a></dd></dl></div>
+      <p class="shortcomment cmt">Given a type A, create a concrete Monoid[F[A]].</p><div class="fullcomment"><div class="comment cmt"><p>Given a type A, create a concrete Monoid[F[A]].</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; MonoidK[<span class="std">List</span>].algebra[<span class="std">Long</span>].empty
+res0: <span class="std">List</span>[<span class="std">Long</span>] = <span class="std">List</span>()</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="MonoidK.html" class="extype" name="cats.MonoidK">MonoidK</a> → <a href="SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a></dd></dl></div>
     </li><li name="cats.ApplyArityFunctions#ap10" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="ApArity">
       <a id="ap10[A0,A1,A2,A3,A4,A5,A6,A7,A8,A9,Z](f:F[(A0,A1,A2,A3,A4,A5,A6,A7,A8,A9)=&gt;Z])(f0:F[A0],f1:F[A1],f2:F[A2],f3:F[A3],f4:F[A4],f5:F[A5],f6:F[A6],f7:F[A7],f8:F[A8],f9:F[A9]):F[Z]"></a><a id="ap10[A0,A1,A2,A3,A4,A5,A6,A7,A8,A9,Z](F[(A0,A1,A2,A3,A4,A5,A6,A7,A8,A9)⇒Z])(F[A0],F[A1],F[A2],F[A3],F[A4],F[A5],F[A6],F[A7],F[A8],F[A9]):F[Z]"></a>
       <span class="permalink">
@@ -1147,7 +1215,37 @@ res0: <span class="std">List</span>[<span class="std">String</span>] = <span cla
               
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
+    </li><li name="cats.SemigroupK#combineKEval" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="combineKEval[A](x:F[A],y:cats.Eval[F[A]]):cats.Eval[F[A]]"></a><a id="combineKEval[A](F[A],Eval[F[A]]):Eval[F[A]]"></a>
+      <span class="permalink">
+      <a href="../cats/Alternative.html#combineKEval[A](x:F[A],y:cats.Eval[F[A]]):cats.Eval[F[A]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">combineKEval</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="x">x: <span class="extype" name="cats.Alternative.F">F</span>[<span class="extype" name="cats.SemigroupK.combineKEval.A">A</span>]</span>, <span name="y">y: <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.Alternative.F">F</span>[<span class="extype" name="cats.SemigroupK.combineKEval.A">A</span>]]</span>)</span><span class="result">: <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.Alternative.F">F</span>[<span class="extype" name="cats.SemigroupK.combineKEval.A">A</span>]]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Similar to <a href="SemigroupK.html#combineK[A](x:F[A],y:F[A]):F[A]" class="extmbr" name="cats.SemigroupK#combineK">combineK</a> but uses <a href="Eval.html" class="extype" name="cats.Eval">Eval</a> to allow for laziness in the second
+argument.</p><div class="fullcomment"><div class="comment cmt"><p>Similar to <a href="SemigroupK.html#combineK[A](x:F[A],y:F[A]):F[A]" class="extmbr" name="cats.SemigroupK#combineK">combineK</a> but uses <a href="Eval.html" class="extype" name="cats.Eval">Eval</a> to allow for laziness in the second
+argument. This can allow for &quot;short-circuiting&quot; of computations.</p><p>NOTE: the default implementation of <code>combineKEval</code> does not short-circuit
+computations. For data structures that can benefit from laziness, <a href="SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a>
+instances should override this method.</p><p>In the following example, <code>x.combineK(bomb)</code> would result in an error,
+but <code>combineKEval</code> &quot;short-circuits&quot; the computation. <code>x</code> is <code>Some</code> and thus the
+result of <code>bomb</code> doesn't even need to be evaluated in order to determine
+that the result of <code>combineKEval</code> should be <code>x</code>.</p><pre>scala&gt; <span class="kw">import</span> cats.{Eval, Later}
+scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">val</span> bomb: Eval[<span class="std">Option</span>[<span class="std">Int</span>]] = Later(sys.error(<span class="lit">"boom"</span>))
+scala&gt; <span class="kw">val</span> x: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">Some</span>(<span class="num">42</span>)
+scala&gt; x.combineKEval(bomb).value
+res0: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">Some</span>(<span class="num">42</span>)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a></dd></dl></div>
     </li><li name="cats.Alternative#compose" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="compose[G[_]](implicitevidence$1:cats.Applicative[G]):cats.Alternative[[α]F[G[α]]]"></a><a id="compose[G[_]](Applicative[G]):Alternative[[α]F[G[α]]]"></a>
       <span class="permalink">
@@ -1189,13 +1287,10 @@ res1: <span class="std">List</span>[<span class="std">Option</span>[(<span class
         <span class="name">compose</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result">: <a href="MonoidK.html" class="extype" name="cats.MonoidK">MonoidK</a>[[α]<span class="extype" name="cats.Alternative.F">F</span>[<span class="extype" name="cats.MonoidK.compose.G">G</span>[<span class="extype" name="cats.MonoidK.&lt;refinement&gt;.Λ$.α">α</span>]]]</span>
       </span>
       
-      <p class="shortcomment cmt">&quot;Compose&quot; with a <code>G[_]</code> type to form a <code>SemigroupK</code> for <code>λ[α =&gt; F[G[α]]]</code>.</p><div class="fullcomment"><div class="comment cmt"><p>&quot;Compose&quot; with a <code>G[_]</code> type to form a <code>SemigroupK</code> for <code>λ[α =&gt; F[G[α]]]</code>.
-Note that this universally works for any <code>G</code>, because the &quot;inner&quot; structure
-isn't considered when combining two instances.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
-scala&gt; <span class="kw">type</span> ListOption[A] = <span class="std">List</span>[<span class="std">Option</span>[A]]
-scala&gt; <span class="kw">val</span> s: SemigroupK[ListOption] = SemigroupK[<span class="std">List</span>].compose[<span class="std">Option</span>]
-scala&gt; s.combineK(<span class="std">List</span>(<span class="std">Some</span>(<span class="num">1</span>), <span class="std">None</span>, <span class="std">Some</span>(<span class="num">2</span>)), <span class="std">List</span>(<span class="std">Some</span>(<span class="num">3</span>), <span class="std">None</span>))
-res0: <span class="std">List</span>[<span class="std">Option</span>[<span class="std">Int</span>]] = <span class="std">List</span>(<span class="std">Some</span>(<span class="num">1</span>), <span class="std">None</span>, <span class="std">Some</span>(<span class="num">2</span>), <span class="std">Some</span>(<span class="num">3</span>), <span class="std">None</span>)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="MonoidK.html" class="extype" name="cats.MonoidK">MonoidK</a> → <a href="SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a></dd></dl></div>
+      <p class="shortcomment cmt">Given a kind G, create an &quot;composed&quot; MonoidK[F[G[_]]</p><div class="fullcomment"><div class="comment cmt"><p>Given a kind G, create an &quot;composed&quot; MonoidK[F[G[_]]</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">val</span> monoidK = MonoidK[<span class="std">List</span>].compose[<span class="std">Option</span>]
+scala&gt; monoidK.combineK(<span class="std">List</span>(<span class="std">Some</span>(<span class="num">1</span>)), <span class="std">List</span>(<span class="std">Some</span>(<span class="num">2</span>), <span class="std">None</span>))
+res0: <span class="std">List</span>[<span class="std">Option</span>[<span class="std">Int</span>]] = <span class="std">List</span>(<span class="std">Some</span>(<span class="num">1</span>), <span class="std">Some</span>(<span class="num">2</span>), <span class="std">None</span>)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="MonoidK.html" class="extype" name="cats.MonoidK">MonoidK</a> → <a href="SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a></dd></dl></div>
     </li><li name="cats.Apply#compose" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="compose[G[_]](implicitevidence$1:cats.Apply[G]):cats.Apply[[α]F[G[α]]]"></a><a id="compose[G[_]](Apply[G]):Apply[[α]F[G[α]]]"></a>
       <span class="permalink">
@@ -1248,7 +1343,13 @@ res1: <span class="std">List</span>[<span class="std">Option</span>[(<span class
         <span class="name">compose</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="Invariant.html" class="extype" name="cats.Invariant">Invariant</a>[<span class="extype" name="cats.Invariant.compose.G">G</span>]</span>)</span><span class="result">: <a href="Invariant.html" class="extype" name="cats.Invariant">Invariant</a>[[α]<span class="extype" name="cats.Alternative.F">F</span>[<span class="extype" name="cats.Invariant.compose.G">G</span>[<span class="extype" name="cats.Invariant.&lt;refinement&gt;.Λ$.α">α</span>]]]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Invariant.html" class="extype" name="cats.Invariant">Invariant</a></dd></dl></div>
+      <p class="shortcomment cmt">Compose Invariant <code>F[_]</code> and <code>G[_]</code> then produce <code>Invariant[F[G[_]]]</code> using their <code>imap</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Compose Invariant <code>F[_]</code> and <code>G[_]</code> then produce <code>Invariant[F[G[_]]]</code> using their <code>imap</code>.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">import</span> scala.concurrent.duration._
+
+scala&gt; <span class="kw">val</span> durSemigroupList: Semigroup[<span class="std">List</span>[FiniteDuration]] =
+     | Invariant[Semigroup].compose[<span class="std">List</span>].imap(Semigroup[<span class="std">List</span>[<span class="std">Long</span>]])(Duration.fromNanos)(_.toNanos)
+scala&gt; durSemigroupList.combine(<span class="std">List</span>(<span class="num">2.</span>seconds, <span class="num">3.</span>seconds), <span class="std">List</span>(<span class="num">4.</span>seconds))
+res1: <span class="std">List</span>[FiniteDuration] = <span class="std">List</span>(<span class="num">2</span> seconds, <span class="num">3</span> seconds, <span class="num">4</span> seconds)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Invariant.html" class="extype" name="cats.Invariant">Invariant</a></dd></dl></div>
     </li><li name="cats.InvariantSemigroupal#composeApply" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="composeApply[G[_]](implicitevidence$1:cats.Apply[G]):cats.InvariantSemigroupal[[α]F[G[α]]]"></a><a id="composeApply[G[_]](Apply[G]):InvariantSemigroupal[[α]F[G[α]]]"></a>
       <span class="permalink">
@@ -1280,7 +1381,19 @@ res1: <span class="std">List</span>[<span class="std">Option</span>[(<span class
         <span class="name">composeContravariant</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="Contravariant.html" class="extype" name="cats.Contravariant">Contravariant</a>[<span class="extype" name="cats.Functor.composeContravariant.G">G</span>]</span>)</span><span class="result">: <a href="Contravariant.html" class="extype" name="cats.Contravariant">Contravariant</a>[[α]<span class="extype" name="cats.Alternative.F">F</span>[<span class="extype" name="cats.Functor.composeContravariant.G">G</span>[<span class="extype" name="cats.Functor.&lt;refinement&gt;.Λ$.α">α</span>]]]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Functor.html" class="extype" name="cats.Functor">Functor</a> → <a href="Invariant.html" class="extype" name="cats.Invariant">Invariant</a></dd></dl></div>
+      <p class="shortcomment cmt">Compose Invariant <code>F[_]</code> and Contravariant <code>G[_]</code> then produce <code>Invariant[F[G[_]]]</code>
+using F's <code>imap</code> and G's <code>contramap</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Compose Invariant <code>F[_]</code> and Contravariant <code>G[_]</code> then produce <code>Invariant[F[G[_]]]</code>
+using F's <code>imap</code> and G's <code>contramap</code>.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">import</span> scala.concurrent.duration._
+
+scala&gt; <span class="kw">type</span> ToInt[T] = T <span class="kw">=&gt;</span> <span class="std">Int</span>
+scala&gt; <span class="kw">val</span> durSemigroupToInt: Semigroup[ToInt[FiniteDuration]] =
+     | Invariant[Semigroup]
+     |   .composeContravariant[ToInt]
+     |   .imap(Semigroup[ToInt[<span class="std">Long</span>]])(Duration.fromNanos)(_.toNanos)
+<span class="cmt">// semantically equal to (2.seconds.toSeconds.toInt + 1) + (2.seconds.toSeconds.toInt * 2) = 7</span>
+scala&gt; durSemigroupToInt.combine(_.toSeconds.toInt + <span class="num">1</span>, _.toSeconds.toInt * <span class="num">2</span>)(<span class="num">2.</span>seconds)
+res1: <span class="std">Int</span> = <span class="num">7</span></pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Functor.html" class="extype" name="cats.Functor">Functor</a> → <a href="Invariant.html" class="extype" name="cats.Invariant">Invariant</a></dd></dl></div>
     </li><li name="cats.Applicative#composeContravariantMonoidal" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="composeContravariantMonoidal[G[_]](implicitevidence$2:cats.ContravariantMonoidal[G]):cats.ContravariantMonoidal[[α]F[G[α]]]"></a><a id="composeContravariantMonoidal[G[_]](ContravariantMonoidal[G]):ContravariantMonoidal[[α]F[G[α]]]"></a>
       <span class="permalink">
@@ -1347,7 +1460,17 @@ res2: <span class="std">List</span>[Comparison] = <span class="std">List</span>(
         <span class="name">composeFunctor</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.Invariant.composeFunctor.G">G</span>]</span>)</span><span class="result">: <a href="Invariant.html" class="extype" name="cats.Invariant">Invariant</a>[[α]<span class="extype" name="cats.Alternative.F">F</span>[<span class="extype" name="cats.Invariant.composeFunctor.G">G</span>[<span class="extype" name="cats.Invariant.&lt;refinement&gt;.Λ$.α">α</span>]]]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Invariant.html" class="extype" name="cats.Invariant">Invariant</a></dd></dl></div>
+      <p class="shortcomment cmt">Compose Invariant <code>F[_]</code> and Functor <code>G[_]</code> then produce <code>Invariant[F[G[_]]]</code>
+using F's <code>imap</code> and G's <code>map</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Compose Invariant <code>F[_]</code> and Functor <code>G[_]</code> then produce <code>Invariant[F[G[_]]]</code>
+using F's <code>imap</code> and G's <code>map</code>.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">import</span> scala.concurrent.duration._
+
+scala&gt; <span class="kw">val</span> durSemigroupList: Semigroup[<span class="std">List</span>[FiniteDuration]] =
+     | Invariant[Semigroup]
+     |   .composeFunctor[<span class="std">List</span>]
+     |   .imap(Semigroup[<span class="std">List</span>[<span class="std">Long</span>]])(Duration.fromNanos)(_.toNanos)
+scala&gt; durSemigroupList.combine(<span class="std">List</span>(<span class="num">2.</span>seconds, <span class="num">3.</span>seconds), <span class="std">List</span>(<span class="num">4.</span>seconds))
+res1: <span class="std">List</span>[FiniteDuration] = <span class="std">List</span>(<span class="num">2</span> seconds, <span class="num">3</span> seconds, <span class="num">4</span> seconds)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Invariant.html" class="extype" name="cats.Invariant">Invariant</a></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
       <span class="permalink">
@@ -1380,28 +1503,6 @@ res2: <span class="std">List</span>[Comparison] = <span class="std">List</span>(
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="finalize():Unit"></a>
-      <span class="permalink">
-      <a href="../cats/Alternative.html#finalize():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="symbol">classOf[java.lang.Throwable]</span>
-    </span>)</span>
-              
-        </dd></dl></div>
     </li><li name="cats.Functor#fmap" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="fmap[A,B](fa:F[A])(f:A=&gt;B):F[B]"></a><a id="fmap[A,B](F[A])((A)⇒B):F[B]"></a>
       <span class="permalink">
@@ -1447,6 +1548,26 @@ scala&gt; <span class="kw">import</span> cats.implicits.catsStdInstancesForOptio
 
 scala&gt; Functor[<span class="std">Option</span>].fproduct(<span class="std">Option</span>(<span class="num">42</span>))(_.toString)
 res0: <span class="std">Option</span>[(<span class="std">Int</span>, <span class="std">String</span>)] = <span class="std">Some</span>((<span class="num">42</span>,<span class="num">42</span>))</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Functor.html" class="extype" name="cats.Functor">Functor</a></dd></dl></div>
+    </li><li name="cats.Functor#fproductLeft" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="fproductLeft[A,B](fa:F[A])(f:A=&gt;B):F[(B,A)]"></a><a id="fproductLeft[A,B](F[A])((A)⇒B):F[(B,A)]"></a>
+      <span class="permalink">
+      <a href="../cats/Alternative.html#fproductLeft[A,B](fa:F[A])(f:A=&gt;B):F[(B,A)]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fproductLeft</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Alternative.F">F</span>[<span class="extype" name="cats.Functor.fproductLeft.A">A</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Functor.fproductLeft.A">A</span>) ⇒ <span class="extype" name="cats.Functor.fproductLeft.B">B</span></span>)</span><span class="result">: <span class="extype" name="cats.Alternative.F">F</span>[(<span class="extype" name="cats.Functor.fproductLeft.B">B</span>, <span class="extype" name="cats.Functor.fproductLeft.A">A</span>)]</span>
+      </span>
+      
+      <p class="shortcomment cmt"> Pair the result of function application with <code>A</code>.</p><div class="fullcomment"><div class="comment cmt"><p> Pair the result of function application with <code>A</code>.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.Functor
+scala&gt; <span class="kw">import</span> cats.implicits.catsStdInstancesForOption
+
+scala&gt; Functor[<span class="std">Option</span>].fproductLeft(<span class="std">Option</span>(<span class="num">42</span>))(_.toString)
+res0: <span class="std">Option</span>[(<span class="std">String</span>, <span class="std">Int</span>)] = <span class="std">Some</span>((<span class="num">42</span>,<span class="num">42</span>))</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Functor.html" class="extype" name="cats.Functor">Functor</a></dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
@@ -1464,6 +1585,8 @@ res0: <span class="std">Option</span>[(<span class="std">Int</span>, <span class
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="cats.Alternative#guard" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -1504,6 +1627,8 @@ res1: <span class="std">Option</span>[<span class="std">String</span>] = <span c
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="cats.Apply#ifA" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -1561,7 +1686,10 @@ asInt2: <span class="std">Option</span>[<span class="std">Int</span>] = <span cl
 scala&gt; <span class="kw">import</span> cats.implicits.catsStdInstancesForList
 
 scala&gt; Functor[<span class="std">List</span>].ifF(<span class="std">List</span>(<span class="kw">true</span>, <span class="kw">false</span>, <span class="kw">false</span>))(<span class="num">1</span>, <span class="num">0</span>)
-res0: <span class="std">List</span>[<span class="std">Int</span>] = <span class="std">List</span>(<span class="num">1</span>, <span class="num">0</span>, <span class="num">0</span>)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Functor.html" class="extype" name="cats.Functor">Functor</a></dd></dl></div>
+res0: <span class="std">List</span>[<span class="std">Int</span>] = <span class="std">List</span>(<span class="num">1</span>, <span class="num">0</span>, <span class="num">0</span>)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Functor.html" class="extype" name="cats.Functor">Functor</a></dd><dt>Annotations</dt><dd>
+                <span class="name">@noop</span><span class="args">()</span>
+              
+        </dd></dl></div>
     </li><li name="cats.Functor#imap" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="imap[A,B](fa:F[A])(f:A=&gt;B)(g:B=&gt;A):F[B]"></a><a id="imap[A,B](F[A])((A)⇒B)((B)⇒A):F[B]"></a>
       <span class="permalink">
@@ -1581,6 +1709,7 @@ res0: <span class="std">List</span>[<span class="std">Int</span>] = <span class=
 to <code>B</code> and one from <code>B</code> to <code>A</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Transform an <code>F[A]</code> into an <code>F[B]</code> by providing a transformation from <code>A</code>
 to <code>B</code> and one from <code>B</code> to <code>A</code>.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
 scala&gt; <span class="kw">import</span> scala.concurrent.duration._
+
 scala&gt; <span class="kw">val</span> durSemigroup: Semigroup[FiniteDuration] =
      | Invariant[Semigroup].imap(Semigroup[<span class="std">Long</span>])(Duration.fromNanos)(_.toNanos)
 scala&gt; durSemigroup.combine(<span class="num">2.</span>seconds, <span class="num">3.</span>seconds)
@@ -2053,6 +2182,8 @@ res0: <span class="std">Option</span>[<span class="std">Int</span>] = <span clas
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
@@ -2071,6 +2202,8 @@ res0: <span class="std">Option</span>[<span class="std">Int</span>] = <span clas
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="cats.InvariantMonoidal#point" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -2266,11 +2399,11 @@ for Fs that have Foldable instances
 which allows for a single-pass implementation
 (as opposed to </p><pre>separate</pre><p> which is 2-pass).</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
 scala&gt; <span class="kw">val</span> l: <span class="std">List</span>[Either[<span class="std">String</span>, <span class="std">Int</span>]] = <span class="std">List</span>(Right(<span class="num">1</span>), Left(<span class="lit">"error"</span>))
-scala&gt; Alternative[<span class="std">List</span>].separate(l)
+scala&gt; Alternative[<span class="std">List</span>].separateFoldable(l)
 res0: (<span class="std">List</span>[<span class="std">String</span>], <span class="std">List</span>[<span class="std">Int</span>]) = (<span class="std">List</span>(error),<span class="std">List</span>(<span class="num">1</span>))</pre><p>separate
 }}}</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
 scala&gt; <span class="kw">val</span> l: <span class="std">List</span>[Either[<span class="std">String</span>, <span class="std">Int</span>]] = <span class="std">List</span>(Right(<span class="num">1</span>), Left(<span class="lit">"error"</span>))
-scala&gt; Alternative[<span class="std">List</span>].separate(l)
+scala&gt; Alternative[<span class="std">List</span>].separateFoldable(l)
 res0: (<span class="std">List</span>[<span class="std">String</span>], <span class="std">List</span>[<span class="std">Int</span>]) = (<span class="std">List</span>(error),<span class="std">List</span>(<span class="num">1</span>))</pre></div></div>
     </li><li name="cats.SemigroupK#sum" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="sum[A,B](fa:F[A],fb:F[B])(implicitF:cats.Functor[F]):F[Either[A,B]]"></a><a id="sum[A,B](F[A],F[B])(Functor[F]):F[Either[A,B]]"></a>
@@ -2819,28 +2952,6 @@ scala&gt; <span class="kw">import</span> cats.implicits.catsStdInstancesForList
 scala&gt; Functor[<span class="std">List</span>].void(<span class="std">List</span>(<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>))
 res0: <span class="std">List</span>[<span class="std">Unit</span>] = <span class="std">List</span>((), (), ())</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Functor.html" class="extype" name="cats.Functor">Functor</a></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait():Unit"></a>
-      <span class="permalink">
-      <a href="../cats/Alternative.html#wait():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
-    </span>)</span>
-              
-        </dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <span class="permalink">
       <a href="../cats/Alternative.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
@@ -2884,6 +2995,28 @@ res0: <span class="std">List</span>[<span class="std">Unit</span>] = <span class
     </span>)</span>
               
                 <span class="name">@native</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <span class="permalink">
+      <a href="../cats/Alternative.html#wait():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li><li name="cats.Applicative#whenA" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -2949,7 +3082,36 @@ res0: <span class="std">Option</span>[<span class="std">Int</span>] = <span clas
 
         
 
-        
+        <div class="values members">
+              <h3>Deprecated Value Members</h3>
+              <ol><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <span class="permalink">
+      <a href="../cats/Alternative.html#finalize():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version ) see corresponding Javadoc for more information.">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+                <span class="name">@Deprecated</span>
+              
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version )</i> see corresponding Javadoc for more information.</p></dd></dl></div>
+    </li></ol>
+            </div>
         </div>
 
         <div id="inheritedMembers">

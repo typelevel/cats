@@ -81,10 +81,32 @@
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <a title="Symbolic aliases for various types are defined here." href="index.html"><span class="name">cats</span></a>
+        <a title="The cats root package contains all the trait signatures of most Scala type classes." href="index.html"><span class="name">cats</span></a>
       </span>
       
-      <p class="shortcomment cmt">Symbolic aliases for various types are defined here.</p><div class="fullcomment"><div class="comment cmt"><p>Symbolic aliases for various types are defined here.
+      <p class="shortcomment cmt">The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><p>Cats type classes are implemented using the approach from the
+ <a href="https://ropas.snu.ac.kr/~bruno/papers/TypeClasses.pdf" target="_blank">Type classes as objects and implicits</a> article.</p><p>For each type class, <code>cats</code> provides three pieces:
+- Its <b>signature</b>: a trait that is polymorphic on a type parameter.
+  Type class traits inherit from other type classes to indicate that any implementation of the lower type class (e.g. <code>Applicative</code>)
+  can also serve as an instance for the higuer type class (e.g. <code>Functor</code>).
+- Type class <b>'instances</b>, which are classes and objects that implement one or more type class signatures for some specific types.
+  Type class instances for several data types from the Java or Scala standard libraries are declared in the subpackage <code>cats.instances</code>.
+- <b>Syntax extensions</b>, each of which provides the methods of the type class defines as extension methods
+  (which in Scala 2 are encoded as implicit classes) for values of any type <code>F</code>; given that an instance of the type class
+  for the receiver type (<code>this</code>) is in the implicit scope.
+  Symtax extensions are declared in the <code>cats.syntax</code> package.
+- A set of <b>laws</b>, that are also generic on the type of the class, and are only defined on the operations of the type class.
+  The purpose of these laws is to declare some algebraic relations (equations) between Scala expressions involving the operations
+  of the type class, and test (but not verify) that implemented instances satisfy those equations.
+  Laws are defined in the <code>cats-laws</code> package.</p><p>Although most of cats type classes are declared in this package, some are declared in other packages:
+- type classes that operate on base types (kind <code>*</code>), and their implementations for standard library types,
+  are contained in <code>cats.kernel</code>, which is a different SBT project. However, they are re-exported from this package.
+- type classes of kind <code>F[_, _]</code>, such as <a href="arrow/Profunctor.html" class="extype" name="cats.arrow.Profunctor">cats.arrow.Profunctor</a>&quot; or <a href="arrow/Arrow.html" class="extype" name="cats.arrow.Arrow">cats.arrow.Arrow</a>, which are relevant for
+  Functional Reactive Programming or optics, are declared in the <code>cats.arrow</code> package.
+- Also, those type classes that abstract over (pure or impure) functional runtime effects are declared
+  in the <a href="https://typelevel.org/cats-effect/" target="_blank">cats-effect library</a>.
+- Some type classes for which no laws can be provided are left out of the main road, in a small and dirty alley.
+  These are the <code>alleycats</code>.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="_root_">root</a></dd></dl></div>
     </li><li name="cats.CoflatMap" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="CoflatMap"></a><a id="CoflatMap:CoflatMap"></a>
@@ -154,13 +176,23 @@
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="Functor$$AllOps.html" class="extype" name="cats.Functor.AllOps">Functor.AllOps</a>[<span class="extype" name="cats.CoflatMap.AllOps.F">F</span>, <span class="extype" name="cats.CoflatMap.AllOps.A">A</span>], <a href="Invariant$$AllOps.html" class="extype" name="cats.Invariant.AllOps">Invariant.AllOps</a>[<span class="extype" name="cats.CoflatMap.AllOps.F">F</span>, <span class="extype" name="cats.CoflatMap.AllOps.A">A</span>], <a href="Invariant$$Ops.html" class="extype" name="cats.Invariant.Ops">Invariant.Ops</a>[<span class="extype" name="cats.CoflatMap.AllOps.F">F</span>, <span class="extype" name="cats.CoflatMap.AllOps.A">A</span>], <a href="Functor$$Ops.html" class="extype" name="cats.Functor.Ops">Functor.Ops</a>[<span class="extype" name="cats.CoflatMap.AllOps.F">F</span>, <span class="extype" name="cats.CoflatMap.AllOps.A">A</span>], <a href="CoflatMap$$Ops.html" class="extype" name="cats.CoflatMap.Ops">Ops</a>[<span class="extype" name="cats.CoflatMap.AllOps.F">F</span>, <span class="extype" name="cats.CoflatMap.AllOps.A">A</span>], <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="Functor$$AllOps.html" class="extype" name="cats.Functor.AllOps">Functor.AllOps</a>[<span class="extype" name="cats.CoflatMap.AllOps.F">F</span>, <span class="extype" name="cats.CoflatMap.AllOps.A">A</span>], <a href="Invariant$$AllOps.html" class="extype" name="cats.Invariant.AllOps">Invariant.AllOps</a>[<span class="extype" name="cats.CoflatMap.AllOps.F">F</span>, <span class="extype" name="cats.CoflatMap.AllOps.A">A</span>], <a href="Invariant$$Ops.html" class="extype" name="cats.Invariant.Ops">Invariant.Ops</a>[<span class="extype" name="cats.CoflatMap.AllOps.F">F</span>, <span class="extype" name="cats.CoflatMap.AllOps.A">A</span>], <a href="Functor$$Ops.html" class="extype" name="cats.Functor.Ops">Functor.Ops</a>[<span class="extype" name="cats.CoflatMap.AllOps.F">F</span>, <span class="extype" name="cats.CoflatMap.AllOps.A">A</span>], <a href="CoflatMap$$Ops.html" class="extype" name="cats.CoflatMap.Ops">Ops</a>[<span class="extype" name="cats.CoflatMap.AllOps.F">F</span>, <span class="extype" name="cats.CoflatMap.AllOps.A">A</span>], <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
         </div><div class="toggleContainer block">
             <span class="toggle">
               Known Subclasses
             </span>
             <div class="subClasses hiddenContent"><a href="Bimonad$$AllOps.html" class="extype" name="cats.Bimonad.AllOps">AllOps</a>, <a href="Comonad$$AllOps.html" class="extype" name="cats.Comonad.AllOps">AllOps</a></div>
-          </div></div>
+          </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
+                <span class="toggle diagram-link">
+                  Type Hierarchy
+                </span>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph1" viewBox="0.00 0.00 249.50 155.00" height="155pt" width="250pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 151)" class="graph" id="page0,1_graph0"><polygon points="-4,4 -4,-151 245.5,-151 245.5,4 -4,4" stroke="transparent" fill="white"></polygon><g class="cluster" id="clust1"></g><g class="cluster" id="clust2"></g><!-- node0 --><g class="node this trait" id="graph1_0"><g id="a_this trait|graph1_0"><a xlink:title="cats.CoflatMap.AllOps (this trait)" xlink:href="#inheritance-diagram"><path d="M150.17,-86C150.17,-86 66.83,-86 66.83,-86 62.67,-86 58.5,-81.83 58.5,-77.67 58.5,-77.67 58.5,-69.33 58.5,-69.33 58.5,-65.17 62.67,-61 66.83,-61 66.83,-61 150.17,-61 150.17,-61 154.33,-61 158.5,-65.17 158.5,-69.33 158.5,-69.33 158.5,-77.67 158.5,-77.67 158.5,-81.83 154.33,-86 150.17,-86" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-80.5" x="68.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-71.1" x="89.5" text-anchor="start">AllOps[F, A]</text></a></g></g><!-- node1 --><g class="node trait" id="graph1_1"><g id="a_trait|graph1_1"><a xlink:title="cats.Comonad.AllOps" xlink:href="Comonad$$AllOps.html#inheritance-diagram"><path d="M168.17,-25C168.17,-25 48.83,-25 48.83,-25 44.67,-25 40.5,-20.83 40.5,-16.67 40.5,-16.67 40.5,-8.33 40.5,-8.33 40.5,-4.17 44.67,0 48.83,0 48.83,0 168.17,0 168.17,0 172.33,0 176.5,-4.17 176.5,-8.33 176.5,-8.33 176.5,-16.67 176.5,-16.67 176.5,-20.83 172.33,-25 168.17,-25" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-19.5" x="50.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="71.5" text-anchor="start">Comonad.AllOps[F, A]</text></a></g></g><!-- node0&#45;&gt;node1 --><g class="edge inheritance" id="graph1_0_1"><g id="a_inheritance|graph1_0_1"><a xlink:title="Comonad.AllOps[F, A] is a subtype of AllOps[F, A]"><path d="M108.5,-53.76C108.5,-44.37 108.5,-33.29 108.5,-25.13" stroke="#d4d4d4" fill="none"></path><polygon points="106.05,-53.84 108.5,-60.84 110.95,-53.84 106.05,-53.84" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node2 --><g class="node trait" id="graph1_2"><g id="a_trait|graph1_2"><a xlink:title="cats.CoflatMap.Ops" xlink:href="CoflatMap$$Ops.html#inheritance-diagram"><path d="M78.67,-147C78.67,-147 8.33,-147 8.33,-147 4.17,-147 0,-142.83 0,-138.67 0,-138.67 0,-130.33 0,-130.33 0,-126.17 4.17,-122 8.33,-122 8.33,-122 78.67,-122 78.67,-122 82.83,-122 87,-126.17 87,-130.33 87,-130.33 87,-138.67 87,-138.67 87,-142.83 82.83,-147 78.67,-147" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-141.5" x="10.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="31.5" text-anchor="start">Ops[F, A]</text></a></g></g><!-- node2&#45;&gt;node0 --><g class="edge inheritance" id="graph1_2_0"><g id="a_inheritance|graph1_2_0"><a xlink:title="AllOps[F, A] is a subtype of Ops[F, A]"><path d="M61.72,-116.96C72.54,-107.14 85.99,-94.93 95.68,-86.13" stroke="#d4d4d4" fill="none"></path><polygon points="59.88,-115.32 56.34,-121.84 63.17,-118.95 59.88,-115.32" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node3 --><g class="node trait" id="graph1_3"><g id="a_trait|graph1_3"><a xlink:title="cats.Functor.AllOps" xlink:href="Functor$$AllOps.html#inheritance-diagram"><path d="M233.17,-147C233.17,-147 113.83,-147 113.83,-147 109.67,-147 105.5,-142.83 105.5,-138.67 105.5,-138.67 105.5,-130.33 105.5,-130.33 105.5,-126.17 109.67,-122 113.83,-122 113.83,-122 233.17,-122 233.17,-122 237.33,-122 241.5,-126.17 241.5,-130.33 241.5,-130.33 241.5,-138.67 241.5,-138.67 241.5,-142.83 237.33,-147 233.17,-147" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-141.5" x="115.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="136.5" text-anchor="start">Functor.AllOps[F, A]</text></a></g></g><!-- node3&#45;&gt;node0 --><g class="edge inheritance" id="graph1_3_0"><g id="a_inheritance|graph1_3_0"><a xlink:title="AllOps[F, A] is a subtype of Functor.AllOps[F, A]"><path d="M155.28,-116.96C144.46,-107.14 131.01,-94.93 121.32,-86.13" stroke="#d4d4d4" fill="none"></path><polygon points="153.83,-118.95 160.66,-121.84 157.12,-115.32 153.83,-118.95" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
+                <div id="diagram-controls" class="hiddenContent">
+                  <button id="diagram-zoom-out" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button id="diagram-zoom-in" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button title="Toggle full-screen" id="diagram-fs" class="diagram-btn to-full"><i class="material-icons"></i></button>
+                </div>
+              </div></div>
         
 
       <div id="mbrsel">
@@ -185,7 +217,7 @@
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="cats.CoflatMap.AllOps"><span>AllOps</span></li><li class="in" name="cats.Functor.AllOps"><span>AllOps</span></li><li class="in" name="cats.Invariant.AllOps"><span>AllOps</span></li><li class="in" name="cats.Invariant.Ops"><span>Ops</span></li><li class="in" name="cats.Functor.Ops"><span>Ops</span></li><li class="in" name="cats.CoflatMap.Ops"><span>Ops</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="cats.CoflatMap.AllOps"><span>AllOps</span></li><li class="in" name="cats.Functor.AllOps"><span>AllOps</span></li><li class="in" name="cats.Invariant.AllOps"><span>AllOps</span></li><li class="in" name="cats.Invariant.Ops"><span>Ops</span></li><li class="in" name="cats.Functor.Ops"><span>Ops</span></li><li class="in" name="cats.CoflatMap.Ops"><span>Ops</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -222,7 +254,7 @@
         <span class="name">TypeClassType</span><span class="result"> &lt;: <a href="CoflatMap.html" class="extype" name="cats.CoflatMap">CoflatMap</a>[<span class="extype" name="cats.CoflatMap.AllOps.F">F</span>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.CoflatMap.AllOps">AllOps</a> → <a href="Functor$$AllOps.html" class="extype" name="cats.Functor.AllOps">AllOps</a> → <a href="Invariant$$AllOps.html" class="extype" name="cats.Invariant.AllOps">AllOps</a> → <a href="Invariant$$Ops.html" class="extype" name="cats.Invariant.Ops">Ops</a> → <a href="Functor$$Ops.html" class="extype" name="cats.Functor.Ops">Ops</a> → <a href="CoflatMap$$Ops.html" class="extype" name="cats.CoflatMap.Ops">Ops</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.CoflatMap.AllOps">AllOps</a> → <a href="Functor$$AllOps.html" class="extype" name="cats.Functor.AllOps">AllOps</a> → <a href="Invariant$$Ops.html" class="extype" name="cats.Invariant.Ops">Ops</a> → <a href="Functor$$Ops.html" class="extype" name="cats.Functor.Ops">Ops</a> → <a href="CoflatMap$$Ops.html" class="extype" name="cats.CoflatMap.Ops">Ops</a></dd></dl></div>
     </li></ol>
             </div>
 
@@ -244,10 +276,10 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Invariant$$Ops.html" class="extype" name="cats.Invariant.Ops">Ops</a></dd></dl></div>
-    </li><li name="cats.CoflatMap.AllOps#typeClassInstance" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="typeClassInstance:AllOps.this.TypeClassType"></a><a id="typeClassInstance:TypeClassType"></a>
+    </li><li name="cats.Invariant.Ops#typeClassInstance" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="typeClassInstance:Ops.this.TypeClassType"></a><a id="typeClassInstance:TypeClassType"></a>
       <span class="permalink">
-      <a href="../cats/CoflatMap$$AllOps.html#typeClassInstance:AllOps.this.TypeClassType" title="Permalink">
+      <a href="../cats/CoflatMap$$AllOps.html#typeClassInstance:Ops.this.TypeClassType" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -259,7 +291,7 @@
         <span class="name">typeClassInstance</span><span class="result">: <a href="#TypeClassType&lt;:cats.CoflatMap[F]" class="extmbr" name="cats.CoflatMap.AllOps.TypeClassType">TypeClassType</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.CoflatMap.AllOps">AllOps</a> → <a href="Functor$$AllOps.html" class="extype" name="cats.Functor.AllOps">AllOps</a> → <a href="Invariant$$AllOps.html" class="extype" name="cats.Invariant.AllOps">AllOps</a> → <a href="Invariant$$Ops.html" class="extype" name="cats.Invariant.Ops">Ops</a> → <a href="Functor$$Ops.html" class="extype" name="cats.Functor.Ops">Ops</a> → <a href="CoflatMap$$Ops.html" class="extype" name="cats.CoflatMap.Ops">Ops</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Invariant$$Ops.html" class="extype" name="cats.Invariant.Ops">Ops</a></dd></dl></div>
     </li></ol>
             </div>
 
@@ -369,6 +401,8 @@
               
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="cats.CoflatMap.Ops#coflatMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="coflatMap[B](f:F[A]=&gt;B):F[B]"></a><a id="coflatMap[B]((F[A])⇒B):F[B]"></a>
@@ -434,28 +468,6 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="finalize():Unit"></a>
-      <span class="permalink">
-      <a href="../cats/CoflatMap$$AllOps.html#finalize():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="symbol">classOf[java.lang.Throwable]</span>
-    </span>)</span>
-              
-        </dd></dl></div>
     </li><li name="cats.Functor.Ops#fmap" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="fmap[B](f:A=&gt;B):F[B]"></a><a id="fmap[B]((A)⇒B):F[B]"></a>
       <span class="permalink">
@@ -464,7 +476,7 @@
       </a>
     </span>
       <span class="modifier_kind">
-        <span class="modifier"></span>
+        <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
@@ -488,6 +500,22 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Functor$$Ops.html" class="extype" name="cats.Functor.Ops">Ops</a></dd></dl></div>
+    </li><li name="cats.Functor.Ops#fproductLeft" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="fproductLeft[B](f:A=&gt;B):F[(B,A)]"></a><a id="fproductLeft[B]((A)⇒B):F[(B,A)]"></a>
+      <span class="permalink">
+      <a href="../cats/CoflatMap$$AllOps.html#fproductLeft[B](f:A=&gt;B):F[(B,A)]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fproductLeft</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.CoflatMap.AllOps.A">A</span>) ⇒ <span class="extype" name="cats.Functor.Ops.fproductLeft.B">B</span></span>)</span><span class="result">: <span class="extype" name="cats.CoflatMap.AllOps.F">F</span>[(<span class="extype" name="cats.Functor.Ops.fproductLeft.B">B</span>, <span class="extype" name="cats.CoflatMap.AllOps.A">A</span>)]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Functor$$Ops.html" class="extype" name="cats.Functor.Ops">Ops</a></dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
@@ -505,6 +533,8 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -524,6 +554,8 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="cats.Invariant.Ops#imap" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -608,6 +640,8 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
@@ -626,6 +660,8 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -709,28 +745,6 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Functor$$Ops.html" class="extype" name="cats.Functor.Ops">Ops</a></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait():Unit"></a>
-      <span class="permalink">
-      <a href="../cats/CoflatMap$$AllOps.html#wait():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
-    </span>)</span>
-              
-        </dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <span class="permalink">
       <a href="../cats/CoflatMap$$AllOps.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
@@ -776,6 +790,28 @@
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <span class="permalink">
+      <a href="../cats/CoflatMap$$AllOps.html#wait():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
     </li><li name="cats.Functor.Ops#widen" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="widen[B&gt;:A]:F[B]"></a>
       <span class="permalink">
@@ -798,7 +834,36 @@
 
         
 
-        
+        <div class="values members">
+              <h3>Deprecated Value Members</h3>
+              <ol><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <span class="permalink">
+      <a href="../cats/CoflatMap$$AllOps.html#finalize():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version ) see corresponding Javadoc for more information.">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+                <span class="name">@Deprecated</span>
+              
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version )</i> see corresponding Javadoc for more information.</p></dd></dl></div>
+    </li></ol>
+            </div>
         </div>
 
         <div id="inheritedMembers">
@@ -812,6 +877,10 @@
               <h3>Inherited from <a href="Functor$$Ops.html" class="extype" name="cats.Functor.Ops">Functor.Ops</a>[<span class="extype" name="cats.CoflatMap.AllOps.F">F</span>, <span class="extype" name="cats.CoflatMap.AllOps.A">A</span>]</h3>
             </div><div class="parent" name="cats.CoflatMap.Ops">
               <h3>Inherited from <a href="CoflatMap$$Ops.html" class="extype" name="cats.CoflatMap.Ops">Ops</a>[<span class="extype" name="cats.CoflatMap.AllOps.F">F</span>, <span class="extype" name="cats.CoflatMap.AllOps.A">A</span>]</h3>
+            </div><div class="parent" name="scala.Serializable">
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">

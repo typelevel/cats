@@ -81,10 +81,32 @@
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <a title="Symbolic aliases for various types are defined here." href="../index.html"><span class="name">cats</span></a>
+        <a title="The cats root package contains all the trait signatures of most Scala type classes." href="../index.html"><span class="name">cats</span></a>
       </span>
       
-      <p class="shortcomment cmt">Symbolic aliases for various types are defined here.</p><div class="fullcomment"><div class="comment cmt"><p>Symbolic aliases for various types are defined here.
+      <p class="shortcomment cmt">The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><p>Cats type classes are implemented using the approach from the
+ <a href="https://ropas.snu.ac.kr/~bruno/papers/TypeClasses.pdf" target="_blank">Type classes as objects and implicits</a> article.</p><p>For each type class, <code>cats</code> provides three pieces:
+- Its <b>signature</b>: a trait that is polymorphic on a type parameter.
+  Type class traits inherit from other type classes to indicate that any implementation of the lower type class (e.g. <code>Applicative</code>)
+  can also serve as an instance for the higuer type class (e.g. <code>Functor</code>).
+- Type class <b>'instances</b>, which are classes and objects that implement one or more type class signatures for some specific types.
+  Type class instances for several data types from the Java or Scala standard libraries are declared in the subpackage <code>cats.instances</code>.
+- <b>Syntax extensions</b>, each of which provides the methods of the type class defines as extension methods
+  (which in Scala 2 are encoded as implicit classes) for values of any type <code>F</code>; given that an instance of the type class
+  for the receiver type (<code>this</code>) is in the implicit scope.
+  Symtax extensions are declared in the <code>cats.syntax</code> package.
+- A set of <b>laws</b>, that are also generic on the type of the class, and are only defined on the operations of the type class.
+  The purpose of these laws is to declare some algebraic relations (equations) between Scala expressions involving the operations
+  of the type class, and test (but not verify) that implemented instances satisfy those equations.
+  Laws are defined in the <code>cats-laws</code> package.</p><p>Although most of cats type classes are declared in this package, some are declared in other packages:
+- type classes that operate on base types (kind <code>*</code>), and their implementations for standard library types,
+  are contained in <code>cats.kernel</code>, which is a different SBT project. However, they are re-exported from this package.
+- type classes of kind <code>F[_, _]</code>, such as <a href="../arrow/Profunctor.html" class="extype" name="cats.arrow.Profunctor">cats.arrow.Profunctor</a>&quot; or <a href="../arrow/Arrow.html" class="extype" name="cats.arrow.Arrow">cats.arrow.Arrow</a>, which are relevant for
+  Functional Reactive Programming or optics, are declared in the <code>cats.arrow</code> package.
+- Also, those type classes that abstract over (pure or impure) functional runtime effects are declared
+  in the <a href="https://typelevel.org/cats-effect/" target="_blank">cats-effect library</a>.
+- Some type classes for which no laws can be provided are left out of the main road, in a small and dirty alley.
+  These are the <code>alleycats</code>.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
     </li><li name="cats.data" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="data"></a><a id="data:data"></a>
@@ -138,6 +160,10 @@
                         <a class="object" href="Const$.html" title=""></a>
                         <a class="class" href="Const.html" title="Const is a phantom type, it does not contain a value of its second type parameter B Const can be seen as a type level version of Function.const[A, B]: A =&gt; B =&gt; A"></a>
                         <a href="Const.html" title="Const is a phantom type, it does not contain a value of its second type parameter B Const can be seen as a type level version of Function.const[A, B]: A =&gt; B =&gt; A">Const</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$Cont$.html" title=""></a>
+                        <a href="package$$Cont$.html" title="">Cont</a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="ContT$.html" title=""></a>
                         <a class="class" href="ContT.html" title="This is a continuation transformer based on the ContT in the Haskell package Control.Monad.Cont"></a>
@@ -198,6 +224,10 @@
                         <span class="separator"></span>
                         <a class="class" href="NonEmptyMapOps.html" title=""></a>
                         <a href="NonEmptyMapOps.html" title="">NonEmptyMapOps</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="NonEmptySeq$.html" title=""></a>
+                        <a class="class" href="NonEmptySeq.html" title="A data type which represents a Seq guaranteed to contain at least one element."></a>
+                        <a href="NonEmptySeq.html" title="A data type which represents a Seq guaranteed to contain at least one element.">NonEmptySeq</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="class" href="NonEmptySetOps.html" title=""></a>
@@ -266,6 +296,10 @@
                         <a class="object" href="ZipList$.html" title=""></a>
                         <a class="class" href="ZipList.html" title=""></a>
                         <a href="ZipList.html" title="">ZipList</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="ZipSeq$.html" title=""></a>
+                        <a class="class" href="ZipSeq.html" title=""></a>
+                        <a href="ZipSeq.html" title="">ZipSeq</a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="ZipStream$.html" title=""></a>
                         <a class="class" href="ZipStream.html" title=""></a>
@@ -426,9 +460,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="cats.data.EitherTInstances#catsDataBifunctorForEitherT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataBifunctorForEitherT[F[_]](implicitF:cats.Functor[F]):cats.Bifunctor[[β$13$,γ$14$]cats.data.EitherT[F,β$13$,γ$14$]]"></a><a id="catsDataBifunctorForEitherT[F[_]](Functor[F]):Bifunctor[[β$13$,γ$14$]EitherT[F,β$13$,γ$14$]]"></a>
+      <a id="catsDataBifunctorForEitherT[F[_]](implicitF:cats.Functor[F]):cats.Bifunctor[[β$14$,γ$15$]cats.data.EitherT[F,β$14$,γ$15$]]"></a><a id="catsDataBifunctorForEitherT[F[_]](Functor[F]):Bifunctor[[β$14$,γ$15$]EitherT[F,β$14$,γ$15$]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/EitherT$.html#catsDataBifunctorForEitherT[F[_]](implicitF:cats.Functor[F]):cats.Bifunctor[[β$13$,γ$14$]cats.data.EitherT[F,β$13$,γ$14$]]" title="Permalink">
+      <a href="../../cats/data/EitherT$.html#catsDataBifunctorForEitherT[F[_]](implicitF:cats.Functor[F]):cats.Bifunctor[[β$14$,γ$15$]cats.data.EitherT[F,β$14$,γ$15$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -437,14 +471,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataBifunctorForEitherT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.EitherTInstances.catsDataBifunctorForEitherT.F">F</span>]</span>)</span><span class="result">: <a href="../Bifunctor.html" class="extype" name="cats.Bifunctor">Bifunctor</a>[[β$13$, γ$14$]<a href="EitherT.html" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherTInstances.catsDataBifunctorForEitherT.F">F</span>, <span class="extype" name="cats.data.EitherTInstances.&lt;refinement&gt;.Λ$.β$13$">β$13$</span>, <span class="extype" name="cats.data.EitherTInstances.&lt;refinement&gt;.Λ$.γ$14$">γ$14$</span>]]</span>
+        <span class="name">catsDataBifunctorForEitherT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.EitherTInstances.catsDataBifunctorForEitherT.F">F</span>]</span>)</span><span class="result">: <a href="../Bifunctor.html" class="extype" name="cats.Bifunctor">Bifunctor</a>[[β$14$, γ$15$]<a href="EitherT.html" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherTInstances.catsDataBifunctorForEitherT.F">F</span>, <span class="extype" name="cats.data.EitherTInstances.&lt;refinement&gt;.Λ$.β$14$">β$14$</span>, <span class="extype" name="cats.data.EitherTInstances.&lt;refinement&gt;.Λ$.γ$15$">γ$15$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>EitherTInstances</dd></dl></div>
     </li><li name="cats.data.EitherTInstances1#catsDataBitraverseForEitherT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataBitraverseForEitherT[F[_]](implicitF:cats.Traverse[F]):cats.Bitraverse[[β$42$,γ$43$]cats.data.EitherT[F,β$42$,γ$43$]]"></a><a id="catsDataBitraverseForEitherT[F[_]](Traverse[F]):Bitraverse[[β$42$,γ$43$]EitherT[F,β$42$,γ$43$]]"></a>
+      <a id="catsDataBitraverseForEitherT[F[_]](implicitF:cats.Traverse[F]):cats.Bitraverse[[β$43$,γ$44$]cats.data.EitherT[F,β$43$,γ$44$]]"></a><a id="catsDataBitraverseForEitherT[F[_]](Traverse[F]):Bitraverse[[β$43$,γ$44$]EitherT[F,β$43$,γ$44$]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/EitherT$.html#catsDataBitraverseForEitherT[F[_]](implicitF:cats.Traverse[F]):cats.Bitraverse[[β$42$,γ$43$]cats.data.EitherT[F,β$42$,γ$43$]]" title="Permalink">
+      <a href="../../cats/data/EitherT$.html#catsDataBitraverseForEitherT[F[_]](implicitF:cats.Traverse[F]):cats.Bitraverse[[β$43$,γ$44$]cats.data.EitherT[F,β$43$,γ$44$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -453,14 +487,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataBitraverseForEitherT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<span class="extype" name="cats.data.EitherTInstances1.catsDataBitraverseForEitherT.F">F</span>]</span>)</span><span class="result">: <a href="../Bitraverse.html" class="extype" name="cats.Bitraverse">Bitraverse</a>[[β$42$, γ$43$]<a href="EitherT.html" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherTInstances1.catsDataBitraverseForEitherT.F">F</span>, <span class="extype" name="cats.data.EitherTInstances1.&lt;refinement&gt;.Λ$.β$42$">β$42$</span>, <span class="extype" name="cats.data.EitherTInstances1.&lt;refinement&gt;.Λ$.γ$43$">γ$43$</span>]]</span>
+        <span class="name">catsDataBitraverseForEitherT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<span class="extype" name="cats.data.EitherTInstances1.catsDataBitraverseForEitherT.F">F</span>]</span>)</span><span class="result">: <a href="../Bitraverse.html" class="extype" name="cats.Bitraverse">Bitraverse</a>[[β$43$, γ$44$]<a href="EitherT.html" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherTInstances1.catsDataBitraverseForEitherT.F">F</span>, <span class="extype" name="cats.data.EitherTInstances1.&lt;refinement&gt;.Λ$.β$43$">β$43$</span>, <span class="extype" name="cats.data.EitherTInstances1.&lt;refinement&gt;.Λ$.γ$44$">γ$44$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>EitherTInstances1</dd></dl></div>
     </li><li name="cats.data.EitherTInstances#catsDataDeferForEitherT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataDeferForEitherT[F[_],L](implicitF:cats.Defer[F]):cats.Defer[[γ$16$]cats.data.EitherT[F,L,γ$16$]]"></a><a id="catsDataDeferForEitherT[F[_],L](Defer[F]):Defer[[γ$16$]EitherT[F,L,γ$16$]]"></a>
+      <a id="catsDataDeferForEitherT[F[_],L](implicitF:cats.Defer[F]):cats.Defer[[γ$17$]cats.data.EitherT[F,L,γ$17$]]"></a><a id="catsDataDeferForEitherT[F[_],L](Defer[F]):Defer[[γ$17$]EitherT[F,L,γ$17$]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/EitherT$.html#catsDataDeferForEitherT[F[_],L](implicitF:cats.Defer[F]):cats.Defer[[γ$16$]cats.data.EitherT[F,L,γ$16$]]" title="Permalink">
+      <a href="../../cats/data/EitherT$.html#catsDataDeferForEitherT[F[_],L](implicitF:cats.Defer[F]):cats.Defer[[γ$17$]cats.data.EitherT[F,L,γ$17$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -469,7 +503,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataDeferForEitherT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="L">L</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Defer.html" class="extype" name="cats.Defer">Defer</a>[<span class="extype" name="cats.data.EitherTInstances.catsDataDeferForEitherT.F">F</span>]</span>)</span><span class="result">: <a href="../Defer.html" class="extype" name="cats.Defer">Defer</a>[[γ$16$]<a href="EitherT.html" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherTInstances.catsDataDeferForEitherT.F">F</span>, <span class="extype" name="cats.data.EitherTInstances.catsDataDeferForEitherT.L">L</span>, <span class="extype" name="cats.data.EitherTInstances.&lt;refinement&gt;.Λ$.γ$16$">γ$16$</span>]]</span>
+        <span class="name">catsDataDeferForEitherT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="L">L</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Defer.html" class="extype" name="cats.Defer">Defer</a>[<span class="extype" name="cats.data.EitherTInstances.catsDataDeferForEitherT.F">F</span>]</span>)</span><span class="result">: <a href="../Defer.html" class="extype" name="cats.Defer">Defer</a>[[γ$17$]<a href="EitherT.html" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherTInstances.catsDataDeferForEitherT.F">F</span>, <span class="extype" name="cats.data.EitherTInstances.catsDataDeferForEitherT.L">L</span>, <span class="extype" name="cats.data.EitherTInstances.&lt;refinement&gt;.Λ$.γ$17$">γ$17$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>EitherTInstances</dd></dl></div>
@@ -490,9 +524,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>EitherTInstances2</dd></dl></div>
     </li><li name="cats.data.EitherTInstances1#catsDataFoldableForEitherT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataFoldableForEitherT[F[_],L](implicitF:cats.Foldable[F]):cats.Foldable[[γ$41$]cats.data.EitherT[F,L,γ$41$]]"></a><a id="catsDataFoldableForEitherT[F[_],L](Foldable[F]):Foldable[[γ$41$]EitherT[F,L,γ$41$]]"></a>
+      <a id="catsDataFoldableForEitherT[F[_],L](implicitF:cats.Foldable[F]):cats.Foldable[[γ$42$]cats.data.EitherT[F,L,γ$42$]]"></a><a id="catsDataFoldableForEitherT[F[_],L](Foldable[F]):Foldable[[γ$42$]EitherT[F,L,γ$42$]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/EitherT$.html#catsDataFoldableForEitherT[F[_],L](implicitF:cats.Foldable[F]):cats.Foldable[[γ$41$]cats.data.EitherT[F,L,γ$41$]]" title="Permalink">
+      <a href="../../cats/data/EitherT$.html#catsDataFoldableForEitherT[F[_],L](implicitF:cats.Foldable[F]):cats.Foldable[[γ$42$]cats.data.EitherT[F,L,γ$42$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -501,14 +535,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataFoldableForEitherT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="L">L</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.data.EitherTInstances1.catsDataFoldableForEitherT.F">F</span>]</span>)</span><span class="result">: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[[γ$41$]<a href="EitherT.html" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherTInstances1.catsDataFoldableForEitherT.F">F</span>, <span class="extype" name="cats.data.EitherTInstances1.catsDataFoldableForEitherT.L">L</span>, <span class="extype" name="cats.data.EitherTInstances1.&lt;refinement&gt;.Λ$.γ$41$">γ$41$</span>]]</span>
+        <span class="name">catsDataFoldableForEitherT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="L">L</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.data.EitherTInstances1.catsDataFoldableForEitherT.F">F</span>]</span>)</span><span class="result">: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[[γ$42$]<a href="EitherT.html" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherTInstances1.catsDataFoldableForEitherT.F">F</span>, <span class="extype" name="cats.data.EitherTInstances1.catsDataFoldableForEitherT.L">L</span>, <span class="extype" name="cats.data.EitherTInstances1.&lt;refinement&gt;.Λ$.γ$42$">γ$42$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>EitherTInstances1</dd></dl></div>
     </li><li name="cats.data.EitherTInstances3#catsDataFunctorForEitherT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataFunctorForEitherT[F[_],L](implicitF0:cats.Functor[F]):cats.Functor[[γ$72$]cats.data.EitherT[F,L,γ$72$]]"></a><a id="catsDataFunctorForEitherT[F[_],L](Functor[F]):Functor[[γ$72$]EitherT[F,L,γ$72$]]"></a>
+      <a id="catsDataFunctorForEitherT[F[_],L](implicitF0:cats.Functor[F]):cats.Functor[[γ$73$]cats.data.EitherT[F,L,γ$73$]]"></a><a id="catsDataFunctorForEitherT[F[_],L](Functor[F]):Functor[[γ$73$]EitherT[F,L,γ$73$]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/EitherT$.html#catsDataFunctorForEitherT[F[_],L](implicitF0:cats.Functor[F]):cats.Functor[[γ$72$]cats.data.EitherT[F,L,γ$72$]]" title="Permalink">
+      <a href="../../cats/data/EitherT$.html#catsDataFunctorForEitherT[F[_],L](implicitF0:cats.Functor[F]):cats.Functor[[γ$73$]cats.data.EitherT[F,L,γ$73$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -517,14 +551,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataFunctorForEitherT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="L">L</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.EitherTInstances3.catsDataFunctorForEitherT.F">F</span>]</span>)</span><span class="result">: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[[γ$72$]<a href="EitherT.html" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherTInstances3.catsDataFunctorForEitherT.F">F</span>, <span class="extype" name="cats.data.EitherTInstances3.catsDataFunctorForEitherT.L">L</span>, <span class="extype" name="cats.data.EitherTInstances3.&lt;refinement&gt;.Λ$.γ$72$">γ$72$</span>]]</span>
+        <span class="name">catsDataFunctorForEitherT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="L">L</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.EitherTInstances3.catsDataFunctorForEitherT.F">F</span>]</span>)</span><span class="result">: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[[γ$73$]<a href="EitherT.html" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherTInstances3.catsDataFunctorForEitherT.F">F</span>, <span class="extype" name="cats.data.EitherTInstances3.catsDataFunctorForEitherT.L">L</span>, <span class="extype" name="cats.data.EitherTInstances3.&lt;refinement&gt;.Λ$.γ$73$">γ$73$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>EitherTInstances3</dd></dl></div>
     </li><li name="cats.data.EitherTInstances2#catsDataMonadErrorFForEitherT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataMonadErrorFForEitherT[F[_],E,L](implicitFE0:cats.MonadError[F,E]):cats.MonadError[[γ$70$]cats.data.EitherT[F,L,γ$70$],E]"></a><a id="catsDataMonadErrorFForEitherT[F[_],E,L](MonadError[F,E]):MonadError[[γ$70$]EitherT[F,L,γ$70$],E]"></a>
+      <a id="catsDataMonadErrorFForEitherT[F[_],E,L](implicitFE0:cats.MonadError[F,E]):cats.MonadError[[γ$71$]cats.data.EitherT[F,L,γ$71$],E]"></a><a id="catsDataMonadErrorFForEitherT[F[_],E,L](MonadError[F,E]):MonadError[[γ$71$]EitherT[F,L,γ$71$],E]"></a>
       <span class="permalink">
-      <a href="../../cats/data/EitherT$.html#catsDataMonadErrorFForEitherT[F[_],E,L](implicitFE0:cats.MonadError[F,E]):cats.MonadError[[γ$70$]cats.data.EitherT[F,L,γ$70$],E]" title="Permalink">
+      <a href="../../cats/data/EitherT$.html#catsDataMonadErrorFForEitherT[F[_],E,L](implicitFE0:cats.MonadError[F,E]):cats.MonadError[[γ$71$]cats.data.EitherT[F,L,γ$71$],E]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -533,7 +567,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataMonadErrorFForEitherT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="E">E</span>, <span name="L">L</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="FE0">FE0: <a href="../MonadError.html" class="extype" name="cats.MonadError">MonadError</a>[<span class="extype" name="cats.data.EitherTInstances2.catsDataMonadErrorFForEitherT.F">F</span>, <span class="extype" name="cats.data.EitherTInstances2.catsDataMonadErrorFForEitherT.E">E</span>]</span>)</span><span class="result">: <a href="../MonadError.html" class="extype" name="cats.MonadError">MonadError</a>[[γ$70$]<a href="EitherT.html" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherTInstances2.catsDataMonadErrorFForEitherT.F">F</span>, <span class="extype" name="cats.data.EitherTInstances2.catsDataMonadErrorFForEitherT.L">L</span>, <span class="extype" name="cats.data.EitherTInstances2.&lt;refinement&gt;.Λ$.γ$70$">γ$70$</span>], <span class="extype" name="cats.data.EitherTInstances2.catsDataMonadErrorFForEitherT.E">E</span>]</span>
+        <span class="name">catsDataMonadErrorFForEitherT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="E">E</span>, <span name="L">L</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="FE0">FE0: <a href="../MonadError.html" class="extype" name="cats.MonadError">MonadError</a>[<span class="extype" name="cats.data.EitherTInstances2.catsDataMonadErrorFForEitherT.F">F</span>, <span class="extype" name="cats.data.EitherTInstances2.catsDataMonadErrorFForEitherT.E">E</span>]</span>)</span><span class="result">: <a href="../MonadError.html" class="extype" name="cats.MonadError">MonadError</a>[[γ$71$]<a href="EitherT.html" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherTInstances2.catsDataMonadErrorFForEitherT.F">F</span>, <span class="extype" name="cats.data.EitherTInstances2.catsDataMonadErrorFForEitherT.L">L</span>, <span class="extype" name="cats.data.EitherTInstances2.&lt;refinement&gt;.Λ$.γ$71$">γ$71$</span>], <span class="extype" name="cats.data.EitherTInstances2.catsDataMonadErrorFForEitherT.E">E</span>]</span>
       </span>
       
       <p class="shortcomment cmt"> Monad error instance for recovering errors in F instead of
@@ -547,9 +581,9 @@ scala&gt; <span class="kw">val</span> me = MonadError[EitherT[<span class="std">
 scala&gt; me.recover(et) { <span class="kw">case</span> () <span class="kw">=&gt;</span> <span class="num">1</span> }
 res0: cats.data.EitherT[<span class="std">Option</span>,<span class="std">String</span>,<span class="std">Int</span>] = EitherT(<span class="std">Some</span>(Right(<span class="num">1</span>)))</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>EitherTInstances2</dd></dl></div>
     </li><li name="cats.data.EitherTInstances1#catsDataMonadErrorForEitherT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataMonadErrorForEitherT[F[_],L](implicitF0:cats.Monad[F]):cats.MonadError[[γ$44$]cats.data.EitherT[F,L,γ$44$],L]"></a><a id="catsDataMonadErrorForEitherT[F[_],L](Monad[F]):MonadError[[γ$44$]EitherT[F,L,γ$44$],L]"></a>
+      <a id="catsDataMonadErrorForEitherT[F[_],L](implicitF0:cats.Monad[F]):cats.MonadError[[γ$45$]cats.data.EitherT[F,L,γ$45$],L]"></a><a id="catsDataMonadErrorForEitherT[F[_],L](Monad[F]):MonadError[[γ$45$]EitherT[F,L,γ$45$],L]"></a>
       <span class="permalink">
-      <a href="../../cats/data/EitherT$.html#catsDataMonadErrorForEitherT[F[_],L](implicitF0:cats.Monad[F]):cats.MonadError[[γ$44$]cats.data.EitherT[F,L,γ$44$],L]" title="Permalink">
+      <a href="../../cats/data/EitherT$.html#catsDataMonadErrorForEitherT[F[_],L](implicitF0:cats.Monad[F]):cats.MonadError[[γ$45$]cats.data.EitherT[F,L,γ$45$],L]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -558,7 +592,7 @@ res0: cats.data.EitherT[<span class="std">Option</span>,<span class="std">String
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataMonadErrorForEitherT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="L">L</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.EitherTInstances1.catsDataMonadErrorForEitherT.F">F</span>]</span>)</span><span class="result">: <a href="../MonadError.html" class="extype" name="cats.MonadError">MonadError</a>[[γ$44$]<a href="EitherT.html" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherTInstances1.catsDataMonadErrorForEitherT.F">F</span>, <span class="extype" name="cats.data.EitherTInstances1.catsDataMonadErrorForEitherT.L">L</span>, <span class="extype" name="cats.data.EitherTInstances1.&lt;refinement&gt;.Λ$.γ$44$">γ$44$</span>], <span class="extype" name="cats.data.EitherTInstances1.catsDataMonadErrorForEitherT.L">L</span>]</span>
+        <span class="name">catsDataMonadErrorForEitherT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="L">L</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.EitherTInstances1.catsDataMonadErrorForEitherT.F">F</span>]</span>)</span><span class="result">: <a href="../MonadError.html" class="extype" name="cats.MonadError">MonadError</a>[[γ$45$]<a href="EitherT.html" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherTInstances1.catsDataMonadErrorForEitherT.F">F</span>, <span class="extype" name="cats.data.EitherTInstances1.catsDataMonadErrorForEitherT.L">L</span>, <span class="extype" name="cats.data.EitherTInstances1.&lt;refinement&gt;.Λ$.γ$45$">γ$45$</span>], <span class="extype" name="cats.data.EitherTInstances1.catsDataMonadErrorForEitherT.L">L</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>EitherTInstances1</dd></dl></div>
@@ -579,9 +613,9 @@ res0: cats.data.EitherT[<span class="std">Option</span>,<span class="std">String
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>EitherTInstances</dd></dl></div>
     </li><li name="cats.data.EitherTInstances#catsDataParallelForEitherTWithParallelEffect" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataParallelForEitherTWithParallelEffect[M[_],E](implicitevidence$1:cats.Semigroup[E],implicitP:cats.Parallel[M]):cats.Parallel.Aux[[γ$19$]cats.data.EitherT[M,E,γ$19$],[γ$20$]cats.data.Nested[P.F,[β$18$]cats.data.Validated[E,β$18$],γ$20$]]"></a><a id="catsDataParallelForEitherTWithParallelEffect[M[_],E](Semigroup[E],Parallel[M]):Aux[[γ$19$]EitherT[M,E,γ$19$],[γ$20$]Nested[Parallel.F,[β$18$]Validated[E,β$18$],γ$20$]]"></a>
+      <a id="catsDataParallelForEitherTWithParallelEffect[M[_],E](implicitevidence$1:cats.Semigroup[E],implicitP:cats.Parallel[M]):cats.Parallel.Aux[[γ$20$]cats.data.EitherT[M,E,γ$20$],[γ$21$]cats.data.Nested[P.F,[β$19$]cats.data.Validated[E,β$19$],γ$21$]]"></a><a id="catsDataParallelForEitherTWithParallelEffect[M[_],E](Semigroup[E],Parallel[M]):Aux[[γ$20$]EitherT[M,E,γ$20$],[γ$21$]Nested[Parallel.F,[β$19$]Validated[E,β$19$],γ$21$]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/EitherT$.html#catsDataParallelForEitherTWithParallelEffect[M[_],E](implicitevidence$1:cats.Semigroup[E],implicitP:cats.Parallel[M]):cats.Parallel.Aux[[γ$19$]cats.data.EitherT[M,E,γ$19$],[γ$20$]cats.data.Nested[P.F,[β$18$]cats.data.Validated[E,β$18$],γ$20$]]" title="Permalink">
+      <a href="../../cats/data/EitherT$.html#catsDataParallelForEitherTWithParallelEffect[M[_],E](implicitevidence$1:cats.Semigroup[E],implicitP:cats.Parallel[M]):cats.Parallel.Aux[[γ$20$]cats.data.EitherT[M,E,γ$20$],[γ$21$]cats.data.Nested[P.F,[β$19$]cats.data.Validated[E,β$19$],γ$21$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -590,14 +624,14 @@ res0: cats.data.EitherT[<span class="std">Option</span>,<span class="std">String
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataParallelForEitherTWithParallelEffect</span><span class="tparams">[<span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="E">E</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../index.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.data.EitherTInstances.catsDataParallelForEitherTWithParallelEffect.E">E</span>]</span>, <span name="P">P: <a href="../Parallel.html" class="extype" name="cats.Parallel">Parallel</a>[<span class="extype" name="cats.data.EitherTInstances.catsDataParallelForEitherTWithParallelEffect.M">M</span>]</span>)</span><span class="result">: <a href="../Parallel$.html#Aux[M[_],F0[_]]=cats.Parallel[M]{typeF[x]=F0[x]}" class="extmbr" name="cats.Parallel.Aux">Aux</a>[[γ$19$]<a href="EitherT.html" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherTInstances.catsDataParallelForEitherTWithParallelEffect.M">M</span>, <span class="extype" name="cats.data.EitherTInstances.catsDataParallelForEitherTWithParallelEffect.E">E</span>, <span class="extype" name="cats.data.EitherTInstances.&lt;refinement&gt;.Λ$.γ$19$">γ$19$</span>], [γ$20$]<a href="Nested.html" class="extype" name="cats.data.Nested">Nested</a>[<a href="../Parallel.html#F[_]" class="extmbr" name="cats.Parallel.F">Parallel.F</a>, [β$18$]<a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.EitherTInstances.catsDataParallelForEitherTWithParallelEffect.E">E</span>, <span class="extype" name="cats.data.EitherTInstances.&lt;refinement&gt;.&lt;refinement&gt;.Λ$.β$18$">β$18$</span>], <span class="extype" name="cats.data.EitherTInstances.&lt;refinement&gt;.Λ$.γ$20$">γ$20$</span>]]</span>
+        <span class="name">catsDataParallelForEitherTWithParallelEffect</span><span class="tparams">[<span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="E">E</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../index.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.data.EitherTInstances.catsDataParallelForEitherTWithParallelEffect.E">E</span>]</span>, <span name="P">P: <a href="../Parallel.html" class="extype" name="cats.Parallel">Parallel</a>[<span class="extype" name="cats.data.EitherTInstances.catsDataParallelForEitherTWithParallelEffect.M">M</span>]</span>)</span><span class="result">: <a href="../Parallel$.html#Aux[M[_],F0[_]]=cats.Parallel[M]{typeF[x]=F0[x]}" class="extmbr" name="cats.Parallel.Aux">Aux</a>[[γ$20$]<a href="EitherT.html" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherTInstances.catsDataParallelForEitherTWithParallelEffect.M">M</span>, <span class="extype" name="cats.data.EitherTInstances.catsDataParallelForEitherTWithParallelEffect.E">E</span>, <span class="extype" name="cats.data.EitherTInstances.&lt;refinement&gt;.Λ$.γ$20$">γ$20$</span>], [γ$21$]<a href="Nested.html" class="extype" name="cats.data.Nested">Nested</a>[<a href="../Parallel.html#F[_]" class="extmbr" name="cats.Parallel.F">Parallel.F</a>, [β$19$]<a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.EitherTInstances.catsDataParallelForEitherTWithParallelEffect.E">E</span>, <span class="extype" name="cats.data.EitherTInstances.&lt;refinement&gt;.&lt;refinement&gt;.Λ$.β$19$">β$19$</span>], <span class="extype" name="cats.data.EitherTInstances.&lt;refinement&gt;.Λ$.γ$21$">γ$21$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>EitherTInstances</dd></dl></div>
     </li><li name="cats.data.EitherTInstances1#catsDataParallelForEitherTWithSequentialEffect" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataParallelForEitherTWithSequentialEffect[M[_],E](implicitevidence$2:cats.Monad[M],implicitevidence$3:cats.Semigroup[E]):cats.Parallel.Aux[[γ$46$]cats.data.EitherT[M,E,γ$46$],[γ$47$]cats.data.Nested[M,[β$45$]cats.data.Validated[E,β$45$],γ$47$]]"></a><a id="catsDataParallelForEitherTWithSequentialEffect[M[_],E](Monad[M],Semigroup[E]):Aux[[γ$46$]EitherT[M,E,γ$46$],[γ$47$]Nested[M,[β$45$]Validated[E,β$45$],γ$47$]]"></a>
+      <a id="catsDataParallelForEitherTWithSequentialEffect[M[_],E](implicitevidence$2:cats.Monad[M],implicitevidence$3:cats.Semigroup[E]):cats.Parallel.Aux[[γ$47$]cats.data.EitherT[M,E,γ$47$],[γ$48$]cats.data.Nested[M,[β$46$]cats.data.Validated[E,β$46$],γ$48$]]"></a><a id="catsDataParallelForEitherTWithSequentialEffect[M[_],E](Monad[M],Semigroup[E]):Aux[[γ$47$]EitherT[M,E,γ$47$],[γ$48$]Nested[M,[β$46$]Validated[E,β$46$],γ$48$]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/EitherT$.html#catsDataParallelForEitherTWithSequentialEffect[M[_],E](implicitevidence$2:cats.Monad[M],implicitevidence$3:cats.Semigroup[E]):cats.Parallel.Aux[[γ$46$]cats.data.EitherT[M,E,γ$46$],[γ$47$]cats.data.Nested[M,[β$45$]cats.data.Validated[E,β$45$],γ$47$]]" title="Permalink">
+      <a href="../../cats/data/EitherT$.html#catsDataParallelForEitherTWithSequentialEffect[M[_],E](implicitevidence$2:cats.Monad[M],implicitevidence$3:cats.Semigroup[E]):cats.Parallel.Aux[[γ$47$]cats.data.EitherT[M,E,γ$47$],[γ$48$]cats.data.Nested[M,[β$46$]cats.data.Validated[E,β$46$],γ$48$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -606,7 +640,7 @@ res0: cats.data.EitherT[<span class="std">Option</span>,<span class="std">String
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataParallelForEitherTWithSequentialEffect</span><span class="tparams">[<span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="E">E</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.EitherTInstances1.catsDataParallelForEitherTWithSequentialEffect.M">M</span>]</span>, <span name="arg1">arg1: <a href="../index.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.data.EitherTInstances1.catsDataParallelForEitherTWithSequentialEffect.E">E</span>]</span>)</span><span class="result">: <a href="../Parallel$.html#Aux[M[_],F0[_]]=cats.Parallel[M]{typeF[x]=F0[x]}" class="extmbr" name="cats.Parallel.Aux">Aux</a>[[γ$46$]<a href="EitherT.html" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherTInstances1.catsDataParallelForEitherTWithSequentialEffect.M">M</span>, <span class="extype" name="cats.data.EitherTInstances1.catsDataParallelForEitherTWithSequentialEffect.E">E</span>, <span class="extype" name="cats.data.EitherTInstances1.&lt;refinement&gt;.Λ$.γ$46$">γ$46$</span>], [γ$47$]<a href="Nested.html" class="extype" name="cats.data.Nested">Nested</a>[<span class="extype" name="cats.data.EitherTInstances1.catsDataParallelForEitherTWithSequentialEffect.M">M</span>, [β$45$]<a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.EitherTInstances1.catsDataParallelForEitherTWithSequentialEffect.E">E</span>, <span class="extype" name="cats.data.EitherTInstances1.&lt;refinement&gt;.&lt;refinement&gt;.Λ$.β$45$">β$45$</span>], <span class="extype" name="cats.data.EitherTInstances1.&lt;refinement&gt;.Λ$.γ$47$">γ$47$</span>]]</span>
+        <span class="name">catsDataParallelForEitherTWithSequentialEffect</span><span class="tparams">[<span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="E">E</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.EitherTInstances1.catsDataParallelForEitherTWithSequentialEffect.M">M</span>]</span>, <span name="arg1">arg1: <a href="../index.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.data.EitherTInstances1.catsDataParallelForEitherTWithSequentialEffect.E">E</span>]</span>)</span><span class="result">: <a href="../Parallel$.html#Aux[M[_],F0[_]]=cats.Parallel[M]{typeF[x]=F0[x]}" class="extmbr" name="cats.Parallel.Aux">Aux</a>[[γ$47$]<a href="EitherT.html" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherTInstances1.catsDataParallelForEitherTWithSequentialEffect.M">M</span>, <span class="extype" name="cats.data.EitherTInstances1.catsDataParallelForEitherTWithSequentialEffect.E">E</span>, <span class="extype" name="cats.data.EitherTInstances1.&lt;refinement&gt;.Λ$.γ$47$">γ$47$</span>], [γ$48$]<a href="Nested.html" class="extype" name="cats.data.Nested">Nested</a>[<span class="extype" name="cats.data.EitherTInstances1.catsDataParallelForEitherTWithSequentialEffect.M">M</span>, [β$46$]<a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.EitherTInstances1.catsDataParallelForEitherTWithSequentialEffect.E">E</span>, <span class="extype" name="cats.data.EitherTInstances1.&lt;refinement&gt;.&lt;refinement&gt;.Λ$.β$46$">β$46$</span>], <span class="extype" name="cats.data.EitherTInstances1.&lt;refinement&gt;.Λ$.γ$48$">γ$48$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>EitherTInstances1</dd></dl></div>
@@ -627,9 +661,9 @@ res0: cats.data.EitherT[<span class="std">Option</span>,<span class="std">String
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>EitherTInstances1</dd></dl></div>
     </li><li name="cats.data.EitherTInstances2#catsDataSemigroupKForEitherT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataSemigroupKForEitherT[F[_],L](implicitF0:cats.Monad[F]):cats.SemigroupK[[γ$71$]cats.data.EitherT[F,L,γ$71$]]"></a><a id="catsDataSemigroupKForEitherT[F[_],L](Monad[F]):SemigroupK[[γ$71$]EitherT[F,L,γ$71$]]"></a>
+      <a id="catsDataSemigroupKForEitherT[F[_],L](implicitF0:cats.Monad[F]):cats.SemigroupK[[γ$72$]cats.data.EitherT[F,L,γ$72$]]"></a><a id="catsDataSemigroupKForEitherT[F[_],L](Monad[F]):SemigroupK[[γ$72$]EitherT[F,L,γ$72$]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/EitherT$.html#catsDataSemigroupKForEitherT[F[_],L](implicitF0:cats.Monad[F]):cats.SemigroupK[[γ$71$]cats.data.EitherT[F,L,γ$71$]]" title="Permalink">
+      <a href="../../cats/data/EitherT$.html#catsDataSemigroupKForEitherT[F[_],L](implicitF0:cats.Monad[F]):cats.SemigroupK[[γ$72$]cats.data.EitherT[F,L,γ$72$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -638,7 +672,7 @@ res0: cats.data.EitherT[<span class="std">Option</span>,<span class="std">String
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataSemigroupKForEitherT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="L">L</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.EitherTInstances2.catsDataSemigroupKForEitherT.F">F</span>]</span>)</span><span class="result">: <a href="../SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a>[[γ$71$]<a href="EitherT.html" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherTInstances2.catsDataSemigroupKForEitherT.F">F</span>, <span class="extype" name="cats.data.EitherTInstances2.catsDataSemigroupKForEitherT.L">L</span>, <span class="extype" name="cats.data.EitherTInstances2.&lt;refinement&gt;.Λ$.γ$71$">γ$71$</span>]]</span>
+        <span class="name">catsDataSemigroupKForEitherT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="L">L</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.EitherTInstances2.catsDataSemigroupKForEitherT.F">F</span>]</span>)</span><span class="result">: <a href="../SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a>[[γ$72$]<a href="EitherT.html" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherTInstances2.catsDataSemigroupKForEitherT.F">F</span>, <span class="extype" name="cats.data.EitherTInstances2.catsDataSemigroupKForEitherT.L">L</span>, <span class="extype" name="cats.data.EitherTInstances2.&lt;refinement&gt;.Λ$.γ$72$">γ$72$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>EitherTInstances2</dd></dl></div>
@@ -659,9 +693,9 @@ res0: cats.data.EitherT[<span class="std">Option</span>,<span class="std">String
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>EitherTInstances</dd></dl></div>
     </li><li name="cats.data.EitherTInstances#catsDataTraverseForEitherT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataTraverseForEitherT[F[_],L](implicitFF:cats.Traverse[F]):cats.Traverse[[γ$15$]cats.data.EitherT[F,L,γ$15$]]"></a><a id="catsDataTraverseForEitherT[F[_],L](Traverse[F]):Traverse[[γ$15$]EitherT[F,L,γ$15$]]"></a>
+      <a id="catsDataTraverseForEitherT[F[_],L](implicitFF:cats.Traverse[F]):cats.Traverse[[γ$16$]cats.data.EitherT[F,L,γ$16$]]"></a><a id="catsDataTraverseForEitherT[F[_],L](Traverse[F]):Traverse[[γ$16$]EitherT[F,L,γ$16$]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/EitherT$.html#catsDataTraverseForEitherT[F[_],L](implicitFF:cats.Traverse[F]):cats.Traverse[[γ$15$]cats.data.EitherT[F,L,γ$15$]]" title="Permalink">
+      <a href="../../cats/data/EitherT$.html#catsDataTraverseForEitherT[F[_],L](implicitFF:cats.Traverse[F]):cats.Traverse[[γ$16$]cats.data.EitherT[F,L,γ$16$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -670,7 +704,7 @@ res0: cats.data.EitherT[<span class="std">Option</span>,<span class="std">String
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataTraverseForEitherT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="L">L</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="FF">FF: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<span class="extype" name="cats.data.EitherTInstances.catsDataTraverseForEitherT.F">F</span>]</span>)</span><span class="result">: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[[γ$15$]<a href="EitherT.html" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherTInstances.catsDataTraverseForEitherT.F">F</span>, <span class="extype" name="cats.data.EitherTInstances.catsDataTraverseForEitherT.L">L</span>, <span class="extype" name="cats.data.EitherTInstances.&lt;refinement&gt;.Λ$.γ$15$">γ$15$</span>]]</span>
+        <span class="name">catsDataTraverseForEitherT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="L">L</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="FF">FF: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<span class="extype" name="cats.data.EitherTInstances.catsDataTraverseForEitherT.F">F</span>]</span>)</span><span class="result">: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[[γ$16$]<a href="EitherT.html" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherTInstances.catsDataTraverseForEitherT.F">F</span>, <span class="extype" name="cats.data.EitherTInstances.catsDataTraverseForEitherT.L">L</span>, <span class="extype" name="cats.data.EitherTInstances.&lt;refinement&gt;.Λ$.γ$16$">γ$16$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>EitherTInstances</dd></dl></div>
@@ -728,6 +762,8 @@ res0: cats.data.EitherT[<span class="std">Option</span>,<span class="std">String
     </span>)</span>
               
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="cats.data.EitherT#cond" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -789,28 +825,6 @@ res0: EitherT[Id, <span class="std">String</span>, <span class="std">String</spa
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="finalize():Unit"></a>
-      <span class="permalink">
-      <a href="../../cats/data/EitherT$.html#finalize():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="symbol">classOf[java.lang.Throwable]</span>
-    </span>)</span>
-              
-        </dd></dl></div>
     </li><li name="cats.data.EitherT#fromEither" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="fromEither[F[_]]:cats.data.EitherT.FromEitherPartiallyApplied[F]"></a><a id="fromEither[F[_]]:FromEitherPartiallyApplied[F]"></a>
       <span class="permalink">
@@ -876,6 +890,23 @@ scala&gt; EitherT.fromOptionF(<span class="std">List</span>(o), <span class="lit
 res0: EitherT[<span class="std">List</span>, <span class="std">String</span>, <span class="std">Int</span>]  = EitherT(<span class="std">List</span>(Left(Answer not known.)))
 scala&gt; EitherT.fromOptionF(<span class="std">List</span>(<span class="std">Option</span>(<span class="num">42</span>)), <span class="lit">"Answer not known."</span>)
 res1: EitherT[<span class="std">List</span>, <span class="std">String</span>, <span class="std">Int</span>] = EitherT(<span class="std">List</span>(Right(<span class="num">42</span>)))</pre></div></div>
+    </li><li name="cats.data.EitherT#fromOptionM" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="fromOptionM[F[_],E,A](fopt:F[Option[A]],ifNone:=&gt;F[E])(implicitF:cats.Monad[F]):cats.data.EitherT[F,E,A]"></a><a id="fromOptionM[F[_],E,A](F[Option[A]],⇒F[E])(Monad[F]):EitherT[F,E,A]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/EitherT$.html#fromOptionM[F[_],E,A](fopt:F[Option[A]],ifNone:=&gt;F[E])(implicitF:cats.Monad[F]):cats.data.EitherT[F,E,A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fromOptionM</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="E">E</span>, <span name="A">A</span>]</span><span class="params">(<span name="fopt">fopt: <span class="extype" name="cats.data.EitherT.fromOptionM.F">F</span>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.data.EitherT.fromOptionM.A">A</span>]]</span>, <span name="ifNone">ifNone: ⇒ <span class="extype" name="cats.data.EitherT.fromOptionM.F">F</span>[<span class="extype" name="cats.data.EitherT.fromOptionM.E">E</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.EitherT.fromOptionM.F">F</span>]</span>)</span><span class="result">: <a href="EitherT.html" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherT.fromOptionM.F">F</span>, <span class="extype" name="cats.data.EitherT.fromOptionM.E">E</span>, <span class="extype" name="cats.data.EitherT.fromOptionM.A">A</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Similar to <code>fromOptionF</code> but the left is carried from monadic <code>F[_]</code> context when the option is <code>None</code>
+</p>
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
@@ -893,6 +924,8 @@ res1: EitherT[<span class="std">List</span>, <span class="std">String</span>, <s
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -912,6 +945,8 @@ res1: EitherT[<span class="std">List</span>, <span class="std">String</span>, <s
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -968,6 +1003,31 @@ res0: cats.data.EitherT[<span class="std">Option</span>,<span class="std">String
 scala&gt; <span class="kw">import</span> cats.implicits._
 scala&gt; EitherT.leftT[<span class="std">Option</span>, <span class="std">Int</span>](<span class="lit">"err"</span>)
 res0: cats.data.EitherT[<span class="std">Option</span>,<span class="std">String</span>,<span class="std">Int</span>] = EitherT(<span class="std">Some</span>(Left(err)))</pre></div></div>
+    </li><li name="cats.data.EitherT#liftAttemptK" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="liftAttemptK[F[_],E](implicitF:cats.ApplicativeError[F,E]):F~&gt;[γ$12$]cats.data.EitherT[F,E,γ$12$]"></a><a id="liftAttemptK[F[_],E](ApplicativeError[F,E]):~&gt;[F,[γ$12$]EitherT[F,E,γ$12$]]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/EitherT$.html#liftAttemptK[F[_],E](implicitF:cats.ApplicativeError[F,E]):F~&gt;[γ$12$]cats.data.EitherT[F,E,γ$12$]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">liftAttemptK</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="E">E</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../ApplicativeError.html" class="extype" name="cats.ApplicativeError">ApplicativeError</a>[<span class="extype" name="cats.data.EitherT.liftAttemptK.F">F</span>, <span class="extype" name="cats.data.EitherT.liftAttemptK.E">E</span>]</span>)</span><span class="result">: <a href="../index.html#~&gt;[F[_],G[_]]=cats.arrow.FunctionK[F,G]" class="extmbr" name="cats.~&gt;">~&gt;</a>[<span class="extype" name="cats.data.EitherT.liftAttemptK.F">F</span>, [γ$12$]<a href="EitherT.html" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherT.liftAttemptK.F">F</span>, <span class="extype" name="cats.data.EitherT.liftAttemptK.E">E</span>, <span class="extype" name="cats.data.EitherT.&lt;refinement&gt;.Λ$.γ$12$">γ$12$</span>]]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Lifts an effect into EitherT, catching all errors from the effect and lifting them into EitherT's error channel.</p><div class="fullcomment"><div class="comment cmt"><p>Lifts an effect into EitherT, catching all errors from the effect and lifting them into EitherT's error channel.</p><pre>scala&gt; <span class="kw">import</span> cats._, data._, implicits._
+scala&gt; <span class="kw">val</span> a: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">None</span>
+scala&gt; <span class="kw">val</span> b: EitherT[<span class="std">Option</span>, <span class="std">Unit</span>, <span class="std">Int</span>] = EitherT.liftAttemptK[<span class="std">Option</span>, <span class="std">Unit</span>].apply(a)
+scala&gt; b.value
+res0: <span class="std">Option</span>[Either[<span class="std">Unit</span>, <span class="std">Int</span>]] = <span class="std">Some</span>(Left(()))
+
+scala&gt; <span class="kw">val</span> a2: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">Some</span>(<span class="num">42</span>)
+scala&gt; <span class="kw">val</span> b2: EitherT[<span class="std">Option</span>, <span class="std">Unit</span>, <span class="std">Int</span>] = EitherT.liftAttemptK[<span class="std">Option</span>, <span class="std">Unit</span>].apply(a2)
+scala&gt; b2.value
+res1: <span class="std">Option</span>[Either[<span class="std">Unit</span>, <span class="std">Int</span>]] = <span class="std">Some</span>(Right(<span class="num">42</span>))</pre></div></div>
     </li><li name="cats.data.EitherT#liftF" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="liftF[F[_],A,B](fb:F[B])(implicitF:cats.Functor[F]):cats.data.EitherT[F,A,B]"></a><a id="liftF[F[_],A,B](F[B])(Functor[F]):EitherT[F,A,B]"></a>
       <span class="permalink">
@@ -1045,6 +1105,8 @@ res0: Either[<span class="std">String</span>,<span class="std">Option</span>[<sp
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
@@ -1063,6 +1125,8 @@ res0: Either[<span class="std">String</span>,<span class="std">Option</span>[<sp
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="cats.data.EitherT#pure" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -1155,28 +1219,6 @@ res0: cats.data.EitherT[<span class="std">Option</span>,<span class="std">String
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait():Unit"></a>
-      <span class="permalink">
-      <a href="../../cats/data/EitherT$.html#wait():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
-    </span>)</span>
-              
-        </dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <span class="permalink">
       <a href="../../cats/data/EitherT$.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
@@ -1222,6 +1264,28 @@ res0: cats.data.EitherT[<span class="std">Option</span>,<span class="std">String
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/data/EitherT$.html#wait():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
     </li>
               </ol>
             </div>
@@ -1230,7 +1294,33 @@ res0: cats.data.EitherT[<span class="std">Option</span>,<span class="std">String
 
         <div class="values members">
               <h3>Deprecated Value Members</h3>
-              <ol><li name="cats.data.EitherT#liftT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+              <ol><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/data/EitherT$.html#finalize():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version ) see corresponding Javadoc for more information.">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+                <span class="name">@Deprecated</span>
+              
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version )</i> see corresponding Javadoc for more information.</p></dd></dl></div>
+    </li><li name="cats.data.EitherT#liftT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="liftT[F[_],A,B](fb:F[B])(implicitF:cats.Functor[F]):cats.data.EitherT[F,A,B]"></a><a id="liftT[F[_],A,B](F[B])(Functor[F]):EitherT[F,A,B]"></a>
       <span class="permalink">
       <a href="../../cats/data/EitherT$.html#liftT[F[_],A,B](fb:F[B])(implicitF:cats.Functor[F]):cats.data.EitherT[F,A,B]" title="Permalink">

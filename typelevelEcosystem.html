@@ -1,0 +1,638 @@
+<!DOCTYPE html><html><head><title>Cats: Typelevel Ecosystem</title><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Cats contributors" /><meta name="description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="og:image" content="/cats/img/poster.png" /><meta name="image" property="og:image" content="/cats/img/poster.png" /><meta name="og:title" content="Cats: Typelevel Ecosystem" /><meta name="title" property="og:title" content="Cats: Typelevel Ecosystem" /><meta name="og:site_name" content="Cats" /><meta name="og:url" content="http://typelevel.org/cats/" /><meta name="og:type" content="website" /><meta name="og:description" content="Lightweight, modular, and extensible library for functional programming" /><link rel="icon" type="image/png" href="/cats/img/favicon.png" /><meta name="twitter:title" content="Cats: Typelevel Ecosystem" /><meta name="twitter:image" content="/cats/img/poster.png" /><meta name="twitter:description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="twitter:card" content="summary_large_image" /><link rel="icon" type="image/png" sizes="16x16" href="/cats/img/favicon16x16.png" /><link rel="icon" type="image/png" sizes="24x24" href="/cats/img/favicon24x24.png" /><link rel="icon" type="image/png" sizes="32x32" href="/cats/img/favicon32x32.png" /><link rel="icon" type="image/png" sizes="48x48" href="/cats/img/favicon48x48.png" /><link rel="icon" type="image/png" sizes="57x57" href="/cats/img/favicon57x57.png" /><link rel="icon" type="image/png" sizes="60x60" href="/cats/img/favicon60x60.png" /><link rel="icon" type="image/png" sizes="64x64" href="/cats/img/favicon64x64.png" /><link rel="icon" type="image/png" sizes="70x70" href="/cats/img/favicon70x70.png" /><link rel="icon" type="image/png" sizes="72x72" href="/cats/img/favicon72x72.png" /><link rel="icon" type="image/png" sizes="76x76" href="/cats/img/favicon76x76.png" /><link rel="icon" type="image/png" sizes="96x96" href="/cats/img/favicon96x96.png" /><link rel="icon" type="image/png" sizes="114x114" href="/cats/img/favicon114x114.png" /><link rel="icon" type="image/png" sizes="120x120" href="/cats/img/favicon120x120.png" /><link rel="icon" type="image/png" sizes="128x128" href="/cats/img/favicon128x128.png" /><link rel="icon" type="image/png" sizes="144x144" href="/cats/img/favicon144x144.png" /><link rel="icon" type="image/png" sizes="150x150" href="/cats/img/favicon150x150.png" /><link rel="icon" type="image/png" sizes="152x152" href="/cats/img/favicon152x152.png" /><link rel="icon" type="image/png" sizes="196x196" href="/cats/img/favicon196x196.png" /><link rel="icon" type="image/png" sizes="310x310" href="/cats/img/favicon310x310.png" /><link rel="icon" type="image/png" sizes="310x150" href="/cats/img/favicon310x150.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" /><link rel="stylesheet" href="/cats/highlight/styles/atom-one-light.css" /><link rel="stylesheet" href="/cats/css/pattern-style.css" /></head><body><header id="site-header"><div class="navbar-wrapper navbar-inverse"><div class="container"><div class="navbar-header"><button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="/cats/" class="brand"><div class="icon-wrapper"><span>Cats</span></div></a></div><nav class="text-right"><ul class=""><li><a href="https://github.com/typelevel/cats" target="_blank" rel="noopener noreferrer"><i class="fa fa-github"></i><span class="hidden-xs">GitHub</span></a></li><li><a href="/cats/api/cats/index.html"><i class="fa fa-file-text"></i><span class="hidden-xs">API Documentation</span></a></li></ul></nav></div></div><div class="jumbotron" style="background-image:url('/cats/img/jumbotron_pattern.png')"></div><div id="horizontal-menu"><ul class="horizontal-nav"><li><a class="" href="/cats/">Home</a></li><li><a class="" href="/cats/typeclasses.html">Type Classes</a></li><li><a class="" href="/cats/datatypes.html">Data Types</a></li><li><a class="" href="/cats/motivations.html">Motivations</a></li><li><a class="" href="/cats/resources_for_learners.html">Resources for Learners</a></li><li><a class="" href="/cats/faq.html">FAQ</a></li><li><a class="" href="/cats/contributing.html">Contributing</a></li><li><a class="" href="/cats/colophon.html">Colophon</a></li><li><a class="" href="/cats/nomenclature.html">Glossary</a></li><li><a class="" href="/cats/guidelines.html">Guidelines</a></li><li><a class=" active " href="/cats/typelevelEcosystem.html">Typelevel Ecosystem</a></li></ul></div></header><main id="site-main" class="page-site-main"><section class="use"><div class="container"><div id="content"><h1 id="typelevel-ecosystem">Typelevel Ecosystem</h1>
+
+<p>By sharing the same set of type classes, instances and data types provided by Cats, projects can speak the same “Cats language”, and integrate with each other with ease.</p>
+
+<h2 id="libraries">Libraries</h2>
+
+<p>Here you can find a comprehensive list of libraries and projects related to Typelevel:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Project</th>
+      <th style="text-align: center">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/ChristopherDavenport/mules">Mules</a></td>
+      <td style="text-align: center">In memory caching.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://christopherdavenport.github.io/agitation/">agitation</a></td>
+      <td style="text-align: center">Cooperative Cancelation for <a href="https://typelevel.org/cats-effect/">cats effect</a>.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://christopherdavenport.github.io/ancient-concurrent/">ancient-concurrent</a></td>
+      <td style="text-align: center"><a href="https://typelevel.org/cats-effect/">cats effect</a> concurrent for cats-effect 0.10.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://tpolecat.github.io/atto/">atto</a></td>
+      <td style="text-align: center">Friendly little text parsers.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/ChristopherDavenport/bank">bank</a></td>
+      <td style="text-align: center">Concurrent Vault Management.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/augustjune/canoe">canoe</a></td>
+      <td style="text-align: center">A purely functional library for building <a href="https://telegram.org/">Telegram</a> chatbots.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://typelevel.org/cats-effect/">cats effect</a></td>
+      <td style="text-align: center">High-performance, asynchronous, composable framework for building real-world applications in a purely functional style.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/djspiewak/cats-effect-testing">cats-effect-testing</a></td>
+      <td style="text-align: center">Experimental integration between <a href="https://typelevel.org/cats-effect/">cats effect</a> and testing frameworks.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://christopherdavenport.github.io/cats-effect-time/">cats-effect-time</a></td>
+      <td style="text-align: center">Java Time from <a href="https://typelevel.org/cats-effect/">cats effect</a>.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://cb372.github.io/cats-retry/">cats-retry</a></td>
+      <td style="text-align: center">Composable retry logic for <a href="Https://Typelevel.Org/Cats/">Cats</a> and <a href="https://typelevel.org/cats-effect/">cats effect</a>.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://christopherdavenport.github.io/cats-scalacheck/">cats-scalacheck</a></td>
+      <td style="text-align: center"><a href="Https://Typelevel.Org/Cats/">Cats</a> typeclass instances for <a href="https://www.scalacheck.org/">ScalaCheck</a>.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://timwspence.github.io/cats-stm/">cats-stm</a></td>
+      <td style="text-align: center">Software Transactional Memory for <a href="https://typelevel.org/cats-effect/">cats effect</a>.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://christopherdavenport.github.io/cats-time/">cats-time</a></td>
+      <td style="text-align: center"><a href="Https://Typelevel.Org/Cats/">Cats</a> typeclass instances for <a href="https://docs.oracle.com/javase/8/docs/api/java/time/package-summary.html">java.time</a>.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/mgdigital/Chromaprint.scala">chromaprint</a></td>
+      <td style="text-align: center">A Scala implementation of the Chromaprint/AcoustID audio fingerprinting algorithm, built with <a href="https://fs2.io/index.html">fs2</a> streams / <a href="https://typelevel.org/cats-effect/">cats effect</a>.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/circe/circe-fs2">circe-fs2</a></td>
+      <td style="text-align: center">Streaming JSON manipulation with <a href="https://circe.github.io/circe/">circe</a>.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://circe.github.io/circe/">circe</a></td>
+      <td style="text-align: center">Pure functional JSON library.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://christopherdavenport.github.io/circuit/">circuit</a></td>
+      <td style="text-align: center">Functional Circuit Breaker implementation.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://cir.is/">ciris</a></td>
+      <td style="text-align: center">Lightweight, extensible, and validated configuration loading in Scala.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://console4cats.profunktor.dev/">console4cats</a></td>
+      <td style="text-align: center">Console I/O for <a href="https://typelevel.org/cats-effect/">cats effect</a>.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://christopherdavenport.github.io/cormorant/">cormorant</a></td>
+      <td style="text-align: center">CSV handling library for FP.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/erikerlandson/coulomb">coulomb-cats</a></td>
+      <td style="text-align: center"><a href="Https://Typelevel.Org/Cats/">Cats</a> typeclass instances for coulomb Quantity.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="http://ben.kirw.in/decline/">decline</a></td>
+      <td style="text-align: center">A composable command-line parser.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://christopherdavenport.github.io/doobie-pool/">doobie-pool</a></td>
+      <td style="text-align: center">Doobie Pooling Mechanism in Pure FP.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://tpolecat.github.io/doobie/">doobie</a></td>
+      <td style="text-align: center">Pure functional JDBC built on <a href="https://fs2.io/index.html">fs2</a>.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/higherkindness/droste">droste</a></td>
+      <td style="text-align: center">Recursion schemes for <a href="Https://Typelevel.Org/Cats/">Cats</a>.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/ThoughtWorksInc/dsl-domains-cats">dsl-domains-cats</a></td>
+      <td style="text-align: center">The !-notation for creating <a href="Https://Typelevel.Org/Cats/">Cats</a> monadic expressions.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://christopherdavenport.github.io/dynamapath/">dynamapath</a></td>
+      <td style="text-align: center">Dynamic Path Parsing.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://atnos-org.github.io/eff/">eff</a></td>
+      <td style="text-align: center">Functional effects and effect handlers (alternative to monad transformers).</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/ChristopherDavenport/epimetheus-circuit/">epimetheus-circuit</a></td>
+      <td style="text-align: center">Prometeus Rejected Execution Metrics.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/ChristopherDavenport/epimetheus-http4s">epimetheus-http4s</a></td>
+      <td style="text-align: center">Prometeus Http4s Metrics Middleware and Push Gateway Support.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/ChristopherDavenport/epimetheus-log4cats">epimetheus-log4cats</a></td>
+      <td style="text-align: center">Prometeus Logging Metrics.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/ChristopherDavenport/epimetheus-redis4cats">epimetheus-redis4cats</a></td>
+      <td style="text-align: center">Prometeus Redis4cats Metrics.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://christopherdavenport.github.io/epimetheus/">epimetheus</a></td>
+      <td style="text-align: center">Prometeus Core Reperesentations.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://janstenpickle.github.io/extruder/">extruder</a></td>
+      <td style="text-align: center">Populate case classes from any data source.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/johnynek/fastparse-cats">fastparse-cats</a></td>
+      <td style="text-align: center"><a href="Https://Typelevel.Org/Cats/">Cats</a> Monad and Alternative instances for <a href="https://www.lihaoyi.com/fastparse/">fastparse</a>.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://fd4s.github.io/fs2-kafka/">fd4s/fs2-kafka</a></td>
+      <td style="text-align: center">Functional <a href="Https://Kafka.Apache.Org/">Kafka</a> Streams for Scala.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://47degrees.github.io/fetch/">fetch</a></td>
+      <td style="text-align: center">Efficient data access to heterogeneous data sources.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://finagle.github.io/finch/">finch</a></td>
+      <td style="text-align: center">Scala combinator api for building <a href="https://twitter.github.io/finagle/">finagle</a> http services.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/typelevel/frameless">frameless</a></td>
+      <td style="text-align: center">Expressive types for <a href="https://spark.apache.org/">Spark</a>.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="http://frees.io/">freestyle</a></td>
+      <td style="text-align: center">Pure functional framework for free and tagless final applications and libraries.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/laserdisc-io/fs2-aws">fs2-aws</a></td>
+      <td style="text-align: center"><a href="https://fs2.io/index.html">Fs2</a> streams to interact with AWS utilities.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/lendup/fs2-blobstore">fs2-blobstore</a></td>
+      <td style="text-align: center">Minimal, idiomatic, stream-based Scala interface for S3, GCS, SFTP and other key/value store implementations.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://spinoco.github.io/fs2-cassandra/">fs2-cassandra</a></td>
+      <td style="text-align: center"><a href="https://cassandra.apache.org/">Cassandra</a> bindings for <a href="https://fs2.io/index.html">fs2</a>.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://gitlab.com/lJoublanc/fs2-columns">fs2-columns</a></td>
+      <td style="text-align: center">A Chunk that uses <a href="https://github.com/milessabin/shapeless">Shapeless</a> to store case class data column-wise.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://gitlab.com/lJoublanc/fs2-columns">fs2-cron</a></td>
+      <td style="text-align: center"><a href="https://fs2.io/index.html">Fs2</a> streams based on cron expressions.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/Spinoco/fs2-crypto">fs2-crypto</a></td>
+      <td style="text-align: center">TLS support for <a href="https://fs2.io/index.html">fs2</a>.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://fs2-data.gnieh.org/">fs2-data</a></td>
+      <td style="text-align: center">A set of data parsers and manipulation libraries for various formats for <a href="https://fs2.io/index.html">fs2</a>.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/amarrella/fs2-elastic">fs2-elastic</a></td>
+      <td style="text-align: center">Simple client for Elasticsearch.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/regis-leray/fs2-ftp">fs2-ftp</a></td>
+      <td style="text-align: center">Simple client for Ftp/Ftps/Sftp using <a href="https://fs2.io/index.html">fs2</a> and <a href="https://typelevel.org/cats-effect/">cats effect</a>.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/permutive/fs2-google-pubsub">fs2-google-pubsub</a></td>
+      <td style="text-align: center">A Google Cloud Pub/Sub implementation using <a href="https://fs2.io/index.html">fs2</a> and <a href="https://typelevel.org/cats-effect/">cats effect</a>.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/fiadliel/fs2-grpc">fs2-grpc</a></td>
+      <td style="text-align: center">GRPC implementation for <a href="https://fs2.io/index.html">Fs2</a> / <a href="https://typelevel.org/cats-effect/">cats effect</a>.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/Spinoco/fs2-http">fs2-http</a></td>
+      <td style="text-align: center">Http server and client library implemented in <a href="https://fs2.io/index.html">fs2</a>.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/kiambogo/fs2-jms">fs2-jms</a></td>
+      <td style="text-align: center">Java Messaging Service (JMS) connectors for <a href="https://fs2.io/index.html">Fs2</a> streams.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/Spinoco/fs2-log">fs2-log</a></td>
+      <td style="text-align: center">Simple logging facade for <a href="https://fs2.io/index.html">fs2</a>.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/Spinoco/fs2-mail">fs2-mail</a></td>
+      <td style="text-align: center">Fully asynchronous Java non-blocking email client using <a href="https://fs2.io/index.html">fs2</a>.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/user-signal/fs2-mqtt/">fs2-mqtt</a></td>
+      <td style="text-align: center">A purely functional MQTT client library based on <a href="https://fs2.io/index.html">fs2</a> and <a href="https://typelevel.org/cats-effect/">cats effect</a>.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://fs2-rabbit.profunktor.dev/">fs2-rabbit</a></td>
+      <td style="text-align: center"><a href="https://www.rabbitmq.com/">RabbitMQ</a> stream-based client built on top of <a href="https://fs2.io/index.html">fs2</a> and <a href="https://typelevel.org/cats-effect/">cats effect</a>.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/zainab-ali/fs2-reactive-streams">fs2-reactive-streams</a></td>
+      <td style="text-align: center">A reactive streams implementation for <a href="https://fs2.io/index.html">fs2</a>.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/precog/fs2-ssh">fs2-ssh</a></td>
+      <td style="text-align: center">A wrapper around Apache SSHD targeting <a href="https://typelevel.org/cats-effect/">cats effect</a> and <a href="https://fs2.io/index.html">fs2</a>.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/Spinoco/fs2-zk">fs2-zk</a></td>
+      <td style="text-align: center">Simple Apache <a href="https://zookeeper.apache.org/">Zookeeper</a> bindings for <a href="https://fs2.io/index.html">fs2</a>.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://fs2.io/index.html">fs2</a></td>
+      <td style="text-align: center">Functional streams for Scala (streaming I/O library).</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://christopherdavenport.github.io/fuuid-annotation/">fuuid-annotation</a></td>
+      <td style="text-align: center">Automatically create an inner Id tagged FUUID type with convenient methods for its creation.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://christopherdavenport.github.io/fuuid/">fuuid</a></td>
+      <td style="text-align: center">Functional UUID’s.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://christopherdavenport.github.io/gato-parsec/">gato-parsec</a></td>
+      <td style="text-align: center">Generalized attoparsec with <a href="Https://Typelevel.Org/Cats/">Cats</a>.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="http://47degrees.github.io/github4s/">github4s</a></td>
+      <td style="text-align: center">Wrapper around the GitHub API.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://christopherdavenport.github.io/github/">github</a></td>
+      <td style="text-align: center">Github Integration for Scala.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://opensource.zalando.com/grafter/">grafter</a></td>
+      <td style="text-align: center">Dependency-injection library using the Reader pattern.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/YannMoisan/graphite4s">graphite4s</a></td>
+      <td style="text-align: center">Lightweight graphite client.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/BenFradet/gsheets4s">gsheets4s</a></td>
+      <td style="text-align: center">Wrapper around the Google Sheets API.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://pepegar.com/hammock">hammock</a></td>
+      <td style="text-align: center">Purely functional HTTP client.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/kailuowang/henkan">henkan</a></td>
+      <td style="text-align: center">Type safe conversion between case class instances with similar fields.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://http4s.org/">http4s</a></td>
+      <td style="text-align: center">Minimal, idiomatic Scala interface for HTTP services using <a href="https://fs2.io/index.html">fs2</a>.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/frees-io/iota">iota</a></td>
+      <td style="text-align: center">Fast [co]product types with a clean syntax.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/gekomad/itto-csv">itto-csv</a></td>
+      <td style="text-align: center">Pure functional library for working with CSV.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://banno.github.io/kafka4s/">kafka4s</a></td>
+      <td style="text-align: center">Functional programming with <a href="Https://Kafka.Apache.Org/">Kafka</a> and Scala.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/bogdanromanx/kamon-monix">kamon-monix</a></td>
+      <td style="text-align: center"><a href="https://github.com/kamon-io/Kamon">Kamon</a> Integration for <a href="Https://Monix.Io/">Monix</a>.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://christopherdavenport.github.io/keysemaphore/">keysemaphore</a></td>
+      <td style="text-align: center">Keyed Semaphore implementation.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/ChristopherDavenport/library.g8">library.g8</a></td>
+      <td style="text-align: center">Library Starter Template.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://christopherdavenport.github.io/linebacker/">linebacker</a></td>
+      <td style="text-align: center">Thread pool management for Scala: Enabling functional blocking where needed.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://christopherdavenport.github.io/log4cats-log4s">log4cats-log4s</a></td>
+      <td style="text-align: center">Log4s support for <a href="https://christopherdavenport.github.io/log4cats/">log4cats</a>.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://christopherdavenport.github.io/log4cats-mtl/">log4cats-mtl</a></td>
+      <td style="text-align: center">Provide MTL support for <a href="https://christopherdavenport.github.io/log4cats/">log4cats</a>.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://christopherdavenport.github.io/log4cats-scribe">log4cats-scribe</a></td>
+      <td style="text-align: center">Scribe support for <a href="https://christopherdavenport.github.io/log4cats/">log4cats</a>.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://christopherdavenport.github.io/log4cats/">log4cats</a></td>
+      <td style="text-align: center">Functional logging.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://christopherdavenport.github.io/mapref/">mapref</a></td>
+      <td style="text-align: center">Refs optimized around maps.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/kailuowang/mau">mau</a></td>
+      <td style="text-align: center">A tiny library for an auto polling ref.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://olivierblanvillain.github.io/monadic-html/">monadic-html</a></td>
+      <td style="text-align: center">Tiny DOM binding library for Scala.js.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://gitlab.com/lJoublanc/mongosaur">mongosaur</a></td>
+      <td style="text-align: center"><a href="Https://Fs2.Io/Index.Html">Fs2</a>-based MongoDB driver.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://bio.monix.io/">monix bio</a></td>
+      <td style="text-align: center">Io alternative with typed errors.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://connect.monix.io/">monix-connect</a></td>
+      <td style="text-align: center">stream integrations for <a href="Https://Monix.Io/">Monix</a>.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/monix/monix-kafka">monix-kafka</a></td>
+      <td style="text-align: center"><a href="Https://Monix.Io/">Monix</a> integration with <a href="Https://Kafka.Apache.Org/">Kafka</a>.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/monix/monix-nio">monix-nio</a></td>
+      <td style="text-align: center">Java NIO utilities for usage with <a href="Https://Monix.Io/">Monix</a>.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://monix.io/">monix</a></td>
+      <td style="text-align: center">High-performance library for composing asynchronous and event-based programs.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://www.optics.dev/Monocle/">monocle</a></td>
+      <td style="text-align: center">An optics library for Scala (and Scala.js) strongly inspired by <a href="https://hackage.haskell.org/package/lens">Haskell Lens</a>.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://christopherdavenport.github.io/monoids/">monoids</a></td>
+      <td style="text-align: center">Generic Monoids in Scala.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/danslapman/morphling">morphling</a></td>
+      <td style="text-align: center">Free applicative schemas &amp; instance derivation.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://christopherdavenport.github.io/mules-http4s-redis">mules-http4s-redis</a></td>
+      <td style="text-align: center"><a href="https://github.com/ChristopherDavenport/mules">Mules</a> Distributed Http Caching Support.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://christopherdavenport.github.io/mules-http4s/">mules-http4s</a></td>
+      <td style="text-align: center"><a href="https://github.com/ChristopherDavenport/mules">Mules</a> Http4s Caching Implementation for Caching Servers and Client Http Interactions According to the Http Spec.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://christopherdavenport.github.io/mules-redis/">mules-redis</a></td>
+      <td style="text-align: center"><a href="https://github.com/ChristopherDavenport/mules">Mules</a> Redis Support.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/allwefantasy/spark-binlog">mysql-binlog-stream</a></td>
+      <td style="text-align: center">Stream MySQL binlog events with <a href="https://fs2.io/index.html">Fs2</a>.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/tpolecat/natchez">natchez</a></td>
+      <td style="text-align: center">An opentracing library, to use with Jaegger, Honeycomb, OpenCensus, and Lightstep.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://neotypes.github.io/neotypes/">neotypes</a></td>
+      <td style="text-align: center">A Scala lightweight, type-safe &amp; asynchronous driver for neo4j. Support streaming queries using <a href="https://fs2.io/index.html">fs2</a>.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://cr-org.github.io/neutron/">neutron</a></td>
+      <td style="text-align: center">Apache Pulsar bindings for <a href="https://fs2.io/index.html">fs2</a>.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://julien-truffaut.github.io/newts/">newts</a></td>
+      <td style="text-align: center">Defines newtypes compatible with <a href="Https://Typelevel.Org/Cats/">Cats</a> type classes.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/valskalla/odin">odin</a></td>
+      <td style="text-align: center">Fast &amp; functional logger with own logging backend.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/atnos-org/origami">origami</a></td>
+      <td style="text-align: center">Monadic folds.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/alirezameskin/phony">phony</a></td>
+      <td style="text-align: center">Fake data generator.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/sksamuel/pulsar4s">pulsar4s</a></td>
+      <td style="text-align: center">concise, idiomatic, reactive, type safe Scala client for <a href="https://pulsar.apache.org/">Apache Pulsar</a>.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://pureconfig.github.io/">pureconfig</a></td>
+      <td style="text-align: center">A boilerplate-free library for loading configuration files.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://rainier.fit/">rainier</a></td>
+      <td style="text-align: center">Bayesian inference in Scala.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://christopherdavenport.github.io/random/">random</a></td>
+      <td style="text-align: center">Pure randomness in Scala.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/ChristopherDavenport/read">read</a></td>
+      <td style="text-align: center">Read Typeclass.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://christopherdavenport.github.io/rediculous/">rediculous</a></td>
+      <td style="text-align: center">Pure FP <a href="https://redis.io/">Redis</a> client.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://redis4cats.profunktor.dev/">redis4cats</a></td>
+      <td style="text-align: center"><a href="https://redis.io/">Redis</a> client built on top of <a href="https://fs2.io/index.html">fs2</a> and <a href="https://typelevel.org/cats-effect/">cats effect</a>.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/fthomas/refined">refined</a></td>
+      <td style="text-align: center">Simple refinement types for Scala.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/sangria-graphql/sangria-monix">sangria-monix</a></td>
+      <td style="text-align: center">Sangria integration for <a href="Https://Monix.Io/">Monix</a>.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://christopherdavenport.github.io/sbt-mima-version-check/">sbt-mima-version-check</a></td>
+      <td style="text-align: center">Plugin to automate which mima versions to check.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://cb372.github.io/scalacache/">scala cache</a></td>
+      <td style="text-align: center">A facade for the most popular cache implementations for Scala.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/snowplow/scala-forex">scala-forex</a></td>
+      <td style="text-align: center">Exchange rate lookups.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/snowplow/scala-maxmind-iplookups">scala-maxmind-ip-lookups</a></td>
+      <td style="text-align: center">IP geolocation through the Maxmind database.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/snowplow-referer-parser/scala-referer-parser">scala-referer-parser</a></td>
+      <td style="text-align: center">Referer parsing.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://www.scalarl.com/">scala-rl</a></td>
+      <td style="text-align: center">Functional, monadic reinforcement learning in Scala.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/snowplow/scala-weather">scala-weather</a></td>
+      <td style="text-align: center">Weather lookups.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://www.scanamo.org/">scanamo</a></td>
+      <td style="text-align: center">Simpler <a href="https://aws.amazon.com/dynamodb/">DynamoDB</a> access for Scala.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://gitlab.com/lJoublanc/scarctic">scarctic</a></td>
+      <td style="text-align: center"><a href="Https://Fs2.Io/Index.Html">Fs2</a>-based driver for MAN/AHL’s Arctic data store.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/scodec/scodec-protocols">scodec-protocols</a></td>
+      <td style="text-align: center">A library for working with libpcap files. Contains many interesting pipes (e.g., working with time series and playing back streams at various rates).</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/scodec/scodec-stream">scodec-stream</a></td>
+      <td style="text-align: center">A library for streaming binary decoding and encoding, built using <a href="https://fs2.io/index.html">fs2</a> and scodec.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/durban/seals">seals</a></td>
+      <td style="text-align: center">Tools for schema evolution and language-integrated schemata.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/ChristopherDavenport/semigroups">semigroups</a></td>
+      <td style="text-align: center">Set of generic semigroup types and accompanying instances very useful for abstract programming.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/djspiewak/shims">shims</a></td>
+      <td style="text-align: center">Seamless interoperability for <a href="Https://Typelevel.Org/Cats/">Cats</a> and <a href="https://scalaz.github.io/7/">Scalaz</a> typeclasses and datatypes.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://tpolecat.github.io/skunk/">skunk</a></td>
+      <td style="text-align: center">A data access library for Scala + <a href="https://www.postgresql.org/">Postgres</a>.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/fingo/spata">spata</a></td>
+      <td style="text-align: center">CSV parser build on <a href="https://fs2.io/index.html">Fs2</a>.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/Spinoco/fs2-kafka">spinoco/fs2-kafka</a></td>
+      <td style="text-align: center">Simple client for Apache <a href="Https://Kafka.Apache.Org/">Kafka</a>.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://d2a4u.github.io/sqs4s/">sqs4s</a></td>
+      <td style="text-align: center">A pure Scala client for <a href="https://www.postgresql.org/">AWS SQS</a> using <a href="https://fs2.io/index.html">fs2</a>.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/krasserm/streamz">streamz</a></td>
+      <td style="text-align: center">A library that supports the conversion of <a href="https://doc.akka.io/docs/akka/current/stream/index.html">Akka Stream</a> Sources, Flows and Sinks to and from <a href="https://fs2.io/index.html">Fs2</a> Streams, Pipes and Sinks, respectively. It also supports the usage of <a href="https://camel.apache.org/">Apache Camel</a> endpoints in <a href="https://fs2.io/index.html">Fs2</a> Streams and Akka Stream Sources, Flows and SubFlows.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/softwaremill/sttp">sttp</a></td>
+      <td style="text-align: center">The Scala HTTP client you always wanted.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://sup.kubukoz.com/">sup</a></td>
+      <td style="text-align: center">Composable, purely functional healthchecks in Scala.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://christopherdavenport.github.io/synchronized/">synchronized</a></td>
+      <td style="text-align: center">Synchronous resource access.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/ChristopherDavenport/system-effect">system-effect</a></td>
+      <td style="text-align: center">Console and Environment Simple Tools.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/ChristopherDavenport/testcontainers-specs2">testcontainers-specs2</a></td>
+      <td style="text-align: center">Test Containers Support for Specs2.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://jmcardon.github.io/tsec/">tsec</a></td>
+      <td style="text-align: center">Typesafe, functional, general purpose cryptography and security library.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://christopherdavenport.github.io/unique/">unique</a></td>
+      <td style="text-align: center">Unique functional values for Scala.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/SystemFw/upperbound">upperbound</a></td>
+      <td style="text-align: center">A purely functional, interval-based rate limiter with support for backpressure.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://christopherdavenport.github.io/vault/">vault</a></td>
+      <td style="text-align: center">Type-safe, persistent storage for values of arbitrary types.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://www.vinyldns.io/">vinyldns</a></td>
+      <td style="text-align: center">A DNS governance system using <a href="https://fs2.io/index.html">fs2</a> for throttling updates to DNS backends.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="https://christopherdavenport.github.io/whale-tail">whale-tail</a></td>
+      <td style="text-align: center">Docker Daemon Integration.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Your project talks Cats too? <a href="https://github.com/typelevel/cats/edit/master/docs/src/main/mdoc/TypelevelEcosystem.md">Submit a PR to add it here!</a></p>
+
+<p><em>The full-size <a href="https://typelevel.org/cats/img/cats-logo.png">Cats logo</a> is available for use for Cats related projects, contents, souvenirs, etc.</em></p>
+
+<p><em>We offer a <a href="https://typelevel.org/cats/img/cats-badge.svg">Cats Friendly Badge</a> to let others know your project works with Cats!</em></p>
+
+<p><img src="https://typelevel.org/cats/img/cats-badge-normal.png" alt="Cats Friendly Badge" /></p>
+
+<p>Below are quick html and markdown snippets to use the badge in your own project.</p>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"https://typelevel.org/cats/"</span><span class="nt">&gt;&lt;img</span> <span class="na">src=</span><span class="s">"https://typelevel.org/cats/img/cats-badge-tiny.png"</span> <span class="na">alt=</span><span class="s">"Cats friendly"</span> <span class="nt">/&gt;&lt;/a&gt;</span>
+</code></pre></div></div>
+<div class="language-markdown highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">![</span><span class="nv">Cats Friendly Badge</span><span class="p">](</span><span class="sx">https://typelevel.org/cats/img/cats-badge-tiny.png</span><span class="p">)</span>
+</code></pre></div></div>
+</div></div></section></main><footer id="site-footer"><div class="container"><div class="row"><div class="col-xs-6"><p>Cats is designed and developed by <a href="https://github.com/typelevel/cats" target="_blank" rel="noopener noreferrer">Cats contributors</a></p></div><div class="col-xs-6"><p class="text-right"><a href="https://github.com/typelevel/cats" target="_blank" rel="noopener noreferrer"><span class="fa fa-github"></span>View on GitHub</a></p></div></div><div class="row"><div class="col-xs-6">
+<p>© 2020 <a href="https://github.com/typelevel/cats#maintainers">The Cats Maintainers</a></p>
+<p style="font-size: 80%; margin-top: 10px">Website built with <a href="https://47deg.github.io/sbt-microsites/">sbt-microsites © 2020 47 Degrees</a></p>
+</div></div></div></footer><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/cats/highlight/highlight.pack.js"></script><script>
+// For all code blocks, copy the language from the containing div
+// to the inner code tag (where hljs expects it to be)
+const langPrefix = 'language-';
+document.querySelectorAll(`div[class^='${langPrefix}']`).forEach(function(div) {
+  div.classList.forEach(function(cssClass) {
+    if (cssClass.startsWith(langPrefix)) {
+      const lang = cssClass.substring(langPrefix.length);
+      div.querySelectorAll('pre code').forEach(function(code) {
+        code.classList.add(lang);
+      });
+    }
+  });
+});
+
+hljs.configure({languages:['scala','java','bash']});
+hljs.initHighlightingOnLoad();
+      </script><script>console.info('\x57\x65\x62\x73\x69\x74\x65\x20\x62\x75\x69\x6c\x74\x20\x77\x69\x74\x68\x3a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x5f\x5f\x20\x20\x20\x20\x5f\x5f\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x5f\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x5f\x20\x5f\x5f\x0a\x20\x20\x20\x5f\x5f\x5f\x5f\x5f\x2f\x20\x2f\x5f\x20\x20\x2f\x20\x2f\x5f\x20\x20\x20\x20\x20\x20\x5f\x5f\x5f\x5f\x20\x5f\x5f\x5f\x20\x20\x28\x5f\x29\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x20\x20\x5f\x5f\x5f\x5f\x5f\x28\x5f\x29\x20\x2f\x5f\x5f\x5f\x5f\x20\x20\x5f\x5f\x5f\x5f\x5f\x0a\x20\x20\x2f\x20\x5f\x5f\x5f\x2f\x20\x5f\x5f\x20\x5c\x2f\x20\x5f\x5f\x2f\x5f\x5f\x5f\x5f\x5f\x2f\x20\x5f\x5f\x20\x60\x5f\x5f\x20\x5c\x2f\x20\x2f\x20\x5f\x5f\x5f\x2f\x20\x5f\x5f\x5f\x2f\x20\x5f\x5f\x20\x5c\x2f\x20\x5f\x5f\x5f\x2f\x20\x2f\x20\x5f\x5f\x2f\x20\x5f\x20\x5c\x2f\x20\x5f\x5f\x5f\x2f\x0a\x20\x28\x5f\x5f\x20\x20\x29\x20\x2f\x5f\x2f\x20\x2f\x20\x2f\x5f\x2f\x5f\x5f\x5f\x5f\x5f\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x5f\x5f\x2f\x20\x2f\x20\x20\x2f\x20\x2f\x5f\x2f\x20\x28\x5f\x5f\x20\x20\x29\x20\x2f\x20\x2f\x5f\x2f\x20\x20\x5f\x5f\x28\x5f\x5f\x20\x20\x29\x0a\x2f\x5f\x5f\x5f\x5f\x2f\x5f\x2e\x5f\x5f\x5f\x2f\x5c\x5f\x5f\x2f\x20\x20\x20\x20\x20\x2f\x5f\x2f\x20\x2f\x5f\x2f\x20\x2f\x5f\x2f\x5f\x2f\x5c\x5f\x5f\x5f\x2f\x5f\x2f\x20\x20\x20\x5c\x5f\x5f\x5f\x5f\x2f\x5f\x5f\x5f\x5f\x2f\x5f\x2f\x5c\x5f\x5f\x2f\x5c\x5f\x5f\x5f\x2f\x5f\x5f\x5f\x5f\x2f\x0a\x0a\x68\x74\x74\x70\x73\x3a\x2f\x2f\x34\x37\x64\x65\x67\x2e\x67\x69\x74\x68\x75\x62\x2e\x69\x6f\x2f\x73\x62\x74\x2d\x6d\x69\x63\x72\x6f\x73\x69\x74\x65\x73')</script><script>((window.gitter = {}).chat = {}).options = {
+room: 'typelevel/cats'};</script><script src="https://sidecar.gitter.im/dist/sidecar.v1.js"></script><script src="/cats/js/version-selector.js"></script></body></html>

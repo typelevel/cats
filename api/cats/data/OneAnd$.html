@@ -81,10 +81,32 @@
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <a title="Symbolic aliases for various types are defined here." href="../index.html"><span class="name">cats</span></a>
+        <a title="The cats root package contains all the trait signatures of most Scala type classes." href="../index.html"><span class="name">cats</span></a>
       </span>
       
-      <p class="shortcomment cmt">Symbolic aliases for various types are defined here.</p><div class="fullcomment"><div class="comment cmt"><p>Symbolic aliases for various types are defined here.
+      <p class="shortcomment cmt">The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><p>Cats type classes are implemented using the approach from the
+ <a href="https://ropas.snu.ac.kr/~bruno/papers/TypeClasses.pdf" target="_blank">Type classes as objects and implicits</a> article.</p><p>For each type class, <code>cats</code> provides three pieces:
+- Its <b>signature</b>: a trait that is polymorphic on a type parameter.
+  Type class traits inherit from other type classes to indicate that any implementation of the lower type class (e.g. <code>Applicative</code>)
+  can also serve as an instance for the higuer type class (e.g. <code>Functor</code>).
+- Type class <b>'instances</b>, which are classes and objects that implement one or more type class signatures for some specific types.
+  Type class instances for several data types from the Java or Scala standard libraries are declared in the subpackage <code>cats.instances</code>.
+- <b>Syntax extensions</b>, each of which provides the methods of the type class defines as extension methods
+  (which in Scala 2 are encoded as implicit classes) for values of any type <code>F</code>; given that an instance of the type class
+  for the receiver type (<code>this</code>) is in the implicit scope.
+  Symtax extensions are declared in the <code>cats.syntax</code> package.
+- A set of <b>laws</b>, that are also generic on the type of the class, and are only defined on the operations of the type class.
+  The purpose of these laws is to declare some algebraic relations (equations) between Scala expressions involving the operations
+  of the type class, and test (but not verify) that implemented instances satisfy those equations.
+  Laws are defined in the <code>cats-laws</code> package.</p><p>Although most of cats type classes are declared in this package, some are declared in other packages:
+- type classes that operate on base types (kind <code>*</code>), and their implementations for standard library types,
+  are contained in <code>cats.kernel</code>, which is a different SBT project. However, they are re-exported from this package.
+- type classes of kind <code>F[_, _]</code>, such as <a href="../arrow/Profunctor.html" class="extype" name="cats.arrow.Profunctor">cats.arrow.Profunctor</a>&quot; or <a href="../arrow/Arrow.html" class="extype" name="cats.arrow.Arrow">cats.arrow.Arrow</a>, which are relevant for
+  Functional Reactive Programming or optics, are declared in the <code>cats.arrow</code> package.
+- Also, those type classes that abstract over (pure or impure) functional runtime effects are declared
+  in the <a href="https://typelevel.org/cats-effect/" target="_blank">cats-effect library</a>.
+- Some type classes for which no laws can be provided are left out of the main road, in a small and dirty alley.
+  These are the <code>alleycats</code>.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
     </li><li name="cats.data" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="data"></a><a id="data:data"></a>
@@ -138,6 +160,10 @@
                         <a class="object" href="Const$.html" title=""></a>
                         <a class="class" href="Const.html" title="Const is a phantom type, it does not contain a value of its second type parameter B Const can be seen as a type level version of Function.const[A, B]: A =&gt; B =&gt; A"></a>
                         <a href="Const.html" title="Const is a phantom type, it does not contain a value of its second type parameter B Const can be seen as a type level version of Function.const[A, B]: A =&gt; B =&gt; A">Const</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$Cont$.html" title=""></a>
+                        <a href="package$$Cont$.html" title="">Cont</a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="ContT$.html" title=""></a>
                         <a class="class" href="ContT.html" title="This is a continuation transformer based on the ContT in the Haskell package Control.Monad.Cont"></a>
@@ -198,6 +224,10 @@
                         <span class="separator"></span>
                         <a class="class" href="NonEmptyMapOps.html" title=""></a>
                         <a href="NonEmptyMapOps.html" title="">NonEmptyMapOps</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="NonEmptySeq$.html" title=""></a>
+                        <a class="class" href="NonEmptySeq.html" title="A data type which represents a Seq guaranteed to contain at least one element."></a>
+                        <a href="NonEmptySeq.html" title="A data type which represents a Seq guaranteed to contain at least one element.">NonEmptySeq</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="class" href="NonEmptySetOps.html" title=""></a>
@@ -266,6 +296,10 @@
                         <a class="object" href="ZipList$.html" title=""></a>
                         <a class="class" href="ZipList.html" title=""></a>
                         <a href="ZipList.html" title="">ZipList</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="ZipSeq$.html" title=""></a>
+                        <a class="class" href="ZipSeq.html" title=""></a>
+                        <a href="ZipSeq.html" title="">ZipSeq</a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="ZipStream$.html" title=""></a>
                         <a class="class" href="ZipStream.html" title=""></a>
@@ -426,9 +460,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="cats.data.OneAndLowPriority2#catsDataApplicativeForOneAnd" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataApplicativeForOneAnd[F[_]](implicitF:cats.Alternative[F]):cats.Applicative[[β$21$]cats.data.OneAnd[F,β$21$]]"></a><a id="catsDataApplicativeForOneAnd[F[_]](Alternative[F]):Applicative[[β$21$]OneAnd[F,β$21$]]"></a>
+      <a id="catsDataApplicativeForOneAnd[F[_]](implicitF:cats.Alternative[F]):cats.Applicative[[β$19$]cats.data.OneAnd[F,β$19$]]"></a><a id="catsDataApplicativeForOneAnd[F[_]](Alternative[F]):Applicative[[β$19$]OneAnd[F,β$19$]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/OneAnd$.html#catsDataApplicativeForOneAnd[F[_]](implicitF:cats.Alternative[F]):cats.Applicative[[β$21$]cats.data.OneAnd[F,β$21$]]" title="Permalink">
+      <a href="../../cats/data/OneAnd$.html#catsDataApplicativeForOneAnd[F[_]](implicitF:cats.Alternative[F]):cats.Applicative[[β$19$]cats.data.OneAnd[F,β$19$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -437,7 +471,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataApplicativeForOneAnd</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Alternative.html" class="extype" name="cats.Alternative">Alternative</a>[<span class="extype" name="cats.data.OneAndLowPriority2.catsDataApplicativeForOneAnd.F">F</span>]</span>)</span><span class="result">: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[[β$21$]<a href="OneAnd.html" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAndLowPriority2.catsDataApplicativeForOneAnd.F">F</span>, <span class="extype" name="cats.data.OneAndLowPriority2.&lt;refinement&gt;.Λ$.β$21$">β$21$</span>]]</span>
+        <span class="name">catsDataApplicativeForOneAnd</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Alternative.html" class="extype" name="cats.Alternative">Alternative</a>[<span class="extype" name="cats.data.OneAndLowPriority2.catsDataApplicativeForOneAnd.F">F</span>]</span>)</span><span class="result">: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[[β$19$]<a href="OneAnd.html" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAndLowPriority2.catsDataApplicativeForOneAnd.F">F</span>, <span class="extype" name="cats.data.OneAndLowPriority2.&lt;refinement&gt;.Λ$.β$19$">β$19$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OneAndLowPriority2</dd></dl></div>
@@ -474,9 +508,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OneAndInstances</dd></dl></div>
     </li><li name="cats.data.OneAndLowPriority3#catsDataFunctorForOneAnd" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataFunctorForOneAnd[F[_]](implicitF:cats.Functor[F]):cats.Functor[[β$19$]cats.data.OneAnd[F,β$19$]]"></a><a id="catsDataFunctorForOneAnd[F[_]](Functor[F]):Functor[[β$19$]OneAnd[F,β$19$]]"></a>
+      <a id="catsDataFunctorForOneAnd[F[_]](implicitF:cats.Functor[F]):cats.Functor[[β$17$]cats.data.OneAnd[F,β$17$]]"></a><a id="catsDataFunctorForOneAnd[F[_]](Functor[F]):Functor[[β$17$]OneAnd[F,β$17$]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/OneAnd$.html#catsDataFunctorForOneAnd[F[_]](implicitF:cats.Functor[F]):cats.Functor[[β$19$]cats.data.OneAnd[F,β$19$]]" title="Permalink">
+      <a href="../../cats/data/OneAnd$.html#catsDataFunctorForOneAnd[F[_]](implicitF:cats.Functor[F]):cats.Functor[[β$17$]cats.data.OneAnd[F,β$17$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -485,14 +519,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataFunctorForOneAnd</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.OneAndLowPriority3.catsDataFunctorForOneAnd.F">F</span>]</span>)</span><span class="result">: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[[β$19$]<a href="OneAnd.html" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAndLowPriority3.catsDataFunctorForOneAnd.F">F</span>, <span class="extype" name="cats.data.OneAndLowPriority3.&lt;refinement&gt;.Λ$.β$19$">β$19$</span>]]</span>
+        <span class="name">catsDataFunctorForOneAnd</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.OneAndLowPriority3.catsDataFunctorForOneAnd.F">F</span>]</span>)</span><span class="result">: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[[β$17$]<a href="OneAnd.html" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAndLowPriority3.catsDataFunctorForOneAnd.F">F</span>, <span class="extype" name="cats.data.OneAndLowPriority3.&lt;refinement&gt;.Λ$.β$17$">β$17$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OneAndLowPriority3</dd></dl></div>
     </li><li name="cats.data.OneAndInstances#catsDataMonadForOneAnd" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataMonadForOneAnd[F[_]](implicitmonad:cats.Monad[F],implicitalternative:cats.Alternative[F]):cats.Monad[[β$17$]cats.data.OneAnd[F,β$17$]]"></a><a id="catsDataMonadForOneAnd[F[_]](Monad[F],Alternative[F]):Monad[[β$17$]OneAnd[F,β$17$]]"></a>
+      <a id="catsDataMonadForOneAnd[F[_]](implicitmonad:cats.Monad[F],implicitalternative:cats.Alternative[F]):cats.Monad[[β$15$]cats.data.OneAnd[F,β$15$]]"></a><a id="catsDataMonadForOneAnd[F[_]](Monad[F],Alternative[F]):Monad[[β$15$]OneAnd[F,β$15$]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/OneAnd$.html#catsDataMonadForOneAnd[F[_]](implicitmonad:cats.Monad[F],implicitalternative:cats.Alternative[F]):cats.Monad[[β$17$]cats.data.OneAnd[F,β$17$]]" title="Permalink">
+      <a href="../../cats/data/OneAnd$.html#catsDataMonadForOneAnd[F[_]](implicitmonad:cats.Monad[F],implicitalternative:cats.Alternative[F]):cats.Monad[[β$15$]cats.data.OneAnd[F,β$15$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -501,14 +535,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataMonadForOneAnd</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="monad">monad: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.OneAndInstances.catsDataMonadForOneAnd.F">F</span>]</span>, <span name="alternative">alternative: <a href="../Alternative.html" class="extype" name="cats.Alternative">Alternative</a>[<span class="extype" name="cats.data.OneAndInstances.catsDataMonadForOneAnd.F">F</span>]</span>)</span><span class="result">: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[[β$17$]<a href="OneAnd.html" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAndInstances.catsDataMonadForOneAnd.F">F</span>, <span class="extype" name="cats.data.OneAndInstances.&lt;refinement&gt;.Λ$.β$17$">β$17$</span>]]</span>
+        <span class="name">catsDataMonadForOneAnd</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="monad">monad: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.OneAndInstances.catsDataMonadForOneAnd.F">F</span>]</span>, <span name="alternative">alternative: <a href="../Alternative.html" class="extype" name="cats.Alternative">Alternative</a>[<span class="extype" name="cats.data.OneAndInstances.catsDataMonadForOneAnd.F">F</span>]</span>)</span><span class="result">: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[[β$15$]<a href="OneAnd.html" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAndInstances.catsDataMonadForOneAnd.F">F</span>, <span class="extype" name="cats.data.OneAndInstances.&lt;refinement&gt;.Λ$.β$15$">β$15$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OneAndInstances</dd></dl></div>
     </li><li name="cats.data.OneAndLowPriority0#catsDataNonEmptyTraverseForOneAnd" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataNonEmptyTraverseForOneAnd[F[_]](implicitF:cats.Traverse[F],implicitF2:cats.Alternative[F]):cats.NonEmptyTraverse[[β$27$]cats.data.OneAnd[F,β$27$]]"></a><a id="catsDataNonEmptyTraverseForOneAnd[F[_]](Traverse[F],Alternative[F]):NonEmptyTraverse[[β$27$]OneAnd[F,β$27$]]"></a>
+      <a id="catsDataNonEmptyTraverseForOneAnd[F[_]](implicitF:cats.Traverse[F],implicitF2:cats.Alternative[F]):cats.NonEmptyTraverse[[β$25$]cats.data.OneAnd[F,β$25$]]"></a><a id="catsDataNonEmptyTraverseForOneAnd[F[_]](Traverse[F],Alternative[F]):NonEmptyTraverse[[β$25$]OneAnd[F,β$25$]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/OneAnd$.html#catsDataNonEmptyTraverseForOneAnd[F[_]](implicitF:cats.Traverse[F],implicitF2:cats.Alternative[F]):cats.NonEmptyTraverse[[β$27$]cats.data.OneAnd[F,β$27$]]" title="Permalink">
+      <a href="../../cats/data/OneAnd$.html#catsDataNonEmptyTraverseForOneAnd[F[_]](implicitF:cats.Traverse[F],implicitF2:cats.Alternative[F]):cats.NonEmptyTraverse[[β$25$]cats.data.OneAnd[F,β$25$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -517,7 +551,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataNonEmptyTraverseForOneAnd</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<span class="extype" name="cats.data.OneAndLowPriority0.catsDataNonEmptyTraverseForOneAnd.F">F</span>]</span>, <span name="F2">F2: <a href="../Alternative.html" class="extype" name="cats.Alternative">Alternative</a>[<span class="extype" name="cats.data.OneAndLowPriority0.catsDataNonEmptyTraverseForOneAnd.F">F</span>]</span>)</span><span class="result">: <a href="../NonEmptyTraverse.html" class="extype" name="cats.NonEmptyTraverse">NonEmptyTraverse</a>[[β$27$]<a href="OneAnd.html" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAndLowPriority0.catsDataNonEmptyTraverseForOneAnd.F">F</span>, <span class="extype" name="cats.data.OneAndLowPriority0.&lt;refinement&gt;.Λ$.β$27$">β$27$</span>]]</span>
+        <span class="name">catsDataNonEmptyTraverseForOneAnd</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<span class="extype" name="cats.data.OneAndLowPriority0.catsDataNonEmptyTraverseForOneAnd.F">F</span>]</span>, <span name="F2">F2: <a href="../Alternative.html" class="extype" name="cats.Alternative">Alternative</a>[<span class="extype" name="cats.data.OneAndLowPriority0.catsDataNonEmptyTraverseForOneAnd.F">F</span>]</span>)</span><span class="result">: <a href="../NonEmptyTraverse.html" class="extype" name="cats.NonEmptyTraverse">NonEmptyTraverse</a>[[β$25$]<a href="OneAnd.html" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAndLowPriority0.catsDataNonEmptyTraverseForOneAnd.F">F</span>, <span class="extype" name="cats.data.OneAndLowPriority0.&lt;refinement&gt;.Λ$.β$25$">β$25$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OneAndLowPriority0</dd></dl></div>
@@ -538,9 +572,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OneAndInstances</dd></dl></div>
     </li><li name="cats.data.OneAndLowPriority0_5#catsDataReducibleForOneAnd" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataReducibleForOneAnd[F[_]](implicitF:cats.Foldable[F]):cats.Reducible[[β$25$]cats.data.OneAnd[F,β$25$]]"></a><a id="catsDataReducibleForOneAnd[F[_]](Foldable[F]):Reducible[[β$25$]OneAnd[F,β$25$]]"></a>
+      <a id="catsDataReducibleForOneAnd[F[_]](implicitF:cats.Foldable[F]):cats.Reducible[[β$23$]cats.data.OneAnd[F,β$23$]]"></a><a id="catsDataReducibleForOneAnd[F[_]](Foldable[F]):Reducible[[β$23$]OneAnd[F,β$23$]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/OneAnd$.html#catsDataReducibleForOneAnd[F[_]](implicitF:cats.Foldable[F]):cats.Reducible[[β$25$]cats.data.OneAnd[F,β$25$]]" title="Permalink">
+      <a href="../../cats/data/OneAnd$.html#catsDataReducibleForOneAnd[F[_]](implicitF:cats.Foldable[F]):cats.Reducible[[β$23$]cats.data.OneAnd[F,β$23$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -549,7 +583,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataReducibleForOneAnd</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.data.OneAndLowPriority0_5.catsDataReducibleForOneAnd.F">F</span>]</span>)</span><span class="result">: <a href="../Reducible.html" class="extype" name="cats.Reducible">Reducible</a>[[β$25$]<a href="OneAnd.html" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAndLowPriority0_5.catsDataReducibleForOneAnd.F">F</span>, <span class="extype" name="cats.data.OneAndLowPriority0_5.&lt;refinement&gt;.Λ$.β$25$">β$25$</span>]]</span>
+        <span class="name">catsDataReducibleForOneAnd</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.data.OneAndLowPriority0_5.catsDataReducibleForOneAnd.F">F</span>]</span>)</span><span class="result">: <a href="../Reducible.html" class="extype" name="cats.Reducible">Reducible</a>[[β$23$]<a href="OneAnd.html" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAndLowPriority0_5.catsDataReducibleForOneAnd.F">F</span>, <span class="extype" name="cats.data.OneAndLowPriority0_5.&lt;refinement&gt;.Λ$.β$23$">β$23$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OneAndLowPriority0_5</dd></dl></div>
@@ -570,9 +604,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OneAndInstances</dd></dl></div>
     </li><li name="cats.data.OneAndInstances#catsDataSemigroupKForOneAnd" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataSemigroupKForOneAnd[F[_]](implicitevidence$3:cats.Alternative[F]):cats.SemigroupK[[β$15$]cats.data.OneAnd[F,β$15$]]"></a><a id="catsDataSemigroupKForOneAnd[F[_]](Alternative[F]):SemigroupK[[β$15$]OneAnd[F,β$15$]]"></a>
+      <a id="catsDataSemigroupKForOneAnd[F[_]](implicitevidence$3:cats.Alternative[F]):cats.SemigroupK[[β$13$]cats.data.OneAnd[F,β$13$]]"></a><a id="catsDataSemigroupKForOneAnd[F[_]](Alternative[F]):SemigroupK[[β$13$]OneAnd[F,β$13$]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/OneAnd$.html#catsDataSemigroupKForOneAnd[F[_]](implicitevidence$3:cats.Alternative[F]):cats.SemigroupK[[β$15$]cats.data.OneAnd[F,β$15$]]" title="Permalink">
+      <a href="../../cats/data/OneAnd$.html#catsDataSemigroupKForOneAnd[F[_]](implicitevidence$3:cats.Alternative[F]):cats.SemigroupK[[β$13$]cats.data.OneAnd[F,β$13$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -581,7 +615,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataSemigroupKForOneAnd</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../Alternative.html" class="extype" name="cats.Alternative">Alternative</a>[<span class="extype" name="cats.data.OneAndInstances.catsDataSemigroupKForOneAnd.F">F</span>]</span>)</span><span class="result">: <a href="../SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a>[[β$15$]<a href="OneAnd.html" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAndInstances.catsDataSemigroupKForOneAnd.F">F</span>, <span class="extype" name="cats.data.OneAndInstances.&lt;refinement&gt;.Λ$.β$15$">β$15$</span>]]</span>
+        <span class="name">catsDataSemigroupKForOneAnd</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../Alternative.html" class="extype" name="cats.Alternative">Alternative</a>[<span class="extype" name="cats.data.OneAndInstances.catsDataSemigroupKForOneAnd.F">F</span>]</span>)</span><span class="result">: <a href="../SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a>[[β$13$]<a href="OneAnd.html" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAndInstances.catsDataSemigroupKForOneAnd.F">F</span>, <span class="extype" name="cats.data.OneAndInstances.&lt;refinement&gt;.Λ$.β$13$">β$13$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OneAndInstances</dd></dl></div>
@@ -602,9 +636,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OneAndInstances</dd></dl></div>
     </li><li name="cats.data.OneAndLowPriority1#catsDataTraverseForOneAnd" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataTraverseForOneAnd[F[_]](implicitF:cats.Traverse[F]):cats.Traverse[[β$23$]cats.data.OneAnd[F,β$23$]]"></a><a id="catsDataTraverseForOneAnd[F[_]](Traverse[F]):Traverse[[β$23$]OneAnd[F,β$23$]]"></a>
+      <a id="catsDataTraverseForOneAnd[F[_]](implicitF:cats.Traverse[F]):cats.Traverse[[β$21$]cats.data.OneAnd[F,β$21$]]"></a><a id="catsDataTraverseForOneAnd[F[_]](Traverse[F]):Traverse[[β$21$]OneAnd[F,β$21$]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/OneAnd$.html#catsDataTraverseForOneAnd[F[_]](implicitF:cats.Traverse[F]):cats.Traverse[[β$23$]cats.data.OneAnd[F,β$23$]]" title="Permalink">
+      <a href="../../cats/data/OneAnd$.html#catsDataTraverseForOneAnd[F[_]](implicitF:cats.Traverse[F]):cats.Traverse[[β$21$]cats.data.OneAnd[F,β$21$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -613,7 +647,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataTraverseForOneAnd</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<span class="extype" name="cats.data.OneAndLowPriority1.catsDataTraverseForOneAnd.F">F</span>]</span>)</span><span class="result">: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[[β$23$]<a href="OneAnd.html" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAndLowPriority1.catsDataTraverseForOneAnd.F">F</span>, <span class="extype" name="cats.data.OneAndLowPriority1.&lt;refinement&gt;.Λ$.β$23$">β$23$</span>]]</span>
+        <span class="name">catsDataTraverseForOneAnd</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<span class="extype" name="cats.data.OneAndLowPriority1.catsDataTraverseForOneAnd.F">F</span>]</span>)</span><span class="result">: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[[β$21$]<a href="OneAnd.html" class="extype" name="cats.data.OneAnd">OneAnd</a>[<span class="extype" name="cats.data.OneAndLowPriority1.catsDataTraverseForOneAnd.F">F</span>, <span class="extype" name="cats.data.OneAndLowPriority1.&lt;refinement&gt;.Λ$.β$21$">β$21$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OneAndLowPriority1</dd></dl></div>
@@ -639,6 +673,8 @@
     </span>)</span>
               
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -673,28 +709,6 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="finalize():Unit"></a>
-      <span class="permalink">
-      <a href="../../cats/data/OneAnd$.html#finalize():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="symbol">classOf[java.lang.Throwable]</span>
-    </span>)</span>
-              
-        </dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
@@ -712,6 +726,8 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -731,6 +747,8 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -783,6 +801,8 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
@@ -801,6 +821,8 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -835,28 +857,6 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait():Unit"></a>
-      <span class="permalink">
-      <a href="../../cats/data/OneAnd$.html#wait():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
-    </span>)</span>
-              
-        </dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <span class="permalink">
@@ -903,13 +903,64 @@
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/data/OneAnd$.html#wait():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
     </li>
               </ol>
             </div>
 
         
 
-        
+        <div class="values members">
+              <h3>Deprecated Value Members</h3>
+              <ol><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/data/OneAnd$.html#finalize():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version ) see corresponding Javadoc for more information.">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+                <span class="name">@Deprecated</span>
+              
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version )</i> see corresponding Javadoc for more information.</p></dd></dl></div>
+    </li></ol>
+            </div>
         </div>
 
         <div id="inheritedMembers">

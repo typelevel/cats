@@ -81,10 +81,32 @@
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <a title="Symbolic aliases for various types are defined here." href="../index.html"><span class="name">cats</span></a>
+        <a title="The cats root package contains all the trait signatures of most Scala type classes." href="../index.html"><span class="name">cats</span></a>
       </span>
       
-      <p class="shortcomment cmt">Symbolic aliases for various types are defined here.</p><div class="fullcomment"><div class="comment cmt"><p>Symbolic aliases for various types are defined here.
+      <p class="shortcomment cmt">The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><p>Cats type classes are implemented using the approach from the
+ <a href="https://ropas.snu.ac.kr/~bruno/papers/TypeClasses.pdf" target="_blank">Type classes as objects and implicits</a> article.</p><p>For each type class, <code>cats</code> provides three pieces:
+- Its <b>signature</b>: a trait that is polymorphic on a type parameter.
+  Type class traits inherit from other type classes to indicate that any implementation of the lower type class (e.g. <code>Applicative</code>)
+  can also serve as an instance for the higuer type class (e.g. <code>Functor</code>).
+- Type class <b>'instances</b>, which are classes and objects that implement one or more type class signatures for some specific types.
+  Type class instances for several data types from the Java or Scala standard libraries are declared in the subpackage <code>cats.instances</code>.
+- <b>Syntax extensions</b>, each of which provides the methods of the type class defines as extension methods
+  (which in Scala 2 are encoded as implicit classes) for values of any type <code>F</code>; given that an instance of the type class
+  for the receiver type (<code>this</code>) is in the implicit scope.
+  Symtax extensions are declared in the <code>cats.syntax</code> package.
+- A set of <b>laws</b>, that are also generic on the type of the class, and are only defined on the operations of the type class.
+  The purpose of these laws is to declare some algebraic relations (equations) between Scala expressions involving the operations
+  of the type class, and test (but not verify) that implemented instances satisfy those equations.
+  Laws are defined in the <code>cats-laws</code> package.</p><p>Although most of cats type classes are declared in this package, some are declared in other packages:
+- type classes that operate on base types (kind <code>*</code>), and their implementations for standard library types,
+  are contained in <code>cats.kernel</code>, which is a different SBT project. However, they are re-exported from this package.
+- type classes of kind <code>F[_, _]</code>, such as <a href="../arrow/Profunctor.html" class="extype" name="cats.arrow.Profunctor">cats.arrow.Profunctor</a>&quot; or <a href="../arrow/Arrow.html" class="extype" name="cats.arrow.Arrow">cats.arrow.Arrow</a>, which are relevant for
+  Functional Reactive Programming or optics, are declared in the <code>cats.arrow</code> package.
+- Also, those type classes that abstract over (pure or impure) functional runtime effects are declared
+  in the <a href="https://typelevel.org/cats-effect/" target="_blank">cats-effect library</a>.
+- Some type classes for which no laws can be provided are left out of the main road, in a small and dirty alley.
+  These are the <code>alleycats</code>.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
     </li><li name="cats.kernel" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="kernel"></a><a id="kernel:kernel"></a>
@@ -122,6 +144,10 @@
                         <a class="object" href="Band$.html" title=""></a>
                         <a class="trait" href="Band.html" title="Bands are semigroups whose operation (i.e."></a>
                         <a href="Band.html" title="Bands are semigroups whose operation (i.e.">Band</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="BoundedEnumerable$.html" title=""></a>
+                        <a class="trait" href="BoundedEnumerable.html" title=""></a>
+                        <a href="BoundedEnumerable.html" title="">BoundedEnumerable</a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="BoundedSemilattice$.html" title=""></a>
                         <a class="trait" href="" title=""></a>
@@ -180,6 +206,10 @@
                         <a href="LowerBounded.html" title="A type class used to name the lower limit of a type.">LowerBounded</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
+                        <a class="trait" href="LowerBoundedEnumerable.html" title=""></a>
+                        <a href="LowerBoundedEnumerable.html" title="">LowerBoundedEnumerable</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
                         <a class="trait" href="LowerBoundedFunctions.html" title=""></a>
                         <a href="LowerBoundedFunctions.html" title="">LowerBoundedFunctions</a>
                       </li><li class="current-entities indented2">
@@ -190,6 +220,10 @@
                         <span class="separator"></span>
                         <a class="class" href="MonoidFunctions.html" title=""></a>
                         <a href="MonoidFunctions.html" title="">MonoidFunctions</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="Next.html" title="A typeclass with an operation which returns a member which is always greater than the one supplied."></a>
+                        <a href="Next.html" title="A typeclass with an operation which returns a member which is always greater than the one supplied.">Next</a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="Order$.html" title=""></a>
                         <a class="trait" href="Order.html" title="The Order type class is used to define a total ordering on some type A."></a>
@@ -203,6 +237,14 @@
                         <a class="trait" href="OrderToOrderingConversion.html" title=""></a>
                         <a href="OrderToOrderingConversion.html" title="">OrderToOrderingConversion</a>
                       </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="PartialNext.html" title="A typeclass with an operation which returns a member which is greater or None than the one supplied."></a>
+                        <a href="PartialNext.html" title="A typeclass with an operation which returns a member which is greater or None than the one supplied.">PartialNext</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="PartialNextLowerBounded.html" title=""></a>
+                        <a href="PartialNextLowerBounded.html" title="">PartialNextLowerBounded</a>
+                      </li><li class="current-entities indented2">
                         <a class="object" href="PartialOrder$.html" title=""></a>
                         <a class="trait" href="PartialOrder.html" title="The PartialOrder type class is used to define a partial ordering on some type A."></a>
                         <a href="PartialOrder.html" title="The PartialOrder type class is used to define a partial ordering on some type A.">PartialOrder</a>
@@ -214,6 +256,18 @@
                         <span class="separator"></span>
                         <a class="trait" href="PartialOrderToPartialOrderingConversion.html" title=""></a>
                         <a href="PartialOrderToPartialOrderingConversion.html" title="">PartialOrderToPartialOrderingConversion</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="PartialPrevious.html" title="A typeclass with an operation which returns a member which is smaller or None than the one supplied."></a>
+                        <a href="PartialPrevious.html" title="A typeclass with an operation which returns a member which is smaller or None than the one supplied.">PartialPrevious</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="PartialPreviousUpperBounded.html" title=""></a>
+                        <a href="PartialPreviousUpperBounded.html" title="">PartialPreviousUpperBounded</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="Previous.html" title="A typeclass with an operation which returns a member which is always smaller than the one supplied."></a>
+                        <a href="Previous.html" title="A typeclass with an operation which returns a member which is always smaller than the one supplied.">Previous</a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="Semigroup$.html" title=""></a>
                         <a class="trait" href="Semigroup.html" title="A semigroup is any set A with an associative operation (combine)."></a>
@@ -231,9 +285,17 @@
                         <a class="class" href="SemilatticeFunctions.html" title=""></a>
                         <a href="SemilatticeFunctions.html" title="">SemilatticeFunctions</a>
                       </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="UnboundedEnumerable.html" title="A typeclass which has both previous and next operations such that next . previous == identity."></a>
+                        <a href="UnboundedEnumerable.html" title="A typeclass which has both previous and next operations such that next . previous == identity.">UnboundedEnumerable</a>
+                      </li><li class="current-entities indented2">
                         <a class="object" href="UpperBounded$.html" title=""></a>
                         <a class="trait" href="UpperBounded.html" title="A type class used to name the upper limit of a type."></a>
                         <a href="UpperBounded.html" title="A type class used to name the upper limit of a type.">UpperBounded</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="UpperBoundedEnumerable.html" title=""></a>
+                        <a href="UpperBoundedEnumerable.html" title="">UpperBoundedEnumerable</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="trait" href="UpperBoundedFunctions.html" title=""></a>
@@ -278,7 +340,17 @@
               Known Subclasses
             </span>
             <div class="subClasses hiddenContent"><a href="instances/BitSetSemilattice.html" class="extype" name="cats.kernel.instances.BitSetSemilattice">BitSetSemilattice</a>, <a href="instances/SetSemilattice.html" class="extype" name="cats.kernel.instances.SetSemilattice">SetSemilattice</a>, <a href="instances/SortedSetSemilattice.html" class="extype" name="cats.kernel.instances.SortedSetSemilattice">SortedSetSemilattice</a>, <a href="instances/UnitAlgebra.html" class="extype" name="cats.kernel.instances.UnitAlgebra">UnitAlgebra</a>, <a href="../instances/SortedSetSemilattice.html" class="extype" name="cats.instances.SortedSetSemilattice">SortedSetSemilattice</a></div>
-          </div></div>
+          </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
+                <span class="toggle diagram-link">
+                  Type Hierarchy
+                </span>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph1" viewBox="0.00 0.00 554.50 155.00" height="155pt" width="555pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 151)" class="graph" id="page0,1_graph0"><polygon points="-4,4 -4,-151 550.5,-151 550.5,4 -4,4" stroke="transparent" fill="white"></polygon><g class="cluster" id="clust1"></g><g class="cluster" id="clust2"></g><!-- node0 --><g class="node this trait" id="graph1_0"><g id="a_this trait|graph1_0"><a xlink:title="cats.kernel.BoundedSemilattice (this trait)" xlink:href="#inheritance-diagram"><path d="M341.67,-86C341.67,-86 217.33,-86 217.33,-86 213.17,-86 209,-81.83 209,-77.67 209,-77.67 209,-69.33 209,-69.33 209,-65.17 213.17,-61 217.33,-61 217.33,-61 341.67,-61 341.67,-61 345.83,-61 350,-65.17 350,-69.33 350,-69.33 350,-77.67 350,-77.67 350,-81.83 345.83,-86 341.67,-86" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-80.5" x="219.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-71.1" x="240.5" text-anchor="start">BoundedSemilattice[A]</text></a></g></g><!-- node1 --><g class="node class" id="graph1_1"><g id="a_class|graph1_1"><a xlink:title="cats.kernel.instances.BitSetSemilattice" xlink:href="instances/BitSetSemilattice.html#inheritance-diagram"><path d="M114.67,-25C114.67,-25 8.33,-25 8.33,-25 4.17,-25 0,-20.83 0,-16.67 0,-16.67 0,-8.33 0,-8.33 0,-4.17 4.17,0 8.33,0 8.33,0 114.67,0 114.67,0 118.83,0 123,-4.17 123,-8.33 123,-8.33 123,-16.67 123,-16.67 123,-20.83 118.83,-25 114.67,-25" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-19.5" x="10.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="31.5" text-anchor="start">BitSetSemilattice</text></a></g></g><!-- node0&#45;&gt;node1 --><g class="edge inheritance" id="graph1_0_1"><g id="a_inheritance|graph1_0_1"><a xlink:title="BitSetSemilattice is a subtype of BoundedSemilattice[A]"><path d="M230.04,-59.12C192.16,-48.86 140.44,-34.86 104.31,-25.09" stroke="#d4d4d4" fill="none"></path><polygon points="229.55,-61.52 236.95,-60.98 230.83,-56.79 229.55,-61.52" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node2 --><g class="node class" id="graph1_2"><g id="a_class|graph1_2"><a xlink:title="cats.kernel.instances.SetSemilattice" xlink:href="instances/SetSemilattice.html#inheritance-diagram"><path d="M255.67,-25C255.67,-25 149.33,-25 149.33,-25 145.17,-25 141,-20.83 141,-16.67 141,-16.67 141,-8.33 141,-8.33 141,-4.17 145.17,0 149.33,0 149.33,0 255.67,0 255.67,0 259.83,0 264,-4.17 264,-8.33 264,-8.33 264,-16.67 264,-16.67 264,-20.83 259.83,-25 255.67,-25" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-19.5" x="151.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="172.5" text-anchor="start">SetSemilattice[A]</text></a></g></g><!-- node0&#45;&gt;node2 --><g class="edge inheritance" id="graph1_0_2"><g id="a_inheritance|graph1_0_2"><a xlink:title="SetSemilattice[A] is a subtype of BoundedSemilattice[A]"><path d="M258.61,-56.5C245.69,-46.59 229.38,-34.1 217.68,-25.13" stroke="#d4d4d4" fill="none"></path><polygon points="257.24,-58.53 264.29,-60.84 260.22,-54.64 257.24,-58.53" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node3 --><g class="node class" id="graph1_3"><g id="a_class|graph1_3"><a xlink:title="cats.kernel.instances.SortedSetSemilattice" xlink:href="instances/SortedSetSemilattice.html#inheritance-diagram"><path d="M424.17,-25C424.17,-25 290.83,-25 290.83,-25 286.67,-25 282.5,-20.83 282.5,-16.67 282.5,-16.67 282.5,-8.33 282.5,-8.33 282.5,-4.17 286.67,0 290.83,0 290.83,0 424.17,0 424.17,0 428.33,0 432.5,-4.17 432.5,-8.33 432.5,-8.33 432.5,-16.67 432.5,-16.67 432.5,-20.83 428.33,-25 424.17,-25" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-19.5" x="292.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="313.5" text-anchor="start">SortedSetSemilattice[A]</text></a></g></g><!-- node0&#45;&gt;node3 --><g class="edge inheritance" id="graph1_0_3"><g id="a_inheritance|graph1_0_3"><a xlink:title="SortedSetSemilattice[A] is a subtype of BoundedSemilattice[A]"><path d="M300.66,-56.5C313.75,-46.59 330.27,-34.1 342.12,-25.13" stroke="#d4d4d4" fill="none"></path><polygon points="299.02,-54.67 294.91,-60.84 301.97,-58.57 299.02,-54.67" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node4 --><g class="node class" id="graph1_4"><g id="a_class|graph1_4"><a xlink:title="cats.kernel.instances.UnitAlgebra" xlink:href="instances/UnitAlgebra.html#inheritance-diagram"><path d="M538.17,-25C538.17,-25 458.83,-25 458.83,-25 454.67,-25 450.5,-20.83 450.5,-16.67 450.5,-16.67 450.5,-8.33 450.5,-8.33 450.5,-4.17 454.67,0 458.83,0 458.83,0 538.17,0 538.17,0 542.33,0 546.5,-4.17 546.5,-8.33 546.5,-8.33 546.5,-16.67 546.5,-16.67 546.5,-20.83 542.33,-25 538.17,-25" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-19.5" x="460.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="481.5" text-anchor="start">UnitAlgebra</text></a></g></g><!-- node0&#45;&gt;node4 --><g class="edge inheritance" id="graph1_0_4"><g id="a_inheritance|graph1_0_4"><a xlink:title="UnitAlgebra is a subtype of BoundedSemilattice[A]"><path d="M329.18,-59.12C367.24,-48.86 419.2,-34.86 455.49,-25.09" stroke="#d4d4d4" fill="none"></path><polygon points="328.37,-56.8 322.25,-60.98 329.64,-61.53 328.37,-56.8" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node5 --><g class="node trait" id="graph1_5"><g id="a_trait|graph1_5"><a xlink:title="cats.kernel.Semilattice" xlink:href="Semilattice.html#inheritance-diagram"><path d="M255.67,-147C255.67,-147 163.33,-147 163.33,-147 159.17,-147 155,-142.83 155,-138.67 155,-138.67 155,-130.33 155,-130.33 155,-126.17 159.17,-122 163.33,-122 163.33,-122 255.67,-122 255.67,-122 259.83,-122 264,-126.17 264,-130.33 264,-130.33 264,-138.67 264,-138.67 264,-142.83 259.83,-147 255.67,-147" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-141.5" x="165.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="186.5" text-anchor="start">Semilattice[A]</text></a></g></g><!-- node5&#45;&gt;node0 --><g class="edge inheritance" id="graph1_5_0"><g id="a_inheritance|graph1_5_0"><a xlink:title="BoundedSemilattice[A] is a subtype of Semilattice[A]"><path d="M228.81,-117.23C240.51,-107.37 255.16,-95.01 265.7,-86.13" stroke="#d4d4d4" fill="none"></path><polygon points="227.1,-115.46 223.33,-121.84 230.26,-119.21 227.1,-115.46" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node6 --><g class="node trait" id="graph1_6"><g id="a_trait|graph1_6"><a xlink:title="cats.kernel.CommutativeMonoid" xlink:href="CommutativeMonoid.html#inheritance-diagram"><path d="M410.17,-147C410.17,-147 290.83,-147 290.83,-147 286.67,-147 282.5,-142.83 282.5,-138.67 282.5,-138.67 282.5,-130.33 282.5,-130.33 282.5,-126.17 286.67,-122 290.83,-122 290.83,-122 410.17,-122 410.17,-122 414.33,-122 418.5,-126.17 418.5,-130.33 418.5,-130.33 418.5,-138.67 418.5,-138.67 418.5,-142.83 414.33,-147 410.17,-147" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-141.5" x="292.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="313.5" text-anchor="start">CommutativeMonoid[A]</text></a></g></g><!-- node6&#45;&gt;node0 --><g class="edge inheritance" id="graph1_6_0"><g id="a_inheritance|graph1_6_0"><a xlink:title="BoundedSemilattice[A] is a subtype of CommutativeMonoid[A]"><path d="M330.92,-117.23C319.05,-107.37 304.19,-95.01 293.5,-86.13" stroke="#d4d4d4" fill="none"></path><polygon points="329.52,-119.25 336.47,-121.84 332.65,-115.49 329.52,-119.25" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
+                <div id="diagram-controls" class="hiddenContent">
+                  <button id="diagram-zoom-out" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button id="diagram-zoom-in" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button title="Toggle full-screen" id="diagram-fs" class="diagram-btn to-full"><i class="material-icons"></i></button>
+                </div>
+              </div></div>
         
 
       <div id="mbrsel">
@@ -550,7 +622,7 @@ res0: <span class="std">Option</span>[<span class="std">String</span>] = <span c
 
 scala&gt; Semigroup[<span class="std">String</span>].combineAllOption(<span class="std">List</span>.empty)
 res1: <span class="std">Option</span>[<span class="std">String</span>] = <span class="std">None</span></pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Monoid.html" class="extype" name="cats.kernel.Monoid">Monoid</a> → <a href="Semigroup.html" class="extype" name="cats.kernel.Semigroup">Semigroup</a></dd></dl></div>
-    </li><li name="cats.kernel.Monoid#combineN" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="cats.kernel.BoundedSemilattice#combineN" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="combineN(a:A,n:Int):A"></a><a id="combineN(A,Int):A"></a>
       <span class="permalink">
       <a href="../../cats/kernel/BoundedSemilattice.html#combineN(a:A,n:Int):A" title="Permalink">
@@ -571,7 +643,7 @@ scala&gt; Monoid[<span class="std">String</span>].combineN(<span class="lit">"ha
 res0: <span class="std">String</span> = hahaha
 
 scala&gt; Monoid[<span class="std">String</span>].combineN(<span class="lit">"ha"</span>, <span class="num">0</span>)
-res1: <span class="std">String</span> = <span class="lit">""</span></pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Monoid.html" class="extype" name="cats.kernel.Monoid">Monoid</a> → <a href="Semigroup.html" class="extype" name="cats.kernel.Semigroup">Semigroup</a></dd></dl></div>
+res1: <span class="std">String</span> = <span class="lit">""</span></pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.kernel.BoundedSemilattice">BoundedSemilattice</a> → <a href="Monoid.html" class="extype" name="cats.kernel.Monoid">Monoid</a> → <a href="Band.html" class="extype" name="cats.kernel.Band">Band</a> → <a href="Semigroup.html" class="extype" name="cats.kernel.Semigroup">Semigroup</a></dd></dl></div>
     </li><li name="scala.Any#equals" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="equals(x$1:Any):Boolean"></a><a id="equals(Any):Boolean"></a>
       <span class="permalink">
@@ -604,6 +676,25 @@ res1: <span class="std">String</span> = <span class="lit">""</span></pre></div><
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.kernel.CommutativeSemigroup#intercalate" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="intercalate(middle:A):cats.kernel.CommutativeSemigroup[A]"></a><a id="intercalate(A):CommutativeSemigroup[A]"></a>
+      <span class="permalink">
+      <a href="../../cats/kernel/BoundedSemilattice.html#intercalate(middle:A):cats.kernel.CommutativeSemigroup[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">intercalate</span><span class="params">(<span name="middle">middle: <span class="extype" name="cats.kernel.BoundedSemilattice.A">A</span></span>)</span><span class="result">: <a href="CommutativeSemigroup.html" class="extype" name="cats.kernel.CommutativeSemigroup">CommutativeSemigroup</a>[<span class="extype" name="cats.kernel.BoundedSemilattice.A">A</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Between each pair of elements insert middle
+This name matches the term used in Foldable and Reducible and a similar Haskell function.</p><div class="fullcomment"><div class="comment cmt"><p>Between each pair of elements insert middle
+This name matches the term used in Foldable and Reducible and a similar Haskell function.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="CommutativeSemigroup.html" class="extype" name="cats.kernel.CommutativeSemigroup">CommutativeSemigroup</a> → <a href="Semigroup.html" class="extype" name="cats.kernel.Semigroup">Semigroup</a></dd></dl></div>
     </li><li name="cats.kernel.Monoid#isEmpty" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isEmpty(a:A)(implicitev:cats.kernel.Eq[A]):Boolean"></a><a id="isEmpty(A)(Eq[A]):Boolean"></a>
       <span class="permalink">
@@ -659,6 +750,26 @@ res1: <span class="std">Boolean</span> = <span class="kw">false</span></pre></di
       
       <p class="shortcomment cmt">Return <code>a</code> combined with itself more than once.</p><div class="fullcomment"><div class="comment cmt"><p>Return <code>a</code> combined with itself more than once.
 </p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd><a href="Semigroup.html" class="extype" name="cats.kernel.Semigroup">Semigroup</a></dd></dl></div>
+    </li><li name="cats.kernel.CommutativeMonoid#reverse" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="reverse:cats.kernel.CommutativeMonoid[A]"></a><a id="reverse:CommutativeMonoid[A]"></a>
+      <span class="permalink">
+      <a href="../../cats/kernel/BoundedSemilattice.html#reverse:cats.kernel.CommutativeMonoid[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">reverse</span><span class="result">: <a href="CommutativeMonoid.html" class="extype" name="cats.kernel.CommutativeMonoid">CommutativeMonoid</a>[<span class="extype" name="cats.kernel.BoundedSemilattice.A">A</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">return a semigroup that reverses the order
+so combine(a, b) == reverse.combine(b, a)
+</p><div class="fullcomment"><div class="comment cmt"><p>return a semigroup that reverses the order
+so combine(a, b) == reverse.combine(b, a)
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="CommutativeMonoid.html" class="extype" name="cats.kernel.CommutativeMonoid">CommutativeMonoid</a> → <a href="CommutativeSemigroup.html" class="extype" name="cats.kernel.CommutativeSemigroup">CommutativeSemigroup</a> → <a href="Monoid.html" class="extype" name="cats.kernel.Monoid">Monoid</a> → <a href="Semigroup.html" class="extype" name="cats.kernel.Semigroup">Semigroup</a></dd></dl></div>
     </li><li name="scala.Any#toString" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <span class="permalink">

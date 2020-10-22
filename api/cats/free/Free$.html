@@ -81,10 +81,32 @@
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <a title="Symbolic aliases for various types are defined here." href="../index.html"><span class="name">cats</span></a>
+        <a title="The cats root package contains all the trait signatures of most Scala type classes." href="../index.html"><span class="name">cats</span></a>
       </span>
       
-      <p class="shortcomment cmt">Symbolic aliases for various types are defined here.</p><div class="fullcomment"><div class="comment cmt"><p>Symbolic aliases for various types are defined here.
+      <p class="shortcomment cmt">The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><p>Cats type classes are implemented using the approach from the
+ <a href="https://ropas.snu.ac.kr/~bruno/papers/TypeClasses.pdf" target="_blank">Type classes as objects and implicits</a> article.</p><p>For each type class, <code>cats</code> provides three pieces:
+- Its <b>signature</b>: a trait that is polymorphic on a type parameter.
+  Type class traits inherit from other type classes to indicate that any implementation of the lower type class (e.g. <code>Applicative</code>)
+  can also serve as an instance for the higuer type class (e.g. <code>Functor</code>).
+- Type class <b>'instances</b>, which are classes and objects that implement one or more type class signatures for some specific types.
+  Type class instances for several data types from the Java or Scala standard libraries are declared in the subpackage <code>cats.instances</code>.
+- <b>Syntax extensions</b>, each of which provides the methods of the type class defines as extension methods
+  (which in Scala 2 are encoded as implicit classes) for values of any type <code>F</code>; given that an instance of the type class
+  for the receiver type (<code>this</code>) is in the implicit scope.
+  Symtax extensions are declared in the <code>cats.syntax</code> package.
+- A set of <b>laws</b>, that are also generic on the type of the class, and are only defined on the operations of the type class.
+  The purpose of these laws is to declare some algebraic relations (equations) between Scala expressions involving the operations
+  of the type class, and test (but not verify) that implemented instances satisfy those equations.
+  Laws are defined in the <code>cats-laws</code> package.</p><p>Although most of cats type classes are declared in this package, some are declared in other packages:
+- type classes that operate on base types (kind <code>*</code>), and their implementations for standard library types,
+  are contained in <code>cats.kernel</code>, which is a different SBT project. However, they are re-exported from this package.
+- type classes of kind <code>F[_, _]</code>, such as <a href="../arrow/Profunctor.html" class="extype" name="cats.arrow.Profunctor">cats.arrow.Profunctor</a>&quot; or <a href="../arrow/Arrow.html" class="extype" name="cats.arrow.Arrow">cats.arrow.Arrow</a>, which are relevant for
+  Functional Reactive Programming or optics, are declared in the <code>cats.arrow</code> package.
+- Also, those type classes that abstract over (pure or impure) functional runtime effects are declared
+  in the <a href="https://typelevel.org/cats-effect/" target="_blank">cats-effect library</a>.
+- Some type classes for which no laws can be provided are left out of the main road, in a small and dirty alley.
+  These are the <code>alleycats</code>.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
     </li><li name="cats.free" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="free"></a><a id="free:free"></a>
@@ -290,9 +312,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="cats.free.FreeInstances#catsFreeDeferForFree" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsFreeDeferForFree[S[_]]:cats.Defer[[β$24$]cats.free.Free[S,β$24$]]"></a><a id="catsFreeDeferForFree[S[_]]:Defer[[β$24$]Free[S,β$24$]]"></a>
+      <a id="catsFreeDeferForFree[S[_]]:cats.Defer[[β$19$]cats.free.Free[S,β$19$]]"></a><a id="catsFreeDeferForFree[S[_]]:Defer[[β$19$]Free[S,β$19$]]"></a>
       <span class="permalink">
-      <a href="../../cats/free/Free$.html#catsFreeDeferForFree[S[_]]:cats.Defer[[β$24$]cats.free.Free[S,β$24$]]" title="Permalink">
+      <a href="../../cats/free/Free$.html#catsFreeDeferForFree[S[_]]:cats.Defer[[β$19$]cats.free.Free[S,β$19$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -301,14 +323,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsFreeDeferForFree</span><span class="tparams">[<span name="S">S<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result">: <a href="../Defer.html" class="extype" name="cats.Defer">Defer</a>[[β$24$]<a href="Free.html" class="extype" name="cats.free.Free">Free</a>[<span class="extype" name="cats.free.FreeInstances.catsFreeDeferForFree.S">S</span>, <span class="extype" name="cats.free.FreeInstances.&lt;refinement&gt;.Λ$.β$24$">β$24$</span>]]</span>
+        <span class="name">catsFreeDeferForFree</span><span class="tparams">[<span name="S">S<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result">: <a href="../Defer.html" class="extype" name="cats.Defer">Defer</a>[[β$19$]<a href="Free.html" class="extype" name="cats.free.Free">Free</a>[<span class="extype" name="cats.free.FreeInstances.catsFreeDeferForFree.S">S</span>, <span class="extype" name="cats.free.FreeInstances.&lt;refinement&gt;.Λ$.β$19$">β$19$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>FreeInstances</dd></dl></div>
     </li><li name="cats.free.Free#catsFreeDeferForId" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="catsFreeDeferForId:cats.Defer[[β$18$]cats.free.Free[[A]A,β$18$]]"></a><a id="catsFreeDeferForId:Defer[[β$18$]Free[[A]A,β$18$]]"></a>
+      <a id="catsFreeDeferForId:cats.Defer[[β$13$]cats.free.Free[[A]A,β$13$]]"></a><a id="catsFreeDeferForId:Defer[[β$13$]Free[[A]A,β$13$]]"></a>
       <span class="permalink">
-      <a href="../../cats/free/Free$.html#catsFreeDeferForId:cats.Defer[[β$18$]cats.free.Free[[A]A,β$18$]]" title="Permalink">
+      <a href="../../cats/free/Free$.html#catsFreeDeferForId:cats.Defer[[β$13$]cats.free.Free[[A]A,β$13$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -317,14 +339,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsFreeDeferForId</span><span class="result">: <a href="../Defer.html" class="extype" name="cats.Defer">Defer</a>[[β$18$]<a href="Free.html" class="extype" name="cats.free.Free">Free</a>[[A]<span class="extype" name="cats.Id.A">A</span>, <span class="extype" name="cats.free.Free.&lt;refinement&gt;.Λ$.β$18$">β$18$</span>]]</span>
+        <span class="name">catsFreeDeferForId</span><span class="result">: <a href="../Defer.html" class="extype" name="cats.Defer">Defer</a>[[β$13$]<a href="Free.html" class="extype" name="cats.free.Free">Free</a>[[A]<span class="extype" name="cats.Id.A">A</span>, <span class="extype" name="cats.free.Free.&lt;refinement&gt;.Λ$.β$13$">β$13$</span>]]</span>
       </span>
       
       
     </li><li name="cats.free.FreeInstances1#catsFreeFoldableForFree" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsFreeFoldableForFree[F[_]](implicitfoldableF:cats.Foldable[F]):cats.Foldable[[β$26$]cats.free.Free[F,β$26$]]"></a><a id="catsFreeFoldableForFree[F[_]](Foldable[F]):Foldable[[β$26$]Free[F,β$26$]]"></a>
+      <a id="catsFreeFoldableForFree[F[_]](implicitfoldableF:cats.Foldable[F]):cats.Foldable[[β$21$]cats.free.Free[F,β$21$]]"></a><a id="catsFreeFoldableForFree[F[_]](Foldable[F]):Foldable[[β$21$]Free[F,β$21$]]"></a>
       <span class="permalink">
-      <a href="../../cats/free/Free$.html#catsFreeFoldableForFree[F[_]](implicitfoldableF:cats.Foldable[F]):cats.Foldable[[β$26$]cats.free.Free[F,β$26$]]" title="Permalink">
+      <a href="../../cats/free/Free$.html#catsFreeFoldableForFree[F[_]](implicitfoldableF:cats.Foldable[F]):cats.Foldable[[β$21$]cats.free.Free[F,β$21$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -333,14 +355,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsFreeFoldableForFree</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="foldableF">foldableF: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.free.FreeInstances1.catsFreeFoldableForFree.F">F</span>]</span>)</span><span class="result">: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[[β$26$]<a href="Free.html" class="extype" name="cats.free.Free">Free</a>[<span class="extype" name="cats.free.FreeInstances1.catsFreeFoldableForFree.F">F</span>, <span class="extype" name="cats.free.FreeInstances1.&lt;refinement&gt;.Λ$.β$26$">β$26$</span>]]</span>
+        <span class="name">catsFreeFoldableForFree</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="foldableF">foldableF: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.free.FreeInstances1.catsFreeFoldableForFree.F">F</span>]</span>)</span><span class="result">: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[[β$21$]<a href="Free.html" class="extype" name="cats.free.Free">Free</a>[<span class="extype" name="cats.free.FreeInstances1.catsFreeFoldableForFree.F">F</span>, <span class="extype" name="cats.free.FreeInstances1.&lt;refinement&gt;.Λ$.β$21$">β$21$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>FreeInstances1</dd></dl></div>
     </li><li name="cats.free.FreeInstances#catsFreeMonadForFree" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsFreeMonadForFree[S[_]]:cats.Monad[[β$21$]cats.free.Free[S,β$21$]]"></a><a id="catsFreeMonadForFree[S[_]]:Monad[[β$21$]Free[S,β$21$]]"></a>
+      <a id="catsFreeMonadForFree[S[_]]:cats.Monad[[β$16$]cats.free.Free[S,β$16$]]"></a><a id="catsFreeMonadForFree[S[_]]:Monad[[β$16$]Free[S,β$16$]]"></a>
       <span class="permalink">
-      <a href="../../cats/free/Free$.html#catsFreeMonadForFree[S[_]]:cats.Monad[[β$21$]cats.free.Free[S,β$21$]]" title="Permalink">
+      <a href="../../cats/free/Free$.html#catsFreeMonadForFree[S[_]]:cats.Monad[[β$16$]cats.free.Free[S,β$16$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -349,15 +371,15 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsFreeMonadForFree</span><span class="tparams">[<span name="S">S<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result">: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[[β$21$]<a href="Free.html" class="extype" name="cats.free.Free">Free</a>[<span class="extype" name="cats.free.FreeInstances.catsFreeMonadForFree.S">S</span>, <span class="extype" name="cats.free.FreeInstances.&lt;refinement&gt;.Λ$.β$21$">β$21$</span>]]</span>
+        <span class="name">catsFreeMonadForFree</span><span class="tparams">[<span name="S">S<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result">: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[[β$16$]<a href="Free.html" class="extype" name="cats.free.Free">Free</a>[<span class="extype" name="cats.free.FreeInstances.catsFreeMonadForFree.S">S</span>, <span class="extype" name="cats.free.FreeInstances.&lt;refinement&gt;.Λ$.β$16$">β$16$</span>]]</span>
       </span>
       
       <p class="shortcomment cmt"><code>Free[S, *]</code> has a monad for any type constructor <code>S[_]</code>.</p><div class="fullcomment"><div class="comment cmt"><p><code>Free[S, *]</code> has a monad for any type constructor <code>S[_]</code>.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>FreeInstances</dd></dl></div>
     </li><li name="cats.free.Free#catsFreeMonadForId" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="catsFreeMonadForId:cats.Monad[[β$17$]cats.free.Free[[A]A,β$17$]]"></a><a id="catsFreeMonadForId:Monad[[β$17$]Free[[A]A,β$17$]]"></a>
+      <a id="catsFreeMonadForId:cats.Monad[[β$12$]cats.free.Free[[A]A,β$12$]]"></a><a id="catsFreeMonadForId:Monad[[β$12$]Free[[A]A,β$12$]]"></a>
       <span class="permalink">
-      <a href="../../cats/free/Free$.html#catsFreeMonadForId:cats.Monad[[β$17$]cats.free.Free[[A]A,β$17$]]" title="Permalink">
+      <a href="../../cats/free/Free$.html#catsFreeMonadForId:cats.Monad[[β$12$]cats.free.Free[[A]A,β$12$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -366,14 +388,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsFreeMonadForId</span><span class="result">: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[[β$17$]<a href="Free.html" class="extype" name="cats.free.Free">Free</a>[[A]<span class="extype" name="cats.Id.A">A</span>, <span class="extype" name="cats.free.Free.&lt;refinement&gt;.Λ$.β$17$">β$17$</span>]]</span>
+        <span class="name">catsFreeMonadForId</span><span class="result">: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[[β$12$]<a href="Free.html" class="extype" name="cats.free.Free">Free</a>[[A]<span class="extype" name="cats.Id.A">A</span>, <span class="extype" name="cats.free.Free.&lt;refinement&gt;.Λ$.β$12$">β$12$</span>]]</span>
       </span>
       
       
     </li><li name="cats.free.FreeInstances1#catsFreeTraverseForFree" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsFreeTraverseForFree[F[_]](implicittraversableF:cats.Traverse[F]):cats.Traverse[[β$27$]cats.free.Free[F,β$27$]]"></a><a id="catsFreeTraverseForFree[F[_]](Traverse[F]):Traverse[[β$27$]Free[F,β$27$]]"></a>
+      <a id="catsFreeTraverseForFree[F[_]](implicittraversableF:cats.Traverse[F]):cats.Traverse[[β$22$]cats.free.Free[F,β$22$]]"></a><a id="catsFreeTraverseForFree[F[_]](Traverse[F]):Traverse[[β$22$]Free[F,β$22$]]"></a>
       <span class="permalink">
-      <a href="../../cats/free/Free$.html#catsFreeTraverseForFree[F[_]](implicittraversableF:cats.Traverse[F]):cats.Traverse[[β$27$]cats.free.Free[F,β$27$]]" title="Permalink">
+      <a href="../../cats/free/Free$.html#catsFreeTraverseForFree[F[_]](implicittraversableF:cats.Traverse[F]):cats.Traverse[[β$22$]cats.free.Free[F,β$22$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -382,7 +404,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsFreeTraverseForFree</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="traversableF">traversableF: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<span class="extype" name="cats.free.FreeInstances1.catsFreeTraverseForFree.F">F</span>]</span>)</span><span class="result">: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[[β$27$]<a href="Free.html" class="extype" name="cats.free.Free">Free</a>[<span class="extype" name="cats.free.FreeInstances1.catsFreeTraverseForFree.F">F</span>, <span class="extype" name="cats.free.FreeInstances1.&lt;refinement&gt;.Λ$.β$27$">β$27$</span>]]</span>
+        <span class="name">catsFreeTraverseForFree</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="traversableF">traversableF: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<span class="extype" name="cats.free.FreeInstances1.catsFreeTraverseForFree.F">F</span>]</span>)</span><span class="result">: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[[β$22$]<a href="Free.html" class="extype" name="cats.free.Free">Free</a>[<span class="extype" name="cats.free.FreeInstances1.catsFreeTraverseForFree.F">F</span>, <span class="extype" name="cats.free.FreeInstances1.&lt;refinement&gt;.Λ$.β$22$">β$22$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>FreeInstances1</dd></dl></div>
@@ -409,11 +431,13 @@
               
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="cats.free.Free#compile" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="compile[F[_],G[_]](fk:cats.arrow.FunctionK[F,G]):cats.arrow.FunctionK[[β$12$]cats.free.Free[F,β$12$],[β$13$]cats.free.Free[G,β$13$]]"></a><a id="compile[F[_],G[_]](FunctionK[F,G]):FunctionK[[β$12$]Free[F,β$12$],[β$13$]Free[G,β$13$]]"></a>
+      <a id="compile[F[_],G[_]](fk:cats.arrow.FunctionK[F,G]):cats.arrow.FunctionK[[β$8$]cats.free.Free[F,β$8$],[β$9$]cats.free.Free[G,β$9$]]"></a><a id="compile[F[_],G[_]](FunctionK[F,G]):FunctionK[[β$8$]Free[F,β$8$],[β$9$]Free[G,β$9$]]"></a>
       <span class="permalink">
-      <a href="../../cats/free/Free$.html#compile[F[_],G[_]](fk:cats.arrow.FunctionK[F,G]):cats.arrow.FunctionK[[β$12$]cats.free.Free[F,β$12$],[β$13$]cats.free.Free[G,β$13$]]" title="Permalink">
+      <a href="../../cats/free/Free$.html#compile[F[_],G[_]](fk:cats.arrow.FunctionK[F,G]):cats.arrow.FunctionK[[β$8$]cats.free.Free[F,β$8$],[β$9$]cats.free.Free[G,β$9$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -422,7 +446,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">compile</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="fk">fk: <a href="../arrow/FunctionK.html" class="extype" name="cats.arrow.FunctionK">FunctionK</a>[<span class="extype" name="cats.free.Free.compile.F">F</span>, <span class="extype" name="cats.free.Free.compile.G">G</span>]</span>)</span><span class="result">: <a href="../arrow/FunctionK.html" class="extype" name="cats.arrow.FunctionK">FunctionK</a>[[β$12$]<a href="Free.html" class="extype" name="cats.free.Free">Free</a>[<span class="extype" name="cats.free.Free.compile.F">F</span>, <span class="extype" name="cats.free.Free.&lt;refinement&gt;.Λ$.β$12$">β$12$</span>], [β$13$]<a href="Free.html" class="extype" name="cats.free.Free">Free</a>[<span class="extype" name="cats.free.Free.compile.G">G</span>, <span class="extype" name="cats.free.Free.&lt;refinement&gt;.Λ$.β$13$">β$13$</span>]]</span>
+        <span class="name">compile</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="fk">fk: <a href="../arrow/FunctionK.html" class="extype" name="cats.arrow.FunctionK">FunctionK</a>[<span class="extype" name="cats.free.Free.compile.F">F</span>, <span class="extype" name="cats.free.Free.compile.G">G</span>]</span>)</span><span class="result">: <a href="../arrow/FunctionK.html" class="extype" name="cats.arrow.FunctionK">FunctionK</a>[[β$8$]<a href="Free.html" class="extype" name="cats.free.Free">Free</a>[<span class="extype" name="cats.free.Free.compile.F">F</span>, <span class="extype" name="cats.free.Free.&lt;refinement&gt;.Λ$.β$8$">β$8$</span>], [β$9$]<a href="Free.html" class="extype" name="cats.free.Free">Free</a>[<span class="extype" name="cats.free.Free.compile.G">G</span>, <span class="extype" name="cats.free.Free.&lt;refinement&gt;.Λ$.β$9$">β$9$</span>]]</span>
       </span>
       
       <p class="shortcomment cmt">a FunctionK, suitable for composition, which calls compile
@@ -475,32 +499,10 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="finalize():Unit"></a>
-      <span class="permalink">
-      <a href="../../cats/free/Free$.html#finalize():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="symbol">classOf[java.lang.Throwable]</span>
-    </span>)</span>
-              
-        </dd></dl></div>
     </li><li name="cats.free.Free#foldMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="foldMap[F[_],M[_]](fk:cats.arrow.FunctionK[F,M])(implicitevidence$2:cats.Monad[M]):cats.arrow.FunctionK[[β$14$]cats.free.Free[F,β$14$],M]"></a><a id="foldMap[F[_],M[_]](FunctionK[F,M])(Monad[M]):FunctionK[[β$14$]Free[F,β$14$],M]"></a>
+      <a id="foldMap[F[_],M[_]](fk:cats.arrow.FunctionK[F,M])(implicitevidence$2:cats.Monad[M]):cats.arrow.FunctionK[[β$10$]cats.free.Free[F,β$10$],M]"></a><a id="foldMap[F[_],M[_]](FunctionK[F,M])(Monad[M]):FunctionK[[β$10$]Free[F,β$10$],M]"></a>
       <span class="permalink">
-      <a href="../../cats/free/Free$.html#foldMap[F[_],M[_]](fk:cats.arrow.FunctionK[F,M])(implicitevidence$2:cats.Monad[M]):cats.arrow.FunctionK[[β$14$]cats.free.Free[F,β$14$],M]" title="Permalink">
+      <a href="../../cats/free/Free$.html#foldMap[F[_],M[_]](fk:cats.arrow.FunctionK[F,M])(implicitevidence$2:cats.Monad[M]):cats.arrow.FunctionK[[β$10$]cats.free.Free[F,β$10$],M]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -509,7 +511,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">foldMap</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="fk">fk: <a href="../arrow/FunctionK.html" class="extype" name="cats.arrow.FunctionK">FunctionK</a>[<span class="extype" name="cats.free.Free.foldMap.F">F</span>, <span class="extype" name="cats.free.Free.foldMap.M">M</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.free.Free.foldMap.M">M</span>]</span>)</span><span class="result">: <a href="../arrow/FunctionK.html" class="extype" name="cats.arrow.FunctionK">FunctionK</a>[[β$14$]<a href="Free.html" class="extype" name="cats.free.Free">Free</a>[<span class="extype" name="cats.free.Free.foldMap.F">F</span>, <span class="extype" name="cats.free.Free.&lt;refinement&gt;.Λ$.β$14$">β$14$</span>], <span class="extype" name="cats.free.Free.foldMap.M">M</span>]</span>
+        <span class="name">foldMap</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="fk">fk: <a href="../arrow/FunctionK.html" class="extype" name="cats.arrow.FunctionK">FunctionK</a>[<span class="extype" name="cats.free.Free.foldMap.F">F</span>, <span class="extype" name="cats.free.Free.foldMap.M">M</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.free.Free.foldMap.M">M</span>]</span>)</span><span class="result">: <a href="../arrow/FunctionK.html" class="extype" name="cats.arrow.FunctionK">FunctionK</a>[[β$10$]<a href="Free.html" class="extype" name="cats.free.Free">Free</a>[<span class="extype" name="cats.free.Free.foldMap.F">F</span>, <span class="extype" name="cats.free.Free.&lt;refinement&gt;.Λ$.β$10$">β$10$</span>], <span class="extype" name="cats.free.Free.foldMap.M">M</span>]</span>
       </span>
       
       <p class="shortcomment cmt">a FunctionK, suitable for composition, which calls foldMap
@@ -532,6 +534,8 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
@@ -550,6 +554,8 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="cats.free.Free#inject" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -643,9 +649,9 @@ instance. The actual work happens in
 bound independently of the <code>F</code> and <code>A</code> parameters below.
 </p></div></div>
     </li><li name="cats.free.Free#mapK" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="mapK[F[_],G[_]](fk:cats.arrow.FunctionK[F,G]):cats.arrow.FunctionK[[β$7$]cats.free.Free[F,β$7$],[β$8$]cats.free.Free[G,β$8$]]"></a><a id="mapK[F[_],G[_]](FunctionK[F,G]):FunctionK[[β$7$]Free[F,β$7$],[β$8$]Free[G,β$8$]]"></a>
+      <a id="mapK[F[_],G[_]](fk:cats.arrow.FunctionK[F,G]):cats.arrow.FunctionK[[β$4$]cats.free.Free[F,β$4$],[β$5$]cats.free.Free[G,β$5$]]"></a><a id="mapK[F[_],G[_]](FunctionK[F,G]):FunctionK[[β$4$]Free[F,β$4$],[β$5$]Free[G,β$5$]]"></a>
       <span class="permalink">
-      <a href="../../cats/free/Free$.html#mapK[F[_],G[_]](fk:cats.arrow.FunctionK[F,G]):cats.arrow.FunctionK[[β$7$]cats.free.Free[F,β$7$],[β$8$]cats.free.Free[G,β$8$]]" title="Permalink">
+      <a href="../../cats/free/Free$.html#mapK[F[_],G[_]](fk:cats.arrow.FunctionK[F,G]):cats.arrow.FunctionK[[β$4$]cats.free.Free[F,β$4$],[β$5$]cats.free.Free[G,β$5$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -654,7 +660,7 @@ bound independently of the <code>F</code> and <code>A</code> parameters below.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">mapK</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="fk">fk: <a href="../arrow/FunctionK.html" class="extype" name="cats.arrow.FunctionK">FunctionK</a>[<span class="extype" name="cats.free.Free.mapK.F">F</span>, <span class="extype" name="cats.free.Free.mapK.G">G</span>]</span>)</span><span class="result">: <a href="../arrow/FunctionK.html" class="extype" name="cats.arrow.FunctionK">FunctionK</a>[[β$7$]<a href="Free.html" class="extype" name="cats.free.Free">Free</a>[<span class="extype" name="cats.free.Free.mapK.F">F</span>, <span class="extype" name="cats.free.Free.&lt;refinement&gt;.Λ$.β$7$">β$7$</span>], [β$8$]<a href="Free.html" class="extype" name="cats.free.Free">Free</a>[<span class="extype" name="cats.free.Free.mapK.G">G</span>, <span class="extype" name="cats.free.Free.&lt;refinement&gt;.Λ$.β$8$">β$8$</span>]]</span>
+        <span class="name">mapK</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="fk">fk: <a href="../arrow/FunctionK.html" class="extype" name="cats.arrow.FunctionK">FunctionK</a>[<span class="extype" name="cats.free.Free.mapK.F">F</span>, <span class="extype" name="cats.free.Free.mapK.G">G</span>]</span>)</span><span class="result">: <a href="../arrow/FunctionK.html" class="extype" name="cats.arrow.FunctionK">FunctionK</a>[[β$4$]<a href="Free.html" class="extype" name="cats.free.Free">Free</a>[<span class="extype" name="cats.free.Free.mapK.F">F</span>, <span class="extype" name="cats.free.Free.&lt;refinement&gt;.Λ$.β$4$">β$4$</span>], [β$5$]<a href="Free.html" class="extype" name="cats.free.Free">Free</a>[<span class="extype" name="cats.free.Free.mapK.G">G</span>, <span class="extype" name="cats.free.Free.&lt;refinement&gt;.Λ$.β$5$">β$5$</span>]]</span>
       </span>
       
       <p class="shortcomment cmt">a FunctionK, suitable for composition, which calls mapK
@@ -709,6 +715,8 @@ bound independently of the <code>F</code> and <code>A</code> parameters below.
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
@@ -727,6 +735,8 @@ bound independently of the <code>F</code> and <code>A</code> parameters below.
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="cats.free.Free#pure" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
@@ -794,28 +804,6 @@ bound independently of the <code>F</code> and <code>A</code> parameters below.
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait():Unit"></a>
-      <span class="permalink">
-      <a href="../../cats/free/Free$.html#wait():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
-    </span>)</span>
-              
-        </dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <span class="permalink">
       <a href="../../cats/free/Free$.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
@@ -861,6 +849,28 @@ bound independently of the <code>F</code> and <code>A</code> parameters below.
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/free/Free$.html#wait():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
     </li>
               </ol>
             </div>
@@ -869,7 +879,33 @@ bound independently of the <code>F</code> and <code>A</code> parameters below.
 
         <div class="values members">
               <h3>Deprecated Value Members</h3>
-              <ol><li name="cats.free.Free#suspend" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+              <ol><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/free/Free$.html#finalize():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version ) see corresponding Javadoc for more information.">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+                <span class="name">@Deprecated</span>
+              
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version )</i> see corresponding Javadoc for more information.</p></dd></dl></div>
+    </li><li name="cats.free.Free#suspend" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="suspend[F[_],A](value:=&gt;cats.free.Free[F,A]):cats.free.Free[F,A]"></a><a id="suspend[F[_],A](⇒Free[F,A]):Free[F,A]"></a>
       <span class="permalink">
       <a href="../../cats/free/Free$.html#suspend[F[_],A](value:=&gt;cats.free.Free[F,A]):cats.free.Free[F,A]" title="Permalink">

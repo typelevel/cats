@@ -1,4 +1,4 @@
-<html><head><title>Cats: Validated</title><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Cats contributors" /><meta name="description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="og:image" content="/cats/img/poster.png" /><meta name="image" property="og:image" content="/cats/img/poster.png" /><meta name="og:title" content="Cats: Validated" /><meta name="title" property="og:title" content="Cats: Validated" /><meta name="og:site_name" content="Cats" /><meta name="og:url" content="http://typelevel.org/cats/" /><meta name="og:type" content="website" /><meta name="og:description" content="Lightweight, modular, and extensible library for functional programming" /><link rel="icon" type="image/png" href="/cats/img/favicon.png" /><meta name="twitter:title" content="Cats: Validated" /><meta name="twitter:image" content="/cats/img/poster.png" /><meta name="twitter:description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="twitter:card" content="summary_large_image" /><link rel="icon" type="image/png" sizes="16x16" href="/cats/img/favicon16x16.png" /><link rel="icon" type="image/png" sizes="24x24" href="/cats/img/favicon24x24.png" /><link rel="icon" type="image/png" sizes="32x32" href="/cats/img/favicon32x32.png" /><link rel="icon" type="image/png" sizes="48x48" href="/cats/img/favicon48x48.png" /><link rel="icon" type="image/png" sizes="57x57" href="/cats/img/favicon57x57.png" /><link rel="icon" type="image/png" sizes="60x60" href="/cats/img/favicon60x60.png" /><link rel="icon" type="image/png" sizes="64x64" href="/cats/img/favicon64x64.png" /><link rel="icon" type="image/png" sizes="70x70" href="/cats/img/favicon70x70.png" /><link rel="icon" type="image/png" sizes="72x72" href="/cats/img/favicon72x72.png" /><link rel="icon" type="image/png" sizes="76x76" href="/cats/img/favicon76x76.png" /><link rel="icon" type="image/png" sizes="96x96" href="/cats/img/favicon96x96.png" /><link rel="icon" type="image/png" sizes="114x114" href="/cats/img/favicon114x114.png" /><link rel="icon" type="image/png" sizes="120x120" href="/cats/img/favicon120x120.png" /><link rel="icon" type="image/png" sizes="128x128" href="/cats/img/favicon128x128.png" /><link rel="icon" type="image/png" sizes="144x144" href="/cats/img/favicon144x144.png" /><link rel="icon" type="image/png" sizes="150x150" href="/cats/img/favicon150x150.png" /><link rel="icon" type="image/png" sizes="152x152" href="/cats/img/favicon152x152.png" /><link rel="icon" type="image/png" sizes="196x196" href="/cats/img/favicon196x196.png" /><link rel="icon" type="image/png" sizes="310x310" href="/cats/img/favicon310x310.png" /><link rel="icon" type="image/png" sizes="310x150" href="/cats/img/favicon310x150.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" /><link rel="stylesheet" href="/cats/highlight/styles/atom-one-light.css" /><link rel="stylesheet" href="/cats/css/style.css" /><link rel="stylesheet" href="/cats/css/palette.css" /><link rel="stylesheet" href="/cats/css/codemirror.css" /><link rel="stylesheet" href="/cats/css/override.css" /></head><body class="docs"><div id="wrapper"><div id="sidebar-wrapper"><ul id="sidebar" class="sidebar-nav"><li class="sidebar-brand"><a href="/cats/" class="brand"><div class="brand-wrapper"><span>Cats</span></div></a></li>                   <li><a href="/cats/datatypes.html" class="">Data Types</a></li> <li><a href="/cats/datatypes/chain.html" class="">Chain</a></li> <li><a href="/cats/datatypes/const.html" class="">Const</a></li> <li><a href="/cats/datatypes/contt.html" class="">ContT</a></li> <li><a href="/cats/datatypes/either.html" class="">Either</a></li> <li><a href="/cats/datatypes/eval.html" class="">Eval</a></li> <li><a href="/cats/datatypes/freeapplicative.html" class="">FreeApplicatives</a></li> <li><a href="/cats/datatypes/freemonad.html" class="">FreeMonads</a></li> <li><a href="/cats/datatypes/functionk.html" class="">FunctionK</a></li> <li><a href="/cats/datatypes/id.html" class="">Id</a></li> <li><a href="/cats/datatypes/ior.html" class="">Ior</a></li> <li><a href="/cats/datatypes/kleisli.html" class="">Kleisli</a></li> <li><a href="/cats/datatypes/nested.html" class="">Nested</a></li> <li><a href="/cats/datatypes/nel.html" class="">NonEmptyList</a></li> <li><a href="/cats/datatypes/oneand.html" class="">OneAnd</a></li> <li><a href="/cats/datatypes/optiont.html" class="">OptionT</a></li> <li><a href="/cats/datatypes/eithert.html" class="">EitherT</a></li> <li><a href="/cats/datatypes/iort.html" class="">IorT</a></li> <li><a href="/cats/datatypes/state.html" class="">State</a></li> <li><a href="/cats/datatypes/validated.html" class=" active ">Validated</a></li></ul></div><div id="page-content-wrapper"><div class="nav"><div class="container-fluid"><div class="row"><div class="col-lg-12"><div class="action-menu pull-left clearfix"><a href="#menu-toggle" id="menu-toggle"><i class="fa fa-bars" aria-hidden="true"></i></a></div><ul class="pull-right"><li id="gh-eyes-item" class="hidden-xs"><a href="https://github.com/typelevel/cats"><i class="fa fa-eye"></i><span>WATCH<span id="eyes" class="label label-default">--</span></span></a></li><li id="gh-stars-item" class="hidden-xs"><a href="https://github.com/typelevel/cats"><i class="fa fa-star-o"></i><span>STARS<span id="stars" class="label label-default">--</span></span></a></li><li><a href="#" onclick="shareSiteTwitter('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-twitter"></i></a></li><li><a href="#" onclick="shareSiteFacebook('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-facebook"></i></a></li><li><a href="#" onclick="shareSiteGoogle();"><i class="fa fa-google-plus"></i></a></li></ul></div></div></div></div><div id="content" data-github-owner="typelevel" data-github-repo="cats"><div class="content-wrapper"><section><h1 id="validated">Validated</h1>
+<!DOCTYPE html><html><head><title>Cats: Validated</title><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Cats contributors" /><meta name="description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="og:image" content="/cats/img/poster.png" /><meta name="image" property="og:image" content="/cats/img/poster.png" /><meta name="og:title" content="Cats: Validated" /><meta name="title" property="og:title" content="Cats: Validated" /><meta name="og:site_name" content="Cats" /><meta name="og:url" content="http://typelevel.org/cats/" /><meta name="og:type" content="website" /><meta name="og:description" content="Lightweight, modular, and extensible library for functional programming" /><link rel="icon" type="image/png" href="/cats/img/favicon.png" /><meta name="twitter:title" content="Cats: Validated" /><meta name="twitter:image" content="/cats/img/poster.png" /><meta name="twitter:description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="twitter:card" content="summary_large_image" /><link rel="icon" type="image/png" sizes="16x16" href="/cats/img/favicon16x16.png" /><link rel="icon" type="image/png" sizes="24x24" href="/cats/img/favicon24x24.png" /><link rel="icon" type="image/png" sizes="32x32" href="/cats/img/favicon32x32.png" /><link rel="icon" type="image/png" sizes="48x48" href="/cats/img/favicon48x48.png" /><link rel="icon" type="image/png" sizes="57x57" href="/cats/img/favicon57x57.png" /><link rel="icon" type="image/png" sizes="60x60" href="/cats/img/favicon60x60.png" /><link rel="icon" type="image/png" sizes="64x64" href="/cats/img/favicon64x64.png" /><link rel="icon" type="image/png" sizes="70x70" href="/cats/img/favicon70x70.png" /><link rel="icon" type="image/png" sizes="72x72" href="/cats/img/favicon72x72.png" /><link rel="icon" type="image/png" sizes="76x76" href="/cats/img/favicon76x76.png" /><link rel="icon" type="image/png" sizes="96x96" href="/cats/img/favicon96x96.png" /><link rel="icon" type="image/png" sizes="114x114" href="/cats/img/favicon114x114.png" /><link rel="icon" type="image/png" sizes="120x120" href="/cats/img/favicon120x120.png" /><link rel="icon" type="image/png" sizes="128x128" href="/cats/img/favicon128x128.png" /><link rel="icon" type="image/png" sizes="144x144" href="/cats/img/favicon144x144.png" /><link rel="icon" type="image/png" sizes="150x150" href="/cats/img/favicon150x150.png" /><link rel="icon" type="image/png" sizes="152x152" href="/cats/img/favicon152x152.png" /><link rel="icon" type="image/png" sizes="196x196" href="/cats/img/favicon196x196.png" /><link rel="icon" type="image/png" sizes="310x310" href="/cats/img/favicon310x310.png" /><link rel="icon" type="image/png" sizes="310x150" href="/cats/img/favicon310x150.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" /><link rel="stylesheet" href="/cats/highlight/styles/atom-one-light.css" /><link rel="stylesheet" href="/cats/css/pattern-style.css" /></head><body class="docs"><div id="wrapper"><div id="sidebar-wrapper"><ul id="sidebar" class="sidebar-nav"><li class="sidebar-brand"><a href="/cats/" class="brand"><div class="brand-wrapper"><span>Cats</span></div></a></li><li><a href="/cats/datatypes/chain.html" class="">Chain</a></li><li><a href="/cats/datatypes/const.html" class="">Const</a></li><li><a href="/cats/datatypes/contt.html" class="">ContT</a></li><li><a href="/cats/datatypes.html" class="">Data Types</a></li><li><a href="/cats/datatypes/either.html" class="">Either</a></li><li><a href="/cats/datatypes/eithert.html" class="">EitherT</a></li><li><a href="/cats/datatypes/eval.html" class="">Eval</a></li><li><a href="/cats/datatypes/freeapplicative.html" class="">FreeApplicatives</a></li><li><a href="/cats/datatypes/freemonad.html" class="">FreeMonads</a></li><li><a href="/cats/datatypes/functionk.html" class="">FunctionK</a></li><li><a href="/cats/datatypes/id.html" class="">Id</a></li><li><a href="/cats/datatypes/ior.html" class="">Ior</a></li><li><a href="/cats/datatypes/iort.html" class="">IorT</a></li><li><a href="/cats/datatypes/kleisli.html" class="">Kleisli</a></li><li><a href="/cats/datatypes/nel.html" class="">NonEmptyList</a></li><li><a href="/cats/datatypes/nested.html" class="">Nested</a></li><li><a href="/cats/datatypes/oneand.html" class="">OneAnd</a></li><li><a href="/cats/datatypes/optiont.html" class="">OptionT</a></li><li><a href="/cats/datatypes/state.html" class="">State</a></li><li><a href="/cats/datatypes/validated.html" class=" active ">Validated</a></li><li><a href="/cats/datatypes/writer.html" class="">Writer</a></li><li><a href="/cats/datatypes/writert.html" class="">WriterT</a></li></ul></div><div id="page-content-wrapper"><div class="nav"><div class="container-fluid"><div class="row"><div class="col-lg-12"><div class="action-menu pull-left clearfix"><a href="#menu-toggle" id="menu-toggle"><i class="fa fa-bars" aria-hidden="true"></i></a></div><ul class="pull-right"><li id="gh-eyes-item" class="hidden-xs"><a href="https://github.com/typelevel/cats" target="_blank" rel="noopener noreferrer"><i class="fa fa-eye"></i><span>Watchers<span id="eyes" class="label label-default">--</span></span></a></li><li id="gh-stars-item" class="hidden-xs"><a href="https://github.com/typelevel/cats" target="_blank" rel="noopener noreferrer"><i class="fa fa-star-o"></i><span>Stars<span id="stars" class="label label-default">--</span></span></a></li><li><a href="#" onclick="shareSiteTwitter('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-twitter"></i></a></li><li><a href="#" onclick="shareSiteFacebook('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-facebook"></i></a></li><li><a href="#" onclick="shareSiteGoogle();"><i class="fa fa-google-plus"></i></a></li></ul></div></div></div></div><div id="content" data-github-owner="typelevel" data-github-repo="cats"><div class="content-wrapper"><section><h1 id="validated">Validated</h1>
 
 <p>Imagine you are filling out a web form to signup for an account. You input your username and password and submit.
 Response comes back saying your username can’t have dashes in it, so you make some changes and resubmit. Can’t
@@ -10,111 +10,107 @@ be validated separately from it not having special characters, as well as from t
 requirements. A misspelled (or missing) field in a config can be validated separately from another field not being
 well-formed.</p>
 
-<p>Enter <code class="highlighter-rouge">Validated</code>.</p>
+<p>Enter <code class="language-plaintext highlighter-rouge">Validated</code>.</p>
 
 <h2 id="a-first-approach">A first approach</h2>
 
-<p>You’ll note firsthand that <code class="highlighter-rouge">Validated</code> is very similar to <code class="highlighter-rouge">Either</code> because it also has two possible values: errors on the left side or successful computations on the right side.</p>
+<p>You’ll note firsthand that <code class="language-plaintext highlighter-rouge">Validated</code> is very similar to <code class="language-plaintext highlighter-rouge">Either</code> because it also has two possible values: errors on the left side or successful computations on the right side.</p>
 
 <p>Signature of the structure is as follows:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">sealed</span> <span class="k">abstract</span> <span class="k">class</span> <span class="nc">Validated</span><span class="o">[</span><span class="kt">+E</span>, <span class="kt">+A</span><span class="o">]</span> <span class="nc">extends</span> <span class="nc">Product</span> <span class="k">with</span> <span class="nc">Serializable</span> <span class="o">{</span>
-  <span class="c1">// Implementation elided
-</span><span class="o">}</span>
-</code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">sealed</span> <span class="k">abstract</span> <span class="k">class</span> <span class="nc">Validated</span><span class="o">[</span><span class="kt">+E</span>, <span class="kt">+A</span><span class="o">]</span> <span class="nc">extends</span> <span class="nc">Product</span> <span class="k">with</span> <span class="nc">Serializable</span> <span class="o">{</span>
+  <span class="c1">// Implementation elided</span>
+<span class="o">}</span>
+</code></pre></div></div>
 
 <p>And its <em>projections</em>:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">final</span> <span class="k">case</span> <span class="k">class</span> <span class="nc">Valid</span><span class="o">[</span><span class="kt">+A</span><span class="o">](</span><span class="n">a</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">Validated</span><span class="o">[</span><span class="kt">Nothing</span>, <span class="kt">A</span><span class="o">]</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">final</span> <span class="k">case</span> <span class="k">class</span> <span class="nc">Valid</span><span class="o">[</span><span class="kt">+A</span><span class="o">](</span><span class="n">a</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">Validated</span><span class="o">[</span><span class="kt">Nothing</span>, <span class="kt">A</span><span class="o">]</span>
 <span class="k">final</span> <span class="k">case</span> <span class="k">class</span> <span class="nc">Invalid</span><span class="o">[</span><span class="kt">+E</span><span class="o">](</span><span class="n">e</span><span class="k">:</span> <span class="kt">E</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">Validated</span><span class="o">[</span><span class="kt">E</span>, <span class="kt">Nothing</span><span class="o">]</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<p>Before diving into <code class="highlighter-rouge">Validated</code>, let’s take a look at an <code class="highlighter-rouge">Either</code> based first approach to address our validation necessity.</p>
+<p>Before diving into <code class="language-plaintext highlighter-rouge">Validated</code>, let’s take a look at an <code class="language-plaintext highlighter-rouge">Either</code> based first approach to address our validation necessity.</p>
 
 <p>Our data will be represented this way:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">final</span> <span class="k">case</span> <span class="k">class</span> <span class="nc">RegistrationData</span><span class="o">(</span><span class="n">username</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">password</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">firstName</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">lastName</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">age</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span>
-</code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">final</span> <span class="k">case</span> <span class="k">class</span> <span class="nc">RegistrationData</span><span class="o">(</span><span class="n">username</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">password</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">firstName</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">lastName</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">age</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span>
+</code></pre></div></div>
 
 <p>And our error model:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">sealed</span> <span class="k">trait</span> <span class="nc">DomainValidation</span> <span class="o">{</span>
-  <span class="k">def</span> <span class="n">errorMessage</span><span class="k">:</span> <span class="kt">String</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">sealed</span> <span class="k">trait</span> <span class="nc">DomainValidation</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="nf">errorMessage</span><span class="k">:</span> <span class="kt">String</span>
 <span class="o">}</span>
 
 <span class="k">case</span> <span class="k">object</span> <span class="nc">UsernameHasSpecialCharacters</span> <span class="k">extends</span> <span class="nc">DomainValidation</span> <span class="o">{</span>
-  <span class="k">def</span> <span class="n">errorMessage</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"Username cannot contain special characters."</span>
+  <span class="k">def</span> <span class="nf">errorMessage</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"Username cannot contain special characters."</span>
 <span class="o">}</span>
 
 <span class="k">case</span> <span class="k">object</span> <span class="nc">PasswordDoesNotMeetCriteria</span> <span class="k">extends</span> <span class="nc">DomainValidation</span> <span class="o">{</span>
-  <span class="k">def</span> <span class="n">errorMessage</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"Password must be at least 10 characters long, including an uppercase and a lowercase letter, one number and one special character."</span>
+  <span class="k">def</span> <span class="nf">errorMessage</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"Password must be at least 10 characters long, including an uppercase and a lowercase letter, one number and one special character."</span>
 <span class="o">}</span>
 
 <span class="k">case</span> <span class="k">object</span> <span class="nc">FirstNameHasSpecialCharacters</span> <span class="k">extends</span> <span class="nc">DomainValidation</span> <span class="o">{</span>
-  <span class="k">def</span> <span class="n">errorMessage</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"First name cannot contain spaces, numbers or special characters."</span>
+  <span class="k">def</span> <span class="nf">errorMessage</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"First name cannot contain spaces, numbers or special characters."</span>
 <span class="o">}</span>
 
 <span class="k">case</span> <span class="k">object</span> <span class="nc">LastNameHasSpecialCharacters</span> <span class="k">extends</span> <span class="nc">DomainValidation</span> <span class="o">{</span>
-  <span class="k">def</span> <span class="n">errorMessage</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"Last name cannot contain spaces, numbers or special characters."</span>
+  <span class="k">def</span> <span class="nf">errorMessage</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"Last name cannot contain spaces, numbers or special characters."</span>
 <span class="o">}</span>
 
 <span class="k">case</span> <span class="k">object</span> <span class="nc">AgeIsInvalid</span> <span class="k">extends</span> <span class="nc">DomainValidation</span> <span class="o">{</span>
-  <span class="k">def</span> <span class="n">errorMessage</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"You must be aged 18 and not older than 75 to use our services."</span>
+  <span class="k">def</span> <span class="nf">errorMessage</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"You must be aged 18 and not older than 75 to use our services."</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<p>We have our <code class="highlighter-rouge">RegistrationData</code> case class that will hold the information the user has submitted, alongside the definition of the error model that we’ll be using for displaying the possible errors of every field. Now, let’s explore the proposed implementation:</p>
+<p>We have our <code class="language-plaintext highlighter-rouge">RegistrationData</code> case class that will hold the information the user has submitted, alongside the definition of the error model that we’ll be using for displaying the possible errors of every field. Now, let’s explore the proposed implementation:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
 
 <span class="k">sealed</span> <span class="k">trait</span> <span class="nc">FormValidator</span> <span class="o">{</span>
- <span class="k">def</span> <span class="n">validateUserName</span><span class="o">(</span><span class="n">userName</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">DomainValidation</span>, <span class="kt">String</span><span class="o">]</span> <span class="k">=</span>
-    <span class="nc">Either</span><span class="o">.</span><span class="n">cond</span><span class="o">(</span>
-      <span class="n">userName</span><span class="o">.</span><span class="n">matches</span><span class="o">(</span><span class="s">"^[a-zA-Z0-9]+$"</span><span class="o">),</span>
+ <span class="k">def</span> <span class="nf">validateUserName</span><span class="o">(</span><span class="n">userName</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">DomainValidation</span>, <span class="kt">String</span><span class="o">]</span> <span class="k">=</span>
+    <span class="nv">Either</span><span class="o">.</span><span class="py">cond</span><span class="o">(</span>
+      <span class="nv">userName</span><span class="o">.</span><span class="py">matches</span><span class="o">(</span><span class="s">"^[a-zA-Z0-9]+$"</span><span class="o">),</span>
       <span class="n">userName</span><span class="o">,</span>
       <span class="nc">UsernameHasSpecialCharacters</span>
     <span class="o">)</span>
 
- <span class="k">def</span> <span class="n">validatePassword</span><span class="o">(</span><span class="n">password</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">DomainValidation</span>, <span class="kt">String</span><span class="o">]</span> <span class="k">=</span>
-    <span class="nc">Either</span><span class="o">.</span><span class="n">cond</span><span class="o">(</span>
-      <span class="n">password</span><span class="o">.</span><span class="n">matches</span><span class="o">(</span><span class="s">"(?=^.{10,}$)((?=.*\\d)|(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$"</span><span class="o">),</span>
+ <span class="k">def</span> <span class="nf">validatePassword</span><span class="o">(</span><span class="n">password</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">DomainValidation</span>, <span class="kt">String</span><span class="o">]</span> <span class="k">=</span>
+    <span class="nv">Either</span><span class="o">.</span><span class="py">cond</span><span class="o">(</span>
+      <span class="nv">password</span><span class="o">.</span><span class="py">matches</span><span class="o">(</span><span class="s">"(?=^.{10,}$)((?=.*\\d)|(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$"</span><span class="o">),</span>
       <span class="n">password</span><span class="o">,</span>
       <span class="nc">PasswordDoesNotMeetCriteria</span>
     <span class="o">)</span>
 
- <span class="k">def</span> <span class="n">validateFirstName</span><span class="o">(</span><span class="n">firstName</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">DomainValidation</span>, <span class="kt">String</span><span class="o">]</span> <span class="k">=</span>
-    <span class="nc">Either</span><span class="o">.</span><span class="n">cond</span><span class="o">(</span>
-      <span class="n">firstName</span><span class="o">.</span><span class="n">matches</span><span class="o">(</span><span class="s">"^[a-zA-Z]+$"</span><span class="o">),</span>
+ <span class="k">def</span> <span class="nf">validateFirstName</span><span class="o">(</span><span class="n">firstName</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">DomainValidation</span>, <span class="kt">String</span><span class="o">]</span> <span class="k">=</span>
+    <span class="nv">Either</span><span class="o">.</span><span class="py">cond</span><span class="o">(</span>
+      <span class="nv">firstName</span><span class="o">.</span><span class="py">matches</span><span class="o">(</span><span class="s">"^[a-zA-Z]+$"</span><span class="o">),</span>
       <span class="n">firstName</span><span class="o">,</span>
       <span class="nc">FirstNameHasSpecialCharacters</span>
     <span class="o">)</span>
 
- <span class="k">def</span> <span class="n">validateLastName</span><span class="o">(</span><span class="n">lastName</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">DomainValidation</span>, <span class="kt">String</span><span class="o">]</span> <span class="k">=</span>
-    <span class="nc">Either</span><span class="o">.</span><span class="n">cond</span><span class="o">(</span>
-      <span class="n">lastName</span><span class="o">.</span><span class="n">matches</span><span class="o">(</span><span class="s">"^[a-zA-Z]+$"</span><span class="o">),</span>
+ <span class="k">def</span> <span class="nf">validateLastName</span><span class="o">(</span><span class="n">lastName</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">DomainValidation</span>, <span class="kt">String</span><span class="o">]</span> <span class="k">=</span>
+    <span class="nv">Either</span><span class="o">.</span><span class="py">cond</span><span class="o">(</span>
+      <span class="nv">lastName</span><span class="o">.</span><span class="py">matches</span><span class="o">(</span><span class="s">"^[a-zA-Z]+$"</span><span class="o">),</span>
       <span class="n">lastName</span><span class="o">,</span>
       <span class="nc">LastNameHasSpecialCharacters</span>
     <span class="o">)</span>
 
- <span class="k">def</span> <span class="n">validateAge</span><span class="o">(</span><span class="n">age</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">DomainValidation</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span>
-    <span class="nc">Either</span><span class="o">.</span><span class="n">cond</span><span class="o">(</span>
+ <span class="k">def</span> <span class="nf">validateAge</span><span class="o">(</span><span class="n">age</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">DomainValidation</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span>
+    <span class="nv">Either</span><span class="o">.</span><span class="py">cond</span><span class="o">(</span>
       <span class="n">age</span> <span class="o">&gt;=</span> <span class="mi">18</span> <span class="o">&amp;&amp;</span> <span class="n">age</span> <span class="o">&lt;=</span> <span class="mi">75</span><span class="o">,</span>
       <span class="n">age</span><span class="o">,</span>
       <span class="nc">AgeIsInvalid</span>
     <span class="o">)</span>
 
-  <span class="k">def</span> <span class="n">validateForm</span><span class="o">(</span><span class="n">username</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">password</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">firstName</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">lastName</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">age</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">DomainValidation</span>, <span class="kt">RegistrationData</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="nf">validateForm</span><span class="o">(</span><span class="n">username</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">password</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">firstName</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">lastName</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">age</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">DomainValidation</span>, <span class="kt">RegistrationData</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
 
     <span class="k">for</span> <span class="o">{</span>
-      <span class="n">validatedUserName</span> <span class="k">&lt;-</span> <span class="n">validateUserName</span><span class="o">(</span><span class="n">username</span><span class="o">)</span>
-      <span class="n">validatedPassword</span> <span class="k">&lt;-</span> <span class="n">validatePassword</span><span class="o">(</span><span class="n">password</span><span class="o">)</span>
-      <span class="n">validatedFirstName</span> <span class="k">&lt;-</span> <span class="n">validateFirstName</span><span class="o">(</span><span class="n">firstName</span><span class="o">)</span>
-      <span class="n">validatedLastName</span> <span class="k">&lt;-</span> <span class="n">validateLastName</span><span class="o">(</span><span class="n">lastName</span><span class="o">)</span>
-      <span class="n">validatedAge</span> <span class="k">&lt;-</span> <span class="n">validateAge</span><span class="o">(</span><span class="n">age</span><span class="o">)</span>
+      <span class="n">validatedUserName</span> <span class="k">&lt;-</span> <span class="nf">validateUserName</span><span class="o">(</span><span class="n">username</span><span class="o">)</span>
+      <span class="n">validatedPassword</span> <span class="k">&lt;-</span> <span class="nf">validatePassword</span><span class="o">(</span><span class="n">password</span><span class="o">)</span>
+      <span class="n">validatedFirstName</span> <span class="k">&lt;-</span> <span class="nf">validateFirstName</span><span class="o">(</span><span class="n">firstName</span><span class="o">)</span>
+      <span class="n">validatedLastName</span> <span class="k">&lt;-</span> <span class="nf">validateLastName</span><span class="o">(</span><span class="n">lastName</span><span class="o">)</span>
+      <span class="n">validatedAge</span> <span class="k">&lt;-</span> <span class="nf">validateAge</span><span class="o">(</span><span class="n">age</span><span class="o">)</span>
     <span class="o">}</span> <span class="k">yield</span> <span class="nc">RegistrationData</span><span class="o">(</span><span class="n">validatedUserName</span><span class="o">,</span> <span class="n">validatedPassword</span><span class="o">,</span> <span class="n">validatedFirstName</span><span class="o">,</span> <span class="n">validatedLastName</span><span class="o">,</span> <span class="n">validatedAge</span><span class="o">)</span>
   <span class="o">}</span>
 
@@ -122,95 +118,92 @@ well-formed.</p>
 
 <span class="k">object</span> <span class="nc">FormValidator</span> <span class="k">extends</span> <span class="nc">FormValidator</span>
 
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<p>The logic of the validation process is as follows: <strong>check every individual field based on the established rules for each one of them. If the validation is successful, then return the field wrapped in a <code class="highlighter-rouge">Right</code> instance; If not, then return a <code class="highlighter-rouge">DomainValidation</code> with the respective message, wrapped in a <code class="highlighter-rouge">Left</code> instance</strong>.
-Note that we took advantage of the <code class="highlighter-rouge">.cond</code> method of <code class="highlighter-rouge">Either</code>, that is equivalent to do <code class="highlighter-rouge">if (cond) Right(value) else Left(error)</code>.</p>
+<p>The logic of the validation process is as follows: <strong>check every individual field based on the established rules for each one of them. If the validation is successful, then return the field wrapped in a <code class="language-plaintext highlighter-rouge">Right</code> instance; If not, then return a <code class="language-plaintext highlighter-rouge">DomainValidation</code> with the respective message, wrapped in a <code class="language-plaintext highlighter-rouge">Left</code> instance</strong>.
+Note that we took advantage of the <code class="language-plaintext highlighter-rouge">.cond</code> method of <code class="language-plaintext highlighter-rouge">Either</code>, that is equivalent to do <code class="language-plaintext highlighter-rouge">if (cond) Right(value) else Left(error)</code>.</p>
 
-<p>Our service has the <code class="highlighter-rouge">validateForm</code> method for checking all the fields and, if the process succeeds it will create an instance of <code class="highlighter-rouge">RegistrationData</code>, right?</p>
+<p>Our service has the <code class="language-plaintext highlighter-rouge">validateForm</code> method for checking all the fields and, if the process succeeds it will create an instance of <code class="language-plaintext highlighter-rouge">RegistrationData</code>, right?</p>
 
 <p>Well, yes, but the error reporting part will have the downside of showing only the first error.</p>
 
 <p>Let’s look this in detail:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">for</span> <span class="o">{</span>
-  <span class="n">validatedUserName</span> <span class="k">&lt;-</span> <span class="n">validateUserName</span><span class="o">(</span><span class="n">username</span><span class="o">)</span>
-  <span class="n">validatedPassword</span> <span class="k">&lt;-</span> <span class="n">validatePassword</span><span class="o">(</span><span class="n">password</span><span class="o">)</span>
-  <span class="n">validatedFirstName</span> <span class="k">&lt;-</span> <span class="n">validateFirstName</span><span class="o">(</span><span class="n">firstName</span><span class="o">)</span>
-  <span class="n">validatedLastName</span> <span class="k">&lt;-</span> <span class="n">validateLastName</span><span class="o">(</span><span class="n">lastName</span><span class="o">)</span>
-  <span class="n">validatedAge</span> <span class="k">&lt;-</span> <span class="n">validateAge</span><span class="o">(</span><span class="n">age</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="o">{</span>
+  <span class="n">validatedUserName</span> <span class="k">&lt;-</span> <span class="nf">validateUserName</span><span class="o">(</span><span class="n">username</span><span class="o">)</span>
+  <span class="n">validatedPassword</span> <span class="k">&lt;-</span> <span class="nf">validatePassword</span><span class="o">(</span><span class="n">password</span><span class="o">)</span>
+  <span class="n">validatedFirstName</span> <span class="k">&lt;-</span> <span class="nf">validateFirstName</span><span class="o">(</span><span class="n">firstName</span><span class="o">)</span>
+  <span class="n">validatedLastName</span> <span class="k">&lt;-</span> <span class="nf">validateLastName</span><span class="o">(</span><span class="n">lastName</span><span class="o">)</span>
+  <span class="n">validatedAge</span> <span class="k">&lt;-</span> <span class="nf">validateAge</span><span class="o">(</span><span class="n">age</span><span class="o">)</span>
 <span class="o">}</span> <span class="k">yield</span> <span class="nc">RegistrationData</span><span class="o">(</span><span class="n">validatedUserName</span><span class="o">,</span> <span class="n">validatedPassword</span><span class="o">,</span> <span class="n">validatedFirstName</span><span class="o">,</span> <span class="n">validatedLastName</span><span class="o">,</span> <span class="n">validatedAge</span><span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<p>A for-comprehension is <em>fail-fast</em>. If some of the evaluations in the <code class="highlighter-rouge">for</code> block fails for some reason, the <code class="highlighter-rouge">yield</code> statement will not complete. In our case, if that happens we won’t be getting the accumulated list of errors.</p>
+<p>A for-comprehension is <em>fail-fast</em>. If some of the evaluations in the <code class="language-plaintext highlighter-rouge">for</code> block fails for some reason, the <code class="language-plaintext highlighter-rouge">yield</code> statement will not complete. In our case, if that happens we won’t be getting the accumulated list of errors.</p>
 
 <p>If we run our code:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="nc">FormValidator</span><span class="o">.</span><span class="n">validateForm</span><span class="o">(</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">FormValidator</span><span class="o">.</span><span class="py">validateForm</span><span class="o">(</span>
   <span class="n">username</span> <span class="k">=</span> <span class="s">"fakeUs3rname"</span><span class="o">,</span>
   <span class="n">password</span> <span class="k">=</span> <span class="s">"password"</span><span class="o">,</span>
   <span class="n">firstName</span> <span class="k">=</span> <span class="s">"John"</span><span class="o">,</span>
   <span class="n">lastName</span> <span class="k">=</span> <span class="s">"Doe"</span><span class="o">,</span>
   <span class="n">age</span> <span class="k">=</span> <span class="mi">15</span>
 <span class="o">)</span>
-<span class="c1">// res1: Either[DomainValidation,RegistrationData] = Left(PasswordDoesNotMeetCriteria)
-</span></code></pre>
-</div>
+<span class="c1">// res1: Either[DomainValidation, RegistrationData] = Left(</span>
+<span class="c1">//   PasswordDoesNotMeetCriteria</span>
+<span class="c1">// )</span>
+</code></pre></div></div>
 
-<p>We should have gotten another <code class="highlighter-rouge">DomainValidation</code> object denoting the invalid age.</p>
+<p>We should have gotten another <code class="language-plaintext highlighter-rouge">DomainValidation</code> object denoting the invalid age.</p>
 
-<h3 id="an-iteration-with-validated">An iteration with <code class="highlighter-rouge">Validated</code></h3>
+<h3 id="an-iteration-with-validated">An iteration with <code class="language-plaintext highlighter-rouge">Validated</code></h3>
 
-<p>Time to do some refactoring! We’re going to try a <code class="highlighter-rouge">Validated</code> approach:</p>
+<p>Time to do some refactoring! We’re going to try a <code class="language-plaintext highlighter-rouge">Validated</code> approach:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data._</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data._</span>
 <span class="k">import</span> <span class="nn">cats.data.Validated._</span>
 <span class="k">import</span> <span class="nn">cats.implicits._</span>
 
-<span class="k">def</span> <span class="n">validateUserName</span><span class="o">(</span><span class="n">userName</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Validated</span><span class="o">[</span><span class="kt">DomainValidation</span>, <span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nc">FormValidator</span><span class="o">.</span><span class="n">validateUserName</span><span class="o">(</span><span class="n">userName</span><span class="o">).</span><span class="n">toValidated</span>
+<span class="k">def</span> <span class="nf">validateUserName</span><span class="o">(</span><span class="n">userName</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Validated</span><span class="o">[</span><span class="kt">DomainValidation</span>, <span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nv">FormValidator</span><span class="o">.</span><span class="py">validateUserName</span><span class="o">(</span><span class="n">userName</span><span class="o">).</span><span class="py">toValidated</span>
 
-<span class="k">def</span> <span class="n">validatePassword</span><span class="o">(</span><span class="n">password</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Validated</span><span class="o">[</span><span class="kt">DomainValidation</span>, <span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nc">FormValidator</span><span class="o">.</span><span class="n">validatePassword</span><span class="o">(</span><span class="n">password</span><span class="o">).</span><span class="n">toValidated</span>
+<span class="k">def</span> <span class="nf">validatePassword</span><span class="o">(</span><span class="n">password</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Validated</span><span class="o">[</span><span class="kt">DomainValidation</span>, <span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nv">FormValidator</span><span class="o">.</span><span class="py">validatePassword</span><span class="o">(</span><span class="n">password</span><span class="o">).</span><span class="py">toValidated</span>
 
-<span class="k">def</span> <span class="n">validateFirstName</span><span class="o">(</span><span class="n">firstName</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Validated</span><span class="o">[</span><span class="kt">DomainValidation</span>, <span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nc">FormValidator</span><span class="o">.</span><span class="n">validateFirstName</span><span class="o">(</span><span class="n">firstName</span><span class="o">).</span><span class="n">toValidated</span>
+<span class="k">def</span> <span class="nf">validateFirstName</span><span class="o">(</span><span class="n">firstName</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Validated</span><span class="o">[</span><span class="kt">DomainValidation</span>, <span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nv">FormValidator</span><span class="o">.</span><span class="py">validateFirstName</span><span class="o">(</span><span class="n">firstName</span><span class="o">).</span><span class="py">toValidated</span>
 
-<span class="k">def</span> <span class="n">validateLastName</span><span class="o">(</span><span class="n">lastName</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Validated</span><span class="o">[</span><span class="kt">DomainValidation</span>, <span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nc">FormValidator</span><span class="o">.</span><span class="n">validateLastName</span><span class="o">(</span><span class="n">lastName</span><span class="o">).</span><span class="n">toValidated</span>
+<span class="k">def</span> <span class="nf">validateLastName</span><span class="o">(</span><span class="n">lastName</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Validated</span><span class="o">[</span><span class="kt">DomainValidation</span>, <span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nv">FormValidator</span><span class="o">.</span><span class="py">validateLastName</span><span class="o">(</span><span class="n">lastName</span><span class="o">).</span><span class="py">toValidated</span>
 
-<span class="k">def</span> <span class="n">validateAge</span><span class="o">(</span><span class="n">age</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">Validated</span><span class="o">[</span><span class="kt">DomainValidation</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">FormValidator</span><span class="o">.</span><span class="n">validateAge</span><span class="o">(</span><span class="n">age</span><span class="o">).</span><span class="n">toValidated</span>
-</code></pre>
-</div>
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">validateForm</span><span class="o">(</span><span class="n">username</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">password</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">firstName</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">lastName</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">age</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">Validated</span><span class="o">[</span><span class="kt">DomainValidation</span>, <span class="kt">RegistrationData</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+<span class="k">def</span> <span class="nf">validateAge</span><span class="o">(</span><span class="n">age</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">Validated</span><span class="o">[</span><span class="kt">DomainValidation</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nv">FormValidator</span><span class="o">.</span><span class="py">validateAge</span><span class="o">(</span><span class="n">age</span><span class="o">).</span><span class="py">toValidated</span>
+</code></pre></div></div>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">validateForm</span><span class="o">(</span><span class="n">username</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">password</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">firstName</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">lastName</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">age</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">Validated</span><span class="o">[</span><span class="kt">DomainValidation</span>, <span class="kt">RegistrationData</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
   <span class="k">for</span> <span class="o">{</span>
-    <span class="n">validatedUserName</span> <span class="k">&lt;-</span> <span class="n">validateUserName</span><span class="o">(</span><span class="n">username</span><span class="o">)</span>
-    <span class="n">validatedPassword</span> <span class="k">&lt;-</span> <span class="n">validatePassword</span><span class="o">(</span><span class="n">password</span><span class="o">)</span>
-    <span class="n">validatedFirstName</span> <span class="k">&lt;-</span> <span class="n">validateFirstName</span><span class="o">(</span><span class="n">firstName</span><span class="o">)</span>
-    <span class="n">validatedLastName</span> <span class="k">&lt;-</span> <span class="n">validateLastName</span><span class="o">(</span><span class="n">lastName</span><span class="o">)</span>
-    <span class="n">validatedAge</span> <span class="k">&lt;-</span> <span class="n">validateAge</span><span class="o">(</span><span class="n">age</span><span class="o">)</span>
+    <span class="n">validatedUserName</span> <span class="k">&lt;-</span> <span class="nf">validateUserName</span><span class="o">(</span><span class="n">username</span><span class="o">)</span>
+    <span class="n">validatedPassword</span> <span class="k">&lt;-</span> <span class="nf">validatePassword</span><span class="o">(</span><span class="n">password</span><span class="o">)</span>
+    <span class="n">validatedFirstName</span> <span class="k">&lt;-</span> <span class="nf">validateFirstName</span><span class="o">(</span><span class="n">firstName</span><span class="o">)</span>
+    <span class="n">validatedLastName</span> <span class="k">&lt;-</span> <span class="nf">validateLastName</span><span class="o">(</span><span class="n">lastName</span><span class="o">)</span>
+    <span class="n">validatedAge</span> <span class="k">&lt;-</span> <span class="nf">validateAge</span><span class="o">(</span><span class="n">age</span><span class="o">)</span>
   <span class="o">}</span> <span class="k">yield</span> <span class="nc">RegistrationData</span><span class="o">(</span><span class="n">validatedUserName</span><span class="o">,</span> <span class="n">validatedPassword</span><span class="o">,</span> <span class="n">validatedFirstName</span><span class="o">,</span> <span class="n">validatedLastName</span><span class="o">,</span> <span class="n">validatedAge</span><span class="o">)</span>
 <span class="o">}</span>
-<span class="c1">// &lt;console&gt;:34: error: value flatMap is not a member of cats.data.Validated[DomainValidation,String]
-//            validatedUserName &lt;- validateUserName(username)
-//                                                 ^
-// &lt;console&gt;:35: error: value flatMap is not a member of cats.data.Validated[DomainValidation,String]
-//            validatedPassword &lt;- validatePassword(password)
-//                                                 ^
-// &lt;console&gt;:36: error: value flatMap is not a member of cats.data.Validated[DomainValidation,String]
-//            validatedFirstName &lt;- validateFirstName(firstName)
-//                                                   ^
-// &lt;console&gt;:37: error: value flatMap is not a member of cats.data.Validated[DomainValidation,String]
-//            validatedLastName &lt;- validateLastName(lastName)
-//                                                 ^
-</span></code></pre>
-</div>
+<span class="c1">// error: value flatMap is not a member of cats.data.Validated[repl.MdocSession.App.DomainValidation,String]</span>
+<span class="c1">//     validatedUserName &lt;- validateUserName(username)</span>
+<span class="c1">//                          ^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
+<span class="c1">// error: value flatMap is not a member of cats.data.Validated[repl.MdocSession.App.DomainValidation,String]</span>
+<span class="c1">//     validatedPassword &lt;- validatePassword(password)</span>
+<span class="c1">//                          ^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
+<span class="c1">// error: value flatMap is not a member of cats.data.Validated[repl.MdocSession.App.DomainValidation,String]</span>
+<span class="c1">//     validatedFirstName &lt;- validateFirstName(firstName)</span>
+<span class="c1">//                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
+<span class="c1">// error: value flatMap is not a member of cats.data.Validated[repl.MdocSession.App.DomainValidation,String]</span>
+<span class="c1">//     validatedLastName &lt;- validateLastName(lastName)</span>
+<span class="c1">//                          ^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
+</code></pre></div></div>
 
-<p>What we’ve done here was to reuse the previously created validation functions and convert their output to a <code class="highlighter-rouge">Validated</code> instance with the <code class="highlighter-rouge">.toValidated</code> combinator. This one takes an <code class="highlighter-rouge">Either</code> and converts it to its equivalent <code class="highlighter-rouge">Validated</code>.
-This datatype, as with <code class="highlighter-rouge">Either</code> has two projections: <code class="highlighter-rouge">Valid</code> and <code class="highlighter-rouge">Invalid</code>, analogous to <code class="highlighter-rouge">Right</code> and <code class="highlighter-rouge">Left</code>, respectively.</p>
+<p>What we’ve done here was to reuse the previously created validation functions and convert their output to a <code class="language-plaintext highlighter-rouge">Validated</code> instance with the <code class="language-plaintext highlighter-rouge">.toValidated</code> combinator. This one takes an <code class="language-plaintext highlighter-rouge">Either</code> and converts it to its equivalent <code class="language-plaintext highlighter-rouge">Validated</code>.
+This datatype, as with <code class="language-plaintext highlighter-rouge">Either</code> has two projections: <code class="language-plaintext highlighter-rouge">Valid</code> and <code class="language-plaintext highlighter-rouge">Invalid</code>, analogous to <code class="language-plaintext highlighter-rouge">Right</code> and <code class="language-plaintext highlighter-rouge">Left</code>, respectively.</p>
 
 <p>Remember that our goal is to get all the validation errors for displaying it to the user, but you’ll find that this approach won’t compile, as you can see in the previous snippet. Why?</p>
 
-<p>Without diving into details about monads, a for-comprehension uses the <code class="highlighter-rouge">flatMap</code> method for composition. Monads like <code class="highlighter-rouge">Either</code> can be composed in that way, but the thing with <code class="highlighter-rouge">Validated</code> is that it isn’t a monad, but an <a href="../typeclasses/applicativetraverse.html"><em>Applicative Functor</em></a>.
-That’s why you see the message: <code class="highlighter-rouge">error: value flatMap is not a member of cats.data.Validated[DomainValidation,String]</code>.</p>
+<p>Without diving into details about monads, a for-comprehension uses the <code class="language-plaintext highlighter-rouge">flatMap</code> method for composition. Monads like <code class="language-plaintext highlighter-rouge">Either</code> can be composed in that way, but the thing with <code class="language-plaintext highlighter-rouge">Validated</code> is that it isn’t a monad, but an <a href="../typeclasses/applicativetraverse.html"><em>Applicative Functor</em></a>.
+That’s why you see the message: <code class="language-plaintext highlighter-rouge">error: value flatMap is not a member of cats.data.Validated[DomainValidation,String]</code>.</p>
 
 <p>So, how do we do here?</p>
 
@@ -218,141 +211,156 @@ That’s why you see the message: <code class="highlighter-rouge">error: value f
 
 <p>We have to look into another direction: a for-comprehension plays well in a fail-fast scenario, but the structure in our previous example was designed to catch one error at a time, so, our next step is to tweak the implementation a bit.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">sealed</span> <span class="k">trait</span> <span class="nc">FormValidatorNec</span> <span class="o">{</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">sealed</span> <span class="k">trait</span> <span class="nc">FormValidatorNec</span> <span class="o">{</span>
 
   <span class="k">type</span> <span class="kt">ValidationResult</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">ValidatedNec</span><span class="o">[</span><span class="kt">DomainValidation</span>, <span class="kt">A</span><span class="o">]</span>
 
-  <span class="k">private</span> <span class="k">def</span> <span class="n">validateUserName</span><span class="o">(</span><span class="n">userName</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">ValidationResult</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">userName</span><span class="o">.</span><span class="n">matches</span><span class="o">(</span><span class="s">"^[a-zA-Z0-9]+$"</span><span class="o">))</span> <span class="n">userName</span><span class="o">.</span><span class="n">validNec</span> <span class="k">else</span> <span class="nc">UsernameHasSpecialCharacters</span><span class="o">.</span><span class="n">invalidNec</span>
+  <span class="k">private</span> <span class="k">def</span> <span class="nf">validateUserName</span><span class="o">(</span><span class="n">userName</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">ValidationResult</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span>
+    <span class="nf">if</span> <span class="o">(</span><span class="nv">userName</span><span class="o">.</span><span class="py">matches</span><span class="o">(</span><span class="s">"^[a-zA-Z0-9]+$"</span><span class="o">))</span> <span class="nv">userName</span><span class="o">.</span><span class="py">validNec</span> <span class="k">else</span> <span class="nv">UsernameHasSpecialCharacters</span><span class="o">.</span><span class="py">invalidNec</span>
 
-  <span class="k">private</span> <span class="k">def</span> <span class="n">validatePassword</span><span class="o">(</span><span class="n">password</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">ValidationResult</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">password</span><span class="o">.</span><span class="n">matches</span><span class="o">(</span><span class="s">"(?=^.{10,}$)((?=.*\\d)|(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$"</span><span class="o">))</span> <span class="n">password</span><span class="o">.</span><span class="n">validNec</span>
-    <span class="k">else</span> <span class="nc">PasswordDoesNotMeetCriteria</span><span class="o">.</span><span class="n">invalidNec</span>
+  <span class="k">private</span> <span class="k">def</span> <span class="nf">validatePassword</span><span class="o">(</span><span class="n">password</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">ValidationResult</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span>
+    <span class="nf">if</span> <span class="o">(</span><span class="nv">password</span><span class="o">.</span><span class="py">matches</span><span class="o">(</span><span class="s">"(?=^.{10,}$)((?=.*\\d)|(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$"</span><span class="o">))</span> <span class="nv">password</span><span class="o">.</span><span class="py">validNec</span>
+    <span class="k">else</span> <span class="nv">PasswordDoesNotMeetCriteria</span><span class="o">.</span><span class="py">invalidNec</span>
 
-  <span class="k">private</span> <span class="k">def</span> <span class="n">validateFirstName</span><span class="o">(</span><span class="n">firstName</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">ValidationResult</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">firstName</span><span class="o">.</span><span class="n">matches</span><span class="o">(</span><span class="s">"^[a-zA-Z]+$"</span><span class="o">))</span> <span class="n">firstName</span><span class="o">.</span><span class="n">validNec</span> <span class="k">else</span> <span class="nc">FirstNameHasSpecialCharacters</span><span class="o">.</span><span class="n">invalidNec</span>
+  <span class="k">private</span> <span class="k">def</span> <span class="nf">validateFirstName</span><span class="o">(</span><span class="n">firstName</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">ValidationResult</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span>
+    <span class="nf">if</span> <span class="o">(</span><span class="nv">firstName</span><span class="o">.</span><span class="py">matches</span><span class="o">(</span><span class="s">"^[a-zA-Z]+$"</span><span class="o">))</span> <span class="nv">firstName</span><span class="o">.</span><span class="py">validNec</span> <span class="k">else</span> <span class="nv">FirstNameHasSpecialCharacters</span><span class="o">.</span><span class="py">invalidNec</span>
 
-  <span class="k">private</span> <span class="k">def</span> <span class="n">validateLastName</span><span class="o">(</span><span class="n">lastName</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">ValidationResult</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">lastName</span><span class="o">.</span><span class="n">matches</span><span class="o">(</span><span class="s">"^[a-zA-Z]+$"</span><span class="o">))</span> <span class="n">lastName</span><span class="o">.</span><span class="n">validNec</span> <span class="k">else</span> <span class="nc">LastNameHasSpecialCharacters</span><span class="o">.</span><span class="n">invalidNec</span>
+  <span class="k">private</span> <span class="k">def</span> <span class="nf">validateLastName</span><span class="o">(</span><span class="n">lastName</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">ValidationResult</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span>
+    <span class="nf">if</span> <span class="o">(</span><span class="nv">lastName</span><span class="o">.</span><span class="py">matches</span><span class="o">(</span><span class="s">"^[a-zA-Z]+$"</span><span class="o">))</span> <span class="nv">lastName</span><span class="o">.</span><span class="py">validNec</span> <span class="k">else</span> <span class="nv">LastNameHasSpecialCharacters</span><span class="o">.</span><span class="py">invalidNec</span>
 
-  <span class="k">private</span> <span class="k">def</span> <span class="n">validateAge</span><span class="o">(</span><span class="n">age</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">ValidationResult</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">age</span> <span class="o">&gt;=</span> <span class="mi">18</span> <span class="o">&amp;&amp;</span> <span class="n">age</span> <span class="o">&lt;=</span> <span class="mi">75</span><span class="o">)</span> <span class="n">age</span><span class="o">.</span><span class="n">validNec</span> <span class="k">else</span> <span class="nc">AgeIsInvalid</span><span class="o">.</span><span class="n">invalidNec</span>
+  <span class="k">private</span> <span class="k">def</span> <span class="nf">validateAge</span><span class="o">(</span><span class="n">age</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">ValidationResult</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span>
+    <span class="nf">if</span> <span class="o">(</span><span class="n">age</span> <span class="o">&gt;=</span> <span class="mi">18</span> <span class="o">&amp;&amp;</span> <span class="n">age</span> <span class="o">&lt;=</span> <span class="mi">75</span><span class="o">)</span> <span class="nv">age</span><span class="o">.</span><span class="py">validNec</span> <span class="k">else</span> <span class="nv">AgeIsInvalid</span><span class="o">.</span><span class="py">invalidNec</span>
 
-  <span class="k">def</span> <span class="n">validateForm</span><span class="o">(</span><span class="n">username</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">password</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">firstName</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">lastName</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">age</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">ValidationResult</span><span class="o">[</span><span class="kt">RegistrationData</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
-    <span class="o">(</span><span class="n">validateUserName</span><span class="o">(</span><span class="n">username</span><span class="o">),</span>
-    <span class="n">validatePassword</span><span class="o">(</span><span class="n">password</span><span class="o">),</span>
-    <span class="n">validateFirstName</span><span class="o">(</span><span class="n">firstName</span><span class="o">),</span>
-    <span class="n">validateLastName</span><span class="o">(</span><span class="n">lastName</span><span class="o">),</span>
-    <span class="n">validateAge</span><span class="o">(</span><span class="n">age</span><span class="o">)).</span><span class="n">mapN</span><span class="o">(</span><span class="nc">RegistrationData</span><span class="o">)</span>
+  <span class="k">def</span> <span class="nf">validateForm</span><span class="o">(</span><span class="n">username</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">password</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">firstName</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">lastName</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">age</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">ValidationResult</span><span class="o">[</span><span class="kt">RegistrationData</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+    <span class="o">(</span><span class="nf">validateUserName</span><span class="o">(</span><span class="n">username</span><span class="o">),</span>
+    <span class="nf">validatePassword</span><span class="o">(</span><span class="n">password</span><span class="o">),</span>
+    <span class="nf">validateFirstName</span><span class="o">(</span><span class="n">firstName</span><span class="o">),</span>
+    <span class="nf">validateLastName</span><span class="o">(</span><span class="n">lastName</span><span class="o">),</span>
+    <span class="nf">validateAge</span><span class="o">(</span><span class="n">age</span><span class="o">)).</span><span class="py">mapN</span><span class="o">(</span><span class="nc">RegistrationData</span><span class="o">)</span>
   <span class="o">}</span>
 
 <span class="o">}</span>
 
 <span class="k">object</span> <span class="nc">FormValidatorNec</span> <span class="k">extends</span> <span class="nc">FormValidatorNec</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Let’s see what changed here:</p>
 
 <ol>
-  <li>In this new implementation, we’re using a <a href="https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/data/NonEmptyChain.scala">NonEmptyChain</a>, a data structure that guarantees that at least one element will be present. In case that multiple errors arise, you’ll get a chain of <code class="highlighter-rouge">DomainValidation</code>.</li>
-  <li><code class="highlighter-rouge">ValidatedNec[DomainValidation, A]</code> is an alias for <code class="highlighter-rouge">Validated[NonEmptyChain[DomainValidation], A]</code>. When you use <code class="highlighter-rouge">ValidatedNec</code> you’re stating that your accumulative structure will be a <code class="highlighter-rouge">NonEmptyChain</code>. With <code class="highlighter-rouge">Validated</code>, you have the choice about which data structure you want for reporting the errors (more on that soon).</li>
-  <li>We’ve declared the type alias <code class="highlighter-rouge">ValidationResult</code> that conveniently expresses the return type of our validation.</li>
-  <li><code class="highlighter-rouge">.validNec</code> and <code class="highlighter-rouge">.invalidNec</code> combinators lets you <em>lift</em> the success or failure in their respective container (either a <code class="highlighter-rouge">Valid</code> or <code class="highlighter-rouge">Invalid[NonEmptyChain[A]]</code>).</li>
-  <li>The <a href="../typeclasses/applicative.html">applicative</a> syntax <code class="highlighter-rouge">(a, b, c, ...).mapN(...)</code> provides us a way to accumulatively apply the validation functions and yield a product with their successful result or the accumulated errors in the <code class="highlighter-rouge">NonEmptyChain</code>. Then, we transform that product with <code class="highlighter-rouge">mapN</code> into a valid instance of <code class="highlighter-rouge">RegistrationData</code>.</li>
+  <li>In this new implementation, we’re using a <a href="https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/data/NonEmptyChain.scala">NonEmptyChain</a>, a data structure that guarantees that at least one element will be present. In case that multiple errors arise, you’ll get a chain of <code class="language-plaintext highlighter-rouge">DomainValidation</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">ValidatedNec[DomainValidation, A]</code> is an alias for <code class="language-plaintext highlighter-rouge">Validated[NonEmptyChain[DomainValidation], A]</code>. When you use <code class="language-plaintext highlighter-rouge">ValidatedNec</code> you’re stating that your accumulative structure will be a <code class="language-plaintext highlighter-rouge">NonEmptyChain</code>. With <code class="language-plaintext highlighter-rouge">Validated</code>, you have the choice about which data structure you want for reporting the errors (more on that soon).</li>
+  <li>We’ve declared the type alias <code class="language-plaintext highlighter-rouge">ValidationResult</code> that conveniently expresses the return type of our validation.</li>
+  <li><code class="language-plaintext highlighter-rouge">.validNec</code> and <code class="language-plaintext highlighter-rouge">.invalidNec</code> combinators lets you <em>lift</em> the success or failure in their respective container (either a <code class="language-plaintext highlighter-rouge">Valid</code> or <code class="language-plaintext highlighter-rouge">Invalid[NonEmptyChain[A]]</code>).</li>
+  <li>The <a href="../typeclasses/applicative.html">applicative</a> syntax <code class="language-plaintext highlighter-rouge">(a, b, c, ...).mapN(...)</code> provides us a way to accumulatively apply the validation functions and yield a product with their successful result or the accumulated errors in the <code class="language-plaintext highlighter-rouge">NonEmptyChain</code>. Then, we transform that product with <code class="language-plaintext highlighter-rouge">mapN</code> into a valid instance of <code class="language-plaintext highlighter-rouge">RegistrationData</code>.</li>
 </ol>
 
-<p><strong>Deprecation notice:</strong> since Cats <code class="highlighter-rouge">1.0.0-MF</code> the cartesian syntax <code class="highlighter-rouge">|@|</code> for applicatives is deprecated. If you’re using <code class="highlighter-rouge">0.9.0</code> or less, you can use the syntax: <code class="highlighter-rouge">(a |@| b |@| ...).map(...)</code>.</p>
+<p><strong>Deprecation notice:</strong> since Cats <code class="language-plaintext highlighter-rouge">1.0.0-MF</code> the cartesian syntax <code class="language-plaintext highlighter-rouge">|@|</code> for applicatives is deprecated. If you’re using <code class="language-plaintext highlighter-rouge">0.9.0</code> or less, you can use the syntax: <code class="language-plaintext highlighter-rouge">(a |@| b |@| ...).map(...)</code>.</p>
 
-<p>Note that, at the end, we expect to lift the result of the validation functions in a <code class="highlighter-rouge">RegistrationData</code> instance. If the process fails, we’ll get our <code class="highlighter-rouge">NonEmptyChain</code> detailing what went wrong.</p>
+<p>Note that, at the end, we expect to lift the result of the validation functions in a <code class="language-plaintext highlighter-rouge">RegistrationData</code> instance. If the process fails, we’ll get our <code class="language-plaintext highlighter-rouge">NonEmptyChain</code> detailing what went wrong.</p>
 
 <p>For example:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="nc">FormValidatorNec</span><span class="o">.</span><span class="n">validateForm</span><span class="o">(</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">FormValidatorNec</span><span class="o">.</span><span class="py">validateForm</span><span class="o">(</span>
   <span class="n">username</span> <span class="k">=</span> <span class="s">"Joe"</span><span class="o">,</span>
   <span class="n">password</span> <span class="k">=</span> <span class="s">"Passw0r$1234"</span><span class="o">,</span>
   <span class="n">firstName</span> <span class="k">=</span> <span class="s">"John"</span><span class="o">,</span>
   <span class="n">lastName</span> <span class="k">=</span> <span class="s">"Doe"</span><span class="o">,</span>
   <span class="n">age</span> <span class="k">=</span> <span class="mi">21</span>
 <span class="o">)</span>
-<span class="c1">// res2: FormValidatorNec.ValidationResult[RegistrationData] = Valid(RegistrationData(Joe,Passw0r$1234,John,Doe,21))
-</span>
-<span class="nc">FormValidatorNec</span><span class="o">.</span><span class="n">validateForm</span><span class="o">(</span>
+<span class="c1">// res3: FormValidatorNec.ValidationResult[RegistrationData] = Valid(</span>
+<span class="c1">//   RegistrationData("Joe", "Passw0r$1234", "John", "Doe", 21)</span>
+<span class="c1">// )</span>
+
+<span class="nv">FormValidatorNec</span><span class="o">.</span><span class="py">validateForm</span><span class="o">(</span>
   <span class="n">username</span> <span class="k">=</span> <span class="s">"Joe%%%"</span><span class="o">,</span>
   <span class="n">password</span> <span class="k">=</span> <span class="s">"password"</span><span class="o">,</span>
   <span class="n">firstName</span> <span class="k">=</span> <span class="s">"John"</span><span class="o">,</span>
   <span class="n">lastName</span> <span class="k">=</span> <span class="s">"Doe"</span><span class="o">,</span>
   <span class="n">age</span> <span class="k">=</span> <span class="mi">21</span>
 <span class="o">)</span>
-<span class="c1">// res3: FormValidatorNec.ValidationResult[RegistrationData] = Invalid(Chain(UsernameHasSpecialCharacters, PasswordDoesNotMeetCriteria))
-</span></code></pre>
-</div>
+<span class="c1">// res4: FormValidatorNec.ValidationResult[RegistrationData] = Invalid(</span>
+<span class="c1">//   Append(</span>
+<span class="c1">//     Singleton(UsernameHasSpecialCharacters),</span>
+<span class="c1">//     Singleton(PasswordDoesNotMeetCriteria)</span>
+<span class="c1">//   )</span>
+<span class="c1">// )</span>
+</code></pre></div></div>
 
 <p>Sweet success! Now you can take your validation process to the next level!</p>
 
 <h3 id="a-short-detour">A short detour</h3>
 
-<p>As previously stated, <code class="highlighter-rouge">ValidatedNec[DomainValidation, A]</code> is an alias for <code class="highlighter-rouge">Validated[NonEmptyChain[DomainValidation], A]</code>. Typically, you’ll see that <code class="highlighter-rouge">Validated</code> is accompanied by a <code class="highlighter-rouge">NonEmptyChain</code> when it comes to accumulation. The thing here is that you can define your own accumulative data structure and you’re not limited to the aforementioned construction.</p>
+<p>As previously stated, <code class="language-plaintext highlighter-rouge">ValidatedNec[DomainValidation, A]</code> is an alias for <code class="language-plaintext highlighter-rouge">Validated[NonEmptyChain[DomainValidation], A]</code>. Typically, you’ll see that <code class="language-plaintext highlighter-rouge">Validated</code> is accompanied by a <code class="language-plaintext highlighter-rouge">NonEmptyChain</code> when it comes to accumulation. The thing here is that you can define your own accumulative data structure and you’re not limited to the aforementioned construction.</p>
 
-<p>For doing this, you have to provide a <code class="highlighter-rouge">Semigroup</code> instance. <code class="highlighter-rouge">NonEmptyChain</code>, by definition has its own <code class="highlighter-rouge">Semigroup</code>. For those who don’t know what a <code class="highlighter-rouge">Semigroup</code> is, you can find out more <a href="../typeclasses/semigroup.html">here</a>.</p>
+<p>For doing this, you have to provide a <code class="language-plaintext highlighter-rouge">Semigroup</code> instance. <code class="language-plaintext highlighter-rouge">NonEmptyChain</code>, by definition has its own <code class="language-plaintext highlighter-rouge">Semigroup</code>. For those who don’t know what a <code class="language-plaintext highlighter-rouge">Semigroup</code> is, you can find out more <a href="../typeclasses/semigroup.html">here</a>.</p>
 
 <h4 id="accumulative-structures">Accumulative Structures</h4>
 
-<p>Let’s take a look about how a <code class="highlighter-rouge">Semigroup</code> works in a <code class="highlighter-rouge">NonEmptyChain</code>:</p>
+<p>Let’s take a look about how a <code class="language-plaintext highlighter-rouge">Semigroup</code> works in a <code class="language-plaintext highlighter-rouge">NonEmptyChain</code>:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="nc">NonEmptyChain</span><span class="o">.</span><span class="n">one</span><span class="o">[</span><span class="kt">DomainValidation</span><span class="o">](</span><span class="nc">UsernameHasSpecialCharacters</span><span class="o">)</span> <span class="o">|+|</span> <span class="nc">NonEmptyChain</span><span class="o">[</span><span class="kt">DomainValidation</span><span class="o">](</span><span class="nc">FirstNameHasSpecialCharacters</span><span class="o">,</span> <span class="nc">LastNameHasSpecialCharacters</span><span class="o">)</span>
-<span class="c1">// res4: cats.data.NonEmptyChain[DomainValidation] = Chain(UsernameHasSpecialCharacters, FirstNameHasSpecialCharacters, LastNameHasSpecialCharacters)
-</span></code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">NonEmptyChain</span><span class="o">.</span><span class="py">one</span><span class="o">[</span><span class="kt">DomainValidation</span><span class="o">](</span><span class="nc">UsernameHasSpecialCharacters</span><span class="o">)</span> <span class="o">|+|</span> <span class="nc">NonEmptyChain</span><span class="o">[</span><span class="kt">DomainValidation</span><span class="o">](</span><span class="nc">FirstNameHasSpecialCharacters</span><span class="o">,</span> <span class="nc">LastNameHasSpecialCharacters</span><span class="o">)</span>
+<span class="c1">// res5: NonEmptyChain[DomainValidation] = Append(</span>
+<span class="c1">//   Singleton(UsernameHasSpecialCharacters),</span>
+<span class="c1">//   Append(</span>
+<span class="c1">//     Singleton(FirstNameHasSpecialCharacters),</span>
+<span class="c1">//     Singleton(LastNameHasSpecialCharacters)</span>
+<span class="c1">//   )</span>
+<span class="c1">// )</span>
+</code></pre></div></div>
 
-<p>We’re combining a couple of <code class="highlighter-rouge">NonEmptyChain</code>s. The first one has its mandatory element (note that we’ve built an instance of it with <code class="highlighter-rouge">.one</code>) and the second has a couple of elements. As you can see, the output of the combination, expressed by the <code class="highlighter-rouge">|+|</code> operator is another <code class="highlighter-rouge">NonEmptyChain</code> with the three elements.</p>
+<p>We’re combining a couple of <code class="language-plaintext highlighter-rouge">NonEmptyChain</code>s. The first one has its mandatory element (note that we’ve built an instance of it with <code class="language-plaintext highlighter-rouge">.one</code>) and the second has a couple of elements. As you can see, the output of the combination, expressed by the <code class="language-plaintext highlighter-rouge">|+|</code> operator is another <code class="language-plaintext highlighter-rouge">NonEmptyChain</code> with the three elements.</p>
 
-<p>But, what about if we want <em>another</em> way of combining? We can provide our custom <code class="highlighter-rouge">Semigroup</code> instance with the desired combining logic and pass it implicitly to your scope.</p>
+<p>But, what about if we want <em>another</em> way of combining? We can provide our custom <code class="language-plaintext highlighter-rouge">Semigroup</code> instance with the desired combining logic and pass it implicitly to your scope.</p>
 
 <h3 id="going-back-and-forth">Going back and forth</h3>
 
-<p>Cats offers you a nice set of combinators for transforming your <code class="highlighter-rouge">Validated</code> based approach to an <code class="highlighter-rouge">Either</code> one and vice-versa.
-We’ve used <code class="highlighter-rouge">.toValidated</code> in our second example, now let’s see how to use <code class="highlighter-rouge">.toEither</code>.</p>
+<p>Cats offers you a nice set of combinators for transforming your <code class="language-plaintext highlighter-rouge">Validated</code> based approach to an <code class="language-plaintext highlighter-rouge">Either</code> one and vice-versa.
+We’ve used <code class="language-plaintext highlighter-rouge">.toValidated</code> in our second example, now let’s see how to use <code class="language-plaintext highlighter-rouge">.toEither</code>.</p>
 
-<h4 id="from-validated-to-either">From <code class="highlighter-rouge">Validated</code> to <code class="highlighter-rouge">Either</code></h4>
+<h4 id="from-validated-to-either">From <code class="language-plaintext highlighter-rouge">Validated</code> to <code class="language-plaintext highlighter-rouge">Either</code></h4>
 
-<p>To do this, simply use <code class="highlighter-rouge">.toEither</code> combinator:</p>
+<p>To do this, simply use <code class="language-plaintext highlighter-rouge">.toEither</code> combinator:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="c1">// Successful case
-</span><span class="nc">FormValidatorNec</span><span class="o">.</span><span class="n">validateForm</span><span class="o">(</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Successful case</span>
+<span class="nv">FormValidatorNec</span><span class="o">.</span><span class="py">validateForm</span><span class="o">(</span>
   <span class="n">username</span> <span class="k">=</span> <span class="s">"Joe"</span><span class="o">,</span>
   <span class="n">password</span> <span class="k">=</span> <span class="s">"Passw0r$1234"</span><span class="o">,</span>
   <span class="n">firstName</span> <span class="k">=</span> <span class="s">"John"</span><span class="o">,</span>
   <span class="n">lastName</span> <span class="k">=</span> <span class="s">"Doe"</span><span class="o">,</span>
   <span class="n">age</span> <span class="k">=</span> <span class="mi">21</span>
-<span class="o">).</span><span class="n">toEither</span>
-<span class="c1">// res6: Either[cats.data.NonEmptyChain[DomainValidation],RegistrationData] = Right(RegistrationData(Joe,Passw0r$1234,John,Doe,21))
-</span>
-<span class="c1">// Invalid case
-</span><span class="nc">FormValidatorNec</span><span class="o">.</span><span class="n">validateForm</span><span class="o">(</span>
+<span class="o">).</span><span class="py">toEither</span>
+<span class="c1">// res6: Either[NonEmptyChain[DomainValidation], RegistrationData] = Right(</span>
+<span class="c1">//   RegistrationData("Joe", "Passw0r$1234", "John", "Doe", 21)</span>
+<span class="c1">// )</span>
+
+<span class="c1">// Invalid case</span>
+<span class="nv">FormValidatorNec</span><span class="o">.</span><span class="py">validateForm</span><span class="o">(</span>
   <span class="n">username</span> <span class="k">=</span> <span class="s">"Joe123#"</span><span class="o">,</span>
   <span class="n">password</span> <span class="k">=</span> <span class="s">"password"</span><span class="o">,</span>
   <span class="n">firstName</span> <span class="k">=</span> <span class="s">"John"</span><span class="o">,</span>
   <span class="n">lastName</span> <span class="k">=</span> <span class="s">"Doe"</span><span class="o">,</span>
   <span class="n">age</span> <span class="k">=</span> <span class="mi">5</span>
-<span class="o">).</span><span class="n">toEither</span>
-<span class="c1">// res8: Either[cats.data.NonEmptyChain[DomainValidation],RegistrationData] = Left(Chain(UsernameHasSpecialCharacters, PasswordDoesNotMeetCriteria, AgeIsInvalid))
-</span></code></pre>
-</div>
+<span class="o">).</span><span class="py">toEither</span>
+<span class="c1">// res7: Either[NonEmptyChain[DomainValidation], RegistrationData] = Left(</span>
+<span class="c1">//   Append(</span>
+<span class="c1">//     Singleton(UsernameHasSpecialCharacters),</span>
+<span class="c1">//     Append(Singleton(PasswordDoesNotMeetCriteria), Singleton(AgeIsInvalid))</span>
+<span class="c1">//   )</span>
+<span class="c1">// )</span>
+</code></pre></div></div>
 
-<p>With this conversion, as you can see, we got an <code class="highlighter-rouge">Either</code> with a <code class="highlighter-rouge">NonEmptyChain</code> detailing the possible validation errors or our <code class="highlighter-rouge">RegistrationData</code> object.</p>
+<p>With this conversion, as you can see, we got an <code class="language-plaintext highlighter-rouge">Either</code> with a <code class="language-plaintext highlighter-rouge">NonEmptyChain</code> detailing the possible validation errors or our <code class="language-plaintext highlighter-rouge">RegistrationData</code> object.</p>
 
 <h2 id="another-case">Another case</h2>
 
 <p>Perhaps you’re reading from a configuration file. One could imagine the configuration library you’re using returns
-a <code class="highlighter-rouge">scala.util.Try</code>, or maybe a <code class="highlighter-rouge">scala.util.Either</code>. Your parsing may look something like:</p>
+a <code class="language-plaintext highlighter-rouge">scala.util.Try</code>, or maybe a <code class="language-plaintext highlighter-rouge">scala.util.Either</code>. Your parsing may look something like:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">for</span> <span class="o">{</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="o">{</span>
   <span class="n">url</span>  <span class="k">&lt;-</span> <span class="n">config</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span><span class="s">"url"</span><span class="o">)</span>
   <span class="n">port</span> <span class="k">&lt;-</span> <span class="n">config</span><span class="o">[</span><span class="kt">Int</span><span class="o">](</span><span class="s">"port"</span><span class="o">)</span>
 <span class="o">}</span> <span class="k">yield</span> <span class="nc">ConnectionParams</span><span class="o">(</span><span class="n">url</span><span class="o">,</span> <span class="n">port</span><span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>You run your program and it says key “url” not found, turns out the key was “endpoint”. So you change your code
 and re-run. Now it says the “port” key was not a well-formed integer.</p>
@@ -363,308 +371,313 @@ pieces of configuration, each configuration field can be validated separately fr
 enforce that the data we are working with is independent? We ask for both of them up front.</p>
 
 <p>As our running example, we will look at config parsing. Our config will be represented by a
-<code class="highlighter-rouge">Map[String, String]</code>. Parsing will be handled by a <code class="highlighter-rouge">Read</code> type class - we provide instances
-just for <code class="highlighter-rouge">String</code> and <code class="highlighter-rouge">Int</code> for brevity.</p>
+<code class="language-plaintext highlighter-rouge">Map[String, String]</code>. Parsing will be handled by a <code class="language-plaintext highlighter-rouge">Read</code> type class - we provide instances
+just for <code class="language-plaintext highlighter-rouge">String</code> and <code class="language-plaintext highlighter-rouge">Int</code> for brevity.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">trait</span> <span class="nc">Read</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="o">{</span>
-  <span class="k">def</span> <span class="n">read</span><span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">trait</span> <span class="nc">Read</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="nf">read</span><span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span>
 <span class="o">}</span>
 
 <span class="k">object</span> <span class="nc">Read</span> <span class="o">{</span>
-  <span class="k">def</span> <span class="n">apply</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="k">implicit</span> <span class="n">A</span><span class="k">:</span> <span class="kt">Read</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span><span class="k">:</span> <span class="kt">Read</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="n">A</span>
+  <span class="k">def</span> <span class="nf">apply</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="k">implicit</span> <span class="n">A</span><span class="k">:</span> <span class="kt">Read</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span><span class="k">:</span> <span class="kt">Read</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="n">A</span>
 
-  <span class="k">implicit</span> <span class="k">val</span> <span class="n">stringRead</span><span class="k">:</span> <span class="kt">Read</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span>
-    <span class="k">new</span> <span class="nc">Read</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="o">{</span> <span class="k">def</span> <span class="n">read</span><span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="n">s</span><span class="o">)</span> <span class="o">}</span>
+  <span class="k">implicit</span> <span class="k">val</span> <span class="nv">stringRead</span><span class="k">:</span> <span class="kt">Read</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span>
+    <span class="k">new</span> <span class="nc">Read</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="o">{</span> <span class="k">def</span> <span class="nf">read</span><span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="n">s</span><span class="o">)</span> <span class="o">}</span>
 
-  <span class="k">implicit</span> <span class="k">val</span> <span class="n">intRead</span><span class="k">:</span> <span class="kt">Read</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span>
+  <span class="k">implicit</span> <span class="k">val</span> <span class="nv">intRead</span><span class="k">:</span> <span class="kt">Read</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span>
     <span class="k">new</span> <span class="nc">Read</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="o">{</span>
-      <span class="k">def</span> <span class="n">read</span><span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="n">matches</span><span class="o">(</span><span class="s">"-?[0-9]+"</span><span class="o">))</span> <span class="nc">Some</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="n">toInt</span><span class="o">)</span>
+      <span class="k">def</span> <span class="nf">read</span><span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span>
+        <span class="nf">if</span> <span class="o">(</span><span class="nv">s</span><span class="o">.</span><span class="py">matches</span><span class="o">(</span><span class="s">"-?[0-9]+"</span><span class="o">))</span> <span class="nc">Some</span><span class="o">(</span><span class="nv">s</span><span class="o">.</span><span class="py">toInt</span><span class="o">)</span>
         <span class="k">else</span> <span class="nc">None</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Then we enumerate our errors - when asking for a config value, one of two things can
 go wrong: the field is missing, or it is not well-formed with regards to the expected
 type.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">sealed</span> <span class="k">abstract</span> <span class="k">class</span> <span class="nc">ConfigError</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">sealed</span> <span class="k">abstract</span> <span class="k">class</span> <span class="nc">ConfigError</span>
 <span class="k">final</span> <span class="k">case</span> <span class="k">class</span> <span class="nc">MissingConfig</span><span class="o">(</span><span class="n">field</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">ConfigError</span>
 <span class="k">final</span> <span class="k">case</span> <span class="k">class</span> <span class="nc">ParseError</span><span class="o">(</span><span class="n">field</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">ConfigError</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>We need a data type that can represent either a successful value (a parsed configuration),
 or an error.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">sealed</span> <span class="k">abstract</span> <span class="k">class</span> <span class="nc">Validated</span><span class="o">[</span><span class="kt">+E</span>, <span class="kt">+A</span><span class="o">]</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">sealed</span> <span class="k">abstract</span> <span class="k">class</span> <span class="nc">Validated</span><span class="o">[</span><span class="kt">+E</span>, <span class="kt">+A</span><span class="o">]</span>
 
 <span class="nc">object</span> <span class="nc">Validated</span> <span class="o">{</span>
   <span class="k">final</span> <span class="k">case</span> <span class="k">class</span> <span class="nc">Valid</span><span class="o">[</span><span class="kt">+A</span><span class="o">](</span><span class="n">a</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">Validated</span><span class="o">[</span><span class="kt">Nothing</span>, <span class="kt">A</span><span class="o">]</span>
   <span class="k">final</span> <span class="k">case</span> <span class="k">class</span> <span class="nc">Invalid</span><span class="o">[</span><span class="kt">+E</span><span class="o">](</span><span class="n">e</span><span class="k">:</span> <span class="kt">E</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">Validated</span><span class="o">[</span><span class="kt">E</span>, <span class="kt">Nothing</span><span class="o">]</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Now we are ready to write our parser.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.Validated</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.Validated</span>
 <span class="k">import</span> <span class="nn">cats.data.Validated.</span><span class="o">{</span><span class="nc">Invalid</span><span class="o">,</span> <span class="nc">Valid</span><span class="o">}</span>
 
 <span class="k">case</span> <span class="k">class</span> <span class="nc">Config</span><span class="o">(</span><span class="n">map</span><span class="k">:</span> <span class="kt">Map</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">String</span><span class="o">])</span> <span class="o">{</span>
-  <span class="k">def</span> <span class="n">parse</span><span class="o">[</span><span class="kt">A</span> <span class="kt">:</span> <span class="kt">Read</span><span class="o">](</span><span class="n">key</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Validated</span><span class="o">[</span><span class="kt">ConfigError</span>, <span class="kt">A</span><span class="o">]</span> <span class="k">=</span>
-    <span class="n">map</span><span class="o">.</span><span class="n">get</span><span class="o">(</span><span class="n">key</span><span class="o">)</span> <span class="k">match</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="nf">parse</span><span class="o">[</span><span class="kt">A</span> <span class="kt">:</span> <span class="kt">Read</span><span class="o">](</span><span class="n">key</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Validated</span><span class="o">[</span><span class="kt">ConfigError</span>, <span class="kt">A</span><span class="o">]</span> <span class="k">=</span>
+    <span class="nv">map</span><span class="o">.</span><span class="py">get</span><span class="o">(</span><span class="n">key</span><span class="o">)</span> <span class="k">match</span> <span class="o">{</span>
       <span class="k">case</span> <span class="nc">None</span>        <span class="k">=&gt;</span> <span class="nc">Invalid</span><span class="o">(</span><span class="nc">MissingConfig</span><span class="o">(</span><span class="n">key</span><span class="o">))</span>
       <span class="k">case</span> <span class="nc">Some</span><span class="o">(</span><span class="n">value</span><span class="o">)</span> <span class="k">=&gt;</span>
-        <span class="nc">Read</span><span class="o">[</span><span class="kt">A</span><span class="o">].</span><span class="n">read</span><span class="o">(</span><span class="n">value</span><span class="o">)</span> <span class="k">match</span> <span class="o">{</span>
+        <span class="nc">Read</span><span class="o">[</span><span class="kt">A</span><span class="o">].</span><span class="py">read</span><span class="o">(</span><span class="n">value</span><span class="o">)</span> <span class="k">match</span> <span class="o">{</span>
           <span class="k">case</span> <span class="nc">None</span>    <span class="k">=&gt;</span> <span class="nc">Invalid</span><span class="o">(</span><span class="nc">ParseError</span><span class="o">(</span><span class="n">key</span><span class="o">))</span>
           <span class="k">case</span> <span class="nc">Some</span><span class="o">(</span><span class="n">a</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nc">Valid</span><span class="o">(</span><span class="n">a</span><span class="o">)</span>
         <span class="o">}</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Everything is in place to write the parallel validator. Recall that we can only do parallel
 validation if each piece is independent. How do we enforce the data is independent? By asking
 for all of it up front. Let’s start with two pieces of data.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">parallelValidate</span><span class="o">[</span><span class="kt">E</span>, <span class="kt">A</span>, <span class="kt">B</span>, <span class="kt">C</span><span class="o">](</span><span class="n">v1</span><span class="k">:</span> <span class="kt">Validated</span><span class="o">[</span><span class="kt">E</span>, <span class="kt">A</span><span class="o">],</span> <span class="n">v2</span><span class="k">:</span> <span class="kt">Validated</span><span class="o">[</span><span class="kt">E</span>, <span class="kt">B</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="o">(</span><span class="kt">A</span><span class="o">,</span> <span class="kt">B</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">C</span><span class="o">)</span><span class="k">:</span> <span class="kt">Validated</span><span class="o">[</span><span class="kt">E</span>, <span class="kt">C</span><span class="o">]</span> <span class="k">=</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">parallelValidateSimple</span><span class="o">[</span><span class="kt">E</span>, <span class="kt">A</span>, <span class="kt">B</span>, <span class="kt">C</span><span class="o">](</span><span class="n">v1</span><span class="k">:</span> <span class="kt">Validated</span><span class="o">[</span><span class="kt">E</span>, <span class="kt">A</span><span class="o">],</span> <span class="n">v2</span><span class="k">:</span> <span class="kt">Validated</span><span class="o">[</span><span class="kt">E</span>, <span class="kt">B</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="o">(</span><span class="kt">A</span><span class="o">,</span> <span class="kt">B</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">C</span><span class="o">)</span><span class="k">:</span> <span class="kt">Validated</span><span class="o">[</span><span class="kt">E</span>, <span class="kt">C</span><span class="o">]</span> <span class="k">=</span>
   <span class="o">(</span><span class="n">v1</span><span class="o">,</span> <span class="n">v2</span><span class="o">)</span> <span class="k">match</span> <span class="o">{</span>
-    <span class="k">case</span> <span class="o">(</span><span class="nc">Valid</span><span class="o">(</span><span class="n">a</span><span class="o">),</span> <span class="nc">Valid</span><span class="o">(</span><span class="n">b</span><span class="o">))</span>       <span class="k">=&gt;</span> <span class="nc">Valid</span><span class="o">(</span><span class="n">f</span><span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">))</span>
-    <span class="k">case</span> <span class="o">(</span><span class="nc">Valid</span><span class="o">(</span><span class="k">_</span><span class="o">),</span> <span class="n">i</span><span class="nd">@Invalid</span><span class="o">(</span><span class="k">_</span><span class="o">))</span>   <span class="k">=&gt;</span> <span class="n">i</span>
-    <span class="k">case</span> <span class="o">(</span><span class="n">i</span><span class="nd">@Invalid</span><span class="o">(</span><span class="k">_</span><span class="o">),</span> <span class="nc">Valid</span><span class="o">(</span><span class="k">_</span><span class="o">))</span>   <span class="k">=&gt;</span> <span class="n">i</span>
-    <span class="k">case</span> <span class="o">(</span><span class="nc">Invalid</span><span class="o">(</span><span class="n">e1</span><span class="o">),</span> <span class="nc">Invalid</span><span class="o">(</span><span class="n">e2</span><span class="o">))</span> <span class="k">=&gt;</span> <span class="o">???</span>
+    <span class="nf">case</span> <span class="o">(</span><span class="nc">Valid</span><span class="o">(</span><span class="n">a</span><span class="o">),</span> <span class="nc">Valid</span><span class="o">(</span><span class="n">b</span><span class="o">))</span>       <span class="k">=&gt;</span> <span class="nc">Valid</span><span class="o">(</span><span class="nf">f</span><span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">))</span>
+    <span class="nf">case</span> <span class="o">(</span><span class="nc">Valid</span><span class="o">(</span><span class="k">_</span><span class="o">),</span> <span class="n">i</span><span class="nd">@Invalid</span><span class="o">(</span><span class="k">_</span><span class="o">))</span>   <span class="k">=&gt;</span> <span class="n">i</span>
+    <span class="nf">case</span> <span class="o">(</span><span class="n">i</span><span class="nd">@Invalid</span><span class="o">(</span><span class="k">_</span><span class="o">),</span> <span class="nc">Valid</span><span class="o">(</span><span class="k">_</span><span class="o">))</span>   <span class="k">=&gt;</span> <span class="n">i</span>
+    <span class="nf">case</span> <span class="o">(</span><span class="nc">Invalid</span><span class="o">(</span><span class="n">e1</span><span class="o">),</span> <span class="nc">Invalid</span><span class="o">(</span><span class="n">e2</span><span class="o">))</span> <span class="k">=&gt;</span> <span class="o">???</span>
   <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>We’ve run into a problem. In the case where both have errors, we want to report both. But we have
-no way of combining the two errors into one error! Perhaps we can put both errors into a <code class="highlighter-rouge">Chain</code>,
+no way of combining the two errors into one error! Perhaps we can put both errors into a <code class="language-plaintext highlighter-rouge">Chain</code>,
 but that seems needlessly specific - clients may want to define their own way of combining errors.</p>
 
-<p>How then do we abstract over a binary operation? The <code class="highlighter-rouge">Semigroup</code> type class captures this idea.</p>
+<p>How then do we abstract over a binary operation? The <code class="language-plaintext highlighter-rouge">Semigroup</code> type class captures this idea.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.Semigroup</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.Semigroup</span>
 
-<span class="k">def</span> <span class="n">parallelValidate</span><span class="o">[</span><span class="kt">E</span> <span class="kt">:</span> <span class="kt">Semigroup</span>, <span class="kt">A</span>, <span class="kt">B</span>, <span class="kt">C</span><span class="o">](</span><span class="n">v1</span><span class="k">:</span> <span class="kt">Validated</span><span class="o">[</span><span class="kt">E</span>, <span class="kt">A</span><span class="o">],</span> <span class="n">v2</span><span class="k">:</span> <span class="kt">Validated</span><span class="o">[</span><span class="kt">E</span>, <span class="kt">B</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="o">(</span><span class="kt">A</span><span class="o">,</span> <span class="kt">B</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">C</span><span class="o">)</span><span class="k">:</span> <span class="kt">Validated</span><span class="o">[</span><span class="kt">E</span>, <span class="kt">C</span><span class="o">]</span> <span class="k">=</span>
+<span class="k">def</span> <span class="nf">parallelValidate</span><span class="o">[</span><span class="kt">E</span> <span class="kt">:</span> <span class="kt">Semigroup</span>, <span class="kt">A</span>, <span class="kt">B</span>, <span class="kt">C</span><span class="o">](</span><span class="n">v1</span><span class="k">:</span> <span class="kt">Validated</span><span class="o">[</span><span class="kt">E</span>, <span class="kt">A</span><span class="o">],</span> <span class="n">v2</span><span class="k">:</span> <span class="kt">Validated</span><span class="o">[</span><span class="kt">E</span>, <span class="kt">B</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="o">(</span><span class="kt">A</span><span class="o">,</span> <span class="kt">B</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">C</span><span class="o">)</span><span class="k">:</span> <span class="kt">Validated</span><span class="o">[</span><span class="kt">E</span>, <span class="kt">C</span><span class="o">]</span> <span class="k">=</span>
   <span class="o">(</span><span class="n">v1</span><span class="o">,</span> <span class="n">v2</span><span class="o">)</span> <span class="k">match</span> <span class="o">{</span>
-    <span class="k">case</span> <span class="o">(</span><span class="nc">Valid</span><span class="o">(</span><span class="n">a</span><span class="o">),</span> <span class="nc">Valid</span><span class="o">(</span><span class="n">b</span><span class="o">))</span>       <span class="k">=&gt;</span> <span class="nc">Valid</span><span class="o">(</span><span class="n">f</span><span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">))</span>
-    <span class="k">case</span> <span class="o">(</span><span class="nc">Valid</span><span class="o">(</span><span class="k">_</span><span class="o">),</span> <span class="n">i</span><span class="nd">@Invalid</span><span class="o">(</span><span class="k">_</span><span class="o">))</span>   <span class="k">=&gt;</span> <span class="n">i</span>
-    <span class="k">case</span> <span class="o">(</span><span class="n">i</span><span class="nd">@Invalid</span><span class="o">(</span><span class="k">_</span><span class="o">),</span> <span class="nc">Valid</span><span class="o">(</span><span class="k">_</span><span class="o">))</span>   <span class="k">=&gt;</span> <span class="n">i</span>
-    <span class="k">case</span> <span class="o">(</span><span class="nc">Invalid</span><span class="o">(</span><span class="n">e1</span><span class="o">),</span> <span class="nc">Invalid</span><span class="o">(</span><span class="n">e2</span><span class="o">))</span> <span class="k">=&gt;</span> <span class="nc">Invalid</span><span class="o">(</span><span class="nc">Semigroup</span><span class="o">[</span><span class="kt">E</span><span class="o">].</span><span class="n">combine</span><span class="o">(</span><span class="n">e1</span><span class="o">,</span> <span class="n">e2</span><span class="o">))</span>
+    <span class="nf">case</span> <span class="o">(</span><span class="nc">Valid</span><span class="o">(</span><span class="n">a</span><span class="o">),</span> <span class="nc">Valid</span><span class="o">(</span><span class="n">b</span><span class="o">))</span>       <span class="k">=&gt;</span> <span class="nc">Valid</span><span class="o">(</span><span class="nf">f</span><span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">))</span>
+    <span class="nf">case</span> <span class="o">(</span><span class="nc">Valid</span><span class="o">(</span><span class="k">_</span><span class="o">),</span> <span class="n">i</span><span class="nd">@Invalid</span><span class="o">(</span><span class="k">_</span><span class="o">))</span>   <span class="k">=&gt;</span> <span class="n">i</span>
+    <span class="nf">case</span> <span class="o">(</span><span class="n">i</span><span class="nd">@Invalid</span><span class="o">(</span><span class="k">_</span><span class="o">),</span> <span class="nc">Valid</span><span class="o">(</span><span class="k">_</span><span class="o">))</span>   <span class="k">=&gt;</span> <span class="n">i</span>
+    <span class="nf">case</span> <span class="o">(</span><span class="nc">Invalid</span><span class="o">(</span><span class="n">e1</span><span class="o">),</span> <span class="nc">Invalid</span><span class="o">(</span><span class="n">e2</span><span class="o">))</span> <span class="k">=&gt;</span> <span class="nc">Invalid</span><span class="o">(</span><span class="nc">Semigroup</span><span class="o">[</span><span class="kt">E</span><span class="o">].</span><span class="py">combine</span><span class="o">(</span><span class="n">e1</span><span class="o">,</span> <span class="n">e2</span><span class="o">))</span>
   <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<p>Perfect! But.. going back to our example, we don’t have a way to combine <code class="highlighter-rouge">ConfigError</code>s. But as clients,
-we can change our <code class="highlighter-rouge">Validated</code> values where the error can be combined, say, a <code class="highlighter-rouge">Chain[ConfigError]</code>. It is
-more common however to use a <code class="highlighter-rouge">NonEmptyChain[ConfigError]</code> - the <code class="highlighter-rouge">NonEmptyChain</code> statically guarantees we
-have at least one value, which aligns with the fact that if we have an <code class="highlighter-rouge">Invalid</code>, then we most
-certainly have at least one error. This technique is so common there is a convenient method on <code class="highlighter-rouge">Validated</code>
-called <code class="highlighter-rouge">toValidatedNec</code> that turns any <code class="highlighter-rouge">Validated[E, A]</code> value to a <code class="highlighter-rouge">Validated[NonEmptyChain[E], A]</code>.
-Additionally, the type alias <code class="highlighter-rouge">ValidatedNec[E, A]</code> is provided.</p>
+<p>Perfect! But.. going back to our example, we don’t have a way to combine <code class="language-plaintext highlighter-rouge">ConfigError</code>s. But as clients,
+we can change our <code class="language-plaintext highlighter-rouge">Validated</code> values where the error can be combined, say, a <code class="language-plaintext highlighter-rouge">Chain[ConfigError]</code>. It is
+more common however to use a <code class="language-plaintext highlighter-rouge">NonEmptyChain[ConfigError]</code> - the <code class="language-plaintext highlighter-rouge">NonEmptyChain</code> statically guarantees we
+have at least one value, which aligns with the fact that if we have an <code class="language-plaintext highlighter-rouge">Invalid</code>, then we most
+certainly have at least one error. This technique is so common there is a convenient method on <code class="language-plaintext highlighter-rouge">Validated</code>
+called <code class="language-plaintext highlighter-rouge">toValidatedNec</code> that turns any <code class="language-plaintext highlighter-rouge">Validated[E, A]</code> value to a <code class="language-plaintext highlighter-rouge">Validated[NonEmptyChain[E], A]</code>.
+Additionally, the type alias <code class="language-plaintext highlighter-rouge">ValidatedNec[E, A]</code> is provided.</p>
 
 <p>Time to parse.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.SemigroupK</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.SemigroupK</span>
 <span class="k">import</span> <span class="nn">cats.data.NonEmptyChain</span>
 <span class="k">import</span> <span class="nn">cats.implicits._</span>
 
 <span class="k">case</span> <span class="k">class</span> <span class="nc">ConnectionParams</span><span class="o">(</span><span class="n">url</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">port</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span>
 
-<span class="k">val</span> <span class="n">config</span> <span class="k">=</span> <span class="nc">Config</span><span class="o">(</span><span class="nc">Map</span><span class="o">((</span><span class="s">"endpoint"</span><span class="o">,</span> <span class="s">"127.0.0.1"</span><span class="o">),</span> <span class="o">(</span><span class="s">"port"</span><span class="o">,</span> <span class="s">"not an int"</span><span class="o">)))</span>
+<span class="k">val</span> <span class="nv">config</span> <span class="k">=</span> <span class="nc">Config</span><span class="o">(</span><span class="nc">Map</span><span class="o">((</span><span class="s">"endpoint"</span><span class="o">,</span> <span class="s">"127.0.0.1"</span><span class="o">),</span> <span class="o">(</span><span class="s">"port"</span><span class="o">,</span> <span class="s">"not an int"</span><span class="o">)))</span>
 
-<span class="k">implicit</span> <span class="k">val</span> <span class="n">necSemigroup</span><span class="k">:</span> <span class="kt">Semigroup</span><span class="o">[</span><span class="kt">NonEmptyChain</span><span class="o">[</span><span class="kt">ConfigError</span><span class="o">]]</span> <span class="k">=</span>
-  <span class="nc">SemigroupK</span><span class="o">[</span><span class="kt">NonEmptyChain</span><span class="o">].</span><span class="n">algebra</span><span class="o">[</span><span class="kt">ConfigError</span><span class="o">]</span>
+<span class="k">implicit</span> <span class="k">val</span> <span class="nv">necSemigroup</span><span class="k">:</span> <span class="kt">Semigroup</span><span class="o">[</span><span class="kt">NonEmptyChain</span><span class="o">[</span><span class="kt">ConfigError</span><span class="o">]]</span> <span class="k">=</span>
+  <span class="nc">SemigroupK</span><span class="o">[</span><span class="kt">NonEmptyChain</span><span class="o">].</span><span class="py">algebra</span><span class="o">[</span><span class="kt">ConfigError</span><span class="o">]</span>
 
-<span class="k">implicit</span> <span class="k">val</span> <span class="n">readString</span><span class="k">:</span> <span class="kt">Read</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Read</span><span class="o">.</span><span class="n">stringRead</span>
-<span class="k">implicit</span> <span class="k">val</span> <span class="n">readInt</span><span class="k">:</span> <span class="kt">Read</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Read</span><span class="o">.</span><span class="n">intRead</span>
-</code></pre>
-</div>
+<span class="k">implicit</span> <span class="k">val</span> <span class="nv">readString</span><span class="k">:</span> <span class="kt">Read</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nv">Read</span><span class="o">.</span><span class="py">stringRead</span>
+<span class="k">implicit</span> <span class="k">val</span> <span class="nv">readInt</span><span class="k">:</span> <span class="kt">Read</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nv">Read</span><span class="o">.</span><span class="py">intRead</span>
+</code></pre></div></div>
 
 <p>Any and all errors are reported!</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">v1</span> <span class="k">=</span> <span class="n">parallelValidate</span><span class="o">(</span><span class="n">config</span><span class="o">.</span><span class="n">parse</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span><span class="s">"url"</span><span class="o">).</span><span class="n">toValidatedNec</span><span class="o">,</span>
-                          <span class="n">config</span><span class="o">.</span><span class="n">parse</span><span class="o">[</span><span class="kt">Int</span><span class="o">](</span><span class="s">"port"</span><span class="o">).</span><span class="n">toValidatedNec</span><span class="o">)(</span><span class="nc">ConnectionParams</span><span class="o">.</span><span class="n">apply</span><span class="o">)</span>
-<span class="c1">// v1: cats.data.Validated[cats.data.NonEmptyChain[ConfigError],ConnectionParams] = Invalid(Chain(MissingConfig(url), ParseError(port)))
-</span>
-<span class="k">val</span> <span class="n">v2</span> <span class="k">=</span> <span class="n">parallelValidate</span><span class="o">(</span><span class="n">config</span><span class="o">.</span><span class="n">parse</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span><span class="s">"endpoint"</span><span class="o">).</span><span class="n">toValidatedNec</span><span class="o">,</span>
-                          <span class="n">config</span><span class="o">.</span><span class="n">parse</span><span class="o">[</span><span class="kt">Int</span><span class="o">](</span><span class="s">"port"</span><span class="o">).</span><span class="n">toValidatedNec</span><span class="o">)(</span><span class="nc">ConnectionParams</span><span class="o">.</span><span class="n">apply</span><span class="o">)</span>
-<span class="c1">// v2: cats.data.Validated[cats.data.NonEmptyChain[ConfigError],ConnectionParams] = Invalid(Chain(ParseError(port)))
-</span>
-<span class="k">val</span> <span class="n">config</span> <span class="k">=</span> <span class="nc">Config</span><span class="o">(</span><span class="nc">Map</span><span class="o">((</span><span class="s">"endpoint"</span><span class="o">,</span> <span class="s">"127.0.0.1"</span><span class="o">),</span> <span class="o">(</span><span class="s">"port"</span><span class="o">,</span> <span class="s">"1234"</span><span class="o">)))</span>
-<span class="c1">// config: Config = Config(Map(endpoint -&gt; 127.0.0.1, port -&gt; 1234))
-</span>
-<span class="k">val</span> <span class="n">v3</span> <span class="k">=</span> <span class="n">parallelValidate</span><span class="o">(</span><span class="n">config</span><span class="o">.</span><span class="n">parse</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span><span class="s">"endpoint"</span><span class="o">).</span><span class="n">toValidatedNec</span><span class="o">,</span>
-                          <span class="n">config</span><span class="o">.</span><span class="n">parse</span><span class="o">[</span><span class="kt">Int</span><span class="o">](</span><span class="s">"port"</span><span class="o">).</span><span class="n">toValidatedNec</span><span class="o">)(</span><span class="nc">ConnectionParams</span><span class="o">.</span><span class="n">apply</span><span class="o">)</span>
-<span class="c1">// v3: cats.data.Validated[cats.data.NonEmptyChain[ConfigError],ConnectionParams] = Valid(ConnectionParams(127.0.0.1,1234))
-</span></code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">v1</span> <span class="k">=</span> <span class="nf">parallelValidate</span><span class="o">(</span><span class="nv">config</span><span class="o">.</span><span class="py">parse</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span><span class="s">"url"</span><span class="o">).</span><span class="py">toValidatedNec</span><span class="o">,</span>
+                          <span class="nv">config</span><span class="o">.</span><span class="py">parse</span><span class="o">[</span><span class="kt">Int</span><span class="o">](</span><span class="s">"port"</span><span class="o">).</span><span class="py">toValidatedNec</span><span class="o">)(</span><span class="nv">ConnectionParams</span><span class="o">.</span><span class="py">apply</span><span class="o">)</span>
+<span class="c1">// v1: Validated[NonEmptyChain[ConfigError], ConnectionParams] = Invalid(</span>
+<span class="c1">//   Append(Singleton(MissingConfig("url")), Singleton(ParseError("port")))</span>
+<span class="c1">// )</span>
+
+<span class="k">val</span> <span class="nv">v2</span> <span class="k">=</span> <span class="nf">parallelValidate</span><span class="o">(</span><span class="nv">config</span><span class="o">.</span><span class="py">parse</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span><span class="s">"endpoint"</span><span class="o">).</span><span class="py">toValidatedNec</span><span class="o">,</span>
+                          <span class="nv">config</span><span class="o">.</span><span class="py">parse</span><span class="o">[</span><span class="kt">Int</span><span class="o">](</span><span class="s">"port"</span><span class="o">).</span><span class="py">toValidatedNec</span><span class="o">)(</span><span class="nv">ConnectionParams</span><span class="o">.</span><span class="py">apply</span><span class="o">)</span>
+<span class="c1">// v2: Validated[NonEmptyChain[ConfigError], ConnectionParams] = Invalid(</span>
+<span class="c1">//   Singleton(ParseError("port"))</span>
+<span class="c1">// )</span>
+</code></pre></div></div>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">config</span> <span class="k">=</span> <span class="nc">Config</span><span class="o">(</span><span class="nc">Map</span><span class="o">((</span><span class="s">"endpoint"</span><span class="o">,</span> <span class="s">"127.0.0.1"</span><span class="o">),</span> <span class="o">(</span><span class="s">"port"</span><span class="o">,</span> <span class="s">"1234"</span><span class="o">)))</span>
+<span class="c1">// config: Config = Config(Map("endpoint" -&gt; "127.0.0.1", "port" -&gt; "1234"))</span>
+<span class="k">val</span> <span class="nv">v3</span> <span class="k">=</span> <span class="nf">parallelValidate</span><span class="o">(</span><span class="nv">config</span><span class="o">.</span><span class="py">parse</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span><span class="s">"endpoint"</span><span class="o">).</span><span class="py">toValidatedNec</span><span class="o">,</span>
+                          <span class="nv">config</span><span class="o">.</span><span class="py">parse</span><span class="o">[</span><span class="kt">Int</span><span class="o">](</span><span class="s">"port"</span><span class="o">).</span><span class="py">toValidatedNec</span><span class="o">)(</span><span class="nv">ConnectionParams</span><span class="o">.</span><span class="py">apply</span><span class="o">)</span>
+<span class="c1">// v3: Validated[NonEmptyChain[ConfigError], ConnectionParams] = Valid(</span>
+<span class="c1">//   ConnectionParams("127.0.0.1", 1234)</span>
+<span class="c1">// )</span>
+</code></pre></div></div>
 
 <h2 id="apply">Apply</h2>
-<p>Our <code class="highlighter-rouge">parallelValidate</code> function looks awfully like the <code class="highlighter-rouge">Apply#map2</code> function.</p>
+<p>Our <code class="language-plaintext highlighter-rouge">parallelValidate</code> function looks awfully like the <code class="language-plaintext highlighter-rouge">Apply#map2</code> function.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">map2</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]</span>, <span class="kt">A</span>, <span class="kt">B</span>, <span class="kt">C</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">],</span> <span class="n">fb</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">B</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="o">(</span><span class="kt">A</span><span class="o">,</span> <span class="kt">B</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">C</span><span class="o">)</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">C</span><span class="o">]</span>
-</code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">map2</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]</span>, <span class="kt">A</span>, <span class="kt">B</span>, <span class="kt">C</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">],</span> <span class="n">fb</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">B</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="o">(</span><span class="kt">A</span><span class="o">,</span> <span class="kt">B</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">C</span><span class="o">)</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">C</span><span class="o">]</span>
+</code></pre></div></div>
 
-<p>Which can be defined in terms of <code class="highlighter-rouge">Apply#ap</code> and <code class="highlighter-rouge">Apply#map</code>, the very functions needed to create an <code class="highlighter-rouge">Apply</code> instance.</p>
+<p>Which can be defined in terms of <code class="language-plaintext highlighter-rouge">Apply#ap</code> and <code class="language-plaintext highlighter-rouge">Apply#map</code>, the very functions needed to create an <code class="language-plaintext highlighter-rouge">Apply</code> instance.</p>
 
-<p>Can we perhaps define an <code class="highlighter-rouge">Apply</code> instance for <code class="highlighter-rouge">Validated</code>? Better yet, can we define an <code class="highlighter-rouge">Applicative</code> instance?</p>
+<p>Can we perhaps define an <code class="language-plaintext highlighter-rouge">Apply</code> instance for <code class="language-plaintext highlighter-rouge">Validated</code>? Better yet, can we define an <code class="language-plaintext highlighter-rouge">Applicative</code> instance?</p>
 
-<p><em>Note</em>: the example below assumes usage of the <a href="https://github.com/non/kind-projector">kind-projector compiler plugin</a> and will not compile if it is not being used in a project.</p>
+<p><em>Note</em>: the example below assumes usage of the <a href="https://github.com/typelevel/kind-projector">kind-projector compiler plugin</a> and will not compile if it is not being used in a project.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.Applicative</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.Applicative</span>
 
-<span class="k">implicit</span> <span class="k">def</span> <span class="n">validatedApplicative</span><span class="o">[</span><span class="kt">E</span> <span class="kt">:</span> <span class="kt">Semigroup</span><span class="o">]</span><span class="k">:</span> <span class="kt">Applicative</span><span class="o">[</span><span class="kt">Validated</span><span class="o">[</span><span class="kt">E</span>, <span class="kt">*</span><span class="o">]]</span> <span class="k">=</span>
+<span class="k">implicit</span> <span class="k">def</span> <span class="nf">validatedApplicative</span><span class="o">[</span><span class="kt">E</span> <span class="kt">:</span> <span class="kt">Semigroup</span><span class="o">]</span><span class="k">:</span> <span class="kt">Applicative</span><span class="o">[</span><span class="kt">Validated</span><span class="o">[</span><span class="kt">E</span>, <span class="kt">*</span><span class="o">]]</span> <span class="k">=</span>
   <span class="k">new</span> <span class="nc">Applicative</span><span class="o">[</span><span class="kt">Validated</span><span class="o">[</span><span class="kt">E</span>, <span class="kt">*</span><span class="o">]]</span> <span class="o">{</span>
-    <span class="k">def</span> <span class="n">ap</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">f</span><span class="k">:</span> <span class="kt">Validated</span><span class="o">[</span><span class="kt">E</span>, <span class="kt">A</span> <span class="k">=&gt;</span> <span class="kt">B</span><span class="o">])(</span><span class="n">fa</span><span class="k">:</span> <span class="kt">Validated</span><span class="o">[</span><span class="kt">E</span>, <span class="kt">A</span><span class="o">])</span><span class="k">:</span> <span class="kt">Validated</span><span class="o">[</span><span class="kt">E</span>, <span class="kt">B</span><span class="o">]</span> <span class="k">=</span>
+    <span class="k">def</span> <span class="nf">ap</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">f</span><span class="k">:</span> <span class="kt">Validated</span><span class="o">[</span><span class="kt">E</span>, <span class="kt">A</span> <span class="k">=&gt;</span> <span class="kt">B</span><span class="o">])(</span><span class="n">fa</span><span class="k">:</span> <span class="kt">Validated</span><span class="o">[</span><span class="kt">E</span>, <span class="kt">A</span><span class="o">])</span><span class="k">:</span> <span class="kt">Validated</span><span class="o">[</span><span class="kt">E</span>, <span class="kt">B</span><span class="o">]</span> <span class="k">=</span>
       <span class="o">(</span><span class="n">fa</span><span class="o">,</span> <span class="n">f</span><span class="o">)</span> <span class="k">match</span> <span class="o">{</span>
-        <span class="k">case</span> <span class="o">(</span><span class="nc">Valid</span><span class="o">(</span><span class="n">a</span><span class="o">),</span> <span class="nc">Valid</span><span class="o">(</span><span class="n">fab</span><span class="o">))</span> <span class="k">=&gt;</span> <span class="nc">Valid</span><span class="o">(</span><span class="n">fab</span><span class="o">(</span><span class="n">a</span><span class="o">))</span>
-        <span class="k">case</span> <span class="o">(</span><span class="n">i</span><span class="nd">@Invalid</span><span class="o">(</span><span class="k">_</span><span class="o">),</span> <span class="nc">Valid</span><span class="o">(</span><span class="k">_</span><span class="o">))</span> <span class="k">=&gt;</span> <span class="n">i</span>
-        <span class="k">case</span> <span class="o">(</span><span class="nc">Valid</span><span class="o">(</span><span class="k">_</span><span class="o">),</span> <span class="n">i</span><span class="nd">@Invalid</span><span class="o">(</span><span class="k">_</span><span class="o">))</span> <span class="k">=&gt;</span> <span class="n">i</span>
-        <span class="k">case</span> <span class="o">(</span><span class="nc">Invalid</span><span class="o">(</span><span class="n">e1</span><span class="o">),</span> <span class="nc">Invalid</span><span class="o">(</span><span class="n">e2</span><span class="o">))</span> <span class="k">=&gt;</span> <span class="nc">Invalid</span><span class="o">(</span><span class="nc">Semigroup</span><span class="o">[</span><span class="kt">E</span><span class="o">].</span><span class="n">combine</span><span class="o">(</span><span class="n">e1</span><span class="o">,</span> <span class="n">e2</span><span class="o">))</span>
+        <span class="nf">case</span> <span class="o">(</span><span class="nc">Valid</span><span class="o">(</span><span class="n">a</span><span class="o">),</span> <span class="nc">Valid</span><span class="o">(</span><span class="n">fab</span><span class="o">))</span> <span class="k">=&gt;</span> <span class="nc">Valid</span><span class="o">(</span><span class="nf">fab</span><span class="o">(</span><span class="n">a</span><span class="o">))</span>
+        <span class="nf">case</span> <span class="o">(</span><span class="n">i</span><span class="nd">@Invalid</span><span class="o">(</span><span class="k">_</span><span class="o">),</span> <span class="nc">Valid</span><span class="o">(</span><span class="k">_</span><span class="o">))</span> <span class="k">=&gt;</span> <span class="n">i</span>
+        <span class="nf">case</span> <span class="o">(</span><span class="nc">Valid</span><span class="o">(</span><span class="k">_</span><span class="o">),</span> <span class="n">i</span><span class="nd">@Invalid</span><span class="o">(</span><span class="k">_</span><span class="o">))</span> <span class="k">=&gt;</span> <span class="n">i</span>
+        <span class="nf">case</span> <span class="o">(</span><span class="nc">Invalid</span><span class="o">(</span><span class="n">e1</span><span class="o">),</span> <span class="nc">Invalid</span><span class="o">(</span><span class="n">e2</span><span class="o">))</span> <span class="k">=&gt;</span> <span class="nc">Invalid</span><span class="o">(</span><span class="nc">Semigroup</span><span class="o">[</span><span class="kt">E</span><span class="o">].</span><span class="py">combine</span><span class="o">(</span><span class="n">e1</span><span class="o">,</span> <span class="n">e2</span><span class="o">))</span>
       <span class="o">}</span>
 
-    <span class="k">def</span> <span class="n">pure</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">x</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span><span class="k">:</span> <span class="kt">Validated</span><span class="o">[</span><span class="kt">E</span>, <span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Validated</span><span class="o">.</span><span class="n">valid</span><span class="o">(</span><span class="n">x</span><span class="o">)</span>
+    <span class="k">def</span> <span class="nf">pure</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">x</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span><span class="k">:</span> <span class="kt">Validated</span><span class="o">[</span><span class="kt">E</span>, <span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nv">Validated</span><span class="o">.</span><span class="py">valid</span><span class="o">(</span><span class="n">x</span><span class="o">)</span>
   <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<p>Awesome! And now we also get access to all the goodness of <code class="highlighter-rouge">Applicative</code>, which includes <code class="highlighter-rouge">map{2-22}</code>, as well as the
-<code class="highlighter-rouge">Semigroupal</code> tuple syntax.</p>
+<p>Awesome! And now we also get access to all the goodness of <code class="language-plaintext highlighter-rouge">Applicative</code>, which includes <code class="language-plaintext highlighter-rouge">map{2-22}</code>, as well as the
+<code class="language-plaintext highlighter-rouge">Semigroupal</code> tuple syntax.</p>
 
 <p>We can now easily ask for several bits of configuration and get any and all errors returned back.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.Apply</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.Apply</span>
 <span class="k">import</span> <span class="nn">cats.data.ValidatedNec</span>
 
-<span class="k">implicit</span> <span class="k">val</span> <span class="n">necSemigroup</span><span class="k">:</span> <span class="kt">Semigroup</span><span class="o">[</span><span class="kt">NonEmptyChain</span><span class="o">[</span><span class="kt">ConfigError</span><span class="o">]]</span> <span class="k">=</span>
-  <span class="nc">SemigroupK</span><span class="o">[</span><span class="kt">NonEmptyChain</span><span class="o">].</span><span class="n">algebra</span><span class="o">[</span><span class="kt">ConfigError</span><span class="o">]</span>
+<span class="k">implicit</span> <span class="k">def</span> <span class="nf">necSemigroup</span><span class="k">:</span> <span class="kt">Semigroup</span><span class="o">[</span><span class="kt">NonEmptyChain</span><span class="o">[</span><span class="kt">ConfigError</span><span class="o">]]</span> <span class="k">=</span>
+  <span class="nc">SemigroupK</span><span class="o">[</span><span class="kt">NonEmptyChain</span><span class="o">].</span><span class="py">algebra</span><span class="o">[</span><span class="kt">ConfigError</span><span class="o">]</span>
 
-<span class="k">val</span> <span class="n">config</span> <span class="k">=</span> <span class="nc">Config</span><span class="o">(</span><span class="nc">Map</span><span class="o">((</span><span class="s">"name"</span><span class="o">,</span> <span class="s">"cat"</span><span class="o">),</span> <span class="o">(</span><span class="s">"age"</span><span class="o">,</span> <span class="s">"not a number"</span><span class="o">),</span> <span class="o">(</span><span class="s">"houseNumber"</span><span class="o">,</span> <span class="s">"1234"</span><span class="o">),</span> <span class="o">(</span><span class="s">"lane"</span><span class="o">,</span> <span class="s">"feline street"</span><span class="o">)))</span>
+<span class="k">val</span> <span class="nv">personConfig</span> <span class="k">=</span> <span class="nc">Config</span><span class="o">(</span><span class="nc">Map</span><span class="o">((</span><span class="s">"name"</span><span class="o">,</span> <span class="s">"cat"</span><span class="o">),</span> <span class="o">(</span><span class="s">"age"</span><span class="o">,</span> <span class="s">"not a number"</span><span class="o">),</span> <span class="o">(</span><span class="s">"houseNumber"</span><span class="o">,</span> <span class="s">"1234"</span><span class="o">),</span> <span class="o">(</span><span class="s">"lane"</span><span class="o">,</span> <span class="s">"feline street"</span><span class="o">)))</span>
 
 <span class="k">case</span> <span class="k">class</span> <span class="nc">Address</span><span class="o">(</span><span class="n">houseNumber</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">street</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span>
 <span class="k">case</span> <span class="k">class</span> <span class="nc">Person</span><span class="o">(</span><span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">age</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">address</span><span class="k">:</span> <span class="kt">Address</span><span class="o">)</span>
-</code></pre>
-</div>
 
-<p>Thus.</p>
-
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">personFromConfig</span><span class="k">:</span> <span class="kt">ValidatedNec</span><span class="o">[</span><span class="kt">ConfigError</span>, <span class="kt">Person</span><span class="o">]</span> <span class="k">=</span>
-  <span class="nc">Apply</span><span class="o">[</span><span class="kt">ValidatedNec</span><span class="o">[</span><span class="kt">ConfigError</span>, <span class="kt">*</span><span class="o">]].</span><span class="n">map4</span><span class="o">(</span><span class="n">config</span><span class="o">.</span><span class="n">parse</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span><span class="s">"name"</span><span class="o">).</span><span class="n">toValidatedNec</span><span class="o">,</span>
-                                           <span class="n">config</span><span class="o">.</span><span class="n">parse</span><span class="o">[</span><span class="kt">Int</span><span class="o">](</span><span class="s">"age"</span><span class="o">).</span><span class="n">toValidatedNec</span><span class="o">,</span>
-                                           <span class="n">config</span><span class="o">.</span><span class="n">parse</span><span class="o">[</span><span class="kt">Int</span><span class="o">](</span><span class="s">"house_number"</span><span class="o">).</span><span class="n">toValidatedNec</span><span class="o">,</span>
-                                           <span class="n">config</span><span class="o">.</span><span class="n">parse</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span><span class="s">"street"</span><span class="o">).</span><span class="n">toValidatedNec</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">case</span> <span class="o">(</span><span class="n">name</span><span class="o">,</span> <span class="n">age</span><span class="o">,</span> <span class="n">houseNumber</span><span class="o">,</span> <span class="n">street</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nc">Person</span><span class="o">(</span><span class="n">name</span><span class="o">,</span> <span class="n">age</span><span class="o">,</span> <span class="nc">Address</span><span class="o">(</span><span class="n">houseNumber</span><span class="o">,</span> <span class="n">street</span><span class="o">))</span>
+<span class="k">val</span> <span class="nv">personFromConfig</span><span class="k">:</span> <span class="kt">ValidatedNec</span><span class="o">[</span><span class="kt">ConfigError</span>, <span class="kt">Person</span><span class="o">]</span> <span class="k">=</span>
+  <span class="nc">Apply</span><span class="o">[</span><span class="kt">ValidatedNec</span><span class="o">[</span><span class="kt">ConfigError</span>, <span class="kt">*</span><span class="o">]].</span><span class="py">map4</span><span class="o">(</span><span class="nv">personConfig</span><span class="o">.</span><span class="py">parse</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span><span class="s">"name"</span><span class="o">).</span><span class="py">toValidatedNec</span><span class="o">,</span>
+                                           <span class="nv">personConfig</span><span class="o">.</span><span class="py">parse</span><span class="o">[</span><span class="kt">Int</span><span class="o">](</span><span class="s">"age"</span><span class="o">).</span><span class="py">toValidatedNec</span><span class="o">,</span>
+                                           <span class="nv">personConfig</span><span class="o">.</span><span class="py">parse</span><span class="o">[</span><span class="kt">Int</span><span class="o">](</span><span class="s">"house_number"</span><span class="o">).</span><span class="py">toValidatedNec</span><span class="o">,</span>
+                                           <span class="nv">personConfig</span><span class="o">.</span><span class="py">parse</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span><span class="s">"street"</span><span class="o">).</span><span class="py">toValidatedNec</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nf">case</span> <span class="o">(</span><span class="n">name</span><span class="o">,</span> <span class="n">age</span><span class="o">,</span> <span class="n">houseNumber</span><span class="o">,</span> <span class="n">street</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nc">Person</span><span class="o">(</span><span class="n">name</span><span class="o">,</span> <span class="n">age</span><span class="o">,</span> <span class="nc">Address</span><span class="o">(</span><span class="n">houseNumber</span><span class="o">,</span> <span class="n">street</span><span class="o">))</span>
   <span class="o">}</span>
-<span class="c1">// personFromConfig: cats.data.ValidatedNec[ConfigError,Person] = Invalid(Chain(ParseError(age), MissingConfig(house_number), MissingConfig(street)))
-</span></code></pre>
-</div>
+</code></pre></div></div>
 
-<h2 id="of-flatmaps-and-eithers">Of <code class="highlighter-rouge">flatMap</code>s and <code class="highlighter-rouge">Either</code>s</h2>
-<p><code class="highlighter-rouge">Option</code> has <code class="highlighter-rouge">flatMap</code>, <code class="highlighter-rouge">Either</code> has <code class="highlighter-rouge">flatMap</code>, where’s <code class="highlighter-rouge">Validated</code>’s? Let’s try to implement it - better yet,
-let’s implement the <code class="highlighter-rouge">Monad</code> type class.</p>
+<h2 id="of-flatmaps-and-eithers">Of <code class="language-plaintext highlighter-rouge">flatMap</code>s and <code class="language-plaintext highlighter-rouge">Either</code>s</h2>
+<p><code class="language-plaintext highlighter-rouge">Option</code> has <code class="language-plaintext highlighter-rouge">flatMap</code>, <code class="language-plaintext highlighter-rouge">Either</code> has <code class="language-plaintext highlighter-rouge">flatMap</code>, where’s <code class="language-plaintext highlighter-rouge">Validated</code>’s? Let’s try to implement it - better yet,
+let’s implement the <code class="language-plaintext highlighter-rouge">Monad</code> type class.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.Monad</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.Monad</span>
 
-<span class="k">implicit</span> <span class="k">def</span> <span class="n">validatedMonad</span><span class="o">[</span><span class="kt">E</span><span class="o">]</span><span class="k">:</span> <span class="kt">Monad</span><span class="o">[</span><span class="kt">Validated</span><span class="o">[</span><span class="kt">E</span>, <span class="kt">*</span><span class="o">]]</span> <span class="k">=</span>
+<span class="k">implicit</span> <span class="k">def</span> <span class="nf">validatedMonad</span><span class="o">[</span><span class="kt">E</span><span class="o">]</span><span class="k">:</span> <span class="kt">Monad</span><span class="o">[</span><span class="kt">Validated</span><span class="o">[</span><span class="kt">E</span>, <span class="kt">*</span><span class="o">]]</span> <span class="k">=</span>
   <span class="k">new</span> <span class="nc">Monad</span><span class="o">[</span><span class="kt">Validated</span><span class="o">[</span><span class="kt">E</span>, <span class="kt">*</span><span class="o">]]</span> <span class="o">{</span>
-    <span class="k">def</span> <span class="n">flatMap</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">Validated</span><span class="o">[</span><span class="kt">E</span>, <span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="nc">Validated</span><span class="o">[</span><span class="kt">E</span>, <span class="kt">B</span><span class="o">])</span><span class="k">:</span> <span class="kt">Validated</span><span class="o">[</span><span class="kt">E</span>, <span class="kt">B</span><span class="o">]</span> <span class="k">=</span>
+    <span class="k">def</span> <span class="nf">flatMap</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">Validated</span><span class="o">[</span><span class="kt">E</span>, <span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="nc">Validated</span><span class="o">[</span><span class="kt">E</span>, <span class="kt">B</span><span class="o">])</span><span class="k">:</span> <span class="kt">Validated</span><span class="o">[</span><span class="kt">E</span>, <span class="kt">B</span><span class="o">]</span> <span class="k">=</span>
       <span class="n">fa</span> <span class="k">match</span> <span class="o">{</span>
-        <span class="k">case</span> <span class="nc">Valid</span><span class="o">(</span><span class="n">a</span><span class="o">)</span>     <span class="k">=&gt;</span> <span class="n">f</span><span class="o">(</span><span class="n">a</span><span class="o">)</span>
+        <span class="k">case</span> <span class="nc">Valid</span><span class="o">(</span><span class="n">a</span><span class="o">)</span>     <span class="k">=&gt;</span> <span class="nf">f</span><span class="o">(</span><span class="n">a</span><span class="o">)</span>
         <span class="k">case</span> <span class="n">i</span><span class="nd">@Invalid</span><span class="o">(</span><span class="k">_</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">i</span>
       <span class="o">}</span>
 
-    <span class="k">def</span> <span class="n">pure</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">x</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span><span class="k">:</span> <span class="kt">Validated</span><span class="o">[</span><span class="kt">E</span>, <span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Valid</span><span class="o">(</span><span class="n">x</span><span class="o">)</span>
+    <span class="k">def</span> <span class="nf">pure</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">x</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span><span class="k">:</span> <span class="kt">Validated</span><span class="o">[</span><span class="kt">E</span>, <span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Valid</span><span class="o">(</span><span class="n">x</span><span class="o">)</span>
 
-    <span class="nd">@annotation</span><span class="o">.</span><span class="n">tailrec</span>
-    <span class="k">def</span> <span class="n">tailRecM</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">a</span><span class="k">:</span> <span class="kt">A</span><span class="o">)(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="nc">Validated</span><span class="o">[</span><span class="kt">E</span>, <span class="kt">Either</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">]])</span><span class="k">:</span> <span class="kt">Validated</span><span class="o">[</span><span class="kt">E</span>, <span class="kt">B</span><span class="o">]</span> <span class="k">=</span>
-      <span class="n">f</span><span class="o">(</span><span class="n">a</span><span class="o">)</span> <span class="k">match</span> <span class="o">{</span>
+    <span class="nd">@annotation</span><span class="o">.</span><span class="py">tailrec</span>
+    <span class="k">def</span> <span class="nf">tailRecM</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">a</span><span class="k">:</span> <span class="kt">A</span><span class="o">)(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="nc">Validated</span><span class="o">[</span><span class="kt">E</span>, <span class="kt">Either</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">]])</span><span class="k">:</span> <span class="kt">Validated</span><span class="o">[</span><span class="kt">E</span>, <span class="kt">B</span><span class="o">]</span> <span class="k">=</span>
+      <span class="nf">f</span><span class="o">(</span><span class="n">a</span><span class="o">)</span> <span class="k">match</span> <span class="o">{</span>
         <span class="k">case</span> <span class="nc">Valid</span><span class="o">(</span><span class="nc">Right</span><span class="o">(</span><span class="n">b</span><span class="o">))</span> <span class="k">=&gt;</span> <span class="nc">Valid</span><span class="o">(</span><span class="n">b</span><span class="o">)</span>
-        <span class="k">case</span> <span class="nc">Valid</span><span class="o">(</span><span class="nc">Left</span><span class="o">(</span><span class="n">a</span><span class="o">))</span> <span class="k">=&gt;</span> <span class="n">tailRecM</span><span class="o">(</span><span class="n">a</span><span class="o">)(</span><span class="n">f</span><span class="o">)</span>
+        <span class="k">case</span> <span class="nc">Valid</span><span class="o">(</span><span class="nc">Left</span><span class="o">(</span><span class="n">a</span><span class="o">))</span> <span class="k">=&gt;</span> <span class="nf">tailRecM</span><span class="o">(</span><span class="n">a</span><span class="o">)(</span><span class="n">f</span><span class="o">)</span>
         <span class="k">case</span> <span class="n">i</span><span class="nd">@Invalid</span><span class="o">(</span><span class="k">_</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">i</span>
       <span class="o">}</span>
   <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<p>Note that all <code class="highlighter-rouge">Monad</code> instances are also <code class="highlighter-rouge">Applicative</code> instances, where <code class="highlighter-rouge">ap</code> is defined as</p>
+<p>Note that all <code class="language-plaintext highlighter-rouge">Monad</code> instances are also <code class="language-plaintext highlighter-rouge">Applicative</code> instances, where <code class="language-plaintext highlighter-rouge">ap</code> is defined as</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">trait</span> <span class="nc">Monad</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]]</span> <span class="o">{</span>
-  <span class="k">def</span> <span class="n">flatMap</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">F</span><span class="o">[</span><span class="kt">B</span><span class="o">])</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span>
-  <span class="k">def</span> <span class="n">pure</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">x</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">trait</span> <span class="nc">Monad</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]]</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="nf">flatMap</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">F</span><span class="o">[</span><span class="kt">B</span><span class="o">])</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span>
+  <span class="k">def</span> <span class="nf">pure</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">x</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span>
 
-  <span class="k">def</span> <span class="n">map</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">B</span><span class="o">)</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span> <span class="k">=</span>
-    <span class="n">flatMap</span><span class="o">(</span><span class="n">fa</span><span class="o">)(</span><span class="n">f</span><span class="o">.</span><span class="n">andThen</span><span class="o">(</span><span class="n">pure</span><span class="o">))</span>
+  <span class="k">def</span> <span class="nf">map</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">B</span><span class="o">)</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span> <span class="k">=</span>
+    <span class="nf">flatMap</span><span class="o">(</span><span class="n">fa</span><span class="o">)(</span><span class="nv">f</span><span class="o">.</span><span class="py">andThen</span><span class="o">(</span><span class="n">pure</span><span class="o">))</span>
 
-  <span class="k">def</span> <span class="n">ap</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span> <span class="k">=&gt;</span> <span class="kt">B</span><span class="o">])</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span> <span class="k">=</span>
-    <span class="n">flatMap</span><span class="o">(</span><span class="n">fa</span><span class="o">)(</span><span class="n">a</span> <span class="k">=&gt;</span> <span class="n">map</span><span class="o">(</span><span class="n">f</span><span class="o">)(</span><span class="n">fab</span> <span class="k">=&gt;</span> <span class="n">fab</span><span class="o">(</span><span class="n">a</span><span class="o">)))</span>
+  <span class="k">def</span> <span class="nf">ap</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span> <span class="k">=&gt;</span> <span class="kt">B</span><span class="o">])</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span> <span class="k">=</span>
+    <span class="nf">flatMap</span><span class="o">(</span><span class="n">fa</span><span class="o">)(</span><span class="n">a</span> <span class="k">=&gt;</span> <span class="nf">map</span><span class="o">(</span><span class="n">f</span><span class="o">)(</span><span class="n">fab</span> <span class="k">=&gt;</span> <span class="nf">fab</span><span class="o">(</span><span class="n">a</span><span class="o">)))</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<p>However, the <code class="highlighter-rouge">ap</code> behavior defined in terms of <code class="highlighter-rouge">flatMap</code> does not behave the same as that of
-our <code class="highlighter-rouge">ap</code> defined above. Observe:</p>
+<p>However, the <code class="language-plaintext highlighter-rouge">ap</code> behavior defined in terms of <code class="language-plaintext highlighter-rouge">flatMap</code> does not behave the same as that of
+our <code class="language-plaintext highlighter-rouge">ap</code> defined above. Observe:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">v</span> <span class="k">=</span> <span class="n">validatedMonad</span><span class="o">.</span><span class="n">tuple2</span><span class="o">(</span><span class="nc">Validated</span><span class="o">.</span><span class="n">invalidNec</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">](</span><span class="s">"oops"</span><span class="o">),</span> <span class="nc">Validated</span><span class="o">.</span><span class="n">invalidNec</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Double</span><span class="o">](</span><span class="s">"uh oh"</span><span class="o">))</span>
-<span class="c1">// v: cats.data.Validated[cats.data.NonEmptyChain[String],(Int, Double)] = Invalid(Chain(oops))
-</span></code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">validatedMonad</span><span class="o">.</span><span class="py">tuple2</span><span class="o">(</span><span class="nv">Validated</span><span class="o">.</span><span class="py">invalidNec</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">](</span><span class="s">"oops"</span><span class="o">),</span> <span class="nv">Validated</span><span class="o">.</span><span class="py">invalidNec</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Double</span><span class="o">](</span><span class="s">"uh oh"</span><span class="o">))</span>
+<span class="c1">// res10: Validated[NonEmptyChain[String], (Int, Double)] = Invalid(</span>
+<span class="c1">//   Singleton("oops")</span>
+<span class="c1">// )</span>
+</code></pre></div></div>
 
-<p>This one short circuits! Therefore, if we were to define a <code class="highlighter-rouge">Monad</code> (or <code class="highlighter-rouge">FlatMap</code>) instance for <code class="highlighter-rouge">Validated</code> we would
-have to override <code class="highlighter-rouge">ap</code> to get the behavior we want. But then the behavior of <code class="highlighter-rouge">flatMap</code> would be inconsistent with
-that of <code class="highlighter-rouge">ap</code>, not good. Therefore, <code class="highlighter-rouge">Validated</code> has only an <code class="highlighter-rouge">Applicative</code> instance.</p>
+<p>This one short circuits! Therefore, if we were to define a <code class="language-plaintext highlighter-rouge">Monad</code> (or <code class="language-plaintext highlighter-rouge">FlatMap</code>) instance for <code class="language-plaintext highlighter-rouge">Validated</code> we would
+have to override <code class="language-plaintext highlighter-rouge">ap</code> to get the behavior we want. But then the behavior of <code class="language-plaintext highlighter-rouge">flatMap</code> would be inconsistent with
+that of <code class="language-plaintext highlighter-rouge">ap</code>, not good. Therefore, <code class="language-plaintext highlighter-rouge">Validated</code> has only an <code class="language-plaintext highlighter-rouge">Applicative</code> instance.</p>
 
-<h2 id="validated-vs-either"><code class="highlighter-rouge">Validated</code> vs <code class="highlighter-rouge">Either</code></h2>
+<h2 id="validated-vs-either"><code class="language-plaintext highlighter-rouge">Validated</code> vs <code class="language-plaintext highlighter-rouge">Either</code></h2>
 
-<p>We’ve established that an error-accumulating data type such as <code class="highlighter-rouge">Validated</code> can’t have a valid <code class="highlighter-rouge">Monad</code> instance. Sometimes the task at hand requires error-accumulation. However, sometimes we want a monadic structure that we can use for sequential validation (such as in a for-comprehension). This leaves us in a bit of a conundrum.</p>
+<p>We’ve established that an error-accumulating data type such as <code class="language-plaintext highlighter-rouge">Validated</code> can’t have a valid <code class="language-plaintext highlighter-rouge">Monad</code> instance. Sometimes the task at hand requires error-accumulation. However, sometimes we want a monadic structure that we can use for sequential validation (such as in a for-comprehension). This leaves us in a bit of a conundrum.</p>
 
-<p>Cats has decided to solve this problem by using separate data structures for error-accumulation (<code class="highlighter-rouge">Validated</code>) and short-circuiting monadic behavior (<code class="highlighter-rouge">Either</code>).</p>
+<p>Cats has decided to solve this problem by using separate data structures for error-accumulation (<code class="language-plaintext highlighter-rouge">Validated</code>) and short-circuiting monadic behavior (<code class="language-plaintext highlighter-rouge">Either</code>).</p>
 
-<p>If you are trying to decide whether you want to use <code class="highlighter-rouge">Validated</code> or <code class="highlighter-rouge">Either</code>, a simple heuristic is to use <code class="highlighter-rouge">Validated</code> if you want error-accumulation and to otherwise use <code class="highlighter-rouge">Either</code>.</p>
+<p>If you are trying to decide whether you want to use <code class="language-plaintext highlighter-rouge">Validated</code> or <code class="language-plaintext highlighter-rouge">Either</code>, a simple heuristic is to use <code class="language-plaintext highlighter-rouge">Validated</code> if you want error-accumulation and to otherwise use <code class="language-plaintext highlighter-rouge">Either</code>.</p>
 
 <h2 id="sequential-validation">Sequential Validation</h2>
 
-<p>If you do want error accumulation but occasionally run into places where you sequential validation is needed, then <code class="highlighter-rouge">Validated</code> provides a couple methods that may be helpful.</p>
+<p>If you do want error accumulation but occasionally run into places where you sequential validation is needed, then <code class="language-plaintext highlighter-rouge">Validated</code> provides a couple methods that may be helpful.</p>
 
-<h3 id="andthen"><code class="highlighter-rouge">andThen</code></h3>
-<p>The <code class="highlighter-rouge">andThen</code> method is similar to <code class="highlighter-rouge">flatMap</code> (such as <code class="highlighter-rouge">Either.flatMap</code>). In the case of success, it passes the valid value into a function that returns a new <code class="highlighter-rouge">Validated</code> instance.</p>
+<h3 id="andthen"><code class="language-plaintext highlighter-rouge">andThen</code></h3>
+<p>The <code class="language-plaintext highlighter-rouge">andThen</code> method is similar to <code class="language-plaintext highlighter-rouge">flatMap</code> (such as <code class="language-plaintext highlighter-rouge">Either.flatMap</code>). In the case of success, it passes the valid value into a function that returns a new <code class="language-plaintext highlighter-rouge">Validated</code> instance.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">houseNumber</span> <span class="k">=</span> <span class="n">config</span><span class="o">.</span><span class="n">parse</span><span class="o">[</span><span class="kt">Int</span><span class="o">](</span><span class="s">"house_number"</span><span class="o">).</span><span class="n">andThen</span><span class="o">{</span> <span class="n">n</span> <span class="k">=&gt;</span>
-   <span class="k">if</span> <span class="o">(</span><span class="n">n</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="o">)</span> <span class="nc">Validated</span><span class="o">.</span><span class="n">valid</span><span class="o">(</span><span class="n">n</span><span class="o">)</span>
-   <span class="k">else</span> <span class="nc">Validated</span><span class="o">.</span><span class="n">invalid</span><span class="o">(</span><span class="nc">ParseError</span><span class="o">(</span><span class="s">"house_number"</span><span class="o">))</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">houseNumber</span> <span class="k">=</span> <span class="nv">config</span><span class="o">.</span><span class="py">parse</span><span class="o">[</span><span class="kt">Int</span><span class="o">](</span><span class="s">"house_number"</span><span class="o">).</span><span class="py">andThen</span><span class="o">{</span> <span class="n">n</span> <span class="k">=&gt;</span>
+   <span class="nf">if</span> <span class="o">(</span><span class="n">n</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="o">)</span> <span class="nv">Validated</span><span class="o">.</span><span class="py">valid</span><span class="o">(</span><span class="n">n</span><span class="o">)</span>
+   <span class="k">else</span> <span class="nv">Validated</span><span class="o">.</span><span class="py">invalid</span><span class="o">(</span><span class="nc">ParseError</span><span class="o">(</span><span class="s">"house_number"</span><span class="o">))</span>
 <span class="o">}</span>
-<span class="c1">// houseNumber: cats.data.Validated[ConfigError,Int] = Invalid(MissingConfig(house_number))
-</span></code></pre>
-</div>
+<span class="c1">// houseNumber: Validated[ConfigError, Int] = Invalid(</span>
+<span class="c1">//   MissingConfig("house_number")</span>
+<span class="c1">// )</span>
+</code></pre></div></div>
 
-<h3 id="witheither"><code class="highlighter-rouge">withEither</code></h3>
-<p>The <code class="highlighter-rouge">withEither</code> method allows you to temporarily turn a <code class="highlighter-rouge">Validated</code> instance into an <code class="highlighter-rouge">Either</code> instance and apply it to a function.</p>
+<h3 id="witheither"><code class="language-plaintext highlighter-rouge">withEither</code></h3>
+<p>The <code class="language-plaintext highlighter-rouge">withEither</code> method allows you to temporarily turn a <code class="language-plaintext highlighter-rouge">Validated</code> instance into an <code class="language-plaintext highlighter-rouge">Either</code> instance and apply it to a function.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.implicits._</span> <span class="c1">// get Either#flatMap
-</span>
-<span class="k">def</span> <span class="n">positive</span><span class="o">(</span><span class="n">field</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">i</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">ConfigError</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
-  <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="o">)</span> <span class="nc">Right</span><span class="o">(</span><span class="n">i</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.implicits._</span> <span class="c1">// get Either#flatMap</span>
+
+<span class="k">def</span> <span class="nf">positive</span><span class="o">(</span><span class="n">field</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">i</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">ConfigError</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+  <span class="nf">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="o">)</span> <span class="nc">Right</span><span class="o">(</span><span class="n">i</span><span class="o">)</span>
   <span class="k">else</span> <span class="nc">Left</span><span class="o">(</span><span class="nc">ParseError</span><span class="o">(</span><span class="n">field</span><span class="o">))</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Thus.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">houseNumber</span> <span class="k">=</span> <span class="n">config</span><span class="o">.</span><span class="n">parse</span><span class="o">[</span><span class="kt">Int</span><span class="o">](</span><span class="s">"house_number"</span><span class="o">).</span><span class="n">withEither</span><span class="o">{</span> <span class="n">either</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">ConfigError</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=&gt;</span>
-  <span class="n">either</span><span class="o">.</span><span class="n">flatMap</span><span class="o">{</span> <span class="n">i</span> <span class="k">=&gt;</span>
-    <span class="n">positive</span><span class="o">(</span><span class="s">"house_number"</span><span class="o">,</span> <span class="n">i</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">houseNumber</span> <span class="k">=</span> <span class="nv">config</span><span class="o">.</span><span class="py">parse</span><span class="o">[</span><span class="kt">Int</span><span class="o">](</span><span class="s">"house_number"</span><span class="o">).</span><span class="py">withEither</span><span class="o">{</span> <span class="n">either</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">ConfigError</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=&gt;</span>
+  <span class="nv">either</span><span class="o">.</span><span class="py">flatMap</span><span class="o">{</span> <span class="n">i</span> <span class="k">=&gt;</span>
+    <span class="nf">positive</span><span class="o">(</span><span class="s">"house_number"</span><span class="o">,</span> <span class="n">i</span><span class="o">)</span>
   <span class="o">}</span>
 <span class="o">}</span>
-<span class="c1">// houseNumber: cats.data.Validated[ConfigError,Int] = Invalid(MissingConfig(house_number))
-</span></code></pre>
-</div>
-</section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/cats/highlight/highlight.pack.js"></script><script>hljs.configure({languages:['scala','java','bash']});
-hljs.initHighlighting();
-              </script><script>((window.gitter = {}).chat = {}).options = {
+<span class="c1">// houseNumber: Validated[ConfigError, Int] = Invalid(</span>
+<span class="c1">//   MissingConfig("house_number")</span>
+<span class="c1">// )</span>
+</code></pre></div></div>
+</section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/cats/highlight/highlight.pack.js"></script><script>
+// For all code blocks, copy the language from the containing div
+// to the inner code tag (where hljs expects it to be)
+const langPrefix = 'language-';
+document.querySelectorAll(`div[class^='${langPrefix}']`).forEach(function(div) {
+  div.classList.forEach(function(cssClass) {
+    if (cssClass.startsWith(langPrefix)) {
+      const lang = cssClass.substring(langPrefix.length);
+      div.querySelectorAll('pre code').forEach(function(code) {
+        code.classList.add(lang);
+      });
+    }
+  });
+});
+
+hljs.configure({languages:['scala','java','bash']});
+hljs.initHighlightingOnLoad();
+      </script><script>console.info('\x57\x65\x62\x73\x69\x74\x65\x20\x62\x75\x69\x6c\x74\x20\x77\x69\x74\x68\x3a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x5f\x5f\x20\x20\x20\x20\x5f\x5f\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x5f\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x5f\x20\x5f\x5f\x0a\x20\x20\x20\x5f\x5f\x5f\x5f\x5f\x2f\x20\x2f\x5f\x20\x20\x2f\x20\x2f\x5f\x20\x20\x20\x20\x20\x20\x5f\x5f\x5f\x5f\x20\x5f\x5f\x5f\x20\x20\x28\x5f\x29\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x20\x20\x5f\x5f\x5f\x5f\x5f\x28\x5f\x29\x20\x2f\x5f\x5f\x5f\x5f\x20\x20\x5f\x5f\x5f\x5f\x5f\x0a\x20\x20\x2f\x20\x5f\x5f\x5f\x2f\x20\x5f\x5f\x20\x5c\x2f\x20\x5f\x5f\x2f\x5f\x5f\x5f\x5f\x5f\x2f\x20\x5f\x5f\x20\x60\x5f\x5f\x20\x5c\x2f\x20\x2f\x20\x5f\x5f\x5f\x2f\x20\x5f\x5f\x5f\x2f\x20\x5f\x5f\x20\x5c\x2f\x20\x5f\x5f\x5f\x2f\x20\x2f\x20\x5f\x5f\x2f\x20\x5f\x20\x5c\x2f\x20\x5f\x5f\x5f\x2f\x0a\x20\x28\x5f\x5f\x20\x20\x29\x20\x2f\x5f\x2f\x20\x2f\x20\x2f\x5f\x2f\x5f\x5f\x5f\x5f\x5f\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x5f\x5f\x2f\x20\x2f\x20\x20\x2f\x20\x2f\x5f\x2f\x20\x28\x5f\x5f\x20\x20\x29\x20\x2f\x20\x2f\x5f\x2f\x20\x20\x5f\x5f\x28\x5f\x5f\x20\x20\x29\x0a\x2f\x5f\x5f\x5f\x5f\x2f\x5f\x2e\x5f\x5f\x5f\x2f\x5c\x5f\x5f\x2f\x20\x20\x20\x20\x20\x2f\x5f\x2f\x20\x2f\x5f\x2f\x20\x2f\x5f\x2f\x5f\x2f\x5c\x5f\x5f\x5f\x2f\x5f\x2f\x20\x20\x20\x5c\x5f\x5f\x5f\x5f\x2f\x5f\x5f\x5f\x5f\x2f\x5f\x2f\x5c\x5f\x5f\x2f\x5c\x5f\x5f\x5f\x2f\x5f\x5f\x5f\x5f\x2f\x0a\x0a\x68\x74\x74\x70\x73\x3a\x2f\x2f\x34\x37\x64\x65\x67\x2e\x67\x69\x74\x68\x75\x62\x2e\x69\x6f\x2f\x73\x62\x74\x2d\x6d\x69\x63\x72\x6f\x73\x69\x74\x65\x73')</script><script>((window.gitter = {}).chat = {}).options = {
 room: 'typelevel/cats'};</script><script src="https://sidecar.gitter.im/dist/sidecar.v1.js"></script><script src="/cats/js/main.js"></script></body></html>

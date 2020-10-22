@@ -81,10 +81,32 @@
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <a title="Symbolic aliases for various types are defined here." href="../index.html"><span class="name">cats</span></a>
+        <a title="The cats root package contains all the trait signatures of most Scala type classes." href="../index.html"><span class="name">cats</span></a>
       </span>
       
-      <p class="shortcomment cmt">Symbolic aliases for various types are defined here.</p><div class="fullcomment"><div class="comment cmt"><p>Symbolic aliases for various types are defined here.
+      <p class="shortcomment cmt">The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><p>Cats type classes are implemented using the approach from the
+ <a href="https://ropas.snu.ac.kr/~bruno/papers/TypeClasses.pdf" target="_blank">Type classes as objects and implicits</a> article.</p><p>For each type class, <code>cats</code> provides three pieces:
+- Its <b>signature</b>: a trait that is polymorphic on a type parameter.
+  Type class traits inherit from other type classes to indicate that any implementation of the lower type class (e.g. <code>Applicative</code>)
+  can also serve as an instance for the higuer type class (e.g. <code>Functor</code>).
+- Type class <b>'instances</b>, which are classes and objects that implement one or more type class signatures for some specific types.
+  Type class instances for several data types from the Java or Scala standard libraries are declared in the subpackage <code>cats.instances</code>.
+- <b>Syntax extensions</b>, each of which provides the methods of the type class defines as extension methods
+  (which in Scala 2 are encoded as implicit classes) for values of any type <code>F</code>; given that an instance of the type class
+  for the receiver type (<code>this</code>) is in the implicit scope.
+  Symtax extensions are declared in the <code>cats.syntax</code> package.
+- A set of <b>laws</b>, that are also generic on the type of the class, and are only defined on the operations of the type class.
+  The purpose of these laws is to declare some algebraic relations (equations) between Scala expressions involving the operations
+  of the type class, and test (but not verify) that implemented instances satisfy those equations.
+  Laws are defined in the <code>cats-laws</code> package.</p><p>Although most of cats type classes are declared in this package, some are declared in other packages:
+- type classes that operate on base types (kind <code>*</code>), and their implementations for standard library types,
+  are contained in <code>cats.kernel</code>, which is a different SBT project. However, they are re-exported from this package.
+- type classes of kind <code>F[_, _]</code>, such as <a href="../arrow/Profunctor.html" class="extype" name="cats.arrow.Profunctor">cats.arrow.Profunctor</a>&quot; or <a href="../arrow/Arrow.html" class="extype" name="cats.arrow.Arrow">cats.arrow.Arrow</a>, which are relevant for
+  Functional Reactive Programming or optics, are declared in the <code>cats.arrow</code> package.
+- Also, those type classes that abstract over (pure or impure) functional runtime effects are declared
+  in the <a href="https://typelevel.org/cats-effect/" target="_blank">cats-effect library</a>.
+- Some type classes for which no laws can be provided are left out of the main road, in a small and dirty alley.
+  These are the <code>alleycats</code>.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
     </li><li name="cats.syntax" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="syntax"></a><a id="syntax:syntax"></a>
@@ -142,6 +164,10 @@
                         <span class="separator"></span>
                         <a class="trait" href="AllSyntaxBinCompat6.html" title=""></a>
                         <a href="AllSyntaxBinCompat6.html" title="">AllSyntaxBinCompat6</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="AllSyntaxBinCompat7.html" title=""></a>
+                        <a href="AllSyntaxBinCompat7.html" title="">AllSyntaxBinCompat7</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="trait" href="AlternativeSyntax.html" title=""></a>
@@ -520,6 +546,10 @@
                         <a href="ParallelLeftTraverseOps.html" title="">ParallelLeftTraverseOps</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
+                        <a class="class" href="ParallelSequenceFilterOps.html" title=""></a>
+                        <a href="ParallelSequenceFilterOps.html" title="">ParallelSequenceFilterOps</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
                         <a class="class" href="ParallelSequenceOps.html" title=""></a>
                         <a href="ParallelSequenceOps.html" title="">ParallelSequenceOps</a>
                       </li><li class="current-entities indented2">
@@ -538,6 +568,14 @@
                         <span class="separator"></span>
                         <a class="class" href="ParallelTraversable_Ops.html" title=""></a>
                         <a href="ParallelTraversable_Ops.html" title="">ParallelTraversable_Ops</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="ParallelTraverseFilterOps.html" title=""></a>
+                        <a href="ParallelTraverseFilterOps.html" title="">ParallelTraverseFilterOps</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="ParallelTraverseFilterSyntax.html" title=""></a>
+                        <a href="ParallelTraverseFilterSyntax.html" title="">ParallelTraverseFilterSyntax</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="trait" href="ParallelTraverseSyntax.html" title=""></a>
@@ -610,6 +648,14 @@
                         <span class="separator"></span>
                         <a class="class" href="SeparateOps.html" title=""></a>
                         <a href="SeparateOps.html" title="">SeparateOps</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="SeqOps.html" title=""></a>
+                        <a href="SeqOps.html" title="">SeqOps</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="SeqSyntax.html" title=""></a>
+                        <a href="SeqSyntax.html" title="">SeqSyntax</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="class" href="SequenceFilterOps.html" title=""></a>
@@ -820,6 +866,10 @@
                         <a href="package$$group$.html" title="">group</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
+                        <a class="object" href="package$$hash$.html" title=""></a>
+                        <a href="package$$hash$.html" title="">hash</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
                         <a class="object" href="package$$invariant$.html" title=""></a>
                         <a href="package$$invariant$.html" title="">invariant</a>
                       </li><li class="current-entities indented2">
@@ -890,6 +940,10 @@
                         <span class="separator"></span>
                         <a class="object" href="package$$semigroupk$.html" title=""></a>
                         <a href="package$$semigroupk$.html" title="">semigroupk</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$seq$.html" title=""></a>
+                        <a href="package$$seq$.html" title="">seq</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="object" href="package$$set$.html" title=""></a>
@@ -966,13 +1020,23 @@
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><span class="extype" name="cats.syntax.ValidatedSyntaxBincompat0">ValidatedSyntaxBincompat0</span>, <span class="extype" name="cats.syntax.ListSyntaxBinCompat0">ListSyntaxBinCompat0</span>, <span class="extype" name="cats.syntax.EitherSyntaxBinCompat0">EitherSyntaxBinCompat0</span>, <a href="FunctorFilterSyntax.html" class="extype" name="cats.syntax.FunctorFilterSyntax">FunctorFilterSyntax</a>, <a href="../FunctorFilter$$ToFunctorFilterOps.html" class="extype" name="cats.FunctorFilter.ToFunctorFilterOps">ToFunctorFilterOps</a>, <a href="TraverseFilterSyntax.html" class="extype" name="cats.syntax.TraverseFilterSyntax">TraverseFilterSyntax</a>, <a href="../TraverseFilter$$ToTraverseFilterOps.html" class="extype" name="cats.TraverseFilter.ToTraverseFilterOps">ToTraverseFilterOps</a>, <a href="ParallelTraverseSyntax.html" class="extype" name="cats.syntax.ParallelTraverseSyntax">ParallelTraverseSyntax</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="cats.syntax.ValidatedSyntaxBincompat0">ValidatedSyntaxBincompat0</span>, <span class="extype" name="cats.syntax.ListSyntaxBinCompat0">ListSyntaxBinCompat0</span>, <span class="extype" name="cats.syntax.EitherSyntaxBinCompat0">EitherSyntaxBinCompat0</span>, <a href="FunctorFilterSyntax.html" class="extype" name="cats.syntax.FunctorFilterSyntax">FunctorFilterSyntax</a>, <a href="../FunctorFilter$$ToFunctorFilterOps.html" class="extype" name="cats.FunctorFilter.ToFunctorFilterOps">ToFunctorFilterOps</a>, <a href="TraverseFilterSyntax.html" class="extype" name="cats.syntax.TraverseFilterSyntax">TraverseFilterSyntax</a>, <a href="../TraverseFilter$$ToTraverseFilterOps.html" class="extype" name="cats.TraverseFilter.ToTraverseFilterOps">ToTraverseFilterOps</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="ParallelTraverseSyntax.html" class="extype" name="cats.syntax.ParallelTraverseSyntax">ParallelTraverseSyntax</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
         </div><div class="toggleContainer block">
             <span class="toggle">
               Known Subclasses
             </span>
             <div class="subClasses hiddenContent"><a href="../implicits$.html" class="extype" name="cats.implicits">implicits</a>, <a href="AllSyntaxBinCompat.html" class="extype" name="cats.syntax.AllSyntaxBinCompat">AllSyntaxBinCompat</a>, <a href="package$$all$.html" class="extype" name="cats.syntax.all">all</a></div>
-          </div></div>
+          </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
+                <span class="toggle diagram-link">
+                  Type Hierarchy
+                </span>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph1" viewBox="0.00 0.00 953.00 155.00" height="155pt" width="953pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 151)" class="graph" id="page0,1_graph0"><polygon points="-4,4 -4,-151 949,-151 949,4 -4,4" stroke="transparent" fill="white"></polygon><g class="cluster" id="clust1"></g><g class="cluster" id="clust2"></g><!-- node0 --><g class="node this trait" id="graph1_0"><g id="a_this trait|graph1_0"><a xlink:title="cats.syntax.AllSyntaxBinCompat2 (this trait)" xlink:href="#inheritance-diagram"><path d="M519.17,-86C519.17,-86 403.83,-86 403.83,-86 399.67,-86 395.5,-81.83 395.5,-77.67 395.5,-77.67 395.5,-69.33 395.5,-69.33 395.5,-65.17 399.67,-61 403.83,-61 403.83,-61 519.17,-61 519.17,-61 523.33,-61 527.5,-65.17 527.5,-69.33 527.5,-69.33 527.5,-77.67 527.5,-77.67 527.5,-81.83 523.33,-86 519.17,-86" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-80.5" x="405.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-71.1" x="426.5" text-anchor="start">AllSyntaxBinCompat2</text></a></g></g><!-- node1 --><g class="node class" id="graph1_1"><g id="a_class|graph1_1"><a xlink:title="cats.syntax.AllSyntaxBinCompat" xlink:href="AllSyntaxBinCompat.html#inheritance-diagram"><path d="M454.67,-25C454.67,-25 344.33,-25 344.33,-25 340.17,-25 336,-20.83 336,-16.67 336,-16.67 336,-8.33 336,-8.33 336,-4.17 340.17,0 344.33,0 344.33,0 454.67,0 454.67,0 458.83,0 463,-4.17 463,-8.33 463,-8.33 463,-16.67 463,-16.67 463,-20.83 458.83,-25 454.67,-25" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-19.5" x="346.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="367.5" text-anchor="start">AllSyntaxBinCompat</text></a></g></g><!-- node0&#45;&gt;node1 --><g class="edge inheritance" id="graph1_0_1"><g id="a_inheritance|graph1_0_1"><a xlink:title="AllSyntaxBinCompat is a subtype of AllSyntaxBinCompat2"><path d="M444.12,-55.96C433.8,-46.14 420.97,-33.93 411.72,-25.13" stroke="#d4d4d4" fill="none"></path><polygon points="442.49,-57.79 449.25,-60.84 445.87,-54.24 442.49,-57.79" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node2 --><g class="node object" id="graph1_2"><g id="a_object|graph1_2"><a xlink:title="cats.implicits" xlink:href="../implicits$.html#inheritance-diagram"><path d="M559.67,-25C559.67,-25 489.33,-25 489.33,-25 485.17,-25 481,-20.83 481,-16.67 481,-16.67 481,-8.33 481,-8.33 481,-4.17 485.17,0 489.33,0 489.33,0 559.67,0 559.67,0 563.83,0 568,-4.17 568,-8.33 568,-8.33 568,-16.67 568,-16.67 568,-20.83 563.83,-25 559.67,-25" stroke="#103a51" fill="#103a51"></path><image xlink:href="../../lib/object_diagram.png" y="-19.5" x="491.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="512.5" text-anchor="start">implicits</text></a></g></g><!-- node0&#45;&gt;node2 --><g class="edge inheritance" id="graph1_0_2"><g id="a_inheritance|graph1_0_2"><a xlink:title="implicits is a subtype of AllSyntaxBinCompat2"><path d="M479.16,-55.96C489.65,-46.14 502.68,-33.93 512.08,-25.13" stroke="#d4d4d4" fill="none"></path><polygon points="477.38,-54.27 473.95,-60.84 480.73,-57.85 477.38,-54.27" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node3 --><g class="node trait" id="graph1_3"><g id="a_trait|graph1_3"><a xlink:title="cats.syntax.ParallelTraverseSyntax" xlink:href="ParallelTraverseSyntax.html#inheritance-diagram"><path d="M136.67,-147C136.67,-147 8.33,-147 8.33,-147 4.17,-147 0,-142.83 0,-138.67 0,-138.67 0,-130.33 0,-130.33 0,-126.17 4.17,-122 8.33,-122 8.33,-122 136.67,-122 136.67,-122 140.83,-122 145,-126.17 145,-130.33 145,-130.33 145,-138.67 145,-138.67 145,-142.83 140.83,-147 136.67,-147" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-141.5" x="10.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="31.5" text-anchor="start">ParallelTraverseSyntax</text></a></g></g><!-- node3&#45;&gt;node0 --><g class="edge inheritance" id="graph1_3_0"><g id="a_inheritance|graph1_3_0"><a xlink:title="AllSyntaxBinCompat2 is a subtype of ParallelTraverseSyntax"><path d="M152.48,-121.37C224.19,-110.49 328.16,-94.72 395.31,-84.54" stroke="#d4d4d4" fill="none"></path><polygon points="151.77,-119 145.21,-122.47 152.5,-123.84 151.77,-119" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node4 --><g class="node trait" id="graph1_4"><g id="a_trait|graph1_4"><a xlink:title="cats.syntax.TraverseFilterSyntax" xlink:href="TraverseFilterSyntax.html#inheritance-diagram"><path d="M291.17,-147C291.17,-147 171.83,-147 171.83,-147 167.67,-147 163.5,-142.83 163.5,-138.67 163.5,-138.67 163.5,-130.33 163.5,-130.33 163.5,-126.17 167.67,-122 171.83,-122 171.83,-122 291.17,-122 291.17,-122 295.33,-122 299.5,-126.17 299.5,-130.33 299.5,-130.33 299.5,-138.67 299.5,-138.67 299.5,-142.83 295.33,-147 291.17,-147" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-141.5" x="173.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="194.5" text-anchor="start">TraverseFilterSyntax</text></a></g></g><!-- node4&#45;&gt;node0 --><g class="edge inheritance" id="graph1_4_0"><g id="a_inheritance|graph1_4_0"><a xlink:title="AllSyntaxBinCompat2 is a subtype of TraverseFilterSyntax"><path d="M283.18,-120.24C323.19,-109.98 378.06,-95.9 416.33,-86.09" stroke="#d4d4d4" fill="none"></path><polygon points="282.56,-117.87 276.39,-121.98 283.78,-122.62 282.56,-117.87" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node5 --><g class="node trait" id="graph1_5"><g id="a_trait|graph1_5"><a xlink:title="cats.syntax.FunctorFilterSyntax" xlink:href="FunctorFilterSyntax.html#inheritance-diagram"><path d="M441.17,-147C441.17,-147 325.83,-147 325.83,-147 321.67,-147 317.5,-142.83 317.5,-138.67 317.5,-138.67 317.5,-130.33 317.5,-130.33 317.5,-126.17 321.67,-122 325.83,-122 325.83,-122 441.17,-122 441.17,-122 445.33,-122 449.5,-126.17 449.5,-130.33 449.5,-130.33 449.5,-138.67 449.5,-138.67 449.5,-142.83 445.33,-147 441.17,-147" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-141.5" x="327.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="348.5" text-anchor="start">FunctorFilterSyntax</text></a></g></g><!-- node5&#45;&gt;node0 --><g class="edge inheritance" id="graph1_5_0"><g id="a_inheritance|graph1_5_0"><a xlink:title="AllSyntaxBinCompat2 is a subtype of FunctorFilterSyntax"><path d="M404.66,-117.5C417.75,-107.59 434.27,-95.1 446.12,-86.13" stroke="#d4d4d4" fill="none"></path><polygon points="403.02,-115.67 398.91,-121.84 405.97,-119.57 403.02,-115.67" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node6 --><g class="node trait" id="graph1_6"><g id="a_trait|graph1_6"><a xlink:title="cats.syntax.EitherSyntaxBinCompat0"><path d="M604.67,-147C604.67,-147 476.33,-147 476.33,-147 472.17,-147 468,-142.83 468,-138.67 468,-138.67 468,-130.33 468,-130.33 468,-126.17 472.17,-122 476.33,-122 476.33,-122 604.67,-122 604.67,-122 608.83,-122 613,-126.17 613,-130.33 613,-130.33 613,-138.67 613,-138.67 613,-142.83 608.83,-147 604.67,-147" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-141.5" x="478.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="499.5" text-anchor="start">EitherSyntaxBinCompat0</text></a></g></g><!-- node6&#45;&gt;node0 --><g class="edge inheritance" id="graph1_6_0"><g id="a_inheritance|graph1_6_0"><a xlink:title="AllSyntaxBinCompat2 is a subtype of EitherSyntaxBinCompat0"><path d="M519.07,-117.5C505.81,-107.59 489.08,-95.1 477.08,-86.13" stroke="#d4d4d4" fill="none"></path><polygon points="517.82,-119.62 524.89,-121.84 520.75,-115.69 517.82,-119.62" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node7 --><g class="node trait" id="graph1_7"><g id="a_trait|graph1_7"><a xlink:title="cats.syntax.ListSyntaxBinCompat0"><path d="M759.17,-147C759.17,-147 639.83,-147 639.83,-147 635.67,-147 631.5,-142.83 631.5,-138.67 631.5,-138.67 631.5,-130.33 631.5,-130.33 631.5,-126.17 635.67,-122 639.83,-122 639.83,-122 759.17,-122 759.17,-122 763.33,-122 767.5,-126.17 767.5,-130.33 767.5,-130.33 767.5,-138.67 767.5,-138.67 767.5,-142.83 763.33,-147 759.17,-147" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-141.5" x="641.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="662.5" text-anchor="start">ListSyntaxBinCompat0</text></a></g></g><!-- node7&#45;&gt;node0 --><g class="edge inheritance" id="graph1_7_0"><g id="a_inheritance|graph1_7_0"><a xlink:title="AllSyntaxBinCompat2 is a subtype of ListSyntaxBinCompat0"><path d="M646.02,-120.24C604.62,-109.98 547.84,-95.9 508.24,-86.09" stroke="#d4d4d4" fill="none"></path><polygon points="645.66,-122.68 653.05,-121.98 646.84,-117.92 645.66,-122.68" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node8 --><g class="node trait" id="graph1_8"><g id="a_trait|graph1_8"><a xlink:title="cats.syntax.ValidatedSyntaxBincompat0"><path d="M936.67,-147C936.67,-147 794.33,-147 794.33,-147 790.17,-147 786,-142.83 786,-138.67 786,-138.67 786,-130.33 786,-130.33 786,-126.17 790.17,-122 794.33,-122 794.33,-122 936.67,-122 936.67,-122 940.83,-122 945,-126.17 945,-130.33 945,-130.33 945,-138.67 945,-138.67 945,-142.83 940.83,-147 936.67,-147" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-141.5" x="796.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="817.5" text-anchor="start">ValidatedSyntaxBincompat0</text></a></g></g><!-- node8&#45;&gt;node0 --><g class="edge inheritance" id="graph1_8_0"><g id="a_inheritance|graph1_8_0"><a xlink:title="AllSyntaxBinCompat2 is a subtype of ValidatedSyntaxBincompat0"><path d="M779.47,-120.94C704.22,-109.95 596.51,-94.22 527.79,-84.18" stroke="#d4d4d4" fill="none"></path><polygon points="779.37,-123.4 786.65,-121.98 780.07,-118.55 779.37,-123.4" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
+                <div id="diagram-controls" class="hiddenContent">
+                  <button id="diagram-zoom-out" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button id="diagram-zoom-in" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button title="Toggle full-screen" id="diagram-fs" class="diagram-btn to-full"><i class="material-icons"></i></button>
+                </div>
+              </div></div>
         
 
       <div id="mbrsel">
@@ -997,7 +1061,7 @@
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="cats.syntax.AllSyntaxBinCompat2"><span>AllSyntaxBinCompat2</span></li><li class="in" name="cats.syntax.ValidatedSyntaxBincompat0"><span>ValidatedSyntaxBincompat0</span></li><li class="in" name="cats.syntax.ListSyntaxBinCompat0"><span>ListSyntaxBinCompat0</span></li><li class="in" name="cats.syntax.EitherSyntaxBinCompat0"><span>EitherSyntaxBinCompat0</span></li><li class="in" name="cats.syntax.FunctorFilterSyntax"><span>FunctorFilterSyntax</span></li><li class="in" name="cats.FunctorFilter.ToFunctorFilterOps"><span>ToFunctorFilterOps</span></li><li class="in" name="cats.syntax.TraverseFilterSyntax"><span>TraverseFilterSyntax</span></li><li class="in" name="cats.TraverseFilter.ToTraverseFilterOps"><span>ToTraverseFilterOps</span></li><li class="in" name="cats.syntax.ParallelTraverseSyntax"><span>ParallelTraverseSyntax</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="cats.syntax.AllSyntaxBinCompat2"><span>AllSyntaxBinCompat2</span></li><li class="in" name="cats.syntax.ValidatedSyntaxBincompat0"><span>ValidatedSyntaxBincompat0</span></li><li class="in" name="cats.syntax.ListSyntaxBinCompat0"><span>ListSyntaxBinCompat0</span></li><li class="in" name="cats.syntax.EitherSyntaxBinCompat0"><span>EitherSyntaxBinCompat0</span></li><li class="in" name="cats.syntax.FunctorFilterSyntax"><span>FunctorFilterSyntax</span></li><li class="in" name="cats.FunctorFilter.ToFunctorFilterOps"><span>ToFunctorFilterOps</span></li><li class="in" name="cats.syntax.TraverseFilterSyntax"><span>TraverseFilterSyntax</span></li><li class="in" name="cats.TraverseFilter.ToTraverseFilterOps"><span>ToTraverseFilterOps</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="cats.syntax.ParallelTraverseSyntax"><span>ParallelTraverseSyntax</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -1137,9 +1201,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ListSyntaxBinCompat0</dd></dl></div>
     </li><li name="cats.syntax.ParallelTraverseSyntax#catsSyntaxParallelSequence_" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsSyntaxParallelSequence_[T[_],M[_],A](tma:T[M[A]])(implicitevidence$11:cats.Foldable[T]):cats.syntax.ParallelSequence_Ops[T,M,A]"></a><a id="catsSyntaxParallelSequence_[T[_],M[_],A](T[M[A]])(Foldable[T]):ParallelSequence_Ops[T,M,A]"></a>
+      <a id="catsSyntaxParallelSequence_[T[_],M[_],A](tma:T[M[A]])(implicitevidence$14:cats.Foldable[T]):cats.syntax.ParallelSequence_Ops[T,M,A]"></a><a id="catsSyntaxParallelSequence_[T[_],M[_],A](T[M[A]])(Foldable[T]):ParallelSequence_Ops[T,M,A]"></a>
       <span class="permalink">
-      <a href="../../cats/syntax/AllSyntaxBinCompat2.html#catsSyntaxParallelSequence_[T[_],M[_],A](tma:T[M[A]])(implicitevidence$11:cats.Foldable[T]):cats.syntax.ParallelSequence_Ops[T,M,A]" title="Permalink">
+      <a href="../../cats/syntax/AllSyntaxBinCompat2.html#catsSyntaxParallelSequence_[T[_],M[_],A](tma:T[M[A]])(implicitevidence$14:cats.Foldable[T]):cats.syntax.ParallelSequence_Ops[T,M,A]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1153,9 +1217,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ParallelTraverseSyntax.html" class="extype" name="cats.syntax.ParallelTraverseSyntax">ParallelTraverseSyntax</a></dd></dl></div>
     </li><li name="cats.syntax.ParallelTraverseSyntax#catsSyntaxParallelTraverse_" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsSyntaxParallelTraverse_[T[_],A](ta:T[A])(implicitevidence$10:cats.Foldable[T]):cats.syntax.ParallelTraversable_Ops[T,A]"></a><a id="catsSyntaxParallelTraverse_[T[_],A](T[A])(Foldable[T]):ParallelTraversable_Ops[T,A]"></a>
+      <a id="catsSyntaxParallelTraverse_[T[_],A](ta:T[A])(implicitevidence$13:cats.Foldable[T]):cats.syntax.ParallelTraversable_Ops[T,A]"></a><a id="catsSyntaxParallelTraverse_[T[_],A](T[A])(Foldable[T]):ParallelTraversable_Ops[T,A]"></a>
       <span class="permalink">
-      <a href="../../cats/syntax/AllSyntaxBinCompat2.html#catsSyntaxParallelTraverse_[T[_],A](ta:T[A])(implicitevidence$10:cats.Foldable[T]):cats.syntax.ParallelTraversable_Ops[T,A]" title="Permalink">
+      <a href="../../cats/syntax/AllSyntaxBinCompat2.html#catsSyntaxParallelTraverse_[T[_],A](ta:T[A])(implicitevidence$13:cats.Foldable[T]):cats.syntax.ParallelTraversable_Ops[T,A]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1207,6 +1271,8 @@
               
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
@@ -1240,28 +1306,6 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="finalize():Unit"></a>
-      <span class="permalink">
-      <a href="../../cats/syntax/AllSyntaxBinCompat2.html#finalize():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="symbol">classOf[java.lang.Throwable]</span>
-    </span>)</span>
-              
-        </dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
@@ -1279,6 +1323,8 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -1298,6 +1344,8 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -1350,6 +1398,8 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
@@ -1369,6 +1419,8 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
@@ -1387,9 +1439,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="cats.FunctorFilter.ToFunctorFilterOps#toFunctorFilterOps" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="toFunctorFilterOps[F[_],C](target:F[C])(implicittc:cats.FunctorFilter[F]):cats.FunctorFilter.Ops[F,C]{typeTypeClassType=cats.FunctorFilter[F]}"></a><a id="toFunctorFilterOps[F[_],C](F[C])(FunctorFilter[F]):Ops[F,C]{typeTypeClassType=cats.FunctorFilter[F]}"></a>
+      <a id="toFunctorFilterOps[F[_],A](target:F[A])(implicittc:cats.FunctorFilter[F]):cats.FunctorFilter.Ops[F,A]{typeTypeClassType=cats.FunctorFilter[F]}"></a><a id="toFunctorFilterOps[F[_],A](F[A])(FunctorFilter[F]):Ops[F,A]{typeTypeClassType=cats.FunctorFilter[F]}"></a>
       <span class="permalink">
-      <a href="../../cats/syntax/AllSyntaxBinCompat2.html#toFunctorFilterOps[F[_],C](target:F[C])(implicittc:cats.FunctorFilter[F]):cats.FunctorFilter.Ops[F,C]{typeTypeClassType=cats.FunctorFilter[F]}" title="Permalink">
+      <a href="../../cats/syntax/AllSyntaxBinCompat2.html#toFunctorFilterOps[F[_],A](target:F[A])(implicittc:cats.FunctorFilter[F]):cats.FunctorFilter.Ops[F,A]{typeTypeClassType=cats.FunctorFilter[F]}" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1398,13 +1450,10 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">toFunctorFilterOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="C">C</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.FunctorFilter.ToFunctorFilterOps.toFunctorFilterOps.F">F</span>[<span class="extype" name="cats.FunctorFilter.ToFunctorFilterOps.toFunctorFilterOps.C">C</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../FunctorFilter.html" class="extype" name="cats.FunctorFilter">FunctorFilter</a>[<span class="extype" name="cats.FunctorFilter.ToFunctorFilterOps.toFunctorFilterOps.F">F</span>]</span>)</span><span class="result">: <a href="../FunctorFilter$$Ops.html" class="extype" name="cats.FunctorFilter.Ops">Ops</a>[<span class="extype" name="cats.FunctorFilter.ToFunctorFilterOps.toFunctorFilterOps.F">F</span>, <span class="extype" name="cats.FunctorFilter.ToFunctorFilterOps.toFunctorFilterOps.C">C</span>] { type TypeClassType = cats.FunctorFilter[F] }</span>
+        <span class="name">toFunctorFilterOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.FunctorFilter.ToFunctorFilterOps.toFunctorFilterOps.F">F</span>[<span class="extype" name="cats.FunctorFilter.ToFunctorFilterOps.toFunctorFilterOps.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../FunctorFilter.html" class="extype" name="cats.FunctorFilter">FunctorFilter</a>[<span class="extype" name="cats.FunctorFilter.ToFunctorFilterOps.toFunctorFilterOps.F">F</span>]</span>)</span><span class="result">: <a href="../FunctorFilter$$Ops.html" class="extype" name="cats.FunctorFilter.Ops">Ops</a>[<span class="extype" name="cats.FunctorFilter.ToFunctorFilterOps.toFunctorFilterOps.F">F</span>, <span class="extype" name="cats.FunctorFilter.ToFunctorFilterOps.toFunctorFilterOps.A">A</span>] { type TypeClassType = cats.FunctorFilter[F] }</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../FunctorFilter$$ToFunctorFilterOps.html" class="extype" name="cats.FunctorFilter.ToFunctorFilterOps">ToFunctorFilterOps</a></dd><dt>Annotations</dt><dd>
-                <span class="name">@SuppressWarnings</span><span class="args">()</span>
-              
-        </dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../FunctorFilter$$ToFunctorFilterOps.html" class="extype" name="cats.FunctorFilter.ToFunctorFilterOps">ToFunctorFilterOps</a></dd></dl></div>
     </li><li name="scala.AnyRef#toString" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <span class="permalink">
@@ -1436,32 +1485,7 @@
         <span class="name">toTraverseFilterOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.TraverseFilter.ToTraverseFilterOps.toTraverseFilterOps.F">F</span>[<span class="extype" name="cats.TraverseFilter.ToTraverseFilterOps.toTraverseFilterOps.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../TraverseFilter.html" class="extype" name="cats.TraverseFilter">TraverseFilter</a>[<span class="extype" name="cats.TraverseFilter.ToTraverseFilterOps.toTraverseFilterOps.F">F</span>]</span>)</span><span class="result">: <a href="../TraverseFilter$$Ops.html" class="extype" name="cats.TraverseFilter.Ops">Ops</a>[<span class="extype" name="cats.TraverseFilter.ToTraverseFilterOps.toTraverseFilterOps.F">F</span>, <span class="extype" name="cats.TraverseFilter.ToTraverseFilterOps.toTraverseFilterOps.A">A</span>] { type TypeClassType = cats.TraverseFilter[F] }</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../TraverseFilter$$ToTraverseFilterOps.html" class="extype" name="cats.TraverseFilter.ToTraverseFilterOps">ToTraverseFilterOps</a></dd><dt>Annotations</dt><dd>
-                <span class="name">@SuppressWarnings</span><span class="args">()</span>
-              
-        </dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait():Unit"></a>
-      <span class="permalink">
-      <a href="../../cats/syntax/AllSyntaxBinCompat2.html#wait():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
-    </span>)</span>
-              
-        </dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../TraverseFilter$$ToTraverseFilterOps.html" class="extype" name="cats.TraverseFilter.ToTraverseFilterOps">ToTraverseFilterOps</a></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <span class="permalink">
@@ -1508,13 +1532,64 @@
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/syntax/AllSyntaxBinCompat2.html#wait():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
     </li>
               </ol>
             </div>
 
         
 
-        
+        <div class="values members">
+              <h3>Deprecated Value Members</h3>
+              <ol><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/syntax/AllSyntaxBinCompat2.html#finalize():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version ) see corresponding Javadoc for more information.">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+                <span class="name">@Deprecated</span>
+              
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version )</i> see corresponding Javadoc for more information.</p></dd></dl></div>
+    </li></ol>
+            </div>
         </div>
 
         <div id="inheritedMembers">
@@ -1532,6 +1607,10 @@
               <h3>Inherited from <a href="TraverseFilterSyntax.html" class="extype" name="cats.syntax.TraverseFilterSyntax">TraverseFilterSyntax</a></h3>
             </div><div class="parent" name="cats.TraverseFilter.ToTraverseFilterOps">
               <h3>Inherited from <a href="../TraverseFilter$$ToTraverseFilterOps.html" class="extype" name="cats.TraverseFilter.ToTraverseFilterOps">ToTraverseFilterOps</a></h3>
+            </div><div class="parent" name="scala.Serializable">
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
             </div><div class="parent" name="cats.syntax.ParallelTraverseSyntax">
               <h3>Inherited from <a href="ParallelTraverseSyntax.html" class="extype" name="cats.syntax.ParallelTraverseSyntax">ParallelTraverseSyntax</a></h3>
             </div><div class="parent" name="scala.AnyRef">

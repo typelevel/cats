@@ -81,10 +81,32 @@
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <a title="Symbolic aliases for various types are defined here." href="index.html"><span class="name">cats</span></a>
+        <a title="The cats root package contains all the trait signatures of most Scala type classes." href="index.html"><span class="name">cats</span></a>
       </span>
       
-      <p class="shortcomment cmt">Symbolic aliases for various types are defined here.</p><div class="fullcomment"><div class="comment cmt"><p>Symbolic aliases for various types are defined here.
+      <p class="shortcomment cmt">The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><p>Cats type classes are implemented using the approach from the
+ <a href="https://ropas.snu.ac.kr/~bruno/papers/TypeClasses.pdf" target="_blank">Type classes as objects and implicits</a> article.</p><p>For each type class, <code>cats</code> provides three pieces:
+- Its <b>signature</b>: a trait that is polymorphic on a type parameter.
+  Type class traits inherit from other type classes to indicate that any implementation of the lower type class (e.g. <code>Applicative</code>)
+  can also serve as an instance for the higuer type class (e.g. <code>Functor</code>).
+- Type class <b>'instances</b>, which are classes and objects that implement one or more type class signatures for some specific types.
+  Type class instances for several data types from the Java or Scala standard libraries are declared in the subpackage <code>cats.instances</code>.
+- <b>Syntax extensions</b>, each of which provides the methods of the type class defines as extension methods
+  (which in Scala 2 are encoded as implicit classes) for values of any type <code>F</code>; given that an instance of the type class
+  for the receiver type (<code>this</code>) is in the implicit scope.
+  Symtax extensions are declared in the <code>cats.syntax</code> package.
+- A set of <b>laws</b>, that are also generic on the type of the class, and are only defined on the operations of the type class.
+  The purpose of these laws is to declare some algebraic relations (equations) between Scala expressions involving the operations
+  of the type class, and test (but not verify) that implemented instances satisfy those equations.
+  Laws are defined in the <code>cats-laws</code> package.</p><p>Although most of cats type classes are declared in this package, some are declared in other packages:
+- type classes that operate on base types (kind <code>*</code>), and their implementations for standard library types,
+  are contained in <code>cats.kernel</code>, which is a different SBT project. However, they are re-exported from this package.
+- type classes of kind <code>F[_, _]</code>, such as <a href="arrow/Profunctor.html" class="extype" name="cats.arrow.Profunctor">cats.arrow.Profunctor</a>&quot; or <a href="arrow/Arrow.html" class="extype" name="cats.arrow.Arrow">cats.arrow.Arrow</a>, which are relevant for
+  Functional Reactive Programming or optics, are declared in the <code>cats.arrow</code> package.
+- Also, those type classes that abstract over (pure or impure) functional runtime effects are declared
+  in the <a href="https://typelevel.org/cats-effect/" target="_blank">cats-effect library</a>.
+- Some type classes for which no laws can be provided are left out of the main road, in a small and dirty alley.
+  These are the <code>alleycats</code>.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="_root_">root</a></dd></dl></div>
     </li><li name="cats.Traverse" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="Traverse"></a><a id="Traverse:Traverse"></a>
@@ -145,7 +167,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">AllOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="C">C</span>]</span><span class="result"> extends <a href="Traverse$$Ops.html" class="extype" name="cats.Traverse.Ops">Ops</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.C">C</span>] with <a href="Functor$$AllOps.html" class="extype" name="cats.Functor.AllOps">Functor.AllOps</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.C">C</span>] with <a href="Foldable$$AllOps.html" class="extype" name="cats.Foldable.AllOps">Foldable.AllOps</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.C">C</span>] with <a href="UnorderedTraverse$$AllOps.html" class="extype" name="cats.UnorderedTraverse.AllOps">UnorderedTraverse.AllOps</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.C">C</span>]</span>
+        <span class="name">AllOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> extends <a href="Traverse$$Ops.html" class="extype" name="cats.Traverse.Ops">Ops</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.A">A</span>] with <a href="Functor$$AllOps.html" class="extype" name="cats.Functor.AllOps">Functor.AllOps</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.A">A</span>] with <a href="Foldable$$AllOps.html" class="extype" name="cats.Foldable.AllOps">Foldable.AllOps</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.A">A</span>] with <a href="UnorderedTraverse$$AllOps.html" class="extype" name="cats.UnorderedTraverse.AllOps">UnorderedTraverse.AllOps</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.A">A</span>]</span>
       </span>
       </h4>
 
@@ -154,13 +176,23 @@
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="UnorderedTraverse$$AllOps.html" class="extype" name="cats.UnorderedTraverse.AllOps">UnorderedTraverse.AllOps</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.C">C</span>], <a href="UnorderedTraverse$$Ops.html" class="extype" name="cats.UnorderedTraverse.Ops">UnorderedTraverse.Ops</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.C">C</span>], <a href="Foldable$$AllOps.html" class="extype" name="cats.Foldable.AllOps">Foldable.AllOps</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.C">C</span>], <a href="UnorderedFoldable$$AllOps.html" class="extype" name="cats.UnorderedFoldable.AllOps">UnorderedFoldable.AllOps</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.C">C</span>], <a href="UnorderedFoldable$$Ops.html" class="extype" name="cats.UnorderedFoldable.Ops">UnorderedFoldable.Ops</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.C">C</span>], <a href="Foldable$$Ops.html" class="extype" name="cats.Foldable.Ops">Foldable.Ops</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.C">C</span>], <a href="Functor$$AllOps.html" class="extype" name="cats.Functor.AllOps">Functor.AllOps</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.C">C</span>], <a href="Invariant$$AllOps.html" class="extype" name="cats.Invariant.AllOps">Invariant.AllOps</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.C">C</span>], <a href="Invariant$$Ops.html" class="extype" name="cats.Invariant.Ops">Invariant.Ops</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.C">C</span>], <a href="Functor$$Ops.html" class="extype" name="cats.Functor.Ops">Functor.Ops</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.C">C</span>], <a href="Traverse$$Ops.html" class="extype" name="cats.Traverse.Ops">Ops</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.C">C</span>], <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="UnorderedTraverse$$AllOps.html" class="extype" name="cats.UnorderedTraverse.AllOps">UnorderedTraverse.AllOps</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.A">A</span>], <a href="UnorderedTraverse$$Ops.html" class="extype" name="cats.UnorderedTraverse.Ops">UnorderedTraverse.Ops</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.A">A</span>], <a href="Foldable$$AllOps.html" class="extype" name="cats.Foldable.AllOps">Foldable.AllOps</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.A">A</span>], <a href="UnorderedFoldable$$AllOps.html" class="extype" name="cats.UnorderedFoldable.AllOps">UnorderedFoldable.AllOps</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.A">A</span>], <a href="UnorderedFoldable$$Ops.html" class="extype" name="cats.UnorderedFoldable.Ops">UnorderedFoldable.Ops</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.A">A</span>], <a href="Foldable$$Ops.html" class="extype" name="cats.Foldable.Ops">Foldable.Ops</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.A">A</span>], <a href="Functor$$AllOps.html" class="extype" name="cats.Functor.AllOps">Functor.AllOps</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.A">A</span>], <a href="Invariant$$AllOps.html" class="extype" name="cats.Invariant.AllOps">Invariant.AllOps</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.A">A</span>], <a href="Invariant$$Ops.html" class="extype" name="cats.Invariant.Ops">Invariant.Ops</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.A">A</span>], <a href="Functor$$Ops.html" class="extype" name="cats.Functor.Ops">Functor.Ops</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.A">A</span>], <a href="Traverse$$Ops.html" class="extype" name="cats.Traverse.Ops">Ops</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.A">A</span>], <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
         </div><div class="toggleContainer block">
             <span class="toggle">
               Known Subclasses
             </span>
             <div class="subClasses hiddenContent"><a href="NonEmptyTraverse$$AllOps.html" class="extype" name="cats.NonEmptyTraverse.AllOps">AllOps</a></div>
-          </div></div>
+          </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
+                <span class="toggle diagram-link">
+                  Type Hierarchy
+                </span>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph1" viewBox="0.00 0.00 608.00 155.00" height="155pt" width="608pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 151)" class="graph" id="page0,1_graph0"><polygon points="-4,4 -4,-151 604,-151 604,4 -4,4" stroke="transparent" fill="white"></polygon><g class="cluster" id="clust1"></g><g class="cluster" id="clust2"></g><!-- node0 --><g class="node this trait" id="graph1_0"><g id="a_this trait|graph1_0"><a xlink:title="cats.Traverse.AllOps (this trait)" xlink:href="#inheritance-diagram"><path d="M293.17,-86C293.17,-86 209.83,-86 209.83,-86 205.67,-86 201.5,-81.83 201.5,-77.67 201.5,-77.67 201.5,-69.33 201.5,-69.33 201.5,-65.17 205.67,-61 209.83,-61 209.83,-61 293.17,-61 293.17,-61 297.33,-61 301.5,-65.17 301.5,-69.33 301.5,-69.33 301.5,-77.67 301.5,-77.67 301.5,-81.83 297.33,-86 293.17,-86" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-80.5" x="211.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-71.1" x="232.5" text-anchor="start">AllOps[F, A]</text></a></g></g><!-- node1 --><g class="node trait" id="graph1_1"><g id="a_trait|graph1_1"><a xlink:title="cats.NonEmptyTraverse.AllOps" xlink:href="NonEmptyTraverse$$AllOps.html#inheritance-diagram"><path d="M331.67,-25C331.67,-25 171.33,-25 171.33,-25 167.17,-25 163,-20.83 163,-16.67 163,-16.67 163,-8.33 163,-8.33 163,-4.17 167.17,0 171.33,0 171.33,0 331.67,0 331.67,0 335.83,0 340,-4.17 340,-8.33 340,-8.33 340,-16.67 340,-16.67 340,-20.83 335.83,-25 331.67,-25" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-19.5" x="173.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="194.5" text-anchor="start">NonEmptyTraverse.AllOps[F, A]</text></a></g></g><!-- node0&#45;&gt;node1 --><g class="edge inheritance" id="graph1_0_1"><g id="a_inheritance|graph1_0_1"><a xlink:title="NonEmptyTraverse.AllOps[F, A] is a subtype of AllOps[F, A]"><path d="M251.5,-53.76C251.5,-44.37 251.5,-33.29 251.5,-25.13" stroke="#d4d4d4" fill="none"></path><polygon points="249.05,-53.84 251.5,-60.84 253.95,-53.84 249.05,-53.84" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node2 --><g class="node trait" id="graph1_2"><g id="a_trait|graph1_2"><a xlink:title="cats.Traverse.Ops" xlink:href="Traverse$$Ops.html#inheritance-diagram"><path d="M78.67,-147C78.67,-147 8.33,-147 8.33,-147 4.17,-147 0,-142.83 0,-138.67 0,-138.67 0,-130.33 0,-130.33 0,-126.17 4.17,-122 8.33,-122 8.33,-122 78.67,-122 78.67,-122 82.83,-122 87,-126.17 87,-130.33 87,-130.33 87,-138.67 87,-138.67 87,-142.83 82.83,-147 78.67,-147" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-141.5" x="10.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="31.5" text-anchor="start">Ops[F, A]</text></a></g></g><!-- node2&#45;&gt;node0 --><g class="edge inheritance" id="graph1_2_0"><g id="a_inheritance|graph1_2_0"><a xlink:title="AllOps[F, A] is a subtype of Ops[F, A]"><path d="M91.14,-119.99C127.24,-109.75 176.33,-95.82 210.65,-86.09" stroke="#d4d4d4" fill="none"></path><polygon points="90.16,-117.72 84.1,-121.98 91.5,-122.43 90.16,-117.72" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node3 --><g class="node trait" id="graph1_3"><g id="a_trait|graph1_3"><a xlink:title="cats.Functor.AllOps" xlink:href="Functor$$AllOps.html#inheritance-diagram"><path d="M233.17,-147C233.17,-147 113.83,-147 113.83,-147 109.67,-147 105.5,-142.83 105.5,-138.67 105.5,-138.67 105.5,-130.33 105.5,-130.33 105.5,-126.17 109.67,-122 113.83,-122 113.83,-122 233.17,-122 233.17,-122 237.33,-122 241.5,-126.17 241.5,-130.33 241.5,-130.33 241.5,-138.67 241.5,-138.67 241.5,-142.83 237.33,-147 233.17,-147" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-141.5" x="115.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="136.5" text-anchor="start">Functor.AllOps[F, A]</text></a></g></g><!-- node3&#45;&gt;node0 --><g class="edge inheritance" id="graph1_3_0"><g id="a_inheritance|graph1_3_0"><a xlink:title="AllOps[F, A] is a subtype of Functor.AllOps[F, A]"><path d="M194.66,-117.5C207.75,-107.59 224.27,-95.1 236.12,-86.13" stroke="#d4d4d4" fill="none"></path><polygon points="193.02,-115.67 188.91,-121.84 195.97,-119.57 193.02,-115.67" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node4 --><g class="node trait" id="graph1_4"><g id="a_trait|graph1_4"><a xlink:title="cats.Foldable.AllOps" xlink:href="Foldable$$AllOps.html#inheritance-diagram"><path d="M392.67,-147C392.67,-147 268.33,-147 268.33,-147 264.17,-147 260,-142.83 260,-138.67 260,-138.67 260,-130.33 260,-130.33 260,-126.17 264.17,-122 268.33,-122 268.33,-122 392.67,-122 392.67,-122 396.83,-122 401,-126.17 401,-130.33 401,-130.33 401,-138.67 401,-138.67 401,-142.83 396.83,-147 392.67,-147" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-141.5" x="270.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="291.5" text-anchor="start">Foldable.AllOps[F, A]</text></a></g></g><!-- node4&#45;&gt;node0 --><g class="edge inheritance" id="graph1_4_0"><g id="a_inheritance|graph1_4_0"><a xlink:title="AllOps[F, A] is a subtype of Foldable.AllOps[F, A]"><path d="M309.07,-117.5C295.81,-107.59 279.08,-95.1 267.08,-86.13" stroke="#d4d4d4" fill="none"></path><polygon points="307.82,-119.62 314.89,-121.84 310.75,-115.69 307.82,-119.62" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node5 --><g class="node trait" id="graph1_5"><g id="a_trait|graph1_5"><a xlink:title="cats.UnorderedTraverse.AllOps" xlink:href="UnorderedTraverse$$AllOps.html#inheritance-diagram"><path d="M591.67,-147C591.67,-147 427.33,-147 427.33,-147 423.17,-147 419,-142.83 419,-138.67 419,-138.67 419,-130.33 419,-130.33 419,-126.17 423.17,-122 427.33,-122 427.33,-122 591.67,-122 591.67,-122 595.83,-122 600,-126.17 600,-130.33 600,-130.33 600,-138.67 600,-138.67 600,-142.83 595.83,-147 591.67,-147" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-141.5" x="429.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="450.5" text-anchor="start">UnorderedTraverse.AllOps[F, A]</text></a></g></g><!-- node5&#45;&gt;node0 --><g class="edge inheritance" id="graph1_5_0"><g id="a_inheritance|graph1_5_0"><a xlink:title="AllOps[F, A] is a subtype of UnorderedTraverse.AllOps[F, A]"><path d="M452.06,-120.36C406.98,-110.06 344.84,-95.85 301.73,-85.99" stroke="#d4d4d4" fill="none"></path><polygon points="451.77,-122.81 459.14,-121.98 452.86,-118.04 451.77,-122.81" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
+                <div id="diagram-controls" class="hiddenContent">
+                  <button id="diagram-zoom-out" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button id="diagram-zoom-in" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button title="Toggle full-screen" id="diagram-fs" class="diagram-btn to-full"><i class="material-icons"></i></button>
+                </div>
+              </div></div>
         
 
       <div id="mbrsel">
@@ -185,7 +217,7 @@
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="cats.Traverse.AllOps"><span>AllOps</span></li><li class="in" name="cats.UnorderedTraverse.AllOps"><span>AllOps</span></li><li class="in" name="cats.UnorderedTraverse.Ops"><span>Ops</span></li><li class="in" name="cats.Foldable.AllOps"><span>AllOps</span></li><li class="in" name="cats.UnorderedFoldable.AllOps"><span>AllOps</span></li><li class="in" name="cats.UnorderedFoldable.Ops"><span>Ops</span></li><li class="in" name="cats.Foldable.Ops"><span>Ops</span></li><li class="in" name="cats.Functor.AllOps"><span>AllOps</span></li><li class="in" name="cats.Invariant.AllOps"><span>AllOps</span></li><li class="in" name="cats.Invariant.Ops"><span>Ops</span></li><li class="in" name="cats.Functor.Ops"><span>Ops</span></li><li class="in" name="cats.Traverse.Ops"><span>Ops</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="cats.Traverse.AllOps"><span>AllOps</span></li><li class="in" name="cats.UnorderedTraverse.AllOps"><span>AllOps</span></li><li class="in" name="cats.UnorderedTraverse.Ops"><span>Ops</span></li><li class="in" name="cats.Foldable.AllOps"><span>AllOps</span></li><li class="in" name="cats.UnorderedFoldable.AllOps"><span>AllOps</span></li><li class="in" name="cats.UnorderedFoldable.Ops"><span>Ops</span></li><li class="in" name="cats.Foldable.Ops"><span>Ops</span></li><li class="in" name="cats.Functor.AllOps"><span>AllOps</span></li><li class="in" name="cats.Invariant.AllOps"><span>AllOps</span></li><li class="in" name="cats.Invariant.Ops"><span>Ops</span></li><li class="in" name="cats.Functor.Ops"><span>Ops</span></li><li class="in" name="cats.Traverse.Ops"><span>Ops</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -222,16 +254,16 @@
         <span class="name">TypeClassType</span><span class="result"> &lt;: <a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.Traverse.AllOps">AllOps</a> → <a href="UnorderedTraverse$$AllOps.html" class="extype" name="cats.UnorderedTraverse.AllOps">AllOps</a> → <a href="UnorderedTraverse$$Ops.html" class="extype" name="cats.UnorderedTraverse.Ops">Ops</a> → <a href="Foldable$$AllOps.html" class="extype" name="cats.Foldable.AllOps">AllOps</a> → <a href="UnorderedFoldable$$AllOps.html" class="extype" name="cats.UnorderedFoldable.AllOps">AllOps</a> → <a href="UnorderedFoldable$$Ops.html" class="extype" name="cats.UnorderedFoldable.Ops">Ops</a> → <a href="Foldable$$Ops.html" class="extype" name="cats.Foldable.Ops">Ops</a> → <a href="Functor$$AllOps.html" class="extype" name="cats.Functor.AllOps">AllOps</a> → <a href="Invariant$$AllOps.html" class="extype" name="cats.Invariant.AllOps">AllOps</a> → <a href="Invariant$$Ops.html" class="extype" name="cats.Invariant.Ops">Ops</a> → <a href="Functor$$Ops.html" class="extype" name="cats.Functor.Ops">Ops</a> → <a href="Traverse$$Ops.html" class="extype" name="cats.Traverse.Ops">Ops</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.Traverse.AllOps">AllOps</a> → <a href="UnorderedTraverse$$AllOps.html" class="extype" name="cats.UnorderedTraverse.AllOps">AllOps</a> → <a href="UnorderedTraverse$$Ops.html" class="extype" name="cats.UnorderedTraverse.Ops">Ops</a> → <a href="Foldable$$AllOps.html" class="extype" name="cats.Foldable.AllOps">AllOps</a> → <a href="UnorderedFoldable$$Ops.html" class="extype" name="cats.UnorderedFoldable.Ops">Ops</a> → <a href="Foldable$$Ops.html" class="extype" name="cats.Foldable.Ops">Ops</a> → <a href="Functor$$AllOps.html" class="extype" name="cats.Functor.AllOps">AllOps</a> → <a href="Invariant$$Ops.html" class="extype" name="cats.Invariant.Ops">Ops</a> → <a href="Functor$$Ops.html" class="extype" name="cats.Functor.Ops">Ops</a> → <a href="Traverse$$Ops.html" class="extype" name="cats.Traverse.Ops">Ops</a></dd></dl></div>
     </li></ol>
             </div>
 
         <div class="values members">
               <h3>Abstract Value Members</h3>
               <ol><li name="cats.UnorderedTraverse.Ops#self" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="self:F[C]"></a>
+      <a id="self:F[A]"></a>
       <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#self:F[C]" title="Permalink">
+      <a href="../cats/Traverse$$AllOps.html#self:F[A]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -240,14 +272,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">self</span><span class="result">: <span class="extype" name="cats.Traverse.AllOps.F">F</span>[<span class="extype" name="cats.Traverse.AllOps.C">C</span>]</span>
+        <span class="name">self</span><span class="result">: <span class="extype" name="cats.Traverse.AllOps.F">F</span>[<span class="extype" name="cats.Traverse.AllOps.A">A</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="UnorderedTraverse$$Ops.html" class="extype" name="cats.UnorderedTraverse.Ops">Ops</a></dd></dl></div>
-    </li><li name="cats.Traverse.AllOps#typeClassInstance" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="typeClassInstance:AllOps.this.TypeClassType"></a><a id="typeClassInstance:TypeClassType"></a>
+    </li><li name="cats.UnorderedTraverse.Ops#typeClassInstance" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="typeClassInstance:Ops.this.TypeClassType"></a><a id="typeClassInstance:TypeClassType"></a>
       <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#typeClassInstance:AllOps.this.TypeClassType" title="Permalink">
+      <a href="../cats/Traverse$$AllOps.html#typeClassInstance:Ops.this.TypeClassType" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -259,7 +291,7 @@
         <span class="name">typeClassInstance</span><span class="result">: <a href="#TypeClassType&lt;:cats.Traverse[F]" class="extmbr" name="cats.Traverse.AllOps.TypeClassType">TypeClassType</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.Traverse.AllOps">AllOps</a> → <a href="UnorderedTraverse$$AllOps.html" class="extype" name="cats.UnorderedTraverse.AllOps">AllOps</a> → <a href="UnorderedTraverse$$Ops.html" class="extype" name="cats.UnorderedTraverse.Ops">Ops</a> → <a href="Foldable$$AllOps.html" class="extype" name="cats.Foldable.AllOps">AllOps</a> → <a href="UnorderedFoldable$$AllOps.html" class="extype" name="cats.UnorderedFoldable.AllOps">AllOps</a> → <a href="UnorderedFoldable$$Ops.html" class="extype" name="cats.UnorderedFoldable.Ops">Ops</a> → <a href="Foldable$$Ops.html" class="extype" name="cats.Foldable.Ops">Ops</a> → <a href="Functor$$AllOps.html" class="extype" name="cats.Functor.AllOps">AllOps</a> → <a href="Invariant$$AllOps.html" class="extype" name="cats.Invariant.AllOps">AllOps</a> → <a href="Invariant$$Ops.html" class="extype" name="cats.Invariant.Ops">Ops</a> → <a href="Functor$$Ops.html" class="extype" name="cats.Functor.Ops">Ops</a> → <a href="Traverse$$Ops.html" class="extype" name="cats.Traverse.Ops">Ops</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="UnorderedTraverse$$Ops.html" class="extype" name="cats.UnorderedTraverse.Ops">Ops</a></dd></dl></div>
     </li></ol>
             </div>
 
@@ -369,11 +401,13 @@
               
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="cats.Foldable.Ops#collectFirst" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="collectFirst[B](pf:PartialFunction[D,B]):Option[B]"></a><a id="collectFirst[B](PartialFunction[C,B]):Option[B]"></a>
+      <a id="collectFirst[B](pf:PartialFunction[A,B]):Option[B]"></a><a id="collectFirst[B](PartialFunction[A,B]):Option[B]"></a>
       <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#collectFirst[B](pf:PartialFunction[D,B]):Option[B]" title="Permalink">
+      <a href="../cats/Traverse$$AllOps.html#collectFirst[B](pf:PartialFunction[A,B]):Option[B]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -382,14 +416,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">collectFirst</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="pf">pf: <a href="https://www.scala-lang.org/api/2.12.10/scala/PartialFunction.html#scala.PartialFunction" class="extype" name="scala.PartialFunction">PartialFunction</a>[<span class="extype" name="cats.Traverse.AllOps.C">C</span>, <span class="extype" name="cats.Foldable.Ops.collectFirst.B">B</span>]</span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.Foldable.Ops.collectFirst.B">B</span>]</span>
+        <span class="name">collectFirst</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="pf">pf: <a href="https://www.scala-lang.org/api/2.12.10/scala/PartialFunction.html#scala.PartialFunction" class="extype" name="scala.PartialFunction">PartialFunction</a>[<span class="extype" name="cats.Traverse.AllOps.A">A</span>, <span class="extype" name="cats.Foldable.Ops.collectFirst.B">B</span>]</span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.Foldable.Ops.collectFirst.B">B</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable$$Ops.html" class="extype" name="cats.Foldable.Ops">Ops</a></dd></dl></div>
     </li><li name="cats.Foldable.Ops#collectFirstSome" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="collectFirstSome[B](f:D=&gt;Option[B]):Option[B]"></a><a id="collectFirstSome[B]((C)⇒Option[B]):Option[B]"></a>
+      <a id="collectFirstSome[B](f:A=&gt;Option[B]):Option[B]"></a><a id="collectFirstSome[B]((A)⇒Option[B]):Option[B]"></a>
       <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#collectFirstSome[B](f:D=&gt;Option[B]):Option[B]" title="Permalink">
+      <a href="../cats/Traverse$$AllOps.html#collectFirstSome[B](f:A=&gt;Option[B]):Option[B]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -398,14 +432,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">collectFirstSome</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.C">C</span>) ⇒ <a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.Foldable.Ops.collectFirstSome.B">B</span>]</span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.Foldable.Ops.collectFirstSome.B">B</span>]</span>
+        <span class="name">collectFirstSome</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.A">A</span>) ⇒ <a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.Foldable.Ops.collectFirstSome.B">B</span>]</span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.Foldable.Ops.collectFirstSome.B">B</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable$$Ops.html" class="extype" name="cats.Foldable.Ops">Ops</a></dd></dl></div>
     </li><li name="cats.Foldable.Ops#collectFoldSome" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="collectFoldSome[B](f:D=&gt;Option[B])(implicitB:cats.Monoid[B]):B"></a><a id="collectFoldSome[B]((C)⇒Option[B])(Monoid[B]):B"></a>
+      <a id="collectFoldSome[B](f:A=&gt;Option[B])(implicitB:cats.Monoid[B]):B"></a><a id="collectFoldSome[B]((A)⇒Option[B])(Monoid[B]):B"></a>
       <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#collectFoldSome[B](f:D=&gt;Option[B])(implicitB:cats.Monoid[B]):B" title="Permalink">
+      <a href="../cats/Traverse$$AllOps.html#collectFoldSome[B](f:A=&gt;Option[B])(implicitB:cats.Monoid[B]):B" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -414,14 +448,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">collectFoldSome</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.C">C</span>) ⇒ <a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.Foldable.Ops.collectFoldSome.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="B">B: <a href="index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="cats.Foldable.Ops.collectFoldSome.B">B</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Foldable.Ops.collectFoldSome.B">B</span></span>
+        <span class="name">collectFoldSome</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.A">A</span>) ⇒ <a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.Foldable.Ops.collectFoldSome.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="B">B: <a href="index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="cats.Foldable.Ops.collectFoldSome.B">B</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Foldable.Ops.collectFoldSome.B">B</span></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable$$Ops.html" class="extype" name="cats.Foldable.Ops">Ops</a></dd></dl></div>
     </li><li name="cats.Foldable.Ops#combineAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="combineAll(implicitevidence$4:cats.Monoid[D]):D"></a><a id="combineAll(Monoid[C]):C"></a>
+      <a id="combineAll(implicitev$1:cats.Monoid[A]):A"></a><a id="combineAll(Monoid[A]):A"></a>
       <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#combineAll(implicitevidence$4:cats.Monoid[D]):D" title="Permalink">
+      <a href="../cats/Traverse$$AllOps.html#combineAll(implicitev$1:cats.Monoid[A]):A" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -430,14 +464,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">combineAll</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="cats.Traverse.AllOps.C">C</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Traverse.AllOps.C">C</span></span>
+        <span class="name">combineAll</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="cats.Traverse.AllOps.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Traverse.AllOps.A">A</span></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable$$Ops.html" class="extype" name="cats.Foldable.Ops">Ops</a></dd></dl></div>
     </li><li name="cats.Foldable.Ops#combineAllOption" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="combineAllOption(implicitev:cats.Semigroup[D]):Option[D]"></a><a id="combineAllOption(Semigroup[C]):Option[C]"></a>
+      <a id="combineAllOption(implicitev:cats.Semigroup[A]):Option[A]"></a><a id="combineAllOption(Semigroup[A]):Option[A]"></a>
       <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#combineAllOption(implicitev:cats.Semigroup[D]):Option[D]" title="Permalink">
+      <a href="../cats/Traverse$$AllOps.html#combineAllOption(implicitev:cats.Semigroup[A]):Option[A]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -446,14 +480,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">combineAllOption</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="index.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.Traverse.AllOps.C">C</span>]</span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.Traverse.AllOps.C">C</span>]</span>
+        <span class="name">combineAllOption</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="index.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.Traverse.AllOps.A">A</span>]</span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.Traverse.AllOps.A">A</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable$$Ops.html" class="extype" name="cats.Foldable.Ops">Ops</a></dd></dl></div>
     </li><li name="cats.Foldable.Ops#dropWhile_" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="dropWhile_(p:D=&gt;Boolean):List[D]"></a><a id="dropWhile_((C)⇒Boolean):List[C]"></a>
+      <a id="dropWhile_(p:A=&gt;Boolean):List[A]"></a><a id="dropWhile_((A)⇒Boolean):List[A]"></a>
       <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#dropWhile_(p:D=&gt;Boolean):List[D]" title="Permalink">
+      <a href="../cats/Traverse$$AllOps.html#dropWhile_(p:A=&gt;Boolean):List[A]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -462,7 +496,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">dropWhile_</span><span class="params">(<span name="p">p: (<span class="extype" name="cats.Traverse.AllOps.C">C</span>) ⇒ <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="result">: <span class="extype" name="scala.List">List</span>[<span class="extype" name="cats.Traverse.AllOps.C">C</span>]</span>
+        <span class="name">dropWhile_</span><span class="params">(<span name="p">p: (<span class="extype" name="cats.Traverse.AllOps.A">A</span>) ⇒ <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="result">: <span class="extype" name="scala.List">List</span>[<span class="extype" name="cats.Traverse.AllOps.A">A</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable$$Ops.html" class="extype" name="cats.Foldable.Ops">Ops</a></dd></dl></div>
@@ -499,7 +533,7 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="cats.UnorderedFoldable.Ops#exists" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="exists(p:A=&gt;Boolean):Boolean"></a><a id="exists((C)⇒Boolean):Boolean"></a>
+      <a id="exists(p:A=&gt;Boolean):Boolean"></a><a id="exists((A)⇒Boolean):Boolean"></a>
       <span class="permalink">
       <a href="../cats/Traverse$$AllOps.html#exists(p:A=&gt;Boolean):Boolean" title="Permalink">
         <i class="material-icons"></i>
@@ -510,14 +544,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">exists</span><span class="params">(<span name="p">p: (<span class="extype" name="cats.Traverse.AllOps.C">C</span>) ⇒ <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">exists</span><span class="params">(<span name="p">p: (<span class="extype" name="cats.Traverse.AllOps.A">A</span>) ⇒ <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="UnorderedFoldable$$Ops.html" class="extype" name="cats.UnorderedFoldable.Ops">Ops</a></dd></dl></div>
     </li><li name="cats.Foldable.Ops#existsM" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="existsM[G[_]](p:D=&gt;G[Boolean])(implicitG:cats.Monad[G]):G[Boolean]"></a><a id="existsM[G[_]]((C)⇒G[Boolean])(Monad[G]):G[Boolean]"></a>
+      <a id="existsM[G[_]](p:A=&gt;G[Boolean])(implicitG:cats.Monad[G]):G[Boolean]"></a><a id="existsM[G[_]]((A)⇒G[Boolean])(Monad[G]):G[Boolean]"></a>
       <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#existsM[G[_]](p:D=&gt;G[Boolean])(implicitG:cats.Monad[G]):G[Boolean]" title="Permalink">
+      <a href="../cats/Traverse$$AllOps.html#existsM[G[_]](p:A=&gt;G[Boolean])(implicitG:cats.Monad[G]):G[Boolean]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -526,14 +560,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">existsM</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="p">p: (<span class="extype" name="cats.Traverse.AllOps.C">C</span>) ⇒ <span class="extype" name="cats.Foldable.Ops.existsM.G">G</span>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="G">G: <a href="Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.Foldable.Ops.existsM.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Foldable.Ops.existsM.G">G</span>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a>]</span>
+        <span class="name">existsM</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="p">p: (<span class="extype" name="cats.Traverse.AllOps.A">A</span>) ⇒ <span class="extype" name="cats.Foldable.Ops.existsM.G">G</span>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="G">G: <a href="Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.Foldable.Ops.existsM.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Foldable.Ops.existsM.G">G</span>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable$$Ops.html" class="extype" name="cats.Foldable.Ops">Ops</a></dd></dl></div>
     </li><li name="cats.Foldable.Ops#filter_" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="filter_(p:D=&gt;Boolean):List[D]"></a><a id="filter_((C)⇒Boolean):List[C]"></a>
+      <a id="filter_(p:A=&gt;Boolean):List[A]"></a><a id="filter_((A)⇒Boolean):List[A]"></a>
       <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#filter_(p:D=&gt;Boolean):List[D]" title="Permalink">
+      <a href="../cats/Traverse$$AllOps.html#filter_(p:A=&gt;Boolean):List[A]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -542,36 +576,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">filter_</span><span class="params">(<span name="p">p: (<span class="extype" name="cats.Traverse.AllOps.C">C</span>) ⇒ <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="result">: <span class="extype" name="scala.List">List</span>[<span class="extype" name="cats.Traverse.AllOps.C">C</span>]</span>
+        <span class="name">filter_</span><span class="params">(<span name="p">p: (<span class="extype" name="cats.Traverse.AllOps.A">A</span>) ⇒ <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="result">: <span class="extype" name="scala.List">List</span>[<span class="extype" name="cats.Traverse.AllOps.A">A</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable$$Ops.html" class="extype" name="cats.Foldable.Ops">Ops</a></dd></dl></div>
-    </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="finalize():Unit"></a>
-      <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#finalize():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="symbol">classOf[java.lang.Throwable]</span>
-    </span>)</span>
-              
-        </dd></dl></div>
     </li><li name="cats.Foldable.Ops#find" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="find(f:D=&gt;Boolean):Option[D]"></a><a id="find((C)⇒Boolean):Option[C]"></a>
+      <a id="find(f:A=&gt;Boolean):Option[A]"></a><a id="find((A)⇒Boolean):Option[A]"></a>
       <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#find(f:D=&gt;Boolean):Option[D]" title="Permalink">
+      <a href="../cats/Traverse$$AllOps.html#find(f:A=&gt;Boolean):Option[A]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -580,14 +592,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">find</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.C">C</span>) ⇒ <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.Traverse.AllOps.C">C</span>]</span>
+        <span class="name">find</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.A">A</span>) ⇒ <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.Traverse.AllOps.A">A</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable$$Ops.html" class="extype" name="cats.Foldable.Ops">Ops</a></dd></dl></div>
     </li><li name="cats.Traverse.Ops#flatSequence" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="flatSequence[G[_],A](implicitev$macro$48:C&lt;:&lt;G[F[A]],implicitG:cats.Applicative[G],implicitF:cats.FlatMap[F]):G[F[A]]"></a><a id="flatSequence[G[_],A](&lt;:&lt;[C,G[F[A]]],Applicative[G],FlatMap[F]):G[F[A]]"></a>
+      <a id="flatSequence[G[_],B](implicitev$1:A&lt;:&lt;G[F[B]],implicitG:cats.Applicative[G],implicitF:cats.FlatMap[F]):G[F[B]]"></a><a id="flatSequence[G[_],B](&lt;:&lt;[A,G[F[B]]],Applicative[G],FlatMap[F]):G[F[B]]"></a>
       <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#flatSequence[G[_],A](implicitev$macro$48:C&lt;:&lt;G[F[A]],implicitG:cats.Applicative[G],implicitF:cats.FlatMap[F]):G[F[A]]" title="Permalink">
+      <a href="../cats/Traverse$$AllOps.html#flatSequence[G[_],B](implicitev$1:A&lt;:&lt;G[F[B]],implicitG:cats.Applicative[G],implicitF:cats.FlatMap[F]):G[F[B]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -596,14 +608,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">flatSequence</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[<span class="extype" name="cats.Traverse.AllOps.C">C</span>, <span class="extype" name="cats.Traverse.Ops.flatSequence.G">G</span>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>[<span class="extype" name="cats.Traverse.Ops.flatSequence.A">A</span>]]]</span>, <span name="G">G: <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.Traverse.Ops.flatSequence.G">G</span>]</span>, <span name="F">F: <a href="FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Traverse.Ops.flatSequence.G">G</span>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>[<span class="extype" name="cats.Traverse.Ops.flatSequence.A">A</span>]]</span>
+        <span class="name">flatSequence</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[<span class="extype" name="cats.Traverse.AllOps.A">A</span>, <span class="extype" name="cats.Traverse.Ops.flatSequence.G">G</span>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>[<span class="extype" name="cats.Traverse.Ops.flatSequence.B">B</span>]]]</span>, <span name="G">G: <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.Traverse.Ops.flatSequence.G">G</span>]</span>, <span name="F">F: <a href="FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Traverse.Ops.flatSequence.G">G</span>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>[<span class="extype" name="cats.Traverse.Ops.flatSequence.B">B</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Traverse$$Ops.html" class="extype" name="cats.Traverse.Ops">Ops</a></dd></dl></div>
     </li><li name="cats.Traverse.Ops#flatTraverse" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="flatTraverse[G[_],B](f:C=&gt;G[F[B]])(implicitG:cats.Applicative[G],implicitF:cats.FlatMap[F]):G[F[B]]"></a><a id="flatTraverse[G[_],B]((C)⇒G[F[B]])(Applicative[G],FlatMap[F]):G[F[B]]"></a>
+      <a id="flatTraverse[G[_],B](f:A=&gt;G[F[B]])(implicitG:cats.Applicative[G],implicitF:cats.FlatMap[F]):G[F[B]]"></a><a id="flatTraverse[G[_],B]((A)⇒G[F[B]])(Applicative[G],FlatMap[F]):G[F[B]]"></a>
       <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#flatTraverse[G[_],B](f:C=&gt;G[F[B]])(implicitG:cats.Applicative[G],implicitF:cats.FlatMap[F]):G[F[B]]" title="Permalink">
+      <a href="../cats/Traverse$$AllOps.html#flatTraverse[G[_],B](f:A=&gt;G[F[B]])(implicitG:cats.Applicative[G],implicitF:cats.FlatMap[F]):G[F[B]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -612,30 +624,30 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">flatTraverse</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.C">C</span>) ⇒ <span class="extype" name="cats.Traverse.Ops.flatTraverse.G">G</span>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>[<span class="extype" name="cats.Traverse.Ops.flatTraverse.B">B</span>]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="G">G: <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.Traverse.Ops.flatTraverse.G">G</span>]</span>, <span name="F">F: <a href="FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Traverse.Ops.flatTraverse.G">G</span>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>[<span class="extype" name="cats.Traverse.Ops.flatTraverse.B">B</span>]]</span>
+        <span class="name">flatTraverse</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.A">A</span>) ⇒ <span class="extype" name="cats.Traverse.Ops.flatTraverse.G">G</span>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>[<span class="extype" name="cats.Traverse.Ops.flatTraverse.B">B</span>]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="G">G: <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.Traverse.Ops.flatTraverse.G">G</span>]</span>, <span name="F">F: <a href="FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Traverse.Ops.flatTraverse.G">G</span>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>[<span class="extype" name="cats.Traverse.Ops.flatTraverse.B">B</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Traverse$$Ops.html" class="extype" name="cats.Traverse.Ops">Ops</a></dd></dl></div>
     </li><li name="cats.Functor.Ops#fmap" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="fmap[B](f:A=&gt;B):F[B]"></a><a id="fmap[B]((C)⇒B):F[B]"></a>
+      <a id="fmap[B](f:A=&gt;B):F[B]"></a><a id="fmap[B]((A)⇒B):F[B]"></a>
       <span class="permalink">
       <a href="../cats/Traverse$$AllOps.html#fmap[B](f:A=&gt;B):F[B]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
       <span class="modifier_kind">
-        <span class="modifier"></span>
+        <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">fmap</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.C">C</span>) ⇒ <span class="extype" name="cats.Functor.Ops.fmap.B">B</span></span>)</span><span class="result">: <span class="extype" name="cats.Traverse.AllOps.F">F</span>[<span class="extype" name="cats.Functor.Ops.fmap.B">B</span>]</span>
+        <span class="name">fmap</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.A">A</span>) ⇒ <span class="extype" name="cats.Functor.Ops.fmap.B">B</span></span>)</span><span class="result">: <span class="extype" name="cats.Traverse.AllOps.F">F</span>[<span class="extype" name="cats.Functor.Ops.fmap.B">B</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Functor$$Ops.html" class="extype" name="cats.Functor.Ops">Ops</a></dd></dl></div>
     </li><li name="cats.Foldable.Ops#fold" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="fold(implicitA:cats.Monoid[D]):D"></a><a id="fold(Monoid[C]):C"></a>
+      <a id="fold(implicitA:cats.Monoid[A]):A"></a><a id="fold(Monoid[A]):A"></a>
       <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#fold(implicitA:cats.Monoid[D]):D" title="Permalink">
+      <a href="../cats/Traverse$$AllOps.html#fold(implicitA:cats.Monoid[A]):A" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -644,14 +656,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">fold</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="cats.Traverse.AllOps.C">C</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Traverse.AllOps.C">C</span></span>
+        <span class="name">fold</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="cats.Traverse.AllOps.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Traverse.AllOps.A">A</span></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable$$Ops.html" class="extype" name="cats.Foldable.Ops">Ops</a></dd></dl></div>
     </li><li name="cats.Foldable.Ops#foldK" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="foldK[G[_],A](implicitev$macro$52:D&lt;:&lt;G[A],implicitG:cats.MonoidK[G]):G[A]"></a><a id="foldK[G[_],A](&lt;:&lt;[C,G[A]],MonoidK[G]):G[A]"></a>
+      <a id="foldK[G[_],B](implicitev$1:A&lt;:&lt;G[B],implicitG:cats.MonoidK[G]):G[B]"></a><a id="foldK[G[_],B](&lt;:&lt;[A,G[B]],MonoidK[G]):G[B]"></a>
       <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#foldK[G[_],A](implicitev$macro$52:D&lt;:&lt;G[A],implicitG:cats.MonoidK[G]):G[A]" title="Permalink">
+      <a href="../cats/Traverse$$AllOps.html#foldK[G[_],B](implicitev$1:A&lt;:&lt;G[B],implicitG:cats.MonoidK[G]):G[B]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -660,14 +672,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">foldK</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[<span class="extype" name="cats.Traverse.AllOps.C">C</span>, <span class="extype" name="cats.Foldable.Ops.foldK.G">G</span>[<span class="extype" name="cats.Foldable.Ops.foldK.A">A</span>]]</span>, <span name="G">G: <a href="MonoidK.html" class="extype" name="cats.MonoidK">MonoidK</a>[<span class="extype" name="cats.Foldable.Ops.foldK.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Foldable.Ops.foldK.G">G</span>[<span class="extype" name="cats.Foldable.Ops.foldK.A">A</span>]</span>
+        <span class="name">foldK</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[<span class="extype" name="cats.Traverse.AllOps.A">A</span>, <span class="extype" name="cats.Foldable.Ops.foldK.G">G</span>[<span class="extype" name="cats.Foldable.Ops.foldK.B">B</span>]]</span>, <span name="G">G: <a href="MonoidK.html" class="extype" name="cats.MonoidK">MonoidK</a>[<span class="extype" name="cats.Foldable.Ops.foldK.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Foldable.Ops.foldK.G">G</span>[<span class="extype" name="cats.Foldable.Ops.foldK.B">B</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable$$Ops.html" class="extype" name="cats.Foldable.Ops">Ops</a></dd></dl></div>
     </li><li name="cats.Foldable.Ops#foldLeft" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="foldLeft[B](b:B)(f:(B,D)=&gt;B):B"></a><a id="foldLeft[B](B)((B,C)⇒B):B"></a>
+      <a id="foldLeft[B](b:B)(f:(B,A)=&gt;B):B"></a><a id="foldLeft[B](B)((B,A)⇒B):B"></a>
       <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#foldLeft[B](b:B)(f:(B,D)=&gt;B):B" title="Permalink">
+      <a href="../cats/Traverse$$AllOps.html#foldLeft[B](b:B)(f:(B,A)=&gt;B):B" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -676,30 +688,30 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">foldLeft</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="b">b: <span class="extype" name="cats.Foldable.Ops.foldLeft.B">B</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Foldable.Ops.foldLeft.B">B</span>, <span class="extype" name="cats.Traverse.AllOps.C">C</span>) ⇒ <span class="extype" name="cats.Foldable.Ops.foldLeft.B">B</span></span>)</span><span class="result">: <span class="extype" name="cats.Foldable.Ops.foldLeft.B">B</span></span>
+        <span class="name">foldLeft</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="b">b: <span class="extype" name="cats.Foldable.Ops.foldLeft.B">B</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Foldable.Ops.foldLeft.B">B</span>, <span class="extype" name="cats.Traverse.AllOps.A">A</span>) ⇒ <span class="extype" name="cats.Foldable.Ops.foldLeft.B">B</span></span>)</span><span class="result">: <span class="extype" name="cats.Foldable.Ops.foldLeft.B">B</span></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable$$Ops.html" class="extype" name="cats.Foldable.Ops">Ops</a></dd></dl></div>
     </li><li name="cats.Foldable.Ops#foldLeftM" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="foldLeftM[G[_],B](z:B)(f:(B,D)=&gt;G[B])(implicitG:cats.Monad[G]):G[B]"></a><a id="foldLeftM[G[_],B](B)((B,C)⇒G[B])(Monad[G]):G[B]"></a>
+      <a id="foldLeftM[G[_],B](z:B)(f:(B,A)=&gt;G[B])(implicitG:cats.Monad[G]):G[B]"></a><a id="foldLeftM[G[_],B](B)((B,A)⇒G[B])(Monad[G]):G[B]"></a>
       <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#foldLeftM[G[_],B](z:B)(f:(B,D)=&gt;G[B])(implicitG:cats.Monad[G]):G[B]" title="Permalink">
+      <a href="../cats/Traverse$$AllOps.html#foldLeftM[G[_],B](z:B)(f:(B,A)=&gt;G[B])(implicitG:cats.Monad[G]):G[B]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
       <span class="modifier_kind">
-        <span class="modifier"></span>
+        <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">foldLeftM</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="B">B</span>]</span><span class="params">(<span name="z">z: <span class="extype" name="cats.Foldable.Ops.foldLeftM.B">B</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Foldable.Ops.foldLeftM.B">B</span>, <span class="extype" name="cats.Traverse.AllOps.C">C</span>) ⇒ <span class="extype" name="cats.Foldable.Ops.foldLeftM.G">G</span>[<span class="extype" name="cats.Foldable.Ops.foldLeftM.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="G">G: <a href="Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.Foldable.Ops.foldLeftM.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Foldable.Ops.foldLeftM.G">G</span>[<span class="extype" name="cats.Foldable.Ops.foldLeftM.B">B</span>]</span>
+        <span class="name">foldLeftM</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="B">B</span>]</span><span class="params">(<span name="z">z: <span class="extype" name="cats.Foldable.Ops.foldLeftM.B">B</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Foldable.Ops.foldLeftM.B">B</span>, <span class="extype" name="cats.Traverse.AllOps.A">A</span>) ⇒ <span class="extype" name="cats.Foldable.Ops.foldLeftM.G">G</span>[<span class="extype" name="cats.Foldable.Ops.foldLeftM.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="G">G: <a href="Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.Foldable.Ops.foldLeftM.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Foldable.Ops.foldLeftM.G">G</span>[<span class="extype" name="cats.Foldable.Ops.foldLeftM.B">B</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable$$Ops.html" class="extype" name="cats.Foldable.Ops">Ops</a></dd></dl></div>
     </li><li name="cats.Foldable.Ops#foldM" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="foldM[G[_],B](z:B)(f:(B,D)=&gt;G[B])(implicitG:cats.Monad[G]):G[B]"></a><a id="foldM[G[_],B](B)((B,C)⇒G[B])(Monad[G]):G[B]"></a>
+      <a id="foldM[G[_],B](z:B)(f:(B,A)=&gt;G[B])(implicitG:cats.Monad[G]):G[B]"></a><a id="foldM[G[_],B](B)((B,A)⇒G[B])(Monad[G]):G[B]"></a>
       <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#foldM[G[_],B](z:B)(f:(B,D)=&gt;G[B])(implicitG:cats.Monad[G]):G[B]" title="Permalink">
+      <a href="../cats/Traverse$$AllOps.html#foldM[G[_],B](z:B)(f:(B,A)=&gt;G[B])(implicitG:cats.Monad[G]):G[B]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -708,14 +720,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">foldM</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="B">B</span>]</span><span class="params">(<span name="z">z: <span class="extype" name="cats.Foldable.Ops.foldM.B">B</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Foldable.Ops.foldM.B">B</span>, <span class="extype" name="cats.Traverse.AllOps.C">C</span>) ⇒ <span class="extype" name="cats.Foldable.Ops.foldM.G">G</span>[<span class="extype" name="cats.Foldable.Ops.foldM.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="G">G: <a href="Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.Foldable.Ops.foldM.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Foldable.Ops.foldM.G">G</span>[<span class="extype" name="cats.Foldable.Ops.foldM.B">B</span>]</span>
+        <span class="name">foldM</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="B">B</span>]</span><span class="params">(<span name="z">z: <span class="extype" name="cats.Foldable.Ops.foldM.B">B</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Foldable.Ops.foldM.B">B</span>, <span class="extype" name="cats.Traverse.AllOps.A">A</span>) ⇒ <span class="extype" name="cats.Foldable.Ops.foldM.G">G</span>[<span class="extype" name="cats.Foldable.Ops.foldM.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="G">G: <a href="Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.Foldable.Ops.foldM.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Foldable.Ops.foldM.G">G</span>[<span class="extype" name="cats.Foldable.Ops.foldM.B">B</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable$$Ops.html" class="extype" name="cats.Foldable.Ops">Ops</a></dd></dl></div>
     </li><li name="cats.Foldable.Ops#foldMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="foldMap[B](f:D=&gt;B)(implicitB:cats.Monoid[B]):B"></a><a id="foldMap[B]((C)⇒B)(Monoid[B]):B"></a>
+      <a id="foldMap[B](f:A=&gt;B)(implicitB:cats.Monoid[B]):B"></a><a id="foldMap[B]((A)⇒B)(Monoid[B]):B"></a>
       <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#foldMap[B](f:D=&gt;B)(implicitB:cats.Monoid[B]):B" title="Permalink">
+      <a href="../cats/Traverse$$AllOps.html#foldMap[B](f:A=&gt;B)(implicitB:cats.Monoid[B]):B" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -724,14 +736,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">foldMap</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.C">C</span>) ⇒ <span class="extype" name="cats.Foldable.Ops.foldMap.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="B">B: <a href="index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="cats.Foldable.Ops.foldMap.B">B</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Foldable.Ops.foldMap.B">B</span></span>
+        <span class="name">foldMap</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.A">A</span>) ⇒ <span class="extype" name="cats.Foldable.Ops.foldMap.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="B">B: <a href="index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="cats.Foldable.Ops.foldMap.B">B</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Foldable.Ops.foldMap.B">B</span></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable$$Ops.html" class="extype" name="cats.Foldable.Ops">Ops</a></dd></dl></div>
     </li><li name="cats.Foldable.Ops#foldMapA" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="foldMapA[G[_],B](f:D=&gt;G[B])(implicitG:cats.Applicative[G],implicitB:cats.Monoid[B]):G[B]"></a><a id="foldMapA[G[_],B]((C)⇒G[B])(Applicative[G],Monoid[B]):G[B]"></a>
+      <a id="foldMapA[G[_],B](f:A=&gt;G[B])(implicitG:cats.Applicative[G],implicitB:cats.Monoid[B]):G[B]"></a><a id="foldMapA[G[_],B]((A)⇒G[B])(Applicative[G],Monoid[B]):G[B]"></a>
       <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#foldMapA[G[_],B](f:D=&gt;G[B])(implicitG:cats.Applicative[G],implicitB:cats.Monoid[B]):G[B]" title="Permalink">
+      <a href="../cats/Traverse$$AllOps.html#foldMapA[G[_],B](f:A=&gt;G[B])(implicitG:cats.Applicative[G],implicitB:cats.Monoid[B]):G[B]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -740,14 +752,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">foldMapA</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.C">C</span>) ⇒ <span class="extype" name="cats.Foldable.Ops.foldMapA.G">G</span>[<span class="extype" name="cats.Foldable.Ops.foldMapA.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="G">G: <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.Foldable.Ops.foldMapA.G">G</span>]</span>, <span name="B">B: <a href="index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="cats.Foldable.Ops.foldMapA.B">B</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Foldable.Ops.foldMapA.G">G</span>[<span class="extype" name="cats.Foldable.Ops.foldMapA.B">B</span>]</span>
+        <span class="name">foldMapA</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.A">A</span>) ⇒ <span class="extype" name="cats.Foldable.Ops.foldMapA.G">G</span>[<span class="extype" name="cats.Foldable.Ops.foldMapA.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="G">G: <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.Foldable.Ops.foldMapA.G">G</span>]</span>, <span name="B">B: <a href="index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="cats.Foldable.Ops.foldMapA.B">B</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Foldable.Ops.foldMapA.G">G</span>[<span class="extype" name="cats.Foldable.Ops.foldMapA.B">B</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable$$Ops.html" class="extype" name="cats.Foldable.Ops">Ops</a></dd></dl></div>
     </li><li name="cats.Foldable.Ops#foldMapM" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="foldMapM[G[_],B](f:D=&gt;G[B])(implicitG:cats.Monad[G],implicitB:cats.Monoid[B]):G[B]"></a><a id="foldMapM[G[_],B]((C)⇒G[B])(Monad[G],Monoid[B]):G[B]"></a>
+      <a id="foldMapM[G[_],B](f:A=&gt;G[B])(implicitG:cats.Monad[G],implicitB:cats.Monoid[B]):G[B]"></a><a id="foldMapM[G[_],B]((A)⇒G[B])(Monad[G],Monoid[B]):G[B]"></a>
       <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#foldMapM[G[_],B](f:D=&gt;G[B])(implicitG:cats.Monad[G],implicitB:cats.Monoid[B]):G[B]" title="Permalink">
+      <a href="../cats/Traverse$$AllOps.html#foldMapM[G[_],B](f:A=&gt;G[B])(implicitG:cats.Monad[G],implicitB:cats.Monoid[B]):G[B]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -756,14 +768,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">foldMapM</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.C">C</span>) ⇒ <span class="extype" name="cats.Foldable.Ops.foldMapM.G">G</span>[<span class="extype" name="cats.Foldable.Ops.foldMapM.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="G">G: <a href="Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.Foldable.Ops.foldMapM.G">G</span>]</span>, <span name="B">B: <a href="index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="cats.Foldable.Ops.foldMapM.B">B</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Foldable.Ops.foldMapM.G">G</span>[<span class="extype" name="cats.Foldable.Ops.foldMapM.B">B</span>]</span>
+        <span class="name">foldMapM</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.A">A</span>) ⇒ <span class="extype" name="cats.Foldable.Ops.foldMapM.G">G</span>[<span class="extype" name="cats.Foldable.Ops.foldMapM.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="G">G: <a href="Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.Foldable.Ops.foldMapM.G">G</span>]</span>, <span name="B">B: <a href="index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="cats.Foldable.Ops.foldMapM.B">B</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Foldable.Ops.foldMapM.G">G</span>[<span class="extype" name="cats.Foldable.Ops.foldMapM.B">B</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable$$Ops.html" class="extype" name="cats.Foldable.Ops">Ops</a></dd></dl></div>
     </li><li name="cats.Foldable.Ops#foldRight" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="foldRight[B](lb:cats.Eval[B])(f:(D,cats.Eval[B])=&gt;cats.Eval[B]):cats.Eval[B]"></a><a id="foldRight[B](Eval[B])((C,Eval[B])⇒Eval[B]):Eval[B]"></a>
+      <a id="foldRight[B](lb:cats.Eval[B])(f:(A,cats.Eval[B])=&gt;cats.Eval[B]):cats.Eval[B]"></a><a id="foldRight[B](Eval[B])((A,Eval[B])⇒Eval[B]):Eval[B]"></a>
       <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#foldRight[B](lb:cats.Eval[B])(f:(D,cats.Eval[B])=&gt;cats.Eval[B]):cats.Eval[B]" title="Permalink">
+      <a href="../cats/Traverse$$AllOps.html#foldRight[B](lb:cats.Eval[B])(f:(A,cats.Eval[B])=&gt;cats.Eval[B]):cats.Eval[B]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -772,14 +784,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">foldRight</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="lb">lb: <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.Foldable.Ops.foldRight.B">B</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.C">C</span>, <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.Foldable.Ops.foldRight.B">B</span>]) ⇒ <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.Foldable.Ops.foldRight.B">B</span>]</span>)</span><span class="result">: <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.Foldable.Ops.foldRight.B">B</span>]</span>
+        <span class="name">foldRight</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="lb">lb: <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.Foldable.Ops.foldRight.B">B</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.A">A</span>, <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.Foldable.Ops.foldRight.B">B</span>]) ⇒ <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.Foldable.Ops.foldRight.B">B</span>]</span>)</span><span class="result">: <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.Foldable.Ops.foldRight.B">B</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable$$Ops.html" class="extype" name="cats.Foldable.Ops">Ops</a></dd></dl></div>
     </li><li name="cats.Foldable.Ops#foldRightDefer" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="foldRightDefer[G[_],B](gb:G[B])(fn:(D,G[B])=&gt;G[B])(implicitevidence$1:cats.Defer[G]):G[B]"></a><a id="foldRightDefer[G[_],B](G[B])((C,G[B])⇒G[B])(Defer[G]):G[B]"></a>
+      <a id="foldRightDefer[G[_],B](gb:G[B])(fn:(A,G[B])=&gt;G[B])(implicitev$1:cats.Defer[G]):G[B]"></a><a id="foldRightDefer[G[_],B](G[B])((A,G[B])⇒G[B])(Defer[G]):G[B]"></a>
       <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#foldRightDefer[G[_],B](gb:G[B])(fn:(D,G[B])=&gt;G[B])(implicitevidence$1:cats.Defer[G]):G[B]" title="Permalink">
+      <a href="../cats/Traverse$$AllOps.html#foldRightDefer[G[_],B](gb:G[B])(fn:(A,G[B])=&gt;G[B])(implicitev$1:cats.Defer[G]):G[B]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -788,12 +800,12 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">foldRightDefer</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="B">B</span>]</span><span class="params">(<span name="gb">gb: <span class="extype" name="cats.Foldable.Ops.foldRightDefer.G">G</span>[<span class="extype" name="cats.Foldable.Ops.foldRightDefer.B">B</span>]</span>)</span><span class="params">(<span name="fn">fn: (<span class="extype" name="cats.Traverse.AllOps.C">C</span>, <span class="extype" name="cats.Foldable.Ops.foldRightDefer.G">G</span>[<span class="extype" name="cats.Foldable.Ops.foldRightDefer.B">B</span>]) ⇒ <span class="extype" name="cats.Foldable.Ops.foldRightDefer.G">G</span>[<span class="extype" name="cats.Foldable.Ops.foldRightDefer.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="Defer.html" class="extype" name="cats.Defer">Defer</a>[<span class="extype" name="cats.Foldable.Ops.foldRightDefer.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Foldable.Ops.foldRightDefer.G">G</span>[<span class="extype" name="cats.Foldable.Ops.foldRightDefer.B">B</span>]</span>
+        <span class="name">foldRightDefer</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="B">B</span>]</span><span class="params">(<span name="gb">gb: <span class="extype" name="cats.Foldable.Ops.foldRightDefer.G">G</span>[<span class="extype" name="cats.Foldable.Ops.foldRightDefer.B">B</span>]</span>)</span><span class="params">(<span name="fn">fn: (<span class="extype" name="cats.Traverse.AllOps.A">A</span>, <span class="extype" name="cats.Foldable.Ops.foldRightDefer.G">G</span>[<span class="extype" name="cats.Foldable.Ops.foldRightDefer.B">B</span>]) ⇒ <span class="extype" name="cats.Foldable.Ops.foldRightDefer.G">G</span>[<span class="extype" name="cats.Foldable.Ops.foldRightDefer.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="Defer.html" class="extype" name="cats.Defer">Defer</a>[<span class="extype" name="cats.Foldable.Ops.foldRightDefer.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Foldable.Ops.foldRightDefer.G">G</span>[<span class="extype" name="cats.Foldable.Ops.foldRightDefer.B">B</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable$$Ops.html" class="extype" name="cats.Foldable.Ops">Ops</a></dd></dl></div>
     </li><li name="cats.UnorderedFoldable.Ops#forall" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="forall(p:A=&gt;Boolean):Boolean"></a><a id="forall((C)⇒Boolean):Boolean"></a>
+      <a id="forall(p:A=&gt;Boolean):Boolean"></a><a id="forall((A)⇒Boolean):Boolean"></a>
       <span class="permalink">
       <a href="../cats/Traverse$$AllOps.html#forall(p:A=&gt;Boolean):Boolean" title="Permalink">
         <i class="material-icons"></i>
@@ -804,14 +816,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">forall</span><span class="params">(<span name="p">p: (<span class="extype" name="cats.Traverse.AllOps.C">C</span>) ⇒ <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">forall</span><span class="params">(<span name="p">p: (<span class="extype" name="cats.Traverse.AllOps.A">A</span>) ⇒ <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="UnorderedFoldable$$Ops.html" class="extype" name="cats.UnorderedFoldable.Ops">Ops</a></dd></dl></div>
     </li><li name="cats.Foldable.Ops#forallM" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="forallM[G[_]](p:D=&gt;G[Boolean])(implicitG:cats.Monad[G]):G[Boolean]"></a><a id="forallM[G[_]]((C)⇒G[Boolean])(Monad[G]):G[Boolean]"></a>
+      <a id="forallM[G[_]](p:A=&gt;G[Boolean])(implicitG:cats.Monad[G]):G[Boolean]"></a><a id="forallM[G[_]]((A)⇒G[Boolean])(Monad[G]):G[Boolean]"></a>
       <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#forallM[G[_]](p:D=&gt;G[Boolean])(implicitG:cats.Monad[G]):G[Boolean]" title="Permalink">
+      <a href="../cats/Traverse$$AllOps.html#forallM[G[_]](p:A=&gt;G[Boolean])(implicitG:cats.Monad[G]):G[Boolean]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -820,12 +832,12 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">forallM</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="p">p: (<span class="extype" name="cats.Traverse.AllOps.C">C</span>) ⇒ <span class="extype" name="cats.Foldable.Ops.forallM.G">G</span>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="G">G: <a href="Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.Foldable.Ops.forallM.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Foldable.Ops.forallM.G">G</span>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a>]</span>
+        <span class="name">forallM</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="p">p: (<span class="extype" name="cats.Traverse.AllOps.A">A</span>) ⇒ <span class="extype" name="cats.Foldable.Ops.forallM.G">G</span>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="G">G: <a href="Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.Foldable.Ops.forallM.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Foldable.Ops.forallM.G">G</span>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable$$Ops.html" class="extype" name="cats.Foldable.Ops">Ops</a></dd></dl></div>
     </li><li name="cats.Functor.Ops#fproduct" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="fproduct[B](f:A=&gt;B):F[(A,B)]"></a><a id="fproduct[B]((C)⇒B):F[(C,B)]"></a>
+      <a id="fproduct[B](f:A=&gt;B):F[(A,B)]"></a><a id="fproduct[B]((A)⇒B):F[(A,B)]"></a>
       <span class="permalink">
       <a href="../cats/Traverse$$AllOps.html#fproduct[B](f:A=&gt;B):F[(A,B)]" title="Permalink">
         <i class="material-icons"></i>
@@ -836,14 +848,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">fproduct</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.C">C</span>) ⇒ <span class="extype" name="cats.Functor.Ops.fproduct.B">B</span></span>)</span><span class="result">: <span class="extype" name="cats.Traverse.AllOps.F">F</span>[(<span class="extype" name="cats.Traverse.AllOps.C">C</span>, <span class="extype" name="cats.Functor.Ops.fproduct.B">B</span>)]</span>
+        <span class="name">fproduct</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.A">A</span>) ⇒ <span class="extype" name="cats.Functor.Ops.fproduct.B">B</span></span>)</span><span class="result">: <span class="extype" name="cats.Traverse.AllOps.F">F</span>[(<span class="extype" name="cats.Traverse.AllOps.A">A</span>, <span class="extype" name="cats.Functor.Ops.fproduct.B">B</span>)]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Functor$$Ops.html" class="extype" name="cats.Functor.Ops">Ops</a></dd></dl></div>
-    </li><li name="cats.Foldable.Ops#get" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="get(idx:Long):Option[D]"></a><a id="get(Long):Option[C]"></a>
+    </li><li name="cats.Functor.Ops#fproductLeft" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="fproductLeft[B](f:A=&gt;B):F[(B,A)]"></a><a id="fproductLeft[B]((A)⇒B):F[(B,A)]"></a>
       <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#get(idx:Long):Option[D]" title="Permalink">
+      <a href="../cats/Traverse$$AllOps.html#fproductLeft[B](f:A=&gt;B):F[(B,A)]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -852,7 +864,23 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">get</span><span class="params">(<span name="idx">idx: <a href="https://www.scala-lang.org/api/2.12.10/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.Traverse.AllOps.C">C</span>]</span>
+        <span class="name">fproductLeft</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.A">A</span>) ⇒ <span class="extype" name="cats.Functor.Ops.fproductLeft.B">B</span></span>)</span><span class="result">: <span class="extype" name="cats.Traverse.AllOps.F">F</span>[(<span class="extype" name="cats.Functor.Ops.fproductLeft.B">B</span>, <span class="extype" name="cats.Traverse.AllOps.A">A</span>)]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Functor$$Ops.html" class="extype" name="cats.Functor.Ops">Ops</a></dd></dl></div>
+    </li><li name="cats.Foldable.Ops#get" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="get(idx:Long):Option[A]"></a><a id="get(Long):Option[A]"></a>
+      <span class="permalink">
+      <a href="../cats/Traverse$$AllOps.html#get(idx:Long):Option[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">get</span><span class="params">(<span name="idx">idx: <a href="https://www.scala-lang.org/api/2.12.10/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.Traverse.AllOps.A">A</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable$$Ops.html" class="extype" name="cats.Foldable.Ops">Ops</a></dd></dl></div>
@@ -874,6 +902,8 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
@@ -893,9 +923,11 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="cats.Invariant.Ops#imap" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="imap[B](f:A=&gt;B)(g:B=&gt;A):F[B]"></a><a id="imap[B]((C)⇒B)((B)⇒C):F[B]"></a>
+      <a id="imap[B](f:A=&gt;B)(g:B=&gt;A):F[B]"></a><a id="imap[B]((A)⇒B)((B)⇒A):F[B]"></a>
       <span class="permalink">
       <a href="../cats/Traverse$$AllOps.html#imap[B](f:A=&gt;B)(g:B=&gt;A):F[B]" title="Permalink">
         <i class="material-icons"></i>
@@ -906,14 +938,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">imap</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.C">C</span>) ⇒ <span class="extype" name="cats.Invariant.Ops.imap.B">B</span></span>)</span><span class="params">(<span name="g">g: (<span class="extype" name="cats.Invariant.Ops.imap.B">B</span>) ⇒ <span class="extype" name="cats.Traverse.AllOps.C">C</span></span>)</span><span class="result">: <span class="extype" name="cats.Traverse.AllOps.F">F</span>[<span class="extype" name="cats.Invariant.Ops.imap.B">B</span>]</span>
+        <span class="name">imap</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.A">A</span>) ⇒ <span class="extype" name="cats.Invariant.Ops.imap.B">B</span></span>)</span><span class="params">(<span name="g">g: (<span class="extype" name="cats.Invariant.Ops.imap.B">B</span>) ⇒ <span class="extype" name="cats.Traverse.AllOps.A">A</span></span>)</span><span class="result">: <span class="extype" name="cats.Traverse.AllOps.F">F</span>[<span class="extype" name="cats.Invariant.Ops.imap.B">B</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Invariant$$Ops.html" class="extype" name="cats.Invariant.Ops">Ops</a></dd></dl></div>
     </li><li name="cats.Foldable.Ops#intercalate" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="intercalate(a:D)(implicitA:cats.Monoid[D]):D"></a><a id="intercalate(C)(Monoid[C]):C"></a>
+      <a id="intercalate(a:A)(implicitA:cats.Monoid[A]):A"></a><a id="intercalate(A)(Monoid[A]):A"></a>
       <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#intercalate(a:D)(implicitA:cats.Monoid[D]):D" title="Permalink">
+      <a href="../cats/Traverse$$AllOps.html#intercalate(a:A)(implicitA:cats.Monoid[A]):A" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -922,7 +954,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">intercalate</span><span class="params">(<span name="a">a: <span class="extype" name="cats.Traverse.AllOps.C">C</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="cats.Traverse.AllOps.C">C</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Traverse.AllOps.C">C</span></span>
+        <span class="name">intercalate</span><span class="params">(<span name="a">a: <span class="extype" name="cats.Traverse.AllOps.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="cats.Traverse.AllOps.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Traverse.AllOps.A">A</span></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable$$Ops.html" class="extype" name="cats.Foldable.Ops">Ops</a></dd></dl></div>
@@ -959,7 +991,7 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="cats.Functor.Ops#map" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="map[B](f:A=&gt;B):F[B]"></a><a id="map[B]((C)⇒B):F[B]"></a>
+      <a id="map[B](f:A=&gt;B):F[B]"></a><a id="map[B]((A)⇒B):F[B]"></a>
       <span class="permalink">
       <a href="../cats/Traverse$$AllOps.html#map[B](f:A=&gt;B):F[B]" title="Permalink">
         <i class="material-icons"></i>
@@ -970,14 +1002,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">map</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.C">C</span>) ⇒ <span class="extype" name="cats.Functor.Ops.map.B">B</span></span>)</span><span class="result">: <span class="extype" name="cats.Traverse.AllOps.F">F</span>[<span class="extype" name="cats.Functor.Ops.map.B">B</span>]</span>
+        <span class="name">map</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.A">A</span>) ⇒ <span class="extype" name="cats.Functor.Ops.map.B">B</span></span>)</span><span class="result">: <span class="extype" name="cats.Traverse.AllOps.F">F</span>[<span class="extype" name="cats.Functor.Ops.map.B">B</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Functor$$Ops.html" class="extype" name="cats.Functor.Ops">Ops</a></dd></dl></div>
     </li><li name="cats.Traverse.Ops#mapWithIndex" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="mapWithIndex[B](f:(C,Int)=&gt;B):F[B]"></a><a id="mapWithIndex[B]((C,Int)⇒B):F[B]"></a>
+      <a id="mapWithIndex[B](f:(A,Int)=&gt;B):F[B]"></a><a id="mapWithIndex[B]((A,Int)⇒B):F[B]"></a>
       <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#mapWithIndex[B](f:(C,Int)=&gt;B):F[B]" title="Permalink">
+      <a href="../cats/Traverse$$AllOps.html#mapWithIndex[B](f:(A,Int)=&gt;B):F[B]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -986,14 +1018,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">mapWithIndex</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.C">C</span>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>) ⇒ <span class="extype" name="cats.Traverse.Ops.mapWithIndex.B">B</span></span>)</span><span class="result">: <span class="extype" name="cats.Traverse.AllOps.F">F</span>[<span class="extype" name="cats.Traverse.Ops.mapWithIndex.B">B</span>]</span>
+        <span class="name">mapWithIndex</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.A">A</span>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>) ⇒ <span class="extype" name="cats.Traverse.Ops.mapWithIndex.B">B</span></span>)</span><span class="result">: <span class="extype" name="cats.Traverse.AllOps.F">F</span>[<span class="extype" name="cats.Traverse.Ops.mapWithIndex.B">B</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Traverse$$Ops.html" class="extype" name="cats.Traverse.Ops">Ops</a></dd></dl></div>
     </li><li name="cats.Foldable.Ops#maximumByOption" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="maximumByOption[B](f:D=&gt;B)(implicitevidence$3:cats.Order[B]):Option[D]"></a><a id="maximumByOption[B]((C)⇒B)(Order[B]):Option[C]"></a>
+      <a id="maximumByOption[B](f:A=&gt;B)(implicitev$1:cats.Order[B]):Option[A]"></a><a id="maximumByOption[B]((A)⇒B)(Order[B]):Option[A]"></a>
       <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#maximumByOption[B](f:D=&gt;B)(implicitevidence$3:cats.Order[B]):Option[D]" title="Permalink">
+      <a href="../cats/Traverse$$AllOps.html#maximumByOption[B](f:A=&gt;B)(implicitev$1:cats.Order[B]):Option[A]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1002,14 +1034,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">maximumByOption</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.C">C</span>) ⇒ <span class="extype" name="cats.Foldable.Ops.maximumByOption.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.Foldable.Ops.maximumByOption.B">B</span>]</span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.Traverse.AllOps.C">C</span>]</span>
+        <span class="name">maximumByOption</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.A">A</span>) ⇒ <span class="extype" name="cats.Foldable.Ops.maximumByOption.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.Foldable.Ops.maximumByOption.B">B</span>]</span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.Traverse.AllOps.A">A</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable$$Ops.html" class="extype" name="cats.Foldable.Ops">Ops</a></dd></dl></div>
     </li><li name="cats.Foldable.Ops#maximumOption" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="maximumOption(implicitA:cats.Order[D]):Option[D]"></a><a id="maximumOption(Order[C]):Option[C]"></a>
+      <a id="maximumOption(implicitA:cats.Order[A]):Option[A]"></a><a id="maximumOption(Order[A]):Option[A]"></a>
       <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#maximumOption(implicitA:cats.Order[D]):Option[D]" title="Permalink">
+      <a href="../cats/Traverse$$AllOps.html#maximumOption(implicitA:cats.Order[A]):Option[A]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1018,14 +1050,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">maximumOption</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.Traverse.AllOps.C">C</span>]</span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.Traverse.AllOps.C">C</span>]</span>
+        <span class="name">maximumOption</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.Traverse.AllOps.A">A</span>]</span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.Traverse.AllOps.A">A</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable$$Ops.html" class="extype" name="cats.Foldable.Ops">Ops</a></dd></dl></div>
     </li><li name="cats.Foldable.Ops#minimumByOption" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="minimumByOption[B](f:D=&gt;B)(implicitevidence$2:cats.Order[B]):Option[D]"></a><a id="minimumByOption[B]((C)⇒B)(Order[B]):Option[C]"></a>
+      <a id="minimumByOption[B](f:A=&gt;B)(implicitev$1:cats.Order[B]):Option[A]"></a><a id="minimumByOption[B]((A)⇒B)(Order[B]):Option[A]"></a>
       <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#minimumByOption[B](f:D=&gt;B)(implicitevidence$2:cats.Order[B]):Option[D]" title="Permalink">
+      <a href="../cats/Traverse$$AllOps.html#minimumByOption[B](f:A=&gt;B)(implicitev$1:cats.Order[B]):Option[A]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1034,14 +1066,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">minimumByOption</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.C">C</span>) ⇒ <span class="extype" name="cats.Foldable.Ops.minimumByOption.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.Foldable.Ops.minimumByOption.B">B</span>]</span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.Traverse.AllOps.C">C</span>]</span>
+        <span class="name">minimumByOption</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.A">A</span>) ⇒ <span class="extype" name="cats.Foldable.Ops.minimumByOption.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.Foldable.Ops.minimumByOption.B">B</span>]</span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.Traverse.AllOps.A">A</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable$$Ops.html" class="extype" name="cats.Foldable.Ops">Ops</a></dd></dl></div>
     </li><li name="cats.Foldable.Ops#minimumOption" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="minimumOption(implicitA:cats.Order[D]):Option[D]"></a><a id="minimumOption(Order[C]):Option[C]"></a>
+      <a id="minimumOption(implicitA:cats.Order[A]):Option[A]"></a><a id="minimumOption(Order[A]):Option[A]"></a>
       <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#minimumOption(implicitA:cats.Order[D]):Option[D]" title="Permalink">
+      <a href="../cats/Traverse$$AllOps.html#minimumOption(implicitA:cats.Order[A]):Option[A]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1050,7 +1082,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">minimumOption</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.Traverse.AllOps.C">C</span>]</span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.Traverse.AllOps.C">C</span>]</span>
+        <span class="name">minimumOption</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.Traverse.AllOps.A">A</span>]</span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.Traverse.AllOps.A">A</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable$$Ops.html" class="extype" name="cats.Foldable.Ops">Ops</a></dd></dl></div>
@@ -1104,6 +1136,8 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
@@ -1123,11 +1157,13 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="cats.Foldable.Ops#partitionEither" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="partitionEither[B,C](f:D=&gt;Either[B,C])(implicitA:cats.Alternative[F]):(F[B],F[C])"></a><a id="partitionEither[B,C]((C)⇒Either[B,C])(Alternative[F]):(F[B],F[C])"></a>
+      <a id="partitionEither[B,C](f:A=&gt;Either[B,C])(implicitA:cats.Alternative[F]):(F[B],F[C])"></a><a id="partitionEither[B,C]((A)⇒Either[B,C])(Alternative[F]):(F[B],F[C])"></a>
       <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#partitionEither[B,C](f:D=&gt;Either[B,C])(implicitA:cats.Alternative[F]):(F[B],F[C])" title="Permalink">
+      <a href="../cats/Traverse$$AllOps.html#partitionEither[B,C](f:A=&gt;Either[B,C])(implicitA:cats.Alternative[F]):(F[B],F[C])" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1136,14 +1172,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">partitionEither</span><span class="tparams">[<span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.C">C</span>) ⇒ <span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.Foldable.Ops.partitionEither.B">B</span>, <span class="extype" name="cats.Foldable.Ops.partitionEither.C">C</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="Alternative.html" class="extype" name="cats.Alternative">Alternative</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>]</span>)</span><span class="result">: (<span class="extype" name="cats.Traverse.AllOps.F">F</span>[<span class="extype" name="cats.Foldable.Ops.partitionEither.B">B</span>], <span class="extype" name="cats.Traverse.AllOps.F">F</span>[<span class="extype" name="cats.Foldable.Ops.partitionEither.C">C</span>])</span>
+        <span class="name">partitionEither</span><span class="tparams">[<span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.A">A</span>) ⇒ <span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.Foldable.Ops.partitionEither.B">B</span>, <span class="extype" name="cats.Foldable.Ops.partitionEither.C">C</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="Alternative.html" class="extype" name="cats.Alternative">Alternative</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>]</span>)</span><span class="result">: (<span class="extype" name="cats.Traverse.AllOps.F">F</span>[<span class="extype" name="cats.Foldable.Ops.partitionEither.B">B</span>], <span class="extype" name="cats.Traverse.AllOps.F">F</span>[<span class="extype" name="cats.Foldable.Ops.partitionEither.C">C</span>])</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable$$Ops.html" class="extype" name="cats.Foldable.Ops">Ops</a></dd></dl></div>
     </li><li name="cats.Foldable.Ops#reduceLeftOption" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="reduceLeftOption(f:(D,D)=&gt;D):Option[D]"></a><a id="reduceLeftOption((C,C)⇒C):Option[C]"></a>
+      <a id="reduceLeftOption(f:(A,A)=&gt;A):Option[A]"></a><a id="reduceLeftOption((A,A)⇒A):Option[A]"></a>
       <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#reduceLeftOption(f:(D,D)=&gt;D):Option[D]" title="Permalink">
+      <a href="../cats/Traverse$$AllOps.html#reduceLeftOption(f:(A,A)=&gt;A):Option[A]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1152,14 +1188,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">reduceLeftOption</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.C">C</span>, <span class="extype" name="cats.Traverse.AllOps.C">C</span>) ⇒ <span class="extype" name="cats.Traverse.AllOps.C">C</span></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.Traverse.AllOps.C">C</span>]</span>
+        <span class="name">reduceLeftOption</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.A">A</span>, <span class="extype" name="cats.Traverse.AllOps.A">A</span>) ⇒ <span class="extype" name="cats.Traverse.AllOps.A">A</span></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.Traverse.AllOps.A">A</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable$$Ops.html" class="extype" name="cats.Foldable.Ops">Ops</a></dd></dl></div>
     </li><li name="cats.Foldable.Ops#reduceLeftToOption" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="reduceLeftToOption[B](f:D=&gt;B)(g:(B,D)=&gt;B):Option[B]"></a><a id="reduceLeftToOption[B]((C)⇒B)((B,C)⇒B):Option[B]"></a>
+      <a id="reduceLeftToOption[B](f:A=&gt;B)(g:(B,A)=&gt;B):Option[B]"></a><a id="reduceLeftToOption[B]((A)⇒B)((B,A)⇒B):Option[B]"></a>
       <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#reduceLeftToOption[B](f:D=&gt;B)(g:(B,D)=&gt;B):Option[B]" title="Permalink">
+      <a href="../cats/Traverse$$AllOps.html#reduceLeftToOption[B](f:A=&gt;B)(g:(B,A)=&gt;B):Option[B]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1168,14 +1204,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">reduceLeftToOption</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.C">C</span>) ⇒ <span class="extype" name="cats.Foldable.Ops.reduceLeftToOption.B">B</span></span>)</span><span class="params">(<span name="g">g: (<span class="extype" name="cats.Foldable.Ops.reduceLeftToOption.B">B</span>, <span class="extype" name="cats.Traverse.AllOps.C">C</span>) ⇒ <span class="extype" name="cats.Foldable.Ops.reduceLeftToOption.B">B</span></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.Foldable.Ops.reduceLeftToOption.B">B</span>]</span>
+        <span class="name">reduceLeftToOption</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.A">A</span>) ⇒ <span class="extype" name="cats.Foldable.Ops.reduceLeftToOption.B">B</span></span>)</span><span class="params">(<span name="g">g: (<span class="extype" name="cats.Foldable.Ops.reduceLeftToOption.B">B</span>, <span class="extype" name="cats.Traverse.AllOps.A">A</span>) ⇒ <span class="extype" name="cats.Foldable.Ops.reduceLeftToOption.B">B</span></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.Foldable.Ops.reduceLeftToOption.B">B</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable$$Ops.html" class="extype" name="cats.Foldable.Ops">Ops</a></dd></dl></div>
     </li><li name="cats.Foldable.Ops#reduceRightOption" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="reduceRightOption(f:(D,cats.Eval[D])=&gt;cats.Eval[D]):cats.Eval[Option[D]]"></a><a id="reduceRightOption((C,Eval[C])⇒Eval[C]):Eval[Option[C]]"></a>
+      <a id="reduceRightOption(f:(A,cats.Eval[A])=&gt;cats.Eval[A]):cats.Eval[Option[A]]"></a><a id="reduceRightOption((A,Eval[A])⇒Eval[A]):Eval[Option[A]]"></a>
       <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#reduceRightOption(f:(D,cats.Eval[D])=&gt;cats.Eval[D]):cats.Eval[Option[D]]" title="Permalink">
+      <a href="../cats/Traverse$$AllOps.html#reduceRightOption(f:(A,cats.Eval[A])=&gt;cats.Eval[A]):cats.Eval[Option[A]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1184,14 +1220,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">reduceRightOption</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.C">C</span>, <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.Traverse.AllOps.C">C</span>]) ⇒ <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.Traverse.AllOps.C">C</span>]</span>)</span><span class="result">: <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.Traverse.AllOps.C">C</span>]]</span>
+        <span class="name">reduceRightOption</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.A">A</span>, <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.Traverse.AllOps.A">A</span>]) ⇒ <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.Traverse.AllOps.A">A</span>]</span>)</span><span class="result">: <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.Traverse.AllOps.A">A</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable$$Ops.html" class="extype" name="cats.Foldable.Ops">Ops</a></dd></dl></div>
     </li><li name="cats.Foldable.Ops#reduceRightToOption" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="reduceRightToOption[B](f:D=&gt;B)(g:(D,cats.Eval[B])=&gt;cats.Eval[B]):cats.Eval[Option[B]]"></a><a id="reduceRightToOption[B]((C)⇒B)((C,Eval[B])⇒Eval[B]):Eval[Option[B]]"></a>
+      <a id="reduceRightToOption[B](f:A=&gt;B)(g:(A,cats.Eval[B])=&gt;cats.Eval[B]):cats.Eval[Option[B]]"></a><a id="reduceRightToOption[B]((A)⇒B)((A,Eval[B])⇒Eval[B]):Eval[Option[B]]"></a>
       <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#reduceRightToOption[B](f:D=&gt;B)(g:(D,cats.Eval[B])=&gt;cats.Eval[B]):cats.Eval[Option[B]]" title="Permalink">
+      <a href="../cats/Traverse$$AllOps.html#reduceRightToOption[B](f:A=&gt;B)(g:(A,cats.Eval[B])=&gt;cats.Eval[B]):cats.Eval[Option[B]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1200,14 +1236,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">reduceRightToOption</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.C">C</span>) ⇒ <span class="extype" name="cats.Foldable.Ops.reduceRightToOption.B">B</span></span>)</span><span class="params">(<span name="g">g: (<span class="extype" name="cats.Traverse.AllOps.C">C</span>, <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.Foldable.Ops.reduceRightToOption.B">B</span>]) ⇒ <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.Foldable.Ops.reduceRightToOption.B">B</span>]</span>)</span><span class="result">: <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.Foldable.Ops.reduceRightToOption.B">B</span>]]</span>
+        <span class="name">reduceRightToOption</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.A">A</span>) ⇒ <span class="extype" name="cats.Foldable.Ops.reduceRightToOption.B">B</span></span>)</span><span class="params">(<span name="g">g: (<span class="extype" name="cats.Traverse.AllOps.A">A</span>, <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.Foldable.Ops.reduceRightToOption.B">B</span>]) ⇒ <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.Foldable.Ops.reduceRightToOption.B">B</span>]</span>)</span><span class="result">: <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.Foldable.Ops.reduceRightToOption.B">B</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable$$Ops.html" class="extype" name="cats.Foldable.Ops">Ops</a></dd></dl></div>
     </li><li name="cats.Traverse.Ops#sequence" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="sequence[G[_],A](implicitev$macro$47:C&lt;:&lt;G[A],implicitevidence$2:cats.Applicative[G]):G[F[A]]"></a><a id="sequence[G[_],A](&lt;:&lt;[C,G[A]],Applicative[G]):G[F[A]]"></a>
+      <a id="sequence[G[_],B](implicitev$1:A&lt;:&lt;G[B],implicitev$2:cats.Applicative[G]):G[F[B]]"></a><a id="sequence[G[_],B](&lt;:&lt;[A,G[B]],Applicative[G]):G[F[B]]"></a>
       <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#sequence[G[_],A](implicitev$macro$47:C&lt;:&lt;G[A],implicitevidence$2:cats.Applicative[G]):G[F[A]]" title="Permalink">
+      <a href="../cats/Traverse$$AllOps.html#sequence[G[_],B](implicitev$1:A&lt;:&lt;G[B],implicitev$2:cats.Applicative[G]):G[F[B]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1216,14 +1252,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">sequence</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[<span class="extype" name="cats.Traverse.AllOps.C">C</span>, <span class="extype" name="cats.Traverse.Ops.sequence.G">G</span>[<span class="extype" name="cats.Traverse.Ops.sequence.A">A</span>]]</span>, <span name="arg1">arg1: <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.Traverse.Ops.sequence.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Traverse.Ops.sequence.G">G</span>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>[<span class="extype" name="cats.Traverse.Ops.sequence.A">A</span>]]</span>
+        <span class="name">sequence</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[<span class="extype" name="cats.Traverse.AllOps.A">A</span>, <span class="extype" name="cats.Traverse.Ops.sequence.G">G</span>[<span class="extype" name="cats.Traverse.Ops.sequence.B">B</span>]]</span>, <span name="arg1">arg1: <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.Traverse.Ops.sequence.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Traverse.Ops.sequence.G">G</span>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>[<span class="extype" name="cats.Traverse.Ops.sequence.B">B</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Traverse$$Ops.html" class="extype" name="cats.Traverse.Ops">Ops</a></dd></dl></div>
     </li><li name="cats.Foldable.Ops#sequence_" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="sequence_[G[_],A](implicitev$macro$51:D&lt;:&lt;G[A],implicitevidence$5:cats.Applicative[G]):G[Unit]"></a><a id="sequence_[G[_],A](&lt;:&lt;[C,G[A]],Applicative[G]):G[Unit]"></a>
+      <a id="sequence_[G[_],B](implicitev$1:A&lt;:&lt;G[B],implicitev$2:cats.Applicative[G]):G[Unit]"></a><a id="sequence_[G[_],B](&lt;:&lt;[A,G[B]],Applicative[G]):G[Unit]"></a>
       <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#sequence_[G[_],A](implicitev$macro$51:D&lt;:&lt;G[A],implicitevidence$5:cats.Applicative[G]):G[Unit]" title="Permalink">
+      <a href="../cats/Traverse$$AllOps.html#sequence_[G[_],B](implicitev$1:A&lt;:&lt;G[B],implicitev$2:cats.Applicative[G]):G[Unit]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1232,7 +1268,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">sequence_</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[<span class="extype" name="cats.Traverse.AllOps.C">C</span>, <span class="extype" name="cats.Foldable.Ops.sequence_.G">G</span>[<span class="extype" name="cats.Foldable.Ops.sequence_.A">A</span>]]</span>, <span name="arg1">arg1: <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.Foldable.Ops.sequence_.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Foldable.Ops.sequence_.G">G</span>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>]</span>
+        <span class="name">sequence_</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[<span class="extype" name="cats.Traverse.AllOps.A">A</span>, <span class="extype" name="cats.Foldable.Ops.sequence_.G">G</span>[<span class="extype" name="cats.Foldable.Ops.sequence_.B">B</span>]]</span>, <span name="arg1">arg1: <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.Foldable.Ops.sequence_.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Foldable.Ops.sequence_.G">G</span>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable$$Ops.html" class="extype" name="cats.Foldable.Ops">Ops</a></dd></dl></div>
@@ -1269,9 +1305,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="cats.Foldable.Ops#takeWhile_" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="takeWhile_(p:D=&gt;Boolean):List[D]"></a><a id="takeWhile_((C)⇒Boolean):List[C]"></a>
+      <a id="takeWhile_(p:A=&gt;Boolean):List[A]"></a><a id="takeWhile_((A)⇒Boolean):List[A]"></a>
       <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#takeWhile_(p:D=&gt;Boolean):List[D]" title="Permalink">
+      <a href="../cats/Traverse$$AllOps.html#takeWhile_(p:A=&gt;Boolean):List[A]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1280,14 +1316,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">takeWhile_</span><span class="params">(<span name="p">p: (<span class="extype" name="cats.Traverse.AllOps.C">C</span>) ⇒ <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="result">: <span class="extype" name="scala.List">List</span>[<span class="extype" name="cats.Traverse.AllOps.C">C</span>]</span>
+        <span class="name">takeWhile_</span><span class="params">(<span name="p">p: (<span class="extype" name="cats.Traverse.AllOps.A">A</span>) ⇒ <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="result">: <span class="extype" name="scala.List">List</span>[<span class="extype" name="cats.Traverse.AllOps.A">A</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable$$Ops.html" class="extype" name="cats.Foldable.Ops">Ops</a></dd></dl></div>
     </li><li name="cats.Foldable.Ops#toIterable" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="toIterable:Iterable[D]"></a><a id="toIterable:Iterable[C]"></a>
+      <a id="toIterable:Iterable[A]"></a>
       <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#toIterable:Iterable[D]" title="Permalink">
+      <a href="../cats/Traverse$$AllOps.html#toIterable:Iterable[A]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1296,14 +1332,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">toIterable</span><span class="result">: <span class="extype" name="scala.Iterable">Iterable</span>[<span class="extype" name="cats.Traverse.AllOps.C">C</span>]</span>
+        <span class="name">toIterable</span><span class="result">: <span class="extype" name="scala.Iterable">Iterable</span>[<span class="extype" name="cats.Traverse.AllOps.A">A</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable$$Ops.html" class="extype" name="cats.Foldable.Ops">Ops</a></dd></dl></div>
     </li><li name="cats.Foldable.Ops#toList" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="toList:List[D]"></a><a id="toList:List[C]"></a>
+      <a id="toList:List[A]"></a>
       <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#toList:List[D]" title="Permalink">
+      <a href="../cats/Traverse$$AllOps.html#toList:List[A]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1312,7 +1348,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">toList</span><span class="result">: <span class="extype" name="scala.List">List</span>[<span class="extype" name="cats.Traverse.AllOps.C">C</span>]</span>
+        <span class="name">toList</span><span class="result">: <span class="extype" name="scala.List">List</span>[<span class="extype" name="cats.Traverse.AllOps.A">A</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable$$Ops.html" class="extype" name="cats.Foldable.Ops">Ops</a></dd></dl></div>
@@ -1333,9 +1369,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="cats.Traverse.Ops#traverse" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="traverse[G[_],B](f:C=&gt;G[B])(implicitevidence$1:cats.Applicative[G]):G[F[B]]"></a><a id="traverse[G[_],B]((C)⇒G[B])(Applicative[G]):G[F[B]]"></a>
+      <a id="traverse[G[_],B](f:A=&gt;G[B])(implicitev$1:cats.Applicative[G]):G[F[B]]"></a><a id="traverse[G[_],B]((A)⇒G[B])(Applicative[G]):G[F[B]]"></a>
       <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#traverse[G[_],B](f:C=&gt;G[B])(implicitevidence$1:cats.Applicative[G]):G[F[B]]" title="Permalink">
+      <a href="../cats/Traverse$$AllOps.html#traverse[G[_],B](f:A=&gt;G[B])(implicitev$1:cats.Applicative[G]):G[F[B]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1344,14 +1380,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">traverse</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.C">C</span>) ⇒ <span class="extype" name="cats.Traverse.Ops.traverse.G">G</span>[<span class="extype" name="cats.Traverse.Ops.traverse.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.Traverse.Ops.traverse.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Traverse.Ops.traverse.G">G</span>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>[<span class="extype" name="cats.Traverse.Ops.traverse.B">B</span>]]</span>
+        <span class="name">traverse</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.A">A</span>) ⇒ <span class="extype" name="cats.Traverse.Ops.traverse.G">G</span>[<span class="extype" name="cats.Traverse.Ops.traverse.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.Traverse.Ops.traverse.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Traverse.Ops.traverse.G">G</span>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>[<span class="extype" name="cats.Traverse.Ops.traverse.B">B</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Traverse$$Ops.html" class="extype" name="cats.Traverse.Ops">Ops</a></dd></dl></div>
     </li><li name="cats.Traverse.Ops#traverseWithIndexM" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="traverseWithIndexM[G[_],B](f:(C,Int)=&gt;G[B])(implicitG:cats.Monad[G]):G[F[B]]"></a><a id="traverseWithIndexM[G[_],B]((C,Int)⇒G[B])(Monad[G]):G[F[B]]"></a>
+      <a id="traverseWithIndexM[G[_],B](f:(A,Int)=&gt;G[B])(implicitG:cats.Monad[G]):G[F[B]]"></a><a id="traverseWithIndexM[G[_],B]((A,Int)⇒G[B])(Monad[G]):G[F[B]]"></a>
       <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#traverseWithIndexM[G[_],B](f:(C,Int)=&gt;G[B])(implicitG:cats.Monad[G]):G[F[B]]" title="Permalink">
+      <a href="../cats/Traverse$$AllOps.html#traverseWithIndexM[G[_],B](f:(A,Int)=&gt;G[B])(implicitG:cats.Monad[G]):G[F[B]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1360,14 +1396,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">traverseWithIndexM</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.C">C</span>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>) ⇒ <span class="extype" name="cats.Traverse.Ops.traverseWithIndexM.G">G</span>[<span class="extype" name="cats.Traverse.Ops.traverseWithIndexM.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="G">G: <a href="Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.Traverse.Ops.traverseWithIndexM.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Traverse.Ops.traverseWithIndexM.G">G</span>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>[<span class="extype" name="cats.Traverse.Ops.traverseWithIndexM.B">B</span>]]</span>
+        <span class="name">traverseWithIndexM</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.A">A</span>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>) ⇒ <span class="extype" name="cats.Traverse.Ops.traverseWithIndexM.G">G</span>[<span class="extype" name="cats.Traverse.Ops.traverseWithIndexM.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="G">G: <a href="Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.Traverse.Ops.traverseWithIndexM.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Traverse.Ops.traverseWithIndexM.G">G</span>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>[<span class="extype" name="cats.Traverse.Ops.traverseWithIndexM.B">B</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Traverse$$Ops.html" class="extype" name="cats.Traverse.Ops">Ops</a></dd></dl></div>
     </li><li name="cats.Foldable.Ops#traverse_" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="traverse_[G[_],B](f:D=&gt;G[B])(implicitG:cats.Applicative[G]):G[Unit]"></a><a id="traverse_[G[_],B]((C)⇒G[B])(Applicative[G]):G[Unit]"></a>
+      <a id="traverse_[G[_],B](f:A=&gt;G[B])(implicitG:cats.Applicative[G]):G[Unit]"></a><a id="traverse_[G[_],B]((A)⇒G[B])(Applicative[G]):G[Unit]"></a>
       <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#traverse_[G[_],B](f:D=&gt;G[B])(implicitG:cats.Applicative[G]):G[Unit]" title="Permalink">
+      <a href="../cats/Traverse$$AllOps.html#traverse_[G[_],B](f:A=&gt;G[B])(implicitG:cats.Applicative[G]):G[Unit]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1376,12 +1412,12 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">traverse_</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.C">C</span>) ⇒ <span class="extype" name="cats.Foldable.Ops.traverse_.G">G</span>[<span class="extype" name="cats.Foldable.Ops.traverse_.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="G">G: <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.Foldable.Ops.traverse_.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Foldable.Ops.traverse_.G">G</span>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>]</span>
+        <span class="name">traverse_</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.A">A</span>) ⇒ <span class="extype" name="cats.Foldable.Ops.traverse_.G">G</span>[<span class="extype" name="cats.Foldable.Ops.traverse_.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="G">G: <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.Foldable.Ops.traverse_.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Foldable.Ops.traverse_.G">G</span>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable$$Ops.html" class="extype" name="cats.Foldable.Ops">Ops</a></dd></dl></div>
     </li><li name="cats.Functor.Ops#tupleLeft" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="tupleLeft[B](b:B):F[(B,A)]"></a><a id="tupleLeft[B](B):F[(B,C)]"></a>
+      <a id="tupleLeft[B](b:B):F[(B,A)]"></a><a id="tupleLeft[B](B):F[(B,A)]"></a>
       <span class="permalink">
       <a href="../cats/Traverse$$AllOps.html#tupleLeft[B](b:B):F[(B,A)]" title="Permalink">
         <i class="material-icons"></i>
@@ -1392,12 +1428,12 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">tupleLeft</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="b">b: <span class="extype" name="cats.Functor.Ops.tupleLeft.B">B</span></span>)</span><span class="result">: <span class="extype" name="cats.Traverse.AllOps.F">F</span>[(<span class="extype" name="cats.Functor.Ops.tupleLeft.B">B</span>, <span class="extype" name="cats.Traverse.AllOps.C">C</span>)]</span>
+        <span class="name">tupleLeft</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="b">b: <span class="extype" name="cats.Functor.Ops.tupleLeft.B">B</span></span>)</span><span class="result">: <span class="extype" name="cats.Traverse.AllOps.F">F</span>[(<span class="extype" name="cats.Functor.Ops.tupleLeft.B">B</span>, <span class="extype" name="cats.Traverse.AllOps.A">A</span>)]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Functor$$Ops.html" class="extype" name="cats.Functor.Ops">Ops</a></dd></dl></div>
     </li><li name="cats.Functor.Ops#tupleRight" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="tupleRight[B](b:B):F[(A,B)]"></a><a id="tupleRight[B](B):F[(C,B)]"></a>
+      <a id="tupleRight[B](b:B):F[(A,B)]"></a><a id="tupleRight[B](B):F[(A,B)]"></a>
       <span class="permalink">
       <a href="../cats/Traverse$$AllOps.html#tupleRight[B](b:B):F[(A,B)]" title="Permalink">
         <i class="material-icons"></i>
@@ -1408,14 +1444,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">tupleRight</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="b">b: <span class="extype" name="cats.Functor.Ops.tupleRight.B">B</span></span>)</span><span class="result">: <span class="extype" name="cats.Traverse.AllOps.F">F</span>[(<span class="extype" name="cats.Traverse.AllOps.C">C</span>, <span class="extype" name="cats.Functor.Ops.tupleRight.B">B</span>)]</span>
+        <span class="name">tupleRight</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="b">b: <span class="extype" name="cats.Functor.Ops.tupleRight.B">B</span></span>)</span><span class="result">: <span class="extype" name="cats.Traverse.AllOps.F">F</span>[(<span class="extype" name="cats.Traverse.AllOps.A">A</span>, <span class="extype" name="cats.Functor.Ops.tupleRight.B">B</span>)]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Functor$$Ops.html" class="extype" name="cats.Functor.Ops">Ops</a></dd></dl></div>
     </li><li name="cats.UnorderedFoldable.Ops#unorderedFold" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="unorderedFold(implicitevidence$2:cats.kernel.CommutativeMonoid[A]):A"></a><a id="unorderedFold(CommutativeMonoid[C]):C"></a>
+      <a id="unorderedFold(implicitev$1:cats.kernel.CommutativeMonoid[A]):A"></a><a id="unorderedFold(CommutativeMonoid[A]):A"></a>
       <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#unorderedFold(implicitevidence$2:cats.kernel.CommutativeMonoid[A]):A" title="Permalink">
+      <a href="../cats/Traverse$$AllOps.html#unorderedFold(implicitev$1:cats.kernel.CommutativeMonoid[A]):A" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1424,14 +1460,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">unorderedFold</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="kernel/CommutativeMonoid.html" class="extype" name="cats.kernel.CommutativeMonoid">CommutativeMonoid</a>[<span class="extype" name="cats.Traverse.AllOps.C">C</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Traverse.AllOps.C">C</span></span>
+        <span class="name">unorderedFold</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="kernel/CommutativeMonoid.html" class="extype" name="cats.kernel.CommutativeMonoid">CommutativeMonoid</a>[<span class="extype" name="cats.Traverse.AllOps.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Traverse.AllOps.A">A</span></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="UnorderedFoldable$$Ops.html" class="extype" name="cats.UnorderedFoldable.Ops">Ops</a></dd></dl></div>
     </li><li name="cats.UnorderedFoldable.Ops#unorderedFoldMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="unorderedFoldMap[B](f:A=&gt;B)(implicitevidence$1:cats.kernel.CommutativeMonoid[B]):B"></a><a id="unorderedFoldMap[B]((C)⇒B)(CommutativeMonoid[B]):B"></a>
+      <a id="unorderedFoldMap[B](f:A=&gt;B)(implicitev$1:cats.kernel.CommutativeMonoid[B]):B"></a><a id="unorderedFoldMap[B]((A)⇒B)(CommutativeMonoid[B]):B"></a>
       <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#unorderedFoldMap[B](f:A=&gt;B)(implicitevidence$1:cats.kernel.CommutativeMonoid[B]):B" title="Permalink">
+      <a href="../cats/Traverse$$AllOps.html#unorderedFoldMap[B](f:A=&gt;B)(implicitev$1:cats.kernel.CommutativeMonoid[B]):B" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1440,14 +1476,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">unorderedFoldMap</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.C">C</span>) ⇒ <span class="extype" name="cats.UnorderedFoldable.Ops.unorderedFoldMap.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="kernel/CommutativeMonoid.html" class="extype" name="cats.kernel.CommutativeMonoid">CommutativeMonoid</a>[<span class="extype" name="cats.UnorderedFoldable.Ops.unorderedFoldMap.B">B</span>]</span>)</span><span class="result">: <span class="extype" name="cats.UnorderedFoldable.Ops.unorderedFoldMap.B">B</span></span>
+        <span class="name">unorderedFoldMap</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.A">A</span>) ⇒ <span class="extype" name="cats.UnorderedFoldable.Ops.unorderedFoldMap.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="kernel/CommutativeMonoid.html" class="extype" name="cats.kernel.CommutativeMonoid">CommutativeMonoid</a>[<span class="extype" name="cats.UnorderedFoldable.Ops.unorderedFoldMap.B">B</span>]</span>)</span><span class="result">: <span class="extype" name="cats.UnorderedFoldable.Ops.unorderedFoldMap.B">B</span></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="UnorderedFoldable$$Ops.html" class="extype" name="cats.UnorderedFoldable.Ops">Ops</a></dd></dl></div>
     </li><li name="cats.UnorderedTraverse.Ops#unorderedSequence" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="unorderedSequence[G[_],A](implicitev$macro$57:C&lt;:&lt;G[A],implicitevidence$2:cats.CommutativeApplicative[G]):G[F[A]]"></a><a id="unorderedSequence[G[_],A](&lt;:&lt;[C,G[A]],CommutativeApplicative[G]):G[F[A]]"></a>
+      <a id="unorderedSequence[G[_],B](implicitev$1:A&lt;:&lt;G[B],implicitev$2:cats.CommutativeApplicative[G]):G[F[B]]"></a><a id="unorderedSequence[G[_],B](&lt;:&lt;[A,G[B]],CommutativeApplicative[G]):G[F[B]]"></a>
       <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#unorderedSequence[G[_],A](implicitev$macro$57:C&lt;:&lt;G[A],implicitevidence$2:cats.CommutativeApplicative[G]):G[F[A]]" title="Permalink">
+      <a href="../cats/Traverse$$AllOps.html#unorderedSequence[G[_],B](implicitev$1:A&lt;:&lt;G[B],implicitev$2:cats.CommutativeApplicative[G]):G[F[B]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1456,14 +1492,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">unorderedSequence</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[<span class="extype" name="cats.Traverse.AllOps.C">C</span>, <span class="extype" name="cats.UnorderedTraverse.Ops.unorderedSequence.G">G</span>[<span class="extype" name="cats.UnorderedTraverse.Ops.unorderedSequence.A">A</span>]]</span>, <span name="arg1">arg1: <a href="CommutativeApplicative.html" class="extype" name="cats.CommutativeApplicative">CommutativeApplicative</a>[<span class="extype" name="cats.UnorderedTraverse.Ops.unorderedSequence.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.UnorderedTraverse.Ops.unorderedSequence.G">G</span>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>[<span class="extype" name="cats.UnorderedTraverse.Ops.unorderedSequence.A">A</span>]]</span>
+        <span class="name">unorderedSequence</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[<span class="extype" name="cats.Traverse.AllOps.A">A</span>, <span class="extype" name="cats.UnorderedTraverse.Ops.unorderedSequence.G">G</span>[<span class="extype" name="cats.UnorderedTraverse.Ops.unorderedSequence.B">B</span>]]</span>, <span name="arg1">arg1: <a href="CommutativeApplicative.html" class="extype" name="cats.CommutativeApplicative">CommutativeApplicative</a>[<span class="extype" name="cats.UnorderedTraverse.Ops.unorderedSequence.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.UnorderedTraverse.Ops.unorderedSequence.G">G</span>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>[<span class="extype" name="cats.UnorderedTraverse.Ops.unorderedSequence.B">B</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="UnorderedTraverse$$Ops.html" class="extype" name="cats.UnorderedTraverse.Ops">Ops</a></dd></dl></div>
     </li><li name="cats.UnorderedTraverse.Ops#unorderedTraverse" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="unorderedTraverse[G[_],B](f:C=&gt;G[B])(implicitevidence$1:cats.CommutativeApplicative[G]):G[F[B]]"></a><a id="unorderedTraverse[G[_],B]((C)⇒G[B])(CommutativeApplicative[G]):G[F[B]]"></a>
+      <a id="unorderedTraverse[G[_],B](f:A=&gt;G[B])(implicitev$1:cats.CommutativeApplicative[G]):G[F[B]]"></a><a id="unorderedTraverse[G[_],B]((A)⇒G[B])(CommutativeApplicative[G]):G[F[B]]"></a>
       <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#unorderedTraverse[G[_],B](f:C=&gt;G[B])(implicitevidence$1:cats.CommutativeApplicative[G]):G[F[B]]" title="Permalink">
+      <a href="../cats/Traverse$$AllOps.html#unorderedTraverse[G[_],B](f:A=&gt;G[B])(implicitev$1:cats.CommutativeApplicative[G]):G[F[B]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1472,7 +1508,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">unorderedTraverse</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.C">C</span>) ⇒ <span class="extype" name="cats.UnorderedTraverse.Ops.unorderedTraverse.G">G</span>[<span class="extype" name="cats.UnorderedTraverse.Ops.unorderedTraverse.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="CommutativeApplicative.html" class="extype" name="cats.CommutativeApplicative">CommutativeApplicative</a>[<span class="extype" name="cats.UnorderedTraverse.Ops.unorderedTraverse.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.UnorderedTraverse.Ops.unorderedTraverse.G">G</span>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>[<span class="extype" name="cats.UnorderedTraverse.Ops.unorderedTraverse.B">B</span>]]</span>
+        <span class="name">unorderedTraverse</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.AllOps.A">A</span>) ⇒ <span class="extype" name="cats.UnorderedTraverse.Ops.unorderedTraverse.G">G</span>[<span class="extype" name="cats.UnorderedTraverse.Ops.unorderedTraverse.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="CommutativeApplicative.html" class="extype" name="cats.CommutativeApplicative">CommutativeApplicative</a>[<span class="extype" name="cats.UnorderedTraverse.Ops.unorderedTraverse.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.UnorderedTraverse.Ops.unorderedTraverse.G">G</span>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>[<span class="extype" name="cats.UnorderedTraverse.Ops.unorderedTraverse.B">B</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="UnorderedTraverse$$Ops.html" class="extype" name="cats.UnorderedTraverse.Ops">Ops</a></dd></dl></div>
@@ -1492,28 +1528,6 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Functor$$Ops.html" class="extype" name="cats.Functor.Ops">Ops</a></dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait():Unit"></a>
-      <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#wait():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
-    </span>)</span>
-              
-        </dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <span class="permalink">
@@ -1560,8 +1574,30 @@
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <span class="permalink">
+      <a href="../cats/Traverse$$AllOps.html#wait():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
     </li><li name="cats.Functor.Ops#widen" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="widen[B&gt;:A]:F[B]"></a><a id="widen[B&gt;:C]:F[B]"></a>
+      <a id="widen[B&gt;:A]:F[B]"></a>
       <span class="permalink">
       <a href="../cats/Traverse$$AllOps.html#widen[B&gt;:A]:F[B]" title="Permalink">
         <i class="material-icons"></i>
@@ -1572,14 +1608,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">widen</span><span class="tparams">[<span name="B">B &gt;: <span class="extype" name="cats.Traverse.AllOps.C">C</span></span>]</span><span class="result">: <span class="extype" name="cats.Traverse.AllOps.F">F</span>[<span class="extype" name="cats.Functor.Ops.widen.B">B</span>]</span>
+        <span class="name">widen</span><span class="tparams">[<span name="B">B &gt;: <span class="extype" name="cats.Traverse.AllOps.A">A</span></span>]</span><span class="result">: <span class="extype" name="cats.Traverse.AllOps.F">F</span>[<span class="extype" name="cats.Functor.Ops.widen.B">B</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Functor$$Ops.html" class="extype" name="cats.Functor.Ops">Ops</a></dd></dl></div>
     </li><li name="cats.Traverse.Ops#zipWithIndex" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="zipWithIndex:F[(C,Int)]"></a>
+      <a id="zipWithIndex:F[(A,Int)]"></a>
       <span class="permalink">
-      <a href="../cats/Traverse$$AllOps.html#zipWithIndex:F[(C,Int)]" title="Permalink">
+      <a href="../cats/Traverse$$AllOps.html#zipWithIndex:F[(A,Int)]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1588,7 +1624,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">zipWithIndex</span><span class="result">: <span class="extype" name="cats.Traverse.AllOps.F">F</span>[(<span class="extype" name="cats.Traverse.AllOps.C">C</span>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>)]</span>
+        <span class="name">zipWithIndex</span><span class="result">: <span class="extype" name="cats.Traverse.AllOps.F">F</span>[(<span class="extype" name="cats.Traverse.AllOps.A">A</span>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>)]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Traverse$$Ops.html" class="extype" name="cats.Traverse.Ops">Ops</a></dd></dl></div>
@@ -1598,32 +1634,65 @@
 
         
 
-        
+        <div class="values members">
+              <h3>Deprecated Value Members</h3>
+              <ol><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <span class="permalink">
+      <a href="../cats/Traverse$$AllOps.html#finalize():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version ) see corresponding Javadoc for more information.">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+                <span class="name">@Deprecated</span>
+              
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version )</i> see corresponding Javadoc for more information.</p></dd></dl></div>
+    </li></ol>
+            </div>
         </div>
 
         <div id="inheritedMembers">
         <div class="parent" name="cats.UnorderedTraverse.AllOps">
-              <h3>Inherited from <a href="UnorderedTraverse$$AllOps.html" class="extype" name="cats.UnorderedTraverse.AllOps">UnorderedTraverse.AllOps</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.C">C</span>]</h3>
+              <h3>Inherited from <a href="UnorderedTraverse$$AllOps.html" class="extype" name="cats.UnorderedTraverse.AllOps">UnorderedTraverse.AllOps</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.A">A</span>]</h3>
             </div><div class="parent" name="cats.UnorderedTraverse.Ops">
-              <h3>Inherited from <a href="UnorderedTraverse$$Ops.html" class="extype" name="cats.UnorderedTraverse.Ops">UnorderedTraverse.Ops</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.C">C</span>]</h3>
+              <h3>Inherited from <a href="UnorderedTraverse$$Ops.html" class="extype" name="cats.UnorderedTraverse.Ops">UnorderedTraverse.Ops</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.A">A</span>]</h3>
             </div><div class="parent" name="cats.Foldable.AllOps">
-              <h3>Inherited from <a href="Foldable$$AllOps.html" class="extype" name="cats.Foldable.AllOps">Foldable.AllOps</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.C">C</span>]</h3>
+              <h3>Inherited from <a href="Foldable$$AllOps.html" class="extype" name="cats.Foldable.AllOps">Foldable.AllOps</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.A">A</span>]</h3>
             </div><div class="parent" name="cats.UnorderedFoldable.AllOps">
-              <h3>Inherited from <a href="UnorderedFoldable$$AllOps.html" class="extype" name="cats.UnorderedFoldable.AllOps">UnorderedFoldable.AllOps</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.C">C</span>]</h3>
+              <h3>Inherited from <a href="UnorderedFoldable$$AllOps.html" class="extype" name="cats.UnorderedFoldable.AllOps">UnorderedFoldable.AllOps</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.A">A</span>]</h3>
             </div><div class="parent" name="cats.UnorderedFoldable.Ops">
-              <h3>Inherited from <a href="UnorderedFoldable$$Ops.html" class="extype" name="cats.UnorderedFoldable.Ops">UnorderedFoldable.Ops</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.C">C</span>]</h3>
+              <h3>Inherited from <a href="UnorderedFoldable$$Ops.html" class="extype" name="cats.UnorderedFoldable.Ops">UnorderedFoldable.Ops</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.A">A</span>]</h3>
             </div><div class="parent" name="cats.Foldable.Ops">
-              <h3>Inherited from <a href="Foldable$$Ops.html" class="extype" name="cats.Foldable.Ops">Foldable.Ops</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.C">C</span>]</h3>
+              <h3>Inherited from <a href="Foldable$$Ops.html" class="extype" name="cats.Foldable.Ops">Foldable.Ops</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.A">A</span>]</h3>
             </div><div class="parent" name="cats.Functor.AllOps">
-              <h3>Inherited from <a href="Functor$$AllOps.html" class="extype" name="cats.Functor.AllOps">Functor.AllOps</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.C">C</span>]</h3>
+              <h3>Inherited from <a href="Functor$$AllOps.html" class="extype" name="cats.Functor.AllOps">Functor.AllOps</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.A">A</span>]</h3>
             </div><div class="parent" name="cats.Invariant.AllOps">
-              <h3>Inherited from <a href="Invariant$$AllOps.html" class="extype" name="cats.Invariant.AllOps">Invariant.AllOps</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.C">C</span>]</h3>
+              <h3>Inherited from <a href="Invariant$$AllOps.html" class="extype" name="cats.Invariant.AllOps">Invariant.AllOps</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.A">A</span>]</h3>
             </div><div class="parent" name="cats.Invariant.Ops">
-              <h3>Inherited from <a href="Invariant$$Ops.html" class="extype" name="cats.Invariant.Ops">Invariant.Ops</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.C">C</span>]</h3>
+              <h3>Inherited from <a href="Invariant$$Ops.html" class="extype" name="cats.Invariant.Ops">Invariant.Ops</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.A">A</span>]</h3>
             </div><div class="parent" name="cats.Functor.Ops">
-              <h3>Inherited from <a href="Functor$$Ops.html" class="extype" name="cats.Functor.Ops">Functor.Ops</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.C">C</span>]</h3>
+              <h3>Inherited from <a href="Functor$$Ops.html" class="extype" name="cats.Functor.Ops">Functor.Ops</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.A">A</span>]</h3>
             </div><div class="parent" name="cats.Traverse.Ops">
-              <h3>Inherited from <a href="Traverse$$Ops.html" class="extype" name="cats.Traverse.Ops">Ops</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.C">C</span>]</h3>
+              <h3>Inherited from <a href="Traverse$$Ops.html" class="extype" name="cats.Traverse.Ops">Ops</a>[<span class="extype" name="cats.Traverse.AllOps.F">F</span>, <span class="extype" name="cats.Traverse.AllOps.A">A</span>]</h3>
+            </div><div class="parent" name="scala.Serializable">
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">

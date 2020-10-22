@@ -81,10 +81,32 @@
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <a title="Symbolic aliases for various types are defined here." href="../index.html"><span class="name">cats</span></a>
+        <a title="The cats root package contains all the trait signatures of most Scala type classes." href="../index.html"><span class="name">cats</span></a>
       </span>
       
-      <p class="shortcomment cmt">Symbolic aliases for various types are defined here.</p><div class="fullcomment"><div class="comment cmt"><p>Symbolic aliases for various types are defined here.
+      <p class="shortcomment cmt">The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><p>Cats type classes are implemented using the approach from the
+ <a href="https://ropas.snu.ac.kr/~bruno/papers/TypeClasses.pdf" target="_blank">Type classes as objects and implicits</a> article.</p><p>For each type class, <code>cats</code> provides three pieces:
+- Its <b>signature</b>: a trait that is polymorphic on a type parameter.
+  Type class traits inherit from other type classes to indicate that any implementation of the lower type class (e.g. <code>Applicative</code>)
+  can also serve as an instance for the higuer type class (e.g. <code>Functor</code>).
+- Type class <b>'instances</b>, which are classes and objects that implement one or more type class signatures for some specific types.
+  Type class instances for several data types from the Java or Scala standard libraries are declared in the subpackage <code>cats.instances</code>.
+- <b>Syntax extensions</b>, each of which provides the methods of the type class defines as extension methods
+  (which in Scala 2 are encoded as implicit classes) for values of any type <code>F</code>; given that an instance of the type class
+  for the receiver type (<code>this</code>) is in the implicit scope.
+  Symtax extensions are declared in the <code>cats.syntax</code> package.
+- A set of <b>laws</b>, that are also generic on the type of the class, and are only defined on the operations of the type class.
+  The purpose of these laws is to declare some algebraic relations (equations) between Scala expressions involving the operations
+  of the type class, and test (but not verify) that implemented instances satisfy those equations.
+  Laws are defined in the <code>cats-laws</code> package.</p><p>Although most of cats type classes are declared in this package, some are declared in other packages:
+- type classes that operate on base types (kind <code>*</code>), and their implementations for standard library types,
+  are contained in <code>cats.kernel</code>, which is a different SBT project. However, they are re-exported from this package.
+- type classes of kind <code>F[_, _]</code>, such as <a href="../arrow/Profunctor.html" class="extype" name="cats.arrow.Profunctor">cats.arrow.Profunctor</a>&quot; or <a href="../arrow/Arrow.html" class="extype" name="cats.arrow.Arrow">cats.arrow.Arrow</a>, which are relevant for
+  Functional Reactive Programming or optics, are declared in the <code>cats.arrow</code> package.
+- Also, those type classes that abstract over (pure or impure) functional runtime effects are declared
+  in the <a href="https://typelevel.org/cats-effect/" target="_blank">cats-effect library</a>.
+- Some type classes for which no laws can be provided are left out of the main road, in a small and dirty alley.
+  These are the <code>alleycats</code>.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
     </li><li name="cats.instances" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="instances"></a><a id="instances:instances"></a>
@@ -138,6 +160,10 @@
                         <span class="separator"></span>
                         <a class="trait" href="AllInstancesBinCompat6.html" title=""></a>
                         <a href="AllInstancesBinCompat6.html" title="">AllInstancesBinCompat6</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="AllInstancesBinCompat7.html" title=""></a>
+                        <a href="AllInstancesBinCompat7.html" title="">AllInstancesBinCompat7</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="trait" href="AnyValInstances.html" title=""></a>
@@ -244,6 +270,10 @@
                         <a href="ParallelInstances.html" title="">ParallelInstances</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
+                        <a class="trait" href="PartialFunctionInstances.html" title=""></a>
+                        <a href="PartialFunctionInstances.html" title="">PartialFunctionInstances</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
                         <a class="trait" href="PartialOrderInstances.html" title=""></a>
                         <a href="PartialOrderInstances.html" title="">PartialOrderInstances</a>
                       </li><li class="current-entities indented2">
@@ -254,6 +284,10 @@
                         <span class="separator"></span>
                         <a class="trait" href="QueueInstances.html" title=""></a>
                         <a href="QueueInstances.html" title="">QueueInstances</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="SeqInstances.html" title=""></a>
+                        <a href="SeqInstances.html" title="">SeqInstances</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="trait" href="SetInstances.html" title=""></a>
@@ -436,6 +470,10 @@
                         <a href="package$$parallel$.html" title="">parallel</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
+                        <a class="object" href="package$$partialFunction$.html" title=""></a>
+                        <a href="package$$partialFunction$.html" title="">partialFunction</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
                         <a class="object" href="package$$partialOrder$.html" title=""></a>
                         <a href="package$$partialOrder$.html" title="">partialOrder</a>
                       </li><li class="current-entities indented2">
@@ -446,6 +484,10 @@
                         <span class="separator"></span>
                         <a class="object" href="" title=""></a>
                         <a href="" title="">queue</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$seq$.html" title=""></a>
+                        <a href="package$$seq$.html" title="">seq</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="object" href="package$$set$.html" title=""></a>
@@ -526,7 +568,7 @@
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="QueueInstances.html" class="extype" name="cats.instances.QueueInstances">QueueInstances</a>, <a href="../kernel/instances/QueueInstances.html" class="extype" name="cats.kernel.instances.QueueInstances">kernel.instances.QueueInstances</a>, <span class="extype" name="cats.kernel.instances.QueueInstances1">QueueInstances1</span>, <span class="extype" name="cats.kernel.instances.QueueInstances2">QueueInstances2</span>, <span class="extype" name="cats.kernel.instances.QueueInstances3">QueueInstances3</span>, <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="QueueInstances.html" class="extype" name="cats.instances.QueueInstances">QueueInstances</a>, <a href="../kernel/instances/QueueInstances.html" class="extype" name="cats.kernel.instances.QueueInstances">kernel.instances.QueueInstances</a>, <span class="extype" name="cats.kernel.instances.QueueInstances1">QueueInstances1</span>, <span class="extype" name="cats.kernel.instances.QueueInstances2">QueueInstances2</span>, <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
         </div></div>
         
 
@@ -552,7 +594,7 @@
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="cats.instances.queue"><span>queue</span></li><li class="in" name="cats.instances.QueueInstances"><span>QueueInstances</span></li><li class="in" name="cats.kernel.instances.QueueInstances"><span>QueueInstances</span></li><li class="in" name="cats.kernel.instances.QueueInstances1"><span>QueueInstances1</span></li><li class="in" name="cats.kernel.instances.QueueInstances2"><span>QueueInstances2</span></li><li class="in" name="cats.kernel.instances.QueueInstances3"><span>QueueInstances3</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="cats.instances.queue"><span>queue</span></li><li class="in" name="cats.instances.QueueInstances"><span>QueueInstances</span></li><li class="in" name="cats.kernel.instances.QueueInstances"><span>QueueInstances</span></li><li class="in" name="cats.kernel.instances.QueueInstances1"><span>QueueInstances1</span></li><li class="in" name="cats.kernel.instances.QueueInstances2"><span>QueueInstances2</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -643,7 +685,7 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="cats.kernel.instances.QueueInstances3#catsKernelStdEqForQueue" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="cats.kernel.instances.QueueInstances2#catsKernelStdEqForQueue" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="catsKernelStdEqForQueue[A](implicitevidence$4:cats.kernel.Eq[A]):cats.kernel.Eq[scala.collection.immutable.Queue[A]]"></a><a id="catsKernelStdEqForQueue[A](kernel.Eq[A]):kernel.Eq[Queue[A]]"></a>
       <span class="permalink">
       <a href="../../cats/instances/package$$queue$.html#catsKernelStdEqForQueue[A](implicitevidence$4:cats.kernel.Eq[A]):cats.kernel.Eq[scala.collection.immutable.Queue[A]]" title="Permalink">
@@ -655,14 +697,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsKernelStdEqForQueue</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../kernel/Eq.html" class="extype" name="cats.kernel.Eq">kernel.Eq</a>[<span class="extype" name="cats.kernel.instances.QueueInstances3.catsKernelStdEqForQueue.A">A</span>]</span>)</span><span class="result">: <a href="../kernel/Eq.html" class="extype" name="cats.kernel.Eq">kernel.Eq</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/collection/immutable/Queue.html#scala.collection.immutable.Queue" class="extype" name="scala.collection.immutable.Queue">Queue</a>[<span class="extype" name="cats.kernel.instances.QueueInstances3.catsKernelStdEqForQueue.A">A</span>]]</span>
+        <span class="name">catsKernelStdEqForQueue</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../kernel/Eq.html" class="extype" name="cats.kernel.Eq">kernel.Eq</a>[<span class="extype" name="cats.kernel.instances.QueueInstances2.catsKernelStdEqForQueue.A">A</span>]</span>)</span><span class="result">: <a href="../kernel/Eq.html" class="extype" name="cats.kernel.Eq">kernel.Eq</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/collection/immutable/Queue.html#scala.collection.immutable.Queue" class="extype" name="scala.collection.immutable.Queue">Queue</a>[<span class="extype" name="cats.kernel.instances.QueueInstances2.catsKernelStdEqForQueue.A">A</span>]]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>QueueInstances3</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>QueueInstances2</dd></dl></div>
     </li><li name="cats.kernel.instances.QueueInstances1#catsKernelStdHashForQueue" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsKernelStdHashForQueue[A](implicitevidence$2:cats.kernel.Hash[A]):cats.kernel.Hash[scala.collection.immutable.Queue[A]]"></a><a id="catsKernelStdHashForQueue[A](kernel.Hash[A]):kernel.Hash[Queue[A]]"></a>
+      <a id="catsKernelStdHashForQueue[A](implicitevidence$3:cats.kernel.Hash[A]):cats.kernel.Hash[scala.collection.immutable.Queue[A]]"></a><a id="catsKernelStdHashForQueue[A](kernel.Hash[A]):kernel.Hash[Queue[A]]"></a>
       <span class="permalink">
-      <a href="../../cats/instances/package$$queue$.html#catsKernelStdHashForQueue[A](implicitevidence$2:cats.kernel.Hash[A]):cats.kernel.Hash[scala.collection.immutable.Queue[A]]" title="Permalink">
+      <a href="../../cats/instances/package$$queue$.html#catsKernelStdHashForQueue[A](implicitevidence$3:cats.kernel.Hash[A]):cats.kernel.Hash[scala.collection.immutable.Queue[A]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -707,10 +749,10 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../kernel/instances/QueueInstances.html" class="extype" name="cats.kernel.instances.QueueInstances">QueueInstances</a></dd></dl></div>
-    </li><li name="cats.kernel.instances.QueueInstances2#catsKernelStdPartialOrderForQueue" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsKernelStdPartialOrderForQueue[A](implicitevidence$3:cats.kernel.PartialOrder[A]):cats.kernel.PartialOrder[scala.collection.immutable.Queue[A]]"></a><a id="catsKernelStdPartialOrderForQueue[A](kernel.PartialOrder[A]):kernel.PartialOrder[Queue[A]]"></a>
+    </li><li name="cats.kernel.instances.QueueInstances1#catsKernelStdPartialOrderForQueue" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsKernelStdPartialOrderForQueue[A](implicitevidence$2:cats.kernel.PartialOrder[A]):cats.kernel.PartialOrder[scala.collection.immutable.Queue[A]]"></a><a id="catsKernelStdPartialOrderForQueue[A](kernel.PartialOrder[A]):kernel.PartialOrder[Queue[A]]"></a>
       <span class="permalink">
-      <a href="../../cats/instances/package$$queue$.html#catsKernelStdPartialOrderForQueue[A](implicitevidence$3:cats.kernel.PartialOrder[A]):cats.kernel.PartialOrder[scala.collection.immutable.Queue[A]]" title="Permalink">
+      <a href="../../cats/instances/package$$queue$.html#catsKernelStdPartialOrderForQueue[A](implicitevidence$2:cats.kernel.PartialOrder[A]):cats.kernel.PartialOrder[scala.collection.immutable.Queue[A]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -719,10 +761,10 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsKernelStdPartialOrderForQueue</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../kernel/PartialOrder.html" class="extype" name="cats.kernel.PartialOrder">kernel.PartialOrder</a>[<span class="extype" name="cats.kernel.instances.QueueInstances2.catsKernelStdPartialOrderForQueue.A">A</span>]</span>)</span><span class="result">: <a href="../kernel/PartialOrder.html" class="extype" name="cats.kernel.PartialOrder">kernel.PartialOrder</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/collection/immutable/Queue.html#scala.collection.immutable.Queue" class="extype" name="scala.collection.immutable.Queue">Queue</a>[<span class="extype" name="cats.kernel.instances.QueueInstances2.catsKernelStdPartialOrderForQueue.A">A</span>]]</span>
+        <span class="name">catsKernelStdPartialOrderForQueue</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../kernel/PartialOrder.html" class="extype" name="cats.kernel.PartialOrder">kernel.PartialOrder</a>[<span class="extype" name="cats.kernel.instances.QueueInstances1.catsKernelStdPartialOrderForQueue.A">A</span>]</span>)</span><span class="result">: <a href="../kernel/PartialOrder.html" class="extype" name="cats.kernel.PartialOrder">kernel.PartialOrder</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/collection/immutable/Queue.html#scala.collection.immutable.Queue" class="extype" name="scala.collection.immutable.Queue">Queue</a>[<span class="extype" name="cats.kernel.instances.QueueInstances1.catsKernelStdPartialOrderForQueue.A">A</span>]]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>QueueInstances2</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>QueueInstances1</dd></dl></div>
     </li><li name="cats.instances.QueueInstances#catsStdInstancesForQueue" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="catsStdInstancesForQueue:cats.Traverse[scala.collection.immutable.Queue]withcats.Alternative[scala.collection.immutable.Queue]withcats.Monad[scala.collection.immutable.Queue]withcats.CoflatMap[scala.collection.immutable.Queue]"></a><a id="catsStdInstancesForQueue:Traverse[Queue]withAlternative[Queue]withMonad[Queue]withCoflatMap[Queue]"></a>
       <span class="permalink">
@@ -794,6 +836,8 @@
               
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
@@ -827,28 +871,6 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="finalize():Unit"></a>
-      <span class="permalink">
-      <a href="../../cats/instances/package$$queue$.html#finalize():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="symbol">classOf[java.lang.Throwable]</span>
-    </span>)</span>
-              
-        </dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
@@ -866,6 +888,8 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -885,6 +909,8 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -937,6 +963,8 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
@@ -955,6 +983,8 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -989,28 +1019,6 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait():Unit"></a>
-      <span class="permalink">
-      <a href="../../cats/instances/package$$queue$.html#wait():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
-    </span>)</span>
-              
-        </dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <span class="permalink">
@@ -1057,13 +1065,64 @@
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/instances/package$$queue$.html#wait():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
     </li>
               </ol>
             </div>
 
         
 
-        
+        <div class="values members">
+              <h3>Deprecated Value Members</h3>
+              <ol><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/instances/package$$queue$.html#finalize():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version ) see corresponding Javadoc for more information.">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+                <span class="name">@Deprecated</span>
+              
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version )</i> see corresponding Javadoc for more information.</p></dd></dl></div>
+    </li></ol>
+            </div>
         </div>
 
         <div id="inheritedMembers">
@@ -1075,8 +1134,6 @@
               <h3>Inherited from <span class="extype" name="cats.kernel.instances.QueueInstances1">QueueInstances1</span></h3>
             </div><div class="parent" name="cats.kernel.instances.QueueInstances2">
               <h3>Inherited from <span class="extype" name="cats.kernel.instances.QueueInstances2">QueueInstances2</span></h3>
-            </div><div class="parent" name="cats.kernel.instances.QueueInstances3">
-              <h3>Inherited from <span class="extype" name="cats.kernel.instances.QueueInstances3">QueueInstances3</span></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">

@@ -81,10 +81,32 @@
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <a title="Symbolic aliases for various types are defined here." href="../index.html"><span class="name">cats</span></a>
+        <a title="The cats root package contains all the trait signatures of most Scala type classes." href="../index.html"><span class="name">cats</span></a>
       </span>
       
-      <p class="shortcomment cmt">Symbolic aliases for various types are defined here.</p><div class="fullcomment"><div class="comment cmt"><p>Symbolic aliases for various types are defined here.
+      <p class="shortcomment cmt">The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><p>Cats type classes are implemented using the approach from the
+ <a href="https://ropas.snu.ac.kr/~bruno/papers/TypeClasses.pdf" target="_blank">Type classes as objects and implicits</a> article.</p><p>For each type class, <code>cats</code> provides three pieces:
+- Its <b>signature</b>: a trait that is polymorphic on a type parameter.
+  Type class traits inherit from other type classes to indicate that any implementation of the lower type class (e.g. <code>Applicative</code>)
+  can also serve as an instance for the higuer type class (e.g. <code>Functor</code>).
+- Type class <b>'instances</b>, which are classes and objects that implement one or more type class signatures for some specific types.
+  Type class instances for several data types from the Java or Scala standard libraries are declared in the subpackage <code>cats.instances</code>.
+- <b>Syntax extensions</b>, each of which provides the methods of the type class defines as extension methods
+  (which in Scala 2 are encoded as implicit classes) for values of any type <code>F</code>; given that an instance of the type class
+  for the receiver type (<code>this</code>) is in the implicit scope.
+  Symtax extensions are declared in the <code>cats.syntax</code> package.
+- A set of <b>laws</b>, that are also generic on the type of the class, and are only defined on the operations of the type class.
+  The purpose of these laws is to declare some algebraic relations (equations) between Scala expressions involving the operations
+  of the type class, and test (but not verify) that implemented instances satisfy those equations.
+  Laws are defined in the <code>cats-laws</code> package.</p><p>Although most of cats type classes are declared in this package, some are declared in other packages:
+- type classes that operate on base types (kind <code>*</code>), and their implementations for standard library types,
+  are contained in <code>cats.kernel</code>, which is a different SBT project. However, they are re-exported from this package.
+- type classes of kind <code>F[_, _]</code>, such as <a href="../arrow/Profunctor.html" class="extype" name="cats.arrow.Profunctor">cats.arrow.Profunctor</a>&quot; or <a href="../arrow/Arrow.html" class="extype" name="cats.arrow.Arrow">cats.arrow.Arrow</a>, which are relevant for
+  Functional Reactive Programming or optics, are declared in the <code>cats.arrow</code> package.
+- Also, those type classes that abstract over (pure or impure) functional runtime effects are declared
+  in the <a href="https://typelevel.org/cats-effect/" target="_blank">cats-effect library</a>.
+- Some type classes for which no laws can be provided are left out of the main road, in a small and dirty alley.
+  These are the <code>alleycats</code>.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
     </li><li name="cats.data" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="data"></a><a id="data:data"></a>
@@ -138,6 +160,10 @@
                         <a class="object" href="Const$.html" title=""></a>
                         <a class="class" href="Const.html" title="Const is a phantom type, it does not contain a value of its second type parameter B Const can be seen as a type level version of Function.const[A, B]: A =&gt; B =&gt; A"></a>
                         <a href="Const.html" title="Const is a phantom type, it does not contain a value of its second type parameter B Const can be seen as a type level version of Function.const[A, B]: A =&gt; B =&gt; A">Const</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$Cont$.html" title=""></a>
+                        <a href="package$$Cont$.html" title="">Cont</a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="ContT$.html" title=""></a>
                         <a class="class" href="ContT.html" title="This is a continuation transformer based on the ContT in the Haskell package Control.Monad.Cont"></a>
@@ -198,6 +224,10 @@
                         <span class="separator"></span>
                         <a class="class" href="NonEmptyMapOps.html" title=""></a>
                         <a href="NonEmptyMapOps.html" title="">NonEmptyMapOps</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="NonEmptySeq$.html" title=""></a>
+                        <a class="class" href="NonEmptySeq.html" title="A data type which represents a Seq guaranteed to contain at least one element."></a>
+                        <a href="NonEmptySeq.html" title="A data type which represents a Seq guaranteed to contain at least one element.">NonEmptySeq</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="class" href="NonEmptySetOps.html" title=""></a>
@@ -267,6 +297,10 @@
                         <a class="class" href="ZipList.html" title=""></a>
                         <a href="ZipList.html" title="">ZipList</a>
                       </li><li class="current-entities indented2">
+                        <a class="object" href="ZipSeq$.html" title=""></a>
+                        <a class="class" href="ZipSeq.html" title=""></a>
+                        <a href="ZipSeq.html" title="">ZipSeq</a>
+                      </li><li class="current-entities indented2">
                         <a class="object" href="ZipStream$.html" title=""></a>
                         <a class="class" href="ZipStream.html" title=""></a>
                         <a href="ZipStream.html" title="">ZipStream</a>
@@ -297,7 +331,7 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">NonEmptyChainOps</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyVal.html#scala.AnyVal" class="extype" name="scala.AnyVal">AnyVal</a></span>
+        <span class="name">NonEmptyChainOps</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyVal.html#scala.AnyVal" class="extype" name="scala.AnyVal">AnyVal</a> with <span class="extype" name="cats.data.NonEmptyCollection">NonEmptyCollection</span>[<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>, <a href="Chain.html" class="extype" name="cats.data.Chain">Chain</a>, <a href="index.html#NonEmptyChain[+A]=cats.data.NonEmptyChainImpl.Type[A]" class="extmbr" name="cats.data.NonEmptyChain">NonEmptyChain</a>]</span>
       </span>
       </h4>
 
@@ -306,8 +340,18 @@
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="https://www.scala-lang.org/api/2.12.10/scala/AnyVal.html#scala.AnyVal" class="extype" name="scala.AnyVal">AnyVal</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
-        </div></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="cats.data.NonEmptyCollection">NonEmptyCollection</span>[<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>, <a href="Chain.html" class="extype" name="cats.data.Chain">Chain</a>, <a href="index.html#NonEmptyChain[+A]=cats.data.NonEmptyChainImpl.Type[A]" class="extmbr" name="cats.data.NonEmptyChain">NonEmptyChain</a>], <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyVal.html#scala.AnyVal" class="extype" name="scala.AnyVal">AnyVal</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+        </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
+                <span class="toggle diagram-link">
+                  Type Hierarchy
+                </span>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph1" viewBox="0.00 0.00 339.50 118.00" height="118pt" width="340pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 114)" class="graph" id="page0,1_graph0"><polygon points="-4,4 -4,-114 335.5,-114 335.5,4 -4,4" stroke="transparent" fill="white"></polygon><g class="cluster" id="clust1"></g><g class="cluster" id="clust2"></g><!-- node0 --><g class="node this class" id="graph1_0"><g id="a_this class|graph1_0"><a xlink:title="cats.data.NonEmptyChainOps (this class)" xlink:href="#inheritance-diagram"><path d="M181.17,-49C181.17,-49 65.83,-49 65.83,-49 61.67,-49 57.5,-44.83 57.5,-40.67 57.5,-40.67 57.5,-32.33 57.5,-32.33 57.5,-28.17 61.67,-24 65.83,-24 65.83,-24 181.17,-24 181.17,-24 185.33,-24 189.5,-28.17 189.5,-32.33 189.5,-32.33 189.5,-40.67 189.5,-40.67 189.5,-44.83 185.33,-49 181.17,-49" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-43.5" x="67.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-34.1" x="88.5" text-anchor="start">NonEmptyChainOps[A]</text></a></g></g><!-- node1 --><g class="node class" id="graph1_1"><g id="a_class|graph1_1"><a xlink:title="scala.AnyVal"><path d="M64.67,-110C64.67,-110 8.33,-110 8.33,-110 4.17,-110 0,-105.83 0,-101.67 0,-101.67 0,-93.33 0,-93.33 0,-89.17 4.17,-85 8.33,-85 8.33,-85 64.67,-85 64.67,-85 68.83,-85 73,-89.17 73,-93.33 73,-93.33 73,-101.67 73,-101.67 73,-105.83 68.83,-110 64.67,-110" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-104.5" x="10.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-95.1" x="31.5" text-anchor="start">AnyVal</text></a></g></g><!-- node1&#45;&gt;node0 --><g class="edge inheritance" id="graph1_1_0"><g id="a_inheritance|graph1_1_0"><a xlink:title="NonEmptyChainOps[A] is a subtype of AnyVal"><path d="M59.71,-80.76C74.37,-70.82 93.01,-58.18 106.35,-49.13" stroke="#d4d4d4" fill="none"></path><polygon points="58.11,-78.89 53.69,-84.84 60.86,-82.94 58.11,-78.89" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node2 --><g class="node trait" id="graph1_2"><g id="a_trait|graph1_2"><a xlink:title="cats.data.NonEmptyCollection"><path d="M323.17,-110C323.17,-110 99.83,-110 99.83,-110 95.67,-110 91.5,-105.83 91.5,-101.67 91.5,-101.67 91.5,-93.33 91.5,-93.33 91.5,-89.17 95.67,-85 99.83,-85 99.83,-85 323.17,-85 323.17,-85 327.33,-85 331.5,-89.17 331.5,-93.33 331.5,-93.33 331.5,-101.67 331.5,-101.67 331.5,-105.83 327.33,-110 323.17,-110" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-104.5" x="101.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-95.1" x="122.5" text-anchor="start">NonEmptyCollection[A, Chain, NonEmptyChain]</text></a></g></g><!-- node2&#45;&gt;node0 --><g class="edge inheritance" id="graph1_2_0"><g id="a_inheritance|graph1_2_0"><a xlink:title="NonEmptyChainOps[A] is a subtype of NonEmptyCollection[A, Chain, NonEmptyChain]"><path d="M188.03,-80.76C173.19,-70.82 154.34,-58.18 140.85,-49.13" stroke="#d4d4d4" fill="none"></path><polygon points="186.94,-82.98 194.11,-84.84 189.66,-78.91 186.94,-82.98" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
+                <div id="diagram-controls" class="hiddenContent">
+                  <button id="diagram-zoom-out" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button id="diagram-zoom-in" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button title="Toggle full-screen" id="diagram-fs" class="diagram-btn to-full"><i class="material-icons"></i></button>
+                </div>
+              </div></div>
         
 
       <div id="mbrsel">
@@ -332,7 +376,7 @@
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="cats.data.NonEmptyChainOps"><span>NonEmptyChainOps</span></li><li class="in" name="scala.AnyVal"><span>AnyVal</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="cats.data.NonEmptyChainOps"><span>NonEmptyChainOps</span></li><li class="in" name="cats.data.NonEmptyCollection"><span>NonEmptyCollection</span></li><li class="in" name="scala.AnyVal"><span>AnyVal</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -529,7 +573,7 @@ res0: cats.data.NonEmptyChain[<span class="std">Int</span>] = Chain(<span class=
       </span>
       
       <p class="shortcomment cmt">Returns a new Chain consisting of this followed by <code>a</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a new Chain consisting of this followed by <code>a</code>. O(1) runtime.
-</p></div></div>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.data.NonEmptyChainOps">NonEmptyChainOps</a> → NonEmptyCollection</dd></dl></div>
     </li><li name="cats.data.NonEmptyChainOps#appendChain" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="appendChain[A2&gt;:A](c:cats.data.Chain[A2]):cats.data.NonEmptyChain[A2]"></a><a id="appendChain[A2&gt;:A](Chain[A2]):NonEmptyChain[A2]"></a>
       <span class="permalink">
@@ -581,7 +625,7 @@ res0: cats.data.NonEmptyChain[<span class="std">Int</span>] = Chain(<span class=
 scala&gt; <span class="kw">import</span> cats.implicits._
 scala&gt; <span class="kw">val</span> nec = NonEmptyChain(<span class="num">4</span>, <span class="num">5</span>, <span class="num">6</span>).map(n <span class="kw">=&gt;</span> <span class="kw">if</span> (n % <span class="num">2</span> == <span class="num">0</span>) <span class="std">Some</span>(n) <span class="kw">else</span> <span class="std">None</span>)
 scala&gt; nec.collect { <span class="kw">case</span> <span class="std">Some</span>(n) <span class="kw">=&gt;</span> n }
-res0: cats.data.Chain[<span class="std">Int</span>] = Chain(<span class="num">4</span>, <span class="num">6</span>)</pre></div></div>
+res0: cats.data.Chain[<span class="std">Int</span>] = Chain(<span class="num">4</span>, <span class="num">6</span>)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.data.NonEmptyChainOps">NonEmptyChainOps</a> → NonEmptyCollection</dd></dl></div>
     </li><li name="cats.data.NonEmptyChainOps#collectFirst" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="collectFirst[B](pf:PartialFunction[A,B]):Option[B]"></a><a id="collectFirst[B](PartialFunction[A,B]):Option[B]"></a>
       <span class="permalink">
@@ -674,9 +718,9 @@ res0: <span class="std">Boolean</span> = <span class="kw">true</span></pre></div
 otherwise yields None, if <code>a</code> was not found
 Traverses only until <code>a</code> is found.</p>
     </li><li name="cats.data.NonEmptyChainOps#distinct" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="distinct[AA&gt;:A](implicitO:cats.Order[AA]):cats.data.NonEmptyChain[AA]"></a><a id="distinct[AA&gt;:A](Order[AA]):NonEmptyChain[AA]"></a>
+      <a id="distinct[AA&gt;:A](implicitO:cats.kernel.Order[AA]):cats.data.NonEmptyChain[AA]"></a><a id="distinct[AA&gt;:A](kernel.Order[AA]):NonEmptyChain[AA]"></a>
       <span class="permalink">
-      <a href="../../cats/data/NonEmptyChainOps.html#distinct[AA&gt;:A](implicitO:cats.Order[AA]):cats.data.NonEmptyChain[AA]" title="Permalink">
+      <a href="../../cats/data/NonEmptyChainOps.html#distinct[AA&gt;:A](implicitO:cats.kernel.Order[AA]):cats.data.NonEmptyChain[AA]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -685,12 +729,12 @@ Traverses only until <code>a</code> is found.</p>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">distinct</span><span class="tparams">[<span name="AA">AA &gt;: <span class="extype" name="cats.data.NonEmptyChainOps.A">A</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="O">O: <a href="../index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.data.NonEmptyChainOps.distinct.AA">AA</span>]</span>)</span><span class="result">: <a href="index.html#NonEmptyChain[+A]=cats.data.NonEmptyChainImpl.Type[A]" class="extmbr" name="cats.data.NonEmptyChain">NonEmptyChain</a>[<span class="extype" name="cats.data.NonEmptyChainOps.distinct.AA">AA</span>]</span>
+        <span class="name">distinct</span><span class="tparams">[<span name="AA">AA &gt;: <span class="extype" name="cats.data.NonEmptyChainOps.A">A</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="O">O: <a href="../kernel/Order.html" class="extype" name="cats.kernel.Order">kernel.Order</a>[<span class="extype" name="cats.data.NonEmptyChainOps.distinct.AA">AA</span>]</span>)</span><span class="result">: <a href="index.html#NonEmptyChain[+A]=cats.data.NonEmptyChainImpl.Type[A]" class="extmbr" name="cats.data.NonEmptyChain">NonEmptyChain</a>[<span class="extype" name="cats.data.NonEmptyChainOps.distinct.AA">AA</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Remove duplicates.</p><div class="fullcomment"><div class="comment cmt"><p>Remove duplicates. Duplicates are checked using <code>Order[_]</code> instance.
-</p></div></div>
-    </li><li name="cats.data.NonEmptyChainOps#exists" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.data.NonEmptyChainOps">NonEmptyChainOps</a> → NonEmptyCollection</dd></dl></div>
+    </li><li name="cats.data.NonEmptyChainOps#exists" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="exists(f:A=&gt;Boolean):Boolean"></a><a id="exists((A)⇒Boolean):Boolean"></a>
       <span class="permalink">
       <a href="../../cats/data/NonEmptyChainOps.html#exists(f:A=&gt;Boolean):Boolean" title="Permalink">
@@ -705,8 +749,9 @@ Traverses only until <code>a</code> is found.</p>
         <span class="name">exists</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>) ⇒ <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
-      <p class="shortcomment cmt">Tests whether a predicate holds for at least one element of this chain.</p>
-    </li><li name="cats.data.NonEmptyChainOps#filter" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <p class="shortcomment cmt">Tests whether a predicate holds for at least one element of this chain.</p><div class="fullcomment"><div class="comment cmt"><p>Tests whether a predicate holds for at least one element of this chain.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.data.NonEmptyChainOps">NonEmptyChainOps</a> → NonEmptyCollection</dd></dl></div>
+    </li><li name="cats.data.NonEmptyChainOps#filter" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="filter(p:A=&gt;Boolean):cats.data.Chain[A]"></a><a id="filter((A)⇒Boolean):Chain[A]"></a>
       <span class="permalink">
       <a href="../../cats/data/NonEmptyChainOps.html#filter(p:A=&gt;Boolean):cats.data.Chain[A]" title="Permalink">
@@ -721,8 +766,9 @@ Traverses only until <code>a</code> is found.</p>
         <span class="name">filter</span><span class="params">(<span name="p">p: (<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>) ⇒ <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="result">: <a href="Chain.html" class="extype" name="cats.data.Chain">Chain</a>[<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>]</span>
       </span>
       
-      <p class="shortcomment cmt">Filters all elements of this chain that do not satisfy the given predicate.</p>
-    </li><li name="cats.data.NonEmptyChainOps#filterNot" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <p class="shortcomment cmt">Filters all elements of this chain that do not satisfy the given predicate.</p><div class="fullcomment"><div class="comment cmt"><p>Filters all elements of this chain that do not satisfy the given predicate.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.data.NonEmptyChainOps">NonEmptyChainOps</a> → NonEmptyCollection</dd></dl></div>
+    </li><li name="cats.data.NonEmptyChainOps#filterNot" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="filterNot(p:A=&gt;Boolean):cats.data.Chain[A]"></a><a id="filterNot((A)⇒Boolean):Chain[A]"></a>
       <span class="permalink">
       <a href="../../cats/data/NonEmptyChainOps.html#filterNot(p:A=&gt;Boolean):cats.data.Chain[A]" title="Permalink">
@@ -737,8 +783,9 @@ Traverses only until <code>a</code> is found.</p>
         <span class="name">filterNot</span><span class="params">(<span name="p">p: (<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>) ⇒ <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="result">: <a href="Chain.html" class="extype" name="cats.data.Chain">Chain</a>[<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>]</span>
       </span>
       
-      <p class="shortcomment cmt">Filters all elements of this chain that satisfy the given predicate.</p>
-    </li><li name="cats.data.NonEmptyChainOps#find" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <p class="shortcomment cmt">Filters all elements of this chain that satisfy the given predicate.</p><div class="fullcomment"><div class="comment cmt"><p>Filters all elements of this chain that satisfy the given predicate.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.data.NonEmptyChainOps">NonEmptyChainOps</a> → NonEmptyCollection</dd></dl></div>
+    </li><li name="cats.data.NonEmptyChainOps#find" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="find(f:A=&gt;Boolean):Option[A]"></a><a id="find((A)⇒Boolean):Option[A]"></a>
       <span class="permalink">
       <a href="../../cats/data/NonEmptyChainOps.html#find(f:A=&gt;Boolean):Option[A]" title="Permalink">
@@ -753,7 +800,8 @@ Traverses only until <code>a</code> is found.</p>
         <span class="name">find</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>) ⇒ <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>]</span>
       </span>
       
-      <p class="shortcomment cmt">Returns the first value that matches the given predicate.</p>
+      <p class="shortcomment cmt">Returns the first value that matches the given predicate.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the first value that matches the given predicate.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.data.NonEmptyChainOps">NonEmptyChainOps</a> → NonEmptyCollection</dd></dl></div>
     </li><li name="cats.data.NonEmptyChainOps#flatMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="flatMap[B](f:A=&gt;cats.data.NonEmptyChain[B]):cats.data.NonEmptyChain[B]"></a><a id="flatMap[B]((A)⇒NonEmptyChain[B]):NonEmptyChain[B]"></a>
       <span class="permalink">
@@ -771,7 +819,7 @@ Traverses only until <code>a</code> is found.</p>
       
       <p class="shortcomment cmt">Applies the supplied function to each element and returns a new NonEmptyChain from the concatenated results
 </p>
-    </li><li name="cats.data.NonEmptyChainOps#foldLeft" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="cats.data.NonEmptyChainOps#foldLeft" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="foldLeft[B](b:B)(f:(B,A)=&gt;B):B"></a><a id="foldLeft[B](B)((B,A)⇒B):B"></a>
       <span class="permalink">
       <a href="../../cats/data/NonEmptyChainOps.html#foldLeft[B](b:B)(f:(B,A)=&gt;B):B" title="Permalink">
@@ -786,7 +834,8 @@ Traverses only until <code>a</code> is found.</p>
         <span class="name">foldLeft</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="b">b: <span class="extype" name="cats.data.NonEmptyChainOps.foldLeft.B">B</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.NonEmptyChainOps.foldLeft.B">B</span>, <span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>) ⇒ <span class="extype" name="cats.data.NonEmptyChainOps.foldLeft.B">B</span></span>)</span><span class="result">: <span class="extype" name="cats.data.NonEmptyChainOps.foldLeft.B">B</span></span>
       </span>
       
-      <p class="shortcomment cmt">Left-associative fold using f.</p>
+      <p class="shortcomment cmt">Left-associative fold using f.</p><div class="fullcomment"><div class="comment cmt"><p>Left-associative fold using f.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.data.NonEmptyChainOps">NonEmptyChainOps</a> → NonEmptyCollection</dd></dl></div>
     </li><li name="cats.data.NonEmptyChainOps#foldRight" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="foldRight[B](z:B)(f:(A,B)=&gt;B):B"></a><a id="foldRight[B](B)((A,B)⇒B):B"></a>
       <span class="permalink">
@@ -803,7 +852,7 @@ Traverses only until <code>a</code> is found.</p>
       </span>
       
       <p class="shortcomment cmt">Right-associative fold using f.</p>
-    </li><li name="cats.data.NonEmptyChainOps#forall" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="cats.data.NonEmptyChainOps#forall" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="forall(p:A=&gt;Boolean):Boolean"></a><a id="forall((A)⇒Boolean):Boolean"></a>
       <span class="permalink">
       <a href="../../cats/data/NonEmptyChainOps.html#forall(p:A=&gt;Boolean):Boolean" title="Permalink">
@@ -818,7 +867,8 @@ Traverses only until <code>a</code> is found.</p>
         <span class="name">forall</span><span class="params">(<span name="p">p: (<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>) ⇒ <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
-      <p class="shortcomment cmt">Tests whether a predicate holds for all elements of this chain.</p>
+      <p class="shortcomment cmt">Tests whether a predicate holds for all elements of this chain.</p><div class="fullcomment"><div class="comment cmt"><p>Tests whether a predicate holds for all elements of this chain.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.data.NonEmptyChainOps">NonEmptyChainOps</a> → NonEmptyCollection</dd></dl></div>
     </li><li name="scala.AnyVal#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_&lt;:AnyVal]"></a>
       <span class="permalink">
@@ -836,9 +886,9 @@ Traverses only until <code>a</code> is found.</p>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyVal → Any</dd></dl></div>
     </li><li name="cats.data.NonEmptyChainOps#groupBy" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="groupBy[B](f:A=&gt;B)(implicitB:cats.Order[B]):cats.data.NonEmptyMap[B,cats.data.NonEmptyChain[A]]"></a><a id="groupBy[B]((A)⇒B)(Order[B]):NonEmptyMap[B,NonEmptyChain[A]]"></a>
+      <a id="groupBy[B](f:A=&gt;B)(implicitB:cats.kernel.Order[B]):cats.data.NonEmptyMap[B,cats.data.NonEmptyChain[A]]"></a><a id="groupBy[B]((A)⇒B)(kernel.Order[B]):NonEmptyMap[B,NonEmptyChain[A]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/NonEmptyChainOps.html#groupBy[B](f:A=&gt;B)(implicitB:cats.Order[B]):cats.data.NonEmptyMap[B,cats.data.NonEmptyChain[A]]" title="Permalink">
+      <a href="../../cats/data/NonEmptyChainOps.html#groupBy[B](f:A=&gt;B)(implicitB:cats.kernel.Order[B]):cats.data.NonEmptyMap[B,cats.data.NonEmptyChain[A]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -847,11 +897,27 @@ Traverses only until <code>a</code> is found.</p>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">groupBy</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>) ⇒ <span class="extype" name="cats.data.NonEmptyChainOps.groupBy.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="B">B: <a href="../index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.data.NonEmptyChainOps.groupBy.B">B</span>]</span>)</span><span class="result">: <a href="index.html#NonEmptyMap[K,+A]=cats.data.NonEmptyMapImpl.Type[K,A]" class="extmbr" name="cats.data.NonEmptyMap">NonEmptyMap</a>[<span class="extype" name="cats.data.NonEmptyChainOps.groupBy.B">B</span>, <a href="index.html#NonEmptyChain[+A]=cats.data.NonEmptyChainImpl.Type[A]" class="extmbr" name="cats.data.NonEmptyChain">NonEmptyChain</a>[<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>]]</span>
+        <span class="name">groupBy</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>) ⇒ <span class="extype" name="cats.data.NonEmptyChainOps.groupBy.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="B">B: <a href="../kernel/Order.html" class="extype" name="cats.kernel.Order">kernel.Order</a>[<span class="extype" name="cats.data.NonEmptyChainOps.groupBy.B">B</span>]</span>)</span><span class="result">: <a href="index.html#NonEmptyMap[K,+A]=cats.data.NonEmptyMapImpl.Type[K,A]" class="extmbr" name="cats.data.NonEmptyMap">NonEmptyMap</a>[<span class="extype" name="cats.data.NonEmptyChainOps.groupBy.B">B</span>, <a href="index.html#NonEmptyChain[+A]=cats.data.NonEmptyChainImpl.Type[A]" class="extmbr" name="cats.data.NonEmptyChain">NonEmptyChain</a>[<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>]]</span>
       </span>
       
       <p class="shortcomment cmt">Groups elements inside this <code>NonEmptyChain</code> according to the <code>Order</code>
 of the keys produced by the given mapping function.</p>
+    </li><li name="cats.data.NonEmptyChainOps#groupByNem" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="groupByNem[B](f:A=&gt;B)(implicitB:cats.kernel.Order[B]):cats.data.NonEmptyMap[B,cats.data.NonEmptyChain[A]]"></a><a id="groupByNem[B]((A)⇒B)(kernel.Order[B]):NonEmptyMap[B,NonEmptyChain[A]]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/NonEmptyChainOps.html#groupByNem[B](f:A=&gt;B)(implicitB:cats.kernel.Order[B]):cats.data.NonEmptyMap[B,cats.data.NonEmptyChain[A]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">groupByNem</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>) ⇒ <span class="extype" name="cats.data.NonEmptyChainOps.groupByNem.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="B">B: <a href="../kernel/Order.html" class="extype" name="cats.kernel.Order">kernel.Order</a>[<span class="extype" name="cats.data.NonEmptyChainOps.groupByNem.B">B</span>]</span>)</span><span class="result">: <a href="index.html#NonEmptyMap[K,+A]=cats.data.NonEmptyMapImpl.Type[K,A]" class="extmbr" name="cats.data.NonEmptyMap">NonEmptyMap</a>[<span class="extype" name="cats.data.NonEmptyChainOps.groupByNem.B">B</span>, <a href="index.html#NonEmptyChain[+A]=cats.data.NonEmptyChainImpl.Type[A]" class="extmbr" name="cats.data.NonEmptyChain">NonEmptyChain</a>[<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>]]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.data.NonEmptyChainOps">NonEmptyChainOps</a> → NonEmptyCollection</dd></dl></div>
     </li><li name="cats.data.NonEmptyChainOps#head" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="head:A"></a>
       <span class="permalink">
@@ -868,7 +934,7 @@ of the keys produced by the given mapping function.</p>
       </span>
       
       <p class="shortcomment cmt">Returns the first element of this NonEmptyChain.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the first element of this NonEmptyChain. Amortized O(1).
-</p></div></div>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.data.NonEmptyChainOps">NonEmptyChainOps</a> → NonEmptyCollection</dd></dl></div>
     </li><li name="cats.data.NonEmptyChainOps#init" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="init:cats.data.Chain[A]"></a><a id="init:Chain[A]"></a>
       <span class="permalink">
@@ -885,7 +951,7 @@ of the keys produced by the given mapping function.</p>
       </span>
       
       <p class="shortcomment cmt">Returns all but the last element of this NonEmptyChain.</p><div class="fullcomment"><div class="comment cmt"><p>Returns all but the last element of this NonEmptyChain. Amortized O(1).
-</p></div></div>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.data.NonEmptyChainOps">NonEmptyChainOps</a> → NonEmptyCollection</dd></dl></div>
     </li><li name="cats.data.NonEmptyChainOps#initLast" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="initLast:(cats.data.Chain[A],A)"></a><a id="initLast:(Chain[A],A)"></a>
       <span class="permalink">
@@ -919,7 +985,7 @@ of the keys produced by the given mapping function.</p>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="cats.data.NonEmptyChainOps#iterator" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="cats.data.NonEmptyChainOps#iterator" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="iterator:Iterator[A]"></a>
       <span class="permalink">
       <a href="../../cats/data/NonEmptyChainOps.html#iterator:Iterator[A]" title="Permalink">
@@ -934,7 +1000,7 @@ of the keys produced by the given mapping function.</p>
         <span class="name">iterator</span><span class="result">: <span class="extype" name="scala.Iterator">Iterator</span>[<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>]</span>
       </span>
       
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.data.NonEmptyChainOps">NonEmptyChainOps</a> → NonEmptyCollection</dd></dl></div>
     </li><li name="cats.data.NonEmptyChainOps#last" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="last:A"></a>
       <span class="permalink">
@@ -951,7 +1017,7 @@ of the keys produced by the given mapping function.</p>
       </span>
       
       <p class="shortcomment cmt">Returns the last element of this NonEmptyChain.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the last element of this NonEmptyChain. Amortized O(1).
-</p></div></div>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.data.NonEmptyChainOps">NonEmptyChainOps</a> → NonEmptyCollection</dd></dl></div>
     </li><li name="cats.data.NonEmptyChainOps#length" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="length:Long"></a>
       <span class="permalink">
@@ -968,7 +1034,7 @@ of the keys produced by the given mapping function.</p>
       </span>
       
       <p class="shortcomment cmt">Returns the number of elements in this chain.</p>
-    </li><li name="cats.data.NonEmptyChainOps#map" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="cats.data.NonEmptyChainOps#map" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="map[B](f:A=&gt;B):cats.data.NonEmptyChain[B]"></a><a id="map[B]((A)⇒B):NonEmptyChain[B]"></a>
       <span class="permalink">
       <a href="../../cats/data/NonEmptyChainOps.html#map[B](f:A=&gt;B):cats.data.NonEmptyChain[B]" title="Permalink">
@@ -983,7 +1049,8 @@ of the keys produced by the given mapping function.</p>
         <span class="name">map</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>) ⇒ <span class="extype" name="cats.data.NonEmptyChainOps.map.B">B</span></span>)</span><span class="result">: <a href="index.html#NonEmptyChain[+A]=cats.data.NonEmptyChainImpl.Type[A]" class="extmbr" name="cats.data.NonEmptyChain">NonEmptyChain</a>[<span class="extype" name="cats.data.NonEmptyChainOps.map.B">B</span>]</span>
       </span>
       
-      <p class="shortcomment cmt">Applies the supplied function to each element and returns a new NonEmptyChain.</p>
+      <p class="shortcomment cmt">Applies the supplied function to each element and returns a new NonEmptyChain.</p><div class="fullcomment"><div class="comment cmt"><p>Applies the supplied function to each element and returns a new NonEmptyChain.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.data.NonEmptyChainOps">NonEmptyChainOps</a> → NonEmptyCollection</dd></dl></div>
     </li><li name="cats.data.NonEmptyChainOps#prepend" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="prepend[A2&gt;:A](a:A2):cats.data.NonEmptyChain[A2]"></a><a id="prepend[A2&gt;:A](A2):NonEmptyChain[A2]"></a>
       <span class="permalink">
@@ -1000,7 +1067,7 @@ of the keys produced by the given mapping function.</p>
       </span>
       
       <p class="shortcomment cmt">Returns a new NonEmptyChain consisting of <code>a</code> followed by this.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a new NonEmptyChain consisting of <code>a</code> followed by this. O(1) runtime.
-</p></div></div>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.data.NonEmptyChainOps">NonEmptyChainOps</a> → NonEmptyCollection</dd></dl></div>
     </li><li name="cats.data.NonEmptyChainOps#prependChain" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="prependChain[A2&gt;:A](c:cats.data.Chain[A2]):cats.data.NonEmptyChain[A2]"></a><a id="prependChain[A2&gt;:A](Chain[A2]):NonEmptyChain[A2]"></a>
       <span class="permalink">
@@ -1017,10 +1084,10 @@ of the keys produced by the given mapping function.</p>
       </span>
       
       <p class="shortcomment cmt">Prepends the given chain in O(1) runtime.</p>
-    </li><li name="cats.data.NonEmptyChainOps#reduce" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="reduce[AA&gt;:A](implicitS:cats.Semigroup[AA]):AA"></a><a id="reduce[AA&gt;:A](Semigroup[AA]):AA"></a>
+    </li><li name="cats.data.NonEmptyChainOps#reduce" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="reduce[AA&gt;:A](implicitS:cats.kernel.Semigroup[AA]):AA"></a><a id="reduce[AA&gt;:A](kernel.Semigroup[AA]):AA"></a>
       <span class="permalink">
-      <a href="../../cats/data/NonEmptyChainOps.html#reduce[AA&gt;:A](implicitS:cats.Semigroup[AA]):AA" title="Permalink">
+      <a href="../../cats/data/NonEmptyChainOps.html#reduce[AA&gt;:A](implicitS:cats.kernel.Semigroup[AA]):AA" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1029,11 +1096,12 @@ of the keys produced by the given mapping function.</p>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">reduce</span><span class="tparams">[<span name="AA">AA &gt;: <span class="extype" name="cats.data.NonEmptyChainOps.A">A</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="S">S: <a href="../index.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.data.NonEmptyChainOps.reduce.AA">AA</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.NonEmptyChainOps.reduce.AA">AA</span></span>
+        <span class="name">reduce</span><span class="tparams">[<span name="AA">AA &gt;: <span class="extype" name="cats.data.NonEmptyChainOps.A">A</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="S">S: <a href="../kernel/Semigroup.html" class="extype" name="cats.kernel.Semigroup">kernel.Semigroup</a>[<span class="extype" name="cats.data.NonEmptyChainOps.reduce.AA">AA</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.NonEmptyChainOps.reduce.AA">AA</span></span>
       </span>
       
       <p class="shortcomment cmt">Reduce using the Semigroup of A
-</p>
+</p><div class="fullcomment"><div class="comment cmt"><p>Reduce using the Semigroup of A
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.data.NonEmptyChainOps">NonEmptyChainOps</a> → NonEmptyCollection</dd></dl></div>
     </li><li name="cats.data.NonEmptyChainOps#reduceLeft" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="reduceLeft(f:(A,A)=&gt;A):A"></a><a id="reduceLeft((A,A)⇒A):A"></a>
       <span class="permalink">
@@ -1114,7 +1182,7 @@ with every other value using the given function <code>g</code>.</p><pre>scala&gt
 scala&gt; <span class="kw">val</span> nec = NonEmptyChain(<span class="num">4</span>, <span class="num">5</span>, <span class="num">6</span>)
 scala&gt; nec.reduceRightTo(_.toString)((cur, acc) <span class="kw">=&gt;</span> acc + cur.toString)
 res0: <span class="std">String</span> = <span class="num">654</span></pre></div></div>
-    </li><li name="cats.data.NonEmptyChainOps#reverse" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="cats.data.NonEmptyChainOps#reverse" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="reverse:cats.data.NonEmptyChain[A]"></a><a id="reverse:NonEmptyChain[A]"></a>
       <span class="permalink">
       <a href="../../cats/data/NonEmptyChainOps.html#reverse:cats.data.NonEmptyChain[A]" title="Permalink">
@@ -1129,7 +1197,9 @@ res0: <span class="std">String</span> = <span class="num">654</span></pre></div>
         <span class="name">reverse</span><span class="result">: <a href="index.html#NonEmptyChain[+A]=cats.data.NonEmptyChainImpl.Type[A]" class="extmbr" name="cats.data.NonEmptyChain">NonEmptyChain</a>[<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>]</span>
       </span>
       
-      <p class="shortcomment cmt">Reverses this <code>NonEmptyChain</code></p>
+      <p class="shortcomment cmt">Reverses this <code>NonEmptyChain</code>
+</p><div class="fullcomment"><div class="comment cmt"><p>Reverses this <code>NonEmptyChain</code>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.data.NonEmptyChainOps">NonEmptyChainOps</a> → NonEmptyCollection</dd></dl></div>
     </li><li name="cats.data.NonEmptyChainOps#reverseIterator" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="reverseIterator:Iterator[A]"></a>
       <span class="permalink">
@@ -1146,6 +1216,54 @@ res0: <span class="std">String</span> = <span class="num">654</span></pre></div>
       </span>
       
       
+    </li><li name="cats.data.NonEmptyChainOps#show" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="show[AA&gt;:A](implicitAA:cats.Show[AA]):String"></a><a id="show[AA&gt;:A](Show[AA]):String"></a>
+      <span class="permalink">
+      <a href="../../cats/data/NonEmptyChainOps.html#show[AA&gt;:A](implicitAA:cats.Show[AA]):String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">show</span><span class="tparams">[<span name="AA">AA &gt;: <span class="extype" name="cats.data.NonEmptyChainOps.A">A</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="AA">AA: <a href="../Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.data.NonEmptyChainOps.show.AA">AA</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.data.NonEmptyChainOps">NonEmptyChainOps</a> → NonEmptyCollection</dd></dl></div>
+    </li><li name="cats.data.NonEmptyChainOps#sortBy" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="sortBy[B](f:A=&gt;B)(implicitB:cats.kernel.Order[B]):cats.data.NonEmptyChain[A]"></a><a id="sortBy[B]((A)⇒B)(kernel.Order[B]):NonEmptyChain[A]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/NonEmptyChainOps.html#sortBy[B](f:A=&gt;B)(implicitB:cats.kernel.Order[B]):cats.data.NonEmptyChain[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">sortBy</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>) ⇒ <span class="extype" name="cats.data.NonEmptyChainOps.sortBy.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="B">B: <a href="../kernel/Order.html" class="extype" name="cats.kernel.Order">kernel.Order</a>[<span class="extype" name="cats.data.NonEmptyChainOps.sortBy.B">B</span>]</span>)</span><span class="result">: <a href="index.html#NonEmptyChain[+A]=cats.data.NonEmptyChainImpl.Type[A]" class="extmbr" name="cats.data.NonEmptyChain">NonEmptyChain</a>[<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.data.NonEmptyChainOps">NonEmptyChainOps</a> → NonEmptyCollection</dd></dl></div>
+    </li><li name="cats.data.NonEmptyChainOps#sorted" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="sorted[AA&gt;:A](implicitAA:cats.kernel.Order[AA]):cats.data.NonEmptyChain[AA]"></a><a id="sorted[AA&gt;:A](kernel.Order[AA]):NonEmptyChain[AA]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/NonEmptyChainOps.html#sorted[AA&gt;:A](implicitAA:cats.kernel.Order[AA]):cats.data.NonEmptyChain[AA]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">sorted</span><span class="tparams">[<span name="AA">AA &gt;: <span class="extype" name="cats.data.NonEmptyChainOps.A">A</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="AA">AA: <a href="../kernel/Order.html" class="extype" name="cats.kernel.Order">kernel.Order</a>[<span class="extype" name="cats.data.NonEmptyChainOps.sorted.AA">AA</span>]</span>)</span><span class="result">: <a href="index.html#NonEmptyChain[+A]=cats.data.NonEmptyChainImpl.Type[A]" class="extmbr" name="cats.data.NonEmptyChain">NonEmptyChain</a>[<span class="extype" name="cats.data.NonEmptyChainOps.sorted.AA">AA</span>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.data.NonEmptyChainOps">NonEmptyChainOps</a> → NonEmptyCollection</dd></dl></div>
     </li><li name="cats.data.NonEmptyChainOps#tail" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="tail:cats.data.Chain[A]"></a><a id="tail:Chain[A]"></a>
       <span class="permalink">
@@ -1162,7 +1280,7 @@ res0: <span class="std">String</span> = <span class="num">654</span></pre></div>
       </span>
       
       <p class="shortcomment cmt">Returns all but the first element of this NonEmptyChain.</p><div class="fullcomment"><div class="comment cmt"><p>Returns all but the first element of this NonEmptyChain. Amortized O(1).
-</p></div></div>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.data.NonEmptyChainOps">NonEmptyChainOps</a> → NonEmptyCollection</dd></dl></div>
     </li><li name="cats.data.NonEmptyChainOps#toChain" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="toChain:cats.data.Chain[A]"></a><a id="toChain:Chain[A]"></a>
       <span class="permalink">
@@ -1180,6 +1298,38 @@ res0: <span class="std">String</span> = <span class="num">654</span></pre></div>
       
       <p class="shortcomment cmt">Converts this chain to a <code>Chain</code>
 </p>
+    </li><li name="cats.data.NonEmptyChainOps#toNem" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toNem[T,V](implicitev:A&lt;:&lt;(T,V),implicitorder:cats.kernel.Order[T]):cats.data.NonEmptyMap[T,V]"></a><a id="toNem[T,V](&lt;:&lt;[A,(T,V)],kernel.Order[T]):NonEmptyMap[T,V]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/NonEmptyChainOps.html#toNem[T,V](implicitev:A&lt;:&lt;(T,V),implicitorder:cats.kernel.Order[T]):cats.data.NonEmptyMap[T,V]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toNem</span><span class="tparams">[<span name="T">T</span>, <span name="V">V</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>, (<span class="extype" name="cats.data.NonEmptyChainOps.toNem.T">T</span>, <span class="extype" name="cats.data.NonEmptyChainOps.toNem.V">V</span>)]</span>, <span name="order">order: <a href="../kernel/Order.html" class="extype" name="cats.kernel.Order">kernel.Order</a>[<span class="extype" name="cats.data.NonEmptyChainOps.toNem.T">T</span>]</span>)</span><span class="result">: <a href="index.html#NonEmptyMap[K,+A]=cats.data.NonEmptyMapImpl.Type[K,A]" class="extmbr" name="cats.data.NonEmptyMap">NonEmptyMap</a>[<span class="extype" name="cats.data.NonEmptyChainOps.toNem.T">T</span>, <span class="extype" name="cats.data.NonEmptyChainOps.toNem.V">V</span>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.data.NonEmptyChainOps">NonEmptyChainOps</a> → NonEmptyCollection</dd></dl></div>
+    </li><li name="cats.data.NonEmptyChainOps#toNes" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toNes[B&gt;:A](implicitorder:cats.kernel.Order[B]):cats.data.NonEmptySet[B]"></a><a id="toNes[B&gt;:A](kernel.Order[B]):NonEmptySet[B]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/NonEmptyChainOps.html#toNes[B&gt;:A](implicitorder:cats.kernel.Order[B]):cats.data.NonEmptySet[B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toNes</span><span class="tparams">[<span name="B">B &gt;: <span class="extype" name="cats.data.NonEmptyChainOps.A">A</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="order">order: <a href="../kernel/Order.html" class="extype" name="cats.kernel.Order">kernel.Order</a>[<span class="extype" name="cats.data.NonEmptyChainOps.toNes.B">B</span>]</span>)</span><span class="result">: <a href="index.html#NonEmptySet[A]=cats.data.NonEmptySetImpl.Type[A]" class="extmbr" name="cats.data.NonEmptySet">NonEmptySet</a>[<span class="extype" name="cats.data.NonEmptyChainOps.toNes.B">B</span>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.data.NonEmptyChainOps">NonEmptyChainOps</a> → NonEmptyCollection</dd></dl></div>
     </li><li name="cats.data.NonEmptyChainOps#toNonEmptyList" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toNonEmptyList:cats.data.NonEmptyList[A]"></a><a id="toNonEmptyList:NonEmptyList[A]"></a>
       <span class="permalink">
@@ -1269,8 +1419,24 @@ res0: cats.data.NonEmptyVector[<span class="std">Int</span>] = NonEmptyVector(<s
       <p class="shortcomment cmt">Zips this <code>NonEmptyChain</code> with another <code>NonEmptyChain</code> and applies a function for each pair of elements.</p><div class="fullcomment"><div class="comment cmt"><p>Zips this <code>NonEmptyChain</code> with another <code>NonEmptyChain</code> and applies a function for each pair of elements.</p><pre>scala&gt; <span class="kw">import</span> cats.data.NonEmptyChain
 scala&gt; <span class="kw">val</span> as = NonEmptyChain(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>)
 scala&gt; <span class="kw">val</span> bs = NonEmptyChain(<span class="lit">"A"</span>, <span class="lit">"B"</span>, <span class="lit">"C"</span>)
-scala&gt; as.zipWith(bs)(_ + _)
-res0: cats.data.NonEmptyChain[<span class="std">String</span>] = Chain(<span class="num">1</span>A, <span class="num">2</span>B, <span class="num">3</span>C)</pre></div></div>
+scala&gt; as.zipWith(bs)(_.toString + _)
+res0: cats.data.NonEmptyChain[<span class="std">String</span>] = Chain(<span class="num">1</span>A, <span class="num">2</span>B, <span class="num">3</span>C)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.data.NonEmptyChainOps">NonEmptyChainOps</a> → NonEmptyCollection</dd></dl></div>
+    </li><li name="cats.data.NonEmptyChainOps#zipWithIndex" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="zipWithIndex:cats.data.NonEmptyChain[(A,Int)]"></a><a id="zipWithIndex:NonEmptyChain[(A,Int)]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/NonEmptyChainOps.html#zipWithIndex:cats.data.NonEmptyChain[(A,Int)]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">zipWithIndex</span><span class="result">: <a href="index.html#NonEmptyChain[+A]=cats.data.NonEmptyChainImpl.Type[A]" class="extmbr" name="cats.data.NonEmptyChain">NonEmptyChain</a>[(<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>)]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.data.NonEmptyChainOps">NonEmptyChainOps</a> → NonEmptyCollection</dd></dl></div>
     </li>
               </ol>
             </div>
@@ -1281,7 +1447,9 @@ res0: cats.data.NonEmptyChain[<span class="std">String</span>] = Chain(<span cla
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.AnyVal">
+        <div class="parent" name="cats.data.NonEmptyCollection">
+              <h3>Inherited from <span class="extype" name="cats.data.NonEmptyCollection">NonEmptyCollection</span>[<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>, <a href="Chain.html" class="extype" name="cats.data.Chain">Chain</a>, <a href="index.html#NonEmptyChain[+A]=cats.data.NonEmptyChainImpl.Type[A]" class="extmbr" name="cats.data.NonEmptyChain">NonEmptyChain</a>]</h3>
+            </div><div class="parent" name="scala.AnyVal">
               <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyVal.html#scala.AnyVal" class="extype" name="scala.AnyVal">AnyVal</a></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></h3>

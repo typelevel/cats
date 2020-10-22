@@ -81,10 +81,32 @@
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <a title="Symbolic aliases for various types are defined here." href="../index.html"><span class="name">cats</span></a>
+        <a title="The cats root package contains all the trait signatures of most Scala type classes." href="../index.html"><span class="name">cats</span></a>
       </span>
       
-      <p class="shortcomment cmt">Symbolic aliases for various types are defined here.</p><div class="fullcomment"><div class="comment cmt"><p>Symbolic aliases for various types are defined here.
+      <p class="shortcomment cmt">The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><p>Cats type classes are implemented using the approach from the
+ <a href="https://ropas.snu.ac.kr/~bruno/papers/TypeClasses.pdf" target="_blank">Type classes as objects and implicits</a> article.</p><p>For each type class, <code>cats</code> provides three pieces:
+- Its <b>signature</b>: a trait that is polymorphic on a type parameter.
+  Type class traits inherit from other type classes to indicate that any implementation of the lower type class (e.g. <code>Applicative</code>)
+  can also serve as an instance for the higuer type class (e.g. <code>Functor</code>).
+- Type class <b>'instances</b>, which are classes and objects that implement one or more type class signatures for some specific types.
+  Type class instances for several data types from the Java or Scala standard libraries are declared in the subpackage <code>cats.instances</code>.
+- <b>Syntax extensions</b>, each of which provides the methods of the type class defines as extension methods
+  (which in Scala 2 are encoded as implicit classes) for values of any type <code>F</code>; given that an instance of the type class
+  for the receiver type (<code>this</code>) is in the implicit scope.
+  Symtax extensions are declared in the <code>cats.syntax</code> package.
+- A set of <b>laws</b>, that are also generic on the type of the class, and are only defined on the operations of the type class.
+  The purpose of these laws is to declare some algebraic relations (equations) between Scala expressions involving the operations
+  of the type class, and test (but not verify) that implemented instances satisfy those equations.
+  Laws are defined in the <code>cats-laws</code> package.</p><p>Although most of cats type classes are declared in this package, some are declared in other packages:
+- type classes that operate on base types (kind <code>*</code>), and their implementations for standard library types,
+  are contained in <code>cats.kernel</code>, which is a different SBT project. However, they are re-exported from this package.
+- type classes of kind <code>F[_, _]</code>, such as <a href="../arrow/Profunctor.html" class="extype" name="cats.arrow.Profunctor">cats.arrow.Profunctor</a>&quot; or <a href="../arrow/Arrow.html" class="extype" name="cats.arrow.Arrow">cats.arrow.Arrow</a>, which are relevant for
+  Functional Reactive Programming or optics, are declared in the <code>cats.arrow</code> package.
+- Also, those type classes that abstract over (pure or impure) functional runtime effects are declared
+  in the <a href="https://typelevel.org/cats-effect/" target="_blank">cats-effect library</a>.
+- Some type classes for which no laws can be provided are left out of the main road, in a small and dirty alley.
+  These are the <code>alleycats</code>.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
     </li><li name="cats.free" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="free"></a><a id="free:free"></a>
@@ -163,7 +185,7 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">Free</span><span class="tparams">[<span name="S">S<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.10/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <span class="name">Free</span><span class="tparams">[<span name="S">S<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.10/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a> with <span class="extype" name="cats.free.FreeFoldStep">FreeFoldStep</span>[<span class="extype" name="cats.free.Free.S">S</span>, <span class="extype" name="cats.free.Free.A">A</span>]</span>
       </span>
       </h4>
 
@@ -175,8 +197,18 @@ elimination.
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Equals.html#scala.Equals" class="extype" name="scala.Equals">Equals</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
-        </div></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="cats.free.FreeFoldStep">FreeFoldStep</span>[<span class="extype" name="cats.free.Free.S">S</span>, <span class="extype" name="cats.free.Free.A">A</span>], <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Equals.html#scala.Equals" class="extype" name="scala.Equals">Equals</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+        </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
+                <span class="toggle diagram-link">
+                  Type Hierarchy
+                </span>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph1" viewBox="0.00 0.00 349.50 118.00" height="118pt" width="350pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 114)" class="graph" id="page0,1_graph0"><polygon points="-4,4 -4,-114 345.5,-114 345.5,4 -4,4" stroke="transparent" fill="white"></polygon><g class="cluster" id="clust1"></g><g class="cluster" id="clust2"></g><!-- node0 --><g class="node this class" id="graph1_0"><g id="a_this class|graph1_0"><a xlink:title="cats.free.Free (this class)" xlink:href="#inheritance-diagram"><path d="M183.17,-49C183.17,-49 108.83,-49 108.83,-49 104.67,-49 100.5,-44.83 100.5,-40.67 100.5,-40.67 100.5,-32.33 100.5,-32.33 100.5,-28.17 104.67,-24 108.83,-24 108.83,-24 183.17,-24 183.17,-24 187.33,-24 191.5,-28.17 191.5,-32.33 191.5,-32.33 191.5,-40.67 191.5,-40.67 191.5,-44.83 187.33,-49 183.17,-49" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-43.5" x="111" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-34.1" x="132" text-anchor="start">Free[S, A]</text></a></g></g><!-- node1 --><g class="node trait" id="graph1_1"><g id="a_trait|graph1_1"><a xlink:title="scala.Product"><path d="M69.67,-110C69.67,-110 8.33,-110 8.33,-110 4.17,-110 0,-105.83 0,-101.67 0,-101.67 0,-93.33 0,-93.33 0,-89.17 4.17,-85 8.33,-85 8.33,-85 69.67,-85 69.67,-85 73.83,-85 78,-89.17 78,-93.33 78,-93.33 78,-101.67 78,-101.67 78,-105.83 73.83,-110 69.67,-110" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-104.5" x="10" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-95.1" x="31" text-anchor="start">Product</text></a></g></g><!-- node1&#45;&gt;node0 --><g class="edge inheritance" id="graph1_1_0"><g id="a_inheritance|graph1_1_0"><a xlink:title="Free[S, A] is a subtype of Product"><path d="M66.32,-81.44C84.5,-71.41 108.03,-58.43 124.8,-49.19" stroke="#d4d4d4" fill="none"></path><polygon points="64.83,-79.46 59.88,-84.98 67.2,-83.75 64.83,-79.46" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node2 --><g class="node trait" id="graph1_2"><g id="a_trait|graph1_2"><a xlink:title="scala.Serializable"><path d="M187.67,-110C187.67,-110 104.33,-110 104.33,-110 100.17,-110 96,-105.83 96,-101.67 96,-101.67 96,-93.33 96,-93.33 96,-89.17 100.17,-85 104.33,-85 104.33,-85 187.67,-85 187.67,-85 191.83,-85 196,-89.17 196,-93.33 196,-93.33 196,-101.67 196,-101.67 196,-105.83 191.83,-110 187.67,-110" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-104.5" x="106" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-95.1" x="127" text-anchor="start">Serializable</text></a></g></g><!-- node2&#45;&gt;node0 --><g class="edge inheritance" id="graph1_2_0"><g id="a_inheritance|graph1_2_0"><a xlink:title="Free[S, A] is a subtype of Serializable"><path d="M146,-77.76C146,-68.37 146,-57.29 146,-49.13" stroke="#d4d4d4" fill="none"></path><polygon points="143.55,-77.84 146,-84.84 148.45,-77.84 143.55,-77.84" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node3 --><g class="node trait" id="graph1_3"><g id="a_trait|graph1_3"><a xlink:title="cats.free.FreeFoldStep"><path d="M333.17,-110C333.17,-110 222.83,-110 222.83,-110 218.67,-110 214.5,-105.83 214.5,-101.67 214.5,-101.67 214.5,-93.33 214.5,-93.33 214.5,-89.17 218.67,-85 222.83,-85 222.83,-85 333.17,-85 333.17,-85 337.33,-85 341.5,-89.17 341.5,-93.33 341.5,-93.33 341.5,-101.67 341.5,-101.67 341.5,-105.83 337.33,-110 333.17,-110" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-104.5" x="225" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-95.1" x="246" text-anchor="start">FreeFoldStep[S, A]</text></a></g></g><!-- node3&#45;&gt;node0 --><g class="edge inheritance" id="graph1_3_0"><g id="a_inheritance|graph1_3_0"><a xlink:title="Free[S, A] is a subtype of FreeFoldStep[S, A]"><path d="M245.76,-82.09C223.15,-71.98 193.29,-58.64 172.15,-49.19" stroke="#d4d4d4" fill="none"></path><polygon points="244.85,-84.36 252.24,-84.98 246.84,-79.89 244.85,-84.36" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
+                <div id="diagram-controls" class="hiddenContent">
+                  <button id="diagram-zoom-out" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button id="diagram-zoom-in" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button title="Toggle full-screen" id="diagram-fs" class="diagram-btn to-full"><i class="material-icons"></i></button>
+                </div>
+              </div></div>
         
 
       <div id="mbrsel">
@@ -201,7 +233,7 @@ elimination.
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="cats.free.Free"><span>Free</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="cats.free.Free"><span>Free</span></li><li class="in" name="cats.free.FreeFoldStep"><span>FreeFoldStep</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -366,6 +398,8 @@ elimination.
               
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="cats.free.Free#compile" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="compile[T[_]](f:cats.arrow.FunctionK[S,T]):cats.free.Free[T,A]"></a><a id="compile[T[_]](FunctionK[S,T]):Free[T,A]"></a>
@@ -419,28 +453,6 @@ effects will be applied by <code>compile</code>.
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="finalize():Unit"></a>
-      <span class="permalink">
-      <a href="../../cats/free/Free.html#finalize():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="symbol">classOf[java.lang.Throwable]</span>
-    </span>)</span>
-              
-        </dd></dl></div>
     </li><li name="cats.free.Free#flatMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="flatMap[B](f:A=&gt;cats.free.Free[S,B]):cats.free.Free[S,B]"></a><a id="flatMap[B]((A)⇒Free[S,B]):Free[S,B]"></a>
       <span class="permalink">
@@ -477,6 +489,22 @@ All left-associated binds are reassociated to the right.
       <p class="shortcomment cmt">Catamorphism.</p><div class="fullcomment"><div class="comment cmt"><p>Catamorphism. Run the first given function if Pure, otherwise,
 the second given function.
 </p></div></div>
+    </li><li name="cats.free.FreeFoldStep#foldLeft" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="foldLeft[B](fa:cats.free.Free[S,A],b:B)(f:(B,A)=&gt;B)(implicitF:cats.Foldable[S]):B"></a><a id="foldLeft[B](Free[S,A],B)((B,A)⇒B)(Foldable[S]):B"></a>
+      <span class="permalink">
+      <a href="../../cats/free/Free.html#foldLeft[B](fa:cats.free.Free[S,A],b:B)(f:(B,A)=&gt;B)(implicitF:cats.Foldable[S]):B" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">foldLeft</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <a href="" class="extype" name="cats.free.Free">Free</a>[<span class="extype" name="cats.free.Free.S">S</span>, <span class="extype" name="cats.free.Free.A">A</span>]</span>, <span name="b">b: <span class="extype" name="cats.free.FreeFoldStep.foldLeft.B">B</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.free.FreeFoldStep.foldLeft.B">B</span>, <span class="extype" name="cats.free.Free.A">A</span>) ⇒ <span class="extype" name="cats.free.FreeFoldStep.foldLeft.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.free.Free.S">S</span>]</span>)</span><span class="result">: <span class="extype" name="cats.free.FreeFoldStep.foldLeft.B">B</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>FreeFoldStep</dd></dl></div>
     </li><li name="cats.free.Free#foldMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="foldMap[M[_]](f:cats.arrow.FunctionK[S,M])(implicitM:cats.Monad[M]):M[A]"></a><a id="foldMap[M[_]](FunctionK[S,M])(Monad[M]):M[A]"></a>
       <span class="permalink">
@@ -495,6 +523,40 @@ the second given function.
       <p class="shortcomment cmt">Catamorphism for <code>Free</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Catamorphism for <code>Free</code>.</p><p>Run to completion, mapping the suspension with the given
 transformation at each step and accumulating into the monad <code>M</code>.</p><p>This method uses <code>tailRecM</code> to provide stack-safety.
 </p></div></div>
+    </li><li name="cats.free.FreeFoldStep#foldRight" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="foldRight[B](fa:cats.free.Free[S,A],lb:cats.Eval[B])(f:(A,cats.Eval[B])=&gt;cats.Eval[B])(implicitF:cats.Foldable[S]):cats.Eval[B]"></a><a id="foldRight[B](Free[S,A],Eval[B])((A,Eval[B])⇒Eval[B])(Foldable[S]):Eval[B]"></a>
+      <span class="permalink">
+      <a href="../../cats/free/Free.html#foldRight[B](fa:cats.free.Free[S,A],lb:cats.Eval[B])(f:(A,cats.Eval[B])=&gt;cats.Eval[B])(implicitF:cats.Foldable[S]):cats.Eval[B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">foldRight</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <a href="" class="extype" name="cats.free.Free">Free</a>[<span class="extype" name="cats.free.Free.S">S</span>, <span class="extype" name="cats.free.Free.A">A</span>]</span>, <span name="lb">lb: <a href="../Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.free.FreeFoldStep.foldRight.B">B</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.free.Free.A">A</span>, <a href="../Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.free.FreeFoldStep.foldRight.B">B</span>]) ⇒ <a href="../Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.free.FreeFoldStep.foldRight.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.free.Free.S">S</span>]</span>)</span><span class="result">: <a href="../Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.free.FreeFoldStep.foldRight.B">B</span>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>FreeFoldStep</dd></dl></div>
+    </li><li name="cats.free.FreeFoldStep#foldStep" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="foldStep[B](onPure:A=&gt;B,onSuspend:S[A]=&gt;B,onFlatMapped:((S[X],X=&gt;cats.free.Free[S,A])forSome{typeX})=&gt;B):B"></a><a id="foldStep[B]((A)⇒B,(S[A])⇒B,((S[X],(X)⇒Free[S,A])forSome{typeX})⇒B):B"></a>
+      <span class="permalink">
+      <a href="../../cats/free/Free.html#foldStep[B](onPure:A=&gt;B,onSuspend:S[A]=&gt;B,onFlatMapped:((S[X],X=&gt;cats.free.Free[S,A])forSome{typeX})=&gt;B):B" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">foldStep</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="onPure">onPure: (<span class="extype" name="cats.free.Free.A">A</span>) ⇒ <span class="extype" name="cats.free.FreeFoldStep.foldStep.B">B</span></span>, <span name="onSuspend">onSuspend: (<span class="extype" name="cats.free.Free.S">S</span>[<span class="extype" name="cats.free.Free.A">A</span>]) ⇒ <span class="extype" name="cats.free.FreeFoldStep.foldStep.B">B</span></span>, <span name="onFlatMapped">onFlatMapped: ((<span class="extype" name="cats.free.Free.S">S</span>[<span class="extype" name="cats.free.FreeFoldStep.foldStep.onFlatMapped.X">X</span>], (<span class="extype" name="cats.free.FreeFoldStep.foldStep.onFlatMapped.X">X</span>) ⇒ <a href="" class="extype" name="cats.free.Free">Free</a>[<span class="extype" name="cats.free.Free.S">S</span>, <span class="extype" name="cats.free.Free.A">A</span>]) forSome {type X}) ⇒ <span class="extype" name="cats.free.FreeFoldStep.foldStep.B">B</span></span>)</span><span class="result">: <span class="extype" name="cats.free.FreeFoldStep.foldStep.B">B</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">A combination of step and fold.</p><div class="fullcomment"><div class="comment cmt"><p>A combination of step and fold. May be used to define interpreters with custom
+(non-monoidial) control flow.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>FreeFoldStep</dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
@@ -512,6 +574,8 @@ transformation at each step and accumulating into the monad <code>M</code>.</p><
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="cats.free.Free#go" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
@@ -548,6 +612,8 @@ from its suspension functor.</p>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="cats.free.Free#inject" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -660,6 +726,8 @@ effects will be applied by <code>mapK</code>.
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
@@ -678,6 +746,8 @@ effects will be applied by <code>mapK</code>.
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.Product#productIterator" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -798,7 +868,8 @@ resumption in the context of <code>S</code>.</p>
         <span class="name">step</span><span class="result">: <a href="" class="extype" name="cats.free.Free">Free</a>[<span class="extype" name="cats.free.Free.S">S</span>, <span class="extype" name="cats.free.Free.A">A</span>]</span>
       </span>
       
-      <p class="shortcomment cmt">Takes one evaluation step in the Free monad, re-associating left-nested binds in the process.</p><div class="fullcomment"><div class="comment cmt"><p>Takes one evaluation step in the Free monad, re-associating left-nested binds in the process.</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+      <p class="shortcomment cmt">Takes one evaluation step in the Free monad, re-associating left-nested binds in the process.</p><div class="fullcomment"><div class="comment cmt"><p>Takes one evaluation step in the Free monad, re-associating left-nested binds in the process.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.free.Free">Free</a> → FreeFoldStep</dd><dt>Annotations</dt><dd>
                 <span class="name">@tailrec</span><span class="args">()</span>
               
         </dd></dl></div>
@@ -851,28 +922,6 @@ resumption in the context of <code>S</code>.</p>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.free.Free">Free</a> → AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait():Unit"></a>
-      <span class="permalink">
-      <a href="../../cats/free/Free.html#wait():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
-    </span>)</span>
-              
-        </dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <span class="permalink">
       <a href="../../cats/free/Free.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
@@ -918,17 +967,70 @@ resumption in the context of <code>S</code>.</p>
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/free/Free.html#wait():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
     </li>
               </ol>
             </div>
 
         
 
-        
+        <div class="values members">
+              <h3>Deprecated Value Members</h3>
+              <ol><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/free/Free.html#finalize():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version ) see corresponding Javadoc for more information.">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+                <span class="name">@Deprecated</span>
+              
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version )</i> see corresponding Javadoc for more information.</p></dd></dl></div>
+    </li></ol>
+            </div>
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.Serializable">
+        <div class="parent" name="cats.free.FreeFoldStep">
+              <h3>Inherited from <span class="extype" name="cats.free.FreeFoldStep">FreeFoldStep</span>[<span class="extype" name="cats.free.Free.S">S</span>, <span class="extype" name="cats.free.Free.A">A</span>]</h3>
+            </div><div class="parent" name="scala.Serializable">
               <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></h3>
             </div><div class="parent" name="java.io.Serializable">
               <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>

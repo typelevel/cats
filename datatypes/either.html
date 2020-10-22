@@ -1,4 +1,4 @@
-<html><head><title>Cats: Either</title><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Cats contributors" /><meta name="description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="og:image" content="/cats/img/poster.png" /><meta name="image" property="og:image" content="/cats/img/poster.png" /><meta name="og:title" content="Cats: Either" /><meta name="title" property="og:title" content="Cats: Either" /><meta name="og:site_name" content="Cats" /><meta name="og:url" content="http://typelevel.org/cats/" /><meta name="og:type" content="website" /><meta name="og:description" content="Lightweight, modular, and extensible library for functional programming" /><link rel="icon" type="image/png" href="/cats/img/favicon.png" /><meta name="twitter:title" content="Cats: Either" /><meta name="twitter:image" content="/cats/img/poster.png" /><meta name="twitter:description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="twitter:card" content="summary_large_image" /><link rel="icon" type="image/png" sizes="16x16" href="/cats/img/favicon16x16.png" /><link rel="icon" type="image/png" sizes="24x24" href="/cats/img/favicon24x24.png" /><link rel="icon" type="image/png" sizes="32x32" href="/cats/img/favicon32x32.png" /><link rel="icon" type="image/png" sizes="48x48" href="/cats/img/favicon48x48.png" /><link rel="icon" type="image/png" sizes="57x57" href="/cats/img/favicon57x57.png" /><link rel="icon" type="image/png" sizes="60x60" href="/cats/img/favicon60x60.png" /><link rel="icon" type="image/png" sizes="64x64" href="/cats/img/favicon64x64.png" /><link rel="icon" type="image/png" sizes="70x70" href="/cats/img/favicon70x70.png" /><link rel="icon" type="image/png" sizes="72x72" href="/cats/img/favicon72x72.png" /><link rel="icon" type="image/png" sizes="76x76" href="/cats/img/favicon76x76.png" /><link rel="icon" type="image/png" sizes="96x96" href="/cats/img/favicon96x96.png" /><link rel="icon" type="image/png" sizes="114x114" href="/cats/img/favicon114x114.png" /><link rel="icon" type="image/png" sizes="120x120" href="/cats/img/favicon120x120.png" /><link rel="icon" type="image/png" sizes="128x128" href="/cats/img/favicon128x128.png" /><link rel="icon" type="image/png" sizes="144x144" href="/cats/img/favicon144x144.png" /><link rel="icon" type="image/png" sizes="150x150" href="/cats/img/favicon150x150.png" /><link rel="icon" type="image/png" sizes="152x152" href="/cats/img/favicon152x152.png" /><link rel="icon" type="image/png" sizes="196x196" href="/cats/img/favicon196x196.png" /><link rel="icon" type="image/png" sizes="310x310" href="/cats/img/favicon310x310.png" /><link rel="icon" type="image/png" sizes="310x150" href="/cats/img/favicon310x150.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" /><link rel="stylesheet" href="/cats/highlight/styles/atom-one-light.css" /><link rel="stylesheet" href="/cats/css/style.css" /><link rel="stylesheet" href="/cats/css/palette.css" /><link rel="stylesheet" href="/cats/css/codemirror.css" /><link rel="stylesheet" href="/cats/css/override.css" /></head><body class="docs"><div id="wrapper"><div id="sidebar-wrapper"><ul id="sidebar" class="sidebar-nav"><li class="sidebar-brand"><a href="/cats/" class="brand"><div class="brand-wrapper"><span>Cats</span></div></a></li>                   <li><a href="/cats/datatypes.html" class="">Data Types</a></li> <li><a href="/cats/datatypes/chain.html" class="">Chain</a></li> <li><a href="/cats/datatypes/const.html" class="">Const</a></li> <li><a href="/cats/datatypes/contt.html" class="">ContT</a></li> <li><a href="/cats/datatypes/either.html" class=" active ">Either</a></li> <li><a href="/cats/datatypes/eval.html" class="">Eval</a></li> <li><a href="/cats/datatypes/freeapplicative.html" class="">FreeApplicatives</a></li> <li><a href="/cats/datatypes/freemonad.html" class="">FreeMonads</a></li> <li><a href="/cats/datatypes/functionk.html" class="">FunctionK</a></li> <li><a href="/cats/datatypes/id.html" class="">Id</a></li> <li><a href="/cats/datatypes/ior.html" class="">Ior</a></li> <li><a href="/cats/datatypes/kleisli.html" class="">Kleisli</a></li> <li><a href="/cats/datatypes/nested.html" class="">Nested</a></li> <li><a href="/cats/datatypes/nel.html" class="">NonEmptyList</a></li> <li><a href="/cats/datatypes/oneand.html" class="">OneAnd</a></li> <li><a href="/cats/datatypes/optiont.html" class="">OptionT</a></li> <li><a href="/cats/datatypes/eithert.html" class="">EitherT</a></li> <li><a href="/cats/datatypes/iort.html" class="">IorT</a></li> <li><a href="/cats/datatypes/state.html" class="">State</a></li> <li><a href="/cats/datatypes/validated.html" class="">Validated</a></li></ul></div><div id="page-content-wrapper"><div class="nav"><div class="container-fluid"><div class="row"><div class="col-lg-12"><div class="action-menu pull-left clearfix"><a href="#menu-toggle" id="menu-toggle"><i class="fa fa-bars" aria-hidden="true"></i></a></div><ul class="pull-right"><li id="gh-eyes-item" class="hidden-xs"><a href="https://github.com/typelevel/cats"><i class="fa fa-eye"></i><span>WATCH<span id="eyes" class="label label-default">--</span></span></a></li><li id="gh-stars-item" class="hidden-xs"><a href="https://github.com/typelevel/cats"><i class="fa fa-star-o"></i><span>STARS<span id="stars" class="label label-default">--</span></span></a></li><li><a href="#" onclick="shareSiteTwitter('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-twitter"></i></a></li><li><a href="#" onclick="shareSiteFacebook('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-facebook"></i></a></li><li><a href="#" onclick="shareSiteGoogle();"><i class="fa fa-google-plus"></i></a></li></ul></div></div></div></div><div id="content" data-github-owner="typelevel" data-github-repo="cats"><div class="content-wrapper"><section><h1 id="either">Either</h1>
+<!DOCTYPE html><html><head><title>Cats: Either</title><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Cats contributors" /><meta name="description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="og:image" content="/cats/img/poster.png" /><meta name="image" property="og:image" content="/cats/img/poster.png" /><meta name="og:title" content="Cats: Either" /><meta name="title" property="og:title" content="Cats: Either" /><meta name="og:site_name" content="Cats" /><meta name="og:url" content="http://typelevel.org/cats/" /><meta name="og:type" content="website" /><meta name="og:description" content="Lightweight, modular, and extensible library for functional programming" /><link rel="icon" type="image/png" href="/cats/img/favicon.png" /><meta name="twitter:title" content="Cats: Either" /><meta name="twitter:image" content="/cats/img/poster.png" /><meta name="twitter:description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="twitter:card" content="summary_large_image" /><link rel="icon" type="image/png" sizes="16x16" href="/cats/img/favicon16x16.png" /><link rel="icon" type="image/png" sizes="24x24" href="/cats/img/favicon24x24.png" /><link rel="icon" type="image/png" sizes="32x32" href="/cats/img/favicon32x32.png" /><link rel="icon" type="image/png" sizes="48x48" href="/cats/img/favicon48x48.png" /><link rel="icon" type="image/png" sizes="57x57" href="/cats/img/favicon57x57.png" /><link rel="icon" type="image/png" sizes="60x60" href="/cats/img/favicon60x60.png" /><link rel="icon" type="image/png" sizes="64x64" href="/cats/img/favicon64x64.png" /><link rel="icon" type="image/png" sizes="70x70" href="/cats/img/favicon70x70.png" /><link rel="icon" type="image/png" sizes="72x72" href="/cats/img/favicon72x72.png" /><link rel="icon" type="image/png" sizes="76x76" href="/cats/img/favicon76x76.png" /><link rel="icon" type="image/png" sizes="96x96" href="/cats/img/favicon96x96.png" /><link rel="icon" type="image/png" sizes="114x114" href="/cats/img/favicon114x114.png" /><link rel="icon" type="image/png" sizes="120x120" href="/cats/img/favicon120x120.png" /><link rel="icon" type="image/png" sizes="128x128" href="/cats/img/favicon128x128.png" /><link rel="icon" type="image/png" sizes="144x144" href="/cats/img/favicon144x144.png" /><link rel="icon" type="image/png" sizes="150x150" href="/cats/img/favicon150x150.png" /><link rel="icon" type="image/png" sizes="152x152" href="/cats/img/favicon152x152.png" /><link rel="icon" type="image/png" sizes="196x196" href="/cats/img/favicon196x196.png" /><link rel="icon" type="image/png" sizes="310x310" href="/cats/img/favicon310x310.png" /><link rel="icon" type="image/png" sizes="310x150" href="/cats/img/favicon310x150.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" /><link rel="stylesheet" href="/cats/highlight/styles/atom-one-light.css" /><link rel="stylesheet" href="/cats/css/pattern-style.css" /></head><body class="docs"><div id="wrapper"><div id="sidebar-wrapper"><ul id="sidebar" class="sidebar-nav"><li class="sidebar-brand"><a href="/cats/" class="brand"><div class="brand-wrapper"><span>Cats</span></div></a></li><li><a href="/cats/datatypes/chain.html" class="">Chain</a></li><li><a href="/cats/datatypes/const.html" class="">Const</a></li><li><a href="/cats/datatypes/contt.html" class="">ContT</a></li><li><a href="/cats/datatypes.html" class="">Data Types</a></li><li><a href="/cats/datatypes/either.html" class=" active ">Either</a></li><li><a href="/cats/datatypes/eithert.html" class="">EitherT</a></li><li><a href="/cats/datatypes/eval.html" class="">Eval</a></li><li><a href="/cats/datatypes/freeapplicative.html" class="">FreeApplicatives</a></li><li><a href="/cats/datatypes/freemonad.html" class="">FreeMonads</a></li><li><a href="/cats/datatypes/functionk.html" class="">FunctionK</a></li><li><a href="/cats/datatypes/id.html" class="">Id</a></li><li><a href="/cats/datatypes/ior.html" class="">Ior</a></li><li><a href="/cats/datatypes/iort.html" class="">IorT</a></li><li><a href="/cats/datatypes/kleisli.html" class="">Kleisli</a></li><li><a href="/cats/datatypes/nel.html" class="">NonEmptyList</a></li><li><a href="/cats/datatypes/nested.html" class="">Nested</a></li><li><a href="/cats/datatypes/oneand.html" class="">OneAnd</a></li><li><a href="/cats/datatypes/optiont.html" class="">OptionT</a></li><li><a href="/cats/datatypes/state.html" class="">State</a></li><li><a href="/cats/datatypes/validated.html" class="">Validated</a></li><li><a href="/cats/datatypes/writer.html" class="">Writer</a></li><li><a href="/cats/datatypes/writert.html" class="">WriterT</a></li></ul></div><div id="page-content-wrapper"><div class="nav"><div class="container-fluid"><div class="row"><div class="col-lg-12"><div class="action-menu pull-left clearfix"><a href="#menu-toggle" id="menu-toggle"><i class="fa fa-bars" aria-hidden="true"></i></a></div><ul class="pull-right"><li id="gh-eyes-item" class="hidden-xs"><a href="https://github.com/typelevel/cats" target="_blank" rel="noopener noreferrer"><i class="fa fa-eye"></i><span>Watchers<span id="eyes" class="label label-default">--</span></span></a></li><li id="gh-stars-item" class="hidden-xs"><a href="https://github.com/typelevel/cats" target="_blank" rel="noopener noreferrer"><i class="fa fa-star-o"></i><span>Stars<span id="stars" class="label label-default">--</span></span></a></li><li><a href="#" onclick="shareSiteTwitter('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-twitter"></i></a></li><li><a href="#" onclick="shareSiteFacebook('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-facebook"></i></a></li><li><a href="#" onclick="shareSiteGoogle();"><i class="fa fa-google-plus"></i></a></li></ul></div></div></div></div><div id="content" data-github-owner="typelevel" data-github-repo="cats"><div class="content-wrapper"><section><h1 id="either">Either</h1>
 
 <p>In day-to-day programming, it is fairly common to find ourselves writing functions that
 can fail. For instance, querying a service may result in a connection issue, or some
@@ -10,108 +10,99 @@ what kind of exceptions (if any) a function may throw, we have to dig through th
 Then to handle these exceptions, we have to make sure we catch them at the call site.
 This all becomes even more unwieldy when we try to compose exception-throwing procedures.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">throwsSomeStuff</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=&gt;</span> <span class="nc">Double</span> <span class="k">=</span> <span class="o">???</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">throwsSomeStuff</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=&gt;</span> <span class="nc">Double</span> <span class="k">=</span> <span class="o">???</span>
 
-<span class="k">val</span> <span class="n">throwsOtherThings</span><span class="k">:</span> <span class="kt">Double</span> <span class="o">=&gt;</span> <span class="nc">String</span> <span class="k">=</span> <span class="o">???</span>
+<span class="k">val</span> <span class="nv">throwsOtherThings</span><span class="k">:</span> <span class="kt">Double</span> <span class="o">=&gt;</span> <span class="nc">String</span> <span class="k">=</span> <span class="o">???</span>
 
-<span class="k">val</span> <span class="n">moreThrowing</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=&gt;</span> <span class="nc">List</span><span class="o">[</span><span class="kt">Char</span><span class="o">]</span> <span class="k">=</span> <span class="o">???</span>
+<span class="k">val</span> <span class="nv">moreThrowing</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=&gt;</span> <span class="nc">List</span><span class="o">[</span><span class="kt">Char</span><span class="o">]</span> <span class="k">=</span> <span class="o">???</span>
 
-<span class="k">val</span> <span class="n">magic</span> <span class="k">=</span> <span class="n">throwsSomeStuff</span><span class="o">.</span><span class="n">andThen</span><span class="o">(</span><span class="n">throwsOtherThings</span><span class="o">).</span><span class="n">andThen</span><span class="o">(</span><span class="n">moreThrowing</span><span class="o">)</span>
-</code></pre>
-</div>
+<span class="k">val</span> <span class="nv">magic</span> <span class="k">=</span> <span class="nv">throwsSomeStuff</span><span class="o">.</span><span class="py">andThen</span><span class="o">(</span><span class="n">throwsOtherThings</span><span class="o">).</span><span class="py">andThen</span><span class="o">(</span><span class="n">moreThrowing</span><span class="o">)</span>
+</code></pre></div></div>
 
 <p>Assume we happily throw exceptions in our code. Looking at the types, any of those functions
 can throw any number of exceptions, we don’t know. When we compose, exceptions from any of
 the constituent functions can be thrown. Moreover, they may throw the same kind of exception
-(e.g. <code class="highlighter-rouge">IllegalArgumentException</code>) and thus it gets tricky tracking exactly where that
+(e.g. <code class="language-plaintext highlighter-rouge">IllegalArgumentException</code>) and thus it gets tricky tracking exactly where that
 exception came from.</p>
 
 <p>How then do we communicate an error? By making it explicit in the data type we return.</p>
 
 <h2 id="either-1">Either</h2>
 
-<h3 id="either-vs-validated"><code class="highlighter-rouge">Either</code> vs <code class="highlighter-rouge">Validated</code></h3>
+<h3 id="either-vs-validated"><code class="language-plaintext highlighter-rouge">Either</code> vs <code class="language-plaintext highlighter-rouge">Validated</code></h3>
 
-<p>In general, <code class="highlighter-rouge">Validated</code> is used to accumulate errors, while <code class="highlighter-rouge">Either</code> is used to short-circuit a computation upon the first error. For more information, see the <code class="highlighter-rouge">Validated</code> vs <code class="highlighter-rouge">Either</code> section of the <a href="/cats/datatypes/validated.html"><code class="highlighter-rouge">Validated</code> documentation</a>.</p>
+<p>In general, <code class="language-plaintext highlighter-rouge">Validated</code> is used to accumulate errors, while <code class="language-plaintext highlighter-rouge">Either</code> is used to short-circuit a computation upon the first error. For more information, see the <code class="language-plaintext highlighter-rouge">Validated</code> vs <code class="language-plaintext highlighter-rouge">Either</code> section of the <a href="/cats/datatypes/validated.html"><code class="language-plaintext highlighter-rouge">Validated</code> documentation</a>.</p>
 
 <h3 id="syntax">Syntax</h3>
 
-<p>In Scala 2.10.x and 2.11.x, <code class="highlighter-rouge">Either</code> is unbiased. That is, usual combinators like <code class="highlighter-rouge">flatMap</code> and <code class="highlighter-rouge">map</code>
-are missing from it. Instead, you call <code class="highlighter-rouge">.right</code> or <code class="highlighter-rouge">.left</code> to get a <code class="highlighter-rouge">RightProjection</code> or
-<code class="highlighter-rouge">LeftProjection</code> (respectively) which does have the combinators. The direction of the projection indicates the direction
-of bias. For instance, calling <code class="highlighter-rouge">map</code> on a <code class="highlighter-rouge">RightProjection</code> acts on the <code class="highlighter-rouge">Right</code> of an <code class="highlighter-rouge">Either</code>.</p>
+<p>In Scala 2.10.x and 2.11.x, <code class="language-plaintext highlighter-rouge">Either</code> is unbiased. That is, usual combinators like <code class="language-plaintext highlighter-rouge">flatMap</code> and <code class="language-plaintext highlighter-rouge">map</code>
+are missing from it. Instead, you call <code class="language-plaintext highlighter-rouge">.right</code> or <code class="language-plaintext highlighter-rouge">.left</code> to get a <code class="language-plaintext highlighter-rouge">RightProjection</code> or
+<code class="language-plaintext highlighter-rouge">LeftProjection</code> (respectively) which does have the combinators. The direction of the projection indicates the direction
+of bias. For instance, calling <code class="language-plaintext highlighter-rouge">map</code> on a <code class="language-plaintext highlighter-rouge">RightProjection</code> acts on the <code class="language-plaintext highlighter-rouge">Right</code> of an <code class="language-plaintext highlighter-rouge">Either</code>.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">e1</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Right</span><span class="o">(</span><span class="mi">5</span><span class="o">)</span>
-<span class="c1">// e1: Either[String,Int] = Right(5)
-</span>
-<span class="n">e1</span><span class="o">.</span><span class="n">right</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="k">_</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span>
-<span class="c1">// res0: scala.util.Either[String,Int] = Right(6)
-</span>
-<span class="k">val</span> <span class="n">e2</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Left</span><span class="o">(</span><span class="s">"hello"</span><span class="o">)</span>
-<span class="c1">// e2: Either[String,Int] = Left(hello)
-</span>
-<span class="n">e2</span><span class="o">.</span><span class="n">right</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="k">_</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span>
-<span class="c1">// res1: scala.util.Either[String,Int] = Left(hello)
-</span></code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">e1</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Right</span><span class="o">(</span><span class="mi">5</span><span class="o">)</span>
+<span class="c1">// e1: Either[String, Int] = Right(5)</span>
+<span class="nv">e1</span><span class="o">.</span><span class="py">right</span><span class="o">.</span><span class="py">map</span><span class="o">(</span><span class="k">_</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span>
+<span class="c1">// res0: Either[String, Int] = Right(6)</span>
 
-<p>Note the return types are themselves back to <code class="highlighter-rouge">Either</code>, so if we want to make more calls to
-<code class="highlighter-rouge">flatMap</code> or <code class="highlighter-rouge">map</code> then we again must call <code class="highlighter-rouge">right</code> or <code class="highlighter-rouge">left</code>.</p>
+<span class="k">val</span> <span class="nv">e2</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Left</span><span class="o">(</span><span class="s">"hello"</span><span class="o">)</span>
+<span class="c1">// e2: Either[String, Int] = Left("hello")</span>
+<span class="nv">e2</span><span class="o">.</span><span class="py">right</span><span class="o">.</span><span class="py">map</span><span class="o">(</span><span class="k">_</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span>
+<span class="c1">// res1: Either[String, Int] = Left("hello")</span>
+</code></pre></div></div>
 
-<p>However, the convention is almost always to right-bias <code class="highlighter-rouge">Either</code>. Indeed in Scala 2.12.x <code class="highlighter-rouge">Either</code> is
+<p>Note the return types are themselves back to <code class="language-plaintext highlighter-rouge">Either</code>, so if we want to make more calls to
+<code class="language-plaintext highlighter-rouge">flatMap</code> or <code class="language-plaintext highlighter-rouge">map</code> then we again must call <code class="language-plaintext highlighter-rouge">right</code> or <code class="language-plaintext highlighter-rouge">left</code>.</p>
+
+<p>However, the convention is almost always to right-bias <code class="language-plaintext highlighter-rouge">Either</code>. Indeed in Scala 2.12.x <code class="language-plaintext highlighter-rouge">Either</code> is
 <a href="https://github.com/scala/scala/pull/5135">right-biased</a> by default.</p>
 
 <p>More often than not we want to just bias towards one side and call it a day - by convention,
 the right side is most often chosen. In Scala 2.12.x this convention
 <a href="https://github.com/scala/scala/pull/5135">is implemented</a>
 in the standard library. Since Cats builds on 2.10.x and 2.11.x, the gaps have been filled via syntax
-enrichments available under <code class="highlighter-rouge">cats.syntax.either._</code> or <code class="highlighter-rouge">cats.implicits._</code>.</p>
+enrichments available under <code class="language-plaintext highlighter-rouge">cats.syntax.either._</code> or <code class="language-plaintext highlighter-rouge">cats.implicits._</code>.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
-<span class="c1">// import cats.implicits._
-</span>
-<span class="k">val</span> <span class="n">right</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Right</span><span class="o">(</span><span class="mi">5</span><span class="o">)</span>
-<span class="c1">// right: Either[String,Int] = Right(5)
-</span>
-<span class="n">right</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="k">_</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span>
-<span class="c1">// res2: scala.util.Either[String,Int] = Right(6)
-</span>
-<span class="k">val</span> <span class="n">left</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Left</span><span class="o">(</span><span class="s">"hello"</span><span class="o">)</span>
-<span class="c1">// left: Either[String,Int] = Left(hello)
-</span>
-<span class="n">left</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="k">_</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span>
-<span class="c1">// res3: scala.util.Either[String,Int] = Left(hello)
-</span></code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
 
-<p>For the rest of this tutorial we will assume the syntax enrichment is in scope giving us right-biased <code class="highlighter-rouge">Either</code>
-and a bunch of other useful combinators (both on <code class="highlighter-rouge">Either</code> and the companion object).</p>
+<span class="k">val</span> <span class="nv">right</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Right</span><span class="o">(</span><span class="mi">5</span><span class="o">)</span>
+<span class="c1">// right: Either[String, Int] = Right(5)</span>
+<span class="nv">right</span><span class="o">.</span><span class="py">map</span><span class="o">(</span><span class="k">_</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span>
+<span class="c1">// res2: Either[String, Int] = Right(6)</span>
 
-<p>Because <code class="highlighter-rouge">Either</code> is right-biased, it is possible to define a <code class="highlighter-rouge">Monad</code> instance for it.
-Since we only ever want the computation to continue in the case of <code class="highlighter-rouge">Right</code>, we fix the left type parameter
+<span class="k">val</span> <span class="nv">left</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Left</span><span class="o">(</span><span class="s">"hello"</span><span class="o">)</span>
+<span class="c1">// left: Either[String, Int] = Left("hello")</span>
+<span class="nv">left</span><span class="o">.</span><span class="py">map</span><span class="o">(</span><span class="k">_</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span>
+<span class="c1">// res3: Either[String, Int] = Left("hello")</span>
+</code></pre></div></div>
+
+<p>For the rest of this tutorial we will assume the syntax enrichment is in scope giving us right-biased <code class="language-plaintext highlighter-rouge">Either</code>
+and a bunch of other useful combinators (both on <code class="language-plaintext highlighter-rouge">Either</code> and the companion object).</p>
+
+<p>Because <code class="language-plaintext highlighter-rouge">Either</code> is right-biased, it is possible to define a <code class="language-plaintext highlighter-rouge">Monad</code> instance for it.
+Since we only ever want the computation to continue in the case of <code class="language-plaintext highlighter-rouge">Right</code>, we fix the left type parameter
 and leave the right one free.</p>
 
-<p><em>Note</em>: the example below assumes usage of the <a href="https://github.com/non/kind-projector">kind-projector compiler plugin</a> and will not compile if it is not being used in a project.</p>
+<p><em>Note</em>: the example below assumes usage of the <a href="https://github.com/typelevel/kind-projector">kind-projector compiler plugin</a> and will not compile if it is not being used in a project.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.Monad</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.Monad</span>
 
-<span class="k">implicit</span> <span class="k">def</span> <span class="n">eitherMonad</span><span class="o">[</span><span class="kt">Err</span><span class="o">]</span><span class="k">:</span> <span class="kt">Monad</span><span class="o">[</span><span class="kt">Either</span><span class="o">[</span><span class="kt">Err</span>, <span class="kt">?</span><span class="o">]]</span> <span class="k">=</span>
+<span class="k">implicit</span> <span class="k">def</span> <span class="nf">eitherMonad</span><span class="o">[</span><span class="kt">Err</span><span class="o">]</span><span class="k">:</span> <span class="kt">Monad</span><span class="o">[</span><span class="kt">Either</span><span class="o">[</span><span class="kt">Err</span>, <span class="kt">?</span><span class="o">]]</span> <span class="k">=</span>
   <span class="k">new</span> <span class="nc">Monad</span><span class="o">[</span><span class="kt">Either</span><span class="o">[</span><span class="kt">Err</span>, <span class="kt">?</span><span class="o">]]</span> <span class="o">{</span>
-    <span class="k">def</span> <span class="n">flatMap</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">Err</span>, <span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="nc">Either</span><span class="o">[</span><span class="kt">Err</span>, <span class="kt">B</span><span class="o">])</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">Err</span>, <span class="kt">B</span><span class="o">]</span> <span class="k">=</span>
-      <span class="n">fa</span><span class="o">.</span><span class="n">flatMap</span><span class="o">(</span><span class="n">f</span><span class="o">)</span>
+    <span class="k">def</span> <span class="nf">flatMap</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">Err</span>, <span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="nc">Either</span><span class="o">[</span><span class="kt">Err</span>, <span class="kt">B</span><span class="o">])</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">Err</span>, <span class="kt">B</span><span class="o">]</span> <span class="k">=</span>
+      <span class="nv">fa</span><span class="o">.</span><span class="py">flatMap</span><span class="o">(</span><span class="n">f</span><span class="o">)</span>
 
-    <span class="k">def</span> <span class="n">pure</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">x</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">Err</span>, <span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Either</span><span class="o">.</span><span class="n">right</span><span class="o">(</span><span class="n">x</span><span class="o">)</span>
+    <span class="k">def</span> <span class="nf">pure</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">x</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">Err</span>, <span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nv">Either</span><span class="o">.</span><span class="py">right</span><span class="o">(</span><span class="n">x</span><span class="o">)</span>
 
-    <span class="nd">@annotation</span><span class="o">.</span><span class="n">tailrec</span>
-    <span class="k">def</span> <span class="n">tailRecM</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">a</span><span class="k">:</span> <span class="kt">A</span><span class="o">)(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="nc">Either</span><span class="o">[</span><span class="kt">Err</span>, <span class="kt">Either</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">]])</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">Err</span>, <span class="kt">B</span><span class="o">]</span> <span class="k">=</span>
-      <span class="n">f</span><span class="o">(</span><span class="n">a</span><span class="o">)</span> <span class="k">match</span> <span class="o">{</span>
-        <span class="k">case</span> <span class="nc">Right</span><span class="o">(</span><span class="nc">Right</span><span class="o">(</span><span class="n">b</span><span class="o">))</span> <span class="k">=&gt;</span> <span class="nc">Either</span><span class="o">.</span><span class="n">right</span><span class="o">(</span><span class="n">b</span><span class="o">)</span>
-        <span class="k">case</span> <span class="nc">Right</span><span class="o">(</span><span class="nc">Left</span><span class="o">(</span><span class="n">a</span><span class="o">))</span> <span class="k">=&gt;</span> <span class="n">tailRecM</span><span class="o">(</span><span class="n">a</span><span class="o">)(</span><span class="n">f</span><span class="o">)</span>
-        <span class="k">case</span> <span class="n">l</span><span class="nd">@Left</span><span class="o">(</span><span class="k">_</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">l</span><span class="o">.</span><span class="n">rightCast</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span> <span class="c1">// Cast the right type parameter to avoid allocation
-</span>      <span class="o">}</span>
+    <span class="nd">@annotation</span><span class="o">.</span><span class="py">tailrec</span>
+    <span class="k">def</span> <span class="nf">tailRecM</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">a</span><span class="k">:</span> <span class="kt">A</span><span class="o">)(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="nc">Either</span><span class="o">[</span><span class="kt">Err</span>, <span class="kt">Either</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">]])</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">Err</span>, <span class="kt">B</span><span class="o">]</span> <span class="k">=</span>
+      <span class="nf">f</span><span class="o">(</span><span class="n">a</span><span class="o">)</span> <span class="k">match</span> <span class="o">{</span>
+        <span class="k">case</span> <span class="nc">Right</span><span class="o">(</span><span class="nc">Right</span><span class="o">(</span><span class="n">b</span><span class="o">))</span> <span class="k">=&gt;</span> <span class="nv">Either</span><span class="o">.</span><span class="py">right</span><span class="o">(</span><span class="n">b</span><span class="o">)</span>
+        <span class="k">case</span> <span class="nc">Right</span><span class="o">(</span><span class="nc">Left</span><span class="o">(</span><span class="n">a</span><span class="o">))</span> <span class="k">=&gt;</span> <span class="nf">tailRecM</span><span class="o">(</span><span class="n">a</span><span class="o">)(</span><span class="n">f</span><span class="o">)</span>
+        <span class="k">case</span> <span class="n">l</span><span class="nd">@Left</span><span class="o">(</span><span class="k">_</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nv">l</span><span class="o">.</span><span class="py">rightCast</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span> <span class="c1">// Cast the right type parameter to avoid allocation</span>
+      <span class="o">}</span>
   <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 id="example-usage-round-1">Example usage: Round 1</h3>
 <p>As a running example, we will have a series of functions that will parse a string into an integer,
@@ -119,63 +110,59 @@ take the reciprocal, and then turn the reciprocal into a string.</p>
 
 <p>In exception-throwing code, we would have something like this:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">object</span> <span class="nc">ExceptionStyle</span> <span class="o">{</span>
-  <span class="k">def</span> <span class="n">parse</span><span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="n">matches</span><span class="o">(</span><span class="s">"-?[0-9]+"</span><span class="o">))</span> <span class="n">s</span><span class="o">.</span><span class="n">toInt</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">object</span> <span class="nc">ExceptionStyle</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="nf">parse</span><span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span>
+    <span class="nf">if</span> <span class="o">(</span><span class="nv">s</span><span class="o">.</span><span class="py">matches</span><span class="o">(</span><span class="s">"-?[0-9]+"</span><span class="o">))</span> <span class="nv">s</span><span class="o">.</span><span class="py">toInt</span>
     <span class="k">else</span> <span class="k">throw</span> <span class="k">new</span> <span class="nc">NumberFormatException</span><span class="o">(</span><span class="n">s</span><span class="s">"${s} is not a valid integer."</span><span class="o">)</span>
 
-  <span class="k">def</span> <span class="n">reciprocal</span><span class="o">(</span><span class="n">i</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">Double</span> <span class="o">=</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="nc">IllegalArgumentException</span><span class="o">(</span><span class="s">"Cannot take reciprocal of 0."</span><span class="o">)</span>
+  <span class="k">def</span> <span class="nf">reciprocal</span><span class="o">(</span><span class="n">i</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">Double</span> <span class="o">=</span>
+    <span class="nf">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="nc">IllegalArgumentException</span><span class="o">(</span><span class="s">"Cannot take reciprocal of 0."</span><span class="o">)</span>
     <span class="k">else</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">i</span>
 
-  <span class="k">def</span> <span class="n">stringify</span><span class="o">(</span><span class="n">d</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">toString</span>
+  <span class="k">def</span> <span class="nf">stringify</span><span class="o">(</span><span class="n">d</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="nv">d</span><span class="o">.</span><span class="py">toString</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Instead, let’s make the fact that some of our functions can fail explicit in the return type.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">object</span> <span class="nc">EitherStyle</span> <span class="o">{</span>
-  <span class="k">def</span> <span class="n">parse</span><span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">Exception</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="n">matches</span><span class="o">(</span><span class="s">"-?[0-9]+"</span><span class="o">))</span> <span class="nc">Either</span><span class="o">.</span><span class="n">right</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="n">toInt</span><span class="o">)</span>
-    <span class="k">else</span> <span class="nc">Either</span><span class="o">.</span><span class="n">left</span><span class="o">(</span><span class="k">new</span> <span class="nc">NumberFormatException</span><span class="o">(</span><span class="n">s</span><span class="s">"${s} is not a valid integer."</span><span class="o">))</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">object</span> <span class="nc">EitherStyle</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="nf">parse</span><span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">Exception</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span>
+    <span class="nf">if</span> <span class="o">(</span><span class="nv">s</span><span class="o">.</span><span class="py">matches</span><span class="o">(</span><span class="s">"-?[0-9]+"</span><span class="o">))</span> <span class="nv">Either</span><span class="o">.</span><span class="py">right</span><span class="o">(</span><span class="nv">s</span><span class="o">.</span><span class="py">toInt</span><span class="o">)</span>
+    <span class="k">else</span> <span class="nv">Either</span><span class="o">.</span><span class="py">left</span><span class="o">(</span><span class="k">new</span> <span class="nc">NumberFormatException</span><span class="o">(</span><span class="n">s</span><span class="s">"${s} is not a valid integer."</span><span class="o">))</span>
 
-  <span class="k">def</span> <span class="n">reciprocal</span><span class="o">(</span><span class="n">i</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">Exception</span>, <span class="kt">Double</span><span class="o">]</span> <span class="k">=</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="nc">Either</span><span class="o">.</span><span class="n">left</span><span class="o">(</span><span class="k">new</span> <span class="nc">IllegalArgumentException</span><span class="o">(</span><span class="s">"Cannot take reciprocal of 0."</span><span class="o">))</span>
-    <span class="k">else</span> <span class="nc">Either</span><span class="o">.</span><span class="n">right</span><span class="o">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">i</span><span class="o">)</span>
+  <span class="k">def</span> <span class="nf">reciprocal</span><span class="o">(</span><span class="n">i</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">Exception</span>, <span class="kt">Double</span><span class="o">]</span> <span class="k">=</span>
+    <span class="nf">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="nv">Either</span><span class="o">.</span><span class="py">left</span><span class="o">(</span><span class="k">new</span> <span class="nc">IllegalArgumentException</span><span class="o">(</span><span class="s">"Cannot take reciprocal of 0."</span><span class="o">))</span>
+    <span class="k">else</span> <span class="nv">Either</span><span class="o">.</span><span class="py">right</span><span class="o">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">i</span><span class="o">)</span>
 
-  <span class="k">def</span> <span class="n">stringify</span><span class="o">(</span><span class="n">d</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">toString</span>
+  <span class="k">def</span> <span class="nf">stringify</span><span class="o">(</span><span class="n">d</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="nv">d</span><span class="o">.</span><span class="py">toString</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<p>Now, using combinators like <code class="highlighter-rouge">flatMap</code> and <code class="highlighter-rouge">map</code>, we can compose our functions together.</p>
+<p>Now, using combinators like <code class="language-plaintext highlighter-rouge">flatMap</code> and <code class="language-plaintext highlighter-rouge">map</code>, we can compose our functions together.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">EitherStyle._</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">EitherStyle._</span>
 
-<span class="k">def</span> <span class="n">magic</span><span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">Exception</span>, <span class="kt">String</span><span class="o">]</span> <span class="k">=</span>
-  <span class="n">parse</span><span class="o">(</span><span class="n">s</span><span class="o">).</span><span class="n">flatMap</span><span class="o">(</span><span class="n">reciprocal</span><span class="o">).</span><span class="n">map</span><span class="o">(</span><span class="n">stringify</span><span class="o">)</span>
-</code></pre>
-</div>
+<span class="k">def</span> <span class="nf">magic</span><span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">Exception</span>, <span class="kt">String</span><span class="o">]</span> <span class="k">=</span>
+  <span class="nf">parse</span><span class="o">(</span><span class="n">s</span><span class="o">).</span><span class="py">flatMap</span><span class="o">(</span><span class="n">reciprocal</span><span class="o">).</span><span class="py">map</span><span class="o">(</span><span class="n">stringify</span><span class="o">)</span>
+</code></pre></div></div>
 
 <p>With the composite function that we actually care about, we can pass in strings and then pattern
-match on the exception. Because <code class="highlighter-rouge">Either</code> is a sealed type (often referred to as an algebraic data type,
-or ADT), the compiler will complain if we do not check both the <code class="highlighter-rouge">Left</code> and <code class="highlighter-rouge">Right</code> case.</p>
+match on the exception. Because <code class="language-plaintext highlighter-rouge">Either</code> is a sealed type (often referred to as an algebraic data type,
+or ADT), the compiler will complain if we do not check both the <code class="language-plaintext highlighter-rouge">Left</code> and <code class="language-plaintext highlighter-rouge">Right</code> case.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">magic</span><span class="o">(</span><span class="s">"123"</span><span class="o">)</span> <span class="k">match</span> <span class="o">{</span>
-  <span class="k">case</span> <span class="nc">Left</span><span class="o">(</span><span class="k">_:</span> <span class="kt">NumberFormatException</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="s">"not a number!"</span><span class="o">)</span>
-  <span class="k">case</span> <span class="nc">Left</span><span class="o">(</span><span class="k">_:</span> <span class="kt">IllegalArgumentException</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="s">"can't take reciprocal of 0!"</span><span class="o">)</span>
-  <span class="k">case</span> <span class="nc">Left</span><span class="o">(</span><span class="k">_</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="s">"got unknown exception"</span><span class="o">)</span>
-  <span class="k">case</span> <span class="nc">Right</span><span class="o">(</span><span class="n">s</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="n">s</span><span class="s">"Got reciprocal: ${s}"</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">magic</span><span class="o">(</span><span class="s">"123"</span><span class="o">)</span> <span class="k">match</span> <span class="o">{</span>
+  <span class="k">case</span> <span class="nc">Left</span><span class="o">(</span><span class="k">_:</span> <span class="kt">NumberFormatException</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="s">"not a number!"</span><span class="o">)</span>
+  <span class="k">case</span> <span class="nc">Left</span><span class="o">(</span><span class="k">_:</span> <span class="kt">IllegalArgumentException</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="s">"can't take reciprocal of 0!"</span><span class="o">)</span>
+  <span class="k">case</span> <span class="nc">Left</span><span class="o">(</span><span class="k">_</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="s">"got unknown exception"</span><span class="o">)</span>
+  <span class="k">case</span> <span class="nc">Right</span><span class="o">(</span><span class="n">s</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="n">s</span><span class="s">"Got reciprocal: ${s}"</span><span class="o">)</span>
 <span class="o">}</span>
-<span class="c1">// Got reciprocal: 0.008130081300813009
-</span></code></pre>
-</div>
+<span class="c1">// Got reciprocal: 0.008130081300813009</span>
+</code></pre></div></div>
 
 <p>Not bad - if we leave out any of those clauses the compiler will yell at us, as it should. However,
-note the <code class="highlighter-rouge">Left(_)</code> clause - the compiler will complain if we leave that out because it knows
-that given the type <code class="highlighter-rouge">Either[Exception, String]</code>, there can be inhabitants of <code class="highlighter-rouge">Left</code> that are not
-<code class="highlighter-rouge">NumberFormatException</code> or <code class="highlighter-rouge">IllegalArgumentException</code>. However, we “know” by inspection of the source
+note the <code class="language-plaintext highlighter-rouge">Left(_)</code> clause - the compiler will complain if we leave that out because it knows
+that given the type <code class="language-plaintext highlighter-rouge">Either[Exception, String]</code>, there can be inhabitants of <code class="language-plaintext highlighter-rouge">Left</code> that are not
+<code class="language-plaintext highlighter-rouge">NumberFormatException</code> or <code class="language-plaintext highlighter-rouge">IllegalArgumentException</code>. However, we “know” by inspection of the source
 that those will be the only exceptions thrown, so it seems strange to have to account for other exceptions.
 This implies that there is still room to improve.</p>
 
@@ -183,131 +170,126 @@ This implies that there is still room to improve.</p>
 <p>Instead of using exceptions as our error value, let’s instead enumerate explicitly the things that
 can go wrong in our program.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">object</span> <span class="nc">EitherStyle</span> <span class="o">{</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
+
+<span class="k">object</span> <span class="nc">EitherStyle</span> <span class="o">{</span>
   <span class="k">sealed</span> <span class="k">abstract</span> <span class="k">class</span> <span class="nc">Error</span>
   <span class="k">final</span> <span class="k">case</span> <span class="k">class</span> <span class="nc">NotANumber</span><span class="o">(</span><span class="n">string</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">Error</span>
-  <span class="k">final</span> <span class="k">case</span> <span class="k">object</span> <span class="nc">NoZeroReciprocal</span> <span class="k">extends</span> <span class="nc">Error</span>
+  <span class="k">case</span> <span class="k">object</span> <span class="nc">NoZeroReciprocal</span> <span class="k">extends</span> <span class="nc">Error</span>
 
-  <span class="k">def</span> <span class="n">parse</span><span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">Error</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="n">matches</span><span class="o">(</span><span class="s">"-?[0-9]+"</span><span class="o">))</span> <span class="nc">Either</span><span class="o">.</span><span class="n">right</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="n">toInt</span><span class="o">)</span>
-    <span class="k">else</span> <span class="nc">Either</span><span class="o">.</span><span class="n">left</span><span class="o">(</span><span class="nc">NotANumber</span><span class="o">(</span><span class="n">s</span><span class="o">))</span>
+  <span class="k">def</span> <span class="nf">parse</span><span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">Error</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span>
+    <span class="nf">if</span> <span class="o">(</span><span class="nv">s</span><span class="o">.</span><span class="py">matches</span><span class="o">(</span><span class="s">"-?[0-9]+"</span><span class="o">))</span> <span class="nv">Either</span><span class="o">.</span><span class="py">right</span><span class="o">(</span><span class="nv">s</span><span class="o">.</span><span class="py">toInt</span><span class="o">)</span>
+    <span class="k">else</span> <span class="nv">Either</span><span class="o">.</span><span class="py">left</span><span class="o">(</span><span class="nc">NotANumber</span><span class="o">(</span><span class="n">s</span><span class="o">))</span>
 
-  <span class="k">def</span> <span class="n">reciprocal</span><span class="o">(</span><span class="n">i</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">Error</span>, <span class="kt">Double</span><span class="o">]</span> <span class="k">=</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="nc">Either</span><span class="o">.</span><span class="n">left</span><span class="o">(</span><span class="nc">NoZeroReciprocal</span><span class="o">)</span>
-    <span class="k">else</span> <span class="nc">Either</span><span class="o">.</span><span class="n">right</span><span class="o">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">i</span><span class="o">)</span>
+  <span class="k">def</span> <span class="nf">reciprocal</span><span class="o">(</span><span class="n">i</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">Error</span>, <span class="kt">Double</span><span class="o">]</span> <span class="k">=</span>
+    <span class="nf">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="nv">Either</span><span class="o">.</span><span class="py">left</span><span class="o">(</span><span class="nc">NoZeroReciprocal</span><span class="o">)</span>
+    <span class="k">else</span> <span class="nv">Either</span><span class="o">.</span><span class="py">right</span><span class="o">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">i</span><span class="o">)</span>
 
-  <span class="k">def</span> <span class="n">stringify</span><span class="o">(</span><span class="n">d</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">toString</span>
+  <span class="k">def</span> <span class="nf">stringify</span><span class="o">(</span><span class="n">d</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="nv">d</span><span class="o">.</span><span class="py">toString</span>
 
-  <span class="k">def</span> <span class="n">magic</span><span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">Error</span>, <span class="kt">String</span><span class="o">]</span> <span class="k">=</span>
-    <span class="n">parse</span><span class="o">(</span><span class="n">s</span><span class="o">).</span><span class="n">flatMap</span><span class="o">(</span><span class="n">reciprocal</span><span class="o">).</span><span class="n">map</span><span class="o">(</span><span class="n">stringify</span><span class="o">)</span>
+  <span class="k">def</span> <span class="nf">magic</span><span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">Error</span>, <span class="kt">String</span><span class="o">]</span> <span class="k">=</span>
+    <span class="nf">parse</span><span class="o">(</span><span class="n">s</span><span class="o">).</span><span class="py">flatMap</span><span class="o">(</span><span class="n">reciprocal</span><span class="o">).</span><span class="py">map</span><span class="o">(</span><span class="n">stringify</span><span class="o">)</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>For our little module, we enumerate any and all errors that can occur. Then, instead of using
 exception classes as error values, we use one of the enumerated cases. Now when we pattern
-match, we get much nicer matching. Moreover, since <code class="highlighter-rouge">Error</code> is <code class="highlighter-rouge">sealed</code>, no outside code can
+match, we get much nicer matching. Moreover, since <code class="language-plaintext highlighter-rouge">Error</code> is <code class="language-plaintext highlighter-rouge">sealed</code>, no outside code can
 add additional subtypes which we might fail to handle.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">EitherStyle._</span>
-<span class="c1">// import EitherStyle._
-</span>
-<span class="n">magic</span><span class="o">(</span><span class="s">"123"</span><span class="o">)</span> <span class="k">match</span> <span class="o">{</span>
-  <span class="k">case</span> <span class="nc">Left</span><span class="o">(</span><span class="nc">NotANumber</span><span class="o">(</span><span class="k">_</span><span class="o">))</span> <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="s">"not a number!"</span><span class="o">)</span>
-  <span class="k">case</span> <span class="nc">Left</span><span class="o">(</span><span class="nc">NoZeroReciprocal</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="s">"can't take reciprocal of 0!"</span><span class="o">)</span>
-  <span class="k">case</span> <span class="nc">Right</span><span class="o">(</span><span class="n">s</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="n">s</span><span class="s">"Got reciprocal: ${s}"</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">EitherStyle._</span>
+
+<span class="nf">magic</span><span class="o">(</span><span class="s">"123"</span><span class="o">)</span> <span class="k">match</span> <span class="o">{</span>
+  <span class="k">case</span> <span class="nc">Left</span><span class="o">(</span><span class="nc">NotANumber</span><span class="o">(</span><span class="k">_</span><span class="o">))</span> <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="s">"not a number!"</span><span class="o">)</span>
+  <span class="k">case</span> <span class="nc">Left</span><span class="o">(</span><span class="nc">NoZeroReciprocal</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="s">"can't take reciprocal of 0!"</span><span class="o">)</span>
+  <span class="k">case</span> <span class="nc">Right</span><span class="o">(</span><span class="n">s</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="n">s</span><span class="s">"Got reciprocal: ${s}"</span><span class="o">)</span>
 <span class="o">}</span>
-<span class="c1">// Got reciprocal: 0.008130081300813009
-</span></code></pre>
-</div>
+<span class="c1">// Got reciprocal: 0.008130081300813009</span>
+</code></pre></div></div>
 
 <h2 id="either-in-the-small-either-in-the-large">Either in the small, Either in the large</h2>
-<p>Once you start using <code class="highlighter-rouge">Either</code> for all your error-handling, you may quickly run into an issue where
+<p>Once you start using <code class="language-plaintext highlighter-rouge">Either</code> for all your error-handling, you may quickly run into an issue where
 you need to call into two separate modules which give back separate kinds of errors.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">sealed</span> <span class="k">abstract</span> <span class="k">class</span> <span class="nc">DatabaseError</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">sealed</span> <span class="k">abstract</span> <span class="k">class</span> <span class="nc">DatabaseError</span>
 <span class="k">trait</span> <span class="nc">DatabaseValue</span>
 
 <span class="k">object</span> <span class="nc">Database</span> <span class="o">{</span>
-  <span class="k">def</span> <span class="n">databaseThings</span><span class="o">()</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">DatabaseError</span>, <span class="kt">DatabaseValue</span><span class="o">]</span> <span class="k">=</span> <span class="o">???</span>
+  <span class="k">def</span> <span class="nf">databaseThings</span><span class="o">()</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">DatabaseError</span>, <span class="kt">DatabaseValue</span><span class="o">]</span> <span class="k">=</span> <span class="o">???</span>
 <span class="o">}</span>
 
 <span class="k">sealed</span> <span class="k">abstract</span> <span class="k">class</span> <span class="nc">ServiceError</span>
 <span class="k">trait</span> <span class="nc">ServiceValue</span>
 
 <span class="k">object</span> <span class="nc">Service</span> <span class="o">{</span>
-  <span class="k">def</span> <span class="n">serviceThings</span><span class="o">(</span><span class="n">v</span><span class="k">:</span> <span class="kt">DatabaseValue</span><span class="o">)</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">ServiceError</span>, <span class="kt">ServiceValue</span><span class="o">]</span> <span class="k">=</span> <span class="o">???</span>
+  <span class="k">def</span> <span class="nf">serviceThings</span><span class="o">(</span><span class="n">v</span><span class="k">:</span> <span class="kt">DatabaseValue</span><span class="o">)</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">ServiceError</span>, <span class="kt">ServiceValue</span><span class="o">]</span> <span class="k">=</span> <span class="o">???</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Let’s say we have an application that wants to do database things, and then take database
-values and do service things. Glancing at the types, it looks like <code class="highlighter-rouge">flatMap</code> will do it.</p>
+values and do service things. Glancing at the types, it looks like <code class="language-plaintext highlighter-rouge">flatMap</code> will do it.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">doApp</span> <span class="k">=</span> <span class="nc">Database</span><span class="o">.</span><span class="n">databaseThings</span><span class="o">().</span><span class="n">flatMap</span><span class="o">(</span><span class="nc">Service</span><span class="o">.</span><span class="n">serviceThings</span><span class="o">)</span>
-</code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">doApp</span> <span class="k">=</span> <span class="nv">Database</span><span class="o">.</span><span class="py">databaseThings</span><span class="o">().</span><span class="py">flatMap</span><span class="o">(</span><span class="nv">Service</span><span class="o">.</span><span class="py">serviceThings</span><span class="o">)</span>
+</code></pre></div></div>
 
 <p>This line will compile and work as expected, no matter if you’re on 2.12 or an earlier
-version of Scala.  The <code class="highlighter-rouge">flatMap</code> we get here (either provided by Cats’s <code class="highlighter-rouge">Either</code> syntax for
-Scala 2.10 and 2.11, or, in Scala 2.12, a method on <code class="highlighter-rouge">Either</code>) has this signature:</p>
+version of Scala.  The <code class="language-plaintext highlighter-rouge">flatMap</code> we get here (either provided by Cats’s <code class="language-plaintext highlighter-rouge">Either</code> syntax for
+Scala 2.10 and 2.11, or, in Scala 2.12, a method on <code class="language-plaintext highlighter-rouge">Either</code>) has this signature:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">flatMap</span><span class="o">[</span><span class="kt">AA</span> <span class="k">&gt;:</span> <span class="kt">A</span>, <span class="kt">Y</span><span class="o">](</span><span class="n">f</span><span class="k">:</span> <span class="o">(</span><span class="kt">B</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="nc">Either</span><span class="o">[</span><span class="kt">AA</span>, <span class="kt">Y</span><span class="o">])</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">AA</span>, <span class="kt">Y</span><span class="o">]</span>
-</code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">flatMap</span><span class="o">[</span><span class="kt">AA</span> <span class="k">&gt;:</span> <span class="kt">A</span>, <span class="kt">Y</span><span class="o">](</span><span class="n">f</span><span class="k">:</span> <span class="o">(</span><span class="kt">B</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="nc">Either</span><span class="o">[</span><span class="kt">AA</span>, <span class="kt">Y</span><span class="o">])</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">AA</span>, <span class="kt">Y</span><span class="o">]</span>
+</code></pre></div></div>
 
-<p>This <code class="highlighter-rouge">flatMap</code> is different from the ones you’ll find on <code class="highlighter-rouge">List</code> or <code class="highlighter-rouge">Option</code>, for example, in that it
-has two type parameters, with the extra <code class="highlighter-rouge">AA</code> parameter allowing us to <code class="highlighter-rouge">flatMap</code> into an <code class="highlighter-rouge">Either</code>
+<p>This <code class="language-plaintext highlighter-rouge">flatMap</code> is different from the ones you’ll find on <code class="language-plaintext highlighter-rouge">List</code> or <code class="language-plaintext highlighter-rouge">Option</code>, for example, in that it
+has two type parameters, with the extra <code class="language-plaintext highlighter-rouge">AA</code> parameter allowing us to <code class="language-plaintext highlighter-rouge">flatMap</code> into an <code class="language-plaintext highlighter-rouge">Either</code>
 with a different type on the left side.</p>
 
-<p>This behavior is consistent with the covariance of <code class="highlighter-rouge">Either</code>, and in some cases it can be convenient,
-but it also makes it easy to run into nasty variance issues - such as <code class="highlighter-rouge">Object</code> being inferred as the
+<p>This behavior is consistent with the covariance of <code class="language-plaintext highlighter-rouge">Either</code>, and in some cases it can be convenient,
+but it also makes it easy to run into nasty variance issues - such as <code class="language-plaintext highlighter-rouge">Object</code> being inferred as the
 type of the left side, as it is in this case.</p>
 
 <h3 id="solution-1-application-wide-errors">Solution 1: Application-wide errors</h3>
 <p>We may then be tempted to make our entire application share an error data type.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">sealed</span> <span class="k">abstract</span> <span class="k">class</span> <span class="nc">AppError</span>
-<span class="k">final</span> <span class="k">case</span> <span class="k">object</span> <span class="nc">DatabaseError1</span> <span class="k">extends</span> <span class="nc">AppError</span>
-<span class="k">final</span> <span class="k">case</span> <span class="k">object</span> <span class="nc">DatabaseError2</span> <span class="k">extends</span> <span class="nc">AppError</span>
-<span class="k">final</span> <span class="k">case</span> <span class="k">object</span> <span class="nc">ServiceError1</span> <span class="k">extends</span> <span class="nc">AppError</span>
-<span class="k">final</span> <span class="k">case</span> <span class="k">object</span> <span class="nc">ServiceError2</span> <span class="k">extends</span> <span class="nc">AppError</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">sealed</span> <span class="k">abstract</span> <span class="k">class</span> <span class="nc">AppError</span>
+<span class="k">case</span> <span class="k">object</span> <span class="nc">DatabaseError1</span> <span class="k">extends</span> <span class="nc">AppError</span>
+<span class="k">case</span> <span class="k">object</span> <span class="nc">DatabaseError2</span> <span class="k">extends</span> <span class="nc">AppError</span>
+<span class="k">case</span> <span class="k">object</span> <span class="nc">ServiceError1</span> <span class="k">extends</span> <span class="nc">AppError</span>
+<span class="k">case</span> <span class="k">object</span> <span class="nc">ServiceError2</span> <span class="k">extends</span> <span class="nc">AppError</span>
 
 <span class="k">trait</span> <span class="nc">DatabaseValue</span>
 
 <span class="k">object</span> <span class="nc">Database</span> <span class="o">{</span>
-  <span class="k">def</span> <span class="n">databaseThings</span><span class="o">()</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">AppError</span>, <span class="kt">DatabaseValue</span><span class="o">]</span> <span class="k">=</span> <span class="o">???</span>
+  <span class="k">def</span> <span class="nf">databaseThings</span><span class="o">()</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">AppError</span>, <span class="kt">DatabaseValue</span><span class="o">]</span> <span class="k">=</span> <span class="o">???</span>
 <span class="o">}</span>
 
 <span class="k">object</span> <span class="nc">Service</span> <span class="o">{</span>
-  <span class="k">def</span> <span class="n">serviceThings</span><span class="o">(</span><span class="n">v</span><span class="k">:</span> <span class="kt">DatabaseValue</span><span class="o">)</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">AppError</span>, <span class="kt">ServiceValue</span><span class="o">]</span> <span class="k">=</span> <span class="o">???</span>
+  <span class="k">def</span> <span class="nf">serviceThings</span><span class="o">(</span><span class="n">v</span><span class="k">:</span> <span class="kt">DatabaseValue</span><span class="o">)</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">AppError</span>, <span class="kt">ServiceValue</span><span class="o">]</span> <span class="k">=</span> <span class="o">???</span>
 <span class="o">}</span>
 
-<span class="k">def</span> <span class="n">doApp</span> <span class="k">=</span> <span class="nc">Database</span><span class="o">.</span><span class="n">databaseThings</span><span class="o">().</span><span class="n">flatMap</span><span class="o">(</span><span class="nc">Service</span><span class="o">.</span><span class="n">serviceThings</span><span class="o">)</span>
-</code></pre>
-</div>
+<span class="k">def</span> <span class="nf">doApp</span> <span class="k">=</span> <span class="nv">Database</span><span class="o">.</span><span class="py">databaseThings</span><span class="o">().</span><span class="py">flatMap</span><span class="o">(</span><span class="nv">Service</span><span class="o">.</span><span class="py">serviceThings</span><span class="o">)</span>
+</code></pre></div></div>
 
 <p>This certainly works, or at least it compiles. But consider the case where another module wants to just use
-<code class="highlighter-rouge">Database</code>, and gets an <code class="highlighter-rouge">Either[AppError, DatabaseValue]</code> back. Should it want to inspect the errors, it
-must inspect <strong>all</strong> the <code class="highlighter-rouge">AppError</code> cases, even though it was only intended for <code class="highlighter-rouge">Database</code> to use
-<code class="highlighter-rouge">DatabaseError1</code> or <code class="highlighter-rouge">DatabaseError2</code>.</p>
+<code class="language-plaintext highlighter-rouge">Database</code>, and gets an <code class="language-plaintext highlighter-rouge">Either[AppError, DatabaseValue]</code> back. Should it want to inspect the errors, it
+must inspect <strong>all</strong> the <code class="language-plaintext highlighter-rouge">AppError</code> cases, even though it was only intended for <code class="language-plaintext highlighter-rouge">Database</code> to use
+<code class="language-plaintext highlighter-rouge">DatabaseError1</code> or <code class="language-plaintext highlighter-rouge">DatabaseError2</code>.</p>
 
 <h3 id="solution-2-adts-all-the-way-down">Solution 2: ADTs all the way down</h3>
 <p>Instead of lumping all our errors into one big ADT, we can instead keep them local to each module, and have
 an application-wide error ADT that wraps each error ADT we need.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">sealed</span> <span class="k">abstract</span> <span class="k">class</span> <span class="nc">DatabaseError</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">sealed</span> <span class="k">abstract</span> <span class="k">class</span> <span class="nc">DatabaseError</span>
 <span class="k">trait</span> <span class="nc">DatabaseValue</span>
 
 <span class="k">object</span> <span class="nc">Database</span> <span class="o">{</span>
-  <span class="k">def</span> <span class="n">databaseThings</span><span class="o">()</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">DatabaseError</span>, <span class="kt">DatabaseValue</span><span class="o">]</span> <span class="k">=</span> <span class="o">???</span>
+  <span class="k">def</span> <span class="nf">databaseThings</span><span class="o">()</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">DatabaseError</span>, <span class="kt">DatabaseValue</span><span class="o">]</span> <span class="k">=</span> <span class="o">???</span>
 <span class="o">}</span>
 
 <span class="k">sealed</span> <span class="k">abstract</span> <span class="k">class</span> <span class="nc">ServiceError</span>
 <span class="k">trait</span> <span class="nc">ServiceValue</span>
 
 <span class="k">object</span> <span class="nc">Service</span> <span class="o">{</span>
-  <span class="k">def</span> <span class="n">serviceThings</span><span class="o">(</span><span class="n">v</span><span class="k">:</span> <span class="kt">DatabaseValue</span><span class="o">)</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">ServiceError</span>, <span class="kt">ServiceValue</span><span class="o">]</span> <span class="k">=</span> <span class="o">???</span>
+  <span class="k">def</span> <span class="nf">serviceThings</span><span class="o">(</span><span class="n">v</span><span class="k">:</span> <span class="kt">DatabaseValue</span><span class="o">)</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">ServiceError</span>, <span class="kt">ServiceValue</span><span class="o">]</span> <span class="k">=</span> <span class="o">???</span>
 <span class="o">}</span>
 
 <span class="k">sealed</span> <span class="k">abstract</span> <span class="k">class</span> <span class="nc">AppError</span>
@@ -315,63 +297,78 @@ an application-wide error ADT that wraps each error ADT we need.</p>
   <span class="k">final</span> <span class="k">case</span> <span class="k">class</span> <span class="nc">Database</span><span class="o">(</span><span class="n">error</span><span class="k">:</span> <span class="kt">DatabaseError</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">AppError</span>
   <span class="k">final</span> <span class="k">case</span> <span class="k">class</span> <span class="nc">Service</span><span class="o">(</span><span class="n">error</span><span class="k">:</span> <span class="kt">ServiceError</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">AppError</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<p>Now in our outer application, we can wrap/lift each module-specific error into <code class="highlighter-rouge">AppError</code> and then
-call our combinators as usual. <code class="highlighter-rouge">Either</code> provides a convenient method to assist with this, called <code class="highlighter-rouge">Either.leftMap</code> -
-it can be thought of as the same as <code class="highlighter-rouge">map</code>, but for the <code class="highlighter-rouge">Left</code> side.</p>
+<p>Now in our outer application, we can wrap/lift each module-specific error into <code class="language-plaintext highlighter-rouge">AppError</code> and then
+call our combinators as usual. <code class="language-plaintext highlighter-rouge">Either</code> provides a convenient method to assist with this, called <code class="language-plaintext highlighter-rouge">Either.leftMap</code> -
+it can be thought of as the same as <code class="language-plaintext highlighter-rouge">map</code>, but for the <code class="language-plaintext highlighter-rouge">Left</code> side.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">doApp</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">AppError</span>, <span class="kt">ServiceValue</span><span class="o">]</span> <span class="k">=</span>
-  <span class="nc">Database</span><span class="o">.</span><span class="n">databaseThings</span><span class="o">().</span><span class="n">leftMap</span><span class="o">[</span><span class="kt">AppError</span><span class="o">](</span><span class="nc">AppError</span><span class="o">.</span><span class="nc">Database</span><span class="o">).</span>
-  <span class="n">flatMap</span><span class="o">(</span><span class="n">dv</span> <span class="k">=&gt;</span> <span class="nc">Service</span><span class="o">.</span><span class="n">serviceThings</span><span class="o">(</span><span class="n">dv</span><span class="o">).</span><span class="n">leftMap</span><span class="o">(</span><span class="nc">AppError</span><span class="o">.</span><span class="nc">Service</span><span class="o">))</span>
-</code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">doApp</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">AppError</span>, <span class="kt">ServiceValue</span><span class="o">]</span> <span class="k">=</span>
+  <span class="nv">Database</span><span class="o">.</span><span class="py">databaseThings</span><span class="o">().</span><span class="py">leftMap</span><span class="o">[</span><span class="kt">AppError</span><span class="o">](</span><span class="nv">AppError</span><span class="o">.</span><span class="py">Database</span><span class="o">).</span>
+  <span class="nf">flatMap</span><span class="o">(</span><span class="n">dv</span> <span class="k">=&gt;</span> <span class="nv">Service</span><span class="o">.</span><span class="py">serviceThings</span><span class="o">(</span><span class="n">dv</span><span class="o">).</span><span class="py">leftMap</span><span class="o">(</span><span class="nv">AppError</span><span class="o">.</span><span class="py">Service</span><span class="o">))</span>
+</code></pre></div></div>
 
 <p>Hurrah! Each module only cares about its own errors as it should be, and more composite modules have their
 own error ADT that encapsulates each constituent module’s error ADT. Doing this also allows us to take action
 on entire classes of errors instead of having to pattern match on each individual one.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">awesome</span> <span class="k">=</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">awesome</span> <span class="k">=</span>
   <span class="n">doApp</span> <span class="k">match</span> <span class="o">{</span>
-    <span class="k">case</span> <span class="nc">Left</span><span class="o">(</span><span class="nc">AppError</span><span class="o">.</span><span class="nc">Database</span><span class="o">(</span><span class="k">_</span><span class="o">))</span> <span class="k">=&gt;</span> <span class="s">"something in the database went wrong"</span>
-    <span class="k">case</span> <span class="nc">Left</span><span class="o">(</span><span class="nc">AppError</span><span class="o">.</span><span class="nc">Service</span><span class="o">(</span><span class="k">_</span><span class="o">))</span>  <span class="k">=&gt;</span> <span class="s">"something in the service went wrong"</span>
+    <span class="k">case</span> <span class="nc">Left</span><span class="o">(</span><span class="nv">AppError</span><span class="o">.</span><span class="py">Database</span><span class="o">(</span><span class="k">_</span><span class="o">))</span> <span class="k">=&gt;</span> <span class="s">"something in the database went wrong"</span>
+    <span class="k">case</span> <span class="nc">Left</span><span class="o">(</span><span class="nv">AppError</span><span class="o">.</span><span class="py">Service</span><span class="o">(</span><span class="k">_</span><span class="o">))</span>  <span class="k">=&gt;</span> <span class="s">"something in the service went wrong"</span>
     <span class="k">case</span> <span class="nc">Right</span><span class="o">(</span><span class="k">_</span><span class="o">)</span>                   <span class="k">=&gt;</span> <span class="s">"everything is alright!"</span>
   <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h2 id="working-with-exception-y-code">Working with exception-y code</h2>
-<p>There will inevitably come a time when your nice <code class="highlighter-rouge">Either</code> code will have to interact with exception-throwing
+<p>There will inevitably come a time when your nice <code class="language-plaintext highlighter-rouge">Either</code> code will have to interact with exception-throwing
 code. Handling such situations is easy enough.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">either</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">NumberFormatException</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">either</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">NumberFormatException</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span>
   <span class="k">try</span> <span class="o">{</span>
-    <span class="nc">Either</span><span class="o">.</span><span class="n">right</span><span class="o">(</span><span class="s">"abc"</span><span class="o">.</span><span class="n">toInt</span><span class="o">)</span>
+    <span class="nv">Either</span><span class="o">.</span><span class="py">right</span><span class="o">(</span><span class="s">"abc"</span><span class="o">.</span><span class="py">toInt</span><span class="o">)</span>
   <span class="o">}</span> <span class="k">catch</span> <span class="o">{</span>
-    <span class="k">case</span> <span class="n">nfe</span><span class="k">:</span> <span class="kt">NumberFormatException</span> <span class="o">=&gt;</span> <span class="nc">Either</span><span class="o">.</span><span class="n">left</span><span class="o">(</span><span class="n">nfe</span><span class="o">)</span>
+    <span class="k">case</span> <span class="n">nfe</span><span class="k">:</span> <span class="kt">NumberFormatException</span> <span class="o">=&gt;</span> <span class="nv">Either</span><span class="o">.</span><span class="py">left</span><span class="o">(</span><span class="n">nfe</span><span class="o">)</span>
   <span class="o">}</span>
-<span class="c1">// either: Either[NumberFormatException,Int] = Left(java.lang.NumberFormatException: For input string: "abc")
-</span></code></pre>
-</div>
+<span class="c1">// either: Either[NumberFormatException, Int] = Left(</span>
+<span class="c1">//   java.lang.NumberFormatException: For input string: "abc"</span>
+<span class="c1">// )</span>
+</code></pre></div></div>
 
-<p>However, this can get tedious quickly. <code class="highlighter-rouge">Either</code> has a <code class="highlighter-rouge">catchOnly</code> method on its companion object
+<p>However, this can get tedious quickly. <code class="language-plaintext highlighter-rouge">Either</code> has a <code class="language-plaintext highlighter-rouge">catchOnly</code> method on its companion object
 (via syntax enrichment) that allows you to pass it a function, along with the type of exception you want to catch, and does the
 above for you.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">either</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">NumberFormatException</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span>
-  <span class="nc">Either</span><span class="o">.</span><span class="n">catchOnly</span><span class="o">[</span><span class="kt">NumberFormatException</span><span class="o">](</span><span class="s">"abc"</span><span class="o">.</span><span class="n">toInt</span><span class="o">)</span>
-<span class="c1">// either: Either[NumberFormatException,Int] = Left(java.lang.NumberFormatException: For input string: "abc")
-</span></code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">either</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">NumberFormatException</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span>
+  <span class="nv">Either</span><span class="o">.</span><span class="py">catchOnly</span><span class="o">[</span><span class="kt">NumberFormatException</span><span class="o">](</span><span class="s">"abc"</span><span class="o">.</span><span class="py">toInt</span><span class="o">)</span>
+<span class="c1">// either: Either[NumberFormatException, Int] = Left(</span>
+<span class="c1">//   java.lang.NumberFormatException: For input string: "abc"</span>
+<span class="c1">// )</span>
+</code></pre></div></div>
 
-<p>If you want to catch all (non-fatal) throwables, you can use <code class="highlighter-rouge">catchNonFatal</code>.</p>
+<p>If you want to catch all (non-fatal) throwables, you can use <code class="language-plaintext highlighter-rouge">catchNonFatal</code>.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">either</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">Throwable</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Either</span><span class="o">.</span><span class="n">catchNonFatal</span><span class="o">(</span><span class="s">"abc"</span><span class="o">.</span><span class="n">toInt</span><span class="o">)</span>
-<span class="c1">// either: Either[Throwable,Int] = Left(java.lang.NumberFormatException: For input string: "abc")
-</span></code></pre>
-</div>
-</section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/cats/highlight/highlight.pack.js"></script><script>hljs.configure({languages:['scala','java','bash']});
-hljs.initHighlighting();
-              </script><script>((window.gitter = {}).chat = {}).options = {
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">either</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">Throwable</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nv">Either</span><span class="o">.</span><span class="py">catchNonFatal</span><span class="o">(</span><span class="s">"abc"</span><span class="o">.</span><span class="py">toInt</span><span class="o">)</span>
+<span class="c1">// either: Either[Throwable, Int] = Left(</span>
+<span class="c1">//   java.lang.NumberFormatException: For input string: "abc"</span>
+<span class="c1">// )</span>
+</code></pre></div></div>
+</section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/cats/highlight/highlight.pack.js"></script><script>
+// For all code blocks, copy the language from the containing div
+// to the inner code tag (where hljs expects it to be)
+const langPrefix = 'language-';
+document.querySelectorAll(`div[class^='${langPrefix}']`).forEach(function(div) {
+  div.classList.forEach(function(cssClass) {
+    if (cssClass.startsWith(langPrefix)) {
+      const lang = cssClass.substring(langPrefix.length);
+      div.querySelectorAll('pre code').forEach(function(code) {
+        code.classList.add(lang);
+      });
+    }
+  });
+});
+
+hljs.configure({languages:['scala','java','bash']});
+hljs.initHighlightingOnLoad();
+      </script><script>console.info('\x57\x65\x62\x73\x69\x74\x65\x20\x62\x75\x69\x6c\x74\x20\x77\x69\x74\x68\x3a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x5f\x5f\x20\x20\x20\x20\x5f\x5f\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x5f\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x5f\x20\x5f\x5f\x0a\x20\x20\x20\x5f\x5f\x5f\x5f\x5f\x2f\x20\x2f\x5f\x20\x20\x2f\x20\x2f\x5f\x20\x20\x20\x20\x20\x20\x5f\x5f\x5f\x5f\x20\x5f\x5f\x5f\x20\x20\x28\x5f\x29\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x20\x20\x5f\x5f\x5f\x5f\x5f\x28\x5f\x29\x20\x2f\x5f\x5f\x5f\x5f\x20\x20\x5f\x5f\x5f\x5f\x5f\x0a\x20\x20\x2f\x20\x5f\x5f\x5f\x2f\x20\x5f\x5f\x20\x5c\x2f\x20\x5f\x5f\x2f\x5f\x5f\x5f\x5f\x5f\x2f\x20\x5f\x5f\x20\x60\x5f\x5f\x20\x5c\x2f\x20\x2f\x20\x5f\x5f\x5f\x2f\x20\x5f\x5f\x5f\x2f\x20\x5f\x5f\x20\x5c\x2f\x20\x5f\x5f\x5f\x2f\x20\x2f\x20\x5f\x5f\x2f\x20\x5f\x20\x5c\x2f\x20\x5f\x5f\x5f\x2f\x0a\x20\x28\x5f\x5f\x20\x20\x29\x20\x2f\x5f\x2f\x20\x2f\x20\x2f\x5f\x2f\x5f\x5f\x5f\x5f\x5f\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x5f\x5f\x2f\x20\x2f\x20\x20\x2f\x20\x2f\x5f\x2f\x20\x28\x5f\x5f\x20\x20\x29\x20\x2f\x20\x2f\x5f\x2f\x20\x20\x5f\x5f\x28\x5f\x5f\x20\x20\x29\x0a\x2f\x5f\x5f\x5f\x5f\x2f\x5f\x2e\x5f\x5f\x5f\x2f\x5c\x5f\x5f\x2f\x20\x20\x20\x20\x20\x2f\x5f\x2f\x20\x2f\x5f\x2f\x20\x2f\x5f\x2f\x5f\x2f\x5c\x5f\x5f\x5f\x2f\x5f\x2f\x20\x20\x20\x5c\x5f\x5f\x5f\x5f\x2f\x5f\x5f\x5f\x5f\x2f\x5f\x2f\x5c\x5f\x5f\x2f\x5c\x5f\x5f\x5f\x2f\x5f\x5f\x5f\x5f\x2f\x0a\x0a\x68\x74\x74\x70\x73\x3a\x2f\x2f\x34\x37\x64\x65\x67\x2e\x67\x69\x74\x68\x75\x62\x2e\x69\x6f\x2f\x73\x62\x74\x2d\x6d\x69\x63\x72\x6f\x73\x69\x74\x65\x73')</script><script>((window.gitter = {}).chat = {}).options = {
 room: 'typelevel/cats'};</script><script src="https://sidecar.gitter.im/dist/sidecar.v1.js"></script><script src="/cats/js/main.js"></script></body></html>

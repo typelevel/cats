@@ -81,10 +81,32 @@
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <a title="Symbolic aliases for various types are defined here." href="../../index.html"><span class="name">cats</span></a>
+        <a title="The cats root package contains all the trait signatures of most Scala type classes." href="../../index.html"><span class="name">cats</span></a>
       </span>
       
-      <p class="shortcomment cmt">Symbolic aliases for various types are defined here.</p><div class="fullcomment"><div class="comment cmt"><p>Symbolic aliases for various types are defined here.
+      <p class="shortcomment cmt">The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><p>Cats type classes are implemented using the approach from the
+ <a href="https://ropas.snu.ac.kr/~bruno/papers/TypeClasses.pdf" target="_blank">Type classes as objects and implicits</a> article.</p><p>For each type class, <code>cats</code> provides three pieces:
+- Its <b>signature</b>: a trait that is polymorphic on a type parameter.
+  Type class traits inherit from other type classes to indicate that any implementation of the lower type class (e.g. <code>Applicative</code>)
+  can also serve as an instance for the higuer type class (e.g. <code>Functor</code>).
+- Type class <b>'instances</b>, which are classes and objects that implement one or more type class signatures for some specific types.
+  Type class instances for several data types from the Java or Scala standard libraries are declared in the subpackage <code>cats.instances</code>.
+- <b>Syntax extensions</b>, each of which provides the methods of the type class defines as extension methods
+  (which in Scala 2 are encoded as implicit classes) for values of any type <code>F</code>; given that an instance of the type class
+  for the receiver type (<code>this</code>) is in the implicit scope.
+  Symtax extensions are declared in the <code>cats.syntax</code> package.
+- A set of <b>laws</b>, that are also generic on the type of the class, and are only defined on the operations of the type class.
+  The purpose of these laws is to declare some algebraic relations (equations) between Scala expressions involving the operations
+  of the type class, and test (but not verify) that implemented instances satisfy those equations.
+  Laws are defined in the <code>cats-laws</code> package.</p><p>Although most of cats type classes are declared in this package, some are declared in other packages:
+- type classes that operate on base types (kind <code>*</code>), and their implementations for standard library types,
+  are contained in <code>cats.kernel</code>, which is a different SBT project. However, they are re-exported from this package.
+- type classes of kind <code>F[_, _]</code>, such as <a href="../../arrow/Profunctor.html" class="extype" name="cats.arrow.Profunctor">cats.arrow.Profunctor</a>&quot; or <a href="../../arrow/Arrow.html" class="extype" name="cats.arrow.Arrow">cats.arrow.Arrow</a>, which are relevant for
+  Functional Reactive Programming or optics, are declared in the <code>cats.arrow</code> package.
+- Also, those type classes that abstract over (pure or impure) functional runtime effects are declared
+  in the <a href="https://typelevel.org/cats-effect/" target="_blank">cats-effect library</a>.
+- Some type classes for which no laws can be provided are left out of the main road, in a small and dirty alley.
+  These are the <code>alleycats</code>.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
     </li><li name="cats.kernel" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="kernel"></a><a id="kernel:kernel"></a>
@@ -124,8 +146,8 @@
                         <a href="AllInstances.html" title="">AllInstances</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
-                        <a class="class" href="BigDecimalGroup.html" title=""></a>
-                        <a href="BigDecimalGroup.html" title="">BigDecimalGroup</a>
+                        <a class="class" href="BigDecimalGroup.html" title="Note that combining, removing, and inverting BigDecimal values will use unlimited precision operations."></a>
+                        <a href="BigDecimalGroup.html" title="Note that combining, removing, and inverting BigDecimal values will use unlimited precision operations.">BigDecimalGroup</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
                         <a class="trait" href="BigDecimalInstances.html" title=""></a>
@@ -148,6 +170,10 @@
                         <a href="BigIntOrder.html" title="">BigIntOrder</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
+                        <a class="trait" href="BigIntUnboundedEnum.html" title=""></a>
+                        <a href="BigIntUnboundedEnum.html" title="">BigIntUnboundedEnum</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
                         <a class="trait" href="BitSetInstances.html" title=""></a>
                         <a href="BitSetInstances.html" title="">BitSetInstances</a>
                       </li><li class="current-entities indented3">
@@ -162,6 +188,10 @@
                         <span class="separator"></span>
                         <a class="trait" href="BooleanBounded.html" title=""></a>
                         <a href="BooleanBounded.html" title="">BooleanBounded</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="BooleanEnumerable.html" title=""></a>
+                        <a href="BooleanEnumerable.html" title="">BooleanEnumerable</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
                         <a class="trait" href="BooleanInstances.html" title=""></a>
@@ -190,6 +220,10 @@
                         <span class="separator"></span>
                         <a class="trait" href="CharBounded.html" title=""></a>
                         <a href="CharBounded.html" title="">CharBounded</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="CharEnumerable.html" title=""></a>
+                        <a href="CharEnumerable.html" title="">CharEnumerable</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
                         <a class="trait" href="CharInstances.html" title=""></a>
@@ -308,6 +342,10 @@
                         <a href="IntBounded.html" title="">IntBounded</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
+                        <a class="trait" href="IntEnumerable.html" title=""></a>
+                        <a href="IntEnumerable.html" title="">IntEnumerable</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
                         <a class="class" href="IntGroup.html" title=""></a>
                         <a href="IntGroup.html" title="">IntGroup</a>
                       </li><li class="current-entities indented3">
@@ -346,6 +384,10 @@
                         <span class="separator"></span>
                         <a class="trait" href="LongBounded.html" title=""></a>
                         <a href="LongBounded.html" title="">LongBounded</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="LongEnumerable.html" title=""></a>
+                        <a href="LongEnumerable.html" title="">LongEnumerable</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
                         <a class="class" href="LongGroup.html" title=""></a>
@@ -432,6 +474,30 @@
                         <a href="QueuePartialOrder.html" title="">QueuePartialOrder</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
+                        <a class="class" href="SeqEq.html" title=""></a>
+                        <a href="SeqEq.html" title="">SeqEq</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="SeqHash.html" title=""></a>
+                        <a href="SeqHash.html" title="">SeqHash</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="SeqInstances.html" title=""></a>
+                        <a href="SeqInstances.html" title="">SeqInstances</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="SeqMonoid.html" title=""></a>
+                        <a href="SeqMonoid.html" title="">SeqMonoid</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="SeqOrder.html" title=""></a>
+                        <a href="SeqOrder.html" title="">SeqOrder</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="SeqPartialOrder.html" title=""></a>
+                        <a href="SeqPartialOrder.html" title="">SeqPartialOrder</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
                         <a class="class" href="SetHash.html" title=""></a>
                         <a href="SetHash.html" title="">SetHash</a>
                       </li><li class="current-entities indented3">
@@ -452,6 +518,10 @@
                         <a href="ShortBounded.html" title="">ShortBounded</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
+                        <a class="trait" href="ShortEnumerable.html" title=""></a>
+                        <a href="ShortEnumerable.html" title="">ShortEnumerable</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
                         <a class="class" href="ShortGroup.html" title=""></a>
                         <a href="ShortGroup.html" title="">ShortGroup</a>
                       </li><li class="current-entities indented3">
@@ -468,6 +538,10 @@
                         <a href="SortedMapCommutativeMonoid.html" title="">SortedMapCommutativeMonoid</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
+                        <a class="class" href="SortedMapCommutativeSemigroup.html" title=""></a>
+                        <a href="SortedMapCommutativeSemigroup.html" title="">SortedMapCommutativeSemigroup</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
                         <a class="class" href="SortedMapEq.html" title=""></a>
                         <a href="SortedMapEq.html" title="">SortedMapEq</a>
                       </li><li class="current-entities indented3">
@@ -482,6 +556,10 @@
                         <span class="separator"></span>
                         <a class="class" href="SortedMapMonoid.html" title=""></a>
                         <a href="SortedMapMonoid.html" title="">SortedMapMonoid</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="SortedMapSemigroup.html" title=""></a>
+                        <a href="SortedMapSemigroup.html" title="">SortedMapSemigroup</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
                         <a class="class" href="SortedSetHash.html" title=""></a>
@@ -576,6 +654,10 @@
                         <a href="UnitBounded.html" title="">UnitBounded</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
+                        <a class="trait" href="UnitEnumerable.html" title=""></a>
+                        <a href="UnitEnumerable.html" title="">UnitEnumerable</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
                         <a class="trait" href="UnitInstances.html" title=""></a>
                         <a href="UnitInstances.html" title="">UnitInstances</a>
                       </li><li class="current-entities indented3">
@@ -655,7 +737,17 @@
             Linear Supertypes
           </span>
           <div class="superTypes hiddenContent"><span class="extype" name="cats.kernel.instances.SortedMapInstances2">SortedMapInstances2</span>, <span class="extype" name="cats.kernel.instances.SortedMapInstances1">SortedMapInstances1</span>, <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
-        </div></div>
+        </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
+                <span class="toggle diagram-link">
+                  Type Hierarchy
+                </span>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph1" viewBox="0.00 0.00 184.00 118.00" height="118pt" width="184pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 114)" class="graph" id="page0,1_graph0"><polygon points="-4,4 -4,-114 180,-114 180,4 -4,4" stroke="transparent" fill="white"></polygon><g class="cluster" id="clust1"></g><g class="cluster" id="clust2"></g><!-- node0 --><g class="node this trait" id="graph1_0"><g id="a_this trait|graph1_0"><a xlink:title="cats.kernel.instances.SortedMapInstances (this trait)" xlink:href="#inheritance-diagram"><path d="M143.17,-49C143.17,-49 32.83,-49 32.83,-49 28.67,-49 24.5,-44.83 24.5,-40.67 24.5,-40.67 24.5,-32.33 24.5,-32.33 24.5,-28.17 28.67,-24 32.83,-24 32.83,-24 143.17,-24 143.17,-24 147.33,-24 151.5,-28.17 151.5,-32.33 151.5,-32.33 151.5,-40.67 151.5,-40.67 151.5,-44.83 147.33,-49 143.17,-49" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../../lib/trait_diagram.png" y="-43.5" x="35" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-34.1" x="56" text-anchor="start">SortedMapInstances</text></a></g></g><!-- node1 --><g class="node trait" id="graph1_1"><g id="a_trait|graph1_1"><a xlink:title="cats.kernel.instances.SortedMapInstances2"><path d="M145.67,-110C145.67,-110 30.33,-110 30.33,-110 26.17,-110 22,-105.83 22,-101.67 22,-101.67 22,-93.33 22,-93.33 22,-89.17 26.17,-85 30.33,-85 30.33,-85 145.67,-85 145.67,-85 149.83,-85 154,-89.17 154,-93.33 154,-93.33 154,-101.67 154,-101.67 154,-105.83 149.83,-110 145.67,-110" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../../lib/trait_diagram.png" y="-104.5" x="32" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-95.1" x="53" text-anchor="start">SortedMapInstances2</text></a></g></g><!-- node1&#45;&gt;node0 --><g class="edge inheritance" id="graph1_1_0"><g id="a_inheritance|graph1_1_0"><a xlink:title="SortedMapInstances is a subtype of SortedMapInstances2"><path d="M88,-77.76C88,-68.37 88,-57.29 88,-49.13" stroke="#d4d4d4" fill="none"></path><polygon points="85.55,-77.84 88,-84.84 90.45,-77.84 85.55,-77.84" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
+                <div id="diagram-controls" class="hiddenContent">
+                  <button id="diagram-zoom-out" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button id="diagram-zoom-in" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button title="Toggle full-screen" id="diagram-fs" class="diagram-btn to-full"><i class="material-icons"></i></button>
+                </div>
+              </div></div>
         
 
       <div id="mbrsel">
@@ -787,10 +879,10 @@
       </span>
       
       
-    </li><li name="cats.kernel.instances.SortedMapInstances1#catsKernelStdEqForSortedMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsKernelStdEqForSortedMap[K,V](implicitevidence$6:cats.kernel.Order[K],implicitevidence$7:cats.kernel.Eq[V]):cats.kernel.Eq[scala.collection.immutable.SortedMap[K,V]]"></a><a id="catsKernelStdEqForSortedMap[K,V](Order[K],Eq[V]):Eq[SortedMap[K,V]]"></a>
+    </li><li name="cats.kernel.instances.SortedMapInstances#catsKernelStdCommutativeSemigroupForSortedMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="catsKernelStdCommutativeSemigroupForSortedMap[K,V](implicitevidence$3:cats.kernel.CommutativeSemigroup[V]):cats.kernel.CommutativeSemigroup[scala.collection.immutable.SortedMap[K,V]]"></a><a id="catsKernelStdCommutativeSemigroupForSortedMap[K,V](CommutativeSemigroup[V]):CommutativeSemigroup[SortedMap[K,V]]"></a>
       <span class="permalink">
-      <a href="../../../cats/kernel/instances/SortedMapInstances.html#catsKernelStdEqForSortedMap[K,V](implicitevidence$6:cats.kernel.Order[K],implicitevidence$7:cats.kernel.Eq[V]):cats.kernel.Eq[scala.collection.immutable.SortedMap[K,V]]" title="Permalink">
+      <a href="../../../cats/kernel/instances/SortedMapInstances.html#catsKernelStdCommutativeSemigroupForSortedMap[K,V](implicitevidence$3:cats.kernel.CommutativeSemigroup[V]):cats.kernel.CommutativeSemigroup[scala.collection.immutable.SortedMap[K,V]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -799,14 +891,30 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsKernelStdEqForSortedMap</span><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../Order.html" class="extype" name="cats.kernel.Order">Order</a>[<span class="extype" name="cats.kernel.instances.SortedMapInstances1.catsKernelStdEqForSortedMap.K">K</span>]</span>, <span name="arg1">arg1: <a href="../Eq.html" class="extype" name="cats.kernel.Eq">Eq</a>[<span class="extype" name="cats.kernel.instances.SortedMapInstances1.catsKernelStdEqForSortedMap.V">V</span>]</span>)</span><span class="result">: <a href="../Eq.html" class="extype" name="cats.kernel.Eq">Eq</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/collection/immutable/SortedMap.html#scala.collection.immutable.SortedMap" class="extype" name="scala.collection.immutable.SortedMap">SortedMap</a>[<span class="extype" name="cats.kernel.instances.SortedMapInstances1.catsKernelStdEqForSortedMap.K">K</span>, <span class="extype" name="cats.kernel.instances.SortedMapInstances1.catsKernelStdEqForSortedMap.V">V</span>]]</span>
+        <span class="name">catsKernelStdCommutativeSemigroupForSortedMap</span><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../CommutativeSemigroup.html" class="extype" name="cats.kernel.CommutativeSemigroup">CommutativeSemigroup</a>[<span class="extype" name="cats.kernel.instances.SortedMapInstances.catsKernelStdCommutativeSemigroupForSortedMap.V">V</span>]</span>)</span><span class="result">: <a href="../CommutativeSemigroup.html" class="extype" name="cats.kernel.CommutativeSemigroup">CommutativeSemigroup</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/collection/immutable/SortedMap.html#scala.collection.immutable.SortedMap" class="extype" name="scala.collection.immutable.SortedMap">SortedMap</a>[<span class="extype" name="cats.kernel.instances.SortedMapInstances.catsKernelStdCommutativeSemigroupForSortedMap.K">K</span>, <span class="extype" name="cats.kernel.instances.SortedMapInstances.catsKernelStdCommutativeSemigroupForSortedMap.V">V</span>]]</span>
+      </span>
+      
+      
+    </li><li name="cats.kernel.instances.SortedMapInstances1#catsKernelStdEqForSortedMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsKernelStdEqForSortedMap[K,V](implicitevidence$6:cats.kernel.Eq[V]):cats.kernel.Eq[scala.collection.immutable.SortedMap[K,V]]"></a><a id="catsKernelStdEqForSortedMap[K,V](Eq[V]):Eq[SortedMap[K,V]]"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/SortedMapInstances.html#catsKernelStdEqForSortedMap[K,V](implicitevidence$6:cats.kernel.Eq[V]):cats.kernel.Eq[scala.collection.immutable.SortedMap[K,V]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsKernelStdEqForSortedMap</span><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../Eq.html" class="extype" name="cats.kernel.Eq">Eq</a>[<span class="extype" name="cats.kernel.instances.SortedMapInstances1.catsKernelStdEqForSortedMap.V">V</span>]</span>)</span><span class="result">: <a href="../Eq.html" class="extype" name="cats.kernel.Eq">Eq</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/collection/immutable/SortedMap.html#scala.collection.immutable.SortedMap" class="extype" name="scala.collection.immutable.SortedMap">SortedMap</a>[<span class="extype" name="cats.kernel.instances.SortedMapInstances1.catsKernelStdEqForSortedMap.K">K</span>, <span class="extype" name="cats.kernel.instances.SortedMapInstances1.catsKernelStdEqForSortedMap.V">V</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SortedMapInstances1</dd></dl></div>
     </li><li name="cats.kernel.instances.SortedMapInstances#catsKernelStdHashForSortedMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="catsKernelStdHashForSortedMap[K,V](implicitevidence$1:cats.kernel.Hash[K],implicitevidence$2:cats.kernel.Order[K],implicitevidence$3:cats.kernel.Hash[V]):cats.kernel.Hash[scala.collection.immutable.SortedMap[K,V]]"></a><a id="catsKernelStdHashForSortedMap[K,V](Hash[K],Order[K],Hash[V]):Hash[SortedMap[K,V]]"></a>
+      <a id="catsKernelStdHashForSortedMap[K,V](implicitevidence$1:cats.kernel.Hash[K],implicitevidence$2:cats.kernel.Hash[V]):cats.kernel.Hash[scala.collection.immutable.SortedMap[K,V]]"></a><a id="catsKernelStdHashForSortedMap[K,V](Hash[K],Hash[V]):Hash[SortedMap[K,V]]"></a>
       <span class="permalink">
-      <a href="../../../cats/kernel/instances/SortedMapInstances.html#catsKernelStdHashForSortedMap[K,V](implicitevidence$1:cats.kernel.Hash[K],implicitevidence$2:cats.kernel.Order[K],implicitevidence$3:cats.kernel.Hash[V]):cats.kernel.Hash[scala.collection.immutable.SortedMap[K,V]]" title="Permalink">
+      <a href="../../../cats/kernel/instances/SortedMapInstances.html#catsKernelStdHashForSortedMap[K,V](implicitevidence$1:cats.kernel.Hash[K],implicitevidence$2:cats.kernel.Hash[V]):cats.kernel.Hash[scala.collection.immutable.SortedMap[K,V]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -815,7 +923,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsKernelStdHashForSortedMap</span><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../Hash.html" class="extype" name="cats.kernel.Hash">Hash</a>[<span class="extype" name="cats.kernel.instances.SortedMapInstances.catsKernelStdHashForSortedMap.K">K</span>]</span>, <span name="arg1">arg1: <a href="../Order.html" class="extype" name="cats.kernel.Order">Order</a>[<span class="extype" name="cats.kernel.instances.SortedMapInstances.catsKernelStdHashForSortedMap.K">K</span>]</span>, <span name="arg2">arg2: <a href="../Hash.html" class="extype" name="cats.kernel.Hash">Hash</a>[<span class="extype" name="cats.kernel.instances.SortedMapInstances.catsKernelStdHashForSortedMap.V">V</span>]</span>)</span><span class="result">: <a href="../Hash.html" class="extype" name="cats.kernel.Hash">Hash</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/collection/immutable/SortedMap.html#scala.collection.immutable.SortedMap" class="extype" name="scala.collection.immutable.SortedMap">SortedMap</a>[<span class="extype" name="cats.kernel.instances.SortedMapInstances.catsKernelStdHashForSortedMap.K">K</span>, <span class="extype" name="cats.kernel.instances.SortedMapInstances.catsKernelStdHashForSortedMap.V">V</span>]]</span>
+        <span class="name">catsKernelStdHashForSortedMap</span><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../Hash.html" class="extype" name="cats.kernel.Hash">Hash</a>[<span class="extype" name="cats.kernel.instances.SortedMapInstances.catsKernelStdHashForSortedMap.K">K</span>]</span>, <span name="arg1">arg1: <a href="../Hash.html" class="extype" name="cats.kernel.Hash">Hash</a>[<span class="extype" name="cats.kernel.instances.SortedMapInstances.catsKernelStdHashForSortedMap.V">V</span>]</span>)</span><span class="result">: <a href="../Hash.html" class="extype" name="cats.kernel.Hash">Hash</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/collection/immutable/SortedMap.html#scala.collection.immutable.SortedMap" class="extype" name="scala.collection.immutable.SortedMap">SortedMap</a>[<span class="extype" name="cats.kernel.instances.SortedMapInstances.catsKernelStdHashForSortedMap.K">K</span>, <span class="extype" name="cats.kernel.instances.SortedMapInstances.catsKernelStdHashForSortedMap.V">V</span>]]</span>
       </span>
       
       
@@ -832,6 +940,22 @@
       </span>
       <span class="symbol">
         <span class="name">catsKernelStdMonoidForSortedMap</span><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../Order.html" class="extype" name="cats.kernel.Order">Order</a>[<span class="extype" name="cats.kernel.instances.SortedMapInstances2.catsKernelStdMonoidForSortedMap.K">K</span>]</span>, <span name="arg1">arg1: <a href="../Semigroup.html" class="extype" name="cats.kernel.Semigroup">Semigroup</a>[<span class="extype" name="cats.kernel.instances.SortedMapInstances2.catsKernelStdMonoidForSortedMap.V">V</span>]</span>)</span><span class="result">: <a href="../Monoid.html" class="extype" name="cats.kernel.Monoid">Monoid</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/collection/immutable/SortedMap.html#scala.collection.immutable.SortedMap" class="extype" name="scala.collection.immutable.SortedMap">SortedMap</a>[<span class="extype" name="cats.kernel.instances.SortedMapInstances2.catsKernelStdMonoidForSortedMap.K">K</span>, <span class="extype" name="cats.kernel.instances.SortedMapInstances2.catsKernelStdMonoidForSortedMap.V">V</span>]]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SortedMapInstances2</dd></dl></div>
+    </li><li name="cats.kernel.instances.SortedMapInstances2#catsKernelStdSemigroupForSortedMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsKernelStdSemigroupForSortedMap[K,V](implicitevidence$7:cats.kernel.Semigroup[V]):cats.kernel.Semigroup[scala.collection.immutable.SortedMap[K,V]]"></a><a id="catsKernelStdSemigroupForSortedMap[K,V](Semigroup[V]):Semigroup[SortedMap[K,V]]"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/SortedMapInstances.html#catsKernelStdSemigroupForSortedMap[K,V](implicitevidence$7:cats.kernel.Semigroup[V]):cats.kernel.Semigroup[scala.collection.immutable.SortedMap[K,V]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsKernelStdSemigroupForSortedMap</span><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../Semigroup.html" class="extype" name="cats.kernel.Semigroup">Semigroup</a>[<span class="extype" name="cats.kernel.instances.SortedMapInstances2.catsKernelStdSemigroupForSortedMap.V">V</span>]</span>)</span><span class="result">: <a href="../Semigroup.html" class="extype" name="cats.kernel.Semigroup">Semigroup</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/collection/immutable/SortedMap.html#scala.collection.immutable.SortedMap" class="extype" name="scala.collection.immutable.SortedMap">SortedMap</a>[<span class="extype" name="cats.kernel.instances.SortedMapInstances2.catsKernelStdSemigroupForSortedMap.K">K</span>, <span class="extype" name="cats.kernel.instances.SortedMapInstances2.catsKernelStdSemigroupForSortedMap.V">V</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SortedMapInstances2</dd></dl></div>
@@ -857,6 +981,8 @@
     </span>)</span>
               
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -891,28 +1017,6 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="finalize():Unit"></a>
-      <span class="permalink">
-      <a href="../../../cats/kernel/instances/SortedMapInstances.html#finalize():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="symbol">classOf[java.lang.Throwable]</span>
-    </span>)</span>
-              
-        </dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
@@ -930,6 +1034,8 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -949,6 +1055,8 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -1001,6 +1109,8 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
@@ -1019,6 +1129,8 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -1053,28 +1165,6 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait():Unit"></a>
-      <span class="permalink">
-      <a href="../../../cats/kernel/instances/SortedMapInstances.html#wait():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
-    </span>)</span>
-              
-        </dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <span class="permalink">
@@ -1121,13 +1211,102 @@
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/SortedMapInstances.html#wait():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
     </li>
               </ol>
             </div>
 
         
 
-        
+        <div class="values members">
+              <h3>Deprecated Value Members</h3>
+              <ol><li name="cats.kernel.instances.SortedMapInstances1#catsKernelStdEqForSortedMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsKernelStdEqForSortedMap[K,V](orderK:cats.kernel.Order[K],eqV:cats.kernel.Eq[V]):cats.kernel.Eq[scala.collection.immutable.SortedMap[K,V]]"></a><a id="catsKernelStdEqForSortedMap[K,V](Order[K],Eq[V]):Eq[SortedMap[K,V]]"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/SortedMapInstances.html#catsKernelStdEqForSortedMap[K,V](orderK:cats.kernel.Order[K],eqV:cats.kernel.Eq[V]):cats.kernel.Eq[scala.collection.immutable.SortedMap[K,V]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version 2.2.0-M3) Use catsKernelStdEqForSortedMap override without Order">catsKernelStdEqForSortedMap</span><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="params">(<span name="orderK">orderK: <a href="../Order.html" class="extype" name="cats.kernel.Order">Order</a>[<span class="extype" name="cats.kernel.instances.SortedMapInstances1.catsKernelStdEqForSortedMap.K">K</span>]</span>, <span name="eqV">eqV: <a href="../Eq.html" class="extype" name="cats.kernel.Eq">Eq</a>[<span class="extype" name="cats.kernel.instances.SortedMapInstances1.catsKernelStdEqForSortedMap.V">V</span>]</span>)</span><span class="result">: <a href="../Eq.html" class="extype" name="cats.kernel.Eq">Eq</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/collection/immutable/SortedMap.html#scala.collection.immutable.SortedMap" class="extype" name="scala.collection.immutable.SortedMap">SortedMap</a>[<span class="extype" name="cats.kernel.instances.SortedMapInstances1.catsKernelStdEqForSortedMap.K">K</span>, <span class="extype" name="cats.kernel.instances.SortedMapInstances1.catsKernelStdEqForSortedMap.V">V</span>]]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SortedMapInstances1</dd><dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2.2.0-M3)</i> Use catsKernelStdEqForSortedMap override without Order</p></dd></dl></div>
+    </li><li name="cats.kernel.instances.SortedMapInstances#catsKernelStdHashForSortedMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsKernelStdHashForSortedMap[K,V](hashK:cats.kernel.Hash[K],orderK:cats.kernel.Order[K],hashV:cats.kernel.Hash[V]):cats.kernel.Hash[scala.collection.immutable.SortedMap[K,V]]"></a><a id="catsKernelStdHashForSortedMap[K,V](Hash[K],Order[K],Hash[V]):Hash[SortedMap[K,V]]"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/SortedMapInstances.html#catsKernelStdHashForSortedMap[K,V](hashK:cats.kernel.Hash[K],orderK:cats.kernel.Order[K],hashV:cats.kernel.Hash[V]):cats.kernel.Hash[scala.collection.immutable.SortedMap[K,V]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version 2.2.0-M3) Use catsKernelStdHashForSortedMap override without Order">catsKernelStdHashForSortedMap</span><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="params">(<span name="hashK">hashK: <a href="../Hash.html" class="extype" name="cats.kernel.Hash">Hash</a>[<span class="extype" name="cats.kernel.instances.SortedMapInstances.catsKernelStdHashForSortedMap.K">K</span>]</span>, <span name="orderK">orderK: <a href="../Order.html" class="extype" name="cats.kernel.Order">Order</a>[<span class="extype" name="cats.kernel.instances.SortedMapInstances.catsKernelStdHashForSortedMap.K">K</span>]</span>, <span name="hashV">hashV: <a href="../Hash.html" class="extype" name="cats.kernel.Hash">Hash</a>[<span class="extype" name="cats.kernel.instances.SortedMapInstances.catsKernelStdHashForSortedMap.V">V</span>]</span>)</span><span class="result">: <a href="../Hash.html" class="extype" name="cats.kernel.Hash">Hash</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/collection/immutable/SortedMap.html#scala.collection.immutable.SortedMap" class="extype" name="scala.collection.immutable.SortedMap">SortedMap</a>[<span class="extype" name="cats.kernel.instances.SortedMapInstances.catsKernelStdHashForSortedMap.K">K</span>, <span class="extype" name="cats.kernel.instances.SortedMapInstances.catsKernelStdHashForSortedMap.V">V</span>]]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2.2.0-M3)</i> Use catsKernelStdHashForSortedMap override without Order</p></dd></dl></div>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/SortedMapInstances.html#finalize():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version ) see corresponding Javadoc for more information.">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+                <span class="name">@Deprecated</span>
+              
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version )</i> see corresponding Javadoc for more information.</p></dd></dl></div>
+    </li></ol>
+            </div>
         </div>
 
         <div id="inheritedMembers">

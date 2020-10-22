@@ -81,10 +81,32 @@
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <a title="Symbolic aliases for various types are defined here." href="../index.html"><span class="name">cats</span></a>
+        <a title="The cats root package contains all the trait signatures of most Scala type classes." href="../index.html"><span class="name">cats</span></a>
       </span>
       
-      <p class="shortcomment cmt">Symbolic aliases for various types are defined here.</p><div class="fullcomment"><div class="comment cmt"><p>Symbolic aliases for various types are defined here.
+      <p class="shortcomment cmt">The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><p>Cats type classes are implemented using the approach from the
+ <a href="https://ropas.snu.ac.kr/~bruno/papers/TypeClasses.pdf" target="_blank">Type classes as objects and implicits</a> article.</p><p>For each type class, <code>cats</code> provides three pieces:
+- Its <b>signature</b>: a trait that is polymorphic on a type parameter.
+  Type class traits inherit from other type classes to indicate that any implementation of the lower type class (e.g. <code>Applicative</code>)
+  can also serve as an instance for the higuer type class (e.g. <code>Functor</code>).
+- Type class <b>'instances</b>, which are classes and objects that implement one or more type class signatures for some specific types.
+  Type class instances for several data types from the Java or Scala standard libraries are declared in the subpackage <code>cats.instances</code>.
+- <b>Syntax extensions</b>, each of which provides the methods of the type class defines as extension methods
+  (which in Scala 2 are encoded as implicit classes) for values of any type <code>F</code>; given that an instance of the type class
+  for the receiver type (<code>this</code>) is in the implicit scope.
+  Symtax extensions are declared in the <code>cats.syntax</code> package.
+- A set of <b>laws</b>, that are also generic on the type of the class, and are only defined on the operations of the type class.
+  The purpose of these laws is to declare some algebraic relations (equations) between Scala expressions involving the operations
+  of the type class, and test (but not verify) that implemented instances satisfy those equations.
+  Laws are defined in the <code>cats-laws</code> package.</p><p>Although most of cats type classes are declared in this package, some are declared in other packages:
+- type classes that operate on base types (kind <code>*</code>), and their implementations for standard library types,
+  are contained in <code>cats.kernel</code>, which is a different SBT project. However, they are re-exported from this package.
+- type classes of kind <code>F[_, _]</code>, such as <a href="Profunctor.html" class="extype" name="cats.arrow.Profunctor">cats.arrow.Profunctor</a>&quot; or <a href="Arrow.html" class="extype" name="cats.arrow.Arrow">cats.arrow.Arrow</a>, which are relevant for
+  Functional Reactive Programming or optics, are declared in the <code>cats.arrow</code> package.
+- Also, those type classes that abstract over (pure or impure) functional runtime effects are declared
+  in the <a href="https://typelevel.org/cats-effect/" target="_blank">cats-effect library</a>.
+- Some type classes for which no laws can be provided are left out of the main road, in a small and dirty alley.
+  These are the <code>alleycats</code>.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
     </li><li name="cats.arrow" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="arrow"></a><a id="arrow:arrow"></a>
@@ -170,13 +192,23 @@
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="Compose$$AllOps.html" class="extype" name="cats.arrow.Compose.AllOps">Compose.AllOps</a>[<span class="extype" name="cats.arrow.Category.AllOps.F">F</span>, <span class="extype" name="cats.arrow.Category.AllOps.A">A</span>, <span class="extype" name="cats.arrow.Category.AllOps.B">B</span>], <a href="Compose$$Ops.html" class="extype" name="cats.arrow.Compose.Ops">Compose.Ops</a>[<span class="extype" name="cats.arrow.Category.AllOps.F">F</span>, <span class="extype" name="cats.arrow.Category.AllOps.A">A</span>, <span class="extype" name="cats.arrow.Category.AllOps.B">B</span>], <a href="Category$$Ops.html" class="extype" name="cats.arrow.Category.Ops">Ops</a>[<span class="extype" name="cats.arrow.Category.AllOps.F">F</span>, <span class="extype" name="cats.arrow.Category.AllOps.A">A</span>, <span class="extype" name="cats.arrow.Category.AllOps.B">B</span>], <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="Compose$$AllOps.html" class="extype" name="cats.arrow.Compose.AllOps">Compose.AllOps</a>[<span class="extype" name="cats.arrow.Category.AllOps.F">F</span>, <span class="extype" name="cats.arrow.Category.AllOps.A">A</span>, <span class="extype" name="cats.arrow.Category.AllOps.B">B</span>], <a href="Compose$$Ops.html" class="extype" name="cats.arrow.Compose.Ops">Compose.Ops</a>[<span class="extype" name="cats.arrow.Category.AllOps.F">F</span>, <span class="extype" name="cats.arrow.Category.AllOps.A">A</span>, <span class="extype" name="cats.arrow.Category.AllOps.B">B</span>], <a href="Category$$Ops.html" class="extype" name="cats.arrow.Category.Ops">Ops</a>[<span class="extype" name="cats.arrow.Category.AllOps.F">F</span>, <span class="extype" name="cats.arrow.Category.AllOps.A">A</span>, <span class="extype" name="cats.arrow.Category.AllOps.B">B</span>], <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
         </div><div class="toggleContainer block">
             <span class="toggle">
               Known Subclasses
             </span>
             <div class="subClasses hiddenContent"><a href="Arrow$$AllOps.html" class="extype" name="cats.arrow.Arrow.AllOps">AllOps</a>, <a href="ArrowChoice$$AllOps.html" class="extype" name="cats.arrow.ArrowChoice.AllOps">AllOps</a>, <a href="Choice$$AllOps.html" class="extype" name="cats.arrow.Choice.AllOps">AllOps</a>, <a href="CommutativeArrow$$AllOps.html" class="extype" name="cats.arrow.CommutativeArrow.AllOps">AllOps</a></div>
-          </div></div>
+          </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
+                <span class="toggle diagram-link">
+                  Type Hierarchy
+                </span>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph1" viewBox="0.00 0.00 312.00 155.00" height="155pt" width="312pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 151)" class="graph" id="page0,1_graph0"><polygon points="-4,4 -4,-151 308,-151 308,4 -4,4" stroke="transparent" fill="white"></polygon><g class="cluster" id="clust1"></g><g class="cluster" id="clust2"></g><!-- node0 --><g class="node this trait" id="graph1_0"><g id="a_this trait|graph1_0"><a xlink:title="cats.arrow.Category.AllOps (this trait)" xlink:href="#inheritance-diagram"><path d="M199.17,-86C199.17,-86 101.83,-86 101.83,-86 97.67,-86 93.5,-81.83 93.5,-77.67 93.5,-77.67 93.5,-69.33 93.5,-69.33 93.5,-65.17 97.67,-61 101.83,-61 101.83,-61 199.17,-61 199.17,-61 203.33,-61 207.5,-65.17 207.5,-69.33 207.5,-69.33 207.5,-77.67 207.5,-77.67 207.5,-81.83 203.33,-86 199.17,-86" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-80.5" x="103.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-71.1" x="124.5" text-anchor="start">AllOps[F, A, B]</text></a></g></g><!-- node1 --><g class="node trait" id="graph1_1"><g id="a_trait|graph1_1"><a xlink:title="cats.arrow.Arrow.AllOps" xlink:href="Arrow$$AllOps.html#inheritance-diagram"><path d="M132.67,-25C132.67,-25 8.33,-25 8.33,-25 4.17,-25 0,-20.83 0,-16.67 0,-16.67 0,-8.33 0,-8.33 0,-4.17 4.17,0 8.33,0 8.33,0 132.67,0 132.67,0 136.83,0 141,-4.17 141,-8.33 141,-8.33 141,-16.67 141,-16.67 141,-20.83 136.83,-25 132.67,-25" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-19.5" x="10.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="31.5" text-anchor="start">Arrow.AllOps[F, A, B]</text></a></g></g><!-- node0&#45;&gt;node1 --><g class="edge inheritance" id="graph1_0_1"><g id="a_inheritance|graph1_0_1"><a xlink:title="Arrow.AllOps[F, A, B] is a subtype of AllOps[F, A, B]"><path d="M128.8,-56.5C115.37,-46.59 98.43,-34.1 86.27,-25.13" stroke="#d4d4d4" fill="none"></path><polygon points="127.61,-58.66 134.69,-60.84 130.52,-54.72 127.61,-58.66" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node2 --><g class="node trait" id="graph1_2"><g id="a_trait|graph1_2"><a xlink:title="cats.arrow.Choice.AllOps" xlink:href="Choice$$AllOps.html#inheritance-diagram"><path d="M295.67,-25C295.67,-25 167.33,-25 167.33,-25 163.17,-25 159,-20.83 159,-16.67 159,-16.67 159,-8.33 159,-8.33 159,-4.17 163.17,0 167.33,0 167.33,0 295.67,0 295.67,0 299.83,0 304,-4.17 304,-8.33 304,-8.33 304,-16.67 304,-16.67 304,-20.83 299.83,-25 295.67,-25" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-19.5" x="169.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="190.5" text-anchor="start">Choice.AllOps[F, A, B]</text></a></g></g><!-- node0&#45;&gt;node2 --><g class="edge inheritance" id="graph1_0_2"><g id="a_inheritance|graph1_0_2"><a xlink:title="Choice.AllOps[F, A, B] is a subtype of AllOps[F, A, B]"><path d="M172.47,-56.5C186.07,-46.59 203.22,-34.1 215.53,-25.13" stroke="#d4d4d4" fill="none"></path><polygon points="170.72,-54.74 166.5,-60.84 173.6,-58.7 170.72,-54.74" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node3 --><g class="node trait" id="graph1_3"><g id="a_trait|graph1_3"><a xlink:title="cats.arrow.Category.Ops" xlink:href="Category$$Ops.html#inheritance-diagram"><path d="M121.17,-147C121.17,-147 37.83,-147 37.83,-147 33.67,-147 29.5,-142.83 29.5,-138.67 29.5,-138.67 29.5,-130.33 29.5,-130.33 29.5,-126.17 33.67,-122 37.83,-122 37.83,-122 121.17,-122 121.17,-122 125.33,-122 129.5,-126.17 129.5,-130.33 129.5,-130.33 129.5,-138.67 129.5,-138.67 129.5,-142.83 125.33,-147 121.17,-147" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-141.5" x="39.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="60.5" text-anchor="start">Ops[F, A, B]</text></a></g></g><!-- node3&#45;&gt;node0 --><g class="edge inheritance" id="graph1_3_0"><g id="a_inheritance|graph1_3_0"><a xlink:title="AllOps[F, A, B] is a subtype of Ops[F, A, B]"><path d="M99.08,-117.23C110.95,-107.37 125.81,-95.01 136.5,-86.13" stroke="#d4d4d4" fill="none"></path><polygon points="97.35,-115.49 93.53,-121.84 100.48,-119.25 97.35,-115.49" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node4 --><g class="node trait" id="graph1_4"><g id="a_trait|graph1_4"><a xlink:title="cats.arrow.Compose.AllOps" xlink:href="Compose$$AllOps.html#inheritance-diagram"><path d="M289.17,-147C289.17,-147 155.83,-147 155.83,-147 151.67,-147 147.5,-142.83 147.5,-138.67 147.5,-138.67 147.5,-130.33 147.5,-130.33 147.5,-126.17 151.67,-122 155.83,-122 155.83,-122 289.17,-122 289.17,-122 293.33,-122 297.5,-126.17 297.5,-130.33 297.5,-130.33 297.5,-138.67 297.5,-138.67 297.5,-142.83 293.33,-147 289.17,-147" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-141.5" x="157.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="178.5" text-anchor="start">Compose.AllOps[F, A, B]</text></a></g></g><!-- node4&#45;&gt;node0 --><g class="edge inheritance" id="graph1_4_0"><g id="a_inheritance|graph1_4_0"><a xlink:title="AllOps[F, A, B] is a subtype of Compose.AllOps[F, A, B]"><path d="M202.64,-117.23C190.61,-107.37 175.54,-95.01 164.7,-86.13" stroke="#d4d4d4" fill="none"></path><polygon points="201.31,-119.3 208.28,-121.84 204.41,-115.51 201.31,-119.3" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
+                <div id="diagram-controls" class="hiddenContent">
+                  <button id="diagram-zoom-out" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button id="diagram-zoom-in" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button title="Toggle full-screen" id="diagram-fs" class="diagram-btn to-full"><i class="material-icons"></i></button>
+                </div>
+              </div></div>
         
 
       <div id="mbrsel">
@@ -201,7 +233,7 @@
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="cats.arrow.Category.AllOps"><span>AllOps</span></li><li class="in" name="cats.arrow.Compose.AllOps"><span>AllOps</span></li><li class="in" name="cats.arrow.Compose.Ops"><span>Ops</span></li><li class="in" name="cats.arrow.Category.Ops"><span>Ops</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="cats.arrow.Category.AllOps"><span>AllOps</span></li><li class="in" name="cats.arrow.Compose.AllOps"><span>AllOps</span></li><li class="in" name="cats.arrow.Compose.Ops"><span>Ops</span></li><li class="in" name="cats.arrow.Category.Ops"><span>Ops</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -238,16 +270,16 @@
         <span class="name">TypeClassType</span><span class="result"> &lt;: <a href="Category.html" class="extype" name="cats.arrow.Category">Category</a>[<span class="extype" name="cats.arrow.Category.AllOps.F">F</span>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.arrow.Category.AllOps">AllOps</a> → <a href="Compose$$AllOps.html" class="extype" name="cats.arrow.Compose.AllOps">AllOps</a> → <a href="Compose$$Ops.html" class="extype" name="cats.arrow.Compose.Ops">Ops</a> → <a href="Category$$Ops.html" class="extype" name="cats.arrow.Category.Ops">Ops</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.arrow.Category.AllOps">AllOps</a> → <a href="Compose$$Ops.html" class="extype" name="cats.arrow.Compose.Ops">Ops</a> → <a href="Category$$Ops.html" class="extype" name="cats.arrow.Category.Ops">Ops</a></dd></dl></div>
     </li></ol>
             </div>
 
         <div class="values members">
               <h3>Abstract Value Members</h3>
               <ol><li name="cats.arrow.Compose.Ops#self" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="self:F[B,D]"></a><a id="self:F[A,B]"></a>
+      <a id="self:F[A,B]"></a>
       <span class="permalink">
-      <a href="../../cats/arrow/Category$$AllOps.html#self:F[B,D]" title="Permalink">
+      <a href="../../cats/arrow/Category$$AllOps.html#self:F[A,B]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -260,10 +292,10 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Compose$$Ops.html" class="extype" name="cats.arrow.Compose.Ops">Ops</a></dd></dl></div>
-    </li><li name="cats.arrow.Category.AllOps#typeClassInstance" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="typeClassInstance:AllOps.this.TypeClassType"></a><a id="typeClassInstance:TypeClassType"></a>
+    </li><li name="cats.arrow.Compose.Ops#typeClassInstance" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="typeClassInstance:Ops.this.TypeClassType"></a><a id="typeClassInstance:TypeClassType"></a>
       <span class="permalink">
-      <a href="../../cats/arrow/Category$$AllOps.html#typeClassInstance:AllOps.this.TypeClassType" title="Permalink">
+      <a href="../../cats/arrow/Category$$AllOps.html#typeClassInstance:Ops.this.TypeClassType" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -275,7 +307,7 @@
         <span class="name">typeClassInstance</span><span class="result">: <a href="#TypeClassType&lt;:cats.arrow.Category[F]" class="extmbr" name="cats.arrow.Category.AllOps.TypeClassType">TypeClassType</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.arrow.Category.AllOps">AllOps</a> → <a href="Compose$$AllOps.html" class="extype" name="cats.arrow.Compose.AllOps">AllOps</a> → <a href="Compose$$Ops.html" class="extype" name="cats.arrow.Compose.Ops">Ops</a> → <a href="Category$$Ops.html" class="extype" name="cats.arrow.Category.Ops">Ops</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Compose$$Ops.html" class="extype" name="cats.arrow.Compose.Ops">Ops</a></dd></dl></div>
     </li></ol>
             </div>
 
@@ -315,9 +347,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="cats.arrow.Compose.Ops#&lt;&lt;&lt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;&lt;&lt;[A](g:F[A,B]):F[A,D]"></a><a id="&lt;&lt;&lt;[A](F[A,A]):F[A,B]"></a>
+      <a id="&lt;&lt;&lt;[C](g:F[C,A]):F[C,B]"></a><a id="&lt;&lt;&lt;[C](F[C,A]):F[C,B]"></a>
       <span class="permalink">
-      <a href="../../cats/arrow/Category$$AllOps.html#&lt;&lt;&lt;[A](g:F[A,B]):F[A,D]" title="Permalink">
+      <a href="../../cats/arrow/Category$$AllOps.html#&lt;&lt;&lt;[C](g:F[C,A]):F[C,B]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -326,7 +358,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $less$less$less" class="name">&lt;&lt;&lt;</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="g">g: <span class="extype" name="cats.arrow.Category.AllOps.F">F</span>[<span class="extype" name="cats.arrow.Compose.Ops.&lt;&lt;&lt;.A">A</span>, <span class="extype" name="cats.arrow.Category.AllOps.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.arrow.Category.AllOps.F">F</span>[<span class="extype" name="cats.arrow.Compose.Ops.&lt;&lt;&lt;.A">A</span>, <span class="extype" name="cats.arrow.Category.AllOps.B">B</span>]</span>
+        <span title="gt4s: $less$less$less" class="name">&lt;&lt;&lt;</span><span class="tparams">[<span name="C">C</span>]</span><span class="params">(<span name="g">g: <span class="extype" name="cats.arrow.Category.AllOps.F">F</span>[<span class="extype" name="cats.arrow.Compose.Ops.&lt;&lt;&lt;.C">C</span>, <span class="extype" name="cats.arrow.Category.AllOps.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.arrow.Category.AllOps.F">F</span>[<span class="extype" name="cats.arrow.Compose.Ops.&lt;&lt;&lt;.C">C</span>, <span class="extype" name="cats.arrow.Category.AllOps.B">B</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Compose$$Ops.html" class="extype" name="cats.arrow.Compose.Ops">Ops</a></dd></dl></div>
@@ -347,9 +379,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="cats.arrow.Compose.Ops#&gt;&gt;&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&gt;&gt;&gt;[C](g:F[D,C]):F[B,C]"></a><a id="&gt;&gt;&gt;[C](F[B,C]):F[A,C]"></a>
+      <a id="&gt;&gt;&gt;[C](g:F[B,C]):F[A,C]"></a><a id="&gt;&gt;&gt;[C](F[B,C]):F[A,C]"></a>
       <span class="permalink">
-      <a href="../../cats/arrow/Category$$AllOps.html#&gt;&gt;&gt;[C](g:F[D,C]):F[B,C]" title="Permalink">
+      <a href="../../cats/arrow/Category$$AllOps.html#&gt;&gt;&gt;[C](g:F[B,C]):F[A,C]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -363,9 +395,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Compose$$Ops.html" class="extype" name="cats.arrow.Compose.Ops">Ops</a></dd></dl></div>
     </li><li name="cats.arrow.Compose.Ops#andThen" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="andThen[C](g:F[D,C]):F[B,C]"></a><a id="andThen[C](F[B,C]):F[A,C]"></a>
+      <a id="andThen[C](g:F[B,C]):F[A,C]"></a><a id="andThen[C](F[B,C]):F[A,C]"></a>
       <span class="permalink">
-      <a href="../../cats/arrow/Category$$AllOps.html#andThen[C](g:F[D,C]):F[B,C]" title="Permalink">
+      <a href="../../cats/arrow/Category$$AllOps.html#andThen[C](g:F[B,C]):F[A,C]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -417,11 +449,13 @@
               
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="cats.arrow.Compose.Ops#compose" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="compose[A](g:F[A,B]):F[A,D]"></a><a id="compose[A](F[A,A]):F[A,B]"></a>
+      <a id="compose[C](g:F[C,A]):F[C,B]"></a><a id="compose[C](F[C,A]):F[C,B]"></a>
       <span class="permalink">
-      <a href="../../cats/arrow/Category$$AllOps.html#compose[A](g:F[A,B]):F[A,D]" title="Permalink">
+      <a href="../../cats/arrow/Category$$AllOps.html#compose[C](g:F[C,A]):F[C,B]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -430,7 +464,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">compose</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="g">g: <span class="extype" name="cats.arrow.Category.AllOps.F">F</span>[<span class="extype" name="cats.arrow.Compose.Ops.compose.A">A</span>, <span class="extype" name="cats.arrow.Category.AllOps.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.arrow.Category.AllOps.F">F</span>[<span class="extype" name="cats.arrow.Compose.Ops.compose.A">A</span>, <span class="extype" name="cats.arrow.Category.AllOps.B">B</span>]</span>
+        <span class="name">compose</span><span class="tparams">[<span name="C">C</span>]</span><span class="params">(<span name="g">g: <span class="extype" name="cats.arrow.Category.AllOps.F">F</span>[<span class="extype" name="cats.arrow.Compose.Ops.compose.C">C</span>, <span class="extype" name="cats.arrow.Category.AllOps.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.arrow.Category.AllOps.F">F</span>[<span class="extype" name="cats.arrow.Compose.Ops.compose.C">C</span>, <span class="extype" name="cats.arrow.Category.AllOps.B">B</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Compose$$Ops.html" class="extype" name="cats.arrow.Compose.Ops">Ops</a></dd></dl></div>
@@ -466,28 +500,6 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="finalize():Unit"></a>
-      <span class="permalink">
-      <a href="../../cats/arrow/Category$$AllOps.html#finalize():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="symbol">classOf[java.lang.Throwable]</span>
-    </span>)</span>
-              
-        </dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
@@ -505,6 +517,8 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -524,6 +538,8 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -576,6 +592,8 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
@@ -594,6 +612,8 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -628,28 +648,6 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait():Unit"></a>
-      <span class="permalink">
-      <a href="../../cats/arrow/Category$$AllOps.html#wait():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
-    </span>)</span>
-              
-        </dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <span class="permalink">
@@ -696,13 +694,64 @@
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/arrow/Category$$AllOps.html#wait():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
     </li>
               </ol>
             </div>
 
         
 
-        
+        <div class="values members">
+              <h3>Deprecated Value Members</h3>
+              <ol><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/arrow/Category$$AllOps.html#finalize():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version ) see corresponding Javadoc for more information.">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+                <span class="name">@Deprecated</span>
+              
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version )</i> see corresponding Javadoc for more information.</p></dd></dl></div>
+    </li></ol>
+            </div>
         </div>
 
         <div id="inheritedMembers">
@@ -712,6 +761,10 @@
               <h3>Inherited from <a href="Compose$$Ops.html" class="extype" name="cats.arrow.Compose.Ops">Compose.Ops</a>[<span class="extype" name="cats.arrow.Category.AllOps.F">F</span>, <span class="extype" name="cats.arrow.Category.AllOps.A">A</span>, <span class="extype" name="cats.arrow.Category.AllOps.B">B</span>]</h3>
             </div><div class="parent" name="cats.arrow.Category.Ops">
               <h3>Inherited from <a href="Category$$Ops.html" class="extype" name="cats.arrow.Category.Ops">Ops</a>[<span class="extype" name="cats.arrow.Category.AllOps.F">F</span>, <span class="extype" name="cats.arrow.Category.AllOps.A">A</span>, <span class="extype" name="cats.arrow.Category.AllOps.B">B</span>]</h3>
+            </div><div class="parent" name="scala.Serializable">
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">

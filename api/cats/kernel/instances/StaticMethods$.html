@@ -81,10 +81,32 @@
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <a title="Symbolic aliases for various types are defined here." href="../../index.html"><span class="name">cats</span></a>
+        <a title="The cats root package contains all the trait signatures of most Scala type classes." href="../../index.html"><span class="name">cats</span></a>
       </span>
       
-      <p class="shortcomment cmt">Symbolic aliases for various types are defined here.</p><div class="fullcomment"><div class="comment cmt"><p>Symbolic aliases for various types are defined here.
+      <p class="shortcomment cmt">The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><p>Cats type classes are implemented using the approach from the
+ <a href="https://ropas.snu.ac.kr/~bruno/papers/TypeClasses.pdf" target="_blank">Type classes as objects and implicits</a> article.</p><p>For each type class, <code>cats</code> provides three pieces:
+- Its <b>signature</b>: a trait that is polymorphic on a type parameter.
+  Type class traits inherit from other type classes to indicate that any implementation of the lower type class (e.g. <code>Applicative</code>)
+  can also serve as an instance for the higuer type class (e.g. <code>Functor</code>).
+- Type class <b>'instances</b>, which are classes and objects that implement one or more type class signatures for some specific types.
+  Type class instances for several data types from the Java or Scala standard libraries are declared in the subpackage <code>cats.instances</code>.
+- <b>Syntax extensions</b>, each of which provides the methods of the type class defines as extension methods
+  (which in Scala 2 are encoded as implicit classes) for values of any type <code>F</code>; given that an instance of the type class
+  for the receiver type (<code>this</code>) is in the implicit scope.
+  Symtax extensions are declared in the <code>cats.syntax</code> package.
+- A set of <b>laws</b>, that are also generic on the type of the class, and are only defined on the operations of the type class.
+  The purpose of these laws is to declare some algebraic relations (equations) between Scala expressions involving the operations
+  of the type class, and test (but not verify) that implemented instances satisfy those equations.
+  Laws are defined in the <code>cats-laws</code> package.</p><p>Although most of cats type classes are declared in this package, some are declared in other packages:
+- type classes that operate on base types (kind <code>*</code>), and their implementations for standard library types,
+  are contained in <code>cats.kernel</code>, which is a different SBT project. However, they are re-exported from this package.
+- type classes of kind <code>F[_, _]</code>, such as <a href="../../arrow/Profunctor.html" class="extype" name="cats.arrow.Profunctor">cats.arrow.Profunctor</a>&quot; or <a href="../../arrow/Arrow.html" class="extype" name="cats.arrow.Arrow">cats.arrow.Arrow</a>, which are relevant for
+  Functional Reactive Programming or optics, are declared in the <code>cats.arrow</code> package.
+- Also, those type classes that abstract over (pure or impure) functional runtime effects are declared
+  in the <a href="https://typelevel.org/cats-effect/" target="_blank">cats-effect library</a>.
+- Some type classes for which no laws can be provided are left out of the main road, in a small and dirty alley.
+  These are the <code>alleycats</code>.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
     </li><li name="cats.kernel" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="kernel"></a><a id="kernel:kernel"></a>
@@ -124,8 +146,8 @@
                         <a href="AllInstances.html" title="">AllInstances</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
-                        <a class="class" href="BigDecimalGroup.html" title=""></a>
-                        <a href="BigDecimalGroup.html" title="">BigDecimalGroup</a>
+                        <a class="class" href="BigDecimalGroup.html" title="Note that combining, removing, and inverting BigDecimal values will use unlimited precision operations."></a>
+                        <a href="BigDecimalGroup.html" title="Note that combining, removing, and inverting BigDecimal values will use unlimited precision operations.">BigDecimalGroup</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
                         <a class="trait" href="BigDecimalInstances.html" title=""></a>
@@ -148,6 +170,10 @@
                         <a href="BigIntOrder.html" title="">BigIntOrder</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
+                        <a class="trait" href="BigIntUnboundedEnum.html" title=""></a>
+                        <a href="BigIntUnboundedEnum.html" title="">BigIntUnboundedEnum</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
                         <a class="trait" href="BitSetInstances.html" title=""></a>
                         <a href="BitSetInstances.html" title="">BitSetInstances</a>
                       </li><li class="current-entities indented3">
@@ -162,6 +188,10 @@
                         <span class="separator"></span>
                         <a class="trait" href="BooleanBounded.html" title=""></a>
                         <a href="BooleanBounded.html" title="">BooleanBounded</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="BooleanEnumerable.html" title=""></a>
+                        <a href="BooleanEnumerable.html" title="">BooleanEnumerable</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
                         <a class="trait" href="BooleanInstances.html" title=""></a>
@@ -190,6 +220,10 @@
                         <span class="separator"></span>
                         <a class="trait" href="CharBounded.html" title=""></a>
                         <a href="CharBounded.html" title="">CharBounded</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="CharEnumerable.html" title=""></a>
+                        <a href="CharEnumerable.html" title="">CharEnumerable</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
                         <a class="trait" href="CharInstances.html" title=""></a>
@@ -308,6 +342,10 @@
                         <a href="IntBounded.html" title="">IntBounded</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
+                        <a class="trait" href="IntEnumerable.html" title=""></a>
+                        <a href="IntEnumerable.html" title="">IntEnumerable</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
                         <a class="class" href="IntGroup.html" title=""></a>
                         <a href="IntGroup.html" title="">IntGroup</a>
                       </li><li class="current-entities indented3">
@@ -346,6 +384,10 @@
                         <span class="separator"></span>
                         <a class="trait" href="LongBounded.html" title=""></a>
                         <a href="LongBounded.html" title="">LongBounded</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="LongEnumerable.html" title=""></a>
+                        <a href="LongEnumerable.html" title="">LongEnumerable</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
                         <a class="class" href="LongGroup.html" title=""></a>
@@ -432,6 +474,30 @@
                         <a href="QueuePartialOrder.html" title="">QueuePartialOrder</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
+                        <a class="class" href="SeqEq.html" title=""></a>
+                        <a href="SeqEq.html" title="">SeqEq</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="SeqHash.html" title=""></a>
+                        <a href="SeqHash.html" title="">SeqHash</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="SeqInstances.html" title=""></a>
+                        <a href="SeqInstances.html" title="">SeqInstances</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="SeqMonoid.html" title=""></a>
+                        <a href="SeqMonoid.html" title="">SeqMonoid</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="SeqOrder.html" title=""></a>
+                        <a href="SeqOrder.html" title="">SeqOrder</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="SeqPartialOrder.html" title=""></a>
+                        <a href="SeqPartialOrder.html" title="">SeqPartialOrder</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
                         <a class="class" href="SetHash.html" title=""></a>
                         <a href="SetHash.html" title="">SetHash</a>
                       </li><li class="current-entities indented3">
@@ -452,6 +518,10 @@
                         <a href="ShortBounded.html" title="">ShortBounded</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
+                        <a class="trait" href="ShortEnumerable.html" title=""></a>
+                        <a href="ShortEnumerable.html" title="">ShortEnumerable</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
                         <a class="class" href="ShortGroup.html" title=""></a>
                         <a href="ShortGroup.html" title="">ShortGroup</a>
                       </li><li class="current-entities indented3">
@@ -468,6 +538,10 @@
                         <a href="SortedMapCommutativeMonoid.html" title="">SortedMapCommutativeMonoid</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
+                        <a class="class" href="SortedMapCommutativeSemigroup.html" title=""></a>
+                        <a href="SortedMapCommutativeSemigroup.html" title="">SortedMapCommutativeSemigroup</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
                         <a class="class" href="SortedMapEq.html" title=""></a>
                         <a href="SortedMapEq.html" title="">SortedMapEq</a>
                       </li><li class="current-entities indented3">
@@ -482,6 +556,10 @@
                         <span class="separator"></span>
                         <a class="class" href="SortedMapMonoid.html" title=""></a>
                         <a href="SortedMapMonoid.html" title="">SortedMapMonoid</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="SortedMapSemigroup.html" title=""></a>
+                        <a href="SortedMapSemigroup.html" title="">SortedMapSemigroup</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
                         <a class="class" href="SortedSetHash.html" title=""></a>
@@ -574,6 +652,10 @@
                         <span class="separator"></span>
                         <a class="trait" href="UnitBounded.html" title=""></a>
                         <a href="UnitBounded.html" title="">UnitBounded</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="UnitEnumerable.html" title=""></a>
+                        <a href="UnitEnumerable.html" title="">UnitEnumerable</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
                         <a class="trait" href="UnitInstances.html" title=""></a>
@@ -797,6 +879,8 @@
               
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="cats.kernel.instances.StaticMethods#combineAllIterable" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="combineAllIterable[A,R](b:scala.collection.mutable.Builder[A,R],xs:cats.kernel.compat.scalaVersionSpecific.IterableOnce[Iterable[A]]):R"></a><a id="combineAllIterable[A,R](Builder[A,R],IterableOnce[Iterable[A]]):R"></a>
@@ -862,28 +946,6 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="finalize():Unit"></a>
-      <span class="permalink">
-      <a href="../../../cats/kernel/instances/StaticMethods$.html#finalize():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="symbol">classOf[java.lang.Throwable]</span>
-    </span>)</span>
-              
-        </dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
@@ -901,6 +963,8 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -920,6 +984,8 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -1036,6 +1102,8 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
@@ -1054,6 +1122,8 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="cats.kernel.compat.HashCompat#orderedHash" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -1137,28 +1207,6 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait():Unit"></a>
-      <span class="permalink">
-      <a href="../../../cats/kernel/instances/StaticMethods$.html#wait():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
-    </span>)</span>
-              
-        </dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <span class="permalink">
       <a href="../../../cats/kernel/instances/StaticMethods$.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
@@ -1204,6 +1252,48 @@
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/StaticMethods$.html#wait():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="cats.kernel.instances.StaticMethods#wrapMutableIndexedSeq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wrapMutableIndexedSeq[A](m:scala.collection.mutable.IndexedSeq[A]):scala.collection.immutable.IndexedSeq[A]"></a><a id="wrapMutableIndexedSeq[A](IndexedSeq[A]):IndexedSeq[A]"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/StaticMethods$.html#wrapMutableIndexedSeq[A](m:scala.collection.mutable.IndexedSeq[A]):scala.collection.immutable.IndexedSeq[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wrapMutableIndexedSeq</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="m">m: <a href="https://www.scala-lang.org/api/2.12.10/scala/collection/mutable/IndexedSeq.html#scala.collection.mutable.IndexedSeq" class="extype" name="scala.collection.mutable.IndexedSeq">IndexedSeq</a>[<span class="extype" name="cats.kernel.instances.StaticMethods.wrapMutableIndexedSeq.A">A</span>]</span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/collection/immutable/IndexedSeq.html#scala.collection.immutable.IndexedSeq" class="extype" name="scala.collection.immutable.IndexedSeq">IndexedSeq</a>[<span class="extype" name="cats.kernel.instances.StaticMethods.wrapMutableIndexedSeq.A">A</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">When you &quot;own&quot; this m, and will not mutate it again, this
+is safe to call.</p><div class="fullcomment"><div class="comment cmt"><p>When you &quot;own&quot; this m, and will not mutate it again, this
+is safe to call. It is unsafe to call this, then mutate
+the original collection.</p><p>You are giving up ownership when calling this method
+</p></div></div>
     </li><li name="cats.kernel.instances.StaticMethods#wrapMutableMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="wrapMutableMap[K,V](m:scala.collection.mutable.Map[K,V]):Map[K,V]"></a><a id="wrapMutableMap[K,V](Map[K,V]):Map[K,V]"></a>
       <span class="permalink">
@@ -1226,7 +1316,36 @@
 
         
 
-        
+        <div class="values members">
+              <h3>Deprecated Value Members</h3>
+              <ol><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/StaticMethods$.html#finalize():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version ) see corresponding Javadoc for more information.">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+                <span class="name">@Deprecated</span>
+              
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version )</i> see corresponding Javadoc for more information.</p></dd></dl></div>
+    </li></ol>
+            </div>
         </div>
 
         <div id="inheritedMembers">

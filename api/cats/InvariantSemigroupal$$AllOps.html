@@ -81,10 +81,32 @@
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <a title="Symbolic aliases for various types are defined here." href="index.html"><span class="name">cats</span></a>
+        <a title="The cats root package contains all the trait signatures of most Scala type classes." href="index.html"><span class="name">cats</span></a>
       </span>
       
-      <p class="shortcomment cmt">Symbolic aliases for various types are defined here.</p><div class="fullcomment"><div class="comment cmt"><p>Symbolic aliases for various types are defined here.
+      <p class="shortcomment cmt">The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><p>Cats type classes are implemented using the approach from the
+ <a href="https://ropas.snu.ac.kr/~bruno/papers/TypeClasses.pdf" target="_blank">Type classes as objects and implicits</a> article.</p><p>For each type class, <code>cats</code> provides three pieces:
+- Its <b>signature</b>: a trait that is polymorphic on a type parameter.
+  Type class traits inherit from other type classes to indicate that any implementation of the lower type class (e.g. <code>Applicative</code>)
+  can also serve as an instance for the higuer type class (e.g. <code>Functor</code>).
+- Type class <b>'instances</b>, which are classes and objects that implement one or more type class signatures for some specific types.
+  Type class instances for several data types from the Java or Scala standard libraries are declared in the subpackage <code>cats.instances</code>.
+- <b>Syntax extensions</b>, each of which provides the methods of the type class defines as extension methods
+  (which in Scala 2 are encoded as implicit classes) for values of any type <code>F</code>; given that an instance of the type class
+  for the receiver type (<code>this</code>) is in the implicit scope.
+  Symtax extensions are declared in the <code>cats.syntax</code> package.
+- A set of <b>laws</b>, that are also generic on the type of the class, and are only defined on the operations of the type class.
+  The purpose of these laws is to declare some algebraic relations (equations) between Scala expressions involving the operations
+  of the type class, and test (but not verify) that implemented instances satisfy those equations.
+  Laws are defined in the <code>cats-laws</code> package.</p><p>Although most of cats type classes are declared in this package, some are declared in other packages:
+- type classes that operate on base types (kind <code>*</code>), and their implementations for standard library types,
+  are contained in <code>cats.kernel</code>, which is a different SBT project. However, they are re-exported from this package.
+- type classes of kind <code>F[_, _]</code>, such as <a href="arrow/Profunctor.html" class="extype" name="cats.arrow.Profunctor">cats.arrow.Profunctor</a>&quot; or <a href="arrow/Arrow.html" class="extype" name="cats.arrow.Arrow">cats.arrow.Arrow</a>, which are relevant for
+  Functional Reactive Programming or optics, are declared in the <code>cats.arrow</code> package.
+- Also, those type classes that abstract over (pure or impure) functional runtime effects are declared
+  in the <a href="https://typelevel.org/cats-effect/" target="_blank">cats-effect library</a>.
+- Some type classes for which no laws can be provided are left out of the main road, in a small and dirty alley.
+  These are the <code>alleycats</code>.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="_root_">root</a></dd></dl></div>
     </li><li name="cats.InvariantSemigroupal" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="InvariantSemigroupal"></a><a id="InvariantSemigroupal:InvariantSemigroupal"></a>
@@ -154,13 +176,23 @@
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="Invariant$$AllOps.html" class="extype" name="cats.Invariant.AllOps">Invariant.AllOps</a>[<span class="extype" name="cats.InvariantSemigroupal.AllOps.F">F</span>, <span class="extype" name="cats.InvariantSemigroupal.AllOps.A">A</span>], <a href="Invariant$$Ops.html" class="extype" name="cats.Invariant.Ops">Invariant.Ops</a>[<span class="extype" name="cats.InvariantSemigroupal.AllOps.F">F</span>, <span class="extype" name="cats.InvariantSemigroupal.AllOps.A">A</span>], <a href="Semigroupal$$AllOps.html" class="extype" name="cats.Semigroupal.AllOps">Semigroupal.AllOps</a>[<span class="extype" name="cats.InvariantSemigroupal.AllOps.F">F</span>, <span class="extype" name="cats.InvariantSemigroupal.AllOps.A">A</span>], <a href="Semigroupal$$Ops.html" class="extype" name="cats.Semigroupal.Ops">Semigroupal.Ops</a>[<span class="extype" name="cats.InvariantSemigroupal.AllOps.F">F</span>, <span class="extype" name="cats.InvariantSemigroupal.AllOps.A">A</span>], <a href="InvariantSemigroupal$$Ops.html" class="extype" name="cats.InvariantSemigroupal.Ops">Ops</a>[<span class="extype" name="cats.InvariantSemigroupal.AllOps.F">F</span>, <span class="extype" name="cats.InvariantSemigroupal.AllOps.A">A</span>], <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="Invariant$$AllOps.html" class="extype" name="cats.Invariant.AllOps">Invariant.AllOps</a>[<span class="extype" name="cats.InvariantSemigroupal.AllOps.F">F</span>, <span class="extype" name="cats.InvariantSemigroupal.AllOps.A">A</span>], <a href="Invariant$$Ops.html" class="extype" name="cats.Invariant.Ops">Invariant.Ops</a>[<span class="extype" name="cats.InvariantSemigroupal.AllOps.F">F</span>, <span class="extype" name="cats.InvariantSemigroupal.AllOps.A">A</span>], <a href="Semigroupal$$AllOps.html" class="extype" name="cats.Semigroupal.AllOps">Semigroupal.AllOps</a>[<span class="extype" name="cats.InvariantSemigroupal.AllOps.F">F</span>, <span class="extype" name="cats.InvariantSemigroupal.AllOps.A">A</span>], <a href="Semigroupal$$Ops.html" class="extype" name="cats.Semigroupal.Ops">Semigroupal.Ops</a>[<span class="extype" name="cats.InvariantSemigroupal.AllOps.F">F</span>, <span class="extype" name="cats.InvariantSemigroupal.AllOps.A">A</span>], <a href="InvariantSemigroupal$$Ops.html" class="extype" name="cats.InvariantSemigroupal.Ops">Ops</a>[<span class="extype" name="cats.InvariantSemigroupal.AllOps.F">F</span>, <span class="extype" name="cats.InvariantSemigroupal.AllOps.A">A</span>], <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
         </div><div class="toggleContainer block">
             <span class="toggle">
               Known Subclasses
             </span>
             <div class="subClasses hiddenContent"><a href="Alternative$$AllOps.html" class="extype" name="cats.Alternative.AllOps">AllOps</a>, <a href="Applicative$$AllOps.html" class="extype" name="cats.Applicative.AllOps">AllOps</a>, <a href="Apply$$AllOps.html" class="extype" name="cats.Apply.AllOps">AllOps</a>, <a href="Bimonad$$AllOps.html" class="extype" name="cats.Bimonad.AllOps">AllOps</a>, <a href="CommutativeApplicative$$AllOps.html" class="extype" name="cats.CommutativeApplicative.AllOps">AllOps</a>, <a href="CommutativeApply$$AllOps.html" class="extype" name="cats.CommutativeApply.AllOps">AllOps</a>, <a href="CommutativeFlatMap$$AllOps.html" class="extype" name="cats.CommutativeFlatMap.AllOps">AllOps</a>, <a href="CommutativeMonad$$AllOps.html" class="extype" name="cats.CommutativeMonad.AllOps">AllOps</a>, <a href="ContravariantMonoidal$$AllOps.html" class="extype" name="cats.ContravariantMonoidal.AllOps">AllOps</a>, <a href="ContravariantSemigroupal$$AllOps.html" class="extype" name="cats.ContravariantSemigroupal.AllOps">AllOps</a>, <a href="FlatMap$$AllOps.html" class="extype" name="cats.FlatMap.AllOps">AllOps</a>, <a href="InvariantMonoidal$$AllOps.html" class="extype" name="cats.InvariantMonoidal.AllOps">AllOps</a>, <a href="Monad$$AllOps.html" class="extype" name="cats.Monad.AllOps">AllOps</a></div>
-          </div></div>
+          </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
+                <span class="toggle diagram-link">
+                  Type Hierarchy
+                </span>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph1" viewBox="0.00 0.00 565.00 155.00" height="155pt" width="565pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 151)" class="graph" id="page0,1_graph0"><polygon points="-4,4 -4,-151 561,-151 561,4 -4,4" stroke="transparent" fill="white"></polygon><g class="cluster" id="clust1"></g><g class="cluster" id="clust2"></g><!-- node0 --><g class="node this trait" id="graph1_0"><g id="a_this trait|graph1_0"><a xlink:title="cats.InvariantSemigroupal.AllOps (this trait)" xlink:href="#inheritance-diagram"><path d="M293.17,-86C293.17,-86 209.83,-86 209.83,-86 205.67,-86 201.5,-81.83 201.5,-77.67 201.5,-77.67 201.5,-69.33 201.5,-69.33 201.5,-65.17 205.67,-61 209.83,-61 209.83,-61 293.17,-61 293.17,-61 297.33,-61 301.5,-65.17 301.5,-69.33 301.5,-69.33 301.5,-77.67 301.5,-77.67 301.5,-81.83 297.33,-86 293.17,-86" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-80.5" x="211.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-71.1" x="232.5" text-anchor="start">AllOps[F, A]</text></a></g></g><!-- node1 --><g class="node trait" id="graph1_1"><g id="a_trait|graph1_1"><a xlink:title="cats.Apply.AllOps" xlink:href="Apply$$AllOps.html#inheritance-diagram"><path d="M118.67,-25C118.67,-25 8.33,-25 8.33,-25 4.17,-25 0,-20.83 0,-16.67 0,-16.67 0,-8.33 0,-8.33 0,-4.17 4.17,0 8.33,0 8.33,0 118.67,0 118.67,0 122.83,0 127,-4.17 127,-8.33 127,-8.33 127,-16.67 127,-16.67 127,-20.83 122.83,-25 118.67,-25" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-19.5" x="10.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="31.5" text-anchor="start">Apply.AllOps[F, A]</text></a></g></g><!-- node0&#45;&gt;node1 --><g class="edge inheritance" id="graph1_0_1"><g id="a_inheritance|graph1_0_1"><a xlink:title="Apply.AllOps[F, A] is a subtype of AllOps[F, A]"><path d="M208.03,-58.86C175.44,-48.63 131.31,-34.78 100.42,-25.09" stroke="#d4d4d4" fill="none"></path><polygon points="207.39,-61.23 214.81,-60.98 208.86,-56.55 207.39,-61.23" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node2 --><g class="node trait" id="graph1_2"><g id="a_trait|graph1_2"><a xlink:title="cats.ContravariantSemigroupal.AllOps" xlink:href="ContravariantSemigroupal$$AllOps.html#inheritance-diagram"><path d="M349.67,-25C349.67,-25 153.33,-25 153.33,-25 149.17,-25 145,-20.83 145,-16.67 145,-16.67 145,-8.33 145,-8.33 145,-4.17 149.17,0 153.33,0 153.33,0 349.67,0 349.67,0 353.83,0 358,-4.17 358,-8.33 358,-8.33 358,-16.67 358,-16.67 358,-20.83 353.83,-25 349.67,-25" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-19.5" x="155.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="176.5" text-anchor="start">ContravariantSemigroupal.AllOps[F, A]</text></a></g></g><!-- node0&#45;&gt;node2 --><g class="edge inheritance" id="graph1_0_2"><g id="a_inheritance|graph1_0_2"><a xlink:title="ContravariantSemigroupal.AllOps[F, A] is a subtype of AllOps[F, A]"><path d="M251.5,-53.76C251.5,-44.37 251.5,-33.29 251.5,-25.13" stroke="#d4d4d4" fill="none"></path><polygon points="249.05,-53.84 251.5,-60.84 253.95,-53.84 249.05,-53.84" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node3 --><g class="node trait" id="graph1_3"><g id="a_trait|graph1_3"><a xlink:title="cats.InvariantMonoidal.AllOps" xlink:href="InvariantMonoidal$$AllOps.html#inheritance-diagram"><path d="M548.67,-25C548.67,-25 384.33,-25 384.33,-25 380.17,-25 376,-20.83 376,-16.67 376,-16.67 376,-8.33 376,-8.33 376,-4.17 380.17,0 384.33,0 384.33,0 548.67,0 548.67,0 552.83,0 557,-4.17 557,-8.33 557,-8.33 557,-16.67 557,-16.67 557,-20.83 552.83,-25 548.67,-25" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-19.5" x="386.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="407.5" text-anchor="start">InvariantMonoidal.AllOps[F, A]</text></a></g></g><!-- node0&#45;&gt;node3 --><g class="edge inheritance" id="graph1_0_3"><g id="a_inheritance|graph1_0_3"><a xlink:title="InvariantMonoidal.AllOps[F, A] is a subtype of AllOps[F, A]"><path d="M300.27,-59.12C337.64,-48.86 388.65,-34.86 424.27,-25.09" stroke="#d4d4d4" fill="none"></path><polygon points="299.57,-56.77 293.46,-60.98 300.86,-61.49 299.57,-56.77" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node4 --><g class="node trait" id="graph1_4"><g id="a_trait|graph1_4"><a xlink:title="cats.InvariantSemigroupal.Ops" xlink:href="InvariantSemigroupal$$Ops.html#inheritance-diagram"><path d="M147.67,-147C147.67,-147 77.33,-147 77.33,-147 73.17,-147 69,-142.83 69,-138.67 69,-138.67 69,-130.33 69,-130.33 69,-126.17 73.17,-122 77.33,-122 77.33,-122 147.67,-122 147.67,-122 151.83,-122 156,-126.17 156,-130.33 156,-130.33 156,-138.67 156,-138.67 156,-142.83 151.83,-147 147.67,-147" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-141.5" x="79.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="100.5" text-anchor="start">Ops[F, A]</text></a></g></g><!-- node4&#45;&gt;node0 --><g class="edge inheritance" id="graph1_4_0"><g id="a_inheritance|graph1_4_0"><a xlink:title="AllOps[F, A] is a subtype of Ops[F, A]"><path d="M146.14,-119.22C169.99,-109.1 201.61,-95.68 223.96,-86.19" stroke="#d4d4d4" fill="none"></path><polygon points="145.12,-116.99 139.63,-121.98 147.03,-121.5 145.12,-116.99" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node5 --><g class="node trait" id="graph1_5"><g id="a_trait|graph1_5"><a xlink:title="cats.Semigroupal.AllOps" xlink:href="Semigroupal$$AllOps.html#inheritance-diagram"><path d="M320.17,-147C320.17,-147 182.83,-147 182.83,-147 178.67,-147 174.5,-142.83 174.5,-138.67 174.5,-138.67 174.5,-130.33 174.5,-130.33 174.5,-126.17 178.67,-122 182.83,-122 182.83,-122 320.17,-122 320.17,-122 324.33,-122 328.5,-126.17 328.5,-130.33 328.5,-130.33 328.5,-138.67 328.5,-138.67 328.5,-142.83 324.33,-147 320.17,-147" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-141.5" x="184.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="205.5" text-anchor="start">Semigroupal.AllOps[F, A]</text></a></g></g><!-- node5&#45;&gt;node0 --><g class="edge inheritance" id="graph1_5_0"><g id="a_inheritance|graph1_5_0"><a xlink:title="AllOps[F, A] is a subtype of Semigroupal.AllOps[F, A]"><path d="M251.5,-114.76C251.5,-105.37 251.5,-94.29 251.5,-86.13" stroke="#d4d4d4" fill="none"></path><polygon points="249.05,-114.84 251.5,-121.84 253.95,-114.84 249.05,-114.84" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node6 --><g class="node trait" id="graph1_6"><g id="a_trait|graph1_6"><a xlink:title="cats.Invariant.AllOps" xlink:href="Invariant$$AllOps.html#inheritance-diagram"><path d="M483.67,-147C483.67,-147 355.33,-147 355.33,-147 351.17,-147 347,-142.83 347,-138.67 347,-138.67 347,-130.33 347,-130.33 347,-126.17 351.17,-122 355.33,-122 355.33,-122 483.67,-122 483.67,-122 487.83,-122 492,-126.17 492,-130.33 492,-130.33 492,-138.67 492,-138.67 492,-142.83 487.83,-147 483.67,-147" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-141.5" x="357.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="378.5" text-anchor="start">Invariant.AllOps[F, A]</text></a></g></g><!-- node6&#45;&gt;node0 --><g class="edge inheritance" id="graph1_6_0"><g id="a_inheritance|graph1_6_0"><a xlink:title="AllOps[F, A] is a subtype of Invariant.AllOps[F, A]"><path d="M379.93,-119.6C350.87,-109.4 311.87,-95.7 284.49,-86.09" stroke="#d4d4d4" fill="none"></path><polygon points="379.29,-121.98 386.71,-121.98 380.92,-117.35 379.29,-121.98" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
+                <div id="diagram-controls" class="hiddenContent">
+                  <button id="diagram-zoom-out" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button id="diagram-zoom-in" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button title="Toggle full-screen" id="diagram-fs" class="diagram-btn to-full"><i class="material-icons"></i></button>
+                </div>
+              </div></div>
         
 
       <div id="mbrsel">
@@ -185,7 +217,7 @@
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="cats.InvariantSemigroupal.AllOps"><span>AllOps</span></li><li class="in" name="cats.Invariant.AllOps"><span>AllOps</span></li><li class="in" name="cats.Invariant.Ops"><span>Ops</span></li><li class="in" name="cats.Semigroupal.AllOps"><span>AllOps</span></li><li class="in" name="cats.Semigroupal.Ops"><span>Ops</span></li><li class="in" name="cats.InvariantSemigroupal.Ops"><span>Ops</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="cats.InvariantSemigroupal.AllOps"><span>AllOps</span></li><li class="in" name="cats.Invariant.AllOps"><span>AllOps</span></li><li class="in" name="cats.Invariant.Ops"><span>Ops</span></li><li class="in" name="cats.Semigroupal.AllOps"><span>AllOps</span></li><li class="in" name="cats.Semigroupal.Ops"><span>Ops</span></li><li class="in" name="cats.InvariantSemigroupal.Ops"><span>Ops</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -222,7 +254,7 @@
         <span class="name">TypeClassType</span><span class="result"> &lt;: <a href="InvariantSemigroupal.html" class="extype" name="cats.InvariantSemigroupal">InvariantSemigroupal</a>[<span class="extype" name="cats.InvariantSemigroupal.AllOps.F">F</span>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.InvariantSemigroupal.AllOps">AllOps</a> → <a href="Invariant$$AllOps.html" class="extype" name="cats.Invariant.AllOps">AllOps</a> → <a href="Invariant$$Ops.html" class="extype" name="cats.Invariant.Ops">Ops</a> → <a href="Semigroupal$$AllOps.html" class="extype" name="cats.Semigroupal.AllOps">AllOps</a> → <a href="Semigroupal$$Ops.html" class="extype" name="cats.Semigroupal.Ops">Ops</a> → <a href="InvariantSemigroupal$$Ops.html" class="extype" name="cats.InvariantSemigroupal.Ops">Ops</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.InvariantSemigroupal.AllOps">AllOps</a> → <a href="Invariant$$Ops.html" class="extype" name="cats.Invariant.Ops">Ops</a> → <a href="Semigroupal$$Ops.html" class="extype" name="cats.Semigroupal.Ops">Ops</a> → <a href="InvariantSemigroupal$$Ops.html" class="extype" name="cats.InvariantSemigroupal.Ops">Ops</a></dd></dl></div>
     </li></ol>
             </div>
 
@@ -244,10 +276,10 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Invariant$$Ops.html" class="extype" name="cats.Invariant.Ops">Ops</a></dd></dl></div>
-    </li><li name="cats.InvariantSemigroupal.AllOps#typeClassInstance" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="typeClassInstance:AllOps.this.TypeClassType"></a><a id="typeClassInstance:TypeClassType"></a>
+    </li><li name="cats.Invariant.Ops#typeClassInstance" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="typeClassInstance:Ops.this.TypeClassType"></a><a id="typeClassInstance:TypeClassType"></a>
       <span class="permalink">
-      <a href="../cats/InvariantSemigroupal$$AllOps.html#typeClassInstance:AllOps.this.TypeClassType" title="Permalink">
+      <a href="../cats/InvariantSemigroupal$$AllOps.html#typeClassInstance:Ops.this.TypeClassType" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -259,7 +291,7 @@
         <span class="name">typeClassInstance</span><span class="result">: <a href="#TypeClassType&lt;:cats.InvariantSemigroupal[F]" class="extmbr" name="cats.InvariantSemigroupal.AllOps.TypeClassType">TypeClassType</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.InvariantSemigroupal.AllOps">AllOps</a> → <a href="Invariant$$AllOps.html" class="extype" name="cats.Invariant.AllOps">AllOps</a> → <a href="Invariant$$Ops.html" class="extype" name="cats.Invariant.Ops">Ops</a> → <a href="Semigroupal$$AllOps.html" class="extype" name="cats.Semigroupal.AllOps">AllOps</a> → <a href="Semigroupal$$Ops.html" class="extype" name="cats.Semigroupal.Ops">Ops</a> → <a href="InvariantSemigroupal$$Ops.html" class="extype" name="cats.InvariantSemigroupal.Ops">Ops</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Invariant$$Ops.html" class="extype" name="cats.Invariant.Ops">Ops</a></dd></dl></div>
     </li></ol>
             </div>
 
@@ -353,6 +385,8 @@
               
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
@@ -386,28 +420,6 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="finalize():Unit"></a>
-      <span class="permalink">
-      <a href="../cats/InvariantSemigroupal$$AllOps.html#finalize():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="symbol">classOf[java.lang.Throwable]</span>
-    </span>)</span>
-              
-        </dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
@@ -425,6 +437,8 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -444,6 +458,8 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="cats.Invariant.Ops#imap" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -512,6 +528,8 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
@@ -530,6 +548,8 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="cats.Semigroupal.Ops#product" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -581,28 +601,6 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait():Unit"></a>
-      <span class="permalink">
-      <a href="../cats/InvariantSemigroupal$$AllOps.html#wait():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
-    </span>)</span>
-              
-        </dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <span class="permalink">
       <a href="../cats/InvariantSemigroupal$$AllOps.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
@@ -648,13 +646,64 @@
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <span class="permalink">
+      <a href="../cats/InvariantSemigroupal$$AllOps.html#wait():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
     </li>
               </ol>
             </div>
 
         
 
-        
+        <div class="values members">
+              <h3>Deprecated Value Members</h3>
+              <ol><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <span class="permalink">
+      <a href="../cats/InvariantSemigroupal$$AllOps.html#finalize():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version ) see corresponding Javadoc for more information.">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+                <span class="name">@Deprecated</span>
+              
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version )</i> see corresponding Javadoc for more information.</p></dd></dl></div>
+    </li></ol>
+            </div>
         </div>
 
         <div id="inheritedMembers">
@@ -668,6 +717,10 @@
               <h3>Inherited from <a href="Semigroupal$$Ops.html" class="extype" name="cats.Semigroupal.Ops">Semigroupal.Ops</a>[<span class="extype" name="cats.InvariantSemigroupal.AllOps.F">F</span>, <span class="extype" name="cats.InvariantSemigroupal.AllOps.A">A</span>]</h3>
             </div><div class="parent" name="cats.InvariantSemigroupal.Ops">
               <h3>Inherited from <a href="InvariantSemigroupal$$Ops.html" class="extype" name="cats.InvariantSemigroupal.Ops">Ops</a>[<span class="extype" name="cats.InvariantSemigroupal.AllOps.F">F</span>, <span class="extype" name="cats.InvariantSemigroupal.AllOps.A">A</span>]</h3>
+            </div><div class="parent" name="scala.Serializable">
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">

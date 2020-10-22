@@ -81,10 +81,32 @@
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <a title="Symbolic aliases for various types are defined here." href="../index.html"><span class="name">cats</span></a>
+        <a title="The cats root package contains all the trait signatures of most Scala type classes." href="../index.html"><span class="name">cats</span></a>
       </span>
       
-      <p class="shortcomment cmt">Symbolic aliases for various types are defined here.</p><div class="fullcomment"><div class="comment cmt"><p>Symbolic aliases for various types are defined here.
+      <p class="shortcomment cmt">The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><p>Cats type classes are implemented using the approach from the
+ <a href="https://ropas.snu.ac.kr/~bruno/papers/TypeClasses.pdf" target="_blank">Type classes as objects and implicits</a> article.</p><p>For each type class, <code>cats</code> provides three pieces:
+- Its <b>signature</b>: a trait that is polymorphic on a type parameter.
+  Type class traits inherit from other type classes to indicate that any implementation of the lower type class (e.g. <code>Applicative</code>)
+  can also serve as an instance for the higuer type class (e.g. <code>Functor</code>).
+- Type class <b>'instances</b>, which are classes and objects that implement one or more type class signatures for some specific types.
+  Type class instances for several data types from the Java or Scala standard libraries are declared in the subpackage <code>cats.instances</code>.
+- <b>Syntax extensions</b>, each of which provides the methods of the type class defines as extension methods
+  (which in Scala 2 are encoded as implicit classes) for values of any type <code>F</code>; given that an instance of the type class
+  for the receiver type (<code>this</code>) is in the implicit scope.
+  Symtax extensions are declared in the <code>cats.syntax</code> package.
+- A set of <b>laws</b>, that are also generic on the type of the class, and are only defined on the operations of the type class.
+  The purpose of these laws is to declare some algebraic relations (equations) between Scala expressions involving the operations
+  of the type class, and test (but not verify) that implemented instances satisfy those equations.
+  Laws are defined in the <code>cats-laws</code> package.</p><p>Although most of cats type classes are declared in this package, some are declared in other packages:
+- type classes that operate on base types (kind <code>*</code>), and their implementations for standard library types,
+  are contained in <code>cats.kernel</code>, which is a different SBT project. However, they are re-exported from this package.
+- type classes of kind <code>F[_, _]</code>, such as <a href="../arrow/Profunctor.html" class="extype" name="cats.arrow.Profunctor">cats.arrow.Profunctor</a>&quot; or <a href="../arrow/Arrow.html" class="extype" name="cats.arrow.Arrow">cats.arrow.Arrow</a>, which are relevant for
+  Functional Reactive Programming or optics, are declared in the <code>cats.arrow</code> package.
+- Also, those type classes that abstract over (pure or impure) functional runtime effects are declared
+  in the <a href="https://typelevel.org/cats-effect/" target="_blank">cats-effect library</a>.
+- Some type classes for which no laws can be provided are left out of the main road, in a small and dirty alley.
+  These are the <code>alleycats</code>.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
     </li><li name="cats.data" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="data"></a><a id="data:data"></a>
@@ -138,6 +160,10 @@
                         <a class="object" href="Const$.html" title=""></a>
                         <a class="class" href="Const.html" title="Const is a phantom type, it does not contain a value of its second type parameter B Const can be seen as a type level version of Function.const[A, B]: A =&gt; B =&gt; A"></a>
                         <a href="Const.html" title="Const is a phantom type, it does not contain a value of its second type parameter B Const can be seen as a type level version of Function.const[A, B]: A =&gt; B =&gt; A">Const</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$Cont$.html" title=""></a>
+                        <a href="package$$Cont$.html" title="">Cont</a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="ContT$.html" title=""></a>
                         <a class="class" href="ContT.html" title="This is a continuation transformer based on the ContT in the Haskell package Control.Monad.Cont"></a>
@@ -198,6 +224,10 @@
                         <span class="separator"></span>
                         <a class="class" href="NonEmptyMapOps.html" title=""></a>
                         <a href="NonEmptyMapOps.html" title="">NonEmptyMapOps</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="NonEmptySeq$.html" title=""></a>
+                        <a class="class" href="NonEmptySeq.html" title="A data type which represents a Seq guaranteed to contain at least one element."></a>
+                        <a href="NonEmptySeq.html" title="A data type which represents a Seq guaranteed to contain at least one element.">NonEmptySeq</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="class" href="NonEmptySetOps.html" title=""></a>
@@ -266,6 +296,10 @@
                         <a class="object" href="ZipList$.html" title=""></a>
                         <a class="class" href="ZipList.html" title=""></a>
                         <a href="ZipList.html" title="">ZipList</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="ZipSeq$.html" title=""></a>
+                        <a class="class" href="ZipSeq.html" title=""></a>
+                        <a href="ZipSeq.html" title="">ZipSeq</a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="ZipStream$.html" title=""></a>
                         <a class="class" href="ZipStream.html" title=""></a>
@@ -475,9 +509,9 @@
       <p class="shortcomment cmt">Get the provided environment, without modifying the input state.</p><div class="fullcomment"><div class="comment cmt"><p>Get the provided environment, without modifying the input state.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>CommonIRWSTConstructors</dd></dl></div>
     </li><li name="cats.data.IRWSTInstances2#catsDataAlternativeForIRWST" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataAlternativeForIRWST[F[_],E,L,S](implicitFM:cats.Monad[F],implicitFA:cats.Alternative[F],implicitL0:cats.Monoid[L]):cats.Alternative[[ζ$14$]cats.data.IndexedReaderWriterStateT[F,E,L,S,S,ζ$14$]]"></a><a id="catsDataAlternativeForIRWST[F[_],E,L,S](Monad[F],Alternative[F],Monoid[L]):Alternative[[ζ$14$]IndexedReaderWriterStateT[F,E,L,S,S,ζ$14$]]"></a>
+      <a id="catsDataAlternativeForIRWST[F[_],E,L,S](implicitFM:cats.Monad[F],implicitFA:cats.Alternative[F],implicitL0:cats.Monoid[L]):cats.Alternative[[ζ$13$]cats.data.IndexedReaderWriterStateT[F,E,L,S,S,ζ$13$]]"></a><a id="catsDataAlternativeForIRWST[F[_],E,L,S](Monad[F],Alternative[F],Monoid[L]):Alternative[[ζ$13$]IndexedReaderWriterStateT[F,E,L,S,S,ζ$13$]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/IndexedReaderWriterStateT$.html#catsDataAlternativeForIRWST[F[_],E,L,S](implicitFM:cats.Monad[F],implicitFA:cats.Alternative[F],implicitL0:cats.Monoid[L]):cats.Alternative[[ζ$14$]cats.data.IndexedReaderWriterStateT[F,E,L,S,S,ζ$14$]]" title="Permalink">
+      <a href="../../cats/data/IndexedReaderWriterStateT$.html#catsDataAlternativeForIRWST[F[_],E,L,S](implicitFM:cats.Monad[F],implicitFA:cats.Alternative[F],implicitL0:cats.Monoid[L]):cats.Alternative[[ζ$13$]cats.data.IndexedReaderWriterStateT[F,E,L,S,S,ζ$13$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -486,14 +520,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataAlternativeForIRWST</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="E">E</span>, <span name="L">L</span>, <span name="S">S</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="FM">FM: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.IRWSTInstances2.catsDataAlternativeForIRWST.F">F</span>]</span>, <span name="FA">FA: <a href="../Alternative.html" class="extype" name="cats.Alternative">Alternative</a>[<span class="extype" name="cats.data.IRWSTInstances2.catsDataAlternativeForIRWST.F">F</span>]</span>, <span name="L0">L0: <a href="../index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="cats.data.IRWSTInstances2.catsDataAlternativeForIRWST.L">L</span>]</span>)</span><span class="result">: <a href="../Alternative.html" class="extype" name="cats.Alternative">Alternative</a>[[ζ$14$]<a href="IndexedReaderWriterStateT.html" class="extype" name="cats.data.IndexedReaderWriterStateT">IndexedReaderWriterStateT</a>[<span class="extype" name="cats.data.IRWSTInstances2.catsDataAlternativeForIRWST.F">F</span>, <span class="extype" name="cats.data.IRWSTInstances2.catsDataAlternativeForIRWST.E">E</span>, <span class="extype" name="cats.data.IRWSTInstances2.catsDataAlternativeForIRWST.L">L</span>, <span class="extype" name="cats.data.IRWSTInstances2.catsDataAlternativeForIRWST.S">S</span>, <span class="extype" name="cats.data.IRWSTInstances2.catsDataAlternativeForIRWST.S">S</span>, <span class="extype" name="cats.data.IRWSTInstances2.&lt;refinement&gt;.Λ$.ζ$14$">ζ$14$</span>]]</span>
+        <span class="name">catsDataAlternativeForIRWST</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="E">E</span>, <span name="L">L</span>, <span name="S">S</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="FM">FM: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.IRWSTInstances2.catsDataAlternativeForIRWST.F">F</span>]</span>, <span name="FA">FA: <a href="../Alternative.html" class="extype" name="cats.Alternative">Alternative</a>[<span class="extype" name="cats.data.IRWSTInstances2.catsDataAlternativeForIRWST.F">F</span>]</span>, <span name="L0">L0: <a href="../index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="cats.data.IRWSTInstances2.catsDataAlternativeForIRWST.L">L</span>]</span>)</span><span class="result">: <a href="../Alternative.html" class="extype" name="cats.Alternative">Alternative</a>[[ζ$13$]<a href="IndexedReaderWriterStateT.html" class="extype" name="cats.data.IndexedReaderWriterStateT">IndexedReaderWriterStateT</a>[<span class="extype" name="cats.data.IRWSTInstances2.catsDataAlternativeForIRWST.F">F</span>, <span class="extype" name="cats.data.IRWSTInstances2.catsDataAlternativeForIRWST.E">E</span>, <span class="extype" name="cats.data.IRWSTInstances2.catsDataAlternativeForIRWST.L">L</span>, <span class="extype" name="cats.data.IRWSTInstances2.catsDataAlternativeForIRWST.S">S</span>, <span class="extype" name="cats.data.IRWSTInstances2.catsDataAlternativeForIRWST.S">S</span>, <span class="extype" name="cats.data.IRWSTInstances2.&lt;refinement&gt;.Λ$.ζ$13$">ζ$13$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IRWSTInstances2</dd></dl></div>
     </li><li name="cats.data.IRWSTInstances#catsDataBifunctorForIRWST" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataBifunctorForIRWST[F[_],E,L,SA](implicitF0:cats.Functor[F]):cats.Bifunctor[[ε$5$,ζ$6$]cats.data.IndexedReaderWriterStateT[F,E,L,SA,ε$5$,ζ$6$]]"></a><a id="catsDataBifunctorForIRWST[F[_],E,L,SA](Functor[F]):Bifunctor[[ε$5$,ζ$6$]IndexedReaderWriterStateT[F,E,L,SA,ε$5$,ζ$6$]]"></a>
+      <a id="catsDataBifunctorForIRWST[F[_],E,L,SA](implicitF0:cats.Functor[F]):cats.Bifunctor[[ε$4$,ζ$5$]cats.data.IndexedReaderWriterStateT[F,E,L,SA,ε$4$,ζ$5$]]"></a><a id="catsDataBifunctorForIRWST[F[_],E,L,SA](Functor[F]):Bifunctor[[ε$4$,ζ$5$]IndexedReaderWriterStateT[F,E,L,SA,ε$4$,ζ$5$]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/IndexedReaderWriterStateT$.html#catsDataBifunctorForIRWST[F[_],E,L,SA](implicitF0:cats.Functor[F]):cats.Bifunctor[[ε$5$,ζ$6$]cats.data.IndexedReaderWriterStateT[F,E,L,SA,ε$5$,ζ$6$]]" title="Permalink">
+      <a href="../../cats/data/IndexedReaderWriterStateT$.html#catsDataBifunctorForIRWST[F[_],E,L,SA](implicitF0:cats.Functor[F]):cats.Bifunctor[[ε$4$,ζ$5$]cats.data.IndexedReaderWriterStateT[F,E,L,SA,ε$4$,ζ$5$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -502,14 +536,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataBifunctorForIRWST</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="E">E</span>, <span name="L">L</span>, <span name="SA">SA</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.IRWSTInstances.catsDataBifunctorForIRWST.F">F</span>]</span>)</span><span class="result">: <a href="../Bifunctor.html" class="extype" name="cats.Bifunctor">Bifunctor</a>[[ε$5$, ζ$6$]<a href="IndexedReaderWriterStateT.html" class="extype" name="cats.data.IndexedReaderWriterStateT">IndexedReaderWriterStateT</a>[<span class="extype" name="cats.data.IRWSTInstances.catsDataBifunctorForIRWST.F">F</span>, <span class="extype" name="cats.data.IRWSTInstances.catsDataBifunctorForIRWST.E">E</span>, <span class="extype" name="cats.data.IRWSTInstances.catsDataBifunctorForIRWST.L">L</span>, <span class="extype" name="cats.data.IRWSTInstances.catsDataBifunctorForIRWST.SA">SA</span>, <span class="extype" name="cats.data.IRWSTInstances.&lt;refinement&gt;.Λ$.ε$5$">ε$5$</span>, <span class="extype" name="cats.data.IRWSTInstances.&lt;refinement&gt;.Λ$.ζ$6$">ζ$6$</span>]]</span>
+        <span class="name">catsDataBifunctorForIRWST</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="E">E</span>, <span name="L">L</span>, <span name="SA">SA</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.IRWSTInstances.catsDataBifunctorForIRWST.F">F</span>]</span>)</span><span class="result">: <a href="../Bifunctor.html" class="extype" name="cats.Bifunctor">Bifunctor</a>[[ε$4$, ζ$5$]<a href="IndexedReaderWriterStateT.html" class="extype" name="cats.data.IndexedReaderWriterStateT">IndexedReaderWriterStateT</a>[<span class="extype" name="cats.data.IRWSTInstances.catsDataBifunctorForIRWST.F">F</span>, <span class="extype" name="cats.data.IRWSTInstances.catsDataBifunctorForIRWST.E">E</span>, <span class="extype" name="cats.data.IRWSTInstances.catsDataBifunctorForIRWST.L">L</span>, <span class="extype" name="cats.data.IRWSTInstances.catsDataBifunctorForIRWST.SA">SA</span>, <span class="extype" name="cats.data.IRWSTInstances.&lt;refinement&gt;.Λ$.ε$4$">ε$4$</span>, <span class="extype" name="cats.data.IRWSTInstances.&lt;refinement&gt;.Λ$.ζ$5$">ζ$5$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IRWSTInstances</dd></dl></div>
     </li><li name="cats.data.IRWSTInstances#catsDataContravariantForIRWST" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataContravariantForIRWST[F[_],E,L,SB,T](implicitF0:cats.Functor[F]):cats.Contravariant[[δ$7$]cats.data.IndexedReaderWriterStateT[F,E,L,δ$7$,SB,T]]"></a><a id="catsDataContravariantForIRWST[F[_],E,L,SB,T](Functor[F]):Contravariant[[δ$7$]IndexedReaderWriterStateT[F,E,L,δ$7$,SB,T]]"></a>
+      <a id="catsDataContravariantForIRWST[F[_],E,L,SB,T](implicitF0:cats.Functor[F]):cats.Contravariant[[δ$6$]cats.data.IndexedReaderWriterStateT[F,E,L,δ$6$,SB,T]]"></a><a id="catsDataContravariantForIRWST[F[_],E,L,SB,T](Functor[F]):Contravariant[[δ$6$]IndexedReaderWriterStateT[F,E,L,δ$6$,SB,T]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/IndexedReaderWriterStateT$.html#catsDataContravariantForIRWST[F[_],E,L,SB,T](implicitF0:cats.Functor[F]):cats.Contravariant[[δ$7$]cats.data.IndexedReaderWriterStateT[F,E,L,δ$7$,SB,T]]" title="Permalink">
+      <a href="../../cats/data/IndexedReaderWriterStateT$.html#catsDataContravariantForIRWST[F[_],E,L,SB,T](implicitF0:cats.Functor[F]):cats.Contravariant[[δ$6$]cats.data.IndexedReaderWriterStateT[F,E,L,δ$6$,SB,T]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -518,14 +552,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataContravariantForIRWST</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="E">E</span>, <span name="L">L</span>, <span name="SB">SB</span>, <span name="T">T</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.IRWSTInstances.catsDataContravariantForIRWST.F">F</span>]</span>)</span><span class="result">: <a href="../Contravariant.html" class="extype" name="cats.Contravariant">Contravariant</a>[[δ$7$]<a href="IndexedReaderWriterStateT.html" class="extype" name="cats.data.IndexedReaderWriterStateT">IndexedReaderWriterStateT</a>[<span class="extype" name="cats.data.IRWSTInstances.catsDataContravariantForIRWST.F">F</span>, <span class="extype" name="cats.data.IRWSTInstances.catsDataContravariantForIRWST.E">E</span>, <span class="extype" name="cats.data.IRWSTInstances.catsDataContravariantForIRWST.L">L</span>, <span class="extype" name="cats.data.IRWSTInstances.&lt;refinement&gt;.Λ$.δ$7$">δ$7$</span>, <span class="extype" name="cats.data.IRWSTInstances.catsDataContravariantForIRWST.SB">SB</span>, <span class="extype" name="cats.data.IRWSTInstances.catsDataContravariantForIRWST.T">T</span>]]</span>
+        <span class="name">catsDataContravariantForIRWST</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="E">E</span>, <span name="L">L</span>, <span name="SB">SB</span>, <span name="T">T</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.IRWSTInstances.catsDataContravariantForIRWST.F">F</span>]</span>)</span><span class="result">: <a href="../Contravariant.html" class="extype" name="cats.Contravariant">Contravariant</a>[[δ$6$]<a href="IndexedReaderWriterStateT.html" class="extype" name="cats.data.IndexedReaderWriterStateT">IndexedReaderWriterStateT</a>[<span class="extype" name="cats.data.IRWSTInstances.catsDataContravariantForIRWST.F">F</span>, <span class="extype" name="cats.data.IRWSTInstances.catsDataContravariantForIRWST.E">E</span>, <span class="extype" name="cats.data.IRWSTInstances.catsDataContravariantForIRWST.L">L</span>, <span class="extype" name="cats.data.IRWSTInstances.&lt;refinement&gt;.Λ$.δ$6$">δ$6$</span>, <span class="extype" name="cats.data.IRWSTInstances.catsDataContravariantForIRWST.SB">SB</span>, <span class="extype" name="cats.data.IRWSTInstances.catsDataContravariantForIRWST.T">T</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IRWSTInstances</dd></dl></div>
     </li><li name="cats.data.IRWSTInstances#catsDataDeferForIRWST" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataDeferForIRWST[F[_],E,L,SA,SB](implicitF:cats.Defer[F]):cats.Defer[[ζ$9$]cats.data.IndexedReaderWriterStateT[F,E,L,SA,SB,ζ$9$]]"></a><a id="catsDataDeferForIRWST[F[_],E,L,SA,SB](Defer[F]):Defer[[ζ$9$]IndexedReaderWriterStateT[F,E,L,SA,SB,ζ$9$]]"></a>
+      <a id="catsDataDeferForIRWST[F[_],E,L,SA,SB](implicitF:cats.Defer[F]):cats.Defer[[ζ$8$]cats.data.IndexedReaderWriterStateT[F,E,L,SA,SB,ζ$8$]]"></a><a id="catsDataDeferForIRWST[F[_],E,L,SA,SB](Defer[F]):Defer[[ζ$8$]IndexedReaderWriterStateT[F,E,L,SA,SB,ζ$8$]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/IndexedReaderWriterStateT$.html#catsDataDeferForIRWST[F[_],E,L,SA,SB](implicitF:cats.Defer[F]):cats.Defer[[ζ$9$]cats.data.IndexedReaderWriterStateT[F,E,L,SA,SB,ζ$9$]]" title="Permalink">
+      <a href="../../cats/data/IndexedReaderWriterStateT$.html#catsDataDeferForIRWST[F[_],E,L,SA,SB](implicitF:cats.Defer[F]):cats.Defer[[ζ$8$]cats.data.IndexedReaderWriterStateT[F,E,L,SA,SB,ζ$8$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -534,14 +568,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataDeferForIRWST</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="E">E</span>, <span name="L">L</span>, <span name="SA">SA</span>, <span name="SB">SB</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Defer.html" class="extype" name="cats.Defer">Defer</a>[<span class="extype" name="cats.data.IRWSTInstances.catsDataDeferForIRWST.F">F</span>]</span>)</span><span class="result">: <a href="../Defer.html" class="extype" name="cats.Defer">Defer</a>[[ζ$9$]<a href="IndexedReaderWriterStateT.html" class="extype" name="cats.data.IndexedReaderWriterStateT">IndexedReaderWriterStateT</a>[<span class="extype" name="cats.data.IRWSTInstances.catsDataDeferForIRWST.F">F</span>, <span class="extype" name="cats.data.IRWSTInstances.catsDataDeferForIRWST.E">E</span>, <span class="extype" name="cats.data.IRWSTInstances.catsDataDeferForIRWST.L">L</span>, <span class="extype" name="cats.data.IRWSTInstances.catsDataDeferForIRWST.SA">SA</span>, <span class="extype" name="cats.data.IRWSTInstances.catsDataDeferForIRWST.SB">SB</span>, <span class="extype" name="cats.data.IRWSTInstances.&lt;refinement&gt;.Λ$.ζ$9$">ζ$9$</span>]]</span>
+        <span class="name">catsDataDeferForIRWST</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="E">E</span>, <span name="L">L</span>, <span name="SA">SA</span>, <span name="SB">SB</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Defer.html" class="extype" name="cats.Defer">Defer</a>[<span class="extype" name="cats.data.IRWSTInstances.catsDataDeferForIRWST.F">F</span>]</span>)</span><span class="result">: <a href="../Defer.html" class="extype" name="cats.Defer">Defer</a>[[ζ$8$]<a href="IndexedReaderWriterStateT.html" class="extype" name="cats.data.IndexedReaderWriterStateT">IndexedReaderWriterStateT</a>[<span class="extype" name="cats.data.IRWSTInstances.catsDataDeferForIRWST.F">F</span>, <span class="extype" name="cats.data.IRWSTInstances.catsDataDeferForIRWST.E">E</span>, <span class="extype" name="cats.data.IRWSTInstances.catsDataDeferForIRWST.L">L</span>, <span class="extype" name="cats.data.IRWSTInstances.catsDataDeferForIRWST.SA">SA</span>, <span class="extype" name="cats.data.IRWSTInstances.catsDataDeferForIRWST.SB">SB</span>, <span class="extype" name="cats.data.IRWSTInstances.&lt;refinement&gt;.Λ$.ζ$8$">ζ$8$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IRWSTInstances</dd></dl></div>
     </li><li name="cats.data.IRWSTInstances3#catsDataFunctorForIRWST" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataFunctorForIRWST[F[_],E,L,SA,SB](implicitF0:cats.Functor[F]):cats.Functor[[ζ$16$]cats.data.IndexedReaderWriterStateT[F,E,L,SA,SB,ζ$16$]]"></a><a id="catsDataFunctorForIRWST[F[_],E,L,SA,SB](Functor[F]):Functor[[ζ$16$]IndexedReaderWriterStateT[F,E,L,SA,SB,ζ$16$]]"></a>
+      <a id="catsDataFunctorForIRWST[F[_],E,L,SA,SB](implicitF0:cats.Functor[F]):cats.Functor[[ζ$15$]cats.data.IndexedReaderWriterStateT[F,E,L,SA,SB,ζ$15$]]"></a><a id="catsDataFunctorForIRWST[F[_],E,L,SA,SB](Functor[F]):Functor[[ζ$15$]IndexedReaderWriterStateT[F,E,L,SA,SB,ζ$15$]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/IndexedReaderWriterStateT$.html#catsDataFunctorForIRWST[F[_],E,L,SA,SB](implicitF0:cats.Functor[F]):cats.Functor[[ζ$16$]cats.data.IndexedReaderWriterStateT[F,E,L,SA,SB,ζ$16$]]" title="Permalink">
+      <a href="../../cats/data/IndexedReaderWriterStateT$.html#catsDataFunctorForIRWST[F[_],E,L,SA,SB](implicitF0:cats.Functor[F]):cats.Functor[[ζ$15$]cats.data.IndexedReaderWriterStateT[F,E,L,SA,SB,ζ$15$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -550,14 +584,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataFunctorForIRWST</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="E">E</span>, <span name="L">L</span>, <span name="SA">SA</span>, <span name="SB">SB</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.IRWSTInstances3.catsDataFunctorForIRWST.F">F</span>]</span>)</span><span class="result">: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[[ζ$16$]<a href="IndexedReaderWriterStateT.html" class="extype" name="cats.data.IndexedReaderWriterStateT">IndexedReaderWriterStateT</a>[<span class="extype" name="cats.data.IRWSTInstances3.catsDataFunctorForIRWST.F">F</span>, <span class="extype" name="cats.data.IRWSTInstances3.catsDataFunctorForIRWST.E">E</span>, <span class="extype" name="cats.data.IRWSTInstances3.catsDataFunctorForIRWST.L">L</span>, <span class="extype" name="cats.data.IRWSTInstances3.catsDataFunctorForIRWST.SA">SA</span>, <span class="extype" name="cats.data.IRWSTInstances3.catsDataFunctorForIRWST.SB">SB</span>, <span class="extype" name="cats.data.IRWSTInstances3.&lt;refinement&gt;.Λ$.ζ$16$">ζ$16$</span>]]</span>
+        <span class="name">catsDataFunctorForIRWST</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="E">E</span>, <span name="L">L</span>, <span name="SA">SA</span>, <span name="SB">SB</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.IRWSTInstances3.catsDataFunctorForIRWST.F">F</span>]</span>)</span><span class="result">: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[[ζ$15$]<a href="IndexedReaderWriterStateT.html" class="extype" name="cats.data.IndexedReaderWriterStateT">IndexedReaderWriterStateT</a>[<span class="extype" name="cats.data.IRWSTInstances3.catsDataFunctorForIRWST.F">F</span>, <span class="extype" name="cats.data.IRWSTInstances3.catsDataFunctorForIRWST.E">E</span>, <span class="extype" name="cats.data.IRWSTInstances3.catsDataFunctorForIRWST.L">L</span>, <span class="extype" name="cats.data.IRWSTInstances3.catsDataFunctorForIRWST.SA">SA</span>, <span class="extype" name="cats.data.IRWSTInstances3.catsDataFunctorForIRWST.SB">SB</span>, <span class="extype" name="cats.data.IRWSTInstances3.&lt;refinement&gt;.Λ$.ζ$15$">ζ$15$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IRWSTInstances3</dd></dl></div>
     </li><li name="cats.data.IRWSTInstances#catsDataMonadErrorForIRWST" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataMonadErrorForIRWST[F[_],E,L,S,R](implicitF0:cats.MonadError[F,R],implicitL0:cats.Monoid[L]):cats.MonadError[[ζ$8$]cats.data.IndexedReaderWriterStateT[F,E,L,S,S,ζ$8$],R]"></a><a id="catsDataMonadErrorForIRWST[F[_],E,L,S,R](MonadError[F,R],Monoid[L]):MonadError[[ζ$8$]IndexedReaderWriterStateT[F,E,L,S,S,ζ$8$],R]"></a>
+      <a id="catsDataMonadErrorForIRWST[F[_],E,L,S,R](implicitF0:cats.MonadError[F,R],implicitL0:cats.Monoid[L]):cats.MonadError[[ζ$7$]cats.data.IndexedReaderWriterStateT[F,E,L,S,S,ζ$7$],R]"></a><a id="catsDataMonadErrorForIRWST[F[_],E,L,S,R](MonadError[F,R],Monoid[L]):MonadError[[ζ$7$]IndexedReaderWriterStateT[F,E,L,S,S,ζ$7$],R]"></a>
       <span class="permalink">
-      <a href="../../cats/data/IndexedReaderWriterStateT$.html#catsDataMonadErrorForIRWST[F[_],E,L,S,R](implicitF0:cats.MonadError[F,R],implicitL0:cats.Monoid[L]):cats.MonadError[[ζ$8$]cats.data.IndexedReaderWriterStateT[F,E,L,S,S,ζ$8$],R]" title="Permalink">
+      <a href="../../cats/data/IndexedReaderWriterStateT$.html#catsDataMonadErrorForIRWST[F[_],E,L,S,R](implicitF0:cats.MonadError[F,R],implicitL0:cats.Monoid[L]):cats.MonadError[[ζ$7$]cats.data.IndexedReaderWriterStateT[F,E,L,S,S,ζ$7$],R]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -566,14 +600,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataMonadErrorForIRWST</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="E">E</span>, <span name="L">L</span>, <span name="S">S</span>, <span name="R">R</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../MonadError.html" class="extype" name="cats.MonadError">MonadError</a>[<span class="extype" name="cats.data.IRWSTInstances.catsDataMonadErrorForIRWST.F">F</span>, <span class="extype" name="cats.data.IRWSTInstances.catsDataMonadErrorForIRWST.R">R</span>]</span>, <span name="L0">L0: <a href="../index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="cats.data.IRWSTInstances.catsDataMonadErrorForIRWST.L">L</span>]</span>)</span><span class="result">: <a href="../MonadError.html" class="extype" name="cats.MonadError">MonadError</a>[[ζ$8$]<a href="IndexedReaderWriterStateT.html" class="extype" name="cats.data.IndexedReaderWriterStateT">IndexedReaderWriterStateT</a>[<span class="extype" name="cats.data.IRWSTInstances.catsDataMonadErrorForIRWST.F">F</span>, <span class="extype" name="cats.data.IRWSTInstances.catsDataMonadErrorForIRWST.E">E</span>, <span class="extype" name="cats.data.IRWSTInstances.catsDataMonadErrorForIRWST.L">L</span>, <span class="extype" name="cats.data.IRWSTInstances.catsDataMonadErrorForIRWST.S">S</span>, <span class="extype" name="cats.data.IRWSTInstances.catsDataMonadErrorForIRWST.S">S</span>, <span class="extype" name="cats.data.IRWSTInstances.&lt;refinement&gt;.Λ$.ζ$8$">ζ$8$</span>], <span class="extype" name="cats.data.IRWSTInstances.catsDataMonadErrorForIRWST.R">R</span>]</span>
+        <span class="name">catsDataMonadErrorForIRWST</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="E">E</span>, <span name="L">L</span>, <span name="S">S</span>, <span name="R">R</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../MonadError.html" class="extype" name="cats.MonadError">MonadError</a>[<span class="extype" name="cats.data.IRWSTInstances.catsDataMonadErrorForIRWST.F">F</span>, <span class="extype" name="cats.data.IRWSTInstances.catsDataMonadErrorForIRWST.R">R</span>]</span>, <span name="L0">L0: <a href="../index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="cats.data.IRWSTInstances.catsDataMonadErrorForIRWST.L">L</span>]</span>)</span><span class="result">: <a href="../MonadError.html" class="extype" name="cats.MonadError">MonadError</a>[[ζ$7$]<a href="IndexedReaderWriterStateT.html" class="extype" name="cats.data.IndexedReaderWriterStateT">IndexedReaderWriterStateT</a>[<span class="extype" name="cats.data.IRWSTInstances.catsDataMonadErrorForIRWST.F">F</span>, <span class="extype" name="cats.data.IRWSTInstances.catsDataMonadErrorForIRWST.E">E</span>, <span class="extype" name="cats.data.IRWSTInstances.catsDataMonadErrorForIRWST.L">L</span>, <span class="extype" name="cats.data.IRWSTInstances.catsDataMonadErrorForIRWST.S">S</span>, <span class="extype" name="cats.data.IRWSTInstances.catsDataMonadErrorForIRWST.S">S</span>, <span class="extype" name="cats.data.IRWSTInstances.&lt;refinement&gt;.Λ$.ζ$7$">ζ$7$</span>], <span class="extype" name="cats.data.IRWSTInstances.catsDataMonadErrorForIRWST.R">R</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IRWSTInstances</dd></dl></div>
     </li><li name="cats.data.IRWSTInstances1#catsDataMonadForRWST" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataMonadForRWST[F[_],E,L,S](implicitF0:cats.Monad[F],implicitL0:cats.Monoid[L]):cats.Monad[[ε$11$]cats.data.IndexedReaderWriterStateT[F,E,L,S,S,ε$11$]]"></a><a id="catsDataMonadForRWST[F[_],E,L,S](Monad[F],Monoid[L]):Monad[[ε$11$]IndexedReaderWriterStateT[F,E,L,S,S,ε$11$]]"></a>
+      <a id="catsDataMonadForRWST[F[_],E,L,S](implicitF0:cats.Monad[F],implicitL0:cats.Monoid[L]):cats.Monad[[ε$10$]cats.data.IndexedReaderWriterStateT[F,E,L,S,S,ε$10$]]"></a><a id="catsDataMonadForRWST[F[_],E,L,S](Monad[F],Monoid[L]):Monad[[ε$10$]IndexedReaderWriterStateT[F,E,L,S,S,ε$10$]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/IndexedReaderWriterStateT$.html#catsDataMonadForRWST[F[_],E,L,S](implicitF0:cats.Monad[F],implicitL0:cats.Monoid[L]):cats.Monad[[ε$11$]cats.data.IndexedReaderWriterStateT[F,E,L,S,S,ε$11$]]" title="Permalink">
+      <a href="../../cats/data/IndexedReaderWriterStateT$.html#catsDataMonadForRWST[F[_],E,L,S](implicitF0:cats.Monad[F],implicitL0:cats.Monoid[L]):cats.Monad[[ε$10$]cats.data.IndexedReaderWriterStateT[F,E,L,S,S,ε$10$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -582,14 +616,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataMonadForRWST</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="E">E</span>, <span name="L">L</span>, <span name="S">S</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.IRWSTInstances1.catsDataMonadForRWST.F">F</span>]</span>, <span name="L0">L0: <a href="../index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="cats.data.IRWSTInstances1.catsDataMonadForRWST.L">L</span>]</span>)</span><span class="result">: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[[ε$11$]<a href="IndexedReaderWriterStateT.html" class="extype" name="cats.data.IndexedReaderWriterStateT">IndexedReaderWriterStateT</a>[<span class="extype" name="cats.data.IRWSTInstances1.catsDataMonadForRWST.F">F</span>, <span class="extype" name="cats.data.IRWSTInstances1.catsDataMonadForRWST.E">E</span>, <span class="extype" name="cats.data.IRWSTInstances1.catsDataMonadForRWST.L">L</span>, <span class="extype" name="cats.data.IRWSTInstances1.catsDataMonadForRWST.S">S</span>, <span class="extype" name="cats.data.IRWSTInstances1.catsDataMonadForRWST.S">S</span>, <span class="extype" name="cats.data.IRWSTInstances1.&lt;refinement&gt;.Λ$.ε$11$">ε$11$</span>]]</span>
+        <span class="name">catsDataMonadForRWST</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="E">E</span>, <span name="L">L</span>, <span name="S">S</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.IRWSTInstances1.catsDataMonadForRWST.F">F</span>]</span>, <span name="L0">L0: <a href="../index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="cats.data.IRWSTInstances1.catsDataMonadForRWST.L">L</span>]</span>)</span><span class="result">: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[[ε$10$]<a href="IndexedReaderWriterStateT.html" class="extype" name="cats.data.IndexedReaderWriterStateT">IndexedReaderWriterStateT</a>[<span class="extype" name="cats.data.IRWSTInstances1.catsDataMonadForRWST.F">F</span>, <span class="extype" name="cats.data.IRWSTInstances1.catsDataMonadForRWST.E">E</span>, <span class="extype" name="cats.data.IRWSTInstances1.catsDataMonadForRWST.L">L</span>, <span class="extype" name="cats.data.IRWSTInstances1.catsDataMonadForRWST.S">S</span>, <span class="extype" name="cats.data.IRWSTInstances1.catsDataMonadForRWST.S">S</span>, <span class="extype" name="cats.data.IRWSTInstances1.&lt;refinement&gt;.Λ$.ε$10$">ε$10$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IRWSTInstances1</dd></dl></div>
     </li><li name="cats.data.IRWSTInstances1#catsDataProfunctorForIRWST" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataProfunctorForIRWST[F[_],E,L,T](implicitF0:cats.Functor[F]):cats.arrow.Profunctor[[δ$12$,ε$13$]cats.data.IndexedReaderWriterStateT[F,E,L,δ$12$,ε$13$,T]]"></a><a id="catsDataProfunctorForIRWST[F[_],E,L,T](Functor[F]):Profunctor[[δ$12$,ε$13$]IndexedReaderWriterStateT[F,E,L,δ$12$,ε$13$,T]]"></a>
+      <a id="catsDataProfunctorForIRWST[F[_],E,L,T](implicitF0:cats.Functor[F]):cats.arrow.Profunctor[[δ$11$,ε$12$]cats.data.IndexedReaderWriterStateT[F,E,L,δ$11$,ε$12$,T]]"></a><a id="catsDataProfunctorForIRWST[F[_],E,L,T](Functor[F]):Profunctor[[δ$11$,ε$12$]IndexedReaderWriterStateT[F,E,L,δ$11$,ε$12$,T]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/IndexedReaderWriterStateT$.html#catsDataProfunctorForIRWST[F[_],E,L,T](implicitF0:cats.Functor[F]):cats.arrow.Profunctor[[δ$12$,ε$13$]cats.data.IndexedReaderWriterStateT[F,E,L,δ$12$,ε$13$,T]]" title="Permalink">
+      <a href="../../cats/data/IndexedReaderWriterStateT$.html#catsDataProfunctorForIRWST[F[_],E,L,T](implicitF0:cats.Functor[F]):cats.arrow.Profunctor[[δ$11$,ε$12$]cats.data.IndexedReaderWriterStateT[F,E,L,δ$11$,ε$12$,T]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -598,14 +632,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataProfunctorForIRWST</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="E">E</span>, <span name="L">L</span>, <span name="T">T</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.IRWSTInstances1.catsDataProfunctorForIRWST.F">F</span>]</span>)</span><span class="result">: <a href="../arrow/Profunctor.html" class="extype" name="cats.arrow.Profunctor">Profunctor</a>[[δ$12$, ε$13$]<a href="IndexedReaderWriterStateT.html" class="extype" name="cats.data.IndexedReaderWriterStateT">IndexedReaderWriterStateT</a>[<span class="extype" name="cats.data.IRWSTInstances1.catsDataProfunctorForIRWST.F">F</span>, <span class="extype" name="cats.data.IRWSTInstances1.catsDataProfunctorForIRWST.E">E</span>, <span class="extype" name="cats.data.IRWSTInstances1.catsDataProfunctorForIRWST.L">L</span>, <span class="extype" name="cats.data.IRWSTInstances1.&lt;refinement&gt;.Λ$.δ$12$">δ$12$</span>, <span class="extype" name="cats.data.IRWSTInstances1.&lt;refinement&gt;.Λ$.ε$13$">ε$13$</span>, <span class="extype" name="cats.data.IRWSTInstances1.catsDataProfunctorForIRWST.T">T</span>]]</span>
+        <span class="name">catsDataProfunctorForIRWST</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="E">E</span>, <span name="L">L</span>, <span name="T">T</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.IRWSTInstances1.catsDataProfunctorForIRWST.F">F</span>]</span>)</span><span class="result">: <a href="../arrow/Profunctor.html" class="extype" name="cats.arrow.Profunctor">Profunctor</a>[[δ$11$, ε$12$]<a href="IndexedReaderWriterStateT.html" class="extype" name="cats.data.IndexedReaderWriterStateT">IndexedReaderWriterStateT</a>[<span class="extype" name="cats.data.IRWSTInstances1.catsDataProfunctorForIRWST.F">F</span>, <span class="extype" name="cats.data.IRWSTInstances1.catsDataProfunctorForIRWST.E">E</span>, <span class="extype" name="cats.data.IRWSTInstances1.catsDataProfunctorForIRWST.L">L</span>, <span class="extype" name="cats.data.IRWSTInstances1.&lt;refinement&gt;.Λ$.δ$11$">δ$11$</span>, <span class="extype" name="cats.data.IRWSTInstances1.&lt;refinement&gt;.Λ$.ε$12$">ε$12$</span>, <span class="extype" name="cats.data.IRWSTInstances1.catsDataProfunctorForIRWST.T">T</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IRWSTInstances1</dd></dl></div>
     </li><li name="cats.data.IRWSTInstances3#catsDataSemigroupKForIRWST" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataSemigroupKForIRWST[F[_],E,L,SA,SB](implicitF0:cats.Monad[F],implicitG0:cats.SemigroupK[F]):cats.SemigroupK[[ζ$15$]cats.data.IndexedReaderWriterStateT[F,E,L,SA,SB,ζ$15$]]"></a><a id="catsDataSemigroupKForIRWST[F[_],E,L,SA,SB](Monad[F],SemigroupK[F]):SemigroupK[[ζ$15$]IndexedReaderWriterStateT[F,E,L,SA,SB,ζ$15$]]"></a>
+      <a id="catsDataSemigroupKForIRWST[F[_],E,L,SA,SB](implicitF0:cats.Monad[F],implicitG0:cats.SemigroupK[F]):cats.SemigroupK[[ζ$14$]cats.data.IndexedReaderWriterStateT[F,E,L,SA,SB,ζ$14$]]"></a><a id="catsDataSemigroupKForIRWST[F[_],E,L,SA,SB](Monad[F],SemigroupK[F]):SemigroupK[[ζ$14$]IndexedReaderWriterStateT[F,E,L,SA,SB,ζ$14$]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/IndexedReaderWriterStateT$.html#catsDataSemigroupKForIRWST[F[_],E,L,SA,SB](implicitF0:cats.Monad[F],implicitG0:cats.SemigroupK[F]):cats.SemigroupK[[ζ$15$]cats.data.IndexedReaderWriterStateT[F,E,L,SA,SB,ζ$15$]]" title="Permalink">
+      <a href="../../cats/data/IndexedReaderWriterStateT$.html#catsDataSemigroupKForIRWST[F[_],E,L,SA,SB](implicitF0:cats.Monad[F],implicitG0:cats.SemigroupK[F]):cats.SemigroupK[[ζ$14$]cats.data.IndexedReaderWriterStateT[F,E,L,SA,SB,ζ$14$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -614,14 +648,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataSemigroupKForIRWST</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="E">E</span>, <span name="L">L</span>, <span name="SA">SA</span>, <span name="SB">SB</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.IRWSTInstances3.catsDataSemigroupKForIRWST.F">F</span>]</span>, <span name="G0">G0: <a href="../SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a>[<span class="extype" name="cats.data.IRWSTInstances3.catsDataSemigroupKForIRWST.F">F</span>]</span>)</span><span class="result">: <a href="../SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a>[[ζ$15$]<a href="IndexedReaderWriterStateT.html" class="extype" name="cats.data.IndexedReaderWriterStateT">IndexedReaderWriterStateT</a>[<span class="extype" name="cats.data.IRWSTInstances3.catsDataSemigroupKForIRWST.F">F</span>, <span class="extype" name="cats.data.IRWSTInstances3.catsDataSemigroupKForIRWST.E">E</span>, <span class="extype" name="cats.data.IRWSTInstances3.catsDataSemigroupKForIRWST.L">L</span>, <span class="extype" name="cats.data.IRWSTInstances3.catsDataSemigroupKForIRWST.SA">SA</span>, <span class="extype" name="cats.data.IRWSTInstances3.catsDataSemigroupKForIRWST.SB">SB</span>, <span class="extype" name="cats.data.IRWSTInstances3.&lt;refinement&gt;.Λ$.ζ$15$">ζ$15$</span>]]</span>
+        <span class="name">catsDataSemigroupKForIRWST</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="E">E</span>, <span name="L">L</span>, <span name="SA">SA</span>, <span name="SB">SB</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.IRWSTInstances3.catsDataSemigroupKForIRWST.F">F</span>]</span>, <span name="G0">G0: <a href="../SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a>[<span class="extype" name="cats.data.IRWSTInstances3.catsDataSemigroupKForIRWST.F">F</span>]</span>)</span><span class="result">: <a href="../SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a>[[ζ$14$]<a href="IndexedReaderWriterStateT.html" class="extype" name="cats.data.IndexedReaderWriterStateT">IndexedReaderWriterStateT</a>[<span class="extype" name="cats.data.IRWSTInstances3.catsDataSemigroupKForIRWST.F">F</span>, <span class="extype" name="cats.data.IRWSTInstances3.catsDataSemigroupKForIRWST.E">E</span>, <span class="extype" name="cats.data.IRWSTInstances3.catsDataSemigroupKForIRWST.L">L</span>, <span class="extype" name="cats.data.IRWSTInstances3.catsDataSemigroupKForIRWST.SA">SA</span>, <span class="extype" name="cats.data.IRWSTInstances3.catsDataSemigroupKForIRWST.SB">SB</span>, <span class="extype" name="cats.data.IRWSTInstances3.&lt;refinement&gt;.Λ$.ζ$14$">ζ$14$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IRWSTInstances3</dd></dl></div>
     </li><li name="cats.data.IRWSTInstances#catsDataStrongForIRWST" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataStrongForIRWST[F[_],E,L,T](implicitF0:cats.Monad[F]):cats.arrow.Strong[[δ$3$,ε$4$]cats.data.IndexedReaderWriterStateT[F,E,L,δ$3$,ε$4$,T]]"></a><a id="catsDataStrongForIRWST[F[_],E,L,T](Monad[F]):Strong[[δ$3$,ε$4$]IndexedReaderWriterStateT[F,E,L,δ$3$,ε$4$,T]]"></a>
+      <a id="catsDataStrongForIRWST[F[_],E,L,T](implicitF0:cats.Monad[F]):cats.arrow.Strong[[δ$2$,ε$3$]cats.data.IndexedReaderWriterStateT[F,E,L,δ$2$,ε$3$,T]]"></a><a id="catsDataStrongForIRWST[F[_],E,L,T](Monad[F]):Strong[[δ$2$,ε$3$]IndexedReaderWriterStateT[F,E,L,δ$2$,ε$3$,T]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/IndexedReaderWriterStateT$.html#catsDataStrongForIRWST[F[_],E,L,T](implicitF0:cats.Monad[F]):cats.arrow.Strong[[δ$3$,ε$4$]cats.data.IndexedReaderWriterStateT[F,E,L,δ$3$,ε$4$,T]]" title="Permalink">
+      <a href="../../cats/data/IndexedReaderWriterStateT$.html#catsDataStrongForIRWST[F[_],E,L,T](implicitF0:cats.Monad[F]):cats.arrow.Strong[[δ$2$,ε$3$]cats.data.IndexedReaderWriterStateT[F,E,L,δ$2$,ε$3$,T]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -630,7 +664,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataStrongForIRWST</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="E">E</span>, <span name="L">L</span>, <span name="T">T</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.IRWSTInstances.catsDataStrongForIRWST.F">F</span>]</span>)</span><span class="result">: <a href="../arrow/Strong.html" class="extype" name="cats.arrow.Strong">Strong</a>[[δ$3$, ε$4$]<a href="IndexedReaderWriterStateT.html" class="extype" name="cats.data.IndexedReaderWriterStateT">IndexedReaderWriterStateT</a>[<span class="extype" name="cats.data.IRWSTInstances.catsDataStrongForIRWST.F">F</span>, <span class="extype" name="cats.data.IRWSTInstances.catsDataStrongForIRWST.E">E</span>, <span class="extype" name="cats.data.IRWSTInstances.catsDataStrongForIRWST.L">L</span>, <span class="extype" name="cats.data.IRWSTInstances.&lt;refinement&gt;.Λ$.δ$3$">δ$3$</span>, <span class="extype" name="cats.data.IRWSTInstances.&lt;refinement&gt;.Λ$.ε$4$">ε$4$</span>, <span class="extype" name="cats.data.IRWSTInstances.catsDataStrongForIRWST.T">T</span>]]</span>
+        <span class="name">catsDataStrongForIRWST</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="E">E</span>, <span name="L">L</span>, <span name="T">T</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.IRWSTInstances.catsDataStrongForIRWST.F">F</span>]</span>)</span><span class="result">: <a href="../arrow/Strong.html" class="extype" name="cats.arrow.Strong">Strong</a>[[δ$2$, ε$3$]<a href="IndexedReaderWriterStateT.html" class="extype" name="cats.data.IndexedReaderWriterStateT">IndexedReaderWriterStateT</a>[<span class="extype" name="cats.data.IRWSTInstances.catsDataStrongForIRWST.F">F</span>, <span class="extype" name="cats.data.IRWSTInstances.catsDataStrongForIRWST.E">E</span>, <span class="extype" name="cats.data.IRWSTInstances.catsDataStrongForIRWST.L">L</span>, <span class="extype" name="cats.data.IRWSTInstances.&lt;refinement&gt;.Λ$.δ$2$">δ$2$</span>, <span class="extype" name="cats.data.IRWSTInstances.&lt;refinement&gt;.Λ$.ε$3$">ε$3$</span>, <span class="extype" name="cats.data.IRWSTInstances.catsDataStrongForIRWST.T">T</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IRWSTInstances</dd></dl></div>
@@ -656,6 +690,8 @@
     </span>)</span>
               
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -690,28 +726,6 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="finalize():Unit"></a>
-      <span class="permalink">
-      <a href="../../cats/data/IndexedReaderWriterStateT$.html#finalize():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="symbol">classOf[java.lang.Throwable]</span>
-    </span>)</span>
-              
-        </dd></dl></div>
     </li><li name="cats.data.CommonIRWSTConstructors#get" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="get[F[_],E,L,S](implicitF:cats.Applicative[F],implicitL:cats.Monoid[L]):cats.data.IndexedReaderWriterStateT[F,E,L,S,S,S]"></a><a id="get[F[_],E,L,S](Applicative[F],Monoid[L]):IndexedReaderWriterStateT[F,E,L,S,S,S]"></a>
       <span class="permalink">
@@ -747,6 +761,8 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
@@ -766,6 +782,8 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="cats.data.CommonIRWSTConstructors#inspect" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="inspect[F[_],E,L,S,A](f:S=&gt;A)(implicitF:cats.Applicative[F],implicitL:cats.Monoid[L]):cats.data.IndexedReaderWriterStateT[F,E,L,S,S,A]"></a><a id="inspect[F[_],E,L,S,A]((S)⇒A)(Applicative[F],Monoid[L]):IndexedReaderWriterStateT[F,E,L,S,S,A]"></a>
@@ -783,6 +801,40 @@
       </span>
       
       <p class="shortcomment cmt">Inspect a value from the input state, without modifying the state.</p><div class="fullcomment"><div class="comment cmt"><p>Inspect a value from the input state, without modifying the state.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>CommonIRWSTConstructors</dd></dl></div>
+    </li><li name="cats.data.CommonIRWSTConstructors#inspectAsk" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="inspectAsk[F[_],E,L,S,A](f:(E,S)=&gt;A)(implicitevidence$1:cats.Applicative[F],implicitevidence$2:cats.Monoid[L]):cats.data.ReaderWriterStateT[F,E,L,S,A]"></a><a id="inspectAsk[F[_],E,L,S,A]((E,S)⇒A)(Applicative[F],Monoid[L]):ReaderWriterStateT[F,E,L,S,A]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/IndexedReaderWriterStateT$.html#inspectAsk[F[_],E,L,S,A](f:(E,S)=&gt;A)(implicitevidence$1:cats.Applicative[F],implicitevidence$2:cats.Monoid[L]):cats.data.ReaderWriterStateT[F,E,L,S,A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">inspectAsk</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="E">E</span>, <span name="L">L</span>, <span name="S">S</span>, <span name="A">A</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.CommonIRWSTConstructors.inspectAsk.E">E</span>, <span class="extype" name="cats.data.CommonIRWSTConstructors.inspectAsk.S">S</span>) ⇒ <span class="extype" name="cats.data.CommonIRWSTConstructors.inspectAsk.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.CommonIRWSTConstructors.inspectAsk.F">F</span>]</span>, <span name="arg1">arg1: <a href="../index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="cats.data.CommonIRWSTConstructors.inspectAsk.L">L</span>]</span>)</span><span class="result">: <a href="index.html#ReaderWriterStateT[F[_],E,L,S,A]=cats.data.IndexedReaderWriterStateT[F,E,L,S,S,A]" class="extmbr" name="cats.data.ReaderWriterStateT">ReaderWriterStateT</a>[<span class="extype" name="cats.data.CommonIRWSTConstructors.inspectAsk.F">F</span>, <span class="extype" name="cats.data.CommonIRWSTConstructors.inspectAsk.E">E</span>, <span class="extype" name="cats.data.CommonIRWSTConstructors.inspectAsk.L">L</span>, <span class="extype" name="cats.data.CommonIRWSTConstructors.inspectAsk.S">S</span>, <span class="extype" name="cats.data.CommonIRWSTConstructors.inspectAsk.A">A</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Inspect values from the environment and input state, without modifying the state.</p><div class="fullcomment"><div class="comment cmt"><p>Inspect values from the environment and input state, without modifying the state.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>CommonIRWSTConstructors</dd></dl></div>
+    </li><li name="cats.data.CommonIRWSTConstructors#inspectAskF" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="inspectAskF[F[_],E,L,S,A](f:(E,S)=&gt;F[A])(implicitevidence$3:cats.Applicative[F],implicitevidence$4:cats.Monoid[L]):cats.data.ReaderWriterStateT[F,E,L,S,A]"></a><a id="inspectAskF[F[_],E,L,S,A]((E,S)⇒F[A])(Applicative[F],Monoid[L]):ReaderWriterStateT[F,E,L,S,A]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/IndexedReaderWriterStateT$.html#inspectAskF[F[_],E,L,S,A](f:(E,S)=&gt;F[A])(implicitevidence$3:cats.Applicative[F],implicitevidence$4:cats.Monoid[L]):cats.data.ReaderWriterStateT[F,E,L,S,A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">inspectAskF</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="E">E</span>, <span name="L">L</span>, <span name="S">S</span>, <span name="A">A</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.CommonIRWSTConstructors.inspectAskF.E">E</span>, <span class="extype" name="cats.data.CommonIRWSTConstructors.inspectAskF.S">S</span>) ⇒ <span class="extype" name="cats.data.CommonIRWSTConstructors.inspectAskF.F">F</span>[<span class="extype" name="cats.data.CommonIRWSTConstructors.inspectAskF.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.CommonIRWSTConstructors.inspectAskF.F">F</span>]</span>, <span name="arg1">arg1: <a href="../index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="cats.data.CommonIRWSTConstructors.inspectAskF.L">L</span>]</span>)</span><span class="result">: <a href="index.html#ReaderWriterStateT[F[_],E,L,S,A]=cats.data.IndexedReaderWriterStateT[F,E,L,S,S,A]" class="extmbr" name="cats.data.ReaderWriterStateT">ReaderWriterStateT</a>[<span class="extype" name="cats.data.CommonIRWSTConstructors.inspectAskF.F">F</span>, <span class="extype" name="cats.data.CommonIRWSTConstructors.inspectAskF.E">E</span>, <span class="extype" name="cats.data.CommonIRWSTConstructors.inspectAskF.L">L</span>, <span class="extype" name="cats.data.CommonIRWSTConstructors.inspectAskF.S">S</span>, <span class="extype" name="cats.data.CommonIRWSTConstructors.inspectAskF.A">A</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Like <a href="#inspectAsk[F[_],E,L,S,A](f:(E,S)=&gt;A)(implicitevidence$1:cats.Applicative[F],implicitevidence$2:cats.Monoid[L]):cats.data.ReaderWriterStateT[F,E,L,S,A]" class="extmbr" name="cats.data.IndexedReaderWriterStateT#inspectAsk">inspectAsk</a>, but using an effectful function.</p><div class="fullcomment"><div class="comment cmt"><p>Like <a href="#inspectAsk[F[_],E,L,S,A](f:(E,S)=&gt;A)(implicitevidence$1:cats.Applicative[F],implicitevidence$2:cats.Monoid[L]):cats.data.ReaderWriterStateT[F,E,L,S,A]" class="extmbr" name="cats.data.IndexedReaderWriterStateT#inspectAsk">inspectAsk</a>, but using an effectful function.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>CommonIRWSTConstructors</dd></dl></div>
     </li><li name="cats.data.CommonIRWSTConstructors#inspectF" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="inspectF[F[_],E,L,S,A](f:S=&gt;F[A])(implicitF:cats.Applicative[F],implicitL:cats.Monoid[L]):cats.data.IndexedReaderWriterStateT[F,E,L,S,S,A]"></a><a id="inspectF[F[_],E,L,S,A]((S)⇒F[A])(Applicative[F],Monoid[L]):IndexedReaderWriterStateT[F,E,L,S,S,A]"></a>
@@ -920,6 +972,8 @@ res0: (<span class="std">List</span>[<span class="std">String</span>], <span cla
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
@@ -938,6 +992,8 @@ res0: (<span class="std">List</span>[<span class="std">String</span>], <span cla
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="cats.data.CommonIRWSTConstructors#pure" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -1058,28 +1114,6 @@ res0: (<span class="std">List</span>[<span class="std">String</span>], <span cla
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait():Unit"></a>
-      <span class="permalink">
-      <a href="../../cats/data/IndexedReaderWriterStateT$.html#wait():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
-    </span>)</span>
-              
-        </dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <span class="permalink">
       <a href="../../cats/data/IndexedReaderWriterStateT$.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
@@ -1125,6 +1159,28 @@ res0: (<span class="std">List</span>[<span class="std">String</span>], <span cla
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/data/IndexedReaderWriterStateT$.html#wait():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
     </li>
               </ol>
             </div>
@@ -1133,7 +1189,33 @@ res0: (<span class="std">List</span>[<span class="std">String</span>], <span cla
 
         <div class="values members">
               <h3>Deprecated Value Members</h3>
-              <ol><li name="cats.data.CommonIRWSTConstructors#lift" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+              <ol><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/data/IndexedReaderWriterStateT$.html#finalize():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version ) see corresponding Javadoc for more information.">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+                <span class="name">@Deprecated</span>
+              
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version )</i> see corresponding Javadoc for more information.</p></dd></dl></div>
+    </li><li name="cats.data.CommonIRWSTConstructors#lift" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="lift[F[_],E,L,S,A](fa:F[A])(implicitF:cats.Applicative[F],implicitL:cats.Monoid[L]):cats.data.IndexedReaderWriterStateT[F,E,L,S,S,A]"></a><a id="lift[F[_],E,L,S,A](F[A])(Applicative[F],Monoid[L]):IndexedReaderWriterStateT[F,E,L,S,S,A]"></a>
       <span class="permalink">
       <a href="../../cats/data/IndexedReaderWriterStateT$.html#lift[F[_],E,L,S,A](fa:F[A])(implicitF:cats.Applicative[F],implicitL:cats.Monoid[L]):cats.data.IndexedReaderWriterStateT[F,E,L,S,S,A]" title="Permalink">

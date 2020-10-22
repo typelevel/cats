@@ -81,10 +81,32 @@
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <a title="Symbolic aliases for various types are defined here." href="../index.html"><span class="name">cats</span></a>
+        <a title="The cats root package contains all the trait signatures of most Scala type classes." href="../index.html"><span class="name">cats</span></a>
       </span>
       
-      <p class="shortcomment cmt">Symbolic aliases for various types are defined here.</p><div class="fullcomment"><div class="comment cmt"><p>Symbolic aliases for various types are defined here.
+      <p class="shortcomment cmt">The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><p>Cats type classes are implemented using the approach from the
+ <a href="https://ropas.snu.ac.kr/~bruno/papers/TypeClasses.pdf" target="_blank">Type classes as objects and implicits</a> article.</p><p>For each type class, <code>cats</code> provides three pieces:
+- Its <b>signature</b>: a trait that is polymorphic on a type parameter.
+  Type class traits inherit from other type classes to indicate that any implementation of the lower type class (e.g. <code>Applicative</code>)
+  can also serve as an instance for the higuer type class (e.g. <code>Functor</code>).
+- Type class <b>'instances</b>, which are classes and objects that implement one or more type class signatures for some specific types.
+  Type class instances for several data types from the Java or Scala standard libraries are declared in the subpackage <code>cats.instances</code>.
+- <b>Syntax extensions</b>, each of which provides the methods of the type class defines as extension methods
+  (which in Scala 2 are encoded as implicit classes) for values of any type <code>F</code>; given that an instance of the type class
+  for the receiver type (<code>this</code>) is in the implicit scope.
+  Symtax extensions are declared in the <code>cats.syntax</code> package.
+- A set of <b>laws</b>, that are also generic on the type of the class, and are only defined on the operations of the type class.
+  The purpose of these laws is to declare some algebraic relations (equations) between Scala expressions involving the operations
+  of the type class, and test (but not verify) that implemented instances satisfy those equations.
+  Laws are defined in the <code>cats-laws</code> package.</p><p>Although most of cats type classes are declared in this package, some are declared in other packages:
+- type classes that operate on base types (kind <code>*</code>), and their implementations for standard library types,
+  are contained in <code>cats.kernel</code>, which is a different SBT project. However, they are re-exported from this package.
+- type classes of kind <code>F[_, _]</code>, such as <a href="../arrow/Profunctor.html" class="extype" name="cats.arrow.Profunctor">cats.arrow.Profunctor</a>&quot; or <a href="../arrow/Arrow.html" class="extype" name="cats.arrow.Arrow">cats.arrow.Arrow</a>, which are relevant for
+  Functional Reactive Programming or optics, are declared in the <code>cats.arrow</code> package.
+- Also, those type classes that abstract over (pure or impure) functional runtime effects are declared
+  in the <a href="https://typelevel.org/cats-effect/" target="_blank">cats-effect library</a>.
+- Some type classes for which no laws can be provided are left out of the main road, in a small and dirty alley.
+  These are the <code>alleycats</code>.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
     </li><li name="cats.syntax" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="syntax"></a><a id="syntax:syntax"></a>
@@ -142,6 +164,10 @@
                         <span class="separator"></span>
                         <a class="trait" href="AllSyntaxBinCompat6.html" title=""></a>
                         <a href="AllSyntaxBinCompat6.html" title="">AllSyntaxBinCompat6</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="AllSyntaxBinCompat7.html" title=""></a>
+                        <a href="AllSyntaxBinCompat7.html" title="">AllSyntaxBinCompat7</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="trait" href="AlternativeSyntax.html" title=""></a>
@@ -520,6 +546,10 @@
                         <a href="ParallelLeftTraverseOps.html" title="">ParallelLeftTraverseOps</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
+                        <a class="class" href="ParallelSequenceFilterOps.html" title=""></a>
+                        <a href="ParallelSequenceFilterOps.html" title="">ParallelSequenceFilterOps</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
                         <a class="class" href="ParallelSequenceOps.html" title=""></a>
                         <a href="ParallelSequenceOps.html" title="">ParallelSequenceOps</a>
                       </li><li class="current-entities indented2">
@@ -538,6 +568,14 @@
                         <span class="separator"></span>
                         <a class="class" href="ParallelTraversable_Ops.html" title=""></a>
                         <a href="ParallelTraversable_Ops.html" title="">ParallelTraversable_Ops</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="ParallelTraverseFilterOps.html" title=""></a>
+                        <a href="ParallelTraverseFilterOps.html" title="">ParallelTraverseFilterOps</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="ParallelTraverseFilterSyntax.html" title=""></a>
+                        <a href="ParallelTraverseFilterSyntax.html" title="">ParallelTraverseFilterSyntax</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="trait" href="ParallelTraverseSyntax.html" title=""></a>
@@ -610,6 +648,14 @@
                         <span class="separator"></span>
                         <a class="class" href="SeparateOps.html" title=""></a>
                         <a href="SeparateOps.html" title="">SeparateOps</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="SeqOps.html" title=""></a>
+                        <a href="SeqOps.html" title="">SeqOps</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="SeqSyntax.html" title=""></a>
+                        <a href="SeqSyntax.html" title="">SeqSyntax</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="class" href="SequenceFilterOps.html" title=""></a>
@@ -820,6 +866,10 @@
                         <a href="package$$group$.html" title="">group</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
+                        <a class="object" href="package$$hash$.html" title=""></a>
+                        <a href="package$$hash$.html" title="">hash</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
                         <a class="object" href="package$$invariant$.html" title=""></a>
                         <a href="package$$invariant$.html" title="">invariant</a>
                       </li><li class="current-entities indented2">
@@ -890,6 +940,10 @@
                         <span class="separator"></span>
                         <a class="object" href="package$$semigroupk$.html" title=""></a>
                         <a href="package$$semigroupk$.html" title="">semigroupk</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$seq$.html" title=""></a>
+                        <a href="package$$seq$.html" title="">seq</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="object" href="package$$set$.html" title=""></a>
@@ -966,13 +1020,23 @@
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="RepresentableSyntax.html" class="extype" name="cats.syntax.RepresentableSyntax">RepresentableSyntax</a>, <a href="ValidatedExtensionSyntax.html" class="extype" name="cats.syntax.ValidatedExtensionSyntax">ValidatedExtensionSyntax</a>, <a href="SetSyntax.html" class="extype" name="cats.syntax.SetSyntax">SetSyntax</a>, <a href="ParallelFlatSyntax.html" class="extype" name="cats.syntax.ParallelFlatSyntax">ParallelFlatSyntax</a>, <a href="BinestedSyntax.html" class="extype" name="cats.syntax.BinestedSyntax">BinestedSyntax</a>, <a href="NestedSyntax.html" class="extype" name="cats.syntax.NestedSyntax">NestedSyntax</a>, <a href="ChoiceSyntax.html" class="extype" name="cats.syntax.ChoiceSyntax">ChoiceSyntax</a>, <a href="../arrow/Choice$$ToChoiceOps.html" class="extype" name="cats.arrow.Choice.ToChoiceOps">ToChoiceOps</a>, <a href="FlatMapOptionSyntax.html" class="extype" name="cats.syntax.FlatMapOptionSyntax">FlatMapOptionSyntax</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="RepresentableSyntax.html" class="extype" name="cats.syntax.RepresentableSyntax">RepresentableSyntax</a>, <a href="ValidatedExtensionSyntax.html" class="extype" name="cats.syntax.ValidatedExtensionSyntax">ValidatedExtensionSyntax</a>, <a href="SetSyntax.html" class="extype" name="cats.syntax.SetSyntax">SetSyntax</a>, <a href="ParallelFlatSyntax.html" class="extype" name="cats.syntax.ParallelFlatSyntax">ParallelFlatSyntax</a>, <a href="BinestedSyntax.html" class="extype" name="cats.syntax.BinestedSyntax">BinestedSyntax</a>, <a href="NestedSyntax.html" class="extype" name="cats.syntax.NestedSyntax">NestedSyntax</a>, <a href="ChoiceSyntax.html" class="extype" name="cats.syntax.ChoiceSyntax">ChoiceSyntax</a>, <a href="../arrow/Choice$$ToChoiceOps.html" class="extype" name="cats.arrow.Choice.ToChoiceOps">ToChoiceOps</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="FlatMapOptionSyntax.html" class="extype" name="cats.syntax.FlatMapOptionSyntax">FlatMapOptionSyntax</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
         </div><div class="toggleContainer block">
             <span class="toggle">
               Known Subclasses
             </span>
             <div class="subClasses hiddenContent"><a href="../implicits$.html" class="extype" name="cats.implicits">implicits</a>, <a href="AllSyntaxBinCompat.html" class="extype" name="cats.syntax.AllSyntaxBinCompat">AllSyntaxBinCompat</a>, <a href="package$$all$.html" class="extype" name="cats.syntax.all">all</a></div>
-          </div></div>
+          </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
+                <span class="toggle diagram-link">
+                  Type Hierarchy
+                </span>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph1" viewBox="0.00 0.00 1076.00 155.00" height="155pt" width="1076pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 151)" class="graph" id="page0,1_graph0"><polygon points="-4,4 -4,-151 1072,-151 1072,4 -4,4" stroke="transparent" fill="white"></polygon><g class="cluster" id="clust1"></g><g class="cluster" id="clust2"></g><!-- node0 --><g class="node this trait" id="graph1_0"><g id="a_this trait|graph1_0"><a xlink:title="cats.syntax.AllSyntaxBinCompat1 (this trait)" xlink:href="#inheritance-diagram"><path d="M566.67,-86C566.67,-86 451.33,-86 451.33,-86 447.17,-86 443,-81.83 443,-77.67 443,-77.67 443,-69.33 443,-69.33 443,-65.17 447.17,-61 451.33,-61 451.33,-61 566.67,-61 566.67,-61 570.83,-61 575,-65.17 575,-69.33 575,-69.33 575,-77.67 575,-77.67 575,-81.83 570.83,-86 566.67,-86" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-80.5" x="453" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-71.1" x="474" text-anchor="start">AllSyntaxBinCompat1</text></a></g></g><!-- node1 --><g class="node class" id="graph1_1"><g id="a_class|graph1_1"><a xlink:title="cats.syntax.AllSyntaxBinCompat" xlink:href="AllSyntaxBinCompat.html#inheritance-diagram"><path d="M502.17,-25C502.17,-25 391.83,-25 391.83,-25 387.67,-25 383.5,-20.83 383.5,-16.67 383.5,-16.67 383.5,-8.33 383.5,-8.33 383.5,-4.17 387.67,0 391.83,0 391.83,0 502.17,0 502.17,0 506.33,0 510.5,-4.17 510.5,-8.33 510.5,-8.33 510.5,-16.67 510.5,-16.67 510.5,-20.83 506.33,-25 502.17,-25" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-19.5" x="394" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="415" text-anchor="start">AllSyntaxBinCompat</text></a></g></g><!-- node0&#45;&gt;node1 --><g class="edge inheritance" id="graph1_0_1"><g id="a_inheritance|graph1_0_1"><a xlink:title="AllSyntaxBinCompat is a subtype of AllSyntaxBinCompat1"><path d="M491.62,-55.96C481.3,-46.14 468.47,-33.93 459.22,-25.13" stroke="#d4d4d4" fill="none"></path><polygon points="489.99,-57.79 496.75,-60.84 493.37,-54.24 489.99,-57.79" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node2 --><g class="node object" id="graph1_2"><g id="a_object|graph1_2"><a xlink:title="cats.implicits" xlink:href="../implicits$.html#inheritance-diagram"><path d="M607.17,-25C607.17,-25 536.83,-25 536.83,-25 532.67,-25 528.5,-20.83 528.5,-16.67 528.5,-16.67 528.5,-8.33 528.5,-8.33 528.5,-4.17 532.67,0 536.83,0 536.83,0 607.17,0 607.17,0 611.33,0 615.5,-4.17 615.5,-8.33 615.5,-8.33 615.5,-16.67 615.5,-16.67 615.5,-20.83 611.33,-25 607.17,-25" stroke="#103a51" fill="#103a51"></path><image xlink:href="../../lib/object_diagram.png" y="-19.5" x="539" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="560" text-anchor="start">implicits</text></a></g></g><!-- node0&#45;&gt;node2 --><g class="edge inheritance" id="graph1_0_2"><g id="a_inheritance|graph1_0_2"><a xlink:title="implicits is a subtype of AllSyntaxBinCompat1"><path d="M526.66,-55.96C537.15,-46.14 550.18,-33.93 559.58,-25.13" stroke="#d4d4d4" fill="none"></path><polygon points="524.88,-54.27 521.45,-60.84 528.23,-57.85 524.88,-54.27" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node3 --><g class="node trait" id="graph1_3"><g id="a_trait|graph1_3"><a xlink:title="cats.syntax.FlatMapOptionSyntax" xlink:href="FlatMapOptionSyntax.html#inheritance-diagram"><path d="M123.67,-147C123.67,-147 8.33,-147 8.33,-147 4.17,-147 0,-142.83 0,-138.67 0,-138.67 0,-130.33 0,-130.33 0,-126.17 4.17,-122 8.33,-122 8.33,-122 123.67,-122 123.67,-122 127.83,-122 132,-126.17 132,-130.33 132,-130.33 132,-138.67 132,-138.67 132,-142.83 127.83,-147 123.67,-147" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-141.5" x="10" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="31" text-anchor="start">FlatMapOptionSyntax</text></a></g></g><!-- node3&#45;&gt;node0 --><g class="edge inheritance" id="graph1_3_0"><g id="a_inheritance|graph1_3_0"><a xlink:title="AllSyntaxBinCompat1 is a subtype of FlatMapOptionSyntax"><path d="M139.38,-122.23C139.92,-122.15 140.46,-122.08 141,-122 246.41,-107.12 369.07,-91.66 442.79,-82.56" stroke="#d4d4d4" fill="none"></path><polygon points="138.82,-119.83 132.24,-123.26 139.52,-124.68 138.82,-119.83" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node4 --><g class="node trait" id="graph1_4"><g id="a_trait|graph1_4"><a xlink:title="cats.syntax.ChoiceSyntax" xlink:href="ChoiceSyntax.html#inheritance-diagram"><path d="M241.67,-147C241.67,-147 158.33,-147 158.33,-147 154.17,-147 150,-142.83 150,-138.67 150,-138.67 150,-130.33 150,-130.33 150,-126.17 154.17,-122 158.33,-122 158.33,-122 241.67,-122 241.67,-122 245.83,-122 250,-126.17 250,-130.33 250,-130.33 250,-138.67 250,-138.67 250,-142.83 245.83,-147 241.67,-147" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-141.5" x="160" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="181" text-anchor="start">ChoiceSyntax</text></a></g></g><!-- node4&#45;&gt;node0 --><g class="edge inheritance" id="graph1_4_0"><g id="a_inheritance|graph1_4_0"><a xlink:title="AllSyntaxBinCompat1 is a subtype of ChoiceSyntax"><path d="M257.11,-122.36C257.74,-122.24 258.37,-122.12 259,-122 323.42,-109.6 397.23,-95.6 447.85,-86.03" stroke="#d4d4d4" fill="none"></path><polygon points="256.62,-119.96 250.21,-123.7 257.55,-124.77 256.62,-119.96" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node5 --><g class="node trait" id="graph1_5"><g id="a_trait|graph1_5"><a xlink:title="cats.syntax.NestedSyntax" xlink:href="NestedSyntax.html#inheritance-diagram"><path d="M359.67,-147C359.67,-147 276.33,-147 276.33,-147 272.17,-147 268,-142.83 268,-138.67 268,-138.67 268,-130.33 268,-130.33 268,-126.17 272.17,-122 276.33,-122 276.33,-122 359.67,-122 359.67,-122 363.83,-122 368,-126.17 368,-130.33 368,-130.33 368,-138.67 368,-138.67 368,-142.83 363.83,-147 359.67,-147" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-141.5" x="278" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="299" text-anchor="start">NestedSyntax</text></a></g></g><!-- node5&#45;&gt;node0 --><g class="edge inheritance" id="graph1_5_0"><g id="a_inheritance|graph1_5_0"><a xlink:title="AllSyntaxBinCompat1 is a subtype of NestedSyntax"><path d="M362.16,-119.86C395.27,-109.63 440.1,-95.78 471.49,-86.09" stroke="#d4d4d4" fill="none"></path><polygon points="361.25,-117.58 355.28,-121.98 362.69,-122.26 361.25,-117.58" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node6 --><g class="node trait" id="graph1_6"><g id="a_trait|graph1_6"><a xlink:title="cats.syntax.BinestedSyntax" xlink:href="BinestedSyntax.html#inheritance-diagram"><path d="M487.17,-147C487.17,-147 394.83,-147 394.83,-147 390.67,-147 386.5,-142.83 386.5,-138.67 386.5,-138.67 386.5,-130.33 386.5,-130.33 386.5,-126.17 390.67,-122 394.83,-122 394.83,-122 487.17,-122 487.17,-122 491.33,-122 495.5,-126.17 495.5,-130.33 495.5,-130.33 495.5,-138.67 495.5,-138.67 495.5,-142.83 491.33,-147 487.17,-147" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-141.5" x="397" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="418" text-anchor="start">BinestedSyntax</text></a></g></g><!-- node6&#45;&gt;node0 --><g class="edge inheritance" id="graph1_6_0"><g id="a_inheritance|graph1_6_0"><a xlink:title="AllSyntaxBinCompat1 is a subtype of BinestedSyntax"><path d="M459.75,-117.23C471.12,-107.37 485.36,-95.01 495.59,-86.13" stroke="#d4d4d4" fill="none"></path><polygon points="458.12,-115.41 454.43,-121.84 461.33,-119.11 458.12,-115.41" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node7 --><g class="node trait" id="graph1_7"><g id="a_trait|graph1_7"><a xlink:title="cats.syntax.ParallelFlatSyntax" xlink:href="ParallelFlatSyntax.html#inheritance-diagram"><path d="M632.17,-147C632.17,-147 521.83,-147 521.83,-147 517.67,-147 513.5,-142.83 513.5,-138.67 513.5,-138.67 513.5,-130.33 513.5,-130.33 513.5,-126.17 517.67,-122 521.83,-122 521.83,-122 632.17,-122 632.17,-122 636.33,-122 640.5,-126.17 640.5,-130.33 640.5,-130.33 640.5,-138.67 640.5,-138.67 640.5,-142.83 636.33,-147 632.17,-147" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-141.5" x="524" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="545" text-anchor="start">ParallelFlatSyntax</text></a></g></g><!-- node7&#45;&gt;node0 --><g class="edge inheritance" id="graph1_7_0"><g id="a_inheritance|graph1_7_0"><a xlink:title="AllSyntaxBinCompat1 is a subtype of ParallelFlatSyntax"><path d="M558.25,-117.23C546.88,-107.37 532.64,-95.01 522.41,-86.13" stroke="#d4d4d4" fill="none"></path><polygon points="556.67,-119.11 563.57,-121.84 559.88,-115.41 556.67,-119.11" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node8 --><g class="node trait" id="graph1_8"><g id="a_trait|graph1_8"><a xlink:title="cats.syntax.SetSyntax" xlink:href="SetSyntax.html#inheritance-diagram"><path d="M737.17,-147C737.17,-147 666.83,-147 666.83,-147 662.67,-147 658.5,-142.83 658.5,-138.67 658.5,-138.67 658.5,-130.33 658.5,-130.33 658.5,-126.17 662.67,-122 666.83,-122 666.83,-122 737.17,-122 737.17,-122 741.33,-122 745.5,-126.17 745.5,-130.33 745.5,-130.33 745.5,-138.67 745.5,-138.67 745.5,-142.83 741.33,-147 737.17,-147" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-141.5" x="669" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="690" text-anchor="start">SetSyntax</text></a></g></g><!-- node8&#45;&gt;node0 --><g class="edge inheritance" id="graph1_8_0"><g id="a_inheritance|graph1_8_0"><a xlink:title="AllSyntaxBinCompat1 is a subtype of SetSyntax"><path d="M657.38,-119.86C623.92,-109.63 578.62,-95.78 546.9,-86.09" stroke="#d4d4d4" fill="none"></path><polygon points="656.92,-122.28 664.33,-121.98 658.35,-117.59 656.92,-122.28" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node9 --><g class="node trait" id="graph1_9"><g id="a_trait|graph1_9"><a xlink:title="cats.syntax.ValidatedExtensionSyntax" xlink:href="ValidatedExtensionSyntax.html#inheritance-diagram"><path d="M909.67,-147C909.67,-147 772.33,-147 772.33,-147 768.17,-147 764,-142.83 764,-138.67 764,-138.67 764,-130.33 764,-130.33 764,-126.17 768.17,-122 772.33,-122 772.33,-122 909.67,-122 909.67,-122 913.83,-122 918,-126.17 918,-130.33 918,-130.33 918,-138.67 918,-138.67 918,-142.83 913.83,-147 909.67,-147" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-141.5" x="774" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="795" text-anchor="start">ValidatedExtensionSyntax</text></a></g></g><!-- node9&#45;&gt;node0 --><g class="edge inheritance" id="graph1_9_0"><g id="a_inheritance|graph1_9_0"><a xlink:title="AllSyntaxBinCompat1 is a subtype of ValidatedExtensionSyntax"><path d="M769.23,-120.75C711.16,-110.43 630.08,-96.02 573.92,-86.04" stroke="#d4d4d4" fill="none"></path><polygon points="768.88,-123.17 776.2,-121.98 769.74,-118.35 768.88,-123.17" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node10 --><g class="node trait" id="graph1_10"><g id="a_trait|graph1_10"><a xlink:title="cats.syntax.RepresentableSyntax" xlink:href="RepresentableSyntax.html#inheritance-diagram"><path d="M1059.67,-147C1059.67,-147 944.33,-147 944.33,-147 940.17,-147 936,-142.83 936,-138.67 936,-138.67 936,-130.33 936,-130.33 936,-126.17 940.17,-122 944.33,-122 944.33,-122 1059.67,-122 1059.67,-122 1063.83,-122 1068,-126.17 1068,-130.33 1068,-130.33 1068,-138.67 1068,-138.67 1068,-142.83 1063.83,-147 1059.67,-147" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-141.5" x="946" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="967" text-anchor="start">RepresentableSyntax</text></a></g></g><!-- node10&#45;&gt;node0 --><g class="edge inheritance" id="graph1_10_0"><g id="a_inheritance|graph1_10_0"><a xlink:title="AllSyntaxBinCompat1 is a subtype of RepresentableSyntax"><path d="M928.62,-122.22C928.08,-122.14 927.54,-122.07 927,-122 803.02,-105.46 657.86,-89.79 575.34,-81.23" stroke="#d4d4d4" fill="none"></path><polygon points="928.5,-124.67 935.77,-123.2 929.17,-119.82 928.5,-124.67" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
+                <div id="diagram-controls" class="hiddenContent">
+                  <button id="diagram-zoom-out" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button id="diagram-zoom-in" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button title="Toggle full-screen" id="diagram-fs" class="diagram-btn to-full"><i class="material-icons"></i></button>
+                </div>
+              </div></div>
         
 
       <div id="mbrsel">
@@ -997,7 +1061,7 @@
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="cats.syntax.AllSyntaxBinCompat1"><span>AllSyntaxBinCompat1</span></li><li class="in" name="cats.syntax.RepresentableSyntax"><span>RepresentableSyntax</span></li><li class="in" name="cats.syntax.ValidatedExtensionSyntax"><span>ValidatedExtensionSyntax</span></li><li class="in" name="cats.syntax.SetSyntax"><span>SetSyntax</span></li><li class="in" name="cats.syntax.ParallelFlatSyntax"><span>ParallelFlatSyntax</span></li><li class="in" name="cats.syntax.BinestedSyntax"><span>BinestedSyntax</span></li><li class="in" name="cats.syntax.NestedSyntax"><span>NestedSyntax</span></li><li class="in" name="cats.syntax.ChoiceSyntax"><span>ChoiceSyntax</span></li><li class="in" name="cats.arrow.Choice.ToChoiceOps"><span>ToChoiceOps</span></li><li class="in" name="cats.syntax.FlatMapOptionSyntax"><span>FlatMapOptionSyntax</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="cats.syntax.AllSyntaxBinCompat1"><span>AllSyntaxBinCompat1</span></li><li class="in" name="cats.syntax.RepresentableSyntax"><span>RepresentableSyntax</span></li><li class="in" name="cats.syntax.ValidatedExtensionSyntax"><span>ValidatedExtensionSyntax</span></li><li class="in" name="cats.syntax.SetSyntax"><span>SetSyntax</span></li><li class="in" name="cats.syntax.ParallelFlatSyntax"><span>ParallelFlatSyntax</span></li><li class="in" name="cats.syntax.BinestedSyntax"><span>BinestedSyntax</span></li><li class="in" name="cats.syntax.NestedSyntax"><span>NestedSyntax</span></li><li class="in" name="cats.syntax.ChoiceSyntax"><span>ChoiceSyntax</span></li><li class="in" name="cats.arrow.Choice.ToChoiceOps"><span>ToChoiceOps</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="cats.syntax.FlatMapOptionSyntax"><span>FlatMapOptionSyntax</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -1255,6 +1319,8 @@
               
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
@@ -1288,28 +1354,6 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="finalize():Unit"></a>
-      <span class="permalink">
-      <a href="../../cats/syntax/AllSyntaxBinCompat1.html#finalize():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="symbol">classOf[java.lang.Throwable]</span>
-    </span>)</span>
-              
-        </dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
@@ -1327,6 +1371,8 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -1346,6 +1392,8 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -1398,6 +1446,8 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
@@ -1417,6 +1467,8 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
@@ -1435,9 +1487,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="cats.arrow.Choice.ToChoiceOps#toChoiceOps" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="toChoiceOps[F[_,_],A,C](target:F[A,C])(implicittc:cats.arrow.Choice[F]):cats.arrow.Choice.Ops[F,A,C]{typeTypeClassType=cats.arrow.Choice[F]}"></a><a id="toChoiceOps[F[_,_],A,C](F[A,C])(Choice[F]):Ops[F,A,C]{typeTypeClassType=cats.arrow.Choice[F]}"></a>
+      <a id="toChoiceOps[F[_,_],A,B](target:F[A,B])(implicittc:cats.arrow.Choice[F]):cats.arrow.Choice.Ops[F,A,B]{typeTypeClassType=cats.arrow.Choice[F]}"></a><a id="toChoiceOps[F[_,_],A,B](F[A,B])(Choice[F]):Ops[F,A,B]{typeTypeClassType=cats.arrow.Choice[F]}"></a>
       <span class="permalink">
-      <a href="../../cats/syntax/AllSyntaxBinCompat1.html#toChoiceOps[F[_,_],A,C](target:F[A,C])(implicittc:cats.arrow.Choice[F]):cats.arrow.Choice.Ops[F,A,C]{typeTypeClassType=cats.arrow.Choice[F]}" title="Permalink">
+      <a href="../../cats/syntax/AllSyntaxBinCompat1.html#toChoiceOps[F[_,_],A,B](target:F[A,B])(implicittc:cats.arrow.Choice[F]):cats.arrow.Choice.Ops[F,A,B]{typeTypeClassType=cats.arrow.Choice[F]}" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1446,13 +1498,10 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">toChoiceOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="C">C</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.arrow.Choice.ToChoiceOps.toChoiceOps.F">F</span>[<span class="extype" name="cats.arrow.Choice.ToChoiceOps.toChoiceOps.A">A</span>, <span class="extype" name="cats.arrow.Choice.ToChoiceOps.toChoiceOps.C">C</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../arrow/Choice.html" class="extype" name="cats.arrow.Choice">Choice</a>[<span class="extype" name="cats.arrow.Choice.ToChoiceOps.toChoiceOps.F">F</span>]</span>)</span><span class="result">: <a href="../arrow/Choice$$Ops.html" class="extype" name="cats.arrow.Choice.Ops">Ops</a>[<span class="extype" name="cats.arrow.Choice.ToChoiceOps.toChoiceOps.F">F</span>, <span class="extype" name="cats.arrow.Choice.ToChoiceOps.toChoiceOps.A">A</span>, <span class="extype" name="cats.arrow.Choice.ToChoiceOps.toChoiceOps.C">C</span>] { type TypeClassType = cats.arrow.Choice[F] }</span>
+        <span class="name">toChoiceOps</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="cats.arrow.Choice.ToChoiceOps.toChoiceOps.F">F</span>[<span class="extype" name="cats.arrow.Choice.ToChoiceOps.toChoiceOps.A">A</span>, <span class="extype" name="cats.arrow.Choice.ToChoiceOps.toChoiceOps.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tc">tc: <a href="../arrow/Choice.html" class="extype" name="cats.arrow.Choice">Choice</a>[<span class="extype" name="cats.arrow.Choice.ToChoiceOps.toChoiceOps.F">F</span>]</span>)</span><span class="result">: <a href="../arrow/Choice$$Ops.html" class="extype" name="cats.arrow.Choice.Ops">Ops</a>[<span class="extype" name="cats.arrow.Choice.ToChoiceOps.toChoiceOps.F">F</span>, <span class="extype" name="cats.arrow.Choice.ToChoiceOps.toChoiceOps.A">A</span>, <span class="extype" name="cats.arrow.Choice.ToChoiceOps.toChoiceOps.B">B</span>] { type TypeClassType = cats.arrow.Choice[F] }</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../arrow/Choice$$ToChoiceOps.html" class="extype" name="cats.arrow.Choice.ToChoiceOps">ToChoiceOps</a></dd><dt>Annotations</dt><dd>
-                <span class="name">@SuppressWarnings</span><span class="args">()</span>
-              
-        </dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../arrow/Choice$$ToChoiceOps.html" class="extype" name="cats.arrow.Choice.ToChoiceOps">ToChoiceOps</a></dd></dl></div>
     </li><li name="scala.AnyRef#toString" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <span class="permalink">
@@ -1469,28 +1518,6 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait():Unit"></a>
-      <span class="permalink">
-      <a href="../../cats/syntax/AllSyntaxBinCompat1.html#wait():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
-    </span>)</span>
-              
-        </dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <span class="permalink">
@@ -1537,13 +1564,64 @@
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/syntax/AllSyntaxBinCompat1.html#wait():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
     </li>
               </ol>
             </div>
 
         
 
-        
+        <div class="values members">
+              <h3>Deprecated Value Members</h3>
+              <ol><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/syntax/AllSyntaxBinCompat1.html#finalize():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version ) see corresponding Javadoc for more information.">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+                <span class="name">@Deprecated</span>
+              
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version )</i> see corresponding Javadoc for more information.</p></dd></dl></div>
+    </li></ol>
+            </div>
         </div>
 
         <div id="inheritedMembers">
@@ -1563,6 +1641,10 @@
               <h3>Inherited from <a href="ChoiceSyntax.html" class="extype" name="cats.syntax.ChoiceSyntax">ChoiceSyntax</a></h3>
             </div><div class="parent" name="cats.arrow.Choice.ToChoiceOps">
               <h3>Inherited from <a href="../arrow/Choice$$ToChoiceOps.html" class="extype" name="cats.arrow.Choice.ToChoiceOps">ToChoiceOps</a></h3>
+            </div><div class="parent" name="scala.Serializable">
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
             </div><div class="parent" name="cats.syntax.FlatMapOptionSyntax">
               <h3>Inherited from <a href="FlatMapOptionSyntax.html" class="extype" name="cats.syntax.FlatMapOptionSyntax">FlatMapOptionSyntax</a></h3>
             </div><div class="parent" name="scala.AnyRef">

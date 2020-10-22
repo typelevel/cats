@@ -81,10 +81,32 @@
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <a title="Symbolic aliases for various types are defined here." href="../index.html"><span class="name">cats</span></a>
+        <a title="The cats root package contains all the trait signatures of most Scala type classes." href="../index.html"><span class="name">cats</span></a>
       </span>
       
-      <p class="shortcomment cmt">Symbolic aliases for various types are defined here.</p><div class="fullcomment"><div class="comment cmt"><p>Symbolic aliases for various types are defined here.
+      <p class="shortcomment cmt">The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><p>Cats type classes are implemented using the approach from the
+ <a href="https://ropas.snu.ac.kr/~bruno/papers/TypeClasses.pdf" target="_blank">Type classes as objects and implicits</a> article.</p><p>For each type class, <code>cats</code> provides three pieces:
+- Its <b>signature</b>: a trait that is polymorphic on a type parameter.
+  Type class traits inherit from other type classes to indicate that any implementation of the lower type class (e.g. <code>Applicative</code>)
+  can also serve as an instance for the higuer type class (e.g. <code>Functor</code>).
+- Type class <b>'instances</b>, which are classes and objects that implement one or more type class signatures for some specific types.
+  Type class instances for several data types from the Java or Scala standard libraries are declared in the subpackage <code>cats.instances</code>.
+- <b>Syntax extensions</b>, each of which provides the methods of the type class defines as extension methods
+  (which in Scala 2 are encoded as implicit classes) for values of any type <code>F</code>; given that an instance of the type class
+  for the receiver type (<code>this</code>) is in the implicit scope.
+  Symtax extensions are declared in the <code>cats.syntax</code> package.
+- A set of <b>laws</b>, that are also generic on the type of the class, and are only defined on the operations of the type class.
+  The purpose of these laws is to declare some algebraic relations (equations) between Scala expressions involving the operations
+  of the type class, and test (but not verify) that implemented instances satisfy those equations.
+  Laws are defined in the <code>cats-laws</code> package.</p><p>Although most of cats type classes are declared in this package, some are declared in other packages:
+- type classes that operate on base types (kind <code>*</code>), and their implementations for standard library types,
+  are contained in <code>cats.kernel</code>, which is a different SBT project. However, they are re-exported from this package.
+- type classes of kind <code>F[_, _]</code>, such as <a href="../arrow/Profunctor.html" class="extype" name="cats.arrow.Profunctor">cats.arrow.Profunctor</a>&quot; or <a href="../arrow/Arrow.html" class="extype" name="cats.arrow.Arrow">cats.arrow.Arrow</a>, which are relevant for
+  Functional Reactive Programming or optics, are declared in the <code>cats.arrow</code> package.
+- Also, those type classes that abstract over (pure or impure) functional runtime effects are declared
+  in the <a href="https://typelevel.org/cats-effect/" target="_blank">cats-effect library</a>.
+- Some type classes for which no laws can be provided are left out of the main road, in a small and dirty alley.
+  These are the <code>alleycats</code>.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
     </li><li name="cats.syntax" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="syntax"></a><a id="syntax:syntax"></a>
@@ -142,6 +164,10 @@
                         <span class="separator"></span>
                         <a class="trait" href="AllSyntaxBinCompat6.html" title=""></a>
                         <a href="AllSyntaxBinCompat6.html" title="">AllSyntaxBinCompat6</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="AllSyntaxBinCompat7.html" title=""></a>
+                        <a href="AllSyntaxBinCompat7.html" title="">AllSyntaxBinCompat7</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="trait" href="AlternativeSyntax.html" title=""></a>
@@ -520,6 +546,10 @@
                         <a href="ParallelLeftTraverseOps.html" title="">ParallelLeftTraverseOps</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
+                        <a class="class" href="ParallelSequenceFilterOps.html" title=""></a>
+                        <a href="ParallelSequenceFilterOps.html" title="">ParallelSequenceFilterOps</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
                         <a class="class" href="ParallelSequenceOps.html" title=""></a>
                         <a href="ParallelSequenceOps.html" title="">ParallelSequenceOps</a>
                       </li><li class="current-entities indented2">
@@ -538,6 +568,14 @@
                         <span class="separator"></span>
                         <a class="class" href="ParallelTraversable_Ops.html" title=""></a>
                         <a href="ParallelTraversable_Ops.html" title="">ParallelTraversable_Ops</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="ParallelTraverseFilterOps.html" title=""></a>
+                        <a href="ParallelTraverseFilterOps.html" title="">ParallelTraverseFilterOps</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="ParallelTraverseFilterSyntax.html" title=""></a>
+                        <a href="ParallelTraverseFilterSyntax.html" title="">ParallelTraverseFilterSyntax</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="trait" href="ParallelTraverseSyntax.html" title=""></a>
@@ -610,6 +648,14 @@
                         <span class="separator"></span>
                         <a class="class" href="SeparateOps.html" title=""></a>
                         <a href="SeparateOps.html" title="">SeparateOps</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="SeqOps.html" title=""></a>
+                        <a href="SeqOps.html" title="">SeqOps</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="SeqSyntax.html" title=""></a>
+                        <a href="SeqSyntax.html" title="">SeqSyntax</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="class" href="SequenceFilterOps.html" title=""></a>
@@ -820,6 +866,10 @@
                         <a href="package$$group$.html" title="">group</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
+                        <a class="object" href="package$$hash$.html" title=""></a>
+                        <a href="package$$hash$.html" title="">hash</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
                         <a class="object" href="package$$invariant$.html" title=""></a>
                         <a href="package$$invariant$.html" title="">invariant</a>
                       </li><li class="current-entities indented2">
@@ -890,6 +940,10 @@
                         <span class="separator"></span>
                         <a class="object" href="package$$semigroupk$.html" title=""></a>
                         <a href="package$$semigroupk$.html" title="">semigroupk</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$seq$.html" title=""></a>
+                        <a href="package$$seq$.html" title="">seq</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="object" href="package$$set$.html" title=""></a>
@@ -967,7 +1021,17 @@
             Linear Supertypes
           </span>
           <div class="superTypes hiddenContent"><a href="https://www.scala-lang.org/api/2.12.10/scala/AnyVal.html#scala.AnyVal" class="extype" name="scala.AnyVal">AnyVal</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
-        </div></div>
+        </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
+                <span class="toggle diagram-link">
+                  Type Hierarchy
+                </span>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph1" viewBox="0.00 0.00 228.00 118.00" height="118pt" width="228pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 114)" class="graph" id="page0,1_graph0"><polygon points="-4,4 -4,-114 224,-114 224,4 -4,4" stroke="transparent" fill="white"></polygon><g class="cluster" id="clust1"></g><g class="cluster" id="clust2"></g><!-- node0 --><g class="node this class" id="graph1_0"><g id="a_this class|graph1_0"><a xlink:title="cats.syntax.ApplicativeErrorOps (this class)" xlink:href="#inheritance-diagram"><path d="M187.67,-49C187.67,-49 32.33,-49 32.33,-49 28.17,-49 24,-44.83 24,-40.67 24,-40.67 24,-32.33 24,-32.33 24,-28.17 28.17,-24 32.33,-24 32.33,-24 187.67,-24 187.67,-24 191.83,-24 196,-28.17 196,-32.33 196,-32.33 196,-40.67 196,-40.67 196,-44.83 191.83,-49 187.67,-49" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-43.5" x="34" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-34.1" x="55" text-anchor="start">ApplicativeErrorOps[F, E, A]</text></a></g></g><!-- node1 --><g class="node class" id="graph1_1"><g id="a_class|graph1_1"><a xlink:title="scala.AnyVal"><path d="M138.17,-110C138.17,-110 81.83,-110 81.83,-110 77.67,-110 73.5,-105.83 73.5,-101.67 73.5,-101.67 73.5,-93.33 73.5,-93.33 73.5,-89.17 77.67,-85 81.83,-85 81.83,-85 138.17,-85 138.17,-85 142.33,-85 146.5,-89.17 146.5,-93.33 146.5,-93.33 146.5,-101.67 146.5,-101.67 146.5,-105.83 142.33,-110 138.17,-110" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-104.5" x="84" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-95.1" x="105" text-anchor="start">AnyVal</text></a></g></g><!-- node1&#45;&gt;node0 --><g class="edge inheritance" id="graph1_1_0"><g id="a_inheritance|graph1_1_0"><a xlink:title="ApplicativeErrorOps[F, E, A] is a subtype of AnyVal"><path d="M110,-77.76C110,-68.37 110,-57.29 110,-49.13" stroke="#d4d4d4" fill="none"></path><polygon points="107.55,-77.84 110,-84.84 112.45,-77.84 107.55,-77.84" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
+                <div id="diagram-controls" class="hiddenContent">
+                  <button id="diagram-zoom-out" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button id="diagram-zoom-in" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button title="Toggle full-screen" id="diagram-fs" class="diagram-btn to-full"><i class="material-icons"></i></button>
+                </div>
+              </div></div>
         
 
       <div id="mbrsel">
@@ -1149,9 +1213,9 @@ this would result in ambiguous implicits.
       
       
     </li><li name="cats.syntax.ApplicativeErrorOps#attemptNarrow" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="attemptNarrow[EE](implicitF:cats.ApplicativeError[F,E],implicittag:scala.reflect.ClassTag[EE],implicitev:EE&lt;:&lt;E):F[Either[EE,A]]"></a><a id="attemptNarrow[EE](ApplicativeError[F,E],ClassTag[EE],&lt;:&lt;[EE,E]):F[Either[EE,A]]"></a>
+      <a id="attemptNarrow[EE&lt;:Throwable](implicitF:cats.ApplicativeError[F,E],implicittag:scala.reflect.ClassTag[EE],implicitev:EE&lt;:&lt;E):F[Either[EE,A]]"></a><a id="attemptNarrow[EE&lt;:Throwable](ApplicativeError[F,E],ClassTag[EE],&lt;:&lt;[EE,E]):F[Either[EE,A]]"></a>
       <span class="permalink">
-      <a href="../../cats/syntax/ApplicativeErrorOps.html#attemptNarrow[EE](implicitF:cats.ApplicativeError[F,E],implicittag:scala.reflect.ClassTag[EE],implicitev:EE&lt;:&lt;E):F[Either[EE,A]]" title="Permalink">
+      <a href="../../cats/syntax/ApplicativeErrorOps.html#attemptNarrow[EE&lt;:Throwable](implicitF:cats.ApplicativeError[F,E],implicittag:scala.reflect.ClassTag[EE],implicitev:EE&lt;:&lt;E):F[Either[EE,A]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1160,7 +1224,7 @@ this would result in ambiguous implicits.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">attemptNarrow</span><span class="tparams">[<span name="EE">EE</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../ApplicativeError.html" class="extype" name="cats.ApplicativeError">ApplicativeError</a>[<span class="extype" name="cats.syntax.ApplicativeErrorOps.F">F</span>, <span class="extype" name="cats.syntax.ApplicativeErrorOps.E">E</span>]</span>, <span name="tag">tag: <a href="https://www.scala-lang.org/api/2.12.10/scala/reflect/ClassTag.html#scala.reflect.ClassTag" class="extype" name="scala.reflect.ClassTag">ClassTag</a>[<span class="extype" name="cats.syntax.ApplicativeErrorOps.attemptNarrow.EE">EE</span>]</span>, <span name="ev">ev: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[<span class="extype" name="cats.syntax.ApplicativeErrorOps.attemptNarrow.EE">EE</span>, <span class="extype" name="cats.syntax.ApplicativeErrorOps.E">E</span>]</span>)</span><span class="result">: <span class="extype" name="cats.syntax.ApplicativeErrorOps.F">F</span>[<span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.syntax.ApplicativeErrorOps.attemptNarrow.EE">EE</span>, <span class="extype" name="cats.syntax.ApplicativeErrorOps.A">A</span>]]</span>
+        <span class="name">attemptNarrow</span><span class="tparams">[<span name="EE">EE &lt;: <span class="extype" name="scala.Throwable">Throwable</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../ApplicativeError.html" class="extype" name="cats.ApplicativeError">ApplicativeError</a>[<span class="extype" name="cats.syntax.ApplicativeErrorOps.F">F</span>, <span class="extype" name="cats.syntax.ApplicativeErrorOps.E">E</span>]</span>, <span name="tag">tag: <a href="https://www.scala-lang.org/api/2.12.10/scala/reflect/ClassTag.html#scala.reflect.ClassTag" class="extype" name="scala.reflect.ClassTag">ClassTag</a>[<span class="extype" name="cats.syntax.ApplicativeErrorOps.attemptNarrow.EE">EE</span>]</span>, <span name="ev">ev: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[<span class="extype" name="cats.syntax.ApplicativeErrorOps.attemptNarrow.EE">EE</span>, <span class="extype" name="cats.syntax.ApplicativeErrorOps.E">E</span>]</span>)</span><span class="result">: <span class="extype" name="cats.syntax.ApplicativeErrorOps.F">F</span>[<span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.syntax.ApplicativeErrorOps.attemptNarrow.EE">EE</span>, <span class="extype" name="cats.syntax.ApplicativeErrorOps.A">A</span>]]</span>
       </span>
       
       
@@ -1276,6 +1340,32 @@ this would result in ambiguous implicits.
       </span>
       
       
+    </li><li name="cats.syntax.ApplicativeErrorOps#orRaise" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="orRaise(other:=&gt;E)(implicitF:cats.ApplicativeError[F,E]):F[A]"></a><a id="orRaise(⇒E)(ApplicativeError[F,E]):F[A]"></a>
+      <span class="permalink">
+      <a href="../../cats/syntax/ApplicativeErrorOps.html#orRaise(other:=&gt;E)(implicitF:cats.ApplicativeError[F,E]):F[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">orRaise</span><span class="params">(<span name="other">other: ⇒ <span class="extype" name="cats.syntax.ApplicativeErrorOps.E">E</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../ApplicativeError.html" class="extype" name="cats.ApplicativeError">ApplicativeError</a>[<span class="extype" name="cats.syntax.ApplicativeErrorOps.F">F</span>, <span class="extype" name="cats.syntax.ApplicativeErrorOps.E">E</span>]</span>)</span><span class="result">: <span class="extype" name="cats.syntax.ApplicativeErrorOps.F">F</span>[<span class="extype" name="cats.syntax.ApplicativeErrorOps.A">A</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Handle all errors on this F[A] by raising an error using the given value.</p><div class="fullcomment"><div class="comment cmt"><p>Handle all errors on this F[A] by raising an error using the given value.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats._, implicits._
+
+scala&gt; <span class="kw">val</span> fa: Either[<span class="std">String</span>, <span class="std">Int</span>] = Left(<span class="lit">"wrong"</span>)
+
+scala&gt; fa.orRaise(<span class="lit">"wronger"</span>)
+res1: Either[<span class="std">String</span>,<span class="std">Int</span>] = Left(wronger)
+
+scala&gt; <span class="kw">val</span> fb: Either[<span class="std">String</span>, <span class="std">Int</span>] = Right(<span class="num">42</span>)
+
+scala&gt; fb.orRaise(<span class="lit">"wrongest"</span>)
+res2: Either[<span class="std">String</span>,<span class="std">Int</span>] = Right(<span class="num">42</span>)</pre></div></div>
     </li><li name="cats.syntax.ApplicativeErrorOps#recover" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="recover(pf:PartialFunction[E,A])(implicitF:cats.ApplicativeError[F,E]):F[A]"></a><a id="recover(PartialFunction[E,A])(ApplicativeError[F,E]):F[A]"></a>
       <span class="permalink">

@@ -81,10 +81,32 @@
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <a title="Symbolic aliases for various types are defined here." href="../index.html"><span class="name">cats</span></a>
+        <a title="The cats root package contains all the trait signatures of most Scala type classes." href="../index.html"><span class="name">cats</span></a>
       </span>
       
-      <p class="shortcomment cmt">Symbolic aliases for various types are defined here.</p><div class="fullcomment"><div class="comment cmt"><p>Symbolic aliases for various types are defined here.
+      <p class="shortcomment cmt">The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><p>Cats type classes are implemented using the approach from the
+ <a href="https://ropas.snu.ac.kr/~bruno/papers/TypeClasses.pdf" target="_blank">Type classes as objects and implicits</a> article.</p><p>For each type class, <code>cats</code> provides three pieces:
+- Its <b>signature</b>: a trait that is polymorphic on a type parameter.
+  Type class traits inherit from other type classes to indicate that any implementation of the lower type class (e.g. <code>Applicative</code>)
+  can also serve as an instance for the higuer type class (e.g. <code>Functor</code>).
+- Type class <b>'instances</b>, which are classes and objects that implement one or more type class signatures for some specific types.
+  Type class instances for several data types from the Java or Scala standard libraries are declared in the subpackage <code>cats.instances</code>.
+- <b>Syntax extensions</b>, each of which provides the methods of the type class defines as extension methods
+  (which in Scala 2 are encoded as implicit classes) for values of any type <code>F</code>; given that an instance of the type class
+  for the receiver type (<code>this</code>) is in the implicit scope.
+  Symtax extensions are declared in the <code>cats.syntax</code> package.
+- A set of <b>laws</b>, that are also generic on the type of the class, and are only defined on the operations of the type class.
+  The purpose of these laws is to declare some algebraic relations (equations) between Scala expressions involving the operations
+  of the type class, and test (but not verify) that implemented instances satisfy those equations.
+  Laws are defined in the <code>cats-laws</code> package.</p><p>Although most of cats type classes are declared in this package, some are declared in other packages:
+- type classes that operate on base types (kind <code>*</code>), and their implementations for standard library types,
+  are contained in <code>cats.kernel</code>, which is a different SBT project. However, they are re-exported from this package.
+- type classes of kind <code>F[_, _]</code>, such as <a href="../arrow/Profunctor.html" class="extype" name="cats.arrow.Profunctor">cats.arrow.Profunctor</a>&quot; or <a href="../arrow/Arrow.html" class="extype" name="cats.arrow.Arrow">cats.arrow.Arrow</a>, which are relevant for
+  Functional Reactive Programming or optics, are declared in the <code>cats.arrow</code> package.
+- Also, those type classes that abstract over (pure or impure) functional runtime effects are declared
+  in the <a href="https://typelevel.org/cats-effect/" target="_blank">cats-effect library</a>.
+- Some type classes for which no laws can be provided are left out of the main road, in a small and dirty alley.
+  These are the <code>alleycats</code>.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
     </li><li name="cats.kernel" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="kernel"></a><a id="kernel:kernel"></a>
@@ -122,6 +144,10 @@
                         <a class="object" href="Band$.html" title=""></a>
                         <a class="trait" href="Band.html" title="Bands are semigroups whose operation (i.e."></a>
                         <a href="Band.html" title="Bands are semigroups whose operation (i.e.">Band</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="BoundedEnumerable$.html" title=""></a>
+                        <a class="trait" href="BoundedEnumerable.html" title=""></a>
+                        <a href="BoundedEnumerable.html" title="">BoundedEnumerable</a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="BoundedSemilattice$.html" title=""></a>
                         <a class="trait" href="BoundedSemilattice.html" title=""></a>
@@ -180,6 +206,10 @@
                         <a href="LowerBounded.html" title="A type class used to name the lower limit of a type.">LowerBounded</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
+                        <a class="trait" href="LowerBoundedEnumerable.html" title=""></a>
+                        <a href="LowerBoundedEnumerable.html" title="">LowerBoundedEnumerable</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
                         <a class="trait" href="LowerBoundedFunctions.html" title=""></a>
                         <a href="LowerBoundedFunctions.html" title="">LowerBoundedFunctions</a>
                       </li><li class="current-entities indented2">
@@ -190,6 +220,10 @@
                         <span class="separator"></span>
                         <a class="class" href="MonoidFunctions.html" title=""></a>
                         <a href="MonoidFunctions.html" title="">MonoidFunctions</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="Next.html" title="A typeclass with an operation which returns a member which is always greater than the one supplied."></a>
+                        <a href="Next.html" title="A typeclass with an operation which returns a member which is always greater than the one supplied.">Next</a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="Order$.html" title=""></a>
                         <a class="trait" href="Order.html" title="The Order type class is used to define a total ordering on some type A."></a>
@@ -203,6 +237,14 @@
                         <a class="trait" href="OrderToOrderingConversion.html" title=""></a>
                         <a href="OrderToOrderingConversion.html" title="">OrderToOrderingConversion</a>
                       </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="PartialNext.html" title="A typeclass with an operation which returns a member which is greater or None than the one supplied."></a>
+                        <a href="PartialNext.html" title="A typeclass with an operation which returns a member which is greater or None than the one supplied.">PartialNext</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="PartialNextLowerBounded.html" title=""></a>
+                        <a href="PartialNextLowerBounded.html" title="">PartialNextLowerBounded</a>
+                      </li><li class="current-entities indented2">
                         <a class="object" href="PartialOrder$.html" title=""></a>
                         <a class="trait" href="PartialOrder.html" title="The PartialOrder type class is used to define a partial ordering on some type A."></a>
                         <a href="PartialOrder.html" title="The PartialOrder type class is used to define a partial ordering on some type A.">PartialOrder</a>
@@ -214,6 +256,18 @@
                         <span class="separator"></span>
                         <a class="trait" href="PartialOrderToPartialOrderingConversion.html" title=""></a>
                         <a href="PartialOrderToPartialOrderingConversion.html" title="">PartialOrderToPartialOrderingConversion</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="PartialPrevious.html" title="A typeclass with an operation which returns a member which is smaller or None than the one supplied."></a>
+                        <a href="PartialPrevious.html" title="A typeclass with an operation which returns a member which is smaller or None than the one supplied.">PartialPrevious</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="PartialPreviousUpperBounded.html" title=""></a>
+                        <a href="PartialPreviousUpperBounded.html" title="">PartialPreviousUpperBounded</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="Previous.html" title="A typeclass with an operation which returns a member which is always smaller than the one supplied."></a>
+                        <a href="Previous.html" title="A typeclass with an operation which returns a member which is always smaller than the one supplied.">Previous</a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="Semigroup$.html" title=""></a>
                         <a class="trait" href="" title="A semigroup is any set A with an associative operation (combine)."></a>
@@ -231,9 +285,17 @@
                         <a class="class" href="SemilatticeFunctions.html" title=""></a>
                         <a href="SemilatticeFunctions.html" title="">SemilatticeFunctions</a>
                       </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="UnboundedEnumerable.html" title="A typeclass which has both previous and next operations such that next . previous == identity."></a>
+                        <a href="UnboundedEnumerable.html" title="A typeclass which has both previous and next operations such that next . previous == identity.">UnboundedEnumerable</a>
+                      </li><li class="current-entities indented2">
                         <a class="object" href="UpperBounded$.html" title=""></a>
                         <a class="trait" href="UpperBounded.html" title="A type class used to name the upper limit of a type."></a>
                         <a href="UpperBounded.html" title="A type class used to name the upper limit of a type.">UpperBounded</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="UpperBoundedEnumerable.html" title=""></a>
+                        <a href="UpperBoundedEnumerable.html" title="">UpperBoundedEnumerable</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="trait" href="UpperBoundedFunctions.html" title=""></a>
@@ -269,7 +331,7 @@
 
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A semigroup is any set <code>A</code> with an associative operation (<code>combine</code>).
-</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/kernel/src/main/scala/cats/kernel/Semigroup.scala" target="_blank">Semigroup.scala</a></dd></dl><div class="toggleContainer block">
+</p></div><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="cats.kernel.Semigroup">Semigroup</a>[<span class="extype" name="cats.kernel.Semigroup.A">A</span>]</dd><dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/kernel/src/main/scala/cats/kernel/Semigroup.scala" target="_blank">Semigroup.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
@@ -278,8 +340,18 @@
             <span class="toggle">
               Known Subclasses
             </span>
-            <div class="subClasses hiddenContent"><a href="../EvalGroup.html" class="extype" name="cats.EvalGroup">EvalGroup</a>, <a href="../EvalMonoid.html" class="extype" name="cats.EvalMonoid">EvalMonoid</a>, <a href="../EvalSemigroup.html" class="extype" name="cats.EvalSemigroup">EvalSemigroup</a>, <a href="Band.html" class="extype" name="cats.kernel.Band">Band</a>, <a href="BoundedSemilattice.html" class="extype" name="cats.kernel.BoundedSemilattice">BoundedSemilattice</a>, <a href="CommutativeGroup.html" class="extype" name="cats.kernel.CommutativeGroup">CommutativeGroup</a>, <a href="CommutativeMonoid.html" class="extype" name="cats.kernel.CommutativeMonoid">CommutativeMonoid</a>, <a href="CommutativeSemigroup.html" class="extype" name="cats.kernel.CommutativeSemigroup">CommutativeSemigroup</a>, <a href="Group.html" class="extype" name="cats.kernel.Group">Group</a>, <a href="Monoid.html" class="extype" name="cats.kernel.Monoid">Monoid</a>, <a href="Semilattice.html" class="extype" name="cats.kernel.Semilattice">Semilattice</a>, <a href="instances/BigDecimalGroup.html" class="extype" name="cats.kernel.instances.BigDecimalGroup">BigDecimalGroup</a>, <a href="instances/BigIntGroup.html" class="extype" name="cats.kernel.instances.BigIntGroup">BigIntGroup</a>, <a href="instances/BitSetSemilattice.html" class="extype" name="cats.kernel.instances.BitSetSemilattice">BitSetSemilattice</a>, <a href="instances/ByteGroup.html" class="extype" name="cats.kernel.instances.ByteGroup">ByteGroup</a>, <a href="instances/DoubleGroup.html" class="extype" name="cats.kernel.instances.DoubleGroup">DoubleGroup</a>, <a href="instances/DurationGroup.html" class="extype" name="cats.kernel.instances.DurationGroup">DurationGroup</a>, <a href="instances/FiniteDurationGroup.html" class="extype" name="cats.kernel.instances.FiniteDurationGroup">FiniteDurationGroup</a>, <a href="instances/FloatGroup.html" class="extype" name="cats.kernel.instances.FloatGroup">FloatGroup</a>, <a href="instances/Function0Group.html" class="extype" name="cats.kernel.instances.Function0Group">Function0Group</a>, <a href="instances/Function0Monoid.html" class="extype" name="cats.kernel.instances.Function0Monoid">Function0Monoid</a>, <a href="instances/Function0Semigroup.html" class="extype" name="cats.kernel.instances.Function0Semigroup">Function0Semigroup</a>, <a href="instances/Function1Group.html" class="extype" name="cats.kernel.instances.Function1Group">Function1Group</a>, <a href="instances/Function1Monoid.html" class="extype" name="cats.kernel.instances.Function1Monoid">Function1Monoid</a>, <a href="instances/Function1Semigroup.html" class="extype" name="cats.kernel.instances.Function1Semigroup">Function1Semigroup</a>, <a href="instances/IntGroup.html" class="extype" name="cats.kernel.instances.IntGroup">IntGroup</a>, <a href="instances/ListMonoid.html" class="extype" name="cats.kernel.instances.ListMonoid">ListMonoid</a>, <a href="instances/LongGroup.html" class="extype" name="cats.kernel.instances.LongGroup">LongGroup</a>, <a href="instances/MapMonoid.html" class="extype" name="cats.kernel.instances.MapMonoid">MapMonoid</a>, <a href="instances/OptionMonoid.html" class="extype" name="cats.kernel.instances.OptionMonoid">OptionMonoid</a>, <a href="instances/QueueMonoid.html" class="extype" name="cats.kernel.instances.QueueMonoid">QueueMonoid</a>, <a href="instances/SetSemilattice.html" class="extype" name="cats.kernel.instances.SetSemilattice">SetSemilattice</a>, <a href="instances/ShortGroup.html" class="extype" name="cats.kernel.instances.ShortGroup">ShortGroup</a>, <a href="instances/SortedMapCommutativeMonoid.html" class="extype" name="cats.kernel.instances.SortedMapCommutativeMonoid">SortedMapCommutativeMonoid</a>, <a href="instances/SortedMapMonoid.html" class="extype" name="cats.kernel.instances.SortedMapMonoid">SortedMapMonoid</a>, <a href="instances/SortedSetSemilattice.html" class="extype" name="cats.kernel.instances.SortedSetSemilattice">SortedSetSemilattice</a>, <a href="instances/StreamMonoid.html" class="extype" name="cats.kernel.instances.StreamMonoid">StreamMonoid</a>, <a href="instances/StringMonoid.html" class="extype" name="cats.kernel.instances.StringMonoid">StringMonoid</a>, <a href="instances/UnitAlgebra.html" class="extype" name="cats.kernel.instances.UnitAlgebra">UnitAlgebra</a>, <a href="instances/VectorMonoid.html" class="extype" name="cats.kernel.instances.VectorMonoid">VectorMonoid</a>, <a href="../instances/SortedMapCommutativeMonoid.html" class="extype" name="cats.instances.SortedMapCommutativeMonoid">SortedMapCommutativeMonoid</a>, <a href="../instances/SortedMapMonoid.html" class="extype" name="cats.instances.SortedMapMonoid">SortedMapMonoid</a>, <a href="../instances/SortedSetSemilattice.html" class="extype" name="cats.instances.SortedSetSemilattice">SortedSetSemilattice</a></div>
-          </div></div>
+            <div class="subClasses hiddenContent"><a href="../EvalGroup.html" class="extype" name="cats.EvalGroup">EvalGroup</a>, <a href="../EvalMonoid.html" class="extype" name="cats.EvalMonoid">EvalMonoid</a>, <a href="../EvalSemigroup.html" class="extype" name="cats.EvalSemigroup">EvalSemigroup</a>, <a href="Band.html" class="extype" name="cats.kernel.Band">Band</a>, <a href="BoundedSemilattice.html" class="extype" name="cats.kernel.BoundedSemilattice">BoundedSemilattice</a>, <a href="CommutativeGroup.html" class="extype" name="cats.kernel.CommutativeGroup">CommutativeGroup</a>, <a href="CommutativeMonoid.html" class="extype" name="cats.kernel.CommutativeMonoid">CommutativeMonoid</a>, <a href="CommutativeSemigroup.html" class="extype" name="cats.kernel.CommutativeSemigroup">CommutativeSemigroup</a>, <a href="Group.html" class="extype" name="cats.kernel.Group">Group</a>, <a href="Monoid.html" class="extype" name="cats.kernel.Monoid">Monoid</a>, <a href="Semilattice.html" class="extype" name="cats.kernel.Semilattice">Semilattice</a>, <a href="instances/BigDecimalGroup.html" class="extype" name="cats.kernel.instances.BigDecimalGroup">BigDecimalGroup</a>, <a href="instances/BigIntGroup.html" class="extype" name="cats.kernel.instances.BigIntGroup">BigIntGroup</a>, <a href="instances/BitSetSemilattice.html" class="extype" name="cats.kernel.instances.BitSetSemilattice">BitSetSemilattice</a>, <a href="instances/ByteGroup.html" class="extype" name="cats.kernel.instances.ByteGroup">ByteGroup</a>, <a href="instances/DoubleGroup.html" class="extype" name="cats.kernel.instances.DoubleGroup">DoubleGroup</a>, <a href="instances/DurationGroup.html" class="extype" name="cats.kernel.instances.DurationGroup">DurationGroup</a>, <a href="instances/FiniteDurationGroup.html" class="extype" name="cats.kernel.instances.FiniteDurationGroup">FiniteDurationGroup</a>, <a href="instances/FloatGroup.html" class="extype" name="cats.kernel.instances.FloatGroup">FloatGroup</a>, <a href="instances/Function0Group.html" class="extype" name="cats.kernel.instances.Function0Group">Function0Group</a>, <a href="instances/Function0Monoid.html" class="extype" name="cats.kernel.instances.Function0Monoid">Function0Monoid</a>, <a href="instances/Function0Semigroup.html" class="extype" name="cats.kernel.instances.Function0Semigroup">Function0Semigroup</a>, <a href="instances/Function1Group.html" class="extype" name="cats.kernel.instances.Function1Group">Function1Group</a>, <a href="instances/Function1Monoid.html" class="extype" name="cats.kernel.instances.Function1Monoid">Function1Monoid</a>, <a href="instances/Function1Semigroup.html" class="extype" name="cats.kernel.instances.Function1Semigroup">Function1Semigroup</a>, <a href="instances/IntGroup.html" class="extype" name="cats.kernel.instances.IntGroup">IntGroup</a>, <a href="instances/ListMonoid.html" class="extype" name="cats.kernel.instances.ListMonoid">ListMonoid</a>, <a href="instances/LongGroup.html" class="extype" name="cats.kernel.instances.LongGroup">LongGroup</a>, <a href="instances/MapMonoid.html" class="extype" name="cats.kernel.instances.MapMonoid">MapMonoid</a>, <a href="instances/OptionMonoid.html" class="extype" name="cats.kernel.instances.OptionMonoid">OptionMonoid</a>, <a href="instances/QueueMonoid.html" class="extype" name="cats.kernel.instances.QueueMonoid">QueueMonoid</a>, <a href="instances/SeqMonoid.html" class="extype" name="cats.kernel.instances.SeqMonoid">SeqMonoid</a>, <a href="instances/SetSemilattice.html" class="extype" name="cats.kernel.instances.SetSemilattice">SetSemilattice</a>, <a href="instances/ShortGroup.html" class="extype" name="cats.kernel.instances.ShortGroup">ShortGroup</a>, <a href="instances/SortedMapCommutativeMonoid.html" class="extype" name="cats.kernel.instances.SortedMapCommutativeMonoid">SortedMapCommutativeMonoid</a>, <a href="instances/SortedMapCommutativeSemigroup.html" class="extype" name="cats.kernel.instances.SortedMapCommutativeSemigroup">SortedMapCommutativeSemigroup</a>, <a href="instances/SortedMapMonoid.html" class="extype" name="cats.kernel.instances.SortedMapMonoid">SortedMapMonoid</a>, <a href="instances/SortedMapSemigroup.html" class="extype" name="cats.kernel.instances.SortedMapSemigroup">SortedMapSemigroup</a>, <a href="instances/SortedSetSemilattice.html" class="extype" name="cats.kernel.instances.SortedSetSemilattice">SortedSetSemilattice</a>, <a href="instances/StreamMonoid.html" class="extype" name="cats.kernel.instances.StreamMonoid">StreamMonoid</a>, <a href="instances/StringMonoid.html" class="extype" name="cats.kernel.instances.StringMonoid">StringMonoid</a>, <a href="instances/UnitAlgebra.html" class="extype" name="cats.kernel.instances.UnitAlgebra">UnitAlgebra</a>, <a href="instances/VectorMonoid.html" class="extype" name="cats.kernel.instances.VectorMonoid">VectorMonoid</a>, <a href="../instances/SortedMapCommutativeMonoid.html" class="extype" name="cats.instances.SortedMapCommutativeMonoid">SortedMapCommutativeMonoid</a>, <a href="../instances/SortedMapMonoid.html" class="extype" name="cats.instances.SortedMapMonoid">SortedMapMonoid</a>, <a href="../instances/SortedSetSemilattice.html" class="extype" name="cats.instances.SortedSetSemilattice">SortedSetSemilattice</a></div>
+          </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
+                <span class="toggle diagram-link">
+                  Type Hierarchy
+                </span>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph1" viewBox="0.00 0.00 1000.00 155.00" height="155pt" width="1000pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 151)" class="graph" id="page0,1_graph0"><polygon points="-4,4 -4,-151 996,-151 996,4 -4,4" stroke="transparent" fill="white"></polygon><g class="cluster" id="clust1"></g><g class="cluster" id="clust2"></g><!-- node0 --><g class="node this trait" id="graph1_0"><g id="a_this trait|graph1_0"><a xlink:title="cats.kernel.Semigroup (this trait)" xlink:href="#inheritance-diagram"><path d="M512.67,-86C512.67,-86 429.33,-86 429.33,-86 425.17,-86 421,-81.83 421,-77.67 421,-77.67 421,-69.33 421,-69.33 421,-65.17 425.17,-61 429.33,-61 429.33,-61 512.67,-61 512.67,-61 516.83,-61 521,-65.17 521,-69.33 521,-69.33 521,-77.67 521,-77.67 521,-81.83 516.83,-86 512.67,-86" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-80.5" x="431" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-71.1" x="452" text-anchor="start">Semigroup[A]</text></a></g></g><!-- node1 --><g class="node trait" id="graph1_1"><g id="a_trait|graph1_1"><a xlink:title="cats.kernel.Band" xlink:href="Band.html#inheritance-diagram"><path d="M69.67,-25C69.67,-25 8.33,-25 8.33,-25 4.17,-25 0,-20.83 0,-16.67 0,-16.67 0,-8.33 0,-8.33 0,-4.17 4.17,0 8.33,0 8.33,0 69.67,0 69.67,0 73.83,0 78,-4.17 78,-8.33 78,-8.33 78,-16.67 78,-16.67 78,-20.83 73.83,-25 69.67,-25" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-19.5" x="10" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="31" text-anchor="start">Band[A]</text></a></g></g><!-- node0&#45;&gt;node1 --><g class="edge inheritance" id="graph1_0_1"><g id="a_inheritance|graph1_0_1"><a xlink:title="Band[A] is a subtype of Semigroup[A]"><path d="M413.62,-67.43C338.29,-60.31 202.1,-45.84 87,-25 84.13,-24.48 81.18,-23.9 78.22,-23.27" stroke="#d4d4d4" fill="none"></path><polygon points="413.52,-69.88 420.72,-68.09 413.98,-65 413.52,-69.88" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node2 --><g class="node trait" id="graph1_2"><g id="a_trait|graph1_2"><a xlink:title="cats.kernel.CommutativeSemigroup" xlink:href="CommutativeSemigroup.html#inheritance-diagram"><path d="M237.67,-25C237.67,-25 104.33,-25 104.33,-25 100.17,-25 96,-20.83 96,-16.67 96,-16.67 96,-8.33 96,-8.33 96,-4.17 100.17,0 104.33,0 104.33,0 237.67,0 237.67,0 241.83,0 246,-4.17 246,-8.33 246,-8.33 246,-16.67 246,-16.67 246,-20.83 241.83,-25 237.67,-25" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-19.5" x="106" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="127" text-anchor="start">CommutativeSemigroup[A]</text></a></g></g><!-- node0&#45;&gt;node2 --><g class="edge inheritance" id="graph1_0_2"><g id="a_inheritance|graph1_0_2"><a xlink:title="CommutativeSemigroup[A] is a subtype of Semigroup[A]"><path d="M413.83,-61.26C361.01,-50.87 282.89,-35.51 229.62,-25.03" stroke="#d4d4d4" fill="none"></path><polygon points="413.45,-63.68 420.79,-62.62 414.39,-58.87 413.45,-63.68" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node3 --><g class="node trait" id="graph1_3"><g id="a_trait|graph1_3"><a xlink:title="cats.EvalSemigroup" xlink:href="../EvalSemigroup.html#inheritance-diagram"><path d="M373.67,-25C373.67,-25 272.33,-25 272.33,-25 268.17,-25 264,-20.83 264,-16.67 264,-16.67 264,-8.33 264,-8.33 264,-4.17 268.17,0 272.33,0 272.33,0 373.67,0 373.67,0 377.83,0 382,-4.17 382,-8.33 382,-8.33 382,-16.67 382,-16.67 382,-20.83 377.83,-25 373.67,-25" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-19.5" x="274" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="295" text-anchor="start">EvalSemigroup[A]</text></a></g></g><!-- node0&#45;&gt;node3 --><g class="edge inheritance" id="graph1_0_3"><g id="a_inheritance|graph1_0_3"><a xlink:title="EvalSemigroup[A] is a subtype of Semigroup[A]"><path d="M435.49,-58.34C409.96,-48.17 375.98,-34.62 352.07,-25.09" stroke="#d4d4d4" fill="none"></path><polygon points="434.7,-60.67 442.11,-60.98 436.52,-56.12 434.7,-60.67" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node4 --><g class="node trait" id="graph1_4"><g id="a_trait|graph1_4"><a xlink:title="cats.kernel.instances.Function0Semigroup" xlink:href="instances/Function0Semigroup.html#inheritance-diagram"><path d="M533.17,-25C533.17,-25 408.83,-25 408.83,-25 404.67,-25 400.5,-20.83 400.5,-16.67 400.5,-16.67 400.5,-8.33 400.5,-8.33 400.5,-4.17 404.67,0 408.83,0 408.83,0 533.17,0 533.17,0 537.33,0 541.5,-4.17 541.5,-8.33 541.5,-8.33 541.5,-16.67 541.5,-16.67 541.5,-20.83 537.33,-25 533.17,-25" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-19.5" x="411" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="432" text-anchor="start">Function0Semigroup[A]</text></a></g></g><!-- node0&#45;&gt;node4 --><g class="edge inheritance" id="graph1_0_4"><g id="a_inheritance|graph1_0_4"><a xlink:title="Function0Semigroup[A] is a subtype of Semigroup[A]"><path d="M471,-53.76C471,-44.37 471,-33.29 471,-25.13" stroke="#d4d4d4" fill="none"></path><polygon points="468.55,-53.84 471,-60.84 473.45,-53.84 468.55,-53.84" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node5 --><g class="node trait" id="graph1_5"><g id="a_trait|graph1_5"><a xlink:title="cats.kernel.instances.Function1Semigroup" xlink:href="instances/Function1Semigroup.html#inheritance-diagram"><path d="M705.67,-25C705.67,-25 568.33,-25 568.33,-25 564.17,-25 560,-20.83 560,-16.67 560,-16.67 560,-8.33 560,-8.33 560,-4.17 564.17,0 568.33,0 568.33,0 705.67,0 705.67,0 709.83,0 714,-4.17 714,-8.33 714,-8.33 714,-16.67 714,-16.67 714,-20.83 709.83,-25 705.67,-25" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-19.5" x="570" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="591" text-anchor="start">Function1Semigroup[A, B]</text></a></g></g><!-- node0&#45;&gt;node5 --><g class="edge inheritance" id="graph1_0_5"><g id="a_inheritance|graph1_0_5"><a xlink:title="Function1Semigroup[A, B] is a subtype of Semigroup[A]"><path d="M510.1,-58.6C538.81,-48.4 577.35,-34.7 604.4,-25.09" stroke="#d4d4d4" fill="none"></path><polygon points="509.18,-56.33 503.4,-60.98 510.82,-60.95 509.18,-56.33" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node6 --><g class="node trait" id="graph1_6"><g id="a_trait|graph1_6"><a xlink:title="cats.kernel.Monoid" xlink:href="Monoid.html#inheritance-diagram"><path d="M811.17,-25C811.17,-25 740.83,-25 740.83,-25 736.67,-25 732.5,-20.83 732.5,-16.67 732.5,-16.67 732.5,-8.33 732.5,-8.33 732.5,-4.17 736.67,0 740.83,0 740.83,0 811.17,0 811.17,0 815.33,0 819.5,-4.17 819.5,-8.33 819.5,-8.33 819.5,-16.67 819.5,-16.67 819.5,-20.83 815.33,-25 811.17,-25" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-19.5" x="743" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="764" text-anchor="start">Monoid[A]</text></a></g></g><!-- node0&#45;&gt;node6 --><g class="edge inheritance" id="graph1_0_6"><g id="a_inheritance|graph1_0_6"><a xlink:title="Monoid[A] is a subtype of Semigroup[A]"><path d="M528.32,-62.16C579.46,-52.82 656.32,-38.52 723,-25 726.05,-24.38 729.19,-23.73 732.35,-23.07" stroke="#d4d4d4" fill="none"></path><polygon points="527.73,-59.77 521.28,-63.44 528.61,-64.6 527.73,-59.77" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node7 --><g class="node class" id="graph1_7"><g id="a_class|graph1_7"><a xlink:title="cats.kernel.instances.SortedMapSemigroup" xlink:href="instances/SortedMapSemigroup.html#inheritance-diagram"><path d="M983.67,-25C983.67,-25 846.33,-25 846.33,-25 842.17,-25 838,-20.83 838,-16.67 838,-16.67 838,-8.33 838,-8.33 838,-4.17 842.17,0 846.33,0 846.33,0 983.67,0 983.67,0 987.83,0 992,-4.17 992,-8.33 992,-8.33 992,-16.67 992,-16.67 992,-20.83 987.83,-25 983.67,-25" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-19.5" x="848" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="869" text-anchor="start">SortedMapSemigroup[K, V]</text></a></g></g><!-- node0&#45;&gt;node7 --><g class="edge inheritance" id="graph1_0_7"><g id="a_inheritance|graph1_0_7"><a xlink:title="SortedMapSemigroup[K, V] is a subtype of Semigroup[A]"><path d="M528.19,-64.93C598.87,-55.57 722.8,-39.15 829,-25 831.84,-24.62 834.73,-24.24 837.65,-23.85" stroke="#d4d4d4" fill="none"></path><polygon points="527.72,-62.52 521.1,-65.87 528.36,-67.38 527.72,-62.52" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node8 --><g class="node trait" id="graph1_8"><g id="a_trait|graph1_8"><a xlink:title="scala.Serializable"><path d="M512.67,-147C512.67,-147 429.33,-147 429.33,-147 425.17,-147 421,-142.83 421,-138.67 421,-138.67 421,-130.33 421,-130.33 421,-126.17 425.17,-122 429.33,-122 429.33,-122 512.67,-122 512.67,-122 516.83,-122 521,-126.17 521,-130.33 521,-130.33 521,-138.67 521,-138.67 521,-142.83 516.83,-147 512.67,-147" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-141.5" x="431" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="452" text-anchor="start">Serializable</text></a></g></g><!-- node8&#45;&gt;node0 --><g class="edge inheritance" id="graph1_8_0"><g id="a_inheritance|graph1_8_0"><a xlink:title="Semigroup[A] is a subtype of Serializable"><path d="M471,-114.76C471,-105.37 471,-94.29 471,-86.13" stroke="#d4d4d4" fill="none"></path><polygon points="468.55,-114.84 471,-121.84 473.45,-114.84 468.55,-114.84" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
+                <div id="diagram-controls" class="hiddenContent">
+                  <button id="diagram-zoom-out" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button id="diagram-zoom-in" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button title="Toggle full-screen" id="diagram-fs" class="diagram-btn to-full"><i class="material-icons"></i></button>
+                </div>
+              </div></div>
         
 
       <div id="mbrsel">
@@ -515,6 +587,23 @@ res1: <span class="std">String</span> = hahaha</pre></div></div>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.kernel.Semigroup#intercalate" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="intercalate(middle:A):cats.kernel.Semigroup[A]"></a><a id="intercalate(A):Semigroup[A]"></a>
+      <span class="permalink">
+      <a href="../../cats/kernel/Semigroup.html#intercalate(middle:A):cats.kernel.Semigroup[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">intercalate</span><span class="params">(<span name="middle">middle: <span class="extype" name="cats.kernel.Semigroup.A">A</span></span>)</span><span class="result">: <a href="" class="extype" name="cats.kernel.Semigroup">Semigroup</a>[<span class="extype" name="cats.kernel.Semigroup.A">A</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Between each pair of elements insert middle
+This name matches the term used in Foldable and Reducible and a similar Haskell function.</p>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <span class="permalink">
@@ -548,6 +637,24 @@ res1: <span class="std">String</span> = hahaha</pre></div></div>
       
       <p class="shortcomment cmt">Return <code>a</code> combined with itself more than once.</p><div class="fullcomment"><div class="comment cmt"><p>Return <code>a</code> combined with itself more than once.
 </p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd></dl></div>
+    </li><li name="cats.kernel.Semigroup#reverse" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="reverse:cats.kernel.Semigroup[A]"></a><a id="reverse:Semigroup[A]"></a>
+      <span class="permalink">
+      <a href="../../cats/kernel/Semigroup.html#reverse:cats.kernel.Semigroup[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">reverse</span><span class="result">: <a href="" class="extype" name="cats.kernel.Semigroup">Semigroup</a>[<span class="extype" name="cats.kernel.Semigroup.A">A</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">return a semigroup that reverses the order
+so combine(a, b) == reverse.combine(b, a)
+</p>
     </li><li name="scala.Any#toString" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <span class="permalink">

@@ -81,10 +81,32 @@
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <a title="Symbolic aliases for various types are defined here." href="../index.html"><span class="name">cats</span></a>
+        <a title="The cats root package contains all the trait signatures of most Scala type classes." href="../index.html"><span class="name">cats</span></a>
       </span>
       
-      <p class="shortcomment cmt">Symbolic aliases for various types are defined here.</p><div class="fullcomment"><div class="comment cmt"><p>Symbolic aliases for various types are defined here.
+      <p class="shortcomment cmt">The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><p>Cats type classes are implemented using the approach from the
+ <a href="https://ropas.snu.ac.kr/~bruno/papers/TypeClasses.pdf" target="_blank">Type classes as objects and implicits</a> article.</p><p>For each type class, <code>cats</code> provides three pieces:
+- Its <b>signature</b>: a trait that is polymorphic on a type parameter.
+  Type class traits inherit from other type classes to indicate that any implementation of the lower type class (e.g. <code>Applicative</code>)
+  can also serve as an instance for the higuer type class (e.g. <code>Functor</code>).
+- Type class <b>'instances</b>, which are classes and objects that implement one or more type class signatures for some specific types.
+  Type class instances for several data types from the Java or Scala standard libraries are declared in the subpackage <code>cats.instances</code>.
+- <b>Syntax extensions</b>, each of which provides the methods of the type class defines as extension methods
+  (which in Scala 2 are encoded as implicit classes) for values of any type <code>F</code>; given that an instance of the type class
+  for the receiver type (<code>this</code>) is in the implicit scope.
+  Symtax extensions are declared in the <code>cats.syntax</code> package.
+- A set of <b>laws</b>, that are also generic on the type of the class, and are only defined on the operations of the type class.
+  The purpose of these laws is to declare some algebraic relations (equations) between Scala expressions involving the operations
+  of the type class, and test (but not verify) that implemented instances satisfy those equations.
+  Laws are defined in the <code>cats-laws</code> package.</p><p>Although most of cats type classes are declared in this package, some are declared in other packages:
+- type classes that operate on base types (kind <code>*</code>), and their implementations for standard library types,
+  are contained in <code>cats.kernel</code>, which is a different SBT project. However, they are re-exported from this package.
+- type classes of kind <code>F[_, _]</code>, such as <a href="../arrow/Profunctor.html" class="extype" name="cats.arrow.Profunctor">cats.arrow.Profunctor</a>&quot; or <a href="../arrow/Arrow.html" class="extype" name="cats.arrow.Arrow">cats.arrow.Arrow</a>, which are relevant for
+  Functional Reactive Programming or optics, are declared in the <code>cats.arrow</code> package.
+- Also, those type classes that abstract over (pure or impure) functional runtime effects are declared
+  in the <a href="https://typelevel.org/cats-effect/" target="_blank">cats-effect library</a>.
+- Some type classes for which no laws can be provided are left out of the main road, in a small and dirty alley.
+  These are the <code>alleycats</code>.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
     </li><li name="cats.data" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="data"></a><a id="data:data"></a>
@@ -138,6 +160,10 @@
                         <a class="object" href="Const$.html" title=""></a>
                         <a class="class" href="Const.html" title="Const is a phantom type, it does not contain a value of its second type parameter B Const can be seen as a type level version of Function.const[A, B]: A =&gt; B =&gt; A"></a>
                         <a href="Const.html" title="Const is a phantom type, it does not contain a value of its second type parameter B Const can be seen as a type level version of Function.const[A, B]: A =&gt; B =&gt; A">Const</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$Cont$.html" title=""></a>
+                        <a href="package$$Cont$.html" title="">Cont</a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="ContT$.html" title=""></a>
                         <a class="class" href="ContT.html" title="This is a continuation transformer based on the ContT in the Haskell package Control.Monad.Cont"></a>
@@ -198,6 +224,10 @@
                         <span class="separator"></span>
                         <a class="class" href="NonEmptyMapOps.html" title=""></a>
                         <a href="NonEmptyMapOps.html" title="">NonEmptyMapOps</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="NonEmptySeq$.html" title=""></a>
+                        <a class="class" href="NonEmptySeq.html" title="A data type which represents a Seq guaranteed to contain at least one element."></a>
+                        <a href="NonEmptySeq.html" title="A data type which represents a Seq guaranteed to contain at least one element.">NonEmptySeq</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="class" href="NonEmptySetOps.html" title=""></a>
@@ -267,6 +297,10 @@
                         <a class="class" href="ZipList.html" title=""></a>
                         <a href="ZipList.html" title="">ZipList</a>
                       </li><li class="current-entities indented2">
+                        <a class="object" href="ZipSeq$.html" title=""></a>
+                        <a class="class" href="ZipSeq.html" title=""></a>
+                        <a href="ZipSeq.html" title="">ZipSeq</a>
+                      </li><li class="current-entities indented2">
                         <a class="object" href="ZipStream$.html" title=""></a>
                         <a class="class" href="ZipStream.html" title=""></a>
                         <a href="ZipStream.html" title="">ZipStream</a>
@@ -312,7 +346,17 @@
               Known Subclasses
             </span>
             <div class="subClasses hiddenContent"><a href="BinestedBitraverse.html" class="extype" name="cats.data.BinestedBitraverse">BinestedBitraverse</a></div>
-          </div></div>
+          </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
+                <span class="toggle diagram-link">
+                  Type Hierarchy
+                </span>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph1" viewBox="0.00 0.00 311.00 155.00" height="155pt" width="311pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 151)" class="graph" id="page0,1_graph0"><polygon points="-4,4 -4,-151 307,-151 307,4 -4,4" stroke="transparent" fill="white"></polygon><g class="cluster" id="clust1"></g><g class="cluster" id="clust2"></g><!-- node0 --><g class="node this class" id="graph1_0"><g id="a_this class|graph1_0"><a xlink:title="cats.data.BinestedBifoldable (this class)" xlink:href="#inheritance-diagram"><path d="M227.17,-86C227.17,-86 75.83,-86 75.83,-86 71.67,-86 67.5,-81.83 67.5,-77.67 67.5,-77.67 67.5,-69.33 67.5,-69.33 67.5,-65.17 71.67,-61 75.83,-61 75.83,-61 227.17,-61 227.17,-61 231.33,-61 235.5,-65.17 235.5,-69.33 235.5,-69.33 235.5,-77.67 235.5,-77.67 235.5,-81.83 231.33,-86 227.17,-86" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-80.5" x="77.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-71.1" x="98.5" text-anchor="start">BinestedBifoldable[F, G, H]</text></a></g></g><!-- node1 --><g class="node class" id="graph1_1"><g id="a_class|graph1_1"><a xlink:title="cats.data.BinestedBitraverse" xlink:href="BinestedBitraverse.html#inheritance-diagram"><path d="M227.17,-25C227.17,-25 75.83,-25 75.83,-25 71.67,-25 67.5,-20.83 67.5,-16.67 67.5,-16.67 67.5,-8.33 67.5,-8.33 67.5,-4.17 71.67,0 75.83,0 75.83,0 227.17,0 227.17,0 231.33,0 235.5,-4.17 235.5,-8.33 235.5,-8.33 235.5,-16.67 235.5,-16.67 235.5,-20.83 231.33,-25 227.17,-25" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-19.5" x="77.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="98.5" text-anchor="start">BinestedBitraverse[F, G, H]</text></a></g></g><!-- node0&#45;&gt;node1 --><g class="edge inheritance" id="graph1_0_1"><g id="a_inheritance|graph1_0_1"><a xlink:title="BinestedBitraverse[F, G, H] is a subtype of BinestedBifoldable[F, G, H]"><path d="M151.5,-53.76C151.5,-44.37 151.5,-33.29 151.5,-25.13" stroke="#d4d4d4" fill="none"></path><polygon points="149.05,-53.84 151.5,-60.84 153.95,-53.84 149.05,-53.84" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node2 --><g class="node trait" id="graph1_2"><g id="a_trait|graph1_2"><a xlink:title="cats.Bifoldable" xlink:href="../Bifoldable.html#inheritance-diagram"><path d="M294.67,-147C294.67,-147 8.33,-147 8.33,-147 4.17,-147 0,-142.83 0,-138.67 0,-138.67 0,-130.33 0,-130.33 0,-126.17 4.17,-122 8.33,-122 8.33,-122 294.67,-122 294.67,-122 298.83,-122 303,-126.17 303,-130.33 303,-130.33 303,-138.67 303,-138.67 303,-142.83 298.83,-147 294.67,-147" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-141.5" x="10.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="31.5" text-anchor="start">Bifoldable[[δ$12$, ε$13$]Binested[F, G, H, δ$12$, ε$13$]]</text></a></g></g><!-- node2&#45;&gt;node0 --><g class="edge inheritance" id="graph1_2_0"><g id="a_inheritance|graph1_2_0"><a xlink:title="BinestedBifoldable[F, G, H] is a subtype of Bifoldable[[δ$12$, ε$13$]Binested[F, G, H, δ$12$, ε$13$]]"><path d="M151.5,-114.76C151.5,-105.37 151.5,-94.29 151.5,-86.13" stroke="#d4d4d4" fill="none"></path><polygon points="149.05,-114.84 151.5,-121.84 153.95,-114.84 149.05,-114.84" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
+                <div id="diagram-controls" class="hiddenContent">
+                  <button id="diagram-zoom-out" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button id="diagram-zoom-in" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button title="Toggle full-screen" id="diagram-fs" class="diagram-btn to-full"><i class="material-icons"></i></button>
+                </div>
+              </div></div>
         
 
       <div id="mbrsel">
@@ -510,7 +554,9 @@
         <span class="name">bifoldLeft</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="fab">fab: <a href="Binested.html" class="extype" name="cats.data.Binested">Binested</a>[<span class="extype" name="cats.data.BinestedBifoldable.F">F</span>, <span class="extype" name="cats.data.BinestedBifoldable.G">G</span>, <span class="extype" name="cats.data.BinestedBifoldable.H">H</span>, <span class="extype" name="cats.data.BinestedBifoldable.bifoldLeft.A">A</span>, <span class="extype" name="cats.data.BinestedBifoldable.bifoldLeft.B">B</span>]</span>, <span name="c">c: <span class="extype" name="cats.data.BinestedBifoldable.bifoldLeft.C">C</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.BinestedBifoldable.bifoldLeft.C">C</span>, <span class="extype" name="cats.data.BinestedBifoldable.bifoldLeft.A">A</span>) ⇒ <span class="extype" name="cats.data.BinestedBifoldable.bifoldLeft.C">C</span></span>, <span name="g">g: (<span class="extype" name="cats.data.BinestedBifoldable.bifoldLeft.C">C</span>, <span class="extype" name="cats.data.BinestedBifoldable.bifoldLeft.B">B</span>) ⇒ <span class="extype" name="cats.data.BinestedBifoldable.bifoldLeft.C">C</span></span>)</span><span class="result">: <span class="extype" name="cats.data.BinestedBifoldable.bifoldLeft.C">C</span></span>
       </span>
       
-      <p class="shortcomment cmt">Collapse the structure with a left-associative function</p><div class="fullcomment"><div class="comment cmt"><p>Collapse the structure with a left-associative function</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.data.BinestedBifoldable">BinestedBifoldable</a> → <a href="../Bifoldable.html" class="extype" name="cats.Bifoldable">Bifoldable</a></dd></dl></div>
+      <p class="shortcomment cmt">Collapse the structure with a left-associative function
+</p><div class="fullcomment"><div class="comment cmt"><p>Collapse the structure with a left-associative function
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.data.BinestedBifoldable">BinestedBifoldable</a> → <a href="../Bifoldable.html" class="extype" name="cats.Bifoldable">Bifoldable</a></dd></dl></div>
     </li><li name="cats.Bifoldable#bifoldMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="bifoldMap[A,B,C](fab:F[A,B])(f:A=&gt;C,g:B=&gt;C)(implicitC:cats.Monoid[C]):C"></a><a id="bifoldMap[A,B,C](Binested[F,G,H,A,B])((A)⇒C,(B)⇒C)(Monoid[C]):C"></a>
       <span class="permalink">
@@ -526,7 +572,9 @@
         <span class="name">bifoldMap</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="fab">fab: <a href="Binested.html" class="extype" name="cats.data.Binested">Binested</a>[<span class="extype" name="cats.data.BinestedBifoldable.F">F</span>, <span class="extype" name="cats.data.BinestedBifoldable.G">G</span>, <span class="extype" name="cats.data.BinestedBifoldable.H">H</span>, <span class="extype" name="cats.Bifoldable.bifoldMap.A">A</span>, <span class="extype" name="cats.Bifoldable.bifoldMap.B">B</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Bifoldable.bifoldMap.A">A</span>) ⇒ <span class="extype" name="cats.Bifoldable.bifoldMap.C">C</span></span>, <span name="g">g: (<span class="extype" name="cats.Bifoldable.bifoldMap.B">B</span>) ⇒ <span class="extype" name="cats.Bifoldable.bifoldMap.C">C</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="C">C: <a href="../index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="cats.Bifoldable.bifoldMap.C">C</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Bifoldable.bifoldMap.C">C</span></span>
       </span>
       
-      <p class="shortcomment cmt">Collapse the structure by mapping each element to an element of a type that has a <a href="../index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">cats.Monoid</a></p><div class="fullcomment"><div class="comment cmt"><p>Collapse the structure by mapping each element to an element of a type that has a <a href="../index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">cats.Monoid</a></p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Bifoldable.html" class="extype" name="cats.Bifoldable">Bifoldable</a></dd></dl></div>
+      <p class="shortcomment cmt">Collapse the structure by mapping each element to an element of a type that has a <a href="../index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">cats.Monoid</a>
+</p><div class="fullcomment"><div class="comment cmt"><p>Collapse the structure by mapping each element to an element of a type that has a <a href="../index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">cats.Monoid</a>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Bifoldable.html" class="extype" name="cats.Bifoldable">Bifoldable</a></dd></dl></div>
     </li><li name="cats.data.BinestedBifoldable#bifoldRight" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="bifoldRight[A,B,C](fab:cats.data.Binested[F,G,H,A,B],c:cats.Eval[C])(f:(A,cats.Eval[C])=&gt;cats.Eval[C],g:(B,cats.Eval[C])=&gt;cats.Eval[C]):cats.Eval[C]"></a><a id="bifoldRight[A,B,C](Binested[F,G,H,A,B],Eval[C])((A,Eval[C])⇒Eval[C],(B,Eval[C])⇒Eval[C]):Eval[C]"></a>
       <span class="permalink">
@@ -542,7 +590,9 @@
         <span class="name">bifoldRight</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="fab">fab: <a href="Binested.html" class="extype" name="cats.data.Binested">Binested</a>[<span class="extype" name="cats.data.BinestedBifoldable.F">F</span>, <span class="extype" name="cats.data.BinestedBifoldable.G">G</span>, <span class="extype" name="cats.data.BinestedBifoldable.H">H</span>, <span class="extype" name="cats.data.BinestedBifoldable.bifoldRight.A">A</span>, <span class="extype" name="cats.data.BinestedBifoldable.bifoldRight.B">B</span>]</span>, <span name="c">c: <a href="../Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.data.BinestedBifoldable.bifoldRight.C">C</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.BinestedBifoldable.bifoldRight.A">A</span>, <a href="../Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.data.BinestedBifoldable.bifoldRight.C">C</span>]) ⇒ <a href="../Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.data.BinestedBifoldable.bifoldRight.C">C</span>]</span>, <span name="g">g: (<span class="extype" name="cats.data.BinestedBifoldable.bifoldRight.B">B</span>, <a href="../Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.data.BinestedBifoldable.bifoldRight.C">C</span>]) ⇒ <a href="../Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.data.BinestedBifoldable.bifoldRight.C">C</span>]</span>)</span><span class="result">: <a href="../Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.data.BinestedBifoldable.bifoldRight.C">C</span>]</span>
       </span>
       
-      <p class="shortcomment cmt">Collapse the structure with a right-associative function</p><div class="fullcomment"><div class="comment cmt"><p>Collapse the structure with a right-associative function</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.data.BinestedBifoldable">BinestedBifoldable</a> → <a href="../Bifoldable.html" class="extype" name="cats.Bifoldable">Bifoldable</a></dd></dl></div>
+      <p class="shortcomment cmt">Collapse the structure with a right-associative function
+</p><div class="fullcomment"><div class="comment cmt"><p>Collapse the structure with a right-associative function
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.data.BinestedBifoldable">BinestedBifoldable</a> → <a href="../Bifoldable.html" class="extype" name="cats.Bifoldable">Bifoldable</a></dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a><a id="clone():AnyRef"></a>
       <span class="permalink">
@@ -565,6 +615,8 @@
     </span>)</span>
               
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="cats.Bifoldable#compose" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -615,28 +667,6 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="finalize():Unit"></a>
-      <span class="permalink">
-      <a href="../../cats/data/BinestedBifoldable.html#finalize():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="symbol">classOf[java.lang.Throwable]</span>
-    </span>)</span>
-              
-        </dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
@@ -654,6 +684,8 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -673,6 +705,8 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -725,6 +759,8 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
@@ -743,6 +779,8 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -777,28 +815,6 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait():Unit"></a>
-      <span class="permalink">
-      <a href="../../cats/data/BinestedBifoldable.html#wait():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
-    </span>)</span>
-              
-        </dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <span class="permalink">
@@ -845,13 +861,64 @@
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/data/BinestedBifoldable.html#wait():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
     </li>
               </ol>
             </div>
 
         
 
-        
+        <div class="values members">
+              <h3>Deprecated Value Members</h3>
+              <ol><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/data/BinestedBifoldable.html#finalize():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version ) see corresponding Javadoc for more information.">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+                <span class="name">@Deprecated</span>
+              
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version )</i> see corresponding Javadoc for more information.</p></dd></dl></div>
+    </li></ol>
+            </div>
         </div>
 
         <div id="inheritedMembers">

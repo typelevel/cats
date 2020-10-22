@@ -81,10 +81,32 @@
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <a title="Symbolic aliases for various types are defined here." href="../index.html"><span class="name">cats</span></a>
+        <a title="The cats root package contains all the trait signatures of most Scala type classes." href="../index.html"><span class="name">cats</span></a>
       </span>
       
-      <p class="shortcomment cmt">Symbolic aliases for various types are defined here.</p><div class="fullcomment"><div class="comment cmt"><p>Symbolic aliases for various types are defined here.
+      <p class="shortcomment cmt">The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><p>Cats type classes are implemented using the approach from the
+ <a href="https://ropas.snu.ac.kr/~bruno/papers/TypeClasses.pdf" target="_blank">Type classes as objects and implicits</a> article.</p><p>For each type class, <code>cats</code> provides three pieces:
+- Its <b>signature</b>: a trait that is polymorphic on a type parameter.
+  Type class traits inherit from other type classes to indicate that any implementation of the lower type class (e.g. <code>Applicative</code>)
+  can also serve as an instance for the higuer type class (e.g. <code>Functor</code>).
+- Type class <b>'instances</b>, which are classes and objects that implement one or more type class signatures for some specific types.
+  Type class instances for several data types from the Java or Scala standard libraries are declared in the subpackage <code>cats.instances</code>.
+- <b>Syntax extensions</b>, each of which provides the methods of the type class defines as extension methods
+  (which in Scala 2 are encoded as implicit classes) for values of any type <code>F</code>; given that an instance of the type class
+  for the receiver type (<code>this</code>) is in the implicit scope.
+  Symtax extensions are declared in the <code>cats.syntax</code> package.
+- A set of <b>laws</b>, that are also generic on the type of the class, and are only defined on the operations of the type class.
+  The purpose of these laws is to declare some algebraic relations (equations) between Scala expressions involving the operations
+  of the type class, and test (but not verify) that implemented instances satisfy those equations.
+  Laws are defined in the <code>cats-laws</code> package.</p><p>Although most of cats type classes are declared in this package, some are declared in other packages:
+- type classes that operate on base types (kind <code>*</code>), and their implementations for standard library types,
+  are contained in <code>cats.kernel</code>, which is a different SBT project. However, they are re-exported from this package.
+- type classes of kind <code>F[_, _]</code>, such as <a href="../arrow/Profunctor.html" class="extype" name="cats.arrow.Profunctor">cats.arrow.Profunctor</a>&quot; or <a href="../arrow/Arrow.html" class="extype" name="cats.arrow.Arrow">cats.arrow.Arrow</a>, which are relevant for
+  Functional Reactive Programming or optics, are declared in the <code>cats.arrow</code> package.
+- Also, those type classes that abstract over (pure or impure) functional runtime effects are declared
+  in the <a href="https://typelevel.org/cats-effect/" target="_blank">cats-effect library</a>.
+- Some type classes for which no laws can be provided are left out of the main road, in a small and dirty alley.
+  These are the <code>alleycats</code>.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
     </li><li name="cats.data" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="data"></a><a id="data:data"></a>
@@ -138,6 +160,10 @@
                         <a class="object" href="Const$.html" title=""></a>
                         <a class="class" href="Const.html" title="Const is a phantom type, it does not contain a value of its second type parameter B Const can be seen as a type level version of Function.const[A, B]: A =&gt; B =&gt; A"></a>
                         <a href="Const.html" title="Const is a phantom type, it does not contain a value of its second type parameter B Const can be seen as a type level version of Function.const[A, B]: A =&gt; B =&gt; A">Const</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$Cont$.html" title=""></a>
+                        <a href="package$$Cont$.html" title="">Cont</a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="ContT$.html" title=""></a>
                         <a class="class" href="ContT.html" title="This is a continuation transformer based on the ContT in the Haskell package Control.Monad.Cont"></a>
@@ -198,6 +224,10 @@
                         <span class="separator"></span>
                         <a class="class" href="NonEmptyMapOps.html" title=""></a>
                         <a href="NonEmptyMapOps.html" title="">NonEmptyMapOps</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="NonEmptySeq$.html" title=""></a>
+                        <a class="class" href="NonEmptySeq.html" title="A data type which represents a Seq guaranteed to contain at least one element."></a>
+                        <a href="NonEmptySeq.html" title="A data type which represents a Seq guaranteed to contain at least one element.">NonEmptySeq</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="class" href="NonEmptySetOps.html" title=""></a>
@@ -266,6 +296,10 @@
                         <a class="object" href="ZipList$.html" title=""></a>
                         <a class="class" href="ZipList.html" title=""></a>
                         <a href="ZipList.html" title="">ZipList</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="ZipSeq$.html" title=""></a>
+                        <a class="class" href="ZipSeq.html" title=""></a>
+                        <a href="ZipSeq.html" title="">ZipSeq</a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="ZipStream$.html" title=""></a>
                         <a class="class" href="ZipStream.html" title=""></a>
@@ -480,9 +514,9 @@ res0: cats.data.IorT[<span class="std">Option</span>,<span class="std">String</s
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IorTInstances</dd></dl></div>
     </li><li name="cats.data.IorTInstances#catsDataDeferForIor" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataDeferForIor[F[_],E](implicitF:cats.Defer[F]):cats.Defer[[γ$33$]cats.data.IorT[F,E,γ$33$]]"></a><a id="catsDataDeferForIor[F[_],E](Defer[F]):Defer[[γ$33$]IorT[F,E,γ$33$]]"></a>
+      <a id="catsDataDeferForIor[F[_],E](implicitF:cats.Defer[F]):cats.Defer[[γ$31$]cats.data.IorT[F,E,γ$31$]]"></a><a id="catsDataDeferForIor[F[_],E](Defer[F]):Defer[[γ$31$]IorT[F,E,γ$31$]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/IorT$.html#catsDataDeferForIor[F[_],E](implicitF:cats.Defer[F]):cats.Defer[[γ$33$]cats.data.IorT[F,E,γ$33$]]" title="Permalink">
+      <a href="../../cats/data/IorT$.html#catsDataDeferForIor[F[_],E](implicitF:cats.Defer[F]):cats.Defer[[γ$31$]cats.data.IorT[F,E,γ$31$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -491,7 +525,7 @@ res0: cats.data.IorT[<span class="std">Option</span>,<span class="std">String</s
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataDeferForIor</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="E">E</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Defer.html" class="extype" name="cats.Defer">Defer</a>[<span class="extype" name="cats.data.IorTInstances.catsDataDeferForIor.F">F</span>]</span>)</span><span class="result">: <a href="../Defer.html" class="extype" name="cats.Defer">Defer</a>[[γ$33$]<a href="IorT.html" class="extype" name="cats.data.IorT">IorT</a>[<span class="extype" name="cats.data.IorTInstances.catsDataDeferForIor.F">F</span>, <span class="extype" name="cats.data.IorTInstances.catsDataDeferForIor.E">E</span>, <span class="extype" name="cats.data.IorTInstances.&lt;refinement&gt;.Λ$.γ$33$">γ$33$</span>]]</span>
+        <span class="name">catsDataDeferForIor</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="E">E</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Defer.html" class="extype" name="cats.Defer">Defer</a>[<span class="extype" name="cats.data.IorTInstances.catsDataDeferForIor.F">F</span>]</span>)</span><span class="result">: <a href="../Defer.html" class="extype" name="cats.Defer">Defer</a>[[γ$31$]<a href="IorT.html" class="extype" name="cats.data.IorT">IorT</a>[<span class="extype" name="cats.data.IorTInstances.catsDataDeferForIor.F">F</span>, <span class="extype" name="cats.data.IorTInstances.catsDataDeferForIor.E">E</span>, <span class="extype" name="cats.data.IorTInstances.&lt;refinement&gt;.Λ$.γ$31$">γ$31$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IorTInstances</dd></dl></div>
@@ -512,9 +546,9 @@ res0: cats.data.IorT[<span class="std">Option</span>,<span class="std">String</s
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IorTInstances2</dd></dl></div>
     </li><li name="cats.data.IorTInstances1#catsDataFoldableForIorT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataFoldableForIorT[F[_],A](implicitF:cats.Foldable[F]):cats.Foldable[[γ$35$]cats.data.IorT[F,A,γ$35$]]"></a><a id="catsDataFoldableForIorT[F[_],A](Foldable[F]):Foldable[[γ$35$]IorT[F,A,γ$35$]]"></a>
+      <a id="catsDataFoldableForIorT[F[_],A](implicitF:cats.Foldable[F]):cats.Foldable[[γ$33$]cats.data.IorT[F,A,γ$33$]]"></a><a id="catsDataFoldableForIorT[F[_],A](Foldable[F]):Foldable[[γ$33$]IorT[F,A,γ$33$]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/IorT$.html#catsDataFoldableForIorT[F[_],A](implicitF:cats.Foldable[F]):cats.Foldable[[γ$35$]cats.data.IorT[F,A,γ$35$]]" title="Permalink">
+      <a href="../../cats/data/IorT$.html#catsDataFoldableForIorT[F[_],A](implicitF:cats.Foldable[F]):cats.Foldable[[γ$33$]cats.data.IorT[F,A,γ$33$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -523,14 +557,14 @@ res0: cats.data.IorT[<span class="std">Option</span>,<span class="std">String</s
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataFoldableForIorT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.data.IorTInstances1.catsDataFoldableForIorT.F">F</span>]</span>)</span><span class="result">: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[[γ$35$]<a href="IorT.html" class="extype" name="cats.data.IorT">IorT</a>[<span class="extype" name="cats.data.IorTInstances1.catsDataFoldableForIorT.F">F</span>, <span class="extype" name="cats.data.IorTInstances1.catsDataFoldableForIorT.A">A</span>, <span class="extype" name="cats.data.IorTInstances1.&lt;refinement&gt;.Λ$.γ$35$">γ$35$</span>]]</span>
+        <span class="name">catsDataFoldableForIorT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.data.IorTInstances1.catsDataFoldableForIorT.F">F</span>]</span>)</span><span class="result">: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[[γ$33$]<a href="IorT.html" class="extype" name="cats.data.IorT">IorT</a>[<span class="extype" name="cats.data.IorTInstances1.catsDataFoldableForIorT.F">F</span>, <span class="extype" name="cats.data.IorTInstances1.catsDataFoldableForIorT.A">A</span>, <span class="extype" name="cats.data.IorTInstances1.&lt;refinement&gt;.Λ$.γ$33$">γ$33$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IorTInstances1</dd></dl></div>
     </li><li name="cats.data.IorTInstances3#catsDataFunctorForIorT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataFunctorForIorT[F[_],A](implicitF:cats.Functor[F]):cats.Functor[[γ$55$]cats.data.IorT[F,A,γ$55$]]"></a><a id="catsDataFunctorForIorT[F[_],A](Functor[F]):Functor[[γ$55$]IorT[F,A,γ$55$]]"></a>
+      <a id="catsDataFunctorForIorT[F[_],A](implicitF:cats.Functor[F]):cats.Functor[[γ$51$]cats.data.IorT[F,A,γ$51$]]"></a><a id="catsDataFunctorForIorT[F[_],A](Functor[F]):Functor[[γ$51$]IorT[F,A,γ$51$]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/IorT$.html#catsDataFunctorForIorT[F[_],A](implicitF:cats.Functor[F]):cats.Functor[[γ$55$]cats.data.IorT[F,A,γ$55$]]" title="Permalink">
+      <a href="../../cats/data/IorT$.html#catsDataFunctorForIorT[F[_],A](implicitF:cats.Functor[F]):cats.Functor[[γ$51$]cats.data.IorT[F,A,γ$51$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -539,14 +573,14 @@ res0: cats.data.IorT[<span class="std">Option</span>,<span class="std">String</s
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataFunctorForIorT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.IorTInstances3.catsDataFunctorForIorT.F">F</span>]</span>)</span><span class="result">: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[[γ$55$]<a href="IorT.html" class="extype" name="cats.data.IorT">IorT</a>[<span class="extype" name="cats.data.IorTInstances3.catsDataFunctorForIorT.F">F</span>, <span class="extype" name="cats.data.IorTInstances3.catsDataFunctorForIorT.A">A</span>, <span class="extype" name="cats.data.IorTInstances3.&lt;refinement&gt;.Λ$.γ$55$">γ$55$</span>]]</span>
+        <span class="name">catsDataFunctorForIorT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.IorTInstances3.catsDataFunctorForIorT.F">F</span>]</span>)</span><span class="result">: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[[γ$51$]<a href="IorT.html" class="extype" name="cats.data.IorT">IorT</a>[<span class="extype" name="cats.data.IorTInstances3.catsDataFunctorForIorT.F">F</span>, <span class="extype" name="cats.data.IorTInstances3.catsDataFunctorForIorT.A">A</span>, <span class="extype" name="cats.data.IorTInstances3.&lt;refinement&gt;.Λ$.γ$51$">γ$51$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IorTInstances3</dd></dl></div>
     </li><li name="cats.data.IorTInstances2#catsDataMonadErrorFForIorT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataMonadErrorFForIorT[F[_],A,E](implicitFE:cats.MonadError[F,E],implicitA:cats.Semigroup[A]):cats.MonadError[[γ$54$]cats.data.IorT[F,A,γ$54$],E]"></a><a id="catsDataMonadErrorFForIorT[F[_],A,E](MonadError[F,E],Semigroup[A]):MonadError[[γ$54$]IorT[F,A,γ$54$],E]"></a>
+      <a id="catsDataMonadErrorFForIorT[F[_],A,E](implicitFE:cats.MonadError[F,E],implicitA:cats.Semigroup[A]):cats.MonadError[[γ$50$]cats.data.IorT[F,A,γ$50$],E]"></a><a id="catsDataMonadErrorFForIorT[F[_],A,E](MonadError[F,E],Semigroup[A]):MonadError[[γ$50$]IorT[F,A,γ$50$],E]"></a>
       <span class="permalink">
-      <a href="../../cats/data/IorT$.html#catsDataMonadErrorFForIorT[F[_],A,E](implicitFE:cats.MonadError[F,E],implicitA:cats.Semigroup[A]):cats.MonadError[[γ$54$]cats.data.IorT[F,A,γ$54$],E]" title="Permalink">
+      <a href="../../cats/data/IorT$.html#catsDataMonadErrorFForIorT[F[_],A,E](implicitFE:cats.MonadError[F,E],implicitA:cats.Semigroup[A]):cats.MonadError[[γ$50$]cats.data.IorT[F,A,γ$50$],E]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -555,14 +589,14 @@ res0: cats.data.IorT[<span class="std">Option</span>,<span class="std">String</s
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataMonadErrorFForIorT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="E">E</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="FE">FE: <a href="../MonadError.html" class="extype" name="cats.MonadError">MonadError</a>[<span class="extype" name="cats.data.IorTInstances2.catsDataMonadErrorFForIorT.F">F</span>, <span class="extype" name="cats.data.IorTInstances2.catsDataMonadErrorFForIorT.E">E</span>]</span>, <span name="A">A: <a href="../index.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.data.IorTInstances2.catsDataMonadErrorFForIorT.A">A</span>]</span>)</span><span class="result">: <a href="../MonadError.html" class="extype" name="cats.MonadError">MonadError</a>[[γ$54$]<a href="IorT.html" class="extype" name="cats.data.IorT">IorT</a>[<span class="extype" name="cats.data.IorTInstances2.catsDataMonadErrorFForIorT.F">F</span>, <span class="extype" name="cats.data.IorTInstances2.catsDataMonadErrorFForIorT.A">A</span>, <span class="extype" name="cats.data.IorTInstances2.&lt;refinement&gt;.Λ$.γ$54$">γ$54$</span>], <span class="extype" name="cats.data.IorTInstances2.catsDataMonadErrorFForIorT.E">E</span>]</span>
+        <span class="name">catsDataMonadErrorFForIorT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="E">E</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="FE">FE: <a href="../MonadError.html" class="extype" name="cats.MonadError">MonadError</a>[<span class="extype" name="cats.data.IorTInstances2.catsDataMonadErrorFForIorT.F">F</span>, <span class="extype" name="cats.data.IorTInstances2.catsDataMonadErrorFForIorT.E">E</span>]</span>, <span name="A">A: <a href="../index.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.data.IorTInstances2.catsDataMonadErrorFForIorT.A">A</span>]</span>)</span><span class="result">: <a href="../MonadError.html" class="extype" name="cats.MonadError">MonadError</a>[[γ$50$]<a href="IorT.html" class="extype" name="cats.data.IorT">IorT</a>[<span class="extype" name="cats.data.IorTInstances2.catsDataMonadErrorFForIorT.F">F</span>, <span class="extype" name="cats.data.IorTInstances2.catsDataMonadErrorFForIorT.A">A</span>, <span class="extype" name="cats.data.IorTInstances2.&lt;refinement&gt;.Λ$.γ$50$">γ$50$</span>], <span class="extype" name="cats.data.IorTInstances2.catsDataMonadErrorFForIorT.E">E</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IorTInstances2</dd></dl></div>
     </li><li name="cats.data.IorTInstances1#catsDataMonadErrorForIorT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataMonadErrorForIorT[F[_],A](implicitF:cats.Monad[F],implicitA:cats.Semigroup[A]):cats.MonadError[[γ$36$]cats.data.IorT[F,A,γ$36$],A]"></a><a id="catsDataMonadErrorForIorT[F[_],A](Monad[F],Semigroup[A]):MonadError[[γ$36$]IorT[F,A,γ$36$],A]"></a>
+      <a id="catsDataMonadErrorForIorT[F[_],A](implicitF:cats.Monad[F],implicitA:cats.Semigroup[A]):cats.MonadError[[γ$34$]cats.data.IorT[F,A,γ$34$],A]"></a><a id="catsDataMonadErrorForIorT[F[_],A](Monad[F],Semigroup[A]):MonadError[[γ$34$]IorT[F,A,γ$34$],A]"></a>
       <span class="permalink">
-      <a href="../../cats/data/IorT$.html#catsDataMonadErrorForIorT[F[_],A](implicitF:cats.Monad[F],implicitA:cats.Semigroup[A]):cats.MonadError[[γ$36$]cats.data.IorT[F,A,γ$36$],A]" title="Permalink">
+      <a href="../../cats/data/IorT$.html#catsDataMonadErrorForIorT[F[_],A](implicitF:cats.Monad[F],implicitA:cats.Semigroup[A]):cats.MonadError[[γ$34$]cats.data.IorT[F,A,γ$34$],A]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -571,7 +605,7 @@ res0: cats.data.IorT[<span class="std">Option</span>,<span class="std">String</s
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataMonadErrorForIorT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.IorTInstances1.catsDataMonadErrorForIorT.F">F</span>]</span>, <span name="A">A: <a href="../index.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.data.IorTInstances1.catsDataMonadErrorForIorT.A">A</span>]</span>)</span><span class="result">: <a href="../MonadError.html" class="extype" name="cats.MonadError">MonadError</a>[[γ$36$]<a href="IorT.html" class="extype" name="cats.data.IorT">IorT</a>[<span class="extype" name="cats.data.IorTInstances1.catsDataMonadErrorForIorT.F">F</span>, <span class="extype" name="cats.data.IorTInstances1.catsDataMonadErrorForIorT.A">A</span>, <span class="extype" name="cats.data.IorTInstances1.&lt;refinement&gt;.Λ$.γ$36$">γ$36$</span>], <span class="extype" name="cats.data.IorTInstances1.catsDataMonadErrorForIorT.A">A</span>]</span>
+        <span class="name">catsDataMonadErrorForIorT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.IorTInstances1.catsDataMonadErrorForIorT.F">F</span>]</span>, <span name="A">A: <a href="../index.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.data.IorTInstances1.catsDataMonadErrorForIorT.A">A</span>]</span>)</span><span class="result">: <a href="../MonadError.html" class="extype" name="cats.MonadError">MonadError</a>[[γ$34$]<a href="IorT.html" class="extype" name="cats.data.IorT">IorT</a>[<span class="extype" name="cats.data.IorTInstances1.catsDataMonadErrorForIorT.F">F</span>, <span class="extype" name="cats.data.IorTInstances1.catsDataMonadErrorForIorT.A">A</span>, <span class="extype" name="cats.data.IorTInstances1.&lt;refinement&gt;.Λ$.γ$34$">γ$34$</span>], <span class="extype" name="cats.data.IorTInstances1.catsDataMonadErrorForIorT.A">A</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IorTInstances1</dd></dl></div>
@@ -591,6 +625,22 @@ res0: cats.data.IorT[<span class="std">Option</span>,<span class="std">String</s
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IorTInstances</dd></dl></div>
+    </li><li name="cats.data.IorTInstances1#catsDataOrderForIorT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataOrderForIorT[F[_],A,B](implicitF:cats.Order[F[cats.data.Ior[A,B]]]):cats.Order[cats.data.IorT[F,A,B]]"></a><a id="catsDataOrderForIorT[F[_],A,B](Order[F[Ior[A,B]]]):Order[IorT[F,A,B]]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/IorT$.html#catsDataOrderForIorT[F[_],A,B](implicitF:cats.Order[F[cats.data.Ior[A,B]]]):cats.Order[cats.data.IorT[F,A,B]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDataOrderForIorT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.data.IorTInstances1.catsDataOrderForIorT.F">F</span>[<a href="Ior.html" class="extype" name="cats.data.Ior">Ior</a>[<span class="extype" name="cats.data.IorTInstances1.catsDataOrderForIorT.A">A</span>, <span class="extype" name="cats.data.IorTInstances1.catsDataOrderForIorT.B">B</span>]]]</span>)</span><span class="result">: <a href="../index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<a href="IorT.html" class="extype" name="cats.data.IorT">IorT</a>[<span class="extype" name="cats.data.IorTInstances1.catsDataOrderForIorT.F">F</span>, <span class="extype" name="cats.data.IorTInstances1.catsDataOrderForIorT.A">A</span>, <span class="extype" name="cats.data.IorTInstances1.catsDataOrderForIorT.B">B</span>]]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IorTInstances1</dd></dl></div>
     </li><li name="cats.data.IorTInstances#catsDataParallelForIorTWithParallelEffect" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="catsDataParallelForIorTWithParallelEffect[M[_],E](implicitP:cats.Parallel[M],implicitE:cats.Semigroup[E]):cats.Parallel.Aux[[γ$13$]cats.data.IorT[M,E,γ$13$],[γ$14$]cats.data.IorT[P.F,E,γ$14$]]{typeDummy}"></a><a id="catsDataParallelForIorTWithParallelEffect[M[_],E](Parallel[M],Semigroup[E]):Aux[[γ$13$]IorT[M,E,γ$13$],[γ$14$]IorT[Parallel.F,E,γ$14$]]{typeDummy}"></a>
       <span class="permalink">
@@ -608,9 +658,9 @@ res0: cats.data.IorT[<span class="std">Option</span>,<span class="std">String</s
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IorTInstances</dd></dl></div>
     </li><li name="cats.data.IorTInstances1#catsDataParallelForIorTWithSequentialEffect" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataParallelForIorTWithSequentialEffect[F0[_],E](implicitF:cats.Monad[F0],implicitE:cats.Semigroup[E]):cats.Parallel.Aux[[γ$37$]cats.data.IorT[F0,E,γ$37$],[γ$38$]cats.data.IorT[F0,E,γ$38$]]"></a><a id="catsDataParallelForIorTWithSequentialEffect[F0[_],E](Monad[F0],Semigroup[E]):Aux[[γ$37$]IorT[F0,E,γ$37$],[γ$38$]IorT[F0,E,γ$38$]]"></a>
+      <a id="catsDataParallelForIorTWithSequentialEffect[F0[_],E](implicitF:cats.Monad[F0],implicitE:cats.Semigroup[E]):cats.Parallel.Aux[[γ$35$]cats.data.IorT[F0,E,γ$35$],[γ$36$]cats.data.IorT[F0,E,γ$36$]]"></a><a id="catsDataParallelForIorTWithSequentialEffect[F0[_],E](Monad[F0],Semigroup[E]):Aux[[γ$35$]IorT[F0,E,γ$35$],[γ$36$]IorT[F0,E,γ$36$]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/IorT$.html#catsDataParallelForIorTWithSequentialEffect[F0[_],E](implicitF:cats.Monad[F0],implicitE:cats.Semigroup[E]):cats.Parallel.Aux[[γ$37$]cats.data.IorT[F0,E,γ$37$],[γ$38$]cats.data.IorT[F0,E,γ$38$]]" title="Permalink">
+      <a href="../../cats/data/IorT$.html#catsDataParallelForIorTWithSequentialEffect[F0[_],E](implicitF:cats.Monad[F0],implicitE:cats.Semigroup[E]):cats.Parallel.Aux[[γ$35$]cats.data.IorT[F0,E,γ$35$],[γ$36$]cats.data.IorT[F0,E,γ$36$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -619,7 +669,7 @@ res0: cats.data.IorT[<span class="std">Option</span>,<span class="std">String</s
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataParallelForIorTWithSequentialEffect</span><span class="tparams">[<span name="F0">F0<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="E">E</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.IorTInstances1.catsDataParallelForIorTWithSequentialEffect.F0">F0</span>]</span>, <span name="E">E: <a href="../index.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.data.IorTInstances1.catsDataParallelForIorTWithSequentialEffect.E">E</span>]</span>)</span><span class="result">: <a href="../Parallel$.html#Aux[M[_],F0[_]]=cats.Parallel[M]{typeF[x]=F0[x]}" class="extmbr" name="cats.Parallel.Aux">Aux</a>[[γ$37$]<a href="IorT.html" class="extype" name="cats.data.IorT">IorT</a>[<span class="extype" name="cats.data.IorTInstances1.catsDataParallelForIorTWithSequentialEffect.F0">F0</span>, <span class="extype" name="cats.data.IorTInstances1.catsDataParallelForIorTWithSequentialEffect.E">E</span>, <span class="extype" name="cats.data.IorTInstances1.&lt;refinement&gt;.Λ$.γ$37$">γ$37$</span>], [γ$38$]<a href="IorT.html" class="extype" name="cats.data.IorT">IorT</a>[<span class="extype" name="cats.data.IorTInstances1.catsDataParallelForIorTWithSequentialEffect.F0">F0</span>, <span class="extype" name="cats.data.IorTInstances1.catsDataParallelForIorTWithSequentialEffect.E">E</span>, <span class="extype" name="cats.data.IorTInstances1.&lt;refinement&gt;.Λ$.γ$38$">γ$38$</span>]]</span>
+        <span class="name">catsDataParallelForIorTWithSequentialEffect</span><span class="tparams">[<span name="F0">F0<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="E">E</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.IorTInstances1.catsDataParallelForIorTWithSequentialEffect.F0">F0</span>]</span>, <span name="E">E: <a href="../index.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.data.IorTInstances1.catsDataParallelForIorTWithSequentialEffect.E">E</span>]</span>)</span><span class="result">: <a href="../Parallel$.html#Aux[M[_],F0[_]]=cats.Parallel[M]{typeF[x]=F0[x]}" class="extmbr" name="cats.Parallel.Aux">Aux</a>[[γ$35$]<a href="IorT.html" class="extype" name="cats.data.IorT">IorT</a>[<span class="extype" name="cats.data.IorTInstances1.catsDataParallelForIorTWithSequentialEffect.F0">F0</span>, <span class="extype" name="cats.data.IorTInstances1.catsDataParallelForIorTWithSequentialEffect.E">E</span>, <span class="extype" name="cats.data.IorTInstances1.&lt;refinement&gt;.Λ$.γ$35$">γ$35$</span>], [γ$36$]<a href="IorT.html" class="extype" name="cats.data.IorT">IorT</a>[<span class="extype" name="cats.data.IorTInstances1.catsDataParallelForIorTWithSequentialEffect.F0">F0</span>, <span class="extype" name="cats.data.IorTInstances1.catsDataParallelForIorTWithSequentialEffect.E">E</span>, <span class="extype" name="cats.data.IorTInstances1.&lt;refinement&gt;.Λ$.γ$36$">γ$36$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IorTInstances1</dd></dl></div>
@@ -693,6 +743,8 @@ res0: cats.data.IorT[<span class="std">Option</span>,<span class="std">String</s
     </span>)</span>
               
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="cats.data.IorT#cond" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -777,28 +829,6 @@ res0: cats.data.IorT[<span class="std">Option</span>,<span class="std">String</s
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="finalize():Unit"></a>
-      <span class="permalink">
-      <a href="../../cats/data/IorT$.html#finalize():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="symbol">classOf[java.lang.Throwable]</span>
-    </span>)</span>
-              
-        </dd></dl></div>
     </li><li name="cats.data.IorT#fromEither" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="fromEither[F[_]]:cats.data.IorT.FromEitherPartiallyApplied[F]"></a><a id="fromEither[F[_]]:FromEitherPartiallyApplied[F]"></a>
       <span class="permalink">
@@ -905,6 +935,23 @@ scala&gt; IorT.fromOptionF(<span class="std">List</span>(o), <span class="lit">"
 res0: cats.data.IorT[<span class="std">List</span>,<span class="std">String</span>,<span class="std">Int</span>]  = IorT(<span class="std">List</span>(Left(Answer not known.)))
 scala&gt; IorT.fromOptionF(<span class="std">List</span>(<span class="std">Option</span>(<span class="num">42</span>)), <span class="lit">"Answer not known."</span>)
 res1: cats.data.IorT[<span class="std">List</span>,<span class="std">String</span>,<span class="std">Int</span>] = IorT(<span class="std">List</span>(Right(<span class="num">42</span>)))</pre></div></div>
+    </li><li name="cats.data.IorT#fromOptionM" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="fromOptionM[F[_],E,A](foption:F[Option[A]],ifNone:=&gt;F[E])(implicitF:cats.Monad[F]):cats.data.IorT[F,E,A]"></a><a id="fromOptionM[F[_],E,A](F[Option[A]],⇒F[E])(Monad[F]):IorT[F,E,A]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/IorT$.html#fromOptionM[F[_],E,A](foption:F[Option[A]],ifNone:=&gt;F[E])(implicitF:cats.Monad[F]):cats.data.IorT[F,E,A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fromOptionM</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="E">E</span>, <span name="A">A</span>]</span><span class="params">(<span name="foption">foption: <span class="extype" name="cats.data.IorT.fromOptionM.F">F</span>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.data.IorT.fromOptionM.A">A</span>]]</span>, <span name="ifNone">ifNone: ⇒ <span class="extype" name="cats.data.IorT.fromOptionM.F">F</span>[<span class="extype" name="cats.data.IorT.fromOptionM.E">E</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.IorT.fromOptionM.F">F</span>]</span>)</span><span class="result">: <a href="IorT.html" class="extype" name="cats.data.IorT">IorT</a>[<span class="extype" name="cats.data.IorT.fromOptionM.F">F</span>, <span class="extype" name="cats.data.IorT.fromOptionM.E">E</span>, <span class="extype" name="cats.data.IorT.fromOptionM.A">A</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Similar to <code>fromOptionF</code> but the left is carried from monadic <code>F[_]</code> context when the option is <code>None</code>
+</p>
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
@@ -922,6 +969,8 @@ res1: cats.data.IorT[<span class="std">List</span>,<span class="std">String</spa
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -941,6 +990,8 @@ res1: cats.data.IorT[<span class="std">List</span>,<span class="std">String</spa
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -1074,6 +1125,8 @@ res0: cats.data.Ior[<span class="std">String</span>,<span class="std">Option</sp
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
@@ -1092,6 +1145,8 @@ res0: cats.data.Ior[<span class="std">String</span>,<span class="std">Option</sp
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="cats.data.IorT#pure" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -1184,28 +1239,6 @@ res0: cats.data.IorT[<span class="std">Option</span>,<span class="std">String</s
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait():Unit"></a>
-      <span class="permalink">
-      <a href="../../cats/data/IorT$.html#wait():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
-    </span>)</span>
-              
-        </dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <span class="permalink">
       <a href="../../cats/data/IorT$.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
@@ -1251,13 +1284,64 @@ res0: cats.data.IorT[<span class="std">Option</span>,<span class="std">String</s
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/data/IorT$.html#wait():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
     </li>
               </ol>
             </div>
 
         
 
-        
+        <div class="values members">
+              <h3>Deprecated Value Members</h3>
+              <ol><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/data/IorT$.html#finalize():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version ) see corresponding Javadoc for more information.">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+                <span class="name">@Deprecated</span>
+              
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version )</i> see corresponding Javadoc for more information.</p></dd></dl></div>
+    </li></ol>
+            </div>
         </div>
 
         <div id="inheritedMembers">

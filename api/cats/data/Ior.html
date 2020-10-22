@@ -81,10 +81,32 @@
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <a title="Symbolic aliases for various types are defined here." href="../index.html"><span class="name">cats</span></a>
+        <a title="The cats root package contains all the trait signatures of most Scala type classes." href="../index.html"><span class="name">cats</span></a>
       </span>
       
-      <p class="shortcomment cmt">Symbolic aliases for various types are defined here.</p><div class="fullcomment"><div class="comment cmt"><p>Symbolic aliases for various types are defined here.
+      <p class="shortcomment cmt">The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><p>Cats type classes are implemented using the approach from the
+ <a href="https://ropas.snu.ac.kr/~bruno/papers/TypeClasses.pdf" target="_blank">Type classes as objects and implicits</a> article.</p><p>For each type class, <code>cats</code> provides three pieces:
+- Its <b>signature</b>: a trait that is polymorphic on a type parameter.
+  Type class traits inherit from other type classes to indicate that any implementation of the lower type class (e.g. <code>Applicative</code>)
+  can also serve as an instance for the higuer type class (e.g. <code>Functor</code>).
+- Type class <b>'instances</b>, which are classes and objects that implement one or more type class signatures for some specific types.
+  Type class instances for several data types from the Java or Scala standard libraries are declared in the subpackage <code>cats.instances</code>.
+- <b>Syntax extensions</b>, each of which provides the methods of the type class defines as extension methods
+  (which in Scala 2 are encoded as implicit classes) for values of any type <code>F</code>; given that an instance of the type class
+  for the receiver type (<code>this</code>) is in the implicit scope.
+  Symtax extensions are declared in the <code>cats.syntax</code> package.
+- A set of <b>laws</b>, that are also generic on the type of the class, and are only defined on the operations of the type class.
+  The purpose of these laws is to declare some algebraic relations (equations) between Scala expressions involving the operations
+  of the type class, and test (but not verify) that implemented instances satisfy those equations.
+  Laws are defined in the <code>cats-laws</code> package.</p><p>Although most of cats type classes are declared in this package, some are declared in other packages:
+- type classes that operate on base types (kind <code>*</code>), and their implementations for standard library types,
+  are contained in <code>cats.kernel</code>, which is a different SBT project. However, they are re-exported from this package.
+- type classes of kind <code>F[_, _]</code>, such as <a href="../arrow/Profunctor.html" class="extype" name="cats.arrow.Profunctor">cats.arrow.Profunctor</a>&quot; or <a href="../arrow/Arrow.html" class="extype" name="cats.arrow.Arrow">cats.arrow.Arrow</a>, which are relevant for
+  Functional Reactive Programming or optics, are declared in the <code>cats.arrow</code> package.
+- Also, those type classes that abstract over (pure or impure) functional runtime effects are declared
+  in the <a href="https://typelevel.org/cats-effect/" target="_blank">cats-effect library</a>.
+- Some type classes for which no laws can be provided are left out of the main road, in a small and dirty alley.
+  These are the <code>alleycats</code>.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
     </li><li name="cats.data" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="data"></a><a id="data:data"></a>
@@ -138,6 +160,10 @@
                         <a class="object" href="Const$.html" title=""></a>
                         <a class="class" href="Const.html" title="Const is a phantom type, it does not contain a value of its second type parameter B Const can be seen as a type level version of Function.const[A, B]: A =&gt; B =&gt; A"></a>
                         <a href="Const.html" title="Const is a phantom type, it does not contain a value of its second type parameter B Const can be seen as a type level version of Function.const[A, B]: A =&gt; B =&gt; A">Const</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$Cont$.html" title=""></a>
+                        <a href="package$$Cont$.html" title="">Cont</a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="ContT$.html" title=""></a>
                         <a class="class" href="ContT.html" title="This is a continuation transformer based on the ContT in the Haskell package Control.Monad.Cont"></a>
@@ -198,6 +224,10 @@
                         <span class="separator"></span>
                         <a class="class" href="NonEmptyMapOps.html" title=""></a>
                         <a href="NonEmptyMapOps.html" title="">NonEmptyMapOps</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="NonEmptySeq$.html" title=""></a>
+                        <a class="class" href="NonEmptySeq.html" title="A data type which represents a Seq guaranteed to contain at least one element."></a>
+                        <a href="NonEmptySeq.html" title="A data type which represents a Seq guaranteed to contain at least one element.">NonEmptySeq</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="class" href="NonEmptySetOps.html" title=""></a>
@@ -267,6 +297,10 @@
                         <a class="class" href="ZipList.html" title=""></a>
                         <a href="ZipList.html" title="">ZipList</a>
                       </li><li class="current-entities indented2">
+                        <a class="object" href="ZipSeq$.html" title=""></a>
+                        <a class="class" href="ZipSeq.html" title=""></a>
+                        <a href="ZipSeq.html" title="">ZipSeq</a>
+                      </li><li class="current-entities indented2">
                         <a class="object" href="ZipStream$.html" title=""></a>
                         <a class="class" href="ZipStream.html" title=""></a>
                         <a href="ZipStream.html" title="">ZipStream</a>
@@ -320,7 +354,17 @@ The isomorphic <code>scala.util.Either</code> form can be accessed via the <a hr
               Known Subclasses
             </span>
             <div class="subClasses hiddenContent"><a href="Ior$$Both.html" class="extype" name="cats.data.Ior.Both">Both</a>, <a href="Ior$$Left.html" class="extype" name="cats.data.Ior.Left">Left</a>, <a href="Ior$$Right.html" class="extype" name="cats.data.Ior.Right">Right</a></div>
-          </div></div>
+          </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
+                <span class="toggle diagram-link">
+                  Type Hierarchy
+                </span>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph1" viewBox="0.00 0.00 295.50 155.00" height="155pt" width="296pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 151)" class="graph" id="page0,1_graph0"><polygon points="-4,4 -4,-151 291.5,-151 291.5,4 -4,4" stroke="transparent" fill="white"></polygon><g class="cluster" id="clust1"></g><g class="cluster" id="clust2"></g><!-- node0 --><g class="node this class" id="graph1_0"><g id="a_this class|graph1_0"><a xlink:title="cats.data.Ior (this class)" xlink:href="#inheritance-diagram"><path d="M183.67,-86C183.67,-86 113.33,-86 113.33,-86 109.17,-86 105,-81.83 105,-77.67 105,-77.67 105,-69.33 105,-69.33 105,-65.17 109.17,-61 113.33,-61 113.33,-61 183.67,-61 183.67,-61 187.83,-61 192,-65.17 192,-69.33 192,-69.33 192,-77.67 192,-77.67 192,-81.83 187.83,-86 183.67,-86" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-80.5" x="115.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-71.1" x="136.5" text-anchor="start">Ior[A, B]</text></a></g></g><!-- node1 --><g class="node class" id="graph1_1"><g id="a_class|graph1_1"><a xlink:title="cats.data.Ior.Both" xlink:href="Ior$$Both.html#inheritance-diagram"><path d="M82.67,-25C82.67,-25 8.33,-25 8.33,-25 4.17,-25 0,-20.83 0,-16.67 0,-16.67 0,-8.33 0,-8.33 0,-4.17 4.17,0 8.33,0 8.33,0 82.67,0 82.67,0 86.83,0 91,-4.17 91,-8.33 91,-8.33 91,-16.67 91,-16.67 91,-20.83 86.83,-25 82.67,-25" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-19.5" x="10.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="31.5" text-anchor="start">Both[A, B]</text></a></g></g><!-- node0&#45;&gt;node1 --><g class="edge inheritance" id="graph1_0_1"><g id="a_inheritance|graph1_0_1"><a xlink:title="Both[A, B] is a subtype of Ior[A, B]"><path d="M121.95,-57.29C104.45,-47.27 81.88,-34.34 65.81,-25.13" stroke="#d4d4d4" fill="none"></path><polygon points="120.86,-59.49 128.15,-60.84 123.29,-55.24 120.86,-59.49" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node2 --><g class="node class" id="graph1_2"><g id="a_class|graph1_2"><a xlink:title="cats.data.Ior.Left" xlink:href="Ior$$Left.html#inheritance-diagram"><path d="M179.17,-25C179.17,-25 117.83,-25 117.83,-25 113.67,-25 109.5,-20.83 109.5,-16.67 109.5,-16.67 109.5,-8.33 109.5,-8.33 109.5,-4.17 113.67,0 117.83,0 117.83,0 179.17,0 179.17,0 183.33,0 187.5,-4.17 187.5,-8.33 187.5,-8.33 187.5,-16.67 187.5,-16.67 187.5,-20.83 183.33,-25 179.17,-25" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-19.5" x="119.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="140.5" text-anchor="start">Left[A]</text></a></g></g><!-- node0&#45;&gt;node2 --><g class="edge inheritance" id="graph1_0_2"><g id="a_inheritance|graph1_0_2"><a xlink:title="Left[A] is a subtype of Ior[A, B]"><path d="M148.5,-53.76C148.5,-44.37 148.5,-33.29 148.5,-25.13" stroke="#d4d4d4" fill="none"></path><polygon points="146.05,-53.84 148.5,-60.84 150.95,-53.84 146.05,-53.84" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node3 --><g class="node class" id="graph1_3"><g id="a_class|graph1_3"><a xlink:title="cats.data.Ior.Right" xlink:href="Ior$$Right.html#inheritance-diagram"><path d="M279.17,-25C279.17,-25 213.83,-25 213.83,-25 209.67,-25 205.5,-20.83 205.5,-16.67 205.5,-16.67 205.5,-8.33 205.5,-8.33 205.5,-4.17 209.67,0 213.83,0 213.83,0 279.17,0 279.17,0 283.33,0 287.5,-4.17 287.5,-8.33 287.5,-8.33 287.5,-16.67 287.5,-16.67 287.5,-20.83 283.33,-25 279.17,-25" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-19.5" x="215.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="236.5" text-anchor="start">Right[B]</text></a></g></g><!-- node0&#45;&gt;node3 --><g class="edge inheritance" id="graph1_0_3"><g id="a_inheritance|graph1_0_3"><a xlink:title="Right[B] is a subtype of Ior[A, B]"><path d="M174.2,-57.03C190.79,-47.04 212.02,-34.26 227.18,-25.13" stroke="#d4d4d4" fill="none"></path><polygon points="172.6,-55.13 167.86,-60.84 175.12,-59.33 172.6,-55.13" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node4 --><g class="node trait" id="graph1_4"><g id="a_trait|graph1_4"><a xlink:title="scala.Product"><path d="M126.17,-147C126.17,-147 64.83,-147 64.83,-147 60.67,-147 56.5,-142.83 56.5,-138.67 56.5,-138.67 56.5,-130.33 56.5,-130.33 56.5,-126.17 60.67,-122 64.83,-122 64.83,-122 126.17,-122 126.17,-122 130.33,-122 134.5,-126.17 134.5,-130.33 134.5,-130.33 134.5,-138.67 134.5,-138.67 134.5,-142.83 130.33,-147 126.17,-147" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-141.5" x="66.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="87.5" text-anchor="start">Product</text></a></g></g><!-- node4&#45;&gt;node0 --><g class="edge inheritance" id="graph1_4_0"><g id="a_inheritance|graph1_4_0"><a xlink:title="Ior[A, B] is a subtype of Product"><path d="M110.85,-116.42C119.58,-106.69 130.29,-94.77 138.05,-86.13" stroke="#d4d4d4" fill="none"></path><polygon points="108.83,-115 105.97,-121.84 112.47,-118.27 108.83,-115" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node5 --><g class="node trait" id="graph1_5"><g id="a_trait|graph1_5"><a xlink:title="scala.Serializable"><path d="M244.17,-147C244.17,-147 160.83,-147 160.83,-147 156.67,-147 152.5,-142.83 152.5,-138.67 152.5,-138.67 152.5,-130.33 152.5,-130.33 152.5,-126.17 156.67,-122 160.83,-122 160.83,-122 244.17,-122 244.17,-122 248.33,-122 252.5,-126.17 252.5,-130.33 252.5,-130.33 252.5,-138.67 252.5,-138.67 252.5,-142.83 248.33,-147 244.17,-147" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-141.5" x="162.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="183.5" text-anchor="start">Serializable</text></a></g></g><!-- node5&#45;&gt;node0 --><g class="edge inheritance" id="graph1_5_0"><g id="a_inheritance|graph1_5_0"><a xlink:title="Ior[A, B] is a subtype of Serializable"><path d="M186.86,-116.42C177.97,-106.69 167.05,-94.77 159.15,-86.13" stroke="#d4d4d4" fill="none"></path><polygon points="185.3,-118.33 191.83,-121.84 188.91,-115.03 185.3,-118.33" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
+                <div id="diagram-controls" class="hiddenContent">
+                  <button id="diagram-zoom-out" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button id="diagram-zoom-in" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button title="Toggle full-screen" id="diagram-fs" class="diagram-btn to-full"><i class="material-icons"></i></button>
+                </div>
+              </div></div>
         
 
       <div id="mbrsel">
@@ -552,6 +596,8 @@ res2: Ior[<span class="std">Int</span>, <span class="std">Int</span>] = Both(<sp
               
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="cats.data.Ior#combine" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="combine[AA&gt;:A,BB&gt;:B](that:cats.data.Ior[AA,BB])(implicitAA:cats.Semigroup[AA],implicitBB:cats.Semigroup[BB]):cats.data.Ior[AA,BB]"></a><a id="combine[AA&gt;:A,BB&gt;:B](Ior[AA,BB])(Semigroup[AA],Semigroup[BB]):Ior[AA,BB]"></a>
@@ -588,6 +634,22 @@ res3: Ior[<span class="std">String</span>, <span class="std">Int</span>] = Both(
 
 scala&gt; Ior.Both(<span class="lit">"abc"</span>, <span class="num">123</span>).combine(<span class="num">456.</span>rightIor[<span class="std">String</span>])
 res3: Ior[<span class="std">String</span>, <span class="std">Int</span>] = Both(abc,<span class="num">579</span>)</pre></div></div>
+    </li><li name="cats.data.Ior#compare" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="compare[AA&gt;:A,BB&gt;:B](that:cats.data.Ior[AA,BB])(implicitAA:cats.Order[AA],implicitBB:cats.Order[BB]):Int"></a><a id="compare[AA&gt;:A,BB&gt;:B](Ior[AA,BB])(Order[AA],Order[BB]):Int"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Ior.html#compare[AA&gt;:A,BB&gt;:B](that:cats.data.Ior[AA,BB])(implicitAA:cats.Order[AA],implicitBB:cats.Order[BB]):Int" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">compare</span><span class="tparams">[<span name="AA">AA &gt;: <span class="extype" name="cats.data.Ior.A">A</span></span>, <span name="BB">BB &gt;: <span class="extype" name="cats.data.Ior.B">B</span></span>]</span><span class="params">(<span name="that">that: <a href="" class="extype" name="cats.data.Ior">Ior</a>[<span class="extype" name="cats.data.Ior.compare.AA">AA</span>, <span class="extype" name="cats.data.Ior.compare.BB">BB</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="AA">AA: <a href="../index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.data.Ior.compare.AA">AA</span>]</span>, <span name="BB">BB: <a href="../index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.data.Ior.compare.BB">BB</span>]</span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
+      </span>
+      
+      
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
       <span class="permalink">
@@ -646,28 +708,6 @@ res1: <span class="std">Boolean</span> = <span class="kw">true</span>
 
 scala&gt; Ior.Both(<span class="lit">"abc"</span>, <span class="num">123</span>).exists(_ &gt; <span class="num">100</span>)
 res2: <span class="std">Boolean</span> = <span class="kw">true</span></pre></div></div>
-    </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="finalize():Unit"></a>
-      <span class="permalink">
-      <a href="../../cats/data/Ior.html#finalize():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="symbol">classOf[java.lang.Throwable]</span>
-    </span>)</span>
-              
-        </dd></dl></div>
     </li><li name="cats.data.Ior#flatMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="flatMap[AA&gt;:A,D](f:B=&gt;cats.data.Ior[AA,D])(implicitAA:cats.Semigroup[AA]):cats.data.Ior[AA,D]"></a><a id="flatMap[AA&gt;:A,D]((B)⇒Ior[AA,D])(Semigroup[AA]):Ior[AA,D]"></a>
       <span class="permalink">
@@ -803,7 +843,7 @@ res1: <span class="std">Boolean</span> = <span class="kw">false</span>
 
 scala&gt; Ior.Both(<span class="lit">"abc"</span>, <span class="num">123</span>).forall(_ &gt; <span class="num">100</span>)
 res2: <span class="std">Boolean</span> = <span class="kw">true</span></pre></div></div>
-    </li><li name="cats.data.Ior#foreach" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="cats.data.Ior#foreach" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="foreach(f:B=&gt;Unit):Unit"></a><a id="foreach((B)⇒Unit):Unit"></a>
       <span class="permalink">
       <a href="../../cats/data/Ior.html#foreach(f:B=&gt;Unit):Unit" title="Permalink">
@@ -818,7 +858,20 @@ res2: <span class="std">Boolean</span> = <span class="kw">true</span></pre></div
         <span class="name">foreach</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.Ior.B">B</span>) ⇒ <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      
+      <p class="shortcomment cmt">Example:</p><div class="fullcomment"><div class="comment cmt"><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.data.Ior
+scala&gt; <span class="kw">import</span> cats.implicits._
+
+<span class="cmt">// Nothing to show</span>
+scala&gt; <span class="lit">"abc"</span>.leftIor[<span class="std">Int</span>].foreach(println)
+res0: <span class="std">Unit</span> = ()
+
+<span class="cmt">// 123 to be shown</span>
+scala&gt; <span class="num">123.</span>rightIor[<span class="std">String</span>].foreach(println)
+res1: <span class="std">Unit</span> = ()
+
+<span class="num">123</span> to be shown
+scala&gt; Ior.both(<span class="lit">"abc"</span>, <span class="num">123</span>).foreach(println)
+res2: <span class="std">Unit</span> = ()</pre></div></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
@@ -836,6 +889,8 @@ res2: <span class="std">Boolean</span> = <span class="kw">true</span></pre></div
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="cats.data.Ior#getOrElse" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -881,6 +936,8 @@ res2: <span class="std">Int</span> = <span class="num">123</span></pre></div></d
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="cats.data.Ior#isBoth" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
@@ -1027,14 +1084,14 @@ res2: Ior[<span class="std">Int</span>, <span class="std">Int</span>] = Both(<sp
       <p class="shortcomment cmt">Example:</p><div class="fullcomment"><div class="comment cmt"><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.data.Ior
 scala&gt; <span class="kw">import</span> cats.implicits._
 
-scala&gt; <span class="lit">"abc"</span>.leftIor[<span class="std">Int</span>].bimap(_.length, _ * <span class="num">2</span>)
-res0: Ior[<span class="std">Int</span>, <span class="std">Int</span>] = Left(<span class="num">3</span>)
+scala&gt; <span class="lit">"abc"</span>.leftIor[<span class="std">Int</span>].map(_ * <span class="num">2</span>)
+res0: Ior[<span class="std">String</span>, <span class="std">Int</span>] = Left(abc)
 
-scala&gt; <span class="num">123.</span>rightIor[<span class="std">String</span>].bimap(_.length, _ * <span class="num">2</span>)
-res1: Ior[<span class="std">Int</span>, <span class="std">Int</span>] = Right(<span class="num">246</span>)
+scala&gt; <span class="num">123.</span>rightIor[<span class="std">String</span>].map(_ * <span class="num">2</span>)
+res1: Ior[<span class="std">String</span>, <span class="std">Int</span>] = Right(<span class="num">246</span>)
 
-scala&gt; Ior.Both(<span class="lit">"abc"</span>, <span class="num">123</span>).bimap(_.length, _ * <span class="num">2</span>)
-res2: Ior[<span class="std">Int</span>, <span class="std">Int</span>] = Both(<span class="num">3</span>,<span class="num">246</span>)</pre></div></div>
+scala&gt; Ior.Both(<span class="lit">"abc"</span>, <span class="num">123</span>).map(_ * <span class="num">2</span>)
+res2: Ior[<span class="std">String</span>, <span class="std">Int</span>] = Both(abc,<span class="num">246</span>)</pre></div></div>
     </li><li name="cats.data.Ior#merge" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="merge[AA&gt;:A](implicitev:B&lt;:&lt;AA,implicitAA:cats.Semigroup[AA]):AA"></a><a id="merge[AA&gt;:A](&lt;:&lt;[B,AA],Semigroup[AA]):AA"></a>
       <span class="permalink">
@@ -1117,6 +1174,8 @@ res2: Ior[<span class="std">Int</span>, <span class="std">Int</span>] = Both(<sp
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
@@ -1135,6 +1194,8 @@ res2: Ior[<span class="std">Int</span>, <span class="std">Int</span>] = Both(<sp
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="cats.data.Ior#onlyBoth" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -1655,7 +1716,7 @@ res1: Validated[<span class="std">String</span>, <span class="std">Int</span>]= 
 
 scala&gt; Ior.Both(<span class="lit">"abc"</span>, <span class="num">123</span>).toValidated
 res2: Validated[<span class="std">String</span>, <span class="std">Int</span>] = Valid(<span class="num">123</span>)</pre></div></div>
-    </li><li name="cats.data.Ior#traverse" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="cats.data.Ior#traverse" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="traverse[F[_],AA&gt;:A,D](g:B=&gt;F[D])(implicitF:cats.Applicative[F]):F[cats.data.Ior[AA,D]]"></a><a id="traverse[F[_],AA&gt;:A,D]((B)⇒F[D])(Applicative[F]):F[Ior[AA,D]]"></a>
       <span class="permalink">
       <a href="../../cats/data/Ior.html#traverse[F[_],AA&gt;:A,D](g:B=&gt;F[D])(implicitF:cats.Applicative[F]):F[cats.data.Ior[AA,D]]" title="Permalink">
@@ -1670,7 +1731,17 @@ res2: Validated[<span class="std">String</span>, <span class="std">Int</span>] =
         <span class="name">traverse</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="AA">AA &gt;: <span class="extype" name="cats.data.Ior.A">A</span></span>, <span name="D">D</span>]</span><span class="params">(<span name="g">g: (<span class="extype" name="cats.data.Ior.B">B</span>) ⇒ <span class="extype" name="cats.data.Ior.traverse.F">F</span>[<span class="extype" name="cats.data.Ior.traverse.D">D</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.Ior.traverse.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.Ior.traverse.F">F</span>[<a href="" class="extype" name="cats.data.Ior">Ior</a>[<span class="extype" name="cats.data.Ior.traverse.AA">AA</span>, <span class="extype" name="cats.data.Ior.traverse.D">D</span>]]</span>
       </span>
       
-      
+      <p class="shortcomment cmt">Example</p><div class="fullcomment"><div class="comment cmt"><p>Example</p><pre>scala&gt; <span class="kw">import</span> cats.data.Ior
+scala&gt; <span class="kw">import</span> cats.implicits._
+
+scala&gt; <span class="lit">"abc"</span>.leftIor[<span class="std">Int</span>].traverse(i <span class="kw">=&gt;</span> <span class="std">List</span>(i, i * <span class="num">2</span>))
+res0: <span class="std">List</span>[Ior[<span class="std">String</span>,<span class="std">Int</span>]] = <span class="std">List</span>(Left(abc))
+
+scala&gt; <span class="num">123.</span>rightIor[<span class="std">String</span>].traverse(i <span class="kw">=&gt;</span> <span class="std">List</span>(i, i * <span class="num">2</span>))
+res1: <span class="std">List</span>[Ior[<span class="std">String</span>,<span class="std">Int</span>]] = <span class="std">List</span>(Right(<span class="num">123</span>), Right(<span class="num">246</span>))
+
+scala&gt; Ior.both(<span class="lit">"abc"</span>, <span class="num">123</span>).traverse(i <span class="kw">=&gt;</span> <span class="std">List</span>(i, i * <span class="num">2</span>))
+res2: <span class="std">List</span>[Ior[<span class="std">String</span>,<span class="std">Int</span>]] = <span class="std">List</span>(Both(abc,<span class="num">123</span>), Both(abc,<span class="num">246</span>))</pre></div></div>
     </li><li name="cats.data.Ior#unwrap" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="unwrap:Either[Either[A,B],(A,B)]"></a>
       <span class="permalink">
@@ -1724,28 +1795,6 @@ res1: <span class="std">Int</span> = <span class="num">123</span>
 scala&gt; Ior.Both(<span class="lit">"abc"</span>, <span class="num">123</span>).valueOr(_.length)
 res2: <span class="std">Int</span> = <span class="num">126</span></pre></div></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait():Unit"></a>
-      <span class="permalink">
-      <a href="../../cats/data/Ior.html#wait():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
-    </span>)</span>
-              
-        </dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <span class="permalink">
       <a href="../../cats/data/Ior.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
@@ -1791,13 +1840,64 @@ res2: <span class="std">Int</span> = <span class="num">126</span></pre></div></d
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Ior.html#wait():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
     </li>
               </ol>
             </div>
 
         
 
-        
+        <div class="values members">
+              <h3>Deprecated Value Members</h3>
+              <ol><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Ior.html#finalize():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version ) see corresponding Javadoc for more information.">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+                <span class="name">@Deprecated</span>
+              
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version )</i> see corresponding Javadoc for more information.</p></dd></dl></div>
+    </li></ol>
+            </div>
         </div>
 
         <div id="inheritedMembers">

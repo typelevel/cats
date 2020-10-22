@@ -81,10 +81,32 @@
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <a title="Symbolic aliases for various types are defined here." href="../index.html"><span class="name">cats</span></a>
+        <a title="The cats root package contains all the trait signatures of most Scala type classes." href="../index.html"><span class="name">cats</span></a>
       </span>
       
-      <p class="shortcomment cmt">Symbolic aliases for various types are defined here.</p><div class="fullcomment"><div class="comment cmt"><p>Symbolic aliases for various types are defined here.
+      <p class="shortcomment cmt">The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><p>Cats type classes are implemented using the approach from the
+ <a href="https://ropas.snu.ac.kr/~bruno/papers/TypeClasses.pdf" target="_blank">Type classes as objects and implicits</a> article.</p><p>For each type class, <code>cats</code> provides three pieces:
+- Its <b>signature</b>: a trait that is polymorphic on a type parameter.
+  Type class traits inherit from other type classes to indicate that any implementation of the lower type class (e.g. <code>Applicative</code>)
+  can also serve as an instance for the higuer type class (e.g. <code>Functor</code>).
+- Type class <b>'instances</b>, which are classes and objects that implement one or more type class signatures for some specific types.
+  Type class instances for several data types from the Java or Scala standard libraries are declared in the subpackage <code>cats.instances</code>.
+- <b>Syntax extensions</b>, each of which provides the methods of the type class defines as extension methods
+  (which in Scala 2 are encoded as implicit classes) for values of any type <code>F</code>; given that an instance of the type class
+  for the receiver type (<code>this</code>) is in the implicit scope.
+  Symtax extensions are declared in the <code>cats.syntax</code> package.
+- A set of <b>laws</b>, that are also generic on the type of the class, and are only defined on the operations of the type class.
+  The purpose of these laws is to declare some algebraic relations (equations) between Scala expressions involving the operations
+  of the type class, and test (but not verify) that implemented instances satisfy those equations.
+  Laws are defined in the <code>cats-laws</code> package.</p><p>Although most of cats type classes are declared in this package, some are declared in other packages:
+- type classes that operate on base types (kind <code>*</code>), and their implementations for standard library types,
+  are contained in <code>cats.kernel</code>, which is a different SBT project. However, they are re-exported from this package.
+- type classes of kind <code>F[_, _]</code>, such as <a href="../arrow/Profunctor.html" class="extype" name="cats.arrow.Profunctor">cats.arrow.Profunctor</a>&quot; or <a href="../arrow/Arrow.html" class="extype" name="cats.arrow.Arrow">cats.arrow.Arrow</a>, which are relevant for
+  Functional Reactive Programming or optics, are declared in the <code>cats.arrow</code> package.
+- Also, those type classes that abstract over (pure or impure) functional runtime effects are declared
+  in the <a href="https://typelevel.org/cats-effect/" target="_blank">cats-effect library</a>.
+- Some type classes for which no laws can be provided are left out of the main road, in a small and dirty alley.
+  These are the <code>alleycats</code>.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
     </li><li name="cats.kernel" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="kernel"></a><a id="kernel:kernel"></a>
@@ -122,6 +144,10 @@
                         <a class="object" href="Band$.html" title=""></a>
                         <a class="trait" href="Band.html" title="Bands are semigroups whose operation (i.e."></a>
                         <a href="Band.html" title="Bands are semigroups whose operation (i.e.">Band</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="BoundedEnumerable$.html" title=""></a>
+                        <a class="trait" href="BoundedEnumerable.html" title=""></a>
+                        <a href="BoundedEnumerable.html" title="">BoundedEnumerable</a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="BoundedSemilattice$.html" title=""></a>
                         <a class="trait" href="BoundedSemilattice.html" title=""></a>
@@ -180,6 +206,10 @@
                         <a href="" title="A type class used to name the lower limit of a type.">LowerBounded</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
+                        <a class="trait" href="LowerBoundedEnumerable.html" title=""></a>
+                        <a href="LowerBoundedEnumerable.html" title="">LowerBoundedEnumerable</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
                         <a class="trait" href="LowerBoundedFunctions.html" title=""></a>
                         <a href="LowerBoundedFunctions.html" title="">LowerBoundedFunctions</a>
                       </li><li class="current-entities indented2">
@@ -190,6 +220,10 @@
                         <span class="separator"></span>
                         <a class="class" href="MonoidFunctions.html" title=""></a>
                         <a href="MonoidFunctions.html" title="">MonoidFunctions</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="Next.html" title="A typeclass with an operation which returns a member which is always greater than the one supplied."></a>
+                        <a href="Next.html" title="A typeclass with an operation which returns a member which is always greater than the one supplied.">Next</a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="Order$.html" title=""></a>
                         <a class="trait" href="Order.html" title="The Order type class is used to define a total ordering on some type A."></a>
@@ -203,6 +237,14 @@
                         <a class="trait" href="OrderToOrderingConversion.html" title=""></a>
                         <a href="OrderToOrderingConversion.html" title="">OrderToOrderingConversion</a>
                       </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="PartialNext.html" title="A typeclass with an operation which returns a member which is greater or None than the one supplied."></a>
+                        <a href="PartialNext.html" title="A typeclass with an operation which returns a member which is greater or None than the one supplied.">PartialNext</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="PartialNextLowerBounded.html" title=""></a>
+                        <a href="PartialNextLowerBounded.html" title="">PartialNextLowerBounded</a>
+                      </li><li class="current-entities indented2">
                         <a class="object" href="PartialOrder$.html" title=""></a>
                         <a class="trait" href="PartialOrder.html" title="The PartialOrder type class is used to define a partial ordering on some type A."></a>
                         <a href="PartialOrder.html" title="The PartialOrder type class is used to define a partial ordering on some type A.">PartialOrder</a>
@@ -214,6 +256,18 @@
                         <span class="separator"></span>
                         <a class="trait" href="PartialOrderToPartialOrderingConversion.html" title=""></a>
                         <a href="PartialOrderToPartialOrderingConversion.html" title="">PartialOrderToPartialOrderingConversion</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="PartialPrevious.html" title="A typeclass with an operation which returns a member which is smaller or None than the one supplied."></a>
+                        <a href="PartialPrevious.html" title="A typeclass with an operation which returns a member which is smaller or None than the one supplied.">PartialPrevious</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="PartialPreviousUpperBounded.html" title=""></a>
+                        <a href="PartialPreviousUpperBounded.html" title="">PartialPreviousUpperBounded</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="Previous.html" title="A typeclass with an operation which returns a member which is always smaller than the one supplied."></a>
+                        <a href="Previous.html" title="A typeclass with an operation which returns a member which is always smaller than the one supplied.">Previous</a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="Semigroup$.html" title=""></a>
                         <a class="trait" href="Semigroup.html" title="A semigroup is any set A with an associative operation (combine)."></a>
@@ -231,9 +285,17 @@
                         <a class="class" href="SemilatticeFunctions.html" title=""></a>
                         <a href="SemilatticeFunctions.html" title="">SemilatticeFunctions</a>
                       </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="UnboundedEnumerable.html" title="A typeclass which has both previous and next operations such that next . previous == identity."></a>
+                        <a href="UnboundedEnumerable.html" title="A typeclass which has both previous and next operations such that next . previous == identity.">UnboundedEnumerable</a>
+                      </li><li class="current-entities indented2">
                         <a class="object" href="UpperBounded$.html" title=""></a>
                         <a class="trait" href="UpperBounded.html" title="A type class used to name the upper limit of a type."></a>
                         <a href="UpperBounded.html" title="A type class used to name the upper limit of a type.">UpperBounded</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="UpperBoundedEnumerable.html" title=""></a>
+                        <a href="UpperBoundedEnumerable.html" title="">UpperBoundedEnumerable</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="trait" href="UpperBoundedFunctions.html" title=""></a>
@@ -278,8 +340,18 @@
             <span class="toggle">
               Known Subclasses
             </span>
-            <div class="subClasses hiddenContent"><a href="instances/BooleanBounded.html" class="extype" name="cats.kernel.instances.BooleanBounded">BooleanBounded</a>, <a href="instances/BooleanOrder.html" class="extype" name="cats.kernel.instances.BooleanOrder">BooleanOrder</a>, <a href="instances/ByteBounded.html" class="extype" name="cats.kernel.instances.ByteBounded">ByteBounded</a>, <a href="instances/ByteOrder.html" class="extype" name="cats.kernel.instances.ByteOrder">ByteOrder</a>, <a href="instances/CharBounded.html" class="extype" name="cats.kernel.instances.CharBounded">CharBounded</a>, <a href="instances/CharOrder.html" class="extype" name="cats.kernel.instances.CharOrder">CharOrder</a>, <a href="instances/DurationBounded.html" class="extype" name="cats.kernel.instances.DurationBounded">DurationBounded</a>, <a href="instances/DurationOrder.html" class="extype" name="cats.kernel.instances.DurationOrder">DurationOrder</a>, <a href="instances/FiniteDurationBounded.html" class="extype" name="cats.kernel.instances.FiniteDurationBounded">FiniteDurationBounded</a>, <a href="instances/FiniteDurationOrder.html" class="extype" name="cats.kernel.instances.FiniteDurationOrder">FiniteDurationOrder</a>, <a href="instances/IntBounded.html" class="extype" name="cats.kernel.instances.IntBounded">IntBounded</a>, <a href="instances/IntOrder.html" class="extype" name="cats.kernel.instances.IntOrder">IntOrder</a>, <a href="instances/LongBounded.html" class="extype" name="cats.kernel.instances.LongBounded">LongBounded</a>, <a href="instances/LongOrder.html" class="extype" name="cats.kernel.instances.LongOrder">LongOrder</a>, <a href="instances/ShortBounded.html" class="extype" name="cats.kernel.instances.ShortBounded">ShortBounded</a>, <a href="instances/ShortOrder.html" class="extype" name="cats.kernel.instances.ShortOrder">ShortOrder</a>, <a href="instances/StringLowerBounded.html" class="extype" name="cats.kernel.instances.StringLowerBounded">StringLowerBounded</a>, <a href="instances/StringOrder.html" class="extype" name="cats.kernel.instances.StringOrder">StringOrder</a>, <a href="instances/SymbolLowerBounded.html" class="extype" name="cats.kernel.instances.SymbolLowerBounded">SymbolLowerBounded</a>, <a href="instances/SymbolOrder.html" class="extype" name="cats.kernel.instances.SymbolOrder">SymbolOrder</a>, <a href="instances/UUIDBounded.html" class="extype" name="cats.kernel.instances.UUIDBounded">UUIDBounded</a>, <a href="instances/UnitBounded.html" class="extype" name="cats.kernel.instances.UnitBounded">UnitBounded</a>, <a href="instances/UnitOrder.html" class="extype" name="cats.kernel.instances.UnitOrder">UnitOrder</a></div>
-          </div></div>
+            <div class="subClasses hiddenContent"><a href="BoundedEnumerable.html" class="extype" name="cats.kernel.BoundedEnumerable">BoundedEnumerable</a>, <a href="LowerBoundedEnumerable.html" class="extype" name="cats.kernel.LowerBoundedEnumerable">LowerBoundedEnumerable</a>, <a href="PartialNextLowerBounded.html" class="extype" name="cats.kernel.PartialNextLowerBounded">PartialNextLowerBounded</a>, <a href="instances/BooleanBounded.html" class="extype" name="cats.kernel.instances.BooleanBounded">BooleanBounded</a>, <a href="instances/BooleanEnumerable.html" class="extype" name="cats.kernel.instances.BooleanEnumerable">BooleanEnumerable</a>, <a href="instances/BooleanOrder.html" class="extype" name="cats.kernel.instances.BooleanOrder">BooleanOrder</a>, <a href="instances/ByteBounded.html" class="extype" name="cats.kernel.instances.ByteBounded">ByteBounded</a>, <a href="instances/ByteOrder.html" class="extype" name="cats.kernel.instances.ByteOrder">ByteOrder</a>, <a href="instances/CharBounded.html" class="extype" name="cats.kernel.instances.CharBounded">CharBounded</a>, <a href="instances/CharEnumerable.html" class="extype" name="cats.kernel.instances.CharEnumerable">CharEnumerable</a>, <a href="instances/CharOrder.html" class="extype" name="cats.kernel.instances.CharOrder">CharOrder</a>, <a href="instances/DurationBounded.html" class="extype" name="cats.kernel.instances.DurationBounded">DurationBounded</a>, <a href="instances/DurationOrder.html" class="extype" name="cats.kernel.instances.DurationOrder">DurationOrder</a>, <a href="instances/FiniteDurationBounded.html" class="extype" name="cats.kernel.instances.FiniteDurationBounded">FiniteDurationBounded</a>, <a href="instances/FiniteDurationOrder.html" class="extype" name="cats.kernel.instances.FiniteDurationOrder">FiniteDurationOrder</a>, <a href="instances/IntBounded.html" class="extype" name="cats.kernel.instances.IntBounded">IntBounded</a>, <a href="instances/IntEnumerable.html" class="extype" name="cats.kernel.instances.IntEnumerable">IntEnumerable</a>, <a href="instances/IntOrder.html" class="extype" name="cats.kernel.instances.IntOrder">IntOrder</a>, <a href="instances/LongBounded.html" class="extype" name="cats.kernel.instances.LongBounded">LongBounded</a>, <a href="instances/LongEnumerable.html" class="extype" name="cats.kernel.instances.LongEnumerable">LongEnumerable</a>, <a href="instances/LongOrder.html" class="extype" name="cats.kernel.instances.LongOrder">LongOrder</a>, <a href="instances/ShortBounded.html" class="extype" name="cats.kernel.instances.ShortBounded">ShortBounded</a>, <a href="instances/ShortEnumerable.html" class="extype" name="cats.kernel.instances.ShortEnumerable">ShortEnumerable</a>, <a href="instances/ShortOrder.html" class="extype" name="cats.kernel.instances.ShortOrder">ShortOrder</a>, <a href="instances/StringLowerBounded.html" class="extype" name="cats.kernel.instances.StringLowerBounded">StringLowerBounded</a>, <a href="instances/StringOrder.html" class="extype" name="cats.kernel.instances.StringOrder">StringOrder</a>, <a href="instances/SymbolLowerBounded.html" class="extype" name="cats.kernel.instances.SymbolLowerBounded">SymbolLowerBounded</a>, <a href="instances/SymbolOrder.html" class="extype" name="cats.kernel.instances.SymbolOrder">SymbolOrder</a>, <a href="instances/UUIDBounded.html" class="extype" name="cats.kernel.instances.UUIDBounded">UUIDBounded</a>, <a href="instances/UnitBounded.html" class="extype" name="cats.kernel.instances.UnitBounded">UnitBounded</a>, <a href="instances/UnitEnumerable.html" class="extype" name="cats.kernel.instances.UnitEnumerable">UnitEnumerable</a>, <a href="instances/UnitOrder.html" class="extype" name="cats.kernel.instances.UnitOrder">UnitOrder</a></div>
+          </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
+                <span class="toggle diagram-link">
+                  Type Hierarchy
+                </span>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph1" viewBox="0.00 0.00 1679.50 155.00" height="155pt" width="1680pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 151)" class="graph" id="page0,1_graph0"><polygon points="-4,4 -4,-151 1675.5,-151 1675.5,4 -4,4" stroke="transparent" fill="white"></polygon><g class="cluster" id="clust1"></g><g class="cluster" id="clust2"></g><!-- node0 --><g class="node this trait" id="graph1_0"><g id="a_this trait|graph1_0"><a xlink:title="cats.kernel.LowerBounded (this trait)" xlink:href="#inheritance-diagram"><path d="M853.17,-86C853.17,-86 755.83,-86 755.83,-86 751.67,-86 747.5,-81.83 747.5,-77.67 747.5,-77.67 747.5,-69.33 747.5,-69.33 747.5,-65.17 751.67,-61 755.83,-61 755.83,-61 853.17,-61 853.17,-61 857.33,-61 861.5,-65.17 861.5,-69.33 861.5,-69.33 861.5,-77.67 861.5,-77.67 861.5,-81.83 857.33,-86 853.17,-86" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-80.5" x="757.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-71.1" x="778.5" text-anchor="start">LowerBounded[A]</text></a></g></g><!-- node1 --><g class="node trait" id="graph1_1"><g id="a_trait|graph1_1"><a xlink:title="cats.kernel.instances.BooleanBounded" xlink:href="instances/BooleanBounded.html#inheritance-diagram"><path d="M100.67,-25C100.67,-25 8.33,-25 8.33,-25 4.17,-25 0,-20.83 0,-16.67 0,-16.67 0,-8.33 0,-8.33 0,-4.17 4.17,0 8.33,0 8.33,0 100.67,0 100.67,0 104.83,0 109,-4.17 109,-8.33 109,-8.33 109,-16.67 109,-16.67 109,-20.83 104.83,-25 100.67,-25" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-19.5" x="10.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="31.5" text-anchor="start">BooleanBounded</text></a></g></g><!-- node0&#45;&gt;node1 --><g class="edge inheritance" id="graph1_0_1"><g id="a_inheritance|graph1_0_1"><a xlink:title="BooleanBounded is a subtype of LowerBounded[A]"><path d="M740.29,-70.38C618.6,-65.85 346.17,-53.25 118.5,-25 115.48,-24.62 112.38,-24.2 109.25,-23.74" stroke="#d4d4d4" fill="none"></path><polygon points="740.3,-72.83 747.38,-70.64 740.48,-67.94 740.3,-72.83" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node2 --><g class="node trait" id="graph1_2"><g id="a_trait|graph1_2"><a xlink:title="cats.kernel.instances.ByteBounded" xlink:href="instances/ByteBounded.html#inheritance-diagram"><path d="M215.17,-25C215.17,-25 135.83,-25 135.83,-25 131.67,-25 127.5,-20.83 127.5,-16.67 127.5,-16.67 127.5,-8.33 127.5,-8.33 127.5,-4.17 131.67,0 135.83,0 135.83,0 215.17,0 215.17,0 219.33,0 223.5,-4.17 223.5,-8.33 223.5,-8.33 223.5,-16.67 223.5,-16.67 223.5,-20.83 219.33,-25 215.17,-25" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-19.5" x="137.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="158.5" text-anchor="start">ByteBounded</text></a></g></g><!-- node0&#45;&gt;node2 --><g class="edge inheritance" id="graph1_0_2"><g id="a_inheritance|graph1_0_2"><a xlink:title="ByteBounded is a subtype of LowerBounded[A]"><path d="M740.29,-69.61C634.18,-64.28 415.74,-51 232.5,-25 229.6,-24.59 226.63,-24.12 223.63,-23.62" stroke="#d4d4d4" fill="none"></path><polygon points="740.31,-72.06 747.42,-69.96 740.55,-67.17 740.31,-72.06" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node3 --><g class="node trait" id="graph1_3"><g id="a_trait|graph1_3"><a xlink:title="cats.kernel.instances.CharBounded" xlink:href="instances/CharBounded.html#inheritance-diagram"><path d="M329.17,-25C329.17,-25 249.83,-25 249.83,-25 245.67,-25 241.5,-20.83 241.5,-16.67 241.5,-16.67 241.5,-8.33 241.5,-8.33 241.5,-4.17 245.67,0 249.83,0 249.83,0 329.17,0 329.17,0 333.33,0 337.5,-4.17 337.5,-8.33 337.5,-8.33 337.5,-16.67 337.5,-16.67 337.5,-20.83 333.33,-25 329.17,-25" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-19.5" x="251.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="272.5" text-anchor="start">CharBounded</text></a></g></g><!-- node0&#45;&gt;node3 --><g class="edge inheritance" id="graph1_0_3"><g id="a_inheritance|graph1_0_3"><a xlink:title="CharBounded is a subtype of LowerBounded[A]"><path d="M740.1,-67.78C651.24,-60.81 486.15,-46.28 346.5,-25 343.61,-24.56 340.64,-24.07 337.64,-23.55" stroke="#d4d4d4" fill="none"></path><polygon points="739.99,-70.23 747.15,-68.33 740.37,-65.34 739.99,-70.23" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node4 --><g class="node trait" id="graph1_4"><g id="a_trait|graph1_4"><a xlink:title="cats.kernel.instances.DurationBounded" xlink:href="instances/DurationBounded.html#inheritance-diagram"><path d="M461.17,-25C461.17,-25 363.83,-25 363.83,-25 359.67,-25 355.5,-20.83 355.5,-16.67 355.5,-16.67 355.5,-8.33 355.5,-8.33 355.5,-4.17 359.67,0 363.83,0 363.83,0 461.17,0 461.17,0 465.33,0 469.5,-4.17 469.5,-8.33 469.5,-8.33 469.5,-16.67 469.5,-16.67 469.5,-20.83 465.33,-25 461.17,-25" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-19.5" x="365.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="386.5" text-anchor="start">DurationBounded</text></a></g></g><!-- node0&#45;&gt;node4 --><g class="edge inheritance" id="graph1_0_4"><g id="a_inheritance|graph1_0_4"><a xlink:title="DurationBounded is a subtype of LowerBounded[A]"><path d="M740.27,-63.68C674.46,-54.52 569.23,-39.51 478.5,-25 475.63,-24.54 472.69,-24.06 469.72,-23.57" stroke="#d4d4d4" fill="none"></path><polygon points="740.03,-66.12 747.3,-64.66 740.71,-61.27 740.03,-66.12" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node5 --><g class="node trait" id="graph1_5"><g id="a_trait|graph1_5"><a xlink:title="cats.kernel.instances.FiniteDurationBounded" xlink:href="instances/FiniteDurationBounded.html#inheritance-diagram"><path d="M620.67,-25C620.67,-25 496.33,-25 496.33,-25 492.17,-25 488,-20.83 488,-16.67 488,-16.67 488,-8.33 488,-8.33 488,-4.17 492.17,0 496.33,0 496.33,0 620.67,0 620.67,0 624.83,0 629,-4.17 629,-8.33 629,-8.33 629,-16.67 629,-16.67 629,-20.83 624.83,-25 620.67,-25" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-19.5" x="498.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="519.5" text-anchor="start">FiniteDurationBounded</text></a></g></g><!-- node0&#45;&gt;node5 --><g class="edge inheritance" id="graph1_0_5"><g id="a_inheritance|graph1_0_5"><a xlink:title="FiniteDurationBounded is a subtype of LowerBounded[A]"><path d="M749.49,-59.31C706.67,-49.04 647.83,-34.92 606.81,-25.09" stroke="#d4d4d4" fill="none"></path><polygon points="749.11,-61.73 756.48,-60.98 750.25,-56.97 749.11,-61.73" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node6 --><g class="node trait" id="graph1_6"><g id="a_trait|graph1_6"><a xlink:title="cats.kernel.instances.IntBounded" xlink:href="instances/IntBounded.html#inheritance-diagram"><path d="M729.67,-25C729.67,-25 655.33,-25 655.33,-25 651.17,-25 647,-20.83 647,-16.67 647,-16.67 647,-8.33 647,-8.33 647,-4.17 651.17,0 655.33,0 655.33,0 729.67,0 729.67,0 733.83,0 738,-4.17 738,-8.33 738,-8.33 738,-16.67 738,-16.67 738,-20.83 733.83,-25 729.67,-25" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-19.5" x="657.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="678.5" text-anchor="start">IntBounded</text></a></g></g><!-- node0&#45;&gt;node6 --><g class="edge inheritance" id="graph1_0_6"><g id="a_inheritance|graph1_0_6"><a xlink:title="IntBounded is a subtype of LowerBounded[A]"><path d="M776.4,-57.7C757.31,-47.64 732.39,-34.52 714.69,-25.19" stroke="#d4d4d4" fill="none"></path><polygon points="775.3,-59.89 782.64,-60.98 777.59,-55.55 775.3,-59.89" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node7 --><g class="node trait" id="graph1_7"><g id="a_trait|graph1_7"><a xlink:title="cats.kernel.instances.LongBounded" xlink:href="instances/LongBounded.html#inheritance-diagram"><path d="M844.17,-25C844.17,-25 764.83,-25 764.83,-25 760.67,-25 756.5,-20.83 756.5,-16.67 756.5,-16.67 756.5,-8.33 756.5,-8.33 756.5,-4.17 760.67,0 764.83,0 764.83,0 844.17,0 844.17,0 848.33,0 852.5,-4.17 852.5,-8.33 852.5,-8.33 852.5,-16.67 852.5,-16.67 852.5,-20.83 848.33,-25 844.17,-25" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-19.5" x="766.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="787.5" text-anchor="start">LongBounded</text></a></g></g><!-- node0&#45;&gt;node7 --><g class="edge inheritance" id="graph1_0_7"><g id="a_inheritance|graph1_0_7"><a xlink:title="LongBounded is a subtype of LowerBounded[A]"><path d="M804.5,-53.76C804.5,-44.37 804.5,-33.29 804.5,-25.13" stroke="#d4d4d4" fill="none"></path><polygon points="802.05,-53.84 804.5,-60.84 806.95,-53.84 802.05,-53.84" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node8 --><g class="node trait" id="graph1_8"><g id="a_trait|graph1_8"><a xlink:title="cats.kernel.PartialNextLowerBounded" xlink:href="PartialNextLowerBounded.html#inheritance-diagram"><path d="M1025.67,-25C1025.67,-25 879.33,-25 879.33,-25 875.17,-25 871,-20.83 871,-16.67 871,-16.67 871,-8.33 871,-8.33 871,-4.17 875.17,0 879.33,0 879.33,0 1025.67,0 1025.67,0 1029.83,0 1034,-4.17 1034,-8.33 1034,-8.33 1034,-16.67 1034,-16.67 1034,-20.83 1029.83,-25 1025.67,-25" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-19.5" x="881.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="902.5" text-anchor="start">PartialNextLowerBounded[A]</text></a></g></g><!-- node0&#45;&gt;node8 --><g class="edge inheritance" id="graph1_0_8"><g id="a_inheritance|graph1_0_8"><a xlink:title="PartialNextLowerBounded[A] is a subtype of LowerBounded[A]"><path d="M840.01,-58.34C865.54,-48.17 899.52,-34.62 923.43,-25.09" stroke="#d4d4d4" fill="none"></path><polygon points="838.98,-56.12 833.39,-60.98 840.8,-60.67 838.98,-56.12" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node9 --><g class="node trait" id="graph1_9"><g id="a_trait|graph1_9"><a xlink:title="cats.kernel.instances.ShortBounded" xlink:href="instances/ShortBounded.html#inheritance-diagram"><path d="M1144.17,-25C1144.17,-25 1060.83,-25 1060.83,-25 1056.67,-25 1052.5,-20.83 1052.5,-16.67 1052.5,-16.67 1052.5,-8.33 1052.5,-8.33 1052.5,-4.17 1056.67,0 1060.83,0 1060.83,0 1144.17,0 1144.17,0 1148.33,0 1152.5,-4.17 1152.5,-8.33 1152.5,-8.33 1152.5,-16.67 1152.5,-16.67 1152.5,-20.83 1148.33,-25 1144.17,-25" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-19.5" x="1062.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="1083.5" text-anchor="start">ShortBounded</text></a></g></g><!-- node0&#45;&gt;node9 --><g class="edge inheritance" id="graph1_0_9"><g id="a_inheritance|graph1_0_9"><a xlink:title="ShortBounded is a subtype of LowerBounded[A]"><path d="M868.52,-59.83C923.42,-48.95 1001.46,-33.5 1052.04,-23.49" stroke="#d4d4d4" fill="none"></path><polygon points="868,-57.43 861.6,-61.19 868.95,-62.24 868,-57.43" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node10 --><g class="node trait" id="graph1_10"><g id="a_trait|graph1_10"><a xlink:title="cats.kernel.instances.StringLowerBounded" xlink:href="instances/StringLowerBounded.html#inheritance-diagram"><path d="M1289.67,-25C1289.67,-25 1179.33,-25 1179.33,-25 1175.17,-25 1171,-20.83 1171,-16.67 1171,-16.67 1171,-8.33 1171,-8.33 1171,-4.17 1175.17,0 1179.33,0 1179.33,0 1289.67,0 1289.67,0 1293.83,0 1298,-4.17 1298,-8.33 1298,-8.33 1298,-16.67 1298,-16.67 1298,-20.83 1293.83,-25 1289.67,-25" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-19.5" x="1181.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="1202.5" text-anchor="start">StringLowerBounded</text></a></g></g><!-- node0&#45;&gt;node10 --><g class="edge inheritance" id="graph1_0_10"><g id="a_inheritance|graph1_0_10"><a xlink:title="StringLowerBounded is a subtype of LowerBounded[A]"><path d="M868.95,-64.4C940.5,-55.29 1059.35,-39.84 1161.5,-25 1164.55,-24.56 1167.66,-24.1 1170.81,-23.63" stroke="#d4d4d4" fill="none"></path><polygon points="868.39,-62 861.75,-65.31 869,-66.86 868.39,-62" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node11 --><g class="node trait" id="graph1_11"><g id="a_trait|graph1_11"><a xlink:title="cats.kernel.instances.SymbolLowerBounded" xlink:href="instances/SymbolLowerBounded.html#inheritance-diagram"><path d="M1434.67,-25C1434.67,-25 1324.33,-25 1324.33,-25 1320.17,-25 1316,-20.83 1316,-16.67 1316,-16.67 1316,-8.33 1316,-8.33 1316,-4.17 1320.17,0 1324.33,0 1324.33,0 1434.67,0 1434.67,0 1438.83,0 1443,-4.17 1443,-8.33 1443,-8.33 1443,-16.67 1443,-16.67 1443,-20.83 1438.83,-25 1434.67,-25" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-19.5" x="1326.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="1347.5" text-anchor="start">SymbolLowerBounded</text></a></g></g><!-- node0&#45;&gt;node11 --><g class="edge inheritance" id="graph1_0_11"><g id="a_inheritance|graph1_0_11"><a xlink:title="SymbolLowerBounded is a subtype of LowerBounded[A]"><path d="M868.6,-67.77C964.33,-60.41 1150.24,-44.96 1307.5,-25 1310.26,-24.65 1313.08,-24.27 1315.93,-23.88" stroke="#d4d4d4" fill="none"></path><polygon points="868.38,-65.33 861.58,-68.31 868.75,-70.22 868.38,-65.33" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node12 --><g class="node trait" id="graph1_12"><g id="a_trait|graph1_12"><a xlink:title="cats.kernel.instances.UUIDBounded" xlink:href="instances/UUIDBounded.html#inheritance-diagram"><path d="M1549.17,-25C1549.17,-25 1469.83,-25 1469.83,-25 1465.67,-25 1461.5,-20.83 1461.5,-16.67 1461.5,-16.67 1461.5,-8.33 1461.5,-8.33 1461.5,-4.17 1465.67,0 1469.83,0 1469.83,0 1549.17,0 1549.17,0 1553.33,0 1557.5,-4.17 1557.5,-8.33 1557.5,-8.33 1557.5,-16.67 1557.5,-16.67 1557.5,-20.83 1553.33,-25 1549.17,-25" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-19.5" x="1471.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="1492.5" text-anchor="start">UUIDBounded</text></a></g></g><!-- node0&#45;&gt;node12 --><g class="edge inheritance" id="graph1_0_12"><g id="a_inheritance|graph1_0_12"><a xlink:title="UUIDBounded is a subtype of LowerBounded[A]"><path d="M868.67,-70.47C985.35,-66.2 1239.86,-54.13 1452.5,-25 1455.4,-24.6 1458.38,-24.15 1461.37,-23.65" stroke="#d4d4d4" fill="none"></path><polygon points="868.43,-68.03 861.53,-70.73 868.61,-72.93 868.43,-68.03" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node13 --><g class="node trait" id="graph1_13"><g id="a_trait|graph1_13"><a xlink:title="cats.kernel.instances.UnitBounded" xlink:href="instances/UnitBounded.html#inheritance-diagram"><path d="M1663.17,-25C1663.17,-25 1583.83,-25 1583.83,-25 1579.67,-25 1575.5,-20.83 1575.5,-16.67 1575.5,-16.67 1575.5,-8.33 1575.5,-8.33 1575.5,-4.17 1579.67,0 1583.83,0 1583.83,0 1663.17,0 1663.17,0 1667.33,0 1671.5,-4.17 1671.5,-8.33 1671.5,-8.33 1671.5,-16.67 1671.5,-16.67 1671.5,-20.83 1667.33,-25 1663.17,-25" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-19.5" x="1585.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="1606.5" text-anchor="start">UnitBounded</text></a></g></g><!-- node0&#45;&gt;node13 --><g class="edge inheritance" id="graph1_0_13"><g id="a_inheritance|graph1_0_13"><a xlink:title="UnitBounded is a subtype of LowerBounded[A]"><path d="M868.9,-71.45C1000.5,-68.67 1309.51,-58.77 1566.5,-25 1569.4,-24.62 1572.38,-24.18 1575.38,-23.69" stroke="#d4d4d4" fill="none"></path><polygon points="868.58,-69.01 861.63,-71.61 868.68,-73.91 868.58,-69.01" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node14 --><g class="node class" id="graph1_14"><g id="a_class|graph1_14"><a xlink:title="scala.AnyRef"><path d="M832.67,-147C832.67,-147 776.33,-147 776.33,-147 772.17,-147 768,-142.83 768,-138.67 768,-138.67 768,-130.33 768,-130.33 768,-126.17 772.17,-122 776.33,-122 776.33,-122 832.67,-122 832.67,-122 836.83,-122 841,-126.17 841,-130.33 841,-130.33 841,-138.67 841,-138.67 841,-142.83 836.83,-147 832.67,-147" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-141.5" x="778.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="799.5" text-anchor="start">AnyRef</text></a></g></g><!-- node14&#45;&gt;node0 --><g class="edge inheritance" id="graph1_14_0"><g id="a_inheritance|graph1_14_0"><a xlink:title="LowerBounded[A] is a subtype of AnyRef"><path d="M804.5,-114.76C804.5,-105.37 804.5,-94.29 804.5,-86.13" stroke="#d4d4d4" fill="none"></path><polygon points="802.05,-114.84 804.5,-121.84 806.95,-114.84 802.05,-114.84" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
+                <div id="diagram-controls" class="hiddenContent">
+                  <button id="diagram-zoom-out" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button id="diagram-zoom-in" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button title="Toggle full-screen" id="diagram-fs" class="diagram-btn to-full"><i class="material-icons"></i></button>
+                </div>
+              </div></div>
         
 
       <div id="mbrsel">
@@ -453,6 +525,8 @@
               
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
@@ -486,28 +560,6 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="finalize():Unit"></a>
-      <span class="permalink">
-      <a href="../../cats/kernel/LowerBounded.html#finalize():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="symbol">classOf[java.lang.Throwable]</span>
-    </span>)</span>
-              
-        </dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
@@ -525,6 +577,8 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -544,6 +598,8 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -596,6 +652,8 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
               
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
         </dd></dl></div>
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
@@ -614,6 +672,8 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -648,28 +708,6 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait():Unit"></a>
-      <span class="permalink">
-      <a href="../../cats/kernel/LowerBounded.html#wait():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
-    </span>)</span>
-              
-        </dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <span class="permalink">
@@ -716,13 +754,64 @@
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/kernel/LowerBounded.html#wait():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
     </li>
               </ol>
             </div>
 
         
 
-        
+        <div class="values members">
+              <h3>Deprecated Value Members</h3>
+              <ol><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/kernel/LowerBounded.html#finalize():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version ) see corresponding Javadoc for more information.">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+                <span class="name">@Deprecated</span>
+              
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version )</i> see corresponding Javadoc for more information.</p></dd></dl></div>
+    </li></ol>
+            </div>
         </div>
 
         <div id="inheritedMembers">

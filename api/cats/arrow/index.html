@@ -81,10 +81,32 @@
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <a title="Symbolic aliases for various types are defined here." href="../index.html"><span class="name">cats</span></a>
+        <a title="The cats root package contains all the trait signatures of most Scala type classes." href="../index.html"><span class="name">cats</span></a>
       </span>
       
-      <p class="shortcomment cmt">Symbolic aliases for various types are defined here.</p><div class="fullcomment"><div class="comment cmt"><p>Symbolic aliases for various types are defined here.
+      <p class="shortcomment cmt">The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><p>Cats type classes are implemented using the approach from the
+ <a href="https://ropas.snu.ac.kr/~bruno/papers/TypeClasses.pdf" target="_blank">Type classes as objects and implicits</a> article.</p><p>For each type class, <code>cats</code> provides three pieces:
+- Its <b>signature</b>: a trait that is polymorphic on a type parameter.
+  Type class traits inherit from other type classes to indicate that any implementation of the lower type class (e.g. <code>Applicative</code>)
+  can also serve as an instance for the higuer type class (e.g. <code>Functor</code>).
+- Type class <b>'instances</b>, which are classes and objects that implement one or more type class signatures for some specific types.
+  Type class instances for several data types from the Java or Scala standard libraries are declared in the subpackage <code>cats.instances</code>.
+- <b>Syntax extensions</b>, each of which provides the methods of the type class defines as extension methods
+  (which in Scala 2 are encoded as implicit classes) for values of any type <code>F</code>; given that an instance of the type class
+  for the receiver type (<code>this</code>) is in the implicit scope.
+  Symtax extensions are declared in the <code>cats.syntax</code> package.
+- A set of <b>laws</b>, that are also generic on the type of the class, and are only defined on the operations of the type class.
+  The purpose of these laws is to declare some algebraic relations (equations) between Scala expressions involving the operations
+  of the type class, and test (but not verify) that implemented instances satisfy those equations.
+  Laws are defined in the <code>cats-laws</code> package.</p><p>Although most of cats type classes are declared in this package, some are declared in other packages:
+- type classes that operate on base types (kind <code>*</code>), and their implementations for standard library types,
+  are contained in <code>cats.kernel</code>, which is a different SBT project. However, they are re-exported from this package.
+- type classes of kind <code>F[_, _]</code>, such as <a href="Profunctor.html" class="extype" name="cats.arrow.Profunctor">cats.arrow.Profunctor</a>&quot; or <a href="Arrow.html" class="extype" name="cats.arrow.Arrow">cats.arrow.Arrow</a>, which are relevant for
+  Functional Reactive Programming or optics, are declared in the <code>cats.arrow</code> package.
+- Also, those type classes that abstract over (pure or impure) functional runtime effects are declared
+  in the <a href="https://typelevel.org/cats-effect/" target="_blank">cats-effect library</a>.
+- Some type classes for which no laws can be provided are left out of the main road, in a small and dirty alley.
+  These are the <code>alleycats</code>.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
     </li><li name="cats.arrow" visbl="pub" class="indented2 current" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="arrow"></a><a id="arrow:arrow"></a>
@@ -138,7 +160,23 @@
                         <a class="object" href="Strong$.html" title=""></a>
                         <a class="trait" href="Strong.html" title="Must obey the laws defined in cats.laws.StrongLaws."></a>
                         <a href="Strong.html" title="Must obey the laws defined in cats.laws.StrongLaws.">Strong</a>
-                      </li><li name="cats.data" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+                      </li><li name="cats.conversions" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="conversions"></a><a id="conversions:conversions"></a>
+      <span class="permalink">
+      <a href="../../cats/conversions/index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../conversions/index.html"><span class="name">conversions</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="cats">cats</a></dd></dl></div>
+    </li><li name="cats.data" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="data"></a><a id="data:data"></a>
       <span class="permalink">
       <a href="../../cats/data/index.html" title="Permalink">
@@ -262,7 +300,17 @@
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"></div>
+          <div id="comment" class="fullcommenttop"><div class="toggleContainer block diagram-container" id="content-diagram-container">
+                <span class="toggle diagram-link">
+                  Content Hierarchy
+                </span>
+                <div class="diagram" id="content-diagram"><svg class="package-diagram" id="graph1" viewBox="0.00 0.00 267.50 216.00" height="216pt" width="268pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 212)" class="graph" id="page0,1_graph0"><polygon points="-4,4 -4,-212 263.5,-212 263.5,4 -4,4" stroke="transparent" fill="white"></polygon><!-- node0 --><g class="node trait" id="graph1_0"><g id="a_trait|graph1_0"><a xlink:title="cats.arrow.Strong" xlink:href="Strong.html#inheritance-diagram"><path d="M200.67,-147C200.67,-147 130.33,-147 130.33,-147 126.17,-147 122,-142.83 122,-138.67 122,-138.67 122,-130.33 122,-130.33 122,-126.17 126.17,-122 130.33,-122 130.33,-122 200.67,-122 200.67,-122 204.83,-122 209,-126.17 209,-130.33 209,-130.33 209,-138.67 209,-138.67 209,-142.83 204.83,-147 200.67,-147" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-141.5" x="132.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="153.5" text-anchor="start">Strong[F]</text></a></g></g><!-- node7 --><g class="node trait" id="graph1_7"><g id="a_trait|graph1_7"><a xlink:title="cats.arrow.Arrow" xlink:href="Arrow.html#inheritance-diagram"><path d="M193.17,-86C193.17,-86 127.83,-86 127.83,-86 123.67,-86 119.5,-81.83 119.5,-77.67 119.5,-77.67 119.5,-69.33 119.5,-69.33 119.5,-65.17 123.67,-61 127.83,-61 127.83,-61 193.17,-61 193.17,-61 197.33,-61 201.5,-65.17 201.5,-69.33 201.5,-69.33 201.5,-77.67 201.5,-77.67 201.5,-81.83 197.33,-86 193.17,-86" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-80.5" x="129.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-71.1" x="150.5" text-anchor="start">Arrow[F]</text></a></g></g><!-- node0&#45;&gt;node7 --><g class="edge inheritance" id="graph1_0_7"><g id="a_inheritance|graph1_0_7"><a xlink:title="Arrow[F] is a subtype of Strong[F]"><path d="M163.91,-114.76C163.12,-105.37 162.18,-94.29 161.49,-86.13" stroke="#d4d4d4" fill="none"></path><polygon points="161.48,-115.08 164.51,-121.84 166.36,-114.66 161.48,-115.08" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node1 --><g class="node trait" id="graph1_1"><g id="a_trait|graph1_1"><a xlink:title="cats.arrow.Profunctor" xlink:href="Profunctor.html#inheritance-diagram"><path d="M211.67,-208C211.67,-208 123.33,-208 123.33,-208 119.17,-208 115,-203.83 115,-199.67 115,-199.67 115,-191.33 115,-191.33 115,-187.17 119.17,-183 123.33,-183 123.33,-183 211.67,-183 211.67,-183 215.83,-183 220,-187.17 220,-191.33 220,-191.33 220,-199.67 220,-199.67 220,-203.83 215.83,-208 211.67,-208" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-202.5" x="125.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-193.1" x="146.5" text-anchor="start">Profunctor[F]</text></a></g></g><!-- node1&#45;&gt;node0 --><g class="edge inheritance" id="graph1_1_0"><g id="a_inheritance|graph1_1_0"><a xlink:title="Strong[F] is a subtype of Profunctor[F]"><path d="M166.86,-175.76C166.55,-166.37 166.17,-155.29 165.89,-147.13" stroke="#d4d4d4" fill="none"></path><polygon points="164.42,-175.93 167.1,-182.84 169.32,-175.76 164.42,-175.93" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node2 --><g class="node trait" id="graph1_2"><g id="a_trait|graph1_2"><a xlink:title="cats.arrow.Compose" xlink:href="Compose.html#inheritance-diagram"><path d="M88.67,-208C88.67,-208 14.33,-208 14.33,-208 10.17,-208 6,-203.83 6,-199.67 6,-199.67 6,-191.33 6,-191.33 6,-187.17 10.17,-183 14.33,-183 14.33,-183 88.67,-183 88.67,-183 92.83,-183 97,-187.17 97,-191.33 97,-191.33 97,-199.67 97,-199.67 97,-203.83 92.83,-208 88.67,-208" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-202.5" x="16.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-193.1" x="37.5" text-anchor="start">Compose[F]</text></a></g></g><!-- node5 --><g class="node trait" id="graph1_5"><g id="a_trait|graph1_5"><a xlink:title="cats.arrow.Category" xlink:href="Category.html#inheritance-diagram"><path d="M94.17,-147C94.17,-147 14.83,-147 14.83,-147 10.67,-147 6.5,-142.83 6.5,-138.67 6.5,-138.67 6.5,-130.33 6.5,-130.33 6.5,-126.17 10.67,-122 14.83,-122 14.83,-122 94.17,-122 94.17,-122 98.33,-122 102.5,-126.17 102.5,-130.33 102.5,-130.33 102.5,-138.67 102.5,-138.67 102.5,-142.83 98.33,-147 94.17,-147" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-141.5" x="16.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="37.5" text-anchor="start">Category[F]</text></a></g></g><!-- node2&#45;&gt;node5 --><g class="edge inheritance" id="graph1_2_5"><g id="a_inheritance|graph1_2_5"><a xlink:title="Category[F] is a subtype of Compose[F]"><path d="M52.45,-175.76C52.93,-166.37 53.49,-155.29 53.91,-147.13" stroke="#d4d4d4" fill="none"></path><polygon points="50,-175.73 52.09,-182.84 54.9,-175.98 50,-175.73" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node3 --><g class="node trait" id="graph1_3"><g id="a_trait|graph1_3"><a xlink:title="cats.arrow.CommutativeArrow" xlink:href="CommutativeArrow.html#inheritance-diagram"><path d="M251.17,-25C251.17,-25 135.83,-25 135.83,-25 131.67,-25 127.5,-20.83 127.5,-16.67 127.5,-16.67 127.5,-8.33 127.5,-8.33 127.5,-4.17 131.67,0 135.83,0 135.83,0 251.17,0 251.17,0 255.33,0 259.5,-4.17 259.5,-8.33 259.5,-8.33 259.5,-16.67 259.5,-16.67 259.5,-20.83 255.33,-25 251.17,-25" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-19.5" x="137.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="158.5" text-anchor="start">CommutativeArrow[F]</text></a></g></g><!-- node4 --><g class="node trait" id="graph1_4"><g id="a_trait|graph1_4"><a xlink:title="cats.arrow.Choice" xlink:href="Choice.html#inheritance-diagram"><path d="M89.67,-86C89.67,-86 19.33,-86 19.33,-86 15.17,-86 11,-81.83 11,-77.67 11,-77.67 11,-69.33 11,-69.33 11,-65.17 15.17,-61 19.33,-61 19.33,-61 89.67,-61 89.67,-61 93.83,-61 98,-65.17 98,-69.33 98,-69.33 98,-77.67 98,-77.67 98,-81.83 93.83,-86 89.67,-86" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-80.5" x="21.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-71.1" x="42.5" text-anchor="start">Choice[F]</text></a></g></g><!-- node6 --><g class="node trait" id="graph1_6"><g id="a_trait|graph1_6"><a xlink:title="cats.arrow.ArrowChoice" xlink:href="ArrowChoice.html#inheritance-diagram"><path d="M100.67,-25C100.67,-25 8.33,-25 8.33,-25 4.17,-25 0,-20.83 0,-16.67 0,-16.67 0,-8.33 0,-8.33 0,-4.17 4.17,0 8.33,0 8.33,0 100.67,0 100.67,0 104.83,0 109,-4.17 109,-8.33 109,-8.33 109,-16.67 109,-16.67 109,-20.83 104.83,-25 100.67,-25" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-19.5" x="10.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="31.5" text-anchor="start">ArrowChoice[F]</text></a></g></g><!-- node4&#45;&gt;node6 --><g class="edge inheritance" id="graph1_4_6"><g id="a_inheritance|graph1_4_6"><a xlink:title="ArrowChoice[F] is a subtype of Choice[F]"><path d="M54.5,-53.76C54.5,-44.37 54.5,-33.29 54.5,-25.13" stroke="#d4d4d4" fill="none"></path><polygon points="52.05,-53.84 54.5,-60.84 56.95,-53.84 52.05,-53.84" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node5&#45;&gt;node4 --><g class="edge inheritance" id="graph1_5_4"><g id="a_inheritance|graph1_5_4"><a xlink:title="Choice[F] is a subtype of Category[F]"><path d="M54.5,-114.76C54.5,-105.37 54.5,-94.29 54.5,-86.13" stroke="#d4d4d4" fill="none"></path><polygon points="52.05,-114.84 54.5,-121.84 56.95,-114.84 52.05,-114.84" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node5&#45;&gt;node7 --><g class="edge inheritance" id="graph1_5_7"><g id="a_inheritance|graph1_5_7"><a xlink:title="Arrow[F] is a subtype of Category[F]"><path d="M81.56,-118.44C99.57,-108.41 122.89,-95.43 139.5,-86.19" stroke="#d4d4d4" fill="none"></path><polygon points="80.11,-116.44 75.19,-121.98 82.5,-120.72 80.11,-116.44" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node7&#45;&gt;node3 --><g class="edge inheritance" id="graph1_7_3"><g id="a_inheritance|graph1_7_3"><a xlink:title="CommutativeArrow[F] is a subtype of Arrow[F]"><path d="M170.52,-54.59C175.87,-45.03 182.3,-33.53 186.99,-25.13" stroke="#d4d4d4" fill="none"></path><polygon points="168.3,-53.54 167.02,-60.84 172.58,-55.93 168.3,-53.54" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node7&#45;&gt;node6 --><g class="edge inheritance" id="graph1_7_6"><g id="a_inheritance|graph1_7_6"><a xlink:title="ArrowChoice[F] is a subtype of Arrow[F]"><path d="M133.44,-57.44C115.43,-47.41 92.11,-34.43 75.5,-25.19" stroke="#d4d4d4" fill="none"></path><polygon points="132.5,-59.72 139.81,-60.98 134.89,-55.44 132.5,-59.72" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
+                <div id="diagram-controls" class="hiddenContent">
+                  <button id="diagram-zoom-out" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button id="diagram-zoom-in" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button title="Toggle full-screen" id="diagram-fs" class="diagram-btn to-full"><i class="material-icons"></i></button>
+                </div>
+              </div></div>
         
 
       <div id="mbrsel">
@@ -298,7 +346,7 @@
         <div id="types" class="types members">
               <h3>Type Members</h3>
               <ol><li name="cats.arrow.Arrow" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="Arrow[F[_,_]]extendsCategory[F]withStrong[F]withSerializable"></a><a id="Arrow[F[_,_]]:Arrow[F]"></a>
+      <a id="Arrow[F[_,_]]extendsCategory[F]withStrong[F]"></a><a id="Arrow[F[_,_]]:Arrow[F]"></a>
       <span class="permalink">
       <a href="../../cats/arrow/Arrow.html" title="Permalink">
         <i class="material-icons"></i>
@@ -309,7 +357,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="Must obey the laws defined in cats.laws.ArrowLaws." href="Arrow.html"><span class="name">Arrow</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Category.html" class="extype" name="cats.arrow.Category">Category</a>[<span class="extype" name="cats.arrow.Arrow.F">F</span>] with <a href="Strong.html" class="extype" name="cats.arrow.Strong">Strong</a>[<span class="extype" name="cats.arrow.Arrow.F">F</span>] with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="Must obey the laws defined in cats.laws.ArrowLaws." href="Arrow.html"><span class="name">Arrow</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Category.html" class="extype" name="cats.arrow.Category">Category</a>[<span class="extype" name="cats.arrow.Arrow.F">F</span>] with <a href="Strong.html" class="extype" name="cats.arrow.Strong">Strong</a>[<span class="extype" name="cats.arrow.Arrow.F">F</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Must obey the laws defined in cats.laws.ArrowLaws.</p><div class="fullcomment"><div class="comment cmt"><p>Must obey the laws defined in cats.laws.ArrowLaws.
@@ -319,9 +367,17 @@
       <span class="defval" name="&quot;Could not find an instance of Arrow for ${F}&quot;">...</span>
     </span>)</span>
               
+                <span class="name">@typeclass</span><span class="args">(<span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$1">...</span>
+    </span>, <span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$2">...</span>
+    </span>)</span>
+              
         </dd></dl></div>
     </li><li name="cats.arrow.ArrowChoice" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="ArrowChoice[F[_,_]]extendsArrow[F]withChoice[F]withSerializable"></a><a id="ArrowChoice[F[_,_]]:ArrowChoice[F]"></a>
+      <a id="ArrowChoice[F[_,_]]extendsArrow[F]withChoice[F]"></a><a id="ArrowChoice[F[_,_]]:ArrowChoice[F]"></a>
       <span class="permalink">
       <a href="../../cats/arrow/ArrowChoice.html" title="Permalink">
         <i class="material-icons"></i>
@@ -332,7 +388,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="Must obey the laws defined in cats.laws.ArrowChoiceLaws." href="ArrowChoice.html"><span class="name">ArrowChoice</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Arrow.html" class="extype" name="cats.arrow.Arrow">Arrow</a>[<span class="extype" name="cats.arrow.ArrowChoice.F">F</span>] with <a href="Choice.html" class="extype" name="cats.arrow.Choice">Choice</a>[<span class="extype" name="cats.arrow.ArrowChoice.F">F</span>] with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="Must obey the laws defined in cats.laws.ArrowChoiceLaws." href="ArrowChoice.html"><span class="name">ArrowChoice</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Arrow.html" class="extype" name="cats.arrow.Arrow">Arrow</a>[<span class="extype" name="cats.arrow.ArrowChoice.F">F</span>] with <a href="Choice.html" class="extype" name="cats.arrow.Choice">Choice</a>[<span class="extype" name="cats.arrow.ArrowChoice.F">F</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Must obey the laws defined in cats.laws.ArrowChoiceLaws.</p><div class="fullcomment"><div class="comment cmt"><p>Must obey the laws defined in cats.laws.ArrowChoiceLaws.
@@ -342,9 +398,17 @@
       <span class="defval" name="&quot;Could not find an instance of ArrowChoice for ${F}&quot;">...</span>
     </span>)</span>
               
+                <span class="name">@typeclass</span><span class="args">(<span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$1">...</span>
+    </span>, <span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$2">...</span>
+    </span>)</span>
+              
         </dd></dl></div>
     </li><li name="cats.arrow.Category" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="Category[F[_,_]]extendsCompose[F]withSerializable"></a><a id="Category[F[_,_]]:Category[F]"></a>
+      <a id="Category[F[_,_]]extendsCompose[F]"></a><a id="Category[F[_,_]]:Category[F]"></a>
       <span class="permalink">
       <a href="../../cats/arrow/Category.html" title="Permalink">
         <i class="material-icons"></i>
@@ -355,7 +419,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="Must obey the laws defined in cats.laws.CategoryLaws." href="Category.html"><span class="name">Category</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Compose.html" class="extype" name="cats.arrow.Compose">Compose</a>[<span class="extype" name="cats.arrow.Category.F">F</span>] with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="Must obey the laws defined in cats.laws.CategoryLaws." href="Category.html"><span class="name">Category</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Compose.html" class="extype" name="cats.arrow.Compose">Compose</a>[<span class="extype" name="cats.arrow.Category.F">F</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Must obey the laws defined in cats.laws.CategoryLaws.</p><div class="fullcomment"><div class="comment cmt"><p>Must obey the laws defined in cats.laws.CategoryLaws.
@@ -365,9 +429,17 @@
       <span class="defval" name="&quot;Could not find an instance of Category for ${F}&quot;">...</span>
     </span>)</span>
               
+                <span class="name">@typeclass</span><span class="args">(<span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$1">...</span>
+    </span>, <span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$2">...</span>
+    </span>)</span>
+              
         </dd></dl></div>
     </li><li name="cats.arrow.Choice" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="Choice[F[_,_]]extendsCategory[F]withSerializable"></a><a id="Choice[F[_,_]]:Choice[F]"></a>
+      <a id="Choice[F[_,_]]extendsCategory[F]"></a><a id="Choice[F[_,_]]:Choice[F]"></a>
       <span class="permalink">
       <a href="../../cats/arrow/Choice.html" title="Permalink">
         <i class="material-icons"></i>
@@ -378,7 +450,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="" href="Choice.html"><span class="name">Choice</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Category.html" class="extype" name="cats.arrow.Category">Category</a>[<span class="extype" name="cats.arrow.Choice.F">F</span>] with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="" href="Choice.html"><span class="name">Choice</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Category.html" class="extype" name="cats.arrow.Category">Category</a>[<span class="extype" name="cats.arrow.Choice.F">F</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
@@ -387,9 +459,17 @@
       <span class="defval" name="&quot;Could not find an instance of Choice for ${F}&quot;">...</span>
     </span>)</span>
               
+                <span class="name">@typeclass</span><span class="args">(<span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$1">...</span>
+    </span>, <span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$2">...</span>
+    </span>)</span>
+              
         </dd></dl></div>
     </li><li name="cats.arrow.CommutativeArrow" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="CommutativeArrow[F[_,_]]extendsArrow[F]withSerializable"></a><a id="CommutativeArrow[F[_,_]]:CommutativeArrow[F]"></a>
+      <a id="CommutativeArrow[F[_,_]]extendsArrow[F]"></a><a id="CommutativeArrow[F[_,_]]:CommutativeArrow[F]"></a>
       <span class="permalink">
       <a href="../../cats/arrow/CommutativeArrow.html" title="Permalink">
         <i class="material-icons"></i>
@@ -400,7 +480,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="In a Commutative Arrow F[_, _], the split operation (or ***) is commutative, which means that there is non-interference between the effect of the paired arrows." href="CommutativeArrow.html"><span class="name">CommutativeArrow</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Arrow.html" class="extype" name="cats.arrow.Arrow">Arrow</a>[<span class="extype" name="cats.arrow.CommutativeArrow.F">F</span>] with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="In a Commutative Arrow F[_, _], the split operation (or ***) is commutative, which means that there is non-interference between the effect of the paired arrows." href="CommutativeArrow.html"><span class="name">CommutativeArrow</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Arrow.html" class="extype" name="cats.arrow.Arrow">Arrow</a>[<span class="extype" name="cats.arrow.CommutativeArrow.F">F</span>]</span>
       </span>
       
       <p class="shortcomment cmt">In a Commutative Arrow F[_, _], the split operation (or <code>***</code>) is commutative,
@@ -412,9 +492,17 @@ which means that there is non-interference between the effect of the paired arro
       <span class="defval" name="&quot;Could not find an instance of CommutativeArrow for ${F}&quot;">...</span>
     </span>)</span>
               
+                <span class="name">@typeclass</span><span class="args">(<span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$1">...</span>
+    </span>, <span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$2">...</span>
+    </span>)</span>
+              
         </dd></dl></div>
     </li><li name="cats.arrow.Compose" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="Compose[F[_,_]]extendsAnywithSerializable"></a><a id="Compose[F[_,_]]:Compose[F]"></a>
+      <a id="Compose[F[_,_]]extendsSerializable"></a><a id="Compose[F[_,_]]:Compose[F]"></a>
       <span class="permalink">
       <a href="../../cats/arrow/Compose.html" title="Permalink">
         <i class="material-icons"></i>
@@ -441,6 +529,14 @@ res1: <span class="std">Int</span> = <span class="num">301</span></pre></div><dl
       <span class="defval" name="&quot;Could not find an instance of Compose for ${F}&quot;">...</span>
     </span>)</span>
               
+                <span class="name">@typeclass</span><span class="args">(<span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$1">...</span>
+    </span>, <span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$2">...</span>
+    </span>)</span>
+              
         </dd></dl></div>
     </li><li name="cats.arrow.FunctionK" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="FunctionK[F[_],G[_]]extendsSerializable"></a><a id="FunctionK[F[_],G[_]]:FunctionK[F,G]"></a>
@@ -463,9 +559,9 @@ of type <code>A</code> to <code>B</code>.</p><div class="fullcomment"><div class
 in the same manner that function <code>A =&gt; B</code> is a morphism from values
 of type <code>A</code> to <code>B</code>.
 An easy way to create a FunctionK instance is to use the Polymorphic
-lambdas provided by non/kind-projector v0.9+. E.g.</p><pre><span class="kw">val</span> listToOption = λ[FunctionK[<span class="std">List</span>, <span class="std">Option</span>]](_.headOption)</pre></div></div>
+lambdas provided by typelevel/kind-projector v0.9+. E.g.</p><pre><span class="kw">val</span> listToOption = λ[FunctionK[<span class="std">List</span>, <span class="std">Option</span>]](_.headOption)</pre></div></div>
     </li><li name="cats.arrow.Profunctor" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="Profunctor[F[_,_]]extendsAnywithSerializable"></a><a id="Profunctor[F[_,_]]:Profunctor[F]"></a>
+      <a id="Profunctor[F[_,_]]extendsSerializable"></a><a id="Profunctor[F[_,_]]:Profunctor[F]"></a>
       <span class="permalink">
       <a href="../../cats/arrow/Profunctor.html" title="Permalink">
         <i class="material-icons"></i>
@@ -488,9 +584,17 @@ and a <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a> o
       <span class="defval" name="&quot;Could not find an instance of Profunctor for ${F}&quot;">...</span>
     </span>)</span>
               
+                <span class="name">@typeclass</span><span class="args">(<span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$1">...</span>
+    </span>, <span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$2">...</span>
+    </span>)</span>
+              
         </dd></dl></div>
     </li><li name="cats.arrow.Strong" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="Strong[F[_,_]]extendsProfunctor[F]withSerializable"></a><a id="Strong[F[_,_]]:Strong[F]"></a>
+      <a id="Strong[F[_,_]]extendsProfunctor[F]"></a><a id="Strong[F[_,_]]:Strong[F]"></a>
       <span class="permalink">
       <a href="../../cats/arrow/Strong.html" title="Permalink">
         <i class="material-icons"></i>
@@ -501,7 +605,7 @@ and a <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a> o
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="Must obey the laws defined in cats.laws.StrongLaws." href="Strong.html"><span class="name">Strong</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Profunctor.html" class="extype" name="cats.arrow.Profunctor">Profunctor</a>[<span class="extype" name="cats.arrow.Strong.F">F</span>] with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="Must obey the laws defined in cats.laws.StrongLaws." href="Strong.html"><span class="name">Strong</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="Profunctor.html" class="extype" name="cats.arrow.Profunctor">Profunctor</a>[<span class="extype" name="cats.arrow.Strong.F">F</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Must obey the laws defined in cats.laws.StrongLaws.</p><div class="fullcomment"><div class="comment cmt"><p>Must obey the laws defined in cats.laws.StrongLaws.
@@ -509,6 +613,14 @@ and a <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a> o
                 <span class="name">@implicitNotFound</span><span class="args">(<span>
       
       <span class="defval" name="&quot;Could not find an instance of Strong for ${F}&quot;">...</span>
+    </span>)</span>
+              
+                <span class="name">@typeclass</span><span class="args">(<span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$1">...</span>
+    </span>, <span>
+      
+      <span class="defval" name="simulacrum.this.typeclass.&lt;init&gt;$default$2">...</span>
     </span>)</span>
               
         </dd></dl></div>
@@ -628,7 +740,7 @@ and a <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a> o
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a title="" href="FunctionK$.html"><span class="name">FunctionK</span></a><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="" href="FunctionK$.html"><span class="name">FunctionK</span></a><span class="result"> extends <span class="extype" name="cats.arrow.FunctionKMacroMethods">FunctionKMacroMethods</span> with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
