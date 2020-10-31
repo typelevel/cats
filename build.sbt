@@ -18,7 +18,7 @@ val isTravisBuild = settingKey[Boolean]("Flag indicating whether the current bui
 val crossScalaVersionsFromTravis = settingKey[Seq[String]]("Scala versions set in .travis.yml as scala_version_XXX")
 isTravisBuild in Global := sys.env.contains("TRAVIS")
 
-val scalaCheckVersion = "1.14.3"
+val scalaCheckVersion = "1.15.0"
 
 val munitVersion = "0.7.14"
 
