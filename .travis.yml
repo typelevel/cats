@@ -13,7 +13,7 @@ jdk:
 
 scala_version_212: &scala_version_212 2.12.12
 scala_version_213: &scala_version_213 2.13.3
-dotty_version: &dotty_version 0.27.0-RC1
+scala_version_dotty: &scala_version_dotty 0.27.0-RC1
 
 before_install:
  - export PATH=${PATH}:./vendor/bundle
@@ -52,6 +52,10 @@ jobs:
       name: Jvm tests 2.13
       scala: *scala_version_213
       after_success: codecov -F scala_version_213
+    - <<: *jvm_tests
+      name: Jvm tests Dotty
+      script: sbt ++$TRAVIS_SCALA_VERSION! buildJVM bench/test
+      scala: *scala_version_dotty
 
     - stage: test
       name: Make Microsite on 2.12.10
@@ -73,12 +77,6 @@ jobs:
     - <<: *bincompat
       name: Binary compatibility 2.13
       scala: *scala_version_213
-
-    - stage: test
-      name: Dotty tests
-      env: TEST="Dotty tests"
-      script: sbt ++$TRAVIS_SCALA_VERSION! buildJVM bench/test
-      scala: *dotty_version
 
     - stage: styling
       name: Linting

@@ -15,7 +15,8 @@ organization in ThisBuild := "org.typelevel"
 scalafixDependencies in ThisBuild += "org.typelevel" %% "simulacrum-scalafix" % "0.5.0"
 
 val isTravisBuild = settingKey[Boolean]("Flag indicating whether the current build is running under Travis")
-val crossScalaVersionsFromTravis = settingKey[Seq[String]]("Scala versions set in .travis.yml as scala_version_XXX")
+val crossScalaVersionsFromTravis =
+  settingKey[(Seq[String], String)]("Scala versions set in .travis.yml as scala_version_XXX")
 isTravisBuild in Global := sys.env.contains("TRAVIS")
 
 val scalaCheckVersion = "1.15.0"
@@ -23,18 +24,20 @@ val scalaCheckVersion = "1.15.0"
 val disciplineVersion = "1.1.0"
 
 val disciplineScalatestVersion = "2.0.1"
-val disciplineMunitVersion = "1.0.0-RC1"
+val disciplineMunitVersion = "1.0.0"
 
 val kindProjectorVersion = "0.11.0"
 
 crossScalaVersionsFromTravis in Global := {
   val manifest = (baseDirectory in ThisBuild).value / ".travis.yml"
   import collection.JavaConverters._
-  Using.fileInputStream(manifest) { fis =>
+  val all = Using.fileInputStream(manifest) { fis =>
     new org.yaml.snakeyaml.Yaml().loadAs(fis, classOf[java.util.Map[_, _]]).asScala.toList.collect {
       case (k: String, v: String) if k.contains("scala_version_") => v
     }
   }
+  val (scala2, dotty) = all.partition(_.startsWith("2."))
+  (scala2, dotty.head)
 }
 
 def scalaVersionSpecificFolders(srcName: String, srcBaseDir: java.io.File, scalaVersion: String) = {
@@ -49,7 +52,7 @@ def scalaVersionSpecificFolders(srcName: String, srcBaseDir: java.io.File, scala
 }
 
 lazy val commonScalaVersionSettings = Seq(
-  crossScalaVersions := (crossScalaVersionsFromTravis in Global).value,
+  crossScalaVersions := (crossScalaVersionsFromTravis in Global).value._1,
   scalaVersion := crossScalaVersions.value.find(_.contains("2.12")).get
 )
 
@@ -64,10 +67,16 @@ lazy val commonSettings = commonScalaVersionSettings ++ Seq(
   scalacOptions ++= commonScalacOptions(scalaVersion.value, isDotty.value),
   Compile / unmanagedSourceDirectories ++= scalaVersionSpecificFolders("main", baseDirectory.value, scalaVersion.value),
   Test / unmanagedSourceDirectories ++= scalaVersionSpecificFolders("test", baseDirectory.value, scalaVersion.value),
-  resolvers ++= Seq(Resolver.sonatypeRepo("releases"), Resolver.sonatypeRepo("snapshots")),
   parallelExecution in Test := false,
   testFrameworks += new TestFramework("munit.Framework"),
-  scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings")
+  scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings"),
+  Compile / doc / sources := {
+    val old = (Compile / doc / sources).value
+    if (isDotty.value)
+      Seq()
+    else
+      old
+  }
 ) ++ warnUnusedImport
 
 def macroDependencies(scalaVersion: String) =
@@ -137,6 +146,7 @@ lazy val commonJvmSettings = Seq(
     val flag = if ((isTravisBuild in Global).value) "-oCI" else "-oDF"
     Tests.Argument(TestFrameworks.ScalaTest, flag)
   },
+  crossScalaVersions += crossScalaVersionsFromTravis.value._2,
   Test / fork := true,
   Test / javaOptions := Seq("-Xmx3G")
 )
@@ -406,6 +416,9 @@ lazy val docs = project
   .enablePlugins(ScalaUnidocPlugin)
   .settings(moduleName := "cats-docs")
   .settings(catsSettings)
+  .settings(
+    crossScalaVersions := crossScalaVersionsFromTravis.value._1
+  )
   .settings(noPublishSettings)
   .settings(docSettings)
   .settings(commonJvmSettings)
@@ -441,8 +454,7 @@ lazy val catsJVM = project
              alleycatsCore.jvm,
              alleycatsLaws.jvm,
              alleycatsTests.jvm,
-             jvm,
-             docs
+             jvm
   )
   .dependsOn(
     kernel.jvm,
@@ -776,8 +788,7 @@ addCommandAlias("validateKernelJS", "kernelLawsJS/test")
 addCommandAlias("validateFreeJS", "freeJS/test")
 addCommandAlias("validateAlleycatsJS", "alleycatsTestsJS/test")
 addCommandAlias("validateAllJS", "all testsJS/test js/test kernelLawsJS/test freeJS/test alleycatsTestsJS/test")
-addCommandAlias("validateDotty", ";++0.27.0-RC1!;alleycatsLawsJVM/compile")
-addCommandAlias("validate", ";clean;validateJS;validateKernelJS;validateFreeJS;validateJVM;validateDotty")
+addCommandAlias("validate", ";clean;validateJS;validateKernelJS;validateFreeJS;validateJVM")
 
 addCommandAlias("prePR", "fmt")
 
