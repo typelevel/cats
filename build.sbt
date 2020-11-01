@@ -20,7 +20,7 @@ isTravisBuild in Global := sys.env.contains("TRAVIS")
 
 val scalaCheckVersion = "1.14.3"
 
-val munitVersion = "0.7.14"
+val munitVersion = "0.7.15"
 
 val disciplineVersion = "1.0.3"
 
