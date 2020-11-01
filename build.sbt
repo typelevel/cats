@@ -18,14 +18,12 @@ val isTravisBuild = settingKey[Boolean]("Flag indicating whether the current bui
 val crossScalaVersionsFromTravis = settingKey[Seq[String]]("Scala versions set in .travis.yml as scala_version_XXX")
 isTravisBuild in Global := sys.env.contains("TRAVIS")
 
-val scalaCheckVersion = "1.14.3"
+val scalaCheckVersion = "1.15.0"
 
-val munitVersion = "0.7.14"
-
-val disciplineVersion = "1.0.3"
+val disciplineVersion = "1.1.0"
 
 val disciplineScalatestVersion = "2.0.1"
-val disciplineMunitVersion = "0.3.0"
+val disciplineMunitVersion = "1.0.0-RC1"
 
 val kindProjectorVersion = "0.11.0"
 
@@ -160,7 +158,6 @@ lazy val disciplineDependencies = Seq(
 
 lazy val testingDependencies = Seq(
   libraryDependencies ++= Seq(
-    "org.scalameta" %%% "munit-scalacheck" % munitVersion % Test,
     "org.typelevel" %%% "discipline-munit" % disciplineMunitVersion % Test
   )
 )
@@ -506,8 +503,7 @@ lazy val kernel = crossProject(JSPlatform, JVMPlatform)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings ++ mimaSettings("cats-kernel"))
   .settings(
-    libraryDependencies += ("org.scalacheck" %%% "scalacheck" % scalaCheckVersion % Test)
-      .withDottyCompat(scalaVersion.value)
+    libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % Test
   )
 
 lazy val kernelLaws = crossProject(JSPlatform, JVMPlatform)
@@ -532,8 +528,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
   .settings(sourceGenerators in Compile += (sourceManaged in Compile).map(Boilerplate.gen).taskValue)
   .settings(includeGeneratedSrc)
   .settings(
-    libraryDependencies += ("org.scalacheck" %%% "scalacheck" % scalaCheckVersion % Test)
-      .withDottyCompat(scalaVersion.value),
+    libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % Test,
     doctestGenTests := doctestGenTestsDottyCompat(isDotty.value, doctestGenTests.value)
   )
   .settings(
