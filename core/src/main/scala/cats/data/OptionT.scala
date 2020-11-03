@@ -15,7 +15,7 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
     F.map(value)(_.fold(default)(f))
 
   /**
-   * Transform this `OptionT[F, A]` into a `F[C]`.
+   * Transform this `OptionT[F, A]` into a `F[B]`.
    *
    * Example:
    * {{{
