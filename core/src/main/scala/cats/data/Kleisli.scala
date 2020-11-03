@@ -267,8 +267,8 @@ sealed private[data] trait KleisliFunctions {
    * res0: Option[String] = Some(42)
    * }}}
    */
-  def fromFunction[M[_]: Applicative, R]: KleisliFromFunctionPartiallyApplied[M, R] =
-    new KleisliFromFunctionPartiallyApplied[M, R](Applicative[M])
+  def fromFunction[M[_], R]: KleisliFromFunctionPartiallyApplied[M, R] =
+    new KleisliFromFunctionPartiallyApplied[M, R]
 }
 
 sealed private[data] trait KleisliFunctionsBinCompat {
@@ -296,8 +296,8 @@ sealed private[data] trait KleisliFunctionsBinCompat {
     new (Kleisli[F, A, *] ~> Kleisli[G, A, *]) { def apply[B](k: Kleisli[F, A, B]): Kleisli[G, A, B] = k.mapK(f) }
 }
 
-final class KleisliFromFunctionPartiallyApplied[M[_], R] private[data] (private val M: Applicative[M]) extends AnyVal {
-  def apply[A](f: R => A): Kleisli[M, R, A] = Kleisli(r => M.pure(f(r)))
+final class KleisliFromFunctionPartiallyApplied[M[_], R] {
+  def apply[A](f: R => A)(implicit M: Applicative[M]): Kleisli[M, R, A] = Kleisli(r => M.pure(f(r)))
 }
 
 sealed private[data] trait KleisliExplicitInstances {
