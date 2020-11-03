@@ -262,13 +262,13 @@ sealed private[data] trait KleisliFunctions {
    * Lifts a function to a Kleisli.
    * {{{
    * scala> import cats.data.Kleisli
-   * scala> val stringify = Kleisli.fromFunction[Option, Int, String](_.toString)
+   * scala> val stringify = Kleisli.fromFunction[Option, Int].apply(_.toString)
    * scala> stringify.run(42)
    * res0: Option[String] = Some(42)
    * }}}
    */
-  def fromFunction[M[_]: Applicative, A, R](f: R => A): Kleisli[M, R, A] =
-    Kleisli(r => Applicative[M].pure(f(r)))
+  def fromFunction[M[_]: Applicative, R]: KleisliFromFunctionPartiallyApplied[M, R] =
+    new KleisliFromFunctionPartiallyApplied[M, R](Applicative[M])
 }
 
 sealed private[data] trait KleisliFunctionsBinCompat {
@@ -294,6 +294,10 @@ sealed private[data] trait KleisliFunctionsBinCompat {
    */
   def liftFunctionK[F[_], G[_], A](f: F ~> G): Kleisli[F, A, *] ~> Kleisli[G, A, *] =
     new (Kleisli[F, A, *] ~> Kleisli[G, A, *]) { def apply[B](k: Kleisli[F, A, B]): Kleisli[G, A, B] = k.mapK(f) }
+}
+
+final class KleisliFromFunctionPartiallyApplied[M[_], R] private[data] (private val M: Applicative[M]) extends AnyVal {
+  def apply[A](f: R => A): Kleisli[M, R, A] = Kleisli(r => M.pure(f(r)))
 }
 
 sealed private[data] trait KleisliExplicitInstances {
