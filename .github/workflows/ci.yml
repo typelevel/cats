@@ -29,7 +29,7 @@ jobs:
           - os: ubuntu-latest
             java: adopt@1.8
             platform: jvm
-            scala: 0.24.0
+            scala: 0.27.0-RC1
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout current branch (fast)
@@ -96,35 +96,35 @@ jobs:
         if: matrix.platform == 'js'
         run: sbt ++${{ matrix.scala }} validateAllJS
 
-      - if: matrix.platform == 'jvm' && matrix.scala != '0.24.0'
+      - if: matrix.platform == 'jvm' && matrix.scala != '0.27.0-RC1'
         uses: actions/setup-python@v2
         with:
           python-version: 3.x
 
-      - if: matrix.platform == 'jvm' && matrix.scala != '0.24.0'
+      - if: matrix.platform == 'jvm' && matrix.scala != '0.27.0-RC1'
         run: pip install codecov
 
       - name: Validate JVM
-        if: matrix.platform == 'jvm' && matrix.scala != '0.24.0'
+        if: matrix.platform == 'jvm' && matrix.scala != '0.27.0-RC1'
         run: sbt ++${{ matrix.scala }} coverage buildJVM bench/test coverageReport
 
       - name: Validate JVM (dotty)
-        if: matrix.scala == '0.24.0'
+        if: matrix.scala == '0.27.0-RC1'
         run: sbt ++${{ matrix.scala }} alleycatsLawsJVM/compile
 
       - name: Upload Codecov Results
-        if: matrix.platform == 'jvm' && matrix.scala != '0.24.0'
+        if: matrix.platform == 'jvm' && matrix.scala != '0.27.0-RC1'
         run: codecov -F ${{ matrix.scala }}
 
       - name: Binary compatibility ${{ matrix.scala }}
-        if: matrix.platform == 'jvm' && matrix.scala != '0.24.0'
+        if: matrix.platform == 'jvm' && matrix.scala != '0.27.0-RC1'
         run: sbt ++${{ matrix.scala }} clean validateBC
 
-      - if: matrix.platform == 'jvm' && matrix.scala != '0.24.0' && matrix.scala == '2.12.12'
+      - if: matrix.platform == 'jvm' && matrix.scala != '0.27.0-RC1' && matrix.scala == '2.12.12'
         uses: actions/setup-ruby@v1
 
-      - if: matrix.platform == 'jvm' && matrix.scala != '0.24.0' && matrix.scala == '2.12.12'
+      - if: matrix.platform == 'jvm' && matrix.scala != '0.27.0-RC1' && matrix.scala == '2.12.12'
         run: gem install jekyll -v 4.0.0
 
-      - if: matrix.platform == 'jvm' && matrix.scala != '0.24.0' && matrix.scala == '2.12.12'
+      - if: matrix.platform == 'jvm' && matrix.scala != '0.27.0-RC1' && matrix.scala == '2.12.12'
         run: sbt ++${{ matrix.scala }} docs/makeMicrosite

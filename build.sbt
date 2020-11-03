@@ -39,7 +39,7 @@ ThisBuild / githubWorkflowPublishTargetBranches := Seq() // disable publication 
 ThisBuild / githubWorkflowBuildMatrixAdditions +=
   "platform" -> List("jvm", "js", "scalafix")
 
-val Dotty = "0.24.0"
+val Dotty = "0.27.0-RC1"
 
 ThisBuild / githubWorkflowBuildMatrixInclusions +=
   MatrixInclude(Map("os" -> PrimaryOS, "java" -> PrimaryJava, "platform" -> "jvm"), Map("scala" -> Dotty))
@@ -813,7 +813,7 @@ addCommandAlias("validateKernelJS", "kernelLawsJS/test")
 addCommandAlias("validateFreeJS", "freeJS/test")
 addCommandAlias("validateAlleycatsJS", "alleycatsTestsJS/test")
 addCommandAlias("validateAllJS", "all testsJS/test js/test kernelLawsJS/test freeJS/test alleycatsTestsJS/test")
-addCommandAlias("validateDotty", ";++0.27.0-RC1!;alleycatsLawsJVM/compile")
+addCommandAlias("validateDotty", s";++${Dotty}!;alleycatsLawsJVM/compile")
 addCommandAlias("validate", ";clean;validateJS;validateKernelJS;validateFreeJS;validateJVM;validateDotty")
 
 addCommandAlias("prePR", "fmt")
