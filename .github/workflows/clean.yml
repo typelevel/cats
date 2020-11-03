@@ -19,7 +19,7 @@ jobs:
       - name: Delete artifacts
         run: |
           # Customize those three lines with your repository and credentials:
-          REPO=https://api.github.com/repos/$1
+          REPO=${GITHUB_API_URL}/repos/${{ github.repository }}
 
           # A shortcut to call GitHub API.
           ghapi() { curl --silent --location --user _:$GITHUB_TOKEN "$@"; }

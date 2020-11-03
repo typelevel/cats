@@ -31,47 +31,90 @@ ThisBuild / githubWorkflowJavaVersions := Seq(PrimaryJava)
 
 val Scala212 = "2.12.12"
 val Scala213 = "2.13.3"
-ThisBuild / crossScalaVersions := Seq(Scala212, Scala213)
+val Dotty = "0.27.0-RC1"
+
+ThisBuild / crossScalaVersions := Seq(Scala212, Scala213, Dotty)
 ThisBuild / scalaVersion := Scala213
 
 ThisBuild / githubWorkflowPublishTargetBranches := Seq() // disable publication for now
 
 ThisBuild / githubWorkflowBuildMatrixAdditions +=
-  "platform" -> List("jvm", "js", "scalafix")
+  "platform" -> List("jvm", "js")
 
-val Dotty = "0.27.0-RC1"
+ThisBuild / githubWorkflowBuildMatrixExclusions +=
+  MatrixExclude(Map("platform" -> "js", "scala" -> Dotty))
 
-ThisBuild / githubWorkflowBuildMatrixInclusions +=
-  MatrixInclude(Map("os" -> PrimaryOS, "java" -> PrimaryJava, "platform" -> "jvm"), Map("scala" -> Dotty))
+// we don't need this since we aren't publishing
+ThisBuild / githubWorkflowArtifactUpload := false
 
-val JvmCond = s"matrix.platform == 'jvm' && matrix.scala != '$Dotty'"
-val JvmScala212Cond = JvmCond + s" && matrix.scala == '$Scala212'"
+val JvmCond = s"matrix.platform == 'jvm'"
+val JsCond = s"matrix.platform == 'js'"
+
+val Scala2Cond = s"matrix.scala != '$Dotty'"
+val Scala3Cond = s"matrix.scala == '$Dotty'"
 
 ThisBuild / githubWorkflowBuild := Seq(
-  WorkflowStep.Sbt(List("fmtCheck"), name = Some("Linting"), cond = Some("matrix.platform != 'scalafix'")),
-  WorkflowStep.Run(List("cd scalafix", "sbt tests/test"),
-                   name = Some("Scalafix tests"),
-                   cond = Some("matrix.platform == 'scalafix'")
+  WorkflowStep.Sbt(List("validateAllJS"), name = Some("Validate JavaScript"), cond = Some(JsCond)),
+  WorkflowStep.Use("actions",
+                   "setup-python",
+                   "v2",
+                   name = Some("Setup Python"),
+                   params = Map("python-version" -> "3.x"),
+                   cond = Some(JvmCond + " && " + Scala2Cond)
   ),
-  WorkflowStep.Sbt(List("validateAllJS"), name = Some("Validate JavaScript"), cond = Some("matrix.platform == 'js'")),
-  WorkflowStep.Use("actions", "setup-python", "v2", params = Map("python-version" -> "3.x"), cond = Some(JvmCond)),
-  WorkflowStep.Run(List("pip install codecov"), cond = Some(JvmCond)),
+  WorkflowStep.Run(List("pip install codecov"),
+                   cond = Some(JvmCond + " && " + Scala2Cond),
+                   name = Some("Setup codecov")
+  ),
   WorkflowStep.Sbt(List("coverage", "buildJVM", "bench/test", "coverageReport"),
-                   name = Some("Validate JVM"),
-                   cond = Some(JvmCond)
+                   name = Some("Validate JVM (scala 2)"),
+                   cond = Some(JvmCond + " && " + Scala2Cond)
   ),
-  WorkflowStep.Sbt(List("alleycatsLawsJVM/compile"),
-                   name = Some("Validate JVM (dotty)"),
-                   cond = Some(s"matrix.scala == '$Dotty'")
+  WorkflowStep.Sbt(List("buildJVM", "bench/test"),
+                   name = Some("Validate JVM (scala 3)"),
+                   cond = Some(JvmCond + " && " + Scala3Cond)
   ),
-  WorkflowStep.Run(List("codecov -F ${{ matrix.scala }}"), name = Some("Upload Codecov Results"), cond = Some(JvmCond)),
-  WorkflowStep.Sbt(List("clean", "validateBC"), // cleaning here to avoid issues with codecov
-                   name = Some("Binary compatibility ${{ matrix.scala }}"),
-                   cond = Some(JvmCond)
+  WorkflowStep.Run(List("codecov -F ${{ matrix.scala }}"),
+                   name = Some("Upload Codecov Results"),
+                   cond = Some(JvmCond + " && " + Scala2Cond)
   ),
-  WorkflowStep.Use("actions", "setup-ruby", "v1", cond = Some(JvmScala212Cond)),
-  WorkflowStep.Run(List("gem install jekyll -v 4.0.0"), cond = Some(JvmScala212Cond)),
-  WorkflowStep.Sbt(List("docs/makeMicrosite"), cond = Some(JvmScala212Cond))
+  WorkflowStep.Sbt(
+    List("clean", "validateBC"), // cleaning here to avoid issues with codecov
+    name = Some("Binary compatibility ${{ matrix.scala }}"),
+    cond = Some(JvmCond + " && " + Scala2Cond)
+  )
+)
+
+ThisBuild / githubWorkflowAddedJobs ++= Seq(
+  WorkflowJob(
+    "scalafix",
+    "Scalafix",
+    githubWorkflowJobSetup.value.toList ::: List(
+      WorkflowStep.Run(List("cd scalafix", "sbt test"), name = Some("Scalafix tests"))
+    ),
+    javas = List(PrimaryJava),
+    scalas = crossScalaVersions.value.toList
+  ),
+  WorkflowJob(
+    "linting",
+    "Linting",
+    githubWorkflowJobSetup.value.toList ::: List(
+      WorkflowStep.Sbt(List("fmtCheck"), name = Some("Check formatting"), cond = Some(Scala2Cond))
+    ),
+    javas = List(PrimaryJava),
+    scalas = crossScalaVersions.value.toList
+  ),
+  WorkflowJob(
+    "microsite",
+    "Microsite",
+    githubWorkflowJobSetup.value.toList ::: List(
+      WorkflowStep.Use("actions", "setup-ruby", "v1", name = Some("Setup Ruby")),
+      WorkflowStep.Run(List("gem install jekyll -v 4.0.0"), name = Some("Setup Jekyll")),
+      WorkflowStep.Sbt(List("docs/makeMicrosite"), name = Some("Build the microsite"))
+    ),
+    javas = List(PrimaryJava),
+    scalas = List(Scala212)
+  )
 )
 
 def scalaVersionSpecificFolders(srcName: String, srcBaseDir: java.io.File, scalaVersion: String) = {
