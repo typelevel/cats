@@ -19,7 +19,7 @@ val scalaCheckVersion = "1.15.0"
 val disciplineVersion = "1.1.0"
 
 val disciplineScalatestVersion = "2.0.1"
-val disciplineMunitVersion = "1.0.0-RC1"
+val disciplineMunitVersion = "1.0.0"
 
 val kindProjectorVersion = "0.11.0"
 
@@ -151,7 +151,14 @@ lazy val commonSettings = Seq(
   resolvers ++= Seq(Resolver.sonatypeRepo("releases"), Resolver.sonatypeRepo("snapshots")),
   parallelExecution in Test := false,
   testFrameworks += new TestFramework("munit.Framework"),
-  scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings")
+  scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings"),
+  Compile / doc / sources := {
+     val old = (Compile / doc / sources).value
+     if (isDotty.value)
+       Seq()
+     else
+       old
+   }
 ) ++ warnUnusedImport
 
 def macroDependencies(scalaVersion: String) =
@@ -525,8 +532,7 @@ lazy val catsJVM = project
              alleycatsCore.jvm,
              alleycatsLaws.jvm,
              alleycatsTests.jvm,
-             jvm,
-             docs
+             jvm
   )
   .dependsOn(
     kernel.jvm,
@@ -865,8 +871,7 @@ addCommandAlias("validateKernelJS", "kernelLawsJS/test")
 addCommandAlias("validateFreeJS", "freeJS/test")
 addCommandAlias("validateAlleycatsJS", "alleycatsTestsJS/test")
 addCommandAlias("validateAllJS", "all testsJS/test js/test kernelLawsJS/test freeJS/test alleycatsTestsJS/test")
-addCommandAlias("validateDotty", s";++${Dotty}!;alleycatsLawsJVM/compile")
-addCommandAlias("validate", ";clean;validateJS;validateKernelJS;validateFreeJS;validateJVM;validateDotty")
+addCommandAlias("validate", ";clean;validateJS;validateKernelJS;validateFreeJS;validateJVM")
 
 addCommandAlias("prePR", "fmt")
 
