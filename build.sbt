@@ -27,7 +27,11 @@ val PrimaryOS = "ubuntu-latest"
 ThisBuild / githubWorkflowOSes := Seq(PrimaryOS)
 
 val PrimaryJava = "adopt@1.8"
-ThisBuild / githubWorkflowJavaVersions := Seq(PrimaryJava)
+val LTSJava = "adopt@1.11"
+val LatestJava = "adopt@1.15"
+val GraalVM8 = "graalvm-ce-java8@20.2.0"
+
+ThisBuild / githubWorkflowJavaVersions := Seq(PrimaryJava, LTSJava, LatestJava, GraalVM8)
 
 val Scala212 = "2.12.12"
 val Scala213 = "2.13.3"
@@ -43,6 +47,11 @@ ThisBuild / githubWorkflowBuildMatrixAdditions +=
 
 ThisBuild / githubWorkflowBuildMatrixExclusions +=
   MatrixExclude(Map("platform" -> "js", "scala" -> Dotty))
+
+ThisBuild / githubWorkflowBuildMatrixExclusions ++=
+  githubWorkflowJavaVersions.value.filterNot(Set(PrimaryJava)).map { java =>
+    MatrixExclude(Map("platform" -> "js", "java" -> java))
+  }
 
 // we don't need this since we aren't publishing
 ThisBuild / githubWorkflowArtifactUpload := false

@@ -23,11 +23,21 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         scala: [2.12.12, 2.13.3, 0.27.0-RC1]
-        java: [adopt@1.8]
+        java:
+          - adopt@1.8
+          - adopt@1.11
+          - adopt@1.15
+          - graalvm-ce-java8@20.2.0
         platform: [jvm, js]
         exclude:
           - platform: js
             scala: 0.27.0-RC1
+          - platform: js
+            java: adopt@1.11
+          - platform: js
+            java: adopt@1.15
+          - platform: js
+            java: graalvm-ce-java8@20.2.0
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout current branch (full)
