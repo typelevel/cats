@@ -153,12 +153,12 @@ lazy val commonSettings = Seq(
   testFrameworks += new TestFramework("munit.Framework"),
   scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings"),
   Compile / doc / sources := {
-     val old = (Compile / doc / sources).value
-     if (isDotty.value)
-       Seq()
-     else
-       old
-   }
+    val old = (Compile / doc / sources).value
+    if (isDotty.value)
+      Seq()
+    else
+      old
+  }
 ) ++ warnUnusedImport
 
 def macroDependencies(scalaVersion: String) =
