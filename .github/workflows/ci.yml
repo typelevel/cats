@@ -38,6 +38,8 @@ jobs:
             java: adopt@1.15
           - platform: js
             java: graalvm-ce-java8@20.2.0
+          - platform: js
+            scala: 0.27.0-RC1
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout current branch (full)

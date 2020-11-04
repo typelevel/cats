@@ -53,6 +53,12 @@ ThisBuild / githubWorkflowBuildMatrixExclusions ++=
     MatrixExclude(Map("platform" -> "js", "java" -> java))
   }
 
+// exclude DottyJS for now
+ThisBuild / githubWorkflowBuildMatrixExclusions ++=
+  crossScalaVersions.value.filterNot(_.startsWith("2.")).map { scala =>
+    MatrixExclude(Map("platform" -> "js", "scala" -> scala))
+  }
+
 // we don't need this since we aren't publishing
 ThisBuild / githubWorkflowArtifactUpload := false
 
@@ -181,7 +187,7 @@ lazy val simulacrumSettings = Seq(
     if (isDotty.value) Nil else Seq(s"-P:semanticdb:targetroot:${baseDirectory.value}/target/.semanticdb", "-Yrangepos")
   ),
   libraryDependencies +=
-    ("org.typelevel" %% "simulacrum-scalafix-annotations" % "0.5.0" % Provided).withDottyCompat(scalaVersion.value),
+    "org.typelevel" %% "simulacrum-scalafix-annotations" % "0.5.1-SNAPSHOT" % Provided,
   pomPostProcess := { (node: xml.Node) =>
     new RuleTransformer(new RewriteRule {
       override def transform(node: xml.Node): Seq[xml.Node] =
@@ -202,6 +208,7 @@ lazy val tagName = Def.setting {
 }
 
 lazy val commonJsSettings = Seq(
+  crossScalaVersions := crossScalaVersions.value.filter(_.startsWith("2.")),
   scalacOptions += {
     val tv = tagName.value
     val tagOrHash =
