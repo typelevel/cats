@@ -22,7 +22,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        scala: [2.12.12, 2.13.3, 0.27.0-RC1]
+        scala: [2.12.12, 2.13.3, 0.27.0-RC1, 3.0.0-M1]
         java:
           - adopt@1.8
           - adopt@1.11
@@ -33,6 +33,8 @@ jobs:
           - platform: js
             scala: 0.27.0-RC1
           - platform: js
+            scala: 3.0.0-M1
+          - platform: js
             java: adopt@1.11
           - platform: js
             java: adopt@1.15
@@ -40,6 +42,8 @@ jobs:
             java: graalvm-ce-java8@20.2.0
           - platform: js
             scala: 0.27.0-RC1
+          - platform: js
+            scala: 3.0.0-M1
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout current branch (full)
@@ -99,29 +103,29 @@ jobs:
         run: sbt ++${{ matrix.scala }} validateAllJS
 
       - name: Setup Python
-        if: matrix.platform == 'jvm' && matrix.scala != '0.27.0-RC1'
+        if: matrix.platform == 'jvm' && (matrix.scala != '0.27.0-RC1' && matrix.scala != '3.0.0-M1')
         uses: actions/setup-python@v2
         with:
           python-version: 3.x
 
       - name: Setup codecov
-        if: matrix.platform == 'jvm' && matrix.scala != '0.27.0-RC1'
+        if: matrix.platform == 'jvm' && (matrix.scala != '0.27.0-RC1' && matrix.scala != '3.0.0-M1')
         run: pip install codecov
 
       - name: Validate JVM (scala 2)
-        if: matrix.platform == 'jvm' && matrix.scala != '0.27.0-RC1'
+        if: matrix.platform == 'jvm' && (matrix.scala != '0.27.0-RC1' && matrix.scala != '3.0.0-M1')
         run: sbt ++${{ matrix.scala }} coverage buildJVM bench/test coverageReport
 
       - name: Validate JVM (scala 3)
-        if: matrix.platform == 'jvm' && matrix.scala == '0.27.0-RC1'
+        if: matrix.platform == 'jvm' && (matrix.scala == '0.27.0-RC1' || matrix.scala == '3.0.0-M1')
         run: sbt ++${{ matrix.scala }} buildJVM bench/test
 
       - name: Upload Codecov Results
-        if: matrix.platform == 'jvm' && matrix.scala != '0.27.0-RC1'
+        if: matrix.platform == 'jvm' && (matrix.scala != '0.27.0-RC1' && matrix.scala != '3.0.0-M1')
         run: codecov -F ${{ matrix.scala }}
 
       - name: Binary compatibility ${{ matrix.scala }}
-        if: matrix.platform == 'jvm' && matrix.scala != '0.27.0-RC1'
+        if: matrix.platform == 'jvm' && (matrix.scala != '0.27.0-RC1' && matrix.scala != '3.0.0-M1')
         run: sbt ++${{ matrix.scala }} clean validateBC
 
   scalafix:
@@ -129,7 +133,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        scala: [2.12.12, 2.13.3, 0.27.0-RC1]
+        scala: [2.12.12, 2.13.3, 0.27.0-RC1, 3.0.0-M1]
         java: [adopt@1.8]
     runs-on: ${{ matrix.os }}
     steps:
@@ -192,7 +196,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        scala: [2.12.12, 2.13.3, 0.27.0-RC1]
+        scala: [2.12.12, 2.13.3, 0.27.0-RC1, 3.0.0-M1]
         java: [adopt@1.8]
     runs-on: ${{ matrix.os }}
     steps:
@@ -246,7 +250,7 @@ jobs:
           key: ${{ runner.os }}-sbt-cache-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
 
       - name: Check formatting
-        if: matrix.scala != '0.27.0-RC1'
+        if: (matrix.scala != '0.27.0-RC1' && matrix.scala != '3.0.0-M1')
         run: sbt ++${{ matrix.scala }} fmtCheck
 
   microsite:
