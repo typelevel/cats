@@ -1,9 +1,17 @@
 import microsites._
 import ReleaseTransformations._
 import sbt.io.Using
+import com.jsuereth.sbtpgp.PgpKeys
 
 import scala.xml.transform.{RewriteRule, RuleTransformer}
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
+
+lazy val publishSignedIfRelevant = taskKey[Unit]("Runs publishSigned but only if scalaVersion in crossScalaVersions")
+Global / publishSignedIfRelevant := PgpKeys.publishSigned.value
+
+lazy val publishLocalSignedIfRelevant =
+  taskKey[Unit]("Runs publishLocalSigned but only if scalaVersion in crossScalaVersions")
+Global / publishLocalSignedIfRelevant := PgpKeys.publishLocalSigned.value
 
 lazy val scoverageSettings = Seq(
   coverageMinimum := 60,
@@ -12,14 +20,14 @@ lazy val scoverageSettings = Seq(
 )
 
 organization in ThisBuild := "org.typelevel"
-scalafixDependencies in ThisBuild += "org.typelevel" %% "simulacrum-scalafix" % "0.5.0"
+scalafixDependencies in ThisBuild += "org.typelevel" %% "simulacrum-scalafix" % "0.5.1"
 
 val scalaCheckVersion = "1.15.0"
 
 val disciplineVersion = "1.1.0"
 
 val disciplineScalatestVersion = "2.0.1"
-val disciplineMunitVersion = "1.0.0"
+val disciplineMunitVersion = "1.0.1"
 
 val kindProjectorVersion = "0.11.0"
 
@@ -35,9 +43,10 @@ ThisBuild / githubWorkflowJavaVersions := Seq(PrimaryJava, LTSJava, LatestJava, 
 
 val Scala212 = "2.12.12"
 val Scala213 = "2.13.3"
-val Dotty = "0.27.0-RC1"
+val DottyOld = "0.27.0-RC1"
+val DottyNew = "3.0.0-M1"
 
-ThisBuild / crossScalaVersions := Seq(Scala212, Scala213, Dotty)
+ThisBuild / crossScalaVersions := Seq(Scala212, Scala213, DottyOld, DottyNew)
 ThisBuild / scalaVersion := Scala213
 
 ThisBuild / githubWorkflowPublishTargetBranches := Seq() // disable publication for now
@@ -45,12 +54,25 @@ ThisBuild / githubWorkflowPublishTargetBranches := Seq() // disable publication 
 ThisBuild / githubWorkflowBuildMatrixAdditions +=
   "platform" -> List("jvm", "js")
 
-ThisBuild / githubWorkflowBuildMatrixExclusions +=
-  MatrixExclude(Map("platform" -> "js", "scala" -> Dotty))
+ThisBuild / githubWorkflowBuildMatrixExclusions ++=
+  crossScalaVersions.value.filterNot(_.startsWith("2.")).map(v => MatrixExclude(Map("platform" -> "js", "scala" -> v)))
 
 ThisBuild / githubWorkflowBuildMatrixExclusions ++=
   githubWorkflowJavaVersions.value.filterNot(Set(PrimaryJava)).map { java =>
     MatrixExclude(Map("platform" -> "js", "java" -> java))
+  }
+
+ThisBuild / githubWorkflowBuildMatrixExclusions ++=
+  Seq("jvm", "js").map { platform =>
+    MatrixExclude(
+      Map("platform" -> platform, "java" -> LatestJava, "scala" -> DottyNew)
+    ) // 3.0.0-M1 doesn't work on JDK 14+
+  }
+
+// exclude DottyJS for now
+ThisBuild / githubWorkflowBuildMatrixExclusions ++=
+  crossScalaVersions.value.filterNot(_.startsWith("2.")).map { scala =>
+    MatrixExclude(Map("platform" -> "js", "scala" -> scala))
   }
 
 // we don't need this since we aren't publishing
@@ -59,8 +81,8 @@ ThisBuild / githubWorkflowArtifactUpload := false
 val JvmCond = s"matrix.platform == 'jvm'"
 val JsCond = s"matrix.platform == 'js'"
 
-val Scala2Cond = s"matrix.scala != '$Dotty'"
-val Scala3Cond = s"matrix.scala == '$Dotty'"
+val Scala2Cond = s"(matrix.scala != '$DottyOld' && matrix.scala != '$DottyNew')"
+val Scala3Cond = s"(matrix.scala == '$DottyOld' || matrix.scala == '$DottyNew')"
 
 ThisBuild / githubWorkflowBuild := Seq(
   WorkflowStep.Sbt(List("validateAllJS"), name = Some("Validate JavaScript"), cond = Some(JsCond)),
@@ -131,9 +153,9 @@ def scalaVersionSpecificFolders(srcName: String, srcBaseDir: java.io.File, scala
     List(CrossType.Pure, CrossType.Full)
       .flatMap(_.sharedSrcDir(srcBaseDir, srcName).toList.map(f => file(f.getPath + suffix)))
   CrossVersion.partialVersion(scalaVersion) match {
-    case Some((2, y)) => extraDirs("-2.x") ++ (if (y >= 13) extraDirs("-2.13+") else Nil)
-    case Some((0, _)) => extraDirs("-2.13+") ++ extraDirs("-3.x")
-    case _            => Nil
+    case Some((2, y))     => extraDirs("-2.x") ++ (if (y >= 13) extraDirs("-2.13+") else Nil)
+    case Some((0 | 3, _)) => extraDirs("-2.13+") ++ extraDirs("-3.x")
+    case _                => Nil
   }
 }
 
@@ -141,8 +163,6 @@ ThisBuild / mimaFailOnNoPrevious := false
 
 def doctestGenTestsDottyCompat(isDotty: Boolean, genTests: Seq[File]): Seq[File] =
   if (isDotty) Nil else genTests
-
-lazy val dottySettings = Seq(crossScalaVersions += Dotty)
 
 lazy val commonSettings = Seq(
   scalacOptions ++= commonScalacOptions(scalaVersion.value, isDotty.value),
@@ -158,7 +178,24 @@ lazy val commonSettings = Seq(
       Seq()
     else
       old
-  }
+  },
+  // copying this trick from sbt-spiewak for now
+  publishSignedIfRelevant := Def.taskDyn {
+    val ver = scalaVersion.value
+    val cross = crossScalaVersions.value
+    if (cross.contains(ver))
+      Def.task(PgpKeys.publishSigned.value)
+    else
+      Def.task(streams.value.log.warn(s"skipping `publishSigned` in ${name.value}: $ver is not in $cross"))
+  }.value,
+  publishLocalSignedIfRelevant := Def.taskDyn {
+    val ver = scalaVersion.value
+    val cross = crossScalaVersions.value
+    if (cross.contains(ver))
+      Def.task(PgpKeys.publishLocalSigned.value)
+    else
+      Def.task(streams.value.log.warn(s"skipping `publishLocalSigned` in ${name.value}: $ver is not in $cross"))
+  }.value
 ) ++ warnUnusedImport
 
 def macroDependencies(scalaVersion: String) =
@@ -180,21 +217,7 @@ lazy val simulacrumSettings = Seq(
   scalacOptions ++= (
     if (isDotty.value) Nil else Seq(s"-P:semanticdb:targetroot:${baseDirectory.value}/target/.semanticdb", "-Yrangepos")
   ),
-  libraryDependencies +=
-    ("org.typelevel" %% "simulacrum-scalafix-annotations" % "0.5.1" % Provided).withDottyCompat(scalaVersion.value),
-  pomPostProcess := { (node: xml.Node) =>
-    new RuleTransformer(new RewriteRule {
-      override def transform(node: xml.Node): Seq[xml.Node] =
-        node match {
-          case e: xml.Elem
-              if e.label == "dependency" &&
-                e.child.exists(child => child.label == "groupId" && child.text == "org.typelevel") &&
-                e.child.exists(child => child.label == "artifactId" && child.text.startsWith("simulacrum")) =>
-            Nil
-          case _ => Seq(node)
-        }
-    }).transform(node).head
-  }
+  libraryDependencies += "org.typelevel" %% "simulacrum-scalafix-annotations" % "0.5.1"
 )
 
 lazy val tagName = Def.setting {
@@ -202,6 +225,7 @@ lazy val tagName = Def.setting {
 }
 
 lazy val commonJsSettings = Seq(
+  crossScalaVersions := crossScalaVersions.value.filter(_.startsWith("2.")),
   scalacOptions += {
     val tv = tagName.value
     val tagOrHash =
@@ -595,7 +619,6 @@ lazy val kernel = crossProject(JSPlatform, JVMPlatform)
   .settings(
     libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % Test
   )
-  .jvmSettings(dottySettings)
 
 lazy val kernelLaws = crossProject(JSPlatform, JVMPlatform)
   .in(file("kernel-laws"))
@@ -610,7 +633,6 @@ lazy val kernelLaws = crossProject(JSPlatform, JVMPlatform)
   .jvmSettings(commonJvmSettings ++ mimaSettings("cats-kernel-laws", includeCats1 = false))
   .jsSettings(coverageEnabled := false)
   .dependsOn(kernel)
-  .jvmSettings(dottySettings)
 
 lazy val core = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
@@ -632,7 +654,6 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
   )
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings ++ mimaSettings("cats-core"))
-  .jvmSettings(dottySettings)
 
 lazy val laws = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
@@ -644,7 +665,6 @@ lazy val laws = crossProject(JSPlatform, JVMPlatform)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings ++ mimaSettings("cats-laws", includeCats1 = false))
   .jsSettings(coverageEnabled := false)
-  .jvmSettings(dottySettings)
 
 lazy val free = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
@@ -689,7 +709,6 @@ lazy val alleycatsCore = crossProject(JSPlatform, JVMPlatform)
   .settings(includeGeneratedSrc)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings ++ mimaSettings("alleycats-core", includeCats1 = false))
-  .jvmSettings(dottySettings)
 
 lazy val alleycatsLaws = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
@@ -704,7 +723,6 @@ lazy val alleycatsLaws = crossProject(JSPlatform, JVMPlatform)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings ++ mimaSettings("alleycats-laws", includeCats1 = false))
   .jsSettings(coverageEnabled := false)
-  .jvmSettings(dottySettings)
 
 lazy val alleycatsTests = crossProject(JSPlatform, JVMPlatform)
   .in(file("alleycats-tests"))
@@ -956,7 +974,7 @@ lazy val sharedReleaseProcess = Seq(
     setReleaseVersion,
     commitReleaseVersion,
     tagRelease,
-    releaseStepCommandAndRemaining("+publishSigned"),
+    releaseStepCommandAndRemaining("+publishSignedIfRelevant"),
     setNextVersion,
     commitNextVersion,
     releaseStepCommand("sonatypeReleaseAll"),
