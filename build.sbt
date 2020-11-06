@@ -210,26 +210,7 @@ lazy val simulacrumSettings = Seq(
   scalacOptions ++= (
     if (isDotty.value) Nil else Seq(s"-P:semanticdb:targetroot:${baseDirectory.value}/target/.semanticdb", "-Yrangepos")
   ),
-  libraryDependencies += "org.typelevel" %% "simulacrum-scalafix-annotations" % "0.5.1" % Provided,
-  pomPostProcess := {
-    if (isDotty.value) { (node: xml.Node) =>
-      node
-    } else {
-      { (node: xml.Node) =>
-        new RuleTransformer(new RewriteRule {
-          override def transform(node: xml.Node): Seq[xml.Node] =
-            node match {
-              case e: xml.Elem
-                  if e.label == "dependency" &&
-                    e.child.exists(child => child.label == "groupId" && child.text == "org.typelevel") &&
-                    e.child.exists(child => child.label == "artifactId" && child.text.startsWith("simulacrum")) =>
-                Nil
-              case _ => Seq(node)
-            }
-        }).transform(node).head
-      }
-    }
-  }
+  libraryDependencies += "org.typelevel" %% "simulacrum-scalafix-annotations" % "0.5.1"
 )
 
 lazy val tagName = Def.setting {
