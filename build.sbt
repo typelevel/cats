@@ -9,7 +9,8 @@ import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 lazy val publishSignedIfRelevant = taskKey[Unit]("Runs publishSigned but only if scalaVersion in crossScalaVersions")
 Global / publishSignedIfRelevant := PgpKeys.publishSigned.value
 
-lazy val publishLocalSignedIfRelevant = taskKey[Unit]("Runs publishLocalSigned but only if scalaVersion in crossScalaVersions")
+lazy val publishLocalSignedIfRelevant =
+  taskKey[Unit]("Runs publishLocalSigned but only if scalaVersion in crossScalaVersions")
 Global / publishLocalSignedIfRelevant := PgpKeys.publishLocalSigned.value
 
 lazy val scoverageSettings = Seq(
