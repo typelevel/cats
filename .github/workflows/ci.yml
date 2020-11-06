@@ -40,6 +40,12 @@ jobs:
             java: adopt@1.15
           - platform: js
             java: graalvm-ce-java8@20.2.0
+          - platform: jvm
+            java: adopt@1.15
+            scala: 3.0.0-M1
+          - platform: js
+            java: adopt@1.15
+            scala: 3.0.0-M1
           - platform: js
             scala: 0.27.0-RC1
           - platform: js

@@ -62,6 +62,13 @@ ThisBuild / githubWorkflowBuildMatrixExclusions ++=
     MatrixExclude(Map("platform" -> "js", "java" -> java))
   }
 
+ThisBuild / githubWorkflowBuildMatrixExclusions ++=
+  Seq("jvm", "js").map { platform =>
+    MatrixExclude(
+      Map("platform" -> platform, "java" -> LatestJava, "scala" -> DottyNew)
+    ) // 3.0.0-M1 doesn't work on JDK 14+
+  }
+
 // exclude DottyJS for now
 ThisBuild / githubWorkflowBuildMatrixExclusions ++=
   crossScalaVersions.value.filterNot(_.startsWith("2.")).map { scala =>
