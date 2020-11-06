@@ -22,7 +22,7 @@ lazy val scoverageSettings = Seq(
 organization in ThisBuild := "org.typelevel"
 scalafixDependencies in ThisBuild += "org.typelevel" %% "simulacrum-scalafix" % "0.5.1"
 
-val scalaCheckVersion = "1.15.0"
+val scalaCheckVersion = "1.15.1"
 
 val disciplineVersion = "1.1.0"
 
