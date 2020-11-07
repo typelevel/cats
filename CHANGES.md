@@ -1,3 +1,14 @@
+## Version 2.3.0-M2
+
+_2020 November 6_ 🍂
+
+Added support for Scala/Dotty 3.0.0-M1.
+
+### Other improvements
+
+* #3661 fix typo in Scaladoc by @fixxer 
+* #3666, #3667 add `simulacrum-scalafix-annotations` to the classpath
+
 ## Version 2.3.0-M1
 
 _2020 October 31_ 🎃
