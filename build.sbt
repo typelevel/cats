@@ -226,8 +226,7 @@ lazy val tagName = Def.setting {
 
 lazy val commonJsSettings = Seq(
   crossScalaVersions := crossScalaVersions.value.filter(_.startsWith("2.")),
-  publishConfiguration := publishConfiguration.value.withOverwrite(true),   // needed since we double-publish on release
-
+  publishConfiguration := publishConfiguration.value.withOverwrite(true), // needed since we double-publish on release
   scalacOptions += {
     val tv = tagName.value
     val tagOrHash =
