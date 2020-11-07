@@ -7,7 +7,7 @@ Added support for Scala/Dotty 3.0.0-M1.
 ### Other improvements
 
 * #3661 fix typo in Scaladoc by @fixxer 
-* #3666, #3667 add `simulacrum-scalafix-annotations` to the classpath
+* #3666, #3667 add `simulacrum-scalafix-annotations` to the classpath, build for 3.0.0-M1 by @djspiewak
 
 ## Version 2.3.0-M1
 
