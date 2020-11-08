@@ -25,7 +25,6 @@ position: 40
  * [What does this symbol mean?](#symbol)
  * [How can I test instances against their type classes' laws?](#law-testing)
  * [How can I help?](#contributing)
- * [Is there a sbt plugin that facilitate projects based on the Cats ecosystem libraries?](#sbt-catalysts)
  * [Why aren't monad transformers like `OptionT` and `EitherT` covariant like `Option` and `Either`?](#monad-transformer-variance)
  * [How to try Cats in a REPL?](#ammonite)
 
@@ -259,10 +258,6 @@ The Сats community welcomes and encourages contributions, even if you are compl
 - Find an [open issue](https://github.com/typelevel/cats/issues?q=is%3Aopen+is%3Aissue+label%3Aready), leave a comment on it to let people know you are working on it, and submit a pull request. If you are new to Сats, you may want to look for items with the [low-hanging-fruit](https://github.com/typelevel/cats/issues?q=is%3Aopen+is%3Aissue+label%3A%22low-hanging+fruit%22) label.
 
 See the [contributing guide]({{ site.baseurl }}/contributing.html) for more information.
-
-## <a id="sbt-catalysts" href="#sbt-catalysts"></a>Is there a sbt plugin that facilitate projects based on the Cats ecosystem libraries?
-
-Of course. [sbt-catalysts](https://github.com/typelevel/sbt-catalysts) is created particularly for this purpose. It also provides a g8 template so that you can run `sbt new typelevel/sbt-catalysts.g8` to quickly set up a project using Cats ecosystem libraries through this plugin. For more details, go to [sbt-catalysts](https://github.com/typelevel/sbt-catalysts). 
 
 ## <a id="ammonite" href="#ammonite"></a>How to try Cats in a REPL? 
 
