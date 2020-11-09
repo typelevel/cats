@@ -24,10 +24,10 @@ scalafixDependencies in ThisBuild += "org.typelevel" %% "simulacrum-scalafix" % 
 
 val scalaCheckVersion = "1.15.1"
 
-val disciplineVersion = "1.1.1"
+val disciplineVersion = "1.1.2"
 
 val disciplineScalatestVersion = "2.0.1"
-val disciplineMunitVersion = "1.0.1"
+val disciplineMunitVersion = "1.0.2"
 
 val kindProjectorVersion = "0.11.0"
 
@@ -55,7 +55,7 @@ ThisBuild / githubWorkflowBuildMatrixAdditions +=
   "platform" -> List("jvm", "js")
 
 ThisBuild / githubWorkflowBuildMatrixExclusions ++=
-  crossScalaVersions.value.filterNot(_.startsWith("2.")).map(v => MatrixExclude(Map("platform" -> "js", "scala" -> v)))
+  crossScalaVersions.value.filter(_.startsWith("0.")).map(v => MatrixExclude(Map("platform" -> "js", "scala" -> v)))
 
 ThisBuild / githubWorkflowBuildMatrixExclusions ++=
   githubWorkflowJavaVersions.value.filterNot(Set(PrimaryJava)).map { java =>
@@ -67,12 +67,6 @@ ThisBuild / githubWorkflowBuildMatrixExclusions ++=
     MatrixExclude(
       Map("platform" -> platform, "java" -> LatestJava, "scala" -> DottyNew)
     ) // 3.0.0-M1 doesn't work on JDK 14+
-  }
-
-// exclude DottyJS for now
-ThisBuild / githubWorkflowBuildMatrixExclusions ++=
-  crossScalaVersions.value.filterNot(_.startsWith("2.")).map { scala =>
-    MatrixExclude(Map("platform" -> "js", "scala" -> scala))
   }
 
 // we don't need this since we aren't publishing
@@ -225,16 +219,19 @@ lazy val tagName = Def.setting {
 }
 
 lazy val commonJsSettings = Seq(
-  crossScalaVersions := crossScalaVersions.value.filter(_.startsWith("2.")),
+  crossScalaVersions := crossScalaVersions.value.filterNot(_.startsWith("0.")),
   publishConfiguration := publishConfiguration.value.withOverwrite(true), // needed since we double-publish on release
-  scalacOptions += {
-    val tv = tagName.value
-    val tagOrHash =
-      if (isSnapshot.value) sys.process.Process("git rev-parse HEAD").lineStream_!.head
-      else tv
-    val a = (baseDirectory in LocalRootProject).value.toURI.toString
-    val g = "https://raw.githubusercontent.com/typelevel/cats/" + tagOrHash
-    s"-P:scalajs:mapSourceURI:$a->$g/"
+  scalacOptions ++= {
+    if (isDotty.value) Seq()
+    else {
+      val tv = tagName.value
+      val tagOrHash =
+        if (isSnapshot.value) sys.process.Process("git rev-parse HEAD").lineStream_!.head
+        else tv
+      val a = (baseDirectory in LocalRootProject).value.toURI.toString
+      val g = "https://raw.githubusercontent.com/typelevel/cats/" + tagOrHash
+      Seq(s"-P:scalajs:mapSourceURI:$a->$g/")
+    }
   },
   scalaJSStage in Global := FullOptStage,
   parallelExecution := false,

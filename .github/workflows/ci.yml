@@ -33,8 +33,6 @@ jobs:
           - platform: js
             scala: 0.27.0-RC1
           - platform: js
-            scala: 3.0.0-M1
-          - platform: js
             java: adopt@1.11
           - platform: js
             java: adopt@1.15
@@ -45,10 +43,6 @@ jobs:
             scala: 3.0.0-M1
           - platform: js
             java: adopt@1.15
-            scala: 3.0.0-M1
-          - platform: js
-            scala: 0.27.0-RC1
-          - platform: js
             scala: 3.0.0-M1
     runs-on: ${{ matrix.os }}
     steps:
