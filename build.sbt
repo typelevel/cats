@@ -24,7 +24,7 @@ scalafixDependencies in ThisBuild += "org.typelevel" %% "simulacrum-scalafix" % 
 
 val scalaCheckVersion = "1.15.1"
 
-val disciplineVersion = "1.1.1"
+val disciplineVersion = "1.1.2"
 
 val disciplineScalatestVersion = "2.0.1"
 val disciplineMunitVersion = "1.0.1"
