@@ -78,4 +78,10 @@ trait MapInstances {
             }
           }) { chain => chain.foldLeft(Map.empty[K, B]) { case (m, (k, b)) => m.updated(k, b) } }
     }
+
+  implicit def alletcatsStdMapEmptyK[K]: EmptyK[Map[K, *]] =
+    new EmptyK[Map[K, *]] {
+      def empty[A]: Map[K, A] = Map.empty[K, A]
+    }
+
 }
