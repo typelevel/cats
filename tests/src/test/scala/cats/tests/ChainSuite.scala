@@ -166,8 +166,14 @@ class ChainSuite extends CatsSuite {
   }
 
   test("groupBy consistent with List#groupBy") {
-    forAll { (cs: Chain[String], f: String => Int) =>
-      assert(cs.groupBy(f).map { case (k, v) => (k, v.toList) }.toMap === (cs.toList.groupBy(f).toMap))
+    forAll { (cs: Chain[String], key: String => Int) =>
+      assert(cs.groupBy(key).map { case (k, v) => (k, v.toList) }.toMap === (cs.toList.groupBy(key).toMap))
+    }
+  }
+
+  test("groupMap consistent with List#groupBy + Map#mapValues") {
+    forAll { (cs: Chain[String], key: String => String, f: String => Int) =>
+      assert(cs.groupMap(key)(f).map { case (k, v) => (k, v.toList) }.toMap === (cs.toList.groupBy(key).map { case (k, v) => (k, v.map(f)) }))
     }
   }
 

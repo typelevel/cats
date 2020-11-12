@@ -141,9 +141,15 @@ class NonEmptyChainSuite extends NonEmptyCollectionSuite[Chain, NonEmptyChain, N
     }
   }
 
-  test("groupBy consistent with List#groupBy") {
-    forAll { (cs: NonEmptyChain[String], f: String => Int) =>
-      assert(cs.groupBy(f).map(_.toNonEmptyList) === (cs.toNonEmptyList.groupByNem(f)))
+  test("groupBy consistent with NonEmptyList#groupByNem") {
+    forAll { (cs: NonEmptyChain[String], key: String => Int) =>
+      assert(cs.groupBy(key).map(_.toNonEmptyList) === (cs.toNonEmptyList.groupByNem(key)))
+    }
+  }
+
+  test("groupMap consistent with NonEmptyList#groupMapNem") {
+    forAll { (cs: NonEmptyChain[String], key: String => String, f: String => Int) =>
+      assert(cs.groupMap(key)(f).map(_.toNonEmptyList) === (cs.toNonEmptyList.groupMapNem(key)(f)))
     }
   }
 

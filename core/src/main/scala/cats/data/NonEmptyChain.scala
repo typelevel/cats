@@ -379,12 +379,75 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
 
   /**
    * Groups elements inside this `NonEmptyChain` according to the `Order`
-   * of the keys produced by the given mapping function.
+   * of the keys produced by the given key function.
+   *
+   * {{{
+   * scala> import cats.data.{NonEmptyChain, NonEmptyMap}
+   * scala> import cats.implicits._
+   * scala> val nec = NonEmptyChain(12, -2, 3, -5)
+   * scala> val expectedResult = NonEmptyMap.of(false -> NonEmptyChain(-2, -5), true -> NonEmptyChain(12, 3))
+   * scala> val result = nec.groupBy(_ >= 0)
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   * }}}
    */
-  final def groupBy[B](f: A => B)(implicit B: Order[B]): NonEmptyMap[B, NonEmptyChain[A]] =
-    toChain.groupBy(f).asInstanceOf[NonEmptyMap[B, NonEmptyChain[A]]]
+  final def groupBy[K](key: A => K)(implicit K: Order[K]): NonEmptyMap[K, NonEmptyChain[A]] =
+    toChain.groupBy(key).asInstanceOf[NonEmptyMap[K, NonEmptyChain[A]]]
 
-  final def groupByNem[B](f: A => B)(implicit B: Order[B]): NonEmptyMap[B, NonEmptyChain[A]] = groupBy(f)
+  /**
+   * Groups elements inside this `NonEmptyChain` according to the `Order`
+   * of the keys produced by the given key function.
+   *
+   * {{{
+   * scala> import cats.data.{NonEmptyChain, NonEmptyMap}
+   * scala> import cats.implicits._
+   * scala> val nec = NonEmptyChain(12, -2, 3, -5)
+   * scala> val expectedResult = NonEmptyMap.of(false -> NonEmptyChain(-2, -5), true -> NonEmptyChain(12, 3))
+   * scala> val result = nec.groupByNem(_ >= 0)
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  final def groupByNem[K](key: A => K)(implicit K: Order[K]): NonEmptyMap[K, NonEmptyChain[A]] =
+    groupBy(key)
+
+  /**
+   * Groups elements inside this `NonEmptyChain` according to the `Order`
+   * of the keys produced by the given key function.
+   * And each element in a group is transformed into a value of type B
+   * using the mapping function.
+   *
+   * {{{
+   * scala> import cats.data.{NonEmptyChain, NonEmptyMap}
+   * scala> import cats.implicits._
+   * scala> val nec = NonEmptyChain(12, -2, 3, -5)
+   * scala> val expectedResult = NonEmptyMap.of(false -> NonEmptyChain("-2", "-5"), true -> NonEmptyChain("12", "3"))
+   * scala> val result = nec.groupMap(_ >= 0)(_.toString)
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  final def groupMap[K, B](key: A => K)(f: A => B)(implicit K: Order[K]): NonEmptyMap[K, NonEmptyChain[B]] =
+    toChain.groupMap(key)(f).asInstanceOf[NonEmptyMap[K, NonEmptyChain[B]]]
+
+  /**
+   * Groups elements inside this `NonEmptyChain` according to the `Order`
+   * of the keys produced by the given key function.
+   * And each element in a group is transformed into a value of type B
+   * using the mapping function.
+   *
+   * {{{
+   * scala> import cats.data.{NonEmptyChain, NonEmptyMap}
+   * scala> import cats.implicits._
+   * scala> val nec = NonEmptyChain(12, -2, 3, -5)
+   * scala> val expectedResult = NonEmptyMap.of(false -> NonEmptyChain("-2", "-5"), true -> NonEmptyChain("12", "3"))
+   * scala> val result = nec.groupMapNem(_ >= 0)(_.toString)
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  final def groupMapNem[K, B](key: A => K)(f: A => B)(implicit K: Order[K]): NonEmptyMap[K, NonEmptyChain[B]] =
+    groupMap(key)(f)
 
   final def iterator: Iterator[A] = toChain.iterator
 

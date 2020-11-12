@@ -356,22 +356,52 @@ sealed abstract class Chain[+A] {
 
   /**
    * Groups elements inside this `Chain` according to the `Order`
-   * of the keys produced by the given mapping function.
+   * of the keys produced by the given key function.
+   *
+   * {{{
+   * scala> import scala.collection.immutable.SortedMap
+   * scala> import cats.data.{Chain, NonEmptyChain}
+   * scala> import cats.implicits._
+   * scala> val chain = Chain(12, -2, 3, -5)
+   * scala> val expectedResult = SortedMap(false -> NonEmptyChain(-2, -5), true -> NonEmptyChain(12, 3))
+   * scala> val result = chain.groupBy(_ >= 0)
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   * }}}
    */
-  final def groupBy[B](f: A => B)(implicit B: Order[B]): SortedMap[B, NonEmptyChain[A]] = {
-    implicit val ordering: Ordering[B] = B.toOrdering
-    var m = SortedMap.empty[B, NonEmptyChain[A]]
-    val iter = iterator
+  final def groupBy[K](key: A => K)(implicit K: Order[K]): SortedMap[K, NonEmptyChain[A]] =
+    groupMap(key)(identity)
 
-    while (iter.hasNext) {
-      val elem = iter.next()
-      val k = f(elem)
+  /**
+   * Groups elements inside this `Chain` according to the `Order`
+   * of the keys produced by the given key function.
+   * And each element in a group is transformed into a value of type B
+   * using the mapping function.
+   *
+   * {{{
+   * scala> import scala.collection.immutable.SortedMap
+   * scala> import cats.data.{Chain, NonEmptyChain}
+   * scala> import cats.implicits._
+   * scala> val chain = Chain(12, -2, 3, -5)
+   * scala> val expectedResult = SortedMap(false -> NonEmptyChain("-2", "-5"), true -> NonEmptyChain("12", "3"))
+   * scala> val result = chain.groupMap(_ >= 0)(_.toString)
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  final def groupMap[K, B](key: A => K)(f: A => B)(implicit K: Order[K]): SortedMap[K, NonEmptyChain[B]] = {
+    implicit val ordering: Ordering[K] = K.toOrdering
+    var m = SortedMap.empty[K, NonEmptyChain[B]]
+
+    for (elem <- iterator) {
+      val k = key(elem)
 
       m.get(k) match {
-        case None      => m += ((k, NonEmptyChain.one(elem))); ()
-        case Some(cat) => m = m.updated(k, cat :+ elem)
+        case Some(cat) => m = m.updated(key = k, value = cat :+ f(elem))
+        case None      => m += (k -> NonEmptyChain.one(f(elem)))
       }
     }
+
     m
   }
 
