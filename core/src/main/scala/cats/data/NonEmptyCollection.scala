@@ -33,6 +33,7 @@ private[cats] trait NonEmptyCollection[+A, U[+_], NE[+_]] extends Any {
   def sortBy[B](f: A => B)(implicit B: Order[B]): NE[A]
   def sorted[AA >: A](implicit AA: Order[AA]): NE[AA]
   def groupByNem[B](f: A => B)(implicit B: Order[B]): NonEmptyMap[B, NE[A]]
+  def grouped(size: Int): Iterator[NE[A]]
   def toNem[T, V](implicit ev: A <:< (T, V), order: Order[T]): NonEmptyMap[T, V]
   def toNes[B >: A](implicit order: Order[B]): NonEmptySet[B]
 

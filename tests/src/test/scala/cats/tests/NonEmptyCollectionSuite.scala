@@ -153,6 +153,12 @@ abstract class NonEmptyCollectionSuite[U[+_], NE[+_], NEC[x] <: NonEmptyCollecti
     }
   }
 
+  test("grouped is consistent with iterator.toList.grouped") {
+    forAll { (is: NE[Int], i: Int) =>
+      (i > 0) ==> assert(is.grouped(i).toList.map(toList) === is.iterator.toList.grouped(i).toList)
+    }
+  }
+
   test("toNem is consistent with iterator.toMap") {
     forAll { (is: NE[Int]) =>
       assert((is.zipWithIndex.toNem.toSortedMap: Map[Int, Int]) === (is.zipWithIndex.iterator.toMap))

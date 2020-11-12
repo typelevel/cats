@@ -301,6 +301,24 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
     NonEmptyMap.fromMapUnsafe(groupBy(f))
 
   /**
+   * Partitions elements in fixed size `NonEmptyVector`s.
+   *
+   * {{{
+   * scala> import cats.data.NonEmptyVector
+   * scala> import cats.implicits._
+   * scala> val nel = NonEmptyVector.of(12, -2, 3, -5)
+   * scala> val expectedResult = Iterator(NonEmptyVector.of(12, -2), NonEmptyVector.of(3, -5))
+   * scala> val result = nel.grouped(2)
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  def grouped(size: Int): Iterator[NonEmptyVector[A]] = {
+    require(size >= 1, f"size=$size%d, but size must be positive")
+    toVector.grouped(size).map(NonEmptyVector.fromVectorUnsafe)
+  }
+
+  /**
    * Creates new `NonEmptyMap`, similarly to List#toMap from scala standard library.
    * {{{
    * scala> import cats.data.{NonEmptyMap, NonEmptyVector}
