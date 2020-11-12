@@ -406,6 +406,63 @@ sealed abstract class Chain[+A] {
   }
 
   /**
+   * Groups elements inside this `Chain` according to the `Order`
+   * of the keys produced by the given key function.
+   * Then each element in a group is transformed into a value of type B
+   * using the mapping function.
+   * And finally they are all reduced into a single value
+   * using their `Semigroup`
+   *
+   * {{{
+   * scala> import scala.collection.immutable.SortedMap
+   * scala> import cats.data.Chain
+   * scala> import cats.implicits._
+   * scala> val chain = Chain("Hello", "World", "Goodbye", "World")
+   * scala> val expectedResult = SortedMap("goodbye" -> 1, "hello" -> 1, "world" -> 2)
+   * scala> val result = chain.groupMapReduce(_.strip.toLowerCase)(_ => 1)
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  final def groupMapReduce[K, B](key: A => K)(f: A => B)(implicit K: Order[K], S: Semigroup[B]): SortedMap[K, B] =
+    groupMapReduceWith(key)(f)(S.combine)
+
+  /**
+   * Groups elements inside this `Chain` according to the `Order`
+   * of the keys produced by the given key function.
+   * Then each element in a group is transformed into a value of type B
+   * using the mapping function.
+   * And finally they are all reduced into a single value
+   * using the provided combine function.
+   *
+   * {{{
+   * scala> import scala.collection.immutable.SortedMap
+   * scala> import cats.data.Chain
+   * scala> import cats.implicits._
+   * scala> val chain = Chain("Hello", "World", "Goodbye", "World")
+   * scala> val expectedResult = SortedMap("goodbye" -> 1, "hello" -> 1, "world" -> 2)
+   * scala> val result = chain.groupMapReduceWith(_.strip.toLowerCase)(_ => 1)(_ + _)
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  final def groupMapReduceWith[K, B](key: A => K)(f: A => B)(combine: (B, B) => B)(implicit K: Order[K]): SortedMap[K, B] = {
+    implicit val ordering: Ordering[K] = K.toOrdering
+    var m = SortedMap.empty[K, B]
+
+    for (elem <- iterator) {
+      val k = key(elem)
+
+      m.get(k) match {
+        case Some(b) => m = m.updated(key = k, value = combine(b, f(elem)))
+        case None    => m += (k -> f(elem))
+      }
+    }
+
+    m
+  }
+
+  /**
    * Reverses this `Chain`
    */
   def reverse: Chain[A] =

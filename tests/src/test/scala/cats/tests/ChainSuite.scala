@@ -4,7 +4,7 @@ import cats.{Align, Alternative, CoflatMap, Monad, Show, Traverse, TraverseFilte
 import cats.data.Chain
 import cats.data.Chain.==:
 import cats.data.Chain.`:==`
-import cats.kernel.{Eq, Hash, Monoid, Order, PartialOrder}
+import cats.kernel.{Eq, Hash, Monoid, Order, PartialOrder, Semigroup}
 import cats.kernel.laws.discipline.{EqTests, HashTests, MonoidTests, OrderTests, PartialOrderTests}
 import cats.laws.discipline.{
   AlignTests,
@@ -174,6 +174,18 @@ class ChainSuite extends CatsSuite {
   test("groupMap consistent with List#groupBy + Map#mapValues") {
     forAll { (cs: Chain[String], key: String => String, f: String => Int) =>
       assert(cs.groupMap(key)(f).map { case (k, v) => (k, v.toList) }.toMap === (cs.toList.groupBy(key).map { case (k, v) => (k, v.map(f)) }))
+    }
+  }
+
+  test("groupMapReduce consistent with List#groupBy + Map#mapValues + List#reduce") {
+    forAll { (cs: Chain[String], key: String => String, f: String => Int) =>
+      assert(cs.groupMapReduce(key)(f).toMap === (cs.toList.groupBy(key).map { case (k, v) => (k, v.map(f).reduce(Semigroup[Int].combine)) }))
+    }
+  }
+
+  test("groupMapReduceWith consistent with List#groupBy + Map#mapValues + List#reduce") {
+    forAll { (cs: Chain[String], key: String => String, f: String => Int, combine: (Int, Int) => Int) =>
+      assert(cs.groupMapReduceWith(key)(f)(combine).toMap === (cs.toList.groupBy(key).map { case (k, v) => (k, v.map(f).reduce(combine)) }))
     }
   }
 

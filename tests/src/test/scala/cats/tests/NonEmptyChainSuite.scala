@@ -153,6 +153,18 @@ class NonEmptyChainSuite extends NonEmptyCollectionSuite[Chain, NonEmptyChain, N
     }
   }
 
+  test("groupMapReduce consistent with NonEmptyList#groupMapReduceNem") {
+    forAll { (cs: NonEmptyChain[String], key: String => String, f: String => Int) =>
+      assert(cs.groupMapReduce(key)(f) === (cs.toNonEmptyList.groupMapReduceNem(key)(f)))
+    }
+  }
+
+  test("groupMapReduceWith consistent with NonEmptyList#groupMapReduceWithNem") {
+    forAll { (cs: NonEmptyChain[String], key: String => String, f: String => Int, combine: (Int, Int) => Int) =>
+      assert(cs.groupMapReduceWith(key)(f)(combine) === (cs.toNonEmptyList.groupMapReduceWithNem(key)(f)(combine)))
+    }
+  }
+
   test("reverse . reverse is id") {
     forAll { (ci: NonEmptyChain[Int]) =>
       assert(ci.reverse.reverse === ci)
