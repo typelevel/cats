@@ -314,8 +314,14 @@ class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonE
   }
 
   test("NonEmptyList#groupBy is consistent with List#groupBy") {
-    forAll { (nel: NonEmptyList[Int], f: Int => Int) =>
-      assert((nel.groupBy(f).map { case (k, v) => (k, v.toList) }: Map[Int, List[Int]]) === (nel.toList.groupBy(f)))
+    forAll { (nel: NonEmptyList[Int], key: Int => Int) =>
+      assert((nel.groupBy(key).map { case (k, v) => (k, v.toList) }: Map[Int, List[Int]]) === (nel.toList.groupBy(key)))
+    }
+  }
+
+  test("NonEmptyList#groupMap is consistent with List#groupBy + Map#mapValues") {
+    forAll { (nel: NonEmptyList[Int], key: Int => Int, f: Int => String) =>
+      assert((nel.groupMap(key)(f).map { case (k, v) => (k, v.toList) }: Map[Int, List[String]] ) === (nel.toList.groupBy(key).map { case (k, v) => (k, v.map(f)) }))
     }
   }
 

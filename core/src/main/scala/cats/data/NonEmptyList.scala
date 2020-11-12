@@ -363,7 +363,7 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
 
   /**
    * Groups elements inside this `NonEmptyList` according to the `Order`
-   * of the keys produced by the given mapping function.
+   * of the keys produced by the given key function.
    *
    * {{{
    * scala> import scala.collection.immutable.SortedMap
@@ -376,27 +376,12 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
    * res0: Boolean = true
    * }}}
    */
-  def groupBy[B](f: A => B)(implicit B: Order[B]): SortedMap[B, NonEmptyList[A]] = {
-    implicit val ordering: Ordering[B] = B.toOrdering
-    var m = TreeMap.empty[B, mutable.Builder[A, List[A]]]
-
-    for { elem <- toList } {
-      val k = f(elem)
-
-      m.get(k) match {
-        case None          => m += ((k, List.newBuilder[A] += elem))
-        case Some(builder) => builder += elem
-      }
-    }
-
-    m.map { case (k, v) =>
-      (k, NonEmptyList.fromListUnsafe(v.result()))
-    }: TreeMap[B, NonEmptyList[A]]
-  }
+  def groupBy[K](key: A => K)(implicit K: Order[K]): SortedMap[K, NonEmptyList[A]] =
+    groupMap(key)(identity)
 
   /**
    * Groups elements inside this `NonEmptyList` according to the `Order`
-   * of the keys produced by the given mapping function.
+   * of the keys produced by the given key function.
    *
    * {{{
    * scala> import cats.data.{NonEmptyList, NonEmptyMap}
@@ -408,8 +393,62 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
    * res0: Boolean = true
    * }}}
    */
-  def groupByNem[B](f: A => B)(implicit B: Order[B]): NonEmptyMap[B, NonEmptyList[A]] =
-    NonEmptyMap.fromMapUnsafe(groupBy(f))
+  def groupByNem[K](key: A => K)(implicit K: Order[K]): NonEmptyMap[K, NonEmptyList[A]] =
+    NonEmptyMap.fromMapUnsafe(groupBy(key))
+
+  /**
+   * Groups elements inside this `NonEmptyList` according to the `Order`
+   * of the keys produced by the given key function.
+   * And each element in a group is transformed into a value of type B
+   * using the mapping function.
+   *
+   * {{{
+   * scala> import scala.collection.immutable.SortedMap
+   * scala> import cats.data.NonEmptyList
+   * scala> import cats.implicits._
+   * scala> val nel = NonEmptyList.of(12, -2, 3, -5)
+   * scala> val expectedResult = SortedMap(false -> NonEmptyList.of("-2", "-5"), true -> NonEmptyList.of("12", "3"))
+   * scala> val result = nel.groupMap(_ >= 0)(_.toString)
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  def groupMap[K, B](key: A => K)(f: A => B)(implicit K: Order[K]): SortedMap[K, NonEmptyList[B]] = {
+    implicit val ordering: Ordering[K] = K.toOrdering
+    var m = TreeMap.empty[K, mutable.Builder[B, List[B]]]
+
+    for { elem <- toList } {
+      val k = key(elem)
+
+      m.get(k) match {
+        case None          => m += ((k, List.newBuilder[B] += f(elem)))
+        case Some(builder) => builder += f(elem)
+      }
+    }
+
+    m.map {
+      case (k, v) => (k, NonEmptyList.fromListUnsafe(v.result()))
+    }
+  }
+
+  /**
+   * Groups elements inside this `NonEmptyList` according to the `Order`
+   * of the keys produced by the given key function.
+   * And each element in a group is transformed into a value of type B
+   * using the mapping function.
+   *
+   * {{{
+   * scala> import cats.data.{NonEmptyList, NonEmptyMap}
+   * scala> import cats.implicits._
+   * scala> val nel = NonEmptyList.of(12, -2, 3, -5)
+   * scala> val expectedResult = NonEmptyMap.of(false -> NonEmptyList.of("-2", "-5"), true -> NonEmptyList.of("12", "3"))
+   * scala> val result = nel.groupMapNem(_ >= 0)(_.toString)
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  def groupMapNem[K, B](key: A => K)(f: A => B)(implicit K: Order[K]): NonEmptyMap[K, NonEmptyList[B]] =
+    NonEmptyMap.fromMapUnsafe(groupMap(key)(f))
 
   /**
    * Creates new `NonEmptyMap`, similarly to List#toMap from scala standard library.
