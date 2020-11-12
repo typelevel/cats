@@ -325,6 +325,18 @@ class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonE
     }
   }
 
+  test("NonEmptyList#groupMapReduce is consistent with List#groupBy + Map#mapValues + List#reduce") {
+    forAll { (nel: NonEmptyList[Int], key: Int => Int, f: Int => String) =>
+      assert((nel.groupMapReduce(key)(f) : Map[Int, String]) === (nel.toList.groupBy(key).map { case (k, v) => (k, v.map(f).reduce(Semigroup[String].combine)) }))
+    }
+  }
+
+  test("NonEmptyList#groupMapReduceWith is consistent with List#groupBy + Map#mapValues + List#reduce") {
+    forAll { (nel: NonEmptyList[Int], key: Int => Int, f: Int => String, combine: (String, String) => String) =>
+      assert((nel.groupMapReduceWith(key)(f)(combine) : Map[Int, String]) === (nel.toList.groupBy(key).map { case (k, v) => (k, v.map(f).reduce(combine)) }))
+    }
+  }
+
   test("NonEmptyList#concat/concatNel is consistent with List#:::") {
     forAll { (nel: NonEmptyList[Int], l: List[Int], n: Int) =>
       assert((nel ++ l).toList === (nel.toList ::: l))

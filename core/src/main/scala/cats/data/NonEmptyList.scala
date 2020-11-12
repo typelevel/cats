@@ -417,12 +417,12 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
     implicit val ordering: Ordering[K] = K.toOrdering
     var m = TreeMap.empty[K, mutable.Builder[B, List[B]]]
 
-    for { elem <- toList } {
+    for (elem <- toList) {
       val k = key(elem)
 
       m.get(k) match {
-        case None          => m += ((k, List.newBuilder[B] += f(elem)))
         case Some(builder) => builder += f(elem)
+        case None          => m += (k -> (List.newBuilder[B] += f(elem)))
       }
     }
 
@@ -449,6 +449,105 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
    */
   def groupMapNem[K, B](key: A => K)(f: A => B)(implicit K: Order[K]): NonEmptyMap[K, NonEmptyList[B]] =
     NonEmptyMap.fromMapUnsafe(groupMap(key)(f))
+
+  /**
+   * Groups elements inside this `NonEmptyList` according to the `Order`
+   * of the keys produced by the given key function.
+   * Then each element in a group is transformed into a value of type B
+   * using the mapping function.
+   * And finally they are all reduced into a single value
+   * using their `Semigroup`.
+   *
+   * {{{
+   * scala> import scala.collection.immutable.SortedMap
+   * scala> import cats.data.NonEmptyList
+   * scala> import cats.implicits._
+   * scala> val nel = NonEmptyList.of("Hello", "World", "Goodbye", "World")
+   * scala> val expectedResult = SortedMap("goodbye" -> 1, "hello" -> 1, "world" -> 2)
+   * scala> val result = nel.groupMapReduce(_.strip.toLowerCase)(_ => 1)
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  def groupMapReduce[K, B](key: A => K)(f: A => B)(implicit K: Order[K], B: Semigroup[B]): SortedMap[K, B] =
+    groupMapReduceWith(key)(f)(B.combine)
+
+  /**
+   * Groups elements inside this `NonEmptyList` according to the `Order`
+   * of the keys produced by the given key function.
+   * Then each element in a group is transformed into a value of type B
+   * using the mapping function.
+   * And finally they are all reduced into a single value
+   * using their `Semigroup`.
+   *
+   * {{{
+   * scala> import cats.data.{NonEmptyList, NonEmptyMap}
+   * scala> import cats.implicits._
+   * scala> val nel = NonEmptyList.of("Hello", "World", "Goodbye", "World")
+   * scala> val expectedResult = NonEmptyMap.of("goodbye" -> 1, "hello" -> 1, "world" -> 2)
+   * scala> val result = nel.groupMapReduceNem(_.strip.toLowerCase)(_ => 1)
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  def groupMapReduceNem[K, B](key: A => K)(f: A => B)(implicit K: Order[K], B: Semigroup[B]): NonEmptyMap[K, B] =
+    NonEmptyMap.fromMapUnsafe(groupMapReduce(key)(f))
+
+  /**
+   * Groups elements inside this `NonEmptyList` according to the `Order`
+   * of the keys produced by the given key function.
+   * Then each element in a group is transformed into a value of type B
+   * using the mapping function.
+   * And finally they are all reduced into a single value
+   * using the provided combine function.
+   *
+   * {{{
+   * scala> import scala.collection.immutable.SortedMap
+   * scala> import cats.data.NonEmptyList
+   * scala> import cats.implicits._
+   * scala> val nel = NonEmptyList.of("Hello", "World", "Goodbye", "World")
+   * scala> val expectedResult = SortedMap("goodbye" -> 1, "hello" -> 1, "world" -> 2)
+   * scala> val result = nel.groupMapReduceWith(_.strip.toLowerCase)(_ => 1)(_ + _)
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  def groupMapReduceWith[K, B](key: A => K)(f: A => B)(combine: (B, B) => B)(implicit K: Order[K]): SortedMap[K, B] = {
+    implicit val ordering: Ordering[K] = K.toOrdering
+    var m = TreeMap.empty[K, B]
+
+    for (elem <- toList) {
+      val k = key(elem)
+
+      m.get(k) match {
+        case Some(b) => m = m.updated(key = k, value = combine(b, f(elem)))
+        case None    => m += (k -> f(elem))
+      }
+    }
+
+    m
+  }
+
+  /**
+   * Groups elements inside this `NonEmptyList` according to the `Order`
+   * of the keys produced by the given key function.
+   * Then each element in a group is transformed into a value of type B
+   * using the mapping function.
+   * And finally they are all reduced into a single value
+   * using the provided combine function.
+   *
+   * {{{
+   * scala> import cats.data.{NonEmptyList, NonEmptyMap}
+   * scala> import cats.implicits._
+   * scala> val nel = NonEmptyList.of("Hello", "World", "Goodbye", "World")
+   * scala> val expectedResult = NonEmptyMap.of("goodbye" -> 1, "hello" -> 1, "world" -> 2)
+   * scala> val result = nel.groupMapReduceWithNem(_.strip.toLowerCase)(_ => 1)(_ + _)
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  def groupMapReduceWithNem[K, B](key: A => K)(f: A => B)(combine: (B, B) => B)(implicit K: Order[K]): NonEmptyMap[K, B] =
+    NonEmptyMap.fromMapUnsafe(groupMapReduceWith(key)(f)(combine))
 
   /**
    * Creates new `NonEmptyMap`, similarly to List#toMap from scala standard library.
