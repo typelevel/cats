@@ -509,7 +509,9 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
    * res0: Boolean = true
    * }}}
    */
-  final def groupMapReduceWith[K, B](key: A => K)(f: A => B)(combine: (B, B) => B)(implicit K: Order[K]): NonEmptyMap[K, B] =
+  final def groupMapReduceWith[K, B](key: A => K)(f: A => B)(combine: (B, B) => B)(implicit
+    K: Order[K]
+  ): NonEmptyMap[K, B] =
     toChain.groupMapReduceWith(key)(f)(combine).asInstanceOf[NonEmptyMap[K, B]]
 
   /**
@@ -530,7 +532,9 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
    * res0: Boolean = true
    * }}}
    */
-  final def groupMapReduceWithNem[K, B](key: A => K)(f: A => B)(combine: (B, B) => B)(implicit K: Order[K]): NonEmptyMap[K, B] =
+  final def groupMapReduceWithNem[K, B](key: A => K)(f: A => B)(combine: (B, B) => B)(implicit
+    K: Order[K]
+  ): NonEmptyMap[K, B] =
     groupMapReduceWith(key)(f)(combine)
 
   final def iterator: Iterator[A] = toChain.iterator

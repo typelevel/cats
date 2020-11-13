@@ -426,8 +426,8 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
       }
     }
 
-    m.map {
-      case (k, v) => (k, NonEmptyList.fromListUnsafe(v.result()))
+    m.map { case (k, v) =>
+      (k, NonEmptyList.fromListUnsafe(v.result()))
     }
   }
 
@@ -546,7 +546,9 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
    * res0: Boolean = true
    * }}}
    */
-  def groupMapReduceWithNem[K, B](key: A => K)(f: A => B)(combine: (B, B) => B)(implicit K: Order[K]): NonEmptyMap[K, B] =
+  def groupMapReduceWithNem[K, B](key: A => K)(f: A => B)(combine: (B, B) => B)(implicit
+    K: Order[K]
+  ): NonEmptyMap[K, B] =
     NonEmptyMap.fromMapUnsafe(groupMapReduceWith(key)(f)(combine))
 
   /**

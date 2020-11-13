@@ -71,37 +71,49 @@ class ListSuite extends CatsSuite {
 
   test("groupByNel should be consistent with List#groupBy") {
     forAll { (fa: List[Int], key: Int => Int) =>
-      assert(fa.groupByNel(key).map { case (k, v) => (k, v.toList) }.toMap === fa.groupBy(key))
+      val result = fa.groupByNel(key).map { case (k, v) => (k, v.toList) }.toMap
+      val expected = fa.groupBy(key)
+      assert(result === expected)
     }
   }
 
   test("groupByNec should be consistent with List#groupBy") {
     forAll { (fa: List[Int], key: Int => Int) =>
-      assert(fa.groupByNec(key).map { case (k, v) => (k, v.toChain.toList) }.toMap === fa.groupBy(key))
+      val result = fa.groupByNec(key).map { case (k, v) => (k, v.toChain.toList) }.toMap
+      val expected = fa.groupBy(key)
+      assert(result === expected)
     }
   }
 
   test("groupMapNel should be consistent with List#groupBy + Map#mapValues") {
     forAll { (fa: List[Int], key: Int => Int, f: Int => String) =>
-      assert(fa.groupMapNel(key)(f).map { case (k, v) => (k, v.toList) }.toMap === fa.groupBy(key).map { case (k, v) => (k, v.map(f)) })
+      val result = fa.groupMapNel(key)(f).map { case (k, v) => (k, v.toList) }.toMap
+      val expected = fa.groupBy(key).map { case (k, v) => (k, v.map(f)) }
+      assert(result === expected)
     }
   }
 
   test("groupMapNec should be consistent with List#groupBy + Map#mapValues") {
     forAll { (fa: List[Int], key: Int => Int, f: Int => String) =>
-      assert(fa.groupMapNec(key)(f).map { case (k, v) => (k, v.toChain.toList) }.toMap === fa.groupBy(key).map { case (k, v) => (k, v.map(f)) })
+      val result = fa.groupMapNec(key)(f).map { case (k, v) => (k, v.toChain.toList) }.toMap
+      val expected = fa.groupBy(key).map { case (k, v) => (k, v.map(f)) }
+      assert(result === expected)
     }
   }
 
   test("groupMapReduce should be consistent with List#groupBy + Map#mapValues + List#reduce") {
     forAll { (fa: List[String], key: String => String, f: String => Int) =>
-      assert(fa.groupMapReduce(key)(f).toMap === fa.groupBy(key).map { case (k, v) => (k, v.map(f).reduce(Semigroup[Int].combine)) })
+      val result = fa.groupMapReduce(key)(f).toMap
+      val expected = fa.groupBy(key).map { case (k, v) => (k, v.map(f).reduce(Semigroup[Int].combine)) }
+      assert(result === expected)
     }
   }
 
   test("groupMapReduceWith should be consistent with List#groupBy + Map#mapValues + List#reduce") {
     forAll { (fa: List[String], key: String => String, f: String => Int, combine: (Int, Int) => Int) =>
-      assert(fa.groupMapReduceWith(key)(f)(combine).toMap === fa.groupBy(key).map { case (k, v) => (k, v.map(f).reduce(combine)) })
+      val result = fa.groupMapReduceWith(key)(f)(combine).toMap
+      val expected = fa.groupBy(key).map { case (k, v) => (k, v.map(f).reduce(combine)) }
+      assert(result === expected)
     }
   }
 

@@ -446,7 +446,9 @@ sealed abstract class Chain[+A] {
    * res0: Boolean = true
    * }}}
    */
-  final def groupMapReduceWith[K, B](key: A => K)(f: A => B)(combine: (B, B) => B)(implicit K: Order[K]): SortedMap[K, B] = {
+  final def groupMapReduceWith[K, B](key: A => K)(f: A => B)(combine: (B, B) => B)(implicit
+    K: Order[K]
+  ): SortedMap[K, B] = {
     implicit val ordering: Ordering[K] = K.toOrdering
     var m = SortedMap.empty[K, B]
 
