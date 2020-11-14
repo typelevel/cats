@@ -216,6 +216,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Basefarm](https://basefarm.com/)
 - [buildo](https://buildo.io)
 - [Chartboost](https://www.chartboost.com/)
+- [Cleverbase](https://cleverbase.com/en/)
 - [Codacy](https://www.codacy.com/)
 - [Codecentric](https://codecentric.de)
 - [Colisweb](https://www.colisweb.com/)
