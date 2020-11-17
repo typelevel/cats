@@ -56,44 +56,17 @@ jobs:
         with:
           java-version: ${{ matrix.java }}
 
-      - name: Cache ivy2
-        uses: actions/cache@v1
-        with:
-          path: ~/.ivy2/cache
-          key: ${{ runner.os }}-sbt-ivy-cache-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
-
-      - name: Cache coursier (generic)
-        uses: actions/cache@v1
-        with:
-          path: ~/.coursier/cache/v1
-          key: ${{ runner.os }}-generic-sbt-coursier-cache-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
-
-      - name: Cache coursier (linux)
-        if: contains(runner.os, 'linux')
-        uses: actions/cache@v1
-        with:
-          path: ~/.cache/coursier/v1
-          key: ${{ runner.os }}-sbt-coursier-cache-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
-
-      - name: Cache coursier (macOS)
-        if: contains(runner.os, 'macos')
-        uses: actions/cache@v1
-        with:
-          path: ~/Library/Caches/Coursier/v1
-          key: ${{ runner.os }}-sbt-coursier-cache-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
-
-      - name: Cache coursier (windows)
-        if: contains(runner.os, 'windows')
-        uses: actions/cache@v1
-        with:
-          path: ~/AppData/Local/Coursier/Cache/v1
-          key: ${{ runner.os }}-sbt-coursier-cache-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
-
       - name: Cache sbt
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
-          path: ~/.sbt
-          key: ${{ runner.os }}-sbt-cache-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
+          path: |
+            ~/.sbt
+            ~/.ivy2/cache
+            ~/.coursier/cache/v1
+            ~/.cache/coursier/v1
+            ~/AppData/Local/Coursier/Cache/v1
+            ~/Library/Caches/Coursier/v1
+          key: ${{ runner.os }}-sbt-cache-v2-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
 
       - name: Check that workflows are up to date
         run: sbt ++${{ matrix.scala }} githubWorkflowCheck
@@ -147,44 +120,17 @@ jobs:
         with:
           java-version: ${{ matrix.java }}
 
-      - name: Cache ivy2
-        uses: actions/cache@v1
-        with:
-          path: ~/.ivy2/cache
-          key: ${{ runner.os }}-sbt-ivy-cache-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
-
-      - name: Cache coursier (generic)
-        uses: actions/cache@v1
-        with:
-          path: ~/.coursier/cache/v1
-          key: ${{ runner.os }}-generic-sbt-coursier-cache-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
-
-      - name: Cache coursier (linux)
-        if: contains(runner.os, 'linux')
-        uses: actions/cache@v1
-        with:
-          path: ~/.cache/coursier/v1
-          key: ${{ runner.os }}-sbt-coursier-cache-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
-
-      - name: Cache coursier (macOS)
-        if: contains(runner.os, 'macos')
-        uses: actions/cache@v1
-        with:
-          path: ~/Library/Caches/Coursier/v1
-          key: ${{ runner.os }}-sbt-coursier-cache-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
-
-      - name: Cache coursier (windows)
-        if: contains(runner.os, 'windows')
-        uses: actions/cache@v1
-        with:
-          path: ~/AppData/Local/Coursier/Cache/v1
-          key: ${{ runner.os }}-sbt-coursier-cache-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
-
       - name: Cache sbt
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
-          path: ~/.sbt
-          key: ${{ runner.os }}-sbt-cache-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
+          path: |
+            ~/.sbt
+            ~/.ivy2/cache
+            ~/.coursier/cache/v1
+            ~/.cache/coursier/v1
+            ~/AppData/Local/Coursier/Cache/v1
+            ~/Library/Caches/Coursier/v1
+          key: ${{ runner.os }}-sbt-cache-v2-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
 
       - name: Scalafix tests
         run: |
@@ -210,44 +156,17 @@ jobs:
         with:
           java-version: ${{ matrix.java }}
 
-      - name: Cache ivy2
-        uses: actions/cache@v1
-        with:
-          path: ~/.ivy2/cache
-          key: ${{ runner.os }}-sbt-ivy-cache-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
-
-      - name: Cache coursier (generic)
-        uses: actions/cache@v1
-        with:
-          path: ~/.coursier/cache/v1
-          key: ${{ runner.os }}-generic-sbt-coursier-cache-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
-
-      - name: Cache coursier (linux)
-        if: contains(runner.os, 'linux')
-        uses: actions/cache@v1
-        with:
-          path: ~/.cache/coursier/v1
-          key: ${{ runner.os }}-sbt-coursier-cache-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
-
-      - name: Cache coursier (macOS)
-        if: contains(runner.os, 'macos')
-        uses: actions/cache@v1
-        with:
-          path: ~/Library/Caches/Coursier/v1
-          key: ${{ runner.os }}-sbt-coursier-cache-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
-
-      - name: Cache coursier (windows)
-        if: contains(runner.os, 'windows')
-        uses: actions/cache@v1
-        with:
-          path: ~/AppData/Local/Coursier/Cache/v1
-          key: ${{ runner.os }}-sbt-coursier-cache-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
-
       - name: Cache sbt
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
-          path: ~/.sbt
-          key: ${{ runner.os }}-sbt-cache-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
+          path: |
+            ~/.sbt
+            ~/.ivy2/cache
+            ~/.coursier/cache/v1
+            ~/.cache/coursier/v1
+            ~/AppData/Local/Coursier/Cache/v1
+            ~/Library/Caches/Coursier/v1
+          key: ${{ runner.os }}-sbt-cache-v2-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
 
       - name: Check formatting
         if: (matrix.scala != '0.27.0-RC1' && matrix.scala != '3.0.0-M1')
@@ -272,44 +191,17 @@ jobs:
         with:
           java-version: ${{ matrix.java }}
 
-      - name: Cache ivy2
-        uses: actions/cache@v1
-        with:
-          path: ~/.ivy2/cache
-          key: ${{ runner.os }}-sbt-ivy-cache-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
-
-      - name: Cache coursier (generic)
-        uses: actions/cache@v1
-        with:
-          path: ~/.coursier/cache/v1
-          key: ${{ runner.os }}-generic-sbt-coursier-cache-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
-
-      - name: Cache coursier (linux)
-        if: contains(runner.os, 'linux')
-        uses: actions/cache@v1
-        with:
-          path: ~/.cache/coursier/v1
-          key: ${{ runner.os }}-sbt-coursier-cache-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
-
-      - name: Cache coursier (macOS)
-        if: contains(runner.os, 'macos')
-        uses: actions/cache@v1
-        with:
-          path: ~/Library/Caches/Coursier/v1
-          key: ${{ runner.os }}-sbt-coursier-cache-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
-
-      - name: Cache coursier (windows)
-        if: contains(runner.os, 'windows')
-        uses: actions/cache@v1
-        with:
-          path: ~/AppData/Local/Coursier/Cache/v1
-          key: ${{ runner.os }}-sbt-coursier-cache-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
-
       - name: Cache sbt
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
-          path: ~/.sbt
-          key: ${{ runner.os }}-sbt-cache-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
+          path: |
+            ~/.sbt
+            ~/.ivy2/cache
+            ~/.coursier/cache/v1
+            ~/.cache/coursier/v1
+            ~/AppData/Local/Coursier/Cache/v1
+            ~/Library/Caches/Coursier/v1
+          key: ${{ runner.os }}-sbt-cache-v2-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
 
       - name: Setup Ruby
         uses: actions/setup-ruby@v1
