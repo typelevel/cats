@@ -30,23 +30,6 @@ object KernelCheck {
   implicit val arbitraryUUID: Arbitrary[UUID] =
     Arbitrary(Gen.uuid)
 
-  implicit val arbitraryDuration: Arbitrary[Duration] = {
-    // max range is +/- 292 years, but we give ourselves some extra headroom
-    // to ensure that we can add these things up. they crash on overflow.
-    val n = (292L * 365) / 500
-    Arbitrary(
-      Gen.oneOf(
-        Gen.choose(-n, n).map(Duration(_, DAYS)),
-        Gen.choose(-n * 24L, n * 24L).map(Duration(_, HOURS)),
-        Gen.choose(-n * 1440L, n * 1440L).map(Duration(_, MINUTES)),
-        Gen.choose(-n * 86400L, n * 86400L).map(Duration(_, SECONDS)),
-        Gen.choose(-n * 86400000L, n * 86400000L).map(Duration(_, MILLISECONDS)),
-        Gen.choose(-n * 86400000000L, n * 86400000000L).map(Duration(_, MICROSECONDS)),
-        Gen.choose(-n * 86400000000000L, n * 86400000000000L).map(Duration(_, NANOSECONDS))
-      )
-    )
-  }
-
   implicit val arbitraryFiniteDuration: Arbitrary[FiniteDuration] = {
     // max range is +/- 292 years, but we give ourselves some extra headroom
     // to ensure that we can add these things up. they crash on overflow.
@@ -63,6 +46,9 @@ object KernelCheck {
       )
     )
   }
+
+  implicit def arbitraryDuration(implicit ev: Arbitrary[FiniteDuration]): Arbitrary[Duration] =
+    Arbitrary(ev.arbitrary)
 
   // Copied from cats-laws.
   implicit def arbitrarySortedMap[K: Arbitrary: Order, V: Arbitrary]: Arbitrary[SortedMap[K, V]] =
@@ -101,36 +87,6 @@ object KernelCheck {
 
   implicit val cogenUUID: Cogen[UUID] =
     Cogen[(Long, Long)].contramap(u => (u.getMostSignificantBits, u.getLeastSignificantBits))
-
-  implicit val cogenDuration: Cogen[Duration] =
-    Cogen[Long].contramap { d =>
-      if (d == Duration.Inf) 3896691548866406746L
-      else if (d == Duration.MinusInf) 1844151880988859955L
-      else if (d == Duration.Undefined) -7917359255778781894L
-      else
-        d.length * (d.unit match {
-          case DAYS         => -6307593037248227856L
-          case HOURS        => -3527447467459552709L
-          case MINUTES      => 5955657079535371609L
-          case SECONDS      => 5314272869665647192L
-          case MILLISECONDS => -2025740217814855607L
-          case MICROSECONDS => -2965853209268633779L
-          case NANOSECONDS  => 6128745701389500153L
-        })
-    }
-
-  implicit val cogenFiniteDuration: Cogen[FiniteDuration] =
-    Cogen[Long].contramap { d =>
-      d.length * (d.unit match {
-        case DAYS         => -6307593037248227856L
-        case HOURS        => -3527447467459552709L
-        case MINUTES      => 5955657079535371609L
-        case SECONDS      => 5314272869665647192L
-        case MILLISECONDS => -2025740217814855607L
-        case MICROSECONDS => -2965853209268633779L
-        case NANOSECONDS  => 6128745701389500153L
-      })
-    }
 }
 
 class TestsConfig extends ScalaCheckSuite {
@@ -520,4 +476,28 @@ class Tests extends TestsConfig with DisciplineSuite {
     implicit def hasCogen[A: Cogen]: Cogen[HasHash[A]] =
       Cogen[A].contramap(_.a)
   }
+}
+
+sealed class LongRunningTestsConfig extends TestsConfig {
+  // This increases the number of successes to trigger the problem
+  // described here: https://github.com/typelevel/cats/issues/3353
+  // With this number of positive cases the problem is systematic
+  // or at least it happens very often.
+  final val IncreasedMinSuccessful: PosInt = if (Platform.isJs) 10 else 400 * 1000
+  implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
+    PropertyCheckConfiguration(
+      minSuccessful = IncreasedMinSuccessful,
+      sizeRange = PropMaxSize,
+      workers = PropWorkers
+    )
+}
+
+// These tests are not checking the actual laws but they make sure that Gen and
+// Cogen for Duration and FiniteDuration don't trigger the problem described here
+// https://github.com/typelevel/cats/issues/3353
+final class LongRunningTests extends LongRunningTestsConfig with AnyFunSuiteLike with FunSuiteDiscipline {
+  import KernelCheck._
+
+  checkAll("Deeper test of Eq[Duration]", EqTests[Duration].eqv)
+  checkAll("Deeper test of Eq[FiniteDuration]", EqTests[FiniteDuration].eqv)
 }
