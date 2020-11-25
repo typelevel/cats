@@ -27,7 +27,7 @@ val scalaCheckVersion = "1.15.1"
 val disciplineVersion = "1.1.2"
 
 val disciplineScalatestVersion = "2.0.1"
-val disciplineMunitVersion = "1.0.2"
+val disciplineMunitVersion = "1.0.3"
 
 val kindProjectorVersion = "0.11.1"
 
@@ -43,8 +43,8 @@ ThisBuild / githubWorkflowJavaVersions := Seq(PrimaryJava, LTSJava, LatestJava, 
 
 val Scala212 = "2.12.12"
 val Scala213 = "2.13.3"
-val DottyOld = "0.27.0-RC1"
-val DottyNew = "3.0.0-M1"
+val DottyOld = "3.0.0-M1"
+val DottyNew = "3.0.0-M2"
 
 ThisBuild / crossScalaVersions := Seq(Scala212, Scala213, DottyOld, DottyNew)
 ThisBuild / scalaVersion := Scala213
@@ -55,9 +55,6 @@ ThisBuild / githubWorkflowBuildMatrixAdditions +=
   "platform" -> List("jvm", "js")
 
 ThisBuild / githubWorkflowBuildMatrixExclusions ++=
-  crossScalaVersions.value.filter(_.startsWith("0.")).map(v => MatrixExclude(Map("platform" -> "js", "scala" -> v)))
-
-ThisBuild / githubWorkflowBuildMatrixExclusions ++=
   githubWorkflowJavaVersions.value.filterNot(Set(PrimaryJava)).map { java =>
     MatrixExclude(Map("platform" -> "js", "java" -> java))
   }
@@ -65,7 +62,7 @@ ThisBuild / githubWorkflowBuildMatrixExclusions ++=
 ThisBuild / githubWorkflowBuildMatrixExclusions ++=
   Seq("jvm", "js").map { platform =>
     MatrixExclude(
-      Map("platform" -> platform, "java" -> LatestJava, "scala" -> DottyNew)
+      Map("platform" -> platform, "java" -> LatestJava, "scala" -> DottyOld)
     ) // 3.0.0-M1 doesn't work on JDK 14+
   }
 
@@ -172,24 +169,7 @@ lazy val commonSettings = Seq(
       Seq()
     else
       old
-  },
-  // copying this trick from sbt-spiewak for now
-  publishSignedIfRelevant := Def.taskDyn {
-    val ver = scalaVersion.value
-    val cross = crossScalaVersions.value
-    if (cross.contains(ver))
-      Def.task(PgpKeys.publishSigned.value)
-    else
-      Def.task(streams.value.log.warn(s"skipping `publishSigned` in ${name.value}: $ver is not in $cross"))
-  }.value,
-  publishLocalSignedIfRelevant := Def.taskDyn {
-    val ver = scalaVersion.value
-    val cross = crossScalaVersions.value
-    if (cross.contains(ver))
-      Def.task(PgpKeys.publishLocalSigned.value)
-    else
-      Def.task(streams.value.log.warn(s"skipping `publishLocalSigned` in ${name.value}: $ver is not in $cross"))
-  }.value
+  }
 ) ++ warnUnusedImport
 
 def macroDependencies(scalaVersion: String) =
@@ -219,7 +199,6 @@ lazy val tagName = Def.setting {
 }
 
 lazy val commonJsSettings = Seq(
-  crossScalaVersions := crossScalaVersions.value.filterNot(_.startsWith("0.")),
   publishConfiguration := publishConfiguration.value.withOverwrite(true), // needed since we double-publish on release
   scalacOptions ++= {
     if (isDotty.value) Seq()
