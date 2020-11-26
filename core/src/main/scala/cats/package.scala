@@ -144,5 +144,12 @@ package object cats {
   val Group = cats.kernel.Group
 
   type ApplicativeThrow[F[_]] = ApplicativeError[F, Throwable]
+  object ApplicativeThrow {
+    def apply[F[_]](implicit ev: ApplicativeThrow[F]): ApplicativeThrow[F] = ev
+  }
+
   type MonadThrow[F[_]] = MonadError[F, Throwable]
+  object MonadThrow {
+    def apply[F[_]](implicit ev: MonadThrow[F]): MonadThrow[F] = ev
+  }
 }
