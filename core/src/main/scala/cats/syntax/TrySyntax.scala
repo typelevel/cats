@@ -13,7 +13,7 @@ trait TrySyntax {
 final class TryOps[A](private val self: Try[A]) extends AnyVal {
 
   /**
-   * lift the `try` into a `F[_]` with `ApplicativeError[F, Throwable]` instance
+   * lift the `try` into a `F[_]` with `ApplicativeThrow[F]` instance
    *
    * {{{
    * scala> import cats.implicits._
@@ -28,7 +28,7 @@ final class TryOps[A](private val self: Try[A]) extends AnyVal {
    * res0: Either[Throwable, Int] = Left(java.lang.Throwable: boo)
    * }}}
    */
-  def liftTo[F[_]](implicit F: ApplicativeError[F, Throwable]): F[A] =
+  def liftTo[F[_]](implicit F: ApplicativeThrow[F]): F[A] =
     F.fromTry(self)
 
   /**

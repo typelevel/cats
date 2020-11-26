@@ -142,4 +142,7 @@ package object cats {
   val Semigroup = cats.kernel.Semigroup
   val Monoid = cats.kernel.Monoid
   val Group = cats.kernel.Group
+
+  type ApplicativeThrow[F[_]] = ApplicativeError[F, Throwable]
+  type MonadThrow[F[_]] = MonadError[F, Throwable]
 }
