@@ -1,3 +1,38 @@
+## Version 2.3.0-M2
+
+_2020 November 6_ 🍂
+
+Added support for Scala/Dotty 3.0.0-M1.
+
+### Other improvements
+
+* #3661 fix typo in Scaladoc by @fixxer 
+* #3666, #3667 add `simulacrum-scalafix-annotations` to the classpath, build for 3.0.0-M1 by @djspiewak
+
+## Version 2.3.0-M1
+
+_2020 October 31_ 🎃
+
+The purpose of this milestone is that adventurous users can try out first-class Dotty support before we cut a final 2.3.0 release. Note that for the Dotty builds, binary compatibility between this milestone release and 2.3.0 may break in some situations. Also, if you are using the laws, sbt may complain about conflicting Scala version suffixes. This will be fixed in time for the final release.
+
+### Changes & additions
+
+* #3603 `distinct` for `TraverseFilter` by @takayahilton
+* #3620, #3624 instances for `immutable.Seq` by @JosephMoniz
+* #3630 methods to narrow input/widen output types on `FunctionK` by @bplommer
+* #3636 Dotty support by @LukaJCB and @larsrh
+* #3647 `traverseTap` by @majk-p
+* #3648 add a law relating `defer` and `fix` in `Defer` by @johnynek
+
+### Other improvements
+
+* #3373 test for `zipWithIndex` stack safety by @dantb
+* #3595 migrate from tut to mdoc by @keynmol
+* #3608 document `scalafixAll` to migrate test code as well by @bjaglin
+* #3609 Cats ecosystem website by @benkio
+* #3616 documentation on `ApplicativeError` by @dhinojosa
+* #3616 documentation on `Writer` and `WriterT` by @benkio
+
 ## Version 2.2.0
 
 _2020 September 3_

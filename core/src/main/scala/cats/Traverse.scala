@@ -38,6 +38,25 @@ import scala.annotation.implicitNotFound
   def traverse[G[_]: Applicative, A, B](fa: F[A])(f: A => G[B]): G[F[B]]
 
   /**
+   * Given a function which returns a G effect, thread this effect
+   * through the running of this function on all the values in F,
+   * returning an F[A] in a G context, ignoring the values
+   * returned by provided function.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import java.io.IOException
+   * scala> type IO[A] = Either[IOException, A]
+   * scala> def debug(msg: String): IO[Unit] = Right(())
+   * scala> List("1", "2", "3").traverseTap(debug)
+   * res1: IO[List[String]] = Right(List(1, 2, 3))
+   * }}}
+   */
+  def traverseTap[G[_]: Applicative, A, B](fa: F[A])(f: A => G[B]): G[F[A]] =
+    traverse(fa)(a => Applicative[G].as(f(a), a))
+
+  /**
    * A traverse followed by flattening the inner result.
    *
    * Example:
@@ -160,6 +179,8 @@ object Traverse {
     val typeClassInstance: TypeClassType
     def traverse[G[_], B](f: A => G[B])(implicit ev$1: Applicative[G]): G[F[B]] =
       typeClassInstance.traverse[G, A, B](self)(f)
+    def traverseTap[G[_], B](f: A => G[B])(implicit ev$1: Applicative[G]): G[F[A]] =
+      typeClassInstance.traverseTap[G, A, B](self)(f)
     def flatTraverse[G[_], B](f: A => G[F[B]])(implicit G: Applicative[G], F: FlatMap[F]): G[F[B]] =
       typeClassInstance.flatTraverse[G, A, B](self)(f)(G, F)
     def sequence[G[_], B](implicit ev$1: A <:< G[B], ev$2: Applicative[G]): G[F[B]] =
