@@ -146,12 +146,13 @@ import scala.annotation.implicitNotFound
 
     tailRecM(branches.toList)(step)
   }
-  
+
   def replicateM[A](n: Int, fa: F[A]): F[List[A]] =
-    ???
+    if (n == 0) this.pure(Nil)
+    else this.flatMap(fa)(head => this.flatMap(replicateM(n - 1, fa))(tail => head :: tail))
 
   def replicateM_[A](n: Int, fa: F[A]): F[Unit] =
-    if(n == 0) this.pure(())
+    if (n == 0) this.pure(())
     else this.flatMap(fa)(_ => replicateM_(n - 1, fa))
 
 }

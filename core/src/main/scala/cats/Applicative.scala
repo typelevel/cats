@@ -80,14 +80,14 @@ import scala.annotation.implicitNotFound
    * scala> val increment5AndGet: Counter[Int] = Applicative[Counter].productR(
    *      | Applicative[Counter].replicateA_(5, increment),
    *      | get
-          | )
+   *          | )
    * scala> increment5AndGet.run(0).value
    * res0: (Int, Int) = (5,5)
    * }}}
    */
   def replicateA_[A](n: Int, fa: F[A]): F[Unit] =
-    if(n == 0) this.pure(())
-	else this.productR(fa, this.replicateA_(n - 1, fa))
+    if (n == 0) this.pure(())
+    else this.productR(fa, this.replicateA_(n - 1, fa))
 
   /**
    * Compose an `Applicative[F]` and an `Applicative[G]` into an
