@@ -1,6 +1,6 @@
 package cats.tests
 
-import cats.{CoflatMap, Eval, Later, Monad, MonadError, Semigroupal, Traverse}
+import cats.{CoflatMap, Eval, Later, Monad, MonadThrow, Semigroupal, Traverse}
 import cats.kernel.{Eq, Monoid, Semigroup}
 import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests}
 import cats.laws.{ApplicativeLaws, CoflatMapLaws, FlatMapLaws, MonadLaws}
@@ -22,7 +22,7 @@ class TrySuite extends CatsSuite {
   checkAll("CoflatMap[Try]", SerializableTests.serializable(CoflatMap[Try]))
 
   checkAll("Try with Throwable", MonadErrorTests[Try, Throwable].monadError[Int, Int, Int])
-  checkAll("MonadError[Try, Throwable]", SerializableTests.serializable(MonadError[Try, Throwable]))
+  checkAll("MonadThrow[Try]", SerializableTests.serializable(MonadThrow[Try]))
 
   checkAll("Try[Int] with Option", TraverseTests[Try].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[Try]", SerializableTests.serializable(Traverse[Try]))
@@ -49,7 +49,7 @@ class TrySuite extends CatsSuite {
   test("catchNonFatal works") {
     forAll { (e: Either[String, Int]) =>
       val str = e.fold(identity, _.toString)
-      val res = MonadError[Try, Throwable].catchNonFatal(str.toInt)
+      val res = MonadThrow[Try].catchNonFatal(str.toInt)
       // the above should just never cause an uncaught exception
       // this is a somewhat bogus test:
       assert(res != null)
@@ -59,7 +59,7 @@ class TrySuite extends CatsSuite {
   test("catchNonFatalEval works") {
     forAll { (e: Either[String, Int]) =>
       val str = e.fold(identity, _.toString)
-      val res = MonadError[Try, Throwable].catchNonFatalEval(Eval.later(str.toInt))
+      val res = MonadThrow[Try].catchNonFatalEval(Eval.later(str.toInt))
       // the above should just never cause an uncaught exception
       // this is a somewhat bogus test:
       assert(res != null)
@@ -69,7 +69,7 @@ class TrySuite extends CatsSuite {
   test("catchOnly works") {
     forAll { (e: Either[String, Int]) =>
       val str = e.fold(identity, _.toString)
-      val res = MonadError[Try, Throwable].catchOnly[NumberFormatException](str.toInt)
+      val res = MonadThrow[Try].catchOnly[NumberFormatException](str.toInt)
       // the above should just never cause an uncaught exception
       // this is a somewhat bogus test:
       assert(res != null)
@@ -78,13 +78,13 @@ class TrySuite extends CatsSuite {
 
   test("catchOnly catches only a specified type") {
     intercept[NumberFormatException] {
-      MonadError[Try, Throwable].catchOnly[UnsupportedOperationException]("str".toInt)
+      MonadThrow[Try].catchOnly[UnsupportedOperationException]("str".toInt)
     }
   }
 
   test("fromTry works") {
     forAll { (t: Try[Int]) =>
-      assert((MonadError[Try, Throwable].fromTry(t)) === t)
+      assert((MonadThrow[Try].fromTry(t)) === t)
     }
   }
 
