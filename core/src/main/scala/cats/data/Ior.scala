@@ -99,6 +99,58 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
     fold(Ior.both(_, right), _ => Ior.right(right), (a, _) => Ior.both(a, right))
 
   /**
+   * When a Left value is present in the Ior, combine it will the value specified.
+   *
+   * When the Left value is absent, set it to the value specified.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.data.Ior
+   * scala> import cats.implicits._
+   *
+   * scala> val ior1 = "abc".leftIor[Int]
+   * scala> ior1.addLeft("def")
+   * res0: Ior[String, Int] = Left(abcdef)
+   *
+   * scala> val ior2 = 123.rightIor[String]
+   * scala> ior2.addLeft("abc")
+   * res1: cats.data.Ior[String,Int] = Both(abc,123)
+   *
+   * scala> val ior3 = Ior.Both("abc",123)
+   * scala> ior3.addLeft("def")
+   * res2: Ior[String, Int] = Both(abcdef,123)
+   * }}}
+   */
+  final def addLeft[AA >: A](left: AA)(implicit AA: Semigroup[AA]): AA Ior B =
+    fold(l => Ior.left(AA.combine(l, left)), Ior.both(left, _), (l, r) => Ior.both(AA.combine(l, left), r))
+
+  /**
+   * When a Right value is present in the Ior, combine it will the value specified.
+   *
+   * When the Right value is absent, set it to the value specified.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.data.Ior
+   * scala> import cats.implicits._
+   *
+   * scala> val ior1 = "abc".leftIor[Int]
+   * scala> ior1.addRight(123)
+   * res0: Ior[String, Int] = Both(abc,123)
+   *
+   * scala> val ior2 = 123.rightIor[String]
+   * scala> ior2.addRight(123)
+   * res1: Ior[String, Int] = Right(246)
+   *
+   * scala> val ior3 = Ior.Both("abc",123)
+   * scala> ior3.addRight(123)
+   * res2: Ior[String, Int] = Both(abc,246)
+   * }}}
+   */
+  final def addRight[BB >: B](right: BB)(implicit BB: Semigroup[BB]): A Ior BB =
+    fold(Ior.both(_, right), r => Ior.right(BB.combine(r, right)), (l, r) => Ior.both(l, BB.combine(r, right)))
+
+  /**
    * Example:
    * {{{
    * scala> import cats.data.Ior
