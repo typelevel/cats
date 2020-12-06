@@ -5,7 +5,7 @@ section: "typeclasses"
 source: "core/src/main/scala/cats/ApplicativeError.scala"
 scaladoc: "#cats.ApplicativeError"
 ---
-# ApplicativeError and Monad Error
+# ApplicativeError and MonadError
 
 ## Applicative Error
 
