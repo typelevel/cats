@@ -68,6 +68,28 @@ import scala.annotation.implicitNotFound
     Traverse[List].sequence(List.fill(n)(fa))(this)
 
   /**
+   * Given `fa` and `n`, apply `fa` `n` times but discard the results.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.data.State
+   *
+   * scala> type Counter[A] = State[Int, A]
+   * scala> val increment: Counter[Unit] = State.modify(_ + 1)
+   * scala> val get: Counter[Int] = State.get
+   * scala> val increment5AndGet: Counter[Int] = Applicative[Counter].productR(
+   *      | Applicative[Counter].replicateA_(5, increment),
+   *      | get
+          | )
+   * scala> increment5AndGet.run(0).value
+   * res0: (Int, Int) = (5,5)
+   * }}}
+   */
+  def replicateA_[A](n: Int, fa: F[A]): F[Unit] =
+    if(n == 0) this.pure(())
+	else this.productR(fa, this.replicateA_(n - 1, fa))
+
+  /**
    * Compose an `Applicative[F]` and an `Applicative[G]` into an
    * `Applicative[λ[α => F[G[α]]]]`.
    *
