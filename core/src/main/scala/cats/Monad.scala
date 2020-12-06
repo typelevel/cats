@@ -152,7 +152,7 @@ import scala.annotation.implicitNotFound
 
   def replicateM_[A](n: Int, fa: F[A]): F[Unit] =
     if(n == 0) this.pure(())
-	else this.flatMap(fa)(_ => replicateM_(n - 1, fa))
+    else this.flatMap(fa)(_ => replicateM_(n - 1, fa))
 
 }
 
