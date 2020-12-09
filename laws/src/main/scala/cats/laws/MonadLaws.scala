@@ -7,7 +7,7 @@ import cats.implicits._
 /**
  * Laws that must be obeyed by any `Monad`.
  */
-trait MonadLaws[F[_]] extends ApplicativeLaws[F] with FlatMapLaws[F] {
+trait MonadLaws[F[_]] extends SelectiveLaws[F] with FlatMapLaws[F] {
   implicit override def F: Monad[F]
 
   def monadLeftIdentity[A, B](a: A, f: A => F[B]): IsEq[F[B]] =
