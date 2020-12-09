@@ -207,7 +207,7 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
     new Parallel[Either[E, *]] {
       type F[x] = Validated[E, x]
 
-      def applicative: Applicative[Validated[E, *]] = Validated.catsDataApplicativeErrorForValidated
+      def applicative: Applicative[Validated[E, *]] = Validated.catsDataSelectiveErrorForValidated
       def monad: Monad[Either[E, *]] = cats.instances.either.catsStdInstancesForEither
 
       def sequential: Validated[E, *] ~> Either[E, *] =

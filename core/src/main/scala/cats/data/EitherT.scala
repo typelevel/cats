@@ -922,7 +922,7 @@ abstract private[data] class EitherTInstances extends EitherTInstances1 {
       implicit val monadEither: Monad[Either[E, *]] = cats.instances.either.catsStdInstancesForEither
 
       def applicative: Applicative[Nested[P.F, Validated[E, *], *]] =
-        cats.data.Nested.catsDataApplicativeForNested(P.applicative, Validated.catsDataApplicativeErrorForValidated)
+        cats.data.Nested.catsDataApplicativeForNested(P.applicative, Validated.catsDataSelectiveErrorForValidated)
 
       def monad: Monad[EitherT[M, E, *]] = cats.data.EitherT.catsDataMonadErrorForEitherT
 
@@ -983,7 +983,7 @@ abstract private[data] class EitherTInstances1 extends EitherTInstances2 {
     new Parallel[EitherT[M, E, *]] {
       type F[x] = Nested[M, Validated[E, *], x]
 
-      implicit val appValidated: Applicative[Validated[E, *]] = Validated.catsDataApplicativeErrorForValidated
+      implicit val appValidated: Applicative[Validated[E, *]] = Validated.catsDataSelectiveErrorForValidated
       implicit val monadEither: Monad[Either[E, *]] = cats.instances.either.catsStdInstancesForEither
 
       def applicative: Applicative[Nested[M, Validated[E, *], *]] =
