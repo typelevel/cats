@@ -1,5 +1,7 @@
 
 ### ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) Community Announcements ![#f03c15](https://placehold.it/15/f03c15/000000?text=+)
+
+* **Oct 31 2020** [Cats 2.3.0-M1 is released](https://github.com/typelevel/cats/releases/tag/v2.3.0-M1) with Dotty supported
 * **Sept 3 2020** [Cats 2.2.0 is released](https://github.com/typelevel/cats/releases/tag/v2.2.0)
 * **Dec 18 2019** [Cats 2.1.0 is released](https://github.com/typelevel/cats/releases/tag/v2.1.0)
 * **Sep 9 2019** [Cats 2.0.0 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0)
@@ -214,6 +216,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Basefarm](https://basefarm.com/)
 - [buildo](https://buildo.io)
 - [Chartboost](https://www.chartboost.com/)
+- [Cleverbase](https://cleverbase.com/en/)
 - [Codacy](https://www.codacy.com/)
 - [Codecentric](https://codecentric.de)
 - [Colisweb](https://www.colisweb.com/)

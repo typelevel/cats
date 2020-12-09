@@ -127,11 +127,11 @@ object Invariant extends ScalaVersionSpecificInvariantInstances with InvariantIn
     cats.instances.function.catsStdContravariantMonoidalForFunction1[R]
   implicit def catsFunctorForPair: Functor[λ[P => (P, P)]] = cats.instances.tuple.catsDataFunctorForPair
 
-  implicit def catsInstancesForTry: MonadError[Try, Throwable] with CoflatMap[Try] =
+  implicit def catsInstancesForTry: MonadThrow[Try] with CoflatMap[Try] =
     cats.instances.try_.catsStdInstancesForTry
   implicit def catsInstancesForFuture(implicit
     ec: ExecutionContext
-  ): MonadError[Future, Throwable] with CoflatMap[Future] =
+  ): MonadThrow[Future] with CoflatMap[Future] =
     cats.instances.future.catsStdInstancesForFuture(ec)
 
   implicit def catsContravariantMonoidalForOrder: ContravariantMonoidal[Order] =

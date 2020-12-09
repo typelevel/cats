@@ -812,4 +812,10 @@ private[data] trait WriterTFunctions {
 
   def valueT[F[_], L, V](vf: F[V])(implicit functorF: Functor[F], monoidL: Monoid[L]): WriterT[F, L, V] =
     WriterT.putT[F, L, V](vf)(monoidL.empty)
+
+  /**
+   * Lifts a FunctionK operating on effects to a FunctionK operating on WriterT with these effects.
+   */
+  def liftFunctionK[F[_], G[_], A](f: F ~> G): WriterT[F, A, *] ~> WriterT[G, A, *] =
+    new (WriterT[F, A, *] ~> WriterT[G, A, *]) { def apply[B](k: WriterT[F, A, B]): WriterT[G, A, B] = k.mapK(f) }
 }

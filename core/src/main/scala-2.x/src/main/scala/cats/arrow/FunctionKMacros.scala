@@ -2,9 +2,10 @@ package cats
 package arrow
 
 import scala.language.experimental.macros
-import scala.reflect.macros.blackbox.Context
+import scala.reflect.macros.blackbox
 
 private[arrow] class FunctionKMacroMethods {
+  protected type τ[F[_], G[_]]
 
   /**
    * Lifts function `f` of `F[A] => G[A]` into a `FunctionK[F, G]`.
@@ -27,76 +28,61 @@ private[arrow] class FunctionKMacroMethods {
    */
   def lift[F[_], G[_]](f: (F[α] => G[α]) forSome { type α }): FunctionK[F, G] =
     macro FunctionKMacros.lift[F, G]
+
+  /**
+   * Lifts function `f` of `F[A] => G[A]` into a `FunctionK[F, G]`.
+   *
+   * {{{
+   *   def headOption[A](list: List[A]): Option[A] = list.headOption
+   *   val lifted = FunctionK.liftFunction[List, Option](headOption)
+   * }}}
+   *
+   * Note: The weird `τ[F, G]` parameter is there to compensate for
+   * the lack of polymorphic function types in Scala 2.
+   */
+  def liftFunction[F[_], G[_]](f: F[τ[F, G]] => G[τ[F, G]]): FunctionK[F, G] =
+    new FunctionK[F, G] {
+      def apply[A](fa: F[A]): G[A] = f.asInstanceOf[F[A] => G[A]](fa)
+    }
 }
 
 private[arrow] object FunctionKMacros {
 
-  def lift[F[_], G[_]](c: Context)(
+  def lift[F[_], G[_]](c: blackbox.Context)(
     f: c.Expr[(F[α] => G[α]) forSome { type α }]
-  )(implicit
-    evF: c.WeakTypeTag[F[_]],
-    evG: c.WeakTypeTag[G[_]]
-  ): c.Expr[FunctionK[F, G]] =
+  )(implicit evF: c.WeakTypeTag[F[Any]], evG: c.WeakTypeTag[G[Any]]): c.Expr[FunctionK[F, G]] =
     c.Expr[FunctionK[F, G]](new Lifter[c.type](c).lift[F, G](f.tree))
-  // ^^note: extra space after c.type to appease scalastyle
 
-  private[this] class Lifter[C <: Context](val c: C) {
+  private class Lifter[C <: blackbox.Context](val c: C) {
     import c.universe._
 
-    def lift[F[_], G[_]](tree: Tree)(implicit
-      evF: c.WeakTypeTag[F[_]],
-      evG: c.WeakTypeTag[G[_]]
-    ): Tree =
-      unblock(tree) match {
-        case q"($param) => $trans[..$typeArgs](${arg: Ident})" if param.name == arg.name =>
-          typeArgs
-            .collect { case tt: TypeTree => tt }
-            .find(tt => Option(tt.original).isDefined)
-            .foreach { param =>
-              c.abort(param.pos,
-                      s"type parameter $param must not be supplied when lifting function $trans to FunctionK"
+    def lift[F[_], G[_]](tree: Tree)(implicit evF: c.WeakTypeTag[F[Any]], evG: c.WeakTypeTag[G[Any]]): Tree = {
+      def liftFunction(function: Tree): Tree =
+        function match {
+          case q"($param) => $trans[..$typeArgs]($arg)" if param.symbol == arg.symbol =>
+            for (typeArg @ TypeTree() <- typeArgs) if (typeArg.original != null) {
+              c.abort(
+                typeArg.pos,
+                s"type parameter $typeArg must not be supplied when lifting function $trans to FunctionK"
               )
             }
 
-          val F = punchHole(evF.tpe)
-          val G = punchHole(evG.tpe)
+            val F = typeConstructorOf[F[Any]]
+            val G = typeConstructorOf[G[Any]]
+            q"${reify(FunctionK)}.liftFunction[$F, $G]($trans(_))"
 
-          q"""
-        new _root_.cats.arrow.FunctionK[$F, $G] {
-          def apply[A](fa: $F[A]): $G[A] = $trans(fa)
+          case other =>
+            c.abort(other.pos, s"Unexpected tree $other when lifting to FunctionK")
         }
-       """
-        case other =>
-          c.abort(other.pos, s"Unexpected tree $other when lifting to FunctionK")
-      }
 
-    private[this] def unblock(tree: Tree): Tree =
       tree match {
-        case Block(Nil, expr) => expr
-        case _                => tree
+        case Block(Nil, expr)   => liftFunction(expr)
+        case Block(stats, expr) => Block(stats, liftFunction(expr))
+        case other              => liftFunction(other)
       }
+    }
 
-    private[this] def punchHole(tpe: Type): Tree =
-      tpe match {
-        case PolyType(undet :: Nil, underlying: TypeRef) =>
-          val α = TypeName("α")
-          def rebind(typeRef: TypeRef): Tree =
-            if (typeRef.sym == undet) tq"$α"
-            else {
-              val args = typeRef.args.map {
-                case ref: TypeRef => rebind(ref)
-                case arg          => tq"$arg"
-              }
-              tq"${typeRef.sym}[..$args]"
-            }
-          val rebound = rebind(underlying)
-          tq"""({type λ[$α] = $rebound})#λ"""
-        case TypeRef(pre, sym, Nil) =>
-          tq"$sym"
-        case _ =>
-          c.abort(c.enclosingPosition, s"Unexpected type $tpe when lifting to FunctionK")
-      }
-
+    private def typeConstructorOf[A: WeakTypeTag]: Type =
+      weakTypeOf[A].typeConstructor.etaExpand
   }
-
 }

@@ -1,9 +1,17 @@
 import microsites._
 import ReleaseTransformations._
 import sbt.io.Using
+import com.jsuereth.sbtpgp.PgpKeys
 
 import scala.xml.transform.{RewriteRule, RuleTransformer}
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
+
+lazy val publishSignedIfRelevant = taskKey[Unit]("Runs publishSigned but only if scalaVersion in crossScalaVersions")
+Global / publishSignedIfRelevant := PgpKeys.publishSigned.value
+
+lazy val publishLocalSignedIfRelevant =
+  taskKey[Unit]("Runs publishLocalSigned but only if scalaVersion in crossScalaVersions")
+Global / publishLocalSignedIfRelevant := PgpKeys.publishLocalSigned.value
 
 lazy val scoverageSettings = Seq(
   coverageMinimum := 60,
@@ -12,64 +20,156 @@ lazy val scoverageSettings = Seq(
 )
 
 organization in ThisBuild := "org.typelevel"
-scalafixDependencies in ThisBuild += "org.typelevel" %% "simulacrum-scalafix" % "0.5.0"
+scalafixDependencies in ThisBuild += "org.typelevel" %% "simulacrum-scalafix" % "0.5.1"
 
-val isTravisBuild = settingKey[Boolean]("Flag indicating whether the current build is running under Travis")
-val crossScalaVersionsFromTravis = settingKey[Seq[String]]("Scala versions set in .travis.yml as scala_version_XXX")
-isTravisBuild in Global := sys.env.contains("TRAVIS")
+val scalaCheckVersion = "1.15.1"
 
-val scalaCheckVersion = "1.14.3"
-
-val munitVersion = "0.7.14"
-
-val disciplineVersion = "1.0.3"
+val disciplineVersion = "1.1.2"
 
 val disciplineScalatestVersion = "2.0.1"
-val disciplineMunitVersion = "0.3.0"
+val disciplineMunitVersion = "1.0.3"
 
-val kindProjectorVersion = "0.11.0"
+val kindProjectorVersion = "0.11.2"
 
-crossScalaVersionsFromTravis in Global := {
-  val manifest = (baseDirectory in ThisBuild).value / ".travis.yml"
-  import collection.JavaConverters._
-  Using.fileInputStream(manifest) { fis =>
-    new org.yaml.snakeyaml.Yaml().loadAs(fis, classOf[java.util.Map[_, _]]).asScala.toList.collect {
-      case (k: String, v: String) if k.contains("scala_version_") => v
-    }
+val PrimaryOS = "ubuntu-latest"
+ThisBuild / githubWorkflowOSes := Seq(PrimaryOS)
+
+val PrimaryJava = "adopt@1.8"
+val LTSJava = "adopt@1.11"
+val LatestJava = "adopt@1.15"
+val GraalVM8 = "graalvm-ce-java8@20.2.0"
+
+ThisBuild / githubWorkflowJavaVersions := Seq(PrimaryJava, LTSJava, LatestJava, GraalVM8)
+
+val Scala212 = "2.12.12"
+val Scala213 = "2.13.3"
+val DottyOld = "3.0.0-M1"
+val DottyNew = "3.0.0-M2"
+
+ThisBuild / crossScalaVersions := Seq(Scala212, Scala213, DottyOld, DottyNew)
+ThisBuild / scalaVersion := Scala213
+
+ThisBuild / githubWorkflowPublishTargetBranches := Seq() // disable publication for now
+
+ThisBuild / githubWorkflowBuildMatrixAdditions +=
+  "platform" -> List("jvm", "js")
+
+ThisBuild / githubWorkflowBuildMatrixExclusions ++=
+  githubWorkflowJavaVersions.value.filterNot(Set(PrimaryJava)).map { java =>
+    MatrixExclude(Map("platform" -> "js", "java" -> java))
   }
-}
+
+ThisBuild / githubWorkflowBuildMatrixExclusions ++=
+  Seq("jvm", "js").map { platform =>
+    MatrixExclude(
+      Map("platform" -> platform, "java" -> LatestJava, "scala" -> DottyOld)
+    ) // 3.0.0-M1 doesn't work on JDK 14+
+  }
+
+// we don't need this since we aren't publishing
+ThisBuild / githubWorkflowArtifactUpload := false
+
+val JvmCond = s"matrix.platform == 'jvm'"
+val JsCond = s"matrix.platform == 'js'"
+
+val Scala2Cond = s"(matrix.scala != '$DottyOld' && matrix.scala != '$DottyNew')"
+val Scala3Cond = s"(matrix.scala == '$DottyOld' || matrix.scala == '$DottyNew')"
+
+ThisBuild / githubWorkflowBuild := Seq(
+  WorkflowStep.Sbt(List("validateAllJS"), name = Some("Validate JavaScript"), cond = Some(JsCond)),
+  WorkflowStep.Use("actions",
+                   "setup-python",
+                   "v2",
+                   name = Some("Setup Python"),
+                   params = Map("python-version" -> "3.x"),
+                   cond = Some(JvmCond + " && " + Scala2Cond)
+  ),
+  WorkflowStep.Run(List("pip install codecov"),
+                   cond = Some(JvmCond + " && " + Scala2Cond),
+                   name = Some("Setup codecov")
+  ),
+  WorkflowStep.Sbt(List("coverage", "buildJVM", "bench/test", "coverageReport"),
+                   name = Some("Validate JVM (scala 2)"),
+                   cond = Some(JvmCond + " && " + Scala2Cond)
+  ),
+  WorkflowStep.Sbt(List("buildJVM", "bench/test"),
+                   name = Some("Validate JVM (scala 3)"),
+                   cond = Some(JvmCond + " && " + Scala3Cond)
+  ),
+  WorkflowStep.Run(List("codecov -F ${{ matrix.scala }}"),
+                   name = Some("Upload Codecov Results"),
+                   cond = Some(JvmCond + " && " + Scala2Cond)
+  ),
+  WorkflowStep.Sbt(
+    List("clean", "validateBC"), // cleaning here to avoid issues with codecov
+    name = Some("Binary compatibility ${{ matrix.scala }}"),
+    cond = Some(JvmCond + " && " + Scala2Cond)
+  )
+)
+
+ThisBuild / githubWorkflowAddedJobs ++= Seq(
+  WorkflowJob(
+    "scalafix",
+    "Scalafix",
+    githubWorkflowJobSetup.value.toList ::: List(
+      WorkflowStep.Run(List("cd scalafix", "sbt test"), name = Some("Scalafix tests"))
+    ),
+    javas = List(PrimaryJava),
+    scalas = crossScalaVersions.value.toList
+  ),
+  WorkflowJob(
+    "linting",
+    "Linting",
+    githubWorkflowJobSetup.value.toList ::: List(
+      WorkflowStep.Sbt(List("fmtCheck"), name = Some("Check formatting"), cond = Some(Scala2Cond))
+    ),
+    javas = List(PrimaryJava),
+    scalas = crossScalaVersions.value.toList
+  ),
+  WorkflowJob(
+    "microsite",
+    "Microsite",
+    githubWorkflowJobSetup.value.toList ::: List(
+      WorkflowStep.Use("actions", "setup-ruby", "v1", name = Some("Setup Ruby")),
+      WorkflowStep.Run(List("gem install jekyll -v 4.0.0"), name = Some("Setup Jekyll")),
+      WorkflowStep.Sbt(List("docs/makeMicrosite"), name = Some("Build the microsite"))
+    ),
+    javas = List(PrimaryJava),
+    scalas = List(Scala212)
+  )
+)
 
 def scalaVersionSpecificFolders(srcName: String, srcBaseDir: java.io.File, scalaVersion: String) = {
   def extraDirs(suffix: String) =
     List(CrossType.Pure, CrossType.Full)
       .flatMap(_.sharedSrcDir(srcBaseDir, srcName).toList.map(f => file(f.getPath + suffix)))
   CrossVersion.partialVersion(scalaVersion) match {
-    case Some((2, y)) => extraDirs("-2.x") ++ (if (y >= 13) extraDirs("-2.13+") else Nil)
-    case Some((0, _)) => extraDirs("-2.13+") ++ extraDirs("-3.x")
-    case _            => Nil
+    case Some((2, y))     => extraDirs("-2.x") ++ (if (y >= 13) extraDirs("-2.13+") else Nil)
+    case Some((0 | 3, _)) => extraDirs("-2.13+") ++ extraDirs("-3.x")
+    case _                => Nil
   }
 }
-
-lazy val commonScalaVersionSettings = Seq(
-  crossScalaVersions := (crossScalaVersionsFromTravis in Global).value,
-  scalaVersion := crossScalaVersions.value.find(_.contains("2.12")).get
-)
-
-commonScalaVersionSettings
 
 ThisBuild / mimaFailOnNoPrevious := false
 
 def doctestGenTestsDottyCompat(isDotty: Boolean, genTests: Seq[File]): Seq[File] =
   if (isDotty) Nil else genTests
 
-lazy val commonSettings = commonScalaVersionSettings ++ Seq(
+lazy val commonSettings = Seq(
   scalacOptions ++= commonScalacOptions(scalaVersion.value, isDotty.value),
   Compile / unmanagedSourceDirectories ++= scalaVersionSpecificFolders("main", baseDirectory.value, scalaVersion.value),
   Test / unmanagedSourceDirectories ++= scalaVersionSpecificFolders("test", baseDirectory.value, scalaVersion.value),
   resolvers ++= Seq(Resolver.sonatypeRepo("releases"), Resolver.sonatypeRepo("snapshots")),
   parallelExecution in Test := false,
   testFrameworks += new TestFramework("munit.Framework"),
-  scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings")
+  scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings"),
+  Compile / doc / sources := {
+    val old = (Compile / doc / sources).value
+    if (isDotty.value)
+      Seq()
+    else
+      old
+  }
 ) ++ warnUnusedImport
 
 def macroDependencies(scalaVersion: String) =
@@ -91,21 +191,7 @@ lazy val simulacrumSettings = Seq(
   scalacOptions ++= (
     if (isDotty.value) Nil else Seq(s"-P:semanticdb:targetroot:${baseDirectory.value}/target/.semanticdb", "-Yrangepos")
   ),
-  libraryDependencies +=
-    ("org.typelevel" %% "simulacrum-scalafix-annotations" % "0.5.0" % Provided).withDottyCompat(scalaVersion.value),
-  pomPostProcess := { (node: xml.Node) =>
-    new RuleTransformer(new RewriteRule {
-      override def transform(node: xml.Node): Seq[xml.Node] =
-        node match {
-          case e: xml.Elem
-              if e.label == "dependency" &&
-                e.child.exists(child => child.label == "groupId" && child.text == "org.typelevel") &&
-                e.child.exists(child => child.label == "artifactId" && child.text.startsWith("simulacrum")) =>
-            Nil
-          case _ => Seq(node)
-        }
-    }).transform(node).head
-  }
+  libraryDependencies += "org.typelevel" %% "simulacrum-scalafix-annotations" % "0.5.1"
 )
 
 lazy val tagName = Def.setting {
@@ -113,20 +199,24 @@ lazy val tagName = Def.setting {
 }
 
 lazy val commonJsSettings = Seq(
-  scalacOptions += {
-    val tv = tagName.value
-    val tagOrHash =
-      if (isSnapshot.value) sys.process.Process("git rev-parse HEAD").lineStream_!.head
-      else tv
-    val a = (baseDirectory in LocalRootProject).value.toURI.toString
-    val g = "https://raw.githubusercontent.com/typelevel/cats/" + tagOrHash
-    s"-P:scalajs:mapSourceURI:$a->$g/"
+  publishConfiguration := publishConfiguration.value.withOverwrite(true), // needed since we double-publish on release
+  scalacOptions ++= {
+    if (isDotty.value) Seq()
+    else {
+      val tv = tagName.value
+      val tagOrHash =
+        if (isSnapshot.value) sys.process.Process("git rev-parse HEAD").lineStream_!.head
+        else tv
+      val a = (baseDirectory in LocalRootProject).value.toURI.toString
+      val g = "https://raw.githubusercontent.com/typelevel/cats/" + tagOrHash
+      Seq(s"-P:scalajs:mapSourceURI:$a->$g/")
+    }
   },
   scalaJSStage in Global := FullOptStage,
   parallelExecution := false,
   jsEnv := new org.scalajs.jsenv.nodejs.NodeJSEnv(),
   // batch mode decreases the amount of memory needed to compile Scala.js code
-  scalaJSLinkerConfig := scalaJSLinkerConfig.value.withBatchMode(isTravisBuild.value),
+  scalaJSLinkerConfig := scalaJSLinkerConfig.value.withBatchMode(githubIsWorkflowBuild.value),
   scalaJSLinkerConfig ~= (_.withModuleKind(ModuleKind.CommonJSModule)),
   // currently sbt-doctest doesn't work in JS builds
   // https://github.com/tkawachi/sbt-doctest/issues/52
@@ -136,7 +226,7 @@ lazy val commonJsSettings = Seq(
 
 lazy val commonJvmSettings = Seq(
   testOptions in Test += {
-    val flag = if ((isTravisBuild in Global).value) "-oCI" else "-oDF"
+    val flag = if (githubIsWorkflowBuild.value) "-oCI" else "-oDF"
     Tests.Argument(TestFrameworks.ScalaTest, flag)
   },
   Test / fork := true,
@@ -160,7 +250,6 @@ lazy val disciplineDependencies = Seq(
 
 lazy val testingDependencies = Seq(
   libraryDependencies ++= Seq(
-    "org.scalameta" %%% "munit-scalacheck" % munitVersion % Test,
     "org.typelevel" %%% "discipline-munit" % disciplineMunitVersion % Test
   )
 )
@@ -422,7 +511,7 @@ lazy val docs = project
 
 lazy val cats = project
   .in(file("."))
-  .settings(moduleName := "root", crossScalaVersions := Nil)
+  .settings(moduleName := "root")
   .settings(publishSettings) // these settings are needed to release all aggregated modules under this root module
   .settings(noPublishSettings) // this is to exclude the root module itself from being published.
   .aggregate(catsJVM, catsJS)
@@ -444,8 +533,7 @@ lazy val catsJVM = project
              alleycatsCore.jvm,
              alleycatsLaws.jvm,
              alleycatsTests.jvm,
-             jvm,
-             docs
+             jvm
   )
   .dependsOn(
     kernel.jvm,
@@ -506,8 +594,7 @@ lazy val kernel = crossProject(JSPlatform, JVMPlatform)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings ++ mimaSettings("cats-kernel"))
   .settings(
-    libraryDependencies += ("org.scalacheck" %%% "scalacheck" % scalaCheckVersion % Test)
-      .withDottyCompat(scalaVersion.value)
+    libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % Test
   )
 
 lazy val kernelLaws = crossProject(JSPlatform, JVMPlatform)
@@ -532,8 +619,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
   .settings(sourceGenerators in Compile += (sourceManaged in Compile).map(Boilerplate.gen).taskValue)
   .settings(includeGeneratedSrc)
   .settings(
-    libraryDependencies += ("org.scalacheck" %%% "scalacheck" % scalaCheckVersion % Test)
-      .withDottyCompat(scalaVersion.value),
+    libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % Test,
     doctestGenTests := doctestGenTestsDottyCompat(isDotty.value, doctestGenTests.value)
   )
   .settings(
@@ -654,7 +740,6 @@ lazy val binCompatTest = project
     // see https://github.com/typelevel/cats/pull/3079#discussion_r327181584
     // see https://github.com/typelevel/cats/pull/3026#discussion_r321984342
     useCoursier := false,
-    commonScalaVersionSettings,
     addCompilerPlugin(("org.typelevel" %% "kind-projector" % kindProjectorVersion).cross(CrossVersion.full)),
     libraryDependencies += mimaPrevious("cats-core", scalaVersion.value, version.value).last % Provided,
     scalacOptions ++= (if (priorTo2_13(scalaVersion.value)) Seq("-Ypartial-unification") else Nil)
@@ -781,8 +866,7 @@ addCommandAlias("validateKernelJS", "kernelLawsJS/test")
 addCommandAlias("validateFreeJS", "freeJS/test")
 addCommandAlias("validateAlleycatsJS", "alleycatsTestsJS/test")
 addCommandAlias("validateAllJS", "all testsJS/test js/test kernelLawsJS/test freeJS/test alleycatsTestsJS/test")
-addCommandAlias("validateDotty", ";++0.27.0-RC1!;alleycatsLawsJVM/compile")
-addCommandAlias("validate", ";clean;validateJS;validateKernelJS;validateFreeJS;validateJVM;validateDotty")
+addCommandAlias("validate", ";clean;validateJS;validateKernelJS;validateFreeJS;validateJVM")
 
 addCommandAlias("prePR", "fmt")
 
