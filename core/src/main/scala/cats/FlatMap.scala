@@ -20,7 +20,7 @@ import scala.annotation.implicitNotFound
  * Must obey the laws defined in cats.laws.FlatMapLaws.
  */
 @implicitNotFound("Could not find an instance of FlatMap for ${F}")
-@typeclass trait FlatMap[F[_]] extends Apply[F] {
+@typeclass trait FlatMap[F[_]] extends Select[F] {
   def flatMap[A, B](fa: F[A])(f: A => F[B]): F[B]
 
   /**
