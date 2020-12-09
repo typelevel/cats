@@ -28,9 +28,11 @@ trait MonadTests[F[_]] extends SelectiveTests[F] with FlatMapTests[F] {
     iso: Isomorphisms[F]
   ): RuleSet = {
     implicit def ArbFAA: Arbitrary[F[Either[A, A]]] =
-      Arbitrary(Gen.oneOf(
-        ArbFA.arbitrary.map(fa => laws.F.map(fa)(_.asLeft[A])),
-        ArbFA.arbitrary.map(fa => laws.F.map(fa)(_.asRight[A]))))
+      Arbitrary(
+        Gen.oneOf(ArbFA.arbitrary.map(fa => laws.F.map(fa)(_.asLeft[A])),
+                  ArbFA.arbitrary.map(fa => laws.F.map(fa)(_.asRight[A]))
+        )
+      )
 
     new RuleSet {
       def name: String = "monad"
@@ -63,9 +65,11 @@ trait MonadTests[F[_]] extends SelectiveTests[F] with FlatMapTests[F] {
     iso: Isomorphisms[F]
   ): RuleSet = {
     implicit def ArbFAA: Arbitrary[F[Either[A, A]]] =
-      Arbitrary(Gen.oneOf(
-        ArbFA.arbitrary.map(fa => laws.F.map(fa)(_.asLeft[A])),
-        ArbFA.arbitrary.map(fa => laws.F.map(fa)(_.asRight[A]))))
+      Arbitrary(
+        Gen.oneOf(ArbFA.arbitrary.map(fa => laws.F.map(fa)(_.asLeft[A])),
+                  ArbFA.arbitrary.map(fa => laws.F.map(fa)(_.asRight[A]))
+        )
+      )
     new RuleSet {
       def name: String = "monad (stack-unsafe)"
       def bases: Seq[(String, RuleSet)] = Nil
