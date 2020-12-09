@@ -257,6 +257,12 @@ trait Apply[F[_]] extends Functor[F] with InvariantSemigroupal[F] with ApplyArit
     def ite(b: Boolean)(ifTrue: A, ifFalse: A) = if (b) ifTrue else ifFalse
     ap2(map(fcond)(ite))(ifTrue, ifFalse)
   }
+
+  def select[A, B](fab: F[Either[A, B]])(ff: F[A => B]): F[B] =
+    map2(fab, ff) {
+      case (Left(a), f)  => f(a)
+      case (Right(b), f) => b
+    }
 }
 
 object Apply {
