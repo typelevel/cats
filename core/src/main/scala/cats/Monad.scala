@@ -13,9 +13,15 @@ import scala.annotation.implicitNotFound
  * Must obey the laws defined in cats.laws.MonadLaws.
  */
 @implicitNotFound("Could not find an instance of Monad for ${F}")
-@typeclass trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
+@typeclass trait Monad[F[_]] extends FlatMap[F] with Selective[F] {
   override def map[A, B](fa: F[A])(f: A => B): F[B] =
     flatMap(fa)(a => pure(f(a)))
+
+  override def select[A, B](fab: F[Either[A, B]])(ff: F[A => B]): F[B] =
+    flatMap(fab) {
+      case Left(a)  => map(ff)(_(a))
+      case Right(b) => pure(b)
+    }
 
   /**
    * Execute an action repeatedly as long as the given `Boolean` expression
