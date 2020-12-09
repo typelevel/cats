@@ -395,6 +395,11 @@ final class EitherObjectOps(private val either: Either.type) extends AnyVal { //
    * Cached value of `Right(())` to avoid allocations for a common case.
    */
   def unit[A]: Either[A, Unit] = EitherUtil.unit
+
+  /**
+   * Cached value of `Left(())` to avoid allocations for a common case.
+   */
+  def leftUnit[B]: Either[Unit, B] = EitherUtil.leftUnit
 }
 
 final class LeftOps[A, B](private val left: Left[A, B]) extends AnyVal {
@@ -509,4 +514,5 @@ private[cats] object EitherUtil {
     left.asInstanceOf[Either[A, C]]
 
   private[cats] val unit = Right(())
+  private[cats] val leftUnit = Left(())
 }
