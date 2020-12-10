@@ -185,7 +185,6 @@ import scala.annotation.implicitNotFound
    */
   def whenA[A](cond: Boolean)(f: => F[A]): F[Unit] =
     if (cond) void(f) else unit
-
 }
 
 object Applicative {
