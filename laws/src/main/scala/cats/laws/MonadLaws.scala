@@ -45,7 +45,7 @@ trait MonadLaws[F[_]] extends SelectiveLaws[F] with FlatMapLaws[F] {
   def selectRigidity[A, B](fab: F[Either[A, B]], ff: F[A => B]): IsEq[F[B]] = {
     def selectM[G[_]: Monad](gab: G[Either[A, B]])(gf: G[A => B]) =
       gab.flatMap {
-        case Left(a) => gf.map(_(a))
+        case Left(a)  => gf.map(_(a))
         case Right(b) => b.pure[G]
       }
     F.select(fab)(ff) <-> selectM(fab)(ff)
