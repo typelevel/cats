@@ -7,13 +7,13 @@ import scala.annotation.implicitNotFound
 @typeclass trait Selective[F[_]] extends Applicative[F] {
   def select[A, B](fab: F[Either[A, B]])(ff: F[A => B]): F[B]
 
-  def branch[A, B, C](x: F[Either[A, B]])(l: F[A => C])(r: F[B => C]): F[C] = {
+  def branch[A, B, C](fab: F[Either[A, B]])(fl: F[A => C])(fr: F[B => C]): F[C] = {
     val lhs = {
-      val innerLhs: F[Either[A, Either[B, C]]] = map(x)(_.map(Left(_)))
-      val innerRhs: F[A => Either[B, C]] = map(l)(_.andThen(Right(_)))
+      val innerLhs: F[Either[A, Either[B, C]]] = map(fab)(_.map(Left(_)))
+      val innerRhs: F[A => Either[B, C]] = map(fl)(_.andThen(Right(_)))
       select(innerLhs)(innerRhs)
     }
-    select(lhs)(r)
+    select(lhs)(fr)
   }
 
   def ifS[A](x: F[Boolean])(t: F[A])(e: F[A]): F[A] = {

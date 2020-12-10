@@ -16,7 +16,7 @@ final class SelectiveOps[F[_], A, B](private val fab: F[Either[A, B]]) extends A
 }
 
 final class IfSOps[F[_]](private val fBool: F[Boolean]) extends AnyVal {
-  def ifS[A](ifTrue: => F[A], ifFalse: => F[A])(implicit F: Selective[F]): F[A] = F.ifS(fBool)(ifTrue)(ifFalse)
+  def ifS[A](ifTrue: => F[A])(ifFalse: => F[A])(implicit F: Selective[F]): F[A] = F.ifS(fBool)(ifTrue)(ifFalse)
 }
 
 final class WhenSOps[F[_]](private val fBool: F[Boolean]) extends AnyVal {
