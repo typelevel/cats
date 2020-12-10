@@ -48,7 +48,7 @@ trait MonadLaws[F[_]] extends SelectiveLaws[F] with FlatMapLaws[F] {
         case Left(a)  => gf.map(_(a))
         case Right(b) => b.pure[G]
       }
-    F.select(fab)(ff) <-> selectM(fab)(ff)
+    fab.select(ff) <-> selectM(fab)(ff)
   }
 }
 
