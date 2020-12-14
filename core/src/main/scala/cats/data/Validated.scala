@@ -931,8 +931,10 @@ sealed abstract private[data] class ValidatedInstances extends ValidatedInstance
         fab.leftMap(f)
     }
 
-  implicit def catsDataSelectiveErrorForValidated[E](implicit E: Semigroup[E]): SelectiveError[Validated[E, *], E] =
-    new ValidatedSelective[E] with SelectiveError[Validated[E, *], E] {
+  implicit def catsDataSelectiveErrorForValidated[E](implicit
+    E: Semigroup[E]
+  ): Selective[Validated[E, *]] with ApplicativeError[Validated[E, *], E] =
+    new ValidatedSelective[E] with ApplicativeError[Validated[E, *], E] {
       def handleErrorWith[A](fa: Validated[E, A])(f: E => Validated[E, A]): Validated[E, A] =
         fa match {
           case Validated.Invalid(e)   => f(e)
