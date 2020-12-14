@@ -3,7 +3,8 @@ package laws
 package discipline
 
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import org.scalacheck.{Arbitrary, Cogen, Prop}
+import cats.syntax.all._
+import org.scalacheck.{Arbitrary, Cogen, Gen, Prop}
 import Prop._
 
 trait SelectiveTests[F[_]] extends ApplicativeTests[F] {
@@ -15,7 +16,6 @@ trait SelectiveTests[F[_]] extends ApplicativeTests[F] {
     ArbFC: Arbitrary[F[C]],
     ArbFAtoB: Arbitrary[F[A => B]],
     ArbFBtoC: Arbitrary[F[B => C]],
-    ArbFAA: Arbitrary[F[Either[A, A]]],
     CogenA: Cogen[A],
     CogenB: Cogen[B],
     CogenC: Cogen[C],
@@ -26,16 +26,50 @@ trait SelectiveTests[F[_]] extends ApplicativeTests[F] {
     EqFInt: Eq[F[Int]],
     iso: Isomorphisms[F]
   ): RuleSet = {
+    implicit val ArbFBool: Arbitrary[F[Boolean]] = arbFB[A, Boolean]
+    implicit val ArbFUnit: Arbitrary[F[Unit]] = arbFB[A, Unit]
     new RuleSet {
       def name: String = "selective"
       def bases: Seq[(String, RuleSet)] = Nil
       def parents: Seq[RuleSet] = Seq(applicative[A, B, C])
       def props: Seq[(String, Prop)] =
         Seq(
-          "selective identity" -> forAll(laws.selectiveIdentity[A, B] _)
+          "selective identity" -> forAll(laws.selectiveIdentity[A, B] _),
+          "selective branch consistency" -> forAll(laws.selectiveBranchConsistency[A, B, C] _),
+          "selective ifS consistency" -> forAll(laws.selectiveIfSConsistency[A] _),
+          "selective whenS consistency" -> forAll(laws.selectiveWhenSConsistency[A] _)
         )
     }
   }
+
+  implicit private def arbFAB[A, B](implicit
+    arbFA: Arbitrary[F[A]],
+    arbFB: Arbitrary[F[B]]
+  ): Arbitrary[F[Either[A, B]]] = {
+    Arbitrary(
+      Gen.oneOf(arbFA.arbitrary.map(fa => laws.F.map(fa)(_.asLeft[B])),
+                arbFB.arbitrary.map(fb => laws.F.map(fb)(_.asRight[A]))
+      )
+    )
+  }
+
+  private def arbFB[A, B](implicit arbFA: Arbitrary[F[A]], arbB: Arbitrary[B]): Arbitrary[F[B]] =
+    Arbitrary(for {
+      fa <- arbFA.arbitrary
+      b <- arbB.arbitrary
+    } yield laws.F.as(fa, b))
+
+  implicit private def arbFAtoC[A, B, C](implicit
+    arbFAtoB: Arbitrary[F[A => B]],
+    arbFBtoC: Arbitrary[F[B => C]]
+  ): Arbitrary[F[A => C]] =
+    Arbitrary(for {
+      fAToB <- arbFAtoB.arbitrary
+      fBToC <- arbFBtoC.arbitrary
+    } yield laws.F.map2(fAToB, fBToC)(_ andThen _))
+
+  implicit private def eqFUnit(implicit eqFInt: Eq[F[Int]]): Eq[F[Unit]] =
+    Eq.by(laws.F.map(_)(_ => 0))
 }
 
 object SelectiveTests {

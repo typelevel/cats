@@ -4,8 +4,7 @@ package discipline
 
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.platform.Platform
-import cats.syntax.all._
-import org.scalacheck.{Arbitrary, Cogen, Gen, Prop}
+import org.scalacheck.{Arbitrary, Cogen, Prop}
 import Prop._
 
 trait MonadTests[F[_]] extends SelectiveTests[F] with FlatMapTests[F] {
@@ -26,14 +25,7 @@ trait MonadTests[F[_]] extends SelectiveTests[F] with FlatMapTests[F] {
     EqFABC: Eq[F[(A, B, C)]],
     EqFInt: Eq[F[Int]],
     iso: Isomorphisms[F]
-  ): RuleSet = {
-    implicit def ArbFAA: Arbitrary[F[Either[A, A]]] =
-      Arbitrary(
-        Gen.oneOf(ArbFA.arbitrary.map(fa => laws.F.map(fa)(_.asLeft[A])),
-                  ArbFA.arbitrary.map(fa => laws.F.map(fa)(_.asRight[A]))
-        )
-      )
-
+  ): RuleSet =
     new RuleSet {
       def name: String = "monad"
       def bases: Seq[(String, RuleSet)] = Nil
@@ -46,7 +38,6 @@ trait MonadTests[F[_]] extends SelectiveTests[F] with FlatMapTests[F] {
         ) ++ (if (Platform.isJvm) Seq[(String, Prop)]("tailRecM stack safety" -> Prop.lzy(laws.tailRecMStackSafety))
               else Seq.empty)
     }
-  }
 
   def stackUnsafeMonad[A: Arbitrary: Eq, B: Arbitrary: Eq, C: Arbitrary: Eq](implicit
     ArbFA: Arbitrary[F[A]],
@@ -63,13 +54,7 @@ trait MonadTests[F[_]] extends SelectiveTests[F] with FlatMapTests[F] {
     EqFABC: Eq[F[(A, B, C)]],
     EqFInt: Eq[F[Int]],
     iso: Isomorphisms[F]
-  ): RuleSet = {
-    implicit def ArbFAA: Arbitrary[F[Either[A, A]]] =
-      Arbitrary(
-        Gen.oneOf(ArbFA.arbitrary.map(fa => laws.F.map(fa)(_.asLeft[A])),
-                  ArbFA.arbitrary.map(fa => laws.F.map(fa)(_.asRight[A]))
-        )
-      )
+  ): RuleSet =
     new RuleSet {
       def name: String = "monad (stack-unsafe)"
       def bases: Seq[(String, RuleSet)] = Nil
@@ -81,7 +66,6 @@ trait MonadTests[F[_]] extends SelectiveTests[F] with FlatMapTests[F] {
           "map flatMap coherence" -> forAll(laws.mapFlatMapCoherence[A, B] _)
         )
     }
-  }
 }
 
 object MonadTests {
