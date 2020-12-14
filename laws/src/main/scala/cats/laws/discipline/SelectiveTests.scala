@@ -35,6 +35,8 @@ trait SelectiveTests[F[_]] extends ApplicativeTests[F] {
       def props: Seq[(String, Prop)] =
         Seq(
           "selective identity" -> forAll(laws.selectiveIdentity[A, B] _),
+          "selective distributivity" -> forAll(laws.selectiveDistributivity[A, B] _),
+          "selective associativity" -> forAll(laws.selectiveAssociativity[A, B, C] _),
           "selective branch consistency" -> forAll(laws.selectiveBranchConsistency[A, B, C] _),
           "selective ifS consistency" -> forAll(laws.selectiveIfSConsistency[A] _),
           "selective whenS consistency" -> forAll(laws.selectiveWhenSConsistency[A] _)
@@ -67,6 +69,17 @@ trait SelectiveTests[F[_]] extends ApplicativeTests[F] {
       fAToB <- arbFAtoB.arbitrary
       fBToC <- arbFBtoC.arbitrary
     } yield laws.F.map2(fAToB, fBToC)(_ andThen _))
+
+  implicit private def arbFAtoBtoC[A, B, C](implicit
+    arbFA: Arbitrary[F[A]],
+    arbC: Arbitrary[C],
+    cogenA: Cogen[A],
+    cogenB: Cogen[B]
+  ): Arbitrary[F[A => B => C]] =
+    Arbitrary(for {
+      fa <- arbFA.arbitrary
+      f <- Gen.function1(Gen.function1(arbC.arbitrary)(cogenB))(cogenA)
+    } yield laws.F.as(fa, f))
 
   implicit private def eqFUnit(implicit eqFInt: Eq[F[Int]]): Eq[F[Unit]] =
     Eq.by(laws.F.map(_)(_ => 0))

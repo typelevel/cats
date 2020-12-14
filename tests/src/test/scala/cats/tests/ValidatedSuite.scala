@@ -6,6 +6,7 @@ import cats.{
   ApplicativeError,
   Bitraverse,
   CommutativeApplicative,
+  Selective,
   SemigroupK,
   Semigroupal,
   Show,
@@ -44,6 +45,9 @@ class ValidatedSuite extends CatsSuite {
   checkAll("ApplicativeError[Validated, String]",
            SerializableTests.serializable(ApplicativeError[Validated[String, *], String])
   )
+
+  checkAll("Validated[String, Int]", SelectiveTests[Validated[String, *]].selective[Int, Int, Int])
+  checkAll("Selective[Validated[String, *]]", SerializableTests.serializable(Selective[Validated[String, *]]))
 
   checkAll("Validated[String, Int] with Option",
            TraverseTests[Validated[String, *]].traverse[Int, Int, Int, Int, Option, Option]

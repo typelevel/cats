@@ -26,3 +26,7 @@ import scala.annotation.implicitNotFound
   def whenS[A](fbool: F[Boolean])(fa: F[Unit]): F[Unit] =
     ifS(fbool)(fa)(unit)
 }
+
+object Selective {
+  @inline def apply[F[_]](implicit instance: Selective[F]): Selective[F] = instance
+}
