@@ -29,8 +29,8 @@ import scala.annotation.implicitNotFound
   }
 
   @noop
-  def whenS[A](fbool: F[Boolean])(fa: => F[Unit]): F[Unit] =
-    ifS(fbool)(fa)(unit)
+  def whenS[A](fCond: F[Boolean])(fTrue: => F[Unit]): F[Unit] =
+    ifS(fCond)(fTrue)(unit)
 }
 
 object Selective {

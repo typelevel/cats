@@ -36,7 +36,8 @@ trait RigidSelectiveTests[F[_]] extends SelectiveTests[F] {
           "selective branch skip right" -> forAll(laws.selectiveBranchSkipRight[A, B, C] _),
           "selective branch skip left" -> forAll(laws.selectiveBranchSkipLeft[A, B, C] _),
           "selective ifS skip true" -> forAll(laws.selectiveIfSSkipTrue[A, B] _),
-          "selective ifS skip false" -> forAll(laws.selectiveIfSSkipFalse[A, B] _)
+          "selective ifS skip false" -> forAll(laws.selectiveIfSSkipFalse[A, B] _),
+          "selective whenS skip" -> forAll(laws.selectiveWhenSSkip[A] _)
         )
     }
   }

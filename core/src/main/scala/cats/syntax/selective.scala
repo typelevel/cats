@@ -6,7 +6,7 @@ trait SelectiveSyntax extends Selective.ToSelectiveOps {
     new SelectiveBooleanOps(fBool)
 }
 
-final class SelectiveBooleanOps[F[_]](private val fBool: F[Boolean]) extends AnyVal {
-  def ifS[A](ifTrue: => F[A])(ifFalse: => F[A])(implicit F: Selective[F]): F[A] = F.ifS(fBool)(ifTrue)(ifFalse)
-  def whenS[A](fa: F[Unit])(implicit F: Selective[F]): F[Unit] = F.whenS(fBool)(fa)
+final class SelectiveBooleanOps[F[_]](private val fCond: F[Boolean]) extends AnyVal {
+  def ifS[A](fTrue: => F[A])(fFalse: => F[A])(implicit F: Selective[F]): F[A] = F.ifS(fCond)(fTrue)(fFalse)
+  def whenS[A](fTrue: => F[Unit])(implicit F: Selective[F]): F[Unit] = F.whenS(fCond)(fTrue)
 }

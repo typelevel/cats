@@ -60,7 +60,7 @@ trait SelectiveTests[F[_]] extends ApplicativeTests[F] {
       f <- Gen.function1(Gen.function1(arbC.arbitrary)(cogenB))(cogenA)
     } yield laws.F.as(fa, f))
 
-  implicit private def eqFUnit(implicit eqFInt: Eq[F[Int]]): Eq[F[Unit]] =
+  implicit protected def derivedArbiraryFUnit(implicit eqFInt: Eq[F[Int]]): Eq[F[Unit]] =
     Eq.by(laws.F.map(_)(_ => 0))
 }
 

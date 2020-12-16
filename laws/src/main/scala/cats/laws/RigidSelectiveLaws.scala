@@ -28,6 +28,9 @@ trait RigidSelectiveLaws[F[_]] extends SelectiveLaws[F] {
 
   def selectiveIfSSkipTrue[A, B](fa: F[A], fb: F[B]): IsEq[F[B]] =
     fa.as(false).ifS(ope[B])(fb) <-> fa *> fb
+
+  def selectiveWhenSSkip[A](fa: F[A]): IsEq[F[Unit]] =
+    fa.as(false).whenS(ope[Unit]) <-> fa *> F.unit
 }
 
 object RigidSelectiveLaws {
