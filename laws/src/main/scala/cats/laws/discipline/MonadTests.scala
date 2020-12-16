@@ -7,7 +7,7 @@ import cats.platform.Platform
 import org.scalacheck.{Arbitrary, Cogen, Prop}
 import Prop._
 
-trait MonadTests[F[_]] extends SelectiveTests[F] with FlatMapTests[F] {
+trait MonadTests[F[_]] extends RigidSelectiveTests[F] with FlatMapTests[F] {
   def laws: MonadLaws[F]
 
   def monad[A: Arbitrary: Eq, B: Arbitrary: Eq, C: Arbitrary: Eq](implicit
