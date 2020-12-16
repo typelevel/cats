@@ -44,7 +44,7 @@ trait RigidSelectiveTests[F[_]] extends SelectiveTests[F] {
 }
 
 object RigidSelectiveTests {
-  def apply[F[_]: Selective]: RigidSelectiveTests[F] =
+  def apply[F[_]: RigidSelective]: RigidSelectiveTests[F] =
     new RigidSelectiveTests[F] {
       def laws: RigidSelectiveLaws[F] = RigidSelectiveLaws[F]
     }

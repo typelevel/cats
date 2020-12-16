@@ -14,12 +14,6 @@ import scala.annotation.implicitNotFound
     select(lhs)(fr)
   }
 
-  def apS[A, B](ff: F[A => B])(fa: F[A]): F[B] = {
-    val left: F[Either[A => B, B]] = map(ff)(Left(_))
-    val right: F[(A => B) => B] = map(fa)((a: A) => _(a))
-    select(left)(right)
-  }
-
   @noop
   def ifS[A](fCond: F[Boolean])(fTrue: => F[A])(fFalse: => F[A]): F[A] = {
     val condition: F[Either[Unit, Unit]] = map(fCond)(if (_) EitherUtil.leftUnit else EitherUtil.unit)
@@ -57,9 +51,10 @@ object Selective {
     type TypeClassType <: Selective[F]
     def self: F[A]
     val typeClassInstance: TypeClassType
-    def select[B, C](ff: => F[B => C])(implicit ev$1: A <:< Either[B, C]): F[C] = typeClassInstance.select[B, C](self.asInstanceOf[F[Either[B, C]]])(ff)
-    def branch[B, C, D](fl: => F[B => D])(fr: => F[C => D])(implicit ev$1: A <:< Either[B, C]): F[D] = typeClassInstance.branch[B, C, D](self.asInstanceOf[F[Either[B, C]]])(fl)(fr)
-    def apS[B, C](fa: F[B])(implicit ev$1: A <:< (B => C)): F[C] = typeClassInstance.apS[B, C](self.asInstanceOf[F[B => C]])(fa)
+    def select[B, C](ff: => F[B => C])(implicit ev$1: A <:< Either[B, C]): F[C] =
+      typeClassInstance.select[B, C](self.asInstanceOf[F[Either[B, C]]])(ff)
+    def branch[B, C, D](fl: => F[B => D])(fr: => F[C => D])(implicit ev$1: A <:< Either[B, C]): F[D] =
+      typeClassInstance.branch[B, C, D](self.asInstanceOf[F[Either[B, C]]])(fl)(fr)
   }
   trait AllOps[F[_], A] extends Ops[F, A] with Applicative.AllOps[F, A] {
     type TypeClassType <: Selective[F]
@@ -79,6 +74,5 @@ object Selective {
   /* ======================================================================== */
   /* END OF SIMULACRUM-MANAGED CODE                                           */
   /* ======================================================================== */
-
 
 }

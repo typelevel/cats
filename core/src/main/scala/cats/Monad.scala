@@ -13,7 +13,7 @@ import scala.annotation.implicitNotFound
  * Must obey the laws defined in cats.laws.MonadLaws.
  */
 @implicitNotFound("Could not find an instance of Monad for ${F}")
-@typeclass trait Monad[F[_]] extends FlatMap[F] with Selective[F] {
+@typeclass trait Monad[F[_]] extends FlatMap[F] with RigidSelective[F] {
   override def map[A, B](fa: F[A])(f: A => B): F[B] =
     flatMap(fa)(a => pure(f(a)))
 

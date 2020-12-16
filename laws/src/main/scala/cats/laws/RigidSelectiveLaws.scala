@@ -10,7 +10,11 @@ trait RigidSelectiveLaws[F[_]] extends SelectiveLaws[F] {
   implicit override def F: Selective[F]
 
   def selectiveApply[A, B](fa: F[A], ff: F[A => B]): IsEq[F[B]] =
-    ff.apS(fa) <-> ff.ap(fa)
+    ff.ap(fa) <-> {
+      val left: F[Either[A => B, B]] = ff.map(Left(_))
+      val right: F[(A => B) => B] = fa.map((a: A) => _(a))
+      left.select(right)
+    }
 
   private def ope[A] = F.pure(sys.error("ope!"): A)
 
