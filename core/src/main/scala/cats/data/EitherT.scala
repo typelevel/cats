@@ -2,7 +2,7 @@ package cats
 package data
 
 import cats.Bifunctor
-import cats.syntax.EitherUtil
+import cats.EitherUtil
 
 /**
  * Transformer for `Either`, allowing the effect of an arbitrary type constructor `F` to be combined with the

@@ -54,7 +54,7 @@ final class EitherOps[A, B](private val eab: Either[A, B]) extends AnyVal {
   def orElse[C, BB >: B](fallback: => Either[C, BB]): Either[C, BB] =
     eab match {
       case Left(_)      => fallback
-      case r @ Right(_) => EitherUtil.leftCast(r)
+      case r @ Right(_) => cats.EitherUtil.leftCast(r)
     }
 
   def recover[BB >: B](pf: PartialFunction[A, BB]): Either[A, BB] =
@@ -157,20 +157,20 @@ final class EitherOps[A, B](private val eab: Either[A, B]) extends AnyVal {
   @deprecated("Included in the standard library", "2.1.0-RC1")
   private[syntax] def map[C](f: B => C): Either[A, C] =
     eab match {
-      case l @ Left(_) => EitherUtil.rightCast(l)
+      case l @ Left(_) => cats.EitherUtil.rightCast(l)
       case Right(b)    => Right(f(b))
     }
 
   def map2Eval[AA >: A, C, Z](fc: Eval[Either[AA, C]])(f: (B, C) => Z): Eval[Either[AA, Z]] =
     eab match {
-      case l @ Left(_) => Now(EitherUtil.rightCast(l))
+      case l @ Left(_) => Now(cats.EitherUtil.rightCast(l))
       case Right(b)    => fc.map(_.map(f(b, _)))
     }
 
   def leftMap[C](f: A => C): Either[C, B] =
     eab match {
       case Left(a)      => Left(f(a))
-      case r @ Right(_) => EitherUtil.leftCast(r)
+      case r @ Right(_) => cats.EitherUtil.leftCast(r)
     }
 
   @deprecated("Included in the standard library", "2.1.0-RC1")
@@ -183,7 +183,7 @@ final class EitherOps[A, B](private val eab: Either[A, B]) extends AnyVal {
   def leftFlatMap[C, BB >: B](f: A => Either[C, BB]): Either[C, BB] =
     eab match {
       case Left(a)      => f(a)
-      case r @ Right(_) => EitherUtil.leftCast(r)
+      case r @ Right(_) => cats.EitherUtil.leftCast(r)
     }
 
   def compare[AA >: A, BB >: B](that: Either[AA, BB])(implicit AA: Order[AA], BB: Order[BB]): Int =
@@ -232,7 +232,7 @@ final class EitherOps[A, B](private val eab: Either[A, B]) extends AnyVal {
 
   def traverse[F[_], AA >: A, D](f: B => F[D])(implicit F: Applicative[F]): F[Either[AA, D]] =
     eab match {
-      case l @ Left(_) => F.pure(EitherUtil.rightCast(l))
+      case l @ Left(_) => F.pure(cats.EitherUtil.rightCast(l))
       case Right(b)    => F.map(f(b))(Right(_))
     }
 
@@ -394,12 +394,12 @@ final class EitherObjectOps(private val either: Either.type) extends AnyVal { //
   /**
    * Cached value of `Right(())` to avoid allocations for a common case.
    */
-  def unit[A]: Either[A, Unit] = EitherUtil.unit
+  def unit[A]: Either[A, Unit] = cats.EitherUtil.unit
 
   /**
    * Cached value of `Left(())` to avoid allocations for a common case.
    */
-  def leftUnit[B]: Either[Unit, B] = EitherUtil.leftUnit
+  def leftUnit[B]: Either[Unit, B] = cats.EitherUtil.leftUnit
 }
 
 final class LeftOps[A, B](private val left: Left[A, B]) extends AnyVal {
@@ -507,12 +507,13 @@ final private[syntax] class EitherOpsBinCompat0[A, B](private val value: Either[
 /**
  * Convenience methods to use `Either` syntax inside `Either` syntax definitions.
  */
+@deprecated("Moved to cats.EitherUtil", "2.4.0")
 private[cats] object EitherUtil {
   def leftCast[A, B, C](right: Right[A, B]): Either[C, B] =
-    right.asInstanceOf[Either[C, B]]
+    cats.EitherUtil.leftCast(right)
   def rightCast[A, B, C](left: Left[A, B]): Either[A, C] =
-    left.asInstanceOf[Either[A, C]]
+    cats.EitherUtil.rightCast(left)
 
-  private[cats] val unit = Right(())
-  private[cats] val leftUnit = Left(())
+  private[cats] def unit = cats.EitherUtil.unit
+  private[cats] def leftUnit = cats.EitherUtil.leftUnit
 }

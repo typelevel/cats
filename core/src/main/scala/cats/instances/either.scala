@@ -3,7 +3,6 @@ package instances
 
 import cats.data.Validated
 import cats.kernel.Semigroup
-import cats.syntax.EitherUtil
 import cats.syntax.either._
 
 import scala.annotation.tailrec
