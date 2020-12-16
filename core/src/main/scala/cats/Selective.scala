@@ -22,7 +22,7 @@ import scala.annotation.implicitNotFound
 
   @noop
   def ifS[A](x: F[Boolean])(t: F[A])(e: F[A]): F[A] = {
-    val condition: F[Either[Unit, Unit]] = map(x)(p => if (p) Left(()) else Right(()))
+    val condition: F[Either[Unit, Unit]] = map(x)(p => if (p) EitherUtil.leftUnit else EitherUtil.unit)
     val left: F[Unit => A] = map(t)(Function.const)
     val right: F[Unit => A] = map(e)(Function.const)
     branch(condition)(left)(right)
