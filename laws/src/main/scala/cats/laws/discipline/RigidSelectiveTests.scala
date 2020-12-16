@@ -32,7 +32,11 @@ trait RigidSelectiveTests[F[_]] extends SelectiveTests[F] {
       def props: Seq[(String, Prop)] =
         Seq(
           "selective apply" -> forAll(laws.selectiveApply[A, B] _),
-          "selective skip on right" -> forAll(laws.selectiveSkipOnRight[A, B] _)
+          "selective select skip" -> forAll(laws.selectiveSelectSkip[A, B] _),
+          "selective branch skip right" -> forAll(laws.selectiveBranchSkipRight[A, B, C] _),
+          "selective branch skip left" -> forAll(laws.selectiveBranchSkipLeft[A, B, C] _),
+          "selective ifS skip true" -> forAll(laws.selectiveIfSSkipTrue[A, B] _),
+          "selective ifS skip false" -> forAll(laws.selectiveIfSSkipFalse[A, B] _)
         )
     }
   }
