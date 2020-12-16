@@ -9,6 +9,6 @@ private[cats] object EitherUtil {
   def rightCast[A, B, C](left: Left[A, B]): Either[A, C] =
     left.asInstanceOf[Either[A, C]]
 
-  private[cats] val unit = Right(())
-  private[cats] val leftUnit = Left(())
+  val unit = Right(())
+  val leftUnit = Left(())
 }
