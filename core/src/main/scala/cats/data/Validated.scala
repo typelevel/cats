@@ -1045,7 +1045,7 @@ sealed abstract private[data] class ValidatedInstances2 {
 }
 
 private[data] class ValidatedSelective[E: Semigroup] extends ValidatedApplicative[E] with Selective[Validated[E, *]] {
-  override def select[A, B](fab: Validated[E, Either[A, B]])(ff: Validated[E, A => B]): Validated[E, B] =
+  override def select[A, B](fab: Validated[E, Either[A, B]])(ff: => Validated[E, A => B]): Validated[E, B] =
     fab match {
       case Valid(Left(a))  => ff.map(_(a))
       case Valid(Right(b)) => Valid(b)

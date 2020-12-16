@@ -31,7 +31,8 @@ trait RigidSelectiveTests[F[_]] extends SelectiveTests[F] {
       def parents: Seq[RuleSet] = Seq(selective[A, B, C])
       def props: Seq[(String, Prop)] =
         Seq(
-          "selective apply" -> forAll(laws.selectiveApply[A, B] _)
+          "selective apply" -> forAll(laws.selectiveApply[A, B] _),
+          "selective skip on right" -> forAll(laws.selectiveSkipOnRight[A, B] _)
         )
     }
   }
