@@ -3,7 +3,8 @@ package laws
 package discipline
 
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import org.scalacheck.{Arbitrary, Cogen, Prop}
+import cats.syntax.all._
+import org.scalacheck.{Arbitrary, Cogen, Gen, Prop}
 import Prop._
 
 trait ApplyTests[F[_]] extends FunctorTests[F] with SemigroupalTests[F] {
@@ -32,9 +33,31 @@ trait ApplyTests[F[_]] extends FunctorTests[F] with SemigroupalTests[F] {
         "map2/product-map consistency" -> forAll(laws.map2ProductConsistency[A, B, C] _),
         "map2/map2Eval consistency" -> forAll(laws.map2EvalConsistency[A, B, C] _),
         "productR consistent map2" -> forAll(laws.productRConsistency[A, C] _),
-        "productL consistent map2" -> forAll(laws.productLConsistency[A, C] _)
+        "productL consistent map2" -> forAll(laws.productLConsistency[A, C] _),
+        "selectA consistent map2" -> forAll(laws.selectAConsistency[A, C] _)
       )
     }
+
+  // Derived implicits to preserve bincompat
+  implicit protected def derivedArbitraryEither[A, B](implicit
+    arbFA: Arbitrary[F[A]],
+    arbFB: Arbitrary[F[B]]
+  ): Arbitrary[F[Either[A, B]]] = {
+    Arbitrary(
+      Gen.oneOf(arbFA.arbitrary.map(fa => laws.F.map(fa)(_.asLeft[B])),
+                arbFB.arbitrary.map(fb => laws.F.map(fb)(_.asRight[A]))
+      )
+    )
+  }
+
+  implicit protected def derivedArbitraryFunctionComposition[A, B, C](implicit
+    arbFAtoB: Arbitrary[F[A => B]],
+    arbFBtoC: Arbitrary[F[B => C]]
+  ): Arbitrary[F[A => C]] =
+    Arbitrary(for {
+      fAToB <- arbFAtoB.arbitrary
+      fBToC <- arbFBtoC.arbitrary
+    } yield laws.F.map2(fAToB, fBToC)(_ andThen _))
 }
 
 object ApplyTests {

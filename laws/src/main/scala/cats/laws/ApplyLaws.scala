@@ -26,6 +26,12 @@ trait ApplyLaws[F[_]] extends FunctorLaws[F] with SemigroupalLaws[F] {
 
   def productLConsistency[A, B](fa: F[A], fb: F[B]): IsEq[F[A]] =
     F.productL(fa)(fb) <-> F.map2(fa, fb)((a, _) => a)
+
+  def selectAConsistency[A, B](fab: F[Either[A, B]], ff: F[A => B]): IsEq[F[B]] =
+    F.selectA(fab)(ff) <-> F.map2(fab, ff) {
+      case (Left(a), f)  => f(a)
+      case (Right(b), _) => b
+    }
 }
 
 object ApplyLaws {

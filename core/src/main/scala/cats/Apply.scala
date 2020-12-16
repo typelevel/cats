@@ -257,6 +257,12 @@ trait Apply[F[_]] extends Functor[F] with InvariantSemigroupal[F] with ApplyArit
     def ite(b: Boolean)(ifTrue: A, ifFalse: A) = if (b) ifTrue else ifFalse
     ap2(map(fcond)(ite))(ifTrue, ifFalse)
   }
+
+  def selectA[A, B](fab: F[Either[A, B]])(ff: F[A => B]): F[B] =
+    map2(fab, ff) {
+      case (Left(a), f)  => f(a)
+      case (Right(b), _) => b
+    }
 }
 
 object Apply {
@@ -289,12 +295,11 @@ object Apply {
   object ops {
     implicit def toAllApplyOps[F[_], A](target: F[A])(implicit tc: Apply[F]): AllOps[F, A] {
       type TypeClassType = Apply[F]
-    } =
-      new AllOps[F, A] {
-        type TypeClassType = Apply[F]
-        val self: F[A] = target
-        val typeClassInstance: TypeClassType = tc
-      }
+    } = new AllOps[F, A] {
+      type TypeClassType = Apply[F]
+      val self: F[A] = target
+      val typeClassInstance: TypeClassType = tc
+    }
   }
   trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: Apply[F]
@@ -312,6 +317,8 @@ object Apply {
       typeClassInstance.ap2[B, C, D](self.asInstanceOf[F[(B, C) => D]])(fa, fb)
     def map2[B, C](fb: F[B])(f: (A, B) => C): F[C] = typeClassInstance.map2[A, B, C](self, fb)(f)
     def map2Eval[B, C](fb: Eval[F[B]])(f: (A, B) => C): Eval[F[C]] = typeClassInstance.map2Eval[A, B, C](self, fb)(f)
+    def selectA[B, C](ff: F[B => C])(implicit ev$1: A <:< Either[B, C]): F[C] =
+      typeClassInstance.selectA[B, C](self.asInstanceOf[F[Either[B, C]]])(ff)
   }
   trait AllOps[F[_], A] extends Ops[F, A] with Functor.AllOps[F, A] with InvariantSemigroupal.AllOps[F, A] {
     type TypeClassType <: Apply[F]
@@ -319,12 +326,11 @@ object Apply {
   trait ToApplyOps extends Serializable {
     implicit def toApplyOps[F[_], A](target: F[A])(implicit tc: Apply[F]): Ops[F, A] {
       type TypeClassType = Apply[F]
-    } =
-      new Ops[F, A] {
-        type TypeClassType = Apply[F]
-        val self: F[A] = target
-        val typeClassInstance: TypeClassType = tc
-      }
+    } = new Ops[F, A] {
+      type TypeClassType = Apply[F]
+      val self: F[A] = target
+      val typeClassInstance: TypeClassType = tc
+    }
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToApplyOps

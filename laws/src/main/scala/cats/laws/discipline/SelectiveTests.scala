@@ -3,7 +3,6 @@ package laws
 package discipline
 
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import cats.syntax.all._
 import org.scalacheck.{Arbitrary, Cogen, Gen, Prop}
 import Prop._
 
@@ -44,31 +43,11 @@ trait SelectiveTests[F[_]] extends ApplicativeTests[F] {
     }
   }
 
-  implicit private def arbFAB[A, B](implicit
-    arbFA: Arbitrary[F[A]],
-    arbFB: Arbitrary[F[B]]
-  ): Arbitrary[F[Either[A, B]]] = {
-    Arbitrary(
-      Gen.oneOf(arbFA.arbitrary.map(fa => laws.F.map(fa)(_.asLeft[B])),
-                arbFB.arbitrary.map(fb => laws.F.map(fb)(_.asRight[A]))
-      )
-    )
-  }
-
   private def arbFB[A, B](implicit arbFA: Arbitrary[F[A]], arbB: Arbitrary[B]): Arbitrary[F[B]] =
     Arbitrary(for {
       fa <- arbFA.arbitrary
       b <- arbB.arbitrary
     } yield laws.F.as(fa, b))
-
-  implicit private def arbFAtoC[A, B, C](implicit
-    arbFAtoB: Arbitrary[F[A => B]],
-    arbFBtoC: Arbitrary[F[B => C]]
-  ): Arbitrary[F[A => C]] =
-    Arbitrary(for {
-      fAToB <- arbFAtoB.arbitrary
-      fBToC <- arbFBtoC.arbitrary
-    } yield laws.F.map2(fAToB, fBToC)(_ andThen _))
 
   implicit private def arbFAtoBtoC[A, B, C](implicit
     arbFA: Arbitrary[F[A]],
