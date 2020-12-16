@@ -6,10 +6,10 @@ import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import org.scalacheck.{Arbitrary, Cogen, Prop}
 import Prop._
 
-trait RigidSelectiveTests[F[_]] extends ApplicativeTests[F] {
+trait RigidSelectiveTests[F[_]] extends SelectiveTests[F] {
   def laws: RigidSelectiveLaws[F]
 
-  def selective[A: Arbitrary: Eq, B: Arbitrary: Eq, C: Arbitrary: Eq](implicit
+  def rigidSelective[A: Arbitrary: Eq, B: Arbitrary: Eq, C: Arbitrary: Eq](implicit
     ArbFA: Arbitrary[F[A]],
     ArbFB: Arbitrary[F[B]],
     ArbFC: Arbitrary[F[C]],

@@ -6,7 +6,7 @@ import cats.syntax.all._
 /**
  * Laws that must be obeyed by any rigid `Selective`.
  */
-trait RigidSelectiveLaws[F[_]] extends ApplicativeLaws[F] {
+trait RigidSelectiveLaws[F[_]] extends SelectiveLaws[F] {
   implicit override def F: Selective[F]
 
   def selectiveApply[A, B](fa: F[A], ff: F[A => B]): IsEq[F[B]] =
