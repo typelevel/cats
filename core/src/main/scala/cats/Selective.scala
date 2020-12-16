@@ -8,11 +8,9 @@ import scala.annotation.implicitNotFound
   def select[A, B](fab: F[Either[A, B]])(ff: F[A => B]): F[B]
 
   def branch[A, B, C](fab: F[Either[A, B]])(fl: F[A => C])(fr: F[B => C]): F[C] = {
-    val lhs = {
-      val innerLhs: F[Either[A, Either[B, C]]] = map(fab)(_.map(Left(_)))
-      val innerRhs: F[A => Either[B, C]] = map(fl)(_.andThen(Right(_)))
-      select(innerLhs)(innerRhs)
-    }
+    val innerLhs: F[Either[A, Either[B, C]]] = map(fab)(_.map(Left(_)))
+    val innerRhs: F[A => Either[B, C]] = map(fl)(_.andThen(Right(_)))
+    val lhs = select(innerLhs)(innerRhs)
     select(lhs)(fr)
   }
 
