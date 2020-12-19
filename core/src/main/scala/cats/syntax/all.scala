@@ -51,7 +51,6 @@ trait AllSyntax
     with PartialOrderSyntax
     with ProfunctorSyntax
     with ReducibleSyntax
-    with SelectiveSyntax
     with SemigroupSyntax
     with SemigroupKSyntax
     with ShowSyntax

@@ -933,7 +933,7 @@ sealed abstract private[data] class ValidatedInstances extends ValidatedInstance
 
   implicit def catsDataSelectiveErrorForValidated[E](implicit
     E: Semigroup[E]
-  ): Selective[Validated[E, *]] with ApplicativeError[Validated[E, *], E] =
+  ): ApplicativeError[Validated[E, *], E] =
     new ValidatedSelective[E] with ApplicativeError[Validated[E, *], E] {
       def handleErrorWith[A](fa: Validated[E, A])(f: E => Validated[E, A]): Validated[E, A] =
         fa match {
@@ -959,7 +959,7 @@ sealed abstract private[data] class ValidatedInstances1 extends ValidatedInstanc
     }
 
   implicit def catsDataCommutativeSelectiveForValidated[E: CommutativeSemigroup]
-    : Selective[Validated[E, *]] with CommutativeApplicative[Validated[E, *]] =
+    : CommutativeApplicative[Validated[E, *]] =
     new ValidatedSelective[E] with CommutativeApplicative[Validated[E, *]]
 
   @deprecated("Use catsDataCommutativeSelectiveForValidated", "2.4.0")
@@ -1044,7 +1044,7 @@ sealed abstract private[data] class ValidatedInstances2 {
   // scalastyle:off method.length
 }
 
-private[data] class ValidatedSelective[E: Semigroup] extends ValidatedApplicative[E] with Selective[Validated[E, *]] {
+private[data] class ValidatedSelective[E: Semigroup] extends ValidatedApplicative[E] {
   override def select[A, B](fab: Validated[E, Either[A, B]])(ff: => Validated[E, A => B]): Validated[E, B] =
     fab match {
       case Valid(Left(a))  => ff.map(_(a))

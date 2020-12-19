@@ -183,7 +183,7 @@ object Monad {
     def iterateWhile(p: A => Boolean): F[A] = typeClassInstance.iterateWhile[A](self)(p)
     def iterateUntil(p: A => Boolean): F[A] = typeClassInstance.iterateUntil[A](self)(p)
   }
-  trait AllOps[F[_], A] extends Ops[F, A] with FlatMap.AllOps[F, A] with Selective.AllOps[F, A] {
+  trait AllOps[F[_], A] extends Ops[F, A] with FlatMap.AllOps[F, A] with RigidSelective.AllOps[F, A] {
     type TypeClassType <: Monad[F]
   }
   trait ToMonadOps extends Serializable {

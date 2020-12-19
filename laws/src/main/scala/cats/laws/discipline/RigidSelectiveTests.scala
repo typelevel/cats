@@ -6,7 +6,7 @@ import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import org.scalacheck.{Arbitrary, Cogen, Prop}
 import Prop._
 
-trait RigidSelectiveTests[F[_]] extends SelectiveTests[F] {
+trait RigidSelectiveTests[F[_]] extends ApplicativeTests[F] {
   def laws: RigidSelectiveLaws[F]
 
   def rigidSelective[A: Arbitrary: Eq, B: Arbitrary: Eq, C: Arbitrary: Eq](implicit
@@ -39,7 +39,7 @@ trait RigidSelectiveTests[F[_]] extends SelectiveTests[F] {
     new RuleSet {
       def name: String = "rigidSelective"
       def bases: Seq[(String, RuleSet)] = Nil
-      def parents: Seq[RuleSet] = Seq(selective[A, B, C])
+      def parents: Seq[RuleSet] = Seq(applicative[A, B, C])
       def props: Seq[(String, Prop)] =
         Seq(
           "selective apply" -> forAll(laws.selectiveApply[A, B] _),

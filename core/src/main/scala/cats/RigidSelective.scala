@@ -4,7 +4,7 @@ import simulacrum.typeclass
 import scala.annotation.implicitNotFound
 
 @implicitNotFound("Could not find an instance of RigidSelective for ${F}")
-@typeclass trait RigidSelective[F[_]] extends Selective[F] {
+@typeclass trait RigidSelective[F[_]] extends Applicative[F] {
   override def ap[A, B](ff: F[A => B])(fa: F[A]): F[B] = {
     val left: F[Either[A => B, B]] = map(ff)(Left(_))
     val right: F[(A => B) => B] = map(fa)((a: A) => _(a))
@@ -37,7 +37,7 @@ object RigidSelective {
     def self: F[A]
     val typeClassInstance: TypeClassType
   }
-  trait AllOps[F[_], A] extends Ops[F, A] with Selective.AllOps[F, A] {
+  trait AllOps[F[_], A] extends Ops[F, A] with Applicative.AllOps[F, A] {
     type TypeClassType <: RigidSelective[F]
   }
   trait ToRigidSelectiveOps extends Serializable {
