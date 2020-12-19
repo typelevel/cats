@@ -3,9 +3,7 @@ package laws
 package discipline
 
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import cats.syntax.either._
-import org.scalacheck.{Arbitrary, Cogen, Gen, Prop}
-import Prop._
+import org.scalacheck.{Arbitrary, Cogen, Prop}
 
 trait SelectiveTests[F[_]] extends ApplicativeTests[F] {
   def laws: SelectiveLaws[F]
@@ -37,21 +35,12 @@ trait SelectiveTests[F[_]] extends ApplicativeTests[F] {
       fa <- ArbFA.arbitrary
     } yield laws.F.as(fa, ()))
 
-    implicit val ArbFAA: Arbitrary[F[Either[A, A]]] = Arbitrary(
-      Gen.oneOf(
-        ArbFA.arbitrary.map(fa => laws.F.map(fa)(_.asLeft[A])),
-        ArbFA.arbitrary.map(fa => laws.F.map(fa)(_.asRight[A]))
-      )
-    )
-
     new RuleSet {
       def name: String = "selective"
       def bases: Seq[(String, RuleSet)] = Nil
       def parents: Seq[RuleSet] = Seq(applicative[A, B, C])
       def props: Seq[(String, Prop)] =
         Seq(
-          "selective identity" -> forAll(laws.selectiveIdentity[A, B] _),
-          "selective distributivity" -> forAll(laws.selectiveDistributivity[A, B] _)
         )
     }
   }

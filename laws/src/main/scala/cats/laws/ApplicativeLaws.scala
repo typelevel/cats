@@ -48,6 +48,12 @@ trait ApplicativeLaws[F[_]] extends ApplyLaws[F] {
   def monoidalRightIdentity[A](fa: F[A]): (F[(A, Unit)], F[A]) =
     (F.product(fa, F.pure(())), fa)
 
+  def selectiveIdentity[A, B](faa: F[Either[A, A]]): IsEq[F[A]] =
+    faa.select[A, A](F.pure(identity)) <-> faa.map(_.merge)
+
+  def selectiveDistributivity[A, B](ab: Either[A, B], ff1: F[A => B], ff2: F[A => B]): IsEq[F[B]] =
+    F.pure(ab).select(ff1 *> ff2) <-> F.pure(ab).select(ff1) *> F.pure(ab).select(ff2)
+
   def whenSIfSConsistency[A](fb: F[Boolean], fa: F[Unit]): IsEq[F[Unit]] = {
     fb.whenS(fa) <-> fb.ifS(fa)(F.unit)
   }
