@@ -487,6 +487,15 @@ def mimaSettings(moduleName: String, includeCats1: Boolean = true) =
         ) ++ // Only narrowing of types allowed here
         Seq(
           exclude[IncompatibleSignatureProblem]("*")
+        ) ++ // New issues found since mima 0.8.0 (#3596, #3641)
+        Seq(
+          exclude[NewMixinForwarderProblem]("cats.kernel.Band#mcI#sp.combineN"),
+          exclude[NewMixinForwarderProblem]("cats.kernel.Band#mcD#sp.combineN"),
+          exclude[NewMixinForwarderProblem]("cats.kernel.Band#mcJ#sp.combineN"),
+          exclude[NewMixinForwarderProblem]("cats.kernel.Band.combineN"),
+          exclude[NewMixinForwarderProblem]("cats.kernel.Band#mcF#sp.combineN"),
+          exclude[NewMixinForwarderProblem]("cats.data.Tuple2KApply.product"),
+          exclude[NewMixinForwarderProblem]("cats.InvariantInstances0.catsApplicativeForArrow")
         )
     }
   )
