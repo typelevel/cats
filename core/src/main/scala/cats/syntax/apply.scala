@@ -12,6 +12,9 @@ trait ApplySyntax extends TupleSemigroupalSyntax {
 
   implicit final def catsSyntaxApplyOps[F[_], A](fa: F[A]): ApplyOps[F, A] =
     new ApplyOps(fa)
+
+  implicit final def catsSyntaxApplyBooleanOps[F[_]](fBool: F[Boolean]): ApplyBooleanOps[F] =
+    new ApplyBooleanOps(fBool)
 }
 
 private[syntax] trait ApplySyntaxBinCompat0 {
@@ -67,4 +70,8 @@ final class ApplyOps[F[_], A](private val fa: F[A]) extends AnyVal {
   @deprecated("Use <* or productL instead.", "1.0.0-RC2")
   @inline private[syntax] def forEffect[B](fb: F[B])(implicit F: Apply[F]): F[A] =
     F.productL(fa)(fb)
+}
+
+final class ApplyBooleanOps[F[_]](private val fCond: F[Boolean]) extends AnyVal {
+  def ifS[A](fTrue: => F[A])(fFalse: => F[A])(implicit F: Apply[F]): F[A] = F.ifS(fCond)(fTrue)(fFalse)
 }

@@ -266,6 +266,21 @@ trait Apply[F[_]] extends Functor[F] with InvariantSemigroupal[F] with ApplyArit
       case (Left(a), f)  => f(a)
       case (Right(b), _) => b
     }
+
+  def branch[A, B, C](fab: F[Either[A, B]])(fl: => F[A => C])(fr: => F[B => C]): F[C] = {
+    val innerLhs: F[Either[A, Either[B, C]]] = map(fab)(_.map(Left(_)))
+    def innerRhs: F[A => Either[B, C]] = map(fl)(_.andThen(Right(_)))
+    val lhs = select(innerLhs)(innerRhs)
+    select(lhs)(fr)
+  }
+
+  @noop
+  def ifS[A](fCond: F[Boolean])(fTrue: => F[A])(fFalse: => F[A]): F[A] = {
+    val condition: F[Either[Unit, Unit]] = map(fCond)(if (_) EitherUtil.leftUnit else EitherUtil.unit)
+    def left: F[Unit => A] = map(fTrue)(Function.const)
+    def right: F[Unit => A] = map(fFalse)(Function.const)
+    branch(condition)(left)(right)
+  }
 }
 
 object Apply {
@@ -324,6 +339,8 @@ object Apply {
       typeClassInstance.select[B, C](self.asInstanceOf[F[Either[B, C]]])(ff)
     def selectA[B, C](ff: F[B => C])(implicit ev$1: A <:< Either[B, C]): F[C] =
       typeClassInstance.selectA[B, C](self.asInstanceOf[F[Either[B, C]]])(ff)
+    def branch[B, C, D](fl: => F[B => D])(fr: => F[C => D])(implicit ev$1: A <:< Either[B, C]): F[D] =
+      typeClassInstance.branch[B, C, D](self.asInstanceOf[F[Either[B, C]]])(fl)(fr)
   }
   trait AllOps[F[_], A] extends Ops[F, A] with Functor.AllOps[F, A] with InvariantSemigroupal.AllOps[F, A] {
     type TypeClassType <: Apply[F]

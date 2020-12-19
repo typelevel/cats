@@ -25,6 +25,12 @@ trait RigidSelectiveTests[F[_]] extends SelectiveTests[F] {
     EqFInt: Eq[F[Int]],
     iso: Isomorphisms[F]
   ): RuleSet = {
+    implicit val ArbFAtoC: Arbitrary[F[A => C]] =
+      Arbitrary(for {
+        fAToB <- ArbFAtoB.arbitrary
+        fBToC <- ArbFBtoC.arbitrary
+      } yield laws.F.map2(fAToB, fBToC)(_ andThen _))
+
     new RuleSet {
       def name: String = "rigidSelective"
       def bases: Seq[(String, RuleSet)] = Nil

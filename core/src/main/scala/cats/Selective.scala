@@ -5,22 +5,6 @@ import scala.annotation.implicitNotFound
 
 @implicitNotFound("Could not find an instance of Selective for ${F}")
 @typeclass trait Selective[F[_]] extends Applicative[F] {
-
-  def branch[A, B, C](fab: F[Either[A, B]])(fl: => F[A => C])(fr: => F[B => C]): F[C] = {
-    val innerLhs: F[Either[A, Either[B, C]]] = map(fab)(_.map(Left(_)))
-    def innerRhs: F[A => Either[B, C]] = map(fl)(_.andThen(Right(_)))
-    val lhs = select(innerLhs)(innerRhs)
-    select(lhs)(fr)
-  }
-
-  @noop
-  def ifS[A](fCond: F[Boolean])(fTrue: => F[A])(fFalse: => F[A]): F[A] = {
-    val condition: F[Either[Unit, Unit]] = map(fCond)(if (_) EitherUtil.leftUnit else EitherUtil.unit)
-    def left: F[Unit => A] = map(fTrue)(Function.const)
-    def right: F[Unit => A] = map(fFalse)(Function.const)
-    branch(condition)(left)(right)
-  }
-
   @noop
   def whenS[A](fCond: F[Boolean])(fTrue: => F[Unit]): F[Unit] =
     ifS(fCond)(fTrue)(unit)
@@ -50,8 +34,6 @@ object Selective {
     type TypeClassType <: Selective[F]
     def self: F[A]
     val typeClassInstance: TypeClassType
-    def branch[B, C, D](fl: => F[B => D])(fr: => F[C => D])(implicit ev$1: A <:< Either[B, C]): F[D] =
-      typeClassInstance.branch[B, C, D](self.asInstanceOf[F[Either[B, C]]])(fl)(fr)
   }
   trait AllOps[F[_], A] extends Ops[F, A] with Applicative.AllOps[F, A] {
     type TypeClassType <: Selective[F]

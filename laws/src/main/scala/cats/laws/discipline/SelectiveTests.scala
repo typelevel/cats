@@ -3,7 +3,8 @@ package laws
 package discipline
 
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import org.scalacheck.{Arbitrary, Cogen, Prop}
+import cats.syntax.either._
+import org.scalacheck.{Arbitrary, Cogen, Gen, Prop}
 import Prop._
 
 trait SelectiveTests[F[_]] extends ApplicativeTests[F] {
@@ -25,8 +26,24 @@ trait SelectiveTests[F[_]] extends ApplicativeTests[F] {
     EqFInt: Eq[F[Int]],
     iso: Isomorphisms[F]
   ): RuleSet = {
-    implicit val ArbFBool: Arbitrary[F[Boolean]] = arbFB[A, Boolean]
-    implicit val ArbFUnit: Arbitrary[F[Unit]] = arbFB[A, Unit]
+    // Derive implicits required after bincompat was locked in for 2.0
+
+    implicit val ArbFCond: Arbitrary[F[Boolean]] = Arbitrary(for {
+      fa <- ArbFA.arbitrary
+      b <- Arbitrary.arbitrary[Boolean]
+    } yield laws.F.as(fa, b))
+
+    implicit val ArbFUnit: Arbitrary[F[Unit]] = Arbitrary(for {
+      fa <- ArbFA.arbitrary
+    } yield laws.F.as(fa, ()))
+
+    implicit val ArbFAA: Arbitrary[F[Either[A, A]]] = Arbitrary(
+      Gen.oneOf(
+        ArbFA.arbitrary.map(fa => laws.F.map(fa)(_.asLeft[A])),
+        ArbFA.arbitrary.map(fa => laws.F.map(fa)(_.asRight[A]))
+      )
+    )
+
     new RuleSet {
       def name: String = "selective"
       def bases: Seq[(String, RuleSet)] = Nil
@@ -35,18 +52,10 @@ trait SelectiveTests[F[_]] extends ApplicativeTests[F] {
         Seq(
           "selective identity" -> forAll(laws.selectiveIdentity[A, B] _),
           "selective distributivity" -> forAll(laws.selectiveDistributivity[A, B] _),
-          "selective branch consistency" -> forAll(laws.selectiveBranchConsistency[A, B, C] _),
-          "selective ifS consistency" -> forAll(laws.selectiveIfSConsistency[A] _),
           "selective whenS consistency" -> forAll(laws.selectiveWhenSConsistency[A] _)
         )
     }
   }
-
-  private def arbFB[A, B](implicit arbFA: Arbitrary[F[A]], arbB: Arbitrary[B]): Arbitrary[F[B]] =
-    Arbitrary(for {
-      fa <- arbFA.arbitrary
-      b <- arbB.arbitrary
-    } yield laws.F.as(fa, b))
 
   implicit protected def derivedArbiraryFUnit(implicit eqFInt: Eq[F[Int]]): Eq[F[Unit]] =
     Eq.by(laws.F.map(_)(_ => 0))
