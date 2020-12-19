@@ -213,6 +213,7 @@ lazy val commonJsSettings = Seq(
     }
   },
   scalaJSStage in Global := FullOptStage,
+  scalaJSStage in Test := FastOptStage,
   parallelExecution := false,
   jsEnv := new org.scalajs.jsenv.nodejs.NodeJSEnv(),
   // batch mode decreases the amount of memory needed to compile Scala.js code
@@ -658,7 +659,6 @@ lazy val free = crossProject(JSPlatform, JVMPlatform)
   .settings(moduleName := "cats-free", name := "Cats Free")
   .settings(catsSettings)
   .jsSettings(commonJsSettings)
-  .jsSettings(scalaJSStage in Test := FastOptStage)
   .jvmSettings(commonJvmSettings ++ mimaSettings("cats-free"))
 
 lazy val tests = crossProject(JSPlatform, JVMPlatform)
