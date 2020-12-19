@@ -51,14 +51,10 @@ trait SelectiveTests[F[_]] extends ApplicativeTests[F] {
       def props: Seq[(String, Prop)] =
         Seq(
           "selective identity" -> forAll(laws.selectiveIdentity[A, B] _),
-          "selective distributivity" -> forAll(laws.selectiveDistributivity[A, B] _),
-          "selective whenS consistency" -> forAll(laws.selectiveWhenSConsistency[A] _)
+          "selective distributivity" -> forAll(laws.selectiveDistributivity[A, B] _)
         )
     }
   }
-
-  implicit protected def derivedArbiraryFUnit(implicit eqFInt: Eq[F[Int]]): Eq[F[Unit]] =
-    Eq.by(laws.F.map(_)(_ => 0))
 }
 
 object SelectiveTests {

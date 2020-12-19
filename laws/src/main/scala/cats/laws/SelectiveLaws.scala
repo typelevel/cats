@@ -14,10 +14,6 @@ trait SelectiveLaws[F[_]] extends ApplicativeLaws[F] {
 
   def selectiveDistributivity[A, B](ab: Either[A, B], ff1: F[A => B], ff2: F[A => B]): IsEq[F[B]] =
     F.pure(ab).select(ff1 *> ff2) <-> F.pure(ab).select(ff1) *> F.pure(ab).select(ff2)
-
-  def selectiveWhenSConsistency[A](fb: F[Boolean], fa: F[Unit]): IsEq[F[Unit]] = {
-    fb.whenS(fa) <-> F.ifS(fb)(fa)(F.unit)
-  }
 }
 
 object SelectiveLaws {

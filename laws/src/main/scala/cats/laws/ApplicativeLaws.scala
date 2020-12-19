@@ -2,6 +2,7 @@ package cats
 package laws
 
 import cats.syntax.apply._
+import cats.syntax.applicative._
 import cats.syntax.functor._
 
 /**
@@ -46,6 +47,10 @@ trait ApplicativeLaws[F[_]] extends ApplyLaws[F] {
 
   def monoidalRightIdentity[A](fa: F[A]): (F[(A, Unit)], F[A]) =
     (F.product(fa, F.pure(())), fa)
+
+  def whenSIfSConsistency[A](fb: F[Boolean], fa: F[Unit]): IsEq[F[Unit]] = {
+    fb.whenS(fa) <-> fb.ifS(fa)(F.unit)
+  }
 }
 
 object ApplicativeLaws {

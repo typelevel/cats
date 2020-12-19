@@ -31,6 +31,11 @@ trait RigidSelectiveTests[F[_]] extends SelectiveTests[F] {
         fBToC <- ArbFBtoC.arbitrary
       } yield laws.F.map2(fAToB, fBToC)(_ andThen _))
 
+    implicit val EqFUnit: Eq[F[Unit]] = {
+      val a = Arbitrary.arbitrary[A].retryUntil(_ => true).sample.get
+      Eq.by(laws.F.map(_)(_ => null.asInstanceOf[A]))
+    }
+
     new RuleSet {
       def name: String = "rigidSelective"
       def bases: Seq[(String, RuleSet)] = Nil

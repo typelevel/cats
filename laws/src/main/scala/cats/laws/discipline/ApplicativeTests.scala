@@ -23,7 +23,21 @@ trait ApplicativeTests[F[_]] extends ApplyTests[F] {
     EqFC: Eq[F[C]],
     EqFABC: Eq[F[(A, B, C)]],
     iso: Isomorphisms[F]
-  ): RuleSet =
+  ): RuleSet = {
+    implicit val ArbFCond: Arbitrary[F[Boolean]] = Arbitrary(for {
+      fa <- ArbFA.arbitrary
+      b <- Arbitrary.arbitrary[Boolean]
+    } yield laws.F.as(fa, b))
+
+    implicit val ArbFUnit: Arbitrary[F[Unit]] = Arbitrary(for {
+      fa <- ArbFA.arbitrary
+    } yield laws.F.as(fa, ()))
+
+    implicit val EqFUnit: Eq[F[Unit]] = {
+      val a = Arbitrary.arbitrary[A].retryUntil(_ => true).sample.get
+      Eq.by(laws.F.map(_)(_ => a))
+    }
+
     new DefaultRuleSet(
       name = "applicative",
       parent = Some(apply[A, B, C]),
@@ -34,8 +48,10 @@ trait ApplicativeTests[F[_]] extends ApplyTests[F] {
       "applicative unit" -> forAll(laws.applicativeUnit[A] _),
       "ap consistent with product + map" -> forAll(laws.apProductConsistent[A, B] _),
       "monoidal left identity" -> forAll((fa: F[A]) => iso.leftIdentity(laws.monoidalLeftIdentity(fa))),
-      "monoidal right identity" -> forAll((fa: F[A]) => iso.rightIdentity(laws.monoidalRightIdentity(fa)))
+      "monoidal right identity" -> forAll((fa: F[A]) => iso.rightIdentity(laws.monoidalRightIdentity(fa))),
+      "whenS/ifS consistency" -> forAll(laws.whenSIfSConsistency[A] _)
     )
+  }
 }
 
 object ApplicativeTests {

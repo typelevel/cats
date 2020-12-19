@@ -1,14 +1,10 @@
 package cats
 
-import simulacrum.{noop, typeclass}
+import simulacrum.{typeclass}
 import scala.annotation.implicitNotFound
 
 @implicitNotFound("Could not find an instance of Selective for ${F}")
-@typeclass trait Selective[F[_]] extends Applicative[F] {
-  @noop
-  def whenS[A](fCond: F[Boolean])(fTrue: => F[Unit]): F[Unit] =
-    ifS(fCond)(fTrue)(unit)
-}
+@typeclass trait Selective[F[_]] extends Applicative[F] {}
 
 object Selective {
   /* ======================================================================== */
