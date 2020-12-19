@@ -258,6 +258,9 @@ trait Apply[F[_]] extends Functor[F] with InvariantSemigroupal[F] with ApplyArit
     ap2(map(fcond)(ite))(ifTrue, ifFalse)
   }
 
+  def select[A, B](fab: F[Either[A, B]])(ff: => F[A => B]): F[B] =
+    selectA(fab)(ff)
+
   def selectA[A, B](fab: F[Either[A, B]])(ff: F[A => B]): F[B] =
     map2(fab, ff) {
       case (Left(a), f)  => f(a)
@@ -317,6 +320,8 @@ object Apply {
       typeClassInstance.ap2[B, C, D](self.asInstanceOf[F[(B, C) => D]])(fa, fb)
     def map2[B, C](fb: F[B])(f: (A, B) => C): F[C] = typeClassInstance.map2[A, B, C](self, fb)(f)
     def map2Eval[B, C](fb: Eval[F[B]])(f: (A, B) => C): Eval[F[C]] = typeClassInstance.map2Eval[A, B, C](self, fb)(f)
+    def select[B, C](ff: => F[B => C])(implicit ev$1: A <:< Either[B, C]): F[C] =
+      typeClassInstance.select[B, C](self.asInstanceOf[F[Either[B, C]]])(ff)
     def selectA[B, C](ff: F[B => C])(implicit ev$1: A <:< Either[B, C]): F[C] =
       typeClassInstance.selectA[B, C](self.asInstanceOf[F[Either[B, C]]])(ff)
   }

@@ -15,13 +15,6 @@ trait SelectiveLaws[F[_]] extends ApplicativeLaws[F] {
   def selectiveDistributivity[A, B](ab: Either[A, B], ff1: F[A => B], ff2: F[A => B]): IsEq[F[B]] =
     F.pure(ab).select(ff1 *> ff2) <-> F.pure(ab).select(ff1) *> F.pure(ab).select(ff2)
 
-  def selectiveAssociativity[A, B, C](fa: F[Either[A, B]], fb: F[Either[C, A => B]], fc: F[C => A => B]): IsEq[F[B]] = {
-    val fa0 = fa.map(_.map(_.asRight[(C, A)]))
-    val fb0 = fb.map { either => (a: A) => either.bimap(c => (c, a), f => f(a)) }
-    val fc0 = fc.map(Function.uncurried(_).tupled)
-    fa.select(fb.select(fc)) <-> fa0.select(fb0).select(fc0)
-  }
-
   def selectiveBranchConsistency[A, B, C](fab: F[Either[A, B]], fl: F[A => C], fr: F[B => C]): IsEq[F[C]] = {
     fab.branch(fl)(fr) <-> {
       val lhs = {

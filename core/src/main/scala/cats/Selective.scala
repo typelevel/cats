@@ -5,7 +5,6 @@ import scala.annotation.implicitNotFound
 
 @implicitNotFound("Could not find an instance of Selective for ${F}")
 @typeclass trait Selective[F[_]] extends Applicative[F] {
-  def select[A, B](fab: F[Either[A, B]])(ff: => F[A => B]): F[B]
 
   def branch[A, B, C](fab: F[Either[A, B]])(fl: => F[A => C])(fr: => F[B => C]): F[C] = {
     val innerLhs: F[Either[A, Either[B, C]]] = map(fab)(_.map(Left(_)))
@@ -51,8 +50,6 @@ object Selective {
     type TypeClassType <: Selective[F]
     def self: F[A]
     val typeClassInstance: TypeClassType
-    def select[B, C](ff: => F[B => C])(implicit ev$1: A <:< Either[B, C]): F[C] =
-      typeClassInstance.select[B, C](self.asInstanceOf[F[Either[B, C]]])(ff)
     def branch[B, C, D](fl: => F[B => D])(fr: => F[C => D])(implicit ev$1: A <:< Either[B, C]): F[D] =
       typeClassInstance.branch[B, C, D](self.asInstanceOf[F[Either[B, C]]])(fl)(fr)
   }

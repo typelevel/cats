@@ -2,6 +2,7 @@ package cats
 package laws
 
 import cats.syntax.apply._
+import cats.syntax.either._
 import cats.syntax.functor._
 
 /**
@@ -26,6 +27,13 @@ trait ApplyLaws[F[_]] extends FunctorLaws[F] with SemigroupalLaws[F] {
 
   def productLConsistency[A, B](fa: F[A], fb: F[B]): IsEq[F[A]] =
     F.productL(fa)(fb) <-> F.map2(fa, fb)((a, _) => a)
+
+  def selectAssociativity[A, B, C](fa: F[Either[A, B]], fb: F[Either[C, A => B]], fc: F[C => A => B]): IsEq[F[B]] = {
+    val fa0 = fa.map(_.map(_.asRight[(C, A)]))
+    val fb0 = fb.map { either => (a: A) => either.bimap(c => (c, a), f => f(a)) }
+    val fc0 = fc.map(Function.uncurried(_).tupled)
+    fa.select(fb.select(fc)) <-> fa0.select(fb0).select(fc0)
+  }
 
   def selectAConsistency[A, B](fab: F[Either[A, B]], ff: F[A => B]): IsEq[F[B]] =
     F.selectA(fab)(ff) <-> F.map2(fab, ff) {

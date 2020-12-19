@@ -3,7 +3,7 @@ package laws
 package discipline
 
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import org.scalacheck.{Arbitrary, Cogen, Gen, Prop}
+import org.scalacheck.{Arbitrary, Cogen, Prop}
 import Prop._
 
 trait SelectiveTests[F[_]] extends ApplicativeTests[F] {
@@ -35,7 +35,6 @@ trait SelectiveTests[F[_]] extends ApplicativeTests[F] {
         Seq(
           "selective identity" -> forAll(laws.selectiveIdentity[A, B] _),
           "selective distributivity" -> forAll(laws.selectiveDistributivity[A, B] _),
-          "selective associativity" -> forAll(laws.selectiveAssociativity[A, B, C] _),
           "selective branch consistency" -> forAll(laws.selectiveBranchConsistency[A, B, C] _),
           "selective ifS consistency" -> forAll(laws.selectiveIfSConsistency[A] _),
           "selective whenS consistency" -> forAll(laws.selectiveWhenSConsistency[A] _)
@@ -48,17 +47,6 @@ trait SelectiveTests[F[_]] extends ApplicativeTests[F] {
       fa <- arbFA.arbitrary
       b <- arbB.arbitrary
     } yield laws.F.as(fa, b))
-
-  implicit private def arbFAtoBtoC[A, B, C](implicit
-    arbFA: Arbitrary[F[A]],
-    arbC: Arbitrary[C],
-    cogenA: Cogen[A],
-    cogenB: Cogen[B]
-  ): Arbitrary[F[A => B => C]] =
-    Arbitrary(for {
-      fa <- arbFA.arbitrary
-      f <- Gen.function1(Gen.function1(arbC.arbitrary)(cogenB))(cogenA)
-    } yield laws.F.as(fa, f))
 
   implicit protected def derivedArbiraryFUnit(implicit eqFInt: Eq[F[Int]]): Eq[F[Unit]] =
     Eq.by(laws.F.map(_)(_ => 0))

@@ -23,7 +23,9 @@ trait ApplyTests[F[_]] extends FunctorTests[F] with SemigroupalTests[F] {
     EqFC: Eq[F[C]],
     EqFABC: Eq[F[(A, B, C)]],
     iso: Isomorphisms[F]
-  ): RuleSet =
+  ): RuleSet = {
+    // We don't have an F[B]. This is an odious hack to preserve bincompat.
+    implicit val EqFB: Eq[F[B]] = Eq.by((fb: F[B]) => laws.F.map(fb)((null.asInstanceOf[A], _, null.asInstanceOf[C])))
     new RuleSet {
       val name = "apply"
       val parents = Seq(functor[A, B, C], semigroupal[A, B, C])
@@ -34,11 +36,14 @@ trait ApplyTests[F[_]] extends FunctorTests[F] with SemigroupalTests[F] {
         "map2/map2Eval consistency" -> forAll(laws.map2EvalConsistency[A, B, C] _),
         "productR consistent map2" -> forAll(laws.productRConsistency[A, C] _),
         "productL consistent map2" -> forAll(laws.productLConsistency[A, C] _),
+        "select associativity" -> forAll(laws.selectAssociativity[A, B, C] _),
         "selectA consistent map2" -> forAll(laws.selectAConsistency[A, C] _)
       )
     }
+  }
 
   // Derived implicits to preserve bincompat
+
   implicit protected def derivedArbitraryEither[A, B](implicit
     arbFA: Arbitrary[F[A]],
     arbFB: Arbitrary[F[B]]
@@ -58,6 +63,18 @@ trait ApplyTests[F[_]] extends FunctorTests[F] with SemigroupalTests[F] {
       fAToB <- arbFAtoB.arbitrary
       fBToC <- arbFBtoC.arbitrary
     } yield laws.F.map2(fAToB, fBToC)(_ andThen _))
+
+  implicit protected def derivedAtoBtoC[A, B, C](implicit
+    arbFA: Arbitrary[F[A]],
+    arbC: Arbitrary[C],
+    cogenA: Cogen[A],
+    cogenB: Cogen[B]
+  ): Arbitrary[F[A => B => C]] =
+    Arbitrary(for {
+      fa <- arbFA.arbitrary
+      f <- Gen.function1(Gen.function1(arbC.arbitrary)(cogenB))(cogenA)
+    } yield laws.F.as(fa, f))
+
 }
 
 object ApplyTests {
