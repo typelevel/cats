@@ -69,45 +69,6 @@ trait ApplyTests[F[_]] extends FunctorTests[F] with SemigroupalTests[F] {
       )
     }
   }
-
-  // Derived implicits to preserve bincompat
-
-//   implicit protected def derivedArbitraryEither[A, B](implicit
-//     arbFA: Arbitrary[F[A]],
-//     arbFB: Arbitrary[F[B]]
-//   ): Arbitrary[F[Either[A, B]]] = {
-//     Arbitrary(
-//       Gen.oneOf(arbFA.arbitrary.map(fa => laws.F.map(fa)(_.asLeft[B])),
-//                 arbFB.arbitrary.map(fb => laws.F.map(fb)(_.asRight[A]))
-//       )
-//     )
-//   }
-
-//   implicit protected def derivedArbitraryFunctionComposition[A, B, C](implicit
-//     arbFAtoB: Arbitrary[F[A => B]],
-//     arbFBtoC: Arbitrary[F[B => C]]
-//   ): Arbitrary[F[A => C]] =
-//     Arbitrary(for {
-//       fAToB <- arbFAtoB.arbitrary
-//       fBToC <- arbFBtoC.arbitrary
-//     } yield laws.F.map2(fAToB, fBToC)(_ andThen _))
-
-//   implicit protected def derivedArbitraryAtoBtoC[A, B, C](implicit
-//     arbFA: Arbitrary[F[A]],
-//     arbC: Arbitrary[C],
-//     cogenA: Cogen[A],
-//     cogenB: Cogen[B]
-//   ): Arbitrary[F[A => B => C]] =
-//     Arbitrary(for {
-//       fa <- arbFA.arbitrary
-//       f <- Gen.function1(Gen.function1(arbC.arbitrary)(cogenB))(cogenA)
-//     } yield laws.F.as(fa, f))
-
-//   implicit def derivedArbitraryFB[A, B](implicit arbFA: Arbitrary[F[A]], arbB: Arbitrary[B]): Arbitrary[F[B]] =
-//     Arbitrary(for {
-//       fa <- arbFA.arbitrary
-//       b <- arbB.arbitrary
-//     } yield laws.F.as(fa, b))
 }
 
 object ApplyTests {
