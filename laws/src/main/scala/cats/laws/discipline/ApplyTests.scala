@@ -45,6 +45,20 @@ trait ApplyTests[F[_]] extends FunctorTests[F] with SemigroupalTests[F] {
       )
     )
 
+    implicit val ArbFCAtoB: Arbitrary[F[Either[C, A => B]]] = Arbitrary(
+      Gen.oneOf(
+        ArbFC.arbitrary.map(fa => laws.F.map(fa)(_.asLeft[A => B])),
+        ArbFAtoB.arbitrary.map(faToB => laws.F.map(faToB)(_.asRight[C]))
+      )
+    )
+
+    implicit val ArbCtoAtoB: Arbitrary[F[C => A => B]] = Arbitrary(
+      for {
+        fa <- ArbFA.arbitrary
+        f <- Gen.function1(Gen.function1(Arbitrary.arbitrary[B])(CogenA))(CogenC)
+      } yield laws.F.as(fa, f)
+    )
+
     implicit val ArbFAtoC: Arbitrary[F[A => C]] =
       Arbitrary(for {
         fAToB <- ArbFAtoB.arbitrary
@@ -65,7 +79,8 @@ trait ApplyTests[F[_]] extends FunctorTests[F] with SemigroupalTests[F] {
         "productL consistent map2" -> forAll(laws.productLConsistency[A, C] _),
         "branch/select consistency" -> forAll(laws.branchConsistency[A, B, C] _),
         "ifS/branch consistency" -> forAll(laws.ifSConsistency[A] _),
-        "selectA consistent map2" -> forAll(laws.selectAConsistency[A, C] _)
+        "selectA consistent map2" -> forAll(laws.selectAConsistency[A, C] _),
+        "select associativity" -> forAll(laws.selectAssociativity[A, B, C] _)
       )
     }
   }
