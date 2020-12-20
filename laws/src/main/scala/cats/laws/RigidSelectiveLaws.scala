@@ -28,10 +28,10 @@ trait RigidSelectiveLaws[F[_]] extends ApplicativeLaws[F] {
     fb.map(Right(_)).branch(ope[A => C])(fr) <-> fb.map(Left(_)).select(fr)
 
   def selectiveIfSSkipFalse[A, B](fa: F[A], fb: F[B]): IsEq[F[B]] =
-    fa.as(true).ifS(fb)(ope[B]) <-> fa *> fb
+    fa.as(true).ifS(fb)(ope[B]) <-> fa.as(Either.leftUnit).select(fb.map(Function.const))
 
   def selectiveIfSSkipTrue[A, B](fa: F[A], fb: F[B]): IsEq[F[B]] =
-    fa.as(false).ifS(ope[B])(fb) <-> fa *> fb
+    fa.as(false).ifS(ope[B])(fb) <-> fa.as(Either.leftUnit).select(fb.map(Function.const))
 
   def selectiveWhenSSkip[A](fa: F[A]): IsEq[F[Unit]] =
     fa.as(false).whenS(ope[Unit]) <-> fa *> F.unit
