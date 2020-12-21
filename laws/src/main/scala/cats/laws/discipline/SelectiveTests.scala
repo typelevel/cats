@@ -81,7 +81,7 @@ trait SelectiveTests[F[_]] extends ApplicativeTests[F] {
     }
 
     new DefaultRuleSet(
-      name = "applicative",
+      name = "selective",
       parent = Some(apply[A, B, C]),
       "applicative identity" -> forAll(laws.applicativeIdentity[A] _),
       "applicative homomorphism" -> forAll(laws.applicativeHomomorphism[A, B] _),
