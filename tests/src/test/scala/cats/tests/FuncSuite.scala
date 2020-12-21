@@ -1,6 +1,6 @@
 package cats.tests
 
-import cats.{Applicative, Apply, Contravariant, Functor, Semigroupal, Show}
+import cats.{Applicative, Apply, Contravariant, Functor, RigidSelective, Selective, Semigroupal, Show}
 import cats.data.{AppFunc, Func}
 import cats.data.Func.appFunc
 import cats.kernel.Eq
@@ -26,6 +26,22 @@ class FuncSuite extends CatsSuite {
       Func.catsDataApplicativeForFunc[Option, Int]
     checkAll("Func[Option, MiniInt, Int]", ApplicativeTests[Func[Option, MiniInt, *]].applicative[Int, Int, Int])
     checkAll("Applicative[Func[Option, Int, *]]", SerializableTests.serializable(Applicative[Func[Option, Int, *]]))
+  }
+
+  {
+    implicit val catsDataSelectiveForFunc: Selective[Func[Option, Int, *]] =
+      Func.catsDataRigidSelectiveForFunc[Option, Int]
+    checkAll("Func[Option, MiniInt, Int]", SelectiveTests[Func[Option, MiniInt, *]].selective[Int, Int, Int])
+    checkAll("Selective[Func[Option, Int, *]]", SerializableTests.serializable(Selective[Func[Option, Int, *]]))
+  }
+
+  {
+    implicit val catsDataRigidSelectiveForFunc: RigidSelective[Func[Option, Int, *]] =
+      Func.catsDataRigidSelectiveForFunc[Option, Int]
+    checkAll("Func[Option, MiniInt, Int]", RigidSelectiveTests[Func[Option, MiniInt, *]].rigidSelective[Int, Int, Int])
+    checkAll("RigidSelective[Func[Option, Int, *]]",
+             SerializableTests.serializable(RigidSelective[Func[Option, Int, *]])
+    )
   }
 
   {
