@@ -3,8 +3,7 @@ package laws
 package discipline
 
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import cats.syntax.either._
-import org.scalacheck.{Arbitrary, Cogen, Gen, Prop}
+import org.scalacheck.{Arbitrary, Cogen, Prop}
 import Prop._
 
 trait ApplicativeTests[F[_]] extends ApplyTests[F] {
@@ -25,27 +24,6 @@ trait ApplicativeTests[F[_]] extends ApplyTests[F] {
     EqFABC: Eq[F[(A, B, C)]],
     iso: Isomorphisms[F]
   ): RuleSet = {
-    implicit val ArbFCond: Arbitrary[F[Boolean]] = Arbitrary(for {
-      fa <- ArbFA.arbitrary
-      b <- Arbitrary.arbitrary[Boolean]
-    } yield laws.F.as(fa, b))
-
-    implicit val ArbFUnit: Arbitrary[F[Unit]] = Arbitrary(for {
-      fa <- ArbFA.arbitrary
-    } yield laws.F.as(fa, ()))
-
-    implicit val ArbFAA: Arbitrary[F[Either[A, A]]] = Arbitrary(
-      Gen.oneOf(
-        ArbFA.arbitrary.map(fa => laws.F.map(fa)(_.asLeft[A])),
-        ArbFA.arbitrary.map(fa => laws.F.map(fa)(_.asRight[A]))
-      )
-    )
-
-    implicit val EqFUnit: Eq[F[Unit]] = {
-      val a = Arbitrary.arbitrary[A].retryUntil(_ => true).sample.get
-      Eq.by(laws.F.map(_)(_ => a))
-    }
-
     new DefaultRuleSet(
       name = "applicative",
       parent = Some(apply[A, B, C]),
@@ -56,10 +34,7 @@ trait ApplicativeTests[F[_]] extends ApplyTests[F] {
       "applicative unit" -> forAll(laws.applicativeUnit[A] _),
       "ap consistent with product + map" -> forAll(laws.apProductConsistent[A, B] _),
       "monoidal left identity" -> forAll((fa: F[A]) => iso.leftIdentity(laws.monoidalLeftIdentity(fa))),
-      "monoidal right identity" -> forAll((fa: F[A]) => iso.rightIdentity(laws.monoidalRightIdentity(fa))),
-      "selective identity" -> forAll(laws.selectiveIdentity[A, B] _),
-      "selective distributivity" -> forAll(laws.selectiveDistributivity[A, B] _),
-      "whenS/ifS consistency" -> forAll(laws.whenSIfSConsistency[A] _)
+      "monoidal right identity" -> forAll((fa: F[A]) => iso.rightIdentity(laws.monoidalRightIdentity(fa)))
     )
   }
 }

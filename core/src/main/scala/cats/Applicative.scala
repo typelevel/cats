@@ -1,7 +1,7 @@
 package cats
 
 import cats.arrow.Arrow
-import simulacrum.{noop, typeclass}
+import simulacrum.typeclass
 import scala.annotation.implicitNotFound
 
 /**
@@ -185,10 +185,6 @@ import scala.annotation.implicitNotFound
    */
   def whenA[A](cond: Boolean)(f: => F[A]): F[Unit] =
     if (cond) void(f) else unit
-
-  @noop
-  def whenS[A](fCond: F[Boolean])(fTrue: => F[Unit]): F[Unit] =
-    ifS(fCond)(fTrue)(unit)
 }
 
 object Applicative {

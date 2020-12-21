@@ -6,8 +6,8 @@ import cats.syntax.all._
 /**
  * Laws that must be obeyed by any rigid `Selective`.
  */
-trait RigidSelectiveLaws[F[_]] extends ApplicativeLaws[F] {
-  implicit override def F: Applicative[F]
+trait RigidSelectiveLaws[F[_]] extends SelectiveLaws[F] {
+  implicit override def F: Selective[F]
 
   def selectiveApply[A, B](fa: F[A], ff: F[A => B]): IsEq[F[B]] =
     ff.ap(fa) <-> {
@@ -26,15 +26,6 @@ trait RigidSelectiveLaws[F[_]] extends ApplicativeLaws[F] {
 
   def selectiveBranchSkipLeft[A, B, C](fb: F[B], fr: F[B => C]): IsEq[F[C]] =
     fb.map(Right(_)).branch(ope[A => C])(fr) <-> fb.map(Left(_)).select(fr)
-
-  def selectiveIfSSkipFalse[A, B](fa: F[A], fb: F[B]): IsEq[F[B]] =
-    fa.as(true).ifS(fb)(ope[B]) <-> fa.as(Either.leftUnit).select(fb.map(Function.const))
-
-  def selectiveIfSSkipTrue[A, B](fa: F[A], fb: F[B]): IsEq[F[B]] =
-    fa.as(false).ifS(ope[B])(fb) <-> fa.as(Either.leftUnit).select(fb.map(Function.const))
-
-  def selectiveWhenSSkip[A](fa: F[A]): IsEq[F[Unit]] =
-    fa.as(false).whenS(ope[Unit]) <-> fa *> F.unit
 }
 
 object RigidSelectiveLaws {

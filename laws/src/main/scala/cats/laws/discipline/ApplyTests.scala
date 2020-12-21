@@ -3,8 +3,7 @@ package laws
 package discipline
 
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import cats.syntax.all._
-import org.scalacheck.{Arbitrary, Cogen, Gen, Prop}
+import org.scalacheck.{Arbitrary, Cogen, Prop}
 import Prop._
 
 trait ApplyTests[F[_]] extends FunctorTests[F] with SemigroupalTests[F] {
@@ -24,49 +23,6 @@ trait ApplyTests[F[_]] extends FunctorTests[F] with SemigroupalTests[F] {
     EqFABC: Eq[F[(A, B, C)]],
     iso: Isomorphisms[F]
   ): RuleSet = {
-    // Derive implicits required after bincompat was locked in for 2.0
-
-    implicit val ArbFCond: Arbitrary[F[Boolean]] = Arbitrary(for {
-      fa <- ArbFA.arbitrary
-      b <- Arbitrary.arbitrary[Boolean]
-    } yield laws.F.as(fa, b))
-
-    implicit val ArbFAB: Arbitrary[F[Either[A, B]]] = Arbitrary(
-      Gen.oneOf(
-        ArbFA.arbitrary.map(fa => laws.F.map(fa)(_.asLeft[B])),
-        ArbFB.arbitrary.map(fb => laws.F.map(fb)(_.asRight[A]))
-      )
-    )
-
-    implicit val ArbFAC: Arbitrary[F[Either[A, C]]] = Arbitrary(
-      Gen.oneOf(
-        ArbFA.arbitrary.map(fa => laws.F.map(fa)(_.asLeft[C])),
-        ArbFC.arbitrary.map(fc => laws.F.map(fc)(_.asRight[A]))
-      )
-    )
-
-    implicit val ArbFCAtoB: Arbitrary[F[Either[C, A => B]]] = Arbitrary(
-      Gen.oneOf(
-        ArbFC.arbitrary.map(fa => laws.F.map(fa)(_.asLeft[A => B])),
-        ArbFAtoB.arbitrary.map(faToB => laws.F.map(faToB)(_.asRight[C]))
-      )
-    )
-
-    implicit val ArbCtoAtoB: Arbitrary[F[C => A => B]] = Arbitrary(
-      for {
-        fa <- ArbFA.arbitrary
-        f <- Gen.function1(Gen.function1(Arbitrary.arbitrary[B])(CogenA))(CogenC)
-      } yield laws.F.as(fa, f)
-    )
-
-    implicit val ArbFAtoC: Arbitrary[F[A => C]] =
-      Arbitrary(for {
-        fAToB <- ArbFAtoB.arbitrary
-        fBToC <- ArbFBtoC.arbitrary
-      } yield laws.F.map2(fAToB, fBToC)(_ andThen _))
-
-    implicit val EqFB: Eq[F[B]] = Eq.by((fb: F[B]) => laws.F.map(fb)((null.asInstanceOf[A], _, null.asInstanceOf[C])))
-
     new RuleSet {
       val name = "apply"
       val parents = Seq(functor[A, B, C], semigroupal[A, B, C])
@@ -76,11 +32,7 @@ trait ApplyTests[F[_]] extends FunctorTests[F] with SemigroupalTests[F] {
         "map2/product-map consistency" -> forAll(laws.map2ProductConsistency[A, B, C] _),
         "map2/map2Eval consistency" -> forAll(laws.map2EvalConsistency[A, B, C] _),
         "productR consistent map2" -> forAll(laws.productRConsistency[A, C] _),
-        "productL consistent map2" -> forAll(laws.productLConsistency[A, C] _),
-        "branch/select consistency" -> forAll(laws.branchConsistency[A, B, C] _),
-        "ifS/branch consistency" -> forAll(laws.ifSConsistency[A] _),
-        "selectA consistent map2" -> forAll(laws.selectAConsistency[A, C] _),
-        "select associativity" -> forAll(laws.selectAssociativity[A, B, C] _)
+        "productL consistent map2" -> forAll(laws.productLConsistency[A, C] _)
       )
     }
   }

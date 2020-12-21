@@ -6,7 +6,7 @@ import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import org.scalacheck.{Arbitrary, Cogen, Prop}
 import Prop._
 
-trait RigidSelectiveTests[F[_]] extends ApplicativeTests[F] {
+trait RigidSelectiveTests[F[_]] extends SelectiveTests[F] {
   def laws: RigidSelectiveLaws[F]
 
   def rigidSelective[A: Arbitrary: Eq, B: Arbitrary: Eq, C: Arbitrary: Eq](implicit
@@ -39,16 +39,13 @@ trait RigidSelectiveTests[F[_]] extends ApplicativeTests[F] {
     new RuleSet {
       def name: String = "rigidSelective"
       def bases: Seq[(String, RuleSet)] = Nil
-      def parents: Seq[RuleSet] = Seq(applicative[A, B, C])
+      def parents: Seq[RuleSet] = Seq(selective[A, B, C])
       def props: Seq[(String, Prop)] =
         Seq(
           "selective apply" -> forAll(laws.selectiveApply[A, B] _),
           "selective select skip" -> forAll(laws.selectiveSelectSkip[A, B] _),
           "selective branch skip right" -> forAll(laws.selectiveBranchSkipRight[A, B, C] _),
-          "selective branch skip left" -> forAll(laws.selectiveBranchSkipLeft[A, B, C] _),
-          "selective ifS skip true" -> forAll(laws.selectiveIfSSkipTrue[A, B] _),
-          "selective ifS skip false" -> forAll(laws.selectiveIfSSkipFalse[A, B] _),
-          "selective whenS skip" -> forAll(laws.selectiveWhenSSkip[A] _)
+          "selective branch skip left" -> forAll(laws.selectiveBranchSkipLeft[A, B, C] _)
         )
     }
   }

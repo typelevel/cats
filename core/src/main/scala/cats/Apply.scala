@@ -257,30 +257,6 @@ trait Apply[F[_]] extends Functor[F] with InvariantSemigroupal[F] with ApplyArit
     def ite(b: Boolean)(ifTrue: A, ifFalse: A) = if (b) ifTrue else ifFalse
     ap2(map(fcond)(ite))(ifTrue, ifFalse)
   }
-
-  def select[A, B](fab: F[Either[A, B]])(ff: => F[A => B]): F[B] =
-    selectA(fab)(ff)
-
-  def selectA[A, B](fab: F[Either[A, B]])(ff: F[A => B]): F[B] =
-    map2(fab, ff) {
-      case (Left(a), f)  => f(a)
-      case (Right(b), _) => b
-    }
-
-  def branch[A, B, C](fab: F[Either[A, B]])(fl: => F[A => C])(fr: => F[B => C]): F[C] = {
-    val innerLhs: F[Either[A, Either[B, C]]] = map(fab)(_.map(Left(_)))
-    def innerRhs: F[A => Either[B, C]] = map(fl)(_.andThen(Right(_)))
-    val lhs = select(innerLhs)(innerRhs)
-    select(lhs)(fr)
-  }
-
-  @noop
-  def ifS[A](fCond: F[Boolean])(fTrue: => F[A])(fFalse: => F[A]): F[A] = {
-    val condition: F[Either[Unit, Unit]] = map(fCond)(if (_) EitherUtil.leftUnit else EitherUtil.unit)
-    def left: F[Unit => A] = map(fTrue)(Function.const)
-    def right: F[Unit => A] = map(fFalse)(Function.const)
-    branch(condition)(left)(right)
-  }
 }
 
 object Apply {
@@ -335,12 +311,6 @@ object Apply {
       typeClassInstance.ap2[B, C, D](self.asInstanceOf[F[(B, C) => D]])(fa, fb)
     def map2[B, C](fb: F[B])(f: (A, B) => C): F[C] = typeClassInstance.map2[A, B, C](self, fb)(f)
     def map2Eval[B, C](fb: Eval[F[B]])(f: (A, B) => C): Eval[F[C]] = typeClassInstance.map2Eval[A, B, C](self, fb)(f)
-    def select[B, C](ff: => F[B => C])(implicit ev$1: A <:< Either[B, C]): F[C] =
-      typeClassInstance.select[B, C](self.asInstanceOf[F[Either[B, C]]])(ff)
-    def selectA[B, C](ff: F[B => C])(implicit ev$1: A <:< Either[B, C]): F[C] =
-      typeClassInstance.selectA[B, C](self.asInstanceOf[F[Either[B, C]]])(ff)
-    def branch[B, C, D](fl: => F[B => D])(fr: => F[C => D])(implicit ev$1: A <:< Either[B, C]): F[D] =
-      typeClassInstance.branch[B, C, D](self.asInstanceOf[F[Either[B, C]]])(fl)(fr)
   }
   trait AllOps[F[_], A] extends Ops[F, A] with Functor.AllOps[F, A] with InvariantSemigroupal.AllOps[F, A] {
     type TypeClassType <: Apply[F]
