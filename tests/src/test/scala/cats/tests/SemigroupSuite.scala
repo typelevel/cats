@@ -3,9 +3,10 @@ package cats.tests
 import cats.{Invariant, InvariantMonoidal, Semigroupal}
 import cats.kernel.Semigroup
 import cats.syntax.eq._
+import cats.kernel.laws.discipline.SemigroupTests
 import org.scalacheck.Prop._
 
-class SemigroupSuite extends munit.ScalaCheckSuite {
+class SemigroupSuite extends CatsSuite {
   {
     Invariant[Semigroup]
     Semigroupal[Semigroup]
@@ -26,5 +27,15 @@ class SemigroupSuite extends munit.ScalaCheckSuite {
       assert(Semigroup.instance(mult).combine(a, b) === (a * b))
       assert(Semigroup.instance(add).combine(a, b) === (a + b))
     }
+  }
+  
+  {
+    val S = Semigroup.righthand[Int]
+    checkAll("Semigroup.righthand", SemigroupTests[Int](S).semigroup)
+  }
+
+  {
+    val S = Semigroup.lefthand[Int]
+    checkAll("Semigroup.lefthand", SemigroupTests[Int](S).semigroup)
   }
 }
