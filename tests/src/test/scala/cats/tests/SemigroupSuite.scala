@@ -28,7 +28,7 @@ class SemigroupSuite extends CatsSuite {
       assert(Semigroup.instance(add).combine(a, b) === (a + b))
     }
   }
-  
+
   {
     val S = Semigroup.righthand[Int]
     checkAll("Semigroup.righthand", SemigroupTests[Int](S).semigroup)
