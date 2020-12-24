@@ -298,7 +298,6 @@ lazy val docSettings = Seq(
     "gray-lighter" -> "#F4F3F4",
     "white-color" -> "#FFFFFF"
   ),
-  micrositeCompilingDocsTool := WithMdoc,
   autoAPIMappings := true,
   unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(kernel.jvm, core.jvm, free.jvm),
   docsMappingsAPIDir := "api",
