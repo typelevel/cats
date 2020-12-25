@@ -156,7 +156,7 @@ object Semigroup
   /**
    * Create a `Semigroup` instance that always returns the lefthand side.
    */
-  @inline def lefthand[A]: Semigroup[A] =
+  @inline def first[A]: Semigroup[A] =
     new Semigroup[A] {
       override def combine(x: A, y: A): A = x
     }
@@ -164,7 +164,7 @@ object Semigroup
   /**
    * Create a `Semigroup` instance that always returns the righthand side.
    */
-  @inline def righthand[A]: Semigroup[A] =
+  @inline def last[A]: Semigroup[A] =
     new Semigroup[A] {
       override def combine(x: A, y: A): A = y
     }

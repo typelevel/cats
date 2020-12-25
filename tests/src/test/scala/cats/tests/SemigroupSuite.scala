@@ -30,12 +30,12 @@ class SemigroupSuite extends CatsSuite {
   }
 
   {
-    val S = Semigroup.righthand[Int]
-    checkAll("Semigroup.righthand", SemigroupTests[Int](S).semigroup)
+    val S = Semigroup.first[Int]
+    checkAll("Semigroup.first", SemigroupTests[Int](S).semigroup)
   }
 
   {
-    val S = Semigroup.lefthand[Int]
-    checkAll("Semigroup.lefthand", SemigroupTests[Int](S).semigroup)
+    val S = Semigroup.last[Int]
+    checkAll("Semigroup.last", SemigroupTests[Int](S).semigroup)
   }
 }
