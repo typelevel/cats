@@ -772,16 +772,6 @@ import scala.annotation.implicitNotFound
       case Some(a) => a
     }
 
-  def sliding2[A](fa: F[A]): List[(A, A)] =
-    foldRight(fa, Now((List.empty[(A, A)], None: Option[A]))) { (x1, eval) =>
-      eval.value match {
-        case (acc, Some(x2)) =>
-          Now(((x1, x2) :: acc, Some(x1)))
-        case (acc, None) =>
-          Now((acc, Some(x1)))
-      }
-    }.value._1
-
   protected def intersperseList[A](xs: List[A], x: A): List[A] = {
     val bld = List.newBuilder[A]
     val it = xs.iterator
