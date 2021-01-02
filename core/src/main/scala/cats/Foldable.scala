@@ -30,7 +30,7 @@ import scala.annotation.implicitNotFound
  * See: [[http://www.cs.nott.ac.uk/~pszgmh/fold.pdf A tutorial on the universality and expressiveness of fold]]
  */
 @implicitNotFound("Could not find an instance of Foldable for ${F}")
-@typeclass trait Foldable[F[_]] extends UnorderedFoldable[F] { self =>
+@typeclass trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableArityFunctions[F] { self =>
 
   /**
    * Left associative fold on 'F' using the function 'f'.
@@ -781,7 +781,7 @@ import scala.annotation.implicitNotFound
           Now((acc, Some(x2)))
       }
     }.value._1
-    
+
   protected def intersperseList[A](xs: List[A], x: A): List[A] = {
     val bld = List.newBuilder[A]
     val it = xs.iterator

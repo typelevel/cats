@@ -28,7 +28,8 @@ object Boilerplate {
     GenTupleSemigroupalSyntax,
     GenParallelArityFunctions,
     GenParallelArityFunctions2,
-    GenTupleParallelSyntax
+    GenTupleParallelSyntax,
+    GenFoldableArityFunctions
   )
 
   val header = "// auto-generated boilerplate by /project/Boilerplate.scala" // TODO: put something meaningful here?
@@ -503,4 +504,41 @@ object Boilerplate {
     }
   }
 
+  object GenFoldableArityFunctions extends Template {
+    def filename(root: File) = root / "cats" / "FoldableArityFunctions.scala"
+    override def range = 3 to maxArity
+    def content(tv: TemplateVals) = {
+      import tv._
+
+      val tupleTpe = (1 to arity).map(_ => "A").mkString("(", ", ", ")")
+      def listXN(range: Range) = range.map("x" + _).mkString(" :: ")
+      val reverseXN = listXN(1 to arity - 1)
+      val tupleXN = (1 to arity).map("x" + _).mkString("(", ", ", ")")
+
+      block"""
+      |package cats
+      |
+      |/**
+      | * @groupprio Ungrouped 0
+      | *
+      | * @groupname FoldableSlidingN foldable arity
+      | * @groupdesc FoldableSlidingN Sliding windows of size N
+      | * @groupprio FoldableSlidingN 999
+      | *
+      | */
+      |trait FoldableArityFunctions[F[_]] { self: Foldable[F] =>
+        -  /** @group FoldableArity */
+        -  def sliding$arity[A](fa: F[A]): List[$tupleTpe] =
+        -    foldRight(fa, Now((List.empty[$tupleTpe], List.empty[A]))) { (x$arity, eval) =>
+        -      eval.value match {
+        -        case (acc, ${listXN(arity - 1 to 1 by -1)} :: Nil) =>
+        -          Now(($tupleXN :: acc, ${listXN(arity to 2 by -1)} :: Nil))
+        -        case (acc, l) =>
+        -          Now((acc, x$arity :: l))
+        -      }
+        -    }.value._1
+      |}
+      """
+    }
+  }
 }
