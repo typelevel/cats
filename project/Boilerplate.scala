@@ -529,12 +529,12 @@ object Boilerplate {
       |trait FoldableArityFunctions[F[_]] { self: Foldable[F] =>
         -  /** @group FoldableArity */
         -  def sliding$arity[A](fa: F[A]): List[$tupleTpe] =
-        -    foldRight(fa, Now((List.empty[$tupleTpe], List.empty[A]))) { (x$arity, eval) =>
+        -    foldRight(fa, Now((List.empty[$tupleTpe], List.empty[A]))) { (x1, eval) =>
         -      eval.value match {
-        -        case (acc, ${listXN(arity - 1 to 1 by -1)} :: Nil) =>
-        -          Now(($tupleXN :: acc, ${listXN(arity to 2 by -1)} :: Nil))
+        -        case (acc, ${listXN(2 to arity)} :: Nil) =>
+        -          Now(($tupleXN :: acc, ${listXN(1 to arity - 1)} :: Nil))
         -        case (acc, l) =>
-        -          Now((acc, x$arity :: l))
+        -          Now((acc, x1 :: l))
         -      }
         -    }.value._1
       |}

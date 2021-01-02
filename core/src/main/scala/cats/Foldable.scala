@@ -773,12 +773,12 @@ import scala.annotation.implicitNotFound
     }
 
   def sliding2[A](fa: F[A]): List[(A, A)] =
-    foldRight(fa, Now((List.empty[(A, A)], None: Option[A]))) { (x2, eval) =>
+    foldRight(fa, Now((List.empty[(A, A)], None: Option[A]))) { (x1, eval) =>
       eval.value match {
-        case (acc, Some(x1)) =>
-          Now(((x1, x2) :: acc, Some(x2)))
+        case (acc, Some(x2)) =>
+          Now(((x1, x2) :: acc, Some(x1)))
         case (acc, None) =>
-          Now((acc, Some(x2)))
+          Now((acc, Some(x1)))
       }
     }.value._1
 
