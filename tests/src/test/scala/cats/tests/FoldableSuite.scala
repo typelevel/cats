@@ -285,7 +285,7 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit
   test(s"Foldable[$name].sliding2 consistent with List#sliding(2)") {
     forAll { (fi: F[Int]) =>
       val n = 2
-      (n <= fi.size) ==> checkSlidingNConsistent(fi, n, Foldable[F].sliding2) { case x1 :: x2 :: Nil =>
+      checkSlidingNConsistent(fi, n, Foldable[F].sliding2) { case x1 :: x2 :: Nil =>
         (x1, x2)
       }
     }
@@ -293,7 +293,7 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit
   test(s"Foldable[$name].sliding3 consistent with List#sliding(3)") {
     forAll { (fi: F[Int]) =>
       val n = 3
-      (n <= fi.size) ==> checkSlidingNConsistent(fi, n, Foldable[F].sliding3) { case x1 :: x2 :: x3 :: Nil =>
+      checkSlidingNConsistent(fi, n, Foldable[F].sliding3) { case x1 :: x2 :: x3 :: Nil =>
         (x1, x2, x3)
       }
     }
@@ -301,7 +301,7 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit
   test(s"Foldable[$name].sliding4 consistent with List#sliding(4)") {
     forAll { (fi: F[Int]) =>
       val n = 4
-      (n <= fi.size) ==> checkSlidingNConsistent(fi, n, Foldable[F].sliding4) { case x1 :: x2 :: x3 :: x4 :: Nil =>
+      checkSlidingNConsistent(fi, n, Foldable[F].sliding4) { case x1 :: x2 :: x3 :: x4 :: Nil =>
         (x1, x2, x3, x4)
       }
     }
@@ -309,7 +309,7 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit
   test(s"Foldable[$name].sliding5 consistent with List#sliding(5)") {
     forAll { (fi: F[Int]) =>
       val n = 5
-      (n <= fi.size) ==> checkSlidingNConsistent(fi, n, Foldable[F].sliding5) {
+      checkSlidingNConsistent(fi, n, Foldable[F].sliding5) {
         case x1 :: x2 :: x3 :: x4 :: x5 :: Nil => (x1, x2, x3, x4, x5)
       }
     }
@@ -317,7 +317,7 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit
   test(s"Foldable[$name].sliding6 consistent with List#sliding(6)") {
     forAll { (fi: F[Int]) =>
       val n = 6
-      (n <= fi.size) ==> checkSlidingNConsistent(fi, n, Foldable[F].sliding6) {
+      checkSlidingNConsistent(fi, n, Foldable[F].sliding6) {
         case x1 :: x2 :: x3 :: x4 :: x5 :: x6 :: Nil => (x1, x2, x3, x4, x5, x6)
       }
     }
@@ -325,7 +325,7 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit
   test(s"Foldable[$name].sliding7 consistent with List#sliding(7)") {
     forAll { (fi: F[Int]) =>
       val n = 7
-      (n <= fi.size) ==> checkSlidingNConsistent(fi, n, Foldable[F].sliding7) {
+      checkSlidingNConsistent(fi, n, Foldable[F].sliding7) {
         case x1 :: x2 :: x3 :: x4 :: x5 :: x6 :: x7 :: Nil => (x1, x2, x3, x4, x5, x6, x7)
       }
     }
@@ -333,7 +333,7 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit
   test(s"Foldable[$name].sliding8 consistent with List#sliding(8)") {
     forAll { (fi: F[Int]) =>
       val n = 8
-      (n <= fi.size) ==> checkSlidingNConsistent(fi, n, Foldable[F].sliding8) {
+      checkSlidingNConsistent(fi, n, Foldable[F].sliding8) {
         case x1 :: x2 :: x3 :: x4 :: x5 :: x6 :: x7 :: x8 :: Nil => (x1, x2, x3, x4, x5, x6, x7, x8)
       }
     }
@@ -342,7 +342,7 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit
   test(s"Foldable[$name].sliding9 consistent with List#sliding(9)") {
     forAll { (fi: F[Int]) =>
       val n = 9
-      (n <= fi.size) ==> checkSlidingNConsistent(fi, n, Foldable[F].sliding9) {
+      checkSlidingNConsistent(fi, n, Foldable[F].sliding9) {
         case x1 :: x2 :: x3 :: x4 :: x5 :: x6 :: x7 :: x8 :: x9 :: Nil => (x1, x2, x3, x4, x5, x6, x7, x8, x9)
       }
     }
@@ -350,13 +350,15 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit
 
   def checkSlidingNConsistent[Tup <: Product: Eq](fi: F[Int], n: Int, slidingN: F[Int] => List[Tup])(
     pf: PartialFunction[List[Int], Tup]
-  ) = {
-    val result = slidingN(fi)
-    val expected = fi.toList
-      .sliding(n)
-      .map(pf)
-      .toList
-    assert(result == expected)
+  ): Unit = {
+    if (n <= fi.size) {
+      val result = slidingN(fi)
+      val expected = fi.toList
+        .sliding(n)
+        .map(pf)
+        .toList
+      assert(result === expected)
+    }
   }
 
 }
