@@ -527,7 +527,7 @@ object Boilerplate {
       | *
       | */
       |trait FoldableArityFunctions[F[_]] { self: Foldable[F] =>
-        -  /** @group FoldableArity */
+        -  /** @group FoldableSlidingN */
         -  def sliding$arity[A](fa: F[A]): List[$tupleTpe] =
         -    foldRight(fa, Now((List.empty[$tupleTpe], List.empty[A]))) { (x1, eval) =>
         -      val (acc, l) = eval.value
