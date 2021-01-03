@@ -309,32 +309,32 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit
   test(s"Foldable[$name].sliding5 consistent with List#sliding(5)") {
     forAll { (fi: F[Int]) =>
       val n = 5
-      checkSlidingNConsistent(fi, n, Foldable[F].sliding5) {
-        case x1 :: x2 :: x3 :: x4 :: x5 :: Nil => (x1, x2, x3, x4, x5)
+      checkSlidingNConsistent(fi, n, Foldable[F].sliding5) { case x1 :: x2 :: x3 :: x4 :: x5 :: Nil =>
+        (x1, x2, x3, x4, x5)
       }
     }
   }
   test(s"Foldable[$name].sliding6 consistent with List#sliding(6)") {
     forAll { (fi: F[Int]) =>
       val n = 6
-      checkSlidingNConsistent(fi, n, Foldable[F].sliding6) {
-        case x1 :: x2 :: x3 :: x4 :: x5 :: x6 :: Nil => (x1, x2, x3, x4, x5, x6)
+      checkSlidingNConsistent(fi, n, Foldable[F].sliding6) { case x1 :: x2 :: x3 :: x4 :: x5 :: x6 :: Nil =>
+        (x1, x2, x3, x4, x5, x6)
       }
     }
   }
   test(s"Foldable[$name].sliding7 consistent with List#sliding(7)") {
     forAll { (fi: F[Int]) =>
       val n = 7
-      checkSlidingNConsistent(fi, n, Foldable[F].sliding7) {
-        case x1 :: x2 :: x3 :: x4 :: x5 :: x6 :: x7 :: Nil => (x1, x2, x3, x4, x5, x6, x7)
+      checkSlidingNConsistent(fi, n, Foldable[F].sliding7) { case x1 :: x2 :: x3 :: x4 :: x5 :: x6 :: x7 :: Nil =>
+        (x1, x2, x3, x4, x5, x6, x7)
       }
     }
   }
   test(s"Foldable[$name].sliding8 consistent with List#sliding(8)") {
     forAll { (fi: F[Int]) =>
       val n = 8
-      checkSlidingNConsistent(fi, n, Foldable[F].sliding8) {
-        case x1 :: x2 :: x3 :: x4 :: x5 :: x6 :: x7 :: x8 :: Nil => (x1, x2, x3, x4, x5, x6, x7, x8)
+      checkSlidingNConsistent(fi, n, Foldable[F].sliding8) { case x1 :: x2 :: x3 :: x4 :: x5 :: x6 :: x7 :: x8 :: Nil =>
+        (x1, x2, x3, x4, x5, x6, x7, x8)
       }
     }
   }
