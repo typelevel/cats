@@ -283,6 +283,32 @@ final class FoldableOps0[F[_], A](private val fa: F[A]) extends AnyVal {
     f: A => G[Either[B, C]]
   )(implicit A: Alternative[F], F: Foldable[F], M: Monad[G]): G[(F[B], F[C])] =
     F.partitionEitherM[G, A, B, C](fa)(f)(A, M)
+
+  def sliding2(implicit F: Foldable[F]): List[(A, A)] = F.sliding2(fa)
+  def sliding3(implicit F: Foldable[F]): List[(A, A, A)] = F.sliding3(fa)
+  def sliding4(implicit F: Foldable[F]): List[(A, A, A, A)] = F.sliding4(fa)
+  def sliding5(implicit F: Foldable[F]): List[(A, A, A, A, A)] = F.sliding5(fa)
+  def sliding6(implicit F: Foldable[F]): List[(A, A, A, A, A, A)] = F.sliding6(fa)
+  def sliding7(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A)] = F.sliding7(fa)
+  def sliding8(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A)] = F.sliding8(fa)
+  def sliding9(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A, A)] = F.sliding9(fa)
+  def sliding10(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A, A, A)] = F.sliding10(fa)
+  def sliding11(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A, A, A, A)] = F.sliding11(fa)
+  def sliding12(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A, A, A, A, A)] = F.sliding12(fa)
+  def sliding13(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A, A, A, A, A, A)] = F.sliding13(fa)
+  def sliding14(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A, A, A, A, A, A, A)] = F.sliding14(fa)
+  def sliding15(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A, A, A, A, A, A, A, A)] = F.sliding15(fa)
+  def sliding16(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A)] = F.sliding16(fa)
+  def sliding17(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A)] = F.sliding17(fa)
+  def sliding18(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A)] = F.sliding18(fa)
+  def sliding19(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A)] =
+    F.sliding19(fa)
+  def sliding20(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A)] =
+    F.sliding20(fa)
+  def sliding21(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A)] =
+    F.sliding21(fa)
+  def sliding22(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A)] =
+    F.sliding22(fa)
 }
 
 @deprecated("Use methods on Foldable", "2.1.0-RC1")
