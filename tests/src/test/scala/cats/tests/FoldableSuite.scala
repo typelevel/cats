@@ -351,13 +351,15 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit
   def checkSlidingNConsistent[Tup <: Product: Eq](fi: F[Int], n: Int, slidingN: F[Int] => List[Tup])(
     pf: PartialFunction[List[Int], Tup]
   ): Unit = {
+    val result = slidingN(fi)
     if (n <= fi.size) {
-      val result = slidingN(fi)
       val expected = fi.toList
         .sliding(n)
         .map(pf)
         .toList
       assert(result === expected)
+    } else {
+      assert(result.isEmpty)
     }
   }
 
