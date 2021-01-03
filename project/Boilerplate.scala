@@ -505,7 +505,7 @@ object Boilerplate {
   }
 
   object GenFoldableArityFunctions extends Template {
-    def filename(root: File) = root / "cats" / "FoldableArityFunctions.scala"
+    def filename(root: File) = root / "cats" / "FoldableNFunctions.scala"
     override def range = 2 to maxArity
     def content(tv: TemplateVals) = {
       import tv._
@@ -543,7 +543,7 @@ object Boilerplate {
       | * @groupprio FoldableSlidingN 999
       | *
       | */
-      |trait FoldableArityFunctions[F[_]] { self: Foldable[F] =>
+      |trait FoldableNFunctions[F[_]] { self: Foldable[F] =>
         -  /** @group FoldableSlidingN */
         -  def sliding$arity[A](fa: F[A]): List[$tupleTpe] =
         -    foldRight(fa, Now((List.empty[$tupleTpe], List.empty[A]))) { (x1, eval) =>
