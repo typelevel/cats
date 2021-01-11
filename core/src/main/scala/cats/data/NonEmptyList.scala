@@ -287,6 +287,22 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
   }
 
   /**
+   * Zips this `NonEmptyList` with another `NonEmptyList` and returns the pairs of elements.
+   *
+   * {{{
+   * scala> import cats.data.NonEmptyList
+   * scala> val as = NonEmptyList.of(1, 2, 3)
+   * scala> val bs = NonEmptyList.of("A", "B", "C")
+   * scala> as.zip(bs)
+   * res0: cats.data.NonEmptyList[(Int, String)] = NonEmptyList((1,A), (2,B), (3,C))
+   * }}}
+   */
+  def zip[B](nel: NonEmptyList[B]): NonEmptyList[(A, B)] = {
+    val (NonEmptyList(head1, tail1), NonEmptyList(head2, tail2)) = (this, nel)
+    NonEmptyList((head1, head2), tail1.zip(tail2))
+  }
+
+  /**
    * Zips this `NonEmptyList` with another `NonEmptyList` and applies a function for each pair of elements.
    *
    * {{{
