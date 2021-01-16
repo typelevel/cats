@@ -29,7 +29,7 @@ val disciplineVersion = "1.1.3"
 val disciplineScalatestVersion = "2.0.1"
 val disciplineMunitVersion = "1.0.4"
 
-val kindProjectorVersion = "0.11.2"
+val kindProjectorVersion = "0.11.3"
 
 val PrimaryOS = "ubuntu-latest"
 ThisBuild / githubWorkflowOSes := Seq(PrimaryOS)
