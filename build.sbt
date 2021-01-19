@@ -77,9 +77,7 @@ val Scala3Cond = s"(matrix.scala == '$DottyOld' || matrix.scala == '$DottyNew')"
 
 ThisBuild / githubWorkflowBuild := Seq(
   WorkflowStep.Sbt(List("validateAllJS"), name = Some("Validate JavaScript"), cond = Some(JsCond)),
-  WorkflowStep.Use("actions",
-                   "setup-python",
-                   "v2",
+  WorkflowStep.Use(UseRef.Public("actions", "setup-python", "v2"),
                    name = Some("Setup Python"),
                    params = Map("python-version" -> "3.x"),
                    cond = Some(JvmCond + " && " + Scala2Cond)
@@ -130,7 +128,7 @@ ThisBuild / githubWorkflowAddedJobs ++= Seq(
     "microsite",
     "Microsite",
     githubWorkflowJobSetup.value.toList ::: List(
-      WorkflowStep.Use("actions", "setup-ruby", "v1", name = Some("Setup Ruby")),
+      WorkflowStep.Use(UseRef.Public("actions", "setup-ruby", "v1"), name = Some("Setup Ruby")),
       WorkflowStep.Run(List("gem install jekyll -v 4.0.0"), name = Some("Setup Jekyll")),
       WorkflowStep.Sbt(List("docs/makeMicrosite"), name = Some("Build the microsite"))
     ),
