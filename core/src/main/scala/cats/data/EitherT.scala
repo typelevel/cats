@@ -178,6 +178,9 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
 
   /**
    * Inverse of `MonadError#attemptT`
+   * Given MonadError[F, E :> A] transforms Either[F, A, B] to F[B]
+   * If the value was B, F[B] is successful
+   * If the value was A, F[B] is failed with E
    *
    * Example:
    * {{{
