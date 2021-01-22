@@ -852,7 +852,7 @@ lazy val publishSettings = Seq(
         <url>https://github.com/kailuowang/</url>
       </developer>
     </developers>
-) ++ credentialSettings ++ sharedPublishSettings ++ sharedReleaseProcess
+) ++ sharedPublishSettings ++ sharedReleaseProcess
 
 // Scalafmt
 addCommandAlias("fmt", "; compile:scalafmt; test:scalafmt; scalafmtSbt")
@@ -969,12 +969,4 @@ lazy val warnUnusedImport = Seq(
   scalacOptions ++= (if (isDotty.value) Nil else Seq("-Ywarn-unused:imports")),
   scalacOptions in (Compile, console) ~= { _.filterNot(Set("-Ywarn-unused-import", "-Ywarn-unused:imports")) },
   scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value
-)
-
-lazy val credentialSettings = Seq(
-  // For Travis CI - see http://www.cakesolutions.net/teamblogs/publishing-artefacts-to-oss-sonatype-nexus-using-sbt-and-travis-ci
-  credentials ++= (for {
-    username <- Option(System.getenv().get("SONATYPE_USERNAME"))
-    password <- Option(System.getenv().get("SONATYPE_PASSWORD"))
-  } yield Credentials("Sonatype Nexus Repository Manager", "oss.sonatype.org", username, password)).toSeq
 )
