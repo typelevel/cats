@@ -105,6 +105,29 @@ object ContT {
       def apply[A](ma: M[A]): ContT[M, B, A] = ContT.liftF(ma)
     }
 
+  /*
+   * Call with current continuation
+   *
+   * Passes the current continuation to f, meaning we can model short-circuit
+   * evaluation eg exception handling
+   *
+   * {{{
+   *   for {
+   *     _ <- ContT.callCC( (k: Unit => ContT[IO, Unit, Unit]) =>
+   *       ContT.liftF(IO.println("this will print first")) >>
+   *         k(()) >>
+   *         ContT.liftF(IO.println("this will NOT print as we short-circuit to the contination"))
+   *     )
+   *     _ <- ContT.liftF(IO.println("this will print second")])
+   *   } yield ()
+   *
+   * }}}
+   */
+  def callCC[M[_], R, A, B](f: (A => ContT[M, R, B]) => ContT[M, R, A]): ContT[M, R, A] =
+    apply { cb =>
+      f(a => apply(_ => cb(a))).run(cb)
+    }
+
   /**
    * Similar to [[pure]] but evaluation of the argument is deferred.
    *

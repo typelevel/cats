@@ -6,7 +6,7 @@ import cats.kernel.Eq
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import org.scalacheck.{Arbitrary, Gen}
-import cats.syntax.eq._
+import cats.syntax.all._
 import org.scalacheck.Prop._
 
 class ContTSuite extends CatsSuite {
@@ -83,6 +83,35 @@ class ContTSuite extends CatsSuite {
 
       contT.run(cb)
       assert(didSideEffect === true)
+    }
+  }
+
+  test("ContT.callCC short-circuits and invokes the continuation") {
+    forAll { (cb: Unit => Eval[Int]) =>
+      var shouldNotChange = false
+      var shouldChange = false
+      var shouldAlsoChange = false
+
+      val contT: ContT[Eval, Int, Unit] = for {
+        _ <- ContT.callCC((k: Unit => ContT[Eval, Int, Unit]) =>
+          ContT.defer[Eval, Int, Unit] {
+            shouldChange = true
+          } >>
+            k(()) >>
+            ContT.defer[Eval, Int, Unit] {
+              shouldNotChange = true
+            }
+        )
+        _ <- ContT.defer[Eval, Int, Unit] {
+          shouldAlsoChange = true
+        }
+      } yield ()
+
+      contT.run(cb).value
+
+      assert(shouldNotChange === false)
+      assert(shouldChange === true)
+      assert(shouldAlsoChange === true)
     }
   }
 
