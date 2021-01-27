@@ -45,6 +45,8 @@ sealed abstract class ContT[M[_], A, +B] extends Serializable {
       M.defer(run(fn3))
     }
   }
+
+  final def eval(implicit M: Monad[M], ev: B <:< A): M[A] = run(b => M.pure(ev(b)))
 }
 
 object ContT {
@@ -159,6 +161,38 @@ object ContT {
    */
   def later[M[_], A, B](fn: => (B => M[A]) => M[A]): ContT[M, A, B] =
     DeferCont(() => FromFn(AndThen(fn)))
+
+  /*
+   * Limits the continuation of any inner [[shiftT]]
+   */
+  def resetT[M[_]: Monad, R, R2](contT: ContT[M, R, R]): ContT[M, R2, R] =
+    ContT.liftF(contT.eval)
+
+  /*
+   * Captures the continuation up to the nearest enclosing [[resetT]] and passes
+   * it to f
+   *
+   * {{{
+   *   for {
+   *     _ <- ContT.resetT(
+   *            for {
+   *              _ <- ContT.liftF(IO.println("1"))
+   *              _ <- ContT.shiftT( (k: Unit => IO[Unit])
+   *                     for {
+   *                       _ <- ContT.liftF(IO.println("2"))
+   *                       _ <- ContT.liftF(k(()))
+   *                       _ <- ContT.liftF(IO.println("4"))
+   *                     }
+   *                   )
+   *              _ <- ContT.liftF(IO.println("3"))
+   *            } yield ()
+   *         )
+   *     _ <- ContT.liftF(IO.println("5"))
+   *   } yield ()
+   * }}}
+   */
+  def shiftT[M[_]: Monad, R, A](f: (A => M[R]) => ContT[M, R, R]): ContT[M, R, A] =
+    apply(cb => f(cb).eval)
 
   def tailRecM[M[_], A, B, C](a: A)(fn: A => ContT[M, C, Either[A, B]])(implicit M: Defer[M]): ContT[M, C, B] =
     ContT[M, C, B] { (cb: (B => M[C])) =>

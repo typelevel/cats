@@ -6,7 +6,7 @@ import cats.kernel.Eq
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import org.scalacheck.{Arbitrary, Gen}
-import cats.syntax.eq._
+import cats.syntax.all._
 import org.scalacheck.Prop._
 
 class ContTSuite extends CatsSuite {
@@ -86,4 +86,27 @@ class ContTSuite extends CatsSuite {
     }
   }
 
+  test("ContT.resetT and shiftT delimit continuations") {
+    forAll { (cb: Unit => Eval[Unit]) =>
+      var counter = 0
+
+      val contT: ContT[Eval, Unit, Unit] = ContT.resetT(
+        ContT.shiftT { (k: Unit => Eval[Unit]) =>
+          ContT.defer[Eval, Unit, Unit] {
+            counter = counter + 1
+          } >>
+            ContT.liftF(k(())) >>
+            ContT.defer[Eval, Unit, Unit] {
+              counter = counter + 1
+            }
+        }
+          >> ContT.defer[Eval, Unit, Unit] {
+            counter = counter + 1
+          }
+      )
+
+      contT.run(cb).value
+      assert(counter == 3)
+    }
+  }
 }
