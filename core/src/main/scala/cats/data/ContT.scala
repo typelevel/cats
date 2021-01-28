@@ -46,7 +46,7 @@ sealed abstract class ContT[M[_], A, +B] extends Serializable {
     }
   }
 
-  final def eval(implicit M: Monad[M], ev: B <:< A): M[A] = run(b => M.pure(ev(b)))
+  final def eval(implicit M: Applicative[M], ev: B <:< A): M[A] = run(b => M.pure(ev(b)))
 }
 
 object ContT {

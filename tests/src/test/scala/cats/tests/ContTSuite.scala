@@ -8,6 +8,7 @@ import cats.laws.discipline.arbitrary._
 import org.scalacheck.{Arbitrary, Gen}
 import cats.syntax.all._
 import org.scalacheck.Prop._
+import java.util.concurrent.atomic.AtomicInteger
 
 class ContTSuite extends CatsSuite {
 
@@ -88,25 +89,34 @@ class ContTSuite extends CatsSuite {
 
   test("ContT.resetT and shiftT delimit continuations") {
     forAll { (cb: Unit => Eval[Unit]) =>
-      var counter = 0
+      val counter = new AtomicInteger(0)
+      var a = 0
+      var b = 0
+      var c = 0
+      var d = 0
 
       val contT: ContT[Eval, Unit, Unit] = ContT.resetT(
         ContT.shiftT { (k: Unit => Eval[Unit]) =>
           ContT.defer[Eval, Unit, Unit] {
-            counter = counter + 1
+            a = counter.incrementAndGet()
           } >>
             ContT.liftF(k(())) >>
             ContT.defer[Eval, Unit, Unit] {
-              counter = counter + 1
+              b = counter.incrementAndGet()
             }
         }
           >> ContT.defer[Eval, Unit, Unit] {
-            counter = counter + 1
+            c = counter.incrementAndGet()
           }
-      )
+      ) >> ContT.defer[Eval, Unit, Unit] {
+        d = counter.incrementAndGet()
+      }
 
       contT.run(cb).value
-      assert(counter == 3)
+      assert(a == 1)
+      assert(b == 3)
+      assert(c == 2)
+      assert(d == 4)
     }
   }
 }
