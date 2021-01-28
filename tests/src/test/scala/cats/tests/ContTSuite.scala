@@ -95,20 +95,22 @@ class ContTSuite extends CatsSuite {
       var c = 0
       var d = 0
 
-      val contT: ContT[Eval, Unit, Unit] = ContT.resetT(
-        ContT.shiftT { (k: Unit => Eval[Unit]) =>
-          ContT.defer[Eval, Unit, Unit] {
-            a = counter.incrementAndGet()
-          } >>
-            ContT.liftF(k(())) >>
+      val contT: ContT[Eval, Unit, Unit] = ContT
+        .resetT(
+          ContT.shiftT { (k: Unit => Eval[Unit]) =>
             ContT.defer[Eval, Unit, Unit] {
-              b = counter.incrementAndGet()
-            }
-        }
-          >> ContT.defer[Eval, Unit, Unit] {
-            c = counter.incrementAndGet()
+              a = counter.incrementAndGet()
+            } >>
+              ContT.liftF(k(())) >>
+              ContT.defer[Eval, Unit, Unit] {
+                b = counter.incrementAndGet()
+              }
           }
-      ) flatMap { _ =>
+            >> ContT.defer[Eval, Unit, Unit] {
+              c = counter.incrementAndGet()
+            }
+        )
+        .flatMap { _ =>
           ContT.defer[Eval, Unit, Unit] {
             d = counter.incrementAndGet()
           }
