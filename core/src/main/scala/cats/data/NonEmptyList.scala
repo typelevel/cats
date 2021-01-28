@@ -297,10 +297,8 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
    * res0: cats.data.NonEmptyList[(Int, String)] = NonEmptyList((1,A), (2,B), (3,C))
    * }}}
    */
-  def zip[B](nel: NonEmptyList[B]): NonEmptyList[(A, B)] = {
-    val (NonEmptyList(head1, tail1), NonEmptyList(head2, tail2)) = (this, nel)
-    NonEmptyList((head1, head2), tail1.zip(tail2))
-  }
+  def zip[B](nel: NonEmptyList[B]): NonEmptyList[(A, B)] =
+    NonEmptyList((head, nel.head), tail.zip(nel.tail))
 
   /**
    * Zips this `NonEmptyList` with another `NonEmptyList` and applies a function for each pair of elements.
