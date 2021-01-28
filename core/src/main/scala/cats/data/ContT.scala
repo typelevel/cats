@@ -177,13 +177,13 @@ object ContT {
    *     _ <- ContT.resetT(
    *            for {
    *              _ <- ContT.liftF(IO.println("1"))
-   *              _ <- ContT.shiftT( (k: Unit => IO[Unit])
+   *              _ <- ContT.shiftT{ (k: Unit => IO[Unit])
    *                     for {
    *                       _ <- ContT.liftF(IO.println("2"))
    *                       _ <- ContT.liftF(k(()))
    *                       _ <- ContT.liftF(IO.println("4"))
    *                     }
-   *                   )
+   *                   }
    *              _ <- ContT.liftF(IO.println("3"))
    *            } yield ()
    *         )
