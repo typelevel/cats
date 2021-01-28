@@ -108,9 +108,11 @@ class ContTSuite extends CatsSuite {
           >> ContT.defer[Eval, Unit, Unit] {
             c = counter.incrementAndGet()
           }
-      ) >> ContT.defer[Eval, Unit, Unit] {
-        d = counter.incrementAndGet()
-      }
+      ) flatMap { _ =>
+          ContT.defer[Eval, Unit, Unit] {
+            d = counter.incrementAndGet()
+          }
+        }
 
       contT.run(cb).value
       assert(a == 1)
