@@ -86,8 +86,12 @@ import scala.annotation.implicitNotFound
    * }}}
    */
   def replicateA_[A](n: Int, fa: F[A]): F[Unit] =
-    if (n == 0) this.pure(())
-    else this.productR(fa, this.replicateA_(n - 1, fa))
+    def go(x: Int, step: F[Unit]): F[Unit] = {
+      if(x == 0) step
+      else go(x - 1, this.productR(fa, step))
+    }
+    go(n, this.pure(()))
+  }
 
   /**
    * Compose an `Applicative[F]` and an `Applicative[G]` into an
