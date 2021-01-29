@@ -88,6 +88,23 @@ class ContTSuite extends CatsSuite {
     }
   }
 
+  test("ContT flatMap stack safety") {
+    val maxIters = 20000
+    var counter = 0
+
+    def contT: ContT[Eval, Int, Int] =
+      ContT
+        .defer[Eval, Int, Int] {
+          counter = counter + 1
+          counter
+        }
+        .flatMap { n =>
+          if (n === maxIters) ContT.pure[Eval, Int, Int](n) else contT
+        }
+
+    assert(contT.run(Eval.now(_)).value === maxIters)
+  }
+
   test("ContT.callCC short-circuits and invokes the continuation") {
     forAll { (cb: Unit => Eval[Int]) =>
       var shouldNotChange = false
