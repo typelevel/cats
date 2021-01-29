@@ -122,15 +122,19 @@ class ContTSuite extends CatsSuite {
     val counter = new AtomicInteger(0)
     val maxIters = 10000
 
-    def contT: ContT[Eval, Unit, Int] = ContT.callCC { (k: Int => ContT[Eval, Unit, Int]) =>
-      ContT.defer[Eval, Unit, Int] {
-        counter.incrementAndGet()
-      }.flatMap { n =>
-        if (n === maxIters) ContT.pure[Eval, Unit, Int](n) else contT
+    def contT: ContT[Eval, Unit, Int] = ContT
+      .callCC { (k: Int => ContT[Eval, Unit, Int]) =>
+        ContT
+          .defer[Eval, Unit, Int] {
+            counter.incrementAndGet()
+          }
+          .flatMap { n =>
+            if (n === maxIters) ContT.pure[Eval, Unit, Int](n) else contT
+          }
       }
-    }.flatMap { n =>
-      ContT.pure[Eval, Unit, Int](n)
-    }
+      .flatMap { n =>
+        ContT.pure[Eval, Unit, Int](n)
+      }
 
     contT.run(_ => Eval.now(())).value
   }
