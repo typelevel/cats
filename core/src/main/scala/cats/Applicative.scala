@@ -80,7 +80,7 @@ import scala.annotation.implicitNotFound
    * scala> val increment5AndGet: Counter[Int] = Applicative[Counter].productR(
    *      | Applicative[Counter].replicateA_(5, increment),
    *      | get
-   *          | )
+   *      | )
    * scala> increment5AndGet.run(0).value
    * res0: (Int, Int) = (5,5)
    * }}}
