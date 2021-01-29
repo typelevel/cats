@@ -123,4 +123,41 @@ class ContTSuite extends CatsSuite {
       assert(d == 4)
     }
   }
+  test("ContT.shiftT stack safety") {
+    var counter = 0
+    val maxIters = 50000
+
+    def contT: ContT[Eval, Int, Int] =
+      ContT.shiftT { (k: Int => Eval[Int]) =>
+        ContT
+          .defer[Eval, Int, Int] {
+            counter = counter + 1
+            counter
+          }
+          .flatMap { n =>
+            if (n === maxIters) ContT.liftF(k(n)) else contT
+          }
+      }
+
+    assert(contT.run(Eval.now(_)).value === maxIters)
+  }
+
+  test("ContT.resetT stack safety") {
+    var counter = 0
+    val maxIters = 50000
+
+    def contT: ContT[Eval, Int, Int] =
+      ContT.resetT(
+        ContT
+          .defer[Eval, Int, Int] {
+            counter = counter + 1
+            counter
+          }
+          .flatMap { n =>
+            if (n === maxIters) ContT.pure[Eval, Int, Int](n) else contT
+          }
+      )
+
+    assert(contT.run(Eval.now(_)).value === maxIters)
+  }
 }

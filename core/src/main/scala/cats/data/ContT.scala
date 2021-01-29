@@ -46,7 +46,7 @@ sealed abstract class ContT[M[_], A, +B] extends Serializable {
     }
   }
 
-  final def eval(implicit M: Applicative[M], ev: B <:< A): M[A] = run(b => M.pure(ev(b)))
+  final def eval(implicit M: Applicative[M], D: Defer[M], ev: B <:< A): M[A] = run(b => D.defer(M.pure(ev(b))))
 }
 
 object ContT {
@@ -165,7 +165,7 @@ object ContT {
   /*
    * Limits the continuation of any inner [[shiftT]]
    */
-  def resetT[M[_]: Monad, R, R2](contT: ContT[M, R, R]): ContT[M, R2, R] =
+  def resetT[M[_]: Monad: Defer, R, R2](contT: ContT[M, R, R]): ContT[M, R2, R] =
     ContT.liftF(contT.eval)
 
   /*
@@ -191,7 +191,7 @@ object ContT {
    *   } yield ()
    * }}}
    */
-  def shiftT[M[_]: Monad, R, A](f: (A => M[R]) => ContT[M, R, R]): ContT[M, R, A] =
+  def shiftT[M[_]: Monad: Defer, R, A](f: (A => M[R]) => ContT[M, R, R]): ContT[M, R, A] =
     apply(cb => f(cb).eval)
 
   def tailRecM[M[_], A, B, C](a: A)(fn: A => ContT[M, C, Either[A, B]])(implicit M: Defer[M]): ContT[M, C, B] =
