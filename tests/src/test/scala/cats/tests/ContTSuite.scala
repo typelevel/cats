@@ -88,7 +88,7 @@ class ContTSuite extends CatsSuite {
     }
   }
 
-  test("ContT flatMap stack safety") {
+  test("ContT.flatMap stack safety") {
     val maxIters = 20000
     var counter = 0
 
