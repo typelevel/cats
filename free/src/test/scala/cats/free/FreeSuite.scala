@@ -104,7 +104,7 @@ class FreeSuite extends CatsSuite {
     def runner: FunctionK[FTestApi, Id] =
       new FunctionK[FTestApi, Id] {
         def apply[A](a: FTestApi[A]): A =
-          a match {
+          (a: @unchecked) match {
             case TB(i) => i + 1
           }
       }

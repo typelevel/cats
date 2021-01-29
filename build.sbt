@@ -20,16 +20,16 @@ lazy val scoverageSettings = Seq(
 )
 
 organization in ThisBuild := "org.typelevel"
-scalafixDependencies in ThisBuild += "org.typelevel" %% "simulacrum-scalafix" % "0.5.1"
+scalafixDependencies in ThisBuild += "org.typelevel" %% "simulacrum-scalafix" % "0.5.3"
 
-val scalaCheckVersion = "1.15.1"
+val scalaCheckVersion = "1.15.2"
 
-val disciplineVersion = "1.1.2"
+val disciplineVersion = "1.1.3"
 
 val disciplineScalatestVersion = "2.0.1"
-val disciplineMunitVersion = "1.0.3"
+val disciplineMunitVersion = "1.0.4"
 
-val kindProjectorVersion = "0.11.2"
+val kindProjectorVersion = "0.11.3"
 
 val PrimaryOS = "ubuntu-latest"
 ThisBuild / githubWorkflowOSes := Seq(PrimaryOS)
@@ -42,9 +42,9 @@ val GraalVM8 = "graalvm-ce-java8@20.2.0"
 ThisBuild / githubWorkflowJavaVersions := Seq(PrimaryJava, LTSJava, LatestJava, GraalVM8)
 
 val Scala212 = "2.12.12"
-val Scala213 = "2.13.3"
-val DottyOld = "3.0.0-M1"
-val DottyNew = "3.0.0-M2"
+val Scala213 = "2.13.4"
+val DottyOld = "3.0.0-M2"
+val DottyNew = "3.0.0-M3"
 
 ThisBuild / crossScalaVersions := Seq(Scala212, Scala213, DottyOld, DottyNew)
 ThisBuild / scalaVersion := Scala213
@@ -77,9 +77,7 @@ val Scala3Cond = s"(matrix.scala == '$DottyOld' || matrix.scala == '$DottyNew')"
 
 ThisBuild / githubWorkflowBuild := Seq(
   WorkflowStep.Sbt(List("validateAllJS"), name = Some("Validate JavaScript"), cond = Some(JsCond)),
-  WorkflowStep.Use("actions",
-                   "setup-python",
-                   "v2",
+  WorkflowStep.Use(UseRef.Public("actions", "setup-python", "v2"),
                    name = Some("Setup Python"),
                    params = Map("python-version" -> "3.x"),
                    cond = Some(JvmCond + " && " + Scala2Cond)
@@ -130,7 +128,7 @@ ThisBuild / githubWorkflowAddedJobs ++= Seq(
     "microsite",
     "Microsite",
     githubWorkflowJobSetup.value.toList ::: List(
-      WorkflowStep.Use("actions", "setup-ruby", "v1", name = Some("Setup Ruby")),
+      WorkflowStep.Use(UseRef.Public("actions", "setup-ruby", "v1"), name = Some("Setup Ruby")),
       WorkflowStep.Run(List("gem install jekyll -v 4.0.0"), name = Some("Setup Jekyll")),
       WorkflowStep.Sbt(List("docs/makeMicrosite"), name = Some("Build the microsite"))
     ),
@@ -191,7 +189,7 @@ lazy val simulacrumSettings = Seq(
   scalacOptions ++= (
     if (isDotty.value) Nil else Seq(s"-P:semanticdb:targetroot:${baseDirectory.value}/target/.semanticdb", "-Yrangepos")
   ),
-  libraryDependencies += "org.typelevel" %% "simulacrum-scalafix-annotations" % "0.5.1"
+  libraryDependencies += "org.typelevel" %% "simulacrum-scalafix-annotations" % "0.5.3"
 )
 
 lazy val tagName = Def.setting {
@@ -213,6 +211,7 @@ lazy val commonJsSettings = Seq(
     }
   },
   scalaJSStage in Global := FullOptStage,
+  scalaJSStage in Test := FastOptStage,
   parallelExecution := false,
   jsEnv := new org.scalajs.jsenv.nodejs.NodeJSEnv(),
   // batch mode decreases the amount of memory needed to compile Scala.js code
@@ -297,7 +296,6 @@ lazy val docSettings = Seq(
     "gray-lighter" -> "#F4F3F4",
     "white-color" -> "#FFFFFF"
   ),
-  micrositeCompilingDocsTool := WithMdoc,
   autoAPIMappings := true,
   unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(kernel.jvm, core.jvm, free.jvm),
   docsMappingsAPIDir := "api",
@@ -487,6 +485,15 @@ def mimaSettings(moduleName: String, includeCats1: Boolean = true) =
         ) ++ // Only narrowing of types allowed here
         Seq(
           exclude[IncompatibleSignatureProblem]("*")
+        ) ++ // New issues found since mima 0.8.0 (#3596, #3641)
+        Seq(
+          exclude[NewMixinForwarderProblem]("cats.kernel.Band#mcI#sp.combineN"),
+          exclude[NewMixinForwarderProblem]("cats.kernel.Band#mcD#sp.combineN"),
+          exclude[NewMixinForwarderProblem]("cats.kernel.Band#mcJ#sp.combineN"),
+          exclude[NewMixinForwarderProblem]("cats.kernel.Band.combineN"),
+          exclude[NewMixinForwarderProblem]("cats.kernel.Band#mcF#sp.combineN"),
+          exclude[NewMixinForwarderProblem]("cats.data.Tuple2KApply.product"),
+          exclude[NewMixinForwarderProblem]("cats.InvariantInstances0.catsApplicativeForArrow")
         )
     }
   )
@@ -649,7 +656,6 @@ lazy val free = crossProject(JSPlatform, JVMPlatform)
   .settings(moduleName := "cats-free", name := "Cats Free")
   .settings(catsSettings)
   .jsSettings(commonJsSettings)
-  .jsSettings(scalaJSStage in Test := FastOptStage)
   .jvmSettings(commonJvmSettings ++ mimaSettings("cats-free"))
 
 lazy val tests = crossProject(JSPlatform, JVMPlatform)
@@ -846,7 +852,7 @@ lazy val publishSettings = Seq(
         <url>https://github.com/kailuowang/</url>
       </developer>
     </developers>
-) ++ credentialSettings ++ sharedPublishSettings ++ sharedReleaseProcess
+) ++ sharedPublishSettings ++ sharedReleaseProcess
 
 // Scalafmt
 addCommandAlias("fmt", "; compile:scalafmt; test:scalafmt; scalafmtSbt")
@@ -963,12 +969,4 @@ lazy val warnUnusedImport = Seq(
   scalacOptions ++= (if (isDotty.value) Nil else Seq("-Ywarn-unused:imports")),
   scalacOptions in (Compile, console) ~= { _.filterNot(Set("-Ywarn-unused-import", "-Ywarn-unused:imports")) },
   scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value
-)
-
-lazy val credentialSettings = Seq(
-  // For Travis CI - see http://www.cakesolutions.net/teamblogs/publishing-artefacts-to-oss-sonatype-nexus-using-sbt-and-travis-ci
-  credentials ++= (for {
-    username <- Option(System.getenv().get("SONATYPE_USERNAME"))
-    password <- Option(System.getenv().get("SONATYPE_PASSWORD"))
-  } yield Credentials("Sonatype Nexus Repository Manager", "oss.sonatype.org", username, password)).toSeq
 )

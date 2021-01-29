@@ -178,6 +178,9 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
 
   /**
    * Inverse of `MonadError#attemptT`
+   * Given MonadError[F, E :> A] transforms Either[F, A, B] to F[B]
+   * If the value was B, F[B] is successful
+   * If the value was A, F[B] is failed with E
    *
    * Example:
    * {{{
@@ -191,6 +194,17 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
    * scala> val e2: EitherT[Option, Unit, Int] = EitherT[Option, Unit, Int](Some(Left(())))
    * scala> e2.rethrowT
    * res1: Option[Int] = None
+   *
+   * scala> import scala.util.Try
+   * scala> import java.lang.Exception
+   *
+   * scala> val e3: EitherT[Try, Throwable, String] = EitherT[Try, Throwable, String](Try(Right("happy cats")))
+   * scala> e3.rethrowT
+   * res2: util.Try[String] = Success(happy cats)
+   *
+   * scala> val e4: EitherT[Try, Throwable, String] = EitherT[Try, Throwable, String](Try(Left(new Exception("sad cats"))))
+   * scala> e4.rethrowT
+   * res3: util.Try[String] = Failure(java.lang.Exception: sad cats)
    * }}}
    */
   def rethrowT(implicit F: MonadError[F, _ >: A]): F[B] =

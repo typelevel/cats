@@ -80,7 +80,7 @@ import scala.annotation.implicitNotFound
    * scala> assert(count == 1)
    * }}}
    */
-  def productLEval[A, B](fa: F[A])(fb: Eval[F[B]]): F[A] = flatMap(fa)(a => map(fb.value)(_ => a))
+  def productLEval[A, B](fa: F[A])(fb: Eval[F[B]]): F[A] = flatMap(fa)(a => as(fb.value, a))
 
   @deprecated("Use productLEval instead.", "1.0.0-RC2")
   @noop private[cats] def forEffectEval[A, B](fa: F[A])(fb: Eval[F[B]]): F[A] = productLEval(fa)(fb)
@@ -169,7 +169,7 @@ import scala.annotation.implicitNotFound
   def foreverM[A, B](fa: F[A]): F[B] = {
     // allocate two things once for efficiency.
     val leftUnit = Left(())
-    val stepResult: F[Either[Unit, B]] = map(fa)(_ => leftUnit)
+    val stepResult: F[Either[Unit, B]] = as(fa, leftUnit)
     tailRecM(())(_ => stepResult)
   }
 
