@@ -59,13 +59,6 @@ ThisBuild / githubWorkflowBuildMatrixExclusions ++=
     MatrixExclude(Map("platform" -> "js", "java" -> java))
   }
 
-ThisBuild / githubWorkflowBuildMatrixExclusions ++=
-  Seq("jvm", "js").map { platform =>
-    MatrixExclude(
-      Map("platform" -> platform, "java" -> LatestJava, "scala" -> DottyOld)
-    ) // 3.0.0-M1 doesn't work on JDK 14+
-  }
-
 // we don't need this since we aren't publishing
 ThisBuild / githubWorkflowArtifactUpload := false
 
