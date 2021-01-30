@@ -27,7 +27,7 @@ val scalaCheckVersion = "1.15.2"
 val disciplineVersion = "1.1.3"
 
 val disciplineScalatestVersion = "2.0.1"
-val disciplineMunitVersion = "1.0.4"
+val disciplineMunitVersion = "1.0.5"
 
 val kindProjectorVersion = "0.11.3"
 
