@@ -212,20 +212,19 @@ class Tests extends TestsConfig with DisciplineSuite {
   checkAll("Order.reverse(Order.reverse(Order[Int]))", OrderTests(Order.reverse(Order.reverse(Order[Int]))).order)
   checkAll("Order.fromLessThan[Int](_ < _)", OrderTests(Order.fromLessThan[Int](_ < _)).order)
 
-  checkAll("LowerBounded[Byte]", LowerBoundedTests[Byte].lowerBounded)
   checkAll("LowerBounded[Duration]", LowerBoundedTests[Duration].lowerBounded)
   checkAll("LowerBounded[FiniteDuration]", LowerBoundedTests[FiniteDuration].lowerBounded)
   checkAll("LowerBounded[UUID]", LowerBoundedTests[UUID].lowerBounded)
   checkAll("LowerBounded[String]", LowerBoundedTests[String].lowerBounded)
   checkAll("LowerBounded[Symbol]", LowerBoundedTests[Symbol].lowerBounded)
 
-  checkAll("UpperBounded[Byte]", UpperBoundedTests[Byte].upperBounded)
   checkAll("UpperBounded[Duration]", UpperBoundedTests[Duration].upperBounded)
   checkAll("UpperBounded[FiniteDuration]", UpperBoundedTests[FiniteDuration].upperBounded)
   checkAll("UpperBounded[UUID]", UpperBoundedTests[UUID].upperBounded)
 
   checkAll("BoundedEnumerable[Unit]", BoundedEnumerableTests[Unit].boundedEnumerable)
   checkAll("BoundedEnumerable[Boolean]", BoundedEnumerableTests[Boolean].boundedEnumerable)
+  checkAll("BoundedEnumerable[Byte]", BoundedEnumerableTests[Byte].boundedEnumerable)
   checkAll("BoundedEnumerable[Short]", BoundedEnumerableTests[Short].boundedEnumerable)
   checkAll("BoundedEnumerable[Int]", BoundedEnumerableTests[Int].boundedEnumerable)
   checkAll("BoundedEnumerable[Char]", BoundedEnumerableTests[Char].boundedEnumerable)
