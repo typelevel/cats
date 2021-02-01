@@ -389,6 +389,8 @@ class Tests extends TestsConfig with DisciplineSuite {
 
   checkAll("Eq[Comparison]", EqTests[Comparison].eqv)
 
+  checkAll("Monoid[Comparison]", MonoidTests[Comparison].monoid)
+
   test("comparison") {
     val order = Order[Int]
     val eqv = Eq[Comparison]
