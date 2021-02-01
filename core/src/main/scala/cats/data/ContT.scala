@@ -125,9 +125,12 @@ object ContT {
    *
    * }}}
    */
-  def callCC[M[_], R, A, B](f: (A => ContT[M, R, B]) => ContT[M, R, A]): ContT[M, R, A] =
+  def callCC[M[_], R, A, B](f: (A => ContT[M, R, B]) => ContT[M, R, A])(implicit M: Defer[M]): ContT[M, R, A] =
     apply { cb =>
-      f(a => apply(_ => cb(a))).run(cb)
+      val cont = f { a =>
+        apply(_ => cb(a))
+      }
+      M.defer(cont.run(cb))
     }
 
   /**
