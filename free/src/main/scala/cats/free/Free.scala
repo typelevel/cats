@@ -276,7 +276,7 @@ object Free extends FreeInstances {
    * This method exists to allow the `F` and `G` parameters to be
    * bound independently of the `A` parameter below.
    */
-  // TODO: to be deprecated / removed in cats 2.0
+  @deprecated("use liftInject", "2.3.1")
   def inject[F[_], G[_]]: FreeInjectKPartiallyApplied[F, G] =
     new FreeInjectKPartiallyApplied
 
