@@ -2,7 +2,7 @@ package cats.kernel
 package instances
 
 trait ByteInstances {
-  implicit val catsKernelStdOrderForByte: Order[Byte] with Hash[Byte] with LowerBounded[Byte] with UpperBounded[Byte] =
+  implicit val catsKernelStdOrderForByte: Order[Byte] with Hash[Byte] with BoundedEnumerable[Byte] =
     new ByteOrder
   implicit val catsKernelStdGroupForByte: CommutativeGroup[Byte] = new ByteGroup
 }
@@ -14,12 +14,19 @@ class ByteGroup extends CommutativeGroup[Byte] {
   override def remove(x: Byte, y: Byte): Byte = (x - y).toByte
 }
 
+trait ByteEnumerable extends BoundedEnumerable[Byte] {
+  override def partialNext(a: Byte): Option[Byte] =
+    if (order.eqv(a, maxBound)) None else Some((a + 1).toByte)
+  override def partialPrevious(a: Byte): Option[Byte] =
+    if (order.eqv(a, minBound)) None else Some((a - 1).toByte)
+}
+
 trait ByteBounded extends LowerBounded[Byte] with UpperBounded[Byte] {
   override def minBound: Byte = Byte.MinValue
   override def maxBound: Byte = Byte.MaxValue
 }
 
-class ByteOrder extends Order[Byte] with Hash[Byte] with ByteBounded { self =>
+class ByteOrder extends Order[Byte] with Hash[Byte] with ByteBounded with ByteEnumerable { self =>
 
   def hash(x: Byte): Int = x.hashCode()
 
@@ -38,5 +45,5 @@ class ByteOrder extends Order[Byte] with Hash[Byte] with ByteBounded { self =>
   override def max(x: Byte, y: Byte): Byte =
     java.lang.Math.max(x.toInt, y.toInt).toByte
 
-  override val partialOrder: PartialOrder[Byte] = self
+  override val order: Order[Byte] = self
 }
