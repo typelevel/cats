@@ -13,12 +13,6 @@ lazy val publishLocalSignedIfRelevant =
   taskKey[Unit]("Runs publishLocalSigned but only if scalaVersion in crossScalaVersions")
 Global / publishLocalSignedIfRelevant := PgpKeys.publishLocalSigned.value
 
-lazy val scoverageSettings = Seq(
-  coverageMinimum := 60,
-  coverageFailOnMinimum := false,
-  coverageHighlighting := true
-)
-
 organization in ThisBuild := "org.typelevel"
 scalafixDependencies in ThisBuild += "org.typelevel" %% "simulacrum-scalafix" % "0.5.3"
 
@@ -27,7 +21,7 @@ val scalaCheckVersion = "1.15.2"
 val disciplineVersion = "1.1.3"
 
 val disciplineScalatestVersion = "2.0.1"
-val disciplineMunitVersion = "1.0.4"
+val disciplineMunitVersion = "1.0.5"
 
 val kindProjectorVersion = "0.11.3"
 
@@ -59,13 +53,6 @@ ThisBuild / githubWorkflowBuildMatrixExclusions ++=
     MatrixExclude(Map("platform" -> "js", "java" -> java))
   }
 
-ThisBuild / githubWorkflowBuildMatrixExclusions ++=
-  Seq("jvm", "js").map { platform =>
-    MatrixExclude(
-      Map("platform" -> platform, "java" -> LatestJava, "scala" -> DottyOld)
-    ) // 3.0.0-M1 doesn't work on JDK 14+
-  }
-
 // we don't need this since we aren't publishing
 ThisBuild / githubWorkflowArtifactUpload := false
 
@@ -77,26 +64,13 @@ val Scala3Cond = s"(matrix.scala == '$DottyOld' || matrix.scala == '$DottyNew')"
 
 ThisBuild / githubWorkflowBuild := Seq(
   WorkflowStep.Sbt(List("validateAllJS"), name = Some("Validate JavaScript"), cond = Some(JsCond)),
-  WorkflowStep.Use(UseRef.Public("actions", "setup-python", "v2"),
-                   name = Some("Setup Python"),
-                   params = Map("python-version" -> "3.x"),
-                   cond = Some(JvmCond + " && " + Scala2Cond)
-  ),
-  WorkflowStep.Run(List("pip install codecov"),
-                   cond = Some(JvmCond + " && " + Scala2Cond),
-                   name = Some("Setup codecov")
-  ),
-  WorkflowStep.Sbt(List("coverage", "buildJVM", "bench/test", "coverageReport"),
+  WorkflowStep.Sbt(List("buildJVM", "bench/test"),
                    name = Some("Validate JVM (scala 2)"),
                    cond = Some(JvmCond + " && " + Scala2Cond)
   ),
   WorkflowStep.Sbt(List("buildJVM", "bench/test"),
                    name = Some("Validate JVM (scala 3)"),
                    cond = Some(JvmCond + " && " + Scala3Cond)
-  ),
-  WorkflowStep.Run(List("codecov -F ${{ matrix.scala }}"),
-                   name = Some("Upload Codecov Results"),
-                   cond = Some(JvmCond + " && " + Scala2Cond)
   ),
   WorkflowStep.Sbt(
     List("clean", "validateBC"), // cleaning here to avoid issues with codecov
@@ -182,7 +156,7 @@ lazy val catsSettings = Seq(
         compilerPlugin(("org.typelevel" %% "kind-projector" % kindProjectorVersion).cross(CrossVersion.full))
       )
   ) ++ macroDependencies(scalaVersion.value)
-) ++ commonSettings ++ publishSettings ++ scoverageSettings ++ simulacrumSettings
+) ++ commonSettings ++ publishSettings ++ simulacrumSettings
 
 lazy val simulacrumSettings = Seq(
   libraryDependencies ++= (if (isDotty.value) Nil else Seq(compilerPlugin(scalafixSemanticdb))),
@@ -219,8 +193,7 @@ lazy val commonJsSettings = Seq(
   scalaJSLinkerConfig ~= (_.withModuleKind(ModuleKind.CommonJSModule)),
   // currently sbt-doctest doesn't work in JS builds
   // https://github.com/tkawachi/sbt-doctest/issues/52
-  doctestGenTests := Seq.empty,
-  coverageEnabled := false
+  doctestGenTests := Seq.empty
 )
 
 lazy val commonJvmSettings = Seq(
@@ -595,7 +568,6 @@ lazy val kernel = crossProject(JSPlatform, JVMPlatform)
   .settings(moduleName := "cats-kernel", name := "Cats kernel")
   .settings(commonSettings)
   .settings(publishSettings)
-  .settings(scoverageSettings)
   .settings(sourceGenerators in Compile += (sourceManaged in Compile).map(KernelBoiler.gen).taskValue)
   .settings(includeGeneratedSrc)
   .jsSettings(commonJsSettings)
@@ -609,13 +581,11 @@ lazy val kernelLaws = crossProject(JSPlatform, JVMPlatform)
   .settings(moduleName := "cats-kernel-laws", name := "Cats kernel laws")
   .settings(commonSettings)
   .settings(publishSettings)
-  .settings(scoverageSettings)
   .settings(disciplineDependencies)
   .settings(testingDependencies)
   .settings(scalacOptions in Test := (scalacOptions in Test).value.filter(_ != "-Xfatal-warnings"))
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings ++ mimaSettings("cats-kernel-laws", includeCats1 = false))
-  .jsSettings(coverageEnabled := false)
   .dependsOn(kernel)
 
 lazy val core = crossProject(JSPlatform, JVMPlatform)
@@ -648,7 +618,6 @@ lazy val laws = crossProject(JSPlatform, JVMPlatform)
   .settings(testingDependencies)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings ++ mimaSettings("cats-laws", includeCats1 = false))
-  .jsSettings(coverageEnabled := false)
 
 lazy val free = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
@@ -688,7 +657,6 @@ lazy val alleycatsCore = crossProject(JSPlatform, JVMPlatform)
   .settings(moduleName := "alleycats-core", name := "Alleycats core")
   .settings(catsSettings)
   .settings(publishSettings)
-  .settings(scoverageSettings)
   .settings(includeGeneratedSrc)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings ++ mimaSettings("alleycats-core", includeCats1 = false))
@@ -700,12 +668,10 @@ lazy val alleycatsLaws = crossProject(JSPlatform, JVMPlatform)
   .settings(moduleName := "alleycats-laws", name := "Alleycats laws")
   .settings(catsSettings)
   .settings(publishSettings)
-  .settings(scoverageSettings)
   .settings(disciplineDependencies)
   .settings(testingDependencies)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings ++ mimaSettings("alleycats-laws", includeCats1 = false))
-  .jsSettings(coverageEnabled := false)
 
 lazy val alleycatsTests = crossProject(JSPlatform, JVMPlatform)
   .in(file("alleycats-tests"))
@@ -725,7 +691,6 @@ lazy val bench = project
   .settings(catsSettings)
   .settings(noPublishSettings)
   .settings(commonJvmSettings)
-  .settings(coverageEnabled := false)
   .settings(
     libraryDependencies ++= {
       if (priorTo2_13(scalaVersion.value))

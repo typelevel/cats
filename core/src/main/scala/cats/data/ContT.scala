@@ -40,7 +40,9 @@ sealed abstract class ContT[M[_], A, +B] extends Serializable {
     // allocate/pattern match once
     val fnAndThen = AndThen(fn)
     ContT[M, A, C] { fn2 =>
-      val contRun: ContT[M, A, C] => M[A] = _.run(fn2)
+      val contRun: ContT[M, A, C] => M[A] = { c =>
+        M.defer(c.run(fn2))
+      }
       val fn3: B => M[A] = fnAndThen.andThen(contRun)
       M.defer(run(fn3))
     }
@@ -105,6 +107,32 @@ object ContT {
   def liftK[M[_], B](implicit M: FlatMap[M]): M ~> ContT[M, B, *] =
     new (M ~> ContT[M, B, *]) {
       def apply[A](ma: M[A]): ContT[M, B, A] = ContT.liftF(ma)
+    }
+
+  /*
+   * Call with current continuation
+   *
+   * Passes the current continuation to f, meaning we can model short-circuit
+   * evaluation eg exception handling
+   *
+   * {{{
+   *   for {
+   *     _ <- ContT.callCC( (k: Unit => ContT[IO, Unit, Unit]) =>
+   *       ContT.liftF(IO.println("this will print first")) >>
+   *         k(()) >>
+   *         ContT.liftF(IO.println("this will NOT print as we short-circuit to the contination"))
+   *     )
+   *     _ <- ContT.liftF(IO.println("this will print second")])
+   *   } yield ()
+   *
+   * }}}
+   */
+  def callCC[M[_], R, A, B](f: (A => ContT[M, R, B]) => ContT[M, R, A])(implicit M: Defer[M]): ContT[M, R, A] =
+    apply { cb =>
+      val cont = f { a =>
+        apply(_ => cb(a))
+      }
+      M.defer(cont.run(cb))
     }
 
   /**

@@ -1,5 +1,7 @@
 package cats.tests
 
+import java.util.concurrent.atomic.AtomicInteger
+
 import cats.Eval
 import cats.data.ContT
 import cats.kernel.Eq
@@ -160,4 +162,73 @@ class ContTSuite extends CatsSuite {
 
     assert(contT.run(Eval.now(_)).value === maxIters)
   }
+
+  test("ContT.flatMap stack safety") {
+    val maxIters = 20000
+    var counter = 0
+
+    def contT: ContT[Eval, Int, Int] =
+      ContT
+        .defer[Eval, Int, Int] {
+          counter = counter + 1
+          counter
+        }
+        .flatMap { n =>
+          if (n === maxIters) ContT.pure[Eval, Int, Int](n) else contT
+        }
+
+    assert(contT.run(Eval.now(_)).value === maxIters)
+  }
+
+  test("ContT.callCC short-circuits and invokes the continuation") {
+    forAll { (cb: Unit => Eval[Int]) =>
+      var shouldNotChange = false
+      var shouldChange = false
+      var shouldAlsoChange = false
+
+      val contT: ContT[Eval, Int, Unit] = for {
+        _ <- ContT.callCC((k: Unit => ContT[Eval, Int, Unit]) =>
+          ContT.defer[Eval, Int, Unit] {
+            shouldChange = true
+          } >>
+            k(()) >>
+            ContT.defer[Eval, Int, Unit] {
+              shouldNotChange = true
+            }
+        )
+        _ <- ContT.defer[Eval, Int, Unit] {
+          shouldAlsoChange = true
+        }
+      } yield ()
+
+      contT.run(cb).value
+
+      assert(shouldNotChange === false)
+      assert(shouldChange === true)
+      assert(shouldAlsoChange === true)
+    }
+  }
+
+  test("ContT.callCC stack-safety") {
+
+    val counter = new AtomicInteger(0)
+    val maxIters = 10000
+
+    def contT: ContT[Eval, Unit, Int] = ContT
+      .callCC { (k: Int => ContT[Eval, Unit, Int]) =>
+        ContT
+          .defer[Eval, Unit, Int] {
+            counter.incrementAndGet()
+          }
+          .flatMap { n =>
+            if (n === maxIters) ContT.pure[Eval, Unit, Int](n) else contT
+          }
+      }
+      .flatMap { n =>
+        ContT.pure[Eval, Unit, Int](n)
+      }
+
+    contT.run(_ => Eval.now(())).value
+  }
+
 }

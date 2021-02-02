@@ -36,12 +36,6 @@ jobs:
             java: adopt@1.15
           - platform: js
             java: graalvm-ce-java8@20.2.0
-          - platform: jvm
-            java: adopt@1.15
-            scala: 3.0.0-M2
-          - platform: js
-            java: adopt@1.15
-            scala: 3.0.0-M2
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout current branch (full)
@@ -73,27 +67,13 @@ jobs:
         if: matrix.platform == 'js'
         run: sbt ++${{ matrix.scala }} validateAllJS
 
-      - name: Setup Python
-        if: matrix.platform == 'jvm' && (matrix.scala != '3.0.0-M2' && matrix.scala != '3.0.0-M3')
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.x
-
-      - name: Setup codecov
-        if: matrix.platform == 'jvm' && (matrix.scala != '3.0.0-M2' && matrix.scala != '3.0.0-M3')
-        run: pip install codecov
-
       - name: Validate JVM (scala 2)
         if: matrix.platform == 'jvm' && (matrix.scala != '3.0.0-M2' && matrix.scala != '3.0.0-M3')
-        run: sbt ++${{ matrix.scala }} coverage buildJVM bench/test coverageReport
+        run: sbt ++${{ matrix.scala }} buildJVM bench/test
 
       - name: Validate JVM (scala 3)
         if: matrix.platform == 'jvm' && (matrix.scala == '3.0.0-M2' || matrix.scala == '3.0.0-M3')
         run: sbt ++${{ matrix.scala }} buildJVM bench/test
-
-      - name: Upload Codecov Results
-        if: matrix.platform == 'jvm' && (matrix.scala != '3.0.0-M2' && matrix.scala != '3.0.0-M3')
-        run: codecov -F ${{ matrix.scala }}
 
       - name: Binary compatibility ${{ matrix.scala }}
         if: matrix.platform == 'jvm' && (matrix.scala != '3.0.0-M2' && matrix.scala != '3.0.0-M3')
