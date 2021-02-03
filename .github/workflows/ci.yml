@@ -182,7 +182,9 @@ jobs:
           key: ${{ runner.os }}-sbt-cache-v2-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
 
       - name: Setup Ruby
-        uses: actions/setup-ruby@v1
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.7
 
       - name: Setup Jekyll
         run: gem install jekyll -v 4.0.0
