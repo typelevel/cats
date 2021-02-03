@@ -25,6 +25,7 @@ trait AllInstances
     with FutureInstances
     with HashInstances
     with InvariantMonoidalInstances
+    with JavaTimeInstances
     with ListInstances
     with MapInstances
     with OptionInstances
