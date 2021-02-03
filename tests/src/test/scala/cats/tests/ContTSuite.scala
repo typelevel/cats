@@ -10,7 +10,6 @@ import cats.laws.discipline.arbitrary._
 import org.scalacheck.{Arbitrary, Gen}
 import cats.syntax.all._
 import org.scalacheck.Prop._
-import java.util.concurrent.atomic.AtomicInteger
 
 class ContTSuite extends CatsSuite {
 

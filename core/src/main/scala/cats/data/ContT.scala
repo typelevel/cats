@@ -198,14 +198,30 @@ object ContT {
 
   /*
    * Captures the continuation up to the nearest enclosing [[resetT]] and passes
-   * it to f
+   * it to f.
    *
+   * For example, in the following the continuation captured as k is
+   * {{{ _.map(_ + 1) }}}
+   * so the evaluation (modulo Eval) is 2 * (5 + 1)
+   *
+   * {{{
+   *   val cont: Cont[Int, Int] = Cont.reset(
+   *     Cont.shift((k: Int => Eval[Int]) =>
+   *       Cont.liftF[Int, Int](k(5))
+   *     ).map(_ + 1)
+   *   ).map(_ * 2)
+   *
+   *   cont.eval.value === 12
+   * }}}
+   *
+   *
+   * For an example with IO, consider the evaluation order of this:
    * {{{
    *   for {
    *     _ <- ContT.resetT(
    *            for {
    *              _ <- ContT.liftF(IO.println("1"))
-   *              _ <- ContT.shiftT{ (k: Unit => IO[Unit])
+   *              _ <- ContT.shiftT { (k: Unit => IO[Unit]) =>
    *                     for {
    *                       _ <- ContT.liftF(IO.println("2"))
    *                       _ <- ContT.liftF(k(()))
@@ -218,6 +234,10 @@ object ContT {
    *     _ <- ContT.liftF(IO.println("5"))
    *   } yield ()
    * }}}
+   *
+   * The continuation captured by k is {{{ >> ContT.liftF(IO.println("3")) }}}
+   * which is why that is evaluated when {{{ k() }}} is invoked and
+   * hence why it is printed before 4.
    */
   def shiftT[M[_]: Monad: Defer, R, A](f: (A => M[R]) => ContT[M, R, R]): ContT[M, R, A] =
     apply(cb => f(cb).eval)
