@@ -14,6 +14,7 @@ import scala.collection.immutable.{BitSet, Queue, SortedMap, SortedSet}
 import scala.util.Random
 import java.util.UUID
 import java.util.concurrent.TimeUnit.{DAYS, HOURS, MICROSECONDS, MILLISECONDS, MINUTES, NANOSECONDS, SECONDS}
+import java.time.{Instant, Duration, ZonedDateTime, ZoneId, Instant, LocalTime, Year, YearMonth}
 import compat.scalaVersionSpecific._
 import munit.ScalaCheckSuite
 import org.scalacheck.Test.Parameters
@@ -128,6 +129,8 @@ class Tests extends TestsConfig with DisciplineSuite {
   checkAll("Eq[Vector[HasEq[Int]]]", EqTests[Vector[HasEq[Int]]].eqv)
   checkAll("Eq[Stream[HasEq[Int]]]", EqTests[Stream[HasEq[Int]]].eqv)
   checkAll("Eq[Queue[HasEq[Int]]]", EqTests[Queue[HasEq[Int]]].eqv)
+  checkAll("Eq[java.time.ZoneId]", EqTests[ZoneId].eqv)
+
 
   checkAll("PartialOrder[Set[Int]]", PartialOrderTests[Set[Int]].partialOrder)
   checkAll("PartialOrder.reverse(PartialOrder[Set[Int]])",
@@ -168,6 +171,22 @@ class Tests extends TestsConfig with DisciplineSuite {
   checkAll("Order.reverse(Order[Int])", OrderTests(Order.reverse(Order[Int])).order)
   checkAll("Order.reverse(Order.reverse(Order[Int]))", OrderTests(Order.reverse(Order.reverse(Order[Int]))).order)
   checkAll("Order.fromLessThan[Int](_ < _)", OrderTests(Order.fromLessThan[Int](_ < _)).order)
+  // instances for the classes from java.time
+  checkAll("Order[java.time.Duration]", OrderTests[Duration].order)
+  checkAll("Order[java.time.Instant]", OrderTests[Instant].order)
+  checkAll("Order[java.time.LocalDate]", OrderTests[LocalDate].order)
+  checkAll("Order[java.time.LocalDateTime]", OrderTests[LocalDateTime].order)
+  checkAll("Order[java.time.LocalTime]", OrderTests[LocalTime].order)
+  checkAll("Order[java.time.Month]", OrderTests[Month].order)
+  checkAll("Order[java.time.MonthDay]", OrderTests[MonthDay].order)
+  checkAll("Order[java.time.OffsetDateTime]", OrderTests[OffsetDateTime].order)
+  checkAll("Order[java.time.OffsetTime]", OrderTests[OffsetTime].order)
+  checkAll("Order[java.time.ZoneOffset]", OrderTests[ZoneOffset].order)
+  checkAll("Order[java.time.ZonedDateTime]", OrderTests[ZonedDateTime].order)
+  checkAll("Order[java.time.YearMonth]", OrderTests[YearMonth].order)
+  checkAll("Order[java.time.Year]", OrderTests[Year].order)
+
+
 
   checkAll("LowerBounded[Duration]", LowerBoundedTests[Duration].lowerBounded)
   checkAll("LowerBounded[FiniteDuration]", LowerBoundedTests[FiniteDuration].lowerBounded)
@@ -225,6 +244,7 @@ class Tests extends TestsConfig with DisciplineSuite {
   checkAll("CommutativeMonoid[SortedMap[String, Int]]",
            SerializableTests.serializable(CommutativeMonoid[SortedMap[String, Int]])
   )
+  checkAll("CommutativeMonoid[java.time.Duration]", CommutativeMonoidTests[Duration].commutativeMonoid)
 
   checkAll("BoundedSemilattice[BitSet]", BoundedSemilatticeTests[BitSet].boundedSemilattice)
   checkAll("BoundedSemilattice[BitSet]", SerializableTests.serializable(BoundedSemilattice[BitSet]))
@@ -282,6 +302,22 @@ class Tests extends TestsConfig with DisciplineSuite {
   checkAll("Hash[Map[Int, String]]", HashTests[Map[Int, String]].hash)
   checkAll("Hash[SortedMap[Int, String]]", HashTests[SortedMap[Int, String]].hash)
   checkAll("Hash[Queue[Int]", HashTests[Queue[Int]].hash)
+
+  // Instances for classes in java.time
+  checkAll("Hash[java.time.Duration]", HashTests[Duration].hash)
+  checkAll("Hash[java.time.Instant]", HashTests[Instant].hash)
+  checkAll("Hash[java.time.LocalDate]", HashTests[LocalDate].hash)
+  checkAll("Hash[java.time.LocalDateTime]", HashTests[LocalDateTime].hash)
+  checkAll("Hash[java.time.LocalTime]", HashTests[LocalTime].hash)
+  checkAll("Hash[java.time.MonthDay]", HashTests[MonthDay].hash)
+  checkAll("Hash[java.time.Month]", HashTests[Month].hash)
+  checkAll("Hash[java.time.OffsetDateTime]", HashTests[OffsetDateTime].hash)
+  checkAll("Hash[java.time.OffsetTime]", HashTests[OffsetTime].hash)
+  checkAll("Hash[java.time.YearMonth]", HashTests[YearMonth].hash)
+  checkAll("Hash[java.time.Year]", HashTests[Year].hash)
+  checkAll("Hash[java.time.ZoneId]", HashTests[ZoneId].hash)
+  checkAll("Hash[java.time.ZoneOffset]", HashTests[ZoneOffset].hash)
+  checkAll("Hash[java.time.ZonedDateTime]", HashTests[ZonedDateTime].hash)
 
   checkAll("Order[BigDecimal]", OrderTests[BigDecimal].order)
   checkAll("CommutativeGroup[BigDecimal]", CommutativeGroupTests[BigDecimal].commutativeGroup)

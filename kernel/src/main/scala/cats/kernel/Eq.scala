@@ -103,10 +103,17 @@ object Eq
    * This can be useful for case classes, which have reasonable `equals`
    * implementations
    */
-  def fromUniversalEquals[A]: Eq[A] =
-    new Eq[A] {
-      def eqv(x: A, y: A) = x == y
-    }
+  def fromUniversalEquals[A]: Eq[A] = new FromUniversal[A] {}
+
+  /** An Eq[A] based on the eq method defined in the `Any` type.
+    *
+    * NOTE: this should only be used as a mixin to define multiple instances
+    * in a given type. If you are only interested on the `Eq` instance,
+    * you should use the method above instead.
+    */
+  trait FromUniversal[A] extends Eq[A] {
+    def eqv(x: A, y: A) = x == y
+  }
 
   /**
    * Everything is the same

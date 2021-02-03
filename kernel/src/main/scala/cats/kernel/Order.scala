@@ -226,9 +226,16 @@ object Order extends OrderFunctions[Order] with OrderToOrderingConversion {
       override def toOrdering: Ordering[A] = ev
     }
 
-  def fromComparable[A <: Comparable[A]]: Order[A] =
-    new Order[A] {
-      override def compare(x: A, y: A): Int =
-        x.compareTo(y)
-    }
+  def fromComparable[A <: Comparable[A]]: Order[A] = new FromComparable[A] {}
+
+  /** Trait that provides an instance of Comparable
+    *
+    * NOTE: This is intended to be used when defining instances of several typeclasses.
+    * If you only want to define the instance for `Order`, `fromComparable` below is better.
+    *
+    */
+  trait FromComparable[A <: Comparable[A]] extends Order[A] {
+    def compare(x: A, y: A) = x.compareTo(y)
+  }
+
 }
