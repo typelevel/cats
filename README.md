@@ -87,7 +87,7 @@ Support this project with your organization. Your logo will show up here with a 
 
 ### Getting Started
 
-Cats is currently available for Scala 2.10 (up to 1.2.x), 2.11, 2.12, 2.13, and [Scala.js](http://www.scala-js.org/).
+Cats is currently available for Scala 2.10 (up to 1.2.x), 2.11, 2.12, 2.13, [Scala.js](http://www.scala-js.org/), and [Scala Native](https://www.scala-native.org/).
 
 Cats relies on improved type inference via the fix for [SI-2712](https://github.com/scala/bug/issues/2712), which is not enabled by default. For **Scala 2.11.9+ or 2.12** you should add the following to your `build.sbt`:
 
