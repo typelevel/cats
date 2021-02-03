@@ -55,6 +55,18 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
   final def iterator: Iterator[A] = toList.iterator
 
   /**
+   * Returns the first n elements of this NonEmptyList as a List.
+   *
+   * {{{
+   * scala> import cats.data.NonEmptyList
+   * scala> val nel = NonEmptyList.of(1, 2, 3, 4, 5)
+   * scala> nel.take(3)
+   * res0: scala.collection.immutable.List[Int] = List(1, 2, 3)
+   * }}}
+   */
+  def take(n: Int): List[A] = toList.take(n)
+
+  /**
    * The size of this NonEmptyList
    *
    * {{{
