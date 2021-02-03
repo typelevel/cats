@@ -102,7 +102,7 @@ ThisBuild / githubWorkflowAddedJobs ++= Seq(
     "microsite",
     "Microsite",
     githubWorkflowJobSetup.value.toList ::: List(
-      WorkflowStep.Use(UseRef.Public("actions", "setup-ruby", "v1"), name = Some("Setup Ruby")),
+      WorkflowStep.Use(UseRef.Public("ruby", "setup-ruby", "v1"), name = Some("Setup Ruby")),
       WorkflowStep.Run(List("gem install jekyll -v 4.0.0"), name = Some("Setup Jekyll")),
       WorkflowStep.Sbt(List("docs/makeMicrosite"), name = Some("Build the microsite"))
     ),
