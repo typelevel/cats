@@ -100,5 +100,16 @@ package object data extends ScalaVersionSpecificPackage {
 
     def tailRecM[A, B, C](a: A)(f: A => Cont[C, Either[A, B]]): Cont[C, B] =
       ContT.tailRecM(a)(f)
+
+    def liftF[A, B](b: Eval[B]): Cont[A, B] = ContT.liftF(b)
+
+    def callCC[A, B, C](f: (B => Cont[A, C]) => Cont[A, B]): Cont[A, B] =
+      ContT.callCC(f)
+
+    def reset[A, B](cont: Cont[A, A]): Cont[B, A] =
+      ContT.resetT(cont)
+
+    def shift[A, B](f: (B => Eval[A]) => Cont[A, A]): Cont[A, B] =
+      ContT.shiftT(f)
   }
 }

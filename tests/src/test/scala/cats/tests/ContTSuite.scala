@@ -88,6 +88,80 @@ class ContTSuite extends CatsSuite {
     }
   }
 
+  test("ContT.resetT and shiftT delimit continuations") {
+    forAll { (cb: Unit => Eval[Unit]) =>
+      val counter = new AtomicInteger(0)
+      var a = 0
+      var b = 0
+      var c = 0
+      var d = 0
+
+      val contT: ContT[Eval, Unit, Unit] = ContT
+        .resetT(
+          ContT.shiftT { (k: Unit => Eval[Unit]) =>
+            ContT.defer[Eval, Unit, Unit] {
+              a = counter.incrementAndGet()
+            } >>
+              ContT.liftF(k(())) >>
+              ContT.defer[Eval, Unit, Unit] {
+                b = counter.incrementAndGet()
+              }
+          }
+            >> ContT.defer[Eval, Unit, Unit] {
+              c = counter.incrementAndGet()
+            }
+        )
+        .flatMap { _ =>
+          ContT.defer[Eval, Unit, Unit] {
+            d = counter.incrementAndGet()
+          }
+        }
+
+      contT.run(cb).value
+      assert(a == 1)
+      assert(b == 3)
+      assert(c == 2)
+      assert(d == 4)
+    }
+  }
+  test("ContT.shiftT stack safety") {
+    var counter = 0
+    val maxIters = 50000
+
+    def contT: ContT[Eval, Int, Int] =
+      ContT.shiftT { (k: Int => Eval[Int]) =>
+        ContT
+          .defer[Eval, Int, Int] {
+            counter = counter + 1
+            counter
+          }
+          .flatMap { n =>
+            if (n === maxIters) ContT.liftF(k(n)) else contT
+          }
+      }
+
+    assert(contT.run(Eval.now(_)).value === maxIters)
+  }
+
+  test("ContT.resetT stack safety") {
+    var counter = 0
+    val maxIters = 50000
+
+    def contT: ContT[Eval, Int, Int] =
+      ContT.resetT(
+        ContT
+          .defer[Eval, Int, Int] {
+            counter = counter + 1
+            counter
+          }
+          .flatMap { n =>
+            if (n === maxIters) ContT.pure[Eval, Int, Int](n) else contT
+          }
+      )
+
+    assert(contT.run(Eval.now(_)).value === maxIters)
+  }
+
   test("ContT.flatMap stack safety") {
     val maxIters = 20000
     var counter = 0
