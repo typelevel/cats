@@ -193,7 +193,7 @@ object ContT {
   /*
    * Limits the continuation of any inner [[shiftT]]
    */
-  def resetT[M[_]: Monad: Defer, A, B](contT: ContT[M, A, A]): ContT[M, B, A] =
+  def resetT[M[_]: Monad: Defer, A, B](contT: ContT[M, B, B]): ContT[M, A, B] =
     ContT.liftF(contT.eval)
 
   /*
@@ -239,7 +239,7 @@ object ContT {
    * which is why that is evaluated when {{{ k() }}} is invoked and
    * hence why it is printed before 4.
    */
-  def shiftT[M[_]: Monad: Defer, A, B](f: (B => M[A]) => ContT[M, A, A]): ContT[M, A, B] =
+  def shiftT[M[_]: Applicative: Defer, A, B](f: (B => M[A]) => ContT[M, A, A]): ContT[M, A, B] =
     apply(cb => f(cb).eval)
 
   def tailRecM[M[_], A, B, C](a: A)(fn: A => ContT[M, C, Either[A, B]])(implicit M: Defer[M]): ContT[M, C, B] =
