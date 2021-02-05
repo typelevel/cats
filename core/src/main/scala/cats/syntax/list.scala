@@ -83,7 +83,7 @@ final class ListOps[A](private val la: List[A]) extends AnyVal {
    * scala> import cats.implicits._
    * scala> val list = List("Hello", "World", "Goodbye", "World")
    * scala> val expectedResult = SortedMap("goodbye" -> 1, "hello" -> 1, "world" -> 2)
-   * scala> list.groupMapReduce(_.strip.toLowerCase)(_ => 1) === expectedResult
+   * scala> list.groupMapReduce(_.trim.toLowerCase)(_ => 1) === expectedResult
    * res0: Boolean = true
    * }}}
    */
@@ -103,7 +103,7 @@ final class ListOps[A](private val la: List[A]) extends AnyVal {
    * scala> import cats.implicits._
    * scala> val list = List("Hello", "World", "Goodbye", "World")
    * scala> val expectedResult = SortedMap("goodbye" -> 1, "hello" -> 1, "world" -> 2)
-   * scala> list.groupMapReduceWith(_.strip.toLowerCase)(_ => 1)(_ + _) === expectedResult
+   * scala> list.groupMapReduceWith(_.trim.toLowerCase)(_ => 1)(_ + _) === expectedResult
    * res0: Boolean = true
    * }}}
    */
