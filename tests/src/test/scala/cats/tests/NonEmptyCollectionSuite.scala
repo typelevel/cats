@@ -155,7 +155,7 @@ abstract class NonEmptyCollectionSuite[U[+_], NE[+_], NEC[x] <: NonEmptyCollecti
 
   test("grouped is consistent with iterator.toList.grouped") {
     forAll { (is: NE[Int], i: Int) =>
-      (i > 0) ==> is.grouped(i).toList.map(toList) === is.iterator.toList.grouped(i).toList
+      (i > 0) ==> (is.grouped(i).toList.map(toList) === is.iterator.toList.grouped(i).toList)
     }
   }
 
