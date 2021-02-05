@@ -462,7 +462,7 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
    * scala> import cats.implicits._
    * scala> val nec = NonEmptyChain("Hello", "World", "Goodbye", "World")
    * scala> val expectedResult = NonEmptyMap.of("goodbye" -> 1, "hello" -> 1, "world" -> 2)
-   * scala> val result = nec.groupMapReduce(_.strip.toLowerCase)(_ => 1)
+   * scala> val result = nec.groupMapReduce(_.trim.toLowerCase)(_ => 1)
    * scala> result === expectedResult
    * res0: Boolean = true
    * }}}
@@ -483,7 +483,7 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
    * scala> import cats.implicits._
    * scala> val nec = NonEmptyChain("Hello", "World", "Goodbye", "World")
    * scala> val expectedResult = NonEmptyMap.of("goodbye" -> 1, "hello" -> 1, "world" -> 2)
-   * scala> val result = nec.groupMapReduceNem(_.strip.toLowerCase)(_ => 1)
+   * scala> val result = nec.groupMapReduceNem(_.trim.toLowerCase)(_ => 1)
    * scala> result === expectedResult
    * res0: Boolean = true
    * }}}
@@ -504,7 +504,7 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
    * scala> import cats.implicits._
    * scala> val nec = NonEmptyChain("Hello", "World", "Goodbye", "World")
    * scala> val expectedResult = NonEmptyMap.of("goodbye" -> 1, "hello" -> 1, "world" -> 2)
-   * scala> val result = nec.groupMapReduceWith(_.strip.toLowerCase)(_ => 1)(_ + _)
+   * scala> val result = nec.groupMapReduceWith(_.trim.toLowerCase)(_ => 1)(_ + _)
    * scala> result === expectedResult
    * res0: Boolean = true
    * }}}
@@ -527,7 +527,7 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
    * scala> import cats.implicits._
    * scala> val nec = NonEmptyChain("Hello", "World", "Goodbye", "World")
    * scala> val expectedResult = NonEmptyMap.of("goodbye" -> 1, "hello" -> 1, "world" -> 2)
-   * scala> val result = nec.groupMapReduceWithNem(_.strip.toLowerCase)(_ => 1)(_ + _)
+   * scala> val result = nec.groupMapReduceWithNem(_.trim.toLowerCase)(_ => 1)(_ + _)
    * scala> result === expectedResult
    * res0: Boolean = true
    * }}}

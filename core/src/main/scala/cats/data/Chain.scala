@@ -419,7 +419,7 @@ sealed abstract class Chain[+A] {
    * scala> import cats.implicits._
    * scala> val chain = Chain("Hello", "World", "Goodbye", "World")
    * scala> val expectedResult = SortedMap("goodbye" -> 1, "hello" -> 1, "world" -> 2)
-   * scala> val result = chain.groupMapReduce(_.strip.toLowerCase)(_ => 1)
+   * scala> val result = chain.groupMapReduce(_.trim.toLowerCase)(_ => 1)
    * scala> result === expectedResult
    * res0: Boolean = true
    * }}}
@@ -441,7 +441,7 @@ sealed abstract class Chain[+A] {
    * scala> import cats.implicits._
    * scala> val chain = Chain("Hello", "World", "Goodbye", "World")
    * scala> val expectedResult = SortedMap("goodbye" -> 1, "hello" -> 1, "world" -> 2)
-   * scala> val result = chain.groupMapReduceWith(_.strip.toLowerCase)(_ => 1)(_ + _)
+   * scala> val result = chain.groupMapReduceWith(_.trim.toLowerCase)(_ => 1)(_ + _)
    * scala> result === expectedResult
    * res0: Boolean = true
    * }}}
