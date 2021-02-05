@@ -240,6 +240,62 @@ import scala.annotation.implicitNotFound
     maximumOption(fa)(Order.by(f))
 
   /**
+   * Find all the minimum `A` items in this structure.
+   * For all elements in the result Order.eqv(x, y) is true. Preserves order.
+   *
+   * @see [[Reducible#minimumNel]] for a version that doesn't need to return an
+   * `Option` for structures that are guaranteed to be non-empty.
+   *
+   * @see [[maximumList]] for maximum instead of minimum.
+   */
+  def minimumList[A](fa: F[A])(implicit A: Order[A]): List[A] =
+    foldLeft(fa, List.empty[A]) {
+      case (l @ (b :: _), a) if A.compare(a, b) > 0  => l
+      case (l @ (b :: _), a) if A.compare(a, b) == 0 => a :: l
+      case (_, a)                                    => a :: Nil
+    }.reverse
+
+  /**
+   * Find all the maximum `A` items in this structure.
+   * For all elements in the result Order.eqv(x, y) is true. Preserves order.
+   *
+   * @see [[Reducible#maximumNel]] for a version that doesn't need to return an
+   * `Option` for structures that are guaranteed to be non-empty.
+   *
+   * @see [[minimumList]] for minimum instead of maximum.
+   */
+  def maximumList[A](fa: F[A])(implicit A: Order[A]): List[A] =
+    foldLeft(fa, List.empty[A]) {
+      case (l @ (b :: _), a) if A.compare(a, b) < 0  => l
+      case (l @ (b :: _), a) if A.compare(a, b) == 0 => a :: l
+      case (_, a)                                    => a :: Nil
+    }.reverse
+
+  /**
+   * Find all the minimum `A` items in this structure according to an `Order.by(f)`.
+   * For all elements in the result Order.eqv(x, y) is true. Preserves order.
+   *
+   * @see [[Reducible#minimumByNel]] for a version that doesn't need to return an
+   * `Option` for structures that are guaranteed to be non-empty.
+   *
+   * @see [[maximumByList]] for maximum instead of minimum.
+   */
+  def minimumByList[A, B: Order](fa: F[A])(f: A => B): List[A] =
+    minimumList(fa)(Order.by(f))
+
+  /**
+   * Find all the maximum `A` items in this structure according to an `Order.by(f)`.
+   * For all elements in the result Order.eqv(x, y) is true. Preserves order.
+   *
+   * @see [[Reducible#maximumByNel]] for a version that doesn't need to return an
+   * `Option` for structures that are guaranteed to be non-empty.
+   *
+   * @see [[minimumByList]] for minimum instead of maximum.
+   */
+  def maximumByList[A, B: Order](fa: F[A])(f: A => B): List[A] =
+    maximumList(fa)(Order.by(f))
+
+  /**
    * Get the element at the index of the `Foldable`.
    */
   def get[A](fa: F[A])(idx: Long): Option[A] =
@@ -961,6 +1017,10 @@ object Foldable {
       typeClassInstance.minimumByOption[A, B](self)(f)
     def maximumByOption[B](f: A => B)(implicit ev$1: Order[B]): Option[A] =
       typeClassInstance.maximumByOption[A, B](self)(f)
+    def minimumList(implicit A: Order[A]): List[A] = typeClassInstance.minimumList[A](self)(A)
+    def maximumList(implicit A: Order[A]): List[A] = typeClassInstance.maximumList[A](self)(A)
+    def minimumByList[B](f: A => B)(implicit ev$1: Order[B]): List[A] = typeClassInstance.minimumByList[A, B](self)(f)
+    def maximumByList[B](f: A => B)(implicit ev$1: Order[B]): List[A] = typeClassInstance.maximumByList[A, B](self)(f)
     def get(idx: Long): Option[A] = typeClassInstance.get[A](self)(idx)
     def collectFirst[B](pf: PartialFunction[A, B]): Option[B] = typeClassInstance.collectFirst[A, B](self)(pf)
     def collectFirstSome[B](f: A => Option[B]): Option[B] = typeClassInstance.collectFirstSome[A, B](self)(f)

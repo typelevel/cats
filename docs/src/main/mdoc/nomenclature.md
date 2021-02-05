@@ -56,7 +56,7 @@ _WARNING_: this page is written manually, and not automatically generated, so ma
 | ------------- |---------------|
 | `F[F[A]] => F[A]` | `flatten`  |
 | `F[A] => (A => F[B]) => F[B]` | `flatMap`
-| `F[A] => (A => F[B]) => F[(A,B)]` | `productM`
+| `F[A] => (A => F[B]) => F[(A,B)]` | `mproduct`
 | `F[Boolean] => F[A] => F[A] => F[A]` | `ifM`
 | `F[A] => (A => F[B]) => F[A]` | `flatTap`
 

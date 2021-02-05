@@ -51,6 +51,9 @@ trait TraverseLaws[F[_]] extends FunctorLaws[F] with FoldableLaws[F] with Unorde
     lhs <-> rhs
   }
 
+  def traverseTap[A, B, G[_]](fa: F[A], f: A => G[B])(implicit G: Applicative[G]): IsEq[G[F[A]]] =
+    fa.traverseTap(f) <-> fa.traverse(a => Applicative[G].as(f(a), a))
+
   def foldMapDerived[A, B](
     fa: F[A],
     f: A => B

@@ -294,6 +294,14 @@ class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonE
     }
   }
 
+  test("NonEmptyList#take is consistent with List#take") {
+    forAll { (n: Int, head: Int, tail: List[Int]) =>
+      val list = head :: tail
+      val nonEmptyList = NonEmptyList.of(head, tail: _*)
+      assert(nonEmptyList.take(n) === list.take(n))
+    }
+  }
+
   test("NonEmptyList#size and length is consistent with List#size") {
     forAll { (nel: NonEmptyList[Int]) =>
       assert(nel.size === (nel.toList.size))
@@ -339,11 +347,18 @@ class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonE
     }
   }
 
+  test("NonEmptyList#zip is consistent with List#zip") {
+    forAll { (a: NonEmptyList[Int], b: NonEmptyList[Int], f: (Int, Int) => Int) =>
+      assert(a.zip(b).toList === (a.toList.zip(b.toList)))
+    }
+  }
+
   test("NonEmptyList#zipWith is consistent with List#zip and then List#map") {
     forAll { (a: NonEmptyList[Int], b: NonEmptyList[Int], f: (Int, Int) => Int) =>
       assert(a.zipWith(b)(f).toList === (a.toList.zip(b.toList).map { case (x, y) => f(x, y) }))
     }
   }
+
   test("NonEmptyList#nonEmptyPartition remains sorted") {
     forAll { (nel: NonEmptyList[Int], f: Int => Either[String, String]) =>
       val sorted = nel.map(f).sorted

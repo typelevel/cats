@@ -208,6 +208,30 @@ object Free extends FreeInstances {
   def liftF[F[_], A](value: F[A]): Free[F, A] = Suspend(value)
 
   /**
+   * Same as [[liftF]], but expressed as a FunctionK for use with mapK
+   * {{{
+   * scala> import cats._, data._, implicits._
+   * scala> val a: OptionT[Eval, Int] = 1.pure[OptionT[Eval, *]]
+   * scala> val b: OptionT[Free[Eval, *], Int] = a.mapK(Free.liftK)
+   * scala> b.value.run
+   * res0: Option[Int] = Some(1)
+   * }}}
+   */
+  def liftK[F[_]]: F ~> Free[F, *] =
+    new (F ~> Free[F, *]) { def apply[A](fa: F[A]): Free[F, A] = Free.liftF(fa) }
+
+  /**
+   * Same as [[pure]] but expressed as a FunctionK
+   * {{{
+   * scala> import cats._
+   * scala> val fo = Free.liftId[Eval]("foo")
+   * val fo: cats.free.Free[Eval,String] = Free(...)
+   * }}}
+   */
+  def liftId[F[_]]: Id ~> Free[F, *] =
+    new (Id ~> Free[F, *]) { def apply[A](fa: Id[A]): Free[F, A] = Free.pure(fa) }
+
+  /**
    * Absorb a step into the free monad.
    */
   def roll[F[_], A](value: F[Free[F, A]]): Free[F, A] =
@@ -252,7 +276,7 @@ object Free extends FreeInstances {
    * This method exists to allow the `F` and `G` parameters to be
    * bound independently of the `A` parameter below.
    */
-  // TODO: to be deprecated / removed in cats 2.0
+  @deprecated("use liftInject", "2.3.1")
   def inject[F[_], G[_]]: FreeInjectKPartiallyApplied[F, G] =
     new FreeInjectKPartiallyApplied
 
