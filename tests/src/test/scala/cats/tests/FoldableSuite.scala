@@ -198,14 +198,24 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit
     forAll { (fa: F[Int]) =>
       val maxOpt = fa.maximumOption
       val minOpt = fa.minimumOption
+      val maxList = fa.maximumList
+      val minList = fa.minimumList
       val list = fa.toList
       val nelOpt = list.toNel
-      assert(maxOpt === (nelOpt.map(_.maximum)))
-      assert(maxOpt === (nelOpt.map(_.toList.max)))
-      assert(minOpt === (nelOpt.map(_.minimum)))
-      assert(minOpt === (nelOpt.map(_.toList.min)))
-      assert(maxOpt.forall(i => fa.forall(_ <= i)) === true)
-      assert(minOpt.forall(i => fa.forall(_ >= i)) === true)
+      assert(maxOpt === nelOpt.map(_.maximum))
+      assert(maxOpt === nelOpt.map(_.toList.max))
+      assert(maxList.lastOption === nelOpt.map(_.maximum))
+      assert(maxList.lastOption === nelOpt.map(_.toList.max))
+      assert(minOpt === nelOpt.map(_.minimum))
+      assert(minOpt === nelOpt.map(_.toList.min))
+      assert(minList.lastOption === nelOpt.map(_.minimum))
+      assert(minList.lastOption === nelOpt.map(_.toList.min))
+      assert(maxOpt.forall(i => fa.forall(_ <= i)))
+      assert(minOpt.forall(i => fa.forall(_ >= i)))
+      assert(maxList.forall(i => fa.forall(_ <= i)))
+      assert(minList.forall(i => fa.forall(_ >= i)))
+      assert(maxList.flatMap(a => maxList.map(b => a -> b)).forall { case (a, b) => a === b })
+      assert(minList.flatMap(a => minList.map(b => a -> b)).forall { case (a, b) => a === b })
     }
   }
 
@@ -213,13 +223,23 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit
     forAll { (fa: F[Int], f: Int => Int) =>
       val maxOpt = fa.maximumByOption(f).map(f)
       val minOpt = fa.minimumByOption(f).map(f)
+      val maxList = fa.maximumByList(f).map(f)
+      val minList = fa.minimumByList(f).map(f)
       val nelOpt = fa.toList.toNel
-      assert(maxOpt === (nelOpt.map(_.maximumBy(f)).map(f)))
-      assert(maxOpt === (nelOpt.map(_.toList.maxBy(f)).map(f)))
-      assert(minOpt === (nelOpt.map(_.minimumBy(f)).map(f)))
-      assert(minOpt === (nelOpt.map(_.toList.minBy(f)).map(f)))
-      assert(maxOpt.forall(i => fa.forall(f(_) <= i)) === true)
-      assert(minOpt.forall(i => fa.forall(f(_) >= i)) === true)
+      assert(maxOpt === nelOpt.map(_.maximumBy(f)).map(f))
+      assert(maxOpt === nelOpt.map(_.toList.maxBy(f)).map(f))
+      assert(maxList.lastOption === nelOpt.map(_.maximumBy(f)).map(f))
+      assert(maxList.lastOption === nelOpt.map(_.toList.maxBy(f)).map(f))
+      assert(minOpt === nelOpt.map(_.minimumBy(f)).map(f))
+      assert(minOpt === nelOpt.map(_.toList.minBy(f)).map(f))
+      assert(minList.lastOption === nelOpt.map(_.minimumBy(f)).map(f))
+      assert(minList.lastOption === nelOpt.map(_.toList.minBy(f)).map(f))
+      assert(maxOpt.forall(i => fa.forall(f(_) <= i)))
+      assert(minOpt.forall(i => fa.forall(f(_) >= i)))
+      assert(maxList.forall(i => fa.forall(f(_) <= i)))
+      assert(minList.forall(i => fa.forall(f(_) >= i)))
+      assert(maxList.flatMap(a => maxList.map(b => a -> b)).forall { case (a, b) => f(a) === f(b) })
+      assert(minList.flatMap(a => minList.map(b => a -> b)).forall { case (a, b) => f(a) === f(b) })
     }
   }
 

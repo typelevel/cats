@@ -153,6 +153,22 @@ object Semigroup
       override def combine(x: A, y: A): A = cmb(x, y)
     }
 
+  /**
+   * Create a `Semigroup` instance that always returns the lefthand side.
+   */
+  @inline def first[A]: Semigroup[A] =
+    new Semigroup[A] {
+      override def combine(x: A, y: A): A = x
+    }
+
+  /**
+   * Create a `Semigroup` instance that always returns the righthand side.
+   */
+  @inline def last[A]: Semigroup[A] =
+    new Semigroup[A] {
+      override def combine(x: A, y: A): A = y
+    }
+
   implicit def catsKernelBoundedSemilatticeForBitSet: BoundedSemilattice[BitSet] =
     cats.kernel.instances.bitSet.catsKernelStdSemilatticeForBitSet
   implicit def catsKernelInstancesForUnit: BoundedSemilattice[Unit] with CommutativeGroup[Unit] =

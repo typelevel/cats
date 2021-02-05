@@ -530,7 +530,7 @@ class OptionTSuite extends CatsSuite {
     import scala.util.Try
     Functor[OptionT[Try, *]]
     Monad[OptionT[Try, *]]
-    MonadError[OptionT[Try, *], Throwable]
+    MonadThrow[OptionT[Try, *]]
 
     Foldable[OptionT[List, *]]
     Traverse[OptionT[List, *]]

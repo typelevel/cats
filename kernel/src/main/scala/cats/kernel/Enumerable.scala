@@ -67,6 +67,8 @@ object BoundedEnumerable {
     cats.kernel.instances.unit.catsKernelStdOrderForUnit
   implicit def catsKernelBoundedEnumerableForBoolean: BoundedEnumerable[Boolean] =
     cats.kernel.instances.boolean.catsKernelStdOrderForBoolean
+  implicit def catsKernelBoundedEnumerableForByte: BoundedEnumerable[Byte] =
+    cats.kernel.instances.byte.catsKernelStdOrderForByte
   implicit def catsKernelBoundedEnumerableForInt: BoundedEnumerable[Int] =
     cats.kernel.instances.int.catsKernelStdOrderForInt
   implicit def catsKernelBoundedEnumerableForShort: BoundedEnumerable[Short] =

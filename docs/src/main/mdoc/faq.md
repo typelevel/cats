@@ -14,6 +14,7 @@ position: 40
  * [Where is right-biased `Either`?](#either)
  * [Why is the compiler having trouble with types with more than one type parameter?](#si-2712)
  * [Why can't the compiler find implicit instances for Future?](#future-instances)
+ * [Where are implicit instances for `Seq`](seq-instances)
  * [Why is some example code not compiling for me?](#example-compile)
  * [How can I turn my List of `<something>` into a `<something>` of a list?](#traverse)
  * [Where is `ListT`?](#listt)
@@ -76,6 +77,12 @@ A portion of example code requires either the [Kind-projector](https://github.co
 ## <a id="future-instances" href="#future-instances"></a>Why can't the compiler find implicit instances for Future?
 
 If you have already followed the [imports advice](#what-imports) but are still getting error messages like `could not find implicit value for parameter e: cats.Monad[scala.concurrent.Future]` or `value |+| is not a member of scala.concurrent.Future[Int]`, then make sure that you have an implicit `scala.concurrent.ExecutionContext` in scope. The easiest way to do this is to `import scala.concurrent.ExecutionContext.Implicits.global`, but note that you may want to use a different execution context for your production application.
+
+## <a id="seq-instances" href="#seq-instances"></a>Where are implicit instances for `Seq`?
+
+As of `cats-2.3`, instances for `collection.immutable.Seq` are provided by cats.
+Mind that, up to `scala-2.12`, `Seq` was an alias for `collection.Seq` and lawful instances can't be provided for it due to its potential mutability.
+In `scala-2.13`, `Seq` was changed to `collection.immutable.Seq` which greatly improves `Seq`'s interoperability with cats.
 
 ## <a id="traverse" href="#traverse"></a>How can I turn my List of `<something>` into a `<something>` of a list?
 

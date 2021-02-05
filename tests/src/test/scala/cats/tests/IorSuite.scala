@@ -182,6 +182,32 @@ class IorSuite extends CatsSuite {
     }
   }
 
+  test("addLeft") {
+    forAll { (i: Int Ior Int, j: Int) =>
+      val expectedResult =
+        if (i.isLeft)
+          Ior.left(i.left.get + j)
+        else if (i.isRight)
+          Ior.both(j, i.right.get)
+        else
+          Ior.both(i.left.get + j, i.right.get)
+      assert(i.addLeft(j) === expectedResult)
+    }
+  }
+
+  test("addRight") {
+    forAll { (i: Int Ior Int, j: Int) =>
+      val expectedResult =
+        if (i.isLeft)
+          Ior.both(i.left.get, j)
+        else if (i.isRight)
+          Ior.right(i.right.get + j)
+        else
+          Ior.both(i.left.get, i.right.get + j)
+      assert(i.addRight(j) === expectedResult)
+    }
+  }
+
   test("combine left") {
     forAll { (i: Int Ior String, j: Int Ior String) =>
       assert(i.combine(j).left === (i.left.map(_ + j.left.getOrElse(0)).orElse(j.left)))
