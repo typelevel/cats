@@ -356,7 +356,7 @@ sealed abstract class Chain[+A] {
 
   /**
    * Groups elements inside this `Chain` according to the `Order`
-   * of the keys produced by the given key function.
+   * of the keys produced by the given mapping function.
    *
    * {{{
    * scala> import scala.collection.immutable.SortedMap
@@ -369,8 +369,8 @@ sealed abstract class Chain[+A] {
    * res0: Boolean = true
    * }}}
    */
-  final def groupBy[K](key: A => K)(implicit K: Order[K]): SortedMap[K, NonEmptyChain[A]] =
-    groupMap(key)(identity)
+  final def groupBy[B](f: A => B)(implicit B: Order[B]): SortedMap[B, NonEmptyChain[A]] =
+    groupMap(key = f)(identity)
 
   /**
    * Groups elements inside this `Chain` according to the `Order`

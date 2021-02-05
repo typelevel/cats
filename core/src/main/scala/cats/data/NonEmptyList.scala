@@ -389,7 +389,7 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
 
   /**
    * Groups elements inside this `NonEmptyList` according to the `Order`
-   * of the keys produced by the given key function.
+   * of the keys produced by the given mapping function.
    *
    * {{{
    * scala> import scala.collection.immutable.SortedMap
@@ -402,12 +402,12 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
    * res0: Boolean = true
    * }}}
    */
-  def groupBy[K](key: A => K)(implicit K: Order[K]): SortedMap[K, NonEmptyList[A]] =
-    groupMap(key)(identity)
+  def groupBy[B](f: A => B)(implicit B: Order[B]): SortedMap[B, NonEmptyList[A]] =
+    groupMap(key = f)(identity)
 
   /**
    * Groups elements inside this `NonEmptyList` according to the `Order`
-   * of the keys produced by the given key function.
+   * of the keys produced by the given mapping function.
    *
    * {{{
    * scala> import cats.data.{NonEmptyList, NonEmptyMap}
@@ -419,8 +419,8 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
    * res0: Boolean = true
    * }}}
    */
-  def groupByNem[K](key: A => K)(implicit K: Order[K]): NonEmptyMap[K, NonEmptyList[A]] =
-    NonEmptyMap.fromMapUnsafe(groupBy(key))
+  def groupByNem[B](f: A => B)(implicit B: Order[B]): NonEmptyMap[B, NonEmptyList[A]] =
+    NonEmptyMap.fromMapUnsafe(groupBy(f))
 
   /**
    * Groups elements inside this `NonEmptyList` according to the `Order`

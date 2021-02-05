@@ -379,7 +379,7 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
 
   /**
    * Groups elements inside this `NonEmptyChain` according to the `Order`
-   * of the keys produced by the given key function.
+   * of the keys produced by the given mapping function.
    *
    * {{{
    * scala> import cats.data.{NonEmptyChain, NonEmptyMap}
@@ -391,12 +391,12 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
    * res0: Boolean = true
    * }}}
    */
-  final def groupBy[K](key: A => K)(implicit K: Order[K]): NonEmptyMap[K, NonEmptyChain[A]] =
-    toChain.groupBy(key).asInstanceOf[NonEmptyMap[K, NonEmptyChain[A]]]
+  final def groupBy[B](f: A => B)(implicit B: Order[B]): NonEmptyMap[B, NonEmptyChain[A]] =
+    toChain.groupBy(f).asInstanceOf[NonEmptyMap[B, NonEmptyChain[A]]]
 
   /**
    * Groups elements inside this `NonEmptyChain` according to the `Order`
-   * of the keys produced by the given key function.
+   * of the keys produced by the given mapping function.
    *
    * {{{
    * scala> import cats.data.{NonEmptyChain, NonEmptyMap}
@@ -408,8 +408,8 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
    * res0: Boolean = true
    * }}}
    */
-  final def groupByNem[K](key: A => K)(implicit K: Order[K]): NonEmptyMap[K, NonEmptyChain[A]] =
-    groupBy(key)
+  final def groupByNem[B](f: A => B)(implicit B: Order[B]): NonEmptyMap[B, NonEmptyChain[A]] =
+    groupBy(f)
 
   /**
    * Groups elements inside this `NonEmptyChain` according to the `Order`
