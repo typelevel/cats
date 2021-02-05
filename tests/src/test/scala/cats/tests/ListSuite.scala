@@ -1,8 +1,7 @@
 package cats.tests
 
 import cats.{Align, Alternative, CoflatMap, Monad, Semigroupal, Traverse, TraverseFilter}
-import cats.data.{NonEmptyChain, NonEmptyList, ZipList}
-import cats.kernel.Semigroup
+import cats.data.{NonEmptyList, ZipList}
 import cats.laws.discipline.{
   AlignTests,
   AlternativeTests,
@@ -59,69 +58,17 @@ class ListSuite extends CatsSuite {
     assert(List.empty[Int].toNel === None)
   }
 
-  test("nec => list => nec returns original nel")(
-    forAll { (fa: NonEmptyChain[Int]) =>
-      assert(fa.toChain.toList.toNec === (Some(fa)))
+  test("groupByNel should be consistent with groupBy")(
+    forAll { (fa: List[Int], f: Int => Int) =>
+      assert((fa.groupByNel(f).map { case (k, v) => (k, v.toList) }: Map[Int, List[Int]]) === fa.groupBy(f))
     }
   )
 
-  test("toNec on empty list returns None") {
-    assert(List.empty[Int].toNec === None)
-  }
-
-  test("groupByNel should be consistent with List#groupBy") {
-    forAll { (fa: List[Int], key: Int => Int) =>
-      val result = fa.groupByNel(key).map { case (k, v) => (k, v.toList) }.toMap
-      val expected = fa.groupBy(key)
-      assert(result === expected)
-    }
-  }
-
-  test("groupByNec should be consistent with List#groupBy") {
-    forAll { (fa: List[Int], key: Int => Int) =>
-      val result = fa.groupByNec(key).map { case (k, v) => (k, v.toChain.toList) }.toMap
-      val expected = fa.groupBy(key)
-      assert(result === expected)
-    }
-  }
-
-  test("groupMapNel should be consistent with List#groupBy + Map#mapValues") {
-    forAll { (fa: List[Int], key: Int => Int, f: Int => String) =>
-      val result = fa.groupMapNel(key)(f).map { case (k, v) => (k, v.toList) }.toMap
-      val expected = fa.groupBy(key).map { case (k, v) => (k, v.map(f)) }
-      assert(result === expected)
-    }
-  }
-
-  test("groupMapNec should be consistent with List#groupBy + Map#mapValues") {
-    forAll { (fa: List[Int], key: Int => Int, f: Int => String) =>
-      val result = fa.groupMapNec(key)(f).map { case (k, v) => (k, v.toChain.toList) }.toMap
-      val expected = fa.groupBy(key).map { case (k, v) => (k, v.map(f)) }
-      assert(result === expected)
-    }
-  }
-
-  test("groupMapReduce should be consistent with List#groupBy + Map#mapValues + List#reduce") {
-    forAll { (fa: List[String], key: String => String, f: String => Int) =>
-      val result = fa.groupMapReduce(key)(f).toMap
-      val expected = fa.groupBy(key).map { case (k, v) => (k, v.map(f).reduce(Semigroup[Int].combine)) }
-      assert(result === expected)
-    }
-  }
-
-  test("groupMapReduceWith should be consistent with List#groupBy + Map#mapValues + List#reduce") {
-    forAll { (fa: List[String], key: String => String, f: String => Int, combine: (Int, Int) => Int) =>
-      val result = fa.groupMapReduceWith(key)(f)(combine).toMap
-      val expected = fa.groupBy(key).map { case (k, v) => (k, v.map(f).reduce(combine)) }
-      assert(result === expected)
-    }
-  }
-
-  test("groupByNelA should be consistent with groupByNel") {
+  test("groupByNelA should be consistent with groupByNel")(
     forAll { (fa: List[Int], f: Int => Int) =>
       assert(fa.groupByNelA(f.andThen(Option(_))) === (Option(fa.groupByNel(f))))
     }
-  }
+  )
 
   test("show") {
     assert(List(1, 2, 3).show === "List(1, 2, 3)")
