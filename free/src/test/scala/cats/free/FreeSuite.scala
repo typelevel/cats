@@ -1,6 +1,6 @@
 package cats.free
 
-import cats.{:<:, Foldable, Functor, Id, Monad, Traverse}
+import cats._
 import cats.arrow.FunctionK
 import cats.data.EitherK
 import cats.instances.all._
@@ -104,7 +104,7 @@ class FreeSuite extends CatsSuite {
     def runner: FunctionK[FTestApi, Id] =
       new FunctionK[FTestApi, Id] {
         def apply[A](a: FTestApi[A]): A =
-          a match {
+          (a: @unchecked) match {
             case TB(i) => i + 1
           }
       }
@@ -196,17 +196,6 @@ class FreeSuite extends CatsSuite {
 
   val eitherKInterpreter: FunctionK[T, Id] = Test1Interpreter.or(Test2Interpreter)
 
-  test(".inject") {
-    forAll { (x: Int, y: Int) =>
-      def res[F[_]](implicit I0: Test1Algebra :<: F, I1: Test2Algebra :<: F): Free[F, Int] =
-        for {
-          a <- Free.inject[Test1Algebra, F](test1(x, identity))
-          b <- Free.inject[Test2Algebra, F](test2(y, identity))
-        } yield a + b
-      assert(res[T].foldMap(eitherKInterpreter) == (x + y))
-    }
-  }
-
   test(".liftInject") {
     forAll { (x: Int, y: Int) =>
       def res[F[_]](implicit I0: Test1Algebra :<: F, I1: Test2Algebra :<: F): Free[F, Int] =
@@ -217,8 +206,6 @@ class FreeSuite extends CatsSuite {
       assert(res[T].foldMap(eitherKInterpreter) == (x + y))
     }
   }
-
-  val x: Free[T, Int] = Free.inject[Test1Algebra, T](Test1(1, identity))
 
   test(".injectRoll") {
     def distr[F[_], A](

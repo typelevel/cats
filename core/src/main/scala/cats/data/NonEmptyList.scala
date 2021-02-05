@@ -55,6 +55,18 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
   final def iterator: Iterator[A] = toList.iterator
 
   /**
+   * Returns the first n elements of this NonEmptyList as a List.
+   *
+   * {{{
+   * scala> import cats.data.NonEmptyList
+   * scala> val nel = NonEmptyList.of(1, 2, 3, 4, 5)
+   * scala> nel.take(3)
+   * res0: scala.collection.immutable.List[Int] = List(1, 2, 3)
+   * }}}
+   */
+  def take(n: Int): List[A] = toList.take(n)
+
+  /**
    * The size of this NonEmptyList
    *
    * {{{
@@ -287,6 +299,20 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
   }
 
   /**
+   * Zips this `NonEmptyList` with another `NonEmptyList` and returns the pairs of elements.
+   *
+   * {{{
+   * scala> import cats.data.NonEmptyList
+   * scala> val as = NonEmptyList.of(1, 2, 3)
+   * scala> val bs = NonEmptyList.of("A", "B", "C")
+   * scala> as.zip(bs)
+   * res0: cats.data.NonEmptyList[(Int, String)] = NonEmptyList((1,A), (2,B), (3,C))
+   * }}}
+   */
+  def zip[B](nel: NonEmptyList[B]): NonEmptyList[(A, B)] =
+    NonEmptyList((head, nel.head), tail.zip(nel.tail))
+
+  /**
    * Zips this `NonEmptyList` with another `NonEmptyList` and applies a function for each pair of elements.
    *
    * {{{
@@ -389,8 +415,8 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
       }
     }
 
-    m.map {
-      case (k, v) => (k, NonEmptyList.fromListUnsafe(v.result()))
+    m.map { case (k, v) =>
+      (k, NonEmptyList.fromListUnsafe(v.result()))
     }: TreeMap[B, NonEmptyList[A]]
   }
 

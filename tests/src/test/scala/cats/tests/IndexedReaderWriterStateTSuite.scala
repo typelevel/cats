@@ -1,6 +1,6 @@
 package cats.tests
 
-import cats.{~>, Bifunctor, Contravariant, Eval, Functor, Id, Monad, MonadError, SemigroupK}
+import cats._
 import cats.arrow.{Profunctor, Strong}
 import cats.data.{EitherT, IRWST, IndexedReaderWriterStateT, ReaderWriterState, ReaderWriterStateT}
 import cats.kernel.{Eq, Monoid}

@@ -177,6 +177,12 @@ class ChainSuite extends CatsSuite {
     }
   }
 
+  test("zipWithIndex is stack-safe for a large chain constructed using concatenations") {
+    val list = List.fill(10000)(1)
+    val chain = list.foldLeft(Chain.empty[Int]) { case (acc, next) => acc.concat(Chain(next)) }
+    chain.zipWithIndex.toList === (list.zipWithIndex)
+  }
+
   test("sortBy is consistent with toList.sortBy") {
     forAll { (ci: Chain[Int], f: Int => String) =>
       assert(ci.sortBy(f).toList === (ci.toList.sortBy(f)))
@@ -259,13 +265,13 @@ class ChainSuite extends CatsSuite {
 
   test("== returns false for non-Chains") {
     forAll { (a: Chain[Int], b: Int) =>
-      assert((a == b) === false)
+      assert((a.equals(b)) === false)
     }
   }
 
   test("== returns false for Chains of different element types") {
     forAll { (a: Chain[Option[String]], b: Chain[String]) =>
-      assert((a == b) === (a.isEmpty && b.isEmpty))
+      assert((a.equals(b)) === (a.isEmpty && b.isEmpty))
     }
   }
 

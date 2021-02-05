@@ -7,16 +7,8 @@ import cats.kernel.compat.scalaVersionSpecific._
 import cats.laws.discipline.{ApplicativeErrorTests, MiniInt, NonEmptyParallelTests, ParallelTests, SerializableTests}
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
-import cats.syntax.bifunctor._
-import cats.syntax.bitraverse._
-import cats.syntax.either._
-import cats.syntax.flatMap._
-import cats.syntax.foldable._
-import cats.syntax.option._
-import cats.syntax.parallel._
-import cats.syntax.traverse._
+import cats.implicits._
 import scala.collection.immutable.SortedSet
-import cats.syntax.eq._
 import org.scalacheck.Prop._
 
 @suppressUnusedImportWarningForScalaVersionSpecific
@@ -25,8 +17,8 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
   test("ParSequence Either should accumulate errors") {
     forAll { (es: List[Either[String, Int]]) =>
       val lefts = es
-        .collect {
-          case Left(e) => e
+        .collect { case Left(e) =>
+          e
         }
         .foldMap(identity)
 
@@ -38,8 +30,8 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
     forAll { (es: List[Ior[String, Int]]) =>
       val lefts = es
         .map(_.left)
-        .collect {
-          case Some(e) => e
+        .collect { case Some(e) =>
+          e
         }
         .foldMap(identity)
       assert(es.parSequence.left.getOrElse(Monoid[String].empty) === lefts)
@@ -60,19 +52,22 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
 
   test("ParTraverse_ identity should be equivalent to parSequence_") {
     forAll { (es: SortedSet[Either[String, Int]]) =>
-      assert(Parallel.parTraverse_(es)(identity) === (Parallel.parSequence_(es)))
+      assert(Parallel.parTraverse_(es)(identity) === (Parallel.parSequence_[SortedSet, Either[String, *], Int](es)))
     }
   }
 
   test("ParTraverse_ syntax should be equivalent to Parallel.parTraverse_") {
     forAll { (es: SortedSet[Either[String, Int]]) =>
-      assert(Parallel.parTraverse_(es)(identity) === (es.parTraverse_(identity)))
+      assert(
+        Parallel.parTraverse_[SortedSet, Either[String, *], Either[String, Int], Int](es)(identity) === (es
+          .parTraverse_(identity))
+      )
     }
   }
 
   test("ParSequence_ syntax should be equivalent to Parallel.parSequence_") {
     forAll { (es: SortedSet[Either[String, Int]]) =>
-      assert(Parallel.parSequence_(es) === (es.parSequence_))
+      assert(Parallel.parSequence_[SortedSet, Either[String, *], Int](es) === (es.parSequence_))
     }
   }
 
@@ -88,17 +83,17 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
     }
   }
 
-  type ListTuple2[A, B] = List[(A, B)]
+  case class ListTuple2[A, B](value: List[(A, B)])
   implicit val catsBitraverseForListTuple2: Bitraverse[ListTuple2] = new Bitraverse[ListTuple2] {
     def bifoldLeft[A, B, C](fab: ListTuple2[A, B], c: C)(f: (C, A) => C, g: (C, B) => C): C =
-      fab.foldLeft(c) { case (c, (a, b)) => g(f(c, a), b) }
+      fab.value.foldLeft(c) { case (c, (a, b)) => g(f(c, a), b) }
     def bifoldRight[A, B, C](fab: ListTuple2[A, B],
                              lc: Eval[C]
     )(f: (A, Eval[C]) => Eval[C], g: (B, Eval[C]) => Eval[C]): Eval[C] = {
       def loop(abs: ListTuple2[A, B]): Eval[C] =
-        abs match {
+        abs.value match {
           case Nil         => lc
-          case (a, b) :: t => f(a, g(b, Eval.defer(loop(t))))
+          case (a, b) :: t => f(a, g(b, Eval.defer(loop(ListTuple2(t)))))
         }
       Eval.defer(loop(fab))
     }
@@ -106,48 +101,52 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
       fab: ListTuple2[A, B]
     )(f: A => G[C], g: B => G[D])(implicit G: Applicative[G]): G[ListTuple2[C, D]] = {
       def loop(abs: ListTuple2[A, B]): Eval[G[ListTuple2[C, D]]] =
-        abs match {
-          case Nil         => Now(G.pure(List.empty))
-          case (a, b) :: t => G.map2Eval(G.product(f(a), g(b)), Eval.defer(loop(t)))(_ :: _)
+        abs.value match {
+          case Nil => Now(G.pure(ListTuple2(List.empty)))
+          case (a, b) :: t =>
+            G.map2Eval(G.product(f(a), g(b)), Eval.defer(loop(ListTuple2(t))))((cur, acc) =>
+              ListTuple2(cur :: acc.value)
+            )
         }
       loop(fab).value
     }
   }
 
   test("ParBisequence Either should accumulate errors") {
-    forAll { (es: ListTuple2[Either[String, Int], Either[String, Int]]) =>
+    forAll { (es: List[(Either[String, Int], Either[String, Int])]) =>
       val lefts = es
-        .flatMap {
-          case (a, b) => List(a, b)
+        .flatMap { case (a, b) =>
+          List(a, b)
         }
-        .collect {
-          case Left(e) => e
+        .collect { case Left(e) =>
+          e
         }
         .foldMap(identity)
 
-      assert(es.parBisequence.fold(identity, i => Monoid[String].empty) === lefts)
+      assert(ListTuple2(es).parBisequence.fold(identity, i => Monoid[String].empty) === lefts)
     }
   }
 
   test("ParBisequence Ior should accumulate errors") {
-    forAll { (es: ListTuple2[Ior[String, Int], Ior[String, Int]]) =>
+    forAll { (es: List[(Ior[String, Int], Ior[String, Int])]) =>
       val lefts = es
-        .flatMap {
-          case (a, b) => List(a, b)
+        .flatMap { case (a, b) =>
+          List(a, b)
         }
         .map(_.left)
-        .collect {
-          case Some(e) => e
+        .collect { case Some(e) =>
+          e
         }
         .foldMap(identity)
 
-      assert(es.parBisequence.left.getOrElse(Monoid[String].empty) === lefts)
+      assert(ListTuple2(es).parBisequence.left.getOrElse(Monoid[String].empty) === lefts)
     }
   }
 
   test("ParBisequence Ior should bisequence values") {
-    forAll { (es: ListTuple2[Ior[String, Int], Ior[String, Int]]) =>
-      assert(es.parBisequence.right === (es.bimap(_.toOption, _.toOption).bisequence))
+    forAll { (es: List[(Ior[String, Int], Ior[String, Int])]) =>
+      val wrapped = ListTuple2(es)
+      assert(wrapped.parBisequence.right.map(_.value) === wrapped.bimap(_.toOption, _.toOption).bisequence.map(_.value))
     }
   }
 
@@ -158,35 +157,38 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
   }
 
   test("ParLeftSequence Either should accumulate errors") {
-    forAll { (es: ListTuple2[Either[String, Int], Int]) =>
+    forAll { (es: List[(Either[String, Int], Int)]) =>
       val lefts = es
-        .collect {
-          case (Left(e), _) => e
+        .collect { case (Left(e), _) =>
+          e
         }
         .foldMap(identity)
 
-      assert(es.parLeftSequence.fold(identity, i => Monoid[String].empty) === lefts)
+      assert(ListTuple2(es).parLeftSequence.fold(identity, i => Monoid[String].empty) === lefts)
     }
   }
 
   test("ParLeftSequence Ior should accumulate errors") {
-    forAll { (es: ListTuple2[Ior[String, Int], Int]) =>
+    forAll { (es: List[(Ior[String, Int], Int)]) =>
       val lefts = es
-        .map {
-          case (a, b) => a.left
+        .map { case (a, b) =>
+          a.left
         }
-        .collect {
-          case Some(e) => e
+        .collect { case Some(e) =>
+          e
         }
         .foldMap(identity)
 
-      assert(es.parLeftSequence.left.getOrElse(Monoid[String].empty) === lefts)
+      assert(ListTuple2(es).parLeftSequence.left.getOrElse(Monoid[String].empty) === lefts)
     }
   }
 
   test("ParLeftSequence Ior should leftSequence values") {
-    forAll { (es: ListTuple2[Ior[String, Int], Int]) =>
-      assert(es.parLeftSequence.right === (es.bimap(_.toOption, identity).leftSequence))
+    forAll { (es: List[(Ior[String, Int], Int)]) =>
+      val wrapped = ListTuple2(es)
+      assert(
+        wrapped.parLeftSequence.right.map(_.value) === (wrapped.bimap(_.toOption, identity).leftSequence.map(_.value))
+      )
     }
   }
 
@@ -297,12 +299,12 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
     forAll { (as: List[Int], bs: List[Int], cs: List[Int]) =>
       val zipped = as
         .zip(bs)
-        .map {
-          case (a, b) => a + b
+        .map { case (a, b) =>
+          a + b
         }
         .zip(cs)
-        .map {
-          case (a, b) => a + b
+        .map { case (a, b) =>
+          a + b
         }
 
       assert((as, bs, cs).parMapN(_ + _ + _) === zipped)
@@ -313,12 +315,12 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
     forAll { (as: Vector[Int], bs: Vector[Int], cs: Vector[Int]) =>
       val zipped = as
         .zip(bs)
-        .map {
-          case (a, b) => a + b
+        .map { case (a, b) =>
+          a + b
         }
         .zip(cs)
-        .map {
-          case (a, b) => a + b
+        .map { case (a, b) =>
+          a + b
         }
 
       assert((as, bs, cs).parMapN(_ + _ + _) === zipped)
@@ -329,12 +331,12 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
     forAll { (as: Stream[Int], bs: Stream[Int], cs: Stream[Int]) =>
       val zipped = as
         .zip(bs)
-        .map {
-          case (a, b) => a + b
+        .map { case (a, b) =>
+          a + b
         }
         .zip(cs)
-        .map {
-          case (a, b) => a + b
+        .map { case (a, b) =>
+          a + b
         }
 
       assert((as, bs, cs).parMapN(_ + _ + _) === zipped)

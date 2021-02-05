@@ -230,6 +230,50 @@ import scala.annotation.implicitNotFound
     maximum(fa)(Order.by(f))
 
   /**
+   * Find all the minimum `A` items in this structure.
+   * For all elements in the result Order.eqv(x, y) is true. Preserves order.
+   *
+   * @see [[maximumNel]] for maximum instead of minimum.
+   */
+  def minimumNel[A](fa: F[A])(implicit A: Order[A]): NonEmptyList[A] =
+    reduceLeftTo(fa)(NonEmptyList.one) {
+      case (l @ NonEmptyList(b, _), a) if A.compare(a, b) > 0  => l
+      case (l @ NonEmptyList(b, _), a) if A.compare(a, b) == 0 => a :: l
+      case (_, a)                                              => NonEmptyList.one(a)
+    }.reverse
+
+  /**
+   * Find all the maximum `A` items in this structure.
+   * For all elements in the result Order.eqv(x, y) is true. Preserves order.
+   *
+   * @see [[minimumNel]] for minimum instead of maximum.
+   */
+  def maximumNel[A](fa: F[A])(implicit A: Order[A]): NonEmptyList[A] =
+    reduceLeftTo(fa)(NonEmptyList.one) {
+      case (l @ NonEmptyList(b, _), a) if A.compare(a, b) < 0  => l
+      case (l @ NonEmptyList(b, _), a) if A.compare(a, b) == 0 => a :: l
+      case (_, a)                                              => NonEmptyList.one(a)
+    }.reverse
+
+  /**
+   * Find all the minimum `A` items in this structure according to an `Order.by(f)`.
+   * For all elements in the result Order.eqv(x, y) is true. Preserves order.
+   *
+   * @see [[maximumByNel]] for maximum instead of minimum.
+   */
+  def minimumByNel[A, B: Order](fa: F[A])(f: A => B): NonEmptyList[A] =
+    minimumNel(fa)(Order.by(f))
+
+  /**
+   * Find all the maximum `A` items in this structure according to an `Order.by(f)`.
+   * For all elements in the result Order.eqv(x, y) is true. Preserves order.
+   *
+   * @see [[minimumByNel]] for minimum instead of maximum.
+   */
+  def maximumByNel[A, B: Order](fa: F[A])(f: A => B): NonEmptyList[A] =
+    maximumNel(fa)(Order.by(f))
+
+  /**
    * Intercalate/insert an element between the existing elements while reducing.
    *
    * {{{
@@ -337,6 +381,12 @@ object Reducible {
     def maximum(implicit A: Order[A]): A = typeClassInstance.maximum[A](self)(A)
     def minimumBy[B](f: A => B)(implicit ev$1: Order[B]): A = typeClassInstance.minimumBy[A, B](self)(f)
     def maximumBy[B](f: A => B)(implicit ev$1: Order[B]): A = typeClassInstance.maximumBy[A, B](self)(f)
+    def minimumNel(implicit A: Order[A]): NonEmptyList[A] = typeClassInstance.minimumNel[A](self)(A)
+    def maximumNel(implicit A: Order[A]): NonEmptyList[A] = typeClassInstance.maximumNel[A](self)(A)
+    def minimumByNel[B](f: A => B)(implicit ev$1: Order[B]): NonEmptyList[A] =
+      typeClassInstance.minimumByNel[A, B](self)(f)
+    def maximumByNel[B](f: A => B)(implicit ev$1: Order[B]): NonEmptyList[A] =
+      typeClassInstance.maximumByNel[A, B](self)(f)
     def nonEmptyIntercalate(a: A)(implicit A: Semigroup[A]): A = typeClassInstance.nonEmptyIntercalate[A](self, a)(A)
     def nonEmptyPartition[B, C](f: A => Either[B, C]): Ior[NonEmptyList[B], NonEmptyList[C]] =
       typeClassInstance.nonEmptyPartition[A, B, C](self)(f)
@@ -382,9 +432,8 @@ abstract class NonEmptyReducible[F[_], G[_]](implicit G: Foldable[G]) extends Re
   }
 
   def foldRight[A, B](fa: F[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
-    Always(split(fa)).flatMap {
-      case (a, ga) =>
-        f(a, G.foldRight(ga, lb)(f))
+    Always(split(fa)).flatMap { case (a, ga) =>
+      f(a, G.foldRight(ga, lb)(f))
     }
 
   def reduceLeftTo[A, B](fa: F[A])(f: A => B)(g: (B, A) => B): B = {
@@ -399,9 +448,8 @@ abstract class NonEmptyReducible[F[_], G[_]](implicit G: Foldable[G]) extends Re
         case None            => Eval.later(f(now))
       }
 
-    Always(split(fa)).flatMap {
-      case (a, ga) =>
-        Eval.defer(loop(a, Foldable.Source.fromFoldable(ga)))
+    Always(split(fa)).flatMap { case (a, ga) =>
+      Eval.defer(loop(a, Foldable.Source.fromFoldable(ga)))
     }
   }
 

@@ -167,7 +167,8 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
 
   /**
    * Converts this NonEmptyLazyList to a `NonEmptyList`.
-   */ // TODO also add toNonEmptyLazyList to NonEmptyList?
+   */
+  // TODO also add toNonEmptyLazyList to NonEmptyList?
   final def toNonEmptyList: NonEmptyList[A] =
     NonEmptyList.fromListUnsafe(toLazyList.toList)
 
@@ -394,8 +395,8 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
       }
     }
 
-    m.map {
-      case (k, v) => (k, create(v.result()))
+    m.map { case (k, v) =>
+      (k, create(v.result()))
     }: TreeMap[B, NonEmptyLazyList[A]]
   }
 
@@ -485,10 +486,10 @@ sealed abstract private[data] class NonEmptyLazyListInstances extends NonEmptyLa
 
       def reduceRightTo[A, B](fa: NonEmptyLazyList[A])(f: A => B)(g: (A, cats.Eval[B]) => cats.Eval[B]): cats.Eval[B] =
         fa.tail match {
-          case LazyList() => Eval.later(f(fa.head))
           case head +: tail =>
             val nell = NonEmptyLazyList.fromLazyListPrepend(head, tail)
             g(fa.head, Eval.defer(reduceRightTo(nell)(f)(g)))
+          case _ => Eval.later(f(fa.head))
         }
 
       private val alignInstance = Align[LazyList].asInstanceOf[Align[NonEmptyLazyList]]

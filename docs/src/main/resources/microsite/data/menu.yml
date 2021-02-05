@@ -74,7 +74,7 @@ options:
   - title: Alternative
     url: typeclasses/alternative.html
     menu_type: typeclasses
-  
+
   - title: Bifunctor
     url: typeclasses/bifunctor.html
     menu_type: typeclasses
@@ -105,6 +105,10 @@ options:
 
   - title: Reducible
     url: typeclasses/reducible.html
+    menu_type: typeclasses
+
+  - title: ApplicativeError and MonadError
+    url: typeclasses/applicativemonaderror.html
     menu_type: typeclasses
 
   - title: NonEmptyTraverse
@@ -138,7 +142,7 @@ options:
   - title: Const
     url: datatypes/const.html
     menu_type: data
-    
+
   - title: ContT
     url: datatypes/contt.html
     menu_type: data
@@ -173,6 +177,14 @@ options:
 
   - title: Kleisli
     url: datatypes/kleisli.html
+    menu_type: data
+
+  - title: Writer
+    url: datatypes/writer.html
+    menu_type: data
+
+  - title: WriterT
+    url: datatypes/writert.html
     menu_type: data
 
   - title: Nested

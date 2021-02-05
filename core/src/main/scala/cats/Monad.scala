@@ -51,9 +51,7 @@ import scala.annotation.implicitNotFound
     val b = Eval.later(body)
     tailRecM(())(_ =>
       ifM(p)(
-        ifTrue = {
-          map(b.value)(_ => continue)
-        },
+        ifTrue = as(b.value, continue),
         ifFalse = stop
       )
     )

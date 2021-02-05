@@ -217,10 +217,6 @@ object Order extends OrderFunctions[Order] with OrderToOrderingConversion {
     new Monoid[Order[A]] with Band[Order[A]] {
       val empty: Order[A] = allEqual[A]
       def combine(x: Order[A], y: Order[A]): Order[A] = Order.whenEqual(x, y)
-      override def combineN(a: Order[A], n: Int): Order[A] =
-        if (n < 0) throw new IllegalArgumentException("Repeated combining for monoids must have n >= 0")
-        else if (n == 0) empty
-        else a // combine(a, a) == a for a band
     }
 
   def fromOrdering[A](implicit ev: Ordering[A]): Order[A] =

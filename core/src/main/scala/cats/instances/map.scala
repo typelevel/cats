@@ -51,9 +51,8 @@ trait MapInstances extends cats.kernel.instances.MapInstances {
         fa.flatMap { case (k, a) => ff.get(k).map(f => (k, f(a))) }
 
       override def ap2[A, B, Z](f: Map[K, (A, B) => Z])(fa: Map[K, A], fb: Map[K, B]): Map[K, Z] =
-        f.flatMap {
-          case (k, f) =>
-            for { a <- fa.get(k); b <- fb.get(k) } yield (k, f(a, b))
+        f.flatMap { case (k, f) =>
+          for { a <- fa.get(k); b <- fb.get(k) } yield (k, f(a, b))
         }
 
       def flatMap[A, B](fa: Map[K, A])(f: (A) => Map[K, B]): Map[K, B] =
@@ -131,12 +130,11 @@ private[instances] trait MapInstancesBinCompat0 {
      * }}}
      */
     def compose[A, B, C](f: Map[B, C], g: Map[A, B]): Map[A, C] =
-      g.foldLeft(Map.empty[A, C]) {
-        case (acc, (key, value)) =>
-          f.get(value) match {
-            case Some(other) => acc + (key -> other)
-            case _           => acc
-          }
+      g.foldLeft(Map.empty[A, C]) { case (acc, (key, value)) =>
+        f.get(value) match {
+          case Some(other) => acc + (key -> other)
+          case _           => acc
+        }
       }
   }
 

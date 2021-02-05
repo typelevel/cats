@@ -1,7 +1,7 @@
 package cats.kernel
 
 import scala.annotation.tailrec
-import scala.collection.immutable.{BitSet, Queue, SortedMap, SortedSet}
+import scala.collection.immutable.{BitSet, Queue, Seq, SortedMap, SortedSet}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration.{Duration, FiniteDuration}
 import scala.{specialized => sp}
@@ -153,6 +153,22 @@ object Semigroup
       override def combine(x: A, y: A): A = cmb(x, y)
     }
 
+  /**
+   * Create a `Semigroup` instance that always returns the lefthand side.
+   */
+  @inline def first[A]: Semigroup[A] =
+    new Semigroup[A] {
+      override def combine(x: A, y: A): A = x
+    }
+
+  /**
+   * Create a `Semigroup` instance that always returns the righthand side.
+   */
+  @inline def last[A]: Semigroup[A] =
+    new Semigroup[A] {
+      override def combine(x: A, y: A): A = y
+    }
+
   implicit def catsKernelBoundedSemilatticeForBitSet: BoundedSemilattice[BitSet] =
     cats.kernel.instances.bitSet.catsKernelStdSemilatticeForBitSet
   implicit def catsKernelInstancesForUnit: BoundedSemilattice[Unit] with CommutativeGroup[Unit] =
@@ -255,6 +271,8 @@ private[kernel] trait MonoidInstances extends BandInstances {
     new FutureMonoid[A](A, ec)
   implicit def catsKernelMonoidForOption[A: Semigroup]: Monoid[Option[A]] =
     cats.kernel.instances.option.catsKernelStdMonoidForOption[A]
+  implicit def catsKernelMonoidForSeq[A]: Monoid[Seq[A]] =
+    cats.kernel.instances.seq.catsKernelStdMonoidForSeq[A]
 }
 
 private[kernel] trait BandInstances extends CommutativeSemigroupInstances {

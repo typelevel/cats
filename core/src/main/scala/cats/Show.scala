@@ -1,7 +1,7 @@
 package cats
 
 import java.util.UUID
-import scala.collection.immutable.{BitSet, Queue, SortedMap, SortedSet}
+import scala.collection.immutable.{BitSet, Queue, Seq, SortedMap, SortedSet}
 import scala.concurrent.duration.{Duration, FiniteDuration}
 import scala.util.Try
 
@@ -89,6 +89,7 @@ object Show extends ScalaVersionSpecificShowInstances with ShowInstances {
   implicit def catsShowForOption[A: Show]: Show[Option[A]] = cats.instances.option.catsStdShowForOption[A]
   implicit def catsShowForTry[A: Show]: Show[Try[A]] = cats.instances.try_.catsStdShowForTry[A]
   implicit def catsShowForList[A: Show]: Show[List[A]] = cats.instances.list.catsStdShowForList[A]
+  implicit def catsShowForSeq[A: Show]: Show[Seq[A]] = cats.instances.seq.catsStdShowForSeq[A]
   implicit def catsShowForVector[A: Show]: Show[Vector[A]] = cats.instances.vector.catsStdShowForVector[A]
   implicit def catsShowForQueue[A: Show]: Show[Queue[A]] = cats.instances.queue.catsStdShowForQueue[A]
   implicit def catsShowForEither[A: Show, B: Show]: Show[Either[A, B]] =

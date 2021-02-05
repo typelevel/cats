@@ -1,5 +1,7 @@
 
 ### ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) Community Announcements ![#f03c15](https://placehold.it/15/f03c15/000000?text=+)
+
+* **Oct 31 2020** [Cats 2.3.0-M1 is released](https://github.com/typelevel/cats/releases/tag/v2.3.0-M1) with Dotty supported
 * **Sept 3 2020** [Cats 2.2.0 is released](https://github.com/typelevel/cats/releases/tag/v2.2.0)
 * **Dec 18 2019** [Cats 2.1.0 is released](https://github.com/typelevel/cats/releases/tag/v2.1.0)
 * **Sep 9 2019** [Cats 2.0.0 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0)
@@ -10,11 +12,11 @@
 
 ![cats image](http://plastic-idolatry.com/erik/cats2.png)
 
-[![Build Status](https://api.travis-ci.org/typelevel/cats.svg)](https://travis-ci.org/typelevel/cats)
+![Continuous Integration](https://github.com/typelevel/cats/workflows/Continuous%20Integration/badge.svg)
 [![Financial Contributors on Open Collective](https://opencollective.com/typelevel/all/badge.svg?label=financial+contributors)](https://opencollective.com/typelevel) [![Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/typelevel/cats)
 [![codecov.io](http://codecov.io/github/typelevel/cats/coverage.svg?branch=master)](http://codecov.io/github/typelevel/cats?branch=master)
 [![Latest version](https://index.scala-lang.org/typelevel/cats/cats-core/latest.svg?color=orange&v=1)](https://index.scala-lang.org/typelevel/cats/cats-core)
-[![Scala.js](http://scala-js.org/assets/badges/scalajs-0.6.14.svg)](http://scala-js.org)
+[![Scala.js](http://scala-js.org/assets/badges/scalajs-1.2.0.svg)](http://scala-js.org)
 
 
 ### Overview
@@ -104,7 +106,7 @@ addSbtPlugin("org.lyranthe.sbt" % "partial-unification" % "1.1.2")
 And then create the Cats dependency, by adding the following to your `build.sbt`:
 
 ```scala
-libraryDependencies += "org.typelevel" %% "cats-core" % "2.1.1"
+libraryDependencies += "org.typelevel" %% "cats-core" % "2.3.0"
 ```
 
 This will pull in the cats-core module. If you require some other
@@ -143,88 +145,7 @@ Links:
 5. Glossary: [typelevel.org/cats/nomenclature.html](https://typelevel.org/cats/nomenclature.html)
 6. Resources for Learners: [typelevel.org/cats/resources_for_learners.html](https://typelevel.org/cats/resources_for_learners.html)
 7. FAQ: [typelevel.org/cats/faq.html](https://typelevel.org/cats/faq.html)
-
-
-### <a name="ecosystem" href="#ecosystem"></a>The Cats ecosystem
-
-By sharing the same set of type classes, instances and data types provided by Cats, projects can speak the same "Cats language", and integrate with each other with ease.
-
-#### General purpose libraries to support pure functional programming
-
- * [cats-retry](https://github.com/cb372/cats-retry): composable retry logic for Cats and Cats Effect
- * [droste](https://github.com/andyscott/droste): recursion schemes for Cats
- * [dsl-domains-cats](https://github.com/ThoughtWorksInc/dsl-domains-cats): The `!`-notation for creating Cats monadic expressions
- * [eff](https://github.com/atnos-org/eff): functional effects and effect handlers (alternative to monad transformers)
- * [Freestyle](https://github.com/frees-io/freestyle): pure functional framework for Free and Tagless Final apps & libs
- * [iota](https://github.com/frees-io/iota): Fast [co]product types with a clean syntax
- * [Monocle](https://github.com/julien-truffaut/Monocle): an optics library for Scala (and Scala.js) strongly inspired by Haskell Lens.
- * [newts](https://github.com/julien-truffaut/newts): Defines newtypes compatible with Cats type classes
- * [origami](https://github.com/atnos-org/origami): monadic folds
- * [refined](https://github.com/fthomas/refined): simple refinement types for Scala
- * [shims](https://github.com/djspiewak/shims): seamless interoperability for Cats and scalaz typeclasses and datatypes
-
-#### Libraries with more specific uses
-
- * [atto](https://github.com/tpolecat/atto): friendly little text parsers
- * [cats-scalacheck](https://github.com/ChristopherDavenport/cats-scalacheck): Cats typeclass instances for ScalaCheck
- * [cats-time](https://github.com/ChristopherDavenport/cats-time): cats typeclass instances for java time
- * [circe](https://github.com/circe/circe): pure functional JSON library
- * [Ciris](https://github.com/vlovgr/ciris): Lightweight, extensible, and validated configuration loading in Scala
- * [cormorant](https://github.com/ChristopherDavenport/cormorant): CSV handling library for FP
- * [decline](https://github.com/bkirwi/decline): A composable command-line parser
- * [doobie](https://github.com/tpolecat/doobie): a pure functional JDBC layer for Scala
- * [extruder](https://github.com/janstenpickle/extruder): Populate case classes from any data source
- * [fastparse-cats](https://github.com/johnynek/fastparse-cats): cats Monad and Alternative instances for [fastparse](https://github.com/lihaoyi/fastparse)
- * [Fetch](https://github.com/47deg/fetch): efficient data access to heterogeneous data sources
- * [finch](https://github.com/finagle/finch): Scala combinator library for building Finagle HTTP services
- * [Frameless](https://github.com/typelevel/frameless): Expressive types for Spark
- * [FS2](https://github.com/functional-streams-for-scala): compositional, streaming I/O library
- * [fuuid](https://github.com/ChristopherDavenport/fuuid): functional uuid's
- * [github4s](https://github.com/47deg/github4s): wrapper around the GitHub API
- * [grafter](https://github.com/zalando/grafter): dependency-injection library using the `Reader` pattern
- * [gsheets4s](https://github.com/benfradet/gsheets4s): wrapper around the Google Sheets API
- * [hammock](https://github.com/pepegar/hammock): Purely functional HTTP client
- * [henkan](https://github.com/kailuowang/henkan): Type safe conversion between case class instances with similar fields
- * [http4s](https://github.com/http4s/http4s): A minimal, idiomatic Scala interface for HTTP
- * [itto-csv](https://github.com/gekomad/itto-csv): pure functional library for working with CSV
- * [linebacker](https://github.com/ChristopherDavenport/linebacker): functional thread pool management
- * [log4cats](https://github.com/ChristopherDavenport/log4cats): functional logging
- * [monadic-html](https://github.com/OlivierBlanvillain/monadic-html): Tiny DOM binding library for Scala.js
- * [Monix](https://github.com/monix/monix): high-performance library for composing asynchronous and event-based programs
- * [Monix BIO](https://github.com/monix/monix-bio): `IO` alternative with typed errors
- * [morphling](https://github.com/danslapman/morphling): free applicative schemas & instance derivation
- * [natchez](https://github.com/tpolecat/natchez): an opentracing library, to use with Jaegger, Honeycomb, OpenCensus, and Lightstep.
- * [phony](https://github.com/alirezameskin/phony): Fake data generator
- * [pureconfig](https://github.com/pureconfig/pureconfig): A boilerplate-free library for loading configuration files
- * [rainier](https://github.com/stripe/rainier): Bayesian inference in Scala
- * [redis4cats](https://github.com/profunktor/redis4cats): a Redis client library.
- * [scala-forex](https://github.com/snowplow/scala-forex): exchange rate lookups
- * [scala-maxmind-ip-lookups](https://github.com/snowplow/scala-maxmind-iplookups): IP geolocation through [the Maxmind database](https://www.maxmind.com/en/home)
- * [scala-referer-parser](https://github.com/snowplow-referer-parser/scala-referer-parser): referer parsing
- * [scala-rl](https://github.com/sritchie/scala-rl): Functional, monadic reinforcement learning in Scala
- * [scala-weather](https://github.com/snowplow/scala-weather): weather lookups
- * [scanamo](https://github.com/guardian/scanamo): simpler DynamoDB access for Scala
- * [seals](https://github.com/durban/seals): tools for schema evolution and language-integrated schemata
- * [sup](https://github.com/kubukoz/sup): Composable, purely functional healthchecks in Scala
- * [skunk](https://github.com/tpolecat/skunk): a data access library for Scala + Postgres.
- * [tsec](https://github.com/jmcardon/tsec/): Typesafe, functional, general purpose cryptography and security library
- * [coulomb-cats](https://github.com/erikerlandson/coulomb/tree/develop/coulomb-cats): cats typeclass instances for coulomb Quantity
-
-Your project talks Cats too? [Submit a PR to add it here!](https://github.com/typelevel/cats/edit/master/README.md)
-
-*The full-size [Cats logo](https://typelevel.org/cats/img/cats-logo.png) is available for use for Cats related projects, contents, souvenirs, etc.*
-
-*We offer a [Cats Friendly Badge](https://typelevel.org/cats/img/cats-badge.svg) to let others know your project works with Cats!*
-
-![Cats Friendly Badge](https://typelevel.org/cats/img/cats-badge-normal.png) 
-
-Below are quick html and markdown snippets to use the badge in your own project.
-```html
-<a href="https://typelevel.org/cats/"><img src="https://typelevel.org/cats/img/cats-badge-tiny.png" alt="Cats friendly" /></a>
-```
-```markdown
-![Cats Friendly Badge](https://typelevel.org/cats/img/cats-badge-tiny.png) 
-```
+8. The Typelevel Ecosystem: [typelevel.org/cats/typelevelEcosystem.html](https://typelevel.org/cats/typelevelEcosystem.html)
 
 ### Community
 
@@ -295,6 +216,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Basefarm](https://basefarm.com/)
 - [buildo](https://buildo.io)
 - [Chartboost](https://www.chartboost.com/)
+- [Cleverbase](https://cleverbase.com/en/)
 - [Codacy](https://www.codacy.com/)
 - [Codecentric](https://codecentric.de)
 - [Colisweb](https://www.colisweb.com/)
@@ -313,6 +235,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [formation.ai](https://formation.ai)
 - [Free2Move](https://free2move.com)
 - [HelloSoda](https://hellosoda.com)
+- [HiFi](https://hi.fi)
 - [HomeAway](https://www.homeaway.com)
 - [Hootsuite Inc.](https://hootsuite.com/)
 - [iHeartRadio](https://iheart.com)
@@ -394,4 +317,4 @@ http://opensource.org/licenses/mit-license.php and also in the
 [COPYING](COPYING) file. The design is informed by many other
 projects, in particular [Scalaz](https://github.com/scalaz/scalaz).
 
-Copyright the maintainers, 2015-2019.
+Copyright the maintainers, 2015-2021.

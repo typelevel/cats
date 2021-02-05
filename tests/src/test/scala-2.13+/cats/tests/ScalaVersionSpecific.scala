@@ -10,6 +10,7 @@ import cats.syntax.parallel._
 import cats.syntax.traverse._
 import cats.syntax.eq._
 import org.scalacheck.Prop._
+import cats.catsInstancesForId
 
 trait ScalaVersionSpecificFoldableSuite { self: FoldableSuiteAdditional =>
   test("Foldable[LazyList].foldM stack safety") {
@@ -104,12 +105,12 @@ trait ScalaVersionSpecificParallelSuite { self: ParallelSuite =>
     forAll { (as: LazyList[Int], bs: LazyList[Int], cs: LazyList[Int]) =>
       val zipped = as
         .zip(bs)
-        .map {
-          case (a, b) => a + b
+        .map { case (a, b) =>
+          a + b
         }
         .zip(cs)
-        .map {
-          case (a, b) => a + b
+        .map { case (a, b) =>
+          a + b
         }
 
       assert((as, bs, cs).parMapN(_ + _ + _) === zipped)
@@ -164,3 +165,4 @@ trait ScalaVersionSpecificTraverseSuite { self: TraverseSuiteAdditional =>
 
 class TraverseLazyListSuite extends TraverseSuite[LazyList]("LazyList")
 class TraverseLazyListSuiteUnderlying extends TraverseSuite.Underlying[LazyList]("LazyList")
+class TraverseFilterLazyListSuite extends TraverseFilterSuite[LazyList]("LazyList")

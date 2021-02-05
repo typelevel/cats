@@ -9,7 +9,7 @@ import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.laws.discipline.{DeferTests, MonoidKTests, SemigroupKTests}
-import cats.implicits._
+import cats.syntax.all._
 import cats.platform.Platform
 import cats.tests.Helpers.CSemi
 import org.scalacheck.Prop._

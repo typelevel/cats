@@ -13,7 +13,7 @@ import scala.annotation.implicitNotFound
     }
 }
 
-object EmptyK {
+object EmptyK extends EmptyKInstances0 {
 
   /* ======================================================================== */
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
@@ -58,4 +58,8 @@ object EmptyK {
   /* END OF SIMULACRUM-MANAGED CODE                                           */
   /* ======================================================================== */
 
+}
+
+private[alleycats] trait EmptyKInstances0 {
+  implicit def alleycatsEmptyKForMap[K]: EmptyK[Map[K, *]] = alleycats.std.map.alletcatsStdMapEmptyK[K]
 }
