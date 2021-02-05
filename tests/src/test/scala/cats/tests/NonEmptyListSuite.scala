@@ -294,6 +294,14 @@ class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonE
     }
   }
 
+  test("NonEmptyList#take is consistent with List#take") {
+    forAll { (n: Int, head: Int, tail: List[Int]) =>
+      val list = head :: tail
+      val nonEmptyList = NonEmptyList.of(head, tail: _*)
+      assert(nonEmptyList.take(n) === list.take(n))
+    }
+  }
+
   test("NonEmptyList#size and length is consistent with List#size") {
     forAll { (nel: NonEmptyList[Int]) =>
       assert(nel.size === (nel.toList.size))
