@@ -157,6 +157,8 @@ class AlgebraInvariantSuite extends CatsSuite with ScalaVersionSpecificAlgebraIn
   implicit private val arbCommutativeGroupInt: Arbitrary[CommutativeGroup[Int]] =
     Arbitrary(genCommutativeGroupInt)
 
+  implicit private val arbNumericMiniInt: Arbitrary[Numeric[MiniInt]] = Arbitrary(Gen.const(numericForMiniInt))
+
   checkAll("InvariantMonoidal[Semigroup]", SemigroupTests[Int](InvariantMonoidal[Semigroup].point(0)).semigroup)
   checkAll("InvariantMonoidal[CommutativeSemigroup]",
            CommutativeSemigroupTests[Int](InvariantMonoidal[CommutativeSemigroup].point(0)).commutativeSemigroup

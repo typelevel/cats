@@ -12,7 +12,6 @@ import cats.syntax.eq._
 import org.scalacheck.Prop._
 import cats.catsInstancesForId
 import cats.kernel.{Eq, Order}
-import org.scalacheck.{Arbitrary, Gen}
 import cats.laws.discipline.eq._
 
 trait ScalaVersionSpecificFoldableSuite { self: FoldableSuiteAdditional =>
@@ -167,27 +166,26 @@ trait ScalaVersionSpecificTraverseSuite { self: TraverseSuiteAdditional =>
 }
 
 trait ScalaVersionSpecificAlgebraInvariantSuite {
-  implicit protected val arbNumericMiniInt: Arbitrary[Numeric[MiniInt]] = Arbitrary {
-    Gen.const {
-      new Numeric[MiniInt] {
-        def compare(x: MiniInt, y: MiniInt): Int = Order[MiniInt].compare(x, y)
-        def plus(x: MiniInt, y: MiniInt): MiniInt = x + y
-        def minus(x: MiniInt, y: MiniInt): MiniInt = x + (-y)
-        def times(x: MiniInt, y: MiniInt): MiniInt = x * y
-        def negate(x: MiniInt): MiniInt = -x
-        def fromInt(x: Int): MiniInt = MiniInt.unsafeFromInt(x)
-        def toInt(x: MiniInt): Int = x.toInt
-        def toLong(x: MiniInt): Long = x.toInt.toLong
-        def toFloat(x: MiniInt): Float = x.toInt.toFloat
-        def toDouble(x: MiniInt): Double = x.toInt.toDouble
 
-        def parseString(str: String): Option[MiniInt] = Numeric[Int].parseString(str).flatMap(MiniInt.fromInt)
-      }
-    }
+  protected val numericForMiniInt: Integral[MiniInt] = new Integral[MiniInt] {
+    def compare(x: MiniInt, y: MiniInt): Int = Order[MiniInt].compare(x, y)
+    def plus(x: MiniInt, y: MiniInt): MiniInt = x + y
+    def minus(x: MiniInt, y: MiniInt): MiniInt = x + (-y)
+    def times(x: MiniInt, y: MiniInt): MiniInt = x * y
+    def negate(x: MiniInt): MiniInt = -x
+    def fromInt(x: Int): MiniInt = MiniInt.unsafeFromInt(x)
+    def toInt(x: MiniInt): Int = x.toInt
+    def toLong(x: MiniInt): Long = x.toInt.toLong
+    def toFloat(x: MiniInt): Float = x.toInt.toFloat
+    def toDouble(x: MiniInt): Double = x.toInt.toDouble
+    def quot(x: MiniInt, y: MiniInt): MiniInt = MiniInt.unsafeFromInt(x.toInt / y.toInt)
+    def rem(x: MiniInt, y: MiniInt): MiniInt = MiniInt.unsafeFromInt(x.toInt % y.toInt)
+    def parseString(str: String): Option[MiniInt] = Integral[Int].parseString(str).flatMap(MiniInt.fromInt)
   }
 
   implicit protected def eqNumeric[A: Eq: ExhaustiveCheck]: Eq[Numeric[A]] = Eq.by { numeric =>
     val fromInt = numeric.fromInt _
+    val parseString = numeric.parseString _
 
     (
       numeric.compare _,
@@ -199,8 +197,8 @@ trait ScalaVersionSpecificAlgebraInvariantSuite {
       numeric.toInt _,
       numeric.toLong _,
       numeric.toFloat _,
-      numeric.toDouble _
-//      numeric.parseString _,
+      numeric.toDouble _,
+      parseString.compose((_: MiniInt).toString),
     )
   }
 }
