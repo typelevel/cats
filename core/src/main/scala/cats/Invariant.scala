@@ -154,6 +154,8 @@ object Invariant extends ScalaVersionSpecificInvariantInstances with InvariantIn
     cats.instances.invariant.catsInvariantMonoidalCommutativeSemigroup
   implicit def catsInvariantSemigroupalForMonoid: InvariantSemigroupal[Monoid] =
     cats.instances.invariant.catsSemigroupalForMonoid
+  implicit def catsInvariantForNumeric: Invariant[Numeric] =
+    cats.instances.invariant.catsInvariantForNumeric
 
   implicit val catsInvariantMonoid: Invariant[Monoid] = new Invariant[Monoid] {
 

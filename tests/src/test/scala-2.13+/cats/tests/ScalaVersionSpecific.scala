@@ -2,7 +2,7 @@ package cats.tests
 
 import cats.{Eval, Foldable, Id, Now}
 import cats.data.NonEmptyLazyList
-import cats.laws.discipline.{NonEmptyParallelTests, ParallelTests}
+import cats.laws.discipline.{ExhaustiveCheck, MiniInt, NonEmptyParallelTests, ParallelTests}
 import cats.laws.discipline.arbitrary._
 import cats.syntax.either._
 import cats.syntax.foldable._
@@ -11,6 +11,9 @@ import cats.syntax.traverse._
 import cats.syntax.eq._
 import org.scalacheck.Prop._
 import cats.catsInstancesForId
+import cats.kernel.{Eq, Order}
+import org.scalacheck.{Arbitrary, Gen}
+import cats.laws.discipline.eq._
 
 trait ScalaVersionSpecificFoldableSuite { self: FoldableSuiteAdditional =>
   test("Foldable[LazyList].foldM stack safety") {
@@ -160,6 +163,45 @@ trait ScalaVersionSpecificRegressionSuite { self: RegressionSuite =>
 trait ScalaVersionSpecificTraverseSuite { self: TraverseSuiteAdditional =>
   test("Traverse[LazyList].zipWithIndex stack safety") {
     checkZipWithIndexedStackSafety[LazyList](_.to(LazyList))
+  }
+}
+
+trait ScalaVersionSpecificAlgebraInvariantSuite {
+  implicit protected val arbNumericMiniInt: Arbitrary[Numeric[MiniInt]] = Arbitrary {
+    Gen.const {
+      new Numeric[MiniInt] {
+        def compare(x: MiniInt, y: MiniInt): Int = Order[MiniInt].compare(x, y)
+        def plus(x: MiniInt, y: MiniInt): MiniInt = x + y
+        def minus(x: MiniInt, y: MiniInt): MiniInt = x + (-y)
+        def times(x: MiniInt, y: MiniInt): MiniInt = x * y
+        def negate(x: MiniInt): MiniInt = -x
+        def fromInt(x: Int): MiniInt = MiniInt.unsafeFromInt(x)
+        def toInt(x: MiniInt): Int = x.toInt
+        def toLong(x: MiniInt): Long = x.toInt.toLong
+        def toFloat(x: MiniInt): Float = x.toInt.toFloat
+        def toDouble(x: MiniInt): Double = x.toInt.toDouble
+
+        def parseString(str: String): Option[MiniInt] = Numeric[Int].parseString(str).flatMap(MiniInt.fromInt)
+      }
+    }
+  }
+
+  implicit protected def eqNumeric[A: Eq: ExhaustiveCheck]: Eq[Numeric[A]] = Eq.by { numeric =>
+    val fromInt = numeric.fromInt _
+
+    (
+      numeric.compare _,
+      numeric.plus _,
+      numeric.minus _,
+      numeric.times _,
+      numeric.negate _,
+      fromInt.compose((_: MiniInt).toInt),
+      numeric.toInt _,
+      numeric.toLong _,
+      numeric.toFloat _,
+      numeric.toDouble _
+//      numeric.parseString _,
+    )
   }
 }
 
