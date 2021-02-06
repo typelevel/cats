@@ -198,7 +198,7 @@ trait ScalaVersionSpecificAlgebraInvariantSuite {
       numeric.toLong _,
       numeric.toFloat _,
       numeric.toDouble _,
-      parseString.compose((_: MiniInt).toString),
+      parseString.compose((_: MiniInt).toString)
     )
   }
 }
