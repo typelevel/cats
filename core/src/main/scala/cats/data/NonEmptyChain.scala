@@ -48,6 +48,9 @@ private[data] object NonEmptyChainImpl extends NonEmptyChainInstances with Scala
 
   def one[A](a: A): NonEmptyChain[A] = create(Chain.one(a))
 
+  def of[A](head: A, tail: A*): NonEmptyChain[A] =
+    fromChainPrepend(head, Chain.fromSeq(tail))
+
   implicit def catsNonEmptyChainOps[A](value: NonEmptyChain[A]): NonEmptyChainOps[A] =
     new NonEmptyChainOps(value)
 }
