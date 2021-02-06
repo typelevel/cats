@@ -52,7 +52,7 @@ trait InvariantMonoidalInstances {
     }
 }
 
-private[instances] trait InvariantInstances {
+trait InvariantInstances {
   implicit val catsInvariantForNumeric: Invariant[Numeric] = new Invariant[Numeric] {
     def imap[A, B](fa: Numeric[A])(f: A => B)(g: B => A): Numeric[B] =
       new ScalaVersionSpecificNumeric[A, B](fa)(f)(g) {}
