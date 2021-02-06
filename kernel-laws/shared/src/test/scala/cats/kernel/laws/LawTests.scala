@@ -107,30 +107,11 @@ object KernelCheck {
       if (d == Duration.Inf) 3896691548866406746L
       else if (d == Duration.MinusInf) 1844151880988859955L
       else if (d == Duration.Undefined) -7917359255778781894L
-      else
-        d.length * (d.unit match {
-          case DAYS         => -6307593037248227856L
-          case HOURS        => -3527447467459552709L
-          case MINUTES      => 5955657079535371609L
-          case SECONDS      => 5314272869665647192L
-          case MILLISECONDS => -2025740217814855607L
-          case MICROSECONDS => -2965853209268633779L
-          case NANOSECONDS  => 6128745701389500153L
-        })
+      else d.toNanos
     }
 
   implicit val cogenFiniteDuration: Cogen[FiniteDuration] =
-    Cogen[Long].contramap { d =>
-      d.length * (d.unit match {
-        case DAYS         => -6307593037248227856L
-        case HOURS        => -3527447467459552709L
-        case MINUTES      => 5955657079535371609L
-        case SECONDS      => 5314272869665647192L
-        case MILLISECONDS => -2025740217814855607L
-        case MICROSECONDS => -2965853209268633779L
-        case NANOSECONDS  => 6128745701389500153L
-      })
-    }
+    Cogen[Long].contramap(_.toNanos)
 }
 
 class TestsConfig extends ScalaCheckSuite {
@@ -521,4 +502,25 @@ class Tests extends TestsConfig with DisciplineSuite {
     implicit def hasCogen[A: Cogen]: Cogen[HasHash[A]] =
       Cogen[A].contramap(_.a)
   }
+}
+
+final class LongRunningTests extends ScalaCheckSuite with DisciplineSuite {
+  // This increases the number of successes to trigger the problem
+  // described here: https://github.com/typelevel/cats/issues/3734
+  // With this number of positive cases the problem is systematic
+  // or at least it happens very often.
+  final val PropMaxSize = if (Platform.isJs) 10 else 100
+  final val PropMinSuccessful = if (Platform.isJs) 10 else 400 * 1000
+  final val PropWorkers = if (Platform.isJvm) 2 else 1
+
+  implicit override def scalaCheckTestParameters: Parameters =
+    Parameters.default
+      .withMinSuccessfulTests(PropMinSuccessful)
+      .withMaxSize(PropMaxSize)
+      .withWorkers(PropWorkers)
+
+  import KernelCheck._
+
+  checkAll("Deeper test of Eq[Duration]", EqTests[Duration].eqv)
+  checkAll("Deeper test of Eq[FiniteDuration]", EqTests[FiniteDuration].eqv)
 }
