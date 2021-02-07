@@ -4,7 +4,7 @@ import cats.{Align, Alternative, CoflatMap, Monad, Show, Traverse, TraverseFilte
 import cats.data.Chain
 import cats.data.Chain.==:
 import cats.data.Chain.`:==`
-import cats.kernel.{Eq, Hash, Monoid, Order, PartialOrder}
+import cats.kernel.{Eq, Hash, Monoid, Order, PartialOrder, Semigroup}
 import cats.kernel.laws.discipline.{EqTests, HashTests, MonoidTests, OrderTests, PartialOrderTests}
 import cats.laws.discipline.{
   AlignTests,
@@ -166,8 +166,34 @@ class ChainSuite extends CatsSuite {
   }
 
   test("groupBy consistent with List#groupBy") {
-    forAll { (cs: Chain[String], f: String => Int) =>
-      assert(cs.groupBy(f).map { case (k, v) => (k, v.toList) }.toMap === (cs.toList.groupBy(f).toMap))
+    forAll { (cs: Chain[String], key: String => Int) =>
+      val result = cs.groupBy(key).map { case (k, v) => (k, v.toList) }.toMap
+      val expected = cs.toList.groupBy(key).toMap
+      assert(result === expected)
+    }
+  }
+
+  test("groupMap consistent with List#groupBy + Map#mapValues") {
+    forAll { (cs: Chain[String], key: String => String, f: String => Int) =>
+      val result = cs.groupMap(key)(f).map { case (k, v) => (k, v.toList) }.toMap
+      val expected = cs.toList.groupBy(key).map { case (k, v) => (k, v.map(f)) }
+      assert(result === expected)
+    }
+  }
+
+  test("groupMapReduce consistent with List#groupBy + Map#mapValues + List#reduce") {
+    forAll { (cs: Chain[String], key: String => String, f: String => Int) =>
+      val result = cs.groupMapReduce(key)(f).toMap
+      val expected = cs.toList.groupBy(key).map { case (k, v) => (k, v.map(f).reduce(Semigroup[Int].combine)) }
+      assert(result === expected)
+    }
+  }
+
+  test("groupMapReduceWith consistent with List#groupBy + Map#mapValues + List#reduce") {
+    forAll { (cs: Chain[String], key: String => String, f: String => Int, combine: (Int, Int) => Int) =>
+      val result = cs.groupMapReduceWith(key)(f)(combine).toMap
+      val expected = cs.toList.groupBy(key).map { case (k, v) => (k, v.map(f).reduce(combine)) }
+      assert(result === expected)
     }
   }
 

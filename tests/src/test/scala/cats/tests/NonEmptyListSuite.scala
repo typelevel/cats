@@ -322,8 +322,34 @@ class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonE
   }
 
   test("NonEmptyList#groupBy is consistent with List#groupBy") {
-    forAll { (nel: NonEmptyList[Int], f: Int => Int) =>
-      assert((nel.groupBy(f).map { case (k, v) => (k, v.toList) }: Map[Int, List[Int]]) === (nel.toList.groupBy(f)))
+    forAll { (nel: NonEmptyList[Int], key: Int => Int) =>
+      val result = nel.groupBy(key).map { case (k, v) => (k, v.toList) }.toMap
+      val expected = nel.toList.groupBy(key)
+      assert(result === expected)
+    }
+  }
+
+  test("NonEmptyList#groupMap is consistent with List#groupBy + Map#mapValues") {
+    forAll { (nel: NonEmptyList[Int], key: Int => Int, f: Int => String) =>
+      val result = nel.groupMap(key)(f).map { case (k, v) => (k, v.toList) }.toMap
+      val expected = nel.toList.groupBy(key).map { case (k, v) => (k, v.map(f)) }
+      assert(result === expected)
+    }
+  }
+
+  test("NonEmptyList#groupMapReduce is consistent with List#groupBy + Map#mapValues + List#reduce") {
+    forAll { (nel: NonEmptyList[Int], key: Int => Int, f: Int => String) =>
+      val result = nel.groupMapReduce(key)(f).toMap
+      val expected = nel.toList.groupBy(key).map { case (k, v) => (k, v.map(f).reduce(Semigroup[String].combine)) }
+      assert(result === expected)
+    }
+  }
+
+  test("NonEmptyList#groupMapReduceWith is consistent with List#groupBy + Map#mapValues + List#reduce") {
+    forAll { (nel: NonEmptyList[Int], key: Int => Int, f: Int => String, combine: (String, String) => String) =>
+      val result = nel.groupMapReduceWith(key)(f)(combine).toMap
+      val expected = nel.toList.groupBy(key).map { case (k, v) => (k, v.map(f).reduce(combine)) }
+      assert(result === expected)
     }
   }
 

@@ -357,21 +357,110 @@ sealed abstract class Chain[+A] {
   /**
    * Groups elements inside this `Chain` according to the `Order`
    * of the keys produced by the given mapping function.
+   *
+   * {{{
+   * scala> import scala.collection.immutable.SortedMap
+   * scala> import cats.data.{Chain, NonEmptyChain}
+   * scala> import cats.implicits._
+   * scala> val chain = Chain(12, -2, 3, -5)
+   * scala> val expectedResult = SortedMap(false -> NonEmptyChain(-2, -5), true -> NonEmptyChain(12, 3))
+   * scala> val result = chain.groupBy(_ >= 0)
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   * }}}
    */
-  final def groupBy[B](f: A => B)(implicit B: Order[B]): SortedMap[B, NonEmptyChain[A]] = {
-    implicit val ordering: Ordering[B] = B.toOrdering
-    var m = SortedMap.empty[B, NonEmptyChain[A]]
-    val iter = iterator
+  final def groupBy[B](f: A => B)(implicit B: Order[B]): SortedMap[B, NonEmptyChain[A]] =
+    groupMap(key = f)(identity)
 
-    while (iter.hasNext) {
-      val elem = iter.next()
-      val k = f(elem)
+  /**
+   * Groups elements inside this `Chain` according to the `Order`
+   * of the keys produced by the given key function.
+   * And each element in a group is transformed into a value of type B
+   * using the mapping function.
+   *
+   * {{{
+   * scala> import scala.collection.immutable.SortedMap
+   * scala> import cats.data.{Chain, NonEmptyChain}
+   * scala> import cats.implicits._
+   * scala> val chain = Chain(12, -2, 3, -5)
+   * scala> val expectedResult = SortedMap(false -> NonEmptyChain("-2", "-5"), true -> NonEmptyChain("12", "3"))
+   * scala> val result = chain.groupMap(_ >= 0)(_.toString)
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  final def groupMap[K, B](key: A => K)(f: A => B)(implicit K: Order[K]): SortedMap[K, NonEmptyChain[B]] = {
+    implicit val ordering: Ordering[K] = K.toOrdering
+    var m = SortedMap.empty[K, NonEmptyChain[B]]
+
+    for (elem <- iterator) {
+      val k = key(elem)
 
       m.get(k) match {
-        case None      => m += ((k, NonEmptyChain.one(elem))); ()
-        case Some(cat) => m = m.updated(k, cat :+ elem)
+        case Some(cat) => m = m.updated(key = k, value = cat :+ f(elem))
+        case None      => m += (k -> NonEmptyChain.one(f(elem)))
       }
     }
+
+    m
+  }
+
+  /**
+   * Groups elements inside this `Chain` according to the `Order`
+   * of the keys produced by the given key function.
+   * Then each element in a group is transformed into a value of type B
+   * using the mapping function.
+   * And finally they are all reduced into a single value
+   * using their `Semigroup`
+   *
+   * {{{
+   * scala> import scala.collection.immutable.SortedMap
+   * scala> import cats.data.Chain
+   * scala> import cats.implicits._
+   * scala> val chain = Chain("Hello", "World", "Goodbye", "World")
+   * scala> val expectedResult = SortedMap("goodbye" -> 1, "hello" -> 1, "world" -> 2)
+   * scala> val result = chain.groupMapReduce(_.trim.toLowerCase)(_ => 1)
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  final def groupMapReduce[K, B](key: A => K)(f: A => B)(implicit K: Order[K], S: Semigroup[B]): SortedMap[K, B] =
+    groupMapReduceWith(key)(f)(S.combine)
+
+  /**
+   * Groups elements inside this `Chain` according to the `Order`
+   * of the keys produced by the given key function.
+   * Then each element in a group is transformed into a value of type B
+   * using the mapping function.
+   * And finally they are all reduced into a single value
+   * using the provided combine function.
+   *
+   * {{{
+   * scala> import scala.collection.immutable.SortedMap
+   * scala> import cats.data.Chain
+   * scala> import cats.implicits._
+   * scala> val chain = Chain("Hello", "World", "Goodbye", "World")
+   * scala> val expectedResult = SortedMap("goodbye" -> 1, "hello" -> 1, "world" -> 2)
+   * scala> val result = chain.groupMapReduceWith(_.trim.toLowerCase)(_ => 1)(_ + _)
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  final def groupMapReduceWith[K, B](key: A => K)(f: A => B)(combine: (B, B) => B)(implicit
+    K: Order[K]
+  ): SortedMap[K, B] = {
+    implicit val ordering: Ordering[K] = K.toOrdering
+    var m = SortedMap.empty[K, B]
+
+    for (elem <- iterator) {
+      val k = key(elem)
+
+      m.get(k) match {
+        case Some(b) => m = m.updated(key = k, value = combine(b, f(elem)))
+        case None    => m += (k -> f(elem))
+      }
+    }
+
     m
   }
 

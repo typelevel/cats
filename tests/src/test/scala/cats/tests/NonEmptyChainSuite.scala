@@ -141,9 +141,35 @@ class NonEmptyChainSuite extends NonEmptyCollectionSuite[Chain, NonEmptyChain, N
     }
   }
 
-  test("groupBy consistent with List#groupBy") {
-    forAll { (cs: NonEmptyChain[String], f: String => Int) =>
-      assert(cs.groupBy(f).map(_.toNonEmptyList) === (cs.toNonEmptyList.groupByNem(f)))
+  test("groupBy consistent with NonEmptyList#groupByNem") {
+    forAll { (cs: NonEmptyChain[String], key: String => Int) =>
+      val result = cs.groupBy(key).map(_.toNonEmptyList)
+      val expected = cs.toNonEmptyList.groupByNem(key)
+      assert(result === expected)
+    }
+  }
+
+  test("groupMap consistent with NonEmptyList#groupMapNem") {
+    forAll { (cs: NonEmptyChain[String], key: String => String, f: String => Int) =>
+      val result = cs.groupMap(key)(f).map(_.toNonEmptyList)
+      val expected = cs.toNonEmptyList.groupMapNem(key)(f)
+      assert(result === expected)
+    }
+  }
+
+  test("groupMapReduce consistent with NonEmptyList#groupMapReduceNem") {
+    forAll { (cs: NonEmptyChain[String], key: String => String, f: String => Int) =>
+      val result = cs.groupMapReduce(key)(f)
+      val expected = cs.toNonEmptyList.groupMapReduceNem(key)(f)
+      assert(result === expected)
+    }
+  }
+
+  test("groupMapReduceWith consistent with NonEmptyList#groupMapReduceWithNem") {
+    forAll { (cs: NonEmptyChain[String], key: String => String, f: String => Int, combine: (Int, Int) => Int) =>
+      val result = cs.groupMapReduceWith(key)(f)(combine)
+      val expected = cs.toNonEmptyList.groupMapReduceWithNem(key)(f)(combine)
+      assert(result === expected)
     }
   }
 
@@ -174,6 +200,12 @@ class NonEmptyChainSuite extends NonEmptyCollectionSuite[Chain, NonEmptyChain, N
   test("last") {
     forAll { (ci: NonEmptyChain[Int]) =>
       assert(ci.last === (ci.toList.last))
+    }
+  }
+
+  test("of") {
+    forAll { (head: Int, tail: Seq[Int]) =>
+      assert(NonEmptyChain.of(head, tail: _*).toList === (head :: tail.toList))
     }
   }
 }
