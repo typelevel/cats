@@ -43,7 +43,7 @@ import scala.annotation.implicitNotFound
 object Bifoldable extends cats.instances.NTupleBitraverseInstances {
   implicit def catsBitraverseForEither: Bitraverse[Either] = cats.instances.either.catsStdBitraverseForEither
 
-  @deprecated("Use catsStdBitraverseForTuple2 in cats.instances.NTupleBitraverseInstances", "2.3.1")
+  @deprecated("Use catsStdBitraverseForTuple2 in cats.instances.NTupleBitraverseInstances", "2.4.0")
   def catsBitraverseForTuple2: Bitraverse[Tuple2] = cats.instances.tuple.catsStdBitraverseForTuple2
 
   /* ======================================================================== */

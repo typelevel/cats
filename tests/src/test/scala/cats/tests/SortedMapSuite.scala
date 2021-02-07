@@ -69,7 +69,7 @@ class SortedMapSuite extends CatsSuite {
     val items = SortedMap((0 until 100000).map { i => (i.toString, i) }: _*)
     val sumAll = Traverse[SortedMap[String, *]]
       .traverse(items) { i => () => i }
-      .apply
+      .apply()
       .values
       .sum
 

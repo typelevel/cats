@@ -71,7 +71,7 @@ class VectorSuite extends CatsSuite {
     val vec = (0 until 100000).toVector
     val sumAll = Traverse[Vector]
       .traverse(vec) { i => () => i }
-      .apply
+      .apply()
       .sum
 
     assert(sumAll == vec.sum)

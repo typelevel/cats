@@ -62,7 +62,7 @@ import scala.annotation.implicitNotFound
 object Bifunctor extends cats.instances.NTupleBifunctorInstances {
   implicit def catsBifunctorForEither: Bifunctor[Either] = cats.instances.either.catsStdBitraverseForEither
 
-  @deprecated("Use catsStdBitraverseForTuple2 in cats.instances.NTupleBitraverseInstances", "2.3.1")
+  @deprecated("Use catsStdBitraverseForTuple2 in cats.instances.NTupleBitraverseInstances", "2.4.0")
   def catsBifunctorForTuple2: Bifunctor[Tuple2] = cats.instances.tuple.catsStdBitraverseForTuple2
 
   /* ======================================================================== */

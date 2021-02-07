@@ -100,7 +100,7 @@ object Show extends ScalaVersionSpecificShowInstances with ShowInstances {
   implicit def catsShowForSortedMap[K: Show, V: Show]: Show[SortedMap[K, V]] =
     cats.instances.sortedMap.catsStdShowForSortedMap[K, V]
 
-  @deprecated("Use catsStdShowForTuple2 in cats.instances.NTupleShowInstances", "2.3.1")
+  @deprecated("Use catsStdShowForTuple2 in cats.instances.NTupleShowInstances", "2.4.0")
   def catsShowForTuple2[A: Show, B: Show]: Show[(A, B)] = cats.instances.tuple.catsStdShowForTuple2[A, B]
 }
 

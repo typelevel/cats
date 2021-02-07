@@ -237,7 +237,7 @@ object Invariant extends ScalaVersionSpecificInvariantInstances with InvariantIn
 
   }
 
-  @deprecated("Use catsStdInstancesForTuple2 in cats.instances.NTupleMonadInstances", "2.3.1")
+  @deprecated("Use catsStdInstancesForTuple2 in cats.instances.NTupleMonadInstances", "2.4.0")
   def catsComonadForTuple2[A]: Comonad[(A, *)] = cats.instances.tuple.catsStdInstancesForTuple2[A]
 
   /* ======================================================================== */
@@ -293,7 +293,7 @@ private[cats] trait InvariantInstances0 extends InvariantInstances1 {
   implicit def catsDistributiveForFunction1[I]: Distributive[I => *] =
     cats.instances.function.catsStdDistributiveForFunction1[I]
 
-  @deprecated("Use catsStdCommutativeMonadForTuple2 in cats.instances.NTupleMonadInstances", "2.3.1")
+  @deprecated("Use catsStdCommutativeMonadForTuple2 in cats.instances.NTupleMonadInstances", "2.4.0")
   def catsCommutativeMonadForTuple2[X](implicit X: CommutativeMonoid[X]): CommutativeMonad[(X, *)] =
     cats.instances.tuple.catsStdCommutativeMonadForTuple2[X]
 }
@@ -310,19 +310,19 @@ private[cats] trait InvariantInstances2 extends cats.instances.NTupleMonadInstan
 }
 
 private[cats] trait TupleInstances0 extends TupleInstances1 {
-  @deprecated("Use catsStdCommutativeFlatMapForTuple2 in cats.instances.NTupleMonadInstances", "2.3.1")
+  @deprecated("Use catsStdCommutativeFlatMapForTuple2 in cats.instances.NTupleMonadInstances", "2.4.0")
   def catsCommutativeFlatMapForTuple2[X](implicit X: CommutativeSemigroup[X]): CommutativeFlatMap[(X, *)] =
     cats.instances.tuple.catsStdCommutativeFlatMapForTuple2[X]
 }
 
 private trait TupleInstances1 extends TupleInstances2 {
-  @deprecated("Use catsStdMonadForTuple2 in cats.instances.NTupleMonadInstances", "2.3.1")
+  @deprecated("Use catsStdMonadForTuple2 in cats.instances.NTupleMonadInstances", "2.4.0")
   def catsMonadForTuple2[X](implicit X: Monoid[X]): Monad[(X, *)] =
     cats.instances.tuple.catsStdMonadForTuple2[X]
 }
 
 private trait TupleInstances2 {
-  @deprecated("Use catsStdFlatMapForTuple2 on cats.instances.NTupleMonadInstances", "2.3.1")
+  @deprecated("Use catsStdFlatMapForTuple2 on cats.instances.NTupleMonadInstances", "2.4.0")
   def catsFlatMapForTuple2[X](implicit X: Semigroup[X]): FlatMap[(X, *)] =
     cats.instances.tuple.catsStdFlatMapForTuple2[X]
 }

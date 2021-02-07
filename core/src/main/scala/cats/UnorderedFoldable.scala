@@ -115,7 +115,7 @@ object UnorderedFoldable
   implicit def catsTraverseForEither[A]: Traverse[Either[A, *]] = cats.instances.either.catsStdInstancesForEither[A]
   implicit def catsTraverseForTry: Traverse[Try] = cats.instances.try_.catsStdInstancesForTry
 
-  @deprecated("Use catsStdInstancesForTuple2 in cats.instances.NTupleMonadInstances", "2.3.1")
+  @deprecated("Use catsStdInstancesForTuple2 in cats.instances.NTupleMonadInstances", "2.4.0")
   def catsInstancesForTuple[A]: Traverse[(A, *)] with Reducible[(A, *)] =
     cats.instances.tuple.catsStdInstancesForTuple2[A]
 

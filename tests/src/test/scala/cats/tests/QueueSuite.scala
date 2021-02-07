@@ -46,7 +46,7 @@ class QueueSuite extends CatsSuite {
     val queue = (0 until 100000).foldLeft(Queue.empty[Int])(_ :+ _)
     val sumAll = Traverse[Queue]
       .traverse(queue) { i => () => i }
-      .apply
+      .apply()
       .iterator
       .sum
 
