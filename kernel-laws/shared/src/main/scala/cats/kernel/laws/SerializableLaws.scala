@@ -18,14 +18,13 @@ object SerializableLaws {
   // This part is a bit tricky. Basically, we only want to test
   // serializability on the JVM.
   //
-  // `Platform.isJs` is a constant expression, so we can rely on
+  // `Platform.isJvm` is a constant expression, so we can rely on
   // scalac to prune away the "other" branch. Thus, when Scala.js
   // looks at this method it won't "see" the branch which was removed,
   // and will avoid an error trying to support java.io.*.
 
   def serializable[A](a: A): Prop =
-    if (Platform.isJs) Prop(_ => Result(status = Proof))
-    else
+    if (Platform.isJvm) {
       Prop { _ =>
         import java.io.{ByteArrayInputStream, ByteArrayOutputStream, ObjectInputStream, ObjectOutputStream}
 
@@ -48,4 +47,5 @@ object SerializableLaws {
           if (ois != null) ois.close() // scalastyle:ignore null
         }
       }
+    } else Prop(_ => Result(status = Proof))
 }

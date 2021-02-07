@@ -35,7 +35,7 @@ val GraalVM8 = "graalvm-ce-java8@20.2.0"
 
 ThisBuild / githubWorkflowJavaVersions := Seq(PrimaryJava, LTSJava, LatestJava, GraalVM8)
 
-val Scala212 = "2.12.12"
+val Scala212 = "2.12.13"
 val Scala213 = "2.13.4"
 val DottyOld = "3.0.0-M2"
 val DottyNew = "3.0.0-M3"
@@ -46,24 +46,34 @@ ThisBuild / scalaVersion := Scala213
 ThisBuild / githubWorkflowPublishTargetBranches := Seq() // disable publication for now
 
 ThisBuild / githubWorkflowBuildMatrixAdditions +=
-  "platform" -> List("jvm", "js")
+  "platform" -> List("jvm", "js", "native")
 
 ThisBuild / githubWorkflowBuildMatrixExclusions ++=
-  githubWorkflowJavaVersions.value.filterNot(Set(PrimaryJava)).map { java =>
-    MatrixExclude(Map("platform" -> "js", "java" -> java))
+  githubWorkflowJavaVersions.value.filterNot(Set(PrimaryJava)).flatMap { java =>
+    Seq(MatrixExclude(Map("platform" -> "js", "java" -> java)),
+        MatrixExclude(Map("platform" -> "native", "java" -> java))
+    )
   }
+
+ThisBuild / githubWorkflowBuildMatrixExclusions ++= Seq(DottyOld, DottyNew).map { dottyVersion =>
+  MatrixExclude(Map("platform" -> "native", "scala" -> dottyVersion))
+} // Dotty is not yet supported by Scala Native
 
 // we don't need this since we aren't publishing
 ThisBuild / githubWorkflowArtifactUpload := false
 
+ThisBuild / githubWorkflowBuildMatrixFailFast := Some(false)
+
 val JvmCond = s"matrix.platform == 'jvm'"
 val JsCond = s"matrix.platform == 'js'"
+val NativeCond = s"matrix.platform == 'native'"
 
 val Scala2Cond = s"(matrix.scala != '$DottyOld' && matrix.scala != '$DottyNew')"
 val Scala3Cond = s"(matrix.scala == '$DottyOld' || matrix.scala == '$DottyNew')"
 
 ThisBuild / githubWorkflowBuild := Seq(
   WorkflowStep.Sbt(List("validateAllJS"), name = Some("Validate JavaScript"), cond = Some(JsCond)),
+  WorkflowStep.Sbt(List("validateAllNative"), name = Some("Validate Scala Native"), cond = Some(NativeCond)),
   WorkflowStep.Sbt(List("buildJVM", "bench/test"),
                    name = Some("Validate JVM (scala 2)"),
                    cond = Some(JvmCond + " && " + Scala2Cond)
@@ -197,6 +207,14 @@ lazy val commonJsSettings = Seq(
   // currently sbt-doctest doesn't work in JS builds
   // https://github.com/tkawachi/sbt-doctest/issues/52
   doctestGenTests := Seq.empty
+)
+
+lazy val commonNativeSettings = Seq(
+  // currently sbt-doctest doesn't work in Native/JS builds
+  // https://github.com/tkawachi/sbt-doctest/issues/52
+  doctestGenTests := Seq.empty,
+  // Currently scala-native does not support Dotty
+  crossScalaVersions := { crossScalaVersions.value.filterNot(Seq(DottyOld, DottyNew).contains) }
 )
 
 lazy val commonJvmSettings = Seq(
@@ -497,8 +515,8 @@ lazy val cats = project
   .settings(moduleName := "root")
   .settings(publishSettings) // these settings are needed to release all aggregated modules under this root module
   .settings(noPublishSettings) // this is to exclude the root module itself from being published.
-  .aggregate(catsJVM, catsJS)
-  .dependsOn(catsJVM, catsJS, tests.jvm % "test-internal -> test")
+  .aggregate(catsJVM, catsJS, catsNative)
+  .dependsOn(catsJVM, catsJS, catsNative, tests.jvm % "test-internal -> test")
 
 lazy val catsJVM = project
   .in(file(".catsJVM"))
@@ -565,7 +583,41 @@ lazy val catsJS = project
   )
   .enablePlugins(ScalaJSPlugin)
 
-lazy val kernel = crossProject(JSPlatform, JVMPlatform)
+lazy val catsNative = project
+  .in(file(".catsNative"))
+  .settings(moduleName := "cats")
+  .settings(noPublishSettings)
+  .settings(catsSettings)
+  .settings(commonNativeSettings)
+  .aggregate(
+    kernel.native,
+    kernelLaws.native,
+    core.native,
+    laws.native,
+    free.native,
+    testkit.native,
+    tests.native,
+    alleycatsCore.native,
+    alleycatsLaws.native,
+    alleycatsTests.native,
+    native
+  )
+  .dependsOn(
+    kernel.native,
+    kernelLaws.native,
+    core.native,
+    laws.native,
+    free.native,
+    testkit.native,
+    tests.native % "test-internal -> test",
+    alleycatsCore.native,
+    alleycatsLaws.native,
+    alleycatsTests.native % "test-internal -> test",
+    native
+  )
+  .enablePlugins(ScalaNativePlugin)
+
+lazy val kernel = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .crossType(CrossType.Pure)
   .in(file("kernel"))
   .settings(moduleName := "cats-kernel", name := "Cats kernel")
@@ -575,11 +627,13 @@ lazy val kernel = crossProject(JSPlatform, JVMPlatform)
   .settings(includeGeneratedSrc)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings ++ mimaSettings("cats-kernel"))
+  .nativeSettings(commonNativeSettings)
+  .settings(testingDependencies)
   .settings(
     libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % Test
   )
 
-lazy val kernelLaws = crossProject(JSPlatform, JVMPlatform)
+lazy val kernelLaws = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .in(file("kernel-laws"))
   .settings(moduleName := "cats-kernel-laws", name := "Cats kernel laws")
   .settings(commonSettings)
@@ -590,8 +644,9 @@ lazy val kernelLaws = crossProject(JSPlatform, JVMPlatform)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings ++ mimaSettings("cats-kernel-laws", includeCats1 = false))
   .dependsOn(kernel)
+  .nativeSettings(commonNativeSettings)
 
-lazy val core = crossProject(JSPlatform, JVMPlatform)
+lazy val core = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .crossType(CrossType.Pure)
   .dependsOn(kernel)
   .settings(moduleName := "cats-core", name := "Cats core")
@@ -611,8 +666,10 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
   )
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings ++ mimaSettings("cats-core"))
+  .settings(testingDependencies)
+  .nativeSettings(commonNativeSettings)
 
-lazy val laws = crossProject(JSPlatform, JVMPlatform)
+lazy val laws = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .crossType(CrossType.Pure)
   .dependsOn(kernel, core, kernelLaws)
   .settings(moduleName := "cats-laws", name := "Cats laws")
@@ -621,16 +678,18 @@ lazy val laws = crossProject(JSPlatform, JVMPlatform)
   .settings(testingDependencies)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings ++ mimaSettings("cats-laws", includeCats1 = false))
+  .nativeSettings(commonNativeSettings)
 
-lazy val free = crossProject(JSPlatform, JVMPlatform)
+lazy val free = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .crossType(CrossType.Pure)
   .dependsOn(core, tests % "test-internal -> test")
   .settings(moduleName := "cats-free", name := "Cats Free")
   .settings(catsSettings)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings ++ mimaSettings("cats-free"))
+  .nativeSettings(commonNativeSettings)
 
-lazy val tests = crossProject(JSPlatform, JVMPlatform)
+lazy val tests = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .crossType(CrossType.Pure)
   .dependsOn(testkit % Test)
   .settings(moduleName := "cats-tests")
@@ -640,8 +699,9 @@ lazy val tests = crossProject(JSPlatform, JVMPlatform)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
   .settings(scalacOptions in Test := (scalacOptions in Test).value.filter(_ != "-Xfatal-warnings"))
+  .nativeSettings(commonNativeSettings)
 
-lazy val testkit = crossProject(JSPlatform, JVMPlatform)
+lazy val testkit = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .crossType(CrossType.Pure)
   .dependsOn(core, laws)
   .enablePlugins(BuildInfoPlugin)
@@ -652,8 +712,9 @@ lazy val testkit = crossProject(JSPlatform, JVMPlatform)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings ++ mimaSettings("cats-testkit", includeCats1 = false))
   .settings(scalacOptions := scalacOptions.value.filter(_ != "-Xfatal-warnings"))
+  .nativeSettings(commonNativeSettings)
 
-lazy val alleycatsCore = crossProject(JSPlatform, JVMPlatform)
+lazy val alleycatsCore = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .crossType(CrossType.Pure)
   .in(file("alleycats-core"))
   .dependsOn(core)
@@ -663,8 +724,9 @@ lazy val alleycatsCore = crossProject(JSPlatform, JVMPlatform)
   .settings(includeGeneratedSrc)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings ++ mimaSettings("alleycats-core", includeCats1 = false))
+  .nativeSettings(commonNativeSettings)
 
-lazy val alleycatsLaws = crossProject(JSPlatform, JVMPlatform)
+lazy val alleycatsLaws = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .crossType(CrossType.Pure)
   .in(file("alleycats-laws"))
   .dependsOn(alleycatsCore, laws)
@@ -675,8 +737,9 @@ lazy val alleycatsLaws = crossProject(JSPlatform, JVMPlatform)
   .settings(testingDependencies)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings ++ mimaSettings("alleycats-laws", includeCats1 = false))
+  .nativeSettings(commonNativeSettings)
 
-lazy val alleycatsTests = crossProject(JSPlatform, JVMPlatform)
+lazy val alleycatsTests = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .in(file("alleycats-tests"))
   .dependsOn(alleycatsLaws, tests % "test-internal -> test")
   .settings(moduleName := "alleycats-tests")
@@ -685,6 +748,7 @@ lazy val alleycatsTests = crossProject(JSPlatform, JVMPlatform)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
   .settings(scalacOptions in Test := (scalacOptions in Test).value.filter(_ != "-Xfatal-warnings"))
+  .nativeSettings(commonNativeSettings)
 
 // bench is currently JVM-only
 
@@ -728,6 +792,14 @@ lazy val js = project
   .settings(catsSettings)
   .settings(commonJsSettings)
   .enablePlugins(ScalaJSPlugin)
+
+// cats-native is Native-only
+lazy val native = project
+  .dependsOn(core.native, tests.native % "test-internal -> test")
+  .settings(moduleName := "cats-native")
+  .settings(catsSettings)
+  .settings(commonNativeSettings)
+  .enablePlugins(ScalaNativePlugin)
 
 // cats-jvm is JVM-only
 lazy val jvm = project
@@ -833,14 +905,24 @@ addCommandAlias("buildTestsJVM", ";lawsJVM/test;testkitJVM/test;testsJVM/test;jv
 addCommandAlias("buildFreeJVM", ";freeJVM/test")
 addCommandAlias("buildAlleycatsJVM", ";alleycatsCoreJVM/test;alleycatsLawsJVM/test;alleycatsTestsJVM/test")
 addCommandAlias("buildJVM", ";buildKernelJVM;buildCoreJVM;buildTestsJVM;buildFreeJVM;buildAlleycatsJVM")
-addCommandAlias("validateBC", ";binCompatTest/test;mimaReportBinaryIssues")
+addCommandAlias("validateBC", ";binCompatTest/test;catsJVM/mimaReportBinaryIssues")
 addCommandAlias("validateJVM", ";fmtCheck;buildJVM;bench/test;validateBC;makeMicrosite")
 addCommandAlias("validateJS", ";testsJS/test;js/test")
 addCommandAlias("validateKernelJS", "kernelLawsJS/test")
 addCommandAlias("validateFreeJS", "freeJS/test")
 addCommandAlias("validateAlleycatsJS", "alleycatsTestsJS/test")
 addCommandAlias("validateAllJS", "all testsJS/test js/test kernelLawsJS/test freeJS/test alleycatsTestsJS/test")
-addCommandAlias("validate", ";clean;validateJS;validateKernelJS;validateFreeJS;validateJVM")
+addCommandAlias("validateNative", ";testsNative/test;native/test")
+addCommandAlias("validateKernelNative", "kernelLawsNative/test")
+addCommandAlias("validateFreeNative", "freeNative/test")
+addCommandAlias("validateAlleycatsNative", "alleycatsTestsNative/test")
+addCommandAlias("validateAllNative",
+                "all testsNative/test native/test kernelLawsNative/test freeNative/test alleycatsTestsNative/test"
+)
+addCommandAlias(
+  "validate",
+  ";clean;validateJS;validateKernelJS;validateFreeJS;validateNative;validateKernelNative;validateFreeNative;validateJVM"
+)
 
 addCommandAlias("prePR", "fmt")
 
