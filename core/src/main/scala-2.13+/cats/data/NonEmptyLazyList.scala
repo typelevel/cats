@@ -424,12 +424,12 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
    * scala> import cats.data.NonEmptyLazyList
    * scala> import cats.implicits._
    * scala> val nel = NonEmptyLazyList.fromLazyListUnsafe(LazyList(12, -2, 3, -5))
-   * scala> val expectedResult = Iterator(
-   * scala>   NonEmptyLazyList.fromLazyListUnsafe(LazyList(12, -2)),
-   * scala>   NonEmptyLazyList.fromLazyListUnsafe(LazyList(3, -5))
-   * scala> )
+   * scala> val expectedResult = List(
+   *      |   NonEmptyLazyList.fromLazyListUnsafe(LazyList(12, -2)),
+   *      |   NonEmptyLazyList.fromLazyListUnsafe(LazyList(3, -5))
+   *      | )
    * scala> val result = nel.grouped(2)
-   * scala> result === expectedResult
+   * scala> result.toList === expectedResult
    * res0: Boolean = true
    * }}}
    */

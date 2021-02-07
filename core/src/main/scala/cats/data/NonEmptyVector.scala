@@ -307,9 +307,9 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
    * scala> import cats.data.NonEmptyVector
    * scala> import cats.implicits._
    * scala> val nel = NonEmptyVector.of(12, -2, 3, -5)
-   * scala> val expectedResult = Iterator(NonEmptyVector.of(12, -2), NonEmptyVector.of(3, -5))
+   * scala> val expectedResult = List(NonEmptyVector.of(12, -2), NonEmptyVector.of(3, -5))
    * scala> val result = nel.grouped(2)
-   * scala> result === expectedResult
+   * scala> result.toList === expectedResult
    * res0: Boolean = true
    * }}}
    */

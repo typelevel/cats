@@ -584,9 +584,9 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
    * scala> import cats.data.NonEmptyList
    * scala> import cats.implicits._
    * scala> val nel = NonEmptyList.of(12, -2, 3, -5)
-   * scala> val expectedResult = Iterator(NonEmptyList.of(12, -2), NonEmptyList.of(3, -5))
+   * scala> val expectedResult = List(NonEmptyList.of(12, -2), NonEmptyList.of(3, -5))
    * scala> val result = nel.grouped(2)
-   * scala> result === expectedResult
+   * scala> result.toList === expectedResult
    * res0: Boolean = true
    * }}}
    */
