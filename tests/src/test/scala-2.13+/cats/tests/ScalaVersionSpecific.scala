@@ -183,24 +183,40 @@ trait ScalaVersionSpecificAlgebraInvariantSuite {
     def parseString(str: String): Option[MiniInt] = Integral[Int].parseString(str).flatMap(MiniInt.fromInt)
   }
 
-  implicit protected def eqNumeric[A: Eq: ExhaustiveCheck]: Eq[Numeric[A]] = Eq.by { numeric =>
-    val fromInt = numeric.fromInt _
-    val parseString = numeric.parseString _
+  implicit protected def eqNumeric[A: Eq: ExhaustiveCheck]: Eq[Numeric[A]] = {
 
-    (
-      numeric.compare _,
-      numeric.plus _,
-      numeric.minus _,
-      numeric.times _,
-      numeric.negate _,
-      fromInt.compose((_: MiniInt).toInt),
-      numeric.toInt _,
-      numeric.toLong _,
-      numeric.toFloat _,
-      numeric.toDouble _,
-      parseString.compose((_: MiniInt).toString)
-    )
+    // These allow us to capture the cases where operations on Numeric throw (eg when dividing by zero or causing an
+    // overflow). These are represented by `None` and allow us to compare two Numeric instances, verifying that when one
+    // throws, the other also throws.
+    def makeUnaryFnSafe[X, R](f: X => R): X => Option[R] =
+      x => Either.catchOnly[IllegalArgumentException](f(x)).toOption
+    def makeBinaryFnSafe[X, Y, R](f: (X, Y) => R): (X, Y) => Option[R] =
+      (x, y) => Either.catchOnly[IllegalArgumentException](f(x, y)).toOption
+
+    Eq.by { numeric =>
+      val fromMiniInt: MiniInt => Option[A] = makeUnaryFnSafe(miniInt => numeric.fromInt(miniInt.toInt))
+
+      val parseMiniIntStrings: Option[MiniInt] => Option[A] = {
+        case Some(miniInt) => numeric.parseString(miniInt.toInt.toString)
+        case None          => numeric.parseString("invalid") // Use this to test parsing of non-numeric strings
+      }
+
+      (
+        makeBinaryFnSafe(numeric.compare),
+        makeBinaryFnSafe(numeric.plus),
+        makeBinaryFnSafe(numeric.minus),
+        makeBinaryFnSafe(numeric.times),
+        makeUnaryFnSafe(numeric.negate),
+        fromMiniInt,
+        makeUnaryFnSafe(numeric.toInt),
+        makeUnaryFnSafe(numeric.toLong),
+        makeUnaryFnSafe(numeric.toFloat),
+        makeUnaryFnSafe(numeric.toDouble),
+        parseMiniIntStrings
+      )
+    }
   }
+
 }
 
 class TraverseLazyListSuite extends TraverseSuite[LazyList]("LazyList")
