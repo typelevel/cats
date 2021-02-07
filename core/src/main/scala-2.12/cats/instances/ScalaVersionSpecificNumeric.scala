@@ -1,6 +1,7 @@
 package cats.instances
 
-private[instances] abstract class ScalaVersionSpecificNumeric[A, B](fa: Numeric[A])(f: A => B)(g: B => A) extends Numeric[B] {
+abstract private[instances] class ScalaVersionSpecificNumeric[A, B](fa: Numeric[A])(f: A => B)(g: B => A)
+    extends Numeric[B] {
   def compare(x: B, y: B): Int = fa.compare(g(x), g(y))
   def plus(x: B, y: B): B = f(fa.plus(g(x), g(y)))
   def minus(x: B, y: B): B = f(fa.minus(g(x), g(y)))

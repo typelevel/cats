@@ -39,7 +39,7 @@ trait ScalaVersionSpecificAlgebraInvariantSuite {
       numeric.toInt _,
       numeric.toLong _,
       numeric.toFloat _,
-      numeric.toDouble _,
+      numeric.toDouble _
     )
   }
 }
