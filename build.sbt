@@ -13,12 +13,6 @@ lazy val publishLocalSignedIfRelevant =
   taskKey[Unit]("Runs publishLocalSigned but only if scalaVersion in crossScalaVersions")
 Global / publishLocalSignedIfRelevant := PgpKeys.publishLocalSigned.value
 
-lazy val scoverageSettings = Seq(
-  coverageMinimum := 60,
-  coverageFailOnMinimum := false,
-  coverageHighlighting := true
-)
-
 organization in ThisBuild := "org.typelevel"
 scalafixDependencies in ThisBuild += "org.typelevel" %% "simulacrum-scalafix" % "0.5.3"
 
@@ -27,9 +21,9 @@ val scalaCheckVersion = "1.15.2"
 val disciplineVersion = "1.1.3"
 
 val disciplineScalatestVersion = "2.0.1"
-val disciplineMunitVersion = "1.0.4"
+val disciplineMunitVersion = "1.0.5"
 
-val kindProjectorVersion = "0.11.2"
+val kindProjectorVersion = "0.11.3"
 
 val PrimaryOS = "ubuntu-latest"
 ThisBuild / githubWorkflowOSes := Seq(PrimaryOS)
@@ -41,7 +35,7 @@ val GraalVM8 = "graalvm-ce-java8@20.2.0"
 
 ThisBuild / githubWorkflowJavaVersions := Seq(PrimaryJava, LTSJava, LatestJava, GraalVM8)
 
-val Scala212 = "2.12.12"
+val Scala212 = "2.12.13"
 val Scala213 = "2.13.4"
 val DottyOld = "3.0.0-M2"
 val DottyNew = "3.0.0-M3"
@@ -52,53 +46,41 @@ ThisBuild / scalaVersion := Scala213
 ThisBuild / githubWorkflowPublishTargetBranches := Seq() // disable publication for now
 
 ThisBuild / githubWorkflowBuildMatrixAdditions +=
-  "platform" -> List("jvm", "js")
+  "platform" -> List("jvm", "js", "native")
 
 ThisBuild / githubWorkflowBuildMatrixExclusions ++=
-  githubWorkflowJavaVersions.value.filterNot(Set(PrimaryJava)).map { java =>
-    MatrixExclude(Map("platform" -> "js", "java" -> java))
+  githubWorkflowJavaVersions.value.filterNot(Set(PrimaryJava)).flatMap { java =>
+    Seq(MatrixExclude(Map("platform" -> "js", "java" -> java)),
+        MatrixExclude(Map("platform" -> "native", "java" -> java))
+    )
   }
 
-ThisBuild / githubWorkflowBuildMatrixExclusions ++=
-  Seq("jvm", "js").map { platform =>
-    MatrixExclude(
-      Map("platform" -> platform, "java" -> LatestJava, "scala" -> DottyOld)
-    ) // 3.0.0-M1 doesn't work on JDK 14+
-  }
+ThisBuild / githubWorkflowBuildMatrixExclusions ++= Seq(DottyOld, DottyNew).map { dottyVersion =>
+  MatrixExclude(Map("platform" -> "native", "scala" -> dottyVersion))
+} // Dotty is not yet supported by Scala Native
 
 // we don't need this since we aren't publishing
 ThisBuild / githubWorkflowArtifactUpload := false
 
+ThisBuild / githubWorkflowBuildMatrixFailFast := Some(false)
+
 val JvmCond = s"matrix.platform == 'jvm'"
 val JsCond = s"matrix.platform == 'js'"
+val NativeCond = s"matrix.platform == 'native'"
 
 val Scala2Cond = s"(matrix.scala != '$DottyOld' && matrix.scala != '$DottyNew')"
 val Scala3Cond = s"(matrix.scala == '$DottyOld' || matrix.scala == '$DottyNew')"
 
 ThisBuild / githubWorkflowBuild := Seq(
   WorkflowStep.Sbt(List("validateAllJS"), name = Some("Validate JavaScript"), cond = Some(JsCond)),
-  WorkflowStep.Use("actions",
-                   "setup-python",
-                   "v2",
-                   name = Some("Setup Python"),
-                   params = Map("python-version" -> "3.x"),
-                   cond = Some(JvmCond + " && " + Scala2Cond)
-  ),
-  WorkflowStep.Run(List("pip install codecov"),
-                   cond = Some(JvmCond + " && " + Scala2Cond),
-                   name = Some("Setup codecov")
-  ),
-  WorkflowStep.Sbt(List("coverage", "buildJVM", "bench/test", "coverageReport"),
+  WorkflowStep.Sbt(List("validateAllNative"), name = Some("Validate Scala Native"), cond = Some(NativeCond)),
+  WorkflowStep.Sbt(List("buildJVM", "bench/test"),
                    name = Some("Validate JVM (scala 2)"),
                    cond = Some(JvmCond + " && " + Scala2Cond)
   ),
   WorkflowStep.Sbt(List("buildJVM", "bench/test"),
                    name = Some("Validate JVM (scala 3)"),
                    cond = Some(JvmCond + " && " + Scala3Cond)
-  ),
-  WorkflowStep.Run(List("codecov -F ${{ matrix.scala }}"),
-                   name = Some("Upload Codecov Results"),
-                   cond = Some(JvmCond + " && " + Scala2Cond)
   ),
   WorkflowStep.Sbt(
     List("clean", "validateBC"), // cleaning here to avoid issues with codecov
@@ -130,7 +112,10 @@ ThisBuild / githubWorkflowAddedJobs ++= Seq(
     "microsite",
     "Microsite",
     githubWorkflowJobSetup.value.toList ::: List(
-      WorkflowStep.Use("actions", "setup-ruby", "v1", name = Some("Setup Ruby")),
+      WorkflowStep.Use(UseRef.Public("ruby", "setup-ruby", "v1"),
+                       params = Map("ruby-version" -> "2.7"),
+                       name = Some("Setup Ruby")
+      ),
       WorkflowStep.Run(List("gem install jekyll -v 4.0.0"), name = Some("Setup Jekyll")),
       WorkflowStep.Sbt(List("docs/makeMicrosite"), name = Some("Build the microsite"))
     ),
@@ -184,7 +169,7 @@ lazy val catsSettings = Seq(
         compilerPlugin(("org.typelevel" %% "kind-projector" % kindProjectorVersion).cross(CrossVersion.full))
       )
   ) ++ macroDependencies(scalaVersion.value)
-) ++ commonSettings ++ publishSettings ++ scoverageSettings ++ simulacrumSettings
+) ++ commonSettings ++ publishSettings ++ simulacrumSettings
 
 lazy val simulacrumSettings = Seq(
   libraryDependencies ++= (if (isDotty.value) Nil else Seq(compilerPlugin(scalafixSemanticdb))),
@@ -221,8 +206,15 @@ lazy val commonJsSettings = Seq(
   scalaJSLinkerConfig ~= (_.withModuleKind(ModuleKind.CommonJSModule)),
   // currently sbt-doctest doesn't work in JS builds
   // https://github.com/tkawachi/sbt-doctest/issues/52
+  doctestGenTests := Seq.empty
+)
+
+lazy val commonNativeSettings = Seq(
+  // currently sbt-doctest doesn't work in Native/JS builds
+  // https://github.com/tkawachi/sbt-doctest/issues/52
   doctestGenTests := Seq.empty,
-  coverageEnabled := false
+  // Currently scala-native does not support Dotty
+  crossScalaVersions := { crossScalaVersions.value.filterNot(Seq(DottyOld, DottyNew).contains) }
 )
 
 lazy val commonJvmSettings = Seq(
@@ -523,8 +515,8 @@ lazy val cats = project
   .settings(moduleName := "root")
   .settings(publishSettings) // these settings are needed to release all aggregated modules under this root module
   .settings(noPublishSettings) // this is to exclude the root module itself from being published.
-  .aggregate(catsJVM, catsJS)
-  .dependsOn(catsJVM, catsJS, tests.jvm % "test-internal -> test")
+  .aggregate(catsJVM, catsJS, catsNative)
+  .dependsOn(catsJVM, catsJS, catsNative, tests.jvm % "test-internal -> test")
 
 lazy val catsJVM = project
   .in(file(".catsJVM"))
@@ -591,36 +583,70 @@ lazy val catsJS = project
   )
   .enablePlugins(ScalaJSPlugin)
 
-lazy val kernel = crossProject(JSPlatform, JVMPlatform)
+lazy val catsNative = project
+  .in(file(".catsNative"))
+  .settings(moduleName := "cats")
+  .settings(noPublishSettings)
+  .settings(catsSettings)
+  .settings(commonNativeSettings)
+  .aggregate(
+    kernel.native,
+    kernelLaws.native,
+    core.native,
+    laws.native,
+    free.native,
+    testkit.native,
+    tests.native,
+    alleycatsCore.native,
+    alleycatsLaws.native,
+    alleycatsTests.native,
+    native
+  )
+  .dependsOn(
+    kernel.native,
+    kernelLaws.native,
+    core.native,
+    laws.native,
+    free.native,
+    testkit.native,
+    tests.native % "test-internal -> test",
+    alleycatsCore.native,
+    alleycatsLaws.native,
+    alleycatsTests.native % "test-internal -> test",
+    native
+  )
+  .enablePlugins(ScalaNativePlugin)
+
+lazy val kernel = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .crossType(CrossType.Pure)
   .in(file("kernel"))
   .settings(moduleName := "cats-kernel", name := "Cats kernel")
   .settings(commonSettings)
   .settings(publishSettings)
-  .settings(scoverageSettings)
   .settings(sourceGenerators in Compile += (sourceManaged in Compile).map(KernelBoiler.gen).taskValue)
   .settings(includeGeneratedSrc)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings ++ mimaSettings("cats-kernel"))
+  .nativeSettings(commonNativeSettings)
+  .settings(testingDependencies)
   .settings(
     libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % Test
   )
 
-lazy val kernelLaws = crossProject(JSPlatform, JVMPlatform)
+lazy val kernelLaws = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .in(file("kernel-laws"))
   .settings(moduleName := "cats-kernel-laws", name := "Cats kernel laws")
   .settings(commonSettings)
   .settings(publishSettings)
-  .settings(scoverageSettings)
   .settings(disciplineDependencies)
   .settings(testingDependencies)
   .settings(scalacOptions in Test := (scalacOptions in Test).value.filter(_ != "-Xfatal-warnings"))
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings ++ mimaSettings("cats-kernel-laws", includeCats1 = false))
-  .jsSettings(coverageEnabled := false)
   .dependsOn(kernel)
+  .nativeSettings(commonNativeSettings)
 
-lazy val core = crossProject(JSPlatform, JVMPlatform)
+lazy val core = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .crossType(CrossType.Pure)
   .dependsOn(kernel)
   .settings(moduleName := "cats-core", name := "Cats core")
@@ -640,8 +666,10 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
   )
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings ++ mimaSettings("cats-core"))
+  .settings(testingDependencies)
+  .nativeSettings(commonNativeSettings)
 
-lazy val laws = crossProject(JSPlatform, JVMPlatform)
+lazy val laws = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .crossType(CrossType.Pure)
   .dependsOn(kernel, core, kernelLaws)
   .settings(moduleName := "cats-laws", name := "Cats laws")
@@ -650,17 +678,18 @@ lazy val laws = crossProject(JSPlatform, JVMPlatform)
   .settings(testingDependencies)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings ++ mimaSettings("cats-laws", includeCats1 = false))
-  .jsSettings(coverageEnabled := false)
+  .nativeSettings(commonNativeSettings)
 
-lazy val free = crossProject(JSPlatform, JVMPlatform)
+lazy val free = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .crossType(CrossType.Pure)
   .dependsOn(core, tests % "test-internal -> test")
   .settings(moduleName := "cats-free", name := "Cats Free")
   .settings(catsSettings)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings ++ mimaSettings("cats-free"))
+  .nativeSettings(commonNativeSettings)
 
-lazy val tests = crossProject(JSPlatform, JVMPlatform)
+lazy val tests = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .crossType(CrossType.Pure)
   .dependsOn(testkit % Test)
   .settings(moduleName := "cats-tests")
@@ -670,8 +699,9 @@ lazy val tests = crossProject(JSPlatform, JVMPlatform)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
   .settings(scalacOptions in Test := (scalacOptions in Test).value.filter(_ != "-Xfatal-warnings"))
+  .nativeSettings(commonNativeSettings)
 
-lazy val testkit = crossProject(JSPlatform, JVMPlatform)
+lazy val testkit = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .crossType(CrossType.Pure)
   .dependsOn(core, laws)
   .enablePlugins(BuildInfoPlugin)
@@ -682,34 +712,34 @@ lazy val testkit = crossProject(JSPlatform, JVMPlatform)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings ++ mimaSettings("cats-testkit", includeCats1 = false))
   .settings(scalacOptions := scalacOptions.value.filter(_ != "-Xfatal-warnings"))
+  .nativeSettings(commonNativeSettings)
 
-lazy val alleycatsCore = crossProject(JSPlatform, JVMPlatform)
+lazy val alleycatsCore = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .crossType(CrossType.Pure)
   .in(file("alleycats-core"))
   .dependsOn(core)
   .settings(moduleName := "alleycats-core", name := "Alleycats core")
   .settings(catsSettings)
   .settings(publishSettings)
-  .settings(scoverageSettings)
   .settings(includeGeneratedSrc)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings ++ mimaSettings("alleycats-core", includeCats1 = false))
+  .nativeSettings(commonNativeSettings)
 
-lazy val alleycatsLaws = crossProject(JSPlatform, JVMPlatform)
+lazy val alleycatsLaws = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .crossType(CrossType.Pure)
   .in(file("alleycats-laws"))
   .dependsOn(alleycatsCore, laws)
   .settings(moduleName := "alleycats-laws", name := "Alleycats laws")
   .settings(catsSettings)
   .settings(publishSettings)
-  .settings(scoverageSettings)
   .settings(disciplineDependencies)
   .settings(testingDependencies)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings ++ mimaSettings("alleycats-laws", includeCats1 = false))
-  .jsSettings(coverageEnabled := false)
+  .nativeSettings(commonNativeSettings)
 
-lazy val alleycatsTests = crossProject(JSPlatform, JVMPlatform)
+lazy val alleycatsTests = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .in(file("alleycats-tests"))
   .dependsOn(alleycatsLaws, tests % "test-internal -> test")
   .settings(moduleName := "alleycats-tests")
@@ -718,6 +748,7 @@ lazy val alleycatsTests = crossProject(JSPlatform, JVMPlatform)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
   .settings(scalacOptions in Test := (scalacOptions in Test).value.filter(_ != "-Xfatal-warnings"))
+  .nativeSettings(commonNativeSettings)
 
 // bench is currently JVM-only
 
@@ -727,7 +758,6 @@ lazy val bench = project
   .settings(catsSettings)
   .settings(noPublishSettings)
   .settings(commonJvmSettings)
-  .settings(coverageEnabled := false)
   .settings(
     libraryDependencies ++= {
       if (priorTo2_13(scalaVersion.value))
@@ -762,6 +792,14 @@ lazy val js = project
   .settings(catsSettings)
   .settings(commonJsSettings)
   .enablePlugins(ScalaJSPlugin)
+
+// cats-native is Native-only
+lazy val native = project
+  .dependsOn(core.native, tests.native % "test-internal -> test")
+  .settings(moduleName := "cats-native")
+  .settings(catsSettings)
+  .settings(commonNativeSettings)
+  .enablePlugins(ScalaNativePlugin)
 
 // cats-jvm is JVM-only
 lazy val jvm = project
@@ -854,7 +892,7 @@ lazy val publishSettings = Seq(
         <url>https://github.com/kailuowang/</url>
       </developer>
     </developers>
-) ++ credentialSettings ++ sharedPublishSettings ++ sharedReleaseProcess
+) ++ sharedPublishSettings ++ sharedReleaseProcess
 
 // Scalafmt
 addCommandAlias("fmt", "; compile:scalafmt; test:scalafmt; scalafmtSbt")
@@ -867,14 +905,24 @@ addCommandAlias("buildTestsJVM", ";lawsJVM/test;testkitJVM/test;testsJVM/test;jv
 addCommandAlias("buildFreeJVM", ";freeJVM/test")
 addCommandAlias("buildAlleycatsJVM", ";alleycatsCoreJVM/test;alleycatsLawsJVM/test;alleycatsTestsJVM/test")
 addCommandAlias("buildJVM", ";buildKernelJVM;buildCoreJVM;buildTestsJVM;buildFreeJVM;buildAlleycatsJVM")
-addCommandAlias("validateBC", ";binCompatTest/test;mimaReportBinaryIssues")
+addCommandAlias("validateBC", ";binCompatTest/test;catsJVM/mimaReportBinaryIssues")
 addCommandAlias("validateJVM", ";fmtCheck;buildJVM;bench/test;validateBC;makeMicrosite")
 addCommandAlias("validateJS", ";testsJS/test;js/test")
 addCommandAlias("validateKernelJS", "kernelLawsJS/test")
 addCommandAlias("validateFreeJS", "freeJS/test")
 addCommandAlias("validateAlleycatsJS", "alleycatsTestsJS/test")
 addCommandAlias("validateAllJS", "all testsJS/test js/test kernelLawsJS/test freeJS/test alleycatsTestsJS/test")
-addCommandAlias("validate", ";clean;validateJS;validateKernelJS;validateFreeJS;validateJVM")
+addCommandAlias("validateNative", ";testsNative/test;native/test")
+addCommandAlias("validateKernelNative", "kernelLawsNative/test")
+addCommandAlias("validateFreeNative", "freeNative/test")
+addCommandAlias("validateAlleycatsNative", "alleycatsTestsNative/test")
+addCommandAlias("validateAllNative",
+                "all testsNative/test native/test kernelLawsNative/test freeNative/test alleycatsTestsNative/test"
+)
+addCommandAlias(
+  "validate",
+  ";clean;validateJS;validateKernelJS;validateFreeJS;validateNative;validateKernelNative;validateFreeNative;validateJVM"
+)
 
 addCommandAlias("prePR", "fmt")
 
@@ -971,12 +1019,4 @@ lazy val warnUnusedImport = Seq(
   scalacOptions ++= (if (isDotty.value) Nil else Seq("-Ywarn-unused:imports")),
   scalacOptions in (Compile, console) ~= { _.filterNot(Set("-Ywarn-unused-import", "-Ywarn-unused:imports")) },
   scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value
-)
-
-lazy val credentialSettings = Seq(
-  // For Travis CI - see http://www.cakesolutions.net/teamblogs/publishing-artefacts-to-oss-sonatype-nexus-using-sbt-and-travis-ci
-  credentials ++= (for {
-    username <- Option(System.getenv().get("SONATYPE_USERNAME"))
-    password <- Option(System.getenv().get("SONATYPE_PASSWORD"))
-  } yield Credentials("Sonatype Nexus Repository Manager", "oss.sonatype.org", username, password)).toSeq
 )

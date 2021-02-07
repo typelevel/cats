@@ -294,6 +294,14 @@ class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonE
     }
   }
 
+  test("NonEmptyList#take is consistent with List#take") {
+    forAll { (n: Int, head: Int, tail: List[Int]) =>
+      val list = head :: tail
+      val nonEmptyList = NonEmptyList.of(head, tail: _*)
+      assert(nonEmptyList.take(n) === list.take(n))
+    }
+  }
+
   test("NonEmptyList#size and length is consistent with List#size") {
     forAll { (nel: NonEmptyList[Int]) =>
       assert(nel.size === (nel.toList.size))
@@ -314,8 +322,34 @@ class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonE
   }
 
   test("NonEmptyList#groupBy is consistent with List#groupBy") {
-    forAll { (nel: NonEmptyList[Int], f: Int => Int) =>
-      assert((nel.groupBy(f).map { case (k, v) => (k, v.toList) }: Map[Int, List[Int]]) === (nel.toList.groupBy(f)))
+    forAll { (nel: NonEmptyList[Int], key: Int => Int) =>
+      val result = nel.groupBy(key).map { case (k, v) => (k, v.toList) }.toMap
+      val expected = nel.toList.groupBy(key)
+      assert(result === expected)
+    }
+  }
+
+  test("NonEmptyList#groupMap is consistent with List#groupBy + Map#mapValues") {
+    forAll { (nel: NonEmptyList[Int], key: Int => Int, f: Int => String) =>
+      val result = nel.groupMap(key)(f).map { case (k, v) => (k, v.toList) }.toMap
+      val expected = nel.toList.groupBy(key).map { case (k, v) => (k, v.map(f)) }
+      assert(result === expected)
+    }
+  }
+
+  test("NonEmptyList#groupMapReduce is consistent with List#groupBy + Map#mapValues + List#reduce") {
+    forAll { (nel: NonEmptyList[Int], key: Int => Int, f: Int => String) =>
+      val result = nel.groupMapReduce(key)(f).toMap
+      val expected = nel.toList.groupBy(key).map { case (k, v) => (k, v.map(f).reduce(Semigroup[String].combine)) }
+      assert(result === expected)
+    }
+  }
+
+  test("NonEmptyList#groupMapReduceWith is consistent with List#groupBy + Map#mapValues + List#reduce") {
+    forAll { (nel: NonEmptyList[Int], key: Int => Int, f: Int => String, combine: (String, String) => String) =>
+      val result = nel.groupMapReduceWith(key)(f)(combine).toMap
+      val expected = nel.toList.groupBy(key).map { case (k, v) => (k, v.map(f).reduce(combine)) }
+      assert(result === expected)
     }
   }
 
@@ -339,11 +373,18 @@ class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonE
     }
   }
 
+  test("NonEmptyList#zip is consistent with List#zip") {
+    forAll { (a: NonEmptyList[Int], b: NonEmptyList[Int], f: (Int, Int) => Int) =>
+      assert(a.zip(b).toList === (a.toList.zip(b.toList)))
+    }
+  }
+
   test("NonEmptyList#zipWith is consistent with List#zip and then List#map") {
     forAll { (a: NonEmptyList[Int], b: NonEmptyList[Int], f: (Int, Int) => Int) =>
       assert(a.zipWith(b)(f).toList === (a.toList.zip(b.toList).map { case (x, y) => f(x, y) }))
     }
   }
+
   test("NonEmptyList#nonEmptyPartition remains sorted") {
     forAll { (nel: NonEmptyList[Int], f: Int => Either[String, String]) =>
       val sorted = nel.map(f).sorted

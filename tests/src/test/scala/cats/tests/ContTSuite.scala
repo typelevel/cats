@@ -1,12 +1,14 @@
 package cats.tests
 
+import java.util.concurrent.atomic.AtomicInteger
+
 import cats.Eval
 import cats.data.ContT
 import cats.kernel.Eq
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import org.scalacheck.{Arbitrary, Gen}
-import cats.syntax.eq._
+import cats.syntax.all._
 import org.scalacheck.Prop._
 
 class ContTSuite extends CatsSuite {
@@ -84,6 +86,148 @@ class ContTSuite extends CatsSuite {
       contT.run(cb)
       assert(didSideEffect === true)
     }
+  }
+
+  test("ContT.resetT and shiftT delimit continuations") {
+    forAll { (cb: Unit => Eval[Unit]) =>
+      val counter = new AtomicInteger(0)
+      var a = 0
+      var b = 0
+      var c = 0
+      var d = 0
+
+      val contT: ContT[Eval, Unit, Unit] = ContT
+        .resetT(
+          ContT.shiftT { (k: Unit => Eval[Unit]) =>
+            ContT.defer[Eval, Unit, Unit] {
+              a = counter.incrementAndGet()
+            } >>
+              ContT.liftF(k(())) >>
+              ContT.defer[Eval, Unit, Unit] {
+                b = counter.incrementAndGet()
+              }
+          }
+            >> ContT.defer[Eval, Unit, Unit] {
+              c = counter.incrementAndGet()
+            }
+        )
+        .flatMap { _ =>
+          ContT.defer[Eval, Unit, Unit] {
+            d = counter.incrementAndGet()
+          }
+        }
+
+      contT.run(cb).value
+      assert(a == 1)
+      assert(b == 3)
+      assert(c == 2)
+      assert(d == 4)
+    }
+  }
+  test("ContT.shiftT stack safety") {
+    var counter = 0
+    val maxIters = 50000
+
+    def contT: ContT[Eval, Int, Int] =
+      ContT.shiftT { (k: Int => Eval[Int]) =>
+        ContT
+          .defer[Eval, Int, Int] {
+            counter = counter + 1
+            counter
+          }
+          .flatMap { n =>
+            if (n === maxIters) ContT.liftF(k(n)) else contT
+          }
+      }
+
+    assert(contT.run(Eval.now(_)).value === maxIters)
+  }
+
+  test("ContT.resetT stack safety") {
+    var counter = 0
+    val maxIters = 50000
+
+    def contT: ContT[Eval, Int, Int] =
+      ContT.resetT(
+        ContT
+          .defer[Eval, Int, Int] {
+            counter = counter + 1
+            counter
+          }
+          .flatMap { n =>
+            if (n === maxIters) ContT.pure[Eval, Int, Int](n) else contT
+          }
+      )
+
+    assert(contT.run(Eval.now(_)).value === maxIters)
+  }
+
+  test("ContT.flatMap stack safety") {
+    val maxIters = 20000
+    var counter = 0
+
+    def contT: ContT[Eval, Int, Int] =
+      ContT
+        .defer[Eval, Int, Int] {
+          counter = counter + 1
+          counter
+        }
+        .flatMap { n =>
+          if (n === maxIters) ContT.pure[Eval, Int, Int](n) else contT
+        }
+
+    assert(contT.run(Eval.now(_)).value === maxIters)
+  }
+
+  test("ContT.callCC short-circuits and invokes the continuation") {
+    forAll { (cb: Unit => Eval[Int]) =>
+      var shouldNotChange = false
+      var shouldChange = false
+      var shouldAlsoChange = false
+
+      val contT: ContT[Eval, Int, Unit] = for {
+        _ <- ContT.callCC((k: Unit => ContT[Eval, Int, Unit]) =>
+          ContT.defer[Eval, Int, Unit] {
+            shouldChange = true
+          } >>
+            k(()) >>
+            ContT.defer[Eval, Int, Unit] {
+              shouldNotChange = true
+            }
+        )
+        _ <- ContT.defer[Eval, Int, Unit] {
+          shouldAlsoChange = true
+        }
+      } yield ()
+
+      contT.run(cb).value
+
+      assert(shouldNotChange === false)
+      assert(shouldChange === true)
+      assert(shouldAlsoChange === true)
+    }
+  }
+
+  test("ContT.callCC stack-safety") {
+
+    val counter = new AtomicInteger(0)
+    val maxIters = 10000
+
+    def contT: ContT[Eval, Unit, Int] = ContT
+      .callCC { (k: Int => ContT[Eval, Unit, Int]) =>
+        ContT
+          .defer[Eval, Unit, Int] {
+            counter.incrementAndGet()
+          }
+          .flatMap { n =>
+            if (n === maxIters) ContT.pure[Eval, Unit, Int](n) else contT
+          }
+      }
+      .flatMap { n =>
+        ContT.pure[Eval, Unit, Int](n)
+      }
+
+    contT.run(_ => Eval.now(())).value
   }
 
 }

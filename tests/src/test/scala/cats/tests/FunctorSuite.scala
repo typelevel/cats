@@ -2,6 +2,8 @@ package cats.tests
 
 import cats.Functor
 import cats.syntax.functor._
+import cats.data.{NonEmptyList, NonEmptyMap}
+import cats.laws.discipline.arbitrary._
 import cats.syntax.eq._
 import org.scalacheck.Prop._
 
@@ -34,10 +36,33 @@ class FunctorSuite extends CatsSuite {
   }
 
   test("unzip preserves structure") {
-    forAll { (l: List[Int], o: Option[Int], m: Map[String, Int]) =>
-      Functor[List].unzip(l.map(i => (i, i))) === ((l, l))
-      Functor[Option].unzip(o.map(i => (i, i))) === ((o, o))
-      Functor[Map[String, *]].unzip(m.map { case (k, v) => (k, (v, v)) }) === ((m, m))
+    forAll { (nel: NonEmptyList[Int], o: Option[Int], nem: NonEmptyMap[String, Int]) =>
+      val l = nel.toList
+      val m = nem.toSortedMap
+
+      assert(Functor[List].unzip(l.map(i => (i, i))) === ((l, l)))
+      assert(Functor[Option].unzip(o.map(i => (i, i))) === ((o, o)))
+      assert(Functor[Map[String, *]].unzip(m.map { case (k, v) => (k, (v, v)) }) === ((m, m)))
+
+      //postfix test for Cats datatypes
+      assert(nel.map(i => (i, i)).unzip === ((nel, nel)))
+      assert(nem.map(v => (v, v)).unzip === ((nem, nem)))
+    }
+
+    //empty test for completeness
+    val emptyL = List.empty[Int]
+    val emptyM = Map.empty[String, Int]
+
+    assert(Functor[List].unzip(List.empty[(Int, Int)]) === ((emptyL, emptyL)))
+    assert(Functor[Map[String, *]].unzip(Map.empty[String, (Int, Int)]) === ((emptyM, emptyM)))
+  }
+
+  test("_1F, _2F and swapF form correct lists for concrete list of tuples") {
+    forAll { (l: List[(Int, Int)]) =>
+      val (l1, l2) = l.unzip
+      assertEquals(l._1F, l1)
+      assertEquals(l._2F, l2)
+      assertEquals(l.swapF, l2.zip(l1))
     }
   }
 
