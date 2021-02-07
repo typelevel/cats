@@ -88,9 +88,16 @@ object GenTupleMonadInstances extends Template {
     -      def pure[A](a: A): ${`A0, A(N - 1)&`("A")} = $monadPureMethod
     -    }
     |}
-    |private[cats] sealed trait NTupleMonadInstances4 {
+    |private[cats] sealed trait NTupleMonadInstances4 extends NTupleMonadInstances5 {
     -  implicit def catsStdFlatMapForTuple$arity${`[A0, A(N - 1)]`}${`constraints A..(N-1)`("Semigroup")}: FlatMap[${`(A..N - 1, *)`}] =
     -    new FlatMapTuple$arity${`[A0, A(N - 1)]`}(${`A0, A(N - 1)`})
+    |}
+    |private[cats] sealed trait NTupleMonadInstances5 {
+    -  implicit def catsStdInvariantForTuple$arity${`[A0, A(N - 1)]`}: Invariant[${`(A..N - 1, *)`}] =
+    -    new Invariant[${`(A..N - 1, *)`}] {
+    -      def imap[A, B](fa: ${`A0, A(N - 1)&`("A")})(f: A => B)(g: B => A): ${`A0, A(N - 1)&`("B")} =
+    -        ${`fa._1..(n - 1) & `(s"f(fa._$arity)")}
+    -    }
     |}
     -
     -private[instances] class $flatMapTupleClass${`[A0, A(N - 1)]`}(${`parameters A..(N-1)`("Semigroup")}) extends FlatMap[${`(A..N - 1, *)`}] {
