@@ -12,7 +12,7 @@ trait ScalaVersionSpecificRegressionSuite
 trait ScalaVersionSpecificTraverseSuite
 
 trait ScalaVersionSpecificAlgebraInvariantSuite {
-  protected val numericForMiniInt: Integral[MiniInt] = new Integral[MiniInt] {
+  protected val integralForMiniInt: Integral[MiniInt] = new Integral[MiniInt] {
     def compare(x: MiniInt, y: MiniInt): Int = Order[MiniInt].compare(x, y)
     def plus(x: MiniInt, y: MiniInt): MiniInt = x + y
     def minus(x: MiniInt, y: MiniInt): MiniInt = x + (-y)
@@ -29,9 +29,9 @@ trait ScalaVersionSpecificAlgebraInvariantSuite {
 
   implicit protected def eqNumeric[A: Eq: ExhaustiveCheck]: Eq[Numeric[A]] = {
 
-    // These allow us to capture the cases where operations on Numeric throw (eg when dividing by zero or causing an
-    // overflow). These are represented by `None` and allow us to compare two Numeric instances, verifying that when one
-    // throws, the other also throws.
+    // These allow us to capture the cases where operations on Numeric throw (eg when causing an overflow). These are
+    // represented by `None` and allow us to compare two Numeric instances, verifying that when one throws, the other
+    // also throws.
     def makeUnaryFnSafe[X, R](f: X => R): X => Option[R] =
       x => Either.catchOnly[IllegalArgumentException](f(x)).toOption
     def makeBinaryFnSafe[X, Y, R](f: (X, Y) => R): (X, Y) => Option[R] =

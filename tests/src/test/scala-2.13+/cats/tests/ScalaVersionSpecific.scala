@@ -167,7 +167,7 @@ trait ScalaVersionSpecificTraverseSuite { self: TraverseSuiteAdditional =>
 
 trait ScalaVersionSpecificAlgebraInvariantSuite {
 
-  protected val numericForMiniInt: Integral[MiniInt] = new Integral[MiniInt] {
+  protected val integralForMiniInt: Integral[MiniInt] = new Integral[MiniInt] {
     def compare(x: MiniInt, y: MiniInt): Int = Order[MiniInt].compare(x, y)
     def plus(x: MiniInt, y: MiniInt): MiniInt = x + y
     def minus(x: MiniInt, y: MiniInt): MiniInt = x + (-y)
