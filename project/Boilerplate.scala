@@ -28,7 +28,8 @@ object Boilerplate {
     GenTupleSemigroupalSyntax,
     GenParallelArityFunctions,
     GenParallelArityFunctions2,
-    GenTupleParallelSyntax
+    GenTupleParallelSyntax,
+    GenFoldableArityFunctions
   )
 
   val header = "// auto-generated boilerplate by /project/Boilerplate.scala" // TODO: put something meaningful here?
@@ -503,4 +504,59 @@ object Boilerplate {
     }
   }
 
+  object GenFoldableArityFunctions extends Template {
+    def filename(root: File) = root / "cats" / "FoldableNFunctions.scala"
+    override def range = 2 to maxArity
+    def content(tv: TemplateVals) = {
+      import tv._
+
+      val tupleTpe = (1 to arity).map(_ => "A").mkString("(", ", ", ")")
+      def listXN(range: Range) = range.map("x" + _).mkString(" :: ")
+      val reverseXN = listXN(1 to arity - 1)
+      val tupleXN = (1 to arity).map("x" + _).mkString("(", ", ", ")")
+
+      block"""
+      |package cats
+      |
+      |/**
+      | * @groupprio Ungrouped 0
+      | *
+      | * @groupname FoldableSlidingN foldable arity
+      | * @groupdesc FoldableSlidingN
+      | *   Group sequential elements into fixed sized tuples by passing a "sliding window" over them.
+      | * 
+      | *   A foldable with fewer elements than the window size will return an empty list unlike `Iterable#sliding(size: Int)`.
+      | *   Example:
+      | *   {{{
+      | *   import cats.Foldable
+      | *   scala> Foldable[List].sliding2((1 to 10).toList)
+      | *   val res0: List[(Int, Int)] = List((1,2), (2,3), (3,4), (4,5), (5,6), (6,7), (7,8), (8,9), (9,10))
+      | *
+      | *   scala> Foldable[List].sliding4((1 to 10).toList)
+      | *   val res1: List[(Int, Int, Int, Int)] = List((1,2,3,4), (2,3,4,5), (3,4,5,6), (4,5,6,7), (5,6,7,8), (6,7,8,9), (7,8,9,10))
+      | *   
+      | *   scala> Foldable[List].sliding4((1 to 2).toList)
+      | *   val res2: List[(Int, Int, Int, Int)] = List()
+      | *
+      | *   }}}
+      | *   
+      | * @groupprio FoldableSlidingN 999
+      | *
+      | */
+      |trait FoldableNFunctions[F[_]] { self: Foldable[F] =>
+        -  /** @group FoldableSlidingN */
+        -  def sliding$arity[A](fa: F[A]): List[$tupleTpe] =
+        -    foldRight(fa, Now((List.empty[$tupleTpe], List.empty[A]))) { (x1, eval) =>
+        -      val (acc, l) = eval.value
+        -      l match {
+        -        case ${listXN(2 to arity)} :: Nil =>
+        -          Now(($tupleXN :: acc, ${listXN(1 to arity - 1)} :: Nil))
+        -        case l =>
+        -          Now((acc, x1 :: l))
+        -      }
+        -    }.value._1
+      |}
+      """
+    }
+  }
 }
