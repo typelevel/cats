@@ -69,64 +69,70 @@ sealed abstract private[data] class ConstInstances extends ConstInstances0 {
       override def minBound: Const[A, B] = Const(A.minBound)
     }
 
-  implicit def catsDataOrderForConst[A: Order, B]: Order[Const[A, B]] = new Order[Const[A, B]] {
-    def compare(x: Const[A, B], y: Const[A, B]): Int =
-      x.compare(y)
-  }
+  implicit def catsDataOrderForConst[A: Order, B]: Order[Const[A, B]] =
+    new Order[Const[A, B]] {
+      def compare(x: Const[A, B], y: Const[A, B]): Int =
+        x.compare(y)
+    }
 
-  implicit def catsDataAlignForConst[A: Semigroup]: Align[Const[A, *]] = new Align[Const[A, *]] {
-    def align[B, C](fa: Const[A, B], fb: Const[A, C]): Const[A, Ior[B, C]] =
-      Const(Semigroup[A].combine(fa.getConst, fb.getConst))
-    def functor: Functor[Const[A, *]] = catsDataFunctorForConst
-  }
+  implicit def catsDataAlignForConst[A: Semigroup]: Align[Const[A, *]] =
+    new Align[Const[A, *]] {
+      def align[B, C](fa: Const[A, B], fb: Const[A, C]): Const[A, Ior[B, C]] =
+        Const(Semigroup[A].combine(fa.getConst, fb.getConst))
+      def functor: Functor[Const[A, *]] = catsDataFunctorForConst
+    }
 
-  implicit def catsDataShowForConst[A: Show, B]: Show[Const[A, B]] = new Show[Const[A, B]] {
-    def show(f: Const[A, B]): String = f.show
-  }
+  implicit def catsDataShowForConst[A: Show, B]: Show[Const[A, B]] =
+    new Show[Const[A, B]] {
+      def show(f: Const[A, B]): String = f.show
+    }
 
-  implicit def catsDataTraverseForConst[C]: Traverse[Const[C, *]] = new Traverse[Const[C, *]] {
-    def foldLeft[A, B](fa: Const[C, A], b: B)(f: (B, A) => B): B = b
+  implicit def catsDataTraverseForConst[C]: Traverse[Const[C, *]] =
+    new Traverse[Const[C, *]] {
+      def foldLeft[A, B](fa: Const[C, A], b: B)(f: (B, A) => B): B = b
 
-    def foldRight[A, B](fa: Const[C, A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = lb
+      def foldRight[A, B](fa: Const[C, A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = lb
 
-    override def size[A](fa: Const[C, A]): Long = 0L
+      override def size[A](fa: Const[C, A]): Long = 0L
 
-    override def get[A](fa: Const[C, A])(idx: Long): Option[A] = None
+      override def get[A](fa: Const[C, A])(idx: Long): Option[A] = None
 
-    def traverse[G[_]: Applicative, A, B](fa: Const[C, A])(f: A => G[B]): G[Const[C, B]] =
-      fa.traverse(f)
-  }
+      def traverse[G[_]: Applicative, A, B](fa: Const[C, A])(f: A => G[B]): G[Const[C, B]] =
+        fa.traverse(f)
+    }
 
-  implicit def catsDataTraverseFilterForConst[C]: TraverseFilter[Const[C, *]] = new TraverseFilter[Const[C, *]] {
+  implicit def catsDataTraverseFilterForConst[C]: TraverseFilter[Const[C, *]] =
+    new TraverseFilter[Const[C, *]] {
 
-    override def mapFilter[A, B](fa: Const[C, A])(f: (A) => Option[B]): Const[C, B] = fa.retag
+      override def mapFilter[A, B](fa: Const[C, A])(f: (A) => Option[B]): Const[C, B] = fa.retag
 
-    override def collect[A, B](fa: Const[C, A])(f: PartialFunction[A, B]): Const[C, B] = fa.retag
+      override def collect[A, B](fa: Const[C, A])(f: PartialFunction[A, B]): Const[C, B] = fa.retag
 
-    override def flattenOption[A](fa: Const[C, Option[A]]): Const[C, A] = fa.retag
+      override def flattenOption[A](fa: Const[C, Option[A]]): Const[C, A] = fa.retag
 
-    override def filter[A](fa: Const[C, A])(f: (A) => Boolean): Const[C, A] = fa.retag
+      override def filter[A](fa: Const[C, A])(f: (A) => Boolean): Const[C, A] = fa.retag
 
-    override def filterNot[A](fa: Const[C, A])(f: A => Boolean): Const[C, A] = fa.retag
+      override def filterNot[A](fa: Const[C, A])(f: A => Boolean): Const[C, A] = fa.retag
 
-    def traverseFilter[G[_], A, B](
-      fa: Const[C, A]
-    )(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[Const[C, B]] =
-      G.pure(fa.retag[B])
+      def traverseFilter[G[_], A, B](
+        fa: Const[C, A]
+      )(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[Const[C, B]] =
+        G.pure(fa.retag[B])
 
-    override def filterA[G[_], A](fa: Const[C, A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[Const[C, A]] =
-      G.pure(fa)
+      override def filterA[G[_], A](fa: Const[C, A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[Const[C, A]] =
+        G.pure(fa)
 
-    val traverse: Traverse[Const[C, *]] = Const.catsDataTraverseForConst[C]
-  }
+      val traverse: Traverse[Const[C, *]] = Const.catsDataTraverseForConst[C]
+    }
 
-  implicit def catsDataMonoidForConst[A: Monoid, B]: Monoid[Const[A, B]] = new Monoid[Const[A, B]] {
-    def empty: Const[A, B] =
-      Const.empty
+  implicit def catsDataMonoidForConst[A: Monoid, B]: Monoid[Const[A, B]] =
+    new Monoid[Const[A, B]] {
+      def empty: Const[A, B] =
+        Const.empty
 
-    def combine(x: Const[A, B], y: Const[A, B]): Const[A, B] =
-      x.combine(y)
-  }
+      def combine(x: Const[A, B], y: Const[A, B]): Const[A, B] =
+        x.combine(y)
+    }
 
   implicit val catsDataBifoldableForConst: Bifoldable[Const] =
     new Bifoldable[Const] {
@@ -134,7 +140,8 @@ sealed abstract private[data] class ConstInstances extends ConstInstances0 {
         f(c, fab.getConst)
 
       def bifoldRight[A, B, C](fab: Const[A, B], c: Eval[C])(f: (A, Eval[C]) => Eval[C],
-                                                             g: (B, Eval[C]) => Eval[C]): Eval[C] =
+                                                             g: (B, Eval[C]) => Eval[C]
+      ): Eval[C] =
         f(fab.getConst, c)
     }
 }
@@ -150,8 +157,8 @@ sealed abstract private[data] class ConstInstances0 extends ConstInstances1 {
         fa.retag[(A, B)].combine(fb.retag[(A, B)])
     }
 
-  implicit def catsDataCommutativeApplicativeForConst[C](
-    implicit C: CommutativeMonoid[C]
+  implicit def catsDataCommutativeApplicativeForConst[C](implicit
+    C: CommutativeMonoid[C]
   ): CommutativeApplicative[Const[C, *]] =
     new ConstApplicative[C] with CommutativeApplicative[Const[C, *]] { val C0: CommutativeMonoid[C] = C }
 }
@@ -164,9 +171,10 @@ sealed abstract private[data] class ConstInstances1 extends ConstInstances2 {
 
 sealed abstract private[data] class ConstInstances2 extends ConstInstances3 {
 
-  implicit def catsDataSemigroupForConst[A: Semigroup, B]: Semigroup[Const[A, B]] = new Semigroup[Const[A, B]] {
-    def combine(x: Const[A, B], y: Const[A, B]): Const[A, B] = x.combine(y)
-  }
+  implicit def catsDataSemigroupForConst[A: Semigroup, B]: Semigroup[Const[A, B]] =
+    new Semigroup[Const[A, B]] {
+      def combine(x: Const[A, B], y: Const[A, B]): Const[A, B] = x.combine(y)
+    }
 
   implicit def catsDataPartialOrderForConst[A: PartialOrder, B]: PartialOrder[Const[A, B]] =
     new PartialOrder[Const[A, B]] {
@@ -180,10 +188,11 @@ sealed abstract private[data] class ConstInstances2 extends ConstInstances3 {
 
 sealed abstract private[data] class ConstInstances3 extends ConstInstances4 {
 
-  implicit def catsDataEqForConst[A: Eq, B]: Eq[Const[A, B]] = new Eq[Const[A, B]] {
-    def eqv(x: Const[A, B], y: Const[A, B]): Boolean =
-      x === y
-  }
+  implicit def catsDataEqForConst[A: Eq, B]: Eq[Const[A, B]] =
+    new Eq[Const[A, B]] {
+      def eqv(x: Const[A, B], y: Const[A, B]): Boolean =
+        x === y
+    }
 
   implicit def catsDataApplyForConst[C](implicit C: Semigroup[C]): Apply[Const[C, *]] =
     new ConstApply[C] { val C0: Semigroup[C] = C }

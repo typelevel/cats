@@ -1,7 +1,6 @@
 package cats.tests
 
 import cats.{Bifunctor, Functor}
-import cats.instances.all._
 import cats.laws.discipline.{BifunctorTests, FunctorTests, SerializableTests}
 
 class BifunctorSuite extends CatsSuite {
@@ -10,7 +9,8 @@ class BifunctorSuite extends CatsSuite {
     Bifunctor[Tuple2].compose[Either]
 
   checkAll("Tuple2 compose Either",
-           BifunctorTests(tuple2ComposeEither).bifunctor[Int, Int, Int, String, String, String])
+           BifunctorTests(tuple2ComposeEither).bifunctor[Int, Int, Int, String, String, String]
+  )
   checkAll("Bifunctor[Tuple2 compose Either]", SerializableTests.serializable(tuple2ComposeEither))
 
   {

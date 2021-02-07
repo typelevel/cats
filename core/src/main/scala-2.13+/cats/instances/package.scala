@@ -17,6 +17,7 @@ package object instances {
   object float extends FloatInstances
   object finiteDuration extends CoreFiniteDurationInstances with FiniteDurationInstances
   object function extends FunctionInstances with FunctionInstancesBinCompat0
+  object partialFunction extends PartialFunctionInstances
   object future extends FutureInstances
   object int extends IntInstances
   object invariant extends InvariantMonoidalInstances
@@ -31,6 +32,7 @@ package object instances {
   object partialOrdering extends PartialOrderingInstances
   object queue extends QueueInstances
   object set extends SetInstances
+  object seq extends SeqInstances
   object short extends ShortInstances
   object sortedMap
       extends SortedMapInstances

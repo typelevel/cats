@@ -2,7 +2,6 @@ package cats
 package data
 
 import NonEmptyChainImpl.create
-import cats.{Order, Semigroup}
 import cats.kernel._
 import scala.collection.immutable.SortedMap
 
@@ -48,6 +47,9 @@ private[data] object NonEmptyChainImpl extends NonEmptyChainInstances with Scala
     create(Chain.concat(Chain.one(a), Chain.fromSeq(as)))
 
   def one[A](a: A): NonEmptyChain[A] = create(Chain.one(a))
+
+  def of[A](head: A, tail: A*): NonEmptyChain[A] =
+    fromChainPrepend(head, Chain.fromSeq(tail))
 
   implicit def catsNonEmptyChainOps[A](value: NonEmptyChain[A]): NonEmptyChainOps[A] =
     new NonEmptyChainOps(value)
@@ -286,8 +288,8 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
    */
   final def reduceLeft(f: (A, A) => A): A = {
     val iter = toChain.iterator
-    var result = iter.next
-    while (iter.hasNext) { result = f(result, iter.next) }
+    var result = iter.next()
+    while (iter.hasNext) { result = f(result, iter.next()) }
     result
   }
 
@@ -303,8 +305,8 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
    */
   final def reduceLeftTo[B](f: A => B)(g: (B, A) => B): B = {
     val iter = toChain.iterator
-    var result = f(iter.next)
-    while (iter.hasNext) { result = g(result, iter.next) }
+    var result = f(iter.next())
+    while (iter.hasNext) { result = g(result, iter.next()) }
     result
   }
 
@@ -319,8 +321,8 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
    */
   final def reduceRight(f: (A, A) => A): A = {
     val iter = toChain.reverseIterator
-    var result = iter.next
-    while (iter.hasNext) { result = f(result, iter.next) }
+    var result = iter.next()
+    while (iter.hasNext) { result = f(result, iter.next()) }
     result
   }
 
@@ -336,8 +338,8 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
    */
   final def reduceRightTo[B](f: A => B)(g: (A, B) => B): B = {
     val iter = toChain.reverseIterator
-    var result = f(iter.next)
-    while (iter.hasNext) { result = g(iter.next, result) }
+    var result = f(iter.next())
+    while (iter.hasNext) { result = g(iter.next(), result) }
     result
   }
 
@@ -381,17 +383,170 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
   /**
    * Groups elements inside this `NonEmptyChain` according to the `Order`
    * of the keys produced by the given mapping function.
+   *
+   * {{{
+   * scala> import cats.data.{NonEmptyChain, NonEmptyMap}
+   * scala> import cats.implicits._
+   * scala> val nec = NonEmptyChain(12, -2, 3, -5)
+   * scala> val expectedResult = NonEmptyMap.of(false -> NonEmptyChain(-2, -5), true -> NonEmptyChain(12, 3))
+   * scala> val result = nec.groupBy(_ >= 0)
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   * }}}
    */
   final def groupBy[B](f: A => B)(implicit B: Order[B]): NonEmptyMap[B, NonEmptyChain[A]] =
     toChain.groupBy(f).asInstanceOf[NonEmptyMap[B, NonEmptyChain[A]]]
 
-  final def groupByNem[B](f: A => B)(implicit B: Order[B]): NonEmptyMap[B, NonEmptyChain[A]] = groupBy(f)
+  /**
+   * Groups elements inside this `NonEmptyChain` according to the `Order`
+   * of the keys produced by the given mapping function.
+   *
+   * {{{
+   * scala> import cats.data.{NonEmptyChain, NonEmptyMap}
+   * scala> import cats.implicits._
+   * scala> val nec = NonEmptyChain(12, -2, 3, -5)
+   * scala> val expectedResult = NonEmptyMap.of(false -> NonEmptyChain(-2, -5), true -> NonEmptyChain(12, 3))
+   * scala> val result = nec.groupByNem(_ >= 0)
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  final def groupByNem[B](f: A => B)(implicit B: Order[B]): NonEmptyMap[B, NonEmptyChain[A]] =
+    groupBy(f)
+
+  /**
+   * Groups elements inside this `NonEmptyChain` according to the `Order`
+   * of the keys produced by the given key function.
+   * And each element in a group is transformed into a value of type B
+   * using the mapping function.
+   *
+   * {{{
+   * scala> import cats.data.{NonEmptyChain, NonEmptyMap}
+   * scala> import cats.implicits._
+   * scala> val nec = NonEmptyChain(12, -2, 3, -5)
+   * scala> val expectedResult = NonEmptyMap.of(false -> NonEmptyChain("-2", "-5"), true -> NonEmptyChain("12", "3"))
+   * scala> val result = nec.groupMap(_ >= 0)(_.toString)
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  final def groupMap[K, B](key: A => K)(f: A => B)(implicit K: Order[K]): NonEmptyMap[K, NonEmptyChain[B]] =
+    toChain.groupMap(key)(f).asInstanceOf[NonEmptyMap[K, NonEmptyChain[B]]]
+
+  /**
+   * Groups elements inside this `NonEmptyChain` according to the `Order`
+   * of the keys produced by the given key function.
+   * And each element in a group is transformed into a value of type B
+   * using the mapping function.
+   *
+   * {{{
+   * scala> import cats.data.{NonEmptyChain, NonEmptyMap}
+   * scala> import cats.implicits._
+   * scala> val nec = NonEmptyChain(12, -2, 3, -5)
+   * scala> val expectedResult = NonEmptyMap.of(false -> NonEmptyChain("-2", "-5"), true -> NonEmptyChain("12", "3"))
+   * scala> val result = nec.groupMapNem(_ >= 0)(_.toString)
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  final def groupMapNem[K, B](key: A => K)(f: A => B)(implicit K: Order[K]): NonEmptyMap[K, NonEmptyChain[B]] =
+    groupMap(key)(f)
+
+  /**
+   * Groups elements inside this `NonEmptyChain` according to the `Order`
+   * of the keys produced by the given key function.
+   * Then each element in a group is transformed into a value of type B
+   * using the mapping function.
+   * And finally they are all reduced into a single value
+   * using their `Semigroup`
+   *
+   * {{{
+   * scala> import cats.data.{NonEmptyChain, NonEmptyMap}
+   * scala> import cats.implicits._
+   * scala> val nec = NonEmptyChain("Hello", "World", "Goodbye", "World")
+   * scala> val expectedResult = NonEmptyMap.of("goodbye" -> 1, "hello" -> 1, "world" -> 2)
+   * scala> val result = nec.groupMapReduce(_.trim.toLowerCase)(_ => 1)
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  final def groupMapReduce[K, B](key: A => K)(f: A => B)(implicit K: Order[K], B: Semigroup[B]): NonEmptyMap[K, B] =
+    toChain.groupMapReduce(key)(f).asInstanceOf[NonEmptyMap[K, B]]
+
+  /**
+   * Groups elements inside this `NonEmptyChain` according to the `Order`
+   * of the keys produced by the given key function.
+   * Then each element in a group is transformed into a value of type B
+   * using the mapping function.
+   * And finally they are all reduced into a single value
+   * using their `Semigroup`
+   *
+   * {{{
+   * scala> import cats.data.{NonEmptyChain, NonEmptyMap}
+   * scala> import cats.implicits._
+   * scala> val nec = NonEmptyChain("Hello", "World", "Goodbye", "World")
+   * scala> val expectedResult = NonEmptyMap.of("goodbye" -> 1, "hello" -> 1, "world" -> 2)
+   * scala> val result = nec.groupMapReduceNem(_.trim.toLowerCase)(_ => 1)
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  final def groupMapReduceNem[K, B](key: A => K)(f: A => B)(implicit K: Order[K], B: Semigroup[B]): NonEmptyMap[K, B] =
+    groupMapReduce(key)(f)
+
+  /**
+   * Groups elements inside this `NonEmptyChain` according to the `Order`
+   * of the keys produced by the given key function.
+   * Then each element in a group is transformed into a value of type B
+   * using the mapping function.
+   * And finally they are all reduced into a single value
+   * using the provided combine function.
+   *
+   * {{{
+   * scala> import cats.data.{NonEmptyChain, NonEmptyMap}
+   * scala> import cats.implicits._
+   * scala> val nec = NonEmptyChain("Hello", "World", "Goodbye", "World")
+   * scala> val expectedResult = NonEmptyMap.of("goodbye" -> 1, "hello" -> 1, "world" -> 2)
+   * scala> val result = nec.groupMapReduceWith(_.trim.toLowerCase)(_ => 1)(_ + _)
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  final def groupMapReduceWith[K, B](key: A => K)(f: A => B)(combine: (B, B) => B)(implicit
+    K: Order[K]
+  ): NonEmptyMap[K, B] =
+    toChain.groupMapReduceWith(key)(f)(combine).asInstanceOf[NonEmptyMap[K, B]]
+
+  /**
+   * Groups elements inside this `NonEmptyChain` according to the `Order`
+   * of the keys produced by the given key function.
+   * Then each element in a group is transformed into a value of type B
+   * using the mapping function.
+   * And finally they are all reduced into a single value
+   * using the provided combine function.
+   *
+   * {{{
+   * scala> import cats.data.{NonEmptyChain, NonEmptyMap}
+   * scala> import cats.implicits._
+   * scala> val nec = NonEmptyChain("Hello", "World", "Goodbye", "World")
+   * scala> val expectedResult = NonEmptyMap.of("goodbye" -> 1, "hello" -> 1, "world" -> 2)
+   * scala> val result = nec.groupMapReduceWithNem(_.trim.toLowerCase)(_ => 1)(_ + _)
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  final def groupMapReduceWithNem[K, B](key: A => K)(f: A => B)(combine: (B, B) => B)(implicit
+    K: Order[K]
+  ): NonEmptyMap[K, B] =
+    groupMapReduceWith(key)(f)(combine)
 
   final def iterator: Iterator[A] = toChain.iterator
 
   final def reverseIterator: Iterator[A] = toChain.reverseIterator
 
-  /** Reverses this `NonEmptyChain` */
+  /**
+   * Reverses this `NonEmptyChain`
+   */
   final def reverse: NonEmptyChain[A] =
     create(toChain.reverse)
 
@@ -420,16 +575,14 @@ sealed abstract private[data] class NonEmptyChainInstances extends NonEmptyChain
     new AbstractNonEmptyInstances[Chain, NonEmptyChain] with Align[NonEmptyChain] {
       def extract[A](fa: NonEmptyChain[A]): A = fa.head
 
-      def nonEmptyTraverse[G[_]: Apply, A, B](fa: NonEmptyChain[A])(f: A => G[B]): G[NonEmptyChain[B]] =
-        Foldable[Chain]
-          .reduceRightToOption[A, G[Chain[B]]](fa.tail)(a => Apply[G].map(f(a))(Chain.one)) { (a, lglb) =>
-            Apply[G].map2Eval(f(a), lglb)(_ +: _)
+      def nonEmptyTraverse[G[_]: Apply, A, B](fa: NonEmptyChain[A])(f: A => G[B]): G[NonEmptyChain[B]] = {
+        def loop(head: A, tail: Chain[A]): Eval[G[NonEmptyChain[B]]] =
+          tail.uncons.fold(Eval.now(Apply[G].map(f(head))(NonEmptyChain(_)))) { case (h, t) =>
+            Apply[G].map2Eval(f(head), Eval.defer(loop(h, t)))((b, acc) => b +: acc)
           }
-          .map {
-            case None        => Apply[G].map(f(fa.head))(NonEmptyChain.one)
-            case Some(gtail) => Apply[G].map2(f(fa.head), gtail)((h, t) => create(Chain.one(h) ++ t))
-          }
-          .value
+
+        loop(fa.head, fa.tail).value
+      }
 
       override def size[A](fa: NonEmptyChain[A]): Long = fa.length
 
@@ -442,7 +595,7 @@ sealed abstract private[data] class NonEmptyChainInstances extends NonEmptyChain
       def reduceLeftTo[A, B](fa: NonEmptyChain[A])(f: A => B)(g: (B, A) => B): B = fa.reduceLeftTo(f)(g)
 
       def reduceRightTo[A, B](fa: NonEmptyChain[A])(f: A => B)(g: (A, cats.Eval[B]) => cats.Eval[B]): cats.Eval[B] =
-        Eval.defer(fa.reduceRightTo(a => Eval.now(f(a))) { (a, b) =>
+        Eval.defer(fa.reduceRightTo(a => Eval.later(f(a))) { (a, b) =>
           Eval.defer(g(a, b))
         })
 
@@ -458,6 +611,8 @@ sealed abstract private[data] class NonEmptyChainInstances extends NonEmptyChain
 
       override def alignWith[A, B, C](fa: NonEmptyChain[A], fb: NonEmptyChain[B])(f: Ior[A, B] => C): NonEmptyChain[C] =
         alignInstance.alignWith(fa, fb)(f)
+
+      override def toNonEmptyList[A](fa: NonEmptyChain[A]): NonEmptyList[A] = fa.toNonEmptyList
     }
 
   implicit def catsDataOrderForNonEmptyChain[A: Order]: Order[NonEmptyChain[A]] =

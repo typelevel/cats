@@ -16,9 +16,7 @@ trait TraverseLaws[F[_]] extends FunctorLaws[F] with FoldableLaws[F] with Unorde
     fa: F[A],
     f: A => M[B],
     g: B => N[C]
-  )(implicit
-    N: Applicative[N],
-    M: Applicative[M]): IsEq[Nested[M, N, F[C]]] = {
+  )(implicit N: Applicative[N], M: Applicative[M]): IsEq[Nested[M, N, F[C]]] = {
 
     val lhs = Nested(M.map(fa.traverse(f))(fb => fb.traverse(g)))
     val rhs = fa.traverse[Nested[M, N, *], C](a => Nested(M.map(f(a))(g)))
@@ -29,9 +27,7 @@ trait TraverseLaws[F[_]] extends FunctorLaws[F] with FoldableLaws[F] with Unorde
     fa: F[A],
     f: A => M[B],
     g: A => N[B]
-  )(implicit
-    N: Applicative[N],
-    M: Applicative[M]): IsEq[(M[F[B]], N[F[B]])] = {
+  )(implicit N: Applicative[N], M: Applicative[M]): IsEq[(M[F[B]], N[F[B]])] = {
     type MN[Z] = (M[Z], N[Z])
     implicit val MN: Applicative[MN] = new Applicative[MN] {
       def pure[X](x: X): MN[X] = (M.pure(x), N.pure(x))
@@ -54,6 +50,9 @@ trait TraverseLaws[F[_]] extends FunctorLaws[F] with FoldableLaws[F] with Unorde
     val rhs: MN[F[B]] = (fa.traverse(f), fa.traverse(g))
     lhs <-> rhs
   }
+
+  def traverseTap[A, B, G[_]](fa: F[A], f: A => G[B])(implicit G: Applicative[G]): IsEq[G[F[A]]] =
+    fa.traverseTap(f) <-> fa.traverse(a => Applicative[G].as(f(a), a))
 
   def foldMapDerived[A, B](
     fa: F[A],

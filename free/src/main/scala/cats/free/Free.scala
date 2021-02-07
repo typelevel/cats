@@ -10,7 +10,7 @@ import cats.arrow.FunctionK
  * using the heap instead of the stack, allowing tail-call
  * elimination.
  */
-sealed abstract class Free[S[_], A] extends Product with Serializable {
+sealed abstract class Free[S[_], A] extends Product with Serializable with FreeFoldStep[S, A] {
 
   import Free.{FlatMapped, Pure, Suspend}
 
@@ -46,43 +46,32 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
   final def fold[B](r: A => B, s: S[Free[S, A]] => B)(implicit S: Functor[S]): B =
     resume.fold(s, r)
 
-  /** Takes one evaluation step in the Free monad, re-associating left-nested binds in the process. */
+  /**
+   * Takes one evaluation step in the Free monad, re-associating left-nested binds in the process.
+   */
   @tailrec
-  final def step: Free[S, A] = this match {
-    case FlatMapped(FlatMapped(c, f), g) => c.flatMap(cc => f(cc).flatMap(g)).step
-    case FlatMapped(Pure(a), f)          => f(a).step
-    case x                               => x
-  }
+  final def step: Free[S, A] =
+    this match {
+      case FlatMapped(FlatMapped(c, f), g) => c.flatMap(cc => f(cc).flatMap(g)).step
+      case FlatMapped(Pure(a), f)          => f(a).step
+      case x                               => x
+    }
 
   /**
    * Evaluate a single layer of the free monad.
    */
   @tailrec
-  final def resume(implicit S: Functor[S]): Either[S[Free[S, A]], A] = this match {
-    case Pure(a)    => Right(a)
-    case Suspend(t) => Left(S.map(t)(Pure(_)))
-    case FlatMapped(c, f) =>
-      c match {
-        case Pure(a)          => f(a).resume
-        case Suspend(t)       => Left(S.map(t)(f))
-        case FlatMapped(d, g) => d.flatMap(dd => g(dd).flatMap(f)).resume
-      }
-  }
-
-  /**
-   * A combination of step and fold. May be used to define interpreters with custom
-   * (non-monoidial) control flow.
-   */
-  final def foldStep[B](
-    onPure: A => B,
-    onSuspend: S[A] => B,
-    onFlatMapped: ((S[X], X => Free[S, A]) forSome { type X }) => B
-  ): B = this.step match {
-    case Pure(a)                    => onPure(a)
-    case Suspend(a)                 => onSuspend(a)
-    case FlatMapped(Suspend(fa), f) => onFlatMapped((fa, f))
-    case _                          => sys.error("FlatMapped should be right associative after step")
-  }
+  final def resume(implicit S: Functor[S]): Either[S[Free[S, A]], A] =
+    this match {
+      case Pure(a)    => Right(a)
+      case Suspend(t) => Left(S.map(t)(Pure(_)))
+      case FlatMapped(c, f) =>
+        c match {
+          case Pure(a)          => f(a).resume
+          case Suspend(t)       => Left(S.map(t)(f))
+          case FlatMapped(d, g) => d.flatMap(dd => g(dd).flatMap(f)).resume
+        }
+    }
 
   /**
    * Run to completion, using a function that extracts the resumption
@@ -170,16 +159,16 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
    * Lift into `G` (typically a `EitherK`) given `InjectK`. Analogous
    * to `Free.inject` but lifts programs rather than constructors.
    *
-   *{{{
-   *scala> type Lo[A] = cats.data.EitherK[List, Option, A]
-   *defined type alias Lo
+   * {{{
+   * scala> type Lo[A] = cats.data.EitherK[List, Option, A]
+   * defined type alias Lo
    *
-   *scala> val fo = Free.liftF(Option("foo"))
-   *fo: cats.free.Free[Option,String] = Free(...)
+   * scala> val fo = Free.liftF(Option("foo"))
+   * fo: cats.free.Free[Option,String] = Free(...)
    *
-   *scala> fo.inject[Lo]
-   *res4: cats.free.Free[Lo,String] = Free(...)
-   *}}}
+   * scala> fo.inject[Lo]
+   * res4: cats.free.Free[Lo,String] = Free(...)
+   * }}}
    */
   final def inject[G[_]](implicit ev: InjectK[S, G]): Free[G, A] =
     mapK(new (S ~> G) { def apply[B](sb: S[B]): G[B] = ev.inj(sb) })
@@ -198,10 +187,14 @@ object Free extends FreeInstances {
    */
   final private[free] case class Pure[S[_], A](a: A) extends Free[S, A]
 
-  /** Suspend the computation with the given suspension. */
+  /**
+   * Suspend the computation with the given suspension.
+   */
   final private[free] case class Suspend[S[_], A](a: S[A]) extends Free[S, A]
 
-  /** Call a subroutine and continue with the given function. */
+  /**
+   * Call a subroutine and continue with the given function.
+   */
   final private[free] case class FlatMapped[S[_], B, C](c: Free[S, C], f: C => Free[S, B]) extends Free[S, B]
 
   /**
@@ -213,6 +206,30 @@ object Free extends FreeInstances {
    * Lift an `F[A]` value into the free monad.
    */
   def liftF[F[_], A](value: F[A]): Free[F, A] = Suspend(value)
+
+  /**
+   * Same as [[liftF]], but expressed as a FunctionK for use with mapK
+   * {{{
+   * scala> import cats._, data._, implicits._
+   * scala> val a: OptionT[Eval, Int] = 1.pure[OptionT[Eval, *]]
+   * scala> val b: OptionT[Free[Eval, *], Int] = a.mapK(Free.liftK)
+   * scala> b.value.run
+   * res0: Option[Int] = Some(1)
+   * }}}
+   */
+  def liftK[F[_]]: F ~> Free[F, *] =
+    new (F ~> Free[F, *]) { def apply[A](fa: F[A]): Free[F, A] = Free.liftF(fa) }
+
+  /**
+   * Same as [[pure]] but expressed as a FunctionK
+   * {{{
+   * scala> import cats._
+   * scala> val fo = Free.liftId[Eval]("foo")
+   * val fo: cats.free.Free[Eval,String] = Free(...)
+   * }}}
+   */
+  def liftId[F[_]]: Id ~> Free[F, *] =
+    new (Id ~> Free[F, *]) { def apply[A](fa: Id[A]): Free[F, A] = Free.pure(fa) }
 
   /**
    * Absorb a step into the free monad.
@@ -259,7 +276,7 @@ object Free extends FreeInstances {
    * This method exists to allow the `F` and `G` parameters to be
    * bound independently of the `A` parameter below.
    */
-  // TODO: to be deprecated / removed in cats 2.0
+  @deprecated("use liftInject", "2.3.1")
   def inject[F[_], G[_]]: FreeInjectKPartiallyApplied[F, G] =
     new FreeInjectKPartiallyApplied
 
@@ -306,18 +323,10 @@ private trait FreeFoldable[F[_]] extends Foldable[Free[F, *]] {
   implicit def F: Foldable[F]
 
   final override def foldLeft[A, B](fa: Free[F, A], b: B)(f: (B, A) => B): B =
-    fa.foldStep(
-      a => f(b, a),
-      fa => F.foldLeft(fa, b)(f),
-      { case (fx, g) => F.foldLeft(fx, b)((bb, x) => foldLeft(g(x), bb)(f)) }
-    )
+    fa.foldLeft(fa, b)(f)
 
   final override def foldRight[A, B](fa: Free[F, A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
-    fa.foldStep(
-      a => f(a, lb),
-      fa => F.foldRight(fa, lb)(f),
-      { case (fx, g) => F.foldRight(fx, lb)((a, lbb) => foldRight(g(a), lbb)(f)) }
-    )
+    fa.foldRight(fa, lb)(f)
 }
 
 private trait FreeTraverse[F[_]] extends Traverse[Free[F, *]] with FreeFoldable[F] {
@@ -356,16 +365,14 @@ sealed abstract private[free] class FreeInstances extends FreeInstances1 {
 
 sealed abstract private[free] class FreeInstances1 {
 
-  implicit def catsFreeFoldableForFree[F[_]](
-    implicit
+  implicit def catsFreeFoldableForFree[F[_]](implicit
     foldableF: Foldable[F]
   ): Foldable[Free[F, *]] =
     new FreeFoldable[F] {
       val F = foldableF
     }
 
-  implicit def catsFreeTraverseForFree[F[_]](
-    implicit
+  implicit def catsFreeTraverseForFree[F[_]](implicit
     traversableF: Traverse[F]
   ): Traverse[Free[F, *]] =
     new FreeTraverse[F] {

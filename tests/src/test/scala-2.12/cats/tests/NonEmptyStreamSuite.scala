@@ -11,16 +11,20 @@ import cats.laws.discipline.arbitrary._
 import cats.syntax.foldable._
 import cats.syntax.reducible._
 import cats.syntax.show._
+import cats.syntax.eq._
+import org.scalacheck.Prop._
+import org.scalacheck.Test.Parameters
 
 class NonEmptyStreamSuite extends CatsSuite {
   // Lots of collections here.. telling ScalaCheck to calm down a bit
-  implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
-    PropertyCheckConfiguration(minSuccessful = 20, sizeRange = 5)
+  implicit override val scalaCheckTestParameters: Parameters =
+    Parameters.default.withMinSuccessfulTests(20).withMaxSize(Parameters.default.minSize + 5)
 
   checkAll("NonEmptyStream[Int]", EqTests[NonEmptyStream[Int]].eqv)
 
   checkAll("NonEmptyStream[Int] with Option",
-           NonEmptyTraverseTests[NonEmptyStream].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option])
+           NonEmptyTraverseTests[NonEmptyStream].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option]
+  )
   checkAll("NonEmptyTraverse[NonEmptyStream[A]]", SerializableTests.serializable(NonEmptyTraverse[NonEmptyStream[*]]))
 
   checkAll("NonEmptyStream[Int]", ReducibleTests[NonEmptyStream].reducible[Option, Int, Int])
@@ -28,6 +32,10 @@ class NonEmptyStreamSuite extends CatsSuite {
 
   checkAll("NonEmptyStream[Int]", SemigroupTests[NonEmptyStream[Int]].semigroup)
   checkAll("Semigroup[NonEmptyStream[Int]]", SerializableTests.serializable(Semigroup[NonEmptyStream[Int]]))
+
+  checkAll("NonEmptyStream[Int]", ShortCircuitingTests[NonEmptyStream].foldable[Int])
+  checkAll("NonEmptyStream[Int]", ShortCircuitingTests[NonEmptyStream].traverse[Int])
+  checkAll("NonEmptyStream[Int]", ShortCircuitingTests[NonEmptyStream].nonEmptyTraverse[Int])
 
   {
     // Test functor and subclasses don't have implicit conflicts
@@ -46,51 +54,51 @@ class NonEmptyStreamSuite extends CatsSuite {
 
   test("Show is not empty and is formatted as expected") {
     forAll { (nel: NonEmptyStream[Int]) =>
-      nel.show.nonEmpty should ===(true)
-      nel.show.startsWith("OneAnd(") should ===(true)
-      nel.show should ===(implicitly[Show[NonEmptyStream[Int]]].show(nel))
-      nel.show.contains(nel.head.show) should ===(true)
+      assert(nel.show.nonEmpty === true)
+      assert(nel.show.startsWith("OneAnd(") === true)
+      assert(nel.show === (implicitly[Show[NonEmptyStream[Int]]].show(nel)))
+      assert(nel.show.contains(nel.head.show) === true)
     }
   }
 
   test("Show is formatted correctly") {
     val oneAnd = NonEmptyStream("Test")
-    oneAnd.show should ===(s"OneAnd(Test, Stream())")
+    assert(oneAnd.show === s"OneAnd(Test, Stream())")
   }
 
   test("Creating OneAnd + unwrap is identity") {
     forAll { (i: Int, tail: Stream[Int]) =>
       val stream = i #:: tail
       val oneAnd = NonEmptyStream(i, tail: _*)
-      stream should ===(oneAnd.unwrap)
+      assert(stream === (oneAnd.unwrap))
     }
   }
 
   test("NonEmptyStream#find is consistent with Stream#find") {
     forAll { (nel: NonEmptyStream[Int], p: Int => Boolean) =>
       val stream = nel.unwrap
-      nel.find(p) should ===(stream.find(p))
+      assert(nel.find(p) === (stream.find(p)))
     }
   }
 
   test("NonEmptyStream#exists is consistent with Stream#exists") {
     forAll { (nel: NonEmptyStream[Int], p: Int => Boolean) =>
       val stream = nel.unwrap
-      nel.exists(p) should ===(stream.exists(p))
+      assert(nel.exists(p) === (stream.exists(p)))
     }
   }
 
   test("NonEmptyStream#forall is consistent with Stream#forall") {
     forAll { (nel: NonEmptyStream[Int], p: Int => Boolean) =>
       val stream = nel.unwrap
-      nel.forall(p) should ===(stream.forall(p))
+      assert(nel.forall(p) === (stream.forall(p)))
     }
   }
 
   test("NonEmptyStream#map is consistent with Stream#map") {
     forAll { (nel: NonEmptyStream[Int], p: Int => String) =>
       val stream = nel.unwrap
-      nel.map(p).unwrap should ===(stream.map(p))
+      assert(nel.map(p).unwrap === (stream.map(p)))
     }
   }
 
@@ -101,14 +109,14 @@ class NonEmptyStreamSuite extends CatsSuite {
       val sortedNes = OneAnd(sortedStream.head, sortedStream.tail)
       val ior = Reducible[NonEmptyStream].nonEmptyPartition(sortedNes)(identity)
 
-      ior.left.map(xs => xs.sorted should ===(xs))
-      ior.right.map(xs => xs.sorted should ===(xs))
+      assert(ior.left.forall(xs => xs.sorted === xs))
+      assert(ior.right.map(xs => xs.sorted === xs).getOrElse(true))
     }
   }
 
   test("reduceLeft consistent with foldLeft") {
     forAll { (nel: NonEmptyStream[Int], f: (Int, Int) => Int) =>
-      nel.reduceLeft(f) should ===(nel.tail.foldLeft(nel.head)(f))
+      assert(nel.reduceLeft(f) === nel.tail.foldLeft(nel.head)(f))
     }
   }
 
@@ -117,19 +125,19 @@ class NonEmptyStreamSuite extends CatsSuite {
       val got = nel.reduceRight(f).value
       val last :: rev = nel.unwrap.toList.reverse
       val expected = rev.reverse.foldRight(last)((a, b) => f(a, Now(b)).value)
-      got should ===(expected)
+      assert(got === expected)
     }
   }
 
   test("reduce consistent with fold") {
     forAll { (nel: NonEmptyStream[Int]) =>
-      nel.reduce should ===(nel.fold)
+      assert(nel.reduce === (nel.fold))
     }
   }
 
   test("reduce consistent with reduceK") {
     forAll { (nel: NonEmptyStream[Option[Int]]) =>
-      nel.reduce(SemigroupK[Option].algebra[Int]) should ===(nel.reduceK)
+      assert(nel.reduce(SemigroupK[Option].algebra[Int]) === (nel.reduceK))
     }
   }
 
@@ -138,7 +146,7 @@ class NonEmptyStreamSuite extends CatsSuite {
       val expected = nel.tail.foldLeft(Option(f(nel.head))) { (opt, i) =>
         opt.map(s => g(s, i))
       }
-      nel.reduceLeftToOption(f)(g) should ===(expected)
+      assert(nel.reduceLeftToOption(f)(g) === expected)
     }
   }
 
@@ -149,13 +157,13 @@ class NonEmptyStreamSuite extends CatsSuite {
       val expected = rev.reverse.foldRight(Option(f(last))) { (i, opt) =>
         opt.map(s => g(i, Now(s)).value)
       }
-      got should ===(expected)
+      assert(got === expected)
     }
   }
 
   test("filter includes elements based on a predicate") {
     forAll { (nes: NonEmptyStream[Int], pred: Int => Boolean) =>
-      nes.filter(pred) should ===(nes.unwrap.filter(pred))
+      assert(nes.filter(pred) === (nes.unwrap.filter(pred)))
     }
   }
 

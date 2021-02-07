@@ -167,7 +167,8 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
 
   /**
    * Converts this NonEmptyLazyList to a `NonEmptyList`.
-   */ // TODO also add toNonEmptyLazyList to NonEmptyList?
+   */
+  // TODO also add toNonEmptyLazyList to NonEmptyList?
   final def toNonEmptyList: NonEmptyList[A] =
     NonEmptyList.fromListUnsafe(toLazyList.toList)
 
@@ -264,8 +265,8 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
    */
   final def reduceLeftTo[B](f: A => B)(g: (B, A) => B): B = {
     val iter = toLazyList.iterator
-    var result = f(iter.next)
-    while (iter.hasNext) { result = g(result, iter.next) }
+    var result = f(iter.next())
+    while (iter.hasNext) { result = g(result, iter.next()) }
     result
   }
 
@@ -281,8 +282,8 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
    */
   final def reduceRightTo[B](f: A => B)(g: (A, B) => B): B = {
     val iter = toLazyList.reverseIterator
-    var result = f(iter.next)
-    while (iter.hasNext) { result = g(iter.next, result) }
+    var result = f(iter.next())
+    while (iter.hasNext) { result = g(iter.next(), result) }
     result
   }
 
@@ -394,8 +395,8 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
       }
     }
 
-    m.map {
-      case (k, v) => (k, create(v.result))
+    m.map { case (k, v) =>
+      (k, create(v.result()))
     }: TreeMap[B, NonEmptyLazyList[A]]
   }
 
@@ -418,7 +419,7 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
 
   /**
    * Creates new `NonEmptyMap`, similarly to List#toMap from scala standard library.
-   *{{{
+   * {{{
    * scala> import cats.data.{NonEmptyLazyList, NonEmptyMap}
    * scala> import cats.implicits._
    * scala> val nel = NonEmptyLazyList.fromLazyListPrepend((0, "a"), LazyList((1, "b"),(0, "c"), (2, "d")))
@@ -426,24 +427,38 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
    * scala> val result = nel.toNem
    * scala> result === expectedResult
    * res0: Boolean = true
-   *}}}
-   *
+   * }}}
    */
   final def toNem[T, U](implicit ev: A <:< (T, U), order: Order[T]): NonEmptyMap[T, U] =
     NonEmptyMap.fromMapUnsafe(SortedMap(toLazyList.map(ev): _*)(order.toOrdering))
 
   /**
    * Creates new `NonEmptySet`, similarly to List#toSet from scala standard library.
-   *{{{
+   * {{{
    * scala> import cats.data._
    * scala> import cats.instances.int._
    * scala> val nel = NonEmptyLazyList.fromLazyListPrepend(1, LazyList(2,2,3,4))
    * scala> nel.toNes
    * res0: cats.data.NonEmptySet[Int] = TreeSet(1, 2, 3, 4)
-   *}}}
+   * }}}
    */
   final def toNes[B >: A](implicit order: Order[B]): NonEmptySet[B] =
     NonEmptySet.of(head, tail: _*)
+
+  /**
+   * Creates new `NonEmptyVector`, similarly to List#toVector from scala standard library.
+   * {{{
+   * scala> import cats.data._
+   * scala> import cats.instances.int._
+   * scala> val nel = NonEmptyLazyList.fromLazyListPrepend(1, LazyList(2,3,4))
+   * scala> val expectedResult = NonEmptyVector.fromVectorUnsafe(Vector(1,2,3,4))
+   * scala> val result = nel.toNev
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  final def toNev[B >: A]: NonEmptyVector[B] =
+    NonEmptyVector.fromVectorUnsafe(toLazyList.toVector)
 
   final def show[AA >: A](implicit AA: Show[AA]): String = s"NonEmpty${Show[LazyList[AA]].show(toLazyList)}"
 }
@@ -458,23 +473,24 @@ sealed abstract private[data] class NonEmptyLazyListInstances extends NonEmptyLa
 
       def extract[A](fa: NonEmptyLazyList[A]): A = fa.head
 
-      def nonEmptyTraverse[G[_]: Apply, A, B](fa: NonEmptyLazyList[A])(f: A => G[B]): G[NonEmptyLazyList[B]] =
-        Foldable[LazyList]
-          .reduceRightToOption[A, G[LazyList[B]]](fa.tail)(a => Apply[G].map(f(a))(LazyList.apply(_))) { (a, lglb) =>
-            Apply[G].map2Eval(f(a), lglb)(_ +: _)
+      def nonEmptyTraverse[G[_]: Apply, A, B](fa: NonEmptyLazyList[A])(f: A => G[B]): G[NonEmptyLazyList[B]] = {
+        def loop(head: A, tail: LazyList[A]): Eval[G[NonEmptyLazyList[B]]] =
+          tail.headOption.fold(Eval.now(Apply[G].map(f(head))(NonEmptyLazyList(_)))) { h =>
+            Apply[G].map2Eval(f(head), Eval.defer(loop(h, tail.tail)))((b, acc) => b +: acc)
           }
-          .map {
-            case None        => Apply[G].map(f(fa.head))(h => create(LazyList(h)))
-            case Some(gtail) => Apply[G].map2(f(fa.head), gtail)((h, t) => create(LazyList(h) ++ t))
-          }
-          .value
+
+        loop(fa.head, fa.tail).value
+      }
 
       def reduceLeftTo[A, B](fa: NonEmptyLazyList[A])(f: A => B)(g: (B, A) => B): B = fa.reduceLeftTo(f)(g)
 
       def reduceRightTo[A, B](fa: NonEmptyLazyList[A])(f: A => B)(g: (A, cats.Eval[B]) => cats.Eval[B]): cats.Eval[B] =
-        Eval.defer(fa.reduceRightTo(a => Eval.now(f(a))) { (a, b) =>
-          Eval.defer(g(a, b))
-        })
+        fa.tail match {
+          case head +: tail =>
+            val nell = NonEmptyLazyList.fromLazyListPrepend(head, tail)
+            g(fa.head, Eval.defer(reduceRightTo(nell)(f)(g)))
+          case _ => Eval.later(f(fa.head))
+        }
 
       private val alignInstance = Align[LazyList].asInstanceOf[Align[NonEmptyLazyList]]
 
@@ -483,8 +499,9 @@ sealed abstract private[data] class NonEmptyLazyListInstances extends NonEmptyLa
       def align[A, B](fa: NonEmptyLazyList[A], fb: NonEmptyLazyList[B]): NonEmptyLazyList[Ior[A, B]] =
         alignInstance.align(fa, fb)
 
-      override def alignWith[A, B, C](fa: NonEmptyLazyList[A],
-                                      fb: NonEmptyLazyList[B])(f: Ior[A, B] => C): NonEmptyLazyList[C] =
+      override def alignWith[A, B, C](fa: NonEmptyLazyList[A], fb: NonEmptyLazyList[B])(
+        f: Ior[A, B] => C
+      ): NonEmptyLazyList[C] =
         alignInstance.alignWith(fa, fb)(f)
     }
 

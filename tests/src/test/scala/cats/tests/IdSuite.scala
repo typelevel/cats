@@ -1,8 +1,8 @@
 package cats.tests
 
 import cats.{Bimonad, CommutativeMonad, Id, Reducible, Traverse}
-import cats.instances.all._
 import cats.laws.discipline._
+import cats.catsInstancesForId
 
 class IdSuite extends CatsSuite {
   implicit val iso: SemigroupalTests.Isomorphisms[Id] =

@@ -38,10 +38,14 @@ package object cats {
   type ⊥ = Nothing
   type ⊤ = Any
 
-  /** [[cats.InjectK]][F, G] */
+  /**
+   * [[cats.InjectK]][F, G]
+   */
   type :<:[F[_], G[_]] = InjectK[F, G]
 
-  /** [[cats.InjectK]][F, G] */
+  /**
+   * [[cats.InjectK]][F, G]
+   */
   type :≺:[F[_], G[_]] = InjectK[F, G]
 
   /**
@@ -68,10 +72,11 @@ package object cats {
       def extract[A](a: A): A = a
       def flatMap[A, B](a: A)(f: A => B): B = f(a)
       def coflatMap[A, B](a: A)(f: A => B): B = f(a)
-      @tailrec def tailRecM[A, B](a: A)(f: A => Either[A, B]): B = f(a) match {
-        case Left(a1) => tailRecM(a1)(f)
-        case Right(b) => b
-      }
+      @tailrec def tailRecM[A, B](a: A)(f: A => Either[A, B]): B =
+        f(a) match {
+          case Left(a1) => tailRecM(a1)(f)
+          case Right(b) => b
+        }
       override def distribute[F[_], A, B](fa: F[A])(f: A => B)(implicit F: Functor[F]): Id[F[B]] = F.map(fa)(f)
       override def map[A, B](fa: A)(f: A => B): B = f(fa)
       override def ap[A, B](ff: A => B)(fa: A): B = ff(fa)
@@ -137,4 +142,14 @@ package object cats {
   val Semigroup = cats.kernel.Semigroup
   val Monoid = cats.kernel.Monoid
   val Group = cats.kernel.Group
+
+  type ApplicativeThrow[F[_]] = ApplicativeError[F, Throwable]
+  object ApplicativeThrow {
+    def apply[F[_]](implicit ev: ApplicativeThrow[F]): ApplicativeThrow[F] = ev
+  }
+
+  type MonadThrow[F[_]] = MonadError[F, Throwable]
+  object MonadThrow {
+    def apply[F[_]](implicit ev: MonadThrow[F]): MonadThrow[F] = ev
+  }
 }

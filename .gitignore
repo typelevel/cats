@@ -19,9 +19,12 @@ TAGS
 .DS_Store
 .vscode
 .sbtrc
+.semanticdb
+metals.sbt
 *.sublime-project
 *.sublime-workspace
 tests.iml
 # Auto-copied by sbt-microsites
 docs/src/main/tut/contributing.md
 docs/src/main/tut/index.md
+.bsp/

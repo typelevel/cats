@@ -1,7 +1,6 @@
 package cats.tests
 
 import cats.{CommutativeApplicative, CommutativeApply, Invariant, InvariantMonoidal}
-import cats.instances._
 import cats.kernel._
 import cats.kernel.laws.discipline.{SemigroupTests, MonoidTests, GroupTests, _}
 import cats.laws.discipline.{
@@ -18,16 +17,7 @@ import cats.syntax.invariant._
 import cats.syntax.order._
 import org.scalacheck.{Arbitrary, Gen}
 
-class AlgebraInvariantSuite
-    extends CatsSuite
-    with AllInstances
-    with AllInstancesBinCompat0
-    with AllInstancesBinCompat1
-    with AllInstancesBinCompat2
-    with AllInstancesBinCompat3
-    with AllInstancesBinCompat4
-    with AllInstancesBinCompat5
-    with AllInstancesBinCompat6 {
+class AlgebraInvariantSuite extends CatsSuite {
   // working around https://github.com/typelevel/cats/issues/2701
   implicit private val eqSetBooleanTuple: Eq[(Set[Boolean], Set[Boolean])] = Eq.fromUniversalEquals
   implicit private val eqSetBooleanBooleanTuple: Eq[(Set[Boolean], Boolean)] = Eq.fromUniversalEquals
@@ -35,16 +25,17 @@ class AlgebraInvariantSuite
   catsLawsEqForBand[Set[Boolean]]
 
   // https://github.com/typelevel/cats/issues/2725
-  implicit private def commutativeMonoidForSemigroup[A](
-    implicit csA: CommutativeSemigroup[A]
+  implicit private def commutativeMonoidForSemigroup[A](implicit
+    csA: CommutativeSemigroup[A]
   ): CommutativeMonoid[Option[A]] =
     new CommutativeMonoid[Option[A]] {
       def empty: Option[A] = None
-      def combine(x: Option[A], y: Option[A]): Option[A] = (x, y) match {
-        case (None, r)          => r
-        case (l, None)          => l
-        case (Some(l), Some(r)) => Some(csA.combine(l, r))
-      }
+      def combine(x: Option[A], y: Option[A]): Option[A] =
+        (x, y) match {
+          case (None, r)          => r
+          case (l, None)          => l
+          case (Some(l), Some(r)) => Some(csA.combine(l, r))
+        }
     }
 
   private def leftOptionMonoid[A]: Monoid[Option[A]] =
@@ -133,7 +124,8 @@ class AlgebraInvariantSuite
     Gen.oneOf(commutativeMonoidForSemigroup(boolAnd),
               commutativeMonoidForSemigroup(boolOr),
               leftOptionMonoid[Boolean],
-              rightOptionMonoid[Boolean])
+              rightOptionMonoid[Boolean]
+    )
 
   implicit private val arbMonoidOptionBoolean: Arbitrary[Monoid[Option[Boolean]]] =
     Arbitrary(genMonoidOptionBoolean)
@@ -167,10 +159,12 @@ class AlgebraInvariantSuite
 
   checkAll("InvariantMonoidal[Semigroup]", SemigroupTests[Int](InvariantMonoidal[Semigroup].point(0)).semigroup)
   checkAll("InvariantMonoidal[CommutativeSemigroup]",
-           CommutativeSemigroupTests[Int](InvariantMonoidal[CommutativeSemigroup].point(0)).commutativeSemigroup)
+           CommutativeSemigroupTests[Int](InvariantMonoidal[CommutativeSemigroup].point(0)).commutativeSemigroup
+  )
 
   checkAll("InvariantSemigroupal[Monoid]",
-           InvariantSemigroupalTests[Monoid].invariantSemigroupal[Option[MiniInt], Option[Boolean], Option[Boolean]])
+           InvariantSemigroupalTests[Monoid].invariantSemigroupal[Option[MiniInt], Option[Boolean], Option[Boolean]]
+  )
 
   {
     val S: Semigroup[Int] = Semigroup[Int].imap(identity)(identity)
@@ -255,7 +249,8 @@ class AlgebraInvariantSuite
   checkAll("Invariant[CommutativeMonoid]", SerializableTests.serializable(Invariant[CommutativeMonoid]))
 
   checkAll("Invariant[BoundedSemilattice]",
-           InvariantTests[BoundedSemilattice].invariant[MiniInt, Set[Boolean], Set[Boolean]])
+           InvariantTests[BoundedSemilattice].invariant[MiniInt, Set[Boolean], Set[Boolean]]
+  )
   checkAll("Invariant[BoundedSemilattice]", SerializableTests.serializable(Invariant[BoundedSemilattice]))
 
   checkAll("Invariant[Group]", InvariantTests[Group].invariant[MiniInt, Boolean, Boolean])
@@ -265,12 +260,15 @@ class AlgebraInvariantSuite
   checkAll("Invariant[CommutativeGroup]", SerializableTests.serializable(Invariant[CommutativeGroup]))
 
   checkAll("InvariantMonoidal[Semigroup]",
-           InvariantMonoidalTests[Semigroup].invariantMonoidal[Option[MiniInt], Option[Boolean], Option[Boolean]])
+           InvariantMonoidalTests[Semigroup].invariantMonoidal[Option[MiniInt], Option[Boolean], Option[Boolean]]
+  )
   checkAll("InvariantMonoidal[Semigroup]", SerializableTests.serializable(InvariantMonoidal[Semigroup]))
 
   checkAll("InvariantMonoidal[CommutativeSemigroup]",
-           InvariantMonoidalTests[CommutativeSemigroup].invariantMonoidal[MiniInt, Boolean, Boolean])
+           InvariantMonoidalTests[CommutativeSemigroup].invariantMonoidal[MiniInt, Boolean, Boolean]
+  )
   checkAll("InvariantMonoidal[CommutativeSemigroup]",
-           SerializableTests.serializable(InvariantMonoidal[CommutativeSemigroup]))
+           SerializableTests.serializable(InvariantMonoidal[CommutativeSemigroup])
+  )
 
 }

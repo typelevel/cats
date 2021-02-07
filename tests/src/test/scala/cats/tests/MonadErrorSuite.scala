@@ -1,10 +1,10 @@
 package cats.tests
 
-import cats.instances.all._
 import cats.kernel.Eq
 import cats.syntax.applicativeError._
 import cats.syntax.monadError._
 import scala.util.{Failure, Success, Try}
+import cats.syntax.eq._
 
 class MonadErrorSuite extends CatsSuite {
 
@@ -16,62 +16,62 @@ class MonadErrorSuite extends CatsSuite {
   val failed: Try[Int] = Failure(failedValue)
 
   test("ensure raises an error if the predicate fails") {
-    successful.ensure(failedValue)(_ => false) should ===(failed)
+    assert(successful.ensure(failedValue)(_ => false) === failed)
   }
 
   test("ensure returns the successful value if the predicate succeeds") {
-    successful.ensure(failedValue)(_ => true) should ===(successful)
+    assert(successful.ensure(failedValue)(_ => true) === successful)
   }
 
   test("ensure returns the original failure, when applied to a failure") {
-    failed.ensure(otherValue)(_ => false) should ===(failed)
-    failed.ensure(otherValue)(_ => true) should ===(failed)
+    assert(failed.ensure(otherValue)(_ => false) === failed)
+    assert(failed.ensure(otherValue)(_ => true) === failed)
   }
 
   test("ensureOr raises an error if the predicate fails") {
-    successful.ensureOr(_ => failedValue)(_ => false) should ===(failed)
+    assert(successful.ensureOr(_ => failedValue)(_ => false) === failed)
   }
 
   test("ensureOr returns the successful value if the predicate succeeds") {
-    successful.ensureOr(_ => failedValue)(_ => true) should ===(successful)
+    assert(successful.ensureOr(_ => failedValue)(_ => true) === successful)
   }
 
   test("ensureOr returns the original failure, when applied to a failure") {
-    failed.ensureOr(_ => otherValue)(_ => false) should ===(failed)
-    failed.ensureOr(_ => otherValue)(_ => true) should ===(failed)
+    assert(failed.ensureOr(_ => otherValue)(_ => false) === failed)
+    assert(failed.ensureOr(_ => otherValue)(_ => true) === failed)
   }
 
   test("reject returns the successful value if the partial function is not defined") {
-    successful.reject {
+    assert(successful.reject {
       case i if i < 0 => failedValue
-    } should ===(successful)
+    } === successful)
   }
 
   test("reject returns the original failure, when applied to a failure") {
-    failed.reject {
+    assert(failed.reject {
       case i if i < 0 => otherValue
-    } should ===(failed)
+    } === failed)
   }
 
   test("reject raises an error if the partial function is defined") {
-    successful.reject {
+    assert(successful.reject {
       case i if i > 0 => failedValue
-    } should ===(failed)
+    } === failed)
   }
 
   test("rethrow returns the failure, when applied to a Left of a failure") {
-    failed.attempt.rethrow should ===(failed)
+    assert(failed.attempt.rethrow === failed)
   }
 
   test("rethrow returns the successful value, when applied to a Right of a successful value") {
-    successful.attempt.rethrow should ===(successful)
+    assert(successful.attempt.rethrow === successful)
   }
 
   test("rethrow returns the failure, when applied to a Left of a specialized failure") {
-    failed.attempt.asInstanceOf[Try[Either[IllegalArgumentException, Int]]].rethrow should ===(failed)
+    assert(failed.attempt.asInstanceOf[Try[Either[IllegalArgumentException, Int]]].rethrow === failed)
   }
 
   test("rethrow returns the successful value, when applied to a Right of a specialized successful value") {
-    successful.attempt.asInstanceOf[Try[Either[IllegalArgumentException, Int]]].rethrow should ===(successful)
+    assert(successful.attempt.asInstanceOf[Try[Either[IllegalArgumentException, Int]]].rethrow === successful)
   }
 }

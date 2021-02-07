@@ -15,12 +15,36 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
     F.map(value)(_.fold(default)(f))
 
   /**
+   * Transform this `OptionT[F, A]` into a `F[B]`.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.data.OptionT
+   *
+   * scala> val optionT: OptionT[List, Int] = OptionT[List, Int](List(Some(23), None))
+   * scala> optionT.foldF(Nil)(v => List(v, v * 2))
+   * res0: List[Int] = List(23, 46)
+   * }}}
+   */
+  def foldF[B](default: => F[B])(f: A => F[B])(implicit F: FlatMap[F]): F[B] =
+    F.flatMap(value)(_.fold(default)(f))
+
+  /**
    * Catamorphism on the Option. This is identical to [[fold]], but it only has
    * one parameter list, which can result in better type inference in some
    * contexts.
    */
   def cata[B](default: => B, f: A => B)(implicit F: Functor[F]): F[B] =
     fold(default)(f)
+
+  /**
+   * Effectful catamorphism on the Option. This is identical to [[foldF]], but it only has
+   * one parameter list, which can result in better type inference in some
+   * contexts.
+   */
+  def cataF[B](default: => F[B], f: A => F[B])(implicit F: FlatMap[F]): F[B] =
+    foldF(default)(f)
 
   def map[B](f: A => B)(implicit F: Functor[F]): OptionT[F, B] =
     OptionT(F.map(value)(_.map(f)))
@@ -43,6 +67,9 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
   def semiflatMap[B](f: A => F[B])(implicit F: Monad[F]): OptionT[F, B] =
     flatMap(a => OptionT.liftF(f(a)))
 
+  def semiflatTap[B](f: A => F[B])(implicit F: Monad[F]): OptionT[F, A] =
+    semiflatMap(a => F.as(f(a), a))
+
   def mapFilter[B](f: A => Option[B])(implicit F: Functor[F]): OptionT[F, B] =
     subflatMap(f)
 
@@ -60,6 +87,13 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
 
   def subflatMap[B](f: A => Option[B])(implicit F: Functor[F]): OptionT[F, B] =
     transform(_.flatMap(f))
+
+  /**
+   * Perform an effect if the value inside the is a `None`, leaving the value untouched. Equivalent to [[orElseF]]
+   * with an effect returning `None` as argument.
+   */
+  def flatTapNone[B](ifNone: => F[B])(implicit F: Monad[F]): OptionT[F, A] =
+    OptionT(F.flatTap(value)(_.fold(F.void(ifNone))(_ => F.unit)))
 
   def getOrElse[B >: A](default: => B)(implicit F: Functor[F]): F[B] =
     F.map(value)(_.getOrElse(default))
@@ -103,8 +137,14 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
   def toRight[L](left: => L)(implicit F: Functor[F]): EitherT[F, L, A] =
     EitherT(cata(Left(left), Right.apply))
 
+  def toRightF[L](left: => F[L])(implicit F: Monad[F]): EitherT[F, L, A] =
+    EitherT(cataF(F.map(left)(Left.apply[L, A]), a => F.pure(Right(a))))
+
   def toLeft[R](right: => R)(implicit F: Functor[F]): EitherT[F, A, R] =
     EitherT(cata(Right(right), Left.apply))
+
+  def toLeftF[R](right: => F[R])(implicit F: Monad[F]): EitherT[F, A, R] =
+    EitherT(cataF(F.map(right)(Right.apply[A, R]), a => F.pure(Left(a))))
 
   def show(implicit F: Show[F[Option[A]]]): String = F.show(value)
 
@@ -158,25 +198,25 @@ object OptionT extends OptionTInstances {
       OptionT(F.pure(Some(value)))
   }
 
-  /** Creates a `OptionT[A]` from an `A`
+  /**
+   * Creates a `OptionT[A]` from an `A`
    *
    * {{{
    * scala> import cats.implicits._
    * scala> OptionT.pure[List](2)
    * res0: OptionT[List, Int] = OptionT(List(Some(2)))
    * }}}
-   *
    */
   def pure[F[_]]: PurePartiallyApplied[F] = new PurePartiallyApplied[F]
 
-  /** An alias for pure
+  /**
+   * An alias for pure
    *
    * {{{
    * scala> import cats.implicits._
    * scala> OptionT.some[List](2)
    * res0: OptionT[List, Int] = OptionT(List(Some(2)))
    * }}}
-   *
    */
   def some[F[_]]: PurePartiallyApplied[F] = pure
 
@@ -309,44 +349,45 @@ sealed abstract private[data] class OptionTInstances extends OptionTInstances0 {
   def catsDateTraverseFilterForOptionT[F[_]](implicit F0: Traverse[F]): TraverseFilter[OptionT[F, *]] =
     catsDataTraverseFilterForOptionT
 
-  implicit def catsDataParallelForOptionT[M[_]](
-    implicit P: Parallel[M]
-  ): Parallel.Aux[OptionT[M, *], Nested[P.F, Option, *]] = new Parallel[OptionT[M, *]] {
-    type F[x] = Nested[P.F, Option, x]
+  implicit def catsDataParallelForOptionT[M[_]](implicit
+    P: Parallel[M]
+  ): Parallel.Aux[OptionT[M, *], Nested[P.F, Option, *]] =
+    new Parallel[OptionT[M, *]] {
+      type F[x] = Nested[P.F, Option, x]
 
-    implicit val monadM: Monad[M] = P.monad
+      implicit val monadM: Monad[M] = P.monad
 
-    def applicative: Applicative[Nested[P.F, Option, *]] =
-      cats.data.Nested.catsDataApplicativeForNested(P.applicative, cats.instances.option.catsStdInstancesForOption)
+      def applicative: Applicative[Nested[P.F, Option, *]] =
+        cats.data.Nested.catsDataApplicativeForNested(P.applicative, cats.instances.option.catsStdInstancesForOption)
 
-    def monad: Monad[OptionT[M, *]] = cats.data.OptionT.catsDataMonadErrorMonadForOptionT[M]
+      def monad: Monad[OptionT[M, *]] = cats.data.OptionT.catsDataMonadErrorMonadForOptionT[M]
 
-    def sequential: Nested[P.F, Option, *] ~> OptionT[M, *] =
-      new (Nested[P.F, Option, *] ~> OptionT[M, *]) {
-        def apply[A](nested: Nested[P.F, Option, A]): OptionT[M, A] = OptionT(P.sequential(nested.value))
-      }
+      def sequential: Nested[P.F, Option, *] ~> OptionT[M, *] =
+        new (Nested[P.F, Option, *] ~> OptionT[M, *]) {
+          def apply[A](nested: Nested[P.F, Option, A]): OptionT[M, A] = OptionT(P.sequential(nested.value))
+        }
 
-    def parallel: OptionT[M, *] ~> Nested[P.F, Option, *] =
-      new (OptionT[M, *] ~> Nested[P.F, Option, *]) {
-        def apply[A](optT: OptionT[M, A]): Nested[P.F, Option, A] = Nested(P.parallel(optT.value))
-      }
-  }
+      def parallel: OptionT[M, *] ~> Nested[P.F, Option, *] =
+        new (OptionT[M, *] ~> Nested[P.F, Option, *]) {
+          def apply[A](optT: OptionT[M, A]): Nested[P.F, Option, A] = Nested(P.parallel(optT.value))
+        }
+    }
 }
 
 sealed abstract private[data] class OptionTInstances0 extends OptionTInstances1 {
 
   // the Dummy type is to make this one more specific than catsDataMonadErrorMonadForOptionT on 2.13.x
   // see https://github.com/typelevel/cats/pull/2335#issuecomment-408249775
-  implicit def catsDataMonadErrorForOptionT[F[_], E](
-    implicit F0: MonadError[F, E]
+  implicit def catsDataMonadErrorForOptionT[F[_], E](implicit
+    F0: MonadError[F, E]
   ): MonadError[OptionT[F, *], E] { type Dummy } =
     new OptionTMonadError[F, E] {
       type Dummy
       implicit val F = F0
     }
 
-  implicit def catsDataContravariantMonoidalForOptionT[F[_]](
-    implicit F0: ContravariantMonoidal[F]
+  implicit def catsDataContravariantMonoidalForOptionT[F[_]](implicit
+    F0: ContravariantMonoidal[F]
   ): ContravariantMonoidal[OptionT[F, *]] =
     new OptionTContravariantMonoidal[F] { implicit val F = F0 }
 
@@ -356,8 +397,8 @@ sealed abstract private[data] class OptionTInstances0 extends OptionTInstances1 
   implicit def catsDataSemigroupForOptionT[F[_], A](implicit F0: Semigroup[F[Option[A]]]): Semigroup[OptionT[F, A]] =
     new OptionTSemigroup[F, A] { implicit val F = F0 }
 
-  implicit def catsDataPartialOrderForOptionT[F[_], A](
-    implicit F0: PartialOrder[F[Option[A]]]
+  implicit def catsDataPartialOrderForOptionT[F[_], A](implicit
+    F0: PartialOrder[F[Option[A]]]
   ): PartialOrder[OptionT[F, A]] =
     new OptionTPartialOrder[F, A] { implicit val F = F0 }
 
@@ -506,6 +547,12 @@ private[data] trait OptionTSemigroupK[F[_]] extends SemigroupK[OptionT[F, *]] {
   implicit def F: Monad[F]
 
   def combineK[A](x: OptionT[F, A], y: OptionT[F, A]): OptionT[F, A] = x.orElse(y)
+
+  override def combineKEval[A](x: OptionT[F, A], y: Eval[OptionT[F, A]]): Eval[OptionT[F, A]] =
+    Eval.now(OptionT(F.flatMap(x.value) {
+      case oa @ Some(_) => F.pure(oa)
+      case None         => y.value.value
+    }))
 }
 
 private[data] trait OptionTMonoidK[F[_]] extends MonoidK[OptionT[F, *]] with OptionTSemigroupK[F] {

@@ -2,6 +2,7 @@ package cats
 package arrow
 
 import simulacrum.typeclass
+import scala.annotation.implicitNotFound
 
 /**
  * Must obey the laws defined in cats.laws.ComposeLaws.
@@ -18,7 +19,8 @@ import simulacrum.typeclass
  * res1: Int = 301
  * }}}
  */
-@typeclass trait Compose[F[_, _]] { self =>
+@implicitNotFound("Could not find an instance of Compose for ${F}")
+@typeclass trait Compose[F[_, _]] extends Serializable { self =>
 
   @simulacrum.op("<<<", alias = true)
   def compose[A, B, C](f: F[B, C], g: F[A, B]): F[A, C]
@@ -42,4 +44,55 @@ object Compose {
   implicit def catsInstancesForFunction1: ArrowChoice[Function1] with CommutativeArrow[Function1] =
     cats.instances.function.catsStdInstancesForFunction1
   implicit def catsComposeForMap: Compose[Map] = cats.instances.map.catsStdComposeForMap
+
+  implicit def catsInstancesForPartialFunction: ArrowChoice[PartialFunction] with CommutativeArrow[PartialFunction] =
+    cats.instances.partialFunction.catsStdInstancesForPartialFunction
+
+  /* ======================================================================== */
+  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
+  /* ======================================================================== */
+
+  /**
+   * Summon an instance of [[Compose]] for `F`.
+   */
+  @inline def apply[F[_, _]](implicit instance: Compose[F]): Compose[F] = instance
+
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllComposeOps[F[_, _], A, B](target: F[A, B])(implicit tc: Compose[F]): AllOps[F, A, B] {
+      type TypeClassType = Compose[F]
+    } =
+      new AllOps[F, A, B] {
+        type TypeClassType = Compose[F]
+        val self: F[A, B] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
+  trait Ops[F[_, _], A, B] extends Serializable {
+    type TypeClassType <: Compose[F]
+    def self: F[A, B]
+    val typeClassInstance: TypeClassType
+    def compose[C](g: F[C, A]): F[C, B] = typeClassInstance.compose[C, A, B](self, g)
+    def <<<[C](g: F[C, A]): F[C, B] = typeClassInstance.compose[C, A, B](self, g)
+    def andThen[C](g: F[B, C]): F[A, C] = typeClassInstance.andThen[A, B, C](self, g)
+    def >>>[C](g: F[B, C]): F[A, C] = typeClassInstance.andThen[A, B, C](self, g)
+  }
+  trait AllOps[F[_, _], A, B] extends Ops[F, A, B]
+  trait ToComposeOps extends Serializable {
+    implicit def toComposeOps[F[_, _], A, B](target: F[A, B])(implicit tc: Compose[F]): Ops[F, A, B] {
+      type TypeClassType = Compose[F]
+    } =
+      new Ops[F, A, B] {
+        type TypeClassType = Compose[F]
+        val self: F[A, B] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object nonInheritedOps extends ToComposeOps
+
+  /* ======================================================================== */
+  /* END OF SIMULACRUM-MANAGED CODE                                           */
+  /* ======================================================================== */
+
 }

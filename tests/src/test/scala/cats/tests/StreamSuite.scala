@@ -2,7 +2,6 @@ package cats.tests
 
 import cats.{Align, Alternative, CoflatMap, Monad, Semigroupal, Traverse, TraverseFilter}
 import cats.data.ZipStream
-import cats.instances.all._
 import cats.laws.discipline.{
   AlignTests,
   AlternativeTests,
@@ -11,12 +10,14 @@ import cats.laws.discipline.{
   MonadTests,
   SemigroupalTests,
   SerializableTests,
+  ShortCircuitingTests,
   TraverseFilterTests,
   TraverseTests
 }
 import cats.laws.discipline.arbitrary._
 import cats.syntax.show._
-import org.scalatest.funsuite.AnyFunSuiteLike
+import cats.syntax.eq._
+import org.scalacheck.Prop._
 
 class StreamSuite extends CatsSuite {
   checkAll("Stream[Int]", SemigroupalTests[Stream].semigroupal[Int, Int, Int])
@@ -40,12 +41,15 @@ class StreamSuite extends CatsSuite {
   checkAll("Stream[Int]", AlignTests[Stream].align[Int, Int, Int, Int])
   checkAll("Align[Stream]", SerializableTests.serializable(Align[Stream]))
 
+  checkAll("Stream[Int]", ShortCircuitingTests[Stream].foldable[Int])
+  checkAll("Stream[Int]", ShortCircuitingTests[Stream].traverseFilter[Int])
+
   // Can't test applicative laws as they don't terminate
   checkAll("ZipStream[Int]", CommutativeApplyTests[ZipStream].apply[Int, Int, Int])
 
   test("show") {
-    Stream(1, 2, 3).show should ===(s"Stream(1, ?)")
-    Stream.empty[Int].show should ===(s"Stream()")
+    assert(Stream(1, 2, 3).show === s"Stream(1, ?)")
+    assert(Stream.empty[Int].show === s"Stream()")
   }
 
   test("Show[Stream] is referentially transparent, unlike Stream.toString") {
@@ -58,16 +62,16 @@ class StreamSuite extends CatsSuite {
         // depending on the internal state of the Stream. Show[Stream] should return
         // consistent values independent of internal state.
         unevaluatedLL.tail
-        initialShow should ===(unevaluatedLL.show)
+        assert(initialShow === (unevaluatedLL.show))
       } else {
-        stream.show should ===(stream.toString)
+        assert(stream.show === (stream.toString))
       }
     }
   }
 
 }
 
-final class StreamInstancesSuite extends AnyFunSuiteLike {
+final class StreamInstancesSuite extends munit.FunSuite {
 
   test("parallel instance in cats.instances.stream") {
     import cats.instances.stream._

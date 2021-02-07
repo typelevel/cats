@@ -23,8 +23,8 @@ object GenTupleMonadInstances extends Template {
       if (arity <= 1) s"Tuple1($last)"
       else
         `A..(N - 1)`.zipWithIndex.iterator
-          .map {
-            case (an, i) => s"$an.combine($a._${i + 1}, $b._${i + 1})"
+          .map { case (an, i) =>
+            s"$an.combine($a._${i + 1}, $b._${i + 1})"
           }
           .mkString("(", ", ", s", $last)")
 
@@ -41,8 +41,8 @@ object GenTupleMonadInstances extends Template {
       if (arity == 2) s"A0.combine(x, a0)"
       else
         `A..(N - 1)`.zipWithIndex.iterator
-          .map {
-            case (an, i) => s"$an.combine(x._${i + 1}, a$i)"
+          .map { case (an, i) =>
+            s"$an.combine(x._${i + 1}, a$i)"
           }
           .mkString(", ")
 
@@ -57,7 +57,9 @@ object GenTupleMonadInstances extends Template {
     |private[cats] trait NTupleMonadInstances extends NTupleMonadInstances1 {
     -  implicit final def catsStdInstancesForTuple$arity${`[A0, A(N - 1)]`}: Comonad[${`(A..N - 1, *)`}] =
     -    new Comonad[${`(A..N - 1, *)`}] {
-    -      def coflatMap[A, B](fa: ${`A0, A(N - 1)&`("A")})(f: (${`A0, A(N - 1)&`("A")}) => B): ${`A0, A(N - 1)&`("B")} = ${`fa._1..(n - 1) & `(
+    -      def coflatMap[A, B](fa: ${`A0, A(N - 1)&`("A")})(f: (${`A0, A(N - 1)&`("A")}) => B): ${`A0, A(N - 1)&`(
+      "B"
+    )} = ${`fa._1..(n - 1) & `(
       "f(fa)"
     )}
     -      def extract[A](fa: ${`A0, A(N - 1)&`("A")}): A = fa._$arity

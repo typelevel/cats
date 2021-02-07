@@ -1,34 +1,35 @@
 package cats.tests
 
 import cats.Alternative
-import cats.instances.all._
+import cats.syntax.eq._
+import org.scalacheck.Prop._
 
 class AlternativeSuite extends CatsSuite {
-  test("unite") {
+  property("unite") {
     forAll { (list: List[Option[String]]) =>
       val expected = list.collect { case Some(s) => s }
 
-      Alternative[List].unite(list) should ===(expected)
+      assert(Alternative[List].unite(list) === expected)
     }
   }
 
-  test("separate") {
+  property("separate") {
     forAll { (list: List[Either[Int, String]]) =>
-      val ints = list.collect { case Left(i)     => i }
+      val ints = list.collect { case Left(i) => i }
       val strings = list.collect { case Right(s) => s }
       val expected = (ints, strings)
 
-      Alternative[List].separate(list) should ===(expected)
+      assert(Alternative[List].separate(list) === expected)
     }
   }
 
-  test("separateFoldable") {
+  property("separateFoldable") {
     forAll { (list: List[Either[Int, String]]) =>
-      val ints = list.collect { case Left(i)     => i }
+      val ints = list.collect { case Left(i) => i }
       val strings = list.collect { case Right(s) => s }
       val expected = (ints, strings)
 
-      Alternative[List].separateFoldable(list) should ===(expected)
+      assert(Alternative[List].separateFoldable(list) === expected)
     }
   }
 

@@ -3,13 +3,11 @@ package cats.tests
 import cats.{Contravariant, Show}
 import cats.Show.ContravariantShow
 import cats.kernel.Order
-import cats.instances.all._
 import cats.syntax.show._
 import cats.laws.discipline.{ContravariantTests, MiniInt, SerializableTests}
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import java.util.concurrent.TimeUnit
-import org.scalatest.funsuite.AnyFunSuiteLike
 import scala.concurrent.duration.{Duration, FiniteDuration}
 
 class ShowSuite extends CatsSuite {
@@ -30,15 +28,15 @@ class ShowSuite extends CatsSuite {
     val tod: TimeOfDay = Morning
     val cat = Cat("Whiskers")
 
-    assertResult("Good morning, Whiskers!")(show"Good $tod, $cat!")
+    assertEquals("Good morning, Whiskers!", show"Good $tod, $cat!")
 
-    assertResult("Good morning, Whiskers!")(show"Good $tod, ${List(cat).head}!")
+    assertEquals("Good morning, Whiskers!", show"Good $tod, ${List(cat).head}!")
   }
 
   test("show string interpolator and contravariance") {
     val tod: Morning.type = Morning
 
-    assertResult("Good morning")(show"Good $tod")
+    assertEquals("Good morning", show"Good $tod")
   }
 
   test("contravariant show is not ambiguous when both FiniteDuration's and Duration's instances are in scope") {
@@ -52,7 +50,7 @@ class ShowSuite extends CatsSuite {
   }
 }
 
-final class ShowSuite2 extends AnyFunSuiteLike {
+final class ShowSuite2 extends munit.FunSuite {
 
   test(
     "contravariant show for FiniteDuration can be inferred when importing both duration's and finiteDuration's instances"

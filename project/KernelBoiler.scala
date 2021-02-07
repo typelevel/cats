@@ -32,11 +32,12 @@ object KernelBoiler {
    *
    * As a side-effect, it actually generates them...
    */
-  def gen(dir: File): Seq[File] = templates.map { template =>
-    val tgtFile = template.filename(dir)
-    IO.write(tgtFile, template.body)
-    tgtFile
-  }
+  def gen(dir: File): Seq[File] =
+    templates.map { template =>
+      val tgtFile = template.filename(dir)
+      IO.write(tgtFile, template.body)
+      tgtFile
+    }
 
   class TemplateVals(val arity: Int) {
     val synTypes = (0 until arity).map(n => s"A$n")
@@ -95,10 +96,9 @@ object KernelBoiler {
     def tupleNHeader = s"Tuple${synTypes.size}"
 
     def binMethod(name: String) =
-      synTypes.zipWithIndex.iterator.map {
-        case (tpe, i) =>
-          val j = i + 1
-          s"${tpe}.${name}(x._${j}, y._${j})"
+      synTypes.zipWithIndex.iterator.map { case (tpe, i) =>
+        val j = i + 1
+        s"${tpe}.${name}(x._${j}, y._${j})"
       }
 
     def binTuple(name: String) =
@@ -110,9 +110,8 @@ object KernelBoiler {
     }
 
     def unaryMethod(name: String) =
-      synTypes.zipWithIndex.iterator.map {
-        case (tpe, i) =>
-          s"$tpe.$name(x._${i + 1})"
+      synTypes.zipWithIndex.iterator.map { case (tpe, i) =>
+        s"$tpe.$name(x._${i + 1})"
       }
 
     def nullaryTuple(name: String) = {

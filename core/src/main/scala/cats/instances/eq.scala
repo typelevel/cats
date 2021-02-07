@@ -11,7 +11,8 @@ trait EqInstances extends kernel.instances.EqInstances {
        */
       def unit: Eq[Unit] = Eq.allEqual
 
-      /** Derive an `Eq` for `B` given an `Eq[A]` and a function `B => A`.
+      /**
+       * Derive an `Eq` for `B` given an `Eq[A]` and a function `B => A`.
        *
        * Note: resulting instances are law-abiding only when the functions used are injective (represent a one-to-one mapping)
        */

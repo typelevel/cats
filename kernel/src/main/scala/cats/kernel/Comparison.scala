@@ -1,6 +1,8 @@
 package cats.kernel
 
-/** ADT encoding the possible results of a comparison */
+/**
+ * ADT encoding the possible results of a comparison
+ */
 sealed abstract class Comparison(val toInt: Int, val toDouble: Double) extends Product with Serializable
 
 object Comparison {
@@ -24,5 +26,14 @@ object Comparison {
     else if (double == 0.0) SomeEq
     else SomeLt
 
-  implicit val catsKernelEqForComparison: Eq[Comparison] = Eq.fromUniversalEquals
+  implicit val catsKernelEqForComparison: Eq[Comparison] with Monoid[Comparison] =
+    new Eq[Comparison] with Monoid[Comparison] {
+      def eqv(x: Comparison, y: Comparison): Boolean = x == y
+      def empty: Comparison = EqualTo
+
+      def combine(x: Comparison, y: Comparison): Comparison = x match {
+        case EqualTo => y
+        case comp    => comp
+      }
+    }
 }

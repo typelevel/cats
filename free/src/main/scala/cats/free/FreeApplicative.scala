@@ -40,7 +40,8 @@ sealed abstract class FreeApplicative[F[_], A] extends Product with Serializable
         }
     }
 
-  /** Interprets/Runs the sequence of operations using the semantics of `Applicative` G[_].
+  /**
+   * Interprets/Runs the sequence of operations using the semantics of `Applicative` G[_].
    * Tail recursive.
    */
   // scalastyle:off method.length
@@ -151,13 +152,17 @@ sealed abstract class FreeApplicative[F[_], A] extends Product with Serializable
   def flatCompile[G[_]](f: F ~> FA[G, *]): FA[G, A] =
     foldMap(f)
 
-  /** Interpret this algebra into a Monoid. */
+  /**
+   * Interpret this algebra into a Monoid.
+   */
   final def analyze[M: Monoid](f: FunctionK[F, λ[α => M]]): M =
     foldMap[Const[M, *]](
       new FunctionK[F, Const[M, *]] { def apply[B](fb: F[B]): Const[M, B] = Const(f(fb)) }
     ).getConst
 
-  /** Compile this FreeApplicative algebra into a Free algebra. */
+  /**
+   * Compile this FreeApplicative algebra into a Free algebra.
+   */
   final def monad: Free[F, A] =
     foldMap[Free[F, *]] {
       new FunctionK[F, Free[F, *]] { def apply[B](fb: F[B]): Free[F, B] = Free.liftF(fb) }
@@ -177,7 +182,8 @@ object FreeApplicative {
       case x        => throw new RuntimeException(s"Impossible for a $x to reach here")
     }
 
-  /** Represents a curried function `F[A => B => C => ...]`
+  /**
+   * Represents a curried function `F[A => B => C => ...]`
    * that has been constructed with chained `ap` calls.
    * Fn#argc denotes the amount of curried params remaining.
    */

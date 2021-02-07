@@ -19,7 +19,9 @@ object GenTupleUnorderedFoldableInstances extends Template {
     |private[cats] trait NTupleUnorderedFoldableInstances {
 -  implicit final def catsUnorderedFoldableInstancesForTuple$arity${`[A0, A(N - 1)]`}: Traverse[${`(A..N - 1, *)`}] with Reducible[${`(A..N - 1, *)`}] =
 -    new Traverse[${`(A..N - 1, *)`}] with Reducible[${`(A..N - 1, *)`}] {
--      def traverse[G[_], A, B](fa: ${`A0, A(N - 1)&`("A")})(f: A => G[B])(implicit G: Applicative[G]): G[${`A0, A(N - 1)&`(
+-      def traverse[G[_], A, B](fa: ${`A0, A(N - 1)&`(
+      "A"
+    )})(f: A => G[B])(implicit G: Applicative[G]): G[${`A0, A(N - 1)&`(
       "B"
     )}] =
 -        G.map(f(fa._$arity))(${`(fa._1..(n - 1))`})

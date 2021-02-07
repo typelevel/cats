@@ -15,6 +15,7 @@ possible:
  * 3rdLaw
  * Aaron Levin
  * Adam Fisher
+ * Adam Rosien
  * Adelbert Chang
  * Adrian Ramirez Fornell
  * Aldo Stracquadanio
@@ -46,6 +47,7 @@ possible:
  * Ben Hutchison
  * Ben Kirwin
  * Ben Plommer
+ * Ben Stewart
  * Benjamin Thuillier
  * Binh Nguyen
  * Bjørn Madsen
@@ -71,6 +73,7 @@ possible:
  * Daniel Spiewak
  * Daniel Urban
  * Daniela Sfregola
+ * dantb
  * Dave Gurnell
  * Dave Rostron
  * David Allsopp
@@ -87,8 +90,11 @@ possible:
  * Earl St Sauver
  * Edd Steel
  * Endre Galaczi
+ * Enrico Benini
+ * enzief
  * Eric Torreborre
  * ericaovo
+ * Erik Erlandson
  * Erik LaBianca
  * Erik Osheim
  * Eugene Burmako
@@ -125,6 +131,7 @@ possible:
  * Ionuț G. Stan
  * Israel Pérez González
  * Itamar Ravid
+ * Ivan Klass
  * Jack Low
  * Jacob Barber
  * Jakub Kozłowski
@@ -150,17 +157,23 @@ possible:
  * Julien Truffaut
  * Jun Tomioka
  * jurisk
+ * Justin Heyes-Jones
  * Kailuo Wang
  * Kamil Kloch
+ * kazchimo
  * Keir Lawson
  * kellen
  * Kenji Yoshida
+ * Kris Kalavantavanich
  * Lars Hupel
+ * Leandro
  * Leandro Bolivar
  * Leif Battermann
  * Lionel Parreaux
  * Long Cao
  * Luis Angel Vicente Sanchez
+ * Luís Campos
+ * Luis Miguel Mejía Suárez
  * Luis Sanchez
  * Luka Jacobowitz
  * Lukáš Voda
@@ -171,9 +184,12 @@ possible:
  * Marco Battaglia
  * Mariot Chauvin
  * Mark de Jong
+ * Markus Appel
  * Markus Hauck
  * Martijn Hoekstra
+ * MaT1g3R
  * Mateusz Sokół
+ * Mateusz Wójcik
  * mathhun
  * Matt Martin
  * Matthias Lüneberg
@@ -187,6 +203,7 @@ possible:
  * Miklós Martin
  * Miles Sabin
  * Mirco Dotta
+ * mooi
  * msinton
  * nigredo-tori
  * Nikolay Maksimenko
@@ -212,10 +229,12 @@ possible:
  * phderome
  * Philip Wills
  * Piotr Gawryś
+ * Raas Ahsan
  * Rafa Paradela
  * Raúl Raja Martínez
  * RawToast
  * Raymond Tay
+ * rfigueiredo
  * Richard Imaoka
  * Richard Miller
  * Rintcius Blok
@@ -229,9 +248,12 @@ possible:
  * Rüdiger Klaehn
  * Rutvik Patel
  * Ryan Case
+ * Ryan Mehri
  * Sam Ritchie
+ * Sanjiv Sahayam
  * Sarunas Valaskevicius
  * Sergei Dolgov
+ * Shan Sikdar
  * Sho Kohara
  * Shohei Kamimori
  * Shunsuke Otani
@@ -245,9 +267,12 @@ possible:
  * Suhas Gaddam
  * sullis
  * Sumedh Mungee
+ * Syed Akber Jafri
  * Takayuki Sakai
  * Tanaka Takaya
  * Taylor Brown
+ * Tim Spence
+ * Timothy McCarthy
  * Tom Switzer
  * Tomas Mikula
  * Tongfei Chen
@@ -255,12 +280,16 @@ possible:
  * Travis Brown
  * Trond Bjerkestrand
  * Tya
+ * Valentin Willscher
+ * Valeriy Avanesov
  * Valy Diarrassouba
  * Vasileios Lampridis
+ * Vasilis Nicolaou
  * Vasiliy Bondarenko
  * ven
  * Viktor Dychko
  * Viktor Lövgren
+ * Vitaly Lavrov
  * Vladimir Samoylov
  * Vladislav Gutov
  * Wedens
@@ -268,8 +297,11 @@ possible:
  * Xavier Fernández Salas
  * XUWE
  * 杨博 (Yang Bo)
+ * Yannick Heiber
+ * ybasket
  * Yosef Fertel
  * Yilin Wei
+ * Yuki Kitakata
  * Yuriy Badalyantc
  * Zach Abbott
  * zainab-ali

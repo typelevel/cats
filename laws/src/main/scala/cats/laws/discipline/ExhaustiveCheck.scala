@@ -14,9 +14,10 @@ trait ExhaustiveCheck[A] extends Serializable { self =>
 object ExhaustiveCheck {
   def apply[A](implicit A: ExhaustiveCheck[A]): ExhaustiveCheck[A] = A
 
-  def instance[A](values: List[A]): ExhaustiveCheck[A] = new ExhaustiveCheck[A] {
-    val allValues: List[A] = values
-  }
+  def instance[A](values: List[A]): ExhaustiveCheck[A] =
+    new ExhaustiveCheck[A] {
+      val allValues: List[A] = values
+    }
 
   implicit val catsLawsExhaustiveCheckForBoolean: ExhaustiveCheck[Boolean] =
     instance(List(false, true))
@@ -27,16 +28,20 @@ object ExhaustiveCheck {
   /**
    * Warning: the domain of (A, B) is the cross-product of the domain of `A` and the domain of `B`.
    */
-  implicit def catsLawsExhaustiveCheckForTuple2[A, B](implicit A: ExhaustiveCheck[A],
-                                                      B: ExhaustiveCheck[B]): ExhaustiveCheck[(A, B)] =
+  implicit def catsLawsExhaustiveCheckForTuple2[A, B](implicit
+    A: ExhaustiveCheck[A],
+    B: ExhaustiveCheck[B]
+  ): ExhaustiveCheck[(A, B)] =
     instance(A.allValues.flatMap(a => B.allValues.map(b => (a, b))))
 
   /**
    * Warning: the domain of (A, B, C) is the cross-product of the 3 domains.
    */
-  implicit def catsLawsExhaustiveCheckForTuple3[A, B, C](implicit A: ExhaustiveCheck[A],
-                                                         B: ExhaustiveCheck[B],
-                                                         C: ExhaustiveCheck[C]): ExhaustiveCheck[(A, B, C)] =
+  implicit def catsLawsExhaustiveCheckForTuple3[A, B, C](implicit
+    A: ExhaustiveCheck[A],
+    B: ExhaustiveCheck[B],
+    C: ExhaustiveCheck[C]
+  ): ExhaustiveCheck[(A, B, C)] =
     instance(
       for {
         a <- A.allValues
@@ -45,8 +50,10 @@ object ExhaustiveCheck {
       } yield (a, b, c)
     )
 
-  implicit def catsLawsExhaustiveCheckForEither[A, B](implicit A: ExhaustiveCheck[A],
-                                                      B: ExhaustiveCheck[B]): ExhaustiveCheck[Either[A, B]] =
+  implicit def catsLawsExhaustiveCheckForEither[A, B](implicit
+    A: ExhaustiveCheck[A],
+    B: ExhaustiveCheck[B]
+  ): ExhaustiveCheck[Either[A, B]] =
     instance(A.allValues.map(Left(_)) ++ B.allValues.map(Right(_)))
 
   implicit def catsLawsExhaustiveCheckForOption[A](implicit A: ExhaustiveCheck[A]): ExhaustiveCheck[Option[A]] =
@@ -58,5 +65,5 @@ object ExhaustiveCheck {
    * in the domain of `Set[A]`, so use this only on small domains.
    */
   def forSet[A](implicit A: ExhaustiveCheck[A]): ExhaustiveCheck[Set[A]] =
-    instance(A.allValues.toSet.subsets.toList)
+    instance(A.allValues.toSet.subsets().toList)
 }

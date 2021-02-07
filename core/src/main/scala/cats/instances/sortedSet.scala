@@ -25,9 +25,9 @@ trait SortedSetInstances extends SortedSetInstances1 {
         @tailrec
         def go(idx: Int, it: Iterator[A]): Option[A] =
           if (it.hasNext) {
-            if (idx == 0) Some(it.next)
+            if (idx == 0) Some(it.next())
             else {
-              it.next
+              it.next()
               go(idx - 1, it)
             }
           } else None
@@ -60,10 +60,11 @@ trait SortedSetInstances extends SortedSetInstances1 {
         fa.collectFirst(Function.unlift(f))
     }
 
-  implicit def catsStdShowForSortedSet[A: Show]: Show[SortedSet[A]] = new Show[SortedSet[A]] {
-    def show(fa: SortedSet[A]): String =
-      fa.iterator.map(Show[A].show).mkString("SortedSet(", ", ", ")")
-  }
+  implicit def catsStdShowForSortedSet[A: Show]: Show[SortedSet[A]] =
+    new Show[SortedSet[A]] {
+      def show(fa: SortedSet[A]): String =
+        fa.iterator.map(Show[A].show).mkString("SortedSet(", ", ", ")")
+    }
 
   @deprecated("Use cats.kernel.instances.sortedSet.catsKernelStdOrderForSortedSet", "2.0.0-RC2")
   private[instances] def catsKernelStdOrderForSortedSet[A: Order]: Order[SortedSet[A]] =

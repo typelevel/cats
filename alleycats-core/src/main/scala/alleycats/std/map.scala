@@ -2,6 +2,8 @@ package alleycats
 package std
 
 import cats._
+import cats.data.Chain
+import cats.kernel.instances.StaticMethods.wrapMutableIndexedSeq
 
 object map extends MapInstances
 
@@ -11,17 +13,16 @@ trait MapInstances {
   implicit def alleycatsStdInstancesForMap[K]: Traverse[Map[K, *]] =
     new Traverse[Map[K, *]] {
 
-      def traverse[G[_], A, B](fa: Map[K, A])(f: A => G[B])(implicit G: Applicative[G]): G[Map[K, B]] = {
-        val gba: Eval[G[Map[K, B]]] = Always(G.pure(Map.empty))
-        val gbb = Foldable
-          .iterateRight(fa, gba) { (kv, lbuf) =>
-            G.map2Eval(f(kv._2), lbuf) { (b, buf) =>
-              buf + (kv._1 -> b)
-            }
-          }
-          .value
-        G.map(gbb)(_.toMap)
-      }
+      def traverse[G[_], A, B](fa: Map[K, A])(f: A => G[B])(implicit G: Applicative[G]): G[Map[K, B]] =
+        if (fa.isEmpty) G.pure(Map.empty[K, B])
+        else
+          G.map(Chain.traverseViaChain {
+            val as = collection.mutable.ArrayBuffer[(K, A)]()
+            as ++= fa
+            wrapMutableIndexedSeq(as)
+          } { case (k, a) =>
+            G.map(f(a))((k, _))
+          }) { chain => chain.foldLeft(Map.empty[K, B]) { case (m, (k, b)) => m.updated(k, b) } }
 
       override def map[A, B](fa: Map[K, A])(f: A => B): Map[K, B] =
         fa.map { case (k, a) => (k, f(a)) }
@@ -39,7 +40,7 @@ trait MapInstances {
         else {
           val n = idx.toInt
           if (n >= fa.size) None
-          else Some(fa.valuesIterator.drop(n).next)
+          else Some(fa.valuesIterator.drop(n).next())
         }
 
       override def isEmpty[A](fa: Map[K, A]): Boolean = fa.isEmpty
@@ -63,15 +64,24 @@ trait MapInstances {
     new TraverseFilter[Map[K, *]] {
       def traverse: Traverse[Map[K, *]] = alleycatsStdInstancesForMap
 
-      def traverseFilter[G[_], A, B](fa: Map[K, A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Map[K, B]] = {
-        val gba: Eval[G[Map[K, B]]] = Always(G.pure(Map.empty))
-        Foldable
-          .iterateRight(fa, gba) { (kv, lbuf) =>
-            G.map2Eval(f(kv._2), lbuf) { (ob, buf) =>
-              ob.fold(buf)(b => buf + (kv._1 -> b))
+      def traverseFilter[G[_], A, B](fa: Map[K, A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Map[K, B]] =
+        if (fa.isEmpty) G.pure(Map.empty[K, B])
+        else
+          G.map(Chain.traverseFilterViaChain {
+            val as = collection.mutable.ArrayBuffer[(K, A)]()
+            as ++= fa
+            wrapMutableIndexedSeq(as)
+          } { case (k, a) =>
+            G.map(f(a)) { optB =>
+              if (optB.isDefined) Some((k, optB.get))
+              else None
             }
-          }
-          .value
-      }
+          }) { chain => chain.foldLeft(Map.empty[K, B]) { case (m, (k, b)) => m.updated(k, b) } }
     }
+
+  implicit def alletcatsStdMapEmptyK[K]: EmptyK[Map[K, *]] =
+    new EmptyK[Map[K, *]] {
+      def empty[A]: Map[K, A] = Map.empty[K, A]
+    }
+
 }

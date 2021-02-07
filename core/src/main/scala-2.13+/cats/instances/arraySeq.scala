@@ -100,7 +100,7 @@ private[cats] object ArraySeqInstances {
             case h :: tail if h.isEmpty =>
               loop(state = tail)
             case h :: tail =>
-              h.next match {
+              h.next() match {
                 case Right(b) =>
                   buf += b
                   loop(state)
@@ -129,10 +129,9 @@ private[cats] object ArraySeqInstances {
         fa.isEmpty
 
       override def foldM[G[_], A, B](fa: ArraySeq[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] =
-        G.tailRecM((z, 0)) {
-          case (b, i) =>
-            if (i < fa.length) G.map(f(b, fa(i)))(b => Left((b, i + 1)))
-            else G.pure(Right(b))
+        G.tailRecM((z, 0)) { case (b, i) =>
+          if (i < fa.length) G.map(f(b, fa(i)))(b => Left((b, i + 1)))
+          else G.pure(Right(b))
         }
 
       override def fold[A](fa: ArraySeq[A])(implicit A: Monoid[A]): A =
@@ -191,17 +190,13 @@ private[cats] object ArraySeqInstances {
       def traverseFilter[G[_], A, B](
         fa: ArraySeq[A]
       )(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[ArraySeq[B]] =
-        fa.foldRight(Eval.now(G.pure(ArraySeq.untagged.empty[B]))) {
-            case (x, xse) =>
-              G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o))
-          }
-          .value
+        fa.foldRight(Eval.now(G.pure(ArraySeq.untagged.empty[B]))) { case (x, xse) =>
+          G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o))
+        }.value
 
       override def filterA[G[_], A](fa: ArraySeq[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[ArraySeq[A]] =
-        fa.foldRight(Eval.now(G.pure(ArraySeq.untagged.empty[A]))) {
-            case (x, xse) =>
-              G.map2Eval(f(x), xse)((b, vec) => if (b) x +: vec else vec)
-          }
-          .value
+        fa.foldRight(Eval.now(G.pure(ArraySeq.untagged.empty[A]))) { case (x, xse) =>
+          G.map2Eval(f(x), xse)((b, vec) => if (b) x +: vec else vec)
+        }.value
     }
 }

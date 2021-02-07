@@ -13,8 +13,8 @@ object GenTupleShowInstances extends Template {
 
     val showMethod: String =
       synTypes.zipWithIndex.iterator
-        .map {
-          case (tpe, i) => s"$${$tpe.show(f._${i + 1})}"
+        .map { case (tpe, i) =>
+          s"$${$tpe.show(f._${i + 1})}"
         }
         .mkString("s\"(", ",", ")\"")
 

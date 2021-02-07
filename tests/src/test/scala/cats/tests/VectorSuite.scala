@@ -2,7 +2,6 @@ package cats.tests
 
 import cats.{Align, Alternative, CoflatMap, Monad, Semigroupal, Traverse, TraverseFilter}
 import cats.data.{NonEmptyVector, ZipVector}
-import cats.instances.all._
 import cats.laws.discipline.{
   AlignTests,
   AlternativeTests,
@@ -11,13 +10,15 @@ import cats.laws.discipline.{
   MonadTests,
   SemigroupalTests,
   SerializableTests,
+  ShortCircuitingTests,
   TraverseFilterTests,
   TraverseTests
 }
 import cats.laws.discipline.arbitrary._
 import cats.syntax.show._
 import cats.syntax.vector._
-import org.scalatest.funsuite.AnyFunSuiteLike
+import cats.syntax.eq._
+import org.scalacheck.Prop._
 
 class VectorSuite extends CatsSuite {
   checkAll("Vector[Int]", SemigroupalTests[Vector].semigroupal[Int, Int, Int])
@@ -41,15 +42,18 @@ class VectorSuite extends CatsSuite {
   checkAll("Vector[Int]", AlignTests[Vector].align[Int, Int, Int, Int])
   checkAll("Align[Vector]", SerializableTests.serializable(Align[Vector]))
 
+  checkAll("Vector[Int]", ShortCircuitingTests[Vector].traverseFilter[Int])
+  checkAll("Vector[Int]", ShortCircuitingTests[Vector].foldable[Int])
+
   checkAll("ZipVector[Int]", CommutativeApplyTests[ZipVector].commutativeApply[Int, Int, Int])
 
   test("show") {
-    Vector(1, 2, 3).show should ===("Vector(1, 2, 3)")
+    assert(Vector(1, 2, 3).show === "Vector(1, 2, 3)")
 
-    Vector.empty[Int].show should ===("Vector()")
+    assert(Vector.empty[Int].show === "Vector()")
 
     forAll { (vec: Vector[String]) =>
-      vec.show should ===(vec.toString)
+      assert(vec.show === (vec.toString))
     }
   }
 
@@ -62,9 +66,19 @@ class VectorSuite extends CatsSuite {
   test("toNev on empty vector returns None") {
     assert(Vector.empty[Int].toNev == None)
   }
+
+  test("traverse is stack-safe") {
+    val vec = (0 until 100000).toVector
+    val sumAll = Traverse[Vector]
+      .traverse(vec) { i => () => i }
+      .apply
+      .sum
+
+    assert(sumAll == vec.sum)
+  }
 }
 
-final class VectorInstancesSuite extends AnyFunSuiteLike {
+final class VectorInstancesSuite extends munit.FunSuite {
 
   test("NonEmptyParallel instance in cats.instances.vector") {
     import cats.instances.vector._

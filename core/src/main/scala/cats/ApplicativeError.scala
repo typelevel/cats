@@ -185,7 +185,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    * scala> val prog2: F[Int] = (Err("two")).raiseError[F, Int]
    *
    * scala> prog1.onError(action).value.run("").value
-
+   *
    * res0: (String, Either[Err,Int]) = (one,Left(Err(one)))
    *
    * scala> prog2.onError(action).value.run("").value

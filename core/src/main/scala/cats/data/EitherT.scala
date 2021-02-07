@@ -13,7 +13,8 @@ import cats.syntax.EitherUtil
  */
 final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
 
-  /** Transform this `EitherT[F, A, B]` into a `F[C]`.
+  /**
+   * Transform this `EitherT[F, A, B]` into a `F[C]`.
    *
    * Example:
    * {{{
@@ -27,7 +28,8 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
    */
   def fold[C](fa: A => C, fb: B => C)(implicit F: Functor[F]): F[C] = F.map(value)(_.fold(fa, fb))
 
-  /** Transform this `EitherT[F, A, B]` into a `F[C]`.
+  /**
+   * Transform this `EitherT[F, A, B]` into a `F[C]`.
    *
    * Example:
    * {{{
@@ -176,6 +178,9 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
 
   /**
    * Inverse of `MonadError#attemptT`
+   * Given MonadError[F, E :> A] transforms Either[F, A, B] to F[B]
+   * If the value was B, F[B] is successful
+   * If the value was A, F[B] is failed with E
    *
    * Example:
    * {{{
@@ -189,6 +194,17 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
    * scala> val e2: EitherT[Option, Unit, Int] = EitherT[Option, Unit, Int](Some(Left(())))
    * scala> e2.rethrowT
    * res1: Option[Int] = None
+   *
+   * scala> import scala.util.Try
+   * scala> import java.lang.Exception
+   *
+   * scala> val e3: EitherT[Try, Throwable, String] = EitherT[Try, Throwable, String](Try(Right("happy cats")))
+   * scala> e3.rethrowT
+   * res2: util.Try[String] = Success(happy cats)
+   *
+   * scala> val e4: EitherT[Try, Throwable, String] = EitherT[Try, Throwable, String](Try(Left(new Exception("sad cats"))))
+   * scala> e4.rethrowT
+   * res3: util.Try[String] = Failure(java.lang.Exception: sad cats)
    * }}}
    */
   def rethrowT(implicit F: MonadError[F, _ >: A]): F[B] =
@@ -368,8 +384,10 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
       }
     )
 
-  def bitraverse[G[_], C, D](f: A => G[C], g: B => G[D])(implicit traverseF: Traverse[F],
-                                                         applicativeG: Applicative[G]): G[EitherT[F, C, D]] =
+  def bitraverse[G[_], C, D](f: A => G[C], g: B => G[D])(implicit
+    traverseF: Traverse[F],
+    applicativeG: Applicative[G]
+  ): G[EitherT[F, C, D]] =
     applicativeG.map(traverseF.traverse(value)(axb => Bitraverse[Either].bitraverse(axb)(f, g)))(EitherT.apply)
 
   def biflatMap[C, D](fa: A => EitherT[F, C, D], fb: B => EitherT[F, C, D])(implicit F: FlatMap[F]): EitherT[F, C, D] =
@@ -423,7 +441,8 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
       case r @ Right(_) => F.pure(EitherUtil.leftCast(r))
     })
 
-  /** Combine `leftSemiflatMap` and `semiflatMap` together.
+  /**
+   * Combine `leftSemiflatMap` and `semiflatMap` together.
    *
    * Example:
    * {{{
@@ -462,8 +481,9 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
   def ===(that: EitherT[F, A, B])(implicit eq: Eq[F[Either[A, B]]]): Boolean =
     eq.eqv(value, that.value)
 
-  def traverse[G[_], D](f: B => G[D])(implicit traverseF: Traverse[F],
-                                      applicativeG: Applicative[G]): G[EitherT[F, A, D]] =
+  def traverse[G[_], D](
+    f: B => G[D]
+  )(implicit traverseF: Traverse[F], applicativeG: Applicative[G]): G[EitherT[F, A, D]] =
     applicativeG.map(traverseF.traverse(value)(axb => Traverse[Either[A, *]].traverse(axb)(f)))(EitherT.apply)
 
   def foldLeft[C](c: C)(f: (C, B) => C)(implicit F: Foldable[F]): C =
@@ -542,7 +562,8 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
       case Left(a)  => Validated.invalidNec(a)
     }
 
-  /** Run this value as a `[[Validated]]` against the function and convert it back to an `[[EitherT]]`.
+  /**
+   * Run this value as a `[[Validated]]` against the function and convert it back to an `[[EitherT]]`.
    *
    * The [[Applicative]] instance for `EitherT` "fails fast" - it is often useful to "momentarily" have
    * it accumulate errors instead, which is what the `[[Validated]]` data type gives us.
@@ -582,7 +603,6 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
    * scala> EitherT((ff.toNested).ap(fa.toNested).value)
    * res1: EitherT[List,String,String] = EitherT(List(Right(1), Right(2), Left(error), Left(error)))
    * }}}
-   *
    */
   def toNested: Nested[F, Either[A, *], B] = Nested[F, Either[A, *], B](value)
 
@@ -689,7 +709,7 @@ object EitherT extends EitherTInstances {
    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
    */
   final private[data] class PurePartiallyApplied[F[_], A](private val dummy: Boolean = true) extends AnyVal {
-    def apply[B](b: B)(implicit F: Applicative[F]): EitherT[F, A, B] = right(F.pure(b))
+    def apply[B](b: B)(implicit F: Applicative[F]): EitherT[F, A, B] = EitherT(F.pure(Right(b)))
   }
 
   /**
@@ -742,10 +762,32 @@ object EitherT extends EitherTInstances {
   final def liftK[F[_], A](implicit F: Functor[F]): F ~> EitherT[F, A, *] =
     new (F ~> EitherT[F, A, *]) { def apply[B](fb: F[B]): EitherT[F, A, B] = right(fb) }
 
+  /**
+   * Lifts an effect into EitherT, catching all errors from the effect and lifting them into EitherT's error channel.
+   *
+   * {{{
+   * scala> import cats._, data._, implicits._
+   * scala> val a: Option[Int] = None
+   * scala> val b: EitherT[Option, Unit, Int] = EitherT.liftAttemptK[Option, Unit].apply(a)
+   * scala> b.value
+   * res0: Option[Either[Unit, Int]] = Some(Left(()))
+   *
+   * scala> val a2: Option[Int] = Some(42)
+   * scala> val b2: EitherT[Option, Unit, Int] = EitherT.liftAttemptK[Option, Unit].apply(a2)
+   * scala> b2.value
+   * res1: Option[Either[Unit, Int]] = Some(Right(42))
+   * }}}
+   */
+  final def liftAttemptK[F[_], E](implicit F: ApplicativeError[F, E]): F ~> EitherT[F, E, *] =
+    new (F ~> EitherT[F, E, *]) {
+      def apply[A](fa: F[A]): EitherT[F, E, A] = EitherT(F.attempt(fa))
+    }
+
   @deprecated("Use EitherT.liftF.", "1.0.0-RC1")
   final def liftT[F[_], A, B](fb: F[B])(implicit F: Functor[F]): EitherT[F, A, B] = right(fb)
 
-  /** Transforms an `Either` into an `EitherT`, lifted into the specified `Applicative`.
+  /**
+   * Transforms an `Either` into an `EitherT`, lifted into the specified `Applicative`.
    *
    * Note: The return type is a FromEitherPartiallyApplied[F], which has an apply method
    * on it, allowing you to call fromEither like this:
@@ -768,7 +810,8 @@ object EitherT extends EitherTInstances {
       EitherT(F.pure(either))
   }
 
-  /** Transforms an `Option` into an `EitherT`, lifted into the specified `Applicative` and using
+  /**
+   * Transforms an `Option` into an `EitherT`, lifted into the specified `Applicative` and using
    *  the second argument if the `Option` is a `None`.
    * {{{
    * scala> import cats.implicits._
@@ -796,7 +839,8 @@ object EitherT extends EitherTInstances {
       )
   }
 
-  /** Transforms an `F[Option]` into an `EitherT`, using the second argument if the `Option` is a `None`.
+  /**
+   * Transforms an `F[Option]` into an `EitherT`, using the second argument if the `Option` is a `None`.
    * {{{
    * scala> import cats.implicits._
    * scala> val o: Option[Int] = None
@@ -814,7 +858,19 @@ object EitherT extends EitherTInstances {
       }
     )
 
-  /**  If the condition is satisfied, return the given `A` in `Right`
+  /**
+   * Similar to `fromOptionF` but the left is carried from monadic `F[_]` context when the option is `None`
+   */
+  final def fromOptionM[F[_], E, A](fopt: F[Option[A]], ifNone: => F[E])(implicit F: Monad[F]): EitherT[F, E, A] =
+    EitherT(
+      F.flatMap(fopt) {
+        case Some(a) => F.pure(Right.apply[E, A](a))
+        case None    => F.map(ifNone)(Left.apply[E, A])
+      }
+    )
+
+  /**
+   *  If the condition is satisfied, return the given `A` in `Right`
    *  lifted into the specified `Applicative`, otherwise, return the
    *  given `E` in `Left` lifted into the specified `Applicative`.
    *
@@ -870,8 +926,8 @@ abstract private[data] class EitherTInstances extends EitherTInstances1 {
         EitherT(F.defer(fa.value))
     }
 
-  implicit def catsDataParallelForEitherTWithParallelEffect[M[_], E: Semigroup](
-    implicit P: Parallel[M]
+  implicit def catsDataParallelForEitherTWithParallelEffect[M[_], E: Semigroup](implicit
+    P: Parallel[M]
   ): Parallel.Aux[EitherT[M, E, *], Nested[P.F, Validated[E, *], *]] =
     new Parallel[EitherT[M, E, *]] {
       type F[x] = Nested[P.F, Validated[E, *], x]
@@ -904,8 +960,8 @@ abstract private[data] class EitherTInstances extends EitherTInstances1 {
 
 abstract private[data] class EitherTInstances1 extends EitherTInstances2 {
 
-  implicit def catsSemigroupForEitherT[F[_], L, A](
-    implicit F: Semigroup[F[Either[L, A]]]
+  implicit def catsSemigroupForEitherT[F[_], L, A](implicit
+    F: Semigroup[F[Either[L, A]]]
   ): Semigroup[EitherT[F, L, A]] =
     new EitherTSemigroup[F, L, A] { implicit val F0 = F }
 
@@ -914,8 +970,8 @@ abstract private[data] class EitherTInstances1 extends EitherTInstances2 {
       val F0: Foldable[F] = F
     }
 
-  implicit def catsDataPartialOrderForEitherT[F[_], L, R](
-    implicit F: PartialOrder[F[Either[L, R]]]
+  implicit def catsDataPartialOrderForEitherT[F[_], L, R](implicit
+    F: PartialOrder[F[Either[L, R]]]
   ): PartialOrder[EitherT[F, L, R]] =
     new EitherTPartialOrder[F, L, R] {
       val F0: PartialOrder[F[Either[L, R]]] = F
@@ -965,7 +1021,8 @@ abstract private[data] class EitherTInstances1 extends EitherTInstances2 {
 
 abstract private[data] class EitherTInstances2 extends EitherTInstances3 {
 
-  /**  Monad error instance for recovering errors in F instead of
+  /**
+   *  Monad error instance for recovering errors in F instead of
    *  the underlying Either.
    *
    * {{{
@@ -979,8 +1036,8 @@ abstract private[data] class EitherTInstances2 extends EitherTInstances3 {
    * res0: cats.data.EitherT[Option,String,Int] = EitherT(Some(Right(1)))
    * }}}
    */
-  implicit def catsDataMonadErrorFForEitherT[F[_], E, L](
-    implicit FE0: MonadError[F, E]
+  implicit def catsDataMonadErrorFForEitherT[F[_], E, L](implicit
+    FE0: MonadError[F, E]
   ): MonadError[EitherT[F, L, *], E] =
     new EitherTMonadErrorF[F, E, L] { implicit val F = FE0 }
 
@@ -1016,6 +1073,12 @@ private[data] trait EitherTSemigroupK[F[_], L] extends SemigroupK[EitherT[F, L, 
       case l @ Left(_)  => y.value
       case r @ Right(_) => F.pure(r)
     })
+
+  override def combineKEval[A](x: EitherT[F, L, A], y: Eval[EitherT[F, L, A]]): Eval[EitherT[F, L, A]] =
+    Eval.now(EitherT(F.flatMap(x.value) {
+      case l @ Left(_)  => y.value.value
+      case r @ Right(_) => F.pure(r: Either[L, A])
+    }))
 }
 
 private[data] trait EitherTFunctor[F[_], L] extends Functor[EitherT[F, L, *]] {
@@ -1092,7 +1155,8 @@ sealed private[data] trait EitherTBifoldable[F[_]] extends Bifoldable[EitherT[F,
     F0.foldLeft(fab.value, c)((acc, axb) => Bifoldable[Either].bifoldLeft(axb, acc)(f, g))
 
   def bifoldRight[A, B, C](fab: EitherT[F, A, B], c: Eval[C])(f: (A, Eval[C]) => Eval[C],
-                                                              g: (B, Eval[C]) => Eval[C]): Eval[C] =
+                                                              g: (B, Eval[C]) => Eval[C]
+  ): Eval[C] =
     F0.foldRight(fab.value, c)((axb, acc) => Bifoldable[Either].bifoldRight(axb, acc)(f, g))
 }
 

@@ -1,11 +1,13 @@
 package cats
 
-import scala.collection.immutable.{Queue, SortedMap}
+import scala.collection.immutable.{Queue, Seq, SortedMap}
 import simulacrum.typeclass
+import scala.annotation.implicitNotFound
 
 /**
  * `FunctorFilter[F]` allows you to `map` and filter out elements simultaneously.
  */
+@implicitNotFound("Could not find an instance of FunctorFilter for ${F}")
 @typeclass
 trait FunctorFilter[F[_]] extends Serializable {
   def functor: Functor[F]
@@ -76,16 +78,72 @@ trait FunctorFilter[F[_]] extends Serializable {
     mapFilter(fa)(Some(_).filterNot(f))
 }
 
-object FunctorFilter extends ScalaVersionSpecificTraverseFilterInstances {
+object FunctorFilter extends ScalaVersionSpecificTraverseFilterInstances with FunctorFilterInstances0 {
   implicit def catsTraverseFilterForOption: TraverseFilter[Option] =
     cats.instances.option.catsStdTraverseFilterForOption
   implicit def catsTraverseFilterForList: TraverseFilter[List] = cats.instances.list.catsStdTraverseFilterForList
   implicit def catsTraverseFilterForVector: TraverseFilter[Vector] =
     cats.instances.vector.catsStdTraverseFilterForVector
-  implicit def catsFunctorFilterForMap[K: Order]: FunctorFilter[Map[K, *]] =
+  implicit def catsFunctorFilterForMap[K]: FunctorFilter[Map[K, *]] =
     cats.instances.map.catsStdFunctorFilterForMap[K]
-  implicit def catsTraverseFilterForSortedMap[K: Order]: TraverseFilter[SortedMap[K, *]] =
+  implicit def catsTraverseFilterForSortedMap[K]: TraverseFilter[SortedMap[K, *]] =
     cats.instances.sortedMap.catsStdTraverseFilterForSortedMap[K]
   implicit def catsTraverseFilterForQueue: TraverseFilter[Queue] =
     cats.instances.queue.catsStdTraverseFilterForQueue
+
+  /* ======================================================================== */
+  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
+  /* ======================================================================== */
+
+  /**
+   * Summon an instance of [[FunctorFilter]] for `F`.
+   */
+  @inline def apply[F[_]](implicit instance: FunctorFilter[F]): FunctorFilter[F] = instance
+
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllFunctorFilterOps[F[_], A](target: F[A])(implicit tc: FunctorFilter[F]): AllOps[F, A] {
+      type TypeClassType = FunctorFilter[F]
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = FunctorFilter[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
+  trait Ops[F[_], A] extends Serializable {
+    type TypeClassType <: FunctorFilter[F]
+    def self: F[A]
+    val typeClassInstance: TypeClassType
+    def mapFilter[B](f: A => Option[B]): F[B] = typeClassInstance.mapFilter[A, B](self)(f)
+    def collect[B](f: PartialFunction[A, B]): F[B] = typeClassInstance.collect[A, B](self)(f)
+    def flattenOption[B](implicit ev$1: A <:< Option[B]): F[B] =
+      typeClassInstance.flattenOption[B](self.asInstanceOf[F[Option[B]]])
+    def filter(f: A => Boolean): F[A] = typeClassInstance.filter[A](self)(f)
+    def filterNot(f: A => Boolean): F[A] = typeClassInstance.filterNot[A](self)(f)
+  }
+  trait AllOps[F[_], A] extends Ops[F, A]
+  trait ToFunctorFilterOps extends Serializable {
+    implicit def toFunctorFilterOps[F[_], A](target: F[A])(implicit tc: FunctorFilter[F]): Ops[F, A] {
+      type TypeClassType = FunctorFilter[F]
+    } =
+      new Ops[F, A] {
+        type TypeClassType = FunctorFilter[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object nonInheritedOps extends ToFunctorFilterOps
+
+  /* ======================================================================== */
+  /* END OF SIMULACRUM-MANAGED CODE                                           */
+  /* ======================================================================== */
+
+}
+
+trait FunctorFilterInstances0 {
+
+  implicit def catsTraverseFilterForSeq: TraverseFilter[Seq] = cats.instances.seq.catsStdTraverseFilterForSeq
+
 }

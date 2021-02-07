@@ -15,7 +15,7 @@ import arrow.Category
  * function that expects a `B` as input.)
  *
  * This code was ported directly from scalaz to cats using this version from scalaz:
- * https://github.com/scalaz/scalaz/blob/a89b6d63/core/src/main/scala/scalaz/As.scala
+ * https://github.com/scalaz/scalaz/blob/a89b6d63/core/src/main/scala/scalaz/Liskov.scala
  *
  *  The original contribution to scalaz came from Jason Zaugg
  */
@@ -34,6 +34,15 @@ sealed abstract class As[-A, +B] extends Serializable {
   @inline final def compose[C](that: (C As A)): (C As B) = As.compose(this, that)
 
   @inline final def coerce(a: A): B = As.witness(this)(a)
+
+  /**
+   * A value `A As B` is always sufficient to produce a similar `Predef.<:<`
+   * value.
+   */
+  @inline final def toPredef: A <:< B = {
+    type F[-Z] = <:<[Z, B]
+    substitute[F](implicitly[B <:< B])
+  }
 }
 
 sealed abstract class AsInstances {
@@ -49,7 +58,7 @@ sealed abstract class AsInstances {
   }
 }
 
-object As extends AsInstances {
+object As extends AsInstances with AsSupport {
 
   /**
    * In truth, "all values of `A Is B` are `refl`". `reflAny` is that
@@ -88,12 +97,11 @@ object As extends AsInstances {
 
   /**
    * It can be convenient to convert a <:< value into a `<~<` value.
-   * This is not strictly valid as while it is almost certainly true that
-   * `A <:< B` implies `A <~< B` it is not the case that you can create
-   * evidence of `A <~< B` except via a coercion. Use responsibly.
+   * This is not actually unsafe, but was previously labeled as such out
+   * of an abundance of caution
    */
   def fromPredef[A, B](eq: A <:< B): A As B =
-    reflAny.asInstanceOf[A As B]
+    asFromPredef(eq)
 
   /**
    * We can lift subtyping into any covariant type constructor

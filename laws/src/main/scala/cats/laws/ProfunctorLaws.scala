@@ -17,7 +17,8 @@ trait ProfunctorLaws[F[_, _]] {
                                                     f2: A2 => A1,
                                                     f1: A1 => A0,
                                                     g1: B0 => B1,
-                                                    g2: B1 => B2): IsEq[F[A2, B2]] =
+                                                    g2: B1 => B2
+  ): IsEq[F[A2, B2]] =
     fab.dimap(f1)(g1).dimap(f2)(g2) <-> fab.dimap(f1.compose(f2))(g2.compose(g1))
 
   def profunctorLmapIdentity[A, B](fab: F[A, B]): IsEq[F[A, B]] =

@@ -12,19 +12,20 @@ private[instances] trait Tuple2InstancesBinCompat0 {
   /**
    * Witness for: (A, A) <-> Boolean => A
    */
-  implicit def catsDataRepresentableForPair(
-    implicit PF: Functor[λ[P => (P, P)]]
-  ): Representable.Aux[λ[P => (P, P)], Boolean] = new Representable[λ[P => (P, P)]] {
-    override type Representation = Boolean
-    override val F: Functor[λ[P => (P, P)]] = PF
+  implicit def catsDataRepresentableForPair(implicit
+    PF: Functor[λ[P => (P, P)]]
+  ): Representable.Aux[λ[P => (P, P)], Boolean] =
+    new Representable[λ[P => (P, P)]] {
+      override type Representation = Boolean
+      override val F: Functor[λ[P => (P, P)]] = PF
 
-    override def tabulate[A](f: Boolean => A): (A, A) = (f(true), f(false))
+      override def tabulate[A](f: Boolean => A): (A, A) = (f(true), f(false))
 
-    override def index[A](pair: (A, A)): Boolean => A = {
-      case true  => pair._1
-      case false => pair._2
+      override def index[A](pair: (A, A)): Boolean => A = {
+        case true  => pair._1
+        case false => pair._2
+      }
     }
-  }
 
   implicit val catsDataFunctorForPair: Functor[λ[P => (P, P)]] = new Functor[λ[P => (P, P)]] {
     override def map[A, B](fa: (A, A))(f: A => B): (B, B) = (f(fa._1), f(fa._2))
@@ -32,7 +33,7 @@ private[instances] trait Tuple2InstancesBinCompat0 {
 }
 
 sealed private[instances] trait Tuple2Instances extends Tuple2Instances1 {
-  @deprecated("Use catsStdBitraverseForNTuple2 on cats.instances.NTupleInstances", "2.1.1")
+  @deprecated("Use catsStdBitraverseForTuple2 in cats.instances.NTupleBitraverseInstances", "2.3.1")
   val catsStdBitraverseForTuple2: Bitraverse[Tuple2] =
     new Bitraverse[Tuple2] {
       def bitraverse[G[_]: Applicative, A, B, C, D](fab: (A, B))(f: A => G[C], g: B => G[D]): G[(C, D)] =
@@ -42,17 +43,19 @@ sealed private[instances] trait Tuple2Instances extends Tuple2Instances1 {
         g(f(c, fab._1), fab._2)
 
       def bifoldRight[A, B, C](fab: (A, B), c: Eval[C])(f: (A, Eval[C]) => Eval[C],
-                                                        g: (B, Eval[C]) => Eval[C]): Eval[C] =
+                                                        g: (B, Eval[C]) => Eval[C]
+      ): Eval[C] =
         g(fab._2, f(fab._1, c))
     }
 
-  @deprecated("Use catsStdShowForNTuple2 on cats.instances.NTupleInstances", "2.1.1")
+  @deprecated("Use catsStdShowForTuple2 in cats.instances.NTupleShowInstances", "2.3.1")
   def catsStdShowForTuple2[A, B](implicit aShow: Show[A], bShow: Show[B]): Show[(A, B)] =
     new Show[(A, B)] {
-      override def show(f: (A, B)): String = s"(${aShow.show(f._1)},${bShow.show(f._2)})"
+      override def show(f: (A, B)): String =
+        s"(${aShow.show(f._1)},${bShow.show(f._2)})"
     }
 
-  @deprecated("Use catsStdInstancesForNTuple2 on cats.instances.NTupleInstances", "2.1.1")
+  @deprecated("Use catsStdInstancesForTuple2 in cats.instances.NTupleMonadInstances", "2.3.1")
   def catsStdInstancesForTuple2[X]: Traverse[(X, *)] with Comonad[(X, *)] with Reducible[(X, *)] =
     new Traverse[(X, *)] with Comonad[(X, *)] with Reducible[(X, *)] {
       def traverse[G[_], A, B](fa: (X, A))(f: A => G[B])(implicit G: Applicative[G]): G[(X, B)] =
@@ -107,7 +110,7 @@ sealed private[instances] trait Tuple2Instances extends Tuple2Instances1 {
 }
 
 sealed private[instances] trait Tuple2Instances1 extends Tuple2Instances2 {
-  @deprecated("Use catsStdCommutativeMonadForNTuple2 on cats.instances.NTupleInstances", "2.1.1")
+  @deprecated("Use catsStdCommutativeMonadForTuple2 in cats.instances.NTupleMonadInstances", "2.3.1")
   def catsStdCommutativeMonadForTuple2[X](implicit MX: CommutativeMonoid[X]): CommutativeMonad[(X, *)] =
     new FlatMapTuple2[X](MX) with CommutativeMonad[(X, *)] {
       def pure[A](a: A): (X, A) = (MX.empty, a)
@@ -115,13 +118,13 @@ sealed private[instances] trait Tuple2Instances1 extends Tuple2Instances2 {
 }
 
 sealed private[instances] trait Tuple2Instances2 extends Tuple2Instances3 {
-  @deprecated("Use catsStdCommutativeFlatMapForNTuple2 on cats.instances.NTupleInstances", "2.1.1")
+  @deprecated("Use catsStdCommutativeFlatMapForTuple2 in cats.instances.NTupleMonadInstances", "2.3.1")
   def catsStdCommutativeFlatMapForTuple2[X](implicit MX: CommutativeSemigroup[X]): CommutativeFlatMap[(X, *)] =
     new FlatMapTuple2[X](MX) with CommutativeFlatMap[(X, *)]
 }
 
 sealed private[instances] trait Tuple2Instances3 extends Tuple2Instances4 {
-  @deprecated("Use catsStdMonadForNTuple2 on cats.instances.NTupleInstances", "2.1.1")
+  @deprecated("Use catsStdMonadForTuple2 in cats.instances.NTupleMonadInstances", "2.3.1")
   def catsStdMonadForTuple2[X](implicit MX: Monoid[X]): Monad[(X, *)] =
     new FlatMapTuple2[X](MX) with Monad[(X, *)] {
       def pure[A](a: A): (X, A) = (MX.empty, a)
@@ -129,7 +132,7 @@ sealed private[instances] trait Tuple2Instances3 extends Tuple2Instances4 {
 }
 
 sealed private[instances] trait Tuple2Instances4 {
-  @deprecated("Use catsStdFlatMapForNTuple2 on cats.instances.NTupleInstances", "2.1.1")
+  @deprecated("Use catsStdFlatMapForTuple2 on cats.instances.NTupleMonadInstances", "2.3.1")
   def catsStdFlatMapForTuple2[X](implicit SX: Semigroup[X]): FlatMap[(X, *)] =
     new FlatMapTuple2[X](SX)
 }

@@ -10,22 +10,23 @@ import scala.annotation.tailrec
 trait TryInstances extends TryInstances1 {
 
   // scalastyle:off method.length
-  implicit def catsStdInstancesForTry
-    : MonadError[Try, Throwable] with CoflatMap[Try] with Traverse[Try] with Monad[Try] =
-    new TryCoflatMap with MonadError[Try, Throwable] with Traverse[Try] with Monad[Try] {
+  implicit def catsStdInstancesForTry: MonadThrow[Try] with CoflatMap[Try] with Traverse[Try] with Monad[Try] =
+    new TryCoflatMap with MonadThrow[Try] with Traverse[Try] with Monad[Try] {
       def pure[A](x: A): Try[A] = Success(x)
 
-      override def product[A, B](ta: Try[A], tb: Try[B]): Try[(A, B)] = (ta, tb) match {
-        case (Success(a), Success(b)) => Success((a, b))
-        case (f: Failure[_], _)       => castFailure[(A, B)](f)
-        case (_, f: Failure[_])       => castFailure[(A, B)](f)
-      }
+      override def product[A, B](ta: Try[A], tb: Try[B]): Try[(A, B)] =
+        (ta, tb) match {
+          case (Success(a), Success(b)) => Success((a, b))
+          case (f: Failure[_], _)       => castFailure[(A, B)](f)
+          case (_, f: Failure[_])       => castFailure[(A, B)](f)
+        }
 
-      override def map2[A, B, Z](ta: Try[A], tb: Try[B])(f: (A, B) => Z): Try[Z] = (ta, tb) match {
-        case (Success(a), Success(b)) => Try(f(a, b))
-        case (f: Failure[_], _)       => castFailure[Z](f)
-        case (_, f: Failure[_])       => castFailure[Z](f)
-      }
+      override def map2[A, B, Z](ta: Try[A], tb: Try[B])(f: (A, B) => Z): Try[Z] =
+        (ta, tb) match {
+          case (Success(a), Success(b)) => Try(f(a, b))
+          case (f: Failure[_], _)       => castFailure[Z](f)
+          case (_, f: Failure[_])       => castFailure[Z](f)
+        }
 
       override def map2Eval[A, B, Z](ta: Try[A], tb: Eval[Try[B]])(f: (A, B) => Z): Eval[Try[Z]] =
         ta match {
@@ -146,10 +147,11 @@ trait TryInstances extends TryInstances1 {
 
   implicit def catsStdShowForTry[A](implicit A: Show[A]): Show[Try[A]] =
     new Show[Try[A]] {
-      def show(fa: Try[A]): String = fa match {
-        case Success(a) => s"Success(${A.show(a)})"
-        case Failure(e) => s"Failure($e)"
-      }
+      def show(fa: Try[A]): String =
+        fa match {
+          case Success(a) => s"Success(${A.show(a)})"
+          case Failure(e) => s"Failure($e)"
+        }
     }
 
   /**
@@ -159,11 +161,12 @@ trait TryInstances extends TryInstances1 {
    */
   implicit def catsStdEqForTry[A, T](implicit A: Eq[A], T: Eq[Throwable]): Eq[Try[A]] =
     new Eq[Try[A]] {
-      def eqv(x: Try[A], y: Try[A]): Boolean = (x, y) match {
-        case (Success(a), Success(b)) => A.eqv(a, b)
-        case (Failure(a), Failure(b)) => T.eqv(a, b)
-        case _                        => false
-      }
+      def eqv(x: Try[A], y: Try[A]): Boolean =
+        (x, y) match {
+          case (Success(a), Success(b)) => A.eqv(a, b)
+          case (Failure(a), Failure(b)) => T.eqv(a, b)
+          case _                        => false
+        }
     }
 }
 

@@ -4,8 +4,7 @@ import cats.{Align, Alternative, CoflatMap, Monad, Show, Traverse, TraverseFilte
 import cats.data.Chain
 import cats.data.Chain.==:
 import cats.data.Chain.`:==`
-import cats.instances.all._
-import cats.kernel.{Eq, Hash, Monoid, Order, PartialOrder}
+import cats.kernel.{Eq, Hash, Monoid, Order, PartialOrder, Semigroup}
 import cats.kernel.laws.discipline.{EqTests, HashTests, MonoidTests, OrderTests, PartialOrderTests}
 import cats.laws.discipline.{
   AlignTests,
@@ -13,12 +12,15 @@ import cats.laws.discipline.{
   CoflatMapTests,
   MonadTests,
   SerializableTests,
+  ShortCircuitingTests,
   TraverseFilterTests,
   TraverseTests
 }
 import cats.laws.discipline.arbitrary._
 import cats.syntax.foldable._
 import cats.syntax.semigroup._
+import cats.syntax.eq._
+import org.scalacheck.Prop._
 
 class ChainSuite extends CatsSuite {
   checkAll("Chain[Int]", AlternativeTests[Chain].alternative[Int, Int, Int])
@@ -45,11 +47,15 @@ class ChainSuite extends CatsSuite {
   checkAll("Chain[Int]", TraverseFilterTests[Chain].traverseFilter[Int, Int, Int])
   checkAll("TraverseFilter[Chain]", SerializableTests.serializable(TraverseFilter[Chain]))
 
+  checkAll("Chain[Int]", ShortCircuitingTests[Chain].foldable[Int])
+  checkAll("Chain[Int]", ShortCircuitingTests[Chain].traverseFilter[Int])
+
   {
     implicit val partialOrder: PartialOrder[ListWrapper[Int]] = ListWrapper.partialOrder[Int]
     checkAll("Chain[ListWrapper[Int]]", PartialOrderTests[Chain[ListWrapper[Int]]].partialOrder)
     checkAll("PartialOrder[Chain[ListWrapper[Int]]",
-             SerializableTests.serializable(PartialOrder[Chain[ListWrapper[Int]]]))
+             SerializableTests.serializable(PartialOrder[Chain[ListWrapper[Int]]])
+    )
   }
 
   {
@@ -65,133 +71,165 @@ class ChainSuite extends CatsSuite {
   }
 
   test("show") {
-    Show[Chain[Int]].show(Chain(1, 2, 3)) should ===("Chain(1, 2, 3)")
-    Chain.empty[Int].show should ===("Chain()")
+    assert(Show[Chain[Int]].show(Chain(1, 2, 3)) === "Chain(1, 2, 3)")
+    assert(Chain.empty[Int].show === "Chain()")
     forAll { (l: Chain[String]) =>
-      l.show should ===(l.toString)
+      assert(l.show === (l.toString))
     }
   }
 
   test("headOption") {
     forAll { (s: Seq[Int]) =>
-      Chain.fromSeq(s).headOption should ===(s.headOption)
+      assert(Chain.fromSeq(s).headOption === (s.headOption))
     }
   }
 
   test("lastOption") {
     forAll { (c: Chain[Int]) =>
-      c.lastOption should ===(c.toList.lastOption)
+      assert(c.lastOption === (c.toList.lastOption))
     }
   }
 
   test("seq-like pattern match") {
     Chain(1, 2, 3) match {
-      case Chain(a, b, c) => (a, b, c) should ===((1, 2, 3))
+      case Chain(a, b, c) => assert((a, b, c) === ((1, 2, 3)))
     }
 
     Chain(1, 2, 3) match {
-      case h ==: t => (h, t) should ===(1 -> Chain(2, 3))
+      case h ==: t => assert((h, t) === 1 -> Chain(2, 3))
     }
 
     Chain(1, 2, 3) match {
-      case init :== last => (init, last) should ===(Chain(1, 2) -> 3)
+      case init :== last => assert((init, last) === Chain(1, 2) -> 3)
     }
 
   }
 
   test("size is consistent with toList.size") {
     forAll { (ci: Chain[Int]) =>
-      ci.size.toInt should ===(ci.toList.size)
+      assert(ci.size.toInt === (ci.toList.size))
     }
   }
 
   test("filterNot and then exists should always be false") {
     forAll { (ci: Chain[Int], f: Int => Boolean) =>
-      ci.filterNot(f).exists(f) should ===(false)
+      assert(ci.filterNot(f).exists(f) === false)
     }
   }
 
   test("filter and then forall should always be true") {
     forAll { (ci: Chain[Int], f: Int => Boolean) =>
-      ci.filter(f).forall(f) should ===(true)
+      assert(ci.filter(f).forall(f) === true)
     }
   }
 
   test("exists should be consistent with find + isDefined") {
     forAll { (ci: Chain[Int], f: Int => Boolean) =>
-      ci.exists(f) should ===(ci.find(f).isDefined)
+      assert(ci.exists(f) === (ci.find(f).isDefined))
     }
   }
 
   test("deleteFirst consistent with find") {
     forAll { (ci: Chain[Int], f: Int => Boolean) =>
-      ci.find(f) should ===(ci.deleteFirst(f).map(_._1))
+      assert(ci.find(f) === (ci.deleteFirst(f).map(_._1)))
     }
   }
 
   test("filterNot element and then contains should be false") {
     forAll { (ci: Chain[Int], i: Int) =>
-      ci.filterNot(_ === i).contains(i) should ===(false)
+      assert(ci.filterNot(_ === i).contains(i) === false)
     }
   }
 
   test("Always nonempty after cons") {
     forAll { (ci: Chain[Int], i: Int) =>
-      (i +: ci).nonEmpty should ===(true)
+      assert((i +: ci).nonEmpty === true)
     }
   }
 
   test("fromSeq . toVector is id") {
     forAll { (ci: Chain[Int]) =>
-      Chain.fromSeq(ci.toVector) should ===(ci)
+      assert(Chain.fromSeq(ci.toVector) === ci)
     }
   }
 
   test("fromSeq . toList . iterator is id") {
     forAll { (ci: Chain[Int]) =>
-      Chain.fromSeq(ci.iterator.toList) should ===(ci)
+      assert(Chain.fromSeq(ci.iterator.toList) === ci)
     }
   }
 
   test("zipWith consistent with List#zip and then List#map") {
     forAll { (a: Chain[String], b: Chain[Int], f: (String, Int) => Int) =>
-      a.zipWith(b)(f).toList should ===(a.toList.zip(b.toList).map { case (x, y) => f(x, y) })
+      assert(a.zipWith(b)(f).toList === (a.toList.zip(b.toList).map { case (x, y) => f(x, y) }))
     }
   }
 
   test("groupBy consistent with List#groupBy") {
-    forAll { (cs: Chain[String], f: String => Int) =>
-      cs.groupBy(f).map { case (k, v) => (k, v.toList) }.toMap should ===(cs.toList.groupBy(f).toMap)
+    forAll { (cs: Chain[String], key: String => Int) =>
+      val result = cs.groupBy(key).map { case (k, v) => (k, v.toList) }.toMap
+      val expected = cs.toList.groupBy(key).toMap
+      assert(result === expected)
+    }
+  }
+
+  test("groupMap consistent with List#groupBy + Map#mapValues") {
+    forAll { (cs: Chain[String], key: String => String, f: String => Int) =>
+      val result = cs.groupMap(key)(f).map { case (k, v) => (k, v.toList) }.toMap
+      val expected = cs.toList.groupBy(key).map { case (k, v) => (k, v.map(f)) }
+      assert(result === expected)
+    }
+  }
+
+  test("groupMapReduce consistent with List#groupBy + Map#mapValues + List#reduce") {
+    forAll { (cs: Chain[String], key: String => String, f: String => Int) =>
+      val result = cs.groupMapReduce(key)(f).toMap
+      val expected = cs.toList.groupBy(key).map { case (k, v) => (k, v.map(f).reduce(Semigroup[Int].combine)) }
+      assert(result === expected)
+    }
+  }
+
+  test("groupMapReduceWith consistent with List#groupBy + Map#mapValues + List#reduce") {
+    forAll { (cs: Chain[String], key: String => String, f: String => Int, combine: (Int, Int) => Int) =>
+      val result = cs.groupMapReduceWith(key)(f)(combine).toMap
+      val expected = cs.toList.groupBy(key).map { case (k, v) => (k, v.map(f).reduce(combine)) }
+      assert(result === expected)
     }
   }
 
   test("zipWithIndex is consistent with toList.zipWithIndex") {
     forAll { (ci: Chain[Int]) =>
-      ci.zipWithIndex.toList should ===(ci.toList.zipWithIndex)
+      assert(ci.zipWithIndex.toList === (ci.toList.zipWithIndex))
     }
+  }
+
+  test("zipWithIndex is stack-safe for a large chain constructed using concatenations") {
+    val list = List.fill(10000)(1)
+    val chain = list.foldLeft(Chain.empty[Int]) { case (acc, next) => acc.concat(Chain(next)) }
+    chain.zipWithIndex.toList === (list.zipWithIndex)
   }
 
   test("sortBy is consistent with toList.sortBy") {
     forAll { (ci: Chain[Int], f: Int => String) =>
-      ci.sortBy(f).toList should ===(ci.toList.sortBy(f))
+      assert(ci.sortBy(f).toList === (ci.toList.sortBy(f)))
     }
   }
 
   test("sorted is consistent with toList.sorted") {
     forAll { (ci: Chain[Int]) =>
-      ci.sorted.toList should ===(ci.toList.sorted)
+      assert(ci.sorted.toList === (ci.toList.sorted))
     }
   }
 
   test("reverse . reverse is id") {
     forAll { (ci: Chain[Int]) =>
-      ci.reverse.reverse should ===(ci)
+      assert(ci.reverse.reverse === ci)
     }
   }
 
   test("reverse consistent with List#reverse") {
     forAll { (ci: Chain[Int]) =>
-      ci.reverse.toList should ===(ci.toList.reverse)
+      assert(ci.reverse.toList === (ci.toList.reverse))
     }
   }
 
@@ -220,70 +258,81 @@ class ChainSuite extends CatsSuite {
     forAll { (a: Chain[Int]) =>
       val it = a.iterator
 
-      while (it.hasNext) it.next
+      while (it.hasNext) it.next()
 
       intercept[java.util.NoSuchElementException] {
-        it.next
+        it.next()
       }
 
       val rit = a.reverseIterator
 
-      while (rit.hasNext) rit.next
+      while (rit.hasNext) rit.next()
 
       intercept[java.util.NoSuchElementException] {
-        rit.next
+        rit.next()
       }
+      ()
     }
   }
 
   test("Chain#distinct is consistent with List#distinct") {
     forAll { (a: Chain[Int]) =>
-      a.distinct.toList should ===(a.toList.distinct)
+      assert(a.distinct.toList === (a.toList.distinct))
     }
   }
 
   test("=== is consistent with == (issue #2540)") {
-    (Chain.one(1) |+| Chain.one(2) |+| Chain.one(3)) should be(Chain.fromSeq(List(1, 2, 3)))
+    assertEquals(Chain.one(1) |+| Chain.one(2) |+| Chain.one(3), Chain.fromSeq(List(1, 2, 3)))
 
     forAll { (a: Chain[Int], b: Chain[Int]) =>
-      (a === b) should ===(a == b)
+      assert((a === b) === (a == b))
     }
   }
 
   test("== returns false for non-Chains") {
     forAll { (a: Chain[Int], b: Int) =>
-      (a == b) should ===(false)
+      assert((a.equals(b)) === false)
     }
   }
 
   test("== returns false for Chains of different element types") {
     forAll { (a: Chain[Option[String]], b: Chain[String]) =>
-      (a == b) should ===(a.isEmpty && b.isEmpty)
+      assert((a.equals(b)) === (a.isEmpty && b.isEmpty))
     }
   }
 
   test("Chain#hashCode is consistent with List#hashCode") {
     forAll { (x: Chain[Int]) =>
-      x.hashCode should ===(x.toList.hashCode)
+      assert(x.hashCode === (x.toList.hashCode))
     }
   }
 
   test("Chain#takeWhile is consistent with List#takeWhile") {
     forAll { (x: Chain[Int], p: Int => Boolean) =>
-      x.takeWhile(p).toList should ===(x.toList.takeWhile(p))
+      assert(x.takeWhile(p).toList === (x.toList.takeWhile(p)))
     }
   }
 
   test("Chain#dropWhile is consistent with List#dropWhile") {
     forAll { (x: Chain[Int], p: Int => Boolean) =>
-      x.dropWhile(p).toList should ===(x.toList.dropWhile(p))
+      assert(x.dropWhile(p).toList === (x.toList.dropWhile(p)))
     }
   }
 
   test("Chain#get is consistent with List#lift") {
     forAll { (x: Chain[Int], idx: Int) =>
-      x.get(idx.toLong) should ===(x.toList.lift(idx))
+      assert(x.get(idx.toLong) === (x.toList.lift(idx)))
     }
   }
 
+  test("traverse is stack-safe") {
+    val chain = (0 until 100000).map(Chain.one).reduce(_.concat(_))
+    val sumAll = Traverse[Chain]
+      .traverse(chain) { i => () => i }
+      .apply
+      .iterator
+      .sum
+
+    assert(sumAll == chain.iterator.sum)
+  }
 }

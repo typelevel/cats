@@ -82,4 +82,34 @@ package object data extends ScalaVersionSpecificPackage {
     def apply[S, A](f: S => A, s: S): Store[S, A] =
       RepresentableStore[S => *, S, A](f, s)
   }
+
+  type Cont[A, B] = ContT[Eval, A, B]
+
+  object Cont {
+    def apply[A, B](f: (B => Eval[A]) => Eval[A]): Cont[A, B] =
+      ContT[Eval, A, B](f)
+
+    def pure[A, B](b: B): Cont[A, B] =
+      ContT.pure[Eval, A, B](b)
+
+    def defer[A, B](b: => B): Cont[A, B] =
+      ContT.defer[Eval, A, B](b)
+
+    def later[A, B](fn: => (B => Eval[A]) => Eval[A]): Cont[A, B] =
+      ContT.later(fn)
+
+    def tailRecM[A, B, C](a: A)(f: A => Cont[C, Either[A, B]]): Cont[C, B] =
+      ContT.tailRecM(a)(f)
+
+    def liftF[A, B](b: Eval[B]): Cont[A, B] = ContT.liftF(b)
+
+    def callCC[A, B, C](f: (B => Cont[A, C]) => Cont[A, B]): Cont[A, B] =
+      ContT.callCC(f)
+
+    def reset[A, B](cont: Cont[A, A]): Cont[B, A] =
+      ContT.resetT(cont)
+
+    def shift[A, B](f: (B => Eval[A]) => Cont[A, A]): Cont[A, B] =
+      ContT.shiftT(f)
+  }
 }

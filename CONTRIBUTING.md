@@ -155,7 +155,7 @@ with [Discipline](https://github.com/typelevel/discipline) for law checking, and
  that the `Validated` data type supports.
  - An exception to this is serializability tests, where the type class name is also included in the name.
  For example, in the case of `Validated`, the serializability test would take the form,
- *"Applicative[Validated[String, Int]"*, to indicate that this test is verifying that the `Applicative`
+ *"Applicative[Validated[String, Int]]"*, to indicate that this test is verifying that the `Applicative`
  type class instance for the `Validated` data type is serializable.
  - This convention helps to ensure clear and easy to understand output, with minimal duplication in the output.
 - It is also a goal that, for every combination of data type and supported type class instance:
@@ -187,7 +187,7 @@ As a side note, the latter command uses [sbt-mima](https://github.com/lightbend/
 ### source for the documentation
 The documentation for this website is stored alongside the source, in the [docs subproject](https://github.com/typelevel/cats/tree/master/docs).
 
-* The source for the tut compiled pages is in `docs/src/main/tut`
+* The source for the tut compiled pages is in `docs/src/main/mdoc`
 * The menu structure for these pages is in `docs/src/main/resources/microsite/data/menu.yml`
 
 ### Generating the Site
@@ -206,9 +206,9 @@ run `sbt docs/makeMicrosite`
 
     Or just dropping into a `nix-shell` if you are using the [Nix Cats development environment](#nix-cats-development-environment).
 
-2. In a shell, navigate to the generated site directory in `docs/target/site`
+2. In a shell, navigate to the generated site directory in `cats-docs/target/site`
 
-3. Start jekyll with `jekyll serve`
+3. Start jekyll with `jekyll serve -b /cats`
 
 4. Navigate to http://localhost:4000/cats/ in your browser
 
@@ -216,7 +216,7 @@ run `sbt docs/makeMicrosite`
 
 ### Compiler verified documentation
 
-We use [tut](https://github.com/tpolecat/tut) to compile source code
+We use [mdoc](https://github.com/scalameta/mdoc) to compile source code
 which appears in the documentation, this ensures us that our examples
 should always compile, and our documentation has a better chance of
 staying up-to-date.

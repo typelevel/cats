@@ -168,24 +168,24 @@ final class FoldableOps[F[_], A](private val fa: F[A]) extends AnyVal {
 
   /**
    * Tear down a subset of this structure using a `PartialFunction`.
-   *{{{
+   * {{{
    * scala> import cats.implicits._
    * scala> val xs = List(1, 2, 3, 4)
    * scala> xs.collectFold { case n if n % 2 == 0 => n }
    * res0: Int = 6
-   *}}}
+   * }}}
    */
   def collectFold[M](f: PartialFunction[A, M])(implicit F: Foldable[F], M: Monoid[M]): M = F.collectFold[A, M](fa)(f)
 
   /**
    * Tear down a subset of this structure using a `A => Option[M]`.
-   *{{{
+   * {{{
    * scala> import cats.implicits._
    * scala> val xs = List(1, 2, 3, 4)
    * scala> def f(n: Int): Option[Int] = if (n % 2 == 0) Some(n) else None
    * scala> xs.collectFoldSome(f)
    * res0: Int = 6
-   *}}}
+   * }}}
    */
   @deprecated("Use collectFoldSome", "2.1.0-RC1")
   def collectSomeFold[M](f: A => Option[M])(implicit F: Foldable[F], M: Monoid[M]): M = F.collectFoldSome[A, M](fa)(f)
@@ -224,7 +224,7 @@ final class FoldableOps0[F[_], A](private val fa: F[A]) extends AnyVal {
    * scala> val a = x("foo")
    * a: String = "foo321"
    * }}}
-   * */
+   */
   def foldMapK[G[_], B](f: A => G[B])(implicit F: Foldable[F], G: MonoidK[G]): G[B] = F.foldMapK(fa)(f)
 
   /**
@@ -283,14 +283,41 @@ final class FoldableOps0[F[_], A](private val fa: F[A]) extends AnyVal {
     f: A => G[Either[B, C]]
   )(implicit A: Alternative[F], F: Foldable[F], M: Monad[G]): G[(F[B], F[C])] =
     F.partitionEitherM[G, A, B, C](fa)(f)(A, M)
+
+  def sliding2(implicit F: Foldable[F]): List[(A, A)] = F.sliding2(fa)
+  def sliding3(implicit F: Foldable[F]): List[(A, A, A)] = F.sliding3(fa)
+  def sliding4(implicit F: Foldable[F]): List[(A, A, A, A)] = F.sliding4(fa)
+  def sliding5(implicit F: Foldable[F]): List[(A, A, A, A, A)] = F.sliding5(fa)
+  def sliding6(implicit F: Foldable[F]): List[(A, A, A, A, A, A)] = F.sliding6(fa)
+  def sliding7(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A)] = F.sliding7(fa)
+  def sliding8(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A)] = F.sliding8(fa)
+  def sliding9(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A, A)] = F.sliding9(fa)
+  def sliding10(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A, A, A)] = F.sliding10(fa)
+  def sliding11(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A, A, A, A)] = F.sliding11(fa)
+  def sliding12(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A, A, A, A, A)] = F.sliding12(fa)
+  def sliding13(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A, A, A, A, A, A)] = F.sliding13(fa)
+  def sliding14(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A, A, A, A, A, A, A)] = F.sliding14(fa)
+  def sliding15(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A, A, A, A, A, A, A, A)] = F.sliding15(fa)
+  def sliding16(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A)] = F.sliding16(fa)
+  def sliding17(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A)] = F.sliding17(fa)
+  def sliding18(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A)] = F.sliding18(fa)
+  def sliding19(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A)] =
+    F.sliding19(fa)
+  def sliding20(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A)] =
+    F.sliding20(fa)
+  def sliding21(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A)] =
+    F.sliding21(fa)
+  def sliding22(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A)] =
+    F.sliding22(fa)
 }
 
 @deprecated("Use methods on Foldable", "2.1.0-RC1")
 final private[syntax] class FoldableOps1[F[_]](private val F: Foldable[F]) extends AnyVal {
 
   @deprecated("Use partitionBifold on Foldable", "2.1.0-RC1")
-  def partitionBifold[H[_, _], A, B, C](fa: F[A])(f: A => H[B, C])(implicit A: Alternative[F],
-                                                                   H: Bifoldable[H]): (F[B], F[C]) =
+  def partitionBifold[H[_, _], A, B, C](
+    fa: F[A]
+  )(f: A => H[B, C])(implicit A: Alternative[F], H: Bifoldable[H]): (F[B], F[C]) =
     F.partitionBifold[H, A, B, C](fa)(f)
 
   @deprecated("Use partitionBifoldM on Foldable", "2.1.0-RC1")
@@ -300,7 +327,8 @@ final private[syntax] class FoldableOps1[F[_]](private val F: Foldable[F]) exten
     F.partitionBifoldM[G, H, A, B, C](fa)(f)
 
   @deprecated("Use partitionEitherM on Foldable", "2.1.0-RC1")
-  def partitionEitherM[G[_], A, B, C](fa: F[A])(f: A => G[Either[B, C]])(implicit A: Alternative[F],
-                                                                         M: Monad[G]): G[(F[B], F[C])] =
+  def partitionEitherM[G[_], A, B, C](
+    fa: F[A]
+  )(f: A => G[Either[B, C]])(implicit A: Alternative[F], M: Monad[G]): G[(F[B], F[C])] =
     F.partitionEitherM[G, A, B, C](fa)(f)
 }

@@ -1,6 +1,10 @@
 package cats
 
+import cats.data.State
 import simulacrum.{noop, typeclass}
+
+import scala.annotation.implicitNotFound
+import scala.collection.immutable.{HashSet, TreeSet}
 
 /**
  * `TraverseFilter`, also known as `Witherable`, represents list-like structures
@@ -10,6 +14,7 @@ import simulacrum.{noop, typeclass}
  * Based on Haskell's [[https://hackage.haskell.org/package/witherable-0.1.3.3/docs/Data-Witherable.html Data.Witherable]]
  */
 
+@implicitNotFound("Could not find an instance of TraverseFilter for ${F}")
 @typeclass
 trait TraverseFilter[F[_]] extends FunctorFilter[F] {
   def traverse: Traverse[F]
@@ -41,13 +46,12 @@ trait TraverseFilter[F[_]] extends FunctorFilter[F] {
    * scala> val b: Either[String, List[Int]] = TraverseFilter[List].sequenceFilter(a)
    * b: Either[String, List[Int]] = Right(List(1, 5, 3))
    * }}}
-   * */
+   */
   @noop
   def sequenceFilter[G[_], A](fgoa: F[G[Option[A]]])(implicit G: Applicative[G]): G[F[A]] =
     traverseFilter(fgoa)(identity)
 
   /**
-   *
    * Filter values inside a `G` context.
    *
    * This is a generalized version of Haskell's [[http://hackage.haskell.org/package/base-4.9.0.0/docs/Control-Monad.html#v:filterM filterM]].
@@ -84,4 +88,87 @@ trait TraverseFilter[F[_]] extends FunctorFilter[F] {
 
   override def mapFilter[A, B](fa: F[A])(f: A => Option[B]): F[B] =
     traverseFilter[Id, A, B](fa)(f)
+
+  /**
+   * Removes duplicate elements from a list, keeping only the first occurrence.
+   */
+  def ordDistinct[A](fa: F[A])(implicit O: Order[A]): F[A] = {
+    implicit val ord: Ordering[A] = O.toOrdering
+
+    traverseFilter[State[TreeSet[A], *], A, A](fa)(a =>
+      State(alreadyIn => if (alreadyIn(a)) (alreadyIn, None) else (alreadyIn + a, Some(a)))
+    )
+      .run(TreeSet.empty)
+      .value
+      ._2
+  }
+
+  /**
+   * Removes duplicate elements from a list, keeping only the first occurrence.
+   * This is usually faster than ordDistinct, especially for things that have a slow comparion (like String).
+   */
+  def hashDistinct[A](fa: F[A])(implicit H: Hash[A]): F[A] =
+    traverseFilter[State[HashSet[A], *], A, A](fa)(a =>
+      State(alreadyIn => if (alreadyIn(a)) (alreadyIn, None) else (alreadyIn + a, Some(a)))
+    )
+      .run(HashSet.empty)
+      .value
+      ._2
+}
+
+object TraverseFilter {
+
+  /* ======================================================================== */
+  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
+  /* ======================================================================== */
+
+  /**
+   * Summon an instance of [[TraverseFilter]] for `F`.
+   */
+  @inline def apply[F[_]](implicit instance: TraverseFilter[F]): TraverseFilter[F] = instance
+
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllTraverseFilterOps[F[_], A](target: F[A])(implicit tc: TraverseFilter[F]): AllOps[F, A] {
+      type TypeClassType = TraverseFilter[F]
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = TraverseFilter[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
+  trait Ops[F[_], A] extends Serializable {
+    type TypeClassType <: TraverseFilter[F]
+    def self: F[A]
+    val typeClassInstance: TypeClassType
+    def traverseFilter[G[_], B](f: A => G[Option[B]])(implicit G: Applicative[G]): G[F[B]] =
+      typeClassInstance.traverseFilter[G, A, B](self)(f)(G)
+    def filterA[G[_]](f: A => G[Boolean])(implicit G: Applicative[G]): G[F[A]] =
+      typeClassInstance.filterA[G, A](self)(f)(G)
+    def traverseEither[G[_], B, C](f: A => G[Either[C, B]])(g: (A, C) => G[Unit])(implicit G: Monad[G]): G[F[B]] =
+      typeClassInstance.traverseEither[G, A, B, C](self)(f)(g)(G)
+    def ordDistinct(implicit O: Order[A]): F[A] = typeClassInstance.ordDistinct(self)
+    def hashDistinct(implicit H: Hash[A]): F[A] = typeClassInstance.hashDistinct(self)
+  }
+  trait AllOps[F[_], A] extends Ops[F, A] with FunctorFilter.AllOps[F, A] {
+    type TypeClassType <: TraverseFilter[F]
+  }
+  trait ToTraverseFilterOps extends Serializable {
+    implicit def toTraverseFilterOps[F[_], A](target: F[A])(implicit tc: TraverseFilter[F]): Ops[F, A] {
+      type TypeClassType = TraverseFilter[F]
+    } =
+      new Ops[F, A] {
+        type TypeClassType = TraverseFilter[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object nonInheritedOps extends ToTraverseFilterOps
+
+  /* ======================================================================== */
+  /* END OF SIMULACRUM-MANAGED CODE                                           */
+  /* ======================================================================== */
+
 }

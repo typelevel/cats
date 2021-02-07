@@ -1,7 +1,8 @@
 package cats.kernel
 
 import scala.annotation.tailrec
-import scala.collection.immutable.{BitSet, Queue, SortedMap, SortedSet}
+import scala.collection.immutable.{BitSet, Queue, Seq, SortedMap, SortedSet}
+import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration.{Duration, FiniteDuration}
 import scala.{specialized => sp}
 import scala.util.{Failure, Success, Try}
@@ -147,9 +148,26 @@ object Semigroup
   /**
    * Create a `Semigroup` instance from the given function.
    */
-  @inline def instance[A](cmb: (A, A) => A): Semigroup[A] = new Semigroup[A] {
-    override def combine(x: A, y: A): A = cmb(x, y)
-  }
+  @inline def instance[A](cmb: (A, A) => A): Semigroup[A] =
+    new Semigroup[A] {
+      override def combine(x: A, y: A): A = cmb(x, y)
+    }
+
+  /**
+   * Create a `Semigroup` instance that always returns the lefthand side.
+   */
+  @inline def first[A]: Semigroup[A] =
+    new Semigroup[A] {
+      override def combine(x: A, y: A): A = x
+    }
+
+  /**
+   * Create a `Semigroup` instance that always returns the righthand side.
+   */
+  @inline def last[A]: Semigroup[A] =
+    new Semigroup[A] {
+      override def combine(x: A, y: A): A = y
+    }
 
   implicit def catsKernelBoundedSemilatticeForBitSet: BoundedSemilattice[BitSet] =
     cats.kernel.instances.bitSet.catsKernelStdSemilatticeForBitSet
@@ -178,8 +196,6 @@ object Semigroup
 
   implicit def catsKernelMonoidForString: Monoid[String] = cats.kernel.instances.string.catsKernelStdMonoidForString
 
-  implicit def catsKernelMonoidForOption[A: Semigroup]: Monoid[Option[A]] =
-    cats.kernel.instances.option.catsKernelStdMonoidForOption[A]
   implicit def catsKernelMonoidForList[A]: Monoid[List[A]] = cats.kernel.instances.list.catsKernelStdMonoidForList[A]
   implicit def catsKernelMonoidForVector[A]: Monoid[Vector[A]] =
     cats.kernel.instances.vector.catsKernelStdMonoidForVector[A]
@@ -198,6 +214,9 @@ object Semigroup
 
   implicit def catsKernelCommutativeMonoidForMap[K, V: CommutativeSemigroup]: CommutativeMonoid[Map[K, V]] =
     cats.kernel.instances.map.catsKernelStdCommutativeMonoidForMap[K, V]
+  implicit def catsKernelCommutativeSemigroupForSortedMap[K, V: CommutativeSemigroup]
+    : CommutativeSemigroup[SortedMap[K, V]] =
+    cats.kernel.instances.sortedMap.catsKernelStdCommutativeSemigroupForSortedMap[K, V]
   implicit def catsKernelCommutativeMonoidForSortedMap[K: Order, V: CommutativeSemigroup]
     : CommutativeMonoid[SortedMap[K, V]] =
     cats.kernel.instances.sortedMap.catsKernelStdCommutativeMonoidForSortedMap[K, V]
@@ -229,6 +248,8 @@ private[kernel] trait CommutativeMonoidInstances extends MonoidInstances {
     cats.kernel.instances.function.catsKernelCommutativeMonoidForFunction0[A]
   implicit def catsKernelCommutativeMonoidForFunction1[A, B: CommutativeMonoid]: CommutativeMonoid[A => B] =
     cats.kernel.instances.function.catsKernelCommutativeMonoidForFunction1[A, B]
+  implicit def catsKernelCommutativeMonoidForOption[A: CommutativeSemigroup]: CommutativeMonoid[Option[A]] =
+    cats.kernel.instances.option.catsKernelStdCommutativeMonoidForOption[A]
 }
 
 private[kernel] trait MonoidInstances extends BandInstances {
@@ -236,11 +257,22 @@ private[kernel] trait MonoidInstances extends BandInstances {
     cats.kernel.instances.function.catsKernelMonoidForFunction0[A]
   implicit def catsKernelMonoidForFunction1[A, B: Monoid]: Monoid[A => B] =
     cats.kernel.instances.function.catsKernelMonoidForFunction1[A, B]
+  implicit def catsKernelMonoidForMap[K, V: Semigroup]: Monoid[Map[K, V]] =
+    cats.kernel.instances.map.catsKernelStdMonoidForMap[K, V]
+  implicit def catsKernelSemigroupForSortedMap[K, V: Semigroup]: Semigroup[SortedMap[K, V]] =
+    cats.kernel.instances.sortedMap.catsKernelStdSemigroupForSortedMap[K, V]
   implicit def catsKernelMonoidForSortedMap[K: Order, V: Semigroup]: Monoid[SortedMap[K, V]] =
     cats.kernel.instances.sortedMap.catsKernelStdMonoidForSortedMap[K, V]
   implicit def catsKernelMonoidForEither[A, B: Monoid]: Monoid[Either[A, B]] =
     cats.kernel.instances.either.catsDataMonoidForEither[A, B]
-  implicit def catsKernelMonoidForTry[A: Monoid]: Monoid[Try[A]] = new TryMonoid[A](Monoid[A])
+  implicit def catsKernelMonoidForTry[A: Monoid]: Monoid[Try[A]] =
+    new TryMonoid[A](Monoid[A])
+  implicit def catsKernelMonoidForFuture[A](implicit A: Monoid[A], ec: ExecutionContext): Monoid[Future[A]] =
+    new FutureMonoid[A](A, ec)
+  implicit def catsKernelMonoidForOption[A: Semigroup]: Monoid[Option[A]] =
+    cats.kernel.instances.option.catsKernelStdMonoidForOption[A]
+  implicit def catsKernelMonoidForSeq[A]: Monoid[Seq[A]] =
+    cats.kernel.instances.seq.catsKernelStdMonoidForSeq[A]
 }
 
 private[kernel] trait BandInstances extends CommutativeSemigroupInstances {
@@ -264,7 +296,10 @@ private[kernel] trait SemigroupInstances {
     cats.kernel.instances.function.catsKernelSemigroupForFunction1[A, B]
   implicit def catsKernelSemigroupForEither[A, B: Semigroup]: Semigroup[Either[A, B]] =
     cats.kernel.instances.either.catsDataSemigroupForEither[A, B]
-  implicit def catsKernelSemigroupForTry[A: Semigroup]: Semigroup[Try[A]] = new TrySemigroup[A](Semigroup[A])
+  implicit def catsKernelSemigroupForTry[A: Semigroup]: Semigroup[Try[A]] =
+    new TrySemigroup[A](Semigroup[A])
+  implicit def catsKernelSemigroupForFuture[A](implicit A: Semigroup[A], ec: ExecutionContext): Semigroup[Future[A]] =
+    new FutureSemigroup[A](A, ec)
 }
 
 private class TryMonoid[A](A: Monoid[A]) extends TrySemigroup[A](A) with Monoid[Try[A]] {
@@ -272,9 +307,20 @@ private class TryMonoid[A](A: Monoid[A]) extends TrySemigroup[A](A) with Monoid[
 }
 
 private class TrySemigroup[A](A: Semigroup[A]) extends Semigroup[Try[A]] {
-  def combine(x: Try[A], y: Try[A]): Try[A] = (x, y) match {
-    case (Success(xv), Success(yv)) => Success(A.combine(xv, yv))
-    case (f @ Failure(_), _)        => f
-    case (_, f)                     => f
-  }
+  def combine(x: Try[A], y: Try[A]): Try[A] =
+    (x, y) match {
+      case (Success(xv), Success(yv)) => Success(A.combine(xv, yv))
+      case (f @ Failure(_), _)        => f
+      case (_, f)                     => f
+    }
+}
+
+private class FutureMonoid[A](A: Monoid[A], ec: ExecutionContext)
+    extends FutureSemigroup[A](A, ec)
+    with Monoid[Future[A]] {
+  def empty: Future[A] = Future.successful(A.empty)
+}
+
+private class FutureSemigroup[A](A: Semigroup[A], ec: ExecutionContext) extends Semigroup[Future[A]] {
+  def combine(x: Future[A], y: Future[A]): Future[A] = x.flatMap(xv => y.map(A.combine(xv, _))(ec))(ec)
 }

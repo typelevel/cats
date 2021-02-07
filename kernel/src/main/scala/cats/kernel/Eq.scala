@@ -1,12 +1,14 @@
 package cats.kernel
 
 import java.util.UUID
-import scala.collection.immutable.{BitSet, Queue, SortedMap, SortedSet}
+
+import cats.kernel.compat.scalaVersionSpecific._
+
+import scala.collection.immutable.{BitSet, Queue, Seq, SortedMap, SortedSet}
 import scala.concurrent.duration.{Duration, FiniteDuration}
 import scala.math.Equiv
-import scala.{specialized => sp}
 import scala.util.{Failure, Success, Try}
-import compat.scalaVersionSpecific._
+import scala.{specialized => sp}
 
 /**
  * A type class used to determine equality between 2 instances of the same
@@ -41,9 +43,10 @@ trait EqToEquivConversion {
    * Implicitly derive a `scala.math.Equiv[A]` from a `Eq[A]`
    * instance.
    */
-  implicit def catsKernelEquivForEq[A](implicit ev: Eq[A]): Equiv[A] = new Equiv[A] {
-    def equiv(a: A, b: A) = ev.eqv(a, b)
-  }
+  implicit def catsKernelEquivForEq[A](implicit ev: Eq[A]): Equiv[A] =
+    new Equiv[A] {
+      def equiv(a: A, b: A) = ev.eqv(a, b)
+    }
 }
 
 @suppressUnusedImportWarningForScalaVersionSpecific
@@ -52,7 +55,7 @@ object Eq
     with EqToEquivConversion
     with ScalaVersionSpecificOrderInstances
     with instances.TupleOrderInstances
-    with PartialOrderInstances {
+    with OrderInstances0 {
 
   /**
    * Access an implicit `Eq[A]`.
@@ -108,42 +111,45 @@ object Eq
   /**
    * Everything is the same
    */
-  def allEqual[A]: Eq[A] = new Eq[A] {
-    def eqv(x: A, y: A) = true
-  }
+  def allEqual[A]: Eq[A] =
+    new Eq[A] {
+      def eqv(x: A, y: A) = true
+    }
 
   /**
    * This is a monoid that creates an Eq that
    * checks that all equality checks pass
    */
-  def allEqualBoundedSemilattice[A]: BoundedSemilattice[Eq[A]] = new BoundedSemilattice[Eq[A]] {
-    def empty = allEqual[A]
-    def combine(e1: Eq[A], e2: Eq[A]): Eq[A] = Eq.and(e1, e2)
-    override def combineAllOption(es: IterableOnce[Eq[A]]): Option[Eq[A]] =
-      if (es.iterator.isEmpty) None
-      else {
-        val materialized = es.iterator.toVector
-        Some(new Eq[A] {
-          def eqv(x: A, y: A) = materialized.forall(_.eqv(x, y))
-        })
-      }
-  }
+  def allEqualBoundedSemilattice[A]: BoundedSemilattice[Eq[A]] =
+    new BoundedSemilattice[Eq[A]] {
+      def empty = allEqual[A]
+      def combine(e1: Eq[A], e2: Eq[A]): Eq[A] = Eq.and(e1, e2)
+      override def combineAllOption(es: IterableOnce[Eq[A]]): Option[Eq[A]] =
+        if (es.iterator.isEmpty) None
+        else {
+          val materialized = es.iterator.toVector
+          Some(new Eq[A] {
+            def eqv(x: A, y: A) = materialized.forall(_.eqv(x, y))
+          })
+        }
+    }
 
   /**
    * This is a monoid that creates an Eq that
    * checks that at least one equality check passes
    */
-  def anyEqualSemilattice[A]: Semilattice[Eq[A]] = new Semilattice[Eq[A]] {
-    def combine(e1: Eq[A], e2: Eq[A]): Eq[A] = Eq.or(e1, e2)
-    override def combineAllOption(es: IterableOnce[Eq[A]]): Option[Eq[A]] =
-      if (es.iterator.isEmpty) None
-      else {
-        val materialized = es.iterator.toVector
-        Some(new Eq[A] {
-          def eqv(x: A, y: A) = materialized.exists(_.eqv(x, y))
-        })
-      }
-  }
+  def anyEqualSemilattice[A]: Semilattice[Eq[A]] =
+    new Semilattice[Eq[A]] {
+      def combine(e1: Eq[A], e2: Eq[A]): Eq[A] = Eq.or(e1, e2)
+      override def combineAllOption(es: IterableOnce[Eq[A]]): Option[Eq[A]] =
+        if (es.iterator.isEmpty) None
+        else {
+          val materialized = es.iterator.toVector
+          Some(new Eq[A] {
+            def eqv(x: A, y: A) = materialized.exists(_.eqv(x, y))
+          })
+        }
+    }
 
   implicit def catsKernelInstancesForBitSet: PartialOrder[BitSet] with Hash[BitSet] =
     cats.kernel.instances.bitSet.catsKernelStdOrderForBitSet
@@ -204,15 +210,21 @@ object Eq
    */
   implicit def catsStdEqForTry[A, T](implicit A: Eq[A], T: Eq[Throwable]): Eq[Try[A]] =
     new Eq[Try[A]] {
-      def eqv(x: Try[A], y: Try[A]): Boolean = (x, y) match {
-        case (Success(a), Success(b)) => A.eqv(a, b)
-        case (Failure(a), Failure(b)) => T.eqv(a, b)
-        case _                        => false
-      }
+      def eqv(x: Try[A], y: Try[A]): Boolean =
+        (x, y) match {
+          case (Success(a), Success(b)) => A.eqv(a, b)
+          case (Failure(a), Failure(b)) => T.eqv(a, b)
+          case _                        => false
+        }
     }
 }
 
-private[kernel] trait PartialOrderInstances extends HashInstances {
+private[kernel] trait OrderInstances0 extends PartialOrderInstances {
+  implicit def catsKernelOrderForSeq[A: Order]: Order[Seq[A]] =
+    cats.kernel.instances.seq.catsKernelStdOrderForSeq[A]
+}
+
+private[kernel] trait PartialOrderInstances extends PartialOrderInstances0 {
   implicit def catsKernelPartialOrderForOption[A: PartialOrder]: PartialOrder[Option[A]] =
     cats.kernel.instances.option.catsKernelStdPartialOrderForOption[A]
   implicit def catsKernelPartialOrderForList[A: PartialOrder]: PartialOrder[List[A]] =
@@ -225,7 +237,12 @@ private[kernel] trait PartialOrderInstances extends HashInstances {
     cats.kernel.instances.function.catsKernelPartialOrderForFunction0[A]
 }
 
-private[kernel] trait HashInstances extends EqInstances {
+private[kernel] trait PartialOrderInstances0 extends HashInstances {
+  implicit def catsKernelPartialOrderForSeq[A: PartialOrder]: PartialOrder[Seq[A]] =
+    cats.kernel.instances.seq.catsKernelStdPartialOrderForSeq[A]
+}
+
+private[kernel] trait HashInstances extends HashInstances0 {
   implicit def catsKernelHashForSet[A]: Hash[Set[A]] = cats.kernel.instances.set.catsKernelStdHashForSet[A]
   implicit def catsKernelHashForOption[A: Hash]: Hash[Option[A]] =
     cats.kernel.instances.option.catsKernelStdHashForOption[A]
@@ -240,21 +257,29 @@ private[kernel] trait HashInstances extends EqInstances {
     cats.kernel.instances.function.catsKernelHashForFunction0[A]
   implicit def catsKernelHashForMap[K: Hash, V: Hash]: Hash[Map[K, V]] =
     cats.kernel.instances.map.catsKernelStdHashForMap[K, V]
-  implicit def catsKernelHashForSortedMap[K: Order: Hash, V: Hash]: Hash[SortedMap[K, V]] =
+  implicit def catsKernelHashForSortedMap[K: Hash, V: Hash]: Hash[SortedMap[K, V]] =
     cats.kernel.instances.sortedMap.catsKernelStdHashForSortedMap[K, V]
   implicit def catsKernelHashForEither[A: Hash, B: Hash]: Hash[Either[A, B]] =
     cats.kernel.instances.either.catsStdHashForEither[A, B]
 }
 
-private[kernel] trait EqInstances {
+private[kernel] trait HashInstances0 extends EqInstances {
+  implicit def catsKernelHashForSeq[A: Hash]: Hash[Seq[A]] = cats.kernel.instances.seq.catsKernelStdHashForSeq[A]
+}
+
+private[kernel] trait EqInstances extends EqInstances0 {
   implicit def catsKernelEqForOption[A: Eq]: Eq[Option[A]] = cats.kernel.instances.option.catsKernelStdEqForOption[A]
   implicit def catsKernelEqForList[A: Eq]: Eq[List[A]] = cats.kernel.instances.list.catsKernelStdEqForList[A]
   implicit def catsKernelEqForVector[A: Eq]: Eq[Vector[A]] = cats.kernel.instances.vector.catsKernelStdEqForVector[A]
   implicit def catsKernelEqForQueue[A: Eq]: Eq[Queue[A]] = cats.kernel.instances.queue.catsKernelStdEqForQueue[A]
   implicit def catsKernelEqForFunction0[A: Eq]: Eq[() => A] = cats.kernel.instances.function.catsKernelEqForFunction0[A]
   implicit def catsKernelEqForMap[K, V: Eq]: Eq[Map[K, V]] = cats.kernel.instances.map.catsKernelStdEqForMap[K, V]
-  implicit def catsKernelEqForSortedMap[K: Order, V: Eq]: Eq[SortedMap[K, V]] =
+  implicit def catsKernelEqForSortedMap[K, V: Eq]: Eq[SortedMap[K, V]] =
     cats.kernel.instances.sortedMap.catsKernelStdEqForSortedMap[K, V]
   implicit def catsKernelEqForEither[A: Eq, B: Eq]: Eq[Either[A, B]] =
     cats.kernel.instances.either.catsStdEqForEither[A, B]
+}
+
+private[kernel] trait EqInstances0 {
+  implicit def catsKernelEqForSeq[A: Eq]: Eq[Seq[A]] = cats.kernel.instances.seq.catsKernelStdEqForSeq[A]
 }

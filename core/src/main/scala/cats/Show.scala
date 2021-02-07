@@ -1,7 +1,7 @@
 package cats
 
 import java.util.UUID
-import scala.collection.immutable.{BitSet, Queue, SortedMap, SortedSet}
+import scala.collection.immutable.{BitSet, Queue, Seq, SortedMap, SortedSet}
 import scala.concurrent.duration.{Duration, FiniteDuration}
 import scala.util.Try
 
@@ -32,21 +32,28 @@ object Show extends ScalaVersionSpecificShowInstances with ShowInstances {
   }
 
   trait ToShowOps {
-    implicit def toShow[A](target: A)(implicit tc: Show[A]): Ops[A] = new Ops[A] {
-      val self = target
-      val typeClassInstance = tc
+    implicit def toShow[A](target: A)(implicit tc: Show[A]): Ops[A] =
+      new Ops[A] {
+        val self = target
+        val typeClassInstance = tc
+      }
+  }
+
+  /**
+   * creates an instance of [[Show]] using the provided function
+   */
+  def show[A](f: A => String): Show[A] =
+    new Show[A] {
+      def show(a: A): String = f(a)
     }
-  }
 
-  /** creates an instance of [[Show]] using the provided function */
-  def show[A](f: A => String): Show[A] = new Show[A] {
-    def show(a: A): String = f(a)
-  }
-
-  /** creates an instance of [[Show]] using object toString */
-  def fromToString[A]: Show[A] = new Show[A] {
-    def show(a: A): String = a.toString
-  }
+  /**
+   * creates an instance of [[Show]] using object toString
+   */
+  def fromToString[A]: Show[A] =
+    new Show[A] {
+      def show(a: A): String = a.toString
+    }
 
   final case class Shown(override val toString: String) extends AnyVal
   object Shown {
@@ -82,6 +89,7 @@ object Show extends ScalaVersionSpecificShowInstances with ShowInstances {
   implicit def catsShowForOption[A: Show]: Show[Option[A]] = cats.instances.option.catsStdShowForOption[A]
   implicit def catsShowForTry[A: Show]: Show[Try[A]] = cats.instances.try_.catsStdShowForTry[A]
   implicit def catsShowForList[A: Show]: Show[List[A]] = cats.instances.list.catsStdShowForList[A]
+  implicit def catsShowForSeq[A: Show]: Show[Seq[A]] = cats.instances.seq.catsStdShowForSeq[A]
   implicit def catsShowForVector[A: Show]: Show[Vector[A]] = cats.instances.vector.catsStdShowForVector[A]
   implicit def catsShowForQueue[A: Show]: Show[Queue[A]] = cats.instances.queue.catsStdShowForQueue[A]
   implicit def catsShowForEither[A: Show, B: Show]: Show[Either[A, B]] =
@@ -89,8 +97,11 @@ object Show extends ScalaVersionSpecificShowInstances with ShowInstances {
   implicit def catsShowForSet[A: Show]: Show[Set[A]] = cats.instances.set.catsStdShowForSet[A]
   implicit def catsShowForMap[K: Show, V: Show]: Show[Map[K, V]] = cats.instances.map.catsStdShowForMap[K, V]
   implicit def catsShowForSortedSet[A: Show]: Show[SortedSet[A]] = cats.instances.sortedSet.catsStdShowForSortedSet[A]
-  implicit def catsShowForSortedMap[K: Order: Show, V: Show]: Show[SortedMap[K, V]] =
+  implicit def catsShowForSortedMap[K: Show, V: Show]: Show[SortedMap[K, V]] =
     cats.instances.sortedMap.catsStdShowForSortedMap[K, V]
+
+  @deprecated("Use catsStdShowForTuple2 in cats.instances.NTupleShowInstances", "2.3.1")
+  def catsShowForTuple2[A: Show, B: Show]: Show[(A, B)] = cats.instances.tuple.catsStdShowForTuple2[A, B]
 }
 
 private[cats] trait ShowInstances extends cats.instances.NTupleShowInstances {

@@ -4,6 +4,7 @@ import cats.data.State
 import cats.data.StateT
 
 import simulacrum.typeclass
+import scala.annotation.implicitNotFound
 
 /**
  * Traverse, also known as Traversable.
@@ -16,6 +17,7 @@ import simulacrum.typeclass
  *
  * See: [[https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf The Essence of the Iterator Pattern]]
  */
+@implicitNotFound("Could not find an instance of Traverse for ${F}")
 @typeclass trait Traverse[F[_]] extends Functor[F] with Foldable[F] with UnorderedTraverse[F] { self =>
 
   /**
@@ -34,6 +36,25 @@ import simulacrum.typeclass
    * }}}
    */
   def traverse[G[_]: Applicative, A, B](fa: F[A])(f: A => G[B]): G[F[B]]
+
+  /**
+   * Given a function which returns a G effect, thread this effect
+   * through the running of this function on all the values in F,
+   * returning an F[A] in a G context, ignoring the values
+   * returned by provided function.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import java.io.IOException
+   * scala> type IO[A] = Either[IOException, A]
+   * scala> def debug(msg: String): IO[Unit] = Right(())
+   * scala> List("1", "2", "3").traverseTap(debug)
+   * res1: IO[List[String]] = Right(List(1, 2, 3))
+   * }}}
+   */
+  def traverseTap[G[_]: Applicative, A, B](fa: F[A])(f: A => G[B]): G[F[A]] =
+    traverse(fa)(a => Applicative[G].as(f(a), a))
 
   /**
    * A traverse followed by flattening the inner result.
@@ -131,5 +152,68 @@ import simulacrum.typeclass
 }
 
 object Traverse {
-  implicit def catsTraverseForEither[A]: Traverse[Either[A, *]] = cats.instances.either.catsStdInstancesForEither[A]
+
+  /* ======================================================================== */
+  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
+  /* ======================================================================== */
+
+  /**
+   * Summon an instance of [[Traverse]] for `F`.
+   */
+  @inline def apply[F[_]](implicit instance: Traverse[F]): Traverse[F] = instance
+
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllTraverseOps[F[_], A](target: F[A])(implicit tc: Traverse[F]): AllOps[F, A] {
+      type TypeClassType = Traverse[F]
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = Traverse[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
+  trait Ops[F[_], A] extends Serializable {
+    type TypeClassType <: Traverse[F]
+    def self: F[A]
+    val typeClassInstance: TypeClassType
+    def traverse[G[_], B](f: A => G[B])(implicit ev$1: Applicative[G]): G[F[B]] =
+      typeClassInstance.traverse[G, A, B](self)(f)
+    def traverseTap[G[_], B](f: A => G[B])(implicit ev$1: Applicative[G]): G[F[A]] =
+      typeClassInstance.traverseTap[G, A, B](self)(f)
+    def flatTraverse[G[_], B](f: A => G[F[B]])(implicit G: Applicative[G], F: FlatMap[F]): G[F[B]] =
+      typeClassInstance.flatTraverse[G, A, B](self)(f)(G, F)
+    def sequence[G[_], B](implicit ev$1: A <:< G[B], ev$2: Applicative[G]): G[F[B]] =
+      typeClassInstance.sequence[G, B](self.asInstanceOf[F[G[B]]])
+    def flatSequence[G[_], B](implicit ev$1: A <:< G[F[B]], G: Applicative[G], F: FlatMap[F]): G[F[B]] =
+      typeClassInstance.flatSequence[G, B](self.asInstanceOf[F[G[F[B]]]])(G, F)
+    def mapWithIndex[B](f: (A, Int) => B): F[B] = typeClassInstance.mapWithIndex[A, B](self)(f)
+    def traverseWithIndexM[G[_], B](f: (A, Int) => G[B])(implicit G: Monad[G]): G[F[B]] =
+      typeClassInstance.traverseWithIndexM[G, A, B](self)(f)(G)
+    def zipWithIndex: F[(A, Int)] = typeClassInstance.zipWithIndex[A](self)
+  }
+  trait AllOps[F[_], A]
+      extends Ops[F, A]
+      with Functor.AllOps[F, A]
+      with Foldable.AllOps[F, A]
+      with UnorderedTraverse.AllOps[F, A] {
+    type TypeClassType <: Traverse[F]
+  }
+  trait ToTraverseOps extends Serializable {
+    implicit def toTraverseOps[F[_], A](target: F[A])(implicit tc: Traverse[F]): Ops[F, A] {
+      type TypeClassType = Traverse[F]
+    } =
+      new Ops[F, A] {
+        type TypeClassType = Traverse[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object nonInheritedOps extends ToTraverseOps
+
+  /* ======================================================================== */
+  /* END OF SIMULACRUM-MANAGED CODE                                           */
+  /* ======================================================================== */
+
 }

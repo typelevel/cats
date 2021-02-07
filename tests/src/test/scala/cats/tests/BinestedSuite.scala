@@ -4,19 +4,21 @@ import cats.{Bifoldable, Bifunctor, Bitraverse, Foldable, Functor, Traverse}
 import cats.arrow.Profunctor
 import cats.data.Binested
 import cats.kernel.Eq
-import cats.instances.all._
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import cats.syntax.bifunctor._
 import cats.syntax.binested._
+import cats.syntax.eq._
+import org.scalacheck.Prop._
+import org.scalacheck.Test.Parameters
 
 class BinestedSuite extends CatsSuite {
   // we have a lot of generated lists of lists in these tests. We have to tell
   // ScalaCheck to calm down a bit so we don't hit memory and test duration
   // issues.
-  implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
-    PropertyCheckConfiguration(minSuccessful = 20, sizeRange = 5)
+  implicit override val scalaCheckTestParameters: Parameters =
+    Parameters.default.withMinSuccessfulTests(20).withMaxSize(Parameters.default.minSize + 5)
 
   {
     // Bifunctor + Functor + Functor = Bifunctor
@@ -26,7 +28,8 @@ class BinestedSuite extends CatsSuite {
       BifunctorTests[Binested[Either, ListWrapper, Option, *, *]].bifunctor[Int, Int, Int, String, String, String]
     )
     checkAll("Bifunctor[Binested[Either, ListWrapper, Option, *, *]]",
-             SerializableTests.serializable(Bifunctor[Binested[Either, ListWrapper, Option, *, *]]))
+             SerializableTests.serializable(Bifunctor[Binested[Either, ListWrapper, Option, *, *]])
+    )
   }
 
   {
@@ -48,7 +51,8 @@ class BinestedSuite extends CatsSuite {
     // Bifoldable + foldable + foldable = Bifoldable
     implicit val instance: Foldable[ListWrapper] = ListWrapper.foldable
     checkAll("Binested[Either, ListWrapper, ListWrapper, *, *]",
-             BifoldableTests[Binested[Either, ListWrapper, ListWrapper, *, *]].bifoldable[Int, Int, Int])
+             BifoldableTests[Binested[Either, ListWrapper, ListWrapper, *, *]].bifoldable[Int, Int, Int]
+    )
     checkAll(
       "Bifoldable[Binested[Either, ListWrapper, ListWrapper, *, *]]",
       SerializableTests.serializable(Bifoldable[Binested[Either, ListWrapper, ListWrapper, *, *]])
@@ -71,7 +75,9 @@ class BinestedSuite extends CatsSuite {
 
   test("simple syntax-based usage") {
     forAll { (value: (Option[Int], List[Int])) =>
-      value.binested.bimap(_.toString, _.toString).value should ===(value.bimap(_.map(_.toString), _.map(_.toString)))
+      // TODO something is wrong with inference in Dotty here, bug?
+      val binested = value.binested
+      assert(binested.bimap(_.toString, _.toString).value === (value.bimap(_.map(_.toString), _.map(_.toString))))
     }
   }
 }
