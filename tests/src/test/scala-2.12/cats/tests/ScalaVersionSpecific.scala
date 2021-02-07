@@ -4,7 +4,6 @@ import cats.laws.discipline.{ExhaustiveCheck, MiniInt}
 import cats.laws.discipline.MiniInt._
 import cats.laws.discipline.eq._
 import cats.kernel.{Eq, Order}
-import cats.syntax.either._
 
 trait ScalaVersionSpecificFoldableSuite
 trait ScalaVersionSpecificParallelSuite
@@ -27,31 +26,27 @@ trait ScalaVersionSpecificAlgebraInvariantSuite {
     def rem(x: MiniInt, y: MiniInt): MiniInt = MiniInt.unsafeFromInt(x.toInt % y.toInt)
   }
 
-  implicit protected def eqNumeric[A: Eq: ExhaustiveCheck]: Eq[Numeric[A]] = {
+  implicit protected def eqNumeric[A: Eq: ExhaustiveCheck]: Eq[Numeric[A]] = Eq.by { numeric =>
+    // This allows us to catch the case where the fromInt overflows. We use the None to compare two Numeric instances,
+    // verifying that when fromInt throws for one, it throws for the other.
+    val fromMiniInt: MiniInt => Option[A] =
+      miniInt =>
+        try Some(numeric.fromInt(miniInt.toInt))
+        catch {
+          case _: IllegalArgumentException => None // MiniInt overflow
+        }
 
-    // These allow us to capture the cases where operations on Numeric throw (eg when causing an overflow). These are
-    // represented by `None` and allow us to compare two Numeric instances, verifying that when one throws, the other
-    // also throws.
-    def makeUnaryFnSafe[X, R](f: X => R): X => Option[R] =
-      x => Either.catchOnly[IllegalArgumentException](f(x)).toOption
-    def makeBinaryFnSafe[X, Y, R](f: (X, Y) => R): (X, Y) => Option[R] =
-      (x, y) => Either.catchOnly[IllegalArgumentException](f(x, y)).toOption
-
-    Eq.by { numeric =>
-      val fromMiniInt: MiniInt => Option[A] = makeUnaryFnSafe(miniInt => numeric.fromInt(miniInt.toInt))
-
-      (
-        makeBinaryFnSafe(numeric.compare),
-        makeBinaryFnSafe(numeric.plus),
-        makeBinaryFnSafe(numeric.minus),
-        makeBinaryFnSafe(numeric.times),
-        makeUnaryFnSafe(numeric.negate),
-        fromMiniInt,
-        makeUnaryFnSafe(numeric.toInt),
-        makeUnaryFnSafe(numeric.toLong),
-        makeUnaryFnSafe(numeric.toFloat),
-        makeUnaryFnSafe(numeric.toDouble)
-      )
-    }
+    (
+      numeric.compare _,
+      numeric.plus _,
+      numeric.minus _,
+      numeric.times _,
+      numeric.negate _,
+      fromMiniInt,
+      numeric.toInt _,
+      numeric.toLong _,
+      numeric.toFloat _,
+      numeric.toDouble _
+    )
   }
 }
