@@ -5,10 +5,11 @@ import Boilerplate.{Template, TemplateVals}
 import sbt.File
 
 object GenTupleBitraverseInstances extends Template {
-  def filename(root: sbt.File): File =
+  override def range = 1 to 11
+  override def filename(root: sbt.File): File =
     root / "cats" / "instances" / "NTupleBitraverseInstances.scala"
 
-  def content(tv: TemplateVals): String = {
+  override def content(tv: TemplateVals): String = {
     import tv._
 
     block"""

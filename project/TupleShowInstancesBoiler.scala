@@ -5,10 +5,11 @@ import Boilerplate.{Template, TemplateVals}
 import sbt.File
 
 object GenTupleShowInstances extends Template {
-  def filename(root: sbt.File): File =
+  override def range = 1 to 11
+  override def filename(root: sbt.File): File =
     root / "cats" / "instances" / "NTupleShowInstances.scala"
 
-  def content(tv: TemplateVals): String = {
+  override def content(tv: TemplateVals): String = {
     import tv._
 
     val showMethod: String =
