@@ -202,6 +202,12 @@ class NonEmptyChainSuite extends NonEmptyCollectionSuite[Chain, NonEmptyChain, N
       assert(ci.last === (ci.toList.last))
     }
   }
+
+  test("of") {
+    forAll { (head: Int, tail: Seq[Int]) =>
+      assert(NonEmptyChain.of(head, tail: _*).toList === (head :: tail.toList))
+    }
+  }
 }
 
 class ReducibleNonEmptyChainSuite extends ReducibleSuite[NonEmptyChain]("NonEmptyChain") {
