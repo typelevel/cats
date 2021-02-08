@@ -926,8 +926,34 @@ abstract private[data] class EitherTInstances extends EitherTInstances1 {
         EitherT(F.defer(fa.value))
     }
 
-  @deprecated("This implicit provides wrong semantics, see #3776", "2.3.1")
+  @deprecated("This implicit provides inconsistent effect layering semantics; see #3776 for more discussion", "2.4.0")
   def catsDataParallelForEitherTWithParallelEffect[M[_], E: Semigroup](implicit
+    P: Parallel[M]
+  ): Parallel.Aux[EitherT[M, E, *], Nested[P.F, Validated[E, *], *]] =
+    accumulatingParallel[M, E]
+
+  /**
+   * An alternative [[Parallel]] implementation which merges the semantics of
+   * the outer Parallel (the F[_] effect) with the effects of the inner
+   * one (the Either). The inner Parallel has the semantics of [[Validated]],
+   * while the outer has the semantics of parallel ''evaluation'' (in most cases).
+   * The default Parallel for [[EitherT]], when the nested F also has a Parallel,
+   * is to strictly take the semantics of the nested F and to short-circuit any
+   * lefts (often, errors) in a left-to-right fashion, mirroring the semantics of
+   * [[Applicative]] on EitherT. This instance is different in that it will not
+   * ''short-circuit'' but instead accumulate all lefts according to the supplied
+   * [[Semigroup]], similar to Validated.
+   *
+   * {{{
+   * implicit val p: Parallel[EitherT[IO, Chain[Error], *]] = EitherT.accumulatingParallel
+   *
+   * val a = EitherT(IO(Chain(error1).asLeft[Unit]))
+   * val b = EitherT(IO(Chain(error2).asLeft[Unit]))
+   *
+   * (a, b).parTupled  // => EitherT(IO(Chain(error1, error2).asLeft[Unit]))
+   * }}}
+   */
+  def accumulatingParallel[M[_], E: Semigroup](implicit
     P: Parallel[M]
   ): Parallel.Aux[EitherT[M, E, *], Nested[P.F, Validated[E, *], *]] =
     new Parallel[EitherT[M, E, *]] {
