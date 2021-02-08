@@ -926,7 +926,7 @@ abstract private[data] class EitherTInstances extends EitherTInstances1 {
         EitherT(F.defer(fa.value))
     }
 
-  implicit def catsDataParallelForEitherTWithParallelEffect[M[_], E: Semigroup](implicit
+  private[cats] def catsDataParallelForEitherTWithParallelEffect[M[_], E: Semigroup](implicit
     P: Parallel[M]
   ): Parallel.Aux[EitherT[M, E, *], Nested[P.F, Validated[E, *], *]] =
     new Parallel[EitherT[M, E, *]] {
@@ -953,6 +953,37 @@ abstract private[data] class EitherTInstances extends EitherTInstances1 {
           def apply[A](eitherT: EitherT[M, E, A]): Nested[P.F, Validated[E, *], A] = {
             val fea = P.parallel(eitherT.value)
             Nested(P.applicative.map(fea)(Validated.fromEither))
+          }
+        }
+    }
+
+  implicit def catsDataParallelForEitherTWithParallelEffect2[M[_], E](implicit
+    P: Parallel[M]
+  ): Parallel.Aux[EitherT[M, E, *], Nested[P.F, Either[E, *], *]] =
+    new Parallel[EitherT[M, E, *]] {
+      type F[x] = Nested[P.F, Either[E, *], x]
+
+      implicit val monadM: Monad[M] = P.monad
+      implicit val monadEither: Monad[Either[E, *]] = cats.instances.either.catsStdInstancesForEither
+
+      def applicative: Applicative[Nested[P.F, Either[E, *], *]] =
+        cats.data.Nested.catsDataApplicativeForNested(P.applicative, implicitly)
+
+      def monad: Monad[EitherT[M, E, *]] = cats.data.EitherT.catsDataMonadErrorForEitherT
+
+      def sequential: Nested[P.F, Either[E, *], *] ~> EitherT[M, E, *] =
+        new (Nested[P.F, Either[E, *], *] ~> EitherT[M, E, *]) {
+          def apply[A](nested: Nested[P.F, Either[E, *], A]): EitherT[M, E, A] = {
+            val mva = P.sequential(nested.value)
+            EitherT(Functor[M].map(mva)(x => x))
+          }
+        }
+
+      def parallel: EitherT[M, E, *] ~> Nested[P.F, Either[E, *], *] =
+        new (EitherT[M, E, *] ~> Nested[P.F, Either[E, *], *]) {
+          def apply[A](eitherT: EitherT[M, E, A]): Nested[P.F, Either[E, *], A] = {
+            val fea = P.parallel(eitherT.value)
+            Nested(P.applicative.map(fea)(x => x))
           }
         }
     }
