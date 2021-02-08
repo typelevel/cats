@@ -307,6 +307,16 @@ class ChainSuite extends CatsSuite {
     }
   }
 
+  test("Chain#splitAt is consistent with List#splitAt") {
+    forAll { (x: Chain[Int]) =>
+      (0 to x.length.toInt).foreach { n =>
+        val (a1, a2) = x.splitAt(n)
+        val (e1, e2) = x.toList.splitAt(n)
+        assert(a1.toList === e1 && a2.toList == e2)
+      }
+    }
+  }
+
   test("Chain#takeWhile is consistent with List#takeWhile") {
     forAll { (x: Chain[Int], p: Int => Boolean) =>
       assert(x.takeWhile(p).toList === (x.toList.takeWhile(p)))

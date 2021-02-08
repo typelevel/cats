@@ -181,6 +181,36 @@ sealed abstract class Chain[+A] {
   }
 
   /**
+   * Splits the chain into two, placing the initial `n` elements in the first element of the tuple
+   * and the remaining elements in the second element of the tuple. If `n` is greater than the length
+   * of this Chain, the first element of the tuple will contain the entire Chain and the second element
+   * will be an empty chain.
+   */
+  final def splitAt(n: Int): (Chain[A], Chain[A]) = {
+    @tailrec
+    def loop(togo: Int, acc: Chain[A], rest: Chain[A]): (Chain[A], Chain[A]) = {
+      if (togo == 0) (acc, rest)
+      else
+        rest match {
+          case Empty            => (acc, Empty)
+          case s @ Singleton(_) => (Chain.concat(acc, s), Empty)
+          case Wrap(seq) =>
+            val (l, r) = seq.splitAt(togo)
+            (Chain.concat(acc, Wrap(l)), Wrap(r))
+          case Append(l, r) =>
+            if (l.size > togo) {
+              val (a, b) = l.splitAt(togo)
+              (Chain.concat(acc, a), Chain.concat(b, r))
+            } else {
+              loop(togo - l.size.toInt, Chain.concat(acc, l), r)
+            }
+        }
+    }
+
+    loop(n, Chain.empty, this)
+  }
+
+  /**
    * Takes longest prefix of elements that satisfy a predicate.
    * @param p The predicate used to test elements.
    * @return the longest prefix of this chain whose elements all satisfy the predicate p.
