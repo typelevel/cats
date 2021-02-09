@@ -210,6 +210,7 @@ lazy val commonJsSettings = Seq(
 )
 
 lazy val commonNativeSettings = Seq(
+  publishConfiguration := publishConfiguration.value.withOverwrite(true), // needed since we double-publish on release
   // currently sbt-doctest doesn't work in Native/JS builds
   // https://github.com/tkawachi/sbt-doctest/issues/52
   doctestGenTests := Seq.empty,
