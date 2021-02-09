@@ -578,6 +578,24 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
     NonEmptyMap.fromMapUnsafe(groupMapReduceWith(key)(f)(combine))
 
   /**
+   * Partitions elements in fixed size `NonEmptyList`s.
+   *
+   * {{{
+   * scala> import cats.data.NonEmptyList
+   * scala> import cats.implicits._
+   * scala> val nel = NonEmptyList.of(12, -2, 3, -5)
+   * scala> val expectedResult = List(NonEmptyList.of(12, -2), NonEmptyList.of(3, -5))
+   * scala> val result = nel.grouped(2)
+   * scala> result.toList === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  def grouped(size: Int): Iterator[NonEmptyList[A]] = {
+    require(size >= 1, f"size=$size%d, but size must be positive")
+    toList.grouped(size).map(NonEmptyList.fromListUnsafe)
+  }
+
+  /**
    * Creates new `NonEmptyMap`, similarly to List#toMap from scala standard library.
    * {{{
    * scala> import cats.data.{NonEmptyList, NonEmptyMap}

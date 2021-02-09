@@ -7,7 +7,7 @@ import scala.collection.immutable.SortedMap
 
 private[data] object NonEmptyChainImpl extends NonEmptyChainInstances with ScalaVersionSpecificNonEmptyChainImpl {
   // The following 3 types are components of a technique to
-  // create a no-boxing newtype. It's coped from the
+  // create a no-boxing newtype. It's copied from the
   // newtypes lib by @alexknvl
   // For more detail see https://github.com/alexknvl/newtypes
   private[data] type Base
@@ -396,6 +396,24 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
    */
   final def groupBy[B](f: A => B)(implicit B: Order[B]): NonEmptyMap[B, NonEmptyChain[A]] =
     toChain.groupBy(f).asInstanceOf[NonEmptyMap[B, NonEmptyChain[A]]]
+
+  /**
+   * Partitions elements in fixed size `NonEmptyChain`s.
+   *
+   * {{{
+   * scala> import cats.data.NonEmptyChain
+   * scala> import cats.implicits._
+   * scala> val nel = NonEmptyChain.of(12, -2, 3, -5)
+   * scala> val expectedResult = List(NonEmptyChain.of(12, -2), NonEmptyChain.of(3, -5))
+   * scala> val result = nel.grouped(2)
+   * scala> result.toList === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  final def grouped(size: Int): Iterator[NonEmptyChain[A]] = {
+    require(size >= 1, f"size=$size%d, but size must be positive")
+    toNonEmptyVector.grouped(size).map(NonEmptyChain.fromNonEmptyVector)
+  }
 
   /**
    * Groups elements inside this `NonEmptyChain` according to the `Order`

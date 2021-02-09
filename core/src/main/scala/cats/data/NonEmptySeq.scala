@@ -299,6 +299,24 @@ final class NonEmptySeq[+A] private (val toSeq: Seq[A]) extends AnyVal with NonE
     NonEmptyMap.fromMapUnsafe(groupBy(f))
 
   /**
+   * Partitions elements in fixed size `NonEmptySeq`s.
+   *
+   * {{{
+   * scala> import cats.data.NonEmptySeq
+   * scala> import cats.implicits._
+   * scala> val nel = NonEmptySeq.of(12, -2, 3, -5)
+   * scala> val expectedResult = List(NonEmptySeq.of(12, -2), NonEmptySeq.of(3, -5))
+   * scala> val result = nel.grouped(2)
+   * scala> result.toList === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  def grouped(size: Int): Iterator[NonEmptySeq[A]] = {
+    require(size >= 1, f"size=$size%d, but size must be positive")
+    toSeq.grouped(size).map(NonEmptySeq.fromSeqUnsafe)
+  }
+
+  /**
    * Creates new `NonEmptyMap`, similarly to List#toMap from scala standard library.
    * {{{
    * scala> import cats.data.{NonEmptyMap, NonEmptySeq}

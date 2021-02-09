@@ -488,6 +488,9 @@ def mimaSettings(moduleName: String, includeCats1: Boolean = true) =
           exclude[NewMixinForwarderProblem]("cats.kernel.Band#mcF#sp.combineN"),
           exclude[NewMixinForwarderProblem]("cats.data.Tuple2KApply.product"),
           exclude[NewMixinForwarderProblem]("cats.InvariantInstances0.catsApplicativeForArrow")
+        ) ++ // Additional methods in package-private traits
+        Seq(
+          exclude[ReversedMissingMethodProblem]("cats.data.NonEmptyCollection.grouped")
         )
     }
   )

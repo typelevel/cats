@@ -418,6 +418,27 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
     NonEmptyMap.fromMapUnsafe(groupBy(f))
 
   /**
+   * Partitions elements in fixed size `NonEmptyLazyList`s.
+   *
+   * {{{
+   * scala> import cats.data.NonEmptyLazyList
+   * scala> import cats.implicits._
+   * scala> val nel = NonEmptyLazyList.fromLazyListUnsafe(LazyList(12, -2, 3, -5))
+   * scala> val expectedResult = List(
+   *      |   NonEmptyLazyList.fromLazyListUnsafe(LazyList(12, -2)),
+   *      |   NonEmptyLazyList.fromLazyListUnsafe(LazyList(3, -5))
+   *      | )
+   * scala> val result = nel.grouped(2)
+   * scala> result.toList === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  def grouped(size: Int): Iterator[NonEmptyLazyList[A]] = {
+    require(size >= 1, f"size=$size%d, but size must be positive")
+    toLazyList.grouped(size).map(NonEmptyLazyList.fromLazyListUnsafe)
+  }
+
+  /**
    * Creates new `NonEmptyMap`, similarly to List#toMap from scala standard library.
    * {{{
    * scala> import cats.data.{NonEmptyLazyList, NonEmptyMap}
