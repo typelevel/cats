@@ -74,7 +74,10 @@ import scala.annotation.implicitNotFound
     unorderedFoldMap(fa)(a => if (p(a)) 1L else 0L)
 }
 
-object UnorderedFoldable extends ScalaVersionSpecificTraverseInstances {
+object UnorderedFoldable
+    extends ScalaVersionSpecificTraverseInstances
+    with cats.instances.NTupleUnorderedFoldableInstances {
+
   private val orEvalMonoid: CommutativeMonoid[Eval[Boolean]] = new CommutativeMonoid[Eval[Boolean]] {
     val empty: Eval[Boolean] = Eval.False
 
@@ -110,10 +113,11 @@ object UnorderedFoldable extends ScalaVersionSpecificTraverseInstances {
     cats.instances.map.catsStdInstancesForMap[K]
 
   implicit def catsTraverseForEither[A]: Traverse[Either[A, *]] = cats.instances.either.catsStdInstancesForEither[A]
-  implicit def catsInstancesForTuple[A]: Traverse[(A, *)] with Reducible[(A, *)] =
-    cats.instances.tuple.catsStdInstancesForTuple2[A]
-
   implicit def catsTraverseForTry: Traverse[Try] = cats.instances.try_.catsStdInstancesForTry
+
+  @deprecated("Use catsStdInstancesForTuple2 in cats.instances.NTupleMonadInstances", "2.4.0")
+  def catsInstancesForTuple[A]: Traverse[(A, *)] with Reducible[(A, *)] =
+    cats.instances.tuple.catsStdInstancesForTuple2[A]
 
   /* ======================================================================== */
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */

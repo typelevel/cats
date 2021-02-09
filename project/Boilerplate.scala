@@ -1,5 +1,7 @@
 import sbt._
 
+import scala.annotation.tailrec
+
 /**
  * Copied, with some modifications, from https://github.com/milessabin/shapeless/blob/master/project/Boilerplate.scala
  *
@@ -28,8 +30,13 @@ object Boilerplate {
     GenTupleSemigroupalSyntax,
     GenParallelArityFunctions,
     GenParallelArityFunctions2,
+    GenFoldableArityFunctions,
     GenTupleParallelSyntax,
-    GenFoldableArityFunctions
+    GenTupleShowInstances,
+    GenTupleMonadInstances,
+    GenTupleBifunctorInstances,
+    GenTupleBitraverseInstances,
+    GenTupleUnorderedFoldableInstances
   )
 
   val header = "// auto-generated boilerplate by /project/Boilerplate.scala" // TODO: put something meaningful here?
@@ -49,14 +56,50 @@ object Boilerplate {
   final class TemplateVals(val arity: Int) {
     val synTypes = (0 until arity).map(n => s"A$n")
     val synVals = (0 until arity).map(n => s"a$n")
-    val synTypedVals = (synVals.zip(synTypes)).map { case (v, t) => v + ":" + t }
+    val synTypedVals = synVals.zip(synTypes).map { case (v, t) => v + ":" + t }
     val `A..N` = synTypes.mkString(", ")
     val `a..n` = synVals.mkString(", ")
     val `_.._` = Seq.fill(arity)("_").mkString(", ")
-    val `(A..N)` = if (arity == 1) "Tuple1[A]" else synTypes.mkString("(", ", ", ")")
+    val `(A..N)` = if (arity == 1) "Tuple1[A0]" else synTypes.mkString("(", ", ", ")")
     val `(_.._)` = if (arity == 1) "Tuple1[_]" else Seq.fill(arity)("_").mkString("(", ", ", ")")
     val `(a..n)` = if (arity == 1) "Tuple1(a)" else synVals.mkString("(", ", ", ")")
     val `a:A..n:N` = synTypedVals.mkString(", ")
+
+    val `A..(N - 1)` = (0 until (arity - 1)).map(n => s"A$n")
+    val `A..(N - 2)` = (0 until (arity - 2)).map(n => s"A$n")
+    val `A0, A(N - 1)` = if (arity <= 1) "" else `A..(N - 1)`.mkString(", ")
+    val `A0, A(N - 2)` = if (arity <= 2) "" else `A..(N - 2)`.mkString("", ", ", ", ")
+    val `[A0, A(N - 2)]` = if (arity <= 2) "" else `A..(N - 2)`.mkString("[", ", ", "]")
+    val `(A..N - 2, *, *)` =
+      if (arity <= 2) "(*, *)"
+      else `A..(N - 2)`.mkString("(", ", ", ", *, *)")
+    val `a..(n - 1)` = (0 until (arity - 1)).map(n => s"a$n")
+    val `fa._1..fa._(n - 2)` =
+      if (arity <= 2) "" else (0 until (arity - 2)).map(n => s"fa._${n + 1}").mkString("", ", ", ", ")
+    val `pure(fa._1..(n - 2))` =
+      if (arity <= 2) "" else (0 until (arity - 2)).map(n => s"G.pure(fa._${n + 1})").mkString("", ", ", ", ")
+    val `a0, a(n - 1)` = if (arity <= 1) "" else `a..(n - 1)`.mkString(", ")
+    val `[A0, A(N - 1)]` = if (arity <= 1) "" else `A..(N - 1)`.mkString("[", ", ", "]")
+    val `(A0, A(N - 1))` =
+      if (arity == 1) "Tuple1[A0]"
+      else if (arity == 2) "A0"
+      else `A..(N - 1)`.mkString("(", ", ", ")")
+    val `(A..N - 1, *)` =
+      if (arity == 1) "Tuple1"
+      else `A..(N - 1)`.mkString("(", ", ", ", *)")
+    val `(fa._1..(n - 1))` =
+      if (arity <= 1) "Tuple1.apply" else (0 until (arity - 1)).map(n => s"fa._${n + 1}").mkString("(", ", ", ", _)")
+
+    def `A0, A(N - 1)&`(a: String): String =
+      if (arity <= 1) s"Tuple1[$a]" else `A..(N - 1)`.mkString("(", ", ", s", $a)")
+
+    def `fa._1..(n - 1) & `(a: String): String =
+      if (arity <= 1) s"Tuple1($a)" else (0 until (arity - 1)).map(n => s"fa._${n + 1}").mkString("(", ", ", s", $a)")
+
+    def `constraints A..N`(c: String): String = synTypes.map(tpe => s"$tpe: $c[$tpe]").mkString("(implicit ", ", ", ")")
+    def `constraints A..(N-1)`(c: String): String =
+      if (arity <= 1) "" else `A..(N - 1)`.map(tpe => s"$tpe: $c[$tpe]").mkString("(implicit ", ", ", ")")
+    def `parameters A..(N-1)`(c: String): String = `A..(N - 1)`.map(tpe => s"$tpe: $c[$tpe]").mkString(", ")
   }
 
   trait Template {
@@ -64,6 +107,7 @@ object Boilerplate {
     def content(tv: TemplateVals): String
     def range = 1 to maxArity
     def body: String = {
+      @tailrec
       def expandInstances(contents: IndexedSeq[Array[String]], acc: Array[String] = Array.empty): Array[String] =
         if (!contents.exists(_.exists(_.startsWith("-"))))
           acc.map(_.tail)
@@ -108,8 +152,7 @@ object Boilerplate {
       val tpes = synTypes.map { tpe =>
         s"F[$tpe]"
       }
-      val tpesString = synTypes.mkString(", ")
-      val params = (synVals.zip(tpes)).map { case (v, t) => s"$v:$t" }.mkString(", ")
+      val params = synVals.zip(tpes).map { case (v, t) => s"$v:$t" }.mkString(", ")
       val next = if (arity + 1 <= maxArity) {
         s"def |@|[Z](z: F[Z]) = new SemigroupalBuilder${arity + 1}(${`a..n`}, z)"
       } else {
@@ -179,7 +222,7 @@ object Boilerplate {
         s"F[$tpe]"
       }
       val fargs = (0 until arity).map("f" + _)
-      val fparams = (fargs.zip(tpes)).map { case (v, t) => s"$v:$t" }.mkString(", ")
+      val fparams = fargs.zip(tpes).map { case (v, t) => s"$v:$t" }.mkString(", ")
 
       val a = arity / 2
       val b = arity - a
@@ -258,8 +301,7 @@ object Boilerplate {
         s"M[$tpe]"
       }
       val fargs = (0 until arity).map("m" + _)
-      val fparams = (fargs.zip(tpes)).map { case (v, t) => s"$v:$t" }.mkString(", ")
-      val fargsS = fargs.mkString(", ")
+      val fparams = fargs.zip(tpes).map { case (v, t) => s"$v:$t" }.mkString(", ")
       val nestedExpansion = ParallelNestedExpansions(arity)
 
       block"""
@@ -291,8 +333,7 @@ object Boilerplate {
         s"M[$tpe]"
       }
       val fargs = (0 until arity).map("m" + _)
-      val fparams = (fargs.zip(tpes)).map { case (v, t) => s"$v:$t" }.mkString(", ")
-      val fargsS = fargs.mkString(", ")
+      val fparams = fargs.zip(tpes).map { case (v, t) => s"$v:$t" }.mkString(", ")
       val nestedExpansion = ParallelNestedExpansions(arity)
 
       block"""
@@ -324,7 +365,7 @@ object Boilerplate {
         s"F[$tpe]"
       }
       val fargs = (0 until arity).map("f" + _)
-      val fparams = (fargs.zip(tpes)).map { case (v, t) => s"$v:$t" }.mkString(", ")
+      val fparams = fargs.zip(tpes).map { case (v, t) => s"$v:$t" }.mkString(", ")
       val fargsS = fargs.mkString(", ")
 
       val nestedProducts = (0 until (arity - 2))
@@ -392,7 +433,7 @@ object Boilerplate {
 
       val tuple = s"Tuple$arity[$tpesString]"
       val tupleTpe = s"t$arity: $tuple"
-      val tupleArgs = (1 to arity).map { case n => s"t$arity._$n" }.mkString(", ")
+      val tupleArgs = (1 to arity).map(n => s"t$arity._$n").mkString(", ")
 
       val n = if (arity == 1) {
         ""
@@ -443,7 +484,7 @@ object Boilerplate {
 
       val tuple = s"Tuple$arity[$tpesString]"
       val tupleTpe = s"t$arity: $tuple"
-      val tupleArgs = (1 to arity).map { case n => s"t$arity._$n" }.mkString(", ")
+      val tupleArgs = (1 to arity).map(n => s"t$arity._$n").mkString(", ")
 
       val n = if (arity == 1) {
         ""
@@ -485,8 +526,6 @@ object Boilerplate {
       |package cats
       |package syntax
       |
-      |
-      |
       |trait TupleSemigroupalSyntax {
         -  implicit def catsSyntaxTuple${arity}Semigroupal[F[_], ${`A..N`}]($tupleTpe): Tuple${arity}SemigroupalOps[F, ${`A..N`}] = new Tuple${arity}SemigroupalOps(t$arity)
       |}
@@ -512,7 +551,6 @@ object Boilerplate {
 
       val tupleTpe = (1 to arity).map(_ => "A").mkString("(", ", ", ")")
       def listXN(range: Range) = range.map("x" + _).mkString(" :: ")
-      val reverseXN = listXN(1 to arity - 1)
       val tupleXN = (1 to arity).map("x" + _).mkString("(", ", ", ")")
 
       block"""
@@ -550,7 +588,7 @@ object Boilerplate {
         -      val (acc, l) = eval.value
         -      l match {
         -        case ${listXN(2 to arity)} :: Nil =>
-        -          Now(($tupleXN :: acc, ${listXN(1 to arity - 1)} :: Nil))
+        -          Now(($tupleXN :: acc, ${listXN(1 until arity)} :: Nil))
         -        case l =>
         -          Now((acc, x1 :: l))
         -      }

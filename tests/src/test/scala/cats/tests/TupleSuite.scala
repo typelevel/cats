@@ -7,6 +7,7 @@ import cats.{
   Comonad,
   ContravariantSemigroupal,
   FlatMap,
+  Invariant,
   Monad,
   Reducible,
   Show,
@@ -18,7 +19,7 @@ import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.syntax.show._
-import cats.tests.Helpers.CSemi
+import cats.tests.Helpers.{CMono, CSemi, Mono, Semi}
 import cats.syntax.eq._
 import org.scalacheck.Prop._
 
@@ -29,32 +30,109 @@ class TupleSuite extends CatsSuite {
 
   checkAll("Tuple2", BitraverseTests[Tuple2].bitraverse[Option, Int, Int, Int, String, String, String])
   checkAll("Bitraverse[Tuple2]", SerializableTests.serializable(Bitraverse[Tuple2]))
+  checkAll("Tuple4",
+           BitraverseTests[(Boolean, Boolean, *, *)].bitraverse[Option, Int, Int, Int, String, String, String]
+  )
+  checkAll("Bitraverse[Tuple4]", SerializableTests.serializable(Bitraverse[(Boolean, Boolean, *, *)]))
 
-  checkAll("Tuple2[String, Int] with Option", TraverseTests[(String, *)].traverse[Int, Int, Int, Int, Option, Option])
+  checkAll("Traverse[Tuple1] with Option", TraverseTests[Tuple1].traverse[Int, Int, Int, Int, Option, Option])
+  checkAll("Traverse[Tuple1]", SerializableTests.serializable(Traverse[Tuple1]))
+  checkAll("Traverse[String, Int] with Option", TraverseTests[(String, *)].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[(String, *)]", SerializableTests.serializable(Traverse[(String, *)]))
+  checkAll(
+    "Traverse[Boolean, Boolean, String, Double, List[Int], Int] with Option",
+    TraverseTests[(Boolean, Boolean, String, Double, List[Int], *)].traverse[Int, Int, Int, Int, Option, Option]
+  )
+  checkAll("Traverse[(Boolean, Boolean, String, Double, List[Int], *)]",
+           SerializableTests.serializable(Traverse[(Boolean, Boolean, String, Double, List[Int], *)])
+  )
 
-  checkAll("Tuple2[String, Int]", ComonadTests[(String, *)].comonad[Int, Int, Int])
+  checkAll("Comonad[Tuple1]", ComonadTests[Tuple1].comonad[Int, Int, Int])
+  checkAll("Comonad[Tuple1]", SerializableTests.serializable(Comonad[Tuple1]))
+  checkAll("Comonad[(String, *)]", ComonadTests[(String, *)].comonad[Int, Int, Int])
   checkAll("Comonad[(String, *)]", SerializableTests.serializable(Comonad[(String, *)]))
+  checkAll("Comonad[(Boolean, Boolean, String, String, List[Boolean], *)]",
+           ComonadTests[(Boolean, Boolean, String, String, List[Boolean], *)].comonad[Int, Int, Int]
+  )
+  checkAll(
+    "Comonad[(Boolean, Boolean, String, String, List[Boolean], *)]",
+    SerializableTests.serializable(Comonad[(Boolean, Boolean, String, String, List[Boolean], *)])
+  )
 
+  checkAll("Invariant[Tuple1]", InvariantTests[Tuple1].invariant[String, Long, String])
+  checkAll("Invariant[Tuple1] serializable", SerializableTests.serializable(Invariant[Tuple1]))
+  checkAll("Invariant[(String, *)]", InvariantTests[(String, *)].invariant[String, Long, String])
+  checkAll("Invariant[(String, *)] serializable", SerializableTests.serializable(Invariant[(String, *)]))
+  checkAll("Invariant[(Int, String, Double, *)]",
+           InvariantTests[(Int, String, Double, List[Int], Boolean, *)].invariant[String, Long, String]
+  )
+  checkAll(
+    "Invariant[(Int, String, Double, List[Int], Boolean, *)] serializable",
+    SerializableTests.serializable(Invariant[(Int, String, Double, List[Int], Boolean, *)])
+  )
+
+  checkAll("FlatMap[Tuple1]", FlatMapTests[Tuple1].flatMap[String, Long, String])
+  checkAll("FlatMap[Tuple1] serializable", SerializableTests.serializable(FlatMap[Tuple1]))
   // Note that NonEmptyList has no Monoid, so we can make a FlatMap, but not a Monad
   checkAll("FlatMap[(NonEmptyList[Int], *)]", FlatMapTests[(NonEmptyList[Int], *)].flatMap[String, Long, String])
   checkAll("FlatMap[(String, *)] serializable", SerializableTests.serializable(FlatMap[(String, *)]))
+  checkAll("FlatMap[(Semi, Semi, NonEmptyList[Int], *)]",
+           FlatMapTests[(Semi, Semi, NonEmptyList[Int], Semi, NonEmptyList[Int], *)].flatMap[String, Long, String]
+  )
+  checkAll("FlatMap[(Semi, Semi, String, *)] serializable",
+           SerializableTests.serializable(FlatMap[(Semi, Semi, String, Semi, NonEmptyList[Int], *)])
+  )
 
+  checkAll("Monad[Tuple1]", MonadTests[Tuple1].monad[Int, Int, String])
+  checkAll("Monad[Tuple1] serializable", SerializableTests.serializable(Monad[Tuple1]))
   checkAll("Monad[(String, *)]", MonadTests[(String, *)].monad[Int, Int, String])
   checkAll("Monad[(String, *)] serializable", SerializableTests.serializable(Monad[(String, *)]))
-
-  checkAll("CommutativeFlatMap[(CSemi, *)]",
-           CommutativeFlatMapTests[(CSemi, *)].commutativeFlatMap[CSemi, CSemi, CSemi]
+  checkAll("Monad[(Mono, Mono, String, Mono, String, *)]",
+           MonadTests[(Mono, Mono, String, Mono, String, *)].monad[Int, Int, String]
   )
+  checkAll("Monad[(Mono, Mono, String, Mono, String, *)] serializable",
+           SerializableTests.serializable(Monad[(Mono, Mono, String, Mono, String, *)])
+  )
+
+  checkAll("CommutativeFlatMap[Tuple1]", CommutativeFlatMapTests[Tuple1].commutativeFlatMap[String, Int, String])
+  checkAll("CommutativeFlatMap[Tuple1] serializable", SerializableTests.serializable(CommutativeFlatMap[Tuple1]))
+  checkAll("CommutativeFlatMap[(CSemi, *)]", CommutativeFlatMapTests[(CSemi, *)].commutativeFlatMap[Int, Int, String])
   checkAll("CommutativeFlatMap[(CSemi, *)] serializable",
            SerializableTests.serializable(CommutativeFlatMap[(CSemi, *)])
   )
+  checkAll(
+    "CommutativeFlatMap[(CSemi, CSemi, CSemi, CSemi, CSemi, *)]",
+    CommutativeFlatMapTests[(CSemi, CSemi, CSemi, CSemi, CSemi, *)].commutativeFlatMap[String, Int, String]
+  )
+  checkAll(
+    "CommutativeFlatMap[(CSemi, CSemi, CSemi, CSemi, CSemi, *)] serializable",
+    SerializableTests.serializable(CommutativeFlatMap[(CSemi, CSemi, CSemi, CSemi, CSemi, *)])
+  )
 
+  checkAll("CommutativeMonad[Tuple1]", CommutativeMonadTests[Tuple1].commutativeMonad[Int, Int, Int])
+  checkAll("CommutativeMonad[Tuple1] serializable", SerializableTests.serializable(CommutativeMonad[Tuple1]))
   checkAll("CommutativeMonad[(Int, *)]", CommutativeMonadTests[(Int, *)].commutativeMonad[Int, Int, Int])
   checkAll("CommutativeMonad[(Int, *)] serializable", SerializableTests.serializable(CommutativeMonad[(Int, *)]))
+  checkAll("CommutativeMonad[(CMono, CMono, Int, CMono, CMono, *)]",
+           CommutativeMonadTests[(CMono, CMono, Int, CMono, CMono, *)].commutativeMonad[Int, Int, Int]
+  )
+  checkAll(
+    "CommutativeMonad[(CMono, CMono, Int, CMono, CMono, *)] serializable",
+    SerializableTests.serializable(CommutativeMonad[(CMono, CMono, Int, CMono, CMono, *)])
+  )
 
-  checkAll("Tuple2[String, Int]", ReducibleTests[(String, *)].reducible[Option, Int, Int])
+  checkAll("Reducible[Tuple1]", ReducibleTests[Tuple1].reducible[Option, Int, Int])
+  checkAll("Reducible[Tuple1]", SerializableTests.serializable(Reducible[Tuple1]))
+  checkAll("Reducible[(String, *)]", ReducibleTests[(String, *)].reducible[Option, Int, Int])
   checkAll("Reducible[(String, *)]", SerializableTests.serializable(Reducible[(String, *)]))
+  checkAll(
+    "Reducible[(Boolean, Boolean, String, List[Int], NonEmptyList[Int], *)]",
+    ReducibleTests[(Boolean, Boolean, String, List[Int], NonEmptyList[Int], *)].reducible[Option, Int, Int]
+  )
+  checkAll(
+    "Reducible[(Boolean, Boolean, String, List[Int], NonEmptyList[Int], *)]",
+    SerializableTests.serializable(Reducible[(Boolean, Boolean, String, List[Int], NonEmptyList[Int], *)])
+  )
 
   test("Semigroupal composition") {
     val cart = ContravariantSemigroupal[Eq].composeFunctor[(Int, *)]
@@ -81,26 +159,78 @@ class TupleSuite extends CatsSuite {
     }
   }
 
-  test("show") {
+  test("Tuple instances inference") {
+    import cats.InvariantMonoidal
+    import cats.InvariantSemigroupal
+    import cats.Functor
+    import cats.Apply
+    import cats.Applicative
+    import cats.Foldable
+    import cats.CommutativeApplicative
+
+    Invariant[(String, Int, Boolean, Double, *)]
+    InvariantSemigroupal[(Semi, Semi, Semi, Semi, *)]
+    InvariantMonoidal[(Mono, Mono, Mono, Mono, *)]
+    Foldable[(String, Int, Boolean, Double, *)]
+    Traverse[(String, Int, Boolean, Double, List[Int], *)]
+    Functor[(String, Int, Boolean, Double, List[Int], *)]
+    Apply[(Semi, Semi, Semi, Semi, Semi, *)]
+    FlatMap[(Semi, Semi, Semi, Semi, Semi, *)]
+    Applicative[(Mono, Mono, Mono, Mono, *)]
+    CommutativeApplicative[(CMono, CMono, CMono, CMono, CMono, *)]
+  }
+
+  test("Show syntax arity") {
+    assert(Tuple1(1).show === "(1)")
     assert((1, 2).show === "(1,2)")
+    assert((1, 2, 3).show === "(1,2,3)")
+    assert((1, 2, 3, 4).show === "(1,2,3,4)")
+    assert((1, 2, 3, 4, 5).show === "(1,2,3,4,5)")
+    assert((1, 2, 3, 4, 5, 6).show === "(1,2,3,4,5,6)")
+    assert((1, 2, 3, 4, 5, 6, 7).show === "(1,2,3,4,5,6,7)")
+    assert((1, 2, 3, 4, 5, 6, 7, 8).show === "(1,2,3,4,5,6,7,8)")
 
     forAll { (fs: (String, String)) =>
-      assert(fs.show === (fs.toString))
+      assert(fs.show === fs.toString)
+    }
+    forAll { (fs: (String, String, String, String, String)) =>
+      assert(fs.show === fs.toString)
     }
 
-    // Provide some "non-standard" Show instances to make sure the tuple2 is actually use the Show instances for the
+    // Provide some "non-standard" Show instances to make sure the tuples actually use the Show instances for the
     // relevant types instead of blindly calling toString
     case class Foo(x: Int)
-    implicit val fooShow: Show[Foo] = new Show[Foo] {
-      override def show(f: Foo): String = s"foo.x = ${f.x}"
-    }
-    case class Bar(y: Int)
-    implicit val barShow: Show[Bar] = new Show[Bar] {
-      override def show(f: Bar): String = s"bar.y = ${f.y}"
+    object Foo {
+      implicit val fooShow: Show[Foo] = (f: Foo) => s"foo.x = ${f.x}"
     }
 
-    val foo = Foo(1)
-    val bar = Bar(2)
-    assert((foo, bar).show === s"(${fooShow.show(foo)},${barShow.show(bar)})")
+    case class Bar(y: Int)
+    object Bar {
+      implicit val barShow: Show[Bar] = (f: Bar) => s"bar.y = ${f.y}"
+    }
+
+    case class Baz(y: Int)
+    object Baz {
+      implicit val bazShow: Show[Baz] = (f: Baz) => s"baz.y = ${f.y}"
+    }
+
+    val foo1 = Foo(1)
+    val bar1 = Bar(2)
+    val baz1 = Baz(3)
+    val foo2 = Foo(4)
+    val bar2 = Bar(5)
+    val baz2 = Baz(6)
+    val foo3 = Foo(7)
+    val bar3 = Bar(8)
+    val baz3 = Baz(9)
+
+    assert(Tuple1(foo1).show === s"(${Show[Foo].show(foo1)})")
+    assert((foo1, bar1).show === s"(${Show[Foo].show(foo1)},${Show[Bar].show(bar1)})")
+    assert((foo1, bar1, baz1).show === s"(${Show[Foo].show(foo1)},${Show[Bar].show(bar1)},${Show[Baz].show(baz1)})")
+    assert((foo1, bar1, baz1, foo2, bar2, baz2).show === s"(${Show[Foo].show(foo1)},${Show[Bar].show(bar1)},${Show[Baz]
+      .show(baz1)},${Show[Foo].show(foo2)},${Show[Bar].show(bar2)},${Show[Baz].show(baz2)})")
+    assert((foo1, bar1, baz1, foo2, bar2, baz2, foo3, bar3, baz3).show === s"(${Show[Foo].show(foo1)},${Show[Bar]
+      .show(bar1)},${Show[Baz].show(baz1)},${Show[Foo].show(foo2)},${Show[Bar].show(bar2)},${Show[Baz]
+      .show(baz2)},${Show[Foo].show(foo3)},${Show[Bar].show(bar3)},${Show[Baz].show(baz3)})")
   }
 }

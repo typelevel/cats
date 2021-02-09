@@ -329,7 +329,7 @@ class ChainSuite extends CatsSuite {
     val chain = (0 until 100000).map(Chain.one).reduce(_.concat(_))
     val sumAll = Traverse[Chain]
       .traverse(chain) { i => () => i }
-      .apply
+      .apply()
       .iterator
       .sum
 

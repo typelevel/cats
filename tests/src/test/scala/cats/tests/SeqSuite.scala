@@ -68,7 +68,7 @@ class SeqSuite extends CatsSuite {
     val seq = (0 until 100000).toSeq
     val sumAll = Traverse[Seq]
       .traverse(seq) { i => () => i }
-      .apply
+      .apply()
       .sum
 
     assert(sumAll == seq.sum)

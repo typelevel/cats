@@ -105,7 +105,6 @@ import scala.util.control.TailCalls.TailRec
 @suppressUnusedImportWarningForScalaVersionSpecific
 object Invariant extends ScalaVersionSpecificInvariantInstances with InvariantInstances0 {
   implicit def catsInstancesForId: Distributive[Id] with Comonad[Id] = cats.catsInstancesForId
-  implicit def catsComonadForTuple2[A]: Comonad[(A, *)] = cats.instances.tuple.catsStdInstancesForTuple2[A]
   implicit def catsMonadErrorForEither[A]: MonadError[Either[A, *], A] =
     cats.instances.either.catsStdInstancesForEither[A]
   implicit def catsInstancesForOption
@@ -238,6 +237,9 @@ object Invariant extends ScalaVersionSpecificInvariantInstances with InvariantIn
 
   }
 
+  @deprecated("Use catsStdInstancesForTuple2 in cats.instances.NTupleMonadInstances", "2.4.0")
+  def catsComonadForTuple2[A]: Comonad[(A, *)] = cats.instances.tuple.catsStdInstancesForTuple2[A]
+
   /* ======================================================================== */
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
   /* ======================================================================== */
@@ -285,21 +287,22 @@ object Invariant extends ScalaVersionSpecificInvariantInstances with InvariantIn
 }
 
 private[cats] trait InvariantInstances0 extends InvariantInstances1 {
-  implicit def catsCommutativeMonadForTuple2[X](implicit X: CommutativeMonoid[X]): CommutativeMonad[(X, *)] =
-    cats.instances.tuple.catsStdCommutativeMonadForTuple2[X]
   implicit def catsContravariantForFunction1[R]: Contravariant[* => R] =
     cats.instances.function.catsStdContravariantForFunction1[R]
   implicit def catsDistributiveForFunction0: Distributive[Function0] = cats.instances.function.function0Distributive
   implicit def catsDistributiveForFunction1[I]: Distributive[I => *] =
     cats.instances.function.catsStdDistributiveForFunction1[I]
 
+  @deprecated("Use catsStdCommutativeMonadForTuple2 in cats.instances.NTupleMonadInstances", "2.4.0")
+  def catsCommutativeMonadForTuple2[X](implicit X: CommutativeMonoid[X]): CommutativeMonad[(X, *)] =
+    cats.instances.tuple.catsStdCommutativeMonadForTuple2[X]
 }
 
 private trait InvariantInstances1 extends InvariantInstances2 {
   implicit def catsMonadForFunction1[I]: Monad[I => *] = cats.instances.function.catsStdMonadForFunction1[I]
 }
 
-private[cats] trait InvariantInstances2 extends TupleInstances0 {
+private[cats] trait InvariantInstances2 extends cats.instances.NTupleMonadInstances with TupleInstances0 {
   implicit def catsApplicativeForArrow[F[_, _], A](implicit F: Arrow[F]): Applicative[F[A, *]] =
     new ArrowApplicative[F, A](F)
   implicit def catsInstancesForSeq: Monad[Seq] with Alternative[Seq] with CoflatMap[Seq] =
@@ -307,16 +310,19 @@ private[cats] trait InvariantInstances2 extends TupleInstances0 {
 }
 
 private[cats] trait TupleInstances0 extends TupleInstances1 {
-  implicit def catsCommutativeFlatMapForTuple2[X](implicit X: CommutativeSemigroup[X]): CommutativeFlatMap[(X, *)] =
+  @deprecated("Use catsStdCommutativeFlatMapForTuple2 in cats.instances.NTupleMonadInstances", "2.4.0")
+  def catsCommutativeFlatMapForTuple2[X](implicit X: CommutativeSemigroup[X]): CommutativeFlatMap[(X, *)] =
     cats.instances.tuple.catsStdCommutativeFlatMapForTuple2[X]
 }
 
 private trait TupleInstances1 extends TupleInstances2 {
-  implicit def catsMonadForTuple2[X](implicit X: Monoid[X]): Monad[(X, *)] =
+  @deprecated("Use catsStdMonadForTuple2 in cats.instances.NTupleMonadInstances", "2.4.0")
+  def catsMonadForTuple2[X](implicit X: Monoid[X]): Monad[(X, *)] =
     cats.instances.tuple.catsStdMonadForTuple2[X]
 }
 
 private trait TupleInstances2 {
-  implicit def catsFlatMapForTuple2[X](implicit X: Semigroup[X]): FlatMap[(X, *)] =
+  @deprecated("Use catsStdFlatMapForTuple2 on cats.instances.NTupleMonadInstances", "2.4.0")
+  def catsFlatMapForTuple2[X](implicit X: Semigroup[X]): FlatMap[(X, *)] =
     cats.instances.tuple.catsStdFlatMapForTuple2[X]
 }
