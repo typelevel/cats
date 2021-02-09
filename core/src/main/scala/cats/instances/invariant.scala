@@ -2,7 +2,7 @@ package cats.instances
 
 import cats.kernel._
 import cats.kernel.instances.unit._
-import cats.{InvariantMonoidal, InvariantSemigroupal, Monoid}
+import cats.{Invariant, InvariantMonoidal, InvariantSemigroupal, Monoid}
 
 trait InvariantMonoidalInstances {
 
@@ -50,5 +50,19 @@ trait InvariantMonoidalInstances {
 
       def unit: CommutativeSemigroup[Unit] = implicitly
     }
+}
 
+trait InvariantInstances {
+  implicit val catsInvariantForNumeric: Invariant[Numeric] = new Invariant[Numeric] {
+    def imap[A, B](fa: Numeric[A])(f: A => B)(g: B => A): Numeric[B] =
+      new ScalaVersionSpecificNumeric[A, B](fa)(f)(g) {}
+  }
+
+  implicit val catsInvariantForIntegral: Invariant[Integral] = new Invariant[Integral] {
+    def imap[A, B](fa: Integral[A])(f: A => B)(g: B => A): Integral[B] =
+      new ScalaVersionSpecificNumeric[A, B](fa)(f)(g) with Integral[B] {
+        override def quot(x: B, y: B): B = f(fa.quot(g(x), g(y)))
+        override def rem(x: B, y: B): B = f(fa.rem(g(x), g(y)))
+      }
+  }
 }

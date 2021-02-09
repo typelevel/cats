@@ -2,8 +2,9 @@ package cats.tests
 
 import cats.{CommutativeApplicative, CommutativeApply, Invariant, InvariantMonoidal}
 import cats.kernel._
-import cats.kernel.laws.discipline.{SemigroupTests, MonoidTests, GroupTests, _}
+import cats.kernel.laws.discipline.{GroupTests, MonoidTests, SemigroupTests, _}
 import cats.laws.discipline.{
+  ExhaustiveCheck,
   InvariantMonoidalTests,
   InvariantSemigroupalTests,
   InvariantTests,
@@ -17,7 +18,7 @@ import cats.syntax.invariant._
 import cats.syntax.order._
 import org.scalacheck.{Arbitrary, Gen}
 
-class AlgebraInvariantSuite extends CatsSuite {
+class AlgebraInvariantSuite extends CatsSuite with ScalaVersionSpecificAlgebraInvariantSuite {
   // working around https://github.com/typelevel/cats/issues/2701
   implicit private val eqSetBooleanTuple: Eq[(Set[Boolean], Set[Boolean])] = Eq.fromUniversalEquals
   implicit private val eqSetBooleanBooleanTuple: Eq[(Set[Boolean], Boolean)] = Eq.fromUniversalEquals
@@ -157,6 +158,33 @@ class AlgebraInvariantSuite extends CatsSuite {
   implicit private val arbCommutativeGroupInt: Arbitrary[CommutativeGroup[Int]] =
     Arbitrary(genCommutativeGroupInt)
 
+  implicit private val arbNumericMiniInt: Arbitrary[Numeric[MiniInt]] = Arbitrary(Gen.const(integralForMiniInt))
+  implicit private val arbIntegralMiniInt: Arbitrary[Integral[MiniInt]] = Arbitrary(Gen.const(integralForMiniInt))
+
+  implicit protected def eqIntegral[A: Eq: ExhaustiveCheck]: Eq[Integral[A]] = {
+    def makeDivisionOpSafe(unsafeF: (A, A) => A): (A, A) => Option[A] =
+      (x, y) =>
+        try Some(unsafeF(x, y))
+        catch {
+          case _: ArithmeticException      => None // division by zero
+          case _: IllegalArgumentException => None // overflow
+        }
+
+    Eq.by { (integral: Integral[A]) =>
+      // Integral.quot and Integral.rem throw on division by zero, and the underlying integral type (eg MiniInt) can
+      // overflow. We catch these cases here and lift them into Option so as to test that two Integrals are equal only
+      // when they both throw for the same input.
+      val safeQuot: (A, A) => Option[A] = makeDivisionOpSafe(integral.quot)
+      val safeRem: (A, A) => Option[A] = makeDivisionOpSafe(integral.rem)
+
+      (
+        integral: Numeric[A],
+        safeQuot,
+        safeRem
+      )
+    }
+  }
+
   checkAll("InvariantMonoidal[Semigroup]", SemigroupTests[Int](InvariantMonoidal[Semigroup].point(0)).semigroup)
   checkAll("InvariantMonoidal[CommutativeSemigroup]",
            CommutativeSemigroupTests[Int](InvariantMonoidal[CommutativeSemigroup].point(0)).commutativeSemigroup
@@ -165,6 +193,9 @@ class AlgebraInvariantSuite extends CatsSuite {
   checkAll("InvariantSemigroupal[Monoid]",
            InvariantSemigroupalTests[Monoid].invariantSemigroupal[Option[MiniInt], Option[Boolean], Option[Boolean]]
   )
+
+  checkAll("Invariant[Numeric]", InvariantTests[Numeric].invariant[MiniInt, Boolean, Boolean])
+  checkAll("Invariant[Integral]", InvariantTests[Integral].invariant[MiniInt, Boolean, Boolean])
 
   {
     val S: Semigroup[Int] = Semigroup[Int].imap(identity)(identity)
@@ -237,11 +268,6 @@ class AlgebraInvariantSuite extends CatsSuite {
   checkAll("Invariant[Monoid]", InvariantTests[Monoid].invariant[Option[MiniInt], Boolean, Boolean])
   checkAll("Invariant[Monoid]", SerializableTests.serializable(Invariant[Monoid]))
 
-  Eq[Band[Set[Boolean]]]
-  cats.laws.discipline.ExhaustiveCheck[Set[Boolean]]
-  Eq[(Set[Boolean], Boolean)]
-  Eq[(Set[Boolean], Set[Boolean] => (Set[Boolean], Boolean))]
-  Eq[CommutativeSemigroup[Set[Boolean]]]
   checkAll("Invariant[Semilattice]", InvariantTests[Semilattice].invariant[MiniInt, Set[Boolean], Set[Boolean]])
   checkAll("Invariant[Semilattice]", SerializableTests.serializable(Invariant[Semilattice]))
 
