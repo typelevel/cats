@@ -271,6 +271,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Stripe](https://stripe.com)
 - [Tecsisa](https://www.tecsisa.com)
 - [Teikametrics](http://teikametrics.com)
+- [Tinkoff](https://tinkoff.ru)
 - [The Guardian](https://www.theguardian.com)
 - [Underscore Consulting](https://underscore.io/)
 - [Waves Platform](https://wavesplatform.com/)
