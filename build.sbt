@@ -42,6 +42,7 @@ val DottyNew = "3.0.0-M3"
 
 ThisBuild / crossScalaVersions := Seq(Scala212, Scala213, DottyOld, DottyNew)
 ThisBuild / scalaVersion := Scala213
+ThisBuild / versionScheme := Some("semver-spec")
 
 ThisBuild / githubWorkflowPublishTargetBranches := Seq() // disable publication for now
 
