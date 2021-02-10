@@ -492,6 +492,31 @@ def mimaSettings(moduleName: String, includeCats1: Boolean = true) =
         ) ++ // Additional methods in package-private traits
         Seq(
           exclude[ReversedMissingMethodProblem]("cats.data.NonEmptyCollection.grouped")
+        ) ++ // https://github.com/typelevel/cats/pull/3785
+        Seq(
+          exclude[MissingClassProblem]("cats.syntax.EqOps$mcJ$sp"),
+          exclude[MissingClassProblem]("cats.syntax.EqOps$mcD$sp"),
+          exclude[FinalClassProblem]("cats.syntax.EqOps"),
+          exclude[MissingFieldProblem]("cats.syntax.EqOps.lhs"),
+          exclude[DirectMissingMethodProblem]("cats.syntax.EqOps.unapply"),
+          exclude[DirectMissingMethodProblem]("cats.syntax.EqOps.apply"),
+          exclude[DirectMissingMethodProblem]("cats.syntax.EqOps.lhs"),
+          exclude[DirectMissingMethodProblem]("cats.syntax.EqOps.copy"),
+          exclude[DirectMissingMethodProblem]("cats.syntax.EqOps.copy$default$1"),
+          exclude[DirectMissingMethodProblem]("cats.syntax.EqOps.productPrefix"),
+          exclude[DirectMissingMethodProblem]("cats.syntax.EqOps.productArity"),
+          exclude[DirectMissingMethodProblem]("cats.syntax.EqOps.productElement"),
+          exclude[DirectMissingMethodProblem]("cats.syntax.EqOps.productIterator"),
+          exclude[DirectMissingMethodProblem]("cats.syntax.EqOps.canEqual"),
+          exclude[DirectMissingMethodProblem]("cats.syntax.EqOps.copy$default$1$mcD$sp"),
+          exclude[DirectMissingMethodProblem]("cats.syntax.EqOps.copy$default$1$mcF$sp"),
+          exclude[DirectMissingMethodProblem]("cats.syntax.EqOps.copy$default$1$mcJ$sp"),
+          exclude[DirectMissingMethodProblem]("cats.syntax.EqOps.copy$default$1$mcI$sp"),
+          exclude[DirectMissingMethodProblem]("cats.syntax.EqOps.productElementNames"),
+          exclude[DirectMissingMethodProblem]("cats.syntax.EqOps.productElementName"),
+          exclude[MissingClassProblem]("cats.syntax.EqOps$"),
+          exclude[MissingClassProblem]("cats.syntax.EqOps$mcF$sp"),
+          exclude[MissingClassProblem]("cats.syntax.EqOps$mcI$sp")
         )
     }
   )
