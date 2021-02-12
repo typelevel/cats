@@ -463,7 +463,9 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
   )
   checkAll(
     "Parallel[IorT[F, String, *]] with parallel effect (accumulating)", {
-      implicit def iorTParallel[M[_]: Parallel, E: Semigroup] = IorT.accumulatingParallel[M, E]
+      type IE[A] = IorT[Either[String, *], String, A]
+      type IV[A] = IorT[Validated[String, *], String, A]
+      implicit val iorTParallel: Parallel.Aux[IE, IV] = IorT.accumulatingParallel[Either[String, *], String]
       ParallelTests[IorT[Either[String, *], String, *]].parallel[Int, String]
     }
   )
@@ -494,9 +496,10 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
   )
   checkAll(
     "Parallel[EitherT[M, String, *]] (accumulating)", {
-      implicit def eitherTParallel[M[_]: Parallel, E: Semigroup] = EitherT.accumulatingParallel[M, E]
-      ParallelTests[EitherT[Either[String, *], String, *]]
-        .parallel[Int, String]
+      type EE[A] = EitherT[Either[String, *], String, A]
+      type VV[A] = Nested[Validated[String, *], Validated[String, *], A]
+      implicit val eitherTParallel: Parallel.Aux[EE, VV] = EitherT.accumulatingParallel[Either[String, *], String]
+      ParallelTests[EitherT[Either[String, *], String, *]].parallel[Int, String]
     }
   )
   checkAll(
