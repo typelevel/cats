@@ -1,3 +1,92 @@
+## Version 2.4.1
+
+_2020 February 10_
+
+This release fixes a problem in Cats 2.4.0. It is not binary compatible with Cats 2.4.0. We urge everyone to skip 2.4.0 and upgrade directly to 2.4.1.
+
+Cats 2.4.1 is a hotfix release in the 2.x series. It is binary compatible to every previous release in the 2.x series, _except for Cats 2.4.0_.
+
+The following release notes contain all cumulative changes since Cats 2.3.1.
+
+### Additions
+
+* #3220, #3222, #3773 Add Invariant instances for Numeric and Integral by @tmccarthy & @kubukoz 
+* #3650, #3579 add grouped to NonEmptyCollection by @bbstilson & @larsrh 
+* #3299, #3293 Generate Show instances for Tuple3 and higher by @barambani 
+* #3727 .slidingN using tuples by @Slakah 
+* #3750, #1549 Support scala-native 0.4 by @arashi01 
+* #3771 add NonEmptyChain.of by @larsrh 
+* #3318 add syntax for unzip on functors by @yangzai 
+* #3680 Add more group-like methods to NonEmptyList & Chain by @BalmungSan 
+* #3748 Delimited continuations via shiftT/resetT for ContT by @TimWSpence 
+* #3747 Add callCC to ContT by @TimWSpence 
+* #3765 Add NonEmptyList.take by @saeltz 
+* #2087, #3753 add Monoid[Comparison] for lexographical ordering by @adelbertc & @larsrh 
+* #3759 Provide BoundedEnumerable[Byte] instance by @ashleymercer 
+* #3699 Allow finding a list of maxiumum/minimum items for Foldable/Reducible by @Billzabob & @larsrh 
+* #3730 Add NonEmptyList.zip by @saeltz 
+* #3724 Trivial semigroup instances by @RaasAhsan 
+* #3707, #3710 Add missing Free.liftK and Free.liftId by @phongngtuan 
+
+### Changes
+
+* #3776, #3777 Removed and replaced inconsistent Parallel derivation for EitherT by @djspiewak 
+  * this change is potentially source-breaking: an existing `implicit` has been made un-`implicit`, but another `implicit` with a different semantics has been provided (core)
+  * more discussion at typelevel/cats-effect#1645
+  * this change emits new deprecation warnings
+* #3734, #3772 Cogen for (Finite)Duration to fix test failures by @larsrh 
+  * this change is only internal in tests
+* #2207, #3758 deprecate Free.inject by @larsrh 
+  * this change emits new deprecation warnings
+* #3702 specialized EqOps by @YannMoisan 
+  * this change accidentally broke source compatibility, please upgrade to 2.4.1
+  * reverted by #3784, #3785 by @larsrh 
+* #3677 Added EmptyK instance for Map by @LMnet 
+  * this change marks a previously non-`implicit` method as `implicit` (alleycats)
+
+#### Documentation
+
+* #3722 Rename productM to mproduct in the glossary by @BenFradet 
+* #3745 Adjust to GitHub Actions by @sh0hei 
+* #3744 Improve scaladoc for EitherT.rethrowT by @majk-p 
+* #3732 scaladoc fixes for PartialOrder by @martijnhoekstra 
+* #3728 Fix a link in typelevelEcosystem.md by @akiomik 
+* #3726 update README by @gokyo 
+
+## Version 2.4.0
+
+_2020 February 9_
+
+Cats 2.4.0 contains an unintended source-breaking change, please upgrade directly to 2.4.1.
+
+## Version 2.3.1
+
+_2020 December 18_
+
+Cats 2.3.1 adds support for Scala 3.0.0-M3 and is published for Scala 2.12, 2.13, and 3.0.0-M2 as well.
+
+### Changes From 2.3.0
+
+- #3696 Add `ApplicativeThrow` and `MonadThrow` to cats package object (from cats-effect) (@agustafson)
+- #3698 Add addLeft/addRight for Ior (@keirlawson)
+- #3639 Created documentation for monaderror, merged it with applicative error (@dhinojosa)
+- #3402 Simplify FunctionK.lift macro (@joroKr21)
+- #3708 Use as rather than map and discard (@johnynek)
+
+## Version 2.3.0
+
+_2020 November 26_
+
+Welcome to the first stable release of Cats on Scala 3… milestone 2! We will continue releasing minor versions within the 2.3.x lineage against Scala 3.0.0 until it reaches a final stable release. The decision to push a stable release of Cats in advance of this date was made in order to simplify versioning within the downstream ecosystem.
+
+### Changes From 2.2.0
+
+- #3673 – tweak Band impl so it can more easily be combined with Monoid in a single instance (@Dwolla)
+- #3609 – A new dedicated cats ecosystem page (@benkio)
+- #3630 – FunctionK: methods to narrow input / widen output types (@bplommer)
+- #3620, #3624 – Typeclass instances for `immutable.Seq` (@JosephMoniz)
+- #3603 – Add method `distinct` to TraverseFilter (@takayahilton)
+
 ## Version 2.3.0-M2
 
 _2020 November 6_ 🍂
