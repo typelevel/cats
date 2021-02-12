@@ -449,7 +449,7 @@ abstract private[data] class IorTInstances extends IorTInstances1 {
         }
 
       private[this] val FA: Applicative[P.F] = P.applicative
-      private[this] val IorA: Applicative[Ior[E, *]] = Parallel[Ior[E, *], Ior[E, *]].applicative
+      private[this] val IorA: Applicative[Ior[E, *]] = Ior.catsDataMonadErrorForIor // See https://github.com/typelevel/cats/issues/3783
 
       val applicative: Applicative[IorT[P.F, E, *]] = new Applicative[IorT[P.F, E, *]] {
         def pure[A](a: A): IorT[P.F, E, A] = IorT.pure(a)(FA)
