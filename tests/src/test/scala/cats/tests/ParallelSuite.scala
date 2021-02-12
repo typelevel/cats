@@ -441,7 +441,20 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
     assert(resultSansInstance === ("sequential".some))
     assert(resultWithInstance === ("parallel".some))
   }
-
+  test("Parallel[IorT[F, E, *]] applies Ior's additive effect when F has no Parallel") {
+    forAll { (intI: Int) =>
+      val iorT = IorT.leftT[Option, Boolean](intI)
+      val parComposed = (iorT, iorT).parMapN(_ && _)
+      parComposed === IorT.leftT[Option, Boolean](intI + intI)
+    }
+  }
+  test("Parallel[IorT[F, E, *]] does not apply Ior's additive effect when F has Parallel") {
+    forAll { (intI: Int) =>
+      val iorT = IorT.leftT[Either[Int, *], Boolean](intI)
+      val parComposed = (iorT, iorT).parMapN(_ && _)
+      parComposed === iorT
+    }
+  }
   checkAll("Parallel[Either[String, *]", ParallelTests[Either[String, *]].parallel[Int, String])
   checkAll("Parallel[Ior[String, *]]", ParallelTests[Ior[String, *]].parallel[Int, String])
   checkAll(
@@ -449,14 +462,42 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
     ParallelTests[IorT[Either[String, *], String, *]].parallel[Int, String]
   )
   checkAll(
+    "Parallel[IorT[F, String, *]] with parallel effect (accumulating)", {
+      implicit def iorTParallel[M[_]: Parallel, E: Semigroup] = IorT.accumulatingParallel[M, E]
+      ParallelTests[IorT[Either[String, *], String, *]].parallel[Int, String]
+    }
+  )
+  checkAll(
     "Parallel[IorT[F, String, *]] with sequential effect",
     ParallelTests[IorT[Option, String, *]].parallel[Int, String]
   )
   checkAll("Parallel[OptionT[M, *]]", ParallelTests[OptionT[Either[String, *], *]].parallel[Int, String])
+
+  test("Parallel[EitherT[F, E, *]] applies Validated's additive effect when F has no Parallel") {
+    forAll { (intI: Int) =>
+      val eitherT = EitherT.leftT[Option, Boolean](intI)
+      val parComposed = (eitherT, eitherT).parMapN(_ && _)
+      parComposed === EitherT.leftT[Option, Boolean](intI + intI)
+    }
+  }
+  test("Parallel[EitherT[F, E, *]] does not apply Validated's additive effect when F has Parallel") {
+    forAll { (intI: Int) =>
+      val eitherT = EitherT.leftT[Ior[Int, *], Boolean](intI)
+      val parComposed = (eitherT, eitherT).parMapN(_ && _)
+      parComposed === eitherT
+    }
+  }
   checkAll(
     "Parallel[EitherT[M, String, *]]",
     ParallelTests[EitherT[Either[String, *], String, *]]
       .parallel[Int, String]
+  )
+  checkAll(
+    "Parallel[EitherT[M, String, *]] (accumulating)", {
+      implicit def eitherTParallel[M[_]: Parallel, E: Semigroup] = EitherT.accumulatingParallel[M, E]
+      ParallelTests[EitherT[Either[String, *], String, *]]
+        .parallel[Int, String]
+    }
   )
   checkAll(
     "Parallel[EitherT[Option, String, *]]",

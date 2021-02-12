@@ -1,7 +1,7 @@
 package cats.tests
 
 import cats._
-import cats.data.{EitherT, Ior, State}
+import cats.data.{EitherT, State}
 import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
@@ -11,7 +11,6 @@ import cats.syntax.applicativeError._
 import cats.syntax.either._
 import scala.util.{Failure, Success, Try}
 import cats.syntax.eq._
-import cats.syntax.parallel._
 import org.scalacheck.Prop._
 
 class EitherTSuite extends CatsSuite {
@@ -657,22 +656,6 @@ class EitherTSuite extends CatsSuite {
       val rightFun = (_: Int) => EitherT.right[String](List(int))
 
       assert(eithert.biflatMap(leftFun, rightFun) === (eithert.leftFlatMap(leftFun).flatMap(rightFun)))
-    }
-  }
-
-  test("Parallel[EitherT[F, E, *]] applies Validated's additive effect when F has no Parallel") {
-    forAll { (intI: Int) =>
-      val eitherT = EitherT.leftT[Option, Boolean](intI)
-      val parComposed = (eitherT, eitherT).parMapN(_ && _)
-      parComposed === EitherT.leftT[Option, Boolean](intI + intI)
-    }
-  }
-
-  test("Parallel[EitherT[F, E, *]] does not apply Validated's additive effect when F has Parallel") {
-    forAll { (intI: Int) =>
-      val eitherT = EitherT.leftT[Ior[Int, *], Boolean](intI)
-      val parComposed = (eitherT, eitherT).parMapN(_ && _)
-      parComposed === eitherT
     }
   }
 

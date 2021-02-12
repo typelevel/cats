@@ -7,7 +7,6 @@ import cats.kernel.laws.discipline.{EqTests, MonoidTests, SemigroupTests}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.syntax.eq._
-import cats.syntax.parallel._
 import org.scalacheck.Prop._
 import cats.kernel.laws.discipline.OrderTests
 
@@ -382,22 +381,6 @@ class IorTSuite extends CatsSuite {
   test("IorT.condF consistent with IorT.right and IorT.left") {
     forAll { (test: Boolean, optionS: Option[String], optionI: Option[Int]) =>
       IorT.condF(test, optionS, optionI) === (if (test) IorT.right(optionS) else IorT.left(optionI))
-    }
-  }
-
-  test("Parallel[IorT[F, E, *]] applies Ior's additive effect when F has no Parallel") {
-    forAll { (intI: Int) =>
-      val iorT = IorT.leftT[Option, Boolean](intI)
-      val parComposed = (iorT, iorT).parMapN(_ && _)
-      parComposed === IorT.leftT[Option, Boolean](intI + intI)
-    }
-  }
-
-  test("Parallel[IorT[F, E, *]] does not apply Ior's additive effect when F has Parallel") {
-    forAll { (intI: Int) =>
-      val iorT = IorT.leftT[Either[Int, *], Boolean](intI)
-      val parComposed = (iorT, iorT).parMapN(_ && _)
-      parComposed === iorT
     }
   }
 }
