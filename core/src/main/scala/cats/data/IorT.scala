@@ -488,10 +488,9 @@ abstract private[data] class IorTInstances extends IorTInstances1 {
   def accumulatingParallel[M[_], E](implicit
     P: Parallel[M],
     E: Semigroup[E]
-  ): Parallel.Aux[IorT[M, E, *], IorT[P.F, E, *]] { type Dummy } =
+  ): Parallel.Aux[IorT[M, E, *], IorT[P.F, E, *]] =
     new Parallel[IorT[M, E, *]] {
       type F[x] = IorT[P.F, E, x]
-      type Dummy // fix to make this one more specific than the catsDataParallelForIorTWithSequentialEffect, see https://github.com/typelevel/cats/pull/2335#issuecomment-408249775
 
       val parallel: IorT[M, E, *] ~> IorT[P.F, E, *] =
         new (IorT[M, E, *] ~> IorT[P.F, E, *]) {
