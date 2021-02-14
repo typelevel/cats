@@ -21,7 +21,7 @@ object Empty extends EmptyInstances0 {
   def apply[A](a: => A): Empty[A] =
     new Empty[A] { lazy val empty: A = a }
 
-  implicit def fromEmptyK[F[_], T](implicit ekf: EmptyK[F]): Empty[F[T]] = ekf.synthesize[T]
+  def fromEmptyK[F[_], T](implicit ekf: EmptyK[F]): Empty[F[T]] = ekf.synthesize[T]
 
   /* ======================================================================== */
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
