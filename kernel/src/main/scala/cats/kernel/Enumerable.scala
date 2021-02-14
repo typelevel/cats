@@ -79,6 +79,21 @@ object BoundedEnumerable {
     cats.kernel.instances.char.catsKernelStdOrderForChar
 
   @inline def apply[A](implicit e: BoundedEnumerable[A]): BoundedEnumerable[A] = e
+
+  /**
+   * Defines a `BoundedEnumerable[A]` from the given enumerable such that
+   * all arrows / successor functions switch direction.
+   */
+  def reverse[@sp A](e: BoundedEnumerable[A]): BoundedEnumerable[A] =
+    new BoundedEnumerable[A] {
+      override def order: Order[A] = Order.reverse(e.order)
+
+      override def partialNext(a: A): Option[A] = e.partialPrevious(a)
+      override def partialPrevious(a: A): Option[A] = e.partialNext(a)
+
+      override def minBound: A = e.maxBound
+      override def maxBound: A = e.minBound
+    }
 }
 
 trait LowerBoundedEnumerable[@sp A] extends PartialNextLowerBounded[A] with Next[A] {
