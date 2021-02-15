@@ -1,6 +1,6 @@
 ## Version 2.4.1
 
-_2020 February 10_
+_2021 February 10_
 
 This release fixes a problem in Cats 2.4.0. It is not binary compatible with Cats 2.4.0. We urge everyone to skip 2.4.0 and upgrade directly to 2.4.1.
 
@@ -55,7 +55,7 @@ The following release notes contain all cumulative changes since Cats 2.3.1.
 
 ## Version 2.4.0
 
-_2020 February 9_
+_2021 February 9_
 
 Cats 2.4.0 contains an unintended source-breaking change, please upgrade directly to 2.4.1.
 
