@@ -431,39 +431,6 @@ abstract private[data] class IorTInstances extends IorTInstances1 {
   implicit def catsDataMonoidForIorT[F[_], A, B](implicit F: Monoid[F[Ior[A, B]]]): Monoid[IorT[F, A, B]] =
     new IorTMonoid[F, A, B] { val F0: Monoid[F[Ior[A, B]]] = F }
 
-  implicit def catsDataParallelForIorTWithParallelEffect[M[_], E](implicit
-    P: Parallel[M],
-    E: Semigroup[E]
-  ): Parallel.Aux[IorT[M, E, *], IorT[P.F, E, *]] { type Dummy } =
-    new Parallel[IorT[M, E, *]] {
-      type F[x] = IorT[P.F, E, x]
-      type Dummy // fix to make this one more specific than the catsDataParallelForIorTWithSequentialEffect, see https://github.com/typelevel/cats/pull/2335#issuecomment-408249775
-
-      val parallel: IorT[M, E, *] ~> IorT[P.F, E, *] =
-        new (IorT[M, E, *] ~> IorT[P.F, E, *]) {
-          def apply[A](fm: IorT[M, E, A]): IorT[P.F, E, A] = IorT(P.parallel(fm.value))
-        }
-      val sequential: IorT[P.F, E, *] ~> IorT[M, E, *] =
-        new (IorT[P.F, E, *] ~> IorT[M, E, *]) {
-          def apply[A](ff: IorT[P.F, E, A]): IorT[M, E, A] = IorT(P.sequential(ff.value))
-        }
-
-      private[this] val FA: Applicative[P.F] = P.applicative
-      private[this] val IorA: Applicative[Ior[E, *]] =
-        Ior.catsDataMonadErrorForIor // See https://github.com/typelevel/cats/issues/3783
-
-      val applicative: Applicative[IorT[P.F, E, *]] = new Applicative[IorT[P.F, E, *]] {
-        def pure[A](a: A): IorT[P.F, E, A] = IorT.pure(a)(FA)
-        def ap[A, B](ff: IorT[P.F, E, A => B])(fa: IorT[P.F, E, A]): IorT[P.F, E, B] =
-          IorT(FA.map2(ff.value, fa.value)((f, a) => IorA.ap(f)(a)))
-      }
-
-      lazy val monad: Monad[IorT[M, E, *]] = {
-        implicit def underlyingMonadM: Monad[M] = P.monad
-        Monad[IorT[M, E, *]]
-      }
-    }
-
   /**
    * An alternative [[Parallel]] implementation which merges the semantics of
    * the outer Parallel (the F[_] effect) with the effects of the inner
@@ -503,6 +470,39 @@ abstract private[data] class IorTInstances extends IorTInstances1 {
 
       private[this] val FA: Applicative[P.F] = P.applicative
       private[this] val IorA: Applicative[Ior[E, *]] = Parallel[Ior[E, *], Ior[E, *]].applicative
+
+      val applicative: Applicative[IorT[P.F, E, *]] = new Applicative[IorT[P.F, E, *]] {
+        def pure[A](a: A): IorT[P.F, E, A] = IorT.pure(a)(FA)
+        def ap[A, B](ff: IorT[P.F, E, A => B])(fa: IorT[P.F, E, A]): IorT[P.F, E, B] =
+          IorT(FA.map2(ff.value, fa.value)((f, a) => IorA.ap(f)(a)))
+      }
+
+      lazy val monad: Monad[IorT[M, E, *]] = {
+        implicit def underlyingMonadM: Monad[M] = P.monad
+        Monad[IorT[M, E, *]]
+      }
+    }
+
+  implicit def catsDataParallelForIorTWithParallelEffect[M[_], E](implicit
+    P: Parallel[M],
+    E: Semigroup[E]
+  ): Parallel.Aux[IorT[M, E, *], IorT[P.F, E, *]] { type Dummy } =
+    new Parallel[IorT[M, E, *]] {
+      type F[x] = IorT[P.F, E, x]
+      type Dummy // fix to make this one more specific than the catsDataParallelForIorTWithSequentialEffect, see https://github.com/typelevel/cats/pull/2335#issuecomment-408249775
+
+      val parallel: IorT[M, E, *] ~> IorT[P.F, E, *] =
+        new (IorT[M, E, *] ~> IorT[P.F, E, *]) {
+          def apply[A](fm: IorT[M, E, A]): IorT[P.F, E, A] = IorT(P.parallel(fm.value))
+        }
+      val sequential: IorT[P.F, E, *] ~> IorT[M, E, *] =
+        new (IorT[P.F, E, *] ~> IorT[M, E, *]) {
+          def apply[A](ff: IorT[P.F, E, A]): IorT[M, E, A] = IorT(P.sequential(ff.value))
+        }
+
+      private[this] val FA: Applicative[P.F] = P.applicative
+      private[this] val IorA: Applicative[Ior[E, *]] =
+        Ior.catsDataMonadErrorForIor // See https://github.com/typelevel/cats/issues/3783
 
       val applicative: Applicative[IorT[P.F, E, *]] = new Applicative[IorT[P.F, E, *]] {
         def pure[A](a: A): IorT[P.F, E, A] = IorT.pure(a)(FA)
