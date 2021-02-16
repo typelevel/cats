@@ -315,6 +315,17 @@ class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonE
     }
   }
 
+  test("NonEmptyList#unapply can be used with a regular Scala List") {
+    forAll { (head: Int, tail: List[Int]) =>
+      val list = head :: tail
+      val nel = list match {
+        case NonEmptyList(nel) => nel
+        case _                 => throw new RuntimeException("Unexpected empty list")
+      }
+      assert(nel.toList === list)
+    }
+  }
+
   test("NonEmptyList#sortBy is consistent with List#sortBy") {
     forAll { (nel: NonEmptyList[Int], f: Int => Int) =>
       assert(nel.sortBy(f).toList === (nel.toList.sortBy(f)))

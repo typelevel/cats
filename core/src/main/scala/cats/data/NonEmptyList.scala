@@ -640,6 +640,10 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
 }
 
 object NonEmptyList extends NonEmptyListInstances {
+  def unapply[A](list: List[A]): Option[NonEmptyList[A]] = fromList(list)
+
+  def unapply[A](nel: NonEmptyList[A]): Some[(A, List[A])] = Some((nel.head, nel.tail))
+
   def of[A](head: A, tail: A*): NonEmptyList[A] = NonEmptyList(head, tail.toList)
 
   def ofInitLast[A](init: List[A], last: A): NonEmptyList[A] =
