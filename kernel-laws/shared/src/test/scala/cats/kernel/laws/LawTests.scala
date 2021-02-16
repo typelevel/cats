@@ -210,6 +210,15 @@ class Tests extends TestsConfig with DisciplineSuite {
   checkAll("BoundedEnumerable[Int]", BoundedEnumerableTests[Int].boundedEnumerable)
   checkAll("BoundedEnumerable[Char]", BoundedEnumerableTests[Char].boundedEnumerable)
   checkAll("BoundedEnumerable[Long]", BoundedEnumerableTests[Long].boundedEnumerable)
+  checkAll("BoundedEnumerable.reverse(BoundedEnumerable[Int])",
+           BoundedEnumerableTests(BoundedEnumerable.reverse(BoundedEnumerable[Int])).boundedEnumerable
+  )
+  checkAll(
+    "BoundedEnumerable.reverse(BoundedEnumerable.reverse(BoundedEnumerable[Int]))",
+    BoundedEnumerableTests(
+      BoundedEnumerable.reverse(BoundedEnumerable.reverse(BoundedEnumerable[Int]))
+    ).boundedEnumerable
+  )
 
   checkAll("Monoid[String]", MonoidTests[String].monoid)
   checkAll("Monoid[String]", SerializableTests.serializable(Monoid[String]))
