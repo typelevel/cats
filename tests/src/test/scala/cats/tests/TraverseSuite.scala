@@ -32,6 +32,18 @@ abstract class TraverseSuite[F[_]: Traverse](name: String)(implicit ArbFInt: Arb
     }
   }
 
+  test(s"Traverse[$name].mapAccumL") {
+    forAll { (fa: F[Int], start: Long, fn: (Long, Int) => (Long, Int)) =>
+      val (act, fb) = fa.mapAccumL(start)(fn)
+      val (exp, xs) = fa.toList.foldLeft((start, List.empty[Int])) { case ((prev, acc), a) =>
+        val (next, b) = fn(prev, a)
+        (next, b :: acc)
+      }
+      assert(act === exp)
+      assert(fb.toList === xs.reverse)
+    }
+  }
+
 }
 
 object TraverseSuite {
