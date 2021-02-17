@@ -16,12 +16,12 @@ Global / publishLocalSignedIfRelevant := PgpKeys.publishLocalSigned.value
 organization in ThisBuild := "org.typelevel"
 scalafixDependencies in ThisBuild += "org.typelevel" %% "simulacrum-scalafix" % "0.5.3"
 
-val scalaCheckVersion = "1.15.2"
+val scalaCheckVersion = "1.15.3"
 
-val disciplineVersion = "1.1.3"
+val disciplineVersion = "1.1.4"
 
 val disciplineScalatestVersion = "2.0.1"
-val disciplineMunitVersion = "1.0.5"
+val disciplineMunitVersion = "1.0.6"
 
 val kindProjectorVersion = "0.11.3"
 
@@ -37,8 +37,8 @@ ThisBuild / githubWorkflowJavaVersions := Seq(PrimaryJava, LTSJava, LatestJava, 
 
 val Scala212 = "2.12.13"
 val Scala213 = "2.13.4"
-val DottyOld = "3.0.0-M2"
-val DottyNew = "3.0.0-M3"
+val DottyOld = "3.0.0-M3"
+val DottyNew = "3.0.0-RC1"
 
 ThisBuild / crossScalaVersions := Seq(Scala212, Scala213, DottyOld, DottyNew)
 ThisBuild / scalaVersion := Scala213
@@ -177,7 +177,7 @@ lazy val simulacrumSettings = Seq(
   scalacOptions ++= (
     if (isDotty.value) Nil else Seq(s"-P:semanticdb:targetroot:${baseDirectory.value}/target/.semanticdb", "-Yrangepos")
   ),
-  libraryDependencies += "org.typelevel" %% "simulacrum-scalafix-annotations" % "0.5.3"
+  libraryDependencies += "org.typelevel" %% "simulacrum-scalafix-annotations" % "0.5.4"
 )
 
 lazy val tagName = Def.setting {
