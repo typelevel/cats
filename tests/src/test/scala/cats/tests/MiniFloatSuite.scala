@@ -1,7 +1,13 @@
 package cats.tests
 
-import cats.kernel.laws.discipline.{HashTests, OrderTests, SerializableTests}
-import cats.kernel.{Hash, Order}
+import cats.kernel.laws.discipline.{
+  BoundedSemilatticeTests,
+  CommutativeMonoidTests,
+  HashTests,
+  OrderTests,
+  SerializableTests
+}
+import cats.kernel.{BoundedSemilattice, CommutativeMonoid, Hash, Order}
 import cats.laws.discipline.MiniFloat
 import cats.laws.discipline.MiniFloat._
 import cats.laws.discipline.arbitrary._
@@ -356,6 +362,13 @@ class MiniFloatSuite extends CatsSuite {
 
   checkAll("MiniFloat", HashTests[MiniFloat].hash)
   checkAll("Hash[MiniFloat]", SerializableTests.serializable(Hash[MiniFloat]))
+
+  {
+    implicit val m: CommutativeMonoid[MiniFloat] with BoundedSemilattice[MiniFloat] = miniFloatMax
+    checkAll("CommutativeMonoid[MiniFloat] maximum", CommutativeMonoidTests[MiniFloat].commutativeMonoid)
+    checkAll("BoundedSemilatticeMonoid[MiniFloat] maximum", BoundedSemilatticeTests[MiniFloat].boundedSemilattice)
+    checkAll("CommutativeMonoid[MiniFloat] maximum", SerializableTests.serializable(miniFloatMax))
+  }
 
 }
 

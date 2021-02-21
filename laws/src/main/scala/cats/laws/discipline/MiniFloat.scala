@@ -2,8 +2,8 @@ package cats
 package laws
 package discipline
 
-import cats.implicits.toTraverseFilterOps
-import java.lang.Math
+import cats.implicits.{catsSyntaxPartialOrder, toTraverseFilterOps}
+import cats.kernel.{BoundedSemilattice, CommutativeMonoid}
 
 /**
  * Similar to `Float`, but with a much smaller domain. The exact range of [[MiniFloat]] may be tuned from time to time,
@@ -157,5 +157,11 @@ object MiniFloat {
   implicit val catsLawsExhaustiveCheckForMiniInt: ExhaustiveCheck[MiniFloat] = new ExhaustiveCheck[MiniFloat] {
     override def allValues: List[MiniFloat] = MiniFloat.allValues
   }
+
+  val miniFloatMax: CommutativeMonoid[MiniFloat] with BoundedSemilattice[MiniFloat] =
+    new CommutativeMonoid[MiniFloat] with BoundedSemilattice[MiniFloat] {
+      override def empty: MiniFloat = MiniFloat.NegativeInfinity
+      override def combine(x: MiniFloat, y: MiniFloat): MiniFloat = if (x > y) x else y
+    }
 
 }
