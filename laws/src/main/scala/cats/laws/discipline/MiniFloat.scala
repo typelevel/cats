@@ -134,7 +134,8 @@ object MiniFloat {
   def from(long: Long): MiniFloat     = from(long.toFloat)
 
   /**
-   * Note that since `MiniFloat` is used primarily for tests, NaN is considered equal to itself in this context.
+   * Note that since `MiniFloat` is used primarily for tests, this `Eq` instance defines `NaN` as equal to itself. This
+   * differs from the `Order` defined for `Float`.
    */
   implicit val catsLawsEqInstancesForMiniFloat: Order[MiniFloat] with Hash[MiniFloat] =
     new Order[MiniFloat] with Hash[MiniFloat] {
