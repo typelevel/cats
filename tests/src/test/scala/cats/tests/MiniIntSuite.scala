@@ -24,7 +24,7 @@ class MiniIntSuite extends CatsSuite {
 
   {
     implicit val m: CommutativeMonoid[MiniInt] = miniIntMultiplication
-    checkAll("MiniInt addition", CommutativeMonoidTests[MiniInt].commutativeMonoid)
+    checkAll("MiniInt multiplication", CommutativeMonoidTests[MiniInt].commutativeMonoid)
     checkAll("CommutativeMonoid[MiniInt] multiplication", SerializableTests.serializable(miniIntMultiplication))
   }
 
