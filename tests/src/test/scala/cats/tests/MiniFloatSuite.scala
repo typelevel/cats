@@ -1,15 +1,15 @@
 package cats.tests
 
-import cats.kernel.{Hash, Order}
 import cats.kernel.laws.discipline.{HashTests, OrderTests, SerializableTests}
+import cats.kernel.{Hash, Order}
 import cats.laws.discipline.MiniFloat
 import cats.laws.discipline.MiniFloat._
 import cats.laws.discipline.arbitrary._
-import org.scalacheck.{Arbitrary, Gen}
 import cats.syntax.eq._
 import cats.tests.MiniFloatSuite.FloatArithmeticOp
 import munit.Location
 import org.scalacheck.Prop._
+import org.scalacheck.{Arbitrary, Gen}
 
 import scala.collection.MapView
 
@@ -358,8 +358,6 @@ class MiniFloatSuite extends CatsSuite {
 
   checkAll("MiniFloat", HashTests[MiniFloat].hash)
   checkAll("Hash[MiniFloat]", SerializableTests.serializable(Hash[MiniFloat]))
-
-  // TODO semigroup tests
 
 }
 
