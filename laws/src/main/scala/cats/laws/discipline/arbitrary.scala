@@ -376,6 +376,13 @@ object arbitrary extends ArbitraryInstances0 with ScalaVersionSpecific.Arbitrary
 
   implicit val catsLawsArbitraryForMiniInt: Arbitrary[MiniInt] =
     Arbitrary(Gen.oneOf(MiniInt.allValues))
+
+  implicit val catsLawsCogenForMiniFloat: Cogen[MiniFloat] =
+    Cogen[Float].contramap(_.toFloat)
+
+  implicit val catsLawsArbitraryForMiniFloat: Arbitrary[MiniFloat] =
+    Arbitrary(Gen.oneOf(MiniFloat.allValues))
+
 }
 
 sealed private[discipline] trait ArbitraryInstances0 {
