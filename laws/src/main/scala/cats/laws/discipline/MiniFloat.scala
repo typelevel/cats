@@ -29,6 +29,14 @@ sealed abstract class MiniFloat private (val toFloat: Float) {
   def isFinite: Boolean = toFloat.isFinite
 
   override def toString = s"MiniFloat($toFloat)"
+
+  override def equals(other: Any): Boolean = other match {
+    case that: MiniFloat => this.toFloat == that.toFloat
+    case _               => false
+  }
+
+  override def hashCode: Int = java.lang.Float.hashCode(toFloat)
+
 }
 
 object MiniFloat {

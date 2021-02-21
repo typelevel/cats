@@ -1,6 +1,7 @@
 package cats.tests
 
-import cats.kernel.Order
+import cats.kernel.{Hash, Order}
+import cats.kernel.laws.discipline.{HashTests, OrderTests, SerializableTests}
 import cats.laws.discipline.MiniFloat
 import cats.laws.discipline.MiniFloat._
 import cats.laws.discipline.arbitrary._
@@ -346,12 +347,17 @@ class MiniFloatSuite extends CatsSuite {
     }
   }
 
-  // TODO roundtrip
-  // TODO bounds
-  // TODO order tests
-  // TODO order serializable tests
-  // TODO hash tests
-  // TODO hash serializable tests
+  test("float roundtrip") {
+    forAll { (f: MiniFloat) =>
+      assert(MiniFloat.from(f.toFloat) === f)
+    }
+  }
+
+  checkAll("MiniFloat", OrderTests[MiniFloat].order)
+  checkAll("Order[MiniFloat]", SerializableTests.serializable(Order[MiniFloat]))
+
+  checkAll("MiniFloat", HashTests[MiniFloat].hash)
+  checkAll("Hash[MiniFloat]", SerializableTests.serializable(Hash[MiniFloat]))
 
   // TODO semigroup tests
 
