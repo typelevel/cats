@@ -11,18 +11,16 @@ import munit.Location
 import org.scalacheck.Prop._
 import org.scalacheck.{Arbitrary, Gen}
 
-import scala.collection.MapView
-
 class MiniFloatSuite extends CatsSuite {
 
   // checks on allValues
 
   test("allValues contains no duplicates") {
-    val occurrencesPerFloatValue: MapView[Float, List[MiniFloat]] = MiniFloat.allValues
+    val occurrencesPerFloatValue = MiniFloat.allValues
       .groupBy(_.toFloat)
       .view
 
-    val duplicates: List[(Float, List[MiniFloat])] = occurrencesPerFloatValue.to(List).filter(_._2.size > 1)
+    val duplicates: List[(Float, List[MiniFloat])] = occurrencesPerFloatValue.toList.filter(_._2.size > 1)
 
     assert(duplicates.isEmpty, s"Minifloats with duplicate values $duplicates")
   }
@@ -100,32 +98,32 @@ class MiniFloatSuite extends CatsSuite {
   testFloatConversion(Float.NegativeInfinity, MiniFloat.NegativeInfinity)
   testFloatConversion(Float.MinValue, MiniFloat.NegativeInfinity)
   testFloatConversion(-16f, MiniFloat.NegativeInfinity)
-  testFloatConversion(math.nextDown(-12f), MiniFloat.NegativeInfinity)
+  testFloatConversion(Math.nextDown(-12f), MiniFloat.NegativeInfinity)
   testFloatConversion(-12f, -8f)
-  testFloatConversion(math.nextDown(-6f), -8f)
+  testFloatConversion(Math.nextDown(-6f), -8f)
   testFloatConversion(-6f, -4f)
-  testFloatConversion(math.nextDown(-3f), -4f)
+  testFloatConversion(Math.nextDown(-3f), -4f)
   testFloatConversion(-3f, -2f)
   testFloatConversion(-1f, MiniFloat.NegativeOne)
   testFloatConversion(1f, MiniFloat.One)
   testFloatConversion(0f, MiniFloat.Zero)
   testFloatConversion(Float.MinPositiveValue, MiniFloat.Zero)
   testFloatConversion(-0f, MiniFloat.Zero)
-  testFloatConversion(math.nextDown(0.125f), MiniFloat.Zero)
+  testFloatConversion(Math.nextDown(0.125f), MiniFloat.Zero)
   testFloatConversion(0.125f, MiniFloat.Zero)
-  testFloatConversion(math.nextDown(0.25f), MiniFloat.Zero)
+  testFloatConversion(Math.nextDown(0.25f), MiniFloat.Zero)
   testFloatConversion(0.25f, MiniFloat.Zero)
   testFloatConversion(0.5f, 0.5f)
   testFloatConversion(1f, 1f)
   testFloatConversion(2f, 2f)
-  testFloatConversion(math.nextDown(3f), 2f)
+  testFloatConversion(Math.nextDown(3f), 2f)
   testFloatConversion(3f, 4f)
   testFloatConversion(4f, 4f)
   testFloatConversion(5f, 4f)
   testFloatConversion(6f, 8f)
   testFloatConversion(7f, 8f)
   testFloatConversion(8f, 8f)
-  testFloatConversion(math.nextDown(12f), 8f)
+  testFloatConversion(Math.nextDown(12f), 8f)
   testFloatConversion(12f, MiniFloat.PositiveInfinity)
   testFloatConversion(16f, MiniFloat.PositiveInfinity)
   testFloatConversion(Float.MaxValue, MiniFloat.PositiveInfinity)
@@ -205,7 +203,7 @@ class MiniFloatSuite extends CatsSuite {
   }
 
   test("negation inverse") {
-    forAll { mf: MiniFloat =>
+    forAll { (mf: MiniFloat) =>
       assert((-(-mf) === mf) || mf.isNaN)
     }
   }
@@ -219,7 +217,7 @@ class MiniFloatSuite extends CatsSuite {
   }
 
   test("zero addition identity") {
-    forAll { mf: MiniFloat =>
+    forAll { (mf: MiniFloat) =>
       assert(mf + MiniFloat.Zero === mf)
     }
   }
@@ -245,7 +243,7 @@ class MiniFloatSuite extends CatsSuite {
   }
 
   test("NaN addition") {
-    forAll { mf: MiniFloat =>
+    forAll { (mf: MiniFloat) =>
       assert((mf + MiniFloat.NaN).isNaN)
     }
   }
@@ -259,7 +257,7 @@ class MiniFloatSuite extends CatsSuite {
   }
 
   test("NaN subtraction") {
-    forAll { mf: MiniFloat =>
+    forAll { (mf: MiniFloat) =>
       assert((mf - MiniFloat.NaN).isNaN)
     }
   }
@@ -277,7 +275,7 @@ class MiniFloatSuite extends CatsSuite {
   }
 
   test("one multiplicative identity") {
-    forAll { mf: MiniFloat =>
+    forAll { (mf: MiniFloat) =>
       assert(mf * MiniFloat.One === mf)
     }
   }
@@ -303,7 +301,7 @@ class MiniFloatSuite extends CatsSuite {
   }
 
   test("NaN multiplication") {
-    forAll { mf: MiniFloat =>
+    forAll { (mf: MiniFloat) =>
       assert((mf * MiniFloat.NaN).isNaN)
     }
   }
@@ -311,7 +309,7 @@ class MiniFloatSuite extends CatsSuite {
   // Division
 
   test("divide by zero") {
-    forAll { mf: MiniFloat =>
+    forAll { (mf: MiniFloat) =>
       val result = mf / MiniFloat.Zero
 
       if (mf.isNaN || mf === MiniFloat.Zero) {

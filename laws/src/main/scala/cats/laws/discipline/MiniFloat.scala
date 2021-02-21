@@ -3,6 +3,7 @@ package laws
 package discipline
 
 import cats.implicits.toTraverseFilterOps
+import java.lang.Math
 
 /**
  * Similar to `Float`, but with a much smaller domain. The exact range of [[MiniFloat]] may be tuned from time to time,
@@ -16,17 +17,17 @@ import cats.implicits.toTraverseFilterOps
  */
 sealed abstract class MiniFloat private (val toFloat: Float) {
   def toDouble: Double = toFloat.toDouble
-  def toInt: Int       = toFloat.toInt
-  def toLong: Long     = toFloat.toLong
+  def toInt: Int = toFloat.toInt
+  def toLong: Long = toFloat.toLong
 
   def +(that: MiniFloat): MiniFloat = MiniFloat.from(this.toFloat + that.toFloat)
   def -(that: MiniFloat): MiniFloat = MiniFloat.from(this.toFloat - that.toFloat)
   def *(that: MiniFloat): MiniFloat = MiniFloat.from(this.toFloat * that.toFloat)
   def /(that: MiniFloat): MiniFloat = MiniFloat.from(this.toFloat / that.toFloat)
-  def unary_- : MiniFloat           = MiniFloat.from(-this.toFloat)
+  def unary_- : MiniFloat = MiniFloat.from(-this.toFloat)
 
-  def isNaN: Boolean    = toFloat.isNaN
-  def isFinite: Boolean = toFloat.isFinite
+  def isNaN: Boolean = toFloat.isNaN
+  def isFinite: Boolean = java.lang.Float.isFinite(toFloat)
 
   override def toString = s"MiniFloat($toFloat)"
 
@@ -43,10 +44,10 @@ object MiniFloat {
 
   object PositiveInfinity extends MiniFloat(Float.PositiveInfinity)
   object NegativeInfinity extends MiniFloat(Float.NegativeInfinity)
-  object NaN              extends MiniFloat(Float.NaN)
+  object NaN extends MiniFloat(Float.NaN)
 
-  private final class Finite private (significand: Int, exponent: Int)
-    extends MiniFloat(significand * math.pow(Finite.base.toDouble, exponent.toDouble).toFloat)
+  final private class Finite private (significand: Int, exponent: Int)
+      extends MiniFloat(significand * math.pow(Finite.base.toDouble, exponent.toDouble).toFloat)
 
   private[MiniFloat] object Finite {
 
@@ -61,22 +62,22 @@ object MiniFloat {
     val allValues: List[Finite] = {
       for {
         significand <- Range.inclusive(minSignificand, maxSignificand)
-        exponent    <- Range.inclusive(minExponent, maxExponent)
+        exponent <- Range.inclusive(minExponent, maxExponent)
       } yield new Finite(significand, exponent)
-    }.to(List).ordDistinct(Order.by(_.toFloat)).sortBy(_.toFloat)
+    }.toList.ordDistinct(Order.by[Finite, Float](_.toFloat)).sortBy(_.toFloat)
 
     private[MiniFloat] val allValuesAsFloats: List[Float] = allValues.map(_.toFloat)
 
-    val zero        = new Finite(0, 0)
-    val max         = new Finite(maxSignificand, maxExponent)
-    val min         = new Finite(minSignificand, maxExponent)
+    val zero = new Finite(0, 0)
+    val max = new Finite(maxSignificand, maxExponent)
+    val min = new Finite(minSignificand, maxExponent)
     val minPositive = new Finite(significand = 1, exponent = minExponent)
 
     /**
      * Returns `None` if the given float cannot fit in an instance of `Finite`.
      */
     def from(float: Float): Option[Finite] = {
-      val exponent: Int    = math.getExponent(float)
+      val exponent: Int = Math.getExponent(float)
       val significand: Int = math.round(float / math.pow(Finite.base.toDouble, exponent.toDouble).toFloat)
 
       if (significand == 0 || exponent < minExponent) {
@@ -85,19 +86,21 @@ object MiniFloat {
         Some(new Finite(significand, exponent))
       } else if (exponent > maxExponent) {
         try {
-          val ordersOfMagnitudeToShift = math.subtractExact(exponent, maxExponent)
+          val ordersOfMagnitudeToShift = Math.subtractExact(exponent, maxExponent)
 
-          val proposedSignificand: Int = math.multiplyExact(
+          val proposedSignificand: Int = Math.multiplyExact(
             significand,
-            math.pow(base.toDouble, ordersOfMagnitudeToShift.toDouble).toInt,
+            math.pow(base.toDouble, ordersOfMagnitudeToShift.toDouble).toInt
           )
-          val proposedExponent: Int = math.subtractExact(exponent, ordersOfMagnitudeToShift)
+          val proposedExponent: Int = Math.subtractExact(exponent, ordersOfMagnitudeToShift)
 
-          Option.when(withinBounds(proposedSignificand, proposedExponent)) {
-            new Finite(proposedSignificand, proposedExponent)
+          if (withinBounds(proposedSignificand, proposedExponent)) {
+            Some(new Finite(proposedSignificand, proposedExponent))
+          } else {
+            None
           }
         } catch {
-          case e: ArithmeticException => None
+          case _: ArithmeticException => None
         }
       } else {
         None
@@ -110,12 +113,12 @@ object MiniFloat {
 
   }
 
-  val Zero: MiniFloat        = MiniFloat.from(0f)
+  val Zero: MiniFloat = MiniFloat.from(0f)
   val NegativeOne: MiniFloat = MiniFloat.from(-1f)
-  val One: MiniFloat         = MiniFloat.from(1f)
+  val One: MiniFloat = MiniFloat.from(1f)
 
-  val MaxValue: MiniFloat         = Finite.max
-  val MinValue: MiniFloat         = Finite.min
+  val MaxValue: MiniFloat = Finite.max
+  val MinValue: MiniFloat = Finite.min
   val MinPositiveValue: MiniFloat = Finite.minPositive
 
   def allValues: List[MiniFloat] =
@@ -138,8 +141,8 @@ object MiniFloat {
     }
 
   def from(double: Double): MiniFloat = from(double.toFloat)
-  def from(int: Int): MiniFloat       = from(int.toFloat)
-  def from(long: Long): MiniFloat     = from(long.toFloat)
+  def from(int: Int): MiniFloat = from(int.toFloat)
+  def from(long: Long): MiniFloat = from(long.toFloat)
 
   /**
    * Note that since `MiniFloat` is used primarily for tests, this `Eq` instance defines `NaN` as equal to itself. This
