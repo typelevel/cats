@@ -11,7 +11,7 @@ import cats.kernel.{BoundedSemilattice, CommutativeMonoid}
  *
  * `MiniFloat` has overflow and floating-point error characteristics similar to `Float`, but these are exaggerated due
  * to its small domain. It is only approximately commutative and associative under addition and multiplication, due to
- * overflows and the behaviour of `NaN`.
+ * floating-point errors, overflows, and the behaviour of `NaN`.
  *
  * Note that unlike `Float`, `MiniFloat` does not support the representation of negative zero (`-0f`).
  */
