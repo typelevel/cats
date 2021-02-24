@@ -77,7 +77,7 @@ object MiniFloat {
      * Returns `None` if the given float cannot fit in an instance of `Finite`.
      */
     def from(float: Float): Option[Finite] = {
-      val exponent: Int = Math.getExponent(float)
+      val exponent: Int = getExponent(float)
       val significand: Int = math.round(float / math.pow(Finite.base.toDouble, exponent.toDouble).toFloat)
 
       if (significand == 0 || exponent < minExponent) {
@@ -110,6 +110,16 @@ object MiniFloat {
     private def withinBounds(significand: Int, exponent: Int): Boolean =
       (minExponent <= exponent && exponent <= maxExponent) &&
         (minSignificand <= significand && significand <= maxSignificand)
+
+    private val floatExponentStartBit: Int = 23
+    private val floatExponentLength: Int = 8
+    private val floatExponentBias: Int = 127
+    private val floatExponentMask: Int = ((1 << floatExponentLength) - 1) << floatExponentStartBit
+
+    // This does the same thing as java.lang.Math.getExponent, but that method is not available in scalaJS so we have to
+    // do the same thing here.
+    private def getExponent(float: Float): Int =
+      ((floatExponentMask & java.lang.Float.floatToIntBits(float)) >> floatExponentStartBit) - floatExponentBias
 
   }
 
