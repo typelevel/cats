@@ -123,7 +123,7 @@ object MiniFloat {
 
   }
 
-  val Zero: MiniFloat = MiniFloat.from(0f)
+  val Zero: MiniFloat = Finite.zero
   val NegativeOne: MiniFloat = MiniFloat.from(-1f)
   val One: MiniFloat = MiniFloat.from(1f)
 
