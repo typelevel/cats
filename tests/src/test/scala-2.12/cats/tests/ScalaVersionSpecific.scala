@@ -1,6 +1,6 @@
 package cats.tests
 
-import cats.laws.discipline.{ExhaustiveCheck, MiniInt}
+import cats.laws.discipline.{ExhaustiveCheck, MiniInt, MiniFloat}
 import cats.laws.discipline.MiniInt._
 import cats.laws.discipline.eq._
 import cats.kernel.{Eq, Order}
@@ -26,27 +26,20 @@ trait ScalaVersionSpecificAlgebraInvariantSuite {
     def rem(x: MiniInt, y: MiniInt): MiniInt = MiniInt.unsafeFromInt(x.toInt % y.toInt)
   }
 
-  implicit protected def eqNumeric[A: Eq: ExhaustiveCheck]: Eq[Numeric[A]] = Eq.by { numeric =>
-    // This allows us to catch the case where the fromInt overflows. We use the None to compare two Numeric instances,
-    // verifying that when fromInt throws for one, it throws for the other.
-    val fromMiniInt: MiniInt => Option[A] =
-      miniInt =>
-        try Some(numeric.fromInt(miniInt.toInt))
-        catch {
-          case _: IllegalArgumentException => None // MiniInt overflow
-        }
-
-    (
-      numeric.compare _,
-      numeric.plus _,
-      numeric.minus _,
-      numeric.times _,
-      numeric.negate _,
-      fromMiniInt,
-      numeric.toInt _,
-      numeric.toLong _,
-      numeric.toFloat _,
-      numeric.toDouble _
-    )
+  protected val fractionalForMiniFloat: Fractional[MiniFloat] = new Fractional[MiniFloat] {
+    def compare(x: MiniFloat, y: MiniFloat): Int = Order[MiniFloat].compare(x, y)
+    def plus(x: MiniFloat, y: MiniFloat): MiniFloat = x + y
+    def minus(x: MiniFloat, y: MiniFloat): MiniFloat = x - y
+    def times(x: MiniFloat, y: MiniFloat): MiniFloat = x * y
+    def negate(x: MiniFloat): MiniFloat = -x
+    def fromInt(x: Int): MiniFloat = MiniFloat.from(x)
+    def toInt(x: MiniFloat): Int = x.toInt
+    def toLong(x: MiniFloat): Long = x.toLong
+    def toFloat(x: MiniFloat): Float = x.toFloat
+    def toDouble(x: MiniFloat): Double = x.toDouble
+    def div(x: MiniFloat, y: MiniFloat): MiniFloat = x / y
   }
+
+  protected def versionSpecificNumericEq[A: Eq: ExhaustiveCheck]: Eq[Numeric[A]] = Eq.allEqual
+
 }

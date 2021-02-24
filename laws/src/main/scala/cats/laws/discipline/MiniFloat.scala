@@ -24,6 +24,7 @@ sealed abstract class MiniFloat private (val toFloat: Float) {
   def -(that: MiniFloat): MiniFloat = MiniFloat.from(this.toFloat - that.toFloat)
   def *(that: MiniFloat): MiniFloat = MiniFloat.from(this.toFloat * that.toFloat)
   def /(that: MiniFloat): MiniFloat = MiniFloat.from(this.toFloat / that.toFloat)
+  // TODO %
   def unary_- : MiniFloat = MiniFloat.from(-this.toFloat)
 
   def isNaN: Boolean = toFloat.isNaN

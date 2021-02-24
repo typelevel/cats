@@ -2,7 +2,7 @@ package cats.tests
 
 import cats.{Eval, Foldable, Id, Now}
 import cats.data.NonEmptyLazyList
-import cats.laws.discipline.{ExhaustiveCheck, MiniInt, NonEmptyParallelTests, ParallelTests}
+import cats.laws.discipline.{ExhaustiveCheck, MiniFloat, MiniInt, NonEmptyParallelTests, ParallelTests}
 import cats.laws.discipline.arbitrary._
 import cats.syntax.either._
 import cats.syntax.foldable._
@@ -183,34 +183,30 @@ trait ScalaVersionSpecificAlgebraInvariantSuite {
     def parseString(str: String): Option[MiniInt] = Integral[Int].parseString(str).flatMap(MiniInt.fromInt)
   }
 
-  implicit protected def eqNumeric[A: Eq: ExhaustiveCheck]: Eq[Numeric[A]] = Eq.by { numeric =>
-    // This allows us to catch the case where the fromInt overflows. We use the None to compare two Numeric instances,
-    // verifying that when fromInt throws for one, it throws for the other.
-    val fromMiniInt: MiniInt => Option[A] =
-      miniInt =>
-        try Some(numeric.fromInt(miniInt.toInt))
-        catch {
-          case _: IllegalArgumentException => None // MiniInt overflow
-        }
+  protected val fractionalForMiniFloat: Fractional[MiniFloat] = new Fractional[MiniFloat] {
+    def compare(x: MiniFloat, y: MiniFloat): Int = Order[MiniFloat].compare(x, y)
+    def plus(x: MiniFloat, y: MiniFloat): MiniFloat = x + y
+    def minus(x: MiniFloat, y: MiniFloat): MiniFloat = x - y
+    def times(x: MiniFloat, y: MiniFloat): MiniFloat = x * y
+    def negate(x: MiniFloat): MiniFloat = -x
+    def fromInt(x: Int): MiniFloat = MiniFloat.from(x)
+    def toInt(x: MiniFloat): Int = x.toInt
+    def toLong(x: MiniFloat): Long = x.toLong
+    def toFloat(x: MiniFloat): Float = x.toFloat
+    def toDouble(x: MiniFloat): Double = x.toDouble
+    def div(x: MiniFloat, y: MiniFloat): MiniFloat = x / y
+    def parseString(str: String): Option[MiniFloat] = Fractional[Float].parseString(str).map(MiniFloat.from)
+  }
 
-    val parseMiniIntStrings: Option[MiniInt] => Option[A] = {
-      case Some(miniInt) => numeric.parseString(miniInt.toInt.toString)
-      case None          => numeric.parseString("invalid") // Use this to test parsing of non-numeric strings
+  // parseString was added in 2.13 so we need to have a specialised Eq to test it in the version-specific trait
+  protected def versionSpecificNumericEq[A: Eq: ExhaustiveCheck]: Eq[Numeric[A]] = {
+    Eq.by { numeric =>
+      Eq.by[Option[Either[MiniInt, MiniFloat]], Option[A]] {
+        case Some(Right(miniFloat)) => numeric.parseString(miniFloat.toFloat.toString) // Test float parsing
+        case Some(Left(miniInt))    => numeric.parseString(miniInt.toInt.toString) // Test int parsing
+        case None                   => numeric.parseString("invalid") // Test parsing of non-numeric strings
+      }
     }
-
-    (
-      numeric.compare _,
-      numeric.plus _,
-      numeric.minus _,
-      numeric.times _,
-      numeric.negate _,
-      fromMiniInt,
-      numeric.toInt _,
-      numeric.toLong _,
-      numeric.toFloat _,
-      numeric.toDouble _,
-      parseMiniIntStrings
-    )
   }
 
 }

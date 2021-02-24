@@ -8,6 +8,7 @@ import cats.laws.discipline.{
   InvariantMonoidalTests,
   InvariantSemigroupalTests,
   InvariantTests,
+  MiniFloat,
   MiniInt,
   SerializableTests
 }
@@ -158,8 +159,46 @@ class AlgebraInvariantSuite extends CatsSuite with ScalaVersionSpecificAlgebraIn
   implicit private val arbCommutativeGroupInt: Arbitrary[CommutativeGroup[Int]] =
     Arbitrary(genCommutativeGroupInt)
 
-  implicit private val arbNumericMiniInt: Arbitrary[Numeric[MiniInt]] = Arbitrary(Gen.const(integralForMiniInt))
-  implicit private val arbIntegralMiniInt: Arbitrary[Integral[MiniInt]] = Arbitrary(Gen.const(integralForMiniInt))
+  implicit private val arbNumericMiniInt: Arbitrary[Numeric[MiniInt]] =
+    Arbitrary(Gen.const(integralForMiniInt))
+
+  implicit private val arbIntegralMiniInt: Arbitrary[Integral[MiniInt]] =
+    Arbitrary(Gen.const(integralForMiniInt))
+
+  implicit private val arbFractionalMiniFloat: Arbitrary[Fractional[MiniFloat]] =
+    Arbitrary(Gen.const(fractionalForMiniFloat))
+
+  implicit protected def eqNumeric[A: Eq: ExhaustiveCheck]: Eq[Numeric[A]] = {
+    // In order to test .toFloat and .toDouble we introduce local Eq instances that compare NaN instances as equivalent
+    implicit val nanInclusiveFloatEq: Eq[Float] = Eq.or(Eq.by(_.isNaN), Eq.catsKernelInstancesForFloat)
+    implicit val nanInclusiveDoubleEq: Eq[Double] = Eq.or(Eq.by(_.isNaN), Eq.catsKernelInstancesForDouble)
+
+    val versionAgnosticNumericEq: Eq[Numeric[A]] = Eq.by { (numeric: Numeric[A]) =>
+      // This allows us to catch the case where the fromInt overflows. We use the None to compare two Numeric instances,
+      // verifying that when fromInt throws for one, it throws for the other.
+      val fromMiniInt: MiniInt => Option[A] =
+        miniInt =>
+          try Some(numeric.fromInt(miniInt.toInt))
+          catch {
+            case _: IllegalArgumentException => None // MiniInt overflow
+          }
+
+      (
+        numeric.compare _,
+        numeric.plus _,
+        numeric.minus _,
+        numeric.times _,
+        numeric.negate _,
+        fromMiniInt,
+        numeric.toInt _,
+        numeric.toLong _,
+        numeric.toFloat _,
+        numeric.toDouble _
+      )
+    }
+
+    Eq.and(versionSpecificNumericEq, versionAgnosticNumericEq)
+  }
 
   implicit protected def eqIntegral[A: Eq: ExhaustiveCheck]: Eq[Integral[A]] = {
     def makeDivisionOpSafe(unsafeF: (A, A) => A): (A, A) => Option[A] =
@@ -185,6 +224,15 @@ class AlgebraInvariantSuite extends CatsSuite with ScalaVersionSpecificAlgebraIn
     }
   }
 
+  implicit protected def eqFractional[A: Eq: ExhaustiveCheck]: Eq[Fractional[A]] = {
+    Eq.by { (fractional: Fractional[A]) =>
+      (
+        fractional: Numeric[A],
+        fractional.div _
+      )
+    }
+  }
+
   checkAll("InvariantMonoidal[Semigroup]", SemigroupTests[Int](InvariantMonoidal[Semigroup].point(0)).semigroup)
   checkAll("InvariantMonoidal[CommutativeSemigroup]",
            CommutativeSemigroupTests[Int](InvariantMonoidal[CommutativeSemigroup].point(0)).commutativeSemigroup
@@ -196,6 +244,7 @@ class AlgebraInvariantSuite extends CatsSuite with ScalaVersionSpecificAlgebraIn
 
   checkAll("Invariant[Numeric]", InvariantTests[Numeric].invariant[MiniInt, Boolean, Boolean])
   checkAll("Invariant[Integral]", InvariantTests[Integral].invariant[MiniInt, Boolean, Boolean])
+  checkAll("Invariant[Fractional]", InvariantTests[Fractional].invariant[MiniFloat, Boolean, Boolean])
 
   {
     val S: Semigroup[Int] = Semigroup[Int].imap(identity)(identity)
