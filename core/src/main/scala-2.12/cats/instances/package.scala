@@ -19,7 +19,7 @@ package object instances {
   object partialFunction extends PartialFunctionInstances
   object future extends FutureInstances
   object int extends IntInstances
-  object invariant extends InvariantMonoidalInstances with InvariantInstances
+  object invariant extends InvariantMonoidalInstances with InvariantInstances with InvariantInstancesBinCompat0
   object list extends ListInstances with ListInstancesBinCompat0
   object long extends LongInstances
   object option extends OptionInstances with OptionInstancesBinCompat0
