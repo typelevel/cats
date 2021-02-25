@@ -1,6 +1,6 @@
 package cats.tests
 
-import cats.laws.discipline.{ExhaustiveCheck, MiniInt, MiniFloat}
+import cats.laws.discipline.{ExhaustiveCheck, MiniFloat, MiniInt}
 import cats.laws.discipline.MiniInt._
 import cats.kernel.{Eq, Order}
 
