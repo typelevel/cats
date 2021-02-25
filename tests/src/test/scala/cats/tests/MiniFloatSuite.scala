@@ -11,9 +11,10 @@ import cats.kernel.{BoundedSemilattice, CommutativeMonoid, Hash, Order}
 import cats.laws.discipline.MiniFloat
 import cats.laws.discipline.MiniFloat._
 import cats.laws.discipline.arbitrary._
+import cats.platform.Platform
 import cats.syntax.eq._
 import cats.tests.MiniFloatSuite.FloatArithmeticOp
-import munit.Location
+import munit.{Location, TestOptions}
 import org.scalacheck.Prop._
 import org.scalacheck.{Arbitrary, Gen}
 
@@ -46,7 +47,8 @@ class MiniFloatSuite extends CatsSuite {
   testAllValuesContains(MiniFloat.NegativeInfinity)
   testAllValuesContains(MiniFloat.NaN)
 
-  test("allValues has max") {
+  // https://github.com/scala-native/scala-native/issues/2178
+  test(failOnScalaNative("allValues has max")) {
     val maxInAllValues = MiniFloat.allValues.filter(_.isFinite).maxBy(_.toFloat)
 
     assert(maxInAllValues === MiniFloat.MaxValue)
@@ -165,7 +167,8 @@ class MiniFloatSuite extends CatsSuite {
   private def testSpecialNumberExpectations(
     mf: MiniFloat,
     expectIsNaN: Boolean,
-    expectIsFinite: Boolean
+    expectIsFinite: Boolean,
+    expectIsFiniteFailOnNative: Boolean = false
   )(implicit
     loc: Location
   ): Unit = {
@@ -173,12 +176,24 @@ class MiniFloatSuite extends CatsSuite {
       assert(mf.isNaN === expectIsNaN)
     }
 
-    test(s"$mf isFinite $expectIsFinite") {
-      assert(mf.isFinite === expectIsFinite)
+    if (expectIsFiniteFailOnNative) {
+      test(failOnScalaNative(s"$mf isFinite $expectIsFinite")) {
+        assert(mf.isFinite === expectIsFinite)
+      }
+    } else {
+      test(s"$mf isFinite $expectIsFinite") {
+        assert(mf.isFinite === expectIsFinite)
+      }
     }
   }
 
-  testSpecialNumberExpectations(MiniFloat.NaN, expectIsNaN = true, expectIsFinite = false)
+  testSpecialNumberExpectations(
+    MiniFloat.NaN,
+    expectIsNaN = true,
+    expectIsFinite = false,
+    expectIsFiniteFailOnNative = true // https://github.com/scala-native/scala-native/issues/2178
+  )
+
   testSpecialNumberExpectations(MiniFloat.PositiveInfinity, expectIsNaN = false, expectIsFinite = false)
   testSpecialNumberExpectations(MiniFloat.NegativeInfinity, expectIsNaN = false, expectIsFinite = false)
   testSpecialNumberExpectations(MiniFloat.Zero, expectIsNaN = false, expectIsFinite = true)
@@ -369,6 +384,9 @@ class MiniFloatSuite extends CatsSuite {
     checkAll("BoundedSemilatticeMonoid[MiniFloat] maximum", BoundedSemilatticeTests[MiniFloat].boundedSemilattice)
     checkAll("CommutativeMonoid[MiniFloat] maximum", SerializableTests.serializable(miniFloatMax))
   }
+
+  private def failOnScalaNative(testName: String)(implicit loc: Location): TestOptions =
+    if (Platform.isNative) testName.fail else TestOptions(testName)
 
 }
 
