@@ -47,15 +47,14 @@ class MiniFloatSuite extends CatsSuite {
   testAllValuesContains(MiniFloat.NegativeInfinity)
   testAllValuesContains(MiniFloat.NaN)
 
-  // https://github.com/scala-native/scala-native/issues/2178
-  test(failOnScalaNative("allValues has max")) {
-    val maxInAllValues = MiniFloat.allValues.filter(_.isFinite).maxBy(_.toFloat)
+  test("allValues has max") {
+    val maxInAllValues = MiniFloat.allValues.filter(mf => !mf.isNaN && mf.isFinite).maxBy(_.toFloat)
 
     assert(maxInAllValues === MiniFloat.MaxValue)
   }
 
   test("allValues has min") {
-    val minInAllValues = MiniFloat.allValues.filter(_.isFinite).minBy(_.toFloat)
+    val minInAllValues = MiniFloat.allValues.filter(mf => !mf.isNaN && mf.isFinite).minBy(_.toFloat)
 
     assert(minInAllValues === MiniFloat.MinValue)
   }
