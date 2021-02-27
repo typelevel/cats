@@ -1,5 +1,5 @@
 addSbtPlugin("ch.epfl.lamp" % "sbt-dotty" % "0.5.3")
-addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.9.25")
+addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.9.26")
 addSbtPlugin("com.eed3si9n" % "sbt-unidoc" % "0.4.3")
 addSbtPlugin("com.github.sbt" %% "sbt-release" % "1.0.15")
 addSbtPlugin("com.github.sbt" % "sbt-pgp" % "2.1.2")
