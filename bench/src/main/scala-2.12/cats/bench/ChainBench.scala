@@ -8,6 +8,7 @@ import org.openjdk.jmh.annotations.{Benchmark, Scope, State}
 @State(Scope.Thread)
 class ChainBench {
 
+  private val intOption = Option(1)
   private val smallChain = Chain(1, 2, 3, 4, 5)
   private val smallCatenable = Catenable(1, 2, 3, 4, 5)
   private val smallVector = Vector(1, 2, 3, 4, 5)
@@ -63,4 +64,7 @@ class ChainBench {
   @Benchmark def createSmallVector: Vector[Int] = Vector(1, 2, 3, 4, 5)
   @Benchmark def createSmallList: List[Int] = List(1, 2, 3, 4, 5)
   @Benchmark def createSmallOldChain: OldChain[Int] = OldChain(Seq(1, 2, 3, 4, 5))
+
+  @Benchmark def createChainSeqOption: Chain[Int] = Chain.fromSeq(intOption.toSeq)
+  @Benchmark def createChainOption: Chain[Int] = Chain.fromOption(intOption)
 }

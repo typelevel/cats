@@ -760,6 +760,12 @@ object Chain extends ChainInstances {
     }
 
   /**
+   * Creates a Chain from the specified option.
+   */
+  def fromOption[A](o: Option[A]): Chain[A] =
+    o.fold(Chain.empty[A])(Chain.one)
+
+  /**
    * Creates a Chain from the specified sequence.
    */
   def fromSeq[A](s: Seq[A]): Chain[A] =

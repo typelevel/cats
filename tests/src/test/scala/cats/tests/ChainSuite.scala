@@ -90,6 +90,12 @@ class ChainSuite extends CatsSuite {
     }
   }
 
+  test("fromOption") {
+    forAll { (o: Option[Int]) =>
+      assert(Chain.fromOption(o).toList == o.toList)
+    }
+  }
+
   test("seq-like pattern match") {
     Chain(1, 2, 3) match {
       case Chain(a, b, c) => assert((a, b, c) === ((1, 2, 3)))
