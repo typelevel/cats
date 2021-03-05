@@ -2,7 +2,7 @@
 package cats.kernel.derivation
 
 import cats.kernel.Eq
-import scala.deriving.*
+import scala.deriving._
 
 import scala.compiletime.{erasedValue, summonInline, constValue}
 

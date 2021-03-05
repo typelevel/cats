@@ -2,11 +2,11 @@
 package cats.kernel.derivation
 
 import cats.kernel.Semigroup
-import scala.deriving.*
+import scala.deriving._
 
 
-private[kernel] trait SemigroupDerivation:
-  private def deriveProduct[T](p: Mirror.ProductOf[T], elems: List[Semigroup[_]]): Semigroup[T] = 
+private[kernel] trait SemigroupDerivationAux:
+  protected def semigroupProduct[T](p: Mirror.ProductOf[T], elems: List[Semigroup[_]]): Semigroup[T] = 
     new Semigroup[T]:
       def combine(x: T, y: T): T = 
         val arrb = new Array[Any](elems.size)
@@ -21,9 +21,10 @@ private[kernel] trait SemigroupDerivation:
         }
         
         p.fromProduct(Tuple.fromArray[Any](arrb))
-        
+
+private[kernel] trait SemigroupDerivation extends SemigroupDerivationAux:
   inline def derived[T](using m: Mirror.Of[T]): Semigroup[T] =
       lazy val elemInstances = summonAll[m.MirroredElemTypes, Semigroup]
       inline m match
-         case p: Mirror.ProductOf[T] => deriveProduct(p, elemInstances)
+         case p: Mirror.ProductOf[T] => semigroupProduct(p, elemInstances)
 

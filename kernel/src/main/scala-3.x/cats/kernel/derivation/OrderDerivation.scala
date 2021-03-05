@@ -2,7 +2,7 @@
 package cats.kernel.derivation
 
 import cats.kernel.Order
-import scala.deriving.*
+import scala.deriving._
 
 
 private[kernel] trait OrderDerivation:
