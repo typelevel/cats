@@ -34,7 +34,7 @@ private[kernel] trait EqDerivation:
           comp.asInstanceOf[Eq[Any]].eqv(l, r)
         }
         
-  inline given derived[T](using m: Mirror.Of[T]): Eq[T] =
+  inline def derived[T](using m: Mirror.Of[T]): Eq[T] =
       lazy val elemInstances = summonAll[m.MirroredElemTypes, Eq]
       inline m match
          case s: Mirror.SumOf[T]     => deriveSum(s, elemInstances)

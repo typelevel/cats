@@ -1,5 +1,5 @@
 package cats.kernel.derivation
 
-private[derivation] trait EqDerivation
-private[derivation] trait OrderDerivation
+private[kernel] trait EqDerivation
+private[kernel] trait OrderDerivation
 

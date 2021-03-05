@@ -31,7 +31,7 @@ private[kernel] trait OrderDerivation:
         
         0
         
-  inline given derived[T](using m: Mirror.Of[T]): Order[T] =
+  inline def derived[T](using m: Mirror.Of[T]): Order[T] =
       lazy val elemInstances = summonAll[m.MirroredElemTypes, Order]
       inline m match
          case s: Mirror.SumOf[T]     => deriveSum(s, elemInstances)
