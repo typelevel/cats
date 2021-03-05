@@ -55,6 +55,7 @@ object Eq
     with EqToEquivConversion
     with ScalaVersionSpecificOrderInstances
     with instances.TupleOrderInstances
+    with derivation.EqDerivation
     with OrderInstances0 {
 
   /**
