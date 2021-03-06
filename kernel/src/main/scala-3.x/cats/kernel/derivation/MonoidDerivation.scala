@@ -25,7 +25,7 @@ private[kernel] trait MonoidDerivation extends SemigroupDerivationAux :
   }
         
   inline def derived[T](using m: Mirror.Of[T]): Monoid[T] =
-      lazy val elemInstances = summonAll[m.MirroredElemTypes, Monoid]
+      lazy val elemInstances = summonAll1[m.MirroredElemTypes, Monoid]
       inline m match
          case p: Mirror.ProductOf[T] => deriveProduct(p, elemInstances)
 
