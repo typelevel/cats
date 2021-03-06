@@ -24,7 +24,7 @@ private[kernel] trait SemigroupDerivationAux:
 
 private[kernel] trait SemigroupDerivation extends SemigroupDerivationAux:
   inline def derived[T](using m: Mirror.Of[T]): Semigroup[T] =
-      lazy val elemInstances = summonAll1[m.MirroredElemTypes, Semigroup]
+      lazy val elemInstances = summonAll[m.MirroredElemTypes, Semigroup]
       inline m match
          case p: Mirror.ProductOf[T] => semigroupProduct(p, elemInstances)
 
