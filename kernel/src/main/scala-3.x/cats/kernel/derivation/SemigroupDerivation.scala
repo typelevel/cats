@@ -2,29 +2,33 @@
 package cats.kernel.derivation
 
 import cats.kernel.Semigroup
+import scala.compiletime.{summonInline, erasedValue}
 import scala.deriving._
 
 
 private[kernel] trait SemigroupDerivationAux:
-  protected def semigroupProduct[T](p: Mirror.ProductOf[T], elems: List[Semigroup[_]]): Semigroup[T] = 
+  inline def combProduct[Cur](x: Product, y: Product, n: Int): Tuple = 
+    inline erasedValue[Cur] match
+      case _: EmptyTuple => EmptyTuple
+      case _: (tpe *: rest) => 
+        summonInline[Semigroup[tpe]].asInstanceOf[Semigroup[Any]].combine(
+          x.productElement(n),
+          y.productElement(n)
+        ) *: combProduct[rest](x, y, n + 1)
+
+  inline def semigroupProduct[T](p: Mirror.ProductOf[T]): Semigroup[T] = 
     new Semigroup[T]:
       def combine(x: T, y: T): T = 
-        val arrb = new Array[Any](elems.size)
-
-        var idx = 0
-        
-        valuesIterator(x).zip(valuesIterator(y)).zip(elems.iterator).foreach {
-          case ((l, r), comp) =>
-              arrb.update(idx, comp.asInstanceOf[Semigroup[Any]].combine(l, r))
-
-              idx += 1
-        }
-        
-        p.fromProduct(Tuple.fromArray[Any](arrb))
+        p.fromProduct(
+          combProduct[p.MirroredElemTypes](
+            x.asInstanceOf[Product], 
+            y.asInstanceOf[Product], 
+            0
+          )
+        )
 
 private[kernel] trait SemigroupDerivation extends SemigroupDerivationAux:
   inline def derived[T](using m: Mirror.Of[T]): Semigroup[T] =
-      lazy val elemInstances = summonAll[m.MirroredElemTypes, Semigroup]
       inline m match
-         case p: Mirror.ProductOf[T] => semigroupProduct(p, elemInstances)
+         case p: Mirror.ProductOf[T] => semigroupProduct(p)
 

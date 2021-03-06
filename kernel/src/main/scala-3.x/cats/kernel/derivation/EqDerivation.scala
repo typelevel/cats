@@ -30,9 +30,6 @@ private[kernel] trait EqDerivation:
       def eqv(x: T, y: T): Boolean = 
         val ord = s.ordinal(x)
         (ord == s.ordinal(y)) && combSum[s.MirroredElemTypes](ord, x, y, 0)
-      
-  
-  
 
   inline def deriveProduct[T](p: Mirror.ProductOf[T]): Eq[T] = 
     new Eq[T]:
