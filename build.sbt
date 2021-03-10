@@ -186,17 +186,15 @@ lazy val tagName = Def.setting {
 
 lazy val commonJsSettings = Seq(
   publishConfiguration := publishConfiguration.value.withOverwrite(true), // needed since we double-publish on release
-  scalacOptions ++= {
-    if (isDotty.value) Seq()
-    else {
-      val tv = tagName.value
-      val tagOrHash =
-        if (isSnapshot.value) sys.process.Process("git rev-parse HEAD").lineStream_!.head
-        else tv
-      val a = (baseDirectory in LocalRootProject).value.toURI.toString
-      val g = "https://raw.githubusercontent.com/typelevel/cats/" + tagOrHash
-      Seq(s"-P:scalajs:mapSourceURI:$a->$g/")
-    }
+  scalacOptions += {
+    val tv = tagName.value
+    val tagOrHash =
+      if (isSnapshot.value) sys.process.Process("git rev-parse HEAD").lineStream_!.head
+      else tv
+    val a = (baseDirectory in LocalRootProject).value.toURI.toString
+    val g = "https://raw.githubusercontent.com/typelevel/cats/" + tagOrHash
+    val opt = if (isDotty.value) "-scalajs-mapSourceURI" else "-P:scalajs:mapSourceURI"
+    s"$opt:$a->$g/"
   },
   scalaJSStage in Global := FullOptStage,
   scalaJSStage in Test := FastOptStage,
