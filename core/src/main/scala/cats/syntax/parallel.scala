@@ -197,11 +197,22 @@ final class ParallelApOps[M[_], A](private val ma: M[A]) extends AnyVal {
   def <&[B](mb: M[B])(implicit P: Parallel[M]): M[A] =
     P.parProductL(ma)(mb)
 
+  def parProductL[B](mb: M[B])(implicit P: Parallel[M]): M[A] =
+    P.parProductL(ma)(mb)
+
+  def parProductR[B](mb: M[B])(implicit P: Parallel[M]): M[B] =
+    P.parProductR(ma)(mb)
+
+  def parProduct[B](mb: M[B])(implicit P: Parallel[M]): M[(A, B)] =
+    Parallel.parProduct(ma, mb)
 }
 
 final class ParallelApplyOps[M[_], A, B](private val mab: M[A => B]) extends AnyVal {
   def <&>(ma: M[A])(implicit P: Parallel[M]): M[B] =
     Parallel.parAp(mab)(ma)(P)
+
+  def parAp(ma: M[A])(implicit P: Parallel[M]): M[B] =
+    Parallel.parAp(mab)(ma)
 }
 
 final class ParallelBitraverseOps[T[_, _], A, B](private val tab: T[A, B]) extends AnyVal {
