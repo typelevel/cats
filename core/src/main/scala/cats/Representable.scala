@@ -13,7 +13,7 @@ package cats
  * Inspired by the Haskell representable package
  * http://hackage.haskell.org/package/representable-functors-3.2.0.2/docs/Data-Functor-Representable.html
  */
-trait Representable[F[_]] extends Serializable {
+trait Representable[F[_]] extends Serializable { self =>
 
   def F: Functor[F]
 
@@ -58,6 +58,11 @@ trait Representable[F[_]] extends Serializable {
    * }}}
    */
   def tabulate[A](f: Representation => A): F[A]
+
+  def compose[G[_]: Representable]: Representable[λ[α => F[G[α]]]] = new ComposedRepresentable[F, G] {
+    val RF = self
+    val RG = Representable[G]
+  }
 }
 
 private trait RepresentableMonad[F[_], R] extends Monad[F] {
