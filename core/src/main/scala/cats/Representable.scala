@@ -62,7 +62,24 @@ trait Representable[F[_]] extends Serializable { self =>
   def compose[G[_]](implicit
     G: Representable[G]
   ): Representable.Aux[λ[α => F[G[α]]], (self.Representation, G.Representation)] =
-    Representable.catsRepresentableForComposed[F, G](self, G)
+    new Representable[λ[α => F[G[α]]]] { inner =>
+      override val F = self.F.compose(G.F)
+
+      type Representation = (self.Representation, G.Representation)
+
+      def index[A](f: F[G[A]]): Representation => A = (repr: Representation) => {
+        val ga: G[A] = self.index(f).apply(repr._1)
+        G.index(ga).apply(repr._2)
+      }
+
+      def tabulate[A](f: Representation => A): F[G[A]] = {
+        val fc: self.Representation => (G.Representation => A) = (rf: self.Representation) =>
+          (rg: G.Representation) => f((rf, rg))
+
+        self.F.map(self.tabulate(fc))(G.tabulate(_))
+      }
+
+    }
 }
 
 private trait RepresentableMonad[F[_], R] extends Monad[F] {
@@ -108,7 +125,7 @@ private trait RepresentableDistributive[F[_], R] extends Distributive[F] {
   override def map[A, B](fa: F[A])(f: A => B): F[B] = R.F.map(fa)(f)
 }
 
-object Representable extends RepresentableInstances1 {
+object Representable {
   type Aux[F[_], R] = Representable[F] { type Representation = R }
 
   /**
@@ -158,30 +175,4 @@ object Representable extends RepresentableInstances1 {
   implicit def catsRepresentableForPair(implicit
     PF: Functor[λ[P => (P, P)]]
   ): Representable.Aux[λ[P => (P, P)], Boolean] = cats.instances.tuple.catsDataRepresentableForPair
-}
-
-trait RepresentableInstances1 {
-
-  implicit def catsRepresentableForComposed[F[_], G[_]](implicit
-    F0: Representable[F],
-    G0: Representable[G]
-  ): Representable.Aux[λ[α => F[G[α]]], (F0.Representation, G0.Representation)] =
-    new Representable[λ[α => F[G[α]]]] { outer =>
-      override val F = F0.F.compose(G0.F)
-
-      type Representation = (F0.Representation, G0.Representation)
-
-      def index[A](f: F[G[A]]): Representation => A = (repr: Representation) => {
-        val ga: G[A] = F0.index(f).apply(repr._1)
-        G0.index(ga).apply(repr._2)
-      }
-
-      def tabulate[A](f: Representation => A): F[G[A]] = {
-        val fc: F0.Representation => (G0.Representation => A) = (rf: F0.Representation) =>
-          (rg: G0.Representation) => f((rf, rg))
-
-        F0.F.map(F0.tabulate(fc))(G0.tabulate(_))
-      }
-
-    }
 }

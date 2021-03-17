@@ -30,10 +30,15 @@ class RepresentableSuite extends CatsSuite {
   checkAll("Pair[String, String] <-> Boolean => String", RepresentableTests[Pair, Boolean].representable[String])
   checkAll("Representable[Pair]", SerializableTests.serializable(Representable[Pair]))
 
-  checkAll("Pair[Pair[String, String]] <-> (Boolean, Boolean) => String",
-           RepresentableTests[λ[α => Pair[Pair[α]]], (Boolean, Boolean)].representable[String]
-  )
-  checkAll("Representable[Id[Pair]]", SerializableTests.serializable(Representable[λ[α => Id[Pair[α]]]]))
+  {
+    implicit val rep: Representable.Aux[λ[α => Pair[Pair[α]]], (Boolean, Boolean)] =
+      Representable[Pair].compose[Pair]
+
+    checkAll("Pair[Pair[String, String]] <-> (Boolean, Boolean) => String",
+             RepresentableTests[λ[α => Pair[Pair[α]]], (Boolean, Boolean)].representable[String]
+    )
+    checkAll("Representable[Id[Pair]]", SerializableTests.serializable(Representable[λ[α => Id[Pair[α]]]]))
+  }
 
   checkAll("Eval[Int] <-> Unit => Int", RepresentableTests[Eval, Unit].representable[Int])
   checkAll("Representable[Eval]", SerializableTests.serializable(Representable[Eval]))
