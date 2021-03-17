@@ -7,6 +7,8 @@ import cats.laws.discipline.SemigroupalTests.Isomorphisms._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import org.scalacheck.Test.Parameters
+import org.scalacheck.Arbitrary
+import org.scalacheck.Cogen
 
 class NestedSuite extends CatsSuite {
   // we have a lot of generated lists of lists in these tests. We have to tell
@@ -268,12 +270,25 @@ class NestedSuite extends CatsSuite {
   {
     type Pair[A] = (A, A)
 
+    //Scala 2.12 implicit resolution absolutely loses its mind here
+    implicit val help_scala2_12: Representable.Aux[Nested[Pair, Pair, *], (Boolean, Boolean)] =
+      Nested.catsDataRepresentableForNested[Pair, Pair]
+    implicit val a: Arbitrary[Int] = Arbitrary.arbInt
+    implicit val b: Arbitrary[Nested[Pair, Pair, Int]] =
+      catsLawsArbitraryForNested[Pair, Pair, Int]
+    implicit val c: Arbitrary[(Boolean, Boolean)] = Arbitrary.arbTuple2(Arbitrary.arbBool, Arbitrary.arbBool)
+    implicit val d: Arbitrary[((Boolean, Boolean)) => Int] = Arbitrary.arbFunction1(Arbitrary.arbInt, Cogen.tuple2(Cogen.cogenBoolean, Cogen.cogenBoolean))
+    implicit val e: Eq[Nested[Pair, Pair, Int]] = Nested.catsDataEqForNested[Pair, Pair, Int]
+    implicit val f: Eq[Int] = Eq.catsKernelInstancesForInt
+
     checkAll(
       "Nested[Pair, Pair, *]",
-      RepresentableTests[Nested[Pair, Pair, *], (Boolean, Boolean)].representable[Int]
+      RepresentableTests[Nested[Pair, Pair, *], (Boolean, Boolean)].representable[Int](
+        a, b, c, d, e, f
+      )
     )
     checkAll("Representable[Nested[Pair, Pair, *]]",
-             SerializableTests.serializable(Representable[Nested[Function1[MiniInt, *], Function1[MiniInt, *], *]])
+             SerializableTests.serializable(Representable[Nested[Pair, Pair, *]])
     )
 
   }
