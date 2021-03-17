@@ -196,25 +196,3 @@ private[cats] trait ComposedInvariantContravariant[F[_], G[_]] extends Invariant
   override def imap[A, B](fga: F[G[A]])(f: A => B)(g: B => A): F[G[B]] =
     F.imap(fga)(ga => G.contramap(ga)(g))(gb => G.contramap(gb)(f))
 }
-
-private[cats] trait ComposedRepresentable[F[_], G[_]] extends Representable[λ[α => F[G[α]]]] { outer =>
-  val RF: Representable[F]
-  val RG: Representable[G]
-
-  override val F = RF.F.compose(RG.F)
-
-  type Representation = (RF.Representation, RG.Representation)
-
-  def index[A](f: F[G[A]]): Representation => A = (repr: Representation) => {
-    val ga: G[A] = RF.index(f).apply(repr._1)
-    RG.index(ga).apply(repr._2)
-  }
-
-  def tabulate[A](f: Representation => A): F[G[A]] = {
-    val fc: RF.Representation => (RG.Representation => A) = (rf: RF.Representation) =>
-      (rg: RG.Representation) => f((rf, rg))
-
-    RF.F.map(RF.tabulate(fc))(RG.tabulate(_))
-  }
-
-}

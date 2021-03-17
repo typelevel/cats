@@ -264,4 +264,17 @@ class NestedSuite extends CatsSuite {
              SerializableTests.serializable(Distributive[Nested[Function1[Int, *], Function0, *]])
     )
   }
+
+  {
+    type Pair[A] = (A, A)
+
+    checkAll(
+      "Nested[Pair, Pair, *]",
+      RepresentableTests[Nested[Pair, Pair, *], (Boolean, Boolean)].representable[Int]
+    )
+    checkAll("Representable[Nested[Pair, Pair, *]]",
+             SerializableTests.serializable(Representable[Nested[Function1[MiniInt, *], Function1[MiniInt, *], *]])
+    )
+
+  }
 }

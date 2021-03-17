@@ -80,6 +80,24 @@ sealed abstract private[data] class NestedInstances0 extends NestedInstances1 {
       implicit val F: Functor[F] = F0
       implicit val G: FunctorFilter[G] = G0
     }
+
+  implicit def catsDataRepresentableForNested[F[_], G[_]](implicit
+    F0: Representable[F],
+    G0: Representable[G]
+  ): Representable.Aux[Nested[F, G, *], (F0.Representation, G0.Representation)] = new Representable[Nested[F, G, *]] {
+    val FG = Representable[λ[α => F[G[α]]]]
+
+    val F = new NestedFunctor[F, G] {
+      val FG = F0.F.compose(G0.F)
+    }
+
+    type Representation = FG.Representation
+
+    def index[A](f: Nested[F, G, A]): Representation => A = FG.index(f.value)
+
+    def tabulate[A](f: Representation => A): Nested[F, G, A] = Nested(FG.tabulate(f))
+  }
+
 }
 
 sealed abstract private[data] class NestedInstances1 extends NestedInstances2 {
@@ -299,6 +317,20 @@ private[data] trait NestedTraverse[F[_], G[_]]
 
   override def traverse[H[_]: Applicative, A, B](fga: Nested[F, G, A])(f: A => H[B]): H[Nested[F, G, B]] =
     Applicative[H].map(FG.traverse(fga.value)(f))(Nested(_))
+}
+
+private[data] trait NestedRepresentable[F[_], G[_]] extends Representable[Nested[F, G, *]] { self =>
+  val FG: Representable[λ[α => F[G[α]]]]
+
+  type Representation = FG.Representation
+
+  val F = new NestedFunctor[F, G] {
+    val FG = self.FG.F
+  }
+
+  def index[A](fga: Nested[F, G, A]): Representation => A = FG.index(fga.value)
+
+  def tabulate[A](f: Representation => A): Nested[F, G, A] = Nested(FG.tabulate(f))
 }
 
 private[data] trait NestedDistributive[F[_], G[_]] extends Distributive[Nested[F, G, *]] with NestedFunctor[F, G] {
