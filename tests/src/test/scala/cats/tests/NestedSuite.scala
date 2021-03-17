@@ -277,14 +277,20 @@ class NestedSuite extends CatsSuite {
     implicit val b: Arbitrary[Nested[Pair, Pair, Int]] =
       catsLawsArbitraryForNested[Pair, Pair, Int]
     implicit val c: Arbitrary[(Boolean, Boolean)] = Arbitrary.arbTuple2(Arbitrary.arbBool, Arbitrary.arbBool)
-    implicit val d: Arbitrary[((Boolean, Boolean)) => Int] = Arbitrary.arbFunction1(Arbitrary.arbInt, Cogen.tuple2(Cogen.cogenBoolean, Cogen.cogenBoolean))
+    implicit val d: Arbitrary[((Boolean, Boolean)) => Int] =
+      Arbitrary.arbFunction1(Arbitrary.arbInt, Cogen.tuple2(Cogen.cogenBoolean, Cogen.cogenBoolean))
     implicit val e: Eq[Nested[Pair, Pair, Int]] = Nested.catsDataEqForNested[Pair, Pair, Int]
     implicit val f: Eq[Int] = Eq.catsKernelInstancesForInt
 
     checkAll(
       "Nested[Pair, Pair, *]",
       RepresentableTests[Nested[Pair, Pair, *], (Boolean, Boolean)].representable[Int](
-        a, b, c, d, e, f
+        a,
+        b,
+        c,
+        d,
+        e,
+        f
       )
     )
     checkAll("Representable[Nested[Pair, Pair, *]]",
