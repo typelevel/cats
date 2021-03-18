@@ -319,20 +319,6 @@ private[data] trait NestedTraverse[F[_], G[_]]
     Applicative[H].map(FG.traverse(fga.value)(f))(Nested(_))
 }
 
-private[data] trait NestedRepresentable[F[_], G[_]] extends Representable[Nested[F, G, *]] { self =>
-  val FG: Representable[λ[α => F[G[α]]]]
-
-  type Representation = FG.Representation
-
-  val F = new NestedFunctor[F, G] {
-    val FG = self.FG.F
-  }
-
-  def index[A](fga: Nested[F, G, A]): Representation => A = FG.index(fga.value)
-
-  def tabulate[A](f: Representation => A): Nested[F, G, A] = Nested(FG.tabulate(f))
-}
-
 private[data] trait NestedDistributive[F[_], G[_]] extends Distributive[Nested[F, G, *]] with NestedFunctor[F, G] {
   def FG: Distributive[λ[α => F[G[α]]]]
 
