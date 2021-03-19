@@ -42,6 +42,18 @@ class Tuple2KSuite extends CatsSuite {
   checkAll("Show[Tuple2K[Option, Option, Int]]", SerializableTests.serializable(Show[Tuple2K[Option, Option, Int]]))
 
   {
+    type Pair[A] = (A, A)
+
+    checkAll(
+      "Representable[Tuple2K[Pair, Function1[MiniInt, *], *]]",
+      RepresentableTests[Tuple2K[Pair, Function1[MiniInt, *], *], Either[Boolean, MiniInt]].representable[Int]
+    )
+    checkAll("Representable[Tuple2K[Pair, Function1[MiniInt, *], *]]",
+             SerializableTests.serializable(Representable[Tuple2K[Pair, Function1[MiniInt, *], *]])
+    )
+  }
+
+  {
     implicit val monoidK: MonoidK[ListWrapper] = ListWrapper.monoidK
     checkAll("Tuple2K[ListWrapper, ListWrapper, *]", MonoidKTests[Tuple2K[ListWrapper, ListWrapper, *]].monoidK[Int])
     checkAll("MonoidK[Tuple2K[ListWrapper, ListWrapper, *]]",

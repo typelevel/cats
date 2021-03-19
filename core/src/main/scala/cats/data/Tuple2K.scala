@@ -96,6 +96,28 @@ sealed abstract private[data] class Tuple2KInstances1 extends Tuple2KInstances2 
       def F: Foldable[F] = FF
       def G: Foldable[G] = GF
     }
+
+  implicit def catsDataRepresentableForTuple2K[F[_], G[_]](implicit
+    FF: Representable[F],
+    GG: Representable[G]
+  ): Representable.Aux[Tuple2K[F, G, *], Either[FF.Representation, GG.Representation]] =
+    new Representable[Tuple2K[F, G, *]] {
+      type Representation = Either[FF.Representation, GG.Representation]
+
+      val F = new Tuple2KFunctor[F, G] {
+        val F = FF.F
+        val G = GG.F
+      }
+
+      def index[A](f: Tuple2K[F, G, A]): Representation => A = {
+        case Left(i)  => FF.index(f.first)(i)
+        case Right(i) => GG.index(f.second)(i)
+      }
+
+      def tabulate[A](f: Representation => A): Tuple2K[F, G, A] =
+        Tuple2K(FF.tabulate((x: FF.Representation) => f(Left(x))), GG.tabulate((x: GG.Representation) => f(Right(x))))
+    }
+
 }
 
 sealed abstract private[data] class Tuple2KInstances2 extends Tuple2KInstances3 {
