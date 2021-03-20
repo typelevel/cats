@@ -264,4 +264,12 @@ class NestedSuite extends CatsSuite {
              SerializableTests.serializable(Distributive[Nested[Function1[Int, *], Function0, *]])
     )
   }
+
+  {
+    // Align composition
+    checkAll(
+      "Nested[List, Option, *]",
+      AlignTests[Nested[List, Option, *]].align[Int, Int, Int, Int]
+    )
+  }
 }
