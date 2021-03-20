@@ -181,5 +181,5 @@ or fallback value if the list is empty. We need a power expressive abstraction, 
 
 N.B.
 Cats defines the `Semigroup` type class in cats-kernel. The
-[`cats` package object](https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/package.scala)
+[`cats` package object](https://github.com/typelevel/cats/blob/main/core/src/main/scala/cats/package.scala)
 defines type aliases to the `Semigroup` from cats-kernel, so that you can simply import `cats.Semigroup`.
