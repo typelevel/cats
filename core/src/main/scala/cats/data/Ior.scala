@@ -702,6 +702,8 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
     fold(identity, ev, (a, _) => a)
   final def mergeRight[AA >: A](implicit ev: B <:< AA): AA =
     fold(identity, ev, (_, b) => ev(b))
+  final def mergeWith[AA >: A](f: (A, B) => AA)(implicit ev: B <:< AA): AA =
+    fold(identity, ev, f)
 
   /**
    * Example:

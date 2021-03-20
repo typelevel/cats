@@ -57,6 +57,19 @@ import scala.annotation.implicitNotFound
     alignWith(fa1, fa2)(_.merge)
 
   /**
+   * Align two structures with the same element, combining results according to the given function.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> Align[List].alignMergeWith(List(1, 2), List(10, 11, 12))(_ + _)
+   * res0: List[Int] = List(11, 13, 12)
+   * }}}
+   */
+  def alignMergeWith[A](fa1: F[A], fa2: F[A])(f: (A, A) => A): F[A] =
+    functor.map(align(fa1, fa2))(_.mergeWith(f))
+
+  /**
    * Same as `align`, but forgets from the type that one of the two elements must be present.
    *
    * Example:
@@ -158,6 +171,7 @@ object Align extends ScalaVersionSpecificAlignInstances {
     def align[B](fb: F[B]): F[Ior[A, B]] = typeClassInstance.align[A, B](self, fb)
     def alignWith[B, C](fb: F[B])(f: Ior[A, B] => C): F[C] = typeClassInstance.alignWith[A, B, C](self, fb)(f)
     def alignCombine(fa2: F[A])(implicit ev$1: Semigroup[A]): F[A] = typeClassInstance.alignCombine[A](self, fa2)
+    def alignMergeWith(fa2: F[A])(f: (A, A) => A): F[A] = typeClassInstance.alignMergeWith[A](self, fa2)(f)
     def padZip[B](fb: F[B]): F[(Option[A], Option[B])] = typeClassInstance.padZip[A, B](self, fb)
     def padZipWith[B, C](fb: F[B])(f: (Option[A], Option[B]) => C): F[C] =
       typeClassInstance.padZipWith[A, B, C](self, fb)(f)
