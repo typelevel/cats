@@ -57,7 +57,7 @@ a bunch of useful combinators around it. In Scala 2.12.x `Either`
 [became right-biased](https://github.com/scala/scala/pull/5135) so we revisited the use of `Xor` and
 [decided](https://github.com/typelevel/cats/issues/1192) that in the interest of interoperability, we would remove `Xor` in the Cats 0.8.0 release and
 fill in the gaps in the `scala.util.Either` API via
-[syntax enrichment](https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/syntax/either.scala).
+[syntax enrichment](https://github.com/typelevel/cats/blob/main/core/src/main/scala/cats/syntax/either.scala).
 
 This syntax and the type class instances for `Either` can be imported using `cats.implicits._`, which will also bring in syntactic enrichment and instances for other standard library types, or you can import them individually with `cats.syntax.either._` and `cats.instances.either._`.
 
@@ -103,7 +103,7 @@ l.map(_.map(_ + 1))
 l.exists(_.exists(isEven))
 ```
 
-A naive implementation of `ListT` suffers from associativity issues; see [this gist](https://gist.github.com/tpolecat/1227e22e3161b5816e014c00650f3b57) for an example. It's possible to create a `ListT` that doesn't have these issues, but it tends to be pretty inefficient. For many use-cases, [Nested](https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/data/Nested.scala) can be used to achieve the desired results.
+A naive implementation of `ListT` suffers from associativity issues; see [this gist](https://gist.github.com/tpolecat/1227e22e3161b5816e014c00650f3b57) for an example. It's possible to create a `ListT` that doesn't have these issues, but it tends to be pretty inefficient. For many use-cases, [Nested](https://github.com/typelevel/cats/blob/main/core/src/main/scala/cats/data/Nested.scala) can be used to achieve the desired results.
 
 Here is how we could achieve the effect of the previous example using `Nested`:
 
@@ -260,8 +260,7 @@ You can find more information [here](typeclasses/lawtesting.html).
 
 The Сats community welcomes and encourages contributions, even if you are completely new to Сats and functional programming. Here are a few ways to help out:
 
-- Find an undocumented method and write a ScalaDoc entry for it. See [Arrow.scala](https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/arrow/Arrow.scala) for some examples of ScalaDoc entries that use [sbt-doctest](https://github.com/tkawachi/sbt-doctest).
-- Look at the [code coverage report](https://codecov.io/github/typelevel/cats?branch=master), find some untested code, and write a test for it. Even simple helper methods and syntax enrichment should be tested.
+- Find an undocumented method and write a ScalaDoc entry for it. See [Arrow.scala](https://github.com/typelevel/cats/blob/main/core/src/main/scala/cats/arrow/Arrow.scala) for some examples of ScalaDoc entries that use [sbt-doctest](https://github.com/tkawachi/sbt-doctest).
 - Find an [open issue](https://github.com/typelevel/cats/issues?q=is%3Aopen+is%3Aissue+label%3Aready), leave a comment on it to let people know you are working on it, and submit a pull request. If you are new to Сats, you may want to look for items with the [low-hanging-fruit](https://github.com/typelevel/cats/issues?q=is%3Aopen+is%3Aissue+label%3A%22low-hanging+fruit%22) label.
 
 See the [contributing guide]({{ site.baseurl }}/contributing.html) for more information.

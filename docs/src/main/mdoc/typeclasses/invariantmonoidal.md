@@ -2,7 +2,7 @@
 layout: docs
 title:  "InvariantMonoidal"
 section: "typeclasses"
-source: "https://github.com/non/cats/blob/master/core/src/main/scala/cats/InvariantMonoidal.scala"
+source: "https://github.com/non/cats/blob/main/core/src/main/scala/cats/InvariantMonoidal.scala"
 scaladoc: "#cats.InvariantMonoidal"
 ---
 # Invariant Monoidal
