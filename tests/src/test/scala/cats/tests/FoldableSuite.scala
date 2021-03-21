@@ -251,6 +251,20 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit
     }
   }
 
+  test(s"Foldable[$name].sumAll") {
+    forAll { (fa: F[Int]) =>
+      assert(fa.sumAll === (fa.toList.sum))
+      assert(fa.sumAll === (iterator(fa).toList.sum))
+    }
+  }
+
+  test(s"Foldable[$name].productAll") {
+    forAll { (fa: F[Int]) =>
+      assert(fa.productAll === (fa.toList.product))
+      assert(fa.productAll === (iterator(fa).toList.product))
+    }
+  }
+
   test(s"Foldable[$name].combineAllOption") {
     forAll { (fa: F[Int]) =>
       assert(fa.combineAllOption === (fa.toList.combineAllOption))
