@@ -16,7 +16,7 @@ object IdT extends IdTInstances {
 
     def map[B](f: A => B)(implicit F: Functor[F]): IdT[F, B] =
       F.map(value)(f)
-    
+
     /**
       * Modify the context `F` using transformation `f`.
       */
