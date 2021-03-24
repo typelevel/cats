@@ -48,14 +48,13 @@ class Tuple2KSuite extends CatsSuite {
     //Scala 2.12 implicit resolution absolutely loses its mind here
     implicit val help_scala2_12: Representable.Aux[Tuple2K[Pair, Pair, *], Either[Boolean, Boolean]] =
       Tuple2K.catsDataRepresentableForTuple2K[Pair, Pair]
-    implicit val a: Arbitrary[Int] = Arbitrary.arbInt
-    implicit val b: Arbitrary[Tuple2K[Pair, Pair, Int]] =
-      catsLawsArbitraryForTuple2K[Pair, Pair, Int]
-    implicit val c: Arbitrary[Either[Boolean, Boolean]] = Arbitrary.arbEither(Arbitrary.arbBool, Arbitrary.arbBool)
-    implicit val d: Arbitrary[(Either[Boolean, Boolean]) => Int] =
-      Arbitrary.arbFunction1(Arbitrary.arbInt, Cogen.cogenEither(Cogen.cogenBoolean, Cogen.cogenBoolean))
-    implicit val e: Eq[Tuple2K[Pair, Pair, Int]] = Tuple2K.catsDataEqForTuple2K[Pair, Pair, Int]
-    implicit val f: Eq[Int] = Eq.catsKernelInstancesForInt
+
+    val a: Arbitrary[Int] = implicitly[Arbitrary[Int]]
+    val b: Arbitrary[Tuple2K[Pair, Pair, Int]] = implicitly[Arbitrary[Tuple2K[Pair, Pair, Int]]]
+    val c: Arbitrary[Either[Boolean, Boolean]] = implicitly[Arbitrary[Either[Boolean, Boolean]]]
+    val d: Arbitrary[(Either[Boolean, Boolean]) => Int] = implicitly[Arbitrary[(Either[Boolean, Boolean]) => Int]]
+    val e: Eq[Tuple2K[Pair, Pair, Int]] = Eq[Tuple2K[Pair, Pair, Int]]
+    val f: Eq[Int] = Eq[Int]
 
     checkAll(
       "Representable[Tuple2K[Pair, Pair, *]]",
