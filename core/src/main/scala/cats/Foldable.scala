@@ -296,6 +296,12 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
   def maximumByList[A, B: Order](fa: F[A])(f: A => B): List[A] =
     maximumList(fa)(Order.by(f))
 
+  def sumAll[A](fa: F[A])(implicit A: Numeric[A]): A =
+    foldLeft(fa, A.zero)(A.plus)
+
+  def productAll[A](fa: F[A])(implicit A: Numeric[A]): A =
+    foldLeft(fa, A.one)(A.times)
+
   /**
    * Get the element at the index of the `Foldable`.
    */
@@ -1028,6 +1034,8 @@ object Foldable {
     def collectFoldSome[B](f: A => Option[B])(implicit B: Monoid[B]): B =
       typeClassInstance.collectFoldSome[A, B](self)(f)(B)
     def fold(implicit A: Monoid[A]): A = typeClassInstance.fold[A](self)(A)
+    def sumAll(implicit A: Numeric[A]): A = typeClassInstance.sumAll[A](self)
+    def productAll(implicit A: Numeric[A]): A = typeClassInstance.productAll[A](self)
     def combineAll(implicit ev$1: Monoid[A]): A = typeClassInstance.combineAll[A](self)
     def combineAllOption(implicit ev: Semigroup[A]): Option[A] = typeClassInstance.combineAllOption[A](self)(ev)
     def toIterable: Iterable[A] = typeClassInstance.toIterable[A](self)

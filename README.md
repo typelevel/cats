@@ -14,7 +14,6 @@
 
 ![Continuous Integration](https://github.com/typelevel/cats/workflows/Continuous%20Integration/badge.svg)
 [![Financial Contributors on Open Collective](https://opencollective.com/typelevel/all/badge.svg?label=financial+contributors)](https://opencollective.com/typelevel) [![Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/typelevel/cats)
-[![codecov.io](http://codecov.io/github/typelevel/cats/coverage.svg?branch=master)](http://codecov.io/github/typelevel/cats?branch=master)
 [![Latest version](https://index.scala-lang.org/typelevel/cats/cats-core/latest.svg?color=orange&v=1)](https://index.scala-lang.org/typelevel/cats/cats-core)
 [![Scala.js](http://scala-js.org/assets/badges/scalajs-1.2.0.svg)](http://scala-js.org)
 
@@ -131,8 +130,7 @@ functionality, you can pick-and-choose from amongst these modules
  * [`cats-collections`](https://github.com/typelevel/cats-collections): Data structures which facilitate pure functional programming
  * [`cats-testkit-scalatest`](https://github.com/typelevel/cats-testkit-scalatest): Cats testkit integration with Scalatest
 
-Past release notes for Cats are available in [CHANGES.md](https://github.com/typelevel/cats/blob/master/CHANGES.md).
-See [Cats 2019 roadmap](https://github.com/typelevel/cats/blob/master/ROADMAP_2019.md) for our plan for 2019.
+Past release notes for Cats are available in [CHANGES.md](https://github.com/typelevel/cats/blob/main/CHANGES.md).
 
 ### Documentation
 
@@ -204,7 +202,7 @@ versioning in the future. But that decision is yet to be made.
 
 ### Adopters
 
-Here's a (non-exhaustive) list of companies that use Cats in production. Don't see yours? [You can add it in a PR!](https://github.com/typelevel/cats/edit/master/README.md). And if you can, consider [supporting us](https://donorbox.org/typelevel-sustainability-program-2019?default_interval=m). 
+Here's a (non-exhaustive) list of companies that use Cats in production. Don't see yours? [You can add it in a PR!](https://github.com/typelevel/cats/edit/main/README.md). And if you can, consider [supporting us](https://donorbox.org/typelevel-sustainability-program-2019?default_interval=m). 
 
 - [Abacus Protocol](https://abacusprotocol.com)
 - [Anduin Transactions](https://anduintransact.com)
@@ -306,7 +304,7 @@ The current maintainers (people who can merge pull requests) are:
 We are currently following a practice of requiring at least two
 sign-offs to merge code PRs (and for large or contentious issues we may
 wait for more). For typos, documentation improvements or minor build fix we
-relax this to a single sign-off. More detail in the [process document](https://github.com/typelevel/cats/blob/master/PROCESS.md).
+relax this to a single sign-off. More detail in the [process document](https://github.com/typelevel/cats/blob/main/PROCESS.md).
 
 
 

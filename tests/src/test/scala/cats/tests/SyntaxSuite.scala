@@ -486,6 +486,7 @@ object SyntaxSuite {
     val fb = mock[F[B]]
     val f = mock[A Ior B => C]
     val f2 = mock[(Option[A], Option[B]) => C]
+    val f3 = mock[(A, A) => A]
     val a = mock[A]
     val b = mock[B]
 
@@ -497,6 +498,7 @@ object SyntaxSuite {
 
     implicit val sa: Semigroup[A] = mock[Semigroup[A]]
     val fa2 = fa.alignCombine(fa)
+    val fa3 = fa.alignMergeWith(fa)(f3)
 
     val zippedAll = fa.zipAll(fb, a, b)
   }

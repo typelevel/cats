@@ -294,6 +294,13 @@ class NestedSuite extends CatsSuite {
     checkAll("Representable[Nested[Pair, Pair, *]]",
              SerializableTests.serializable(Representable[Nested[Pair, Pair, *]])
     )
+  }
 
+  {
+    // Align composition
+    checkAll(
+      "Nested[List, Option, *]",
+      AlignTests[Nested[List, Option, *]].align[Int, Int, Int, Int]
+    )
   }
 }

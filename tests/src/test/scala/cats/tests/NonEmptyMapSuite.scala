@@ -1,6 +1,6 @@
 package cats.tests
 
-import cats.{Align, Eval, Foldable, Now, SemigroupK, Show}
+import cats.{Align, Eval, Foldable, Now, Semigroup, SemigroupK, Show}
 import cats.data.{NonEmptyList, NonEmptyMap}
 import cats.kernel.laws.discipline.{SerializableTests => _, _}
 import cats.laws.discipline._
@@ -20,7 +20,7 @@ class NonEmptyMapSuite extends CatsSuite {
     "NonEmptyMap[String, Int]",
     NonEmptyTraverseTests[NonEmptyMap[String, *]].nonEmptyTraverse[Option, Int, Int, Double, Int, Option, Option]
   )
-  checkAll("NonEmptyMap[String, Int]", BandTests[NonEmptyMap[String, Int]].band)
+  checkAll("NonEmptyMap[String, Int]", SemigroupTests[NonEmptyMap[String, Int]].semigroup)
   checkAll("NonEmptyMap[String, Int]", EqTests[NonEmptyMap[String, Int]].eqv)
   checkAll("NonEmptyMap[String, Int]", HashTests[NonEmptyMap[String, Int]].hash)
 
@@ -222,4 +222,15 @@ class NonEmptyMapSuite extends CatsSuite {
     assert(single.lookup("notHere") === (single.updateWith("notHere")(_ => 1).lookup("notHere")))
   }
 
+  test("combine should be consistent with SortedMap") {
+    forAll { (nem1: NonEmptyMap[Int, Int], nem2: NonEmptyMap[Int, Int]) =>
+      val lhs = Semigroup.combine(nem1, nem2).toSortedMap
+      val rhs = Semigroup.combine(nem1.toSortedMap, nem2.toSortedMap)
+      assert(lhs === rhs)
+    }
+  }
+
+  test("Semigroup[NonEmptyMap[K, V]] should require Semigroup[V]") {
+    assert(compileErrors("Semigroup[NonEmptyMap[Int, Char]]").nonEmpty)
+  }
 }

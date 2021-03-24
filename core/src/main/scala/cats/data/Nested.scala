@@ -64,6 +64,15 @@ sealed abstract private[data] class NestedInstances extends NestedInstances0 {
       implicit val F: Traverse[F] = F0
       implicit val G: TraverseFilter[G] = G0
     }
+
+  implicit def catsDataAlignForNested[F[_], G[_]](implicit
+    F0: Align[F],
+    G0: Align[G]
+  ): Align[Nested[F, G, *]] =
+    new NestedAlign[F, G] {
+      implicit val F: Align[F] = F0
+      implicit val G: Align[G] = G0
+    }
 }
 
 sealed abstract private[data] class NestedInstances0 extends NestedInstances1 {
@@ -419,4 +428,29 @@ abstract private[data] class NestedTraverseFilter[F[_], G[_]]
     fga: Nested[F, G, A]
   )(f: A => H[Option[B]])(implicit H: Applicative[H]): H[Nested[F, G, B]] =
     H.map(F.traverse[H, G[A], G[B]](fga.value)(ga => G.traverseFilter(ga)(f)))(Nested[F, G, B])
+}
+
+abstract private[data] class NestedAlign[F[_], G[_]] extends Align[Nested[F, G, *]] {
+  implicit val F: Align[F]
+  implicit val G: Align[G]
+
+  override def functor: Functor[Nested[F, G, *]] =
+    Nested.catsDataFunctorForNested(F.functor, G.functor)
+
+  override def align[A, B](
+    fa: Nested[F, G, A],
+    fb: Nested[F, G, B]
+  ): Nested[F, G, Ior[A, B]] =
+    Nested(
+      F.functor.map(
+        F.align(fa.value, fb.value)
+      ) {
+        case Ior.Left(ga) =>
+          G.functor.map(ga)(Ior.Left(_))
+        case Ior.Right(gb) =>
+          G.functor.map(gb)(Ior.Right(_))
+        case Ior.Both(ga, gb) =>
+          G.align(ga, gb)
+      }
+    )
 }
