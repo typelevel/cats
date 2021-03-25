@@ -154,6 +154,17 @@ object arbitrary extends ArbitraryInstances0 with ScalaVersionSpecific.Arbitrary
   implicit def catsLawsCogenForOptionT[F[_], A](implicit F: Cogen[F[Option[A]]]): Cogen[OptionT[F, A]] =
     F.contramap(_.value)
 
+  implicit def catsLawsArbitraryForStoreT[F[_], S, A](implicit F: Arbitrary[F[S => A]], S: Arbitrary[S]) =
+    Arbitrary(
+      for {
+        runF <- F.arbitrary
+        index <- S.arbitrary
+      } yield StoreT(runF, index)
+    )
+
+  implicit def catsLawsCogenForStoreT[F[_], S, A](implicit F: Cogen[F[S => A]], S: Cogen[S]): Cogen[StoreT[F, S, A]] =
+    Cogen((seed, st) => S.perturb(F.perturb(seed, st.runF), st.index))
+
   implicit def catsLawsArbitraryForIdT[F[_], A](implicit F: Arbitrary[F[A]]): Arbitrary[IdT[F, A]] =
     Arbitrary(F.arbitrary.map(IdT.apply))
 
