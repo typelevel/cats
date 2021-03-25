@@ -40,15 +40,19 @@ final case class StoreT[F[_], S, A](runF: F[S => A], index: S) {
    */
   def extract(implicit F: Comonad[F]): A = peek(index)
 
+  /**
+   * `coflatMap` is the dual of `flatMap` on `FlatMap`. It applies
+   * a value in a context to a function that takes a value
+   * in a context and returns a normal value.
+   */
   def coflatMap[B](f: StoreT[F, S, A] => B)(implicit F: Comonad[F]): StoreT[F, S, B] = StoreT(
     F.map(F.coflatten(runF))((x: F[S => A]) => (s: S) => f(StoreT(x, s))),
     index
   )
 
   /**
-   * `coflatMap` is the dual of `flatMap` on `FlatMap`. It applies
-   * a value in a context to a function that takes a value
-   * in a context and returns a normal value.
+   * `coflatten` is the dual of `flatten` on `FlatMap`. Whereas flatten removes
+   * a layer of `F`, coflatten adds a layer of `F`
    */
   def coflatten(implicit F: Comonad[F]): StoreT[F, S, StoreT[F, S, A]] =
     StoreT(
@@ -57,8 +61,7 @@ final case class StoreT[F[_], S, A](runF: F[S => A], index: S) {
     )
 
   /**
-   * `coflatten` is the dual of `flatten` on `FlatMap`. Whereas flatten removes
-   * a layer of `F`, coflatten adds a layer of `F`
+   * Functor `map` for StoreT
    */
   def map[B](g: A => B)(implicit F: Functor[F]): StoreT[F, S, B] = StoreT(
     F.map(runF)((f: S => A) => AndThen(f).andThen(g(_))),
