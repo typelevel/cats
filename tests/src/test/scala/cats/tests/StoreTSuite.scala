@@ -12,8 +12,14 @@ class StoreTSuite extends CatsSuite {
 
   checkAll("StoreT[Id, MiniInt, *]", ComonadTests[StoreT[Id, MiniInt, *]].comonad[MiniInt, MiniInt, MiniInt])
 
-  checkAll("StoreT[Validated[String, *], MiniInt, *]",
+  checkAll("Comonad[StoreT[Id, MiniInt, *]]", SerializableTests.serializable(Comonad[StoreT[Id, MiniInt, *]]))
+
+  checkAll("StoreT[Validated[String, *], MiniInt, *]]",
            ApplicativeTests[StoreT[Validated[String, *], MiniInt, *]].applicative[MiniInt, MiniInt, MiniInt]
+  )
+
+  checkAll("Comonad[StoreT[Validated[String, *], MiniInt, *]]",
+           SerializableTests.serializable(Applicative[StoreT[Validated[String, *], MiniInt, *]])
   )
 
 }
