@@ -10,7 +10,9 @@ final case class StoreT[F[_], S, A](runF: F[S => A], index: S) {
   /**
    * Get the current index.
    */
-  def pos: S = index
+  val pos: S = index
+
+  def run(implicit F: Functor[F]) = F.map(runF)(_.apply(index))
 
   /**
    * Peek at what the focus would be for a different focus.
