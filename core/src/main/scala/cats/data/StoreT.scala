@@ -7,15 +7,10 @@ import cats.{Applicative, Comonad, Functor, Monoid}
  */
 final case class StoreT[F[_], S, A](runF: F[S => A], index: S) {
 
-  /**
-   * Get the current index.
-   */
-  val pos: S = index
-
   def run(implicit F: Functor[F]) = F.map(runF)(_.apply(index))
 
   /**
-   * Peek at what the focus would be for a different focus.
+   * Peek at what the focus would be for a given focus s.
    */
   def peek(s: S)(implicit F: Comonad[F]): A = F.extract(F.map(runF)(_.apply(index)))
 
@@ -94,6 +89,7 @@ object StoreT extends StoreTInstances1 {
 }
 
 trait StoreTInstances1 extends StoreTInstances2 {
+
   implicit def applicativeForStoreT[F[_], S](implicit F: Applicative[F], S: Monoid[S]): Applicative[StoreT[F, S, *]] =
     new Applicative[StoreT[F, S, *]] {
 

@@ -9,9 +9,25 @@ import cats.{Comonad, Functor, Representable}
 final case class RepresentableStore[F[_], S, A](fa: F[A], index: S)(implicit R: Representable.Aux[F, S]) {
 
   /**
-   * Inspect the value at "index" s
+   * Peek at what the focus would be for a given focus s.
    */
   def peek(s: S): A = R.index(fa)(s)
+
+  /**
+   * Peek at what the focus would be if the current focus where transformed
+   * with the given function.
+   */
+  def peeks(f: S => S): A = peek(f(index))
+
+  /**
+   * Set the current focus.
+   */
+  def seek(s: S): RepresentableStore[F, S, A] = RepresentableStore(fa, s)
+
+  /**
+   * Modify the current focus with the given function.
+   */
+  def seeks(f: S => S): RepresentableStore[F, S, A] = seek(f(index))
 
   /**
    * Extract the value at the current index.
@@ -19,11 +35,23 @@ final case class RepresentableStore[F[_], S, A](fa: F[A], index: S)(implicit R: 
   lazy val extract: A = peek(index)
 
   /**
-   * Duplicate the store structure
+   * `coflatten` is the dual of `flatten` on `FlatMap`. Whereas flatten removes
+   * a layer of `F`, coflatten adds a layer of `F`
    */
   lazy val coflatten: RepresentableStore[F, S, RepresentableStore[F, S, A]] =
     RepresentableStore(R.tabulate(idx => RepresentableStore(fa, idx)), index)
 
+  /**
+   * `coflatMap` is the dual of `flatMap` on `FlatMap`. It applies
+   * a value in a context to a function that takes a value
+   * in a context and returns a normal value.
+   */
+  def coflatMap[B](f: RepresentableStore[F, S, A] => B): RepresentableStore[F, S, B] =
+    coflatten.map(f)
+
+  /**
+   * Functor `map` for `RepresentableStore`
+   */
   def map[B](f: A => B): RepresentableStore[F, S, B] =
     RepresentableStore(R.F.map(fa)(f), index)
 
