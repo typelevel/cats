@@ -1,15 +1,19 @@
 package cats.tests
 
 import cats._
-import cats.data.StoreT
+import cats.data.{StoreT, Validated}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
-import org.scalacheck.Gen
-import org.scalacheck.Arbitrary
 
 class StoreTSuite extends CatsSuite {
 
-  checkAll("StoreT[Id, String, *]", ComonadTests[StoreT[Id, MiniInt, *]].comonad[MiniInt, MiniInt, MiniInt])
+  implicit val monoid: Monoid[MiniInt] = MiniInt.miniIntAddition
+
+  checkAll("StoreT[Id, MiniInt, *]", ComonadTests[StoreT[Id, MiniInt, *]].comonad[MiniInt, MiniInt, MiniInt])
+
+  checkAll("StoreT[Validated[String, *], MiniInt, *]",
+           ApplicativeTests[StoreT[Validated[String, *], MiniInt, *]].applicative[MiniInt, MiniInt, MiniInt]
+  )
 
 }
