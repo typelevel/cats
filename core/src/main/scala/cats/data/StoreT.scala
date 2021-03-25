@@ -3,7 +3,12 @@ package cats.data
 import cats.{Applicative, Comonad, Functor, Monoid}
 
 /*
- * The dual of `StateT`
+ * The dual of `StateT`. Stores some state `A` indexed by
+ * a type `S` with the notion of a cursor tracking the
+ * current position in the index.
+ *
+ * This state can be extracted if the underlying `F` has
+ * a Comonad instance.
  */
 final case class StoreT[F[_], S, A](runF: F[S => A], index: S) {
 
