@@ -112,4 +112,12 @@ package object data extends ScalaVersionSpecificPackage {
     def shift[A, B](f: (B => Eval[A]) => Cont[A, A]): Cont[A, B] =
       ContT.shiftT(f)
   }
+
+  type ComonadicStore[S, A] = StoreT[Id, S, A]
+
+  object ComonadicStore {
+
+    def pure[S, A](x: A)(implicit S: Monoid[S]): ComonadicStore[S, A] = StoreT.pure[Id, S, A](x)
+
+  }
 }
