@@ -2,7 +2,7 @@ package alleycats
 package std
 
 import alleycats.compat.scalaVersionSpecific._
-import cats.{Always, Applicative, Eval, Foldable, Monad, Monoid, Traverse, TraverseFilter}
+import cats.{Alternative, Always, Applicative, Eval, Foldable, Monad, Monoid, Traverse, TraverseFilter}
 
 import scala.annotation.tailrec
 
@@ -10,7 +10,7 @@ object set extends SetInstances
 
 @suppressUnusedImportWarningForScalaVersionSpecific
 trait SetInstances {
-  // This method advertises parametricity, but relies on using
+  // Monad advertises parametricity, but Set relies on using
   // universal hash codes and equality, which hurts our ability to
   // rely on free theorems.
   //
@@ -30,8 +30,12 @@ trait SetInstances {
   // contain three. Since `g` is not a function (speaking strictly)
   // this would not be considered a law violation, but it still makes
   // people uncomfortable.
-  implicit val alleyCatsStdSetMonad: Monad[Set] =
-    new Monad[Set] {
+  //
+  // If we accept Monad for Set, we can also have Alternative, as
+  // Alternative only requires MonoidK (already accepted by cats-core) and
+  // the Applicative that comes from Monad.
+  implicit val alleyCatsStdSetMonad: Monad[Set] with Alternative[Set] =
+    new Monad[Set] with Alternative[Set] {
       def pure[A](a: A): Set[A] = Set(a)
       override def map[A, B](fa: Set[A])(f: A => B): Set[B] = fa.map(f)
       def flatMap[A, B](fa: Set[A])(f: A => Set[B]): Set[B] = fa.flatMap(f)
@@ -65,6 +69,10 @@ trait SetInstances {
         go(f(a))
         bldr.result()
       }
+
+      override def empty[A]: Set[A] = Set.empty
+
+      override def combineK[A](x: Set[A], y: Set[A]): Set[A] = x | y
     }
 
   // Since iteration order is not guaranteed for sets, folds and other
