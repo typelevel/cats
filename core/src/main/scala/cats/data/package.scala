@@ -113,11 +113,12 @@ package object data extends ScalaVersionSpecificPackage {
       ContT.shiftT(f)
   }
 
-  type ComonadicStore[S, A] = StoreT[Id, S, A]
+  type StoreT[W[_], S, A] = RepresentableStoreT[W, Function1[S, *], S, A]
 
-  object ComonadicStore {
+  object StoreT {
 
-    def pure[S, A](x: A)(implicit S: Monoid[S]): ComonadicStore[S, A] = StoreT.pure[Id, S, A](x)
+    def pure[W[_], S, A](x: A)(implicit W: Applicative[W], S: Monoid[S]): StoreT[W, S, A] =
+      RepresentableStoreT.pure[W, Function1[S, *], S, A](x)
 
   }
 }
