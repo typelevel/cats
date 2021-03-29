@@ -17,160 +17,41 @@ object OptionT extends OptionTInstances {
 
   def none[F[_], A](implicit F: Applicative[F]): OptionT[F, A] = F.pure(None)
 
+  /* Extensions that need no implicits */
   extension[F[_], A](x: OptionT[F, A]) {
 
     def value: F[Option[A]] = x
 
-    def fold[B](default: => B)(f: A => B)(implicit F: Functor[F]): F[B] =
-      F.map(x)(_.fold(default)(f))
-
-    /**
-      * Transform this `OptionT[F, A]` into a `F[B]`.
-     *
-     * Example:
-     * {{{
-     * scala> import cats.implicits._
-     * scala> import cats.data.OptionT
-     *
-     * scala> val optionT: OptionT[List, Int] = OptionT[List, Int](List(Some(23), None))
-     * scala> optionT.foldF(Nil)(v => List(v, v * 2))
-     * res0: List[Int] = List(23, 46)
-     * }}}
-     */
-    def foldF[B](default: => F[B])(f: A => F[B])(implicit F: FlatMap[F]): F[B] =
-      F.flatMap(value)(_.fold(default)(f))
-  
-    /**
-     * Catamorphism on the Option. This is identical to [[fold]], but it only has
-     * one parameter list, which can result in better type inference in some
-     * contexts.
-     */
-    def cata[B](default: => B, f: A => B)(implicit F: Functor[F]): F[B] =
-      fold(default)(f)(F)
-  
-    /**
-     * Effectful catamorphism on the Option. This is identical to [[foldF]], but it only has
-     * one parameter list, which can result in better type inference in some
-     * contexts.
-     */
-    def cataF[B](default: => F[B], f: A => F[B])(implicit F: FlatMap[F]): F[B] =
-      foldF(default)(f)
-  
-    def map[B](f: A => B)(implicit F: Functor[F]): OptionT[F, B] =
-      F.map(value)(_.map(f))
-  
     def imap[B](f: A => B)(g: B => A)(implicit F: Invariant[F]): OptionT[F, B] =
-      F.imap(value)(_.map(f))(_.map(g))
+      F.imap(x)(_.map(f))(_.map(g))
   
     def contramap[B](f: B => A)(implicit F: Contravariant[F]): OptionT[F, B] =
-      F.contramap(value)(_.map(f))
+      F.contramap(x)(_.map(f))
   
     /**
      * Modify the context `F` using transformation `f`.
      */
-    def mapK[G[_]](f: F ~> G): OptionT[G, A] = OptionT[G, A](f(value))
+    def mapK[G[_]](f: F ~> G): OptionT[G, A] = OptionT[G, A](f(x))
   
-    def semiflatMap[B](f: A => F[B])(implicit F: Monad[F]): OptionT[F, B] =
-      flatMap(a => OptionT.liftF(f(a)))
-  
-    def semiflatTap[B](f: A => F[B])(implicit F: Monad[F]): OptionT[F, A] =
-      semiflatMap(a => F.as(f(a), a))
-  
-    def mapFilter[B](f: A => Option[B])(implicit F: Functor[F]): OptionT[F, B] =
-      subflatMap(f)
-  
-    def flatMap[B](f: A => OptionT[F, B])(implicit F: Monad[F]): OptionT[F, B] =
-      flatMapF(a => f(a).value)
-  
-    def flatMapF[B](f: A => F[Option[B]])(implicit F: Monad[F]): OptionT[F, B] =
-      F.flatMap(value)(_.fold(F.pure[Option[B]](None))(f))
-  
-    def flatTransform[B](f: Option[A] => F[Option[B]])(implicit F: Monad[F]): OptionT[F, B] =
-      F.flatMap(value)(f)
-  
-    def transform[B](f: Option[A] => Option[B])(implicit F: Functor[F]): OptionT[F, B] =
-      F.map(value)(f)
-  
-    def subflatMap[B](f: A => Option[B])(implicit F: Functor[F]): OptionT[F, B] =
-      transform(_.flatMap(f))
-  
-    /**
-     * Perform an effect if the value inside the is a `None`, leaving the value untouched. Equivalent to [[orElseF]]
-     * with an effect returning `None` as argument.
-     */
-    def flatTapNone[B](ifNone: => F[B])(implicit F: Monad[F]): OptionT[F, A] =
-      F.flatTap(value)(_.fold(F.void(ifNone))(_ => F.unit))
-  
-    def getOrElse[B >: A](default: => B)(implicit F: Functor[F]): F[B] =
-      F.map(value)(_.getOrElse(default))
-  
-    def getOrElseF[B >: A](default: => F[B])(implicit F: Monad[F]): F[B] =
-      F.flatMap(value)(_.fold(default)(F.pure))
-  
-    def collect[B](f: PartialFunction[A, B])(implicit F: Functor[F]): OptionT[F, B] =
-      F.map(value)(_.collect(f))
-  
-    def exists(f: A => Boolean)(implicit F: Functor[F]): F[Boolean] =
-      F.map(value)(_.exists(f))
-  
-    def filter(p: A => Boolean)(implicit F: Functor[F]): OptionT[F, A] =
-      F.map(value)(_.filter(p))
-  
-    def withFilter(p: A => Boolean)(implicit F: Functor[F]): OptionT[F, A] =
-      filter(p)(F)
-  
-    def filterNot(p: A => Boolean)(implicit F: Functor[F]): OptionT[F, A] =
-      F.map(value)(_.filterNot(p))
-  
-    def forall(f: A => Boolean)(implicit F: Functor[F]): F[Boolean] =
-      F.map(value)(_.forall(f))
-  
-    def isDefined(implicit F: Functor[F]): F[Boolean] =
-      F.map(value)(_.isDefined)
-  
-    def isEmpty(implicit F: Functor[F]): F[Boolean] =
-      F.map(value)(_.isEmpty)
-  
-    def orElse(default: => OptionT[F, A])(implicit F: Monad[F]): OptionT[F, A] =
-      orElseF(default.value)
-  
-    def orElseF(default: => F[Option[A]])(implicit F: Monad[F]): OptionT[F, A] =
-      F.flatMap(value) {
-        case s @ Some(_) => F.pure(s)
-        case None        => default
-      }
-  
-    def toRight[L](left: => L)(implicit F: Functor[F]): EitherT[F, L, A] =
-      EitherT(cata(Left(left), Right.apply))
-  
-    def toRightF[L](left: => F[L])(implicit F: Monad[F]): EitherT[F, L, A] =
-      EitherT(cataF(F.map(left)(Left.apply[L, A]), a => F.pure(Right(a))))
-  
-    def toLeft[R](right: => R)(implicit F: Functor[F]): EitherT[F, A, R] =
-      EitherT(cata(Right(right), Left.apply))
-  
-    def toLeftF[R](right: => F[R])(implicit F: Monad[F]): EitherT[F, A, R] =
-      EitherT(cataF(F.map(right)(Right.apply[A, R]), a => F.pure(Left(a))))
-  
-    def show(implicit F: Show[F[Option[A]]]): String = F.show(value)
+    def show(implicit F: Show[F[Option[A]]]): String = F.show(x)
   
     def compare(that: OptionT[F, A])(implicit o: Order[F[Option[A]]]): Int =
-      o.compare(value, that.value)
+      o.compare(x, that.value)
   
     def partialCompare(that: OptionT[F, A])(implicit p: PartialOrder[F[Option[A]]]): Double =
-      p.partialCompare(value, that.value)
+      p.partialCompare(x, that.value)
   
     def ===(that: OptionT[F, A])(implicit eq: Eq[F[Option[A]]]): Boolean =
-      eq.eqv(value, that.value)
+      eq.eqv(x, that.value)
   
     def traverse[G[_], B](f: A => G[B])(implicit F: Traverse[F], G: Applicative[G]): G[OptionT[F, B]] =
-      F.compose(Traverse[Option]).traverse(value)(f)
+      F.compose(Traverse[Option]).traverse(x)(f)
   
     def foldLeft[B](b: B)(f: (B, A) => B)(implicit F: Foldable[F]): B =
-      F.compose(Foldable[Option]).foldLeft(value, b)(f)
+      F.compose(Foldable[Option]).foldLeft(x, b)(f)
   
     def foldRight[B](lb: Eval[B])(f: (A, Eval[B]) => Eval[B])(implicit F: Foldable[F]): Eval[B] =
-      F.compose(Foldable[Option]).foldRight(value, lb)(f)
+      F.compose(Foldable[Option]).foldRight(x, lb)(f)
   
     /**
      * Transform this `OptionT[F, A]` into a `[[Nested]][F, Option, A]`.
@@ -191,7 +72,162 @@ object OptionT extends OptionTInstances {
      * res1: OptionT[List,String] = OptionT(List(Some(1), Some(2), None, None))
      * }}}
      */
-    def toNested: Nested[F, Option, A] = Nested(value)
+    def toNested: Nested[F, Option, A] = Nested(x)
+  }
+
+  /* Extension methods that take a Functor */
+  extension[F[_], A](x: OptionT[F, A])(using F: Functor[F]){
+
+    def map[B](f: A => B): OptionT[F, B] =
+      F.map(x)(_.map(f))
+  
+    def fold[B](default: => B)(f: A => B): F[B] =
+      F.map(x)(_.fold(default)(f))
+
+    /**
+     * Catamorphism on the Option. This is identical to [[fold]], but it only has
+     * one parameter list, which can result in better type inference in some
+     * contexts.
+     */
+    def cata[B](default: => B, f: A => B): F[B] =
+      F.map(x)(_.fold(default)(f))
+
+    def transform[B](f: Option[A] => Option[B]): OptionT[F, B] =
+      F.map(x)(f)
+  
+    def subflatMap[B](f: A => Option[B]): OptionT[F, B] = 
+      F.map(x)(_.flatMap(f))
+  
+    def mapFilter[B](f: A => Option[B]): OptionT[F, B] = 
+      F.map(x)(_.flatMap(f))
+  
+    def getOrElse[B >: A](default: => B): F[B] = 
+      F.map(x)(_.getOrElse(default))
+  
+    def collect[B](f: PartialFunction[A, B]): OptionT[F, B] =
+      F.map(x)(_.collect(f))
+  
+    def exists(f: A => Boolean): F[Boolean] = F.map(x)(_.exists(f))
+  
+    def filter(p: A => Boolean): OptionT[F, A] = F.map(x)(_.filter(p))
+  
+    def filterNot(p: A => Boolean): OptionT[F, A] = F.map(x)(_.filterNot(p))
+  
+    def withFilter(p: A => Boolean): OptionT[F, A] = F.map(x)(_.filter(p))
+  
+    def forall(f: A => Boolean): F[Boolean] = F.map(x)(_.forall(f))
+  
+    def isDefined: F[Boolean] = F.map(x)(_.isDefined)
+  
+    def isEmpty: F[Boolean] = F.map(x)(_.isEmpty)
+  
+    def toRight[L](left: => L): EitherT[F, L, A] = {
+      val fela: F[Either[L, A]] = F.map(x){
+        case None => Left[L, A](left)
+        case Some(x) => Right[L, A](x)
+      }
+      EitherT(fela)
+    }
+  
+    def toLeft[R](right: => R): EitherT[F, A, R] = {
+      val fear: F[Either[A, R]] = F.map(x){
+        case None => Right[A, R](right)
+        case Some(a) => Left[A, R](a)
+      }
+      EitherT(fear)
+    }
+
+  }
+
+  extension[F[_], A](x: OptionT[F, A])(using F: FlatMap[F]){
+
+    /**
+      * Transform this `OptionT[F, A]` into a `F[B]`.
+     *
+     * Example:
+     * {{{
+     * scala> import cats.implicits._
+     * scala> import cats.data.OptionT
+     *
+     * scala> val optionT: OptionT[List, Int] = OptionT[List, Int](List(Some(23), None))
+     * scala> optionT.foldF(Nil)(v => List(v, v * 2))
+     * res0: List[Int] = List(23, 46)
+     * }}}
+     */
+    def foldF[B](default: => F[B])(f: A => F[B]): F[B] =
+      F.flatMap(x)(_.fold(default)(f))
+
+    /**
+     * Effectful catamorphism on the Option. This is identical to [[foldF]], but it only has
+     * one parameter list, which can result in better type inference in some
+     * contexts.
+     */
+    def cataF[B](default: => F[B], f: A => F[B]): F[B] =
+      F.flatMap(x)(_.fold(default)(f))
+  
+  }
+
+
+  extension[F[_], A](x: OptionT[F, A])(using F: Monad[F]) {
+
+    def flatMapF[B](f: A => F[Option[B]]): OptionT[F, B] =
+      F.flatMap(x)(_.fold(F.pure[Option[B]](None))(f))
+  
+    def flatMap[B](f: A => OptionT[F, B]): OptionT[F, B] =
+      F.flatMap(x) {
+        case Some(a) => f(a)
+        case None    => F.pure(None)
+      }
+
+    def semiflatMap[B](f: A => F[B]): OptionT[F, B] =
+      F.flatMap(x) {
+        case Some(a) => F.map(f(a))(Some(_))
+        case None => F.pure(None)
+      }
+  
+    def semiflatTap[B](f: A => F[B]): OptionT[F, A] =
+      F.flatMap(x){
+        case Some(a) => F.map(f(a))(_ => Some(a))
+        case None => F.pure(None)
+      }
+  
+    def flatTransform[B](f: Option[A] => F[Option[B]]): OptionT[F, B] =
+      F.flatMap(x)(f)
+  
+    /**
+     * Perform an effect if the value inside the is a `None`, leaving the value
+     * untouched. Equivalent to [[orElseF]] with an effect returning `None` as argument.
+     */
+    def flatTapNone[B](ifNone: => F[B]): OptionT[F, A] =
+      F.flatTap(x)(_.fold(F.void(ifNone))(_ => F.unit))
+  
+    def getOrElseF[B >: A](default: => F[B]): F[B] =
+      F.flatMap(x)(_.fold(default)(F.pure))
+  
+    def orElseF(default: => F[Option[A]]): OptionT[F, A] =
+      F.flatMap(x) {
+        case s @ Some(_) => F.pure(s)
+        case None        => default
+      }
+  
+    def orElse(default: => OptionT[F, A]): OptionT[F, A] =
+      (x: OptionT[F, A]).orElseF(default: F[Option[A]])
+
+    def toRightF[L](left: => F[L]): EitherT[F, L, A] = {
+      val fela: F[Either[L, A]] = F.flatMap(x){
+        case None => F.map(left)(Left.apply[L, A])
+        case Some(a) => F.pure(Right(a))
+      }
+      EitherT(fela)
+    }
+  
+    def toLeftF[R](right: => F[R]): EitherT[F, A, R] = {
+      val fear: F[Either[A, R]] = F.flatMap(x) {
+        case None => F.map(right)(Right.apply[A, R])
+        case Some(a) => F.pure(Left[A, R](a))
+      }
+      EitherT(fear)
+    }
   }
 
     /**
