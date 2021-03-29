@@ -3,7 +3,7 @@ package cats.data
 import cats.{Comonad, Functor, Representable}
 
 /**
- * A generalization of `StoreT`, where the underlying functor `F` hasfor any `Representable` functor.
+ * A generalization of `StoreT`, where the underlying functor `F` has a `Representable` instance.
  * `Store` is the dual of `State`
  */
 final case class RepresentableStore[F[_], S, A](fa: F[A], index: S)(implicit R: Representable.Aux[F, S]) {

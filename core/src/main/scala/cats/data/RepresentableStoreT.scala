@@ -9,6 +9,8 @@ import cats.{Applicative, Comonad, Functor, Monoid, Representable}
  *
  * This state can be extracted if the underlying `F` has
  * a Comonad instance.
+ *
+ * This is the (co)monad-transformer version of `RepresentableStore`
  */
 final case class RepresentableStoreT[W[_], F[_], S, A](runF: W[F[A]], index: S)(implicit F: Representable.Aux[F, S]) {
 
