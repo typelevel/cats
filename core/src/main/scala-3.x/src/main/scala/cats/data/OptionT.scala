@@ -164,9 +164,7 @@ object OptionT extends OptionTInstances {
      */
     def cataF[B](default: => F[B], f: A => F[B]): F[B] =
       F.flatMap(x)(_.fold(default)(f))
-  
   }
-
 
   extension[F[_], A](x: OptionT[F, A])(using F: Monad[F]) {
 
