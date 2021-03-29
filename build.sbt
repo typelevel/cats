@@ -21,7 +21,7 @@ val scalaCheckVersion = "1.15.3"
 val disciplineVersion = "1.1.4"
 
 val disciplineScalatestVersion = "2.0.1"
-val disciplineMunitVersion = "1.0.6"
+val disciplineMunitVersion = "1.0.7"
 
 val kindProjectorVersion = "0.11.3"
 
@@ -37,8 +37,8 @@ ThisBuild / githubWorkflowJavaVersions := Seq(PrimaryJava, LTSJava, LatestJava, 
 
 val Scala212 = "2.12.13"
 val Scala213 = "2.13.5"
-val DottyOld = "3.0.0-M3"
-val DottyNew = "3.0.0-RC1"
+val DottyOld = "3.0.0-RC1"
+val DottyNew = "3.0.0-RC2"
 
 ThisBuild / crossScalaVersions := Seq(Scala212, Scala213, DottyOld, DottyNew)
 ThisBuild / scalaVersion := Scala213
