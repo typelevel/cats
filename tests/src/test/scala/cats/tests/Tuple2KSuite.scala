@@ -8,6 +8,7 @@ import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.syntax.eq._
+import org.scalacheck.{Arbitrary, Cogen}
 import org.scalacheck.Prop._
 
 class Tuple2KSuite extends CatsSuite {
@@ -40,6 +41,36 @@ class Tuple2KSuite extends CatsSuite {
   )
 
   checkAll("Show[Tuple2K[Option, Option, Int]]", SerializableTests.serializable(Show[Tuple2K[Option, Option, Int]]))
+
+  {
+    type Pair[A] = (A, A)
+
+    //Scala 2.12 implicit resolution absolutely loses its mind here
+    implicit val help_scala2_12: Representable.Aux[Tuple2K[Pair, Pair, *], Either[Boolean, Boolean]] =
+      Tuple2K.catsDataRepresentableForTuple2K[Pair, Pair]
+
+    val a: Arbitrary[Int] = implicitly[Arbitrary[Int]]
+    val b: Arbitrary[Tuple2K[Pair, Pair, Int]] = implicitly[Arbitrary[Tuple2K[Pair, Pair, Int]]]
+    val c: Arbitrary[Either[Boolean, Boolean]] = implicitly[Arbitrary[Either[Boolean, Boolean]]]
+    val d: Arbitrary[(Either[Boolean, Boolean]) => Int] = implicitly[Arbitrary[(Either[Boolean, Boolean]) => Int]]
+    val e: Eq[Tuple2K[Pair, Pair, Int]] = Eq[Tuple2K[Pair, Pair, Int]]
+    val f: Eq[Int] = Eq[Int]
+
+    checkAll(
+      "Representable[Tuple2K[Pair, Pair, *]]",
+      RepresentableTests[Tuple2K[Pair, Pair, *], Either[Boolean, Boolean]].representable[Int](
+        a,
+        b,
+        c,
+        d,
+        e,
+        f
+      )
+    )
+    checkAll("Representable[Tuple2K[Pair, Pair, *]]",
+             SerializableTests.serializable(Representable[Tuple2K[Pair, Pair, *]])
+    )
+  }
 
   {
     implicit val monoidK: MonoidK[ListWrapper] = ListWrapper.monoidK
