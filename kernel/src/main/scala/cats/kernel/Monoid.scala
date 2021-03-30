@@ -41,9 +41,8 @@ trait Monoid[@sp(Int, Long, Float, Double) A] extends Any with Semigroup[A] { se
    * scala> Monoid[String].isEmpty("something")
    * res1: Boolean = false
    * }}}
-   */
-  def isEmpty(a: A)(implicit ev: Eq[A]): Boolean =
-    ev.eqv(a, empty)
+    */
+  extension (a: A) def isEmpty(using ev: Eq[A]): Boolean = ev.eqv(a, empty)
 
   /**
    * Return `a` appended to itself `n` times.
@@ -79,7 +78,7 @@ trait Monoid[@sp(Int, Long, Float, Double) A] extends Any with Semigroup[A] { se
    * }}}
    */
   def combineAll(as: IterableOnce[A]): A =
-    as.iterator.foldLeft(empty)(combine)
+    as.iterator.foldLeft(empty)(_.combine(_))
 
   override def combineAllOption(as: IterableOnce[A]): Option[A] =
     if (as.iterator.isEmpty) None else Some(combineAll(as))
@@ -87,7 +86,7 @@ trait Monoid[@sp(Int, Long, Float, Double) A] extends Any with Semigroup[A] { se
   override def reverse: Monoid[A] =
     new Monoid[A] {
       def empty = self.empty
-      def combine(a: A, b: A) = self.combine(b, a)
+      extension (a: A) def combine(b: A): A = b.combine(a)
       // a + a + a + ... is the same when reversed
       override def combineN(a: A, n: Int): A = self.combineN(a, n)
       override def reverse = self
@@ -96,12 +95,6 @@ trait Monoid[@sp(Int, Long, Float, Double) A] extends Any with Semigroup[A] { se
 
 @suppressUnusedImportWarningForScalaVersionSpecific
 abstract class MonoidFunctions[M[T] <: Monoid[T]] extends SemigroupFunctions[M] {
-  def empty[@sp(Int, Long, Float, Double) A](implicit ev: M[A]): A =
-    ev.empty
-
-  def isEmpty[@sp(Int, Long, Float, Double) A](a: A)(implicit m: M[A], ev: Eq[A]): Boolean =
-    m.isEmpty(a)
-
   def combineAll[@sp(Int, Long, Float, Double) A](as: IterableOnce[A])(implicit ev: M[A]): A =
     ev.combineAll(as)
 }

@@ -29,7 +29,7 @@ trait Semigroup[@sp(Int, Long, Float, Double) A] extends Any with Serializable {
    * res1: Option[Int] = Some(1)
    * }}}
    */
-  def combine(x: A, y: A): A
+  extension (x: A) def combine(y: A): A
 
   /**
    * Return `a` combined with itself `n` times.
@@ -46,7 +46,7 @@ trait Semigroup[@sp(Int, Long, Float, Double) A] extends Any with Serializable {
    * res1: String = hahaha
    * }}}
    */
-  def combineN(a: A, n: Int): A =
+  extension (x: A) def combineN(n: Int): A =
     if (n <= 0) throw new IllegalArgumentException("Repeated combining for semigroups must have n > 0")
     else repeatedCombineN(a, n)
 
@@ -55,10 +55,10 @@ trait Semigroup[@sp(Int, Long, Float, Double) A] extends Any with Serializable {
    */
   protected[this] def repeatedCombineN(a: A, n: Int): A = {
     @tailrec def loop(b: A, k: Int, extra: A): A =
-      if (k == 1) combine(b, extra)
+      if (k == 1) b.combine(extra)
       else {
-        val x = if ((k & 1) == 1) combine(b, extra) else extra
-        loop(combine(b, b), k >>> 1, x)
+        val x = if ((k & 1) == 1) b.combine(extra) else extra
+        loop(b.combine(b), k >>> 1, x)
       }
     if (n == 1) a else loop(a, n - 1, a)
   }
@@ -90,7 +90,7 @@ trait Semigroup[@sp(Int, Long, Float, Double) A] extends Any with Serializable {
     new Semigroup[A] {
       def combine(a: A, b: A): A = self.combine(b, a)
       // a + a + a + ... is the same when reversed
-      override def combineN(a: A, n: Int): A = self.combineN(a, n)
+      override extension (a: A) def combineN(n: Int): A = self.combineN(a, n)
       override def reverse = self
     }
 
@@ -100,7 +100,7 @@ trait Semigroup[@sp(Int, Long, Float, Double) A] extends Any with Serializable {
    */
   def intercalate(middle: A): Semigroup[A] =
     new Semigroup[A] {
-      def combine(a: A, b: A): A =
+      extension (a: A) def combine(b: A): A =
         self.combine(a, self.combine(middle, b))
     }
 }
