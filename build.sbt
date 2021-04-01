@@ -20,7 +20,6 @@ val scalaCheckVersion = "1.15.3"
 
 val disciplineVersion = "1.1.4"
 
-val disciplineScalatestVersion = "2.0.1"
 val disciplineMunitVersion = "1.0.7"
 
 val kindProjectorVersion = "0.11.3"
@@ -218,10 +217,6 @@ lazy val commonNativeSettings = Seq(
 )
 
 lazy val commonJvmSettings = Seq(
-  testOptions in Test += {
-    val flag = if (githubIsWorkflowBuild.value) "-oCI" else "-oDF"
-    Tests.Argument(TestFrameworks.ScalaTest, flag)
-  },
   Test / fork := true,
   Test / javaOptions := Seq("-Xmx3G")
 )
@@ -532,7 +527,7 @@ lazy val docs = project
   .settings(commonJvmSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "org.typelevel" %%% "discipline-scalatest" % disciplineScalatestVersion
+      "org.typelevel" %%% "discipline-munit" % disciplineMunitVersion
     ),
     scalacOptions in (ScalaUnidoc, unidoc) ~= { _.filter(_ != "-Xlint:-unused,_") }
   )
