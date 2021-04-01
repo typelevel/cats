@@ -145,8 +145,8 @@ possible, include the original authors' names and a link to the original work.
 
 - Tests for cats-core go into the tests module, under the `cats.tests` package.
 - Tests for additional modules, such as 'jvm', go into the tests directory within that module.
-- Cats tests should extend `CatsSuite`.  `CatsSuite` integrates [ScalaTest](http://www.scalatest.org/)
-with [Discipline](https://github.com/typelevel/discipline) for law checking, and imports all syntax and standard instances for convenience.
+- Cats tests should extend `CatsSuite`.  `CatsSuite` integrates with [Discipline](https://github.com/typelevel/discipline)
+for law checking, and imports all syntax and standard instances for convenience.
 - The first parameter to the `checkAll` method provided by
  [Discipline](https://github.com/typelevel/discipline), is the name of the test and will be output to the
  console as part of the test execution. By convention:
