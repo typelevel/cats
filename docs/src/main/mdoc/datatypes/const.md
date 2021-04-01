@@ -271,7 +271,7 @@ trait Traverse[F[_]] extends Foldable[F] {
   def traverse[G[_] : Applicative, A, X](fa: F[A])(f: A => G[X]): G[F[X]]
 
   def foldMap[A, B : Monoid](fa: F[A])(f: A => B): B = {
-    val const: Const[B, F[Nothing]] = traverse[Const[B, ?], A, Nothing](fa)(a => Const(f(a)))
+    val const: Const[B, F[Nothing]] = traverse[Const[B, *], A, Nothing](fa)(a => Const(f(a)))
     const.getConst
   }
 }

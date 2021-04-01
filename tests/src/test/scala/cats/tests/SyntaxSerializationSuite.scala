@@ -19,7 +19,7 @@ class SyntaxSerializationSuite extends CatsSuite {
   )
 
   checkAll(
-    "Tuple3ParallelOps[Either[String, ?], Boolean, Int, Long]",
+    "Tuple3ParallelOps[Either[String, *], Boolean, Int, Long]",
     SerializableTests.serializable(
       cats.syntax.all.catsSyntaxTuple3Parallel(("a".asLeft[Boolean], "b".asLeft[Int], "c".asLeft[Long]))
     )

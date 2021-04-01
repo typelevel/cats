@@ -332,8 +332,8 @@ In order to take advantage of monadic composition we use smart constructors to l
 
 ```scala mdoc:silent
 class Interacts[F[_]](implicit I: InjectK[Interact, F]) {
-  def tell(msg: String): Free[F, Unit] = Free.inject[Interact, F](Tell(msg))
-  def ask(prompt: String): Free[F, String] = Free.inject[Interact, F](Ask(prompt))
+  def tell(msg: String): Free[F, Unit] = Free.liftInject[F](Tell(msg))
+  def ask(prompt: String): Free[F, String] = Free.liftInject[F](Ask(prompt))
 }
 
 object Interacts {
@@ -341,8 +341,8 @@ object Interacts {
 }
 
 class DataSource[F[_]](implicit I: InjectK[DataOp, F]) {
-  def addCat(a: String): Free[F, Unit] = Free.inject[DataOp, F](AddCat(a))
-  def getAllCats: Free[F, List[String]] = Free.inject[DataOp, F](GetAllCats())
+  def addCat(a: String): Free[F, Unit] = Free.liftInject[F](AddCat(a))
+  def getAllCats: Free[F, List[String]] = Free.liftInject[F](GetAllCats())
 }
 
 object DataSource {

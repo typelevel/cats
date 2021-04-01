@@ -132,8 +132,8 @@ import cats.implicits._
 
 // We can define a FlatMap instance for Kleisli if the F[_] we chose has a FlatMap instance
 // Note the input type and F are fixed, with the output type left free
-implicit def kleisliFlatMap[F[_], Z](implicit F: FlatMap[F]): FlatMap[Kleisli[F, Z, ?]] =
-  new FlatMap[Kleisli[F, Z, ?]] {
+implicit def kleisliFlatMap[F[_], Z](implicit F: FlatMap[F]): FlatMap[Kleisli[F, Z, *]] =
+  new FlatMap[Kleisli[F, Z, *]] {
     def flatMap[A, B](fa: Kleisli[F, Z, A])(f: A => Kleisli[F, Z, B]): Kleisli[F, Z, B] =
       Kleisli(z => fa.run(z).flatMap(a => f(a).run(z)))
 
