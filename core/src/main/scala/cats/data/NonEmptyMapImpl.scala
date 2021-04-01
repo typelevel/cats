@@ -302,7 +302,7 @@ sealed abstract private[data] class NonEmptyMapInstances extends NonEmptyMapInst
     }
 
   @deprecated("Use catsDataInstancesForNonEmptyMap override without Order", "2.2.0-M3")
-  implicit def catsDataInstancesForNonEmptyMap[K](
+  def catsDataInstancesForNonEmptyMap[K](
     orderK: Order[K]
   ): SemigroupK[NonEmptyMap[K, *]] with NonEmptyTraverse[NonEmptyMap[K, *]] with Align[NonEmptyMap[K, *]] =
     catsDataInstancesForNonEmptyMap[K]
