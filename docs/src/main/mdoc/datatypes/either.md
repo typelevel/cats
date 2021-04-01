@@ -90,8 +90,8 @@ and leave the right one free.
 ```scala mdoc:silent
 import cats.Monad
 
-implicit def eitherMonad[Err]: Monad[Either[Err, ?]] =
-  new Monad[Either[Err, ?]] {
+implicit def eitherMonad[Err]: Monad[Either[Err, *]] =
+  new Monad[Either[Err, *]] {
     def flatMap[A, B](fa: Either[Err, A])(f: A => Either[Err, B]): Either[Err, B] =
       fa.flatMap(f)
 
