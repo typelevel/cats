@@ -94,27 +94,6 @@ If the provided `option` is `Some(x)`, it becomes `Right(x)`.
 Otherwise it becomes `Left` with the provided `ifNone` value inside.
 
 
-
-# `instances` packages and `apply` syntax
-
-## `import cats.instances.<F>._`
-
-There are a couple of type classes that are fundamental to Cats (and generally to category-based functional programming), the most important ones being
-[`Functor`](http://typelevel.org/cats/typeclasses/functor.html),
-[`Applicative`](http://typelevel.org/cats/typeclasses/applicative.html) and
-[`Monad`](http://typelevel.org/cats/typeclasses/monad.html).
-We're not going into much detail in this blog post (see e.g. the [already mentioned tutorial](https://www.scala-exercises.org/cats/functor)),
-but what is important to know is that to use most Cats syntax, you also need to import the implicit type class instances for the structures you're operating with.
-
-Usually, it's just enough to import the appropriate `cats.instances` package.
-For example, when you're doing the transformations on futures, you'll need to `import cats.instances.future._`.
-The corresponding packages for options and lists are called `cats.instances.option._` and `cats.instances.list._`.
-They provide the implicit type class instances that Cats syntax needs to work properly.
-
-As a side note, if you have trouble finding the necessary `instances` or `syntax` package, the quick workaround is to just `import cats.implicits._`.
-This is not a preferred solution, though, as it can significantly increase compile times — especially if used in many files across the project.
-It is generally considered good practice to use narrow imports to take some of the implicit resolution burden off the compiler.
-
 ## `import cats.syntax.apply._`
 
 The `apply` package provides `(..., ..., ...).mapN` syntax, which allows for an intuitive construct for applying a function that takes more than one parameter to multiple effectful values (like futures).
@@ -137,8 +116,7 @@ Our goal is to apply the function to the values computed by those 3 futures.
 With `apply` syntax this becomes very easy and concise:
 
 ```scala mdoc:silent
-import cats.instances.future._
-import cats.syntax.apply._
+import cats.syntax.all._
 
 def processAsync: Future[ProcessingResult] = {
   (intFuture, stringFuture, userFuture).mapN {
@@ -148,9 +126,8 @@ def processAsync: Future[ProcessingResult] = {
 }
 ```
 
-As pointed out before, to provide the implicit instances (namely, [`Functor[Future]`](http://typelevel.org/cats/api/cats/Functor.html) and
-[`Semigroupal[Future]`](https://typelevel.org/cats/api/cats/Semigroupal.html)) required for `mapN` to work properly,
-you should import `cats.instances.future._`.
+By default the implicit instances (namely, [`Functor[Future]`](http://typelevel.org/cats/api/cats/Functor.html) and
+[`Semigroupal[Future]`](https://typelevel.org/cats/api/cats/Semigroupal.html)) required for `mapN` to work properly are automatically imported. These are present in the respective companion objects of the instances and hence we do not need to import them explicitly.  
 
 This above idea can be expressed even shorter, just:
 
@@ -192,8 +169,6 @@ If you call `traverse` instead of `map`, like `obj.traverse(fun)`, you'll get `G
 
 ```scala mdoc:silent
 import cats.syntax.traverse._
-import cats.instances.future._
-import cats.instances.list._
 
 def updateUser(user: User): Future[User] = { /* ... */ ??? }
 
@@ -211,8 +186,6 @@ but the Cats version is far more readable and can easily work on any structure f
 
 ```scala mdoc:silent
 import cats.syntax.traverse._
-import cats.instances.future._
-import cats.instances.list._
 
 val foo: List[Future[String]] = List(Future("hello"), Future("world"))
 val bar = foo.sequence // will have Future[List[String]] type
@@ -231,8 +204,6 @@ Since `G` is usually something like `Future` and `F` is `List` or `Option`, you 
 
 ```scala mdoc:silent
 import cats.syntax.traverse._
-import cats.instances.future._
-import cats.instances.option._
 
 lazy val valueOpt: Option[Int] = { /* ... */ ??? }
 def compute(value: Int): Future[Option[Int]] = { /* ... */ ??? }
@@ -279,7 +250,6 @@ With the use of `OptionT`, this can be simplified as follows:
 
 ```scala mdoc:silent
 import cats.data.OptionT
-import cats.instances.future._
 
 def mappedResultFuture2: OptionT[Future, String] = OptionT(resultFuture).map { value =>
   // Do something with the value and return String
@@ -323,7 +293,6 @@ As is always the case with `flatMap` and `map`, you can use it not only explicit
 
 ```scala mdoc:silent
 import cats.data.OptionT
-import cats.instances.future._
 
 class Money { /* ... */ }
 
@@ -453,7 +422,7 @@ If you're instead looking for validation that accumulates the errors (e.g. when 
 
 # Common issues
 
-If anything doesn't compile as expected, first make sure all the required Cats implicits are in the scope — just try importing ```cats.implicits._``` and see if the problem persists.
+The Cats type class instances for standard library types are available in implicit scope and hence no longer have to be imported. If anything doesn't compile as expected, first make sure all the required Cats implicits are in the scope — just try importing ```cats.syntax.all._``` and see if the problem persists. The only exception is here is Cat's own ```Order``` and ```PartialOrder``` type classes which are available by importing ```cats.implicits._```. 
 As mentioned before, though, it's better to use narrow imports, but if the code doesn't compile it's sometimes worth just importing the entire library to check if it solves the problem.
 
 If you're using `Futures`, make sure to provide an implicit `ExecutionContext` in the scope, otherwise Cats won't be able to infer implicit instances for `Future`'s type classes.
