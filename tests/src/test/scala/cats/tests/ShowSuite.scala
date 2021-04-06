@@ -8,6 +8,7 @@ import cats.laws.discipline.{ContravariantTests, MiniInt, SerializableTests}
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import java.util.concurrent.TimeUnit
+import scala.collection.immutable.Seq
 import scala.concurrent.duration.{Duration, FiniteDuration}
 
 class ShowSuite extends CatsSuite {
@@ -47,6 +48,17 @@ class ShowSuite extends CatsSuite {
   test("show interpolation works when both FiniteDuration's and Duration's instances are in scope") {
     show"instance resolution is not ambiguous for ${FiniteDuration(3L, TimeUnit.SECONDS)}"
     show"instance resolution is not ambiguous for ${Duration(3L, TimeUnit.SECONDS)}"
+  }
+
+  test("show interpolation with Seq subtypes isn't ambiguous") {
+    implicitly[ContravariantShow[Seq[Int]]]
+    implicitly[ContravariantShow[List[Int]]]
+    implicitly[ContravariantShow[Vector[Int]]]
+
+    val goodmornings = Seq("guten Tag", "good morning", "bonjour")
+    assertEquals(show"$goodmornings", "List(guten Tag, good morning, bonjour)")
+    assertEquals(show"${goodmornings.toList}", "List(guten Tag, good morning, bonjour)")
+    assertEquals(show"${goodmornings.toVector}", "Vector(guten Tag, good morning, bonjour)")
   }
 }
 
