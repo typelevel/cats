@@ -1,6 +1,8 @@
 package cats
 package free
 
+import cats.Representable
+
 /**
  * A free comonad for some branching functor `S`. Branching is done lazily using [[Eval]].
  * A tree with data at the branches, as opposed to [[Free]] which is a tree with data at the leaves.
@@ -146,6 +148,28 @@ sealed abstract private[free] class CofreeInstances extends CofreeInstances1 {
   implicit def catsFreeComonadForCofree[S[_]: Functor]: Comonad[Cofree[S, *]] =
     new CofreeComonad[S] {
       def F = implicitly
+    }
+
+  implicit def catsFreeRepresentableForCofree[S[_]](implicit
+    S: Representable[S]
+  ): Representable.Aux[Cofree[S, *], List[S.Representation]] =
+    new Representable[Cofree[S, *]] {
+      type Representation = List[S.Representation]
+
+      val F = catsFreeComonadForCofree[S](S.F)
+
+      def index[A](f: Cofree[S, A]): Representation => A = {
+        case Nil      => f.head
+        case (h :: t) => index(S.index(f.tail.value)(h))(t)
+      }
+
+      def tabulate[A](f: Representation => A): Cofree[S, A] =
+        Cofree(
+          f(Nil),
+          Eval.later(
+            S.tabulate((r: S.Representation) => tabulate((l: List[S.Representation]) => f(r :: l)))
+          )
+        )
     }
 }
 
