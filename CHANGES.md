@@ -1,3 +1,28 @@
+## Version 2.5.0
+
+_2021 March 29_
+
+Cats 2.5.0 is a binary-compatible release in the 2.x series. It provides support for Scala 2.12, 2.13, 3.0.0-RC1 and 3.0.0-RC2.
+
+### Additions
+
+* #3808 Chain add fromOption factory method by @nikiforo 
+* #3826, #3827 Add syntax for parProduct and parAp by @nigredo-tori 
+* #3804, #3805 Add Ior.mergeWith and AlignMergeWith by @nigredo-tori 
+* #3806 Add Align instance for Nested by @nigredo-tori 
+* #3643, #3823 Add sumAll & productAll by @phongngtuan, @larsrh 
+
+### Changes
+
+* #3818 update Scala to 2.13.5 by @sh0hei 
+* #3825 Use -scalajs-mapSourceURI in Scala 3 builds by @fthomas 
+* #3377, #3807 Replace Band instance for NonEmptyMap with a Semigroup instance consistent with SortedMap by @nigredo-tori 
+* #3480, #3833 Rename master to main by @travisbrown, @larsrh 
+
+#### Documentation
+
+* #3814 typo in `ApplicativeError` by @wibisono 
+
 ## Version 2.4.1
 
 _2021 February 10_
