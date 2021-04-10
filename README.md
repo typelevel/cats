@@ -260,7 +260,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Rudder](https://rudder.io)
 - [Scalac](https://scalac.io)
 - [Scala Center](https://scala.epfl.ch)
-- [SecurityScorecard](https://securityscorecard.io/
+- [SecurityScorecard](https://securityscorecard.io/)
 - [Snowplow Analytics](https://snowplowanalytics.com/)
 - [Spiceworks](https://www.spiceworks.com/)
 - [Spotahome](https://spotahome.com)
