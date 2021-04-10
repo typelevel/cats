@@ -239,6 +239,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [iHeartRadio](https://iheart.com)
 - [ImmobilienScout24](https://www.immobilienscout24.de/)
 - [Immozentral](https://www.immozentral.com/)
+- [innFactory GmbH](https://www.innfactory.de/)
 - [Iterators](https://www.iteratorshq.com/)
 - [ITV](https://www.itv.com/)
 - [Lightform](https://lightform.com/)
