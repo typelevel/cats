@@ -325,18 +325,18 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">Hash</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="Eq.html" class="extype" name="cats.kernel.Eq">Eq</a>[<span class="extype" name="cats.kernel.Hash.A">A</span>] with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <span class="name">Hash</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="Eq.html" class="extype" name="cats.kernel.Eq">Eq</a>[<span class="extype" name="cats.kernel.Hash.A">A</span>] with <a href="https://www.scala-lang.org/api/2.12.13/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       </h4>
 
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A type class used to represent a hashing scheme for objects of a given type.
 For any two instances <code>x</code> and <code>y</code> that are considered equivalent under the
-equivalence relation defined by this object, <code>hash(x)</code> should equal <code>hash(y)</code>.</p></div><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="cats.kernel.Hash">Hash</a>[<span class="extype" name="cats.kernel.Hash.A">A</span>]</dd><dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/kernel/src/main/scala/cats/kernel/Hash.scala" target="_blank">Hash.scala</a></dd></dl><div class="toggleContainer block">
+equivalence relation defined by this object, <code>hash(x)</code> should equal <code>hash(y)</code>.</p></div><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="cats.kernel.Hash">Hash</a>[<span class="extype" name="cats.kernel.Hash.A">A</span>]</dd><dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/main/kernel/src/main/scala/cats/kernel/Hash.scala" target="_blank">Hash.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="Eq.html" class="extype" name="cats.kernel.Eq">Eq</a>[<span class="extype" name="cats.kernel.Hash.A">A</span>], <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="Eq.html" class="extype" name="cats.kernel.Eq">Eq</a>[<span class="extype" name="cats.kernel.Hash.A">A</span>], <a href="https://www.scala-lang.org/api/2.12.13/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="https://www.scala-lang.org/api/2.12.13/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
         </div><div class="toggleContainer block">
             <span class="toggle">
               Known Subclasses
@@ -413,7 +413,7 @@ equivalence relation defined by this object, <code>hash(x)</code> should equal <
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">eqv</span><span class="params">(<span name="x">x: <span class="extype" name="cats.kernel.Hash.A">A</span></span>, <span name="y">y: <span class="extype" name="cats.kernel.Hash.A">A</span></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">eqv</span><span class="params">(<span name="x">x: <span class="extype" name="cats.kernel.Hash.A">A</span></span>, <span name="y">y: <span class="extype" name="cats.kernel.Hash.A">A</span></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <p class="shortcomment cmt">Returns <code>true</code> if <code>x</code> and <code>y</code> are equivalent, <code>false</code> otherwise.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>true</code> if <code>x</code> and <code>y</code> are equivalent, <code>false</code> otherwise.
@@ -446,7 +446,7 @@ equivalence relation defined by this object, <code>hash(x)</code> should equal <
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">hash</span><span class="params">(<span name="x">x: <span class="extype" name="cats.kernel.Hash.A">A</span></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
+        <span class="name">hash</span><span class="params">(<span name="x">x: <span class="extype" name="cats.kernel.Hash.A">A</span></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
       </span>
       
       <p class="shortcomment cmt">Returns the hash code of the given object under this hashing scheme.</p>
@@ -468,7 +468,7 @@ equivalence relation defined by this object, <code>hash(x)</code> should equal <
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.13/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -484,7 +484,7 @@ equivalence relation defined by this object, <code>hash(x)</code> should equal <
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -500,7 +500,7 @@ equivalence relation defined by this object, <code>hash(x)</code> should equal <
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.13/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -532,7 +532,7 @@ equivalence relation defined by this object, <code>hash(x)</code> should equal <
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.13/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -548,7 +548,7 @@ equivalence relation defined by this object, <code>hash(x)</code> should equal <
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -564,7 +564,7 @@ equivalence relation defined by this object, <code>hash(x)</code> should equal <
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -580,7 +580,7 @@ equivalence relation defined by this object, <code>hash(x)</code> should equal <
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">neqv</span><span class="params">(<span name="x">x: <span class="extype" name="cats.kernel.Hash.A">A</span></span>, <span name="y">y: <span class="extype" name="cats.kernel.Hash.A">A</span></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">neqv</span><span class="params">(<span name="x">x: <span class="extype" name="cats.kernel.Hash.A">A</span></span>, <span name="y">y: <span class="extype" name="cats.kernel.Hash.A">A</span></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <p class="shortcomment cmt">Returns <code>false</code> if <code>x</code> and <code>y</code> are equivalent, <code>true</code> otherwise.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>false</code> if <code>x</code> and <code>y</code> are equivalent, <code>true</code> otherwise.
@@ -614,11 +614,11 @@ equivalence relation defined by this object, <code>hash(x)</code> should equal <
         <div class="parent" name="cats.kernel.Eq">
               <h3>Inherited from <a href="Eq.html" class="extype" name="cats.kernel.Eq">Eq</a>[<span class="extype" name="cats.kernel.Hash.A">A</span>]</h3>
             </div><div class="parent" name="scala.Serializable">
-              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></h3>
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.13/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></h3>
             </div><div class="parent" name="java.io.Serializable">
               <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
             </div><div class="parent" name="scala.Any">
-              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></h3>
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.13/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></h3>
             </div>
         
         </div>

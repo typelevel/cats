@@ -209,6 +209,10 @@
                         <a class="class" href="Kleisli.html" title="Represents a function A =&gt; F[B]."></a>
                         <a href="Kleisli.html" title="Represents a function A =&gt; F[B].">Kleisli</a>
                       </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="KleisliFromFunctionPartiallyApplied.html" title=""></a>
+                        <a href="KleisliFromFunctionPartiallyApplied.html" title="">KleisliFromFunctionPartiallyApplied</a>
+                      </li><li class="current-entities indented2">
                         <a class="object" href="Nested$.html" title=""></a>
                         <a class="class" href="Nested.html" title="Similar to cats.data.Tuple2K, but for nested composition."></a>
                         <a href="Nested.html" title="Similar to cats.data.Tuple2K, but for nested composition.">Nested</a>
@@ -262,8 +266,20 @@
                         <a href="package$$ReaderWriterStateT$.html" title="">ReaderWriterStateT</a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="RepresentableStore$.html" title=""></a>
-                        <a class="class" href="RepresentableStore.html" title="A generalisation of the Store comonad, for any Representable functor."></a>
-                        <a href="RepresentableStore.html" title="A generalisation of the Store comonad, for any Representable functor.">RepresentableStore</a>
+                        <a class="class" href="RepresentableStore.html" title="A generalization of StoreT, where the underlying functor F has a Representable instance."></a>
+                        <a href="RepresentableStore.html" title="A generalization of StoreT, where the underlying functor F has a Representable instance.">RepresentableStore</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="RepresentableStoreT$.html" title=""></a>
+                        <a class="class" href="RepresentableStoreT.html" title=""></a>
+                        <a href="RepresentableStoreT.html" title="">RepresentableStoreT</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="RepresentableStoreTInstances1.html" title=""></a>
+                        <a href="RepresentableStoreTInstances1.html" title="">RepresentableStoreTInstances1</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="RepresentableStoreTInstances2.html" title=""></a>
+                        <a href="RepresentableStoreTInstances2.html" title="">RepresentableStoreTInstances2</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="object" href="package$$State$.html" title=""></a>
@@ -276,6 +292,10 @@
                         <span class="separator"></span>
                         <a class="object" href="package$$Store$.html" title=""></a>
                         <a href="package$$Store$.html" title="">Store</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$StoreT$.html" title=""></a>
+                        <a href="package$$StoreT$.html" title="">StoreT</a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="Tuple2K$.html" title=""></a>
                         <a class="class" href="Tuple2K.html" title="Tuple2K is a product to two independent functor values."></a>
@@ -333,16 +353,16 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">OptionT</span><span class="result"> extends <span class="extype" name="cats.data.OptionTInstances">OptionTInstances</span> with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <span class="name">OptionT</span><span class="result"> extends <span class="extype" name="cats.data.OptionTInstances">OptionTInstances</span> with <a href="https://www.scala-lang.org/api/2.12.13/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/data/OptionT.scala" target="_blank">OptionT.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/main/core/src/main/scala/cats/data/OptionT.scala" target="_blank">OptionT.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="cats.data.OptionTInstances">OptionTInstances</span>, <span class="extype" name="cats.data.OptionTInstances0">OptionTInstances0</span>, <span class="extype" name="cats.data.OptionTInstances1">OptionTInstances1</span>, <span class="extype" name="cats.data.OptionTInstances2">OptionTInstances2</span>, <span class="extype" name="cats.data.OptionTInstances3">OptionTInstances3</span>, <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="https://www.scala-lang.org/api/2.12.13/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="cats.data.OptionTInstances">OptionTInstances</span>, <span class="extype" name="cats.data.OptionTInstances0">OptionTInstances0</span>, <span class="extype" name="cats.data.OptionTInstances1">OptionTInstances1</span>, <span class="extype" name="cats.data.OptionTInstances2">OptionTInstances2</span>, <span class="extype" name="cats.data.OptionTInstances3">OptionTInstances3</span>, <a href="https://www.scala-lang.org/api/2.12.13/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.13/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
         </div></div>
         
 
@@ -407,7 +427,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.13/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -423,7 +443,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -439,7 +459,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.13/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -519,7 +539,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataEqForOptionT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../index.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.data.OptionTInstances1.catsDataEqForOptionT.F">F</span>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.data.OptionTInstances1.catsDataEqForOptionT.A">A</span>]]]</span>)</span><span class="result">: <a href="../index.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionTInstances1.catsDataEqForOptionT.F">F</span>, <span class="extype" name="cats.data.OptionTInstances1.catsDataEqForOptionT.A">A</span>]]</span>
+        <span class="name">catsDataEqForOptionT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../index.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.data.OptionTInstances1.catsDataEqForOptionT.F">F</span>[<a href="https://www.scala-lang.org/api/2.12.13/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.data.OptionTInstances1.catsDataEqForOptionT.A">A</span>]]]</span>)</span><span class="result">: <a href="../index.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionTInstances1.catsDataEqForOptionT.F">F</span>, <span class="extype" name="cats.data.OptionTInstances1.catsDataEqForOptionT.A">A</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OptionTInstances1</dd></dl></div>
@@ -599,7 +619,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataMonadErrorMonadForOptionT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.OptionTInstances1.catsDataMonadErrorMonadForOptionT.F">F</span>]</span>)</span><span class="result">: <a href="../MonadError.html" class="extype" name="cats.MonadError">MonadError</a>[[β$33$]<a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionTInstances1.catsDataMonadErrorMonadForOptionT.F">F</span>, <span class="extype" name="cats.data.OptionTInstances1.&lt;refinement&gt;.Λ$.β$33$">β$33$</span>], <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>]</span>
+        <span class="name">catsDataMonadErrorMonadForOptionT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.OptionTInstances1.catsDataMonadErrorMonadForOptionT.F">F</span>]</span>)</span><span class="result">: <a href="../MonadError.html" class="extype" name="cats.MonadError">MonadError</a>[[β$33$]<a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionTInstances1.catsDataMonadErrorMonadForOptionT.F">F</span>, <span class="extype" name="cats.data.OptionTInstances1.&lt;refinement&gt;.Λ$.β$33$">β$33$</span>], <a href="https://www.scala-lang.org/api/2.12.13/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OptionTInstances1</dd></dl></div>
@@ -631,7 +651,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataMonoidForOptionT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="cats.data.OptionTInstances.catsDataMonoidForOptionT.F">F</span>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.data.OptionTInstances.catsDataMonoidForOptionT.A">A</span>]]]</span>)</span><span class="result">: <a href="../index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionTInstances.catsDataMonoidForOptionT.F">F</span>, <span class="extype" name="cats.data.OptionTInstances.catsDataMonoidForOptionT.A">A</span>]]</span>
+        <span class="name">catsDataMonoidForOptionT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="cats.data.OptionTInstances.catsDataMonoidForOptionT.F">F</span>[<a href="https://www.scala-lang.org/api/2.12.13/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.data.OptionTInstances.catsDataMonoidForOptionT.A">A</span>]]]</span>)</span><span class="result">: <a href="../index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionTInstances.catsDataMonoidForOptionT.F">F</span>, <span class="extype" name="cats.data.OptionTInstances.catsDataMonoidForOptionT.A">A</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OptionTInstances</dd></dl></div>
@@ -663,7 +683,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataOrderForOptionT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.data.OptionTInstances.catsDataOrderForOptionT.F">F</span>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.data.OptionTInstances.catsDataOrderForOptionT.A">A</span>]]]</span>)</span><span class="result">: <a href="../index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionTInstances.catsDataOrderForOptionT.F">F</span>, <span class="extype" name="cats.data.OptionTInstances.catsDataOrderForOptionT.A">A</span>]]</span>
+        <span class="name">catsDataOrderForOptionT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.data.OptionTInstances.catsDataOrderForOptionT.F">F</span>[<a href="https://www.scala-lang.org/api/2.12.13/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.data.OptionTInstances.catsDataOrderForOptionT.A">A</span>]]]</span>)</span><span class="result">: <a href="../index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionTInstances.catsDataOrderForOptionT.F">F</span>, <span class="extype" name="cats.data.OptionTInstances.catsDataOrderForOptionT.A">A</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OptionTInstances</dd></dl></div>
@@ -679,7 +699,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataParallelForOptionT</span><span class="tparams">[<span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="P">P: <a href="../Parallel.html" class="extype" name="cats.Parallel">Parallel</a>[<span class="extype" name="cats.data.OptionTInstances.catsDataParallelForOptionT.M">M</span>]</span>)</span><span class="result">: <a href="../Parallel$.html#Aux[M[_],F0[_]]=cats.Parallel[M]{typeF[x]=F0[x]}" class="extmbr" name="cats.Parallel.Aux">Aux</a>[[β$14$]<a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionTInstances.catsDataParallelForOptionT.M">M</span>, <span class="extype" name="cats.data.OptionTInstances.&lt;refinement&gt;.Λ$.β$14$">β$14$</span>], [γ$15$]<a href="Nested.html" class="extype" name="cats.data.Nested">Nested</a>[<a href="../Parallel.html#F[_]" class="extmbr" name="cats.Parallel.F">Parallel.F</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>, <span class="extype" name="cats.data.OptionTInstances.&lt;refinement&gt;.Λ$.γ$15$">γ$15$</span>]]</span>
+        <span class="name">catsDataParallelForOptionT</span><span class="tparams">[<span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="P">P: <a href="../Parallel.html" class="extype" name="cats.Parallel">Parallel</a>[<span class="extype" name="cats.data.OptionTInstances.catsDataParallelForOptionT.M">M</span>]</span>)</span><span class="result">: <a href="../Parallel$.html#Aux[M[_],F0[_]]=cats.Parallel[M]{typeF[x]=F0[x]}" class="extmbr" name="cats.Parallel.Aux">Aux</a>[[β$14$]<a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionTInstances.catsDataParallelForOptionT.M">M</span>, <span class="extype" name="cats.data.OptionTInstances.&lt;refinement&gt;.Λ$.β$14$">β$14$</span>], [γ$15$]<a href="Nested.html" class="extype" name="cats.data.Nested">Nested</a>[<a href="../Parallel.html#F[_]" class="extmbr" name="cats.Parallel.F">Parallel.F</a>, <a href="https://www.scala-lang.org/api/2.12.13/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>, <span class="extype" name="cats.data.OptionTInstances.&lt;refinement&gt;.Λ$.γ$15$">γ$15$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OptionTInstances</dd></dl></div>
@@ -695,7 +715,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataPartialOrderForOptionT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../index.html#PartialOrder[A]=cats.kernel.PartialOrder[A]" class="extmbr" name="cats.PartialOrder">PartialOrder</a>[<span class="extype" name="cats.data.OptionTInstances0.catsDataPartialOrderForOptionT.F">F</span>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.data.OptionTInstances0.catsDataPartialOrderForOptionT.A">A</span>]]]</span>)</span><span class="result">: <a href="../index.html#PartialOrder[A]=cats.kernel.PartialOrder[A]" class="extmbr" name="cats.PartialOrder">PartialOrder</a>[<a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionTInstances0.catsDataPartialOrderForOptionT.F">F</span>, <span class="extype" name="cats.data.OptionTInstances0.catsDataPartialOrderForOptionT.A">A</span>]]</span>
+        <span class="name">catsDataPartialOrderForOptionT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../index.html#PartialOrder[A]=cats.kernel.PartialOrder[A]" class="extmbr" name="cats.PartialOrder">PartialOrder</a>[<span class="extype" name="cats.data.OptionTInstances0.catsDataPartialOrderForOptionT.F">F</span>[<a href="https://www.scala-lang.org/api/2.12.13/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.data.OptionTInstances0.catsDataPartialOrderForOptionT.A">A</span>]]]</span>)</span><span class="result">: <a href="../index.html#PartialOrder[A]=cats.kernel.PartialOrder[A]" class="extmbr" name="cats.PartialOrder">PartialOrder</a>[<a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionTInstances0.catsDataPartialOrderForOptionT.F">F</span>, <span class="extype" name="cats.data.OptionTInstances0.catsDataPartialOrderForOptionT.A">A</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OptionTInstances0</dd></dl></div>
@@ -711,7 +731,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataSemigroupForOptionT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../index.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.data.OptionTInstances0.catsDataSemigroupForOptionT.F">F</span>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.data.OptionTInstances0.catsDataSemigroupForOptionT.A">A</span>]]]</span>)</span><span class="result">: <a href="../index.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionTInstances0.catsDataSemigroupForOptionT.F">F</span>, <span class="extype" name="cats.data.OptionTInstances0.catsDataSemigroupForOptionT.A">A</span>]]</span>
+        <span class="name">catsDataSemigroupForOptionT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../index.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.data.OptionTInstances0.catsDataSemigroupForOptionT.F">F</span>[<a href="https://www.scala-lang.org/api/2.12.13/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.data.OptionTInstances0.catsDataSemigroupForOptionT.A">A</span>]]]</span>)</span><span class="result">: <a href="../index.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionTInstances0.catsDataSemigroupForOptionT.F">F</span>, <span class="extype" name="cats.data.OptionTInstances0.catsDataSemigroupForOptionT.A">A</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OptionTInstances0</dd></dl></div>
@@ -743,7 +763,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataShowForOptionT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.data.OptionTInstances.catsDataShowForOptionT.F">F</span>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.data.OptionTInstances.catsDataShowForOptionT.A">A</span>]]]</span>)</span><span class="result">: <a href="../Show.html" class="extype" name="cats.Show">Show</a>[<a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionTInstances.catsDataShowForOptionT.F">F</span>, <span class="extype" name="cats.data.OptionTInstances.catsDataShowForOptionT.A">A</span>]]</span>
+        <span class="name">catsDataShowForOptionT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.data.OptionTInstances.catsDataShowForOptionT.F">F</span>[<a href="https://www.scala-lang.org/api/2.12.13/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.data.OptionTInstances.catsDataShowForOptionT.A">A</span>]]]</span>)</span><span class="result">: <a href="../Show.html" class="extype" name="cats.Show">Show</a>[<a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionTInstances.catsDataShowForOptionT.F">F</span>, <span class="extype" name="cats.data.OptionTInstances.catsDataShowForOptionT.A">A</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OptionTInstances</dd></dl></div>
@@ -807,7 +827,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -817,8 +837,6 @@
     </span>)</span>
               
                 <span class="name">@native</span><span class="args">()</span>
-              
-                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -833,7 +851,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.13/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -849,10 +867,32 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.13/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/data/OptionT$.html#finalize():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+        </dd></dl></div>
     </li><li name="cats.data.OptionT#fromOption" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="fromOption[F[_]]:cats.data.OptionT.FromOptionPartiallyApplied[F]"></a><a id="fromOption[F[_]]:FromOptionPartiallyApplied[F]"></a>
       <span class="permalink">
@@ -890,8 +930,6 @@ res0: OptionT[<span class="std">List</span>, <span class="std">Int</span>] = Opt
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
               
-                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
-              
         </dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
@@ -905,13 +943,11 @@ res0: OptionT[<span class="std">List</span>, <span class="std">Int</span>] = Opt
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
-              
-                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -926,7 +962,7 @@ res0: OptionT[<span class="std">List</span>, <span class="std">Int</span>] = Opt
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -978,7 +1014,7 @@ res0: <span class="std">Option</span>[Either[<span class="std">String</span>,<sp
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.13/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -1010,13 +1046,11 @@ res0: <span class="std">Option</span>[Either[<span class="std">String</span>,<sp
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
-              
-                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -1031,13 +1065,11 @@ res0: <span class="std">Option</span>[Either[<span class="std">String</span>,<sp
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
-              
-                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="cats.data.OptionT#pure" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -1120,7 +1152,7 @@ res0: OptionT[<span class="std">List</span>, <span class="std">Int</span>] = Opt
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">unless</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="cond">cond: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="params">(<span name="a">a: ⇒ <span class="extype" name="cats.data.OptionT.unless.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.OptionT.unless.F">F</span>]</span>)</span><span class="result">: <a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionT.unless.F">F</span>, <span class="extype" name="cats.data.OptionT.unless.A">A</span>]</span>
+        <span class="name">unless</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="cond">cond: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="params">(<span name="a">a: ⇒ <span class="extype" name="cats.data.OptionT.unless.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.OptionT.unless.F">F</span>]</span>)</span><span class="result">: <a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionT.unless.F">F</span>, <span class="extype" name="cats.data.OptionT.unless.A">A</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Creates a non-empty <code>OptionT[F, A]</code> from an <code>A</code> if the given condition is <code>false</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Creates a non-empty <code>OptionT[F, A]</code> from an <code>A</code> if the given condition is <code>false</code>.
@@ -1138,7 +1170,7 @@ Otherwise, <code>none[F, A]</code> is returned. Analogous to <code>Option.unless
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">unlessF</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="cond">cond: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="params">(<span name="fa">fa: ⇒ <span class="extype" name="cats.data.OptionT.unlessF.F">F</span>[<span class="extype" name="cats.data.OptionT.unlessF.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.OptionT.unlessF.F">F</span>]</span>)</span><span class="result">: <a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionT.unlessF.F">F</span>, <span class="extype" name="cats.data.OptionT.unlessF.A">A</span>]</span>
+        <span class="name">unlessF</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="cond">cond: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="params">(<span name="fa">fa: ⇒ <span class="extype" name="cats.data.OptionT.unlessF.F">F</span>[<span class="extype" name="cats.data.OptionT.unlessF.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.OptionT.unlessF.F">F</span>]</span>)</span><span class="result">: <a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionT.unlessF.F">F</span>, <span class="extype" name="cats.data.OptionT.unlessF.A">A</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Creates an non-empty <code>OptionT[F, A]</code> from an <code>F[A]</code> if the given condition is <code>false</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Creates an non-empty <code>OptionT[F, A]</code> from an <code>F[A]</code> if the given condition is <code>false</code>.
@@ -1156,10 +1188,32 @@ Otherwise, <code>none[F, A]</code> is returned. Analogous to <code>Option.unless
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">unlessK</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="cond">cond: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.OptionT.unlessK.F">F</span>]</span>)</span><span class="result">: <a href="../index.html#~&gt;[F[_],G[_]]=cats.arrow.FunctionK[F,G]" class="extmbr" name="cats.~&gt;">~&gt;</a>[<span class="extype" name="cats.data.OptionT.unlessK.F">F</span>, [β$4$]<a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionT.unlessK.F">F</span>, <span class="extype" name="cats.data.OptionT.&lt;refinement&gt;.Λ$.β$4$">β$4$</span>]]</span>
+        <span class="name">unlessK</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="cond">cond: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.OptionT.unlessK.F">F</span>]</span>)</span><span class="result">: <a href="../index.html#~&gt;[F[_],G[_]]=cats.arrow.FunctionK[F,G]" class="extmbr" name="cats.~&gt;">~&gt;</a>[<span class="extype" name="cats.data.OptionT.unlessK.F">F</span>, [β$4$]<a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionT.unlessK.F">F</span>, <span class="extype" name="cats.data.OptionT.&lt;refinement&gt;.Λ$.β$4$">β$4$</span>]]</span>
       </span>
       
       <p class="shortcomment cmt">Same as <code>unlessF</code>, but expressed as a FunctionK for use with mapK.</p>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/data/OptionT$.html#wait():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <span class="permalink">
@@ -1172,7 +1226,7 @@ Otherwise, <code>none[F, A]</code> is returned. Analogous to <code>Option.unless
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.10/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>, <span name="arg1">arg1: <a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.13/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>, <span name="arg1">arg1: <a href="https://www.scala-lang.org/api/2.12.13/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -1194,7 +1248,7 @@ Otherwise, <code>none[F, A]</code> is returned. Analogous to <code>Option.unless
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.10/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.13/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -1204,28 +1258,6 @@ Otherwise, <code>none[F, A]</code> is returned. Analogous to <code>Option.unless
     </span>)</span>
               
                 <span class="name">@native</span><span class="args">()</span>
-              
-        </dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait():Unit"></a>
-      <span class="permalink">
-      <a href="../../cats/data/OptionT$.html#wait():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
-    </span>)</span>
               
         </dd></dl></div>
     </li><li name="cats.data.OptionT#when" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -1240,7 +1272,7 @@ Otherwise, <code>none[F, A]</code> is returned. Analogous to <code>Option.unless
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">when</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="cond">cond: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="params">(<span name="a">a: ⇒ <span class="extype" name="cats.data.OptionT.when.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.OptionT.when.F">F</span>]</span>)</span><span class="result">: <a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionT.when.F">F</span>, <span class="extype" name="cats.data.OptionT.when.A">A</span>]</span>
+        <span class="name">when</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="cond">cond: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="params">(<span name="a">a: ⇒ <span class="extype" name="cats.data.OptionT.when.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.OptionT.when.F">F</span>]</span>)</span><span class="result">: <a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionT.when.F">F</span>, <span class="extype" name="cats.data.OptionT.when.A">A</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Creates a non-empty <code>OptionT[F, A]</code> from an <code>A</code> value if the given condition is <code>true</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Creates a non-empty <code>OptionT[F, A]</code> from an <code>A</code> value if the given condition is <code>true</code>.
@@ -1258,7 +1290,7 @@ Otherwise, <code>none[F, A]</code> is returned. Analogous to <code>Option.when</
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">whenF</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="cond">cond: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="params">(<span name="fa">fa: ⇒ <span class="extype" name="cats.data.OptionT.whenF.F">F</span>[<span class="extype" name="cats.data.OptionT.whenF.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.OptionT.whenF.F">F</span>]</span>)</span><span class="result">: <a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionT.whenF.F">F</span>, <span class="extype" name="cats.data.OptionT.whenF.A">A</span>]</span>
+        <span class="name">whenF</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="cond">cond: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="params">(<span name="fa">fa: ⇒ <span class="extype" name="cats.data.OptionT.whenF.F">F</span>[<span class="extype" name="cats.data.OptionT.whenF.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.OptionT.whenF.F">F</span>]</span>)</span><span class="result">: <a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionT.whenF.F">F</span>, <span class="extype" name="cats.data.OptionT.whenF.A">A</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Creates a non-empty <code>OptionT[F, A]</code> from an <code>F[A]</code> value if the given condition is <code>true</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Creates a non-empty <code>OptionT[F, A]</code> from an <code>F[A]</code> value if the given condition is <code>true</code>.
@@ -1276,7 +1308,7 @@ Otherwise, <code>none[F, A]</code> is returned. Analogous to <code>Option.when</
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">whenK</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="cond">cond: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.OptionT.whenK.F">F</span>]</span>)</span><span class="result">: <a href="../index.html#~&gt;[F[_],G[_]]=cats.arrow.FunctionK[F,G]" class="extmbr" name="cats.~&gt;">~&gt;</a>[<span class="extype" name="cats.data.OptionT.whenK.F">F</span>, [β$2$]<a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionT.whenK.F">F</span>, <span class="extype" name="cats.data.OptionT.&lt;refinement&gt;.Λ$.β$2$">β$2$</span>]]</span>
+        <span class="name">whenK</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="cond">cond: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.OptionT.whenK.F">F</span>]</span>)</span><span class="result">: <a href="../index.html#~&gt;[F[_],G[_]]=cats.arrow.FunctionK[F,G]" class="extmbr" name="cats.~&gt;">~&gt;</a>[<span class="extype" name="cats.data.OptionT.whenK.F">F</span>, [β$2$]<a href="OptionT.html" class="extype" name="cats.data.OptionT">OptionT</a>[<span class="extype" name="cats.data.OptionT.whenK.F">F</span>, <span class="extype" name="cats.data.OptionT.&lt;refinement&gt;.Λ$.β$2$">β$2$</span>]]</span>
       </span>
       
       <p class="shortcomment cmt">Same as <code>whenF</code>, but expressed as a FunctionK for use with mapK.</p>
@@ -1307,39 +1339,13 @@ Otherwise, <code>none[F, A]</code> is returned. Analogous to <code>Option.when</
                 <span class="name">@deprecated</span>
               
         </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2.0.0)</i> renamed to catsDataTraverseFilterForOptionT</p></dd></dl></div>
-    </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="finalize():Unit"></a>
-      <span class="permalink">
-      <a href="../../cats/data/OptionT$.html#finalize():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name deprecated" title="Deprecated: (Since version ) see corresponding Javadoc for more information.">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="symbol">classOf[java.lang.Throwable]</span>
-    </span>)</span>
-              
-                <span class="name">@Deprecated</span>
-              
-                <span class="name">@deprecated</span>
-              
-        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version )</i> see corresponding Javadoc for more information.</p></dd></dl></div>
     </li></ol>
             </div>
         </div>
 
         <div id="inheritedMembers">
         <div class="parent" name="scala.Serializable">
-              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></h3>
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.13/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></h3>
             </div><div class="parent" name="java.io.Serializable">
               <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
             </div><div class="parent" name="cats.data.OptionTInstances">
@@ -1353,9 +1359,9 @@ Otherwise, <code>none[F, A]</code> is returned. Analogous to <code>Option.when</
             </div><div class="parent" name="cats.data.OptionTInstances3">
               <h3>Inherited from <span class="extype" name="cats.data.OptionTInstances3">OptionTInstances3</span></h3>
             </div><div class="parent" name="scala.AnyRef">
-              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></h3>
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.13/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
-              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></h3>
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.13/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></h3>
             </div>
         
         </div>

@@ -209,6 +209,10 @@
                         <a class="class" href="Kleisli.html" title="Represents a function A =&gt; F[B]."></a>
                         <a href="Kleisli.html" title="Represents a function A =&gt; F[B].">Kleisli</a>
                       </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="KleisliFromFunctionPartiallyApplied.html" title=""></a>
+                        <a href="KleisliFromFunctionPartiallyApplied.html" title="">KleisliFromFunctionPartiallyApplied</a>
+                      </li><li class="current-entities indented2">
                         <a class="object" href="Nested$.html" title=""></a>
                         <a class="class" href="Nested.html" title="Similar to cats.data.Tuple2K, but for nested composition."></a>
                         <a href="Nested.html" title="Similar to cats.data.Tuple2K, but for nested composition.">Nested</a>
@@ -262,8 +266,20 @@
                         <a href="package$$ReaderWriterStateT$.html" title="">ReaderWriterStateT</a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="RepresentableStore$.html" title=""></a>
-                        <a class="class" href="RepresentableStore.html" title="A generalisation of the Store comonad, for any Representable functor."></a>
-                        <a href="RepresentableStore.html" title="A generalisation of the Store comonad, for any Representable functor.">RepresentableStore</a>
+                        <a class="class" href="RepresentableStore.html" title="A generalization of StoreT, where the underlying functor F has a Representable instance."></a>
+                        <a href="RepresentableStore.html" title="A generalization of StoreT, where the underlying functor F has a Representable instance.">RepresentableStore</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="RepresentableStoreT$.html" title=""></a>
+                        <a class="class" href="RepresentableStoreT.html" title=""></a>
+                        <a href="RepresentableStoreT.html" title="">RepresentableStoreT</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="RepresentableStoreTInstances1.html" title=""></a>
+                        <a href="RepresentableStoreTInstances1.html" title="">RepresentableStoreTInstances1</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="RepresentableStoreTInstances2.html" title=""></a>
+                        <a href="RepresentableStoreTInstances2.html" title="">RepresentableStoreTInstances2</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="object" href="package$$State$.html" title=""></a>
@@ -276,6 +292,10 @@
                         <span class="separator"></span>
                         <a class="object" href="package$$Store$.html" title=""></a>
                         <a href="package$$Store$.html" title="">Store</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$StoreT$.html" title=""></a>
+                        <a href="package$$StoreT$.html" title="">StoreT</a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="Tuple2K$.html" title=""></a>
                         <a class="class" href="Tuple2K.html" title="Tuple2K is a product to two independent functor values."></a>
@@ -333,16 +353,16 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">WriterT</span><span class="result"> extends <span class="extype" name="cats.data.WriterTInstances">WriterTInstances</span> with <span class="extype" name="cats.data.WriterTFunctions">WriterTFunctions</span> with <span class="extype" name="cats.data.WriterTFunctions0">WriterTFunctions0</span> with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <span class="name">WriterT</span><span class="result"> extends <span class="extype" name="cats.data.WriterTInstances">WriterTInstances</span> with <span class="extype" name="cats.data.WriterTFunctions">WriterTFunctions</span> with <span class="extype" name="cats.data.WriterTFunctions0">WriterTFunctions0</span> with <a href="https://www.scala-lang.org/api/2.12.13/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/data/WriterT.scala" target="_blank">WriterT.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/main/core/src/main/scala/cats/data/WriterT.scala" target="_blank">WriterT.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="cats.data.WriterTFunctions0">WriterTFunctions0</span>, <span class="extype" name="cats.data.WriterTFunctions">WriterTFunctions</span>, <span class="extype" name="cats.data.WriterTInstances">WriterTInstances</span>, <span class="extype" name="cats.data.WriterTInstances0">WriterTInstances0</span>, <span class="extype" name="cats.data.WriterTInstances1">WriterTInstances1</span>, <span class="extype" name="cats.data.WriterTInstances2">WriterTInstances2</span>, <span class="extype" name="cats.data.WriterTInstances3">WriterTInstances3</span>, <span class="extype" name="cats.data.WriterTInstances4">WriterTInstances4</span>, <span class="extype" name="cats.data.WriterTInstances5">WriterTInstances5</span>, <span class="extype" name="cats.data.WriterTInstances6">WriterTInstances6</span>, <span class="extype" name="cats.data.WriterTInstances7">WriterTInstances7</span>, <span class="extype" name="cats.data.WriterTInstances8">WriterTInstances8</span>, <span class="extype" name="cats.data.WriterTInstances9">WriterTInstances9</span>, <span class="extype" name="cats.data.WriterTInstances10">WriterTInstances10</span>, <span class="extype" name="cats.data.WriterTInstances11">WriterTInstances11</span>, <span class="extype" name="cats.data.WriterTInstances12">WriterTInstances12</span>, <span class="extype" name="cats.data.WriterTInstances13">WriterTInstances13</span>, <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="https://www.scala-lang.org/api/2.12.13/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="cats.data.WriterTFunctions0">WriterTFunctions0</span>, <span class="extype" name="cats.data.WriterTFunctions">WriterTFunctions</span>, <span class="extype" name="cats.data.WriterTInstances">WriterTInstances</span>, <span class="extype" name="cats.data.WriterTInstances0">WriterTInstances0</span>, <span class="extype" name="cats.data.WriterTInstances1">WriterTInstances1</span>, <span class="extype" name="cats.data.WriterTInstances2">WriterTInstances2</span>, <span class="extype" name="cats.data.WriterTInstances3">WriterTInstances3</span>, <span class="extype" name="cats.data.WriterTInstances4">WriterTInstances4</span>, <span class="extype" name="cats.data.WriterTInstances5">WriterTInstances5</span>, <span class="extype" name="cats.data.WriterTInstances6">WriterTInstances6</span>, <span class="extype" name="cats.data.WriterTInstances7">WriterTInstances7</span>, <span class="extype" name="cats.data.WriterTInstances8">WriterTInstances8</span>, <span class="extype" name="cats.data.WriterTInstances9">WriterTInstances9</span>, <span class="extype" name="cats.data.WriterTInstances10">WriterTInstances10</span>, <span class="extype" name="cats.data.WriterTInstances11">WriterTInstances11</span>, <span class="extype" name="cats.data.WriterTInstances12">WriterTInstances12</span>, <span class="extype" name="cats.data.WriterTInstances13">WriterTInstances13</span>, <a href="https://www.scala-lang.org/api/2.12.13/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.13/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
         </div></div>
         
 
@@ -407,7 +427,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.13/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -423,7 +443,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -439,7 +459,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.13/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -1031,7 +1051,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -1041,8 +1061,6 @@
     </span>)</span>
               
                 <span class="name">@native</span><span class="args">()</span>
-              
-                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -1057,7 +1075,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.13/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -1073,10 +1091,32 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.13/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/data/WriterT$.html#finalize():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+        </dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
@@ -1095,8 +1135,6 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
               
-                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
-              
         </dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
@@ -1110,13 +1148,11 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
-              
-                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -1131,7 +1167,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -1151,6 +1187,23 @@
       </span>
       
       
+    </li><li name="cats.data.WriterTFunctions#liftFunctionK" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="liftFunctionK[F[_],G[_],A](f:F~&gt;G):[γ$64$]cats.data.WriterT[F,A,γ$64$]~&gt;[γ$65$]cats.data.WriterT[G,A,γ$65$]"></a><a id="liftFunctionK[F[_],G[_],A](~&gt;[F,G]):~&gt;[[γ$64$]WriterT[F,A,γ$64$],[γ$65$]WriterT[G,A,γ$65$]]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/WriterT$.html#liftFunctionK[F[_],G[_],A](f:F~&gt;G):[γ$64$]cats.data.WriterT[F,A,γ$64$]~&gt;[γ$65$]cats.data.WriterT[G,A,γ$65$]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">liftFunctionK</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="f">f: <a href="../index.html#~&gt;[F[_],G[_]]=cats.arrow.FunctionK[F,G]" class="extmbr" name="cats.~&gt;">~&gt;</a>[<span class="extype" name="cats.data.WriterTFunctions.liftFunctionK.F">F</span>, <span class="extype" name="cats.data.WriterTFunctions.liftFunctionK.G">G</span>]</span>)</span><span class="result">: <a href="../index.html#~&gt;[F[_],G[_]]=cats.arrow.FunctionK[F,G]" class="extmbr" name="cats.~&gt;">~&gt;</a>[[γ$64$]<a href="WriterT.html" class="extype" name="cats.data.WriterT">WriterT</a>[<span class="extype" name="cats.data.WriterTFunctions.liftFunctionK.F">F</span>, <span class="extype" name="cats.data.WriterTFunctions.liftFunctionK.A">A</span>, <span class="extype" name="cats.data.WriterTFunctions.&lt;refinement&gt;.Λ$.γ$64$">γ$64$</span>], [γ$65$]<a href="WriterT.html" class="extype" name="cats.data.WriterT">WriterT</a>[<span class="extype" name="cats.data.WriterTFunctions.liftFunctionK.G">G</span>, <span class="extype" name="cats.data.WriterTFunctions.liftFunctionK.A">A</span>, <span class="extype" name="cats.data.WriterTFunctions.&lt;refinement&gt;.Λ$.γ$65$">γ$65$</span>]]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Lifts a FunctionK operating on effects to a FunctionK operating on WriterT with these effects.</p><div class="fullcomment"><div class="comment cmt"><p>Lifts a FunctionK operating on effects to a FunctionK operating on WriterT with these effects.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>WriterTFunctions</dd></dl></div>
     </li><li name="cats.data.WriterT#liftK" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="liftK[F[_],L](implicitmonoidL:cats.Monoid[L],implicitF:cats.Applicative[F]):F~&gt;[γ$0$]cats.data.WriterT[F,L,γ$0$]"></a><a id="liftK[F[_],L](Monoid[L],Applicative[F]):~&gt;[F,[γ$0$]WriterT[F,L,γ$0$]]"></a>
       <span class="permalink">
@@ -1199,7 +1252,7 @@ res0: (<span class="std">String</span>, <span class="std">Option</span>[<span cl
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.13/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -1215,13 +1268,11 @@ res0: (<span class="std">String</span>, <span class="std">Option</span>[<span cl
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
-              
-                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -1236,13 +1287,11 @@ res0: (<span class="std">String</span>, <span class="std">Option</span>[<span cl
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
-              
-                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="cats.data.WriterTFunctions#put" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -1305,7 +1354,7 @@ res0: (<span class="std">String</span>, <span class="std">Option</span>[<span cl
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">tell</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="L">L</span>]</span><span class="params">(<span name="l">l: <span class="extype" name="cats.data.WriterTFunctions.tell.L">L</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="applicativeF">applicativeF: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.WriterTFunctions.tell.F">F</span>]</span>)</span><span class="result">: <a href="WriterT.html" class="extype" name="cats.data.WriterT">WriterT</a>[<span class="extype" name="cats.data.WriterTFunctions.tell.F">F</span>, <span class="extype" name="cats.data.WriterTFunctions.tell.L">L</span>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>]</span>
+        <span class="name">tell</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="L">L</span>]</span><span class="params">(<span name="l">l: <span class="extype" name="cats.data.WriterTFunctions.tell.L">L</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="applicativeF">applicativeF: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.WriterTFunctions.tell.F">F</span>]</span>)</span><span class="result">: <a href="WriterT.html" class="extype" name="cats.data.WriterT">WriterT</a>[<span class="extype" name="cats.data.WriterTFunctions.tell.F">F</span>, <span class="extype" name="cats.data.WriterTFunctions.tell.L">L</span>, <a href="https://www.scala-lang.org/api/2.12.13/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>WriterTFunctions</dd></dl></div>
@@ -1358,6 +1407,28 @@ res0: (<span class="std">String</span>, <span class="std">Option</span>[<span cl
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>WriterTFunctions</dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/data/WriterT$.html#wait():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <span class="permalink">
       <a href="../../cats/data/WriterT$.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
@@ -1369,7 +1440,7 @@ res0: (<span class="std">String</span>, <span class="std">Option</span>[<span cl
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.10/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>, <span name="arg1">arg1: <a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.13/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>, <span name="arg1">arg1: <a href="https://www.scala-lang.org/api/2.12.13/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -1391,7 +1462,7 @@ res0: (<span class="std">String</span>, <span class="std">Option</span>[<span cl
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.10/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.13/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -1403,28 +1474,6 @@ res0: (<span class="std">String</span>, <span class="std">Option</span>[<span cl
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait():Unit"></a>
-      <span class="permalink">
-      <a href="../../cats/data/WriterT$.html#wait():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
-    </span>)</span>
-              
-        </dd></dl></div>
     </li>
               </ol>
             </div>
@@ -1433,33 +1482,7 @@ res0: (<span class="std">String</span>, <span class="std">Option</span>[<span cl
 
         <div class="values members">
               <h3>Deprecated Value Members</h3>
-              <ol><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="finalize():Unit"></a>
-      <span class="permalink">
-      <a href="../../cats/data/WriterT$.html#finalize():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name deprecated" title="Deprecated: (Since version ) see corresponding Javadoc for more information.">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="symbol">classOf[java.lang.Throwable]</span>
-    </span>)</span>
-              
-                <span class="name">@Deprecated</span>
-              
-                <span class="name">@deprecated</span>
-              
-        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version )</i> see corresponding Javadoc for more information.</p></dd></dl></div>
-    </li><li name="cats.data.WriterT#lift" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+              <ol><li name="cats.data.WriterT#lift" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="lift[F[_],L,V](fv:F[V])(implicitmonoidL:cats.Monoid[L],implicitF:cats.Applicative[F]):cats.data.WriterT[F,L,V]"></a><a id="lift[F[_],L,V](F[V])(Monoid[L],Applicative[F]):WriterT[F,L,V]"></a>
       <span class="permalink">
       <a href="../../cats/data/WriterT$.html#lift[F[_],L,V](fv:F[V])(implicitmonoidL:cats.Monoid[L],implicitF:cats.Applicative[F]):cats.data.WriterT[F,L,V]" title="Permalink">
@@ -1484,7 +1507,7 @@ res0: (<span class="std">String</span>, <span class="std">Option</span>[<span cl
 
         <div id="inheritedMembers">
         <div class="parent" name="scala.Serializable">
-              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></h3>
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.13/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></h3>
             </div><div class="parent" name="java.io.Serializable">
               <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
             </div><div class="parent" name="cats.data.WriterTFunctions0">
@@ -1522,9 +1545,9 @@ res0: (<span class="std">String</span>, <span class="std">Option</span>[<span cl
             </div><div class="parent" name="cats.data.WriterTInstances13">
               <h3>Inherited from <span class="extype" name="cats.data.WriterTInstances13">WriterTInstances13</span></h3>
             </div><div class="parent" name="scala.AnyRef">
-              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></h3>
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.13/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
-              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></h3>
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.13/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></h3>
             </div>
         
         </div>

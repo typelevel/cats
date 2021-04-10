@@ -257,6 +257,10 @@
                         <a class="trait" href="ApplicativeError.html" title="An applicative that also allows you to raise and or handle an error value."></a>
                         <a href="ApplicativeError.html" title="An applicative that also allows you to raise and or handle an error value.">ApplicativeError</a>
                       </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$ApplicativeThrow$.html" title=""></a>
+                        <a href="package$$ApplicativeThrow$.html" title="">ApplicativeThrow</a>
+                      </li><li class="current-entities indented1">
                         <a class="object" href="Apply$.html" title=""></a>
                         <a class="trait" href="Apply.html" title="Weaker version of Applicative[F]; has apply but not pure."></a>
                         <a href="Apply.html" title="Weaker version of Applicative[F]; has apply but not pure.">Apply</a>
@@ -349,6 +353,10 @@
                         <a class="trait" href="Foldable.html" title="Data structures that can be folded to a summary value."></a>
                         <a href="Foldable.html" title="Data structures that can be folded to a summary value.">Foldable</a>
                       </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="trait" href="FoldableNFunctions.html" title=""></a>
+                        <a href="FoldableNFunctions.html" title="">FoldableNFunctions</a>
+                      </li><li class="current-entities indented1">
                         <a class="object" href="Functor$.html" title=""></a>
                         <a class="trait" href="Functor.html" title="Functor."></a>
                         <a href="Functor.html" title="Functor.">Functor</a>
@@ -392,6 +400,10 @@
                         <a class="object" href="MonadError$.html" title=""></a>
                         <a class="trait" href="MonadError.html" title="A monad that also allows you to raise and or handle an error value."></a>
                         <a href="MonadError.html" title="A monad that also allows you to raise and or handle an error value.">MonadError</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$MonadThrow$.html" title=""></a>
+                        <a href="package$$MonadThrow$.html" title="">MonadThrow</a>
                       </li><li class="current-entities indented1">
                         <a class="object" href="MonoidK$.html" title=""></a>
                         <a class="trait" href="MonoidK.html" title="MonoidK is a universal monoid which operates on kinds."></a>
@@ -505,17 +517,17 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">Show</span><span class="result"> extends <span class="extype" name="cats.ScalaVersionSpecificShowInstances">ScalaVersionSpecificShowInstances</span> with <span class="extype" name="cats.ShowInstances">ShowInstances</span> with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <span class="name">Show</span><span class="result"> extends <span class="extype" name="cats.ScalaVersionSpecificShowInstances">ScalaVersionSpecificShowInstances</span> with <span class="extype" name="cats.ShowInstances">ShowInstances</span> with <a href="https://www.scala-lang.org/api/2.12.13/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       </h4>
 
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Hand rolling the type class boilerplate due to scala/bug#6260 and scala/bug#10458
-</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/Show.scala" target="_blank">Show.scala</a></dd></dl><div class="toggleContainer block">
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/main/core/src/main/scala/cats/Show.scala" target="_blank">Show.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="cats.ShowInstances">ShowInstances</span>, <span class="extype" name="cats.ScalaVersionSpecificShowInstances">ScalaVersionSpecificShowInstances</span>, <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="https://www.scala-lang.org/api/2.12.13/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="cats.ShowInstances">ShowInstances</span>, <span class="extype" name="cats.ShowInstances0">ShowInstances0</span>, <span class="extype" name="cats.instances.NTupleShowInstances">NTupleShowInstances</span>, <span class="extype" name="cats.ScalaVersionSpecificShowInstances">ScalaVersionSpecificShowInstances</span>, <a href="https://www.scala-lang.org/api/2.12.13/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.13/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
         </div></div>
         
 
@@ -541,7 +553,7 @@
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="cats.Show"><span>Show</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="cats.ShowInstances"><span>ShowInstances</span></li><li class="in" name="cats.ScalaVersionSpecificShowInstances"><span>ScalaVersionSpecificShowInstances</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="cats.Show"><span>Show</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="cats.ShowInstances"><span>ShowInstances</span></li><li class="in" name="cats.ShowInstances0"><span>ShowInstances0</span></li><li class="in" name="cats.instances.NTupleShowInstances"><span>NTupleShowInstances</span></li><li class="in" name="cats.ScalaVersionSpecificShowInstances"><span>ScalaVersionSpecificShowInstances</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -575,7 +587,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="" href="Show$$ContravariantShow.html"><span class="name">ContravariantShow</span></a><span class="tparams">[<span name="T">-T</span>]</span><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="" href="Show$$ContravariantShow.html"><span class="name">ContravariantShow</span></a><span class="tparams">[<span name="T">-T</span>]</span><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.13/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
@@ -591,7 +603,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="" href="Show$$Ops.html"><span class="name">Ops</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+        <a title="" href="Show$$Ops.html"><span class="name">Ops</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.13/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
       </span>
       
       
@@ -607,7 +619,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a title="" href="Show$$ShowInterpolator.html"><span class="name">ShowInterpolator</span></a><span class="params">(<span name="_sc">_sc: <a href="https://www.scala-lang.org/api/2.12.10/scala/StringContext.html#scala.StringContext" class="extype" name="scala.StringContext">StringContext</a></span>)</span><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyVal.html#scala.AnyVal" class="extype" name="scala.AnyVal">AnyVal</a> with <a href="https://www.scala-lang.org/api/2.12.10/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="" href="Show$$ShowInterpolator.html"><span class="name">ShowInterpolator</span></a><span class="params">(<span name="_sc">_sc: <a href="https://www.scala-lang.org/api/2.12.13/scala/StringContext.html#scala.StringContext" class="extype" name="scala.StringContext">StringContext</a></span>)</span><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.13/scala/AnyVal.html#scala.AnyVal" class="extype" name="scala.AnyVal">AnyVal</a> with <a href="https://www.scala-lang.org/api/2.12.13/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="https://www.scala-lang.org/api/2.12.13/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
@@ -623,7 +635,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a title="" href="Show$$Shown.html"><span class="name">Shown</span></a><span class="params">(<span name="toString">toString: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyVal.html#scala.AnyVal" class="extype" name="scala.AnyVal">AnyVal</a> with <a href="https://www.scala-lang.org/api/2.12.10/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="" href="Show$$Shown.html"><span class="name">Shown</span></a><span class="params">(<span name="toString">toString: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.13/scala/AnyVal.html#scala.AnyVal" class="extype" name="scala.AnyVal">AnyVal</a> with <a href="https://www.scala-lang.org/api/2.12.13/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="https://www.scala-lang.org/api/2.12.13/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
@@ -639,7 +651,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="" href="Show$$ToShowOps.html"><span class="name">ToShowOps</span></a><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+        <a title="" href="Show$$ToShowOps.html"><span class="name">ToShowOps</span></a><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.13/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
       </span>
       
       
@@ -663,7 +675,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.13/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -679,7 +691,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -695,7 +707,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.13/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -791,7 +803,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsShowForBitSet</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/collection/immutable/BitSet.html#scala.collection.immutable.BitSet" class="extype" name="scala.collection.immutable.BitSet">BitSet</a>]</span>
+        <span class="name">catsShowForBitSet</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<a href="https://www.scala-lang.org/api/2.12.13/scala/collection/immutable/BitSet.html#scala.collection.immutable.BitSet" class="extype" name="scala.collection.immutable.BitSet">BitSet</a>]</span>
       </span>
       
       
@@ -807,7 +819,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsShowForBoolean</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a>]</span>
+        <span class="name">catsShowForBoolean</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a>]</span>
       </span>
       
       
@@ -823,7 +835,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsShowForByte</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>]</span>
+        <span class="name">catsShowForByte</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<a href="https://www.scala-lang.org/api/2.12.13/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>]</span>
       </span>
       
       
@@ -839,7 +851,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsShowForChar</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Char.html#scala.Char" class="extype" name="scala.Char">Char</a>]</span>
+        <span class="name">catsShowForChar</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<a href="https://www.scala-lang.org/api/2.12.13/scala/Char.html#scala.Char" class="extype" name="scala.Char">Char</a>]</span>
       </span>
       
       
@@ -855,7 +867,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsShowForDouble</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Double.html#scala.Double" class="extype" name="scala.Double">Double</a>]</span>
+        <span class="name">catsShowForDouble</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<a href="https://www.scala-lang.org/api/2.12.13/scala/Double.html#scala.Double" class="extype" name="scala.Double">Double</a>]</span>
       </span>
       
       
@@ -871,14 +883,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsShowForDuration</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/concurrent/duration/Duration.html#scala.concurrent.duration.Duration" class="extype" name="scala.concurrent.duration.Duration">Duration</a>]</span>
+        <span class="name">catsShowForDuration</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<a href="https://www.scala-lang.org/api/2.12.13/scala/concurrent/duration/Duration.html#scala.concurrent.duration.Duration" class="extype" name="scala.concurrent.duration.Duration">Duration</a>]</span>
       </span>
       
       
     </li><li name="cats.Show#catsShowForEither" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="catsShowForEither[A,B](implicitevidence$7:cats.Show[A],implicitevidence$8:cats.Show[B]):cats.Show[Either[A,B]]"></a><a id="catsShowForEither[A,B](Show[A],Show[B]):Show[Either[A,B]]"></a>
+      <a id="catsShowForEither[A,B](implicitevidence$6:cats.Show[A],implicitevidence$7:cats.Show[B]):cats.Show[Either[A,B]]"></a><a id="catsShowForEither[A,B](Show[A],Show[B]):Show[Either[A,B]]"></a>
       <span class="permalink">
-      <a href="../cats/Show$.html#catsShowForEither[A,B](implicitevidence$7:cats.Show[A],implicitevidence$8:cats.Show[B]):cats.Show[Either[A,B]]" title="Permalink">
+      <a href="../cats/Show$.html#catsShowForEither[A,B](implicitevidence$6:cats.Show[A],implicitevidence$7:cats.Show[B]):cats.Show[Either[A,B]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -903,7 +915,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsShowForFiniteDuration</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/concurrent/duration/FiniteDuration.html#scala.concurrent.duration.FiniteDuration" class="extype" name="scala.concurrent.duration.FiniteDuration">FiniteDuration</a>]</span>
+        <span class="name">catsShowForFiniteDuration</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<a href="https://www.scala-lang.org/api/2.12.13/scala/concurrent/duration/FiniteDuration.html#scala.concurrent.duration.FiniteDuration" class="extype" name="scala.concurrent.duration.FiniteDuration">FiniteDuration</a>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ShowInstances</dd></dl></div>
@@ -919,7 +931,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsShowForFloat</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Float.html#scala.Float" class="extype" name="scala.Float">Float</a>]</span>
+        <span class="name">catsShowForFloat</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<a href="https://www.scala-lang.org/api/2.12.13/scala/Float.html#scala.Float" class="extype" name="scala.Float">Float</a>]</span>
       </span>
       
       
@@ -935,7 +947,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsShowForInt</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>]</span>
+        <span class="name">catsShowForInt</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<a href="https://www.scala-lang.org/api/2.12.13/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>]</span>
       </span>
       
       
@@ -967,14 +979,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsShowForLong</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a>]</span>
+        <span class="name">catsShowForLong</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<a href="https://www.scala-lang.org/api/2.12.13/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a>]</span>
       </span>
       
       
     </li><li name="cats.Show#catsShowForMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="catsShowForMap[K,V](implicitevidence$12:cats.Show[K],implicitevidence$13:cats.Show[V]):cats.Show[Map[K,V]]"></a><a id="catsShowForMap[K,V](Show[K],Show[V]):Show[Map[K,V]]"></a>
+      <a id="catsShowForMap[K,V](implicitevidence$9:cats.Show[K],implicitevidence$10:cats.Show[V]):cats.Show[Map[K,V]]"></a><a id="catsShowForMap[K,V](Show[K],Show[V]):Show[Map[K,V]]"></a>
       <span class="permalink">
-      <a href="../cats/Show$.html#catsShowForMap[K,V](implicitevidence$12:cats.Show[K],implicitevidence$13:cats.Show[V]):cats.Show[Map[K,V]]" title="Permalink">
+      <a href="../cats/Show$.html#catsShowForMap[K,V](implicitevidence$9:cats.Show[K],implicitevidence$10:cats.Show[V]):cats.Show[Map[K,V]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -999,14 +1011,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsShowForOption</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.Show.catsShowForOption.A">A</span>]</span>)</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.Show.catsShowForOption.A">A</span>]]</span>
+        <span class="name">catsShowForOption</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.Show.catsShowForOption.A">A</span>]</span>)</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<a href="https://www.scala-lang.org/api/2.12.13/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.Show.catsShowForOption.A">A</span>]]</span>
       </span>
       
       
     </li><li name="cats.Show#catsShowForQueue" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="catsShowForQueue[A](implicitevidence$6:cats.Show[A]):cats.Show[scala.collection.immutable.Queue[A]]"></a><a id="catsShowForQueue[A](Show[A]):Show[Queue[A]]"></a>
+      <a id="catsShowForQueue[A](implicitevidence$5:cats.Show[A]):cats.Show[scala.collection.immutable.Queue[A]]"></a><a id="catsShowForQueue[A](Show[A]):Show[Queue[A]]"></a>
       <span class="permalink">
-      <a href="../cats/Show$.html#catsShowForQueue[A](implicitevidence$6:cats.Show[A]):cats.Show[scala.collection.immutable.Queue[A]]" title="Permalink">
+      <a href="../cats/Show$.html#catsShowForQueue[A](implicitevidence$5:cats.Show[A]):cats.Show[scala.collection.immutable.Queue[A]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1015,14 +1027,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsShowForQueue</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.Show.catsShowForQueue.A">A</span>]</span>)</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/collection/immutable/Queue.html#scala.collection.immutable.Queue" class="extype" name="scala.collection.immutable.Queue">Queue</a>[<span class="extype" name="cats.Show.catsShowForQueue.A">A</span>]]</span>
+        <span class="name">catsShowForQueue</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.Show.catsShowForQueue.A">A</span>]</span>)</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<a href="https://www.scala-lang.org/api/2.12.13/scala/collection/immutable/Queue.html#scala.collection.immutable.Queue" class="extype" name="scala.collection.immutable.Queue">Queue</a>[<span class="extype" name="cats.Show.catsShowForQueue.A">A</span>]]</span>
       </span>
       
       
-    </li><li name="cats.Show#catsShowForSeq" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="catsShowForSeq[A](implicitevidence$4:cats.Show[A]):cats.Show[scala.collection.immutable.Seq[A]]"></a><a id="catsShowForSeq[A](Show[A]):Show[Seq[A]]"></a>
+    </li><li name="cats.ShowInstances0#catsShowForSeq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsShowForSeq[A](implicitevidence$16:cats.Show[A]):cats.Show[scala.collection.immutable.Seq[A]]"></a><a id="catsShowForSeq[A](Show[A]):Show[Seq[A]]"></a>
       <span class="permalink">
-      <a href="../cats/Show$.html#catsShowForSeq[A](implicitevidence$4:cats.Show[A]):cats.Show[scala.collection.immutable.Seq[A]]" title="Permalink">
+      <a href="../cats/Show$.html#catsShowForSeq[A](implicitevidence$16:cats.Show[A]):cats.Show[scala.collection.immutable.Seq[A]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1031,14 +1043,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsShowForSeq</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.Show.catsShowForSeq.A">A</span>]</span>)</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/collection/immutable/Seq.html#scala.collection.immutable.Seq" class="extype" name="scala.collection.immutable.Seq">Seq</a>[<span class="extype" name="cats.Show.catsShowForSeq.A">A</span>]]</span>
+        <span class="name">catsShowForSeq</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.ShowInstances0.catsShowForSeq.A">A</span>]</span>)</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<a href="https://www.scala-lang.org/api/2.12.13/scala/collection/immutable/Seq.html#scala.collection.immutable.Seq" class="extype" name="scala.collection.immutable.Seq">Seq</a>[<span class="extype" name="cats.ShowInstances0.catsShowForSeq.A">A</span>]]</span>
       </span>
       
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ShowInstances0</dd></dl></div>
     </li><li name="cats.Show#catsShowForSet" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="catsShowForSet[A](implicitevidence$11:cats.Show[A]):cats.Show[Set[A]]"></a><a id="catsShowForSet[A](Show[A]):Show[Set[A]]"></a>
+      <a id="catsShowForSet[A](implicitevidence$8:cats.Show[A]):cats.Show[Set[A]]"></a><a id="catsShowForSet[A](Show[A]):Show[Set[A]]"></a>
       <span class="permalink">
-      <a href="../cats/Show$.html#catsShowForSet[A](implicitevidence$11:cats.Show[A]):cats.Show[Set[A]]" title="Permalink">
+      <a href="../cats/Show$.html#catsShowForSet[A](implicitevidence$8:cats.Show[A]):cats.Show[Set[A]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1063,14 +1075,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsShowForShort</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Short.html#scala.Short" class="extype" name="scala.Short">Short</a>]</span>
+        <span class="name">catsShowForShort</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<a href="https://www.scala-lang.org/api/2.12.13/scala/Short.html#scala.Short" class="extype" name="scala.Short">Short</a>]</span>
       </span>
       
       
     </li><li name="cats.Show#catsShowForSortedMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="catsShowForSortedMap[K,V](implicitevidence$15:cats.Show[K],implicitevidence$16:cats.Show[V]):cats.Show[scala.collection.immutable.SortedMap[K,V]]"></a><a id="catsShowForSortedMap[K,V](Show[K],Show[V]):Show[SortedMap[K,V]]"></a>
+      <a id="catsShowForSortedMap[K,V](implicitevidence$12:cats.Show[K],implicitevidence$13:cats.Show[V]):cats.Show[scala.collection.immutable.SortedMap[K,V]]"></a><a id="catsShowForSortedMap[K,V](Show[K],Show[V]):Show[SortedMap[K,V]]"></a>
       <span class="permalink">
-      <a href="../cats/Show$.html#catsShowForSortedMap[K,V](implicitevidence$15:cats.Show[K],implicitevidence$16:cats.Show[V]):cats.Show[scala.collection.immutable.SortedMap[K,V]]" title="Permalink">
+      <a href="../cats/Show$.html#catsShowForSortedMap[K,V](implicitevidence$12:cats.Show[K],implicitevidence$13:cats.Show[V]):cats.Show[scala.collection.immutable.SortedMap[K,V]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1079,14 +1091,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsShowForSortedMap</span><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.Show.catsShowForSortedMap.K">K</span>]</span>, <span name="arg1">arg1: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.Show.catsShowForSortedMap.V">V</span>]</span>)</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/collection/immutable/SortedMap.html#scala.collection.immutable.SortedMap" class="extype" name="scala.collection.immutable.SortedMap">SortedMap</a>[<span class="extype" name="cats.Show.catsShowForSortedMap.K">K</span>, <span class="extype" name="cats.Show.catsShowForSortedMap.V">V</span>]]</span>
+        <span class="name">catsShowForSortedMap</span><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.Show.catsShowForSortedMap.K">K</span>]</span>, <span name="arg1">arg1: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.Show.catsShowForSortedMap.V">V</span>]</span>)</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<a href="https://www.scala-lang.org/api/2.12.13/scala/collection/immutable/SortedMap.html#scala.collection.immutable.SortedMap" class="extype" name="scala.collection.immutable.SortedMap">SortedMap</a>[<span class="extype" name="cats.Show.catsShowForSortedMap.K">K</span>, <span class="extype" name="cats.Show.catsShowForSortedMap.V">V</span>]]</span>
       </span>
       
       
     </li><li name="cats.Show#catsShowForSortedSet" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="catsShowForSortedSet[A](implicitevidence$14:cats.Show[A]):cats.Show[scala.collection.immutable.SortedSet[A]]"></a><a id="catsShowForSortedSet[A](Show[A]):Show[SortedSet[A]]"></a>
+      <a id="catsShowForSortedSet[A](implicitevidence$11:cats.Show[A]):cats.Show[scala.collection.immutable.SortedSet[A]]"></a><a id="catsShowForSortedSet[A](Show[A]):Show[SortedSet[A]]"></a>
       <span class="permalink">
-      <a href="../cats/Show$.html#catsShowForSortedSet[A](implicitevidence$14:cats.Show[A]):cats.Show[scala.collection.immutable.SortedSet[A]]" title="Permalink">
+      <a href="../cats/Show$.html#catsShowForSortedSet[A](implicitevidence$11:cats.Show[A]):cats.Show[scala.collection.immutable.SortedSet[A]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1095,7 +1107,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsShowForSortedSet</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.Show.catsShowForSortedSet.A">A</span>]</span>)</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/collection/immutable/SortedSet.html#scala.collection.immutable.SortedSet" class="extype" name="scala.collection.immutable.SortedSet">SortedSet</a>[<span class="extype" name="cats.Show.catsShowForSortedSet.A">A</span>]]</span>
+        <span class="name">catsShowForSortedSet</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.Show.catsShowForSortedSet.A">A</span>]</span>)</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<a href="https://www.scala-lang.org/api/2.12.13/scala/collection/immutable/SortedSet.html#scala.collection.immutable.SortedSet" class="extype" name="scala.collection.immutable.SortedSet">SortedSet</a>[<span class="extype" name="cats.Show.catsShowForSortedSet.A">A</span>]]</span>
       </span>
       
       
@@ -1143,7 +1155,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsShowForSymbol</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="scala.Symbol">Symbol</span>]</span>
+        <span class="name">catsShowForSymbol</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<a href="https://www.scala-lang.org/api/2.12.13/scala/Symbol.html#scala.Symbol" class="extype" name="scala.Symbol">Symbol</a>]</span>
       </span>
       
       
@@ -1159,23 +1171,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsShowForTry</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.Show.catsShowForTry.A">A</span>]</span>)</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/util/Try.html#scala.util.Try" class="extype" name="scala.util.Try">Try</a>[<span class="extype" name="cats.Show.catsShowForTry.A">A</span>]]</span>
-      </span>
-      
-      
-    </li><li name="cats.Show#catsShowForTuple2" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="catsShowForTuple2[A,B](implicitevidence$9:cats.Show[A],implicitevidence$10:cats.Show[B]):cats.Show[(A,B)]"></a><a id="catsShowForTuple2[A,B](Show[A],Show[B]):Show[(A,B)]"></a>
-      <span class="permalink">
-      <a href="../cats/Show$.html#catsShowForTuple2[A,B](implicitevidence$9:cats.Show[A],implicitevidence$10:cats.Show[B]):cats.Show[(A,B)]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">catsShowForTuple2</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.Show.catsShowForTuple2.A">A</span>]</span>, <span name="arg1">arg1: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.Show.catsShowForTuple2.B">B</span>]</span>)</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[(<span class="extype" name="cats.Show.catsShowForTuple2.A">A</span>, <span class="extype" name="cats.Show.catsShowForTuple2.B">B</span>)]</span>
+        <span class="name">catsShowForTry</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.Show.catsShowForTry.A">A</span>]</span>)</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<a href="https://www.scala-lang.org/api/2.12.13/scala/util/Try.html#scala.util.Try" class="extype" name="scala.util.Try">Try</a>[<span class="extype" name="cats.Show.catsShowForTry.A">A</span>]]</span>
       </span>
       
       
@@ -1207,14 +1203,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsShowForUnit</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>]</span>
+        <span class="name">catsShowForUnit</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<a href="https://www.scala-lang.org/api/2.12.13/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>]</span>
       </span>
       
       
     </li><li name="cats.Show#catsShowForVector" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="catsShowForVector[A](implicitevidence$5:cats.Show[A]):cats.Show[Vector[A]]"></a><a id="catsShowForVector[A](Show[A]):Show[Vector[A]]"></a>
+      <a id="catsShowForVector[A](implicitevidence$4:cats.Show[A]):cats.Show[Vector[A]]"></a><a id="catsShowForVector[A](Show[A]):Show[Vector[A]]"></a>
       <span class="permalink">
-      <a href="../cats/Show$.html#catsShowForVector[A](implicitevidence$5:cats.Show[A]):cats.Show[Vector[A]]" title="Permalink">
+      <a href="../cats/Show$.html#catsShowForVector[A](implicitevidence$4:cats.Show[A]):cats.Show[Vector[A]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1227,6 +1223,182 @@
       </span>
       
       
+    </li><li name="cats.instances.NTupleShowInstances#catsStdShowForTuple1" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsStdShowForTuple1[A0](implicitA0:cats.Show[A0]):cats.Show[(A0,)]"></a><a id="catsStdShowForTuple1[A0](Show[A0]):Show[(A0)]"></a>
+      <span class="permalink">
+      <a href="../cats/Show$.html#catsStdShowForTuple1[A0](implicitA0:cats.Show[A0]):cats.Show[(A0,)]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsStdShowForTuple1</span><span class="tparams">[<span name="A0">A0</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="A0">A0: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple1.A0">A0</span>]</span>)</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[(<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple1.A0">A0</span>)]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>NTupleShowInstances</dd></dl></div>
+    </li><li name="cats.instances.NTupleShowInstances#catsStdShowForTuple10" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsStdShowForTuple10[A0,A1,A2,A3,A4,A5,A6,A7,A8,A9](implicitA0:cats.Show[A0],implicitA1:cats.Show[A1],implicitA2:cats.Show[A2],implicitA3:cats.Show[A3],implicitA4:cats.Show[A4],implicitA5:cats.Show[A5],implicitA6:cats.Show[A6],implicitA7:cats.Show[A7],implicitA8:cats.Show[A8],implicitA9:cats.Show[A9]):cats.Show[(A0,A1,A2,A3,A4,A5,A6,A7,A8,A9)]"></a><a id="catsStdShowForTuple10[A0,A1,A2,A3,A4,A5,A6,A7,A8,A9](Show[A0],Show[A1],Show[A2],Show[A3],Show[A4],Show[A5],Show[A6],Show[A7],Show[A8],Show[A9]):Show[(A0,A1,A2,A3,A4,A5,A6,A7,A8,A9)]"></a>
+      <span class="permalink">
+      <a href="../cats/Show$.html#catsStdShowForTuple10[A0,A1,A2,A3,A4,A5,A6,A7,A8,A9](implicitA0:cats.Show[A0],implicitA1:cats.Show[A1],implicitA2:cats.Show[A2],implicitA3:cats.Show[A3],implicitA4:cats.Show[A4],implicitA5:cats.Show[A5],implicitA6:cats.Show[A6],implicitA7:cats.Show[A7],implicitA8:cats.Show[A8],implicitA9:cats.Show[A9]):cats.Show[(A0,A1,A2,A3,A4,A5,A6,A7,A8,A9)]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsStdShowForTuple10</span><span class="tparams">[<span name="A0">A0</span>, <span name="A1">A1</span>, <span name="A2">A2</span>, <span name="A3">A3</span>, <span name="A4">A4</span>, <span name="A5">A5</span>, <span name="A6">A6</span>, <span name="A7">A7</span>, <span name="A8">A8</span>, <span name="A9">A9</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="A0">A0: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple10.A0">A0</span>]</span>, <span name="A1">A1: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple10.A1">A1</span>]</span>, <span name="A2">A2: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple10.A2">A2</span>]</span>, <span name="A3">A3: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple10.A3">A3</span>]</span>, <span name="A4">A4: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple10.A4">A4</span>]</span>, <span name="A5">A5: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple10.A5">A5</span>]</span>, <span name="A6">A6: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple10.A6">A6</span>]</span>, <span name="A7">A7: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple10.A7">A7</span>]</span>, <span name="A8">A8: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple10.A8">A8</span>]</span>, <span name="A9">A9: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple10.A9">A9</span>]</span>)</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[(<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple10.A0">A0</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple10.A1">A1</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple10.A2">A2</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple10.A3">A3</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple10.A4">A4</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple10.A5">A5</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple10.A6">A6</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple10.A7">A7</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple10.A8">A8</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple10.A9">A9</span>)]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>NTupleShowInstances</dd></dl></div>
+    </li><li name="cats.instances.NTupleShowInstances#catsStdShowForTuple11" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsStdShowForTuple11[A0,A1,A2,A3,A4,A5,A6,A7,A8,A9,A10](implicitA0:cats.Show[A0],implicitA1:cats.Show[A1],implicitA2:cats.Show[A2],implicitA3:cats.Show[A3],implicitA4:cats.Show[A4],implicitA5:cats.Show[A5],implicitA6:cats.Show[A6],implicitA7:cats.Show[A7],implicitA8:cats.Show[A8],implicitA9:cats.Show[A9],implicitA10:cats.Show[A10]):cats.Show[(A0,A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)]"></a><a id="catsStdShowForTuple11[A0,A1,A2,A3,A4,A5,A6,A7,A8,A9,A10](Show[A0],Show[A1],Show[A2],Show[A3],Show[A4],Show[A5],Show[A6],Show[A7],Show[A8],Show[A9],Show[A10]):Show[(A0,A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)]"></a>
+      <span class="permalink">
+      <a href="../cats/Show$.html#catsStdShowForTuple11[A0,A1,A2,A3,A4,A5,A6,A7,A8,A9,A10](implicitA0:cats.Show[A0],implicitA1:cats.Show[A1],implicitA2:cats.Show[A2],implicitA3:cats.Show[A3],implicitA4:cats.Show[A4],implicitA5:cats.Show[A5],implicitA6:cats.Show[A6],implicitA7:cats.Show[A7],implicitA8:cats.Show[A8],implicitA9:cats.Show[A9],implicitA10:cats.Show[A10]):cats.Show[(A0,A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsStdShowForTuple11</span><span class="tparams">[<span name="A0">A0</span>, <span name="A1">A1</span>, <span name="A2">A2</span>, <span name="A3">A3</span>, <span name="A4">A4</span>, <span name="A5">A5</span>, <span name="A6">A6</span>, <span name="A7">A7</span>, <span name="A8">A8</span>, <span name="A9">A9</span>, <span name="A10">A10</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="A0">A0: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple11.A0">A0</span>]</span>, <span name="A1">A1: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple11.A1">A1</span>]</span>, <span name="A2">A2: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple11.A2">A2</span>]</span>, <span name="A3">A3: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple11.A3">A3</span>]</span>, <span name="A4">A4: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple11.A4">A4</span>]</span>, <span name="A5">A5: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple11.A5">A5</span>]</span>, <span name="A6">A6: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple11.A6">A6</span>]</span>, <span name="A7">A7: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple11.A7">A7</span>]</span>, <span name="A8">A8: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple11.A8">A8</span>]</span>, <span name="A9">A9: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple11.A9">A9</span>]</span>, <span name="A10">A10: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple11.A10">A10</span>]</span>)</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[(<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple11.A0">A0</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple11.A1">A1</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple11.A2">A2</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple11.A3">A3</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple11.A4">A4</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple11.A5">A5</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple11.A6">A6</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple11.A7">A7</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple11.A8">A8</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple11.A9">A9</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple11.A10">A10</span>)]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>NTupleShowInstances</dd></dl></div>
+    </li><li name="cats.instances.NTupleShowInstances#catsStdShowForTuple2" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsStdShowForTuple2[A0,A1](implicitA0:cats.Show[A0],implicitA1:cats.Show[A1]):cats.Show[(A0,A1)]"></a><a id="catsStdShowForTuple2[A0,A1](Show[A0],Show[A1]):Show[(A0,A1)]"></a>
+      <span class="permalink">
+      <a href="../cats/Show$.html#catsStdShowForTuple2[A0,A1](implicitA0:cats.Show[A0],implicitA1:cats.Show[A1]):cats.Show[(A0,A1)]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsStdShowForTuple2</span><span class="tparams">[<span name="A0">A0</span>, <span name="A1">A1</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="A0">A0: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple2.A0">A0</span>]</span>, <span name="A1">A1: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple2.A1">A1</span>]</span>)</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[(<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple2.A0">A0</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple2.A1">A1</span>)]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>NTupleShowInstances</dd></dl></div>
+    </li><li name="cats.instances.NTupleShowInstances#catsStdShowForTuple3" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsStdShowForTuple3[A0,A1,A2](implicitA0:cats.Show[A0],implicitA1:cats.Show[A1],implicitA2:cats.Show[A2]):cats.Show[(A0,A1,A2)]"></a><a id="catsStdShowForTuple3[A0,A1,A2](Show[A0],Show[A1],Show[A2]):Show[(A0,A1,A2)]"></a>
+      <span class="permalink">
+      <a href="../cats/Show$.html#catsStdShowForTuple3[A0,A1,A2](implicitA0:cats.Show[A0],implicitA1:cats.Show[A1],implicitA2:cats.Show[A2]):cats.Show[(A0,A1,A2)]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsStdShowForTuple3</span><span class="tparams">[<span name="A0">A0</span>, <span name="A1">A1</span>, <span name="A2">A2</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="A0">A0: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple3.A0">A0</span>]</span>, <span name="A1">A1: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple3.A1">A1</span>]</span>, <span name="A2">A2: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple3.A2">A2</span>]</span>)</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[(<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple3.A0">A0</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple3.A1">A1</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple3.A2">A2</span>)]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>NTupleShowInstances</dd></dl></div>
+    </li><li name="cats.instances.NTupleShowInstances#catsStdShowForTuple4" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsStdShowForTuple4[A0,A1,A2,A3](implicitA0:cats.Show[A0],implicitA1:cats.Show[A1],implicitA2:cats.Show[A2],implicitA3:cats.Show[A3]):cats.Show[(A0,A1,A2,A3)]"></a><a id="catsStdShowForTuple4[A0,A1,A2,A3](Show[A0],Show[A1],Show[A2],Show[A3]):Show[(A0,A1,A2,A3)]"></a>
+      <span class="permalink">
+      <a href="../cats/Show$.html#catsStdShowForTuple4[A0,A1,A2,A3](implicitA0:cats.Show[A0],implicitA1:cats.Show[A1],implicitA2:cats.Show[A2],implicitA3:cats.Show[A3]):cats.Show[(A0,A1,A2,A3)]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsStdShowForTuple4</span><span class="tparams">[<span name="A0">A0</span>, <span name="A1">A1</span>, <span name="A2">A2</span>, <span name="A3">A3</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="A0">A0: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple4.A0">A0</span>]</span>, <span name="A1">A1: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple4.A1">A1</span>]</span>, <span name="A2">A2: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple4.A2">A2</span>]</span>, <span name="A3">A3: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple4.A3">A3</span>]</span>)</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[(<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple4.A0">A0</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple4.A1">A1</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple4.A2">A2</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple4.A3">A3</span>)]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>NTupleShowInstances</dd></dl></div>
+    </li><li name="cats.instances.NTupleShowInstances#catsStdShowForTuple5" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsStdShowForTuple5[A0,A1,A2,A3,A4](implicitA0:cats.Show[A0],implicitA1:cats.Show[A1],implicitA2:cats.Show[A2],implicitA3:cats.Show[A3],implicitA4:cats.Show[A4]):cats.Show[(A0,A1,A2,A3,A4)]"></a><a id="catsStdShowForTuple5[A0,A1,A2,A3,A4](Show[A0],Show[A1],Show[A2],Show[A3],Show[A4]):Show[(A0,A1,A2,A3,A4)]"></a>
+      <span class="permalink">
+      <a href="../cats/Show$.html#catsStdShowForTuple5[A0,A1,A2,A3,A4](implicitA0:cats.Show[A0],implicitA1:cats.Show[A1],implicitA2:cats.Show[A2],implicitA3:cats.Show[A3],implicitA4:cats.Show[A4]):cats.Show[(A0,A1,A2,A3,A4)]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsStdShowForTuple5</span><span class="tparams">[<span name="A0">A0</span>, <span name="A1">A1</span>, <span name="A2">A2</span>, <span name="A3">A3</span>, <span name="A4">A4</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="A0">A0: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple5.A0">A0</span>]</span>, <span name="A1">A1: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple5.A1">A1</span>]</span>, <span name="A2">A2: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple5.A2">A2</span>]</span>, <span name="A3">A3: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple5.A3">A3</span>]</span>, <span name="A4">A4: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple5.A4">A4</span>]</span>)</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[(<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple5.A0">A0</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple5.A1">A1</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple5.A2">A2</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple5.A3">A3</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple5.A4">A4</span>)]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>NTupleShowInstances</dd></dl></div>
+    </li><li name="cats.instances.NTupleShowInstances#catsStdShowForTuple6" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsStdShowForTuple6[A0,A1,A2,A3,A4,A5](implicitA0:cats.Show[A0],implicitA1:cats.Show[A1],implicitA2:cats.Show[A2],implicitA3:cats.Show[A3],implicitA4:cats.Show[A4],implicitA5:cats.Show[A5]):cats.Show[(A0,A1,A2,A3,A4,A5)]"></a><a id="catsStdShowForTuple6[A0,A1,A2,A3,A4,A5](Show[A0],Show[A1],Show[A2],Show[A3],Show[A4],Show[A5]):Show[(A0,A1,A2,A3,A4,A5)]"></a>
+      <span class="permalink">
+      <a href="../cats/Show$.html#catsStdShowForTuple6[A0,A1,A2,A3,A4,A5](implicitA0:cats.Show[A0],implicitA1:cats.Show[A1],implicitA2:cats.Show[A2],implicitA3:cats.Show[A3],implicitA4:cats.Show[A4],implicitA5:cats.Show[A5]):cats.Show[(A0,A1,A2,A3,A4,A5)]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsStdShowForTuple6</span><span class="tparams">[<span name="A0">A0</span>, <span name="A1">A1</span>, <span name="A2">A2</span>, <span name="A3">A3</span>, <span name="A4">A4</span>, <span name="A5">A5</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="A0">A0: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple6.A0">A0</span>]</span>, <span name="A1">A1: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple6.A1">A1</span>]</span>, <span name="A2">A2: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple6.A2">A2</span>]</span>, <span name="A3">A3: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple6.A3">A3</span>]</span>, <span name="A4">A4: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple6.A4">A4</span>]</span>, <span name="A5">A5: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple6.A5">A5</span>]</span>)</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[(<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple6.A0">A0</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple6.A1">A1</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple6.A2">A2</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple6.A3">A3</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple6.A4">A4</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple6.A5">A5</span>)]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>NTupleShowInstances</dd></dl></div>
+    </li><li name="cats.instances.NTupleShowInstances#catsStdShowForTuple7" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsStdShowForTuple7[A0,A1,A2,A3,A4,A5,A6](implicitA0:cats.Show[A0],implicitA1:cats.Show[A1],implicitA2:cats.Show[A2],implicitA3:cats.Show[A3],implicitA4:cats.Show[A4],implicitA5:cats.Show[A5],implicitA6:cats.Show[A6]):cats.Show[(A0,A1,A2,A3,A4,A5,A6)]"></a><a id="catsStdShowForTuple7[A0,A1,A2,A3,A4,A5,A6](Show[A0],Show[A1],Show[A2],Show[A3],Show[A4],Show[A5],Show[A6]):Show[(A0,A1,A2,A3,A4,A5,A6)]"></a>
+      <span class="permalink">
+      <a href="../cats/Show$.html#catsStdShowForTuple7[A0,A1,A2,A3,A4,A5,A6](implicitA0:cats.Show[A0],implicitA1:cats.Show[A1],implicitA2:cats.Show[A2],implicitA3:cats.Show[A3],implicitA4:cats.Show[A4],implicitA5:cats.Show[A5],implicitA6:cats.Show[A6]):cats.Show[(A0,A1,A2,A3,A4,A5,A6)]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsStdShowForTuple7</span><span class="tparams">[<span name="A0">A0</span>, <span name="A1">A1</span>, <span name="A2">A2</span>, <span name="A3">A3</span>, <span name="A4">A4</span>, <span name="A5">A5</span>, <span name="A6">A6</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="A0">A0: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple7.A0">A0</span>]</span>, <span name="A1">A1: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple7.A1">A1</span>]</span>, <span name="A2">A2: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple7.A2">A2</span>]</span>, <span name="A3">A3: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple7.A3">A3</span>]</span>, <span name="A4">A4: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple7.A4">A4</span>]</span>, <span name="A5">A5: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple7.A5">A5</span>]</span>, <span name="A6">A6: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple7.A6">A6</span>]</span>)</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[(<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple7.A0">A0</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple7.A1">A1</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple7.A2">A2</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple7.A3">A3</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple7.A4">A4</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple7.A5">A5</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple7.A6">A6</span>)]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>NTupleShowInstances</dd></dl></div>
+    </li><li name="cats.instances.NTupleShowInstances#catsStdShowForTuple8" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsStdShowForTuple8[A0,A1,A2,A3,A4,A5,A6,A7](implicitA0:cats.Show[A0],implicitA1:cats.Show[A1],implicitA2:cats.Show[A2],implicitA3:cats.Show[A3],implicitA4:cats.Show[A4],implicitA5:cats.Show[A5],implicitA6:cats.Show[A6],implicitA7:cats.Show[A7]):cats.Show[(A0,A1,A2,A3,A4,A5,A6,A7)]"></a><a id="catsStdShowForTuple8[A0,A1,A2,A3,A4,A5,A6,A7](Show[A0],Show[A1],Show[A2],Show[A3],Show[A4],Show[A5],Show[A6],Show[A7]):Show[(A0,A1,A2,A3,A4,A5,A6,A7)]"></a>
+      <span class="permalink">
+      <a href="../cats/Show$.html#catsStdShowForTuple8[A0,A1,A2,A3,A4,A5,A6,A7](implicitA0:cats.Show[A0],implicitA1:cats.Show[A1],implicitA2:cats.Show[A2],implicitA3:cats.Show[A3],implicitA4:cats.Show[A4],implicitA5:cats.Show[A5],implicitA6:cats.Show[A6],implicitA7:cats.Show[A7]):cats.Show[(A0,A1,A2,A3,A4,A5,A6,A7)]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsStdShowForTuple8</span><span class="tparams">[<span name="A0">A0</span>, <span name="A1">A1</span>, <span name="A2">A2</span>, <span name="A3">A3</span>, <span name="A4">A4</span>, <span name="A5">A5</span>, <span name="A6">A6</span>, <span name="A7">A7</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="A0">A0: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple8.A0">A0</span>]</span>, <span name="A1">A1: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple8.A1">A1</span>]</span>, <span name="A2">A2: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple8.A2">A2</span>]</span>, <span name="A3">A3: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple8.A3">A3</span>]</span>, <span name="A4">A4: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple8.A4">A4</span>]</span>, <span name="A5">A5: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple8.A5">A5</span>]</span>, <span name="A6">A6: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple8.A6">A6</span>]</span>, <span name="A7">A7: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple8.A7">A7</span>]</span>)</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[(<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple8.A0">A0</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple8.A1">A1</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple8.A2">A2</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple8.A3">A3</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple8.A4">A4</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple8.A5">A5</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple8.A6">A6</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple8.A7">A7</span>)]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>NTupleShowInstances</dd></dl></div>
+    </li><li name="cats.instances.NTupleShowInstances#catsStdShowForTuple9" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsStdShowForTuple9[A0,A1,A2,A3,A4,A5,A6,A7,A8](implicitA0:cats.Show[A0],implicitA1:cats.Show[A1],implicitA2:cats.Show[A2],implicitA3:cats.Show[A3],implicitA4:cats.Show[A4],implicitA5:cats.Show[A5],implicitA6:cats.Show[A6],implicitA7:cats.Show[A7],implicitA8:cats.Show[A8]):cats.Show[(A0,A1,A2,A3,A4,A5,A6,A7,A8)]"></a><a id="catsStdShowForTuple9[A0,A1,A2,A3,A4,A5,A6,A7,A8](Show[A0],Show[A1],Show[A2],Show[A3],Show[A4],Show[A5],Show[A6],Show[A7],Show[A8]):Show[(A0,A1,A2,A3,A4,A5,A6,A7,A8)]"></a>
+      <span class="permalink">
+      <a href="../cats/Show$.html#catsStdShowForTuple9[A0,A1,A2,A3,A4,A5,A6,A7,A8](implicitA0:cats.Show[A0],implicitA1:cats.Show[A1],implicitA2:cats.Show[A2],implicitA3:cats.Show[A3],implicitA4:cats.Show[A4],implicitA5:cats.Show[A5],implicitA6:cats.Show[A6],implicitA7:cats.Show[A7],implicitA8:cats.Show[A8]):cats.Show[(A0,A1,A2,A3,A4,A5,A6,A7,A8)]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsStdShowForTuple9</span><span class="tparams">[<span name="A0">A0</span>, <span name="A1">A1</span>, <span name="A2">A2</span>, <span name="A3">A3</span>, <span name="A4">A4</span>, <span name="A5">A5</span>, <span name="A6">A6</span>, <span name="A7">A7</span>, <span name="A8">A8</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="A0">A0: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple9.A0">A0</span>]</span>, <span name="A1">A1: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple9.A1">A1</span>]</span>, <span name="A2">A2: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple9.A2">A2</span>]</span>, <span name="A3">A3: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple9.A3">A3</span>]</span>, <span name="A4">A4: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple9.A4">A4</span>]</span>, <span name="A5">A5: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple9.A5">A5</span>]</span>, <span name="A6">A6: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple9.A6">A6</span>]</span>, <span name="A7">A7: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple9.A7">A7</span>]</span>, <span name="A8">A8: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple9.A8">A8</span>]</span>)</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[(<span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple9.A0">A0</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple9.A1">A1</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple9.A2">A2</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple9.A3">A3</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple9.A4">A4</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple9.A5">A5</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple9.A6">A6</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple9.A7">A7</span>, <span class="extype" name="cats.instances.NTupleShowInstances.catsStdShowForTuple9.A8">A8</span>)]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>NTupleShowInstances</dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a><a id="clone():AnyRef"></a>
       <span class="permalink">
@@ -1239,7 +1411,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -1249,8 +1421,6 @@
     </span>)</span>
               
                 <span class="name">@native</span><span class="args">()</span>
-              
-                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -1265,7 +1435,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.13/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -1281,10 +1451,32 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.13/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <span class="permalink">
+      <a href="../cats/Show$.html#finalize():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+        </dd></dl></div>
     </li><li name="cats.Show#fromToString" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="fromToString[A]:cats.Show[A]"></a><a id="fromToString[A]:Show[A]"></a>
       <span class="permalink">
@@ -1320,8 +1512,6 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
               
-                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
-              
         </dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
@@ -1335,13 +1525,11 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
-              
-                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -1356,7 +1544,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -1372,7 +1560,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.13/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -1388,13 +1576,11 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
-              
-                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -1409,13 +1595,11 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
-              
-                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="cats.Show#show" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
@@ -1468,6 +1652,28 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <span class="permalink">
+      <a href="../cats/Show$.html#wait():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <span class="permalink">
       <a href="../cats/Show$.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
@@ -1479,7 +1685,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.10/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>, <span name="arg1">arg1: <a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.13/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>, <span name="arg1">arg1: <a href="https://www.scala-lang.org/api/2.12.13/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -1501,7 +1707,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.10/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.13/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -1511,28 +1717,6 @@
     </span>)</span>
               
                 <span class="name">@native</span><span class="args">()</span>
-              
-        </dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait():Unit"></a>
-      <span class="permalink">
-      <a href="../cats/Show$.html#wait():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
-    </span>)</span>
               
         </dd></dl></div>
     </li><li name="cats.Show.Shown" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
@@ -1547,7 +1731,7 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a title="" href="Show$$Shown$.html"><span class="name">Shown</span></a><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="" href="Show$$Shown$.html"><span class="name">Shown</span></a><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.13/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
@@ -1559,10 +1743,10 @@
 
         <div class="values members">
               <h3>Deprecated Value Members</h3>
-              <ol><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="finalize():Unit"></a>
+              <ol><li name="cats.Show#catsShowForTuple2" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsShowForTuple2[A,B](implicitevidence$14:cats.Show[A],implicitevidence$15:cats.Show[B]):cats.Show[(A,B)]"></a><a id="catsShowForTuple2[A,B](Show[A],Show[B]):Show[(A,B)]"></a>
       <span class="permalink">
-      <a href="../cats/Show$.html#finalize():Unit" title="Permalink">
+      <a href="../cats/Show$.html#catsShowForTuple2[A,B](implicitevidence$14:cats.Show[A],implicitevidence$15:cats.Show[B]):cats.Show[(A,B)]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1571,37 +1755,34 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name deprecated" title="Deprecated: (Since version ) see corresponding Javadoc for more information.">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name deprecated" title="Deprecated: (Since version 2.4.0) Use catsStdShowForTuple2 in cats.instances.NTupleShowInstances">catsShowForTuple2</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.Show.catsShowForTuple2.A">A</span>]</span>, <span name="arg1">arg1: <a href="Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.Show.catsShowForTuple2.B">B</span>]</span>)</span><span class="result">: <a href="Show.html" class="extype" name="cats.Show">Show</a>[(<span class="extype" name="cats.Show.catsShowForTuple2.A">A</span>, <span class="extype" name="cats.Show.catsShowForTuple2.B">B</span>)]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="symbol">classOf[java.lang.Throwable]</span>
-    </span>)</span>
-              
-                <span class="name">@Deprecated</span>
-              
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@deprecated</span>
               
-        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version )</i> see corresponding Javadoc for more information.</p></dd></dl></div>
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2.4.0)</i> Use catsStdShowForTuple2 in cats.instances.NTupleShowInstances</p></dd></dl></div>
     </li></ol>
             </div>
         </div>
 
         <div id="inheritedMembers">
         <div class="parent" name="scala.Serializable">
-              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></h3>
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.13/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></h3>
             </div><div class="parent" name="java.io.Serializable">
               <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
             </div><div class="parent" name="cats.ShowInstances">
               <h3>Inherited from <span class="extype" name="cats.ShowInstances">ShowInstances</span></h3>
+            </div><div class="parent" name="cats.ShowInstances0">
+              <h3>Inherited from <span class="extype" name="cats.ShowInstances0">ShowInstances0</span></h3>
+            </div><div class="parent" name="cats.instances.NTupleShowInstances">
+              <h3>Inherited from <span class="extype" name="cats.instances.NTupleShowInstances">NTupleShowInstances</span></h3>
             </div><div class="parent" name="cats.ScalaVersionSpecificShowInstances">
               <h3>Inherited from <span class="extype" name="cats.ScalaVersionSpecificShowInstances">ScalaVersionSpecificShowInstances</span></h3>
             </div><div class="parent" name="scala.AnyRef">
-              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></h3>
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.13/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
-              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></h3>
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.13/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></h3>
             </div>
         
         </div>

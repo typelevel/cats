@@ -330,20 +330,19 @@
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>The <code>PartialOrder</code> type class is used to define a partial ordering on some type <code>A</code>.</p><p>A partial order is defined by a relation &lt;=, which obeys the following laws:</p><p>- x &lt;= x (reflexivity)
-- if x &lt;= y and y &lt;= x, then x = y (anti-symmetry)
-- if x &lt;= y and y &lt;= z, then x &lt;= z (transitivity)</p><p>To compute both &lt;= and &gt;= at the same time, we use a Double number
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>The <code>PartialOrder</code> type class is used to define a partial ordering on some type <code>A</code>.</p><p>A partial order is defined by a relation &lt;=, which obeys the following laws:</p><ul><li>x &lt;= x (reflexivity)</li><li>if x &lt;= y and y &lt;= x, then x = y (anti-symmetry)</li><li>if x &lt;= y and y &lt;= z, then x &lt;= z (transitivity)</li></ul><p>To compute both &lt;= and &gt;= at the same time, we use a Double number
 to encode the result of the comparisons x &lt;= y and x &gt;= y.
-The truth table is defined as follows:</p><p>x &lt;= y    x &gt;= y      Double
-true      true        = 0.0     (corresponds to x = y)
-false     false       = NaN     (x and y cannot be compared)
-true      false       = -1.0    (corresponds to x &lt; y)
-false     true        = 1.0     (corresponds to x &gt; y)
-</p></div><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="cats.kernel.PartialOrder">PartialOrder</a>[<span class="extype" name="cats.kernel.PartialOrder.A">A</span>]</dd><dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/kernel/src/main/scala/cats/kernel/PartialOrder.scala" target="_blank">PartialOrder.scala</a></dd></dl><div class="toggleContainer block">
+The truth table is defined as follows:</p><table class="doctbl">
+      <thead>
+        <tr><th class="doctbl-left"><p> x &lt;= y </p></th><th class="doctbl-left"><p> x &gt;= y </p></th><th class="doctbl-right"><p> result </p></th><th class="doctbl-left"><p> note </p></th></tr>
+      </thead>
+      <tbody><tr><td class="doctbl-left"><p> true   </p></td><td class="doctbl-left"><p>true    </p></td><td class="doctbl-right"><p> 0.0    </p></td><td class="doctbl-left"><p> (corresponds to x = y) </p></td></tr><tr><td class="doctbl-left"><p> false  </p></td><td class="doctbl-left"><p>false   </p></td><td class="doctbl-right"><p> NaN    </p></td><td class="doctbl-left"><p> (x and y cannot be compared) </p></td></tr><tr><td class="doctbl-left"><p> true   </p></td><td class="doctbl-left"><p>false   </p></td><td class="doctbl-right"><p> -1.0   </p></td><td class="doctbl-left"><p> (corresponds to x &lt; y) </p></td></tr><tr><td class="doctbl-left"><p> false  </p></td><td class="doctbl-left"><p>true    </p></td><td class="doctbl-right"><p> 1.0    </p></td><td class="doctbl-left"><p> (corresponds to x &gt; y) </p></td></tr>
+          </tbody>
+    </table></div><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="cats.kernel.PartialOrder">PartialOrder</a>[<span class="extype" name="cats.kernel.PartialOrder.A">A</span>]</dd><dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/main/kernel/src/main/scala/cats/kernel/PartialOrder.scala" target="_blank">PartialOrder.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="Eq.html" class="extype" name="cats.kernel.Eq">Eq</a>[<span class="extype" name="cats.kernel.PartialOrder.A">A</span>], <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="Eq.html" class="extype" name="cats.kernel.Eq">Eq</a>[<span class="extype" name="cats.kernel.PartialOrder.A">A</span>], <a href="https://www.scala-lang.org/api/2.12.13/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="https://www.scala-lang.org/api/2.12.13/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
         </div><div class="toggleContainer block">
             <span class="toggle">
               Known Subclasses
@@ -436,16 +435,13 @@ false     true        = 1.0     (corresponds to x &gt; y)
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">partialCompare</span><span class="params">(<span name="x">x: <span class="extype" name="cats.kernel.PartialOrder.A">A</span></span>, <span name="y">y: <span class="extype" name="cats.kernel.PartialOrder.A">A</span></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Double.html#scala.Double" class="extype" name="scala.Double">Double</a></span>
+        <span class="name">partialCompare</span><span class="params">(<span name="x">x: <span class="extype" name="cats.kernel.PartialOrder.A">A</span></span>, <span name="y">y: <span class="extype" name="cats.kernel.PartialOrder.A">A</span></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Double.html#scala.Double" class="extype" name="scala.Double">Double</a></span>
       </span>
       
       <p class="shortcomment cmt">Result of comparing <code>x</code> with <code>y</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Result of comparing <code>x</code> with <code>y</code>. Returns NaN if operands are not
 comparable. If operands are comparable, returns a Double whose
-sign is:
-- negative iff <code>x &lt; y</code>
-- zero     iff <code>x = y</code>
-- positive iff <code>x &gt; y</code>
-</p></div></div>
+sign is:</p><ul><li>negative iff <code>x &lt; y</code></li><li>zero     iff <code>x = y</code></li><li>positive iff <code>x &gt; y</code>
+</li></ul></div></div>
     </li></ol>
             </div>
 
@@ -464,7 +460,7 @@ sign is:
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.13/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -480,7 +476,7 @@ sign is:
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -496,7 +492,7 @@ sign is:
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.13/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -528,7 +524,7 @@ sign is:
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.13/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -544,7 +540,7 @@ sign is:
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">eqv</span><span class="params">(<span name="x">x: <span class="extype" name="cats.kernel.PartialOrder.A">A</span></span>, <span name="y">y: <span class="extype" name="cats.kernel.PartialOrder.A">A</span></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">eqv</span><span class="params">(<span name="x">x: <span class="extype" name="cats.kernel.PartialOrder.A">A</span></span>, <span name="y">y: <span class="extype" name="cats.kernel.PartialOrder.A">A</span></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <p class="shortcomment cmt">Returns true if <code>x</code> = <code>y</code>, false otherwise.</p><div class="fullcomment"><div class="comment cmt"><p>Returns true if <code>x</code> = <code>y</code>, false otherwise.
@@ -561,7 +557,7 @@ sign is:
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">gt</span><span class="params">(<span name="x">x: <span class="extype" name="cats.kernel.PartialOrder.A">A</span></span>, <span name="y">y: <span class="extype" name="cats.kernel.PartialOrder.A">A</span></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">gt</span><span class="params">(<span name="x">x: <span class="extype" name="cats.kernel.PartialOrder.A">A</span></span>, <span name="y">y: <span class="extype" name="cats.kernel.PartialOrder.A">A</span></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <p class="shortcomment cmt">Returns true if <code>x</code> &gt; <code>y</code>, false otherwise.</p>
@@ -577,7 +573,7 @@ sign is:
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">gteqv</span><span class="params">(<span name="x">x: <span class="extype" name="cats.kernel.PartialOrder.A">A</span></span>, <span name="y">y: <span class="extype" name="cats.kernel.PartialOrder.A">A</span></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">gteqv</span><span class="params">(<span name="x">x: <span class="extype" name="cats.kernel.PartialOrder.A">A</span></span>, <span name="y">y: <span class="extype" name="cats.kernel.PartialOrder.A">A</span></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <p class="shortcomment cmt">Returns true if <code>x</code> &gt;= <code>y</code>, false otherwise.</p>
@@ -593,7 +589,7 @@ sign is:
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -609,7 +605,7 @@ sign is:
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -625,7 +621,7 @@ sign is:
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">lt</span><span class="params">(<span name="x">x: <span class="extype" name="cats.kernel.PartialOrder.A">A</span></span>, <span name="y">y: <span class="extype" name="cats.kernel.PartialOrder.A">A</span></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">lt</span><span class="params">(<span name="x">x: <span class="extype" name="cats.kernel.PartialOrder.A">A</span></span>, <span name="y">y: <span class="extype" name="cats.kernel.PartialOrder.A">A</span></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <p class="shortcomment cmt">Returns true if <code>x</code> &lt; <code>y</code>, false otherwise.</p>
@@ -641,7 +637,7 @@ sign is:
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">lteqv</span><span class="params">(<span name="x">x: <span class="extype" name="cats.kernel.PartialOrder.A">A</span></span>, <span name="y">y: <span class="extype" name="cats.kernel.PartialOrder.A">A</span></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">lteqv</span><span class="params">(<span name="x">x: <span class="extype" name="cats.kernel.PartialOrder.A">A</span></span>, <span name="y">y: <span class="extype" name="cats.kernel.PartialOrder.A">A</span></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <p class="shortcomment cmt">Returns true if <code>x</code> &lt;= <code>y</code>, false otherwise.</p>
@@ -657,7 +653,7 @@ sign is:
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">neqv</span><span class="params">(<span name="x">x: <span class="extype" name="cats.kernel.PartialOrder.A">A</span></span>, <span name="y">y: <span class="extype" name="cats.kernel.PartialOrder.A">A</span></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">neqv</span><span class="params">(<span name="x">x: <span class="extype" name="cats.kernel.PartialOrder.A">A</span></span>, <span name="y">y: <span class="extype" name="cats.kernel.PartialOrder.A">A</span></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <p class="shortcomment cmt">Returns <code>false</code> if <code>x</code> and <code>y</code> are equivalent, <code>true</code> otherwise.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>false</code> if <code>x</code> and <code>y</code> are equivalent, <code>true</code> otherwise.
@@ -674,7 +670,7 @@ sign is:
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">partialComparison</span><span class="params">(<span name="x">x: <span class="extype" name="cats.kernel.PartialOrder.A">A</span></span>, <span name="y">y: <span class="extype" name="cats.kernel.PartialOrder.A">A</span></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="Comparison.html" class="extype" name="cats.kernel.Comparison">Comparison</a>]</span>
+        <span class="name">partialComparison</span><span class="params">(<span name="x">x: <span class="extype" name="cats.kernel.PartialOrder.A">A</span></span>, <span name="y">y: <span class="extype" name="cats.kernel.PartialOrder.A">A</span></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="Comparison.html" class="extype" name="cats.kernel.Comparison">Comparison</a>]</span>
       </span>
       
       <p class="shortcomment cmt">Like <code>partialCompare</code>, but returns a <a href="Comparison.html" class="extype" name="cats.kernel.Comparison">cats.kernel.Comparison</a> instead of an Double.</p><div class="fullcomment"><div class="comment cmt"><p>Like <code>partialCompare</code>, but returns a <a href="Comparison.html" class="extype" name="cats.kernel.Comparison">cats.kernel.Comparison</a> instead of an Double.
@@ -692,7 +688,7 @@ Has the benefit of being able to pattern match on, but not as performant.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">pmax</span><span class="params">(<span name="x">x: <span class="extype" name="cats.kernel.PartialOrder.A">A</span></span>, <span name="y">y: <span class="extype" name="cats.kernel.PartialOrder.A">A</span></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.kernel.PartialOrder.A">A</span>]</span>
+        <span class="name">pmax</span><span class="params">(<span name="x">x: <span class="extype" name="cats.kernel.PartialOrder.A">A</span></span>, <span name="y">y: <span class="extype" name="cats.kernel.PartialOrder.A">A</span></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.kernel.PartialOrder.A">A</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Returns Some(x) if x &gt;= y, Some(y) if x &lt; y, otherwise None.</p>
@@ -708,7 +704,7 @@ Has the benefit of being able to pattern match on, but not as performant.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">pmin</span><span class="params">(<span name="x">x: <span class="extype" name="cats.kernel.PartialOrder.A">A</span></span>, <span name="y">y: <span class="extype" name="cats.kernel.PartialOrder.A">A</span></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.kernel.PartialOrder.A">A</span>]</span>
+        <span class="name">pmin</span><span class="params">(<span name="x">x: <span class="extype" name="cats.kernel.PartialOrder.A">A</span></span>, <span name="y">y: <span class="extype" name="cats.kernel.PartialOrder.A">A</span></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.kernel.PartialOrder.A">A</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Returns Some(x) if x &lt;= y, Some(y) if x &gt; y, otherwise None.</p>
@@ -740,16 +736,13 @@ Has the benefit of being able to pattern match on, but not as performant.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">tryCompare</span><span class="params">(<span name="x">x: <span class="extype" name="cats.kernel.PartialOrder.A">A</span></span>, <span name="y">y: <span class="extype" name="cats.kernel.PartialOrder.A">A</span></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>]</span>
+        <span class="name">tryCompare</span><span class="params">(<span name="x">x: <span class="extype" name="cats.kernel.PartialOrder.A">A</span></span>, <span name="y">y: <span class="extype" name="cats.kernel.PartialOrder.A">A</span></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="https://www.scala-lang.org/api/2.12.13/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>]</span>
       </span>
       
       <p class="shortcomment cmt">Result of comparing <code>x</code> with <code>y</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Result of comparing <code>x</code> with <code>y</code>. Returns None if operands are
 not comparable. If operands are comparable, returns Some[Int]
-where the Int sign is:
-- negative iff <code>x &lt; y</code>
-- zero     iff <code>x = y</code>
-- positive iff <code>x &gt; y</code>
-</p></div></div>
+where the Int sign is:</p><ul><li>negative iff <code>x &lt; y</code></li><li>zero     iff <code>x = y</code></li><li>positive iff <code>x &gt; y</code>
+</li></ul></div></div>
     </li>
               </ol>
             </div>
@@ -763,11 +756,11 @@ where the Int sign is:
         <div class="parent" name="cats.kernel.Eq">
               <h3>Inherited from <a href="Eq.html" class="extype" name="cats.kernel.Eq">Eq</a>[<span class="extype" name="cats.kernel.PartialOrder.A">A</span>]</h3>
             </div><div class="parent" name="scala.Serializable">
-              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></h3>
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.13/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></h3>
             </div><div class="parent" name="java.io.Serializable">
               <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
             </div><div class="parent" name="scala.Any">
-              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></h3>
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.13/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></h3>
             </div>
         
         </div>

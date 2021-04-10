@@ -1,0 +1,1377 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+          <title></title>
+          <meta name="description" content="" />
+          <meta name="keywords" content="" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      
+      <link href="../../../lib/index.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../lib/jquery.min.js"></script>
+      <script type="text/javascript" src="../../../lib/jquery.panzoom.min.js"></script>
+      <script type="text/javascript" src="../../../lib/jquery.mousewheel.min.js"></script>
+      <script type="text/javascript" src="../../../lib/index.js"></script>
+      <script type="text/javascript" src="../../../index.js"></script>
+      <script type="text/javascript" src="../../../lib/scheduler.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/modernizr.custom.js"></script><script type="text/javascript" src="../../../lib/diagrams.js" id="diagrams-js"></script>
+      <script type="text/javascript">
+        /* this variable can be used by the JS to determine the path to the root document */
+        var toRoot = '../../../';
+      </script>
+    
+        </head>
+        <body>
+      <div id="search">
+        <span id="doc-title"><span id="doc-version"></span></span>
+        <span class="close-results"><span class="left">&lt;</span> Back</span>
+        <div id="textfilter">
+          <span class="input">
+            <input autocapitalize="none" placeholder="Search" id="index-input" type="text" accesskey="/" />
+            <i class="clear material-icons"></i>
+            <i id="search-icon" class="material-icons"></i>
+          </span>
+        </div>
+    </div>
+      <div id="search-results">
+        <div id="search-progress">
+          <div id="progress-fill"></div>
+        </div>
+        <div id="results-content">
+          <div id="entity-results"></div>
+          <div id="member-results"></div>
+        </div>
+      </div>
+      <div id="content-scroll-container" style="-webkit-overflow-scrolling: touch;">
+        <div id="content-container" style="-webkit-overflow-scrolling: touch;">
+          <div id="subpackage-spacer">
+            <div id="packages">
+              <h1>Packages</h1>
+              <ul>
+                <li name="_root_.root" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="_root_"></a><a id="root:_root_"></a>
+      <span class="permalink">
+      <a href="../../../index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../../../index.html"><span class="name">root</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
+    </li><li name="_root_.cats" visbl="pub" class="indented1 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="cats"></a><a id="cats:cats"></a>
+      <span class="permalink">
+      <a href="../../../cats/index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="The cats root package contains all the trait signatures of most Scala type classes." href="../../index.html"><span class="name">cats</span></a>
+      </span>
+      
+      <p class="shortcomment cmt">The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><p>Cats type classes are implemented using the approach from the
+ <a href="https://ropas.snu.ac.kr/~bruno/papers/TypeClasses.pdf" target="_blank">Type classes as objects and implicits</a> article.</p><p>For each type class, <code>cats</code> provides three pieces:
+- Its <b>signature</b>: a trait that is polymorphic on a type parameter.
+  Type class traits inherit from other type classes to indicate that any implementation of the lower type class (e.g. <code>Applicative</code>)
+  can also serve as an instance for the higuer type class (e.g. <code>Functor</code>).
+- Type class <b>'instances</b>, which are classes and objects that implement one or more type class signatures for some specific types.
+  Type class instances for several data types from the Java or Scala standard libraries are declared in the subpackage <code>cats.instances</code>.
+- <b>Syntax extensions</b>, each of which provides the methods of the type class defines as extension methods
+  (which in Scala 2 are encoded as implicit classes) for values of any type <code>F</code>; given that an instance of the type class
+  for the receiver type (<code>this</code>) is in the implicit scope.
+  Symtax extensions are declared in the <code>cats.syntax</code> package.
+- A set of <b>laws</b>, that are also generic on the type of the class, and are only defined on the operations of the type class.
+  The purpose of these laws is to declare some algebraic relations (equations) between Scala expressions involving the operations
+  of the type class, and test (but not verify) that implemented instances satisfy those equations.
+  Laws are defined in the <code>cats-laws</code> package.</p><p>Although most of cats type classes are declared in this package, some are declared in other packages:
+- type classes that operate on base types (kind <code>*</code>), and their implementations for standard library types,
+  are contained in <code>cats.kernel</code>, which is a different SBT project. However, they are re-exported from this package.
+- type classes of kind <code>F[_, _]</code>, such as <a href="../../arrow/Profunctor.html" class="extype" name="cats.arrow.Profunctor">cats.arrow.Profunctor</a>&quot; or <a href="../../arrow/Arrow.html" class="extype" name="cats.arrow.Arrow">cats.arrow.Arrow</a>, which are relevant for
+  Functional Reactive Programming or optics, are declared in the <code>cats.arrow</code> package.
+- Also, those type classes that abstract over (pure or impure) functional runtime effects are declared
+  in the <a href="https://typelevel.org/cats-effect/" target="_blank">cats-effect library</a>.
+- Some type classes for which no laws can be provided are left out of the main road, in a small and dirty alley.
+  These are the <code>alleycats</code>.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
+    </li><li name="cats.kernel" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="kernel"></a><a id="kernel:kernel"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../index.html"><span class="name">kernel</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="cats">cats</a></dd></dl></div>
+    </li><li name="cats.kernel.instances" visbl="pub" class="indented3 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="instances"></a><a id="instances:instances"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="index.html"><span class="name">instances</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="cats.kernel">kernel</a></dd></dl></div>
+    </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="AllInstances.html" title=""></a>
+                        <a href="AllInstances.html" title="">AllInstances</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="BigDecimalGroup.html" title="Note that combining, removing, and inverting BigDecimal values will use unlimited precision operations."></a>
+                        <a href="BigDecimalGroup.html" title="Note that combining, removing, and inverting BigDecimal values will use unlimited precision operations.">BigDecimalGroup</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="BigDecimalInstances.html" title=""></a>
+                        <a href="BigDecimalInstances.html" title="">BigDecimalInstances</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="BigDecimalOrder.html" title=""></a>
+                        <a href="BigDecimalOrder.html" title="">BigDecimalOrder</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="BigIntGroup.html" title=""></a>
+                        <a href="BigIntGroup.html" title="">BigIntGroup</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="BigIntInstances.html" title=""></a>
+                        <a href="BigIntInstances.html" title="">BigIntInstances</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="BigIntOrder.html" title=""></a>
+                        <a href="BigIntOrder.html" title="">BigIntOrder</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="BigIntUnboundedEnum.html" title=""></a>
+                        <a href="BigIntUnboundedEnum.html" title="">BigIntUnboundedEnum</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="BitSetInstances.html" title=""></a>
+                        <a href="BitSetInstances.html" title="">BitSetInstances</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="BitSetPartialOrder.html" title=""></a>
+                        <a href="BitSetPartialOrder.html" title="">BitSetPartialOrder</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="BitSetSemilattice.html" title=""></a>
+                        <a href="BitSetSemilattice.html" title="">BitSetSemilattice</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="BooleanBounded.html" title=""></a>
+                        <a href="BooleanBounded.html" title="">BooleanBounded</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="BooleanEnumerable.html" title=""></a>
+                        <a href="BooleanEnumerable.html" title="">BooleanEnumerable</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="BooleanInstances.html" title=""></a>
+                        <a href="BooleanInstances.html" title="">BooleanInstances</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="BooleanOrder.html" title=""></a>
+                        <a href="BooleanOrder.html" title="">BooleanOrder</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="ByteBounded.html" title=""></a>
+                        <a href="ByteBounded.html" title="">ByteBounded</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="" title=""></a>
+                        <a href="" title="">ByteEnumerable</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="ByteGroup.html" title=""></a>
+                        <a href="ByteGroup.html" title="">ByteGroup</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="ByteInstances.html" title=""></a>
+                        <a href="ByteInstances.html" title="">ByteInstances</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="ByteOrder.html" title=""></a>
+                        <a href="ByteOrder.html" title="">ByteOrder</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="CharBounded.html" title=""></a>
+                        <a href="CharBounded.html" title="">CharBounded</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="CharEnumerable.html" title=""></a>
+                        <a href="CharEnumerable.html" title="">CharEnumerable</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="CharInstances.html" title=""></a>
+                        <a href="CharInstances.html" title="">CharInstances</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="CharOrder.html" title=""></a>
+                        <a href="CharOrder.html" title="">CharOrder</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="DoubleGroup.html" title=""></a>
+                        <a href="DoubleGroup.html" title="">DoubleGroup</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="DoubleInstances.html" title=""></a>
+                        <a href="DoubleInstances.html" title="">DoubleInstances</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="DoubleOrder.html" title=""></a>
+                        <a href="DoubleOrder.html" title="">DoubleOrder</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="DurationBounded.html" title=""></a>
+                        <a href="DurationBounded.html" title="">DurationBounded</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="DurationGroup.html" title="This group models addition, but has a few problematic edge cases."></a>
+                        <a href="DurationGroup.html" title="This group models addition, but has a few problematic edge cases.">DurationGroup</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="DurationInstances.html" title=""></a>
+                        <a href="DurationInstances.html" title="">DurationInstances</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="DurationOrder.html" title="This ordering is valid for all defined durations."></a>
+                        <a href="DurationOrder.html" title="This ordering is valid for all defined durations.">DurationOrder</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="EitherEq.html" title=""></a>
+                        <a href="EitherEq.html" title="">EitherEq</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="EitherHash.html" title=""></a>
+                        <a href="EitherHash.html" title="">EitherHash</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="EitherInstances.html" title=""></a>
+                        <a href="EitherInstances.html" title="">EitherInstances</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="EqInstances.html" title=""></a>
+                        <a href="EqInstances.html" title="">EqInstances</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="FiniteDurationBounded.html" title=""></a>
+                        <a href="FiniteDurationBounded.html" title="">FiniteDurationBounded</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="FiniteDurationGroup.html" title=""></a>
+                        <a href="FiniteDurationGroup.html" title="">FiniteDurationGroup</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="FiniteDurationInstances.html" title=""></a>
+                        <a href="FiniteDurationInstances.html" title="">FiniteDurationInstances</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="FiniteDurationOrder.html" title=""></a>
+                        <a href="FiniteDurationOrder.html" title="">FiniteDurationOrder</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="FloatGroup.html" title="This is only approximately associative."></a>
+                        <a href="FloatGroup.html" title="This is only approximately associative.">FloatGroup</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="FloatInstances.html" title=""></a>
+                        <a href="FloatInstances.html" title="">FloatInstances</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="FloatOrder.html" title="Due to the way floating-point equality works, this instance is not lawful under equality, but is correct when taken as an approximation of an exact value."></a>
+                        <a href="FloatOrder.html" title="Due to the way floating-point equality works, this instance is not lawful under equality, but is correct when taken as an approximation of an exact value.">FloatOrder</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="Function0Group.html" title=""></a>
+                        <a href="Function0Group.html" title="">Function0Group</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="Function0Monoid.html" title=""></a>
+                        <a href="Function0Monoid.html" title="">Function0Monoid</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="Function0Semigroup.html" title=""></a>
+                        <a href="Function0Semigroup.html" title="">Function0Semigroup</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="Function1Group.html" title=""></a>
+                        <a href="Function1Group.html" title="">Function1Group</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="Function1Monoid.html" title=""></a>
+                        <a href="Function1Monoid.html" title="">Function1Monoid</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="Function1Semigroup.html" title=""></a>
+                        <a href="Function1Semigroup.html" title="">Function1Semigroup</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="FunctionInstances.html" title=""></a>
+                        <a href="FunctionInstances.html" title="">FunctionInstances</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="HashInstances.html" title=""></a>
+                        <a href="HashInstances.html" title="">HashInstances</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="IntBounded.html" title=""></a>
+                        <a href="IntBounded.html" title="">IntBounded</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="IntEnumerable.html" title=""></a>
+                        <a href="IntEnumerable.html" title="">IntEnumerable</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="IntGroup.html" title=""></a>
+                        <a href="IntGroup.html" title="">IntGroup</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="IntInstances.html" title=""></a>
+                        <a href="IntInstances.html" title="">IntInstances</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="IntOrder.html" title=""></a>
+                        <a href="IntOrder.html" title="">IntOrder</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="ListEq.html" title=""></a>
+                        <a href="ListEq.html" title="">ListEq</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="ListHash.html" title=""></a>
+                        <a href="ListHash.html" title="">ListHash</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="ListInstances.html" title=""></a>
+                        <a href="ListInstances.html" title="">ListInstances</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="ListMonoid.html" title=""></a>
+                        <a href="ListMonoid.html" title="">ListMonoid</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="ListOrder.html" title=""></a>
+                        <a href="ListOrder.html" title="">ListOrder</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="ListPartialOrder.html" title=""></a>
+                        <a href="ListPartialOrder.html" title="">ListPartialOrder</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="LongBounded.html" title=""></a>
+                        <a href="LongBounded.html" title="">LongBounded</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="LongEnumerable.html" title=""></a>
+                        <a href="LongEnumerable.html" title="">LongEnumerable</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="LongGroup.html" title=""></a>
+                        <a href="LongGroup.html" title="">LongGroup</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="LongInstances.html" title=""></a>
+                        <a href="LongInstances.html" title="">LongInstances</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="LongOrder.html" title=""></a>
+                        <a href="LongOrder.html" title="">LongOrder</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="MapEq.html" title=""></a>
+                        <a href="MapEq.html" title="">MapEq</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="MapHash.html" title=""></a>
+                        <a href="MapHash.html" title="">MapHash</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="MapInstances.html" title=""></a>
+                        <a href="MapInstances.html" title="">MapInstances</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="MapMonoid.html" title=""></a>
+                        <a href="MapMonoid.html" title="">MapMonoid</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="OptionEq.html" title=""></a>
+                        <a href="OptionEq.html" title="">OptionEq</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="OptionHash.html" title=""></a>
+                        <a href="OptionHash.html" title="">OptionHash</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="OptionInstances.html" title=""></a>
+                        <a href="OptionInstances.html" title="">OptionInstances</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="OptionMonoid.html" title=""></a>
+                        <a href="OptionMonoid.html" title="">OptionMonoid</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="OptionOrder.html" title=""></a>
+                        <a href="OptionOrder.html" title="">OptionOrder</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="OptionPartialOrder.html" title=""></a>
+                        <a href="OptionPartialOrder.html" title="">OptionPartialOrder</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="OrderInstances.html" title=""></a>
+                        <a href="OrderInstances.html" title="">OrderInstances</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="PartialOrderInstances.html" title=""></a>
+                        <a href="PartialOrderInstances.html" title="">PartialOrderInstances</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="QueueEq.html" title=""></a>
+                        <a href="QueueEq.html" title="">QueueEq</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="QueueHash.html" title=""></a>
+                        <a href="QueueHash.html" title="">QueueHash</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="QueueInstances.html" title=""></a>
+                        <a href="QueueInstances.html" title="">QueueInstances</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="QueueMonoid.html" title=""></a>
+                        <a href="QueueMonoid.html" title="">QueueMonoid</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="QueueOrder.html" title=""></a>
+                        <a href="QueueOrder.html" title="">QueueOrder</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="QueuePartialOrder.html" title=""></a>
+                        <a href="QueuePartialOrder.html" title="">QueuePartialOrder</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="SeqEq.html" title=""></a>
+                        <a href="SeqEq.html" title="">SeqEq</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="SeqHash.html" title=""></a>
+                        <a href="SeqHash.html" title="">SeqHash</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="SeqInstances.html" title=""></a>
+                        <a href="SeqInstances.html" title="">SeqInstances</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="SeqMonoid.html" title=""></a>
+                        <a href="SeqMonoid.html" title="">SeqMonoid</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="SeqOrder.html" title=""></a>
+                        <a href="SeqOrder.html" title="">SeqOrder</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="SeqPartialOrder.html" title=""></a>
+                        <a href="SeqPartialOrder.html" title="">SeqPartialOrder</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="SetHash.html" title=""></a>
+                        <a href="SetHash.html" title="">SetHash</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="SetInstances.html" title=""></a>
+                        <a href="SetInstances.html" title="">SetInstances</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="SetPartialOrder.html" title=""></a>
+                        <a href="SetPartialOrder.html" title="">SetPartialOrder</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="SetSemilattice.html" title=""></a>
+                        <a href="SetSemilattice.html" title="">SetSemilattice</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="ShortBounded.html" title=""></a>
+                        <a href="ShortBounded.html" title="">ShortBounded</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="ShortEnumerable.html" title=""></a>
+                        <a href="ShortEnumerable.html" title="">ShortEnumerable</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="ShortGroup.html" title=""></a>
+                        <a href="ShortGroup.html" title="">ShortGroup</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="ShortInstances.html" title=""></a>
+                        <a href="ShortInstances.html" title="">ShortInstances</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="ShortOrder.html" title=""></a>
+                        <a href="ShortOrder.html" title="">ShortOrder</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="SortedMapCommutativeMonoid.html" title=""></a>
+                        <a href="SortedMapCommutativeMonoid.html" title="">SortedMapCommutativeMonoid</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="SortedMapCommutativeSemigroup.html" title=""></a>
+                        <a href="SortedMapCommutativeSemigroup.html" title="">SortedMapCommutativeSemigroup</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="SortedMapEq.html" title=""></a>
+                        <a href="SortedMapEq.html" title="">SortedMapEq</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="SortedMapHash.html" title=""></a>
+                        <a href="SortedMapHash.html" title="">SortedMapHash</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="SortedMapInstances.html" title=""></a>
+                        <a href="SortedMapInstances.html" title="">SortedMapInstances</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="SortedMapMonoid.html" title=""></a>
+                        <a href="SortedMapMonoid.html" title="">SortedMapMonoid</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="SortedMapSemigroup.html" title=""></a>
+                        <a href="SortedMapSemigroup.html" title="">SortedMapSemigroup</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="SortedSetHash.html" title=""></a>
+                        <a href="SortedSetHash.html" title="">SortedSetHash</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="SortedSetInstances.html" title=""></a>
+                        <a href="SortedSetInstances.html" title="">SortedSetInstances</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="SortedSetOrder.html" title=""></a>
+                        <a href="SortedSetOrder.html" title="">SortedSetOrder</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="SortedSetSemilattice.html" title=""></a>
+                        <a href="SortedSetSemilattice.html" title="">SortedSetSemilattice</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="object" href="StaticMethods$.html" title=""></a>
+                        <a href="StaticMethods$.html" title="">StaticMethods</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="StreamEq.html" title=""></a>
+                        <a href="StreamEq.html" title="">StreamEq</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="StreamHash.html" title=""></a>
+                        <a href="StreamHash.html" title="">StreamHash</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="StreamInstances.html" title=""></a>
+                        <a href="StreamInstances.html" title="">StreamInstances</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="StreamMonoid.html" title=""></a>
+                        <a href="StreamMonoid.html" title="">StreamMonoid</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="StreamOrder.html" title=""></a>
+                        <a href="StreamOrder.html" title="">StreamOrder</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="StreamPartialOrder.html" title=""></a>
+                        <a href="StreamPartialOrder.html" title="">StreamPartialOrder</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="StringInstances.html" title=""></a>
+                        <a href="StringInstances.html" title="">StringInstances</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="StringLowerBounded.html" title=""></a>
+                        <a href="StringLowerBounded.html" title="">StringLowerBounded</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="StringMonoid.html" title=""></a>
+                        <a href="StringMonoid.html" title="">StringMonoid</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="StringOrder.html" title=""></a>
+                        <a href="StringOrder.html" title="">StringOrder</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="SymbolInstances.html" title=""></a>
+                        <a href="SymbolInstances.html" title="">SymbolInstances</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="SymbolLowerBounded.html" title=""></a>
+                        <a href="SymbolLowerBounded.html" title="">SymbolLowerBounded</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="SymbolOrder.html" title=""></a>
+                        <a href="SymbolOrder.html" title="">SymbolOrder</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="TupleInstances.html" title=""></a>
+                        <a href="TupleInstances.html" title="">TupleInstances</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="UUIDBounded.html" title=""></a>
+                        <a href="UUIDBounded.html" title="">UUIDBounded</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="UUIDInstances.html" title=""></a>
+                        <a href="UUIDInstances.html" title="">UUIDInstances</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="UnitAlgebra.html" title=""></a>
+                        <a href="UnitAlgebra.html" title="">UnitAlgebra</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="UnitBounded.html" title=""></a>
+                        <a href="UnitBounded.html" title="">UnitBounded</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="UnitEnumerable.html" title=""></a>
+                        <a href="UnitEnumerable.html" title="">UnitEnumerable</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="UnitInstances.html" title=""></a>
+                        <a href="UnitInstances.html" title="">UnitInstances</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="UnitOrder.html" title=""></a>
+                        <a href="UnitOrder.html" title="">UnitOrder</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="VectorEq.html" title=""></a>
+                        <a href="VectorEq.html" title="">VectorEq</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="VectorHash.html" title=""></a>
+                        <a href="VectorHash.html" title="">VectorHash</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="VectorInstances.html" title=""></a>
+                        <a href="VectorInstances.html" title="">VectorInstances</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="VectorMonoid.html" title=""></a>
+                        <a href="VectorMonoid.html" title="">VectorMonoid</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="VectorOrder.html" title=""></a>
+                        <a href="VectorOrder.html" title="">VectorOrder</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="VectorPartialOrder.html" title=""></a>
+                        <a href="VectorPartialOrder.html" title="">VectorPartialOrder</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="object" href="eq$.html" title=""></a>
+                        <a href="eq$.html" title="">eq</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="object" href="hash$.html" title=""></a>
+                        <a href="hash$.html" title="">hash</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="object" href="order$.html" title=""></a>
+                        <a href="order$.html" title="">order</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="object" href="partialOrder$.html" title=""></a>
+                        <a href="partialOrder$.html" title="">partialOrder</a>
+                      </li>
+              </ul>
+            </div>
+          </div>
+          <div id="content">
+            <body class="trait type">
+      <div id="definition">
+        <div class="big-circle trait">t</div>
+        <p id="owner"><a href="../../index.html" class="extype" name="cats">cats</a>.<a href="../index.html" class="extype" name="cats.kernel">kernel</a>.<a href="index.html" class="extype" name="cats.kernel.instances">instances</a></p>
+        <h1>ByteEnumerable<span class="permalink">
+      <a href="../../../cats/kernel/instances/ByteEnumerable.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span></h1>
+        <h3><span class="morelinks"></span></h3>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ByteEnumerable</span><span class="result"> extends <a href="../BoundedEnumerable.html" class="extype" name="cats.kernel.BoundedEnumerable">BoundedEnumerable</a>[<a href="https://www.scala-lang.org/api/2.12.13/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>]</span>
+      </span>
+      </h4>
+
+      
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/main/kernel/src/main/scala/cats/kernel/instances/ByteInstances.scala" target="_blank">ByteInstances.scala</a></dd></dl><div class="toggleContainer block">
+          <span class="toggle">
+            Linear Supertypes
+          </span>
+          <div class="superTypes hiddenContent"><a href="../BoundedEnumerable.html" class="extype" name="cats.kernel.BoundedEnumerable">BoundedEnumerable</a>[<a href="https://www.scala-lang.org/api/2.12.13/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>], <a href="../PartialNextLowerBounded.html" class="extype" name="cats.kernel.PartialNextLowerBounded">PartialNextLowerBounded</a>[<a href="https://www.scala-lang.org/api/2.12.13/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>], <a href="../LowerBounded.html" class="extype" name="cats.kernel.LowerBounded">LowerBounded</a>[<a href="https://www.scala-lang.org/api/2.12.13/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>], <a href="../PartialPreviousUpperBounded.html" class="extype" name="cats.kernel.PartialPreviousUpperBounded">PartialPreviousUpperBounded</a>[<a href="https://www.scala-lang.org/api/2.12.13/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>], <a href="../UpperBounded.html" class="extype" name="cats.kernel.UpperBounded">UpperBounded</a>[<a href="https://www.scala-lang.org/api/2.12.13/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>], <a href="../PartialNext.html" class="extype" name="cats.kernel.PartialNext">PartialNext</a>[<a href="https://www.scala-lang.org/api/2.12.13/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>], <a href="../PartialPrevious.html" class="extype" name="cats.kernel.PartialPrevious">PartialPrevious</a>[<a href="https://www.scala-lang.org/api/2.12.13/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>], <a href="https://www.scala-lang.org/api/2.12.13/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.13/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+        </div><div class="toggleContainer block">
+            <span class="toggle">
+              Known Subclasses
+            </span>
+            <div class="subClasses hiddenContent"><a href="ByteOrder.html" class="extype" name="cats.kernel.instances.ByteOrder">ByteOrder</a></div>
+          </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
+                <span class="toggle diagram-link">
+                  Type Hierarchy
+                </span>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph1" viewBox="0.00 0.00 166.00 155.00" height="155pt" width="166pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 151)" class="graph" id="page0,1_graph0"><polygon points="-4,4 -4,-151 162,-151 162,4 -4,4" stroke="transparent" fill="white"></polygon><g class="cluster" id="clust1"></g><g class="cluster" id="clust2"></g><!-- node0 --><g class="node this trait" id="graph1_0"><g id="a_this trait|graph1_0"><a xlink:title="cats.kernel.instances.ByteEnumerable (this trait)" xlink:href="#inheritance-diagram"><path d="M125.17,-86C125.17,-86 32.83,-86 32.83,-86 28.67,-86 24.5,-81.83 24.5,-77.67 24.5,-77.67 24.5,-69.33 24.5,-69.33 24.5,-65.17 28.67,-61 32.83,-61 32.83,-61 125.17,-61 125.17,-61 129.33,-61 133.5,-65.17 133.5,-69.33 133.5,-69.33 133.5,-77.67 133.5,-77.67 133.5,-81.83 129.33,-86 125.17,-86" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../../lib/trait_diagram.png" y="-80.5" x="35" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-71.1" x="56" text-anchor="start">ByteEnumerable</text></a></g></g><!-- node1 --><g class="node class" id="graph1_1"><g id="a_class|graph1_1"><a xlink:title="cats.kernel.instances.ByteOrder" xlink:href="ByteOrder.html#inheritance-diagram"><path d="M114.17,-25C114.17,-25 43.83,-25 43.83,-25 39.67,-25 35.5,-20.83 35.5,-16.67 35.5,-16.67 35.5,-8.33 35.5,-8.33 35.5,-4.17 39.67,0 43.83,0 43.83,0 114.17,0 114.17,0 118.33,0 122.5,-4.17 122.5,-8.33 122.5,-8.33 122.5,-16.67 122.5,-16.67 122.5,-20.83 118.33,-25 114.17,-25" stroke="#418565" fill="#418565"></path><image xlink:href="../../../lib/class_diagram.png" y="-19.5" x="46" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="67" text-anchor="start">ByteOrder</text></a></g></g><!-- node0&#45;&gt;node1 --><g class="edge inheritance" id="graph1_0_1"><g id="a_inheritance|graph1_0_1"><a xlink:title="ByteOrder is a subtype of ByteEnumerable"><path d="M79,-53.76C79,-44.37 79,-33.29 79,-25.13" stroke="#d4d4d4" fill="none"></path><polygon points="76.55,-53.84 79,-60.84 81.45,-53.84 76.55,-53.84" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node2 --><g class="node trait" id="graph1_2"><g id="a_trait|graph1_2"><a xlink:title="cats.kernel.BoundedEnumerable" xlink:href="../BoundedEnumerable.html#inheritance-diagram"><path d="M145.67,-147C145.67,-147 12.33,-147 12.33,-147 8.17,-147 4,-142.83 4,-138.67 4,-138.67 4,-130.33 4,-130.33 4,-126.17 8.17,-122 12.33,-122 12.33,-122 145.67,-122 145.67,-122 149.83,-122 154,-126.17 154,-130.33 154,-130.33 154,-138.67 154,-138.67 154,-142.83 149.83,-147 145.67,-147" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../../lib/trait_diagram.png" y="-141.5" x="14" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="35" text-anchor="start">BoundedEnumerable[Byte]</text></a></g></g><!-- node2&#45;&gt;node0 --><g class="edge inheritance" id="graph1_2_0"><g id="a_inheritance|graph1_2_0"><a xlink:title="ByteEnumerable is a subtype of BoundedEnumerable[Byte]"><path d="M79,-114.76C79,-105.37 79,-94.29 79,-86.13" stroke="#d4d4d4" fill="none"></path><polygon points="76.55,-114.84 79,-121.84 81.45,-114.84 76.55,-114.84" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
+                <div id="diagram-controls" class="hiddenContent">
+                  <button id="diagram-zoom-out" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button id="diagram-zoom-in" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button title="Toggle full-screen" id="diagram-fs" class="diagram-btn to-full"><i class="material-icons"></i></button>
+                </div>
+              </div></div>
+        
+
+      <div id="mbrsel">
+        <div class="toggle"></div>
+        <div id="memberfilter">
+          <i class="material-icons arrow"></i>
+          <span class="input">
+            <input id="mbrsel-input" placeholder="Filter all members" type="text" accesskey="/" />
+          </span>
+          <i class="clear material-icons"></i>
+        </div>
+        <div id="filterby">
+          <div id="order">
+            <span class="filtertype">Ordering</span>
+            <ol>
+              
+              <li class="alpha in"><span>Alphabetic</span></li>
+              <li class="inherit out"><span>By Inheritance</span></li>
+            </ol>
+          </div>
+          <div class="ancestors">
+                  <span class="filtertype">Inherited<br />
+                  </span>
+                  <ol id="linearization">
+                    <li class="in" name="cats.kernel.instances.ByteEnumerable"><span>ByteEnumerable</span></li><li class="in" name="cats.kernel.BoundedEnumerable"><span>BoundedEnumerable</span></li><li class="in" name="cats.kernel.PartialNextLowerBounded"><span>PartialNextLowerBounded</span></li><li class="in" name="cats.kernel.LowerBounded"><span>LowerBounded</span></li><li class="in" name="cats.kernel.PartialPreviousUpperBounded"><span>PartialPreviousUpperBounded</span></li><li class="in" name="cats.kernel.UpperBounded"><span>UpperBounded</span></li><li class="in" name="cats.kernel.PartialNext"><span>PartialNext</span></li><li class="in" name="cats.kernel.PartialPrevious"><span>PartialPrevious</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  </ol>
+                </div><div class="ancestors">
+              <span class="filtertype"></span>
+              <ol>
+                <li class="hideall out"><span>Hide All</span></li>
+                <li class="showall in"><span>Show All</span></li>
+              </ol>
+            </div>
+          <div id="visbl">
+              <span class="filtertype">Visibility</span>
+              <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+            </div>
+        </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        
+
+        <div class="values members">
+              <h3>Abstract Value Members</h3>
+              <ol><li name="cats.kernel.UpperBounded#maxBound" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="maxBound:A"></a><a id="maxBound:Byte"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/ByteEnumerable.html#maxBound:A" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">maxBound</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Returns the upper limit of a type.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the upper limit of a type.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../UpperBounded.html" class="extype" name="cats.kernel.UpperBounded">UpperBounded</a></dd></dl></div>
+    </li><li name="cats.kernel.LowerBounded#minBound" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="minBound:A"></a><a id="minBound:Byte"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/ByteEnumerable.html#minBound:A" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">minBound</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Returns the lower limit of a type.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the lower limit of a type.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../LowerBounded.html" class="extype" name="cats.kernel.LowerBounded">LowerBounded</a></dd></dl></div>
+    </li><li name="cats.kernel.BoundedEnumerable#order" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="order:cats.kernel.Order[A]"></a><a id="order:Order[Byte]"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/ByteEnumerable.html#order:cats.kernel.Order[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">order</span><span class="result">: <a href="../Order.html" class="extype" name="cats.kernel.Order">Order</a>[<a href="https://www.scala-lang.org/api/2.12.13/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../BoundedEnumerable.html" class="extype" name="cats.kernel.BoundedEnumerable">BoundedEnumerable</a></dd></dl></div>
+    </li></ol>
+            </div>
+
+        <div class="values members">
+              <h3>Concrete Value Members</h3>
+              <ol>
+                <li name="scala.AnyRef#!=" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a><a id="!=(Any):Boolean"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/ByteEnumerable.html#!=(x$1:Any):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.13/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/ByteEnumerable.html###():Int" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a><a id="==(Any):Boolean"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/ByteEnumerable.html#==(x$1:Any):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.13/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/ByteEnumerable.html#asInstanceOf[T0]:T0" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a><a id="clone():AnyRef"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/ByteEnumerable.html#clone():Object" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
+              
+                <span class="name">@native</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="cats.kernel.BoundedEnumerable#cycleNext" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="cycleNext(a:A):A"></a><a id="cycleNext(Byte):Byte"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/ByteEnumerable.html#cycleNext(a:A):A" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">cycleNext</span><span class="params">(<span name="a">a: <a href="https://www.scala-lang.org/api/2.12.13/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../BoundedEnumerable.html" class="extype" name="cats.kernel.BoundedEnumerable">BoundedEnumerable</a></dd></dl></div>
+    </li><li name="cats.kernel.BoundedEnumerable#cyclePrevious" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="cyclePrevious(a:A):A"></a><a id="cyclePrevious(Byte):Byte"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/ByteEnumerable.html#cyclePrevious(a:A):A" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">cyclePrevious</span><span class="params">(<span name="a">a: <a href="https://www.scala-lang.org/api/2.12.13/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../BoundedEnumerable.html" class="extype" name="cats.kernel.BoundedEnumerable">BoundedEnumerable</a></dd></dl></div>
+    </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/ByteEnumerable.html#eq(x$1:AnyRef):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.13/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#equals" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a><a id="equals(Any):Boolean"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/ByteEnumerable.html#equals(x$1:Any):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.13/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/ByteEnumerable.html#finalize():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/ByteEnumerable.html#getClass():Class[_]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
+                <span class="name">@native</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/ByteEnumerable.html#hashCode():Int" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
+                <span class="name">@native</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/ByteEnumerable.html#isInstanceOf[T0]:Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.kernel.PartialNextLowerBounded#membersAscending" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="membersAscending:scala.collection.immutable.Stream[A]"></a><a id="membersAscending:Stream[Byte]"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/ByteEnumerable.html#membersAscending:scala.collection.immutable.Stream[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">membersAscending</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/collection/immutable/Stream.html#scala.collection.immutable.Stream" class="extype" name="scala.collection.immutable.Stream">Stream</a>[<a href="https://www.scala-lang.org/api/2.12.13/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Enumerate the members in ascending order.</p><div class="fullcomment"><div class="comment cmt"><p>Enumerate the members in ascending order.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../PartialNextLowerBounded.html" class="extype" name="cats.kernel.PartialNextLowerBounded">PartialNextLowerBounded</a></dd></dl></div>
+    </li><li name="cats.kernel.PartialPreviousUpperBounded#membersDescending" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="membersDescending:scala.collection.immutable.Stream[A]"></a><a id="membersDescending:Stream[Byte]"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/ByteEnumerable.html#membersDescending:scala.collection.immutable.Stream[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">membersDescending</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/collection/immutable/Stream.html#scala.collection.immutable.Stream" class="extype" name="scala.collection.immutable.Stream">Stream</a>[<a href="https://www.scala-lang.org/api/2.12.13/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Enumerate the members in descending order.</p><div class="fullcomment"><div class="comment cmt"><p>Enumerate the members in descending order.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../PartialPreviousUpperBounded.html" class="extype" name="cats.kernel.PartialPreviousUpperBounded">PartialPreviousUpperBounded</a></dd></dl></div>
+    </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/ByteEnumerable.html#ne(x$1:AnyRef):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.13/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/ByteEnumerable.html#notify():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@native</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/ByteEnumerable.html#notifyAll():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@native</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="cats.kernel.instances.ByteEnumerable#partialNext" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="partialNext(a:Byte):Option[Byte]"></a><a id="partialNext(Byte):Option[Byte]"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/ByteEnumerable.html#partialNext(a:Byte):Option[Byte]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">partialNext</span><span class="params">(<span name="a">a: <a href="https://www.scala-lang.org/api/2.12.13/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="https://www.scala-lang.org/api/2.12.13/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.kernel.instances.ByteEnumerable">ByteEnumerable</a> → <a href="../PartialNext.html" class="extype" name="cats.kernel.PartialNext">PartialNext</a></dd></dl></div>
+    </li><li name="cats.kernel.BoundedEnumerable#partialOrder" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="partialOrder:cats.kernel.PartialOrder[A]"></a><a id="partialOrder:PartialOrder[Byte]"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/ByteEnumerable.html#partialOrder:cats.kernel.PartialOrder[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">partialOrder</span><span class="result">: <a href="../PartialOrder.html" class="extype" name="cats.kernel.PartialOrder">PartialOrder</a>[<a href="https://www.scala-lang.org/api/2.12.13/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../BoundedEnumerable.html" class="extype" name="cats.kernel.BoundedEnumerable">BoundedEnumerable</a> → <a href="../LowerBounded.html" class="extype" name="cats.kernel.LowerBounded">LowerBounded</a> → <a href="../UpperBounded.html" class="extype" name="cats.kernel.UpperBounded">UpperBounded</a> → <a href="../PartialNext.html" class="extype" name="cats.kernel.PartialNext">PartialNext</a> → <a href="../PartialPrevious.html" class="extype" name="cats.kernel.PartialPrevious">PartialPrevious</a></dd></dl></div>
+    </li><li name="cats.kernel.instances.ByteEnumerable#partialPrevious" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="partialPrevious(a:Byte):Option[Byte]"></a><a id="partialPrevious(Byte):Option[Byte]"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/ByteEnumerable.html#partialPrevious(a:Byte):Option[Byte]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">partialPrevious</span><span class="params">(<span name="a">a: <a href="https://www.scala-lang.org/api/2.12.13/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="https://www.scala-lang.org/api/2.12.13/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.kernel.instances.ByteEnumerable">ByteEnumerable</a> → <a href="../PartialPrevious.html" class="extype" name="cats.kernel.PartialPrevious">PartialPrevious</a></dd></dl></div>
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/ByteEnumerable.html#synchronized[T0](x$1:=&gt;T0):T0" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#toString" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/ByteEnumerable.html#toString():String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/ByteEnumerable.html#wait():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/ByteEnumerable.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.13/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>, <span name="arg1">arg1: <a href="https://www.scala-lang.org/api/2.12.13/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a><a id="wait(Long):Unit"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/ByteEnumerable.html#wait(x$1:Long):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.13/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+                <span class="name">@native</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li>
+              </ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="cats.kernel.BoundedEnumerable">
+              <h3>Inherited from <a href="../BoundedEnumerable.html" class="extype" name="cats.kernel.BoundedEnumerable">BoundedEnumerable</a>[<a href="https://www.scala-lang.org/api/2.12.13/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>]</h3>
+            </div><div class="parent" name="cats.kernel.PartialNextLowerBounded">
+              <h3>Inherited from <a href="../PartialNextLowerBounded.html" class="extype" name="cats.kernel.PartialNextLowerBounded">PartialNextLowerBounded</a>[<a href="https://www.scala-lang.org/api/2.12.13/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>]</h3>
+            </div><div class="parent" name="cats.kernel.LowerBounded">
+              <h3>Inherited from <a href="../LowerBounded.html" class="extype" name="cats.kernel.LowerBounded">LowerBounded</a>[<a href="https://www.scala-lang.org/api/2.12.13/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>]</h3>
+            </div><div class="parent" name="cats.kernel.PartialPreviousUpperBounded">
+              <h3>Inherited from <a href="../PartialPreviousUpperBounded.html" class="extype" name="cats.kernel.PartialPreviousUpperBounded">PartialPreviousUpperBounded</a>[<a href="https://www.scala-lang.org/api/2.12.13/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>]</h3>
+            </div><div class="parent" name="cats.kernel.UpperBounded">
+              <h3>Inherited from <a href="../UpperBounded.html" class="extype" name="cats.kernel.UpperBounded">UpperBounded</a>[<a href="https://www.scala-lang.org/api/2.12.13/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>]</h3>
+            </div><div class="parent" name="cats.kernel.PartialNext">
+              <h3>Inherited from <a href="../PartialNext.html" class="extype" name="cats.kernel.PartialNext">PartialNext</a>[<a href="https://www.scala-lang.org/api/2.12.13/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>]</h3>
+            </div><div class="parent" name="cats.kernel.PartialPrevious">
+              <h3>Inherited from <a href="../PartialPrevious.html" class="extype" name="cats.kernel.PartialPrevious">PartialPrevious</a>[<a href="https://www.scala-lang.org/api/2.12.13/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>]</h3>
+            </div><div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.13/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.13/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+    </body>
+          </div>
+        </div>
+      </div>
+    </body>
+      </html>

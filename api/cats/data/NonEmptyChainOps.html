@@ -209,6 +209,10 @@
                         <a class="class" href="Kleisli.html" title="Represents a function A =&gt; F[B]."></a>
                         <a href="Kleisli.html" title="Represents a function A =&gt; F[B].">Kleisli</a>
                       </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="KleisliFromFunctionPartiallyApplied.html" title=""></a>
+                        <a href="KleisliFromFunctionPartiallyApplied.html" title="">KleisliFromFunctionPartiallyApplied</a>
+                      </li><li class="current-entities indented2">
                         <a class="object" href="Nested$.html" title=""></a>
                         <a class="class" href="Nested.html" title="Similar to cats.data.Tuple2K, but for nested composition."></a>
                         <a href="Nested.html" title="Similar to cats.data.Tuple2K, but for nested composition.">Nested</a>
@@ -262,8 +266,20 @@
                         <a href="package$$ReaderWriterStateT$.html" title="">ReaderWriterStateT</a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="RepresentableStore$.html" title=""></a>
-                        <a class="class" href="RepresentableStore.html" title="A generalisation of the Store comonad, for any Representable functor."></a>
-                        <a href="RepresentableStore.html" title="A generalisation of the Store comonad, for any Representable functor.">RepresentableStore</a>
+                        <a class="class" href="RepresentableStore.html" title="A generalization of StoreT, where the underlying functor F has a Representable instance."></a>
+                        <a href="RepresentableStore.html" title="A generalization of StoreT, where the underlying functor F has a Representable instance.">RepresentableStore</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="RepresentableStoreT$.html" title=""></a>
+                        <a class="class" href="RepresentableStoreT.html" title=""></a>
+                        <a href="RepresentableStoreT.html" title="">RepresentableStoreT</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="RepresentableStoreTInstances1.html" title=""></a>
+                        <a href="RepresentableStoreTInstances1.html" title="">RepresentableStoreTInstances1</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="RepresentableStoreTInstances2.html" title=""></a>
+                        <a href="RepresentableStoreTInstances2.html" title="">RepresentableStoreTInstances2</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="object" href="package$$State$.html" title=""></a>
@@ -276,6 +292,10 @@
                         <span class="separator"></span>
                         <a class="object" href="package$$Store$.html" title=""></a>
                         <a href="package$$Store$.html" title="">Store</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$StoreT$.html" title=""></a>
+                        <a href="package$$StoreT$.html" title="">StoreT</a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="Tuple2K$.html" title=""></a>
                         <a class="class" href="Tuple2K.html" title="Tuple2K is a product to two independent functor values."></a>
@@ -331,16 +351,16 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">NonEmptyChainOps</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyVal.html#scala.AnyVal" class="extype" name="scala.AnyVal">AnyVal</a> with <span class="extype" name="cats.data.NonEmptyCollection">NonEmptyCollection</span>[<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>, <a href="Chain.html" class="extype" name="cats.data.Chain">Chain</a>, <a href="index.html#NonEmptyChain[+A]=cats.data.NonEmptyChainImpl.Type[A]" class="extmbr" name="cats.data.NonEmptyChain">NonEmptyChain</a>]</span>
+        <span class="name">NonEmptyChainOps</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.13/scala/AnyVal.html#scala.AnyVal" class="extype" name="scala.AnyVal">AnyVal</a> with <span class="extype" name="cats.data.NonEmptyCollection">NonEmptyCollection</span>[<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>, <a href="Chain.html" class="extype" name="cats.data.Chain">Chain</a>, <a href="index.html#NonEmptyChain[+A]=cats.data.NonEmptyChainImpl.Type[A]" class="extmbr" name="cats.data.NonEmptyChain">NonEmptyChain</a>]</span>
       </span>
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/data/NonEmptyChain.scala" target="_blank">NonEmptyChain.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/main/core/src/main/scala/cats/data/NonEmptyChain.scala" target="_blank">NonEmptyChain.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><span class="extype" name="cats.data.NonEmptyCollection">NonEmptyCollection</span>[<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>, <a href="Chain.html" class="extype" name="cats.data.Chain">Chain</a>, <a href="index.html#NonEmptyChain[+A]=cats.data.NonEmptyChainImpl.Type[A]" class="extmbr" name="cats.data.NonEmptyChain">NonEmptyChain</a>], <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyVal.html#scala.AnyVal" class="extype" name="scala.AnyVal">AnyVal</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="cats.data.NonEmptyCollection">NonEmptyCollection</span>[<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>, <a href="Chain.html" class="extype" name="cats.data.Chain">Chain</a>, <a href="index.html#NonEmptyChain[+A]=cats.data.NonEmptyChainImpl.Type[A]" class="extmbr" name="cats.data.NonEmptyChain">NonEmptyChain</a>], <a href="https://www.scala-lang.org/api/2.12.13/scala/AnyVal.html#scala.AnyVal" class="extype" name="scala.AnyVal">AnyVal</a>, <a href="https://www.scala-lang.org/api/2.12.13/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
         </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
                 <span class="toggle diagram-link">
                   Type Hierarchy
@@ -434,7 +454,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.13/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -450,7 +470,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -553,7 +573,7 @@ res0: cats.data.NonEmptyChain[<span class="std">Int</span>] = Chain(<span class=
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.13/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -618,7 +638,7 @@ res0: cats.data.NonEmptyChain[<span class="std">Int</span>] = Chain(<span class=
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">collect</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="pf">pf: <a href="https://www.scala-lang.org/api/2.12.10/scala/PartialFunction.html#scala.PartialFunction" class="extype" name="scala.PartialFunction">PartialFunction</a>[<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>, <span class="extype" name="cats.data.NonEmptyChainOps.collect.B">B</span>]</span>)</span><span class="result">: <a href="Chain.html" class="extype" name="cats.data.Chain">Chain</a>[<span class="extype" name="cats.data.NonEmptyChainOps.collect.B">B</span>]</span>
+        <span class="name">collect</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="pf">pf: <a href="https://www.scala-lang.org/api/2.12.13/scala/PartialFunction.html#scala.PartialFunction" class="extype" name="scala.PartialFunction">PartialFunction</a>[<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>, <span class="extype" name="cats.data.NonEmptyChainOps.collect.B">B</span>]</span>)</span><span class="result">: <a href="Chain.html" class="extype" name="cats.data.Chain">Chain</a>[<span class="extype" name="cats.data.NonEmptyChainOps.collect.B">B</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Returns a new <code>Chain</code> containing all elements where the result of <code>pf</code> is final defined.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a new <code>Chain</code> containing all elements where the result of <code>pf</code> is final defined.</p><pre>scala&gt; <span class="kw">import</span> cats.data.NonEmptyChain
@@ -638,7 +658,7 @@ res0: cats.data.Chain[<span class="std">Int</span>] = Chain(<span class="num">4<
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">collectFirst</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="pf">pf: <a href="https://www.scala-lang.org/api/2.12.10/scala/PartialFunction.html#scala.PartialFunction" class="extype" name="scala.PartialFunction">PartialFunction</a>[<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>, <span class="extype" name="cats.data.NonEmptyChainOps.collectFirst.B">B</span>]</span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.data.NonEmptyChainOps.collectFirst.B">B</span>]</span>
+        <span class="name">collectFirst</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="pf">pf: <a href="https://www.scala-lang.org/api/2.12.13/scala/PartialFunction.html#scala.PartialFunction" class="extype" name="scala.PartialFunction">PartialFunction</a>[<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>, <span class="extype" name="cats.data.NonEmptyChainOps.collectFirst.B">B</span>]</span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.data.NonEmptyChainOps.collectFirst.B">B</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Finds the first element of this <code>NonEmptyChain</code> for which the given partial
@@ -655,7 +675,7 @@ function is defined, and applies the partial function to it.</p>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">collectFirstSome</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>) ⇒ <a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.data.NonEmptyChainOps.collectFirstSome.B">B</span>]</span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.data.NonEmptyChainOps.collectFirstSome.B">B</span>]</span>
+        <span class="name">collectFirstSome</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>) ⇒ <a href="https://www.scala-lang.org/api/2.12.13/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.data.NonEmptyChainOps.collectFirstSome.B">B</span>]</span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.data.NonEmptyChainOps.collectFirstSome.B">B</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Like <code>collectFirst</code> from <code>scala.collection.Traversable</code> but takes <code>A =&gt; Option[B]</code>
@@ -691,7 +711,7 @@ res0: cats.data.NonEmptyChain[<span class="std">Int</span>] = Chain(<span class=
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">contains</span><span class="params">(<span name="a">a: <span class="extype" name="cats.data.NonEmptyChainOps.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../kernel/Eq.html" class="extype" name="cats.kernel.Eq">kernel.Eq</a>[<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>]</span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">contains</span><span class="params">(<span name="a">a: <span class="extype" name="cats.data.NonEmptyChainOps.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../kernel/Eq.html" class="extype" name="cats.kernel.Eq">kernel.Eq</a>[<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>]</span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <p class="shortcomment cmt">Tests if some element is contained in this chain.</p><div class="fullcomment"><div class="comment cmt"><p>Tests if some element is contained in this chain.</p><pre>scala&gt; <span class="kw">import</span> cats.data.NonEmptyChain
@@ -711,7 +731,7 @@ res0: <span class="std">Boolean</span> = <span class="kw">true</span></pre></div
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">deleteFirst</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>) ⇒ <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[(<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>, <a href="Chain.html" class="extype" name="cats.data.Chain">Chain</a>[<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>])]</span>
+        <span class="name">deleteFirst</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>) ⇒ <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[(<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>, <a href="Chain.html" class="extype" name="cats.data.Chain">Chain</a>[<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>])]</span>
       </span>
       
       <p class="shortcomment cmt">Yields to Some(a, Chain[A]) with <code>a</code> removed where <code>f</code> holds for the first time,
@@ -746,7 +766,7 @@ Traverses only until <code>a</code> is found.</p>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">exists</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>) ⇒ <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">exists</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>) ⇒ <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <p class="shortcomment cmt">Tests whether a predicate holds for at least one element of this chain.</p><div class="fullcomment"><div class="comment cmt"><p>Tests whether a predicate holds for at least one element of this chain.
@@ -763,7 +783,7 @@ Traverses only until <code>a</code> is found.</p>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">filter</span><span class="params">(<span name="p">p: (<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>) ⇒ <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="result">: <a href="Chain.html" class="extype" name="cats.data.Chain">Chain</a>[<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>]</span>
+        <span class="name">filter</span><span class="params">(<span name="p">p: (<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>) ⇒ <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="result">: <a href="Chain.html" class="extype" name="cats.data.Chain">Chain</a>[<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Filters all elements of this chain that do not satisfy the given predicate.</p><div class="fullcomment"><div class="comment cmt"><p>Filters all elements of this chain that do not satisfy the given predicate.
@@ -780,7 +800,7 @@ Traverses only until <code>a</code> is found.</p>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">filterNot</span><span class="params">(<span name="p">p: (<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>) ⇒ <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="result">: <a href="Chain.html" class="extype" name="cats.data.Chain">Chain</a>[<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>]</span>
+        <span class="name">filterNot</span><span class="params">(<span name="p">p: (<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>) ⇒ <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="result">: <a href="Chain.html" class="extype" name="cats.data.Chain">Chain</a>[<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Filters all elements of this chain that satisfy the given predicate.</p><div class="fullcomment"><div class="comment cmt"><p>Filters all elements of this chain that satisfy the given predicate.
@@ -797,7 +817,7 @@ Traverses only until <code>a</code> is found.</p>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">find</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>) ⇒ <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>]</span>
+        <span class="name">find</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>) ⇒ <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Returns the first value that matches the given predicate.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the first value that matches the given predicate.
@@ -864,7 +884,7 @@ Traverses only until <code>a</code> is found.</p>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">forall</span><span class="params">(<span name="p">p: (<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>) ⇒ <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">forall</span><span class="params">(<span name="p">p: (<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>) ⇒ <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <p class="shortcomment cmt">Tests whether a predicate holds for all elements of this chain.</p><div class="fullcomment"><div class="comment cmt"><p>Tests whether a predicate holds for all elements of this chain.
@@ -881,11 +901,11 @@ Traverses only until <code>a</code> is found.</p>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Predef.Class">Class</span>[_ &lt;: <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyVal.html#scala.AnyVal" class="extype" name="scala.AnyVal">AnyVal</a>]</span>
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Predef.Class">Class</span>[_ &lt;: <a href="https://www.scala-lang.org/api/2.12.13/scala/AnyVal.html#scala.AnyVal" class="extype" name="scala.AnyVal">AnyVal</a>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyVal → Any</dd></dl></div>
-    </li><li name="cats.data.NonEmptyChainOps#groupBy" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="cats.data.NonEmptyChainOps#groupBy" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="groupBy[B](f:A=&gt;B)(implicitB:cats.kernel.Order[B]):cats.data.NonEmptyMap[B,cats.data.NonEmptyChain[A]]"></a><a id="groupBy[B]((A)⇒B)(kernel.Order[B]):NonEmptyMap[B,NonEmptyChain[A]]"></a>
       <span class="permalink">
       <a href="../../cats/data/NonEmptyChainOps.html#groupBy[B](f:A=&gt;B)(implicitB:cats.kernel.Order[B]):cats.data.NonEmptyMap[B,cats.data.NonEmptyChain[A]]" title="Permalink">
@@ -901,7 +921,14 @@ Traverses only until <code>a</code> is found.</p>
       </span>
       
       <p class="shortcomment cmt">Groups elements inside this <code>NonEmptyChain</code> according to the <code>Order</code>
-of the keys produced by the given mapping function.</p>
+of the keys produced by the given mapping function.</p><div class="fullcomment"><div class="comment cmt"><p>Groups elements inside this <code>NonEmptyChain</code> according to the <code>Order</code>
+of the keys produced by the given mapping function.</p><pre>scala&gt; <span class="kw">import</span> cats.data.{NonEmptyChain, NonEmptyMap}
+scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">val</span> nec = NonEmptyChain(<span class="num">12</span>, -<span class="num">2</span>, <span class="num">3</span>, -<span class="num">5</span>)
+scala&gt; <span class="kw">val</span> expectedResult = NonEmptyMap.of(<span class="kw">false</span> -&gt; NonEmptyChain(-<span class="num">2</span>, -<span class="num">5</span>), <span class="kw">true</span> -&gt; NonEmptyChain(<span class="num">12</span>, <span class="num">3</span>))
+scala&gt; <span class="kw">val</span> result = nec.groupBy(_ &gt;= <span class="num">0</span>)
+scala&gt; result === expectedResult
+res0: <span class="std">Boolean</span> = <span class="kw">true</span></pre></div></div>
     </li><li name="cats.data.NonEmptyChainOps#groupByNem" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="groupByNem[B](f:A=&gt;B)(implicitB:cats.kernel.Order[B]):cats.data.NonEmptyMap[B,cats.data.NonEmptyChain[A]]"></a><a id="groupByNem[B]((A)⇒B)(kernel.Order[B]):NonEmptyMap[B,NonEmptyChain[A]]"></a>
       <span class="permalink">
@@ -917,7 +944,201 @@ of the keys produced by the given mapping function.</p>
         <span class="name">groupByNem</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>) ⇒ <span class="extype" name="cats.data.NonEmptyChainOps.groupByNem.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="B">B: <a href="../kernel/Order.html" class="extype" name="cats.kernel.Order">kernel.Order</a>[<span class="extype" name="cats.data.NonEmptyChainOps.groupByNem.B">B</span>]</span>)</span><span class="result">: <a href="index.html#NonEmptyMap[K,+A]=cats.data.NonEmptyMapImpl.Type[K,A]" class="extmbr" name="cats.data.NonEmptyMap">NonEmptyMap</a>[<span class="extype" name="cats.data.NonEmptyChainOps.groupByNem.B">B</span>, <a href="index.html#NonEmptyChain[+A]=cats.data.NonEmptyChainImpl.Type[A]" class="extmbr" name="cats.data.NonEmptyChain">NonEmptyChain</a>[<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>]]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.data.NonEmptyChainOps">NonEmptyChainOps</a> → NonEmptyCollection</dd></dl></div>
+      <p class="shortcomment cmt">Groups elements inside this <code>NonEmptyChain</code> according to the <code>Order</code>
+of the keys produced by the given mapping function.</p><div class="fullcomment"><div class="comment cmt"><p>Groups elements inside this <code>NonEmptyChain</code> according to the <code>Order</code>
+of the keys produced by the given mapping function.</p><pre>scala&gt; <span class="kw">import</span> cats.data.{NonEmptyChain, NonEmptyMap}
+scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">val</span> nec = NonEmptyChain(<span class="num">12</span>, -<span class="num">2</span>, <span class="num">3</span>, -<span class="num">5</span>)
+scala&gt; <span class="kw">val</span> expectedResult = NonEmptyMap.of(<span class="kw">false</span> -&gt; NonEmptyChain(-<span class="num">2</span>, -<span class="num">5</span>), <span class="kw">true</span> -&gt; NonEmptyChain(<span class="num">12</span>, <span class="num">3</span>))
+scala&gt; <span class="kw">val</span> result = nec.groupByNem(_ &gt;= <span class="num">0</span>)
+scala&gt; result === expectedResult
+res0: <span class="std">Boolean</span> = <span class="kw">true</span></pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.data.NonEmptyChainOps">NonEmptyChainOps</a> → NonEmptyCollection</dd></dl></div>
+    </li><li name="cats.data.NonEmptyChainOps#groupMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="groupMap[K,B](key:A=&gt;K)(f:A=&gt;B)(implicitK:cats.kernel.Order[K]):cats.data.NonEmptyMap[K,cats.data.NonEmptyChain[B]]"></a><a id="groupMap[K,B]((A)⇒K)((A)⇒B)(kernel.Order[K]):NonEmptyMap[K,NonEmptyChain[B]]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/NonEmptyChainOps.html#groupMap[K,B](key:A=&gt;K)(f:A=&gt;B)(implicitK:cats.kernel.Order[K]):cats.data.NonEmptyMap[K,cats.data.NonEmptyChain[B]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">groupMap</span><span class="tparams">[<span name="K">K</span>, <span name="B">B</span>]</span><span class="params">(<span name="key">key: (<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>) ⇒ <span class="extype" name="cats.data.NonEmptyChainOps.groupMap.K">K</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>) ⇒ <span class="extype" name="cats.data.NonEmptyChainOps.groupMap.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="K">K: <a href="../kernel/Order.html" class="extype" name="cats.kernel.Order">kernel.Order</a>[<span class="extype" name="cats.data.NonEmptyChainOps.groupMap.K">K</span>]</span>)</span><span class="result">: <a href="index.html#NonEmptyMap[K,+A]=cats.data.NonEmptyMapImpl.Type[K,A]" class="extmbr" name="cats.data.NonEmptyMap">NonEmptyMap</a>[<span class="extype" name="cats.data.NonEmptyChainOps.groupMap.K">K</span>, <a href="index.html#NonEmptyChain[+A]=cats.data.NonEmptyChainImpl.Type[A]" class="extmbr" name="cats.data.NonEmptyChain">NonEmptyChain</a>[<span class="extype" name="cats.data.NonEmptyChainOps.groupMap.B">B</span>]]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Groups elements inside this <code>NonEmptyChain</code> according to the <code>Order</code>
+of the keys produced by the given key function.</p><div class="fullcomment"><div class="comment cmt"><p>Groups elements inside this <code>NonEmptyChain</code> according to the <code>Order</code>
+of the keys produced by the given key function.
+And each element in a group is transformed into a value of type B
+using the mapping function.</p><pre>scala&gt; <span class="kw">import</span> cats.data.{NonEmptyChain, NonEmptyMap}
+scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">val</span> nec = NonEmptyChain(<span class="num">12</span>, -<span class="num">2</span>, <span class="num">3</span>, -<span class="num">5</span>)
+scala&gt; <span class="kw">val</span> expectedResult = NonEmptyMap.of(<span class="kw">false</span> -&gt; NonEmptyChain(<span class="lit">"-2"</span>, <span class="lit">"-5"</span>), <span class="kw">true</span> -&gt; NonEmptyChain(<span class="lit">"12"</span>, <span class="lit">"3"</span>))
+scala&gt; <span class="kw">val</span> result = nec.groupMap(_ &gt;= <span class="num">0</span>)(_.toString)
+scala&gt; result === expectedResult
+res0: <span class="std">Boolean</span> = <span class="kw">true</span></pre></div></div>
+    </li><li name="cats.data.NonEmptyChainOps#groupMapNem" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="groupMapNem[K,B](key:A=&gt;K)(f:A=&gt;B)(implicitK:cats.kernel.Order[K]):cats.data.NonEmptyMap[K,cats.data.NonEmptyChain[B]]"></a><a id="groupMapNem[K,B]((A)⇒K)((A)⇒B)(kernel.Order[K]):NonEmptyMap[K,NonEmptyChain[B]]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/NonEmptyChainOps.html#groupMapNem[K,B](key:A=&gt;K)(f:A=&gt;B)(implicitK:cats.kernel.Order[K]):cats.data.NonEmptyMap[K,cats.data.NonEmptyChain[B]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">groupMapNem</span><span class="tparams">[<span name="K">K</span>, <span name="B">B</span>]</span><span class="params">(<span name="key">key: (<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>) ⇒ <span class="extype" name="cats.data.NonEmptyChainOps.groupMapNem.K">K</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>) ⇒ <span class="extype" name="cats.data.NonEmptyChainOps.groupMapNem.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="K">K: <a href="../kernel/Order.html" class="extype" name="cats.kernel.Order">kernel.Order</a>[<span class="extype" name="cats.data.NonEmptyChainOps.groupMapNem.K">K</span>]</span>)</span><span class="result">: <a href="index.html#NonEmptyMap[K,+A]=cats.data.NonEmptyMapImpl.Type[K,A]" class="extmbr" name="cats.data.NonEmptyMap">NonEmptyMap</a>[<span class="extype" name="cats.data.NonEmptyChainOps.groupMapNem.K">K</span>, <a href="index.html#NonEmptyChain[+A]=cats.data.NonEmptyChainImpl.Type[A]" class="extmbr" name="cats.data.NonEmptyChain">NonEmptyChain</a>[<span class="extype" name="cats.data.NonEmptyChainOps.groupMapNem.B">B</span>]]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Groups elements inside this <code>NonEmptyChain</code> according to the <code>Order</code>
+of the keys produced by the given key function.</p><div class="fullcomment"><div class="comment cmt"><p>Groups elements inside this <code>NonEmptyChain</code> according to the <code>Order</code>
+of the keys produced by the given key function.
+And each element in a group is transformed into a value of type B
+using the mapping function.</p><pre>scala&gt; <span class="kw">import</span> cats.data.{NonEmptyChain, NonEmptyMap}
+scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">val</span> nec = NonEmptyChain(<span class="num">12</span>, -<span class="num">2</span>, <span class="num">3</span>, -<span class="num">5</span>)
+scala&gt; <span class="kw">val</span> expectedResult = NonEmptyMap.of(<span class="kw">false</span> -&gt; NonEmptyChain(<span class="lit">"-2"</span>, <span class="lit">"-5"</span>), <span class="kw">true</span> -&gt; NonEmptyChain(<span class="lit">"12"</span>, <span class="lit">"3"</span>))
+scala&gt; <span class="kw">val</span> result = nec.groupMapNem(_ &gt;= <span class="num">0</span>)(_.toString)
+scala&gt; result === expectedResult
+res0: <span class="std">Boolean</span> = <span class="kw">true</span></pre></div></div>
+    </li><li name="cats.data.NonEmptyChainOps#groupMapReduce" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="groupMapReduce[K,B](key:A=&gt;K)(f:A=&gt;B)(implicitK:cats.kernel.Order[K],implicitB:cats.kernel.Semigroup[B]):cats.data.NonEmptyMap[K,B]"></a><a id="groupMapReduce[K,B]((A)⇒K)((A)⇒B)(kernel.Order[K],kernel.Semigroup[B]):NonEmptyMap[K,B]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/NonEmptyChainOps.html#groupMapReduce[K,B](key:A=&gt;K)(f:A=&gt;B)(implicitK:cats.kernel.Order[K],implicitB:cats.kernel.Semigroup[B]):cats.data.NonEmptyMap[K,B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">groupMapReduce</span><span class="tparams">[<span name="K">K</span>, <span name="B">B</span>]</span><span class="params">(<span name="key">key: (<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>) ⇒ <span class="extype" name="cats.data.NonEmptyChainOps.groupMapReduce.K">K</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>) ⇒ <span class="extype" name="cats.data.NonEmptyChainOps.groupMapReduce.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="K">K: <a href="../kernel/Order.html" class="extype" name="cats.kernel.Order">kernel.Order</a>[<span class="extype" name="cats.data.NonEmptyChainOps.groupMapReduce.K">K</span>]</span>, <span name="B">B: <a href="../kernel/Semigroup.html" class="extype" name="cats.kernel.Semigroup">kernel.Semigroup</a>[<span class="extype" name="cats.data.NonEmptyChainOps.groupMapReduce.B">B</span>]</span>)</span><span class="result">: <a href="index.html#NonEmptyMap[K,+A]=cats.data.NonEmptyMapImpl.Type[K,A]" class="extmbr" name="cats.data.NonEmptyMap">NonEmptyMap</a>[<span class="extype" name="cats.data.NonEmptyChainOps.groupMapReduce.K">K</span>, <span class="extype" name="cats.data.NonEmptyChainOps.groupMapReduce.B">B</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Groups elements inside this <code>NonEmptyChain</code> according to the <code>Order</code>
+of the keys produced by the given key function.</p><div class="fullcomment"><div class="comment cmt"><p>Groups elements inside this <code>NonEmptyChain</code> according to the <code>Order</code>
+of the keys produced by the given key function.
+Then each element in a group is transformed into a value of type B
+using the mapping function.
+And finally they are all reduced into a single value
+using their <code>Semigroup</code></p><pre>scala&gt; <span class="kw">import</span> cats.data.{NonEmptyChain, NonEmptyMap}
+scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">val</span> nec = NonEmptyChain(<span class="lit">"Hello"</span>, <span class="lit">"World"</span>, <span class="lit">"Goodbye"</span>, <span class="lit">"World"</span>)
+scala&gt; <span class="kw">val</span> expectedResult = NonEmptyMap.of(<span class="lit">"goodbye"</span> -&gt; <span class="num">1</span>, <span class="lit">"hello"</span> -&gt; <span class="num">1</span>, <span class="lit">"world"</span> -&gt; <span class="num">2</span>)
+scala&gt; <span class="kw">val</span> result = nec.groupMapReduce(_.trim.toLowerCase)(_ <span class="kw">=&gt;</span> <span class="num">1</span>)
+scala&gt; result === expectedResult
+res0: <span class="std">Boolean</span> = <span class="kw">true</span></pre></div></div>
+    </li><li name="cats.data.NonEmptyChainOps#groupMapReduceNem" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="groupMapReduceNem[K,B](key:A=&gt;K)(f:A=&gt;B)(implicitK:cats.kernel.Order[K],implicitB:cats.kernel.Semigroup[B]):cats.data.NonEmptyMap[K,B]"></a><a id="groupMapReduceNem[K,B]((A)⇒K)((A)⇒B)(kernel.Order[K],kernel.Semigroup[B]):NonEmptyMap[K,B]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/NonEmptyChainOps.html#groupMapReduceNem[K,B](key:A=&gt;K)(f:A=&gt;B)(implicitK:cats.kernel.Order[K],implicitB:cats.kernel.Semigroup[B]):cats.data.NonEmptyMap[K,B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">groupMapReduceNem</span><span class="tparams">[<span name="K">K</span>, <span name="B">B</span>]</span><span class="params">(<span name="key">key: (<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>) ⇒ <span class="extype" name="cats.data.NonEmptyChainOps.groupMapReduceNem.K">K</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>) ⇒ <span class="extype" name="cats.data.NonEmptyChainOps.groupMapReduceNem.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="K">K: <a href="../kernel/Order.html" class="extype" name="cats.kernel.Order">kernel.Order</a>[<span class="extype" name="cats.data.NonEmptyChainOps.groupMapReduceNem.K">K</span>]</span>, <span name="B">B: <a href="../kernel/Semigroup.html" class="extype" name="cats.kernel.Semigroup">kernel.Semigroup</a>[<span class="extype" name="cats.data.NonEmptyChainOps.groupMapReduceNem.B">B</span>]</span>)</span><span class="result">: <a href="index.html#NonEmptyMap[K,+A]=cats.data.NonEmptyMapImpl.Type[K,A]" class="extmbr" name="cats.data.NonEmptyMap">NonEmptyMap</a>[<span class="extype" name="cats.data.NonEmptyChainOps.groupMapReduceNem.K">K</span>, <span class="extype" name="cats.data.NonEmptyChainOps.groupMapReduceNem.B">B</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Groups elements inside this <code>NonEmptyChain</code> according to the <code>Order</code>
+of the keys produced by the given key function.</p><div class="fullcomment"><div class="comment cmt"><p>Groups elements inside this <code>NonEmptyChain</code> according to the <code>Order</code>
+of the keys produced by the given key function.
+Then each element in a group is transformed into a value of type B
+using the mapping function.
+And finally they are all reduced into a single value
+using their <code>Semigroup</code></p><pre>scala&gt; <span class="kw">import</span> cats.data.{NonEmptyChain, NonEmptyMap}
+scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">val</span> nec = NonEmptyChain(<span class="lit">"Hello"</span>, <span class="lit">"World"</span>, <span class="lit">"Goodbye"</span>, <span class="lit">"World"</span>)
+scala&gt; <span class="kw">val</span> expectedResult = NonEmptyMap.of(<span class="lit">"goodbye"</span> -&gt; <span class="num">1</span>, <span class="lit">"hello"</span> -&gt; <span class="num">1</span>, <span class="lit">"world"</span> -&gt; <span class="num">2</span>)
+scala&gt; <span class="kw">val</span> result = nec.groupMapReduceNem(_.trim.toLowerCase)(_ <span class="kw">=&gt;</span> <span class="num">1</span>)
+scala&gt; result === expectedResult
+res0: <span class="std">Boolean</span> = <span class="kw">true</span></pre></div></div>
+    </li><li name="cats.data.NonEmptyChainOps#groupMapReduceWith" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="groupMapReduceWith[K,B](key:A=&gt;K)(f:A=&gt;B)(combine:(B,B)=&gt;B)(implicitK:cats.kernel.Order[K]):cats.data.NonEmptyMap[K,B]"></a><a id="groupMapReduceWith[K,B]((A)⇒K)((A)⇒B)((B,B)⇒B)(kernel.Order[K]):NonEmptyMap[K,B]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/NonEmptyChainOps.html#groupMapReduceWith[K,B](key:A=&gt;K)(f:A=&gt;B)(combine:(B,B)=&gt;B)(implicitK:cats.kernel.Order[K]):cats.data.NonEmptyMap[K,B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">groupMapReduceWith</span><span class="tparams">[<span name="K">K</span>, <span name="B">B</span>]</span><span class="params">(<span name="key">key: (<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>) ⇒ <span class="extype" name="cats.data.NonEmptyChainOps.groupMapReduceWith.K">K</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>) ⇒ <span class="extype" name="cats.data.NonEmptyChainOps.groupMapReduceWith.B">B</span></span>)</span><span class="params">(<span name="combine">combine: (<span class="extype" name="cats.data.NonEmptyChainOps.groupMapReduceWith.B">B</span>, <span class="extype" name="cats.data.NonEmptyChainOps.groupMapReduceWith.B">B</span>) ⇒ <span class="extype" name="cats.data.NonEmptyChainOps.groupMapReduceWith.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="K">K: <a href="../kernel/Order.html" class="extype" name="cats.kernel.Order">kernel.Order</a>[<span class="extype" name="cats.data.NonEmptyChainOps.groupMapReduceWith.K">K</span>]</span>)</span><span class="result">: <a href="index.html#NonEmptyMap[K,+A]=cats.data.NonEmptyMapImpl.Type[K,A]" class="extmbr" name="cats.data.NonEmptyMap">NonEmptyMap</a>[<span class="extype" name="cats.data.NonEmptyChainOps.groupMapReduceWith.K">K</span>, <span class="extype" name="cats.data.NonEmptyChainOps.groupMapReduceWith.B">B</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Groups elements inside this <code>NonEmptyChain</code> according to the <code>Order</code>
+of the keys produced by the given key function.</p><div class="fullcomment"><div class="comment cmt"><p>Groups elements inside this <code>NonEmptyChain</code> according to the <code>Order</code>
+of the keys produced by the given key function.
+Then each element in a group is transformed into a value of type B
+using the mapping function.
+And finally they are all reduced into a single value
+using the provided combine function.</p><pre>scala&gt; <span class="kw">import</span> cats.data.{NonEmptyChain, NonEmptyMap}
+scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">val</span> nec = NonEmptyChain(<span class="lit">"Hello"</span>, <span class="lit">"World"</span>, <span class="lit">"Goodbye"</span>, <span class="lit">"World"</span>)
+scala&gt; <span class="kw">val</span> expectedResult = NonEmptyMap.of(<span class="lit">"goodbye"</span> -&gt; <span class="num">1</span>, <span class="lit">"hello"</span> -&gt; <span class="num">1</span>, <span class="lit">"world"</span> -&gt; <span class="num">2</span>)
+scala&gt; <span class="kw">val</span> result = nec.groupMapReduceWith(_.trim.toLowerCase)(_ <span class="kw">=&gt;</span> <span class="num">1</span>)(_ + _)
+scala&gt; result === expectedResult
+res0: <span class="std">Boolean</span> = <span class="kw">true</span></pre></div></div>
+    </li><li name="cats.data.NonEmptyChainOps#groupMapReduceWithNem" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="groupMapReduceWithNem[K,B](key:A=&gt;K)(f:A=&gt;B)(combine:(B,B)=&gt;B)(implicitK:cats.kernel.Order[K]):cats.data.NonEmptyMap[K,B]"></a><a id="groupMapReduceWithNem[K,B]((A)⇒K)((A)⇒B)((B,B)⇒B)(kernel.Order[K]):NonEmptyMap[K,B]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/NonEmptyChainOps.html#groupMapReduceWithNem[K,B](key:A=&gt;K)(f:A=&gt;B)(combine:(B,B)=&gt;B)(implicitK:cats.kernel.Order[K]):cats.data.NonEmptyMap[K,B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">groupMapReduceWithNem</span><span class="tparams">[<span name="K">K</span>, <span name="B">B</span>]</span><span class="params">(<span name="key">key: (<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>) ⇒ <span class="extype" name="cats.data.NonEmptyChainOps.groupMapReduceWithNem.K">K</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>) ⇒ <span class="extype" name="cats.data.NonEmptyChainOps.groupMapReduceWithNem.B">B</span></span>)</span><span class="params">(<span name="combine">combine: (<span class="extype" name="cats.data.NonEmptyChainOps.groupMapReduceWithNem.B">B</span>, <span class="extype" name="cats.data.NonEmptyChainOps.groupMapReduceWithNem.B">B</span>) ⇒ <span class="extype" name="cats.data.NonEmptyChainOps.groupMapReduceWithNem.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="K">K: <a href="../kernel/Order.html" class="extype" name="cats.kernel.Order">kernel.Order</a>[<span class="extype" name="cats.data.NonEmptyChainOps.groupMapReduceWithNem.K">K</span>]</span>)</span><span class="result">: <a href="index.html#NonEmptyMap[K,+A]=cats.data.NonEmptyMapImpl.Type[K,A]" class="extmbr" name="cats.data.NonEmptyMap">NonEmptyMap</a>[<span class="extype" name="cats.data.NonEmptyChainOps.groupMapReduceWithNem.K">K</span>, <span class="extype" name="cats.data.NonEmptyChainOps.groupMapReduceWithNem.B">B</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Groups elements inside this <code>NonEmptyChain</code> according to the <code>Order</code>
+of the keys produced by the given key function.</p><div class="fullcomment"><div class="comment cmt"><p>Groups elements inside this <code>NonEmptyChain</code> according to the <code>Order</code>
+of the keys produced by the given key function.
+Then each element in a group is transformed into a value of type B
+using the mapping function.
+And finally they are all reduced into a single value
+using the provided combine function.</p><pre>scala&gt; <span class="kw">import</span> cats.data.{NonEmptyChain, NonEmptyMap}
+scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">val</span> nec = NonEmptyChain(<span class="lit">"Hello"</span>, <span class="lit">"World"</span>, <span class="lit">"Goodbye"</span>, <span class="lit">"World"</span>)
+scala&gt; <span class="kw">val</span> expectedResult = NonEmptyMap.of(<span class="lit">"goodbye"</span> -&gt; <span class="num">1</span>, <span class="lit">"hello"</span> -&gt; <span class="num">1</span>, <span class="lit">"world"</span> -&gt; <span class="num">2</span>)
+scala&gt; <span class="kw">val</span> result = nec.groupMapReduceWithNem(_.trim.toLowerCase)(_ <span class="kw">=&gt;</span> <span class="num">1</span>)(_ + _)
+scala&gt; result === expectedResult
+res0: <span class="std">Boolean</span> = <span class="kw">true</span></pre></div></div>
+    </li><li name="cats.data.NonEmptyChainOps#grouped" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="grouped(size:Int):Iterator[cats.data.NonEmptyChain[A]]"></a><a id="grouped(Int):Iterator[NonEmptyChain[A]]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/NonEmptyChainOps.html#grouped(size:Int):Iterator[cats.data.NonEmptyChain[A]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">grouped</span><span class="params">(<span name="size">size: <a href="https://www.scala-lang.org/api/2.12.13/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>)</span><span class="result">: <span class="extype" name="scala.Iterator">Iterator</span>[<a href="index.html#NonEmptyChain[+A]=cats.data.NonEmptyChainImpl.Type[A]" class="extmbr" name="cats.data.NonEmptyChain">NonEmptyChain</a>[<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>]]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Partitions elements in fixed size <code>NonEmptyChain</code>s.</p><div class="fullcomment"><div class="comment cmt"><p>Partitions elements in fixed size <code>NonEmptyChain</code>s.</p><pre>scala&gt; <span class="kw">import</span> cats.data.NonEmptyChain
+scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">val</span> nel = NonEmptyChain.of(<span class="num">12</span>, -<span class="num">2</span>, <span class="num">3</span>, -<span class="num">5</span>)
+scala&gt; <span class="kw">val</span> expectedResult = <span class="std">List</span>(NonEmptyChain.of(<span class="num">12</span>, -<span class="num">2</span>), NonEmptyChain.of(<span class="num">3</span>, -<span class="num">5</span>))
+scala&gt; <span class="kw">val</span> result = nel.grouped(<span class="num">2</span>)
+scala&gt; result.toList === expectedResult
+res0: <span class="std">Boolean</span> = <span class="kw">true</span></pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.data.NonEmptyChainOps">NonEmptyChainOps</a> → NonEmptyCollection</dd></dl></div>
     </li><li name="cats.data.NonEmptyChainOps#head" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="head:A"></a>
       <span class="permalink">
@@ -981,7 +1202,7 @@ of the keys produced by the given mapping function.</p>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -1030,7 +1251,7 @@ of the keys produced by the given mapping function.</p>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">length</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>
+        <span class="name">length</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>
       </span>
       
       <p class="shortcomment cmt">Returns the number of elements in this chain.</p>
@@ -1433,7 +1654,7 @@ res0: cats.data.NonEmptyChain[<span class="std">String</span>] = Chain(<span cla
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">zipWithIndex</span><span class="result">: <a href="index.html#NonEmptyChain[+A]=cats.data.NonEmptyChainImpl.Type[A]" class="extmbr" name="cats.data.NonEmptyChain">NonEmptyChain</a>[(<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>)]</span>
+        <span class="name">zipWithIndex</span><span class="result">: <a href="index.html#NonEmptyChain[+A]=cats.data.NonEmptyChainImpl.Type[A]" class="extmbr" name="cats.data.NonEmptyChain">NonEmptyChain</a>[(<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>, <a href="https://www.scala-lang.org/api/2.12.13/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>)]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.data.NonEmptyChainOps">NonEmptyChainOps</a> → NonEmptyCollection</dd></dl></div>
@@ -1450,9 +1671,9 @@ res0: cats.data.NonEmptyChain[<span class="std">String</span>] = Chain(<span cla
         <div class="parent" name="cats.data.NonEmptyCollection">
               <h3>Inherited from <span class="extype" name="cats.data.NonEmptyCollection">NonEmptyCollection</span>[<span class="extype" name="cats.data.NonEmptyChainOps.A">A</span>, <a href="Chain.html" class="extype" name="cats.data.Chain">Chain</a>, <a href="index.html#NonEmptyChain[+A]=cats.data.NonEmptyChainImpl.Type[A]" class="extmbr" name="cats.data.NonEmptyChain">NonEmptyChain</a>]</h3>
             </div><div class="parent" name="scala.AnyVal">
-              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyVal.html#scala.AnyVal" class="extype" name="scala.AnyVal">AnyVal</a></h3>
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.13/scala/AnyVal.html#scala.AnyVal" class="extype" name="scala.AnyVal">AnyVal</a></h3>
             </div><div class="parent" name="scala.Any">
-              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></h3>
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.13/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></h3>
             </div>
         
         </div>

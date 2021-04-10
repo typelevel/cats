@@ -209,6 +209,10 @@
                         <a class="class" href="Kleisli.html" title="Represents a function A =&gt; F[B]."></a>
                         <a href="Kleisli.html" title="Represents a function A =&gt; F[B].">Kleisli</a>
                       </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="KleisliFromFunctionPartiallyApplied.html" title=""></a>
+                        <a href="KleisliFromFunctionPartiallyApplied.html" title="">KleisliFromFunctionPartiallyApplied</a>
+                      </li><li class="current-entities indented2">
                         <a class="object" href="Nested$.html" title=""></a>
                         <a class="class" href="Nested.html" title="Similar to cats.data.Tuple2K, but for nested composition."></a>
                         <a href="Nested.html" title="Similar to cats.data.Tuple2K, but for nested composition.">Nested</a>
@@ -262,8 +266,20 @@
                         <a href="package$$ReaderWriterStateT$.html" title="">ReaderWriterStateT</a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="RepresentableStore$.html" title=""></a>
-                        <a class="class" href="RepresentableStore.html" title="A generalisation of the Store comonad, for any Representable functor."></a>
-                        <a href="RepresentableStore.html" title="A generalisation of the Store comonad, for any Representable functor.">RepresentableStore</a>
+                        <a class="class" href="RepresentableStore.html" title="A generalization of StoreT, where the underlying functor F has a Representable instance."></a>
+                        <a href="RepresentableStore.html" title="A generalization of StoreT, where the underlying functor F has a Representable instance.">RepresentableStore</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="RepresentableStoreT$.html" title=""></a>
+                        <a class="class" href="RepresentableStoreT.html" title=""></a>
+                        <a href="RepresentableStoreT.html" title="">RepresentableStoreT</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="RepresentableStoreTInstances1.html" title=""></a>
+                        <a href="RepresentableStoreTInstances1.html" title="">RepresentableStoreTInstances1</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="RepresentableStoreTInstances2.html" title=""></a>
+                        <a href="RepresentableStoreTInstances2.html" title="">RepresentableStoreTInstances2</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="object" href="package$$State$.html" title=""></a>
@@ -276,6 +292,10 @@
                         <span class="separator"></span>
                         <a class="object" href="package$$Store$.html" title=""></a>
                         <a href="package$$Store$.html" title="">Store</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$StoreT$.html" title=""></a>
+                        <a href="package$$StoreT$.html" title="">StoreT</a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="Tuple2K$.html" title=""></a>
                         <a class="class" href="Tuple2K.html" title="Tuple2K is a product to two independent functor values."></a>
@@ -333,16 +353,16 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">Validated</span><span class="tparams">[<span name="E">+E</span>, <span name="A">+A</span>]</span><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.10/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <span class="name">Validated</span><span class="tparams">[<span name="E">+E</span>, <span name="A">+A</span>]</span><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.13/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="https://www.scala-lang.org/api/2.12.13/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/data/Validated.scala" target="_blank">Validated.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/main/core/src/main/scala/cats/data/Validated.scala" target="_blank">Validated.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Equals.html#scala.Equals" class="extype" name="scala.Equals">Equals</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="https://www.scala-lang.org/api/2.12.13/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="https://www.scala-lang.org/api/2.12.13/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a>, <a href="https://www.scala-lang.org/api/2.12.13/scala/Equals.html#scala.Equals" class="extype" name="scala.Equals">Equals</a>, <a href="https://www.scala-lang.org/api/2.12.13/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.13/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
         </div><div class="toggleContainer block">
             <span class="toggle">
               Known Subclasses
@@ -419,7 +439,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">canEqual</span><span class="params">(<span name="that">that: <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">canEqual</span><span class="params">(<span name="that">that: <a href="https://www.scala-lang.org/api/2.12.13/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Equals</dd></dl></div>
@@ -435,7 +455,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">productArity</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
+        <span class="name">productArity</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Product</dd></dl></div>
@@ -451,7 +471,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">productElement</span><span class="params">(<span name="n">n: <a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>
+        <span class="name">productElement</span><span class="params">(<span name="n">n: <a href="https://www.scala-lang.org/api/2.12.13/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Product</dd></dl></div>
@@ -473,7 +493,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.13/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -489,7 +509,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -505,7 +525,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.13/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -521,7 +541,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $eq$eq$eq" class="name">===</span><span class="tparams">[<span name="EE">EE &gt;: <span class="extype" name="cats.data.Validated.E">E</span></span>, <span name="AA">AA &gt;: <span class="extype" name="cats.data.Validated.A">A</span></span>]</span><span class="params">(<span name="that">that: <a href="" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.Validated.===.EE">EE</span>, <span class="extype" name="cats.data.Validated.===.AA">AA</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="EE">EE: <a href="../index.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.data.Validated.===.EE">EE</span>]</span>, <span name="AA">AA: <a href="../index.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.data.Validated.===.AA">AA</span>]</span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span title="gt4s: $eq$eq$eq" class="name">===</span><span class="tparams">[<span name="EE">EE &gt;: <span class="extype" name="cats.data.Validated.E">E</span></span>, <span name="AA">AA &gt;: <span class="extype" name="cats.data.Validated.A">A</span></span>]</span><span class="params">(<span name="that">that: <a href="" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.Validated.===.EE">EE</span>, <span class="extype" name="cats.data.Validated.===.AA">AA</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="EE">EE: <a href="../index.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.data.Validated.===.EE">EE</span>]</span>, <span name="AA">AA: <a href="../index.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.data.Validated.===.AA">AA</span>]</span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <p class="shortcomment cmt">Example:</p><div class="fullcomment"><div class="comment cmt"><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
@@ -654,7 +674,7 @@ res1: Validated[<span class="std">List</span>[<span class="std">String</span>] ,
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -664,8 +684,6 @@ res1: Validated[<span class="std">List</span>[<span class="std">String</span>] ,
     </span>)</span>
               
                 <span class="name">@native</span><span class="args">()</span>
-              
-                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="cats.data.Validated#combine" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -714,7 +732,7 @@ res2: Validated[NonEmptyList[<span class="std">String</span>], <span class="std"
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">compare</span><span class="tparams">[<span name="EE">EE &gt;: <span class="extype" name="cats.data.Validated.E">E</span></span>, <span name="AA">AA &gt;: <span class="extype" name="cats.data.Validated.A">A</span></span>]</span><span class="params">(<span name="that">that: <a href="" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.Validated.compare.EE">EE</span>, <span class="extype" name="cats.data.Validated.compare.AA">AA</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="EE">EE: <a href="../index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.data.Validated.compare.EE">EE</span>]</span>, <span name="AA">AA: <a href="../index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.data.Validated.compare.AA">AA</span>]</span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
+        <span class="name">compare</span><span class="tparams">[<span name="EE">EE &gt;: <span class="extype" name="cats.data.Validated.E">E</span></span>, <span name="AA">AA &gt;: <span class="extype" name="cats.data.Validated.A">A</span></span>]</span><span class="params">(<span name="that">that: <a href="" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.Validated.compare.EE">EE</span>, <span class="extype" name="cats.data.Validated.compare.AA">AA</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="EE">EE: <a href="../index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.data.Validated.compare.EE">EE</span>]</span>, <span name="AA">AA: <a href="../index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.data.Validated.compare.AA">AA</span>]</span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
       </span>
       
       <p class="shortcomment cmt">Example:</p><div class="fullcomment"><div class="comment cmt"><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
@@ -751,7 +769,7 @@ res5: <span class="std">Int</span> = <span class="num">0</span></pre></div></div
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">ensure</span><span class="tparams">[<span name="EE">EE &gt;: <span class="extype" name="cats.data.Validated.E">E</span></span>]</span><span class="params">(<span name="onFailure">onFailure: ⇒ <span class="extype" name="cats.data.Validated.ensure.EE">EE</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.Validated.A">A</span>) ⇒ <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="result">: <a href="" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.Validated.ensure.EE">EE</span>, <span class="extype" name="cats.data.Validated.A">A</span>]</span>
+        <span class="name">ensure</span><span class="tparams">[<span name="EE">EE &gt;: <span class="extype" name="cats.data.Validated.E">E</span></span>]</span><span class="params">(<span name="onFailure">onFailure: ⇒ <span class="extype" name="cats.data.Validated.ensure.EE">EE</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.Validated.A">A</span>) ⇒ <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="result">: <a href="" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.Validated.ensure.EE">EE</span>, <span class="extype" name="cats.data.Validated.A">A</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Ensure that a successful result passes the given predicate,
@@ -772,7 +790,7 @@ res0: Validated[IllegalArgumentException, <span class="std">String</span>] = Inv
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">ensureOr</span><span class="tparams">[<span name="EE">EE &gt;: <span class="extype" name="cats.data.Validated.E">E</span></span>]</span><span class="params">(<span name="onFailure">onFailure: (<span class="extype" name="cats.data.Validated.A">A</span>) ⇒ <span class="extype" name="cats.data.Validated.ensureOr.EE">EE</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.Validated.A">A</span>) ⇒ <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="result">: <a href="" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.Validated.ensureOr.EE">EE</span>, <span class="extype" name="cats.data.Validated.A">A</span>]</span>
+        <span class="name">ensureOr</span><span class="tparams">[<span name="EE">EE &gt;: <span class="extype" name="cats.data.Validated.E">E</span></span>]</span><span class="params">(<span name="onFailure">onFailure: (<span class="extype" name="cats.data.Validated.A">A</span>) ⇒ <span class="extype" name="cats.data.Validated.ensureOr.EE">EE</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.Validated.A">A</span>) ⇒ <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="result">: <a href="" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.Validated.ensureOr.EE">EE</span>, <span class="extype" name="cats.data.Validated.A">A</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Ensure that a successful result passes the given predicate,
@@ -793,7 +811,7 @@ res0: Validated[IllegalArgumentException, <span class="std">String</span>] = Inv
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.13/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -809,7 +827,7 @@ res0: Validated[IllegalArgumentException, <span class="std">String</span>] = Inv
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.13/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -825,7 +843,7 @@ res0: Validated[IllegalArgumentException, <span class="std">String</span>] = Inv
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">exists</span><span class="params">(<span name="predicate">predicate: (<span class="extype" name="cats.data.Validated.A">A</span>) ⇒ <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">exists</span><span class="params">(<span name="predicate">predicate: (<span class="extype" name="cats.data.Validated.A">A</span>) ⇒ <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <p class="shortcomment cmt">Is this Valid and matching the given predicate</p><div class="fullcomment"><div class="comment cmt"><p>Is this Valid and matching the given predicate</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
@@ -838,6 +856,28 @@ res0: <span class="std">Boolean</span> = <span class="kw">false</span>
 
 scala&gt; v2.exists(_ &gt; <span class="num">120</span>)
 res1: <span class="std">Boolean</span> = <span class="kw">true</span></pre></div></div>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated.html#finalize():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+        </dd></dl></div>
     </li><li name="cats.data.Validated#findValid" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="findValid[EE&gt;:E,AA&gt;:A](that:=&gt;cats.data.Validated[EE,AA])(implicitEE:cats.Semigroup[EE]):cats.data.Validated[EE,AA]"></a><a id="findValid[EE&gt;:E,AA&gt;:A](⇒Validated[EE,AA])(Semigroup[EE]):Validated[EE,AA]"></a>
       <span class="permalink">
@@ -961,7 +1001,7 @@ res1: <span class="std">Int</span> = <span class="num">579</span></pre></div></d
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">forall</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.Validated.A">A</span>) ⇒ <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">forall</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.Validated.A">A</span>) ⇒ <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <p class="shortcomment cmt">Is this Invalid or matching the predicate</p><div class="fullcomment"><div class="comment cmt"><p>Is this Invalid or matching the predicate</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
@@ -986,7 +1026,7 @@ res1: <span class="std">Boolean</span> = <span class="kw">false</span></pre></di
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">foreach</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.Validated.A">A</span>) ⇒ <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">foreach</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.Validated.A">A</span>) ⇒ <a href="https://www.scala-lang.org/api/2.12.13/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <p class="shortcomment cmt">Run the side-effecting function on the value if it is Valid
@@ -1008,8 +1048,6 @@ res1: <span class="std">Boolean</span> = <span class="kw">false</span></pre></di
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
-              
-                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="cats.data.Validated#getOrElse" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -1049,13 +1087,11 @@ res1: <span class="std">Int</span> = <span class="num">123</span></pre></div></d
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
-              
-                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -1070,7 +1106,7 @@ res1: <span class="std">Int</span> = <span class="num">123</span></pre></div></d
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -1086,7 +1122,7 @@ res1: <span class="std">Int</span> = <span class="num">123</span></pre></div></d
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isInvalid</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">isInvalid</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <p class="shortcomment cmt">Example:</p><div class="fullcomment"><div class="comment cmt"><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
@@ -1106,7 +1142,7 @@ res0: <span class="std">Boolean</span> = <span class="kw">true</span></pre></div
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isValid</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">isValid</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <p class="shortcomment cmt">Example:</p><div class="fullcomment"><div class="comment cmt"><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
@@ -1202,7 +1238,7 @@ res1: <span class="std">Seq</span>[<span class="std">String</span>] = <span clas
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.13/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -1218,13 +1254,11 @@ res1: <span class="std">Seq</span>[<span class="std">String</span>] = <span clas
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
-              
-                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -1239,13 +1273,11 @@ res1: <span class="std">Seq</span>[<span class="std">String</span>] = <span clas
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
-              
-                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="cats.data.Validated#orElse" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -1288,7 +1320,7 @@ res1: Validated[<span class="std">Option</span>[<span class="std">String</span>]
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">partialCompare</span><span class="tparams">[<span name="EE">EE &gt;: <span class="extype" name="cats.data.Validated.E">E</span></span>, <span name="AA">AA &gt;: <span class="extype" name="cats.data.Validated.A">A</span></span>]</span><span class="params">(<span name="that">that: <a href="" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.Validated.partialCompare.EE">EE</span>, <span class="extype" name="cats.data.Validated.partialCompare.AA">AA</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="EE">EE: <a href="../index.html#PartialOrder[A]=cats.kernel.PartialOrder[A]" class="extmbr" name="cats.PartialOrder">PartialOrder</a>[<span class="extype" name="cats.data.Validated.partialCompare.EE">EE</span>]</span>, <span name="AA">AA: <a href="../index.html#PartialOrder[A]=cats.kernel.PartialOrder[A]" class="extmbr" name="cats.PartialOrder">PartialOrder</a>[<span class="extype" name="cats.data.Validated.partialCompare.AA">AA</span>]</span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Double.html#scala.Double" class="extype" name="scala.Double">Double</a></span>
+        <span class="name">partialCompare</span><span class="tparams">[<span name="EE">EE &gt;: <span class="extype" name="cats.data.Validated.E">E</span></span>, <span name="AA">AA &gt;: <span class="extype" name="cats.data.Validated.A">A</span></span>]</span><span class="params">(<span name="that">that: <a href="" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.Validated.partialCompare.EE">EE</span>, <span class="extype" name="cats.data.Validated.partialCompare.AA">AA</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="EE">EE: <a href="../index.html#PartialOrder[A]=cats.kernel.PartialOrder[A]" class="extmbr" name="cats.PartialOrder">PartialOrder</a>[<span class="extype" name="cats.data.Validated.partialCompare.EE">EE</span>]</span>, <span name="AA">AA: <a href="../index.html#PartialOrder[A]=cats.kernel.PartialOrder[A]" class="extmbr" name="cats.PartialOrder">PartialOrder</a>[<span class="extype" name="cats.data.Validated.partialCompare.AA">AA</span>]</span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Double.html#scala.Double" class="extype" name="scala.Double">Double</a></span>
       </span>
       
       
@@ -1335,7 +1367,7 @@ res2: ValidatedNec[<span class="std">String</span>, (<span class="std">Int</span
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">productIterator</span><span class="result">: <span class="extype" name="scala.Iterator">Iterator</span>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a>]</span>
+        <span class="name">productIterator</span><span class="result">: <span class="extype" name="scala.Iterator">Iterator</span>[<a href="https://www.scala-lang.org/api/2.12.13/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Product</dd></dl></div>
@@ -1501,7 +1533,7 @@ res1: <span class="std">List</span>[<span class="std">Int</span>] = <span class=
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">toOption</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.data.Validated.A">A</span>]</span>
+        <span class="name">toOption</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.data.Validated.A">A</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Returns Valid values wrapped in Some, and None for Invalid values</p><div class="fullcomment"><div class="comment cmt"><p>Returns Valid values wrapped in Some, and None for Invalid values</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
@@ -1637,6 +1669,28 @@ res0: <span class="std">String</span> = exception
 scala&gt; v2.valueOr(_.getOrElse(<span class="lit">""</span>))
 res1: <span class="std">String</span> = OK</pre></div></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated.html#wait():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <span class="permalink">
       <a href="../../cats/data/Validated.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
@@ -1648,7 +1702,7 @@ res1: <span class="std">String</span> = OK</pre></div></div>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.10/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>, <span name="arg1">arg1: <a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.13/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>, <span name="arg1">arg1: <a href="https://www.scala-lang.org/api/2.12.13/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -1670,7 +1724,7 @@ res1: <span class="std">String</span> = OK</pre></div></div>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.10/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.13/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -1680,28 +1734,6 @@ res1: <span class="std">String</span> = OK</pre></div></div>
     </span>)</span>
               
                 <span class="name">@native</span><span class="args">()</span>
-              
-        </dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait():Unit"></a>
-      <span class="permalink">
-      <a href="../../cats/data/Validated.html#wait():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
-    </span>)</span>
               
         </dd></dl></div>
     </li><li name="cats.data.Validated#withEither" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -1736,51 +1768,22 @@ res1: Validated[<span class="std">List</span>[<span class="std">String</span>], 
 
         
 
-        <div class="values members">
-              <h3>Deprecated Value Members</h3>
-              <ol><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="finalize():Unit"></a>
-      <span class="permalink">
-      <a href="../../cats/data/Validated.html#finalize():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name deprecated" title="Deprecated: (Since version ) see corresponding Javadoc for more information.">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="symbol">classOf[java.lang.Throwable]</span>
-    </span>)</span>
-              
-                <span class="name">@Deprecated</span>
-              
-                <span class="name">@deprecated</span>
-              
-        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version )</i> see corresponding Javadoc for more information.</p></dd></dl></div>
-    </li></ol>
-            </div>
+        
         </div>
 
         <div id="inheritedMembers">
         <div class="parent" name="scala.Serializable">
-              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></h3>
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.13/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></h3>
             </div><div class="parent" name="java.io.Serializable">
               <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
             </div><div class="parent" name="scala.Product">
-              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.10/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a></h3>
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.13/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a></h3>
             </div><div class="parent" name="scala.Equals">
-              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.10/scala/Equals.html#scala.Equals" class="extype" name="scala.Equals">Equals</a></h3>
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.13/scala/Equals.html#scala.Equals" class="extype" name="scala.Equals">Equals</a></h3>
             </div><div class="parent" name="scala.AnyRef">
-              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></h3>
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.13/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
-              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></h3>
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.13/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></h3>
             </div>
         
         </div>

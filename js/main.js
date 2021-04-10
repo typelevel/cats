@@ -53,11 +53,6 @@ function shareSiteTwitter(text) {
   return false;
 }
 
-function shareSiteGoogle() {
-  launchPopup('https://plus.google.com/share?url='+baseURL);
-  return false;
-}
-
 function launchPopup(url) {
   window.open(url, 'Social Share', 'height=320, width=640, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, directories=no, status=no');
 }

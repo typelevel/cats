@@ -1,28 +1,28 @@
 /* When the user clicks on the navigation Documentation button,
  * toggle between hiding and showing the dropdown content.
  */
-function displayToggle(e) {
+function displayToggleVersion(e) {
   e.preventDefault();
   e.stopPropagation();
   // Calling close func. in case we're clicking another dropdown with one opened
-  closeDropdown(e);
+  closeDropdownVersion(e);
   const parent = e.target.closest("div[id$='version-dropdown']");
   if (parent) {
-    const dropdown = parent.querySelector(".dropdown-content");
+    const dropdown = parent.querySelector("#version-dropdown-content");
     if (dropdown) {
       dropdown.classList.toggle("show");
       if (dropdown.classList.contains("show")) {
-        document.documentElement.addEventListener("click", closeDropdown);
+        document.documentElement.addEventListener("click", closeDropdownVersion);
       }
       else {
-        document.documentElement.removeEventListener("click", closeDropdown);
+        document.documentElement.removeEventListener("click", closeDropdownVersion);
       }
     }
   }
 }
 
 // Close the dropdown if the user clicks (only) outside of it
-function closeDropdown(e) {
+function closeDropdownVersion(e) {
   const dropdown = document.querySelector("div[id$='version-dropdown'] > .dropdown-content.show");
   if (dropdown) {
     const currentTarget = e.currentTarget || {};
@@ -31,6 +31,6 @@ function closeDropdown(e) {
     if (currentTargetParent !== dropdownParent) {
       dropdown.classList.remove("show");
     }
-    document.documentElement.removeEventListener("click", closeDropdown);
+    document.documentElement.removeEventListener("click", closeDropdownVersion);
   }
 }

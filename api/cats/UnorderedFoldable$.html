@@ -257,6 +257,10 @@
                         <a class="trait" href="ApplicativeError.html" title="An applicative that also allows you to raise and or handle an error value."></a>
                         <a href="ApplicativeError.html" title="An applicative that also allows you to raise and or handle an error value.">ApplicativeError</a>
                       </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$ApplicativeThrow$.html" title=""></a>
+                        <a href="package$$ApplicativeThrow$.html" title="">ApplicativeThrow</a>
+                      </li><li class="current-entities indented1">
                         <a class="object" href="Apply$.html" title=""></a>
                         <a class="trait" href="Apply.html" title="Weaker version of Applicative[F]; has apply but not pure."></a>
                         <a href="Apply.html" title="Weaker version of Applicative[F]; has apply but not pure.">Apply</a>
@@ -349,6 +353,10 @@
                         <a class="trait" href="Foldable.html" title="Data structures that can be folded to a summary value."></a>
                         <a href="Foldable.html" title="Data structures that can be folded to a summary value.">Foldable</a>
                       </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="trait" href="FoldableNFunctions.html" title=""></a>
+                        <a href="FoldableNFunctions.html" title="">FoldableNFunctions</a>
+                      </li><li class="current-entities indented1">
                         <a class="object" href="Functor$.html" title=""></a>
                         <a class="trait" href="Functor.html" title="Functor."></a>
                         <a href="Functor.html" title="Functor.">Functor</a>
@@ -392,6 +400,10 @@
                         <a class="object" href="MonadError$.html" title=""></a>
                         <a class="trait" href="MonadError.html" title="A monad that also allows you to raise and or handle an error value."></a>
                         <a href="MonadError.html" title="A monad that also allows you to raise and or handle an error value.">MonadError</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$MonadThrow$.html" title=""></a>
+                        <a href="package$$MonadThrow$.html" title="">MonadThrow</a>
                       </li><li class="current-entities indented1">
                         <a class="object" href="MonoidK$.html" title=""></a>
                         <a class="trait" href="MonoidK.html" title="MonoidK is a universal monoid which operates on kinds."></a>
@@ -505,16 +517,16 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">UnorderedFoldable</span><span class="result"> extends <span class="extype" name="cats.ScalaVersionSpecificTraverseInstances">ScalaVersionSpecificTraverseInstances</span> with <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <span class="name">UnorderedFoldable</span><span class="result"> extends <span class="extype" name="cats.ScalaVersionSpecificTraverseInstances">ScalaVersionSpecificTraverseInstances</span> with <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances">NTupleUnorderedFoldableInstances</span> with <a href="https://www.scala-lang.org/api/2.12.13/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/UnorderedFoldable.scala" target="_blank">UnorderedFoldable.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/main/core/src/main/scala/cats/UnorderedFoldable.scala" target="_blank">UnorderedFoldable.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="cats.ScalaVersionSpecificTraverseInstances">ScalaVersionSpecificTraverseInstances</span>, <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="https://www.scala-lang.org/api/2.12.13/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances">NTupleUnorderedFoldableInstances</span>, <span class="extype" name="cats.ScalaVersionSpecificTraverseInstances">ScalaVersionSpecificTraverseInstances</span>, <a href="https://www.scala-lang.org/api/2.12.13/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.13/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
         </div><div class="toggleContainer block diagram-container" id="content-diagram-container">
                 <span class="toggle diagram-link">
                   Content Hierarchy
@@ -550,7 +562,7 @@
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="cats.UnorderedFoldable"><span>UnorderedFoldable</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="cats.ScalaVersionSpecificTraverseInstances"><span>ScalaVersionSpecificTraverseInstances</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="cats.UnorderedFoldable"><span>UnorderedFoldable</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="cats.instances.NTupleUnorderedFoldableInstances"><span>NTupleUnorderedFoldableInstances</span></li><li class="in" name="cats.ScalaVersionSpecificTraverseInstances"><span>ScalaVersionSpecificTraverseInstances</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -600,7 +612,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="" href="UnorderedFoldable$$Ops.html"><span class="name">Ops</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="" href="UnorderedFoldable$$Ops.html"><span class="name">Ops</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.13/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
@@ -616,7 +628,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="" href="UnorderedFoldable$$ToUnorderedFoldableOps.html"><span class="name">ToUnorderedFoldableOps</span></a><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="" href="UnorderedFoldable$$ToUnorderedFoldableOps.html"><span class="name">ToUnorderedFoldableOps</span></a><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.13/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
@@ -640,7 +652,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.13/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -656,7 +668,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -672,7 +684,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.13/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -724,23 +736,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsFoldableForSortedSet</span><span class="result">: <a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/collection/immutable/SortedSet.html#scala.collection.immutable.SortedSet" class="extype" name="scala.collection.immutable.SortedSet">SortedSet</a>]</span>
-      </span>
-      
-      
-    </li><li name="cats.UnorderedFoldable#catsInstancesForTuple" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="catsInstancesForTuple[A]:cats.Traverse[[β$3$](A,β$3$)]withcats.Reducible[[β$4$](A,β$4$)]"></a><a id="catsInstancesForTuple[A]:Traverse[[β$3$](A,β$3$)]withReducible[[β$4$](A,β$4$)]"></a>
-      <span class="permalink">
-      <a href="../cats/UnorderedFoldable$.html#catsInstancesForTuple[A]:cats.Traverse[[β$3$](A,β$3$)]withcats.Reducible[[β$4$](A,β$4$)]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">catsInstancesForTuple</span><span class="tparams">[<span name="A">A</span>]</span><span class="result">: <a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[[β$3$](<span class="extype" name="cats.UnorderedFoldable.catsInstancesForTuple.A">A</span>, <span class="extype" name="cats.UnorderedFoldable.&lt;refinement&gt;.Λ$.β$3$">β$3$</span>)] with <a href="Reducible.html" class="extype" name="cats.Reducible">Reducible</a>[[β$4$](<span class="extype" name="cats.UnorderedFoldable.catsInstancesForTuple.A">A</span>, <span class="extype" name="cats.UnorderedFoldable.&lt;refinement&gt;.Λ$.β$4$">β$4$</span>)]</span>
+        <span class="name">catsFoldableForSortedSet</span><span class="result">: <a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<a href="https://www.scala-lang.org/api/2.12.13/scala/collection/immutable/SortedSet.html#scala.collection.immutable.SortedSet" class="extype" name="scala.collection.immutable.SortedSet">SortedSet</a>]</span>
       </span>
       
       
@@ -772,7 +768,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsTraverseForEither</span><span class="tparams">[<span name="A">A</span>]</span><span class="result">: <a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[[β$2$]<a href="https://www.scala-lang.org/api/2.12.10/scala/util/Either.html#scala.util.Either" class="extype" name="scala.util.Either">Either</a>[<span class="extype" name="cats.UnorderedFoldable.catsTraverseForEither.A">A</span>, <span class="extype" name="cats.UnorderedFoldable.&lt;refinement&gt;.Λ$.β$2$">β$2$</span>]]</span>
+        <span class="name">catsTraverseForEither</span><span class="tparams">[<span name="A">A</span>]</span><span class="result">: <a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[[β$2$]<a href="https://www.scala-lang.org/api/2.12.13/scala/util/Either.html#scala.util.Either" class="extype" name="scala.util.Either">Either</a>[<span class="extype" name="cats.UnorderedFoldable.catsTraverseForEither.A">A</span>, <span class="extype" name="cats.UnorderedFoldable.&lt;refinement&gt;.Λ$.β$2$">β$2$</span>]]</span>
       </span>
       
       
@@ -804,7 +800,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsTraverseForOption</span><span class="result">: <a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>]</span>
+        <span class="name">catsTraverseForOption</span><span class="result">: <a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<a href="https://www.scala-lang.org/api/2.12.13/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>]</span>
       </span>
       
       
@@ -820,7 +816,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsTraverseForQueue</span><span class="result">: <a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/collection/immutable/Queue.html#scala.collection.immutable.Queue" class="extype" name="scala.collection.immutable.Queue">Queue</a>]</span>
+        <span class="name">catsTraverseForQueue</span><span class="result">: <a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<a href="https://www.scala-lang.org/api/2.12.13/scala/collection/immutable/Queue.html#scala.collection.immutable.Queue" class="extype" name="scala.collection.immutable.Queue">Queue</a>]</span>
       </span>
       
       
@@ -836,7 +832,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsTraverseForSeq</span><span class="result">: <a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/collection/immutable/Seq.html#scala.collection.immutable.Seq" class="extype" name="scala.collection.immutable.Seq">Seq</a>]</span>
+        <span class="name">catsTraverseForSeq</span><span class="result">: <a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<a href="https://www.scala-lang.org/api/2.12.13/scala/collection/immutable/Seq.html#scala.collection.immutable.Seq" class="extype" name="scala.collection.immutable.Seq">Seq</a>]</span>
       </span>
       
       
@@ -852,7 +848,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsTraverseForSortedMap</span><span class="tparams">[<span name="K">K</span>]</span><span class="result">: <a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[[β$0$]<a href="https://www.scala-lang.org/api/2.12.10/scala/collection/immutable/SortedMap.html#scala.collection.immutable.SortedMap" class="extype" name="scala.collection.immutable.SortedMap">SortedMap</a>[<span class="extype" name="cats.UnorderedFoldable.catsTraverseForSortedMap.K">K</span>, <span class="extype" name="cats.UnorderedFoldable.&lt;refinement&gt;.Λ$.β$0$">β$0$</span>]]</span>
+        <span class="name">catsTraverseForSortedMap</span><span class="tparams">[<span name="K">K</span>]</span><span class="result">: <a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[[β$0$]<a href="https://www.scala-lang.org/api/2.12.13/scala/collection/immutable/SortedMap.html#scala.collection.immutable.SortedMap" class="extype" name="scala.collection.immutable.SortedMap">SortedMap</a>[<span class="extype" name="cats.UnorderedFoldable.catsTraverseForSortedMap.K">K</span>, <span class="extype" name="cats.UnorderedFoldable.&lt;refinement&gt;.Λ$.β$0$">β$0$</span>]]</span>
       </span>
       
       
@@ -884,7 +880,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsTraverseForTry</span><span class="result">: <a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<a href="https://www.scala-lang.org/api/2.12.10/scala/util/Try.html#scala.util.Try" class="extype" name="scala.util.Try">Try</a>]</span>
+        <span class="name">catsTraverseForTry</span><span class="result">: <a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<a href="https://www.scala-lang.org/api/2.12.13/scala/util/Try.html#scala.util.Try" class="extype" name="scala.util.Try">Try</a>]</span>
       </span>
       
       
@@ -904,6 +900,182 @@
       </span>
       
       
+    </li><li name="cats.instances.NTupleUnorderedFoldableInstances#catsUnorderedFoldableInstancesForTuple1" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsUnorderedFoldableInstancesForTuple1:cats.Traverse[Tuple1]withcats.Reducible[Tuple1]"></a><a id="catsUnorderedFoldableInstancesForTuple1:Traverse[Tuple1]withReducible[Tuple1]"></a>
+      <span class="permalink">
+      <a href="../cats/UnorderedFoldable$.html#catsUnorderedFoldableInstancesForTuple1:cats.Traverse[Tuple1]withcats.Reducible[Tuple1]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsUnorderedFoldableInstancesForTuple1</span><span class="result">: <a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<a href="https://www.scala-lang.org/api/2.12.13/scala/Tuple1.html#scala.Tuple1" class="extype" name="scala.Tuple1">Tuple1</a>] with <a href="Reducible.html" class="extype" name="cats.Reducible">Reducible</a>[<a href="https://www.scala-lang.org/api/2.12.13/scala/Tuple1.html#scala.Tuple1" class="extype" name="scala.Tuple1">Tuple1</a>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>NTupleUnorderedFoldableInstances</dd></dl></div>
+    </li><li name="cats.instances.NTupleUnorderedFoldableInstances#catsUnorderedFoldableInstancesForTuple10" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsUnorderedFoldableInstancesForTuple10[A0,A1,A2,A3,A4,A5,A6,A7,A8]:cats.Traverse[[κ$32$](A0,A1,A2,A3,A4,A5,A6,A7,A8,κ$32$)]withcats.Reducible[[κ$33$](A0,A1,A2,A3,A4,A5,A6,A7,A8,κ$33$)]"></a><a id="catsUnorderedFoldableInstancesForTuple10[A0,A1,A2,A3,A4,A5,A6,A7,A8]:Traverse[[κ$32$](A0,A1,A2,A3,A4,A5,A6,A7,A8,κ$32$)]withReducible[[κ$33$](A0,A1,A2,A3,A4,A5,A6,A7,A8,κ$33$)]"></a>
+      <span class="permalink">
+      <a href="../cats/UnorderedFoldable$.html#catsUnorderedFoldableInstancesForTuple10[A0,A1,A2,A3,A4,A5,A6,A7,A8]:cats.Traverse[[κ$32$](A0,A1,A2,A3,A4,A5,A6,A7,A8,κ$32$)]withcats.Reducible[[κ$33$](A0,A1,A2,A3,A4,A5,A6,A7,A8,κ$33$)]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsUnorderedFoldableInstancesForTuple10</span><span class="tparams">[<span name="A0">A0</span>, <span name="A1">A1</span>, <span name="A2">A2</span>, <span name="A3">A3</span>, <span name="A4">A4</span>, <span name="A5">A5</span>, <span name="A6">A6</span>, <span name="A7">A7</span>, <span name="A8">A8</span>]</span><span class="result">: <a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[[κ$32$](<span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple10.A0">A0</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple10.A1">A1</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple10.A2">A2</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple10.A3">A3</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple10.A4">A4</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple10.A5">A5</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple10.A6">A6</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple10.A7">A7</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple10.A8">A8</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.&lt;refinement&gt;.Λ$.κ$32$">κ$32$</span>)] with <a href="Reducible.html" class="extype" name="cats.Reducible">Reducible</a>[[κ$33$](<span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple10.A0">A0</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple10.A1">A1</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple10.A2">A2</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple10.A3">A3</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple10.A4">A4</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple10.A5">A5</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple10.A6">A6</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple10.A7">A7</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple10.A8">A8</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.&lt;refinement&gt;.Λ$.κ$33$">κ$33$</span>)]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>NTupleUnorderedFoldableInstances</dd></dl></div>
+    </li><li name="cats.instances.NTupleUnorderedFoldableInstances#catsUnorderedFoldableInstancesForTuple11" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsUnorderedFoldableInstancesForTuple11[A0,A1,A2,A3,A4,A5,A6,A7,A8,A9]:cats.Traverse[[λ$36$](A0,A1,A2,A3,A4,A5,A6,A7,A8,A9,λ$36$)]withcats.Reducible[[λ$37$](A0,A1,A2,A3,A4,A5,A6,A7,A8,A9,λ$37$)]"></a><a id="catsUnorderedFoldableInstancesForTuple11[A0,A1,A2,A3,A4,A5,A6,A7,A8,A9]:Traverse[[λ$36$](A0,A1,A2,A3,A4,A5,A6,A7,A8,A9,λ$36$)]withReducible[[λ$37$](A0,A1,A2,A3,A4,A5,A6,A7,A8,A9,λ$37$)]"></a>
+      <span class="permalink">
+      <a href="../cats/UnorderedFoldable$.html#catsUnorderedFoldableInstancesForTuple11[A0,A1,A2,A3,A4,A5,A6,A7,A8,A9]:cats.Traverse[[λ$36$](A0,A1,A2,A3,A4,A5,A6,A7,A8,A9,λ$36$)]withcats.Reducible[[λ$37$](A0,A1,A2,A3,A4,A5,A6,A7,A8,A9,λ$37$)]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsUnorderedFoldableInstancesForTuple11</span><span class="tparams">[<span name="A0">A0</span>, <span name="A1">A1</span>, <span name="A2">A2</span>, <span name="A3">A3</span>, <span name="A4">A4</span>, <span name="A5">A5</span>, <span name="A6">A6</span>, <span name="A7">A7</span>, <span name="A8">A8</span>, <span name="A9">A9</span>]</span><span class="result">: <a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[[λ$36$](<span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple11.A0">A0</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple11.A1">A1</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple11.A2">A2</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple11.A3">A3</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple11.A4">A4</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple11.A5">A5</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple11.A6">A6</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple11.A7">A7</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple11.A8">A8</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple11.A9">A9</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.&lt;refinement&gt;.Λ$.λ$36$">λ$36$</span>)] with <a href="Reducible.html" class="extype" name="cats.Reducible">Reducible</a>[[λ$37$](<span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple11.A0">A0</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple11.A1">A1</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple11.A2">A2</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple11.A3">A3</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple11.A4">A4</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple11.A5">A5</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple11.A6">A6</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple11.A7">A7</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple11.A8">A8</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple11.A9">A9</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.&lt;refinement&gt;.Λ$.λ$37$">λ$37$</span>)]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>NTupleUnorderedFoldableInstances</dd></dl></div>
+    </li><li name="cats.instances.NTupleUnorderedFoldableInstances#catsUnorderedFoldableInstancesForTuple2" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsUnorderedFoldableInstancesForTuple2[A0]:cats.Traverse[[β$0$](A0,β$0$)]withcats.Reducible[[β$1$](A0,β$1$)]"></a><a id="catsUnorderedFoldableInstancesForTuple2[A0]:Traverse[[β$0$](A0,β$0$)]withReducible[[β$1$](A0,β$1$)]"></a>
+      <span class="permalink">
+      <a href="../cats/UnorderedFoldable$.html#catsUnorderedFoldableInstancesForTuple2[A0]:cats.Traverse[[β$0$](A0,β$0$)]withcats.Reducible[[β$1$](A0,β$1$)]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsUnorderedFoldableInstancesForTuple2</span><span class="tparams">[<span name="A0">A0</span>]</span><span class="result">: <a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[[β$0$](<span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple2.A0">A0</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.&lt;refinement&gt;.Λ$.β$0$">β$0$</span>)] with <a href="Reducible.html" class="extype" name="cats.Reducible">Reducible</a>[[β$1$](<span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple2.A0">A0</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.&lt;refinement&gt;.Λ$.β$1$">β$1$</span>)]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>NTupleUnorderedFoldableInstances</dd></dl></div>
+    </li><li name="cats.instances.NTupleUnorderedFoldableInstances#catsUnorderedFoldableInstancesForTuple3" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsUnorderedFoldableInstancesForTuple3[A0,A1]:cats.Traverse[[γ$4$](A0,A1,γ$4$)]withcats.Reducible[[γ$5$](A0,A1,γ$5$)]"></a><a id="catsUnorderedFoldableInstancesForTuple3[A0,A1]:Traverse[[γ$4$](A0,A1,γ$4$)]withReducible[[γ$5$](A0,A1,γ$5$)]"></a>
+      <span class="permalink">
+      <a href="../cats/UnorderedFoldable$.html#catsUnorderedFoldableInstancesForTuple3[A0,A1]:cats.Traverse[[γ$4$](A0,A1,γ$4$)]withcats.Reducible[[γ$5$](A0,A1,γ$5$)]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsUnorderedFoldableInstancesForTuple3</span><span class="tparams">[<span name="A0">A0</span>, <span name="A1">A1</span>]</span><span class="result">: <a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[[γ$4$](<span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple3.A0">A0</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple3.A1">A1</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.&lt;refinement&gt;.Λ$.γ$4$">γ$4$</span>)] with <a href="Reducible.html" class="extype" name="cats.Reducible">Reducible</a>[[γ$5$](<span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple3.A0">A0</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple3.A1">A1</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.&lt;refinement&gt;.Λ$.γ$5$">γ$5$</span>)]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>NTupleUnorderedFoldableInstances</dd></dl></div>
+    </li><li name="cats.instances.NTupleUnorderedFoldableInstances#catsUnorderedFoldableInstancesForTuple4" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsUnorderedFoldableInstancesForTuple4[A0,A1,A2]:cats.Traverse[[δ$8$](A0,A1,A2,δ$8$)]withcats.Reducible[[δ$9$](A0,A1,A2,δ$9$)]"></a><a id="catsUnorderedFoldableInstancesForTuple4[A0,A1,A2]:Traverse[[δ$8$](A0,A1,A2,δ$8$)]withReducible[[δ$9$](A0,A1,A2,δ$9$)]"></a>
+      <span class="permalink">
+      <a href="../cats/UnorderedFoldable$.html#catsUnorderedFoldableInstancesForTuple4[A0,A1,A2]:cats.Traverse[[δ$8$](A0,A1,A2,δ$8$)]withcats.Reducible[[δ$9$](A0,A1,A2,δ$9$)]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsUnorderedFoldableInstancesForTuple4</span><span class="tparams">[<span name="A0">A0</span>, <span name="A1">A1</span>, <span name="A2">A2</span>]</span><span class="result">: <a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[[δ$8$](<span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple4.A0">A0</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple4.A1">A1</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple4.A2">A2</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.&lt;refinement&gt;.Λ$.δ$8$">δ$8$</span>)] with <a href="Reducible.html" class="extype" name="cats.Reducible">Reducible</a>[[δ$9$](<span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple4.A0">A0</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple4.A1">A1</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple4.A2">A2</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.&lt;refinement&gt;.Λ$.δ$9$">δ$9$</span>)]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>NTupleUnorderedFoldableInstances</dd></dl></div>
+    </li><li name="cats.instances.NTupleUnorderedFoldableInstances#catsUnorderedFoldableInstancesForTuple5" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsUnorderedFoldableInstancesForTuple5[A0,A1,A2,A3]:cats.Traverse[[ε$12$](A0,A1,A2,A3,ε$12$)]withcats.Reducible[[ε$13$](A0,A1,A2,A3,ε$13$)]"></a><a id="catsUnorderedFoldableInstancesForTuple5[A0,A1,A2,A3]:Traverse[[ε$12$](A0,A1,A2,A3,ε$12$)]withReducible[[ε$13$](A0,A1,A2,A3,ε$13$)]"></a>
+      <span class="permalink">
+      <a href="../cats/UnorderedFoldable$.html#catsUnorderedFoldableInstancesForTuple5[A0,A1,A2,A3]:cats.Traverse[[ε$12$](A0,A1,A2,A3,ε$12$)]withcats.Reducible[[ε$13$](A0,A1,A2,A3,ε$13$)]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsUnorderedFoldableInstancesForTuple5</span><span class="tparams">[<span name="A0">A0</span>, <span name="A1">A1</span>, <span name="A2">A2</span>, <span name="A3">A3</span>]</span><span class="result">: <a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[[ε$12$](<span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple5.A0">A0</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple5.A1">A1</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple5.A2">A2</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple5.A3">A3</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.&lt;refinement&gt;.Λ$.ε$12$">ε$12$</span>)] with <a href="Reducible.html" class="extype" name="cats.Reducible">Reducible</a>[[ε$13$](<span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple5.A0">A0</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple5.A1">A1</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple5.A2">A2</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple5.A3">A3</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.&lt;refinement&gt;.Λ$.ε$13$">ε$13$</span>)]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>NTupleUnorderedFoldableInstances</dd></dl></div>
+    </li><li name="cats.instances.NTupleUnorderedFoldableInstances#catsUnorderedFoldableInstancesForTuple6" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsUnorderedFoldableInstancesForTuple6[A0,A1,A2,A3,A4]:cats.Traverse[[ζ$16$](A0,A1,A2,A3,A4,ζ$16$)]withcats.Reducible[[ζ$17$](A0,A1,A2,A3,A4,ζ$17$)]"></a><a id="catsUnorderedFoldableInstancesForTuple6[A0,A1,A2,A3,A4]:Traverse[[ζ$16$](A0,A1,A2,A3,A4,ζ$16$)]withReducible[[ζ$17$](A0,A1,A2,A3,A4,ζ$17$)]"></a>
+      <span class="permalink">
+      <a href="../cats/UnorderedFoldable$.html#catsUnorderedFoldableInstancesForTuple6[A0,A1,A2,A3,A4]:cats.Traverse[[ζ$16$](A0,A1,A2,A3,A4,ζ$16$)]withcats.Reducible[[ζ$17$](A0,A1,A2,A3,A4,ζ$17$)]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsUnorderedFoldableInstancesForTuple6</span><span class="tparams">[<span name="A0">A0</span>, <span name="A1">A1</span>, <span name="A2">A2</span>, <span name="A3">A3</span>, <span name="A4">A4</span>]</span><span class="result">: <a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[[ζ$16$](<span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple6.A0">A0</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple6.A1">A1</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple6.A2">A2</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple6.A3">A3</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple6.A4">A4</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.&lt;refinement&gt;.Λ$.ζ$16$">ζ$16$</span>)] with <a href="Reducible.html" class="extype" name="cats.Reducible">Reducible</a>[[ζ$17$](<span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple6.A0">A0</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple6.A1">A1</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple6.A2">A2</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple6.A3">A3</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple6.A4">A4</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.&lt;refinement&gt;.Λ$.ζ$17$">ζ$17$</span>)]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>NTupleUnorderedFoldableInstances</dd></dl></div>
+    </li><li name="cats.instances.NTupleUnorderedFoldableInstances#catsUnorderedFoldableInstancesForTuple7" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsUnorderedFoldableInstancesForTuple7[A0,A1,A2,A3,A4,A5]:cats.Traverse[[η$20$](A0,A1,A2,A3,A4,A5,η$20$)]withcats.Reducible[[η$21$](A0,A1,A2,A3,A4,A5,η$21$)]"></a><a id="catsUnorderedFoldableInstancesForTuple7[A0,A1,A2,A3,A4,A5]:Traverse[[η$20$](A0,A1,A2,A3,A4,A5,η$20$)]withReducible[[η$21$](A0,A1,A2,A3,A4,A5,η$21$)]"></a>
+      <span class="permalink">
+      <a href="../cats/UnorderedFoldable$.html#catsUnorderedFoldableInstancesForTuple7[A0,A1,A2,A3,A4,A5]:cats.Traverse[[η$20$](A0,A1,A2,A3,A4,A5,η$20$)]withcats.Reducible[[η$21$](A0,A1,A2,A3,A4,A5,η$21$)]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsUnorderedFoldableInstancesForTuple7</span><span class="tparams">[<span name="A0">A0</span>, <span name="A1">A1</span>, <span name="A2">A2</span>, <span name="A3">A3</span>, <span name="A4">A4</span>, <span name="A5">A5</span>]</span><span class="result">: <a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[[η$20$](<span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple7.A0">A0</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple7.A1">A1</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple7.A2">A2</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple7.A3">A3</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple7.A4">A4</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple7.A5">A5</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.&lt;refinement&gt;.Λ$.η$20$">η$20$</span>)] with <a href="Reducible.html" class="extype" name="cats.Reducible">Reducible</a>[[η$21$](<span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple7.A0">A0</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple7.A1">A1</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple7.A2">A2</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple7.A3">A3</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple7.A4">A4</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple7.A5">A5</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.&lt;refinement&gt;.Λ$.η$21$">η$21$</span>)]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>NTupleUnorderedFoldableInstances</dd></dl></div>
+    </li><li name="cats.instances.NTupleUnorderedFoldableInstances#catsUnorderedFoldableInstancesForTuple8" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsUnorderedFoldableInstancesForTuple8[A0,A1,A2,A3,A4,A5,A6]:cats.Traverse[[θ$24$](A0,A1,A2,A3,A4,A5,A6,θ$24$)]withcats.Reducible[[θ$25$](A0,A1,A2,A3,A4,A5,A6,θ$25$)]"></a><a id="catsUnorderedFoldableInstancesForTuple8[A0,A1,A2,A3,A4,A5,A6]:Traverse[[θ$24$](A0,A1,A2,A3,A4,A5,A6,θ$24$)]withReducible[[θ$25$](A0,A1,A2,A3,A4,A5,A6,θ$25$)]"></a>
+      <span class="permalink">
+      <a href="../cats/UnorderedFoldable$.html#catsUnorderedFoldableInstancesForTuple8[A0,A1,A2,A3,A4,A5,A6]:cats.Traverse[[θ$24$](A0,A1,A2,A3,A4,A5,A6,θ$24$)]withcats.Reducible[[θ$25$](A0,A1,A2,A3,A4,A5,A6,θ$25$)]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsUnorderedFoldableInstancesForTuple8</span><span class="tparams">[<span name="A0">A0</span>, <span name="A1">A1</span>, <span name="A2">A2</span>, <span name="A3">A3</span>, <span name="A4">A4</span>, <span name="A5">A5</span>, <span name="A6">A6</span>]</span><span class="result">: <a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[[θ$24$](<span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple8.A0">A0</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple8.A1">A1</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple8.A2">A2</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple8.A3">A3</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple8.A4">A4</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple8.A5">A5</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple8.A6">A6</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.&lt;refinement&gt;.Λ$.θ$24$">θ$24$</span>)] with <a href="Reducible.html" class="extype" name="cats.Reducible">Reducible</a>[[θ$25$](<span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple8.A0">A0</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple8.A1">A1</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple8.A2">A2</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple8.A3">A3</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple8.A4">A4</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple8.A5">A5</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple8.A6">A6</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.&lt;refinement&gt;.Λ$.θ$25$">θ$25$</span>)]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>NTupleUnorderedFoldableInstances</dd></dl></div>
+    </li><li name="cats.instances.NTupleUnorderedFoldableInstances#catsUnorderedFoldableInstancesForTuple9" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsUnorderedFoldableInstancesForTuple9[A0,A1,A2,A3,A4,A5,A6,A7]:cats.Traverse[[ι$28$](A0,A1,A2,A3,A4,A5,A6,A7,ι$28$)]withcats.Reducible[[ι$29$](A0,A1,A2,A3,A4,A5,A6,A7,ι$29$)]"></a><a id="catsUnorderedFoldableInstancesForTuple9[A0,A1,A2,A3,A4,A5,A6,A7]:Traverse[[ι$28$](A0,A1,A2,A3,A4,A5,A6,A7,ι$28$)]withReducible[[ι$29$](A0,A1,A2,A3,A4,A5,A6,A7,ι$29$)]"></a>
+      <span class="permalink">
+      <a href="../cats/UnorderedFoldable$.html#catsUnorderedFoldableInstancesForTuple9[A0,A1,A2,A3,A4,A5,A6,A7]:cats.Traverse[[ι$28$](A0,A1,A2,A3,A4,A5,A6,A7,ι$28$)]withcats.Reducible[[ι$29$](A0,A1,A2,A3,A4,A5,A6,A7,ι$29$)]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsUnorderedFoldableInstancesForTuple9</span><span class="tparams">[<span name="A0">A0</span>, <span name="A1">A1</span>, <span name="A2">A2</span>, <span name="A3">A3</span>, <span name="A4">A4</span>, <span name="A5">A5</span>, <span name="A6">A6</span>, <span name="A7">A7</span>]</span><span class="result">: <a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[[ι$28$](<span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple9.A0">A0</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple9.A1">A1</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple9.A2">A2</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple9.A3">A3</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple9.A4">A4</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple9.A5">A5</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple9.A6">A6</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple9.A7">A7</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.&lt;refinement&gt;.Λ$.ι$28$">ι$28$</span>)] with <a href="Reducible.html" class="extype" name="cats.Reducible">Reducible</a>[[ι$29$](<span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple9.A0">A0</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple9.A1">A1</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple9.A2">A2</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple9.A3">A3</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple9.A4">A4</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple9.A5">A5</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple9.A6">A6</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.catsUnorderedFoldableInstancesForTuple9.A7">A7</span>, <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances.&lt;refinement&gt;.Λ$.ι$29$">ι$29$</span>)]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>NTupleUnorderedFoldableInstances</dd></dl></div>
     </li><li name="cats.UnorderedFoldable#catsUnorderedTraverseForMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="catsUnorderedTraverseForMap[K]:cats.UnorderedTraverse[[β$1$]scala.collection.immutable.Map[K,β$1$]]"></a><a id="catsUnorderedTraverseForMap[K]:UnorderedTraverse[[β$1$]Map[K,β$1$]]"></a>
       <span class="permalink">
@@ -916,7 +1088,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsUnorderedTraverseForMap</span><span class="tparams">[<span name="K">K</span>]</span><span class="result">: <a href="UnorderedTraverse.html" class="extype" name="cats.UnorderedTraverse">UnorderedTraverse</a>[[β$1$]<a href="https://www.scala-lang.org/api/2.12.10/scala/collection/immutable/Map.html#scala.collection.immutable.Map" class="extype" name="scala.collection.immutable.Map">Map</a>[<span class="extype" name="cats.UnorderedFoldable.catsUnorderedTraverseForMap.K">K</span>, <span class="extype" name="cats.UnorderedFoldable.&lt;refinement&gt;.Λ$.β$1$">β$1$</span>]]</span>
+        <span class="name">catsUnorderedTraverseForMap</span><span class="tparams">[<span name="K">K</span>]</span><span class="result">: <a href="UnorderedTraverse.html" class="extype" name="cats.UnorderedTraverse">UnorderedTraverse</a>[[β$1$]<a href="https://www.scala-lang.org/api/2.12.13/scala/collection/immutable/Map.html#scala.collection.immutable.Map" class="extype" name="scala.collection.immutable.Map">Map</a>[<span class="extype" name="cats.UnorderedFoldable.catsUnorderedTraverseForMap.K">K</span>, <span class="extype" name="cats.UnorderedFoldable.&lt;refinement&gt;.Λ$.β$1$">β$1$</span>]]</span>
       </span>
       
       
@@ -948,7 +1120,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -958,8 +1130,6 @@
     </span>)</span>
               
                 <span class="name">@native</span><span class="args">()</span>
-              
-                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -974,7 +1144,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.13/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -990,10 +1160,32 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.13/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <span class="permalink">
+      <a href="../cats/UnorderedFoldable$.html#finalize():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+        </dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
@@ -1012,8 +1204,6 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
               
-                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
-              
         </dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
@@ -1027,13 +1217,11 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
-              
-                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -1048,7 +1236,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -1064,7 +1252,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.13/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -1080,13 +1268,11 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
-              
-                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -1101,13 +1287,11 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
-              
-                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -1143,6 +1327,28 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <span class="permalink">
+      <a href="../cats/UnorderedFoldable$.html#wait():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <span class="permalink">
       <a href="../cats/UnorderedFoldable$.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
@@ -1154,7 +1360,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.10/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>, <span name="arg1">arg1: <a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.13/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>, <span name="arg1">arg1: <a href="https://www.scala-lang.org/api/2.12.13/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -1176,7 +1382,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.10/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.13/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.13/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -1188,28 +1394,6 @@
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait():Unit"></a>
-      <span class="permalink">
-      <a href="../cats/UnorderedFoldable$.html#wait():Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
-    </span>)</span>
-              
-        </dd></dl></div>
     </li>
               </ol>
             </div>
@@ -1218,10 +1402,10 @@
 
         <div class="values members">
               <h3>Deprecated Value Members</h3>
-              <ol><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="finalize():Unit"></a>
+              <ol><li name="cats.UnorderedFoldable#catsInstancesForTuple" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsInstancesForTuple[A]:cats.Traverse[[β$3$](A,β$3$)]withcats.Reducible[[β$4$](A,β$4$)]"></a><a id="catsInstancesForTuple[A]:Traverse[[β$3$](A,β$3$)]withReducible[[β$4$](A,β$4$)]"></a>
       <span class="permalink">
-      <a href="../cats/UnorderedFoldable$.html#finalize():Unit" title="Permalink">
+      <a href="../cats/UnorderedFoldable$.html#catsInstancesForTuple[A]:cats.Traverse[[β$3$](A,β$3$)]withcats.Reducible[[β$4$](A,β$4$)]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1230,20 +1414,13 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name deprecated" title="Deprecated: (Since version ) see corresponding Javadoc for more information.">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name deprecated" title="Deprecated: (Since version 2.4.0) Use catsStdInstancesForTuple2 in cats.instances.NTupleMonadInstances">catsInstancesForTuple</span><span class="tparams">[<span name="A">A</span>]</span><span class="result">: <a href="Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[[β$3$](<span class="extype" name="cats.UnorderedFoldable.catsInstancesForTuple.A">A</span>, <span class="extype" name="cats.UnorderedFoldable.&lt;refinement&gt;.Λ$.β$3$">β$3$</span>)] with <a href="Reducible.html" class="extype" name="cats.Reducible">Reducible</a>[[β$4$](<span class="extype" name="cats.UnorderedFoldable.catsInstancesForTuple.A">A</span>, <span class="extype" name="cats.UnorderedFoldable.&lt;refinement&gt;.Λ$.β$4$">β$4$</span>)]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="symbol">classOf[java.lang.Throwable]</span>
-    </span>)</span>
-              
-                <span class="name">@Deprecated</span>
-              
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@deprecated</span>
               
-        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version )</i> see corresponding Javadoc for more information.</p></dd></dl></div>
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2.4.0)</i> Use catsStdInstancesForTuple2 in cats.instances.NTupleMonadInstances</p></dd></dl></div>
     </li><li name="cats.UnorderedFoldable.nonInheritedOps" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="nonInheritedOps"></a><a id="nonInheritedOps:nonInheritedOps"></a>
       <span class="permalink">
@@ -1288,15 +1465,17 @@
 
         <div id="inheritedMembers">
         <div class="parent" name="scala.Serializable">
-              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></h3>
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.13/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></h3>
             </div><div class="parent" name="java.io.Serializable">
               <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="cats.instances.NTupleUnorderedFoldableInstances">
+              <h3>Inherited from <span class="extype" name="cats.instances.NTupleUnorderedFoldableInstances">NTupleUnorderedFoldableInstances</span></h3>
             </div><div class="parent" name="cats.ScalaVersionSpecificTraverseInstances">
               <h3>Inherited from <span class="extype" name="cats.ScalaVersionSpecificTraverseInstances">ScalaVersionSpecificTraverseInstances</span></h3>
             </div><div class="parent" name="scala.AnyRef">
-              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.10/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></h3>
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.13/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
-              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></h3>
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.13/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></h3>
             </div>
         
         </div>
