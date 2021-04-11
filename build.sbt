@@ -790,7 +790,8 @@ lazy val bench = project
           "co.fs2" %% "fs2-core" % "0.10.4"
         )
       else Nil
-    }
+    },
+    evictionErrorLevel := Level.Warn
   )
   .enablePlugins(JmhPlugin)
 
