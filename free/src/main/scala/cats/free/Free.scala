@@ -361,6 +361,20 @@ sealed abstract private[free] class FreeInstances extends FreeInstances1 {
       def defer[A](fa: => Free[S, A]): Free[S, A] =
         Free.defer(fa)
     }
+
+  implicit def catsFreeEqForFree[S[_]: Functor, A: Eq](implicit S: => Eq[S[Free[S, A]]]): Eq[Free[S, A]] =
+    Eq instance { (left, right) =>
+      (left.resume, right.resume) match {
+        case (Right(leftA), Right(rightA)) =>
+          Eq[A].eqv(leftA, rightA)
+
+        case (Left(leftS), Left(rightS)) =>
+          S.eqv(leftS, rightS)
+
+        case (Left(_), Right(_)) | (Right(_), Left(_)) =>
+          false
+      }
+    }
 }
 
 sealed abstract private[free] class FreeInstances1 {
