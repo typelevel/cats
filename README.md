@@ -279,6 +279,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Wejo](https://www.wejo.com/)
 - [WeWork](https://www.wework.com)
 - [Wix.com](https://www.wix.com)
+- [Wolt](https://wolt.com/)
 - [Zalando](https://zalando.com)
 - [47 Degrees](https://www.47deg.com)
 
