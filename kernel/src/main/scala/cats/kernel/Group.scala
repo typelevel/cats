@@ -60,7 +60,7 @@ trait Group[@sp(Int, Long, Float, Double) A] extends Any with Monoid[A] {
     else repeatedCombineN(inverse(a), -n)
 }
 
-abstract class GroupFunctions[G[T] <: Group[T]] extends MonoidFunctions[Group] {
+abstract class GroupFunctions[G[T] <: Group[T]] extends MonoidFunctions[G] {
   def inverse[@sp(Int, Long, Float, Double) A](a: A)(implicit ev: G[A]): A =
     ev.inverse(a)
 
