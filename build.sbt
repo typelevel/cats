@@ -3,6 +3,10 @@ import microsites._
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 import sbtrelease.ReleasePlugin.autoImport.ReleaseTransformations._
 
+val isDotty = Def.setting(
+  CrossVersion.partialVersion(scalaVersion.value).exists(_._1 == 3)
+)
+
 lazy val publishSignedIfRelevant = taskKey[Unit]("Runs publishSigned but only if scalaVersion in crossScalaVersions")
 Global / publishSignedIfRelevant := PgpKeys.publishSigned.value
 
