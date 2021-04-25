@@ -6,6 +6,10 @@ import com.jsuereth.sbtpgp.PgpKeys
 import scala.xml.transform.{RewriteRule, RuleTransformer}
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 
+val isDotty = Def.setting(
+  CrossVersion.partialVersion(scalaVersion.value).exists(_._1 == 3)
+)
+
 lazy val publishSignedIfRelevant = taskKey[Unit]("Runs publishSigned but only if scalaVersion in crossScalaVersions")
 Global / publishSignedIfRelevant := PgpKeys.publishSigned.value
 
