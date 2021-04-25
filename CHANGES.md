@@ -1,3 +1,23 @@
+## Version 2.6.0
+
+_2021 April 20_
+
+Cats 2.6.0 is a binary-compatible release in the 2.x series. It provides support for Scala 2.12, 2.13, 3.0.0-RC2 and 3.0.0-RC3.
+
+### Additions
+
+* #3831 Add composition to Representable by @TimWSpence 
+* #3832 Representable instance for Tuple2K by @TimWSpence 
+* #3837 Provide instance of `Alternative[Set]` in alleycats by @rtyley 
+* #3836 RepresentableStoreT by @TimWSpence 
+
+### Changes
+
+* #3847 Make deprecated catsDataInstancesForNonEmptyMap not implicit by @joroKr21 (source breaking)
+* #3720, #3852 fix show interpolation ambiguity with Seq/List by @tnielens 
+* #2254, #3856 Remove redundant Monad constraints from Parallel syntax by @joroKr21 
+* #3851 Update 'Jump Start Guide' page to modern cats by @chaitanyawaikar
+
 ## Version 2.5.0
 
 _2021 March 29_
