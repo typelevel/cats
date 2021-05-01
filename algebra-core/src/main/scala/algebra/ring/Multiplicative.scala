@@ -2,7 +2,7 @@ package algebra
 package ring
 
 import scala.{specialized => sp}
-import scala.annotation.tailrec
+import scala.annotation.{nowarn, tailrec}
 
 trait MultiplicativeSemigroup[@sp(Int, Long, Float, Double) A] extends Any with Serializable {
   def multiplicative: Semigroup[A] =
@@ -31,6 +31,7 @@ trait MultiplicativeSemigroup[@sp(Int, Long, Float, Double) A] extends Any with 
    *
    * If the sequence is empty, returns None. Otherwise, returns Some(total).
    */
+  @nowarn("msg=deprecated")
   def tryProduct(as: TraversableOnce[A]): Option[A] =
     as.toIterator.reduceOption(times)
 }
@@ -62,9 +63,11 @@ trait MultiplicativeMonoid[@sp(Int, Long, Float, Double) A] extends Any with Mul
   /**
    * Given a sequence of `as`, compute the product.
    */
+  @nowarn("msg=deprecated")
   def product(as: TraversableOnce[A]): A =
     as.foldLeft(one)(times)
 
+  @nowarn("msg=deprecated")
   override def tryProduct(as: TraversableOnce[A]): Option[A] =
     if (as.isEmpty) None else Some(product(as))
 }
@@ -118,6 +121,7 @@ trait MultiplicativeSemigroupFunctions[S[T] <: MultiplicativeSemigroup[T]] {
   def pow[@sp(Int, Long, Float, Double) A](a: A, n: Int)(implicit ev: S[A]): A =
     ev.pow(a, n)
 
+  @nowarn("msg=deprecated")
   def tryProduct[A](as: TraversableOnce[A])(implicit ev: S[A]): Option[A] =
     ev.tryProduct(as)
 }
@@ -129,6 +133,7 @@ trait MultiplicativeMonoidFunctions[M[T] <: MultiplicativeMonoid[T]] extends Mul
   def isOne[@sp(Int, Long, Float, Double) A](a: A)(implicit ev0: M[A], ev1: Eq[A]): Boolean =
     ev0.isOne(a)
 
+  @nowarn("msg=deprecated")
   def product[@sp(Int, Long, Float, Double) A](as: TraversableOnce[A])(implicit ev: M[A]): A =
     ev.product(as)
 }

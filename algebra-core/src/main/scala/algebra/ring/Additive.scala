@@ -2,11 +2,12 @@ package algebra
 package ring
 
 import scala.{specialized => sp}
-import scala.annotation.tailrec
+import scala.annotation.{nowarn, tailrec}
 
 trait AdditiveSemigroup[@sp(Int, Long, Float, Double) A] extends Any with Serializable {
   def additive: Semigroup[A] = new Semigroup[A] {
     def combine(x: A, y: A): A = plus(x, y)
+    @nowarn("msg=deprecated")
     override def combineAllOption(as: TraversableOnce[A]): Option[A] = trySum(as)
   }
 
@@ -31,6 +32,7 @@ trait AdditiveSemigroup[@sp(Int, Long, Float, Double) A] extends Any with Serial
    *
    * If the sequence is empty, returns None. Otherwise, returns Some(total).
    */
+  @nowarn("msg=deprecated")
   def trySum(as: TraversableOnce[A]): Option[A] =
     as.toIterator.reduceOption(plus)
 }
@@ -38,6 +40,7 @@ trait AdditiveSemigroup[@sp(Int, Long, Float, Double) A] extends Any with Serial
 trait AdditiveCommutativeSemigroup[@sp(Int, Long, Float, Double) A] extends Any with AdditiveSemigroup[A] {
   override def additive: CommutativeSemigroup[A] = new CommutativeSemigroup[A] {
     def combine(x: A, y: A): A = plus(x, y)
+    @nowarn("msg=deprecated")
     override def combineAllOption(as: TraversableOnce[A]): Option[A] = trySum(as)
   }
 }
@@ -46,7 +49,9 @@ trait AdditiveMonoid[@sp(Int, Long, Float, Double) A] extends Any with AdditiveS
   override def additive: Monoid[A] = new Monoid[A] {
     def empty = zero
     def combine(x: A, y: A): A = plus(x, y)
+    @nowarn("msg=deprecated")
     override def combineAllOption(as: TraversableOnce[A]): Option[A] = trySum(as)
+    @nowarn("msg=deprecated")
     override def combineAll(as: TraversableOnce[A]): A = sum(as)
   }
 
@@ -65,9 +70,11 @@ trait AdditiveMonoid[@sp(Int, Long, Float, Double) A] extends Any with AdditiveS
   /**
    * Given a sequence of `as`, compute the sum.
    */
+  @nowarn("msg=deprecated")
   def sum(as: TraversableOnce[A]): A =
     as.foldLeft(zero)(plus)
 
+  @nowarn("msg=deprecated")
   override def trySum(as: TraversableOnce[A]): Option[A] =
     if (as.isEmpty) None else Some(sum(as))
 }
@@ -79,7 +86,9 @@ trait AdditiveCommutativeMonoid[@sp(Int, Long, Float, Double) A]
   override def additive: CommutativeMonoid[A] = new CommutativeMonoid[A] {
     def empty = zero
     def combine(x: A, y: A): A = plus(x, y)
+    @nowarn("msg=deprecated")
     override def combineAllOption(as: TraversableOnce[A]): Option[A] = trySum(as)
+    @nowarn("msg=deprecated")
     override def combineAll(as: TraversableOnce[A]): A = sum(as)
   }
 }
@@ -90,7 +99,9 @@ trait AdditiveGroup[@sp(Int, Long, Float, Double) A] extends Any with AdditiveMo
     def combine(x: A, y: A): A = plus(x, y)
     override def remove(x: A, y: A): A = minus(x, y)
     def inverse(x: A): A = negate(x)
+    @nowarn("msg=deprecated")
     override def combineAllOption(as: TraversableOnce[A]): Option[A] = trySum(as)
+    @nowarn("msg=deprecated")
     override def combineAll(as: TraversableOnce[A]): A = sum(as)
   }
 
@@ -113,7 +124,9 @@ trait AdditiveCommutativeGroup[@sp(Int, Long, Float, Double) A]
     def combine(x: A, y: A): A = plus(x, y)
     override def remove(x: A, y: A): A = minus(x, y)
     def inverse(x: A): A = negate(x)
+    @nowarn("msg=deprecated")
     override def combineAllOption(as: TraversableOnce[A]): Option[A] = trySum(as)
+    @nowarn("msg=deprecated")
     override def combineAll(as: TraversableOnce[A]): A = sum(as)
   }
 }
@@ -129,6 +142,7 @@ trait AdditiveSemigroupFunctions[S[T] <: AdditiveSemigroup[T]] {
   def sumN[@sp(Int, Long, Float, Double) A](a: A, n: Int)(implicit ev: S[A]): A =
     ev.sumN(a, n)
 
+  @nowarn("msg=deprecated")
   def trySum[A](as: TraversableOnce[A])(implicit ev: S[A]): Option[A] =
     ev.trySum(as)
 }
@@ -140,6 +154,7 @@ trait AdditiveMonoidFunctions[M[T] <: AdditiveMonoid[T]] extends AdditiveSemigro
   def isZero[@sp(Int, Long, Float, Double) A](a: A)(implicit ev0: M[A], ev1: Eq[A]): Boolean =
     ev0.isZero(a)
 
+  @nowarn("msg=deprecated")
   def sum[@sp(Int, Long, Float, Double) A](as: TraversableOnce[A])(implicit ev: M[A]): A =
     ev.sum(as)
 }
