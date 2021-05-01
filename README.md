@@ -115,6 +115,7 @@ functionality, you can pick-and-choose from amongst these modules
  * `cats-kernel`: Small set of basic type classes (*required*).
  * `cats-core`: Most core type classes and functionality (*required*).
  * `cats-laws`: Laws for testing type class instances.
+ * `cats-algebra`: Type classes to represent algebraic structures.
  * `cats-free`: Free structures such as the free monad, and supporting type classes.
  * `cats-testkit`: lib for writing tests for type class instances using laws.
  * `alleycats-core`: Cats instances and classes which are not lawful. 
@@ -140,10 +141,11 @@ Links:
 2. ScalaDoc: [typelevel.org/cats/api/](https://typelevel.org/cats/api/)
 3. Type classes: [typelevel.org/cats/typeclasses](https://typelevel.org/cats/typeclasses.html)
 4. Data types: [typelevel.org/cats/datatypes.html](https://typelevel.org/cats/datatypes.html)
-5. Glossary: [typelevel.org/cats/nomenclature.html](https://typelevel.org/cats/nomenclature.html)
-6. Resources for Learners: [typelevel.org/cats/resources_for_learners.html](https://typelevel.org/cats/resources_for_learners.html)
-7. FAQ: [typelevel.org/cats/faq.html](https://typelevel.org/cats/faq.html)
-8. The Typelevel Ecosystem: [typelevel.org/cats/typelevelEcosystem.html](https://typelevel.org/cats/typelevelEcosystem.html)
+5. Algebra overview: [typelevel.org/cats/algebra.html](https://typelevel.org/cats/algebra.html)
+6. Glossary: [typelevel.org/cats/nomenclature.html](https://typelevel.org/cats/nomenclature.html)
+7. Resources for Learners: [typelevel.org/cats/resources_for_learners.html](https://typelevel.org/cats/resources_for_learners.html)
+8. FAQ: [typelevel.org/cats/faq.html](https://typelevel.org/cats/faq.html)
+9. The Typelevel Ecosystem: [typelevel.org/cats/typelevelEcosystem.html](https://typelevel.org/cats/typelevelEcosystem.html)
 
 ### Community
 
