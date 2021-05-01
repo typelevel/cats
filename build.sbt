@@ -547,21 +547,26 @@ lazy val catsJVM = project
   .settings(noPublishSettings)
   .settings(catsSettings)
   .settings(commonJvmSettings)
-  .aggregate(kernel.jvm,
-             kernelLaws.jvm,
-             core.jvm,
-             laws.jvm,
-             free.jvm,
-             testkit.jvm,
-             tests.jvm,
-             alleycatsCore.jvm,
-             alleycatsLaws.jvm,
-             alleycatsTests.jvm,
-             jvm
+  .aggregate(
+    kernel.jvm,
+    kernelLaws.jvm,
+    algebra.jvm,
+    algebraLaws.jvm,
+    core.jvm,
+    laws.jvm,
+    free.jvm,
+    testkit.jvm,
+    tests.jvm,
+    alleycatsCore.jvm,
+    alleycatsLaws.jvm,
+    alleycatsTests.jvm,
+    jvm
   )
   .dependsOn(
     kernel.jvm,
     kernelLaws.jvm,
+    algebra.jvm,
+    algebraLaws.jvm,
     core.jvm,
     laws.jvm,
     free.jvm,
@@ -581,6 +586,8 @@ lazy val catsJS = project
   .settings(commonJsSettings)
   .aggregate(kernel.js,
              kernelLaws.js,
+             algebra.js,
+             algebraLaws.js,
              core.js,
              laws.js,
              free.js,
@@ -594,6 +601,8 @@ lazy val catsJS = project
   .dependsOn(
     kernel.js,
     kernelLaws.js,
+    algebra.js,
+    algebraLaws.js,
     core.js,
     laws.js,
     free.js,
@@ -615,6 +624,8 @@ lazy val catsNative = project
   .aggregate(
     kernel.native,
     kernelLaws.native,
+    algebra.native,
+    algebraLaws.native,
     core.native,
     laws.native,
     free.native,
@@ -628,6 +639,8 @@ lazy val catsNative = project
   .dependsOn(
     kernel.native,
     kernelLaws.native,
+    algebra.native,
+    algebraLaws.native,
     core.native,
     laws.native,
     free.native,
@@ -667,6 +680,36 @@ lazy val kernelLaws = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings ++ mimaSettings("cats-kernel-laws", includeCats1 = false))
   .dependsOn(kernel)
+  .nativeSettings(commonNativeSettings)
+
+lazy val algebra = crossProject(JSPlatform, JVMPlatform, NativePlatform)
+  .crossType(CrossType.Pure)
+  .in(file("algebra-core"))
+  .settings(moduleName := "cats-algebra", name := "Cats algebra")
+  .dependsOn(kernel)
+  .settings(commonSettings)
+  .settings(publishSettings)
+  .settings(Compile / sourceGenerators += (Compile / sourceManaged).map(AlgebraBoilerplate.gen).taskValue)
+  .settings(includeGeneratedSrc)
+  .jsSettings(commonJsSettings)
+  .jvmSettings(commonJvmSettings ++ mimaSettings("cats-algebra"))
+  .nativeSettings(commonNativeSettings)
+  .settings(testingDependencies)
+  .settings(
+    libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % Test
+  )
+
+lazy val algebraLaws = crossProject(JSPlatform, JVMPlatform, NativePlatform)
+  .in(file("algebra-laws"))
+  .settings(moduleName := "cats-algebra-laws", name := "Cats algebra laws")
+  .settings(commonSettings)
+  .settings(publishSettings)
+  .settings(disciplineDependencies)
+  .settings(testingDependencies)
+  .settings(Test / scalacOptions := (Test / scalacOptions).value.filter(_ != "-Xfatal-warnings"))
+  .jsSettings(commonJsSettings)
+  .jvmSettings(commonJvmSettings ++ mimaSettings("cats-algebra-laws", includeCats1 = false))
+  .dependsOn(kernel, algebra)
   .nativeSettings(commonNativeSettings)
 
 lazy val core = crossProject(JSPlatform, JVMPlatform, NativePlatform)
