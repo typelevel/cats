@@ -56,20 +56,21 @@ object GenTupleMonadInstances extends Template {
     |import scala.annotation.tailrec
     |
     |private[cats] trait NTupleMonadInstances extends NTupleMonadInstances1 {
+    |
+    |  private def instance[F[_] <: Product](cofMap: (F[Any], F[Any] => Any) => F[Any]): Comonad[F] =
+    |    new Comonad[F] {
+    |      def coflatMap[A, B](fa: F[A])(f: F[A] => B) =
+    |        cofMap(fa.asInstanceOf[F[Any]], f.asInstanceOf[F[Any] => Any]).asInstanceOf[F[B]]
+    |      def extract[A](fa: F[A]) =
+    |        fa.productElement(fa.productArity - 1).asInstanceOf[A]
+    |      def map[A, B](fa: F[A])(f: A => B) =
+    |        coflatMap(fa)(fa => f(extract(fa)))
+    |    }
+    -
     -  implicit final def catsStdInstancesForTuple$arity${`[A0, A(N - 1)]`}: Comonad[${`(A..N - 1, *)`}] =
-    -    new Comonad[${`(A..N - 1, *)`}] {
-    -      def coflatMap[A, B](fa: ${`A0, A(N - 1)&`("A")})(f: (${`A0, A(N - 1)&`("A")}) => B): ${`A0, A(N - 1)&`(
-      "B"
-    )} = ${`fa._1..(n - 1) & `(
-      "f(fa)"
-    )}
-    -      def extract[A](fa: ${`A0, A(N - 1)&`("A")}): A = fa._$arity
-    -      override def map[A, B](fa: ${`A0, A(N - 1)&`("A")})(f: A => B): ${`A0, A(N - 1)&`("B")} =
-    -        ${`fa._1..(n - 1) & `(s"f(fa._$arity)")}
-    -      override def coflatten[A](fa: ${`A0, A(N - 1)&`("A")}): $coflattenReturn = ${`fa._1..(n - 1) & `("fa")}
-    -    }
+    -    instance((fa, f) => fa.copy(_$arity = f(fa)))
     |}
-    |private[cats] sealed trait NTupleMonadInstances1 extends NTupleMonadInstances2 {
+    |private[cats] sealed trait NTupleMonadInstances1 extends NTupleMonadInstances2 { this: NTupleMonadInstances =>
     -  implicit final def catsStdCommutativeMonadForTuple$arity${`[A0, A(N - 1)]`}${`constraints A..(N-1)`(
       "CommutativeMonoid"
     )}: CommutativeMonad[${`(A..N - 1, *)`}] =
@@ -77,28 +78,25 @@ object GenTupleMonadInstances extends Template {
     -      def pure[A](a: A): ${`A0, A(N - 1)&`("A")} = $monadPureMethod
     -    }
     |}
-    |private[cats] sealed trait NTupleMonadInstances2 extends NTupleMonadInstances3 {
+    |private[cats] sealed trait NTupleMonadInstances2 extends NTupleMonadInstances3 { this: NTupleMonadInstances =>
     -  implicit final def catsStdCommutativeFlatMapForTuple$arity${`[A0, A(N - 1)]`}${`constraints A..(N-1)`(
       "CommutativeSemigroup"
     )}: CommutativeFlatMap[${`(A..N - 1, *)`}] =
     -    new FlatMapTuple$arity${`[A0, A(N - 1)]`}(${`A0, A(N - 1)`}) with CommutativeFlatMap[${`(A..N - 1, *)`}]
     |}
-    |private[cats] sealed trait NTupleMonadInstances3 extends NTupleMonadInstances4 {
+    |private[cats] sealed trait NTupleMonadInstances3 extends NTupleMonadInstances4 { this: NTupleMonadInstances =>
     -  implicit def catsStdMonadForTuple$arity${`[A0, A(N - 1)]`}${`constraints A..(N-1)`("Monoid")}: Monad[${`(A..N - 1, *)`}] =
     -    new FlatMapTuple$arity${`[A0, A(N - 1)]`}(${`A0, A(N - 1)`}) with Monad[${`(A..N - 1, *)`}] {
     -      def pure[A](a: A): ${`A0, A(N - 1)&`("A")} = $monadPureMethod
     -    }
     |}
-    |private[cats] sealed trait NTupleMonadInstances4 extends NTupleMonadInstances5 {
+    |private[cats] sealed trait NTupleMonadInstances4 extends NTupleMonadInstances5 { this: NTupleMonadInstances =>
     -  implicit def catsStdFlatMapForTuple$arity${`[A0, A(N - 1)]`}${`constraints A..(N-1)`("Semigroup")}: FlatMap[${`(A..N - 1, *)`}] =
     -    new FlatMapTuple$arity${`[A0, A(N - 1)]`}(${`A0, A(N - 1)`})
     |}
-    |private[cats] sealed trait NTupleMonadInstances5 {
+    |private[cats] sealed trait NTupleMonadInstances5 { this: NTupleMonadInstances =>
     -  implicit def catsStdInvariantForTuple$arity${`[A0, A(N - 1)]`}: Invariant[${`(A..N - 1, *)`}] =
-    -    new Invariant[${`(A..N - 1, *)`}] {
-    -      def imap[A, B](fa: ${`A0, A(N - 1)&`("A")})(f: A => B)(g: B => A): ${`A0, A(N - 1)&`("B")} =
-    -        ${`fa._1..(n - 1) & `(s"f(fa._$arity)")}
-    -    }
+    -    catsStdInstancesForTuple$arity
     |}
     -
     -private[instances] class $flatMapTupleClass${`[A0, A(N - 1)]`}(${`parameters A..(N-1)`("Semigroup")}) extends FlatMap[${`(A..N - 1, *)`}] {
@@ -107,7 +105,7 @@ object GenTupleMonadInstances extends Template {
     -  override def product[A, B](fa: ${`A0, A(N - 1)&`("A")}, fb: ${`A0, A(N - 1)&`("B")}): ${`A0, A(N - 1)&`("(A, B)")} =
     -    ${`combine A..(N - 1)`("fa", "fb", s"(fa._$arity, fb._$arity)")}
     -  override def map[A, B](fa: ${`A0, A(N - 1)&`("A")})(f: A => B): ${`A0, A(N - 1)&`("B")} =
-    -    ${`fa._1..(n - 1) & `(s"f(fa._$arity)")}
+    -    fa.copy(_$arity = f(fa._$arity))
     -  def flatMap[A, B](fa: ${`A0, A(N - 1)&`("A")})(f: A => ${`A0, A(N - 1)&`("B")}): ${`A0, A(N - 1)&`("B")} = {
          ${if (arity > 1) block"""
          -    val xb = f(fa._$arity)
