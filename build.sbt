@@ -19,9 +19,9 @@ ThisBuild / scalafixDependencies += "org.typelevel" %% "simulacrum-scalafix" % "
 
 val scalaCheckVersion = "1.15.4"
 
-val disciplineVersion = "1.1.4"
+val disciplineVersion = "1.1.5"
 
-val disciplineMunitVersion = "1.0.8"
+val disciplineMunitVersion = "1.0.9"
 
 val kindProjectorVersion = "0.12.0"
 
@@ -37,10 +37,9 @@ ThisBuild / githubWorkflowJavaVersions := Seq(PrimaryJava, LTSJava, LatestJava, 
 
 val Scala212 = "2.12.13"
 val Scala213 = "2.13.5"
-val DottyOld = "3.0.0-RC2"
-val DottyNew = "3.0.0-RC3"
+val Scala3 = "3.0.0"
 
-ThisBuild / crossScalaVersions := Seq(Scala212, Scala213, DottyOld, DottyNew)
+ThisBuild / crossScalaVersions := Seq(Scala212, Scala213, Scala3)
 ThisBuild / scalaVersion := Scala213
 ThisBuild / versionScheme := Some("semver-spec")
 
@@ -56,9 +55,9 @@ ThisBuild / githubWorkflowBuildMatrixExclusions ++=
     )
   }
 
-ThisBuild / githubWorkflowBuildMatrixExclusions ++= Seq(DottyOld, DottyNew).map { dottyVersion =>
-  MatrixExclude(Map("platform" -> "native", "scala" -> dottyVersion))
-} // Dotty is not yet supported by Scala Native
+ThisBuild / githubWorkflowBuildMatrixExclusions +=
+  MatrixExclude(Map("platform" -> "native", "scala" -> Scala3))
+// Dotty is not yet supported by Scala Native
 
 // we don't need this since we aren't publishing
 ThisBuild / githubWorkflowArtifactUpload := false
@@ -69,8 +68,8 @@ val JvmCond = s"matrix.platform == 'jvm'"
 val JsCond = s"matrix.platform == 'js'"
 val NativeCond = s"matrix.platform == 'native'"
 
-val Scala2Cond = s"(matrix.scala != '$DottyOld' && matrix.scala != '$DottyNew')"
-val Scala3Cond = s"(matrix.scala == '$DottyOld' || matrix.scala == '$DottyNew')"
+val Scala2Cond = s"(matrix.scala != '$Scala3')"
+val Scala3Cond = s"(matrix.scala == '$Scala3')"
 
 ThisBuild / githubWorkflowBuild := Seq(
   WorkflowStep.Sbt(List("validateAllJS"), name = Some("Validate JavaScript"), cond = Some(JsCond)),
@@ -207,7 +206,7 @@ lazy val commonNativeSettings = Seq(
   // https://github.com/tkawachi/sbt-doctest/issues/52
   doctestGenTests := Seq.empty,
   // Currently scala-native does not support Dotty
-  crossScalaVersions := { crossScalaVersions.value.filterNot(Seq(DottyOld, DottyNew).contains) }
+  crossScalaVersions := { crossScalaVersions.value.filterNot(Scala3 == _) }
 )
 
 lazy val commonJvmSettings = Seq(
