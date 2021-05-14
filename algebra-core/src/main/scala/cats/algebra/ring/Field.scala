@@ -4,10 +4,8 @@ package ring
 
 import scala.{specialized => sp}
 
-trait Field[@sp(Int, Long, Float, Double) A]
-    extends Any
-    with EuclideanRing[A]
-    with MultiplicativeCommutativeGroup[A] { self =>
+trait Field[@sp(Int, Long, Float, Double) A] extends Any with EuclideanRing[A] with MultiplicativeCommutativeGroup[A] {
+  self =>
 
   // default implementations for GCD
 
