@@ -116,6 +116,7 @@ object AlgebraBoilerplate {
       }
 
       block"""
+        |package cats
         |package algebra
         |package instances
         |
