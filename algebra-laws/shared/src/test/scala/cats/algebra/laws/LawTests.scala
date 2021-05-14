@@ -24,7 +24,6 @@ class LawTests extends munit.DisciplineSuite {
   implicit def orderLaws[A: Cogen: Eq: Arbitrary]: OrderLaws[A] = OrderLaws[A]
   implicit def groupLaws[A: Eq: Arbitrary]: GroupLaws[A] = GroupLaws[A]
   implicit def logicLaws[A: Eq: Arbitrary]: LogicLaws[A] = LogicLaws[A]
-  implicit def deMorganLaws[A: Eq: Arbitrary]: DeMorganLaws[A] = DeMorganLaws[A]
 
   implicit def latticeLaws[A: Eq: Arbitrary]: LatticeLaws[A] = LatticeLaws[A]
   implicit def ringLaws[A: Eq: Arbitrary: AdditiveMonoid]: RingLaws[A] = RingLaws[A]
@@ -53,10 +52,10 @@ class LawTests extends munit.DisciplineSuite {
 
   checkAll("Boolean", OrderLaws[Boolean].order) //("Boolean").check(_.order)
   checkAll("Boolean", LogicLaws[Boolean].bool)
-  checkAll("SimpleHeyting", DeMorganLaws[SimpleHeyting].logic(Logic.fromHeyting(Heyting[SimpleHeyting])))
+  checkAll("SimpleHeyting", LogicLaws[SimpleHeyting].logic(Logic.fromHeyting(Heyting[SimpleHeyting])))
   checkAll("SimpleHeyting", LogicLaws[SimpleHeyting].heyting)
-  checkAll("SimpleDeMorgan", DeMorganLaws[SimpleDeMorgan].deMorgan)
-  checkAll("Boolean", DeMorganLaws[Boolean].deMorgan(DeMorgan.fromBool(Bool[Boolean])))
+  checkAll("SimpleDeMorgan", LogicLaws[SimpleDeMorgan].deMorgan)
+  checkAll("Boolean", LogicLaws[Boolean].deMorgan(DeMorgan.fromBool(Bool[Boolean])))
   checkAll("Boolean", LatticePartialOrderLaws[Boolean].boundedLatticePartialOrder)
   checkAll("Boolean", RingLaws[Boolean].boolRing(booleanRing))
 

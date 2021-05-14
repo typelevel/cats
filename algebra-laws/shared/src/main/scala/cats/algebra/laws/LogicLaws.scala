@@ -1,8 +1,7 @@
 package cats.algebra.laws
 
 import cats.algebra._
-import cats.algebra.lattice.{Bool, GenBool, Heyting}
-
+import cats.algebra.lattice.{Bool, DeMorgan, GenBool, Heyting, Logic}
 import org.scalacheck.{Arbitrary, Prop}
 import org.scalacheck.Prop._
 
@@ -66,6 +65,23 @@ trait LogicLaws[A] extends LatticeLaws[A] {
     parents = Seq(heyting, generalizedBool),
     ll = boundedDistributiveLattice,
     "excluded middle" -> forAll { (x: A) => A.or(x, A.complement(x)) ?== A.one }
+  )
+
+  def logic(implicit A: Logic[A]) = new LogicProperties(
+    name = "logic",
+    parents = Seq(),
+    ll = boundedDistributiveLattice,
+    Rules.distributive(A.or)(A.and),
+    "¬(x∨y) = ¬x∧¬y" -> forAll { (x: A, y: A) => A.not(A.or(x, y)) ?== A.and(A.not(x), A.not(y)) },
+    "¬(x∧y) = ¬¬(¬x∨¬y)" -> forAll { (x: A, y: A) => A.not(A.and(x, y)) ?== A.not(A.not(A.or(A.not(x), A.not(y)))) }
+  )
+
+  def deMorgan(implicit A: DeMorgan[A]) = new LogicProperties(
+    name = "deMorgan",
+    parents = Seq(logic),
+    ll = boundedDistributiveLattice,
+    Rules.distributive(A.or)(A.and),
+    "involutive" -> forAll { (x: A) => A.not(A.not(x)) ?== x }
   )
 
   class LogicProperties(
