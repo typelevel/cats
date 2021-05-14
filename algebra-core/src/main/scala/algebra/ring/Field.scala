@@ -3,10 +3,21 @@ package ring
 
 import scala.{specialized => sp}
 
-trait Field[@sp(Int, Long, Float, Double) A]
-    extends Any
-    with CommutativeRing[A]
-    with MultiplicativeCommutativeGroup[A] { self =>
+trait Field[@sp(Int, Long, Float, Double) A] extends Any with EuclideanRing[A] with MultiplicativeCommutativeGroup[A] {
+  self =>
+
+  // default implementations for GCD
+
+  override def gcd(a: A, b: A)(implicit eqA: Eq[A]): A =
+    if (isZero(a) && isZero(b)) zero else one
+  override def lcm(a: A, b: A)(implicit eqA: Eq[A]): A = times(a, b)
+
+  // default implementations for Euclidean division in a field (as every nonzero element is a unit!)
+
+  def euclideanFunction(a: A): BigInt = BigInt(0)
+  def equot(a: A, b: A): A = div(a, b)
+  def emod(a: A, b: A): A = zero
+  override def equotmod(a: A, b: A): (A, A) = (div(a, b), zero)
 
   /**
    * This is implemented in terms of basic Field ops. However, this is
@@ -20,7 +31,7 @@ trait Field[@sp(Int, Long, Float, Double) A]
 
 }
 
-trait FieldFunctions[F[T] <: Field[T]] extends RingFunctions[F] with MultiplicativeGroupFunctions[F] {
+trait FieldFunctions[F[T] <: Field[T]] extends EuclideanRingFunctions[F] with MultiplicativeGroupFunctions[F] {
   def fromDouble[@sp(Int, Long, Float, Double) A](n: Double)(implicit ev: F[A]): A =
     ev.fromDouble(n)
 }

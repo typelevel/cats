@@ -205,6 +205,57 @@ trait RingLaws[A] extends GroupLaws[A] { self =>
     parents = Seq(ring, commutativeRig, commutativeRng)
   )
 
+  def gcdRing(implicit A: GCDRing[A]) = RingProperties.fromParent(
+    name = "gcd domain",
+    parent = commutativeRing,
+    "gcd/lcm" -> forAll { (x: A, y: A) =>
+      val d = A.gcd(x, y)
+      val m = A.lcm(x, y)
+      A.times(x, y) ?== A.times(d, m)
+    },
+    "gcd is commutative" -> forAll { (x: A, y: A) =>
+      A.gcd(x, y) ?== A.gcd(y, x)
+    },
+    "lcm is commutative" -> forAll { (x: A, y: A) =>
+      A.lcm(x, y) ?== A.lcm(y, x)
+    },
+    "gcd(0, 0)" -> (A.gcd(A.zero, A.zero) ?== A.zero),
+    "lcm(0, 0) === 0" -> (A.lcm(A.zero, A.zero) ?== A.zero),
+    "lcm(x, 0) === 0" -> forAll { (x: A) => A.lcm(x, A.zero) ?== A.zero }
+  )
+
+  def euclideanRing(implicit A: EuclideanRing[A]) = RingProperties.fromParent(
+    name = "euclidean ring",
+    parent = gcdRing,
+    "euclidean division rule" -> forAll { (x: A, y: A) =>
+      pred(y) ==> {
+        val (q, r) = A.equotmod(x, y)
+        x ?== A.plus(A.times(y, q), r)
+      }
+    },
+    "equot" -> forAll { (x: A, y: A) =>
+      pred(y) ==> {
+        A.equotmod(x, y)._1 ?== A.equot(x, y)
+      }
+    },
+    "emod" -> forAll { (x: A, y: A) =>
+      pred(y) ==> {
+        A.equotmod(x, y)._2 ?== A.emod(x, y)
+      }
+    },
+    "euclidean function" -> forAll { (x: A, y: A) =>
+      pred(y) ==> {
+        val (_, r) = A.equotmod(x, y)
+        A.isZero(r) || (A.euclideanFunction(r) < A.euclideanFunction(y))
+      }
+    },
+    "submultiplicative function" -> forAll { (x: A, y: A) =>
+      (pred(x) && pred(y)) ==> {
+        A.euclideanFunction(x) <= A.euclideanFunction(A.times(x, y))
+      }
+    }
+  )
+
   // boolean rings
 
   def boolRng(implicit A: BoolRng[A]) = RingProperties.fromParent(
@@ -231,6 +282,31 @@ trait RingLaws[A] extends GroupLaws[A] { self =>
   // zero * x == x * zero hold.
   // Luckily, these follow from the other field and group axioms.
   def field(implicit A: Field[A]) = new RingProperties(
+    name = "field",
+    al = additiveCommutativeGroup,
+    ml = multiplicativeCommutativeGroup,
+    parents = Seq(euclideanRing),
+    "fromDouble" -> forAll { (n: Double) =>
+      if (Platform.isJvm) {
+        // TODO: BigDecimal(n) is busted in scalajs, so we skip this test.
+        val bd = new java.math.BigDecimal(n)
+        val unscaledValue = new BigInt(bd.unscaledValue)
+        val expected =
+          if (bd.scale > 0) {
+            A.div(A.fromBigInt(unscaledValue), A.fromBigInt(BigInt(10).pow(bd.scale)))
+          } else {
+            A.fromBigInt(unscaledValue * BigInt(10).pow(-bd.scale))
+          }
+        Field.fromDouble[A](n) ?== expected
+      } else {
+        Prop(true)
+      }
+    }
+  )
+
+  // Approximate fields such a Float or Double, even through filtered using FPFilter, do not work well with
+  // Euclidean ring tests
+  def approxField(implicit A: Field[A]) = new RingProperties(
     name = "field",
     al = additiveCommutativeGroup,
     ml = multiplicativeCommutativeGroup,
