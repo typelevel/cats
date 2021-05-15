@@ -6,11 +6,11 @@ import cats.algebra.lattice._
 import cats.algebra.ring._
 import cats.algebra.instances.all._
 import cats.algebra.instances.BigDecimalAlgebra
-
-import cats.algebra.laws.platform.Platform
-
+import cats.platform.Platform
 import org.scalacheck.{Arbitrary, Cogen}
 import Arbitrary.arbitrary
+import cats.kernel.laws.discipline.{EqTests, OrderTests, PartialOrderTests}
+
 import scala.collection.immutable.BitSet
 import scala.util.Random
 
@@ -21,7 +21,6 @@ class LawTests extends munit.DisciplineSuite {
   implicit val intLattice: BoundedDistributiveLattice[Int] = IntMinMaxLattice
   implicit val longLattice: BoundedDistributiveLattice[Long] = LongMinMaxLattice
 
-  implicit def orderLaws[A: Cogen: Eq: Arbitrary]: OrderLaws[A] = OrderLaws[A]
   implicit def groupLaws[A: Eq: Arbitrary]: GroupLaws[A] = GroupLaws[A]
   implicit def logicLaws[A: Eq: Arbitrary]: LogicLaws[A] = LogicLaws[A]
 
@@ -50,7 +49,7 @@ class LawTests extends munit.DisciplineSuite {
       Cogen[A].contramap[HasPartialOrder[A]](_.a)
   }
 
-  checkAll("Boolean", OrderLaws[Boolean].order) //("Boolean").check(_.order)
+  checkAll("Boolean", OrderTests[Boolean].order) //("Boolean").check(_.order)
   checkAll("Boolean", LogicLaws[Boolean].bool)
   checkAll("SimpleHeyting", LogicLaws[SimpleHeyting].logic(Logic.fromHeyting(Heyting[SimpleHeyting])))
   checkAll("SimpleHeyting", LogicLaws[SimpleHeyting].heyting)
@@ -65,53 +64,53 @@ class LawTests extends munit.DisciplineSuite {
   // ensure that BoolRing[A].asBool is a valid Bool
   checkAll("Boolean- bool-from-ring", LogicLaws[Boolean].bool(new BoolFromBoolRing(booleanRing)))
 
-  checkAll("String", OrderLaws[String].order)
+  checkAll("String", OrderTests[String].order)
   checkAll("String", GroupLaws[String].monoid)
 
   {
-    checkAll("Option[HasEq[Int]]", OrderLaws[Option[HasEq[Int]]].eqv)
-    checkAll("Option[HasPartialOrder[Int]]", OrderLaws[Option[HasPartialOrder[Int]]].partialOrder)
-    checkAll("Option[Int]", OrderLaws[Option[Int]].order)
+    checkAll("Option[HasEq[Int]]", EqTests[Option[HasEq[Int]]].eqv)
+    checkAll("Option[HasPartialOrder[Int]]", PartialOrderTests[Option[HasPartialOrder[Int]]].partialOrder)
+    checkAll("Option[Int]", OrderTests[Option[Int]].order)
     checkAll("Option[Int]", GroupLaws[Option[Int]].monoid)
-    checkAll("Option[HasEq[String]]", OrderLaws[Option[HasEq[String]]].eqv)
-    checkAll("Option[HasPartialOrder[String]]", OrderLaws[Option[HasPartialOrder[String]]].partialOrder)
-    checkAll("Option[String]", OrderLaws[Option[String]].order)
+    checkAll("Option[HasEq[String]]", EqTests[Option[HasEq[String]]].eqv)
+    checkAll("Option[HasPartialOrder[String]]", PartialOrderTests[Option[HasPartialOrder[String]]].partialOrder)
+    checkAll("Option[String]", OrderTests[Option[String]].order)
     checkAll("Option[String]", GroupLaws[Option[String]].monoid)
   }
 
-  checkAll("List[HasEq[Int]]", OrderLaws[List[HasEq[Int]]].eqv)
-  checkAll("List[HasPartialOrder[Int]]", OrderLaws[List[HasPartialOrder[Int]]].partialOrder)
-  checkAll("List[Int]", OrderLaws[List[Int]].order)
+  checkAll("List[HasEq[Int]]", EqTests[List[HasEq[Int]]].eqv)
+  checkAll("List[HasPartialOrder[Int]]", PartialOrderTests[List[HasPartialOrder[Int]]].partialOrder)
+  checkAll("List[Int]", OrderTests[List[Int]].order)
   checkAll("List[Int]", GroupLaws[List[Int]].monoid)
-  checkAll("List[HasEq[String]]", OrderLaws[List[HasEq[String]]].eqv)
-  checkAll("List[HasPartialOrder[String]]", OrderLaws[List[HasPartialOrder[String]]].partialOrder)
-  checkAll("List[String]", OrderLaws[List[String]].order)
+  checkAll("List[HasEq[String]]", EqTests[List[HasEq[String]]].eqv)
+  checkAll("List[HasPartialOrder[String]]", PartialOrderTests[List[HasPartialOrder[String]]].partialOrder)
+  checkAll("List[String]", OrderTests[List[String]].order)
   checkAll("List[String]", GroupLaws[List[String]].monoid)
 
   checkAll("Set[Byte]", LogicLaws[Set[Byte]].generalizedBool)
   checkAll("Set[Byte]", RingLaws[Set[Byte]].boolRng(setBoolRng[Byte]))
   checkAll("Set[Byte]-bool-from-rng", LogicLaws[Set[Byte]].generalizedBool(new GenBoolFromBoolRng(setBoolRng)))
   checkAll("Set[Byte]-rng-from-bool", RingLaws[Set[Byte]].boolRng(GenBool[Set[Byte]].asBoolRing))
-  checkAll("Set[Int]", OrderLaws[Set[Int]].partialOrder)
+  checkAll("Set[Int]", PartialOrderTests[Set[Int]].partialOrder)
   checkAll("Set[Int]", RingLaws[Set[Int]].semiring)
   checkAll("Set[String]", RingLaws[Set[String]].semiring)
 
-  checkAll("Map[Char, Int]", OrderLaws[Map[Char, Int]].eqv)
+  checkAll("Map[Char, Int]", EqTests[Map[Char, Int]].eqv)
   checkAll("Map[Char, Int]", RingLaws[Map[Char, Int]].semiring)
-  checkAll("Map[Int, BigInt]", OrderLaws[Map[Int, BigInt]].eqv)
+  checkAll("Map[Int, BigInt]", EqTests[Map[Int, BigInt]].eqv)
   checkAll("Map[Int, BigInt]", RingLaws[Map[Int, BigInt]].semiring)
 
-  checkAll("Byte", OrderLaws[Byte].order)
+  checkAll("Byte", OrderTests[Byte].order)
   checkAll("Byte", RingLaws[Byte].commutativeRing)
   checkAll("Byte", LatticeLaws[Byte].lattice)
 
-  checkAll("Short", OrderLaws[Short].order)
+  checkAll("Short", OrderTests[Short].order)
   checkAll("Short", RingLaws[Short].commutativeRing)
   checkAll("Short", LatticeLaws[Short].lattice)
 
-  checkAll("Char", OrderLaws[Char].order)
+  checkAll("Char", OrderTests[Char].order)
 
-  checkAll("Int", OrderLaws[Int].order)
+  checkAll("Int", OrderTests[Int].order)
   checkAll("Int", RingLaws[Int].commutativeRing)
   checkAll("Int", LatticeLaws[Int].boundedDistributiveLattice)
 
@@ -119,7 +118,7 @@ class LawTests extends munit.DisciplineSuite {
     checkAll("Int", RingLaws[Int].commutativeRig)
   }
 
-  checkAll("Long", OrderLaws[Long].order)
+  checkAll("Long", OrderTests[Long].order)
   checkAll("Long", RingLaws[Long].commutativeRing)
   checkAll("Long", LatticeLaws[Long].boundedDistributiveLattice)
 
@@ -170,7 +169,7 @@ class LawTests extends munit.DisciplineSuite {
     checkAll("(Int, Int) Band", GroupLaws[(Int, Int)].band)
   }
 
-  checkAll("Unit", OrderLaws[Unit].order)
+  checkAll("Unit", OrderTests[Unit].order)
   checkAll("Unit", RingLaws[Unit].commutativeRing)
   checkAll("Unit", RingLaws[Unit].multiplicativeMonoid)
   checkAll("Unit", LatticeLaws[Unit].boundedSemilattice)
@@ -223,8 +222,8 @@ class LawTests extends munit.DisciplineSuite {
   }
 
   // checkAll("Int", "fromOrdering", OrderLaws[Int].order(Order.fromOrdering[Int]))
-  checkAll("Array[Int]", OrderLaws[Array[Int]].order)
-  checkAll("Array[Int]", OrderLaws[Array[Int]].partialOrder)
+  checkAll("Array[Int]", OrderTests[Array[Int]].order)
+  checkAll("Array[Int]", PartialOrderTests[Array[Int]].partialOrder)
 
   // Rational tests do not return on Scala-js, so we make them JVM only.
   if (Platform.isJvm) checkAll("Rat", RingLaws[Rat].field)

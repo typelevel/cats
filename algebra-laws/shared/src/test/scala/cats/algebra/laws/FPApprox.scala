@@ -66,7 +66,7 @@ object FPApprox {
   def exact[A: Rng: Order](a: A): FPApprox[A] = FPApprox(a, abs(a), 0)
   def approx[A: Rng: Order](a: A): FPApprox[A] = FPApprox(a, abs(a), 1)
 
-  trait Epsilon[A] {
+  trait Epsilon[A] extends Serializable {
     def minValue: A
     def epsilon: A
     def isFinite(a: A): Boolean
