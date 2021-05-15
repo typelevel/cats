@@ -30,12 +30,6 @@ trait GenBool[@sp(Int, Long) A] extends Any with DistributiveLattice[A] with Bou
    * Defined as `a\b ∨ b\a`.
    */
   def xor(a: A, b: A): A = or(without(a, b), without(b, a))
-
-  /**
-   * Every generalized Boolean algebra is also a `BoolRng`, with
-   * multiplication defined as `and` and addition defined as `xor`.
-   */
-  def asBoolRing: BoolRng[A] = new BoolRngFromGenBool(self)
 }
 
 /**
@@ -48,17 +42,16 @@ trait GenBool[@sp(Int, Long) A] extends Any with DistributiveLattice[A] with Bou
  *
  * `BoolRng.asBool.asBoolRing` gives back the original `BoolRng`.
  *
- * @see [[algebra.lattice.GenBool.asBoolRing]]
+ * @see [[algebra.lattice.BoolRngFromGenBool]]
  */
 class GenBoolFromBoolRng[A](orig: BoolRng[A]) extends GenBool[A] {
   def zero: A = orig.zero
   def and(a: A, b: A): A = orig.times(a, b)
   def or(a: A, b: A): A = orig.plus(orig.plus(a, b), orig.times(a, b))
   def without(a: A, b: A): A = orig.plus(a, orig.times(a, b))
-  override def asBoolRing: BoolRng[A] = orig
 }
 
-private[lattice] class BoolRngFromGenBool[@sp(Int, Long) A](orig: GenBool[A]) extends BoolRng[A] {
+class BoolRngFromGenBool[@sp(Int, Long) A](orig: GenBool[A]) extends BoolRng[A] {
   def zero: A = orig.zero
   def plus(x: A, y: A): A = orig.xor(x, y)
   def times(x: A, y: A): A = orig.and(x, y)
