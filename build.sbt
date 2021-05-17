@@ -36,7 +36,7 @@ val GraalVM8 = "graalvm-ce-java8@20.2.0"
 ThisBuild / githubWorkflowJavaVersions := Seq(PrimaryJava, LTSJava, LatestJava, GraalVM8)
 
 val Scala212 = "2.12.13"
-val Scala213 = "2.13.5"
+val Scala213 = "2.13.6"
 val Scala3 = "3.0.0"
 
 ThisBuild / crossScalaVersions := Seq(Scala212, Scala213, Scala3)
