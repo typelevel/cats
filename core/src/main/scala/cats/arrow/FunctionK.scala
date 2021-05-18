@@ -13,7 +13,7 @@ import cats.data.{EitherK, Tuple2K}
  *   val listToOption = λ[FunctionK[List, Option]](_.headOption)
  * }}}
  */
-trait FunctionK[F[_], G[_]] extends Serializable { self =>
+trait FunctionK[F[_], G[_]] extends PolyFunction with Serializable { self =>
 
   /**
    * Applies this functor transformation from `F` to `G`

@@ -13,4 +13,8 @@ class FunctionKLiftSuite extends CatsSuite {
       assert(fHeadOption(a) === a.headOption)
     }
   }
+
+  test("FunctionK[F, G] extends [X] => F[X] => G[X]") {
+    val poly: [X] => List[X] => List[X] = FunctionK.id[List]
+  }
 }
