@@ -151,7 +151,7 @@ Discussion around Cats is currently happening on Github issues, PR pages,
 two Gitter channels, and we're also trying out Discord: 
  
 [Typelevel Discord](https://discord.gg/XF3CXcMzqD) has access to all of the 
-typelevel library channels as well as community channels.  Please join us! 
+Typelevel library channels as well as community channels.  Please join us! 
 
 [Gitter channel cats](https://gitter.im/typelevel/cats) is for general user 
 questions and discussions, and 
