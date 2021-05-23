@@ -5,7 +5,10 @@ section: "data"
 source: "core/src/main/scala/cats/data/OneAnd.scala"
 scaladoc: "#cats.data.OneAnd"
 ---
-# OneAnd
+# OneAnd (DEPRECATED)
+
+**DEPRECATED**: The `OneAnd` class will be removed in version 3.0 of cats.
+
 
 The `OneAnd[F[_],A]` data type represents a single element of type `A`
 that is guaranteed to be present (`head`) and in addition to this a

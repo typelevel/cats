@@ -43,6 +43,7 @@ object arbitrary extends ArbitraryInstances0 with ScalaVersionSpecific.Arbitrary
   implicit def catsLawsCogenForConst[A, B](implicit A: Cogen[A]): Cogen[Const[A, B]] =
     A.contramap(_.getConst)
 
+  @deprecated("The OneAnd type is deprecated, in favour of NonEmpty types (see #3089 for details)", "2.6.2")
   implicit def catsLawsArbitraryForOneAnd[F[_], A](implicit
     A: Arbitrary[A],
     F: Arbitrary[F[A]]

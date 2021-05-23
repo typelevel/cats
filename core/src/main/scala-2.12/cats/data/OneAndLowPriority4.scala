@@ -5,6 +5,7 @@ import scala.annotation.tailrec
 import scala.collection.mutable.Builder
 
 abstract private[data] class OneAndLowPriority4 {
+  @deprecated("For collections, use special NonEmpty types instead of OneAnd (see #3089 for details)", "2.6.2")
   implicit val catsDataComonadForNonEmptyStream: Comonad[OneAnd[Stream, *]] =
     new Comonad[OneAnd[Stream, *]] {
       def coflatMap[A, B](fa: OneAnd[Stream, A])(f: OneAnd[Stream, A] => B): OneAnd[Stream, B] = {
