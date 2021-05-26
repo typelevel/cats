@@ -10,7 +10,6 @@ import cats.syntax.parallel._
 import cats.syntax.traverse._
 import cats.syntax.eq._
 import org.scalacheck.Prop._
-import cats.catsInstancesForId
 import cats.kernel.{Eq, Order}
 import cats.laws.discipline.eq._
 

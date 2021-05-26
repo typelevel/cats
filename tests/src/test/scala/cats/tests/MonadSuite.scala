@@ -1,7 +1,6 @@
 package cats.tests
 
 import cats.{Eval, Id, Monad}
-import cats.catsInstancesForId
 import cats.data.{IndexedStateT, StateT}
 import cats.syntax.apply._
 import cats.syntax.monad._
