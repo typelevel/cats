@@ -208,6 +208,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Anduin Transactions](https://anduintransact.com)
 - [Apple Inc. (FEAR team)](https://news.ycombinator.com/item?id=16969118)
 - [AutoScout24](https://www.autoscout24.com) 
+- [AvantStay](https://avantstay.com/) 
 - [Avast](https://avast.com)
 - [BabylonHealth](https://www.babylonhealth.com/)
 - [Banno Group inside of Jack Henry & Associates](https://banno.com/)
