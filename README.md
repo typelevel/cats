@@ -147,8 +147,11 @@ Links:
 
 ### Community
 
-Discussion around Cats is currently happening on Github issue and PR pages
-as well as in two Gitter channels: 
+Discussion around Cats is currently happening on Github issues, PR pages, 
+two Gitter channels, and we're also trying out Discord: 
+ 
+[Typelevel Discord](https://discord.gg/XF3CXcMzqD) has access to all of the 
+Typelevel library channels as well as community channels.  Please join us! 
 
 [Gitter channel cats](https://gitter.im/typelevel/cats) is for general user 
 questions and discussions, and 
@@ -202,7 +205,7 @@ versioning in the future. But that decision is yet to be made.
 
 ### Adopters
 
-Here's a (non-exhaustive) list of companies that use Cats in production. Don't see yours? [You can add it in a PR!](https://github.com/typelevel/cats/edit/main/README.md). And if you can, consider [supporting us](https://donorbox.org/typelevel-sustainability-program-2019?default_interval=m). 
+Here's a (non-exhaustive) list of companies that use Cats in production. Don't see yours? [You can add it in a PR!](https://github.com/typelevel/cats/edit/main/README.md) And if you can, consider [supporting us](https://donorbox.org/typelevel-sustainability-program-2019?default_interval=m). 
 
 - [Abacus Protocol](https://abacusprotocol.com)
 - [Anduin Transactions](https://anduintransact.com)
