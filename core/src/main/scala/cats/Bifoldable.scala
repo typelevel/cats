@@ -61,7 +61,6 @@ import scala.annotation.implicitNotFound
    * scala> bifolded2.value
    * res1: Int = 3
    * }}}
-   *
    */
   def bifoldRight[A, B, C](fab: F[A, B], c: Eval[C])(f: (A, Eval[C]) => Eval[C], g: (B, Eval[C]) => Eval[C]): Eval[C]
 
