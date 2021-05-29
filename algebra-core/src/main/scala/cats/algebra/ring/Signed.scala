@@ -17,7 +17,7 @@ import scala.{specialized => sp}
  *
  * (3) `abs(x) = -x` if `x < 0`, or `x` otherwise,
  *
- * Laws (1) and (2) lead to the triange inequality:
+ * Laws (1) and (2) lead to the triangle inequality:
  *
  * (4) `abs(a + b) <= abs(a) + abs(b)`
  *
@@ -27,7 +27,7 @@ import scala.{specialized => sp}
  * It's better to have the Signed hierarchy separate from the Ring/Order hierarchy, so that
  * we do not end up with duplicate implicits.
  */
-trait Signed[@sp(Byte, Short, Int, Long, Float, Double) A] extends Any {
+trait Signed[@sp(Byte, Short, Int, Long, Float, Double) A] extends Any with Serializable {
 
   def additiveCommutativeMonoid: AdditiveCommutativeMonoid[A]
   def order: Order[A]

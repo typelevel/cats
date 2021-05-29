@@ -1,6 +1,12 @@
 package cats.algebra.laws
 
-import cats.algebra.ring.{CommutativeRing, Signed, TruncatedDivision}
+import cats.algebra.ring.{
+  AdditiveCommutativeGroup,
+  CommutativeRing,
+  GCDRing,
+  Signed,
+  TruncatedDivision
+}
 import cats.kernel._
 import org.scalacheck.{Arbitrary, Cogen, Prop}
 import org.scalacheck.Prop._
@@ -30,7 +36,37 @@ trait SignedTests[A] extends OrderTests[A] {
     "abs non-negative" -> forAll((x: A) => A.sign(A.abs(x)) != Signed.Negative),
     "abs never less than" -> forAll((x: A) => A.order.gteqv(A.abs(x), x)),
     "signum returns -1/0/1" -> forAll((x: A) => A.signum(A.abs(x)) <= 1),
-    "signum is sign.toInt" -> forAll((x: A) => A.signum(x) == A.sign(x).toInt)
+    "signum is sign.toInt" -> forAll((x: A) => A.signum(x) == A.sign(x).toInt),
+    "linear order" -> forAll { (x: A, y: A, z: A) =>
+      A.order.lteqv(x, y) ==> A.order.lteqv(A.additiveCommutativeMonoid.plus(x, z),
+                                            A.additiveCommutativeMonoid.plus(y, z)
+      )
+    },
+    "triangle inequality" -> forAll { (x: A, y: A) =>
+      A.order.lteqv(A.abs(A.additiveCommutativeMonoid.plus(x, y)), A.additiveCommutativeMonoid.plus(A.abs(x), A.abs(y)))
+    }
+  )
+
+  def signedAdditiveCommutativeGroup(implicit signedA: Signed[A], A: AdditiveCommutativeGroup[A]) = new DefaultRuleSet(
+    name = "signedAdditiveAbGroup",
+    parent = Some(signed),
+    "abs(x) equals abs(-x)" -> forAll { (x: A) =>
+      signedA.abs(x) ?== signedA.abs(A.negate(x))
+    }
+  )
+
+  // more a convention: as GCD is defined up to a unit, so up to a sign,
+  // on an ordered GCD ring we require gcd(x, y) >= 0, which is the common
+  // behavior of computer algebra systems
+  def signedGCDRing(implicit signedA: Signed[A], A: GCDRing[A]) = new DefaultRuleSet(
+    name = "signedGCDRing",
+    parent = Some(signedAdditiveCommutativeGroup),
+    "gcd(x, y) >= 0" -> forAll { (x: A, y: A) =>
+      signedA.isSignNonNegative(A.gcd(x, y))
+    },
+    "gcd(x, 0) === abs(x)" -> forAll { (x: A) =>
+      A.gcd(x, A.zero) ?== signedA.abs(x)
+    }
   )
 
   def truncatedDivision(implicit ring: CommutativeRing[A], A: TruncatedDivision[A]) = new DefaultRuleSet(

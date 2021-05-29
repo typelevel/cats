@@ -81,6 +81,7 @@ class LawTests extends munit.DisciplineSuite {
 
   checkAll("BigInt", RingTests[BigInt].euclideanRing)
   checkAll("BigInt", SignedTests[BigInt].truncatedDivision)
+  checkAll("BigInt", SignedTests[BigInt].signedGCDRing)
 
   checkAll("FPApprox[Float]", RingTests[FPApprox[Float]].approxField)
   checkAll("FPApprox[Double]", RingTests[FPApprox[Double]].approxField)
