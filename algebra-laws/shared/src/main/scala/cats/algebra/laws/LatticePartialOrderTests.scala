@@ -10,14 +10,14 @@ import org.scalacheck.Prop._
 
 import cats.algebra.instances.boolean._
 
-object LatticePartialOrderLaws {
-  def apply[A: Eq: Arbitrary] = new LatticePartialOrderLaws[A] {
+object LatticePartialOrderTests {
+  def apply[A: Eq: Arbitrary] = new LatticePartialOrderTests[A] {
     def Equ = Eq[A]
     def Arb = implicitly[Arbitrary[A]]
   }
 }
 
-trait LatticePartialOrderLaws[A] extends Laws {
+trait LatticePartialOrderTests[A] extends Laws {
 
   implicit def Equ: Eq[A]
   implicit def Arb: Arbitrary[A]

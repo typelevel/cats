@@ -2,17 +2,18 @@ package cats.algebra.laws
 
 import cats.algebra._
 import cats.algebra.lattice.{Bool, DeMorgan, GenBool, Heyting, Logic}
+import cats.kernel.laws.discipline.{BoundedSemilatticeTests, SemilatticeTests}
 import org.scalacheck.{Arbitrary, Prop}
 import org.scalacheck.Prop._
 
-object LogicLaws {
-  def apply[A: Eq: Arbitrary] = new LogicLaws[A] {
+object LogicTests {
+  def apply[A: Eq: Arbitrary] = new LogicTests[A] {
     def Equ = Eq[A]
     def Arb = implicitly[Arbitrary[A]]
   }
 }
 
-trait LogicLaws[A] extends LatticeLaws[A] {
+trait LogicTests[A] extends LatticeTests[A] {
 
   def heyting(implicit A: Heyting[A]) = new LogicProperties(
     name = "heyting",
@@ -49,8 +50,8 @@ trait LogicLaws[A] extends LatticeLaws[A] {
     ll = new LatticeProperties(
       name = "lowerBoundedDistributiveLattice",
       parents = Seq(boundedJoinSemilattice, distributiveLattice),
-      join = Some(boundedSemilattice(A.joinSemilattice)),
-      meet = Some(semilattice(A.meetSemilattice))
+      join = Some(BoundedSemilatticeTests(A.joinSemilattice).boundedSemilattice),
+      meet = Some(SemilatticeTests(A.meetSemilattice).semilattice)
     ),
     """x\y ∧ y = 0""" -> forAll { (x: A, y: A) =>
       A.and(A.without(x, y), y) ?== A.zero
