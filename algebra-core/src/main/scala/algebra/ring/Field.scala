@@ -3,7 +3,11 @@ package ring
 
 import scala.{specialized => sp}
 
-trait Field[@sp(Int, Long, Float, Double) A] extends Any with EuclideanRing[A] with MultiplicativeCommutativeGroup[A] {
+trait Field[@sp(Int, Long, Float, Double) A]
+    extends Any
+    with EuclideanRing[A]
+    with DivisionRing[A]
+    with MultiplicativeCommutativeGroup[A] {
   self =>
 
   // default implementations for GCD
@@ -19,15 +23,9 @@ trait Field[@sp(Int, Long, Float, Double) A] extends Any with EuclideanRing[A] w
   def emod(a: A, b: A): A = zero
   override def equotmod(a: A, b: A): (A, A) = (div(a, b), zero)
 
-  /**
-   * This is implemented in terms of basic Field ops. However, this is
-   * probably significantly less efficient than can be done with a
-   * specific type. So, it is recommended that this method be
-   * overriden.
-   *
-   * This is possible because a Double is a rational number.
-   */
-  def fromDouble(a: Double): A = Field.defaultFromDouble(a)(self, self)
+  // needed for bin-compat
+  override def fromDouble(a: Double): A =
+    DivisionRing.defaultFromDouble[A](a)(self, self)
 
 }
 

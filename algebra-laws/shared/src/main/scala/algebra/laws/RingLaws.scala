@@ -256,6 +256,29 @@ trait RingLaws[A] extends GroupLaws[A] { self =>
     }
   )
 
+  def divisionRing(implicit A: DivisionRing[A]) = new RingProperties(
+    name = "division ring",
+    al = additiveCommutativeGroup,
+    ml = multiplicativeGroup,
+    parents = Seq(ring),
+    "fromDouble" -> forAll { (n: Double) =>
+      if (Platform.isJvm) {
+        // TODO: BigDecimal(n) is busted in scalajs, so we skip this test.
+        val bd = new java.math.BigDecimal(n)
+        val unscaledValue = new BigInt(bd.unscaledValue)
+        val expected =
+          if (bd.scale > 0) {
+            A.div(A.fromBigInt(unscaledValue), A.fromBigInt(BigInt(10).pow(bd.scale)))
+          } else {
+            A.fromBigInt(unscaledValue * BigInt(10).pow(-bd.scale))
+          }
+        DivisionRing.fromDouble[A](n) ?== expected
+      } else {
+        Prop(true)
+      }
+    }
+  )
+
   // boolean rings
 
   def boolRng(implicit A: BoolRng[A]) = RingProperties.fromParent(
@@ -285,23 +308,7 @@ trait RingLaws[A] extends GroupLaws[A] { self =>
     name = "field",
     al = additiveCommutativeGroup,
     ml = multiplicativeCommutativeGroup,
-    parents = Seq(euclideanRing),
-    "fromDouble" -> forAll { (n: Double) =>
-      if (Platform.isJvm) {
-        // TODO: BigDecimal(n) is busted in scalajs, so we skip this test.
-        val bd = new java.math.BigDecimal(n)
-        val unscaledValue = new BigInt(bd.unscaledValue)
-        val expected =
-          if (bd.scale > 0) {
-            A.div(A.fromBigInt(unscaledValue), A.fromBigInt(BigInt(10).pow(bd.scale)))
-          } else {
-            A.fromBigInt(unscaledValue * BigInt(10).pow(-bd.scale))
-          }
-        Field.fromDouble[A](n) ?== expected
-      } else {
-        Prop(true)
-      }
-    }
+    parents = Seq(euclideanRing, divisionRing)
   )
 
   // Approximate fields such a Float or Double, even through filtered using FPFilter, do not work well with
