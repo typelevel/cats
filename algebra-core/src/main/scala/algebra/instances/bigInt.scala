@@ -6,8 +6,9 @@ import algebra.ring._
 package object bigInt extends BigIntInstances
 
 trait BigIntInstances extends cats.kernel.instances.BigIntInstances {
-  implicit val bigIntAlgebra: BigIntAlgebra =
-    new BigIntAlgebra
+  implicit val bigIntAlgebra: BigIntAlgebra = new BigIntTruncatedDivison
+  implicit def bigIntTruncatedDivision: TruncatedDivision[BigInt] =
+    bigIntAlgebra.asInstanceOf[BigIntTruncatedDivison] // Bin-compat hack to avoid allocation
 }
 
 class BigIntAlgebra extends EuclideanRing[BigInt] with Serializable {
@@ -53,4 +54,10 @@ class BigIntAlgebra extends EuclideanRing[BigInt] with Serializable {
     else rt - b
   }
 
+}
+
+class BigIntTruncatedDivison extends BigIntAlgebra with TruncatedDivision.forCommutativeRing[BigInt] {
+  override def tquot(x: BigInt, y: BigInt): BigInt = x / y
+  override def tmod(x: BigInt, y: BigInt): BigInt = x % y
+  override def order: Order[BigInt] = cats.kernel.instances.bigInt.catsKernelStdOrderForBigInt
 }
