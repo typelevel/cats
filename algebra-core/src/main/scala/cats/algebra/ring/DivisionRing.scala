@@ -7,7 +7,15 @@ import scala.{specialized => sp}
 trait DivisionRing[@sp(Byte, Short, Int, Long, Float, Double) A] extends Any with Ring[A] with MultiplicativeGroup[A] {
   self =>
 
-  def fromDouble(a: Double): A = Field.defaultFromDouble[A](a)(self, self)
+  /**
+   * This is implemented in terms of basic Ring ops. However, this is
+   * probably significantly less efficient than can be done with a
+   * specific type. So, it is recommended that this method be
+   * overriden.
+   *
+   * This is possible because a Double is a rational number.
+   */
+  def fromDouble(a: Double): A = DivisionRing.defaultFromDouble[A](a)(self, self)
 
 }
 
