@@ -6,10 +6,10 @@ import java.math.MathContext
 
 import cats.algebra.ring._
 
-package object bigDecimal extends BigDecimalInstances
+object bigDecimal extends BigDecimalInstances
 
-trait BigDecimalInstances extends cats.kernel.instances.BigDecimalInstances {
-  implicit val bigDecimalAlgebra: BigDecimalAlgebra = new BigDecimalAlgebra()
+trait BigDecimalInstances {
+  implicit val catsAlgebraStdAlgebraForBigDecimal: BigDecimalAlgebra = new BigDecimalAlgebra()
 }
 
 class BigDecimalAlgebra(mc: MathContext) extends Field[BigDecimal] with Serializable {

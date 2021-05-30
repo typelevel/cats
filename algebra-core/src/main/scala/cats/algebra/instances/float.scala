@@ -6,12 +6,14 @@ import cats.algebra.lattice.DistributiveLattice
 import cats.algebra.ring.Field
 import java.lang.Math
 
-trait FloatInstances extends cats.kernel.instances.FloatInstances {
-  implicit val floatAlgebra: Field[Float] =
+object float extends FloatInstances
+
+trait FloatInstances {
+  implicit val catsAlgebraStdAlgebraForFloat: Field[Float] =
     new FloatAlgebra
 
   // Not bounded due to the presence of NaN
-  val FloatMinMaxLattice: DistributiveLattice[Float] =
+  val catsAlgebraStdMinMaxLatticeForFloat: DistributiveLattice[Float] =
     DistributiveLattice.minMax[Float]
 }
 

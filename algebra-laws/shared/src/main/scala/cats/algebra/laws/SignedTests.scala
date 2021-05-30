@@ -1,12 +1,6 @@
 package cats.algebra.laws
 
-import cats.algebra.ring.{
-  AdditiveCommutativeGroup,
-  CommutativeRing,
-  GCDRing,
-  Signed,
-  TruncatedDivision
-}
+import cats.algebra.ring.{AdditiveCommutativeGroup, CommutativeRing, GCDRing, Signed, TruncatedDivision}
 import cats.kernel._
 import org.scalacheck.{Arbitrary, Cogen, Prop}
 import org.scalacheck.Prop._

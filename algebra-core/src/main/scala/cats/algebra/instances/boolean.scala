@@ -6,13 +6,13 @@ import cats.algebra.lattice.Bool
 import cats.algebra.ring.BoolRing
 import cats.algebra.ring.CommutativeRig
 
-package object boolean extends BooleanInstances
+object boolean extends BooleanInstances
 
-trait BooleanInstances extends cats.kernel.instances.BooleanInstances {
-  implicit val booleanAlgebra: BooleanAlgebra =
+trait BooleanInstances {
+  implicit val catsAlgebraStdAlgebraForBoolean: BooleanAlgebra =
     new BooleanAlgebra
 
-  val booleanRing = new BoolRing[Boolean] {
+  val catsAlgebraStdRingForBoolean: BoolRing[Boolean] = new BoolRing[Boolean] {
     def zero: Boolean = false
     def one: Boolean = true
     def plus(x: Boolean, y: Boolean): Boolean = x ^ y

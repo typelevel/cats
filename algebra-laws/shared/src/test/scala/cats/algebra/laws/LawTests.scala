@@ -14,11 +14,6 @@ import scala.collection.immutable.BitSet
 
 class LawTests extends munit.DisciplineSuite {
 
-  implicit val byteLattice: Lattice[Byte] = ByteMinMaxLattice
-  implicit val shortLattice: Lattice[Short] = ShortMinMaxLattice
-  implicit val intLattice: BoundedDistributiveLattice[Int] = IntMinMaxLattice
-  implicit val longLattice: BoundedDistributiveLattice[Long] = LongMinMaxLattice
-
   case class HasEq[A](a: A)
 
   object HasEq {
@@ -45,17 +40,19 @@ class LawTests extends munit.DisciplineSuite {
   checkAll("SimpleDeMorgan", LogicTests[SimpleDeMorgan].deMorgan)
   checkAll("Boolean", LogicTests[Boolean].deMorgan(DeMorgan.fromBool(Bool[Boolean])))
   checkAll("Boolean", LatticePartialOrderTests[Boolean].boundedLatticePartialOrder)
-  checkAll("Boolean", RingTests[Boolean].boolRing(booleanRing))
+  checkAll("Boolean", RingTests[Boolean].boolRing(catsAlgebraStdRingForBoolean))
 
   // ensure that Bool[A].asBoolRing is a valid BoolRing
   checkAll("Boolean-ring-from-bool", RingTests[Boolean].boolRing(new BoolRingFromBool[Boolean](Bool[Boolean])))
 
   // ensure that BoolRing[A].asBool is a valid Bool
-  checkAll("Boolean- bool-from-ring", LogicTests[Boolean].bool(new BoolFromBoolRing(booleanRing)))
+  checkAll("Boolean- bool-from-ring", LogicTests[Boolean].bool(new BoolFromBoolRing(catsAlgebraStdRingForBoolean)))
 
   checkAll("Set[Byte]", LogicTests[Set[Byte]].generalizedBool)
-  checkAll("Set[Byte]", RingTests[Set[Byte]].boolRng(setBoolRng[Byte]))
-  checkAll("Set[Byte]-bool-from-rng", LogicTests[Set[Byte]].generalizedBool(new GenBoolFromBoolRng(setBoolRng)))
+  checkAll("Set[Byte]", RingTests[Set[Byte]].boolRng(catsAlgebraStdBoolRngForSet))
+  checkAll("Set[Byte]-bool-from-rng",
+           LogicTests[Set[Byte]].generalizedBool(new GenBoolFromBoolRng(catsAlgebraStdBoolRngForSet))
+  )
   checkAll("Set[Byte]-rng-from-bool", RingTests[Set[Byte]].boolRng(new BoolRngFromGenBool(GenBool[Set[Byte]])))
   checkAll("Set[Int]", RingTests[Set[Int]].semiring)
   checkAll("Set[String]", RingTests[Set[String]].semiring)
@@ -64,20 +61,20 @@ class LawTests extends munit.DisciplineSuite {
   checkAll("Map[Int, BigInt]", RingTests[Map[Int, BigInt]].semiring)
 
   checkAll("Byte", RingTests[Byte].commutativeRing)
-  checkAll("Byte", LatticeTests[Byte].lattice)
+  checkAll("Byte", LatticeTests[Byte].lattice(catsAlgebraStdMinMaxLatticeForByte))
 
   checkAll("Short", RingTests[Short].commutativeRing)
-  checkAll("Short", LatticeTests[Short].lattice)
+  checkAll("Short", LatticeTests[Short].lattice(catsAlgebraStdMinMaxLatticeForShort))
 
   checkAll("Int", RingTests[Int].commutativeRing)
-  checkAll("Int", LatticeTests[Int].boundedDistributiveLattice)
+  checkAll("Int", LatticeTests[Int].boundedDistributiveLattice(catsAlgebraStdBoundedDistributiveLatticeForInt))
 
   {
     checkAll("Int", RingTests[Int].commutativeRig)
   }
 
   checkAll("Long", RingTests[Long].commutativeRing)
-  checkAll("Long", LatticeTests[Long].boundedDistributiveLattice)
+  checkAll("Long", LatticeTests[Long].boundedDistributiveLattice(catsAlgebraStdBoundedDistributiveLatticeForLong))
 
   checkAll("BigInt", RingTests[BigInt].euclideanRing)
   checkAll("BigInt", SignedTests[BigInt].truncatedDivision)

@@ -7,21 +7,15 @@ import scala.collection.mutable
 
 import cats.algebra.ring._
 
-package object map extends MapInstances
+object map extends MapInstances
 
-trait MapInstances extends cats.kernel.instances.MapInstances with MapInstances3
-
-trait MapInstances3 extends MapInstances2 {}
-
-trait MapInstances2 extends MapInstances1 {
-  implicit def mapSemiring[K, V: Semiring]: MapSemiring[K, V] =
+trait MapInstances extends LowPriorityMapInstances {
+  implicit def catsAlgebraStdSemiringForMap[K, V: Semiring]: MapSemiring[K, V] =
     new MapSemiring[K, V]
 }
 
-trait MapInstances1 extends MapInstances0 {}
-
-trait MapInstances0 {
-  implicit def mapAdditiveMonoid[K, V: AdditiveSemigroup]: MapAdditiveMonoid[K, V] =
+trait LowPriorityMapInstances {
+  implicit def catsAlgebraStdAdditiveMonoidForMap[K, V: AdditiveSemigroup]: MapAdditiveMonoid[K, V] =
     new MapAdditiveMonoid[K, V]
 }
 

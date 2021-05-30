@@ -5,12 +5,12 @@ package instances
 import cats.algebra.lattice._
 import cats.algebra.ring._
 
-package object byte extends ByteInstances
+object byte extends ByteInstances
 
-trait ByteInstances extends cats.kernel.instances.ByteInstances {
-  implicit val byteAlgebra: ByteAlgebra = new ByteAlgebra
+trait ByteInstances {
+  implicit val catsAlgebraStdAlgebraForByte: ByteAlgebra = new ByteAlgebra
 
-  val ByteMinMaxLattice: BoundedDistributiveLattice[Byte] =
+  val catsAlgebraStdMinMaxLatticeForByte: BoundedDistributiveLattice[Byte] =
     BoundedDistributiveLattice.minMax[Byte](Byte.MinValue, Byte.MaxValue)
 }
 

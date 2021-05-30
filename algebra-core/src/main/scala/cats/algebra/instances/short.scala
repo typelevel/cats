@@ -5,13 +5,13 @@ package instances
 import cats.algebra.lattice._
 import cats.algebra.ring._
 
-package object short extends ShortInstances
+object short extends ShortInstances
 
-trait ShortInstances extends cats.kernel.instances.ShortInstances {
-  implicit val shortAlgebra: ShortAlgebra =
+trait ShortInstances {
+  implicit val catsAlgebraStdAlgebraForShort: ShortAlgebra =
     new ShortAlgebra
 
-  val ShortMinMaxLattice: BoundedDistributiveLattice[Short] =
+  val catsAlgebraStdMinMaxLatticeForShort: BoundedDistributiveLattice[Short] =
     BoundedDistributiveLattice.minMax[Short](Short.MinValue, Short.MaxValue)
 }
 

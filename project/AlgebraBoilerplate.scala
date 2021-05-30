@@ -122,9 +122,9 @@ object AlgebraBoilerplate {
         |
         |import algebra.ring.{Rig, Ring, Rng, Semiring}
         |
-        |trait TupleInstances extends cats.kernel.instances.TupleInstances {
+        |trait TupleInstances {
         -
-        -  implicit def tuple${arity}Rig[${`A..N`}](implicit ${constraints("Rig")}): Rig[${`(A..N)`}] =
+        -  implicit def catsAlgebraStdRigForTuple${arity}[${`A..N`}](implicit ${constraints("Rig")}): Rig[${`(A..N)`}] =
         -    new Rig[${`(A..N)`}] {
         -      def one: ${`(A..N)`} = ${nullaryTuple("one")}
         -      def plus(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("plus")}
@@ -132,7 +132,7 @@ object AlgebraBoilerplate {
         -      def zero: ${`(A..N)`} = ${nullaryTuple("zero")}
         -    }
         -
-        -  implicit def tuple${arity}Ring[${`A..N`}](implicit ${constraints("Ring")}): Ring[${`(A..N)`}] =
+        -  implicit def catsAlgebraStdRingForTuple${arity}[${`A..N`}](implicit ${constraints("Ring")}): Ring[${`(A..N)`}] =
         -    new Ring[${`(A..N)`}] {
         -      def one: ${`(A..N)`} = ${nullaryTuple("one")}
         -      def plus(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("plus")}
@@ -141,7 +141,7 @@ object AlgebraBoilerplate {
         -      def negate(x: ${`(A..N)`}): ${`(A..N)`} = ${unaryTuple("negate")}
         -    }
         -
-        -  implicit def tuple${arity}Rng[${`A..N`}](implicit ${constraints("Rng")}): Rng[${`(A..N)`}] =
+        -  implicit def catsAlgebraStdRngForTuple${arity}[${`A..N`}](implicit ${constraints("Rng")}): Rng[${`(A..N)`}] =
         -    new Rng[${`(A..N)`}] {
         -      def plus(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("plus")}
         -      def times(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("times")}
@@ -149,7 +149,7 @@ object AlgebraBoilerplate {
         -      def negate(x: ${`(A..N)`}): ${`(A..N)`} = ${unaryTuple("negate")}
         -    }
         -
-        -  implicit def tuple${arity}Semiring[${`A..N`}](implicit ${constraints("Semiring")}): Semiring[${`(A..N)`}] =
+        -  implicit def catsAlgebraStdSemiringForTuple${arity}[${`A..N`}](implicit ${constraints("Semiring")}): Semiring[${`(A..N)`}] =
         -    new Semiring[${`(A..N)`}] {
         -      def plus(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("plus")}
         -      def times(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("times")}

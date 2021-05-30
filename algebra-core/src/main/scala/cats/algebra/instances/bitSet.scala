@@ -6,10 +6,10 @@ import scala.collection.immutable.BitSet
 
 import cats.algebra.lattice._
 
-package object bitSet extends BitSetInstances
+object bitSet extends BitSetInstances
 
-trait BitSetInstances extends cats.kernel.instances.BitSetInstances {
-  implicit val bitSetAlgebra: BitSetAlgebra =
+trait BitSetInstances {
+  implicit val catsAlgebraStdAlgebraForBitSet: BitSetAlgebra =
     new BitSetAlgebra
 }
 

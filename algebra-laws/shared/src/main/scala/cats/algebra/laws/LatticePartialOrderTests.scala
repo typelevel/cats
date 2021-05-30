@@ -8,8 +8,6 @@ import org.typelevel.discipline.Laws
 import org.scalacheck.{Arbitrary, Prop}
 import org.scalacheck.Prop._
 
-import cats.algebra.instances.boolean._
-
 object LatticePartialOrderTests {
   def apply[A: Eq: Arbitrary] = new LatticePartialOrderTests[A] {
     def Equ = Eq[A]

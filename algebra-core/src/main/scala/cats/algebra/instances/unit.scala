@@ -4,10 +4,10 @@ package instances
 
 import cats.algebra.ring.CommutativeRing
 
-package object unit extends UnitInstances
+object unit extends UnitInstances
 
-trait UnitInstances extends cats.kernel.instances.UnitInstances {
-  implicit val unitRing: CommutativeRing[Unit] =
+trait UnitInstances {
+  implicit val catsAlgebraStdAlgebraForUnit: UnitAlgebra =
     new UnitAlgebra
 }
 

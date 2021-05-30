@@ -7,12 +7,14 @@ import cats.algebra.ring.Field
 
 import java.lang.Math
 
-trait DoubleInstances extends cats.kernel.instances.DoubleInstances {
-  implicit val doubleAlgebra: Field[Double] =
+object double extends DoubleInstances
+
+trait DoubleInstances {
+  implicit val catsAlgebraStdAlgebraForDouble: Field[Double] =
     new DoubleAlgebra
 
   // This is not Bounded due to the presence of NaN
-  val DoubleMinMaxLattice: DistributiveLattice[Double] =
+  val catsAlgebraStdMinMaxLatticeForDouble: DistributiveLattice[Double] =
     DistributiveLattice.minMax[Double]
 }
 

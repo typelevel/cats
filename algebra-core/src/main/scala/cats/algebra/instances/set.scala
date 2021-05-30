@@ -5,16 +5,16 @@ package instances
 import cats.algebra.lattice.GenBool
 import cats.algebra.ring.{BoolRng, Semiring}
 
-package object set extends SetInstances
+object set extends SetInstances
 
-trait SetInstances extends cats.kernel.instances.SetInstances {
+trait SetInstances {
 
-  implicit def setLattice[A]: GenBool[Set[A]] = new SetLattice[A]
-  implicit def setSemiring[A]: Semiring[Set[A]] = new SetSemiring[A]
+  implicit def catsAlgebraStdLatticeForSet[A]: GenBool[Set[A]] = new SetLattice[A]
+  implicit def catsAlgebraStdSemiringForSet[A]: Semiring[Set[A]] = new SetSemiring[A]
 
   // this instance is not compatible with setSemiring, so it is not
   // marked as implicit to avoid an ambiguity.
-  def setBoolRng[A]: BoolRng[Set[A]] = new SetBoolRng[A]
+  def catsAlgebraStdBoolRngForSet[A]: BoolRng[Set[A]] = new SetBoolRng[A]
 }
 
 class SetLattice[A] extends GenBool[Set[A]] {

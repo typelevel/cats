@@ -4,12 +4,12 @@ package instances
 
 import cats.algebra.ring._
 
-package object bigInt extends BigIntInstances
+object bigInt extends BigIntInstances
 
-trait BigIntInstances extends cats.kernel.instances.BigIntInstances {
+trait BigIntInstances {
   private val instance: BigIntAlgebra = new BigIntAlgebra
-  implicit def bigIntAlgebra: EuclideanRing[BigInt] = instance
-  implicit def bigIntTruncatedDivision: TruncatedDivision[BigInt] = instance
+  implicit def catsAlgebraStdAlgebraForBigInt: EuclideanRing[BigInt] = instance
+  implicit def catsAlgebraStdTruncatedDivisionForBigInt: TruncatedDivision[BigInt] = instance
 }
 
 class BigIntAlgebra extends EuclideanRing[BigInt] with TruncatedDivision.forCommutativeRing[BigInt] with Serializable {
