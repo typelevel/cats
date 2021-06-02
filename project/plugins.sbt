@@ -15,7 +15,7 @@ addSbtPlugin("org.scala-js" % "sbt-scalajs" % "1.5.1")
 addSbtPlugin("org.scala-native" % "sbt-scala-native" % "0.4.0")
 addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.4.2")
 addSbtPlugin("com.eed3si9n" % "sbt-buildinfo" % "0.10.0")
-addSbtPlugin("com.codecommit" % "sbt-github-actions" % "0.11.0")
+addSbtPlugin("com.codecommit" % "sbt-github-actions" % "0.12.0")
 
 /* Temporarily disabling sbt-hydra, see #2870.
 resolvers += Resolver.url(
