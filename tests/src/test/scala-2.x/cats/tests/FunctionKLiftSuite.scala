@@ -1,5 +1,6 @@
 package cats.tests
 
+import cats.Applicative
 import cats.data.NonEmptyList
 import cats.arrow.FunctionK
 import cats.implicits._
@@ -7,6 +8,7 @@ import org.scalacheck.Prop._
 import cats.laws.discipline.arbitrary._
 
 class FunctionKLiftSuite extends CatsSuite {
+  type OptionOfNel[+A] = Option[NonEmptyList[A]]
 
   test("lift simple unary") {
     def optionToList[A](option: Option[A]): List[A] = option.toList
@@ -39,6 +41,21 @@ class FunctionKLiftSuite extends CatsSuite {
     val fNelFromList = FunctionK.lift[List, λ[α => Option[NonEmptyList[α]]]](NonEmptyList.fromList _)
     forAll { (a: List[String]) =>
       assert(fNelFromList(a) === (NonEmptyList.fromList(a)))
+    }
+  }
+
+  test("lift eta-expanded function") {
+    val fSomeNel = FunctionK.lift[NonEmptyList, OptionOfNel](Applicative[Option].pure)
+    forAll { (a: NonEmptyList[Int]) =>
+      assert(fSomeNel(a) === Some(a))
+    }
+  }
+
+  test("lift a function directly") {
+    def headOption[A](list: List[A]): Option[A] = list.headOption
+    val fHeadOption = FunctionK.liftFunction[List, Option](headOption)
+    forAll { (a: List[Int]) =>
+      assert(fHeadOption(a) === a.headOption)
     }
   }
 
