@@ -16,7 +16,7 @@
 [![Financial Contributors on Open Collective](https://opencollective.com/typelevel/all/badge.svg?label=financial+contributors)](https://opencollective.com/typelevel) [![Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/typelevel/cats)
 [![Latest version](https://index.scala-lang.org/typelevel/cats/cats-core/latest.svg?color=orange&v=1)](https://index.scala-lang.org/typelevel/cats/cats-core)
 [![Scala.js](http://scala-js.org/assets/badges/scalajs-1.2.0.svg)](http://scala-js.org)
-
+[![Discord](https://img.shields.io/discord/632277896739946517.svg?label=&logo=discord&logoColor=ffffff&color=404244&labelColor=6A7EC2)](https://discord.gg/hWd4eS244g)
 
 ### Overview
 
@@ -149,8 +149,11 @@ Links:
 
 ### Community
 
-Discussion around Cats is currently happening on Github issue and PR pages
-as well as in two Gitter channels: 
+Discussion around Cats is currently happening on Github issues, PR pages, 
+two Gitter channels, and we're also trying out Discord: 
+ 
+[Typelevel Discord](https://discord.gg/XF3CXcMzqD) has access to all of the 
+Typelevel library channels as well as community channels.  Please join us! 
 
 [Gitter channel cats](https://gitter.im/typelevel/cats) is for general user 
 questions and discussions, and 
@@ -204,12 +207,13 @@ versioning in the future. But that decision is yet to be made.
 
 ### Adopters
 
-Here's a (non-exhaustive) list of companies that use Cats in production. Don't see yours? [You can add it in a PR!](https://github.com/typelevel/cats/edit/main/README.md). And if you can, consider [supporting us](https://donorbox.org/typelevel-sustainability-program-2019?default_interval=m). 
+Here's a (non-exhaustive) list of companies that use Cats in production. Don't see yours? [You can add it in a PR!](https://github.com/typelevel/cats/edit/main/README.md) And if you can, consider [supporting us](https://donorbox.org/typelevel-sustainability-program-2019?default_interval=m). 
 
 - [Abacus Protocol](https://abacusprotocol.com)
 - [Anduin Transactions](https://anduintransact.com)
 - [Apple Inc. (FEAR team)](https://news.ycombinator.com/item?id=16969118)
 - [AutoScout24](https://www.autoscout24.com) 
+- [AvantStay](https://avantstay.com/) 
 - [Avast](https://avast.com)
 - [BabylonHealth](https://www.babylonhealth.com/)
 - [Banno Group inside of Jack Henry & Associates](https://banno.com/)
@@ -259,6 +263,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Rakuten](https://www.rakuten.com)
 - [REA Group](https://www.realestate.com.au/)
 - [Reality Games](https://wearerealitygames.com)
+- [Rewards Network](https://rewardsnetwork.com)
 - [RBC Capital Markets](https://www.rbccm.com)
 - [Rudder](https://rudder.io)
 - [Scalac](https://scalac.io)

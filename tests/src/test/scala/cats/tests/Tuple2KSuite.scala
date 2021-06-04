@@ -3,12 +3,12 @@ package cats.tests
 import cats._
 import cats.data.{Const, Tuple2K, Validated}
 import cats.kernel.laws.discipline.{EqTests, OrderTests, PartialOrderTests}
+import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
-import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.syntax.eq._
-import org.scalacheck.{Arbitrary, Cogen}
+import org.scalacheck.Arbitrary
 import org.scalacheck.Prop._
 
 class Tuple2KSuite extends CatsSuite {
@@ -211,6 +211,18 @@ class Tuple2KSuite extends CatsSuite {
       val tuple = Tuple2K(l1, l2)
 
       assert(tuple.swap.swap === tuple)
+    }
+  }
+
+  test("firstK is consistent with first") {
+    forAll { (tuple: Tuple2K[Option, Option, String]) =>
+      assert(Tuple2K.firstK(tuple) === tuple.first)
+    }
+  }
+
+  test("secondK is consistent with second") {
+    forAll { (tuple: Tuple2K[Option, Option, String]) =>
+      assert(Tuple2K.secondK(tuple) === tuple.second)
     }
   }
 

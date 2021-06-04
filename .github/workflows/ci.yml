@@ -9,9 +9,9 @@ name: Continuous Integration
 
 on:
   pull_request:
-    branches: ['*']
+    branches: ['**']
   push:
-    branches: ['*']
+    branches: ['**']
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -23,7 +23,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        scala: [2.12.13, 2.13.5, 3.0.0-RC2, 3.0.0-RC3]
+        scala: [2.12.13, 2.13.5, 3.0.0]
         java:
           - adopt@1.8
           - adopt@1.11
@@ -44,9 +44,7 @@ jobs:
           - platform: native
             java: graalvm-ce-java8@20.2.0
           - platform: native
-            scala: 3.0.0-RC2
-          - platform: native
-            scala: 3.0.0-RC3
+            scala: 3.0.0
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout current branch (full)
@@ -55,7 +53,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup Java and Scala
-        uses: olafurpg/setup-scala@v10
+        uses: olafurpg/setup-scala@v12
         with:
           java-version: ${{ matrix.java }}
 
@@ -72,34 +70,34 @@ jobs:
           key: ${{ runner.os }}-sbt-cache-v2-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
 
       - name: Check that workflows are up to date
-        run: sbt ++${{ matrix.scala }} githubWorkflowCheck
+        run: sbt --client '++${{ matrix.scala }}; githubWorkflowCheck'
 
       - name: Validate JavaScript
         if: matrix.platform == 'js'
-        run: sbt ++${{ matrix.scala }} validateAllJS
+        run: sbt --client '++${{ matrix.scala }}; validateAllJS'
 
       - name: Validate Scala Native
         if: matrix.platform == 'native'
-        run: sbt ++${{ matrix.scala }} validateAllNative
+        run: sbt --client '++${{ matrix.scala }}; validateAllNative'
 
       - name: Validate JVM (scala 2)
-        if: matrix.platform == 'jvm' && (matrix.scala != '3.0.0-RC2' && matrix.scala != '3.0.0-RC3')
-        run: sbt ++${{ matrix.scala }} buildJVM bench/test
+        if: matrix.platform == 'jvm' && (matrix.scala != '3.0.0')
+        run: sbt --client '++${{ matrix.scala }}; buildJVM; bench/test'
 
       - name: Validate JVM (scala 3)
-        if: matrix.platform == 'jvm' && (matrix.scala == '3.0.0-RC2' || matrix.scala == '3.0.0-RC3')
-        run: sbt ++${{ matrix.scala }} buildJVM bench/test
+        if: matrix.platform == 'jvm' && (matrix.scala == '3.0.0')
+        run: sbt --client '++${{ matrix.scala }}; buildJVM; bench/test'
 
       - name: Binary compatibility ${{ matrix.scala }}
-        if: matrix.platform == 'jvm' && (matrix.scala != '3.0.0-RC2' && matrix.scala != '3.0.0-RC3')
-        run: sbt ++${{ matrix.scala }} clean validateBC
+        if: matrix.platform == 'jvm' && (matrix.scala != '3.0.0')
+        run: sbt --client '++${{ matrix.scala }}; clean; validateBC'
 
   scalafix:
     name: Scalafix
     strategy:
       matrix:
         os: [ubuntu-latest]
-        scala: [2.12.13, 2.13.5, 3.0.0-RC2, 3.0.0-RC3]
+        scala: [2.12.13, 2.13.5, 3.0.0]
         java: [adopt@1.8]
     runs-on: ${{ matrix.os }}
     steps:
@@ -109,7 +107,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup Java and Scala
-        uses: olafurpg/setup-scala@v10
+        uses: olafurpg/setup-scala@v12
         with:
           java-version: ${{ matrix.java }}
 
@@ -135,7 +133,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        scala: [2.12.13, 2.13.5, 3.0.0-RC2, 3.0.0-RC3]
+        scala: [2.12.13, 2.13.5, 3.0.0]
         java: [adopt@1.8]
     runs-on: ${{ matrix.os }}
     steps:
@@ -145,7 +143,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup Java and Scala
-        uses: olafurpg/setup-scala@v10
+        uses: olafurpg/setup-scala@v12
         with:
           java-version: ${{ matrix.java }}
 
@@ -162,8 +160,8 @@ jobs:
           key: ${{ runner.os }}-sbt-cache-v2-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
 
       - name: Check formatting
-        if: (matrix.scala != '3.0.0-RC2' && matrix.scala != '3.0.0-RC3')
-        run: sbt ++${{ matrix.scala }} fmtCheck
+        if: (matrix.scala != '3.0.0')
+        run: sbt --client '++${{ matrix.scala }}; fmtCheck'
 
   microsite:
     name: Microsite
@@ -180,7 +178,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup Java and Scala
-        uses: olafurpg/setup-scala@v10
+        uses: olafurpg/setup-scala@v12
         with:
           java-version: ${{ matrix.java }}
 
@@ -205,4 +203,4 @@ jobs:
         run: gem install jekyll -v 4.0.0
 
       - name: Build the microsite
-        run: sbt ++${{ matrix.scala }} docs/makeMicrosite
+        run: sbt --client '++${{ matrix.scala }}; docs/makeMicrosite'

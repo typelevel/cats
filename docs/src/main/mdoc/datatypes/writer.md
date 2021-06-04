@@ -178,4 +178,4 @@ import cats.syntax.compose._
 ).run
 ```
 
-If you are interested in logging solutions, we recommend the library [log4cats](https://christopherdavenport.github.io/log4cats/)
+If you are interested in logging solutions, we recommend the library [log4cats](https://typelevel.org/log4cats/)

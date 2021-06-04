@@ -1,7 +1,7 @@
 package cats
 package data
 
-import cats.Contravariant
+import cats.arrow.FunctionK
 
 /**
  * [[Tuple2K]] is a product to two independent functor values.
@@ -19,7 +19,27 @@ final case class Tuple2K[F[_], G[_], A](first: F[A], second: G[A]) {
   def swap: Tuple2K[G, F, A] = Tuple2K(second, first)
 }
 
-object Tuple2K extends Tuple2KInstances
+object Tuple2K extends Tuple2KInstances {
+  private[this] val _1k = new FunctionK[Tuple2K[Id, Id, *], Id] {
+    def apply[A](fa: Tuple2K[Id, Id, A]) = fa.first
+  }
+
+  private[this] val _2k = new FunctionK[Tuple2K[Id, Id, *], Id] {
+    def apply[A](fa: Tuple2K[Id, Id, A]) = fa.second
+  }
+
+  /**
+   * Higher-kinded version of [[Tuple2K.first]]
+   */
+  def firstK[F[_], G[_]]: Tuple2K[F, G, *] ~> F =
+    _1k.asInstanceOf[Tuple2K[F, G, *] ~> F]
+
+  /**
+   * Higher-kinded version of [[Tuple2K.second]]
+   */
+  def secondK[F[_], G[_]]: Tuple2K[F, G, *] ~> G =
+    _2k.asInstanceOf[Tuple2K[F, G, *] ~> G]
+}
 
 sealed abstract private[data] class Tuple2KInstances extends Tuple2KInstances0 {
   implicit def catsDataOrderForTuple2K[F[_], G[_], A](implicit
