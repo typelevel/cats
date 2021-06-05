@@ -58,9 +58,6 @@ import scala.annotation.implicitNotFound
    */
   def productREval[A, B](fa: F[A])(fb: Eval[F[B]]): F[B] = flatMap(fa)(_ => fb.value)
 
-  @deprecated("Use productREval instead.", "1.0.0-RC2")
-  @noop private[cats] def followedByEval[A, B](fa: F[A])(fb: Eval[F[B]]): F[B] = productREval(fa)(fb)
-
   /**
    * Sequentially compose two actions, discarding any value produced by the second. This variant of
    * [[productL]] also lets you define the evaluation strategy of the second action. For instance
@@ -81,9 +78,6 @@ import scala.annotation.implicitNotFound
    * }}}
    */
   def productLEval[A, B](fa: F[A])(fb: Eval[F[B]]): F[A] = flatMap(fa)(a => as(fb.value, a))
-
-  @deprecated("Use productLEval instead.", "1.0.0-RC2")
-  @noop private[cats] def forEffectEval[A, B](fa: F[A])(fb: Eval[F[B]]): F[A] = productLEval(fa)(fb)
 
   override def ap[A, B](ff: F[A => B])(fa: F[A]): F[B] =
     flatMap(ff)(f => map(fa)(f))

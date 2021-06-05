@@ -99,10 +99,6 @@ final case class Kleisli[F[_], -A, B](run: A => F[B]) { self =>
   def local[AA](f: AA => A): Kleisli[F, AA, B] =
     Kleisli(aa => run(f(aa)))
 
-  @deprecated("Use mapK", "1.0.0-RC2")
-  private[cats] def transform[G[_]](f: FunctionK[F, G]): Kleisli[G, A, B] =
-    mapK(f)
-
   def lower(implicit F: Applicative[F]): Kleisli[F, A, F[B]] =
     Kleisli(a => F.pure(run(a)))
 
@@ -218,10 +214,6 @@ sealed private[data] trait KleisliFunctions {
    */
   def liftK[F[_], A]: F ~> Kleisli[F, A, *] =
     new (F ~> Kleisli[F, A, *]) { def apply[B](fb: F[B]): Kleisli[F, A, B] = Kleisli.liftF(fb) }
-
-  @deprecated("Use liftF instead", "1.0.0-RC2")
-  private[cats] def lift[F[_], A, B](x: F[B]): Kleisli[F, A, B] =
-    Kleisli(_ => x)
 
   /**
    * Creates a Kleisli arrow ignoring its input and lifting the given `B` into applicative context `F`.

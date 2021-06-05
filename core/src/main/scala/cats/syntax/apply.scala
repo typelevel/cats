@@ -25,19 +25,4 @@ final class IfApplyOps[F[_]](private val fcond: F[Boolean]) extends AnyVal {
   def ifA[A](ifTrue: F[A], ifFalse: F[A])(implicit F: Apply[F]): F[A] = F.ifA(fcond)(ifTrue, ifFalse)
 }
 
-final class ApplyOps[F[_], A](private val fa: F[A]) extends AnyVal {
-
-  /**
-   * Alias for [[Apply.productR]].
-   */
-  @deprecated("Use *> or productR instead.", "1.0.0-RC2")
-  @inline private[syntax] def followedBy[B](fb: F[B])(implicit F: Apply[F]): F[B] =
-    F.productR(fa)(fb)
-
-  /**
-   * Alias for [[Apply.productL]].
-   */
-  @deprecated("Use <* or productL instead.", "1.0.0-RC2")
-  @inline private[syntax] def forEffect[B](fb: F[B])(implicit F: Apply[F]): F[A] =
-    F.productL(fa)(fb)
-}
+final class ApplyOps[F[_], A](private val fa: F[A]) extends AnyVal {}
