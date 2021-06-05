@@ -43,7 +43,7 @@ trait Bool[@sp(Int, Long) A] extends Any with Heyting[A] with GenBool[A] { self 
    * Note that the ring returned by this method is not an extension of
    * the `Rig` returned from `BoundedDistributiveLattice.asCommutativeRig`.
    */
-  override def asBoolRing: BoolRing[A] = new BoolRingFromBool(self)
+  override private[algebra] def asBoolRing: BoolRing[A] = new BoolRingFromBool(self)
 }
 
 class DualBool[@sp(Int, Long) A](orig: Bool[A]) extends Bool[A] {
@@ -62,7 +62,7 @@ class DualBool[@sp(Int, Long) A](orig: Bool[A]) extends Bool[A] {
   override def dual: Bool[A] = orig
 }
 
-private[lattice] class BoolRingFromBool[A](orig: Bool[A]) extends BoolRngFromGenBool(orig) with BoolRing[A] {
+class BoolRingFromBool[A](orig: Bool[A]) extends BoolRngFromGenBool(orig) with BoolRing[A] {
   def one: A = orig.one
 }
 
@@ -78,7 +78,7 @@ class BoolFromBoolRing[A](orig: BoolRing[A]) extends GenBoolFromBoolRng(orig) wi
   def one: A = orig.one
   def complement(a: A): A = orig.plus(orig.one, a)
   override def without(a: A, b: A): A = super[GenBoolFromBoolRng].without(a, b)
-  override def asBoolRing: BoolRing[A] = orig
+  override private[algebra] def asBoolRing: BoolRing[A] = orig
 
   override def meet(a: A, b: A): A = super[GenBoolFromBoolRng].meet(a, b)
   override def join(a: A, b: A): A = super[GenBoolFromBoolRng].join(a, b)

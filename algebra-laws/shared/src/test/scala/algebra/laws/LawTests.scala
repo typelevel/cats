@@ -60,7 +60,7 @@ class LawTests extends munit.DisciplineSuite {
   checkAll("Boolean", RingLaws[Boolean].boolRing(booleanRing))
 
   // ensure that Bool[A].asBoolRing is a valid BoolRing
-  checkAll("Boolean-ring-from-bool", RingLaws[Boolean].boolRing(Bool[Boolean].asBoolRing))
+  checkAll("Boolean-ring-from-bool", RingLaws[Boolean].boolRing(new BoolRingFromBool[Boolean](Bool[Boolean])))
 
   // ensure that BoolRing[A].asBool is a valid Bool
   checkAll("Boolean- bool-from-ring", LogicLaws[Boolean].bool(new BoolFromBoolRing(booleanRing)))
@@ -91,7 +91,7 @@ class LawTests extends munit.DisciplineSuite {
   checkAll("Set[Byte]", LogicLaws[Set[Byte]].generalizedBool)
   checkAll("Set[Byte]", RingLaws[Set[Byte]].boolRng(setBoolRng[Byte]))
   checkAll("Set[Byte]-bool-from-rng", LogicLaws[Set[Byte]].generalizedBool(new GenBoolFromBoolRng(setBoolRng)))
-  checkAll("Set[Byte]-rng-from-bool", RingLaws[Set[Byte]].boolRng(GenBool[Set[Byte]].asBoolRing))
+  checkAll("Set[Byte]-rng-from-bool", RingLaws[Set[Byte]].boolRng(new BoolRngFromGenBool(GenBool[Set[Byte]])))
   checkAll("Set[Int]", OrderLaws[Set[Int]].partialOrder)
   checkAll("Set[Int]", RingLaws[Set[Int]].semiring)
   checkAll("Set[String]", RingLaws[Set[String]].semiring)
