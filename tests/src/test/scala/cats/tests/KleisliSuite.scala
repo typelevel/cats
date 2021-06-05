@@ -187,7 +187,7 @@ class KleisliSuite extends CatsSuite {
 
   test("local composes functions") {
     forAll { (f: Int => Option[String], g: Int => Int, i: Int) =>
-      assert(f(g(i)) === (Kleisli.local[Option, String, Int](g)(Kleisli(f)).run(i)))
+      assert(f(g(i)) === ((Kleisli(f).local(g)).run(i)))
     }
   }
 
