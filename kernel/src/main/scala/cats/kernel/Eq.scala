@@ -109,19 +109,7 @@ object Eq
     }
 
   /**
-   * An `Eq[A]` that delegates to referential equality (`eq`).
-   *
-   * This is the finest possible equivalence relation.
-   */
-  def fromReferentialEquals[A <: AnyRef]: Eq[A] =
-    new Eq[A] {
-      def eqv(x: A, y: A) = x eq y
-    }
-
-  /**
-   * Everything is the same.
-   *
-   * This is the coarsest possible equivalence relation.
+   * Everything is the same
    */
   def allEqual[A]: Eq[A] =
     new Eq[A] {
