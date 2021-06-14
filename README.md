@@ -1,5 +1,5 @@
 
-### ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) Community Announcements ![#f03c15](https://placehold.it/15/f03c15/000000?text=+)
+### Community Announcements
 
 * **Oct 31 2020** [Cats 2.3.0-M1 is released](https://github.com/typelevel/cats/releases/tag/v2.3.0-M1) with Dotty supported
 * **Sept 3 2020** [Cats 2.2.0 is released](https://github.com/typelevel/cats/releases/tag/v2.2.0)
@@ -10,12 +10,10 @@
 
 ## Cats
 
-![cats image](http://plastic-idolatry.com/erik/cats2.png)
+![Cats graphic](https://raw.githubusercontent.com/typelevel/cats/main/docs/src/main/resources/microsite/img/cats2.png)
 
-![Continuous Integration](https://github.com/typelevel/cats/workflows/Continuous%20Integration/badge.svg)
+[![cats-core Scala version support](https://index.scala-lang.org/typelevel/cats/cats-core/latest-by-scala-version.svg?targetType=Js)](https://index.scala-lang.org/typelevel/cats/cats-core) ![Continuous Integration](https://github.com/typelevel/cats/workflows/Continuous%20Integration/badge.svg)
 [![Financial Contributors on Open Collective](https://opencollective.com/typelevel/all/badge.svg?label=financial+contributors)](https://opencollective.com/typelevel) [![Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/typelevel/cats)
-[![Latest version](https://index.scala-lang.org/typelevel/cats/cats-core/latest.svg?color=orange&v=1)](https://index.scala-lang.org/typelevel/cats/cats-core)
-[![Scala.js](http://scala-js.org/assets/badges/scalajs-1.2.0.svg)](http://scala-js.org)
 [![Discord](https://img.shields.io/discord/632277896739946517.svg?label=&logo=discord&logoColor=ffffff&color=404244&labelColor=6A7EC2)](https://discord.gg/hWd4eS244g)
 
 ### Overview
@@ -86,7 +84,7 @@ Support this project with your organization. Your logo will show up here with a 
 
 ### Getting Started
 
-Cats is currently available for Scala 2.10 (up to 1.2.x), 2.11, 2.12, 2.13, [Scala.js](http://www.scala-js.org/), and [Scala Native](https://www.scala-native.org/).
+Cats is available for [Scala.js](http://www.scala-js.org/) and [Scala Native](https://www.scala-native.org/), as well as the standard JVM runtime.
 
 Cats relies on improved type inference via the fix for [SI-2712](https://github.com/scala/bug/issues/2712), which is not enabled by default. For **Scala 2.11.9+ or 2.12** you should add the following to your `build.sbt`:
 
