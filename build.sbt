@@ -504,6 +504,10 @@ def mimaSettings(moduleName: String, includeCats1: Boolean = true) =
           exclude[MissingClassProblem]("cats.syntax.EqOps$"),
           exclude[MissingClassProblem]("cats.syntax.EqOps$mcF$sp"),
           exclude[MissingClassProblem]("cats.syntax.EqOps$mcI$sp")
+        ) ++ // https://github.com/typelevel/cats/pull/3918
+        Seq(
+          exclude[MissingClassProblem]("algebra.laws.IsSerializable"),
+          exclude[MissingClassProblem]("algebra.laws.IsSerializable$")
         )
     }
   )
@@ -705,8 +709,12 @@ lazy val algebraLaws = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .settings(testingDependencies)
   .settings(Test / scalacOptions := (Test / scalacOptions).value.filter(_ != "-Xfatal-warnings"))
   .jsSettings(commonJsSettings)
-  .jvmSettings(commonJvmSettings)
-  .dependsOn(kernel, algebra)
+  .jvmSettings(
+    commonJvmSettings ++ mimaSettings("algebra-laws") ++ Seq(
+      mimaPreviousArtifacts := Set("org.typelevel" %% "algebra-laws" % "2.2.3")
+    )
+  )
+  .dependsOn(kernelLaws, algebra)
   .nativeSettings(commonNativeSettings)
 
 lazy val core = crossProject(JSPlatform, JVMPlatform, NativePlatform)

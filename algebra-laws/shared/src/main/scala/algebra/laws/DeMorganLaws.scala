@@ -6,6 +6,7 @@ import org.scalacheck.{Arbitrary, Prop}
 import org.scalacheck.Prop._
 import org.typelevel.discipline.Laws
 
+@deprecated("Laws moved to LogicLaws", since = "2.7.0")
 object DeMorganLaws {
   def apply[A: Eq: Arbitrary: LatticeLaws] = new DeMorganLaws[A] {
     def Equ = Eq[A]
@@ -13,10 +14,8 @@ object DeMorganLaws {
     def LL = implicitly[LatticeLaws[A]]
   }
 }
-/* TODO:
- *  This is separated for LogicLaws for binary compatibility reasons.
- *  Merge with LogicLaws when possible.
- */
+
+@deprecated("Laws moved to LogicLaws", since = "2.7.0")
 trait DeMorganLaws[A] extends Laws {
 
   implicit def Equ: Eq[A]

@@ -5,6 +5,7 @@ import algebra.lattice.{Bool, GenBool, Heyting}
 
 import org.scalacheck.{Arbitrary, Prop}
 import org.scalacheck.Prop._
+import scala.annotation.nowarn
 
 object LogicLaws {
   def apply[A: Eq: Arbitrary] = new LogicLaws[A] {
@@ -13,7 +14,10 @@ object LogicLaws {
   }
 }
 
-trait LogicLaws[A] extends LatticeLaws[A] {
+@nowarn("msg=deprecated")
+trait LogicLaws[A] extends LatticeLaws[A] with DeMorganLaws[A] {
+
+  final def LL: LatticeLaws[A] = this
 
   def heyting(implicit A: Heyting[A]) = new LogicProperties(
     name = "heyting",

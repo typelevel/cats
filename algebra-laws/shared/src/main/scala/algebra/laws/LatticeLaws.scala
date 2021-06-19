@@ -5,6 +5,7 @@ import algebra.lattice._
 
 import org.scalacheck.{Arbitrary, Prop}
 import org.scalacheck.Prop._
+import scala.annotation.nowarn
 
 object LatticeLaws {
   def apply[A: Eq: Arbitrary] = new LatticeLaws[A] {
@@ -13,6 +14,7 @@ object LatticeLaws {
   }
 }
 
+@nowarn("msg=deprecated")
 trait LatticeLaws[A] extends GroupLaws[A] {
 
   implicit def Equ: Eq[A]

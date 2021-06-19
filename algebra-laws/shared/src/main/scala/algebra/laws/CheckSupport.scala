@@ -8,4 +8,5 @@ package algebra.laws
  * (Since algebra-instances has no dependencies, its types can't
  * define Arbitrary instances in companions.)
  */
+@deprecated("No replacement", since = "2.7.0")
 object CheckSupport {}

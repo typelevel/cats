@@ -6,6 +6,7 @@ import org.typelevel.discipline.Laws
 
 import org.scalacheck.{Arbitrary, Prop}
 
+@deprecated("No replacement", since = "2.7.0")
 object BaseLaws {
   def apply[A: Eq: Arbitrary]: BaseLaws[A] = new BaseLaws[A] {
     def Equ = Eq[A]
@@ -13,6 +14,7 @@ object BaseLaws {
   }
 }
 
+@deprecated("No replacement", since = "2.7.0")
 trait BaseLaws[A] extends Laws {
 
   implicit def Equ: Eq[A]

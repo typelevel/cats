@@ -9,6 +9,7 @@ import org.scalacheck.Prop._
 
 import cats.kernel.instances.all._
 
+@deprecated("Provided by cats.kernel.laws", since = "2.7.0")
 object OrderLaws {
   def apply[A: Eq: Arbitrary: Cogen]: OrderLaws[A] =
     new OrderLaws[A] {
@@ -18,6 +19,7 @@ object OrderLaws {
     }
 }
 
+@deprecated("Provided by cats.kernel.laws", since = "2.7.0")
 trait OrderLaws[A] extends Laws {
 
   implicit def Equ: Eq[A]

@@ -4,6 +4,7 @@ import cats.kernel._
 import org.scalacheck.Prop._
 import org.scalacheck.{Arbitrary, Prop}
 import cats.kernel.instances.boolean._
+import cats.kernel.laws.discipline.SerializableTests
 
 object Rules {
 
@@ -92,12 +93,7 @@ object Rules {
       (m(a(x, y), z) ?== a(m(x, z), m(y, z)))
     }
 
-  // ugly platform-specific code follows
-
+  @deprecated("Provided by cats.kernel.laws", since = "2.7.0")
   def serializable[M](m: M): (String, Prop) =
-    "serializable" -> (if (IsSerializable()) {
-                         Prop(_ => Result(status = Proof))
-                       } else {
-                         Prop(_ => IsSerializable.testSerialization(m))
-                       })
+    SerializableTests.serializable[M](m).props.head
 }

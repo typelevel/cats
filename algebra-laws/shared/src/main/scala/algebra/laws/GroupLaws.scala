@@ -8,6 +8,7 @@ import org.typelevel.discipline.Laws
 import org.scalacheck.{Arbitrary, Prop}
 import org.scalacheck.Prop._
 
+@deprecated("Provided by cats.kernel.laws", since = "2.7.0")
 object GroupLaws {
   def apply[A: Eq: Arbitrary]: GroupLaws[A] = new GroupLaws[A] {
     def Equ = Eq[A]
@@ -15,6 +16,7 @@ object GroupLaws {
   }
 }
 
+@deprecated("Provided by cats.kernel.laws", since = "2.7.0")
 trait GroupLaws[A] extends Laws {
 
   implicit def Equ: Eq[A]

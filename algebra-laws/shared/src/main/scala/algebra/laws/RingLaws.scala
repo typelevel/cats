@@ -10,6 +10,7 @@ import org.typelevel.discipline.Predicate
 import org.scalacheck.{Arbitrary, Prop}
 import org.scalacheck.Arbitrary._
 import org.scalacheck.Prop._
+import scala.annotation.nowarn
 
 object RingLaws {
   def apply[A: Eq: Arbitrary: AdditiveMonoid]: RingLaws[A] =
@@ -20,6 +21,7 @@ object RingLaws {
   def withPred[A](pred0: Predicate[A])(implicit eqv: Eq[A], arb: Arbitrary[A]): RingLaws[A] = new RingLaws[A] {
     def Arb = arb
     def pred = pred0
+    @nowarn("msg=deprecated")
     val nonZeroLaws = new GroupLaws[A] {
       def Arb = Arbitrary(arbitrary[A](arb).filter(pred))
       def Equ = eqv
@@ -27,6 +29,7 @@ object RingLaws {
   }
 }
 
+@nowarn("msg=deprecated")
 trait RingLaws[A] extends GroupLaws[A] { self =>
 
   // must be a val (stable identifier)
