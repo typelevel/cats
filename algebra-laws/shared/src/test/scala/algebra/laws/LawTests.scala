@@ -123,7 +123,9 @@ class LawTests extends munit.DisciplineSuite {
   checkAll("Long", RingLaws[Long].commutativeRing)
   checkAll("Long", LatticeLaws[Long].boundedDistributiveLattice)
 
+  checkAll("BigInt", OrderLaws[BigInt].truncatedDivision)
   checkAll("BigInt", RingLaws[BigInt].euclideanRing)
+  checkAll("BigInt", OrderLaws[BigInt].signedGCDRing)
 
   checkAll("FPApprox[Float]", RingLaws[FPApprox[Float]].approxField)
   checkAll("FPApprox[Double]", RingLaws[FPApprox[Double]].approxField)
