@@ -1,5 +1,7 @@
 package algebra
 
+import scala.annotation.nowarn
+
 /**
  * Priority is a type class for prioritized implicit search.
  *
@@ -11,6 +13,7 @@ package algebra
  * This type can be useful for problems where multiple algorithms can
  * be used, depending on the type classes available.
  */
+@deprecated("No replacement", since = "2.7.0")
 sealed trait Priority[+P, +F] {
 
   import Priority.{Fallback, Preferred}
@@ -46,6 +49,7 @@ sealed trait Priority[+P, +F] {
     fold[Option[F]](_ => None)(f => Some(f))
 }
 
+@deprecated("No replacement", since = "2.7.0")
 object Priority extends FindPreferred {
 
   case class Preferred[P](get: P) extends Priority[P, Nothing]
@@ -55,11 +59,13 @@ object Priority extends FindPreferred {
 }
 
 private[algebra] trait FindPreferred extends FindFallback {
+  @nowarn("msg=deprecated")
   implicit def preferred[P](implicit ev: P): Priority[P, Nothing] =
     Priority.Preferred(ev)
 }
 
 private[algebra] trait FindFallback {
+  @nowarn("msg=deprecated")
   implicit def fallback[F](implicit ev: F): Priority[Nothing, F] =
     Priority.Fallback(ev)
 }
