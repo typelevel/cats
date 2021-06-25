@@ -79,6 +79,18 @@ class VectorSuite extends CatsSuite {
     }
   )
 
+  test("scanLeftNev should be consistent with scanLeft")(
+    forAll { (fa: Vector[Int], b: Int, f: (Int, Int) => Int) =>
+      assert(fa.scanLeftNev(b)(f).toVector === fa.scanLeft(b)(f))
+    }
+  )
+
+  test("scanRightNev should be consistent with scanRight")(
+    forAll { (fa: Vector[Int], b: Int, f: (Int, Int) => Int) =>
+      assert(fa.scanRightNev(b)(f).toVector === fa.scanRight(b)(f))
+    }
+  )
+
   test("traverse is stack-safe") {
     val vec = (0 until 100000).toVector
     val sumAll = Traverse[Vector]

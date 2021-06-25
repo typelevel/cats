@@ -82,4 +82,46 @@ final class VectorOps[A](private val va: Vector[A]) extends AnyVal {
       }
     }
   }
+
+  /**
+   * Produces a `NonEmptyVector` containing cumulative results of applying the
+   * operator going left to right.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.data.NonEmptyVector
+   * scala> import cats.implicits._
+   *
+   * scala> val result1: Vector[Int] = Vector(1, 2)
+   * scala> result1.scanLeftNev(100)(_ + _)
+   * res0: NonEmptyVector[Int] = NonEmptyVector(100, 101, 103)
+   *
+   * scala> val result2: Vector[Int] = Vector.empty[Int]
+   * scala> result2.scanLeftNev(1)(_ + _)
+   * res1: NonEmptyVector[Int] = NonEmptyVector(1)
+   * }}}
+   */
+  def scanLeftNev[B](b: B)(f: (B, A) => B): NonEmptyVector[B] =
+    NonEmptyVector.fromVectorUnsafe(va.scanLeft(b)(f))
+
+  /**
+   * Produces a `NonEmptyVector` containing cumulative results of applying the
+   * operator going right to left.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.data.NonEmptyVector
+   * scala> import cats.implicits._
+   *
+   * scala> val result1: Vector[Int] = Vector(1, 2)
+   * scala> result1.scanRightNev(100)(_ + _)
+   * res0: NonEmptyVector[Int] = NonEmptyVector(103, 102, 100)
+   *
+   * scala> val result2: Vector[Int] = Vector.empty[Int]
+   * scala> result2.scanRightNev(1)(_ + _)
+   * res1: NonEmptyVector[Int] = NonEmptyVector(1)
+   * }}}
+   */
+  def scanRightNev[B](b: B)(f: (A, B) => B): NonEmptyVector[B] =
+    NonEmptyVector.fromVectorUnsafe(va.scanRight(b)(f))
 }
