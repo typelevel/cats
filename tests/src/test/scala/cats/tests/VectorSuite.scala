@@ -73,6 +73,12 @@ class VectorSuite extends CatsSuite {
     }
   )
 
+  test("groupByNevA should be consistent with groupByNev")(
+    forAll { (fa: Vector[Int], f: Int => Int) =>
+      assert(fa.groupByNevA(f.andThen(Option(_))) === Option(fa.groupByNev(f)))
+    }
+  )
+
   test("traverse is stack-safe") {
     val vec = (0 until 100000).toVector
     val sumAll = Traverse[Vector]
