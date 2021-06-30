@@ -13,7 +13,6 @@ import scala.annotation.nowarn
  * This type can be useful for problems where multiple algorithms can
  * be used, depending on the type classes available.
  */
-@deprecated("No replacement", since = "2.7.0")
 sealed trait Priority[+P, +F] {
 
   import Priority.{Fallback, Preferred}
@@ -49,7 +48,6 @@ sealed trait Priority[+P, +F] {
     fold[Option[F]](_ => None)(f => Some(f))
 }
 
-@deprecated("No replacement", since = "2.7.0")
 object Priority extends FindPreferred {
 
   case class Preferred[P](get: P) extends Priority[P, Nothing]
