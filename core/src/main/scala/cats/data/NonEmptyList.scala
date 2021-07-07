@@ -398,6 +398,7 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
    * }}}
    */
   def min[AA >: A](implicit ord: Ordering[AA]): A = reduceLeft(ord.min[A])
+
   /**
    * Returns the maximum value of this `NonEmptyList` according to an `Ordering`
    *
