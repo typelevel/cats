@@ -21,6 +21,7 @@ import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.laws.discipline.arbitrary._
 import cats.syntax.apply._
 import cats.syntax.either._
+import cats.syntax.string._
 import cats.syntax.validated._
 import org.scalacheck.Arbitrary._
 import scala.util.Try
@@ -113,7 +114,7 @@ class ValidatedSuite extends CatsSuite {
 
   test("catchNonFatal catches non-fatal exceptions") {
     assert(Validated.catchNonFatal("foo".toInt).isInvalid)
-    assert(Validated.catchNonFatal(throw new Throwable("blargh")).isInvalid)
+    assert(Validated.catchNonFatal(throw "blargh".asThrowable).isInvalid)
   }
 
   test("fromTry is invalid for failed try") {

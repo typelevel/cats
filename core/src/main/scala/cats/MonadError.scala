@@ -92,7 +92,7 @@ trait MonadError[F[_], E] extends ApplicativeError[F, E] with Monad[F] {
    *
    * scala> def checkError(result: Either[Throwable, Int]): Try[String] = result.fold(_ => Failure(new java.lang.Exception), _ => Success("success"))
    *
-   * scala> val a: Try[Int] = Failure(new Throwable("failed"))
+   * scala> val a: Try[Int] = Failure("failed".asThrowable)
    * scala> a.attemptTap(checkError)
    * res0: scala.util.Try[Int] = Failure(java.lang.Exception)
    *

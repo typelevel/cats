@@ -7,6 +7,7 @@ import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.syntax.either._
+import cats.syntax.string._
 import scala.util.Try
 import cats.syntax.eq._
 import org.scalacheck.Prop._
@@ -110,7 +111,7 @@ class EitherSuite extends CatsSuite {
 
   test("catchNonFatal catches non-fatal exceptions") {
     assert(Either.catchNonFatal("foo".toInt).isLeft)
-    assert(Either.catchNonFatal(throw new Throwable("blargh")).isLeft)
+    assert(Either.catchNonFatal(throw "blargh".asThrowable).isLeft)
   }
 
   test("fromTry is left for failed Try") {

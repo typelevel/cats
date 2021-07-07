@@ -23,7 +23,7 @@ final class TryOps[A](private val self: Try[A]) extends AnyVal {
    * scala> s.liftTo[Either[Throwable, *]]
    * res0: Either[Throwable, Int] = Right(3)
    *
-   * scala> val f: Try[Int] = Try(throw new Throwable("boo"))
+   * scala> val f: Try[Int] = Try(throw "boo".asThrowable)
    * scala> f.liftTo[Either[Throwable, *]]
    * res0: Either[Throwable, Int] = Left(java.lang.Throwable: boo)
    * }}}
@@ -35,7 +35,7 @@ final class TryOps[A](private val self: Try[A]) extends AnyVal {
    * transforms the try to a Validated[Throwable, A] instance
    *
    * {{{
-   * scala> import cats.syntax.try_._
+   * scala> import cats.implicits._
    * scala> import cats.data.Validated
    * scala> import util.Try
    *
@@ -43,7 +43,7 @@ final class TryOps[A](private val self: Try[A]) extends AnyVal {
    * scala> s.toValidated
    * res0: Validated[Throwable, Int] = Valid(3)
    *
-   * scala> val f: Try[Int] = Try(throw new Throwable("boo"))
+   * scala> val f: Try[Int] = Try(throw "boo".asThrowable)
    * scala> f.toValidated
    * res0: Validated[Throwable, Int] = Invalid(java.lang.Throwable: boo)
    * }}}
