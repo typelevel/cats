@@ -125,7 +125,16 @@ trait OrderToOrderingConversion {
 
 }
 
-object Order extends OrderFunctions[Order] with OrderToOrderingConversion {
+trait OrderFromOrderingConversion {
+
+  /**
+   * Implicitly derive a `Order[A]` from a `scala.math.Ordering[A]`
+   * instance.
+   */
+  implicit def catsKernelOrderForOrdering[A](implicit ev: Ordering[A]): Order[A] = Order.fromOrdering
+}
+
+object Order extends OrderFunctions[Order] with OrderToOrderingConversion with OrderFromOrderingConversion {
 
   /**
    * Access an implicit `Order[A]`.
