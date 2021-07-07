@@ -321,6 +321,18 @@ class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonE
     }
   }
 
+  test("NonEmptyList#min is consistent with List#min") {
+    forAll { (nel: NonEmptyList[Int]) =>
+      assert(nel.min === nel.toList.min)
+    }
+  }
+
+  test("NonEmptyList#max is consistent with List#max") {
+    forAll { (nel: NonEmptyList[Int]) =>
+      assert(nel.max === nel.toList.max)
+    }
+  }
+
   test("NonEmptyList#groupBy is consistent with List#groupBy") {
     forAll { (nel: NonEmptyList[Int], key: Int => Int) =>
       val result = nel.groupBy(key).map { case (k, v) => (k, v.toList) }.toMap

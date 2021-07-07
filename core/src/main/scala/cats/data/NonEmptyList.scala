@@ -388,6 +388,29 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
     NonEmptyList.fromListUnsafe(toList.sorted(AA.toOrdering))
 
   /**
+   * Returns the minimum value of this `NonEmptyList` according to an `Ordering`
+   *
+   * {{{
+   * scala> import cats.data.NonEmptyList
+   * scala> val nel = NonEmptyList.of(12, 4, 3, 9)
+   * scala> nel.min
+   * res0: Int = 3
+   * }}}
+   */
+  def min[AA >: A](implicit ord: Ordering[AA]): A = reduceLeft(ord.min[A])
+  /**
+   * Returns the maximum value of this `NonEmptyList` according to an `Ordering`
+   *
+   * {{{
+   * scala> import cats.data.NonEmptyList
+   * scala> val nel = NonEmptyList.of(12, 4, 3, 9)
+   * scala> nel.max
+   * res0: Int = 12
+   * }}}
+   */
+  def max[AA >: A](implicit ord: Ordering[AA]): A = reduceLeft(ord.max[A])
+
+  /**
    * Groups elements inside this `NonEmptyList` according to the `Order`
    * of the keys produced by the given mapping function.
    *
