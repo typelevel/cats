@@ -45,6 +45,7 @@ For example, if you'd like to import the `Monoid` instance for `String` and the 
 
 ```scala mdoc
 import cats.instances.string._
+import cats.syntax.semigroup._
 
 "Hello, " |+| "World!"
 ```
