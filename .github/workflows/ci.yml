@@ -23,7 +23,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        scala: [2.12.14, 2.13.6, 3.0.0]
+        scala: [2.12.14, 2.13.6, 3.0.1]
         java:
           - adopt@1.8
           - adopt@1.11
@@ -44,7 +44,7 @@ jobs:
           - platform: native
             java: graalvm-ce-java8@20.2.0
           - platform: native
-            scala: 3.0.0
+            scala: 3.0.1
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout current branch (full)
@@ -81,15 +81,15 @@ jobs:
         run: sbt --client '++${{ matrix.scala }}; validateAllNative'
 
       - name: Validate JVM (scala 2)
-        if: matrix.platform == 'jvm' && (matrix.scala != '3.0.0')
+        if: matrix.platform == 'jvm' && (matrix.scala != '3.0.1')
         run: sbt --client '++${{ matrix.scala }}; buildJVM; bench/test'
 
       - name: Validate JVM (scala 3)
-        if: matrix.platform == 'jvm' && (matrix.scala == '3.0.0')
+        if: matrix.platform == 'jvm' && (matrix.scala == '3.0.1')
         run: sbt --client '++${{ matrix.scala }}; buildJVM; bench/test'
 
       - name: Binary compatibility ${{ matrix.scala }}
-        if: matrix.platform == 'jvm' && (matrix.scala != '3.0.0')
+        if: matrix.platform == 'jvm' && (matrix.scala != '3.0.1')
         run: sbt --client '++${{ matrix.scala }}; clean; validateBC'
 
   scalafix:
@@ -97,7 +97,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        scala: [2.12.14, 2.13.6, 3.0.0]
+        scala: [2.12.14, 2.13.6, 3.0.1]
         java: [adopt@1.8]
     runs-on: ${{ matrix.os }}
     steps:
@@ -133,7 +133,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        scala: [2.12.14, 2.13.6, 3.0.0]
+        scala: [2.12.14, 2.13.6, 3.0.1]
         java: [adopt@1.8]
     runs-on: ${{ matrix.os }}
     steps:
@@ -160,7 +160,7 @@ jobs:
           key: ${{ runner.os }}-sbt-cache-v2-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
 
       - name: Check formatting
-        if: (matrix.scala != '3.0.0')
+        if: (matrix.scala != '3.0.1')
         run: sbt --client '++${{ matrix.scala }}; fmtCheck'
 
   microsite:
