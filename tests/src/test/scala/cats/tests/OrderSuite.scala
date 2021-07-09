@@ -8,7 +8,10 @@ import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import cats.tests.Helpers.Ord
 import cats.implicits._
+import cats.kernel.laws.KernelCheck.{arbitraryDeadline, cogenDeadline}
 import org.scalacheck.Prop._
+
+import scala.concurrent.duration.Deadline
 
 class OrderSuite extends CatsSuite {
   {
@@ -21,6 +24,7 @@ class OrderSuite extends CatsSuite {
   checkAll("Double", OrderTests[Double].order)
   checkAll("Float", OrderTests[Float].order)
   checkAll("Long", OrderTests[Long].order)
+  checkAll("Deadline", OrderTests[Deadline].order)
 
   checkAll("Order", ContravariantMonoidalTests[Order].contravariantMonoidal[MiniInt, Boolean, Boolean])
   checkAll("ContravariantMonoidal[Order]", SerializableTests.serializable(ContravariantMonoidal[Order]))
