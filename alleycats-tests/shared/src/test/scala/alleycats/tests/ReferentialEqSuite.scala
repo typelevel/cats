@@ -5,6 +5,7 @@ import cats.kernel.Eq
 import cats.kernel.laws.discipline._
 import cats.kernel.laws.EqLaws
 import org.scalacheck.Arbitrary
+import org.scalacheck.Gen
 import org.scalacheck.Prop.forAll
 import org.typelevel.discipline.Laws
 
@@ -25,7 +26,17 @@ class ReferentialEqSuite extends AlleycatsSuite {
     }
   }
 
-  implicit val arbObject: Arbitrary[Object] = Arbitrary(Arbitrary.arbUnit.arbitrary.map(_ => new Object))
+  implicit val arbObject: Arbitrary[Object] =
+    // with some probability we select from a small set of objects
+    // otherwise make a totally new one
+    // courtesy of @johnynek
+    Arbitrary(
+      Gen.oneOf(
+        Gen.oneOf(List.fill(5)(new Object)),
+        Arbitrary.arbUnit.arbitrary.map(_ => new Object)
+      )
+    )
+
   implicit val eqObject: Eq[Object] = ReferentialEq[Object]
 
   checkAll("ReferentialEq[Object]", new ReferentialEqTests(ReferentialEq[Object]).eqv)
