@@ -12,6 +12,7 @@ abstract class AllInstancesBinCompat
     with AllInstancesBinCompat6
     with AllInstancesBinCompat7
     with AllInstancesBinCompat8
+    with AllInstancesBinCompat9
 
 trait AllInstances
     extends AnyValInstances
@@ -59,7 +60,7 @@ trait AllInstancesBinCompat1
     with MapInstancesBinCompat0
     with SortedMapInstancesBinCompat0
 
-trait AllInstancesBinCompat2 extends DurationInstances with FiniteDurationInstances with DeadlineInstances
+trait AllInstancesBinCompat2 extends DurationInstances with FiniteDurationInstances
 
 trait AllInstancesBinCompat3 extends AllCoreDurationInstances
 
@@ -72,3 +73,5 @@ trait AllInstancesBinCompat6 extends SortedSetInstancesBinCompat1 with SortedMap
 trait AllInstancesBinCompat7 extends SeqInstances
 
 trait AllInstancesBinCompat8 extends InvariantInstances
+
+trait AllInstancesBinCompat9 extends DeadlineInstances
