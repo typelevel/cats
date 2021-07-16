@@ -11,6 +11,8 @@ abstract class AllInstancesBinCompat
     with AllInstancesBinCompat5
     with AllInstancesBinCompat6
     with AllInstancesBinCompat7
+    with AllInstancesBinCompat8
+    with AllInstancesBinCompat9
 
 trait AllInstances
     extends AnyValInstances
@@ -67,3 +69,7 @@ trait AllInstancesBinCompat5 extends SortedSetInstancesBinCompat0
 trait AllInstancesBinCompat6 extends SortedSetInstancesBinCompat1 with SortedMapInstancesBinCompat2
 
 trait AllInstancesBinCompat7 extends SeqInstances
+
+trait AllInstancesBinCompat8 extends InvariantInstances
+
+trait AllInstancesBinCompat9 extends InvariantInstancesBinCompat0

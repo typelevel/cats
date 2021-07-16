@@ -66,3 +66,12 @@ trait InvariantInstances {
       }
   }
 }
+
+trait InvariantInstancesBinCompat0 {
+  implicit val catsInvariantForFractional: Invariant[Fractional] = new Invariant[Fractional] {
+    def imap[A, B](fa: Fractional[A])(f: A => B)(g: B => A): Fractional[B] =
+      new ScalaVersionSpecificNumeric[A, B](fa)(f)(g) with Fractional[B] {
+        override def div(x: B, y: B): B = f(fa.div(g(x), g(y)))
+      }
+  }
+}
