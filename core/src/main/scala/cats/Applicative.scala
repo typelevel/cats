@@ -76,6 +76,32 @@ import scala.collection.immutable.IndexedSeq
     }
 
   /**
+   * Given `fa` and `n`, apply `fa` `n` times but discard the results.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.data.State
+   *
+   * scala> type Counter[A] = State[Int, A]
+   * scala> val increment: Counter[Unit] = State.modify(_ + 1)
+   * scala> val get: Counter[Int] = State.get
+   * scala> val increment5AndGet: Counter[Int] = Applicative[Counter].productR(
+   *      | Applicative[Counter].replicateA_(5, increment),
+   *      | get
+   *      | )
+   * scala> increment5AndGet.run(0).value
+   * res0: (Int, Int) = (5,5)
+   * }}}
+   */
+  def replicateA_[A](n: Int, fa: F[A]): F[Unit] =
+    def go(x: Int, step: F[Unit]): F[Unit] = {
+      if(x == 0) step
+      else go(x - 1, this.productR(fa, step))
+    }
+    go(n, this.pure(()))
+  }
+
+  /**
    * Compose an `Applicative[F]` and an `Applicative[G]` into an
    * `Applicative[λ[α => F[G[α]]]]`.
    *
