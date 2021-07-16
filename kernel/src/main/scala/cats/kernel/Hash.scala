@@ -46,14 +46,22 @@ object Hash extends HashFunctions[Hash] {
     }
 
   /**
-   * Constructs a `Hash` instance by using the universal `hashCode` function and the universal equality relation.
+   * Constructs a `Hash` instance by using the `hashCode` method, as well as the
+   * universal equality relation, defined in the `Any` top class
+   * https://www.scala-lang.org/api/current/scala/Any.html.
    */
-  def fromUniversalHashCode[A]: Hash[A] =
-    new Hash[A] {
-      def hash(x: A) = x.hashCode()
-      def eqv(x: A, y: A) = x == y
-    }
+  def fromUniversalHashCode[A]: Hash[A] = new Eq.FromUniversal[A] with FromUniversal[A] {}
 
+  /**
+   * Single-function trait that adds the
+   *
+   * NOTE: This is only used internally to define instances of several typeclasses together,
+   * but beware: sticky toffee treackle down with it.
+   */
+  trait FromUniversal[A] extends Hash[A] {
+    self: Eq[A] => /* This means Eq instance is somewhere else */
+    def hash(x: A) = x.hashCode()
+  }
 }
 
 trait HashToHashingConversion {
