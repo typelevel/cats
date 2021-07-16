@@ -54,11 +54,17 @@ object Hash extends HashFunctions[Hash] {
       def eqv(x: A, y: A) = x == y
     }
 
+  /**
+   * Create a `Hash` instance from the given hash and equality functions.
+   */
+  @inline def instance[A](h: A => Int, e: (A, A) => Boolean): Hash[A] =
+    new Hash[A] {
+      def hash(x: A) = h(x)
+      def eqv(x: A, y: A) = e(x, y)
+    }
 }
 
 trait HashToHashingConversion {
   implicit def catsKernelHashToHashing[A](implicit ev: Hash[A]): Hashing[A] =
-    new Hashing[A] {
-      override def hash(x: A): Int = ev.hash(x)
-    }
+    ev.hash(_)
 }

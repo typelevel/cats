@@ -1,4 +1,3 @@
-import KernelBoiler.TemplateVals
 import sbt._
 
 /**
@@ -82,40 +81,40 @@ object KernelBoiler {
   abstract class TemplatedBlock(tv: TemplateVals) {
     import tv._
 
-    def constraints(constraint: String) =
-      synTypes.map(tpe => s"${tpe}: ${constraint}[${tpe}]").mkString(", ")
+    def constraints(constraint: String): String =
+      synTypes.map(tpe => s"$tpe: $constraint[$tpe]").mkString(", ")
 
-    def tuple(results: TraversableOnce[String]) = {
+    def tuple(results: TraversableOnce[String]): String = {
       val resultsVec = results.toVector
       val a = synTypes.size
       val r = s"${0.until(a).map(i => resultsVec(i)).mkString(", ")}"
       if (a == 1) "Tuple1(" ++ r ++ ")"
-      else s"(${r})"
+      else s"($r)"
     }
 
     def tupleNHeader = s"Tuple${synTypes.size}"
 
-    def binMethod(name: String) =
+    def binMethod(name: String): Iterator[String] =
       synTypes.zipWithIndex.iterator.map { case (tpe, i) =>
         val j = i + 1
-        s"${tpe}.${name}(x._${j}, y._${j})"
+        s"$tpe.$name(x._$j, y._$j)"
       }
 
-    def binTuple(name: String) =
+    def binTuple(name: String): String =
       tuple(binMethod(name))
 
-    def unaryTuple(name: String) = {
-      val m = synTypes.zipWithIndex.map { case (tpe, i) => s"${tpe}.${name}(x._${i + 1})" }
+    def unaryTuple(name: String): String = {
+      val m = synTypes.zipWithIndex.map { case (tpe, i) => s"$tpe.$name(x._${i + 1})" }
       tuple(m)
     }
 
-    def unaryMethod(name: String) =
+    def unaryMethod(name: String): Iterator[String] =
       synTypes.zipWithIndex.iterator.map { case (tpe, i) =>
         s"$tpe.$name(x._${i + 1})"
       }
 
-    def nullaryTuple(name: String) = {
-      val m = synTypes.map(tpe => s"${tpe}.${name}")
+    def nullaryTuple(name: String): String = {
+      val m = synTypes.map(tpe => s"$tpe.$name")
       tuple(m)
     }
 
@@ -142,26 +141,19 @@ object KernelBoiler {
               import tv._
               def content =
                 block"""
-                |  implicit def catsKernelStdCommutativeGroupForTuple${arity}[${`A..N`}](implicit ${constraints(
-                  "CommutativeGroup"
-                )}): CommutativeGroup[${`(A..N)`}] =
-                |    new CommutativeGroup[${`(A..N)`}] {
-                |      def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
-                |      def empty: ${`(A..N)`} = ${nullaryTuple("empty")}
-                |      def inverse(x: ${`(A..N)`}): ${`(A..N)`} = ${unaryTuple("inverse")}
-                |    }
-                |  implicit def catsKernelStdOrderForTuple${arity}[${`A..N`}](implicit ${constraints("Order")}): Order[${`(A..N)`}] =
-                |    new Order[${`(A..N)`}] {
-                |      def compare(x: ${`(A..N)`}, y: ${`(A..N)`}): Int =
-                |        ${binMethod("compare").mkString("Array(", ", ", ")")}.find(_ != 0).getOrElse(0)
-                |    }
-                |  implicit def catsKernelStdBoundedSemilatticeForTuple${arity}[${`A..N`}](implicit ${constraints(
-                  "BoundedSemilattice"
-                )}): BoundedSemilattice[${`(A..N)`}] =
-                |    new BoundedSemilattice[${`(A..N)`}] {
-                |      def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
-                |      def empty: ${`(A..N)`} = ${nullaryTuple("empty")}
-                |    }"""
+                |  implicit def catsKernelStdCommutativeGroupForTuple$arity[${`A..N`}](
+                |    implicit ${constraints("CommutativeGroup")}
+                |  ): CommutativeGroup[${`(A..N)`}] =
+                |    Semigroup.catsKernelCommutativeGroupForTuple$arity[${`A..N`}]
+                |  implicit def catsKernelStdOrderForTuple$arity[${`A..N`}](
+                |    implicit ${constraints("Order")}
+                |  ): Order[${`(A..N)`}] =
+                |    Eq.catsKernelOrderForTuple$arity[${`A..N`}]
+                |  implicit def catsKernelStdBoundedSemilatticeForTuple$arity[${`A..N`}](
+                |    implicit ${constraints("BoundedSemilattice")}
+                |  ): BoundedSemilattice[${`(A..N)`}] =
+                |    Semigroup.catsKernelBoundedSemilatticeForTuple$arity[${`A..N`}]
+                |"""
             }
         ),
         InstanceDef(
@@ -172,38 +164,27 @@ object KernelBoiler {
               import tv._
               def content =
                 block"""
-                |  implicit def catsKernelStdSemilatticeForTuple${arity}[${`A..N`}](implicit ${constraints(
-                  "Semilattice"
-                )}): Semilattice[${`(A..N)`}] =
-                |    new Semilattice[${`(A..N)`}] {
-                |      def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
-                |    }
-                |  implicit def catsKernelStdCommutativeMonoidForTuple${arity}[${`A..N`}](implicit ${constraints(
-                  "CommutativeMonoid"
-                )}): CommutativeMonoid[${`(A..N)`}] =
-                |    new CommutativeMonoid[${`(A..N)`}] {
-                |      def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
-                |      def empty: ${`(A..N)`} = ${nullaryTuple("empty")}
-                |    }
-                |  implicit def catsKernelStdGroupForTuple${arity}[${`A..N`}](implicit ${constraints("Group")}): Group[${`(A..N)`}] =
-                |    new Group[${`(A..N)`}] {
-                |      def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
-                |      def empty: ${`(A..N)`} = ${nullaryTuple("empty")}
-                |      def inverse(x: ${`(A..N)`}): ${`(A..N)`} = ${unaryTuple("inverse")}
-                |    }
-                |  implicit def catsKernelStdHashForTuple${arity}[${`A..N`}](implicit ${constraints("Hash")}): Hash[${`(A..N)`}] =
-                |    new Hash[${`(A..N)`}] {
-                |      def hash(x: ${`(A..N)`}): Int = ${unaryMethod("hash")
-                  .mkString(s"$tupleNHeader(", ", ", ")")}.hashCode()
-                |      def eqv(x: ${`(A..N)`}, y: ${`(A..N)`}): Boolean = ${binMethod("eqv").mkString(" && ")}
-                |    }
-                |  implicit def catsKernelStdPartialOrderForTuple${arity}[${`A..N`}](implicit ${constraints(
-                  "PartialOrder"
-                )}): PartialOrder[${`(A..N)`}] =
-                |    new PartialOrder[${`(A..N)`}] {
-                |      def partialCompare(x: ${`(A..N)`}, y: ${`(A..N)`}): Double =
-                |        ${binMethod("partialCompare").mkString("Array(", ", ", ")")}.find(_ != 0.0).getOrElse(0.0)
-                |    }"""
+                |  implicit def catsKernelStdSemilatticeForTuple$arity[${`A..N`}](
+                |    implicit ${constraints("Semilattice")}
+                |  ): Semilattice[${`(A..N)`}] =
+                |    Semigroup.catsKernelSemilatticeForTuple$arity[${`A..N`}]
+                |  implicit def catsKernelStdCommutativeMonoidForTuple$arity[${`A..N`}](
+                |    implicit ${constraints("CommutativeMonoid")}
+                |  ): CommutativeMonoid[${`(A..N)`}] =
+                |    Semigroup.catsKernelCommutativeMonoidForTuple$arity[${`A..N`}]
+                |  implicit def catsKernelStdGroupForTuple$arity[${`A..N`}](
+                |    implicit ${constraints("Group")}
+                |  ): Group[${`(A..N)`}] =
+                |    Semigroup.catsKernelGroupForTuple$arity[${`A..N`}]
+                |  implicit def catsKernelStdHashForTuple$arity[${`A..N`}](
+                |    implicit ${constraints("Hash")}
+                |  ): Hash[${`(A..N)`}] =
+                |    Eq.catsKernelHashForTuple$arity[${`A..N`}]
+                |  implicit def catsKernelStdPartialOrderForTuple$arity[${`A..N`}](
+                |    implicit ${constraints("PartialOrder")}
+                |  ): PartialOrder[${`(A..N)`}] =
+                |    Eq.catsKernelPartialOrderForTuple$arity[${`A..N`}]
+                |"""
             }
         ),
         InstanceDef(
@@ -214,21 +195,19 @@ object KernelBoiler {
               import tv._
               def content =
                 block"""
-                |  implicit def catsKernelStdBandForTuple${arity}[${`A..N`}](implicit ${constraints("Band")}): Band[${`(A..N)`}] =
-                |    new Band[${`(A..N)`}] {
-                |      def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
-                |    }
-                |  implicit def catsKernelStdCommutativeSemigroupForTuple${arity}[${`A..N`}](implicit ${constraints(
-                  "CommutativeSemigroup"
-                )}): CommutativeSemigroup[${`(A..N)`}] =
-                |    new CommutativeSemigroup[${`(A..N)`}] {
-                |      def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
-                |    }
-                |  implicit def catsKernelStdMonoidForTuple${arity}[${`A..N`}](implicit ${constraints("Monoid")}): Monoid[${`(A..N)`}] =
-                |    new Monoid[${`(A..N)`}] {
-                |      def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
-                |      def empty: ${`(A..N)`} = ${nullaryTuple("empty")}
-                |    }"""
+                |  implicit def catsKernelStdBandForTuple$arity[${`A..N`}](
+                |    implicit ${constraints("Band")}
+                |  ): Band[${`(A..N)`}] =
+                |    Semigroup.catsKernelBandForTuple$arity[${`A..N`}]
+                |  implicit def catsKernelStdCommutativeSemigroupForTuple$arity[${`A..N`}](
+                |    implicit ${constraints("CommutativeSemigroup")}
+                |  ): CommutativeSemigroup[${`(A..N)`}] =
+                |    Semigroup.catsKernelCommutativeSemigroupForTuple$arity[${`A..N`}]
+                |  implicit def catsKernelStdMonoidForTuple$arity[${`A..N`}](
+                |    implicit ${constraints("Monoid")}
+                |  ): Monoid[${`(A..N)`}] =
+                |    Semigroup.catsKernelMonoidForTuple$arity[${`A..N`}]
+                |"""
             }
         ),
         InstanceDef(
@@ -239,14 +218,15 @@ object KernelBoiler {
               import tv._
               def content =
                 block"""
-                |  implicit def catsKernelStdSemigroupForTuple${arity}[${`A..N`}](implicit ${constraints("Semigroup")}): Semigroup[${`(A..N)`}] =
-                |    new Semigroup[${`(A..N)`}] {
-                |      def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
-                |    }
-                |  implicit def catsKernelStdEqForTuple${arity}[${`A..N`}](implicit ${constraints("Eq")}): Eq[${`(A..N)`}] =
-                |    new Eq[${`(A..N)`}] {
-                |      def eqv(x: ${`(A..N)`}, y: ${`(A..N)`}): Boolean = ${binMethod("eqv").mkString(" && ")}
-                |    }"""
+                |  implicit def catsKernelStdSemigroupForTuple$arity[${`A..N`}](
+                |    implicit ${constraints("Semigroup")}
+                |  ): Semigroup[${`(A..N)`}] =
+                |    Semigroup.catsKernelSemigroupForTuple$arity[${`A..N`}]
+                |  implicit def catsKernelStdEqForTuple$arity[${`A..N`}](
+                |    implicit ${constraints("Eq")}
+                |  ): Eq[${`(A..N)`}] =
+                |    Eq.catsKernelEqForTuple$arity[${`A..N`}]
+                |"""
             }
         ),
         InstanceDef(
@@ -255,9 +235,12 @@ object KernelBoiler {
             new TemplatedBlock(tv) {
               import tv._
               def content =
-                block"""|  implicit def catsKernelBandForTuple${arity}[${`A..N`}](implicit ${constraints("Band")}): Band[${`(A..N)`}] = new Band[${`(A..N)`}] {
-                 |    def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
-                 |  }"""
+                block"""
+                |  implicit def catsKernelBandForTuple$arity[${`A..N`}](
+                |    implicit ${constraints("Band")}
+                |  ): Band[${`(A..N)`}] = Band.instance { (x, y) =>
+                |    ${binTuple("combine")}
+                |  }"""
             }
         ),
         InstanceDef(
@@ -266,12 +249,13 @@ object KernelBoiler {
             new TemplatedBlock(tv) {
               import tv._
               def content =
-                block"""|  implicit def catsKernelBoundedSemilatticeForTuple${arity}[${`A..N`}](implicit ${constraints(
-                  "BoundedSemilattice"
-                )}): BoundedSemilattice[${`(A..N)`}] = new BoundedSemilattice[${`(A..N)`}] {
-                 |    def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
-                 |    def empty: ${`(A..N)`} = ${nullaryTuple("empty")}
-                 |  }"""
+                block"""
+                |  implicit def catsKernelBoundedSemilatticeForTuple$arity[${`A..N`}](
+                |    implicit ${constraints("BoundedSemilattice")}
+                |  ): BoundedSemilattice[${`(A..N)`}] = BoundedSemilattice.instance(
+                |    ${nullaryTuple("empty")},
+                |    (x, y) => ${binTuple("combine")}
+                |  )"""
             }
         ),
         InstanceDef(
@@ -280,13 +264,14 @@ object KernelBoiler {
             new TemplatedBlock(tv) {
               import tv._
               def content =
-                block"""|  implicit def catsKernelCommutativeGroupForTuple${arity}[${`A..N`}](implicit ${constraints(
-                  "CommutativeGroup"
-                )}): CommutativeGroup[${`(A..N)`}] = new CommutativeGroup[${`(A..N)`}] {
-                 |    def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
-                 |    def empty: ${`(A..N)`} = ${nullaryTuple("empty")}
-                 |    def inverse(x: ${`(A..N)`}): ${`(A..N)`} = ${unaryTuple("inverse")}
-                 |  }"""
+                block"""
+                |  implicit def catsKernelCommutativeGroupForTuple$arity[${`A..N`}](
+                |    implicit ${constraints("CommutativeGroup")}
+                |  ): CommutativeGroup[${`(A..N)`}] = CommutativeGroup.instance(
+                |    ${nullaryTuple("empty")},
+                |    x => ${unaryTuple("inverse")},
+                |    (x, y) => ${binTuple("combine")}
+                |  )"""
             }
         ),
         InstanceDef(
@@ -295,12 +280,13 @@ object KernelBoiler {
             new TemplatedBlock(tv) {
               import tv._
               def content =
-                block"""|  implicit def catsKernelCommutativeMonoidForTuple${arity}[${`A..N`}](implicit ${constraints(
-                  "CommutativeMonoid"
-                )}): CommutativeMonoid[${`(A..N)`}] = new CommutativeMonoid[${`(A..N)`}] {
-                 |    def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
-                 |    def empty: ${`(A..N)`} = ${nullaryTuple("empty")}
-                 |  }"""
+                block"""
+                |  implicit def catsKernelCommutativeMonoidForTuple$arity[${`A..N`}](
+                |    implicit ${constraints("CommutativeMonoid")}
+                |  ): CommutativeMonoid[${`(A..N)`}] = CommutativeMonoid.instance(
+                |    ${nullaryTuple("empty")},
+                |    (x, y) => ${binTuple("combine")}
+                |  )"""
             }
         ),
         InstanceDef(
@@ -309,11 +295,12 @@ object KernelBoiler {
             new TemplatedBlock(tv) {
               import tv._
               def content =
-                block"""|  implicit def catsKernelCommutativeSemigroupForTuple${arity}[${`A..N`}](implicit ${constraints(
-                  "CommutativeSemigroup"
-                )}): CommutativeSemigroup[${`(A..N)`}] = new CommutativeSemigroup[${`(A..N)`}] {
-                 |    def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
-                 |  }"""
+                block"""
+                |  implicit def catsKernelCommutativeSemigroupForTuple$arity[${`A..N`}](
+                |    implicit ${constraints("CommutativeSemigroup")}
+                |  ): CommutativeSemigroup[${`(A..N)`}] = CommutativeSemigroup.instance { (x, y) => 
+                |    ${binTuple("combine")}
+                |  }"""
             }
         ),
         InstanceDef(
@@ -322,9 +309,12 @@ object KernelBoiler {
             new TemplatedBlock(tv) {
               import tv._
               def content =
-                block"""|  implicit def catsKernelEqForTuple${arity}[${`A..N`}](implicit ${constraints("Eq")}): Eq[${`(A..N)`}] = new Eq[${`(A..N)`}] {
-                 |    def eqv(x: ${`(A..N)`}, y: ${`(A..N)`}): Boolean = ${binMethod("eqv").mkString(" && ")}
-                 |  }"""
+                block"""
+                |  implicit def catsKernelEqForTuple$arity[${`A..N`}](
+                |    implicit ${constraints("Eq")}
+                |  ): Eq[${`(A..N)`}] = Eq.instance { (x, y) =>
+                |    ${binMethod("eqv").mkString(" && ")}
+                |  }"""
             }
         ),
         InstanceDef(
@@ -333,11 +323,14 @@ object KernelBoiler {
             new TemplatedBlock(tv) {
               import tv._
               def content =
-                block"""|  implicit def catsKernelGroupForTuple${arity}[${`A..N`}](implicit ${constraints("Group")}): Group[${`(A..N)`}] = new Group[${`(A..N)`}] {
-                 |    def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
-                 |    def empty: ${`(A..N)`} = ${nullaryTuple("empty")}
-                 |    def inverse(x: ${`(A..N)`}): ${`(A..N)`} = ${unaryTuple("inverse")}
-                 |  }"""
+                block"""
+                |  implicit def catsKernelGroupForTuple$arity[${`A..N`}](
+                |    implicit ${constraints("Group")}
+                |  ): Group[${`(A..N)`}] = Group.instance(
+                |    ${nullaryTuple("empty")},
+                |    x => ${unaryTuple("inverse")},
+                |    (x, y) => ${binTuple("combine")}
+                |  )"""
             }
         ),
         InstanceDef(
@@ -346,11 +339,13 @@ object KernelBoiler {
             new TemplatedBlock(tv) {
               import tv._
               def content =
-                block"""|  implicit def catsKernelHashForTuple${arity}[${`A..N`}](implicit ${constraints("Hash")}): Hash[${`(A..N)`}] = new Hash[${`(A..N)`}] {
-                 |    def hash(x: ${`(A..N)`}): Int = ${unaryMethod("hash")
-                  .mkString(s"$tupleNHeader(", ", ", ")")}.hashCode()
-                 |    def eqv(x: ${`(A..N)`}, y: ${`(A..N)`}): Boolean = ${binMethod("eqv").mkString(" && ")}
-                 |  }"""
+                block"""
+                |  implicit def catsKernelHashForTuple$arity[${`A..N`}](
+                |    implicit ${constraints("Hash")}
+                |  ): Hash[${`(A..N)`}] = Hash.instance(
+                |    x => ${unaryMethod("hash").mkString(s"$tupleNHeader(", ", ", ")")}.hashCode(),
+                |    (x, y) => ${binMethod("eqv").mkString(" && ")}
+                |  )"""
             }
         ),
         InstanceDef(
@@ -359,10 +354,13 @@ object KernelBoiler {
             new TemplatedBlock(tv) {
               import tv._
               def content =
-                block"""|  implicit def catsKernelMonoidForTuple${arity}[${`A..N`}](implicit ${constraints("Monoid")}): Monoid[${`(A..N)`}] = new Monoid[${`(A..N)`}] {
-                 |    def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
-                 |    def empty: ${`(A..N)`} = ${nullaryTuple("empty")}
-                 |  }"""
+                block"""
+                |  implicit def catsKernelMonoidForTuple$arity[${`A..N`}](
+                |    implicit ${constraints("Monoid")}
+                |  ): Monoid[${`(A..N)`}] = Monoid.instance(
+                |    ${nullaryTuple("empty")},
+                |    (x, y) => ${binTuple("combine")}
+                |  )"""
             }
         ),
         InstanceDef(
@@ -371,10 +369,12 @@ object KernelBoiler {
             new TemplatedBlock(tv) {
               import tv._
               def content =
-                block"""|  implicit def catsKernelOrderForTuple${arity}[${`A..N`}](implicit ${constraints("Order")}): Order[${`(A..N)`}] = new Order[${`(A..N)`}] {
-                 |    def compare(x: ${`(A..N)`}, y: ${`(A..N)`}): Int =
-                 |      ${binMethod("compare").mkString("Array(", ", ", ")")}.find(_ != 0).getOrElse(0)
-                 |  }"""
+                block"""
+                |  implicit def catsKernelOrderForTuple$arity[${`A..N`}](
+                |    implicit ${constraints("Order")}
+                |  ): Order[${`(A..N)`}] = Order.from { (x, y) =>
+                |    ${binMethod("compare").mkString("Array(", ", ", ")")}.find(_ != 0).getOrElse(0)
+                |  }"""
             }
         ),
         InstanceDef(
@@ -383,12 +383,12 @@ object KernelBoiler {
             new TemplatedBlock(tv) {
               import tv._
               def content =
-                block"""|  implicit def catsKernelPartialOrderForTuple${arity}[${`A..N`}](implicit ${constraints(
-                  "PartialOrder"
-                )}): PartialOrder[${`(A..N)`}] = new PartialOrder[${`(A..N)`}] {
-                 |    def partialCompare(x: ${`(A..N)`}, y: ${`(A..N)`}): Double =
-                 |      ${binMethod("partialCompare").mkString("Array(", ", ", ")")}.find(_ != 0.0).getOrElse(0.0)
-                 |  }"""
+                block"""
+                |  implicit def catsKernelPartialOrderForTuple$arity[${`A..N`}](
+                |    implicit ${constraints("PartialOrder")}
+                |  ): PartialOrder[${`(A..N)`}] = PartialOrder.from { (x, y) =>
+                |    ${binMethod("partialCompare").mkString("Array(", ", ", ")")}.find(_ != 0.0).getOrElse(0.0)
+                |  }"""
             }
         ),
         InstanceDef(
@@ -397,11 +397,12 @@ object KernelBoiler {
             new TemplatedBlock(tv) {
               import tv._
               def content =
-                block"""|  implicit def catsKernelSemigroupForTuple${arity}[${`A..N`}](implicit ${constraints(
-                  "Semigroup"
-                )}): Semigroup[${`(A..N)`}] = new Semigroup[${`(A..N)`}] {
-                 |    def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
-                 |  }"""
+                block"""
+                |  implicit def catsKernelSemigroupForTuple$arity[${`A..N`}](
+                |    implicit ${constraints("Semigroup")}
+                |  ): Semigroup[${`(A..N)`}] = Semigroup.instance { (x, y) =>
+                |    ${binTuple("combine")}
+                |  }"""
             }
         ),
         InstanceDef(
@@ -410,11 +411,12 @@ object KernelBoiler {
             new TemplatedBlock(tv) {
               import tv._
               def content =
-                block"""|  implicit def catsKernelSemilatticeForTuple${arity}[${`A..N`}](implicit ${constraints(
-                  "Semilattice"
-                )}): Semilattice[${`(A..N)`}] = new Semilattice[${`(A..N)`}] {
-                 |    def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
-                 |  }"""
+                block"""
+                |  implicit def catsKernelSemilatticeForTuple$arity[${`A..N`}](
+                |    implicit ${constraints("Semilattice")}
+                |  ): Semilattice[${`(A..N)`}] = Semilattice.instance { (x, y) =>
+                |    ${binTuple("combine")}
+                |  }"""
             }
         )
       )
