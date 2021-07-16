@@ -37,18 +37,12 @@ trait NonEmptyParallel[M[_]] extends Serializable {
   def parProductR[A, B](ma: M[A])(mb: M[B]): M[B] =
     Parallel.parMap2(ma, mb)((_, b) => b)(this)
 
-  @deprecated("Use parProductR instead.", "1.0.0-RC2")
-  @inline private[cats] def parFollowedBy[A, B](ma: M[A])(mb: M[B]): M[B] = parProductR(ma)(mb)
-
   /**
    * Like [[Apply.productL]], but uses the apply instance
    * corresponding to the Parallel instance instead.
    */
   def parProductL[A, B](ma: M[A])(mb: M[B]): M[A] =
     Parallel.parMap2(ma, mb)((a, _) => a)(this)
-
-  @deprecated("Use parProductL instead.", "1.0.0-RC2")
-  @inline private[cats] def parForEffect[A, B](ma: M[A])(mb: M[B]): M[A] = parProductL(ma)(mb)
 
 }
 

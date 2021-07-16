@@ -24,7 +24,6 @@ object Boilerplate {
   }
 
   val templates: Seq[Template] = Seq(
-    GenSemigroupalBuilders,
     GenSemigroupalArityFunctions,
     GenApplyArityFunctions,
     GenTupleSemigroupalSyntax,
@@ -142,75 +141,6 @@ object Boilerplate {
 
     The block otherwise behaves as a standard interpolated string with regards to variable substitution.
    */
-
-  object GenSemigroupalBuilders extends Template {
-    def filename(root: File) = root / "cats" / "syntax" / "SemigroupalBuilder.scala"
-
-    def content(tv: TemplateVals) = {
-      import tv._
-
-      val tpes = synTypes.map { tpe =>
-        s"F[$tpe]"
-      }
-      val params = synVals.zip(tpes).map { case (v, t) => s"$v:$t" }.mkString(", ")
-      val next = if (arity + 1 <= maxArity) {
-        s"def |@|[Z](z: F[Z]) = new SemigroupalBuilder${arity + 1}(${`a..n`}, z)"
-      } else {
-        ""
-      }
-
-      val n = if (arity == 1) {
-        ""
-      } else {
-        arity.toString
-      }
-
-      val map =
-        if (arity == 1)
-          s"def map[Z](f: (${`A..N`}) => Z)(implicit functor: Functor[F]): F[Z] = functor.map(${`a..n`})(f)"
-        else
-          s"def map[Z](f: (${`A..N`}) => Z)(implicit functor: Functor[F], semigroupal: Semigroupal[F]): F[Z] = Semigroupal.map$n(${`a..n`})(f)"
-
-      val contramap =
-        if (arity == 1)
-          s"def contramap[Z](f: Z => (${`A..N`}))(implicit contravariant: Contravariant[F]): F[Z] = contravariant.contramap(${`a..n`})(f)"
-        else
-          s"def contramap[Z](f: Z => (${`A..N`}))(implicit contravariant: Contravariant[F], semigroupal: Semigroupal[F]): F[Z] = Semigroupal.contramap$n(${`a..n`})(f)"
-
-      val imap =
-        if (arity == 1)
-          s"def imap[Z](f: (${`A..N`}) => Z)(g: Z => (${`A..N`}))(implicit invariant: Invariant[F]): F[Z] = invariant.imap(${`a..n`})(f)(g)"
-        else
-          s"def imap[Z](f: (${`A..N`}) => Z)(g: Z => (${`A..N`}))(implicit invariant: Invariant[F], semigroupal: Semigroupal[F]): F[Z] = Semigroupal.imap$n(${`a..n`})(f)(g)"
-
-      val tupled = if (arity != 1) {
-        s"def tupled(implicit invariant: Invariant[F], semigroupal: Semigroupal[F]): F[(${`A..N`})] = Semigroupal.tuple$n(${`a..n`})"
-      } else {
-        ""
-      }
-
-      block"""
-      |package cats
-      |package syntax
-      |
-      |
-      |
-      |@deprecated("replaced by apply syntax", "1.0.0-MF")
-      |private[syntax] final class SemigroupalBuilder[F[_]] extends Serializable {
-      |  def |@|[A](a: F[A]) = new SemigroupalBuilder1(a)
-      |
-        -  private[syntax] final class SemigroupalBuilder$arity[${`A..N`}]($params) extends Serializable {
-        -    $next
-        -    def apWith[Z](f: F[(${`A..N`}) => Z])(implicit apply: Apply[F]): F[Z] = apply.ap$n(f)(${`a..n`})
-        -    $map
-        -    $contramap
-        -    $imap
-        -    $tupled
-        - }
-      |}
-      """
-    }
-  }
 
   object GenApplyArityFunctions extends Template {
     def filename(root: File) = root / "cats" / "ApplyArityFunctions.scala"

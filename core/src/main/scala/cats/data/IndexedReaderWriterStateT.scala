@@ -358,12 +358,6 @@ sealed private[data] trait CommonIRWSTConstructors {
       def apply[A](a: F[A]): IndexedReaderWriterStateT[F, E, L, S, S, A] = IndexedReaderWriterStateT.liftF(a)
     }
 
-  @deprecated("Use liftF instead", "1.0.0-RC2")
-  def lift[F[_], E, L, S, A](
-    fa: F[A]
-  )(implicit F: Applicative[F], L: Monoid[L]): IndexedReaderWriterStateT[F, E, L, S, S, A] =
-    IndexedReaderWriterStateT((_, s) => F.map(fa)((L.empty, s, _)))
-
   /**
    * Inspect a value from the input state, without modifying the state.
    */
