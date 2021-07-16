@@ -47,7 +47,7 @@ class LazyListSuite extends CatsSuite {
   checkAll("LazyList[Int]", ShortCircuitingTests[LazyList].foldable[Int])
   checkAll("LazyList[Int]", ShortCircuitingTests[LazyList].traverseFilter[Int])
 
-  // Can't test applicative laws as they don't terminate
+  // Can't test applicative or selective laws as they don't terminate
   checkAll("ZipLazyList[Int]", CommutativeApplyTests[ZipLazyList].apply[Int, Int, Int])
 
   test("show") {

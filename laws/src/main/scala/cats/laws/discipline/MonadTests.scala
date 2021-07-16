@@ -7,7 +7,7 @@ import cats.platform.Platform
 import org.scalacheck.{Arbitrary, Cogen, Prop}
 import Prop._
 
-trait MonadTests[F[_]] extends ApplicativeTests[F] with FlatMapTests[F] {
+trait MonadTests[F[_]] extends RigidSelectiveTests[F] with FlatMapTests[F] {
   def laws: MonadLaws[F]
 
   def monad[A: Arbitrary: Eq, B: Arbitrary: Eq, C: Arbitrary: Eq](implicit
@@ -29,7 +29,7 @@ trait MonadTests[F[_]] extends ApplicativeTests[F] with FlatMapTests[F] {
     new RuleSet {
       def name: String = "monad"
       def bases: Seq[(String, RuleSet)] = Nil
-      def parents: Seq[RuleSet] = Seq(applicative[A, B, C], flatMap[A, B, C])
+      def parents: Seq[RuleSet] = Seq(rigidSelective[A, B, C], flatMap[A, B, C])
       def props: Seq[(String, Prop)] =
         Seq(
           "monad left identity" -> forAll(laws.monadLeftIdentity[A, B] _),
@@ -58,7 +58,7 @@ trait MonadTests[F[_]] extends ApplicativeTests[F] with FlatMapTests[F] {
     new RuleSet {
       def name: String = "monad (stack-unsafe)"
       def bases: Seq[(String, RuleSet)] = Nil
-      def parents: Seq[RuleSet] = Seq(applicative[A, B, C], flatMap[A, B, C])
+      def parents: Seq[RuleSet] = Seq(rigidSelective[A, B, C], flatMap[A, B, C])
       def props: Seq[(String, Prop)] =
         Seq(
           "monad left identity" -> forAll(laws.monadLeftIdentity[A, B] _),
