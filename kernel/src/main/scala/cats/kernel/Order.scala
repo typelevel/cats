@@ -125,7 +125,7 @@ trait OrderToOrderingConversion {
 
 }
 
-object Order extends OrderFunctions[Order] with OrderToOrderingConversion {
+object Order extends OrderFunctions[Order] with OrderToOrderingConversion with derivation.OrderDerivation {
 
   /**
    * Access an implicit `Order[A]`.

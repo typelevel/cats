@@ -138,6 +138,7 @@ object Semigroup
     extends SemigroupFunctions[Semigroup]
     with ScalaVersionSpecificMonoidInstances
     with instances.TupleCommutativeGroupInstances
+    with derivation.SemigroupDerivation
     with GroupInstances {
 
   /**

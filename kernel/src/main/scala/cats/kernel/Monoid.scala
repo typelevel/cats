@@ -106,7 +106,7 @@ abstract class MonoidFunctions[M[T] <: Monoid[T]] extends SemigroupFunctions[M] 
     ev.combineAll(as)
 }
 
-object Monoid extends MonoidFunctions[Monoid] {
+object Monoid extends MonoidFunctions[Monoid] with derivation.MonoidDerivation {
 
   /**
    * Access an implicit `Monoid[A]`.
