@@ -912,8 +912,8 @@ lazy val publishSettings = Seq(
 ) ++ sharedPublishSettings ++ sharedReleaseProcess
 
 // Scalafmt
-addCommandAlias("fmt", "; compile:scalafmt; test:scalafmt; scalafmtSbt")
-addCommandAlias("fmtCheck", "; compile:scalafmtCheck; test:scalafmtCheck; scalafmtSbtCheck")
+addCommandAlias("fmt", "; Compile / scalafmt; Test / scalafmt; scalafmtSbt")
+addCommandAlias("fmtCheck", "; Compile / scalafmtCheck; Test / scalafmtCheck; scalafmtSbtCheck")
 
 // These aliases serialise the build for the benefit of Travis-CI.
 addCommandAlias("buildKernelJVM", ";kernelJVM/test;kernelLawsJVM/test")
