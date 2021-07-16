@@ -535,6 +535,7 @@ sealed abstract private[data] class NonEmptyLazyListInstances extends NonEmptyLa
   implicit def catsDataShowForNonEmptyLazyList[A](implicit A: Show[A]): Show[NonEmptyLazyList[A]] =
     Show.show[NonEmptyLazyList[A]](_.show)
 
+  @deprecated("The OneAnd type is deprecated, in favour of NonEmpty types (see #3089 for details)", "2.6.2")
   implicit def catsDataParallelForNonEmptyLazyList: Parallel.Aux[NonEmptyLazyList, OneAnd[ZipLazyList, *]] =
     new Parallel[NonEmptyLazyList] {
       type F[x] = OneAnd[ZipLazyList, x]

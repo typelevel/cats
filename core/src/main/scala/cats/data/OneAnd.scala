@@ -13,6 +13,7 @@ import kernel.compat.scalaVersionSpecific._
  * type NonEmptyStream[A] = OneAnd[Stream, A]
  * }}}
  */
+@deprecated("The OneAnd type is deprecated, in favour of NonEmpty types (see #3089 for details)", "2.6.2")
 final case class OneAnd[F[_], A](head: A, tail: F[A]) {
 
   /**
@@ -105,6 +106,7 @@ final case class OneAnd[F[_], A](head: A, tail: F[A]) {
 @suppressUnusedImportWarningForScalaVersionSpecific
 sealed abstract private[data] class OneAndInstances extends OneAndLowPriority0 {
 
+  @deprecated("Will remove OneAnd in cats v3", "2.6.2")
   implicit def catsDataParallelForOneAnd[A, M[_]: Alternative, F0[_]: Alternative](implicit
     P: Parallel.Aux[M, F0]
   ): Parallel.Aux[OneAnd[M, *], OneAnd[F0, *]] =
@@ -126,23 +128,28 @@ sealed abstract private[data] class OneAndInstances extends OneAndLowPriority0 {
 
     }
 
+  @deprecated("Will remove OneAnd in cats v3", "2.6.2")
   implicit def catsDataEqForOneAnd[A, F[_]](implicit A: Eq[A], FA: Eq[F[A]]): Eq[OneAnd[F, A]] =
     new Eq[OneAnd[F, A]] {
       def eqv(x: OneAnd[F, A], y: OneAnd[F, A]): Boolean = x === y
     }
 
+  @deprecated("Will remove OneAnd in cats v3", "2.6.2")
   implicit def catsDataShowForOneAnd[A, F[_]](implicit A: Show[A], FA: Show[F[A]]): Show[OneAnd[F, A]] =
     Show.show[OneAnd[F, A]](_.show)
 
+  @deprecated("Will remove OneAnd in cats v3", "2.6.2")
   implicit def catsDataSemigroupKForOneAnd[F[_]: Alternative]: SemigroupK[OneAnd[F, *]] =
     new SemigroupK[OneAnd[F, *]] {
       def combineK[A](a: OneAnd[F, A], b: OneAnd[F, A]): OneAnd[F, A] =
         a.combine(b)
     }
 
+  @deprecated("The OneAnd type is deprecated, in favour of NonEmpty types (see #3089 for details)", "2.6.2")
   implicit def catsDataSemigroupForOneAnd[F[_]: Alternative, A]: Semigroup[OneAnd[F, A]] =
     catsDataSemigroupKForOneAnd[F].algebra
 
+  @deprecated("The OneAnd type is deprecated, in favour of NonEmpty types (see #3089 for details)", "2.6.2")
   implicit def catsDataMonadForOneAnd[F[_]](implicit
     monad: Monad[F],
     alternative: Alternative[F]
@@ -201,6 +208,7 @@ sealed abstract private[data] class OneAndInstances extends OneAndLowPriority0 {
 
 sealed abstract private[data] class OneAndLowPriority3 extends OneAndLowPriority4 {
 
+  @deprecated("Will remove OneAnd in cats v3", "2.6.2")
   implicit def catsDataFunctorForOneAnd[F[_]](implicit F: Functor[F]): Functor[OneAnd[F, *]] =
     new Functor[OneAnd[F, *]] {
       def map[A, B](fa: OneAnd[F, A])(f: A => B): OneAnd[F, B] =
@@ -211,6 +219,7 @@ sealed abstract private[data] class OneAndLowPriority3 extends OneAndLowPriority
 
 sealed abstract private[data] class OneAndLowPriority2 extends OneAndLowPriority3 {
 
+  @deprecated("The OneAnd type is deprecated in favour of special NonEmpty- types", "2.6.2")
   implicit def catsDataApplicativeForOneAnd[F[_]](implicit F: Alternative[F]): Applicative[OneAnd[F, *]] =
     new Applicative[OneAnd[F, *]] {
       override def map[A, B](fa: OneAnd[F, A])(f: A => B): OneAnd[F, B] =
@@ -231,6 +240,7 @@ sealed abstract private[data] class OneAndLowPriority2 extends OneAndLowPriority
 
 sealed abstract private[data] class OneAndLowPriority1 extends OneAndLowPriority2 {
 
+  @deprecated("The OneAnd type is deprecated, in favour of NonEmpty types (see #3089 for details)", "2.6.2")
   implicit def catsDataTraverseForOneAnd[F[_]](implicit F: Traverse[F]): Traverse[OneAnd[F, *]] =
     new Traverse[OneAnd[F, *]] {
       def traverse[G[_], A, B](fa: OneAnd[F, A])(f: (A) => G[B])(implicit G: Applicative[G]): G[OneAnd[F, B]] =
@@ -245,6 +255,7 @@ sealed abstract private[data] class OneAndLowPriority1 extends OneAndLowPriority
 }
 
 sealed abstract private[data] class OneAndLowPriority0_5 extends OneAndLowPriority1 {
+  @deprecated("The OneAnd type is deprecated, in favour of NonEmpty types (see #3089 for details)", "2.6.2")
   implicit def catsDataReducibleForOneAnd[F[_]](implicit F: Foldable[F]): Reducible[OneAnd[F, *]] =
     new NonEmptyReducible[OneAnd[F, *], F] {
       override def split[A](fa: OneAnd[F, A]): (A, F[A]) = (fa.head, fa.tail)
@@ -257,6 +268,7 @@ sealed abstract private[data] class OneAndLowPriority0_5 extends OneAndLowPriori
 }
 
 sealed abstract private[data] class OneAndLowPriority0 extends OneAndLowPriority0_5 {
+  @deprecated("The OneAnd type is deprecated, in favour of NonEmpty types (see #3089 for details)", "2.6.2")
   implicit def catsDataNonEmptyTraverseForOneAnd[F[_]](implicit
     F: Traverse[F],
     F2: Alternative[F]
@@ -284,4 +296,5 @@ sealed abstract private[data] class OneAndLowPriority0 extends OneAndLowPriority
     }
 }
 
+@deprecated("The OneAnd type is deprecated, in favour of NonEmpty types (see #3089 for details)", "2.6.2")
 object OneAnd extends OneAndInstances

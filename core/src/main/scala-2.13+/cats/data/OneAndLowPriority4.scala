@@ -25,6 +25,7 @@ abstract private[data] class OneAndLowPriority4 {
         fa.map(f)(cats.instances.stream.catsStdInstancesForStream)
     }
 
+  @deprecated("The OneAnd type is deprecated, in favour of NonEmpty types (see #3089 for details)", "2.6.2")
   implicit val catsDataComonadForNonEmptyLazyList: Comonad[OneAnd[LazyList, *]] =
     new Comonad[OneAnd[LazyList, *]] {
       def coflatMap[A, B](fa: OneAnd[LazyList, A])(f: OneAnd[LazyList, A] => B): OneAnd[LazyList, B] = {
