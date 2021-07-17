@@ -4,7 +4,6 @@ import alleycats.std.MapInstances
 import cats._
 import cats.instances.all._
 import org.scalacheck.{Arbitrary, Gen}
-import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Test.Parameters
 
 /**
@@ -29,11 +28,4 @@ sealed trait TestInstances {
         Arbitrary.arbUnit.arbitrary.map(_ => new Object)
       )
     )
-
-  implicit val arbObjectF: Arbitrary[Object => Object] =
-    Arbitrary {
-      for {
-        obj <- arbitrary[Object]
-      } yield _ => obj
-    }
 }
