@@ -5,7 +5,6 @@ import cats._
 import cats.instances.all._
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalacheck.Arbitrary.arbitrary
-import scala.util.{Failure, Success, Try}
 import org.scalacheck.Test.Parameters
 
 /**
@@ -20,7 +19,21 @@ trait AlleycatsSuite extends munit.DisciplineSuite with TestSettings with TestIn
 }
 
 sealed trait TestInstances {
-  // To be replaced by https://github.com/rickynils/scalacheck/pull/170
-  implicit def arbitraryTry[A: Arbitrary]: Arbitrary[Try[A]] =
-    Arbitrary(Gen.oneOf(arbitrary[A].map(Success(_)), arbitrary[Throwable].map(Failure(_))))
+  implicit val arbObject: Arbitrary[Object] =
+    // with some probability we select from a small set of objects
+    // otherwise make a totally new one
+    // courtesy of @johnynek
+    Arbitrary(
+      Gen.oneOf(
+        Gen.oneOf(List.fill(5)(new Object)),
+        Arbitrary.arbUnit.arbitrary.map(_ => new Object)
+      )
+    )
+
+  implicit val arbObjectF: Arbitrary[Object => Object] =
+    Arbitrary {
+      for {
+        obj <- arbitrary[Object]
+      } yield _ => obj
+    }
 }
