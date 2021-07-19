@@ -35,7 +35,6 @@ object StaticMethods extends cats.kernel.compat.HashCompat {
     override def iterator: Iterator[A] = m.iterator
   }
 
-  // scalastyle:off return
   def iteratorCompare[A](xs: Iterator[A], ys: Iterator[A])(implicit ev: Order[A]): Int = {
     while (true) {
       if (xs.hasNext) {
@@ -86,7 +85,6 @@ object StaticMethods extends cats.kernel.compat.HashCompat {
     }
     true
   }
-  // scalastyle:on return
 
   def combineNIterable[A, R](b: mutable.Builder[A, R], x: Iterable[A], n: Int): R = {
     var i = n

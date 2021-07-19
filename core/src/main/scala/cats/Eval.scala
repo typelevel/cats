@@ -146,7 +146,7 @@ final class Later[A](f: () => A) extends Eval.Leaf[A] {
   // expensive to store, consider using `Always`.)
   lazy val value: A = {
     val result = thunk()
-    thunk = null // scalastyle:off
+    thunk = null
     result
   }
 

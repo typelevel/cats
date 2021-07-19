@@ -35,7 +35,6 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
         }
     }
 
-  // scalastyle:off method.length
   implicit def catsStdInstancesForEither[A]
     : MonadError[Either[A, *], A] with Traverse[Either[A, *]] with Align[Either[A, *]] =
     new MonadError[Either[A, *], A] with Traverse[Either[A, *]] with Align[Either[A, *]] {
@@ -177,7 +176,6 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
         }
 
     }
-  // scalastyle:on method.length
 
   implicit def catsStdSemigroupKForEither[L]: SemigroupK[Either[L, *]] =
     new SemigroupK[Either[L, *]] {

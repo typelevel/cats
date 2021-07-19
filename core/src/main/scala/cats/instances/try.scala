@@ -9,7 +9,6 @@ import scala.annotation.tailrec
 
 trait TryInstances extends TryInstances1 {
 
-  // scalastyle:off method.length
   implicit def catsStdInstancesForTry: MonadThrow[Try] with CoflatMap[Try] with Traverse[Try] with Monad[Try] =
     new TryCoflatMap with MonadThrow[Try] with Traverse[Try] with Monad[Try] {
       def pure[A](x: A): Try[A] = Success(x)
@@ -143,7 +142,6 @@ trait TryInstances extends TryInstances1 {
 
       override def catchNonFatalEval[A](a: Eval[A])(implicit ev: Throwable <:< Throwable): Try[A] = Try(a.value)
     }
-  // scalastyle:on method.length
 
   implicit def catsStdShowForTry[A](implicit A: Show[A]): Show[Try[A]] =
     new Show[Try[A]] {
