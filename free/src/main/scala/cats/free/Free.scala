@@ -344,7 +344,7 @@ private trait FreeTraverse[F[_]] extends Traverse[Free[F, *]] with FreeFoldable[
   final override def map[A, B](fa: Free[F, A])(f: A => B): Free[F, B] = fa.map(f)
 }
 
-sealed abstract private[free] class FreeInstances extends FreeInstances1 {
+sealed abstract private[free] class FreeInstances extends FreeInstances1 with FreeStructuralInstances {
 
   /**
    * `Free[S, *]` has a monad for any type constructor `S[_]`.

@@ -27,7 +27,7 @@ package free
  */
 private trait FreeStructuralInstances {
   implicit def catsFreeEqForFree[S[_]: Functor, A: Eq](implicit S: => Eq[S[Free[S, A]]]): Eq[Free[S, A]] =
-    Eq instance { (left, right) =>
+    Eq.instance { (left, right) =>
       (left.resume, right.resume) match {
         case (Right(leftA), Right(rightA)) =>
           Eq[A].eqv(leftA, rightA)
