@@ -20,7 +20,6 @@ jobs:
   build:
     name: Build and Test
     strategy:
-      fail-fast: false
       matrix:
         os: [ubuntu-latest]
         scala: [2.12.14, 2.13.6, 3.0.1]
@@ -76,9 +75,25 @@ jobs:
         if: matrix.platform == 'js'
         run: sbt --client '++${{ matrix.scala }}; validateAllJS'
 
-      - name: Validate Scala Native
+      - name: Validate Tests Native
         if: matrix.platform == 'native'
-        run: sbt --client '++${{ matrix.scala }}; validateAllNative'
+        run: sbt --client '++${{ matrix.scala }}; testsNative/test'
+
+      - name: Validate Native
+        if: matrix.platform == 'native'
+        run: sbt --client '++${{ matrix.scala }}; native/test'
+
+      - name: Validate Kernel Laws Native
+        if: matrix.platform == 'native'
+        run: sbt --client '++${{ matrix.scala }}; kernelLawsNative/test'
+
+      - name: Validate Free Native
+        if: matrix.platform == 'native'
+        run: sbt --client '++${{ matrix.scala }}; freeNative/test'
+
+      - name: Validate Alleycats Tests Native
+        if: matrix.platform == 'native'
+        run: sbt --client '++${{ matrix.scala }}; alleycatsTestsNative/test'
 
       - name: Validate JVM (scala 2)
         if: matrix.platform == 'jvm' && (matrix.scala != '3.0.1')
