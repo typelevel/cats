@@ -25,6 +25,8 @@ val disciplineMunitVersion = "1.0.9"
 
 val kindProjectorVersion = "0.13.0"
 
+ThisBuild / githubWorkflowUseSbtThinClient := false
+
 val PrimaryOS = "ubuntu-latest"
 ThisBuild / githubWorkflowOSes := Seq(PrimaryOS)
 
