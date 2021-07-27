@@ -25,6 +25,8 @@ val disciplineMunitVersion = "1.0.9"
 
 val kindProjectorVersion = "0.13.0"
 
+ThisBuild / githubWorkflowUseSbtThinClient := false
+
 val PrimaryOS = "ubuntu-latest"
 ThisBuild / githubWorkflowOSes := Seq(PrimaryOS)
 
@@ -62,8 +64,6 @@ ThisBuild / githubWorkflowBuildMatrixExclusions +=
 // we don't need this since we aren't publishing
 ThisBuild / githubWorkflowArtifactUpload := false
 
-ThisBuild / githubWorkflowBuildMatrixFailFast := Some(false)
-
 val JvmCond = s"matrix.platform == 'jvm'"
 val JsCond = s"matrix.platform == 'js'"
 val NativeCond = s"matrix.platform == 'native'"
@@ -72,22 +72,28 @@ val Scala2Cond = s"(matrix.scala != '$Scala3')"
 val Scala3Cond = s"(matrix.scala == '$Scala3')"
 
 ThisBuild / githubWorkflowBuild := Seq(
-  WorkflowStep.Sbt(List("validateAllJS"), name = Some("Validate JavaScript"), cond = Some(JsCond)),
-  WorkflowStep.Sbt(List("validateAllNative"), name = Some("Validate Scala Native"), cond = Some(NativeCond)),
-  WorkflowStep.Sbt(List("buildJVM", "bench/test"),
-                   name = Some("Validate JVM (scala 2)"),
-                   cond = Some(JvmCond + " && " + Scala2Cond)
-  ),
-  WorkflowStep.Sbt(List("buildJVM", "bench/test"),
-                   name = Some("Validate JVM (scala 3)"),
-                   cond = Some(JvmCond + " && " + Scala3Cond)
-  ),
-  WorkflowStep.Sbt(
-    List("clean", "validateBC"), // cleaning here to avoid issues with codecov
-    name = Some("Binary compatibility ${{ matrix.scala }}"),
-    cond = Some(JvmCond + " && " + Scala2Cond)
+  WorkflowStep.Sbt(List("validateAllJS"), name = Some("Validate JavaScript"), cond = Some(JsCond))
+) ++
+  // this has to be split up to avoid memory issues in GitHub Actions
+  validateAllNativeAlias.split(" ").filterNot(_ == "all").map { cmd =>
+    val name = cmd.flatMap(c => if (c.isUpper) s" $c" else c.toString).capitalize.replaceAll("/test", "")
+    WorkflowStep.Sbt(List(cmd), name = Some(s"Validate $name"), cond = Some(NativeCond))
+  } ++
+  Seq(
+    WorkflowStep.Sbt(List("buildJVM", "bench/test"),
+                     name = Some("Validate JVM (scala 2)"),
+                     cond = Some(JvmCond + " && " + Scala2Cond)
+    ),
+    WorkflowStep.Sbt(List("buildJVM", "bench/test"),
+                     name = Some("Validate JVM (scala 3)"),
+                     cond = Some(JvmCond + " && " + Scala3Cond)
+    ),
+    WorkflowStep.Sbt(
+      List("clean", "validateBC"), // cleaning here to avoid issues with codecov
+      name = Some("Binary compatibility ${{ matrix.scala }}"),
+      cond = Some(JvmCond + " && " + Scala2Cond)
+    )
   )
-)
 
 ThisBuild / githubWorkflowAddedJobs ++= Seq(
   WorkflowJob(
@@ -933,9 +939,11 @@ addCommandAlias("validateNative", ";testsNative/test;native/test")
 addCommandAlias("validateKernelNative", "kernelLawsNative/test")
 addCommandAlias("validateFreeNative", "freeNative/test")
 addCommandAlias("validateAlleycatsNative", "alleycatsTestsNative/test")
-addCommandAlias("validateAllNative",
-                "all testsNative/test native/test kernelLawsNative/test freeNative/test alleycatsTestsNative/test"
-)
+
+val validateAllNativeAlias =
+  "all testsNative/test native/test kernelLawsNative/test freeNative/test alleycatsTestsNative/test"
+addCommandAlias("validateAllNative", validateAllNativeAlias)
+
 addCommandAlias(
   "validate",
   ";clean;validateJS;validateKernelJS;validateFreeJS;validateNative;validateKernelNative;validateFreeNative;validateJVM"
