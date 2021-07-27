@@ -25,12 +25,99 @@ package free
  * but is fundamentally unavailable in Scala 2.12 and earlier without using something like Shapeless.
  * For that reason, all of these instances are only available on 2.13 and above.
  */
-private trait FreeStructuralInstances {
-  implicit def catsFreeEqForFree[S[_]: Functor, A: Eq](implicit S: => Eq[S[Free[S, A]]]): Eq[Free[S, A]] =
-    Eq.instance { (left, right) =>
+private trait FreeStructuralInstances extends FreeStructuralInstances0
+
+private trait FreeStructuralInstances0 extends FreeStructuralInstances1 {
+
+  implicit def catsFreeShowForFree[S[_], A](implicit
+    SF: Functor[S],
+    S: => Show[S[Free[S, A]]],
+    A: Show[A]
+  ): Show[Free[S, A]] =
+    Show.show { fsa =>
+      fsa.resume match {
+        case Right(a)  => A.show(a)
+        case Left(sfa) => S.show(sfa)
+      }
+    }
+
+  implicit def catsFreeHashForFree[S[_], A](implicit
+    SF: Functor[S],
+    S0: => Hash[S[Free[S, A]]],
+    A0: Hash[A]
+  ): Hash[Free[S, A]] =
+    new FreeStructuralHash[S, A] {
+      def functor = SF
+      def S = S0
+      def A = A0
+    }
+
+  trait FreeStructuralHash[S[_], A] extends FreeStructuralEq[S, A] with Hash[Free[S, A]] {
+    implicit override def S: Hash[S[Free[S, A]]]
+    implicit override def A: Hash[A]
+
+    def hash(fsa: Free[S, A]): Int =
+      fsa.resume match {
+        case Right(a)  => A.hash(a)
+        case Left(sfa) => S.hash(sfa)
+      }
+  }
+}
+
+private trait FreeStructuralInstances1 extends FreeStructuralInstances2 {
+
+  implicit def catsFreePartialOrderForFree[S[_], A](implicit
+    SF: Functor[S],
+    S0: => PartialOrder[S[Free[S, A]]],
+    A0: PartialOrder[A]
+  ): PartialOrder[Free[S, A]] =
+    new FreeStructuralPartialOrder[S, A] {
+      def functor = SF
+      def S = S0
+      def A = A0
+    }
+
+  trait FreeStructuralPartialOrder[S[_], A] extends PartialOrder[Free[S, A]] {
+    implicit def functor: Functor[S]
+    implicit def S: PartialOrder[S[Free[S, A]]]
+    implicit def A: PartialOrder[A]
+
+    def partialCompare(left: Free[S, A], right: Free[S, A]): Double =
       (left.resume, right.resume) match {
         case (Right(leftA), Right(rightA)) =>
-          Eq[A].eqv(leftA, rightA)
+          A.partialCompare(leftA, rightA)
+
+        case (Left(leftS), Left(rightS)) =>
+          S.partialCompare(leftS, rightS)
+
+        case (Left(_), Right(_)) | (Right(_), Left(_)) =>
+          Double.NaN
+      }
+  }
+}
+
+private trait FreeStructuralInstances2 {
+
+  implicit def catsFreeEqForFree[S[_], A](implicit
+    SF: Functor[S],
+    S0: => Eq[S[Free[S, A]]],
+    A0: Eq[A]
+  ): Eq[Free[S, A]] =
+    new FreeStructuralEq[S, A] {
+      def functor = SF
+      def S = S0
+      def A = A0
+    }
+
+  trait FreeStructuralEq[S[_], A] extends Eq[Free[S, A]] {
+    implicit def functor: Functor[S]
+    implicit def S: Eq[S[Free[S, A]]]
+    implicit def A: Eq[A]
+
+    def eqv(left: Free[S, A], right: Free[S, A]): Boolean =
+      (left.resume, right.resume) match {
+        case (Right(leftA), Right(rightA)) =>
+          A.eqv(leftA, rightA)
 
         case (Left(leftS), Left(rightS)) =>
           S.eqv(leftS, rightS)
@@ -38,5 +125,5 @@ private trait FreeStructuralInstances {
         case (Left(_), Right(_)) | (Right(_), Left(_)) =>
           false
       }
-    }
+  }
 }
