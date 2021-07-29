@@ -30,7 +30,7 @@ object SerializableLaws {
 
         val baos = new ByteArrayOutputStream()
         val oos = new ObjectOutputStream(baos)
-        var ois: ObjectInputStream = null // scalastyle:ignore null
+        var ois: ObjectInputStream = null
         try {
           oos.writeObject(a)
           oos.close()
@@ -44,7 +44,7 @@ object SerializableLaws {
             Result(status = Exception(t))
         } finally {
           oos.close()
-          if (ois != null) ois.close() // scalastyle:ignore null
+          if (ois != null) ois.close()
         }
       }
     } else Prop(_ => Result(status = Proof))

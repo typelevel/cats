@@ -970,7 +970,6 @@ sealed abstract private[data] class ValidatedInstances2 {
       def eqv(x: Validated[A, B], y: Validated[A, B]): Boolean = x === y
     }
 
-  // scalastyle:off method.length
   implicit def catsDataTraverseFunctorForValidated[E]: Traverse[Validated[E, *]] =
     new Traverse[Validated[E, *]] {
 
@@ -1032,7 +1031,6 @@ sealed abstract private[data] class ValidatedInstances2 {
 
       override def isEmpty[A](fa: Validated[E, A]): Boolean = fa.isInvalid
     }
-  // scalastyle:off method.length
 }
 
 private[data] class ValidatedApplicative[E: Semigroup] extends CommutativeApplicative[Validated[E, *]] {

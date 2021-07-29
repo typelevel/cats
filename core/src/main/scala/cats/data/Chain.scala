@@ -22,7 +22,6 @@ sealed abstract class Chain[+A] {
     this match {
       case non: Chain.NonEmpty[A] =>
         var c: NonEmpty[A] = non
-        // scalastyle:off null
         var rights: Chain.NonEmpty[A] = null
         var result: (A, Chain[A]) = null
         while (result eq null) {
@@ -50,7 +49,6 @@ sealed abstract class Chain[+A] {
               result = (seq.head, next)
           }
         }
-        // scalastyle:on null
         Some(result)
       case _ => None
     }
@@ -62,7 +60,6 @@ sealed abstract class Chain[+A] {
     this match {
       case non: Chain.NonEmpty[A] =>
         var c: NonEmpty[A] = non
-        // scalastyle:off null
         var lefts: NonEmpty[A] = null
         var result: (Chain[A], A) = null
         while (result eq null) {
@@ -90,7 +87,6 @@ sealed abstract class Chain[+A] {
               result = (pre, seq.last)
           }
         }
-        // scalastyle:on null
         Some(result)
       case _ => None
     }
@@ -491,7 +487,6 @@ sealed abstract class Chain[+A] {
   /**
    * Applies the supplied function to each element, left to right, but stops when true is returned
    */
-  // scalastyle:off null return cyclomatic.complexity
   final private def foreachUntil(f: A => Boolean): Unit =
     this match {
       case non: Chain.NonEmpty[A] =>
@@ -531,7 +526,6 @@ sealed abstract class Chain[+A] {
         }
       case _ => ()
     }
-  // scalastyle:on null return cyclomatic.complexity
 
   final def iterator: Iterator[A] =
     this match {
@@ -599,9 +593,7 @@ sealed abstract class Chain[+A] {
       val iterX = iterator
       val iterY = that.iterator
       while (iterX.hasNext && iterY.hasNext) {
-        // scalastyle:off return
         if (!A.eqv(iterX.next(), iterY.next())) return false
-        // scalastyle:on return
       }
 
       iterX.hasNext == iterY.hasNext
@@ -877,7 +869,6 @@ object Chain extends ChainInstances {
       loop(0, as.size).value
     }
 
-  // scalastyle:off null
   private class ChainIterator[A](self: NonEmpty[A]) extends Iterator[A] {
     def this(chain: Chain[A]) =
       this(chain match {
@@ -930,9 +921,7 @@ object Chain extends ChainInstances {
       go
     }
   }
-  // scalastyle:on null
 
-  // scalastyle:off null
   private class ChainReverseIterator[A](self: NonEmpty[A]) extends Iterator[A] {
     def this(chain: Chain[A]) =
       this(chain match {
@@ -985,7 +974,6 @@ object Chain extends ChainInstances {
       go
     }
   }
-  // scalastyle:on null
 }
 
 sealed abstract private[data] class ChainInstances extends ChainInstances1 {
@@ -1109,9 +1097,7 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
           val iterY = y.iterator
           while (iterX.hasNext && iterY.hasNext) {
             val n = A0.compare(iterX.next(), iterY.next())
-            // scalastyle:off return
             if (n != 0) return n
-            // scalastyle:on return
           }
 
           if (iterX.hasNext) 1
@@ -1184,9 +1170,7 @@ private[data] trait ChainPartialOrder[A] extends PartialOrder[Chain[A]] {
       val iterY = y.iterator
       while (iterX.hasNext && iterY.hasNext) {
         val n = A.partialCompare(iterX.next(), iterY.next())
-        // scalastyle:off return
         if (n != 0.0) return n
-        // scalastyle:on return
       }
 
       if (iterX.hasNext) 1.0
