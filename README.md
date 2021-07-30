@@ -44,10 +44,10 @@ information about how you can get involved as a developer. If you are looking fo
 
 Gold Sponsors are those who have pledged $5,000 to $10,000.
 
-<a href="http://47deg.com"><img src="http://typelevel.org/cats/img/sponsors/47_degree.png" style="margin-left: 10px; margin-right: 10px" /></a>
-<a href="https://www.iteratorshq.com"><img src="http://typelevel.org/cats/img/sponsors/iterators.png" style="margin-bottom:8px;margin-left: 10px; margin-right: 10px"/></a>
-<a href="https://triplequote.com/"><img src="http://typelevel.org/cats/img/sponsors/triplequote.png" style="margin-bottom:9px; margin-right: 10px" /></a>
-<a href="http://underscore.io"><img src="http://typelevel.org/cats/img/sponsors/underscore.png" style="margin-bottom:5px;margin-left: 10px; margin-right: 10px"/></a>
+<a href="http://47deg.com"><img src="https://typelevel.org/img/media/sponsors/47_degrees.png" style="margin-left: 10px; margin-right: 10px" /></a>
+<a href="https://www.iteratorshq.com"><img src="https://typelevel.org/img/media/sponsors/iterators.png" style="margin-bottom:8px;margin-left: 10px; margin-right: 10px"/></a>
+<a href="https://triplequote.com/"><img src="https://typelevel.org/img/media/sponsors/triplequote.png" style="margin-bottom:9px; margin-right: 10px" /></a>
+<a href="http://underscore.io"><img src="https://typelevel.org/img/media/sponsors/underscore.png" style="margin-bottom:5px;margin-left: 10px; margin-right: 10px"/></a>
 
 
 
@@ -55,9 +55,9 @@ Gold Sponsors are those who have pledged $5,000 to $10,000.
 
 Silver Sponsors are those who have pledged $2,000 to $5,000.
 
-<a href="https://www.ebiznext.com/"><img src="http://typelevel.org/cats/img/sponsors/ebiznext.png" style="margin-bottom:15px; margin-right: 10px" /></a>
-<a href="https://www.inner-product.com/"><img src="http://typelevel.org/cats/img/sponsors/inner-product.png" style="margin-bottom:10px; margin-right: 10px"/></a>
-<a href="https://evolutiongaming.com/"><img src="http://typelevel.org/cats/img/sponsors/evolution_gaming_engineering.png" style="margin-bottom:10px; margin-right: 10px"/></a>
+<a href="https://www.ebiznext.com/"><img src="https://typelevel.org/img/media/sponsors/ebiznext.png" style="margin-bottom:15px; margin-right: 10px" /></a>
+<a href="https://www.inner-product.com/"><img src="https://typelevel.org/img/media/sponsors/inner-product.png" style="margin-bottom:10px; margin-right: 10px"/></a>
+<a href="https://evolutiongaming.com/"><img src="https://typelevel.org/img/media/sponsors/evolution_gaming_engineering.png" style="margin-bottom:10px; margin-right: 10px"/></a>
 
 
 #### Other Organizations
