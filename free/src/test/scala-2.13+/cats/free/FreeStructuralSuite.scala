@@ -1,6 +1,6 @@
 package cats.free
 
-import cats.{Applicative, Eq, Eval, Functor, Traverse}
+import cats.{Applicative, Eq, Eval, Functor, Show, Traverse}
 import cats.kernel.laws.discipline.{EqTests, /*HashTests,*/ PartialOrderTests}
 import cats.syntax.all._
 import cats.tests.CatsSuite
@@ -22,6 +22,8 @@ class FreeStructuralSuite extends CatsSuite {
           A.perturb(seed, a)
       }
     }
+
+  Show[Free[Option, Int]]
 
   // TODO HashLaws#sameAsUniversalHash is really dodgy
   // checkAll("Free[Option, Int]", HashTests[Free[Option, Int]].hash)
