@@ -99,9 +99,9 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
        * This avoids making a very deep stack by building a tree instead
        */
       override def traverse_[G[_], A, B](fa: List[A])(f: A => G[B])(implicit G: Applicative[G]): G[Unit] = {
-        val empty = Eval.now(G.unit)
-        // the cost of this is O(size)
-        // c(n) = n + 2 * c(n/2)
+        // the cost of this is O(size log size)
+        // c(n) = n + 2 * c(n/2) = n + 2(n/2 log (n/2)) = n + n (logn - 1) = n log n
+        // invariant: size >= 1
         def runHalf(size: Int, fa: List[A]): Eval[G[Unit]] =
           if (size > 1) {
             val leftSize = size / 2
@@ -113,16 +113,18 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
                 val right = Eval.defer(runHalf(rightSize, fa.drop(leftSize)))
                 G.map2Eval(left, right) { (_, _) => () }
               }
-          } else if (size == 1) {
+          } else {
             // avoid pattern matching when we know that there is only one element
             val a = fa.head
             Eval.later {
               val gb = f(a)
               G.void(gb)
             }
-          } else empty
+          }
 
-        runHalf(fa.length, fa).value
+        val len = fa.length
+        if (len == 0) G.unit
+        else runHalf(len, fa).value
       }
 
       def functor: Functor[List] = this

@@ -32,7 +32,7 @@ abstract class TraverseSuite[F[_]: Traverse](name: String)(implicit ArbFInt: Arb
     }
   }
 
-  test(s"Traverse[$name].traverseMatches_ with Option") {
+  test(s"Traverse[$name].traverse matches traverse_ with Option") {
     forAll { (fa: F[Int], fn: Int => Option[Int]) =>
       assert(Applicative[Option].void(fa.traverse(fn)) == fa.traverse_(fn))
     }
