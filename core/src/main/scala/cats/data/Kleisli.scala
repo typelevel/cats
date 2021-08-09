@@ -668,6 +668,9 @@ private[data] trait KleisliFunctor[F[_], A] extends Functor[Kleisli[F, A, *]] {
 
   override def map[B, C](fa: Kleisli[F, A, B])(f: B => C): Kleisli[F, A, C] =
     fa.map(f)
+
+  override def void[B](fa: Kleisli[F, A, B]): Kleisli[F, A, Unit] =
+    Kleisli(a => F.void(fa.run(a)))
 }
 
 private trait KleisliDistributive[F[_], R] extends Distributive[Kleisli[F, R, *]] {

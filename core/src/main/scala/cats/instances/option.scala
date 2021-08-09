@@ -19,6 +19,8 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
       with CoflatMap[Option]
       with Align[Option] {
 
+      private[this] val someUnit: Option[Unit] = Some(())
+
       def empty[A]: Option[A] = None
 
       def combineK[A](x: Option[A], y: Option[A]): Option[A] = x.orElse(y)
@@ -191,6 +193,10 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
           case (None, Some(b))    => Some(f(Ior.right(b)))
           case (Some(a), Some(b)) => Some(f(Ior.both(a, b)))
         }
+
+      override def unit: Option[Unit] = someUnit
+      override def void[A](oa: Option[A]): Option[Unit] =
+        if (oa.isDefined) someUnit else None
     }
 
   implicit def catsStdShowForOption[A](implicit A: Show[A]): Show[Option[A]] =

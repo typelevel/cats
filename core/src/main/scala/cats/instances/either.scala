@@ -175,6 +175,10 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
             }
         }
 
+      override def void[B](e: Either[A, B]): Either[A, Unit] =
+        if (e.isRight) Either.unit
+        else e.asInstanceOf[Either[A, Unit]] // it is Left(a)
+
     }
 
   implicit def catsStdSemigroupKForEither[L]: SemigroupK[Either[L, *]] =
