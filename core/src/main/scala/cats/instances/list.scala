@@ -101,20 +101,26 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
       override def traverse_[G[_], A, B](fa: List[A])(f: A => G[B])(implicit G: Applicative[G]): G[Unit] = {
         val empty = Eval.now(G.unit)
         // the cost of this is O(size)
-        // c(n) = n/2 + c(n/2) = n/2 + n/4 + c(n/4) = ... 2 * n
+        // c(n) = n + 2 * c(n/2)
         def runHalf(size: Int, fa: List[A]): Eval[G[Unit]] =
-          fa match {
-            case Nil      => empty
-            case h :: Nil => Eval.later(G.void(f(h)))
-            case _ =>
-              val leftSize = size / 2
-              val rightSize = size - leftSize
-              runHalf(leftSize, fa.take(leftSize))
-                .flatMap { left =>
-                  val right = runHalf(rightSize, fa.drop(leftSize))
-                  G.map2Eval(left, right) { (_, _) => () }
-                }
-          }
+          if (size > 2) {
+            val leftSize = size / 2
+            val rightSize = size - leftSize
+            runHalf(leftSize, fa.take(leftSize))
+              .flatMap { left =>
+                // we are defering here to potentially skip the fa.drop
+                // work which we may not need if left is already a failure
+                val right = Eval.defer(runHalf(rightSize, fa.drop(leftSize)))
+                G.map2Eval(left, right) { (_, _) => () }
+              }
+          } else if (size == 1) {
+            // avoid pattern matching when we know that there is only one element
+            val a = fa.head
+            Eval.later {
+              val gb = f(a)
+              G.void(gb)
+            }
+          } else empty
 
         runHalf(fa.length, fa).value
       }

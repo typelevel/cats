@@ -101,7 +101,7 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
       override def traverse_[G[_], A, B](fa: Vector[A])(f: A => G[B])(implicit G: Applicative[G]): G[Unit] = {
         val empty = Eval.now(G.unit)
         // the cost of this is O(size)
-        // c(n) = n/2 + c(n/2) = n/2 + n/4 + c(n/4) = ... 2 * n
+        // c(n) = n + 2 * c(n/2)
         def runHalf(size: Int, idx: Int): Eval[G[Unit]] =
           if (size > 1) {
             val leftSize = size / 2
