@@ -184,13 +184,13 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
 
       override def void[A](fa: List[A]): List[Unit] = {
         @tailrec
-        def build(size: Int, acc: List[Unit]): List[Unit] =
-          if (size == 0) acc
-          else build(size - 1, () :: acc)
+        def build(fa: List[A], acc: List[Unit]): List[Unit] =
+          if (fa.isEmpty) acc
+          else build(fa.tail, () :: acc)
 
-        val sz = fa.size
-        if (sz == 0) Nil
-        else build(sz - 1, unit)
+        // by checking here we can avoid allocating a duplicate unit
+        if (fa.isEmpty) Nil
+        else build(fa.tail, unit)
       }
     }
 
