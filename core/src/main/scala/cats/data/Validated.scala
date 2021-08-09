@@ -814,6 +814,8 @@ object Validated extends ValidatedInstances with ValidatedFunctions with Validat
   final case class Valid[+A](a: A) extends Validated[Nothing, A]
   final case class Invalid[+E](e: E) extends Validated[E, Nothing]
 
+  private[data] val validUnit: Validated[Nothing, Unit] = Valid(())
+
   /**
    * Evaluates the specified block, catching exceptions of the specified type and returning them on the invalid side of
    * the resulting `Validated`. Uncaught exceptions are propagated.
@@ -1030,6 +1032,10 @@ sealed abstract private[data] class ValidatedInstances2 {
         }
 
       override def isEmpty[A](fa: Validated[E, A]): Boolean = fa.isInvalid
+
+      override def void[A](fa: Validated[E, A]): Validated[E, Unit] =
+        if (fa.isValid) Validated.validUnit
+        else fa.asInstanceOf[Validated[E, Unit]]
     }
 }
 
@@ -1044,6 +1050,8 @@ private[data] class ValidatedApplicative[E: Semigroup] extends CommutativeApplic
 
   override def product[A, B](fa: Validated[E, A], fb: Validated[E, B]): Validated[E, (A, B)] =
     fa.product(fb)(Semigroup[E])
+
+  override def unit: Validated[E, Unit] = Validated.validUnit
 }
 
 private[data] trait ValidatedFunctions {

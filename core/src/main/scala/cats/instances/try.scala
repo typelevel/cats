@@ -104,10 +104,7 @@ trait TryInstances extends TryInstances1 {
         if (idx == 0L) fa.toOption else None
 
       override def size[A](fa: Try[A]): Long =
-        fa match {
-          case Failure(_) => 0L
-          case Success(_) => 1L
-        }
+        if (fa.isSuccess) 1L else 0L
 
       override def find[A](fa: Try[A])(f: A => Boolean): Option[A] =
         fa.toOption.filter(f)
@@ -141,6 +138,14 @@ trait TryInstances extends TryInstances1 {
       override def catchNonFatal[A](a: => A)(implicit ev: Throwable <:< Throwable): Try[A] = Try(a)
 
       override def catchNonFatalEval[A](a: Eval[A])(implicit ev: Throwable <:< Throwable): Try[A] = Try(a.value)
+
+      private val successUnit: Try[Unit] = Success(())
+
+      override def void[A](t: Try[A]): Try[Unit] =
+        if (t.isSuccess) successUnit
+        else t.asInstanceOf[Try[Unit]]
+
+      override def unit: Try[Unit] = successUnit
     }
 
   implicit def catsStdShowForTry[A](implicit A: Show[A]): Show[Try[A]] =
