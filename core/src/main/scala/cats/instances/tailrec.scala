@@ -21,7 +21,8 @@ private object TailRecInstances {
       def flatMap[A, B](fa: TailRec[A])(f: A => TailRec[B]): TailRec[B] =
         fa.flatMap(f)
 
-      override val unit: TailRec[Unit] = done(())
+      override def unit: TailRec[Unit] = _unit
+      private[this] val unit: TailRec[Unit] = done(())
       override def void[A](ta: TailRec[A]): TailRec[Unit] = unit
     }
 }

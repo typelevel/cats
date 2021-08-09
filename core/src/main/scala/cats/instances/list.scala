@@ -180,7 +180,8 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
       override def collectFirstSome[A, B](fa: List[A])(f: A => Option[B]): Option[B] =
         fa.collectFirst(Function.unlift(f))
 
-      override val unit: List[Unit] = () :: Nil
+      override def unit: List[Unit] = _unit
+      private[this] val _unit: List[Unit] = () :: Nil
 
       override def void[A](fa: List[A]): List[Unit] = {
         @tailrec

@@ -139,7 +139,7 @@ trait TryInstances extends TryInstances1 {
 
       override def catchNonFatalEval[A](a: Eval[A])(implicit ev: Throwable <:< Throwable): Try[A] = Try(a.value)
 
-      private val successUnit: Try[Unit] = Success(())
+      private[this] val successUnit: Try[Unit] = Success(())
 
       override def void[A](t: Try[A]): Try[Unit] =
         if (t.isSuccess) successUnit
