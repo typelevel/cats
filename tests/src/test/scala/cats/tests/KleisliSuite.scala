@@ -360,7 +360,7 @@ class KleisliSuite extends CatsSuite {
     val res2 = (1 to 10000).toList.traverse_(_ => Kleisli.liftF[Id, String, Unit](())).run("") // fails with SO
     assert(res2 == ())
   }
-  */
+   */
 
   test("traverse_ doesn't stack overflow with List + Eval") {
     // see: https://github.com/typelevel/cats/issues/3947
