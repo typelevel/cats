@@ -106,17 +106,25 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
           if (size > 1) {
             val leftSize = size / 2
             val rightSize = size - leftSize
-            runHalf(leftSize, fa.take(leftSize))
+            val (leftL, rightL) = fa.splitAt(leftSize)
+            runHalf(leftSize, leftL)
               .flatMap { left =>
-                // we are defering here to potentially skip the fa.drop
-                // work which we may not need if left is already a failure
-                val right = Eval.defer(runHalf(rightSize, fa.drop(leftSize)))
+                val right = runHalf(rightSize, rightL)
                 G.map2Eval(left, right) { (_, _) => () }
               }
           } else {
             // avoid pattern matching when we know that there is only one element
             val a = fa.head
-            Eval.later {
+            // we evaluate this at most one time,
+            // always is a bit cheaper in such cases
+            //
+            // Here is the point of the laziness using Eval:
+            // we avoid calling f(a) or G.void in the
+            // event that the computation has already
+            // failed. We do not use laziness to avoid
+            // traversing fa, which we will do fully
+            // in all cases.
+            Eval.always {
               val gb = f(a)
               G.void(gb)
             }

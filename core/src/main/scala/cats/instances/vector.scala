@@ -113,7 +113,16 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
               }
           } else {
             val a = fa(idx)
-            Eval.later {
+            // we evaluate this at most one time,
+            // always is a bit cheaper in such cases
+            //
+            // Here is the point of the laziness using Eval:
+            // we avoid calling f(a) or G.void in the
+            // event that the computation has already
+            // failed. We do not use laziness to avoid
+            // traversing fa, which we will do fully
+            // in all cases.
+            Eval.always {
               val gb = f(a)
               G.void(gb)
             }
