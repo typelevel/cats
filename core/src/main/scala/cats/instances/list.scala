@@ -179,6 +179,19 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
 
       override def collectFirstSome[A, B](fa: List[A])(f: A => Option[B]): Option[B] =
         fa.collectFirst(Function.unlift(f))
+
+      override val unit: List[Unit] = () :: Nil
+
+      override def void[A](fa: List[A]): List[Unit] = {
+        @tailrec
+        def build(size: Int, acc: List[Unit]): List[Unit] =
+          if (size == 0) acc
+          else build(size - 1, () :: acc)
+
+        val sz = fa.size
+        if (sz == 0) Nil
+        else build(sz - 1, unit)
+      }
     }
 
   implicit def catsStdShowForList[A: Show]: Show[List[A]] =
