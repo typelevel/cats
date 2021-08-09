@@ -354,6 +354,19 @@ class KleisliSuite extends CatsSuite {
     assertEquals(program.run(A123), List((1, "2", true)))
   }
 
+  /*
+  test("traverse_ doesn't stack overflow") {
+    // see: https://github.com/typelevel/cats/issues/3947
+    val res2 = (1 to 10000).toList.traverse_(_ => Kleisli.liftF[Id, String, Unit](())).run("") // fails with SO
+    assert(res2 == ())
+  }
+  */
+
+  test("traverse_ doesn't stack overflow with List + Eval") {
+    // see: https://github.com/typelevel/cats/issues/3947
+    (1 to 10000).toList.traverse_(_ => Kleisli.liftF[Eval, String, Unit](Eval.Unit)).run("").value
+  }
+
   /**
    * Testing that implicit resolution works. If it compiles, the "test" passes.
    */
