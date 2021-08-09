@@ -95,6 +95,32 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
       final override def traverse[G[_], A, B](fa: Vector[A])(f: A => G[B])(implicit G: Applicative[G]): G[Vector[B]] =
         G.map(Chain.traverseViaChain(fa)(f))(_.toVector)
 
+      /**
+       * This avoids making a very deep stack by building a tree instead
+       */
+      override def traverse_[G[_], A, B](fa: Vector[A])(f: A => G[B])(implicit G: Applicative[G]): G[Unit] = {
+        val empty = Eval.now(G.unit)
+        // the cost of this is O(size)
+        // c(n) = n/2 + c(n/2) = n/2 + n/4 + c(n/4) = ... 2 * n
+        def runHalf(size: Int, idx: Int): Eval[G[Unit]] =
+          if (size > 1) {
+            val leftSize = size / 2
+            val rightSize = size - leftSize
+            runHalf(leftSize, idx)
+              .flatMap { left =>
+                val right = runHalf(rightSize, idx + leftSize)
+                G.map2Eval(left, right) { (_, _) => () }
+              }
+          } else if (size == 1) {
+            val a = fa(idx)
+            Eval.later {
+              val gb = f(a)
+              G.void(gb)
+            }
+          } else empty
+
+        runHalf(fa.length, 0).value
+      }
       override def mapWithIndex[A, B](fa: Vector[A])(f: (A, Int) => B): Vector[B] =
         fa.iterator.zipWithIndex.map(ai => f(ai._1, ai._2)).toVector
 

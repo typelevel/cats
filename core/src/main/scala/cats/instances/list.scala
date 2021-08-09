@@ -95,6 +95,30 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
             wrapMutableIndexedSeq(as)
           }(f))(_.toList)
 
+      /**
+       * This avoids making a very deep stack by building a tree instead
+       */
+      override def traverse_[G[_], A, B](fa: List[A])(f: A => G[B])(implicit G: Applicative[G]): G[Unit] = {
+        val empty = Eval.now(G.unit)
+        // the cost of this is O(size)
+        // c(n) = n/2 + c(n/2) = n/2 + n/4 + c(n/4) = ... 2 * n
+        def runHalf(size: Int, fa: List[A]): Eval[G[Unit]] =
+          fa match {
+            case Nil      => empty
+            case h :: Nil => Eval.later(G.void(f(h)))
+            case _ =>
+              val leftSize = size / 2
+              val rightSize = size - leftSize
+              runHalf(leftSize, fa.take(leftSize))
+                .flatMap { left =>
+                  val right = runHalf(rightSize, fa.drop(leftSize))
+                  G.map2Eval(left, right) { (_, _) => () }
+                }
+          }
+
+        runHalf(fa.length, fa).value
+      }
+
       def functor: Functor[List] = this
 
       def align[A, B](fa: List[A], fb: List[B]): List[A Ior B] =
