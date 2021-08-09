@@ -103,7 +103,7 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
         // the cost of this is O(size)
         // c(n) = n + 2 * c(n/2)
         def runHalf(size: Int, fa: List[A]): Eval[G[Unit]] =
-          if (size > 2) {
+          if (size > 1) {
             val leftSize = size / 2
             val rightSize = size - leftSize
             runHalf(leftSize, fa.take(leftSize))
