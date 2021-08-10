@@ -11,14 +11,14 @@ import cats.evidence.As
 final case class Kleisli[F[_], -A, B](run: A => F[B]) { self =>
 
   private[data] def ap[C, AA <: A](f: Kleisli[F, AA, B => C])(implicit F: Apply[F]): Kleisli[F, AA, C] =
-    Kleisli(a => F.ap(f.run(a))(run(a)))
+    Kleisli(StackSafeMonad.shiftFunctor(a => F.ap(f.run(a))(run(a))))
 
   def ap[C, D, AA <: A](f: Kleisli[F, AA, C])(implicit F: Apply[F], ev: B As (C => D)): Kleisli[F, AA, D] = {
-    Kleisli { a =>
+    Kleisli(StackSafeMonad.shiftFunctor { a =>
       val fb: F[C => D] = F.map(run(a))(ev.coerce)
       val fc: F[C] = f.run(a)
       F.ap(fb)(fc)
-    }
+    })
   }
 
   /**
@@ -97,7 +97,7 @@ final case class Kleisli[F[_], -A, B](run: A => F[B]) { self =>
    * }}}
    */
   def local[AA](f: AA => A): Kleisli[F, AA, B] =
-    Kleisli(aa => run(f(aa)))
+    Kleisli(AndThen(f).andThen(run))
 
   @deprecated("Use mapK", "1.0.0-RC2")
   private[cats] def transform[G[_]](f: FunctionK[F, G]): Kleisli[G, A, B] =
@@ -156,12 +156,7 @@ object Kleisli
    * in `flatMap`.
    */
   private[data] def shift[F[_], A, B](run: A => F[B])(implicit F: FlatMap[F]): Kleisli[F, A, B] =
-    F match {
-      case ap: Applicative[F] @unchecked =>
-        Kleisli(r => F.flatMap(ap.pure(r))(run))
-      case _ =>
-        Kleisli(run)
-    }
+    Kleisli(StackSafeMonad.shiftFunctor(run))
 
   /**
    * Creates a `FunctionK` that transforms a `Kleisli[F, A, B]` into an `F[B]` by applying the value of type `a:A`.
@@ -660,14 +655,14 @@ private[data] trait KleisliApply[F[_], A] extends Apply[Kleisli[F, A, *]] with K
     // We should only evaluate fb once
     val memoFb = fb.memoize
 
-    Eval.now(Kleisli { a =>
+    Eval.now(Kleisli(StackSafeMonad.shiftFunctor { a =>
       val fb = fa.run(a)
       val efc = memoFb.map(_.run(a))
       val efz: Eval[F[Z]] = F.map2Eval(fb, efc)(f)
       // This is not safe and results in stack overflows:
       // see: https://github.com/typelevel/cats/issues/3947
       efz.value
-    })
+    }))
   }
 
   override def product[B, C](fb: Kleisli[F, A, B], fc: Kleisli[F, A, C]): Kleisli[F, A, (B, C)] =

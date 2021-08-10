@@ -375,6 +375,7 @@ sealed abstract private[cats] class EvalInstances extends EvalInstances0 {
       def coflatMap[A, B](fa: Eval[A])(f: Eval[A] => B): Eval[B] = Later(f(fa))
       override def unit: Eval[Unit] = Eval.Unit
       override def void[A](a: Eval[A]): Eval[Unit] = Eval.Unit
+      override def defer[A](fa: => Eval[A]): Eval[A] = Eval.defer(fa)
     }
 
   implicit val catsDeferForEval: Defer[Eval] =
