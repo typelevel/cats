@@ -656,8 +656,19 @@ private[data] trait KleisliApply[F[_], A] extends Apply[Kleisli[F, A, *]] with K
 
   override def map2Eval[B, C, Z](fa: Kleisli[F, A, B], fb: Eval[Kleisli[F, A, C]])(
     f: (B, C) => Z
-  ): Eval[Kleisli[F, A, Z]] =
-    Eval.now(Kleisli(a => F.map2Eval(fa.run(a), fb.map(_.run(a)))(f).value))
+  ): Eval[Kleisli[F, A, Z]] = {
+    // We should only evaluate fb once
+    val memoFb = fb.memoize
+
+    Eval.now(Kleisli { a =>
+      val fb = fa.run(a)
+      val efc = memoFb.map(_.run(a))
+      val efz: Eval[F[Z]] = F.map2Eval(fb, efc)(f)
+      // This is not safe and results in stack overflows:
+      // see: https://github.com/typelevel/cats/issues/3947
+      efz.value
+    })
+  }
 
   override def product[B, C](fb: Kleisli[F, A, B], fc: Kleisli[F, A, C]): Kleisli[F, A, (B, C)] =
     Kleisli(a => F.product(fb.run(a), fc.run(a)))
