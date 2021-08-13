@@ -79,6 +79,28 @@ sealed class NonEmptyMapOps[K, A](val value: NonEmptyMap[K, A]) {
     NonEmptyMapImpl.create(Functor[SortedMap[K, *]].map(toSortedMap)(f))
 
   /**
+   * Applies f to all the keys leaving elements unchanged.
+   */
+  def leftMap[L](f: K => L)(implicit orderL: Order[L]): NonEmptyMap[L, A] = {
+    implicit val orderingL: Ordering[L] = orderL.toOrdering
+    NonEmptyMapImpl.create(toSortedMap.map(Bifunctor[Tuple2].leftMap(_)(f)))
+  }
+
+  /**
+   * Applies f to both keys and elements simultaneously.
+   */
+  def fullMap[L, B](f: (K, A) => (L, B))(implicit orderL: Order[L]): NonEmptyMap[L, B] = {
+    implicit val orderingL: Ordering[L] = orderL.toOrdering
+    NonEmptyMapImpl.create(toSortedMap.map(Function.tupled(f)))
+  }
+
+  /**
+   * Transforms the elements only by applying f to both elements and associated keys.
+   */
+  def transform[B](f: (K, A) => B): NonEmptyMap[K, B] =
+    NonEmptyMapImpl.create(toSortedMap.transform(f))
+
+  /**
    * Optionally returns the value associated with the given key.
    */
   def lookup(k: K): Option[A] = toSortedMap.get(k)
