@@ -5,12 +5,13 @@ import cats.data.{NonEmptyList, NonEmptyMap}
 import cats.kernel.laws.discipline.{SerializableTests => _, _}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
+import cats.syntax.bifunctor._
+import cats.syntax.eq._
 import cats.syntax.foldable._
 import cats.syntax.functor._
-import cats.syntax.show._
 import cats.syntax.reducible._
+import cats.syntax.show._
 import scala.collection.immutable.SortedMap
-import cats.syntax.eq._
 import org.scalacheck.Prop._
 
 class NonEmptyMapSuite extends CatsSuite {
@@ -82,6 +83,27 @@ class NonEmptyMapSuite extends CatsSuite {
     forAll { (nem: NonEmptyMap[String, Int], p: Int => String) =>
       val map = nem.toSortedMap
       assert(nem.map(p).toSortedMap === (map.fmap(p)))
+    }
+  }
+
+  test("NonEmptyMap#leftMap is consistent with Map#map") {
+    forAll { (nem: NonEmptyMap[String, Int], p: String => Int) =>
+      val map = nem.toSortedMap
+      assert(nem.leftMap(p).toSortedMap === map.map(_.leftMap(p)))
+    }
+  }
+
+  test("NonEmptyMap#fullMap is consistent with Map#map") {
+    forAll { (nem: NonEmptyMap[String, Int], p: (String, Int) => (Int, String)) =>
+      val map = nem.toSortedMap
+      assert(nem.fullMap(p).toSortedMap === map.map(Function.tupled(p)))
+    }
+  }
+
+  test("NonEmptyMap#transform is consistent with Map#transform") {
+    forAll { (nem: NonEmptyMap[String, Int], p: (String, Int) => String) =>
+      val map = nem.toSortedMap
+      assert(nem.transform(p).toSortedMap === map.transform(p))
     }
   }
 
