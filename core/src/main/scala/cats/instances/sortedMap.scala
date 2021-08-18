@@ -114,6 +114,8 @@ trait SortedMapInstances extends SortedMapInstances2 {
 
       override def toList[A](fa: SortedMap[K, A]): List[A] = fa.values.toList
 
+      override def toIterable[A](fa: SortedMap[K, A]): Iterable[A] = fa.values
+
       override def collectFirst[A, B](fa: SortedMap[K, A])(pf: PartialFunction[A, B]): Option[B] =
         fa.collectFirst(new PartialFunction[(K, A), B] {
           override def isDefinedAt(x: (K, A)): Boolean = pf.isDefinedAt(x._2)

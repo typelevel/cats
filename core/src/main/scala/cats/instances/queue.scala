@@ -131,6 +131,8 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
 
       override def toList[A](fa: Queue[A]): List[A] = fa.toList
 
+      override def toIterable[A](fa: Queue[A]): Iterable[A] = fa
+
       override def reduceLeftOption[A](fa: Queue[A])(f: (A, A) => A): Option[A] =
         fa.reduceLeftOption(f)
 

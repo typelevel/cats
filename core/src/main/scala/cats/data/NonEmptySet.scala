@@ -386,6 +386,8 @@ sealed abstract private[data] class NonEmptySetInstances extends NonEmptySetInst
 
       override def toList[A](fa: NonEmptySet[A]): List[A] = fa.toSortedSet.toList
 
+      override def toIterable[A](fa: NonEmptySet[A]): Iterable[A] = fa.toSortedSet
+
       override def toNonEmptyList[A](fa: NonEmptySet[A]): NonEmptyList[A] =
         fa.toNonEmptyList
     }
