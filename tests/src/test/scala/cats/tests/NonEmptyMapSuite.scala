@@ -86,17 +86,17 @@ class NonEmptyMapSuite extends CatsSuite {
     }
   }
 
-  test("NonEmptyMap#leftMap is consistent with Map#map") {
+  test("NonEmptyMap#mapKeys is consistent with Map#map") {
     forAll { (nem: NonEmptyMap[String, Int], p: String => Int) =>
       val map = nem.toSortedMap
-      assert(nem.leftMap(p).toSortedMap === map.map(_.leftMap(p)))
+      assert(nem.mapKeys(p).toSortedMap === map.map(_.leftMap(p)))
     }
   }
 
-  test("NonEmptyMap#fullMap is consistent with Map#map") {
+  test("NonEmptyMap#mapBoth is consistent with Map#map") {
     forAll { (nem: NonEmptyMap[String, Int], p: (String, Int) => (Int, String)) =>
       val map = nem.toSortedMap
-      assert(nem.fullMap(p).toSortedMap === map.map(Function.tupled(p)))
+      assert(nem.mapBoth(p).toSortedMap === map.map(Function.tupled(p)))
     }
   }
 
