@@ -59,7 +59,7 @@ information about how you can get involved as a developer. If you are looking fo
 <h4>Backers</h4>
 Become a <a href="https://opencollective.com/typelevel/contribute/backer-11779/checkout">Backer</a> with a recurring donation of just $5 USD/month.
 <div id="backers">
-  <noscript>Backs appear here at <a href="https://typelevel.org/cats/">https://typelevel.org/cats</a></noscript>
+  <noscript>Backers appear here at <a href="https://typelevel.org/cats/">https://typelevel.org/cats</a></noscript>
 </div>
 
 <h4>Other contributors</h4>
