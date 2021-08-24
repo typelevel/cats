@@ -36,51 +36,39 @@ information about how you can get involved as a developer. If you are looking fo
 
 ### Financial Contributors
 
-[Become a financial contributor](https://opencollective.com/typelevel) and help us sustain our community. Donations directly support office hour for maintainers, better documentation and strategic initiatives. 
+[Become a financial contributor](https://opencollective.com/typelevel) and help us sustain our community. Donations directly support office hours for maintainers, better documentation and strategic initiatives.
 
+<h4>Platinum Sponsors</h4>
+<a href="https://opencollective.com/typelevel/contribute/platinum-sposor-12420/checkout">Platinum sponsorship</a> starts at $950 USD/month.
+<div id="platinum-sponsors">
+  <noscript>Platinum Sponsors appear here at <a href="https://typelevel.org/cats/">https://typelevel.org/cats</a></noscript>
+</div>
 
+<h4>Gold Sponsors</h4>
+<a href="https://opencollective.com/typelevel/contribute/gold-sponsor-12419/checkout">Gold Sponsorship</a> starts at $420 USD/month.
+<div id="gold-sponsors">
+  <noscript>Gold Sponsors appear here at <a href="https://typelevel.org/cats/">https://typelevel.org/cats</a></noscript>
+</div>
 
-### Gold Sponsors 
+<h4>Silver Sponsors</h4>
+<a href="https://opencollective.com/typelevel/contribute/silver-sponsor-11780/checkout">Silver Sponsorship</a> starts at $180 USD/month.
+<div id="silver-sponsors">
+  <noscript>Silver Sponsors appear here at <a href="https://typelevel.org/cats/">https://typelevel.org/cats</a></noscript>
+</div>
 
-Gold Sponsors are those who have pledged $5,000 to $10,000.
+<h4>Backers</h4>
+Become a <a href="https://opencollective.com/typelevel/contribute/backer-11779/checkout">Backer</a> with a recurring donation of just $5 USD/month.
+<div id="backers">
+  <noscript>Backs appear here at <a href="https://typelevel.org/cats/">https://typelevel.org/cats</a></noscript>
+</div>
 
-<a href="http://47deg.com"><img src="https://typelevel.org/img/media/sponsors/47_degrees.png" style="margin-left: 10px; margin-right: 10px" /></a>
-<a href="https://www.iteratorshq.com"><img src="https://typelevel.org/img/media/sponsors/iterators.png" style="margin-bottom:8px;margin-left: 10px; margin-right: 10px"/></a>
-<a href="https://triplequote.com/"><img src="https://typelevel.org/img/media/sponsors/triplequote.png" style="margin-bottom:9px; margin-right: 10px" /></a>
-<a href="http://underscore.io"><img src="https://typelevel.org/img/media/sponsors/underscore.png" style="margin-bottom:5px;margin-left: 10px; margin-right: 10px"/></a>
+<h4>Other contributors</h4>
+We thankfully accept <a href="https://opencollective.com/typelevel/donate">one-time and recurring</a> contributions as well.
+<div id="other-contributors">
+  <noscript>Other contributors appear here at <a href="https://typelevel.org/cats/">https://typelevel.org/cats</a></noscript>
+</div>
 
-
-
-### Silver Sponsors
-
-Silver Sponsors are those who have pledged $2,000 to $5,000.
-
-<a href="https://www.ebiznext.com/"><img src="https://typelevel.org/img/media/sponsors/ebiznext.png" style="margin-bottom:15px; margin-right: 10px" /></a>
-<a href="https://www.inner-product.com/"><img src="https://typelevel.org/img/media/sponsors/inner-product.png" style="margin-bottom:10px; margin-right: 10px"/></a>
-<a href="https://evolutiongaming.com/"><img src="https://typelevel.org/img/media/sponsors/evolution_gaming_engineering.png" style="margin-bottom:10px; margin-right: 10px"/></a>
-
-
-#### Other Organizations
-
-Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/typelevel/contribute)]
-
-<a href="https://opencollective.com/typelevel/organization/0/website"><img src="https://opencollective.com/typelevel/organization/0/avatar.svg"></a>
-<a href="https://opencollective.com/typelevel/organization/1/website"><img src="https://opencollective.com/typelevel/organization/1/avatar.svg"></a>
-<a href="https://opencollective.com/typelevel/organization/2/website"><img src="https://opencollective.com/typelevel/organization/2/avatar.svg"></a>
-<a href="https://opencollective.com/typelevel/organization/3/website"><img src="https://opencollective.com/typelevel/organization/3/avatar.svg"></a>
-<a href="https://opencollective.com/typelevel/organization/4/website"><img src="https://opencollective.com/typelevel/organization/4/avatar.svg"></a>
-<a href="https://opencollective.com/typelevel/organization/5/website"><img src="https://opencollective.com/typelevel/organization/5/avatar.svg"></a>
-<a href="https://opencollective.com/typelevel/organization/6/website"><img src="https://opencollective.com/typelevel/organization/6/avatar.svg"></a>
-<a href="https://opencollective.com/typelevel/organization/7/website"><img src="https://opencollective.com/typelevel/organization/7/avatar.svg"></a>
-<a href="https://opencollective.com/typelevel/organization/8/website"><img src="https://opencollective.com/typelevel/organization/8/avatar.svg"></a>
-<a href="https://opencollective.com/typelevel/organization/9/website"><img src="https://opencollective.com/typelevel/organization/9/avatar.svg"></a>
-
-
-#### Individuals
-
-<a href="https://opencollective.com/typelevel"><img src="https://opencollective.com/typelevel/individuals.svg?width=890"></a>
-
-
+<script src="/cats/js/sponsors.js"></script>
 
 ### Getting Started
 

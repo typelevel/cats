@@ -274,6 +274,7 @@ lazy val docSettings = Seq(
   ),
   micrositeGithubRepo := "cats",
   micrositeImgDirectory := (LocalRootProject / baseDirectory).value / "docs" / "src" / "main" / "resources" / "microsite" / "img",
+  micrositeJsDirectory := (LocalRootProject / baseDirectory).value / "docs" / "src" / "main" / "resources" / "microsite" / "js",
   micrositeTheme := "pattern",
   micrositePalette := Map(
     "brand-primary" -> "#5B5988",
