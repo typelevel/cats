@@ -1,0 +1,948 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+          <title></title>
+          <meta name="description" content="" />
+          <meta name="keywords" content="" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      
+      <link href="../../lib/index.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../lib/jquery.min.js"></script>
+      <script type="text/javascript" src="../../lib/jquery.panzoom.min.js"></script>
+      <script type="text/javascript" src="../../lib/jquery.mousewheel.min.js"></script>
+      <script type="text/javascript" src="../../lib/index.js"></script>
+      <script type="text/javascript" src="../../index.js"></script>
+      <script type="text/javascript" src="../../lib/scheduler.js"></script>
+      <script type="text/javascript" src="../../lib/template.js"></script>
+      <script type="text/javascript" src="../../lib/modernizr.custom.js"></script><script type="text/javascript" src="../../lib/diagrams.js" id="diagrams-js"></script>
+      <script type="text/javascript">
+        /* this variable can be used by the JS to determine the path to the root document */
+        var toRoot = '../../';
+      </script>
+    
+        </head>
+        <body>
+      <div id="search">
+        <span id="doc-title"><span id="doc-version"></span></span>
+        <span class="close-results"><span class="left">&lt;</span> Back</span>
+        <div id="textfilter">
+          <span class="input">
+            <input autocapitalize="none" placeholder="Search" id="index-input" type="text" accesskey="/" />
+            <i class="clear material-icons"></i>
+            <i id="search-icon" class="material-icons"></i>
+          </span>
+        </div>
+    </div>
+      <div id="search-results">
+        <div id="search-progress">
+          <div id="progress-fill"></div>
+        </div>
+        <div id="results-content">
+          <div id="entity-results"></div>
+          <div id="member-results"></div>
+        </div>
+      </div>
+      <div id="content-scroll-container" style="-webkit-overflow-scrolling: touch;">
+        <div id="content-container" style="-webkit-overflow-scrolling: touch;">
+          <div id="subpackage-spacer">
+            <div id="packages">
+              <h1>Packages</h1>
+              <ul>
+                <li name="_root_.root" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="_root_"></a><a id="root:_root_"></a>
+      <span class="permalink">
+      <a href="../../index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../../index.html"><span class="name">root</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
+    </li><li name="_root_.cats" visbl="pub" class="indented1 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="cats"></a><a id="cats:cats"></a>
+      <span class="permalink">
+      <a href="../../cats/index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="The cats root package contains all the trait signatures of most Scala type classes." href="../index.html"><span class="name">cats</span></a>
+      </span>
+      
+      <p class="shortcomment cmt">The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><p>Cats type classes are implemented using the approach from the
+ <a href="https://ropas.snu.ac.kr/~bruno/papers/TypeClasses.pdf" target="_blank">Type classes as objects and implicits</a> article.</p><p>For each type class, <code>cats</code> provides three pieces:
+- Its <b>signature</b>: a trait that is polymorphic on a type parameter.
+  Type class traits inherit from other type classes to indicate that any implementation of the lower type class (e.g. <code>Applicative</code>)
+  can also serve as an instance for the higuer type class (e.g. <code>Functor</code>).
+- Type class <b>'instances</b>, which are classes and objects that implement one or more type class signatures for some specific types.
+  Type class instances for several data types from the Java or Scala standard libraries are declared in the subpackage <code>cats.instances</code>.
+- <b>Syntax extensions</b>, each of which provides the methods of the type class defines as extension methods
+  (which in Scala 2 are encoded as implicit classes) for values of any type <code>F</code>; given that an instance of the type class
+  for the receiver type (<code>this</code>) is in the implicit scope.
+  Symtax extensions are declared in the <code>cats.syntax</code> package.
+- A set of <b>laws</b>, that are also generic on the type of the class, and are only defined on the operations of the type class.
+  The purpose of these laws is to declare some algebraic relations (equations) between Scala expressions involving the operations
+  of the type class, and test (but not verify) that implemented instances satisfy those equations.
+  Laws are defined in the <code>cats-laws</code> package.</p><p>Although most of cats type classes are declared in this package, some are declared in other packages:
+- type classes that operate on base types (kind <code>*</code>), and their implementations for standard library types,
+  are contained in <code>cats.kernel</code>, which is a different SBT project. However, they are re-exported from this package.
+- type classes of kind <code>F[_, _]</code>, such as <a href="../arrow/Profunctor.html" class="extype" name="cats.arrow.Profunctor">cats.arrow.Profunctor</a>&quot; or <a href="../arrow/Arrow.html" class="extype" name="cats.arrow.Arrow">cats.arrow.Arrow</a>, which are relevant for
+  Functional Reactive Programming or optics, are declared in the <code>cats.arrow</code> package.
+- Also, those type classes that abstract over (pure or impure) functional runtime effects are declared
+  in the <a href="https://typelevel.org/cats-effect/" target="_blank">cats-effect library</a>.
+- Some type classes for which no laws can be provided are left out of the main road, in a small and dirty alley.
+  These are the <code>alleycats</code>.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
+    </li><li name="cats.free" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="free"></a><a id="free:free"></a>
+      <span class="permalink">
+      <a href="../../cats/free/index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="index.html"><span class="name">free</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="cats">cats</a></dd></dl></div>
+    </li><li class="current-entities indented2">
+                        <a class="object" href="Cofree$.html" title=""></a>
+                        <a class="class" href="Cofree.html" title="A free comonad for some branching functor S."></a>
+                        <a href="Cofree.html" title="A free comonad for some branching functor S.">Cofree</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="ContravariantCoyoneda$.html" title=""></a>
+                        <a class="class" href="ContravariantCoyoneda.html" title="The free contravariant functor on F."></a>
+                        <a href="ContravariantCoyoneda.html" title="The free contravariant functor on F.">ContravariantCoyoneda</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="Coyoneda$.html" title=""></a>
+                        <a class="class" href="Coyoneda.html" title="The dual view of the Yoneda lemma."></a>
+                        <a href="Coyoneda.html" title="The dual view of the Yoneda lemma.">Coyoneda</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="Free$.html" title=""></a>
+                        <a class="class" href="Free.html" title="A free operational monad for some functor S."></a>
+                        <a href="Free.html" title="A free operational monad for some functor S.">Free</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="FreeApplicative$.html" title=""></a>
+                        <a class="class" href="FreeApplicative.html" title="Applicative Functor for Free, implementation inspired by https://github.com/safareli/free/pull/31/"></a>
+                        <a href="FreeApplicative.html" title="Applicative Functor for Free, implementation inspired by https://github.com/safareli/free/pull/31/">FreeApplicative</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="FreeInvariantMonoidal$.html" title=""></a>
+                        <a class="class" href="FreeInvariantMonoidal.html" title="Invariant Monoidal for Free"></a>
+                        <a href="FreeInvariantMonoidal.html" title="Invariant Monoidal for Free">FreeInvariantMonoidal</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="" title=""></a>
+                        <a class="class" href="FreeT.html" title="FreeT is a monad transformer for Free monads over a Functor S"></a>
+                        <a href="FreeT.html" title="FreeT is a monad transformer for Free monads over a Functor S">FreeT</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$Trampoline$.html" title=""></a>
+                        <a href="package$$Trampoline$.html" title="">Trampoline</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="Yoneda$.html" title=""></a>
+                        <a class="class" href="Yoneda.html" title="The cofree functor for F."></a>
+                        <a href="Yoneda.html" title="The cofree functor for F.">Yoneda</a>
+                      </li>
+              </ul>
+            </div>
+          </div>
+          <div id="content">
+            <body class="object value">
+      <div id="definition">
+        <a href="FreeT.html" title="See companion class"><div class="big-circle object-companion-class">o</div></a>
+        <p id="owner"><a href="../index.html" class="extype" name="cats">cats</a>.<a href="index.html" class="extype" name="cats.free">free</a></p>
+        <h1><a href="FreeT.html" title="See companion class">FreeT</a><span class="permalink">
+      <a href="../../cats/free/FreeT$.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span></h1>
+        <h3><span class="morelinks"><div>
+            Companion <a href="FreeT.html" title="See companion class">class FreeT</a>
+          </div></span></h3>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <span class="name">FreeT</span><span class="result"> extends <span class="extype" name="cats.free.FreeTInstances">FreeTInstances</span> with <a href="https://www.scala-lang.org/api/2.12.14/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      </h4>
+
+      
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/main/free/src/main/scala/cats/free/FreeT.scala" target="_blank">FreeT.scala</a></dd></dl><div class="toggleContainer block">
+          <span class="toggle">
+            Linear Supertypes
+          </span>
+          <div class="superTypes hiddenContent"><a href="https://www.scala-lang.org/api/2.12.14/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="cats.free.FreeTInstances">FreeTInstances</span>, <span class="extype" name="cats.free.FreeTInstances0">FreeTInstances0</span>, <span class="extype" name="cats.free.FreeTInstances1">FreeTInstances1</span>, <span class="extype" name="cats.free.FreeTInstances2">FreeTInstances2</span>, <span class="extype" name="cats.free.FreeTInstances3">FreeTInstances3</span>, <a href="https://www.scala-lang.org/api/2.12.14/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.14/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div class="toggle"></div>
+        <div id="memberfilter">
+          <i class="material-icons arrow"></i>
+          <span class="input">
+            <input id="mbrsel-input" placeholder="Filter all members" type="text" accesskey="/" />
+          </span>
+          <i class="clear material-icons"></i>
+        </div>
+        <div id="filterby">
+          <div id="order">
+            <span class="filtertype">Ordering</span>
+            <ol>
+              
+              <li class="alpha in"><span>Alphabetic</span></li>
+              <li class="inherit out"><span>By Inheritance</span></li>
+            </ol>
+          </div>
+          <div class="ancestors">
+                  <span class="filtertype">Inherited<br />
+                  </span>
+                  <ol id="linearization">
+                    <li class="in" name="cats.free.FreeT"><span>FreeT</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="cats.free.FreeTInstances"><span>FreeTInstances</span></li><li class="in" name="cats.free.FreeTInstances0"><span>FreeTInstances0</span></li><li class="in" name="cats.free.FreeTInstances1"><span>FreeTInstances1</span></li><li class="in" name="cats.free.FreeTInstances2"><span>FreeTInstances2</span></li><li class="in" name="cats.free.FreeTInstances3"><span>FreeTInstances3</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  </ol>
+                </div><div class="ancestors">
+              <span class="filtertype"></span>
+              <ol>
+                <li class="hideall out"><span>Hide All</span></li>
+                <li class="showall in"><span>Show All</span></li>
+              </ol>
+            </div>
+          <div id="visbl">
+              <span class="filtertype">Visibility</span>
+              <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+            </div>
+        </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        
+
+        
+
+        <div class="values members">
+              <h3>Value Members</h3>
+              <ol>
+                <li name="scala.AnyRef#!=" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a><a id="!=(Any):Boolean"></a>
+      <span class="permalink">
+      <a href="../../cats/free/FreeT$.html#!=(x$1:Any):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.14/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <span class="permalink">
+      <a href="../../cats/free/FreeT$.html###():Int" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a><a id="==(Any):Boolean"></a>
+      <span class="permalink">
+      <a href="../../cats/free/FreeT$.html#==(x$1:Any):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.14/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <span class="permalink">
+      <a href="../../cats/free/FreeT$.html#asInstanceOf[T0]:T0" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.free.FreeTInstances#catsDeferForFreeT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDeferForFreeT[S[_],M[_]](implicitevidence$4:cats.Applicative[M]):cats.Defer[[γ$11$]cats.free.FreeT[S,M,γ$11$]]"></a><a id="catsDeferForFreeT[S[_],M[_]](Applicative[M]):Defer[[γ$11$]FreeT[S,M,γ$11$]]"></a>
+      <span class="permalink">
+      <a href="../../cats/free/FreeT$.html#catsDeferForFreeT[S[_],M[_]](implicitevidence$4:cats.Applicative[M]):cats.Defer[[γ$11$]cats.free.FreeT[S,M,γ$11$]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDeferForFreeT</span><span class="tparams">[<span name="S">S<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.free.FreeTInstances.catsDeferForFreeT.M">M</span>]</span>)</span><span class="result">: <a href="../Defer.html" class="extype" name="cats.Defer">Defer</a>[[γ$11$]<a href="FreeT.html" class="extype" name="cats.free.FreeT">FreeT</a>[<span class="extype" name="cats.free.FreeTInstances.catsDeferForFreeT.S">S</span>, <span class="extype" name="cats.free.FreeTInstances.catsDeferForFreeT.M">M</span>, <span class="extype" name="cats.free.FreeTInstances.&lt;refinement&gt;.Λ$.γ$11$">γ$11$</span>]]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>FreeTInstances</dd></dl></div>
+    </li><li name="cats.free.FreeTInstances2#catsFreeAlternativeForFreeT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsFreeAlternativeForFreeT[S[_],M[_]](implicitevidence$5:cats.Alternative[M],implicitevidence$6:cats.Monad[M]):cats.Alternative[[γ$17$]cats.free.FreeT[S,M,γ$17$]]"></a><a id="catsFreeAlternativeForFreeT[S[_],M[_]](Alternative[M],Monad[M]):Alternative[[γ$17$]FreeT[S,M,γ$17$]]"></a>
+      <span class="permalink">
+      <a href="../../cats/free/FreeT$.html#catsFreeAlternativeForFreeT[S[_],M[_]](implicitevidence$5:cats.Alternative[M],implicitevidence$6:cats.Monad[M]):cats.Alternative[[γ$17$]cats.free.FreeT[S,M,γ$17$]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsFreeAlternativeForFreeT</span><span class="tparams">[<span name="S">S<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../Alternative.html" class="extype" name="cats.Alternative">Alternative</a>[<span class="extype" name="cats.free.FreeTInstances2.catsFreeAlternativeForFreeT.M">M</span>]</span>, <span name="arg1">arg1: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.free.FreeTInstances2.catsFreeAlternativeForFreeT.M">M</span>]</span>)</span><span class="result">: <a href="../Alternative.html" class="extype" name="cats.Alternative">Alternative</a>[[γ$17$]<a href="FreeT.html" class="extype" name="cats.free.FreeT">FreeT</a>[<span class="extype" name="cats.free.FreeTInstances2.catsFreeAlternativeForFreeT.S">S</span>, <span class="extype" name="cats.free.FreeTInstances2.catsFreeAlternativeForFreeT.M">M</span>, <span class="extype" name="cats.free.FreeTInstances2.&lt;refinement&gt;.Λ$.γ$17$">γ$17$</span>]]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>FreeTInstances2</dd></dl></div>
+    </li><li name="cats.free.FreeTInstances1#catsFreeFlatMapForFreeT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsFreeFlatMapForFreeT[S[_],M[_]](implicitM0:cats.Applicative[M]):cats.FlatMap[[γ$16$]cats.free.FreeT[S,M,γ$16$]]"></a><a id="catsFreeFlatMapForFreeT[S[_],M[_]](Applicative[M]):FlatMap[[γ$16$]FreeT[S,M,γ$16$]]"></a>
+      <span class="permalink">
+      <a href="../../cats/free/FreeT$.html#catsFreeFlatMapForFreeT[S[_],M[_]](implicitM0:cats.Applicative[M]):cats.FlatMap[[γ$16$]cats.free.FreeT[S,M,γ$16$]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsFreeFlatMapForFreeT</span><span class="tparams">[<span name="S">S<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="M0">M0: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.free.FreeTInstances1.catsFreeFlatMapForFreeT.M">M</span>]</span>)</span><span class="result">: <a href="../FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a>[[γ$16$]<a href="FreeT.html" class="extype" name="cats.free.FreeT">FreeT</a>[<span class="extype" name="cats.free.FreeTInstances1.catsFreeFlatMapForFreeT.S">S</span>, <span class="extype" name="cats.free.FreeTInstances1.catsFreeFlatMapForFreeT.M">M</span>, <span class="extype" name="cats.free.FreeTInstances1.&lt;refinement&gt;.Λ$.γ$16$">γ$16$</span>]]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>FreeTInstances1</dd></dl></div>
+    </li><li name="cats.free.FreeTInstances#catsFreeMonadErrorForFreeT2" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsFreeMonadErrorForFreeT2[S[_],M[_],E](implicitE:cats.MonadError[M,E],implicitS:cats.Functor[S]):cats.MonadError[[γ$13$]cats.free.FreeT[S,M,γ$13$],E]"></a><a id="catsFreeMonadErrorForFreeT2[S[_],M[_],E](MonadError[M,E],Functor[S]):MonadError[[γ$13$]FreeT[S,M,γ$13$],E]"></a>
+      <span class="permalink">
+      <a href="../../cats/free/FreeT$.html#catsFreeMonadErrorForFreeT2[S[_],M[_],E](implicitE:cats.MonadError[M,E],implicitS:cats.Functor[S]):cats.MonadError[[γ$13$]cats.free.FreeT[S,M,γ$13$],E]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsFreeMonadErrorForFreeT2</span><span class="tparams">[<span name="S">S<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="E">E</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="E">E: <a href="../MonadError.html" class="extype" name="cats.MonadError">MonadError</a>[<span class="extype" name="cats.free.FreeTInstances.catsFreeMonadErrorForFreeT2.M">M</span>, <span class="extype" name="cats.free.FreeTInstances.catsFreeMonadErrorForFreeT2.E">E</span>]</span>, <span name="S">S: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.free.FreeTInstances.catsFreeMonadErrorForFreeT2.S">S</span>]</span>)</span><span class="result">: <a href="../MonadError.html" class="extype" name="cats.MonadError">MonadError</a>[[γ$13$]<a href="FreeT.html" class="extype" name="cats.free.FreeT">FreeT</a>[<span class="extype" name="cats.free.FreeTInstances.catsFreeMonadErrorForFreeT2.S">S</span>, <span class="extype" name="cats.free.FreeTInstances.catsFreeMonadErrorForFreeT2.M">M</span>, <span class="extype" name="cats.free.FreeTInstances.&lt;refinement&gt;.Λ$.γ$13$">γ$13$</span>], <span class="extype" name="cats.free.FreeTInstances.catsFreeMonadErrorForFreeT2.E">E</span>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>FreeTInstances</dd></dl></div>
+    </li><li name="cats.free.FreeTInstances0#catsFreeMonadForFreeT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsFreeMonadForFreeT[S[_],M[_]](implicitM0:cats.Applicative[M]):cats.Monad[[γ$15$]cats.free.FreeT[S,M,γ$15$]]"></a><a id="catsFreeMonadForFreeT[S[_],M[_]](Applicative[M]):Monad[[γ$15$]FreeT[S,M,γ$15$]]"></a>
+      <span class="permalink">
+      <a href="../../cats/free/FreeT$.html#catsFreeMonadForFreeT[S[_],M[_]](implicitM0:cats.Applicative[M]):cats.Monad[[γ$15$]cats.free.FreeT[S,M,γ$15$]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsFreeMonadForFreeT</span><span class="tparams">[<span name="S">S<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="M0">M0: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.free.FreeTInstances0.catsFreeMonadForFreeT.M">M</span>]</span>)</span><span class="result">: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[[γ$15$]<a href="FreeT.html" class="extype" name="cats.free.FreeT">FreeT</a>[<span class="extype" name="cats.free.FreeTInstances0.catsFreeMonadForFreeT.S">S</span>, <span class="extype" name="cats.free.FreeTInstances0.catsFreeMonadForFreeT.M">M</span>, <span class="extype" name="cats.free.FreeTInstances0.&lt;refinement&gt;.Λ$.γ$15$">γ$15$</span>]]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>FreeTInstances0</dd></dl></div>
+    </li><li name="cats.free.FreeTInstances3#catsFreeSemigroupKForFreeT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsFreeSemigroupKForFreeT[S[_],M[_]](implicitevidence$7:cats.Applicative[M],implicitevidence$8:cats.SemigroupK[M]):cats.SemigroupK[[γ$19$]cats.free.FreeT[S,M,γ$19$]]"></a><a id="catsFreeSemigroupKForFreeT[S[_],M[_]](Applicative[M],SemigroupK[M]):SemigroupK[[γ$19$]FreeT[S,M,γ$19$]]"></a>
+      <span class="permalink">
+      <a href="../../cats/free/FreeT$.html#catsFreeSemigroupKForFreeT[S[_],M[_]](implicitevidence$7:cats.Applicative[M],implicitevidence$8:cats.SemigroupK[M]):cats.SemigroupK[[γ$19$]cats.free.FreeT[S,M,γ$19$]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsFreeSemigroupKForFreeT</span><span class="tparams">[<span name="S">S<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.free.FreeTInstances3.catsFreeSemigroupKForFreeT.M">M</span>]</span>, <span name="arg1">arg1: <a href="../SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a>[<span class="extype" name="cats.free.FreeTInstances3.catsFreeSemigroupKForFreeT.M">M</span>]</span>)</span><span class="result">: <a href="../SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a>[[γ$19$]<a href="FreeT.html" class="extype" name="cats.free.FreeT">FreeT</a>[<span class="extype" name="cats.free.FreeTInstances3.catsFreeSemigroupKForFreeT.S">S</span>, <span class="extype" name="cats.free.FreeTInstances3.catsFreeSemigroupKForFreeT.M">M</span>, <span class="extype" name="cats.free.FreeTInstances3.&lt;refinement&gt;.Λ$.γ$19$">γ$19$</span>]]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>FreeTInstances3</dd></dl></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a><a id="clone():AnyRef"></a>
+      <span class="permalink">
+      <a href="../../cats/free/FreeT$.html#clone():Object" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
+              
+                <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@IntrinsicCandidate</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="cats.free.FreeT#compile" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="compile[S[_],T[_],M[_]](st:cats.arrow.FunctionK[S,T])(implicitevidence$2:cats.Functor[M]):cats.arrow.FunctionK[[γ$3$]cats.free.FreeT[S,M,γ$3$],[γ$4$]cats.free.FreeT[T,M,γ$4$]]"></a><a id="compile[S[_],T[_],M[_]](FunctionK[S,T])(Functor[M]):FunctionK[[γ$3$]FreeT[S,M,γ$3$],[γ$4$]FreeT[T,M,γ$4$]]"></a>
+      <span class="permalink">
+      <a href="../../cats/free/FreeT$.html#compile[S[_],T[_],M[_]](st:cats.arrow.FunctionK[S,T])(implicitevidence$2:cats.Functor[M]):cats.arrow.FunctionK[[γ$3$]cats.free.FreeT[S,M,γ$3$],[γ$4$]cats.free.FreeT[T,M,γ$4$]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">compile</span><span class="tparams">[<span name="S">S<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="T">T<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="st">st: <a href="../arrow/FunctionK.html" class="extype" name="cats.arrow.FunctionK">FunctionK</a>[<span class="extype" name="cats.free.FreeT.compile.S">S</span>, <span class="extype" name="cats.free.FreeT.compile.T">T</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.free.FreeT.compile.M">M</span>]</span>)</span><span class="result">: <a href="../arrow/FunctionK.html" class="extype" name="cats.arrow.FunctionK">FunctionK</a>[[γ$3$]<a href="FreeT.html" class="extype" name="cats.free.FreeT">FreeT</a>[<span class="extype" name="cats.free.FreeT.compile.S">S</span>, <span class="extype" name="cats.free.FreeT.compile.M">M</span>, <span class="extype" name="cats.free.FreeT.&lt;refinement&gt;.Λ$.γ$3$">γ$3$</span>], [γ$4$]<a href="FreeT.html" class="extype" name="cats.free.FreeT">FreeT</a>[<span class="extype" name="cats.free.FreeT.compile.T">T</span>, <span class="extype" name="cats.free.FreeT.compile.M">M</span>, <span class="extype" name="cats.free.FreeT.&lt;refinement&gt;.Λ$.γ$4$">γ$4$</span>]]</span>
+      </span>
+      
+      
+    </li><li name="cats.free.FreeT#defer" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="defer[S[_],M[_],A](a:M[Either[A,S[cats.free.FreeT[S,M,A]]]])(implicitM:cats.Applicative[M]):cats.free.FreeT[S,M,A]"></a><a id="defer[S[_],M[_],A](M[Either[A,S[FreeT[S,M,A]]]])(Applicative[M]):FreeT[S,M,A]"></a>
+      <span class="permalink">
+      <a href="../../cats/free/FreeT$.html#defer[S[_],M[_],A](a:M[Either[A,S[cats.free.FreeT[S,M,A]]]])(implicitM:cats.Applicative[M]):cats.free.FreeT[S,M,A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">defer</span><span class="tparams">[<span name="S">S<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="a">a: <span class="extype" name="cats.free.FreeT.defer.M">M</span>[<span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.free.FreeT.defer.A">A</span>, <span class="extype" name="cats.free.FreeT.defer.S">S</span>[<a href="FreeT.html" class="extype" name="cats.free.FreeT">FreeT</a>[<span class="extype" name="cats.free.FreeT.defer.S">S</span>, <span class="extype" name="cats.free.FreeT.defer.M">M</span>, <span class="extype" name="cats.free.FreeT.defer.A">A</span>]]]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="M">M: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.free.FreeT.defer.M">M</span>]</span>)</span><span class="result">: <a href="FreeT.html" class="extype" name="cats.free.FreeT">FreeT</a>[<span class="extype" name="cats.free.FreeT.defer.S">S</span>, <span class="extype" name="cats.free.FreeT.defer.M">M</span>, <span class="extype" name="cats.free.FreeT.defer.A">A</span>]</span>
+      </span>
+      
+      
+    </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
+      <span class="permalink">
+      <a href="../../cats/free/FreeT$.html#eq(x$1:AnyRef):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.14/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#equals" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a><a id="equals(Any):Boolean"></a>
+      <span class="permalink">
+      <a href="../../cats/free/FreeT$.html#equals(x$1:Any):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.14/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="cats.free.FreeT#foldMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="foldMap[S[_],M[_]](fk:cats.arrow.FunctionK[S,M])(implicitevidence$3:cats.Monad[M]):cats.arrow.FunctionK[[γ$7$]cats.free.FreeT[S,M,γ$7$],M]"></a><a id="foldMap[S[_],M[_]](FunctionK[S,M])(Monad[M]):FunctionK[[γ$7$]FreeT[S,M,γ$7$],M]"></a>
+      <span class="permalink">
+      <a href="../../cats/free/FreeT$.html#foldMap[S[_],M[_]](fk:cats.arrow.FunctionK[S,M])(implicitevidence$3:cats.Monad[M]):cats.arrow.FunctionK[[γ$7$]cats.free.FreeT[S,M,γ$7$],M]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">foldMap</span><span class="tparams">[<span name="S">S<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="fk">fk: <a href="../arrow/FunctionK.html" class="extype" name="cats.arrow.FunctionK">FunctionK</a>[<span class="extype" name="cats.free.FreeT.foldMap.S">S</span>, <span class="extype" name="cats.free.FreeT.foldMap.M">M</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.free.FreeT.foldMap.M">M</span>]</span>)</span><span class="result">: <a href="../arrow/FunctionK.html" class="extype" name="cats.arrow.FunctionK">FunctionK</a>[[γ$7$]<a href="FreeT.html" class="extype" name="cats.free.FreeT">FreeT</a>[<span class="extype" name="cats.free.FreeT.foldMap.S">S</span>, <span class="extype" name="cats.free.FreeT.foldMap.M">M</span>, <span class="extype" name="cats.free.FreeT.&lt;refinement&gt;.Λ$.γ$7$">γ$7$</span>], <span class="extype" name="cats.free.FreeT.foldMap.M">M</span>]</span>
+      </span>
+      
+      
+    </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <span class="permalink">
+      <a href="../../cats/free/FreeT$.html#getClass():Class[_]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
+                <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@IntrinsicCandidate</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <span class="permalink">
+      <a href="../../cats/free/FreeT$.html#hashCode():Int" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
+                <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@IntrinsicCandidate</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <span class="permalink">
+      <a href="../../cats/free/FreeT$.html#isInstanceOf[T0]:Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.free.FreeT#liftF" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="liftF[S[_],M[_],A](value:S[A])(implicitM:cats.Applicative[M]):cats.free.FreeT[S,M,A]"></a><a id="liftF[S[_],M[_],A](S[A])(Applicative[M]):FreeT[S,M,A]"></a>
+      <span class="permalink">
+      <a href="../../cats/free/FreeT$.html#liftF[S[_],M[_],A](value:S[A])(implicitM:cats.Applicative[M]):cats.free.FreeT[S,M,A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">liftF</span><span class="tparams">[<span name="S">S<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="value">value: <span class="extype" name="cats.free.FreeT.liftF.S">S</span>[<span class="extype" name="cats.free.FreeT.liftF.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="M">M: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.free.FreeT.liftF.M">M</span>]</span>)</span><span class="result">: <a href="FreeT.html" class="extype" name="cats.free.FreeT">FreeT</a>[<span class="extype" name="cats.free.FreeT.liftF.S">S</span>, <span class="extype" name="cats.free.FreeT.liftF.M">M</span>, <span class="extype" name="cats.free.FreeT.liftF.A">A</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Suspends a value within a functor in a single step.</p><div class="fullcomment"><div class="comment cmt"><p>Suspends a value within a functor in a single step. Monadic unit for a higher-order monad.
+</p></div></div>
+    </li><li name="cats.free.FreeT#liftInject" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="liftInject[M[_],G[_]]:cats.free.FreeT.FreeTLiftInjectKPartiallyApplied[M,G]"></a><a id="liftInject[M[_],G[_]]:FreeTLiftInjectKPartiallyApplied[M,G]"></a>
+      <span class="permalink">
+      <a href="../../cats/free/FreeT$.html#liftInject[M[_],G[_]]:cats.free.FreeT.FreeTLiftInjectKPartiallyApplied[M,G]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">liftInject</span><span class="tparams">[<span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result">: <span class="extype" name="cats.free.FreeT.FreeTLiftInjectKPartiallyApplied">FreeTLiftInjectKPartiallyApplied</span>[<span class="extype" name="cats.free.FreeT.liftInject.M">M</span>, <span class="extype" name="cats.free.FreeT.liftInject.G">G</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">This method is used to defer the application of an InjectK[F, G]
+instance.</p><div class="fullcomment"><div class="comment cmt"><p>This method is used to defer the application of an InjectK[F, G]
+instance. The actual work happens in
+<code>FreeTLiftInjectKPartiallyApplied#apply</code>.</p><p>This method exists to allow the <code>M</code> and <code>G</code> parameters to be
+bound independently of the <code>F</code> and <code>A</code> parameters below.
+</p></div></div>
+    </li><li name="cats.free.FreeT#liftT" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="liftT[S[_],M[_],A](value:M[A])(implicitM:cats.Functor[M]):cats.free.FreeT[S,M,A]"></a><a id="liftT[S[_],M[_],A](M[A])(Functor[M]):FreeT[S,M,A]"></a>
+      <span class="permalink">
+      <a href="../../cats/free/FreeT$.html#liftT[S[_],M[_],A](value:M[A])(implicitM:cats.Functor[M]):cats.free.FreeT[S,M,A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">liftT</span><span class="tparams">[<span name="S">S<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="value">value: <span class="extype" name="cats.free.FreeT.liftT.M">M</span>[<span class="extype" name="cats.free.FreeT.liftT.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="M">M: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.free.FreeT.liftT.M">M</span>]</span>)</span><span class="result">: <a href="FreeT.html" class="extype" name="cats.free.FreeT">FreeT</a>[<span class="extype" name="cats.free.FreeT.liftT.S">S</span>, <span class="extype" name="cats.free.FreeT.liftT.M">M</span>, <span class="extype" name="cats.free.FreeT.liftT.A">A</span>]</span>
+      </span>
+      
+      
+    </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
+      <span class="permalink">
+      <a href="../../cats/free/FreeT$.html#ne(x$1:AnyRef):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.14/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/free/FreeT$.html#notify():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@IntrinsicCandidate</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/free/FreeT$.html#notifyAll():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@IntrinsicCandidate</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="cats.free.FreeT#pure" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="pure[S[_],M[_],A](value:A)(implicitM:cats.Applicative[M]):cats.free.FreeT[S,M,A]"></a><a id="pure[S[_],M[_],A](A)(Applicative[M]):FreeT[S,M,A]"></a>
+      <span class="permalink">
+      <a href="../../cats/free/FreeT$.html#pure[S[_],M[_],A](value:A)(implicitM:cats.Applicative[M]):cats.free.FreeT[S,M,A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">pure</span><span class="tparams">[<span name="S">S<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="value">value: <span class="extype" name="cats.free.FreeT.pure.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="M">M: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.free.FreeT.pure.M">M</span>]</span>)</span><span class="result">: <a href="FreeT.html" class="extype" name="cats.free.FreeT">FreeT</a>[<span class="extype" name="cats.free.FreeT.pure.S">S</span>, <span class="extype" name="cats.free.FreeT.pure.M">M</span>, <span class="extype" name="cats.free.FreeT.pure.A">A</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Return the given value in the free monad.</p>
+    </li><li name="cats.free.FreeT#roll" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="roll[S[_],M[_],A](value:S[cats.free.FreeT[S,M,A]])(implicitM:cats.Applicative[M]):cats.free.FreeT[S,M,A]"></a><a id="roll[S[_],M[_],A](S[FreeT[S,M,A]])(Applicative[M]):FreeT[S,M,A]"></a>
+      <span class="permalink">
+      <a href="../../cats/free/FreeT$.html#roll[S[_],M[_],A](value:S[cats.free.FreeT[S,M,A]])(implicitM:cats.Applicative[M]):cats.free.FreeT[S,M,A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">roll</span><span class="tparams">[<span name="S">S<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="value">value: <span class="extype" name="cats.free.FreeT.roll.S">S</span>[<a href="FreeT.html" class="extype" name="cats.free.FreeT">FreeT</a>[<span class="extype" name="cats.free.FreeT.roll.S">S</span>, <span class="extype" name="cats.free.FreeT.roll.M">M</span>, <span class="extype" name="cats.free.FreeT.roll.A">A</span>]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="M">M: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.free.FreeT.roll.M">M</span>]</span>)</span><span class="result">: <a href="FreeT.html" class="extype" name="cats.free.FreeT">FreeT</a>[<span class="extype" name="cats.free.FreeT.roll.S">S</span>, <span class="extype" name="cats.free.FreeT.roll.M">M</span>, <span class="extype" name="cats.free.FreeT.roll.A">A</span>]</span>
+      </span>
+      
+      
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
+      <span class="permalink">
+      <a href="../../cats/free/FreeT$.html#synchronized[T0](x$1:=&gt;T0):T0" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="cats.free.FreeT#tailRecM" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="tailRecM[S[_],M[_],A,B](a:A)(f:A=&gt;cats.free.FreeT[S,M,Either[A,B]])(implicitevidence$1:cats.Applicative[M]):cats.free.FreeT[S,M,B]"></a><a id="tailRecM[S[_],M[_],A,B](A)((A)⇒FreeT[S,M,Either[A,B]])(Applicative[M]):FreeT[S,M,B]"></a>
+      <span class="permalink">
+      <a href="../../cats/free/FreeT$.html#tailRecM[S[_],M[_],A,B](a:A)(f:A=&gt;cats.free.FreeT[S,M,Either[A,B]])(implicitevidence$1:cats.Applicative[M]):cats.free.FreeT[S,M,B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">tailRecM</span><span class="tparams">[<span name="S">S<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="a">a: <span class="extype" name="cats.free.FreeT.tailRecM.A">A</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.free.FreeT.tailRecM.A">A</span>) ⇒ <a href="FreeT.html" class="extype" name="cats.free.FreeT">FreeT</a>[<span class="extype" name="cats.free.FreeT.tailRecM.S">S</span>, <span class="extype" name="cats.free.FreeT.tailRecM.M">M</span>, <span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.free.FreeT.tailRecM.A">A</span>, <span class="extype" name="cats.free.FreeT.tailRecM.B">B</span>]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.free.FreeT.tailRecM.M">M</span>]</span>)</span><span class="result">: <a href="FreeT.html" class="extype" name="cats.free.FreeT">FreeT</a>[<span class="extype" name="cats.free.FreeT.tailRecM.S">S</span>, <span class="extype" name="cats.free.FreeT.tailRecM.M">M</span>, <span class="extype" name="cats.free.FreeT.tailRecM.B">B</span>]</span>
+      </span>
+      
+      
+    </li><li name="scala.AnyRef#toString" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <span class="permalink">
+      <a href="../../cats/free/FreeT$.html#toString():String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/free/FreeT$.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.14/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>, <span name="arg1">arg1: <a href="https://www.scala-lang.org/api/2.12.14/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a><a id="wait(Long):Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/free/FreeT$.html#wait(x$1:Long):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.14/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+                <span class="name">@native</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/free/FreeT$.html#wait():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li>
+              </ol>
+            </div>
+
+        
+
+        <div class="values members">
+              <h3>Deprecated Value Members</h3>
+              <ol><li name="cats.free.FreeTInstances#catsFreeMonadErrorForFreeT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsFreeMonadErrorForFreeT[S[_],M[_],E](implicitE:cats.MonadError[M,E]):cats.MonadError[[γ$9$]cats.free.FreeT[S,M,γ$9$],E]"></a><a id="catsFreeMonadErrorForFreeT[S[_],M[_],E](MonadError[M,E]):MonadError[[γ$9$]FreeT[S,M,γ$9$],E]"></a>
+      <span class="permalink">
+      <a href="../../cats/free/FreeT$.html#catsFreeMonadErrorForFreeT[S[_],M[_],E](implicitE:cats.MonadError[M,E]):cats.MonadError[[γ$9$]cats.free.FreeT[S,M,γ$9$],E]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version 2.1.0) does not handle errors beyond the head suspension; use catsFreeMonadErrorForFreeT2">catsFreeMonadErrorForFreeT</span><span class="tparams">[<span name="S">S<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="E">E</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="E">E: <a href="../MonadError.html" class="extype" name="cats.MonadError">MonadError</a>[<span class="extype" name="cats.free.FreeTInstances.catsFreeMonadErrorForFreeT.M">M</span>, <span class="extype" name="cats.free.FreeTInstances.catsFreeMonadErrorForFreeT.E">E</span>]</span>)</span><span class="result">: <a href="../MonadError.html" class="extype" name="cats.MonadError">MonadError</a>[[γ$9$]<a href="FreeT.html" class="extype" name="cats.free.FreeT">FreeT</a>[<span class="extype" name="cats.free.FreeTInstances.catsFreeMonadErrorForFreeT.S">S</span>, <span class="extype" name="cats.free.FreeTInstances.catsFreeMonadErrorForFreeT.M">M</span>, <span class="extype" name="cats.free.FreeTInstances.&lt;refinement&gt;.Λ$.γ$9$">γ$9$</span>], <span class="extype" name="cats.free.FreeTInstances.catsFreeMonadErrorForFreeT.E">E</span>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>FreeTInstances</dd><dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2.1.0)</i> does not handle errors beyond the head suspension; use catsFreeMonadErrorForFreeT2</p></dd></dl></div>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/free/FreeT$.html#finalize():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: ">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+                <span class="name">@Deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"></dd></dl></div>
+    </li><li name="cats.free.FreeT#suspend" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="suspend[S[_],M[_],A](a:M[Either[A,S[cats.free.FreeT[S,M,A]]]])(implicitM:cats.Applicative[M]):cats.free.FreeT[S,M,A]"></a><a id="suspend[S[_],M[_],A](M[Either[A,S[FreeT[S,M,A]]]])(Applicative[M]):FreeT[S,M,A]"></a>
+      <span class="permalink">
+      <a href="../../cats/free/FreeT$.html#suspend[S[_],M[_],A](a:M[Either[A,S[cats.free.FreeT[S,M,A]]]])(implicitM:cats.Applicative[M]):cats.free.FreeT[S,M,A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version 1.0.0-MF) Use FreeT.defer.">suspend</span><span class="tparams">[<span name="S">S<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="a">a: <span class="extype" name="cats.free.FreeT.suspend.M">M</span>[<span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.free.FreeT.suspend.A">A</span>, <span class="extype" name="cats.free.FreeT.suspend.S">S</span>[<a href="FreeT.html" class="extype" name="cats.free.FreeT">FreeT</a>[<span class="extype" name="cats.free.FreeT.suspend.S">S</span>, <span class="extype" name="cats.free.FreeT.suspend.M">M</span>, <span class="extype" name="cats.free.FreeT.suspend.A">A</span>]]]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="M">M: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.free.FreeT.suspend.M">M</span>]</span>)</span><span class="result">: <a href="FreeT.html" class="extype" name="cats.free.FreeT">FreeT</a>[<span class="extype" name="cats.free.FreeT.suspend.S">S</span>, <span class="extype" name="cats.free.FreeT.suspend.M">M</span>, <span class="extype" name="cats.free.FreeT.suspend.A">A</span>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 1.0.0-MF)</i> Use FreeT.defer.</p></dd></dl></div>
+    </li></ol>
+            </div>
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.Serializable">
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.14/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="cats.free.FreeTInstances">
+              <h3>Inherited from <span class="extype" name="cats.free.FreeTInstances">FreeTInstances</span></h3>
+            </div><div class="parent" name="cats.free.FreeTInstances0">
+              <h3>Inherited from <span class="extype" name="cats.free.FreeTInstances0">FreeTInstances0</span></h3>
+            </div><div class="parent" name="cats.free.FreeTInstances1">
+              <h3>Inherited from <span class="extype" name="cats.free.FreeTInstances1">FreeTInstances1</span></h3>
+            </div><div class="parent" name="cats.free.FreeTInstances2">
+              <h3>Inherited from <span class="extype" name="cats.free.FreeTInstances2">FreeTInstances2</span></h3>
+            </div><div class="parent" name="cats.free.FreeTInstances3">
+              <h3>Inherited from <span class="extype" name="cats.free.FreeTInstances3">FreeTInstances3</span></h3>
+            </div><div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.14/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.14/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+    </body>
+          </div>
+        </div>
+      </div>
+    </body>
+      </html>

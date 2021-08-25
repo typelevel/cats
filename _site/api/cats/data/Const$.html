@@ -1,0 +1,1172 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+          <title></title>
+          <meta name="description" content="" />
+          <meta name="keywords" content="" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      
+      <link href="../../lib/index.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../lib/jquery.min.js"></script>
+      <script type="text/javascript" src="../../lib/jquery.panzoom.min.js"></script>
+      <script type="text/javascript" src="../../lib/jquery.mousewheel.min.js"></script>
+      <script type="text/javascript" src="../../lib/index.js"></script>
+      <script type="text/javascript" src="../../index.js"></script>
+      <script type="text/javascript" src="../../lib/scheduler.js"></script>
+      <script type="text/javascript" src="../../lib/template.js"></script>
+      <script type="text/javascript" src="../../lib/modernizr.custom.js"></script><script type="text/javascript" src="../../lib/diagrams.js" id="diagrams-js"></script>
+      <script type="text/javascript">
+        /* this variable can be used by the JS to determine the path to the root document */
+        var toRoot = '../../';
+      </script>
+    
+        </head>
+        <body>
+      <div id="search">
+        <span id="doc-title"><span id="doc-version"></span></span>
+        <span class="close-results"><span class="left">&lt;</span> Back</span>
+        <div id="textfilter">
+          <span class="input">
+            <input autocapitalize="none" placeholder="Search" id="index-input" type="text" accesskey="/" />
+            <i class="clear material-icons"></i>
+            <i id="search-icon" class="material-icons"></i>
+          </span>
+        </div>
+    </div>
+      <div id="search-results">
+        <div id="search-progress">
+          <div id="progress-fill"></div>
+        </div>
+        <div id="results-content">
+          <div id="entity-results"></div>
+          <div id="member-results"></div>
+        </div>
+      </div>
+      <div id="content-scroll-container" style="-webkit-overflow-scrolling: touch;">
+        <div id="content-container" style="-webkit-overflow-scrolling: touch;">
+          <div id="subpackage-spacer">
+            <div id="packages">
+              <h1>Packages</h1>
+              <ul>
+                <li name="_root_.root" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="_root_"></a><a id="root:_root_"></a>
+      <span class="permalink">
+      <a href="../../index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../../index.html"><span class="name">root</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
+    </li><li name="_root_.cats" visbl="pub" class="indented1 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="cats"></a><a id="cats:cats"></a>
+      <span class="permalink">
+      <a href="../../cats/index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="The cats root package contains all the trait signatures of most Scala type classes." href="../index.html"><span class="name">cats</span></a>
+      </span>
+      
+      <p class="shortcomment cmt">The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><p>Cats type classes are implemented using the approach from the
+ <a href="https://ropas.snu.ac.kr/~bruno/papers/TypeClasses.pdf" target="_blank">Type classes as objects and implicits</a> article.</p><p>For each type class, <code>cats</code> provides three pieces:
+- Its <b>signature</b>: a trait that is polymorphic on a type parameter.
+  Type class traits inherit from other type classes to indicate that any implementation of the lower type class (e.g. <code>Applicative</code>)
+  can also serve as an instance for the higuer type class (e.g. <code>Functor</code>).
+- Type class <b>'instances</b>, which are classes and objects that implement one or more type class signatures for some specific types.
+  Type class instances for several data types from the Java or Scala standard libraries are declared in the subpackage <code>cats.instances</code>.
+- <b>Syntax extensions</b>, each of which provides the methods of the type class defines as extension methods
+  (which in Scala 2 are encoded as implicit classes) for values of any type <code>F</code>; given that an instance of the type class
+  for the receiver type (<code>this</code>) is in the implicit scope.
+  Symtax extensions are declared in the <code>cats.syntax</code> package.
+- A set of <b>laws</b>, that are also generic on the type of the class, and are only defined on the operations of the type class.
+  The purpose of these laws is to declare some algebraic relations (equations) between Scala expressions involving the operations
+  of the type class, and test (but not verify) that implemented instances satisfy those equations.
+  Laws are defined in the <code>cats-laws</code> package.</p><p>Although most of cats type classes are declared in this package, some are declared in other packages:
+- type classes that operate on base types (kind <code>*</code>), and their implementations for standard library types,
+  are contained in <code>cats.kernel</code>, which is a different SBT project. However, they are re-exported from this package.
+- type classes of kind <code>F[_, _]</code>, such as <a href="../arrow/Profunctor.html" class="extype" name="cats.arrow.Profunctor">cats.arrow.Profunctor</a>&quot; or <a href="../arrow/Arrow.html" class="extype" name="cats.arrow.Arrow">cats.arrow.Arrow</a>, which are relevant for
+  Functional Reactive Programming or optics, are declared in the <code>cats.arrow</code> package.
+- Also, those type classes that abstract over (pure or impure) functional runtime effects are declared
+  in the <a href="https://typelevel.org/cats-effect/" target="_blank">cats-effect library</a>.
+- Some type classes for which no laws can be provided are left out of the main road, in a small and dirty alley.
+  These are the <code>alleycats</code>.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
+    </li><li name="cats.data" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="data"></a><a id="data:data"></a>
+      <span class="permalink">
+      <a href="../../cats/data/index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="index.html"><span class="name">data</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="cats">cats</a></dd></dl></div>
+    </li><li class="current-entities indented2">
+                        <a class="object" href="AndThen$.html" title=""></a>
+                        <a class="class" href="AndThen.html" title="A function type of a single input that can do function composition (via andThen and compose) in constant stack space with amortized linear time application (in the number of constituent functions)."></a>
+                        <a href="AndThen.html" title="A function type of a single input that can do function composition (via andThen and compose) in constant stack space with amortized linear time application (in the number of constituent functions).">AndThen</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="AppFunc$.html" title=""></a>
+                        <a class="class" href="AppFunc.html" title="An implementation of Func that's specialized to Applicative."></a>
+                        <a href="AppFunc.html" title="An implementation of Func that's specialized to Applicative.">AppFunc</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="Binested$.html" title=""></a>
+                        <a class="class" href="Binested.html" title="Compose a two-slot type constructor F[_, _] with two single-slot type constructors G[_] and H[_], resulting in a two-slot type constructor with respect to the inner types."></a>
+                        <a href="Binested.html" title="Compose a two-slot type constructor F[_, _] with two single-slot type constructors G[_] and H[_], resulting in a two-slot type constructor with respect to the inner types.">Binested</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="BinestedBifoldable.html" title=""></a>
+                        <a href="BinestedBifoldable.html" title="">BinestedBifoldable</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="BinestedBitraverse.html" title=""></a>
+                        <a href="BinestedBitraverse.html" title="">BinestedBitraverse</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="BinestedInstances.html" title=""></a>
+                        <a href="BinestedInstances.html" title="">BinestedInstances</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="Chain$.html" title=""></a>
+                        <a class="class" href="Chain.html" title="Trivial catenable sequence."></a>
+                        <a href="Chain.html" title="Trivial catenable sequence.">Chain</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="Cokleisli$.html" title=""></a>
+                        <a class="class" href="Cokleisli.html" title="Represents a function F[A] =&gt; B."></a>
+                        <a href="Cokleisli.html" title="Represents a function F[A] =&gt; B.">Cokleisli</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="" title=""></a>
+                        <a class="class" href="Const.html" title="Const is a phantom type, it does not contain a value of its second type parameter B Const can be seen as a type level version of Function.const[A, B]: A =&gt; B =&gt; A"></a>
+                        <a href="Const.html" title="Const is a phantom type, it does not contain a value of its second type parameter B Const can be seen as a type level version of Function.const[A, B]: A =&gt; B =&gt; A">Const</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$Cont$.html" title=""></a>
+                        <a href="package$$Cont$.html" title="">Cont</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="ContT$.html" title=""></a>
+                        <a class="class" href="ContT.html" title="This is a continuation transformer based on the ContT in the Haskell package Control.Monad.Cont"></a>
+                        <a href="ContT.html" title="This is a continuation transformer based on the ContT in the Haskell package Control.Monad.Cont">ContT</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="EitherK$.html" title=""></a>
+                        <a class="class" href="EitherK.html" title="F on the left and G on the right of scala.util.Either."></a>
+                        <a href="EitherK.html" title="F on the left and G on the right of scala.util.Either.">EitherK</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="EitherT$.html" title=""></a>
+                        <a class="class" href="EitherT.html" title="Transformer for Either, allowing the effect of an arbitrary type constructor F to be combined with the fail-fast effect of Either."></a>
+                        <a href="EitherT.html" title="Transformer for Either, allowing the effect of an arbitrary type constructor F to be combined with the fail-fast effect of Either.">EitherT</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="Func$.html" title=""></a>
+                        <a class="class" href="Func.html" title="Func is a function A =&gt; F[B]."></a>
+                        <a href="Func.html" title="Func is a function A =&gt; F[B].">Func</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="IdT$.html" title=""></a>
+                        <a class="class" href="IdT.html" title="IdT[F[_], A] is the identity monad transformer."></a>
+                        <a href="IdT.html" title="IdT[F[_], A] is the identity monad transformer.">IdT</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="IndexedReaderWriterStateT$.html" title=""></a>
+                        <a class="class" href="IndexedReaderWriterStateT.html" title="Represents a stateful computation in a context F[_], from state SA to state SB, with an initial environment E, an accumulated log L and a result A."></a>
+                        <a href="IndexedReaderWriterStateT.html" title="Represents a stateful computation in a context F[_], from state SA to state SB, with an initial environment E, an accumulated log L and a result A.">IndexedReaderWriterStateT</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$IndexedState$.html" title=""></a>
+                        <a href="package$$IndexedState$.html" title="">IndexedState</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="IndexedStateT$.html" title=""></a>
+                        <a class="class" href="IndexedStateT.html" title="IndexedStateT[F, SA, SB, A] is a stateful computation in a context F yielding a value of type A."></a>
+                        <a href="IndexedStateT.html" title="IndexedStateT[F, SA, SB, A] is a stateful computation in a context F yielding a value of type A.">IndexedStateT</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="Ior$.html" title=""></a>
+                        <a class="class" href="Ior.html" title="Represents a right-biased disjunction that is either an A, or a B, or both an A and a B."></a>
+                        <a href="Ior.html" title="Represents a right-biased disjunction that is either an A, or a B, or both an A and a B.">Ior</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="IorT$.html" title=""></a>
+                        <a class="class" href="IorT.html" title=""></a>
+                        <a href="IorT.html" title="">IorT</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="Kleisli$.html" title=""></a>
+                        <a class="class" href="Kleisli.html" title="Represents a function A =&gt; F[B]."></a>
+                        <a href="Kleisli.html" title="Represents a function A =&gt; F[B].">Kleisli</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="KleisliFromFunctionPartiallyApplied.html" title=""></a>
+                        <a href="KleisliFromFunctionPartiallyApplied.html" title="">KleisliFromFunctionPartiallyApplied</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="Nested$.html" title=""></a>
+                        <a class="class" href="Nested.html" title="Similar to cats.data.Tuple2K, but for nested composition."></a>
+                        <a href="Nested.html" title="Similar to cats.data.Tuple2K, but for nested composition.">Nested</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="NonEmptyChainOps.html" title=""></a>
+                        <a href="NonEmptyChainOps.html" title="">NonEmptyChainOps</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="NonEmptyList$.html" title=""></a>
+                        <a class="class" href="NonEmptyList.html" title="A data type which represents a non empty list of A, with single element (head) and optional structure (tail)."></a>
+                        <a href="NonEmptyList.html" title="A data type which represents a non empty list of A, with single element (head) and optional structure (tail).">NonEmptyList</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="NonEmptyMapOps.html" title=""></a>
+                        <a href="NonEmptyMapOps.html" title="">NonEmptyMapOps</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="NonEmptySeq$.html" title=""></a>
+                        <a class="class" href="NonEmptySeq.html" title="A data type which represents a Seq guaranteed to contain at least one element."></a>
+                        <a href="NonEmptySeq.html" title="A data type which represents a Seq guaranteed to contain at least one element.">NonEmptySeq</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="NonEmptySetOps.html" title=""></a>
+                        <a href="NonEmptySetOps.html" title="">NonEmptySetOps</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="NonEmptyVector$.html" title=""></a>
+                        <a class="class" href="NonEmptyVector.html" title="A data type which represents a Vector guaranteed to contain at least one element."></a>
+                        <a href="NonEmptyVector.html" title="A data type which represents a Vector guaranteed to contain at least one element.">NonEmptyVector</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="OneAnd$.html" title=""></a>
+                        <a class="class" href="OneAnd.html" title="A data type which represents a single element (head) and some other structure (tail)."></a>
+                        <a href="OneAnd.html" title="A data type which represents a single element (head) and some other structure (tail).">OneAnd</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="Op$.html" title=""></a>
+                        <a class="class" href="Op.html" title="The dual category of some other category, Arr."></a>
+                        <a href="Op.html" title="The dual category of some other category, Arr.">Op</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="OptionT$.html" title=""></a>
+                        <a class="class" href="OptionT.html" title="OptionT[F[_], A] is a light wrapper on an F[Option[A]] with some convenient methods for working with this nested structure."></a>
+                        <a href="OptionT.html" title="OptionT[F[_], A] is a light wrapper on an F[Option[A]] with some convenient methods for working with this nested structure.">OptionT</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$Reader$.html" title=""></a>
+                        <a href="package$$Reader$.html" title="">Reader</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$ReaderWriterState$.html" title=""></a>
+                        <a href="package$$ReaderWriterState$.html" title="">ReaderWriterState</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$ReaderWriterStateT$.html" title=""></a>
+                        <a href="package$$ReaderWriterStateT$.html" title="">ReaderWriterStateT</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="RepresentableStore$.html" title=""></a>
+                        <a class="class" href="RepresentableStore.html" title="A generalization of StoreT, where the underlying functor F has a Representable instance."></a>
+                        <a href="RepresentableStore.html" title="A generalization of StoreT, where the underlying functor F has a Representable instance.">RepresentableStore</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="RepresentableStoreT$.html" title=""></a>
+                        <a class="class" href="RepresentableStoreT.html" title=""></a>
+                        <a href="RepresentableStoreT.html" title="">RepresentableStoreT</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="RepresentableStoreTInstances1.html" title=""></a>
+                        <a href="RepresentableStoreTInstances1.html" title="">RepresentableStoreTInstances1</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="RepresentableStoreTInstances2.html" title=""></a>
+                        <a href="RepresentableStoreTInstances2.html" title="">RepresentableStoreTInstances2</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$State$.html" title=""></a>
+                        <a href="package$$State$.html" title="">State</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$StateT$.html" title=""></a>
+                        <a href="package$$StateT$.html" title="">StateT</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$Store$.html" title=""></a>
+                        <a href="package$$Store$.html" title="">Store</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$StoreT$.html" title=""></a>
+                        <a href="package$$StoreT$.html" title="">StoreT</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="Tuple2K$.html" title=""></a>
+                        <a class="class" href="Tuple2K.html" title="Tuple2K is a product to two independent functor values."></a>
+                        <a href="Tuple2K.html" title="Tuple2K is a product to two independent functor values.">Tuple2K</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="Validated$.html" title=""></a>
+                        <a class="class" href="Validated.html" title=""></a>
+                        <a href="Validated.html" title="">Validated</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$Writer$.html" title=""></a>
+                        <a href="package$$Writer$.html" title="">Writer</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="WriterT$.html" title=""></a>
+                        <a class="class" href="WriterT.html" title=""></a>
+                        <a href="WriterT.html" title="">WriterT</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="ZipList$.html" title=""></a>
+                        <a class="class" href="ZipList.html" title=""></a>
+                        <a href="ZipList.html" title="">ZipList</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="ZipSeq$.html" title=""></a>
+                        <a class="class" href="ZipSeq.html" title=""></a>
+                        <a href="ZipSeq.html" title="">ZipSeq</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="ZipStream$.html" title=""></a>
+                        <a class="class" href="ZipStream.html" title=""></a>
+                        <a href="ZipStream.html" title="">ZipStream</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="ZipVector$.html" title=""></a>
+                        <a class="class" href="ZipVector.html" title=""></a>
+                        <a href="ZipVector.html" title="">ZipVector</a>
+                      </li>
+              </ul>
+            </div>
+          </div>
+          <div id="content">
+            <body class="object value">
+      <div id="definition">
+        <a href="Const.html" title="See companion class"><div class="big-circle object-companion-class">o</div></a>
+        <p id="owner"><a href="../index.html" class="extype" name="cats">cats</a>.<a href="index.html" class="extype" name="cats.data">data</a></p>
+        <h1><a href="Const.html" title="See companion class">Const</a><span class="permalink">
+      <a href="../../cats/data/Const$.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span></h1>
+        <h3><span class="morelinks"><div>
+            Companion <a href="Const.html" title="See companion class">class Const</a>
+          </div></span></h3>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Const</span><span class="result"> extends <span class="extype" name="cats.data.ConstInstances">ConstInstances</span> with <a href="https://www.scala-lang.org/api/2.12.14/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      </h4>
+
+      
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/main/core/src/main/scala/cats/data/Const.scala" target="_blank">Const.scala</a></dd></dl><div class="toggleContainer block">
+          <span class="toggle">
+            Linear Supertypes
+          </span>
+          <div class="superTypes hiddenContent"><a href="https://www.scala-lang.org/api/2.12.14/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="cats.data.ConstInstances">ConstInstances</span>, <span class="extype" name="cats.data.ConstInstances0">ConstInstances0</span>, <span class="extype" name="cats.data.ConstInstances1">ConstInstances1</span>, <span class="extype" name="cats.data.ConstInstances2">ConstInstances2</span>, <span class="extype" name="cats.data.ConstInstances3">ConstInstances3</span>, <span class="extype" name="cats.data.ConstInstances4">ConstInstances4</span>, <a href="https://www.scala-lang.org/api/2.12.14/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.14/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div class="toggle"></div>
+        <div id="memberfilter">
+          <i class="material-icons arrow"></i>
+          <span class="input">
+            <input id="mbrsel-input" placeholder="Filter all members" type="text" accesskey="/" />
+          </span>
+          <i class="clear material-icons"></i>
+        </div>
+        <div id="filterby">
+          <div id="order">
+            <span class="filtertype">Ordering</span>
+            <ol>
+              
+              <li class="alpha in"><span>Alphabetic</span></li>
+              <li class="inherit out"><span>By Inheritance</span></li>
+            </ol>
+          </div>
+          <div class="ancestors">
+                  <span class="filtertype">Inherited<br />
+                  </span>
+                  <ol id="linearization">
+                    <li class="in" name="cats.data.Const"><span>Const</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="cats.data.ConstInstances"><span>ConstInstances</span></li><li class="in" name="cats.data.ConstInstances0"><span>ConstInstances0</span></li><li class="in" name="cats.data.ConstInstances1"><span>ConstInstances1</span></li><li class="in" name="cats.data.ConstInstances2"><span>ConstInstances2</span></li><li class="in" name="cats.data.ConstInstances3"><span>ConstInstances3</span></li><li class="in" name="cats.data.ConstInstances4"><span>ConstInstances4</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  </ol>
+                </div><div class="ancestors">
+              <span class="filtertype"></span>
+              <ol>
+                <li class="hideall out"><span>Hide All</span></li>
+                <li class="showall in"><span>Show All</span></li>
+              </ol>
+            </div>
+          <div id="visbl">
+              <span class="filtertype">Visibility</span>
+              <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+            </div>
+        </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        
+
+        
+
+        <div class="values members">
+              <h3>Value Members</h3>
+              <ol>
+                <li name="scala.AnyRef#!=" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a><a id="!=(Any):Boolean"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Const$.html#!=(x$1:Any):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.14/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Const$.html###():Int" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a><a id="==(Any):Boolean"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Const$.html#==(x$1:Any):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.14/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Const$.html#asInstanceOf[T0]:T0" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.data.ConstInstances#catsDataAlignForConst" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataAlignForConst[A](implicitevidence$2:cats.Semigroup[A]):cats.Align[[β$0$]cats.data.Const[A,β$0$]]"></a><a id="catsDataAlignForConst[A](Semigroup[A]):Align[[β$0$]Const[A,β$0$]]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Const$.html#catsDataAlignForConst[A](implicitevidence$2:cats.Semigroup[A]):cats.Align[[β$0$]cats.data.Const[A,β$0$]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDataAlignForConst</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../index.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.data.ConstInstances.catsDataAlignForConst.A">A</span>]</span>)</span><span class="result">: <a href="../Align.html" class="extype" name="cats.Align">Align</a>[[β$0$]<a href="Const.html" class="extype" name="cats.data.Const">Const</a>[<span class="extype" name="cats.data.ConstInstances.catsDataAlignForConst.A">A</span>, <span class="extype" name="cats.data.ConstInstances.&lt;refinement&gt;.Λ$.β$0$">β$0$</span>]]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ConstInstances</dd></dl></div>
+    </li><li name="cats.data.ConstInstances2#catsDataApplicativeForConst" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataApplicativeForConst[C](implicitC:cats.Monoid[C]):cats.Applicative[[β$14$]cats.data.Const[C,β$14$]]"></a><a id="catsDataApplicativeForConst[C](Monoid[C]):Applicative[[β$14$]Const[C,β$14$]]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Const$.html#catsDataApplicativeForConst[C](implicitC:cats.Monoid[C]):cats.Applicative[[β$14$]cats.data.Const[C,β$14$]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDataApplicativeForConst</span><span class="tparams">[<span name="C">C</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="C">C: <a href="../index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="cats.data.ConstInstances2.catsDataApplicativeForConst.C">C</span>]</span>)</span><span class="result">: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[[β$14$]<a href="Const.html" class="extype" name="cats.data.Const">Const</a>[<span class="extype" name="cats.data.ConstInstances2.catsDataApplicativeForConst.C">C</span>, <span class="extype" name="cats.data.ConstInstances2.&lt;refinement&gt;.Λ$.β$14$">β$14$</span>]]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ConstInstances2</dd></dl></div>
+    </li><li name="cats.data.ConstInstances3#catsDataApplyForConst" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataApplyForConst[C](implicitC:cats.Semigroup[C]):cats.Apply[[β$15$]cats.data.Const[C,β$15$]]"></a><a id="catsDataApplyForConst[C](Semigroup[C]):Apply[[β$15$]Const[C,β$15$]]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Const$.html#catsDataApplyForConst[C](implicitC:cats.Semigroup[C]):cats.Apply[[β$15$]cats.data.Const[C,β$15$]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDataApplyForConst</span><span class="tparams">[<span name="C">C</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="C">C: <a href="../index.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.data.ConstInstances3.catsDataApplyForConst.C">C</span>]</span>)</span><span class="result">: <a href="../Apply.html" class="extype" name="cats.Apply">Apply</a>[[β$15$]<a href="Const.html" class="extype" name="cats.data.Const">Const</a>[<span class="extype" name="cats.data.ConstInstances3.catsDataApplyForConst.C">C</span>, <span class="extype" name="cats.data.ConstInstances3.&lt;refinement&gt;.Λ$.β$15$">β$15$</span>]]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ConstInstances3</dd></dl></div>
+    </li><li name="cats.data.ConstInstances#catsDataBifoldableForConst" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataBifoldableForConst:cats.Bifoldable[cats.data.Const]"></a><a id="catsDataBifoldableForConst:Bifoldable[Const]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Const$.html#catsDataBifoldableForConst:cats.Bifoldable[cats.data.Const]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDataBifoldableForConst</span><span class="result">: <a href="../Bifoldable.html" class="extype" name="cats.Bifoldable">Bifoldable</a>[<a href="Const.html" class="extype" name="cats.data.Const">Const</a>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ConstInstances</dd></dl></div>
+    </li><li name="cats.data.ConstInstances0#catsDataCommutativeApplicativeForConst" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataCommutativeApplicativeForConst[C](implicitC:cats.kernel.CommutativeMonoid[C]):cats.CommutativeApplicative[[β$10$]cats.data.Const[C,β$10$]]"></a><a id="catsDataCommutativeApplicativeForConst[C](CommutativeMonoid[C]):CommutativeApplicative[[β$10$]Const[C,β$10$]]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Const$.html#catsDataCommutativeApplicativeForConst[C](implicitC:cats.kernel.CommutativeMonoid[C]):cats.CommutativeApplicative[[β$10$]cats.data.Const[C,β$10$]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDataCommutativeApplicativeForConst</span><span class="tparams">[<span name="C">C</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="C">C: <a href="../kernel/CommutativeMonoid.html" class="extype" name="cats.kernel.CommutativeMonoid">CommutativeMonoid</a>[<span class="extype" name="cats.data.ConstInstances0.catsDataCommutativeApplicativeForConst.C">C</span>]</span>)</span><span class="result">: <a href="../CommutativeApplicative.html" class="extype" name="cats.CommutativeApplicative">CommutativeApplicative</a>[[β$10$]<a href="Const.html" class="extype" name="cats.data.Const">Const</a>[<span class="extype" name="cats.data.ConstInstances0.catsDataCommutativeApplicativeForConst.C">C</span>, <span class="extype" name="cats.data.ConstInstances0.&lt;refinement&gt;.Λ$.β$10$">β$10$</span>]]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ConstInstances0</dd></dl></div>
+    </li><li name="cats.data.ConstInstances1#catsDataCommutativeApplyForConst" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataCommutativeApplyForConst[C](implicitC:cats.kernel.CommutativeSemigroup[C]):cats.CommutativeApply[[β$12$]cats.data.Const[C,β$12$]]"></a><a id="catsDataCommutativeApplyForConst[C](CommutativeSemigroup[C]):CommutativeApply[[β$12$]Const[C,β$12$]]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Const$.html#catsDataCommutativeApplyForConst[C](implicitC:cats.kernel.CommutativeSemigroup[C]):cats.CommutativeApply[[β$12$]cats.data.Const[C,β$12$]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDataCommutativeApplyForConst</span><span class="tparams">[<span name="C">C</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="C">C: <a href="../kernel/CommutativeSemigroup.html" class="extype" name="cats.kernel.CommutativeSemigroup">CommutativeSemigroup</a>[<span class="extype" name="cats.data.ConstInstances1.catsDataCommutativeApplyForConst.C">C</span>]</span>)</span><span class="result">: <a href="../CommutativeApply.html" class="extype" name="cats.CommutativeApply">CommutativeApply</a>[[β$12$]<a href="Const.html" class="extype" name="cats.data.Const">Const</a>[<span class="extype" name="cats.data.ConstInstances1.catsDataCommutativeApplyForConst.C">C</span>, <span class="extype" name="cats.data.ConstInstances1.&lt;refinement&gt;.Λ$.β$12$">β$12$</span>]]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ConstInstances1</dd></dl></div>
+    </li><li name="cats.data.ConstInstances4#catsDataContravariantForConst" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataContravariantForConst[C]:cats.Contravariant[[β$17$]cats.data.Const[C,β$17$]]"></a><a id="catsDataContravariantForConst[C]:Contravariant[[β$17$]Const[C,β$17$]]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Const$.html#catsDataContravariantForConst[C]:cats.Contravariant[[β$17$]cats.data.Const[C,β$17$]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDataContravariantForConst</span><span class="tparams">[<span name="C">C</span>]</span><span class="result">: <a href="../Contravariant.html" class="extype" name="cats.Contravariant">Contravariant</a>[[β$17$]<a href="Const.html" class="extype" name="cats.data.Const">Const</a>[<span class="extype" name="cats.data.ConstInstances4.catsDataContravariantForConst.C">C</span>, <span class="extype" name="cats.data.ConstInstances4.&lt;refinement&gt;.Λ$.β$17$">β$17$</span>]]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ConstInstances4</dd></dl></div>
+    </li><li name="cats.data.ConstInstances0#catsDataContravariantMonoidalForConst" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataContravariantMonoidalForConst[D](implicitevidence$6:cats.Monoid[D]):cats.ContravariantMonoidal[[β$8$]cats.data.Const[D,β$8$]]"></a><a id="catsDataContravariantMonoidalForConst[D](Monoid[D]):ContravariantMonoidal[[β$8$]Const[D,β$8$]]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Const$.html#catsDataContravariantMonoidalForConst[D](implicitevidence$6:cats.Monoid[D]):cats.ContravariantMonoidal[[β$8$]cats.data.Const[D,β$8$]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDataContravariantMonoidalForConst</span><span class="tparams">[<span name="D">D</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="cats.data.ConstInstances0.catsDataContravariantMonoidalForConst.D">D</span>]</span>)</span><span class="result">: <a href="../ContravariantMonoidal.html" class="extype" name="cats.ContravariantMonoidal">ContravariantMonoidal</a>[[β$8$]<a href="Const.html" class="extype" name="cats.data.Const">Const</a>[<span class="extype" name="cats.data.ConstInstances0.catsDataContravariantMonoidalForConst.D">D</span>, <span class="extype" name="cats.data.ConstInstances0.&lt;refinement&gt;.Λ$.β$8$">β$8$</span>]]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ConstInstances0</dd></dl></div>
+    </li><li name="cats.data.ConstInstances3#catsDataEqForConst" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataEqForConst[A,B](implicitevidence$9:cats.Eq[A]):cats.Eq[cats.data.Const[A,B]]"></a><a id="catsDataEqForConst[A,B](Eq[A]):Eq[Const[A,B]]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Const$.html#catsDataEqForConst[A,B](implicitevidence$9:cats.Eq[A]):cats.Eq[cats.data.Const[A,B]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDataEqForConst</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../index.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.data.ConstInstances3.catsDataEqForConst.A">A</span>]</span>)</span><span class="result">: <a href="../index.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<a href="Const.html" class="extype" name="cats.data.Const">Const</a>[<span class="extype" name="cats.data.ConstInstances3.catsDataEqForConst.A">A</span>, <span class="extype" name="cats.data.ConstInstances3.catsDataEqForConst.B">B</span>]]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ConstInstances3</dd></dl></div>
+    </li><li name="cats.data.ConstInstances4#catsDataFunctorForConst" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataFunctorForConst[C]:cats.Functor[[β$16$]cats.data.Const[C,β$16$]]"></a><a id="catsDataFunctorForConst[C]:Functor[[β$16$]Const[C,β$16$]]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Const$.html#catsDataFunctorForConst[C]:cats.Functor[[β$16$]cats.data.Const[C,β$16$]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDataFunctorForConst</span><span class="tparams">[<span name="C">C</span>]</span><span class="result">: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[[β$16$]<a href="Const.html" class="extype" name="cats.data.Const">Const</a>[<span class="extype" name="cats.data.ConstInstances4.catsDataFunctorForConst.C">C</span>, <span class="extype" name="cats.data.ConstInstances4.&lt;refinement&gt;.Λ$.β$16$">β$16$</span>]]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ConstInstances4</dd></dl></div>
+    </li><li name="cats.data.ConstInstances#catsDataLowerBoundedForConst" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataLowerBoundedForConst[A,B](implicitA:cats.kernel.LowerBounded[A]):cats.kernel.LowerBounded[cats.data.Const[A,B]]"></a><a id="catsDataLowerBoundedForConst[A,B](LowerBounded[A]):LowerBounded[Const[A,B]]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Const$.html#catsDataLowerBoundedForConst[A,B](implicitA:cats.kernel.LowerBounded[A]):cats.kernel.LowerBounded[cats.data.Const[A,B]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDataLowerBoundedForConst</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../kernel/LowerBounded.html" class="extype" name="cats.kernel.LowerBounded">LowerBounded</a>[<span class="extype" name="cats.data.ConstInstances.catsDataLowerBoundedForConst.A">A</span>]</span>)</span><span class="result">: <a href="../kernel/LowerBounded.html" class="extype" name="cats.kernel.LowerBounded">LowerBounded</a>[<a href="Const.html" class="extype" name="cats.data.Const">Const</a>[<span class="extype" name="cats.data.ConstInstances.catsDataLowerBoundedForConst.A">A</span>, <span class="extype" name="cats.data.ConstInstances.catsDataLowerBoundedForConst.B">B</span>]]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ConstInstances</dd></dl></div>
+    </li><li name="cats.data.ConstInstances#catsDataMonoidForConst" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataMonoidForConst[A,B](implicitevidence$5:cats.Monoid[A]):cats.Monoid[cats.data.Const[A,B]]"></a><a id="catsDataMonoidForConst[A,B](Monoid[A]):Monoid[Const[A,B]]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Const$.html#catsDataMonoidForConst[A,B](implicitevidence$5:cats.Monoid[A]):cats.Monoid[cats.data.Const[A,B]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDataMonoidForConst</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="cats.data.ConstInstances.catsDataMonoidForConst.A">A</span>]</span>)</span><span class="result">: <a href="../index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<a href="Const.html" class="extype" name="cats.data.Const">Const</a>[<span class="extype" name="cats.data.ConstInstances.catsDataMonoidForConst.A">A</span>, <span class="extype" name="cats.data.ConstInstances.catsDataMonoidForConst.B">B</span>]]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ConstInstances</dd></dl></div>
+    </li><li name="cats.data.ConstInstances#catsDataOrderForConst" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataOrderForConst[A,B](implicitevidence$1:cats.Order[A]):cats.Order[cats.data.Const[A,B]]"></a><a id="catsDataOrderForConst[A,B](Order[A]):Order[Const[A,B]]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Const$.html#catsDataOrderForConst[A,B](implicitevidence$1:cats.Order[A]):cats.Order[cats.data.Const[A,B]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDataOrderForConst</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.data.ConstInstances.catsDataOrderForConst.A">A</span>]</span>)</span><span class="result">: <a href="../index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<a href="Const.html" class="extype" name="cats.data.Const">Const</a>[<span class="extype" name="cats.data.ConstInstances.catsDataOrderForConst.A">A</span>, <span class="extype" name="cats.data.ConstInstances.catsDataOrderForConst.B">B</span>]]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ConstInstances</dd></dl></div>
+    </li><li name="cats.data.ConstInstances2#catsDataPartialOrderForConst" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataPartialOrderForConst[A,B](implicitevidence$8:cats.PartialOrder[A]):cats.PartialOrder[cats.data.Const[A,B]]"></a><a id="catsDataPartialOrderForConst[A,B](PartialOrder[A]):PartialOrder[Const[A,B]]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Const$.html#catsDataPartialOrderForConst[A,B](implicitevidence$8:cats.PartialOrder[A]):cats.PartialOrder[cats.data.Const[A,B]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDataPartialOrderForConst</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../index.html#PartialOrder[A]=cats.kernel.PartialOrder[A]" class="extmbr" name="cats.PartialOrder">PartialOrder</a>[<span class="extype" name="cats.data.ConstInstances2.catsDataPartialOrderForConst.A">A</span>]</span>)</span><span class="result">: <a href="../index.html#PartialOrder[A]=cats.kernel.PartialOrder[A]" class="extmbr" name="cats.PartialOrder">PartialOrder</a>[<a href="Const.html" class="extype" name="cats.data.Const">Const</a>[<span class="extype" name="cats.data.ConstInstances2.catsDataPartialOrderForConst.A">A</span>, <span class="extype" name="cats.data.ConstInstances2.catsDataPartialOrderForConst.B">B</span>]]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ConstInstances2</dd></dl></div>
+    </li><li name="cats.data.ConstInstances2#catsDataSemigroupForConst" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataSemigroupForConst[A,B](implicitevidence$7:cats.Semigroup[A]):cats.Semigroup[cats.data.Const[A,B]]"></a><a id="catsDataSemigroupForConst[A,B](Semigroup[A]):Semigroup[Const[A,B]]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Const$.html#catsDataSemigroupForConst[A,B](implicitevidence$7:cats.Semigroup[A]):cats.Semigroup[cats.data.Const[A,B]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDataSemigroupForConst</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../index.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.data.ConstInstances2.catsDataSemigroupForConst.A">A</span>]</span>)</span><span class="result">: <a href="../index.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<a href="Const.html" class="extype" name="cats.data.Const">Const</a>[<span class="extype" name="cats.data.ConstInstances2.catsDataSemigroupForConst.A">A</span>, <span class="extype" name="cats.data.ConstInstances2.catsDataSemigroupForConst.B">B</span>]]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ConstInstances2</dd></dl></div>
+    </li><li name="cats.data.ConstInstances#catsDataShowForConst" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataShowForConst[A,B](implicitevidence$3:cats.Show[A]):cats.Show[cats.data.Const[A,B]]"></a><a id="catsDataShowForConst[A,B](Show[A]):Show[Const[A,B]]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Const$.html#catsDataShowForConst[A,B](implicitevidence$3:cats.Show[A]):cats.Show[cats.data.Const[A,B]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDataShowForConst</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.data.ConstInstances.catsDataShowForConst.A">A</span>]</span>)</span><span class="result">: <a href="../Show.html" class="extype" name="cats.Show">Show</a>[<a href="Const.html" class="extype" name="cats.data.Const">Const</a>[<span class="extype" name="cats.data.ConstInstances.catsDataShowForConst.A">A</span>, <span class="extype" name="cats.data.ConstInstances.catsDataShowForConst.B">B</span>]]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ConstInstances</dd></dl></div>
+    </li><li name="cats.data.ConstInstances#catsDataTraverseFilterForConst" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataTraverseFilterForConst[C]:cats.TraverseFilter[[β$5$]cats.data.Const[C,β$5$]]"></a><a id="catsDataTraverseFilterForConst[C]:TraverseFilter[[β$5$]Const[C,β$5$]]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Const$.html#catsDataTraverseFilterForConst[C]:cats.TraverseFilter[[β$5$]cats.data.Const[C,β$5$]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDataTraverseFilterForConst</span><span class="tparams">[<span name="C">C</span>]</span><span class="result">: <a href="../TraverseFilter.html" class="extype" name="cats.TraverseFilter">TraverseFilter</a>[[β$5$]<a href="Const.html" class="extype" name="cats.data.Const">Const</a>[<span class="extype" name="cats.data.ConstInstances.catsDataTraverseFilterForConst.C">C</span>, <span class="extype" name="cats.data.ConstInstances.&lt;refinement&gt;.Λ$.β$5$">β$5$</span>]]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ConstInstances</dd></dl></div>
+    </li><li name="cats.data.ConstInstances#catsDataTraverseForConst" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataTraverseForConst[C]:cats.Traverse[[β$3$]cats.data.Const[C,β$3$]]"></a><a id="catsDataTraverseForConst[C]:Traverse[[β$3$]Const[C,β$3$]]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Const$.html#catsDataTraverseForConst[C]:cats.Traverse[[β$3$]cats.data.Const[C,β$3$]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDataTraverseForConst</span><span class="tparams">[<span name="C">C</span>]</span><span class="result">: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[[β$3$]<a href="Const.html" class="extype" name="cats.data.Const">Const</a>[<span class="extype" name="cats.data.ConstInstances.catsDataTraverseForConst.C">C</span>, <span class="extype" name="cats.data.ConstInstances.&lt;refinement&gt;.Λ$.β$3$">β$3$</span>]]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ConstInstances</dd></dl></div>
+    </li><li name="cats.data.ConstInstances#catsDataUpperBoundedForConst" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataUpperBoundedForConst[A,B](implicitA:cats.kernel.UpperBounded[A]):cats.kernel.UpperBounded[cats.data.Const[A,B]]"></a><a id="catsDataUpperBoundedForConst[A,B](UpperBounded[A]):UpperBounded[Const[A,B]]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Const$.html#catsDataUpperBoundedForConst[A,B](implicitA:cats.kernel.UpperBounded[A]):cats.kernel.UpperBounded[cats.data.Const[A,B]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDataUpperBoundedForConst</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../kernel/UpperBounded.html" class="extype" name="cats.kernel.UpperBounded">UpperBounded</a>[<span class="extype" name="cats.data.ConstInstances.catsDataUpperBoundedForConst.A">A</span>]</span>)</span><span class="result">: <a href="../kernel/UpperBounded.html" class="extype" name="cats.kernel.UpperBounded">UpperBounded</a>[<a href="Const.html" class="extype" name="cats.data.Const">Const</a>[<span class="extype" name="cats.data.ConstInstances.catsDataUpperBoundedForConst.A">A</span>, <span class="extype" name="cats.data.ConstInstances.catsDataUpperBoundedForConst.B">B</span>]]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ConstInstances</dd></dl></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a><a id="clone():AnyRef"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Const$.html#clone():Object" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
+              
+                <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@IntrinsicCandidate</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="cats.data.Const#empty" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="empty[A,B](implicitA:cats.Monoid[A]):cats.data.Const[A,B]"></a><a id="empty[A,B](Monoid[A]):Const[A,B]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Const$.html#empty[A,B](implicitA:cats.Monoid[A]):cats.data.Const[A,B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">empty</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="cats.data.Const.empty.A">A</span>]</span>)</span><span class="result">: <a href="Const.html" class="extype" name="cats.data.Const">Const</a>[<span class="extype" name="cats.data.Const.empty.A">A</span>, <span class="extype" name="cats.data.Const.empty.B">B</span>]</span>
+      </span>
+      
+      
+    </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Const$.html#eq(x$1:AnyRef):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.14/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#equals" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a><a id="equals(Any):Boolean"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Const$.html#equals(x$1:Any):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.14/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Const$.html#getClass():Class[_]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
+                <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@IntrinsicCandidate</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Const$.html#hashCode():Int" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
+                <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@IntrinsicCandidate</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Const$.html#isInstanceOf[T0]:Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Const$.html#ne(x$1:AnyRef):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.14/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Const$.html#notify():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@IntrinsicCandidate</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Const$.html#notifyAll():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@IntrinsicCandidate</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="cats.data.Const#of" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="of[B]:cats.data.Const.OfPartiallyApplied[B]"></a><a id="of[B]:OfPartiallyApplied[B]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Const$.html#of[B]:cats.data.Const.OfPartiallyApplied[B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">of</span><span class="tparams">[<span name="B">B</span>]</span><span class="result">: <span class="extype" name="cats.data.Const.OfPartiallyApplied">OfPartiallyApplied</span>[<span class="extype" name="cats.data.Const.of.B">B</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Convenient syntax for creating a Const[A, B] from an <code>A</code></p><div class="fullcomment"><div class="comment cmt"><p>Convenient syntax for creating a Const[A, B] from an <code>A</code></p><pre>scala&gt; <span class="kw">import</span> cats.data._
+scala&gt; Const.of[<span class="std">Int</span>](<span class="lit">"a"</span>)
+res0: Const[<span class="std">String</span>, <span class="std">Int</span>] = Const(a)</pre></div></div>
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Const$.html#synchronized[T0](x$1:=&gt;T0):T0" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#toString" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Const$.html#toString():String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Const$.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.14/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>, <span name="arg1">arg1: <a href="https://www.scala-lang.org/api/2.12.14/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a><a id="wait(Long):Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Const$.html#wait(x$1:Long):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.14/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+                <span class="name">@native</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Const$.html#wait():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li>
+              </ol>
+            </div>
+
+        
+
+        <div class="values members">
+              <h3>Deprecated Value Members</h3>
+              <ol><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Const$.html#finalize():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: ">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+                <span class="name">@Deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"></dd></dl></div>
+    </li></ol>
+            </div>
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.Serializable">
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.14/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="cats.data.ConstInstances">
+              <h3>Inherited from <span class="extype" name="cats.data.ConstInstances">ConstInstances</span></h3>
+            </div><div class="parent" name="cats.data.ConstInstances0">
+              <h3>Inherited from <span class="extype" name="cats.data.ConstInstances0">ConstInstances0</span></h3>
+            </div><div class="parent" name="cats.data.ConstInstances1">
+              <h3>Inherited from <span class="extype" name="cats.data.ConstInstances1">ConstInstances1</span></h3>
+            </div><div class="parent" name="cats.data.ConstInstances2">
+              <h3>Inherited from <span class="extype" name="cats.data.ConstInstances2">ConstInstances2</span></h3>
+            </div><div class="parent" name="cats.data.ConstInstances3">
+              <h3>Inherited from <span class="extype" name="cats.data.ConstInstances3">ConstInstances3</span></h3>
+            </div><div class="parent" name="cats.data.ConstInstances4">
+              <h3>Inherited from <span class="extype" name="cats.data.ConstInstances4">ConstInstances4</span></h3>
+            </div><div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.14/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.14/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+    </body>
+          </div>
+        </div>
+      </div>
+    </body>
+      </html>

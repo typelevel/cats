@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="490px" height="321px" viewBox="0 0 490 321" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 59.1 (86144) - https://sketch.com -->
+    <title>header-image</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="header-image" transform="translate(-51.000000, -21.000000)">
+            <rect id="Rectangle" opacity="0.0248093378" x="0" y="0" width="584" height="379"></rect>
+            <g id="browser" transform="translate(53.000000, 23.000000)">
+                <polygon id="path" stroke="#FFFFFF" stroke-width="5" fill-opacity="0.15" fill="#FFFFFF" fill-rule="nonzero" points="0.5 0.5 0.5 23.5 357.5 23.5 357.5 0.5"></polygon>
+                <circle id="path" fill="#FFFFFF" fill-rule="nonzero" cx="13" cy="12" r="3"></circle>
+                <circle id="path" fill="#FFFFFF" fill-rule="nonzero" cx="25" cy="12" r="3"></circle>
+                <circle id="path" fill="#FFFFFF" fill-rule="nonzero" cx="37" cy="12" r="3"></circle>
+                <polyline id="Path" stroke="#FFFFFF" stroke-width="5" points="357.5 111.535156 357.5 23.5 0.5 23.5 0.5 302.5 236.675781 302.5"></polyline>
+                <g id="item" transform="translate(136.000000, 195.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                    <rect id="path" stroke="#FFFFFF" stroke-width="5" fill-opacity="0.15" x="25.5" y="0.5" width="35" height="35"></rect>
+                    <rect id="path" x="0" y="48" width="86" height="5"></rect>
+                    <rect id="path" opacity="0.7" x="0" y="60" width="86" height="5"></rect>
+                    <rect id="path" opacity="0.4" x="13" y="72" width="60" height="5"></rect>
+                </g>
+                <g id="item" transform="translate(30.000000, 195.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                    <rect id="path" stroke="#FFFFFF" stroke-width="5" fill-opacity="0.15" x="25.5" y="0.5" width="35" height="35"></rect>
+                    <rect id="path" x="0" y="48" width="86" height="5"></rect>
+                    <rect id="path" opacity="0.702776228" x="0" y="60" width="86" height="5"></rect>
+                    <rect id="path" opacity="0.4" x="13" y="72" width="60" height="5"></rect>
+                </g>
+                <g id="header" transform="translate(0.000000, 23.000000)">
+                    <polyline id="Path" stroke="#FFFFFF" stroke-width="5" points="237.15625 137.5 0.5 137.5 0.5 0.5 357.5 0.5 357.5 87.6933594"></polyline>
+                    <g id="text" transform="translate(30.000000, 29.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                        <rect id="path" x="0" y="21" width="130" height="5"></rect>
+                        <rect id="path" x="0" y="7" width="130" height="5"></rect>
+                        <polyline id="Path" stroke="#FFFFFF" stroke-width="5" fill-opacity="0.15" points="207.060547 79.5 170.5 79.5 170.5 0.5 295.5 0.5 295.5 58.9960938"></polyline>
+                        <rect id="path" x="0" y="35" width="130" height="5"></rect>
+                        <rect id="path" x="0" y="49" width="130" height="5"></rect>
+                        <rect id="path" x="0" y="63" width="90" height="5"></rect>
+                    </g>
+                </g>
+            </g>
+            <g id="browser-doc" transform="translate(290.000000, 134.000000)">
+                <polygon id="path" stroke="#FFFFFF" stroke-width="4" fill-rule="nonzero" points="0 16 249 16 249 0 0 0"></polygon>
+                <circle id="path" fill="#FFFFFF" fill-rule="nonzero" cx="9" cy="8" r="2"></circle>
+                <circle id="path" fill="#FFFFFF" fill-rule="nonzero" cx="17" cy="8" r="2"></circle>
+                <circle id="path" fill="#FFFFFF" fill-rule="nonzero" cx="25" cy="8" r="2"></circle>
+                <path d="M0,16 L0,205 C0,205.552285 0.44771525,206 1,206 L248,206 C248.552285,206 249,205.552285 249,205 L249,16 L0,16 Z" id="path" stroke="#FFFFFF" stroke-width="4" fill-rule="nonzero"></path>
+                <polygon id="path" stroke="#FFFFFF" stroke-width="4" points="0 16 0 206 76 206 76 16"></polygon>
+                <rect id="path" stroke="#FFFFFF" stroke-width="4" fill-rule="nonzero" x="0" y="16" width="76" height="28"></rect>
+                <rect id="path" fill="#FFFFFF" fill-rule="nonzero" x="10" y="25" width="11" height="11"></rect>
+                <rect id="path" fill="#FFFFFF" fill-rule="nonzero" x="26" y="28" width="39" height="4"></rect>
+                <rect id="path" fill="#FFFFFF" fill-rule="nonzero" opacity="0.3" x="9" y="63" width="58" height="4"></rect>
+                <rect id="path" fill="#FFFFFF" fill-rule="nonzero" opacity="0.3" x="9" y="54" width="58" height="4"></rect>
+                <rect id="path" fill="#FFFFFF" fill-rule="nonzero" x="9" y="72" width="58" height="4"></rect>
+                <g id="code" transform="translate(90.000000, 30.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                    <rect id="path" opacity="0.7" x="0" y="64" width="80" height="4"></rect>
+                    <rect id="path" opacity="0.4" x="0" y="154" width="80" height="4"></rect>
+                    <rect id="path" x="0" y="100" width="73" height="4"></rect>
+                    <rect id="path" opacity="0.4" x="0" y="136" width="45" height="4"></rect>
+                    <rect id="path" opacity="0.7" x="0" y="109" width="62" height="4"></rect>
+                    <rect id="path" opacity="0.7" x="0" y="145" width="107" height="4"></rect>
+                    <rect id="path" opacity="0.4" x="0" y="73" width="40" height="4"></rect>
+                    <rect id="path" opacity="0.4" x="0" y="118" width="128" height="4"></rect>
+                    <rect id="path" opacity="0.7" x="0" y="127" width="77" height="4"></rect>
+                    <rect id="path" opacity="0.7" x="0" y="91" width="114" height="4"></rect>
+                    <rect id="path" x="0" y="82" width="27" height="4"></rect>
+                    <rect id="path" opacity="0.7" x="0" y="0" width="124" height="4"></rect>
+                    <rect id="path" opacity="0.7" x="0" y="45" width="80" height="4"></rect>
+                    <rect id="path" x="0" y="36" width="45" height="4"></rect>
+                    <rect id="path" opacity="0.4" x="0" y="54" width="98" height="4"></rect>
+                    <rect id="path" opacity="0.4" x="0" y="9" width="57" height="4"></rect>
+                    <rect id="path" opacity="0.4" x="0" y="27" width="114" height="4"></rect>
+                    <rect id="path" x="0" y="18" width="27" height="4"></rect>
+                </g>
+                <rect id="path" fill="#FFFFFF" fill-rule="nonzero" opacity="0.3" x="9" y="81" width="58" height="4"></rect>
+                <rect id="path" fill="#FFFFFF" fill-rule="nonzero" opacity="0.3" x="9" y="90" width="58" height="4"></rect>
+                <rect id="path" fill="#FFFFFF" fill-rule="nonzero" opacity="0.3" x="9" y="99" width="58" height="4"></rect>
+                <rect id="path" fill="#FFFFFF" fill-rule="nonzero" opacity="0.3" x="9" y="108" width="58" height="4"></rect>
+                <rect id="path" fill="#FFFFFF" fill-rule="nonzero" opacity="0.3" x="9" y="117" width="58" height="4"></rect>
+                <rect id="path" fill="#FFFFFF" fill-rule="nonzero" opacity="0.3" x="9" y="126" width="58" height="4"></rect>
+                <rect id="path" fill="#FFFFFF" fill-rule="nonzero" opacity="0.3" x="9" y="135" width="58" height="4"></rect>
+                <rect id="path" fill="#FFFFFF" fill-rule="nonzero" opacity="0.3" x="9" y="144" width="58" height="4"></rect>
+            </g>
+        </g>
+    </g>
+</svg>

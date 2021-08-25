@@ -1,0 +1,586 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+          <title></title>
+          <meta name="description" content="" />
+          <meta name="keywords" content="" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      
+      <link href="../../lib/index.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../lib/jquery.min.js"></script>
+      <script type="text/javascript" src="../../lib/jquery.panzoom.min.js"></script>
+      <script type="text/javascript" src="../../lib/jquery.mousewheel.min.js"></script>
+      <script type="text/javascript" src="../../lib/index.js"></script>
+      <script type="text/javascript" src="../../index.js"></script>
+      <script type="text/javascript" src="../../lib/scheduler.js"></script>
+      <script type="text/javascript" src="../../lib/template.js"></script>
+      <script type="text/javascript" src="../../lib/modernizr.custom.js"></script><script type="text/javascript" src="../../lib/diagrams.js" id="diagrams-js"></script>
+      <script type="text/javascript">
+        /* this variable can be used by the JS to determine the path to the root document */
+        var toRoot = '../../';
+      </script>
+    
+        </head>
+        <body>
+      <div id="search">
+        <span id="doc-title"><span id="doc-version"></span></span>
+        <span class="close-results"><span class="left">&lt;</span> Back</span>
+        <div id="textfilter">
+          <span class="input">
+            <input autocapitalize="none" placeholder="Search" id="index-input" type="text" accesskey="/" />
+            <i class="clear material-icons"></i>
+            <i id="search-icon" class="material-icons"></i>
+          </span>
+        </div>
+    </div>
+      <div id="search-results">
+        <div id="search-progress">
+          <div id="progress-fill"></div>
+        </div>
+        <div id="results-content">
+          <div id="entity-results"></div>
+          <div id="member-results"></div>
+        </div>
+      </div>
+      <div id="content-scroll-container" style="-webkit-overflow-scrolling: touch;">
+        <div id="content-container" style="-webkit-overflow-scrolling: touch;">
+          <div id="subpackage-spacer">
+            <div id="packages">
+              <h1>Packages</h1>
+              <ul>
+                <li name="_root_.root" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="_root_"></a><a id="root:_root_"></a>
+      <span class="permalink">
+      <a href="../../index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../../index.html"><span class="name">root</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
+    </li><li name="_root_.cats" visbl="pub" class="indented1 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="cats"></a><a id="cats:cats"></a>
+      <span class="permalink">
+      <a href="../../cats/index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="The cats root package contains all the trait signatures of most Scala type classes." href="../index.html"><span class="name">cats</span></a>
+      </span>
+      
+      <p class="shortcomment cmt">The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><p>Cats type classes are implemented using the approach from the
+ <a href="https://ropas.snu.ac.kr/~bruno/papers/TypeClasses.pdf" target="_blank">Type classes as objects and implicits</a> article.</p><p>For each type class, <code>cats</code> provides three pieces:
+- Its <b>signature</b>: a trait that is polymorphic on a type parameter.
+  Type class traits inherit from other type classes to indicate that any implementation of the lower type class (e.g. <code>Applicative</code>)
+  can also serve as an instance for the higuer type class (e.g. <code>Functor</code>).
+- Type class <b>'instances</b>, which are classes and objects that implement one or more type class signatures for some specific types.
+  Type class instances for several data types from the Java or Scala standard libraries are declared in the subpackage <code>cats.instances</code>.
+- <b>Syntax extensions</b>, each of which provides the methods of the type class defines as extension methods
+  (which in Scala 2 are encoded as implicit classes) for values of any type <code>F</code>; given that an instance of the type class
+  for the receiver type (<code>this</code>) is in the implicit scope.
+  Symtax extensions are declared in the <code>cats.syntax</code> package.
+- A set of <b>laws</b>, that are also generic on the type of the class, and are only defined on the operations of the type class.
+  The purpose of these laws is to declare some algebraic relations (equations) between Scala expressions involving the operations
+  of the type class, and test (but not verify) that implemented instances satisfy those equations.
+  Laws are defined in the <code>cats-laws</code> package.</p><p>Although most of cats type classes are declared in this package, some are declared in other packages:
+- type classes that operate on base types (kind <code>*</code>), and their implementations for standard library types,
+  are contained in <code>cats.kernel</code>, which is a different SBT project. However, they are re-exported from this package.
+- type classes of kind <code>F[_, _]</code>, such as <a href="../arrow/Profunctor.html" class="extype" name="cats.arrow.Profunctor">cats.arrow.Profunctor</a>&quot; or <a href="../arrow/Arrow.html" class="extype" name="cats.arrow.Arrow">cats.arrow.Arrow</a>, which are relevant for
+  Functional Reactive Programming or optics, are declared in the <code>cats.arrow</code> package.
+- Also, those type classes that abstract over (pure or impure) functional runtime effects are declared
+  in the <a href="https://typelevel.org/cats-effect/" target="_blank">cats-effect library</a>.
+- Some type classes for which no laws can be provided are left out of the main road, in a small and dirty alley.
+  These are the <code>alleycats</code>.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
+    </li><li name="cats.arrow" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="arrow"></a><a id="arrow:arrow"></a>
+      <span class="permalink">
+      <a href="../../cats/arrow/index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../arrow/index.html"><span class="name">arrow</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="cats">cats</a></dd></dl></div>
+    </li><li name="cats.conversions" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="conversions"></a><a id="conversions:conversions"></a>
+      <span class="permalink">
+      <a href="../../cats/conversions/index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../conversions/index.html"><span class="name">conversions</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="cats">cats</a></dd></dl></div>
+    </li><li name="cats.data" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="data"></a><a id="data:data"></a>
+      <span class="permalink">
+      <a href="../../cats/data/index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../data/index.html"><span class="name">data</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="cats">cats</a></dd></dl></div>
+    </li><li name="cats.evidence" visbl="pub" class="indented2 current" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="evidence"></a><a id="evidence:evidence"></a>
+      <span class="permalink">
+      <a href="../../cats/evidence/index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">evidence</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="cats">cats</a></dd></dl></div>
+    </li><li class="current-entities indented2">
+                        <a class="object" href="As$.html" title=""></a>
+                        <a class="class" href="As.html" title="As substitutability: A better &lt;:&lt;"></a>
+                        <a href="As.html" title="As substitutability: A better &lt;:&lt;">As</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="AsInstances.html" title=""></a>
+                        <a href="AsInstances.html" title="">AsInstances</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="Is$.html" title=""></a>
+                        <a class="class" href="Is.html" title="A value of A Is B is proof that the types A and B are the same."></a>
+                        <a href="Is.html" title="A value of A Is B is proof that the types A and B are the same.">Is</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="IsInstances.html" title=""></a>
+                        <a href="IsInstances.html" title="">IsInstances</a>
+                      </li><li name="cats.free" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="free"></a><a id="free:free"></a>
+      <span class="permalink">
+      <a href="../../cats/free/index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../free/index.html"><span class="name">free</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="cats">cats</a></dd></dl></div>
+    </li><li name="cats.instances" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="instances"></a><a id="instances:instances"></a>
+      <span class="permalink">
+      <a href="../../cats/instances/index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../instances/index.html"><span class="name">instances</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="cats">cats</a></dd></dl></div>
+    </li><li name="cats.kernel" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="kernel"></a><a id="kernel:kernel"></a>
+      <span class="permalink">
+      <a href="../../cats/kernel/index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../kernel/index.html"><span class="name">kernel</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="cats">cats</a></dd></dl></div>
+    </li><li name="cats.syntax" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="syntax"></a><a id="syntax:syntax"></a>
+      <span class="permalink">
+      <a href="../../cats/syntax/index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../syntax/index.html"><span class="name">syntax</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="cats">cats</a></dd></dl></div>
+    </li>
+              </ul>
+            </div>
+          </div>
+          <div id="content">
+            <body class="package value">
+      <div id="definition">
+        <div class="big-circle package">p</div>
+        <p id="owner"><a href="../index.html" class="extype" name="cats">cats</a></p>
+        <h1>evidence<span class="permalink">
+      <a href="../../cats/evidence/index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span></h1>
+        
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">evidence</span>
+      </span>
+      </h4>
+
+      
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/main/core/src/main/scala/cats/evidence/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
+          <span class="toggle">
+            Linear Supertypes
+          </span>
+          <div class="superTypes hiddenContent"><a href="https://www.scala-lang.org/api/2.12.14/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.14/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+        </div><div class="toggleContainer block diagram-container" id="content-diagram-container">
+                <span class="toggle diagram-link">
+                  Content Hierarchy
+                </span>
+                <div class="diagram" id="content-diagram"><svg class="package-diagram" id="graph1" viewBox="0.00 0.00 197.50 94.00" height="94pt" width="198pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 90)" class="graph" id="page0,1_graph0"><polygon points="-4,4 -4,-90 193.5,-90 193.5,4 -4,4" stroke="transparent" fill="white"></polygon><!-- node0 --><g class="node class" id="graph1_0"><g id="a_class|graph1_0"><a xlink:title="cats.evidence.IsInstances" xlink:href="IsInstances.html#inheritance-diagram"><path d="M75.67,-86C75.67,-86 8.33,-86 8.33,-86 4.17,-86 0,-81.83 0,-77.67 0,-77.67 0,-69.33 0,-69.33 0,-65.17 4.17,-61 8.33,-61 8.33,-61 75.67,-61 75.67,-61 79.83,-61 84,-65.17 84,-69.33 84,-69.33 84,-77.67 84,-77.67 84,-81.83 79.83,-86 75.67,-86" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-80.5" x="10" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-71.1" x="31" text-anchor="start">IsInstances</text></a></g></g><!-- node1 --><g class="node object" id="graph1_1"><g id="a_object|graph1_1"><a xlink:title="cats.evidence.Is" xlink:href="Is$.html#inheritance-diagram"><path d="M58.67,-25C58.67,-25 25.33,-25 25.33,-25 21.17,-25 17,-20.83 17,-16.67 17,-16.67 17,-8.33 17,-8.33 17,-4.17 21.17,0 25.33,0 25.33,0 58.67,0 58.67,0 62.83,0 67,-4.17 67,-8.33 67,-8.33 67,-16.67 67,-16.67 67,-20.83 62.83,-25 58.67,-25" stroke="#103a51" fill="#103a51"></path><image xlink:href="../../lib/object_diagram.png" y="-19.5" x="27" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="48" text-anchor="start">Is</text></a></g></g><!-- node0&#45;&gt;node1 --><g class="edge inheritance" id="graph1_0_1"><g id="a_inheritance|graph1_0_1"><a xlink:title="Is is a subtype of IsInstances"><path d="M42,-53.76C42,-44.37 42,-33.29 42,-25.13" stroke="#d4d4d4" fill="none"></path><polygon points="39.55,-53.84 42,-60.84 44.45,-53.84 39.55,-53.84" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node2 --><g class="node class" id="graph1_2"><g id="a_class|graph1_2"><a xlink:title="cats.evidence.AsInstances" xlink:href="AsInstances.html#inheritance-diagram"><path d="M181.17,-86C181.17,-86 110.83,-86 110.83,-86 106.67,-86 102.5,-81.83 102.5,-77.67 102.5,-77.67 102.5,-69.33 102.5,-69.33 102.5,-65.17 106.67,-61 110.83,-61 110.83,-61 181.17,-61 181.17,-61 185.33,-61 189.5,-65.17 189.5,-69.33 189.5,-69.33 189.5,-77.67 189.5,-77.67 189.5,-81.83 185.33,-86 181.17,-86" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-80.5" x="113" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-71.1" x="134" text-anchor="start">AsInstances</text></a></g></g><!-- node3 --><g class="node object" id="graph1_3"><g id="a_object|graph1_3"><a xlink:title="cats.evidence.As" xlink:href="As$.html#inheritance-diagram"><path d="M164.17,-25C164.17,-25 127.83,-25 127.83,-25 123.67,-25 119.5,-20.83 119.5,-16.67 119.5,-16.67 119.5,-8.33 119.5,-8.33 119.5,-4.17 123.67,0 127.83,0 127.83,0 164.17,0 164.17,0 168.33,0 172.5,-4.17 172.5,-8.33 172.5,-8.33 172.5,-16.67 172.5,-16.67 172.5,-20.83 168.33,-25 164.17,-25" stroke="#103a51" fill="#103a51"></path><image xlink:href="../../lib/object_diagram.png" y="-19.5" x="130" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="151" text-anchor="start">As</text></a></g></g><!-- node2&#45;&gt;node3 --><g class="edge inheritance" id="graph1_2_3"><g id="a_inheritance|graph1_2_3"><a xlink:title="As is a subtype of AsInstances"><path d="M146,-53.76C146,-44.37 146,-33.29 146,-25.13" stroke="#d4d4d4" fill="none"></path><polygon points="143.55,-53.84 146,-60.84 148.45,-53.84 143.55,-53.84" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
+                <div id="diagram-controls" class="hiddenContent">
+                  <button id="diagram-zoom-out" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button id="diagram-zoom-in" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button title="Toggle full-screen" id="diagram-fs" class="diagram-btn to-full"><i class="material-icons"></i></button>
+                </div>
+              </div></div>
+        
+
+      <div id="mbrsel">
+        <div class="toggle"></div>
+        <div id="memberfilter">
+          <i class="material-icons arrow"></i>
+          <span class="input">
+            <input id="mbrsel-input" placeholder="Filter all members" type="text" accesskey="/" />
+          </span>
+          <i class="clear material-icons"></i>
+        </div>
+        <div id="filterby">
+          <div id="order">
+            <span class="filtertype">Ordering</span>
+            <ol>
+              
+              <li class="alpha in"><span>Alphabetic</span></li>
+              <li class="inherit out"><span>By Inheritance</span></li>
+            </ol>
+          </div>
+          <div class="ancestors">
+                  <span class="filtertype">Inherited<br />
+                  </span>
+                  <ol id="linearization">
+                    <li class="in" name="cats.evidence"><span>evidence</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  </ol>
+                </div><div class="ancestors">
+              <span class="filtertype"></span>
+              <ol>
+                <li class="hideall out"><span>Hide All</span></li>
+                <li class="showall in"><span>Show All</span></li>
+              </ol>
+            </div>
+          <div id="visbl">
+              <span class="filtertype">Visibility</span>
+              <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+            </div>
+        </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="cats.evidence.&lt;~&lt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&lt;~&lt;[-A,+B]=cats.evidence.As[A,B]"></a><a id="&lt;~&lt;[-A,+B]:&lt;~&lt;[A,B]"></a>
+      <span class="permalink">
+      <a href="../../cats/evidence/index.html#&lt;~&lt;[-A,+B]=cats.evidence.As[A,B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $less$tilde$less" class="name">&lt;~&lt;</span><span class="tparams">[<span name="A">-A</span>, <span name="B">+B</span>]</span><span class="result alias"> = <a href="As.html" class="extype" name="cats.evidence.As">As</a>[<span class="extype" name="cats.evidence.&lt;~&lt;.A">A</span>, <span class="extype" name="cats.evidence.&lt;~&lt;.B">B</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">A convenient type alias for As, this declares that A is a
+subtype of B, and should be able to be  a B is
+expected.</p>
+    </li><li name="cats.evidence.===" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="===[A,B]=cats.evidence.Is[A,B]"></a><a id="===[A,B]:===[A,B]"></a>
+      <span class="permalink">
+      <a href="../../cats/evidence/index.html#===[A,B]=cats.evidence.Is[A,B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq$eq" class="name">===</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="result alias"> = <a href="Is.html" class="extype" name="cats.evidence.Is">Is</a>[<span class="extype" name="cats.evidence.===.A">A</span>, <span class="extype" name="cats.evidence.===.B">B</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">A convenient type alias for Is, which declares that A is the same
+type as B.</p>
+    </li><li name="cats.evidence.&gt;~&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&gt;~&gt;[+B,-A]=cats.evidence.As[A,B]"></a><a id="&gt;~&gt;[+B,-A]:&gt;~&gt;[B,A]"></a>
+      <span class="permalink">
+      <a href="../../cats/evidence/index.html#&gt;~&gt;[+B,-A]=cats.evidence.As[A,B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $greater$tilde$greater" class="name">&gt;~&gt;</span><span class="tparams">[<span name="B">+B</span>, <span name="A">-A</span>]</span><span class="result alias"> = <a href="As.html" class="extype" name="cats.evidence.As">As</a>[<span class="extype" name="cats.evidence.&gt;~&gt;.A">A</span>, <span class="extype" name="cats.evidence.&gt;~&gt;.B">B</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">A flipped alias, for those used to their arrows running left to right
+</p>
+    </li><li name="cats.evidence.As" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="As[-A,+B]extendsSerializable"></a><a id="As[-A,+B]:As[A,B]"></a>
+      <span class="permalink">
+      <a href="../../cats/evidence/As.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="As substitutability: A better &lt;:&lt;" href="As.html"><span class="name">As</span></a><span class="tparams">[<span name="A">-A</span>, <span name="B">+B</span>]</span><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.14/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">As substitutability: A better <code>&lt;:&lt;</code></p><div class="fullcomment"><div class="comment cmt"><p>As substitutability: A better <code>&lt;:&lt;</code></p><p>This class exists to aid in the capture proof of subtyping
+relationships, which can be applied in other context to widen other
+type</p><p><code>A As B</code> holds whenever <code>A</code> could be used in any negative context
+that expects a <code>B</code>.  (e.g. if you could pass an <code>A</code> into any
+function that expects a <code>B</code> as input.)</p><p>This code was ported directly from scalaz to cats using this version from scalaz:
+https://github.com/scalaz/scalaz/blob/a89b6d63/core/src/main/scala/scalaz/Liskov.scala</p><p> The original contribution to scalaz came from Jason Zaugg
+</p></div></div>
+    </li><li name="cats.evidence.AsInstances" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="AsInstancesextendsAnyRef"></a><a id="AsInstances:AsInstances"></a>
+      <span class="permalink">
+      <a href="../../cats/evidence/AsInstances.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="AsInstances.html"><span class="name">AsInstances</span></a><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.14/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      
+      
+    </li><li name="cats.evidence.Is" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="Is[A,B]extendsSerializable"></a><a id="Is[A,B]:Is[A,B]"></a>
+      <span class="permalink">
+      <a href="../../cats/evidence/Is.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="A value of A Is B is proof that the types A and B are the same." href="Is.html"><span class="name">Is</span></a><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.14/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">A value of <code>A Is B</code> is proof that the types <code>A</code> and <code>B</code> are the same.</p><div class="fullcomment"><div class="comment cmt"><p>A value of <code>A Is B</code> is proof that the types <code>A</code> and <code>B</code> are the same. More
+powerfully, it asserts that they have the same meaning in all type
+contexts. This can be a more powerful assertion than <code>A =:= B</code> and is more
+easily used in manipulation of types while avoiding (potentially
+erroneous) coercions.</p><p><code>A Is B</code> is also known as Leibniz equality.
+</p></div></div>
+    </li><li name="cats.evidence.IsInstances" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="IsInstancesextendsAnyRef"></a><a id="IsInstances:IsInstances"></a>
+      <span class="permalink">
+      <a href="../../cats/evidence/IsInstances.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="IsInstances.html"><span class="name">IsInstances</span></a><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.14/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      
+      
+    </li><li name="cats.evidence.Leibniz" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Leibniz[A,B]=cats.evidence.Is[A,B]"></a><a id="Leibniz[A,B]:Leibniz[A,B]"></a>
+      <span class="permalink">
+      <a href="../../cats/evidence/index.html#Leibniz[A,B]=cats.evidence.Is[A,B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Leibniz</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="result alias"> = <a href="Is.html" class="extype" name="cats.evidence.Is">Is</a>[<span class="extype" name="cats.evidence.Leibniz.A">A</span>, <span class="extype" name="cats.evidence.Leibniz.B">B</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">This type level equality represented by <code>Is</code> is referred to as
+&quot;Leibniz equality&quot;, and it had the name &quot;Leibniz&quot; in the scalaz
+ https://en.wikipedia.org/wiki/Gottfried_Wilhelm_Leibniz
+</p>
+    </li><li name="cats.evidence.Liskov" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Liskov[-A,+B]=cats.evidence.As[A,B]"></a><a id="Liskov[-A,+B]:Liskov[A,B]"></a>
+      <span class="permalink">
+      <a href="../../cats/evidence/index.html#Liskov[-A,+B]=cats.evidence.As[A,B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Liskov</span><span class="tparams">[<span name="A">-A</span>, <span name="B">+B</span>]</span><span class="result alias"> = <a href="As.html" class="extype" name="cats.evidence.As">As</a>[<span class="extype" name="cats.evidence.Liskov.A">A</span>, <span class="extype" name="cats.evidence.Liskov.B">B</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">The property that a value of type A can be used in a context
+expecting a B if A &lt;~&lt; B is referred to as the &quot;Liskov
+Substitution Principle&quot;, which is named for Barbara Liskov:
+https://en.wikipedia.org/wiki/Barbara_Liskov
+</p>
+    </li></ol>
+            </div>
+
+        
+
+        <div class="values members">
+              <h3>Value Members</h3>
+              <ol>
+                <li name="cats.evidence.As" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="As"></a><a id="As:As"></a>
+      <span class="permalink">
+      <a href="../../cats/evidence/As$.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="As$.html"><span class="name">As</span></a><span class="result"> extends <a href="AsInstances.html" class="extype" name="cats.evidence.AsInstances">AsInstances</a> with <span class="extype" name="cats.evidence.AsSupport">AsSupport</span> with <a href="https://www.scala-lang.org/api/2.12.14/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      
+    </li><li name="cats.evidence.Is" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Is"></a><a id="Is:Is"></a>
+      <span class="permalink">
+      <a href="../../cats/evidence/Is$.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="Is$.html"><span class="name">Is</span></a><span class="result"> extends <a href="IsInstances.html" class="extype" name="cats.evidence.IsInstances">IsInstances</a> with <span class="extype" name="cats.evidence.IsSupport">IsSupport</span> with <a href="https://www.scala-lang.org/api/2.12.14/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      
+    </li>
+              </ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.14/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.14/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+    </body>
+          </div>
+        </div>
+      </div>
+    </body>
+      </html>

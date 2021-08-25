@@ -1,0 +1,1538 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+          <title></title>
+          <meta name="description" content="" />
+          <meta name="keywords" content="" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      
+      <link href="../../lib/index.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../lib/jquery.min.js"></script>
+      <script type="text/javascript" src="../../lib/jquery.panzoom.min.js"></script>
+      <script type="text/javascript" src="../../lib/jquery.mousewheel.min.js"></script>
+      <script type="text/javascript" src="../../lib/index.js"></script>
+      <script type="text/javascript" src="../../index.js"></script>
+      <script type="text/javascript" src="../../lib/scheduler.js"></script>
+      <script type="text/javascript" src="../../lib/template.js"></script>
+      <script type="text/javascript" src="../../lib/modernizr.custom.js"></script><script type="text/javascript" src="../../lib/diagrams.js" id="diagrams-js"></script>
+      <script type="text/javascript">
+        /* this variable can be used by the JS to determine the path to the root document */
+        var toRoot = '../../';
+      </script>
+    
+        </head>
+        <body>
+      <div id="search">
+        <span id="doc-title"><span id="doc-version"></span></span>
+        <span class="close-results"><span class="left">&lt;</span> Back</span>
+        <div id="textfilter">
+          <span class="input">
+            <input autocapitalize="none" placeholder="Search" id="index-input" type="text" accesskey="/" />
+            <i class="clear material-icons"></i>
+            <i id="search-icon" class="material-icons"></i>
+          </span>
+        </div>
+    </div>
+      <div id="search-results">
+        <div id="search-progress">
+          <div id="progress-fill"></div>
+        </div>
+        <div id="results-content">
+          <div id="entity-results"></div>
+          <div id="member-results"></div>
+        </div>
+      </div>
+      <div id="content-scroll-container" style="-webkit-overflow-scrolling: touch;">
+        <div id="content-container" style="-webkit-overflow-scrolling: touch;">
+          <div id="subpackage-spacer">
+            <div id="packages">
+              <h1>Packages</h1>
+              <ul>
+                <li name="_root_.root" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="_root_"></a><a id="root:_root_"></a>
+      <span class="permalink">
+      <a href="../../index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../../index.html"><span class="name">root</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
+    </li><li name="_root_.cats" visbl="pub" class="indented1 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="cats"></a><a id="cats:cats"></a>
+      <span class="permalink">
+      <a href="../../cats/index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="The cats root package contains all the trait signatures of most Scala type classes." href="../index.html"><span class="name">cats</span></a>
+      </span>
+      
+      <p class="shortcomment cmt">The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><p>Cats type classes are implemented using the approach from the
+ <a href="https://ropas.snu.ac.kr/~bruno/papers/TypeClasses.pdf" target="_blank">Type classes as objects and implicits</a> article.</p><p>For each type class, <code>cats</code> provides three pieces:
+- Its <b>signature</b>: a trait that is polymorphic on a type parameter.
+  Type class traits inherit from other type classes to indicate that any implementation of the lower type class (e.g. <code>Applicative</code>)
+  can also serve as an instance for the higuer type class (e.g. <code>Functor</code>).
+- Type class <b>'instances</b>, which are classes and objects that implement one or more type class signatures for some specific types.
+  Type class instances for several data types from the Java or Scala standard libraries are declared in the subpackage <code>cats.instances</code>.
+- <b>Syntax extensions</b>, each of which provides the methods of the type class defines as extension methods
+  (which in Scala 2 are encoded as implicit classes) for values of any type <code>F</code>; given that an instance of the type class
+  for the receiver type (<code>this</code>) is in the implicit scope.
+  Symtax extensions are declared in the <code>cats.syntax</code> package.
+- A set of <b>laws</b>, that are also generic on the type of the class, and are only defined on the operations of the type class.
+  The purpose of these laws is to declare some algebraic relations (equations) between Scala expressions involving the operations
+  of the type class, and test (but not verify) that implemented instances satisfy those equations.
+  Laws are defined in the <code>cats-laws</code> package.</p><p>Although most of cats type classes are declared in this package, some are declared in other packages:
+- type classes that operate on base types (kind <code>*</code>), and their implementations for standard library types,
+  are contained in <code>cats.kernel</code>, which is a different SBT project. However, they are re-exported from this package.
+- type classes of kind <code>F[_, _]</code>, such as <a href="../arrow/Profunctor.html" class="extype" name="cats.arrow.Profunctor">cats.arrow.Profunctor</a>&quot; or <a href="../arrow/Arrow.html" class="extype" name="cats.arrow.Arrow">cats.arrow.Arrow</a>, which are relevant for
+  Functional Reactive Programming or optics, are declared in the <code>cats.arrow</code> package.
+- Also, those type classes that abstract over (pure or impure) functional runtime effects are declared
+  in the <a href="https://typelevel.org/cats-effect/" target="_blank">cats-effect library</a>.
+- Some type classes for which no laws can be provided are left out of the main road, in a small and dirty alley.
+  These are the <code>alleycats</code>.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
+    </li><li name="cats.data" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="data"></a><a id="data:data"></a>
+      <span class="permalink">
+      <a href="../../cats/data/index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="index.html"><span class="name">data</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="cats">cats</a></dd></dl></div>
+    </li><li name="cats.data.Validated" visbl="pub" class="indented3 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Validated"></a><a id="Validated:Validated"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="Validated$.html"><span class="name">Validated</span></a><span class="result"> extends <span class="extype" name="cats.data.ValidatedInstances">ValidatedInstances</span> with <span class="extype" name="cats.data.ValidatedFunctions">ValidatedFunctions</span> with <span class="extype" name="cats.data.ValidatedFunctionsBinCompat0">ValidatedFunctionsBinCompat0</span> with <a href="https://www.scala-lang.org/api/2.12.14/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="cats.data">data</a></dd></dl></div>
+    </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="" title=""></a>
+                        <a href="" title="">Invalid</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="Validated$$Valid.html" title=""></a>
+                        <a href="Validated$$Valid.html" title="">Valid</a>
+                      </li>
+              </ul>
+            </div>
+          </div>
+          <div id="content">
+            <body class="class type">
+      <div id="definition">
+        <div class="big-circle class">c</div>
+        <p id="owner"><a href="../index.html" class="extype" name="cats">cats</a>.<a href="index.html" class="extype" name="cats.data">data</a>.<a href="Validated$.html" class="extype" name="cats.data.Validated">Validated</a></p>
+        <h1>Invalid<span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span></h1>
+        <h3><span class="morelinks"></span></h3>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Invalid</span><span class="tparams">[<span name="E">+E</span>]</span><span class="params">(<span name="e">e: <span class="extype" name="cats.data.Validated.Invalid.E">E</span></span>)</span><span class="result"> extends <a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.Validated.Invalid.E">E</span>, <a href="https://www.scala-lang.org/api/2.12.14/scala/Nothing.html#scala.Nothing" class="extype" name="scala.Nothing">Nothing</a>] with <a href="https://www.scala-lang.org/api/2.12.14/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="https://www.scala-lang.org/api/2.12.14/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      </h4>
+
+      
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/main/core/src/main/scala/cats/data/Validated.scala" target="_blank">Validated.scala</a></dd></dl><div class="toggleContainer block">
+          <span class="toggle">
+            Linear Supertypes
+          </span>
+          <div class="superTypes hiddenContent"><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.Validated.Invalid.E">E</span>, <a href="https://www.scala-lang.org/api/2.12.14/scala/Nothing.html#scala.Nothing" class="extype" name="scala.Nothing">Nothing</a>], <a href="https://www.scala-lang.org/api/2.12.14/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="https://www.scala-lang.org/api/2.12.14/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a>, <a href="https://www.scala-lang.org/api/2.12.14/scala/Equals.html#scala.Equals" class="extype" name="scala.Equals">Equals</a>, <a href="https://www.scala-lang.org/api/2.12.14/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.14/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+        </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
+                <span class="toggle diagram-link">
+                  Type Hierarchy
+                </span>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph1" viewBox="0.00 0.00 319.50 118.00" height="118pt" width="320pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 114)" class="graph" id="page0,1_graph0"><polygon points="-4,4 -4,-114 315.5,-114 315.5,4 -4,4" stroke="transparent" fill="white"></polygon><g class="cluster" id="clust1"></g><g class="cluster" id="clust2"></g><!-- node0 --><g class="node this class" id="graph1_0"><g id="a_this class|graph1_0"><a xlink:title="cats.data.Validated.Invalid (this class)" xlink:href="#inheritance-diagram"><path d="M203.17,-49C203.17,-49 143.83,-49 143.83,-49 139.67,-49 135.5,-44.83 135.5,-40.67 135.5,-40.67 135.5,-32.33 135.5,-32.33 135.5,-28.17 139.67,-24 143.83,-24 143.83,-24 203.17,-24 203.17,-24 207.33,-24 211.5,-28.17 211.5,-32.33 211.5,-32.33 211.5,-40.67 211.5,-40.67 211.5,-44.83 207.33,-49 203.17,-49" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-43.5" x="145.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-34.1" x="166.5" text-anchor="start">Invalid[E]</text></a></g></g><!-- node1 --><g class="node class" id="graph1_1"><g id="a_class|graph1_1"><a xlink:title="cats.data.Validated" xlink:href="Validated.html#inheritance-diagram"><path d="M110.67,-110C110.67,-110 8.33,-110 8.33,-110 4.17,-110 0,-105.83 0,-101.67 0,-101.67 0,-93.33 0,-93.33 0,-89.17 4.17,-85 8.33,-85 8.33,-85 110.67,-85 110.67,-85 114.83,-85 119,-89.17 119,-93.33 119,-93.33 119,-101.67 119,-101.67 119,-105.83 114.83,-110 110.67,-110" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-104.5" x="10.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-95.1" x="31.5" text-anchor="start">Validated[E, Nothing]</text></a></g></g><!-- node1&#45;&gt;node0 --><g class="edge inheritance" id="graph1_1_0"><g id="a_inheritance|graph1_1_0"><a xlink:title="Invalid[E] is a subtype of Validated[E, Nothing]"><path d="M88.1,-81.7C107.54,-71.64 132.89,-58.52 150.92,-49.19" stroke="#d4d4d4" fill="none"></path><polygon points="86.84,-79.59 81.75,-84.98 89.09,-83.94 86.84,-79.59" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node2 --><g class="node trait" id="graph1_2"><g id="a_trait|graph1_2"><a xlink:title="scala.Product"><path d="M201.17,-110C201.17,-110 145.83,-110 145.83,-110 141.67,-110 137.5,-105.83 137.5,-101.67 137.5,-101.67 137.5,-93.33 137.5,-93.33 137.5,-89.17 141.67,-85 145.83,-85 145.83,-85 201.17,-85 201.17,-85 205.33,-85 209.5,-89.17 209.5,-93.33 209.5,-93.33 209.5,-101.67 209.5,-101.67 209.5,-105.83 205.33,-110 201.17,-110" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-104.5" x="147.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-95.1" x="168.5" text-anchor="start">Product</text></a></g></g><!-- node2&#45;&gt;node0 --><g class="edge inheritance" id="graph1_2_0"><g id="a_inheritance|graph1_2_0"><a xlink:title="Invalid[E] is a subtype of Product"><path d="M173.5,-77.76C173.5,-68.37 173.5,-57.29 173.5,-49.13" stroke="#d4d4d4" fill="none"></path><polygon points="171.05,-77.84 173.5,-84.84 175.95,-77.84 171.05,-77.84" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node3 --><g class="node trait" id="graph1_3"><g id="a_trait|graph1_3"><a xlink:title="scala.Serializable"><path d="M303.17,-110C303.17,-110 235.83,-110 235.83,-110 231.67,-110 227.5,-105.83 227.5,-101.67 227.5,-101.67 227.5,-93.33 227.5,-93.33 227.5,-89.17 231.67,-85 235.83,-85 235.83,-85 303.17,-85 303.17,-85 307.33,-85 311.5,-89.17 311.5,-93.33 311.5,-93.33 311.5,-101.67 311.5,-101.67 311.5,-105.83 307.33,-110 303.17,-110" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-104.5" x="237.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-95.1" x="258.5" text-anchor="start">Serializable</text></a></g></g><!-- node3&#45;&gt;node0 --><g class="edge inheritance" id="graph1_3_0"><g id="a_inheritance|graph1_3_0"><a xlink:title="Invalid[E] is a subtype of Serializable"><path d="M244.33,-81.03C228.08,-71.04 207.27,-58.26 192.43,-49.13" stroke="#d4d4d4" fill="none"></path><polygon points="243.29,-83.27 250.53,-84.84 245.85,-79.09 243.29,-83.27" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
+                <div id="diagram-controls" class="hiddenContent">
+                  <button id="diagram-zoom-out" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button id="diagram-zoom-in" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button title="Toggle full-screen" id="diagram-fs" class="diagram-btn to-full"><i class="material-icons"></i></button>
+                </div>
+              </div></div>
+        
+
+      <div id="mbrsel">
+        <div class="toggle"></div>
+        <div id="memberfilter">
+          <i class="material-icons arrow"></i>
+          <span class="input">
+            <input id="mbrsel-input" placeholder="Filter all members" type="text" accesskey="/" />
+          </span>
+          <i class="clear material-icons"></i>
+        </div>
+        <div id="filterby">
+          <div id="order">
+            <span class="filtertype">Ordering</span>
+            <ol>
+              
+              <li class="alpha in"><span>Alphabetic</span></li>
+              <li class="inherit out"><span>By Inheritance</span></li>
+            </ol>
+          </div>
+          <div class="ancestors">
+                  <span class="filtertype">Inherited<br />
+                  </span>
+                  <ol id="linearization">
+                    <li class="in" name="cats.data.Validated.Invalid"><span>Invalid</span></li><li class="in" name="cats.data.Validated"><span>Validated</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  </ol>
+                </div><div class="ancestors">
+              <span class="filtertype"></span>
+              <ol>
+                <li class="hideall out"><span>Hide All</span></li>
+                <li class="showall in"><span>Show All</span></li>
+              </ol>
+            </div>
+          <div id="visbl">
+              <span class="filtertype">Visibility</span>
+              <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+            </div>
+        </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        <div id="constructors" class="members">
+              <h3>Instance Constructors</h3>
+              <ol><li name="cats.data.Validated.Invalid#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&lt;init&gt;(e:E):cats.data.Validated.Invalid[E]"></a><a id="&lt;init&gt;:Invalid[E]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#&lt;init&gt;(e:E):cats.data.Validated.Invalid[E]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">new</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Invalid</span><span class="params">(<span name="e">e: <span class="extype" name="cats.data.Validated.Invalid.E">E</span></span>)</span>
+      </span>
+      
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+
+        <div class="values members">
+              <h3>Value Members</h3>
+              <ol>
+                <li name="scala.AnyRef#!=" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a><a id="!=(Any):Boolean"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#!=(x$1:Any):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.14/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html###():Int" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a><a id="==(Any):Boolean"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#==(x$1:Any):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.14/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="cats.data.Validated#===" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="===[EE&gt;:E,AA&gt;:A](that:cats.data.Validated[EE,AA])(implicitEE:cats.Eq[EE],implicitAA:cats.Eq[AA]):Boolean"></a><a id="===[EE&gt;:E,AA&gt;:Nothing](Validated[EE,AA])(Eq[EE],Eq[AA]):Boolean"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#===[EE&gt;:E,AA&gt;:A](that:cats.data.Validated[EE,AA])(implicitEE:cats.Eq[EE],implicitAA:cats.Eq[AA]):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq$eq" class="name">===</span><span class="tparams">[<span name="EE">EE &gt;: <span class="extype" name="cats.data.Validated.Invalid.E">E</span></span>, <span name="AA">AA &gt;: <a href="https://www.scala-lang.org/api/2.12.14/scala/Nothing.html#scala.Nothing" class="extype" name="scala.Nothing">Nothing</a></span>]</span><span class="params">(<span name="that">that: <a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.Validated.===.EE">EE</span>, <span class="extype" name="cats.data.Validated.===.AA">AA</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="EE">EE: <a href="../index.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.data.Validated.===.EE">EE</span>]</span>, <span name="AA">AA: <a href="../index.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.data.Validated.===.AA">AA</span>]</span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Example:</p><div class="fullcomment"><div class="comment cmt"><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+
+scala&gt; <span class="kw">val</span> v1 = <span class="lit">"error"</span>.invalid[<span class="std">Int</span>]
+scala&gt; <span class="kw">val</span> v2 = <span class="lit">"error"</span>.invalid[<span class="std">Int</span>]
+scala&gt; <span class="kw">val</span> v3 = <span class="num">123.</span>valid[<span class="std">String</span>]
+scala&gt; <span class="kw">val</span> v4 = <span class="num">456.</span>valid[<span class="std">String</span>]
+
+scala&gt; v1 === v2
+res0: <span class="std">Boolean</span> = <span class="kw">true</span>
+
+scala&gt; v1 === v3
+res1: <span class="std">Boolean</span> = <span class="kw">false</span>
+
+scala&gt; v3 === v4
+res3: <span class="std">Boolean</span> = <span class="kw">false</span></pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></dd></dl></div>
+    </li><li name="cats.data.Validated#andThen" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="andThen[EE&gt;:E,B](f:A=&gt;cats.data.Validated[EE,B]):cats.data.Validated[EE,B]"></a><a id="andThen[EE&gt;:E,B]((Nothing)⇒Validated[EE,B]):Validated[EE,B]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#andThen[EE&gt;:E,B](f:A=&gt;cats.data.Validated[EE,B]):cats.data.Validated[EE,B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">andThen</span><span class="tparams">[<span name="EE">EE &gt;: <span class="extype" name="cats.data.Validated.Invalid.E">E</span></span>, <span name="B">B</span>]</span><span class="params">(<span name="f">f: (<a href="https://www.scala-lang.org/api/2.12.14/scala/Nothing.html#scala.Nothing" class="extype" name="scala.Nothing">Nothing</a>) ⇒ <a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.Validated.andThen.EE">EE</span>, <span class="extype" name="cats.data.Validated.andThen.B">B</span>]</span>)</span><span class="result">: <a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.Validated.andThen.EE">EE</span>, <span class="extype" name="cats.data.Validated.andThen.B">B</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Apply a function (that returns a <code>Validated</code>) in the valid case.</p><div class="fullcomment"><div class="comment cmt"><p>Apply a function (that returns a <code>Validated</code>) in the valid case.
+Otherwise return the original <code>Validated</code>.</p><p>This allows &quot;chained&quot; validation: the output of one validation can be fed
+into another validation function.</p><p>This function is similar to <code>flatMap</code> on <code>Either</code>. It's not called <code>flatMap</code>,
+because by Cats convention, <code>flatMap</code> is a monadic bind that is consistent
+with <code>ap</code>. This method is not consistent with <a href="Validated.html#ap[EE&gt;:E,B](f:cats.data.Validated[EE,A=&gt;B])(implicitEE:cats.Semigroup[EE]):cats.data.Validated[EE,B]" class="extmbr" name="cats.data.Validated#ap">ap</a> (or other
+<code>Apply</code>-based methods), because it has &quot;fail-fast&quot; behavior as opposed to
+accumulating validation failures.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+
+scala&gt; <span class="kw">val</span> v1 = <span class="lit">"error"</span>.invalid[<span class="std">Int</span>]
+scala&gt; <span class="kw">val</span> v2 = <span class="num">123.</span>valid[<span class="std">String</span>]
+scala&gt; <span class="kw">val</span> f: <span class="std">Int</span> <span class="kw">=&gt;</span> Validated[<span class="std">String</span>, <span class="std">List</span>[<span class="std">Int</span>]] = <span class="std">List</span>(_).valid[<span class="std">String</span>]
+
+scala&gt; v1.andThen(f)
+res0: Validated[<span class="std">String</span>, <span class="std">List</span>[<span class="std">Int</span>]] = Invalid(error)
+
+scala&gt; v2.andThen(f)
+res1: Validated[<span class="std">String</span>, <span class="std">List</span>[<span class="std">Int</span>]] = Valid(<span class="std">List</span>(<span class="num">123</span>))</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></dd></dl></div>
+    </li><li name="cats.data.Validated#ap" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ap[EE&gt;:E,B](f:cats.data.Validated[EE,A=&gt;B])(implicitEE:cats.Semigroup[EE]):cats.data.Validated[EE,B]"></a><a id="ap[EE&gt;:E,B](Validated[EE,(Nothing)⇒B])(Semigroup[EE]):Validated[EE,B]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#ap[EE&gt;:E,B](f:cats.data.Validated[EE,A=&gt;B])(implicitEE:cats.Semigroup[EE]):cats.data.Validated[EE,B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ap</span><span class="tparams">[<span name="EE">EE &gt;: <span class="extype" name="cats.data.Validated.Invalid.E">E</span></span>, <span name="B">B</span>]</span><span class="params">(<span name="f">f: <a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.Validated.ap.EE">EE</span>, (<a href="https://www.scala-lang.org/api/2.12.14/scala/Nothing.html#scala.Nothing" class="extype" name="scala.Nothing">Nothing</a>) ⇒ <span class="extype" name="cats.data.Validated.ap.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="EE">EE: <a href="../index.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.data.Validated.ap.EE">EE</span>]</span>)</span><span class="result">: <a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.Validated.ap.EE">EE</span>, <span class="extype" name="cats.data.Validated.ap.B">B</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">From Apply:
+if both the function and this value are Valid, apply the function</p><div class="fullcomment"><div class="comment cmt"><p>From Apply:
+if both the function and this value are Valid, apply the function</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+
+scala&gt; <span class="kw">val</span> v1 = <span class="lit">"error"</span>.invalid[<span class="std">Int</span>]
+scala&gt; <span class="kw">val</span> v2 = <span class="num">123.</span>valid[<span class="std">String</span>]
+scala&gt; <span class="kw">val</span> f: Validated[<span class="std">String</span>, <span class="std">Int</span> <span class="kw">=&gt;</span> <span class="std">Option</span>[<span class="std">Int</span>]] = (<span class="std">Option</span>.apply[<span class="std">Int</span>] _).valid[<span class="std">String</span>]
+
+scala&gt; v1.ap(f)
+res0: Validated[<span class="std">String</span>, <span class="std">Option</span>[<span class="std">Int</span>]] = Invalid(error)
+
+scala&gt; v2.ap(f)
+res1: Validated[<span class="std">String</span>, <span class="std">Option</span>[<span class="std">Int</span>]] = Valid(<span class="std">Some</span>(<span class="num">123</span>))</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#asInstanceOf[T0]:T0" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.data.Validated#bimap" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="bimap[EE,AA](fe:E=&gt;EE,fa:A=&gt;AA):cats.data.Validated[EE,AA]"></a><a id="bimap[EE,AA]((E)⇒EE,(Nothing)⇒AA):Validated[EE,AA]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#bimap[EE,AA](fe:E=&gt;EE,fa:A=&gt;AA):cats.data.Validated[EE,AA]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">bimap</span><span class="tparams">[<span name="EE">EE</span>, <span name="AA">AA</span>]</span><span class="params">(<span name="fe">fe: (<span class="extype" name="cats.data.Validated.Invalid.E">E</span>) ⇒ <span class="extype" name="cats.data.Validated.bimap.EE">EE</span></span>, <span name="fa">fa: (<a href="https://www.scala-lang.org/api/2.12.14/scala/Nothing.html#scala.Nothing" class="extype" name="scala.Nothing">Nothing</a>) ⇒ <span class="extype" name="cats.data.Validated.bimap.AA">AA</span></span>)</span><span class="result">: <a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.Validated.bimap.EE">EE</span>, <span class="extype" name="cats.data.Validated.bimap.AA">AA</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Validated is a <a href="../Bifunctor.html" class="extype" name="cats.Bifunctor">Bifunctor</a>, this method applies one of the
+given functions.]</p><div class="fullcomment"><div class="comment cmt"><p>Validated is a <a href="../Bifunctor.html" class="extype" name="cats.Bifunctor">Bifunctor</a>, this method applies one of the
+given functions.]</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+
+scala&gt; <span class="kw">val</span> v1: Validated[<span class="std">String</span>, <span class="std">Int</span>] = <span class="lit">"error"</span>.invalid[<span class="std">Int</span>]
+scala&gt; <span class="kw">val</span> v2: Validated[<span class="std">String</span>, <span class="std">Int</span>] = <span class="num">123.</span>valid[<span class="std">String</span>]
+
+scala&gt; v1.bimap(<span class="std">List</span>(_), <span class="std">Option</span>(_))
+res0: Validated[<span class="std">List</span>[<span class="std">String</span>], <span class="std">Option</span>[<span class="std">Int</span>]] = Invalid(<span class="std">List</span>(error))
+
+scala&gt; v2.bimap(<span class="std">List</span>(_), <span class="std">Option</span>(_))
+res1: Validated[<span class="std">List</span>[<span class="std">String</span>] ,<span class="std">Option</span>[<span class="std">Int</span>]] = Valid(<span class="std">Some</span>(<span class="num">123</span>))</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></dd></dl></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a><a id="clone():AnyRef"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#clone():Object" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
+              
+                <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@IntrinsicCandidate</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="cats.data.Validated#combine" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="combine[EE&gt;:E,AA&gt;:A](that:cats.data.Validated[EE,AA])(implicitEE:cats.Semigroup[EE],implicitAA:cats.Semigroup[AA]):cats.data.Validated[EE,AA]"></a><a id="combine[EE&gt;:E,AA&gt;:Nothing](Validated[EE,AA])(Semigroup[EE],Semigroup[AA]):Validated[EE,AA]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#combine[EE&gt;:E,AA&gt;:A](that:cats.data.Validated[EE,AA])(implicitEE:cats.Semigroup[EE],implicitAA:cats.Semigroup[AA]):cats.data.Validated[EE,AA]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">combine</span><span class="tparams">[<span name="EE">EE &gt;: <span class="extype" name="cats.data.Validated.Invalid.E">E</span></span>, <span name="AA">AA &gt;: <a href="https://www.scala-lang.org/api/2.12.14/scala/Nothing.html#scala.Nothing" class="extype" name="scala.Nothing">Nothing</a></span>]</span><span class="params">(<span name="that">that: <a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.Validated.combine.EE">EE</span>, <span class="extype" name="cats.data.Validated.combine.AA">AA</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="EE">EE: <a href="../index.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.data.Validated.combine.EE">EE</span>]</span>, <span name="AA">AA: <a href="../index.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.data.Validated.combine.AA">AA</span>]</span>)</span><span class="result">: <a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.Validated.combine.EE">EE</span>, <span class="extype" name="cats.data.Validated.combine.AA">AA</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Combine this <code>Validated</code> with another <code>Validated</code>, using the <code>Semigroup</code>
+instances of the underlying <code>E</code> and <code>A</code> instances.</p><div class="fullcomment"><div class="comment cmt"><p>Combine this <code>Validated</code> with another <code>Validated</code>, using the <code>Semigroup</code>
+instances of the underlying <code>E</code> and <code>A</code> instances. The resultant <code>Validated</code>
+will be <code>Valid</code>, if, and only if, both this <code>Validated</code> instance and the
+supplied <code>Validated</code> instance are also <code>Valid</code>.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+
+scala&gt; <span class="kw">val</span> v1 = <span class="lit">"error"</span>.invalidNel[<span class="std">List</span>[<span class="std">Int</span>]]
+scala&gt; <span class="kw">val</span> v2 = <span class="lit">"error2"</span>.invalidNel[<span class="std">List</span>[<span class="std">Int</span>]]
+scala&gt; <span class="kw">val</span> v3 = <span class="std">List</span>(<span class="num">123</span>).validNel[<span class="std">String</span>]
+scala&gt; <span class="kw">val</span> v4 = <span class="std">List</span>(<span class="num">456</span>).validNel[<span class="std">String</span>]
+
+scala&gt; v1 combine v2
+res0: Validated[NonEmptyList[<span class="std">String</span>], <span class="std">List</span>[<span class="std">Int</span>]] = Invalid(NonEmptyList(error, error2))
+
+scala&gt; v2 combine v3
+res1: Validated[NonEmptyList[<span class="std">String</span>], <span class="std">List</span>[<span class="std">Int</span>]] = Invalid(NonEmptyList(error2))
+
+scala&gt; v3 combine v4
+res2: Validated[NonEmptyList[<span class="std">String</span>], <span class="std">List</span>[<span class="std">Int</span>]] = Valid(<span class="std">List</span>(<span class="num">123</span>, <span class="num">456</span>))</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></dd></dl></div>
+    </li><li name="cats.data.Validated#compare" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="compare[EE&gt;:E,AA&gt;:A](that:cats.data.Validated[EE,AA])(implicitEE:cats.Order[EE],implicitAA:cats.Order[AA]):Int"></a><a id="compare[EE&gt;:E,AA&gt;:Nothing](Validated[EE,AA])(Order[EE],Order[AA]):Int"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#compare[EE&gt;:E,AA&gt;:A](that:cats.data.Validated[EE,AA])(implicitEE:cats.Order[EE],implicitAA:cats.Order[AA]):Int" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">compare</span><span class="tparams">[<span name="EE">EE &gt;: <span class="extype" name="cats.data.Validated.Invalid.E">E</span></span>, <span name="AA">AA &gt;: <a href="https://www.scala-lang.org/api/2.12.14/scala/Nothing.html#scala.Nothing" class="extype" name="scala.Nothing">Nothing</a></span>]</span><span class="params">(<span name="that">that: <a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.Validated.compare.EE">EE</span>, <span class="extype" name="cats.data.Validated.compare.AA">AA</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="EE">EE: <a href="../index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.data.Validated.compare.EE">EE</span>]</span>, <span name="AA">AA: <a href="../index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.data.Validated.compare.AA">AA</span>]</span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Example:</p><div class="fullcomment"><div class="comment cmt"><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+
+scala&gt; <span class="kw">val</span> v1 = <span class="lit">"error"</span>.invalid[<span class="std">Int</span>]
+scala&gt; <span class="kw">val</span> v2 = <span class="lit">"error2"</span>.invalid[<span class="std">Int</span>]
+scala&gt; <span class="kw">val</span> v3 = <span class="num">123.</span>valid[<span class="std">String</span>]
+scala&gt; <span class="kw">val</span> v4 = <span class="num">456.</span>valid[<span class="std">String</span>]
+scala&gt; <span class="kw">val</span> v5 = v4
+
+scala&gt; v1 compare v2
+res0: <span class="std">Int</span> = -<span class="num">1</span>
+
+scala&gt; v1 compare v3
+res1: <span class="std">Int</span> = -<span class="num">1</span>
+
+scala&gt; v3 compare v1
+res3: <span class="std">Int</span> = <span class="num">1</span>
+
+scala&gt; v3 compare v4
+res4: <span class="std">Int</span> = -<span class="num">1</span>
+
+scala&gt; v4 compare v5
+res5: <span class="std">Int</span> = <span class="num">0</span></pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></dd></dl></div>
+    </li><li name="cats.data.Validated.Invalid#e" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="e:E"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#e:E" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">e</span><span class="result">: <span class="extype" name="cats.data.Validated.Invalid.E">E</span></span>
+      </span>
+      
+      
+    </li><li name="cats.data.Validated#ensure" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ensure[EE&gt;:E](onFailure:=&gt;EE)(f:A=&gt;Boolean):cats.data.Validated[EE,A]"></a><a id="ensure[EE&gt;:E](⇒EE)((Nothing)⇒Boolean):Validated[EE,Nothing]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#ensure[EE&gt;:E](onFailure:=&gt;EE)(f:A=&gt;Boolean):cats.data.Validated[EE,A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ensure</span><span class="tparams">[<span name="EE">EE &gt;: <span class="extype" name="cats.data.Validated.Invalid.E">E</span></span>]</span><span class="params">(<span name="onFailure">onFailure: ⇒ <span class="extype" name="cats.data.Validated.ensure.EE">EE</span></span>)</span><span class="params">(<span name="f">f: (<a href="https://www.scala-lang.org/api/2.12.14/scala/Nothing.html#scala.Nothing" class="extype" name="scala.Nothing">Nothing</a>) ⇒ <a href="https://www.scala-lang.org/api/2.12.14/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="result">: <a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.Validated.ensure.EE">EE</span>, <a href="https://www.scala-lang.org/api/2.12.14/scala/Nothing.html#scala.Nothing" class="extype" name="scala.Nothing">Nothing</a>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Ensure that a successful result passes the given predicate,
+falling back to an Invalid of <code>onFailure</code> if the predicate
+returns false.</p><div class="fullcomment"><div class="comment cmt"><p>Ensure that a successful result passes the given predicate,
+falling back to an Invalid of <code>onFailure</code> if the predicate
+returns false.</p><p>For example:</p><pre>scala&gt; Validated.valid(<span class="lit">""</span>).ensure(<span class="kw">new</span> IllegalArgumentException(<span class="lit">"Must not be empty"</span>))(_.nonEmpty)
+res0: Validated[IllegalArgumentException, <span class="std">String</span>] = Invalid(java.lang.IllegalArgumentException: Must not be empty)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></dd></dl></div>
+    </li><li name="cats.data.Validated#ensureOr" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ensureOr[EE&gt;:E](onFailure:A=&gt;EE)(f:A=&gt;Boolean):cats.data.Validated[EE,A]"></a><a id="ensureOr[EE&gt;:E]((Nothing)⇒EE)((Nothing)⇒Boolean):Validated[EE,Nothing]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#ensureOr[EE&gt;:E](onFailure:A=&gt;EE)(f:A=&gt;Boolean):cats.data.Validated[EE,A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ensureOr</span><span class="tparams">[<span name="EE">EE &gt;: <span class="extype" name="cats.data.Validated.Invalid.E">E</span></span>]</span><span class="params">(<span name="onFailure">onFailure: (<a href="https://www.scala-lang.org/api/2.12.14/scala/Nothing.html#scala.Nothing" class="extype" name="scala.Nothing">Nothing</a>) ⇒ <span class="extype" name="cats.data.Validated.ensureOr.EE">EE</span></span>)</span><span class="params">(<span name="f">f: (<a href="https://www.scala-lang.org/api/2.12.14/scala/Nothing.html#scala.Nothing" class="extype" name="scala.Nothing">Nothing</a>) ⇒ <a href="https://www.scala-lang.org/api/2.12.14/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="result">: <a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.Validated.ensureOr.EE">EE</span>, <a href="https://www.scala-lang.org/api/2.12.14/scala/Nothing.html#scala.Nothing" class="extype" name="scala.Nothing">Nothing</a>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Ensure that a successful result passes the given predicate,
+falling back to the an Invalid of the result of <code>onFailure</code> if the predicate
+returns false.</p><div class="fullcomment"><div class="comment cmt"><p>Ensure that a successful result passes the given predicate,
+falling back to the an Invalid of the result of <code>onFailure</code> if the predicate
+returns false.</p><p>For example:</p><pre>scala&gt; Validated.valid(<span class="lit">"ab"</span>).ensureOr(s <span class="kw">=&gt;</span> <span class="kw">new</span> IllegalArgumentException(<span class="lit">"Must be longer than 3, provided '"</span> + s + <span class="lit">"'"</span>))(_.length &gt; <span class="num">3</span>)
+res0: Validated[IllegalArgumentException, <span class="std">String</span>] = Invalid(java.lang.IllegalArgumentException: Must be longer than <span class="num">3</span>, provided <span class="lit">'ab'</span>)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></dd></dl></div>
+    </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#eq(x$1:AnyRef):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.14/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="cats.data.Validated#exists" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="exists(predicate:A=&gt;Boolean):Boolean"></a><a id="exists((Nothing)⇒Boolean):Boolean"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#exists(predicate:A=&gt;Boolean):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">exists</span><span class="params">(<span name="predicate">predicate: (<a href="https://www.scala-lang.org/api/2.12.14/scala/Nothing.html#scala.Nothing" class="extype" name="scala.Nothing">Nothing</a>) ⇒ <a href="https://www.scala-lang.org/api/2.12.14/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Is this Valid and matching the given predicate</p><div class="fullcomment"><div class="comment cmt"><p>Is this Valid and matching the given predicate</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+
+scala&gt; <span class="kw">val</span> v1 = <span class="std">List</span>(<span class="lit">"error"</span>).invalid[<span class="std">Int</span>]
+scala&gt; <span class="kw">val</span> v2 = <span class="num">123.</span>valid[<span class="std">List</span>[<span class="std">String</span>]]
+
+scala&gt; v1.exists(_ &gt; <span class="num">120</span>)
+res0: <span class="std">Boolean</span> = <span class="kw">false</span>
+
+scala&gt; v2.exists(_ &gt; <span class="num">120</span>)
+res1: <span class="std">Boolean</span> = <span class="kw">true</span></pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></dd></dl></div>
+    </li><li name="cats.data.Validated#findValid" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="findValid[EE&gt;:E,AA&gt;:A](that:=&gt;cats.data.Validated[EE,AA])(implicitEE:cats.Semigroup[EE]):cats.data.Validated[EE,AA]"></a><a id="findValid[EE&gt;:E,AA&gt;:Nothing](⇒Validated[EE,AA])(Semigroup[EE]):Validated[EE,AA]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#findValid[EE&gt;:E,AA&gt;:A](that:=&gt;cats.data.Validated[EE,AA])(implicitEE:cats.Semigroup[EE]):cats.data.Validated[EE,AA]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">findValid</span><span class="tparams">[<span name="EE">EE &gt;: <span class="extype" name="cats.data.Validated.Invalid.E">E</span></span>, <span name="AA">AA &gt;: <a href="https://www.scala-lang.org/api/2.12.14/scala/Nothing.html#scala.Nothing" class="extype" name="scala.Nothing">Nothing</a></span>]</span><span class="params">(<span name="that">that: ⇒ <a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.Validated.findValid.EE">EE</span>, <span class="extype" name="cats.data.Validated.findValid.AA">AA</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="EE">EE: <a href="../index.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.data.Validated.findValid.EE">EE</span>]</span>)</span><span class="result">: <a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.Validated.findValid.EE">EE</span>, <span class="extype" name="cats.data.Validated.findValid.AA">AA</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">If <code>this</code> is valid return <code>this</code>, otherwise if <code>that</code> is valid return <code>that</code>, otherwise combine the failures.</p><div class="fullcomment"><div class="comment cmt"><p>If <code>this</code> is valid return <code>this</code>, otherwise if <code>that</code> is valid return <code>that</code>, otherwise combine the failures.
+This is similar to <a href="Validated.html#orElse[EE,AA&gt;:A](default:=&gt;cats.data.Validated[EE,AA]):cats.data.Validated[EE,AA]" class="extmbr" name="cats.data.Validated#orElse">orElse</a> except that here failures are accumulated.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+
+scala&gt; <span class="kw">val</span> v1 = <span class="std">List</span>(<span class="lit">"error1"</span>).invalid[<span class="std">Int</span>]
+scala&gt; <span class="kw">val</span> v2 = <span class="num">123.</span>valid[<span class="std">List</span>[<span class="std">String</span>]]
+scala&gt; <span class="kw">val</span> default1 = <span class="std">List</span>(<span class="lit">"error2"</span>).invalid[<span class="std">Int</span>]
+scala&gt; <span class="kw">val</span> default2 = <span class="num">456.</span>valid[<span class="std">List</span>[<span class="std">String</span>]]
+
+scala&gt; v1.findValid(default1)
+res0: Validated[<span class="std">List</span>[<span class="std">String</span>], <span class="std">Int</span>] = Invalid(<span class="std">List</span>(error1, error2))
+
+scala&gt; v1.findValid(default2)
+res1: Validated[<span class="std">List</span>[<span class="std">String</span>], <span class="std">Int</span>] = Valid(<span class="num">456</span>)
+
+scala&gt; v2.findValid(default1)
+res2: Validated[<span class="std">List</span>[<span class="std">String</span>], <span class="std">Int</span>] = Valid(<span class="num">123</span>)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></dd></dl></div>
+    </li><li name="cats.data.Validated#fold" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="fold[B](fe:E=&gt;B,fa:A=&gt;B):B"></a><a id="fold[B]((E)⇒B,(Nothing)⇒B):B"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#fold[B](fe:E=&gt;B,fa:A=&gt;B):B" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fold</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="fe">fe: (<span class="extype" name="cats.data.Validated.Invalid.E">E</span>) ⇒ <span class="extype" name="cats.data.Validated.fold.B">B</span></span>, <span name="fa">fa: (<a href="https://www.scala-lang.org/api/2.12.14/scala/Nothing.html#scala.Nothing" class="extype" name="scala.Nothing">Nothing</a>) ⇒ <span class="extype" name="cats.data.Validated.fold.B">B</span></span>)</span><span class="result">: <span class="extype" name="cats.data.Validated.fold.B">B</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Example:</p><div class="fullcomment"><div class="comment cmt"><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+
+scala&gt; <span class="kw">val</span> v1= <span class="lit">"error"</span>.invalid[<span class="std">Option</span>[<span class="std">String</span>]]
+scala&gt; <span class="kw">val</span> v2= <span class="std">Some</span>(<span class="lit">"abc"</span>).valid[<span class="std">String</span>]
+
+scala&gt; v1.fold(identity,_.getOrElse(<span class="lit">""</span>))
+res0: <span class="std">String</span> = error
+
+scala&gt; v2.fold(identity,_.getOrElse(<span class="lit">""</span>))
+res1: <span class="std">String</span> = abc</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></dd></dl></div>
+    </li><li name="cats.data.Validated#foldLeft" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="foldLeft[B](b:B)(f:(B,A)=&gt;B):B"></a><a id="foldLeft[B](B)((B,Nothing)⇒B):B"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#foldLeft[B](b:B)(f:(B,A)=&gt;B):B" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">foldLeft</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="b">b: <span class="extype" name="cats.data.Validated.foldLeft.B">B</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.Validated.foldLeft.B">B</span>, <a href="https://www.scala-lang.org/api/2.12.14/scala/Nothing.html#scala.Nothing" class="extype" name="scala.Nothing">Nothing</a>) ⇒ <span class="extype" name="cats.data.Validated.foldLeft.B">B</span></span>)</span><span class="result">: <span class="extype" name="cats.data.Validated.foldLeft.B">B</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">apply the given function to the value with the given B when
+valid, otherwise return the given B</p><div class="fullcomment"><div class="comment cmt"><p>apply the given function to the value with the given B when
+valid, otherwise return the given B</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+
+scala&gt; <span class="kw">val</span> v1 = <span class="lit">"error"</span>.invalid[<span class="std">Int</span>]
+scala&gt; <span class="kw">val</span> v2 = <span class="num">123.</span>valid[<span class="std">String</span>]
+
+scala&gt; v1.foldLeft(<span class="num">456</span>)(_ + _)
+res0: <span class="std">Int</span> = <span class="num">456</span>
+
+scala&gt; v2.foldLeft(<span class="num">456</span>)(_ + _)
+res1: <span class="std">Int</span> = <span class="num">579</span></pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></dd></dl></div>
+    </li><li name="cats.data.Validated#foldRight" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="foldRight[B](lb:cats.Eval[B])(f:(A,cats.Eval[B])=&gt;cats.Eval[B]):cats.Eval[B]"></a><a id="foldRight[B](Eval[B])((Nothing,Eval[B])⇒Eval[B]):Eval[B]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#foldRight[B](lb:cats.Eval[B])(f:(A,cats.Eval[B])=&gt;cats.Eval[B]):cats.Eval[B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">foldRight</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="lb">lb: <a href="../Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.data.Validated.foldRight.B">B</span>]</span>)</span><span class="params">(<span name="f">f: (<a href="https://www.scala-lang.org/api/2.12.14/scala/Nothing.html#scala.Nothing" class="extype" name="scala.Nothing">Nothing</a>, <a href="../Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.data.Validated.foldRight.B">B</span>]) ⇒ <a href="../Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.data.Validated.foldRight.B">B</span>]</span>)</span><span class="result">: <a href="../Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.data.Validated.foldRight.B">B</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Lazily-apply the given function to the value with the given B
+when valid, otherwise return the given B.</p><div class="fullcomment"><div class="comment cmt"><p>Lazily-apply the given function to the value with the given B
+when valid, otherwise return the given B.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">import</span> cats.Eval
+
+scala&gt; <span class="kw">val</span> v1 = <span class="lit">"error"</span>.invalid[<span class="std">Int</span>]
+scala&gt; <span class="kw">val</span> v2 = <span class="num">123.</span>valid[<span class="std">String</span>]
+
+scala&gt; v1.foldRight(Eval.now(<span class="num">456</span>))((i,e) <span class="kw">=&gt;</span> e.map(_ + i))
+res0: Eval[<span class="std">Int</span>] = Now(<span class="num">456</span>)
+
+scala&gt; v2.foldRight(Eval.now(<span class="num">456</span>))((i,e) <span class="kw">=&gt;</span> e.map(_ + i)).value
+res1: <span class="std">Int</span> = <span class="num">579</span></pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></dd></dl></div>
+    </li><li name="cats.data.Validated#forall" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="forall(f:A=&gt;Boolean):Boolean"></a><a id="forall((Nothing)⇒Boolean):Boolean"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#forall(f:A=&gt;Boolean):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">forall</span><span class="params">(<span name="f">f: (<a href="https://www.scala-lang.org/api/2.12.14/scala/Nothing.html#scala.Nothing" class="extype" name="scala.Nothing">Nothing</a>) ⇒ <a href="https://www.scala-lang.org/api/2.12.14/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Is this Invalid or matching the predicate</p><div class="fullcomment"><div class="comment cmt"><p>Is this Invalid or matching the predicate</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+
+scala&gt; <span class="kw">val</span> v1 = <span class="std">Some</span>(<span class="lit">"error"</span>).invalid[<span class="std">Int</span>]
+scala&gt; <span class="kw">val</span> v2 = <span class="num">123.</span>valid[<span class="std">Option</span>[<span class="std">String</span>]]
+
+scala&gt; v1.forall(_ &gt; <span class="num">150</span>)
+res0: <span class="std">Boolean</span> = <span class="kw">true</span>
+
+scala&gt; v2.forall(_ &gt; <span class="num">150</span>)
+res1: <span class="std">Boolean</span> = <span class="kw">false</span></pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></dd></dl></div>
+    </li><li name="cats.data.Validated#foreach" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="foreach(f:A=&gt;Unit):Unit"></a><a id="foreach((Nothing)⇒Unit):Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#foreach(f:A=&gt;Unit):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">foreach</span><span class="params">(<span name="f">f: (<a href="https://www.scala-lang.org/api/2.12.14/scala/Nothing.html#scala.Nothing" class="extype" name="scala.Nothing">Nothing</a>) ⇒ <a href="https://www.scala-lang.org/api/2.12.14/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Run the side-effecting function on the value if it is Valid
+</p><div class="fullcomment"><div class="comment cmt"><p>Run the side-effecting function on the value if it is Valid
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></dd></dl></div>
+    </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#getClass():Class[_]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
+                <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@IntrinsicCandidate</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="cats.data.Validated#getOrElse" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getOrElse[B&gt;:A](default:=&gt;B):B"></a><a id="getOrElse[B&gt;:Nothing](⇒B):B"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#getOrElse[B&gt;:A](default:=&gt;B):B" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getOrElse</span><span class="tparams">[<span name="B">B &gt;: <a href="https://www.scala-lang.org/api/2.12.14/scala/Nothing.html#scala.Nothing" class="extype" name="scala.Nothing">Nothing</a></span>]</span><span class="params">(<span name="default">default: ⇒ <span class="extype" name="cats.data.Validated.getOrElse.B">B</span></span>)</span><span class="result">: <span class="extype" name="cats.data.Validated.getOrElse.B">B</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Return the Valid value, or the default if Invalid</p><div class="fullcomment"><div class="comment cmt"><p>Return the Valid value, or the default if Invalid</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+
+scala&gt; <span class="kw">val</span> v1= <span class="lit">"error"</span>.invalid[<span class="std">Int</span>]
+scala&gt; <span class="kw">val</span> v2= <span class="num">123.</span>valid[<span class="std">String</span>]
+
+scala&gt; v1.getOrElse(<span class="num">456</span>)
+res0: <span class="std">Int</span> = <span class="num">456</span>
+
+scala&gt; v2.getOrElse(<span class="num">456</span>)
+res1: <span class="std">Int</span> = <span class="num">123</span></pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#isInstanceOf[T0]:Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.data.Validated#isInvalid" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInvalid:Boolean"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#isInvalid:Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInvalid</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Example:</p><div class="fullcomment"><div class="comment cmt"><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+
+scala&gt; <span class="kw">val</span> validated= <span class="lit">"error"</span>.invalid[<span class="std">Unit</span>]
+scala&gt; validated.isInvalid
+res0: <span class="std">Boolean</span> = <span class="kw">true</span></pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></dd></dl></div>
+    </li><li name="cats.data.Validated#isValid" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isValid:Boolean"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#isValid:Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isValid</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Example:</p><div class="fullcomment"><div class="comment cmt"><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+
+scala&gt; <span class="kw">val</span> validated= <span class="lit">"error"</span>.invalid[<span class="std">Unit</span>]
+scala&gt; validated.isValid
+res0: <span class="std">Boolean</span> = <span class="kw">false</span></pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></dd></dl></div>
+    </li><li name="cats.data.Validated#leftMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="leftMap[EE](f:E=&gt;EE):cats.data.Validated[EE,A]"></a><a id="leftMap[EE]((E)⇒EE):Validated[EE,Nothing]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#leftMap[EE](f:E=&gt;EE):cats.data.Validated[EE,A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">leftMap</span><span class="tparams">[<span name="EE">EE</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.Validated.Invalid.E">E</span>) ⇒ <span class="extype" name="cats.data.Validated.leftMap.EE">EE</span></span>)</span><span class="result">: <a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.Validated.leftMap.EE">EE</span>, <a href="https://www.scala-lang.org/api/2.12.14/scala/Nothing.html#scala.Nothing" class="extype" name="scala.Nothing">Nothing</a>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Apply a function to an Invalid value, returning a new Invalid value.</p><div class="fullcomment"><div class="comment cmt"><p>Apply a function to an Invalid value, returning a new Invalid value.
+Or, if the original valid was Valid, return it.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+
+scala&gt; <span class="kw">val</span> v1 = <span class="lit">"error"</span>.invalid[<span class="std">Int</span>]
+scala&gt; <span class="kw">val</span> v2 = <span class="num">123.</span>valid[<span class="std">String</span>]
+
+scala&gt; v1.leftMap(<span class="std">Option</span>.apply)
+res0: Validated[<span class="std">Option</span>[<span class="std">String</span>], <span class="std">Int</span>] = Invalid(<span class="std">Some</span>(error))
+
+scala&gt; v2.leftMap(<span class="std">Option</span>.apply)
+res1: Validated[<span class="std">Option</span>[<span class="std">String</span>], <span class="std">Int</span>] = Valid(<span class="num">123</span>)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></dd></dl></div>
+    </li><li name="cats.data.Validated#map" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="map[B](f:A=&gt;B):cats.data.Validated[E,B]"></a><a id="map[B]((Nothing)⇒B):Validated[E,B]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#map[B](f:A=&gt;B):cats.data.Validated[E,B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">map</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<a href="https://www.scala-lang.org/api/2.12.14/scala/Nothing.html#scala.Nothing" class="extype" name="scala.Nothing">Nothing</a>) ⇒ <span class="extype" name="cats.data.Validated.map.B">B</span></span>)</span><span class="result">: <a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.Validated.Invalid.E">E</span>, <span class="extype" name="cats.data.Validated.map.B">B</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Apply a function to a Valid value, returning a new Valid value</p><div class="fullcomment"><div class="comment cmt"><p>Apply a function to a Valid value, returning a new Valid value</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+
+scala&gt; <span class="kw">val</span> v1 = <span class="lit">"error"</span>.invalid[<span class="std">Int</span>]
+scala&gt; <span class="kw">val</span> v2 = <span class="num">123.</span>valid[<span class="std">String</span>]
+
+scala&gt; v1.map(_ * <span class="num">2</span>)
+res0: Validated[<span class="std">String</span>, <span class="std">Int</span>] = Invalid(error)
+
+scala&gt; v2.map(_ * <span class="num">2</span>)
+res1: Validated[<span class="std">String</span>, <span class="std">Int</span>] = Valid(<span class="num">246</span>)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></dd></dl></div>
+    </li><li name="cats.data.Validated#merge" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="merge[EE&gt;:E](implicitev:A&lt;:&lt;EE):EE"></a><a id="merge[EE&gt;:E](&lt;:&lt;[Nothing,EE]):EE"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#merge[EE&gt;:E](implicitev:A&lt;:&lt;EE):EE" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">merge</span><span class="tparams">[<span name="EE">EE &gt;: <span class="extype" name="cats.data.Validated.Invalid.E">E</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[<a href="https://www.scala-lang.org/api/2.12.14/scala/Nothing.html#scala.Nothing" class="extype" name="scala.Nothing">Nothing</a>, <span class="extype" name="cats.data.Validated.merge.EE">EE</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.Validated.merge.EE">EE</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Example:</p><div class="fullcomment"><div class="comment cmt"><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+
+scala&gt; <span class="kw">val</span> v1 = <span class="std">Seq</span>(<span class="lit">"error"</span>).invalid[<span class="std">List</span>[<span class="std">String</span>]]
+scala&gt; <span class="kw">val</span> v2 = <span class="std">List</span>(<span class="lit">"Ok"</span>).valid[<span class="std">Seq</span>[<span class="std">String</span>]]
+
+scala&gt; v1.merge
+res0: <span class="std">Seq</span>[<span class="std">String</span>] = <span class="std">List</span>(error)
+
+scala&gt; v2.merge
+res1: <span class="std">Seq</span>[<span class="std">String</span>] = <span class="std">List</span>(Ok)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></dd></dl></div>
+    </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#ne(x$1:AnyRef):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.14/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#notify():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@IntrinsicCandidate</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#notifyAll():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@IntrinsicCandidate</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="cats.data.Validated#orElse" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="orElse[EE,AA&gt;:A](default:=&gt;cats.data.Validated[EE,AA]):cats.data.Validated[EE,AA]"></a><a id="orElse[EE,AA&gt;:Nothing](⇒Validated[EE,AA]):Validated[EE,AA]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#orElse[EE,AA&gt;:A](default:=&gt;cats.data.Validated[EE,AA]):cats.data.Validated[EE,AA]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">orElse</span><span class="tparams">[<span name="EE">EE</span>, <span name="AA">AA &gt;: <a href="https://www.scala-lang.org/api/2.12.14/scala/Nothing.html#scala.Nothing" class="extype" name="scala.Nothing">Nothing</a></span>]</span><span class="params">(<span name="default">default: ⇒ <a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.Validated.orElse.EE">EE</span>, <span class="extype" name="cats.data.Validated.orElse.AA">AA</span>]</span>)</span><span class="result">: <a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.Validated.orElse.EE">EE</span>, <span class="extype" name="cats.data.Validated.orElse.AA">AA</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Return this if it is Valid, or else fall back to the given default.</p><div class="fullcomment"><div class="comment cmt"><p>Return this if it is Valid, or else fall back to the given default.
+The functionality is similar to that of <a href="Validated.html#findValid[EE&gt;:E,AA&gt;:A](that:=&gt;cats.data.Validated[EE,AA])(implicitEE:cats.Semigroup[EE]):cats.data.Validated[EE,AA]" class="extmbr" name="cats.data.Validated#findValid">findValid</a> except for failure accumulation,
+where here only the error on the right is preserved and the error on the left is ignored.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+
+scala&gt; <span class="kw">val</span> v1 = <span class="std">Some</span>(<span class="lit">"error"</span>).invalid[<span class="std">Int</span>]
+scala&gt; <span class="kw">val</span> v2 = <span class="num">123.</span>valid[<span class="std">Option</span>[<span class="std">String</span>]]
+scala&gt; <span class="kw">val</span> defaultValidated = <span class="num">456.</span>valid[<span class="std">Option</span>[<span class="std">String</span>]]
+
+scala&gt; v1.orElse(defaultValidated)
+res0: Validated[<span class="std">Option</span>[<span class="std">String</span>], <span class="std">Int</span>] = Valid(<span class="num">456</span>)
+
+scala&gt; v2.orElse(defaultValidated)
+res1: Validated[<span class="std">Option</span>[<span class="std">String</span>], <span class="std">Int</span>] = Valid(<span class="num">123</span>)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></dd></dl></div>
+    </li><li name="cats.data.Validated#partialCompare" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="partialCompare[EE&gt;:E,AA&gt;:A](that:cats.data.Validated[EE,AA])(implicitEE:cats.PartialOrder[EE],implicitAA:cats.PartialOrder[AA]):Double"></a><a id="partialCompare[EE&gt;:E,AA&gt;:Nothing](Validated[EE,AA])(PartialOrder[EE],PartialOrder[AA]):Double"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#partialCompare[EE&gt;:E,AA&gt;:A](that:cats.data.Validated[EE,AA])(implicitEE:cats.PartialOrder[EE],implicitAA:cats.PartialOrder[AA]):Double" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">partialCompare</span><span class="tparams">[<span name="EE">EE &gt;: <span class="extype" name="cats.data.Validated.Invalid.E">E</span></span>, <span name="AA">AA &gt;: <a href="https://www.scala-lang.org/api/2.12.14/scala/Nothing.html#scala.Nothing" class="extype" name="scala.Nothing">Nothing</a></span>]</span><span class="params">(<span name="that">that: <a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.Validated.partialCompare.EE">EE</span>, <span class="extype" name="cats.data.Validated.partialCompare.AA">AA</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="EE">EE: <a href="../index.html#PartialOrder[A]=cats.kernel.PartialOrder[A]" class="extmbr" name="cats.PartialOrder">PartialOrder</a>[<span class="extype" name="cats.data.Validated.partialCompare.EE">EE</span>]</span>, <span name="AA">AA: <a href="../index.html#PartialOrder[A]=cats.kernel.PartialOrder[A]" class="extmbr" name="cats.PartialOrder">PartialOrder</a>[<span class="extype" name="cats.data.Validated.partialCompare.AA">AA</span>]</span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Double.html#scala.Double" class="extype" name="scala.Double">Double</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></dd></dl></div>
+    </li><li name="cats.data.Validated#product" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="product[EE&gt;:E,B](fb:cats.data.Validated[EE,B])(implicitEE:cats.Semigroup[EE]):cats.data.Validated[EE,(A,B)]"></a><a id="product[EE&gt;:E,B](Validated[EE,B])(Semigroup[EE]):Validated[EE,(Nothing,B)]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#product[EE&gt;:E,B](fb:cats.data.Validated[EE,B])(implicitEE:cats.Semigroup[EE]):cats.data.Validated[EE,(A,B)]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">product</span><span class="tparams">[<span name="EE">EE &gt;: <span class="extype" name="cats.data.Validated.Invalid.E">E</span></span>, <span name="B">B</span>]</span><span class="params">(<span name="fb">fb: <a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.Validated.product.EE">EE</span>, <span class="extype" name="cats.data.Validated.product.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="EE">EE: <a href="../index.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.data.Validated.product.EE">EE</span>]</span>)</span><span class="result">: <a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.Validated.product.EE">EE</span>, (<a href="https://www.scala-lang.org/api/2.12.14/scala/Nothing.html#scala.Nothing" class="extype" name="scala.Nothing">Nothing</a>, <span class="extype" name="cats.data.Validated.product.B">B</span>)]</span>
+      </span>
+      
+      <p class="shortcomment cmt">From Product</p><div class="fullcomment"><div class="comment cmt"><p>From Product</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">import</span> cats.data.ValidatedNec
+
+scala&gt; <span class="kw">val</span> v1 = <span class="lit">"error"</span>.invalidNec[<span class="std">Int</span>]
+scala&gt; <span class="kw">val</span> v2 = <span class="lit">"error2"</span>.invalidNec[<span class="std">Int</span>]
+scala&gt; <span class="kw">val</span> v3 = <span class="num">123.</span>validNec[<span class="std">String</span>]
+scala&gt; <span class="kw">val</span> v4 = <span class="num">456.</span>validNec[<span class="std">String</span>]
+
+scala&gt; v1.product(v2)
+res0: ValidatedNec[<span class="std">String</span>, (<span class="std">Int</span>, <span class="std">Int</span>)] = Invalid(Chain(error, error2))
+
+scala&gt; v1.product(v3)
+res1: ValidatedNec[<span class="std">String</span>, (<span class="std">Int</span>, <span class="std">Int</span>)] = Invalid(Chain(error))
+
+scala&gt; v3.product(v4)
+res2: ValidatedNec[<span class="std">String</span>, (<span class="std">Int</span>, <span class="std">Int</span>)] = Valid((<span class="num">123</span>,<span class="num">456</span>))</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></dd></dl></div>
+    </li><li name="cats.data.Validated#show" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="show[EE&gt;:E,AA&gt;:A](implicitEE:cats.Show[EE],implicitAA:cats.Show[AA]):String"></a><a id="show[EE&gt;:E,AA&gt;:Nothing](Show[EE],Show[AA]):String"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#show[EE&gt;:E,AA&gt;:A](implicitEE:cats.Show[EE],implicitAA:cats.Show[AA]):String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">show</span><span class="tparams">[<span name="EE">EE &gt;: <span class="extype" name="cats.data.Validated.Invalid.E">E</span></span>, <span name="AA">AA &gt;: <a href="https://www.scala-lang.org/api/2.12.14/scala/Nothing.html#scala.Nothing" class="extype" name="scala.Nothing">Nothing</a></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="EE">EE: <a href="../Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.data.Validated.show.EE">EE</span>]</span>, <span name="AA">AA: <a href="../Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.data.Validated.show.AA">AA</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></dd></dl></div>
+    </li><li name="cats.data.Validated#swap" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="swap:cats.data.Validated[A,E]"></a><a id="swap:Validated[Nothing,E]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#swap:cats.data.Validated[A,E]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">swap</span><span class="result">: <a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<a href="https://www.scala-lang.org/api/2.12.14/scala/Nothing.html#scala.Nothing" class="extype" name="scala.Nothing">Nothing</a>, <span class="extype" name="cats.data.Validated.Invalid.E">E</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Example:</p><div class="fullcomment"><div class="comment cmt"><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+
+scala&gt; <span class="kw">val</span> v1 = <span class="lit">"error"</span>.invalid[<span class="std">Int</span>]
+scala&gt; <span class="kw">val</span> v2 = <span class="num">123.</span>valid[<span class="std">String</span>]
+
+scala&gt; v1.swap
+res0: Validated[<span class="std">Int</span>, <span class="std">String</span>] = Valid(error)
+
+scala&gt; v2.swap
+res1: Validated[<span class="std">Int</span>, <span class="std">String</span>] = Invalid(<span class="num">123</span>)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></dd></dl></div>
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#synchronized[T0](x$1:=&gt;T0):T0" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="cats.data.Validated#toEither" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toEither:Either[E,A]"></a><a id="toEither:Either[E,Nothing]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#toEither:Either[E,A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toEither</span><span class="result">: <span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.data.Validated.Invalid.E">E</span>, <a href="https://www.scala-lang.org/api/2.12.14/scala/Nothing.html#scala.Nothing" class="extype" name="scala.Nothing">Nothing</a>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Converts the value to an Either[E, A]</p><div class="fullcomment"><div class="comment cmt"><p>Converts the value to an Either[E, A]</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+
+scala&gt; <span class="kw">val</span> v1 = <span class="lit">"error"</span>.invalid[<span class="std">Int</span>]
+scala&gt; <span class="kw">val</span> v2 = <span class="num">123.</span>valid[<span class="std">String</span>]
+
+scala&gt; v1.toEither
+res0: Either[<span class="std">String</span>, <span class="std">Int</span>] = Left(error)
+
+scala&gt; v2.toEither
+res1: Either[<span class="std">String</span>, <span class="std">Int</span>] = Right(<span class="num">123</span>)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></dd></dl></div>
+    </li><li name="cats.data.Validated#toIor" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toIor:cats.data.Ior[E,A]"></a><a id="toIor:Ior[E,Nothing]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#toIor:cats.data.Ior[E,A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toIor</span><span class="result">: <a href="Ior.html" class="extype" name="cats.data.Ior">Ior</a>[<span class="extype" name="cats.data.Validated.Invalid.E">E</span>, <a href="https://www.scala-lang.org/api/2.12.14/scala/Nothing.html#scala.Nothing" class="extype" name="scala.Nothing">Nothing</a>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Returns Valid values wrapped in Ior.Right, and None for Ior.Left values</p><div class="fullcomment"><div class="comment cmt"><p>Returns Valid values wrapped in Ior.Right, and None for Ior.Left values</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+
+scala&gt; <span class="kw">val</span> v1 = <span class="lit">"error"</span>.invalid[<span class="std">Int</span>]
+scala&gt; <span class="kw">val</span> v2 = <span class="num">123.</span>valid[<span class="std">String</span>]
+
+scala&gt; v1.toIor
+res0: Ior[<span class="std">String</span>, <span class="std">Int</span>] = Left(error)
+
+scala&gt; v2.toIor
+res1: Ior[<span class="std">String</span>, <span class="std">Int</span>] = Right(<span class="num">123</span>)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></dd></dl></div>
+    </li><li name="cats.data.Validated#toList" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toList:List[A]"></a><a id="toList:List[Nothing]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#toList:List[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toList</span><span class="result">: <span class="extype" name="scala.List">List</span>[<a href="https://www.scala-lang.org/api/2.12.14/scala/Nothing.html#scala.Nothing" class="extype" name="scala.Nothing">Nothing</a>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Convert this value to a single element List if it is Valid,
+otherwise return an empty List</p><div class="fullcomment"><div class="comment cmt"><p>Convert this value to a single element List if it is Valid,
+otherwise return an empty List</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+
+scala&gt; <span class="kw">val</span> v1 = <span class="std">Some</span>(<span class="lit">"error"</span>).invalid[<span class="std">Int</span>]
+scala&gt; <span class="kw">val</span> v2 = <span class="num">123.</span>valid[<span class="std">Option</span>[<span class="std">String</span>]]
+
+scala&gt; v1.toList
+res0: <span class="std">List</span>[<span class="std">Int</span>] = <span class="std">List</span>()
+
+scala&gt; v2.toList
+res1: <span class="std">List</span>[<span class="std">Int</span>] = <span class="std">List</span>(<span class="num">123</span>)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></dd></dl></div>
+    </li><li name="cats.data.Validated#toOption" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toOption:Option[A]"></a><a id="toOption:Option[Nothing]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#toOption:Option[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toOption</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="https://www.scala-lang.org/api/2.12.14/scala/Nothing.html#scala.Nothing" class="extype" name="scala.Nothing">Nothing</a>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Returns Valid values wrapped in Some, and None for Invalid values</p><div class="fullcomment"><div class="comment cmt"><p>Returns Valid values wrapped in Some, and None for Invalid values</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+
+scala&gt; <span class="kw">val</span> v1 = <span class="std">List</span>(<span class="lit">"error"</span>).invalid[<span class="std">Int</span>]
+scala&gt; <span class="kw">val</span> v2 = <span class="num">123.</span>valid[<span class="std">List</span>[<span class="std">String</span>]]
+
+scala&gt; v1.toOption
+res0: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">None</span>
+
+scala&gt; v2.toOption
+res1: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">Some</span>(<span class="num">123</span>)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></dd></dl></div>
+    </li><li name="cats.data.Validated#toValidatedNec" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toValidatedNec[EE&gt;:E,AA&gt;:A]:cats.data.ValidatedNec[EE,AA]"></a><a id="toValidatedNec[EE&gt;:E,AA&gt;:Nothing]:ValidatedNec[EE,AA]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#toValidatedNec[EE&gt;:E,AA&gt;:A]:cats.data.ValidatedNec[EE,AA]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toValidatedNec</span><span class="tparams">[<span name="EE">EE &gt;: <span class="extype" name="cats.data.Validated.Invalid.E">E</span></span>, <span name="AA">AA &gt;: <a href="https://www.scala-lang.org/api/2.12.14/scala/Nothing.html#scala.Nothing" class="extype" name="scala.Nothing">Nothing</a></span>]</span><span class="result">: <a href="index.html#ValidatedNec[+E,+A]=cats.data.Validated[cats.data.package.NonEmptyChain[E],A]" class="extmbr" name="cats.data.ValidatedNec">ValidatedNec</a>[<span class="extype" name="cats.data.Validated.toValidatedNec.EE">EE</span>, <span class="extype" name="cats.data.Validated.toValidatedNec.AA">AA</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Lift the Invalid value into a NonEmptyChain.</p><div class="fullcomment"><div class="comment cmt"><p>Lift the Invalid value into a NonEmptyChain.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+
+scala&gt; <span class="kw">val</span> v1 = <span class="lit">"error"</span>.invalid[<span class="std">Int</span>]
+scala&gt; <span class="kw">val</span> v2 = <span class="num">123.</span>valid[<span class="std">String</span>]
+
+scala&gt; v1.toValidatedNec
+res0: ValidatedNec[<span class="std">String</span>, <span class="std">Int</span>] = Invalid(Chain(error))
+
+scala&gt; v2.toValidatedNec
+res1: ValidatedNec[<span class="std">String</span>, <span class="std">Int</span>] = Valid(<span class="num">123</span>)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></dd></dl></div>
+    </li><li name="cats.data.Validated#toValidatedNel" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toValidatedNel[EE&gt;:E,AA&gt;:A]:cats.data.ValidatedNel[EE,AA]"></a><a id="toValidatedNel[EE&gt;:E,AA&gt;:Nothing]:ValidatedNel[EE,AA]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#toValidatedNel[EE&gt;:E,AA&gt;:A]:cats.data.ValidatedNel[EE,AA]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toValidatedNel</span><span class="tparams">[<span name="EE">EE &gt;: <span class="extype" name="cats.data.Validated.Invalid.E">E</span></span>, <span name="AA">AA &gt;: <a href="https://www.scala-lang.org/api/2.12.14/scala/Nothing.html#scala.Nothing" class="extype" name="scala.Nothing">Nothing</a></span>]</span><span class="result">: <a href="index.html#ValidatedNel[+E,+A]=cats.data.Validated[cats.data.NonEmptyList[E],A]" class="extmbr" name="cats.data.ValidatedNel">ValidatedNel</a>[<span class="extype" name="cats.data.Validated.toValidatedNel.EE">EE</span>, <span class="extype" name="cats.data.Validated.toValidatedNel.AA">AA</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Lift the Invalid value into a NonEmptyList.</p><div class="fullcomment"><div class="comment cmt"><p>Lift the Invalid value into a NonEmptyList.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+
+scala&gt; <span class="kw">val</span> v1 = <span class="lit">"error"</span>.invalid[<span class="std">Int</span>]
+scala&gt; <span class="kw">val</span> v2 = <span class="num">123.</span>valid[<span class="std">String</span>]
+
+scala&gt; v1.toValidatedNel
+res0: ValidatedNel[<span class="std">String</span>, <span class="std">Int</span>] = Invalid(NonEmptyList(error))
+
+scala&gt; v2.toValidatedNel
+res1: ValidatedNel[<span class="std">String</span>, <span class="std">Int</span>] = Valid(<span class="num">123</span>)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></dd></dl></div>
+    </li><li name="cats.data.Validated#traverse" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="traverse[F[_],EE&gt;:E,B](f:A=&gt;F[B])(implicitF:cats.Applicative[F]):F[cats.data.Validated[EE,B]]"></a><a id="traverse[F[_],EE&gt;:E,B]((Nothing)⇒F[B])(Applicative[F]):F[Validated[EE,B]]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#traverse[F[_],EE&gt;:E,B](f:A=&gt;F[B])(implicitF:cats.Applicative[F]):F[cats.data.Validated[EE,B]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">traverse</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="EE">EE &gt;: <span class="extype" name="cats.data.Validated.Invalid.E">E</span></span>, <span name="B">B</span>]</span><span class="params">(<span name="f">f: (<a href="https://www.scala-lang.org/api/2.12.14/scala/Nothing.html#scala.Nothing" class="extype" name="scala.Nothing">Nothing</a>) ⇒ <span class="extype" name="cats.data.Validated.traverse.F">F</span>[<span class="extype" name="cats.data.Validated.traverse.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.Validated.traverse.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.Validated.traverse.F">F</span>[<a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.Validated.traverse.EE">EE</span>, <span class="extype" name="cats.data.Validated.traverse.B">B</span>]]</span>
+      </span>
+      
+      <p class="shortcomment cmt">When Valid, apply the function, marking the result as valid
+inside the Applicative's context,
+when Invalid, lift the Error into the Applicative's context</p><div class="fullcomment"><div class="comment cmt"><p>When Valid, apply the function, marking the result as valid
+inside the Applicative's context,
+when Invalid, lift the Error into the Applicative's context</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+
+scala&gt; <span class="kw">val</span> v1 = <span class="lit">"error"</span>.invalid[<span class="std">Int</span>]
+scala&gt; <span class="kw">val</span> v2 = <span class="num">123.</span>valid[<span class="std">String</span>]
+
+scala&gt; v1.traverse(<span class="std">Option</span>.apply[<span class="std">Int</span>])
+res0: <span class="std">Option</span>[Validated[<span class="std">String</span>, <span class="std">Int</span>]] = <span class="std">Some</span>(Invalid(error))
+
+scala&gt; v2.traverse(<span class="std">Option</span>.apply[<span class="std">Int</span>])
+res1: <span class="std">Option</span>[Validated[<span class="std">String</span>, <span class="std">Int</span>]] = <span class="std">Some</span>(Valid(<span class="num">123</span>))</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></dd></dl></div>
+    </li><li name="cats.data.Validated#valueOr" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="valueOr[B&gt;:A](f:E=&gt;B):B"></a><a id="valueOr[B&gt;:Nothing]((E)⇒B):B"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#valueOr[B&gt;:A](f:E=&gt;B):B" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">valueOr</span><span class="tparams">[<span name="B">B &gt;: <a href="https://www.scala-lang.org/api/2.12.14/scala/Nothing.html#scala.Nothing" class="extype" name="scala.Nothing">Nothing</a></span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.Validated.Invalid.E">E</span>) ⇒ <span class="extype" name="cats.data.Validated.valueOr.B">B</span></span>)</span><span class="result">: <span class="extype" name="cats.data.Validated.valueOr.B">B</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Return the Valid value, or the result of f if Invalid
+Example:</p><div class="fullcomment"><div class="comment cmt"><p>Return the Valid value, or the result of f if Invalid
+Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+
+scala&gt; <span class="kw">val</span> v1 = <span class="std">Some</span>(<span class="lit">"exception"</span>).invalid[<span class="std">String</span>]
+scala&gt; <span class="kw">val</span> v2 = <span class="lit">"OK"</span>.valid[<span class="std">Option</span>[<span class="std">String</span>]]
+
+scala&gt; v1.valueOr(_.getOrElse(<span class="lit">""</span>))
+res0: <span class="std">String</span> = exception
+
+scala&gt; v2.valueOr(_.getOrElse(<span class="lit">""</span>))
+res1: <span class="std">String</span> = OK</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.14/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>, <span name="arg1">arg1: <a href="https://www.scala-lang.org/api/2.12.14/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a><a id="wait(Long):Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#wait(x$1:Long):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.14/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+                <span class="name">@native</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#wait():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="cats.data.Validated#withEither" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="withEither[EE,B](f:Either[E,A]=&gt;Either[EE,B]):cats.data.Validated[EE,B]"></a><a id="withEither[EE,B]((Either[E,Nothing])⇒Either[EE,B]):Validated[EE,B]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#withEither[EE,B](f:Either[E,A]=&gt;Either[EE,B]):cats.data.Validated[EE,B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">withEither</span><span class="tparams">[<span name="EE">EE</span>, <span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.data.Validated.Invalid.E">E</span>, <a href="https://www.scala-lang.org/api/2.12.14/scala/Nothing.html#scala.Nothing" class="extype" name="scala.Nothing">Nothing</a>]) ⇒ <span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.data.Validated.withEither.EE">EE</span>, <span class="extype" name="cats.data.Validated.withEither.B">B</span>]</span>)</span><span class="result">: <a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.Validated.withEither.EE">EE</span>, <span class="extype" name="cats.data.Validated.withEither.B">B</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Convert to an Either, apply a function, convert back.</p><div class="fullcomment"><div class="comment cmt"><p>Convert to an Either, apply a function, convert back.  This is handy
+when you want to use the Monadic properties of the Either type.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+
+scala&gt; <span class="kw">val</span> v1 = <span class="lit">"error"</span>.invalid[<span class="std">Int</span>]
+scala&gt; <span class="kw">val</span> v2 = <span class="num">123.</span>valid[<span class="std">String</span>]
+
+scala&gt; v1.withEither(_.bimap(<span class="std">List</span>(_), <span class="std">Option</span>(_)))
+res0: Validated[<span class="std">List</span>[<span class="std">String</span>], <span class="std">Option</span>[<span class="std">Int</span>]] = Invalid(<span class="std">List</span>(error))
+
+scala&gt; v2.withEither(_.bimap(<span class="std">List</span>(_), <span class="std">Option</span>(_)))
+res1: Validated[<span class="std">List</span>[<span class="std">String</span>], <span class="std">Option</span>[<span class="std">Int</span>]] = Valid(<span class="std">Some</span>(<span class="num">123</span>))</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></dd></dl></div>
+    </li>
+              </ol>
+            </div>
+
+        
+
+        <div class="values members">
+              <h3>Deprecated Value Members</h3>
+              <ol><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Validated$$Invalid.html#finalize():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: ">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+                <span class="name">@Deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"></dd></dl></div>
+    </li></ol>
+            </div>
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="cats.data.Validated">
+              <h3>Inherited from <a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.Validated.Invalid.E">E</span>, <a href="https://www.scala-lang.org/api/2.12.14/scala/Nothing.html#scala.Nothing" class="extype" name="scala.Nothing">Nothing</a>]</h3>
+            </div><div class="parent" name="scala.Serializable">
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.14/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="scala.Product">
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.14/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a></h3>
+            </div><div class="parent" name="scala.Equals">
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.14/scala/Equals.html#scala.Equals" class="extype" name="scala.Equals">Equals</a></h3>
+            </div><div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.14/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.14/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+    </body>
+          </div>
+        </div>
+      </div>
+    </body>
+      </html>

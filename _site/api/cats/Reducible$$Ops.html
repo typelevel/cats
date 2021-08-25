@@ -1,0 +1,1073 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+          <title></title>
+          <meta name="description" content="" />
+          <meta name="keywords" content="" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      
+      <link href="../lib/index.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../lib/jquery.min.js"></script>
+      <script type="text/javascript" src="../lib/jquery.panzoom.min.js"></script>
+      <script type="text/javascript" src="../lib/jquery.mousewheel.min.js"></script>
+      <script type="text/javascript" src="../lib/index.js"></script>
+      <script type="text/javascript" src="../index.js"></script>
+      <script type="text/javascript" src="../lib/scheduler.js"></script>
+      <script type="text/javascript" src="../lib/template.js"></script>
+      <script type="text/javascript" src="../lib/modernizr.custom.js"></script><script type="text/javascript" src="../lib/diagrams.js" id="diagrams-js"></script>
+      <script type="text/javascript">
+        /* this variable can be used by the JS to determine the path to the root document */
+        var toRoot = '../';
+      </script>
+    
+        </head>
+        <body>
+      <div id="search">
+        <span id="doc-title"><span id="doc-version"></span></span>
+        <span class="close-results"><span class="left">&lt;</span> Back</span>
+        <div id="textfilter">
+          <span class="input">
+            <input autocapitalize="none" placeholder="Search" id="index-input" type="text" accesskey="/" />
+            <i class="clear material-icons"></i>
+            <i id="search-icon" class="material-icons"></i>
+          </span>
+        </div>
+    </div>
+      <div id="search-results">
+        <div id="search-progress">
+          <div id="progress-fill"></div>
+        </div>
+        <div id="results-content">
+          <div id="entity-results"></div>
+          <div id="member-results"></div>
+        </div>
+      </div>
+      <div id="content-scroll-container" style="-webkit-overflow-scrolling: touch;">
+        <div id="content-container" style="-webkit-overflow-scrolling: touch;">
+          <div id="subpackage-spacer">
+            <div id="packages">
+              <h1>Packages</h1>
+              <ul>
+                <li name="_root_.root" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="_root_"></a><a id="root:_root_"></a>
+      <span class="permalink">
+      <a href="../index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../index.html"><span class="name">root</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="_root_">root</a></dd></dl></div>
+    </li><li name="_root_.cats" visbl="pub" class="indented1 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="cats"></a><a id="cats:cats"></a>
+      <span class="permalink">
+      <a href="../cats/index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="The cats root package contains all the trait signatures of most Scala type classes." href="index.html"><span class="name">cats</span></a>
+      </span>
+      
+      <p class="shortcomment cmt">The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>cats</code> root package contains all the trait signatures of most Scala type classes.</p><p>Cats type classes are implemented using the approach from the
+ <a href="https://ropas.snu.ac.kr/~bruno/papers/TypeClasses.pdf" target="_blank">Type classes as objects and implicits</a> article.</p><p>For each type class, <code>cats</code> provides three pieces:
+- Its <b>signature</b>: a trait that is polymorphic on a type parameter.
+  Type class traits inherit from other type classes to indicate that any implementation of the lower type class (e.g. <code>Applicative</code>)
+  can also serve as an instance for the higuer type class (e.g. <code>Functor</code>).
+- Type class <b>'instances</b>, which are classes and objects that implement one or more type class signatures for some specific types.
+  Type class instances for several data types from the Java or Scala standard libraries are declared in the subpackage <code>cats.instances</code>.
+- <b>Syntax extensions</b>, each of which provides the methods of the type class defines as extension methods
+  (which in Scala 2 are encoded as implicit classes) for values of any type <code>F</code>; given that an instance of the type class
+  for the receiver type (<code>this</code>) is in the implicit scope.
+  Symtax extensions are declared in the <code>cats.syntax</code> package.
+- A set of <b>laws</b>, that are also generic on the type of the class, and are only defined on the operations of the type class.
+  The purpose of these laws is to declare some algebraic relations (equations) between Scala expressions involving the operations
+  of the type class, and test (but not verify) that implemented instances satisfy those equations.
+  Laws are defined in the <code>cats-laws</code> package.</p><p>Although most of cats type classes are declared in this package, some are declared in other packages:
+- type classes that operate on base types (kind <code>*</code>), and their implementations for standard library types,
+  are contained in <code>cats.kernel</code>, which is a different SBT project. However, they are re-exported from this package.
+- type classes of kind <code>F[_, _]</code>, such as <a href="arrow/Profunctor.html" class="extype" name="cats.arrow.Profunctor">cats.arrow.Profunctor</a>&quot; or <a href="arrow/Arrow.html" class="extype" name="cats.arrow.Arrow">cats.arrow.Arrow</a>, which are relevant for
+  Functional Reactive Programming or optics, are declared in the <code>cats.arrow</code> package.
+- Also, those type classes that abstract over (pure or impure) functional runtime effects are declared
+  in the <a href="https://typelevel.org/cats-effect/" target="_blank">cats-effect library</a>.
+- Some type classes for which no laws can be provided are left out of the main road, in a small and dirty alley.
+  These are the <code>alleycats</code>.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="_root_">root</a></dd></dl></div>
+    </li><li name="cats.Reducible" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Reducible"></a><a id="Reducible:Reducible"></a>
+      <span class="permalink">
+      <a href="../cats/Reducible$.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="Reducible$.html"><span class="name">Reducible</span></a><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.14/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="cats">cats</a></dd></dl></div>
+    </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="Reducible$$AllOps.html" title=""></a>
+                        <a href="Reducible$$AllOps.html" title="">AllOps</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="" title=""></a>
+                        <a href="" title="">Ops</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="Reducible$$ToReducibleOps.html" title=""></a>
+                        <a href="Reducible$$ToReducibleOps.html" title="">ToReducibleOps</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="Reducible$$nonInheritedOps$.html" title=""></a>
+                        <a href="Reducible$$nonInheritedOps$.html" title="">nonInheritedOps</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="Reducible$$ops$.html" title=""></a>
+                        <a href="Reducible$$ops$.html" title="">ops</a>
+                      </li>
+              </ul>
+            </div>
+          </div>
+          <div id="content">
+            <body class="trait type">
+      <div id="definition">
+        <div class="big-circle trait">t</div>
+        <p id="owner"><a href="index.html" class="extype" name="cats">cats</a>.<a href="Reducible$.html" class="extype" name="cats.Reducible">Reducible</a></p>
+        <h1>Ops<span class="permalink">
+      <a href="../cats/Reducible$$Ops.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span></h1>
+        <h3><span class="morelinks"></span></h3>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Ops</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.14/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      </h4>
+
+      
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/main/core/src/main/scala/cats/Reducible.scala" target="_blank">Reducible.scala</a></dd></dl><div class="toggleContainer block">
+          <span class="toggle">
+            Linear Supertypes
+          </span>
+          <div class="superTypes hiddenContent"><a href="https://www.scala-lang.org/api/2.12.14/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="https://www.scala-lang.org/api/2.12.14/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.14/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+        </div><div class="toggleContainer block">
+            <span class="toggle">
+              Known Subclasses
+            </span>
+            <div class="subClasses hiddenContent"><a href="NonEmptyTraverse$$AllOps.html" class="extype" name="cats.NonEmptyTraverse.AllOps">AllOps</a>, <a href="Reducible$$AllOps.html" class="extype" name="cats.Reducible.AllOps">AllOps</a></div>
+          </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
+                <span class="toggle diagram-link">
+                  Type Hierarchy
+                </span>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph1" viewBox="0.00 0.00 132.00 155.00" height="155pt" width="132pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 151)" class="graph" id="page0,1_graph0"><polygon points="-4,4 -4,-151 128,-151 128,4 -4,4" stroke="transparent" fill="white"></polygon><g class="cluster" id="clust1"></g><g class="cluster" id="clust2"></g><!-- node0 --><g class="node this trait" id="graph1_0"><g id="a_this trait|graph1_0"><a xlink:title="cats.Reducible.Ops (this trait)" xlink:href="#inheritance-diagram"><path d="M91.67,-86C91.67,-86 32.33,-86 32.33,-86 28.17,-86 24,-81.83 24,-77.67 24,-77.67 24,-69.33 24,-69.33 24,-65.17 28.17,-61 32.33,-61 32.33,-61 91.67,-61 91.67,-61 95.83,-61 100,-65.17 100,-69.33 100,-69.33 100,-77.67 100,-77.67 100,-81.83 95.83,-86 91.67,-86" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-80.5" x="34" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-71.1" x="55" text-anchor="start">Ops[F, A]</text></a></g></g><!-- node1 --><g class="node trait" id="graph1_1"><g id="a_trait|graph1_1"><a xlink:title="cats.Reducible.AllOps" xlink:href="Reducible$$AllOps.html#inheritance-diagram"><path d="M95.67,-25C95.67,-25 28.33,-25 28.33,-25 24.17,-25 20,-20.83 20,-16.67 20,-16.67 20,-8.33 20,-8.33 20,-4.17 24.17,0 28.33,0 28.33,0 95.67,0 95.67,0 99.83,0 104,-4.17 104,-8.33 104,-8.33 104,-16.67 104,-16.67 104,-20.83 99.83,-25 95.67,-25" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-19.5" x="30" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-10.1" x="51" text-anchor="start">AllOps[F, A]</text></a></g></g><!-- node0&#45;&gt;node1 --><g class="edge inheritance" id="graph1_0_1"><g id="a_inheritance|graph1_0_1"><a xlink:title="AllOps[F, A] is a subtype of Ops[F, A]"><path d="M62,-53.76C62,-44.37 62,-33.29 62,-25.13" stroke="#d4d4d4" fill="none"></path><polygon points="59.55,-53.84 62,-60.84 64.45,-53.84 59.55,-53.84" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node2 --><g class="node trait" id="graph1_2"><g id="a_trait|graph1_2"><a xlink:title="scala.Serializable"><path d="M95.67,-147C95.67,-147 28.33,-147 28.33,-147 24.17,-147 20,-142.83 20,-138.67 20,-138.67 20,-130.33 20,-130.33 20,-126.17 24.17,-122 28.33,-122 28.33,-122 95.67,-122 95.67,-122 99.83,-122 104,-126.17 104,-130.33 104,-130.33 104,-138.67 104,-138.67 104,-142.83 99.83,-147 95.67,-147" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../lib/trait_diagram.png" y="-141.5" x="30" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-132.1" x="51" text-anchor="start">Serializable</text></a></g></g><!-- node2&#45;&gt;node0 --><g class="edge inheritance" id="graph1_2_0"><g id="a_inheritance|graph1_2_0"><a xlink:title="Ops[F, A] is a subtype of Serializable"><path d="M62,-114.76C62,-105.37 62,-94.29 62,-86.13" stroke="#d4d4d4" fill="none"></path><polygon points="59.55,-114.84 62,-121.84 64.45,-114.84 59.55,-114.84" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
+                <div id="diagram-controls" class="hiddenContent">
+                  <button id="diagram-zoom-out" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button id="diagram-zoom-in" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button title="Toggle full-screen" id="diagram-fs" class="diagram-btn to-full"><i class="material-icons"></i></button>
+                </div>
+              </div></div>
+        
+
+      <div id="mbrsel">
+        <div class="toggle"></div>
+        <div id="memberfilter">
+          <i class="material-icons arrow"></i>
+          <span class="input">
+            <input id="mbrsel-input" placeholder="Filter all members" type="text" accesskey="/" />
+          </span>
+          <i class="clear material-icons"></i>
+        </div>
+        <div id="filterby">
+          <div id="order">
+            <span class="filtertype">Ordering</span>
+            <ol>
+              
+              <li class="alpha in"><span>Alphabetic</span></li>
+              <li class="inherit out"><span>By Inheritance</span></li>
+            </ol>
+          </div>
+          <div class="ancestors">
+                  <span class="filtertype">Inherited<br />
+                  </span>
+                  <ol id="linearization">
+                    <li class="in" name="cats.Reducible.Ops"><span>Ops</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  </ol>
+                </div><div class="ancestors">
+              <span class="filtertype"></span>
+              <ol>
+                <li class="hideall out"><span>Hide All</span></li>
+                <li class="showall in"><span>Show All</span></li>
+              </ol>
+            </div>
+          <div id="visbl">
+              <span class="filtertype">Visibility</span>
+              <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+            </div>
+        </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="cats.Reducible.Ops.TypeClassType" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="TypeClassType&lt;:cats.Reducible[F]"></a><a id="TypeClassType:TypeClassType"></a>
+      <span class="permalink">
+      <a href="../cats/Reducible$$Ops.html#TypeClassType&lt;:cats.Reducible[F]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">TypeClassType</span><span class="result"> &lt;: <a href="Reducible.html" class="extype" name="cats.Reducible">Reducible</a>[<span class="extype" name="cats.Reducible.Ops.F">F</span>]</span>
+      </span>
+      
+      
+    </li></ol>
+            </div>
+
+        <div class="values members">
+              <h3>Abstract Value Members</h3>
+              <ol><li name="cats.Reducible.Ops#self" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="self:F[A]"></a>
+      <span class="permalink">
+      <a href="../cats/Reducible$$Ops.html#self:F[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">self</span><span class="result">: <span class="extype" name="cats.Reducible.Ops.F">F</span>[<span class="extype" name="cats.Reducible.Ops.A">A</span>]</span>
+      </span>
+      
+      
+    </li><li name="cats.Reducible.Ops#typeClassInstance" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="typeClassInstance:Ops.this.TypeClassType"></a><a id="typeClassInstance:TypeClassType"></a>
+      <span class="permalink">
+      <a href="../cats/Reducible$$Ops.html#typeClassInstance:Ops.this.TypeClassType" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">typeClassInstance</span><span class="result">: <a href="#TypeClassType&lt;:cats.Reducible[F]" class="extmbr" name="cats.Reducible.Ops.TypeClassType">TypeClassType</a></span>
+      </span>
+      
+      
+    </li></ol>
+            </div>
+
+        <div class="values members">
+              <h3>Concrete Value Members</h3>
+              <ol>
+                <li name="scala.AnyRef#!=" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a><a id="!=(Any):Boolean"></a>
+      <span class="permalink">
+      <a href="../cats/Reducible$$Ops.html#!=(x$1:Any):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.14/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <span class="permalink">
+      <a href="../cats/Reducible$$Ops.html###():Int" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a><a id="==(Any):Boolean"></a>
+      <span class="permalink">
+      <a href="../cats/Reducible$$Ops.html#==(x$1:Any):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.14/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <span class="permalink">
+      <a href="../cats/Reducible$$Ops.html#asInstanceOf[T0]:T0" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a><a id="clone():AnyRef"></a>
+      <span class="permalink">
+      <a href="../cats/Reducible$$Ops.html#clone():Object" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
+              
+                <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@IntrinsicCandidate</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
+      <span class="permalink">
+      <a href="../cats/Reducible$$Ops.html#eq(x$1:AnyRef):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.14/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#equals" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a><a id="equals(Any):Boolean"></a>
+      <span class="permalink">
+      <a href="../cats/Reducible$$Ops.html#equals(x$1:Any):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.14/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <span class="permalink">
+      <a href="../cats/Reducible$$Ops.html#getClass():Class[_]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
+                <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@IntrinsicCandidate</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <span class="permalink">
+      <a href="../cats/Reducible$$Ops.html#hashCode():Int" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
+                <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@IntrinsicCandidate</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <span class="permalink">
+      <a href="../cats/Reducible$$Ops.html#isInstanceOf[T0]:Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.Reducible.Ops#maximum" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="maximum(implicitA:cats.Order[A]):A"></a><a id="maximum(Order[A]):A"></a>
+      <span class="permalink">
+      <a href="../cats/Reducible$$Ops.html#maximum(implicitA:cats.Order[A]):A" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">maximum</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.Reducible.Ops.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Reducible.Ops.A">A</span></span>
+      </span>
+      
+      
+    </li><li name="cats.Reducible.Ops#maximumBy" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="maximumBy[B](f:A=&gt;B)(implicitev$1:cats.Order[B]):A"></a><a id="maximumBy[B]((A)⇒B)(Order[B]):A"></a>
+      <span class="permalink">
+      <a href="../cats/Reducible$$Ops.html#maximumBy[B](f:A=&gt;B)(implicitev$1:cats.Order[B]):A" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">maximumBy</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Reducible.Ops.A">A</span>) ⇒ <span class="extype" name="cats.Reducible.Ops.maximumBy.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.Reducible.Ops.maximumBy.B">B</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Reducible.Ops.A">A</span></span>
+      </span>
+      
+      
+    </li><li name="cats.Reducible.Ops#maximumByNel" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="maximumByNel[B](f:A=&gt;B)(implicitev$1:cats.Order[B]):cats.data.NonEmptyList[A]"></a><a id="maximumByNel[B]((A)⇒B)(Order[B]):NonEmptyList[A]"></a>
+      <span class="permalink">
+      <a href="../cats/Reducible$$Ops.html#maximumByNel[B](f:A=&gt;B)(implicitev$1:cats.Order[B]):cats.data.NonEmptyList[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">maximumByNel</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Reducible.Ops.A">A</span>) ⇒ <span class="extype" name="cats.Reducible.Ops.maximumByNel.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.Reducible.Ops.maximumByNel.B">B</span>]</span>)</span><span class="result">: <a href="data/NonEmptyList.html" class="extype" name="cats.data.NonEmptyList">NonEmptyList</a>[<span class="extype" name="cats.Reducible.Ops.A">A</span>]</span>
+      </span>
+      
+      
+    </li><li name="cats.Reducible.Ops#maximumNel" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="maximumNel(implicitA:cats.Order[A]):cats.data.NonEmptyList[A]"></a><a id="maximumNel(Order[A]):NonEmptyList[A]"></a>
+      <span class="permalink">
+      <a href="../cats/Reducible$$Ops.html#maximumNel(implicitA:cats.Order[A]):cats.data.NonEmptyList[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">maximumNel</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.Reducible.Ops.A">A</span>]</span>)</span><span class="result">: <a href="data/NonEmptyList.html" class="extype" name="cats.data.NonEmptyList">NonEmptyList</a>[<span class="extype" name="cats.Reducible.Ops.A">A</span>]</span>
+      </span>
+      
+      
+    </li><li name="cats.Reducible.Ops#minimum" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="minimum(implicitA:cats.Order[A]):A"></a><a id="minimum(Order[A]):A"></a>
+      <span class="permalink">
+      <a href="../cats/Reducible$$Ops.html#minimum(implicitA:cats.Order[A]):A" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">minimum</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.Reducible.Ops.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Reducible.Ops.A">A</span></span>
+      </span>
+      
+      
+    </li><li name="cats.Reducible.Ops#minimumBy" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="minimumBy[B](f:A=&gt;B)(implicitev$1:cats.Order[B]):A"></a><a id="minimumBy[B]((A)⇒B)(Order[B]):A"></a>
+      <span class="permalink">
+      <a href="../cats/Reducible$$Ops.html#minimumBy[B](f:A=&gt;B)(implicitev$1:cats.Order[B]):A" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">minimumBy</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Reducible.Ops.A">A</span>) ⇒ <span class="extype" name="cats.Reducible.Ops.minimumBy.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.Reducible.Ops.minimumBy.B">B</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Reducible.Ops.A">A</span></span>
+      </span>
+      
+      
+    </li><li name="cats.Reducible.Ops#minimumByNel" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="minimumByNel[B](f:A=&gt;B)(implicitev$1:cats.Order[B]):cats.data.NonEmptyList[A]"></a><a id="minimumByNel[B]((A)⇒B)(Order[B]):NonEmptyList[A]"></a>
+      <span class="permalink">
+      <a href="../cats/Reducible$$Ops.html#minimumByNel[B](f:A=&gt;B)(implicitev$1:cats.Order[B]):cats.data.NonEmptyList[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">minimumByNel</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Reducible.Ops.A">A</span>) ⇒ <span class="extype" name="cats.Reducible.Ops.minimumByNel.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.Reducible.Ops.minimumByNel.B">B</span>]</span>)</span><span class="result">: <a href="data/NonEmptyList.html" class="extype" name="cats.data.NonEmptyList">NonEmptyList</a>[<span class="extype" name="cats.Reducible.Ops.A">A</span>]</span>
+      </span>
+      
+      
+    </li><li name="cats.Reducible.Ops#minimumNel" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="minimumNel(implicitA:cats.Order[A]):cats.data.NonEmptyList[A]"></a><a id="minimumNel(Order[A]):NonEmptyList[A]"></a>
+      <span class="permalink">
+      <a href="../cats/Reducible$$Ops.html#minimumNel(implicitA:cats.Order[A]):cats.data.NonEmptyList[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">minimumNel</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.Reducible.Ops.A">A</span>]</span>)</span><span class="result">: <a href="data/NonEmptyList.html" class="extype" name="cats.data.NonEmptyList">NonEmptyList</a>[<span class="extype" name="cats.Reducible.Ops.A">A</span>]</span>
+      </span>
+      
+      
+    </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
+      <span class="permalink">
+      <a href="../cats/Reducible$$Ops.html#ne(x$1:AnyRef):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.14/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="cats.Reducible.Ops#nonEmptyIntercalate" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="nonEmptyIntercalate(a:A)(implicitA:cats.Semigroup[A]):A"></a><a id="nonEmptyIntercalate(A)(Semigroup[A]):A"></a>
+      <span class="permalink">
+      <a href="../cats/Reducible$$Ops.html#nonEmptyIntercalate(a:A)(implicitA:cats.Semigroup[A]):A" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">nonEmptyIntercalate</span><span class="params">(<span name="a">a: <span class="extype" name="cats.Reducible.Ops.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="index.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.Reducible.Ops.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Reducible.Ops.A">A</span></span>
+      </span>
+      
+      
+    </li><li name="cats.Reducible.Ops#nonEmptyPartition" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="nonEmptyPartition[B,C](f:A=&gt;Either[B,C]):cats.data.Ior[cats.data.NonEmptyList[B],cats.data.NonEmptyList[C]]"></a><a id="nonEmptyPartition[B,C]((A)⇒Either[B,C]):Ior[NonEmptyList[B],NonEmptyList[C]]"></a>
+      <span class="permalink">
+      <a href="../cats/Reducible$$Ops.html#nonEmptyPartition[B,C](f:A=&gt;Either[B,C]):cats.data.Ior[cats.data.NonEmptyList[B],cats.data.NonEmptyList[C]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">nonEmptyPartition</span><span class="tparams">[<span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Reducible.Ops.A">A</span>) ⇒ <span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.Reducible.Ops.nonEmptyPartition.B">B</span>, <span class="extype" name="cats.Reducible.Ops.nonEmptyPartition.C">C</span>]</span>)</span><span class="result">: <a href="data/Ior.html" class="extype" name="cats.data.Ior">Ior</a>[<a href="data/NonEmptyList.html" class="extype" name="cats.data.NonEmptyList">NonEmptyList</a>[<span class="extype" name="cats.Reducible.Ops.nonEmptyPartition.B">B</span>], <a href="data/NonEmptyList.html" class="extype" name="cats.data.NonEmptyList">NonEmptyList</a>[<span class="extype" name="cats.Reducible.Ops.nonEmptyPartition.C">C</span>]]</span>
+      </span>
+      
+      
+    </li><li name="cats.Reducible.Ops#nonEmptySequence_" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="nonEmptySequence_[G[_],B](implicitev$1:A&lt;:&lt;G[B],implicitG:cats.Apply[G]):G[Unit]"></a><a id="nonEmptySequence_[G[_],B](&lt;:&lt;[A,G[B]],Apply[G]):G[Unit]"></a>
+      <span class="permalink">
+      <a href="../cats/Reducible$$Ops.html#nonEmptySequence_[G[_],B](implicitev$1:A&lt;:&lt;G[B],implicitG:cats.Apply[G]):G[Unit]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">nonEmptySequence_</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[<span class="extype" name="cats.Reducible.Ops.A">A</span>, <span class="extype" name="cats.Reducible.Ops.nonEmptySequence_.G">G</span>[<span class="extype" name="cats.Reducible.Ops.nonEmptySequence_.B">B</span>]]</span>, <span name="G">G: <a href="Apply.html" class="extype" name="cats.Apply">Apply</a>[<span class="extype" name="cats.Reducible.Ops.nonEmptySequence_.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Reducible.Ops.nonEmptySequence_.G">G</span>[<a href="https://www.scala-lang.org/api/2.12.14/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>]</span>
+      </span>
+      
+      
+    </li><li name="cats.Reducible.Ops#nonEmptyTraverse_" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="nonEmptyTraverse_[G[_],B](f:A=&gt;G[B])(implicitG:cats.Apply[G]):G[Unit]"></a><a id="nonEmptyTraverse_[G[_],B]((A)⇒G[B])(Apply[G]):G[Unit]"></a>
+      <span class="permalink">
+      <a href="../cats/Reducible$$Ops.html#nonEmptyTraverse_[G[_],B](f:A=&gt;G[B])(implicitG:cats.Apply[G]):G[Unit]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">nonEmptyTraverse_</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Reducible.Ops.A">A</span>) ⇒ <span class="extype" name="cats.Reducible.Ops.nonEmptyTraverse_.G">G</span>[<span class="extype" name="cats.Reducible.Ops.nonEmptyTraverse_.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="G">G: <a href="Apply.html" class="extype" name="cats.Apply">Apply</a>[<span class="extype" name="cats.Reducible.Ops.nonEmptyTraverse_.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Reducible.Ops.nonEmptyTraverse_.G">G</span>[<a href="https://www.scala-lang.org/api/2.12.14/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>]</span>
+      </span>
+      
+      
+    </li><li name="scala.AnyRef#notify" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <span class="permalink">
+      <a href="../cats/Reducible$$Ops.html#notify():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@IntrinsicCandidate</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <span class="permalink">
+      <a href="../cats/Reducible$$Ops.html#notifyAll():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@IntrinsicCandidate</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="cats.Reducible.Ops#reduce" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="reduce(implicitA:cats.Semigroup[A]):A"></a><a id="reduce(Semigroup[A]):A"></a>
+      <span class="permalink">
+      <a href="../cats/Reducible$$Ops.html#reduce(implicitA:cats.Semigroup[A]):A" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">reduce</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="index.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.Reducible.Ops.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Reducible.Ops.A">A</span></span>
+      </span>
+      
+      
+    </li><li name="cats.Reducible.Ops#reduceK" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="reduceK[G[_],B](implicitev$1:A&lt;:&lt;G[B],implicitG:cats.SemigroupK[G]):G[B]"></a><a id="reduceK[G[_],B](&lt;:&lt;[A,G[B]],SemigroupK[G]):G[B]"></a>
+      <span class="permalink">
+      <a href="../cats/Reducible$$Ops.html#reduceK[G[_],B](implicitev$1:A&lt;:&lt;G[B],implicitG:cats.SemigroupK[G]):G[B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">reduceK</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[<span class="extype" name="cats.Reducible.Ops.A">A</span>, <span class="extype" name="cats.Reducible.Ops.reduceK.G">G</span>[<span class="extype" name="cats.Reducible.Ops.reduceK.B">B</span>]]</span>, <span name="G">G: <a href="SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a>[<span class="extype" name="cats.Reducible.Ops.reduceK.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Reducible.Ops.reduceK.G">G</span>[<span class="extype" name="cats.Reducible.Ops.reduceK.B">B</span>]</span>
+      </span>
+      
+      
+    </li><li name="cats.Reducible.Ops#reduceLeft" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="reduceLeft(f:(A,A)=&gt;A):A"></a><a id="reduceLeft((A,A)⇒A):A"></a>
+      <span class="permalink">
+      <a href="../cats/Reducible$$Ops.html#reduceLeft(f:(A,A)=&gt;A):A" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">reduceLeft</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Reducible.Ops.A">A</span>, <span class="extype" name="cats.Reducible.Ops.A">A</span>) ⇒ <span class="extype" name="cats.Reducible.Ops.A">A</span></span>)</span><span class="result">: <span class="extype" name="cats.Reducible.Ops.A">A</span></span>
+      </span>
+      
+      
+    </li><li name="cats.Reducible.Ops#reduceLeftM" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="reduceLeftM[G[_],B](f:A=&gt;G[B])(g:(B,A)=&gt;G[B])(implicitG:cats.FlatMap[G]):G[B]"></a><a id="reduceLeftM[G[_],B]((A)⇒G[B])((B,A)⇒G[B])(FlatMap[G]):G[B]"></a>
+      <span class="permalink">
+      <a href="../cats/Reducible$$Ops.html#reduceLeftM[G[_],B](f:A=&gt;G[B])(g:(B,A)=&gt;G[B])(implicitG:cats.FlatMap[G]):G[B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">reduceLeftM</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Reducible.Ops.A">A</span>) ⇒ <span class="extype" name="cats.Reducible.Ops.reduceLeftM.G">G</span>[<span class="extype" name="cats.Reducible.Ops.reduceLeftM.B">B</span>]</span>)</span><span class="params">(<span name="g">g: (<span class="extype" name="cats.Reducible.Ops.reduceLeftM.B">B</span>, <span class="extype" name="cats.Reducible.Ops.A">A</span>) ⇒ <span class="extype" name="cats.Reducible.Ops.reduceLeftM.G">G</span>[<span class="extype" name="cats.Reducible.Ops.reduceLeftM.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="G">G: <a href="FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a>[<span class="extype" name="cats.Reducible.Ops.reduceLeftM.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Reducible.Ops.reduceLeftM.G">G</span>[<span class="extype" name="cats.Reducible.Ops.reduceLeftM.B">B</span>]</span>
+      </span>
+      
+      
+    </li><li name="cats.Reducible.Ops#reduceLeftTo" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="reduceLeftTo[B](f:A=&gt;B)(g:(B,A)=&gt;B):B"></a><a id="reduceLeftTo[B]((A)⇒B)((B,A)⇒B):B"></a>
+      <span class="permalink">
+      <a href="../cats/Reducible$$Ops.html#reduceLeftTo[B](f:A=&gt;B)(g:(B,A)=&gt;B):B" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">reduceLeftTo</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Reducible.Ops.A">A</span>) ⇒ <span class="extype" name="cats.Reducible.Ops.reduceLeftTo.B">B</span></span>)</span><span class="params">(<span name="g">g: (<span class="extype" name="cats.Reducible.Ops.reduceLeftTo.B">B</span>, <span class="extype" name="cats.Reducible.Ops.A">A</span>) ⇒ <span class="extype" name="cats.Reducible.Ops.reduceLeftTo.B">B</span></span>)</span><span class="result">: <span class="extype" name="cats.Reducible.Ops.reduceLeftTo.B">B</span></span>
+      </span>
+      
+      
+    </li><li name="cats.Reducible.Ops#reduceMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="reduceMap[B](f:A=&gt;B)(implicitB:cats.Semigroup[B]):B"></a><a id="reduceMap[B]((A)⇒B)(Semigroup[B]):B"></a>
+      <span class="permalink">
+      <a href="../cats/Reducible$$Ops.html#reduceMap[B](f:A=&gt;B)(implicitB:cats.Semigroup[B]):B" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">reduceMap</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Reducible.Ops.A">A</span>) ⇒ <span class="extype" name="cats.Reducible.Ops.reduceMap.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="B">B: <a href="index.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.Reducible.Ops.reduceMap.B">B</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Reducible.Ops.reduceMap.B">B</span></span>
+      </span>
+      
+      
+    </li><li name="cats.Reducible.Ops#reduceMapA" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="reduceMapA[G[_],B](f:A=&gt;G[B])(implicitG:cats.Apply[G],implicitB:cats.Semigroup[B]):G[B]"></a><a id="reduceMapA[G[_],B]((A)⇒G[B])(Apply[G],Semigroup[B]):G[B]"></a>
+      <span class="permalink">
+      <a href="../cats/Reducible$$Ops.html#reduceMapA[G[_],B](f:A=&gt;G[B])(implicitG:cats.Apply[G],implicitB:cats.Semigroup[B]):G[B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">reduceMapA</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Reducible.Ops.A">A</span>) ⇒ <span class="extype" name="cats.Reducible.Ops.reduceMapA.G">G</span>[<span class="extype" name="cats.Reducible.Ops.reduceMapA.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="G">G: <a href="Apply.html" class="extype" name="cats.Apply">Apply</a>[<span class="extype" name="cats.Reducible.Ops.reduceMapA.G">G</span>]</span>, <span name="B">B: <a href="index.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.Reducible.Ops.reduceMapA.B">B</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Reducible.Ops.reduceMapA.G">G</span>[<span class="extype" name="cats.Reducible.Ops.reduceMapA.B">B</span>]</span>
+      </span>
+      
+      
+    </li><li name="cats.Reducible.Ops#reduceMapM" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="reduceMapM[G[_],B](f:A=&gt;G[B])(implicitG:cats.FlatMap[G],implicitB:cats.Semigroup[B]):G[B]"></a><a id="reduceMapM[G[_],B]((A)⇒G[B])(FlatMap[G],Semigroup[B]):G[B]"></a>
+      <span class="permalink">
+      <a href="../cats/Reducible$$Ops.html#reduceMapM[G[_],B](f:A=&gt;G[B])(implicitG:cats.FlatMap[G],implicitB:cats.Semigroup[B]):G[B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">reduceMapM</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Reducible.Ops.A">A</span>) ⇒ <span class="extype" name="cats.Reducible.Ops.reduceMapM.G">G</span>[<span class="extype" name="cats.Reducible.Ops.reduceMapM.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="G">G: <a href="FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a>[<span class="extype" name="cats.Reducible.Ops.reduceMapM.G">G</span>]</span>, <span name="B">B: <a href="index.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.Reducible.Ops.reduceMapM.B">B</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Reducible.Ops.reduceMapM.G">G</span>[<span class="extype" name="cats.Reducible.Ops.reduceMapM.B">B</span>]</span>
+      </span>
+      
+      
+    </li><li name="cats.Reducible.Ops#reduceRight" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="reduceRight(f:(A,cats.Eval[A])=&gt;cats.Eval[A]):cats.Eval[A]"></a><a id="reduceRight((A,Eval[A])⇒Eval[A]):Eval[A]"></a>
+      <span class="permalink">
+      <a href="../cats/Reducible$$Ops.html#reduceRight(f:(A,cats.Eval[A])=&gt;cats.Eval[A]):cats.Eval[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">reduceRight</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Reducible.Ops.A">A</span>, <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.Reducible.Ops.A">A</span>]) ⇒ <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.Reducible.Ops.A">A</span>]</span>)</span><span class="result">: <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.Reducible.Ops.A">A</span>]</span>
+      </span>
+      
+      
+    </li><li name="cats.Reducible.Ops#reduceRightTo" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="reduceRightTo[B](f:A=&gt;B)(g:(A,cats.Eval[B])=&gt;cats.Eval[B]):cats.Eval[B]"></a><a id="reduceRightTo[B]((A)⇒B)((A,Eval[B])⇒Eval[B]):Eval[B]"></a>
+      <span class="permalink">
+      <a href="../cats/Reducible$$Ops.html#reduceRightTo[B](f:A=&gt;B)(g:(A,cats.Eval[B])=&gt;cats.Eval[B]):cats.Eval[B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">reduceRightTo</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Reducible.Ops.A">A</span>) ⇒ <span class="extype" name="cats.Reducible.Ops.reduceRightTo.B">B</span></span>)</span><span class="params">(<span name="g">g: (<span class="extype" name="cats.Reducible.Ops.A">A</span>, <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.Reducible.Ops.reduceRightTo.B">B</span>]) ⇒ <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.Reducible.Ops.reduceRightTo.B">B</span>]</span>)</span><span class="result">: <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.Reducible.Ops.reduceRightTo.B">B</span>]</span>
+      </span>
+      
+      
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
+      <span class="permalink">
+      <a href="../cats/Reducible$$Ops.html#synchronized[T0](x$1:=&gt;T0):T0" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="cats.Reducible.Ops#toNonEmptyList" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="toNonEmptyList:cats.data.NonEmptyList[A]"></a><a id="toNonEmptyList:NonEmptyList[A]"></a>
+      <span class="permalink">
+      <a href="../cats/Reducible$$Ops.html#toNonEmptyList:cats.data.NonEmptyList[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toNonEmptyList</span><span class="result">: <a href="data/NonEmptyList.html" class="extype" name="cats.data.NonEmptyList">NonEmptyList</a>[<span class="extype" name="cats.Reducible.Ops.A">A</span>]</span>
+      </span>
+      
+      
+    </li><li name="scala.AnyRef#toString" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <span class="permalink">
+      <a href="../cats/Reducible$$Ops.html#toString():String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
+      <span class="permalink">
+      <a href="../cats/Reducible$$Ops.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.14/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>, <span name="arg1">arg1: <a href="https://www.scala-lang.org/api/2.12.14/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a><a id="wait(Long):Unit"></a>
+      <span class="permalink">
+      <a href="../cats/Reducible$$Ops.html#wait(x$1:Long):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.14/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+                <span class="name">@native</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <span class="permalink">
+      <a href="../cats/Reducible$$Ops.html#wait():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li>
+              </ol>
+            </div>
+
+        
+
+        <div class="values members">
+              <h3>Deprecated Value Members</h3>
+              <ol><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <span class="permalink">
+      <a href="../cats/Reducible$$Ops.html#finalize():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: ">finalize</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.14/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+                <span class="name">@Deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"></dd></dl></div>
+    </li></ol>
+            </div>
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.Serializable">
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.14/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.14/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.14/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+    </body>
+          </div>
+        </div>
+      </div>
+    </body>
+      </html>

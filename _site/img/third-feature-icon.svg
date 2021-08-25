@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="56px" height="56px" viewBox="0 0 56 56" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 57.1 (83088) - https://sketch.com -->
+    <title>features03</title>
+    <desc>Created with Sketch.</desc>
+    <g id="features03" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="icon" transform="translate(0.000000, 1.000000)">
+            <path d="M1.5,17.5 L54.5,17.5 L54.5,3 C54.5,2.17157288 53.8284271,1.5 53,1.5 L3,1.5 C2.17157288,1.5 1.5,2.17157288 1.5,3 L1.5,17.5 Z" id="path" stroke="#02B4E5" stroke-width="3"></path>
+            <path d="M1.5,17.5 L1.5,51 C1.5,51.8284271 2.17157288,52.5 3,52.5 L53,52.5 C53.8284271,52.5 54.5,51.8284271 54.5,51 L54.5,17.5 L1.5,17.5 Z" id="path" stroke="#02B4E5" stroke-width="3"></path>
+            <rect id="path" fill="#02B4E5" x="15" y="2" width="3" height="49"></rect>
+            <rect id="path" fill="#02B4E5" opacity="0.3" x="3" y="19" width="12" height="32"></rect>
+            <g id="code" transform="translate(22.000000, 26.000000)" fill="#02B4E5">
+                <rect id="path" x="0" y="0" width="19" height="3"></rect>
+                <rect id="path" x="0" y="5" width="23" height="3"></rect>
+                <rect id="path" x="0" y="10" width="16" height="3"></rect>
+                <rect id="path" x="0" y="15" width="26" height="3"></rect>
+            </g>
+        </g>
+    </g>
+</svg>
