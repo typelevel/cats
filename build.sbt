@@ -275,6 +275,18 @@ lazy val docSettings = Seq(
   micrositeGithubRepo := "cats",
   micrositeImgDirectory := (LocalRootProject / baseDirectory).value / "docs" / "src" / "main" / "resources" / "microsite" / "img",
   micrositeJsDirectory := (LocalRootProject / baseDirectory).value / "docs" / "src" / "main" / "resources" / "microsite" / "js",
+  micrositeStaticDirectory := (LocalRootProject / baseDirectory).value / "docs" / "target" / "main" / "resources_managed" / "microsite" / "static",
+  makeMicrosite := {
+    import scala.sys.process._
+    IO.createDirectory(micrositeStaticDirectory.value)
+    if (
+      (url(
+        "https://opencollective.com/typelevel/members/all.json"
+      ) #> (micrositeStaticDirectory.value / "members.json")).! != 0
+    )
+      throw new java.io.IOException("Failed to download https://opencollective.com/typelevel/members/all.json")
+    makeMicrosite.value
+  },
   micrositeTheme := "pattern",
   micrositePalette := Map(
     "brand-primary" -> "#5B5988",
@@ -309,7 +321,7 @@ lazy val docSettings = Seq(
     Set("-Ywarn-unused-import", "-Ywarn-unused:imports", "-Ywarn-dead-code", "-Xfatal-warnings")
   )),
   git.remoteRepo := "git@github.com:typelevel/cats.git",
-  makeSite / includeFilter := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.yml" | "*.md" | "*.svg",
+  makeSite / includeFilter := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.yml" | "*.md" | "*.svg" | "*.json",
   Jekyll / includeFilter := (makeSite / includeFilter).value,
   mdocIn := (LocalRootProject / baseDirectory).value / "docs" / "src" / "main" / "mdoc",
   mdocExtraArguments := Seq("--no-link-hygiene")
