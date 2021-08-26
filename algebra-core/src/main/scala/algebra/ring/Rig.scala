@@ -19,4 +19,12 @@ trait Rig[@sp(Int, Long, Float, Double) A] extends Any with Semiring[A] with Mul
 
 object Rig extends AdditiveMonoidFunctions[Rig] with MultiplicativeMonoidFunctions[Rig] {
   @inline final def apply[A](implicit ev: Rig[A]): Rig[A] = ev
+
+  @inline private[algebra] def instance[A](z: A, o: A, add: (A, A) => A, mul: (A, A) => A): Rig[A] =
+    new Rig[A] {
+      val zero: A = z
+      val one: A = o
+      def plus(x: A, y: A): A = add(x, y)
+      def times(x: A, y: A): A = mul(x, y)
+    }
 }

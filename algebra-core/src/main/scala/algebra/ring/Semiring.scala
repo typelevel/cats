@@ -23,4 +23,11 @@ trait Semiring[@sp(Int, Long, Float, Double) A]
 
 object Semiring extends AdditiveMonoidFunctions[Semiring] with MultiplicativeSemigroupFunctions[Semiring] {
   @inline final def apply[A](implicit ev: Semiring[A]): Semiring[A] = ev
+
+  @inline private[algebra] def instance[A](z: A, add: (A, A) => A, mul: (A, A) => A): Semiring[A] =
+    new Semiring[A] {
+      val zero: A = z
+      def plus(x: A, y: A): A = add(x, y)
+      def times(x: A, y: A): A = mul(x, y)
+    }
 }

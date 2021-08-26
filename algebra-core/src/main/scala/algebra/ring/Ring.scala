@@ -115,4 +115,13 @@ trait RingFunctions[R[T] <: Ring[T]] extends AdditiveGroupFunctions[R] with Mult
 
 object Ring extends RingFunctions[Ring] {
   @inline final def apply[A](implicit ev: Ring[A]): Ring[A] = ev
+
+  @inline private[algebra] def instance[A](z: A, o: A, neg: A => A, add: (A, A) => A, mul: (A, A) => A): Ring[A] =
+    new Ring[A] {
+      val zero: A = z
+      val one: A = o
+      def negate(x: A): A = neg(x)
+      def plus(x: A, y: A): A = add(x, y)
+      def times(x: A, y: A): A = mul(x, y)
+    }
 }
