@@ -284,8 +284,9 @@ lazy val docSettings = Seq(
         "https://opencollective.com/typelevel/members/all.json"
       ) #> (micrositeStaticDirectory.value / "members.json")).! != 0
     )
-      throw new java.io.IOException("Failed to download https://opencollective.com/typelevel/members/all.json")
-    makeMicrosite.value
+      sys.error("Failed to download https://opencollective.com/typelevel/members/all.json")
+    else
+      makeMicrosite.value
   },
   micrositeTheme := "pattern",
   micrositePalette := Map(
