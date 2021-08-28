@@ -1,9 +1,9 @@
 function addSponsor(divId, member, size) {
     div = document.getElementById(divId);
     var a = document.createElement('a');
-    a.setAttribute('href', member.website || member.profile || '#');
+    a.setAttribute('href', member.website || (member.slug ? "https://opencollective.com/" + member.slug : null) || '#');
     var img = document.createElement('img');
-    img.setAttribute('src', member.image || 'img/missing-avatar.svg');
+    img.setAttribute('src', member.imageUrl || 'img/missing-avatar.svg');
     if (size) {
         img.setAttribute('height', size);
         img.setAttribute('width', size);
@@ -22,75 +22,77 @@ const SilverSize = 60;
 const BackerSize = 45;
 const ContributorSize = 36;
 
-var sponsors = function() {
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'https://opencollective.com/typelevel/members/all.json', true);
-    xhr.responseType = 'json';
-    xhr.onload = function() {
-        var status = xhr.status;
-        if (status === 200) {
-            for(i = 0; i < xhr.response.length; i++) {
-                var member = xhr.response[i];
-                if (member.isActive) {
-                    switch (member.tier) {
-                    case 'Platinum Sponsor':
-                        addSponsor('platinum-sponsors', member, PlatinumSize);
-                    case 'Gold Sponsor':
-                        addSponsor('gold-sponsors', member, GoldSize);
-                    case 'Silver Sponsor':
-                        addSponsor('silver-sponsors', member, SilverSize);
-                    case 'backer':
-                        addSponsor('backers', member, BackerSize);
-                        break;
-                    default:
-                        if (member.totalAmountDonated > 0) {
-                            addSponsor('other-contributors', member, ContributorSize);
-                        }
+var sponsors = async function () {
+    var response = await fetch('https://api.opencollective.com/graphql/v2', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ query: "query{collective(slug:\"typelevel\"){members{nodes{account{name slug website imageUrl isActive}tier{name}totalDonations{valueInCents}}}}}" })
+    });
+
+    if (response.ok) {
+        var json = await response.json();
+        var members = json.data.collective.members.nodes;
+        for (i = 0; i < members.length; i++) {
+            var member = members[i];
+            switch (member.tier ? member.tier.name : null) {
+                case 'platinum-sponsor':
+                    addSponsor('platinum-sponsors', member.account, PlatinumSize);
+                case 'gold-sponsor':
+                    addSponsor('gold-sponsors', member.account, GoldSize);
+                case 'silver-sponsor':
+                    addSponsor('silver-sponsors', member.account, SilverSize);
+                case 'backer':
+                    addSponsor('backers', member.account, BackerSize);
+                    break;
+                default:
+                    if (member.totalDonations.valueInCents > 0) {
+                        addSponsor('other-contributors', member.account, ContributorSize);
                     }
-                };
-            }
+            };
         }
-    };
-    xhr.send();
+    }
 };
 sponsors();
 // Add sponsors who predate open collective
 addSponsor('gold-sponsors', {
     name: "47 Degrees",
     website: "https://47deg.com",
-    image: "https://typelevel.org/cats/img/sponsors/47_degree.png"
+    imageUrl: "https://typelevel.org/cats/img/sponsors/47_degree.png"
 });
 addSponsor('gold-sponsors', {
     name: "Iterators",
     website: "https://iteratorshq.com",
-    image: "https://typelevel.org/cats/img/sponsors/iterators.png",
+    imageUrl: "https://typelevel.org/cats/img/sponsors/iterators.png",
     marginBottom: 20
 });
 addSponsor('gold-sponsors', {
     name: "Triplequote",
     website: "https://triplequote.com",
-    image: "https://typelevel.org/cats/img/sponsors/triplequote.png",
+    imageUrl: "https://typelevel.org/cats/img/sponsors/triplequote.png",
     marginBottom: 20
 });
 addSponsor('gold-sponsors', {
     name: "Underscore",
     website: "https://underscore.com",
-    image: "https://typelevel.org/cats/img/sponsors/underscore.png",
+    imageUrl: "https://typelevel.org/cats/img/sponsors/underscore.png",
     marginBottom: 10
 });
 addSponsor('silver-sponsors', {
     name: "Ebiznext",
     website: "https://ebiznext.com",
-    image: "https://typelevel.org/cats/img/sponsors/ebiznext.png",
+    imageUrl: "https://typelevel.org/cats/img/sponsors/ebiznext.png",
     marginBottom: 10
 });
 addSponsor('silver-sponsors', {
     name: "Inner Product",
     website: "https://inner-product.com",
-    image: "https://typelevel.org/cats/img/sponsors/inner-product.png"
+    imageUrl: "https://typelevel.org/cats/img/sponsors/inner-product.png"
 });
 addSponsor('silver-sponsors', {
     name: "Evolution Gaming Engineering",
     website: "https://evolutiongaming.com",
-    image: "https://typelevel.org/cats/img/sponsors/evolution_gaming_engineering.png"
+    imageUrl: "https://typelevel.org/cats/img/sponsors/evolution_gaming_engineering.png"
 });
