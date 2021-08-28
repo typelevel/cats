@@ -556,7 +556,7 @@ monad with stronger equational guarantees than if we were emulating the <code cl
 <span class="k">import</span> <span class="nn">TeletypeOps._</span>
 
 <span class="k">val</span> <span class="nv">state</span> <span class="k">=</span> <span class="nv">program</span><span class="o">.</span><span class="py">foldMap</span><span class="o">(</span><span class="n">interpreter</span><span class="o">)</span>
-<span class="c1">// state: TeletypeState[Unit] = cats.data.IndexedStateT@63485da3</span>
+<span class="c1">// state: TeletypeState[Unit] = cats.data.IndexedStateT@79ac2780</span>
 <span class="k">val</span> <span class="nv">initialState</span> <span class="k">=</span> <span class="nc">Nil</span>
 <span class="c1">// initialState: Nil.type = List()</span>
 <span class="nf">val</span> <span class="o">(</span><span class="n">stored</span><span class="o">,</span> <span class="k">_</span><span class="o">)</span> <span class="k">=</span> <span class="nv">state</span><span class="o">.</span><span class="py">run</span><span class="o">(</span><span class="n">initialState</span><span class="o">).</span><span class="py">value</span>
@@ -626,7 +626,7 @@ combined with <code class="language-plaintext highlighter-rouge">OptionT</code> 
 <span class="k">val</span> <span class="nv">hoisted</span> <span class="k">=</span> <span class="nv">opComplete</span><span class="o">.</span><span class="py">hoist</span><span class="o">(</span><span class="n">optTryLift</span><span class="o">)</span>
 <span class="c1">// hoisted: FreeT[Ctx, OptTry, Int] = FlatMapped(</span>
 <span class="c1">//   Suspend(OptionT(Success(Some(Left(Action(7)))))),</span>
-<span class="c1">//   scala.Function1$$Lambda$659/0x000000080100ab98@171c64c7</span>
+<span class="c1">//   scala.Function1$$Lambda$634/0x0000000801005580@2a5a8b7c</span>
 <span class="c1">// )</span>
 <span class="k">val</span> <span class="nv">evaluated</span> <span class="k">=</span> <span class="nv">hoisted</span><span class="o">.</span><span class="py">foldMap</span><span class="o">(</span><span class="n">tryInterpreter</span><span class="o">)</span>
 <span class="c1">// evaluated: OptTry[Int] = OptionT(Success(Some(12)))</span>

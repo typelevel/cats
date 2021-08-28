@@ -59,7 +59,7 @@ at this point. To make our program useful we need to interpret it.</p>
 </code></pre></div></div>
 
 <div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">validator</span> <span class="k">=</span> <span class="nv">prog</span><span class="o">.</span><span class="py">foldMap</span><span class="o">[</span><span class="kt">FromString</span><span class="o">](</span><span class="n">compiler</span><span class="o">)</span>
-<span class="c1">// validator: String =&gt; Boolean = cats.instances.Function1Instances$$anon$7$$Lambda$23362/0x0000000804a158a0@3c82099c</span>
+<span class="c1">// validator: String =&gt; Boolean = cats.instances.Function1Instances$$anon$7$$Lambda$12575/0x0000000802c02658@50d26ed4</span>
 <span class="nf">validator</span><span class="o">(</span><span class="s">"1234"</span><span class="o">)</span>
 <span class="c1">// res0: Boolean = false</span>
 <span class="nf">validator</span><span class="o">(</span><span class="s">"12345"</span><span class="o">)</span>

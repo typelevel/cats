@@ -81,7 +81,7 @@ Eval[UserUpdateResult]</code> as the continuation:</p>
     <span class="nc">Succeeded</span><span class="o">(</span><span class="nv">user</span><span class="o">.</span><span class="py">id</span><span class="o">)</span>
   <span class="o">}</span>
 <span class="o">}</span>
-<span class="c1">// eval: Eval[UserUpdateResult] = cats.Later@4e4f646d</span>
+<span class="c1">// eval: Eval[UserUpdateResult] = cats.Later@26f78194</span>
 </code></pre></div></div>
 
 <p>Finally we can run the resulting <code class="language-plaintext highlighter-rouge">Eval</code> to actually execute the computation:</p>
@@ -110,7 +110,7 @@ in a slightly different way.</p>
   <span class="o">)</span>
 <span class="o">}</span>
 <span class="c1">// anotherComputation: ContT[Eval, UserUpdateResult, Map[String, String]] = FromFn(</span>
-<span class="c1">//   Single(cats.data.ContT$$Lambda$23123/0x000000080494e010@1e5eaf3c, 0)</span>
+<span class="c1">//   Single(cats.data.ContT$$Lambda$12304/0x0000000802b31e40@6e8d9c16, 0)</span>
 <span class="c1">// )</span>
 
 <span class="k">val</span> <span class="nv">anotherEval</span> <span class="k">=</span> <span class="nv">anotherComputation</span><span class="o">.</span><span class="py">run</span> <span class="o">{</span> <span class="n">userFields</span> <span class="k">=&gt;</span>
@@ -119,7 +119,7 @@ in a slightly different way.</p>
     <span class="nc">Succeeded</span><span class="o">(</span><span class="nf">userFields</span><span class="o">(</span><span class="s">"id"</span><span class="o">).</span><span class="py">toInt</span><span class="o">)</span>
   <span class="o">}</span>
 <span class="o">}</span>
-<span class="c1">// anotherEval: Eval[UserUpdateResult] = cats.Eval$$anon$5@4e9346e9</span>
+<span class="c1">// anotherEval: Eval[UserUpdateResult] = cats.Eval$$anon$5@1862d4f8</span>
 
 <span class="nv">anotherEval</span><span class="o">.</span><span class="py">value</span>
 <span class="c1">// Persisting these fields to the DB: Map(id -&gt; 100, name -&gt; Bob, age -&gt; 150)</span>
@@ -139,7 +139,7 @@ in continuation-passing style using <code class="language-plaintext highlighter-
     <span class="n">updatedUser</span>
   <span class="o">}</span>
 <span class="c1">// updateUserModel: ContT[Eval, UserUpdateResult, User] = FromFn(</span>
-<span class="c1">//   Single(cats.data.ContT$$Lambda$23123/0x000000080494e010@5eb3bcbd, 0)</span>
+<span class="c1">//   Single(cats.data.ContT$$Lambda$12304/0x0000000802b31e40@5d495afb, 0)</span>
 <span class="c1">// )</span>
 
 <span class="k">val</span> <span class="nv">persistToDb</span><span class="k">:</span> <span class="kt">User</span> <span class="o">=&gt;</span> <span class="nc">ContT</span><span class="o">[</span><span class="kt">Eval</span>, <span class="kt">UserUpdateResult</span>, <span class="kt">UserUpdateResult</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
@@ -170,7 +170,7 @@ in continuation-passing style using <code class="language-plaintext highlighter-
 <span class="k">val</span> <span class="nv">chainOfContinuations</span> <span class="k">=</span>
   <span class="n">updateUserModel</span> <span class="n">flatMap</span> <span class="n">persistToDb</span> <span class="n">flatMap</span> <span class="n">publishEvent</span>
 <span class="c1">// chainOfContinuations: ContT[Eval, UserUpdateResult, UserUpdateResult] = FromFn(</span>
-<span class="c1">//   Single(cats.data.ContT$$Lambda$23125/0x000000080494e9a8@1b8e5c12, 0)</span>
+<span class="c1">//   Single(cats.data.ContT$$Lambda$12306/0x0000000802b327d8@6599c86b, 0)</span>
 <span class="c1">// )</span>
 
 <span class="k">val</span> <span class="nv">eval</span> <span class="k">=</span> <span class="nv">chainOfContinuations</span><span class="o">.</span><span class="py">run</span> <span class="o">{</span> <span class="n">finalResult</span> <span class="k">=&gt;</span>
@@ -179,7 +179,7 @@ in continuation-passing style using <code class="language-plaintext highlighter-
     <span class="n">finalResult</span>
   <span class="o">}</span>
 <span class="o">}</span>
-<span class="c1">// eval: Eval[UserUpdateResult] = cats.Eval$$anon$5@91fb09e</span>
+<span class="c1">// eval: Eval[UserUpdateResult] = cats.Eval$$anon$5@3335583e</span>
 
 <span class="nv">eval</span><span class="o">.</span><span class="py">value</span>
 <span class="c1">// Updated user model</span>
