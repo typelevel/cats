@@ -24,7 +24,7 @@ const ContributorSize = 36;
 
 var sponsors = function() {
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'static/members.json', true);
+    xhr.open('GET', 'https://opencollective.com/typelevel/members/all.json', true);
     xhr.responseType = 'json';
     xhr.onload = function() {
         var status = xhr.status;
