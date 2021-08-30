@@ -240,6 +240,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Metacommerce](https://www.metacommerce.ru)
 - [MYOB](https://www.myob.com)
 - [Netflix](https://jobs.netflix.com)
+- [NetworkedAssets](https://www.networkedassets.com/)
 - [Nezasa](https://www.nezasa.com)
 - [NCR Edinburgh](https://ncredinburgh.com/)
 - [Ocado Technology](https://ocadotechnology.com)
