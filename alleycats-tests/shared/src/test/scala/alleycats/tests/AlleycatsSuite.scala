@@ -1,41 +1,22 @@
-package alleycats
-package tests
+package alleycats.tests
 
 import alleycats.std.MapInstances
 import cats._
-import cats.instances.AllInstances
-import cats.syntax.{AllSyntax, EqOps}
-import cats.tests.StrictCatsEquality
-import org.scalatest.Matchers
-import org.scalatest.funsuite.AnyFunSuiteLike
-import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
-import org.typelevel.discipline.scalatest.Discipline
+import cats.instances.all._
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalacheck.Arbitrary.arbitrary
-
 import scala.util.{Failure, Success, Try}
+import org.scalacheck.Test.Parameters
 
 /**
  * An opinionated stack of traits to improve consistency and reduce
  * boilerplate in Alleycats tests. Derived from Cats.
  */
-trait AlleycatsSuite
-    extends AnyFunSuiteLike
-    with Matchers
-    with ScalaCheckDrivenPropertyChecks
-    with Discipline
-    with TestSettings
-    with AllInstances
-    with AllSyntax
-    with TestInstances
-    with StrictCatsEquality
-    with MapInstances {
-  implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
+trait AlleycatsSuite extends munit.DisciplineSuite with TestSettings with TestInstances with MapInstances {
+  implicit override def scalaCheckTestParameters: Parameters =
     checkConfiguration
 
-  // disable Eq syntax (by making `catsSyntaxEq` not implicit), since it collides
-  // with scalactic's equality
-  override def catsSyntaxEq[A: Eq](a: A): EqOps[A] = new EqOps[A](a)
+  implicit def EqIterable[A: Eq]: Eq[Iterable[A]] = Eq.by(_.toList)
 }
 
 sealed trait TestInstances {

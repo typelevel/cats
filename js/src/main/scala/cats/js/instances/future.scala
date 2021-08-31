@@ -12,10 +12,11 @@ import cats.syntax.all._
 object future extends FutureInstances0
 
 object Await {
-  def result[A](f: Future[A], atMost: FiniteDuration): A = f.value match {
-    case Some(v) => v.get
-    case None    => throw new IllegalStateException()
-  }
+  def result[A](f: Future[A], atMost: FiniteDuration): A =
+    f.value match {
+      case Some(v) => v.get
+      case None    => throw new IllegalStateException()
+    }
 }
 
 sealed private[instances] trait FutureInstances0 extends FutureInstances1 {

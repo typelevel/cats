@@ -3,7 +3,7 @@ package syntax
 
 trait TraverseFilterSyntax extends TraverseFilter.ToTraverseFilterOps
 
-trait TraverseFilterSyntaxBinCompat0 {
+private[syntax] trait TraverseFilterSyntaxBinCompat0 {
   implicit def toSequenceFilterOps[F[_], G[_], A](fgoa: F[G[Option[A]]]): SequenceFilterOps[F, G, A] =
     new SequenceFilterOps(fgoa)
 }
@@ -17,6 +17,6 @@ final class SequenceFilterOps[F[_], G[_], A](private val fgoa: F[G[Option[A]]]) 
    * scala> val b: Either[String, List[Int]] = a.sequenceFilter
    * b: Either[String, List[Int]] = Right(List(1, 5, 3))
    * }}}
-   * */
-  def sequenceFilter(implicit F: TraverseFilter[F], G: Applicative[G]): G[F[A]] = F.traverseFilter(fgoa)(identity)
+   */
+  def sequenceFilter(implicit F: TraverseFilter[F], G: Applicative[G]): G[F[A]] = F.sequenceFilter(fgoa)
 }

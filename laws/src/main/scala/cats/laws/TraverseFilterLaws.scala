@@ -14,19 +14,23 @@ trait TraverseFilterLaws[F[_]] extends FunctorFilterLaws[F] {
   def traverseFilterConsistentWithTraverse[G[_]: Applicative, A](fa: F[A], f: A => G[A]): IsEq[G[F[A]]] =
     fa.traverseFilter(a => f(a).map(_.some)) <-> F.traverse.traverse(fa)(f)
 
-  def traverseFilterComposition[A, B, C, M[_], N[_]](fa: F[A], f: A => M[Option[B]], g: B => N[Option[C]])(
-    implicit
+  def traverseFilterComposition[A, B, C, M[_], N[_]](fa: F[A], f: A => M[Option[B]], g: B => N[Option[C]])(implicit
     M: Applicative[M],
     N: Applicative[N]
   ): IsEq[Nested[M, N, F[C]]] = {
     val lhs = Nested[M, N, F[C]](fa.traverseFilter(f).map(_.traverseFilter(g)))
     val rhs: Nested[M, N, F[C]] =
-      fa.traverseFilter[Nested[M, N, ?], C](a => Nested[M, N, Option[C]](f(a).map(_.traverseFilter(g))))
+      fa.traverseFilter[Nested[M, N, *], C](a => Nested[M, N, Option[C]](f(a).map(_.traverseFilter(g))))
     lhs <-> rhs
   }
 
   def filterAConsistentWithTraverseFilter[G[_]: Applicative, A](fa: F[A], f: A => G[Boolean]): IsEq[G[F[A]]] =
     fa.filterA(f) <-> fa.traverseFilter(a => f(a).map(if (_) Some(a) else None))
+
+  def traverseEitherConsistentWithTraverseFilter[G[_], E, A, B](fa: F[A], f: A => G[Option[B]], e: E)(implicit
+    G: Monad[G]
+  ): IsEq[G[F[B]]] =
+    fa.traverseEither(a => f(a).map(_.toRight(e)))((_, _) => Applicative[G].unit) <-> fa.traverseFilter(f)
 }
 
 object TraverseFilterLaws {

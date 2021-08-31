@@ -44,7 +44,7 @@ sealed abstract private[cats] class InjectInstances {
     new Inject[A, Either[C, B]] {
       val inj = (a: A) => Right(I.inj(a))
 
-      val prj = (_: Either[C, B]).right.toOption.flatMap(I.prj)
+      val prj = (_: Either[C, B]).toOption.flatMap(I.prj)
     }
 
 }

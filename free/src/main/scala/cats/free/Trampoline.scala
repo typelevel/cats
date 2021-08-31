@@ -8,7 +8,7 @@ abstract private[free] class TrampolineFunctions {
     Free.pure[Function0, A](a)
 
   @deprecated("Use Trampoline.defer.", "1.0.0-MF")
-  def suspend[A](a: => Trampoline[A]): Trampoline[A] =
+  private[free] def suspend[A](a: => Trampoline[A]): Trampoline[A] =
     defer(a)
 
   def defer[A](a: => Trampoline[A]): Trampoline[A] =

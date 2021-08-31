@@ -5,17 +5,19 @@ package discipline
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop.forAll
 
-trait ParallelTests[M[_], F[_]] extends NonEmptyParallelTests[M, F] {
-  def laws: ParallelLaws[M, F]
+trait ParallelTests[M[_]] extends NonEmptyParallelTests[M] {
+  val laws: ParallelLaws[M]
 
-  def parallel[A, B](implicit ArbA: Arbitrary[A],
-                     ArbM: Arbitrary[M[A]],
-                     ArbMb: Arbitrary[M[B]],
-                     Arbf: Arbitrary[A => B],
-                     EqMa: Eq[M[A]],
-                     EqMb: Eq[M[B]],
-                     ArbF: Arbitrary[F[A]],
-                     EqFa: Eq[F[A]]): RuleSet =
+  def parallel[A, B](implicit
+    ArbA: Arbitrary[A],
+    ArbM: Arbitrary[M[A]],
+    ArbMb: Arbitrary[M[B]],
+    Arbf: Arbitrary[A => B],
+    EqMa: Eq[M[A]],
+    EqMb: Eq[M[B]],
+    ArbF: Arbitrary[F[A]],
+    EqFa: Eq[F[A]]
+  ): RuleSet =
     new DefaultRuleSet(
       "parallel",
       Some(nonEmptyParallel[A, B]),
@@ -24,6 +26,11 @@ trait ParallelTests[M[_], F[_]] extends NonEmptyParallelTests[M, F] {
 }
 
 object ParallelTests {
-  def apply[M[_], F[_]](implicit ev: Parallel[M, F]): ParallelTests[M, F] =
-    new ParallelTests[M, F] { val laws: ParallelLaws[M, F] = ParallelLaws[M, F] }
+  type Aux[M[_], F0[_]] = ParallelTests[M] { type F[A] = F0[A]; val laws: ParallelLaws.Aux[M, F0] }
+
+  def apply[M[_]](implicit ev: Parallel[M]): ParallelTests.Aux[M, ev.F] =
+    apply[M, ev.F](ev, implicitly)
+
+  def apply[M[_], F0[_]](implicit ev: Parallel.Aux[M, F0], D: DummyImplicit): ParallelTests.Aux[M, F0] =
+    new ParallelTests[M] { val laws: ParallelLaws.Aux[M, F0] = ParallelLaws[M](ev) }
 }

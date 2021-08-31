@@ -9,6 +9,6 @@ trait FiniteDurationInstances extends cats.kernel.instances.FiniteDurationInstan
     "Left to keep binary compatibility. Use CoreFiniteDurationInstances.catsStdShowForFiniteDurationUnambiguous instead.",
     "1.5.0"
   )
-  val catsStdShowForFiniteDuration: Show[FiniteDuration] =
+  def catsStdShowForFiniteDuration: Show[FiniteDuration] =
     AllCoreDurationInstances.catsStdShowForFiniteDurationUnambiguous
 }

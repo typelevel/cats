@@ -1,13 +1,13 @@
-package cats
-package tests
+package cats.tests
 
-import cats.laws.discipline.MiniInt
-import MiniInt._
-import cats.laws.discipline.arbitrary._
-import cats.kernel.{BoundedSemilattice, CommutativeGroup, CommutativeMonoid}
+import cats.kernel.{BoundedSemilattice, CommutativeGroup, CommutativeMonoid, Hash, Order}
 import cats.kernel.laws.discipline._
-
+import cats.laws.discipline.MiniInt
+import cats.laws.discipline.MiniInt._
+import cats.laws.discipline.arbitrary._
 import org.scalacheck.Gen
+import cats.syntax.eq._
+import org.scalacheck.Prop._
 
 class MiniIntSuite extends CatsSuite {
   checkAll("MiniInt", OrderTests[MiniInt].order)
@@ -35,14 +35,14 @@ class MiniIntSuite extends CatsSuite {
   }
 
   test("int roundtrip") {
-    forAll { i: MiniInt =>
-      MiniInt.fromInt(i.toInt) should ===(Some(i))
+    forAll { (i: MiniInt) =>
+      assert(MiniInt.fromInt(i.toInt) === (Some(i)))
     }
   }
 
   test("int bounds") {
-    forAll(Gen.chooseNum(MiniInt.minIntValue, MiniInt.maxIntValue)) { i: Int =>
-      MiniInt.fromInt(i).map(_.toInt) should ===(Some(i))
+    forAll(Gen.chooseNum(MiniInt.minIntValue, MiniInt.maxIntValue)) { (i: Int) =>
+      assert(MiniInt.fromInt(i).map(_.toInt) === (Some(i)))
     }
   }
 }

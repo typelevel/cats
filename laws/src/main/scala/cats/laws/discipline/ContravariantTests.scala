@@ -10,12 +10,13 @@ trait ContravariantTests[F[_]] extends InvariantTests[F] {
   def laws: ContravariantLaws[F]
 
   def contravariant[A: Arbitrary, B: Arbitrary, C: Arbitrary](implicit
-                                                              ArbFA: Arbitrary[F[A]],
-                                                              CogenA: Cogen[A],
-                                                              CogenB: Cogen[B],
-                                                              CogenC: Cogen[C],
-                                                              EqFA: Eq[F[A]],
-                                                              EqFC: Eq[F[C]]): RuleSet =
+    ArbFA: Arbitrary[F[A]],
+    CogenA: Cogen[A],
+    CogenB: Cogen[B],
+    CogenC: Cogen[C],
+    EqFA: Eq[F[A]],
+    EqFC: Eq[F[C]]
+  ): RuleSet =
     new DefaultRuleSet(
       name = "contravariant",
       parent = Some(invariant[A, B, C]),

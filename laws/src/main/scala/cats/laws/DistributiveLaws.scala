@@ -23,10 +23,8 @@ trait DistributiveLaws[F[_]] extends FunctorLaws[F] {
     ma: M[A],
     f: A => F[B],
     g: B => N[C]
-  )(implicit
-    N: Distributive[N],
-    M: Functor[M]): IsEq[Nested[F, N, M[C]]] = {
-    val rhs = ma.distribute[Nested[F, N, ?], C](a => Nested(F.map(f(a))(g)))
+  )(implicit N: Distributive[N], M: Functor[M]): IsEq[Nested[F, N, M[C]]] = {
+    val rhs = ma.distribute[Nested[F, N, *], C](a => Nested(F.map(f(a))(g)))
     val lhs = Nested(F.map(ma.distribute(f))(fb => fb.distribute(g)))
     lhs <-> rhs
   }

@@ -1,6 +1,8 @@
 package cats
 import simulacrum.typeclass
+import scala.annotation.implicitNotFound
 
+@implicitNotFound("Could not find an instance of Distributive for ${F}")
 @typeclass trait Distributive[F[_]] extends Functor[F] { self =>
 
   /**
@@ -19,4 +21,53 @@ import simulacrum.typeclass
       implicit def F = self
       implicit def G = G0
     }
+}
+
+object Distributive {
+
+  /* ======================================================================== */
+  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
+  /* ======================================================================== */
+
+  /**
+   * Summon an instance of [[Distributive]] for `F`.
+   */
+  @inline def apply[F[_]](implicit instance: Distributive[F]): Distributive[F] = instance
+
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllDistributiveOps[F[_], A](target: F[A])(implicit tc: Distributive[F]): AllOps[F, A] {
+      type TypeClassType = Distributive[F]
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = Distributive[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
+  trait Ops[F[_], A] extends Serializable {
+    type TypeClassType <: Distributive[F]
+    def self: F[A]
+    val typeClassInstance: TypeClassType
+  }
+  trait AllOps[F[_], A] extends Ops[F, A] with Functor.AllOps[F, A] {
+    type TypeClassType <: Distributive[F]
+  }
+  trait ToDistributiveOps extends Serializable {
+    implicit def toDistributiveOps[F[_], A](target: F[A])(implicit tc: Distributive[F]): Ops[F, A] {
+      type TypeClassType = Distributive[F]
+    } =
+      new Ops[F, A] {
+        type TypeClassType = Distributive[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object nonInheritedOps extends ToDistributiveOps
+
+  /* ======================================================================== */
+  /* END OF SIMULACRUM-MANAGED CODE                                           */
+  /* ======================================================================== */
+
 }

@@ -10,10 +10,7 @@ import org.typelevel.discipline.Laws
 trait FlatMapRecTests[F[_]] extends Laws {
   def laws: FlatMapLaws[F]
 
-  def tailRecM[A: Arbitrary](implicit
-                             ArbFA: Arbitrary[F[A]],
-                             ArbAFA: Arbitrary[A => F[A]],
-                             EqFA: Eq[F[A]]): RuleSet =
+  def tailRecM[A: Arbitrary](implicit ArbFA: Arbitrary[F[A]], ArbAFA: Arbitrary[A => F[A]], EqFA: Eq[F[A]]): RuleSet =
     new DefaultRuleSet(
       name = "flatMapTailRec",
       parent = None,

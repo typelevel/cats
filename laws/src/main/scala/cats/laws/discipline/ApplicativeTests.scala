@@ -10,19 +10,20 @@ trait ApplicativeTests[F[_]] extends ApplyTests[F] {
   def laws: ApplicativeLaws[F]
 
   def applicative[A: Arbitrary, B: Arbitrary, C: Arbitrary](implicit
-                                                            ArbFA: Arbitrary[F[A]],
-                                                            ArbFB: Arbitrary[F[B]],
-                                                            ArbFC: Arbitrary[F[C]],
-                                                            ArbFAtoB: Arbitrary[F[A => B]],
-                                                            ArbFBtoC: Arbitrary[F[B => C]],
-                                                            CogenA: Cogen[A],
-                                                            CogenB: Cogen[B],
-                                                            CogenC: Cogen[C],
-                                                            EqFA: Eq[F[A]],
-                                                            EqFB: Eq[F[B]],
-                                                            EqFC: Eq[F[C]],
-                                                            EqFABC: Eq[F[(A, B, C)]],
-                                                            iso: Isomorphisms[F]): RuleSet =
+    ArbFA: Arbitrary[F[A]],
+    ArbFB: Arbitrary[F[B]],
+    ArbFC: Arbitrary[F[C]],
+    ArbFAtoB: Arbitrary[F[A => B]],
+    ArbFBtoC: Arbitrary[F[B => C]],
+    CogenA: Cogen[A],
+    CogenB: Cogen[B],
+    CogenC: Cogen[C],
+    EqFA: Eq[F[A]],
+    EqFB: Eq[F[B]],
+    EqFC: Eq[F[C]],
+    EqFABC: Eq[F[(A, B, C)]],
+    iso: Isomorphisms[F]
+  ): RuleSet =
     new DefaultRuleSet(
       name = "applicative",
       parent = Some(apply[A, B, C]),

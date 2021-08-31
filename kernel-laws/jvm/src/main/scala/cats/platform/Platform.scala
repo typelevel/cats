@@ -5,5 +5,6 @@ private[cats] object Platform {
   // $COVERAGE-OFF$
   final val isJvm = true
   final val isJs = false
+  final val isNative = false
   // $COVERAGE-ON$
 }

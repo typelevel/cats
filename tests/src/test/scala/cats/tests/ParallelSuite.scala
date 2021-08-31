@@ -1,95 +1,99 @@
-package cats
-package tests
+package cats.tests
 
 import cats._
-import cats.data.NonEmptyList.ZipNonEmptyList
-import cats.data.NonEmptyVector.ZipNonEmptyVector
 import cats.data._
-import org.scalatest.funsuite.AnyFunSuiteLike
+import cats.data.NonEmptyList.ZipNonEmptyList
+import cats.kernel.compat.scalaVersionSpecific._
 import cats.laws.discipline.{ApplicativeErrorTests, MiniInt, NonEmptyParallelTests, ParallelTests, SerializableTests}
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
-import org.typelevel.discipline.scalatest.Discipline
+import cats.implicits._
 import scala.collection.immutable.SortedSet
+import org.scalacheck.Prop._
 
-class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest {
+@suppressUnusedImportWarningForScalaVersionSpecific
+class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with ScalaVersionSpecificParallelSuite {
 
   test("ParSequence Either should accumulate errors") {
-    forAll { es: List[Either[String, Int]] =>
+    forAll { (es: List[Either[String, Int]]) =>
       val lefts = es
-        .collect {
-          case Left(e) => e
+        .collect { case Left(e) =>
+          e
         }
         .foldMap(identity)
 
-      es.parSequence.fold(identity, i => Monoid[String].empty) should ===(lefts)
+      assert(es.parSequence.fold(identity, i => Monoid[String].empty) === lefts)
     }
   }
 
   test("ParSequence Ior should accumulate errors") {
-    forAll { es: List[Ior[String, Int]] =>
+    forAll { (es: List[Ior[String, Int]]) =>
       val lefts = es
         .map(_.left)
-        .collect {
-          case Some(e) => e
+        .collect { case Some(e) =>
+          e
         }
         .foldMap(identity)
-      es.parSequence.left.getOrElse(Monoid[String].empty) should ===(lefts)
+      assert(es.parSequence.left.getOrElse(Monoid[String].empty) === lefts)
     }
   }
 
   test("ParSequence Ior should sequence values") {
-    forAll { es: List[Ior[String, Int]] =>
-      es.parSequence.right should ===(es.map(_.toOption).sequence)
+    forAll { (es: List[Ior[String, Int]]) =>
+      assert(es.parSequence.right === (es.map(_.toOption).sequence))
     }
   }
 
   test("ParTraverse identity should be equivalent to parSequence") {
-    forAll { es: List[Either[String, Int]] =>
-      es.parTraverse(identity) should ===(es.parSequence)
+    forAll { (es: List[Either[String, Int]]) =>
+      assert(es.parTraverse(identity) === (es.parSequence))
     }
   }
 
   test("ParTraverse_ identity should be equivalent to parSequence_") {
-    forAll { es: SortedSet[Either[String, Int]] =>
-      Parallel.parTraverse_(es)(identity) should ===(Parallel.parSequence_(es))
+    forAll { (es: SortedSet[Either[String, Int]]) =>
+      assert(Parallel.parTraverse_(es)(identity) === (Parallel.parSequence_[SortedSet, Either[String, *], Int](es)))
     }
   }
 
   test("ParTraverse_ syntax should be equivalent to Parallel.parTraverse_") {
-    forAll { es: SortedSet[Either[String, Int]] =>
-      Parallel.parTraverse_(es)(identity) should ===(es.parTraverse_(identity))
+    forAll { (es: SortedSet[Either[String, Int]]) =>
+      assert(
+        Parallel.parTraverse_[SortedSet, Either[String, *], Either[String, Int], Int](es)(identity) === (es
+          .parTraverse_(identity))
+      )
     }
   }
 
   test("ParSequence_ syntax should be equivalent to Parallel.parSequence_") {
-    forAll { es: SortedSet[Either[String, Int]] =>
-      Parallel.parSequence_(es) should ===(es.parSequence_)
+    forAll { (es: SortedSet[Either[String, Int]]) =>
+      assert(Parallel.parSequence_[SortedSet, Either[String, *], Int](es) === (es.parSequence_))
     }
   }
 
   test("ParNonEmptyTraverse identity should be equivalent to parNonEmptySequence") {
-    forAll { es: NonEmptyVector[Either[String, Int]] =>
-      Parallel.parNonEmptyTraverse(es)(identity) should ===(Parallel.parNonEmptySequence(es))
+    forAll { (es: NonEmptyVector[Either[String, Int]]) =>
+      assert(Parallel.parNonEmptyTraverse(es)(identity) === (Parallel.parNonEmptySequence(es)))
     }
   }
 
   test("ParNonEmptyTraverse_ identity should be equivalent to parNonEmptySequence_") {
-    forAll { es: NonEmptyList[Either[String, Int]] =>
-      Parallel.parNonEmptyTraverse_(es)(identity) should ===(Parallel.parNonEmptySequence_(es))
+    forAll { (es: NonEmptyList[Either[String, Int]]) =>
+      assert(Parallel.parNonEmptyTraverse_(es)(identity) === (Parallel.parNonEmptySequence_(es)))
     }
   }
 
-  type ListTuple2[A, B] = List[(A, B)]
-  implicit val catsBitraverseForListTuple2 = new Bitraverse[ListTuple2] {
+  case class ListTuple2[A, B](value: List[(A, B)])
+  implicit val catsBitraverseForListTuple2: Bitraverse[ListTuple2] = new Bitraverse[ListTuple2] {
     def bifoldLeft[A, B, C](fab: ListTuple2[A, B], c: C)(f: (C, A) => C, g: (C, B) => C): C =
-      fab.foldLeft(c) { case (c, (a, b)) => g(f(c, a), b) }
-    def bifoldRight[A, B, C](fab: ListTuple2[A, B], lc: Eval[C])(f: (A, Eval[C]) => Eval[C],
-                                                                 g: (B, Eval[C]) => Eval[C]): Eval[C] = {
+      fab.value.foldLeft(c) { case (c, (a, b)) => g(f(c, a), b) }
+    def bifoldRight[A, B, C](fab: ListTuple2[A, B],
+                             lc: Eval[C]
+    )(f: (A, Eval[C]) => Eval[C], g: (B, Eval[C]) => Eval[C]): Eval[C] = {
       def loop(abs: ListTuple2[A, B]): Eval[C] =
-        abs match {
+        abs.value match {
           case Nil         => lc
-          case (a, b) :: t => f(a, g(b, Eval.defer(loop(t))))
+          case (a, b) :: t => f(a, g(b, Eval.defer(loop(ListTuple2(t)))))
         }
       Eval.defer(loop(fab))
     }
@@ -97,175 +101,197 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest {
       fab: ListTuple2[A, B]
     )(f: A => G[C], g: B => G[D])(implicit G: Applicative[G]): G[ListTuple2[C, D]] = {
       def loop(abs: ListTuple2[A, B]): Eval[G[ListTuple2[C, D]]] =
-        abs match {
-          case Nil         => Now(G.pure(List.empty))
-          case (a, b) :: t => G.map2Eval(G.product(f(a), g(b)), Eval.defer(loop(t)))(_ :: _)
+        abs.value match {
+          case Nil => Now(G.pure(ListTuple2(List.empty)))
+          case (a, b) :: t =>
+            G.map2Eval(G.product(f(a), g(b)), Eval.defer(loop(ListTuple2(t))))((cur, acc) =>
+              ListTuple2(cur :: acc.value)
+            )
         }
       loop(fab).value
     }
   }
 
   test("ParBisequence Either should accumulate errors") {
-    forAll { es: ListTuple2[Either[String, Int], Either[String, Int]] =>
+    forAll { (es: List[(Either[String, Int], Either[String, Int])]) =>
       val lefts = es
-        .flatMap {
-          case (a, b) => List(a, b)
+        .flatMap { case (a, b) =>
+          List(a, b)
         }
-        .collect {
-          case Left(e) => e
+        .collect { case Left(e) =>
+          e
         }
         .foldMap(identity)
 
-      es.parBisequence.fold(identity, i => Monoid[String].empty) should ===(lefts)
+      assert(ListTuple2(es).parBisequence.fold(identity, i => Monoid[String].empty) === lefts)
     }
   }
 
   test("ParBisequence Ior should accumulate errors") {
-    forAll { es: ListTuple2[Ior[String, Int], Ior[String, Int]] =>
+    forAll { (es: List[(Ior[String, Int], Ior[String, Int])]) =>
       val lefts = es
-        .flatMap {
-          case (a, b) => List(a, b)
+        .flatMap { case (a, b) =>
+          List(a, b)
         }
         .map(_.left)
-        .collect {
-          case Some(e) => e
+        .collect { case Some(e) =>
+          e
         }
         .foldMap(identity)
 
-      es.parBisequence.left.getOrElse(Monoid[String].empty) should ===(lefts)
+      assert(ListTuple2(es).parBisequence.left.getOrElse(Monoid[String].empty) === lefts)
     }
   }
 
   test("ParBisequence Ior should bisequence values") {
-    forAll { es: ListTuple2[Ior[String, Int], Ior[String, Int]] =>
-      es.parBisequence.right should ===(es.bimap(_.toOption, _.toOption).bisequence)
+    forAll { (es: List[(Ior[String, Int], Ior[String, Int])]) =>
+      val wrapped = ListTuple2(es)
+      assert(wrapped.parBisequence.right.map(_.value) === wrapped.bimap(_.toOption, _.toOption).bisequence.map(_.value))
     }
   }
 
   test("ParBitraverse identity should be equivalent to parBisequence") {
-    forAll { es: (Either[String, Int], Either[String, Long]) =>
-      es.parBitraverse(identity, identity) should ===(es.parBisequence)
+    forAll { (es: (Either[String, Int], Either[String, Long])) =>
+      assert(es.parBitraverse(identity, identity) === (es.parBisequence))
     }
   }
 
   test("ParLeftSequence Either should accumulate errors") {
-    forAll { es: ListTuple2[Either[String, Int], Int] =>
+    forAll { (es: List[(Either[String, Int], Int)]) =>
       val lefts = es
-        .collect {
-          case (Left(e), _) => e
+        .collect { case (Left(e), _) =>
+          e
         }
         .foldMap(identity)
 
-      es.parLeftSequence.fold(identity, i => Monoid[String].empty) should ===(lefts)
+      assert(ListTuple2(es).parLeftSequence.fold(identity, i => Monoid[String].empty) === lefts)
     }
   }
 
   test("ParLeftSequence Ior should accumulate errors") {
-    forAll { es: ListTuple2[Ior[String, Int], Int] =>
+    forAll { (es: List[(Ior[String, Int], Int)]) =>
       val lefts = es
-        .map {
-          case (a, b) => a.left
+        .map { case (a, b) =>
+          a.left
         }
-        .collect {
-          case Some(e) => e
+        .collect { case Some(e) =>
+          e
         }
         .foldMap(identity)
 
-      es.parLeftSequence.left.getOrElse(Monoid[String].empty) should ===(lefts)
+      assert(ListTuple2(es).parLeftSequence.left.getOrElse(Monoid[String].empty) === lefts)
     }
   }
 
   test("ParLeftSequence Ior should leftSequence values") {
-    forAll { es: ListTuple2[Ior[String, Int], Int] =>
-      es.parLeftSequence.right should ===(es.bimap(_.toOption, identity).leftSequence)
+    forAll { (es: List[(Ior[String, Int], Int)]) =>
+      val wrapped = ListTuple2(es)
+      assert(
+        wrapped.parLeftSequence.right.map(_.value) === (wrapped.bimap(_.toOption, identity).leftSequence.map(_.value))
+      )
     }
   }
 
   test("ParLeftTraverse identity should be equivalent to parLeftSequence") {
-    forAll { es: (Either[String, Int], Either[String, Long]) =>
-      es.parLeftTraverse(identity) should ===(es.parLeftSequence)
+    forAll { (es: (Either[String, Int], Either[String, Long])) =>
+      assert(es.parLeftTraverse(identity) === (es.parLeftSequence))
     }
   }
 
   test("ParFlatTraverse should be equivalent to parTraverse map flatten") {
-    forAll { es: List[Either[String, Int]] =>
+    forAll { (es: List[Either[String, Int]]) =>
       val f: Int => List[Int] = i => List(i, i + 1)
-      Parallel.parFlatTraverse(es)(e => e.map(f)) should
-        ===(es.parTraverse(e => e.map(f)).map(_.flatten))
+      assert(
+        Parallel.parFlatTraverse(es)(e => e.map(f))
+          === es.parTraverse(e => e.map(f)).map(_.flatten)
+      )
     }
   }
 
   test("ParFlatTraverse identity should be equivalent to parFlatSequence") {
-    forAll { es: List[Either[String, List[Int]]] =>
-      Parallel.parFlatTraverse(es)(identity) should ===(Parallel.parFlatSequence(es))
+    forAll { (es: List[Either[String, List[Int]]]) =>
+      assert(Parallel.parFlatTraverse(es)(identity) === (Parallel.parFlatSequence(es)))
     }
   }
 
   test("ParFlatSequence syntax should be equivalent to Parallel.parFlatSequence") {
-    forAll { es: List[Either[String, List[Int]]] =>
-      es.parFlatSequence should ===(Parallel.parFlatSequence(es))
+    forAll { (es: List[Either[String, List[Int]]]) =>
+      assert(es.parFlatSequence === (Parallel.parFlatSequence(es)))
     }
   }
 
   test("ParFlatTraverse syntax should be equivalent to Parallel.parFlatTraverse") {
-    forAll { es: List[Either[String, Int]] =>
+    forAll { (es: List[Either[String, Int]]) =>
       val f: Int => List[Int] = i => List(i, i + 1)
-      Parallel.parFlatTraverse(es)(e => e.map(f)) should
-        ===(es.parFlatTraverse(e => e.map(f)))
+      assert(
+        Parallel.parFlatTraverse(es)(e => e.map(f))
+          === (es.parFlatTraverse(e => e.map(f)))
+      )
     }
   }
 
   test("ParNonEmptyFlatTraverse should be equivalent to parNonEmptyTraverse map flatten") {
-    forAll { es: NonEmptyList[Either[String, Int]] =>
+    forAll { (es: NonEmptyList[Either[String, Int]]) =>
       val f: Int => NonEmptyList[Int] = i => NonEmptyList.of(i, i + 1)
-      Parallel.parNonEmptyFlatTraverse(es)(e => e.map(f)) should
-        ===(Parallel.parNonEmptyTraverse(es)(e => e.map(f)).map(_.flatten))
+      assert(
+        Parallel.parNonEmptyFlatTraverse(es)(e => e.map(f))
+          === (Parallel.parNonEmptyTraverse(es)(e => e.map(f)).map(_.flatten))
+      )
     }
   }
 
   test("ParNonEmptyFlatTraverse identity should be equivalent to parNonEmptyFlatSequence") {
-    forAll { es: NonEmptyList[Either[String, NonEmptyList[Int]]] =>
-      Parallel.parNonEmptyFlatTraverse(es)(identity) should ===(Parallel.parNonEmptyFlatSequence(es))
+    forAll { (es: NonEmptyList[Either[String, NonEmptyList[Int]]]) =>
+      assert(Parallel.parNonEmptyFlatTraverse(es)(identity) === (Parallel.parNonEmptyFlatSequence(es)))
+    }
+  }
+
+  test("ParFoldMapA should be equivalent to parTraverse map combineAll (where it exists)") {
+    forAll { (es: List[Int], f: Int => Either[String, String]) =>
+      assert(
+        Parallel.parFoldMapA(es)(f) ===
+          Parallel.parTraverse(es)(f).map(_.combineAll)
+      )
     }
   }
 
   test("parAp accumulates errors in order") {
     val right: Either[String, Int => Int] = Left("Hello")
-    Parallel.parAp(right)("World".asLeft) should ===(Left("HelloWorld"))
+    assert(Parallel.parAp(right)("World".asLeft) === (Left("HelloWorld")))
   }
 
   test("parAp2 accumulates errors in order") {
     val plus = (_: Int) + (_: Int)
     val rightPlus: Either[String, (Int, Int) => Int] = Right(plus)
-    Parallel.parAp2(rightPlus)("Hello".asLeft, "World".asLeft) should ===(Left("HelloWorld"))
+    assert(Parallel.parAp2(rightPlus)("Hello".asLeft, "World".asLeft) === (Left("HelloWorld")))
   }
 
   test("Kleisli with Either should accumulate errors") {
-    val k1: Kleisli[Either[String, ?], String, Int] = Kleisli(s => Right(s.length))
-    val k2: Kleisli[Either[String, ?], String, Int] = Kleisli(s => Left("Boo"))
-    val k3: Kleisli[Either[String, ?], String, Int] = Kleisli(s => Left("Nope"))
+    val k1: Kleisli[Either[String, *], String, Int] = Kleisli(s => Right(s.length))
+    val k2: Kleisli[Either[String, *], String, Int] = Kleisli(s => Left("Boo"))
+    val k3: Kleisli[Either[String, *], String, Int] = Kleisli(s => Left("Nope"))
 
-    (List(k1, k2, k3).parSequence.run("Hello")) should ===(Left("BooNope"))
+    assert((List(k1, k2, k3).parSequence.run("Hello")) === (Left("BooNope")))
 
   }
 
   test("WriterT with Either should accumulate errors") {
-    val w1: WriterT[Either[String, ?], String, Int] = WriterT.liftF(Left("Too "))
-    val w2: WriterT[Either[String, ?], String, Int] = WriterT.liftF(Left("bad."))
+    val w1: WriterT[Either[String, *], String, Int] = WriterT.liftF(Left("Too "))
+    val w2: WriterT[Either[String, *], String, Int] = WriterT.liftF(Left("bad."))
 
-    ((w1, w2).parMapN(_ + _).value) should ===(Left("Too bad."))
+    assert(((w1, w2).parMapN(_ + _).value) === (Left("Too bad.")))
 
   }
 
   test("ParMap over NonEmptyList should be consistent with zip") {
     forAll { (as: NonEmptyList[Int], bs: NonEmptyList[Int], cs: NonEmptyList[Int]) =>
-      (as, bs, cs).parMapN(_ + _ + _) should ===(as.zipWith(bs)(_ + _).zipWith(cs)(_ + _))
+      assert((as, bs, cs).parMapN(_ + _ + _) === (as.zipWith(bs)(_ + _).zipWith(cs)(_ + _)))
     }
   }
 
   test("ParMap over NonEmptyVector should be consistent with zip") {
     forAll { (as: NonEmptyVector[Int], bs: NonEmptyVector[Int], cs: NonEmptyVector[Int]) =>
-      (as, bs, cs).parMapN(_ + _ + _) should ===(as.zipWith(bs)(_ + _).zipWith(cs)(_ + _))
+      assert((as, bs, cs).parMapN(_ + _ + _) === (as.zipWith(bs)(_ + _).zipWith(cs)(_ + _)))
     }
   }
 
@@ -273,15 +299,15 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest {
     forAll { (as: List[Int], bs: List[Int], cs: List[Int]) =>
       val zipped = as
         .zip(bs)
-        .map {
-          case (a, b) => a + b
+        .map { case (a, b) =>
+          a + b
         }
         .zip(cs)
-        .map {
-          case (a, b) => a + b
+        .map { case (a, b) =>
+          a + b
         }
 
-      (as, bs, cs).parMapN(_ + _ + _) should ===(zipped)
+      assert((as, bs, cs).parMapN(_ + _ + _) === zipped)
     }
   }
 
@@ -289,15 +315,15 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest {
     forAll { (as: Vector[Int], bs: Vector[Int], cs: Vector[Int]) =>
       val zipped = as
         .zip(bs)
-        .map {
-          case (a, b) => a + b
+        .map { case (a, b) =>
+          a + b
         }
         .zip(cs)
-        .map {
-          case (a, b) => a + b
+        .map { case (a, b) =>
+          a + b
         }
 
-      (as, bs, cs).parMapN(_ + _ + _) should ===(zipped)
+      assert((as, bs, cs).parMapN(_ + _ + _) === zipped)
     }
   }
 
@@ -305,73 +331,75 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest {
     forAll { (as: Stream[Int], bs: Stream[Int], cs: Stream[Int]) =>
       val zipped = as
         .zip(bs)
-        .map {
-          case (a, b) => a + b
+        .map { case (a, b) =>
+          a + b
         }
         .zip(cs)
-        .map {
-          case (a, b) => a + b
+        .map { case (a, b) =>
+          a + b
         }
 
-      (as, bs, cs).parMapN(_ + _ + _) should ===(zipped)
+      assert((as, bs, cs).parMapN(_ + _ + _) === zipped)
     }
   }
 
   test("ParTupled of NonEmptyList should be consistent with ParMap of Tuple.apply") {
     forAll { (fa: NonEmptyList[Int], fb: NonEmptyList[Int], fc: NonEmptyList[Int], fd: NonEmptyList[Int]) =>
-      (fa, fb, fc, fd).parTupled should ===((fa, fb, fc, fd).parMapN(Tuple4.apply))
+      assert((fa, fb, fc, fd).parTupled === ((fa, fb, fc, fd).parMapN(Tuple4.apply)))
     }
   }
 
   test("ParTupled of NonEmptyVector should be consistent with ParMap of Tuple.apply") {
     forAll { (fa: NonEmptyVector[Int], fb: NonEmptyVector[Int], fc: NonEmptyVector[Int], fd: NonEmptyVector[Int]) =>
-      (fa, fb, fc, fd).parTupled should ===((fa, fb, fc, fd).parMapN(Tuple4.apply))
+      assert((fa, fb, fc, fd).parTupled === ((fa, fb, fc, fd).parMapN(Tuple4.apply)))
     }
   }
 
   test("ParTupled of List should be consistent with ParMap of Tuple.apply") {
     forAll { (fa: List[Int], fb: List[Int], fc: List[Int], fd: List[Int]) =>
-      (fa, fb, fc, fd).parTupled should ===((fa, fb, fc, fd).parMapN(Tuple4.apply))
+      assert((fa, fb, fc, fd).parTupled === ((fa, fb, fc, fd).parMapN(Tuple4.apply)))
     }
   }
 
   test("ParTupled of Vector should be consistent with ParMap of Tuple.apply") {
     forAll { (fa: Vector[Int], fb: Vector[Int], fc: Vector[Int], fd: Vector[Int]) =>
-      (fa, fb, fc, fd).parTupled should ===((fa, fb, fc, fd).parMapN(Tuple4.apply))
+      assert((fa, fb, fc, fd).parTupled === ((fa, fb, fc, fd).parMapN(Tuple4.apply)))
     }
   }
 
   test("ParTupled of Stream should be consistent with ParMap of Tuple.apply") {
     forAll { (fa: Stream[Int], fb: Stream[Int], fc: Stream[Int], fd: Stream[Int]) =>
-      (fa, fb, fc, fd).parTupled should ===((fa, fb, fc, fd).parMapN(Tuple4.apply))
+      assert((fa, fb, fc, fd).parTupled === ((fa, fb, fc, fd).parMapN(Tuple4.apply)))
     }
   }
 
   test("ParTupled of List should be consistent with zip") {
     forAll { (fa: List[Int], fb: List[Int], fc: List[Int], fd: List[Int]) =>
-      (fa, fb, fc, fd).parTupled should ===(fa.zip(fb).zip(fc).zip(fd).map { case (((a, b), c), d) => (a, b, c, d) })
+      assert((fa, fb, fc, fd).parTupled === (fa.zip(fb).zip(fc).zip(fd).map { case (((a, b), c), d) => (a, b, c, d) }))
     }
   }
 
   test("ParTupled of Vector should be consistent with zip") {
     forAll { (fa: Vector[Int], fb: Vector[Int], fc: Vector[Int], fd: Vector[Int]) =>
-      (fa, fb, fc, fd).parTupled should ===(fa.zip(fb).zip(fc).zip(fd).map { case (((a, b), c), d) => (a, b, c, d) })
+      assert((fa, fb, fc, fd).parTupled === (fa.zip(fb).zip(fc).zip(fd).map { case (((a, b), c), d) => (a, b, c, d) }))
     }
   }
 
   test("ParTupled of Stream should be consistent with zip") {
     forAll { (fa: Stream[Int], fb: Stream[Int], fc: Stream[Int], fd: Stream[Int]) =>
-      (fa, fb, fc, fd).parTupled should ===(fa.zip(fb).zip(fc).zip(fd).map { case (((a, b), c), d) => (a, b, c, d) })
+      assert((fa, fb, fc, fd).parTupled === (fa.zip(fb).zip(fc).zip(fd).map { case (((a, b), c), d) => (a, b, c, d) }))
     }
   }
 
   test("IorT leverages parallel effect instances when it exists") {
-    case class Marker(value: String) extends Exception("marker") {
+    case class Marker(value: String) extends java.lang.Exception("marker") {
       override def fillInStackTrace: Throwable = null
     }
 
     def checkMarker[A](f: => A): Option[String] =
-      try { f; None } catch {
+      try {
+        f; None
+      } catch {
         case marker: Marker => marker.value.some
         case _: Throwable   => None
       }
@@ -382,110 +410,166 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest {
       def flatMap[A, B](fa: Effect[A])(f: A => Effect[B]): Effect[B] = throw Marker("sequential")
       def tailRecM[A, B](a: A)(f: A => Effect[Either[A, B]]): Effect[B] = ???
     }
-    val parallelInstance: Parallel[Effect, Effect] = new Parallel[Effect, Effect] {
+    val parallelInstance: Parallel.Aux[Effect, Effect] = new Parallel[Effect] {
+      type F[x] = Effect[x]
       def parallel: Effect ~> Effect = arrow.FunctionK.id
       def sequential: Effect ~> Effect = arrow.FunctionK.id
 
-      def applicative: Applicative[Effect] = new Applicative[Effect] {
-        def pure[A](a: A): Effect[A] = Effect(a)
-        def ap[A, B](ff: Effect[A => B])(fa: Effect[A]): Effect[B] = throw Marker("parallel")
-      }
+      def applicative: Applicative[Effect] =
+        new Applicative[Effect] {
+          def pure[A](a: A): Effect[A] = Effect(a)
+          def ap[A, B](ff: Effect[A => B])(fa: Effect[A]): Effect[B] = throw Marker("parallel")
+        }
       def monad: Monad[Effect] = monadInstance
     }
 
     val iorts: List[IorT[Effect, String, Int]] = List(IorT.leftT("hello")(monadInstance),
                                                       IorT.bothT(" world", 404)(monadInstance),
-                                                      IorT.rightT(123)(monadInstance))
+                                                      IorT.rightT(123)(monadInstance)
+    )
 
     val resultSansInstance = {
-      implicit val ev0 = monadInstance
+      implicit val ev0: Monad[Effect] = monadInstance
       checkMarker(iorts.parSequence)
     }
     val resultWithInstance = {
-      implicit val ev0 = monadInstance
-      implicit val ev1 = parallelInstance
+      implicit val ev0: Monad[Effect] = monadInstance
+      implicit val ev1: Parallel.Aux[Effect, Effect] = parallelInstance
       checkMarker(iorts.parSequence)
     }
 
-    resultSansInstance should ===("sequential".some)
-    resultWithInstance should ===("parallel".some)
+    assert(resultSansInstance === ("sequential".some))
+    assert(resultWithInstance === ("parallel".some))
   }
+  test("Parallel[IorT[F, E, *]] applies Ior's additive effect when F has no Parallel") {
+    forAll { (intI: Int) =>
+      val iorT = IorT.leftT[Option, Boolean](intI)
+      val parComposed = (iorT, iorT).parMapN(_ && _)
+      parComposed === IorT.leftT[Option, Boolean](intI + intI)
+    }
+  }
+  test("Parallel[IorT[F, E, *]] does not apply Ior's additive effect when F has Parallel") {
+    forAll { (intI: Int) =>
+      val iorT = IorT.leftT[Either[Int, *], Boolean](intI)
+      val parComposed = (iorT, iorT).parMapN(_ && _)
+      parComposed === iorT
+    }
+  }
+  checkAll("Parallel[Either[String, *]", ParallelTests[Either[String, *]].parallel[Int, String])
+  checkAll("Parallel[Ior[String, *]]", ParallelTests[Ior[String, *]].parallel[Int, String])
+  checkAll(
+    "Parallel[IorT[F, String, *]] with parallel effect",
+    ParallelTests[IorT[Either[String, *], String, *]].parallel[Int, String]
+  )
+  checkAll(
+    "Parallel[IorT[F, String, *]] with parallel effect (accumulating)", {
+      type IE[A] = IorT[Either[String, *], String, A]
+      type IV[A] = IorT[Validated[String, *], String, A]
+      implicit val iorTParallel: Parallel.Aux[IE, IV] = IorT.accumulatingParallel[Either[String, *], String]
+      ParallelTests[IorT[Either[String, *], String, *]].parallel[Int, String]
+    }
+  )
+  checkAll(
+    "Parallel[IorT[F, String, *]] with sequential effect",
+    ParallelTests[IorT[Option, String, *]].parallel[Int, String]
+  )
+  checkAll("Parallel[OptionT[M, *]]", ParallelTests[OptionT[Either[String, *], *]].parallel[Int, String])
 
-  checkAll("Parallel[Either[String, ?], Validated[String, ?]]",
-           ParallelTests[Either[String, ?], Validated[String, ?]].parallel[Int, String])
-  checkAll("Parallel[Ior[String, ?], Ior[String, ?]]",
-           ParallelTests[Ior[String, ?], Ior[String, ?]].parallel[Int, String])
+  test("Parallel[EitherT[F, E, *]] applies Validated's additive effect when F has no Parallel") {
+    forAll { (intI: Int) =>
+      val eitherT = EitherT.leftT[Option, Boolean](intI)
+      val parComposed = (eitherT, eitherT).parMapN(_ && _)
+      parComposed === EitherT.leftT[Option, Boolean](intI + intI)
+    }
+  }
+  test("Parallel[EitherT[F, E, *]] does not apply Validated's additive effect when F has Parallel") {
+    forAll { (intI: Int) =>
+      val eitherT = EitherT.leftT[Ior[Int, *], Boolean](intI)
+      val parComposed = (eitherT, eitherT).parMapN(_ && _)
+      parComposed === eitherT
+    }
+  }
   checkAll(
-    "Parallel[IorT[F, String, ?], IorT[F, String, ?]] with parallel effect",
-    ParallelTests[IorT[Either[String, ?], String, ?], IorT[Validated[String, ?], String, ?]].parallel[Int, String]
-  )
-  checkAll(
-    "Parallel[IorT[F, String, ?], IorT[F, String, ?]] with sequential effect",
-    ParallelTests[IorT[Option, String, ?], IorT[Option, String, ?]].parallel[Int, String]
-  )
-  checkAll("Parallel[OptionT[M, ?], Nested[F, Option, ?]]",
-           ParallelTests[OptionT[Either[String, ?], ?], Nested[Validated[String, ?], Option, ?]].parallel[Int, String])
-  checkAll(
-    "Parallel[EitherT[M, String, ?], Nested[F, Validated[String, ?], ?]]",
-    ParallelTests[EitherT[Either[String, ?], String, ?], Nested[Validated[String, ?], Validated[String, ?], ?]]
+    "Parallel[EitherT[M, String, *]]",
+    ParallelTests[EitherT[Either[String, *], String, *]]
       .parallel[Int, String]
   )
   checkAll(
-    "Parallel[EitherT[Option, String, ?], Nested[Option, Validated[String, ?], ?]]",
-    ParallelTests[EitherT[Option, String, ?], Nested[Option, Validated[String, ?], ?]].parallel[Int, String]
+    "Parallel[EitherT[M, String, *]] (accumulating)", {
+      type EE[A] = EitherT[Either[String, *], String, A]
+      type VV[A] = Nested[Validated[String, *], Validated[String, *], A]
+      implicit val eitherTParallel: Parallel.Aux[EE, VV] = EitherT.accumulatingParallel[Either[String, *], String]
+      ParallelTests[EitherT[Either[String, *], String, *]].parallel[Int, String]
+    }
   )
   checkAll(
-    "Parallel[WriterT[M, Int, ?], WriterT[F, Int, ?]]",
-    ParallelTests[WriterT[Either[String, ?], Int, ?], WriterT[Validated[String, ?], Int, ?]].parallel[Int, String]
+    "Parallel[EitherT[Option, String, *]]",
+    ParallelTests[EitherT[Option, String, *]].parallel[Int, String]
   )
-  checkAll("NonEmptyParallel[Vector, ZipVector]",
-           NonEmptyParallelTests[Vector, ZipVector].nonEmptyParallel[Int, String])
-  checkAll("NonEmptyParallel[List, ZipList]", NonEmptyParallelTests[List, ZipList].nonEmptyParallel[Int, String])
+  checkAll(
+    "Parallel[WriterT[M, Int, *]]",
+    ParallelTests[WriterT[Either[String, *], Int, *]].parallel[Int, String]
+  )
+  checkAll("NonEmptyParallel[Vector]", NonEmptyParallelTests[Vector].nonEmptyParallel[Int, String])
+  checkAll("NonEmptyParallel[List]", NonEmptyParallelTests[List].nonEmptyParallel[Int, String])
   // Can't test Parallel here, as Applicative[ZipStream].pure doesn't terminate
-  checkAll("Parallel[Stream, ZipStream]", NonEmptyParallelTests[Stream, ZipStream].nonEmptyParallel[Int, String])
-  checkAll("NonEmptyParallel[NonEmptyVector, ZipNonEmptyVector]",
-           NonEmptyParallelTests[NonEmptyVector, ZipNonEmptyVector].nonEmptyParallel[Int, String])
-  checkAll("NonEmptyParallel[NonEmptyList, ZipNonEmptyList]",
-           NonEmptyParallelTests[NonEmptyList, ZipNonEmptyList].nonEmptyParallel[Int, String])
-  checkAll("Parallel[NonEmptyStream, OneAnd[ZipStream, ?]",
-           ParallelTests[NonEmptyStream, OneAnd[ZipStream, ?]].parallel[Int, String])
+  checkAll("Parallel[Stream]", NonEmptyParallelTests[Stream].nonEmptyParallel[Int, String])
 
-  checkAll("Parallel[Id, Id]", ParallelTests[Id, Id].parallel[Int, String])
+  checkAll("NonEmptyParallel[NonEmptyVector]", NonEmptyParallelTests[NonEmptyVector].nonEmptyParallel[Int, String])
 
-  checkAll("NonEmptyParallel[NonEmptyList, ZipNonEmptyList]",
-           SerializableTests.serializable(NonEmptyParallel[NonEmptyList, ZipNonEmptyList]))
+  checkAll("NonEmptyParallel[NonEmptyList]", NonEmptyParallelTests[NonEmptyList].nonEmptyParallel[Int, String])
 
-  checkAll("Parallel[Either[String, ?], Validated[String, ?]]",
-           SerializableTests.serializable(Parallel[Either[String, ?], Validated[String, ?]]))
+  // TODO this doesn't infer?
+  checkAll("Parallel[NonEmptyStream]", ParallelTests[NonEmptyStream, OneAnd[ZipStream, *]].parallel[Int, String])
+
+  checkAll("Parallel[Id]", ParallelTests[Id].parallel[Int, String])
+
+  checkAll("NonEmptyParallel[NonEmptyList]", SerializableTests.serializable(NonEmptyParallel[NonEmptyList]))
+
+  checkAll("Parallel[Either[String, *]]", SerializableTests.serializable(Parallel[Either[String, *]]))
 
   {
     implicit def kleisliEq[F[_], A, B](implicit ev: Eq[A => F[B]]): Eq[Kleisli[F, A, B]] =
       Eq.by[Kleisli[F, A, B], A => F[B]](_.run)
 
     checkAll(
-      "Parallel[KlesliT[M, A, ?], Kleisli[F, A, ?]]",
-      ParallelTests[Kleisli[Either[String, ?], MiniInt, ?], Kleisli[Validated[String, ?], MiniInt, ?]]
+      "Parallel[KleisliT[M, A, *]]",
+      ParallelTests[Kleisli[Either[String, *], MiniInt, *]]
         .parallel[Int, String]
     )
   }
 
+  test("NonEmptyParallel.apply should return an appropriately typed instance given both type parameters") {
+    val p1: NonEmptyParallel.Aux[Either[String, *], Validated[String, *]] =
+      NonEmptyParallel[Either[String, *], Validated[String, *]]
+    val p2: NonEmptyParallel.Aux[NonEmptyList, ZipNonEmptyList] = NonEmptyParallel[NonEmptyList, ZipNonEmptyList]
+  }
+
+  test("NonEmptyParallel.apply should return an appropriately typed instance given the first type parameter") {
+    val p1: NonEmptyParallel.Aux[Either[String, *], Validated[String, *]] = NonEmptyParallel[Either[String, *]]
+    val p2: NonEmptyParallel.Aux[NonEmptyList, ZipNonEmptyList] = NonEmptyParallel[NonEmptyList]
+  }
+
+  test("Parallel.apply should return an appropriately typed instance given both type parameters") {
+    val p1: Parallel.Aux[Either[String, *], Validated[String, *]] = Parallel[Either[String, *], Validated[String, *]]
+    val p2: Parallel.Aux[Stream, ZipStream] = Parallel[Stream, ZipStream]
+  }
+
+  test("Parallel.apply should return an appropriately typed instance given the first type parameter") {
+    val p1: Parallel.Aux[Either[String, *], Validated[String, *]] = Parallel[Either[String, *], Validated[String, *]]
+    val p2: Parallel.Aux[Stream, ZipStream] = Parallel[Stream]
+  }
 }
 
-trait ApplicativeErrorForEitherTest extends AnyFunSuiteLike with Discipline {
-
-  import cats.instances.either._
-  import cats.instances.parallel._
-  import cats.instances.string._
-  import cats.instances.int._
-  import cats.instances.unit._
-  import cats.instances.tuple._
-
+trait ApplicativeErrorForEitherTest extends munit.DisciplineSuite {
   implicit def eqV[A: Eq, B: Eq]: Eq[Validated[A, B]] = cats.data.Validated.catsDataEqForValidated
 
   {
-    implicit val parVal = Parallel.applicativeError[Either[String, ?], Validated[String, ?], String]
+    implicit val parVal: ApplicativeError[Validated[String, *], String] =
+      Parallel.applicativeError[Either[String, *], String]
 
     checkAll("ApplicativeError[Validated[String, Int]]",
-             ApplicativeErrorTests[Validated[String, ?], String].applicativeError[Int, Int, Int])
+             ApplicativeErrorTests[Validated[String, *], String].applicativeError[Int, Int, Int]
+    )
   }
 }

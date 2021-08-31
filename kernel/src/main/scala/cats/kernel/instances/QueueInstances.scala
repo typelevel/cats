@@ -2,7 +2,9 @@ package cats.kernel
 package instances
 
 import scala.collection.immutable.Queue
+import compat.scalaVersionSpecific._
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 trait QueueInstances extends QueueInstances1 {
   implicit def catsKernelStdOrderForQueue[A: Order]: Order[Queue[A]] =
     new QueueOrder[A]
@@ -10,7 +12,7 @@ trait QueueInstances extends QueueInstances1 {
     new QueueMonoid[A]
 }
 
-trait QueueInstances1 extends QueueInstances2 {
+private[instances] trait QueueInstances1 extends QueueInstances2 {
   implicit def catsKernelStdPartialOrderForQueue[A: PartialOrder]: PartialOrder[Queue[A]] =
     new QueuePartialOrder[A]
 
@@ -18,7 +20,7 @@ trait QueueInstances1 extends QueueInstances2 {
     new QueueHash[A]
 }
 
-trait QueueInstances2 {
+private[instances] trait QueueInstances2 {
   implicit def catsKernelStdEqForQueue[A: Eq]: Eq[Queue[A]] =
     new QueueEq[A]
 }
@@ -52,6 +54,6 @@ class QueueMonoid[A] extends Monoid[Queue[A]] {
   override def combineN(x: Queue[A], n: Int): Queue[A] =
     StaticMethods.combineNIterable(Queue.newBuilder[A], x, n)
 
-  override def combineAll(xs: TraversableOnce[Queue[A]]): Queue[A] =
+  override def combineAll(xs: IterableOnce[Queue[A]]): Queue[A] =
     StaticMethods.combineAllIterable(Queue.newBuilder[A], xs)
 }

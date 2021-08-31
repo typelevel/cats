@@ -15,12 +15,14 @@ possible:
  * 3rdLaw
  * Aaron Levin
  * Adam Fisher
+ * Adam Rosien
  * Adelbert Chang
  * Adrian Ramirez Fornell
  * Aldo Stracquadanio
  * Alejandro Gómez
  * Alessandro Lacava
  * Alejandro Marín E.
+ * Alex Simkin
  * Alexandru Nedelcu
  * Alexander Semenov
  * Alexey Levan
@@ -40,10 +42,12 @@ possible:
  * Arya Irani
  * Ash Pook
  * Aλ
+ * Barnabás Oláh
  * Ben Fradet
  * Ben Hutchison
  * Ben Kirwin
  * Ben Plommer
+ * Ben Stewart
  * Benjamin Thuillier
  * Binh Nguyen
  * Bjørn Madsen
@@ -52,7 +56,9 @@ possible:
  * Brian McKenna
  * Brian P. Holt
  * Bryan Tan
+ * Brian Wignall
  * Cary Robbins
+ * Changwoo Park
  * Chris Birchall
  * Christopher Davenport
  * Cody Allen
@@ -67,6 +73,7 @@ possible:
  * Daniel Spiewak
  * Daniel Urban
  * Daniela Sfregola
+ * dantb
  * Dave Gurnell
  * Dave Rostron
  * David Allsopp
@@ -78,11 +85,16 @@ possible:
  * Denis
  * Derek Wickern
  * Diego Esteban Alonso Blas
+ * Dmitry Polienko
  * Donaldo Salas
  * Earl St Sauver
  * Edd Steel
+ * Endre Galaczi
+ * Enrico Benini
+ * enzief
  * Eric Torreborre
  * ericaovo
+ * Erik Erlandson
  * Erik LaBianca
  * Erik Osheim
  * Eugene Burmako
@@ -100,19 +112,26 @@ possible:
  * Francois Armand
  * Frank S. Thomas
  * Gabriele Petronella
+ * Gagandeep Kalra
  * Gavin Bisesi
+ * Georgi Krastev
+ * Gergő Törcsvári
  * Giovanni Ruggiero
  * Giulio De Luise
  * Giuseppe Cannella
  * Greg Pfeil
+ * Gregor Heine
  * Guillaume Massé
+ * Hamed Nourhani
  * Hamish Dickson
  * Harrison Houghton
  * Ian McIntosh
+ * Ikrom
  * ImLiar
  * Ionuț G. Stan
  * Israel Pérez González
  * Itamar Ravid
+ * Ivan Klass
  * Jack Low
  * Jacob Barber
  * Jakub Kozłowski
@@ -138,18 +157,26 @@ possible:
  * Julien Truffaut
  * Jun Tomioka
  * jurisk
+ * Justin Heyes-Jones
  * Kailuo Wang
  * Kamil Kloch
+ * kazchimo
  * Keir Lawson
  * kellen
  * Kenji Yoshida
+ * Kris Kalavantavanich
  * Lars Hupel
+ * Leandro
  * Leandro Bolivar
  * Leif Battermann
+ * Lionel Parreaux
  * Long Cao
  * Luis Angel Vicente Sanchez
+ * Luís Campos
+ * Luis Miguel Mejía Suárez
  * Luis Sanchez
  * Luka Jacobowitz
+ * Lukáš Voda
  * Luke Wyman
  * Madder
  * Marc Siegel
@@ -157,19 +184,27 @@ possible:
  * Marco Battaglia
  * Mariot Chauvin
  * Mark de Jong
+ * Markus Appel
  * Markus Hauck
  * Martijn Hoekstra
+ * MaT1g3R
  * Mateusz Sokół
+ * Mateusz Wójcik
  * mathhun
  * Matt Martin
  * Matthias Lüneberg
  * Max Worgan
+ * Maxim Davydov
  * Merlin Göttlinger
+ * Michał Gutowski
  * Michael Ledin
  * Michael Pilquist
  * Mike Curry
+ * Miklós Martin
  * Miles Sabin
  * Mirco Dotta
+ * mooi
+ * msinton
  * nigredo-tori
  * Nikolay Maksimenko
  * n4to4
@@ -185,6 +220,7 @@ possible:
  * Paulo "JCranky" Siqueira
  * Pavel Chlupacek
  * Pavkin Vladimir
+ * Paweł Kiersznowski
  * Paweł Lipski
  * Pepe García
  * Pere Villega
@@ -193,24 +229,31 @@ possible:
  * phderome
  * Philip Wills
  * Piotr Gawryś
+ * Raas Ahsan
  * Rafa Paradela
  * Raúl Raja Martínez
  * RawToast
  * Raymond Tay
+ * rfigueiredo
  * Richard Imaoka
  * Richard Miller
  * Rintcius Blok
  * Rob Norris
  * Rohan Shah
  * Romain Ruetschi
+ * Roman Tkalenko
  * Ross A. Baker
  * rsekulski
  * rsoeldner
  * Rüdiger Klaehn
  * Rutvik Patel
  * Ryan Case
+ * Ryan Mehri
  * Sam Ritchie
+ * Sanjiv Sahayam
  * Sarunas Valaskevicius
+ * Sergei Dolgov
+ * Shan Sikdar
  * Sho Kohara
  * Shohei Kamimori
  * Shunsuke Otani
@@ -220,11 +263,16 @@ possible:
  * Stephen Carman
  * Stephen Judkins
  * Stephen Lazaro
+ * Steven Scott
  * Suhas Gaddam
  * sullis
  * Sumedh Mungee
+ * Syed Akber Jafri
  * Takayuki Sakai
+ * Tanaka Takaya
  * Taylor Brown
+ * Tim Spence
+ * Timothy McCarthy
  * Tom Switzer
  * Tomas Mikula
  * Tongfei Chen
@@ -232,11 +280,16 @@ possible:
  * Travis Brown
  * Trond Bjerkestrand
  * Tya
+ * Valentin Willscher
+ * Valeriy Avanesov
  * Valy Diarrassouba
  * Vasileios Lampridis
+ * Vasilis Nicolaou
+ * Vasiliy Bondarenko
  * ven
  * Viktor Dychko
  * Viktor Lövgren
+ * Vitaly Lavrov
  * Vladimir Samoylov
  * Vladislav Gutov
  * Wedens
@@ -244,8 +297,11 @@ possible:
  * Xavier Fernández Salas
  * XUWE
  * 杨博 (Yang Bo)
+ * Yannick Heiber
+ * ybasket
  * Yosef Fertel
  * Yilin Wei
+ * Yuki Kitakata
  * Yuriy Badalyantc
  * Zach Abbott
  * zainab-ali

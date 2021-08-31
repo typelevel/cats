@@ -5,7 +5,8 @@ trait PartialOrderingInstances {
   implicit val catsContravariantMonoidalForPartialOrdering: ContravariantMonoidal[PartialOrdering] =
     new ContravariantMonoidal[PartialOrdering] {
 
-      /** Derive a `PartialOrdering` for `B` given a `PartialOrdering[A]` and a function `B => A`.
+      /**
+       * Derive a `PartialOrdering` for `B` given a `PartialOrdering[A]` and a function `B => A`.
        *
        * Note: resulting instances are law-abiding only when the functions used are injective (represent a one-to-one mapping)
        */

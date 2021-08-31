@@ -1,8 +1,8 @@
-package cats
-package tests
+package cats.tests
 
-import cats.data.{AppFunc, Const, Func}
-import Func.appFunc
+import cats.data.{AppFunc, Const}
+import cats.data.Func.appFunc
+import cats.syntax.eq._
 
 /*
  * This an example of applicative function composition.
@@ -20,7 +20,7 @@ class WordCountSuite extends CatsSuite {
     // A simple counter
     def count[A](a: A): Count[Unit] = liftInt(1)
 
-    // An applicatve functor to count each character
+    // An applicative functor to count each character
     val countChar: AppFunc[Count, Char, Unit] = appFunc(count)
     def testIf(b: Boolean): Int = if (b) 1 else 0
     // An applicative functor to count each line
@@ -28,7 +28,7 @@ class WordCountSuite extends CatsSuite {
       appFunc { (c: Char) =>
         liftInt(testIf(c == '\n'))
       }
-    def isSpace(c: Char): Boolean = (c == ' ' || c == '\n')
+    def isSpace(c: Char): Boolean = c == ' ' || c == '\n'
 
     // To count words, we need to detect transitions from whitespace to non-whitespace.
     val countWord =
@@ -47,8 +47,8 @@ class WordCountSuite extends CatsSuite {
     val lineCount = allResults.first.second
     val charCount = allResults.second
     val wordCount = wordCountState.value.runA(false).value
-    charCount.getConst should ===(96)
-    lineCount.getConst should ===(2)
-    wordCount.getConst should ===(17)
+    assert(charCount.getConst === 96)
+    assert(lineCount.getConst === 2)
+    assert(wordCount.getConst === 17)
   }
 }

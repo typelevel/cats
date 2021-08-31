@@ -10,17 +10,18 @@ trait ComonadTests[F[_]] extends CoflatMapTests[F] {
   def laws: ComonadLaws[F]
 
   def comonad[A: Arbitrary: Eq, B: Arbitrary: Eq, C: Arbitrary: Eq](implicit
-                                                                    ArbFA: Arbitrary[F[A]],
-                                                                    CogenA: Cogen[A],
-                                                                    CogenB: Cogen[B],
-                                                                    CogenC: Cogen[C],
-                                                                    CogenFA: Cogen[F[A]],
-                                                                    CogenFB: Cogen[F[B]],
-                                                                    EqFA: Eq[F[A]],
-                                                                    EqFFA: Eq[F[F[A]]],
-                                                                    EqFFFA: Eq[F[F[F[A]]]],
-                                                                    EqFB: Eq[F[B]],
-                                                                    EqFC: Eq[F[C]]): RuleSet =
+    ArbFA: Arbitrary[F[A]],
+    CogenA: Cogen[A],
+    CogenB: Cogen[B],
+    CogenC: Cogen[C],
+    CogenFA: Cogen[F[A]],
+    CogenFB: Cogen[F[B]],
+    EqFA: Eq[F[A]],
+    EqFFA: Eq[F[F[A]]],
+    EqFFFA: Eq[F[F[F[A]]]],
+    EqFB: Eq[F[B]],
+    EqFC: Eq[F[C]]
+  ): RuleSet =
     new DefaultRuleSet(
       name = "comonad",
       parent = Some(coflatMap[A, B, C]),

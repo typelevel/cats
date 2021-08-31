@@ -1,6 +1,8 @@
 package cats
 package instances
 
+import cats.data.Chain
+import cats.kernel.instances.StaticMethods.wrapMutableIndexedSeq
 import cats.syntax.show._
 import scala.annotation.tailrec
 import scala.collection.immutable.Queue
@@ -45,7 +47,7 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
                 }
               }
             case Nil =>
-              bldr.result
+              bldr.result()
           }
         go(f(a) :: Nil)
       }
@@ -53,7 +55,7 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
       def coflatMap[A, B](fa: Queue[A])(f: Queue[A] => B): Queue[B] = {
         val bldr = Queue.newBuilder[B]
         @tailrec def loop(as: Queue[A]): Queue[B] =
-          if (as.isEmpty) bldr.result
+          if (as.isEmpty) bldr.result()
           else {
             val (_, rest) = as.dequeue
             bldr += f(as)
@@ -79,14 +81,20 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
         B.combineAll(fa.iterator.map(f))
 
       def traverse[G[_], A, B](fa: Queue[A])(f: A => G[B])(implicit G: Applicative[G]): G[Queue[B]] =
-        foldRight[A, G[Queue[B]]](fa, Always(G.pure(Queue.empty))) { (a, lglb) =>
-          G.map2Eval(f(a), lglb)(_ +: _)
-        }.value
+        if (fa.isEmpty) G.pure(Queue.empty[B])
+        else
+          G.map(Chain.traverseViaChain {
+            val as = collection.mutable.ArrayBuffer[A]()
+            as ++= fa
+            wrapMutableIndexedSeq(as)
+          }(f)) { chain =>
+            chain.foldLeft(Queue.empty[B])(_ :+ _)
+          }
 
       override def mapWithIndex[A, B](fa: Queue[A])(f: (A, Int) => B): Queue[B] = {
         val b = Queue.newBuilder[B]
         fa.iterator.zipWithIndex.map(ai => f(ai._1, ai._2)).foreach(b += _)
-        b.result
+        b.result()
       }
 
       override def zipWithIndex[A](fa: Queue[A]): Queue[(A, Int)] =
@@ -123,6 +131,8 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
 
       override def toList[A](fa: Queue[A]): List[A] = fa.toList
 
+      override def toIterable[A](fa: Queue[A]): Iterable[A] = fa
+
       override def reduceLeftOption[A](fa: Queue[A])(f: (A, A) => A): Option[A] =
         fa.reduceLeftOption(f)
 
@@ -152,4 +162,41 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
       def show(fa: Queue[A]): String =
         fa.iterator.map(_.show).mkString("Queue(", ", ", ")")
     }
+
+  implicit def catsStdTraverseFilterForQueue: TraverseFilter[Queue] = QueueInstances.catsStdTraverseFilterForQueue
+}
+
+private object QueueInstances {
+  private val catsStdTraverseFilterForQueue: TraverseFilter[Queue] = new TraverseFilter[Queue] {
+    val traverse: Traverse[Queue] = cats.instances.queue.catsStdInstancesForQueue
+
+    override def mapFilter[A, B](fa: Queue[A])(f: (A) => Option[B]): Queue[B] =
+      fa.collect(Function.unlift(f))
+
+    override def filter[A](fa: Queue[A])(f: (A) => Boolean): Queue[A] = fa.filter(f)
+
+    override def filterNot[A](fa: Queue[A])(f: A => Boolean): Queue[A] = fa.filterNot(f)
+
+    override def collect[A, B](fa: Queue[A])(f: PartialFunction[A, B]): Queue[B] = fa.collect(f)
+
+    override def flattenOption[A](fa: Queue[Option[A]]): Queue[A] = fa.flatten
+
+    def traverseFilter[G[_], A, B](fa: Queue[A])(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[Queue[B]] =
+      if (fa.isEmpty) G.pure(Queue.empty[B])
+      else
+        G.map(Chain.traverseFilterViaChain {
+          val as = collection.mutable.ArrayBuffer[A]()
+          as ++= fa
+          wrapMutableIndexedSeq(as)
+        }(f)) { chain =>
+          chain.foldLeft(Queue.empty[B])(_ :+ _)
+        }
+
+    override def filterA[G[_], A](fa: Queue[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[Queue[A]] =
+      traverse
+        .foldRight(fa, Eval.now(G.pure(Queue.empty[A])))((x, xse) =>
+          G.map2Eval(f(x), xse)((b, queue) => if (b) x +: queue else queue)
+        )
+        .value
+  }
 }

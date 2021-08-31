@@ -23,7 +23,7 @@ final class NestedBitraverseOps[F[_, _], G[_], A, B](private val fgagb: F[G[A], 
     F.bisequence(fgagb)
 }
 
-trait BitraverseSyntaxBinCompat0 {
+private[syntax] trait BitraverseSyntaxBinCompat0 {
   implicit final def catsSyntaxBitraverseBinCompat0[F[_, _]: Bitraverse, A, B](
     fab: F[A, B]
   ): BitraverseOpsBinCompat0[F, A, B] =
@@ -34,7 +34,7 @@ trait BitraverseSyntaxBinCompat0 {
     new LeftNestedBitraverseOps[F, G, A, B](fgab)
 }
 
-final class BitraverseOpsBinCompat0[F[_, _], A, B](val fab: F[A, B]) extends AnyVal {
+final private[syntax] class BitraverseOpsBinCompat0[F[_, _], A, B](val fab: F[A, B]) extends AnyVal {
 
   /**
    *  Traverse over the left side of the structure.
@@ -54,7 +54,7 @@ final class BitraverseOpsBinCompat0[F[_, _], A, B](val fab: F[A, B]) extends Any
    *  }}}
    */
   def leftTraverse[G[_], C](f: A => G[C])(implicit F: Bitraverse[F], G: Applicative[G]): G[F[C, B]] =
-    F.bitraverse(fab)(f, G.pure(_))
+    F.leftTraverse[G, A, B, C](fab)(f)
 }
 
 final class LeftNestedBitraverseOps[F[_, _], G[_], A, B](val fgab: F[G[A], B]) extends AnyVal {
@@ -81,5 +81,5 @@ final class LeftNestedBitraverseOps[F[_, _], G[_], A, B](val fgab: F[G[A], B]) e
    * }}}
    */
   def leftSequence(implicit F: Bitraverse[F], G: Applicative[G]): G[F[A, B]] =
-    F.bitraverse(fgab)(identity, G.pure(_))
+    F.leftSequence(fgab)
 }

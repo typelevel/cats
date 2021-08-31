@@ -9,30 +9,46 @@ package free
 sealed abstract class ContravariantCoyoneda[F[_], A] extends Serializable { self =>
   import ContravariantCoyoneda.{unsafeApply, Aux}
 
-  /** The pivot between `fi` and `k`, usually existential. */
+  /**
+   * The pivot between `fi` and `k`, usually existential.
+   */
   type Pivot
 
-  /** The underlying value. */
+  /**
+   * The underlying value.
+   */
   val fi: F[Pivot]
 
-  /** The list of transformer functions, to be composed and lifted into `F` by `run`. */
+  /**
+   * The list of transformer functions, to be composed and lifted into `F` by `run`.
+   */
   private[cats] val ks: List[Any => Any]
 
-  /** The composed transformer function, to be lifted into `F` by `run`. */
+  /**
+   * The composed transformer function, to be lifted into `F` by `run`.
+   */
   final def k: A => Pivot = Function.chain(ks)(_).asInstanceOf[Pivot]
 
-  /** Converts to `F[A]` given that `F` is a contravariant functor */
+  /**
+   * Converts to `F[A]` given that `F` is a contravariant functor
+   */
   final def run(implicit F: Contravariant[F]): F[A] = F.contramap(fi)(k)
 
-  /** Converts to `G[A]` given that `G` is a contravariant functor */
+  /**
+   * Converts to `G[A]` given that `G` is a contravariant functor
+   */
   final def foldMap[G[_]](trans: F ~> G)(implicit G: Contravariant[G]): G[A] =
     G.contramap(trans(fi))(k)
 
-  /** Simple function composition. Allows contramap fusion without touching the underlying `F`. */
+  /**
+   * Simple function composition. Allows contramap fusion without touching the underlying `F`.
+   */
   final def contramap[B](f: B => A): Aux[F, B, Pivot] =
     unsafeApply(fi)(f.asInstanceOf[Any => Any] :: ks)
 
-  /** Modify the context `F` using transformation `f`. */
+  /**
+   * Modify the context `F` using transformation `f`.
+   */
   final def mapK[G[_]](f: F ~> G): Aux[G, A, Pivot] =
     unsafeApply(f(fi))(ks)
 
@@ -46,11 +62,15 @@ object ContravariantCoyoneda {
    */
   type Aux[F[_], A, B] = ContravariantCoyoneda[F, A] { type Pivot = B }
 
-  /** `F[A]` converts to `ContravariantCoyoneda[F,A]` for any `F` */
+  /**
+   * `F[A]` converts to `ContravariantCoyoneda[F,A]` for any `F`
+   */
   def lift[F[_], A](fa: F[A]): ContravariantCoyoneda[F, A] =
     apply(fa)(identity[A])
 
-  /** Like `lift(fa).contramap(k0)`. */
+  /**
+   * Like `lift(fa).contramap(k0)`.
+   */
   def apply[F[_], A, B](fa: F[A])(k0: B => A): Aux[F, B, A] =
     unsafeApply(fa)(k0.asInstanceOf[Any => Any] :: Nil)
 
@@ -65,9 +85,11 @@ object ContravariantCoyoneda {
       val fi = fa
     }
 
-  /** `ContravariantCoyoneda[F, ?]` provides a contravariant functor for any `F`. */
-  implicit def catsFreeContravariantFunctorForContravariantCoyoneda[F[_]]: Contravariant[ContravariantCoyoneda[F, ?]] =
-    new Contravariant[ContravariantCoyoneda[F, ?]] {
+  /**
+   * `ContravariantCoyoneda[F, *]` provides a contravariant functor for any `F`.
+   */
+  implicit def catsFreeContravariantFunctorForContravariantCoyoneda[F[_]]: Contravariant[ContravariantCoyoneda[F, *]] =
+    new Contravariant[ContravariantCoyoneda[F, *]] {
       def contramap[A, B](cfa: ContravariantCoyoneda[F, A])(f: B => A): ContravariantCoyoneda[F, B] =
         cfa.contramap(f)
     }

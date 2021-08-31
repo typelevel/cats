@@ -13,7 +13,8 @@ trait OrderInstances extends kernel.instances.OrderInstances {
        */
       def unit: Order[Unit] = Order[Unit]
 
-      /** Derive an `Order` for `B` given an `Order[A]` and a function `B => A`.
+      /**
+       * Derive an `Order` for `B` given an `Order[A]` and a function `B => A`.
        *
        * Note: resulting instances are law-abiding only when the functions used are injective (represent a one-to-one mapping)
        */

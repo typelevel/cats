@@ -10,15 +10,16 @@ trait BifunctorTests[F[_, _]] extends Laws {
   def laws: BifunctorLaws[F]
 
   def bifunctor[A, A2, A3, B, B2, B3](implicit
-                                      ArbFAB: Arbitrary[F[A, B]],
-                                      ArbA2: Arbitrary[A => A2],
-                                      ArbA3: Arbitrary[A2 => A3],
-                                      ArbB2: Arbitrary[B => B2],
-                                      ArbB3: Arbitrary[B2 => B3],
-                                      EqFAB: Eq[F[A, B]],
-                                      EqFCZ: Eq[F[A3, B3]],
-                                      EqFA3B: Eq[F[A3, B]],
-                                      EqFAB3: Eq[F[A, B3]]): RuleSet =
+    ArbFAB: Arbitrary[F[A, B]],
+    ArbA2: Arbitrary[A => A2],
+    ArbA3: Arbitrary[A2 => A3],
+    ArbB2: Arbitrary[B => B2],
+    ArbB3: Arbitrary[B2 => B3],
+    EqFAB: Eq[F[A, B]],
+    EqFCZ: Eq[F[A3, B3]],
+    EqFA3B: Eq[F[A3, B]],
+    EqFAB3: Eq[F[A, B3]]
+  ): RuleSet =
     new DefaultRuleSet(
       name = "Bifunctor",
       parent = None,

@@ -17,10 +17,10 @@ trait EqTests[A] extends Laws {
     new DefaultRuleSet(
       "eq",
       None,
-      "reflexivity" -> forAll(laws.reflexivityEq _),
-      "symmetry" -> forAll(laws.symmetryEq _),
-      "antisymmetry" -> forAll(laws.antiSymmetryEq _),
-      "transitivity" -> forAll(laws.transitivityEq _)
+      "reflexivity eq" -> forAll(laws.reflexivityEq _),
+      "symmetry eq" -> forAll(laws.symmetryEq _),
+      "antisymmetry eq" -> forAll(laws.antiSymmetryEq _),
+      "transitivity eq" -> forAll(laws.transitivityEq _)
     )
   }
 }

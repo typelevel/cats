@@ -1,29 +1,34 @@
-package cats
-package js
-package tests
+package cats.js.tests
 
-import cats.kernel.laws.discipline.{MonoidTests => MonoidLawTests, SemigroupTests => SemigroupLawTests}
-import cats.laws.discipline._
+import cats.Comonad
 import cats.js.instances.Await
 import cats.js.instances.future.futureComonad
+import cats.kernel.Eq
+import cats.kernel.laws.discipline.{MonoidTests => MonoidLawTests, SemigroupTests => SemigroupLawTests}
+import cats.laws.discipline._
+import cats.laws.discipline.arbitrary._
+import cats.syntax.either._
 import cats.tests.{CatsSuite, ListWrapper}
-
-import scala.concurrent.Future
-import scala.concurrent.duration._
-
 import org.scalacheck.{Arbitrary, Cogen}
 import org.scalacheck.Arbitrary.arbitrary
-import cats.laws.discipline.arbitrary._
-
-// https://issues.scala-lang.org/browse/SI-7934
-@deprecated("", "")
-class DeprecatedForwarder {
-  implicit def runNow = scala.scalajs.concurrent.JSExecutionContext.Implicits.runNow
-}
-object DeprecatedForwarder extends DeprecatedForwarder
-import DeprecatedForwarder.runNow
+import scala.concurrent.{ExecutionContextExecutor, Future}
+import scala.concurrent.duration._
 
 class FutureTests extends CatsSuite {
+  // Replaces Scala.js's `JSExecutionContext.runNow`, which is removed in 1.0.
+  // TODO: We shouldn't do this! See: https://github.com/scala-js/scala-js/issues/2102
+  implicit private object RunNowExecutionContext extends ExecutionContextExecutor {
+    def execute(runnable: Runnable): Unit =
+      try {
+        runnable.run()
+      } catch {
+        case t: Throwable => reportFailure(t)
+      }
+
+    def reportFailure(t: Throwable): Unit =
+      t.printStackTrace()
+  }
+
   val timeout = 3.seconds
 
   def futureEither[A](f: Future[A]): Future[Either[Throwable, A]] =
@@ -40,7 +45,7 @@ class FutureTests extends CatsSuite {
   implicit val throwableEq: Eq[Throwable] =
     Eq.by[Throwable, String](_.toString)
 
-  implicit val comonad: Comonad[Future] = futureComonad(timeout)
+  val comonad: Comonad[Future] = futureComonad(timeout)
 
   // Need non-fatal Throwables for Future recoverWith/handleError
   implicit val nonFatalArbitrary: Arbitrary[Throwable] =
@@ -53,7 +58,7 @@ class FutureTests extends CatsSuite {
     Cogen[Unit].contramap(_ => ())
 
   checkAll("Future[Int]", MonadErrorTests[Future, Throwable].monadError[Int, Int, Int])
-  checkAll("Future[Int]", ComonadTests[Future].comonad[Int, Int, Int])
+  checkAll("Future[Int]", ComonadTests[Future](comonad).comonad[Int, Int, Int])
   checkAll("Future", MonadTests[Future].monad[Int, Int, Int])
 
   {

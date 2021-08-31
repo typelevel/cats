@@ -11,7 +11,7 @@ trait FloatInstances {
  */
 class FloatGroup extends CommutativeGroup[Float] {
   def combine(x: Float, y: Float): Float = x + y
-  def empty: Float = 0F
+  def empty: Float = 0f
   def inverse(x: Float): Float = -x
   override def remove(x: Float, y: Float): Float = x - y
 }

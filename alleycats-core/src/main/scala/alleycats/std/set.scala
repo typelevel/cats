@@ -1,13 +1,16 @@
-package alleycats.std
+package alleycats
+package std
 
-import cats.{Applicative, Eval, Foldable, Monad, Monoid, Traverse, TraverseFilter}
+import alleycats.compat.scalaVersionSpecific._
+import cats.{Alternative, Always, Applicative, Eval, Foldable, Monad, Monoid, Traverse, TraverseFilter}
 
 import scala.annotation.tailrec
 
 object set extends SetInstances
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 trait SetInstances {
-  // This method advertises parametricity, but relies on using
+  // Monad advertises parametricity, but Set relies on using
   // universal hash codes and equality, which hurts our ability to
   // rely on free theorems.
   //
@@ -27,11 +30,23 @@ trait SetInstances {
   // contain three. Since `g` is not a function (speaking strictly)
   // this would not be considered a law violation, but it still makes
   // people uncomfortable.
-  implicit val alleyCatsStdSetMonad: Monad[Set] =
-    new Monad[Set] {
+  //
+  // If we accept Monad for Set, we can also have Alternative, as
+  // Alternative only requires MonoidK (already accepted by cats-core) and
+  // the Applicative that comes from Monad.
+  implicit val alleyCatsStdSetMonad: Monad[Set] with Alternative[Set] =
+    new Monad[Set] with Alternative[Set] {
       def pure[A](a: A): Set[A] = Set(a)
       override def map[A, B](fa: Set[A])(f: A => B): Set[B] = fa.map(f)
       def flatMap[A, B](fa: Set[A])(f: A => Set[B]): Set[B] = fa.flatMap(f)
+
+      override def map2[A, B, Z](fa: Set[A], fb: Set[B])(f: (A, B) => Z): Set[Z] =
+        if (fb.isEmpty) Set.empty[Z] // do O(1) work if fb is empty
+        else fa.flatMap(a => fb.map(b => f(a, b))) // already O(1) if fa is empty
+
+      override def map2Eval[A, B, Z](fa: Set[A], fb: Eval[Set[B]])(f: (A, B) => Z): Eval[Set[Z]] =
+        if (fa.isEmpty) Eval.now(Set.empty[Z]) // no need to evaluate fb
+        else fb.map(fb => map2(fa, fb)(f))
 
       def tailRecM[A, B](a: A)(f: (A) => Set[Either[A, B]]): Set[B] = {
         val bldr = Set.newBuilder[B]
@@ -54,6 +69,10 @@ trait SetInstances {
         go(f(a))
         bldr.result()
       }
+
+      override def empty[A]: Set[A] = Set.empty
+
+      override def combineK[A](x: Set[A], y: Set[A]): Set[A] = x | y
     }
 
   // Since iteration order is not guaranteed for sets, folds and other
@@ -71,22 +90,22 @@ trait SetInstances {
 
       def traverse[G[_]: Applicative, A, B](sa: Set[A])(f: A => G[B]): G[Set[B]] = {
         val G = Applicative[G]
-        sa.foldLeft(G.pure(Set.empty[B])) { (buf, a) =>
-          G.map2(buf, f(a))(_ + _)
-        }
+        foldRight[A, G[Set[B]]](sa, Always(G.pure(Set.empty[B]))) { (a, lglb) =>
+          G.map2Eval(f(a), lglb)((b, set) => set + b)
+        }.value
       }
 
       override def get[A](fa: Set[A])(idx: Long): Option[A] = {
         @tailrec
         def go(idx: Int, it: Iterator[A]): Option[A] =
           if (it.hasNext) {
-            if (idx == 0) Some(it.next)
+            if (idx == 0) Some(it.next())
             else {
-              it.next
+              it.next()
               go(idx - 1, it)
             }
           } else None
-        if (idx < Int.MaxValue && idx >= 0L) go(idx.toInt, fa.toIterator) else None
+        if (idx < Int.MaxValue && idx >= 0L) go(idx.toInt, fa.iterator) else None
       }
 
       override def size[A](fa: Set[A]): Long = fa.size.toLong
@@ -102,6 +121,8 @@ trait SetInstances {
       override def fold[A](fa: Set[A])(implicit A: Monoid[A]): A = A.combineAll(fa)
 
       override def toList[A](fa: Set[A]): List[A] = fa.toList
+
+      override def toIterable[A](fa: Set[A]): Iterable[A] = fa
 
       override def reduceLeftOption[A](fa: Set[A])(f: (A, A) => A): Option[A] =
         fa.reduceLeftOption(f)
@@ -120,11 +141,8 @@ trait SetInstances {
       val traverse: Traverse[Set] = alleyCatsSetTraverse
 
       def traverseFilter[G[_], A, B](fa: Set[A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Set[B]] =
-        fa.foldLeft(G.pure(Set.empty[B])) { (gSet, a) =>
-          G.map2(f(a), gSet) {
-            case (Some(b), set) => set + b
-            case (None, set)    => set
-          }
-        }
+        traverse
+          .foldRight(fa, Eval.now(G.pure(Set.empty[B])))((x, xse) => G.map2Eval(f(x), xse)((i, o) => i.fold(o)(o + _)))
+          .value
     }
 }

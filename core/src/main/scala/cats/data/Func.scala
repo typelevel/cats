@@ -17,18 +17,22 @@ sealed abstract class Func[F[_], A, B] { self =>
    * Modify the context `F` using transformation `f`.
    */
   def mapK[G[_]](f: F ~> G): Func[G, A, B] =
-    Func.func(run.andThen(f.apply))
+    Func.func(a => f(run(a)))
 }
 
 object Func extends FuncInstances {
 
-  /** function `A => F[B]`. */
+  /**
+   * function `A => F[B]`.
+   */
   def func[F[_], A, B](run0: A => F[B]): Func[F, A, B] =
     new Func[F, A, B] {
       def run: A => F[B] = run0
     }
 
-  /** applicative function. */
+  /**
+   * applicative function.
+   */
   def appFunc[F[_], A, B](run0: A => F[B])(implicit FF: Applicative[F]): AppFunc[F, A, B] =
     new AppFunc[F, A, B] {
       def F: Applicative[F] = FF
@@ -57,8 +61,8 @@ abstract private[data] class FuncInstances1 {
       def F: Functor[F] = FF
     }
 
-  implicit def catsDataContravariantForFunc[F[_], C](
-    implicit FC: Contravariant[F]
+  implicit def catsDataContravariantForFunc[F[_], C](implicit
+    FC: Contravariant[F]
   ): Contravariant[λ[α => Func[F, α, C]]] =
     new FuncContravariant[F, C] {
       def F: Contravariant[F] = FC
@@ -100,19 +104,19 @@ sealed abstract class AppFunc[F[_], A, B] extends Func[F, A, B] { self =>
   def product[G[_]](g: AppFunc[G, A, B]): AppFunc[λ[α => Tuple2K[F, G, α]], A, B] = {
     implicit val FF: Applicative[F] = self.F
     implicit val GG: Applicative[G] = g.F
-    Func.appFunc[λ[α => Tuple2K[F, G, α]], A, B] { a: A =>
+    Func.appFunc[λ[α => Tuple2K[F, G, α]], A, B] { (a: A) =>
       Tuple2K(self.run(a), g.run(a))
     }
   }
 
-  def compose[G[_], C](g: AppFunc[G, C, A]): AppFunc[Nested[G, F, ?], C, B] = {
-    implicit val gfApplicative: Applicative[Nested[G, F, ?]] = Nested.catsDataApplicativeForNested[G, F](g.F, F)
-    Func.appFunc[Nested[G, F, ?], C, B]({ c: C =>
+  def compose[G[_], C](g: AppFunc[G, C, A]): AppFunc[Nested[G, F, *], C, B] = {
+    implicit val gfApplicative: Applicative[Nested[G, F, *]] = Nested.catsDataApplicativeForNested[G, F](g.F, F)
+    Func.appFunc[Nested[G, F, *], C, B] { (c: C) =>
       Nested(g.F.map(g.run(c))(self.run))
-    })
+    }
   }
 
-  def andThen[G[_], C](g: AppFunc[G, B, C]): AppFunc[Nested[F, G, ?], A, C] =
+  def andThen[G[_], C](g: AppFunc[G, B, C]): AppFunc[Nested[F, G, *], A, C] =
     g.compose(self)
 
   def map[C](f: B => C): AppFunc[F, A, C] = {

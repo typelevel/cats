@@ -6,7 +6,8 @@ trait PartialOrderInstances extends kernel.instances.PartialOrderInstances {
   implicit val catsContravariantMonoidalForPartialOrder: ContravariantMonoidal[PartialOrder] =
     new ContravariantMonoidal[PartialOrder] {
 
-      /** Derive a `PartialOrder` for `B` given a `PartialOrder[A]` and a function `B => A`.
+      /**
+       * Derive a `PartialOrder` for `B` given a `PartialOrder[A]` and a function `B => A`.
        *
        * Note: resulting instances are law-abiding only when the functions used are injective (represent a one-to-one mapping)
        */

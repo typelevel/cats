@@ -16,9 +16,8 @@ class StateTBench {
   var count: Int = _
 
   @Benchmark
-  def single(): Long = {
+  def single(): Long =
     randLong.run(32311).value._2
-  }
 
   @Benchmark
   def repeatedLeftBinds(): Int = {

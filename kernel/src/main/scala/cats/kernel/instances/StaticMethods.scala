@@ -2,8 +2,11 @@ package cats
 package kernel
 package instances
 
+import scala.collection.immutable.{IndexedSeq => ImIndexedSeq}
 import scala.collection.mutable
+import compat.scalaVersionSpecific._
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 object StaticMethods extends cats.kernel.compat.HashCompat {
 
   def wrapMutableMap[K, V](m: mutable.Map[K, V]): Map[K, V] =
@@ -16,13 +19,28 @@ object StaticMethods extends cats.kernel.compat.HashCompat {
     def iterator: Iterator[(K, V)] = m.iterator
   }
 
-  // scalastyle:off return
+  /**
+   * When you "own" this m, and will not mutate it again, this
+   * is safe to call. It is unsafe to call this, then mutate
+   * the original collection.
+   *
+   * You are giving up ownership when calling this method
+   */
+  def wrapMutableIndexedSeq[A](m: mutable.IndexedSeq[A]): ImIndexedSeq[A] =
+    new WrappedIndexedSeq(m)
+
+  private[kernel] class WrappedIndexedSeq[A](m: mutable.IndexedSeq[A]) extends ImIndexedSeq[A] {
+    override def length: Int = m.length
+    override def apply(i: Int): A = m(i)
+    override def iterator: Iterator[A] = m.iterator
+  }
+
   def iteratorCompare[A](xs: Iterator[A], ys: Iterator[A])(implicit ev: Order[A]): Int = {
     while (true) {
       if (xs.hasNext) {
         if (ys.hasNext) {
-          val x = xs.next
-          val y = ys.next
+          val x = xs.next()
+          val y = ys.next()
           val cmp = ev.compare(x, y)
           if (cmp != 0) return cmp
         } else {
@@ -39,8 +57,8 @@ object StaticMethods extends cats.kernel.compat.HashCompat {
     while (true) {
       if (xs.hasNext) {
         if (ys.hasNext) {
-          val x = xs.next
-          val y = ys.next
+          val x = xs.next()
+          val y = ys.next()
           val cmp = ev.partialCompare(x, y)
           if (cmp != 0.0) return cmp
         } else {
@@ -57,7 +75,7 @@ object StaticMethods extends cats.kernel.compat.HashCompat {
     while (true) {
       if (xs.hasNext) {
         if (ys.hasNext) {
-          if (ev.neqv(xs.next, ys.next)) return false
+          if (ev.neqv(xs.next(), ys.next())) return false
         } else {
           return false
         }
@@ -67,17 +85,16 @@ object StaticMethods extends cats.kernel.compat.HashCompat {
     }
     true
   }
-  // scalastyle:on return
 
   def combineNIterable[A, R](b: mutable.Builder[A, R], x: Iterable[A], n: Int): R = {
     var i = n
     while (i > 0) { b ++= x; i -= 1 }
-    b.result
+    b.result()
   }
 
-  def combineAllIterable[A, R](b: mutable.Builder[A, R], xs: TraversableOnce[Iterable[A]]): R = {
-    xs.foreach(b ++= _)
-    b.result
+  def combineAllIterable[A, R](b: mutable.Builder[A, R], xs: IterableOnce[Iterable[A]]): R = {
+    xs.iterator.foreach(b ++= _)
+    b.result()
   }
 
   // Adapted from scala.util.hashing.MurmurHash#productHash.

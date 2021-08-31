@@ -1,11 +1,14 @@
-package cats
-package free
+package cats.free
 
-import cats.tests.CatsSuite
+import cats.Functor
 import cats.arrow.FunctionK
+import cats.instances.all._
+import cats.kernel.Eq
 import cats.laws.discipline.{FunctorTests, SerializableTests}
-
+import cats.tests.CatsSuite
 import org.scalacheck.Arbitrary
+import cats.syntax.eq._
+import org.scalacheck.Prop._
 
 class CoyonedaSuite extends CatsSuite {
   implicit def coyonedaArbitrary[F[_]: Functor, A: Arbitrary](implicit F: Arbitrary[F[A]]): Arbitrary[Coyoneda[F, A]] =
@@ -16,20 +19,20 @@ class CoyonedaSuite extends CatsSuite {
       def eqv(a: Coyoneda[F, A], b: Coyoneda[F, A]): Boolean = FA.eqv(a.run, b.run)
     }
 
-  checkAll("Coyoneda[Option, ?]", FunctorTests[Coyoneda[Option, ?]].functor[Int, Int, Int])
-  checkAll("Functor[Coyoneda[Option, ?]]", SerializableTests.serializable(Functor[Coyoneda[Option, ?]]))
+  checkAll("Coyoneda[Option, *]", FunctorTests[Coyoneda[Option, *]].functor[Int, Int, Int])
+  checkAll("Functor[Coyoneda[Option, *]]", SerializableTests.serializable(Functor[Coyoneda[Option, *]]))
 
   test("toYoneda and then toCoyoneda is identity") {
     forAll { (y: Coyoneda[Option, Int]) =>
-      y.toYoneda.toCoyoneda should ===(y)
+      assert(y === y.toYoneda.toCoyoneda)
     }
   }
 
   test("mapK and run is same as applying natural trans") {
-    val nt = λ[FunctionK[Option, List]](_.toList)
+    val nt = new FunctionK[Option, List] { def apply[A](a: Option[A]): List[A] = a.toList }
     val o = Option("hello")
     val c = Coyoneda.lift(o)
-    c.mapK(nt).run should ===(nt(o))
+    assert(c.mapK(nt).run === nt(o))
   }
 
   test("map order") {
