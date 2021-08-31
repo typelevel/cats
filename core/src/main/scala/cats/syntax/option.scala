@@ -45,7 +45,8 @@ final class OptionIdOps[A](private val a: A) extends AnyVal {
 
 final class EffectOptionOps[F[_], A](private val foa: F[Option[A]]) extends AnyVal {
 
-  /** Converts an `F[Option[A]]` to an `OptionT[F, A]`
+  /**
+   * Converts an `F[Option[A]]` to an `OptionT[F, A]`
    *
    * For example:
    * {{{
