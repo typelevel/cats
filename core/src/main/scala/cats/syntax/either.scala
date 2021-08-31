@@ -510,7 +510,7 @@ final class EffectEitherOps[F[_], A, B](private val value: F[Either[A, B]]) exte
    *
    * For example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> List(42.asRight[String]).asEitherT
    * res0: cats.data.EitherT[List, String, Int] = EitherT(List(Right(42)))
    * }}}
