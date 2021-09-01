@@ -54,7 +54,7 @@ class InvariantCoyonedaSuite extends CatsSuite {
     }
   }
 
-  test("contramap order") {
+  test("imap order") {
     forAll { (x: String, y: String) =>
       InvariantCoyoneda
         .lift[Magma, String](_ + _)
