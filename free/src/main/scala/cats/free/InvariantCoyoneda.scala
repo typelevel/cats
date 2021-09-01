@@ -20,22 +20,22 @@ sealed abstract class InvariantCoyoneda[F[_], A] extends Serializable { self =>
   val fi: F[Pivot]
 
   /**
-   * The list of transformer functions, to be composed and lifted into `F` by `run`.
+   * The list of the `Pivot => *` halves of the transformer functions, to be composed and lifted into `F` by `run`.
    */
   private[cats] val ks0: List[Any => Any]
 
   /**
-   * The list of transformer functions, to be composed and lifted into `F` by `run`.
+   * The list of the `* => Pivot` halves of the transformer functions, to be composed and lifted into `F` by `run`.
    */
   private[cats] val ks1: List[Any => Any]
 
   /**
-   * The list of transformer functions composed into a single function, to be lifted into `F` by `run`.
+   * Half of the composed transformer function, to be lifted into `F` by `run`.
    */
   final def k0: Pivot => A = Function.chain(ks0.reverse)(_).asInstanceOf[A]
 
   /**
-   * The composed transformer function, to be lifted into `F` by `run`.
+   * The other half of the composed transformer function, to be lifted into `F` by `run`.
    */
   final def k1: A => Pivot = Function.chain(ks1)(_).asInstanceOf[Pivot]
 
