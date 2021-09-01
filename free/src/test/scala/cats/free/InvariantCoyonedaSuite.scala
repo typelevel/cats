@@ -1,5 +1,6 @@
 package cats.free
 
+import cats.~>
 import cats.arrow.FunctionK
 import cats.Invariant
 import cats.Semigroup
@@ -41,6 +42,16 @@ class InvariantCoyonedaSuite extends CatsSuite {
   checkAll("Invariant[InvariantCoyoneda[Option, *]]",
            SerializableTests.serializable(Invariant[InvariantCoyoneda[Option, *]])
   )
+
+  test("mapK and run is same as applying natural trans") {
+    forAll { (x: Option[Int], y: Option[Int]) =>
+      val nt = new (Semigroup ~> Semigroup) {
+        def apply[A](sg: Semigroup[A]): Semigroup[A] = sg.reverse
+      }
+      val c = InvariantCoyoneda.lift[Semigroup, Option[Int]](Semigroup[Option[Int]])
+      c.mapK[Semigroup](nt).run.combine(x, y) === nt(Semigroup[Option[Int]]).combine(x, y)
+    }
+  }
 
   test("stack-safe imapmap") {
     def loop(n: Int, acc: InvariantCoyoneda[Semigroup, Int]): InvariantCoyoneda[Semigroup, Int] =
