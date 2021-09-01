@@ -36,10 +36,14 @@ class InvariantCoyonedaSuite extends CatsSuite {
         }
     }
 
-  checkAll("InvariantCoyoneda[Semigroup, Int]",
+  // Needed to help implicit resolution?
+  implicit val invariantCoyonedaMagma: Invariant[InvariantCoyoneda[Magma, *]] =
+    InvariantCoyoneda.catsFreeInvariantFunctorForInvariantCoyoneda[Magma]
+
+  checkAll("InvariantCoyoneda[Magma, Int]",
            InvariantTests[InvariantCoyoneda[Magma, *]].invariant[List[Int], List[Int], List[Int]]
   )
-  checkAll("Invariant[InvariantCoyoneda[Option, *]]",
+  checkAll("Invariant[InvariantCoyoneda[Magma, *]]",
            SerializableTests.serializable(Invariant[InvariantCoyoneda[Magma, *]])
   )
 
