@@ -3,6 +3,7 @@ package cats.free
 import cats.~>
 import cats.arrow.FunctionK
 import cats.Invariant
+import cats.Semigroup
 import cats.instances.all._
 import cats.kernel.Eq
 import cats.laws.discipline.{InvariantTests, SerializableTests}
@@ -14,8 +15,7 @@ import org.scalacheck.Prop._
 class InvariantCoyonedaSuite extends CatsSuite {
 
   type Magma[A] = (A, A) => A
-  implicit def stringMagma[A]: Magma[String] = _ + _
-  implicit def listMagma[A]: Magma[List[A]] = _ ++ _
+  implicit def semigroupIsMagma[A: Semigroup]: Magma[A] = Semigroup[A].combine
   implicit object invariantForMagma extends Invariant[Magma] {
     override def imap[A, B](fa: Magma[A])(f: A => B)(g: B => A): Magma[B] =
       (x, y) => f(fa(g(x), g(y)))
