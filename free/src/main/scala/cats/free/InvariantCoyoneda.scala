@@ -1,13 +1,15 @@
 package cats
 package free
 
+import cats.data.AndThen
+
 /**
  * The free invariant functor on `F`. This is isomorphic to `F` as long as `F` itself is a
  * invariant functor. The function from `F[A]` to `InvariantCoyoneda[F,A]` exists even when
  * `F` is not an invariant functor. Implemented using a List of functions for stack-safety.
  */
 sealed abstract class InvariantCoyoneda[F[_], A] extends Serializable { self =>
-  import InvariantCoyoneda.{unsafeApply, Aux}
+  import InvariantCoyoneda.Aux
 
   /**
    * The pivot between `fi` and `k`, usually existential.
@@ -20,24 +22,14 @@ sealed abstract class InvariantCoyoneda[F[_], A] extends Serializable { self =>
   val fi: F[Pivot]
 
   /**
-   * The list of the `Pivot => *` halves of the transformer functions, to be composed and lifted into `F` by `run`.
-   */
-  private[cats] val ks0: List[Any => Any]
-
-  /**
-   * The list of the `* => Pivot` halves of the transformer functions, to be composed and lifted into `F` by `run`.
-   */
-  private[cats] val ks1: List[Any => Any]
-
-  /**
    * Half of the composed transformer function, to be lifted into `F` by `run`.
    */
-  final def k0: Pivot => A = Function.chain(ks0.reverse)(_).asInstanceOf[A]
+  def k0: Pivot => A
 
   /**
    * The other half of the composed transformer function, to be lifted into `F` by `run`.
    */
-  final def k1: A => Pivot = Function.chain(ks1)(_).asInstanceOf[Pivot]
+  def k1: A => Pivot
 
   /**
    * Converts to `F[A]` given that `F` is a invariant functor
@@ -54,13 +46,13 @@ sealed abstract class InvariantCoyoneda[F[_], A] extends Serializable { self =>
    * Simple function composition. Allows imap fusion without touching the underlying `F`.
    */
   final def imap[B](f: A => B)(g: B => A): Aux[F, B, Pivot] =
-    unsafeApply(fi)(f.asInstanceOf[Any => Any] :: ks0)(g.asInstanceOf[Any => Any] :: ks1)
+    InvariantCoyoneda(fi)(AndThen(k0).andThen(f))(AndThen(k1).compose(g))
 
   /**
    * Modify the context `F` using transformation `f`.
    */
   final def mapK[G[_]](f: F ~> G): Aux[G, A, Pivot] =
-    unsafeApply(f(fi))(ks0)(ks1)
+    InvariantCoyoneda(f(fi))(k0)(k1)
 
 }
 
@@ -81,18 +73,11 @@ object InvariantCoyoneda {
   /**
    * Like `lift(fa).imap(k0)`.
    */
-  def apply[F[_], A, B](fa: F[A])(k0: A => B)(k1: B => A): Aux[F, B, A] =
-    unsafeApply(fa)(k0.asInstanceOf[Any => Any] :: Nil)(k1.asInstanceOf[Any => Any] :: Nil)
-
-  /**
-   * Creates a `InvariantCoyoneda[F, A]` for any `F`, taking an `F[A]` and a list of
-   * [[Invariant.imap]]ped functions to apply later
-   */
-  private[cats] def unsafeApply[F[_], A, B](fa: F[A])(_ks0: List[Any => Any])(_ks1: List[Any => Any]): Aux[F, B, A] =
+  def apply[F[_], A, B](fa: F[A])(f: A => B)(g: B => A): Aux[F, B, A] =
     new InvariantCoyoneda[F, B] {
       type Pivot = A
-      val ks0 = _ks0
-      val ks1 = _ks1
+      val k0 = f
+      val k1 = g
       val fi = fa
     }
 

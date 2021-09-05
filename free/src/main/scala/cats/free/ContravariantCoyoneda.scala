@@ -1,13 +1,15 @@
 package cats
 package free
 
+import cats.data.AndThen
+
 /**
  * The free contravariant functor on `F`. This is isomorphic to `F` as long as `F` itself is a
  * contravariant functor. The function from `F[A]` to `ContravariantCoyoneda[F,A]` exists even when
  * `F` is not a contravariant functor. Implemented using a List of functions for stack-safety.
  */
 sealed abstract class ContravariantCoyoneda[F[_], A] extends Serializable { self =>
-  import ContravariantCoyoneda.{unsafeApply, Aux}
+  import ContravariantCoyoneda.Aux
 
   /**
    * The pivot between `fi` and `k`, usually existential.
@@ -20,14 +22,9 @@ sealed abstract class ContravariantCoyoneda[F[_], A] extends Serializable { self
   val fi: F[Pivot]
 
   /**
-   * The list of transformer functions, to be composed and lifted into `F` by `run`.
-   */
-  private[cats] val ks: List[Any => Any]
-
-  /**
    * The composed transformer function, to be lifted into `F` by `run`.
    */
-  final def k: A => Pivot = Function.chain(ks)(_).asInstanceOf[Pivot]
+  def k: A => Pivot
 
   /**
    * Converts to `F[A]` given that `F` is a contravariant functor
@@ -44,13 +41,13 @@ sealed abstract class ContravariantCoyoneda[F[_], A] extends Serializable { self
    * Simple function composition. Allows contramap fusion without touching the underlying `F`.
    */
   final def contramap[B](f: B => A): Aux[F, B, Pivot] =
-    unsafeApply(fi)(f.asInstanceOf[Any => Any] :: ks)
+    ContravariantCoyoneda(fi)(AndThen(k).compose(f))
 
   /**
    * Modify the context `F` using transformation `f`.
    */
   final def mapK[G[_]](f: F ~> G): Aux[G, A, Pivot] =
-    unsafeApply(f(fi))(ks)
+    ContravariantCoyoneda(f(fi))(k)
 
 }
 
@@ -72,16 +69,9 @@ object ContravariantCoyoneda {
    * Like `lift(fa).contramap(k0)`.
    */
   def apply[F[_], A, B](fa: F[A])(k0: B => A): Aux[F, B, A] =
-    unsafeApply(fa)(k0.asInstanceOf[Any => Any] :: Nil)
-
-  /**
-   * Creates a `ContravariantCoyoneda[F, A]` for any `F`, taking an `F[A]` and a list of
-   * [[Contravariant.contramap]]ped functions to apply later
-   */
-  private[cats] def unsafeApply[F[_], A, B](fa: F[A])(ks0: List[Any => Any]): Aux[F, B, A] =
     new ContravariantCoyoneda[F, B] {
       type Pivot = A
-      val ks = ks0
+      val k = k0
       val fi = fa
     }
 
