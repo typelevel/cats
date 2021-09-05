@@ -67,7 +67,7 @@ object InvariantCoyoneda {
   /**
    * `F[A]` converts to `InvariantCoyoneda[F,A]` for any `F`
    */
-  def lift[F[_], A](fa: F[A]): InvariantCoyoneda[F, A] =
+  def lift[F[_], A](fa: F[A]): Aux[F, A, A] =
     apply(fa)(identity[A])(identity[A])
 
   /**

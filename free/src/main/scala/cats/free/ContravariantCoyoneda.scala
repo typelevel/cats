@@ -62,7 +62,7 @@ object ContravariantCoyoneda {
   /**
    * `F[A]` converts to `ContravariantCoyoneda[F,A]` for any `F`
    */
-  def lift[F[_], A](fa: F[A]): ContravariantCoyoneda[F, A] =
+  def lift[F[_], A](fa: F[A]): Aux[F, A, A] =
     apply(fa)(identity[A])
 
   /**

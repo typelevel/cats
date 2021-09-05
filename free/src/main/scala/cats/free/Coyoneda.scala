@@ -79,7 +79,7 @@ object Coyoneda {
   /**
    * `F[A]` converts to `Coyoneda[F,A]` for any `F`
    */
-  def lift[F[_], A](fa: F[A]): Coyoneda[F, A] = apply(fa)(identity[A])
+  def lift[F[_], A](fa: F[A]): Aux[F, A, A] = apply(fa)(identity[A])
 
   /**
    * Like `lift(fa).map(k0)`.
