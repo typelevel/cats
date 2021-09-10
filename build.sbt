@@ -516,6 +516,12 @@ def mimaSettings(moduleName: String, includeCats1: Boolean = true) =
         Seq(
           exclude[MissingClassProblem]("algebra.laws.IsSerializable"),
           exclude[MissingClassProblem]("algebra.laws.IsSerializable$")
+        ) ++ // https://github.com/typelevel/cats/pull/3987
+        Seq(
+          exclude[DirectAbstractMethodProblem]("cats.free.ContravariantCoyoneda.k"),
+          exclude[ReversedAbstractMethodProblem]("cats.free.ContravariantCoyoneda.k"),
+          exclude[DirectAbstractMethodProblem]("cats.free.Coyoneda.k"),
+          exclude[ReversedAbstractMethodProblem]("cats.free.Coyoneda.k")
         )
     }
   )
