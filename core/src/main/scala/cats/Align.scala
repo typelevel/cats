@@ -119,7 +119,7 @@ import scala.annotation.implicitNotFound
 object Align extends ScalaVersionSpecificAlignInstances {
   def semigroup[F[_], A](implicit F: Align[F], A: Semigroup[A]): Semigroup[F[A]] =
     new Semigroup[F[A]] {
-      def combine(x: F[A], y: F[A]): F[A] = Align[F].alignCombine(x, y)
+      override def combine(x: F[A], y: F[A]): F[A] = Align[F].alignCombine(x, y)
     }
 
   implicit def catsAlignForList: Align[List] = cats.instances.list.catsStdInstancesForList
