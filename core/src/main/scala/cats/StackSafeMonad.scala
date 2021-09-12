@@ -24,7 +24,7 @@ trait StackSafeMonad[F[_]] extends Monad[F] with Defer[F] {
       case Right(b) => pure(b)
     }
 
-  /**
+  /*
    * This is always safe for a StackSafeMonad.
    * proof: we know flatMap can't blow the stack
    * because if it could, tailRecM would not be safe:
