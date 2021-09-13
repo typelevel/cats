@@ -703,7 +703,7 @@ object NonEmptyList extends NonEmptyListInstances {
           ZipNonEmptyList(fa.value.zipWith(fb.value) { case (a, b) => (a, b) })
 
         // We can never stop early on a nonempty list
-        override val traverseStrategy = Apply.TraverseStrategy.direct(this)
+        override val traverseStrategy: Apply.TraverseStrategy[ZipNonEmptyList] = Apply.TraverseStrategy.direct(this)
       }
 
     @deprecated("Use catsDataEqForZipNonEmptyList", "2.0.0-RC2")
@@ -750,7 +750,7 @@ sealed abstract private[data] class NonEmptyListInstances extends NonEmptyListIn
         fa.flatMap(f)
 
       // We can never stop early on a nonempty list
-      override val traverseStrategy = Apply.TraverseStrategy.direct(this)
+      override val traverseStrategy: Apply.TraverseStrategy[NonEmptyList] = Apply.TraverseStrategy.direct(this)
 
       def coflatMap[A, B](fa: NonEmptyList[A])(f: NonEmptyList[A] => B): NonEmptyList[B] =
         fa.coflatMap(f)

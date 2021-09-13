@@ -111,7 +111,7 @@ package object cats {
         if (idx == 0L) Some(fa) else None
       override def isEmpty[A](fa: Id[A]): Boolean = false
 
-      override val traverseStrategy = Apply.TraverseStrategy.direct(this)
+      override val traverseStrategy: Apply.TraverseStrategy[Id] = Apply.TraverseStrategy.direct(this)
     }
 
   /**

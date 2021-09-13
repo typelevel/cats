@@ -389,7 +389,7 @@ sealed abstract private[data] class NonEmptyVectorInstances {
         fa.flatMap(f)
 
       // We can never stop early on a nonempty vector
-      override val traverseStrategy = Apply.TraverseStrategy.direct(this)
+      override val traverseStrategy: Apply.TraverseStrategy[NonEmptyVector] = Apply.TraverseStrategy.direct(this)
 
       def coflatMap[A, B](fa: NonEmptyVector[A])(f: NonEmptyVector[A] => B): NonEmptyVector[B] = {
         @tailrec def consume(as: Vector[A], buf: VectorBuilder[B]): Vector[B] =
@@ -569,7 +569,7 @@ object NonEmptyVector extends NonEmptyVectorInstances with Serializable {
           ZipNonEmptyVector(fa.value.zipWith(fb.value) { case (a, b) => (a, b) })
 
         // We can never stop early on a nonempty vector
-        override val traverseStrategy = Apply.TraverseStrategy.direct(this)
+        override val traverseStrategy: Apply.TraverseStrategy[ZipNonEmptyVector] = Apply.TraverseStrategy.direct(this)
       }
 
     @deprecated("Use catsDataEqForZipNonEmptyVector", "2.0.0-RC2")
