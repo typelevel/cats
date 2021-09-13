@@ -692,17 +692,13 @@ private[data] trait KleisliApply[F[_], A] extends Apply[Kleisli[F, A, *]] with K
           }
 
           def applyToRhs[A0, B](fn: A0 => Kleisli[F, A, B], arg: A0): Rhs[B] = {
-            // the laziness we are looking for is on F, not in the
-            // outer function. We can evalute this here
-            val k: A => F[B] = fn(arg).run
+            lazy val k: A => F[B] = fn(arg).run
 
             { (a: A) => stratF.applyToRhs(k, a) }
           }
 
           def applyOnRhs[A0, B](fn: A0 => Rhs[B], arg: A0): Rhs[B] = {
-            // the laziness we are looking for is on F, not in the
-            // outer function. We can evalute this here
-            val k: A => stratF.Rhs[B] = fn(arg)
+            lazy val k: A => stratF.Rhs[B] = fn(arg)
 
             { (a: A) => stratF.applyOnRhs(k, a) }
           }
