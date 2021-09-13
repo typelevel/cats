@@ -691,11 +691,11 @@ private[data] trait KleisliApply[F[_], A] extends Apply[Kleisli[F, A, *]] with K
             stratF.map2(l, r)(fn)
           }
 
-          def applyToRhs[A0, B](fn: A0 => Kleisli[F, A, B], arg: A0): Rhs[B] = { a: A =>
+          def applyToRhs[A0, B](fn: A0 => Kleisli[F, A, B], arg: A0): Rhs[B] = { (a: A) =>
             stratF.applyToRhs[A0, B]({ a0 => fn(a0).run(a) }, arg)
           }
 
-          def applyOnRhs[A0, B](fn: A0 => Rhs[B], arg: A0): Rhs[B] = { a: A =>
+          def applyOnRhs[A0, B](fn: A0 => Rhs[B], arg: A0): Rhs[B] = { (a: A) =>
             stratF.applyOnRhs[A0, B]({ a0 => fn(a0)(a) }, arg)
           }
 

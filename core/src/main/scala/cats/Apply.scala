@@ -296,8 +296,8 @@ object Apply {
     def viaEval[F[_]](a: Apply[F]): TraverseStrategy[F] =
       ViaEval(a)
 
-    def composeOuter[F[_], G[_]](self: TraverseStrategy[F], that: Apply[G]): TraverseStrategy[Lambda[x => F[G[x]]]] =
-      new TraverseStrategy[Lambda[x => F[G[x]]]] {
+    def composeOuter[F[_], G[_]](self: TraverseStrategy[F], that: Apply[G]): TraverseStrategy[λ[x => F[G[x]]]] =
+      new TraverseStrategy[λ[x => F[G[x]]]] {
         type Rhs[A] = self.Rhs[G[A]]
 
         def map2[A, B, C](left: Rhs[A], right: Rhs[B])(fn: (A, B) => C): Rhs[C] =

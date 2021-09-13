@@ -825,7 +825,7 @@ object Chain extends ChainInstances {
       // we branch out by this factor
       val width = 128
       val strat = G.traverseStrategy
-      val toG: A => G[List[B]] = { a: A =>
+      val toG: A => G[List[B]] = { (a: A) =>
         G.map(f(a)) { optB =>
           if (optB.isDefined) optB.get :: Nil
           else Nil
