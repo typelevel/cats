@@ -778,43 +778,43 @@ object Chain extends ChainInstances {
     else {
       // we branch out by this factor
       val width = 128
+      val strat = G.traverseStrategy
+      val toG: A => G[List[B]] = { a => G.map(f(a))(_ :: Nil) }
+      val consB: (B, List[B]) => List[B] = _ :: _
+      val concatChain: (Chain[B], Chain[B]) => Chain[B] = _.concat(_)
+
       // By making a tree here we don't blow the stack
       // even if the List is very long
       // by construction, this is never called with start == end
-      def loop(start: Int, end: Int): Eval[G[Chain[B]]] =
+      def loop(start: Int, end: Int): strat.Rhs[Chain[B]] =
         if (end - start <= width) {
-          // Here we are at the leafs of the trees
-          // we don't use map2Eval since it is always
-          // at most width in size.
-          var flist = Eval.later(G.map(f(as(end - 1)))(_ :: Nil))
+          var flist = strat.applyToRhs(toG, as(end - 1))
           var idx = end - 2
           while (start <= idx) {
-            val a = as(idx)
-            // don't capture a var in the defer
-            val right = flist
-            flist = Eval.defer(G.map2Eval(f(a), right)(_ :: _))
+            val leftRhs = strat.applyToRhs(f, as(idx))
+            flist = strat.map2(leftRhs, flist)(consB)
             idx = idx - 1
           }
-          flist.map { glist => G.map(glist)(Chain.fromSeq(_)) }
+          strat.mapRhs(flist)(Chain.fromSeq(_))
         } else {
           // we have width + 1 or more nodes left
           val step = (end - start) / width
 
-          var fchain = Eval.defer(loop(start, start + step))
+          var fchain = loop(start, start + step)
           var start0 = start + step
           var end0 = start0 + step
 
           while (start0 < end) {
             val end1 = math.min(end, end0)
             val right = loop(start0, end1)
-            fchain = fchain.flatMap(G.map2Eval(_, right)(_.concat(_)))
+            fchain = strat.map2(fchain, right)(concatChain)
             start0 = start0 + step
             end0 = end0 + step
           }
           fchain
         }
 
-      loop(0, as.size).value
+      strat.rhsToF(loop(0, as.size))
     }
 
   def traverseFilterViaChain[G[_], A, B](
@@ -824,49 +824,52 @@ object Chain extends ChainInstances {
     else {
       // we branch out by this factor
       val width = 128
+      val strat = G.traverseStrategy
+      val toG: A => G[List[B]] = { a: A =>
+        G.map(f(a)) { optB =>
+          if (optB.isDefined) optB.get :: Nil
+          else Nil
+        }
+      }
+      val consB: (Option[B], List[B]) => List[B] = { (optB, tail) =>
+        if (optB.isDefined) optB.get :: tail
+        else tail
+      }
+      val concatChain: (Chain[B], Chain[B]) => Chain[B] = _.concat(_)
       // By making a tree here we don't blow the stack
       // even if the List is very long
       // by construction, this is never called with start == end
-      def loop(start: Int, end: Int): Eval[G[Chain[B]]] =
+      def loop(start: Int, end: Int): strat.Rhs[Chain[B]] =
         if (end - start <= width) {
-          // Here we are at the leafs of the trees
-          // we don't use map2Eval since it is always
-          // at most width in size.
-          var flist = Eval.later(G.map(f(as(end - 1))) { optB =>
-            if (optB.isDefined) optB.get :: Nil
-            else Nil
-          })
+          var flist = strat.applyToRhs(toG, as(end - 1))
           var idx = end - 2
           while (start <= idx) {
-            val a = as(idx)
+            val fa = strat.applyToRhs(f, as(idx))
             // don't capture a var in the defer
             val right = flist
-            flist = Eval.defer(G.map2Eval(f(a), right) { (optB, tail) =>
-              if (optB.isDefined) optB.get :: tail
-              else tail
-            })
+            flist = strat.map2(fa, right)(consB)
             idx = idx - 1
           }
-          flist.map { glist => G.map(glist)(Chain.fromSeq(_)) }
+          strat.mapRhs(flist)(Chain.fromSeq(_))
         } else {
           // we have width + 1 or more nodes left
           val step = (end - start) / width
 
-          var fchain = Eval.defer(loop(start, start + step))
+          var fchain = loop(start, start + step)
           var start0 = start + step
           var end0 = start0 + step
 
           while (start0 < end) {
             val end1 = math.min(end, end0)
             val right = loop(start0, end1)
-            fchain = fchain.flatMap(G.map2Eval(_, right)(_.concat(_)))
+            fchain = strat.map2(fchain, right)(concatChain)
             start0 = start0 + step
             end0 = end0 + step
           }
           fchain
         }
 
-      loop(0, as.size).value
+      strat.rhsToF(loop(0, as.size))
     }
 
   private class ChainIterator[A](self: NonEmpty[A]) extends Iterator[A] {

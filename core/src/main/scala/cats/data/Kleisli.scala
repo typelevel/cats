@@ -672,6 +672,41 @@ private[data] trait KleisliApply[F[_], A] extends Apply[Kleisli[F, A, *]] with K
 
   override def product[B, C](fb: Kleisli[F, A, B], fc: Kleisli[F, A, C]): Kleisli[F, A, (B, C)] =
     Kleisli(a => F.product(fb.run(a), fc.run(a)))
+
+  // use the same traverse strategy as F0
+  override lazy val traverseStrategy = {
+    val stratF = F.traverseStrategy
+
+    stratF match {
+      case Apply.TraverseStrategy.Direct(_) =>
+        // if the inner is direct, be direct here:
+        Apply.TraverseStrategy.Direct(this)
+      case _ =>
+        new Apply.TraverseStrategy[Kleisli[F, A, *]] {
+          type Rhs[B] = A => stratF.Rhs[B]
+
+          def map2[A0, B, C](left: Rhs[A0], right: Rhs[B])(fn: (A0, B) => C): Rhs[C] = { a =>
+            val l = stratF.applyOnRhs(left, a)
+            val r = stratF.applyOnRhs(right, a)
+            stratF.map2(l, r)(fn)
+          }
+
+          def applyToRhs[A0, B](fn: A0 => Kleisli[F, A, B], arg: A0): Rhs[B] = { a: A =>
+            stratF.applyToRhs[A0, B]({ a0 => fn(a0).run(a) }, arg)
+          }
+
+          def applyOnRhs[A0, B](fn: A0 => Rhs[B], arg: A0): Rhs[B] = { a: A =>
+            stratF.applyOnRhs[A0, B]({ a0 => fn(a0)(a) }, arg)
+          }
+
+          def rhsToF[A0](r: Rhs[A0]): Kleisli[F, A, A0] =
+            Kleisli(AndThen(r).andThen(stratF.rhsToF(_)))
+
+          def mapRhs[A0, B](r: Rhs[A0])(fn: A0 => B): Rhs[B] =
+            AndThen(r).andThen { (stratRhs: stratF.Rhs[A0]) => stratF.mapRhs(stratRhs)(fn) }
+        }
+    }
+  }
 }
 
 private[data] trait KleisliFunctor[F[_], A] extends Functor[Kleisli[F, A, *]] {

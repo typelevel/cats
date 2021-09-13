@@ -445,6 +445,9 @@ sealed abstract private[data] class IndexedStateTMonad[F[_], S]
         }
       }
     )
+
+  // IndexedStateT is already lazy and sequential
+  override val traverseStrategy = Apply.TraverseStrategy.direct(this)
 }
 
 sealed abstract private[data] class IndexedStateTSemigroupK[F[_], SA, SB]

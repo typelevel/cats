@@ -613,6 +613,35 @@ sealed private[data] trait WriterTApply[F[_], L] extends WriterTFunctor[F, L] wi
 
   override def product[A, B](fa: WriterT[F, L, A], fb: WriterT[F, L, B]): WriterT[F, L, (A, B)] =
     WriterT(F0.map(F0.product(fa.run, fb.run)) { case ((l1, a), (l2, b)) => (L0.combine(l1, l2), (a, b)) })
+
+  // use the same traverse strategy as F0
+  override lazy val traverseStrategy = {
+    val stratF = F0.traverseStrategy
+
+    stratF match {
+      case Apply.TraverseStrategy.Direct(_) =>
+        Apply.TraverseStrategy.Direct(this)
+      case _ =>
+        new Apply.TraverseStrategy[WriterT[F, L, *]] {
+          type Rhs[A] = stratF.Rhs[(L, A)]
+
+          def map2[A, B, C](left: Rhs[A], right: Rhs[B])(fn: (A, B) => C): Rhs[C] =
+            stratF.map2(left, right) { case ((l1, a), (l2, b)) => (L0.combine(l1, l2), fn(a, b)) }
+
+          def applyToRhs[A, B](fn: A => WriterT[F, L, B], arg: A): Rhs[B] =
+            stratF.applyToRhs(fn.andThen(_.run), arg)
+
+          def applyOnRhs[A, B](fn: A => Rhs[B], arg: A): Rhs[B] =
+            stratF.applyOnRhs(fn, arg)
+
+          def rhsToF[A](r: Rhs[A]): WriterT[F, L, A] =
+            WriterT(stratF.rhsToF(r))
+
+          def mapRhs[A, B](r: Rhs[A])(fn: A => B): Rhs[B] =
+            stratF.mapRhs(r) { case (l, a) => (l, fn(a)) }
+        }
+    }
+  }
 }
 
 sealed private[data] trait WriterTFlatMap1[F[_], L] extends WriterTApply[F, L] with FlatMap[WriterT[F, L, *]] {

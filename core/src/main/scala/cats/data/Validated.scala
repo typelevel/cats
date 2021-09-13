@@ -1052,6 +1052,9 @@ private[data] class ValidatedApplicative[E: Semigroup] extends CommutativeApplic
     fa.product(fb)(Semigroup[E])
 
   override def unit: Validated[E, Unit] = Validated.validUnit
+
+  // We accumulate all errors so there is no short circuiting here
+  override val traverseStrategy = Apply.TraverseStrategy.direct(this)
 }
 
 private[data] trait ValidatedFunctions {

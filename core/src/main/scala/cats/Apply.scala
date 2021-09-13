@@ -230,9 +230,90 @@ trait Apply[F[_]] extends Functor[F] with InvariantSemigroupal[F] with ApplyArit
     def ite(b: Boolean)(ifTrue: A, ifFalse: A) = if (b) ifTrue else ifFalse
     ap2(map(fcond)(ite))(ifTrue, ifFalse)
   }
+
+  def traverseStrategy: Apply.TraverseStrategy[F] =
+    Apply.TraverseStrategy.viaEval(this)
 }
 
 object Apply {
+
+  /**
+   * This type can be used by those implementing traverse-like
+   * functions where you want to respect the potential laziness
+   * or short-circuiting built into F if it exists without
+   * having to pay an additional cost to wrap in Eval[F[A]]
+   */
+  trait TraverseStrategy[F[_]] extends Serializable { self =>
+    type Rhs[_]
+
+    def map2[A, B, C](left: Rhs[A], right: Rhs[B])(fn: (A, B) => C): Rhs[C]
+    def applyToRhs[A, B](fn: A => F[B], arg: A): Rhs[B]
+    def applyOnRhs[A, B](fn: A => Rhs[B], arg: A): Rhs[B]
+    def rhsToF[A](r: Rhs[A]): F[A]
+    def mapRhs[A, B](r: Rhs[A])(fn: A => B): Rhs[B]
+  }
+
+  object TraverseStrategy {
+    final case class Direct[F[_]](F: Apply[F]) extends TraverseStrategy[F] {
+      type Rhs[A] = F[A]
+      def map2[A, B, C](left: Rhs[A], right: Rhs[B])(fn: (A, B) => C): Rhs[C] =
+        F.map2(left, right)(fn)
+
+      def applyToRhs[A, B](fn: A => F[B], arg: A): Rhs[B] = fn(arg)
+      def applyOnRhs[A, B](fn: A => Rhs[B], arg: A): Rhs[B] = fn(arg)
+      def rhsToF[A](r: Rhs[A]): F[A] = r
+      def mapRhs[A, B](r: Rhs[A])(fn: A => B): Rhs[B] = F.map(r)(fn)
+    }
+
+    final case class ViaEval[F[_]](F: Apply[F]) extends TraverseStrategy[F] {
+      type Rhs[A] = Eval[F[A]]
+      def map2[A, B, C](left: Rhs[A], right: Rhs[B])(fn: (A, B) => C): Rhs[C] =
+        left.flatMap { fa =>
+          F.map2Eval(fa, right)(fn)
+        }
+
+      def applyToRhs[A, B](fn: A => F[B], arg: A): Rhs[B] = Eval.always(fn(arg))
+      def applyOnRhs[A, B](fn: A => Rhs[B], arg: A): Rhs[B] = Eval.defer(fn(arg))
+      def rhsToF[A](r: Rhs[A]): F[A] = r.value
+      def mapRhs[A, B](r: Rhs[A])(fn: A => B): Rhs[B] = r.map { fa => F.map(fa)(fn) }
+    }
+
+    /**
+     * This strategy directly does map2 on the type F.
+     *
+     * This is useful for Fs that are already lazy, or
+     * have no short-circuiting properties
+     */
+    def direct[F[_]](a: Apply[F]): TraverseStrategy[F] =
+      Direct(a)
+
+    /**
+     * This strategy wraps F[A] as Eval[F[A]] which
+     * allows laziness in traverse if F can possibly stop early.
+     * This is useful for strict error types (e.g. Either, Option)
+     * or possibly empty collections which are similar to strict error types
+     */
+    def viaEval[F[_]](a: Apply[F]): TraverseStrategy[F] =
+      ViaEval(a)
+
+    def composeOuter[F[_], G[_]](self: TraverseStrategy[F], that: Apply[G]): TraverseStrategy[Lambda[x => F[G[x]]]] =
+      new TraverseStrategy[Lambda[x => F[G[x]]]] {
+        type Rhs[A] = self.Rhs[G[A]]
+
+        def map2[A, B, C](left: Rhs[A], right: Rhs[B])(fn: (A, B) => C): Rhs[C] =
+          self.map2(left, right) { (ga, gb) => that.map2(ga, gb)(fn) }
+        def applyToRhs[A, B](fn: A => F[G[B]], arg: A): Rhs[B] =
+          self.applyToRhs(fn, arg)
+
+        def applyOnRhs[A, B](fn: A => Rhs[B], arg: A): Rhs[B] =
+          self.applyOnRhs(fn, arg)
+
+        def rhsToF[A](r: Rhs[A]): F[G[A]] =
+          self.rhsToF(r)
+        def mapRhs[A, B](r: Rhs[A])(fn: A => B): Rhs[B] =
+          self.mapRhs(r) { ga => that.map(ga)(fn) }
+      }
+  }
 
   /**
    * This semigroup uses a product operation to combine `F`s.
