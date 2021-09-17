@@ -91,17 +91,15 @@ this conversion for three test frameworks: `ScalaTest`, `Specs2` and `MUnit`.
 * For other test frameworks, you need to resort to their integration with `ScalaCheck` to test
 the `ScalaCheck` `Properties` provided by `cats-laws`.
 
-The following example is for ScalaTest.
+The following example is for MUnit.
 
 ```scala mdoc
 import cats.implicits._
 import cats.laws.discipline.FunctorTests
-import org.scalatest.funsuite.AnyFunSuite
-import org.scalatestplus.scalacheck.Checkers
-import org.typelevel.discipline.scalatest.FunSuiteDiscipline
+import munit.DisciplineSuite
 import arbitraries._
 
-class TreeLawTests extends AnyFunSuite with FunSuiteDiscipline with Checkers {
+class TreeLawTests extends DisciplineSuite {
   checkAll("Tree.FunctorLaws", FunctorTests[Tree].functor[Int, Int, String])
 }
 ```
@@ -112,9 +110,6 @@ class TreeLawTests extends AnyFunSuite with FunSuiteDiscipline with Checkers {
 * `FunSuiteDiscipline` provides `checkAll`, and must be mixed into `AnyFunSuite`
 * `arbitraries._` imports the `Arbitrary[Tree[_]]` instances needed to check the laws.
 
-Alternatively, you can use the `CatsSuite` provided by [Cats-testkit-scalatest](https://github.com/typelevel/cats-testkit-scalatest),
-which used to be what Cats used internally to test all instances.
-
 Now when we run `test` in our sbt console, ScalaCheck will test if the `Functor` laws hold for our `Tree` type.
 You should see something like this:
 
@@ -124,12 +119,6 @@ You should see something like this:
 [info] - Tree.FunctorLaws.functor.covariant identity (3 milliseconds)
 [info] - Tree.FunctorLaws.functor.invariant composition (19 milliseconds)
 [info] - Tree.FunctorLaws.functor.invariant identity (3 milliseconds)
-[info] ScalaTest
-[info] Run completed in 1 second, 362 milliseconds.
-[info] Total number of tests run: 4
-[info] Suites: completed 1, aborted 0
-[info] Tests: succeeded 4, failed 0, canceled 0, ignored 0, pending 0
-[info] All tests passed.
 [info] Passed: Total 4, Failed 0, Errors 0, Passed 4
 [success] Total time: 2 s, completed Aug 2, 2019 12:01:17 AM
 ```
@@ -163,12 +152,10 @@ Then we can add the Semigroup tests to our suite:
 import cats.implicits._
 import cats.kernel.laws.discipline.SemigroupTests
 import cats.laws.discipline.FunctorTests
-import org.scalatest.funsuite.AnyFunSuite
-import org.scalatestplus.scalacheck.Checkers
-import org.typelevel.discipline.scalatest.FunSuiteDiscipline
+import munit.DisciplineSuite
 import arbitraries._
 
-class TreeLawTests extends AnyFunSuite with FunSuiteDiscipline with Checkers {
+class TreeLawTests extends DisciplineSuite {
   checkAll("Tree.FunctorLaws", FunctorTests[Tree].functor[Int, Int, String])
   checkAll("Tree[Int].SemigroupLaws", SemigroupTests[Tree[Int]].semigroup)
 }

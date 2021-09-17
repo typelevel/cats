@@ -179,6 +179,11 @@ object SyntaxSuite {
 
     val mab = mock[M[A => B]]
     val mb3: M[B] = mab <&> ma
+
+    val ma3: M[A] = ma.parProductL(mb)
+    val mb4: M[B] = ma.parProductR(mb)
+    val mab2: M[(A, B)] = ma.parProduct(mb)
+    val mb5: M[B] = mab.parAp(ma)
   }
 
   def testParallelUnorderedTraverse[M[_]: Monad, F[_]: CommutativeApplicative, T[_]: UnorderedTraverse: FlatMap, A, B](
@@ -481,6 +486,7 @@ object SyntaxSuite {
     val fb = mock[F[B]]
     val f = mock[A Ior B => C]
     val f2 = mock[(Option[A], Option[B]) => C]
+    val f3 = mock[(A, A) => A]
     val a = mock[A]
     val b = mock[B]
 
@@ -492,6 +498,7 @@ object SyntaxSuite {
 
     implicit val sa: Semigroup[A] = mock[Semigroup[A]]
     val fa2 = fa.alignCombine(fa)
+    val fa3 = fa.alignMergeWith(fa)(f3)
 
     val zippedAll = fa.zipAll(fb, a, b)
   }

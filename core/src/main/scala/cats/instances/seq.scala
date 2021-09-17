@@ -117,6 +117,8 @@ trait SeqInstances extends cats.kernel.instances.SeqInstances {
 
       override def toList[A](fa: Seq[A]): List[A] = fa.toList
 
+      override def toIterable[A](fa: Seq[A]): Iterable[A] = fa
+
       override def reduceLeftOption[A](fa: Seq[A])(f: (A, A) => A): Option[A] =
         fa.reduceLeftOption(f)
 

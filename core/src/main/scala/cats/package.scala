@@ -65,9 +65,9 @@ package object cats {
    */
   type Id[A] = A
   type Endo[A] = A => A
-  implicit val catsInstancesForId
-    : Bimonad[Id] with CommutativeMonad[Id] with Comonad[Id] with NonEmptyTraverse[Id] with Distributive[Id] =
-    new Bimonad[Id] with CommutativeMonad[Id] with Comonad[Id] with NonEmptyTraverse[Id] with Distributive[Id] {
+
+  val catsInstancesForId: Bimonad[Id] with CommutativeMonad[Id] with NonEmptyTraverse[Id] with Distributive[Id] =
+    new Bimonad[Id] with CommutativeMonad[Id] with NonEmptyTraverse[Id] with Distributive[Id] {
       def pure[A](a: A): A = a
       def extract[A](a: A): A = a
       def flatMap[A, B](a: A)(f: A => B): B = f(a)
@@ -82,6 +82,7 @@ package object cats {
       override def ap[A, B](ff: A => B)(fa: A): B = ff(fa)
       override def flatten[A](ffa: A): A = ffa
       override def map2[A, B, Z](fa: A, fb: B)(f: (A, B) => Z): Z = f(fa, fb)
+      override def map2Eval[A, B, Z](fa: A, fb: Eval[B])(f: (A, B) => Z): Eval[Z] = fb.map(f(fa, _))
       override def lift[A, B](f: A => B): A => B = f
       override def imap[A, B](fa: A)(f: A => B)(fi: B => A): B = f(fa)
       def foldLeft[A, B](a: A, b: B)(f: (B, A) => B) = f(b, a)

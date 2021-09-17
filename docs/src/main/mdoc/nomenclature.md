@@ -47,8 +47,8 @@ _WARNING_: this page is written manually, and not automatically generated, so ma
 | ------------- |--------------|------------|
 | `A => F[A]`   | `pure` |
 | `=> F[Unit]`  | `unit` |
-| `Boolean => F[Unit] => F[Unit]` | `when`   | Performs effect iff condition is true
-|                                 | `unless` | Adds effect iff condition is false
+| `Boolean => F[Unit] => F[Unit]` | `whenA`   | Performs effect iff condition is true
+|                                 | `unlessA` | Adds effect iff condition is false
 
 ### FlatMap
 

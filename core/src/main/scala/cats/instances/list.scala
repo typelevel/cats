@@ -95,6 +95,46 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
             wrapMutableIndexedSeq(as)
           }(f))(_.toList)
 
+      /**
+       * This avoids making a very deep stack by building a tree instead
+       */
+      override def traverse_[G[_], A, B](fa: List[A])(f: A => G[B])(implicit G: Applicative[G]): G[Unit] = {
+        // the cost of this is O(size log size)
+        // c(n) = n + 2 * c(n/2) = n + 2(n/2 log (n/2)) = n + n (logn - 1) = n log n
+        // invariant: size >= 1
+        def runHalf(size: Int, fa: List[A]): Eval[G[Unit]] =
+          if (size > 1) {
+            val leftSize = size / 2
+            val rightSize = size - leftSize
+            val (leftL, rightL) = fa.splitAt(leftSize)
+            runHalf(leftSize, leftL)
+              .flatMap { left =>
+                val right = runHalf(rightSize, rightL)
+                G.map2Eval(left, right) { (_, _) => () }
+              }
+          } else {
+            // avoid pattern matching when we know that there is only one element
+            val a = fa.head
+            // we evaluate this at most one time,
+            // always is a bit cheaper in such cases
+            //
+            // Here is the point of the laziness using Eval:
+            // we avoid calling f(a) or G.void in the
+            // event that the computation has already
+            // failed. We do not use laziness to avoid
+            // traversing fa, which we will do fully
+            // in all cases.
+            Eval.always {
+              val gb = f(a)
+              G.void(gb)
+            }
+          }
+
+        val len = fa.length
+        if (len == 0) G.unit
+        else runHalf(len, fa).value
+      }
+
       def functor: Functor[List] = this
 
       def align[A, B](fa: List[A], fb: List[B]): List[A Ior B] =
@@ -162,6 +202,8 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
 
       override def toList[A](fa: List[A]): List[A] = fa
 
+      override def toIterable[A](fa: List[A]): Iterable[A] = fa
+
       override def reduceLeftOption[A](fa: List[A])(f: (A, A) => A): Option[A] =
         fa.reduceLeftOption(f)
 
@@ -179,6 +221,20 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
 
       override def collectFirstSome[A, B](fa: List[A])(f: A => Option[B]): Option[B] =
         fa.collectFirst(Function.unlift(f))
+
+      override def unit: List[Unit] = _unit
+      private[this] val _unit: List[Unit] = () :: Nil
+
+      override def void[A](fa: List[A]): List[Unit] = {
+        @tailrec
+        def build(fa: List[A], acc: List[Unit]): List[Unit] =
+          if (fa.isEmpty) acc
+          else build(fa.tail, () :: acc)
+
+        // by checking here we can avoid allocating a duplicate unit
+        if (fa.isEmpty) Nil
+        else build(fa.tail, unit)
+      }
     }
 
   implicit def catsStdShowForList[A: Show]: Show[List[A]] =

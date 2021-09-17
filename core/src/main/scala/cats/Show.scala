@@ -89,7 +89,6 @@ object Show extends ScalaVersionSpecificShowInstances with ShowInstances {
   implicit def catsShowForOption[A: Show]: Show[Option[A]] = cats.instances.option.catsStdShowForOption[A]
   implicit def catsShowForTry[A: Show]: Show[Try[A]] = cats.instances.try_.catsStdShowForTry[A]
   implicit def catsShowForList[A: Show]: Show[List[A]] = cats.instances.list.catsStdShowForList[A]
-  implicit def catsShowForSeq[A: Show]: Show[Seq[A]] = cats.instances.seq.catsStdShowForSeq[A]
   implicit def catsShowForVector[A: Show]: Show[Vector[A]] = cats.instances.vector.catsStdShowForVector[A]
   implicit def catsShowForQueue[A: Show]: Show[Queue[A]] = cats.instances.queue.catsStdShowForQueue[A]
   implicit def catsShowForEither[A: Show, B: Show]: Show[Either[A, B]] =
@@ -104,7 +103,11 @@ object Show extends ScalaVersionSpecificShowInstances with ShowInstances {
   def catsShowForTuple2[A: Show, B: Show]: Show[(A, B)] = cats.instances.tuple.catsStdShowForTuple2[A, B]
 }
 
-private[cats] trait ShowInstances extends cats.instances.NTupleShowInstances {
+private[cats] trait ShowInstances extends cats.instances.NTupleShowInstances with ShowInstances0 {
   implicit def catsShowForFiniteDuration: Show[FiniteDuration] =
     cats.instances.finiteDuration.catsStdShowForFiniteDurationUnambiguous
+}
+
+private[cats] trait ShowInstances0 {
+  implicit def catsShowForSeq[A: Show]: Show[Seq[A]] = cats.instances.seq.catsStdShowForSeq[A]
 }

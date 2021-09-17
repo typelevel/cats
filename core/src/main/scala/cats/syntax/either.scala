@@ -11,7 +11,7 @@ trait EitherSyntax {
   implicit final def catsSyntaxEither[A, B](eab: Either[A, B]): EitherOps[A, B] = new EitherOps(eab)
 
   implicit final def catsSyntaxEitherObject(either: Either.type): EitherObjectOps =
-    new EitherObjectOps(either) // scalastyle:off ensure.single.space.after.token
+    new EitherObjectOps(either)
 
   implicit final def catsSyntaxLeft[A, B](left: Left[A, B]): LeftOps[A, B] = new LeftOps(left)
 
@@ -334,7 +334,7 @@ final class EitherOps[A, B](private val eab: Either[A, B]) extends AnyVal {
   def liftTo[F[_]](implicit F: ApplicativeError[F, _ >: A]): F[B] = F.fromEither(eab)
 }
 
-final class EitherObjectOps(private val either: Either.type) extends AnyVal { // scalastyle:off ensure.single.space.after.token
+final class EitherObjectOps(private val either: Either.type) extends AnyVal {
   def left[A, B](a: A): Either[A, B] = Left(a)
 
   def right[A, B](b: B): Either[A, B] = Right(b)

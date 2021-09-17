@@ -3,11 +3,12 @@ package cats.tests
 import cats._
 import cats.data.{Const, Tuple2K, Validated}
 import cats.kernel.laws.discipline.{EqTests, OrderTests, PartialOrderTests}
+import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
-import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.syntax.eq._
+import org.scalacheck.Arbitrary
 import org.scalacheck.Prop._
 
 class Tuple2KSuite extends CatsSuite {
@@ -40,6 +41,36 @@ class Tuple2KSuite extends CatsSuite {
   )
 
   checkAll("Show[Tuple2K[Option, Option, Int]]", SerializableTests.serializable(Show[Tuple2K[Option, Option, Int]]))
+
+  {
+    type Pair[A] = (A, A)
+
+    //Scala 2.12 implicit resolution absolutely loses its mind here
+    implicit val help_scala2_12: Representable.Aux[Tuple2K[Pair, Pair, *], Either[Boolean, Boolean]] =
+      Tuple2K.catsDataRepresentableForTuple2K[Pair, Pair]
+
+    val a: Arbitrary[Int] = implicitly[Arbitrary[Int]]
+    val b: Arbitrary[Tuple2K[Pair, Pair, Int]] = implicitly[Arbitrary[Tuple2K[Pair, Pair, Int]]]
+    val c: Arbitrary[Either[Boolean, Boolean]] = implicitly[Arbitrary[Either[Boolean, Boolean]]]
+    val d: Arbitrary[(Either[Boolean, Boolean]) => Int] = implicitly[Arbitrary[(Either[Boolean, Boolean]) => Int]]
+    val e: Eq[Tuple2K[Pair, Pair, Int]] = Eq[Tuple2K[Pair, Pair, Int]]
+    val f: Eq[Int] = Eq[Int]
+
+    checkAll(
+      "Representable[Tuple2K[Pair, Pair, *]]",
+      RepresentableTests[Tuple2K[Pair, Pair, *], Either[Boolean, Boolean]].representable[Int](
+        a,
+        b,
+        c,
+        d,
+        e,
+        f
+      )
+    )
+    checkAll("Representable[Tuple2K[Pair, Pair, *]]",
+             SerializableTests.serializable(Representable[Tuple2K[Pair, Pair, *]])
+    )
+  }
 
   {
     implicit val monoidK: MonoidK[ListWrapper] = ListWrapper.monoidK
@@ -180,6 +211,18 @@ class Tuple2KSuite extends CatsSuite {
       val tuple = Tuple2K(l1, l2)
 
       assert(tuple.swap.swap === tuple)
+    }
+  }
+
+  test("firstK is consistent with first") {
+    forAll { (tuple: Tuple2K[Option, Option, String]) =>
+      assert(Tuple2K.firstK(tuple) === tuple.first)
+    }
+  }
+
+  test("secondK is consistent with second") {
+    forAll { (tuple: Tuple2K[Option, Option, String]) =>
+      assert(Tuple2K.secondK(tuple) === tuple.second)
     }
   }
 

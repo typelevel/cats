@@ -3,13 +3,13 @@ package laws
 
 import cats.kernel.laws.discipline._
 import cats.platform.Platform
-
 import munit.DisciplineSuite
 import org.scalacheck.{Arbitrary, Cogen, Gen, Prop}
 import Prop.forAll
 import Arbitrary.arbitrary
+import cats.kernel.instances.all.catsKernelStdOrderForDeadline
 
-import scala.concurrent.duration.{Duration, FiniteDuration}
+import scala.concurrent.duration.{Deadline, Duration, FiniteDuration}
 import scala.collection.immutable.{BitSet, Queue, SortedMap, SortedSet}
 import scala.util.Random
 import java.util.UUID
@@ -30,23 +30,6 @@ object KernelCheck {
   implicit val arbitraryUUID: Arbitrary[UUID] =
     Arbitrary(Gen.uuid)
 
-  implicit val arbitraryDuration: Arbitrary[Duration] = {
-    // max range is +/- 292 years, but we give ourselves some extra headroom
-    // to ensure that we can add these things up. they crash on overflow.
-    val n = (292L * 365) / 500
-    Arbitrary(
-      Gen.oneOf(
-        Gen.choose(-n, n).map(Duration(_, DAYS)),
-        Gen.choose(-n * 24L, n * 24L).map(Duration(_, HOURS)),
-        Gen.choose(-n * 1440L, n * 1440L).map(Duration(_, MINUTES)),
-        Gen.choose(-n * 86400L, n * 86400L).map(Duration(_, SECONDS)),
-        Gen.choose(-n * 86400000L, n * 86400000L).map(Duration(_, MILLISECONDS)),
-        Gen.choose(-n * 86400000000L, n * 86400000000L).map(Duration(_, MICROSECONDS)),
-        Gen.choose(-n * 86400000000000L, n * 86400000000000L).map(Duration(_, NANOSECONDS))
-      )
-    )
-  }
-
   implicit val arbitraryFiniteDuration: Arbitrary[FiniteDuration] = {
     // max range is +/- 292 years, but we give ourselves some extra headroom
     // to ensure that we can add these things up. they crash on overflow.
@@ -63,6 +46,13 @@ object KernelCheck {
       )
     )
   }
+
+  implicit val arbitraryDeadline: Arbitrary[Deadline] =
+    Arbitrary(arbitraryFiniteDuration.arbitrary.map(Deadline.apply))
+
+  // `Duration.Undefined`, `Duration.Inf` and `Duration.MinusInf` break the tests
+  implicit val arbitraryDuration: Arbitrary[Duration] =
+    Arbitrary(arbitraryFiniteDuration.arbitrary.map(fd => fd: Duration))
 
   // Copied from cats-laws.
   implicit def arbitrarySortedMap[K: Arbitrary: Order, V: Arbitrary]: Arbitrary[SortedMap[K, V]] =
@@ -102,16 +92,8 @@ object KernelCheck {
   implicit val cogenUUID: Cogen[UUID] =
     Cogen[(Long, Long)].contramap(u => (u.getMostSignificantBits, u.getLeastSignificantBits))
 
-  implicit val cogenDuration: Cogen[Duration] =
-    Cogen[Long].contramap { d =>
-      if (d == Duration.Inf) 3896691548866406746L
-      else if (d == Duration.MinusInf) 1844151880988859955L
-      else if (d == Duration.Undefined) -7917359255778781894L
-      else d.toNanos
-    }
-
-  implicit val cogenFiniteDuration: Cogen[FiniteDuration] =
-    Cogen[Long].contramap(_.toNanos)
+  implicit val cogenDeadline: Cogen[Deadline] =
+    Cogen[FiniteDuration].contramap(_.time)
 }
 
 class TestsConfig extends ScalaCheckSuite {
@@ -180,6 +162,7 @@ class Tests extends TestsConfig with DisciplineSuite {
   checkAll("Order[BigInt]", OrderTests[BigInt].order)
   checkAll("Order[Duration]", OrderTests[Duration].order)
   checkAll("Order[FiniteDuration]", OrderTests[FiniteDuration].order)
+  checkAll("Order[Deadline]", OrderTests[Deadline].order)
   checkAll("Order[UUID]", OrderTests[UUID].order)
   checkAll("Order[List[Int]]", OrderTests[List[Int]].order)
   checkAll("Order[Option[String]]", OrderTests[Option[String]].order)

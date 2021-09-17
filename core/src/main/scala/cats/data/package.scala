@@ -112,4 +112,13 @@ package object data extends ScalaVersionSpecificPackage {
     def shift[A, B](f: (B => Eval[A]) => Cont[A, A]): Cont[A, B] =
       ContT.shiftT(f)
   }
+
+  type StoreT[W[_], S, A] = RepresentableStoreT[W, Function1[S, *], S, A]
+
+  object StoreT {
+
+    def pure[W[_], S, A](x: A)(implicit W: Applicative[W], S: Monoid[S]): StoreT[W, S, A] =
+      RepresentableStoreT.pure[W, Function1[S, *], S, A](x)
+
+  }
 }

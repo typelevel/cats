@@ -79,6 +79,28 @@ sealed class NonEmptyMapOps[K, A](val value: NonEmptyMap[K, A]) {
     NonEmptyMapImpl.create(Functor[SortedMap[K, *]].map(toSortedMap)(f))
 
   /**
+   * Applies f to all the keys leaving elements unchanged.
+   */
+  def mapKeys[L](f: K => L)(implicit orderL: Order[L]): NonEmptyMap[L, A] = {
+    implicit val orderingL: Ordering[L] = orderL.toOrdering
+    NonEmptyMapImpl.create(toSortedMap.map(Bifunctor[Tuple2].leftMap(_)(f)))
+  }
+
+  /**
+   * Applies f to both keys and elements simultaneously.
+   */
+  def mapBoth[L, B](f: (K, A) => (L, B))(implicit orderL: Order[L]): NonEmptyMap[L, B] = {
+    implicit val orderingL: Ordering[L] = orderL.toOrdering
+    NonEmptyMapImpl.create(toSortedMap.map(Function.tupled(f)))
+  }
+
+  /**
+   * Transforms the elements only by applying f to both elements and associated keys.
+   */
+  def transform[B](f: (K, A) => B): NonEmptyMap[K, B] =
+    NonEmptyMapImpl.create(toSortedMap.transform(f))
+
+  /**
    * Optionally returns the value associated with the given key.
    */
   def lookup(k: K): Option[A] = toSortedMap.get(k)
@@ -302,7 +324,7 @@ sealed abstract private[data] class NonEmptyMapInstances extends NonEmptyMapInst
     }
 
   @deprecated("Use catsDataInstancesForNonEmptyMap override without Order", "2.2.0-M3")
-  implicit def catsDataInstancesForNonEmptyMap[K](
+  def catsDataInstancesForNonEmptyMap[K](
     orderK: Order[K]
   ): SemigroupK[NonEmptyMap[K, *]] with NonEmptyTraverse[NonEmptyMap[K, *]] with Align[NonEmptyMap[K, *]] =
     catsDataInstancesForNonEmptyMap[K]
@@ -317,9 +339,18 @@ sealed abstract private[data] class NonEmptyMapInstances extends NonEmptyMapInst
   implicit def catsDataShowForNonEmptyMap[K: Show, A: Show]: Show[NonEmptyMap[K, A]] =
     Show.show[NonEmptyMap[K, A]](_.show)
 
-  implicit def catsDataBandForNonEmptyMap[K, A]: Band[NonEmptyMap[K, A]] =
+  @deprecated("Use catsDataSemigroupForNonEmptyMap", "2.5.0")
+  def catsDataBandForNonEmptyMap[K, A]: Band[NonEmptyMap[K, A]] =
     new Band[NonEmptyMap[K, A]] {
       def combine(x: NonEmptyMap[K, A], y: NonEmptyMap[K, A]): NonEmptyMap[K, A] = x ++ y
+    }
+
+  implicit def catsDataSemigroupForNonEmptyMap[K, A: Semigroup]: Semigroup[NonEmptyMap[K, A]] =
+    new Semigroup[NonEmptyMap[K, A]] {
+      def combine(x: NonEmptyMap[K, A], y: NonEmptyMap[K, A]): NonEmptyMap[K, A] =
+        NonEmptyMap.fromMapUnsafe(
+          Semigroup[SortedMap[K, A]].combine(x.toSortedMap, y.toSortedMap)
+        )
     }
 }
 

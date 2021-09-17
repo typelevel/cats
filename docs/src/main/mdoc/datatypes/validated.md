@@ -248,7 +248,7 @@ object FormValidatorNec extends FormValidatorNec
 
 Let's see what changed here:
 
-1. In this new implementation, we're using a [NonEmptyChain](https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/data/NonEmptyChain.scala), a data structure that guarantees that at least one element will be present. In case that multiple errors arise, you'll get a chain of `DomainValidation`.
+1. In this new implementation, we're using a [NonEmptyChain](https://github.com/typelevel/cats/blob/main/core/src/main/scala/cats/data/NonEmptyChain.scala), a data structure that guarantees that at least one element will be present. In case that multiple errors arise, you'll get a chain of `DomainValidation`.
 2. `ValidatedNec[DomainValidation, A]` is an alias for `Validated[NonEmptyChain[DomainValidation], A]`. When you use `ValidatedNec` you're stating that your accumulative structure will be a `NonEmptyChain`. With `Validated`, you have the choice about which data structure you want for reporting the errors (more on that soon).
 3. We've declared the type alias `ValidationResult` that conveniently expresses the return type of our validation.
 4. `.validNec` and `.invalidNec` combinators lets you _lift_ the success or failure in their respective container (either a `Valid` or `Invalid[NonEmptyChain[A]]`).

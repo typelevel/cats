@@ -386,6 +386,8 @@ sealed abstract private[data] class NonEmptySetInstances extends NonEmptySetInst
 
       override def toList[A](fa: NonEmptySet[A]): List[A] = fa.toSortedSet.toList
 
+      override def toIterable[A](fa: NonEmptySet[A]): Iterable[A] = fa.toSortedSet
+
       override def toNonEmptyList[A](fa: NonEmptySet[A]): NonEmptyList[A] =
         fa.toNonEmptyList
     }
@@ -410,7 +412,10 @@ sealed abstract private[data] class NonEmptySetInstances0 extends NonEmptySetIns
 }
 
 sealed abstract private[data] class NonEmptySetInstances1 {
-  implicit def catsDataEqForNonEmptySet[A](implicit A: Order[A]): Eq[NonEmptySet[A]] =
+  private[data] def catsDataEqForNonEmptySet[A](implicit A: Order[A]): Eq[NonEmptySet[A]] =
+    catsDataEqForNonEmptySetFromEqA[A]
+
+  implicit def catsDataEqForNonEmptySetFromEqA[A](implicit A: Eq[A]): Eq[NonEmptySet[A]] =
     new NonEmptySetEq[A] {
       implicit override def A0: Eq[A] = A
     }

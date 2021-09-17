@@ -11,11 +11,56 @@ import scala.annotation.implicitNotFound
 
   /**
    * Collapse the structure with a left-associative function
+   *
+   * Example:
+   * {{{
+   * scala> import cats.Bifoldable
+   * scala> val fab = (List(1), 2)
+   *
+   * Folding by addition to zero:
+   * scala> Bifoldable[Tuple2].bifoldLeft(fab, Option(0))((c, a) => c.map(_ + a.head), (c, b) => c.map(_ + b))
+   * res0: Option[Int] = Some(3)
+   * }}}
+   *
+   * With syntax extensions, `bifoldLeft` can be used like:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> fab.bifoldLeft(Option(0))((c, a) => c.map(_ + a.head), (c, b) => c.map(_ + b))
+   * res1: Option[Int] = Some(3)
+   * }}}
    */
   def bifoldLeft[A, B, C](fab: F[A, B], c: C)(f: (C, A) => C, g: (C, B) => C): C
 
   /**
    * Collapse the structure with a right-associative function
+   * Right associative lazy bifold on `F` using the folding function 'f' and 'g'.
+   *
+   * This method evaluates `c` lazily (in some cases it will not be
+   * needed), and returns a lazy value. We are using `(_, Eval[C]) =>
+   * Eval[C]` to support laziness in a stack-safe way. Chained
+   * computation should be performed via .map and .flatMap.
+   *
+   * For more detailed information about how this method works see the
+   * documentation for `Eval[_]`.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.Bifoldable
+   * scala> val fab = (List(1), 2)
+   *
+   * Folding by addition to zero:
+   * scala> val bifolded1 = Bifoldable[Tuple2].bifoldRight(fab, Eval.now(0))((a, c) => c.map(_ + a.head), (b, c) => c.map(_ + b))
+   * scala> bifolded1.value
+   * res0: Int = 3
+   * }}}
+   *
+   * With syntax extensions, `bifoldRight` can be used like:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> val bifolded2 = fab.bifoldRight(Eval.now(0))((a, c) => c.map(_ + a.head), (b, c) => c.map(_ + b))
+   * scala> bifolded2.value
+   * res1: Int = 3
+   * }}}
    */
   def bifoldRight[A, B, C](fab: F[A, B], c: Eval[C])(f: (A, Eval[C]) => Eval[C], g: (B, Eval[C]) => Eval[C]): Eval[C]
 
