@@ -6,6 +6,15 @@ import scala.annotation.implicitNotFound
 @implicitNotFound("Could not find an instance of Alternative for ${F}")
 @typeclass trait Alternative[F[_]] extends NonEmptyAlternative[F] with MonoidK[F] { self =>
 
+  // Note: `protected` is only necessary to enforce binary compatibility
+  // since neither `private` nor `private[cats]` work properly here.
+  @deprecated("use a FlatMap-constrained version instead", "2.6.2")
+  protected def unite[G[_], A](fga: F[G[A]])(FM: Monad[F], G: Foldable[G]): F[A] = {
+    implicit def FM0: FlatMap[F] = FM
+    implicit def G0: Foldable[G] = G
+    unite(fga)
+  }
+
   /**
    * Fold over the inner structure to combine all of the values with
    * our combine method inherited from MonoidK. The result is for us
@@ -15,29 +24,34 @@ import scala.annotation.implicitNotFound
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
    * scala> val x: List[Vector[Int]] = List(Vector(1, 2), Vector(3, 4))
    * scala> Alternative[List].unite(x)
    * res0: List[Int] = List(1, 2, 3, 4)
    * }}}
    */
-  def unite[G[_], A](fga: F[G[A]])(implicit FM: Monad[F], G: Foldable[G]): F[A] =
-    FM.flatMap(fga) { ga =>
-      G.foldLeft(ga, empty[A])((acc, a) => appendK(acc, a))
-    }
+  def unite[G[_], A](fga: F[G[A]])(implicit FM: FlatMap[F], G: Foldable[G]): F[A] =
+    FM.flatMap(fga) { G.foldMapK(_)(pure)(self) }
+
+  // Note: `protected` is only necessary to enforce binary compatibility
+  // since neither `private` nor `private[cats]` work properly here.
+  @deprecated("use a FlatMap-constrained version instead", "2.6.2")
+  protected def separate[G[_, _], A, B](fgab: F[G[A, B]])(FM: Monad[F], G: Bifoldable[G]): (F[A], F[B]) = {
+    implicit def FM0: FlatMap[F] = FM
+    implicit def G0: Bifoldable[G] = G
+    separate(fgab)
+  }
 
   /**
-   * Separate the inner foldable values into the "lefts" and "rights"
+   * Separate the inner foldable values into the "lefts" and "rights".
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
    * scala> val l: List[Either[String, Int]] = List(Right(1), Left("error"))
    * scala> Alternative[List].separate(l)
    * res0: (List[String], List[Int]) = (List(error),List(1))
    * }}}
    */
-  def separate[G[_, _], A, B](fgab: F[G[A, B]])(implicit FM: Monad[F], G: Bifoldable[G]): (F[A], F[B]) = {
+  def separate[G[_, _], A, B](fgab: F[G[A, B]])(implicit FM: FlatMap[F], G: Bifoldable[G]): (F[A], F[B]) = {
     val as = FM.flatMap(fgab)(gab => G.bifoldMap(gab)(pure, _ => empty[A])(algebra[A]))
     val bs = FM.flatMap(fgab)(gab => G.bifoldMap(gab)(_ => empty[B], pure)(algebra[B]))
     (as, bs)
@@ -45,9 +59,9 @@ import scala.annotation.implicitNotFound
 
   /**
    * Separate the inner foldable values into the "lefts" and "rights".
-   * A variant of [[separate]] that is specialized
-   * for Fs that have Foldable instances
-   * which allows for a single-pass implementation
+   * 
+   * A variant of [[[separate[G[_,_],A,B](fgab:F[G[A,B]])(implicitFM:cats\.FlatMap[F]* separate]]]
+   * that is specialized for Fs that have Foldable instances which allows for a single-pass implementation
    * (as opposed to {{{separate}}} which is 2-pass).
    *
    * Example:
@@ -115,9 +129,11 @@ object Alternative {
     def self: F[A]
     val typeClassInstance: TypeClassType
     def unite[G[_], B](implicit ev$1: A <:< G[B], FM: Monad[F], G: Foldable[G]): F[B] =
-      typeClassInstance.unite[G, B](self.asInstanceOf[F[G[B]]])(FM, G)
+      // Note: edited manually since seems Simulacrum is not able to handle the bin-compat redirection properly.
+      typeClassInstance.unite[G, B](self.asInstanceOf[F[G[B]]])
     def separate[G[_, _], B, C](implicit ev$1: A <:< G[B, C], FM: Monad[F], G: Bifoldable[G]): (F[B], F[C]) =
-      typeClassInstance.separate[G, B, C](self.asInstanceOf[F[G[B, C]]])(FM, G)
+      // Note: edited manually since seems Simulacrum is not able to handle the bin-compat redirection properly.
+      typeClassInstance.separate[G, B, C](self.asInstanceOf[F[G[B, C]]])
     def separateFoldable[G[_, _], B, C](implicit ev$1: A <:< G[B, C], G: Bifoldable[G], FF: Foldable[F]): (F[B], F[C]) =
       typeClassInstance.separateFoldable[G, B, C](self.asInstanceOf[F[G[B, C]]])(G, FF)
   }
