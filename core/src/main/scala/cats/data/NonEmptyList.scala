@@ -108,8 +108,20 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
   def ::[AA >: A](a: AA): NonEmptyList[AA] =
     prepend(a)
 
+  /**
+   * Prepend an item to this, producing a new `NonEmptyList`.
+   */
   def prepend[AA >: A](a: AA): NonEmptyList[AA] =
     NonEmptyList(a, head :: tail)
+
+  /**
+   * Prepend a `List` to this, producing a new `NonEmptyList`.
+   */
+  def prependList[AA >: A](list: List[AA]): NonEmptyList[AA] =
+    list match {
+      case Nil      => this
+      case lh :: lt => NonEmptyList(lh, lt ::: toList)
+    }
 
   /**
    * Alias for append
