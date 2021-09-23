@@ -58,6 +58,12 @@ class ListSuite extends CatsSuite {
     assert(List.empty[Int].toNel === None)
   }
 
+  test("concatNel should be consistent with List#`:::`") {
+    forAll { (fa: List[Int], nel: NonEmptyList[Int]) =>
+      assert(fa.concatNel(nel).toList === fa ::: nel.toList)
+    }
+  }
+
   test("groupByNel should be consistent with groupBy")(
     forAll { (fa: List[Int], f: Int => Int) =>
       assert((fa.groupByNel(f).map { case (k, v) => (k, v.toList) }: Map[Int, List[Int]]) === fa.groupBy(f))
