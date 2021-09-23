@@ -257,10 +257,16 @@ class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonE
     }
   }
 
-  test(":: consistent with List") {
+  test("NonEmptyList#`::` and prepend consistent with List#`::`") {
     forAll { (nel: NonEmptyList[Int], i: Int) =>
       assert((i :: nel).toList === (i :: nel.toList))
       assert(nel.prepend(i).toList === (i :: nel.toList))
+    }
+  }
+
+  test("NonEmptyList#prependList consisntent with List#`:::`") {
+    forAll { (nel: NonEmptyList[Int], l: List[Int]) =>
+      assert(nel.prependList(l).toList === l ::: nel.toList)
     }
   }
 
