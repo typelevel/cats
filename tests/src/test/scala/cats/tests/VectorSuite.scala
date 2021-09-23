@@ -67,6 +67,13 @@ class VectorSuite extends CatsSuite {
     assert(Vector.empty[Int].toNev == None)
   }
 
+  test("concatNev should be consistent with Vector#`++`") {
+    forAll { (fa: Vector[Int], nev: NonEmptyVector[Int]) =>
+      // Note: Scala 2.12.x does not have `Vector#concat`.
+      assert(fa.concatNev(nev).toVector === (fa ++ nev.toVector))
+    }
+  }
+
   test("groupByNev should be consistent with groupBy")(
     forAll { (fa: Vector[Int], f: Int => Int) =>
       assert((fa.groupByNev(f).map { case (k, v) => (k, v.toVector) }: Map[Int, Vector[Int]]) === fa.groupBy(f))

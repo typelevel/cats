@@ -31,6 +31,20 @@ final class VectorOps[A](private val va: Vector[A]) extends AnyVal {
   def toNev: Option[NonEmptyVector[A]] = NonEmptyVector.fromVector(va)
 
   /**
+   * Concatenates this `Vector` with a `NonEmptyVector` producing a new `NonEmptyVector`.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.data.NonEmptyVector
+   * scala> import cats.implicits._
+   *
+   * scala> Vector(1, 2, 3).concatNev(NonEmptyVector.of(4, 5, 6))
+   * res0: NonEmptyVector[Int] = NonEmptyVector(1, 2, 3, 4, 5, 6)
+   * }}}
+   */
+  def concatNev[AA >: A](nev: NonEmptyVector[AA]): NonEmptyVector[AA] = nev.prependVector(va)
+
+  /**
    * Groups elements inside this `Vector` according to the `Order` of the keys
    * produced by the given mapping function.
    *
