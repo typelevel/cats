@@ -64,6 +64,13 @@ class SeqSuite extends CatsSuite {
     assert(Seq.empty[Int].toNeSeq == None)
   }
 
+  test("concatNeSeq should be consistent with Seq#`++`") {
+    forAll { (fa: Seq[Int], neseq: NonEmptySeq[Int]) =>
+      // Note: Scala 2.12.x does not have `Seq#concat`.
+      assert(fa.concatNeSeq(neseq).toSeq === (fa ++ neseq.toSeq))
+    }
+  }
+
   test("traverse is stack-safe") {
     val seq = (0 until 100000).toSeq
     val sumAll = Traverse[Seq]
