@@ -1,7 +1,13 @@
 package cats.syntax
 
+import cats.Applicative
+import cats.Functor
+import cats.Order
+import cats.Traverse
 import cats.data.NonEmptySeq
+
 import scala.collection.immutable.Seq
+import scala.collection.immutable.SortedMap
 
 trait SeqSyntax {
   implicit final def catsSyntaxSeqs[A](va: Seq[A]): SeqOps[A] = new SeqOps(va)
@@ -43,4 +49,61 @@ final class SeqOps[A](private val va: Seq[A]) extends AnyVal {
    * }}}
    */
   def concatNeSeq[AA >: A](neseq: NonEmptySeq[AA]): NonEmptySeq[AA] = neseq.prependSeq(va)
+
+  /**
+   * Groups elements inside this `Seq` according to the `Order` of the keys
+   * produced by the given mapping function.
+   *
+   * {{{
+   * scala> import cats.data.NonEmptySeq
+   * scala> import cats.syntax.all._
+   * scala> import scala.collection.immutable.Seq
+   * scala> import scala.collection.immutable.SortedMap
+   *
+   * scala> val seq = Seq(12, -2, 3, -5)
+   * scala> val res = SortedMap(false -> NonEmptySeq.of(-2, -5), true -> NonEmptySeq.of(12, 3))
+   * scala> seq.groupByNeSeq(_ >= 0) === res
+   * res0: Boolean = true
+   * }}}
+   */
+  def groupByNeSeq[B](f: A => B)(implicit B: Order[B]): SortedMap[B, NonEmptySeq[A]] = {
+    implicit val ordering: Ordering[B] = B.toOrdering
+    toNeSeq.fold(SortedMap.empty[B, NonEmptySeq[A]])(_.groupBy(f))
+  }
+
+  /**
+   * Groups elements inside this `Seq` according to the `Order` of the keys
+   * produced by the given mapping monadic function.
+   *
+   * {{{
+   * scala> import cats.data.NonEmptySeq
+   * scala> import cats.syntax.all._
+   * scala> import scala.collection.immutable.Seq
+   * scala> import scala.collection.immutable.SortedMap
+   *
+   * scala> def f(n: Int) = n match { case 0 => None; case n => Some(n > 0) }
+   *
+   * scala> val seq = Seq(12, -2, 3, -5)
+   * scala> val res = Some(SortedMap(false -> NonEmptySeq.of(-2, -5), true -> NonEmptySeq.of(12, 3)))
+   * scala> seq.groupByNeSeqA(f) === res
+   * res0: Boolean = true
+   *
+   * scala> // `f(0)` returns `None`
+   * scala> (seq :+ 0).groupByNeSeqA(f) === None
+   * res1: Boolean = true
+   * }}}
+   */
+  def groupByNeSeqA[F[_], B](
+    f: A => F[B]
+  )(implicit F: Applicative[F], B: Order[B]): F[SortedMap[B, NonEmptySeq[A]]] = {
+    implicit val ordering: Ordering[B] = B.toOrdering
+    val mapFunctor = Functor[SortedMap[B, *]]
+    val nesTraverse = Traverse[NonEmptySeq]
+
+    toNeSeq.fold(F.pure(SortedMap.empty[B, NonEmptySeq[A]])) { nes =>
+      F.map(nesTraverse.traverse(nes)(a => F.tupleRight(f(a), a))) { seq =>
+        mapFunctor.map(seq.groupBy(_._1))(_.map(_._2))
+      }
+    }
+  }
 }

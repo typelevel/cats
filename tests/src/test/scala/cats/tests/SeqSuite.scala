@@ -1,24 +1,18 @@
 package cats.tests
 
-import cats.{Align, Alternative, CoflatMap, Monad, Semigroupal, Traverse, TraverseFilter}
-import cats.data.{NonEmptySeq, ZipSeq}
-import cats.laws.discipline.{
-  AlignTests,
-  AlternativeTests,
-  CoflatMapTests,
-  CommutativeApplyTests,
-  MonadTests,
-  SemigroupalTests,
-  SerializableTests,
-  ShortCircuitingTests,
-  TraverseFilterTests,
-  TraverseTests
-}
+import cats._
+import cats.data.NonEmptySeq
+import cats.data.OneAnd
+import cats.data.ZipSeq
+import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
-import cats.syntax.show._
-import cats.syntax.seq._
 import cats.syntax.eq._
+import cats.syntax.functor._
+import cats.syntax.seq._
+import cats.syntax.show._
+import cats.syntax.traverse._
 import org.scalacheck.Prop._
+
 import scala.collection.immutable.Seq
 
 class SeqSuite extends CatsSuite {
@@ -68,6 +62,36 @@ class SeqSuite extends CatsSuite {
     forAll { (fa: Seq[Int], neseq: NonEmptySeq[Int]) =>
       // Note: Scala 2.12.x does not have `Seq#concat`.
       assert(fa.concatNeSeq(neseq).toSeq === (fa ++ neseq.toSeq))
+    }
+  }
+
+  test("groupByNeSeq should be consistent with groupBy") {
+    forAll { (fa: Seq[String], f: String => Int) =>
+      assert((fa.groupByNeSeq(f).map { _.map(_.toSeq) }: Map[Int, Seq[String]]) === fa.groupBy(f))
+    }
+  }
+
+  test("groupByNeSeqA[Id] should be consistent with groupByNeSeq") {
+    forAll { (fa: Seq[String], f: String => Id[Int]) =>
+      assert(fa.groupByNeSeqA(f) === fa.groupByNeSeq(f))
+    }
+  }
+
+  def unwrapGroupByNeSeq[G[_]: Applicative, A, B](fa: Seq[A], f: A => G[B])(implicit ord: Order[B]) = {
+    implicit val ordering = ord.toOrdering
+    fa
+      .traverse(a => f(a).tupleRight(a))
+      .map(_.groupByNeSeq(_._1).map(_.map(_.map(_._2))))
+  }
+
+  test("groupByNeSeqA[Option] should be consistent with groupByNeSeq") {
+    forAll { (fa: Seq[String], f: String => Option[Int]) =>
+      assert(fa.groupByNeSeqA(f) === unwrapGroupByNeSeq(fa, f))
+    }
+  }
+  test("groupByNeSeqA[OneAnd] should be consistent with groupByNeSeq") {
+    forAll { (fa: Seq[String], f: String => OneAnd[Option, Int]) =>
+      assert(fa.groupByNeSeqA(f) === unwrapGroupByNeSeq(fa, f))
     }
   }
 
