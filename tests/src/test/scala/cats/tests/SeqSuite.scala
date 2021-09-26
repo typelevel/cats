@@ -95,6 +95,18 @@ class SeqSuite extends CatsSuite {
     }
   }
 
+  test("scanLeftNeSeq should be consistent with scanLeft") {
+    forAll { (fa: Seq[Int], b: String, f: (String, Int) => String) =>
+      assert(fa.scanLeftNeSeq(b)(f).toSeq === fa.scanLeft(b)(f))
+    }
+  }
+
+  test("scanRightNeSeq should be consistent with scanRight") {
+    forAll { (fa: Seq[Int], b: String, f: (Int, String) => String) =>
+      assert(fa.scanRightNeSeq(b)(f).toSeq === fa.scanRight(b)(f))
+    }
+  }
+
   test("traverse is stack-safe") {
     val seq = (0 until 100000).toSeq
     val sumAll = Traverse[Seq]

@@ -24,13 +24,13 @@ final class SeqOps[A](private val va: Seq[A]) extends AnyVal {
    * scala> import cats.syntax.all._
    * scala> import scala.collection.immutable.Seq
    *
-   * scala> val result1: Seq[Int] = Seq(1, 2)
-   * scala> result1.toNeSeq
-   * res0: Option[NonEmptySeq[Int]] = Some(NonEmptySeq(1, 2))
+   * scala> val seq1 = Seq(1, 2)
+   * scala> seq1.toNeSeq
+   * res1: Option[NonEmptySeq[Int]] = Some(NonEmptySeq(1, 2))
    *
-   * scala> val result2: Seq[Int] = Seq.empty[Int]
-   * scala> result2.toNeSeq
-   * res1: Option[NonEmptySeq[Int]] = None
+   * scala> val seq2 = Seq.empty[Int]
+   * scala> seq2.toNeSeq
+   * res2: Option[NonEmptySeq[Int]] = None
    * }}}
    */
   def toNeSeq: Option[NonEmptySeq[A]] = NonEmptySeq.fromSeq(va)
@@ -63,7 +63,7 @@ final class SeqOps[A](private val va: Seq[A]) extends AnyVal {
    * scala> val seq = Seq(12, -2, 3, -5)
    * scala> val res = SortedMap(false -> NonEmptySeq.of(-2, -5), true -> NonEmptySeq.of(12, 3))
    * scala> seq.groupByNeSeq(_ >= 0) === res
-   * res0: Boolean = true
+   * res1: Boolean = true
    * }}}
    */
   def groupByNeSeq[B](f: A => B)(implicit B: Order[B]): SortedMap[B, NonEmptySeq[A]] = {
@@ -86,11 +86,11 @@ final class SeqOps[A](private val va: Seq[A]) extends AnyVal {
    * scala> val seq = Seq(12, -2, 3, -5)
    * scala> val res = Some(SortedMap(false -> NonEmptySeq.of(-2, -5), true -> NonEmptySeq.of(12, 3)))
    * scala> seq.groupByNeSeqA(f) === res
-   * res0: Boolean = true
+   * res1: Boolean = true
    *
    * scala> // `f(0)` returns `None`
    * scala> (seq :+ 0).groupByNeSeqA(f) === None
-   * res1: Boolean = true
+   * res2: Boolean = true
    * }}}
    */
   def groupByNeSeqA[F[_], B](
@@ -106,4 +106,48 @@ final class SeqOps[A](private val va: Seq[A]) extends AnyVal {
       }
     }
   }
+
+  /**
+   * Produces a `NonEmptySeq` containing cumulative results of applying the
+   * operator going left to right.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.data.NonEmptySeq
+   * scala> import cats.syntax.all._
+   * scala> import scala.collection.immutable.Seq
+   *
+   * scala> val seq1 = Seq(1, 2)
+   * scala> seq1.scanLeftNeSeq(100)(_ + _)
+   * res1: NonEmptySeq[Int] = NonEmptySeq(100, 101, 103)
+   *
+   * scala> val seq2 = Seq.empty[Int]
+   * scala> seq2.scanLeftNeSeq(123)(_ + _)
+   * res2: NonEmptySeq[Int] = NonEmptySeq(123)
+   * }}}
+   */
+  def scanLeftNeSeq[B](b: B)(f: (B, A) => B): NonEmptySeq[B] =
+    NonEmptySeq.fromSeqUnsafe(va.scanLeft(b)(f))
+
+  /**
+   * Produces a `NonEmptySeq` containing cumulative results of applying the
+   * operator going right to left.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.data.NonEmptySeq
+   * scala> import cats.syntax.all._
+   * scala> import scala.collection.immutable.Seq
+   *
+   * scala> val seq = Seq(1, 2)
+   * scala> seq.scanRightNeSeq(100)(_ + _)
+   * res0: NonEmptySeq[Int] = NonEmptySeq(103, 102, 100)
+   *
+   * scala> val seq2 = Seq.empty[Int]
+   * scala> seq2.scanRightNeSeq(123)(_ + _)
+   * res1: NonEmptySeq[Int] = NonEmptySeq(123)
+   * }}}
+   */
+  def scanRightNeSeq[B](b: B)(f: (A, B) => B): NonEmptySeq[B] =
+    NonEmptySeq.fromSeqUnsafe(va.scanRight(b)(f))
 }
