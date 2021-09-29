@@ -316,6 +316,7 @@ lazy val docSettings = Seq(
 )
 
 lazy val docs_scala3Settings = docSettings ++ Seq(
+  Compile / scalacOptions ++= Seq("-no-indent"), // Fix for indent errors in mdoc
   ScalaUnidoc / unidoc / scalacOptions ++= Seq(
     "-external-mappings:" +
       ".*scala/.*::scaladoc3::https://dotty.epfl.ch/api/," +
