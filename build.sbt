@@ -39,7 +39,7 @@ ThisBuild / githubWorkflowJavaVersions := Seq(PrimaryJava, LTSJava, GraalVM8)
 
 val Scala212 = "2.12.15"
 val Scala213 = "2.13.6"
-val Scala3 = "3.0.2"
+val Scala3 = "3.1.1-RC1"
 
 ThisBuild / crossScalaVersions := Seq(Scala212, Scala213, Scala3)
 ThisBuild / scalaVersion := Scala213
@@ -256,7 +256,7 @@ lazy val docSettings = Seq(
   micrositeHighlightTheme := "atom-one-light",
   micrositeHomepage := "http://typelevel.org/cats/",
   micrositeBaseUrl := "cats",
-  micrositeDocumentationUrl := "/cats/api/cats/index.html",
+  micrositeDocumentationUrl := "/cats/api/index.html",
   micrositeDocumentationLabelDescription := "API Documentation",
   micrositeGithubOwner := "typelevel",
   micrositeExtraMdFilesOutput := resourceManaged.value / "main" / "jekyll",
@@ -297,7 +297,7 @@ lazy val docSettings = Seq(
     "-Xfatal-warnings",
     "-groups",
     "-doc-source-url",
-    scmInfo.value.get.browseUrl + "/tree/main€{FILE_PATH}.scala",
+    scmInfo.value.get.browseUrl + "/tree/main€{FILE_PATH_EXT}#L€{FILE_LINE}",
     "-sourcepath",
     (LocalRootProject / baseDirectory).value.getAbsolutePath,
     "-diagrams"
@@ -313,6 +313,22 @@ lazy val docSettings = Seq(
   Jekyll / includeFilter := (makeSite / includeFilter).value,
   mdocIn := (LocalRootProject / baseDirectory).value / "docs" / "src" / "main" / "mdoc",
   mdocExtraArguments := Seq("--no-link-hygiene")
+)
+
+lazy val docs_scala3Settings = docSettings ++ Seq(
+  ScalaUnidoc / unidoc / scalacOptions ++= Seq(
+    "-external-mappings:" +
+      ".*scala/.*::scaladoc3::https://dotty.epfl.ch/api/," +
+      ".*java/.*::javadoc::https://docs.oracle.com/javase/8/docs/api/",
+    "-social-links:" +
+      "github::https://github.com/typelevel/cats," +
+      "gitter::https://gitter.im/typelevel/cats," +
+      "twitter::https://twitter.com/typelevel," +
+      "discord::https://discord.gg/hWd4eS244g",
+    "-Ygenerate-inkuire",
+    "-project-logo",
+    "docs/src/main/resources/microsite/img/cats-logo.png"
+  )
 )
 
 def mimaPrevious(moduleName: String, scalaVer: String, ver: String, includeCats1: Boolean = true): List[ModuleID] = {
@@ -525,6 +541,21 @@ def mimaSettings(moduleName: String, includeCats1: Boolean = true) =
         )
     }
   )
+
+lazy val docs_scala3 = project
+  .in(file("docs_scala3"))
+  .enablePlugins(MdocPlugin)
+  .enablePlugins(MicrositesPlugin)
+  .enablePlugins(ScalaUnidocPlugin)
+  .settings(
+    name := "Cats",
+    scalaVersion := Scala3,
+    crossScalaVersions := Seq(Scala3)
+  )
+  .settings(catsSettings)
+  .settings(commonJvmSettings)
+  .settings(docs_scala3Settings)
+  .dependsOn(core.jvm, free.jvm, kernelLaws.jvm, laws.jvm)
 
 lazy val docs = project
   .in(file("cats-docs"))

@@ -1,0 +1,1 @@
+// The placeholder source file is needed because otherwise sbt won't trigger Scaladoc: https://github.com/sbt/sbt/blob/develop/main/src/main/scala/sbt/Defaults.scala#L2131
