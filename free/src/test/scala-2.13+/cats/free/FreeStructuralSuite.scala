@@ -1,7 +1,7 @@
 package cats.free
 
 import cats.{Applicative, Eq, Eval, Functor, Show, Traverse}
-import cats.kernel.laws.discipline.{EqTests, /*HashTests,*/ PartialOrderTests}
+import cats.kernel.laws.discipline.{EqTests, PartialOrderTests}
 import cats.syntax.all._
 import cats.tests.CatsSuite
 

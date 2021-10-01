@@ -5,7 +5,7 @@ import Chain._
 import cats.kernel.instances.StaticMethods
 
 import scala.annotation.tailrec
-import scala.collection.immutable.{SortedMap, TreeSet, IndexedSeq => ImIndexedSeq}
+import scala.collection.immutable.{IndexedSeq => ImIndexedSeq, SortedMap, TreeSet}
 import scala.collection.mutable.ListBuffer
 
 /**

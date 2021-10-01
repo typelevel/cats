@@ -53,10 +53,10 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit
       val (lefts, rights) = Foldable[List].partitionEither(list)(f)
       val (ls, rs) = list
         .map(f)
-        .partition({
+        .partition {
           case Left(_)  => true
           case Right(_) => false
-        })
+        }
 
       assert(lefts.map(_.asLeft[String]) === ls)
       assert(rights.map(_.asRight[String]) === rs)
@@ -105,10 +105,10 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit
       val partitioned = Foldable[List].partitionEitherM(list)(f.andThen(Option.apply))
       val (ls, rs) = list
         .map(f)
-        .partition({
+        .partition {
           case Left(_)  => true
           case Right(_) => false
-        })
+        }
 
       assert(partitioned.map(_._1.map(_.asLeft[String])) === (Option(ls)))
       assert(partitioned.map(_._2.map(_.asRight[String])) === (Option(rs)))
