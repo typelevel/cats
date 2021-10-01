@@ -3,7 +3,7 @@ package ring
 
 import scala.{specialized => sp}
 
-trait DivisionRing[@sp(Byte, Short, Int, Long, Float, Double) A] extends Any with Ring[A] with MultiplicativeGroup[A] {
+trait DivisionRing[@sp(Byte, Short, Int, Long, Float, Double) A] extends Any with Ring[A] with Semifield[A] {
   self =>
 
   /**
