@@ -106,14 +106,6 @@ trait Parallel[M[_]] extends NonEmptyParallel[M] {
 
       override def whenA[A](cond: Boolean)(f: => F[A]): F[Unit] = applicative.whenA(cond)(f)
     }
-
-  /**
-   * Like [[Applicative.replicateA]], but uses the apply instance
-   * corresponding to the Parallel instance instead.
-   */
-  def parReplicateA[A](n: Int, ma: M[A]): M[List[A]] =
-    if (n <= 0) monad.pure(List.empty[A])
-    else Parallel.parSequence(List.fill(n)(ma))(UnorderedFoldable.catsTraverseForList, this)
 }
 
 object NonEmptyParallel extends ScalaVersionSpecificParallelInstances {
@@ -433,6 +425,14 @@ object Parallel extends ParallelArityFunctions2 {
     P.sequential(
       P.apply.ap2(P.parallel(ff))(P.parallel(ma), P.parallel(mb))
     )
+
+  /**
+   * Like `Applicative[F].replicateA`, but uses the apply instance
+   * corresponding to the Parallel instance instead.
+   */
+  def parReplicateA[M[_], A](n: Int, ma: M[A])(implicit P: Parallel[M]): M[List[A]] =
+    if (n <= 0) P.monad.pure(List.empty[A])
+    else Parallel.parSequence(List.fill(n)(ma))
 
   /**
    * Provides an `ApplicativeError[F, E]` instance for any F, that has a `Parallel.Aux[M, F]`

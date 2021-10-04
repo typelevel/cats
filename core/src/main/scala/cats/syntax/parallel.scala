@@ -247,8 +247,7 @@ final class ParallelApOps[M[_], A](private val ma: M[A]) extends AnyVal {
     Parallel.parProduct(ma, mb)
 
   def parReplicateA(n: Int)(implicit P: Parallel[M]): M[List[A]] =
-    if (n <= 0) P.monad.pure(List.empty[A])
-    else Parallel.parSequence(List.fill(n)(ma))
+    Parallel.parReplicateA(n, ma)
 }
 
 final class ParallelApplyOps[M[_], A, B](private val mab: M[A => B]) extends AnyVal {
