@@ -29,13 +29,13 @@ ThisBuild / githubWorkflowUseSbtThinClient := false
 
 val PrimaryOS = "ubuntu-latest"
 ThisBuild / githubWorkflowOSes := Seq(PrimaryOS)
+ThisBuild / githubWorkflowEnv += ("JABBA_INDEX" -> "https://github.com/typelevel/jdk-index/raw/main/index.json")
 
-val PrimaryJava = "adopt@1.8"
-val LTSJava = "adopt@1.11"
-val LatestJava = "adopt@1.15"
+val PrimaryJava = "adoptium@8"
+val LTSJava = "adoptium@17"
 val GraalVM8 = "graalvm-ce-java8@20.2.0"
 
-ThisBuild / githubWorkflowJavaVersions := Seq(PrimaryJava, LTSJava, LatestJava, GraalVM8)
+ThisBuild / githubWorkflowJavaVersions := Seq(PrimaryJava, LTSJava, GraalVM8)
 
 val Scala212 = "2.12.14"
 val Scala213 = "2.13.6"
