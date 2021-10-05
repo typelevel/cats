@@ -15,6 +15,7 @@ on:
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  JABBA_INDEX: 'https://github.com/typelevel/jdk-index/raw/main/index.json'
 
 jobs:
   build:
@@ -24,20 +25,15 @@ jobs:
         os: [ubuntu-latest]
         scala: [2.12.14, 2.13.6, 3.0.2]
         java:
-          - adopt@1.8
-          - adopt@1.11
-          - adopt@1.15
+          - adoptium@8
+          - adoptium@17
           - graalvm-ce-java8@20.2.0
         platform: [jvm, js, native]
         exclude:
           - platform: js
-            java: adopt@1.11
+            java: adoptium@17
           - platform: native
-            java: adopt@1.11
-          - platform: js
-            java: adopt@1.15
-          - platform: native
-            java: adopt@1.15
+            java: adoptium@17
           - platform: js
             java: graalvm-ce-java8@20.2.0
           - platform: native
@@ -113,7 +109,7 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         scala: [2.12.14, 2.13.6, 3.0.2]
-        java: [adopt@1.8]
+        java: [adoptium@8]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout current branch (full)
@@ -149,7 +145,7 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         scala: [2.12.14, 2.13.6, 3.0.2]
-        java: [adopt@1.8]
+        java: [adoptium@8]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout current branch (full)
@@ -184,7 +180,7 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         scala: [2.12.14]
-        java: [adopt@1.8]
+        java: [adoptium@8]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout current branch (full)
