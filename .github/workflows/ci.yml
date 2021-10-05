@@ -27,7 +27,7 @@ jobs:
         java:
           - adoptium@8
           - adoptium@17
-          - graalvm-ce-java8@20.2.0
+          - graalvm-ce-java8@21.2
         platform: [jvm, js, native]
         exclude:
           - platform: js
@@ -35,9 +35,9 @@ jobs:
           - platform: native
             java: adoptium@17
           - platform: js
-            java: graalvm-ce-java8@20.2.0
+            java: graalvm-ce-java8@21.2
           - platform: native
-            java: graalvm-ce-java8@20.2.0
+            java: graalvm-ce-java8@21.2
           - platform: native
             scala: 3.0.2
     runs-on: ${{ matrix.os }}
