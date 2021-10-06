@@ -516,6 +516,12 @@ object Boilerplate {
         else
           s"def traverseN[G[_]: Applicative, Z](f: (${`A..N`}) => G[Z])(implicit traverse: Traverse[F], semigroupal: Semigroupal[F]): G[F[Z]] = Semigroupal.traverse$arity($tupleArgs)(f)"
 
+      val flatMap =
+        if (arity == 1)
+          s"def flatMap[Z](f: (${`A..N`}) => F[Z])(implicit flatMap: FlatMap[F]): F[Z] = flatMap.flatMap($tupleArgs)(f)"
+        else
+          s"def flatMapN[Z](f: (${`A..N`}) => F[Z])(implicit flatMap: FlatMap[F], semigroupal: Semigroupal[F]): F[Z] = flatMap.flatten(Semigroupal.map$arity($tupleArgs)(f))"
+
       block"""
       |package cats
       |package syntax
@@ -528,6 +534,7 @@ object Boilerplate {
         -  $map
         -  $contramap
         -  $imap
+        -  $flatMap
         -  $tupled
         -  $traverse
         -  def apWith[Z](f: F[(${`A..N`}) => Z])(implicit apply: Apply[F]): F[Z] = apply.ap$n(f)($tupleArgs)

@@ -412,10 +412,14 @@ object SyntaxSuite {
     val fa = a.pure[F]
   }
 
-  def testFlatMap[F[_]: FlatMap, A, B, C, D]: Unit = {
+  def testFlatMap[F[_]: FlatMap, A, B, C, D, Z]: Unit = {
     val a = mock[A]
     val returnValue = mock[F[Either[A, B]]]
     val done = a.tailRecM[F, B](a => returnValue)
+    val tfabc = mock[(F[A], F[B], F[C])]
+    val ff = mock[(A, B, C) => F[Z]]
+
+    tfabc.flatMapN(ff)
 
     val x = mock[Function[A, F[B]]]
     val y = mock[Function[B, F[C]]]
