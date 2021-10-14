@@ -8,6 +8,8 @@ import cats.laws.discipline.{ApplicativeErrorTests, MiniInt, NonEmptyParallelTes
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
 import cats.implicits._
+import org.scalacheck.{Arbitrary, Gen}
+
 import scala.collection.immutable.SortedSet
 import org.scalacheck.Prop._
 
@@ -264,6 +266,19 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
     val plus = (_: Int) + (_: Int)
     val rightPlus: Either[String, (Int, Int) => Int] = Right(plus)
     assert(Parallel.parAp2(rightPlus)("Hello".asLeft, "World".asLeft) === (Left("HelloWorld")))
+  }
+
+  test("ParReplicateA should be equivalent to fill parSequence") {
+    forAll(Gen.choose(1, 20), Arbitrary.arbitrary[Either[String, String]]) {
+      (repetitions: Int, e: Either[String, String]) =>
+        assert(Parallel.parReplicateA(repetitions, e) === Parallel.parSequence(List.fill(repetitions)(e)))
+    }
+  }
+
+  test("ParReplicateA 2 should be equivalent to parMap2 List") {
+    forAll { (e: Either[String, String]) =>
+      assert(Parallel.parReplicateA(2, e) === Parallel.parMap2(e, e)((s1, s2) => List(s1, s2)))
+    }
   }
 
   test("Kleisli with Either should accumulate errors") {
