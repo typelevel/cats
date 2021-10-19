@@ -34,7 +34,7 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
    * Transform this `OptionT[F, A]` into a `F[Unit]`.
    * This is identical to `foldF(F.unit)(f)`.
    */
-  def foreachF[B](f: A => F[Unit])(implicit F: Monad[F]): F[Unit] =
+  def foreachF(f: A => F[Unit])(implicit F: Monad[F]): F[Unit] =
     foldF(F.unit)(f)
 
   /**
