@@ -236,6 +236,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [ITV](https://www.itv.com/)
 - [Lightform](https://lightform.com/)
 - [Lookout](https://www.lookout.com)
+- [Medidata](https://www.medidata.com/)
 - [Merit](https://merits.com)
 - [Metacommerce](https://www.metacommerce.ru)
 - [MYOB](https://www.myob.com)
