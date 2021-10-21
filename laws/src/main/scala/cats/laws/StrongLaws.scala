@@ -32,13 +32,13 @@ trait StrongLaws[F[_, _]] extends ProfunctorLaws[F] {
    * lmap fst == rmap fst . first'
    */
   def lmapEqualsFirstAndThenRmap[A, B, C](fab: F[A, B]): IsEq[F[(A, C), B]] =
-    fab.lmap[(A, C)]({ case (a, _) => a }) <-> fab.first[C].rmap[B](_._1)
+    fab.lmap[(A, C)] { case (a, _) => a } <-> fab.first[C].rmap[B](_._1)
 
   /**
    * lmap snd == rmap snd . second'
    */
   def lmapEqualsSecondAndThenRmap[A, B, C](fab: F[A, B]): IsEq[F[(C, A), B]] =
-    fab.lmap[(C, A)]({ case (_, b) => b }) <-> fab.second[C].rmap[B](_._2)
+    fab.lmap[(C, A)] { case (_, b) => b } <-> fab.second[C].rmap[B](_._2)
 
   private def mapFirst[X, Y, Z](f: X => Z)(cb: (X, Y)): (Z, Y) = (f(cb._1), cb._2)
   private def mapSecond[X, Y, Z](f: Y => Z)(cb: (X, Y)): (X, Z) = (cb._1, f(cb._2))

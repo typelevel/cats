@@ -196,10 +196,10 @@ object FreeT extends FreeTInstances {
     defer(a)
 
   def defer[S[_], M[_], A](a: M[Either[A, S[FreeT[S, M, A]]]])(implicit M: Applicative[M]): FreeT[S, M, A] =
-    liftT(a).flatMap({
+    liftT(a).flatMap {
       case Left(a)  => pure(a)
       case Right(s) => roll(s)
-    })
+    }
 
   def tailRecM[S[_], M[_]: Applicative, A, B](a: A)(f: A => FreeT[S, M, Either[A, B]]): FreeT[S, M, B] =
     f(a).flatMap {
