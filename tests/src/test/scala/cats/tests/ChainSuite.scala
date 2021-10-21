@@ -167,7 +167,7 @@ class ChainSuite extends CatsSuite {
 
   test("zipWith consistent with List#zip and then List#map") {
     forAll { (a: Chain[String], b: Chain[Int], f: (String, Int) => Int) =>
-      assert(a.zipWith(b)(f).toList === (a.toList.zip(b.toList).map { case (x, y) => f(x, y) }))
+      assert(a.zipWith(b)(f).toList === a.toList.zip(b.toList).map { case (x, y) => f(x, y) })
     }
   }
 
