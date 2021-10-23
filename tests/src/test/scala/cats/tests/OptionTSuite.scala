@@ -510,6 +510,12 @@ class OptionTSuite extends CatsSuite {
     }
   }
 
+  test("foreachF consistent with foldF") {
+    forAll { (o: OptionT[List, Int], f: Int => List[Unit]) =>
+      assert(o.foreachF(f) === (o.foldF(List(()))(f)))
+    }
+  }
+
   /**
    * Testing that implicit resolution works. If it compiles, the "test" passes.
    */
