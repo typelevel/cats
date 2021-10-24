@@ -36,7 +36,7 @@ The easiest approach to Cats imports is to import everything that's commonly nee
 ```scala mdoc:silent
 import cats._
 import cats.data._
-import cats.implicits._
+import cats.syntax.all._
 ```
 
 This should be all that you need, but if you'd like to learn more about the details of imports than you can check out the [import guide](typeclasses/imports.html).
@@ -241,7 +241,7 @@ All other symbols can be imported with `import cats.implicits._`
 | `f <<< g`                        | Arrow compose            |                  | `Compose[F[_, _]]`      | `compose(f: F[B, C], g: F[A, B]): F[A, C]`                          |
 | `f >>> g`                        | Arrow andThen            |                  | `Compose[F[_, _]]`      | `andThen(f: F[B, C], g: F[A, B]): F[A, C]`                          |
 | `f &&& g`                        | Arrow merge              |                  | `Arrow[F[_, _]]`        | `merge[A, B, C](f: F[A, B], g: F[A, C]): F[A, (B, C)]`              |
-| `f -< g`                         | Arrow combine and bypass |                  | `Arrow[F[_, _]]`        | `combineAndByPass[A, B, C](f: F[A, B], g: F[B, C]): F[A, (B, C)]`   | 
+| `f -< g`                         | Arrow combine and bypass |                  | `Arrow[F[_, _]]`        | `combineAndByPass[A, B, C](f: F[A, B], g: F[B, C]): F[A, (B, C)]`   |
 | `F ~> G`                         | natural transformation   |                  | `FunctionK[F[_], G[_]]` | `FunctionK` alias                                                   |
 | `F :<: G`                        | injectK                  |                  | `InjectK[F[_], G[_]]`   | `InjectK` alias                                                     |
 | `F :≺: G`                        | injectK                  |                  | `InjectK[F[_], G[_]]`   | `InjectK` alias                                                     |
@@ -265,14 +265,14 @@ The Сats community welcomes and encourages contributions, even if you are compl
 
 See the [contributing guide]({{ site.baseurl }}/contributing.html) for more information.
 
-## <a id="ammonite" href="#ammonite"></a>How to try Cats in a REPL? 
+## <a id="ammonite" href="#ammonite"></a>How to try Cats in a REPL?
 
 The easiest way is probably using [Ammonite-REPL](http://ammonite.io/). Install it following the instructions there. Then in the amm console you can type in
 ```scala
 // interp.configureCompiler(_.settings.YpartialUnification.value = true) // If using scala 2.11 or 2.12
 import $ivy.`org.typelevel::cats-core:2.1.1`, cats._, cats.data._, cats.implicits._
 ```
-Or if you want, you can add these lines to `~/.ammonite/predef.sc` so that they are enabled every ammonite session. 
+Or if you want, you can add these lines to `~/.ammonite/predef.sc` so that they are enabled every ammonite session.
 
 ## <a id="monad-transformer-variance" href="#monad-transformer-variance"></a>Why aren't monad transformers like `OptionT` and `EitherT` covariant like `Option` and `Either`?
 
