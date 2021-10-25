@@ -1,10 +1,22 @@
 package cats.tests
 
 import cats.Alternative
+import cats.laws.discipline.AlternativeTests
 import cats.syntax.eq._
 import org.scalacheck.Prop._
 
 class AlternativeSuite extends CatsSuite {
+
+  // Alternative[ListWrapper] is different from Alternative[List] since the former does not override any default implementation.
+  implicit val listWrapperAlternative: Alternative[ListWrapper] = ListWrapper.alternative
+
+  checkAll("compose List[List[Int]]", AlternativeTests.composed[List, List].alternative[Int, Int, Int])
+  checkAll("compose List[Option[Int]]", AlternativeTests.composed[List, Option].alternative[Int, Int, Int])
+  checkAll("compose Option[List[Int]]", AlternativeTests.composed[Option, List].alternative[Int, Int, Int])
+  checkAll("compose Option[Option[Int]]", AlternativeTests.composed[Option, Option].alternative[Int, Int, Int])
+  checkAll("compose List[ListWrapper[Int]]", AlternativeTests.composed[List, ListWrapper].alternative[Int, Int, Int])
+  checkAll("compose ListWrapper[List[Int]]", AlternativeTests.composed[ListWrapper, List].alternative[Int, Int, Int])
+
   property("unite") {
     forAll { (list: List[Option[String]]) =>
       val expected = list.collect { case Some(s) => s }
