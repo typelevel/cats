@@ -40,4 +40,9 @@ trait AlternativeTests[F[_]] extends ApplicativeTests[F] with MonoidKTests[F] {
 object AlternativeTests {
   def apply[F[_]: Alternative]: AlternativeTests[F] =
     new AlternativeTests[F] { def laws: AlternativeLaws[F] = AlternativeLaws[F] }
+
+  def composed[F[_]: Alternative, G[_]: Applicative]: AlternativeTests[λ[α => F[G[α]]]] =
+    new AlternativeTests[λ[α => F[G[α]]]] {
+      def laws: AlternativeLaws[λ[α => F[G[α]]]] = AlternativeLaws.composed[F, G]
+    }
 }

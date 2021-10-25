@@ -21,4 +21,9 @@ trait AlternativeLaws[F[_]] extends ApplicativeLaws[F] with MonoidKLaws[F] {
 object AlternativeLaws {
   def apply[F[_]](implicit ev: Alternative[F]): AlternativeLaws[F] =
     new AlternativeLaws[F] { def F: Alternative[F] = ev }
+
+  def composed[M[_], N[_]](implicit M: Alternative[M], N: Applicative[N]): AlternativeLaws[λ[α => M[N[α]]]] =
+    new AlternativeLaws[λ[α => M[N[α]]]] {
+      def F: Alternative[λ[α => M[N[α]]]] = M.compose[N]
+    }
 }
