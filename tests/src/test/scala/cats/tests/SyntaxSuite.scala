@@ -184,6 +184,7 @@ object SyntaxSuite {
     val mb4: M[B] = ma.parProductR(mb)
     val mab2: M[(A, B)] = ma.parProduct(mb)
     val mb5: M[B] = mab.parAp(ma)
+    val mla: M[List[A]] = ma.parReplicateA(mock[Int])
   }
 
   def testParallelUnorderedTraverse[M[_]: Monad, F[_]: CommutativeApplicative, T[_]: UnorderedTraverse: FlatMap, A, B](

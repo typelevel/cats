@@ -427,6 +427,13 @@ object Parallel extends ParallelArityFunctions2 {
     )
 
   /**
+   * Like `Applicative[F].replicateA`, but uses the apply instance
+   * corresponding to the Parallel instance instead.
+   */
+  def parReplicateA[M[_], A](n: Int, ma: M[A])(implicit P: Parallel[M]): M[List[A]] =
+    P.sequential(P.applicative.replicateA(n, P.parallel(ma)))
+
+  /**
    * Provides an `ApplicativeError[F, E]` instance for any F, that has a `Parallel.Aux[M, F]`
    * and a `MonadError[M, E]` instance.
    * I.e. if you have a type M[_], that supports parallel composition through type F[_],
