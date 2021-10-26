@@ -404,6 +404,18 @@ object Parallel extends ParallelArityFunctions2 {
   }
 
   /**
+   * Like `Reducible[A].reduceMapA`, but uses the apply instance corresponding
+   * to the `NonEmptyParallel` instance instead.
+   */
+  def parReduceMapA[T[_], M[_], A, B](
+    ta: T[A]
+  )(f: A => M[B])(implicit T: Reducible[T], P: NonEmptyParallel[M], B: Semigroup[B]): M[B] = {
+    val fb: P.F[B] =
+      T.reduceMapA(ta)(a => P.parallel(f(a)))(P.apply, B)
+    P.sequential(fb)
+  }
+
+  /**
    * Like `Applicative[F].ap`, but uses the applicative instance
    * corresponding to the Parallel instance instead.
    */

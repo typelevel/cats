@@ -7,7 +7,10 @@ import cats.{
   Foldable,
   Monad,
   Monoid,
+  NonEmptyParallel,
   Parallel,
+  Reducible,
+  Semigroup,
   Traverse,
   TraverseFilter,
   UnorderedTraverse
@@ -122,6 +125,11 @@ trait ParallelUnorderedTraverseSyntax {
 trait ParallelFoldMapASyntax {
   implicit final def catsSyntaxParallelFoldMapA[T[_], A](ta: T[A]): ParallelFoldMapAOps[T, A] =
     new ParallelFoldMapAOps(ta)
+}
+
+trait ParallelReduceMapASyntax {
+  implicit final def catsSyntaxParallelReduceMapA[T[_], A](ta: T[A]): ParallelReduceMapAOps[T, A] =
+    new ParallelReduceMapAOps(ta)
 }
 
 @deprecated("Kept for binary compatibility", "2.6.0")
@@ -281,4 +289,9 @@ final class ParallelLeftSequenceOps[T[_, _], M[_], A, B](private val tmab: T[M[A
 final class ParallelFoldMapAOps[T[_], A](private val ma: T[A]) extends AnyVal {
   def parFoldMapA[M[_], B](f: A => M[B])(implicit T: Foldable[T], P: Parallel[M], B: Monoid[B]): M[B] =
     Parallel.parFoldMapA(ma)(f)
+}
+
+final class ParallelReduceMapAOps[T[_], A](private val ma: T[A]) extends AnyVal {
+  def parReduceMapA[M[_], B](f: A => M[B])(implicit T: Reducible[T], P: NonEmptyParallel[M], B: Semigroup[B]): M[B] =
+    Parallel.parReduceMapA(ma)(f)
 }

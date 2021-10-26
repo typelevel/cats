@@ -257,6 +257,15 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
     }
   }
 
+  test("ParReduceMapA should be equivalent to parNonEmptyTraverse map reduce (where it exists)") {
+    forAll { (es: NonEmptyList[Int], f: Int => Either[String, String]) =>
+      assert(
+        Parallel.parReduceMapA(es)(f) ===
+          Parallel.parNonEmptyTraverse(es)(f).map(_.reduce)
+      )
+    }
+  }
+
   test("parAp accumulates errors in order") {
     val right: Either[String, Int => Int] = Left("Hello")
     assert(Parallel.parAp(right)("World".asLeft) === (Left("HelloWorld")))
