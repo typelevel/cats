@@ -125,6 +125,11 @@ class OptionTSuite extends CatsSuite {
     checkAll("OptionT[ListWrapper, Int]", MonoidKTests[OptionT[ListWrapper, *]].monoidK[Int])
     checkAll("MonoidK[OptionT[ListWrapper, *]]", SerializableTests.serializable(MonoidK[OptionT[ListWrapper, *]]))
 
+    checkAll("OptionT[ListWrapper, Int]", AlternativeTests[OptionT[ListWrapper, *]].monoidK[Int])
+    checkAll("Alternative[OptionT[ListWrapper, *]]",
+             SerializableTests.serializable(Alternative[OptionT[ListWrapper, *]])
+    )
+
     Monad[OptionT[ListWrapper, *]]
     FlatMap[OptionT[ListWrapper, *]]
     Applicative[OptionT[ListWrapper, *]]
@@ -132,6 +137,7 @@ class OptionTSuite extends CatsSuite {
     Functor[OptionT[ListWrapper, *]]
     MonoidK[OptionT[ListWrapper, *]]
     SemigroupK[OptionT[ListWrapper, *]]
+    Alternative[OptionT[ListWrapper, *]]
   }
 
   {
@@ -529,6 +535,7 @@ class OptionTSuite extends CatsSuite {
 
     SemigroupK[OptionT[List, *]]
     MonoidK[OptionT[List, *]]
+    Alternative[OptionT[List, *]]
 
     Functor[OptionT[List, *]]
     Monad[OptionT[List, *]]

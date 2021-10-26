@@ -393,13 +393,13 @@ sealed abstract private[data] class OptionTInstances0 extends OptionTInstances1 
       implicit val F = F0
     }
 
+  implicit def catsDataAlternativeForOptionT[F[_]](implicit F0: Monad[F]): Alternative[OptionT[F, *]] =
+    new OptionTAlternative[F] { implicit val F = F0 }
+
   implicit def catsDataContravariantMonoidalForOptionT[F[_]](implicit
     F0: ContravariantMonoidal[F]
   ): ContravariantMonoidal[OptionT[F, *]] =
     new OptionTContravariantMonoidal[F] { implicit val F = F0 }
-
-  implicit def catsDataMonoidKForOptionT[F[_]](implicit F0: Monad[F]): MonoidK[OptionT[F, *]] =
-    new OptionTMonoidK[F] { implicit val F = F0 }
 
   implicit def catsDataSemigroupForOptionT[F[_], A](implicit F0: Semigroup[F[Option[A]]]): Semigroup[OptionT[F, A]] =
     new OptionTSemigroup[F, A] { implicit val F = F0 }
@@ -417,8 +417,8 @@ sealed abstract private[data] class OptionTInstances0 extends OptionTInstances1 
 }
 
 sealed abstract private[data] class OptionTInstances1 extends OptionTInstances2 {
-  implicit def catsDataSemigroupKForOptionT[F[_]](implicit F0: Monad[F]): SemigroupK[OptionT[F, *]] =
-    new OptionTSemigroupK[F] { implicit val F = F0 }
+  implicit def catsDataMonoidKForOptionT[F[_]](implicit F0: Monad[F]): MonoidK[OptionT[F, *]] =
+    new OptionTMonoidK[F] { implicit val F = F0 }
 
   implicit def catsDataEqForOptionT[F[_], A](implicit F0: Eq[F[Option[A]]]): Eq[OptionT[F, A]] =
     new OptionTEq[F, A] { implicit val F = F0 }
@@ -428,6 +428,9 @@ sealed abstract private[data] class OptionTInstances1 extends OptionTInstances2 
 }
 
 sealed abstract private[data] class OptionTInstances2 extends OptionTInstances3 {
+  implicit def catsDataSemigroupKForOptionT[F[_]](implicit F0: Monad[F]): SemigroupK[OptionT[F, *]] =
+    new OptionTSemigroupK[F] { implicit val F = F0 }
+
   implicit def catsDataFoldableForOptionT[F[_]](implicit F0: Foldable[F]): Foldable[OptionT[F, *]] =
     new OptionTFoldable[F] { implicit val F = F0 }
 
@@ -565,6 +568,11 @@ private[data] trait OptionTSemigroupK[F[_]] extends SemigroupK[OptionT[F, *]] {
 private[data] trait OptionTMonoidK[F[_]] extends MonoidK[OptionT[F, *]] with OptionTSemigroupK[F] {
   def empty[A]: OptionT[F, A] = OptionT.none[F, A]
 }
+
+private[data] trait OptionTAlternative[F[_]]
+    extends Alternative[OptionT[F, *]]
+    with OptionTMonad[F]
+    with OptionTMonoidK[F] {}
 
 sealed private[data] trait OptionTEq[F[_], A] extends Eq[OptionT[F, A]] {
   implicit def F: Eq[F[Option[A]]]
