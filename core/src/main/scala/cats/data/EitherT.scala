@@ -414,6 +414,12 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
   def subflatMap[AA >: A, D](f: B => Either[AA, D])(implicit F: Functor[F]): EitherT[F, AA, D] =
     transform(_.flatMap(f))
 
+  /** Apply a monadic function on the underlying `Either`, discarding the
+    * result.
+    */
+  def subflatTap[AA >: A, D](f: B => Either[AA, D])(implicit F: Functor[F]): EitherT[F, AA, B] =
+    subflatMap(b => f(b).map(_ => b))
+
   def map[D](f: B => D)(implicit F: Functor[F]): EitherT[F, A, D] = bimap(identity, f)
 
   /**

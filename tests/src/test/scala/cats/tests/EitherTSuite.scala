@@ -363,6 +363,14 @@ class EitherTSuite extends CatsSuite {
     }
   }
 
+  test("subflatTap consistent with value.map+flatTap") {
+    forAll { (eithert: EitherT[List, String, Int], f: Int => Either[String, Unit]) =>
+      assert(
+        eithert.subflatTap(f) === (EitherT(eithert.value.map(either => FlatMap[Either[String, *]].flatTap(either)(f))))
+      )
+    }
+  }
+
   test("flatMap and flatMapF consistent") {
     forAll { (eithert: EitherT[List, String, Int], f: Int => EitherT[List, String, Int]) =>
       assert(eithert.flatMap(f) === (eithert.flatMapF(f(_).value)))
