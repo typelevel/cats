@@ -362,6 +362,14 @@ object SyntaxSuite {
     val gfab2 = fgab.leftSequence
   }
 
+  def testNonEmptyAlternative[F[_]: NonEmptyAlternative, A]: Unit = {
+    val fa = mock[F[A]]
+    val a = mock[A]
+
+    val fa1: F[A] = fa.prependK(a)
+    val fa2: F[A] = fa.appendK(a)
+  }
+
   def testAlternativeMonad[F[_]: Alternative: Monad, G[_]: Foldable, H[_, _]: Bifoldable, A, B]: Unit = {
     val fga = mock[F[G[A]]]
     val fa = fga.unite

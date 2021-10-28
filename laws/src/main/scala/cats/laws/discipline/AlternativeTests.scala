@@ -6,7 +6,7 @@ import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import org.scalacheck.{Arbitrary, Cogen, Prop}
 import Prop._
 
-trait AlternativeTests[F[_]] extends ApplicativeTests[F] with MonoidKTests[F] {
+trait AlternativeTests[F[_]] extends NonEmptyAlternativeTests[F] with MonoidKTests[F] {
   def laws: AlternativeLaws[F]
 
   def alternative[A: Arbitrary, B: Arbitrary, C: Arbitrary](implicit
@@ -27,14 +27,11 @@ trait AlternativeTests[F[_]] extends ApplicativeTests[F] with MonoidKTests[F] {
     new RuleSet {
       val name: String = "alternative"
       val bases: Seq[(String, RuleSet)] = Nil
-      val parents: Seq[RuleSet] = Seq(monoidK[A], applicative[A, B, C])
+      val parents: Seq[RuleSet] = Seq(monoidK[A], nonEmptyAlternative[A, B, C])
       val props: Seq[(String, Prop)] = Seq(
-        "left distributivity" -> forAll(laws.alternativeLeftDistributivity[A, B] _),
-        "right distributivity" -> forAll(laws.alternativeRightDistributivity[A, B] _),
         "right absorption" -> forAll(laws.alternativeRightAbsorption[A, B] _)
       )
     }
-
 }
 
 object AlternativeTests {
