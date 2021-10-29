@@ -62,6 +62,7 @@ trait AllSyntax
     with WriterSyntax
     with ParallelFoldMapASyntax
     with ParallelTraverseFilterSyntax
+    with ParallelReduceMapASyntax
 
 trait AllSyntaxBinCompat0 extends UnorderedTraverseSyntax with ApplicativeErrorExtension with TrySyntax
 
