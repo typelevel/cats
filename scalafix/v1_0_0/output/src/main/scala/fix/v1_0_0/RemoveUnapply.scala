@@ -24,7 +24,7 @@ object RemoveUnapplyTests {
   import cats.data.Const
   type Count[A] = Const[Int, A]
   def liftInt(i: Int): Count[Unit] = Const(i)
-  def isSpace(c: Char): Boolean = (c == ' ' || c == '\n')
+  def isSpace(c: Char): Boolean = c == ' ' || c == '\n'
   def testIf(b: Boolean): Int = if (b) 1 else 0
   appFunc { (c: Char) =>
     for {
@@ -32,7 +32,7 @@ object RemoveUnapplyTests {
       y = !isSpace(c)
       _ <- set(y)
     } yield testIf(y && !x)
-  } andThen appFunc(liftInt)
+  }.andThen(appFunc(liftInt))
 
   import cats.free.FreeT
   val a: Either[String, Int] = Right(42)

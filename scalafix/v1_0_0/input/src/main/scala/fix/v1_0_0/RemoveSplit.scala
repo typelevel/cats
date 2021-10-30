@@ -16,6 +16,6 @@ object RemoveSplitTests {
 
   {
     import cats.syntax.split._
-    toLong split toDouble
+    toLong.split(toDouble)
   }
 }

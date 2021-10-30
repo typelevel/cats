@@ -8,8 +8,7 @@ import scala.meta.contrib._
 import scala.meta.Term.Apply
 
 // ref: https://github.com/typelevel/cats/issues/3563
-case class RemoveInstanceImports(index: SemanticdbIndex)
-  extends SemanticRule(index, "RemoveInstanceImports") {
+case class RemoveInstanceImports(index: SemanticdbIndex) extends SemanticRule(index, "RemoveInstanceImports") {
 
   override def fix(ctx: RuleCtx): Patch = ctx.tree.collect {
     // e.g. "import cats.instances.int._" or "import cats.instances.all._"
@@ -47,7 +46,9 @@ case class RemoveInstanceImports(index: SemanticdbIndex)
         case e: scalafix.v1.MissingSymbolException =>
           // see https://github.com/typelevel/cats/pull/3566#issuecomment-684007028
           // and https://github.com/scalacenter/scalafix/issues/1123
-          println(s"Skipping rewrite of 'import cats.implicits._' in file ${ctx.input.label} because we ran into a Scalafix bug. $e")
+          println(
+            s"Skipping rewrite of 'import cats.implicits._' in file ${ctx.input.label} because we ran into a Scalafix bug. $e"
+          )
           e.printStackTrace()
           Patch.empty
       }
@@ -71,18 +72,20 @@ case class RemoveInstanceImports(index: SemanticdbIndex)
   private def findLexicalBoundary(t: Tree): Tree = {
     t.parent match {
       case Some(b: Term.Block) => b
-      case Some(t: Template) => t
-      case Some(parent) => findLexicalBoundary(parent)
-      case None => t
+      case Some(t: Template)   => t
+      case Some(parent)        => findLexicalBoundary(parent)
+      case None                => t
     }
   }
 
   private def removeWhitespaceAndNewlineBefore(ctx: RuleCtx)(index: Int): Patch = {
-    val whitespaceAndNewlines = ctx.tokens.take(index).takeRightWhile(t =>
-      t.is[Token.Space] ||
-      t.is[Token.Tab] ||
-      t.is[Token.LF]
-    )
+    val whitespaceAndNewlines = ctx.tokens
+      .take(index)
+      .takeRightWhile(t =>
+        t.is[Token.Space] ||
+          t.is[Token.Tab] ||
+          t.is[Token.LF]
+      )
     ctx.removeTokens(whitespaceAndNewlines)
   }
 
