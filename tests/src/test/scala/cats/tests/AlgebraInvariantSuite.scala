@@ -160,6 +160,7 @@ class AlgebraInvariantSuite extends CatsSuite with ScalaVersionSpecificAlgebraIn
 
   implicit private val arbNumericMiniInt: Arbitrary[Numeric[MiniInt]] = Arbitrary(Gen.const(integralForMiniInt))
   implicit private val arbIntegralMiniInt: Arbitrary[Integral[MiniInt]] = Arbitrary(Gen.const(integralForMiniInt))
+  implicit private val arbFractionalFloat: Arbitrary[Fractional[Float]] = Arbitrary(Gen.const(implicitly[Fractional[Float]]))
 
   implicit protected def eqIntegral[A: Eq: ExhaustiveCheck]: Eq[Integral[A]] = {
     def makeDivisionOpSafe(unsafeF: (A, A) => A): (A, A) => Option[A] =
@@ -196,6 +197,7 @@ class AlgebraInvariantSuite extends CatsSuite with ScalaVersionSpecificAlgebraIn
 
   checkAll("Invariant[Numeric]", InvariantTests[Numeric].invariant[MiniInt, Boolean, Boolean])
   checkAll("Invariant[Integral]", InvariantTests[Integral].invariant[MiniInt, Boolean, Boolean])
+  checkAll("Invariant[Fractional]", InvariantTests[Fractional].invariant[Float, Boolean, Boolean])
 
   {
     val S: Semigroup[Int] = Semigroup[Int].imap(identity)(identity)
