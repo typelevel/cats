@@ -10,7 +10,6 @@ import cats.syntax.parallel._
 import cats.syntax.traverse._
 import cats.syntax.eq._
 import org.scalacheck.Prop._
-import cats.catsInstancesForId
 import cats.kernel.{Eq, Order}
 import cats.laws.discipline.eq._
 
@@ -127,7 +126,7 @@ trait ScalaVersionSpecificParallelSuite { self: ParallelSuite =>
 
   test("ParTupled of LazyList should be consistent with zip") {
     forAll { (fa: LazyList[Int], fb: LazyList[Int], fc: LazyList[Int], fd: LazyList[Int]) =>
-      assert((fa, fb, fc, fd).parTupled === (fa.zip(fb).zip(fc).zip(fd).map { case (((a, b), c), d) => (a, b, c, d) }))
+      assert((fa, fb, fc, fd).parTupled === fa.zip(fb).zip(fc).zip(fd).map { case (((a, b), c), d) => (a, b, c, d) })
     }
   }
 

@@ -160,6 +160,12 @@ class IorSuite extends CatsSuite {
     }
   }
 
+  test("mergeWith") {
+    forAll { (i: Int Ior Int, f: (Int, Int) => Int) =>
+      assert(i.mergeWith(f) === i.onlyBoth.map(f.tupled).orElse(i.left).orElse(i.right).get)
+    }
+  }
+
   test("putLeft") {
     forAll { (i: Int Ior Int) =>
       val expectedResult =

@@ -128,7 +128,7 @@ def attemptDivideApplicativeErrorWithMap2[F[_]](x: Int, y: Int)(implicit ae: App
    else {
      val fa = ae.pure(x)
      val fb = ae.pure(y)
-     ae.map2(fa, fb)(_ + _)
+     ae.map2(fa, fb)(_ / _)
    }
 }
 ```

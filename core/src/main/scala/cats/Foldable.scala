@@ -296,6 +296,12 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
   def maximumByList[A, B: Order](fa: F[A])(f: A => B): List[A] =
     maximumList(fa)(Order.by(f))
 
+  def sumAll[A](fa: F[A])(implicit A: Numeric[A]): A =
+    foldLeft(fa, A.zero)(A.plus)
+
+  def productAll[A](fa: F[A])(implicit A: Numeric[A]): A =
+    foldLeft(fa, A.one)(A.times)
+
   /**
    * Get the element at the index of the `Foldable`.
    */
@@ -331,11 +337,11 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * res1: Option[String] = None
    * }}}
    */
-  def collectFirstSome[A, B](fa: F[A])(f: A => Option[B]): Option[B] =
-    foldRight(fa, Eval.now(Option.empty[B])) { (a, lb) =>
-      val ob = f(a)
-      if (ob.isDefined) Eval.now(ob) else lb
-    }.value
+  def collectFirstSome[A, B](fa: F[A])(f: A => Option[B]): Option[B] = {
+    val maybeEmpty = toIterable(fa).iterator.map(f).dropWhile(_.isEmpty)
+    if (maybeEmpty.hasNext) maybeEmpty.next()
+    else None
+  }
 
   /**
    * Monadic version of `collectFirstSome`.
@@ -616,9 +622,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * Find the first element matching the predicate, if one exists.
    */
   def find[A](fa: F[A])(f: A => Boolean): Option[A] =
-    foldRight(fa, Now(Option.empty[A])) { (a, lb) =>
-      if (f(a)) Now(Some(a)) else lb
-    }.value
+    toIterable(fa).find(f)
 
   /**
    * Find the first element matching the effectful predicate, if one exists.
@@ -656,9 +660,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * If there are no elements, the result is `false`.
    */
   override def exists[A](fa: F[A])(p: A => Boolean): Boolean =
-    foldRight(fa, Eval.False) { (a, lb) =>
-      if (p(a)) Eval.True else lb
-    }.value
+    toIterable(fa).exists(p)
 
   /**
    * Check whether all elements satisfy the predicate.
@@ -666,9 +668,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * If there are no elements, the result is `true`.
    */
   override def forall[A](fa: F[A])(p: A => Boolean): Boolean =
-    foldRight(fa, Eval.True) { (a, lb) =>
-      if (p(a)) lb else Eval.False
-    }.value
+    toIterable(fa).forall(p)
 
   /**
    * Check whether at least one element satisfies the effectful predicate.
@@ -786,9 +786,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * match `p`.
    */
   def takeWhile_[A](fa: F[A])(p: A => Boolean): List[A] =
-    foldRight(fa, Now(List.empty[A])) { (a, llst) =>
-      if (p(a)) llst.map(a :: _) else Now(Nil)
-    }.value
+    toIterable(fa).iterator.takeWhile(p).toList
 
   /**
    * Convert F[A] to a List[A], dropping all initial elements which
@@ -1028,6 +1026,8 @@ object Foldable {
     def collectFoldSome[B](f: A => Option[B])(implicit B: Monoid[B]): B =
       typeClassInstance.collectFoldSome[A, B](self)(f)(B)
     def fold(implicit A: Monoid[A]): A = typeClassInstance.fold[A](self)(A)
+    def sumAll(implicit A: Numeric[A]): A = typeClassInstance.sumAll[A](self)
+    def productAll(implicit A: Numeric[A]): A = typeClassInstance.productAll[A](self)
     def combineAll(implicit ev$1: Monoid[A]): A = typeClassInstance.combineAll[A](self)
     def combineAllOption(implicit ev: Semigroup[A]): Option[A] = typeClassInstance.combineAllOption[A](self)(ev)
     def toIterable: Iterable[A] = typeClassInstance.toIterable[A](self)

@@ -104,7 +104,9 @@ import scala.util.control.TailCalls.TailRec
 
 @suppressUnusedImportWarningForScalaVersionSpecific
 object Invariant extends ScalaVersionSpecificInvariantInstances with InvariantInstances0 {
-  implicit def catsInstancesForId: Distributive[Id] with Comonad[Id] = cats.catsInstancesForId
+  implicit def catsInstancesForId
+    : Distributive[Id] with Bimonad[Id] with CommutativeMonad[Id] with NonEmptyTraverse[Id] =
+    cats.catsInstancesForId
   implicit def catsMonadErrorForEither[A]: MonadError[Either[A, *], A] =
     cats.instances.either.catsStdInstancesForEither[A]
   implicit def catsInstancesForOption

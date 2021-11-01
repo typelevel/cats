@@ -39,6 +39,30 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
   def raiseError[A](e: E): F[A]
 
   /**
+   * Returns `raiseError` when the `cond` is true, otherwise `F.unit`
+   *
+   * @example {{{
+   * val tooMany = 5
+   * val x: Int = ???
+   * F.raiseWhen(x >= tooMany)(new IllegalArgumentException("Too many"))
+   * }}}
+   */
+  def raiseWhen(cond: Boolean)(e: => E): F[Unit] =
+    whenA(cond)(raiseError(e))
+
+  /**
+   * Returns `raiseError` when `cond` is false, otherwise `F.unit`
+   *
+   * @example {{{
+   * val tooMany = 5
+   * val x: Int = ???
+   * F.raiseUnless(x < tooMany)(new IllegalArgumentException("Too many"))
+   * }}}
+   */
+  def raiseUnless(cond: Boolean)(e: => E): F[Unit] =
+    unlessA(cond)(raiseError(e))
+
+  /**
    * Handle any error, potentially recovering from it, by mapping it to an
    * `F[A]` value.
    *

@@ -105,7 +105,7 @@ To build Cats you should have
  * `console`: launch a REPL
  * `test`: run the tests
  * `unidoc`: generate the documentation
- * `scalastyle`: run the style-checker on the code
+ * `fmt`: run formatting of the code
  * `validate`: run tests, style-checker, and doc generation
 
 #### Scala and Scala.js
@@ -145,8 +145,8 @@ possible, include the original authors' names and a link to the original work.
 
 - Tests for cats-core go into the tests module, under the `cats.tests` package.
 - Tests for additional modules, such as 'jvm', go into the tests directory within that module.
-- Cats tests should extend `CatsSuite`.  `CatsSuite` integrates [ScalaTest](http://www.scalatest.org/)
-with [Discipline](https://github.com/typelevel/discipline) for law checking, and imports all syntax and standard instances for convenience.
+- Cats tests should extend `CatsSuite`.  `CatsSuite` integrates with [Discipline](https://github.com/typelevel/discipline)
+for law checking, and imports all syntax and standard instances for convenience.
 - The first parameter to the `checkAll` method provided by
  [Discipline](https://github.com/typelevel/discipline), is the name of the test and will be output to the
  console as part of the test execution. By convention:
@@ -185,7 +185,7 @@ As a side note, the latter command uses [sbt-mima](https://github.com/lightbend/
 ## Contributing documentation
 
 ### source for the documentation
-The documentation for this website is stored alongside the source, in the [docs subproject](https://github.com/typelevel/cats/tree/master/docs).
+The documentation for this website is stored alongside the source, in the [docs subproject](https://github.com/typelevel/cats/tree/main/docs).
 
 * The source for the tut compiled pages is in `docs/src/main/mdoc`
 * The menu structure for these pages is in `docs/src/main/resources/microsite/data/menu.yml`
@@ -223,7 +223,7 @@ staying up-to-date.
 
 ### Write examples
 
-One of the best ways to provide examples is doctest, here is [an example](https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/Functor.scala#L19-L33). Doctest is a [sbt plugin](https://github.com/tkawachi/sbt-doctest) which generates tests based on the syntax mentioned above and runs when sbt's `test` task is invoked. You can find more information in the plugin documentation.
+One of the best ways to provide examples is doctest, here is [an example](https://github.com/typelevel/cats/blob/main/core/src/main/scala/cats/Functor.scala#L19-L33). Doctest is a [sbt plugin](https://github.com/tkawachi/sbt-doctest) which generates tests based on the syntax mentioned above and runs when sbt's `test` task is invoked. You can find more information in the plugin documentation.
 
 ### Submit a pull request
 

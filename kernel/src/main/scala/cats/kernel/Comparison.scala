@@ -18,7 +18,7 @@ object Comparison {
   def fromInt(int: Int): Comparison =
     if (int > 0) Comparison.GreaterThan
     else if (int == 0) Comparison.EqualTo
-    else Comparison.LessThan // scalastyle:ignore ensure.single.space.after.token
+    else Comparison.LessThan
 
   def fromDouble(double: Double): Option[Comparison] =
     if (double.isNaN) None

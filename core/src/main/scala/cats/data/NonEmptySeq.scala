@@ -477,6 +477,8 @@ sealed abstract private[data] class NonEmptySeqInstances {
 
       override def toList[A](fa: NonEmptySeq[A]): List[A] = fa.toSeq.toList
 
+      override def toIterable[A](fa: NonEmptySeq[A]): Iterable[A] = fa.toSeq
+
       override def toNonEmptyList[A](fa: NonEmptySeq[A]): NonEmptyList[A] =
         NonEmptyList(fa.head, fa.tail.toList)
 

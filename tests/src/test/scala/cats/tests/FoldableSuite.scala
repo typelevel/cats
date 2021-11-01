@@ -53,10 +53,10 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit
       val (lefts, rights) = Foldable[List].partitionEither(list)(f)
       val (ls, rs) = list
         .map(f)
-        .partition({
+        .partition {
           case Left(_)  => true
           case Right(_) => false
-        })
+        }
 
       assert(lefts.map(_.asLeft[String]) === ls)
       assert(rights.map(_.asRight[String]) === rs)
@@ -105,10 +105,10 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit
       val partitioned = Foldable[List].partitionEitherM(list)(f.andThen(Option.apply))
       val (ls, rs) = list
         .map(f)
-        .partition({
+        .partition {
           case Left(_)  => true
           case Right(_) => false
-        })
+        }
 
       assert(partitioned.map(_._1.map(_.asLeft[String])) === (Option(ls)))
       assert(partitioned.map(_._2.map(_.asRight[String])) === (Option(rs)))
@@ -248,6 +248,20 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit
       val list = fa.toList
       assert(fa.reduceLeftOption(_ - _) === (list.reduceLeftOption(_ - _)))
       assert(fa.reduceRightOption((x, ly) => ly.map(x - _)).value === (list.reduceRightOption(_ - _)))
+    }
+  }
+
+  test(s"Foldable[$name].sumAll") {
+    forAll { (fa: F[Int]) =>
+      assert(fa.sumAll === (fa.toList.sum))
+      assert(fa.sumAll === (iterator(fa).toList.sum))
+    }
+  }
+
+  test(s"Foldable[$name].productAll") {
+    forAll { (fa: F[Int]) =>
+      assert(fa.productAll === (fa.toList.product))
+      assert(fa.productAll === (iterator(fa).toList.product))
     }
   }
 

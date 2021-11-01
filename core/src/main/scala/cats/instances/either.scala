@@ -35,7 +35,6 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
         }
     }
 
-  // scalastyle:off method.length
   implicit def catsStdInstancesForEither[A]
     : MonadError[Either[A, *], A] with Traverse[Either[A, *]] with Align[Either[A, *]] =
     new MonadError[Either[A, *], A] with Traverse[Either[A, *]] with Align[Either[A, *]] {
@@ -152,7 +151,12 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
         fab.forall(p)
 
       override def toList[B](fab: Either[A, B]): List[B] =
-        fab.fold(_ => Nil, _ :: Nil)
+        fab match {
+          case Right(a) => a :: Nil
+          case Left(_)  => Nil
+        }
+
+      override def toIterable[B](fab: Either[A, B]): Iterable[B] = toList(fab)
 
       override def isEmpty[B](fab: Either[A, B]): Boolean =
         fab.isLeft
@@ -176,8 +180,11 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
             }
         }
 
+      override def void[B](e: Either[A, B]): Either[A, Unit] =
+        if (e.isRight) Either.unit
+        else e.asInstanceOf[Either[A, Unit]] // it is Left(a)
+
     }
-  // scalastyle:on method.length
 
   implicit def catsStdSemigroupKForEither[L]: SemigroupK[Either[L, *]] =
     new SemigroupK[Either[L, *]] {
