@@ -69,7 +69,7 @@ trait ScalaVersionSpecificAlgebraInvariantSuite {
         fractional.toInt _,
         fractional.toLong _,
         fractional.toFloat _,
-        fractional.toDouble _,
+        fractional.toDouble _
       )
     }
   }
