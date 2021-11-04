@@ -75,3 +75,5 @@ trait AllInstancesBinCompat7 extends SeqInstances
 trait AllInstancesBinCompat8 extends InvariantInstances
 
 trait AllInstancesBinCompat9 extends DeadlineInstances
+
+trait AllInstancesBinCompat10 extends InvariantInstancesBinCompat0

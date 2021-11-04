@@ -159,6 +159,8 @@ object Invariant extends ScalaVersionSpecificInvariantInstances with InvariantIn
     cats.instances.invariant.catsInvariantForNumeric
   implicit def catsInvariantForIntegral: Invariant[Integral] =
     cats.instances.invariant.catsInvariantForIntegral
+  implicit def catsInvariantForFractional: Invariant[Fractional] =
+    cats.instances.invariant.catsInvariantForFractional
 
   implicit val catsInvariantMonoid: Invariant[Monoid] = new Invariant[Monoid] {
 
