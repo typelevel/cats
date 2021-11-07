@@ -46,6 +46,16 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
   def cataF[B](default: => F[B], f: A => F[B])(implicit F: FlatMap[F]): F[B] =
     foldF(default)(f)
 
+  /**
+   * Example:
+   * {{{
+   *  scala> import cats.data.OptionT
+   *
+   *  scala> val optionT: OptionT[List, Int] = OptionT(List(Some(2), None, Some(414), None, None))
+   *  scala> optionT.map(_.toString + "!")
+   *  res0: OptionT[List, String] = OptionT(value = List(Some(value = "2!"), None, Some(value = "414!"), None, None))
+   * }}}
+   */
   def map[B](f: A => B)(implicit F: Functor[F]): OptionT[F, B] =
     OptionT(F.map(value)(_.map(f)))
 
@@ -101,30 +111,109 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
   def getOrElseF[B >: A](default: => F[B])(implicit F: Monad[F]): F[B] =
     F.flatMap(value)(_.fold(default)(F.pure))
 
+  /**
+   * Example:
+   * {{{
+   *  scala> import cats.data.OptionT
+   *
+   *  scala> val optionT: OptionT[List, Int] = OptionT(List(Some(2), None, Some(414), None, None))
+   *  scala> optionT.collect(_ == 2)
+   *  res0: OptionT[List, Boolean] = OptionT(value = List(Some(value = true), None, Some(value = false), None, None))
+   * }}}
+   */
   def collect[B](f: PartialFunction[A, B])(implicit F: Functor[F]): OptionT[F, B] =
     OptionT(F.map(value)(_.collect(f)))
 
   def exists(f: A => Boolean)(implicit F: Functor[F]): F[Boolean] =
     F.map(value)(_.exists(f))
 
+  /**
+   * Example:
+   * {{{
+   *  scala> import cats.data.OptionT
+   *
+   *  scala> val optionT: OptionT[List, Int] = OptionT(List(Some(2), None, Some(414), None, None))
+   *  scala> optionT.filter(el => (el % 2 ==0 ))
+   *  res0: OptionT[List, Int] = OptionT(value = List(Some(value = 2), None, Some(value = 414), None, None))
+   *
+   *  scala> optionT.filter(el => (el % 3 ==0 ))
+   *  res1: OptionT[List, Int] = OptionT(value = List(None, None, Some(value = 414), None, None))
+   * }}}
+   */
   def filter(p: A => Boolean)(implicit F: Functor[F]): OptionT[F, A] =
     OptionT(F.map(value)(_.filter(p)))
 
+  /**
+   * Example:
+   * {{{
+   *  scala> import cats.data.OptionT
+   *
+   *  scala> val optionT: OptionT[List, Int] = OptionT(List(Some(2), None, Some(414), None, None))
+   *  scala> optionT.withFilter(el => (el % 2 ==0 ))
+   *  res0: OptionT[List, Int] = OptionT(value = List(Some(value = 2), None, Some(value = 414), None, None))
+   *
+   *  scala> optionT.withFilter(el => (el % 3 ==0 ))
+   *  res1: OptionT[List, Int] = OptionT(value = List(None, None, Some(value = 414), None, None))
+   * }}}
+   */
   def withFilter(p: A => Boolean)(implicit F: Functor[F]): OptionT[F, A] =
     filter(p)(F)
 
+  /**
+   * Example:
+   * {{{
+   *  scala> import cats.data.OptionT
+   *
+   *  scala> val optionT: OptionT[List, Int] = OptionT(List(Some(2), None, Some(414), None, None))
+   *  scala> optionT.filterNot(el => (el % 2 ==0 ))
+   *  res0: OptionT[List, Int] = OptionT(value = List(None, None, None, None, None))
+   *
+   *  scala> optionT.filterNot(el => (el % 3 ==0 ))
+   *  res1: OptionT[List, Int] = OptionT(value = List(Some(value = 2), None, None, None, None))
+   * }}}
+   */
   def filterNot(p: A => Boolean)(implicit F: Functor[F]): OptionT[F, A] =
     OptionT(F.map(value)(_.filterNot(p)))
 
   def forall(f: A => Boolean)(implicit F: Functor[F]): F[Boolean] =
     F.map(value)(_.forall(f))
 
+  /**
+   * Example:
+   * {{{
+   *  scala> import cats.data.OptionT
+   *
+   *  scala> val optionT: OptionT[List, Int] = OptionT(List(Some(2), None, Some(414), None, None))
+   *  scala> optionT.isDefined
+   *  res0: List[Boolean] = List(true, false, true, false, false)
+   * }}}
+   */
   def isDefined(implicit F: Functor[F]): F[Boolean] =
     F.map(value)(_.isDefined)
 
+  /**
+   * Example:
+   * {{{
+   *  scala> import cats.data.OptionT
+   *
+   *  scala> val optionT: OptionT[List, Int] = OptionT(List(Some(2), None, Some(414), None, None))
+   *  scala> optionT.isEmpty
+   *  res0: List[Boolean] = List(false, true, false, true, true)
+   * }}}
+   */
   def isEmpty(implicit F: Functor[F]): F[Boolean] =
     F.map(value)(_.isEmpty)
 
+  /**
+   * Example:
+   * {{{
+   *  scala> import cats.data.OptionT
+   *
+   *  scala> val optionT: OptionT[List, Int] = OptionT(List(Some(2), None, Some(414), None, None))
+   *  scala> optionT.orElseF(List[Option[Int]](Some(-1)))
+   *  res0: OptionT[List, Int] = OptionT(value = List(Some(value = 2), Some(value = -1), Some(value = 414), Some(value = -1), Some(value = -1))
+   * }}}
+   */
   def orElse(default: => OptionT[F, A])(implicit F: Monad[F]): OptionT[F, A] =
     orElseF(default.value)
 
@@ -146,8 +235,31 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
   def toLeftF[R](right: => F[R])(implicit F: Monad[F]): EitherT[F, A, R] =
     EitherT(cataF(F.map(right)(Right.apply[A, R]), a => F.pure(Left(a))))
 
+  /**
+   * Example:
+   * {{{
+   *  scala> import cats.data.OptionT
+   *
+   *  scala> val optionT: OptionT[List, Int] = OptionT(List(Some(2), None, Some(414), None, None))
+   *  scala> optionT.show
+   *  res0: String = "List(Some(2), None, Some(414), None, None)"
+   * }}}
+   */
   def show(implicit F: Show[F[Option[A]]]): String = F.show(value)
 
+  /**
+   * Example:
+   * {{{
+   *  scala> import cats.data.OptionT
+   *
+   *  scala> val optionT: OptionT[List, Int] = OptionT(List(Some(2), None, Some(414), None, None))
+   *  scala> optionT.compare(OptionT[List, Int](List(Some(2))))
+   *  res0: Int = 1
+   *
+   *  scala> optionT.compare(OptionT[List, Int](List(Some(2), None, Some(414), None, None)))
+   *  res0: Int = 0
+   * }}}
+   */
   def compare(that: OptionT[F, A])(implicit o: Order[F[Option[A]]]): Int =
     o.compare(value, that.value)
 
