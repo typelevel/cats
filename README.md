@@ -206,6 +206,7 @@ versioning in the future. But that decision is yet to be made.
 Here's a (non-exhaustive) list of companies that use Cats in production. Don't see yours? [You can add it in a PR!](https://github.com/typelevel/cats/edit/main/README.md) And if you can, consider [supporting us](https://donorbox.org/typelevel-sustainability-program-2019?default_interval=m). 
 
 - [Abacus Protocol](https://abacusprotocol.com)
+- [Adobe (CCA team)](https://experienceleague.adobe.com/docs/analytics-platform/using/cja-connections/cca/overview.html?lang=en)  
 - [Anduin Transactions](https://anduintransact.com)
 - [Apple Inc. (FEAR team)](https://news.ycombinator.com/item?id=16969118)
 - [AutoScout24](https://www.autoscout24.com) 
