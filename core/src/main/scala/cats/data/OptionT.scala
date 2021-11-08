@@ -133,10 +133,10 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
    *  scala> import cats.data.OptionT
    *
    *  scala> val optionT: OptionT[List, Int] = OptionT(List(Some(2), None, Some(414), None, None))
-   *  scala> optionT.filter(el => (el % 2 ==0 ))
+   *  scala> optionT.filter(el => (el % 2 == 0))
    *  res0: OptionT[List, Int] = OptionT(value = List(Some(value = 2), None, Some(value = 414), None, None))
    *
-   *  scala> optionT.filter(el => (el % 3 ==0 ))
+   *  scala> optionT.filter(el => (el % 3 == 0))
    *  res1: OptionT[List, Int] = OptionT(value = List(None, None, Some(value = 414), None, None))
    * }}}
    */
@@ -149,10 +149,10 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
    *  scala> import cats.data.OptionT
    *
    *  scala> val optionT: OptionT[List, Int] = OptionT(List(Some(2), None, Some(414), None, None))
-   *  scala> optionT.withFilter(el => (el % 2 ==0 ))
+   *  scala> optionT.withFilter(el => (el % 2 == 0))
    *  res0: OptionT[List, Int] = OptionT(value = List(Some(value = 2), None, Some(value = 414), None, None))
    *
-   *  scala> optionT.withFilter(el => (el % 3 ==0 ))
+   *  scala> optionT.withFilter(el => (el % 3 == 0))
    *  res1: OptionT[List, Int] = OptionT(value = List(None, None, Some(value = 414), None, None))
    * }}}
    */
@@ -165,10 +165,10 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
    *  scala> import cats.data.OptionT
    *
    *  scala> val optionT: OptionT[List, Int] = OptionT(List(Some(2), None, Some(414), None, None))
-   *  scala> optionT.filterNot(el => (el % 2 ==0 ))
+   *  scala> optionT.filterNot(el => (el % 2 == 0))
    *  res0: OptionT[List, Int] = OptionT(value = List(None, None, None, None, None))
    *
-   *  scala> optionT.filterNot(el => (el % 3 ==0 ))
+   *  scala> optionT.filterNot(el => (el % 3 == 0))
    *  res1: OptionT[List, Int] = OptionT(value = List(Some(value = 2), None, None, None, None))
    * }}}
    */
