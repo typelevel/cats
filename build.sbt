@@ -19,28 +19,29 @@ ThisBuild / scalafixDependencies += "org.typelevel" %% "simulacrum-scalafix" % "
 
 val scalaCheckVersion = "1.15.4"
 
-val disciplineVersion = "1.1.4"
+val disciplineVersion = "1.2.0"
 
-val disciplineMunitVersion = "1.0.8"
+val disciplineMunitVersion = "1.0.9"
 
-val kindProjectorVersion = "0.12.0"
+val kindProjectorVersion = "0.13.2"
+
+ThisBuild / githubWorkflowUseSbtThinClient := false
 
 val PrimaryOS = "ubuntu-latest"
 ThisBuild / githubWorkflowOSes := Seq(PrimaryOS)
+ThisBuild / githubWorkflowEnv += ("JABBA_INDEX" -> "https://github.com/typelevel/jdk-index/raw/main/index.json")
 
-val PrimaryJava = "adopt@1.8"
-val LTSJava = "adopt@1.11"
-val LatestJava = "adopt@1.15"
-val GraalVM8 = "graalvm-ce-java8@20.2.0"
+val PrimaryJava = "adoptium@8"
+val LTSJava = "adoptium@17"
+val GraalVM8 = "graalvm-ce-java8@21.2"
 
-ThisBuild / githubWorkflowJavaVersions := Seq(PrimaryJava, LTSJava, LatestJava, GraalVM8)
+ThisBuild / githubWorkflowJavaVersions := Seq(PrimaryJava, LTSJava, GraalVM8)
 
-val Scala212 = "2.12.13"
-val Scala213 = "2.13.5"
-val DottyOld = "3.0.0-RC2"
-val DottyNew = "3.0.0-RC3"
+val Scala212 = "2.12.15"
+val Scala213 = "2.13.6"
+val Scala3 = "3.0.2"
 
-ThisBuild / crossScalaVersions := Seq(Scala212, Scala213, DottyOld, DottyNew)
+ThisBuild / crossScalaVersions := Seq(Scala212, Scala213, Scala3)
 ThisBuild / scalaVersion := Scala213
 ThisBuild / versionScheme := Some("semver-spec")
 
@@ -56,39 +57,43 @@ ThisBuild / githubWorkflowBuildMatrixExclusions ++=
     )
   }
 
-ThisBuild / githubWorkflowBuildMatrixExclusions ++= Seq(DottyOld, DottyNew).map { dottyVersion =>
-  MatrixExclude(Map("platform" -> "native", "scala" -> dottyVersion))
-} // Dotty is not yet supported by Scala Native
+ThisBuild / githubWorkflowBuildMatrixExclusions +=
+  MatrixExclude(Map("platform" -> "native", "scala" -> Scala3))
+// Dotty is not yet supported by Scala Native
 
 // we don't need this since we aren't publishing
 ThisBuild / githubWorkflowArtifactUpload := false
-
-ThisBuild / githubWorkflowBuildMatrixFailFast := Some(false)
 
 val JvmCond = s"matrix.platform == 'jvm'"
 val JsCond = s"matrix.platform == 'js'"
 val NativeCond = s"matrix.platform == 'native'"
 
-val Scala2Cond = s"(matrix.scala != '$DottyOld' && matrix.scala != '$DottyNew')"
-val Scala3Cond = s"(matrix.scala == '$DottyOld' || matrix.scala == '$DottyNew')"
+val Scala2Cond = s"(matrix.scala != '$Scala3')"
+val Scala3Cond = s"(matrix.scala == '$Scala3')"
 
 ThisBuild / githubWorkflowBuild := Seq(
-  WorkflowStep.Sbt(List("validateAllJS"), name = Some("Validate JavaScript"), cond = Some(JsCond)),
-  WorkflowStep.Sbt(List("validateAllNative"), name = Some("Validate Scala Native"), cond = Some(NativeCond)),
-  WorkflowStep.Sbt(List("buildJVM", "bench/test"),
-                   name = Some("Validate JVM (scala 2)"),
-                   cond = Some(JvmCond + " && " + Scala2Cond)
-  ),
-  WorkflowStep.Sbt(List("buildJVM", "bench/test"),
-                   name = Some("Validate JVM (scala 3)"),
-                   cond = Some(JvmCond + " && " + Scala3Cond)
-  ),
-  WorkflowStep.Sbt(
-    List("clean", "validateBC"), // cleaning here to avoid issues with codecov
-    name = Some("Binary compatibility ${{ matrix.scala }}"),
-    cond = Some(JvmCond + " && " + Scala2Cond)
+  WorkflowStep.Sbt(List("validateAllJS"), name = Some("Validate JavaScript"), cond = Some(JsCond))
+) ++
+  // this has to be split up to avoid memory issues in GitHub Actions
+  validateAllNativeAlias.split(" ").filterNot(_ == "all").map { cmd =>
+    val name = cmd.flatMap(c => if (c.isUpper) s" $c" else c.toString).capitalize.replaceAll("/test", "")
+    WorkflowStep.Sbt(List(cmd), name = Some(s"Validate $name"), cond = Some(NativeCond))
+  } ++
+  Seq(
+    WorkflowStep.Sbt(List("buildJVM", "bench/test"),
+                     name = Some("Validate JVM (scala 2)"),
+                     cond = Some(JvmCond + " && " + Scala2Cond)
+    ),
+    WorkflowStep.Sbt(List("buildJVM", "bench/test"),
+                     name = Some("Validate JVM (scala 3)"),
+                     cond = Some(JvmCond + " && " + Scala3Cond)
+    ),
+    WorkflowStep.Sbt(
+      List("clean", "validateBC"), // cleaning here to avoid issues with codecov
+      name = Some("Binary compatibility ${{ matrix.scala }}"),
+      cond = Some(JvmCond + " && " + Scala2Cond)
+    )
   )
-)
 
 ThisBuild / githubWorkflowAddedJobs ++= Seq(
   WorkflowJob(
@@ -207,7 +212,7 @@ lazy val commonNativeSettings = Seq(
   // https://github.com/tkawachi/sbt-doctest/issues/52
   doctestGenTests := Seq.empty,
   // Currently scala-native does not support Dotty
-  crossScalaVersions := { crossScalaVersions.value.filterNot(Seq(DottyOld, DottyNew).contains) }
+  crossScalaVersions := { crossScalaVersions.value.filterNot(Scala3 == _) }
 )
 
 lazy val commonJvmSettings = Seq(
@@ -268,6 +273,8 @@ lazy val docSettings = Seq(
     )
   ),
   micrositeGithubRepo := "cats",
+  micrositeImgDirectory := (LocalRootProject / baseDirectory).value / "docs" / "src" / "main" / "resources" / "microsite" / "img",
+  micrositeJsDirectory := (LocalRootProject / baseDirectory).value / "docs" / "src" / "main" / "resources" / "microsite" / "js",
   micrositeTheme := "pattern",
   micrositePalette := Map(
     "brand-primary" -> "#5B5988",
@@ -505,6 +512,16 @@ def mimaSettings(moduleName: String, includeCats1: Boolean = true) =
           exclude[MissingClassProblem]("cats.syntax.EqOps$"),
           exclude[MissingClassProblem]("cats.syntax.EqOps$mcF$sp"),
           exclude[MissingClassProblem]("cats.syntax.EqOps$mcI$sp")
+        ) ++ // https://github.com/typelevel/cats/pull/3918
+        Seq(
+          exclude[MissingClassProblem]("algebra.laws.IsSerializable"),
+          exclude[MissingClassProblem]("algebra.laws.IsSerializable$")
+        ) ++ // https://github.com/typelevel/cats/pull/3987
+        Seq(
+          exclude[DirectAbstractMethodProblem]("cats.free.ContravariantCoyoneda.k"),
+          exclude[ReversedAbstractMethodProblem]("cats.free.ContravariantCoyoneda.k"),
+          exclude[DirectAbstractMethodProblem]("cats.free.Coyoneda.k"),
+          exclude[ReversedAbstractMethodProblem]("cats.free.Coyoneda.k")
         )
     }
   )
@@ -541,21 +558,26 @@ lazy val catsJVM = project
   .settings(noPublishSettings)
   .settings(catsSettings)
   .settings(commonJvmSettings)
-  .aggregate(kernel.jvm,
-             kernelLaws.jvm,
-             core.jvm,
-             laws.jvm,
-             free.jvm,
-             testkit.jvm,
-             tests.jvm,
-             alleycatsCore.jvm,
-             alleycatsLaws.jvm,
-             alleycatsTests.jvm,
-             jvm
+  .aggregate(
+    kernel.jvm,
+    kernelLaws.jvm,
+    algebra.jvm,
+    algebraLaws.jvm,
+    core.jvm,
+    laws.jvm,
+    free.jvm,
+    testkit.jvm,
+    tests.jvm,
+    alleycatsCore.jvm,
+    alleycatsLaws.jvm,
+    alleycatsTests.jvm,
+    jvm
   )
   .dependsOn(
     kernel.jvm,
     kernelLaws.jvm,
+    algebra.jvm,
+    algebraLaws.jvm,
     core.jvm,
     laws.jvm,
     free.jvm,
@@ -575,6 +597,8 @@ lazy val catsJS = project
   .settings(commonJsSettings)
   .aggregate(kernel.js,
              kernelLaws.js,
+             algebra.js,
+             algebraLaws.js,
              core.js,
              laws.js,
              free.js,
@@ -588,6 +612,8 @@ lazy val catsJS = project
   .dependsOn(
     kernel.js,
     kernelLaws.js,
+    algebra.js,
+    algebraLaws.js,
     core.js,
     laws.js,
     free.js,
@@ -609,6 +635,8 @@ lazy val catsNative = project
   .aggregate(
     kernel.native,
     kernelLaws.native,
+    algebra.native,
+    algebraLaws.native,
     core.native,
     laws.native,
     free.native,
@@ -622,6 +650,8 @@ lazy val catsNative = project
   .dependsOn(
     kernel.native,
     kernelLaws.native,
+    algebra.native,
+    algebraLaws.native,
     core.native,
     laws.native,
     free.native,
@@ -661,6 +691,44 @@ lazy val kernelLaws = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings ++ mimaSettings("cats-kernel-laws", includeCats1 = false))
   .dependsOn(kernel)
+  .nativeSettings(commonNativeSettings)
+
+lazy val algebra = crossProject(JSPlatform, JVMPlatform, NativePlatform)
+  .crossType(CrossType.Pure)
+  .in(file("algebra-core"))
+  .settings(moduleName := "algebra", name := "Cats algebra")
+  .dependsOn(kernel)
+  .settings(commonSettings)
+  .settings(publishSettings)
+  .settings(Compile / sourceGenerators += (Compile / sourceManaged).map(AlgebraBoilerplate.gen).taskValue)
+  .settings(includeGeneratedSrc)
+  .jsSettings(commonJsSettings)
+  .jvmSettings(
+    commonJvmSettings ++ mimaSettings("algebra") ++ Seq(
+      mimaPreviousArtifacts := Set("org.typelevel" %% "algebra" % "2.2.3")
+    )
+  )
+  .nativeSettings(commonNativeSettings)
+  .settings(testingDependencies)
+  .settings(
+    libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % Test
+  )
+
+lazy val algebraLaws = crossProject(JSPlatform, JVMPlatform, NativePlatform)
+  .in(file("algebra-laws"))
+  .settings(moduleName := "algebra-laws", name := "Cats algebra laws")
+  .settings(commonSettings)
+  .settings(publishSettings)
+  .settings(disciplineDependencies)
+  .settings(testingDependencies)
+  .settings(Test / scalacOptions := (Test / scalacOptions).value.filter(_ != "-Xfatal-warnings"))
+  .jsSettings(commonJsSettings)
+  .jvmSettings(
+    commonJvmSettings ++ mimaSettings("algebra-laws") ++ Seq(
+      mimaPreviousArtifacts := Set("org.typelevel" %% "algebra-laws" % "2.2.3")
+    )
+  )
+  .dependsOn(kernelLaws, algebra)
   .nativeSettings(commonNativeSettings)
 
 lazy val core = crossProject(JSPlatform, JVMPlatform, NativePlatform)
@@ -913,8 +981,8 @@ lazy val publishSettings = Seq(
 ) ++ sharedPublishSettings ++ sharedReleaseProcess
 
 // Scalafmt
-addCommandAlias("fmt", "; compile:scalafmt; test:scalafmt; scalafmtSbt")
-addCommandAlias("fmtCheck", "; compile:scalafmtCheck; test:scalafmtCheck; scalafmtSbtCheck")
+addCommandAlias("fmt", "; Compile / scalafmt; Test / scalafmt; scalafmtSbt")
+addCommandAlias("fmtCheck", "; Compile / scalafmtCheck; Test / scalafmtCheck; scalafmtSbtCheck")
 
 // These aliases serialise the build for the benefit of Travis-CI.
 addCommandAlias("buildKernelJVM", ";kernelJVM/test;kernelLawsJVM/test")
@@ -934,9 +1002,11 @@ addCommandAlias("validateNative", ";testsNative/test;native/test")
 addCommandAlias("validateKernelNative", "kernelLawsNative/test")
 addCommandAlias("validateFreeNative", "freeNative/test")
 addCommandAlias("validateAlleycatsNative", "alleycatsTestsNative/test")
-addCommandAlias("validateAllNative",
-                "all testsNative/test native/test kernelLawsNative/test freeNative/test alleycatsTestsNative/test"
-)
+
+val validateAllNativeAlias =
+  "all testsNative/test native/test kernelLawsNative/test freeNative/test alleycatsTestsNative/test"
+addCommandAlias("validateAllNative", validateAllNativeAlias)
+
 addCommandAlias(
   "validate",
   ";clean;validateJS;validateKernelJS;validateFreeJS;validateNative;validateKernelNative;validateFreeNative;validateJVM"

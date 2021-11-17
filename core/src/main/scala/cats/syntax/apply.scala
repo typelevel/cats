@@ -21,34 +21,7 @@ private[syntax] trait ApplySyntaxBinCompat0 {
 
 final class IfApplyOps[F[_]](private val fcond: F[Boolean]) extends AnyVal {
 
-  /**
-   * An `if-then-else` lifted into the `F` context.
-   * This function combines the effects of the `fcond` condition and of the two branches,
-   * in the order in which they are given.
-   *
-   * The value of the result is, depending on the value of the condition,
-   * the value of the first argument, or the value of the second argument.
-   *
-   * Example:
-   * {{{
-   * scala> import cats.implicits._
-   *
-   * scala> val b1: Option[Boolean] = Some(true)
-   * scala> val asInt1: Option[Int] = b1.ifA(Some(1), Some(0))
-   * scala> asInt1.get
-   * res0: Int = 1
-   *
-   * scala> val b2: Option[Boolean] = Some(false)
-   * scala> val asInt2: Option[Int] = b2.ifA(Some(1), Some(0))
-   * scala> asInt2.get
-   * res1: Int = 0
-   *
-   * scala> val b3: Option[Boolean] = Some(true)
-   * scala> val asInt3: Option[Int] = b3.ifA(Some(1), None)
-   * asInt2: Option[Int] = None
-   *
-   * }}}
-   */
+  @deprecated("Dangerous method, use ifM (a flatMap) or ifF (a map) instead", "2.6.2")
   def ifA[A](ifTrue: F[A], ifFalse: F[A])(implicit F: Apply[F]): F[A] = F.ifA(fcond)(ifTrue, ifFalse)
 }
 

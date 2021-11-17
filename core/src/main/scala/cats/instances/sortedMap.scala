@@ -27,7 +27,6 @@ trait SortedMapInstances extends SortedMapInstances2 {
   implicit def catsStdShowForSortedMap[A, B](orderA: Order[A], showA: Show[A], showB: Show[B]): Show[SortedMap[A, B]] =
     catsStdShowForSortedMap(showA, showB)
 
-  // scalastyle:off method.length
   implicit def catsStdInstancesForSortedMap[K]
     : Traverse[SortedMap[K, *]] with FlatMap[SortedMap[K, *]] with Align[SortedMap[K, *]] =
     new Traverse[SortedMap[K, *]] with FlatMap[SortedMap[K, *]] with Align[SortedMap[K, *]] {
@@ -114,6 +113,8 @@ trait SortedMapInstances extends SortedMapInstances2 {
         A.combineAll(fa.values)
 
       override def toList[A](fa: SortedMap[K, A]): List[A] = fa.values.toList
+
+      override def toIterable[A](fa: SortedMap[K, A]): Iterable[A] = fa.values
 
       override def collectFirst[A, B](fa: SortedMap[K, A])(pf: PartialFunction[A, B]): Option[B] =
         fa.collectFirst(new PartialFunction[(K, A), B] {

@@ -18,7 +18,6 @@ trait MapInstances extends cats.kernel.instances.MapInstances {
           .mkString("Map(", ", ", ")")
     }
 
-  // scalastyle:off method.length
   implicit def catsStdInstancesForMap[K]: UnorderedTraverse[Map[K, *]] with FlatMap[Map[K, *]] with Align[Map[K, *]] =
     new UnorderedTraverse[Map[K, *]] with FlatMap[Map[K, *]] with Align[Map[K, *]] {
 
@@ -110,7 +109,6 @@ trait MapInstances extends cats.kernel.instances.MapInstances {
           .result()
       }
     }
-  // scalastyle:on method.length
 
 }
 

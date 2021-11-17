@@ -97,6 +97,9 @@ import scala.annotation.implicitNotFound
   override def map2[A, B, Z](fa: F[A], fb: F[B])(f: (A, B) => Z): F[Z] =
     flatMap(fa)(a => map(fb)(b => f(a, b)))
 
+  override def map2Eval[A, B, Z](fa: F[A], fb: Eval[F[B]])(f: (A, B) => Z): Eval[F[Z]] =
+    Eval.now(flatMap(fa)(a => map(fb.value)(b => f(a, b))))
+
   override def productR[A, B](fa: F[A])(fb: F[B]): F[B] =
     flatMap(fa)(_ => fb)
 

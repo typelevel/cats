@@ -15,11 +15,12 @@ package object instances {
   object equiv extends EquivInstances
   object float extends FloatInstances
   object finiteDuration extends CoreFiniteDurationInstances with FiniteDurationInstances
+  object deadline extends DeadlineInstances
   object function extends FunctionInstances with FunctionInstancesBinCompat0
   object partialFunction extends PartialFunctionInstances
   object future extends FutureInstances
   object int extends IntInstances
-  object invariant extends InvariantMonoidalInstances with InvariantInstances
+  object invariant extends InvariantMonoidalInstances with InvariantInstances with InvariantInstancesBinCompat0
   object list extends ListInstances with ListInstancesBinCompat0
   object long extends LongInstances
   object option extends OptionInstances with OptionInstancesBinCompat0

@@ -98,6 +98,10 @@ sealed private[instances] trait Tuple2Instances extends Tuple2Instances1 {
 
       override def size[A](fa: (X, A)): Long = 1L
 
+      override def toList[A](fa: (X, A)): List[A] = fa._2 :: Nil
+
+      override def toIterable[A](fa: (X, A)): Iterable[A] = toList(fa)
+
       override def get[A](fa: (X, A))(idx: Long): Option[A] =
         if (idx == 0L) Some(fa._2) else None
 

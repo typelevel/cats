@@ -50,6 +50,8 @@ trait MapInstances {
 
       override def toList[A](fa: Map[K, A]): List[A] = fa.values.toList
 
+      override def toIterable[A](fa: Map[K, A]): Iterable[A] = fa.values
+
       override def collectFirst[A, B](fa: Map[K, A])(pf: PartialFunction[A, B]): Option[B] =
         fa.collectFirst(new PartialFunction[(K, A), B] {
           override def isDefinedAt(x: (K, A)) = pf.isDefinedAt(x._2)

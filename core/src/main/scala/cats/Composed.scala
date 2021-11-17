@@ -73,6 +73,12 @@ private[cats] trait ComposedFoldable[F[_], G[_]] extends Foldable[λ[α => F[G[�
 
   override def foldRight[A, B](fga: F[G[A]], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
     F.foldRight(fga, lb)((ga, lb) => G.foldRight(ga, lb)(f))
+
+  override def toList[A](fga: F[G[A]]): List[A] =
+    F.toList(fga).flatMap(G.toList)
+
+  override def toIterable[A](fga: F[G[A]]): Iterable[A] =
+    F.toIterable(fga).flatMap(G.toIterable)
 }
 
 private[cats] trait ComposedTraverse[F[_], G[_]]

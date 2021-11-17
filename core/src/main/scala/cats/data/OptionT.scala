@@ -31,6 +31,13 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
     F.flatMap(value)(_.fold(default)(f))
 
   /**
+   * Transform this `OptionT[F, A]` into a `F[Unit]`.
+   * This is identical to `foldF(F.unit)(f)`.
+   */
+  def foreachF(f: A => F[Unit])(implicit F: Monad[F]): F[Unit] =
+    foldF(F.unit)(f)
+
+  /**
    * Catamorphism on the Option. This is identical to [[fold]], but it only has
    * one parameter list, which can result in better type inference in some
    * contexts.
