@@ -58,6 +58,12 @@ class ListSuite extends CatsSuite {
     assert(List.empty[Int].toNel === None)
   }
 
+  test("concatNel should be consistent with List#`:::`") {
+    forAll { (fa: List[Int], nel: NonEmptyList[Int]) =>
+      assert(fa.concatNel(nel).toList === fa ::: nel.toList)
+    }
+  }
+
   test("groupByNel should be consistent with groupBy")(
     forAll { (fa: List[Int], f: Int => Int) =>
       assert((fa.groupByNel(f).map { case (k, v) => (k, v.toList) }: Map[Int, List[Int]]) === fa.groupBy(f))
@@ -67,6 +73,18 @@ class ListSuite extends CatsSuite {
   test("groupByNelA should be consistent with groupByNel")(
     forAll { (fa: List[Int], f: Int => Int) =>
       assert(fa.groupByNelA(f.andThen(Option(_))) === (Option(fa.groupByNel(f))))
+    }
+  )
+
+  test("scanLeftNel should be consistent with scanLeft")(
+    forAll { (fa: List[Int], b: Int, f: (Int, Int) => Int) =>
+      assert(fa.scanLeftNel(b)(f).toList === fa.scanLeft(b)(f))
+    }
+  )
+
+  test("scanRightNel should be consistent with scanRight")(
+    forAll { (fa: List[Int], b: Int, f: (Int, Int) => Int) =>
+      assert(fa.scanRightNel(b)(f).toList === fa.scanRight(b)(f))
     }
   )
 

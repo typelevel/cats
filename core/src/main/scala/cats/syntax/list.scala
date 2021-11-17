@@ -30,6 +30,20 @@ final class ListOps[A](private val la: List[A]) extends AnyVal {
   def toNel: Option[NonEmptyList[A]] = NonEmptyList.fromList(la)
 
   /**
+   * Concatenates this `List` with a `NonEmptyList` producing a new `NonEmptyList`.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.data.NonEmptyList
+   * scala> import cats.implicits._
+   *
+   * scala> List(1, 2, 3).concatNel(NonEmptyList.of(4, 5, 6))
+   * res0: NonEmptyList[Int] = NonEmptyList(1, 2, 3, 4, 5, 6)
+   * }}}
+   */
+  def concatNel[AA >: A](nel: NonEmptyList[AA]): NonEmptyList[AA] = nel.prependList(la)
+
+  /**
    * Groups elements inside this `List` according to the `Order` of the keys
    * produced by the given mapping function.
    *

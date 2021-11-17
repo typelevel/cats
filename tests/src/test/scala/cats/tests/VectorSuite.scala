@@ -67,6 +67,37 @@ class VectorSuite extends CatsSuite {
     assert(Vector.empty[Int].toNev == None)
   }
 
+  test("concatNev should be consistent with Vector#`++`") {
+    forAll { (fa: Vector[Int], nev: NonEmptyVector[Int]) =>
+      // Note: Scala 2.12.x does not have `Vector#concat`.
+      assert(fa.concatNev(nev).toVector === (fa ++ nev.toVector))
+    }
+  }
+
+  test("groupByNev should be consistent with groupBy")(
+    forAll { (fa: Vector[Int], f: Int => Int) =>
+      assert((fa.groupByNev(f).map { case (k, v) => (k, v.toVector) }: Map[Int, Vector[Int]]) === fa.groupBy(f))
+    }
+  )
+
+  test("groupByNevA should be consistent with groupByNev")(
+    forAll { (fa: Vector[Int], f: Int => Int) =>
+      assert(fa.groupByNevA(f.andThen(Option(_))) === Option(fa.groupByNev(f)))
+    }
+  )
+
+  test("scanLeftNev should be consistent with scanLeft")(
+    forAll { (fa: Vector[Int], b: Int, f: (Int, Int) => Int) =>
+      assert(fa.scanLeftNev(b)(f).toVector === fa.scanLeft(b)(f))
+    }
+  )
+
+  test("scanRightNev should be consistent with scanRight")(
+    forAll { (fa: Vector[Int], b: Int, f: (Int, Int) => Int) =>
+      assert(fa.scanRightNev(b)(f).toVector === fa.scanRight(b)(f))
+    }
+  )
+
   test("traverse is stack-safe") {
     val vec = (0 until 100000).toVector
     val sumAll = Traverse[Vector]
