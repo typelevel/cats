@@ -1,6 +1,6 @@
 package cats.syntax
 
-import cats.{Monad, Alternative}
+import cats.{Alternative, Monad}
 
 final class MonadOps[F[_], A](private val fa: F[A]) extends AnyVal {
   def whileM[G[_]](using M: Monad[F], G: Alternative[G])(p: F[Boolean]): F[G[A]] = M.whileM(p)(fa)
