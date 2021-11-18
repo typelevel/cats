@@ -234,7 +234,7 @@ class NonEmptySetSuite extends CatsSuite {
 
   test("NonEmptySet#zipWith is consistent with Set#zip and then Set#map") {
     forAll { (a: NonEmptySet[Int], b: NonEmptySet[Int], f: (Int, Int) => Int) =>
-      assert(a.zipWith(b)(f).toSortedSet === (a.toSortedSet.zip(b.toSortedSet).map { case (x, y) => f(x, y) }))
+      assert(a.zipWith(b)(f).toSortedSet === a.toSortedSet.zip(b.toSortedSet).map { case (x, y) => f(x, y) })
     }
   }
 
