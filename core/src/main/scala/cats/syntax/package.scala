@@ -55,6 +55,7 @@ package object syntax {
   object profunctor extends ProfunctorSyntax
   object reducible extends ReducibleSyntax with ReducibleSyntaxBinCompat0
   object representable extends RepresentableSyntax
+  object selective extends SelectiveSyntax
   object semigroup extends SemigroupSyntax
   object semigroupal extends SemigroupalSyntax
   object semigroupk extends SemigroupKSyntax

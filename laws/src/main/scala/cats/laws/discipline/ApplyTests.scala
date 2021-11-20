@@ -22,7 +22,7 @@ trait ApplyTests[F[_]] extends FunctorTests[F] with SemigroupalTests[F] {
     EqFC: Eq[F[C]],
     EqFABC: Eq[F[(A, B, C)]],
     iso: Isomorphisms[F]
-  ): RuleSet =
+  ): RuleSet = {
     new RuleSet {
       val name = "apply"
       val parents = Seq(functor[A, B, C], semigroupal[A, B, C])
@@ -35,6 +35,7 @@ trait ApplyTests[F[_]] extends FunctorTests[F] with SemigroupalTests[F] {
         "productL consistent map2" -> forAll(laws.productLConsistency[A, C] _)
       )
     }
+  }
 }
 
 object ApplyTests {

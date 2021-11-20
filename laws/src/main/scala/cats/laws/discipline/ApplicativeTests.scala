@@ -23,7 +23,7 @@ trait ApplicativeTests[F[_]] extends ApplyTests[F] {
     EqFC: Eq[F[C]],
     EqFABC: Eq[F[(A, B, C)]],
     iso: Isomorphisms[F]
-  ): RuleSet =
+  ): RuleSet = {
     new DefaultRuleSet(
       name = "applicative",
       parent = Some(apply[A, B, C]),
@@ -36,6 +36,7 @@ trait ApplicativeTests[F[_]] extends ApplyTests[F] {
       "monoidal left identity" -> forAll((fa: F[A]) => iso.leftIdentity(laws.monoidalLeftIdentity(fa))),
       "monoidal right identity" -> forAll((fa: F[A]) => iso.rightIdentity(laws.monoidalRightIdentity(fa)))
     )
+  }
 }
 
 object ApplicativeTests {

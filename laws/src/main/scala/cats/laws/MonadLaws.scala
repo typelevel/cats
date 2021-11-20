@@ -7,7 +7,7 @@ import cats.implicits._
 /**
  * Laws that must be obeyed by any `Monad`.
  */
-trait MonadLaws[F[_]] extends ApplicativeLaws[F] with FlatMapLaws[F] {
+trait MonadLaws[F[_]] extends RigidSelectiveLaws[F] with FlatMapLaws[F] {
   implicit override def F: Monad[F]
 
   def monadLeftIdentity[A, B](a: A, f: A => F[B]): IsEq[F[B]] =
@@ -40,6 +40,15 @@ trait MonadLaws[F[_]] extends ApplicativeLaws[F] with FlatMapLaws[F] {
     val n = 50000
     val res = F.tailRecM(0)(i => F.pure(if (i < n) Either.left(i + 1) else Either.right(i)))
     res <-> F.pure(n)
+  }
+
+  def selectRigidity[A, B](fab: F[Either[A, B]], ff: F[A => B]): IsEq[F[B]] = {
+    def selectM[G[_]: Monad](gab: G[Either[A, B]])(gf: G[A => B]) =
+      gab.flatMap {
+        case Left(a)  => gf.map(_(a))
+        case Right(b) => b.pure[G]
+      }
+    fab.select(ff) <-> selectM(fab)(ff)
   }
 }
 

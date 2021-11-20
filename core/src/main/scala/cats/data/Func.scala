@@ -42,20 +42,36 @@ object Func extends FuncInstances {
 }
 
 abstract private[data] class FuncInstances extends FuncInstances0 {
+  implicit def catsDataRigidSelectiveForFunc[F[_], C](implicit
+    FF: RigidSelective[F]
+  ): RigidSelective[λ[α => Func[F, C, α]]] =
+    new FuncRigidSelective[F, C] {
+      def F: RigidSelective[F] = FF
+    }
+}
+
+abstract private[data] class FuncInstances0 extends FuncInstances1 {
+  implicit def catsDataSelectiveForFunc[F[_], C](implicit FF: Selective[F]): Selective[λ[α => Func[F, C, α]]] =
+    new FuncSelective[F, C] {
+      def F: Selective[F] = FF
+    }
+}
+
+abstract private[data] class FuncInstances1 extends FuncInstances2 {
   implicit def catsDataApplicativeForFunc[F[_], C](implicit FF: Applicative[F]): Applicative[λ[α => Func[F, C, α]]] =
     new FuncApplicative[F, C] {
       def F: Applicative[F] = FF
     }
 }
 
-abstract private[data] class FuncInstances0 extends FuncInstances1 {
+abstract private[data] class FuncInstances2 extends FuncInstances3 {
   implicit def catsDataApplyForFunc[F[_], C](implicit FF: Apply[F]): Apply[λ[α => Func[F, C, α]]] =
     new FuncApply[F, C] {
       def F: Apply[F] = FF
     }
 }
 
-abstract private[data] class FuncInstances1 {
+abstract private[data] class FuncInstances3 {
   implicit def catsDataFunctorForFunc[F[_], C](implicit FF: Functor[F]): Functor[λ[α => Func[F, C, α]]] =
     new FuncFunctor[F, C] {
       def F: Functor[F] = FF
@@ -93,6 +109,18 @@ sealed private[data] trait FuncApplicative[F[_], C] extends Applicative[λ[α =>
   def F: Applicative[F]
   def pure[A](a: A): Func[F, C, A] =
     Func.func(c => F.pure(a))
+}
+
+sealed private[data] trait FuncSelective[F[_], C] extends Selective[λ[α => Func[F, C, α]]] with FuncApplicative[F, C] {
+  def F: Selective[F]
+  def select[A, B](fab: Func[F, C, Either[A, B]])(ff: => Func[F, C, A => B]): Func[F, C, B] =
+    Func.func(c => F.select(fab.run(c))(ff.run(c)))
+}
+
+sealed private[data] trait FuncRigidSelective[F[_], C]
+    extends RigidSelective[λ[α => Func[F, C, α]]]
+    with FuncSelective[F, C] {
+  def F: RigidSelective[F]
 }
 
 /**

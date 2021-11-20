@@ -933,9 +933,10 @@ sealed abstract private[data] class ValidatedInstances extends ValidatedInstance
         fab.leftMap(f)
     }
 
-  implicit def catsDataApplicativeErrorForValidated[E](implicit E: Semigroup[E]): ApplicativeError[Validated[E, *], E] =
-    new ValidatedApplicative[E] with ApplicativeError[Validated[E, *], E] {
-
+  implicit def catsDataSelectiveErrorForValidated[E](implicit
+    E: Semigroup[E]
+  ): ApplicativeError[Validated[E, *], E] =
+    new ValidatedSelective[E] with ApplicativeError[Validated[E, *], E] {
       def handleErrorWith[A](fa: Validated[E, A])(f: E => Validated[E, A]): Validated[E, A] =
         fa match {
           case Validated.Invalid(e)   => f(e)
@@ -943,6 +944,10 @@ sealed abstract private[data] class ValidatedInstances extends ValidatedInstance
         }
       def raiseError[A](e: E): Validated[E, A] = Validated.Invalid(e)
     }
+
+  @deprecated("Use catsDataSelectiveErrorForValidated", "2.4.0")
+  def catsDataApplicativeErrorForValidated[E](implicit E: Semigroup[E]): ApplicativeError[Validated[E, *], E] =
+    catsDataSelectiveErrorForValidated
 }
 
 sealed abstract private[data] class ValidatedInstances1 extends ValidatedInstances2 {
@@ -955,9 +960,13 @@ sealed abstract private[data] class ValidatedInstances1 extends ValidatedInstanc
       def combine(x: Validated[A, B], y: Validated[A, B]): Validated[A, B] = x.combine(y)
     }
 
-  implicit def catsDataCommutativeApplicativeForValidated[E: CommutativeSemigroup]
+  implicit def catsDataCommutativeSelectiveForValidated[E: CommutativeSemigroup]
     : CommutativeApplicative[Validated[E, *]] =
-    new ValidatedApplicative[E] with CommutativeApplicative[Validated[E, *]]
+    new ValidatedSelective[E] with CommutativeApplicative[Validated[E, *]]
+
+  @deprecated("Use catsDataCommutativeSelectiveForValidated", "2.4.0")
+  def catsDataCommutativeApplicativeForValidated[E: CommutativeSemigroup]: CommutativeApplicative[Validated[E, *]] =
+    catsDataCommutativeApplicativeForValidated
 
   implicit def catsDataPartialOrderForValidated[A: PartialOrder, B: PartialOrder]: PartialOrder[Validated[A, B]] =
     new PartialOrder[Validated[A, B]] {
@@ -1036,6 +1045,15 @@ sealed abstract private[data] class ValidatedInstances2 {
       override def void[A](fa: Validated[E, A]): Validated[E, Unit] =
         if (fa.isValid) Validated.validUnit
         else fa.asInstanceOf[Validated[E, Unit]]
+    }
+}
+
+private[data] class ValidatedSelective[E: Semigroup] extends ValidatedApplicative[E] with Selective[Validated[E, *]] {
+  override def select[A, B](fab: Validated[E, Either[A, B]])(ff: => Validated[E, A => B]): Validated[E, B] =
+    fab match {
+      case Valid(Left(a))  => ff.map(_(a))
+      case Valid(Right(b)) => Valid(b)
+      case i @ Invalid(_)  => i
     }
 }
 

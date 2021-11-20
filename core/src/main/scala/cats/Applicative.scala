@@ -193,7 +193,6 @@ import scala.collection.immutable.IndexedSeq
    */
   def whenA[A](cond: Boolean)(f: => F[A]): F[Unit] =
     if (cond) void(f) else unit
-
 }
 
 object Applicative {
@@ -251,12 +250,11 @@ object Applicative {
   object ops {
     implicit def toAllApplicativeOps[F[_], A](target: F[A])(implicit tc: Applicative[F]): AllOps[F, A] {
       type TypeClassType = Applicative[F]
-    } =
-      new AllOps[F, A] {
-        type TypeClassType = Applicative[F]
-        val self: F[A] = target
-        val typeClassInstance: TypeClassType = tc
-      }
+    } = new AllOps[F, A] {
+      type TypeClassType = Applicative[F]
+      val self: F[A] = target
+      val typeClassInstance: TypeClassType = tc
+    }
   }
   trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: Applicative[F]
@@ -269,12 +267,11 @@ object Applicative {
   trait ToApplicativeOps extends Serializable {
     implicit def toApplicativeOps[F[_], A](target: F[A])(implicit tc: Applicative[F]): Ops[F, A] {
       type TypeClassType = Applicative[F]
-    } =
-      new Ops[F, A] {
-        type TypeClassType = Applicative[F]
-        val self: F[A] = target
-        val typeClassInstance: TypeClassType = tc
-      }
+    } = new Ops[F, A] {
+      type TypeClassType = Applicative[F]
+      val self: F[A] = target
+      val typeClassInstance: TypeClassType = tc
+    }
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToApplicativeOps

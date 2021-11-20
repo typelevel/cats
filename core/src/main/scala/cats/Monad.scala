@@ -13,9 +13,15 @@ import scala.annotation.implicitNotFound
  * Must obey the laws defined in cats.laws.MonadLaws.
  */
 @implicitNotFound("Could not find an instance of Monad for ${F}")
-@typeclass trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
+@typeclass trait Monad[F[_]] extends FlatMap[F] with RigidSelective[F] {
   override def map[A, B](fa: F[A])(f: A => B): F[B] =
     flatMap(fa)(a => pure(f(a)))
+
+  override def select[A, B](fab: F[Either[A, B]])(ff: => F[A => B]): F[B] =
+    flatMap(fab) {
+      case Left(a)  => map(ff)(_(a))
+      case Right(b) => pure(b)
+    }
 
   /**
    * Execute an action repeatedly as long as the given `Boolean` expression
@@ -161,12 +167,11 @@ object Monad {
   object ops {
     implicit def toAllMonadOps[F[_], A](target: F[A])(implicit tc: Monad[F]): AllOps[F, A] {
       type TypeClassType = Monad[F]
-    } =
-      new AllOps[F, A] {
-        type TypeClassType = Monad[F]
-        val self: F[A] = target
-        val typeClassInstance: TypeClassType = tc
-      }
+    } = new AllOps[F, A] {
+      type TypeClassType = Monad[F]
+      val self: F[A] = target
+      val typeClassInstance: TypeClassType = tc
+    }
   }
   trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: Monad[F]
@@ -178,18 +183,17 @@ object Monad {
     def iterateWhile(p: A => Boolean): F[A] = typeClassInstance.iterateWhile[A](self)(p)
     def iterateUntil(p: A => Boolean): F[A] = typeClassInstance.iterateUntil[A](self)(p)
   }
-  trait AllOps[F[_], A] extends Ops[F, A] with FlatMap.AllOps[F, A] with Applicative.AllOps[F, A] {
+  trait AllOps[F[_], A] extends Ops[F, A] with FlatMap.AllOps[F, A] with RigidSelective.AllOps[F, A] {
     type TypeClassType <: Monad[F]
   }
   trait ToMonadOps extends Serializable {
     implicit def toMonadOps[F[_], A](target: F[A])(implicit tc: Monad[F]): Ops[F, A] {
       type TypeClassType = Monad[F]
-    } =
-      new Ops[F, A] {
-        type TypeClassType = Monad[F]
-        val self: F[A] = target
-        val typeClassInstance: TypeClassType = tc
-      }
+    } = new Ops[F, A] {
+      type TypeClassType = Monad[F]
+      val self: F[A] = target
+      val typeClassInstance: TypeClassType = tc
+    }
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToMonadOps
