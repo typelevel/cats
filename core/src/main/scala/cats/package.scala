@@ -138,6 +138,14 @@ package object cats {
   type Semigroup[A] = cats.kernel.Semigroup[A]
   type Monoid[A] = cats.kernel.Monoid[A]
   type Group[A] = cats.kernel.Group[A]
+  type Eq1[F[_]] = cats.kernel.Eq1[F]
+  type Eq2[F[_, _]] = cats.kernel.Eq2[F]
+  type Hash1[F[_]] = cats.kernel.Hash1[F]
+  type Hash2[F[_, _]] = cats.kernel.Hash2[F]
+  type PartialOrder1[F[_]] = cats.kernel.PartialOrder1[F]
+  type PartialOrder2[F[_, _]] = cats.kernel.PartialOrder2[F]
+  type Order1[F[_]] = cats.kernel.Order1[F]
+  type Order2[F[_, _]] = cats.kernel.Order2[F]
 
   val Eq = cats.kernel.Eq
   val PartialOrder = cats.kernel.PartialOrder
@@ -147,6 +155,14 @@ package object cats {
   val Semigroup = cats.kernel.Semigroup
   val Monoid = cats.kernel.Monoid
   val Group = cats.kernel.Group
+  val Eq1 = cats.kernel.Eq1
+  val Eq2 = cats.kernel.Eq2
+  val Hash1 = cats.kernel.Hash1
+  val Hash2 = cats.kernel.Hash
+  val PartialOrder1 = cats.kernel.PartialOrder1
+  val PartialOrder2 = cats.kernel.PartialOrder2
+  val Order1 = cats.kernel.Order1
+  val Order2 = cats.kernel.Order2
 
   type ApplicativeThrow[F[_]] = ApplicativeError[F, Throwable]
   object ApplicativeThrow {

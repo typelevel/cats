@@ -125,7 +125,7 @@ trait OrderToOrderingConversion {
 
 }
 
-object Order extends OrderFunctions[Order] with OrderToOrderingConversion {
+object Order extends OrderFunctions[Order] with OrderToOrderingConversion with OrderLowPriorityInstances0 {
 
   /**
    * Access an implicit `Order[A]`.
@@ -230,5 +230,17 @@ object Order extends OrderFunctions[Order] with OrderToOrderingConversion {
     new Order[A] {
       override def compare(x: A, y: A): Int =
         x.compareTo(y)
+    }
+}
+
+private[kernel] trait OrderLowPriorityInstances0 {
+
+  /**
+   * Derive an [[Order]] instance from an [[Order1]] instance.
+   */
+  implicit def order1ToOrder[F[_], A](implicit F: Order1[F], A: Order[A]): Order[F[A]] =
+    new Order[F[A]] {
+      override def compare(x: F[A], y: F[A]): Int =
+        F.liftCompare[A, A](A.compare, x, y)
     }
 }

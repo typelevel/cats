@@ -3,7 +3,33 @@ package instances
 
 trait EitherInstances extends EitherInstances0 {
 
-  implicit def catsStdOrderForEither[A, B](implicit A: Order[A], B: Order[B]): Order[Either[A, B]] =
+  implicit val catsStdOrder2AndHash2ForEither: Order2[Either] with Hash2[Either] =
+    new Order2[Either] with Hash2[Either] {
+      override def liftCompare2[A, B, C, D](compareAB: (A, B) => Int,
+                                            compareCD: (C, D) => Int,
+                                            x: Either[A, C],
+                                            y: Either[B, D]
+      ): Int =
+        (x, y) match {
+          case (Left(x), Left(y)) =>
+            compareAB(x, y)
+          case (Right(x), Right(y)) =>
+            compareCD(x, y)
+          case (Left(_), _) =>
+            -1
+          case _ =>
+            1
+        }
+
+      override def liftHash2[A, B](hashA: A => Int, hashB: B => Int, x: Either[A, B]): Int =
+        x match {
+          case Left(xx)  => StaticMethods.product1HashWithPrefix(hashA(xx), "Left")
+          case Right(xx) => StaticMethods.product1HashWithPrefix(hashB(xx), "Right")
+        }
+    }
+
+  @deprecated(message = "Please use catsStdOrder2AndHash2ForEither", since = "2.8.0")
+  def catsStdOrderForEither[A, B](implicit A: Order[A], B: Order[B]): Order[Either[A, B]] =
     new Order[Either[A, B]] {
       def compare(x: Either[A, B], y: Either[A, B]): Int =
         x match {
@@ -51,7 +77,8 @@ private[instances] trait EitherInstances0 extends EitherInstances1 {
         }
     }
 
-  implicit def catsStdPartialOrderForEither[A, B](implicit
+  @deprecated(message = "Please use catsStdOrder2AndHash2ForEither", since = "2.8.0")
+  def catsStdPartialOrderForEither[A, B](implicit
     A: PartialOrder[A],
     B: PartialOrder[B]
   ): PartialOrder[Either[A, B]] =
@@ -71,16 +98,18 @@ private[instances] trait EitherInstances0 extends EitherInstances1 {
         }
     }
 
-  implicit def catsStdHashForEither[A, B](implicit A: Hash[A], B: Hash[B]): Hash[Either[A, B]] = new EitherHash[A, B]
+  @deprecated(message = "Please use catsStdOrder2AndHash2ForEither", since = "2.8.0")
+  def catsStdHashForEither[A, B](implicit A: Hash[A], B: Hash[B]): Hash[Either[A, B]] = Hash[Either[A, B]]
 }
 
 private[instances] trait EitherInstances1 {
 
-  implicit def catsStdEqForEither[A, B](implicit A: Eq[A], B: Eq[B]): Eq[Either[A, B]] = new EitherEq[A, B]
-
+  @deprecated(message = "Please use catsStdOrder2AndHash2ForEither", since = "2.8.0")
+  def catsStdEqForEither[A, B](implicit A: Eq[A], B: Eq[B]): Eq[Either[A, B]] = Eq[Either[A, B]]
 }
 
 // isolated class for inheritance
+@deprecated(message = "Please use catsStdOrder2AndHash2ForEither", since = "2.8.0")
 class EitherEq[A, B](implicit A: Eq[A], B: Eq[B]) extends Eq[Either[A, B]] {
   def eqv(x: Either[A, B], y: Either[A, B]): Boolean =
     x match {
@@ -97,6 +126,7 @@ class EitherEq[A, B](implicit A: Eq[A], B: Eq[B]) extends Eq[Either[A, B]] {
     }
 }
 
+@deprecated(message = "Please use catsStdOrder2AndHash2ForEither", since = "2.8.0")
 class EitherHash[A, B](implicit A: Hash[A], B: Hash[B]) extends EitherEq[A, B] with Hash[Either[A, B]] {
   def hash(x: Either[A, B]): Int =
     x match {
