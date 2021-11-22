@@ -60,7 +60,7 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
    *
    *  scala> val optionT: OptionT[List, Int] = OptionT(List(Some(2), None, Some(414), None, None))
    *  scala> optionT.map(_.toString + "!")
-   *  res0: OptionT[List, String] = OptionT(value = List(Some(value = "2!"), None, Some(value = "414!"), None, None))
+   *  res0: OptionT[List, String] = OptionT(List(Some(2!), None, Some(414!), None, None))
    * }}}
    */
   def map[B](f: A => B)(implicit F: Functor[F]): OptionT[F, B] =
@@ -125,7 +125,7 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
    *
    *  scala> val optionT: OptionT[List, Int] = OptionT(List(Some(2), None, Some(414), None, None))
    *  scala> optionT.collect{ case i: Int => i == 2 }
-   *  res0: OptionT[List, Boolean] = OptionT(value = List(Some(value = true), None, Some(value = false), None, None))
+   *  res0: OptionT[List, Boolean] = OptionT(List(Some(true), None, Some(false), None, None))
    * }}}
    */
   def collect[B](f: PartialFunction[A, B])(implicit F: Functor[F]): OptionT[F, B] =
@@ -141,10 +141,10 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
    *
    *  scala> val optionT: OptionT[List, Int] = OptionT(List(Some(2), None, Some(414), None, None))
    *  scala> optionT.filter(el => (el % 2 == 0))
-   *  res0: OptionT[List, Int] = OptionT(value = List(Some(value = 2), None, Some(value = 414), None, None))
+   *  res0: OptionT[List, Int] = OptionT(List(Some(2), None, Some(414), None, None))
    *
    *  scala> optionT.filter(el => (el % 3 == 0))
-   *  res1: OptionT[List, Int] = OptionT(value = List(None, None, Some(value = 414), None, None))
+   *  res1: OptionT[List, Int] = OptionT(List(None, None, Some(414), None, None))
    * }}}
    */
   def filter(p: A => Boolean)(implicit F: Functor[F]): OptionT[F, A] =
@@ -157,10 +157,10 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
    *
    *  scala> val optionT: OptionT[List, Int] = OptionT(List(Some(2), None, Some(414), None, None))
    *  scala> optionT.withFilter(el => (el % 2 == 0))
-   *  res0: OptionT[List, Int] = OptionT(value = List(Some(value = 2), None, Some(value = 414), None, None))
+   *  res0: OptionT[List, Int] = OptionT(List(Some(2), None, Some(414), None, None))
    *
    *  scala> optionT.withFilter(el => (el % 3 == 0))
-   *  res1: OptionT[List, Int] = OptionT(value = List(None, None, Some(value = 414), None, None))
+   *  res1: OptionT[List, Int] = OptionT(List(None, None, Some(414), None, None))
    * }}}
    */
   def withFilter(p: A => Boolean)(implicit F: Functor[F]): OptionT[F, A] =
@@ -173,10 +173,10 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
    *
    *  scala> val optionT: OptionT[List, Int] = OptionT(List(Some(2), None, Some(414), None, None))
    *  scala> optionT.filterNot(el => (el % 2 == 0))
-   *  res0: OptionT[List, Int] = OptionT(value = List(None, None, None, None, None))
+   *  res0: OptionT[List, Int] = OptionT(List(None, None, None, None, None))
    *
    *  scala> optionT.filterNot(el => (el % 3 == 0))
-   *  res1: OptionT[List, Int] = OptionT(value = List(Some(value = 2), None, None, None, None))
+   *  res1: OptionT[List, Int] = OptionT(List(Some(2), None, None, None, None))
    * }}}
    */
   def filterNot(p: A => Boolean)(implicit F: Functor[F]): OptionT[F, A] =
@@ -218,7 +218,7 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
    *
    *  scala> val optionT: OptionT[List, Int] = OptionT(List(Some(2), None, Some(414), None, None))
    *  scala> optionT.orElseF(List[Option[Int]](Some(-1)))
-   *  res0: OptionT[List, Int] = OptionT(value = List(Some(value = 2), Some(value = -1), Some(value = 414), Some(value = -1), Some(value = -1))
+   *  res0: OptionT[List, Int] = OptionT(List(Some(2), Some(-1), Some(414), Some(-1), Some(-1)))
    * }}}
    */
   def orElse(default: => OptionT[F, A])(implicit F: Monad[F]): OptionT[F, A] =
@@ -249,7 +249,7 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
    *
    *  scala> val optionT: OptionT[List, Int] = OptionT(List(Some(2), None, Some(414), None, None))
    *  scala> optionT.show
-   *  res0: String = "List(Some(2), None, Some(414), None, None)"
+   *  res0: String = List(Some(2), None, Some(414), None, None)
    * }}}
    */
   def show(implicit F: Show[F[Option[A]]]): String = F.show(value)
