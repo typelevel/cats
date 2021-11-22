@@ -45,7 +45,7 @@ class Tuple2KSuite extends CatsSuite {
   {
     type Pair[A] = (A, A)
 
-    //Scala 2.12 implicit resolution absolutely loses its mind here
+    // Scala 2.12 implicit resolution absolutely loses its mind here
     implicit val help_scala2_12: Representable.Aux[Tuple2K[Pair, Pair, *], Either[Boolean, Boolean]] =
       Tuple2K.catsDataRepresentableForTuple2K[Pair, Pair]
 

@@ -361,7 +361,7 @@ def mimaSettings(moduleName: String, includeCats1: Boolean = true) =
     mimaBinaryIssueFilters ++= {
       import com.typesafe.tools.mima.core.ProblemFilters._
       import com.typesafe.tools.mima.core._
-      //Only sealed abstract classes that provide implicit instances to companion objects are allowed here, since they don't affect usage outside of the file.
+      // Only sealed abstract classes that provide implicit instances to companion objects are allowed here, since they don't affect usage outside of the file.
       Seq(
         exclude[DirectMissingMethodProblem]("cats.data.OptionTInstances2.catsDataTraverseForOptionT"),
         exclude[DirectMissingMethodProblem]("cats.data.KleisliInstances1.catsDataCommutativeArrowForKleisliId"),
@@ -374,8 +374,8 @@ def mimaSettings(moduleName: String, includeCats1: Boolean = true) =
         exclude[DirectMissingMethodProblem]("cats.data.OptionTInstances1.catsDataMonadErrorMonadForOptionT"),
         exclude[DirectMissingMethodProblem]("cats.data.OptionTInstances1.catsDataMonadErrorForOptionT")
       ) ++
-        //These things are Ops classes that shouldn't have the `value` exposed. These should have never been public because they don't
-        //provide any value. Making them private because of issues like #2514 and #2613.
+        // These things are Ops classes that shouldn't have the `value` exposed. These should have never been public because they don't
+        // provide any value. Making them private because of issues like #2514 and #2613.
         Seq(
           exclude[DirectMissingMethodProblem]("cats.ApplicativeError#LiftFromOptionPartially.dummy"),
           exclude[DirectMissingMethodProblem]("cats.data.Const#OfPartiallyApplied.dummy"),
@@ -465,7 +465,7 @@ def mimaSettings(moduleName: String, includeCats1: Boolean = true) =
           exclude[IncompatibleMethTypeProblem]("cats.arrow.FunctionKMacros#Lifter.this"),
           exclude[IncompatibleResultTypeProblem]("cats.arrow.FunctionKMacros#Lifter.c"),
           exclude[DirectMissingMethodProblem]("cats.arrow.FunctionKMacros.compatNewTypeName")
-        ) ++ //package private classes no longer needed
+        ) ++ // package private classes no longer needed
         Seq(
           exclude[MissingClassProblem]("cats.kernel.compat.scalaVersionMoreSpecific$"),
           exclude[MissingClassProblem]("cats.kernel.compat.scalaVersionMoreSpecific"),
@@ -1091,7 +1091,7 @@ lazy val sharedReleaseProcess = Seq(
     checkSnapshotDependencies,
     inquireVersions,
     runClean,
-    runTest, //temporarily only run test in current scala version because docs won't build in 2.13 yet
+    runTest, // temporarily only run test in current scala version because docs won't build in 2.13 yet
     setReleaseVersion,
     commitReleaseVersion,
     tagRelease,
