@@ -124,7 +124,7 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
    *  scala> import cats.data.OptionT
    *
    *  scala> val optionT: OptionT[List, Int] = OptionT(List(Some(2), None, Some(414), None, None))
-   *  scala> optionT.collect(_ == 2)
+   *  scala> optionT.collect{ case i: Int => i == 2 }
    *  res0: OptionT[List, Boolean] = OptionT(value = List(Some(value = true), None, Some(value = false), None, None))
    * }}}
    */
