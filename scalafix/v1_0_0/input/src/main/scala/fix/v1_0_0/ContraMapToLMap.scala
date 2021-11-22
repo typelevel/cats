@@ -4,6 +4,8 @@ rule = "scala:fix.v1_0_0.ContraMapToLMap"
 package fix
 package to1_0_0
 
+
+
 object ContraMapToLMapTests {
   import cats.Show
   import cats.syntax.all._

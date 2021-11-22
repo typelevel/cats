@@ -13,6 +13,6 @@ object RemoveSplitTests {
 
   {
     import cats.syntax.arrow._
-    toLong.split(toDouble)
+    toLong split toDouble
   }
 }

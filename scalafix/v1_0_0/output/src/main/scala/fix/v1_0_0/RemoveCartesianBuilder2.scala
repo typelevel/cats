@@ -10,3 +10,4 @@ object RemoveCartesianBuilderTests2 {
   o1 *> o2
   (o1, o2).mapN(_ + _)
 }
+

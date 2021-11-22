@@ -14,11 +14,13 @@ object RemoveCartesianBuilderTests {
     (o1, o2).tupled
     (o1, o2, o3).mapN(_ + _ + _)
     (o1 |+| o1, o3).mapN(_ + _)
-    (o1, o2, o3).mapN(_ + _ + _)
-    (o1 |+| o1, o3).mapN(_ + _)
-    (o1 |+| o1, o3).mapN(_ + _)
+    (o1, o2, o3) mapN (_ + _ + _)
+    (o1 |+| o1, o3) mapN (_ + _)
+    (o1 |+| o1, o3) mapN (_ + _)
 
-    (o1, o2, o3).mapN(_ + _ + _)
+    (o1,
+     o2,
+     o3) mapN (_ + _ + _)
   }
 
   {

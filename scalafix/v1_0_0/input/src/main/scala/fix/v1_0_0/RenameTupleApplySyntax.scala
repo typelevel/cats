@@ -19,7 +19,8 @@ object RenameTupleApplySyntaxTests {
 
   (Eq[Int], Eq[Int]).contramap2((f: Foo2) => (f.a, f.b))
   (Eq[Int], Eq[Int], Eq[Int]).contramap3((f: Foo3) => (f.a, f.b, f.c))
-  (Eq[Int], Eq[Int], Eq[Int], Eq[Int]).contramap4((f: Foo4) => (f.a, f.b, f.c, f.d))
+  (Eq[Int], Eq[Int], Eq[Int], Eq[Int]).contramap4((f: Foo4) =>
+    (f.a, f.b, f.c, f.d))
 
   (Semigroup[Int], Semigroup[Int])
     .imap2(Foo2.apply)(Function.unlift(Foo2.unapply))

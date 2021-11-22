@@ -25,8 +25,8 @@ class FoldMapABench {
   // Note that this doesn't actually short-circuit; it will keep combining
   // even after it reaches the `Left` value.
   @Benchmark
-  def foldLeftShortCircuit: Either[Int, Int] = xs.foldLeft(M.empty) { case (acc, x) =>
-    M.combine(acc, f(x))
+  def foldLeftShortCircuit: Either[Int, Int] = xs.foldLeft(M.empty) {
+    case (acc, x) => M.combine(acc, f(x))
   }
 
   @Benchmark
@@ -36,7 +36,7 @@ class FoldMapABench {
   def foldMapA: Either[Int, Int] = xs.foldMapA(g)
 
   @Benchmark
-  def foldLeft: Either[Int, Int] = xs.foldLeft(M.empty) { case (acc, x) =>
-    M.combine(acc, g(x))
+  def foldLeft: Either[Int, Int] = xs.foldLeft(M.empty) {
+    case (acc, x) => M.combine(acc, g(x))
   }
 }

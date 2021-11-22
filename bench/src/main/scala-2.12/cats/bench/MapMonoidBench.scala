@@ -25,30 +25,32 @@ class MapMonoidBench {
     cats.Monoid[Map[String, Int]].combineAll(maps)
 
   @Benchmark def combineCats: Map[String, Int] =
-    maps.foldLeft(Map.empty[String, Int]) { case (acc, m) =>
-      cats.Monoid[Map[String, Int]].combine(acc, m)
+    maps.foldLeft(Map.empty[String, Int]) {
+      case (acc, m) => cats.Monoid[Map[String, Int]].combine(acc, m)
     }
 
   @Benchmark def combineScalaz: Map[String, Int] =
-    maps.foldLeft(Map.empty[String, Int]) { case (acc, m) =>
-      scalaz.Monoid[Map[String, Int]].append(acc, m)
+    maps.foldLeft(Map.empty[String, Int]) {
+      case (acc, m) => scalaz.Monoid[Map[String, Int]].append(acc, m)
     }
 
   @Benchmark def combineDirect: Map[String, Int] =
-    maps.foldLeft(Map.empty[String, Int]) { case (acc, m) =>
-      m.foldLeft(acc) { case (m, (k, v)) =>
-        m.updated(k, v + m.getOrElse(k, 0))
-      }
+    maps.foldLeft(Map.empty[String, Int]) {
+      case (acc, m) =>
+        m.foldLeft(acc) {
+          case (m, (k, v)) => m.updated(k, v + m.getOrElse(k, 0))
+        }
     }
 
   @Benchmark def combineGeneric: Map[String, Int] =
     combineMapsGeneric[String, Int](maps, 0, _ + _)
 
   def combineMapsGeneric[K, V](maps: List[Map[K, V]], z: V, f: (V, V) => V): Map[K, V] =
-    maps.foldLeft(Map.empty[K, V]) { case (acc, m) =>
-      m.foldLeft(acc) { case (m, (k, v)) =>
-        m.updated(k, f(v, m.getOrElse(k, z)))
-      }
+    maps.foldLeft(Map.empty[K, V]) {
+      case (acc, m) =>
+        m.foldLeft(acc) {
+          case (m, (k, v)) => m.updated(k, f(v, m.getOrElse(k, z)))
+        }
     }
 
   @Benchmark def foldMapCats: Map[String, Int] =

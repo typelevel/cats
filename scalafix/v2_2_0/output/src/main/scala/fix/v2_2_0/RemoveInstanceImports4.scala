@@ -19,8 +19,10 @@ sealed trait Resolver extends Product with Serializable {
 object Resolver {
   final case class Credentials(user: String, pass: String)
 
-  final case class MavenRepository(name: String, location: String, credentials: Option[Credentials]) extends Resolver
-  final case class IvyRepository(name: String, pattern: String, credentials: Option[Credentials]) extends Resolver
+  final case class MavenRepository(name: String, location: String, credentials: Option[Credentials])
+      extends Resolver
+  final case class IvyRepository(name: String, pattern: String, credentials: Option[Credentials])
+      extends Resolver
 
   val mavenCentral: MavenRepository =
     MavenRepository("public", "https://repo1.maven.org/maven2/", None)
@@ -37,8 +39,8 @@ final case class Scope[A](value: A, resolvers: List[Resolver])
 object Scope {
 
   def combineByResolvers[A: Order](scopes: List[Scope[List[A]]]): List[Scope[List[A]]] =
-    scopes.groupByNel(_.resolvers).toList.map { case (resolvers, group) =>
-      Scope(group.reduceMap(_.value).distinct.sorted, resolvers)
+    scopes.groupByNel(_.resolvers).toList.map {
+      case (resolvers, group) => Scope(group.reduceMap(_.value).distinct.sorted, resolvers)
     }
 
   implicit def scopeOrder[A: Order]: Order[Scope[A]] =

@@ -22,12 +22,12 @@ object RemoveUnapplyTests {
   x.sequenceU_
   Foldable[List].sequenceU_(x)
 
-  import cats.data.Func.{appFunc, appFuncU}
+  import cats.data.Func.{appFuncU, appFunc}
   import cats.data.State.{get, set}
   import cats.data.Const
   type Count[A] = Const[Int, A]
   def liftInt(i: Int): Count[Unit] = Const(i)
-  def isSpace(c: Char): Boolean = c == ' ' || c == '\n'
+  def isSpace(c: Char): Boolean = (c == ' ' || c == '\n')
   def testIf(b: Boolean): Int = if (b) 1 else 0
   appFuncU { (c: Char) =>
     for {
@@ -35,7 +35,7 @@ object RemoveUnapplyTests {
       y = !isSpace(c)
       _ <- set(y)
     } yield testIf(y && !x)
-  }.andThen(appFunc(liftInt))
+  } andThen appFunc(liftInt)
 
   import cats.free.FreeT
   val a: Either[String, Int] = Right(42)

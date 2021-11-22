@@ -2,7 +2,7 @@ package fix
 package to1_0_0
 
 import cats.InjectK
-import cats.data.{EitherK, Tuple2K}
+import cats.data.{ EitherK, Tuple2K }
 
 object RenameInjectProdAndCoproductTests {
   def inject[F[_], G[_]](implicit inj: InjectK[F, G]) = ???
