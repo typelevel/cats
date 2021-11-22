@@ -7,14 +7,11 @@ import scala.meta._
 import scala.meta.contrib._
 
 // ref: https://github.com/typelevel/cats/pull/1745
-case class RemoveCartesianBuilder(index: SemanticdbIndex)
-    extends SemanticRule(index, "RemoveCartesianBuilder") {
+case class RemoveCartesianBuilder(index: SemanticdbIndex) extends SemanticRule(index, "RemoveCartesianBuilder") {
 
   private[this] val cartesianBuilders = SymbolMatcher.normalized(
     Symbol("cats/syntax/CartesianOps#`|@|`().") ::
-      (1 to 22).toList.map(arity =>
-      Symbol(
-        s"cats/syntax/CartesianBuilder#CartesianBuilder$arity#`|@|`().")): _*
+      (1 to 22).toList.map(arity => Symbol(s"cats/syntax/CartesianBuilder#CartesianBuilder$arity#`|@|`().")): _*
   )
 
   private[this] val partialApplies = SymbolMatcher.normalized(
@@ -48,9 +45,8 @@ case class RemoveCartesianBuilder(index: SemanticdbIndex)
       if !head.is[Token.LeftParen]
       last <- t.tokens.lastOption
       if !last.is[Token.RightParen]
-    } yield
-      ctx.addLeft(head, "(") +
-        ctx.addRight(last, ")")
+    } yield ctx.addLeft(head, "(") +
+      ctx.addRight(last, ")")
   }.asPatch
 
   override def fix(ctx: RuleCtx): Patch = {
@@ -62,7 +58,7 @@ case class RemoveCartesianBuilder(index: SemanticdbIndex)
       case t @ q"import cats.syntax.cartesian._" =>
         val usesPartialApplies = ctx.tree.exists {
           case partialApplies(_: Term.Name) => true
-          case _ => false
+          case _                            => false
         }
         if (usesPartialApplies) {
           ctx.addRight(t.tokens.last, "\n  import cats.syntax.apply._")
@@ -74,8 +70,7 @@ case class RemoveCartesianBuilder(index: SemanticdbIndex)
 }
 
 // ref: https://github.com/typelevel/cats/issues/1850
-case class ContraMapToLMap(index: SemanticdbIndex)
-  extends SemanticRule(index, "UseLMapInsteadOfContraMap") {
+case class ContraMapToLMap(index: SemanticdbIndex) extends SemanticRule(index, "UseLMapInsteadOfContraMap") {
 
   override def fix(ctx: RuleCtx): Patch = {
 
@@ -91,8 +86,7 @@ case class ContraMapToLMap(index: SemanticdbIndex)
 }
 
 // ref: https://github.com/typelevel/cats/pull/1583
-case class RemoveUnapply(index: SemanticdbIndex)
-    extends SemanticRule(index, "RemoveUnapply") {
+case class RemoveUnapply(index: SemanticdbIndex) extends SemanticRule(index, "RemoveUnapply") {
 
   override def fix(ctx: RuleCtx): Patch = ctx.replaceSymbols(
     "cats/Traverse.Ops#traverseU()." -> "traverse",
@@ -107,8 +101,7 @@ case class RemoveUnapply(index: SemanticdbIndex)
 }
 
 // ref: https://github.com/typelevel/cats/pull/1709
-case class RenameFreeSuspend(index: SemanticdbIndex)
-    extends SemanticRule(index, "RenameFreeSuspend") {
+case class RenameFreeSuspend(index: SemanticdbIndex) extends SemanticRule(index, "RenameFreeSuspend") {
 
   override def fix(ctx: RuleCtx): Patch = ctx.replaceSymbols(
     "cats/free/Free.suspend()." -> "defer",
@@ -118,8 +111,7 @@ case class RenameFreeSuspend(index: SemanticdbIndex)
 }
 
 // ref: https://github.com/typelevel/cats/pull/1611
-case class RenameReducibleMethods(index: SemanticdbIndex)
-    extends SemanticRule(index, "RenameReducibleMethods") {
+case class RenameReducibleMethods(index: SemanticdbIndex) extends SemanticRule(index, "RenameReducibleMethods") {
 
   override def fix(ctx: RuleCtx): Patch = ctx.replaceSymbols(
     "cats/Reducible#traverse1_()." -> "nonEmptyTraverse_",
@@ -133,8 +125,7 @@ case class RenameReducibleMethods(index: SemanticdbIndex)
 }
 
 // ref: https://github.com/typelevel/cats/pull/1614
-case class SimplifyEitherTLift(index: SemanticdbIndex)
-    extends SemanticRule(index, "SimplifyEitherTLift") {
+case class SimplifyEitherTLift(index: SemanticdbIndex) extends SemanticRule(index, "SimplifyEitherTLift") {
 
   private[this] val leftSymbol = SymbolMatcher.normalized(
     Symbol("cats/data/EitherTFunctions/left.")
@@ -180,8 +171,7 @@ case class RenameInjectProdAndCoproduct(index: SemanticdbIndex)
 }
 
 // ref: https://github.com/typelevel/cats/pull/1487
-case class RenameTupleApplySyntax(index: SemanticdbIndex)
-    extends SemanticRule(index, "RenameTupleApplySyntax") {
+case class RenameTupleApplySyntax(index: SemanticdbIndex) extends SemanticRule(index, "RenameTupleApplySyntax") {
 
   override def fix(ctx: RuleCtx): Patch = {
     ctx.replaceSymbols(
@@ -193,42 +183,37 @@ case class RenameTupleApplySyntax(index: SemanticdbIndex)
         )
       }: _*
     ) ++
-      ctx.tree.collect {
-        case t @ q"import cats.syntax.tuple._" =>
-          ctx.replaceTree(t, "import cats.syntax.apply._")
+      ctx.tree.collect { case t @ q"import cats.syntax.tuple._" =>
+        ctx.replaceTree(t, "import cats.syntax.apply._")
       }
   }
 }
 
 // ref: https://github.com/typelevel/cats/pull/1766
-case class RemoveSplit(index: SemanticdbIndex)
-    extends SemanticRule(index, "RemoveSplit") {
+case class RemoveSplit(index: SemanticdbIndex) extends SemanticRule(index, "RemoveSplit") {
 
   override def fix(ctx: RuleCtx): Patch = {
     ctx.replaceSymbols(
       "cats/arrow/Split." -> "cats/arrow/Arrow."
-    ) + ctx.tree.collect {
-      case t @ q"import cats.syntax.split._" =>
-        ctx.replaceTree(t, "import cats.syntax.arrow._")
+    ) + ctx.tree.collect { case t @ q"import cats.syntax.split._" =>
+      ctx.replaceTree(t, "import cats.syntax.arrow._")
     }.asPatch
   }
 
 }
 
 // ref: https://github.com/typelevel/cats/pull/1947
-case class RenameEitherTLiftT(index: SemanticdbIndex)
-  extends SemanticRule(index, "RenameEitherTLiftT") {
+case class RenameEitherTLiftT(index: SemanticdbIndex) extends SemanticRule(index, "RenameEitherTLiftT") {
 
   override def fix(ctx: RuleCtx): Patch =
     ctx.replaceSymbols(
-      "cats/data/EitherTFunctions#liftT()." -> "liftF",
+      "cats/data/EitherTFunctions#liftT()." -> "liftF"
     )
 
 }
 
 // ref: https://github.com/typelevel/cats/pull/2033
-case class RenameTransformersLift(index: SemanticdbIndex)
-  extends SemanticRule(index, "RenameTransformersLift") {
+case class RenameTransformersLift(index: SemanticdbIndex) extends SemanticRule(index, "RenameTransformersLift") {
 
   override def fix(ctx: RuleCtx): Patch =
     ctx.replaceSymbols(
@@ -241,8 +226,7 @@ case class RenameTransformersLift(index: SemanticdbIndex)
 
 }
 
-case class RenameApplyApConst(index: SemanticdbIndex)
-  extends SemanticRule(index, "RenameApplyApConst") {
+case class RenameApplyApConst(index: SemanticdbIndex) extends SemanticRule(index, "RenameApplyApConst") {
 
   override def fix(ctx: RuleCtx): Patch =
     ctx.replaceSymbols(
@@ -258,17 +242,14 @@ case class RenameApplyApConst(index: SemanticdbIndex)
 
 }
 
-
 // ref: https://github.com/typelevel/cats/pull/1961
-case class RenameCartesian(index: SemanticdbIndex)
-  extends SemanticRule(index, "RenameCartesian") {
+case class RenameCartesian(index: SemanticdbIndex) extends SemanticRule(index, "RenameCartesian") {
 
   override def fix(ctx: RuleCtx): Patch = {
     ctx.replaceSymbols(
       "cats/Cartesian." -> "cats/Semigroupal."
-    )+ ctx.tree.collect {
-      case t @ q"import cats.syntax.cartesian._" =>
-        ctx.replaceTree(t, "import cats.syntax.semigroupal._")
+    ) + ctx.tree.collect { case t @ q"import cats.syntax.cartesian._" =>
+      ctx.replaceTree(t, "import cats.syntax.semigroupal._")
     }.asPatch
   }
 

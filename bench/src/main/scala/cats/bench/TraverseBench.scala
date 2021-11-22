@@ -24,10 +24,9 @@ class TraverseListBench {
       .value
 
   def traverseFoldRight[G[_], A, B](fa: List[A])(f: A => G[B])(implicit G: Applicative[G]): G[List[B]] =
-    fa.foldRight[Eval[G[List[B]]]](Always(G.pure(Nil))) {
-        case (h, t) => G.map2Eval(f(h), Eval.defer(t))(_ :: _)
-      }
-      .value
+    fa.foldRight[Eval[G[List[B]]]](Always(G.pure(Nil))) { case (h, t) =>
+      G.map2Eval(f(h), Eval.defer(t))(_ :: _)
+    }.value
 
   def traverseRec[G[_], A, B](fa: List[A])(f: A => G[B])(implicit G: Applicative[G]): G[List[B]] = {
     def loop(fa: List[A]): Eval[G[List[B]]] = fa match {
@@ -71,10 +70,9 @@ class TraverseVectorBench {
       .value
 
   def traverseFoldRight[G[_], A, B](fa: Vector[A])(f: A => G[B])(implicit G: Applicative[G]): G[Vector[B]] =
-    fa.foldRight[Eval[G[Vector[B]]]](Always(G.pure(Vector.empty))) {
-        case (h, t) => G.map2Eval(f(h), Eval.defer(t))(_ +: _)
-      }
-      .value
+    fa.foldRight[Eval[G[Vector[B]]]](Always(G.pure(Vector.empty))) { case (h, t) =>
+      G.map2Eval(f(h), Eval.defer(t))(_ +: _)
+    }.value
 
   def traverseRec[G[_], A, B](fa: Vector[A])(f: A => G[B])(implicit G: Applicative[G]): G[Vector[B]] = {
     def loop(i: Int): Eval[G[Vector[B]]] =
@@ -96,10 +94,9 @@ class TraverseVectorBench {
 
   def traverseFoldRightViaList[G[_], A, B](fa: Vector[A])(f: A => G[B])(implicit G: Applicative[G]): G[Vector[B]] =
     G.map(
-      fa.foldRight[Eval[G[List[B]]]](Always(G.pure(Nil))) {
-          case (h, t) => G.map2Eval(f(h), Eval.defer(t))(_ :: _)
-        }
-        .value
+      fa.foldRight[Eval[G[List[B]]]](Always(G.pure(Nil))) { case (h, t) =>
+        G.map2Eval(f(h), Eval.defer(t))(_ :: _)
+      }.value
     )(_.toVector)
 
   def traverseRecViaList[G[_], A, B](fa: Vector[A])(f: A => G[B])(implicit G: Applicative[G]): G[Vector[B]] = {

@@ -5,7 +5,7 @@ package fix
 package to1_0_0
 
 import cats.free.Inject
-import cats.data.{ Coproduct, Prod }
+import cats.data.{Coproduct, Prod}
 
 object RenameInjectProdAndCoproductTests {
   def inject[F[_], G[_]](implicit inj: Inject[F, G]) = ???

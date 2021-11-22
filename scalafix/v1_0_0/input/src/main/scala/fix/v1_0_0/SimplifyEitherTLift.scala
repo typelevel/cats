@@ -8,7 +8,7 @@ object SimplifyEitherTLiftTests {
   import cats.Id
   import cats.data.EitherT
   val eithert = EitherT.left[Id, String, Int]("eithert")
-  eithert.recoverWith {
-    case "eithert" => EitherT.right[Id, String, Int](5)
+  eithert.recoverWith { case "eithert" =>
+    EitherT.right[Id, String, Int](5)
   }.isRight
 }
