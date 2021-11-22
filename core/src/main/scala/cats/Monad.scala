@@ -31,7 +31,7 @@ import scala.annotation.implicitNotFound
       ifM(p)(
         ifTrue = {
           map(b.value) { bv =>
-            Left(G.combineK(xs, G.pure(bv)))
+            Left(G.appendK(xs, bv))
           }
         },
         ifFalse = pure(Right(xs))
@@ -66,7 +66,7 @@ import scala.annotation.implicitNotFound
    */
   def untilM[G[_], A](f: F[A])(cond: => F[Boolean])(implicit G: Alternative[G]): F[G[A]] = {
     val p = Eval.later(cond)
-    flatMap(f)(x => map(whileM(map(p.value)(!_))(f))(xs => G.combineK(G.pure(x), xs)))
+    flatMap(f)(x => map(whileM(map(p.value)(!_))(f))(xs => G.prependK(x, xs)))
   }
 
   /**

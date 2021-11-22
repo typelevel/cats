@@ -4,7 +4,7 @@ import simulacrum.typeclass
 import scala.annotation.implicitNotFound
 
 @implicitNotFound("Could not find an instance of Alternative for ${F}")
-@typeclass trait Alternative[F[_]] extends Applicative[F] with MonoidK[F] { self =>
+@typeclass trait Alternative[F[_]] extends NonEmptyAlternative[F] with MonoidK[F] { self =>
 
   /**
    * Fold over the inner structure to combine all of the values with
@@ -23,7 +23,7 @@ import scala.annotation.implicitNotFound
    */
   def unite[G[_], A](fga: F[G[A]])(implicit FM: Monad[F], G: Foldable[G]): F[A] =
     FM.flatMap(fga) { ga =>
-      G.foldLeft(ga, empty[A])((acc, a) => combineK(acc, pure(a)))
+      G.foldLeft(ga, empty[A])((acc, a) => appendK(acc, a))
     }
 
   /**
@@ -61,8 +61,8 @@ import scala.annotation.implicitNotFound
   def separateFoldable[G[_, _], A, B](fgab: F[G[A, B]])(implicit G: Bifoldable[G], FF: Foldable[F]): (F[A], F[B]) =
     FF.foldLeft(fgab, (empty[A], empty[B])) { case (mamb, gab) =>
       G.bifoldLeft(gab, mamb)(
-        (t, a) => (combineK(t._1, pure(a)), t._2),
-        (t, b) => (t._1, combineK(t._2, pure(b)))
+        (t, a) => (appendK(t._1, a), t._2),
+        (t, b) => (t._1, appendK(t._2, b))
       )
     }
 
@@ -104,12 +104,11 @@ object Alternative {
   object ops {
     implicit def toAllAlternativeOps[F[_], A](target: F[A])(implicit tc: Alternative[F]): AllOps[F, A] {
       type TypeClassType = Alternative[F]
-    } =
-      new AllOps[F, A] {
-        type TypeClassType = Alternative[F]
-        val self: F[A] = target
-        val typeClassInstance: TypeClassType = tc
-      }
+    } = new AllOps[F, A] {
+      type TypeClassType = Alternative[F]
+      val self: F[A] = target
+      val typeClassInstance: TypeClassType = tc
+    }
   }
   trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: Alternative[F]
@@ -122,18 +121,17 @@ object Alternative {
     def separateFoldable[G[_, _], B, C](implicit ev$1: A <:< G[B, C], G: Bifoldable[G], FF: Foldable[F]): (F[B], F[C]) =
       typeClassInstance.separateFoldable[G, B, C](self.asInstanceOf[F[G[B, C]]])(G, FF)
   }
-  trait AllOps[F[_], A] extends Ops[F, A] with Applicative.AllOps[F, A] with MonoidK.AllOps[F, A] {
+  trait AllOps[F[_], A] extends Ops[F, A] with NonEmptyAlternative.AllOps[F, A] with MonoidK.AllOps[F, A] {
     type TypeClassType <: Alternative[F]
   }
   trait ToAlternativeOps extends Serializable {
     implicit def toAlternativeOps[F[_], A](target: F[A])(implicit tc: Alternative[F]): Ops[F, A] {
       type TypeClassType = Alternative[F]
-    } =
-      new Ops[F, A] {
-        type TypeClassType = Alternative[F]
-        val self: F[A] = target
-        val typeClassInstance: TypeClassType = tc
-      }
+    } = new Ops[F, A] {
+      type TypeClassType = Alternative[F]
+      val self: F[A] = target
+      val typeClassInstance: TypeClassType = tc
+    }
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToAlternativeOps
@@ -141,5 +139,4 @@ object Alternative {
   /* ======================================================================== */
   /* END OF SIMULACRUM-MANAGED CODE                                           */
   /* ======================================================================== */
-
 }
