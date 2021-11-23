@@ -17,6 +17,10 @@ trait SeqInstances extends cats.kernel.instances.SeqInstances {
 
       def combineK[A](x: Seq[A], y: Seq[A]): Seq[A] = x ++ y
 
+      override def prependK[A](a: A, fa: Seq[A]): Seq[A] = a +: fa
+
+      override def appendK[A](fa: Seq[A], a: A): Seq[A] = fa :+ a
+
       def pure[A](x: A): Seq[A] = Seq(x)
 
       override def map[A, B](fa: Seq[A])(f: A => B): Seq[B] =
