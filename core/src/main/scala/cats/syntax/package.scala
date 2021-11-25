@@ -71,4 +71,5 @@ package object syntax {
   object vector extends VectorSyntax
   object writer extends WriterSyntax
   object set extends SetSyntax
+  object nonEmptyAlternative extends NonEmptyAlternativeSyntax
 }

@@ -1,7 +1,7 @@
 package cats.free
 
 import Free.{FlatMapped, Pure, Suspend}
-import cats.{Foldable, Eval}
+import cats.{Eval, Foldable}
 
 private[free] trait FreeFoldStep[S[_], A] {
 
