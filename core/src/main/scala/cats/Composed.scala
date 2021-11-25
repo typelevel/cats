@@ -57,11 +57,24 @@ private[cats] trait ComposedMonoidK[F[_], G[_]] extends MonoidK[λ[α => F[G[α]
   override def empty[A]: F[G[A]] = F.empty
 }
 
+private[cats] trait ComposedNonEmptyAlternative[F[_], G[_]]
+    extends NonEmptyAlternative[λ[α => F[G[α]]]]
+    with ComposedApplicative[F, G]
+    with ComposedSemigroupK[F, G] { outer =>
+
+  def F: NonEmptyAlternative[F]
+}
+
 private[cats] trait ComposedAlternative[F[_], G[_]]
     extends Alternative[λ[α => F[G[α]]]]
-    with ComposedApplicative[F, G]
+    with ComposedNonEmptyAlternative[F, G]
     with ComposedMonoidK[F, G] { outer =>
+
   def F: Alternative[F]
+
+  override def prependK[A](a: A, fa: F[G[A]]): F[G[A]] = F.prependK(G.pure(a), fa)
+
+  override def appendK[A](fa: F[G[A]], a: A): F[G[A]] = F.appendK(fa, G.pure(a))
 }
 
 private[cats] trait ComposedFoldable[F[_], G[_]] extends Foldable[λ[α => F[G[α]]]] { outer =>

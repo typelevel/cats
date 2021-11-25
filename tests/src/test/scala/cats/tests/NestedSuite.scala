@@ -269,7 +269,7 @@ class NestedSuite extends CatsSuite {
   {
     type Pair[A] = (A, A)
 
-    //Scala 2.12 implicit resolution absolutely loses its mind here
+    // Scala 2.12 implicit resolution absolutely loses its mind here
     implicit val help_scala2_12: Representable.Aux[Nested[Pair, Pair, *], (Boolean, Boolean)] =
       Nested.catsDataRepresentableForNested[Pair, Pair]
 

@@ -12,8 +12,7 @@ import scala.annotation.tailrec
  */
 sealed abstract class FreeApplicative[F[_], A] extends Product with Serializable {
   self =>
-  // ap => apply alias needed so we can refer to both
-  // FreeApplicative.ap and FreeApplicative#ap
+
   import FreeApplicative.{lift, Ap, FA, Pure}
 
   final def ap[B](b: FA[F, A => B]): FA[F, B] =

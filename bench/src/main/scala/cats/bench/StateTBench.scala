@@ -44,7 +44,7 @@ class StateTBench {
 
   def fn(seed: Long): Eval[(Long, Int)] =
     Eval.now {
-      val newSeed = (seed * 0x5DEECE66DL + 0xBL) & 0xFFFFFFFFFFFFL
+      val newSeed = (seed * 0x5deece66dL + 0xbL) & 0xffffffffffffL
       val n = (newSeed >>> 16).toInt
       (newSeed, n)
     }

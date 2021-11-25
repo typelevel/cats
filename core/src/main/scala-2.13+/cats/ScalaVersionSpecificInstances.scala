@@ -36,7 +36,7 @@ private[cats] trait ScalaVersionSpecificMonoidKInstances {
 }
 
 private[cats] trait ScalaVersionSpecificParallelInstances {
-  @deprecated("Use catsParallelForLazyList", "3.0.0")
+  @deprecated("Use catsStdParallelForZipLazyList", "3.0.0")
   implicit def catsStdParallelForZipStream: Parallel.Aux[Stream, ZipStream] =
     cats.instances.parallel.catsStdParallelForZipStream
 
@@ -69,7 +69,7 @@ private[cats] trait ScalaVersionSpecificTraverseFilterInstances {
 }
 
 private[cats] trait ScalaVersionSpecificAlignInstances {
-  @deprecated("Use catsTraverseFilterForLazyList", "3.0.0")
+  @deprecated("Use catsAlignForLazyList", "3.0.0")
   implicit def catsAlignForStream: Align[Stream] =
     cats.instances.stream.catsStdInstancesForStream
 

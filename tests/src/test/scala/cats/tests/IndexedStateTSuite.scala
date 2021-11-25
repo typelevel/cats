@@ -508,7 +508,7 @@ class IndexedStateTSuite extends CatsSuite {
     Alternative[IndexedStateT[ListWrapper, Int, Int, *]]
     Applicative[IndexedStateT[ListWrapper, Int, Int, *]]
     Apply[IndexedStateT[ListWrapper, Int, Int, *]]
-    //Functor[IndexedStateT[ListWrapper, Int, Int, *]]
+    // Functor[IndexedStateT[ListWrapper, Int, Int, *]]
     MonoidK[IndexedStateT[ListWrapper, Int, Int, *]]
     SemigroupK[IndexedStateT[ListWrapper, Int, Int, *]]
   }
