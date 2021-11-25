@@ -7,7 +7,7 @@ trait Field[@sp(Int, Long, Float, Double) A]
     extends Any
     with EuclideanRing[A]
     with DivisionRing[A]
-    with MultiplicativeCommutativeGroup[A] {
+    with CommutativeSemifield[A] {
   self =>
 
   // default implementations for GCD

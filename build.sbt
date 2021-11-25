@@ -19,27 +19,27 @@ ThisBuild / scalafixDependencies += "org.typelevel" %% "simulacrum-scalafix" % "
 
 val scalaCheckVersion = "1.15.4"
 
-val disciplineVersion = "1.1.5"
+val disciplineVersion = "1.2.0"
 
 val disciplineMunitVersion = "1.0.9"
 
-val kindProjectorVersion = "0.13.0"
+val kindProjectorVersion = "0.13.2"
 
 ThisBuild / githubWorkflowUseSbtThinClient := false
 
 val PrimaryOS = "ubuntu-latest"
 ThisBuild / githubWorkflowOSes := Seq(PrimaryOS)
+ThisBuild / githubWorkflowEnv += ("JABBA_INDEX" -> "https://github.com/typelevel/jdk-index/raw/main/index.json")
 
-val PrimaryJava = "adopt@1.8"
-val LTSJava = "adopt@1.11"
-val LatestJava = "adopt@1.15"
-val GraalVM8 = "graalvm-ce-java8@20.2.0"
+val PrimaryJava = "adoptium@8"
+val LTSJava = "adoptium@17"
+val GraalVM8 = "graalvm-ce-java8@21.2"
 
-ThisBuild / githubWorkflowJavaVersions := Seq(PrimaryJava, LTSJava, LatestJava, GraalVM8)
+ThisBuild / githubWorkflowJavaVersions := Seq(PrimaryJava, LTSJava, GraalVM8)
 
-val Scala212 = "2.12.14"
+val Scala212 = "2.12.15"
 val Scala213 = "2.13.6"
-val Scala3 = "3.0.1"
+val Scala3 = "3.0.2"
 
 ThisBuild / crossScalaVersions := Seq(Scala212, Scala213, Scala3)
 ThisBuild / scalaVersion := Scala213
@@ -275,18 +275,6 @@ lazy val docSettings = Seq(
   micrositeGithubRepo := "cats",
   micrositeImgDirectory := (LocalRootProject / baseDirectory).value / "docs" / "src" / "main" / "resources" / "microsite" / "img",
   micrositeJsDirectory := (LocalRootProject / baseDirectory).value / "docs" / "src" / "main" / "resources" / "microsite" / "js",
-  micrositeStaticDirectory := (LocalRootProject / baseDirectory).value / "docs" / "target" / "main" / "resources_managed" / "microsite" / "static",
-  makeMicrosite := {
-    import scala.sys.process._
-    IO.createDirectory(micrositeStaticDirectory.value)
-    if (
-      (url(
-        "https://opencollective.com/typelevel/members/all.json"
-      ) #> (micrositeStaticDirectory.value / "members.json")).! != 0
-    )
-      throw new java.io.IOException("Failed to download https://opencollective.com/typelevel/members/all.json")
-    makeMicrosite.value
-  },
   micrositeTheme := "pattern",
   micrositePalette := Map(
     "brand-primary" -> "#5B5988",
@@ -321,7 +309,7 @@ lazy val docSettings = Seq(
     Set("-Ywarn-unused-import", "-Ywarn-unused:imports", "-Ywarn-dead-code", "-Xfatal-warnings")
   )),
   git.remoteRepo := "git@github.com:typelevel/cats.git",
-  makeSite / includeFilter := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.yml" | "*.md" | "*.svg" | "*.json",
+  makeSite / includeFilter := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.yml" | "*.md" | "*.svg",
   Jekyll / includeFilter := (makeSite / includeFilter).value,
   mdocIn := (LocalRootProject / baseDirectory).value / "docs" / "src" / "main" / "mdoc",
   mdocExtraArguments := Seq("--no-link-hygiene")
@@ -373,7 +361,7 @@ def mimaSettings(moduleName: String, includeCats1: Boolean = true) =
     mimaBinaryIssueFilters ++= {
       import com.typesafe.tools.mima.core.ProblemFilters._
       import com.typesafe.tools.mima.core._
-      //Only sealed abstract classes that provide implicit instances to companion objects are allowed here, since they don't affect usage outside of the file.
+      // Only sealed abstract classes that provide implicit instances to companion objects are allowed here, since they don't affect usage outside of the file.
       Seq(
         exclude[DirectMissingMethodProblem]("cats.data.OptionTInstances2.catsDataTraverseForOptionT"),
         exclude[DirectMissingMethodProblem]("cats.data.KleisliInstances1.catsDataCommutativeArrowForKleisliId"),
@@ -386,8 +374,8 @@ def mimaSettings(moduleName: String, includeCats1: Boolean = true) =
         exclude[DirectMissingMethodProblem]("cats.data.OptionTInstances1.catsDataMonadErrorMonadForOptionT"),
         exclude[DirectMissingMethodProblem]("cats.data.OptionTInstances1.catsDataMonadErrorForOptionT")
       ) ++
-        //These things are Ops classes that shouldn't have the `value` exposed. These should have never been public because they don't
-        //provide any value. Making them private because of issues like #2514 and #2613.
+        // These things are Ops classes that shouldn't have the `value` exposed. These should have never been public because they don't
+        // provide any value. Making them private because of issues like #2514 and #2613.
         Seq(
           exclude[DirectMissingMethodProblem]("cats.ApplicativeError#LiftFromOptionPartially.dummy"),
           exclude[DirectMissingMethodProblem]("cats.data.Const#OfPartiallyApplied.dummy"),
@@ -477,7 +465,7 @@ def mimaSettings(moduleName: String, includeCats1: Boolean = true) =
           exclude[IncompatibleMethTypeProblem]("cats.arrow.FunctionKMacros#Lifter.this"),
           exclude[IncompatibleResultTypeProblem]("cats.arrow.FunctionKMacros#Lifter.c"),
           exclude[DirectMissingMethodProblem]("cats.arrow.FunctionKMacros.compatNewTypeName")
-        ) ++ //package private classes no longer needed
+        ) ++ // package private classes no longer needed
         Seq(
           exclude[MissingClassProblem]("cats.kernel.compat.scalaVersionMoreSpecific$"),
           exclude[MissingClassProblem]("cats.kernel.compat.scalaVersionMoreSpecific"),
@@ -528,6 +516,12 @@ def mimaSettings(moduleName: String, includeCats1: Boolean = true) =
         Seq(
           exclude[MissingClassProblem]("algebra.laws.IsSerializable"),
           exclude[MissingClassProblem]("algebra.laws.IsSerializable$")
+        ) ++ // https://github.com/typelevel/cats/pull/3987
+        Seq(
+          exclude[DirectAbstractMethodProblem]("cats.free.ContravariantCoyoneda.k"),
+          exclude[ReversedAbstractMethodProblem]("cats.free.ContravariantCoyoneda.k"),
+          exclude[DirectAbstractMethodProblem]("cats.free.Coyoneda.k"),
+          exclude[ReversedAbstractMethodProblem]("cats.free.Coyoneda.k")
         )
     }
   )
@@ -1097,7 +1091,7 @@ lazy val sharedReleaseProcess = Seq(
     checkSnapshotDependencies,
     inquireVersions,
     runClean,
-    runTest, //temporarily only run test in current scala version because docs won't build in 2.13 yet
+    runTest, // temporarily only run test in current scala version because docs won't build in 2.13 yet
     setReleaseVersion,
     commitReleaseVersion,
     tagRelease,

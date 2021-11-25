@@ -14,6 +14,7 @@ abstract class AllSyntaxBinCompat
 
 trait AllSyntax
     extends AlternativeSyntax
+    with NonEmptyAlternativeSyntax
     with AlignSyntax
     with ApplicativeSyntax
     with ApplicativeErrorSyntax
@@ -62,6 +63,7 @@ trait AllSyntax
     with WriterSyntax
     with ParallelFoldMapASyntax
     with ParallelTraverseFilterSyntax
+    with ParallelReduceMapASyntax
 
 trait AllSyntaxBinCompat0 extends UnorderedTraverseSyntax with ApplicativeErrorExtension with TrySyntax
 
