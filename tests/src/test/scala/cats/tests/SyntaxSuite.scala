@@ -370,7 +370,7 @@ object SyntaxSuite {
     val fa2: F[A] = fa.appendK(a)
   }
 
-  def testAlternativeMonad[F[_]: Alternative: Monad, G[_]: Foldable, H[_, _]: Bifoldable, A, B]: Unit = {
+  def testAlternativeFlatMap[F[_]: Alternative: FlatMap, G[_]: Foldable, H[_, _]: Bifoldable, A, B]: Unit = {
     val fga = mock[F[G[A]]]
     val fa = fga.unite
 
