@@ -22,6 +22,10 @@ trait LazyListInstances extends cats.kernel.instances.LazyListInstances {
 
       def combineK[A](x: LazyList[A], y: LazyList[A]): LazyList[A] = x.lazyAppendedAll(y)
 
+      override def prependK[A](a: A, fa: LazyList[A]): LazyList[A] = fa.prepended(a)
+
+      override def appendK[A](fa: LazyList[A], a: A): LazyList[A] = fa.appended(a)
+
       def pure[A](x: A): LazyList[A] = LazyList(x)
 
       override def map[A, B](fa: LazyList[A])(f: A => B): LazyList[B] =
