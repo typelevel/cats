@@ -16,7 +16,7 @@ class RepresentableStoreTSuite extends CatsSuite {
 
   implicit val scala2_12_makes_me_sad: Comonad[StoreT[Id, MiniInt, *]] =
     RepresentableStoreT.comonadForStoreT[Id, Function1[MiniInt, *], MiniInt]
-  //Like, really, really, really sad
+  // Like, really, really, really sad
   val a: Arbitrary[Int] = implicitly[Arbitrary[Int]]
   val b: Eq[Int] = Eq[Int]
   val c: Arbitrary[StoreT[Id, MiniInt, Int]] = implicitly[Arbitrary[StoreT[Id, MiniInt, Int]]]

@@ -50,6 +50,7 @@ package object syntax {
       with ParallelUnorderedTraverseSyntax
       with ParallelFoldMapASyntax
       with ParallelTraverseFilterSyntax
+      with ParallelReduceMapASyntax
   object partialOrder extends PartialOrderSyntax
   object profunctor extends ProfunctorSyntax
   object reducible extends ReducibleSyntax with ReducibleSyntaxBinCompat0
@@ -70,4 +71,5 @@ package object syntax {
   object vector extends VectorSyntax
   object writer extends WriterSyntax
   object set extends SetSyntax
+  object nonEmptyAlternative extends NonEmptyAlternativeSyntax
 }

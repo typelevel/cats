@@ -6,7 +6,7 @@ import cats.instances.all._
 import cats.kernel.Eq
 import cats.laws.discipline.{ContravariantTests, SerializableTests}
 import cats.tests.CatsSuite
-import org.scalacheck.{Arbitrary}
+import org.scalacheck.Arbitrary
 import cats.syntax.eq._
 import org.scalacheck.Prop._
 

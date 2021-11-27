@@ -61,7 +61,7 @@ class ApplicativeErrorSuite extends CatsSuite {
     assert(compileErrors("e2.attemptNarrow[Num]").nonEmpty)
 
     val e3: Either[List[T[String]], Unit] = List(Str).asLeft[Unit]
-    //assertEquals(compileErrors("e3.attemptNarrow[List[Str.type]]"), "")
+    // assertEquals(compileErrors("e3.attemptNarrow[List[Str.type]]"), "")
   }
 
   test("attemptT syntax creates an EitherT") {
