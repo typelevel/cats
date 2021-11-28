@@ -1,9 +1,9 @@
 package cats.tests
 
-import cats.{Bimonad, CommutativeMonad, Id, Reducible, Traverse}
 import cats.laws.discipline._
 import cats.syntax.applicative._
 import cats.syntax.eq._
+import cats.{Bimonad, CommutativeMonad, Id, Reducible, Semigroupal, Traverse}
 import org.scalacheck.Prop._
 
 class IdSuite extends CatsSuite {
@@ -29,5 +29,10 @@ class IdSuite extends CatsSuite {
       assert(id === i.pure[Id])
       assert(id === i)
     }
+  }
+
+  def summonInstances(): Unit = {
+    Semigroupal[Id]
+    ()
   }
 }

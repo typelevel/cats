@@ -49,6 +49,7 @@ import scala.annotation.implicitNotFound
 }
 
 object Semigroupal extends ScalaVersionSpecificSemigroupalInstances with SemigroupalArityFunctions {
+  implicit def catsSemigroupalForId: Semigroupal[Id] = catsInstancesForId
   implicit def catsSemigroupalForOption: Semigroupal[Option] = cats.instances.option.catsStdInstancesForOption
   implicit def catsSemigroupalForTry: Semigroupal[Try] = cats.instances.try_.catsStdInstancesForTry
   implicit def catsSemigroupalForFuture(implicit ec: ExecutionContext): Semigroupal[Future] =
