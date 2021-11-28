@@ -990,26 +990,31 @@ addCommandAlias("buildCoreJVM", ";coreJVM/test")
 addCommandAlias("buildTestsJVM", ";lawsJVM/test;testkitJVM/test;testsJVM/test;jvm/test")
 addCommandAlias("buildFreeJVM", ";freeJVM/test")
 addCommandAlias("buildAlleycatsJVM", ";alleycatsCoreJVM/test;alleycatsLawsJVM/test;alleycatsTestsJVM/test")
-addCommandAlias("buildJVM", ";buildKernelJVM;buildCoreJVM;buildTestsJVM;buildFreeJVM;buildAlleycatsJVM")
+addCommandAlias("buildAlgebraJVM", ";algebraCoreJVM/test;algebraLawsJVM/test")
+addCommandAlias("buildJVM", ";buildKernelJVM;buildCoreJVM;buildTestsJVM;buildFreeJVM;buildAlleycatsJVM;buildAlgebraJVM")
 addCommandAlias("validateBC", ";binCompatTest/test;catsJVM/mimaReportBinaryIssues")
 addCommandAlias("validateJVM", ";fmtCheck;buildJVM;bench/test;validateBC;makeMicrosite")
 addCommandAlias("validateJS", ";testsJS/test;js/test")
 addCommandAlias("validateKernelJS", "kernelLawsJS/test")
 addCommandAlias("validateFreeJS", "freeJS/test")
 addCommandAlias("validateAlleycatsJS", "alleycatsTestsJS/test")
-addCommandAlias("validateAllJS", "all testsJS/test js/test kernelLawsJS/test freeJS/test alleycatsTestsJS/test")
+addCommandAlias("validateAlgebraJS", "algebraLawsJS/test")
+addCommandAlias("validateAllJS",
+                "all testsJS/test js/test kernelLawsJS/test freeJS/test alleycatsTestsJS/test validateAlgebraJS"
+)
 addCommandAlias("validateNative", ";testsNative/test;native/test")
 addCommandAlias("validateKernelNative", "kernelLawsNative/test")
 addCommandAlias("validateFreeNative", "freeNative/test")
 addCommandAlias("validateAlleycatsNative", "alleycatsTestsNative/test")
+addCommandAlias("validateAlgebraNative", "algebraLawsNative/test")
 
 val validateAllNativeAlias =
-  "all testsNative/test native/test kernelLawsNative/test freeNative/test alleycatsTestsNative/test"
+  "all testsNative/test native/test kernelLawsNative/test freeNative/test alleycatsTestsNative/test algebraLawsNative/test"
 addCommandAlias("validateAllNative", validateAllNativeAlias)
 
 addCommandAlias(
   "validate",
-  ";clean;validateJS;validateKernelJS;validateFreeJS;validateNative;validateKernelNative;validateFreeNative;validateJVM"
+  ";clean;validateJS;validateKernelJS;validateFreeJS;validateAlleycatsJS;validateAlgebraJS;validateNative;validateKernelNative;validateFreeNative;validateAlgebraNative;validateJVM"
 )
 
 addCommandAlias("prePR", "fmt")
