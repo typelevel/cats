@@ -21,29 +21,27 @@
 
 package cats.tests
 
-import cats.{Align, Bimonad, Eval, NonEmptyTraverse, Now, Reducible, SemigroupK, Show}
-import cats.data.{NonEmptyList, NonEmptyMap, NonEmptySet, NonEmptyVector}
+import cats._
+import cats.data.NonEmptyList
 import cats.data.NonEmptyList.ZipNonEmptyList
-import cats.kernel.{Eq, Order, PartialOrder, Semigroup}
-import cats.kernel.laws.discipline.{EqTests, OrderTests, PartialOrderTests, SemigroupTests}
+import cats.data.NonEmptyMap
+import cats.data.NonEmptySet
+import cats.data.NonEmptyVector
+import cats.kernel.laws.discipline.EqTests
+import cats.kernel.laws.discipline.OrderTests
+import cats.kernel.laws.discipline.PartialOrderTests
+import cats.kernel.laws.discipline.SemigroupTests
+import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.{
-  AlignTests,
-  BimonadTests,
-  CommutativeApplyTests,
-  NonEmptyTraverseTests,
-  ReducibleTests,
-  SemigroupKTests,
-  SerializableTests,
-  ShortCircuitingTests
-}
+import cats.syntax.eq._
 import cats.syntax.foldable._
 import cats.syntax.reducible._
 import cats.syntax.show._
-import scala.collection.immutable.{SortedMap, SortedSet}
-import cats.syntax.eq._
 import org.scalacheck.Prop._
 import org.scalacheck.Test.Parameters
+
+import scala.collection.immutable.SortedMap
+import scala.collection.immutable.SortedSet
 
 class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonEmptyList] {
   protected def toList[A](value: NonEmptyList[A]): List[A] = value.toList
@@ -64,8 +62,8 @@ class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonE
   checkAll("NonEmptyList[Int]", ReducibleTests[NonEmptyList].reducible[Option, Int, Int])
   checkAll("Reducible[NonEmptyList]", SerializableTests.serializable(Reducible[NonEmptyList]))
 
-  checkAll("NonEmptyList[Int]", SemigroupKTests[NonEmptyList].semigroupK[Int])
-  checkAll("SemigroupK[NonEmptyList[A]]", SerializableTests.serializable(SemigroupK[NonEmptyList]))
+  checkAll("NonEmptyList[Int]", NonEmptyAlternativeTests[NonEmptyList].nonEmptyAlternative[Int, Int, Int])
+  checkAll("NonEmptyAlternative[NonEmptyList[A]]", SerializableTests.serializable(NonEmptyAlternative[NonEmptyList]))
 
   checkAll("NonEmptyList[Int]", SemigroupTests[NonEmptyList[Int]].semigroup)
   checkAll("Semigroup[NonEmptyList[Int]]", SerializableTests.serializable(Semigroup[NonEmptyList[Int]]))

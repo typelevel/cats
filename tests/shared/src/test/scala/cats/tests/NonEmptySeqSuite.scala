@@ -21,17 +21,45 @@
 
 package cats.tests
 
+import cats._
 import cats.data.NonEmptySeq
+import cats.kernel.laws.discipline.SemigroupTests
+import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
-import cats.syntax.seq._
+import cats.syntax.all._
 import org.scalacheck.Prop._
 
 import scala.collection.immutable.Seq
 
 class NonEmptySeqSuite extends NonEmptyCollectionSuite[Seq, NonEmptySeq, NonEmptySeq] {
-  protected def toList[A](value: NonEmptySeq[A]): List[A] = value.toSeq.toList
-  protected def underlyingToList[A](underlying: Seq[A]): List[A] = underlying.toList
-  protected def toNonEmptyCollection[A](value: NonEmptySeq[A]): NonEmptySeq[A] = value
+  override protected def toList[A](value: NonEmptySeq[A]): List[A] = value.toList
+  override protected def underlyingToList[A](underlying: Seq[A]): List[A] = underlying.toList
+  override protected def toNonEmptyCollection[A](value: NonEmptySeq[A]): NonEmptySeq[A] = value
+
+  checkAll(
+    "NonEmptySeq[Int] with Option",
+    NonEmptyTraverseTests[NonEmptySeq].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option]
+  )
+  checkAll("NonEmptyTraverse[NonEmptySeq[A]]", SerializableTests.serializable(NonEmptyTraverse[NonEmptySeq]))
+
+  checkAll("NonEmptySeq[Int]", ReducibleTests[NonEmptySeq].reducible[Option, Int, Int])
+  checkAll("Reducible[NonEmptySeq]", SerializableTests.serializable(Reducible[NonEmptySeq]))
+
+  checkAll("NonEmptySeq[Int]", NonEmptyAlternativeTests[NonEmptySeq].nonEmptyAlternative[Int, Int, Int])
+  checkAll("NonEmptyAlternative[NonEmptySeq[A]]", SerializableTests.serializable(NonEmptyAlternative[NonEmptySeq]))
+
+  checkAll("NonEmptySeq[Int]", SemigroupTests[NonEmptySeq[Int]].semigroup)
+  checkAll("Semigroup[NonEmptySeq[Int]]", SerializableTests.serializable(Semigroup[NonEmptySeq[Int]]))
+
+  checkAll("NonEmptySeq[Int]", BimonadTests[NonEmptySeq].bimonad[Int, Int, Int])
+  checkAll("Bimonad[NonEmptySeq]", SerializableTests.serializable(Bimonad[NonEmptySeq]))
+
+  checkAll("NonEmptySeq[Int]", AlignTests[NonEmptySeq].align[Int, Int, Int, Int])
+  checkAll("Align[NonEmptySeq]", SerializableTests.serializable(Align[NonEmptySeq]))
+
+  checkAll("NonEmptySeq[Int]", ShortCircuitingTests[NonEmptySeq].foldable[Int])
+  checkAll("NonEmptySeq[Int]", ShortCircuitingTests[NonEmptySeq].traverse[Int])
+  checkAll("NonEmptySeq[Int]", ShortCircuitingTests[NonEmptySeq].nonEmptyTraverse[Int])
 
   test("neSeq => Seq => neSeq returns original neSeq")(
     forAll { (fa: NonEmptySeq[Int]) =>

@@ -617,10 +617,20 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
 
 sealed abstract private[data] class NonEmptyChainInstances extends NonEmptyChainInstances1 {
 
-  implicit val catsDataInstancesForNonEmptyChain: SemigroupK[NonEmptyChain]
+  @deprecated(
+    "maintained for the sake of binary compatibility only, use catsDataInstancesForNonEmptyChainBinCompat1 instead",
+    "2.9.0"
+  )
+  def catsDataInstancesForNonEmptyChain: SemigroupK[NonEmptyChain]
     with NonEmptyTraverse[NonEmptyChain]
     with Bimonad[NonEmptyChain]
     with Align[NonEmptyChain] =
+    catsDataInstancesForNonEmptyChainBinCompat1
+
+  implicit val catsDataInstancesForNonEmptyChainBinCompat1: Align[NonEmptyChain]
+    with Bimonad[NonEmptyChain]
+    with NonEmptyAlternative[NonEmptyChain]
+    with NonEmptyTraverse[NonEmptyChain] =
     new AbstractNonEmptyInstances[Chain, NonEmptyChain] with Align[NonEmptyChain] {
       def extract[A](fa: NonEmptyChain[A]): A = fa.head
 

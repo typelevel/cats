@@ -386,24 +386,40 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
 @suppressUnusedImportWarningForScalaVersionSpecific
 sealed abstract private[data] class NonEmptyVectorInstances {
 
+  @deprecated(
+    "maintained for the sake of binary compatibility only - use catsDataInstancesForNonEmptyChainBinCompat1 instead",
+    "2.9.0"
+  )
+  def catsDataInstancesForNonEmptyVector: SemigroupK[NonEmptyVector]
+    with Bimonad[NonEmptyVector]
+    with NonEmptyTraverse[NonEmptyVector]
+    with Align[NonEmptyVector] =
+    catsDataInstancesForNonEmptyVectorBinCompat1
+
   /**
    * This is not a bug. The declared type of `catsDataInstancesForNonEmptyVector` intentionally ignores
    * `NonEmptyReducible` trait for it not being a typeclass.
    *
    * Also see the discussion: PR #3541 and issue #3069.
    */
-  implicit val catsDataInstancesForNonEmptyVector: SemigroupK[NonEmptyVector]
+  implicit val catsDataInstancesForNonEmptyVectorBinCompat1: NonEmptyAlternative[NonEmptyVector]
     with Bimonad[NonEmptyVector]
     with NonEmptyTraverse[NonEmptyVector]
     with Align[NonEmptyVector] =
     new NonEmptyReducible[NonEmptyVector, Vector]
-      with SemigroupK[NonEmptyVector]
+      with NonEmptyAlternative[NonEmptyVector]
       with Bimonad[NonEmptyVector]
       with NonEmptyTraverse[NonEmptyVector]
       with Align[NonEmptyVector] {
 
       def combineK[A](a: NonEmptyVector[A], b: NonEmptyVector[A]): NonEmptyVector[A] =
         a.concatNev(b)
+
+      override def prependK[A](a: A, fa: NonEmptyVector[A]): NonEmptyVector[A] =
+        fa.prepend(a)
+
+      override def appendK[A](fa: NonEmptyVector[A], a: A): NonEmptyVector[A] =
+        fa.append(a)
 
       override def split[A](fa: NonEmptyVector[A]): (A, Vector[A]) = (fa.head, fa.tail)
 
@@ -550,14 +566,14 @@ sealed abstract private[data] class NonEmptyVectorInstances {
   implicit def catsDataShowForNonEmptyVector[A: Show]: Show[NonEmptyVector[A]] = _.show
 
   implicit def catsDataSemigroupForNonEmptyVector[A]: Semigroup[NonEmptyVector[A]] =
-    catsDataInstancesForNonEmptyVector.algebra
+    catsDataInstancesForNonEmptyVectorBinCompat1.algebra
 
   implicit def catsDataParallelForNonEmptyVector: NonEmptyParallel.Aux[NonEmptyVector, ZipNonEmptyVector] =
     new NonEmptyParallel[NonEmptyVector] {
       type F[x] = ZipNonEmptyVector[x]
 
       def apply: Apply[ZipNonEmptyVector] = ZipNonEmptyVector.catsDataCommutativeApplyForZipNonEmptyVector
-      def flatMap: FlatMap[NonEmptyVector] = NonEmptyVector.catsDataInstancesForNonEmptyVector
+      def flatMap: FlatMap[NonEmptyVector] = NonEmptyVector.catsDataInstancesForNonEmptyVectorBinCompat1
 
       def sequential: ZipNonEmptyVector ~> NonEmptyVector =
         new (ZipNonEmptyVector ~> NonEmptyVector) { def apply[A](a: ZipNonEmptyVector[A]): NonEmptyVector[A] = a.value }

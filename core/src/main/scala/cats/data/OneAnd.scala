@@ -40,7 +40,7 @@ final case class OneAnd[F[_], A](head: A, tail: F[A]) {
    * Combine the head and tail into a single `F[A]` value.
    */
   def unwrap(implicit F: Alternative[F]): F[A] =
-    F.combineK(F.pure(head), tail)
+    F.prependK(head, tail)
 
   /**
    * remove elements not matching the predicate
@@ -54,7 +54,7 @@ final case class OneAnd[F[_], A](head: A, tail: F[A]) {
    * Append another OneAnd to this
    */
   def combine(other: OneAnd[F, A])(implicit F: Alternative[F]): OneAnd[F, A] =
-    OneAnd(head, F.combineK(tail, F.combineK(F.pure(other.head), other.tail)))
+    OneAnd(head, F.combineK(tail, other.unwrap))
 
   /**
    * find the first element matching the predicate, if one exists
@@ -239,7 +239,7 @@ sealed abstract private[data] class OneAndLowPriority2 extends OneAndLowPriority
       override def ap[A, B](ff: OneAnd[F, A => B])(fa: OneAnd[F, A]): OneAnd[F, B] = {
         val (f, tf) = (ff.head, ff.tail)
         val (a, ta) = (fa.head, fa.tail)
-        val fb = F.ap(tf)(F.combineK(F.pure(a), ta))
+        val fb = F.ap(tf)(F.prependK(a, ta))
         OneAnd(f(a), F.combineK(F.map(ta)(f), fb))
       }
     }

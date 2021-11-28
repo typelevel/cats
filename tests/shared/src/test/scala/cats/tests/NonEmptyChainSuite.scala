@@ -21,22 +21,19 @@
 
 package cats.tests
 
-import cats.{Align, Bimonad, SemigroupK, Show, Traverse}
-import cats.data.{Chain, NonEmptyChain, NonEmptyChainOps}
-import cats.kernel.{Eq, Order, PartialOrder, Semigroup}
-import cats.kernel.laws.discipline.{EqTests, OrderTests, PartialOrderTests, SemigroupTests}
-import cats.laws.discipline.{
-  AlignTests,
-  BimonadTests,
-  NonEmptyTraverseTests,
-  SemigroupKTests,
-  SerializableTests,
-  ShortCircuitingTests
-}
+import cats._
+import cats.data.Chain
+import cats.data.NonEmptyChain
+import cats.data.NonEmptyChainOps
+import cats.kernel.laws.discipline.EqTests
+import cats.kernel.laws.discipline.OrderTests
+import cats.kernel.laws.discipline.PartialOrderTests
+import cats.kernel.laws.discipline.SemigroupTests
+import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.syntax.either._
-import cats.syntax.foldable._
 import cats.syntax.eq._
+import cats.syntax.foldable._
 import org.scalacheck.Prop._
 
 class NonEmptyChainSuite extends NonEmptyCollectionSuite[Chain, NonEmptyChain, NonEmptyChainOps] {
@@ -44,8 +41,8 @@ class NonEmptyChainSuite extends NonEmptyCollectionSuite[Chain, NonEmptyChain, N
   protected def underlyingToList[A](underlying: Chain[A]): List[A] = underlying.toList
   protected def toNonEmptyCollection[A](nea: NonEmptyChain[A]): NonEmptyChainOps[A] = nea
 
-  checkAll("NonEmptyChain[Int]", SemigroupKTests[NonEmptyChain].semigroupK[Int])
-  checkAll("SemigroupK[NonEmptyChain]", SerializableTests.serializable(SemigroupK[NonEmptyChain]))
+  checkAll("NonEmptyChain[Int]", NonEmptyAlternativeTests[NonEmptyChain].nonEmptyAlternative[Int, Int, Int])
+  checkAll("NonEmptyAlternative[NonEmptyChain]", SerializableTests.serializable(NonEmptyAlternative[NonEmptyChain]))
 
   checkAll("NonEmptyChain[Int] with Option",
            NonEmptyTraverseTests[NonEmptyChain].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option]

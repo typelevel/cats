@@ -21,48 +21,23 @@
 
 package cats.tests
 
-import cats.{
-  Align,
-  Bimonad,
-  CommutativeApply,
-  Comonad,
-  Eval,
-  Foldable,
-  Functor,
-  Monad,
-  NonEmptyTraverse,
-  Now,
-  Reducible,
-  SemigroupK,
-  Show,
-  Traverse
-}
+import cats._
 import cats.data.NonEmptyVector
 import cats.data.NonEmptyVector.ZipNonEmptyVector
-import cats.kernel.Semigroup
 import cats.kernel.instances.order.catsKernelOrderingForOrder
-import cats.kernel.laws.discipline.{EqTests, SemigroupTests}
-import cats.laws.discipline.{
-  AlignTests,
-  BimonadTests,
-  CommutativeApplyTests,
-  FoldableTests,
-  NonEmptyTraverseTests,
-  ReducibleTests,
-  SemigroupKTests,
-  SerializableTests,
-  ShortCircuitingTests
-}
+import cats.kernel.laws.discipline.EqTests
+import cats.kernel.laws.discipline.SemigroupTests
+import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.platform.Platform
+import cats.syntax.eq._
 import cats.syntax.foldable._
 import cats.syntax.reducible._
 import cats.syntax.show._
-
-import scala.util.Properties
-import cats.syntax.eq._
 import org.scalacheck.Prop._
 import org.scalacheck.Test.Parameters
+
+import scala.util.Properties
 
 class NonEmptyVectorSuite extends NonEmptyCollectionSuite[Vector, NonEmptyVector, NonEmptyVector] {
   protected def toList[A](value: NonEmptyVector[A]): List[A] = value.toList
@@ -85,10 +60,10 @@ class NonEmptyVectorSuite extends NonEmptyCollectionSuite[Vector, NonEmptyVector
 
   // Test instances that have more general constraints
 
-  checkAll("NonEmptyVector[Int]", SemigroupKTests[NonEmptyVector].semigroupK[Int])
-  checkAll("NonEmptyVector[Int]", SemigroupTests[NonEmptyVector[Int]].semigroup)
-  checkAll("SemigroupK[NonEmptyVector]", SerializableTests.serializable(SemigroupK[NonEmptyVector]))
+  checkAll("NonEmptyVector[Int]", NonEmptyAlternativeTests[NonEmptyVector].nonEmptyAlternative[Int, Int, Int])
   checkAll("Semigroup[NonEmptyVector[Int]]", SerializableTests.serializable(Semigroup[NonEmptyVector[Int]]))
+  checkAll("NonEmptyVector[Int]", SemigroupTests[NonEmptyVector[Int]].semigroup)
+  checkAll("NonEmptyAlternative[NonEmptyVector]", SerializableTests.serializable(NonEmptyAlternative[NonEmptyVector]))
 
   checkAll("NonEmptyVector[Int]", FoldableTests[NonEmptyVector].foldable[Int, Int])
   checkAll("Foldable[NonEmptyVector]", SerializableTests.serializable(Foldable[NonEmptyVector]))

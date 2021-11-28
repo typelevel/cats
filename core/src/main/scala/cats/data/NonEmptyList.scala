@@ -788,22 +788,38 @@ object NonEmptyList extends NonEmptyListInstances {
 
 sealed abstract private[data] class NonEmptyListInstances extends NonEmptyListInstances0 {
 
+  @deprecated(
+    "maintained for the sake of binary compatibility only - use catsDataInstancesForNonEmptyListBinCompat1 instead",
+    "2.9.0"
+  )
+  def catsDataInstancesForNonEmptyList
+    : SemigroupK[NonEmptyList] with Bimonad[NonEmptyList] with NonEmptyTraverse[NonEmptyList] with Align[NonEmptyList] =
+    catsDataInstancesForNonEmptyListBinCompat1
+
   /**
    * This is not a bug. The declared type of `catsDataInstancesForNonEmptyList` intentionally ignores
    * `NonEmptyReducible` trait for it not being a typeclass.
    *
    * Also see the discussion: PR #3541 and issue #3069.
    */
-  implicit val catsDataInstancesForNonEmptyList
-    : SemigroupK[NonEmptyList] with Bimonad[NonEmptyList] with NonEmptyTraverse[NonEmptyList] with Align[NonEmptyList] =
+  implicit val catsDataInstancesForNonEmptyListBinCompat1: NonEmptyAlternative[NonEmptyList]
+    with Bimonad[NonEmptyList]
+    with NonEmptyTraverse[NonEmptyList]
+    with Align[NonEmptyList] =
     new NonEmptyReducible[NonEmptyList, List]
-      with SemigroupK[NonEmptyList]
+      with NonEmptyAlternative[NonEmptyList]
       with Bimonad[NonEmptyList]
       with NonEmptyTraverse[NonEmptyList]
       with Align[NonEmptyList] {
 
       def combineK[A](a: NonEmptyList[A], b: NonEmptyList[A]): NonEmptyList[A] =
         a.concatNel(b)
+
+      override def prependK[A](a: A, fa: NonEmptyList[A]): NonEmptyList[A] =
+        fa.prepend(a)
+
+      override def appendK[A](fa: NonEmptyList[A], a: A): NonEmptyList[A] =
+        fa.append(a)
 
       override def split[A](fa: NonEmptyList[A]): (A, List[A]) = (fa.head, fa.tail)
 
@@ -955,7 +971,7 @@ sealed abstract private[data] class NonEmptyListInstances extends NonEmptyListIn
     new NonEmptyParallel[NonEmptyList] {
       type F[x] = ZipNonEmptyList[x]
 
-      def flatMap: FlatMap[NonEmptyList] = NonEmptyList.catsDataInstancesForNonEmptyList
+      def flatMap: FlatMap[NonEmptyList] = NonEmptyList.catsDataInstancesForNonEmptyListBinCompat1
 
       def apply: Apply[ZipNonEmptyList] = ZipNonEmptyList.catsDataCommutativeApplyForZipNonEmptyList
 
