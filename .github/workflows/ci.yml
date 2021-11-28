@@ -91,6 +91,10 @@ jobs:
         if: matrix.platform == 'native'
         run: sbt ++${{ matrix.scala }} alleycatsTestsNative/test
 
+      - name: Validate Algebra Laws Native
+        if: matrix.platform == 'native'
+        run: sbt ++${{ matrix.scala }} algebraLawsNative/test
+
       - name: Validate JVM (scala 2)
         if: matrix.platform == 'jvm' && (matrix.scala != '3.0.2')
         run: sbt ++${{ matrix.scala }} buildJVM bench/test
