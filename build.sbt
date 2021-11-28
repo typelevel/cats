@@ -711,6 +711,11 @@ lazy val algebra = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .nativeSettings(commonNativeSettings)
   .settings(testingDependencies)
   .settings(
+    scalacOptions := {
+      if (isDotty.value)
+        scalacOptions.value.filterNot(Set("-Xfatal-warnings"))
+      else scalacOptions.value
+    },
     libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % Test
   )
 
@@ -721,7 +726,14 @@ lazy val algebraLaws = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .settings(publishSettings)
   .settings(disciplineDependencies)
   .settings(testingDependencies)
-  .settings(Test / scalacOptions := (Test / scalacOptions).value.filter(_ != "-Xfatal-warnings"))
+  .settings(
+    scalacOptions := {
+      if (isDotty.value)
+        scalacOptions.value.filterNot(Set("-Xfatal-warnings"))
+      else scalacOptions.value
+    },
+    Test / scalacOptions := (Test / scalacOptions).value.filter(_ != "-Xfatal-warnings")
+  )
   .jsSettings(commonJsSettings)
   .jvmSettings(
     commonJvmSettings ++ mimaSettings("algebra-laws") ++ Seq(
