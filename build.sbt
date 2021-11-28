@@ -1000,7 +1000,7 @@ addCommandAlias("validateFreeJS", "freeJS/test")
 addCommandAlias("validateAlleycatsJS", "alleycatsTestsJS/test")
 addCommandAlias("validateAlgebraJS", "algebraLawsJS/test")
 addCommandAlias("validateAllJS",
-                "all testsJS/test js/test kernelLawsJS/test freeJS/test alleycatsTestsJS/test validateAlgebraJS"
+                "all testsJS/test js/test kernelLawsJS/test freeJS/test alleycatsTestsJS/test algebraLawsJS/test"
 )
 addCommandAlias("validateNative", ";testsNative/test;native/test")
 addCommandAlias("validateKernelNative", "kernelLawsNative/test")
