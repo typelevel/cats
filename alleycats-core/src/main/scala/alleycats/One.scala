@@ -3,9 +3,7 @@ package alleycats
 import cats.Eq
 import cats.syntax.eq._
 import simulacrum.typeclass
-import scala.annotation.implicitNotFound
 
-@implicitNotFound("Could not find an instance of One for ${A}")
 @typeclass trait One[A] extends Serializable {
   def one: A
 

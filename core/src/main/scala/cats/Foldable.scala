@@ -5,8 +5,6 @@ import cats.kernel.CommutativeMonoid
 import simulacrum.{noop, typeclass}
 import Foldable.{sentinel, Source}
 
-import scala.annotation.implicitNotFound
-
 /**
  * Data structures that can be folded to a summary value.
  *
@@ -29,7 +27,6 @@ import scala.annotation.implicitNotFound
  *
  * See: [[http://www.cs.nott.ac.uk/~pszgmh/fold.pdf A tutorial on the universality and expressiveness of fold]]
  */
-@implicitNotFound("Could not find an instance of Foldable for ${F}")
 @typeclass(excludeParents = List("FoldableNFunctions"))
 trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { self =>
 
