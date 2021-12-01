@@ -70,7 +70,12 @@ package object cats {
 
   type Endo[A] = A => A
 
-  val catsInstancesForId: Bimonad[Id] with CommutativeMonad[Id] with NonEmptyTraverse[Id] with Distributive[Id] =
+  @deprecated("retained for binary compatibility", "2.7.1")
+  private[cats] def catsInstancesForId
+    : Bimonad[Id] with CommutativeMonad[Id] with Comonad[Id] with NonEmptyTraverse[Id] with Distributive[Id] =
+    catsInstancesForIdBinCompat1
+  val catsInstancesForIdBinCompat1
+    : Bimonad[Id] with CommutativeMonad[Id] with NonEmptyTraverse[Id] with Distributive[Id] =
     new Bimonad[Id] with CommutativeMonad[Id] with NonEmptyTraverse[Id] with Distributive[Id] {
       def pure[A](a: A): A = a
       def extract[A](a: A): A = a

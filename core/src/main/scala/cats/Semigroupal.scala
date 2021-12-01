@@ -47,7 +47,7 @@ import simulacrum.typeclass
 }
 
 object Semigroupal extends ScalaVersionSpecificSemigroupalInstances with SemigroupalArityFunctions {
-  implicit def catsSemigroupalForId: Semigroupal[Id] = catsInstancesForId
+  implicit def catsSemigroupalForId: Semigroupal[Id] = catsInstancesForIdBinCompat1
   implicit def catsSemigroupalForOption: Semigroupal[Option] = cats.instances.option.catsStdInstancesForOption
   implicit def catsSemigroupalForTry: Semigroupal[Try] = cats.instances.try_.catsStdInstancesForTry
   implicit def catsSemigroupalForFuture(implicit ec: ExecutionContext): Semigroupal[Future] =

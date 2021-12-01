@@ -96,7 +96,7 @@ object UnorderedFoldable
       }
   }
 
-  implicit def catsNonEmptyTraverseForId: NonEmptyTraverse[Id] = catsInstancesForId
+  implicit def catsNonEmptyTraverseForId: NonEmptyTraverse[Id] = catsInstancesForIdBinCompat1
   implicit def catsTraverseForOption: Traverse[Option] = cats.instances.option.catsStdInstancesForOption
   implicit def catsTraverseForList: Traverse[List] = cats.instances.list.catsStdInstancesForList
   implicit def catsTraverseForSeq: Traverse[Seq] = cats.instances.seq.catsStdInstancesForSeq

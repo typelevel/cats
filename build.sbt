@@ -345,7 +345,7 @@ def mimaPrevious(moduleName: String, scalaVer: String, ver: String, includeCats1
     }
   }
   // Safety Net For Exclusions
-  lazy val excludedVersions: List[String] = List()
+  lazy val excludedVersions: List[String] = List("2.7.0") // cursed bincompat on Scala 3
 
   // Safety Net for Inclusions
   lazy val extraCats1Versions: List[String] = List("1.0.1", "1.1.0", "1.2.0", "1.3.1", "1.4.0", "1.5.0", "1.6.1")
