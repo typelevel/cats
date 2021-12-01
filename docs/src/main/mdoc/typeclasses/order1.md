@@ -169,11 +169,11 @@ That works just fine.
 (orderInstanceForOption[Map[String, String]]: Eq[Option[Map[String, String]]])
 ```
 
-This fails, because while `Map[String, String]` _does_ have an `Eq` instance, it doesn't have an `Order` instance but our instance demands that `A: Order`. Classically the solution to this problem one would use Scala's lower priority implicit behavior to provide multiple instances, in this case we'd need to provide one for `PartialOrder` and `Eq`, having 3 different implicit scopes.
+This fails, because while `Map[String, String]` _does_ have an `Eq` instance, it doesn't have an `Order` instance but our instance demands that `A: Order`. Classically the solution to this problem would be to define an instance for each layer of the typeclass hierarchy, in this case we'd need to provide one for `PartialOrder` and `Eq`, having 3 different instances.
 
 ```scala mdoc:compile-only
 
-object Option extends OptionLowPriorityInstances0 {
+object Option {
   def orderInstanceForOption[A: Order]: Order[Option[A]] =
     Order.from{
       case (Some(x), Some(y)) =>
@@ -185,9 +185,7 @@ object Option extends OptionLowPriorityInstances0 {
       case _ =>
         -1
     }
-}
 
-trait OptionLowPriorityInstances0 extends OptionLowPriorityInstances1 {
   def partialOrderInstanceForOption[A: PartialOrder]: PartialOrder[Option[A]] =
     PartialOrder.from{
       case (Some(x), Some(y)) =>
@@ -199,9 +197,7 @@ trait OptionLowPriorityInstances0 extends OptionLowPriorityInstances1 {
       case _ =>
         -1d
     }
-}
 
-trait OptionLowPriorityInstances1 {
   def eqInstanceForOption[A: Eq]: Eq[Option[A]] =
     Eq.instance{
       case (Some(x), Some(y)) =>
