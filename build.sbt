@@ -879,9 +879,16 @@ lazy val binCompatTest = project
     // see https://github.com/typelevel/cats/pull/3079#discussion_r327181584
     // see https://github.com/typelevel/cats/pull/3026#discussion_r321984342
     useCoursier := false,
-    addCompilerPlugin(("org.typelevel" %% "kind-projector" % kindProjectorVersion).cross(CrossVersion.full)),
+    libraryDependencies ++= {
+      if (isDotty.value) Nil
+      else
+        Seq(
+          compilerPlugin(("org.typelevel" %% "kind-projector" % kindProjectorVersion).cross(CrossVersion.full))
+        )
+    },
     libraryDependencies += mimaPrevious("cats-core", scalaVersion.value, version.value).last % Provided,
-    scalacOptions ++= (if (priorTo2_13(scalaVersion.value)) Seq("-Ypartial-unification") else Nil)
+    scalacOptions ++= (if (priorTo2_13(scalaVersion.value)) Seq("-Ypartial-unification") else Nil),
+    scalacOptions ++= (if (isDotty.value) Seq("-Ykind-projector") else Nil)
   )
   .settings(testingDependencies)
   .dependsOn(core.jvm % Test)
