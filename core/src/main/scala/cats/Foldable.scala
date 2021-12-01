@@ -5,7 +5,6 @@ import cats.kernel.CommutativeMonoid
 import simulacrum.{noop, typeclass}
 import Foldable.{sentinel, Source}
 
-
 /**
  * Data structures that can be folded to a summary value.
  *
