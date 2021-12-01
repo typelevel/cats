@@ -1,11 +1,8 @@
 package cats.kernel
 
-import scala.annotation.implicitNotFound
-
 /**
  * Lifting of the [[Hash]] class to unary type constructors.
  */
-@implicitNotFound("Could not find an instance of Order1 for ${F}")
 trait Hash1[F[_]] extends Any with Eq1[F] {
 
   /**

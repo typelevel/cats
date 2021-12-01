@@ -158,7 +158,7 @@ package object cats {
   val Eq1 = cats.kernel.Eq1
   val Eq2 = cats.kernel.Eq2
   val Hash1 = cats.kernel.Hash1
-  val Hash2 = cats.kernel.Hash
+  val Hash2 = cats.kernel.Hash2
   val PartialOrder1 = cats.kernel.PartialOrder1
   val PartialOrder2 = cats.kernel.PartialOrder2
   val Order1 = cats.kernel.Order1

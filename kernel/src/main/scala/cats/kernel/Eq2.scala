@@ -1,13 +1,10 @@
 package cats.kernel
 
-import scala.annotation.implicitNotFound
-
 /**
  * Lifting of the [[Eq]] class to binary type constructors.
  *
  * @see [[https://hackage.haskell.org/package/base-4.16.0.0/docs/Data-Functor-Classes.html#t:Eq2]]
  */
-@implicitNotFound("Could not find an instance of Eq2 for ${F}")
 trait Eq2[F[_, _]] extends Any with Serializable {
 
   /**

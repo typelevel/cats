@@ -1,7 +1,6 @@
 package cats.kernel
 
 import java.lang.Double.isNaN
-import scala.annotation.implicitNotFound
 
 /**
  * Lifting of the [[Order]] class to unary type constructors.
@@ -14,7 +13,6 @@ import scala.annotation.implicitNotFound
  *
  * @see [[https://hackage.haskell.org/package/base-4.16.0.0/docs/Data-Functor-Classes.html#t:Ord1]]
  */
-@implicitNotFound("Could not find an instance of Order1 for ${F}")
 trait Order1[F[_]] extends Any with PartialOrder1[F] {
 
   /**

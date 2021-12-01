@@ -1,13 +1,10 @@
 package cats.kernel
 
-import scala.annotation.implicitNotFound
-
 /**
  * Lifting of the [[Eq]] class to unary type constructors.
  *
  * @see [[https://hackage.haskell.org/package/base-4.16.0.0/docs/Data-Functor-Classes.html#t:Eq1]]
  */
-@implicitNotFound("Could not find an instance of Eq1 for ${F}")
 trait Eq1[F[_]] extends Any with Serializable {
 
   /**

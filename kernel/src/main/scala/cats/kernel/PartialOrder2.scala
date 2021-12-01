@@ -1,11 +1,8 @@
 package cats.kernel
 
-import scala.annotation.implicitNotFound
-
 /**
  * Lifting of the [[PartialOrder]] class to binary type constructors.
  */
-@implicitNotFound("Could not find an instance of PartialOrder2 for ${F}")
 trait PartialOrder2[F[_, _]] extends Any with Eq2[F] {
 
   /**
