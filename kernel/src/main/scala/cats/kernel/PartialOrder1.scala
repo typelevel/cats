@@ -21,7 +21,7 @@ trait PartialOrder1[F[_]] extends Any with Eq1[F] {
   // choose Double values to represent true and false. We choose 0 to
   // represent true, to match with the canonical definition of PartialOrder
   // equality, and Double.NaN to match false.
-  final override def liftEq[A, B](compare: (A, B) => Boolean, x: F[A], y: F[B]): Boolean =
+  override def liftEq[A, B](compare: (A, B) => Boolean, x: F[A], y: F[B]): Boolean =
     liftPartialCompare[A, B](
       (a, b) => if (compare(a, b)) 0d else Double.NaN,
       x,
