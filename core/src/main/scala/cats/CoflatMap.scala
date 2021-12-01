@@ -1,7 +1,6 @@
 package cats
 
 import simulacrum.typeclass
-import scala.annotation.implicitNotFound
 
 /**
  * `CoflatMap` is the dual of `FlatMap`.

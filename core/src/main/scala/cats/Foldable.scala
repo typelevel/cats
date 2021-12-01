@@ -5,7 +5,6 @@ import cats.kernel.CommutativeMonoid
 import simulacrum.{noop, typeclass}
 import Foldable.{sentinel, Source}
 
-import scala.annotation.implicitNotFound
 
 /**
  * Data structures that can be folded to a summary value.

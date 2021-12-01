@@ -3,7 +3,6 @@ package alleycats
 import cats.{CoflatMap, Comonad}
 
 import simulacrum.typeclass
-import scala.annotation.implicitNotFound
 
 @typeclass trait Extract[F[_]] extends Serializable {
   def extract[A](fa: F[A]): A

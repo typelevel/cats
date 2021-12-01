@@ -4,7 +4,6 @@ import cats.Eq
 import cats.syntax.eq._
 
 import simulacrum.typeclass
-import scala.annotation.implicitNotFound
 
 @typeclass trait Zero[A] extends Serializable {
   def zero: A

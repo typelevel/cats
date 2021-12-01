@@ -4,7 +4,6 @@ import cats.{Eq, Monoid}
 import cats.syntax.eq._
 
 import simulacrum.typeclass
-import scala.annotation.implicitNotFound
 
 @typeclass trait Empty[A] extends Serializable {
   def empty: A

@@ -2,7 +2,6 @@ package alleycats
 
 import cats.SemigroupK
 import simulacrum.typeclass
-import scala.annotation.implicitNotFound
 
 @typeclass trait ConsK[F[_]] extends Serializable {
   def cons[A](hd: A, tl: F[A]): F[A]

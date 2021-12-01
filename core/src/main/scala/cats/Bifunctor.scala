@@ -1,6 +1,5 @@
 package cats
 import simulacrum.typeclass
-import scala.annotation.implicitNotFound
 
 /**
  * A type class of types which give rise to two independent, covariant

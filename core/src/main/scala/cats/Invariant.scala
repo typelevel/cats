@@ -4,7 +4,6 @@ import cats.arrow.Arrow
 import cats.kernel._
 import simulacrum.typeclass
 import cats.kernel.compat.scalaVersionSpecific._
-import scala.annotation.implicitNotFound
 import scala.collection.immutable.{Queue, Seq, SortedMap}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try

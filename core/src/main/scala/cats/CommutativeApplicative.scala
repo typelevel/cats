@@ -2,7 +2,6 @@ package cats
 
 import cats.kernel.CommutativeMonoid
 import simulacrum.typeclass
-import scala.annotation.implicitNotFound
 
 /**
  * Commutative Applicative.

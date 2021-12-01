@@ -2,7 +2,6 @@ package cats
 
 import scala.collection.immutable.{Queue, Seq, SortedMap}
 import simulacrum.typeclass
-import scala.annotation.implicitNotFound
 
 /**
  * `FunctorFilter[F]` allows you to `map` and filter out elements simultaneously.

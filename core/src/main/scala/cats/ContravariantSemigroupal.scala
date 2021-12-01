@@ -1,7 +1,6 @@
 package cats
 
 import simulacrum.typeclass
-import scala.annotation.implicitNotFound
 
 /**
  * [[ContravariantSemigroupal]] is nothing more than something both contravariant

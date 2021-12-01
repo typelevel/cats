@@ -1,7 +1,6 @@
 package cats
 
 import simulacrum.typeclass
-import scala.annotation.implicitNotFound
 
 @typeclass trait Alternative[F[_]] extends NonEmptyAlternative[F] with MonoidK[F] { self =>
 

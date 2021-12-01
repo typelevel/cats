@@ -2,7 +2,6 @@ package cats
 package arrow
 
 import simulacrum.typeclass
-import scala.annotation.implicitNotFound
 
 /**
  * A [[Profunctor]] is a [[Contravariant]] functor on its first type parameter

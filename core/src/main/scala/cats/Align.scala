@@ -4,7 +4,6 @@ import simulacrum.typeclass
 
 import cats.data.Ior
 import scala.collection.immutable.{Seq, SortedMap}
-import scala.annotation.implicitNotFound
 
 /**
  * `Align` supports zipping together structures with different shapes,

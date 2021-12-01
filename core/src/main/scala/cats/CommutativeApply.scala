@@ -2,7 +2,6 @@ package cats
 
 import cats.kernel.CommutativeSemigroup
 import simulacrum.typeclass
-import scala.annotation.implicitNotFound
 
 /**
  * Commutative Apply.

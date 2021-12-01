@@ -1,7 +1,6 @@
 package cats
 
 import simulacrum.typeclass
-import scala.annotation.implicitNotFound
 
 /**
  * MonoidK is a universal monoid which operates on kinds.

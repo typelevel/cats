@@ -2,7 +2,6 @@ package cats
 
 import simulacrum.{noop, typeclass}
 import cats.data.Ior
-import scala.annotation.implicitNotFound
 
 /**
  * Weaker version of Applicative[F]; has apply but not pure.

@@ -3,7 +3,6 @@ package cats
 import cats.arrow.Arrow
 import cats.data.Chain
 import simulacrum.typeclass
-import scala.annotation.implicitNotFound
 import scala.collection.immutable.IndexedSeq
 
 /**

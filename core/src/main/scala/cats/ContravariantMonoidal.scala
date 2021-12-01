@@ -1,7 +1,6 @@
 package cats
 
 import simulacrum.typeclass
-import scala.annotation.implicitNotFound
 
 /**
  * [[ContravariantMonoidal]] functors are functors that supply

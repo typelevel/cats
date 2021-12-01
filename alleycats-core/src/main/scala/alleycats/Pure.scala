@@ -2,7 +2,6 @@ package alleycats
 
 import cats.{Applicative, FlatMap, Monad}
 import simulacrum.typeclass
-import scala.annotation.implicitNotFound
 
 @typeclass trait Pure[F[_]] extends Serializable {
   def pure[A](a: A): F[A]

@@ -1,7 +1,6 @@
 package cats
 
 import simulacrum.typeclass
-import scala.annotation.implicitNotFound
 
 /**
  * `UnorderedTraverse` is like a `Traverse` for unordered containers.

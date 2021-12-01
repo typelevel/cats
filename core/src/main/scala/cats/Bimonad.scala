@@ -1,7 +1,6 @@
 package cats
 
 import simulacrum.typeclass
-import scala.annotation.implicitNotFound
 
 @typeclass trait Bimonad[F[_]] extends Monad[F] with Comonad[F]
 

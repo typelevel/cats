@@ -2,7 +2,6 @@ package cats
 package arrow
 
 import simulacrum.typeclass
-import scala.annotation.implicitNotFound
 
 /**
  * In a Commutative Arrow F[_, _], the split operation (or `***`) is commutative,

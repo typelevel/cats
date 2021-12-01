@@ -5,7 +5,6 @@ import scala.collection.immutable.{Queue, Seq, SortedMap, SortedSet}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 import simulacrum.typeclass
-import scala.annotation.implicitNotFound
 
 /**
  * [[Semigroupal]] captures the idea of composing independent effectful values.

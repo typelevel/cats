@@ -4,7 +4,6 @@ import cats.kernel.CommutativeMonoid
 import scala.collection.immutable.{Queue, Seq, SortedMap, SortedSet}
 import scala.util.Try
 import simulacrum.{noop, typeclass}
-import scala.annotation.implicitNotFound
 
 /**
  * `UnorderedFoldable` is like a `Foldable` for unordered containers.

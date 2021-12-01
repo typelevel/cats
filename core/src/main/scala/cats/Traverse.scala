@@ -4,7 +4,6 @@ import cats.data.State
 import cats.data.StateT
 
 import simulacrum.typeclass
-import scala.annotation.implicitNotFound
 
 /**
  * Traverse, also known as Traversable.

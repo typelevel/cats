@@ -1,7 +1,6 @@
 package cats
 
 import simulacrum.{noop, typeclass}
-import scala.annotation.implicitNotFound
 
 /**
  * Functor.

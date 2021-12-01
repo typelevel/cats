@@ -3,7 +3,6 @@ package cats
 import scala.collection.immutable.{Seq, SortedMap, SortedSet}
 import simulacrum.typeclass
 import cats.data.Ior
-import scala.annotation.implicitNotFound
 
 /**
  * SemigroupK is a universal semigroup which operates on kinds.

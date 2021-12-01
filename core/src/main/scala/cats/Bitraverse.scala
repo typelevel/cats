@@ -1,7 +1,6 @@
 package cats
 
 import simulacrum.{noop, typeclass}
-import scala.annotation.implicitNotFound
 
 /**
  * A type class abstracting over types that give rise to two independent [[cats.Traverse]]s.

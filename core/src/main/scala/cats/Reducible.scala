@@ -3,7 +3,6 @@ package cats
 import cats.Foldable.Source
 import cats.data.{Ior, NonEmptyList}
 import simulacrum.{noop, typeclass}
-import scala.annotation.implicitNotFound
 
 /**
  * Data structures that can be reduced to a summary value.

@@ -3,7 +3,6 @@ package cats
 import cats.data.State
 import simulacrum.{noop, typeclass}
 
-import scala.annotation.implicitNotFound
 import scala.collection.immutable.{HashSet, TreeSet}
 
 /**

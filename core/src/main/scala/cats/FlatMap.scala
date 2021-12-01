@@ -2,7 +2,6 @@ package cats
 
 import simulacrum.typeclass
 import simulacrum.noop
-import scala.annotation.implicitNotFound
 
 /**
  * FlatMap type class gives us flatMap, which allows us to have a value

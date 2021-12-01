@@ -2,7 +2,6 @@ package cats
 package arrow
 
 import simulacrum.typeclass
-import scala.annotation.implicitNotFound
 
 /**
  * Must obey the laws defined in cats.laws.ComposeLaws.

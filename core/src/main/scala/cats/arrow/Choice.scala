@@ -2,7 +2,6 @@ package cats
 package arrow
 
 import simulacrum.typeclass
-import scala.annotation.implicitNotFound
 
 @typeclass trait Choice[F[_, _]] extends Category[F] {
 
