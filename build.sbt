@@ -33,9 +33,9 @@ ThisBuild / githubWorkflowEnv += ("JABBA_INDEX" -> "https://github.com/typelevel
 
 val PrimaryJava = JavaSpec.temurin("8")
 val LTSJava = JavaSpec.temurin("17")
-val GraalVM8 = JavaSpec.graalvm("21.2.0", "8")
+val GraalVM11 = JavaSpec.graalvm("21.2.0", "11")
 
-ThisBuild / githubWorkflowJavaVersions := Seq(PrimaryJava, LTSJava, GraalVM8)
+ThisBuild / githubWorkflowJavaVersions := Seq(PrimaryJava, LTSJava, GraalVM11)
 
 val Scala212 = "2.12.15"
 val Scala213 = "2.13.7"
