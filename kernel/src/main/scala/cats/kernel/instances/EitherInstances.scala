@@ -3,7 +3,7 @@ package instances
 
 trait EitherInstances extends EitherInstances0 {
 
-  implicit val catsStdOrder2AndHash2ForEither: Order2[Either] with Hash2[Either] =
+  implicit def catsStdOrder2AndHash2ForEither: Order2[Either] with Hash2[Either] =
     new Order2[Either] with Hash2[Either] {
       override def liftCompare2[A, B, C, D](compareAB: (A, B) => Int,
                                             compareCD: (C, D) => Int,
