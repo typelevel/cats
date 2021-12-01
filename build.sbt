@@ -524,7 +524,13 @@ def mimaSettings(moduleName: String, includeCats1: Boolean = true) =
           exclude[DirectAbstractMethodProblem]("cats.free.ContravariantCoyoneda.k"),
           exclude[ReversedAbstractMethodProblem]("cats.free.ContravariantCoyoneda.k"),
           exclude[DirectAbstractMethodProblem]("cats.free.Coyoneda.k"),
-          exclude[ReversedAbstractMethodProblem]("cats.free.Coyoneda.k")
+          exclude[ReversedAbstractMethodProblem]("cats.free.Coyoneda.k"),
+          exclude[DirectMissingMethodProblem]("cats.free.ContravariantCoyoneda.unsafeApply"),
+          exclude[DirectMissingMethodProblem]("cats.free.ContravariantCoyoneda.ks"),
+          exclude[DirectMissingMethodProblem]("cats.free.ContravariantCoyoneda.unsafeApply"),
+          exclude[DirectMissingMethodProblem]("cats.free.Coyoneda.unsafeApply"),
+          exclude[DirectMissingMethodProblem]("cats.free.Coyoneda.ks"),
+          exclude[DirectMissingMethodProblem]("cats.free.Coyoneda.unsafeApply")
         )
     }
   )
