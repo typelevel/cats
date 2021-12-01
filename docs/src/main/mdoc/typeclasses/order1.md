@@ -244,4 +244,4 @@ In this way using these higher kinded classes can allow much more succinct defin
 
 # Order2 and Friends
 
-Similar to the `Order1`, `PartialOrder1`, and `Eq1`, there is also `Order2`, `PartialOrder2` and `Eq2`. These abstract over types with two type parameters, e.g. `Order2[F[_, _]]`. The semantics of these types are analogous to those of `Order1` and friends. In theory, one can define `OrderN` for arbitrarily number of type parameters, but in practice anything higher than two is rarely used.o
+Similar to the `Order1`, `PartialOrder1`, and `Eq1`, there is also `Order2`, `PartialOrder2` and `Eq2`. These abstract over types with two type parameters, e.g. `Order2[F[_, _]]`. The semantics of these types are analogous to those of `Order1` and friends. In theory, one can define `OrderN` for arbitrarily number of type parameters, but in practice anything higher than two is rarely used.
