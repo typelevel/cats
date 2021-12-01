@@ -24,7 +24,7 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         scala: [2.12.15, 2.13.7, 3.0.2]
-        java: [temurin@8, temurin@17, 'graal:21.2.0@11']
+        java: [temurin@8, temurin@17, 'graal:20.3.1@11']
         platform: [jvm, js, native]
         exclude:
           - platform: js
@@ -32,9 +32,9 @@ jobs:
           - platform: native
             java: temurin@17
           - platform: js
-            java: graal:21.2.0@11
+            java: graal:20.3.1@11
           - platform: native
-            java: graal:21.2.0@11
+            java: graal:20.3.1@11
           - platform: native
             scala: 3.0.2
     runs-on: ${{ matrix.os }}
@@ -58,11 +58,11 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - name: 'Setup GraalVM (graal:21.2.0@11)'
-        if: 'matrix.java == ''graal:21.2.0@11'''
+      - name: 'Setup GraalVM (graal:20.3.1@11)'
+        if: 'matrix.java == ''graal:20.3.1@11'''
         uses: DeLaGuardo/setup-graalvm@5.0
         with:
-          graalvm: 21.2.0
+          graalvm: 20.3.1
           java: 11
 
       - name: Cache sbt
@@ -148,11 +148,11 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - name: 'Setup GraalVM (graal:21.2.0@11)'
-        if: 'matrix.java == ''graal:21.2.0@11'''
+      - name: 'Setup GraalVM (graal:20.3.1@11)'
+        if: 'matrix.java == ''graal:20.3.1@11'''
         uses: DeLaGuardo/setup-graalvm@5.0
         with:
-          graalvm: 21.2.0
+          graalvm: 20.3.1
           java: 11
 
       - name: Cache sbt
@@ -200,11 +200,11 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - name: 'Setup GraalVM (graal:21.2.0@11)'
-        if: 'matrix.java == ''graal:21.2.0@11'''
+      - name: 'Setup GraalVM (graal:20.3.1@11)'
+        if: 'matrix.java == ''graal:20.3.1@11'''
         uses: DeLaGuardo/setup-graalvm@5.0
         with:
-          graalvm: 21.2.0
+          graalvm: 20.3.1
           java: 11
 
       - name: Cache sbt
@@ -251,11 +251,11 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - name: 'Setup GraalVM (graal:21.2.0@11)'
-        if: 'matrix.java == ''graal:21.2.0@11'''
+      - name: 'Setup GraalVM (graal:20.3.1@11)'
+        if: 'matrix.java == ''graal:20.3.1@11'''
         uses: DeLaGuardo/setup-graalvm@5.0
         with:
-          graalvm: 21.2.0
+          graalvm: 20.3.1
           java: 11
 
       - name: Cache sbt

@@ -33,7 +33,7 @@ ThisBuild / githubWorkflowEnv += ("JABBA_INDEX" -> "https://github.com/typelevel
 
 val PrimaryJava = JavaSpec.temurin("8")
 val LTSJava = JavaSpec.temurin("17")
-val GraalVM11 = JavaSpec.graalvm("21.2.0", "11")
+val GraalVM11 = JavaSpec.graalvm("20.3.1", "11")
 
 ThisBuild / githubWorkflowJavaVersions := Seq(PrimaryJava, LTSJava, GraalVM11)
 
