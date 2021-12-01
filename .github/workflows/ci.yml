@@ -104,7 +104,7 @@ jobs:
         run: sbt ++${{ matrix.scala }} buildJVM bench/test
 
       - name: Binary compatibility ${{ matrix.scala }}
-        if: matrix.platform == 'jvm' && (matrix.scala != '3.0.2')
+        if: matrix.platform == 'jvm'
         run: sbt ++${{ matrix.scala }} clean validateBC
 
   scalafix:

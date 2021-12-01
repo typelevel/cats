@@ -91,7 +91,7 @@ ThisBuild / githubWorkflowBuild := Seq(
     WorkflowStep.Sbt(
       List("clean", "validateBC"), // cleaning here to avoid issues with codecov
       name = Some("Binary compatibility ${{ matrix.scala }}"),
-      cond = Some(JvmCond + " && " + Scala2Cond)
+      cond = Some(JvmCond)
     )
   )
 
@@ -339,7 +339,7 @@ def mimaPrevious(moduleName: String, scalaVer: String, ver: String, includeCats1
     Version(ver) match {
       case Some(Version(major, Seq(minor, patch), _)) =>
         semverBinCompatVersions(major, minor, patch)
-          .map { case (maj, min, pat) => s"$maj.$min.$pat" }
+          .collect { case (maj, min, pat) if !scalaVer.startsWith("3.") || (maj >= 2 && min >= 7) => s"$maj.$min.$pat" }
       case _ =>
         List.empty[String]
     }
@@ -348,9 +348,12 @@ def mimaPrevious(moduleName: String, scalaVer: String, ver: String, includeCats1
   lazy val excludedVersions: List[String] = List()
 
   // Safety Net for Inclusions
-  lazy val extraVersions: List[String] = List("1.0.1", "1.1.0", "1.2.0", "1.3.1", "1.4.0", "1.5.0", "1.6.1")
+  lazy val extraCats1Versions: List[String] = List("1.0.1", "1.1.0", "1.2.0", "1.3.1", "1.4.0", "1.5.0", "1.6.1")
 
-  (mimaVersions ++ (if (priorTo2_13(scalaVer) && includeCats1) extraVersions else Nil))
+  // Safety Net, starting with Scala 3 introduction in 2.6.1
+  lazy val extraVersions: List[String] = List("2.6.1")
+
+  (mimaVersions ++ extraVersions ++ (if (priorTo2_13(scalaVer) && includeCats1) extraCats1Versions else Nil))
     .filterNot(excludedVersions.contains(_))
     .map(v => "org.typelevel" %% moduleName % v)
 }
