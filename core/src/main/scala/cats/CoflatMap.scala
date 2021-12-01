@@ -8,7 +8,6 @@ import scala.annotation.implicitNotFound
  *
  * Must obey the laws in cats.laws.CoflatMapLaws
  */
-@implicitNotFound("Could not find an instance of CoflatMap for ${F}")
 @typeclass trait CoflatMap[F[_]] extends Functor[F] {
 
   /**

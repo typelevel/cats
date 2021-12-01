@@ -6,7 +6,6 @@ import cats.syntax.eq._
 import simulacrum.typeclass
 import scala.annotation.implicitNotFound
 
-@implicitNotFound("Could not find an instance of Zero for ${A}")
 @typeclass trait Zero[A] extends Serializable {
   def zero: A
 

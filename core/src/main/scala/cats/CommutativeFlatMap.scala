@@ -12,7 +12,6 @@ import scala.annotation.implicitNotFound
  *
  * Must obey the laws defined in cats.laws.CommutativeFlatMapLaws.
  */
-@implicitNotFound("Could not find an instance of CommutativeFlatMap for ${F}")
 @typeclass trait CommutativeFlatMap[F[_]] extends FlatMap[F] with CommutativeApply[F]
 
 object CommutativeFlatMap {

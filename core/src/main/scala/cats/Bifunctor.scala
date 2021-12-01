@@ -6,7 +6,6 @@ import scala.annotation.implicitNotFound
  * A type class of types which give rise to two independent, covariant
  * functors.
  */
-@implicitNotFound("Could not find an instance of Bifunctor for ${F}")
 @typeclass trait Bifunctor[F[_, _]] extends Serializable { self =>
 
   /**

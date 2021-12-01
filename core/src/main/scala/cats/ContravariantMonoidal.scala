@@ -12,7 +12,6 @@ import scala.annotation.implicitNotFound
  * Based on ekmett's contravariant library:
  * https://hackage.haskell.org/package/contravariant-1.4/docs/Data-Functor-Contravariant-Divisible.html
  */
-@implicitNotFound("Could not find an instance of ContravariantMonoidal for ${F}")
 @typeclass trait ContravariantMonoidal[F[_]] extends ContravariantSemigroupal[F] with InvariantMonoidal[F] {
 
   /**

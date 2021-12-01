@@ -8,7 +8,6 @@ import scala.annotation.implicitNotFound
  *
  * Must obey the laws defined in cats.laws.InvariantMonoidalLaws.
  */
-@implicitNotFound("Could not find an instance of InvariantMonoidal for ${F}")
 @typeclass trait InvariantMonoidal[F[_]] extends InvariantSemigroupal[F] {
 
   /**

@@ -16,7 +16,6 @@ import scala.collection.immutable.IndexedSeq
  *
  * Must obey the laws defined in cats.laws.ApplicativeLaws.
  */
-@implicitNotFound("Could not find an instance of Applicative for ${F}")
 @typeclass trait Applicative[F[_]] extends Apply[F] with InvariantMonoidal[F] { self =>
 
   /**

@@ -3,7 +3,6 @@ package cats
 import simulacrum.typeclass
 import scala.annotation.implicitNotFound
 
-@implicitNotFound("Could not find an instance of NonEmptyAlternative for ${F}")
 @typeclass trait NonEmptyAlternative[F[_]] extends Applicative[F] with SemigroupK[F] { self =>
 
   /**

@@ -6,7 +6,6 @@ import scala.annotation.implicitNotFound
 /**
  * A type class abstracting over types that give rise to two independent [[cats.Traverse]]s.
  */
-@implicitNotFound("Could not find an instance of Bitraverse for ${F}")
 @typeclass trait Bitraverse[F[_, _]] extends Bifoldable[F] with Bifunctor[F] { self =>
 
   /**

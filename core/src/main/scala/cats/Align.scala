@@ -12,7 +12,6 @@ import scala.annotation.implicitNotFound
  *
  * Must obey the laws in cats.laws.AlignLaws
  */
-@implicitNotFound("Could not find an instance of Align for ${F}")
 @typeclass trait Align[F[_]] extends Serializable {
 
   def functor: Functor[F]

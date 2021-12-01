@@ -23,7 +23,6 @@ import scala.annotation.implicitNotFound
  *    combination operation and empty value just depend on the
  *    structure of F, but not on the structure of A.
  */
-@implicitNotFound("Could not find an instance of MonoidK for ${F}")
 @typeclass trait MonoidK[F[_]] extends SemigroupK[F] { self =>
 
   /**

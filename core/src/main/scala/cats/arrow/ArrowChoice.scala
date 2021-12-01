@@ -7,7 +7,6 @@ import scala.annotation.implicitNotFound
 /**
  * Must obey the laws defined in cats.laws.ArrowChoiceLaws.
  */
-@implicitNotFound("Could not find an instance of ArrowChoice for ${F}")
 @typeclass trait ArrowChoice[F[_, _]] extends Arrow[F] with Choice[F] { self =>
 
   /**

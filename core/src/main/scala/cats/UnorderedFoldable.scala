@@ -9,7 +9,6 @@ import scala.annotation.implicitNotFound
 /**
  * `UnorderedFoldable` is like a `Foldable` for unordered containers.
  */
-@implicitNotFound("Could not find an instance of UnorderedFoldable for ${F}")
 @typeclass trait UnorderedFoldable[F[_]] extends Serializable {
 
   def unorderedFoldMap[A, B: CommutativeMonoid](fa: F[A])(f: A => B): B

@@ -10,7 +10,6 @@ import scala.annotation.implicitNotFound
  *
  * Must obey the laws in CommutativeArrowLaws
  */
-@implicitNotFound("Could not find an instance of CommutativeArrow for ${F}")
 @typeclass trait CommutativeArrow[F[_, _]] extends Arrow[F]
 
 object CommutativeArrow {

@@ -7,7 +7,6 @@ import scala.annotation.implicitNotFound
  * [[InvariantSemigroupal]] is nothing more than something both invariant
  * and Semigroupal. It comes up enough to be useful, and composes well
  */
-@implicitNotFound("Could not find an instance of InvariantSemigroupal for ${F}")
 @typeclass trait InvariantSemigroupal[F[_]] extends Semigroupal[F] with Invariant[F] { self =>
 
   def composeApply[G[_]: Apply]: InvariantSemigroupal[λ[α => F[G[α]]]] =

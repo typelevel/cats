@@ -5,7 +5,6 @@ import scala.annotation.implicitNotFound
 /**
  * Must obey the laws defined in cats.laws.ContravariantLaws.
  */
-@implicitNotFound("Could not find an instance of Contravariant for ${F}")
 @typeclass trait Contravariant[F[_]] extends Invariant[F] { self =>
   def contramap[A, B](fa: F[A])(f: B => A): F[B]
   override def imap[A, B](fa: F[A])(f: A => B)(fi: B => A): F[B] = contramap(fa)(fi)

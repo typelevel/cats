@@ -4,7 +4,6 @@ package arrow
 import simulacrum.typeclass
 import scala.annotation.implicitNotFound
 
-@implicitNotFound("Could not find an instance of Choice for ${F}")
 @typeclass trait Choice[F[_, _]] extends Category[F] {
 
   /**

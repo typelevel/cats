@@ -3,7 +3,6 @@ package alleycats
 import simulacrum.typeclass
 import scala.annotation.implicitNotFound
 
-@implicitNotFound("Could not find an instance of EmptyK for ${F}")
 @typeclass trait EmptyK[F[_]] extends Serializable { self =>
   def empty[A]: F[A]
 

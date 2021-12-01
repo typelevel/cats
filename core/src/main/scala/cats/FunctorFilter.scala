@@ -7,7 +7,6 @@ import scala.annotation.implicitNotFound
 /**
  * `FunctorFilter[F]` allows you to `map` and filter out elements simultaneously.
  */
-@implicitNotFound("Could not find an instance of FunctorFilter for ${F}")
 @typeclass
 trait FunctorFilter[F[_]] extends Serializable {
   def functor: Functor[F]

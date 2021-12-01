@@ -10,7 +10,6 @@ import scala.annotation.implicitNotFound
  *
  * Must obey the laws defined in cats.laws.ProfunctorLaws.
  */
-@implicitNotFound("Could not find an instance of Profunctor for ${F}")
 @typeclass trait Profunctor[F[_, _]] extends Serializable { self =>
 
   /**

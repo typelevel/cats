@@ -5,7 +5,6 @@ import cats.{CoflatMap, Comonad}
 import simulacrum.typeclass
 import scala.annotation.implicitNotFound
 
-@implicitNotFound("Could not find an instance of Extract for ${F}")
 @typeclass trait Extract[F[_]] extends Serializable {
   def extract[A](fa: F[A]): A
 }

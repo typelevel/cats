@@ -7,7 +7,6 @@ import scala.annotation.implicitNotFound
 /**
  * Must obey the laws defined in cats.laws.ArrowLaws.
  */
-@implicitNotFound("Could not find an instance of Arrow for ${F}")
 @typeclass trait Arrow[F[_, _]] extends Category[F] with Strong[F] { self =>
 
   /**

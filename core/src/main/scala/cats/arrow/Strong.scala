@@ -7,7 +7,6 @@ import scala.annotation.implicitNotFound
 /**
  * Must obey the laws defined in cats.laws.StrongLaws.
  */
-@implicitNotFound("Could not find an instance of Strong for ${F}")
 @typeclass trait Strong[F[_, _]] extends Profunctor[F] {
 
   /**

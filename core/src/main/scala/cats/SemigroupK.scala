@@ -23,7 +23,6 @@ import scala.annotation.implicitNotFound
  *    The combination operation just depends on the structure of F,
  *    but not the structure of A.
  */
-@implicitNotFound("Could not find an instance of SemigroupK for ${F}")
 @typeclass trait SemigroupK[F[_]] extends Serializable { self =>
 
   /**

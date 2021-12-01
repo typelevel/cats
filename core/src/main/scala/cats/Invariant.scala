@@ -13,7 +13,6 @@ import scala.util.control.TailCalls.TailRec
 /**
  * Must obey the laws defined in cats.laws.InvariantLaws.
  */
-@implicitNotFound("Could not find an instance of Invariant for ${F}")
 @typeclass trait Invariant[F[_]] extends Serializable { self =>
 
   /**

@@ -13,7 +13,6 @@ import scala.annotation.implicitNotFound
  *
  * Must obey the laws defined in cats.laws.CommutativeApplicativeLaws.
  */
-@implicitNotFound("Could not find an instance of CommutativeApplicative for ${F}")
 @typeclass trait CommutativeApplicative[F[_]] extends Applicative[F] with CommutativeApply[F]
 
 object CommutativeApplicative {

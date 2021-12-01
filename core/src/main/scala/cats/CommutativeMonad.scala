@@ -12,7 +12,6 @@ import scala.annotation.implicitNotFound
  *
  * Must obey the laws defined in cats.laws.CommutativeMonadLaws.
  */
-@implicitNotFound("Could not find an instance of CommutativeMonad for ${F}")
 @typeclass trait CommutativeMonad[F[_]] extends Monad[F] with CommutativeFlatMap[F] with CommutativeApplicative[F]
 
 object CommutativeMonad {

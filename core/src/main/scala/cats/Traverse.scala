@@ -17,7 +17,6 @@ import scala.annotation.implicitNotFound
  *
  * See: [[https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf The Essence of the Iterator Pattern]]
  */
-@implicitNotFound("Could not find an instance of Traverse for ${F}")
 @typeclass trait Traverse[F[_]] extends Functor[F] with Foldable[F] with UnorderedTraverse[F] { self =>
 
   /**
