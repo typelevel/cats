@@ -1,7 +1,6 @@
 package cats
 
 import simulacrum.{noop, typeclass}
-import scala.annotation.implicitNotFound
 
 /**
  * Functor.
@@ -10,7 +9,6 @@ import scala.annotation.implicitNotFound
  *
  * Must obey the laws defined in cats.laws.FunctorLaws.
  */
-@implicitNotFound("Could not find an instance of Functor for ${F}")
 @typeclass trait Functor[F[_]] extends Invariant[F] { self =>
   def map[A, B](fa: F[A])(f: A => B): F[B]
 

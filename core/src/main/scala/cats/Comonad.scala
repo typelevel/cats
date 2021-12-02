@@ -1,7 +1,6 @@
 package cats
 
 import simulacrum.typeclass
-import scala.annotation.implicitNotFound
 
 /**
  * Comonad
@@ -11,7 +10,6 @@ import scala.annotation.implicitNotFound
  *
  * Must obey the laws defined in cats.laws.ComonadLaws.
  */
-@implicitNotFound("Could not find an instance of Comonad for ${F}")
 @typeclass trait Comonad[F[_]] extends CoflatMap[F] {
 
   /**
