@@ -31,11 +31,11 @@ val PrimaryOS = "ubuntu-latest"
 ThisBuild / githubWorkflowOSes := Seq(PrimaryOS)
 ThisBuild / githubWorkflowEnv += ("JABBA_INDEX" -> "https://github.com/typelevel/jdk-index/raw/main/index.json")
 
-val PrimaryJava = "adoptium@8"
-val LTSJava = "adoptium@17"
-val GraalVM8 = "graalvm-ce-java8@21.2"
+val PrimaryJava = JavaSpec.temurin("8")
+val LTSJava = JavaSpec.temurin("17")
+val GraalVM11 = JavaSpec.graalvm("20.3.1", "11")
 
-ThisBuild / githubWorkflowJavaVersions := Seq(PrimaryJava, LTSJava, GraalVM8)
+ThisBuild / githubWorkflowJavaVersions := Seq(PrimaryJava, LTSJava, GraalVM11)
 
 val Scala212 = "2.12.15"
 val Scala213 = "2.13.7"
@@ -52,8 +52,8 @@ ThisBuild / githubWorkflowBuildMatrixAdditions +=
 
 ThisBuild / githubWorkflowBuildMatrixExclusions ++=
   githubWorkflowJavaVersions.value.filterNot(Set(PrimaryJava)).flatMap { java =>
-    Seq(MatrixExclude(Map("platform" -> "js", "java" -> java)),
-        MatrixExclude(Map("platform" -> "native", "java" -> java))
+    Seq(MatrixExclude(Map("platform" -> "js", "java" -> java.render)),
+        MatrixExclude(Map("platform" -> "native", "java" -> java.render))
     )
   }
 
