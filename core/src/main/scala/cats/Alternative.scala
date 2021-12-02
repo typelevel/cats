@@ -1,9 +1,7 @@
 package cats
 
 import simulacrum.typeclass
-import scala.annotation.implicitNotFound
 
-@implicitNotFound("Could not find an instance of Alternative for ${F}")
 @typeclass trait Alternative[F[_]] extends NonEmptyAlternative[F] with MonoidK[F] { self =>
 
   // Note: `protected` is only necessary to enforce binary compatibility

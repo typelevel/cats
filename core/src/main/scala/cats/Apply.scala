@@ -2,14 +2,12 @@ package cats
 
 import simulacrum.{noop, typeclass}
 import cats.data.Ior
-import scala.annotation.implicitNotFound
 
 /**
  * Weaker version of Applicative[F]; has apply but not pure.
  *
  * Must obey the laws defined in cats.laws.ApplyLaws.
  */
-@implicitNotFound("Could not find an instance of Apply for ${F}")
 @typeclass(excludeParents = List("ApplyArityFunctions"))
 trait Apply[F[_]] extends Functor[F] with InvariantSemigroupal[F] with ApplyArityFunctions[F] { self =>
 

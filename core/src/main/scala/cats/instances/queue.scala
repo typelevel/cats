@@ -17,6 +17,10 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
 
       def combineK[A](x: Queue[A], y: Queue[A]): Queue[A] = x ++ y
 
+      override def prependK[A](a: A, fa: Queue[A]): Queue[A] = a +: fa
+
+      override def appendK[A](fa: Queue[A], a: A): Queue[A] = fa.enqueue(a)
+
       def pure[A](x: A): Queue[A] = Queue(x)
 
       override def map[A, B](fa: Queue[A])(f: A => B): Queue[B] =

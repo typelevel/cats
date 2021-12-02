@@ -31,11 +31,11 @@ val PrimaryOS = "ubuntu-latest"
 ThisBuild / githubWorkflowOSes := Seq(PrimaryOS)
 ThisBuild / githubWorkflowEnv += ("JABBA_INDEX" -> "https://github.com/typelevel/jdk-index/raw/main/index.json")
 
-val PrimaryJava = "adoptium@8"
-val LTSJava = "adoptium@17"
-val GraalVM8 = "graalvm-ce-java8@21.2"
+val PrimaryJava = JavaSpec.temurin("8")
+val LTSJava = JavaSpec.temurin("17")
+val GraalVM11 = JavaSpec.graalvm("20.3.1", "11")
 
-ThisBuild / githubWorkflowJavaVersions := Seq(PrimaryJava, LTSJava, GraalVM8)
+ThisBuild / githubWorkflowJavaVersions := Seq(PrimaryJava, LTSJava, GraalVM11)
 
 val Scala212 = "2.12.15"
 val Scala213 = "2.13.7"
@@ -52,8 +52,8 @@ ThisBuild / githubWorkflowBuildMatrixAdditions +=
 
 ThisBuild / githubWorkflowBuildMatrixExclusions ++=
   githubWorkflowJavaVersions.value.filterNot(Set(PrimaryJava)).flatMap { java =>
-    Seq(MatrixExclude(Map("platform" -> "js", "java" -> java)),
-        MatrixExclude(Map("platform" -> "native", "java" -> java))
+    Seq(MatrixExclude(Map("platform" -> "js", "java" -> java.render)),
+        MatrixExclude(Map("platform" -> "native", "java" -> java.render))
     )
   }
 
@@ -711,6 +711,11 @@ lazy val algebra = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .nativeSettings(commonNativeSettings)
   .settings(testingDependencies)
   .settings(
+    scalacOptions := {
+      if (isDotty.value)
+        scalacOptions.value.filterNot(Set("-Xfatal-warnings"))
+      else scalacOptions.value
+    },
     libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % Test
   )
 
@@ -721,7 +726,14 @@ lazy val algebraLaws = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .settings(publishSettings)
   .settings(disciplineDependencies)
   .settings(testingDependencies)
-  .settings(Test / scalacOptions := (Test / scalacOptions).value.filter(_ != "-Xfatal-warnings"))
+  .settings(
+    scalacOptions := {
+      if (isDotty.value)
+        scalacOptions.value.filterNot(Set("-Xfatal-warnings"))
+      else scalacOptions.value
+    },
+    Test / scalacOptions := (Test / scalacOptions).value.filter(_ != "-Xfatal-warnings")
+  )
   .jsSettings(commonJsSettings)
   .jvmSettings(
     commonJvmSettings ++ mimaSettings("algebra-laws") ++ Seq(
@@ -990,26 +1002,31 @@ addCommandAlias("buildCoreJVM", ";coreJVM/test")
 addCommandAlias("buildTestsJVM", ";lawsJVM/test;testkitJVM/test;testsJVM/test;jvm/test")
 addCommandAlias("buildFreeJVM", ";freeJVM/test")
 addCommandAlias("buildAlleycatsJVM", ";alleycatsCoreJVM/test;alleycatsLawsJVM/test;alleycatsTestsJVM/test")
-addCommandAlias("buildJVM", ";buildKernelJVM;buildCoreJVM;buildTestsJVM;buildFreeJVM;buildAlleycatsJVM")
+addCommandAlias("buildAlgebraJVM", ";algebraJVM/test;algebraLawsJVM/test")
+addCommandAlias("buildJVM", ";buildKernelJVM;buildCoreJVM;buildTestsJVM;buildFreeJVM;buildAlleycatsJVM;buildAlgebraJVM")
 addCommandAlias("validateBC", ";binCompatTest/test;catsJVM/mimaReportBinaryIssues")
 addCommandAlias("validateJVM", ";fmtCheck;buildJVM;bench/test;validateBC;makeMicrosite")
 addCommandAlias("validateJS", ";testsJS/test;js/test")
 addCommandAlias("validateKernelJS", "kernelLawsJS/test")
 addCommandAlias("validateFreeJS", "freeJS/test")
 addCommandAlias("validateAlleycatsJS", "alleycatsTestsJS/test")
-addCommandAlias("validateAllJS", "all testsJS/test js/test kernelLawsJS/test freeJS/test alleycatsTestsJS/test")
+addCommandAlias("validateAlgebraJS", "algebraLawsJS/test")
+addCommandAlias("validateAllJS",
+                "all testsJS/test js/test kernelLawsJS/test freeJS/test alleycatsTestsJS/test algebraLawsJS/test"
+)
 addCommandAlias("validateNative", ";testsNative/test;native/test")
 addCommandAlias("validateKernelNative", "kernelLawsNative/test")
 addCommandAlias("validateFreeNative", "freeNative/test")
 addCommandAlias("validateAlleycatsNative", "alleycatsTestsNative/test")
+addCommandAlias("validateAlgebraNative", "algebraLawsNative/test")
 
 val validateAllNativeAlias =
-  "all testsNative/test native/test kernelLawsNative/test freeNative/test alleycatsTestsNative/test"
+  "all testsNative/test native/test kernelLawsNative/test freeNative/test alleycatsTestsNative/test algebraLawsNative/test"
 addCommandAlias("validateAllNative", validateAllNativeAlias)
 
 addCommandAlias(
   "validate",
-  ";clean;validateJS;validateKernelJS;validateFreeJS;validateNative;validateKernelNative;validateFreeNative;validateJVM"
+  ";clean;validateJS;validateKernelJS;validateFreeJS;validateAlleycatsJS;validateAlgebraJS;validateNative;validateKernelNative;validateFreeNative;validateAlgebraNative;validateJVM"
 )
 
 addCommandAlias("prePR", "fmt")
