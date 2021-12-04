@@ -465,7 +465,7 @@ class FoldableSuiteAdditional extends CatsSuite with ScalaVersionSpecificFoldabl
     val lazySum: Eval[Int] = F.foldRightDefer(large, boom[Int])((elem, acc) => acc.map(_ + elem))
   }
 
-  def checkMonadicFoldsStackSafety[F[_]](fromRange: Range => F[Int])(implicit F: Foldable[F]): Unit = {
+  def checkMonadicFoldsStackSafety[F[_]: Foldable](fromRange: Range => F[Int]): Unit = {
     def nonzero(acc: Long, x: Int): Option[Long] =
       if (x == 0) None else Some(acc + x)
 
@@ -479,15 +479,15 @@ class FoldableSuiteAdditional extends CatsSuite with ScalaVersionSpecificFoldabl
     val src = fromRange(1 to n)
 
     val foldMExpected = n.toLong * (n.toLong + 1) / 2
-    val foldMResult = F.foldM(src, 0L)(nonzero)
+    val foldMResult = src.foldM(0L)(nonzero)
     assert(foldMResult.get == foldMExpected)
 
     val existsMExpected = true
-    val existsMResult = F.existsM(src)(gte(n, _))
+    val existsMResult = src.existsM(gte(n, _))
     assert(existsMResult.get == existsMExpected)
 
     val forallMExpected = true
-    val forallMResult = F.forallM(src)(gte(0, _))
+    val forallMResult = src.forallM(gte(0, _))
     assert(forallMResult.get == forallMExpected)
 
     val findMExpected = Some(n)
@@ -497,8 +497,15 @@ class FoldableSuiteAdditional extends CatsSuite with ScalaVersionSpecificFoldabl
     val collectFirstSomeMExpected = Some(n)
     val collectFirstSomeMResult = src.collectFirstSomeM(gteSome(n, _))
     assert(collectFirstSomeMResult.get == collectFirstSomeMExpected)
+  }
 
-    ()
+  def checkSlidingNStackSafety[F[_]: Foldable](fromRange: Range => F[Int]): Unit = {
+    val n = 1000
+    val src = fromRange(1 to n)
+
+    val sliding2Expected = List.tabulate(n)(i => (i, i + 1)).tail
+    val sliding2Result = src.sliding2
+    assertEquals(sliding2Result, sliding2Expected)
   }
 
   test(s"Foldable.iterateRight") {
@@ -514,39 +521,46 @@ class FoldableSuiteAdditional extends CatsSuite with ScalaVersionSpecificFoldabl
     }
   }
 
-  test("Foldable[List].foldM/existsM/forallM/findM/collectFirstSomeM stack safety") {
-    checkMonadicFoldsStackSafety[List](_.toList)
+  test("Foldable[List] monadic folds stack safety")(checkMonadicFoldsStackSafety(_.toList))
+  test("Foldable[List].slidingN stack safety")(checkSlidingNStackSafety(_.toList))
+
+  test("Foldable[Stream] monadic folds stack safety")(checkMonadicFoldsStackSafety(_.toStream))
+  test("Foldable[Stream].slidingN stack safety")(checkSlidingNStackSafety(_.toStream))
+
+  test("Foldable[Vector] monadic folds stack safety")(checkMonadicFoldsStackSafety(_.toVector))
+  test("Foldable[Vector].slidingN stack safety")(checkSlidingNStackSafety(_.toVector))
+
+  test("Foldable[SortedSet] monadic folds stack safety")(checkMonadicFoldsStackSafety(xs => SortedSet(xs: _*)))
+  test("Foldable[SortedSet].slidingN stack safety")(checkSlidingNStackSafety(xs => SortedSet(xs: _*)))
+
+  // Can't checkSlidingNStackSafety because of iteration order.
+  test("Foldable[SortedMap[String, *]] monadic stack safety") {
+    checkMonadicFoldsStackSafety(xs => SortedMap(xs.map(x => x.toString -> x): _*))
   }
 
-  test("Foldable[Stream].foldM stack safety") {
-    checkMonadicFoldsStackSafety[Stream](_.toStream)
-  }
+  test("Foldable[NonEmptyList] monadic folds stack safety")(
+    checkMonadicFoldsStackSafety(xs => NonEmptyList.fromListUnsafe(xs.toList))
+  )
 
-  test("Foldable[Vector].foldM/existsM/forallM/findM/collectFirstSomeM stack safety") {
-    checkMonadicFoldsStackSafety[Vector](_.toVector)
-  }
+  test("Foldable[NonEmptyList].slidingN stack safety")(
+    checkSlidingNStackSafety(xs => NonEmptyList.fromListUnsafe(xs.toList))
+  )
 
-  test("Foldable[SortedSet].foldM/existsM/forallM/findM/collectFirstSomeM stack safety") {
-    checkMonadicFoldsStackSafety[SortedSet](s => SortedSet(s: _*))
-  }
+  test("Foldable[NonEmptyVector] monadic folds stack safety")(
+    checkMonadicFoldsStackSafety(xs => NonEmptyVector.fromVectorUnsafe(xs.toVector))
+  )
 
-  test("Foldable[SortedMap[String, *]].foldM/existsM/forallM/findM/collectFirstSomeM stack safety") {
-    checkMonadicFoldsStackSafety[SortedMap[String, *]](xs =>
-      SortedMap.empty[String, Int] ++ xs.map(x => x.toString -> x).toMap
-    )
-  }
+  test("Foldable[NonEmptyVector].slidingN stack safety")(
+    checkSlidingNStackSafety(xs => NonEmptyVector.fromVectorUnsafe(xs.toVector))
+  )
 
-  test("Foldable[NonEmptyList].foldM/existsM/forallM/findM/collectFirstSomeM stack safety") {
-    checkMonadicFoldsStackSafety[NonEmptyList](xs => NonEmptyList.fromListUnsafe(xs.toList))
-  }
+  test("Foldable[NonEmptyStream] monadic folds stack safety")(
+    checkMonadicFoldsStackSafety(xs => NonEmptyStream(xs.head, xs.tail: _*))
+  )
 
-  test("Foldable[NonEmptyVector].foldM/existsM/forallM/findM/collectFirstSomeM stack safety") {
-    checkMonadicFoldsStackSafety[NonEmptyVector](xs => NonEmptyVector.fromVectorUnsafe(xs.toVector))
-  }
-
-  test("Foldable[NonEmptyStream].foldM/existsM/forallM/findM/collectFirstSomeM stack safety") {
-    checkMonadicFoldsStackSafety[NonEmptyStream](xs => NonEmptyStream(xs.head, xs.tail: _*))
-  }
+  test("Foldable[NonEmptyStream].slidingN stack safety")(
+    checkSlidingNStackSafety(xs => NonEmptyStream(xs.head, xs.tail: _*))
+  )
 
   val F = Foldable[Stream]
   def bomb[A]: A = sys.error("boom")
