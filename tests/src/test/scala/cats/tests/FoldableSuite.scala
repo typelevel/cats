@@ -505,7 +505,7 @@ class FoldableSuiteAdditional extends CatsSuite with ScalaVersionSpecificFoldabl
 
     val sliding2Expected = List.tabulate(n)(i => (i, i + 1)).tail
     val sliding2Result = src.sliding2
-    assert(sliding2Result == sliding2Expected)
+    assertEquals(sliding2Result, sliding2Expected)
   }
 
   test(s"Foldable.iterateRight") {
