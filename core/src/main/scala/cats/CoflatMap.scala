@@ -1,14 +1,12 @@
 package cats
 
 import simulacrum.typeclass
-import scala.annotation.implicitNotFound
 
 /**
  * `CoflatMap` is the dual of `FlatMap`.
  *
  * Must obey the laws in cats.laws.CoflatMapLaws
  */
-@implicitNotFound("Could not find an instance of CoflatMap for ${F}")
 @typeclass trait CoflatMap[F[_]] extends Functor[F] {
 
   /**

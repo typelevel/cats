@@ -64,6 +64,10 @@ package object cats {
    * encodes pure unary function application.
    */
   type Id[A] = A
+  object Id {
+    def apply[A](a: A): Id[A] = a
+  }
+
   type Endo[A] = A => A
 
   val catsInstancesForId: Bimonad[Id] with CommutativeMonad[Id] with NonEmptyTraverse[Id] with Distributive[Id] =

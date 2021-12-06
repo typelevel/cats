@@ -44,12 +44,12 @@ class FunctorSuite extends CatsSuite {
       assert(Functor[Option].unzip(o.map(i => (i, i))) === ((o, o)))
       assert(Functor[Map[String, *]].unzip(m.map { case (k, v) => (k, (v, v)) }) === ((m, m)))
 
-      //postfix test for Cats datatypes
+      // postfix test for Cats datatypes
       assert(nel.map(i => (i, i)).unzip === ((nel, nel)))
       assert(nem.map(v => (v, v)).unzip === ((nem, nem)))
     }
 
-    //empty test for completeness
+    // empty test for completeness
     val emptyL = List.empty[Int]
     val emptyM = Map.empty[String, Int]
 

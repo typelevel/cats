@@ -70,6 +70,18 @@ class ListSuite extends CatsSuite {
     }
   )
 
+  test("scanLeftNel should be consistent with scanLeft")(
+    forAll { (fa: List[Int], b: Int, f: (Int, Int) => Int) =>
+      assert(fa.scanLeftNel(b)(f).toList === fa.scanLeft(b)(f))
+    }
+  )
+
+  test("scanRightNel should be consistent with scanRight")(
+    forAll { (fa: List[Int], b: Int, f: (Int, Int) => Int) =>
+      assert(fa.scanRightNel(b)(f).toList === fa.scanRight(b)(f))
+    }
+  )
+
   test("show") {
     assert(List(1, 2, 3).show === "List(1, 2, 3)")
     assert((Nil: List[Int]).show === "List()")

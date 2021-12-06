@@ -116,6 +116,8 @@ object ListWrapper {
     }
   }
 
+  def nonEmptyAlternative: NonEmptyAlternative[ListWrapper] = alternative
+
   val monad: Monad[ListWrapper] = new Monad[ListWrapper] {
     val M = Monad[List]
     def pure[A](x: A): ListWrapper[A] = ListWrapper(x :: Nil)

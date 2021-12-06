@@ -70,3 +70,5 @@ trait AllInstancesBinCompat6 extends SortedSetInstancesBinCompat1 with SortedMap
 trait AllInstancesBinCompat7 extends SeqInstances
 
 trait AllInstancesBinCompat8 extends DeadlineInstances
+
+trait AllInstancesBinCompat9 extends InvariantInstances with InvariantInstancesBinCompat0

@@ -3,7 +3,6 @@ package cats
 import cats.data.State
 import simulacrum.{noop, typeclass}
 
-import scala.annotation.implicitNotFound
 import scala.collection.immutable.{HashSet, TreeSet}
 
 /**
@@ -14,7 +13,6 @@ import scala.collection.immutable.{HashSet, TreeSet}
  * Based on Haskell's [[https://hackage.haskell.org/package/witherable-0.1.3.3/docs/Data-Witherable.html Data.Witherable]]
  */
 
-@implicitNotFound("Could not find an instance of TraverseFilter for ${F}")
 @typeclass
 trait TraverseFilter[F[_]] extends FunctorFilter[F] {
   def traverse: Traverse[F]

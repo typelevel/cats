@@ -23,21 +23,18 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        scala: [2.12.15, 2.13.6, 3.0.2]
-        java:
-          - adoptium@8
-          - adoptium@17
-          - graalvm-ce-java8@21.2
+        scala: [2.12.15, 2.13.7, 3.0.2]
+        java: [temurin@8, temurin@17, graal_20.3.1@11]
         platform: [jvm, js, native]
         exclude:
           - platform: js
-            java: adoptium@17
+            java: temurin@17
           - platform: native
-            java: adoptium@17
+            java: temurin@17
           - platform: js
-            java: graalvm-ce-java8@21.2
+            java: graal_20.3.1@11
           - platform: native
-            java: graalvm-ce-java8@21.2
+            java: graal_20.3.1@11
           - platform: native
             scala: 3.0.2
     runs-on: ${{ matrix.os }}
@@ -47,10 +44,26 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup Java and Scala
-        uses: olafurpg/setup-scala@v13
+      - name: Setup Java (temurin@8)
+        if: matrix.java == 'temurin@8'
+        uses: actions/setup-java@v2
         with:
-          java-version: ${{ matrix.java }}
+          distribution: temurin
+          java-version: 8
+
+      - name: Setup Java (temurin@17)
+        if: matrix.java == 'temurin@17'
+        uses: actions/setup-java@v2
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Setup GraalVM (graal_20.3.1@11)
+        if: matrix.java == 'graal_20.3.1@11'
+        uses: DeLaGuardo/setup-graalvm@5.0
+        with:
+          graalvm: 20.3.1
+          java: java11
 
       - name: Cache sbt
         uses: actions/cache@v2
@@ -91,6 +104,10 @@ jobs:
         if: matrix.platform == 'native'
         run: sbt ++${{ matrix.scala }} alleycatsTestsNative/test
 
+      - name: Validate Algebra Laws Native
+        if: matrix.platform == 'native'
+        run: sbt ++${{ matrix.scala }} algebraLawsNative/test
+
       - name: Validate JVM (scala 2)
         if: matrix.platform == 'jvm' && (matrix.scala != '3.0.2')
         run: sbt ++${{ matrix.scala }} buildJVM bench/test
@@ -108,8 +125,8 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        scala: [2.12.15, 2.13.6, 3.0.2]
-        java: [adoptium@8]
+        scala: [2.12.15, 2.13.7, 3.0.2]
+        java: [temurin@8]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout current branch (full)
@@ -117,10 +134,26 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup Java and Scala
-        uses: olafurpg/setup-scala@v13
+      - name: Setup Java (temurin@8)
+        if: matrix.java == 'temurin@8'
+        uses: actions/setup-java@v2
         with:
-          java-version: ${{ matrix.java }}
+          distribution: temurin
+          java-version: 8
+
+      - name: Setup Java (temurin@17)
+        if: matrix.java == 'temurin@17'
+        uses: actions/setup-java@v2
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Setup GraalVM (graal_20.3.1@11)
+        if: matrix.java == 'graal_20.3.1@11'
+        uses: DeLaGuardo/setup-graalvm@5.0
+        with:
+          graalvm: 20.3.1
+          java: java11
 
       - name: Cache sbt
         uses: actions/cache@v2
@@ -144,8 +177,8 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        scala: [2.12.15, 2.13.6, 3.0.2]
-        java: [adoptium@8]
+        scala: [2.12.15, 2.13.7, 3.0.2]
+        java: [temurin@8]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout current branch (full)
@@ -153,10 +186,26 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup Java and Scala
-        uses: olafurpg/setup-scala@v13
+      - name: Setup Java (temurin@8)
+        if: matrix.java == 'temurin@8'
+        uses: actions/setup-java@v2
         with:
-          java-version: ${{ matrix.java }}
+          distribution: temurin
+          java-version: 8
+
+      - name: Setup Java (temurin@17)
+        if: matrix.java == 'temurin@17'
+        uses: actions/setup-java@v2
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Setup GraalVM (graal_20.3.1@11)
+        if: matrix.java == 'graal_20.3.1@11'
+        uses: DeLaGuardo/setup-graalvm@5.0
+        with:
+          graalvm: 20.3.1
+          java: java11
 
       - name: Cache sbt
         uses: actions/cache@v2
@@ -180,7 +229,7 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         scala: [2.12.15]
-        java: [adoptium@8]
+        java: [temurin@8]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout current branch (full)
@@ -188,10 +237,26 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup Java and Scala
-        uses: olafurpg/setup-scala@v13
+      - name: Setup Java (temurin@8)
+        if: matrix.java == 'temurin@8'
+        uses: actions/setup-java@v2
         with:
-          java-version: ${{ matrix.java }}
+          distribution: temurin
+          java-version: 8
+
+      - name: Setup Java (temurin@17)
+        if: matrix.java == 'temurin@17'
+        uses: actions/setup-java@v2
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Setup GraalVM (graal_20.3.1@11)
+        if: matrix.java == 'graal_20.3.1@11'
+        uses: DeLaGuardo/setup-graalvm@5.0
+        with:
+          graalvm: 20.3.1
+          java: java11
 
       - name: Cache sbt
         uses: actions/cache@v2

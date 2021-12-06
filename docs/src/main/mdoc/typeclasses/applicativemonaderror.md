@@ -273,7 +273,7 @@ when things go wrong.
 ```scala mdoc:silent
 def getTemperatureFromByCoordinatesAlternate[F[_]](x: (Int, Int))(implicit me: MonadError[F, String]): F[Int] = {
   if (x._1 < 0 || x._2 < 0) me.raiseError("Invalid Coordinates")
-  for { c <- getCityClosestToCoordinate[F](x)
+  else for { c <- getCityClosestToCoordinate[F](x)
         t <- getTemperatureByCity[F](c) } yield t
 }
 ```

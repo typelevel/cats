@@ -17,7 +17,11 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
     new Traverse[List] with Alternative[List] with Monad[List] with CoflatMap[List] with Align[List] {
       def empty[A]: List[A] = Nil
 
-      def combineK[A](x: List[A], y: List[A]): List[A] = x ++ y
+      def combineK[A](x: List[A], y: List[A]): List[A] = x ::: y
+
+      override def prependK[A](a: A, fa: List[A]): List[A] = a :: fa
+
+      override def appendK[A](fa: List[A], a: A): List[A] = fa :+ a
 
       def pure[A](x: A): List[A] = x :: Nil
 

@@ -1,7 +1,6 @@
 package cats
 
 import simulacrum.typeclass
-import scala.annotation.implicitNotFound
 
 /**
  * NonEmptyTraverse, also known as Traversable1.
@@ -9,7 +8,6 @@ import scala.annotation.implicitNotFound
  * `NonEmptyTraverse` is like a non-empty `Traverse`. In addition to the traverse and sequence
  * methods it provides nonEmptyTraverse and nonEmptySequence methods which require an `Apply` instance instead of `Applicative`.
  */
-@implicitNotFound("Could not find an instance of NonEmptyTraverse for ${F}")
 @typeclass trait NonEmptyTraverse[F[_]] extends Traverse[F] with Reducible[F] { self =>
 
   /**

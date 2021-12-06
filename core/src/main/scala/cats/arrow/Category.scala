@@ -2,12 +2,10 @@ package cats
 package arrow
 
 import simulacrum.typeclass
-import scala.annotation.implicitNotFound
 
 /**
  * Must obey the laws defined in cats.laws.CategoryLaws.
  */
-@implicitNotFound("Could not find an instance of Category for ${F}")
 @typeclass trait Category[F[_, _]] extends Compose[F] { self =>
 
   def id[A]: F[A, A]
