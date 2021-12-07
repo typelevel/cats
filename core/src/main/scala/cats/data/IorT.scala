@@ -8,6 +8,21 @@ final case class IorT[F[_], A, B](value: F[Ior[A, B]]) {
   def fold[C](fa: A => C, fb: B => C, fab: (A, B) => C)(implicit F: Functor[F]): F[C] =
     F.map(value)(_.fold(fa, fb, fab))
 
+  /**
+   * Transform this `IorT[F, A, B]` into a `F[C]`.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.data.{Ior, IorT}
+   *
+   * scala> val iorT: IorT[List, String, Int] = IorT[List, String, Int](List(Ior.Right(123),Ior.Left("abc"), Ior.Both("abc", 123)))
+   * scala> iorT.foldF(string => string.split("").toList, int => List(int.toString), (string, int) => string.split("").toList ++ List(int.toString))
+   * val res0: List[String] = List(123, a, b, c, a, b, c, 123)
+   * }}}
+   */
+  def foldF[C](fa: A => F[C], fb: B => F[C], fab: (A, B) => F[C])(implicit F: FlatMap[F]): F[C] =
+    F.flatMap(value)(_.fold(fa, fb, fab))
+
   def isLeft(implicit F: Functor[F]): F[Boolean] = F.map(value)(_.isLeft)
 
   def isRight(implicit F: Functor[F]): F[Boolean] = F.map(value)(_.isRight)
