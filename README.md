@@ -285,11 +285,11 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 
 The current maintainers (people who can merge pull requests) are:
 
- * [ceedubs](https://github.com/ceedubs) Cody Allen
  * [rossabaker](https://github.com/rossabaker) Ross Baker
+ * [armanbilge](https://github.com/armanbilge) Arman Bilge
  * [johnynek](https://github.com/johnynek) P. Oscar Boykin
- * [travisbrown](https://github.com/travisbrown) Travis Brown
  * [adelbertc](https://github.com/adelbertc) Adelbert Chang
+ * [danicheg](https://github.com/danicheg) Daniel Esik
  * [LukaJCB](https://github.com/LukaJCB) Luka Jacobowitz
  * [peterneyens](https://github.com/peterneyens) Peter Neyens
  * [tpolecat](https://github.com/tpolecat) Rob Norris
@@ -299,8 +299,14 @@ The current maintainers (people who can merge pull requests) are:
  * [milessabin](https://github.com/milessabin) Miles Sabin
  * [djspiewak](https://github.com/djspiewak) Daniel Spiewak
  * [fthomas](https://github.com/fthomas) Frank Thomas
+ * [satorg](https://github.com/satorg) Sergey Torgashov
  * [julien-truffaut](https://github.com/julien-truffaut) Julien Truffaut
  * [kailuowang](https://github.com/kailuowang) Kailuo Wang
+ 
+Retired committers include:
+
+ * [ceedubs](https://github.com/ceedubs) Cody Allen
+ * [travisbrown](https://github.com/travisbrown) Travis Brown
 
 We are currently following a practice of requiring at least two
 sign-offs to merge code PRs (and for large or contentious issues we may
