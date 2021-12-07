@@ -13,7 +13,6 @@ final case class IorT[F[_], A, B](value: F[Ior[A, B]]) {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
    * scala> import cats.data.{Ior, IorT}
    *
    * scala> val iorT: IorT[List, String, Int] = IorT[List, String, Int](List(Ior.Right(123),Ior.Left("abc"), Ior.Both("abc", 123)))
