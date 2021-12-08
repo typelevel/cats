@@ -237,33 +237,67 @@ final class ParallelUnorderedFlatSequenceOps[T[_], M[_], A](private val tmta: T[
     Parallel.parUnorderedFlatSequence(tmta)
 }
 
-final class ParallelApOps[M[_], A](private val ma: M[A]) extends AnyVal {
+final class ParallelApOps[M[_], A](protected val ma: M[A]) extends AnyVal with ParallelApOpsBinCompat0[M, A] {
 
-  def &>[B](mb: M[B])(implicit P: Parallel[M]): M[B] =
+  @deprecated("use a NonEmptyParallel-constrained version instead", "2.7.1")
+  protected def &>[B](mb: M[B])(implicit P: Parallel[M]): M[B] =
     P.parProductR(ma)(mb)
 
-  def <&[B](mb: M[B])(implicit P: Parallel[M]): M[A] =
+  @deprecated("use a NonEmptyParallel-constrained version instead", "2.7.1")
+  protected def <&[B](mb: M[B])(implicit P: Parallel[M]): M[A] =
     P.parProductL(ma)(mb)
 
-  def parProductL[B](mb: M[B])(implicit P: Parallel[M]): M[A] =
+  @deprecated("use a NonEmptyParallel-constrained version instead", "2.7.1")
+  protected def parProductL[B](mb: M[B])(implicit P: Parallel[M]): M[A] =
     P.parProductL(ma)(mb)
 
-  def parProductR[B](mb: M[B])(implicit P: Parallel[M]): M[B] =
+  @deprecated("use a NonEmptyParallel-constrained version instead", "2.7.1")
+  protected def parProductR[B](mb: M[B])(implicit P: Parallel[M]): M[B] =
     P.parProductR(ma)(mb)
 
-  def parProduct[B](mb: M[B])(implicit P: Parallel[M]): M[(A, B)] =
+  @deprecated("use a NonEmptyParallel-constrained version instead", "2.7.1")
+  protected def parProduct[B](mb: M[B])(implicit P: Parallel[M]): M[(A, B)] =
     Parallel.parProduct(ma, mb)
 
   def parReplicateA(n: Int)(implicit P: Parallel[M]): M[List[A]] =
     Parallel.parReplicateA(n, ma)
 }
 
-final class ParallelApplyOps[M[_], A, B](private val mab: M[A => B]) extends AnyVal {
-  def <&>(ma: M[A])(implicit P: Parallel[M]): M[B] =
+sealed private[syntax] trait ParallelApOpsBinCompat0[M[_], A] extends Any { self: ParallelApOps[M, A] =>
+  def &>[B](mb: M[B])(implicit P: NonEmptyParallel[M]): M[B] =
+    P.parProductR[A, B](ma)(mb)
+
+  def <&[B](mb: M[B])(implicit P: NonEmptyParallel[M]): M[A] =
+    P.parProductL[A, B](ma)(mb)
+
+  def parProductL[B](mb: M[B])(implicit P: NonEmptyParallel[M]): M[A] =
+    P.parProductL[A, B](ma)(mb)
+
+  def parProductR[B](mb: M[B])(implicit P: NonEmptyParallel[M]): M[B] =
+    P.parProductR[A, B](ma)(mb)
+
+  def parProduct[B](mb: M[B])(implicit P: NonEmptyParallel[M]): M[(A, B)] =
+    Parallel.parProduct(ma, mb)
+}
+
+final class ParallelApplyOps[M[_], A, B](protected val mab: M[A => B])
+    extends AnyVal
+    with ParallelApplyOpsBinCompat0[M, A, B] {
+  @deprecated("use a NonEmptyParallel-constrained version instead", "2.7.1")
+  protected def <&>(ma: M[A])(implicit P: Parallel[M]): M[B] =
     Parallel.parAp(mab)(ma)(P)
 
-  def parAp(ma: M[A])(implicit P: Parallel[M]): M[B] =
+  @deprecated("use a NonEmptyParallel-constrained version instead", "2.7.1")
+  protected def parAp(ma: M[A])(implicit P: Parallel[M]): M[B] =
     Parallel.parAp(mab)(ma)
+}
+
+sealed private[syntax] trait ParallelApplyOpsBinCompat0[M[_], A, B] extends Any { self: ParallelApplyOps[M, A, B] =>
+  def <&>(ma: M[A])(implicit P: NonEmptyParallel[M]): M[B] =
+    Parallel.parAp[M, A, B](mab)(ma)(P)
+
+  def parAp(ma: M[A])(implicit P: NonEmptyParallel[M]): M[B] =
+    Parallel.parAp[M, A, B](mab)(ma)
 }
 
 final class ParallelBitraverseOps[T[_, _], A, B](private val tab: T[A, B]) extends AnyVal {
