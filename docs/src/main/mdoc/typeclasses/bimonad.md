@@ -1,6 +1,6 @@
 ---
 layout: docs
-title:  "BiMonad"
+title:  "Bimonad"
 section: "typeclasses"
 source: "core/src/main/scala/cats/Bimonad.scala"
 scaladoc: "#cats.Bimonad"
