@@ -73,6 +73,10 @@ trait SetInstances {
       override def empty[A]: Set[A] = Set.empty
 
       override def combineK[A](x: Set[A], y: Set[A]): Set[A] = x | y
+
+      override def prependK[A](a: A, fa: Set[A]): Set[A] = fa + a
+
+      override def appendK[A](fa: Set[A], a: A): Set[A] = fa + a
     }
 
   // Since iteration order is not guaranteed for sets, folds and other
@@ -121,6 +125,8 @@ trait SetInstances {
       override def fold[A](fa: Set[A])(implicit A: Monoid[A]): A = A.combineAll(fa)
 
       override def toList[A](fa: Set[A]): List[A] = fa.toList
+
+      override def toIterable[A](fa: Set[A]): Iterable[A] = fa
 
       override def reduceLeftOption[A](fa: Set[A])(f: (A, A) => A): Option[A] =
         fa.reduceLeftOption(f)

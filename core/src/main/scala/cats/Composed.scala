@@ -57,11 +57,24 @@ private[cats] trait ComposedMonoidK[F[_], G[_]] extends MonoidK[λ[α => F[G[α]
   override def empty[A]: F[G[A]] = F.empty
 }
 
+private[cats] trait ComposedNonEmptyAlternative[F[_], G[_]]
+    extends NonEmptyAlternative[λ[α => F[G[α]]]]
+    with ComposedApplicative[F, G]
+    with ComposedSemigroupK[F, G] { outer =>
+
+  def F: NonEmptyAlternative[F]
+}
+
 private[cats] trait ComposedAlternative[F[_], G[_]]
     extends Alternative[λ[α => F[G[α]]]]
-    with ComposedApplicative[F, G]
+    with ComposedNonEmptyAlternative[F, G]
     with ComposedMonoidK[F, G] { outer =>
+
   def F: Alternative[F]
+
+  override def prependK[A](a: A, fa: F[G[A]]): F[G[A]] = F.prependK(G.pure(a), fa)
+
+  override def appendK[A](fa: F[G[A]], a: A): F[G[A]] = F.appendK(fa, G.pure(a))
 }
 
 private[cats] trait ComposedFoldable[F[_], G[_]] extends Foldable[λ[α => F[G[α]]]] { outer =>
@@ -73,6 +86,12 @@ private[cats] trait ComposedFoldable[F[_], G[_]] extends Foldable[λ[α => F[G[�
 
   override def foldRight[A, B](fga: F[G[A]], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
     F.foldRight(fga, lb)((ga, lb) => G.foldRight(ga, lb)(f))
+
+  override def toList[A](fga: F[G[A]]): List[A] =
+    F.toList(fga).flatMap(G.toList)
+
+  override def toIterable[A](fga: F[G[A]]): Iterable[A] =
+    F.toIterable(fga).flatMap(G.toIterable)
 }
 
 private[cats] trait ComposedTraverse[F[_], G[_]]

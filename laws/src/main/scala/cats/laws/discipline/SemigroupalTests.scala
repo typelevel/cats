@@ -39,8 +39,8 @@ object SemigroupalTests {
   }
 
   object Isomorphisms {
-
     import cats.kernel.laws._
+
     implicit def invariant[F[_]](implicit F: Invariant[F]): Isomorphisms[F] =
       new Isomorphisms[F] {
         def associativity[A, B, C](fs: (F[(A, (B, C))], F[((A, B), C)])): IsEq[F[(A, B, C)]] =
@@ -57,6 +57,11 @@ object SemigroupalTests {
             (a, ())
           } <-> fs._2
       }
-  }
 
+    implicit def composedInvariant[F[_], G[_]](implicit
+      F: Invariant[F],
+      G: Invariant[G]
+    ): Isomorphisms[λ[α => F[G[α]]]] =
+      invariant[λ[α => F[G[α]]]](F.compose[G])
+  }
 }

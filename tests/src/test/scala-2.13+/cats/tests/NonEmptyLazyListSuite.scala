@@ -139,7 +139,7 @@ class NonEmptyLazyListSuite extends NonEmptyCollectionSuite[LazyList, NonEmptyLa
 
   test("zipWith consistent with List#zip and then List#map") {
     forAll { (a: NonEmptyLazyList[String], b: NonEmptyLazyList[Int], f: (String, Int) => Int) =>
-      assert(a.zipWith(b)(f).toList === (a.toList.zip(b.toList).map { case (x, y) => f(x, y) }))
+      assert(a.zipWith(b)(f).toList === a.toList.zip(b.toList).map { case (x, y) => f(x, y) })
     }
   }
 

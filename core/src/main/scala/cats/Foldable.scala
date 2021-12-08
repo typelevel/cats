@@ -5,8 +5,6 @@ import cats.kernel.CommutativeMonoid
 import simulacrum.{noop, typeclass}
 import Foldable.{sentinel, Source}
 
-import scala.annotation.implicitNotFound
-
 /**
  * Data structures that can be folded to a summary value.
  *
@@ -29,7 +27,6 @@ import scala.annotation.implicitNotFound
  *
  * See: [[http://www.cs.nott.ac.uk/~pszgmh/fold.pdf A tutorial on the universality and expressiveness of fold]]
  */
-@implicitNotFound("Could not find an instance of Foldable for ${F}")
 @typeclass(excludeParents = List("FoldableNFunctions"))
 trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { self =>
 
@@ -337,11 +334,11 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * res1: Option[String] = None
    * }}}
    */
-  def collectFirstSome[A, B](fa: F[A])(f: A => Option[B]): Option[B] =
-    foldRight(fa, Eval.now(Option.empty[B])) { (a, lb) =>
-      val ob = f(a)
-      if (ob.isDefined) Eval.now(ob) else lb
-    }.value
+  def collectFirstSome[A, B](fa: F[A])(f: A => Option[B]): Option[B] = {
+    val maybeEmpty = toIterable(fa).iterator.map(f).dropWhile(_.isEmpty)
+    if (maybeEmpty.hasNext) maybeEmpty.next()
+    else None
+  }
 
   /**
    * Monadic version of `collectFirstSome`.
@@ -622,9 +619,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * Find the first element matching the predicate, if one exists.
    */
   def find[A](fa: F[A])(f: A => Boolean): Option[A] =
-    foldRight(fa, Now(Option.empty[A])) { (a, lb) =>
-      if (f(a)) Now(Some(a)) else lb
-    }.value
+    toIterable(fa).find(f)
 
   /**
    * Find the first element matching the effectful predicate, if one exists.
@@ -662,9 +657,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * If there are no elements, the result is `false`.
    */
   override def exists[A](fa: F[A])(p: A => Boolean): Boolean =
-    foldRight(fa, Eval.False) { (a, lb) =>
-      if (p(a)) Eval.True else lb
-    }.value
+    toIterable(fa).exists(p)
 
   /**
    * Check whether all elements satisfy the predicate.
@@ -672,9 +665,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * If there are no elements, the result is `true`.
    */
   override def forall[A](fa: F[A])(p: A => Boolean): Boolean =
-    foldRight(fa, Eval.True) { (a, lb) =>
-      if (p(a)) lb else Eval.False
-    }.value
+    toIterable(fa).forall(p)
 
   /**
    * Check whether at least one element satisfies the effectful predicate.
@@ -792,9 +783,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * match `p`.
    */
   def takeWhile_[A](fa: F[A])(p: A => Boolean): List[A] =
-    foldRight(fa, Now(List.empty[A])) { (a, llst) =>
-      if (p(a)) llst.map(a :: _) else Now(Nil)
-    }.value
+    toIterable(fa).iterator.takeWhile(p).toList
 
   /**
    * Convert F[A] to a List[A], dropping all initial elements which

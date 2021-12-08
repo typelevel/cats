@@ -8,6 +8,8 @@ import cats.laws.discipline.{ApplicativeErrorTests, MiniInt, NonEmptyParallelTes
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
 import cats.implicits._
+import org.scalacheck.{Arbitrary, Gen}
+
 import scala.collection.immutable.SortedSet
 import org.scalacheck.Prop._
 
@@ -255,6 +257,15 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
     }
   }
 
+  test("ParReduceMapA should be equivalent to parNonEmptyTraverse map reduce (where it exists)") {
+    forAll { (es: NonEmptyList[Int], f: Int => Either[String, String]) =>
+      assert(
+        Parallel.parReduceMapA(es)(f) ===
+          Parallel.parNonEmptyTraverse(es)(f).map(_.reduce)
+      )
+    }
+  }
+
   test("parAp accumulates errors in order") {
     val right: Either[String, Int => Int] = Left("Hello")
     assert(Parallel.parAp(right)("World".asLeft) === (Left("HelloWorld")))
@@ -264,6 +275,19 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
     val plus = (_: Int) + (_: Int)
     val rightPlus: Either[String, (Int, Int) => Int] = Right(plus)
     assert(Parallel.parAp2(rightPlus)("Hello".asLeft, "World".asLeft) === (Left("HelloWorld")))
+  }
+
+  test("ParReplicateA should be equivalent to fill parSequence") {
+    forAll(Gen.choose(1, 20), Arbitrary.arbitrary[Either[String, String]]) {
+      (repetitions: Int, e: Either[String, String]) =>
+        assert(Parallel.parReplicateA(repetitions, e) === Parallel.parSequence(List.fill(repetitions)(e)))
+    }
+  }
+
+  test("ParReplicateA 2 should be equivalent to parMap2 List") {
+    forAll { (e: Either[String, String]) =>
+      assert(Parallel.parReplicateA(2, e) === Parallel.parMap2(e, e)((s1, s2) => List(s1, s2)))
+    }
   }
 
   test("Kleisli with Either should accumulate errors") {
@@ -375,19 +399,19 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
 
   test("ParTupled of List should be consistent with zip") {
     forAll { (fa: List[Int], fb: List[Int], fc: List[Int], fd: List[Int]) =>
-      assert((fa, fb, fc, fd).parTupled === (fa.zip(fb).zip(fc).zip(fd).map { case (((a, b), c), d) => (a, b, c, d) }))
+      assert((fa, fb, fc, fd).parTupled === fa.zip(fb).zip(fc).zip(fd).map { case (((a, b), c), d) => (a, b, c, d) })
     }
   }
 
   test("ParTupled of Vector should be consistent with zip") {
     forAll { (fa: Vector[Int], fb: Vector[Int], fc: Vector[Int], fd: Vector[Int]) =>
-      assert((fa, fb, fc, fd).parTupled === (fa.zip(fb).zip(fc).zip(fd).map { case (((a, b), c), d) => (a, b, c, d) }))
+      assert((fa, fb, fc, fd).parTupled === fa.zip(fb).zip(fc).zip(fd).map { case (((a, b), c), d) => (a, b, c, d) })
     }
   }
 
   test("ParTupled of Stream should be consistent with zip") {
     forAll { (fa: Stream[Int], fb: Stream[Int], fc: Stream[Int], fd: Stream[Int]) =>
-      assert((fa, fb, fc, fd).parTupled === (fa.zip(fb).zip(fc).zip(fd).map { case (((a, b), c), d) => (a, b, c, d) }))
+      assert((fa, fb, fc, fd).parTupled === fa.zip(fb).zip(fc).zip(fd).map { case (((a, b), c), d) => (a, b, c, d) })
     }
   }
 

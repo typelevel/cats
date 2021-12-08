@@ -17,6 +17,10 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
 
       def combineK[A](x: Queue[A], y: Queue[A]): Queue[A] = x ++ y
 
+      override def prependK[A](a: A, fa: Queue[A]): Queue[A] = a +: fa
+
+      override def appendK[A](fa: Queue[A], a: A): Queue[A] = fa.enqueue(a)
+
       def pure[A](x: A): Queue[A] = Queue(x)
 
       override def map[A, B](fa: Queue[A])(f: A => B): Queue[B] =
@@ -130,6 +134,8 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
       override def fold[A](fa: Queue[A])(implicit A: Monoid[A]): A = A.combineAll(fa)
 
       override def toList[A](fa: Queue[A]): List[A] = fa.toList
+
+      override def toIterable[A](fa: Queue[A]): Iterable[A] = fa
 
       override def reduceLeftOption[A](fa: Queue[A])(f: (A, A) => A): Option[A] =
         fa.reduceLeftOption(f)

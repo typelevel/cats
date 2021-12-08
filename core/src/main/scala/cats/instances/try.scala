@@ -9,7 +9,6 @@ import scala.annotation.tailrec
 
 trait TryInstances extends TryInstances1 {
 
-  // scalastyle:off method.length
   implicit def catsStdInstancesForTry: MonadThrow[Try] with CoflatMap[Try] with Traverse[Try] with Monad[Try] =
     new TryCoflatMap with MonadThrow[Try] with Traverse[Try] with Monad[Try] {
       def pure[A](x: A): Try[A] = Success(x)
@@ -105,10 +104,7 @@ trait TryInstances extends TryInstances1 {
         if (idx == 0L) fa.toOption else None
 
       override def size[A](fa: Try[A]): Long =
-        fa match {
-          case Failure(_) => 0L
-          case Success(_) => 1L
-        }
+        if (fa.isSuccess) 1L else 0L
 
       override def find[A](fa: Try[A])(f: A => Boolean): Option[A] =
         fa.toOption.filter(f)
@@ -142,8 +138,15 @@ trait TryInstances extends TryInstances1 {
       override def catchNonFatal[A](a: => A)(implicit ev: Throwable <:< Throwable): Try[A] = Try(a)
 
       override def catchNonFatalEval[A](a: Eval[A])(implicit ev: Throwable <:< Throwable): Try[A] = Try(a.value)
+
+      private[this] val successUnit: Try[Unit] = Success(())
+
+      override def void[A](t: Try[A]): Try[Unit] =
+        if (t.isSuccess) successUnit
+        else t.asInstanceOf[Try[Unit]]
+
+      override def unit: Try[Unit] = successUnit
     }
-  // scalastyle:on method.length
 
   implicit def catsStdShowForTry[A](implicit A: Show[A]): Show[Try[A]] =
     new Show[Try[A]] {

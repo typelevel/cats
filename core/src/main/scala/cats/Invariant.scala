@@ -4,7 +4,6 @@ import cats.arrow.Arrow
 import cats.kernel._
 import simulacrum.typeclass
 import cats.kernel.compat.scalaVersionSpecific._
-import scala.annotation.implicitNotFound
 import scala.collection.immutable.{Queue, Seq, SortedMap}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
@@ -13,7 +12,6 @@ import scala.util.control.TailCalls.TailRec
 /**
  * Must obey the laws defined in cats.laws.InvariantLaws.
  */
-@implicitNotFound("Could not find an instance of Invariant for ${F}")
 @typeclass trait Invariant[F[_]] extends Serializable { self =>
 
   /**
@@ -159,6 +157,8 @@ object Invariant extends ScalaVersionSpecificInvariantInstances with InvariantIn
     cats.instances.invariant.catsInvariantForNumeric
   implicit def catsInvariantForIntegral: Invariant[Integral] =
     cats.instances.invariant.catsInvariantForIntegral
+  implicit def catsInvariantForFractional: Invariant[Fractional] =
+    cats.instances.invariant.catsInvariantForFractional
 
   implicit val catsInvariantMonoid: Invariant[Monoid] = new Invariant[Monoid] {
 

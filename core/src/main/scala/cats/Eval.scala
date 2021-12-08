@@ -146,7 +146,7 @@ final class Later[A](f: () => A) extends Eval.Leaf[A] {
   // expensive to store, consider using `Always`.)
   lazy val value: A = {
     val result = thunk()
-    thunk = null // scalastyle:off
+    thunk = null
     result
   }
 
@@ -374,6 +374,7 @@ sealed abstract private[cats] class EvalInstances extends EvalInstances0 {
       def extract[A](la: Eval[A]): A = la.value
       def coflatMap[A, B](fa: Eval[A])(f: Eval[A] => B): Eval[B] = Later(f(fa))
       override def unit: Eval[Unit] = Eval.Unit
+      override def void[A](a: Eval[A]): Eval[Unit] = Eval.Unit
     }
 
   implicit val catsDeferForEval: Defer[Eval] =

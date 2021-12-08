@@ -479,6 +479,8 @@ sealed abstract private[data] class NonEmptyVectorInstances {
 
       override def toList[A](fa: NonEmptyVector[A]): List[A] = fa.toVector.toList
 
+      override def toIterable[A](fa: NonEmptyVector[A]): Iterable[A] = fa.toVector
+
       override def toNonEmptyList[A](fa: NonEmptyVector[A]): NonEmptyList[A] =
         NonEmptyList(fa.head, fa.tail.toList)
 

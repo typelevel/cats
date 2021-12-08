@@ -64,6 +64,10 @@ package object cats {
    * encodes pure unary function application.
    */
   type Id[A] = A
+  object Id {
+    def apply[A](a: A): Id[A] = a
+  }
+
   type Endo[A] = A => A
 
   val catsInstancesForId: Bimonad[Id] with CommutativeMonad[Id] with NonEmptyTraverse[Id] with Distributive[Id] =
@@ -82,6 +86,7 @@ package object cats {
       override def ap[A, B](ff: A => B)(fa: A): B = ff(fa)
       override def flatten[A](ffa: A): A = ffa
       override def map2[A, B, Z](fa: A, fb: B)(f: (A, B) => Z): Z = f(fa, fb)
+      override def map2Eval[A, B, Z](fa: A, fb: Eval[B])(f: (A, B) => Z): Eval[Z] = fb.map(f(fa, _))
       override def lift[A, B](f: A => B): A => B = f
       override def imap[A, B](fa: A)(f: A => B)(fi: B => A): B = f(fa)
       def foldLeft[A, B](a: A, b: B)(f: (B, A) => B) = f(b, a)

@@ -730,7 +730,6 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
    * res3: Ior[String, Int] = Both(abc,579)
    * }}}
    */
-  // scalastyle:off cyclomatic.complexity
   final def combine[AA >: A, BB >: B](that: AA Ior BB)(implicit AA: Semigroup[AA], BB: Semigroup[BB]): AA Ior BB =
     this match {
       case Ior.Left(a1) =>
@@ -752,7 +751,6 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
           case Ior.Both(a2, b2) => Ior.Both(AA.combine(a1, a2), BB.combine(b1, b2))
         }
     }
-  // scalastyle:on cyclomatic.complexity
 
   final def ===[AA >: A, BB >: B](that: AA Ior BB)(implicit AA: Eq[AA], BB: Eq[BB]): Boolean =
     fold(
@@ -883,7 +881,6 @@ sealed abstract private[data] class IorInstances extends IorInstances0 {
       override def bimap[A, B, C, D](fab: A Ior B)(f: A => C, g: B => D): C Ior D = fab.bimap(f, g)
     }
 
-  // scalastyle:off cyclomatic.complexity
   implicit def catsDataParallelForIor[E](implicit E: Semigroup[E]): Parallel.Aux[Ior[E, *], Ior[E, *]] =
     new Parallel[Ior[E, *]] {
       type F[x] = Ior[E, x]
@@ -920,7 +917,6 @@ sealed abstract private[data] class IorInstances extends IorInstances0 {
 
       lazy val monad: Monad[Ior[E, *]] = Monad[Ior[E, *]]
     }
-  // scalastyle:on cyclomatic.complexity
 
 }
 
