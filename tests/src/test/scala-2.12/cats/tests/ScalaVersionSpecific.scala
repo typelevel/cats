@@ -1,10 +1,10 @@
 package cats.tests
 
+import cats.kernel.{Eq, Order}
 import cats.laws.discipline.{ExhaustiveCheck, MiniInt}
 import cats.laws.discipline.MiniInt._
 import cats.laws.discipline.eq._
 import cats.laws.discipline.DeprecatedEqInstances
-import cats.kernel.{Eq, Order}
 import org.scalacheck.Arbitrary
 
 trait ScalaVersionSpecificFoldableSuite
@@ -55,6 +55,7 @@ trait ScalaVersionSpecificAlgebraInvariantSuite {
   }
 
   // This version-specific instance is required since 2.12 and below do not have parseString on the Numeric class
+  @annotation.nowarn("cat=deprecation")
   implicit protected def eqFractional[A: Eq: Arbitrary]: Eq[Fractional[A]] = {
     import DeprecatedEqInstances.catsLawsEqForFn1
 
