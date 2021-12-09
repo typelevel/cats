@@ -23,8 +23,8 @@ def f[T[_] : Bimonad, S](fa: T[S]): S
 keep in mind `Bimonad` has its own added laws so something that is both monadic
 and comonadic may not necessarily be a lawful `Bimonad`.
 
-###Eval as a Bimonad
-Eval is a lawful `Bimonad` so you can chain computations (like a `Monad`) and `extract` the result at the end (like a `Comonad`).
+### NonEmptyList as a Bimonad
+NonEmptyList is a lawful `Bimonad` so you can chain computations (like a `Monad`) and `extract` the result at the end (like a `Comonad`).
 
 Here is a possible implementation based on existing monad and comonad:
 ```scala mdoc
@@ -32,32 +32,32 @@ import cats._
 import cats.data._
 import cats.implicits._
 
-implicit def evalBimonad(implicit monad: Monad[Eval], comonad: Comonad[Eval]) =
-  new Bimonad[Eval] {
+implicit def nelBimonad(implicit monad: Monad[NonEmptyList], comonad: Comonad[NonEmptyList]) =
+  new Bimonad[NonEmptyList] {
 
-    //use Eval specific methods for creation and extraction
-    override def pure[A](a: A): Eval[A] =
-      Eval.now(a)
+    //use NonEmptyList specific methods for creation and extraction
+    override def pure[A](a: A): NonEmptyList[A] =
+      NonEmptyList.one(a)
 
-    override def extract[A](x: Eval[A]): A =
-      x.value
+    override def extract[A](fa: NonEmptyList[A]): A =
+      fa.head
 
-    //use the coflatMap from the Eval comonad
-    override def coflatMap[A, B](fa: Eval[A])(f: Eval[A] => B): Eval[B] =
+    //use the coflatMap from the NonEmptyList comonad
+    override def coflatMap[A, B](fa: NonEmptyList[A])(f: NonEmptyList[A] => B): NonEmptyList[B] =
       comonad.coflatMap(fa)(f)
 
-    //use the flatMap and tailRecM from the Eval monad
-    override def flatMap[A, B](fa: Eval[A])(f: A => Eval[B]): Eval[B] =
+    //use the flatMap and tailRecM from the NonEmptyList monad
+    override def flatMap[A, B](fa: NonEmptyList[A])(f: A => NonEmptyList[B]): NonEmptyList[B] =
       monad.flatMap(fa)(f)
 
-    override def tailRecM[A, B](a: A)(f: A => Eval[Either[A, B]]): Eval[B] =
+    override def tailRecM[A, B](a: A)(f: A => NonEmptyList[Either[A, B]]): NonEmptyList[B] =
       monad.tailRecM(a)(f)
   }
 ```
 
 Note the equivalence:
 ```scala mdoc
-evalBimonad.pure(true).extract === Eval.now(true).value
+nelBimonad.pure(true).extract === NonEmptyList.one(true).head
 ```
 
 Using generic bimonad syntax we could define a function that appends and extracts a configuration:
@@ -70,14 +70,12 @@ def make[T[_]: Bimonad](config: T[String]): String =
     .extract
 ```
 
-This will work with all types of `Eval`:
+This works with one element non-empty lists:
 ```scala mdoc
-make(Eval.now("config"))
-
-make(Eval.later("config"))
+make(NonEmptyList.one("config"))
 ```
 
-`Function0` and `NonEmptyList` are also lawful bimonads so the following calls are also valid:
+`Function0[_]` and `Eval[_]` are also lawful bimonads so the following calls are also valid:
 ```scala mdoc
 make(() => "config")
 
