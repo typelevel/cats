@@ -26,14 +26,37 @@ and comonadic may not necessarily be a lawful `Bimonad`.
 ###Eval as a Bimonad
 Eval is a lawful `Bimonad` so you can chain computations (like a `Monad`) and `extract` the result at the end (like a `Comonad`).
 
-Note the equivalence:
+Here is a possible implementation based on existing monad and comonad:
 ```scala mdoc
 import cats._
 import cats.data._
 import cats.implicits._
 
-val evalBimonad = Bimonad[Eval]
+implicit def evalBimonad(implicit monad: Monad[Eval], comonad: Comonad[Eval]) =
+  new Bimonad[Eval] {
 
+    //use Eval specific methods for creation and extraction
+    override def pure[A](a: A): Eval[A] =
+      Eval.now(a)
+
+    override def extract[A](x: Eval[A]): A =
+      x.value
+
+    //use the coflatMap from the Eval comonad
+    override def coflatMap[A, B](fa: Eval[A])(f: Eval[A] => B): Eval[B] =
+      comonad.coflatMap(fa)(f)
+
+    //use the flatMap and tailRecM from the Eval monad
+    override def flatMap[A, B](fa: Eval[A])(f: A => Eval[B]): Eval[B] =
+      monad.flatMap(fa)(f)
+
+    override def tailRecM[A, B](a: A)(f: A => Eval[Either[A, B]]): Eval[B] =
+      monad.tailRecM(a)(f)
+  }
+```
+
+Note the equivalence:
+```scala mdoc
 evalBimonad.pure(true).extract === Eval.now(true).value
 ```
 
