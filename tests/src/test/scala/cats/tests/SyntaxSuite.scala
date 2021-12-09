@@ -163,7 +163,7 @@ object SyntaxSuite {
     val gunit: G[F[A]] = fga.nonEmptySequence
   }
 
-  def testParallel[M[_]: Monad, F[_], T[_]: Traverse, A, B](implicit P: Parallel.Aux[M, F]): Unit = {
+  def testParallel[M[_], F[_], T[_]: Traverse, A, B](implicit P: Parallel.Aux[M, F]): Unit = {
     val ta = mock[T[A]]
     val f = mock[A => M[B]]
     val mtb = ta.parTraverse(f)
