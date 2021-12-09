@@ -176,7 +176,7 @@ object SyntaxSuite {
     val mla: M[List[A]] = ma.parReplicateA(mock[Int])
   }
 
-  def testNonEmptyParallel[M[_]: FlatMap: NonEmptyParallel, A, B]: Unit = {
+  def testNonEmptyParallel[M[_]: NonEmptyParallel, A, B]: Unit = {
     val ma = mock[M[A]]
     val mb = mock[M[B]]
 
