@@ -172,6 +172,12 @@ object SyntaxSuite {
     val mta = tma.parSequence
 
     val ma = mock[M[A]]
+
+    val mla: M[List[A]] = ma.parReplicateA(mock[Int])
+  }
+
+  def testNonEmptyParallel[M[_]: FlatMap: NonEmptyParallel, A, B]: Unit = {
+    val ma = mock[M[A]]
     val mb = mock[M[B]]
 
     val mb2: M[B] = ma &> mb
@@ -184,7 +190,6 @@ object SyntaxSuite {
     val mb4: M[B] = ma.parProductR(mb)
     val mab2: M[(A, B)] = ma.parProduct(mb)
     val mb5: M[B] = mab.parAp(ma)
-    val mla: M[List[A]] = ma.parReplicateA(mock[Int])
   }
 
   def testParallelUnorderedTraverse[M[_]: Monad, F[_]: CommutativeApplicative, T[_]: UnorderedTraverse: FlatMap, A, B](

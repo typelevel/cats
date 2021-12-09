@@ -32,7 +32,11 @@ trait ParallelSyntax extends TupleParallelSyntax {
   implicit final def catsSyntaxParallelSequence1[T[_]: Traverse, M[_], A](tma: T[M[A]]): ParallelSequenceOps1[T, M, A] =
     new ParallelSequenceOps1(tma)
 
+  @deprecated("Kept for binary compatibility", "2.8.0")
   implicit final def catsSyntaxParallelAp[M[_]: FlatMap, A](ma: M[A]): ParallelApOps[M, A] =
+    new ParallelApOps(ma)
+
+  implicit final def catsSyntaxParallelAp1[M[_], A](ma: M[A]): ParallelApOps[M, A] =
     new ParallelApOps(ma)
 }
 
@@ -239,23 +243,23 @@ final class ParallelUnorderedFlatSequenceOps[T[_], M[_], A](private val tmta: T[
 
 final class ParallelApOps[M[_], A](protected val ma: M[A]) extends AnyVal with ParallelApOpsBinCompat0[M, A] {
 
-  @deprecated("use a NonEmptyParallel-constrained version instead", "2.7.1")
+  @deprecated("use a NonEmptyParallel-constrained version instead", "2.8.0")
   protected def &>[B](mb: M[B])(implicit P: Parallel[M]): M[B] =
     P.parProductR(ma)(mb)
 
-  @deprecated("use a NonEmptyParallel-constrained version instead", "2.7.1")
+  @deprecated("use a NonEmptyParallel-constrained version instead", "2.8.0")
   protected def <&[B](mb: M[B])(implicit P: Parallel[M]): M[A] =
     P.parProductL(ma)(mb)
 
-  @deprecated("use a NonEmptyParallel-constrained version instead", "2.7.1")
+  @deprecated("use a NonEmptyParallel-constrained version instead", "2.8.0")
   protected def parProductL[B](mb: M[B])(implicit P: Parallel[M]): M[A] =
     P.parProductL(ma)(mb)
 
-  @deprecated("use a NonEmptyParallel-constrained version instead", "2.7.1")
+  @deprecated("use a NonEmptyParallel-constrained version instead", "2.8.0")
   protected def parProductR[B](mb: M[B])(implicit P: Parallel[M]): M[B] =
     P.parProductR(ma)(mb)
 
-  @deprecated("use a NonEmptyParallel-constrained version instead", "2.7.1")
+  @deprecated("use a NonEmptyParallel-constrained version instead", "2.8.0")
   protected def parProduct[B](mb: M[B])(implicit P: Parallel[M]): M[(A, B)] =
     Parallel.parProduct(ma, mb)
 
@@ -283,11 +287,11 @@ sealed private[syntax] trait ParallelApOpsBinCompat0[M[_], A] extends Any { self
 final class ParallelApplyOps[M[_], A, B](protected val mab: M[A => B])
     extends AnyVal
     with ParallelApplyOpsBinCompat0[M, A, B] {
-  @deprecated("use a NonEmptyParallel-constrained version instead", "2.7.1")
+  @deprecated("use a NonEmptyParallel-constrained version instead", "2.8.0")
   protected def <&>(ma: M[A])(implicit P: Parallel[M]): M[B] =
     Parallel.parAp(mab)(ma)(P)
 
-  @deprecated("use a NonEmptyParallel-constrained version instead", "2.7.1")
+  @deprecated("use a NonEmptyParallel-constrained version instead", "2.8.0")
   protected def parAp(ma: M[A])(implicit P: Parallel[M]): M[B] =
     Parallel.parAp(mab)(ma)
 }
