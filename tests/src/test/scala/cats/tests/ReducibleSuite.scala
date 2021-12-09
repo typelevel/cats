@@ -1,20 +1,14 @@
 package cats.tests
 
-import cats.{Eval, NonEmptyReducible, Now, Reducible}
+import cats._
 import cats.data.NonEmptyList
-import cats.kernel.Eq
-import cats.syntax.either._
-import cats.syntax.foldable._
-import cats.syntax.list._
-import cats.syntax.option._
-import cats.syntax.reducible._
+import cats.syntax.all._
 import org.scalacheck.Arbitrary
-
-import scala.collection.mutable
-import cats.syntax.eq._
 import org.scalacheck.Prop._
 
-class ReducibleSuiteAdditional extends CatsSuite {
+import scala.collection.mutable
+
+class ReducibleSuiteAdditional extends CatsSuite with ReducibleSuiteAdditionalStreamSpecific {
 
   // exists method written in terms of reduceRightTo
   def contains[F[_]: Reducible, A: Eq](as: F[A], goal: A): Eval[Boolean] =
@@ -69,7 +63,10 @@ class ReducibleSuiteAdditional extends CatsSuite {
     val large = NonEmptyList(1, (2 to 10000).toList)
     assert(contains(large, 10000).value)
   }
+}
 
+@annotation.nowarn("cat=deprecation")
+sealed trait ReducibleSuiteAdditionalStreamSpecific { self: ReducibleSuiteAdditional =>
   // A simple non-empty stream with lazy `foldRight` and `reduceRightTo` implementations.
   case class NES[A](h: A, t: Stream[A]) {
     def toStream: Stream[A] = h #:: t
@@ -79,14 +76,14 @@ class ReducibleSuiteAdditional extends CatsSuite {
     implicit val nesReducible: Reducible[NES] = new Reducible[NES] {
       def foldLeft[A, B](fa: NES[A], b: B)(f: (B, A) => B): B = fa.toStream.foldLeft(b)(f)
       def foldRight[A, B](fa: NES[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
-        fa match {
+        (fa: @unchecked) match {
           case NES(h, Stream())  => f(h, lb)
           case NES(h, th #:: tt) => f(h, Eval.defer(foldRight(NES(th, tt), lb)(f)))
         }
 
       def reduceLeftTo[A, B](fa: NES[A])(f: A => B)(g: (B, A) => B): B = fa.t.foldLeft(f(fa.h))(g)
       def reduceRightTo[A, B](fa: NES[A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B] =
-        fa match {
+        (fa: @unchecked) match {
           case NES(h, Stream())  => Eval.now(f(h))
           case NES(h, th #:: tt) => g(h, Eval.defer(reduceRightTo(NES(th, tt))(f)(g)))
         }
