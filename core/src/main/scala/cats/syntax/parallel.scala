@@ -33,7 +33,7 @@ trait ParallelSyntax extends TupleParallelSyntax {
     new ParallelSequenceOps1(tma)
 
   @deprecated("Kept for binary compatibility", "2.8.0")
-  implicit final def catsSyntaxParallelAp[M[_]: FlatMap, A](ma: M[A]): ParallelApOps[M, A] =
+  private[syntax] final def catsSyntaxParallelAp[M[_]: FlatMap, A](ma: M[A]): ParallelApOps[M, A] =
     new ParallelApOps(ma)
 
   implicit final def catsSyntaxParallelAp1[M[_], A](ma: M[A]): ParallelApOps[M, A] =
