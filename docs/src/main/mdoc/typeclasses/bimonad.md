@@ -12,22 +12,19 @@ different of other `Bi` typeclasses like `Bifunctor`, `Bifoldable` or `Bitravers
 `F[_, _]`. The `Bimonad` is a `F[_]` and could be better seen as a dual monad i.e. something that is both a `Monad` and 
 a `Comonad`.
 
-If you use `Bimonad` as a convenience type such that:
-```scala mdoc:silent
-def f[T[_] : Monad, Comonad, S](fa: T[S]): S
-```
-is re-written to:
-```scala  mdoc:silent
-def f[T[_] : Bimonad, S](fa: T[S]): S
-```
-keep in mind `Bimonad` has its own added laws so something that is both monadic and comonadic may 
-not necessarily be a lawful `Bimonad`.
+If you use `Bimonad` as a convenience type such that `def f[T[_] : Monad, Comonad, S](fa: T[S]): S` is re-written to
+`def f[T[_] : Bimonad, S](fa: T[S]): S` keep in mind `Bimonad` has its own added laws so something that is both monadic 
+and comonadic may not necessarily be a lawful `Bimonad`.
 
 ###Eval as a Bimonad
 Eval is a lawful `Bimonad` so you can chain computations and `extract` the result at the end.
 
 Note the equivalence:
 ```scala mdoc
+import cats._
+import cats.data._
+import cats.implicits._
+
 Bimonad[Eval].pure(true).extract === Eval.now(true).value
 ```
 
