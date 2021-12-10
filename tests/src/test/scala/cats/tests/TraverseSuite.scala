@@ -1,12 +1,9 @@
 package cats.tests
 
-import cats.{Applicative, Eval, Traverse}
+import cats._
 import cats.kernel.compat.scalaVersionSpecific._
-import cats.syntax.foldable._
-import cats.syntax.functor._
-import cats.syntax.traverse._
+import cats.syntax.all._
 import org.scalacheck.Arbitrary
-import cats.syntax.eq._
 import org.scalacheck.Prop._
 
 @suppressUnusedImportWarningForScalaVersionSpecific
@@ -59,14 +56,21 @@ object TraverseSuite {
 }
 
 class TraverseListSuite extends TraverseSuite[List]("List")
-class TraverseStreamSuite extends TraverseSuite[Stream]("Stream")
 class TraverseVectorSuite extends TraverseSuite[Vector]("Vector")
 
+@annotation.nowarn("cat=deprecation")
+class TraverseStreamSuite extends TraverseSuite[Stream]("Stream")
+
 class TraverseListSuiteUnderlying extends TraverseSuite.Underlying[List]("List")
-class TraverseStreamSuiteUnderlying extends TraverseSuite.Underlying[Stream]("Stream")
 class TraverseVectorSuiteUnderlying extends TraverseSuite.Underlying[Vector]("Vector")
 
-class TraverseSuiteAdditional extends CatsSuite with ScalaVersionSpecificTraverseSuite {
+@annotation.nowarn("cat=deprecation")
+class TraverseStreamSuiteUnderlying extends TraverseSuite.Underlying[Stream]("Stream")
+
+class TraverseSuiteAdditional
+    extends CatsSuite
+    with ScalaVersionSpecificTraverseSuite
+    with TraverseSuiteAdditionalStreamSpecific {
 
   def checkZipWithIndexedStackSafety[F[_]](fromRange: Range => F[Int])(implicit F: Traverse[F]): Unit = {
     F.zipWithIndex(fromRange(1 to 70000))
@@ -77,11 +81,14 @@ class TraverseSuiteAdditional extends CatsSuite with ScalaVersionSpecificTravers
     checkZipWithIndexedStackSafety[List](_.toList)
   }
 
-  test("Traverse[Stream].zipWithIndex stack safety") {
-    checkZipWithIndexedStackSafety[Stream](_.toStream)
-  }
-
   test("Traverse[Vector].zipWithIndex stack safety") {
     checkZipWithIndexedStackSafety[Vector](_.toVector)
+  }
+}
+
+@annotation.nowarn("cat=deprecation")
+sealed trait TraverseSuiteAdditionalStreamSpecific { self: TraverseSuiteAdditional =>
+  test("Traverse[Stream].zipWithIndex stack safety") {
+    checkZipWithIndexedStackSafety[Stream](_.toStream)
   }
 }
