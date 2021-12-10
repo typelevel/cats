@@ -99,16 +99,18 @@ class ChainSuite extends CatsSuite {
   test("seq-like pattern match") {
     Chain(1, 2, 3) match {
       case Chain(a, b, c) => assert((a, b, c) === ((1, 2, 3)))
+      case other          => fail(other.show)
     }
 
     Chain(1, 2, 3) match {
       case h ==: t => assert((h, t) === 1 -> Chain(2, 3))
+      case other   => fail(other.show)
     }
 
     Chain(1, 2, 3) match {
       case init :== last => assert((init, last) === Chain(1, 2) -> 3)
+      case other         => fail(other.show)
     }
-
   }
 
   test("size is consistent with toList.size") {
