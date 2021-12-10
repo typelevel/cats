@@ -26,7 +26,7 @@ and comonadic may not necessarily be a lawful `Bimonad`.
 ### NonEmptyList as a Bimonad
 `NonEmptyList[_]` is a lawful `Bimonad` so you can chain computations (like a `Monad`) and `extract` the result at the end (like a `Comonad`).
 
-Here is a possible implementation based on existing monad and comonad:
+Here is a possible implementation:
 ```scala mdoc
 import cats._
 import cats.data._
@@ -35,7 +35,7 @@ import cats.implicits._
 implicit def nelBimonad =
   new Bimonad[NonEmptyList] {
 
-    //use NonEmptyList specific methods for creation and extraction
+    //in order to have a lawful bimonad `pure` and `extract` need to respect: `nelBimonad.extract(nelBimonad.pure(a)) <-> a`
     override def pure[A](a: A): NonEmptyList[A] =
       NonEmptyList.one(a)
 
