@@ -24,7 +24,7 @@ keep in mind `Bimonad` has its own added laws so something that is both monadic
 and comonadic may not necessarily be a lawful `Bimonad`.
 
 ### NonEmptyList as a Bimonad
-NonEmptyList is a lawful `Bimonad` so you can chain computations (like a `Monad`) and `extract` the result at the end (like a `Comonad`).
+`NonEmptyList[_]` is a lawful `Bimonad` so you can chain computations (like a `Monad`) and `extract` the result at the end (like a `Comonad`).
 
 Here is a possible implementation based on existing monad and comonad:
 ```scala mdoc
@@ -32,7 +32,7 @@ import cats._
 import cats.data._
 import cats.implicits._
 
-implicit def nelBimonad(implicit monad: Monad[NonEmptyList], comonad: Comonad[NonEmptyList]) =
+implicit def nelBimonad =
   new Bimonad[NonEmptyList] {
 
     //use NonEmptyList specific methods for creation and extraction
@@ -42,16 +42,18 @@ implicit def nelBimonad(implicit monad: Monad[NonEmptyList], comonad: Comonad[No
     override def extract[A](fa: NonEmptyList[A]): A =
       fa.head
 
-    //use the coflatMap from the NonEmptyList comonad
+    //use coflatMap from NonEmptyList
     override def coflatMap[A, B](fa: NonEmptyList[A])(f: NonEmptyList[A] => B): NonEmptyList[B] =
-      comonad.coflatMap(fa)(f)
+      fa.coflatMap(f)
 
-    //use the flatMap and tailRecM from the NonEmptyList monad
+    //use flatMap from NonEmptyList
     override def flatMap[A, B](fa: NonEmptyList[A])(f: A => NonEmptyList[B]): NonEmptyList[B] =
-      monad.flatMap(fa)(f)
+      fa.flatMap(f)
 
-    override def tailRecM[A, B](a: A)(f: A => NonEmptyList[Either[A, B]]): NonEmptyList[B] =
-      monad.tailRecM(a)(f)
+    //The tailRecM implementation is not the subject of this material
+    //As an exercise try to implement it yourself
+    override def tailRecM[A, B](a: A)(fn: A => NonEmptyList[Either[A, B]]): NonEmptyList[B] =
+      ???
   }
 ```
 
@@ -79,5 +81,5 @@ make(NonEmptyList.one("config"))
 ```scala mdoc
 make(() => "config")
 
-make(NonEmptyList.one("config"))
+make(Eval.later("config"))
 ```
