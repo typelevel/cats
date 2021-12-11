@@ -1,18 +1,18 @@
 package cats.tests
 
 import cats._
-import cats.arrow.{Profunctor, Strong}
-import cats.data.{EitherT, IndexedStateT, State, StateT}
-import cats.kernel.Eq
-import cats.laws.discipline._
+import cats.arrow.Profunctor
+import cats.arrow.Strong
+import cats.data.EitherT
+import cats.data.IndexedStateT
+import cats.data.State
+import cats.data.StateT
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import cats.laws.discipline.eq._
+import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.eq._
 import cats.platform.Platform
-import cats.syntax.apply._
-import cats.syntax.flatMap._
-import cats.syntax.traverse._
-import cats.syntax.eq._
+import cats.syntax.all._
 import org.scalacheck.Prop._
 import org.scalacheck.Test.Parameters
 
@@ -332,7 +332,7 @@ class IndexedStateTSuite extends CatsSuite {
     import cats.implicits.catsStdInstancesForOption
     forAll { (initial: Int) =>
       assert(StateT.fromState(state).run(initial).get === {
-        val (s, Some(result)) = state.run(initial).value
+        val (s, Some(result)) = state.run(initial).value: @unchecked // non-exhaustive match warning
         (s, result)
       })
     }
