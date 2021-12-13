@@ -7,10 +7,11 @@ scaladoc: "#cats.Bimonad"
 ---
 # Bimonad
 
-The `Bimonad` trait directly extends `Monad` and `Comonad` without introducing new methods. `Bimonad` is
-different from other `Bi` typeclasses like `Bifunctor`, `Bifoldable` or `Bitraverse` where the prefix describes a
-`F[_, _]`. The `Bimonad` is a `F[_]` and the `Bi` prefix has a different meaning here: it's both a `Monad` and a `Comonad`.
-
+The `Bimonad` trait directly extends `Monad` and `Comonad` without introducing new methods.  `Bimonad` is
+different from other `Bi` typeclasses like `Bifunctor`, `Bifoldable` or `Bitraverse` where the prefix describes
+a `F[_, _]`. The `Bimonad` is a `F[_]` and the `Bi` prefix has a different meaning here: it's both a `Monad` and a `Comonad`.  
+Keep in mind `Bimonad` has its own added laws so something that is both monadic
+and comonadic may not necessarily be a lawful `Bimonad`.
 
 If you use `Bimonad` as a convenience type such that:
 ```scala
@@ -20,8 +21,7 @@ is re-written to:
 ```scala
 def f[T[_] : Bimonad, S](fa: T[S]): S
 ```
-keep in mind `Bimonad` has its own added laws so something that is both monadic
-and comonadic may not necessarily be a lawful `Bimonad`.
+then `T[_]` also needs to respect an extra set of laws.
 
 ### NonEmptyList as a Bimonad
 `NonEmptyList[_]` is a lawful `Bimonad` so you can chain computations (like a `Monad`) and `extract` the result at the end (like a `Comonad`).
@@ -35,23 +35,23 @@ import cats.implicits._
 implicit def nelBimonad =
   new Bimonad[NonEmptyList] {
 
-    //in order to have a lawful bimonad `pure` and `extract` need to respect: `nelBimonad.extract(nelBimonad.pure(a)) <-> a`
+    // in order to have a lawful bimonad `pure` and `extract` need to respect: `nelBimonad.extract(nelBimonad.pure(a)) <-> a`
     override def pure[A](a: A): NonEmptyList[A] =
       NonEmptyList.one(a)
 
     override def extract[A](fa: NonEmptyList[A]): A =
       fa.head
 
-    //use coflatMap from NonEmptyList
+    // use coflatMap from NonEmptyList
     override def coflatMap[A, B](fa: NonEmptyList[A])(f: NonEmptyList[A] => B): NonEmptyList[B] =
       fa.coflatMap(f)
 
-    //use flatMap from NonEmptyList
+    // use flatMap from NonEmptyList
     override def flatMap[A, B](fa: NonEmptyList[A])(f: A => NonEmptyList[B]): NonEmptyList[B] =
       fa.flatMap(f)
 
-    //The tailRecM implementation is not the subject of this material
-    //As an exercise try to implement it yourself
+    // the tailRecM implementation is not the subject of this material
+    // as an exercise try to implement it yourself
     override def tailRecM[A, B](a: A)(fn: A => NonEmptyList[Either[A, B]]): NonEmptyList[B] =
       ???
   }
