@@ -97,7 +97,7 @@ import simulacrum.typeclass
    * scala> SemigroupK[List].combineNK(List(1), 5)
    * res0: List[Int] = List(1,1,1,1,1)
 
-   * scala> MonoidK[List].combineN(List("ha"), 0)
+   * scala> MonoidK[List].combineNK(List("ha"), 0)
    * res1: List[String] = List()
    *
    * }}}
@@ -117,7 +117,7 @@ import simulacrum.typeclass
    * scala> MonoidK[List].combineAllK(List(List("One"), List("Two"), List("Three")))
    * res0: List[String] = List("One", List("Two"), List("Three"))
    *
-   * scala> MonoidK[List].combineAll[String](List.empty)
+   * scala> MonoidK[List].combineAllK[String](List.empty)
    * res1: List[String] = List()
    * }}}
    */
