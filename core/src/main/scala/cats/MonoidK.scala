@@ -41,12 +41,12 @@ import simulacrum.typeclass
    *
    * Example:
    * {{{
-   * scala> import cats.kernel.instances.string._
+   * scala> import cats.kernel.instances.list._
    *
-   * scala> Monoid[String].isEmpty("")
+   * scala> MonoidK[List].isEmpty(List.empty[String])
    * res0: Boolean = true
    *
-   * scala> Monoid[String].isEmpty("something")
+   * scala> MonoidK[List].isEmpty(List("something"))
    * res1: Boolean = false
    * }}}
    */
