@@ -116,10 +116,8 @@ import cats.kernel.compat.scalaVersionSpecific._
    *
    * Example:
    * {{{
-   * scala> import cats.kernel.instances.list._
-   *
    * scala> SemigroupK[List].combineNK(List(1), 5)
-   * res0: List[Int] = List(1,1,1,1,1)
+   * res0: List[Int] = List(1, 1, 1, 1, 1)
    *
    * }}}
    */
@@ -147,10 +145,8 @@ import cats.kernel.compat.scalaVersionSpecific._
    *
    * Example:
    * {{{
-   * scala> import cats.kernel.instances.list._
-   *
    * scala> SemigroupK[List].combineAllOptionK(List(List("One"), List("Two"), List("Three")))
-   * res0: Option[List[String]] = Some(List("One"), List("Two"), List("Three"))
+   * res0: Option[List[String]] = Some(List(One, Two, Three))
    *
    * scala> SemigroupK[List].combineAllOptionK[String](List.empty)
    * res1: Option[List[String]] = None
