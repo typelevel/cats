@@ -115,14 +115,11 @@ import cats.data.Ior
    *
    * Example:
    * {{{
-   * scala> import cats.kernel.instances.int._
-   * scala> import cats.kernel.instances.string._
+   * scala> import cats.kernel.instances.list._
    *
-   * scala> Semigroup[Int].combineN(1, 10)
-   * res0: Int = 10
+   * scala> SemigroupK[List].combineNK(List(1), 5)
+   * res0: List[Int] = List(1,1,1,1,1)
    *
-   * scala> Semigroup[String].combineN("ha", 3)
-   * res1: String = hahaha
    * }}}
    */
   def combineNK[A](a: F[A], n: Int): F[A] =
@@ -149,13 +146,13 @@ import cats.data.Ior
    *
    * Example:
    * {{{
-   * scala> import cats.kernel.instances.string._
+   * scala> import cats.kernel.instances.list._
    *
-   * scala> Semigroup[String].combineAllOption(List("One ", "Two ", "Three"))
-   * res0: Option[String] = Some(One Two Three)
+   * scala> SemigroupK[List].combineAllOptionK(List(List("One"), List("Two"), List("Three")))
+   * res0: Option[List[String]] = Some(List("One"), List("Two"), List("Three"))
    *
-   * scala> Semigroup[String].combineAllOption(List.empty)
-   * res1: Option[String] = None
+   * scala> SemigroupK[List].combineAllOptionK[String](List.empty)
+   * res1: Option[List[String]] = None
    * }}}
    */
   def combineAllOptionK[A](as: IterableOnce[F[A]]): Option[F[A]] =
@@ -163,7 +160,7 @@ import cats.data.Ior
 
   /**
    * return a semigroupK that reverses the order
-   * so combine(a, b) == reverse.combine(b, a)
+   * so combineK(a, b) == reverse.combineK(b, a)
    */
   def reverse: SemigroupK[F] =
     new SemigroupK[F] {

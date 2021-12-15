@@ -86,17 +86,18 @@ import simulacrum.typeclass
     }
 
   /**
-   * Return `a` appended to itself `n` times.
+   * Return `a` combined with itself `n` times.
    *
    * Example:
    * {{{
-   * scala> import cats.kernel.instances.string._
+   * scala> import cats.kernel.instances.list._
    *
-   * scala> Monoid[String].combineN("ha", 3)
-   * res0: String = hahaha
+   * scala> SemigroupK[List].combineNK(List(1), 5)
+   * res0: List[Int] = List(1,1,1,1,1)
+
+   * scala> MonoidK[List].combineN(List("ha"), 0)
+   * res1: List[String] = List()
    *
-   * scala> Monoid[String].combineN("ha", 0)
-   * res1: String = ""
    * }}}
    */
   override def combineNK[A](a: F[A], n: Int): F[A] =
@@ -105,17 +106,17 @@ import simulacrum.typeclass
     else repeatedCombineNK(a, n)
 
   /**
-   * Given a sequence of `as`, sum them using the monoid and return the total.
+   * Given a sequence of `as`, sum them using the monoidK and return the total.
    *
    * Example:
    * {{{
-   * scala> import cats.kernel.instances.string._
+   * scala> import cats.kernel.instances.list._
    *
-   * scala> Monoid[String].combineAll(List("One ", "Two ", "Three"))
-   * res0: String = One Two Three
+   * scala> MonoidK[List].combineAllK(List(List("One"), List("Two"), List("Three")))
+   * res0: List[String] = List("One", List("Two"), List("Three"))
    *
-   * scala> Monoid[String].combineAll(List.empty)
-   * res1: String = ""
+   * scala> MonoidK[List].combineAll[String](List.empty)
+   * res1: List[String] = List()
    * }}}
    */
   def combineAllK[A](as: IterableOnce[F[A]]): F[A] =
