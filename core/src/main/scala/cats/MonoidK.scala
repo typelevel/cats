@@ -1,5 +1,7 @@
 package cats
 
+import cats.kernel.compat.scalaVersionSpecific._
+
 import simulacrum.typeclass
 
 /**
@@ -135,6 +137,7 @@ import simulacrum.typeclass
     }
 }
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 object MonoidK {
 
   /* ======================================================================== */

@@ -4,6 +4,7 @@ import scala.annotation.tailrec
 import scala.collection.immutable.{Seq, SortedMap, SortedSet}
 import simulacrum.typeclass
 import cats.data.Ior
+import cats.kernel.compat.scalaVersionSpecific._
 
 /**
  * SemigroupK is a universal semigroup which operates on kinds.
@@ -172,6 +173,7 @@ import cats.data.Ior
 
 }
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 object SemigroupK extends ScalaVersionSpecificMonoidKInstances with SemigroupKInstances0 {
   def align[F[_]: SemigroupK: Functor]: Align[F] =
     new Align[F] {
