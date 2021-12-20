@@ -19,12 +19,17 @@
 ### Overview
 
 Cats is a library which provides abstractions for functional programming in the [Scala programming language](https://scala-lang.org).
-The name is a playful shortening of the word *category*.
 
 Scala supports both object-oriented and functional programming, and this is reflected in the hybrid approach of the
 standard library. Cats strives to provide functional programming abstractions that are core, [binary compatible](http://typelevel.org/cats/#binary-compatibility-and-versioning), [modular](http://typelevel.org/cats/motivations#modularity), [approachable](http://typelevel.org/cats/motivations#approachability) and [efficient](http://typelevel.org//cats/motivations#efficiency). A broader goal of Cats is to provide a foundation for an [ecosystem of pure, typeful libraries](https://typelevel.org/cats/#ecosystem) to support functional programming in Scala applications.
 
 For more detail about Cats' motivations, go [here](http://typelevel.org/cats/motivations).
+
+### Why "cats"?
+
+The name is a playful shortening of the word *category*, from "[category theory](https://en.wikipedia.org/wiki/Category_theory)".
+
+Regardless, you do not need to know anything about category theory to use Cats.
 
 ## Contributors
 
