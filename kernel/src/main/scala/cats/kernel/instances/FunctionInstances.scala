@@ -114,11 +114,11 @@ final private[instances] case class CombineFunction1[A, B](left: A => B, right: 
     extends (A => B) {
   private def call(fn: A => B, a: A): TailRec[B] =
     fn match {
-      case CombineFunction1(l, r, sg) =>
+      case ref: CombineFunction1[A, B] @unchecked =>
         for {
-          lb <- tailcall(call(l, a))
-          rb <- tailcall(call(r, a))
-        } yield sg.combine(lb, rb)
+          lb <- tailcall(call(ref.left, a))
+          rb <- tailcall(call(ref.right, a))
+        } yield ref.semiB.combine(lb, rb)
       case _ => done(fn(a))
     }
 
@@ -157,11 +157,11 @@ final private[instances] case class CombineFunction0[A](left: () => A, right: ()
     extends (() => A) {
   private def call(fn: () => A): TailRec[A] =
     fn match {
-      case CombineFunction0(l, r, sg) =>
+      case ref: CombineFunction0[A] @unchecked =>
         for {
-          la <- tailcall(call(l))
-          ra <- tailcall(call(r))
-        } yield sg.combine(la, ra)
+          la <- tailcall(call(ref.left))
+          ra <- tailcall(call(ref.right))
+        } yield ref.semiA.combine(la, ra)
       case _ => done(fn())
     }
 
