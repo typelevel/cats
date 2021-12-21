@@ -1,8 +1,10 @@
 package cats.kernel
 package instances
 
+import cats.kernel.compat.scalaVersionSpecific._
 import scala.util.control.TailCalls.{done, tailcall, TailRec}
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 trait FunctionInstances extends FunctionInstances0 {
 
   implicit def catsKernelOrderForFunction0[A](implicit ev: Order[A]): Order[() => A] =
@@ -128,6 +130,13 @@ trait Function1Semigroup[A, B] extends Semigroup[A => B] {
 
   override def combine(x: A => B, y: A => B): A => B =
     CombineFunction1(x, y, B)
+
+  override def combineAllOption(fns: IterableOnce[A => B]): Option[A => B] =
+    if (fns.iterator.isEmpty) None
+    else
+      Some { (a: A) =>
+        B.combineAllOption(fns.iterator.map(_.apply(a))).get
+      }
 }
 
 trait Function1Monoid[A, B] extends Function1Semigroup[A, B] with Monoid[A => B] {
@@ -164,6 +173,13 @@ trait Function0Semigroup[A] extends Semigroup[() => A] {
 
   override def combine(x: () => A, y: () => A): () => A =
     CombineFunction0(x, y, A)
+
+  override def combineAllOption(fns: IterableOnce[() => A]): Option[() => A] =
+    if (fns.iterator.isEmpty) None
+    else
+      Some { () =>
+        A.combineAllOption(fns.iterator.map(_.apply())).get
+      }
 }
 
 trait Function0Monoid[A] extends Function0Semigroup[A] with Monoid[() => A] {
