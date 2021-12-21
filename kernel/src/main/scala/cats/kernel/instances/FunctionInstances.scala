@@ -1,6 +1,8 @@
 package cats.kernel
 package instances
 
+import scala.util.control.TailCalls.{done, tailcall, TailRec}
+
 trait FunctionInstances extends FunctionInstances0 {
 
   implicit def catsKernelOrderForFunction0[A](implicit ev: Order[A]): Order[() => A] =
@@ -106,11 +108,26 @@ private[instances] trait FunctionInstances4 {
     new Function1Semigroup[A, B] { def B: Semigroup[B] = S }
 }
 
+final private[instances] case class CombineFunction1[A, B](left: A => B, right: A => B, semiB: Semigroup[B])
+    extends (A => B) {
+  private def call(fn: A => B, a: A): TailRec[B] =
+    fn match {
+      case CombineFunction1(l, r, sg) =>
+        for {
+          lb <- tailcall(call(l, a))
+          rb <- tailcall(call(r, a))
+        } yield sg.combine(lb, rb)
+      case _ => done(fn(a))
+    }
+
+  final override def apply(a: A): B = call(this, a).result
+}
+
 trait Function1Semigroup[A, B] extends Semigroup[A => B] {
   implicit def B: Semigroup[B]
 
   override def combine(x: A => B, y: A => B): A => B =
-    (a: A) => B.combine(x(a), y(a))
+    CombineFunction1(x, y, B)
 }
 
 trait Function1Monoid[A, B] extends Function1Semigroup[A, B] with Monoid[A => B] {
@@ -127,11 +144,26 @@ trait Function1Group[A, B] extends Function1Monoid[A, B] with Group[A => B] {
     (a: A) => B.inverse(x(a))
 }
 
+final private[instances] case class CombineFunction0[A](left: () => A, right: () => A, semiA: Semigroup[A])
+    extends (() => A) {
+  private def call(fn: () => A): TailRec[A] =
+    fn match {
+      case CombineFunction0(l, r, sg) =>
+        for {
+          la <- tailcall(call(l))
+          ra <- tailcall(call(r))
+        } yield sg.combine(la, ra)
+      case _ => done(fn())
+    }
+
+  final override def apply(): A = call(this).result
+}
+
 trait Function0Semigroup[A] extends Semigroup[() => A] {
   implicit def A: Semigroup[A]
 
   override def combine(x: () => A, y: () => A): () => A =
-    () => A.combine(x(), y())
+    CombineFunction0(x, y, A)
 }
 
 trait Function0Monoid[A] extends Function0Semigroup[A] with Monoid[() => A] {
