@@ -3,7 +3,7 @@ package instances
 
 import scala.collection.immutable.SortedMap
 
-trait SortedMapInstances extends SortedMapInstances2 {
+trait SortedMapInstances extends SortedMapInstances3 {
   implicit def catsKernelStdHashForSortedMap[K: Hash, V: Hash]: Hash[SortedMap[K, V]] =
     new SortedMapHash[K, V]
 
@@ -35,6 +35,43 @@ private[instances] trait SortedMapInstances2 extends SortedMapInstances1 {
 
   implicit def catsKernelStdMonoidForSortedMap[K: Order, V: Semigroup]: Monoid[SortedMap[K, V]] =
     new SortedMapMonoid[K, V]
+
+  implicit def catsKernelStdPartialOrderForSortedMap[K: PartialOrder, V: PartialOrder]: PartialOrder[SortedMap[K, V]] =
+    new SortedMapPartialOrder[K, V]
+}
+
+private[instances] trait SortedMapInstances3 extends SortedMapInstances2 {
+  implicit def catsKernelStdOrderForSortedMap[K: Order, V: Order]: Order[SortedMap[K, V]] =
+    new SortedMapOrder[K, V]
+}
+
+private[instances] class SortedMapOrder[K, V](implicit K: Order[K], V: Order[V]) extends Order[SortedMap[K, V]] {
+  override def compare(x: SortedMap[K, V], y: SortedMap[K, V]): Int =
+    if (x eq y) {
+      0
+    } else {
+      x.size.compare(y.size) match {
+        case 0 =>
+          StaticMethods.iteratorCompare(x.iterator, y.iterator)
+        case otherwise =>
+          otherwise
+      }
+    }
+}
+
+private[instances] class SortedMapPartialOrder[K, V](implicit K: PartialOrder[K], V: PartialOrder[V])
+    extends PartialOrder[SortedMap[K, V]] {
+  override def partialCompare(x: SortedMap[K, V], y: SortedMap[K, V]): Double =
+    if (x eq y) {
+      0.0
+    } else {
+      PartialOrder[Int].partialCompare(x.size, y.size) match {
+        case 0 =>
+          StaticMethods.iteratorPartialCompare(x.iterator, y.iterator)
+        case otherwise =>
+          otherwise
+      }
+    }
 }
 
 class SortedMapHash[K, V](implicit V: Hash[V], K: Hash[K]) extends SortedMapEq[K, V]()(V) with Hash[SortedMap[K, V]] {
