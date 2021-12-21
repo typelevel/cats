@@ -50,12 +50,7 @@ private[instances] class SortedMapOrder[K, V](implicit K: Order[K], V: Order[V])
     if (x eq y) {
       0
     } else {
-      x.size.compare(y.size) match {
-        case 0 =>
-          StaticMethods.iteratorCompare(x.iterator, y.iterator)
-        case otherwise =>
-          otherwise
-      }
+      StaticMethods.iteratorCompare(x.iterator, y.iterator)
     }
 }
 
@@ -65,12 +60,7 @@ private[instances] class SortedMapPartialOrder[K, V](implicit K: PartialOrder[K]
     if (x eq y) {
       0.0
     } else {
-      PartialOrder[Int].partialCompare(x.size, y.size) match {
-        case 0 =>
-          StaticMethods.iteratorPartialCompare(x.iterator, y.iterator)
-        case otherwise =>
-          otherwise
-      }
+      StaticMethods.iteratorPartialCompare(x.iterator, y.iterator)
     }
 }
 
