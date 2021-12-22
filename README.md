@@ -198,7 +198,7 @@ versioning in the future. But that decision is yet to be made.
 
 ### Adopters
 
-Here's a (non-exhaustive) list of companies that use Cats in production. Don't see yours? [You can add it in a PR!](https://github.com/typelevel/cats/edit/main/README.md) And if you can, consider [supporting us](https://donorbox.org/typelevel-sustainability-program-2019?default_interval=m). 
+Here's a (non-exhaustive) list of companies that use Cats in production. Don't see yours? [You can add it in a PR!](https://github.com/typelevel/cats/edit/main/README.md) And if you can, consider [supporting us](https://opencollective.com/typelevel). 
 
 - [Abacus Protocol](https://abacusprotocol.com)
 - [Adobe (CCA team)](https://experienceleague.adobe.com/docs/analytics-platform/using/cja-connections/cca/overview.html?lang=en)  
