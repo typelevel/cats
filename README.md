@@ -3,8 +3,8 @@
 ![Cats graphic](https://raw.githubusercontent.com/typelevel/cats/main/docs/src/main/resources/microsite/img/cats2.png)
 
 [![cats-core Scala version support](https://index.scala-lang.org/typelevel/cats/cats-core/latest-by-scala-version.svg?targetType=Js)](https://index.scala-lang.org/typelevel/cats/cats-core) ![Continuous Integration](https://github.com/typelevel/cats/workflows/Continuous%20Integration/badge.svg)
-[![Financial Contributors on Open Collective](https://opencollective.com/typelevel/all/badge.svg?label=financial+contributors)](https://opencollective.com/typelevel) [![Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/typelevel/cats)
-[![Discord](https://img.shields.io/discord/632277896739946517.svg?label=&logo=discord&logoColor=ffffff&color=404244&labelColor=6A7EC2)](https://discord.gg/hWd4eS244g)
+[![Financial Contributors on Open Collective](https://opencollective.com/typelevel/all/badge.svg?label=financial+contributors)](https://opencollective.com/typelevel)
+[![Discord](https://img.shields.io/discord/632277896739946517.svg?label=&logo=discord&logoColor=ffffff&color=404244&labelColor=6A7EC2)](https://discord.gg/XF3CXcMzqD)
 
 ### Overview
 
@@ -130,24 +130,15 @@ Links:
 
 ### Community
 
-Discussion around Cats is currently happening on Github issues, PR pages,
-two Gitter channels, and we're also trying out Discord:
+Discussion around Cats is currently happening on GitHub issues, PR pages,
+and Discord:
 
-[Typelevel Discord](https://discord.gg/XF3CXcMzqD) has access to all of the
-Typelevel library channels as well as community channels.  Please join us!
-
-[Gitter channel cats](https://gitter.im/typelevel/cats) is for general user
-questions and discussions, and
-
-[Gitter channel cats-dev](https://gitter.im/typelevel/cats-dev)
-is dedicated for Cats development related discussions. For people who wants to
-follow closely and/or to participate in the decisions in Cats development,
-this is the room to join.
+The [Typelevel Discord](https://discord.gg/XF3CXcMzqD) has \#cats and \#cats-dev
+channels, as well as community channels such as \#beginners.  Please join us!
 
 People are expected to follow the
 [Scala Code of Conduct](https://www.scala-lang.org/conduct/) when
-discussing Cats on the Github page, Gitter channel, or other
-venues.
+discussing Cats on GitHub, Discord, or other venues.
 
 We hope that our community will be respectful, helpful, and kind. If
 you find yourself embroiled in a situation that becomes heated, or
