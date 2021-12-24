@@ -15,11 +15,11 @@ and comonadic may not necessarily be a lawful `Bimonad`.
 
 If you use `Bimonad` as a convenience type such that:
 ```scala
-def f[T[_] : Monad, Comonad, S](fa: T[S]): S
+def f[T[_]: Monad: Comonad, S](fa: T[S]): S
 ```
 is re-written to:
 ```scala
-def f[T[_] : Bimonad, S](fa: T[S]): S
+def f[T[_]: Bimonad, S](fa: T[S]): S
 ```
 then `T[_]` also needs to respect an extra set of laws.
 
@@ -32,7 +32,7 @@ import cats._
 import cats.data._
 import cats.implicits._
 
-implicit def nelBimonad =
+implicit val nelBimonad =
   new Bimonad[NonEmptyList] {
 
     // in order to have a lawful bimonad `pure` and `extract` need to respect: `nelBimonad.extract(nelBimonad.pure(a)) <-> a`
