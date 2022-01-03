@@ -94,9 +94,7 @@ trait Order[@sp A] extends Any with PartialOrder[A] { self =>
    * instance.
    */
   def toOrdering: Ordering[A] =
-    new Ordering[A] {
-      def compare(x: A, y: A): Int = self.compare(x, y)
-    }
+    OrderingFromOrder[A](this)
 }
 
 abstract class OrderFunctions[O[T] <: Order[T]] extends PartialOrderFunctions[O] {
@@ -220,15 +218,51 @@ object Order extends OrderFunctions[Order] with OrderToOrderingConversion {
     }
 
   def fromOrdering[A](implicit ev: Ordering[A]): Order[A] =
-    new Order[A] {
-      def compare(x: A, y: A): Int = ev.compare(x, y)
-
-      override def toOrdering: Ordering[A] = ev
-    }
+    OrderFromOrdering[A](ev)
 
   def fromComparable[A <: Comparable[A]]: Order[A] =
     new Order[A] {
       override def compare(x: A, y: A): Int =
         x.compareTo(y)
+    }
+}
+
+/** Wrapper class used to track when we create an `Order` instance from an
+  * `Ordering` instance. This allows us to know that given `Order` instance is
+  * consistent with the given `Ordering` instance. This becomes important when
+  * dealing with structures which rely on `Ordering`, e.g. `SortedSet`.
+  */
+private[kernel] final class OrderFromOrdering[A] private (val value: Ordering[A]) extends Order[A] {
+  override def compare(x: A, y: A): Int = value.compare(x, y)
+
+  override def toOrdering: Ordering[A] = value
+}
+
+private[kernel] object OrderFromOrdering {
+  def apply[A](ev: Ordering[A]): Order[A] =
+    ev match {
+      case ev: OrderingFromOrder[A] =>
+        ev.value
+      case _ =>
+        new OrderFromOrdering(ev)
+    }
+}
+
+/** Wrapper class used to track when we create an `Ordering` instance from an
+  * `Order` instance. This allows us to know that given `Order` instance is
+  * consistent with the given `Ordering` instance. This becomes important when
+  * dealing with structures which rely on `Ordering`, e.g. `SortedSet`.
+  */
+private[kernel] final class OrderingFromOrder[A] private (val value: Order[A]) extends Ordering[A] {
+  override def compare(x: A, y: A): Int = value.compare(x, y)
+}
+
+private[kernel] object OrderingFromOrder {
+  def apply[A](implicit ev: Order[A]): Ordering[A] =
+    ev match {
+      case ev: OrderFromOrdering[A] =>
+        ev.value
+      case _ =>
+        new OrderingFromOrder[A](ev)
     }
 }

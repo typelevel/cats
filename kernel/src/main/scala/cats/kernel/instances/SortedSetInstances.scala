@@ -1,6 +1,9 @@
 package cats.kernel
 package instances
 
+import cats.kernel.OrderingFromOrder
+import cats.kernel.OrderFromOrdering
+
 import scala.collection.immutable.SortedSet
 
 trait SortedSetInstances extends SortedSetInstances1 {
@@ -21,13 +24,30 @@ private[instances] trait SortedSetInstances1 {
 }
 
 class SortedSetOrder[A: Order] extends Order[SortedSet[A]] {
+
+  /** Attempt to verify that the Ordering instances and the Order instance all
+    * come from the same canonical source.
+    */
+  private def consistentOrdering(
+    a1: Ordering[A],
+    a2: Ordering[A]
+  ): Boolean =
+    (a1, a2, Order[A]) match {
+      case (a1: OrderingFromOrder[A], a2: OrderingFromOrder[A], order) =>
+        a1.value == order && a1.value == order
+      case (a1, a2, order: OrderFromOrdering[A]) =>
+        a1 == order.value && a2 == order.value
+      case _ =>
+        false
+    }
+
   def compare(a1: SortedSet[A], a2: SortedSet[A]): Int =
     cats.kernel.instances.int.catsKernelStdOrderForInt.compare(a1.size, a2.size) match {
       case 0 =>
         // In the event that the ordering instances are not _exactly_ the
         // same, we have to sort/rebuild the sets. If we don't we risk
         // violating the Monoid identity law.
-        if (a1.ordering == a2.ordering) {
+        if (consistentOrdering(a1.ordering, a2.ordering)) {
           // Hopefully this is the branch we hit the vast majority of the
           // time.
           StaticMethods.iteratorCompare(a1.iterator, a2.iterator)
