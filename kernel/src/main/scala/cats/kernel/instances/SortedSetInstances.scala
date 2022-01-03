@@ -37,6 +37,10 @@ class SortedSetOrder[A: Order] extends Order[SortedSet[A]] {
         }
       case x => x
     }
+
+  // Could be removed, but MiMa complains
+  override def eqv(a1: SortedSet[A], a2: SortedSet[A]): Boolean =
+    compare(a1, a2) == 0
 }
 
 // FIXME use context bound in 3.x
