@@ -23,12 +23,20 @@ private[instances] trait SortedSetInstances1 {
 class SortedSetOrder[A: Order] extends Order[SortedSet[A]] {
   def compare(a1: SortedSet[A], a2: SortedSet[A]): Int =
     cats.kernel.instances.int.catsKernelStdOrderForInt.compare(a1.size, a2.size) match {
-      case 0 => StaticMethods.iteratorCompare(a1.iterator, a2.iterator)
+      case 0 =>
+        // In the event that the ordering instances are not _exactly_ the
+        // same, we have to sort/rebuild the sets. If we don't we risk
+        // violating the Monoid identity law.
+        if (a1.ordering eq a2.ordering) {
+          // Hopefully this is the branch we hit the vast majority of the
+          // time.
+          StaticMethods.iteratorCompare(a1.iterator, a2.iterator)
+        } else {
+          val ordering: Ordering[A] = Order[A].toOrdering
+          StaticMethods.iteratorCompare(SortedSet.from(a1)(ordering).iterator, SortedSet.from(a2)(ordering).iterator)
+        }
       case x => x
     }
-
-  override def eqv(s1: SortedSet[A], s2: SortedSet[A]): Boolean =
-    StaticMethods.iteratorEq(s1.iterator, s2.iterator)
 }
 
 // FIXME use context bound in 3.x
