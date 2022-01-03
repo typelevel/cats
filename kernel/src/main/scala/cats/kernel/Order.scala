@@ -232,7 +232,7 @@ object Order extends OrderFunctions[Order] with OrderToOrderingConversion {
   * consistent with the given `Ordering` instance. This becomes important when
   * dealing with structures which rely on `Ordering`, e.g. `SortedSet`.
   */
-private[kernel] final class OrderFromOrdering[A] private (val value: Ordering[A]) extends Order[A] {
+final private[kernel] class OrderFromOrdering[A] private (val value: Ordering[A]) extends Order[A] {
   override def compare(x: A, y: A): Int = value.compare(x, y)
 
   override def toOrdering: Ordering[A] = value
@@ -253,7 +253,7 @@ private[kernel] object OrderFromOrdering {
   * consistent with the given `Ordering` instance. This becomes important when
   * dealing with structures which rely on `Ordering`, e.g. `SortedSet`.
   */
-private[kernel] final class OrderingFromOrder[A] private (val value: Order[A]) extends Ordering[A] {
+final private[kernel] class OrderingFromOrder[A] private (val value: Order[A]) extends Ordering[A] {
   override def compare(x: A, y: A): Int = value.compare(x, y)
 }
 
