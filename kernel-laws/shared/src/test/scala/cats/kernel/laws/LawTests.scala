@@ -66,7 +66,7 @@ object KernelCheck {
   }
 
   // Copied from cats-laws.
-  implicit def arbitrarySortedSet[A: Arbitrary: Order]: Arbitrary[SortedSet[A]] = Arbitrary{
+  implicit def arbitrarySortedSet[A: Arbitrary: Order]: Arbitrary[SortedSet[A]] = Arbitrary {
     // We create an arbitrary Ordering[A] which is either the same as Order[A]
     // or the reverse of it. This is important because the Ordering in use by
     // a given SortedSet[A] may not be derived from our Order and
