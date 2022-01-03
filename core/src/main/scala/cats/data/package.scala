@@ -17,6 +17,9 @@ package object data extends ScalaVersionSpecificPackage {
   type NonEmptySet[A] = NonEmptySetImpl.Type[A]
   val NonEmptySet = NonEmptySetImpl
 
+  type OrderedSet[A] = OrderedSetImpl.Type[A]
+  val OrderedSet = OrderedSetImpl
+
   type NonEmptyChain[+A] = NonEmptyChainImpl.Type[A]
   val NonEmptyChain = NonEmptyChainImpl
 
