@@ -239,7 +239,7 @@ final private[kernel] class OrderFromOrdering[A] private (val value: Ordering[A]
 
   override def equals(that: Any): Boolean =
     that match {
-      case that: OrderFromOrdering[A] =>
+      case that: OrderFromOrdering[A] @unchecked =>
         value == that.value
       case _ =>
         false
@@ -269,7 +269,7 @@ final private[kernel] class OrderingFromOrder[A] private (val value: Order[A]) e
 
   override def equals(that: Any): Boolean =
     that match {
-      case that: OrderingFromOrder[A] =>
+      case that: OrderingFromOrder[A] @unchecked =>
         value == that.value
       case _ =>
         false
