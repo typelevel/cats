@@ -72,15 +72,10 @@ object KernelCheck {
     // a given SortedSet[A] may not be derived from our Order and
     // scala.math.Ordering does not imply coherence.
     val orderingGen: Gen[Ordering[A]] =
-      Arbitrary
-        .arbitrary[Boolean]
-        .map(invert =>
-          if (invert) {
-            Order[A].toOrdering.reverse
-          } else {
-            Order[A].toOrdering
-          }
-        )
+      Gen.oneOf(
+        Order[A].toOrdering,
+        Order[A].toOrdering.reverse
+      )
     Arbitrary(
       orderingGen.flatMap(ordering => arbitrary[Set[A]].map(s => SortedSet.empty[A](ordering) ++ s))
     )
