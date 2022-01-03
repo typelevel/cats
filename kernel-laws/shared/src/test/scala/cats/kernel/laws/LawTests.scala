@@ -66,15 +66,17 @@ object KernelCheck {
   }
 
   // Copied from cats-laws.
-  implicit def arbitrarySortedSet[A: Arbitrary: Order]: Arbitrary[SortedSet[A]] = {
+  implicit def arbitrarySortedSet[A: Arbitrary: Order: Cogen]: Arbitrary[SortedSet[A]] = {
     // We create an arbitrary Ordering[A] which is either the same as Order[A]
     // or the reverse of it. This is important because the Ordering in use by
     // a given SortedSet[A] may not be derived from our Order and
     // scala.math.Ordering does not imply coherence.
     val orderingGen: Gen[Ordering[A]] =
-      Gen.oneOf(
-        Order[A].toOrdering,
-        Order[A].toOrdering.reverse
+      Arbitrary.arbitrary[A => Int].map(order =>
+        new Ordering[A] {
+          override def compare(x: A, y: A): Int =
+            order(x).compare(order(y))
+        }
       )
     Arbitrary(
       orderingGen.flatMap(ordering => arbitrary[Set[A]].map(s => SortedSet.empty[A](ordering) ++ s))
