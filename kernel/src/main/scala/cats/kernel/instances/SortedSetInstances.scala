@@ -33,7 +33,7 @@ class SortedSetOrder[A: Order] extends Order[SortedSet[A]] {
           StaticMethods.iteratorCompare(a1.iterator, a2.iterator)
         } else {
           val ordering: Ordering[A] = Order[A].toOrdering
-          StaticMethods.iteratorCompare(SortedSet.from(a1)(ordering).iterator, SortedSet.from(a2)(ordering).iterator)
+          StaticMethods.iteratorCompare(a1.toSeq.sorted(ordering).iterator, a2.toSeq.sorted(ordering).iterator)
         }
       case x => x
     }
