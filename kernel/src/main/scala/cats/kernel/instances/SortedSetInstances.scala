@@ -27,7 +27,7 @@ class SortedSetOrder[A: Order] extends Order[SortedSet[A]] {
         // In the event that the ordering instances are not _exactly_ the
         // same, we have to sort/rebuild the sets. If we don't we risk
         // violating the Monoid identity law.
-        if (a1.ordering eq a2.ordering) {
+        if (a1.ordering == a2.ordering) {
           // Hopefully this is the branch we hit the vast majority of the
           // time.
           StaticMethods.iteratorCompare(a1.iterator, a2.iterator)
