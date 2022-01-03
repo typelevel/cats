@@ -236,6 +236,17 @@ final private[kernel] class OrderFromOrdering[A] private (val value: Ordering[A]
   override def compare(x: A, y: A): Int = value.compare(x, y)
 
   override def toOrdering: Ordering[A] = value
+
+  override def equals(that: Any): Boolean =
+    that match {
+      case that: OrderFromOrdering[A] =>
+        value == that.value
+      case _ =>
+        false
+    }
+
+  override def hashCode: Int =
+    value.hashCode
 }
 
 private[kernel] object OrderFromOrdering {
@@ -255,6 +266,17 @@ private[kernel] object OrderFromOrdering {
   */
 final private[kernel] class OrderingFromOrder[A] private (val value: Order[A]) extends Ordering[A] {
   override def compare(x: A, y: A): Int = value.compare(x, y)
+
+  override def equals(that: Any): Boolean =
+    that match {
+      case that: OrderingFromOrder[A] =>
+        value == that.value
+      case _ =>
+        false
+    }
+
+  override def hashCode: Int =
+    value.hashCode
 }
 
 private[kernel] object OrderingFromOrder {
