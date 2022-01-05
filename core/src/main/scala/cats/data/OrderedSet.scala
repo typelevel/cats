@@ -48,14 +48,8 @@ private[data] object OrderedSetImpl extends OrderedSetInstances with Newtype {
 @suppressUnusedImportWarningForScalaVersionSpecific
 final class OrderedSetOps[A](override val set: OrderedSet[A]) extends SetOpsForOrderedSets[OrderedSet, OrderedSet, A] {
 
-  def toSortedSet: SortedSet[A] =
+  override def toSortedSet: SortedSet[A] =
     OrderedSetImpl.unwrap(set)
-
-  def nonEmpty: Boolean =
-    toSortedSet.nonEmpty
-
-  def isEmpty: Boolean =
-    !nonEmpty
 
   def headOption: Option[A] =
     toSortedSet.headOption
@@ -101,29 +95,8 @@ final class OrderedSetOps[A](override val set: OrderedSet[A]) extends SetOpsForO
   override def union(xs: OrderedSet[A]): OrderedSet[A] =
     OrderedSetImpl.create(set.toSortedSet ++ xs.toSortedSet)
 
-  override def apply(a: A): Boolean =
-    toSortedSet(a)
-
   override def diff(xs: OrderedSet[A]): OrderedSet[A] =
     OrderedSetImpl.create(toSortedSet -- xs.toSortedSet)
-
-  override def length: Int =
-    toSortedSet.size
-
-  override def foldLeft[B](b: B)(f: (B, A) => B): B =
-    toSortedSet.foldLeft(b)(f)
-
-  override def foldRight[B](lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
-    Foldable.iterateRight(toSortedSet, lb)(f)
-
-  override def exists(f: A => Boolean): Boolean =
-    toSortedSet.exists(f)
-
-  override def forall(f: A => Boolean): Boolean =
-    toSortedSet.forall(f)
-
-  override def find(f: A => Boolean): Option[A] =
-    toSortedSet.find(f)
 
   override def filter(p: A => Boolean): OrderedSet[A] =
     OrderedSetImpl.create(toSortedSet.filter(p))

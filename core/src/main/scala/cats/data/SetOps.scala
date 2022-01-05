@@ -1,6 +1,8 @@
 package cats
 package data
 
+import scala.collection.immutable.SortedSet
+
 /** A set of ops methods which should be implemented for all set like
   * structures, both the normal and non-empty variants.
   *
@@ -52,6 +54,8 @@ private[data] trait SetOps[F[_], G[_], A] {
 
   def filter(p: A => Boolean): G[A]
 
+  def nonEmpty: Boolean
+
   // NonAbstract
 
   def +(a: A): F[A] = add(a)
@@ -69,12 +73,19 @@ private[data] trait SetOps[F[_], G[_], A] {
   def &~(as: F[A]): G[A] = diff(as)
 
   def filterNot(p: A => Boolean): G[A] = filter(t => !p(t))
+
+  def isEmpty: Boolean =
+    !nonEmpty
 }
 
 /** As `SetOps`, but adds methods which require an [[Order]] constraint if the
   * underlying set like structure is ordered.
   */
 private[data] trait SetOpsForOrderedSets[F[_], G[_], A] extends SetOps[F, G, A] {
+
+  // Abstract
+
+  def toSortedSet: SortedSet[A]
 
   def map[B](f: A => B)(implicit B: Order[B]): F[B]
 
@@ -85,4 +96,30 @@ private[data] trait SetOpsForOrderedSets[F[_], G[_], A] extends SetOps[F, G, A] 
   def zipWithIndex(implicit A: Order[A]): F[(A, Int)]
 
   def collect[B](pf: PartialFunction[A, B])(implicit B: Order[B]): G[B]
+
+  // Concrete From SetOps
+
+  override def apply(a: A): Boolean =
+    toSortedSet(a)
+
+  override def nonEmpty: Boolean =
+    toSortedSet.nonEmpty
+
+  override def length: Int =
+    toSortedSet.size
+
+  override def foldLeft[B](b: B)(f: (B, A) => B): B =
+    toSortedSet.foldLeft(b)(f)
+
+  override def foldRight[B](lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
+    Foldable.iterateRight(toSortedSet, lb)(f)
+
+  override def exists(f: A => Boolean): Boolean =
+    toSortedSet.exists(f)
+
+  override def forall(f: A => Boolean): Boolean =
+    toSortedSet.forall(f)
+
+  override def find(f: A => Boolean): Option[A] =
+    toSortedSet.find(f)
 }
