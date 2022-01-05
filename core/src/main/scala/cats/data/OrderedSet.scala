@@ -2,6 +2,7 @@ package cats
 package data
 
 import cats.kernel._
+import kernel.compat.scalaVersionSpecific._
 import scala.annotation.tailrec
 import scala.collection.immutable.SortedSet
 
@@ -25,14 +26,17 @@ private[data] object OrderedSetImpl extends OrderedSetInstances with Newtype {
   def empty[A](implicit A: Order[A]): OrderedSet[A] =
     create(SortedSet.empty(A.toOrdering))
 
+  def add[A](xs: OrderedSet[A], x: A): OrderedSet[A] =
+    create(unwrap(xs) + x)
+
   def from[G[_], A](value: G[A])(implicit G: Foldable[G], A: Order[A]): OrderedSet[A] =
-    G.foldLeft(value, empty[A])(_.add(_))
+    G.foldLeft(value, empty[A])(add)
 
   def of[A: Order](x: A, xs: A*): OrderedSet[A] =
-    from(x +: xs)
+    from((x +: xs).toList)
 
   def apply[A: Order](x: A, xs: A*): OrderedSet[A] =
-    from(x +: xs)
+    of(x, xs: _*)
 
   def one[A: Order](x: A): OrderedSet[A] =
     of(x)
@@ -41,6 +45,7 @@ private[data] object OrderedSetImpl extends OrderedSetInstances with Newtype {
     new OrderedSetOps[A](value)
 }
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 final class OrderedSetOps[A](override val set: OrderedSet[A]) extends SetOpsForOrderedSets[OrderedSet, OrderedSet, A] {
 
   def toSortedSet: SortedSet[A] =
@@ -88,7 +93,7 @@ final class OrderedSetOps[A](override val set: OrderedSet[A]) extends SetOpsForO
       .iteratorEq(toSortedSet.iterator, that.toSortedSet.iterator)
 
   override def add(x: A): OrderedSet[A] =
-    OrderedSetImpl.create(toSortedSet + x)
+    OrderedSet.add(set, x)
 
   override def remove(x: A): OrderedSet[A] =
     OrderedSetImpl.create(toSortedSet - x)
@@ -126,16 +131,24 @@ final class OrderedSetOps[A](override val set: OrderedSet[A]) extends SetOpsForO
   override def intersect(xs: OrderedSet[A]): OrderedSet[A] =
     OrderedSetImpl.create(toSortedSet.filter(xs.contains))
 
-  override def map[B](f: A => B)(implicit B: Order[B]): OrderedSet[B] =
-    OrderedSetImpl.create(toSortedSet.map(f)(B.toOrdering))
+  override def map[B](f: A => B)(implicit B: Order[B]): OrderedSet[B] = {
+    implicit val ordering: Ordering[B] = B.toOrdering
+    OrderedSetImpl.create(toSortedSet.map(f))
+  }
 
-  override def concatMap[B](f: A => OrderedSet[B])(implicit B: Order[B]): OrderedSet[B] =
-    OrderedSetImpl.create(toSortedSet.flatMap(a => f(a).toSortedSet)(B.toOrdering))
+  override def concatMap[B](f: A => OrderedSet[B])(implicit B: Order[B]): OrderedSet[B] = {
+    implicit val ordering: Ordering[B] = B.toOrdering
 
-  override def collect[B](pf: PartialFunction[A, B])(implicit B: Order[B]): OrderedSet[B] =
+    OrderedSetImpl.create(toSortedSet.flatMap(a => f(a).toSortedSet))
+  }
+
+  override def collect[B](pf: PartialFunction[A, B])(implicit B: Order[B]): OrderedSet[B] = {
+    implicit val ordering: Ordering[B] = B.toOrdering
+
     foldLeft(OrderedSet.empty[B]) { case (acc, value) =>
       pf.lift(value).fold(acc)(value => acc.add(value))
     }
+  }
 
   override def zipWith[B, C](b: OrderedSet[B])(f: (A, B) => C)(implicit C: Order[C]): OrderedSet[C] = {
     implicit val ordering: Ordering[C] = C.toOrdering
