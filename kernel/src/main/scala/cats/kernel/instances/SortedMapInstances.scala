@@ -45,23 +45,28 @@ private[instances] trait SortedMapInstances3 extends SortedMapInstances2 {
     new SortedMapOrder[K, V]
 }
 
-private[instances] class SortedMapOrder[K, V](implicit K: Order[K], V: Order[V]) extends Order[SortedMap[K, V]] {
-  override def compare(x: SortedMap[K, V], y: SortedMap[K, V]): Int =
+private[instances] class SortedMapOrder[K, V](implicit V: Order[V]) extends Order[SortedMap[K, V]] {
+  override def compare(x: SortedMap[K, V], y: SortedMap[K, V]): Int = {
+    implicit val order: Order[K] = Order.fromOrdering(x.ordering)
     if (x eq y) {
       0
     } else {
       StaticMethods.iteratorCompare(x.iterator, y.iterator)
     }
+  }
 }
 
-private[instances] class SortedMapPartialOrder[K, V](implicit K: PartialOrder[K], V: PartialOrder[V])
+private[instances] class SortedMapPartialOrder[K, V](implicit V: PartialOrder[V])
     extends PartialOrder[SortedMap[K, V]] {
-  override def partialCompare(x: SortedMap[K, V], y: SortedMap[K, V]): Double =
+  override def partialCompare(x: SortedMap[K, V], y: SortedMap[K, V]): Double = {
+    implicit val order: Order[K] = Order.fromOrdering(x.ordering)
+
     if (x eq y) {
       0.0
     } else {
       StaticMethods.iteratorPartialCompare(x.iterator, y.iterator)
     }
+  }
 }
 
 class SortedMapHash[K, V](implicit V: Hash[V], K: Hash[K]) extends SortedMapEq[K, V]()(V) with Hash[SortedMap[K, V]] {
