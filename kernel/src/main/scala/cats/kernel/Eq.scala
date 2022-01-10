@@ -225,7 +225,7 @@ private[kernel] trait OrderInstances0 extends PartialOrderInstances {
 }
 
 private[kernel] trait OrderInstances1 extends OrderInstances0 {
-  implicit def catsKernelOrderForSortedMap[K: Order, V: Order]: Order[SortedMap[K, V]] =
+  implicit def catsKernelOrderForSortedMap[K, V: Order]: Order[SortedMap[K, V]] =
     cats.kernel.instances.sortedMap.catsKernelStdOrderForSortedMap[K, V]
 }
 
@@ -248,7 +248,7 @@ private[kernel] trait PartialOrderInstances0 extends HashInstances {
 }
 
 private[kernel] trait PartialOrderInstances1 extends PartialOrderInstances0 {
-  implicit def catsKernelPartialOrderForSortedMap[K: PartialOrder, V: PartialOrder]: PartialOrder[SortedMap[K, V]] =
+  implicit def catsKernelPartialOrderForSortedMap[K, V: PartialOrder]: PartialOrder[SortedMap[K, V]] =
     cats.kernel.instances.sortedMap.catsKernelStdPartialOrderForSortedMap[K, V]
 }
 

@@ -36,12 +36,12 @@ private[instances] trait SortedMapInstances2 extends SortedMapInstances1 {
   implicit def catsKernelStdMonoidForSortedMap[K: Order, V: Semigroup]: Monoid[SortedMap[K, V]] =
     new SortedMapMonoid[K, V]
 
-  implicit def catsKernelStdPartialOrderForSortedMap[K: PartialOrder, V: PartialOrder]: PartialOrder[SortedMap[K, V]] =
+  implicit def catsKernelStdPartialOrderForSortedMap[K, V: PartialOrder]: PartialOrder[SortedMap[K, V]] =
     new SortedMapPartialOrder[K, V]
 }
 
 private[instances] trait SortedMapInstances3 extends SortedMapInstances2 {
-  implicit def catsKernelStdOrderForSortedMap[K: Order, V: Order]: Order[SortedMap[K, V]] =
+  implicit def catsKernelStdOrderForSortedMap[K, V: Order]: Order[SortedMap[K, V]] =
     new SortedMapOrder[K, V]
 }
 
