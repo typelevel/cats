@@ -647,6 +647,11 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
         case Left(a)  => Validated.invalidNec(a)
       }
     )
+
+  /** Convert this `EitherT[F, A, B]` into an `IorT[F, A, B]`.
+   */
+  def toIorT: IorT[A, B] =
+    IorT.fromEitherF(value)
 }
 
 object EitherT extends EitherTInstances {
