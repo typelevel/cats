@@ -650,7 +650,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
 
   /** Convert this `EitherT[F, A, B]` into an `IorT[F, A, B]`.
    */
-  def toIorT: IorT[A, B] =
+  def toIorT: IorT[F, A, B] =
     IorT.fromEitherF(value)
 }
 
