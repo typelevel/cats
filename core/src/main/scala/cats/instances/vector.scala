@@ -18,6 +18,14 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
 
       def combineK[A](x: Vector[A], y: Vector[A]): Vector[A] = x ++ y
 
+      override def combineAllOptionK[A](as: IterableOnce[Vector[A]]): Option[Vector[A]] = {
+        val iter = as.iterator
+        if (iter.isEmpty) None else Some(iter.flatMap(_.iterator).toVector)
+      }
+
+      override def combineAllK[A](as: IterableOnce[Vector[A]]): Vector[A] =
+        as.iterator.flatMap(_.iterator).toVector
+
       override def prependK[A](a: A, fa: Vector[A]): Vector[A] = a +: fa
 
       override def appendK[A](fa: Vector[A], a: A): Vector[A] = fa :+ a
