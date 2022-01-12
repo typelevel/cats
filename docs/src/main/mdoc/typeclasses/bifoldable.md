@@ -29,7 +29,7 @@ and by implementing those 2 methods you also get:
 
 ## Either and Validated as Bifoldable
 
-Assume in your codebase multiple input paths and system requests end up as `Either` or `Validated`.  
+Assume in your codebase multiple input paths and system requests that end up as `Either[Exception, *]` or `Validated[Exception, *]`.  
 We want to track the amount of errors and store the content of valid requests.
 
 Let's add the implicits:
@@ -87,7 +87,7 @@ attempted
 ## Tuple as Bifoldable
 
 Assume we have `(String, String, Int)`  and to get our summary we need `_1` and `_3`.
-The existing implementations `(*,*)`, `(T0, *, *)`, `(T0, T1, *, *)` ..  aren't useful,
+The existing implementations `(*, *)`, `(T0, *, *)`, `(T0, T1, *, *)` .. aren't useful.
 
 Let's make our own `Bifoldable`:
 ```scala mdoc
@@ -100,8 +100,8 @@ implicit def bifoldableForTuple3[A0]: Bifoldable[(*, A0, *)] =
       g(fa._3, f(fa._1, c))
   }
 ```
-Note: Bifoldable doesn't inherit other typeclasses so the implementation is straight forward.
 
+and use it:
 ```scala mdoc
 //(name, age, occupation)
 val description = ("Niki", 22, "Developer")
@@ -110,10 +110,10 @@ Bifoldable[(*, Int, *)]
   .bifoldLeft(description, List.empty[String])((acc, name) => acc :+ name, (acc, occupation) => acc :+ occupation)
 
 Bifoldable[(*, Int, *)]
-    .bifold(description)
+   .bifold(description)
 
 Bifoldable[(*, Int, *)]
-    .bifoldMap(description)(name => List(name), occupation => List(occupation))
+   .bifoldMap(description)(name => List(name), occupation => List(occupation))
 ```
 
 ## Bifunctor `compose`
