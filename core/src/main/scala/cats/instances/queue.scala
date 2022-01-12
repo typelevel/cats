@@ -2,6 +2,7 @@ package cats
 package instances
 
 import cats.data.Chain
+import cats.kernel.compat.scalaVersionSpecific._
 import cats.kernel.instances.StaticMethods.wrapMutableIndexedSeq
 import cats.syntax.show._
 import scala.annotation.tailrec
@@ -178,6 +179,7 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
   implicit def catsStdTraverseFilterForQueue: TraverseFilter[Queue] = QueueInstances.catsStdTraverseFilterForQueue
 }
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 private object QueueInstances {
   private val catsStdTraverseFilterForQueue: TraverseFilter[Queue] = new TraverseFilter[Queue] {
     val traverse: Traverse[Queue] = cats.instances.queue.catsStdInstancesForQueue

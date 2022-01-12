@@ -2,12 +2,14 @@ package cats
 package instances
 
 import cats.data.{Chain, ZipSeq}
+import cats.kernel.compat.scalaVersionSpecific._
 
 import scala.annotation.tailrec
 import scala.collection.{+:, mutable}
 import scala.collection.immutable.Seq
 import cats.data.Ior
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 trait SeqInstances extends cats.kernel.instances.SeqInstances {
   implicit val catsStdInstancesForSeq
     : Traverse[Seq] with Monad[Seq] with Alternative[Seq] with CoflatMap[Seq] with Align[Seq] =

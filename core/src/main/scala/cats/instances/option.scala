@@ -3,6 +3,7 @@ package instances
 
 import scala.annotation.tailrec
 import cats.data.Ior
+import cats.kernel.compat.scalaVersionSpecific._
 
 trait OptionInstances extends cats.kernel.instances.OptionInstances {
 
@@ -218,6 +219,7 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
     }
 }
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 private[instances] trait OptionInstancesBinCompat0 {
   implicit val catsStdTraverseFilterForOption: TraverseFilter[Option] = new TraverseFilter[Option] {
     val traverse: Traverse[Option] = cats.instances.option.catsStdInstancesForOption

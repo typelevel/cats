@@ -2,6 +2,7 @@ package cats
 package instances
 
 import cats.data.{Chain, ZipVector}
+import cats.kernel.compat.scalaVersionSpecific._
 import cats.syntax.show._
 
 import scala.annotation.tailrec
@@ -214,6 +215,7 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
     }
 }
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 private[instances] trait VectorInstancesBinCompat0 {
   implicit val catsStdTraverseFilterForVector: TraverseFilter[Vector] = new TraverseFilter[Vector] {
     val traverse: Traverse[Vector] = cats.instances.vector.catsStdInstancesForVector
