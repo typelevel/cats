@@ -37,23 +37,6 @@ trait SemigroupKLaws[F[_]] {
     rev.combineAllOptionK(xs) <-> xs.reduceOption(rev.combineK[A])
   }
 
-  // def intercalateIntercalates[A](a: F[A], m: F[A], b: F[A]): IsEq[F[A]] =
-  //   F.combineK(a, F.combineK(m, b)) <-> F.intercalate(m).combineK(a, b)
-
-  // def intercalateRepeat1(m: A, a: A): IsEq[A] = {
-  //   val withMiddle = S.intercalate(m)
-  //   withMiddle.combineN(a, 1) <-> a
-  // }
-
-  // def intercalateRepeat2(m: A, a: A): IsEq[A] = {
-  //   val withMiddle = S.intercalate(m)
-  //   withMiddle.combineN(a, 2) <-> withMiddle.combine(a, a)
-  // }
-
-  // def intercalateCombineAllOption(m: A, xs: Vector[A]): IsEq[Option[A]] = {
-  //   val withMiddle = S.intercalate(m)
-  //   withMiddle.combineAllOption(xs) <-> xs.reduceOption(withMiddle.combine)
-  // }
 }
 
 object SemigroupKLaws {
