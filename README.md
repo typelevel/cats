@@ -235,6 +235,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Nezasa](https://www.nezasa.com)
 - [NCR Edinburgh](https://ncredinburgh.com/)
 - [Ocado Technology](https://ocadotechnology.com)
+- [OVO Energy](https://ovoenergy.com)
 - [Packlink](https://packlink.com/)
 - [Permutive](https://permutive.com/)
 - [Raiffeisenbank Russia](https://www.raiffeisen.ru/)
