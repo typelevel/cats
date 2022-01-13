@@ -22,7 +22,7 @@ trait SeqInstances extends cats.kernel.instances.SeqInstances {
 
       override def combineAllOptionK[A](as: IterableOnce[Seq[A]]): Option[Seq[A]] = {
         val iter = as.iterator
-        if (iter.isEmpty) None else Some(appendAll(as, Seq.newBuilder[A]).result())
+        if (iter.isEmpty) None else Some(appendAll(iter, Seq.newBuilder[A]).result())
       }
 
       override def prependK[A](a: A, fa: Seq[A]): Seq[A] = a +: fa

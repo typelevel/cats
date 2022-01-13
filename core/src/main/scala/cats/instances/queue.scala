@@ -21,7 +21,7 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
 
       override def combineAllOptionK[A](as: IterableOnce[Queue[A]]): Option[Queue[A]] = {
         val iter = as.iterator
-        if (iter.isEmpty) None else Some(appendAll(as, Queue.newBuilder[A]).result())
+        if (iter.isEmpty) None else Some(appendAll(iter, Queue.newBuilder[A]).result())
       }
 
       override def prependK[A](a: A, fa: Queue[A]): Queue[A] = a +: fa

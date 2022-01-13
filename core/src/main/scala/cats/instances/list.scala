@@ -23,7 +23,7 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
 
       override def combineAllOptionK[A](as: IterableOnce[List[A]]): Option[List[A]] = {
         val iter = as.iterator
-        if (iter.isEmpty) None else Some(appendAll(as, List.newBuilder[A]).result())
+        if (iter.isEmpty) None else Some(appendAll(iter, List.newBuilder[A]).result())
       }
 
       override def prependK[A](a: A, fa: List[A]): List[A] = a :: fa
