@@ -23,9 +23,6 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
         if (iter.isEmpty) None else Some(iter.flatMap(_.iterator).to(Queue))
       }
 
-      override def combineAllK[A](as: IterableOnce[Queue[A]]): Queue[A] =
-        as.iterator.flatMap(_.iterator).to(Queue)
-
       override def prependK[A](a: A, fa: Queue[A]): Queue[A] = a +: fa
 
       override def appendK[A](fa: Queue[A], a: A): Queue[A] = fa.enqueue(a)

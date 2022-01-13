@@ -116,10 +116,10 @@ import simulacrum.typeclass
    * }}}
    */
   def combineAllK[A](as: IterableOnce[F[A]]): F[A] =
-    as.iterator.foldLeft(empty[A])(combineK[A])
-
-  override def combineAllOptionK[A](as: IterableOnce[F[A]]): Option[F[A]] =
-    if (as.iterator.isEmpty) None else Some(combineAllK(as))
+    combineAllOptionK(as) match {
+      case Some(fa) => fa
+      case None => empty[A]
+    }
 
   override def reverse: MonoidK[F] =
     new MonoidK[F] {

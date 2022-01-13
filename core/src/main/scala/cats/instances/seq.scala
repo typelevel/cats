@@ -24,9 +24,6 @@ trait SeqInstances extends cats.kernel.instances.SeqInstances {
         if (iter.isEmpty) None else Some(iter.flatMap(_.iterator).toSeq)
       }
 
-      override def combineAllK[A](as: IterableOnce[Seq[A]]): Seq[A] =
-        as.iterator.flatMap(_.iterator).toSeq
-
       override def prependK[A](a: A, fa: Seq[A]): Seq[A] = a +: fa
 
       override def appendK[A](fa: Seq[A], a: A): Seq[A] = fa :+ a
