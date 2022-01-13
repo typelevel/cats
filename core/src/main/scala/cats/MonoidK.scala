@@ -118,7 +118,7 @@ import simulacrum.typeclass
   def combineAllK[A](as: IterableOnce[F[A]]): F[A] =
     combineAllOptionK(as) match {
       case Some(fa) => fa
-      case None => empty[A]
+      case None     => empty[A]
     }
 
   override def reverse: MonoidK[F] =
