@@ -99,7 +99,7 @@ import simulacrum.typeclass
    * }}}
    */
   override def combineNK[A](a: F[A], n: Int): F[A] =
-    if (n < 0) throw new IllegalArgumentException("Repeated combining for monoids must have n >= 0")
+    if (n < 0) throw new IllegalArgumentException("Repeated combining for monoidKs must have n >= 0")
     else if (n == 0) empty[A]
     else repeatedCombineNK(a, n)
 
