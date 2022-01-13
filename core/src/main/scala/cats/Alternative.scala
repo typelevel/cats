@@ -1,6 +1,7 @@
 package cats
 
 import simulacrum.typeclass
+import cats.kernel.compat.scalaVersionSpecific._
 
 @typeclass trait Alternative[F[_]] extends NonEmptyAlternative[F] with MonoidK[F] { self =>
 
@@ -99,8 +100,15 @@ import simulacrum.typeclass
       val F = self
       val G = Applicative[G]
     }
+
+  def fromIterableOnce[A](as: IterableOnce[A]): F[A] =
+    combineAllK(as.iterator.map(pure(_)))
+
+  def fromFoldable[G[_]: Foldable, A](as: G[A]): F[A] =
+    fromIterableOnce(Foldable[G].toIterable(as))
 }
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 object Alternative {
 
   /* ======================================================================== */
