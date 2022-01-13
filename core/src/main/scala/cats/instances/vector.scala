@@ -2,6 +2,7 @@ package cats
 package instances
 
 import cats.data.{Chain, ZipVector}
+import cats.instances.instances.appendAll
 import cats.kernel.compat.scalaVersionSpecific._
 import cats.syntax.show._
 
@@ -21,7 +22,7 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
 
       override def combineAllOptionK[A](as: IterableOnce[Vector[A]]): Option[Vector[A]] = {
         val iter = as.iterator
-        if (iter.isEmpty) None else Some(iter.flatMap(_.iterator).toVector)
+        if (iter.isEmpty) None else Some(appendAll(as, Vector.newBuilder[A]).result())
       }
 
       override def prependK[A](a: A, fa: Vector[A]): Vector[A] = a +: fa

@@ -2,6 +2,7 @@ package cats
 package instances
 
 import cats.data.Chain
+import cats.instances.instances.appendAll
 import cats.kernel.compat.scalaVersionSpecific._
 import cats.kernel.instances.StaticMethods.wrapMutableIndexedSeq
 import cats.syntax.show._
@@ -20,7 +21,7 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
 
       override def combineAllOptionK[A](as: IterableOnce[Queue[A]]): Option[Queue[A]] = {
         val iter = as.iterator
-        if (iter.isEmpty) None else Some(iter.flatMap(_.iterator).to(Queue))
+        if (iter.isEmpty) None else Some(appendAll(as, Queue.newBuilder[A]).result())
       }
 
       override def prependK[A](a: A, fa: Queue[A]): Queue[A] = a +: fa

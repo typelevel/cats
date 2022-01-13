@@ -2,6 +2,7 @@ package cats
 package instances
 
 import cats.data.{Chain, ZipList}
+import cats.instances.instances.appendAll
 import cats.kernel.compat.scalaVersionSpecific._
 import cats.kernel.instances.StaticMethods.wrapMutableIndexedSeq
 import cats.syntax.show._
@@ -22,7 +23,7 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
 
       override def combineAllOptionK[A](as: IterableOnce[List[A]]): Option[List[A]] = {
         val iter = as.iterator
-        if (iter.isEmpty) None else Some(iter.flatMap(_.iterator).toList)
+        if (iter.isEmpty) None else Some(appendAll(as, List.newBuilder[A]).result())
       }
 
       override def prependK[A](a: A, fa: List[A]): List[A] = a :: fa

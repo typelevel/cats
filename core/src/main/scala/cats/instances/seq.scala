@@ -2,6 +2,7 @@ package cats
 package instances
 
 import cats.data.{Chain, ZipSeq}
+import cats.instances.instances.appendAll
 import cats.kernel.compat.scalaVersionSpecific._
 
 import scala.annotation.tailrec
@@ -21,7 +22,7 @@ trait SeqInstances extends cats.kernel.instances.SeqInstances {
 
       override def combineAllOptionK[A](as: IterableOnce[Seq[A]]): Option[Seq[A]] = {
         val iter = as.iterator
-        if (iter.isEmpty) None else Some(iter.flatMap(_.iterator).toSeq)
+        if (iter.isEmpty) None else Some(appendAll(as, Seq.newBuilder[A]).result())
       }
 
       override def prependK[A](a: A, fa: Seq[A]): Seq[A] = a +: fa
