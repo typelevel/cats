@@ -26,8 +26,19 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
 
       def combineK[A](x: Option[A], y: Option[A]): Option[A] = if (x.isDefined) x else y
 
-      override def combineAllOptionK[A](as: IterableOnce[Option[A]]): Option[Option[A]] =
-        as.iterator.find(_.isDefined)
+      override def combineAllOptionK[A](as: IterableOnce[Option[A]]): Option[Option[A]] = {
+        val it = as.iterator
+        if (it.hasNext) {
+          while (true) {
+            val o = it.next()
+            if (o.isDefined) return Some(o)
+            if (!it.hasNext) return Some(None)
+          }
+          sys.error("unreachable")
+        } else {
+          return None
+        }
+      }
 
       override def prependK[A](a: A, fa: Option[A]): Option[A] = Some(a)
       override def appendK[A](fa: Option[A], a: A): Option[A] = if (fa.isDefined) fa else Some(a)
