@@ -8,24 +8,23 @@ scaladoc: "#cats.Bifoldable"
 
 # Bifoldable
 
-`Bifoldable` takes two type parameters and it's seen as a `Foldable` in both of these parameters.
+`Bifoldable` takes two type parameters and it's seen as working with two `Foldable` instances that fold to the same summary value.
 
-As a reminder `Foldable` is implemented in terms of `foldLeft` and `foldRight`, similarly `Bifoldable` is implemented in terms of:
-
-   ```scala
-   //eagerly performs a left-associative bi-fold over `fab` 
-    def bifoldLeft[A, B, C](fab: F[A, B], c: C)(f: (C, A) => C, g: (C, B) => C): C
-
-    //lazily performs a right-associative bi-fold over `fab` 
-    def bifoldRight[A, B, C](fab: F[A, B], c: Eval[C])(f: (A, Eval[C]) => Eval[C], g: (B, Eval[C]) => Eval[C]): Eval[C]
-   ```
+As a reminder `Foldable` is implemented in terms of `foldLeft` and `foldRight`; similarly `Bifoldable` is implemented in terms of:
+```scala
+  //eagerly performs a left-associative bi-fold over `fab` 
+  def bifoldLeft[A, B, C](fab: F[A, B], c: C)(f: (C, A) => C, g: (C, B) => C): C
+  
+  //lazily performs a right-associative bi-fold over `fab` 
+  def bifoldRight[A, B, C](fab: F[A, B], c: Eval[C])(f: (A, Eval[C]) => Eval[C], g: (B, Eval[C]) => Eval[C]): Eval[C]
+```
 
 and by implementing those 2 methods you also get:
-   ```scala
-     def bifold[A, B](fab: F[A, B])(implicit A: Monoid[A], B: Monoid[B]): (A, B)
+```scala
+  def bifold[A, B](fab: F[A, B])(implicit A: Monoid[A], B: Monoid[B]): (A, B)
   
-     def bifoldMap[A, B, C](fab: F[A, B])(f: A => C, g: B => C)(implicit C: Monoid[C]): C
-   ```
+  def bifoldMap[A, B, C](fab: F[A, B])(f: A => C, g: B => C)(implicit C: Monoid[C]): C
+```
 
 ## Either and Validated as Bifoldable
 
@@ -41,19 +40,19 @@ import cats.implicits._
 
 and define a summary class, capable of storing this info:
 ```scala mdoc
-case class Report(content: List[String], errors: Int) {
-  def add(`new`: String): Report =
+case class Report(entries: List[String], errors: Int) {
+  def withEntries(entry: String): Report =
     this.copy(content = content :+ `new`)
 
-  def reject(): Report =
+  def withError(): Report =
     this.copy(errors = errors + 1)
 }
 ```
 
 `Bifoldable` is useful to get a summary value from `F[_,_]` data types:
 ```scala mdoc
-def grow[T[_, _]: Bifoldable](current: Report)(one: T[_, String]): Report =
-  one.bifoldLeft(current)((acc, _) => acc.reject(), (acc, user) => acc.add(user))
+def update[T[_, _]: Bifoldable](current: Report)(result: T[_, String]): Report =
+  result.bifoldLeft(current)((acc, _) => acc.reject(), (acc, user) => acc.add(user))
 ```
 
 Here is the system input:
