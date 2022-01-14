@@ -42,7 +42,7 @@ and define a summary class, capable of storing this info:
 ```scala mdoc
 case class Report(entries: List[String], errors: Int) {
   def withEntries(entry: String): Report =
-    this.copy(content = content :+ `new`)
+    this.copy(entries = entries :+ entry)
 
   def withError(): Report =
     this.copy(errors = errors + 1)
@@ -52,7 +52,7 @@ case class Report(entries: List[String], errors: Int) {
 `Bifoldable` is useful to get a summary value from `F[_,_]` data types:
 ```scala mdoc
 def update[T[_, _]: Bifoldable](current: Report)(result: T[_, String]): Report =
-  result.bifoldLeft(current)((acc, _) => acc.reject(), (acc, user) => acc.add(user))
+  result.bifoldLeft(current)((acc, _) => acc.withError(), (acc, user) => acc.withEntries(user))
 ```
 
 Here is the system input:
@@ -77,10 +77,10 @@ and bi-fold each value into the accumulator:
 val empty = Report(List.empty, 0)
 
 validated
-  .foldl(empty)((acc, validation) => grow(acc)(validation))
+  .foldl(empty)((acc, validation) => update(acc)(validation))
 
 attempted
-  .foldl(empty)((acc, attempt) => grow(acc)(attempt))
+  .foldl(empty)((acc, attempt) => update(acc)(attempt))
 ```
 
 ## Tuple as Bifoldable
