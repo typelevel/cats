@@ -183,4 +183,18 @@ class FunctionSuite extends CatsSuite {
     val sumAll = bigList.combineAll(MonoidK[Endo].algebra)
     List(1, 1, 1).map(sumAll)
   }
+
+  property("Semigroup[Function0[Semi]] is stack safe on combine") {
+    forAll { (f: Function0[Semi]) =>
+      1.to(50000).foldLeft(f)((acc, _) => Semigroup[Function0[Semi]].combine(acc, f)).apply()
+      true
+    }
+  }
+
+  property("Semigroup[Function1[MiniInt, Semi]] is stack safe on combine") {
+    forAll { (i: MiniInt, f: Function1[MiniInt, Semi]) =>
+      1.to(50000).foldLeft(f)((acc, _) => Semigroup[Function1[MiniInt, Semi]].combine(acc, f)).apply(i)
+      true
+    }
+  }
 }

@@ -19,7 +19,7 @@ ThisBuild / scalafixDependencies += "org.typelevel" %% "simulacrum-scalafix" % "
 
 val scalaCheckVersion = "1.15.4"
 
-val disciplineVersion = "1.2.0"
+val disciplineVersion = "1.4.0"
 
 val disciplineMunitVersion = "1.0.9"
 
@@ -29,7 +29,6 @@ ThisBuild / githubWorkflowUseSbtThinClient := false
 
 val PrimaryOS = "ubuntu-latest"
 ThisBuild / githubWorkflowOSes := Seq(PrimaryOS)
-ThisBuild / githubWorkflowEnv += ("JABBA_INDEX" -> "https://github.com/typelevel/jdk-index/raw/main/index.json")
 
 val PrimaryJava = JavaSpec.temurin("8")
 val LTSJava = JavaSpec.temurin("17")
@@ -38,8 +37,8 @@ val GraalVM11 = JavaSpec.graalvm("20.3.1", "11")
 ThisBuild / githubWorkflowJavaVersions := Seq(PrimaryJava, LTSJava, GraalVM11)
 
 val Scala212 = "2.12.15"
-val Scala213 = "2.13.7"
-val Scala3 = "3.1.0"
+val Scala213 = "2.13.8"
+val Scala3 = "3.0.2"
 
 ThisBuild / crossScalaVersions := Seq(Scala212, Scala213, Scala3)
 ThisBuild / scalaVersion := Scala213
