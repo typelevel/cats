@@ -44,15 +44,15 @@ case class Report(entries: List[String], errors: Int) {
   def withEntries(entry: String): Report =
     this.copy(entries = entries :+ entry)
 
-  def withError(): Report =
+  def withError: Report =
     this.copy(errors = errors + 1)
 }
 ```
 
 `Bifoldable` is useful to get a summary value from `F[_,_]` data types:
 ```scala mdoc
-def update[T[_, _]: Bifoldable](current: Report)(result: T[_, String]): Report =
-  result.bifoldLeft(current)((acc, _) => acc.withError(), (acc, user) => acc.withEntries(user))
+def update[T[_, _]: Bifoldable](current: Report)(result: T[Exception, String]): Report =
+  result.bifoldLeft(current)((acc, _) => acc.withError, (acc, user) => acc.withEntries(user))
 ```
 
 Here is the system input:
