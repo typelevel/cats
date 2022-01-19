@@ -124,6 +124,8 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
    *  scala> import cats.data.OptionT
    *
    *  scala> val optionT: OptionT[List, Int] = OptionT(List(Some(2), None, Some(414), None, None))
+   *  scala> optionT.collect{ case i if i == 2 => i }
+   *  res0: OptionT[List, Int] = OptionT(List(Some(2), None, None, None, None))
    *  scala> optionT.collect{ case i: Int => i == 2 }
    *  res0: OptionT[List, Boolean] = OptionT(List(Some(true), None, Some(false), None, None))
    * }}}
@@ -151,6 +153,8 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
     OptionT(F.map(value)(_.filter(p)))
 
   /**
+   * It is used for desugaring 'for comprehensions'. OptionT wouldn't work in 'for-comprehensions' without
+   * this method.
    * Example:
    * {{{
    *  scala> import cats.data.OptionT
