@@ -19,7 +19,7 @@ This is exactly typeclass `Choice` provided, if we make `=>` more generic such a
 
 ```scala
 trait Choice[F[_, _]] {
-  def choice[A,B,C,D](fac: F[A, C], fbc: F[B, C]): F[Either[A, B], C]
+  def choice[A, B, C](fac: F[A, C], fbc: F[B, C]): F[Either[A, B], C]
 }
 ```
 
