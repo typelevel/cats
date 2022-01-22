@@ -1,30 +1,25 @@
-
-### Community Announcements
-
-* **Oct 31 2020** [Cats 2.3.0-M1 is released](https://github.com/typelevel/cats/releases/tag/v2.3.0-M1) with Dotty supported
-* **Sept 3 2020** [Cats 2.2.0 is released](https://github.com/typelevel/cats/releases/tag/v2.2.0)
-* **Dec 18 2019** [Cats 2.1.0 is released](https://github.com/typelevel/cats/releases/tag/v2.1.0)
-* **Sep 9 2019** [Cats 2.0.0 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0)
-* **Jun 3 2019** [Cats 1.6.1 is released](https://github.com/typelevel/cats/releases/tag/v1.6.1) with backported bug fixes
-* **Apr 26 2019** [We launched a sustainability program](https://typelevel.org/blog/2019/04/24/typelevel-sustainability-program-announcement.html). Please consider supporting us.
-
 ## Cats
 
 ![Cats graphic](https://raw.githubusercontent.com/typelevel/cats/main/docs/src/main/resources/microsite/img/cats2.png)
 
 [![cats-core Scala version support](https://index.scala-lang.org/typelevel/cats/cats-core/latest-by-scala-version.svg?targetType=Js)](https://index.scala-lang.org/typelevel/cats/cats-core) ![Continuous Integration](https://github.com/typelevel/cats/workflows/Continuous%20Integration/badge.svg)
-[![Financial Contributors on Open Collective](https://opencollective.com/typelevel/all/badge.svg?label=financial+contributors)](https://opencollective.com/typelevel) [![Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/typelevel/cats)
-[![Discord](https://img.shields.io/discord/632277896739946517.svg?label=&logo=discord&logoColor=ffffff&color=404244&labelColor=6A7EC2)](https://discord.gg/hWd4eS244g)
+[![Financial Contributors on Open Collective](https://opencollective.com/typelevel/all/badge.svg?label=financial+contributors)](https://opencollective.com/typelevel)
+[![Discord](https://img.shields.io/discord/632277896739946517.svg?label=&logo=discord&logoColor=ffffff&color=404244&labelColor=6A7EC2)](https://discord.gg/XF3CXcMzqD)
 
 ### Overview
 
 Cats is a library which provides abstractions for functional programming in the [Scala programming language](https://scala-lang.org).
-The name is a playful shortening of the word *category*.
 
 Scala supports both object-oriented and functional programming, and this is reflected in the hybrid approach of the
 standard library. Cats strives to provide functional programming abstractions that are core, [binary compatible](http://typelevel.org/cats/#binary-compatibility-and-versioning), [modular](http://typelevel.org/cats/motivations#modularity), [approachable](http://typelevel.org/cats/motivations#approachability) and [efficient](http://typelevel.org//cats/motivations#efficiency). A broader goal of Cats is to provide a foundation for an [ecosystem of pure, typeful libraries](https://typelevel.org/cats/#ecosystem) to support functional programming in Scala applications.
 
 For more detail about Cats' motivations, go [here](http://typelevel.org/cats/motivations).
+
+### Why "cats"?
+
+The name is a playful shortening of the word *category*, from "[category theory](https://en.wikipedia.org/wiki/Category_theory)".
+
+Regardless, you do not need to know anything about category theory to use Cats.
 
 ## Contributors
 
@@ -32,7 +27,7 @@ For more detail about Cats' motivations, go [here](http://typelevel.org/cats/mot
 
 This project exists thanks to [all the people who contribute](https://github.com/typelevel/cats/graphs/contributors). We welcome contributions to Cats and would love for you to help build
 Cats. See our [contributor guide](https://typelevel.org/cats/contributing.html) for more
-information about how you can get involved as a developer. If you are looking for something to start with, [here is a beginner friendly list](https://github.com/typelevel/cats/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22). 
+information about how you can get involved as a developer. If you are looking for something to start with, [here is a beginner friendly list](https://github.com/typelevel/cats/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22).
 
 ### Financial Contributors
 
@@ -104,14 +99,14 @@ functionality, you can pick-and-choose from amongst these modules
  * `cats-free`: Free structures such as the free monad, and supporting type classes.
  * `cats-testkit`: lib for writing tests for type class instances using laws.
  * `algebra`: Type classes to represent algebraic structures.
- * `alleycats-core`: Cats instances and classes which are not lawful. 
- 
- There are several other Cats modules that are in separate repos so that they can 
- maintain independent release cycles. 
- 
- * [`cats-effect`](https://github.com/typelevel/cats-effect): standard `IO` type together with `Sync`, `Async` and `Effect` type classes 
+ * `alleycats-core`: Cats instances and classes which are not lawful.
+
+ There are several other Cats modules that are in separate repos so that they can
+ maintain independent release cycles.
+
+ * [`cats-effect`](https://github.com/typelevel/cats-effect): standard `IO` type together with `Sync`, `Async` and `Effect` type classes
  * [`cats-mtl`](https://github.com/typelevel/cats-mtl): transformer typeclasses for Cats' Monads, Applicatives and Functors.
- * [`mouse`](https://github.com/typelevel/mouse): a small companion to Cats that provides convenient syntax (aka extension methods) 
+ * [`mouse`](https://github.com/typelevel/mouse): a small companion to Cats that provides convenient syntax (aka extension methods)
  * [`kittens`](https://github.com/typelevel/kittens): automatic type class instance derivation for Cats and generic utility functions
  * [`cats-tagless`](https://github.com/typelevel/cats-tagless): Utilities for tagless final encoded algebras
  * [`cats-collections`](https://github.com/typelevel/cats-collections): Data structures which facilitate pure functional programming
@@ -135,24 +130,15 @@ Links:
 
 ### Community
 
-Discussion around Cats is currently happening on Github issues, PR pages, 
-two Gitter channels, and we're also trying out Discord: 
- 
-[Typelevel Discord](https://discord.gg/XF3CXcMzqD) has access to all of the 
-Typelevel library channels as well as community channels.  Please join us! 
+Discussion around Cats is currently happening on GitHub issues, PR pages,
+and Discord:
 
-[Gitter channel cats](https://gitter.im/typelevel/cats) is for general user 
-questions and discussions, and 
-
-[Gitter channel cats-dev](https://gitter.im/typelevel/cats-dev)
-is dedicated for Cats development related discussions. For people who wants to 
-follow closely and/or to participate in the decisions in Cats development, 
-this is the room to join. 
+The [Typelevel Discord](https://discord.gg/XF3CXcMzqD) has \#cats and \#cats-dev
+channels, as well as community channels such as \#beginners.  Please join us!
 
 People are expected to follow the
 [Scala Code of Conduct](https://www.scala-lang.org/conduct/) when
-discussing Cats on the Github page, Gitter channel, or other
-venues.
+discussing Cats on GitHub, Discord, or other venues.
 
 We hope that our community will be respectful, helpful, and kind. If
 you find yourself embroiled in a situation that becomes heated, or
@@ -166,41 +152,41 @@ immediately so that we can support you.
 
 ### Binary compatibility and versioning
 
-After `1.0.0` release, we [decided](https://github.com/typelevel/cats/issues/1233) 
+After `1.0.0` release, we [decided](https://github.com/typelevel/cats/issues/1233)
 to use *MAJOR.MINOR.PATCH* [Semantic Versioning 2.0.0](http://semver.org/)
-going forward, which is different from the *EPOCH.MAJOR.MINOR* scheme common among 
-Java and Scala libraries (including the Scala lang). 
+going forward, which is different from the *EPOCH.MAJOR.MINOR* scheme common among
+Java and Scala libraries (including the Scala lang).
 
 Cats strives to provide a solid and stable foundation for an ecosystem of
-FP libraries. Thus, we treat backward binary compatibility maintenance with a high priority. 
+FP libraries. Thus, we treat backward binary compatibility maintenance with a high priority.
 In semantic versioning, backward breaking change is **ONLY** allowed between *MAJOR* versions.
 We will maintain backward binary compatibility between *PATCH* AND *MINOR* versions.
-For example, when we release Cats `1.1.0`, it will be backward binary compatible 
-with the previous `1.0.x` versions. I.E. the new JAR will be a drop-in replacement for 
+For example, when we release Cats `1.1.0`, it will be backward binary compatible
+with the previous `1.0.x` versions. I.E. the new JAR will be a drop-in replacement for
 the old one. This is critical when your application has a diamond
-dependency on Cats - depending on two or more libraries that all depend on Cats. 
-If one library upgrades to the new `1.1.0` Cats before the other one does, your 
+dependency on Cats - depending on two or more libraries that all depend on Cats.
+If one library upgrades to the new `1.1.0` Cats before the other one does, your
 application still runs thanks to this backward binary compatibility.
 
-Also worth noting is that according to semantic versioning, 
-*MINOR* version Y (x.Y.z | x > 0) MUST be incremented 
-if new, backwards compatible functionality is introduced to the public API. 
+Also worth noting is that according to semantic versioning,
+*MINOR* version Y (x.Y.z | x > 0) MUST be incremented
+if new, backwards compatible functionality is introduced to the public API.
 It MUST be incremented if any public API functionality is marked as deprecated.
 
 Any binary breaking changes will require a *MAJOR* version bump, which we will be very
-cautious about. We will also consider using `organization` and package name for major 
-versioning in the future. But that decision is yet to be made. 
+cautious about. We will also consider using `organization` and package name for major
+versioning in the future. But that decision is yet to be made.
 
 ### Adopters
 
-Here's a (non-exhaustive) list of companies that use Cats in production. Don't see yours? [You can add it in a PR!](https://github.com/typelevel/cats/edit/main/README.md) And if you can, consider [supporting us](https://donorbox.org/typelevel-sustainability-program-2019?default_interval=m). 
+Here's a (non-exhaustive) list of companies that use Cats in production. Don't see yours? [You can add it in a PR!](https://github.com/typelevel/cats/edit/main/README.md) And if you can, consider [supporting us](https://opencollective.com/typelevel).
 
 - [Abacus Protocol](https://abacusprotocol.com)
-- [Adobe (CCA team)](https://experienceleague.adobe.com/docs/analytics-platform/using/cja-connections/cca/overview.html?lang=en)  
+- [Adobe (CCA team)](https://experienceleague.adobe.com/docs/analytics-platform/using/cja-connections/cca/overview.html?lang=en)
 - [Anduin Transactions](https://anduintransact.com)
 - [Apple Inc. (FEAR team)](https://news.ycombinator.com/item?id=16969118)
-- [AutoScout24](https://www.autoscout24.com) 
-- [AvantStay](https://avantstay.com/) 
+- [AutoScout24](https://www.autoscout24.com)
+- [AvantStay](https://avantstay.com/)
 - [Avast](https://avast.com)
 - [BabylonHealth](https://www.babylonhealth.com/)
 - [Banno Group inside of Jack Henry & Associates](https://banno.com/)
@@ -213,6 +199,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Colisweb](https://www.colisweb.com/)
 - [Coya](https://coya.com/)
 - [Datum Brain](https://datumbrain.com/)
+- [Disney](https://disney.com/)
 - [DriveTribe](https://drivetribe.com/)
 - [Dwolla](https://dwolla.com/)
 - [Earnest](https://www.earnest.com)
@@ -233,8 +220,10 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [ImmobilienScout24](https://www.immobilienscout24.de/)
 - [Immozentral](https://www.immozentral.com/)
 - [innFactory GmbH](https://www.innfactory.de/)
+- [iofod](https://www.iofod.com/)
 - [Iterators](https://www.iteratorshq.com/)
 - [ITV](https://www.itv.com/)
+- [Lego](https://lego.com)
 - [Lightform](https://lightform.com/)
 - [Lookout](https://www.lookout.com)
 - [Medidata](https://www.medidata.com/)
@@ -246,6 +235,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Nezasa](https://www.nezasa.com)
 - [NCR Edinburgh](https://ncredinburgh.com/)
 - [Ocado Technology](https://ocadotechnology.com)
+- [OVO Energy](https://ovoenergy.com)
 - [Packlink](https://packlink.com/)
 - [Permutive](https://permutive.com/)
 - [Raiffeisenbank Russia](https://www.raiffeisen.ru/)
@@ -302,7 +292,7 @@ The current maintainers (people who can merge pull requests) are:
  * [satorg](https://github.com/satorg) Sergey Torgashov
  * [julien-truffaut](https://github.com/julien-truffaut) Julien Truffaut
  * [kailuowang](https://github.com/kailuowang) Kailuo Wang
- 
+
 Retired committers include:
 
  * [ceedubs](https://github.com/ceedubs) Cody Allen
