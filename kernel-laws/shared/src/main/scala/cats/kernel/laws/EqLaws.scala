@@ -18,6 +18,8 @@ trait EqLaws[A] {
   def transitivityEq(x: A, y: A, z: A): IsEq[Boolean] =
     (!(E.eqv(x, y) && E.eqv(y, z)) || E.eqv(x, z)) <-> true
 
+  def sameAsUniversalEquals(x: A, y: A): IsEq[Boolean] =
+    (E.eqv(x, y)) <-> (x == y)
 }
 
 object EqLaws {
