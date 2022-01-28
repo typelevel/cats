@@ -25,7 +25,11 @@ trait SeqInstances extends cats.kernel.instances.SeqInstances {
         if (iter.isEmpty) None else Some(appendAll(iter, Seq.newBuilder[A]).result())
       }
 
-      override def fromIterableOnce[A](as: IterableOnce[A]): Seq[A] = as.iterator.toSeq
+      override def fromIterableOnce[A](as: IterableOnce[A]): Seq[A] = {
+        val builder = Seq.newBuilder[A]
+        builder ++= as
+        builder.result()
+      }
 
       override def prependK[A](a: A, fa: Seq[A]): Seq[A] = a +: fa
 

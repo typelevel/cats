@@ -25,11 +25,8 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
       }
 
       override def fromIterableOnce[A](as: IterableOnce[A]): Queue[A] = {
-        val iter = as.iterator
         val builder = Queue.newBuilder[A]
-        while (iter.hasNext) {
-          builder.addOne(iter.next())
-        }
+        builder ++= as.iterator
         builder.result()
       }
 

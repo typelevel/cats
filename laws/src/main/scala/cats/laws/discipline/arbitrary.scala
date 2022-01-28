@@ -398,9 +398,6 @@ object arbitrary extends ArbitraryInstances0 with ScalaVersionSpecific.Arbitrary
 
 sealed private[discipline] trait ArbitraryInstances0 {
 
-  implicit def catsLawsArbitraryForIterableOnce[A](implicit AA: Arbitrary[A]): Arbitrary[IterableOnce[A]] =
-    Arbitrary(getArbitrary[List[A]])
-
   implicit def catsLawArbitraryForIndexedStateT[F[_], SA, SB, A](implicit
     F: Arbitrary[F[SA => F[(SB, A)]]]
   ): Arbitrary[IndexedStateT[F, SA, SB, A]] =
