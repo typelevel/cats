@@ -172,7 +172,8 @@ lazy val catsSettings = Seq(
 lazy val simulacrumSettings = Seq(
   libraryDependencies ++= (if (isScala3.value) Nil else Seq(compilerPlugin(scalafixSemanticdb))),
   scalacOptions ++= (
-    if (isScala3.value) Nil else Seq(s"-P:semanticdb:targetroot:${baseDirectory.value}/target/.semanticdb", "-Yrangepos")
+    if (isScala3.value) Nil
+    else Seq(s"-P:semanticdb:targetroot:${baseDirectory.value}/target/.semanticdb", "-Yrangepos")
   ),
   libraryDependencies += "org.typelevel" %% "simulacrum-scalafix-annotations" % "0.5.4"
 )
@@ -757,7 +758,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform, NativePlatform)
     Compile / scalacOptions :=
       (Compile / scalacOptions).value.filter {
         case "-Xfatal-warnings" if isScala3.value => false
-        case _                                   => true
+        case _                                    => true
       }
   )
   .jsSettings(commonJsSettings)
