@@ -2,10 +2,12 @@ package cats
 package instances
 
 import cats.data.{Ior, ZipStream}
+import cats.kernel.compat.scalaVersionSpecific._
 import cats.syntax.show._
 
 import scala.annotation.tailrec
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 trait StreamInstances extends cats.kernel.instances.StreamInstances {
 
   implicit val catsStdInstancesForStream
@@ -15,6 +17,8 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
       def empty[A]: Stream[A] = Stream.Empty
 
       def combineK[A](x: Stream[A], y: Stream[A]): Stream[A] = x #::: y
+
+      override def fromIterableOnce[A](as: IterableOnce[A]): Stream[A] = as.iterator.to(LazyList)
 
       override def prependK[A](a: A, fa: Stream[A]): Stream[A] = a #:: fa
 

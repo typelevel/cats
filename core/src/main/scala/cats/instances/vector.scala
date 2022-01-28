@@ -26,7 +26,7 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
       }
 
       override def fromIterableOnce[A](as: IterableOnce[A]): Vector[A] =
-        Vector.from(as)
+        as.iterator.toVector
 
       override def prependK[A](a: A, fa: Vector[A]): Vector[A] = a +: fa
 
