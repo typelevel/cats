@@ -3,7 +3,7 @@ import microsites._
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 import sbtrelease.ReleasePlugin.autoImport.ReleaseTransformations._
 
-val isDotty = Def.setting(
+val isScala3 = Def.setting(
   CrossVersion.partialVersion(scalaVersion.value).exists(_._1 == 3)
 )
 
@@ -146,7 +146,7 @@ def doctestGenTestsDottyCompat(isDotty: Boolean, genTests: Seq[File]): Seq[File]
   if (isDotty) Nil else genTests
 
 lazy val commonSettings = Seq(
-  scalacOptions ++= commonScalacOptions(scalaVersion.value, isDotty.value),
+  scalacOptions ++= commonScalacOptions(scalaVersion.value, isScala3.value),
   Compile / unmanagedSourceDirectories ++= scalaVersionSpecificFolders("main", baseDirectory.value, scalaVersion.value),
   Test / unmanagedSourceDirectories ++= scalaVersionSpecificFolders("test", baseDirectory.value, scalaVersion.value),
   resolvers ++= Seq(Resolver.sonatypeRepo("releases"), Resolver.sonatypeRepo("snapshots")),
@@ -161,7 +161,7 @@ def macroDependencies(scalaVersion: String) =
 lazy val catsSettings = Seq(
   incOptions := incOptions.value.withLogRecompileOnMacro(false),
   libraryDependencies ++= (
-    if (isDotty.value) Nil
+    if (isScala3.value) Nil
     else
       Seq(
         compilerPlugin(("org.typelevel" %% "kind-projector" % kindProjectorVersion).cross(CrossVersion.full))
@@ -170,9 +170,9 @@ lazy val catsSettings = Seq(
 ) ++ commonSettings ++ publishSettings ++ simulacrumSettings
 
 lazy val simulacrumSettings = Seq(
-  libraryDependencies ++= (if (isDotty.value) Nil else Seq(compilerPlugin(scalafixSemanticdb))),
+  libraryDependencies ++= (if (isScala3.value) Nil else Seq(compilerPlugin(scalafixSemanticdb))),
   scalacOptions ++= (
-    if (isDotty.value) Nil else Seq(s"-P:semanticdb:targetroot:${baseDirectory.value}/target/.semanticdb", "-Yrangepos")
+    if (isScala3.value) Nil else Seq(s"-P:semanticdb:targetroot:${baseDirectory.value}/target/.semanticdb", "-Yrangepos")
   ),
   libraryDependencies += "org.typelevel" %% "simulacrum-scalafix-annotations" % "0.5.4"
 )
@@ -190,7 +190,7 @@ lazy val commonJsSettings = Seq(
       else tv
     val a = (LocalRootProject / baseDirectory).value.toURI.toString
     val g = "https://raw.githubusercontent.com/typelevel/cats/" + tagOrHash
-    val opt = if (isDotty.value) "-scalajs-mapSourceURI" else "-P:scalajs:mapSourceURI"
+    val opt = if (isScala3.value) "-scalajs-mapSourceURI" else "-P:scalajs:mapSourceURI"
     s"$opt:$a->$g/"
   },
   Global / scalaJSStage := FullOptStage,
@@ -711,7 +711,7 @@ lazy val algebra = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .settings(testingDependencies)
   .settings(
     scalacOptions := {
-      if (isDotty.value)
+      if (isScala3.value)
         scalacOptions.value.filterNot(Set("-Xfatal-warnings"))
       else scalacOptions.value
     },
@@ -727,7 +727,7 @@ lazy val algebraLaws = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .settings(testingDependencies)
   .settings(
     scalacOptions := {
-      if (isDotty.value)
+      if (isScala3.value)
         scalacOptions.value.filterNot(Set("-Xfatal-warnings"))
       else scalacOptions.value
     },
@@ -751,12 +751,12 @@ lazy val core = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .settings(includeGeneratedSrc)
   .settings(
     libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % Test,
-    doctestGenTests := doctestGenTestsDottyCompat(isDotty.value, doctestGenTests.value)
+    doctestGenTests := doctestGenTestsDottyCompat(isScala3.value, doctestGenTests.value)
   )
   .settings(
     Compile / scalacOptions :=
       (Compile / scalacOptions).value.filter {
-        case "-Xfatal-warnings" if isDotty.value => false
+        case "-Xfatal-warnings" if isScala3.value => false
         case _                                   => true
       }
   )
@@ -1120,7 +1120,7 @@ lazy val sharedReleaseProcess = Seq(
 )
 
 lazy val warnUnusedImport = Seq(
-  scalacOptions ++= (if (isDotty.value) Nil else Seq("-Ywarn-unused:imports")),
+  scalacOptions ++= (if (isScala3.value) Nil else Seq("-Ywarn-unused:imports")),
   Compile / console / scalacOptions ~= (_.filterNot(Set("-Ywarn-unused-import", "-Ywarn-unused:imports"))),
   Test / console / scalacOptions := (Compile / console / scalacOptions).value
 )
