@@ -24,6 +24,11 @@ trait LazyListInstances extends cats.kernel.instances.LazyListInstances {
 
       def combineK[A](x: LazyList[A], y: LazyList[A]): LazyList[A] = x.lazyAppendedAll(y)
 
+      override def combineAllOptionK[A](as: IterableOnce[LazyList[A]]): Option[LazyList[A]] = {
+        val iter = as.iterator
+        if (iter.isEmpty) None else Some(LazyList.from(iter.flatMap(_.iterator)))
+      }
+
       override def fromIterableOnce[A](as: IterableOnce[A]): LazyList[A] = LazyList.from(as)
 
       override def prependK[A](a: A, fa: LazyList[A]): LazyList[A] = fa.prepended(a)
