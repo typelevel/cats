@@ -18,7 +18,7 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
 
       def combineK[A](x: Stream[A], y: Stream[A]): Stream[A] = x #::: y
 
-      override def fromIterableOnce[A](as: IterableOnce[A]): Stream[A] = as.iterator.to(LazyList)
+      override def fromIterableOnce[A](as: IterableOnce[A]): Stream[A] = as.iterator.toStream
 
       override def prependK[A](a: A, fa: Stream[A]): Stream[A] = a #:: fa
 
