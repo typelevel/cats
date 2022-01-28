@@ -3,6 +3,7 @@ package data
 
 import Chain._
 import cats.kernel.instances.StaticMethods
+import cats.kernel.compat.scalaVersionSpecific._
 
 import scala.annotation.tailrec
 import scala.collection.immutable.{IndexedSeq => ImIndexedSeq, SortedMap, TreeSet}
@@ -678,6 +679,7 @@ sealed abstract class Chain[+A] {
     }
 }
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 object Chain extends ChainInstances {
 
   private val sentinel: Function1[Any, Any] = new scala.runtime.AbstractFunction1[Any, Any] { def apply(a: Any) = this }
@@ -1029,6 +1031,7 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
 
       def empty[A]: Chain[A] = Chain.nil
       def combineK[A](c: Chain[A], c2: Chain[A]): Chain[A] = Chain.concat(c, c2)
+      override def fromIterableOnce[A](as: IterableOnce[A]): Chain[A] = Chain.fromSeq(as.iterator.toSeq)
       def pure[A](a: A): Chain[A] = Chain.one(a)
       def flatMap[A, B](fa: Chain[A])(f: A => Chain[B]): Chain[B] =
         fa.flatMap(f)

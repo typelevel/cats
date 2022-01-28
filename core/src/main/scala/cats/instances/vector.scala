@@ -25,6 +25,9 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
         if (iter.isEmpty) None else Some(appendAll(iter, Vector.newBuilder[A]).result())
       }
 
+      override def fromIterableOnce[A](as: IterableOnce[A]): Vector[A] =
+        Vector.from(as)
+
       override def prependK[A](a: A, fa: Vector[A]): Vector[A] = a +: fa
 
       override def appendK[A](fa: Vector[A], a: A): Vector[A] = fa :+ a

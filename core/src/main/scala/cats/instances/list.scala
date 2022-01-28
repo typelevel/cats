@@ -26,6 +26,8 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
         if (iter.isEmpty) None else Some(appendAll(iter, List.newBuilder[A]).result())
       }
 
+      override def fromIterableOnce[A](as: IterableOnce[A]): List[A] = List.from(as)
+
       override def prependK[A](a: A, fa: List[A]): List[A] = a :: fa
 
       override def appendK[A](fa: List[A], a: A): List[A] = fa :+ a

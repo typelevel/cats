@@ -3,6 +3,7 @@ package cats.tests
 import cats.Alternative
 import cats.FlatMap
 import cats.laws.discipline.AlternativeTests
+import cats.laws.discipline.arbitrary._
 import cats.syntax.eq._
 import org.scalacheck.Prop._
 

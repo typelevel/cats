@@ -24,6 +24,8 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
         if (iter.isEmpty) None else Some(appendAll(iter, Queue.newBuilder[A]).result())
       }
 
+      override def fromIterableOnce[A](as: IterableOnce[A]): Queue[A] = Queue.from(as)
+
       override def prependK[A](a: A, fa: Queue[A]): Queue[A] = a +: fa
 
       override def appendK[A](fa: Queue[A], a: A): Queue[A] = fa.enqueue(a)

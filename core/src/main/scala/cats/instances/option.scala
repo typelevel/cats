@@ -40,6 +40,11 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
         }
       }
 
+      override def fromIterableOnce[A](as: IterableOnce[A]): Option[A] = {
+        val iter = as.iterator
+        if (iter.hasNext) Some(iter.next()) else None
+      }
+
       override def prependK[A](a: A, fa: Option[A]): Option[A] = Some(a)
       override def appendK[A](fa: Option[A], a: A): Option[A] = if (fa.isDefined) fa else Some(a)
 

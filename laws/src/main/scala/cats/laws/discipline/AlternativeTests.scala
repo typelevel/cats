@@ -15,6 +15,7 @@ trait AlternativeTests[F[_]] extends NonEmptyAlternativeTests[F] with MonoidKTes
     ArbFC: Arbitrary[F[C]],
     ArbFAtoB: Arbitrary[F[A => B]],
     ArbFBtoC: Arbitrary[F[B => C]],
+    ArbIterableOnce: Arbitrary[IterableOnce[A]],
     CogenA: Cogen[A],
     CogenB: Cogen[B],
     CogenC: Cogen[C],
@@ -29,7 +30,8 @@ trait AlternativeTests[F[_]] extends NonEmptyAlternativeTests[F] with MonoidKTes
       val bases: Seq[(String, RuleSet)] = Nil
       val parents: Seq[RuleSet] = Seq(monoidK[A], nonEmptyAlternative[A, B, C])
       val props: Seq[(String, Prop)] = Seq(
-        "right absorption" -> forAll(laws.alternativeRightAbsorption[A, B] _)
+        "right absorption" -> forAll(laws.alternativeRightAbsorption[A, B] _),
+        "fromIterableOnce" -> forAll(laws.fromIterableOnce[A] _)
       )
     }
 }
