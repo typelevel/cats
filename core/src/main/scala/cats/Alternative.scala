@@ -104,7 +104,7 @@ import cats.kernel.compat.scalaVersionSpecific._
   def fromIterableOnce[A](as: IterableOnce[A]): F[A] =
     combineAllK(as.iterator.map(pure(_)))
 
-  def fromFoldable[G[_]: Foldable, A](as: G[A]): F[A] =
+  final def fromFoldable[G[_]: Foldable, A](as: G[A]): F[A] =
     fromIterableOnce(Foldable[G].toIterable(as))
 }
 
