@@ -15,7 +15,6 @@ trait AlternativeTests[F[_]] extends NonEmptyAlternativeTests[F] with MonoidKTes
     ArbFC: Arbitrary[F[C]],
     ArbFAtoB: Arbitrary[F[A => B]],
     ArbFBtoC: Arbitrary[F[B => C]],
-    ArbIterableOnce: Arbitrary[Iterable[A]],
     CogenA: Cogen[A],
     CogenB: Cogen[B],
     CogenC: Cogen[C],
