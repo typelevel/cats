@@ -8,7 +8,7 @@ scaladoc: "#cats.Bifoldable"
 
 # Bifoldable
 
-`Bifoldable` takes two type parameters and it's seen as working with two `Foldable` instances that fold to the same summary value.
+`Bifoldable` takes two type parameters and identifies data structures with two varieties of elements foldable to the same summary value.
 
 As a reminder `Foldable` is implemented in terms of `foldLeft` and `foldRight`; similarly `Bifoldable` is implemented in terms of:
 ```scala
