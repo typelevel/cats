@@ -192,7 +192,14 @@ The documentation for this website is stored alongside the source, in the [docs 
 
 ### Generating the Site
 
-run `sbt docs/makeMicrosite`
+The microsite generation require a specific scala version that might
+differ from the project's one. We strongly suggest to check the CI
+workflow to discover the proper version:
+[CI scala-version matrix"](https://github.com/typelevel/cats/blob/main/.github/workflows/ci.yml#L230) and [CI makeMicrosite
+command](https://github.com/typelevel/cats/blob/main/.github/workflows/ci.yml#L281)
+
+At the moment the command is:
+`sbt ++2.12.15 docs/makeMicrosite`
 
 ### Previewing the site
 
