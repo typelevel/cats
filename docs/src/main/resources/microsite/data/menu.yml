@@ -215,6 +215,10 @@ options:
     url: datatypes/state.html
     menu_type: data
 
+  - title: StateT
+    url: datatypes/statet.html
+    menu_type: data
+
   - title: Validated
     url: datatypes/validated.html
     menu_type: data
