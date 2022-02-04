@@ -29,7 +29,7 @@ Plus additional methods, that handles effectful computations, eg: `modifyF`, `se
 In this example we need to:
 - Keep a state of the game, with the target word and the guesses made.
 - Show the game state.
-- Ask the player to input a guess letter until the game is over.
+- Ask the player to input a guess word until the game is over.
 
 The whole game state machine can be summarized as following:
 
@@ -48,7 +48,7 @@ The whole game state machine can be summarized as following:
 
 ```
 
-At each step, the state will be updated and, since some I/O operations needs to be performed along the way, the specific effect (typically `IO` monad, but in our case it will be `Eval`) has to be used.
+At each step, the state might be updated and, since some I/O operations needs to be performed along the way, the specific effect (typically `IO` monad, but in our case it will be `Eval`) has to be used.
 We can model the state as:
 
 ```scala mdoc:silent
@@ -100,7 +100,7 @@ object GameState {
 }
 ```
 
-In the code above you can see some useful functions such the one for hide the target word by the attempts made.
+In the code above you can see some useful functions, such the one that returns the encrypted target word.
 Let's focus on the state machine game steps.
 
 ```scala mdoc:silent
