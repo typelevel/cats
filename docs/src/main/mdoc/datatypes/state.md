@@ -2,7 +2,7 @@
 layout: docs
 title:  "State"
 section: "data"
-source: "cats/core/src/main/scala/cats/data/package.scala"
+source: "core/src/main/scala/cats/data/package.scala"
 scaladoc: "#cats.data.State"
 ---
 # State
