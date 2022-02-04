@@ -36,7 +36,8 @@ object Boilerplate {
     GenTupleMonadInstances,
     GenTupleBifunctorInstances,
     GenTupleBitraverseInstances,
-    GenTupleUnorderedFoldableInstances
+    GenTupleUnorderedFoldableInstances,
+    GenFunctorTupleNSyntax
   )
 
   val header = "// auto-generated boilerplate by /project/Boilerplate.scala" // TODO: put something meaningful here?

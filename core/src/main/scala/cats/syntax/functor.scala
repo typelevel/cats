@@ -1,7 +1,7 @@
 package cats
 package syntax
 
-trait FunctorSyntax extends Functor.ToFunctorOps {
+trait FunctorSyntax extends Functor.ToFunctorOps with FunctorTupleNSyntax {
   implicit final def catsSyntaxFunctorTuple2Ops[F[_], A, B](fab: F[(A, B)]): FunctorTuple2Ops[F, A, B] =
     new FunctorTuple2Ops[F, A, B](fab)
 }
