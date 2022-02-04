@@ -219,7 +219,9 @@ class FunctorTupleNSyntaxSuite extends CatsSuite {
     }
   }
 
-  test("_1F, _2F, _3F, _4F, _5F, _6F, _7F, _8F, _9F, _10F, _11F, _12F, _13F, _14F, _15F, _16F, _17F works for Tuple17") {
+  test(
+    "_1F, _2F, _3F, _4F, _5F, _6F, _7F, _8F, _9F, _10F, _11F, _12F, _13F, _14F, _15F, _16F, _17F works for Tuple17"
+  ) {
     forAll { (l: List[(Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int)]) =>
       assertEquals(l._1F, l.map(_._1))
       assertEquals(l._2F, l.map(_._2))
@@ -241,7 +243,9 @@ class FunctorTupleNSyntaxSuite extends CatsSuite {
     }
   }
 
-  test("_1F, _2F, _3F, _4F, _5F, _6F, _7F, _8F, _9F, _10F, _11F, _12F, _13F, _14F, _15F, _16F, _17F, _18F works for Tuple18") {
+  test(
+    "_1F, _2F, _3F, _4F, _5F, _6F, _7F, _8F, _9F, _10F, _11F, _12F, _13F, _14F, _15F, _16F, _17F, _18F works for Tuple18"
+  ) {
     forAll { (l: List[(Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int)]) =>
       assertEquals(l._1F, l.map(_._1))
       assertEquals(l._2F, l.map(_._2))
@@ -264,105 +268,121 @@ class FunctorTupleNSyntaxSuite extends CatsSuite {
     }
   }
 
-  test("_1F, _2F, _3F, _4F, _5F, _6F, _7F, _8F, _9F, _10F, _11F, _12F, _13F, _14F, _15F, _16F, _17F, _18F, _19F works for Tuple19") {
-    forAll { (l: List[(Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int)]) =>
-      assertEquals(l._1F, l.map(_._1))
-      assertEquals(l._2F, l.map(_._2))
-      assertEquals(l._3F, l.map(_._3))
-      assertEquals(l._4F, l.map(_._4))
-      assertEquals(l._5F, l.map(_._5))
-      assertEquals(l._6F, l.map(_._6))
-      assertEquals(l._7F, l.map(_._7))
-      assertEquals(l._8F, l.map(_._8))
-      assertEquals(l._9F, l.map(_._9))
-      assertEquals(l._10F, l.map(_._10))
-      assertEquals(l._11F, l.map(_._11))
-      assertEquals(l._12F, l.map(_._12))
-      assertEquals(l._13F, l.map(_._13))
-      assertEquals(l._14F, l.map(_._14))
-      assertEquals(l._15F, l.map(_._15))
-      assertEquals(l._16F, l.map(_._16))
-      assertEquals(l._17F, l.map(_._17))
-      assertEquals(l._18F, l.map(_._18))
-      assertEquals(l._19F, l.map(_._19))
+  test(
+    "_1F, _2F, _3F, _4F, _5F, _6F, _7F, _8F, _9F, _10F, _11F, _12F, _13F, _14F, _15F, _16F, _17F, _18F, _19F works for Tuple19"
+  ) {
+    forAll {
+      (l: List[(Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int)]) =>
+        assertEquals(l._1F, l.map(_._1))
+        assertEquals(l._2F, l.map(_._2))
+        assertEquals(l._3F, l.map(_._3))
+        assertEquals(l._4F, l.map(_._4))
+        assertEquals(l._5F, l.map(_._5))
+        assertEquals(l._6F, l.map(_._6))
+        assertEquals(l._7F, l.map(_._7))
+        assertEquals(l._8F, l.map(_._8))
+        assertEquals(l._9F, l.map(_._9))
+        assertEquals(l._10F, l.map(_._10))
+        assertEquals(l._11F, l.map(_._11))
+        assertEquals(l._12F, l.map(_._12))
+        assertEquals(l._13F, l.map(_._13))
+        assertEquals(l._14F, l.map(_._14))
+        assertEquals(l._15F, l.map(_._15))
+        assertEquals(l._16F, l.map(_._16))
+        assertEquals(l._17F, l.map(_._17))
+        assertEquals(l._18F, l.map(_._18))
+        assertEquals(l._19F, l.map(_._19))
     }
   }
 
-  test("_1F, _2F, _3F, _4F, _5F, _6F, _7F, _8F, _9F, _10F, _11F, _12F, _13F, _14F, _15F, _16F, _17F, _18F, _19F, _20F works for Tuple20") {
-    forAll { (l: List[(Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int)]) =>
-      assertEquals(l._1F, l.map(_._1))
-      assertEquals(l._2F, l.map(_._2))
-      assertEquals(l._3F, l.map(_._3))
-      assertEquals(l._4F, l.map(_._4))
-      assertEquals(l._5F, l.map(_._5))
-      assertEquals(l._6F, l.map(_._6))
-      assertEquals(l._7F, l.map(_._7))
-      assertEquals(l._8F, l.map(_._8))
-      assertEquals(l._9F, l.map(_._9))
-      assertEquals(l._10F, l.map(_._10))
-      assertEquals(l._11F, l.map(_._11))
-      assertEquals(l._12F, l.map(_._12))
-      assertEquals(l._13F, l.map(_._13))
-      assertEquals(l._14F, l.map(_._14))
-      assertEquals(l._15F, l.map(_._15))
-      assertEquals(l._16F, l.map(_._16))
-      assertEquals(l._17F, l.map(_._17))
-      assertEquals(l._18F, l.map(_._18))
-      assertEquals(l._19F, l.map(_._19))
-      assertEquals(l._20F, l.map(_._20))
+  test(
+    "_1F, _2F, _3F, _4F, _5F, _6F, _7F, _8F, _9F, _10F, _11F, _12F, _13F, _14F, _15F, _16F, _17F, _18F, _19F, _20F works for Tuple20"
+  ) {
+    forAll {
+      (l: List[(Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int)]) =>
+        assertEquals(l._1F, l.map(_._1))
+        assertEquals(l._2F, l.map(_._2))
+        assertEquals(l._3F, l.map(_._3))
+        assertEquals(l._4F, l.map(_._4))
+        assertEquals(l._5F, l.map(_._5))
+        assertEquals(l._6F, l.map(_._6))
+        assertEquals(l._7F, l.map(_._7))
+        assertEquals(l._8F, l.map(_._8))
+        assertEquals(l._9F, l.map(_._9))
+        assertEquals(l._10F, l.map(_._10))
+        assertEquals(l._11F, l.map(_._11))
+        assertEquals(l._12F, l.map(_._12))
+        assertEquals(l._13F, l.map(_._13))
+        assertEquals(l._14F, l.map(_._14))
+        assertEquals(l._15F, l.map(_._15))
+        assertEquals(l._16F, l.map(_._16))
+        assertEquals(l._17F, l.map(_._17))
+        assertEquals(l._18F, l.map(_._18))
+        assertEquals(l._19F, l.map(_._19))
+        assertEquals(l._20F, l.map(_._20))
     }
   }
 
-  test("_1F, _2F, _3F, _4F, _5F, _6F, _7F, _8F, _9F, _10F, _11F, _12F, _13F, _14F, _15F, _16F, _17F, _18F, _19F, _20F, _21F works for Tuple21") {
-    forAll { (l: List[(Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int)]) =>
-      assertEquals(l._1F, l.map(_._1))
-      assertEquals(l._2F, l.map(_._2))
-      assertEquals(l._3F, l.map(_._3))
-      assertEquals(l._4F, l.map(_._4))
-      assertEquals(l._5F, l.map(_._5))
-      assertEquals(l._6F, l.map(_._6))
-      assertEquals(l._7F, l.map(_._7))
-      assertEquals(l._8F, l.map(_._8))
-      assertEquals(l._9F, l.map(_._9))
-      assertEquals(l._10F, l.map(_._10))
-      assertEquals(l._11F, l.map(_._11))
-      assertEquals(l._12F, l.map(_._12))
-      assertEquals(l._13F, l.map(_._13))
-      assertEquals(l._14F, l.map(_._14))
-      assertEquals(l._15F, l.map(_._15))
-      assertEquals(l._16F, l.map(_._16))
-      assertEquals(l._17F, l.map(_._17))
-      assertEquals(l._18F, l.map(_._18))
-      assertEquals(l._19F, l.map(_._19))
-      assertEquals(l._20F, l.map(_._20))
-      assertEquals(l._21F, l.map(_._21))
+  test(
+    "_1F, _2F, _3F, _4F, _5F, _6F, _7F, _8F, _9F, _10F, _11F, _12F, _13F, _14F, _15F, _16F, _17F, _18F, _19F, _20F, _21F works for Tuple21"
+  ) {
+    forAll {
+      (l: List[
+        (Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int)
+      ]) =>
+        assertEquals(l._1F, l.map(_._1))
+        assertEquals(l._2F, l.map(_._2))
+        assertEquals(l._3F, l.map(_._3))
+        assertEquals(l._4F, l.map(_._4))
+        assertEquals(l._5F, l.map(_._5))
+        assertEquals(l._6F, l.map(_._6))
+        assertEquals(l._7F, l.map(_._7))
+        assertEquals(l._8F, l.map(_._8))
+        assertEquals(l._9F, l.map(_._9))
+        assertEquals(l._10F, l.map(_._10))
+        assertEquals(l._11F, l.map(_._11))
+        assertEquals(l._12F, l.map(_._12))
+        assertEquals(l._13F, l.map(_._13))
+        assertEquals(l._14F, l.map(_._14))
+        assertEquals(l._15F, l.map(_._15))
+        assertEquals(l._16F, l.map(_._16))
+        assertEquals(l._17F, l.map(_._17))
+        assertEquals(l._18F, l.map(_._18))
+        assertEquals(l._19F, l.map(_._19))
+        assertEquals(l._20F, l.map(_._20))
+        assertEquals(l._21F, l.map(_._21))
     }
   }
 
-  test("_1F, _2F, _3F, _4F, _5F, _6F, _7F, _8F, _9F, _10F, _11F, _12F, _13F, _14F, _15F, _16F, _17F, _18F, _19F, _20F, _21F, _22F works for Tuple22") {
-    forAll { (l: List[(Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int)]) =>
-      assertEquals(l._1F, l.map(_._1))
-      assertEquals(l._2F, l.map(_._2))
-      assertEquals(l._3F, l.map(_._3))
-      assertEquals(l._4F, l.map(_._4))
-      assertEquals(l._5F, l.map(_._5))
-      assertEquals(l._6F, l.map(_._6))
-      assertEquals(l._7F, l.map(_._7))
-      assertEquals(l._8F, l.map(_._8))
-      assertEquals(l._9F, l.map(_._9))
-      assertEquals(l._10F, l.map(_._10))
-      assertEquals(l._11F, l.map(_._11))
-      assertEquals(l._12F, l.map(_._12))
-      assertEquals(l._13F, l.map(_._13))
-      assertEquals(l._14F, l.map(_._14))
-      assertEquals(l._15F, l.map(_._15))
-      assertEquals(l._16F, l.map(_._16))
-      assertEquals(l._17F, l.map(_._17))
-      assertEquals(l._18F, l.map(_._18))
-      assertEquals(l._19F, l.map(_._19))
-      assertEquals(l._20F, l.map(_._20))
-      assertEquals(l._21F, l.map(_._21))
-      assertEquals(l._22F, l.map(_._22))
+  test(
+    "_1F, _2F, _3F, _4F, _5F, _6F, _7F, _8F, _9F, _10F, _11F, _12F, _13F, _14F, _15F, _16F, _17F, _18F, _19F, _20F, _21F, _22F works for Tuple22"
+  ) {
+    forAll {
+      (l: List[
+        (Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int)
+      ]) =>
+        assertEquals(l._1F, l.map(_._1))
+        assertEquals(l._2F, l.map(_._2))
+        assertEquals(l._3F, l.map(_._3))
+        assertEquals(l._4F, l.map(_._4))
+        assertEquals(l._5F, l.map(_._5))
+        assertEquals(l._6F, l.map(_._6))
+        assertEquals(l._7F, l.map(_._7))
+        assertEquals(l._8F, l.map(_._8))
+        assertEquals(l._9F, l.map(_._9))
+        assertEquals(l._10F, l.map(_._10))
+        assertEquals(l._11F, l.map(_._11))
+        assertEquals(l._12F, l.map(_._12))
+        assertEquals(l._13F, l.map(_._13))
+        assertEquals(l._14F, l.map(_._14))
+        assertEquals(l._15F, l.map(_._15))
+        assertEquals(l._16F, l.map(_._16))
+        assertEquals(l._17F, l.map(_._17))
+        assertEquals(l._18F, l.map(_._18))
+        assertEquals(l._19F, l.map(_._19))
+        assertEquals(l._20F, l.map(_._20))
+        assertEquals(l._21F, l.map(_._21))
+        assertEquals(l._22F, l.map(_._22))
     }
   }
 }

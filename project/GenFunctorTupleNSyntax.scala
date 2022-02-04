@@ -14,15 +14,17 @@ object GenFunctorTupleNSyntax extends Template {
     import tv._
 
     val generatedFunctions: String =
-      (1 to arity).map { n =>
-        s"""
+      (1 to arity)
+        .map { n =>
+          s"""
           -  /**
           -   * Lifts [[Tuple$arity._$n]] into `F[_]`.
           -   */
-          -  def _${n}F(implicit F: Functor[F]): F[A${n-1}] = F.map(ftuple)(_._$n)
+          -  def _${n}F(implicit F: Functor[F]): F[A${n - 1}] = F.map(ftuple)(_._$n)
           -
         """
-      }.mkString("\n")
+        }
+        .mkString("\n")
 
     block"""
     |
