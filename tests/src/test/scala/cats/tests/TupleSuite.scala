@@ -228,9 +228,9 @@ class TupleSuite extends CatsSuite {
     assert((foo1, bar1).show === s"(${Show[Foo].show(foo1)},${Show[Bar].show(bar1)})")
     assert((foo1, bar1, baz1).show === s"(${Show[Foo].show(foo1)},${Show[Bar].show(bar1)},${Show[Baz].show(baz1)})")
     assert((foo1, bar1, baz1, foo2, bar2, baz2).show === s"(${Show[Foo].show(foo1)},${Show[Bar].show(bar1)},${Show[Baz]
-      .show(baz1)},${Show[Foo].show(foo2)},${Show[Bar].show(bar2)},${Show[Baz].show(baz2)})")
+        .show(baz1)},${Show[Foo].show(foo2)},${Show[Bar].show(bar2)},${Show[Baz].show(baz2)})")
     assert((foo1, bar1, baz1, foo2, bar2, baz2, foo3, bar3, baz3).show === s"(${Show[Foo].show(foo1)},${Show[Bar]
-      .show(bar1)},${Show[Baz].show(baz1)},${Show[Foo].show(foo2)},${Show[Bar].show(bar2)},${Show[Baz]
-      .show(baz2)},${Show[Foo].show(foo3)},${Show[Bar].show(bar3)},${Show[Baz].show(baz3)})")
+        .show(bar1)},${Show[Baz].show(baz1)},${Show[Foo].show(foo2)},${Show[Bar].show(bar2)},${Show[Baz]
+        .show(baz2)},${Show[Foo].show(foo3)},${Show[Bar].show(bar3)},${Show[Baz].show(baz3)})")
   }
 }
