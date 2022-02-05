@@ -73,6 +73,10 @@ trait SetInstances {
       override def empty[A]: Set[A] = Set.empty
 
       override def combineK[A](x: Set[A], y: Set[A]): Set[A] = x | y
+
+      override def prependK[A](a: A, fa: Set[A]): Set[A] = fa + a
+
+      override def appendK[A](fa: Set[A], a: A): Set[A] = fa + a
     }
 
   // Since iteration order is not guaranteed for sets, folds and other

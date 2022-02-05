@@ -102,6 +102,12 @@ class IorTSuite extends CatsSuite {
     }
   }
 
+  test("foldF with Id consistent with Ior fold") {
+    forAll { (iort: IorT[Id, String, Int], fa: String => Long, fb: Int => Long, fab: (String, Int) => Long) =>
+      assert(iort.foldF(fa, fb, fab) === (iort.value.fold(fa, fb, fab)))
+    }
+  }
+
   test("isLeft with Id consistent with Ior isLeft") {
     forAll { (iort: IorT[Id, String, Int]) =>
       assert(iort.isLeft === (iort.value.isLeft))

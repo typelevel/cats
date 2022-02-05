@@ -259,11 +259,25 @@ trait RingLaws[A] extends GroupLaws[A] { self =>
     }
   )
 
+  def semifield(implicit A: Semifield[A]) = new RingProperties(
+    name = "semifield",
+    al = additiveCommutativeMonoid,
+    ml = multiplicativeGroup,
+    parents = Seq(rig)
+  )
+
+  def commutativeSemifield(implicit A: CommutativeSemifield[A]) = new RingProperties(
+    name = "semifield",
+    al = additiveCommutativeMonoid,
+    ml = multiplicativeCommutativeGroup,
+    parents = Seq(semifield, commutativeRig)
+  )
+
   def divisionRing(implicit A: DivisionRing[A]) = new RingProperties(
     name = "division ring",
     al = additiveCommutativeGroup,
     ml = multiplicativeGroup,
-    parents = Seq(ring),
+    parents = Seq(ring, semifield),
     "fromDouble" -> forAll { (n: Double) =>
       if (Platform.isJvm) {
         // TODO: BigDecimal(n) is busted in scalajs, so we skip this test.
@@ -311,7 +325,7 @@ trait RingLaws[A] extends GroupLaws[A] { self =>
     name = "field",
     al = additiveCommutativeGroup,
     ml = multiplicativeCommutativeGroup,
-    parents = Seq(euclideanRing, divisionRing)
+    parents = Seq(euclideanRing, divisionRing, commutativeSemifield)
   )
 
   // Approximate fields such a Float or Double, even through filtered using FPFilter, do not work well with

@@ -3,7 +3,7 @@ import microsites._
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 import sbtrelease.ReleasePlugin.autoImport.ReleaseTransformations._
 
-val isDotty = Def.setting(
+val isScala3 = Def.setting(
   CrossVersion.partialVersion(scalaVersion.value).exists(_._1 == 3)
 )
 
@@ -19,27 +19,26 @@ ThisBuild / scalafixDependencies += "org.typelevel" %% "simulacrum-scalafix" % "
 
 val scalaCheckVersion = "1.15.4"
 
-val disciplineVersion = "1.1.5"
+val disciplineVersion = "1.4.0"
 
 val disciplineMunitVersion = "1.0.9"
 
-val kindProjectorVersion = "0.13.0"
+val kindProjectorVersion = "0.13.2"
 
 ThisBuild / githubWorkflowUseSbtThinClient := false
 
 val PrimaryOS = "ubuntu-latest"
 ThisBuild / githubWorkflowOSes := Seq(PrimaryOS)
 
-val PrimaryJava = "adopt@1.8"
-val LTSJava = "adopt@1.11"
-val LatestJava = "adopt@1.15"
-val GraalVM8 = "graalvm-ce-java8@20.2.0"
+val PrimaryJava = JavaSpec.temurin("8")
+val LTSJava = JavaSpec.temurin("17")
+val GraalVM11 = JavaSpec.graalvm("20.3.1", "11")
 
-ThisBuild / githubWorkflowJavaVersions := Seq(PrimaryJava, LTSJava, LatestJava, GraalVM8)
+ThisBuild / githubWorkflowJavaVersions := Seq(PrimaryJava, LTSJava, GraalVM11)
 
-val Scala212 = "2.12.14"
-val Scala213 = "2.13.6"
-val Scala3 = "3.0.1"
+val Scala212 = "2.12.15"
+val Scala213 = "2.13.8"
+val Scala3 = "3.0.2"
 
 ThisBuild / crossScalaVersions := Seq(Scala212, Scala213, Scala3)
 ThisBuild / scalaVersion := Scala213
@@ -52,8 +51,8 @@ ThisBuild / githubWorkflowBuildMatrixAdditions +=
 
 ThisBuild / githubWorkflowBuildMatrixExclusions ++=
   githubWorkflowJavaVersions.value.filterNot(Set(PrimaryJava)).flatMap { java =>
-    Seq(MatrixExclude(Map("platform" -> "js", "java" -> java)),
-        MatrixExclude(Map("platform" -> "native", "java" -> java))
+    Seq(MatrixExclude(Map("platform" -> "js", "java" -> java.render)),
+        MatrixExclude(Map("platform" -> "native", "java" -> java.render))
     )
   }
 
@@ -147,7 +146,7 @@ def doctestGenTestsDottyCompat(isDotty: Boolean, genTests: Seq[File]): Seq[File]
   if (isDotty) Nil else genTests
 
 lazy val commonSettings = Seq(
-  scalacOptions ++= commonScalacOptions(scalaVersion.value, isDotty.value),
+  scalacOptions ++= commonScalacOptions(scalaVersion.value, isScala3.value),
   Compile / unmanagedSourceDirectories ++= scalaVersionSpecificFolders("main", baseDirectory.value, scalaVersion.value),
   Test / unmanagedSourceDirectories ++= scalaVersionSpecificFolders("test", baseDirectory.value, scalaVersion.value),
   resolvers ++= Seq(Resolver.sonatypeRepo("releases"), Resolver.sonatypeRepo("snapshots")),
@@ -162,7 +161,7 @@ def macroDependencies(scalaVersion: String) =
 lazy val catsSettings = Seq(
   incOptions := incOptions.value.withLogRecompileOnMacro(false),
   libraryDependencies ++= (
-    if (isDotty.value) Nil
+    if (isScala3.value) Nil
     else
       Seq(
         compilerPlugin(("org.typelevel" %% "kind-projector" % kindProjectorVersion).cross(CrossVersion.full))
@@ -171,9 +170,10 @@ lazy val catsSettings = Seq(
 ) ++ commonSettings ++ publishSettings ++ simulacrumSettings
 
 lazy val simulacrumSettings = Seq(
-  libraryDependencies ++= (if (isDotty.value) Nil else Seq(compilerPlugin(scalafixSemanticdb))),
+  libraryDependencies ++= (if (isScala3.value) Nil else Seq(compilerPlugin(scalafixSemanticdb))),
   scalacOptions ++= (
-    if (isDotty.value) Nil else Seq(s"-P:semanticdb:targetroot:${baseDirectory.value}/target/.semanticdb", "-Yrangepos")
+    if (isScala3.value) Nil
+    else Seq(s"-P:semanticdb:targetroot:${baseDirectory.value}/target/.semanticdb", "-Yrangepos")
   ),
   libraryDependencies += "org.typelevel" %% "simulacrum-scalafix-annotations" % "0.5.4"
 )
@@ -191,7 +191,7 @@ lazy val commonJsSettings = Seq(
       else tv
     val a = (LocalRootProject / baseDirectory).value.toURI.toString
     val g = "https://raw.githubusercontent.com/typelevel/cats/" + tagOrHash
-    val opt = if (isDotty.value) "-scalajs-mapSourceURI" else "-P:scalajs:mapSourceURI"
+    val opt = if (isScala3.value) "-scalajs-mapSourceURI" else "-P:scalajs:mapSourceURI"
     s"$opt:$a->$g/"
   },
   Global / scalaJSStage := FullOptStage,
@@ -361,7 +361,7 @@ def mimaSettings(moduleName: String, includeCats1: Boolean = true) =
     mimaBinaryIssueFilters ++= {
       import com.typesafe.tools.mima.core.ProblemFilters._
       import com.typesafe.tools.mima.core._
-      //Only sealed abstract classes that provide implicit instances to companion objects are allowed here, since they don't affect usage outside of the file.
+      // Only sealed abstract classes that provide implicit instances to companion objects are allowed here, since they don't affect usage outside of the file.
       Seq(
         exclude[DirectMissingMethodProblem]("cats.data.OptionTInstances2.catsDataTraverseForOptionT"),
         exclude[DirectMissingMethodProblem]("cats.data.KleisliInstances1.catsDataCommutativeArrowForKleisliId"),
@@ -374,8 +374,8 @@ def mimaSettings(moduleName: String, includeCats1: Boolean = true) =
         exclude[DirectMissingMethodProblem]("cats.data.OptionTInstances1.catsDataMonadErrorMonadForOptionT"),
         exclude[DirectMissingMethodProblem]("cats.data.OptionTInstances1.catsDataMonadErrorForOptionT")
       ) ++
-        //These things are Ops classes that shouldn't have the `value` exposed. These should have never been public because they don't
-        //provide any value. Making them private because of issues like #2514 and #2613.
+        // These things are Ops classes that shouldn't have the `value` exposed. These should have never been public because they don't
+        // provide any value. Making them private because of issues like #2514 and #2613.
         Seq(
           exclude[DirectMissingMethodProblem]("cats.ApplicativeError#LiftFromOptionPartially.dummy"),
           exclude[DirectMissingMethodProblem]("cats.data.Const#OfPartiallyApplied.dummy"),
@@ -465,7 +465,7 @@ def mimaSettings(moduleName: String, includeCats1: Boolean = true) =
           exclude[IncompatibleMethTypeProblem]("cats.arrow.FunctionKMacros#Lifter.this"),
           exclude[IncompatibleResultTypeProblem]("cats.arrow.FunctionKMacros#Lifter.c"),
           exclude[DirectMissingMethodProblem]("cats.arrow.FunctionKMacros.compatNewTypeName")
-        ) ++ //package private classes no longer needed
+        ) ++ // package private classes no longer needed
         Seq(
           exclude[MissingClassProblem]("cats.kernel.compat.scalaVersionMoreSpecific$"),
           exclude[MissingClassProblem]("cats.kernel.compat.scalaVersionMoreSpecific"),
@@ -516,6 +516,12 @@ def mimaSettings(moduleName: String, includeCats1: Boolean = true) =
         Seq(
           exclude[MissingClassProblem]("algebra.laws.IsSerializable"),
           exclude[MissingClassProblem]("algebra.laws.IsSerializable$")
+        ) ++ // https://github.com/typelevel/cats/pull/3987
+        Seq(
+          exclude[DirectAbstractMethodProblem]("cats.free.ContravariantCoyoneda.k"),
+          exclude[ReversedAbstractMethodProblem]("cats.free.ContravariantCoyoneda.k"),
+          exclude[DirectAbstractMethodProblem]("cats.free.Coyoneda.k"),
+          exclude[ReversedAbstractMethodProblem]("cats.free.Coyoneda.k")
         )
     }
   )
@@ -705,6 +711,11 @@ lazy val algebra = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .nativeSettings(commonNativeSettings)
   .settings(testingDependencies)
   .settings(
+    scalacOptions := {
+      if (isScala3.value)
+        scalacOptions.value.filterNot(Set("-Xfatal-warnings"))
+      else scalacOptions.value
+    },
     libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % Test
   )
 
@@ -715,7 +726,14 @@ lazy val algebraLaws = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .settings(publishSettings)
   .settings(disciplineDependencies)
   .settings(testingDependencies)
-  .settings(Test / scalacOptions := (Test / scalacOptions).value.filter(_ != "-Xfatal-warnings"))
+  .settings(
+    scalacOptions := {
+      if (isScala3.value)
+        scalacOptions.value.filterNot(Set("-Xfatal-warnings"))
+      else scalacOptions.value
+    },
+    Test / scalacOptions := (Test / scalacOptions).value.filter(_ != "-Xfatal-warnings")
+  )
   .jsSettings(commonJsSettings)
   .jvmSettings(
     commonJvmSettings ++ mimaSettings("algebra-laws") ++ Seq(
@@ -734,13 +752,13 @@ lazy val core = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .settings(includeGeneratedSrc)
   .settings(
     libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % Test,
-    doctestGenTests := doctestGenTestsDottyCompat(isDotty.value, doctestGenTests.value)
+    doctestGenTests := doctestGenTestsDottyCompat(isScala3.value, doctestGenTests.value)
   )
   .settings(
     Compile / scalacOptions :=
       (Compile / scalacOptions).value.filter {
-        case "-Xfatal-warnings" if isDotty.value => false
-        case _                                   => true
+        case "-Xfatal-warnings" if isScala3.value => false
+        case _                                    => true
       }
   )
   .jsSettings(commonJsSettings)
@@ -984,26 +1002,31 @@ addCommandAlias("buildCoreJVM", ";coreJVM/test")
 addCommandAlias("buildTestsJVM", ";lawsJVM/test;testkitJVM/test;testsJVM/test;jvm/test")
 addCommandAlias("buildFreeJVM", ";freeJVM/test")
 addCommandAlias("buildAlleycatsJVM", ";alleycatsCoreJVM/test;alleycatsLawsJVM/test;alleycatsTestsJVM/test")
-addCommandAlias("buildJVM", ";buildKernelJVM;buildCoreJVM;buildTestsJVM;buildFreeJVM;buildAlleycatsJVM")
+addCommandAlias("buildAlgebraJVM", ";algebraJVM/test;algebraLawsJVM/test")
+addCommandAlias("buildJVM", ";buildKernelJVM;buildCoreJVM;buildTestsJVM;buildFreeJVM;buildAlleycatsJVM;buildAlgebraJVM")
 addCommandAlias("validateBC", ";binCompatTest/test;catsJVM/mimaReportBinaryIssues")
 addCommandAlias("validateJVM", ";fmtCheck;buildJVM;bench/test;validateBC;makeMicrosite")
 addCommandAlias("validateJS", ";testsJS/test;js/test")
 addCommandAlias("validateKernelJS", "kernelLawsJS/test")
 addCommandAlias("validateFreeJS", "freeJS/test")
 addCommandAlias("validateAlleycatsJS", "alleycatsTestsJS/test")
-addCommandAlias("validateAllJS", "all testsJS/test js/test kernelLawsJS/test freeJS/test alleycatsTestsJS/test")
+addCommandAlias("validateAlgebraJS", "algebraLawsJS/test")
+addCommandAlias("validateAllJS",
+                "all testsJS/test js/test kernelLawsJS/test freeJS/test alleycatsTestsJS/test algebraLawsJS/test"
+)
 addCommandAlias("validateNative", ";testsNative/test;native/test")
 addCommandAlias("validateKernelNative", "kernelLawsNative/test")
 addCommandAlias("validateFreeNative", "freeNative/test")
 addCommandAlias("validateAlleycatsNative", "alleycatsTestsNative/test")
+addCommandAlias("validateAlgebraNative", "algebraLawsNative/test")
 
 val validateAllNativeAlias =
-  "all testsNative/test native/test kernelLawsNative/test freeNative/test alleycatsTestsNative/test"
+  "all testsNative/test native/test kernelLawsNative/test freeNative/test alleycatsTestsNative/test algebraLawsNative/test"
 addCommandAlias("validateAllNative", validateAllNativeAlias)
 
 addCommandAlias(
   "validate",
-  ";clean;validateJS;validateKernelJS;validateFreeJS;validateNative;validateKernelNative;validateFreeNative;validateJVM"
+  ";clean;validateJS;validateKernelJS;validateFreeJS;validateAlleycatsJS;validateAlgebraJS;validateNative;validateKernelNative;validateFreeNative;validateAlgebraNative;validateJVM"
 )
 
 addCommandAlias("prePR", "fmt")
@@ -1085,7 +1108,7 @@ lazy val sharedReleaseProcess = Seq(
     checkSnapshotDependencies,
     inquireVersions,
     runClean,
-    runTest, //temporarily only run test in current scala version because docs won't build in 2.13 yet
+    runTest, // temporarily only run test in current scala version because docs won't build in 2.13 yet
     setReleaseVersion,
     commitReleaseVersion,
     tagRelease,
@@ -1098,7 +1121,7 @@ lazy val sharedReleaseProcess = Seq(
 )
 
 lazy val warnUnusedImport = Seq(
-  scalacOptions ++= (if (isDotty.value) Nil else Seq("-Ywarn-unused:imports")),
+  scalacOptions ++= (if (isScala3.value) Nil else Seq("-Ywarn-unused:imports")),
   Compile / console / scalacOptions ~= (_.filterNot(Set("-Ywarn-unused-import", "-Ywarn-unused:imports"))),
   Test / console / scalacOptions := (Compile / console / scalacOptions).value
 )

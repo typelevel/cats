@@ -2,7 +2,6 @@ package cats
 
 import simulacrum.typeclass
 import simulacrum.noop
-import scala.annotation.implicitNotFound
 
 /**
  * FlatMap type class gives us flatMap, which allows us to have a value
@@ -19,7 +18,6 @@ import scala.annotation.implicitNotFound
  *
  * Must obey the laws defined in cats.laws.FlatMapLaws.
  */
-@implicitNotFound("Could not find an instance of FlatMap for ${F}")
 @typeclass trait FlatMap[F[_]] extends Apply[F] {
   def flatMap[A, B](fa: F[A])(f: A => F[B]): F[B]
 

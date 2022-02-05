@@ -4,6 +4,7 @@ import cats.{Eval, Foldable, Id, Now}
 import cats.data.NonEmptyLazyList
 import cats.laws.discipline.{ExhaustiveCheck, MiniInt, NonEmptyParallelTests, ParallelTests}
 import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.DeprecatedEqInstances
 import cats.syntax.either._
 import cats.syntax.foldable._
 import cats.syntax.parallel._
@@ -12,15 +13,19 @@ import cats.syntax.eq._
 import org.scalacheck.Prop._
 import cats.kernel.{Eq, Order}
 import cats.laws.discipline.eq._
+import org.scalacheck.Arbitrary
 
 trait ScalaVersionSpecificFoldableSuite { self: FoldableSuiteAdditional =>
-  test("Foldable[LazyList].foldM stack safety") {
-    checkMonadicFoldsStackSafety[LazyList](_.to(LazyList))
-  }
+  test("Foldable[LazyList] monadic folds stack safety")(checkMonadicFoldsStackSafety(_.to(LazyList)))
+  test("Foldable[LazyList].slidingN stack safety")(checkSlidingNStackSafety(_.to(LazyList)))
 
-  test("Foldable[NonEmptyLazyList].foldM/existsM/forallM/findM/collectFirstSomeM stack safety") {
-    checkMonadicFoldsStackSafety[NonEmptyLazyList](xs => NonEmptyLazyList(xs.head, xs.tail: _*))
-  }
+  test("Foldable[NonEmptyLazyList] monadic folds stack safety")(
+    checkMonadicFoldsStackSafety(xs => NonEmptyLazyList(xs.head, xs.tail: _*))
+  )
+
+  test("Foldable[NonEmptyLazyList].slidingN stack safety")(
+    checkSlidingNStackSafety(xs => NonEmptyLazyList(xs.head, xs.tail: _*))
+  )
 
   private def bombLazyList[A]: A = sys.error("boom")
   private val dangerousLazyList = 0 #:: 1 #:: 2 #:: bombLazyList[Int] #:: LazyList.empty
@@ -126,7 +131,7 @@ trait ScalaVersionSpecificParallelSuite { self: ParallelSuite =>
 
   test("ParTupled of LazyList should be consistent with zip") {
     forAll { (fa: LazyList[Int], fb: LazyList[Int], fc: LazyList[Int], fd: LazyList[Int]) =>
-      assert((fa, fb, fc, fd).parTupled === (fa.zip(fb).zip(fc).zip(fd).map { case (((a, b), c), d) => (a, b, c, d) }))
+      assert((fa, fb, fc, fd).parTupled === fa.zip(fb).zip(fc).zip(fd).map { case (((a, b), c), d) => (a, b, c, d) })
     }
   }
 
@@ -166,6 +171,7 @@ trait ScalaVersionSpecificTraverseSuite { self: TraverseSuiteAdditional =>
 
 trait ScalaVersionSpecificAlgebraInvariantSuite {
 
+  // This version-specific instance is required since 2.12 and below do not have parseString on the Numeric class
   protected val integralForMiniInt: Integral[MiniInt] = new Integral[MiniInt] {
     def compare(x: MiniInt, y: MiniInt): Int = Order[MiniInt].compare(x, y)
     def plus(x: MiniInt, y: MiniInt): MiniInt = x + y
@@ -182,6 +188,7 @@ trait ScalaVersionSpecificAlgebraInvariantSuite {
     def parseString(str: String): Option[MiniInt] = Integral[Int].parseString(str).flatMap(MiniInt.fromInt)
   }
 
+  // This version-specific instance is required since 2.12 and below do not have parseString on the Numeric class
   implicit protected def eqNumeric[A: Eq: ExhaustiveCheck]: Eq[Numeric[A]] = Eq.by { numeric =>
     // This allows us to catch the case where the fromInt overflows. We use the None to compare two Numeric instances,
     // verifying that when fromInt throws for one, it throws for the other.
@@ -210,6 +217,34 @@ trait ScalaVersionSpecificAlgebraInvariantSuite {
       numeric.toDouble _,
       parseMiniIntStrings
     )
+  }
+
+  // This version-specific instance is required since 2.12 and below do not have parseString on the Numeric class
+  implicit protected def eqFractional[A: Eq: Arbitrary]: Eq[Fractional[A]] = {
+    // This deprecated instance is required since there is not `ExhaustiveCheck` for any types for which a `Fractional`
+    // can easily be defined
+    import DeprecatedEqInstances.catsLawsEqForFn1
+
+    Eq.by { fractional =>
+      val parseFloatStrings: Option[Double] => Option[A] = {
+        case Some(f) => fractional.parseString(f.toString)
+        case None    => fractional.parseString("invalid") // Use this to test parsing of non-numeric strings
+      }
+
+      (
+        fractional.compare _,
+        fractional.plus _,
+        fractional.minus _,
+        fractional.times _,
+        fractional.negate _,
+        fractional.fromInt _,
+        fractional.toInt _,
+        fractional.toLong _,
+        fractional.toFloat _,
+        fractional.toDouble _,
+        parseFloatStrings
+      )
+    }
   }
 
 }

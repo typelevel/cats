@@ -23,7 +23,10 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
 
       def empty[A]: Option[A] = None
 
-      def combineK[A](x: Option[A], y: Option[A]): Option[A] = x.orElse(y)
+      def combineK[A](x: Option[A], y: Option[A]): Option[A] = if (x.isDefined) x else y
+
+      override def prependK[A](a: A, fa: Option[A]): Option[A] = Some(a)
+      override def appendK[A](fa: Option[A], a: A): Option[A] = if (fa.isDefined) fa else Some(a)
 
       override def combineKEval[A](x: Option[A], y: Eval[Option[A]]): Eval[Option[A]] =
         x match {

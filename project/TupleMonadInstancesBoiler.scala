@@ -85,13 +85,17 @@ object GenTupleMonadInstances extends Template {
     -    new FlatMapTuple$arity${`[A0, A(N - 1)]`}(${`A0, A(N - 1)`}) with CommutativeFlatMap[${`(A..N - 1, *)`}]
     |}
     |private[cats] sealed trait NTupleMonadInstances3 extends NTupleMonadInstances4 { this: NTupleMonadInstances =>
-    -  implicit def catsStdMonadForTuple$arity${`[A0, A(N - 1)]`}${`constraints A..(N-1)`("Monoid")}: Monad[${`(A..N - 1, *)`}] =
+    -  implicit def catsStdMonadForTuple$arity${`[A0, A(N - 1)]`}${`constraints A..(N-1)`(
+      "Monoid"
+    )}: Monad[${`(A..N - 1, *)`}] =
     -    new FlatMapTuple$arity${`[A0, A(N - 1)]`}(${`A0, A(N - 1)`}) with Monad[${`(A..N - 1, *)`}] {
     -      def pure[A](a: A): ${`A0, A(N - 1)&`("A")} = $monadPureMethod
     -    }
     |}
     |private[cats] sealed trait NTupleMonadInstances4 extends NTupleMonadInstances5 { this: NTupleMonadInstances =>
-    -  implicit def catsStdFlatMapForTuple$arity${`[A0, A(N - 1)]`}${`constraints A..(N-1)`("Semigroup")}: FlatMap[${`(A..N - 1, *)`}] =
+    -  implicit def catsStdFlatMapForTuple$arity${`[A0, A(N - 1)]`}${`constraints A..(N-1)`(
+      "Semigroup"
+    )}: FlatMap[${`(A..N - 1, *)`}] =
     -    new FlatMapTuple$arity${`[A0, A(N - 1)]`}(${`A0, A(N - 1)`})
     |}
     |private[cats] sealed trait NTupleMonadInstances5 { this: NTupleMonadInstances =>
@@ -99,10 +103,14 @@ object GenTupleMonadInstances extends Template {
     -    catsStdInstancesForTuple$arity
     |}
     -
-    -private[instances] class $flatMapTupleClass${`[A0, A(N - 1)]`}(${`parameters A..(N-1)`("Semigroup")}) extends FlatMap[${`(A..N - 1, *)`}] {
+    -private[instances] class $flatMapTupleClass${`[A0, A(N - 1)]`}(${`parameters A..(N-1)`(
+      "Semigroup"
+    )}) extends FlatMap[${`(A..N - 1, *)`}] {
     -  override def ap[A, B](ff: ${`A0, A(N - 1)&`("A => B")})(fa: ${`A0, A(N - 1)&`("A")}): ${`A0, A(N - 1)&`("B")} =
     -    ${`combine A..(N - 1)`("ff", "fa", s"ff._$arity(fa._$arity)")}
-    -  override def product[A, B](fa: ${`A0, A(N - 1)&`("A")}, fb: ${`A0, A(N - 1)&`("B")}): ${`A0, A(N - 1)&`("(A, B)")} =
+    -  override def product[A, B](fa: ${`A0, A(N - 1)&`("A")}, fb: ${`A0, A(N - 1)&`("B")}): ${`A0, A(N - 1)&`(
+      "(A, B)"
+    )} =
     -    ${`combine A..(N - 1)`("fa", "fb", s"(fa._$arity, fb._$arity)")}
     -  override def map[A, B](fa: ${`A0, A(N - 1)&`("A")})(f: A => B): ${`A0, A(N - 1)&`("B")} =
     -    fa.copy(_$arity = f(fa._$arity))

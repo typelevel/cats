@@ -36,7 +36,7 @@ The easiest approach to Cats imports is to import everything that's commonly nee
 ```scala mdoc:silent
 import cats._
 import cats.data._
-import cats.implicits._
+import cats.syntax.all._
 ```
 
 This should be all that you need, but if you'd like to learn more about the details of imports than you can check out the [import guide](typeclasses/imports.html).
@@ -49,7 +49,7 @@ Please refer to the [jump start guide]({{ site.baseurl }}/jump_start_guide.html)
 
 Cats and [Scalaz](https://github.com/scalaz/scalaz) have the same goal: to facilitate pure functional programming in Scala applications. However the underlying core strategy is different; Scalaz took the approach of trying to provide a single batteries-included *standard library* for FP that powers the Scala applications. Cats, on the other hand, aims to help build an [ecosystem](/cats/#ecosystem) of pure FP libraries by providing a solid and stable foundation; these libraries can have their own styles and personalities, competing with each other, while at the same time playing nice. It is through this ecosystem of FP libraries (cats included) that Scala applications can be powered with "FP awesome-ness" and beyond by picking whatever best fit their needs.
 
-Based on this core strategy, Cats takes a [modular](/cats/motivations#modularity) approach and focuses on providing core, [binary compatible](/cats/#binary-compatibility-and-versioning), [approachable](/cats/motivations#approachability) and [efficient](/cats/motivations#efficiency) abstractions. It provides a welcoming and supportive environment for the [user community](https://gitter.im/typelevel/cats) governed by the [Scala code of conduct](https://www.scala-lang.org/conduct/). It also takes great effort in supplying a comprehensive and beginner-friendly [documentation](/cats/#documentation).
+Based on this core strategy, Cats takes a [modular](/cats/motivations#modularity) approach and focuses on providing core, [binary compatible](/cats/#binary-compatibility-and-versioning), [approachable](/cats/motivations#approachability) and [efficient](/cats/motivations#efficiency) abstractions. It provides a welcoming and supportive environment for the [user community](https://discord.gg/XF3CXcMzqD) governed by the [Scala Code of Conduct](https://www.scala-lang.org/conduct/). It also takes great effort in supplying a comprehensive and beginner-friendly [documentation](/cats/#documentation).
 
 ## <a id="either" href="#either"></a>Where is right-biased Either?
 Up through Cats 0.7.x we had `cats.data.Xor`, which was effectively `scala.util.Either`, but right-biased by default and with
@@ -241,7 +241,7 @@ All other symbols can be imported with `import cats.implicits._`
 | `f <<< g`                        | Arrow compose            |                  | `Compose[F[_, _]]`      | `compose(f: F[B, C], g: F[A, B]): F[A, C]`                          |
 | `f >>> g`                        | Arrow andThen            |                  | `Compose[F[_, _]]`      | `andThen(f: F[B, C], g: F[A, B]): F[A, C]`                          |
 | `f &&& g`                        | Arrow merge              |                  | `Arrow[F[_, _]]`        | `merge[A, B, C](f: F[A, B], g: F[A, C]): F[A, (B, C)]`              |
-| `f -< g`                         | Arrow combine and bypass |                  | `Arrow[F[_, _]]`        | `combineAndByPass[A, B, C](f: F[A, B], g: F[B, C]): F[A, (B, C)]`   | 
+| `f -< g`                         | Arrow combine and bypass |                  | `Arrow[F[_, _]]`        | `combineAndByPass[A, B, C](f: F[A, B], g: F[B, C]): F[A, (B, C)]`   |
 | `F ~> G`                         | natural transformation   |                  | `FunctionK[F[_], G[_]]` | `FunctionK` alias                                                   |
 | `F :<: G`                        | injectK                  |                  | `InjectK[F[_], G[_]]`   | `InjectK` alias                                                     |
 | `F :≺: G`                        | injectK                  |                  | `InjectK[F[_], G[_]]`   | `InjectK` alias                                                     |
@@ -265,14 +265,14 @@ The Сats community welcomes and encourages contributions, even if you are compl
 
 See the [contributing guide]({{ site.baseurl }}/contributing.html) for more information.
 
-## <a id="ammonite" href="#ammonite"></a>How to try Cats in a REPL? 
+## <a id="ammonite" href="#ammonite"></a>How to try Cats in a REPL?
 
 The easiest way is probably using [Ammonite-REPL](http://ammonite.io/). Install it following the instructions there. Then in the amm console you can type in
 ```scala
 // interp.configureCompiler(_.settings.YpartialUnification.value = true) // If using scala 2.11 or 2.12
 import $ivy.`org.typelevel::cats-core:2.1.1`, cats._, cats.data._, cats.implicits._
 ```
-Or if you want, you can add these lines to `~/.ammonite/predef.sc` so that they are enabled every ammonite session. 
+Or if you want, you can add these lines to `~/.ammonite/predef.sc` so that they are enabled every ammonite session.
 
 ## <a id="monad-transformer-variance" href="#monad-transformer-variance"></a>Why aren't monad transformers like `OptionT` and `EitherT` covariant like `Option` and `Either`?
 

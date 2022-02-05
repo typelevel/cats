@@ -184,6 +184,7 @@ object SyntaxSuite {
     val mb4: M[B] = ma.parProductR(mb)
     val mab2: M[(A, B)] = ma.parProduct(mb)
     val mb5: M[B] = mab.parAp(ma)
+    val mla: M[List[A]] = ma.parReplicateA(mock[Int])
   }
 
   def testParallelUnorderedTraverse[M[_]: Monad, F[_]: CommutativeApplicative, T[_]: UnorderedTraverse: FlatMap, A, B](
@@ -285,9 +286,16 @@ object SyntaxSuite {
     val fb1: F[B] = fa.as(b)
   }
 
-  def testApply[F[_]: Apply: Semigroupal, G[_]: Contravariant: Semigroupal, H[
-    _
-  ]: Invariant: Semigroupal, A, B, C, D, E, Z] = {
+  def testApply[F[_]: Apply: Semigroupal,
+                G[_]: Contravariant: Semigroupal,
+                H[_]: Invariant: Semigroupal,
+                A,
+                B,
+                C,
+                D,
+                E,
+                Z
+  ] = {
     val tfabc = mock[(F[A], F[B], F[C])]
     val fa = mock[F[A]]
     val fb = mock[F[B]]
@@ -354,7 +362,15 @@ object SyntaxSuite {
     val gfab2 = fgab.leftSequence
   }
 
-  def testAlternativeMonad[F[_]: Alternative: Monad, G[_]: Foldable, H[_, _]: Bifoldable, A, B]: Unit = {
+  def testNonEmptyAlternative[F[_]: NonEmptyAlternative, A]: Unit = {
+    val fa = mock[F[A]]
+    val a = mock[A]
+
+    val fa1: F[A] = fa.prependK(a)
+    val fa2: F[A] = fa.appendK(a)
+  }
+
+  def testAlternativeFlatMap[F[_]: Alternative: FlatMap, G[_]: Foldable, H[_, _]: Bifoldable, A, B]: Unit = {
     val fga = mock[F[G[A]]]
     val fa = fga.unite
 

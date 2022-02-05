@@ -18,6 +18,10 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
 
       def combineK[A](x: Vector[A], y: Vector[A]): Vector[A] = x ++ y
 
+      override def prependK[A](a: A, fa: Vector[A]): Vector[A] = a +: fa
+
+      override def appendK[A](fa: Vector[A], a: A): Vector[A] = fa :+ a
+
       def pure[A](x: A): Vector[A] = Vector(x)
 
       override def map[A, B](fa: Vector[A])(f: A => B): Vector[B] =

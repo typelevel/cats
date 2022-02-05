@@ -17,6 +17,8 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
 
       def combineK[A](x: Stream[A], y: Stream[A]): Stream[A] = x #::: y
 
+      override def prependK[A](a: A, fa: Stream[A]): Stream[A] = a #:: fa
+
       def pure[A](x: A): Stream[A] = Stream(x)
 
       override def map[A, B](fa: Stream[A])(f: A => B): Stream[B] =
