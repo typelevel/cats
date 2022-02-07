@@ -8,7 +8,7 @@ scaladoc: "#cats.Bifoldable"
 
 # Bifoldable
 
-`Bifoldable` takes two type parameters and identifies data structures with two varieties of elements foldable to the same summary value.
+`Bifoldable[F[_,_]]` instances identify data structures with two independent `Foldable` that fold to the same summary value.
 
 As a reminder `Foldable` is implemented in terms of `foldLeft` and `foldRight`; similarly `Bifoldable` is implemented in terms of:
 ```scala
@@ -51,7 +51,7 @@ case class Report(entries: List[String], errors: Int) {
 
 `Bifoldable` is useful to get a summary value from `F[_,_]` data types:
 ```scala mdoc
-def update[T[_, _]: Bifoldable](current: Report)(result: T[Exception, String]): Report =
+def update[F[_, _]: Bifoldable](current: Report)(result: F[Exception, String]): Report =
   result.bifoldLeft(current)((acc, _) => acc.withError, (acc, user) => acc.withEntries(user))
 ```
 
