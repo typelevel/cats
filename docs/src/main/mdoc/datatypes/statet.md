@@ -100,7 +100,15 @@ object GameState {
 }
 ```
 
-In the code above you can see some useful functions, such the one that returns the encrypted target word.
+In the code above you can see some useful functions, such the one that returns the encrypted target word. A brief example here:
+
+```scala mdoc
+val gameState1 = GameState("cats")
+println(GameState.showWordHidden(gameState1))
+val gameState2 = GameState.attemptGuess(gameState1, "bats")
+println(GameState.showWordHidden(gameState2.getOrElse(???)))
+```
+
 Let's focus on the state machine game steps.
 
 ```scala mdoc:silent
@@ -165,4 +173,5 @@ Finally, we can wire everithing together in the following way:
 } yield ()).value
 ```
 
+We hope this example helps clarifying how `StateT` can help in designing a computation based on state machine steps that may requires side effects or other capabilities, eg `Option`, `List`, `Fiber` etc
 You can find the full source of the example [here](https://gist.github.com/benkio/46f5aea4f15ec059f02d6bfe9bd25e99)
