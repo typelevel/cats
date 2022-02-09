@@ -1,7 +1,7 @@
 package cats.tests
 
 import cats._
-import cats.data.{EitherT, State}
+import cats.data.{EitherT, Ior, IorT, State}
 import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
@@ -659,4 +659,9 @@ class EitherTSuite extends CatsSuite {
     }
   }
 
+  test("toIor is consistent with IorT(eitherT.value.map(Ior.fromEither))") {
+    forAll { (eitherT: EitherT[List, String, Int]) =>
+      assert(eitherT.toIor === IorT(eitherT.value.map(Ior.fromEither)))
+    }
+  }
 }

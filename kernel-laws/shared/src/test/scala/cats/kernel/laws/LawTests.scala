@@ -148,6 +148,9 @@ class Tests extends TestsConfig with DisciplineSuite {
   checkAll("PartialOrder[Vector[HasPartialOrder[Int]]]", PartialOrderTests[Vector[HasPartialOrder[Int]]].partialOrder)
   checkAll("PartialOrder[Stream[HasPartialOrder[Int]]]", PartialOrderTests[Stream[HasPartialOrder[Int]]].partialOrder)
   checkAll("PartialOrder[Queue[HasPartialOrder[Int]]]", PartialOrderTests[Queue[HasPartialOrder[Int]]].partialOrder)
+  checkAll("PartialOrder[SortedMap[Int, HasPartialOrder[Int]]]",
+           PartialOrderTests[SortedMap[Int, HasPartialOrder[Int]]].partialOrder
+  )
   checkAll("Semilattice.asMeetPartialOrder[Set[Int]]",
            PartialOrderTests(Semilattice.asMeetPartialOrder[Set[Int]]).partialOrder
   )
@@ -171,6 +174,7 @@ class Tests extends TestsConfig with DisciplineSuite {
   checkAll("Order[Stream[Int]]", OrderTests[Stream[Int]].order)
   checkAll("Order[Queue[Int]]", OrderTests[Queue[Int]].order)
   checkAll("Order[SortedSet[String]", OrderTests[SortedSet[String]].order)
+  checkAll("Order[SortedMap[Int, String]]", OrderTests[SortedMap[Int, String]].order)
   checkAll("fromOrdering[Int]", OrderTests(Order.fromOrdering[Int]).order)
   checkAll("Order.reverse(Order[Int])", OrderTests(Order.reverse(Order[Int])).order)
   checkAll("Order.reverse(Order.reverse(Order[Int]))", OrderTests(Order.reverse(Order.reverse(Order[Int]))).order)

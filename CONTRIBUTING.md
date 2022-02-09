@@ -46,7 +46,7 @@ pull request. The preferred ways to do that are to either:
 
  * [create a GitHub issue](https://github.com/typelevel/cats/issues/new)
    describing your idea.
- * get feedback in the [cats Gitter room](https://gitter.im/typelevel/cats).
+ * get feedback in the [Typelevel Discord](https://discord.gg/XF3CXcMzqD)
 
 Things that belong in Cats generally have the following characteristics:
 
@@ -192,7 +192,14 @@ The documentation for this website is stored alongside the source, in the [docs 
 
 ### Generating the Site
 
-run `sbt docs/makeMicrosite`
+The microsite generation requires a specific scala version that might
+differ from the project's one. We strongly suggest to check the CI's
+workflow to discover the proper version:
+[CI scala-version matrix](https://github.com/typelevel/cats/blob/main/.github/workflows/ci.yml#L230) and [CI makeMicrosite
+command](https://github.com/typelevel/cats/blob/main/.github/workflows/ci.yml#L281)
+
+At the moment the command is:
+`sbt ++2.12.15 docs/makeMicrosite`
 
 ### Previewing the site
 
@@ -251,8 +258,8 @@ the contribution process for the cats project.
 
 It may take a while to familiarize yourself with this document, but if
 we are doing our job right, you shouldn't have to spend months poring
-over the project source code or lurking the
-[Gitter room](https://gitter.im/typelevel/cats) before you feel comfortable
+over the project source code or lurking on Discord
+before you feel comfortable
 contributing. In fact, if you encounter any confusion or frustration
 during the contribution process, please create a GitHub issue and
 we'll do our best to improve the process.
@@ -260,8 +267,8 @@ we'll do our best to improve the process.
 ## Getting in touch
 
 Discussion around Cats is currently happening in the
-[Gitter channel](https://gitter.im/typelevel/cats) as well as on Github
-issue and PR pages.
+[Typelevel Discord](https://discord.gg/XF3CXcMzqD)
+as well as on GitHub issue and PR pages.
 
 Feel free to open an issue if you notice a bug, have an idea for a
 feature, or have a question about the code. Pull requests are also
@@ -269,8 +276,7 @@ gladly accepted.
 
 People are expected to follow the
 [Scala Code of Conduct](https://www.scala-lang.org/conduct/) when
-discussing Cats on the Github page, Gitter channel, or other
-venues.
+discussing Cats on GitHub, Discord, or other venues.
 
 We hope that our community will be respectful, helpful, and kind. If
 you find yourself embroiled in a situation that becomes heated, or
