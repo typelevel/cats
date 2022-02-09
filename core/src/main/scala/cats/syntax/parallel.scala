@@ -36,8 +36,8 @@ trait ParallelSyntax extends TupleParallelSyntax {
   final def catsSyntaxParallelAp[M[_]: FlatMap, A](ma: M[A]): ParallelApOps[M, A] =
     new ParallelApOps(ma)
 
-  implicit final def catsSyntaxParallelAp1[M[_], A](ma: M[A]): ParallelApOps[M, A] =
-    new ParallelApOps(ma)
+  implicit final def catsSyntaxParallelAp1[M[_], A](ma: M[A]): ParallelApOps1[M, A] =
+    new ParallelApOps1(ma)
 
   implicit final def catsSyntaxNonEmptyParallelAp[M[_], A](ma: M[A]): NonEmptyParallelApOps[M, A] =
     new NonEmptyParallelApOps(ma)
@@ -248,27 +248,28 @@ final class ParallelUnorderedFlatSequenceOps[T[_], M[_], A](private val tmta: T[
     Parallel.parUnorderedFlatSequence(tmta)
 }
 
+@deprecated("Kept for binary compatibility", "2.8.0")
 final class ParallelApOps[M[_], A](private val ma: M[A]) extends AnyVal {
-  @deprecated("use a NonEmptyParallel-constrained version instead", "2.8.0")
-  protected def &>[B](mb: M[B])(implicit P: Parallel[M]): M[B] =
+  def &>[B](mb: M[B])(implicit P: Parallel[M]): M[B] =
     P.parProductR(ma)(mb)
 
-  @deprecated("use a NonEmptyParallel-constrained version instead", "2.8.0")
-  protected def <&[B](mb: M[B])(implicit P: Parallel[M]): M[A] =
+  def <&[B](mb: M[B])(implicit P: Parallel[M]): M[A] =
     P.parProductL(ma)(mb)
 
-  @deprecated("use a NonEmptyParallel-constrained version instead", "2.8.0")
-  protected def parProductL[B](mb: M[B])(implicit P: Parallel[M]): M[A] =
+  def parProductL[B](mb: M[B])(implicit P: Parallel[M]): M[A] =
     P.parProductL(ma)(mb)
 
-  @deprecated("use a NonEmptyParallel-constrained version instead", "2.8.0")
-  protected def parProductR[B](mb: M[B])(implicit P: Parallel[M]): M[B] =
+  def parProductR[B](mb: M[B])(implicit P: Parallel[M]): M[B] =
     P.parProductR(ma)(mb)
 
-  @deprecated("use a NonEmptyParallel-constrained version instead", "2.8.0")
-  protected def parProduct[B](mb: M[B])(implicit P: Parallel[M]): M[(A, B)] =
+  def parProduct[B](mb: M[B])(implicit P: Parallel[M]): M[(A, B)] =
     Parallel.parProduct(ma, mb)
 
+  def parReplicateA(n: Int)(implicit P: Parallel[M]): M[List[A]] =
+    Parallel.parReplicateA(n, ma)
+}
+
+final class ParallelApOps1[M[_], A](private val ma: M[A]) extends AnyVal {
   def parReplicateA(n: Int)(implicit P: Parallel[M]): M[List[A]] =
     Parallel.parReplicateA(n, ma)
 }
