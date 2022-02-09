@@ -19,13 +19,13 @@ object GenTupleBifunctorInstances extends Template {
     |
     |private[cats] trait NTupleBifunctorInstances {
 ${if (arity > 1)
-      block"""
+        block"""
     -  implicit final def catsStdBifunctorForTuple$arity${`[A0, A(N - 2)]`}: Bifunctor[${`(A..N - 2, *, *)`}] =
     -    new Bifunctor[${`(A..N - 2, *, *)`}] {
     -      def bimap[A, B, C, D](fa: (${`A0, A(N - 2)`}A, B))(f: A => C, g: B => D): (${`A0, A(N - 2)`}C, D) = (${`fa._1..fa._(n - 2)`}f(fa._${arity - 1}), g(fa._$arity))
     -    }"""
-    else
-      block"""
+      else
+        block"""
     -"""}
     |}"""
   }
