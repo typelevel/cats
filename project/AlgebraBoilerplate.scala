@@ -122,36 +122,36 @@ object AlgebraBoilerplate {
         |trait TupleInstances extends cats.kernel.instances.TupleInstances {
         -
         -  implicit def tuple${arity}Rig[${`A..N`}](implicit ${constraints("Rig")}): Rig[${`(A..N)`}] =
-        -    Rig.instance(
-        -      ${nullaryTuple("zero")},
-        -      ${nullaryTuple("one")},
-        -      (x, y) => ${binTuple("plus")},
-        -      (x, y) => ${binTuple("times")}
-        -    )
+        -    new Rig[${`(A..N)`}] {
+        -      def zero = ${nullaryTuple("zero")}
+        -      def one = ${nullaryTuple("one")}
+        -      def plus(x: ${`(A..N)`}, y: ${`(A..N)`}) = ${binTuple("plus")}
+        -      def times(x: ${`(A..N)`}, y: ${`(A..N)`}) = ${binTuple("times")}
+        -    }
         -
         -  implicit def tuple${arity}Ring[${`A..N`}](implicit ${constraints("Ring")}): Ring[${`(A..N)`}] =
-        -    Ring.instance(
-        -      ${nullaryTuple("zero")},
-        -      ${nullaryTuple("one")},
-        -      x => ${unaryTuple("negate")},
-        -      (x, y) => ${binTuple("plus")},
-        -      (x, y) => ${binTuple("times")}
-        -    )
+        -    new Ring[${`(A..N)`}] {
+        -      def zero = ${nullaryTuple("zero")}
+        -      def one = ${nullaryTuple("one")}
+        -      def negate(x: ${`(A..N)`}) = ${unaryTuple("negate")}
+        -      def plus(x: ${`(A..N)`}, y: ${`(A..N)`}) = ${binTuple("plus")}
+        -      def times(x: ${`(A..N)`}, y: ${`(A..N)`}) = ${binTuple("times")}
+        -    }
         -
         -  implicit def tuple${arity}Rng[${`A..N`}](implicit ${constraints("Rng")}): Rng[${`(A..N)`}] =
-        -    Rng.instance(
-        -      ${nullaryTuple("zero")},
-        -      x => ${unaryTuple("negate")},
-        -      (x, y) => ${binTuple("plus")},
-        -      (x, y) => ${binTuple("times")}
-        -    )
+        -    new Rng[${`(A..N)`}] {
+        -      def zero = ${nullaryTuple("zero")}
+        -      def negate(x: ${`(A..N)`}) = ${unaryTuple("negate")}
+        -      def plus(x: ${`(A..N)`}, y: ${`(A..N)`}) = ${binTuple("plus")}
+        -      def times(x: ${`(A..N)`}, y: ${`(A..N)`}) = ${binTuple("times")}
+        -    }
         -
         -  implicit def tuple${arity}Semiring[${`A..N`}](implicit ${constraints("Semiring")}): Semiring[${`(A..N)`}] =
-        -    Semiring.instance(
-        -      ${nullaryTuple("zero")},
-        -      (x, y) => ${binTuple("plus")},
-        -      (x, y) => ${binTuple("times")}
-        -    )
+        -    new Semiring[${`(A..N)`}] {
+        -      def zero = ${nullaryTuple("zero")}
+        -      def plus(x: ${`(A..N)`}, y: ${`(A..N)`}) = ${binTuple("plus")}
+        -      def times(x: ${`(A..N)`}, y: ${`(A..N)`}) = ${binTuple("times")}
+        -    }
         |}
       """
     }
