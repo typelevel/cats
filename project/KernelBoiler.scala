@@ -267,11 +267,11 @@ object KernelBoiler {
                 block"""
                 |  implicit def catsKernelCommutativeGroupForTuple$arity[${`A..N`}](
                 |    implicit ${constraints("CommutativeGroup")}
-                |  ): CommutativeGroup[${`(A..N)`}] = CommutativeGroup.instance(
-                |    ${nullaryTuple("empty")},
-                |    x => ${unaryTuple("inverse")},
-                |    (x, y) => ${binTuple("combine")}
-                |  )"""
+                |  ): CommutativeGroup[${`(A..N)`}] = new CommutativeGroup[${`(A..N)`}] {
+                |    def empty = ${nullaryTuple("empty")}
+                |    def inverse(x: ${`(A..N)`}) = ${unaryTuple("inverse")}
+                |    def combine(x: ${`(A..N)`}, y: ${`(A..N)`}) = ${binTuple("combine")}
+                |  }"""
             }
         ),
         InstanceDef(
@@ -326,11 +326,11 @@ object KernelBoiler {
                 block"""
                 |  implicit def catsKernelGroupForTuple$arity[${`A..N`}](
                 |    implicit ${constraints("Group")}
-                |  ): Group[${`(A..N)`}] = Group.instance(
-                |    ${nullaryTuple("empty")},
-                |    x => ${unaryTuple("inverse")},
-                |    (x, y) => ${binTuple("combine")}
-                |  )"""
+                |  ): Group[${`(A..N)`}] = new Group[${`(A..N)`}] {
+                |    def empty = ${nullaryTuple("empty")}
+                |    def inverse(x: ${`(A..N)`}) = ${unaryTuple("inverse")}
+                |    def combine(x: ${`(A..N)`}, y: ${`(A..N)`}) = ${binTuple("combine")}
+                |  }"""
             }
         ),
         InstanceDef(
@@ -342,10 +342,12 @@ object KernelBoiler {
                 block"""
                 |  implicit def catsKernelHashForTuple$arity[${`A..N`}](
                 |    implicit ${constraints("Hash")}
-                |  ): Hash[${`(A..N)`}] = Hash.instance(
-                |    x => ${unaryMethod("hash").mkString(s"$tupleNHeader(", ", ", ")")}.hashCode(),
-                |    (x, y) => ${binMethod("eqv").mkString(" && ")}
-                |  )"""
+                |  ): Hash[${`(A..N)`}] = new Hash[${`(A..N)`}] {
+                |    def hash(x: ${`(A..N)`}) =
+                |      ${unaryMethod("hash").mkString(s"$tupleNHeader(", ", ", ")")}.hashCode()
+                |    def eqv(x: ${`(A..N)`}, y: ${`(A..N)`}) =
+                |      ${binMethod("eqv").mkString(" && ")}
+                |  }"""
             }
         ),
         InstanceDef(

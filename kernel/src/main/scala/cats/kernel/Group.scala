@@ -74,14 +74,4 @@ object Group extends GroupFunctions[Group] {
    * Access an implicit `Group[A]`.
    */
   @inline final def apply[A](implicit ev: Group[A]): Group[A] = ev
-
-  /**
-   * Create a `Group` instance from the given inverse and combine functions and empty value.
-   */
-  @inline def instance[A](emp: A, inv: A => A, cmb: (A, A) => A): Group[A] =
-    new Group[A] {
-      val empty = emp
-      def inverse(a: A) = inv(a)
-      def combine(x: A, y: A) = cmb(x, y)
-    }
 }

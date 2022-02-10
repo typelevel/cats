@@ -53,15 +53,6 @@ object Hash extends HashFunctions[Hash] {
       def hash(x: A) = x.hashCode()
       def eqv(x: A, y: A) = x == y
     }
-
-  /**
-   * Create a `Hash` instance from the given hash and equality functions.
-   */
-  @inline def instance[A](h: A => Int, e: (A, A) => Boolean): Hash[A] =
-    new Hash[A] {
-      def hash(x: A) = h(x)
-      def eqv(x: A, y: A) = e(x, y)
-    }
 }
 
 trait HashToHashingConversion {
