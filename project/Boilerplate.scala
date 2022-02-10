@@ -427,12 +427,6 @@ object Boilerplate {
       val tupleTpe = s"t$arity: $tuple"
       val tupleArgs = (1 to arity).map(n => s"t$arity._$n").mkString(", ")
 
-      val n = if (arity == 1) {
-        ""
-      } else {
-        arity.toString
-      }
-
       val parMap =
         if (arity == 1)
           s"def parMap[Z](f: (${`A..N`}) => Z)(implicit p: NonEmptyParallel[M]): M[Z] = p.flatMap.map($tupleArgs)(f)"

@@ -72,30 +72,30 @@ object GenTupleMonadInstances extends Template {
     |}
     |private[cats] sealed trait NTupleMonadInstances1 extends NTupleMonadInstances2 { this: NTupleMonadInstances =>
     -  implicit final def catsStdCommutativeMonadForTuple$arity${`[A0, A(N - 1)]`}${`constraints A..(N-1)`(
-      "CommutativeMonoid"
-    )}: CommutativeMonad[${`(A..N - 1, *)`}] =
+        "CommutativeMonoid"
+      )}: CommutativeMonad[${`(A..N - 1, *)`}] =
     -    new FlatMapTuple$arity${`[A0, A(N - 1)]`}(${`A0, A(N - 1)`}) with CommutativeMonad[${`(A..N - 1, *)`}] {
     -      def pure[A](a: A): ${`A0, A(N - 1)&`("A")} = $monadPureMethod
     -    }
     |}
     |private[cats] sealed trait NTupleMonadInstances2 extends NTupleMonadInstances3 { this: NTupleMonadInstances =>
     -  implicit final def catsStdCommutativeFlatMapForTuple$arity${`[A0, A(N - 1)]`}${`constraints A..(N-1)`(
-      "CommutativeSemigroup"
-    )}: CommutativeFlatMap[${`(A..N - 1, *)`}] =
+        "CommutativeSemigroup"
+      )}: CommutativeFlatMap[${`(A..N - 1, *)`}] =
     -    new FlatMapTuple$arity${`[A0, A(N - 1)]`}(${`A0, A(N - 1)`}) with CommutativeFlatMap[${`(A..N - 1, *)`}]
     |}
     |private[cats] sealed trait NTupleMonadInstances3 extends NTupleMonadInstances4 { this: NTupleMonadInstances =>
     -  implicit def catsStdMonadForTuple$arity${`[A0, A(N - 1)]`}${`constraints A..(N-1)`(
-      "Monoid"
-    )}: Monad[${`(A..N - 1, *)`}] =
+        "Monoid"
+      )}: Monad[${`(A..N - 1, *)`}] =
     -    new FlatMapTuple$arity${`[A0, A(N - 1)]`}(${`A0, A(N - 1)`}) with Monad[${`(A..N - 1, *)`}] {
     -      def pure[A](a: A): ${`A0, A(N - 1)&`("A")} = $monadPureMethod
     -    }
     |}
     |private[cats] sealed trait NTupleMonadInstances4 extends NTupleMonadInstances5 { this: NTupleMonadInstances =>
     -  implicit def catsStdFlatMapForTuple$arity${`[A0, A(N - 1)]`}${`constraints A..(N-1)`(
-      "Semigroup"
-    )}: FlatMap[${`(A..N - 1, *)`}] =
+        "Semigroup"
+      )}: FlatMap[${`(A..N - 1, *)`}] =
     -    new FlatMapTuple$arity${`[A0, A(N - 1)]`}(${`A0, A(N - 1)`})
     |}
     |private[cats] sealed trait NTupleMonadInstances5 { this: NTupleMonadInstances =>
@@ -104,13 +104,13 @@ object GenTupleMonadInstances extends Template {
     |}
     -
     -private[instances] class $flatMapTupleClass${`[A0, A(N - 1)]`}(${`parameters A..(N-1)`(
-      "Semigroup"
-    )}) extends FlatMap[${`(A..N - 1, *)`}] {
+        "Semigroup"
+      )}) extends FlatMap[${`(A..N - 1, *)`}] {
     -  override def ap[A, B](ff: ${`A0, A(N - 1)&`("A => B")})(fa: ${`A0, A(N - 1)&`("A")}): ${`A0, A(N - 1)&`("B")} =
     -    ${`combine A..(N - 1)`("ff", "fa", s"ff._$arity(fa._$arity)")}
     -  override def product[A, B](fa: ${`A0, A(N - 1)&`("A")}, fb: ${`A0, A(N - 1)&`("B")}): ${`A0, A(N - 1)&`(
-      "(A, B)"
-    )} =
+        "(A, B)"
+      )} =
     -    ${`combine A..(N - 1)`("fa", "fb", s"(fa._$arity, fb._$arity)")}
     -  override def map[A, B](fa: ${`A0, A(N - 1)&`("A")})(f: A => B): ${`A0, A(N - 1)&`("B")} =
     -    fa.copy(_$arity = f(fa._$arity))
@@ -119,7 +119,7 @@ object GenTupleMonadInstances extends Template {
          -    val xb = f(fa._$arity)
          -    ${`combine A..(N - 1)`("fa", "xb", s"xb._$arity")}
          """
-    else block"""
+      else block"""
          -    f(fa._1)
          """}
     -  }
@@ -128,8 +128,8 @@ object GenTupleMonadInstances extends Template {
     -  override def productL[A, B](a: ${`A0, A(N - 1)&`("A")})(b: ${`A0, A(N - 1)&`("B")}): ${`A0, A(N - 1)&`("A")} =
     -    ${`combine A..(N - 1)`("a", "b", s"a._$arity")}
     -  override def mproduct[A, B](fa: ${`A0, A(N - 1)&`("A")})(f: A => ${`A0, A(N - 1)&`("B")}): ${`A0, A(N - 1)&`(
-      "(A, B)"
-    )} = {
+        "(A, B)"
+      )} = {
     -    val xb = f(fa._$arity)
     -    ${`combine A..(N - 1)`("fa", "xb", s"(fa._$arity, xb._$arity)")}
     -  }
@@ -145,7 +145,7 @@ ${if (arity > 1) block"""
     -      case (${`a0, a(n - 1)`}, Right(b))    => (${`a0, a(n - 1)`}, b)
     -      case (${`a0, a(n - 1)`}, Left(nextA)) => loop((${`a0, a(n - 1)`}), nextA)
 """
-    else block"""
+      else block"""
     -    def loop(aa: A): Tuple1[B] =
     -      f(aa) match {
     -        case Tuple1(Right(b))    => Tuple1(b)

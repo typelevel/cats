@@ -19,7 +19,7 @@ object GenTupleBitraverseInstances extends Template {
     |
     |private[cats] trait NTupleBitraverseInstances {
     |  protected type γ[_]
-    |  
+    |
     |  private def instance[F[_, _] <: Product](
     |    bitrav: (F[Any, Any], Applicative[γ], Any => γ[Any], Any => γ[Any]) => γ[F[Any, Any]]
     |  ): Bitraverse[F] = new Bitraverse[F] {
@@ -30,7 +30,7 @@ object GenTupleBitraverseInstances extends Template {
     |        f.asInstanceOf[Any => γ[Any]],
     |        g.asInstanceOf[Any => γ[Any]]
     |      ).asInstanceOf[G[F[C, D]]]
-    |      
+    |
     |    @inline private def last1[A, B](fab: F[A, B]): A =
     |      fab.productElement(fab.productArity - 2).asInstanceOf[A]
     |    @inline private def last2[A, B](fab: F[A, B]): B =
