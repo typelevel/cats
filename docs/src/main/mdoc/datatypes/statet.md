@@ -24,6 +24,8 @@ This definition could be confusing, but it will become clear after learning the 
 Therefore, `StateT` exposes the same methods of [State](https://typelevel.org/cats/datatypes/state.html), such as: `modify`, `get` and `set`.
 Plus additional methods, that handles effectful computations, eg: `modifyF`, `setF` and `liftF`.
 
+## Example: Table Reservation
+
 ## Example: Hangman Game
 
 In this example we need to:
@@ -48,24 +50,9 @@ The whole game state machine can be summarized as follows:
 
 ```
 
-At each step, the state might be updated and, since some I/O operations need to be performed along the way, a specific effect (typically `IO` monad) has to be used. In our case, we don't have access to `IO`, therefore we will use a simple custom datatype to simulate it:
+At each step, the state might be updated and, since some I/O operations need to be performed along the way, a specific effect (`IO` monad) has to be used.
 
-```scala mdoc:silent
-
-import scala.util.Try
-
-object EffectType {
-  type EffectType[A] = Either[Throwable, A]
-
-  def performEffect[A](effect: => A): EffectType[A] =
-    Try(effect).toEither
-}
-
-```
-
-Here we use `Either` to expess the failure capability of the computation: if for some reason the input fails it, will be wrapped into the `Either`.
-
-Moving on, we can model the game state as follow:
+We can model the game state as follow:
 
 ```scala mdoc:silent
 import cats.data.StateT
@@ -117,7 +104,7 @@ object GameState {
 
 In the code above you can see some useful functions, such as the one that returns the encrypted target word.
 
-A brief example here:
+In the following snippet you can see the above code in action:
 
 ```scala mdoc
 val gameState1 = GameState("cats")
@@ -126,75 +113,6 @@ val gameState2 = GameState.attemptGuess(gameState1, "bats")
 println(GameState.showWordHidden(gameState2.getOrElse(???)))
 ```
 
-Let's focus on the state machine game steps:
+Unfortunately, the rest of the example can't be shown here due to the required `cats-effect` dependency. We recommend to check out the rest of the code at the following [gist](https://gist.github.com/benkio/46f5aea4f15ec059f02d6bfe9bd25e99) or [scastie](https://scastie.scala-lang.org/4Ab7xspkRJ2q9UKQ9OHrUQ).
 
-```scala mdoc:silent
-object StateMachine {
-
-  import EffectType._
-
-  def step1(): EffectType[GameState] = for {
-    _ <- performEffect[Unit](println("Insert the target word: "))
-    word <- performEffect[String](readLine())
-  } yield GameState(word)
-
-  def step2(): StateT[EffectType, GameState, Unit] = for {
-    state <- StateT.get[EffectType, GameState]
-    _ <- StateT.liftF(performEffect[Unit](println(GameState.showWordHidden(state))))
-  } yield ()
-
-  def step3(): StateT[EffectType, GameState, String] = for {
-    _ <- StateT.liftF(performEffect[Unit](println("Insert the guess word: ")))
-    guess <- StateT.liftF(performEffect[String](readLine()))
-  } yield guess
-
-  def step4(
-    guess: String
-  ): StateT[EffectType, GameState, Either[GameOver, GameState]] =
-    StateT
-      .get[EffectType, GameState]
-      .map(state => GameState.attemptGuess(state, guess))
-
-  def step5(
-    exitCondition: Either[GameOver, GameState]
-  ): StateT[EffectType, GameState, Unit] =
-    exitCondition match {
-      case Left(gameOver) => step6(gameOver)
-      case Right(nextState) =>
-        for {
-          _ <- StateT.set[EffectType, GameState](nextState)
-          _ <- StateT.liftF(performEffect[Unit](println("Wrong Guess, retry")))
-          _ <- hangman()
-        } yield ()
-    }
-
-  def step6(gameResult: GameOver): StateT[EffectType, GameState, Unit] =
-    gameResult match {
-      case Win =>
-        StateT.liftF(performEffect[Unit](println("Congratulations, you won!!!")))
-      case Loose => StateT.liftF(performEffect[Unit](println("I'm sorry, you loose!!!")))
-    }
-
-  def hangman(): StateT[EffectType, GameState, Unit] = for {
-    _ <- step2()
-    guess <- step3()
-    exitCondition <- step4(guess)
-    _ <- step5(exitCondition)
-  } yield ()
-}
-```
-
-Here you can see how the state machine is set up. In particular, there's a loop where, if the exit condition is not reached, a new attempt is requested.
-Finally, we can wire everything together in the following way:
-
-```scala mdoc:compile-only
-(for {
-  initialState <- StateMachine.step1()
-  _ <- StateMachine.hangman().run(initialState)
-} yield ())
-```
-
-We hope this example helps to clarify how `StateT` can help in designing a computation based on state machine steps that may require side effects or other capabilities, eg `Option`, `List`, `Fiber` etc.
-
-You can find the full source of the example [here](https://gist.github.com/benkio/46f5aea4f15ec059f02d6bfe9bd25e99)
-
+We hope these examples help to clarify how `StateT` can be used in designing a computation based on state machine steps that may require side effects or other capabilities, eg `Option`, `List`, `Fiber` etc.
