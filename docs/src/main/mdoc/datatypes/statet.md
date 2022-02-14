@@ -24,7 +24,17 @@ This definition could be confusing, but it will become clear after learning the 
 Therefore, `StateT` exposes the same methods of [State](https://typelevel.org/cats/datatypes/state.html), such as: `modify`, `get` and `set`.
 Plus additional methods, that handles effectful computations, eg: `modifyF`, `setF` and `liftF`.
 
-## Example: Table Reservation
+## Example: Table Reservation System
+
+In this example we are going to model a *Table Reservation System*. To
+do so, we need to keep track of the tables and the current
+reservations for each of them. The end user can then try to insert a
+booking for a specific table and time. If such table is available, then the
+booking is placed and the state is updated, otherwise an error is
+returned.
+
+To simplify the logic, for each reservation we will just consider a single `LocalTime` starting at the beginning of the hour.
+
 
 ## Example: Hangman Game
 
