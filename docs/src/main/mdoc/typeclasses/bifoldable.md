@@ -115,9 +115,9 @@ Bifoldable[(*, Int, *)]
    .bifoldMap(description)(name => List(name), occupation => List(occupation))
 ```
 
-## Bifunctor `compose`
+## Bifoldable `compose`
 
-If `F[_,_]` and `G[_,_]` have `Bifunctor` instances then so does `F[G[_,_],G[_,_]]`.
+If `F[_,_]` and `G[_,_]` have `Bifoldable` instances then so does `F[G[_,_],G[_,_]]`.
 
 Examples for `(Either[*, *], Either[*, *])` and `((*, *), (*, *))`:
 ```scala mdoc
