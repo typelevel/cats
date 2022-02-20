@@ -17,7 +17,7 @@ The type parameters are:
 - `A` represents the return value.
 
 It can be seen as a way to add the capability to manipulate a shared
-state, to an existing computation in the context of `F`.
+state to an existing computation in the context of `F`.
 
 This definition could be confusing, but it will become clear after
 learning the `State` monad and by the example below.
