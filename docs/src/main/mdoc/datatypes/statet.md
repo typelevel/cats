@@ -29,7 +29,16 @@ learning the `State` monad and by the example below.
 particular [State](https://typelevel.org/cats/datatypes/state.html) is
 defined as a `StateT` with
 [Eval](https://typelevel.org/cats/datatypes/eval.html) as the effect
-`F`.  Therefore, `StateT` exposes the same methods of
+`F`.
+
+```scala mdoc:silent
+import cats.data.StateT
+import cats.Eval
+
+type State[S, A] = StateT[Eval, S, A]
+```
+
+Therefore, `StateT` exposes the same methods of
 [State](https://typelevel.org/cats/datatypes/state.html), such as:
 `modify`, `get` and `set`.  Plus additional methods, that handles
 effectful computations, eg: `modifyF`, `setF` and `liftF`.
@@ -49,7 +58,7 @@ single `LocalTime` starting at the beginning of the hour.
 Let's start with defining the type synonyms for the state of the
 program and the effect type:
 
-```scala mdoc:silent
+```scala mdoc:silent:reset
 import cats.data.{StateT, NonEmptyList}
 import cats.implicits._
 import java.time.LocalTime
@@ -80,11 +89,11 @@ In addition, we can implement a simple function that will evaluate a
 ```scala mdoc:silent
 object TableReservationSystem {
 
-  final case class AlreadyReservedTable(
+  final case class TableAlreadyReserved(
       tableNumber: Int,
       time: LocalTime,
       reservation: String
-  ) extends Throwable(
+  ) extends RuntimeException(
         s"$reservation cannot be added because table number $tableNumber is already reserved for the $time"
       )
 
@@ -99,7 +108,7 @@ object TableReservationSystem {
       currentReservations
         .get((tableNumber, time))
         .fold[EffectType[TRSState]](Right(currentReservations + ((tableNumber, time) -> name)))(_ =>
-          Left(AlreadyReservedTable(tableNumber, time, name))
+          Left(TableAlreadyReserved(tableNumber, time, name))
         )
     )
 
@@ -130,17 +139,17 @@ val bookings = NonEmptyList.of(
   (2, LocalTime.parse("18:00:00"), "Steven Seagal")
 )
 
-println(TableReservationSystem.evalBookings(bookings))
-println(
-  TableReservationSystem.evalBookings(
-    bookings.:+((1, LocalTime.parse("16:00:00"), "Bruce Lee"))
-  )
+TableReservationSystem.evalBookings(bookings)
+
+TableReservationSystem.evalBookings(
+  bookings.:+((1, LocalTime.parse("16:00:00"), "Bruce Lee"))
 )
+
 ```
 
 The full source code of this example can be found at this
 [gist](https://gist.github.com/benkio/baa4fe1d50751cd602c4175f1bb39f4d)
-or [scastie](https://scastie.scala-lang.org/8HBP6sT8QBmRNoG7iJHbPA)
+or [scastie](https://scastie.scala-lang.org/7bQAd6KoTfGMsZMtxqAMVg)
 
 ## Example: Hangman Game
 
@@ -173,7 +182,7 @@ monad) has to be used.
 
 We can model the game state as follow:
 
-```scala mdoc:silent
+```scala mdoc:silent:reset
 import cats.data.StateT
 import cats.Eval
 import scala.io.StdIn._
@@ -228,9 +237,9 @@ In the following snippet you can see the above code in action:
 
 ```scala mdoc
 val gameState1 = GameState("cats")
-println(GameState.showWordHidden(gameState1))
+GameState.showWordHidden(gameState1)
 val gameState2 = GameState.attemptGuess(gameState1, "bats")
-println(GameState.showWordHidden(gameState2.getOrElse(???)))
+GameState.showWordHidden(gameState2.getOrElse(???))
 ```
 
 Unfortunately, the rest of the example can't be shown here due to the
