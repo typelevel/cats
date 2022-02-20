@@ -177,7 +177,7 @@ TableReservationSystem.evalBookings(
 
 The full source code of this example can be found at this
 [gist](https://gist.github.com/benkio/baa4fe1d50751cd602c4175f1bb39f4d)
-or [scastie](https://scastie.scala-lang.org/EVtS3qa6SamtLmrOagwPgA)
+or [scastie](https://scastie.scala-lang.org/WmnSoQFyS7SIGxgly3M6QQ)
 
 ## Example: Hangman Game
 
