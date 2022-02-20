@@ -55,33 +55,27 @@ error is returned.
 To simplify the logic, for each reservation we will just consider a
 single `LocalTime` starting at the beginning of the hour.
 
-Let's start with defining the type synonyms for the state of the
-program and the effect type:
+Let's start with defining the type synonym for the effect type:
 
 ```scala mdoc:silent:reset
 import cats.data.{StateT, NonEmptyList}
 import cats.implicits._
 import java.time.LocalTime
 
-type TRSState = Map[(Int, LocalTime), String]
-type EffectType[A] = Either[Throwable, A]
+type ThrowableOr[A] = Either[Throwable, A]
 ```
 
-
-`TRSState` stands for *Table Reservation System State* and it will
-organize the reservations in a `Map` with:
-- `(Int, LocalTime)` as key, representing the table number and hour
-respectively.
-- `String` as value, representing the reservation name.
-
-For the underlying effect, we will use an `Either[Throwable, A]` because each
+We will use an `Either[Throwable, A]` because each
 booking insertion can fail.
 
 Now, we need to implement/define:
-- An initial state, that will be just an empty `Map`.
+- The type representing the reservation.
+- The type representing the state of the Table Reservation System. It
+  will wrap around a collection of Reservations.
+- An initial state, that will be just an empty state type.
 - A custom `Throwable` to be used in case of an error.
 - The logic for the booking insertion. We can take advantage of the
-method `modifyF`.
+method `modifyF` later on to apply it to the system state.
 
 In addition, we can implement a simple function that will evaluate a
 `NonEmptyList` of reservations, inserting them one by one.
@@ -89,38 +83,37 @@ In addition, we can implement a simple function that will evaluate a
 ```scala mdoc:silent
 object TableReservationSystem {
 
+  final case class ReservationId(tableNumber: Int, hour: LocalTime)
+  final case class Reservation(id: ReservationId, name: String)
+  final case class Reservations(reservations: List[Reservation]) {
+    def insert(reservation: Reservation): ThrowableOr[Reservations] =
+      if (reservations.exists(r => r.id == reservation.id))
+        Left(TableAlreadyReserved(reservation))
+      else Right(Reservations(reservations :+ reservation))
+  }
+
   final case class TableAlreadyReserved(
-      tableNumber: Int,
-      time: LocalTime,
-      reservation: String
+      reservation: Reservation
   ) extends RuntimeException(
-        s"$reservation cannot be added because table number $tableNumber is already reserved for the $time"
+        s"${reservation.name} cannot be added because table number ${reservation.id.tableNumber} is already reserved for the ${reservation.id.hour}"
       )
 
-  val emptyReservationSystem: TRSState = Map.empty
+  val emptyReservationSystem: Reservations = Reservations(List.empty)
 
   def insertBooking(
-      tableNumber: Int,
-      time: LocalTime,
-      name: String
-  ): StateT[EffectType, TRSState, Unit] =
-    StateT.modifyF[EffectType, TRSState]((currentReservations: TRSState) =>
-      currentReservations
-        .get((tableNumber, time))
-        .fold[EffectType[TRSState]](Right(currentReservations + ((tableNumber, time) -> name)))(_ =>
-          Left(TableAlreadyReserved(tableNumber, time, name))
-        )
-    )
+      reservation: Reservation
+  ): StateT[ThrowableOr, Reservations, Unit] =
+    StateT.modifyF[ThrowableOr, Reservations](_.insert(reservation))
 
   def evalBookings(
-      bookings: NonEmptyList[(Int, LocalTime, String)]
-  ): EffectType[TRSState] =
+      bookings: NonEmptyList[Reservation]
+  ): ThrowableOr[Reservations] =
     bookings
-      .map { case (tn, t, n) =>
-        TableReservationSystem.insertBooking(tn, t, n)
+      .map(insertBooking)
+      .reduceLeft[StateT[ThrowableOr, Reservations, Unit]] {
+        case (acc, bookNext) => acc.productL(bookNext)
       }
-      .reduceLeft(_ *> _)
-      .runS(TableReservationSystem.emptyReservationSystem)
+      .runS(emptyReservationSystem)
 }
 ```
 
@@ -129,27 +122,62 @@ example input and print out the result.
 
 ```scala mdoc
 val bookings = NonEmptyList.of(
-  (1, LocalTime.parse("10:00:00"), "Cristiano Ronaldo"),
-  (2, LocalTime.parse("10:00:00"), "Lebron James"),
-  (1, LocalTime.parse("12:00:00"), "Tiger Woods"),
-  (2, LocalTime.parse("12:00:00"), "Roger Federer"),
-  (3, LocalTime.parse("13:00:00"), "Elizabeth Alexandra Mary"),
-  (1, LocalTime.parse("16:00:00"), "Chuck Norris"),
-  (2, LocalTime.parse("16:00:00"), "Kobe Bryant"),
-  (2, LocalTime.parse("18:00:00"), "Steven Seagal")
+  TableReservationSystem.Reservation(
+    TableReservationSystem
+      .ReservationId(tableNumber = 1, hour = LocalTime.parse("10:00:00")),
+    name = "Cristiano Ronaldo"
+  ),
+  TableReservationSystem.Reservation(
+    TableReservationSystem
+      .ReservationId(tableNumber = 2, hour = LocalTime.parse("10:00:00")),
+    name = "Lebron James"
+  ),
+  TableReservationSystem.Reservation(
+    TableReservationSystem
+      .ReservationId(tableNumber = 1, hour = LocalTime.parse("12:00:00")),
+    name = "Tiger Woods"
+  ),
+  TableReservationSystem.Reservation(
+    TableReservationSystem
+      .ReservationId(tableNumber = 2, hour = LocalTime.parse("12:00:00")),
+    name = "Roger Federer"
+  ),
+  TableReservationSystem.Reservation(
+    TableReservationSystem
+      .ReservationId(tableNumber = 3, hour = LocalTime.parse("13:00:00")),
+    name = "Elizabeth Alexandra Mary"
+  ),
+  TableReservationSystem.Reservation(
+    TableReservationSystem
+      .ReservationId(tableNumber = 1, hour = LocalTime.parse("16:00:00")),
+    name = "Chuck Norris"
+  ),
+  TableReservationSystem.Reservation(
+    TableReservationSystem
+      .ReservationId(tableNumber = 2, hour = LocalTime.parse("16:00:00")),
+    name = "Kobe Bryant"
+  ),
+  TableReservationSystem.Reservation(
+    TableReservationSystem
+      .ReservationId(tableNumber = 2, hour = LocalTime.parse("18:00:00")),
+    name = "Steven Seagal"
+  )
 )
 
 TableReservationSystem.evalBookings(bookings)
 
 TableReservationSystem.evalBookings(
-  bookings.:+((1, LocalTime.parse("16:00:00"), "Bruce Lee"))
+  bookings :+ TableReservationSystem.Reservation(
+    TableReservationSystem
+      .ReservationId(tableNumber = 1, hour = LocalTime.parse("16:00:00")),
+    name = "Bruce Lee"
+  )
 )
-
 ```
 
 The full source code of this example can be found at this
 [gist](https://gist.github.com/benkio/baa4fe1d50751cd602c4175f1bb39f4d)
-or [scastie](https://scastie.scala-lang.org/7bQAd6KoTfGMsZMtxqAMVg)
+or [scastie](https://scastie.scala-lang.org/EVtS3qa6SamtLmrOagwPgA)
 
 ## Example: Hangman Game
 
