@@ -65,7 +65,7 @@ organize the reservations in a `Map` with:
 respectively.
 - `String` as value, representing the reservation name.
 
-As effect type, we will just use an `Either[Throwable, A]` because each
+For the underlying effect, we will use an `Either[Throwable, A]` because each
 booking insertion can fail.
 
 Now, we need to implement/define:
