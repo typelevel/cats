@@ -13,7 +13,7 @@ trait SemigroupKLaws[F[_]] {
   def repeat1K[A](a: F[A]): IsEq[F[A]] =
     F.combineNK(a, 1) <-> a
 
-  def repeat2[A](a: F[A]): IsEq[F[A]] =
+  def repeat2K[A](a: F[A]): IsEq[F[A]] =
     F.combineNK(a, 2) <-> F.combineK(a, a)
 
   def combineAllOptionK[A](xs: Vector[F[A]]): IsEq[Option[F[A]]] =
