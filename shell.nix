@@ -1,13 +1,13 @@
 let
 
   # use a pinned version of nixpkgs for reproducability
-  nixpkgs-version = "21.05";
+  nixpkgs-version = "21.11";
   pkgs = import (builtins.fetchTarball {
     # Descriptive name to make the store path easier to identify
     name = "nixpkgs-${nixpkgs-version}";
     url = "https://github.com/nixos/nixpkgs/archive/${nixpkgs-version}.tar.gz";
     # Hash obtained using `nix-prefetch-url --unpack <url>`
-    sha256 = "1ckzhh24mgz6jd1xhfgx0i9mijk6xjqxwsshnvq789xsavrmsc36";
+    sha256 = "162dywda2dvfj1248afxc45kcrg83appjd0nmdb541hl7rnncf02";
   }) {};
 in
   with pkgs;
