@@ -7,8 +7,12 @@ scaladoc: "#cats.data.StateT"
 ---
 # StateT
 
-`StateT[F[_], S, A]` is a data type used to define state machine
-effectful computations that can be easily composed into a larger one.
+`StateT[F[_], S, A]` is a data type that generalizes `State` with the
+ability to compose with effects in `F[_]`. Because `StateT` is defined
+in terms of `F`, it is a monad only if `F` is a monad. Additionally,
+`StateT` may acquire new capabilities via `F`: for example, if `F` is
+capable of error handling via `MonadThrow[F]`, then Cats derives an
+instance of `MonadThrow[StateT[F, S, *]]`.
 
 The type parameters are:
 - `F[_]` represents the effect in which the computation is performed.
@@ -105,7 +109,7 @@ object TableReservationSystem {
   ): StateT[ThrowableOr, Reservations, Unit] =
     StateT.modifyF[ThrowableOr, Reservations](_.insert(reservation))
 
-  def evalBookings(
+  def processBookings(
       bookings: NonEmptyList[Reservation]
   ): ThrowableOr[Reservations] =
     bookings
@@ -164,9 +168,9 @@ val bookings = NonEmptyList.of(
   )
 )
 
-TableReservationSystem.evalBookings(bookings)
+TableReservationSystem.processBookings(bookings)
 
-TableReservationSystem.evalBookings(
+TableReservationSystem.processBookings(
   bookings :+ TableReservationSystem.Reservation(
     TableReservationSystem
       .ReservationId(tableNumber = 1, hour = LocalTime.parse("16:00:00")),
@@ -177,7 +181,7 @@ TableReservationSystem.evalBookings(
 
 The full source code of this example can be found at this
 [gist](https://gist.github.com/benkio/baa4fe1d50751cd602c4175f1bb39f4d)
-or [scastie](https://scastie.scala-lang.org/WmnSoQFyS7SIGxgly3M6QQ)
+or [scastie](https://scastie.scala-lang.org/MFHZpU9bRg2e73MLQY1dNQ)
 
 ## Example: Hangman Game
 
