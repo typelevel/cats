@@ -18,13 +18,14 @@ As a reminder `Foldable` is implemented in terms of `foldLeft` and `foldRight`; 
   //lazily performs a right-associative bi-fold over `fab` 
   def bifoldRight[A, B, C](fab: F[A, B], c: Eval[C])(f: (A, Eval[C]) => Eval[C], g: (B, Eval[C]) => Eval[C]): Eval[C]
 ```
-
 and by implementing those 2 methods you also get:
 ```scala
   def bifold[A, B](fab: F[A, B])(implicit A: Monoid[A], B: Monoid[B]): (A, B)
   
   def bifoldMap[A, B, C](fab: F[A, B])(f: A => C, g: B => C)(implicit C: Monoid[C]): C
 ```
+A lawful instance must have `bifoldLeft\Right` consistent with `bifoldMap`; left\right bi-fold based on an associative  
+combine should output the same summary value.
 
 ## Either and Validated as Bifoldable
 
@@ -37,10 +38,9 @@ import cats._
 import cats.data._
 import cats.implicits._
 ```
-
-and define a summary class, capable of storing this info:
+and let's define a summary class, capable of storing this info:
 ```scala mdoc
-case class Report(entries: List[String], errors: Int) {
+case class Report(entries: Chain[String], errors: Int) {
   def withEntries(entry: String): Report =
     this.copy(entries = entries :+ entry)
 
@@ -74,7 +74,7 @@ val attempted =
 
 and bi-fold each value into the accumulator:
 ```scala mdoc
-val empty = Report(List.empty, 0)
+val empty = Report(Chain.empty, 0)
 
 validated
   .foldl(empty)((acc, validation) => update(acc)(validation))
@@ -88,7 +88,7 @@ attempted
 Assume we have `(String, String, Int)`  and to get our summary we need `_1` and `_3`.
 The existing implementations `(*, *)`, `(T0, *, *)`, `(T0, T1, *, *)` .. aren't useful.
 
-Let's make our own `Bifoldable`:
+Let's make a new `Bifoldable` instance:
 ```scala mdoc
 implicit def bifoldableForTuple3[A0]: Bifoldable[(*, A0, *)] =
   new Bifoldable[(*, A0, *)] {
@@ -100,19 +100,44 @@ implicit def bifoldableForTuple3[A0]: Bifoldable[(*, A0, *)] =
   }
 ```
 
-and use it:
+let's check if it's lawful:
 ```scala mdoc
 //(name, age, occupation)
 val description = ("Niki", 22, "Developer")
   
-Bifoldable[(*, Int, *)]
-  .bifoldLeft(description, List.empty[String])((acc, name) => acc :+ name, (acc, occupation) => acc :+ occupation)
+val expected =
+  Bifoldable[(*, Int, *)].bifoldMap(description)(s => s, s => s)
 
-Bifoldable[(*, Int, *)]
-   .bifold(description)
+val left =
+ Bifoldable[(*, Int, *)].bifoldLeft(description, Monoid[String].empty)(
+  (acc, s) => acc |+| s,
+  (acc, s) => acc |+| s
+ )
 
-Bifoldable[(*, Int, *)]
-   .bifoldMap(description)(name => List(name), occupation => List(occupation))
+val right =
+  Bifoldable[(*, Int, *)].bifoldRight(description, Eval.later(Monoid[String].empty))(
+    (s, acc) => acc.map(_ |+| s),
+    (s, acc) => acc.map(_ |+| s)
+  )
+
+left === expected
+right.value === expected
+```
+**NOTE:** This instance would not be lawful if we would use a different ordering in `bifoldRight`.
+  Going from right to left as opposed to left to right:
+```scala mdoc
+ def bifoldRight[A, B, C](fa: (A, Int, B), c: Eval[C])(f: (A, Eval[C]) => Eval[C], g: (B, Eval[C]) => Eval[C]): Eval[C] =
+   f(fa._1, g(fa._3, c))
+```
+would also reverse the output and make the instance unlawful:
+```scala mdoc
+val reversedRight = 
+ bifoldRight(description, Eval.later(Monoid[String].empty))(
+    (s, acc) => acc.map(_ |+| s),
+    (s, acc) => acc.map(_ |+| s)
+  )
+  
+reversedRight.value === expected  
 ```
 
 ## Bifoldable `compose`
