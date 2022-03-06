@@ -59,7 +59,7 @@ error is returned.
 To simplify the logic, for each reservation we will just consider a
 single `LocalTime` starting at the beginning of the hour.
 
-Let's start with defining the type synonym for the effect type:
+Let's start with defining the type alias for the effect type:
 
 ```scala mdoc:silent:reset
 import cats.data.{StateT, NonEmptyList}
