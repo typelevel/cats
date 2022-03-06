@@ -179,102 +179,18 @@ The full source code of this example can be found at this
 [gist](https://gist.github.com/benkio/baa4fe1d50751cd602c4175f1bb39f4d)
 or [scastie](https://scastie.scala-lang.org/urJPRXNTQGuwhcLCFAtJMQ)
 
-## Example: Hangman Game
+## Conclusions
 
-This example is a little bit more complex since it involves more
-steps, checks and I/O operations. Here we need to:
-- Keep a state of the game, with the target word and the guesses made.
-- Show the game state.
-- Ask the player to input a guess word until the game is over.
+If you would like to explore a more complex example involving: I/O
+operations, State condition checks and a more advanced way to compose
+`StateT` computations. We suggest to check out the _hangman game_ from
+the following links:
 
-The whole game state machine can be summarized as follows:
-
-```asciidoc
-
-    +----------------------+                 +----------------------+                   +-------------------+
-    | Ask for Target Word  +---------------->| Show the word hidden |------------------>| Ask for the guess |
-    +----------------------+                 +----------------------+                   +-------------------+
-                                                    ^                                             |
-                                                    |                                             |
-                                                    |                                             |
-                  +-----------+          +---------------+       +-----------------------+        |
-                  | Game Over |<---------+ Check the win |<------| Compute the new state |<-------+
-                  +-----------+          |   condition   |       +-----------------------+
-                                         +---------------+
-
-```
-
-At each step, the state might be updated and, since some I/O
-operations need to be performed along the way, a specific effect (`IO`
-monad) has to be used.
-
-We can model the game state as follow:
-
-```scala mdoc:silent:reset
-import cats.data.StateT
-import cats.Eval
-import scala.io.StdIn._
-
-final case class GameState(
-    target: String,
-    guessedChars: Set[Char],
-    attemptNum: Int
-)
-
-sealed trait GameOver
-case object Win extends GameOver
-case object Loose extends GameOver
-
-object GameState {
-
-  val maxAttempts: Int = 3
-
-  def apply(target: String): GameState = GameState(
-    target = target,
-    guessedChars = Set.empty[Char],
-    attemptNum = 0
-  )
-
-  def showWordHidden(state: GameState): String =
-    state.target.map(c => if (state.guessedChars.contains(c)) c else '*')
-
-  def attemptGuess(
-      state: GameState,
-      guess: String
-  ): Either[GameOver, GameState] =
-    state match {
-      case GameState(t, _, _) if t == guess => Left(Win)
-      case GameState(_, _, attemptNum) if attemptNum == (maxAttempts - 1) =>
-        Left(Loose)
-      case GameState(target, guessedChars, attemptNum) =>
-        Right(
-          GameState(
-            target = target,
-            guessedChars = guessedChars ++ guess,
-            attemptNum = attemptNum + 1
-          )
-        )
-    }
-}
-```
-
-In the code above you can see some useful functions, such as the one
-that returns the encrypted target word.
-
-In the following snippet you can see the above code in action:
-
-```scala mdoc
-val gameState1 = GameState("cats")
-GameState.showWordHidden(gameState1)
-val gameState2 = GameState.attemptGuess(gameState1, "bats")
-GameState.showWordHidden(gameState2.getOrElse(???))
-```
-
-Unfortunately, the rest of the example can't be shown here due to the
-required `cats-effect` dependency. We recommend to check out the rest
-of the code at the following
 [gist](https://gist.github.com/benkio/46f5aea4f15ec059f02d6bfe9bd25e99)
 or [scastie](https://scastie.scala-lang.org/4Ab7xspkRJ2q9UKQ9OHrUQ).
+
+This should give you a more in depth understanding of what the
+`StateT` is capable of.
 
 We hope these examples help to clarify how `StateT` can be used in
 designing a computation based on state machine steps that may require
