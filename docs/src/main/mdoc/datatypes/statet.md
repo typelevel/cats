@@ -63,7 +63,7 @@ Let's start with defining the type alias for the effect type:
 
 ```scala mdoc:silent:reset
 import cats.data.{StateT, NonEmptyList}
-import cats.implicits._
+import cats.syntax.all._
 import java.time.LocalTime
 
 type ThrowableOr[A] = Either[Throwable, A]
@@ -91,11 +91,11 @@ object TableReservationSystem {
   final case class Reservations(reservations: List[Reservation]) {
     def insert(reservation: Reservation): ThrowableOr[Reservations] =
       if (reservations.exists(r => r.id == reservation.id))
-        Left(TableAlreadyReserved(reservation))
+        Left(new TableAlreadyReservedException(reservation))
       else Right(Reservations(reservations :+ reservation))
   }
 
-  final case class TableAlreadyReserved(
+  final class TableAlreadyReservedException(
       reservation: Reservation
   ) extends RuntimeException(
         s"${reservation.name} cannot be added because table number ${reservation.id.tableNumber} is already reserved for the ${reservation.id.hour}"
@@ -112,10 +112,7 @@ object TableReservationSystem {
       bookings: NonEmptyList[Reservation]
   ): ThrowableOr[Reservations] =
     bookings
-      .map(insertBooking)
-      .reduceLeft[StateT[ThrowableOr, Reservations, Unit]] {
-        case (acc, bookNext) => acc.productL(bookNext)
-      }
+      .traverse_(insertBooking)
       .runS(emptyReservationSystem)
 }
 ```
@@ -180,7 +177,7 @@ TableReservationSystem.processBookings(
 
 The full source code of this example can be found at this
 [gist](https://gist.github.com/benkio/baa4fe1d50751cd602c4175f1bb39f4d)
-or [scastie](https://scastie.scala-lang.org/MFHZpU9bRg2e73MLQY1dNQ)
+or [scastie](https://scastie.scala-lang.org/urJPRXNTQGuwhcLCFAtJMQ)
 
 ## Example: Hangman Game
 
@@ -281,4 +278,4 @@ or [scastie](https://scastie.scala-lang.org/4Ab7xspkRJ2q9UKQ9OHrUQ).
 
 We hope these examples help to clarify how `StateT` can be used in
 designing a computation based on state machine steps that may require
-side effects or other capabilities, eg `Option`, `List`, `Fiber` etc.
+side effects or other capabilities, eg `Option`, `List`, `Applicative` etc.
