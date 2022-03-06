@@ -69,8 +69,7 @@ import java.time.LocalTime
 type ThrowableOr[A] = Either[Throwable, A]
 ```
 
-We will use an `Either[Throwable, A]` because each
-booking insertion can fail.
+We will use an `Either[Throwable, A]` to model either success `Right(a)` or failure `Left(ex)`.
 
 Now, we need to implement/define:
 - The type representing the reservation.
