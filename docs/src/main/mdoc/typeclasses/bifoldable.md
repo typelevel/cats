@@ -24,21 +24,22 @@ and by implementing those 2 methods you also get:
   
   def bifoldMap[A, B, C](fab: F[A, B])(f: A => C, g: B => C)(implicit C: Monoid[C]): C
 ```
-A lawful instance must have `bifoldLeft\Right` consistent with `bifoldMap`; left\right bi-fold based on an associative  
-combine should output the same summary value.
+A lawful instance must have `bifoldLeft\Right` consistent with `bifoldMap`; left\right bi-folds based on associative  
+functions should output similar results. 
 
 ## Either and Validated as Bifoldable
 
-Assume in your codebase multiple input paths and system requests that end up as `Either[Exception, *]` or `Validated[Exception, *]`.  
-We want to track the amount of errors and store the content of valid requests.
+Assume multiple input paths and system requests that end up as `Either[Exception, *]` or `Validated[Exception, *]`.  
+The requirement is to track the amount of errors and store the content of valid requests.
 
-Let's add the implicits:
+First add the implicits:
 ```scala mdoc
 import cats._
 import cats.data._
 import cats.implicits._
 ```
-and let's define a summary class, capable of storing this info:
+
+then let's define a summary class capable of storing this info:
 ```scala mdoc
 case class Report(entries: Chain[String], errors: Int) {
   def withEntries(entry: String): Report =
@@ -86,7 +87,7 @@ attempted
 ## Tuple as Bifoldable
 
 Assume we have `(String, String, Int)`  and to get our summary we need `_1` and `_3`.
-The existing implementations `(*, *)`, `(T0, *, *)`, `(T0, T1, *, *)` .. aren't useful.
+The existing implementations for `(*, *)`, `(T0, *, *)`, `(T0, T1, *, *)` .. aren't useful.
 
 Let's make a new `Bifoldable` instance:
 ```scala mdoc
@@ -99,8 +100,8 @@ implicit def bifoldableForTuple3[A0]: Bifoldable[(*, A0, *)] =
       g(fa._3, f(fa._1, c))
   }
 ```
-
-let's check if it's lawful:
+As we were saying in the beginning a lawful `Bifoldable` should have `bifoldLeft\Right` consistent with `bifoldMap`.  
+Let's check our instance:
 ```scala mdoc
 //(name, age, occupation)
 val description = ("Niki", 22, "Developer")
@@ -123,13 +124,14 @@ val right =
 left === expected
 right.value === expected
 ```
-**NOTE:** This instance would not be lawful if we would use a different ordering in `bifoldRight`.
-  Going from right to left as opposed to left to right:
+**NOTE:** This instance would not be lawful if `bifoldRight` in particular would use a different ordering.
+
+Going from right to left as opposed to left to right means:
 ```scala mdoc
  def bifoldRight[A, B, C](fa: (A, Int, B), c: Eval[C])(f: (A, Eval[C]) => Eval[C], g: (B, Eval[C]) => Eval[C]): Eval[C] =
    f(fa._1, g(fa._3, c))
 ```
-would also reverse the output and make the instance unlawful:
+and it would also reverse the output making the instance unlawful:
 ```scala mdoc
 val reversedRight = 
  bifoldRight(description, Eval.later(Monoid[String].empty))(
