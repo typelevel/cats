@@ -75,7 +75,7 @@ Now, we need to implement/define:
 - The type representing the reservation.
 - The type representing the state of the Table Reservation System. It
   will wrap around a collection of Reservations.
-- An initial state, that will be just an empty state type.
+- An initial state, that will be just empty (no reservations).
 - A custom `Throwable` to be used in case of an error.
 - The logic for the booking insertion. We can take advantage of the
 method `modifyF` later on to apply it to the system state.
