@@ -44,6 +44,13 @@ import simulacrum.{noop, typeclass}
    * semigroup for `G[_]`.
    *
    * This method is a generalization of `reduce`.
+   *
+   * {{{
+   * scala> import cats.Reducible
+   * scala> import cats.data._
+   * scala> Reducible[NonEmptyVector].reduceK(NonEmptyVector.of(NonEmptyList.of(1, 2, 3), NonEmptyList.of(4, 5, 6), NonEmptyList.of(7, 8, 9)))
+   * res0: NonEmptyList[Int] = NonEmptyList(1, 2, 3, 4, 5, 6, 7, 8, 9)
+   * }}}
    */
   def reduceK[G[_], A](fga: F[G[A]])(implicit G: SemigroupK[G]): G[A] =
     reduce(fga)(G.algebra)
@@ -51,6 +58,18 @@ import simulacrum.{noop, typeclass}
   /**
    * Apply `f` to each element of `fa` and combine them using the
    * given `Semigroup[B]`.
+   *
+   * {{{
+   * scala> import cats.Reducible
+   * scala> import cats.data.NonEmptyList
+   * scala> import cats.implicits._
+   * scala> Reducible[NonEmptyList].reduceMap(NonEmptyList.of(1, 2, 3))(v => v.toString * v)
+   * res0: String = 122333
+   *
+   * scala> val gt5: Int => Option[Int] = (num: Int) => Some(num).filter(_ > 5)
+   * scala> Reducible[NonEmptyList].reduceMap(NonEmptyList.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10))(gt5)
+   * res1: Option[Int] = Some(40)
+   * }}}
    */
   def reduceMap[A, B](fa: F[A])(f: A => B)(implicit B: Semigroup[B]): B =
     reduceLeftTo(fa)(f)((b, a) => B.combine(b, f(a)))
