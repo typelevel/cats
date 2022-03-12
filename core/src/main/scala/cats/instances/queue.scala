@@ -2,6 +2,8 @@ package cats
 package instances
 
 import cats.data.Chain
+import cats.instances.instances.appendAll
+import cats.kernel.compat.scalaVersionSpecific._
 import cats.kernel.instances.StaticMethods.wrapMutableIndexedSeq
 import cats.syntax.show._
 import scala.annotation.tailrec
@@ -16,6 +18,17 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
       def empty[A]: Queue[A] = Queue.empty
 
       def combineK[A](x: Queue[A], y: Queue[A]): Queue[A] = x ++ y
+
+      override def combineAllOptionK[A](as: IterableOnce[Queue[A]]): Option[Queue[A]] = {
+        val iter = as.iterator
+        if (iter.isEmpty) None else Some(appendAll(iter, Queue.newBuilder[A]).result())
+      }
+
+      override def fromIterableOnce[A](as: IterableOnce[A]): Queue[A] = {
+        val builder = Queue.newBuilder[A]
+        builder ++= as
+        builder.result()
+      }
 
       override def prependK[A](a: A, fa: Queue[A]): Queue[A] = a +: fa
 
@@ -170,6 +183,7 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
   implicit def catsStdTraverseFilterForQueue: TraverseFilter[Queue] = QueueInstances.catsStdTraverseFilterForQueue
 }
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 private object QueueInstances {
   private val catsStdTraverseFilterForQueue: TraverseFilter[Queue] = new TraverseFilter[Queue] {
     val traverse: Traverse[Queue] = cats.instances.queue.catsStdInstancesForQueue

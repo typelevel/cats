@@ -3,6 +3,7 @@ package instances
 
 import scala.annotation.tailrec
 import cats.data.Ior
+import cats.kernel.compat.scalaVersionSpecific._
 
 trait OptionInstances extends cats.kernel.instances.OptionInstances {
 
@@ -24,6 +25,25 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
       def empty[A]: Option[A] = None
 
       def combineK[A](x: Option[A], y: Option[A]): Option[A] = if (x.isDefined) x else y
+
+      override def combineAllOptionK[A](as: IterableOnce[Option[A]]): Option[Option[A]] = {
+        val it = as.iterator
+        if (it.hasNext) {
+          while (true) {
+            val o = it.next()
+            if (o.isDefined) return Some(o)
+            if (!it.hasNext) return Some(None)
+          }
+          sys.error("unreachable")
+        } else {
+          return None
+        }
+      }
+
+      override def fromIterableOnce[A](as: IterableOnce[A]): Option[A] = {
+        val iter = as.iterator
+        if (iter.hasNext) Some(iter.next()) else None
+      }
 
       override def prependK[A](a: A, fa: Option[A]): Option[A] = Some(a)
       override def appendK[A](fa: Option[A], a: A): Option[A] = if (fa.isDefined) fa else Some(a)
@@ -212,6 +232,7 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
     }
 }
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 private[instances] trait OptionInstancesBinCompat0 {
   implicit val catsStdTraverseFilterForOption: TraverseFilter[Option] = new TraverseFilter[Option] {
     val traverse: Traverse[Option] = cats.instances.option.catsStdInstancesForOption

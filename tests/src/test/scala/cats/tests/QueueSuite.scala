@@ -11,6 +11,7 @@ import cats.laws.discipline.{
   TraverseFilterTests,
   TraverseTests
 }
+import cats.laws.discipline.arbitrary._
 import cats.syntax.show._
 import scala.collection.immutable.Queue
 import cats.syntax.eq._
