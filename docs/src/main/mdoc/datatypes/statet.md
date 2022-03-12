@@ -125,42 +125,42 @@ val bookings = NonEmptyList.of(
   TableReservationSystem.Reservation(
     TableReservationSystem
       .ReservationId(tableNumber = 1, hour = LocalTime.parse("10:00:00")),
-    name = "Cristiano Ronaldo"
+    name = "Gandalf"
   ),
   TableReservationSystem.Reservation(
     TableReservationSystem
       .ReservationId(tableNumber = 2, hour = LocalTime.parse("10:00:00")),
-    name = "Lebron James"
+    name = "Legolas"
   ),
   TableReservationSystem.Reservation(
     TableReservationSystem
       .ReservationId(tableNumber = 1, hour = LocalTime.parse("12:00:00")),
-    name = "Tiger Woods"
+    name = "Frodo"
   ),
   TableReservationSystem.Reservation(
     TableReservationSystem
       .ReservationId(tableNumber = 2, hour = LocalTime.parse("12:00:00")),
-    name = "Roger Federer"
+    name = "Bilbo"
   ),
   TableReservationSystem.Reservation(
     TableReservationSystem
       .ReservationId(tableNumber = 3, hour = LocalTime.parse("13:00:00")),
-    name = "Elizabeth Alexandra Mary"
+    name = "Elrond"
   ),
   TableReservationSystem.Reservation(
     TableReservationSystem
       .ReservationId(tableNumber = 1, hour = LocalTime.parse("16:00:00")),
-    name = "Chuck Norris"
+    name = "Sauron"
   ),
   TableReservationSystem.Reservation(
     TableReservationSystem
       .ReservationId(tableNumber = 2, hour = LocalTime.parse("16:00:00")),
-    name = "Kobe Bryant"
+    name = "Aragorn"
   ),
   TableReservationSystem.Reservation(
     TableReservationSystem
       .ReservationId(tableNumber = 2, hour = LocalTime.parse("18:00:00")),
-    name = "Steven Seagal"
+    name = "Gollum"
   )
 )
 
@@ -170,14 +170,14 @@ TableReservationSystem.processBookings(
   bookings :+ TableReservationSystem.Reservation(
     TableReservationSystem
       .ReservationId(tableNumber = 1, hour = LocalTime.parse("16:00:00")),
-    name = "Bruce Lee"
+    name = "Saruman"
   )
 )
 ```
 
 The full source code of this example can be found at this
 [gist](https://gist.github.com/benkio/baa4fe1d50751cd602c4175f1bb39f4d)
-or [scastie](https://scastie.scala-lang.org/urJPRXNTQGuwhcLCFAtJMQ)
+or [scastie](https://scastie.scala-lang.org/YhJmET6PRJKvrZTfrZJkbQ)
 
 ## Conclusions
 
