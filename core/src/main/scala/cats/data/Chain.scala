@@ -783,6 +783,18 @@ object Chain extends ChainInstances {
     else Wrap(s)
 
   /**
+   * Creates a Chain from the specified IterableOnce.
+   */
+  def fromIterableOnce[A](xs: IterableOnce[A]): Chain[A] =
+    xs match {
+      case s: Seq[A @unchecked] =>
+        // Seq is a subclass of IterableOnce, so the type has to be compatible
+        Chain.fromSeq(s) // pay O(1) not O(N) cost
+      case notSeq =>
+        Chain.fromSeq(notSeq.iterator.toSeq)
+    }
+
+  /**
    * Creates a Chain from the specified elements.
    */
   def apply[A](as: A*): Chain[A] =
@@ -1046,7 +1058,7 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
 
       def empty[A]: Chain[A] = Chain.nil
       def combineK[A](c: Chain[A], c2: Chain[A]): Chain[A] = Chain.concat(c, c2)
-      override def fromIterableOnce[A](xs: IterableOnce[A]): Chain[A] = Chain.fromSeq(xs.iterator.toSeq)
+      override def fromIterableOnce[A](xs: IterableOnce[A]): Chain[A] = Chain.fromIterableOnce(xs)
       def pure[A](a: A): Chain[A] = Chain.one(a)
       def flatMap[A, B](fa: Chain[A])(f: A => Chain[B]): Chain[B] =
         fa.flatMap(f)
