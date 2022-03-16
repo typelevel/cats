@@ -4,6 +4,9 @@ package syntax
 trait FunctorSyntax extends Functor.ToFunctorOps {
   implicit final def catsSyntaxFunctorTuple2Ops[F[_], A, B](fab: F[(A, B)]): FunctorTuple2Ops[F, A, B] =
     new FunctorTuple2Ops[F, A, B](fab)
+
+  implicit final def catsSyntaxIfF[F[_]](fa: F[Boolean]): IfFOps[F] =
+    new IfFOps[F](fa)
 }
 
 final class FunctorTuple2Ops[F[_], A, B](private val fab: F[(A, B)]) extends AnyVal {
@@ -61,4 +64,20 @@ final class FunctorTuple2Ops[F[_], A, B](private val fab: F[(A, B)]) extends Any
    * }}}
    */
   def unzip(implicit F: Functor[F]): (F[A], F[B]) = F.unzip(fab)
+}
+
+final class IfFOps[F[_]](private val fa: F[Boolean]) extends AnyVal {
+
+  /**
+   * Lifts `if` to Functor
+   *
+   * Example:
+   * {{{
+   * scala> import cats.syntax.all._
+   *
+   * scala> List(true, false, false).ifF(1, 0)
+   * res0: List[Int] = List(1, 0, 0)
+   * }}}
+   */
+  def ifF[B](ifTrue: => B, ifFalse: => B)(implicit F: Functor[F]): F[B] = F.ifF(fa)(ifTrue, ifFalse)
 }

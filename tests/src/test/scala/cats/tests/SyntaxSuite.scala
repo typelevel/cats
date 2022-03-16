@@ -284,6 +284,9 @@ object SyntaxSuite {
 
     val b = mock[B]
     val fb1: F[B] = fa.as(b)
+
+    val c = mock[F[Boolean]]
+    c.ifF(1, 0)
   }
 
   def testApply[F[_]: Apply: Semigroupal,
