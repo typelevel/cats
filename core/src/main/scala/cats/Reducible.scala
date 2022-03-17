@@ -62,7 +62,7 @@ import simulacrum.{noop, typeclass}
    * {{{
    * scala> import cats.Reducible
    * scala> import cats.data.NonEmptyList
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> Reducible[NonEmptyList].reduceMap(NonEmptyList.of(1, 2, 3))(v => v.toString * v)
    * res0: String = 122333
    *
