@@ -62,7 +62,6 @@ import simulacrum.{noop, typeclass}
    * {{{
    * scala> import cats.Reducible
    * scala> import cats.data.NonEmptyList
-   * scala> import cats.syntax.all._
    * scala> Reducible[NonEmptyList].reduceMap(NonEmptyList.of(1, 2, 3))(v => v.toString * v)
    * res0: String = 122333
    *
@@ -79,7 +78,7 @@ import simulacrum.{noop, typeclass}
    * given `SemigroupK[G]`.
    *
    * {{{
-   * scala> import cats._, cats.data._, cats.implicits._
+   * scala> import cats._, cats.data._
    * scala> val f: Int => Endo[String] = i => (s => s + i)
    * scala> val x: Endo[String] = Reducible[NonEmptyList].reduceMapK(NonEmptyList.of(1, 2, 3))(f)
    * scala> val a = x("foo")
@@ -122,7 +121,6 @@ import simulacrum.{noop, typeclass}
    * {{{
    * scala> import cats.Reducible
    * scala> import cats.data.NonEmptyList
-   * scala> import cats.implicits._
    * scala> val evenOpt: Int => Option[Int] =
    *      |   i => if (i % 2 == 0) Some(i) else None
    * scala> val allEven = NonEmptyList.of(2,4,6,8,10)
@@ -147,7 +145,6 @@ import simulacrum.{noop, typeclass}
    * {{{
    * scala> import cats.Reducible
    * scala> import cats.data.NonEmptyList
-   * scala> import cats.implicits._
    * scala> val evenOpt: Int => Option[Int] =
    *      |   i => if (i % 2 == 0) Some(i) else None
    * scala> val allEven = NonEmptyList.of(2,4,6,8,10)
@@ -294,7 +291,6 @@ import simulacrum.{noop, typeclass}
    * Intercalate/insert an element between the existing elements while reducing.
    *
    * {{{
-   * scala> import cats.implicits._
    * scala> import cats.data.NonEmptyList
    * scala> val nel = NonEmptyList.of("a", "b", "c")
    * scala> Reducible[NonEmptyList].nonEmptyIntercalate(nel, "-")
