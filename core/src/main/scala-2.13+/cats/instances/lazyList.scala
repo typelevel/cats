@@ -2,12 +2,14 @@ package cats
 package instances
 
 import cats.kernel
+import cats.kernel.compat.scalaVersionSpecific._
 import cats.syntax.show._
 import cats.data.Ior
 import cats.data.ZipLazyList
 
 import scala.annotation.tailrec
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 trait LazyListInstances extends cats.kernel.instances.LazyListInstances {
 
   implicit val catsStdInstancesForLazyList
@@ -21,6 +23,13 @@ trait LazyListInstances extends cats.kernel.instances.LazyListInstances {
       def empty[A]: LazyList[A] = LazyList.empty
 
       def combineK[A](x: LazyList[A], y: LazyList[A]): LazyList[A] = x.lazyAppendedAll(y)
+
+      override def combineAllOptionK[A](as: IterableOnce[LazyList[A]]): Option[LazyList[A]] = {
+        val iter = as.iterator
+        if (iter.isEmpty) None else Some(LazyList.from(iter.flatMap(_.iterator)))
+      }
+
+      override def fromIterableOnce[A](as: IterableOnce[A]): LazyList[A] = LazyList.from(as)
 
       override def prependK[A](a: A, fa: LazyList[A]): LazyList[A] = fa.prepended(a)
 

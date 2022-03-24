@@ -2,6 +2,8 @@ package cats
 package instances
 
 import cats.data.{Chain, ZipList}
+import cats.instances.instances.appendAll
+import cats.kernel.compat.scalaVersionSpecific._
 import cats.kernel.instances.StaticMethods.wrapMutableIndexedSeq
 import cats.syntax.show._
 
@@ -18,6 +20,13 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
       def empty[A]: List[A] = Nil
 
       def combineK[A](x: List[A], y: List[A]): List[A] = x ::: y
+
+      override def combineAllOptionK[A](as: IterableOnce[List[A]]): Option[List[A]] = {
+        val iter = as.iterator
+        if (iter.isEmpty) None else Some(appendAll(iter, List.newBuilder[A]).result())
+      }
+
+      override def fromIterableOnce[A](as: IterableOnce[A]): List[A] = as.iterator.toList
 
       override def prependK[A](a: A, fa: List[A]): List[A] = a :: fa
 
@@ -262,6 +271,7 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
     }
 }
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 private[instances] trait ListInstancesBinCompat0 {
   implicit val catsStdTraverseFilterForList: TraverseFilter[List] = new TraverseFilter[List] {
     val traverse: Traverse[List] = cats.instances.list.catsStdInstancesForList

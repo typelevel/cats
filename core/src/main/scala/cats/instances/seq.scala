@@ -2,12 +2,15 @@ package cats
 package instances
 
 import cats.data.{Chain, ZipSeq}
+import cats.instances.instances.appendAll
+import cats.kernel.compat.scalaVersionSpecific._
 
 import scala.annotation.tailrec
 import scala.collection.{+:, mutable}
 import scala.collection.immutable.Seq
 import cats.data.Ior
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 trait SeqInstances extends cats.kernel.instances.SeqInstances {
   implicit val catsStdInstancesForSeq
     : Traverse[Seq] with Monad[Seq] with Alternative[Seq] with CoflatMap[Seq] with Align[Seq] =
@@ -16,6 +19,17 @@ trait SeqInstances extends cats.kernel.instances.SeqInstances {
       def empty[A]: Seq[A] = Seq.empty[A]
 
       def combineK[A](x: Seq[A], y: Seq[A]): Seq[A] = x ++ y
+
+      override def combineAllOptionK[A](as: IterableOnce[Seq[A]]): Option[Seq[A]] = {
+        val iter = as.iterator
+        if (iter.isEmpty) None else Some(appendAll(iter, Seq.newBuilder[A]).result())
+      }
+
+      override def fromIterableOnce[A](as: IterableOnce[A]): Seq[A] = {
+        val builder = Seq.newBuilder[A]
+        builder ++= as
+        builder.result()
+      }
 
       override def prependK[A](a: A, fa: Seq[A]): Seq[A] = a +: fa
 

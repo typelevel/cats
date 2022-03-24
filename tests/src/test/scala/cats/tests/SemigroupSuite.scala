@@ -7,11 +7,6 @@ import cats.kernel.laws.discipline.SemigroupTests
 import org.scalacheck.Prop._
 
 class SemigroupSuite extends CatsSuite {
-  {
-    Invariant[Semigroup]
-    Semigroupal[Semigroup]
-    InvariantMonoidal[Semigroup]
-  }
 
   {
     Invariant[Semigroup]

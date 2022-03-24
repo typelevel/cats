@@ -1,8 +1,10 @@
 package cats
 
+import scala.annotation.tailrec
 import scala.collection.immutable.{Seq, SortedMap, SortedSet}
 import simulacrum.typeclass
 import cats.data.Ior
+import cats.kernel.compat.scalaVersionSpecific._
 
 /**
  * SemigroupK is a universal semigroup which operates on kinds.
@@ -108,8 +110,66 @@ import cats.data.Ior
    */
   def sum[A, B](fa: F[A], fb: F[B])(implicit F: Functor[F]): F[Either[A, B]] =
     combineK(F.map(fa)(Left(_)), F.map(fb)(Right(_)))
+
+  /**
+   * Return `a` combined with itself `n` times.
+   *
+   * Example:
+   * {{{
+   * scala> SemigroupK[List].combineNK(List(1), 5)
+   * res0: List[Int] = List(1, 1, 1, 1, 1)
+   *
+   * }}}
+   */
+  def combineNK[A](a: F[A], n: Int): F[A] =
+    if (n <= 0) throw new IllegalArgumentException("Repeated combining for semigroupKs must have n > 0")
+    else repeatedCombineNK(a, n)
+
+  /**
+   * Return `a` combined with itself more than once.
+   */
+  protected[this] def repeatedCombineNK[A](a: F[A], n: Int): F[A] = {
+    @tailrec def loop(b: F[A], k: Int, extra: F[A]): F[A] =
+      if (k == 1) combineK(b, extra)
+      else {
+        val x = if ((k & 1) == 1) combineK(b, extra) else extra
+        loop(combineK(b, b), k >>> 1, x)
+      }
+    if (n == 1) a else loop(a, n - 1, a)
+  }
+
+  /**
+   * Given a sequence of `as`, combine them and return the total.
+   *
+   * If the sequence is empty, returns None. Otherwise, returns Some(total).
+   *
+   * Example:
+   * {{{
+   * scala> SemigroupK[List].combineAllOptionK(List(List("One"), List("Two"), List("Three")))
+   * res0: Option[List[String]] = Some(List(One, Two, Three))
+   *
+   * scala> SemigroupK[List].combineAllOptionK[String](List.empty)
+   * res1: Option[List[String]] = None
+   * }}}
+   */
+  def combineAllOptionK[A](as: IterableOnce[F[A]]): Option[F[A]] =
+    as.iterator.reduceOption(combineK[A])
+
+  /**
+   * return a semigroupK that reverses the order
+   * so combineK(a, b) == reverse.combineK(b, a)
+   */
+  def reverse: SemigroupK[F] =
+    new SemigroupK[F] {
+      def combineK[A](a: F[A], b: F[A]): F[A] = self.combineK(b, a)
+      // a + a + a + ... is the same when reversed
+      override def combineNK[A](a: F[A], n: Int): F[A] = self.combineNK(a, n)
+      override def reverse = self
+    }
+
 }
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 object SemigroupK extends ScalaVersionSpecificMonoidKInstances with SemigroupKInstances0 {
   def align[F[_]: SemigroupK: Functor]: Align[F] =
     new Align[F] {
