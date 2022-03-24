@@ -34,6 +34,8 @@ private[cats] object ArraySeqInstances {
       def combineK[A](xs: ArraySeq[A], ys: ArraySeq[A]): ArraySeq[A] =
         xs.concat(ys)
 
+      override def fromIterableOnce[A](as: IterableOnce[A]): ArraySeq[A] = ArraySeq.untagged.from(as)
+
       override def prependK[A](a: A, fa: ArraySeq[A]): ArraySeq[A] = fa.prepended(a)
 
       override def appendK[A](fa: ArraySeq[A], a: A): ArraySeq[A] = fa.appended(a)

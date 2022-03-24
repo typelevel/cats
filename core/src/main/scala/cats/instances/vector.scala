@@ -2,6 +2,8 @@ package cats
 package instances
 
 import cats.data.{Chain, ZipVector}
+import cats.instances.instances.appendAll
+import cats.kernel.compat.scalaVersionSpecific._
 import cats.syntax.show._
 
 import scala.annotation.tailrec
@@ -17,6 +19,14 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
       def empty[A]: Vector[A] = Vector.empty[A]
 
       def combineK[A](x: Vector[A], y: Vector[A]): Vector[A] = x ++ y
+
+      override def combineAllOptionK[A](as: IterableOnce[Vector[A]]): Option[Vector[A]] = {
+        val iter = as.iterator
+        if (iter.isEmpty) None else Some(appendAll(iter, Vector.newBuilder[A]).result())
+      }
+
+      override def fromIterableOnce[A](as: IterableOnce[A]): Vector[A] =
+        as.iterator.toVector
 
       override def prependK[A](a: A, fa: Vector[A]): Vector[A] = a +: fa
 
@@ -206,6 +216,7 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
     }
 }
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 private[instances] trait VectorInstancesBinCompat0 {
   implicit val catsStdTraverseFilterForVector: TraverseFilter[Vector] = new TraverseFilter[Vector] {
     val traverse: Traverse[Vector] = cats.instances.vector.catsStdInstancesForVector

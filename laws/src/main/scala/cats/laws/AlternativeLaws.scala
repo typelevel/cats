@@ -2,6 +2,7 @@ package cats
 package laws
 
 import cats.syntax.all._
+import cats.kernel.compat.scalaVersionSpecific._
 
 trait AlternativeLaws[F[_]] extends NonEmptyAlternativeLaws[F] with MonoidKLaws[F] {
   implicit override def F: Alternative[F]
@@ -17,8 +18,13 @@ trait AlternativeLaws[F[_]] extends NonEmptyAlternativeLaws[F] with MonoidKLaws[
   // Perhaps should be deprecated in favor of nonEmptyAlternativeRightDistributivity
   def alternativeRightDistributivity[A, B](fa: F[A], ff: F[A => B], fg: F[A => B]): IsEq[F[B]] =
     nonEmptyAlternativeRightDistributivity(fa, ff, fg)
+
+  def fromIterableOnce[A](as: Iterable[A]): IsEq[F[A]] =
+    F.fromIterableOnce(as) <-> F.combineAllK(as.iterator.map(F.pure(_)))
+
 }
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 object AlternativeLaws {
   def apply[F[_]](implicit ev: Alternative[F]): AlternativeLaws[F] =
     new AlternativeLaws[F] { def F: Alternative[F] = ev }
