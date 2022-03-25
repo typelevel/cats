@@ -44,6 +44,13 @@ import simulacrum.{noop, typeclass}
    * semigroup for `G[_]`.
    *
    * This method is a generalization of `reduce`.
+   *
+   * {{{
+   * scala> import cats.Reducible
+   * scala> import cats.data._
+   * scala> Reducible[NonEmptyVector].reduceK(NonEmptyVector.of(NonEmptyList.of(1, 2, 3), NonEmptyList.of(4, 5, 6), NonEmptyList.of(7, 8, 9)))
+   * res0: NonEmptyList[Int] = NonEmptyList(1, 2, 3, 4, 5, 6, 7, 8, 9)
+   * }}}
    */
   def reduceK[G[_], A](fga: F[G[A]])(implicit G: SemigroupK[G]): G[A] =
     reduce(fga)(G.algebra)
@@ -51,6 +58,17 @@ import simulacrum.{noop, typeclass}
   /**
    * Apply `f` to each element of `fa` and combine them using the
    * given `Semigroup[B]`.
+   *
+   * {{{
+   * scala> import cats.Reducible
+   * scala> import cats.data.NonEmptyList
+   * scala> Reducible[NonEmptyList].reduceMap(NonEmptyList.of(1, 2, 3))(v => v.toString * v)
+   * res0: String = 122333
+   *
+   * scala> val gt5: Int => Option[Int] = (num: Int) => Some(num).filter(_ > 5)
+   * scala> Reducible[NonEmptyList].reduceMap(NonEmptyList.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10))(gt5)
+   * res1: Option[Int] = Some(40)
+   * }}}
    */
   def reduceMap[A, B](fa: F[A])(f: A => B)(implicit B: Semigroup[B]): B =
     reduceLeftTo(fa)(f)((b, a) => B.combine(b, f(a)))
@@ -60,7 +78,7 @@ import simulacrum.{noop, typeclass}
    * given `SemigroupK[G]`.
    *
    * {{{
-   * scala> import cats._, cats.data._, cats.implicits._
+   * scala> import cats._, cats.data._
    * scala> val f: Int => Endo[String] = i => (s => s + i)
    * scala> val x: Endo[String] = Reducible[NonEmptyList].reduceMapK(NonEmptyList.of(1, 2, 3))(f)
    * scala> val a = x("foo")
@@ -103,7 +121,6 @@ import simulacrum.{noop, typeclass}
    * {{{
    * scala> import cats.Reducible
    * scala> import cats.data.NonEmptyList
-   * scala> import cats.implicits._
    * scala> val evenOpt: Int => Option[Int] =
    *      |   i => if (i % 2 == 0) Some(i) else None
    * scala> val allEven = NonEmptyList.of(2,4,6,8,10)
@@ -128,7 +145,6 @@ import simulacrum.{noop, typeclass}
    * {{{
    * scala> import cats.Reducible
    * scala> import cats.data.NonEmptyList
-   * scala> import cats.implicits._
    * scala> val evenOpt: Int => Option[Int] =
    *      |   i => if (i % 2 == 0) Some(i) else None
    * scala> val allEven = NonEmptyList.of(2,4,6,8,10)
@@ -275,7 +291,6 @@ import simulacrum.{noop, typeclass}
    * Intercalate/insert an element between the existing elements while reducing.
    *
    * {{{
-   * scala> import cats.implicits._
    * scala> import cats.data.NonEmptyList
    * scala> val nel = NonEmptyList.of("a", "b", "c")
    * scala> Reducible[NonEmptyList].nonEmptyIntercalate(nel, "-")
