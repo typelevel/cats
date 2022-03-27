@@ -3,7 +3,7 @@ package alleycats.tests
 import alleycats.std.all._
 import cats.{Eval, Foldable}
 import cats.instances.all._
-import cats.laws.discipline.FoldableTests
+import cats.laws.discipline.{TraverseFilterTests, TraverseTests}
 
 class IterableTests extends AlleycatsSuite {
 
@@ -27,5 +27,7 @@ class IterableTests extends AlleycatsSuite {
     )
   }
 
-  checkAll("Foldable[Iterable]", FoldableTests[Iterable].foldable[Int, Int])
+  checkAll("Traverse[Iterable]", TraverseTests[Iterable].traverse[Int, Int, Int, Set[Int], Option, Option])
+
+  checkAll("TraverseFilter[Iterable]", TraverseFilterTests[Iterable].traverseFilter[Int, Int, Int])
 }

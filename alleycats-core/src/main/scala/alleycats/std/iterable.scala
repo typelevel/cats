@@ -1,13 +1,17 @@
 package alleycats
 package std
 
-import cats.{Eval, Foldable, Monoid}
+import cats.data.Chain
+import cats.kernel.instances.StaticMethods.wrapMutableIndexedSeq
+import cats.{Applicative, Eval, Foldable, Monoid, Traverse, TraverseFilter}
+
+import scala.collection.immutable.{IndexedSeq => ImIndexedSeq}
 
 object iterable extends IterableInstances
 
 trait IterableInstances {
-  implicit val alleycatsStdIterableFoldable: Foldable[Iterable] =
-    new Foldable[Iterable] {
+  implicit def alleycatsStdIterableTraverse: Traverse[Iterable] =
+    new Traverse[Iterable] {
       override def foldLeft[A, B](fa: Iterable[A], b: B)(f: (B, A) => B): B = fa.foldLeft(b)(f)
 
       override def foldRight[A, B](fa: Iterable[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
@@ -35,5 +39,31 @@ trait IterableInstances {
       override def isEmpty[A](fa: Iterable[A]): Boolean = fa.isEmpty
 
       override def nonEmpty[A](fa: Iterable[A]): Boolean = fa.nonEmpty
+
+      // Adapted from List and Vector instances.
+      override def traverse[G[_], A, B](fa: Iterable[A])(f: A => G[B])(implicit G: Applicative[G]): G[Iterable[B]] =
+        if (fa.isEmpty) G.pure(Iterable.empty)
+        else G.map(Chain.traverseViaChain(toImIndexedSeq(fa))(f))(_.toVector)
     }
+
+  implicit def alleycatsStdIterableTraverseFilter: TraverseFilter[Iterable] = new TraverseFilter[Iterable] {
+    override def traverse: Traverse[Iterable] = alleycatsStdIterableTraverse
+
+    override def traverseFilter[G[_], A, B](
+      fa: Iterable[A]
+    )(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Iterable[B]] =
+      if (fa.isEmpty) G.pure(Iterable.empty)
+      else G.map(Chain.traverseFilterViaChain(toImIndexedSeq(fa))(f))(_.toVector)
+  }
+
+  private def toImIndexedSeq[A](fa: Iterable[A]): ImIndexedSeq[A] = fa match {
+    case iseq: ImIndexedSeq[A] => iseq
+    case _ =>
+      val as = collection.mutable.ArrayBuffer[A]()
+      as ++= fa
+      wrapMutableIndexedSeq(as)
+  }
+
+  @deprecated("use alleycatsStdIterableTraverse", "2.7.1")
+  val alleycatsStdIterableFoldable: Foldable[Iterable] = alleycatsStdIterableTraverse
 }
