@@ -1,13 +1,18 @@
 package alleycats
 package std
 
-import cats.{Eval, Foldable, Monoid}
+import cats.data.Chain
+import cats.kernel.instances.StaticMethods.wrapMutableIndexedSeq
+import cats.{Applicative, Eval, Foldable, Monoid, Traverse}
 
 object iterable extends IterableInstances
 
 trait IterableInstances {
-  implicit val alleycatsStdIterableFoldable: Foldable[Iterable] =
-    new Foldable[Iterable] {
+  @deprecated("use alleycatsStdIterableTraverse", "2.7.1")
+  val alleycatsStdIterableFoldable: Foldable[Iterable] = alleycatsStdIterableTraverse
+
+  implicit val alleycatsStdIterableTraverse: Traverse[Iterable] =
+    new Traverse[Iterable] {
       override def foldLeft[A, B](fa: Iterable[A], b: B)(f: (B, A) => B): B = fa.foldLeft(b)(f)
 
       override def foldRight[A, B](fa: Iterable[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
@@ -35,5 +40,15 @@ trait IterableInstances {
       override def isEmpty[A](fa: Iterable[A]): Boolean = fa.isEmpty
 
       override def nonEmpty[A](fa: Iterable[A]): Boolean = fa.nonEmpty
+
+      // copied from List instances
+      override def traverse[G[_], A, B](fa: Iterable[A])(f: A => G[B])(implicit G: Applicative[G]): G[Iterable[B]] =
+        if (fa.isEmpty) G.pure(Iterable.empty)
+        else
+          G.map(Chain.traverseViaChain {
+            val as = collection.mutable.ArrayBuffer[A]()
+            as ++= fa
+            wrapMutableIndexedSeq(as)
+          }(f))(_.toVector)
     }
 }
