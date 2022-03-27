@@ -4,6 +4,7 @@ package std
 import cats.data.Chain
 import cats.kernel.instances.StaticMethods.wrapMutableIndexedSeq
 import cats.{Applicative, Eval, Foldable, Monoid, Traverse}
+import scala.collection.immutable.{IndexedSeq => ImIndexedSeq}
 
 object iterable extends IterableInstances
 
@@ -45,14 +46,19 @@ private[std] object IterableInstances {
 
       override def nonEmpty[A](fa: Iterable[A]): Boolean = fa.nonEmpty
 
-      // copied from List instances
+      // Adapted from List and Vector instances.
       override def traverse[G[_], A, B](fa: Iterable[A])(f: A => G[B])(implicit G: Applicative[G]): G[Iterable[B]] =
         if (fa.isEmpty) G.pure(Iterable.empty)
-        else
-          G.map(Chain.traverseViaChain {
-            val as = collection.mutable.ArrayBuffer[A]()
-            as ++= fa
-            wrapMutableIndexedSeq(as)
-          }(f))(_.toVector)
+        else {
+          val imIndexedSeq = fa match {
+            case iseq: ImIndexedSeq[A] => iseq
+            case _ =>
+              val as = collection.mutable.ArrayBuffer[A]()
+              as ++= fa
+              wrapMutableIndexedSeq(as)
+          }
+
+          G.map(Chain.traverseViaChain(imIndexedSeq)(f))(_.toVector)
+        }
     }
 }
