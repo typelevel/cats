@@ -5,13 +5,15 @@ import cats.data.Chain
 import cats.kernel.instances.StaticMethods.wrapMutableIndexedSeq
 import cats.{Applicative, Eval, Foldable, Monoid, Traverse}
 
-object iterable extends IterableInstances
+object iterable extends IterableInstances with IterableInstancesBinCompat0
 
 trait IterableInstances {
   @deprecated("use alleycatsStdIterableTraverse", "2.7.1")
-  val alleycatsStdIterableFoldable: Foldable[Iterable] = alleycatsStdIterableTraverse
+  val alleycatsStdIterableFoldable: Foldable[Iterable] = IterableInstances.alleycatsStdIterableTraverse
+}
 
-  implicit val alleycatsStdIterableTraverse: Traverse[Iterable] =
+private[std] object IterableInstances {
+  val alleycatsStdIterableTraverse: Traverse[Iterable] =
     new Traverse[Iterable] {
       override def foldLeft[A, B](fa: Iterable[A], b: B)(f: (B, A) => B): B = fa.foldLeft(b)(f)
 
@@ -51,4 +53,8 @@ trait IterableInstances {
             wrapMutableIndexedSeq(as)
           }(f))(_.toVector)
     }
+}
+
+trait IterableInstancesBinCompat0 {
+  implicit val alleycatsStdIterableTraverse: Traverse[Iterable] = IterableInstances.alleycatsStdIterableTraverse
 }
