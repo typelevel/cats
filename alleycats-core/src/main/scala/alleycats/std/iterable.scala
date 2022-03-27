@@ -3,7 +3,8 @@ package std
 
 import cats.data.Chain
 import cats.kernel.instances.StaticMethods.wrapMutableIndexedSeq
-import cats.{Applicative, Eval, Foldable, Monoid, Traverse}
+import cats.{Applicative, Eval, Foldable, Monoid, Traverse, TraverseFilter}
+
 import scala.collection.immutable.{IndexedSeq => ImIndexedSeq}
 
 object iterable extends IterableInstances
@@ -41,17 +42,25 @@ trait IterableInstances {
     // Adapted from List and Vector instances.
     override def traverse[G[_], A, B](fa: Iterable[A])(f: A => G[B])(implicit G: Applicative[G]): G[Iterable[B]] =
       if (fa.isEmpty) G.pure(Iterable.empty)
-      else {
-        val imIndexedSeq = fa match {
-          case iseq: ImIndexedSeq[A] => iseq
-          case _ =>
-            val as = collection.mutable.ArrayBuffer[A]()
-            as ++= fa
-            wrapMutableIndexedSeq(as)
-        }
+      else G.map(Chain.traverseViaChain(toImIndexedSeq(fa))(f))(_.toVector)
+  }
 
-        G.map(Chain.traverseViaChain(imIndexedSeq)(f))(_.toVector)
-      }
+  implicit def alleycatsStdIterableTraverseFilter: TraverseFilter[Iterable] = new TraverseFilter[Iterable] {
+    override def traverse: Traverse[Iterable] = alleycatsStdIterableTraverse
+
+    override def traverseFilter[G[_], A, B](
+      fa: Iterable[A]
+    )(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Iterable[B]] =
+      if (fa.isEmpty) G.pure(Iterable.empty)
+      else G.map(Chain.traverseFilterViaChain(toImIndexedSeq(fa))(f))(_.toVector)
+  }
+
+  private def toImIndexedSeq[A](fa: Iterable[A]): ImIndexedSeq[A] = fa match {
+    case iseq: ImIndexedSeq[A] => iseq
+    case _ =>
+      val as = collection.mutable.ArrayBuffer[A]()
+      as ++= fa
+      wrapMutableIndexedSeq(as)
   }
 
   @deprecated("use alleycatsStdIterableTraverse", "2.7.1")
