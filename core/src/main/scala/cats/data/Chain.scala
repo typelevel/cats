@@ -27,8 +27,8 @@ import cats.kernel.instances.StaticMethods
 
 import scala.annotation.tailrec
 import scala.collection.immutable.SortedMap
-import scala.collection.immutable.TreeSet
 import scala.collection.immutable.{IndexedSeq => ImIndexedSeq}
+import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 
 import Chain.{
@@ -150,6 +150,10 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
    * Returns false if there are no elements in this collection.
    */
   final def nonEmpty: Boolean = !isEmpty
+
+  // Quick check whether the chain is either empty or contains one element only.
+  @inline private def isEmptyOrSingleton: Boolean =
+    isEmpty || this.isInstanceOf[Chain.Singleton[_]]
 
   /**
    * Concatenates this with `c` in O(1) runtime.
@@ -760,19 +764,59 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
 
   /**
    * Remove duplicates. Duplicates are checked using `Order[_]` instance.
+   * 
+   * Example:
+   * {{{
+   * scala> import cats.data.Chain
+   * scala> val chain = Chain(1, 2, 2, 3)
+   * scala> chain.distinct
+   * res0: cats.data.Chain[Int] = Chain(1, 2, 3)
+   * }}}
    */
   def distinct[AA >: A](implicit O: Order[AA]): Chain[AA] = {
-    implicit val ord: Ordering[AA] = O.toOrdering
+    if (isEmptyOrSingleton) this
+    else {
+      implicit val ord: Ordering[AA] = O.toOrdering
 
-    var alreadyIn = TreeSet.empty[AA]
-
-    foldLeft(Chain.empty[AA]) { (elementsSoFar, b) =>
-      if (alreadyIn.contains(b)) {
-        elementsSoFar
-      } else {
-        alreadyIn += b
-        elementsSoFar :+ b
+      val bldr = Vector.newBuilder[AA]
+      val seen = mutable.TreeSet.empty[AA]
+      val it = iterator
+      while (it.hasNext) {
+        val next = it.next()
+        if (seen.add(next))
+          bldr += next
       }
+      // Result can contain a single element only.
+      Chain.fromSeq(bldr.result())
+    }
+  }
+
+  /**
+   * Remove duplicates by a predicate. Duplicates are checked using `Order[_]` instance.
+   * 
+   * Example:
+   * {{{
+   * scala> import cats.data.Chain
+   * scala> val chain = Chain(1, 2, 3, 4)
+   * scala> chain.distinctBy(_ / 2)
+   * res0: cats.data.Chain[Int] = Chain(1, 2, 4)
+   * }}}
+   */
+  def distinctBy[B](f: A => B)(implicit O: Order[B]): Chain[A] = {
+    if (isEmptyOrSingleton) this
+    else {
+      implicit val ord: Ordering[B] = O.toOrdering
+
+      val bldr = Vector.newBuilder[A]
+      val seen = mutable.TreeSet.empty[B]
+      val it = iterator
+      while (it.hasNext) {
+        val next = it.next()
+        if (seen.add(f(next)))
+          bldr += next
+      }
+      // Result can contain a single element only.
+      Chain.fromSeq(bldr.result())
     }
   }
 
