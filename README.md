@@ -196,6 +196,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [buildo](https://buildo.io)
 - [BUX](https://getbux.com/)
 - [Chartboost](https://www.chartboost.com/)
+- [ClearScore](https://clearscore.com/)
 - [Cleverbase](https://cleverbase.com/en/)
 - [Codacy](https://www.codacy.com/)
 - [Code Dx](https://codedx.com/)
