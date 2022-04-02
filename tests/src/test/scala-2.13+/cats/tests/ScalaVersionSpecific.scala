@@ -1,19 +1,17 @@
 package cats.tests
 
-import cats.{Eval, Foldable, Id, Now}
+import cats._
 import cats.data.NonEmptyLazyList
-import cats.laws.discipline.{ExhaustiveCheck, MiniInt, NonEmptyParallelTests, ParallelTests}
-import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.DeprecatedEqInstances
-import cats.syntax.either._
-import cats.syntax.foldable._
-import cats.syntax.parallel._
-import cats.syntax.traverse._
-import cats.syntax.eq._
-import org.scalacheck.Prop._
-import cats.kernel.{Eq, Order}
+import cats.laws.discipline.ExhaustiveCheck
+import cats.laws.discipline.MiniInt
+import cats.laws.discipline.NonEmptyParallelTests
+import cats.laws.discipline.ParallelTests
+import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
+import cats.syntax.all._
 import org.scalacheck.Arbitrary
+import org.scalacheck.Prop._
 
 trait ScalaVersionSpecificFoldableSuite { self: FoldableSuiteAdditional =>
   test("Foldable[LazyList] monadic folds stack safety")(checkMonadicFoldsStackSafety(_.to(LazyList)))
@@ -57,7 +55,7 @@ trait ScalaVersionSpecificFoldableSuite { self: FoldableSuiteAdditional =>
   }
 
   test("Foldable[LazyList] laziness of foldM") {
-    assert(dangerous.foldM(0)((acc, a) => if (a < 2) Some(acc + a) else None) === None)
+    assert(dangerousLazyList.foldM(0)((acc, a) => if (a < 2) Some(acc + a) else None) === None)
   }
 
   def foldableLazyListWithDefaultImpl: Foldable[LazyList] =
@@ -220,6 +218,7 @@ trait ScalaVersionSpecificAlgebraInvariantSuite {
   }
 
   // This version-specific instance is required since 2.12 and below do not have parseString on the Numeric class
+  @annotation.nowarn("cat=deprecation")
   implicit protected def eqFractional[A: Eq: Arbitrary]: Eq[Fractional[A]] = {
     // This deprecated instance is required since there is not `ExhaustiveCheck` for any types for which a `Fractional`
     // can easily be defined

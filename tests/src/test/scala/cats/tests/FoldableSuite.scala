@@ -1,23 +1,17 @@
 package cats.tests
 
 import cats._
-import cats.data.{Const, EitherK, IdT, Ior, Nested, NonEmptyList, NonEmptyStream, NonEmptyVector, OneAnd, Validated}
+import cats.data._
 import cats.instances.order._
-import cats.kernel.{Eq, Monoid}
 import cats.kernel.compat.scalaVersionSpecific._
 import cats.laws.discipline.arbitrary._
-import cats.syntax.alternative._
-import cats.syntax.either._
-import cats.syntax.foldable._
-import cats.syntax.functor._
-import cats.syntax.list._
-import cats.syntax.reducible._
-import cats.syntax.semigroupk._
+import cats.syntax.all._
 import org.scalacheck.Arbitrary
-import scala.collection.immutable.{SortedMap, SortedSet}
-import scala.util.Try
-import cats.syntax.eq._
 import org.scalacheck.Prop._
+
+import scala.collection.immutable.SortedMap
+import scala.collection.immutable.SortedSet
+import scala.util.Try
 
 @suppressUnusedImportWarningForScalaVersionSpecific
 abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit
@@ -168,7 +162,9 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit
       // that might still be in use.
       //
       // https://github.com/typelevel/cats/pull/3278#discussion_r372841693
-      assert(fa.collectSomeFold(g) === (fa.toList.filter(f).fold(m.empty)(m.combine)))
+      @annotation.nowarn("cat=deprecation")
+      val obtained = fa.collectSomeFold(g)
+      assert(obtained === (fa.toList.filter(f).fold(m.empty)(m.combine)))
     }
   }
 
@@ -399,7 +395,10 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit
 
 }
 
-class FoldableSuiteAdditional extends CatsSuite with ScalaVersionSpecificFoldableSuite {
+class FoldableSuiteAdditional
+    extends CatsSuite
+    with ScalaVersionSpecificFoldableSuite
+    with FoldableSuiteAdditionalStreamSpecific {
 
   // exists method written in terms of foldRight
   def contains[F[_]: Foldable, A: Eq](as: F[A], goal: A): Eval[Boolean] =
@@ -524,9 +523,6 @@ class FoldableSuiteAdditional extends CatsSuite with ScalaVersionSpecificFoldabl
   test("Foldable[List] monadic folds stack safety")(checkMonadicFoldsStackSafety(_.toList))
   test("Foldable[List].slidingN stack safety")(checkSlidingNStackSafety(_.toList))
 
-  test("Foldable[Stream] monadic folds stack safety")(checkMonadicFoldsStackSafety(_.toStream))
-  test("Foldable[Stream].slidingN stack safety")(checkSlidingNStackSafety(_.toStream))
-
   test("Foldable[Vector] monadic folds stack safety")(checkMonadicFoldsStackSafety(_.toVector))
   test("Foldable[Vector].slidingN stack safety")(checkSlidingNStackSafety(_.toVector))
 
@@ -554,6 +550,20 @@ class FoldableSuiteAdditional extends CatsSuite with ScalaVersionSpecificFoldabl
     checkSlidingNStackSafety(xs => NonEmptyVector.fromVectorUnsafe(xs.toVector))
   )
 
+  test("Foldable[List] doesn't break substitution") {
+    val result = List.range(0, 10).foldM(List.empty[Int])((accum, elt) => Eval.always(elt :: accum))
+
+    assert(result.value == result.value)
+  }
+}
+
+// `Stream` is deprecated since Scala 2.13 therefore all tests involving this type are
+// gathered here to suppress deprecation warnings at once.
+@annotation.nowarn("cat=deprecation")
+sealed trait FoldableSuiteAdditionalStreamSpecific { self: FoldableSuiteAdditional =>
+  test("Foldable[Stream] monadic folds stack safety")(checkMonadicFoldsStackSafety(_.toStream))
+  test("Foldable[Stream].slidingN stack safety")(checkSlidingNStackSafety(_.toStream))
+
   test("Foldable[NonEmptyStream] monadic folds stack safety")(
     checkMonadicFoldsStackSafety(xs => NonEmptyStream(xs.head, xs.tail: _*))
   )
@@ -565,8 +575,8 @@ class FoldableSuiteAdditional extends CatsSuite with ScalaVersionSpecificFoldabl
   val F = Foldable[Stream]
   def bomb[A]: A = sys.error("boom")
   val dangerous = 0 #:: 1 #:: 2 #:: bomb[Int] #:: Stream.empty
-  def boom[A]: Stream[A] =
-    bomb[A] #:: Stream.empty
+  def boom[A]: Stream[A] = bomb[A] #:: Stream.empty
+
   test("Foldable[Stream] doesn't blow up") {
 
     // doesn't blow up - this also ensures it works for infinite streams.
@@ -661,12 +671,6 @@ class FoldableSuiteAdditional extends CatsSuite with ScalaVersionSpecificFoldabl
     assert((1 #:: boom[Int]).findM[Id](_ > 0) == Some(1))
     assert((1 #:: boom[Int]).collectFirstSomeM[Id, Int](Option.apply) == Some(1))
   }
-
-  test("Foldable[List] doesn't break substitution") {
-    val result = List.range(0, 10).foldM(List.empty[Int])((accum, elt) => Eval.always(elt :: accum))
-
-    assert(result.value == result.value)
-  }
 }
 
 class FoldableListSuite extends FoldableSuite[List]("list") {
@@ -681,7 +685,8 @@ class FoldableSortedSetSuite extends FoldableSuite[SortedSet]("sortedSet") {
   def iterator[T](set: SortedSet[T]): Iterator[T] = set.iterator
 }
 
-class FoldableStreamSuite extends FoldableSuite[Stream]("lazyList") {
+@annotation.nowarn("cat=deprecation")
+class FoldableStreamSuite extends FoldableSuite[Stream]("stream") {
   def iterator[T](list: Stream[T]): Iterator[T] = list.iterator
 }
 

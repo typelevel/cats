@@ -1,24 +1,13 @@
 package cats.tests
 
-import cats.{Align, Alternative, CoflatMap, Monad, Semigroupal, Traverse, TraverseFilter}
+import cats._
 import cats.data.ZipStream
-import cats.laws.discipline.{
-  AlignTests,
-  AlternativeTests,
-  CoflatMapTests,
-  CommutativeApplyTests,
-  MonadTests,
-  SemigroupalTests,
-  SerializableTests,
-  ShortCircuitingTests,
-  TraverseFilterTests,
-  TraverseTests
-}
+import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
-import cats.syntax.show._
-import cats.syntax.eq._
+import cats.syntax.all._
 import org.scalacheck.Prop._
 
+@annotation.nowarn("cat=deprecation")
 class StreamSuite extends CatsSuite {
   checkAll("Stream[Int]", SemigroupalTests[Stream].semigroupal[Int, Int, Int])
   checkAll("Semigroupal[Stream]", SerializableTests.serializable(Semigroupal[Stream]))
@@ -69,14 +58,9 @@ class StreamSuite extends CatsSuite {
     }
   }
 
-}
-
-final class StreamInstancesSuite extends munit.FunSuite {
-
-  test("parallel instance in cats.instances.stream") {
-    import cats.instances.stream._
-    import cats.syntax.parallel._
-
-    (Stream(1, 2, 3), Stream("A", "B", "C")).parTupled
+  test("NonEmptyParallel instance in cats.instances.stream") {
+    forAll { (s1: Stream[Int], s2: Stream[String]) =>
+      assert((s1, s2).parTupled === s1.zip(s2))
+    }
   }
 }

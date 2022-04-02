@@ -1,17 +1,14 @@
 package cats.tests
 
-import cats.{Apply, Monad, MonadError, StackSafeMonad, Traverse}
-import cats.data.{Const, NonEmptyList, StateT}
-import cats.kernel.Eq
+import cats._
+import cats.data.Const
+import cats.data.NonEmptyList
+import cats.data.StateT
 import cats.kernel.compat.scalaVersionSpecific._
-import cats.syntax.applicativeError._
-import cats.syntax.either._
-import cats.syntax.foldable._
-import cats.syntax.monadError._
-import cats.syntax.traverse._
-import scala.collection.mutable
+import cats.syntax.all._
+
 import scala.collection.immutable.SortedMap
-import cats.syntax.eq._
+import scala.collection.mutable
 
 @suppressUnusedImportWarningForScalaVersionSpecific
 class RegressionSuite extends CatsSuite with ScalaVersionSpecificRegressionSuite {
@@ -123,7 +120,11 @@ class RegressionSuite extends CatsSuite with ScalaVersionSpecificRegressionSuite
     // shouldn't have ever evaluated validate(8)
     checkAndResetCount(3)
 
-    assert(Stream(1, 2, 6, 8).traverse(validate) === (Either.left("6 is greater than 5")))
+    {
+      @annotation.nowarn("cat=deprecation")
+      val obtained = Stream(1, 2, 6, 8).traverse(validate).void
+      assert(obtained === Either.left("6 is greater than 5"))
+    }
     checkAndResetCount(3)
 
     type StringMap[A] = SortedMap[String, A]
@@ -143,7 +144,11 @@ class RegressionSuite extends CatsSuite with ScalaVersionSpecificRegressionSuite
     assert(List(1, 2, 6, 8).traverse_(validate) === (Either.left("6 is greater than 5")))
     checkAndResetCount(3)
 
-    assert(Stream(1, 2, 6, 8).traverse_(validate) === (Either.left("6 is greater than 5")))
+    {
+      @annotation.nowarn("cat=deprecation")
+      val obtained = Stream(1, 2, 6, 8).traverse_(validate)
+      assert(obtained === Either.left("6 is greater than 5"))
+    }
     checkAndResetCount(3)
 
     assert(Vector(1, 2, 6, 8).traverse_(validate) === (Either.left("6 is greater than 5")))

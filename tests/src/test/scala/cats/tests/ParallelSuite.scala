@@ -1,20 +1,25 @@
 package cats.tests
 
 import cats._
-import cats.data._
 import cats.data.NonEmptyList.ZipNonEmptyList
+import cats.data._
 import cats.kernel.compat.scalaVersionSpecific._
-import cats.laws.discipline.{ApplicativeErrorTests, MiniInt, NonEmptyParallelTests, ParallelTests, SerializableTests}
-import cats.laws.discipline.eq._
+import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
-import cats.implicits._
-import org.scalacheck.{Arbitrary, Gen}
-
-import scala.collection.immutable.SortedSet
+import cats.laws.discipline.eq._
+import cats.syntax.all._
+import org.scalacheck.Arbitrary
+import org.scalacheck.Gen
 import org.scalacheck.Prop._
 
+import scala.collection.immutable.SortedSet
+
 @suppressUnusedImportWarningForScalaVersionSpecific
-class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with ScalaVersionSpecificParallelSuite {
+class ParallelSuite
+    extends CatsSuite
+    with ApplicativeErrorForEitherTest
+    with ScalaVersionSpecificParallelSuite
+    with ParallelSuiteStreamSpecific {
 
   test("ParSequence Either should accumulate errors") {
     forAll { (es: List[Either[String, Int]]) =>
@@ -351,22 +356,6 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
     }
   }
 
-  test("ParMap over Stream should be consistent with zip") {
-    forAll { (as: Stream[Int], bs: Stream[Int], cs: Stream[Int]) =>
-      val zipped = as
-        .zip(bs)
-        .map { case (a, b) =>
-          a + b
-        }
-        .zip(cs)
-        .map { case (a, b) =>
-          a + b
-        }
-
-      assert((as, bs, cs).parMapN(_ + _ + _) === zipped)
-    }
-  }
-
   test("ParTupled of NonEmptyList should be consistent with ParMap of Tuple.apply") {
     forAll { (fa: NonEmptyList[Int], fb: NonEmptyList[Int], fc: NonEmptyList[Int], fd: NonEmptyList[Int]) =>
       assert((fa, fb, fc, fd).parTupled === ((fa, fb, fc, fd).parMapN(Tuple4.apply)))
@@ -391,12 +380,6 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
     }
   }
 
-  test("ParTupled of Stream should be consistent with ParMap of Tuple.apply") {
-    forAll { (fa: Stream[Int], fb: Stream[Int], fc: Stream[Int], fd: Stream[Int]) =>
-      assert((fa, fb, fc, fd).parTupled === ((fa, fb, fc, fd).parMapN(Tuple4.apply)))
-    }
-  }
-
   test("ParTupled of List should be consistent with zip") {
     forAll { (fa: List[Int], fb: List[Int], fc: List[Int], fd: List[Int]) =>
       assert((fa, fb, fc, fd).parTupled === fa.zip(fb).zip(fc).zip(fd).map { case (((a, b), c), d) => (a, b, c, d) })
@@ -405,12 +388,6 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
 
   test("ParTupled of Vector should be consistent with zip") {
     forAll { (fa: Vector[Int], fb: Vector[Int], fc: Vector[Int], fd: Vector[Int]) =>
-      assert((fa, fb, fc, fd).parTupled === fa.zip(fb).zip(fc).zip(fd).map { case (((a, b), c), d) => (a, b, c, d) })
-    }
-  }
-
-  test("ParTupled of Stream should be consistent with zip") {
-    forAll { (fa: Stream[Int], fb: Stream[Int], fc: Stream[Int], fd: Stream[Int]) =>
       assert((fa, fb, fc, fd).parTupled === fa.zip(fb).zip(fc).zip(fd).map { case (((a, b), c), d) => (a, b, c, d) })
     }
   }
@@ -536,15 +513,10 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
   )
   checkAll("NonEmptyParallel[Vector]", NonEmptyParallelTests[Vector].nonEmptyParallel[Int, String])
   checkAll("NonEmptyParallel[List]", NonEmptyParallelTests[List].nonEmptyParallel[Int, String])
-  // Can't test Parallel here, as Applicative[ZipStream].pure doesn't terminate
-  checkAll("Parallel[Stream]", NonEmptyParallelTests[Stream].nonEmptyParallel[Int, String])
 
   checkAll("NonEmptyParallel[NonEmptyVector]", NonEmptyParallelTests[NonEmptyVector].nonEmptyParallel[Int, String])
 
   checkAll("NonEmptyParallel[NonEmptyList]", NonEmptyParallelTests[NonEmptyList].nonEmptyParallel[Int, String])
-
-  // TODO this doesn't infer?
-  checkAll("Parallel[NonEmptyStream]", ParallelTests[NonEmptyStream, OneAnd[ZipStream, *]].parallel[Int, String])
 
   checkAll("Parallel[Id]", ParallelTests[Id].parallel[Int, String])
 
@@ -573,6 +545,44 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
     val p1: NonEmptyParallel.Aux[Either[String, *], Validated[String, *]] = NonEmptyParallel[Either[String, *]]
     val p2: NonEmptyParallel.Aux[NonEmptyList, ZipNonEmptyList] = NonEmptyParallel[NonEmptyList]
   }
+}
+
+@annotation.nowarn("cat=deprecation")
+sealed trait ParallelSuiteStreamSpecific { self: ParallelSuite =>
+
+  test("ParMap over Stream should be consistent with zip") {
+    forAll { (as: Stream[Int], bs: Stream[Int], cs: Stream[Int]) =>
+      val zipped = as
+        .zip(bs)
+        .map { case (a, b) =>
+          a + b
+        }
+        .zip(cs)
+        .map { case (a, b) =>
+          a + b
+        }
+
+      assert((as, bs, cs).parMapN(_ + _ + _) === zipped)
+    }
+  }
+
+  test("ParTupled of Stream should be consistent with ParMap of Tuple.apply") {
+    forAll { (fa: Stream[Int], fb: Stream[Int], fc: Stream[Int], fd: Stream[Int]) =>
+      assert((fa, fb, fc, fd).parTupled === ((fa, fb, fc, fd).parMapN(Tuple4.apply)))
+    }
+  }
+
+  test("ParTupled of Stream should be consistent with zip") {
+    forAll { (fa: Stream[Int], fb: Stream[Int], fc: Stream[Int], fd: Stream[Int]) =>
+      assert((fa, fb, fc, fd).parTupled === fa.zip(fb).zip(fc).zip(fd).map { case (((a, b), c), d) => (a, b, c, d) })
+    }
+  }
+
+  // Can't test Parallel here, as Applicative[ZipStream].pure doesn't terminate
+  checkAll("Parallel[Stream]", NonEmptyParallelTests[Stream].nonEmptyParallel[Int, String])
+
+  // TODO this doesn't infer?
+  checkAll("Parallel[NonEmptyStream]", ParallelTests[NonEmptyStream, OneAnd[ZipStream, *]].parallel[Int, String])
 
   test("Parallel.apply should return an appropriately typed instance given both type parameters") {
     val p1: Parallel.Aux[Either[String, *], Validated[String, *]] = Parallel[Either[String, *], Validated[String, *]]
