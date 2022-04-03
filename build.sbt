@@ -155,6 +155,7 @@ lazy val root = tlCrossRootProject
     alleycatsCore,
     alleycatsLaws,
     alleycatsTests,
+    unidocs,
     bench,
     binCompatTest
   )
@@ -307,6 +308,18 @@ lazy val alleycatsTests = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
   .nativeSettings(commonNativeSettings)
+
+lazy val unidocs = project
+  .enablePlugins(TypelevelUnidocPlugin)
+  .settings(
+    name := "cats-docs",
+    ScalaUnidoc / unidoc / unidocProjectFilter := inProjects(kernel.jvm,
+                                                             core.jvm,
+                                                             free.jvm,
+                                                             algebra.jvm,
+                                                             alleycatsCore.jvm
+    )
+  )
 
 // bench is currently JVM-only
 
