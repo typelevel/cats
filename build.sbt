@@ -205,7 +205,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .crossType(CrossType.Pure)
   .dependsOn(kernel)
   .settings(moduleName := "cats-core", name := "Cats core")
-  .settings(commonSettings, macroSettings)
+  .settings(commonSettings, macroSettings, simulacrumSettings)
   .settings(Compile / sourceGenerators += (Compile / sourceManaged).map(Boilerplate.gen).taskValue)
   .settings(
     libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % Test
@@ -316,6 +316,7 @@ lazy val bench = project
 lazy val binCompatTest = project
   .enablePlugins(NoPublishPlugin)
   .settings(
+    useCoursier := false, // workaround so we can use 2.0.0 in compile
     libraryDependencies += "org.typelevel" %%% "cats-core" % "2.0.0" % Provided
   )
   .settings(testingDependencies)
