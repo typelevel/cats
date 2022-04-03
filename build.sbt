@@ -178,21 +178,22 @@ lazy val algebra = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .in(file("algebra-core"))
   .dependsOn(kernel)
   .settings(moduleName := "algebra", name := "Cats algebra")
-  .settings(commonSettings, algebraSettings)
+  .settings(commonSettings)
   .settings(Compile / sourceGenerators += (Compile / sourceManaged).map(AlgebraBoilerplate.gen).taskValue)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
   .nativeSettings(commonNativeSettings)
-  .settings(testingDependencies)
   .settings(
-    libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % Test
+    algebraSettings,
+    libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % Test,
+    testingDependencies
   )
 
 lazy val algebraLaws = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .in(file("algebra-laws"))
   .dependsOn(kernelLaws, algebra)
   .settings(moduleName := "algebra-laws", name := "Cats algebra laws")
-  .settings(commonSettings, algebraSettings)
+  .settings(commonSettings)
   .settings(disciplineDependencies)
   .settings(testingDependencies)
   .settings(
@@ -201,6 +202,7 @@ lazy val algebraLaws = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
   .nativeSettings(commonNativeSettings)
+  .settings(algebraSettings)
 
 lazy val core = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .crossType(CrossType.Pure)
