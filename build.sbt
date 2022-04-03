@@ -105,11 +105,12 @@ lazy val commonJvmSettings = Seq(
 )
 
 lazy val commonJsSettings = Seq(
+  doctestGenTests := Seq.empty,
   tlVersionIntroduced ++= List("2.12", "2.13").map(_ -> "2.1.0").toMap
 )
 
 lazy val commonNativeSettings = Seq(
-  // doctestGenTests := Seq.empty,
+  doctestGenTests := Seq.empty,
   // Currently scala-native does not support Dotty
   crossScalaVersions := { (ThisBuild / crossScalaVersions).value.filterNot(Scala3 == _) },
   tlVersionIntroduced ++= List("2.12", "2.13").map(_ -> "2.4.0").toMap
@@ -149,7 +150,7 @@ lazy val kernel = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .crossType(CrossType.Pure)
   .in(file("kernel"))
   .settings(moduleName := "cats-kernel", name := "Cats kernel")
-  .settings(commonSettings)
+  .settings(commonSettings, testingDependencies)
   .settings(Compile / sourceGenerators += (Compile / sourceManaged).map(KernelBoiler.gen).taskValue)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings, cats1BincompatSettings)
