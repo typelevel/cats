@@ -81,9 +81,9 @@ lazy val commonSettings = Seq(
       file -> file.relativeTo(base).get.getPath
     }
   },
-  scalacOptions ~= { _.filterNot(x => x.startsWith("-Wunused:")) }
+  scalacOptions ~= { _.filterNot(x => x.startsWith("-Wunused:")) },
   // Test / parallelExecution := false
-  // Compile / doc / scalacOptions := (Compile / doc / scalacOptions).value.filter(_ != "-Xfatal-warnings")
+  Compile / doc / scalacOptions := (Compile / doc / scalacOptions).value.filter(_ != "-Xfatal-warnings")
 )
 
 lazy val macroSettings = Seq(
