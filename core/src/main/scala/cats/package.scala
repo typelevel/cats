@@ -68,6 +68,16 @@ package object cats {
     def apply[A](a: A): Id[A] = a
   }
 
+  /**
+   * Like `Nothing` but works better with type inference.
+   */
+  type INothing <: Nothing
+
+  /**
+   * Like `INothing` but as a type constructor.
+   */
+  type Pure[A] <: Nothing
+
   type Endo[A] = A => A
 
   val catsInstancesForId: Bimonad[Id] with CommutativeMonad[Id] with NonEmptyTraverse[Id] with Distributive[Id] =
