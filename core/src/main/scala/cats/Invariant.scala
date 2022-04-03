@@ -105,6 +105,10 @@ object Invariant extends ScalaVersionSpecificInvariantInstances with InvariantIn
   implicit def catsInstancesForId
     : Distributive[Id] with Bimonad[Id] with CommutativeMonad[Id] with NonEmptyTraverse[Id] =
     cats.catsInstancesForId
+  @deprecated("Added for bincompat", "2.8.0")
+  @cats.compat.targetName("catsInstancesForId")
+  def catsInstancesForIdCompat2_6_1: Comonad[Id] =
+    cats.catsInstancesForId
   implicit def catsMonadErrorForEither[A]: MonadError[Either[A, *], A] =
     cats.instances.either.catsStdInstancesForEither[A]
   implicit def catsInstancesForOption
