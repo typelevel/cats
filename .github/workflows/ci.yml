@@ -32,14 +32,6 @@ jobs:
         java: [temurin@8, temurin@17, graalvm@11]
         project: [rootJS, rootJVM, rootNative]
         exclude:
-          - scala: 2.12.15
-            java: temurin@17
-          - scala: 2.12.15
-            java: graalvm@11
-          - scala: 3.0.2
-            java: temurin@17
-          - scala: 3.0.2
-            java: graalvm@11
           - project: rootJS
             java: temurin@17
           - project: rootJS
@@ -47,6 +39,14 @@ jobs:
           - project: rootNative
             java: temurin@17
           - project: rootNative
+            java: graalvm@11
+          - scala: 2.12.15
+            java: temurin@17
+          - scala: 2.12.15
+            java: graalvm@11
+          - scala: 3.0.2
+            java: temurin@17
+          - scala: 3.0.2
             java: graalvm@11
           - project: rootNative
             scala: 3.0.2
@@ -119,10 +119,6 @@ jobs:
 
       - name: Check that workflows are up to date
         run: sbt 'project ${{ matrix.project }}' '++${{ matrix.scala }}' 'project /' githubWorkflowCheck
-
-      - name: Check headers and formatting
-        if: matrix.java == 'temurin@8'
-        run: sbt 'project ${{ matrix.project }}' '++${{ matrix.scala }}' headerCheckAll scalafmtCheckAll 'project /' scalafmtSbtCheck
 
       - name: scalaJSLink
         if: matrix.project == 'rootJS'
@@ -426,3 +422,80 @@ jobs:
         run: |
           cd scalafix
           sbt test
+
+  linting:
+    name: Linting
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        scala: [2.13.8]
+        java: [temurin@8]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout current branch (full)
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Download Java (temurin@8)
+        id: download-java-temurin-8
+        if: matrix.java == 'temurin@8'
+        uses: typelevel/download-java@v1
+        with:
+          distribution: temurin
+          java-version: 8
+
+      - name: Setup Java (temurin@8)
+        if: matrix.java == 'temurin@8'
+        uses: actions/setup-java@v2
+        with:
+          distribution: jdkfile
+          java-version: 8
+          jdkFile: ${{ steps.download-java-temurin-8.outputs.jdkFile }}
+
+      - name: Download Java (temurin@17)
+        id: download-java-temurin-17
+        if: matrix.java == 'temurin@17'
+        uses: typelevel/download-java@v1
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Setup Java (temurin@17)
+        if: matrix.java == 'temurin@17'
+        uses: actions/setup-java@v2
+        with:
+          distribution: jdkfile
+          java-version: 17
+          jdkFile: ${{ steps.download-java-temurin-17.outputs.jdkFile }}
+
+      - name: Download Java (graalvm@11)
+        id: download-java-graalvm-11
+        if: matrix.java == 'graalvm@11'
+        uses: typelevel/download-java@v1
+        with:
+          distribution: graalvm
+          java-version: 11
+
+      - name: Setup Java (graalvm@11)
+        if: matrix.java == 'graalvm@11'
+        uses: actions/setup-java@v2
+        with:
+          distribution: jdkfile
+          java-version: 11
+          jdkFile: ${{ steps.download-java-graalvm-11.outputs.jdkFile }}
+
+      - name: Cache sbt
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.sbt
+            ~/.ivy2/cache
+            ~/.coursier/cache/v1
+            ~/.cache/coursier/v1
+            ~/AppData/Local/Coursier/Cache/v1
+            ~/Library/Caches/Coursier/v1
+          key: ${{ runner.os }}-sbt-cache-v2-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
+
+      - name: Check formatting
+        run: sbt '++${{ matrix.scala }}' scalafmtSbtCheck +scalafmtCheckAll

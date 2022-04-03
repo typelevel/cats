@@ -23,18 +23,22 @@ val Scala3 = "3.0.2"
 ThisBuild / crossScalaVersions := Seq(Scala212, Scala213, Scala3)
 ThisBuild / scalaVersion := Scala213
 
-ThisBuild / tlFatalWarningsInCi := !tlIsScala3.value
+ThisBuild / tlFatalWarnings := {
+  githubIsWorkflowBuild.value && !tlIsScala3.value
+}
+
+ThisBuild / tlCiReleaseBranches := Seq("main")
+
+ThisBuild / githubWorkflowBuildMatrixExclusions ++= {
+  for {
+    scala <- githubWorkflowScalaVersions.value.filterNot(_ == scalaVersion.value)
+    java <- githubWorkflowJavaVersions.value.tail
+  } yield MatrixExclude(Map("scala" -> scala, "java" -> java.render))
+}
 
 ThisBuild / githubWorkflowBuildMatrixExclusions +=
   MatrixExclude(Map("project" -> "rootNative", "scala" -> Scala3))
 // Dotty is not yet supported by Scala Native
-
-val JvmCond = s"matrix.platform == 'jvm'"
-val JsCond = s"matrix.platform == 'js'"
-val NativeCond = s"matrix.platform == 'native'"
-
-val Scala2Cond = s"(matrix.scala != '$Scala3')"
-val Scala3Cond = s"(matrix.scala == '$Scala3')"
 
 ThisBuild / githubWorkflowAddedJobs ++= Seq(
   WorkflowJob(
@@ -42,6 +46,15 @@ ThisBuild / githubWorkflowAddedJobs ++= Seq(
     "Scalafix",
     githubWorkflowJobSetup.value.toList ::: List(
       WorkflowStep.Run(List("cd scalafix", "sbt test"), name = Some("Scalafix tests"))
+    ),
+    javas = List(PrimaryJava),
+    scalas = List(scalaVersion.value)
+  ),
+  WorkflowJob(
+    "linting",
+    "Linting",
+    githubWorkflowJobSetup.value.toList ::: List(
+      WorkflowStep.Sbt(List("scalafmtSbtCheck", "+scalafmtCheckAll"), name = Some("Check formatting"))
     ),
     javas = List(PrimaryJava),
     scalas = List(scalaVersion.value)
