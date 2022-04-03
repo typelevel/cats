@@ -351,6 +351,9 @@ lazy val binCompatTest = project
   .settings(testingDependencies)
   .dependsOn(core.jvm % Test)
 
+ThisBuild / organization := "org.typelevel"
+ThisBuild / organizationName := "Typelevel"
+ThisBuild / organizationHomepage := Some(url("https://typelevel.org"))
 ThisBuild / licenses += License.MIT
 ThisBuild / developers ++= List(
   tlGitHubDev("ceedubs", "Cody Allen"),
