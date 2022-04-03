@@ -26,7 +26,7 @@ ThisBuild / scalaVersion := Scala213
 ThisBuild / tlFatalWarningsInCi := !tlIsScala3.value
 
 ThisBuild / githubWorkflowBuildMatrixExclusions +=
-  MatrixExclude(Map("platform" -> "native", "scala" -> Scala3))
+  MatrixExclude(Map("project" -> "rootNative", "scala" -> Scala3))
 // Dotty is not yet supported by Scala Native
 
 val JvmCond = s"matrix.platform == 'jvm'"
