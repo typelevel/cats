@@ -81,7 +81,7 @@ lazy val commonSettings = Seq(
       file -> file.relativeTo(base).get.getPath
     }
   },
-  scalacOptions ~= { _.filterNot(x => x.startsWith("-Wunused:") && x != "-Wunused:imports") }
+  scalacOptions ~= { _.filterNot(x => x.startsWith("-Wunused:")) }
   // Test / parallelExecution := false
   // Compile / doc / scalacOptions := (Compile / doc / scalacOptions).value.filter(_ != "-Xfatal-warnings")
 )
