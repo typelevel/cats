@@ -1,25 +1,19 @@
-package cats.tests
+package cats
+package tests
 
-import cats.{Align, Alternative, CoflatMap, Monad, Show, Traverse, TraverseFilter}
 import cats.data.Chain
-import cats.data.Chain.==:
 import cats.data.Chain.`:==`
-import cats.kernel.{Eq, Hash, Monoid, Order, PartialOrder, Semigroup}
-import cats.kernel.laws.discipline.{EqTests, HashTests, MonoidTests, OrderTests, PartialOrderTests}
-import cats.laws.discipline.{
-  AlignTests,
-  AlternativeTests,
-  CoflatMapTests,
-  MonadTests,
-  SerializableTests,
-  ShortCircuitingTests,
-  TraverseFilterTests,
-  TraverseTests
-}
+import cats.data.Chain.==:
+import cats.kernel.laws.discipline.EqTests
+import cats.kernel.laws.discipline.HashTests
+import cats.kernel.laws.discipline.MonoidTests
+import cats.kernel.laws.discipline.OrderTests
+import cats.kernel.laws.discipline.PartialOrderTests
+import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
+import cats.syntax.eq._
 import cats.syntax.foldable._
 import cats.syntax.semigroup._
-import cats.syntax.eq._
 import org.scalacheck.Prop._
 
 class ChainSuite extends CatsSuite {
@@ -119,6 +113,17 @@ class ChainSuite extends CatsSuite {
     }
   }
 
+  test("knownSize should be consistent with size") {
+    forAll { (cu: Chain[Unit]) =>
+      val expected = cu.size match {
+        case size @ (0L | 1L) => size
+        case _                => -1L
+      }
+
+      assertEquals(cu.knownSize, expected)
+    }
+  }
+
   test("filterNot and then exists should always be false") {
     forAll { (ci: Chain[Int], f: Int => Boolean) =>
       assert(ci.filterNot(f).exists(f) === false)
@@ -153,6 +158,28 @@ class ChainSuite extends CatsSuite {
     forAll { (ci: Chain[Int], i: Int) =>
       assert((i +: ci).nonEmpty === true)
     }
+  }
+
+  test("fromOption should be consistent with one") {
+    val expected = Chain.one(())
+    val obtained = Chain.fromOption(Some(()))
+
+    assert(obtained.getClass eq expected.getClass)
+    assert(obtained === expected)
+  }
+
+  test("fromSeq should be consistent with one") {
+    val expected = Chain.one(())
+    val obtained = Chain.fromSeq(() :: Nil)
+    assert(obtained.getClass eq expected.getClass)
+    assert(obtained === expected)
+  }
+
+  test("fromIterableOnce should be consistent with one") {
+    val expected = Chain.one(())
+    val obtained = Chain.fromIterableOnce(Iterator.single(()))
+    assert(obtained.getClass eq expected.getClass)
+    assert(obtained === expected)
   }
 
   test("fromSeq . toVector is id") {
@@ -249,6 +276,8 @@ class ChainSuite extends CatsSuite {
 
   test("a.isEmpty == (a eq Chain.nil)") {
     assert(Chain.fromSeq(Nil) eq Chain.nil)
+    assert(Chain.fromOption(None) eq Chain.nil)
+    assert(Chain.fromIterableOnce(Iterator.empty) eq Chain.nil)
 
     forAll { (a: Chain[Int]) =>
       assert(a.isEmpty == (a eq Chain.nil))

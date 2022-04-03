@@ -575,6 +575,17 @@ sealed abstract class Chain[+A] {
   final def size: Long = length
 
   /**
+   * The number of elements in this chain, if it can be cheaply computed, -1 otherwise.
+   * Cheaply usually means: Not requiring a collection traversal.
+   */
+  final def knownSize: Long =
+    this match {
+      case _ if isEmpty       => 0
+      case Chain.Singleton(_) => 1
+      case _                  => -1
+    }
+
+  /**
    * Converts to a list.
    */
   final def toList: List[A] =
