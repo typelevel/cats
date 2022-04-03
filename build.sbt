@@ -236,7 +236,6 @@ lazy val free = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .nativeSettings(commonNativeSettings)
 
 lazy val tests = crossProject(JSPlatform, JVMPlatform, NativePlatform)
-  .crossType(CrossType.Pure)
   .dependsOn(testkit % Test)
   .enablePlugins(NoPublishPlugin)
   .settings(moduleName := "cats-tests")
