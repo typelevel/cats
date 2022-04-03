@@ -586,6 +586,51 @@ sealed abstract class Chain[+A] {
     }
 
   /**
+   * Compares the length of this chain to a test value.
+   * 
+   * The method does not call `length` directly; its running time
+   * is `O(length min len)` instead of `O(length)`.
+   * 
+   * @param  len the test value that gets compared with the length.
+   * @return a negative value if `this.length < len`,
+   *         zero if `this.length == len` or
+   *         a positive value if `this.length > len`.
+   * @note   This is an adapted version of
+             [[https://github.com/scala/scala/blob/v2.13.8/src/library/scala/collection/Iterable.scala#L272-L288 Iterable#sizeCompare]]
+             from Scala Library v2.13.8
+   * 
+   * {{{
+   * scala> import cats.data.Chain
+   * scala> val chain = Chain(1, 2, 3)
+   * scala> val isLessThan4 = chain.lengthCompare(4) < 0
+   * scala> val isEqualTo3 = chain.lengthCompare(3) == 0
+   * scala> val isGreaterThan2 = chain.lengthCompare(2) > 0
+   * scala> isLessThan4 && isEqualTo3 && isGreaterThan2
+   * res0: Boolean = true
+   * }}}
+   */
+  final def lengthCompare(len: Long): Int =
+    if (len < 0) 1
+    else {
+      var sz = knownSize
+      if (sz < 0) {
+        sz = 0L
+        val it = iterator
+        while (it.hasNext) {
+          if (sz == len) return 1
+          it.next()
+          sz += 1L
+        }
+      }
+      sz.compareTo(len)
+    }
+
+  /**
+   * Alias for lengthCompare
+   */
+  final def sizeCompare(size: Long): Int = lengthCompare(size)
+
+  /**
    * Converts to a list.
    */
   final def toList: List[A] =

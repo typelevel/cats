@@ -124,6 +124,22 @@ class ChainSuite extends CatsSuite {
     }
   }
 
+  test("lengthCompare and sizeCompare should be consistent with length and size") {
+    forAll { (cu: Chain[Unit], diff: Byte) =>
+      val testLen = cu.length + diff
+      val testSize = cu.size + diff
+
+      val expectedSignumLen = math.signum(cu.length.compareTo(testLen))
+      val expectedSignumSize = math.signum(cu.size.compareTo(testLen))
+
+      val obtainedSignumLen = math.signum(cu.lengthCompare(testLen))
+      val obtainedSignumSize = math.signum(cu.sizeCompare(testSize))
+
+      assertEquals(obtainedSignumLen, expectedSignumLen)
+      assertEquals(obtainedSignumSize, expectedSignumSize)
+    }
+  }
+
   test("filterNot and then exists should always be false") {
     forAll { (ci: Chain[Int], f: Int => Boolean) =>
       assert(ci.filterNot(f).exists(f) === false)
