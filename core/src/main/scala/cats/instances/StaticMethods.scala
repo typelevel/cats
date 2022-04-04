@@ -2,7 +2,7 @@ package cats.instances
 
 import scala.collection.mutable.Builder
 
-private[instances] object instances {
+private[instances] object StaticMethods {
 
   def appendAll[F <: Iterable[A], A](it: Iterator[F], bldr: Builder[A, F]): bldr.type = {
     while (it.hasNext) {
