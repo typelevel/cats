@@ -180,11 +180,3 @@ package object cats {
     def apply[F[_]](implicit ev: MonadThrow[F]): MonadThrow[F] = ev
   }
 }
-
-object Test {
-  type PureOrF[F[_], A] = Either[F[A], A]
-
-  val v: PureOrF[Pure, Int] = Right(10)
-  val v1: PureOrF[List, Int] = v
-
-}
