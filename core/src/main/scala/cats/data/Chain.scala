@@ -1,6 +1,15 @@
 package cats
 package data
 
+import cats.kernel.compat.scalaVersionSpecific._
+import cats.kernel.instances.StaticMethods
+
+import scala.annotation.tailrec
+import scala.collection.immutable.SortedMap
+import scala.collection.immutable.TreeSet
+import scala.collection.immutable.{IndexedSeq => ImIndexedSeq}
+import scala.collection.mutable.ListBuffer
+
 import Chain.{
   empty,
   fromSeq,
@@ -17,12 +26,6 @@ import Chain.{
   Singleton,
   Wrap
 }
-import cats.kernel.instances.StaticMethods
-import cats.kernel.compat.scalaVersionSpecific._
-
-import scala.annotation.tailrec
-import scala.collection.immutable.{IndexedSeq => ImIndexedSeq, SortedMap, TreeSet}
-import scala.collection.mutable.ListBuffer
 
 /**
  * Trivial catenable sequence. Supports O(1) append, and (amortized)
@@ -563,6 +566,8 @@ sealed abstract class Chain[+A] {
    * Returns the number of elements in this structure
    */
   final def length: Long = {
+    // TODO: consider optimizing for `Chain.Wrap` case.
+    //       Some underlying seq may not need enumerating all elements to calculate its size.
     val iter = iterator
     var i: Long = 0
     while (iter.hasNext) { i += 1; iter.next(); }
@@ -579,6 +584,8 @@ sealed abstract class Chain[+A] {
    * Cheaply usually means: Not requiring a collection traversal.
    */
   final def knownSize: Long =
+    // TODO: consider optimizing for `Chain.Wrap` case – call the underlying `knownSize` method.
+    //       Note that `knownSize` was introduced since Scala 2.13 only.
     this match {
       case _ if isEmpty       => 0
       case Chain.Singleton(_) => 1
@@ -595,9 +602,9 @@ sealed abstract class Chain[+A] {
    * @return a negative value if `this.length < len`,
    *         zero if `this.length == len` or
    *         a positive value if `this.length > len`.
-   * @note   This is an adapted version of
+   * @note   an adapted version of
              [[https://github.com/scala/scala/blob/v2.13.8/src/library/scala/collection/Iterable.scala#L272-L288 Iterable#sizeCompare]]
-             from Scala Library v2.13.8
+             from Scala Library v2.13.8 is used in a part of the implementation.
    * 
    * {{{
    * scala> import cats.data.Chain
@@ -609,21 +616,31 @@ sealed abstract class Chain[+A] {
    * res0: Boolean = true
    * }}}
    */
-  final def lengthCompare(len: Long): Int =
-    if (len < 0) 1
-    else {
-      var sz = knownSize
-      if (sz < 0) {
-        sz = 0L
-        val it = iterator
+  final def lengthCompare(len: Long): Int = {
+    import java.lang.Long
+    this match {
+      // `isEmpty` check should be faster than `== Chain.Empty`,
+      // but the compiler fails to prove that the match is still exhaustive.
+      case _ if isEmpty       => Long.compare(0L, len)
+      case Chain.Singleton(_) => Long.compare(1L, len)
+      case _ if len < 2       => 1 // the following cases should always have `length >= 2`
+      case Chain.Wrap(seq) =>
+        if (len > Int.MaxValue) -1 // `Seq#length` has `Int` type so cannot be `> Int.MaxValue`
+        else
+          seq.lengthCompare(len.toInt)
+      case _ => // should always be `Chain.Append` (i.e. `NonEmpty` with 2+ elements)
+        var sz = 2L
+        val it = new ChainIterator(this)
+        it.next()
+        it.next()
         while (it.hasNext) {
           if (sz == len) return 1
           it.next()
           sz += 1L
         }
-      }
-      sz.compareTo(len)
+        Long.compare(sz, len)
     }
+  }
 
   /**
    * Alias for lengthCompare

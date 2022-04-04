@@ -14,6 +14,8 @@ import cats.laws.discipline.arbitrary._
 import cats.syntax.eq._
 import cats.syntax.foldable._
 import cats.syntax.semigroup._
+import org.scalacheck.Arbitrary
+import org.scalacheck.Gen
 import org.scalacheck.Prop._
 
 class ChainSuite extends CatsSuite {
@@ -130,10 +132,33 @@ class ChainSuite extends CatsSuite {
       val testSize = cu.size + diff
 
       val expectedSignumLen = math.signum(cu.length.compareTo(testLen))
-      val expectedSignumSize = math.signum(cu.size.compareTo(testLen))
+      val expectedSignumSize = math.signum(cu.size.compareTo(testSize))
 
       val obtainedSignumLen = math.signum(cu.lengthCompare(testLen))
       val obtainedSignumSize = math.signum(cu.sizeCompare(testSize))
+
+      assertEquals(obtainedSignumLen, expectedSignumLen)
+      assertEquals(obtainedSignumSize, expectedSignumSize)
+    }
+  }
+  test("lengthCompare and sizeCompare should be consistent with length and size (Chain.Wrap stressed)") {
+    //
+    // Similar to the previous test but stresses handling Chain.Wrap cases.
+    //
+
+    // Range as `Seq` can has huge size without keeping any elements in it.
+    val seqGen: Gen[Seq[Int]] = Gen.chooseNum(2, Int.MaxValue).map(0 until _)
+    val testValGen: Gen[Long] = Arbitrary.arbitrary[Long]
+
+    // Disable shrinking since it can lead to re-building of range into a regular `Seq`.
+    forAllNoShrink(seqGen, testValGen) { (seq, testVal) =>
+      val ci = Chain.fromSeq(seq) // should produce `Chain.Wrap`
+
+      val expectedSignumLen = math.signum(seq.length.toLong.compareTo(testVal))
+      val expectedSignumSize = math.signum(seq.size.toLong.compareTo(testVal))
+
+      val obtainedSignumLen = math.signum(ci.lengthCompare(testVal))
+      val obtainedSignumSize = math.signum(ci.sizeCompare(testVal))
 
       assertEquals(obtainedSignumLen, expectedSignumLen)
       assertEquals(obtainedSignumSize, expectedSignumSize)
