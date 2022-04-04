@@ -319,7 +319,8 @@ lazy val unidocs = project
                                                              free.jvm,
                                                              algebra.jvm,
                                                              alleycatsCore.jvm
-    )
+    ),
+    ScalaUnidoc / unidoc / scalacOptions ++= Seq("-groups", "-diagrams")
   )
 
 // bench is currently JVM-only
