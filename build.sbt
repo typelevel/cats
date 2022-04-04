@@ -352,8 +352,11 @@ lazy val bench = project
 lazy val binCompatTest = project
   .enablePlugins(NoPublishPlugin)
   .settings(
-    useCoursier := false, // workaround so we can use 2.0.0 in compile
-    libraryDependencies += "org.typelevel" %%% "cats-core" % "2.0.0" % Provided
+    useCoursier := false, // workaround so we can use an old version in compile
+    libraryDependencies += {
+      val oldV = if (tlIsScala3.value) "2.6.1" else "2.0.0"
+      "org.typelevel" %%% "cats-core" % oldV % Provided
+    }
   )
   .settings(testingDependencies)
   .dependsOn(core.jvm % Test)
