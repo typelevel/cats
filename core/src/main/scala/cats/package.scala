@@ -1,5 +1,3 @@
-import cats.Pure
-
 import scala.annotation.tailrec
 
 /**
