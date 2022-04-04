@@ -117,7 +117,8 @@ ThisBuild / tlVersionIntroduced := Map("3" -> "2.6.1")
 
 lazy val commonJvmSettings = Seq(
   Test / fork := true,
-  Test / javaOptions := Seq("-Xmx3G")
+  Test / javaOptions := Seq("-Xmx3G"),
+  doctestGenTests := { if (tlIsScala3.value) Nil else doctestGenTests.value }
 )
 
 lazy val commonJsSettings = Seq(
