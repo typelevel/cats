@@ -1,6 +1,7 @@
+import com.typesafe.tools.mima.core.ProblemFilters._
+import com.typesafe.tools.mima.core._
+
 ThisBuild / mimaBinaryIssueFilters ++= {
-  import com.typesafe.tools.mima.core.ProblemFilters._
-  import com.typesafe.tools.mima.core._
   // Only sealed abstract classes that provide implicit instances to companion objects are allowed here, since they don't affect usage outside of the file.
   Seq(
     exclude[DirectMissingMethodProblem]("cats.data.OptionTInstances2.catsDataTraverseForOptionT"),
@@ -163,4 +164,18 @@ ThisBuild / mimaBinaryIssueFilters ++= {
       exclude[DirectAbstractMethodProblem]("cats.free.Coyoneda.k"),
       exclude[ReversedAbstractMethodProblem]("cats.free.Coyoneda.k")
     )
+}
+
+// TODO: remove these filters after MiMa 1.1.0 is released with improved support for Scala 3
+ThisBuild / mimaBinaryIssueFilters ++= {
+  if (tlIsScala3.value)
+    Seq(
+      exclude[DirectMissingMethodProblem]("cats.free.ContravariantCoyoneda.unsafeApply"),
+      exclude[DirectMissingMethodProblem]("cats.free.ContravariantCoyoneda.ks"),
+      exclude[DirectMissingMethodProblem]("cats.free.ContravariantCoyoneda.unsafeApply"),
+      exclude[DirectMissingMethodProblem]("cats.free.Coyoneda.unsafeApply"),
+      exclude[DirectMissingMethodProblem]("cats.free.Coyoneda.ks"),
+      exclude[DirectMissingMethodProblem]("cats.free.Coyoneda.unsafeApply")
+    )
+  else Nil
 }
