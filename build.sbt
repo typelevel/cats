@@ -31,7 +31,7 @@ ThisBuild / tlCiReleaseBranches := Seq("main")
 
 ThisBuild / githubWorkflowBuildMatrixExclusions ++= {
   for {
-    scala <- githubWorkflowScalaVersions.value.filterNot(_ == scalaVersion.value)
+    scala <- githubWorkflowScalaVersions.value.filterNot(_ == (ThisBuild / scalaVersion).value)
     java <- githubWorkflowJavaVersions.value.tail
   } yield MatrixExclude(Map("scala" -> scala, "java" -> java.render))
 }
@@ -48,7 +48,7 @@ ThisBuild / githubWorkflowAddedJobs ++= Seq(
       WorkflowStep.Run(List("cd scalafix", "sbt test"), name = Some("Scalafix tests"))
     ),
     javas = List(PrimaryJava),
-    scalas = List(scalaVersion.value)
+    scalas = List((ThisBuild / scalaVersion).value)
   ),
   WorkflowJob(
     "linting",
@@ -57,7 +57,7 @@ ThisBuild / githubWorkflowAddedJobs ++= Seq(
       WorkflowStep.Sbt(List("scalafmtSbtCheck", "+scalafmtCheckAll"), name = Some("Check formatting"))
     ),
     javas = List(PrimaryJava),
-    scalas = List(scalaVersion.value)
+    scalas = List((ThisBuild / scalaVersion).value)
   )
 )
 
