@@ -8,6 +8,8 @@ val disciplineVersion = "1.4.0"
 
 val disciplineMunitVersion = "1.0.9"
 
+val munitVersion = "0.7.29"
+
 val kindProjectorVersion = "0.13.2"
 
 val PrimaryJava = JavaSpec.temurin("8")
@@ -138,6 +140,7 @@ lazy val disciplineDependencies = Seq(
 
 lazy val testingDependencies = Seq(
   libraryDependencies ++= Seq(
+    "org.scalameta" %%% "munit" % munitVersion % Test,
     "org.typelevel" %%% "discipline-munit" % disciplineMunitVersion % Test
   )
 )
