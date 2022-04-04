@@ -320,8 +320,10 @@ lazy val unidocs = project
                                                              algebra.jvm,
                                                              alleycatsCore.jvm
     ),
+    scalacOptions ~= { _.filterNot(_.startsWith("-W")) }, // weird nsc bug
     ScalaUnidoc / unidoc / scalacOptions ++= Seq("-groups", "-diagrams")
   )
+  .settings(commonSettings)
 
 // bench is currently JVM-only
 
