@@ -81,7 +81,10 @@ package object cats {
    *
    * {{{
    * scala> type Alg[F[_], A] = Either[F[A], A]
+   * scala> def extract[A](p: Alg[Pure, A]): A = p.merge
    * scala> val pureAlg: Alg[Pure, Int] = Right(3)
+   * scala> extract(pureAlg)
+   * res0: Int = 3
    * scala> val optAlg: Alg[Option, Int] = pureAlg
    * scala> val listAlg: Alg[List, Int] = pureAlg
    * }}}
