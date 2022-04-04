@@ -84,7 +84,6 @@ lazy val commonSettings = Seq(
     }
   },
   scalacOptions ~= { _.filterNot(x => x.startsWith("-Wunused:")) },
-  // Test / parallelExecution := false
   Compile / doc / scalacOptions := (Compile / doc / scalacOptions).value.filter(_ != "-Xfatal-warnings")
 )
 
