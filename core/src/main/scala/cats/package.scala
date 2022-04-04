@@ -1,3 +1,5 @@
+import cats.Pure
+
 import scala.annotation.tailrec
 
 /**
@@ -74,7 +76,17 @@ package object cats {
   type INothing <: Nothing
 
   /**
-   * Like `INothing` but as a type constructor.
+   * Like `INothing` but as a type constructor. When used as a parameter to a coproduct type
+   * with effectful and non-effectful cases (such as [[https://github.com/typelevel/fs2 fs2 Stream]],
+   * where it originates), prevents the effectful cases from being inhabited and allows covariance up to
+   * arbitrary effect types.
+   *
+   * {{{
+   * scala> type Alg[F[_], A] = Either[F[A], A]
+   * scala> val pureAlg: Alg[Pure, Int] = Right(3)
+   * scala> val optAlg: Alg[Option, Int] = pureAlg
+   * scala> val listAlg: Alg[List, Int] = pureAlg
+   * }}}
    */
   type Pure[A] <: Nothing
 
@@ -167,4 +179,12 @@ package object cats {
   object MonadThrow {
     def apply[F[_]](implicit ev: MonadThrow[F]): MonadThrow[F] = ev
   }
+}
+
+object Test {
+  type PureOrF[F[_], A] = Either[F[A], A]
+
+  val v: PureOrF[Pure, Int] = Right(10)
+  val v1: PureOrF[List, Int] = v
+
 }
