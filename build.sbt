@@ -361,6 +361,7 @@ lazy val binCompatTest = project
   .settings(testingDependencies)
   .dependsOn(core.jvm % Test)
 
+ThisBuild / tlSitePublishBranch := Some("topic/sbt-typelevel-site")
 lazy val docs = project
   .in(file("site"))
   .enablePlugins(TypelevelSitePlugin)

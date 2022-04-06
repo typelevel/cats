@@ -40,9 +40,9 @@ jobs:
             java: temurin@17
           - project: rootNative
             java: graalvm@11
-          - scala: 2.12.15
+          - scala: 2.13.8
             java: temurin@17
-          - scala: 2.12.15
+          - scala: 2.13.8
             java: graalvm@11
           - scala: 3.0.2
             java: temurin@17
@@ -141,11 +141,11 @@ jobs:
 
       - name: Make target directories
         if: github.event_name != 'pull_request' && (startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/main')
-        run: mkdir -p algebra-laws/jvm/target free/.js/target testkit/.native/target target testkit/.js/target unidocs/target .js/target core/.native/target free/.jvm/target free/.native/target alleycats-laws/.native/target alleycats-tests/js/target laws/.native/target alleycats-tests/native/target alleycats-core/.js/target alleycats-laws/.js/target kernel/.jvm/target core/.js/target kernel/.js/target algebra-laws/native/target kernel-laws/native/target laws/.js/target core/.jvm/target tests/js/target .jvm/target alleycats-core/.native/target .native/target kernel/.native/target algebra-core/.jvm/target kernel-laws/jvm/target algebra-core/.js/target alleycats-laws/.jvm/target laws/.jvm/target tests/jvm/target algebra-core/.native/target alleycats-core/.jvm/target kernel-laws/js/target testkit/.jvm/target binCompatTest/target algebra-laws/js/target alleycats-tests/jvm/target tests/native/target bench/target project/target
+        run: mkdir -p algebra-laws/jvm/target free/.js/target testkit/.native/target target testkit/.js/target unidocs/target .js/target core/.native/target site/target free/.jvm/target free/.native/target alleycats-laws/.native/target alleycats-tests/js/target laws/.native/target alleycats-tests/native/target alleycats-core/.js/target alleycats-laws/.js/target kernel/.jvm/target core/.js/target kernel/.js/target algebra-laws/native/target kernel-laws/native/target laws/.js/target core/.jvm/target tests/js/target .jvm/target alleycats-core/.native/target .native/target kernel/.native/target algebra-core/.jvm/target kernel-laws/jvm/target algebra-core/.js/target alleycats-laws/.jvm/target laws/.jvm/target tests/jvm/target algebra-core/.native/target alleycats-core/.jvm/target kernel-laws/js/target testkit/.jvm/target binCompatTest/target algebra-laws/js/target alleycats-tests/jvm/target tests/native/target bench/target project/target
 
       - name: Compress target directories
         if: github.event_name != 'pull_request' && (startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/main')
-        run: tar cf targets.tar algebra-laws/jvm/target free/.js/target testkit/.native/target target testkit/.js/target unidocs/target .js/target core/.native/target free/.jvm/target free/.native/target alleycats-laws/.native/target alleycats-tests/js/target laws/.native/target alleycats-tests/native/target alleycats-core/.js/target alleycats-laws/.js/target kernel/.jvm/target core/.js/target kernel/.js/target algebra-laws/native/target kernel-laws/native/target laws/.js/target core/.jvm/target tests/js/target .jvm/target alleycats-core/.native/target .native/target kernel/.native/target algebra-core/.jvm/target kernel-laws/jvm/target algebra-core/.js/target alleycats-laws/.jvm/target laws/.jvm/target tests/jvm/target algebra-core/.native/target alleycats-core/.jvm/target kernel-laws/js/target testkit/.jvm/target binCompatTest/target algebra-laws/js/target alleycats-tests/jvm/target tests/native/target bench/target project/target
+        run: tar cf targets.tar algebra-laws/jvm/target free/.js/target testkit/.native/target target testkit/.js/target unidocs/target .js/target core/.native/target site/target free/.jvm/target free/.native/target alleycats-laws/.native/target alleycats-tests/js/target laws/.native/target alleycats-tests/native/target alleycats-core/.js/target alleycats-laws/.js/target kernel/.jvm/target core/.js/target kernel/.js/target algebra-laws/native/target kernel-laws/native/target laws/.js/target core/.jvm/target tests/js/target .jvm/target alleycats-core/.native/target .native/target kernel/.native/target algebra-core/.jvm/target kernel-laws/jvm/target algebra-core/.js/target alleycats-laws/.jvm/target laws/.jvm/target tests/jvm/target algebra-core/.native/target alleycats-core/.jvm/target kernel-laws/js/target testkit/.jvm/target binCompatTest/target algebra-laws/js/target alleycats-tests/jvm/target tests/native/target bench/target project/target
 
       - name: Upload target directories
         if: github.event_name != 'pull_request' && (startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/main')
@@ -161,7 +161,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        scala: [2.13.8]
+        scala: [2.12.15]
         java: [temurin@8]
     runs-on: ${{ matrix.os }}
     steps:
@@ -260,6 +260,26 @@ jobs:
           tar xf targets.tar
           rm targets.tar
 
+      - name: Download target directories (2.12.15, rootJVM)
+        uses: actions/download-artifact@v2
+        with:
+          name: target-${{ matrix.os }}-${{ matrix.java }}-2.12.15-rootJVM
+
+      - name: Inflate target directories (2.12.15, rootJVM)
+        run: |
+          tar xf targets.tar
+          rm targets.tar
+
+      - name: Download target directories (2.12.15, rootJVM)
+        uses: actions/download-artifact@v2
+        with:
+          name: target-${{ matrix.os }}-${{ matrix.java }}-2.12.15-rootJVM
+
+      - name: Inflate target directories (2.12.15, rootJVM)
+        run: |
+          tar xf targets.tar
+          rm targets.tar
+
       - name: Download target directories (2.13.8, rootJS)
         uses: actions/download-artifact@v2
         with:
@@ -286,26 +306,6 @@ jobs:
           name: target-${{ matrix.os }}-${{ matrix.java }}-2.13.8-rootNative
 
       - name: Inflate target directories (2.13.8, rootNative)
-        run: |
-          tar xf targets.tar
-          rm targets.tar
-
-      - name: Download target directories (2.13.8, rootJVM)
-        uses: actions/download-artifact@v2
-        with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-2.13.8-rootJVM
-
-      - name: Inflate target directories (2.13.8, rootJVM)
-        run: |
-          tar xf targets.tar
-          rm targets.tar
-
-      - name: Download target directories (2.13.8, rootJVM)
-        uses: actions/download-artifact@v2
-        with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-2.13.8-rootJVM
-
-      - name: Inflate target directories (2.13.8, rootJVM)
         run: |
           tar xf targets.tar
           rm targets.tar
@@ -349,7 +349,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        scala: [2.13.8]
+        scala: [2.12.15]
         java: [temurin@8]
     runs-on: ${{ matrix.os }}
     steps:
@@ -428,7 +428,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        scala: [2.13.8]
+        scala: [2.12.15]
         java: [temurin@8]
     runs-on: ${{ matrix.os }}
     steps:
@@ -499,3 +499,88 @@ jobs:
 
       - name: Check formatting
         run: sbt '++${{ matrix.scala }}' scalafmtSbtCheck +scalafmtCheckAll
+
+  site:
+    name: Generate Site
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        scala: [2.12.15]
+        java: [temurin@8]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout current branch (full)
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Download Java (temurin@8)
+        id: download-java-temurin-8
+        if: matrix.java == 'temurin@8'
+        uses: typelevel/download-java@v1
+        with:
+          distribution: temurin
+          java-version: 8
+
+      - name: Setup Java (temurin@8)
+        if: matrix.java == 'temurin@8'
+        uses: actions/setup-java@v2
+        with:
+          distribution: jdkfile
+          java-version: 8
+          jdkFile: ${{ steps.download-java-temurin-8.outputs.jdkFile }}
+
+      - name: Download Java (temurin@17)
+        id: download-java-temurin-17
+        if: matrix.java == 'temurin@17'
+        uses: typelevel/download-java@v1
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Setup Java (temurin@17)
+        if: matrix.java == 'temurin@17'
+        uses: actions/setup-java@v2
+        with:
+          distribution: jdkfile
+          java-version: 17
+          jdkFile: ${{ steps.download-java-temurin-17.outputs.jdkFile }}
+
+      - name: Download Java (graalvm@11)
+        id: download-java-graalvm-11
+        if: matrix.java == 'graalvm@11'
+        uses: typelevel/download-java@v1
+        with:
+          distribution: graalvm
+          java-version: 11
+
+      - name: Setup Java (graalvm@11)
+        if: matrix.java == 'graalvm@11'
+        uses: actions/setup-java@v2
+        with:
+          distribution: jdkfile
+          java-version: 11
+          jdkFile: ${{ steps.download-java-graalvm-11.outputs.jdkFile }}
+
+      - name: Cache sbt
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.sbt
+            ~/.ivy2/cache
+            ~/.coursier/cache/v1
+            ~/.cache/coursier/v1
+            ~/AppData/Local/Coursier/Cache/v1
+            ~/Library/Caches/Coursier/v1
+          key: ${{ runner.os }}-sbt-cache-v2-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
+
+      - name: Generate site
+        run: sbt '++${{ matrix.scala }}' docs/tlSite
+
+      - name: Publish site
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/topic/sbt-typelevel-site'
+        uses: peaceiris/actions-gh-pages@v3.8.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: site/target/docs/site
+          keep_files: true
