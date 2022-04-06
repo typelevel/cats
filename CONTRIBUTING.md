@@ -24,7 +24,7 @@ skip these steps and jump straight to submitting a pull request.
 
  1. [Find something that belongs in cats](#find-something-that-belongs-in-cats)
  2. [Let us know you are working on it](#let-us-know-you-are-working-on-it)
- 3. [Build the project](#build-project)
+ 3. [Build the project](#build-the-project)
  4. [Implement your contribution](#write-code)
  5. [Write tests](#write-tests)
  6. [Write documentation](#contributing-documentation)
@@ -50,7 +50,7 @@ pull request. The preferred ways to do that are to either:
 
 Things that belong in Cats generally have the following characteristics:
 
- * Their behavior is governed by well-defined [laws](https://typelevel.org/cats/typeclasses.html#laws).
+ * Their behavior is governed by well-defined [laws](typeclasses.html#laws).
  * They provide general abstractions.
 
 Laws help keep types consistent, and remove ambiguity or sensitivity
@@ -133,7 +133,7 @@ builds:
 
 ### Write code
 
-[See guidelines](https://typelevel.org/cats/guidelines.html).
+[See guidelines](guidelines.html).
 
 ### Attributions
 
@@ -164,7 +164,7 @@ for law checking, and imports all syntax and standard instances for convenience.
  rely heavily on serialization, such as `Spark`, will have strong compatibility with `Cats`.
  - Note that custom serialization tests are not required for instances of type classes which come from
  `algebra`, such as `Monoid`, because the `algebra` laws include a test for serialization.
-- For testing your laws, it is advised to check [this guide](https://typelevel.org/cats/typeclasses/lawtesting.html).
+- For testing your laws, it is advised to check [this guide](typeclasses/lawtesting.html).
 
 ### Binary compatibility
 

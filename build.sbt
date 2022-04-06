@@ -23,7 +23,7 @@ val Scala213 = "2.13.8"
 val Scala3 = "3.0.2"
 
 ThisBuild / crossScalaVersions := Seq(Scala212, Scala213, Scala3)
-ThisBuild / scalaVersion := Scala213
+ThisBuild / scalaVersion := Scala212
 
 ThisBuild / tlFatalWarnings := {
   githubIsWorkflowBuild.value && !tlIsScala3.value
@@ -360,6 +360,22 @@ lazy val binCompatTest = project
   )
   .settings(testingDependencies)
   .dependsOn(core.jvm % Test)
+
+lazy val docs = project
+  .in(file("site"))
+  .enablePlugins(TypelevelSitePlugin)
+  .settings(
+    laikaConfig ~= { _.withRawContent },
+    tlSiteRelatedProjects := Seq(
+      "Cats Effect" -> url("https://typelevel.org/cats-effect"),
+      "mouse" -> url("https://typelevel.org/mouse"),
+      "Discipline" -> url("https://github.com/typelevel/discipline")
+    ),
+    libraryDependencies ++= Seq(
+      "org.typelevel" %%% "discipline-munit" % disciplineMunitVersion
+    )
+  )
+  .dependsOn(core.jvm, free.jvm, laws.jvm)
 
 ThisBuild / organization := "org.typelevel"
 ThisBuild / organizationName := "Typelevel"
