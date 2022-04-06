@@ -17,7 +17,7 @@ import cats.data._
 import cats.syntax.all._
 ```
 
-This should be all that you need, but if you'd like to learn more about the details of imports than you can check out the [import guide](typeclasses/imports.md).
+This should be all that you need, but if you'd like to learn more about the details of imports than you can check out the [import guide](imports.md).
 
 ## I am new to pure functional programming, what quick wins can I get from Cats?
 
@@ -110,7 +110,7 @@ nl.traverse(even)
 
 ## Where are `Applicative`s for monad transformers?
 
-An `Applicative` instance for `OptionT[F, *]`/`EitherT[F, E, *]`, built without a corresponding `Monad` instance for `F`, would be unlawful, so it's not included. See [the guidelines](guidelines.html#applicative-monad-transformers) for a more detailed explanation.
+An `Applicative` instance for `OptionT[F, *]`/`EitherT[F, E, *]`, built without a corresponding `Monad` instance for `F`, would be unlawful, so it's not included. See [the guidelines](guidelines.md#applicative-instances-for-monad-transformers) for a more detailed explanation.
 
 As an alternative, using `.toNested` on the monad transformer is recommended, although its `ap` will still be inconsistent with the Monad instance's.`.
 
@@ -241,7 +241,7 @@ The Сats community welcomes and encourages contributions, even if you are compl
 - Find an undocumented method and write a ScalaDoc entry for it. See [Arrow.scala](https://github.com/typelevel/cats/blob/main/core/src/main/scala/cats/arrow/Arrow.scala) for some examples of ScalaDoc entries that use [sbt-doctest](https://github.com/tkawachi/sbt-doctest).
 - Find an [open issue](https://github.com/typelevel/cats/issues?q=is%3Aopen+is%3Aissue+label%3Aready), leave a comment on it to let people know you are working on it, and submit a pull request. If you are new to Сats, you may want to look for items with the [low-hanging-fruit](https://github.com/typelevel/cats/issues?q=is%3Aopen+is%3Aissue+label%3A%22low-hanging+fruit%22) label.
 
-See the [contributing guide](contributing.md) for more information.
+See the [contributing guide](CONTRIBUTING.md) for more information.
 
 ## How to try Cats in a REPL?
 

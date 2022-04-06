@@ -1,6 +1,6 @@
 # Law testing
 
-[Laws](typeclasses.html#laws) are an important part of cats.
+[Laws](../typeclasses.md#laws) are an important part of cats.
 Cats uses [discipline](https://github.com/typelevel/discipline) to define type class laws and
 the [ScalaCheck](https://github.com/rickynils/scalacheck) tests based on them.
 

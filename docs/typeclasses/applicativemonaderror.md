@@ -108,7 +108,7 @@ val j = attemptDivideApplicativeError[Validated[String, *]](30, 10)
 
 ### It is an `Applicative` after all
 
-As a Reminder, this is an [`Applicative`](/cats/typeclasses/applicative.md) 
+As a Reminder, this is an [`Applicative`](applicative.md) 
 so all the methods of `Applicative` are available to you to use in 
 manipulating your values, `ap`, `mapN`, etc. In the following example, notice
 we are using `Applicative`'s `map2`, and of course, `pure` which also is a 

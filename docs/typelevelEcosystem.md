@@ -177,7 +177,7 @@ Below are quick html and markdown snippets to use the badge in your own project.
 ![Cats Friendly Badge](img/cats-badge-tiny.png)
 ```
 
-[Cats]:  "Cats"
+[Cats]: index.md "Cats"
 [Fs2]: https://fs2.io "Fs2"
 [Kafka]: https://kafka.apache.org/ "Kafka"
 [Monix]: https://monix.io/ "Monix"

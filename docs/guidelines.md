@@ -1,29 +1,22 @@
----
-layout: page
-title:  "Guidelines"
-section: "guidelines"
-position: 70
----
-
 # Guidelines
 
 All guidelines in Сats should have clear justifications. There is no room for tribal wisdom in a simple library.
 
 ## Syntax
 
-### <a id="implicit-syntax-conversions" href="#implicit-syntax-conversions"></a> Composing Implicit Conversions in Traits
+### Composing Implicit Conversions in Traits
 
 Implicit syntax conversions provided in publicly-exposed traits should be marked final
 so that any composition of the traits provides conversions that can all be inlined.
 
-### <a id="ops-classes" href="#ops-classes"></a> Ops Classes
+### Ops Classes
 
 Ops classes should be marked final and extend AnyVal, to take full advantage of inlining and prevent unnecessary allocations.
 
 The most notable exception is the case where all of the ops in the class are provided by zero-cost macros anyway,
 for example with Simulacrum.
 
-### <a id="partially-applied-type-params" href="#partially-applied-type-params"></a> Partially-Applied Type
+### Partially-Applied Type
 
 In Scala, when there are multiple type parameters in a function, either scalac infers all type parameters or the user has to
 specify all of them. Often we have functions where there are one or more types that are inferable but not all of them. For example, there is helper function in `OptionT` that creates an `OptionT[F, A]` from an `A`. It could be written as:
@@ -69,7 +62,7 @@ The user doesn't need to specify the type `A` which is given by the parameter.
 You probably noticed that there is a `val dummy: Boolean` in the `PurePartiallyApplied` class. This is a trick we used
 to make this intermediate class a [Value Class](http://docs.scala-lang.org/overviews/core/value-classes.html) so that there is no cost of allocation, i.e. at runtime, it doesn't create an instance of `PurePartiallyApplied`. We also hide this partially applied class by making it package private and placing it inside an object.
 
-### <a id="implicit-naming" href="#implicit-naming"></a> Implicit naming
+### Implicit naming
 
 In a widely-used library it's important to minimize the chance that the names of implicits will be used by others and
 therefore name our implicits according to the following rules:
@@ -86,7 +79,7 @@ This rule is relatively flexible. Use what you see appropriate. The goal is to m
 
 
 
-### <a id="implicit-priority" href="#implicit-priority"></a> Implicit instance priority
+### Implicit instance priority
 
 When there are multiple instances provided implicitly, if the type class of them are in the same inheritance hierarchy,
 the instances need to be separated out into different abstract class/traits so that they don't conflict with each other. The names of these abstract classes/traits should be numbered with a priority with 0 being the highest priority. The abstract classes/trait
@@ -116,7 +109,7 @@ abstract class KleisliInstance1 {
 We can introduce new type classes for the sake of adding laws that don't apply to the parent type class, e.g. `CommutativeSemigroup` and
 `CommutativeArrow`.
 
-### <a id="applicative-monad-transformers" href="#applicative-monad-transformers">Applicative instances for monad transformers</a>
+### Applicative instances for monad transformers</a>
 
 We explicitly don't provide an instance of `Applicative` for e.g. `EitherT[F, String, *]` given an `Applicative[F]`.
 An attempt to construct one without a proper `Monad[F]` instance would be inconsistent in `ap` with the provided `Monad` instance

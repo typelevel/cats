@@ -25,7 +25,7 @@ action. The next section uses `Free[_]` to create an embedded DSL
 (Domain Specific Language).
 
 If you're interested in the theory behind *free monads*, the
-[What is Free in theory?](#what-is-free-in-theory) section discusses free monads
+[What is Free in theory?](#for-the-curious-ones-what-is-free-in-theory) section discusses free monads
 in terms of category theory.
 
 ### Study your topic
@@ -399,7 +399,7 @@ import DataSource._, Interacts._
 val evaled: Unit = program.foldMap(interpreter)
 ```
 
-## <a name="what-is-free-in-theory"></a>For the curious ones: what is Free in theory?
+## For the curious ones: what is Free in theory?
 
 Mathematically-speaking, a *free monad* (at least in the programming
 language context) is a construction that is left adjoint to a

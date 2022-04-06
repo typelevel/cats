@@ -8,7 +8,7 @@ import cats.data._
 import cats.syntax.all._
 ```
 
-The `cats._` import brings in quite a few [type classes](typeclasses.html) (similar to interfaces) such as [Monad](typeclasses/monad.html), [Semigroup](typeclasses/semigroup.html), and [Foldable](typeclasses/foldable.md). Instead of the entire `cats` package, you can import only the types that you need, for example:
+The `cats._` import brings in quite a few [type classes](typeclasses.md) (similar to interfaces) such as [Monad](typeclasses/monad.md), [Semigroup](typeclasses/semigroup.md), and [Foldable](typeclasses/foldable.md). Instead of the entire `cats` package, you can import only the types that you need, for example:
 
 ```scala mdoc:reset:silent
 import cats.Monad
@@ -16,7 +16,7 @@ import cats.Semigroup
 import cats.Foldable
 ```
 
-The `cats.data._`, import brings in data structures such as [Validated](datatypes/validated.html) and [State](datatypes/state.md). Instead of the entire `cats.data` package, you can import only the types that you need, for example:
+The `cats.data._`, import brings in data structures such as [Validated](datatypes/validated.md) and [State](datatypes/state.md). Instead of the entire `cats.data` package, you can import only the types that you need, for example:
 
 ```scala mdoc:reset:silent
 import cats.data.Validated

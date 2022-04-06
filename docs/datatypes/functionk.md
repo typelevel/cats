@@ -102,7 +102,7 @@ Being able to use `~>` as an alias for `FunctionK` parallels being able to use `
 
 ## Use-cases
 
-`FunctionK` tends to show up when there is abstraction over higher-kinds. For example, interpreters for [free monads](freemonad.html) and [free applicatives](freeapplicative.md) are represented as `FunctionK` instances.
+`FunctionK` tends to show up when there is abstraction over higher-kinds. For example, interpreters for [free monads](freemonad.md) and [free applicatives](freeapplicative.md) are represented as `FunctionK` instances.
 
 ## Types with more than one type parameter
 

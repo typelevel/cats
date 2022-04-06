@@ -10,7 +10,7 @@ def imap[A, B](fa: F[A])(f: A => B)(g: B => A): F[B]
 Every covariant (as well as [contravariant](contravariant.md)) functor gives rise to an invariant
 functor, by ignoring the `g` (or in case of contravariance, `f`) function.
 
-Examples for instances of `Invariant` are [`Semigroup`](semigroup.html) and [`Monoid`](monoid.md), in
+Examples for instances of `Invariant` are [`Semigroup`](semigroup.md) and [`Monoid`](monoid.md), in
 the following we will explain why this is the case using `Semigroup`, the
 reasoning for `Monoid` is analogous.
 

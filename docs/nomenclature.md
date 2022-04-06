@@ -278,6 +278,6 @@ Because `Сats` is a Scala library and Scala has many knobs and switches, the ac
 - For functions defined as method of the typeclass trait, we ignore the receiver object.
 - We ignore implicit parameters that represent type-class constraints; and write them on a side column instead.
 - We use `A => B` for both `Function1[A, B]` and `PartialFunction[A, B]` parameters, without distinction. We add a side note when one is  a `PartialFunction`.
-- Some functions are defined through the [Partially Applied Type Params](guidelines.html#partially-applied-type-params) pattern. We ignore this.
+- Some functions are defined through the [Partially Applied Type Params](guidelines.md#partially-applied-type) pattern. We ignore this.
 - We ignore the distinction between by-name and by-value input parameters. We use the notation `=> A`, without parameters, to indicate constant functions.
 - We ignore Scala variance annotations. We also ignore extra type parameters, which in some methods are added with a subtype-constraint, (e.g. `B >: A`). These are usually meant for flexibility, but we replace each one by its bound.

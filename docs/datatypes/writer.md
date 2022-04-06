@@ -15,16 +15,16 @@ multiple ways. See the [Operations section](#operations)
 
 When two functions are composed together, e.g. using `flatMap`, the logs
   of both functions will be combined using an implicit
-  [Semigroup](typeclasses/semigroup.md).
+  [Semigroup](../typeclasses/semigroup.md).
 
 ## Operations
 
 The `Writer` datatype provides a set of functions that are similar to
 the ones from the
-[Monad](typeclasses/monad.md)
+[Monad](../typeclasses/monad.md)
 typeclass. In fact, they share the same name and the same signature,
 but have an additional requirement of a
-[`Semigroup[L]`](typeclasses/semigroup.md)
+[`Semigroup[L]`](../typeclasses/semigroup.md)
 that allows the log merging.
 
 `map` effects only the value, keeping the log side untouched. Plus, here we show `run`
@@ -41,7 +41,7 @@ mapExample.run
 
 `ap` allows applying a function, wrapped into a Writer. It works
 exactly like the `Applicative` as expected, but notice how the logs
-are combined using the [`Semigroup[String]`](typeclasses/semigroup.md).
+are combined using the [`Semigroup[String]`](../typeclasses/semigroup.md).
 
 ```scala mdoc
 val apExampleValue = Writer("ap value", 10)
@@ -71,13 +71,13 @@ Apart from those, `Writer` comes with some specific functions to manage
 the log side of the computation:
 
 `tell`
-:  Append a value to the log side. It requires a [`Semigroup[L]`](typeclasses/semigroup.md).
+:  Append a value to the log side. It requires a [`Semigroup[L]`](../typeclasses/semigroup.md).
 
 `swap`
 :  Exchange the two values of the `Writer`.
 
 `reset`
-:  Delete the log side. It requires a [`Monoid[L]`](typeclasses/monoid.md) since it uses the `empty` value of the monoid.
+:  Delete the log side. It requires a [`Monoid[L]`](../typeclasses/monoid.md) since it uses the `empty` value of the monoid.
 
 `value`
 :  Returns only the value of the `Writer`
@@ -123,13 +123,13 @@ type Writer[L, V] = WriterT[Id, L, V]
 
 So, all the [Operations](#operations) defined in the previous section
 are actually coming from the [WriterT
-datatype](datatypes/writert.md)
+datatype](writert.md)
 
-Most of the [`WriterT`](datatypes/writert.md) functions require a
-[`Functor[F]`](typeclasses/functor.md) or
-[`Monad[F]`](typeclasses/monad.md)
+Most of the [`WriterT`](writert.md) functions require a
+[`Functor[F]`](../typeclasses/functor.md) or
+[`Monad[F]`](../typeclasses/monad.md)
 instance. However, Cats provides all the necessary instances for the
-[`Id`](datatypes/id.md) type, therefore
+[`Id`](id.md) type, therefore
 we don't have to worry about them.
 
 ## Example

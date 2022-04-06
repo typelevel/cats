@@ -122,8 +122,8 @@ def processAsync: Future[ProcessingResult] = {
 }
 ```
 
-By default the implicit instances (namely, [`Functor[Future]`](api/cats/Functor.md) and
-[`Semigroupal[Future]`](api/cats/Semigroupal.md)) required for `mapN` to work properly are always visible. They are present in the respective companion objects of the instances and hence we do not need to import them explicitly.  
+By default the implicit instances (namely, [`Functor[Future]`](@API_URL@/cats/Functor.html) and
+[`Semigroupal[Future]`](@API_URL@/cats/Semigroupal.html)) required for `mapN` to work properly are always visible. They are present in the respective companion objects of the instances and hence we do not need to import them explicitly.  
 
 This above idea can be expressed even shorter, just:
 
@@ -224,7 +224,7 @@ and that solves our problem for good.
 
 ## `import cats.data.OptionT`
 
-An instance of [`OptionT[F, A]`](api/cats/data/EitherT.md) can be thought of as a wrapper over `F[Option[A]]`
+An instance of [`OptionT[F, A]`](datatypes/optiont.md) can be thought of as a wrapper over `F[Option[A]]`
 which adds a couple of useful methods specific to nested types that aren't available in `F` or `Option` itself.
 Most typically, your `F` will be `Future` (or sometimes slick's `DBIO`, but this requires having an implementation of Cats type classes like `Functor` or `Monad` for `DBIO`).
 Wrappers such as `OptionT` are generally known as _monad transformers_.
@@ -311,7 +311,7 @@ Otherwise, if the result of all three calls contains `Some`, the final outcome w
 
 ## `import cats.data.EitherT`
 
-[`EitherT[F, A, B]`](api/cats/data/EitherT.md) is the monad transformer for `Either` — you can think of it as a wrapper over a `F[Either[A, B]]` value.
+[`EitherT[F, A, B]`](datatypes/eithert.md) is the monad transformer for `Either` — you can think of it as a wrapper over a `F[Either[A, B]]` value.
 
 Just as in the above section, I simplified the method headers, skipping type parameters or their context bounds and lower bounds.
 

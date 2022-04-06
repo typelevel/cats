@@ -10,7 +10,7 @@ in trying to teach others about these concepts, and trying to make
 decisions which will help ease the process of getting acquainted to
 the library for a newcomer. If you have any feedback for us in this
 regard, we would love to hear from you. See the [Contributing
-page](contributing.md) to find out ways to give us feedback.
+page](CONTRIBUTING.md) to find out ways to give us feedback.
 
 #### Modularity
 
@@ -31,7 +31,7 @@ how the software can be used.
 
 Writing documentation is a huge part of developing software, and one
 that is often neglected. It is also a very easy way to get started
-with [contributing](contributing.md) to the project.
+with [contributing](CONTRIBUTING.md) to the project.
 
 #### Efficiency
 

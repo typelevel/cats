@@ -99,7 +99,7 @@ implicit val optionMonad = new Monad[Option] {
 }
 ```
 
-More discussion about `tailRecM` can be found in the [FAQ](../faq.html#tailrecm).
+More discussion about `tailRecM` can be found in the [FAQ](../faq.md#what-is-tailrecm).
 
 
 ### ifM
@@ -115,7 +115,7 @@ Monad[List].ifM(List(true, false, true))(ifTrue = List(1, 2), ifFalse = List(3, 
 ```
 
 ### Composition
-Unlike [`Functor`s](functor.html) and [`Applicative`s](applicative.md),
+Unlike [`Functor`s](functor.md) and [`Applicative`s](applicative.md),
 not all `Monad`s compose. This means that even if `M[_]` and `N[_]` are
 both `Monad`s, `M[N[_]]` is not guaranteed to be a `Monad`.
 

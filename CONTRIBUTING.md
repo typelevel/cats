@@ -50,7 +50,7 @@ pull request. The preferred ways to do that are to either:
 
 Things that belong in Cats generally have the following characteristics:
 
- * Their behavior is governed by well-defined [laws](typeclasses.html#laws).
+ * Their behavior is governed by well-defined [laws](https://typelevel.org/cats/typeclasses.html#laws).
  * They provide general abstractions.
 
 Laws help keep types consistent, and remove ambiguity or sensitivity
@@ -151,11 +151,11 @@ for law checking, and imports all syntax and standard instances for convenience.
  [Discipline](https://github.com/typelevel/discipline), is the name of the test and will be output to the
  console as part of the test execution. By convention:
  - When checking laws, this parameter generally takes a form that describes the data type being tested.
- For example the name *"Validated[String, Int]"* might be used when testing a type class instance
+ For example the name `"Validated[String, Int]"` might be used when testing a type class instance
  that the `Validated` data type supports.
  - An exception to this is serializability tests, where the type class name is also included in the name.
  For example, in the case of `Validated`, the serializability test would take the form,
- *"Applicative[Validated[String, Int]]"*, to indicate that this test is verifying that the `Applicative`
+ `"Applicative[Validated[String, Int]]"`, to indicate that this test is verifying that the `Applicative`
  type class instance for the `Validated` data type is serializable.
  - This convention helps to ensure clear and easy to understand output, with minimal duplication in the output.
 - It is also a goal that, for every combination of data type and supported type class instance:
