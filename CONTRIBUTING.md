@@ -200,7 +200,7 @@ At the moment the command is:
 
 ### Previewing the site
 
-Run `docs/tlSitePreview` in the sbt console. This will start a live preview server at http://localhost:4242/.
+Run `docs/tlSitePreview` in the sbt console. This will start a preview server at http://localhost:4242/ that will automatically refresh as you make edits.
 
 ### Compiler verified documentation
 
