@@ -1,6 +1,6 @@
 # NonEmptyTraverse
 
-`NonEmptyTraverse` is a non-empty version of the [Traverse](traverse.html) type class, just like [Reducible](reducible.html) is a non-empty version of [Foldable](foldable.html).
+`NonEmptyTraverse` is a non-empty version of the [Traverse](traverse.html) type class, just like [Reducible](reducible.html) is a non-empty version of [Foldable](foldable.md).
 As such, it extends both `Reducible` and `Traverse` in the type class hierarchy.
 It provides the `nonEmptyTraverse` and `nonEmptySequence` methods that require an instance of `Apply` instead of `Applicative`:
 
@@ -10,7 +10,7 @@ def nonEmptyTraverse[G[_]: Apply, A, B](fa: F[A])(f: A => G[B]): G[F[B]]
 def nonEmptySequence[G[_]: Apply, A](fga: F[G[A]]): G[F[A]]
 ```
 
-In the [Applicative tutorial](applicative.html) we learned of `Apply` as a weakened `Applicative` lacking the `pure` method.
+In the [Applicative tutorial](applicative.md) we learned of `Apply` as a weakened `Applicative` lacking the `pure` method.
 One example type lacking an `Applicative` instance is `Map[K, *]`, it's impossible to implement a `pure` method for it.
 
 Knowing this, we can make use of `NonEmptyTraverse`, to traverse over a sequence of `Map`s.

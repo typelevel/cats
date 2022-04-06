@@ -1,6 +1,6 @@
 # Contravariant Monoidal
 
-The `ContravariantMonoidal` type class is for [`Contravariant`](contravariant.html) functors that can define a
+The `ContravariantMonoidal` type class is for [`Contravariant`](contravariant.md) functors that can define a
 `product` function and a `unit` function.
 
 ```scala mdoc:silent
@@ -24,7 +24,7 @@ Basically, if you have two contexts `F[B]` and `F[C]` for types
 from a type `A`, then `ContravariantMonoidal` allows you to obtain
 a context `F[A]` for the type `A`.
 
-Examples of `ContravariantMonoidal` instances are [`Eq`](eq.html) and [`Const`](../datatypes/const.html),
+Examples of `ContravariantMonoidal` instances are [`Eq`](eq.html) and [`Const`](../datatypes/const.md),
 but there are also interesting instances for other types.
 
 ## Predicates Have `ContravariantMonoidal`

@@ -22,4 +22,4 @@ There are other libraries that aim to foster Functional Programming in the Scala
 nature to Cats, also derived from scalaz. The Structures and Cats
 projects have had a healthy relationship of sharing both ideas and code.
 
-For a full list of Cats and Typelevel related projects and libraries, take a look at [The Typelevel Ecosystem](typelevelEcosystem.html)
+For a full list of Cats and Typelevel related projects and libraries, take a look at [The Typelevel Ecosystem](typelevelEcosystem.md)

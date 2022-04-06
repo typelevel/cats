@@ -79,7 +79,7 @@ Here we can see, that the expression is evaluated every time we call `.value`.
 ### Chaining lazy computations
 
 One of the most useful applications of `Eval` is its ability to chain together computations in a stack-safe way.
-You can see one such usage when looking at the `foldRight` method found in [`Foldable`](../typeclasses/foldable.html).
+You can see one such usage when looking at the `foldRight` method found in [`Foldable`](../typeclasses/foldable.md).
 Another great example are mutual tail-recursive calls:
 
 ```scala mdoc

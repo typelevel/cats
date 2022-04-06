@@ -133,7 +133,7 @@ builds:
 
 ### Write code
 
-[See guidelines](guidelines.html).
+[See guidelines](guidelines.md).
 
 ### Attributions
 
@@ -164,7 +164,7 @@ for law checking, and imports all syntax and standard instances for convenience.
  rely heavily on serialization, such as `Spark`, will have strong compatibility with `Cats`.
  - Note that custom serialization tests are not required for instances of type classes which come from
  `algebra`, such as `Monoid`, because the `algebra` laws include a test for serialization.
-- For testing your laws, it is advised to check [this guide](typeclasses/lawtesting.html).
+- For testing your laws, it is advised to check [this guide](https://typelevel.org/cats/typeclasses/lawtesting.html).
 
 ### Binary compatibility
 

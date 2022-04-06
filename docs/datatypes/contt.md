@@ -28,7 +28,7 @@ def updateUser(persistToDatabase: User => Eval[UserUpdateResult])
 ```
 
 (Note: We will be using `Eval` throughout the examples on this page. If you are not
-familiar with `Eval`, it's worth reading [the Eval documentation](eval.html) first.)
+familiar with `Eval`, it's worth reading [the Eval documentation](eval.md) first.)
 
 Our `updateUser` function takes in an existing user and some updates to perform.
 It sanitises the inputs and updates the user model, but it delegates the

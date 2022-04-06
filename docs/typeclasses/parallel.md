@@ -69,7 +69,7 @@ Where `M[_]` has to have an instance of `Monad` and `F[_]` an instance of `Appli
 
 ![The `Parallel` typeclass transforms between `Monad` `M[_]` and `Applicative` `F[_]`.](../img/parallel.png)
 
-Recall that `~>` is just an alias for [`FunctionK`](../datatypes/functionk.html).
+Recall that `~>` is just an alias for [`FunctionK`](../datatypes/functionk.md).
 This allows us to get rid of most of our boilerplate from earlier:
 
 ```scala mdoc:nest
@@ -112,4 +112,4 @@ An example for one of these is `ZipList`.
 
 With instances of `NonEmptyParallel` it's not possible to use the `parTraverse` and `parSequence` functions,
 but we can still use `parMapN` and also `parNonEmptyTraverse` and `parNonEmptySequence`,
-which are analogous to the functions defined on [`NonEmptyTraverse`](nonemptytraverse.html).
+which are analogous to the functions defined on [`NonEmptyTraverse`](nonemptytraverse.md).

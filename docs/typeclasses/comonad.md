@@ -1,6 +1,6 @@
 # Comonad
 
-`Comonad` is a `Functor` and provides duals of the [`Monad`](monad.html) `pure`
+`Comonad` is a `Functor` and provides duals of the [`Monad`](monad.md) `pure`
 and `flatMap` functions.  A dual to a function has the same types but the 
 direction of the arrows are reversed. Whether or not that is useful, or even possible, 
 depends on the particular type. For a more formal definition of duality, please 

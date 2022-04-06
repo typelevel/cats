@@ -7,7 +7,7 @@ We start with two examples of `NonEmptyList`s
 ### Usage in `Validated` and `Ior`
 
 If you have had the opportunity of taking a look to
-[Validated](validated.html) or [Ior](ior.html), you'll find that a
+[Validated](validated.html) or [Ior](ior.md), you'll find that a
 common case is to use `NonEmptyList` with one of these data
 structures.
 

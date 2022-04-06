@@ -7,13 +7,13 @@ function with the following type:
 def contramap[A, B](fa: F[A])(f: B => A): F[B]
 ```
 
-It looks like regular (also called `Covariant`) [`Functor`](functor.html)'s `map`,
+It looks like regular (also called `Covariant`) [`Functor`](functor.md)'s `map`,
 but with the `f` transformation reversed.
 
 Generally speaking, if you have some context `F[A]` for type `A`,
 and you can get an `A` value out of a `B` value — `Contravariant` allows you to get the `F[B]` context for `B`.
 
-Examples of `Contravariant` instances are [`Show`](show.html) and `scala.math.Ordering` (along with `cats.kernel.Order`).
+Examples of `Contravariant` instances are [`Show`](show.md) and `scala.math.Ordering` (along with `cats.kernel.Order`).
 
 ## Contravariant instance for Show.
 

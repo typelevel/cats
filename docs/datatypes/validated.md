@@ -196,7 +196,7 @@ This datatype, as with `Either` has two projections: `Valid` and `Invalid`, anal
 
 Remember that our goal is to get all the validation errors for displaying it to the user, but you'll find that this approach won't compile, as you can see in the previous snippet. Why?
 
-Without diving into details about monads, a for-comprehension uses the `flatMap` method for composition. Monads like `Either` can be composed in that way, but the thing with `Validated` is that it isn't a monad, but an [_Applicative Functor_](../typeclasses/applicativetraverse.html).
+Without diving into details about monads, a for-comprehension uses the `flatMap` method for composition. Monads like `Either` can be composed in that way, but the thing with `Validated` is that it isn't a monad, but an [_Applicative Functor_](../typeclasses/applicativetraverse.md).
 That's why you see the message: `error: value flatMap is not a member of cats.data.Validated[DomainValidation,String]`.
 
 So, how do we do here?
@@ -245,7 +245,7 @@ Let's see what changed here:
 2. `ValidatedNec[DomainValidation, A]` is an alias for `Validated[NonEmptyChain[DomainValidation], A]`. When you use `ValidatedNec` you're stating that your accumulative structure will be a `NonEmptyChain`. With `Validated`, you have the choice about which data structure you want for reporting the errors (more on that soon).
 3. We've declared the type alias `ValidationResult` that conveniently expresses the return type of our validation.
 4. `.validNec` and `.invalidNec` combinators lets you _lift_ the success or failure in their respective container (either a `Valid` or `Invalid[NonEmptyChain[A]]`).
-5. The [applicative](../typeclasses/applicative.html) syntax `(a, b, c, ...).mapN(...)` provides us a way to accumulatively apply the validation functions and yield a product with their successful result or the accumulated errors in the `NonEmptyChain`. Then, we transform that product with `mapN` into a valid instance of `RegistrationData`.
+5. The [applicative](../typeclasses/applicative.md) syntax `(a, b, c, ...).mapN(...)` provides us a way to accumulatively apply the validation functions and yield a product with their successful result or the accumulated errors in the `NonEmptyChain`. Then, we transform that product with `mapN` into a valid instance of `RegistrationData`.
 
 **Deprecation notice:** since Cats `1.0.0-MF` the cartesian syntax `|@|` for applicatives is deprecated. If you're using `0.9.0` or less, you can use the syntax: `(a |@| b |@| ...).map(...)`.
 
@@ -277,7 +277,7 @@ Sweet success! Now you can take your validation process to the next level!
 
 As previously stated, `ValidatedNec[DomainValidation, A]` is an alias for `Validated[NonEmptyChain[DomainValidation], A]`. Typically, you'll see that `Validated` is accompanied by a `NonEmptyChain` when it comes to accumulation. The thing here is that you can define your own accumulative data structure and you're not limited to the aforementioned construction.
 
-For doing this, you have to provide a `Semigroup` instance. `NonEmptyChain`, by definition has its own `Semigroup`. For those who don't know what a `Semigroup` is, you can find out more [here](../typeclasses/semigroup.html).
+For doing this, you have to provide a `Semigroup` instance. `NonEmptyChain`, by definition has its own `Semigroup`. For those who don't know what a `Semigroup` is, you can find out more [here](../typeclasses/semigroup.md).
 
 #### Accumulative Structures
 

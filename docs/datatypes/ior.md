@@ -1,7 +1,7 @@
 # Ior
 
 `Ior` represents an inclusive-or relationship between two data types.
-This makes it very similar to the [`Either`](either.html) data type, which represents an "exclusive-or" relationship.
+This makes it very similar to the [`Either`](either.md) data type, which represents an "exclusive-or" relationship.
 What this means, is that an `Ior[A, B]` (also written as `A Ior B`) can contain either an `A`, a `B`, or both an `A` and `B`.
 Another similarity to `Either` is that `Ior` is right-biased,
 which means that the `map` and `flatMap` functions will work on the right side of the `Ior`, in our case the `B` value.
@@ -35,7 +35,7 @@ val left = "Error".leftIor
 
 
 When we look at the `Monad` or `Applicative` instances of `Ior`, we can see that they actually requires a `Semigroup` instance on the left side.
-This is because `Ior` will actually accumulate failures on the left side, very similar to how the [`Validated`](validated.html) data type does.
+This is because `Ior` will actually accumulate failures on the left side, very similar to how the [`Validated`](validated.md) data type does.
 This means we can accumulate data on the left side while also being able to short-circuit upon the first left-side-only value.
 For example, sometimes, we might want to accumulate warnings together with a valid result and only halt the computation on a "hard error"
 Here's an example of how we might be able to do that:
@@ -98,7 +98,7 @@ validateUser("john.doe", "password").fold(
 )
 
 ```
-Similar to [Validated](validated.html), there is also a type alias for using a `NonEmptyChain` on the left side.
+Similar to [Validated](validated.md), there is also a type alias for using a `NonEmptyChain` on the left side.
 
 ```scala mdoc:silent
 import cats.data.NonEmptyChain

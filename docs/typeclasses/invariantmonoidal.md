@@ -1,6 +1,6 @@
 # Invariant Monoidal
 
-`InvariantMonoidal` combines [`Invariant`](invariant.html) and `Semigroupal` with the addition of a `unit` methods, defined in isolation the `InvariantMonoidal` type class could be defined as follows:
+`InvariantMonoidal` combines [`Invariant`](invariant.md) and `Semigroupal` with the addition of a `unit` methods, defined in isolation the `InvariantMonoidal` type class could be defined as follows:
 
 ```scala mdoc:compile-only
 trait InvariantMonoidal[F[_]] {
@@ -10,13 +10,13 @@ trait InvariantMonoidal[F[_]] {
 }
 ```
 
-Practical uses of `InvariantMonoidal` appear in the context of codecs, that is interfaces to capture both serialization and deserialization for a given format. Another notable examples is [`Semigroup`](semigroup.html).
+Practical uses of `InvariantMonoidal` appear in the context of codecs, that is interfaces to capture both serialization and deserialization for a given format. Another notable examples is [`Semigroup`](semigroup.md).
 
 This tutorial first shows how `Semigroup` is `InvariantMonoidal`, and how this can be used create `Semigroup` instances by combining other `Semigroup` instances. Secondly, we present a complete example of `Codec` for the CSV format, and show how it is `InvariantMonoidal`. Lastly, we present an alternative definition of `InvariantMonoidal` as a generalization of `Invariant`, and show that both definitions are equivalent.
 
 # `Semigroup` is `InvariantMonoidal`
 
-As explained in the [`Invariant` tutorial](invariant.html), `Semigroup` forms an invariant functor. Indeed, given a `Semigroup[A]` and two functions `A => B` and `B => A`, one can construct a `Semigroup[B]` by transforming two values from type `B` to type `A`, combining these using the `Semigroup[A]`, and transforming the result back to type `B`. Thus to define an `InvariantMonoidal[Semigroup]` we need implementations for `unit` and `product`.
+As explained in the [`Invariant` tutorial](invariant.md), `Semigroup` forms an invariant functor. Indeed, given a `Semigroup[A]` and two functions `A => B` and `B => A`, one can construct a `Semigroup[B]` by transforming two values from type `B` to type `A`, combining these using the `Semigroup[A]`, and transforming the result back to type `B`. Thus to define an `InvariantMonoidal[Semigroup]` we need implementations for `unit` and `product`.
 
 To construct a `Semigroup` from a single value, we can define a trivial `Semigroup` with a combine that always outputs the given value. A `Semigroup[(A, B)]` can be obtained from two `Semigroup`s for type `A` and `B` by deconstructing two pairs into elements of type `A` and `B`, combining these element using their respective `Semigroup`s, and reconstructing a pair from the results:
 
@@ -182,7 +182,7 @@ fooCodec.read(fooCodec.write(foo)) == ((Some(foo), List()))
 
 # `InvariantMonoidal` as a generalization of `Invariant`
 
-To better understand the motivations behind the `InvariantMonoidal` type class, we show how one could naturally arrive to its definition by generalizing the concept of `Invariant` functor. This reflection is analogous to the one presented in [Free Applicative Functors by Paolo Capriotti](http://www.paolocapriotti.com/assets/applicative.pdf) to show how [`Applicative`](applicative.html) are a generalization of [`Functor`](functor.html).
+To better understand the motivations behind the `InvariantMonoidal` type class, we show how one could naturally arrive to its definition by generalizing the concept of `Invariant` functor. This reflection is analogous to the one presented in [Free Applicative Functors by Paolo Capriotti](http://www.paolocapriotti.com/assets/applicative.pdf) to show how [`Applicative`](applicative.html) are a generalization of [`Functor`](functor.md).
 
 Given an `Invariant[F]` instance for a certain *context* `F[_]`, its `imap` method gives a way to lift two *unary* pure functions `A => B` and `B => A` into *contextualized* functions `F[A] => F[B]`. But what about functions of other arity?
 

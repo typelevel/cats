@@ -51,4 +51,4 @@ MonoidK[List].combineK(List("hello", "world"), List("goodbye", "moon"))
 MonoidK[List].combineK(List(1, 2), List(3, 4))
 ```
 
-`MonoidK` extends [`SemigroupK`](semigroupk.html), so take a look at the `SemigroupK` documentation for more examples.
+`MonoidK` extends [`SemigroupK`](semigroupk.md), so take a look at the `SemigroupK` documentation for more examples.

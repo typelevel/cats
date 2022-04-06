@@ -1,6 +1,6 @@
 # SemigroupK
 
-`SemigroupK` has a very similar structure to [`Semigroup`](semigroup.html), the difference
+`SemigroupK` has a very similar structure to [`Semigroup`](semigroup.md), the difference
 is that `SemigroupK` operates on type constructors of one argument. So, for
 example, whereas you can find a `Semigroup` for types which are fully
 specified like `Int` or `List[Int]` or `Option[Int]`, you will find

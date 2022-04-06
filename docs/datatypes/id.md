@@ -22,7 +22,7 @@ val y: Int = x
 ```
 
 Using this type declaration, we can treat our Id type constructor as a
-[`Monad`](../typeclasses/monad.html) and as a [`Comonad`](../typeclasses/comonad.html). The `pure`
+[`Monad`](../typeclasses/monad.html) and as a [`Comonad`](../typeclasses/comonad.md). The `pure`
 method, which has type `A => Id[A]` just becomes the identity
 function.  The `map` method from `Functor` just becomes function
 application:

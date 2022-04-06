@@ -26,7 +26,7 @@ Regardless, you do not need to know anything about category theory to use Cats.
 ### Code Contributors
 
 This project exists thanks to [all the people who contribute](https://github.com/typelevel/cats/graphs/contributors). We welcome contributions to Cats and would love for you to help build
-Cats. See our [contributor guide](contributing.html) for more
+Cats. See our [contributor guide](CONTRIBUTING.md) for more
 information about how you can get involved as a developer. If you are looking for something to start with, [here is a beginner friendly list](https://github.com/typelevel/cats/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22).
 
 ### Financial Contributors
@@ -118,15 +118,15 @@ Past release notes for Cats are available in [CHANGES.md](https://github.com/typ
 
 Links:
 
-1. Website: [typelevel.org/cats/]()
-2. ScalaDoc: [typelevel.org/cats/api/](api/)
-3. Type classes: [typelevel.org/cats/typeclasses](typeclasses.html)
-4. Data types: [typelevel.org/cats/datatypes.html](datatypes.html)
-5. Algebra overview: [typelevel.org/cats/algebra.html](algebra.html)
-6. Glossary: [typelevel.org/cats/nomenclature.html](nomenclature.html)
-7. Resources for Learners: [typelevel.org/cats/resources_for_learners.html](resources_for_learners.html)
-8. FAQ: [typelevel.org/cats/faq.html](faq.html)
-9. The Typelevel Ecosystem: [typelevel.org/cats/typelevelEcosystem.html](typelevelEcosystem.html)
+1. Website: [typelevel.org/cats/](https://typelevel.org/cats/)
+2. ScalaDoc: [typelevel.org/cats/api/](https://typelevel.org/cats/api/)
+3. Type classes: [typelevel.org/cats/typeclasses](https://typelevel.org/cats/typeclasses.md)
+4. Data types: [typelevel.org/cats/datatypes.html](https://typelevel.org/cats/datatypes.md)
+5. Algebra overview: [typelevel.org/cats/algebra.html](https://typelevel.org/cats/algebra.md)
+6. Glossary: [typelevel.org/cats/nomenclature.html](https://typelevel.org/cats/nomenclature.md)
+7. Resources for Learners: [typelevel.org/cats/resources_for_learners.html](https://typelevel.org/cats/resources_for_learners.md)
+8. FAQ: [typelevel.org/cats/faq.html](https://typelevel.org/cats/faq.md)
+9. The Typelevel Ecosystem: [typelevel.org/cats/typelevelEcosystem.html](https://typelevel.org/cats/typelevelEcosystem.md)
 
 ### Community
 
