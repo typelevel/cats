@@ -187,9 +187,6 @@ As a side note, the latter command uses [sbt-mima](https://github.com/lightbend/
 ### source for the documentation
 The documentation for this website is stored alongside the source, in the [docs subproject](https://github.com/typelevel/cats/tree/main/docs).
 
-* The source for the tut compiled pages is in `docs/src/main/mdoc`
-* The menu structure for these pages is in `docs/src/main/resources/microsite/data/menu.yml`
-
 ### Generating the Site
 
 The microsite generation requires a specific scala version that might
@@ -199,27 +196,11 @@ workflow to discover the proper version:
 command](https://github.com/typelevel/cats/blob/main/.github/workflows/ci.yml#L281)
 
 At the moment the command is:
-`sbt ++2.12.15 docs/makeMicrosite`
+`sbt ++2.12.15 docs/tlSite`
 
 ### Previewing the site
 
-1. Install jekyll locally. Depending on your platform, you might do this with:
-
-    `yum install jekyll`
-
-    `apt-get install ruby-full; gem install jekyll`
-
-    `gem install jekyll`
-
-    Or just dropping into a `nix-shell` if you are using the [Nix Cats development environment](#nix-cats-development-environment).
-
-2. In a shell, navigate to the generated site directory in `cats-docs/target/site`
-
-3. Start jekyll with `jekyll serve -b /cats`
-
-4. Navigate to http://localhost:4000/cats/ in your browser
-
-5. Make changes to your site, and run `sbt docs/makeMicrosite` to regenerate the site. The changes should be reflected as soon as you run `makeMicrosite`.
+Run `docs/tlSitePreview` in the sbt console. This will start a live preview server at http://localhost:4242/.
 
 ### Compiler verified documentation
 
