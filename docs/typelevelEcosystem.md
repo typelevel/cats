@@ -161,7 +161,7 @@ Here you can find a comprehensive list of libraries and projects related to Type
 | [whale-tail](https://github.com/davenverse/whale-tail)                                                                     | Docker Daemon Integration.                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 |                                                                                                                            |                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 
-Your project talks Cats too? [Submit a PR to add it here!](https://github.com/typelevel/cats/edit/main/docs/src/main/mdoc/typelevelEcosystem.md)
+Your project talks Cats too? [Submit a PR to add it here!](https://github.com/typelevel/cats/edit/main/docs/typelevelEcosystem.md)
 
 *The full-size [Cats logo](img/cats-logo.png) is available for use for Cats related projects, contents, souvenirs, etc.*
 
