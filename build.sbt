@@ -371,7 +371,7 @@ lazy val docs = project
     tlSiteApiUrl := Some(url("https://typelevel.org/cats/api/")),
     tlSiteRelatedProjects := Seq(
       "Cats Effect" -> url("https://typelevel.org/cats-effect"),
-      "mouse" -> url("https://typelevel.org/mouse"),
+      "Mouse" -> url("https://typelevel.org/mouse"),
       "Discipline" -> url("https://github.com/typelevel/discipline")
     ),
     libraryDependencies ++= Seq(
