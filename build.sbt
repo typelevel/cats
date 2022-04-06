@@ -365,6 +365,7 @@ lazy val docs = project
   .in(file("site"))
   .enablePlugins(TypelevelSitePlugin)
   .settings(
+    tlFatalWarnings := false,
     laikaConfig ~= { _.withRawContent },
     tlSiteApiUrl := Some(url("https://typelevel.org/cats/api/")),
     tlSiteRelatedProjects := Seq(
