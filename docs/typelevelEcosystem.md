@@ -171,10 +171,10 @@ Your project talks Cats too? [Submit a PR to add it here!](https://github.com/ty
 
 Below are quick html and markdown snippets to use the badge in your own project.
 ```html
-<a href=""><img src="img/cats-badge-tiny.png" alt="Cats friendly" /></a>
+<a href=""><img src="https://typelevel.org/cats/img/cats-badge-tiny.png" alt="Cats friendly" /></a>
 ```
 ```markdown
-![Cats Friendly Badge](img/cats-badge-tiny.png)
+![Cats Friendly Badge](https://typelevel.org/cats/img/cats-badge-tiny.png)
 ```
 
 [Cats]: index.md "Cats"
