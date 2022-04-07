@@ -567,10 +567,12 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
    */
   final def length: Long =
     this match {
-      case Empty                   => 0
-      case Wrap(seq)               => seq.length.toLong
-      case Singleton(a)            => 1
-      case Append(leftNE, rightNE) => leftNE.length + rightNE.length
+      case Empty        => 0
+      case Singleton(_) => 1
+      case Wrap(seq)    => seq.length.toLong
+
+      // TODO: consider implementing this case as a stack-safe recursion.
+      case Append(_, _) => iterator.length.toLong
     }
 
   /*
