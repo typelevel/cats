@@ -581,7 +581,7 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
     loop(this :: Nil, 0L)
   }
 
-  /*
+  /**
    * Alias for length
    */
   final def size: Long = length
