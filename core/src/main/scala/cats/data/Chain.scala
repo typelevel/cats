@@ -581,15 +581,6 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
     loop(this :: Nil, 0L)
   }
 
-  this match {
-    case Empty        => 0
-    case Singleton(_) => 1
-    case Wrap(seq)    => seq.length.toLong
-
-    // TODO: consider implementing this case as a stack-safe recursion.
-    case Append(_, _) => iterator.length.toLong
-  }
-
   /*
    * Alias for length
    */
