@@ -1,7 +1,7 @@
 package cats
 package data
 
-private[data] trait ChainCompat[+A] { _: Chain[A] =>
+private[data] trait ChainCompat[+A] { self: Chain[A] =>
 
   /**
    * The number of elements in this chain, if it can be cheaply computed, -1 otherwise.
