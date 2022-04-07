@@ -1,25 +1,21 @@
-package cats.tests
+package cats
+package tests
 
-import cats.{Align, Alternative, CoflatMap, Monad, Show, Traverse, TraverseFilter}
 import cats.data.Chain
-import cats.data.Chain.==:
 import cats.data.Chain.`:==`
-import cats.kernel.{Eq, Hash, Monoid, Order, PartialOrder, Semigroup}
-import cats.kernel.laws.discipline.{EqTests, HashTests, MonoidTests, OrderTests, PartialOrderTests}
-import cats.laws.discipline.{
-  AlignTests,
-  AlternativeTests,
-  CoflatMapTests,
-  MonadTests,
-  SerializableTests,
-  ShortCircuitingTests,
-  TraverseFilterTests,
-  TraverseTests
-}
+import cats.data.Chain.==:
+import cats.kernel.laws.discipline.EqTests
+import cats.kernel.laws.discipline.HashTests
+import cats.kernel.laws.discipline.MonoidTests
+import cats.kernel.laws.discipline.OrderTests
+import cats.kernel.laws.discipline.PartialOrderTests
+import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
+import cats.syntax.eq._
 import cats.syntax.foldable._
 import cats.syntax.semigroup._
-import cats.syntax.eq._
+import org.scalacheck.Arbitrary
+import org.scalacheck.Gen
 import org.scalacheck.Prop._
 
 class ChainSuite extends CatsSuite {
@@ -119,6 +115,56 @@ class ChainSuite extends CatsSuite {
     }
   }
 
+  test("knownSize should be consistent with size") {
+    forAll { (cu: Chain[Unit]) =>
+      val expected = cu.size match {
+        case size @ (0L | 1L) => size
+        case _                => -1L
+      }
+
+      assertEquals(cu.knownSize, expected)
+    }
+  }
+
+  test("lengthCompare and sizeCompare should be consistent with length and size") {
+    forAll { (cu: Chain[Unit], diff: Byte) =>
+      val testLen = cu.length + diff
+      val testSize = cu.size + diff
+
+      val expectedSignumLen = math.signum(cu.length.compareTo(testLen))
+      val expectedSignumSize = math.signum(cu.size.compareTo(testSize))
+
+      val obtainedSignumLen = math.signum(cu.lengthCompare(testLen))
+      val obtainedSignumSize = math.signum(cu.sizeCompare(testSize))
+
+      assertEquals(obtainedSignumLen, expectedSignumLen)
+      assertEquals(obtainedSignumSize, expectedSignumSize)
+    }
+  }
+  test("lengthCompare and sizeCompare should be consistent with length and size (Chain.Wrap stressed)") {
+    //
+    // Similar to the previous test but stresses handling Chain.Wrap cases.
+    //
+
+    // Range as `Seq` can has huge size without keeping any elements in it.
+    val seqGen: Gen[Seq[Int]] = Gen.chooseNum(2, Int.MaxValue).map(0 until _)
+    val testValGen: Gen[Long] = Arbitrary.arbitrary[Long]
+
+    // Disable shrinking since it can lead to re-building of range into a regular `Seq`.
+    forAllNoShrink(seqGen, testValGen) { (seq, testVal) =>
+      val ci = Chain.fromSeq(seq) // should produce `Chain.Wrap`
+
+      val expectedSignumLen = math.signum(seq.length.toLong.compareTo(testVal))
+      val expectedSignumSize = math.signum(seq.size.toLong.compareTo(testVal))
+
+      val obtainedSignumLen = math.signum(ci.lengthCompare(testVal))
+      val obtainedSignumSize = math.signum(ci.sizeCompare(testVal))
+
+      assertEquals(obtainedSignumLen, expectedSignumLen)
+      assertEquals(obtainedSignumSize, expectedSignumSize)
+    }
+  }
+
   test("filterNot and then exists should always be false") {
     forAll { (ci: Chain[Int], f: Int => Boolean) =>
       assert(ci.filterNot(f).exists(f) === false)
@@ -153,6 +199,28 @@ class ChainSuite extends CatsSuite {
     forAll { (ci: Chain[Int], i: Int) =>
       assert((i +: ci).nonEmpty === true)
     }
+  }
+
+  test("fromOption should be consistent with one") {
+    val expected = Chain.one(())
+    val obtained = Chain.fromOption(Some(()))
+
+    assert(obtained.getClass eq expected.getClass)
+    assert(obtained === expected)
+  }
+
+  test("fromSeq should be consistent with one") {
+    val expected = Chain.one(())
+    val obtained = Chain.fromSeq(() :: Nil)
+    assert(obtained.getClass eq expected.getClass)
+    assert(obtained === expected)
+  }
+
+  test("fromIterableOnce should be consistent with one") {
+    val expected = Chain.one(())
+    val obtained = Chain.fromIterableOnce(Iterator.single(()))
+    assert(obtained.getClass eq expected.getClass)
+    assert(obtained === expected)
   }
 
   test("fromSeq . toVector is id") {
@@ -249,6 +317,8 @@ class ChainSuite extends CatsSuite {
 
   test("a.isEmpty == (a eq Chain.nil)") {
     assert(Chain.fromSeq(Nil) eq Chain.nil)
+    assert(Chain.fromOption(None) eq Chain.nil)
+    assert(Chain.fromIterableOnce(Iterator.empty) eq Chain.nil)
 
     forAll { (a: Chain[Int]) =>
       assert(a.isEmpty == (a eq Chain.nil))
