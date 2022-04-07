@@ -565,15 +565,30 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
   /**
    * Returns the number of elements in this structure
    */
-  final def length: Long =
-    this match {
-      case Empty        => 0
-      case Singleton(_) => 1
-      case Wrap(seq)    => seq.length.toLong
+  final def length: Long = {
+    @annotation.tailrec
+    def loop(chains: List[Chain[A]], acc: Long): Long =
+      chains match {
+        case Nil => acc
+        case h :: tail =>
+          h match {
+            case Empty        => loop(tail, acc)
+            case Wrap(seq)    => loop(tail, acc + seq.length)
+            case Singleton(a) => loop(tail, acc + 1)
+            case Append(l, r) => loop(l :: r :: tail, acc)
+          }
+      }
+    loop(this :: Nil, 0L)
+  }
 
-      // TODO: consider implementing this case as a stack-safe recursion.
-      case Append(_, _) => iterator.length.toLong
-    }
+  this match {
+    case Empty        => 0
+    case Singleton(_) => 1
+    case Wrap(seq)    => seq.length.toLong
+
+    // TODO: consider implementing this case as a stack-safe recursion.
+    case Append(_, _) => iterator.length.toLong
+  }
 
   /*
    * Alias for length
