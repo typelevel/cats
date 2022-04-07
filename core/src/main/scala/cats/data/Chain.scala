@@ -565,16 +565,15 @@ sealed abstract class Chain[+A] {
   /**
    * Returns the number of elements in this structure
    */
-  final def length: Long = {
-    // TODO: consider optimizing for `Chain.Wrap` case.
-    //       Some underlying seq may not need enumerating all elements to calculate its size.
-    val iter = iterator
-    var i: Long = 0
-    while (iter.hasNext) { i += 1; iter.next(); }
-    i
-  }
+  final def length: Long =
+    this match {
+      case Empty                   => 0
+      case Wrap(seq)               => seq.length
+      case Singleton(a)            => 1
+      case Append(leftNE, rightNE) => leftNE.length + rightNE.length
+    }
 
-  /**
+  /*
    * Alias for length
    */
   final def size: Long = length
