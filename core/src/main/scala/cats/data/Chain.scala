@@ -32,7 +32,7 @@ import Chain.{
  * O(1) `uncons`, such that walking the sequence via N successive `uncons`
  * steps takes O(N).
  */
-sealed abstract class Chain[+A] {
+sealed abstract class Chain[+A] extends ChainCompat[A] {
 
   /**
    * Returns the head and tail of this Chain if non empty, none otherwise. Amortized O(1).
@@ -568,7 +568,7 @@ sealed abstract class Chain[+A] {
   final def length: Long =
     this match {
       case Empty                   => 0
-      case Wrap(seq)               => seq.length
+      case Wrap(seq)               => seq.length.toLong
       case Singleton(a)            => 1
       case Append(leftNE, rightNE) => leftNE.length + rightNE.length
     }
@@ -577,19 +577,6 @@ sealed abstract class Chain[+A] {
    * Alias for length
    */
   final def size: Long = length
-
-  /**
-   * The number of elements in this chain, if it can be cheaply computed, -1 otherwise.
-   * Cheaply usually means: Not requiring a collection traversal.
-   */
-  final def knownSize: Long =
-    // TODO: consider optimizing for `Chain.Wrap` case – call the underlying `knownSize` method.
-    //       Note that `knownSize` was introduced since Scala 2.13 only.
-    this match {
-      case _ if isEmpty       => 0
-      case Chain.Singleton(_) => 1
-      case _                  => -1
-    }
 
   /**
    * Compares the length of this chain to a test value.
