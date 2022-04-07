@@ -99,7 +99,7 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
     fold(Ior.both(_, right), _ => Ior.right(right), (a, _) => Ior.both(a, right))
 
   /**
-   * When a Left value is present in the Ior, combine it will the value specified.
+   * When a Left value is present in the Ior, combine it with the value specified.
    *
    * When the Left value is absent, set it to the value specified.
    *
@@ -125,7 +125,7 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
     fold(l => Ior.left(AA.combine(l, left)), Ior.both(left, _), (l, r) => Ior.both(AA.combine(l, left), r))
 
   /**
-   * When a Right value is present in the Ior, combine it will the value specified.
+   * When a Right value is present in the Ior, combine it with the value specified.
    *
    * When the Right value is absent, set it to the value specified.
    *
