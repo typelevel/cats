@@ -768,7 +768,7 @@ sealed abstract class Chain[+A] {
 }
 
 @suppressUnusedImportWarningForScalaVersionSpecific
-object Chain extends ChainInstances {
+object Chain extends ChainInstances with ChainCompanionCompat {
 
   private val sentinel: Function1[Any, Any] = new scala.runtime.AbstractFunction1[Any, Any] { def apply(a: Any) = this }
 
@@ -846,26 +846,6 @@ object Chain extends ChainInstances {
    */
   def fromOption[A](o: Option[A]): Chain[A] =
     o.fold(Chain.empty[A])(Chain.one)
-
-  /**
-   * Creates a Chain from the specified sequence.
-   */
-  def fromSeq[A](s: Seq[A]): Chain[A] =
-    if (s.isEmpty) nil
-    else if (s.lengthCompare(1) == 0) one(s.head)
-    else Wrap(s)
-
-  /**
-   * Creates a Chain from the specified IterableOnce.
-   */
-  def fromIterableOnce[A](xs: IterableOnce[A]): Chain[A] =
-    xs match {
-      case s: Seq[A @unchecked] =>
-        // Seq is a subclass of IterableOnce, so the type has to be compatible
-        Chain.fromSeq(s) // pay O(1) not O(N) cost
-      case notSeq =>
-        Chain.fromSeq(notSeq.iterator.toSeq)
-    }
 
   /**
    * Creates a Chain from the specified elements.
