@@ -6,7 +6,7 @@ import cats.kernel.compat.scalaVersionSpecific.IterableOnce
 import scala.collection.immutable.{Seq => ImSeq}
 import scala.collection.mutable.{Seq => MutSeq}
 
-trait ChainCompanionCompat {
+private[data] trait ChainCompanionCompat {
 
   /**
    * Creates a Chain from the specified sequence.
