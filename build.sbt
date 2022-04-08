@@ -25,18 +25,7 @@ val Scala3 = "3.0.2"
 ThisBuild / crossScalaVersions := Seq(Scala212, Scala213, Scala3)
 ThisBuild / scalaVersion := Scala212
 
-ThisBuild / tlFatalWarnings := {
-  githubIsWorkflowBuild.value && !tlIsScala3.value
-}
-
-ThisBuild / tlCiReleaseBranches := Seq("main")
-
-ThisBuild / githubWorkflowBuildMatrixExclusions ++= {
-  for {
-    scala <- githubWorkflowScalaVersions.value.filterNot(_ == (ThisBuild / scalaVersion).value)
-    java <- githubWorkflowJavaVersions.value.tail
-  } yield MatrixExclude(Map("scala" -> scala, "java" -> java.render))
-}
+ThisBuild / tlFatalWarnings := false
 
 ThisBuild / githubWorkflowBuildMatrixExclusions +=
   MatrixExclude(Map("project" -> "rootNative", "scala" -> Scala3))
@@ -48,15 +37,6 @@ ThisBuild / githubWorkflowAddedJobs ++= Seq(
     "Scalafix",
     githubWorkflowJobSetup.value.toList ::: List(
       WorkflowStep.Run(List("cd scalafix", "sbt test"), name = Some("Scalafix tests"))
-    ),
-    javas = List(PrimaryJava),
-    scalas = List((ThisBuild / scalaVersion).value)
-  ),
-  WorkflowJob(
-    "linting",
-    "Linting",
-    githubWorkflowJobSetup.value.toList ::: List(
-      WorkflowStep.Sbt(List("scalafmtSbtCheck", "+scalafmtCheckAll"), name = Some("Check formatting"))
     ),
     javas = List(PrimaryJava),
     scalas = List((ThisBuild / scalaVersion).value)
@@ -82,9 +62,7 @@ lazy val commonSettings = Seq(
     (Compile / managedSources).value.map { file =>
       file -> file.relativeTo(base).get.getPath
     }
-  },
-  scalacOptions ~= { _.filterNot(x => x.startsWith("-Wunused:")) },
-  Compile / doc / scalacOptions := (Compile / doc / scalacOptions).value.filter(_ != "-Xfatal-warnings")
+  }
 )
 
 lazy val macroSettings = Seq(
@@ -181,7 +159,6 @@ lazy val kernelLaws = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .settings(commonSettings)
   .settings(disciplineDependencies)
   .settings(testingDependencies)
-  .settings(Test / scalacOptions := (Test / scalacOptions).value.filter(_ != "-Xfatal-warnings"))
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
   .nativeSettings(commonNativeSettings)
@@ -214,9 +191,6 @@ lazy val algebraLaws = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .settings(commonSettings)
   .settings(disciplineDependencies)
   .settings(testingDependencies)
-  .settings(
-    Test / scalacOptions := (Test / scalacOptions).value.filter(_ != "-Xfatal-warnings")
-  )
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
   .nativeSettings(commonNativeSettings)
@@ -261,7 +235,6 @@ lazy val tests = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .enablePlugins(NoPublishPlugin)
   .settings(moduleName := "cats-tests")
   .settings(commonSettings)
-  .settings(Test / scalacOptions := (Test / scalacOptions).value.filter(_ != "-Xfatal-warnings"))
   .settings(testingDependencies)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
@@ -274,7 +247,6 @@ lazy val testkit = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .settings(buildInfoKeys := Seq[BuildInfoKey](scalaVersion), buildInfoPackage := "cats.tests")
   .settings(moduleName := "cats-testkit")
   .settings(commonSettings)
-  .settings(tlFatalWarnings := false)
   .settings(disciplineDependencies)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
@@ -308,7 +280,6 @@ lazy val alleycatsTests = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .enablePlugins(NoPublishPlugin)
   .settings(moduleName := "alleycats-tests")
   .settings(commonSettings)
-  .settings(Test / scalacOptions := (Test / scalacOptions).value.filter(_ != "-Xfatal-warnings"))
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
   .nativeSettings(commonNativeSettings)
@@ -361,7 +332,6 @@ lazy val binCompatTest = project
   .settings(testingDependencies)
   .dependsOn(core.jvm % Test)
 
-ThisBuild / tlSitePublishBranch := Some("topic/sbt-typelevel-site")
 lazy val docs = project
   .in(file("site"))
   .enablePlugins(TypelevelSitePlugin)
@@ -370,9 +340,9 @@ lazy val docs = project
     laikaConfig ~= { _.withRawContent },
     tlSiteApiUrl := Some(url("https://typelevel.org/cats/api/")),
     tlSiteRelatedProjects := Seq(
-      "Cats Effect" -> url("https://typelevel.org/cats-effect"),
+      TypelevelProject.CatsEffect,
       "Mouse" -> url("https://typelevel.org/mouse"),
-      "Discipline" -> url("https://github.com/typelevel/discipline")
+      TypelevelProject.Discipline
     ),
     libraryDependencies ++= Seq(
       "org.typelevel" %%% "discipline-munit" % disciplineMunitVersion
@@ -380,10 +350,7 @@ lazy val docs = project
   )
   .dependsOn(core.jvm, free.jvm, laws.jvm)
 
-ThisBuild / organization := "org.typelevel"
-ThisBuild / organizationName := "Typelevel"
-ThisBuild / organizationHomepage := Some(url("https://typelevel.org"))
-ThisBuild / licenses += License.MIT
+ThisBuild / licenses := List(License.MIT)
 ThisBuild / developers ++= List(
   tlGitHubDev("ceedubs", "Cody Allen"),
   tlGitHubDev("rossabaker", "Ross Baker"),

@@ -1,5 +1,35 @@
+/*
+ * Copyright (c) 2022 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 package data
+
+import cats.kernel.compat.scalaVersionSpecific._
+import cats.kernel.instances.StaticMethods
+
+import scala.annotation.tailrec
+import scala.collection.immutable.SortedMap
+import scala.collection.immutable.TreeSet
+import scala.collection.immutable.{IndexedSeq => ImIndexedSeq}
+import scala.collection.mutable.ListBuffer
 
 import Chain.{
   empty,
@@ -17,12 +47,6 @@ import Chain.{
   Singleton,
   Wrap
 }
-import cats.kernel.instances.StaticMethods
-import cats.kernel.compat.scalaVersionSpecific._
-
-import scala.annotation.tailrec
-import scala.collection.immutable.{IndexedSeq => ImIndexedSeq, SortedMap, TreeSet}
-import scala.collection.mutable.ListBuffer
 
 /**
  * Trivial catenable sequence. Supports O(1) append, and (amortized)
@@ -563,6 +587,8 @@ sealed abstract class Chain[+A] {
    * Returns the number of elements in this structure
    */
   final def length: Long = {
+    // TODO: consider optimizing for `Chain.Wrap` case.
+    //       Some underlying seq may not need enumerating all elements to calculate its size.
     val iter = iterator
     var i: Long = 0
     while (iter.hasNext) { i += 1; iter.next(); }
@@ -573,6 +599,74 @@ sealed abstract class Chain[+A] {
    * Alias for length
    */
   final def size: Long = length
+
+  /**
+   * The number of elements in this chain, if it can be cheaply computed, -1 otherwise.
+   * Cheaply usually means: Not requiring a collection traversal.
+   */
+  final def knownSize: Long =
+    // TODO: consider optimizing for `Chain.Wrap` case – call the underlying `knownSize` method.
+    //       Note that `knownSize` was introduced since Scala 2.13 only.
+    this match {
+      case _ if isEmpty       => 0
+      case Chain.Singleton(_) => 1
+      case _                  => -1
+    }
+
+  /**
+   * Compares the length of this chain to a test value.
+   * 
+   * The method does not call `length` directly; its running time
+   * is `O(length min len)` instead of `O(length)`.
+   * 
+   * @param  len the test value that gets compared with the length.
+   * @return a negative value if `this.length < len`,
+   *         zero if `this.length == len` or
+   *         a positive value if `this.length > len`.
+   * @note   an adapted version of
+             [[https://github.com/scala/scala/blob/v2.13.8/src/library/scala/collection/Iterable.scala#L272-L288 Iterable#sizeCompare]]
+             from Scala Library v2.13.8 is used in a part of the implementation.
+   * 
+   * {{{
+   * scala> import cats.data.Chain
+   * scala> val chain = Chain(1, 2, 3)
+   * scala> val isLessThan4 = chain.lengthCompare(4) < 0
+   * scala> val isEqualTo3 = chain.lengthCompare(3) == 0
+   * scala> val isGreaterThan2 = chain.lengthCompare(2) > 0
+   * scala> isLessThan4 && isEqualTo3 && isGreaterThan2
+   * res0: Boolean = true
+   * }}}
+   */
+  final def lengthCompare(len: Long): Int = {
+    import java.lang.Long
+    this match {
+      // `isEmpty` check should be faster than `== Chain.Empty`,
+      // but the compiler fails to prove that the match is still exhaustive.
+      case _ if isEmpty       => Long.compare(0L, len)
+      case Chain.Singleton(_) => Long.compare(1L, len)
+      case _ if len < 2       => 1 // the following cases should always have `length >= 2`
+      case Chain.Wrap(seq) =>
+        if (len > Int.MaxValue) -1 // `Seq#length` has `Int` type so cannot be `> Int.MaxValue`
+        else
+          seq.lengthCompare(len.toInt)
+      case _ => // should always be `Chain.Append` (i.e. `NonEmpty` with 2+ elements)
+        var sz = 2L
+        val it = new ChainIterator(this)
+        it.next()
+        it.next()
+        while (it.hasNext) {
+          if (sz == len) return 1
+          it.next()
+          sz += 1L
+        }
+        Long.compare(sz, len)
+    }
+  }
+
+  /**
+   * Alias for lengthCompare
+   */
+  final def sizeCompare(size: Long): Int = lengthCompare(size)
 
   /**
    * Converts to a list.
