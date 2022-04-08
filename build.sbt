@@ -351,6 +351,7 @@ lazy val docs = project
   .dependsOn(core.jvm, free.jvm, laws.jvm)
 
 ThisBuild / licenses := List(License.MIT)
+ThisBuild / startYear := Some(2015)
 ThisBuild / developers ++= List(
   tlGitHubDev("ceedubs", "Cody Allen"),
   tlGitHubDev("rossabaker", "Ross Baker"),
