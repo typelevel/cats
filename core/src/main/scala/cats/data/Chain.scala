@@ -7,7 +7,7 @@ import cats.kernel.instances.StaticMethods
 import scala.annotation.tailrec
 import scala.collection.immutable.SortedMap
 import scala.collection.immutable.TreeSet
-import scala.collection.immutable.{IndexedSeq => ImIndexedSeq}
+import scala.collection.immutable.{IndexedSeq => ImIndexedSeq, Seq => ImSeq}
 import scala.collection.mutable.ListBuffer
 
 import Chain.{
@@ -801,7 +801,7 @@ object Chain extends ChainInstances with ChainCompanionCompat {
    * The only places we create Wrap is in fromSeq and in methods that preserve
    * length: zipWithIndex, map, sort
    */
-  final private[data] case class Wrap[A](seq: Seq[A]) extends NonEmpty[A]
+  final private[data] case class Wrap[A](seq: ImSeq[A]) extends NonEmpty[A]
 
   def unapplySeq[A](chain: Chain[A]): Option[Seq[A]] =
     Some(chain.toList)
