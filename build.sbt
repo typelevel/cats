@@ -27,15 +27,6 @@ ThisBuild / scalaVersion := Scala213
 
 ThisBuild / tlFatalWarnings := false
 
-ThisBuild / tlCiReleaseBranches := Seq("main")
-
-ThisBuild / githubWorkflowBuildMatrixExclusions ++= {
-  for {
-    scala <- githubWorkflowScalaVersions.value.filterNot(_ == (ThisBuild / scalaVersion).value)
-    java <- githubWorkflowJavaVersions.value.tail
-  } yield MatrixExclude(Map("scala" -> scala, "java" -> java.render))
-}
-
 ThisBuild / githubWorkflowBuildMatrixExclusions +=
   MatrixExclude(Map("project" -> "rootNative", "scala" -> Scala3))
 // Dotty is not yet supported by Scala Native
@@ -46,15 +37,6 @@ ThisBuild / githubWorkflowAddedJobs ++= Seq(
     "Scalafix",
     githubWorkflowJobSetup.value.toList ::: List(
       WorkflowStep.Run(List("cd scalafix", "sbt test"), name = Some("Scalafix tests"))
-    ),
-    javas = List(PrimaryJava),
-    scalas = List((ThisBuild / scalaVersion).value)
-  ),
-  WorkflowJob(
-    "linting",
-    "Linting",
-    githubWorkflowJobSetup.value.toList ::: List(
-      WorkflowStep.Sbt(List("scalafmtSbtCheck", "+scalafmtCheckAll"), name = Some("Check formatting"))
     ),
     javas = List(PrimaryJava),
     scalas = List((ThisBuild / scalaVersion).value)
@@ -350,10 +332,7 @@ lazy val binCompatTest = project
   .settings(testingDependencies)
   .dependsOn(core.jvm % Test)
 
-ThisBuild / organization := "org.typelevel"
-ThisBuild / organizationName := "Typelevel"
-ThisBuild / organizationHomepage := Some(url("https://typelevel.org"))
-ThisBuild / licenses += License.MIT
+ThisBuild / licenses := List(License.MIT)
 ThisBuild / developers ++= List(
   tlGitHubDev("ceedubs", "Cody Allen"),
   tlGitHubDev("rossabaker", "Ross Baker"),
