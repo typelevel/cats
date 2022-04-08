@@ -17,7 +17,7 @@ Global / publishLocalSignedIfRelevant := PgpKeys.publishLocalSigned.value
 ThisBuild / organization := "org.typelevel"
 ThisBuild / scalafixDependencies += "org.typelevel" %% "simulacrum-scalafix" % "0.5.3"
 
-val scalaCheckVersion = "1.15.4"
+val scalaCheckVersion = "1.16.0"
 
 val disciplineVersion = "1.4.0"
 
