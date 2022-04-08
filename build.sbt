@@ -25,9 +25,7 @@ val Scala3 = "3.0.2"
 ThisBuild / crossScalaVersions := Seq(Scala212, Scala213, Scala3)
 ThisBuild / scalaVersion := Scala213
 
-ThisBuild / tlFatalWarnings := {
-  githubIsWorkflowBuild.value && !tlIsScala3.value
-}
+ThisBuild / tlFatalWarnings := false
 
 ThisBuild / tlCiReleaseBranches := Seq("main")
 
@@ -82,9 +80,7 @@ lazy val commonSettings = Seq(
     (Compile / managedSources).value.map { file =>
       file -> file.relativeTo(base).get.getPath
     }
-  },
-  scalacOptions ~= { _.filterNot(x => x.startsWith("-Wunused:")) },
-  Compile / doc / scalacOptions := (Compile / doc / scalacOptions).value.filter(_ != "-Xfatal-warnings")
+  }
 )
 
 lazy val macroSettings = Seq(
@@ -181,7 +177,6 @@ lazy val kernelLaws = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .settings(commonSettings)
   .settings(disciplineDependencies)
   .settings(testingDependencies)
-  .settings(Test / scalacOptions := (Test / scalacOptions).value.filter(_ != "-Xfatal-warnings"))
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
   .nativeSettings(commonNativeSettings)
@@ -214,9 +209,6 @@ lazy val algebraLaws = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .settings(commonSettings)
   .settings(disciplineDependencies)
   .settings(testingDependencies)
-  .settings(
-    Test / scalacOptions := (Test / scalacOptions).value.filter(_ != "-Xfatal-warnings")
-  )
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
   .nativeSettings(commonNativeSettings)
@@ -261,7 +253,6 @@ lazy val tests = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .enablePlugins(NoPublishPlugin)
   .settings(moduleName := "cats-tests")
   .settings(commonSettings)
-  .settings(Test / scalacOptions := (Test / scalacOptions).value.filter(_ != "-Xfatal-warnings"))
   .settings(testingDependencies)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
@@ -274,7 +265,6 @@ lazy val testkit = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .settings(buildInfoKeys := Seq[BuildInfoKey](scalaVersion), buildInfoPackage := "cats.tests")
   .settings(moduleName := "cats-testkit")
   .settings(commonSettings)
-  .settings(tlFatalWarnings := false)
   .settings(disciplineDependencies)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
@@ -308,7 +298,6 @@ lazy val alleycatsTests = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .enablePlugins(NoPublishPlugin)
   .settings(moduleName := "alleycats-tests")
   .settings(commonSettings)
-  .settings(Test / scalacOptions := (Test / scalacOptions).value.filter(_ != "-Xfatal-warnings"))
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
   .nativeSettings(commonNativeSettings)
