@@ -203,7 +203,8 @@ lazy val core = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .settings(commonSettings, macroSettings, simulacrumSettings)
   .settings(Compile / sourceGenerators += (Compile / sourceManaged).map(Boilerplate.gen).taskValue)
   .settings(
-    libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % Test
+    libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % Test,
+    Compile / doc / scalacOptions ~= { _.filterNot(_.startsWith("-W")) } // weird bug
   )
   .settings(testingDependencies)
   .jsSettings(commonJsSettings)
