@@ -189,10 +189,23 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
    * Folds over the elements from left to right using the supplied initial value and function.
    */
   final def foldLeft[B](z: B)(f: (B, A) => B): B = {
-    var result = z
-    val iter = iterator
-    while (iter.hasNext) { result = f(result, iter.next()) }
-    result
+    @annotation.tailrec
+    def loop(chains: List[Chain.NonEmpty[A]], acc: B): B =
+      chains match {
+        case h :: tail =>
+          h match {
+            case Append(l, r) => loop(l :: r :: tail, acc)
+            case Singleton(a) => loop(tail, f(acc, a))
+            case Wrap(seq)    => loop(tail, seq.foldLeft(acc)(f))
+          }
+        case Nil => acc
+      }
+
+    this match {
+      case ne: Chain.NonEmpty[A] =>
+        loop(ne :: Nil, z)
+      case _ => z
+    }
   }
 
   /**
@@ -566,19 +579,24 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
    * Returns the number of elements in this structure
    */
   final def length: Long = {
+    // This is an optimized (unboxed) implementation
+    // of the same code as foldLeft
     @annotation.tailrec
-    def loop(chains: List[Chain[A]], acc: Long): Long =
+    def loop(chains: List[Chain.NonEmpty[A]], acc: Long): Long =
       chains match {
-        case Nil => acc
         case h :: tail =>
           h match {
-            case Empty        => loop(tail, acc)
-            case Wrap(seq)    => loop(tail, acc + seq.length)
-            case Singleton(a) => loop(tail, acc + 1)
             case Append(l, r) => loop(l :: r :: tail, acc)
+            case Singleton(a) => loop(tail, acc + 1)
+            case Wrap(seq)    => loop(tail, acc + seq.length)
           }
+        case Nil => acc
       }
-    loop(this :: Nil, 0L)
+    this match {
+      case ne: Chain.NonEmpty[A] =>
+        loop(ne :: Nil, 0L)
+      case _ => 0L
+    }
   }
 
   /**
@@ -746,18 +764,20 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
 
   final def sortBy[B](f: A => B)(implicit B: Order[B]): Chain[A] =
     this match {
-      case Singleton(_) => this
       case Append(_, _) => Wrap(toVector.sortBy(f)(B.toOrdering))
       case Wrap(seq)    => Wrap(seq.sortBy(f)(B.toOrdering))
-      case _            => this
+      case _            =>
+        // Empty | Singleton(_)
+        this
     }
 
   final def sorted[AA >: A](implicit AA: Order[AA]): Chain[AA] =
     this match {
-      case Singleton(_) => this
       case Append(_, _) => Wrap(toVector.sorted(AA.toOrdering))
       case Wrap(seq)    => Wrap(seq.sorted(AA.toOrdering))
-      case _            => this
+      case _            =>
+        // Empty | Singleton(_)
+        this
     }
 }
 
@@ -1093,6 +1113,9 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
 
         Eval.defer(loop(fa))
       }
+
+      override def foldMap[A, B](fa: Chain[A])(f: A => B)(implicit B: Monoid[B]): B =
+        B.combineAll(fa.iterator.map(f))
 
       override def map[A, B](fa: Chain[A])(f: A => B): Chain[B] = fa.map(f)
       override def toList[A](fa: Chain[A]): List[A] = fa.toList
