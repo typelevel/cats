@@ -595,7 +595,7 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
     def loop(head: Chain.NonEmpty[A], tail: List[Chain.NonEmpty[A]], acc: Long): Long =
       head match {
         case Append(l, r) => loop(l, r :: tail, acc)
-        case Singleton(a) =>
+        case Singleton(_) =>
           val nextAcc = acc + 1L
           tail match {
             case h1 :: t1 =>
