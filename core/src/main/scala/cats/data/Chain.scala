@@ -190,20 +190,30 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
    */
   final def foldLeft[B](z: B)(f: (B, A) => B): B = {
     @annotation.tailrec
-    def loop(chains: List[Chain.NonEmpty[A]], acc: B): B =
-      chains match {
-        case h :: tail =>
-          h match {
-            case Append(l, r) => loop(l :: r :: tail, acc)
-            case Singleton(a) => loop(tail, f(acc, a))
-            case Wrap(seq)    => loop(tail, seq.foldLeft(acc)(f))
+    def loop(h: Chain.NonEmpty[A], tail: List[Chain.NonEmpty[A]], acc: B): B =
+      h match {
+        case Append(l, r) => loop(l, r :: tail, acc)
+        case Singleton(a) =>
+          val nextAcc = f(acc, a)
+          tail match {
+            case h1 :: t1 =>
+              loop(h1, t1, nextAcc)
+            case _ =>
+              nextAcc
           }
-        case Nil => acc
+        case Wrap(seq) =>
+          val nextAcc = seq.foldLeft(acc)(f)
+          tail match {
+            case h1 :: t1 =>
+              loop(h1, t1, nextAcc)
+            case _ =>
+              nextAcc
+          }
       }
 
     this match {
       case ne: Chain.NonEmpty[A] =>
-        loop(ne :: Nil, z)
+        loop(ne, Nil, z)
       case _ => z
     }
   }
@@ -582,19 +592,30 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
     // This is an optimized (unboxed) implementation
     // of the same code as foldLeft
     @annotation.tailrec
-    def loop(chains: List[Chain.NonEmpty[A]], acc: Long): Long =
-      chains match {
-        case h :: tail =>
-          h match {
-            case Append(l, r) => loop(l :: r :: tail, acc)
-            case Singleton(a) => loop(tail, acc + 1)
-            case Wrap(seq)    => loop(tail, acc + seq.length)
+    def loop(head: Chain.NonEmpty[A], tail: List[Chain.NonEmpty[A]], acc: Long): Long =
+      head match {
+        case Append(l, r) => loop(l, r :: tail, acc)
+        case Singleton(a) =>
+          val nextAcc = acc + 1L
+          tail match {
+            case h1 :: t1 =>
+              loop(h1, t1, nextAcc)
+            case _ =>
+              nextAcc
           }
-        case Nil => acc
+        case Wrap(seq) =>
+          val nextAcc = acc + seq.length.toLong
+          tail match {
+            case h1 :: t1 =>
+              loop(h1, t1, nextAcc)
+            case _ =>
+              nextAcc
+          }
       }
+
     this match {
       case ne: Chain.NonEmpty[A] =>
-        loop(ne :: Nil, 0L)
+        loop(ne, Nil, 0L)
       case _ => 0L
     }
   }
