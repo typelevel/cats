@@ -88,7 +88,7 @@ class ChainBench {
 
   @Benchmark def createChainSeqOption: Chain[Int] = Chain.fromSeq(intOption.toSeq)
   @Benchmark def createChainOption: Chain[Int] = Chain.fromOption(intOption)
-  
+
   @Benchmark def reverseLargeList: List[Int] = largeList.reverse
   @Benchmark def reverseLargeChain: Chain[Int] = largeChain.reverse
 
