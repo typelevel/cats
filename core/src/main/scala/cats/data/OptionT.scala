@@ -489,7 +489,7 @@ sealed abstract private[data] class OptionTInstances extends OptionTInstances0 {
 
     }
 
-  @deprecated("renamed to catsDataTraverseFilterForOptionT", "2.0.0")
+  @deprecated("renamed to catsDataTraverseFilterForOptionT", "2.7.0")
   def catsDateTraverseFilterForOptionT[F[_]](implicit F0: Traverse[F]): TraverseFilter[OptionT[F, *]] =
     catsDataTraverseFilterForOptionT
 
