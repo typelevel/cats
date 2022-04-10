@@ -413,4 +413,10 @@ class ChainSuite extends CatsSuite {
 
     assert(sumAll == chain.iterator.sum)
   }
+
+  test("foldRight(b)(fn) == toList.foldRight(b)(fn)") {
+    forAll { (chain: Chain[Int], init: Long, fn: (Int, Long) => Long) =>
+      assert(chain.foldRight(init)(fn) == chain.toList.foldRight(init)(fn))
+    }
+  }
 }

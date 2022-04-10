@@ -256,10 +256,35 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
    * Folds over the elements from right to left using the supplied initial value and function.
    */
   final def foldRight[B](z: B)(f: (A, B) => B): B = {
-    var result = z
-    val iter = reverseIterator
-    while (iter.hasNext) { result = f(iter.next(), result) }
-    result
+    @annotation.tailrec
+    def loop(h: Chain.NonEmpty[A], tail: List[Chain.NonEmpty[A]], acc: B): B =
+      h match {
+        case Append(l, r) =>
+          // reverse the order here to traverse correctly
+          loop(r, l :: tail, acc)
+        case Singleton(a) =>
+          val nextAcc = f(a, acc)
+          tail match {
+            case h1 :: t1 =>
+              loop(h1, t1, nextAcc)
+            case _ =>
+              nextAcc
+          }
+        case Wrap(seq) =>
+          val nextAcc = seq.foldRight(acc)(f)
+          tail match {
+            case h1 :: t1 =>
+              loop(h1, t1, nextAcc)
+            case _ =>
+              nextAcc
+          }
+      }
+
+    this match {
+      case ne: Chain.NonEmpty[A] =>
+        loop(ne, Nil, z)
+      case _ => z
+    }
   }
 
   /**
@@ -506,6 +531,7 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
    * Reverses this `Chain`
    */
   def reverse: Chain[A] = {
+    @annotation.tailrec
     def loop[B <: A](h: Chain.NonEmpty[B], tail: List[Chain.NonEmpty[B]], acc: Chain[A]): Chain[A] =
       h match {
         case Append(l, r) => loop(l, r :: tail, acc)
