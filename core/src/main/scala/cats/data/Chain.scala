@@ -506,7 +506,7 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
    * Reverses this `Chain`
    */
   def reverse: Chain[A] = {
-    def loop(h: Chain.NonEmpty[A], tail: List[Chain.NonEmpty[A]], acc: Chain[A]): Chain[A] =
+    def loop[B <: A](h: Chain.NonEmpty[B], tail: List[Chain.NonEmpty[B]], acc: Chain[A]): Chain[A] =
       h match {
         case Append(l, r) => loop(l, r :: tail, acc)
         case sing @ Singleton(_) =>
@@ -679,28 +679,37 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
    * }}}
    */
   final def lengthCompare(len: Long): Int = {
-    import java.lang.Long
-    this match {
-      // `isEmpty` check should be faster than `== Chain.Empty`,
-      // but the compiler fails to prove that the match is still exhaustive.
-      case _ if isEmpty       => Long.compare(0L, len)
-      case Chain.Singleton(_) => Long.compare(1L, len)
-      case _ if len < 2       => 1 // the following cases should always have `length >= 2`
-      case Chain.Wrap(seq) =>
-        if (len > Int.MaxValue) -1 // `Seq#length` has `Int` type so cannot be `> Int.MaxValue`
-        else
-          seq.lengthCompare(len.toInt)
-      case _ => // should always be `Chain.Append` (i.e. `NonEmpty` with 2+ elements)
-        var sz = 2L
-        val it = new ChainIterator(this)
-        it.next()
-        it.next()
-        while (it.hasNext) {
-          if (sz == len) return 1
-          it.next()
-          sz += 1L
+    // This is an optimized (unboxed) implementation
+    // of the same code as foldLeft
+    @annotation.tailrec
+    def loop(head: Chain.NonEmpty[A], tail: List[Chain.NonEmpty[A]], acc: Long): Int =
+      if (acc < 0L) 1 // head is nonempty
+      else
+        head match {
+          case Append(l, r) => loop(l, r :: tail, acc)
+          case Singleton(_) =>
+            tail match {
+              case h1 :: t1 =>
+                loop(h1, t1, acc - 1L)
+              case _ =>
+                java.lang.Long.compare(1L, acc)
+            }
+          case Wrap(seq) =>
+            val c =
+              if (acc <= Int.MaxValue) seq.lengthCompare(acc.toInt)
+              else -1
+            tail match {
+              case h1 :: t1 =>
+                if (c >= 0) 1 // there is definitely more in tail
+                else loop(h1, t1, acc - seq.length)
+              case _ => c
+            }
         }
-        Long.compare(sz, len)
+
+    this match {
+      case ne: Chain.NonEmpty[A] =>
+        loop(ne, Nil, len)
+      case _ => java.lang.Long.compare(0L, len)
     }
   }
 
