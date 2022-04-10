@@ -73,8 +73,8 @@ object GenTupleMonadInstances extends Template {
     |}
     |private[cats] sealed trait NTupleMonadInstances1 extends NTupleMonadInstances2 {
     -  implicit final def catsStdCommutativeMonadForTuple$arity${`[A0, A(N - 1)]`}${`constraints A..(N-1)`(
-      "CommutativeMonoid"
-    )}
+        "CommutativeMonoid"
+      )}
     -    : CommutativeMonad[${`(A..N - 1, *)`}] =
     -    new FlatMapTuple$arity${`[A0, A(N - 1)]`}(${`A0, A(N - 1)`}) with CommutativeMonad[${`(A..N - 1, *)`}] {
     -      def pure[A](a: A): ${`A0, A(N - 1)&`("A")} = $monadPureMethod
@@ -82,8 +82,8 @@ object GenTupleMonadInstances extends Template {
     |}
     |private[cats] sealed trait NTupleMonadInstances2 extends NTupleMonadInstances3 {
     -  implicit final def catsStdCommutativeFlatMapForTuple$arity${`[A0, A(N - 1)]`}${`constraints A..(N-1)`(
-      "CommutativeSemigroup"
-    )}
+        "CommutativeSemigroup"
+      )}
     -    : CommutativeFlatMap[${`(A..N - 1, *)`}] =
     -    new FlatMapTuple$arity${`[A0, A(N - 1)]`}(${`A0, A(N - 1)`}) with CommutativeFlatMap[${`(A..N - 1, *)`}]
     |}
@@ -123,7 +123,7 @@ object GenTupleMonadInstances extends Template {
     -    val xb = f(fa._$arity)
     -    ${`combine A..(N - 1)`("fa", "xb", s"xb._$arity")}
     """
-    else block"""
+      else block"""
     -    f(fa._1)
     """}
     -  }
@@ -149,7 +149,7 @@ object GenTupleMonadInstances extends Template {
     -      case (${`a0, a(n - 1)`}, Right(b))    => (${`a0, a(n - 1)`}, b)
     -      case (${`a0, a(n - 1)`}, Left(nextA)) => loop((${`a0, a(n - 1)`}), nextA)
     """
-    else block"""
+      else block"""
     -    def loop(aa: A): Tuple1[B] =
     -      f(aa) match {
     -        case Tuple1(Right(b))    => Tuple1(b)

@@ -1,19 +1,59 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 package data
 
-import Chain._
+import cats.kernel.compat.scalaVersionSpecific._
 import cats.kernel.instances.StaticMethods
 
 import scala.annotation.tailrec
-import scala.collection.immutable.{IndexedSeq => ImIndexedSeq, SortedMap, TreeSet}
+import scala.collection.immutable.SortedMap
+import scala.collection.immutable.TreeSet
+import scala.collection.immutable.{IndexedSeq => ImIndexedSeq}
 import scala.collection.mutable.ListBuffer
+
+import Chain.{
+  empty,
+  fromSeq,
+  nil,
+  one,
+  sentinel,
+  traverseFilterViaChain,
+  traverseViaChain,
+  Append,
+  ChainIterator,
+  ChainReverseIterator,
+  Empty,
+  NonEmpty,
+  Singleton,
+  Wrap
+}
 
 /**
  * Trivial catenable sequence. Supports O(1) append, and (amortized)
  * O(1) `uncons`, such that walking the sequence via N successive `uncons`
  * steps takes O(N).
  */
-sealed abstract class Chain[+A] {
+sealed abstract class Chain[+A] extends ChainCompat[A] {
 
   /**
    * Returns the head and tail of this Chain if non empty, none otherwise. Amortized O(1).
@@ -547,16 +587,80 @@ sealed abstract class Chain[+A] {
    * Returns the number of elements in this structure
    */
   final def length: Long = {
-    val iter = iterator
-    var i: Long = 0
-    while (iter.hasNext) { i += 1; iter.next(); }
-    i
+    @annotation.tailrec
+    def loop(chains: List[Chain[A]], acc: Long): Long =
+      chains match {
+        case Nil => acc
+        case h :: tail =>
+          h match {
+            case Empty        => loop(tail, acc)
+            case Wrap(seq)    => loop(tail, acc + seq.length)
+            case Singleton(a) => loop(tail, acc + 1)
+            case Append(l, r) => loop(l :: r :: tail, acc)
+          }
+      }
+    loop(this :: Nil, 0L)
   }
 
   /**
    * Alias for length
    */
   final def size: Long = length
+
+  /**
+   * Compares the length of this chain to a test value.
+   * 
+   * The method does not call `length` directly; its running time
+   * is `O(length min len)` instead of `O(length)`.
+   * 
+   * @param  len the test value that gets compared with the length.
+   * @return a negative value if `this.length < len`,
+   *         zero if `this.length == len` or
+   *         a positive value if `this.length > len`.
+   * @note   an adapted version of
+             [[https://github.com/scala/scala/blob/v2.13.8/src/library/scala/collection/Iterable.scala#L272-L288 Iterable#sizeCompare]]
+             from Scala Library v2.13.8 is used in a part of the implementation.
+   * 
+   * {{{
+   * scala> import cats.data.Chain
+   * scala> val chain = Chain(1, 2, 3)
+   * scala> val isLessThan4 = chain.lengthCompare(4) < 0
+   * scala> val isEqualTo3 = chain.lengthCompare(3) == 0
+   * scala> val isGreaterThan2 = chain.lengthCompare(2) > 0
+   * scala> isLessThan4 && isEqualTo3 && isGreaterThan2
+   * res0: Boolean = true
+   * }}}
+   */
+  final def lengthCompare(len: Long): Int = {
+    import java.lang.Long
+    this match {
+      // `isEmpty` check should be faster than `== Chain.Empty`,
+      // but the compiler fails to prove that the match is still exhaustive.
+      case _ if isEmpty       => Long.compare(0L, len)
+      case Chain.Singleton(_) => Long.compare(1L, len)
+      case _ if len < 2       => 1 // the following cases should always have `length >= 2`
+      case Chain.Wrap(seq) =>
+        if (len > Int.MaxValue) -1 // `Seq#length` has `Int` type so cannot be `> Int.MaxValue`
+        else
+          seq.lengthCompare(len.toInt)
+      case _ => // should always be `Chain.Append` (i.e. `NonEmpty` with 2+ elements)
+        var sz = 2L
+        val it = new ChainIterator(this)
+        it.next()
+        it.next()
+        while (it.hasNext) {
+          if (sz == len) return 1
+          it.next()
+          sz += 1L
+        }
+        Long.compare(sz, len)
+    }
+  }
+
+  /**
+   * Alias for lengthCompare
+   */
+  final def sizeCompare(size: Long): Int = lengthCompare(size)
 
   /**
    * Converts to a list.
@@ -678,6 +782,7 @@ sealed abstract class Chain[+A] {
     }
 }
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 object Chain extends ChainInstances {
 
   private val sentinel: Function1[Any, Any] = new scala.runtime.AbstractFunction1[Any, Any] { def apply(a: Any) = this }
@@ -764,6 +869,18 @@ object Chain extends ChainInstances {
     if (s.isEmpty) nil
     else if (s.lengthCompare(1) == 0) one(s.head)
     else Wrap(s)
+
+  /**
+   * Creates a Chain from the specified IterableOnce.
+   */
+  def fromIterableOnce[A](xs: IterableOnce[A]): Chain[A] =
+    xs match {
+      case s: Seq[A @unchecked] =>
+        // Seq is a subclass of IterableOnce, so the type has to be compatible
+        Chain.fromSeq(s) // pay O(1) not O(N) cost
+      case notSeq =>
+        Chain.fromSeq(notSeq.iterator.toSeq)
+    }
 
   /**
    * Creates a Chain from the specified elements.
@@ -1029,6 +1146,7 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
 
       def empty[A]: Chain[A] = Chain.nil
       def combineK[A](c: Chain[A], c2: Chain[A]): Chain[A] = Chain.concat(c, c2)
+      override def fromIterableOnce[A](xs: IterableOnce[A]): Chain[A] = Chain.fromIterableOnce(xs)
       def pure[A](a: A): Chain[A] = Chain.one(a)
       def flatMap[A, B](fa: Chain[A])(f: A => Chain[B]): Chain[B] =
         fa.flatMap(f)

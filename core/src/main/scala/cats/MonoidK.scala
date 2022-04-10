@@ -1,4 +1,27 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
+
+import cats.kernel.compat.scalaVersionSpecific._
 
 import simulacrum.typeclass
 
@@ -37,6 +60,21 @@ import simulacrum.typeclass
   def empty[A]: F[A]
 
   /**
+   * Tests if `a` is the identity.
+   *
+   * Example:
+   * {{{
+   * scala> MonoidK[List].isEmpty(List.empty[String])
+   * res0: Boolean = true
+   *
+   * scala> MonoidK[List].isEmpty(List("something"))
+   * res1: Boolean = false
+   * }}}
+   */
+  def isEmpty[A](a: F[A])(implicit ev: Eq[F[A]]): Boolean =
+    ev.eqv(a, empty)
+
+  /**
    * Given a type A, create a concrete Monoid[F[A]].
    *
    * Example:
@@ -67,8 +105,54 @@ import simulacrum.typeclass
     new ComposedMonoidK[F, G] {
       val F: MonoidK[F] = self
     }
+
+  /**
+   * Return `a` combined with itself `n` times.
+   *
+   * Example:
+   * {{{
+   * scala> SemigroupK[List].combineNK(List(1), 5)
+   * res0: List[Int] = List(1, 1, 1, 1, 1)
+
+   * scala> MonoidK[List].combineNK(List("ha"), 0)
+   * res1: List[String] = List()
+   *
+   * }}}
+   */
+  override def combineNK[A](a: F[A], n: Int): F[A] =
+    if (n < 0) throw new IllegalArgumentException("Repeated combining for monoidKs must have n >= 0")
+    else if (n == 0) empty[A]
+    else repeatedCombineNK(a, n)
+
+  /**
+   * Given a sequence of `as`, sum them using the monoidK and return the total.
+   *
+   * Example:
+   * {{{
+   * scala> MonoidK[List].combineAllK(List(List("One"), List("Two"), List("Three")))
+   * res0: List[String] = List(One, Two, Three)
+   *
+   * scala> MonoidK[List].combineAllK[String](List.empty)
+   * res1: List[String] = List()
+   * }}}
+   */
+  def combineAllK[A](as: IterableOnce[F[A]]): F[A] =
+    combineAllOptionK(as) match {
+      case Some(fa) => fa
+      case None     => empty[A]
+    }
+
+  override def reverse: MonoidK[F] =
+    new MonoidK[F] {
+      def empty[A] = self.empty
+      def combineK[A](a: F[A], b: F[A]) = self.combineK(b, a)
+      // a + a + a + ... is the same when reversed
+      override def combineNK[A](a: F[A], n: Int): F[A] = self.combineNK(a, n)
+      override def reverse = self
+    }
 }
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 object MonoidK {
 
   /* ======================================================================== */
