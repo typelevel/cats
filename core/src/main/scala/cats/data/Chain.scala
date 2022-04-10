@@ -682,26 +682,26 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
     // This is an optimized (unboxed) implementation
     // of the same code as foldLeft
     @annotation.tailrec
-    def loop(head: Chain.NonEmpty[A], tail: List[Chain.NonEmpty[A]], acc: Long): Int =
-      if (acc < 0L) 1 // head is nonempty
+    def loop(head: Chain.NonEmpty[A], tail: List[Chain.NonEmpty[A]], len: Long): Int =
+      if (len <= 0L) 1 // head is nonempty
       else
         head match {
-          case Append(l, r) => loop(l, r :: tail, acc)
+          case Append(l, r) => loop(l, r :: tail, len)
           case Singleton(_) =>
             tail match {
               case h1 :: t1 =>
-                loop(h1, t1, acc - 1L)
+                loop(h1, t1, len - 1L)
               case _ =>
-                java.lang.Long.compare(1L, acc)
+                java.lang.Long.compare(1L, len)
             }
           case Wrap(seq) =>
             val c =
-              if (acc <= Int.MaxValue) seq.lengthCompare(acc.toInt)
+              if (len <= Int.MaxValue) seq.lengthCompare(len.toInt)
               else -1
             tail match {
               case h1 :: t1 =>
                 if (c >= 0) 1 // there is definitely more in tail
-                else loop(h1, t1, acc - seq.length)
+                else loop(h1, t1, len - seq.length)
               case _ => c
             }
         }
