@@ -189,33 +189,10 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
    * Folds over the elements from left to right using the supplied initial value and function.
    */
   final def foldLeft[B](z: B)(f: (B, A) => B): B = {
-    @annotation.tailrec
-    def loop(h: Chain.NonEmpty[A], tail: List[Chain.NonEmpty[A]], acc: B): B =
-      h match {
-        case Append(l, r) => loop(l, r :: tail, acc)
-        case Singleton(a) =>
-          val nextAcc = f(acc, a)
-          tail match {
-            case h1 :: t1 =>
-              loop(h1, t1, nextAcc)
-            case _ =>
-              nextAcc
-          }
-        case Wrap(seq) =>
-          val nextAcc = seq.foldLeft(acc)(f)
-          tail match {
-            case h1 :: t1 =>
-              loop(h1, t1, nextAcc)
-            case _ =>
-              nextAcc
-          }
-      }
-
-    this match {
-      case ne: Chain.NonEmpty[A] =>
-        loop(ne, Nil, z)
-      case _ => z
-    }
+    var result = z
+    val iter = iterator
+    while (iter.hasNext) { result = f(result, iter.next()) }
+    result
   }
 
   /**
@@ -256,35 +233,10 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
    * Folds over the elements from right to left using the supplied initial value and function.
    */
   final def foldRight[B](z: B)(f: (A, B) => B): B = {
-    @annotation.tailrec
-    def loop(h: Chain.NonEmpty[A], tail: List[Chain.NonEmpty[A]], acc: B): B =
-      h match {
-        case Append(l, r) =>
-          // reverse the order here to traverse correctly
-          loop(r, l :: tail, acc)
-        case Singleton(a) =>
-          val nextAcc = f(a, acc)
-          tail match {
-            case h1 :: t1 =>
-              loop(h1, t1, nextAcc)
-            case _ =>
-              nextAcc
-          }
-        case Wrap(seq) =>
-          val nextAcc = seq.foldRight(acc)(f)
-          tail match {
-            case h1 :: t1 =>
-              loop(h1, t1, nextAcc)
-            case _ =>
-              nextAcc
-          }
-      }
-
-    this match {
-      case ne: Chain.NonEmpty[A] =>
-        loop(ne, Nil, z)
-      case _ => z
-    }
+    var result = z
+    val iter = reverseIterator
+    while (iter.hasNext) { result = f(iter.next(), result) }
+    result
   }
 
   /**
