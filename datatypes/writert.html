@@ -1,276 +1,413 @@
-<!DOCTYPE html><html><head><title>Cats: WriterT</title><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Cats contributors" /><meta name="description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="og:image" content="/cats/img/poster.png" /><meta name="image" property="og:image" content="/cats/img/poster.png" /><meta name="og:title" content="Cats: WriterT" /><meta name="title" property="og:title" content="Cats: WriterT" /><meta name="og:site_name" content="Cats" /><meta name="og:url" content="http://typelevel.org/cats/" /><meta name="og:type" content="website" /><meta name="og:description" content="Lightweight, modular, and extensible library for functional programming" /><link rel="icon" type="image/png" href="/cats/img/favicon.png" /><meta name="twitter:title" content="Cats: WriterT" /><meta name="twitter:image" content="/cats/img/poster.png" /><meta name="twitter:description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="twitter:card" content="summary_large_image" /><link rel="icon" type="image/png" sizes="16x16" href="/cats/img/favicon16x16.png" /><link rel="icon" type="image/png" sizes="24x24" href="/cats/img/favicon24x24.png" /><link rel="icon" type="image/png" sizes="32x32" href="/cats/img/favicon32x32.png" /><link rel="icon" type="image/png" sizes="48x48" href="/cats/img/favicon48x48.png" /><link rel="icon" type="image/png" sizes="57x57" href="/cats/img/favicon57x57.png" /><link rel="icon" type="image/png" sizes="60x60" href="/cats/img/favicon60x60.png" /><link rel="icon" type="image/png" sizes="64x64" href="/cats/img/favicon64x64.png" /><link rel="icon" type="image/png" sizes="70x70" href="/cats/img/favicon70x70.png" /><link rel="icon" type="image/png" sizes="72x72" href="/cats/img/favicon72x72.png" /><link rel="icon" type="image/png" sizes="76x76" href="/cats/img/favicon76x76.png" /><link rel="icon" type="image/png" sizes="96x96" href="/cats/img/favicon96x96.png" /><link rel="icon" type="image/png" sizes="114x114" href="/cats/img/favicon114x114.png" /><link rel="icon" type="image/png" sizes="120x120" href="/cats/img/favicon120x120.png" /><link rel="icon" type="image/png" sizes="128x128" href="/cats/img/favicon128x128.png" /><link rel="icon" type="image/png" sizes="144x144" href="/cats/img/favicon144x144.png" /><link rel="icon" type="image/png" sizes="150x150" href="/cats/img/favicon150x150.png" /><link rel="icon" type="image/png" sizes="152x152" href="/cats/img/favicon152x152.png" /><link rel="icon" type="image/png" sizes="196x196" href="/cats/img/favicon196x196.png" /><link rel="icon" type="image/png" sizes="310x310" href="/cats/img/favicon310x310.png" /><link rel="icon" type="image/png" sizes="310x150" href="/cats/img/favicon310x150.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" /><link rel="stylesheet" href="/cats/highlight/styles/atom-one-light.css" /><link rel="stylesheet" href="/cats/css/pattern-style.css" /></head><body class="docs"><div id="wrapper"><div id="sidebar-wrapper"><ul id="sidebar" class="sidebar-nav"><li class="sidebar-brand"><a href="/cats/" class="brand"><div class="brand-wrapper"><span>Cats</span></div></a></li><li><a href="/cats/datatypes/writert.html" class=" active ">WriterT</a></li><li><a href="/cats/datatypes/chain.html" class="">Chain</a></li><li><a href="/cats/datatypes/const.html" class="">Const</a></li><li><a href="/cats/datatypes/contt.html" class="">ContT</a></li><li><a href="/cats/datatypes.html" class="">Data Types</a></li><li><a href="/cats/datatypes/either.html" class="">Either</a></li><li><a href="/cats/datatypes/eithert.html" class="">EitherT</a></li><li><a href="/cats/datatypes/eval.html" class="">Eval</a></li><li><a href="/cats/datatypes/freeapplicative.html" class="">FreeApplicatives</a></li><li><a href="/cats/datatypes/freemonad.html" class="">FreeMonads</a></li><li><a href="/cats/datatypes/functionk.html" class="">FunctionK</a></li><li><a href="/cats/datatypes/id.html" class="">Id</a></li><li><a href="/cats/datatypes/ior.html" class="">Ior</a></li><li><a href="/cats/datatypes/iort.html" class="">IorT</a></li><li><a href="/cats/datatypes/kleisli.html" class="">Kleisli</a></li><li><a href="/cats/datatypes/nel.html" class="">NonEmptyList</a></li><li><a href="/cats/datatypes/nested.html" class="">Nested</a></li><li><a href="/cats/datatypes/oneand.html" class="">OneAnd</a></li><li><a href="/cats/datatypes/optiont.html" class="">OptionT</a></li><li><a href="/cats/datatypes/state.html" class="">State</a></li><li><a href="/cats/datatypes/validated.html" class="">Validated</a></li><li><a href="/cats/datatypes/writer.html" class="">Writer</a></li></ul></div><div id="page-content-wrapper"><div class="nav"><div class="container-fluid"><div class="row"><div class="col-lg-12"><div class="action-menu pull-left clearfix"><a href="#menu-toggle" id="menu-toggle"><i class="fa fa-bars" aria-hidden="true"></i></a></div><ul class="pull-right"><li class="search-nav hidden-xs hidden-sm"><div id="search-dropdown"><label><i class="fa fa-search"></i>Search</label><input id="search-bar" type="text" placeholder="Enter keywords here..." onclick="displayToggleSearch(event)" /><ul id="search-dropdown-content" class="dropdown dropdown-content"></ul></div></li><li id="gh-eyes-item" class="hidden-xs to-uppercase"><a href="https://github.com/typelevel/cats" target="_blank" rel="noopener noreferrer"><i class="fa fa-eye"></i><span>Watchers<span id="eyes" class="label label-default">--</span></span></a></li><li id="gh-stars-item" class="hidden-xs to-uppercase"><a href="https://github.com/typelevel/cats" target="_blank" rel="noopener noreferrer"><i class="fa fa-star-o"></i><span>Stars<span id="stars" class="label label-default">--</span></span></a></li><li><a href="#" onclick="shareSiteTwitter('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-twitter"></i></a></li><li><a href="#" onclick="shareSiteFacebook('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-facebook"></i></a></li></ul></div></div></div></div><div id="content" data-github-owner="typelevel" data-github-repo="cats"><div class="content-wrapper"><section><h1 id="writert">WriterT</h1>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Laika 0.18.1 + Helium Theme" />
+    <title>WriterT</title>
+    
+      <meta name="author" content="Cody Allen"/>
+    
+      <meta name="author" content="Ross Baker"/>
+    
+      <meta name="author" content="P. Oscar Boykin"/>
+    
+      <meta name="author" content="Travis Brown"/>
+    
+      <meta name="author" content="Adelbert Chang"/>
+    
+      <meta name="author" content="Peter Neyens"/>
+    
+      <meta name="author" content="Rob Norris"/>
+    
+      <meta name="author" content="Erik Osheim"/>
+    
+      <meta name="author" content="LukaJCB"/>
+    
+      <meta name="author" content="Michael Pilquist"/>
+    
+      <meta name="author" content="Miles Sabin"/>
+    
+      <meta name="author" content="Daniel Spiewak"/>
+    
+      <meta name="author" content="Frank Thomas"/>
+    
+      <meta name="author" content="Julien Truffaut"/>
+    
+      <meta name="author" content="Kailuo Wang"/>
+    
+    
+      <meta name="description" content="docs"/>
+    
+    
+      <link rel="icon" sizes="32x32" type="image/png" href="https://typelevel.org/img/favicon.png"/>
+    
+    
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.207/distr/fira_code.css">
+    
+    <link rel="stylesheet" type="text/css" href="../helium/icofont.min.css" />
+    <link rel="stylesheet" type="text/css" href="../helium/laika-helium.css" />
+    <link rel="stylesheet" type="text/css" href="../site/styles.css" />
+    <script src="../helium/laika-helium.js"></script>
+    <script src="../js/sponsors.js"></script>
+    
+    
+    <script> /* for avoiding page load transitions */ </script>
+  </head>
 
-<p><code class="language-plaintext highlighter-rouge">WriterT[F[_], L, V]</code> is a type wrapper on an <code class="language-plaintext highlighter-rouge">F[(L,
-V)]</code>. Speaking technically, it is a monad transformer for <a href="https://typelevel.org/cats/datatypes/writer.html"><code class="language-plaintext highlighter-rouge">Writer</code></a>,
-but you don’t need to know what that means for it to be
-useful.</p>
+  <body>
 
-<h2 id="composition">Composition</h2>
+    <header id="top-bar">
 
-<p><code class="language-plaintext highlighter-rouge">WriterT</code> can be more convenient to work with than using
-<code class="language-plaintext highlighter-rouge">F[Writer[L, V]]</code> directly, because it exposes operations that allow
-you to work with the values of the inner <a href="https://typelevel.org/cats/datatypes/writer.html"><code class="language-plaintext highlighter-rouge">Writer</code></a> (<code class="language-plaintext highlighter-rouge">L</code> and
-<code class="language-plaintext highlighter-rouge">V</code>) abstracting both the <code class="language-plaintext highlighter-rouge">F</code> and <a href="https://typelevel.org/cats/datatypes/writer.html"><code class="language-plaintext highlighter-rouge">Writer</code></a>.</p>
+      <div class="row">
+        <a id="nav-icon">
+          <i class="icofont-laika" title="Navigation">&#xefa2;</i>
+        </a>
+        
+      </div>
 
-<p>For example, <code class="language-plaintext highlighter-rouge">map</code> allow you to transform the inner <code class="language-plaintext highlighter-rouge">V</code> value, getting
-back a <code class="language-plaintext highlighter-rouge">WriterT</code> that wraps around it.</p>
+      <a class="image-link" href="https://typelevel.org"><img src="https://typelevel.org/img/logo.svg"></a>
 
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.</span><span class="o">{</span><span class="nc">WriterT</span><span class="o">,</span> <span class="nc">Writer</span><span class="o">}</span>
+      <span class="row links"><a class="icon-link svg-link" href="https://typelevel.org/cats/api/"><span title="API"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M75,47.5c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm-50,-0c13.246,-0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,-0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm2.705,16.735l7.239,0l0.622,-4.904l-21.833,0l-0,4.904l7.589,0l0,22.067l6.383,0l-0,-22.067Zm58.076,7.265c-0,-8.757 -3.698,-14.166 -10.781,-14.166c-7.083,-0 -10.781,5.604 -10.781,14.166c0,8.757 3.698,14.166 10.781,14.166c7.083,0 10.781,-5.604 10.781,-14.166Zm-6.539,0c0,6.538 -1.128,9.496 -4.242,9.496c-2.997,0 -4.242,-2.88 -4.242,-9.496c-0,-6.616 1.206,-9.496 4.242,-9.496c3.036,-0 4.242,2.88 4.242,9.496Zm-29.242,-67c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm0.512,9.834c-7.122,-0 -12.609,5.098 -12.609,14.127c-0,9.263 5.215,14.205 12.532,14.205c4.164,0 7.083,-1.634 9.068,-3.658l-2.88,-3.697c-1.518,1.206 -3.153,2.413 -5.838,2.413c-3.697,-0 -6.266,-2.763 -6.266,-9.263c-0,-6.616 2.724,-9.379 6.149,-9.379c2.102,-0 3.892,0.778 5.371,1.984l3.113,-3.775c-2.257,-1.868 -4.748,-2.957 -8.64,-2.957Z"/>
+  </g>
+</svg></span></a><a class="icon-link svg-link" href="https://github.com/typelevel/cats"><span title="Source Code"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M49.995,1c-27.609,-0 -49.995,22.386 -49.995,50.002c-0,22.09 14.325,40.83 34.194,47.444c2.501,0.458 3.413,-1.086 3.413,-2.412c0,-1.185 -0.043,-4.331 -0.067,-8.503c-13.908,3.021 -16.843,-6.704 -16.843,-6.704c-2.274,-5.773 -5.552,-7.311 -5.552,-7.311c-4.54,-3.103 0.344,-3.042 0.344,-3.042c5.018,0.356 7.658,5.154 7.658,5.154c4.46,7.64 11.704,5.433 14.552,4.156c0.454,-3.232 1.744,-5.436 3.174,-6.685c-11.102,-1.262 -22.775,-5.553 -22.775,-24.713c-0,-5.457 1.949,-9.92 5.147,-13.416c-0.516,-1.265 -2.231,-6.348 0.488,-13.233c0,0 4.199,-1.344 13.751,5.126c3.988,-1.108 8.266,-1.663 12.518,-1.682c4.245,0.019 8.523,0.574 12.517,1.682c9.546,-6.47 13.736,-5.126 13.736,-5.126c2.728,6.885 1.013,11.968 0.497,13.233c3.204,3.496 5.141,7.959 5.141,13.416c0,19.209 -11.691,23.436 -22.83,24.673c1.795,1.544 3.394,4.595 3.394,9.26c0,6.682 -0.061,12.076 -0.061,13.715c0,1.338 0.899,2.894 3.438,2.406c19.853,-6.627 34.166,-25.354 34.166,-47.438c-0,-27.616 -22.389,-50.002 -50.005,-50.002"/>
+  </g>
+</svg></span></a><a class="icon-link" href="https://discord.gg/XF3CXcMzqD"><i class="icofont-laika" title="Chat">&#xeed5;</i></a><a class="icon-link" href="https://twitter.com/typelevel"><i class="icofont-laika" title="Twitter">&#xed7a;</i></a></span>
 
-<span class="nc">WriterT</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">](</span><span class="nc">Some</span><span class="o">((</span><span class="s">"value"</span><span class="o">,</span> <span class="mi">10</span><span class="o">))).</span><span class="py">map</span><span class="o">(</span><span class="n">x</span> <span class="k">=&gt;</span> <span class="n">x</span> <span class="o">*</span> <span class="n">x</span><span class="o">)</span>
-<span class="c1">// res0: WriterT[Option, String, Int] = WriterT(Some(("value", 100)))</span>
-</code></pre></div></div>
+    </header>
 
-<p>Plus, when composing multiple <code class="language-plaintext highlighter-rouge">WriterT</code> computations, those will be
-composed following the same behaviour of a
-<a href="https://typelevel.org/cats/datatypes/writer.html"><code class="language-plaintext highlighter-rouge">Writer</code></a> and the
-generic <code class="language-plaintext highlighter-rouge">F</code>.  Let’s see two examples with <code class="language-plaintext highlighter-rouge">Option</code> and <a href="https://typelevel.org/cats/datatypes/either.html"><code class="language-plaintext highlighter-rouge">Either</code></a>: if
-one of the computations has a <code class="language-plaintext highlighter-rouge">None</code> or a <code class="language-plaintext highlighter-rouge">Left</code>, the whole
-computation will return a <code class="language-plaintext highlighter-rouge">None</code> or a <code class="language-plaintext highlighter-rouge">Left</code> since the way the two
-types compose typically behaves that way. Moreover, when the
-computation succeed, the logging side of the
-<a href="https://typelevel.org/cats/datatypes/writer.html"><code class="language-plaintext highlighter-rouge">Writer</code></a>s will be
-combined.</p>
+    <nav id="sidebar">
 
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">optionWriterT1</span> <span class="k">:</span> <span class="kt">WriterT</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">WriterT</span><span class="o">(</span><span class="nc">Some</span><span class="o">((</span><span class="s">"writerT value 1"</span><span class="o">,</span> <span class="mi">123</span><span class="o">)))</span>
-<span class="k">val</span> <span class="nv">optionWriterT2</span> <span class="k">:</span> <span class="kt">WriterT</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">WriterT</span><span class="o">(</span><span class="nc">Some</span><span class="o">((</span><span class="s">"writerT value 1"</span><span class="o">,</span> <span class="mi">123</span><span class="o">)))</span>
-<span class="k">val</span> <span class="nv">optionWriterT3</span> <span class="k">:</span> <span class="kt">WriterT</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nv">WriterT</span><span class="o">.</span><span class="py">valueT</span><span class="o">(</span><span class="nc">None</span><span class="o">)</span>
+      <div class="row">
+        <a class="icon-link svg-link" href="https://typelevel.org/cats/api/"><span title="API"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M75,47.5c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm-50,-0c13.246,-0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,-0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm2.705,16.735l7.239,0l0.622,-4.904l-21.833,0l-0,4.904l7.589,0l0,22.067l6.383,0l-0,-22.067Zm58.076,7.265c-0,-8.757 -3.698,-14.166 -10.781,-14.166c-7.083,-0 -10.781,5.604 -10.781,14.166c0,8.757 3.698,14.166 10.781,14.166c7.083,0 10.781,-5.604 10.781,-14.166Zm-6.539,0c0,6.538 -1.128,9.496 -4.242,9.496c-2.997,0 -4.242,-2.88 -4.242,-9.496c-0,-6.616 1.206,-9.496 4.242,-9.496c3.036,-0 4.242,2.88 4.242,9.496Zm-29.242,-67c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm0.512,9.834c-7.122,-0 -12.609,5.098 -12.609,14.127c-0,9.263 5.215,14.205 12.532,14.205c4.164,0 7.083,-1.634 9.068,-3.658l-2.88,-3.697c-1.518,1.206 -3.153,2.413 -5.838,2.413c-3.697,-0 -6.266,-2.763 -6.266,-9.263c-0,-6.616 2.724,-9.379 6.149,-9.379c2.102,-0 3.892,0.778 5.371,1.984l3.113,-3.775c-2.257,-1.868 -4.748,-2.957 -8.64,-2.957Z"/>
+  </g>
+</svg></span></a><a class="icon-link svg-link" href="https://github.com/typelevel/cats"><span title="Source Code"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M49.995,1c-27.609,-0 -49.995,22.386 -49.995,50.002c-0,22.09 14.325,40.83 34.194,47.444c2.501,0.458 3.413,-1.086 3.413,-2.412c0,-1.185 -0.043,-4.331 -0.067,-8.503c-13.908,3.021 -16.843,-6.704 -16.843,-6.704c-2.274,-5.773 -5.552,-7.311 -5.552,-7.311c-4.54,-3.103 0.344,-3.042 0.344,-3.042c5.018,0.356 7.658,5.154 7.658,5.154c4.46,7.64 11.704,5.433 14.552,4.156c0.454,-3.232 1.744,-5.436 3.174,-6.685c-11.102,-1.262 -22.775,-5.553 -22.775,-24.713c-0,-5.457 1.949,-9.92 5.147,-13.416c-0.516,-1.265 -2.231,-6.348 0.488,-13.233c0,0 4.199,-1.344 13.751,5.126c3.988,-1.108 8.266,-1.663 12.518,-1.682c4.245,0.019 8.523,0.574 12.517,1.682c9.546,-6.47 13.736,-5.126 13.736,-5.126c2.728,6.885 1.013,11.968 0.497,13.233c3.204,3.496 5.141,7.959 5.141,13.416c0,19.209 -11.691,23.436 -22.83,24.673c1.795,1.544 3.394,4.595 3.394,9.26c0,6.682 -0.061,12.076 -0.061,13.715c0,1.338 0.899,2.894 3.438,2.406c19.853,-6.627 34.166,-25.354 34.166,-47.438c-0,-27.616 -22.389,-50.002 -50.005,-50.002"/>
+  </g>
+</svg></span></a><a class="icon-link" href="https://discord.gg/XF3CXcMzqD"><i class="icofont-laika" title="Chat">&#xeed5;</i></a><a class="icon-link" href="https://twitter.com/typelevel"><i class="icofont-laika" title="Twitter">&#xed7a;</i></a>
+      </div>
+
+      <ul class="nav-list">
+        <li class="level1"><a href="../index.html">Cats</a></li>
+        <li class="level1"><a href="../typeclasses.html">Type Classes</a></li>
+        <li class="level1"><a href="../datatypes.html">Data Types</a></li>
+        <li class="level1"><a href="../algebra.html">Algebra</a></li>
+        <li class="level1"><a href="../motivations.html">Motivations</a></li>
+        <li class="level1"><a href="../resources_for_learners.html">Resources for Learners</a></li>
+        <li class="level1"><a href="../jump_start_guide.html">Jump Start Guide</a></li>
+        <li class="level1"><a href="../imports.html">Imports</a></li>
+        <li class="level1"><a href="../faq.html">FAQ</a></li>
+        <li class="level1"><a href="../CONTRIBUTING.html">Contributor guide</a></li>
+        <li class="level1"><a href="../colophon.html">Colophon</a></li>
+        <li class="level1"><a href="../nomenclature.html">Glossary</a></li>
+        <li class="level1"><a href="../guidelines.html">Guidelines</a></li>
+        <li class="level1"><a href="../typelevelEcosystem.html">Typelevel Ecosystem</a></li>
+        <li class="level1 nav-header">Type Classes</li>
+        <li class="level2"><a href="../typeclasses/alternative.html">Alternative</a></li>
+        <li class="level2"><a href="../typeclasses/applicative.html">Applicative</a></li>
+        <li class="level2"><a href="../typeclasses/applicativemonaderror.html">ApplicativeError and MonadError</a></li>
+        <li class="level2"><a href="../typeclasses/applicativetraverse.html">Applicative and Traversable Functors</a></li>
+        <li class="level2"><a href="../typeclasses/arrow.html">Arrow</a></li>
+        <li class="level2"><a href="../typeclasses/arrowchoice.html">Arrow Choice</a></li>
+        <li class="level2"><a href="../typeclasses/bifunctor.html">Bifunctor</a></li>
+        <li class="level2"><a href="../typeclasses/bimonad.html">Bimonad</a></li>
+        <li class="level2"><a href="../typeclasses/comonad.html">Comonad</a></li>
+        <li class="level2"><a href="../typeclasses/contravariant.html">Contravariant</a></li>
+        <li class="level2"><a href="../typeclasses/contravariantmonoidal.html">Contravariant Monoidal</a></li>
+        <li class="level2"><a href="../typeclasses/eq.html">Eq</a></li>
+        <li class="level2"><a href="../typeclasses/foldable.html">Foldable</a></li>
+        <li class="level2"><a href="../typeclasses/functor.html">Functor</a></li>
+        <li class="level2"><a href="../typeclasses/invariant.html">Invariant</a></li>
+        <li class="level2"><a href="../typeclasses/invariantmonoidal.html">Invariant Monoidal</a></li>
+        <li class="level2"><a href="../typeclasses/lawtesting.html">Law testing</a></li>
+        <li class="level2"><a href="../typeclasses/monad.html">Monad</a></li>
+        <li class="level2"><a href="../typeclasses/monoid.html">Monoid</a></li>
+        <li class="level2"><a href="../typeclasses/monoidk.html">MonoidK</a></li>
+        <li class="level2"><a href="../typeclasses/nonemptytraverse.html">NonEmptyTraverse</a></li>
+        <li class="level2"><a href="../typeclasses/parallel.html">Parallel</a></li>
+        <li class="level2"><a href="../typeclasses/reducible.html">Reducible</a></li>
+        <li class="level2"><a href="../typeclasses/semigroup.html">Semigroup</a></li>
+        <li class="level2"><a href="../typeclasses/semigroupk.html">SemigroupK</a></li>
+        <li class="level2"><a href="../typeclasses/show.html">Show</a></li>
+        <li class="level2"><a href="../typeclasses/traverse.html">Traverse</a></li>
+        <li class="level1 nav-header">Data Types</li>
+        <li class="level2"><a href="chain.html">Chain</a></li>
+        <li class="level2"><a href="const.html">Const</a></li>
+        <li class="level2"><a href="contt.html">ContT</a></li>
+        <li class="level2"><a href="either.html">Either</a></li>
+        <li class="level2"><a href="eithert.html">EitherT</a></li>
+        <li class="level2"><a href="eval.html">Eval</a></li>
+        <li class="level2"><a href="freeapplicative.html">Free Applicative</a></li>
+        <li class="level2"><a href="freemonad.html">Free Monad</a></li>
+        <li class="level2"><a href="functionk.html">FunctionK</a></li>
+        <li class="level2"><a href="id.html">Id</a></li>
+        <li class="level2"><a href="ior.html">Ior</a></li>
+        <li class="level2"><a href="iort.html">IorT</a></li>
+        <li class="level2"><a href="kleisli.html">Kleisli</a></li>
+        <li class="level2"><a href="nel.html">NonEmptyList</a></li>
+        <li class="level2"><a href="nested.html">Nested</a></li>
+        <li class="level2"><a href="oneand.html">OneAnd</a></li>
+        <li class="level2"><a href="optiont.html">OptionT</a></li>
+        <li class="level2"><a href="state.html">State</a></li>
+        <li class="level2"><a href="validated.html">Validated</a></li>
+        <li class="level2"><a href="writer.html">Writer</a></li>
+        <li class="level2 active"><a href="#">WriterT</a></li>
+      </ul>
+
+      <ul class="nav-list">
+        <li class="level1 nav-header">Related Projects</li>
+        
+          <li class="level2"><a href="https://typelevel.org/cats-effect/">cats-effect</a></li>
+        
+          <li class="level2"><a href="https://typelevel.org/mouse">Mouse</a></li>
+        
+          <li class="level2"><a href="https://github.com/typelevel/discipline/">discipline</a></li>
+        
+      </ul>
+
+    </nav>
+
+    <div id="container">
+
+      <nav id="page-nav">
+        <p class="header"><a href="#">WriterT</a></p>
+
+        <ul class="nav-list">
+          <li class="level1"><a href="#composition">Composition</a></li>
+          <li class="level1"><a href="#construct-a-writert">Construct a WriterT</a></li>
+          <li class="level1"><a href="#operations">Operations</a></li>
+          <li class="level1"><a href="#example">Example</a></li>
+        </ul>
+
+        <p class="footer"></p>
+      </nav>
+
+      <main class="content">
+
+        <h1 id="writert" class="title">WriterT</h1>
+        <p><code>WriterT[F[_], L, V]</code> is a type wrapper on an <code>F[(L,
+V)]</code>. Speaking technically, it is a monad transformer for <a href="writer.html"><code>Writer</code></a>,
+        but you don&#39;t need to know what that means for it to be
+        useful.</p>
+        
+        <h2 id="composition" class="section">Composition<a class="anchor-link right" href="#composition"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p><code>WriterT</code> can be more convenient to work with than using
+        <code>F[Writer[L, V]]</code> directly, because it exposes operations that allow
+        you to work with the values of the inner <a href="writer.html"><code>Writer</code></a> (<code>L</code> and
+        <code>V</code>) abstracting both the <code>F</code> and <a href="writer.html"><code>Writer</code></a>.</p>
+        <p>For example, <code>map</code> allow you to transform the inner <code>V</code> value, getting
+        back a <code>WriterT</code> that wraps around it.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">data</span><span>.{</span><span class="type-name">WriterT</span><span>, </span><span class="type-name">Writer</span><span>}
+
+</span><span class="type-name">WriterT</span><span>[</span><span class="type-name">Option</span><span>, </span><span class="type-name">String</span><span>, </span><span class="type-name">Int</span><span>](</span><span class="type-name">Some</span><span>((</span><span class="string-literal">&quot;value&quot;</span><span>, </span><span class="number-literal">10</span><span>))).</span><span class="identifier">map</span><span>(</span><span class="identifier">x</span><span> =&gt; </span><span class="identifier">x</span><span> * </span><span class="identifier">x</span><span>)
+</span><span class="comment">// res0: WriterT[Option, String, Int] = WriterT(Some((&quot;value&quot;, 100)))</span></code></pre>
+        <p>Plus, when composing multiple <code>WriterT</code> computations, those will be
+        composed following the same behaviour of a
+        <a href="writer.html"><code>Writer</code></a> and the
+        generic <code>F</code>.  Let&#39;s see two examples with <code>Option</code> and <a href="either.html"><code>Either</code></a>: if
+        one of the computations has a <code>None</code> or a <code>Left</code>, the whole
+        computation will return a <code>None</code> or a <code>Left</code> since the way the two
+        types compose typically behaves that way. Moreover, when the
+        computation succeed, the logging side of the
+        <a href="writer.html"><code>Writer</code></a>s will be
+        combined.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">optionWriterT1</span><span> : </span><span class="type-name">WriterT</span><span>[</span><span class="type-name">Option</span><span>, </span><span class="type-name">String</span><span>, </span><span class="type-name">Int</span><span>] = </span><span class="type-name">WriterT</span><span>(</span><span class="type-name">Some</span><span>((</span><span class="string-literal">&quot;writerT value 1&quot;</span><span>, </span><span class="number-literal">123</span><span>)))
+</span><span class="keyword">val</span><span> </span><span class="identifier">optionWriterT2</span><span> : </span><span class="type-name">WriterT</span><span>[</span><span class="type-name">Option</span><span>, </span><span class="type-name">String</span><span>, </span><span class="type-name">Int</span><span>] = </span><span class="type-name">WriterT</span><span>(</span><span class="type-name">Some</span><span>((</span><span class="string-literal">&quot;writerT value 1&quot;</span><span>, </span><span class="number-literal">123</span><span>)))
+</span><span class="keyword">val</span><span> </span><span class="identifier">optionWriterT3</span><span> : </span><span class="type-name">WriterT</span><span>[</span><span class="type-name">Option</span><span>, </span><span class="type-name">String</span><span>, </span><span class="type-name">Int</span><span>] = </span><span class="type-name">WriterT</span><span>.</span><span class="identifier">valueT</span><span>(</span><span class="type-name">None</span><span>)
 
 
-<span class="k">val</span> <span class="nv">eitherWriterT1</span> <span class="k">:</span> <span class="kt">WriterT</span><span class="o">[</span><span class="kt">Either</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">*</span><span class="o">]</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">WriterT</span><span class="o">(</span><span class="nc">Right</span><span class="o">((</span><span class="s">"writerT value 1"</span><span class="o">,</span> <span class="mi">123</span><span class="o">)))</span>
-<span class="k">val</span> <span class="nv">eitherWriterT2</span> <span class="k">:</span> <span class="kt">WriterT</span><span class="o">[</span><span class="kt">Either</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">*</span><span class="o">]</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">WriterT</span><span class="o">(</span><span class="nc">Right</span><span class="o">((</span><span class="s">"writerT value 1"</span><span class="o">,</span> <span class="mi">123</span><span class="o">)))</span>
-<span class="k">val</span> <span class="nv">eitherWriterT3</span> <span class="k">:</span> <span class="kt">WriterT</span><span class="o">[</span><span class="kt">Either</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">*</span><span class="o">]</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nv">WriterT</span><span class="o">.</span><span class="py">valueT</span><span class="o">(</span><span class="nc">Left</span><span class="o">(</span><span class="s">"error!!!"</span><span class="o">))</span>
-</code></pre></div></div>
+</span><span class="keyword">val</span><span> </span><span class="identifier">eitherWriterT1</span><span> : </span><span class="type-name">WriterT</span><span>[</span><span class="type-name">Either</span><span>[</span><span class="type-name">String</span><span>, *], </span><span class="type-name">String</span><span>, </span><span class="type-name">Int</span><span>] = </span><span class="type-name">WriterT</span><span>(</span><span class="type-name">Right</span><span>((</span><span class="string-literal">&quot;writerT value 1&quot;</span><span>, </span><span class="number-literal">123</span><span>)))
+</span><span class="keyword">val</span><span> </span><span class="identifier">eitherWriterT2</span><span> : </span><span class="type-name">WriterT</span><span>[</span><span class="type-name">Either</span><span>[</span><span class="type-name">String</span><span>, *], </span><span class="type-name">String</span><span>, </span><span class="type-name">Int</span><span>] = </span><span class="type-name">WriterT</span><span>(</span><span class="type-name">Right</span><span>((</span><span class="string-literal">&quot;writerT value 1&quot;</span><span>, </span><span class="number-literal">123</span><span>)))
+</span><span class="keyword">val</span><span> </span><span class="identifier">eitherWriterT3</span><span> : </span><span class="type-name">WriterT</span><span>[</span><span class="type-name">Either</span><span>[</span><span class="type-name">String</span><span>, *], </span><span class="type-name">String</span><span>, </span><span class="type-name">Int</span><span>] = </span><span class="type-name">WriterT</span><span>.</span><span class="identifier">valueT</span><span>(</span><span class="type-name">Left</span><span>(</span><span class="string-literal">&quot;error!!!&quot;</span><span>))</span></code></pre>
+        <pre><code class="nohighlight"><span class="comment">// This returns a Some since both are Some
+</span><span class="keyword">for</span><span> {
+    </span><span class="identifier">v1</span><span> &lt;- </span><span class="identifier">optionWriterT1</span><span>
+    </span><span class="identifier">v2</span><span> &lt;- </span><span class="identifier">optionWriterT2</span><span>
+} </span><span class="keyword">yield</span><span> </span><span class="identifier">v1</span><span> + </span><span class="identifier">v2</span><span>
+</span><span class="comment">// res1: WriterT[Option, String, Int] = WriterT(
+//   Some((&quot;writerT value 1writerT value 1&quot;, 246))
+// )
+</span><span>
+</span><span class="comment">// This returns a None since one is a None
+</span><span class="keyword">for</span><span> {
+    </span><span class="identifier">v1</span><span> &lt;- </span><span class="identifier">optionWriterT1</span><span>
+    </span><span class="identifier">v2</span><span> &lt;- </span><span class="identifier">optionWriterT2</span><span>
+    </span><span class="identifier">v3</span><span> &lt;- </span><span class="identifier">optionWriterT3</span><span>
+} </span><span class="keyword">yield</span><span> </span><span class="identifier">v1</span><span> + </span><span class="identifier">v2</span><span> + </span><span class="identifier">v3</span><span>
+</span><span class="comment">// res2: WriterT[Option, String, Int] = WriterT(None)
+</span><span>
+</span><span class="comment">// This returns a Right since both are Right
+</span><span class="keyword">for</span><span> {
+    </span><span class="identifier">v1</span><span> &lt;- </span><span class="identifier">eitherWriterT1</span><span>
+    </span><span class="identifier">v2</span><span> &lt;- </span><span class="identifier">eitherWriterT2</span><span>
+} </span><span class="keyword">yield</span><span> </span><span class="identifier">v1</span><span> + </span><span class="identifier">v2</span><span>
+</span><span class="comment">// res3: WriterT[Either[String, β$0$], String, Int] = WriterT(
+//   Right((&quot;writerT value 1writerT value 1&quot;, 246))
+// )
+</span><span>
+</span><span class="comment">// This returns a Left since one is a Left
+</span><span class="keyword">for</span><span> {
+    </span><span class="identifier">v1</span><span> &lt;- </span><span class="identifier">eitherWriterT1</span><span>
+    </span><span class="identifier">v2</span><span> &lt;- </span><span class="identifier">eitherWriterT2</span><span>
+    </span><span class="identifier">v3</span><span> &lt;- </span><span class="identifier">eitherWriterT3</span><span>
+} </span><span class="keyword">yield</span><span> </span><span class="identifier">v1</span><span> + </span><span class="identifier">v2</span><span> + </span><span class="identifier">v3</span><span>
+</span><span class="comment">// res4: WriterT[Either[String, β$0$], String, Int] = WriterT(
+//   Left(&quot;error!!!&quot;)
+// )</span></code></pre>
+        <p>Just for completeness, we can have a look at the same example, but
+        with
+        <a href="validated.html"><code>Validated</code></a>
+        since it as a slightly different behaviour than
+        <a href="either.html"><code>Either</code></a>. Instead
+        of short-circuiting when the first error is encountered,
+        <a href="validated.html"><code>Validated</code></a>
+        will accumulate all the errors. In the following example, you can see
+        how this behaviour is respected when
+        <a href="validated.html"><code>Validated</code></a> is
+        wrapped as the <code>F</code> type of a <code>WriterT</code>. In addition, notice
+        how <code>flatMap</code> and for comprehension can&#39;t be used in this case, since
+        <a href="validated.html"><code>Validated</code></a>
+        only extends <a href="../typeclasses/applicative.html"><code>Applicative</code></a>, but not <a href="../typeclasses/monad.html"><code>Monad</code></a>.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">data</span><span>.</span><span class="type-name">Validated</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">data</span><span>.</span><span class="type-name">Validated</span><span>.{</span><span class="type-name">Invalid</span><span>, </span><span class="type-name">Valid</span><span>}
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
 
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// This returns a Some since both are Some</span>
-<span class="k">for</span> <span class="o">{</span>
-    <span class="n">v1</span> <span class="k">&lt;-</span> <span class="n">optionWriterT1</span>
-    <span class="n">v2</span> <span class="k">&lt;-</span> <span class="n">optionWriterT2</span>
-<span class="o">}</span> <span class="k">yield</span> <span class="n">v1</span> <span class="o">+</span> <span class="n">v2</span>
-<span class="c1">// res1: WriterT[Option, String, Int] = WriterT(</span>
-<span class="c1">//   Some(("writerT value 1writerT value 1", 246))</span>
-<span class="c1">// )</span>
+</span><span class="keyword">val</span><span> </span><span class="identifier">validatedWriterT1</span><span> : </span><span class="type-name">WriterT</span><span>[</span><span class="type-name">Validated</span><span>[</span><span class="type-name">String</span><span>, *], </span><span class="type-name">String</span><span>, </span><span class="type-name">Int</span><span>] = </span><span class="type-name">WriterT</span><span>(</span><span class="type-name">Valid</span><span>((</span><span class="string-literal">&quot;writerT value 1&quot;</span><span>, </span><span class="number-literal">123</span><span>)))
+</span><span class="keyword">val</span><span> </span><span class="identifier">validatedWriterT2</span><span> : </span><span class="type-name">WriterT</span><span>[</span><span class="type-name">Validated</span><span>[</span><span class="type-name">String</span><span>, *], </span><span class="type-name">String</span><span>, </span><span class="type-name">Int</span><span>] = </span><span class="type-name">WriterT</span><span>(</span><span class="type-name">Valid</span><span>((</span><span class="string-literal">&quot;writerT value 1&quot;</span><span>, </span><span class="number-literal">123</span><span>)))
+</span><span class="keyword">val</span><span> </span><span class="identifier">validatedWriterT3</span><span> : </span><span class="type-name">WriterT</span><span>[</span><span class="type-name">Validated</span><span>[</span><span class="type-name">String</span><span>, *], </span><span class="type-name">String</span><span>, </span><span class="type-name">Int</span><span>] =
+</span><span class="type-name">WriterT</span><span>(</span><span class="type-name">Invalid</span><span>(</span><span class="string-literal">&quot;error 1!!!&quot;</span><span>) : </span><span class="type-name">Validated</span><span>[</span><span class="type-name">String</span><span>, (</span><span class="type-name">String</span><span>, </span><span class="type-name">Int</span><span>)])
+</span><span class="keyword">val</span><span> </span><span class="identifier">validatedWriterT4</span><span> : </span><span class="type-name">WriterT</span><span>[</span><span class="type-name">Validated</span><span>[</span><span class="type-name">String</span><span>, *], </span><span class="type-name">String</span><span>, </span><span class="type-name">Int</span><span>] = </span><span class="type-name">WriterT</span><span>(</span><span class="type-name">Invalid</span><span>(</span><span class="string-literal">&quot;error 2!!!&quot;</span><span>): </span><span class="type-name">Validated</span><span>[</span><span class="type-name">String</span><span>, (</span><span class="type-name">String</span><span>, </span><span class="type-name">Int</span><span>)])</span></code></pre>
+        <pre><code class="nohighlight"><span class="comment">// This returns a Right since both are Right
+</span><span>(</span><span class="identifier">validatedWriterT1</span><span>,
+</span><span class="identifier">validatedWriterT2</span><span>
+).</span><span class="identifier">mapN</span><span>((</span><span class="identifier">v1</span><span>, </span><span class="identifier">v2</span><span>) =&gt; </span><span class="identifier">v1</span><span> + </span><span class="identifier">v2</span><span>)
+</span><span class="comment">// res5: WriterT[Validated[String, β$4$], String, Int] = WriterT(
+//   Valid((&quot;writerT value 1writerT value 1&quot;, 246))
+// )
+</span><span>
+</span><span class="comment">// This returns a Left since there are several Left
+</span><span>(</span><span class="identifier">validatedWriterT1</span><span>,
+ </span><span class="identifier">validatedWriterT2</span><span>,
+ </span><span class="identifier">validatedWriterT3</span><span>,
+ </span><span class="identifier">validatedWriterT4</span><span>
+).</span><span class="identifier">mapN</span><span>((</span><span class="identifier">v1</span><span>, </span><span class="identifier">v2</span><span>, </span><span class="identifier">v3</span><span>, </span><span class="identifier">v4</span><span>) =&gt; </span><span class="identifier">v1</span><span> + </span><span class="identifier">v2</span><span> + </span><span class="identifier">v3</span><span> + </span><span class="identifier">v4</span><span>)
+</span><span class="comment">// res6: WriterT[Validated[String, β$6$], String, Int] = WriterT(
+//   Invalid(&quot;error 1!!!error 2!!!&quot;)
+// )</span></code></pre>
+        
+        <h2 id="construct-a-writert" class="section">Construct a WriterT<a class="anchor-link right" href="#construct-a-writert"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>A <code>WriterT</code> can be constructed in different ways. Here is the
+        list of the main available constructors with a brief explanation and
+        an example.</p>
+        <p><code>WriterT[F[_], L, V](run: F[(L, V)])</code>
+        :  This is the constructor of the datatype itself. It just builds the
+        type starting from the full wrapped value.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="comment">// Here we use Option as our F[_]
+</span><span>  </span><span class="keyword">val</span><span> </span><span class="identifier">value</span><span> : </span><span class="type-name">Option</span><span>[(</span><span class="type-name">String</span><span>, </span><span class="type-name">Int</span><span>)] = </span><span class="type-name">Some</span><span>((</span><span class="string-literal">&quot;value&quot;</span><span>, </span><span class="number-literal">123</span><span>))
+</span><span class="comment">// value: Option[(String, Int)] = Some((&quot;value&quot;, 123))
+</span><span>  </span><span class="type-name">WriterT</span><span>(</span><span class="identifier">value</span><span>)
+</span><span class="comment">// res7: WriterT[Option, String, Int] = WriterT(Some((&quot;value&quot;, 123)))</span></code></pre>
+        <p><code>liftF[F[_], L, V](fv: F[V])(implicit monoidL: Monoid[L], F: Applicative[F]): WriterT[F, L, V]</code>
+        :  This function allows you to build the datatype starting from the
+        value <code>V</code> wrapped into an <code>F</code>. Notice how it requires:
+        * <a href="../typeclasses/monoid.html"><code>Monoid[L]</code></a>, since it uses the <code>empty</code> value from the typeclass.
+        to fill the <code>L</code> value not specified in the input.
+        * <a href="../typeclasses/applicative.html"><code>Applicative[F]</code></a> to modify the inner value.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">instances</span><span>.</span><span class="identifier">option</span><span>.</span><span class="identifier">_</span><span>
 
-<span class="c1">// This returns a None since one is a None</span>
-<span class="k">for</span> <span class="o">{</span>
-    <span class="n">v1</span> <span class="k">&lt;-</span> <span class="n">optionWriterT1</span>
-    <span class="n">v2</span> <span class="k">&lt;-</span> <span class="n">optionWriterT2</span>
-    <span class="n">v3</span> <span class="k">&lt;-</span> <span class="n">optionWriterT3</span>
-<span class="o">}</span> <span class="k">yield</span> <span class="n">v1</span> <span class="o">+</span> <span class="n">v2</span> <span class="o">+</span> <span class="n">v3</span>
-<span class="c1">// res2: WriterT[Option, String, Int] = WriterT(None)</span>
+  </span><span class="keyword">val</span><span> </span><span class="identifier">value</span><span> : </span><span class="type-name">Option</span><span>[</span><span class="type-name">Int</span><span>] = </span><span class="type-name">Some</span><span>(</span><span class="number-literal">123</span><span>)
+</span><span class="comment">// value: Option[Int] = Some(123)
+</span><span>
+  </span><span class="type-name">WriterT</span><span>.</span><span class="identifier">liftF</span><span>[</span><span class="type-name">Option</span><span>, </span><span class="type-name">String</span><span>, </span><span class="type-name">Int</span><span>](</span><span class="identifier">value</span><span>)
+</span><span class="comment">// res8: WriterT[Option, String, Int] = WriterT(Some((&quot;&quot;, 123)))</span></code></pre>
+        <p><code>put[F[_], L, V](v: V)(l: L)(implicit applicativeF: Applicative[F]): WriterT[F, L, V]</code>
+        :  As soon as there is an <a href="../typeclasses/applicative.html"><code>Applicative</code></a> instance of <code>F</code>, this function
+        creates the datatype starting from the inner <a href="writer.html"><code>Writer</code></a>&#39;s values.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="type-name">WriterT</span><span>.</span><span class="identifier">put</span><span>[</span><span class="type-name">Option</span><span>, </span><span class="type-name">String</span><span>, </span><span class="type-name">Int</span><span>](</span><span class="number-literal">123</span><span>)(</span><span class="string-literal">&quot;initial value&quot;</span><span>)
+</span><span class="comment">// res9: WriterT[Option, String, Int] = WriterT(Some((&quot;initial value&quot;, 123)))</span></code></pre>
+        <p><code>putT[F[_], L, V](vf: F[V])(l: L)(implicit functorF: Functor[F]): WriterT[F, L, V]</code>
+        :  Exactly as <code>put</code>, but the value <code>V</code> is already wrapped into <code>F</code></p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="type-name">WriterT</span><span>.</span><span class="identifier">putT</span><span>[</span><span class="type-name">Option</span><span>, </span><span class="type-name">String</span><span>, </span><span class="type-name">Int</span><span>](</span><span class="type-name">Some</span><span>(</span><span class="number-literal">123</span><span>))(</span><span class="string-literal">&quot;initial value&quot;</span><span>)
+</span><span class="comment">// res10: WriterT[Option, String, Int] = WriterT(Some((&quot;initial value&quot;, 123)))</span></code></pre>
+        
+        <h2 id="operations" class="section">Operations<a class="anchor-link right" href="#operations"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>In the <a href="writer.html#definition">Writer
+        definition</a>
+        section, we showed how it is actually a <code>WriterT</code>. Therefore, all the
+        operations described into <a href="writer.html#operations">Writer
+        operations</a>
+        are valid for <code>WriterT</code> as well.</p>
+        <p>The only aspect we want to remark here is the following sentence from
+        <a href="writer.html"><code>Writer</code></a>&#39;s page:</p>
+        <blockquote>Most of the <code>WriterT</code> functions require a <code>Functor[F]</code> or
+        <code>Monad[F]</code> instance. However, Cats provides all the necessary
+        instances for the <code>Id</code> type, therefore we don&#39;t have to worry about
+        them.</blockquote>
+        <p>In the case of <code>WriterT</code>, the user needs to ensure the required
+        instances are present. Cats still provide a lot of default instances,
+        so there&#39;s a high chance you could find what you are searching for
+        with the right <code>import</code>.</p>
+        
+        <h2 id="example" class="section">Example<a class="anchor-link right" href="#example"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>As an example, we can consider a simple naive console application that
+        pings multiple HTTP well-known services and collect the time
+        spent in each call, returning the total time of the whole execution at
+        the end. We will simulate the calls by successful <code>Future</code> values.</p>
+        <p>Using <code>WriterT</code> we can log each step of our application,
+        compute, the time and work within the <code>Future</code> effect.</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">data</span><span>.</span><span class="type-name">WriterT</span><span>
 
-<span class="c1">// This returns a Right since both are Right</span>
-<span class="k">for</span> <span class="o">{</span>
-    <span class="n">v1</span> <span class="k">&lt;-</span> <span class="n">eitherWriterT1</span>
-    <span class="n">v2</span> <span class="k">&lt;-</span> <span class="n">eitherWriterT2</span>
-<span class="o">}</span> <span class="k">yield</span> <span class="n">v1</span> <span class="o">+</span> <span class="n">v2</span>
-<span class="c1">// res3: WriterT[Either[String, β$0$], String, Int] = WriterT(</span>
-<span class="c1">//   Right(("writerT value 1writerT value 1", 246))</span>
-<span class="c1">// )</span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">scala</span><span>.</span><span class="identifier">concurrent</span><span>.{</span><span class="type-name">Await</span><span>, </span><span class="type-name">Future</span><span>}
+</span><span class="keyword">import</span><span> </span><span class="identifier">scala</span><span>.</span><span class="identifier">concurrent</span><span>.</span><span class="identifier">duration</span><span>.</span><span class="type-name">Duration</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">scala</span><span>.</span><span class="identifier">concurrent</span><span>.</span><span class="type-name">ExecutionContext</span><span>.</span><span class="type-name">Implicits</span><span>.</span><span class="identifier">global</span><span>
 
-<span class="c1">// This returns a Left since one is a Left</span>
-<span class="k">for</span> <span class="o">{</span>
-    <span class="n">v1</span> <span class="k">&lt;-</span> <span class="n">eitherWriterT1</span>
-    <span class="n">v2</span> <span class="k">&lt;-</span> <span class="n">eitherWriterT2</span>
-    <span class="n">v3</span> <span class="k">&lt;-</span> <span class="n">eitherWriterT3</span>
-<span class="o">}</span> <span class="k">yield</span> <span class="n">v1</span> <span class="o">+</span> <span class="n">v2</span> <span class="o">+</span> <span class="n">v3</span>
-<span class="c1">// res4: WriterT[Either[String, β$0$], String, Int] = WriterT(</span>
-<span class="c1">//   Left("error!!!")</span>
-<span class="c1">// )</span>
-</code></pre></div></div>
+</span><span class="comment">// Mocked HTTP calls
+</span><span class="keyword">def</span><span> </span><span class="declaration-name">pingService1</span><span>() : </span><span class="type-name">Future</span><span>[</span><span class="type-name">Int</span><span>] = </span><span class="type-name">Future</span><span>.</span><span class="identifier">successful</span><span>(</span><span class="number-literal">100</span><span>)
+</span><span class="keyword">def</span><span> </span><span class="declaration-name">pingService2</span><span>() : </span><span class="type-name">Future</span><span>[</span><span class="type-name">Int</span><span>] = </span><span class="type-name">Future</span><span>.</span><span class="identifier">successful</span><span>(</span><span class="number-literal">200</span><span>)
+</span><span class="keyword">def</span><span> </span><span class="declaration-name">pingService3</span><span>() : </span><span class="type-name">Future</span><span>[</span><span class="type-name">Int</span><span>] = </span><span class="type-name">Future</span><span>.</span><span class="identifier">successful</span><span>(</span><span class="number-literal">50</span><span>)
+</span><span class="keyword">def</span><span> </span><span class="declaration-name">pingService4</span><span>() : </span><span class="type-name">Future</span><span>[</span><span class="type-name">Int</span><span>] = </span><span class="type-name">Future</span><span>.</span><span class="identifier">successful</span><span>(</span><span class="number-literal">75</span><span>)
 
-<p>Just for completeness, we can have a look at the same example, but
-with
-<a href="https://typelevel.org/cats/datatypes/validated.html"><code class="language-plaintext highlighter-rouge">Validated</code></a>
-since it as a slightly different behaviour than
-<a href="https://typelevel.org/cats/datatypes/either.html"><code class="language-plaintext highlighter-rouge">Either</code></a>. Instead
-of short-circuiting when the first error is encountered,
-<a href="https://typelevel.org/cats/datatypes/validated.html"><code class="language-plaintext highlighter-rouge">Validated</code></a>
-will accumulate all the errors. In the following example, you can see
-how this behaviour is respected when
-<a href="https://typelevel.org/cats/datatypes/validated.html"><code class="language-plaintext highlighter-rouge">Validated</code></a> is
-wrapped as the <code class="language-plaintext highlighter-rouge">F</code> type of a <code class="language-plaintext highlighter-rouge">WriterT</code>. In addition, notice
-how <code class="language-plaintext highlighter-rouge">flatMap</code> and for comprehension can’t be used in this case, since
-<a href="https://typelevel.org/cats/datatypes/validated.html"><code class="language-plaintext highlighter-rouge">Validated</code></a>
-only extends <a href="https://typelevel.org/cats/typeclasses/applicative.html"><code class="language-plaintext highlighter-rouge">Applicative</code></a>, but not <a href="https://typelevel.org/cats/typeclasses/monad.html"><code class="language-plaintext highlighter-rouge">Monad</code></a>.</p>
+</span><span class="keyword">def</span><span> </span><span class="declaration-name">pingToWriterT</span><span>(</span><span class="identifier">ping</span><span>: </span><span class="type-name">Future</span><span>[</span><span class="type-name">Int</span><span>], </span><span class="identifier">serviceName</span><span>: </span><span class="type-name">String</span><span>) : </span><span class="type-name">WriterT</span><span>[</span><span class="type-name">Future</span><span>, </span><span class="type-name">String</span><span>, </span><span class="type-name">Int</span><span>] =
+    </span><span class="type-name">WriterT</span><span>.</span><span class="identifier">valueT</span><span>[</span><span class="type-name">Future</span><span>, </span><span class="type-name">String</span><span>, </span><span class="type-name">Int</span><span>](</span><span class="identifier">ping</span><span>)
+        .</span><span class="identifier">tell</span><span>(</span><span class="string-literal">s&quot;ping to </span><span class="substitution">$serviceName</span><span class="string-literal"> &quot;</span><span>)
+        .</span><span class="identifier">flatMap</span><span>(</span><span class="identifier">pingTime</span><span> =&gt; </span><span class="type-name">WriterT</span><span>.</span><span class="identifier">put</span><span>(</span><span class="identifier">pingTime</span><span>)(</span><span class="string-literal">s&quot;took </span><span class="substitution">$pingTime</span><span class="string-literal"> </span><span class="escape-sequence">\n</span><span class="string-literal">&quot;</span><span>))
 
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.Validated</span>
-<span class="k">import</span> <span class="nn">cats.data.Validated.</span><span class="o">{</span><span class="nc">Invalid</span><span class="o">,</span> <span class="nc">Valid</span><span class="o">}</span>
-<span class="k">import</span> <span class="nn">cats.implicits._</span>
+</span><span class="keyword">val</span><span> </span><span class="identifier">resultWriterT</span><span>: </span><span class="type-name">WriterT</span><span>[</span><span class="type-name">Future</span><span>, </span><span class="type-name">String</span><span>, </span><span class="type-name">Int</span><span>] = </span><span class="keyword">for</span><span> {
+    </span><span class="identifier">ping1</span><span> &lt;- </span><span class="identifier">pingToWriterT</span><span>(</span><span class="identifier">pingService1</span><span>(), </span><span class="string-literal">&quot;service #1&quot;</span><span>)
+    </span><span class="identifier">ping2</span><span> &lt;- </span><span class="identifier">pingToWriterT</span><span>(</span><span class="identifier">pingService2</span><span>(), </span><span class="string-literal">&quot;service #2&quot;</span><span>)
+    </span><span class="identifier">ping3</span><span> &lt;- </span><span class="identifier">pingToWriterT</span><span>(</span><span class="identifier">pingService3</span><span>(), </span><span class="string-literal">&quot;service #3&quot;</span><span>)
+    </span><span class="identifier">ping4</span><span> &lt;- </span><span class="identifier">pingToWriterT</span><span>(</span><span class="identifier">pingService4</span><span>(), </span><span class="string-literal">&quot;service #4&quot;</span><span>)
+  } </span><span class="keyword">yield</span><span> </span><span class="identifier">ping1</span><span> + </span><span class="identifier">ping2</span><span> + </span><span class="identifier">ping3</span><span> + </span><span class="identifier">ping4</span><span>
 
-<span class="k">val</span> <span class="nv">validatedWriterT1</span> <span class="k">:</span> <span class="kt">WriterT</span><span class="o">[</span><span class="kt">Validated</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">*</span><span class="o">]</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">WriterT</span><span class="o">(</span><span class="nc">Valid</span><span class="o">((</span><span class="s">"writerT value 1"</span><span class="o">,</span> <span class="mi">123</span><span class="o">)))</span>
-<span class="k">val</span> <span class="nv">validatedWriterT2</span> <span class="k">:</span> <span class="kt">WriterT</span><span class="o">[</span><span class="kt">Validated</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">*</span><span class="o">]</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">WriterT</span><span class="o">(</span><span class="nc">Valid</span><span class="o">((</span><span class="s">"writerT value 1"</span><span class="o">,</span> <span class="mi">123</span><span class="o">)))</span>
-<span class="k">val</span> <span class="nv">validatedWriterT3</span> <span class="k">:</span> <span class="kt">WriterT</span><span class="o">[</span><span class="kt">Validated</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">*</span><span class="o">]</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span>
-<span class="nc">WriterT</span><span class="o">(</span><span class="nc">Invalid</span><span class="o">(</span><span class="s">"error 1!!!"</span><span class="o">)</span> <span class="k">:</span> <span class="kt">Validated</span><span class="o">[</span><span class="kt">String</span>, <span class="o">(</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">)])</span>
-<span class="k">val</span> <span class="nv">validatedWriterT4</span> <span class="k">:</span> <span class="kt">WriterT</span><span class="o">[</span><span class="kt">Validated</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">*</span><span class="o">]</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">WriterT</span><span class="o">(</span><span class="nc">Invalid</span><span class="o">(</span><span class="s">"error 2!!!"</span><span class="o">)</span><span class="k">:</span> <span class="kt">Validated</span><span class="o">[</span><span class="kt">String</span>, <span class="o">(</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">)])</span>
-</code></pre></div></div>
+</span><span class="keyword">val</span><span> </span><span class="identifier">resultFuture</span><span>: </span><span class="type-name">Future</span><span>[</span><span class="type-name">String</span><span>] = </span><span class="identifier">resultWriterT</span><span>.</span><span class="identifier">run</span><span>.</span><span class="identifier">map</span><span> {
+    </span><span class="keyword">case</span><span> (</span><span class="identifier">log</span><span>: </span><span class="type-name">String</span><span>, </span><span class="identifier">totalTime</span><span>: </span><span class="type-name">Int</span><span>) =&gt; </span><span class="string-literal">s&quot;</span><span class="substitution">$log</span><span class="string-literal">&gt; Total time: </span><span class="substitution">$totalTime</span><span class="string-literal">&quot;</span><span>
+}</span></code></pre>
+        <p>And the final result as expected:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="type-name">Await</span><span>.</span><span class="identifier">result</span><span>(</span><span class="identifier">resultFuture</span><span>, </span><span class="type-name">Duration</span><span>.</span><span class="type-name">Inf</span><span>)
+</span><span class="comment">// res11: String = &quot;&quot;&quot;ping to service #1 took 100 
+// ping to service #2 took 200 
+// ping to service #3 took 50 
+// ping to service #4 took 75 
+// &gt; Total time: 425&quot;&quot;&quot;</span></code></pre>
 
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// This returns a Right since both are Right</span>
-<span class="o">(</span><span class="n">validatedWriterT1</span><span class="o">,</span>
-<span class="n">validatedWriterT2</span>
-<span class="o">).</span><span class="py">mapN</span><span class="o">((</span><span class="n">v1</span><span class="o">,</span> <span class="n">v2</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">v1</span> <span class="o">+</span> <span class="n">v2</span><span class="o">)</span>
-<span class="c1">// res5: WriterT[Validated[String, β$4$], String, Int] = WriterT(</span>
-<span class="c1">//   Valid(("writerT value 1writerT value 1", 246))</span>
-<span class="c1">// )</span>
+        <hr style="margin-top: 30px"/>
+        <footer style="font-size: 90%; text-align: center">
+          cats is a <a href="https://typelevel.org/">Typelevel</a> project distributed under the <a href="https://opensource.org/licenses/MIT">MIT</a> license.
+        </footer>
 
-<span class="c1">// This returns a Left since there are several Left</span>
-<span class="o">(</span><span class="n">validatedWriterT1</span><span class="o">,</span>
- <span class="n">validatedWriterT2</span><span class="o">,</span>
- <span class="n">validatedWriterT3</span><span class="o">,</span>
- <span class="n">validatedWriterT4</span>
-<span class="o">).</span><span class="py">mapN</span><span class="o">((</span><span class="n">v1</span><span class="o">,</span> <span class="n">v2</span><span class="o">,</span> <span class="n">v3</span><span class="o">,</span> <span class="n">v4</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">v1</span> <span class="o">+</span> <span class="n">v2</span> <span class="o">+</span> <span class="n">v3</span> <span class="o">+</span> <span class="n">v4</span><span class="o">)</span>
-<span class="c1">// res6: WriterT[Validated[String, β$6$], String, Int] = WriterT(</span>
-<span class="c1">//   Invalid("error 1!!!error 2!!!")</span>
-<span class="c1">// )</span>
-</code></pre></div></div>
+      </main>
 
-<h2 id="construct-a-writert">Construct a WriterT</h2>
+    </div>
 
-<p>A <code class="language-plaintext highlighter-rouge">WriterT</code> can be constructed in different ways. Here is the
-list of the main available constructors with a brief explanation and
-an example.</p>
-
-<dl>
-  <dt><code class="language-plaintext highlighter-rouge">WriterT[F[_], L, V](run: F[(L, V)])</code></dt>
-  <dd>This is the constructor of the datatype itself. It just builds the
-type starting from the full wrapped value.</dd>
-</dl>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Here we use Option as our F[_]</span>
-  <span class="k">val</span> <span class="nv">value</span> <span class="k">:</span> <span class="kt">Option</span><span class="o">[(</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">)]</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">((</span><span class="s">"value"</span><span class="o">,</span> <span class="mi">123</span><span class="o">))</span>
-<span class="c1">// value: Option[(String, Int)] = Some(("value", 123))</span>
-  <span class="nc">WriterT</span><span class="o">(</span><span class="n">value</span><span class="o">)</span>
-<span class="c1">// res7: WriterT[Option, String, Int] = WriterT(Some(("value", 123)))</span>
-</code></pre></div></div>
-
-<dl>
-  <dt><code class="language-plaintext highlighter-rouge">liftF[F[_], L, V](fv: F[V])(implicit monoidL: Monoid[L], F: Applicative[F]): WriterT[F, L, V]</code></dt>
-  <dd>This function allows you to build the datatype starting from the
-value <code class="language-plaintext highlighter-rouge">V</code> wrapped into an <code class="language-plaintext highlighter-rouge">F</code>. Notice how it requires:
-    <ul>
-      <li><a href="https://typelevel.org/cats/typeclasses/monoid.html"><code class="language-plaintext highlighter-rouge">Monoid[L]</code></a>, since it uses the <code class="language-plaintext highlighter-rouge">empty</code> value from the typeclass.
-to fill the <code class="language-plaintext highlighter-rouge">L</code> value not specified in the input.</li>
-      <li><a href="https://typelevel.org/cats/typeclasses/applicative.html"><code class="language-plaintext highlighter-rouge">Applicative[F]</code></a> to modify the inner value.</li>
-    </ul>
-  </dd>
-</dl>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.instances.option._</span>
-
-  <span class="k">val</span> <span class="nv">value</span> <span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="mi">123</span><span class="o">)</span>
-<span class="c1">// value: Option[Int] = Some(123)</span>
-
-  <span class="nv">WriterT</span><span class="o">.</span><span class="py">liftF</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">](</span><span class="n">value</span><span class="o">)</span>
-<span class="c1">// res8: WriterT[Option, String, Int] = WriterT(Some(("", 123)))</span>
-</code></pre></div></div>
-
-<dl>
-  <dt><code class="language-plaintext highlighter-rouge">put[F[_], L, V](v: V)(l: L)(implicit applicativeF: Applicative[F]): WriterT[F, L, V]</code></dt>
-  <dd>As soon as there is an <a href="https://typelevel.org/cats/typeclasses/applicative.html"><code class="language-plaintext highlighter-rouge">Applicative</code></a> instance of <code class="language-plaintext highlighter-rouge">F</code>, this function
-creates the datatype starting from the inner <a href="https://typelevel.org/cats/datatypes/writer.html"><code class="language-plaintext highlighter-rouge">Writer</code></a>’s values.</dd>
-</dl>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">WriterT</span><span class="o">.</span><span class="py">put</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">](</span><span class="mi">123</span><span class="o">)(</span><span class="s">"initial value"</span><span class="o">)</span>
-<span class="c1">// res9: WriterT[Option, String, Int] = WriterT(Some(("initial value", 123)))</span>
-</code></pre></div></div>
-
-<dl>
-  <dt><code class="language-plaintext highlighter-rouge">putT[F[_], L, V](vf: F[V])(l: L)(implicit functorF: Functor[F]): WriterT[F, L, V]</code></dt>
-  <dd>Exactly as <code class="language-plaintext highlighter-rouge">put</code>, but the value <code class="language-plaintext highlighter-rouge">V</code> is already wrapped into <code class="language-plaintext highlighter-rouge">F</code></dd>
-</dl>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">WriterT</span><span class="o">.</span><span class="py">putT</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">](</span><span class="nc">Some</span><span class="o">(</span><span class="mi">123</span><span class="o">))(</span><span class="s">"initial value"</span><span class="o">)</span>
-<span class="c1">// res10: WriterT[Option, String, Int] = WriterT(Some(("initial value", 123)))</span>
-</code></pre></div></div>
-
-<h2 id="operations">Operations</h2>
-
-<p>In the <a href="https://typelevel.org/cats/datatypes/writer.html#definition">Writer
-definition</a>
-section, we showed how it is actually a <code class="language-plaintext highlighter-rouge">WriterT</code>. Therefore, all the
-operations described into <a href="https://typelevel.org/cats/datatypes/writer.html#operations">Writer
-operations</a>
-are valid for <code class="language-plaintext highlighter-rouge">WriterT</code> as well.</p>
-
-<p>The only aspect we want to remark here is the following sentence from
-<a href="https://typelevel.org/cats/datatypes/writer.html"><code class="language-plaintext highlighter-rouge">Writer</code></a>’s page:</p>
-
-<blockquote>
-  <p>Most of the <code class="language-plaintext highlighter-rouge">WriterT</code> functions require a <code class="language-plaintext highlighter-rouge">Functor[F]</code> or
-<code class="language-plaintext highlighter-rouge">Monad[F]</code> instance. However, Cats provides all the necessary
-instances for the <code class="language-plaintext highlighter-rouge">Id</code> type, therefore we don’t have to worry about
-them.</p>
-</blockquote>
-
-<p>In the case of <code class="language-plaintext highlighter-rouge">WriterT</code>, the user needs to ensure the required
-instances are present. Cats still provide a lot of default instances,
-so there’s a high chance you could find what you are searching for
-with the right <code class="language-plaintext highlighter-rouge">import</code>.</p>
-
-<h2 id="example">Example</h2>
-
-<p>As an example, we can consider a simple naive console application that
-pings multiple HTTP well-known services and collect the time
-spent in each call, returning the total time of the whole execution at
-the end. We will simulate the calls by successful <code class="language-plaintext highlighter-rouge">Future</code> values.</p>
-
-<p>Using <code class="language-plaintext highlighter-rouge">WriterT</code> we can log each step of our application,
-compute, the time and work within the <code class="language-plaintext highlighter-rouge">Future</code> effect.</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.WriterT</span>
-
-<span class="k">import</span> <span class="nn">scala.concurrent.</span><span class="o">{</span><span class="nc">Await</span><span class="o">,</span> <span class="nc">Future</span><span class="o">}</span>
-<span class="k">import</span> <span class="nn">scala.concurrent.duration.Duration</span>
-<span class="k">import</span> <span class="nn">scala.concurrent.ExecutionContext.Implicits.global</span>
-
-<span class="c1">// Mocked HTTP calls</span>
-<span class="k">def</span> <span class="nf">pingService1</span><span class="o">()</span> <span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nv">Future</span><span class="o">.</span><span class="py">successful</span><span class="o">(</span><span class="mi">100</span><span class="o">)</span>
-<span class="k">def</span> <span class="nf">pingService2</span><span class="o">()</span> <span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nv">Future</span><span class="o">.</span><span class="py">successful</span><span class="o">(</span><span class="mi">200</span><span class="o">)</span>
-<span class="k">def</span> <span class="nf">pingService3</span><span class="o">()</span> <span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nv">Future</span><span class="o">.</span><span class="py">successful</span><span class="o">(</span><span class="mi">50</span><span class="o">)</span>
-<span class="k">def</span> <span class="nf">pingService4</span><span class="o">()</span> <span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nv">Future</span><span class="o">.</span><span class="py">successful</span><span class="o">(</span><span class="mi">75</span><span class="o">)</span>
-
-<span class="k">def</span> <span class="nf">pingToWriterT</span><span class="o">(</span><span class="n">ping</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Int</span><span class="o">],</span> <span class="n">serviceName</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">:</span> <span class="kt">WriterT</span><span class="o">[</span><span class="kt">Future</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span>
-    <span class="nv">WriterT</span><span class="o">.</span><span class="py">valueT</span><span class="o">[</span><span class="kt">Future</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">](</span><span class="n">ping</span><span class="o">)</span>
-        <span class="o">.</span><span class="py">tell</span><span class="o">(</span><span class="n">s</span><span class="s">"ping to $serviceName "</span><span class="o">)</span>
-        <span class="o">.</span><span class="py">flatMap</span><span class="o">(</span><span class="n">pingTime</span> <span class="k">=&gt;</span> <span class="nv">WriterT</span><span class="o">.</span><span class="py">put</span><span class="o">(</span><span class="n">pingTime</span><span class="o">)(</span><span class="n">s</span><span class="s">"took $pingTime \n"</span><span class="o">))</span>
-
-<span class="k">val</span> <span class="nv">resultWriterT</span><span class="k">:</span> <span class="kt">WriterT</span><span class="o">[</span><span class="kt">Future</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="k">for</span> <span class="o">{</span>
-    <span class="n">ping1</span> <span class="k">&lt;-</span> <span class="nf">pingToWriterT</span><span class="o">(</span><span class="nf">pingService1</span><span class="o">(),</span> <span class="s">"service #1"</span><span class="o">)</span>
-    <span class="n">ping2</span> <span class="k">&lt;-</span> <span class="nf">pingToWriterT</span><span class="o">(</span><span class="nf">pingService2</span><span class="o">(),</span> <span class="s">"service #2"</span><span class="o">)</span>
-    <span class="n">ping3</span> <span class="k">&lt;-</span> <span class="nf">pingToWriterT</span><span class="o">(</span><span class="nf">pingService3</span><span class="o">(),</span> <span class="s">"service #3"</span><span class="o">)</span>
-    <span class="n">ping4</span> <span class="k">&lt;-</span> <span class="nf">pingToWriterT</span><span class="o">(</span><span class="nf">pingService4</span><span class="o">(),</span> <span class="s">"service #4"</span><span class="o">)</span>
-  <span class="o">}</span> <span class="k">yield</span> <span class="n">ping1</span> <span class="o">+</span> <span class="n">ping2</span> <span class="o">+</span> <span class="n">ping3</span> <span class="o">+</span> <span class="n">ping4</span>
-
-<span class="k">val</span> <span class="nv">resultFuture</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nv">resultWriterT</span><span class="o">.</span><span class="py">run</span><span class="o">.</span><span class="py">map</span> <span class="o">{</span>
-    <span class="nf">case</span> <span class="o">(</span><span class="n">log</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">totalTime</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">s</span><span class="s">"$log&gt; Total time: $totalTime"</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<p>And the final result as expected:</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">Await</span><span class="o">.</span><span class="py">result</span><span class="o">(</span><span class="n">resultFuture</span><span class="o">,</span> <span class="nv">Duration</span><span class="o">.</span><span class="py">Inf</span><span class="o">)</span>
-<span class="c1">// res11: String = """ping to service #1 took 100 </span>
-<span class="c1">// ping to service #2 took 200 </span>
-<span class="c1">// ping to service #3 took 50 </span>
-<span class="c1">// ping to service #4 took 75 </span>
-<span class="c1">// &gt; Total time: 425"""</span>
-</code></pre></div></div>
-</section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/cats/highlight/highlight.pack.js"></script><script src="/cats/lunr/lunr.js"></script><script>
-// For all code blocks, copy the language from the containing div
-// to the inner code tag (where hljs expects it to be)
-const langPrefix = 'language-';
-document.querySelectorAll(`div[class^='${langPrefix}']`).forEach(function(div) {
-  div.classList.forEach(function(cssClass) {
-    if (cssClass.startsWith(langPrefix)) {
-      const lang = cssClass.substring(langPrefix.length);
-      div.querySelectorAll('pre code').forEach(function(code) {
-        code.classList.add(lang);
-      });
-    }
-  });
-});
-
-hljs.configure({languages:['scala','java','bash']});
-hljs.initHighlightingOnLoad();
-      </script><script src="/cats/js/sponsors.js"></script><script>console.info('\x57\x65\x62\x73\x69\x74\x65\x20\x62\x75\x69\x6c\x74\x20\x77\x69\x74\x68\x3a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x5f\x5f\x20\x20\x20\x20\x5f\x5f\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x5f\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x5f\x20\x5f\x5f\x0a\x20\x20\x20\x5f\x5f\x5f\x5f\x5f\x2f\x20\x2f\x5f\x20\x20\x2f\x20\x2f\x5f\x20\x20\x20\x20\x20\x20\x5f\x5f\x5f\x5f\x20\x5f\x5f\x5f\x20\x20\x28\x5f\x29\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x20\x20\x5f\x5f\x5f\x5f\x5f\x28\x5f\x29\x20\x2f\x5f\x5f\x5f\x5f\x20\x20\x5f\x5f\x5f\x5f\x5f\x0a\x20\x20\x2f\x20\x5f\x5f\x5f\x2f\x20\x5f\x5f\x20\x5c\x2f\x20\x5f\x5f\x2f\x5f\x5f\x5f\x5f\x5f\x2f\x20\x5f\x5f\x20\x60\x5f\x5f\x20\x5c\x2f\x20\x2f\x20\x5f\x5f\x5f\x2f\x20\x5f\x5f\x5f\x2f\x20\x5f\x5f\x20\x5c\x2f\x20\x5f\x5f\x5f\x2f\x20\x2f\x20\x5f\x5f\x2f\x20\x5f\x20\x5c\x2f\x20\x5f\x5f\x5f\x2f\x0a\x20\x28\x5f\x5f\x20\x20\x29\x20\x2f\x5f\x2f\x20\x2f\x20\x2f\x5f\x2f\x5f\x5f\x5f\x5f\x5f\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x5f\x5f\x2f\x20\x2f\x20\x20\x2f\x20\x2f\x5f\x2f\x20\x28\x5f\x5f\x20\x20\x29\x20\x2f\x20\x2f\x5f\x2f\x20\x20\x5f\x5f\x28\x5f\x5f\x20\x20\x29\x0a\x2f\x5f\x5f\x5f\x5f\x2f\x5f\x2e\x5f\x5f\x5f\x2f\x5c\x5f\x5f\x2f\x20\x20\x20\x20\x20\x2f\x5f\x2f\x20\x2f\x5f\x2f\x20\x2f\x5f\x2f\x5f\x2f\x5c\x5f\x5f\x5f\x2f\x5f\x2f\x20\x20\x20\x5c\x5f\x5f\x5f\x5f\x2f\x5f\x5f\x5f\x5f\x2f\x5f\x2f\x5c\x5f\x5f\x2f\x5c\x5f\x5f\x5f\x2f\x5f\x5f\x5f\x5f\x2f\x0a\x0a\x68\x74\x74\x70\x73\x3a\x2f\x2f\x34\x37\x64\x65\x67\x2e\x67\x69\x74\x68\x75\x62\x2e\x69\x6f\x2f\x73\x62\x74\x2d\x6d\x69\x63\x72\x6f\x73\x69\x74\x65\x73')</script><script>((window.gitter = {}).chat = {}).options = {
-room: 'typelevel/cats'};</script><script src="https://sidecar.gitter.im/dist/sidecar.v1.js"></script><script src="/cats/js/search.js"></script><script src="/cats/js/main.js"></script></body></html>
+  </body>
+</html>

@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="Laika 0.18.1 + Helium Theme" />
-    <title>Invariant</title>
+    <title>Bimonad</title>
     
       <meta name="author" content="Cody Allen"/>
     
@@ -120,14 +120,14 @@
         <li class="level2"><a href="arrow.html">Arrow</a></li>
         <li class="level2"><a href="arrowchoice.html">Arrow Choice</a></li>
         <li class="level2"><a href="bifunctor.html">Bifunctor</a></li>
-        <li class="level2"><a href="bimonad.html">Bimonad</a></li>
+        <li class="level2 active"><a href="#">Bimonad</a></li>
         <li class="level2"><a href="comonad.html">Comonad</a></li>
         <li class="level2"><a href="contravariant.html">Contravariant</a></li>
         <li class="level2"><a href="contravariantmonoidal.html">Contravariant Monoidal</a></li>
         <li class="level2"><a href="eq.html">Eq</a></li>
         <li class="level2"><a href="foldable.html">Foldable</a></li>
         <li class="level2"><a href="functor.html">Functor</a></li>
-        <li class="level2 active"><a href="#">Invariant</a></li>
+        <li class="level2"><a href="invariant.html">Invariant</a></li>
         <li class="level2"><a href="invariantmonoidal.html">Invariant Monoidal</a></li>
         <li class="level2"><a href="lawtesting.html">Law testing</a></li>
         <li class="level2"><a href="monad.html">Monad</a></li>
@@ -180,13 +180,10 @@
     <div id="container">
 
       <nav id="page-nav">
-        <p class="header"><a href="#">Invariant</a></p>
+        <p class="header"><a href="#">Bimonad</a></p>
 
         <ul class="nav-list">
-          <li class="level1"><a href="#invariant-instance-for-semigroup">Invariant instance for Semigroup</a></li>
-          <li class="level2"><a href="#semigroup-does-not-form-a-covariant-functor">Semigroup does not form a covariant functor</a></li>
-          <li class="level2"><a href="#semigroup-does-not-form-a-contravariant-functor">Semigroup does not form a contravariant functor</a></li>
-          <li class="level2"><a href="#semigroup-does-form-an-invariant-functor">Semigroup does form an invariant functor</a></li>
+          <li class="level1"><a href="#nonemptylist-as-a-bimonad">NonEmptyList as a Bimonad</a></li>
         </ul>
 
         <p class="footer"></p>
@@ -194,73 +191,68 @@
 
       <main class="content">
 
-        <h1 id="invariant" class="title">Invariant</h1>
-        <p>The <code>Invariant</code> type class is for functors that define an <code>imap</code>
-        function with the following type:</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">def</span><span> </span><span class="declaration-name">imap</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>](</span><span class="identifier">fa</span><span>: </span><span class="type-name">F</span><span>[</span><span class="type-name">A</span><span>])(</span><span class="identifier">f</span><span>: </span><span class="type-name">A</span><span> =&gt; </span><span class="type-name">B</span><span>)(</span><span class="identifier">g</span><span>: </span><span class="type-name">B</span><span> =&gt; </span><span class="type-name">A</span><span>): </span><span class="type-name">F</span><span>[</span><span class="type-name">B</span><span>]</span></code></pre>
-        <p>Every covariant (as well as <a href="contravariant.html">contravariant</a>) functor gives rise to an invariant
-        functor, by ignoring the <code>g</code> (or in case of contravariance, <code>f</code>) function.</p>
-        <p>Examples for instances of <code>Invariant</code> are <a href="semigroup.html"><code>Semigroup</code></a> and <a href="monoid.html"><code>Monoid</code></a>, in
-        the following we will explain why this is the case using <code>Semigroup</code>, the
-        reasoning for <code>Monoid</code> is analogous.</p>
+        <h1 id="bimonad" class="title">Bimonad</h1>
+        <p>The <code>Bimonad</code> trait directly extends <code>Monad</code> and <code>Comonad</code> without introducing new methods.  <code>Bimonad</code> is
+        different from other <code>Bi</code> typeclasses like <code>Bifunctor</code>, <code>Bifoldable</code> or <code>Bitraverse</code> where the prefix describes
+        a <code>F[_, _]</code>. The <code>Bimonad</code> is a <code>F[_]</code> and the <code>Bi</code> prefix has a different meaning here: it&#39;s both a <code>Monad</code> and a <code>Comonad</code>.<br>
+        Keep in mind <code>Bimonad</code> has its own added laws so something that is both monadic
+        and comonadic may not necessarily be a lawful <code>Bimonad</code>.</p>
+        <p>If you use <code>Bimonad</code> as a convenience type such that:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">def</span><span> </span><span class="declaration-name">f</span><span>[</span><span class="type-name">T</span><span>[</span><span class="identifier">_</span><span>]: </span><span class="type-name">Monad</span><span>: </span><span class="type-name">Comonad</span><span>, </span><span class="type-name">S</span><span>](</span><span class="identifier">fa</span><span>: </span><span class="type-name">T</span><span>[</span><span class="type-name">S</span><span>]): </span><span class="type-name">S</span></code></pre>
+        <p>is re-written to:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">def</span><span> </span><span class="declaration-name">f</span><span>[</span><span class="type-name">T</span><span>[</span><span class="identifier">_</span><span>]: </span><span class="type-name">Bimonad</span><span>, </span><span class="type-name">S</span><span>](</span><span class="identifier">fa</span><span>: </span><span class="type-name">T</span><span>[</span><span class="type-name">S</span><span>]): </span><span class="type-name">S</span></code></pre>
+        <p>then <code>T[_]</code> also needs to respect an extra set of laws.</p>
         
-        <h2 id="invariant-instance-for-semigroup" class="section">Invariant instance for Semigroup<a class="anchor-link right" href="#invariant-instance-for-semigroup"><i class="icofont-laika">&#xef71;</i></a></h2>
-        <p>Pretend that we have a <code>Semigroup[Long]</code> representing a standard UNIX
-        timestamp.  Let&#39;s say that we want to create a <code>Semigroup[Date]</code>, by
-        <em>reusing</em> <code>Semigroup[Long]</code>.</p>
-        
-        <h3 id="semigroup-does-not-form-a-covariant-functor" class="section">Semigroup does not form a covariant functor<a class="anchor-link right" href="#semigroup-does-not-form-a-covariant-functor"><i class="icofont-laika">&#xef71;</i></a></h3>
-        <p>If <code>Semigroup</code> had an instance for the standard covariant <a href="functor.html"><code>Functor</code></a>
-        type class, we could use <code>map</code> to apply a function <code>longToDate</code>:</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">java</span><span>.</span><span class="identifier">util</span><span>.</span><span class="type-name">Date</span><span>
-</span><span class="keyword">def</span><span> </span><span class="declaration-name">longToDate</span><span>: </span><span class="type-name">Long</span><span> =&gt; </span><span class="type-name">Date</span><span> = </span><span class="keyword">new</span><span> </span><span class="type-name">Date</span><span>(</span><span class="identifier">_</span><span>)</span></code></pre>
-        <p>But is this enough to give us a <code>Semigroup[Date]</code>?  The answer is no,
-        unfortunately.  A <code>Semigroup[Date]</code> should be able to combine two
-        values of type <code>Date</code>, given a <code>Semigroup</code> that only knows how to
-        combine <code>Long</code>s!  The <code>longToDate</code> function does not help at all,
-        because it only allows us to convert a <code>Long</code> into a <code>Date</code>.  Seems
-        like we can&#39;t have an <code>Functor</code> instance for <code>Semigroup</code>.</p>
-        
-        <h3 id="semigroup-does-not-form-a-contravariant-functor" class="section">Semigroup does not form a contravariant functor<a class="anchor-link right" href="#semigroup-does-not-form-a-contravariant-functor"><i class="icofont-laika">&#xef71;</i></a></h3>
-        <p>On the other side, if <code>Semigroup</code> would form a <em>contravariant</em> functor
-        by having an instance for <a href="contravariant.html"><code>Contravariant</code></a>, we could make use of
-        <code>contramap</code> to apply a function <code>dateToLong</code>:</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">java</span><span>.</span><span class="identifier">util</span><span>.</span><span class="type-name">Date</span><span>
-</span><span class="keyword">def</span><span> </span><span class="declaration-name">dateToLong</span><span>: </span><span class="type-name">Date</span><span> =&gt; </span><span class="type-name">Long</span><span> = </span><span class="identifier">_</span><span>.</span><span class="identifier">getTime</span></code></pre>
-        <p>Again we are faced with a problem when trying to get a
-        <code>Semigroup[Date]</code> based on a <code>Semigroup[Long]</code>.  As before consider
-        the case where we have two values of <code>Date</code> at hand.  Using
-        <code>dateToLong</code> we can turn them into <code>Long</code>s and use <code>Semigroup[Long]</code>
-        to combine the two values.  We are left with a value of type <code>Long</code>,
-        but we can&#39;t turn it back into a <code>Date</code> using only <code>contramap</code>!</p>
-        
-        <h3 id="semigroup-does-form-an-invariant-functor" class="section">Semigroup does form an invariant functor<a class="anchor-link right" href="#semigroup-does-form-an-invariant-functor"><i class="icofont-laika">&#xef71;</i></a></h3>
-        <p>From the previous discussion we conclude that we need both the <code>map</code>
-        from (covariant) <code>Functor</code> and <code>contramap</code> from <code>Contravariant</code>.
-        There already is a type class for this and it is called <code>Invariant</code>.
-        Instances of the <code>Invariant</code> type class provide the <code>imap</code> function:</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">def</span><span> </span><span class="declaration-name">imap</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>](</span><span class="identifier">fa</span><span>: </span><span class="type-name">F</span><span>[</span><span class="type-name">A</span><span>])(</span><span class="identifier">f</span><span>: </span><span class="type-name">A</span><span> =&gt; </span><span class="type-name">B</span><span>)(</span><span class="identifier">g</span><span>: </span><span class="type-name">B</span><span> =&gt; </span><span class="type-name">A</span><span>): </span><span class="type-name">F</span><span>[</span><span class="type-name">B</span><span>]</span></code></pre>
-        <p>Reusing the example of turning <code>Semigroup[Long]</code> into
-        <code>Semigroup[Date]</code>, we can use the <code>g</code> parameter to turn <code>Date</code> into a
-        <code>Long</code>, combine our two values using <code>Semigroup[Long]</code> and then
-        convert the result back into a <code>Date</code> using the <code>f</code> parameter of
-        <code>imap</code>:</p>
-        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">java</span><span>.</span><span class="identifier">util</span><span>.</span><span class="type-name">Date</span><span>
-
-</span><span class="comment">// import everything for simplicity:
-</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">_</span><span>
+        <h3 id="nonemptylist-as-a-bimonad" class="section">NonEmptyList as a Bimonad<a class="anchor-link right" href="#nonemptylist-as-a-bimonad"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <p><code>NonEmptyList[_]</code> is a lawful <code>Bimonad</code> so you can chain computations (like a <code>Monad</code>) and <code>extract</code> the result at the end (like a <code>Comonad</code>).</p>
+        <p>Here is a possible implementation:</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">data</span><span>.</span><span class="identifier">_</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
 
-</span><span class="keyword">def</span><span> </span><span class="declaration-name">longToDate</span><span>: </span><span class="type-name">Long</span><span> =&gt; </span><span class="type-name">Date</span><span> = </span><span class="keyword">new</span><span> </span><span class="type-name">Date</span><span>(</span><span class="identifier">_</span><span>)
-</span><span class="keyword">def</span><span> </span><span class="declaration-name">dateToLong</span><span>: </span><span class="type-name">Date</span><span> =&gt; </span><span class="type-name">Long</span><span> = </span><span class="identifier">_</span><span>.</span><span class="identifier">getTime</span><span>
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">nelBimonad</span><span> =
+  </span><span class="keyword">new</span><span> </span><span class="type-name">Bimonad</span><span>[</span><span class="type-name">NonEmptyList</span><span>] {
 
-</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">semigroupDate</span><span>: </span><span class="type-name">Semigroup</span><span>[</span><span class="type-name">Date</span><span>] =
-  </span><span class="type-name">Semigroup</span><span>[</span><span class="type-name">Long</span><span>].</span><span class="identifier">imap</span><span>(</span><span class="identifier">longToDate</span><span>)(</span><span class="identifier">dateToLong</span><span>)
+    </span><span class="comment">// in order to have a lawful bimonad `pure` and `extract` need to respect: `nelBimonad.extract(nelBimonad.pure(a)) &lt;-&gt; a`
+</span><span>    </span><span class="keyword">override</span><span> </span><span class="keyword">def</span><span> </span><span class="declaration-name">pure</span><span>[</span><span class="type-name">A</span><span>](</span><span class="identifier">a</span><span>: </span><span class="type-name">A</span><span>): </span><span class="type-name">NonEmptyList</span><span>[</span><span class="type-name">A</span><span>] =
+      </span><span class="type-name">NonEmptyList</span><span>.</span><span class="identifier">one</span><span>(</span><span class="identifier">a</span><span>)
 
-</span><span class="keyword">val</span><span> </span><span class="identifier">today</span><span>: </span><span class="type-name">Date</span><span> = </span><span class="identifier">longToDate</span><span>(</span><span class="number-literal">1449088684104l</span><span>)
-</span><span class="keyword">val</span><span> </span><span class="identifier">timeLeft</span><span>: </span><span class="type-name">Date</span><span> = </span><span class="identifier">longToDate</span><span>(</span><span class="number-literal">1900918893l</span><span>)</span></code></pre>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">today</span><span> |+| </span><span class="identifier">timeLeft</span><span>
-</span><span class="comment">// res1: Date = Thu Dec 24 20:40:02 UTC 2015</span></code></pre>
+    </span><span class="keyword">override</span><span> </span><span class="keyword">def</span><span> </span><span class="declaration-name">extract</span><span>[</span><span class="type-name">A</span><span>](</span><span class="identifier">fa</span><span>: </span><span class="type-name">NonEmptyList</span><span>[</span><span class="type-name">A</span><span>]): </span><span class="type-name">A</span><span> =
+      </span><span class="identifier">fa</span><span>.</span><span class="identifier">head</span><span>
+
+    </span><span class="comment">// use coflatMap from NonEmptyList
+</span><span>    </span><span class="keyword">override</span><span> </span><span class="keyword">def</span><span> </span><span class="declaration-name">coflatMap</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>](</span><span class="identifier">fa</span><span>: </span><span class="type-name">NonEmptyList</span><span>[</span><span class="type-name">A</span><span>])(</span><span class="identifier">f</span><span>: </span><span class="type-name">NonEmptyList</span><span>[</span><span class="type-name">A</span><span>] =&gt; </span><span class="type-name">B</span><span>): </span><span class="type-name">NonEmptyList</span><span>[</span><span class="type-name">B</span><span>] =
+      </span><span class="identifier">fa</span><span>.</span><span class="identifier">coflatMap</span><span>(</span><span class="identifier">f</span><span>)
+
+    </span><span class="comment">// use flatMap from NonEmptyList
+</span><span>    </span><span class="keyword">override</span><span> </span><span class="keyword">def</span><span> </span><span class="declaration-name">flatMap</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>](</span><span class="identifier">fa</span><span>: </span><span class="type-name">NonEmptyList</span><span>[</span><span class="type-name">A</span><span>])(</span><span class="identifier">f</span><span>: </span><span class="type-name">A</span><span> =&gt; </span><span class="type-name">NonEmptyList</span><span>[</span><span class="type-name">B</span><span>]): </span><span class="type-name">NonEmptyList</span><span>[</span><span class="type-name">B</span><span>] =
+      </span><span class="identifier">fa</span><span>.</span><span class="identifier">flatMap</span><span>(</span><span class="identifier">f</span><span>)
+
+    </span><span class="comment">// the tailRecM implementation is not the subject of this material
+</span><span>    </span><span class="comment">// as an exercise try to implement it yourself
+</span><span>    </span><span class="keyword">override</span><span> </span><span class="keyword">def</span><span> </span><span class="declaration-name">tailRecM</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>](</span><span class="identifier">a</span><span>: </span><span class="type-name">A</span><span>)(</span><span class="identifier">fn</span><span>: </span><span class="type-name">A</span><span> =&gt; </span><span class="type-name">NonEmptyList</span><span>[</span><span class="type-name">Either</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>]]): </span><span class="type-name">NonEmptyList</span><span>[</span><span class="type-name">B</span><span>] =
+      ???
+  }
+</span><span class="comment">// nelBimonad: AnyRef with Bimonad[NonEmptyList] = repl.MdocSession$App$$anon$1@d2765f7</span></code></pre>
+        <p>Note the equivalence:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">nelBimonad</span><span>.</span><span class="identifier">pure</span><span>(</span><span class="boolean-literal">true</span><span>).</span><span class="identifier">extract</span><span> === </span><span class="type-name">NonEmptyList</span><span>.</span><span class="identifier">one</span><span>(</span><span class="boolean-literal">true</span><span>).</span><span class="identifier">head</span><span>
+</span><span class="comment">// res0: Boolean = true</span></code></pre>
+        <p>Using generic bimonad syntax we could define a function that appends and extracts a configuration:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">def</span><span> </span><span class="declaration-name">make</span><span>[</span><span class="type-name">T</span><span>[</span><span class="identifier">_</span><span>]: </span><span class="type-name">Bimonad</span><span>](</span><span class="identifier">config</span><span>: </span><span class="type-name">T</span><span>[</span><span class="type-name">String</span><span>]): </span><span class="type-name">String</span><span> = 
+  </span><span class="identifier">config</span><span>
+    .</span><span class="identifier">flatMap</span><span>(</span><span class="identifier">c</span><span> =&gt; </span><span class="type-name">Bimonad</span><span>[</span><span class="type-name">T</span><span>].</span><span class="identifier">pure</span><span>(</span><span class="identifier">c</span><span> + </span><span class="string-literal">&quot; with option A&quot;</span><span>))
+    .</span><span class="identifier">flatMap</span><span>(</span><span class="identifier">c</span><span> =&gt; </span><span class="type-name">Bimonad</span><span>[</span><span class="type-name">T</span><span>].</span><span class="identifier">pure</span><span>(</span><span class="identifier">c</span><span> + </span><span class="string-literal">&quot; with option B&quot;</span><span>))
+    .</span><span class="identifier">flatMap</span><span>(</span><span class="identifier">c</span><span> =&gt; </span><span class="type-name">Bimonad</span><span>[</span><span class="type-name">T</span><span>].</span><span class="identifier">pure</span><span>(</span><span class="identifier">c</span><span> + </span><span class="string-literal">&quot; with option C&quot;</span><span>))
+    .</span><span class="identifier">extract</span></code></pre>
+        <p>This works with one element non-empty lists:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">make</span><span>(</span><span class="type-name">NonEmptyList</span><span>.</span><span class="identifier">one</span><span>(</span><span class="string-literal">&quot;config&quot;</span><span>))
+</span><span class="comment">// res1: String = &quot;config with option A with option B with option C&quot;</span></code></pre>
+        <p><code>Function0[_]</code> and <code>Eval[_]</code> are also lawful bimonads so the following calls are also valid:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">make</span><span>(() =&gt; </span><span class="string-literal">&quot;config&quot;</span><span>)
+</span><span class="comment">// res2: String = &quot;config with option A with option B with option C&quot;
+</span><span>
+</span><span class="identifier">make</span><span>(</span><span class="type-name">Eval</span><span>.</span><span class="identifier">later</span><span>(</span><span class="string-literal">&quot;config&quot;</span><span>))
+</span><span class="comment">// res3: String = &quot;config with option A with option B with option C&quot;</span></code></pre>
 
         <hr style="margin-top: 30px"/>
         <footer style="font-size: 90%; text-align: center">

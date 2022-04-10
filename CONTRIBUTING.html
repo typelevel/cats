@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Laika 0.18.1 + Helium Theme" />
+    <title>Contributor guide</title>
+    
+      <meta name="author" content="Cody Allen"/>
+    
+      <meta name="author" content="Ross Baker"/>
+    
+      <meta name="author" content="P. Oscar Boykin"/>
+    
+      <meta name="author" content="Travis Brown"/>
+    
+      <meta name="author" content="Adelbert Chang"/>
+    
+      <meta name="author" content="Peter Neyens"/>
+    
+      <meta name="author" content="Rob Norris"/>
+    
+      <meta name="author" content="Erik Osheim"/>
+    
+      <meta name="author" content="LukaJCB"/>
+    
+      <meta name="author" content="Michael Pilquist"/>
+    
+      <meta name="author" content="Miles Sabin"/>
+    
+      <meta name="author" content="Daniel Spiewak"/>
+    
+      <meta name="author" content="Frank Thomas"/>
+    
+      <meta name="author" content="Julien Truffaut"/>
+    
+      <meta name="author" content="Kailuo Wang"/>
+    
+    
+      <meta name="description" content="docs"/>
+    
+    
+      <link rel="icon" sizes="32x32" type="image/png" href="https://typelevel.org/img/favicon.png"/>
+    
+    
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.207/distr/fira_code.css">
+    
+    <link rel="stylesheet" type="text/css" href="helium/icofont.min.css" />
+    <link rel="stylesheet" type="text/css" href="helium/laika-helium.css" />
+    <link rel="stylesheet" type="text/css" href="site/styles.css" />
+    <script src="helium/laika-helium.js"></script>
+    <script src="js/sponsors.js"></script>
+    
+    
+    <script> /* for avoiding page load transitions */ </script>
+  </head>
+
+  <body>
+
+    <header id="top-bar">
+
+      <div class="row">
+        <a id="nav-icon">
+          <i class="icofont-laika" title="Navigation">&#xefa2;</i>
+        </a>
+        
+      </div>
+
+      <a class="image-link" href="https://typelevel.org"><img src="https://typelevel.org/img/logo.svg"></a>
+
+      <span class="row links"><a class="icon-link svg-link" href="https://typelevel.org/cats/api/"><span title="API"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M75,47.5c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm-50,-0c13.246,-0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,-0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm2.705,16.735l7.239,0l0.622,-4.904l-21.833,0l-0,4.904l7.589,0l0,22.067l6.383,0l-0,-22.067Zm58.076,7.265c-0,-8.757 -3.698,-14.166 -10.781,-14.166c-7.083,-0 -10.781,5.604 -10.781,14.166c0,8.757 3.698,14.166 10.781,14.166c7.083,0 10.781,-5.604 10.781,-14.166Zm-6.539,0c0,6.538 -1.128,9.496 -4.242,9.496c-2.997,0 -4.242,-2.88 -4.242,-9.496c-0,-6.616 1.206,-9.496 4.242,-9.496c3.036,-0 4.242,2.88 4.242,9.496Zm-29.242,-67c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm0.512,9.834c-7.122,-0 -12.609,5.098 -12.609,14.127c-0,9.263 5.215,14.205 12.532,14.205c4.164,0 7.083,-1.634 9.068,-3.658l-2.88,-3.697c-1.518,1.206 -3.153,2.413 -5.838,2.413c-3.697,-0 -6.266,-2.763 -6.266,-9.263c-0,-6.616 2.724,-9.379 6.149,-9.379c2.102,-0 3.892,0.778 5.371,1.984l3.113,-3.775c-2.257,-1.868 -4.748,-2.957 -8.64,-2.957Z"/>
+  </g>
+</svg></span></a><a class="icon-link svg-link" href="https://github.com/typelevel/cats"><span title="Source Code"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M49.995,1c-27.609,-0 -49.995,22.386 -49.995,50.002c-0,22.09 14.325,40.83 34.194,47.444c2.501,0.458 3.413,-1.086 3.413,-2.412c0,-1.185 -0.043,-4.331 -0.067,-8.503c-13.908,3.021 -16.843,-6.704 -16.843,-6.704c-2.274,-5.773 -5.552,-7.311 -5.552,-7.311c-4.54,-3.103 0.344,-3.042 0.344,-3.042c5.018,0.356 7.658,5.154 7.658,5.154c4.46,7.64 11.704,5.433 14.552,4.156c0.454,-3.232 1.744,-5.436 3.174,-6.685c-11.102,-1.262 -22.775,-5.553 -22.775,-24.713c-0,-5.457 1.949,-9.92 5.147,-13.416c-0.516,-1.265 -2.231,-6.348 0.488,-13.233c0,0 4.199,-1.344 13.751,5.126c3.988,-1.108 8.266,-1.663 12.518,-1.682c4.245,0.019 8.523,0.574 12.517,1.682c9.546,-6.47 13.736,-5.126 13.736,-5.126c2.728,6.885 1.013,11.968 0.497,13.233c3.204,3.496 5.141,7.959 5.141,13.416c0,19.209 -11.691,23.436 -22.83,24.673c1.795,1.544 3.394,4.595 3.394,9.26c0,6.682 -0.061,12.076 -0.061,13.715c0,1.338 0.899,2.894 3.438,2.406c19.853,-6.627 34.166,-25.354 34.166,-47.438c-0,-27.616 -22.389,-50.002 -50.005,-50.002"/>
+  </g>
+</svg></span></a><a class="icon-link" href="https://discord.gg/XF3CXcMzqD"><i class="icofont-laika" title="Chat">&#xeed5;</i></a><a class="icon-link" href="https://twitter.com/typelevel"><i class="icofont-laika" title="Twitter">&#xed7a;</i></a></span>
+
+    </header>
+
+    <nav id="sidebar">
+
+      <div class="row">
+        <a class="icon-link svg-link" href="https://typelevel.org/cats/api/"><span title="API"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M75,47.5c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm-50,-0c13.246,-0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,-0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm2.705,16.735l7.239,0l0.622,-4.904l-21.833,0l-0,4.904l7.589,0l0,22.067l6.383,0l-0,-22.067Zm58.076,7.265c-0,-8.757 -3.698,-14.166 -10.781,-14.166c-7.083,-0 -10.781,5.604 -10.781,14.166c0,8.757 3.698,14.166 10.781,14.166c7.083,0 10.781,-5.604 10.781,-14.166Zm-6.539,0c0,6.538 -1.128,9.496 -4.242,9.496c-2.997,0 -4.242,-2.88 -4.242,-9.496c-0,-6.616 1.206,-9.496 4.242,-9.496c3.036,-0 4.242,2.88 4.242,9.496Zm-29.242,-67c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm0.512,9.834c-7.122,-0 -12.609,5.098 -12.609,14.127c-0,9.263 5.215,14.205 12.532,14.205c4.164,0 7.083,-1.634 9.068,-3.658l-2.88,-3.697c-1.518,1.206 -3.153,2.413 -5.838,2.413c-3.697,-0 -6.266,-2.763 -6.266,-9.263c-0,-6.616 2.724,-9.379 6.149,-9.379c2.102,-0 3.892,0.778 5.371,1.984l3.113,-3.775c-2.257,-1.868 -4.748,-2.957 -8.64,-2.957Z"/>
+  </g>
+</svg></span></a><a class="icon-link svg-link" href="https://github.com/typelevel/cats"><span title="Source Code"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M49.995,1c-27.609,-0 -49.995,22.386 -49.995,50.002c-0,22.09 14.325,40.83 34.194,47.444c2.501,0.458 3.413,-1.086 3.413,-2.412c0,-1.185 -0.043,-4.331 -0.067,-8.503c-13.908,3.021 -16.843,-6.704 -16.843,-6.704c-2.274,-5.773 -5.552,-7.311 -5.552,-7.311c-4.54,-3.103 0.344,-3.042 0.344,-3.042c5.018,0.356 7.658,5.154 7.658,5.154c4.46,7.64 11.704,5.433 14.552,4.156c0.454,-3.232 1.744,-5.436 3.174,-6.685c-11.102,-1.262 -22.775,-5.553 -22.775,-24.713c-0,-5.457 1.949,-9.92 5.147,-13.416c-0.516,-1.265 -2.231,-6.348 0.488,-13.233c0,0 4.199,-1.344 13.751,5.126c3.988,-1.108 8.266,-1.663 12.518,-1.682c4.245,0.019 8.523,0.574 12.517,1.682c9.546,-6.47 13.736,-5.126 13.736,-5.126c2.728,6.885 1.013,11.968 0.497,13.233c3.204,3.496 5.141,7.959 5.141,13.416c0,19.209 -11.691,23.436 -22.83,24.673c1.795,1.544 3.394,4.595 3.394,9.26c0,6.682 -0.061,12.076 -0.061,13.715c0,1.338 0.899,2.894 3.438,2.406c19.853,-6.627 34.166,-25.354 34.166,-47.438c-0,-27.616 -22.389,-50.002 -50.005,-50.002"/>
+  </g>
+</svg></span></a><a class="icon-link" href="https://discord.gg/XF3CXcMzqD"><i class="icofont-laika" title="Chat">&#xeed5;</i></a><a class="icon-link" href="https://twitter.com/typelevel"><i class="icofont-laika" title="Twitter">&#xed7a;</i></a>
+      </div>
+
+      <ul class="nav-list">
+        <li class="level1"><a href="index.html">Cats</a></li>
+        <li class="level1"><a href="typeclasses.html">Type Classes</a></li>
+        <li class="level1"><a href="datatypes.html">Data Types</a></li>
+        <li class="level1"><a href="algebra.html">Algebra</a></li>
+        <li class="level1"><a href="motivations.html">Motivations</a></li>
+        <li class="level1"><a href="resources_for_learners.html">Resources for Learners</a></li>
+        <li class="level1"><a href="jump_start_guide.html">Jump Start Guide</a></li>
+        <li class="level1"><a href="imports.html">Imports</a></li>
+        <li class="level1"><a href="faq.html">FAQ</a></li>
+        <li class="level1 active"><a href="#">Contributor guide</a></li>
+        <li class="level1"><a href="colophon.html">Colophon</a></li>
+        <li class="level1"><a href="nomenclature.html">Glossary</a></li>
+        <li class="level1"><a href="guidelines.html">Guidelines</a></li>
+        <li class="level1"><a href="typelevelEcosystem.html">Typelevel Ecosystem</a></li>
+        <li class="level1 nav-header">Type Classes</li>
+        <li class="level2"><a href="typeclasses/alternative.html">Alternative</a></li>
+        <li class="level2"><a href="typeclasses/applicative.html">Applicative</a></li>
+        <li class="level2"><a href="typeclasses/applicativemonaderror.html">ApplicativeError and MonadError</a></li>
+        <li class="level2"><a href="typeclasses/applicativetraverse.html">Applicative and Traversable Functors</a></li>
+        <li class="level2"><a href="typeclasses/arrow.html">Arrow</a></li>
+        <li class="level2"><a href="typeclasses/arrowchoice.html">Arrow Choice</a></li>
+        <li class="level2"><a href="typeclasses/bifunctor.html">Bifunctor</a></li>
+        <li class="level2"><a href="typeclasses/bimonad.html">Bimonad</a></li>
+        <li class="level2"><a href="typeclasses/comonad.html">Comonad</a></li>
+        <li class="level2"><a href="typeclasses/contravariant.html">Contravariant</a></li>
+        <li class="level2"><a href="typeclasses/contravariantmonoidal.html">Contravariant Monoidal</a></li>
+        <li class="level2"><a href="typeclasses/eq.html">Eq</a></li>
+        <li class="level2"><a href="typeclasses/foldable.html">Foldable</a></li>
+        <li class="level2"><a href="typeclasses/functor.html">Functor</a></li>
+        <li class="level2"><a href="typeclasses/invariant.html">Invariant</a></li>
+        <li class="level2"><a href="typeclasses/invariantmonoidal.html">Invariant Monoidal</a></li>
+        <li class="level2"><a href="typeclasses/lawtesting.html">Law testing</a></li>
+        <li class="level2"><a href="typeclasses/monad.html">Monad</a></li>
+        <li class="level2"><a href="typeclasses/monoid.html">Monoid</a></li>
+        <li class="level2"><a href="typeclasses/monoidk.html">MonoidK</a></li>
+        <li class="level2"><a href="typeclasses/nonemptytraverse.html">NonEmptyTraverse</a></li>
+        <li class="level2"><a href="typeclasses/parallel.html">Parallel</a></li>
+        <li class="level2"><a href="typeclasses/reducible.html">Reducible</a></li>
+        <li class="level2"><a href="typeclasses/semigroup.html">Semigroup</a></li>
+        <li class="level2"><a href="typeclasses/semigroupk.html">SemigroupK</a></li>
+        <li class="level2"><a href="typeclasses/show.html">Show</a></li>
+        <li class="level2"><a href="typeclasses/traverse.html">Traverse</a></li>
+        <li class="level1 nav-header">Data Types</li>
+        <li class="level2"><a href="datatypes/chain.html">Chain</a></li>
+        <li class="level2"><a href="datatypes/const.html">Const</a></li>
+        <li class="level2"><a href="datatypes/contt.html">ContT</a></li>
+        <li class="level2"><a href="datatypes/either.html">Either</a></li>
+        <li class="level2"><a href="datatypes/eithert.html">EitherT</a></li>
+        <li class="level2"><a href="datatypes/eval.html">Eval</a></li>
+        <li class="level2"><a href="datatypes/freeapplicative.html">Free Applicative</a></li>
+        <li class="level2"><a href="datatypes/freemonad.html">Free Monad</a></li>
+        <li class="level2"><a href="datatypes/functionk.html">FunctionK</a></li>
+        <li class="level2"><a href="datatypes/id.html">Id</a></li>
+        <li class="level2"><a href="datatypes/ior.html">Ior</a></li>
+        <li class="level2"><a href="datatypes/iort.html">IorT</a></li>
+        <li class="level2"><a href="datatypes/kleisli.html">Kleisli</a></li>
+        <li class="level2"><a href="datatypes/nel.html">NonEmptyList</a></li>
+        <li class="level2"><a href="datatypes/nested.html">Nested</a></li>
+        <li class="level2"><a href="datatypes/oneand.html">OneAnd</a></li>
+        <li class="level2"><a href="datatypes/optiont.html">OptionT</a></li>
+        <li class="level2"><a href="datatypes/state.html">State</a></li>
+        <li class="level2"><a href="datatypes/validated.html">Validated</a></li>
+        <li class="level2"><a href="datatypes/writer.html">Writer</a></li>
+        <li class="level2"><a href="datatypes/writert.html">WriterT</a></li>
+      </ul>
+
+      <ul class="nav-list">
+        <li class="level1 nav-header">Related Projects</li>
+        
+          <li class="level2"><a href="https://typelevel.org/cats-effect/">cats-effect</a></li>
+        
+          <li class="level2"><a href="https://typelevel.org/mouse">Mouse</a></li>
+        
+          <li class="level2"><a href="https://github.com/typelevel/discipline/">discipline</a></li>
+        
+      </ul>
+
+    </nav>
+
+    <div id="container">
+
+      <nav id="page-nav">
+        <p class="header"><a href="#">Contributor guide</a></p>
+
+        <ul class="nav-list">
+          <li class="level1"><a href="#about-this-document">About this document</a></li>
+          <li class="level1"><a href="#how-can-i-help">How can I help?</a></li>
+          <li class="level2"><a href="#find-something-that-belongs-in-cats">Find something that belongs in Cats</a></li>
+          <li class="level2"><a href="#let-us-know-you-are-working-on-it">Let us know you are working on it</a></li>
+          <li class="level2"><a href="#build-the-project">Build the project</a></li>
+          <li class="level2"><a href="#editor-setup-tips">Editor Setup Tips</a></li>
+          <li class="level2"><a href="#write-code">Write code</a></li>
+          <li class="level2"><a href="#attributions">Attributions</a></li>
+          <li class="level2"><a href="#write-tests">Write tests</a></li>
+          <li class="level2"><a href="#binary-compatibility">Binary compatibility</a></li>
+          <li class="level1"><a href="#contributing-documentation">Contributing documentation</a></li>
+          <li class="level2"><a href="#source-for-the-documentation">source for the documentation</a></li>
+          <li class="level2"><a href="#generating-the-site">Generating the Site</a></li>
+          <li class="level2"><a href="#previewing-the-site">Previewing the site</a></li>
+          <li class="level2"><a href="#compiler-verified-documentation">Compiler verified documentation</a></li>
+          <li class="level2"><a href="#write-examples">Write examples</a></li>
+          <li class="level2"><a href="#submit-a-pull-request">Submit a pull request</a></li>
+          <li class="level1"><a href="#how-did-we-do">How did we do?</a></li>
+          <li class="level1"><a href="#getting-in-touch">Getting in touch</a></li>
+          <li class="level1"><a href="#nix-cats-development-environment">Nix Cats Development Environment</a></li>
+        </ul>
+
+        <p class="footer"></p>
+      </nav>
+
+      <main class="content">
+
+        <h1 id="contributor-guide" class="title">Contributor guide</h1>
+        
+        <h2 id="about-this-document" class="section">About this document<a class="anchor-link right" href="#about-this-document"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>This guide is for people who would like to be involved in building Cats.</p>
+        <p>This guide assumes that you have some experience doing Scala
+        development. If you get stuck on any of these steps, please feel free
+        to <a href="#getting-in-touch">ask for help</a>.</p>
+        
+        <h2 id="how-can-i-help" class="section">How can I help?<a class="anchor-link right" href="#how-can-i-help"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>Cats follows a standard
+        <a href="https://help.github.com/articles/using-pull-requests/">fork and pull</a>
+        model for contributions via GitHub pull requests.</p>
+        <p>Below is a list of the steps that might be involved in an ideal
+        contribution. If you don&#39;t have the time to go through every step,
+        contribute what you can, and someone else will probably be happy to
+        follow up with any polishing that may need to be done.</p>
+        <p>If you want to touch up some documentation or fix typos, feel free to
+        skip these steps and jump straight to submitting a pull request.</p>
+        <ol class="arabic">
+          <li><a href="#find-something-that-belongs-in-cats">Find something that belongs in cats</a></li>
+        </ol>
+        <ol class="arabic">
+          <li><a href="#let-us-know-you-are-working-on-it">Let us know you are working on it</a></li>
+        </ol>
+        <ol class="arabic">
+          <li><a href="#build-the-project">Build the project</a></li>
+        </ol>
+        <ol class="arabic">
+          <li><a href="#write-code">Implement your contribution</a></li>
+        </ol>
+        <ol class="arabic">
+          <li><a href="#write-tests">Write tests</a></li>
+        </ol>
+        <ol class="arabic">
+          <li><a href="#contributing-documentation">Write documentation</a></li>
+        </ol>
+        <ol class="arabic">
+          <li><a href="#write-examples">Write examples</a></li>
+        </ol>
+        <ol class="arabic">
+          <li><a href="#submit-a-pull-request">Submit pull request</a></li>
+        </ol>
+        
+        <h3 id="find-something-that-belongs-in-cats" class="section">Find something that belongs in Cats<a class="anchor-link right" href="#find-something-that-belongs-in-cats"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <p>Looking for a way that you can help out? Check out our <a href="https://github.com/typelevel/cats/issues">open issues</a> and look for ones tagged as <em><strong>help wanted</strong></em> or <em><strong>low-hanging fruit</strong></em>. These issues are the easiest way to start contributing, but if you find other items that catch your eye, you&#39;re most than welcome to tackle them!</p>
+        <p>Make sure that it&#39;s not already assigned to someone and that nobody has left a comment saying that they are working on it!</p>
+        <p>(Of course, you can also comment on an issue someone is already
+        working on and offer to collaborate.)</p>
+        <p>Have an idea for something new? That&#39;s great! We recommend that you
+        make sure it belongs in Cats before you put effort into creating a
+        pull request. The preferred ways to do that are to either:</p>
+        <ul>
+          <li><a href="https://github.com/typelevel/cats/issues/new">create a GitHub issue</a>
+          describing your idea.</li>
+        </ul>
+        <ul>
+          <li>get feedback in the <a href="https://discord.gg/XF3CXcMzqD">Typelevel Discord</a></li>
+        </ul>
+        <p>Things that belong in Cats generally have the following characteristics:</p>
+        <ul>
+          <li>Their behavior is governed by well-defined <a href="https://typelevel.org/cats/typeclasses.html#laws">laws</a>.</li>
+        </ul>
+        <ul>
+          <li>They provide general abstractions.</li>
+        </ul>
+        <p>Laws help keep types consistent, and remove ambiguity or sensitivity
+        about how particular instances can behave. We&#39;ve found that types with
+        laws are often more useful than <em>lawless</em> types</p>
+        <p>(In some cases, <em>lawless</em> type classes and instances are useful. We
+        intend to support some of these in a future module.)</p>
+        <p>By staying general, Cats&#39; abstractions are widely-applicable, and not
+        tied to particular libraries or strategies. Rather than being a
+        library to work with databases, HTTP requests, etc, Cats provides
+        abstractions used to build those libraries.</p>
+        <p>Cats (and especially <code>cats-core</code>) is intended to be lean and modular.
+        Some great ideas are not a great fit, either due to their size or
+        their complexity. In these cases, creating your own library that
+        depends on Cats is probably the best plan.</p>
+        
+        <h4 id="cats-subprojects" class="section">Cats subprojects<a class="anchor-link right" href="#cats-subprojects"><i class="icofont-laika">&#xef71;</i></a></h4>
+        <p>Cats has other <em>companion</em> projects, described next:</p>
+        <ul>
+          <li><a href="https://github.com/typelevel/cats-effect">cats-effect</a>: a project aimed to provide a standard IO type for the Cats ecosystem, as well as a set of typeclasses (and associated laws) which characterize general effect types.</li>
+          <li><a href="https://github.com/typelevel/cats-mtl">cats-mtl</a>: provides transformer typeclasses for Cats&#39; Monads, Applicatives and Functors.</li>
+          <li><a href="https://github.com/typelevel/mouse">mouse</a>: a small companion to the Cats functional programming library for Scala. It includes convenience extension methods for Scala standard library classes, including some found in scalaz that are not in Cats.</li>
+        </ul>
+        
+        <h3 id="let-us-know-you-are-working-on-it" class="section">Let us know you are working on it<a class="anchor-link right" href="#let-us-know-you-are-working-on-it"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <p>If there is already a GitHub issue for the task you are working on,
+        leave a comment to let people know that you are working on it. If
+        there isn&#39;t already an issue and it is a non-trivial task, it&#39;s a good
+        idea to create one (and note that you&#39;re working on it). This prevents
+        contributors from duplicating effort.</p>
+        
+        <h3 id="build-the-project" class="section">Build the project<a class="anchor-link right" href="#build-the-project"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <p>First you&#39;ll need to checkout a local copy of the code base:</p>
+        <pre class="keep-together pdf epub"><code class="sh">git clone git@github.com:typelevel/cats.git</code></pre>
+        <p>To build Cats you should have
+        <a href="http://www.scala-sbt.org/0.13/tutorial/Setup.html">sbt</a> and <a href="https://nodejs.org/">Node.js</a>
+         installed. If you&#39;d like, you can use the <a href="#nix-cats-development-environment">Nix Cats development environment</a>.</p>
+        <p>Run <code>sbt</code>, and then use any of the following commands:</p>
+        <ul>
+          <li><code>compile</code>: compile the code</li>
+        </ul>
+        <ul>
+          <li><code>console</code>: launch a REPL</li>
+        </ul>
+        <ul>
+          <li><code>test</code>: run the tests</li>
+        </ul>
+        <ul>
+          <li><code>unidoc</code>: generate the documentation</li>
+        </ul>
+        <ul>
+          <li><code>fmt</code>: run formatting of the code</li>
+        </ul>
+        <ul>
+          <li><code>validate</code>: run tests, style-checker, and doc generation</li>
+        </ul>
+        
+        <h4 id="scala-and-scala-js" class="section">Scala and Scala.js<a class="anchor-link right" href="#scala-and-scala-js"><i class="icofont-laika">&#xef71;</i></a></h4>
+        <p>Cats cross-compiles to both JVM and JavaScript runtimes. If you are not used to
+        working with cross-compiling builds, the first things that you will notice is that
+        builds:</p>
+        <ul>
+          <li>Will take longer: To build JVM only, just use the <code>catsJVM</code>, or <code>catsJS</code>
+          for JS only. And if you want the default project to be <code>catsJVM</code>, just copy the
+          file <code>scripts/sbtrc-JVM</code> to <code>.sbtrc</code> in the root directory.</li>
+        </ul>
+        <ul>
+          <li>May run out of memory: We suggest you use
+          <a href="https://github.com/paulp/sbt-extras">Paul Philips&#39;s sbt script</a> that will use the settings from Cats.</li>
+        </ul>
+        
+        <h3 id="editor-setup-tips" class="section">Editor Setup Tips<a class="anchor-link right" href="#editor-setup-tips"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <p><strong>IntelliJ</strong></p>
+        <ul>
+          <li>
+            <p>Be warned, IntelliJ is currently not 100% accurate at reporting compilation errors, there <em>will</em> be cases that it reports errors incorrectly. If you simply don&#39;t want to see the errors, a quick an easy work around is to disable <em>Type-Aware Highlighting</em> by clicking the <code>[T]</code> icon in the bottom toolbar.</p>
+          </li>
+          <li>
+            <p>There is an open <a href="https://github.com/typelevel/cats/issues/2152">issue</a> with the IntelliJ scala plugin, which prevents it from configuring similacrum correctly when importing the cats project. The work around for this issue is to set <code>val CompileTime = Provided</code> in <code>build.sbt</code>. Note: Be careful not to commit this change.</p>
+          </li>
+          <li>
+            <p>IntelliJ does have <a href="https://blog.jetbrains.com/scala/2015/07/31/inline-refactoring-for-type-aliases-and-kind-projector-support/">support</a> for kind-projector. However, it is not always seamless. If you are unable to get IntelliJ to recognise the special symbols that kind-project provides, such as <code>?</code> <code>Lambda[X =&gt; G[F[A]]]</code> or <code>λ[X =&gt; G[F[A]]]</code> try upgrading to the early access preview (EAP) version of the scala plugin. This can be done under <code>Settings &gt; Languages &amp; Frameworks &gt; Scala &gt; Updates</code></p>
+          </li>
+        </ul>
+        
+        <h3 id="write-code" class="section">Write code<a class="anchor-link right" href="#write-code"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <p><a href="guidelines.html">See guidelines</a>.</p>
+        
+        <h3 id="attributions" class="section">Attributions<a class="anchor-link right" href="#attributions"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <p>If your contribution has been derived from or inspired by other work, please
+        state this in its ScalaDoc comment and provide proper attribution. When
+        possible, include the original authors&#39; names and a link to the original work.</p>
+        
+        <h3 id="write-tests" class="section">Write tests<a class="anchor-link right" href="#write-tests"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <ul>
+          <li>Tests for cats-core go into the tests module, under the <code>cats.tests</code> package.</li>
+          <li>Tests for additional modules, such as &#39;jvm&#39;, go into the tests directory within that module.</li>
+          <li>Cats tests should extend <code>CatsSuite</code>.  <code>CatsSuite</code> integrates with <a href="https://github.com/typelevel/discipline">Discipline</a>
+          for law checking, and imports all syntax and standard instances for convenience.</li>
+          <li>The first parameter to the <code>checkAll</code> method provided by
+          <a href="https://github.com/typelevel/discipline">Discipline</a>, is the name of the test and will be output to the
+          console as part of the test execution. By convention:</li>
+        </ul>
+        <ul>
+          <li>When checking laws, this parameter generally takes a form that describes the data type being tested.
+          For example the name <code>&quot;Validated[String, Int]&quot;</code> might be used when testing a type class instance
+          that the <code>Validated</code> data type supports.</li>
+        </ul>
+        <ul>
+          <li>An exception to this is serializability tests, where the type class name is also included in the name.
+          For example, in the case of <code>Validated</code>, the serializability test would take the form,
+          <code>&quot;Applicative[Validated[String, Int]]&quot;</code>, to indicate that this test is verifying that the <code>Applicative</code>
+          type class instance for the <code>Validated</code> data type is serializable.</li>
+        </ul>
+        <ul>
+          <li>This convention helps to ensure clear and easy to understand output, with minimal duplication in the output.</li>
+          <li>It is also a goal that, for every combination of data type and supported type class instance:</li>
+        </ul>
+        <ul>
+          <li>Appropriate law checks for that combination are included to ensure that the instance meets the laws for that type class.</li>
+        </ul>
+        <ul>
+          <li>A serializability test for that combination is also included, such that we know that frameworks which
+          rely heavily on serialization, such as <code>Spark</code>, will have strong compatibility with <code>Cats</code>.</li>
+        </ul>
+        <ul>
+          <li>Note that custom serialization tests are not required for instances of type classes which come from
+          <code>algebra</code>, such as <code>Monoid</code>, because the <code>algebra</code> laws include a test for serialization.</li>
+          <li>For testing your laws, it is advised to check <a href="https://typelevel.org/cats/typeclasses/lawtesting.html">this guide</a>.</li>
+        </ul>
+        
+        <h3 id="binary-compatibility" class="section">Binary compatibility<a class="anchor-link right" href="#binary-compatibility"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <p>It is important to verify that the feature you are implementing is compatible with Scala 2.12.x and Scala 2.13.x (Scala &lt;2.11.x is not supported). When you submit a PR, Travis makes this check, but it is time-expensive, so you can assure this step beforehand by issuing the command <code>++2.12.13</code>, which sets the cats&#39; Scala version to <code>2.12.13</code> and then run <code>mimaReportBinaryIssues</code>.</p>
+        <p>A summary of these steps is as follows:</p>
+        <pre><code>$ sbt
+&gt; ++2.12.13
+&gt; mimaReportBinaryIssues</code></pre>
+        <p>This procedure will report if there are any binary compatibility issues that should be fixed.</p>
+        <p>As a side note, the latter command uses <a href="https://github.com/lightbend/migration-manager">sbt-mima</a> (shorthand for &quot;Migration Manager&quot;) plugin and you can find more information about it <a href="https://github.com/lightbend/migration-manager/wiki">here</a>.</p>
+        
+        <h2 id="contributing-documentation" class="section">Contributing documentation<a class="anchor-link right" href="#contributing-documentation"><i class="icofont-laika">&#xef71;</i></a></h2>
+        
+        <h3 id="source-for-the-documentation" class="section">source for the documentation<a class="anchor-link right" href="#source-for-the-documentation"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <p>The documentation for this website is stored alongside the source, in the <a href="https://github.com/typelevel/cats/tree/main/docs">docs subproject</a>.</p>
+        
+        <h3 id="generating-the-site" class="section">Generating the Site<a class="anchor-link right" href="#generating-the-site"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <p>The microsite generation requires a specific scala version that might
+        differ from the project&#39;s one. We strongly suggest to check the CI&#39;s
+        workflow to discover the proper version:
+        <a href="https://github.com/typelevel/cats/blob/main/.github/workflows/ci.yml#L230">CI scala-version matrix</a> and <a href="https://github.com/typelevel/cats/blob/main/.github/workflows/ci.yml#L281">CI makeMicrosite
+        command</a></p>
+        <p>At the moment the command is:
+        <code>sbt ++2.12.15 docs/tlSite</code></p>
+        
+        <h3 id="previewing-the-site" class="section">Previewing the site<a class="anchor-link right" href="#previewing-the-site"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <p>Run <code>docs/tlSitePreview</code> in the sbt console. This will start a preview server at <a href="http://localhost:4242/">http://localhost:4242/</a> that will automatically refresh as you make edits.</p>
+        
+        <h3 id="compiler-verified-documentation" class="section">Compiler verified documentation<a class="anchor-link right" href="#compiler-verified-documentation"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <p>We use <a href="https://github.com/scalameta/mdoc">mdoc</a> to compile source code
+        which appears in the documentation, this ensures us that our examples
+        should always compile, and our documentation has a better chance of
+        staying up-to-date.</p>
+        
+        <h3 id="write-examples" class="section">Write examples<a class="anchor-link right" href="#write-examples"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <p>One of the best ways to provide examples is doctest, here is <a href="https://github.com/typelevel/cats/blob/main/core/src/main/scala/cats/Functor.scala#L19-L33">an example</a>. Doctest is a <a href="https://github.com/tkawachi/sbt-doctest">sbt plugin</a> which generates tests based on the syntax mentioned above and runs when sbt&#39;s <code>test</code> task is invoked. You can find more information in the plugin documentation.</p>
+        
+        <h3 id="submit-a-pull-request" class="section">Submit a pull request<a class="anchor-link right" href="#submit-a-pull-request"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <p>Before you open a pull request, you should make sure that <code>sbt
+validate</code> runs successfully. Travis will run this as well, but it may
+        save you some time to be alerted to style problems earlier.</p>
+        <p>If your pull request addresses an existing issue, please tag that
+        issue number in the body of your pull request or commit message. For
+        example, if your pull request addresses issue number 52, please
+        include &quot;fixes #52&quot;.</p>
+        <p>If you make changes after you have opened your pull request, please
+        add them as separate commits and avoid squashing or
+        rebasing. Squashing and rebasing can lead to a tidier git history, but
+        they can also be a hassle if somebody else has done work based on your
+        branch.</p>
+        
+        <h2 id="how-did-we-do" class="section">How did we do?<a class="anchor-link right" href="#how-did-we-do"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>Getting involved in an open source project can be tough. As a
+        newcomer, you may not be familiar with coding style conventions,
+        project layout, release cycles, etc. This document seeks to demystify
+        the contribution process for the cats project.</p>
+        <p>It may take a while to familiarize yourself with this document, but if
+        we are doing our job right, you shouldn&#39;t have to spend months poring
+        over the project source code or lurking on Discord
+        before you feel comfortable
+        contributing. In fact, if you encounter any confusion or frustration
+        during the contribution process, please create a GitHub issue and
+        we&#39;ll do our best to improve the process.</p>
+        
+        <h2 id="getting-in-touch" class="section">Getting in touch<a class="anchor-link right" href="#getting-in-touch"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>Discussion around Cats is currently happening in the
+        <a href="https://discord.gg/XF3CXcMzqD">Typelevel Discord</a>
+        as well as on GitHub issue and PR pages.</p>
+        <p>Feel free to open an issue if you notice a bug, have an idea for a
+        feature, or have a question about the code. Pull requests are also
+        gladly accepted.</p>
+        <p>People are expected to follow the
+        <a href="https://www.scala-lang.org/conduct/">Scala Code of Conduct</a> when
+        discussing Cats on GitHub, Discord, or other venues.</p>
+        <p>We hope that our community will be respectful, helpful, and kind. If
+        you find yourself embroiled in a situation that becomes heated, or
+        that fails to live up to our expectations, you should disengage and
+        contact one of the <a href="https://github.com/typelevel/cats#maintainers">project maintainers</a>
+        in private. We hope to avoid letting minor aggressions and misunderstandings
+        escalate into larger problems.</p>
+        <p>If you are being harassed, please contact one of <a href="https://github.com/typelevel/cats#maintainers">us</a>
+        immediately so that we can support you.</p>
+        
+        <h2 id="nix-cats-development-environment" class="section">Nix Cats Development Environment<a class="anchor-link right" href="#nix-cats-development-environment"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>Since Cats development can include the Scala runtime, the Scala.js runtime, the Cats website, and more; a number of dependencies (sbt, Node.js, Jekyll, etc) can be needed to work on Cats. Managing these dependencies globally can be a hassle and can lead to version conflicts. To make this easier to manage in an isolated development environment, Cats provides a <code>shell.nix</code> for anyone using the <a href="https://nixos.org/nix/">Nix package manager</a>.</p>
+        <p>To use the Nix-based Cats development environment:</p>
+        <ol class="arabic">
+          <li><a href="https://nixos.org/nix/download.html">Install</a> the Nix package manager.</li>
+          <li>At the root level of the Cats repository, run <code>nix-shell --pure</code>. This will drop you into a minimal bash shell that has just the required dependencies on the <code>PATH</code>. Note that the first time that you run this it will take some extra time to download the necessary dependencies into your local Nix store.</li>
+          <li>Run <code>sbt</code>, <code>jekyll</code>, etc as required from the <code>nix-shell</code>.</li>
+          <li>When you are finished you can <code>exit</code> the <code>nix-shell</code>.</li>
+        </ol>
+
+        <hr style="margin-top: 30px"/>
+        <footer style="font-size: 90%; text-align: center">
+          cats is a <a href="https://typelevel.org/">Typelevel</a> project distributed under the <a href="https://opensource.org/licenses/MIT">MIT</a> license.
+        </footer>
+
+      </main>
+
+    </div>
+
+  </body>
+</html>

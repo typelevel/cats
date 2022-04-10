@@ -1,421 +1,566 @@
-<!DOCTYPE html><html><head><title>Cats: Type Classes</title><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Cats contributors" /><meta name="description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="og:image" content="/cats/img/poster.png" /><meta name="image" property="og:image" content="/cats/img/poster.png" /><meta name="og:title" content="Cats: Type Classes" /><meta name="title" property="og:title" content="Cats: Type Classes" /><meta name="og:site_name" content="Cats" /><meta name="og:url" content="http://typelevel.org/cats/" /><meta name="og:type" content="website" /><meta name="og:description" content="Lightweight, modular, and extensible library for functional programming" /><link rel="icon" type="image/png" href="/cats/img/favicon.png" /><meta name="twitter:title" content="Cats: Type Classes" /><meta name="twitter:image" content="/cats/img/poster.png" /><meta name="twitter:description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="twitter:card" content="summary_large_image" /><link rel="icon" type="image/png" sizes="16x16" href="/cats/img/favicon16x16.png" /><link rel="icon" type="image/png" sizes="24x24" href="/cats/img/favicon24x24.png" /><link rel="icon" type="image/png" sizes="32x32" href="/cats/img/favicon32x32.png" /><link rel="icon" type="image/png" sizes="48x48" href="/cats/img/favicon48x48.png" /><link rel="icon" type="image/png" sizes="57x57" href="/cats/img/favicon57x57.png" /><link rel="icon" type="image/png" sizes="60x60" href="/cats/img/favicon60x60.png" /><link rel="icon" type="image/png" sizes="64x64" href="/cats/img/favicon64x64.png" /><link rel="icon" type="image/png" sizes="70x70" href="/cats/img/favicon70x70.png" /><link rel="icon" type="image/png" sizes="72x72" href="/cats/img/favicon72x72.png" /><link rel="icon" type="image/png" sizes="76x76" href="/cats/img/favicon76x76.png" /><link rel="icon" type="image/png" sizes="96x96" href="/cats/img/favicon96x96.png" /><link rel="icon" type="image/png" sizes="114x114" href="/cats/img/favicon114x114.png" /><link rel="icon" type="image/png" sizes="120x120" href="/cats/img/favicon120x120.png" /><link rel="icon" type="image/png" sizes="128x128" href="/cats/img/favicon128x128.png" /><link rel="icon" type="image/png" sizes="144x144" href="/cats/img/favicon144x144.png" /><link rel="icon" type="image/png" sizes="150x150" href="/cats/img/favicon150x150.png" /><link rel="icon" type="image/png" sizes="152x152" href="/cats/img/favicon152x152.png" /><link rel="icon" type="image/png" sizes="196x196" href="/cats/img/favicon196x196.png" /><link rel="icon" type="image/png" sizes="310x310" href="/cats/img/favicon310x310.png" /><link rel="icon" type="image/png" sizes="310x150" href="/cats/img/favicon310x150.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" /><link rel="stylesheet" href="/cats/highlight/styles/atom-one-light.css" /><link rel="stylesheet" href="/cats/css/pattern-style.css" /></head><body class="docs"><div id="wrapper"><div id="sidebar-wrapper"><ul id="sidebar" class="sidebar-nav"><li class="sidebar-brand"><a href="/cats/" class="brand"><div class="brand-wrapper"><span>Cats</span></div></a></li><li><a href="/cats/typeclasses/alternative.html" class="">Alternative</a></li><li><a href="/cats/typeclasses/applicative.html" class="">Applicative</a></li><li><a href="/cats/typeclasses/applicativemonaderror.html" class="">Applicative Error</a></li><li><a href="/cats/typeclasses/applicativetraverse.html" class="">Applicative and Traversable Functors</a></li><li><a href="/cats/typeclasses/arrow.html" class="">Arrow</a></li><li><a href="/cats/typeclasses/arrowchoice.html" class="">Arrow Choice</a></li><li><a href="/cats/typeclasses/bifunctor.html" class="">Bifunctor</a></li><li><a href="/cats/typeclasses/comonad.html" class="">Comonad</a></li><li><a href="/cats/typeclasses/contravariant.html" class="">Contravariant</a></li><li><a href="/cats/typeclasses/contravariantmonoidal.html" class="">Contravariant Monoidal</a></li><li><a href="/cats/typeclasses/eq.html" class="">Eq</a></li><li><a href="/cats/typeclasses/foldable.html" class="">Foldable</a></li><li><a href="/cats/typeclasses/functor.html" class="">Functor</a></li><li><a href="/cats/typeclasses/invariant.html" class="">Invariant</a></li><li><a href="/cats/typeclasses/invariantmonoidal.html" class="">InvariantMonoidal</a></li><li><a href="/cats/typeclasses/lawtesting.html" class="">Law Testing</a></li><li><a href="/cats/typeclasses/monad.html" class="">Monad</a></li><li><a href="/cats/typeclasses/monoid.html" class="">Monoid</a></li><li><a href="/cats/typeclasses/monoidk.html" class="">MonoidK</a></li><li><a href="/cats/typeclasses/nonemptytraverse.html" class="">NonEmptyTraverse</a></li><li><a href="/cats/typeclasses/parallel.html" class="">Parallel</a></li><li><a href="/cats/typeclasses/reducible.html" class="">Reducible</a></li><li><a href="/cats/typeclasses/semigroup.html" class="">Semigroup</a></li><li><a href="/cats/typeclasses/semigroupk.html" class="">SemigroupK</a></li><li><a href="/cats/typeclasses/show.html" class="">Show</a></li><li><a href="/cats/typeclasses/traverse.html" class="">Traverse</a></li><li><a href="/cats/typeclasses.html" class=" active ">Type Classes</a></li></ul></div><div id="page-content-wrapper"><div class="nav"><div class="container-fluid"><div class="row"><div class="col-lg-12"><div class="action-menu pull-left clearfix"><a href="#menu-toggle" id="menu-toggle"><i class="fa fa-bars" aria-hidden="true"></i></a></div><ul class="pull-right"><li class="search-nav hidden-xs hidden-sm"><div id="search-dropdown"><label><i class="fa fa-search"></i>Search</label><input id="search-bar" type="text" placeholder="Enter keywords here..." onclick="displayToggleSearch(event)" /><ul id="search-dropdown-content" class="dropdown dropdown-content"></ul></div></li><li id="gh-eyes-item" class="hidden-xs to-uppercase"><a href="https://github.com/typelevel/cats" target="_blank" rel="noopener noreferrer"><i class="fa fa-eye"></i><span>Watchers<span id="eyes" class="label label-default">--</span></span></a></li><li id="gh-stars-item" class="hidden-xs to-uppercase"><a href="https://github.com/typelevel/cats" target="_blank" rel="noopener noreferrer"><i class="fa fa-star-o"></i><span>Stars<span id="stars" class="label label-default">--</span></span></a></li><li><a href="#" onclick="shareSiteTwitter('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-twitter"></i></a></li><li><a href="#" onclick="shareSiteFacebook('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-facebook"></i></a></li></ul></div></div></div></div><div id="content" data-github-owner="typelevel" data-github-repo="cats"><div class="content-wrapper"><section><h1 id="type-classes">Type classes</h1>
-<p>Type classes are a powerful tool used in functional programming to enable ad-hoc polymorphism, more commonly
-known as overloading. Where many object-oriented languages leverage subtyping for polymorphic code, functional
-programming tends towards a combination of parametric polymorphism (think type parameters, like Java generics)
-and ad-hoc polymorphism.</p>
-
-<h2 id="example-collapsing-a-list">Example: collapsing a list</h2>
-<p>The following code snippets show code that sums a list of integers, concatenates a list of strings, and unions a list
-of sets.</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">sumInts</span><span class="o">(</span><span class="n">list</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">])</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="nv">list</span><span class="o">.</span><span class="py">foldRight</span><span class="o">(</span><span class="mi">0</span><span class="o">)(</span><span class="k">_</span> <span class="o">+</span> <span class="k">_</span><span class="o">)</span>
-
-<span class="k">def</span> <span class="nf">concatStrings</span><span class="o">(</span><span class="n">list</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">String</span><span class="o">])</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="nv">list</span><span class="o">.</span><span class="py">foldRight</span><span class="o">(</span><span class="s">""</span><span class="o">)(</span><span class="k">_</span> <span class="o">++</span> <span class="k">_</span><span class="o">)</span>
-
-<span class="k">def</span> <span class="nf">unionSets</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">list</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Set</span><span class="o">[</span><span class="kt">A</span><span class="o">]])</span><span class="k">:</span> <span class="kt">Set</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nv">list</span><span class="o">.</span><span class="py">foldRight</span><span class="o">(</span><span class="nv">Set</span><span class="o">.</span><span class="py">empty</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="k">_</span> <span class="n">union</span> <span class="k">_</span><span class="o">)</span>
-</code></pre></div></div>
-
-<p>All of these follow the same pattern: an initial value (0, empty string, empty set) and a combining function
-(<code class="language-plaintext highlighter-rouge">+</code>, <code class="language-plaintext highlighter-rouge">++</code>, <code class="language-plaintext highlighter-rouge">union</code>). We’d like to abstract over this so we can write the function once instead of once for every type
-so we pull out the necessary pieces into an interface.</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">trait</span> <span class="nc">Monoid</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="o">{</span>
-  <span class="k">def</span> <span class="nf">empty</span><span class="k">:</span> <span class="kt">A</span>
-  <span class="k">def</span> <span class="nf">combine</span><span class="o">(</span><span class="n">x</span><span class="k">:</span> <span class="kt">A</span><span class="o">,</span> <span class="n">y</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span><span class="k">:</span> <span class="kt">A</span>
-<span class="o">}</span>
-
-<span class="c1">// Implementation for Int</span>
-<span class="k">val</span> <span class="nv">intAdditionMonoid</span><span class="k">:</span> <span class="kt">Monoid</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Monoid</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="o">{</span>
-  <span class="k">def</span> <span class="nf">empty</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">0</span>
-  <span class="k">def</span> <span class="nf">combine</span><span class="o">(</span><span class="n">x</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">y</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<p>The name <code class="language-plaintext highlighter-rouge">Monoid</code> is taken from abstract algebra which specifies precisely this kind of structure.</p>
-
-<p>We can now write the functions above against this interface.</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">combineAll</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">list</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">A</span><span class="o">],</span> <span class="n">m</span><span class="k">:</span> <span class="kt">Monoid</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=</span> <span class="nv">list</span><span class="o">.</span><span class="py">foldRight</span><span class="o">(</span><span class="nv">m</span><span class="o">.</span><span class="py">empty</span><span class="o">)(</span><span class="nv">m</span><span class="o">.</span><span class="py">combine</span><span class="o">)</span>
-</code></pre></div></div>
-
-<h2 id="type-classes-vs-subtyping">Type classes vs. subtyping</h2>
-<p>The definition above takes an actual monoid argument instead of doing the usual object-oriented practice of using
-subtype constraints.</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Subtyping</span>
-<span class="k">def</span> <span class="nf">combineAll</span><span class="o">[</span><span class="kt">A</span> <span class="k">&lt;:</span> <span class="kt">Monoid</span><span class="o">[</span><span class="kt">A</span><span class="o">]](</span><span class="n">list</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=</span> <span class="o">???</span>
-</code></pre></div></div>
-
-<p>This has a subtle difference with the earlier explicit example. In order to seed the <code class="language-plaintext highlighter-rouge">foldRight</code> with the empty value,
-we need to get a hold of it given only the type <code class="language-plaintext highlighter-rouge">A</code>. Taking <code class="language-plaintext highlighter-rouge">Monoid[A]</code> as an argument gives us this by calling the
-appropriate <code class="language-plaintext highlighter-rouge">empty</code> method on it. With the subtype example, the <code class="language-plaintext highlighter-rouge">empty</code> method would be on a <strong>value</strong> of type
-<code class="language-plaintext highlighter-rouge">Monoid[A]</code> itself, which we are only getting from the <code class="language-plaintext highlighter-rouge">list</code> argument. If <code class="language-plaintext highlighter-rouge">list</code> is empty, we have no values to work
-with and therefore can’t get the empty value. Not to mention the oddity of getting a constant value from a non-static
-object.</p>
-
-<hr />
-
-<p>For another motivating difference, consider the simple pair type.</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">final</span> <span class="k">case</span> <span class="k">class</span> <span class="nc">Pair</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">first</span><span class="k">:</span> <span class="kt">A</span><span class="o">,</span> <span class="n">second</span><span class="k">:</span> <span class="kt">B</span><span class="o">)</span>
-</code></pre></div></div>
-
-<p>Defining a <code class="language-plaintext highlighter-rouge">Monoid[Pair[A, B]]</code> depends on the ability to define a <code class="language-plaintext highlighter-rouge">Monoid[A]</code> and <code class="language-plaintext highlighter-rouge">Monoid[B]</code>, where the definition
-is point-wise, i.e. the first element of the first pair combines with the first element of the second pair and the second element of the first pair combines with the second element of the second pair. With subtyping such a constraint would be encoded as something like</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">final</span> <span class="k">case</span> <span class="k">class</span> <span class="nc">Pair</span><span class="o">[</span><span class="kt">A</span> <span class="k">&lt;:</span> <span class="kt">Monoid</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span>, <span class="kt">B</span> <span class="k">&lt;:</span> <span class="kt">Monoid</span><span class="o">[</span><span class="kt">B</span><span class="o">]](</span><span class="n">first</span><span class="k">:</span> <span class="kt">A</span><span class="o">,</span> <span class="n">second</span><span class="k">:</span> <span class="kt">B</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">Monoid</span><span class="o">[</span><span class="kt">Pair</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">]]</span> <span class="o">{</span>
-  <span class="k">def</span> <span class="nf">empty</span><span class="k">:</span> <span class="kt">Pair</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">]</span> <span class="k">=</span> <span class="o">???</span>
-
-  <span class="k">def</span> <span class="nf">combine</span><span class="o">(</span><span class="n">x</span><span class="k">:</span> <span class="kt">Pair</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">],</span> <span class="n">y</span><span class="k">:</span> <span class="kt">Pair</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">])</span><span class="k">:</span> <span class="kt">Pair</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">]</span> <span class="k">=</span> <span class="o">???</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<p>Not only is the type signature of <code class="language-plaintext highlighter-rouge">Pair</code> now messy but it also forces all instances of <code class="language-plaintext highlighter-rouge">Pair</code> to have a <code class="language-plaintext highlighter-rouge">Monoid</code>
-instance, whereas <code class="language-plaintext highlighter-rouge">Pair</code> should be able to carry any types it wants and if the types happens to have a
-<code class="language-plaintext highlighter-rouge">Monoid</code> instance then so would it. We could try bubbling down the constraint into the methods themselves.</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">final</span> <span class="k">case</span> <span class="k">class</span> <span class="nc">Pair</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">first</span><span class="k">:</span> <span class="kt">A</span><span class="o">,</span> <span class="n">second</span><span class="k">:</span> <span class="kt">B</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">Monoid</span><span class="o">[</span><span class="kt">Pair</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">]]</span> <span class="o">{</span>
-  <span class="k">def</span> <span class="nf">empty</span><span class="o">(</span><span class="k">implicit</span> <span class="n">eva</span><span class="k">:</span> <span class="kt">A</span> <span class="k">&lt;:</span><span class="kt">&lt;</span> <span class="kt">Monoid</span><span class="o">[</span><span class="kt">A</span><span class="o">],</span> <span class="n">evb</span><span class="k">:</span> <span class="kt">B</span> <span class="k">&lt;:</span><span class="kt">&lt;</span> <span class="kt">Monoid</span><span class="o">[</span><span class="kt">B</span><span class="o">])</span><span class="k">:</span> <span class="kt">Pair</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">]</span> <span class="k">=</span> <span class="o">???</span>
-
-  <span class="k">def</span> <span class="nf">combine</span><span class="o">(</span><span class="n">x</span><span class="k">:</span> <span class="kt">Pair</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">],</span> <span class="n">y</span><span class="k">:</span> <span class="kt">Pair</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">])(</span><span class="k">implicit</span> <span class="n">eva</span><span class="k">:</span> <span class="kt">A</span> <span class="k">&lt;:</span><span class="kt">&lt;</span> <span class="kt">Monoid</span><span class="o">[</span><span class="kt">A</span><span class="o">],</span> <span class="n">evb</span><span class="k">:</span> <span class="kt">B</span> <span class="k">&lt;:</span><span class="kt">&lt;</span> <span class="kt">Monoid</span><span class="o">[</span><span class="kt">B</span><span class="o">])</span><span class="k">:</span> <span class="kt">Pair</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">]</span> <span class="k">=</span> <span class="o">???</span>
-<span class="o">}</span>
-<span class="c1">// error: class Pair needs to be abstract, since:</span>
-<span class="c1">// it has 2 unimplemented members.</span>
-<span class="c1">// /** As seen from class Pair, the missing signatures are as follows.</span>
-<span class="c1">//  *  For convenience, these are usable as stub implementations.</span>
-<span class="c1">//  */</span>
-<span class="c1">//   def combine(x: Pair[A,B],y: Pair[A,B]): Pair[A,B] = ???</span>
-<span class="c1">//   def empty: Pair[A,B] = ???</span>
-<span class="c1">// </span>
-<span class="c1">// final case class Pair[A, B](first: A, second: B) extends Monoid[Pair[A, B]] {</span>
-<span class="c1">// ^</span>
-</code></pre></div></div>
-
-<p>But now these don’t conform to the interface of <code class="language-plaintext highlighter-rouge">Monoid</code> due to the implicit constraints.</p>
-
-<h3 id="implicit-derivation">Implicit derivation</h3>
-
-<p>Note that a <code class="language-plaintext highlighter-rouge">Monoid[Pair[A, B]]</code> is derivable given <code class="language-plaintext highlighter-rouge">Monoid[A]</code> and <code class="language-plaintext highlighter-rouge">Monoid[B]</code>:</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">final</span> <span class="k">case</span> <span class="k">class</span> <span class="nc">Pair</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">first</span><span class="k">:</span> <span class="kt">A</span><span class="o">,</span> <span class="n">second</span><span class="k">:</span> <span class="kt">B</span><span class="o">)</span>
-
-<span class="k">def</span> <span class="nf">deriveMonoidPair</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">A</span><span class="k">:</span> <span class="kt">Monoid</span><span class="o">[</span><span class="kt">A</span><span class="o">],</span> <span class="n">B</span><span class="k">:</span> <span class="kt">Monoid</span><span class="o">[</span><span class="kt">B</span><span class="o">])</span><span class="k">:</span> <span class="kt">Monoid</span><span class="o">[</span><span class="kt">Pair</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">]]</span> <span class="k">=</span>
-  <span class="k">new</span> <span class="nc">Monoid</span><span class="o">[</span><span class="kt">Pair</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">]]</span> <span class="o">{</span>
-    <span class="k">def</span> <span class="nf">empty</span><span class="k">:</span> <span class="kt">Pair</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Pair</span><span class="o">(</span><span class="nv">A</span><span class="o">.</span><span class="py">empty</span><span class="o">,</span> <span class="nv">B</span><span class="o">.</span><span class="py">empty</span><span class="o">)</span>
-
-    <span class="k">def</span> <span class="nf">combine</span><span class="o">(</span><span class="n">x</span><span class="k">:</span> <span class="kt">Pair</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">],</span> <span class="n">y</span><span class="k">:</span> <span class="kt">Pair</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">])</span><span class="k">:</span> <span class="kt">Pair</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">]</span> <span class="k">=</span>
-      <span class="nc">Pair</span><span class="o">(</span><span class="nv">A</span><span class="o">.</span><span class="py">combine</span><span class="o">(</span><span class="nv">x</span><span class="o">.</span><span class="py">first</span><span class="o">,</span> <span class="nv">y</span><span class="o">.</span><span class="py">first</span><span class="o">),</span> <span class="nv">B</span><span class="o">.</span><span class="py">combine</span><span class="o">(</span><span class="nv">x</span><span class="o">.</span><span class="py">second</span><span class="o">,</span> <span class="nv">y</span><span class="o">.</span><span class="py">second</span><span class="o">))</span>
-  <span class="o">}</span>
-</code></pre></div></div>
-
-<p>One of the most powerful features of type classes is the ability to do this kind of derivation automatically.
-We can do this through Scala’s implicit mechanism.</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.Monoid</span>
-
-<span class="k">object</span> <span class="nc">Demo</span> <span class="o">{</span> 
-  <span class="k">final</span> <span class="k">case</span> <span class="k">class</span> <span class="nc">Pair</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">first</span><span class="k">:</span> <span class="kt">A</span><span class="o">,</span> <span class="n">second</span><span class="k">:</span> <span class="kt">B</span><span class="o">)</span>
-
-  <span class="k">object</span> <span class="nc">Pair</span> <span class="o">{</span>
-    <span class="k">implicit</span> <span class="k">def</span> <span class="nf">tuple2Instance</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="k">implicit</span> <span class="n">A</span><span class="k">:</span> <span class="kt">Monoid</span><span class="o">[</span><span class="kt">A</span><span class="o">],</span> <span class="n">B</span><span class="k">:</span> <span class="kt">Monoid</span><span class="o">[</span><span class="kt">B</span><span class="o">])</span><span class="k">:</span> <span class="kt">Monoid</span><span class="o">[</span><span class="kt">Pair</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">]]</span> <span class="k">=</span>
-      <span class="k">new</span> <span class="nc">Monoid</span><span class="o">[</span><span class="kt">Pair</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">]]</span> <span class="o">{</span>
-        <span class="k">def</span> <span class="nf">empty</span><span class="k">:</span> <span class="kt">Pair</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Pair</span><span class="o">(</span><span class="nv">A</span><span class="o">.</span><span class="py">empty</span><span class="o">,</span> <span class="nv">B</span><span class="o">.</span><span class="py">empty</span><span class="o">)</span>
-
-        <span class="k">def</span> <span class="nf">combine</span><span class="o">(</span><span class="n">x</span><span class="k">:</span> <span class="kt">Pair</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">],</span> <span class="n">y</span><span class="k">:</span> <span class="kt">Pair</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">])</span><span class="k">:</span> <span class="kt">Pair</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">]</span> <span class="k">=</span>
-          <span class="nc">Pair</span><span class="o">(</span><span class="nv">A</span><span class="o">.</span><span class="py">combine</span><span class="o">(</span><span class="nv">x</span><span class="o">.</span><span class="py">first</span><span class="o">,</span> <span class="nv">y</span><span class="o">.</span><span class="py">first</span><span class="o">),</span> <span class="nv">B</span><span class="o">.</span><span class="py">combine</span><span class="o">(</span><span class="nv">x</span><span class="o">.</span><span class="py">second</span><span class="o">,</span> <span class="nv">y</span><span class="o">.</span><span class="py">second</span><span class="o">))</span>
-      <span class="o">}</span>
-  <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<p>We also change any functions that have a <code class="language-plaintext highlighter-rouge">Monoid</code> constraint on the type parameter to take the argument implicitly,
-and any instances of the type class to be implicit.</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">implicit</span> <span class="k">val</span> <span class="nv">intAdditionMonoid</span><span class="k">:</span> <span class="kt">Monoid</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Monoid</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="o">{</span>
-  <span class="k">def</span> <span class="nf">empty</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">0</span>
-  <span class="k">def</span> <span class="nf">combine</span><span class="o">(</span><span class="n">x</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">y</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
-<span class="o">}</span>
-
-<span class="k">def</span> <span class="nf">combineAll</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">list</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="k">implicit</span> <span class="n">A</span><span class="k">:</span> <span class="kt">Monoid</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=</span> <span class="nv">list</span><span class="o">.</span><span class="py">foldRight</span><span class="o">(</span><span class="nv">A</span><span class="o">.</span><span class="py">empty</span><span class="o">)(</span><span class="nv">A</span><span class="o">.</span><span class="py">combine</span><span class="o">)</span>
-</code></pre></div></div>
-
-<p>Now we can also <code class="language-plaintext highlighter-rouge">combineAll</code> a list of <code class="language-plaintext highlighter-rouge">Pair</code>s as long as <code class="language-plaintext highlighter-rouge">Pair</code>’s type parameters themselves have <code class="language-plaintext highlighter-rouge">Monoid</code>
-instances.</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">implicit</span> <span class="k">val</span> <span class="nv">stringMonoid</span><span class="k">:</span> <span class="kt">Monoid</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Monoid</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="o">{</span>
-  <span class="k">def</span> <span class="nf">empty</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">""</span>
-  <span class="k">def</span> <span class="nf">combine</span><span class="o">(</span><span class="n">x</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">y</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="n">x</span> <span class="o">++</span> <span class="n">y</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">Demo.</span><span class="o">{</span><span class="nc">Pair</span> <span class="k">=&gt;</span> <span class="nc">Paired</span><span class="o">}</span>
-
-<span class="nf">combineAll</span><span class="o">(</span><span class="nc">List</span><span class="o">(</span><span class="nc">Paired</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="s">"hello"</span><span class="o">),</span> <span class="nc">Paired</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="s">" "</span><span class="o">),</span> <span class="nc">Paired</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span> <span class="s">"world"</span><span class="o">)))</span>
-<span class="c1">// res2: Demo.Pair[Int, String] = Pair(6, "hello world")</span>
-</code></pre></div></div>
-
-<h2 id="a-note-on-syntax">A note on syntax</h2>
-<p>In many cases, including the <code class="language-plaintext highlighter-rouge">combineAll</code> function above, the implicit arguments can be written with syntactic sugar.</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">combineAll</span><span class="o">[</span><span class="kt">A</span> <span class="kt">:</span> <span class="kt">Monoid</span><span class="o">](</span><span class="n">list</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=</span> <span class="o">???</span>
-</code></pre></div></div>
-
-<p>While nicer to read as a user, it comes at a cost for the implementer.</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.Monoid</span>
-
-<span class="c1">// Defined in the standard library, shown for illustration purposes</span>
-<span class="c1">// Implicitly looks in implicit scope for a value of type `A` and just hands it back</span>
-<span class="k">def</span> <span class="nf">implicitly</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="k">implicit</span> <span class="n">ev</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=</span> <span class="n">ev</span>
-
-<span class="k">def</span> <span class="nf">combineAll</span><span class="o">[</span><span class="kt">A</span> <span class="kt">:</span> <span class="kt">Monoid</span><span class="o">](</span><span class="n">list</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=</span>
-  <span class="nv">list</span><span class="o">.</span><span class="py">foldRight</span><span class="o">(</span><span class="n">implicitly</span><span class="o">[</span><span class="kt">Monoid</span><span class="o">[</span><span class="kt">A</span><span class="o">]].</span><span class="py">empty</span><span class="o">)(</span><span class="n">implicitly</span><span class="o">[</span><span class="kt">Monoid</span><span class="o">[</span><span class="kt">A</span><span class="o">]].</span><span class="py">combine</span><span class="o">)</span>
-</code></pre></div></div>
-
-<p>For this reason, many libraries that provide type classes provide a utility method on the companion object of the type
-class, usually under the name <code class="language-plaintext highlighter-rouge">apply</code>, that skirts the need to call <code class="language-plaintext highlighter-rouge">implicitly</code> everywhere.</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">object</span> <span class="nc">Monoid</span> <span class="o">{</span>
-  <span class="k">def</span> <span class="nf">apply</span><span class="o">[</span><span class="kt">A</span> <span class="kt">:</span> <span class="kt">Monoid</span><span class="o">]</span><span class="k">:</span> <span class="kt">Monoid</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="n">implicitly</span><span class="o">[</span><span class="kt">Monoid</span><span class="o">[</span><span class="kt">A</span><span class="o">]]</span>
-<span class="o">}</span>
-
-<span class="k">def</span> <span class="nf">combineAll</span><span class="o">[</span><span class="kt">A</span> <span class="kt">:</span> <span class="kt">Monoid</span><span class="o">](</span><span class="n">list</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=</span>
-  <span class="nv">list</span><span class="o">.</span><span class="py">foldRight</span><span class="o">(</span><span class="nc">Monoid</span><span class="o">[</span><span class="kt">A</span><span class="o">].</span><span class="py">empty</span><span class="o">)(</span><span class="nc">Monoid</span><span class="o">[</span><span class="kt">A</span><span class="o">].</span><span class="py">combine</span><span class="o">)</span>
-</code></pre></div></div>
-
-<p>Cats uses <a href="https://github.com/typelevel/simulacrum" title="First class syntax support for type classes in Scala">simulacrum</a> for defining type classes which will auto-generate such an <code class="language-plaintext highlighter-rouge">apply</code> method.</p>
-
-<h1 id="laws">Laws</h1>
-
-<p>Conceptually, all type classes come with laws. These laws constrain implementations for a given
-type and can be exploited and used to reason about generic code.</p>
-
-<p>For instance, the <code class="language-plaintext highlighter-rouge">Monoid</code> type class requires that
-<code class="language-plaintext highlighter-rouge">combine</code> be associative and <code class="language-plaintext highlighter-rouge">empty</code> be an identity element for <code class="language-plaintext highlighter-rouge">combine</code>. That means the following
-equalities should hold for any choice of <code class="language-plaintext highlighter-rouge">x</code>, <code class="language-plaintext highlighter-rouge">y</code>, and <code class="language-plaintext highlighter-rouge">z</code>.</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>combine(x, combine(y, z)) = combine(combine(x, y), z)
-combine(x, id) = combine(id, x) = x
-</code></pre></div></div>
-
-<p>With these laws in place, functions parametrized over a <code class="language-plaintext highlighter-rouge">Monoid</code> can leverage them for say, performance
-reasons. A function that collapses a <code class="language-plaintext highlighter-rouge">List[A]</code> into a single <code class="language-plaintext highlighter-rouge">A</code> can do so with <code class="language-plaintext highlighter-rouge">foldLeft</code> or
-<code class="language-plaintext highlighter-rouge">foldRight</code> since <code class="language-plaintext highlighter-rouge">combine</code> is assumed to be associative, or it can break apart the list into smaller
-lists and collapse in parallel, such as</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">list</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">4</span><span class="o">,</span> <span class="mi">5</span><span class="o">)</span>
-<span class="nf">val</span> <span class="o">(</span><span class="n">left</span><span class="o">,</span> <span class="n">right</span><span class="o">)</span> <span class="k">=</span> <span class="nv">list</span><span class="o">.</span><span class="py">splitAt</span><span class="o">(</span><span class="mi">2</span><span class="o">)</span>
-</code></pre></div></div>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Imagine the following two operations run in parallel</span>
-<span class="k">val</span> <span class="nv">sumLeft</span> <span class="k">=</span> <span class="nf">combineAll</span><span class="o">(</span><span class="n">left</span><span class="o">)</span>
-<span class="c1">// sumLeft: Int = 3</span>
-<span class="k">val</span> <span class="nv">sumRight</span> <span class="k">=</span> <span class="nf">combineAll</span><span class="o">(</span><span class="n">right</span><span class="o">)</span>
-<span class="c1">// sumRight: Int = 12</span>
-
-<span class="c1">// Now gather the results</span>
-<span class="k">val</span> <span class="nv">result</span> <span class="k">=</span> <span class="nc">Monoid</span><span class="o">[</span><span class="kt">Int</span><span class="o">].</span><span class="py">combine</span><span class="o">(</span><span class="n">sumLeft</span><span class="o">,</span> <span class="n">sumRight</span><span class="o">)</span>
-<span class="c1">// result: Int = 15</span>
-</code></pre></div></div>
-
-<p>Cats provides laws for type classes via the <code class="language-plaintext highlighter-rouge">kernel-laws</code> and <code class="language-plaintext highlighter-rouge">laws</code> modules which makes law checking
-type class instances easy.</p>
-
-<p>You can find out more about law testing <a href="typeclasses/lawtesting.html">here</a>.</p>
-
-<h2 id="type-classes-in-cats">Type classes in Cats</h2>
-
-<p><img src="https://cdn.rawgit.com/tpolecat/cats-infographic/master/cats.svg" alt="infographic" style="width: 100%;" />
-From <a href="https://github.com/tpolecat/cats-infographic">cats-infographic by @tpolecat</a>.</p>
-
-<h2 id="incomplete-type-class-instances-in-cats">Incomplete type class instances in cats</h2>
-
-<p>Originally from <a href="https://gist.github.com/alexknvl/d63508ddb6a728015ace53cb70a1fd5d">@alexknvl</a></p>
-
-<table>
-  <thead>
-    <tr>
-      <th>Type</th>
-      <th style="text-align: center">Functor</th>
-      <th style="text-align: center">Apply</th>
-      <th style="text-align: center">Applicative</th>
-      <th style="text-align: center">Monad</th>
-      <th style="text-align: center">MonoidK</th>
-      <th style="text-align: center">ApplicativeError</th>
-      <th style="text-align: center">MonadError</th>
-      <th style="text-align: center">CoflatMap</th>
-      <th style="text-align: center">Comonad</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Id[A]</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✗</td>
-      <td style="text-align: center">✗</td>
-      <td style="text-align: center">✗</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✔</td>
-    </tr>
-    <tr>
-      <td>Eval[A]</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✗</td>
-      <td style="text-align: center">✗</td>
-      <td style="text-align: center">✗</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✔</td>
-    </tr>
-    <tr>
-      <td>Option[A]</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✗</td>
-    </tr>
-    <tr>
-      <td>Const[K, A]</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✔ (<code class="language-plaintext highlighter-rouge">K:Monoid</code>)</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✗</td>
-      <td style="text-align: center">✗</td>
-      <td style="text-align: center">✗</td>
-      <td style="text-align: center">✗</td>
-      <td style="text-align: center">✗</td>
-      <td style="text-align: center">✗</td>
-    </tr>
-    <tr>
-      <td>Either[E, A]</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✗</td>
-      <td style="text-align: center">✗</td>
-    </tr>
-    <tr>
-      <td>List[A]</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✗</td>
-      <td style="text-align: center">✗</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✗</td>
-    </tr>
-    <tr>
-      <td>NonEmptyList[A]</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✗</td>
-      <td style="text-align: center">✗</td>
-      <td style="text-align: center">✗</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✔</td>
-    </tr>
-    <tr>
-      <td>Stream[A]</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✗</td>
-      <td style="text-align: center">✗</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✗</td>
-    </tr>
-    <tr>
-      <td>Map[K, A]</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✗</td>
-      <td style="text-align: center">✗</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✗</td>
-      <td style="text-align: center">✗</td>
-      <td style="text-align: center">✗</td>
-      <td style="text-align: center">✗</td>
-    </tr>
-    <tr>
-      <td>Validated[E, A]</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✔ (<code class="language-plaintext highlighter-rouge">E: Semigroup</code>)</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✗</td>
-      <td style="text-align: center">✗</td>
-      <td style="text-align: center">✔ (<code class="language-plaintext highlighter-rouge">E: Semigroup</code>)</td>
-      <td style="text-align: center">✗</td>
-      <td style="text-align: center">✗</td>
-      <td style="text-align: center">✗</td>
-    </tr>
-    <tr>
-      <td>Reader[E, A]</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✗</td>
-      <td style="text-align: center">✗</td>
-      <td style="text-align: center">✗</td>
-      <td style="text-align: center">✗</td>
-      <td style="text-align: center">✗</td>
-    </tr>
-    <tr>
-      <td>Writer[E, A]</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✔ (<code class="language-plaintext highlighter-rouge">E:Monoid</code>)</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✗</td>
-      <td style="text-align: center">✗</td>
-      <td style="text-align: center">✗</td>
-      <td style="text-align: center">✔</td>
-      <td style="text-align: center">✗</td>
-    </tr>
-  </tbody>
-</table>
-
-<h2 id="further-reading">Further reading</h2>
-<ul>
-  <li><a href="http://tpolecat.github.io/2015/04/29/f-bounds.html" title="Returning the &quot;Current&quot; Type in Scala">Returning the “Current” Type in Scala</a></li>
-</ul>
-
-</section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/cats/highlight/highlight.pack.js"></script><script src="/cats/lunr/lunr.js"></script><script>
-// For all code blocks, copy the language from the containing div
-// to the inner code tag (where hljs expects it to be)
-const langPrefix = 'language-';
-document.querySelectorAll(`div[class^='${langPrefix}']`).forEach(function(div) {
-  div.classList.forEach(function(cssClass) {
-    if (cssClass.startsWith(langPrefix)) {
-      const lang = cssClass.substring(langPrefix.length);
-      div.querySelectorAll('pre code').forEach(function(code) {
-        code.classList.add(lang);
-      });
-    }
-  });
-});
-
-hljs.configure({languages:['scala','java','bash']});
-hljs.initHighlightingOnLoad();
-      </script><script src="/cats/js/sponsors.js"></script><script>console.info('\x57\x65\x62\x73\x69\x74\x65\x20\x62\x75\x69\x6c\x74\x20\x77\x69\x74\x68\x3a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x5f\x5f\x20\x20\x20\x20\x5f\x5f\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x5f\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x5f\x20\x5f\x5f\x0a\x20\x20\x20\x5f\x5f\x5f\x5f\x5f\x2f\x20\x2f\x5f\x20\x20\x2f\x20\x2f\x5f\x20\x20\x20\x20\x20\x20\x5f\x5f\x5f\x5f\x20\x5f\x5f\x5f\x20\x20\x28\x5f\x29\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x20\x20\x5f\x5f\x5f\x5f\x5f\x28\x5f\x29\x20\x2f\x5f\x5f\x5f\x5f\x20\x20\x5f\x5f\x5f\x5f\x5f\x0a\x20\x20\x2f\x20\x5f\x5f\x5f\x2f\x20\x5f\x5f\x20\x5c\x2f\x20\x5f\x5f\x2f\x5f\x5f\x5f\x5f\x5f\x2f\x20\x5f\x5f\x20\x60\x5f\x5f\x20\x5c\x2f\x20\x2f\x20\x5f\x5f\x5f\x2f\x20\x5f\x5f\x5f\x2f\x20\x5f\x5f\x20\x5c\x2f\x20\x5f\x5f\x5f\x2f\x20\x2f\x20\x5f\x5f\x2f\x20\x5f\x20\x5c\x2f\x20\x5f\x5f\x5f\x2f\x0a\x20\x28\x5f\x5f\x20\x20\x29\x20\x2f\x5f\x2f\x20\x2f\x20\x2f\x5f\x2f\x5f\x5f\x5f\x5f\x5f\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x5f\x5f\x2f\x20\x2f\x20\x20\x2f\x20\x2f\x5f\x2f\x20\x28\x5f\x5f\x20\x20\x29\x20\x2f\x20\x2f\x5f\x2f\x20\x20\x5f\x5f\x28\x5f\x5f\x20\x20\x29\x0a\x2f\x5f\x5f\x5f\x5f\x2f\x5f\x2e\x5f\x5f\x5f\x2f\x5c\x5f\x5f\x2f\x20\x20\x20\x20\x20\x2f\x5f\x2f\x20\x2f\x5f\x2f\x20\x2f\x5f\x2f\x5f\x2f\x5c\x5f\x5f\x5f\x2f\x5f\x2f\x20\x20\x20\x5c\x5f\x5f\x5f\x5f\x2f\x5f\x5f\x5f\x5f\x2f\x5f\x2f\x5c\x5f\x5f\x2f\x5c\x5f\x5f\x5f\x2f\x5f\x5f\x5f\x5f\x2f\x0a\x0a\x68\x74\x74\x70\x73\x3a\x2f\x2f\x34\x37\x64\x65\x67\x2e\x67\x69\x74\x68\x75\x62\x2e\x69\x6f\x2f\x73\x62\x74\x2d\x6d\x69\x63\x72\x6f\x73\x69\x74\x65\x73')</script><script>((window.gitter = {}).chat = {}).options = {
-room: 'typelevel/cats'};</script><script src="https://sidecar.gitter.im/dist/sidecar.v1.js"></script><script src="/cats/js/search.js"></script><script src="/cats/js/main.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Laika 0.18.1 + Helium Theme" />
+    <title>Type Classes</title>
+    
+      <meta name="author" content="Cody Allen"/>
+    
+      <meta name="author" content="Ross Baker"/>
+    
+      <meta name="author" content="P. Oscar Boykin"/>
+    
+      <meta name="author" content="Travis Brown"/>
+    
+      <meta name="author" content="Adelbert Chang"/>
+    
+      <meta name="author" content="Peter Neyens"/>
+    
+      <meta name="author" content="Rob Norris"/>
+    
+      <meta name="author" content="Erik Osheim"/>
+    
+      <meta name="author" content="LukaJCB"/>
+    
+      <meta name="author" content="Michael Pilquist"/>
+    
+      <meta name="author" content="Miles Sabin"/>
+    
+      <meta name="author" content="Daniel Spiewak"/>
+    
+      <meta name="author" content="Frank Thomas"/>
+    
+      <meta name="author" content="Julien Truffaut"/>
+    
+      <meta name="author" content="Kailuo Wang"/>
+    
+    
+      <meta name="description" content="docs"/>
+    
+    
+      <link rel="icon" sizes="32x32" type="image/png" href="https://typelevel.org/img/favicon.png"/>
+    
+    
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.207/distr/fira_code.css">
+    
+    <link rel="stylesheet" type="text/css" href="helium/icofont.min.css" />
+    <link rel="stylesheet" type="text/css" href="helium/laika-helium.css" />
+    <link rel="stylesheet" type="text/css" href="site/styles.css" />
+    <script src="helium/laika-helium.js"></script>
+    <script src="js/sponsors.js"></script>
+    
+    
+    <script> /* for avoiding page load transitions */ </script>
+  </head>
+
+  <body>
+
+    <header id="top-bar">
+
+      <div class="row">
+        <a id="nav-icon">
+          <i class="icofont-laika" title="Navigation">&#xefa2;</i>
+        </a>
+        
+      </div>
+
+      <a class="image-link" href="https://typelevel.org"><img src="https://typelevel.org/img/logo.svg"></a>
+
+      <span class="row links"><a class="icon-link svg-link" href="https://typelevel.org/cats/api/"><span title="API"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M75,47.5c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm-50,-0c13.246,-0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,-0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm2.705,16.735l7.239,0l0.622,-4.904l-21.833,0l-0,4.904l7.589,0l0,22.067l6.383,0l-0,-22.067Zm58.076,7.265c-0,-8.757 -3.698,-14.166 -10.781,-14.166c-7.083,-0 -10.781,5.604 -10.781,14.166c0,8.757 3.698,14.166 10.781,14.166c7.083,0 10.781,-5.604 10.781,-14.166Zm-6.539,0c0,6.538 -1.128,9.496 -4.242,9.496c-2.997,0 -4.242,-2.88 -4.242,-9.496c-0,-6.616 1.206,-9.496 4.242,-9.496c3.036,-0 4.242,2.88 4.242,9.496Zm-29.242,-67c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm0.512,9.834c-7.122,-0 -12.609,5.098 -12.609,14.127c-0,9.263 5.215,14.205 12.532,14.205c4.164,0 7.083,-1.634 9.068,-3.658l-2.88,-3.697c-1.518,1.206 -3.153,2.413 -5.838,2.413c-3.697,-0 -6.266,-2.763 -6.266,-9.263c-0,-6.616 2.724,-9.379 6.149,-9.379c2.102,-0 3.892,0.778 5.371,1.984l3.113,-3.775c-2.257,-1.868 -4.748,-2.957 -8.64,-2.957Z"/>
+  </g>
+</svg></span></a><a class="icon-link svg-link" href="https://github.com/typelevel/cats"><span title="Source Code"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M49.995,1c-27.609,-0 -49.995,22.386 -49.995,50.002c-0,22.09 14.325,40.83 34.194,47.444c2.501,0.458 3.413,-1.086 3.413,-2.412c0,-1.185 -0.043,-4.331 -0.067,-8.503c-13.908,3.021 -16.843,-6.704 -16.843,-6.704c-2.274,-5.773 -5.552,-7.311 -5.552,-7.311c-4.54,-3.103 0.344,-3.042 0.344,-3.042c5.018,0.356 7.658,5.154 7.658,5.154c4.46,7.64 11.704,5.433 14.552,4.156c0.454,-3.232 1.744,-5.436 3.174,-6.685c-11.102,-1.262 -22.775,-5.553 -22.775,-24.713c-0,-5.457 1.949,-9.92 5.147,-13.416c-0.516,-1.265 -2.231,-6.348 0.488,-13.233c0,0 4.199,-1.344 13.751,5.126c3.988,-1.108 8.266,-1.663 12.518,-1.682c4.245,0.019 8.523,0.574 12.517,1.682c9.546,-6.47 13.736,-5.126 13.736,-5.126c2.728,6.885 1.013,11.968 0.497,13.233c3.204,3.496 5.141,7.959 5.141,13.416c0,19.209 -11.691,23.436 -22.83,24.673c1.795,1.544 3.394,4.595 3.394,9.26c0,6.682 -0.061,12.076 -0.061,13.715c0,1.338 0.899,2.894 3.438,2.406c19.853,-6.627 34.166,-25.354 34.166,-47.438c-0,-27.616 -22.389,-50.002 -50.005,-50.002"/>
+  </g>
+</svg></span></a><a class="icon-link" href="https://discord.gg/XF3CXcMzqD"><i class="icofont-laika" title="Chat">&#xeed5;</i></a><a class="icon-link" href="https://twitter.com/typelevel"><i class="icofont-laika" title="Twitter">&#xed7a;</i></a></span>
+
+    </header>
+
+    <nav id="sidebar">
+
+      <div class="row">
+        <a class="icon-link svg-link" href="https://typelevel.org/cats/api/"><span title="API"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M75,47.5c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm-50,-0c13.246,-0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,-0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm2.705,16.735l7.239,0l0.622,-4.904l-21.833,0l-0,4.904l7.589,0l0,22.067l6.383,0l-0,-22.067Zm58.076,7.265c-0,-8.757 -3.698,-14.166 -10.781,-14.166c-7.083,-0 -10.781,5.604 -10.781,14.166c0,8.757 3.698,14.166 10.781,14.166c7.083,0 10.781,-5.604 10.781,-14.166Zm-6.539,0c0,6.538 -1.128,9.496 -4.242,9.496c-2.997,0 -4.242,-2.88 -4.242,-9.496c-0,-6.616 1.206,-9.496 4.242,-9.496c3.036,-0 4.242,2.88 4.242,9.496Zm-29.242,-67c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm0.512,9.834c-7.122,-0 -12.609,5.098 -12.609,14.127c-0,9.263 5.215,14.205 12.532,14.205c4.164,0 7.083,-1.634 9.068,-3.658l-2.88,-3.697c-1.518,1.206 -3.153,2.413 -5.838,2.413c-3.697,-0 -6.266,-2.763 -6.266,-9.263c-0,-6.616 2.724,-9.379 6.149,-9.379c2.102,-0 3.892,0.778 5.371,1.984l3.113,-3.775c-2.257,-1.868 -4.748,-2.957 -8.64,-2.957Z"/>
+  </g>
+</svg></span></a><a class="icon-link svg-link" href="https://github.com/typelevel/cats"><span title="Source Code"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M49.995,1c-27.609,-0 -49.995,22.386 -49.995,50.002c-0,22.09 14.325,40.83 34.194,47.444c2.501,0.458 3.413,-1.086 3.413,-2.412c0,-1.185 -0.043,-4.331 -0.067,-8.503c-13.908,3.021 -16.843,-6.704 -16.843,-6.704c-2.274,-5.773 -5.552,-7.311 -5.552,-7.311c-4.54,-3.103 0.344,-3.042 0.344,-3.042c5.018,0.356 7.658,5.154 7.658,5.154c4.46,7.64 11.704,5.433 14.552,4.156c0.454,-3.232 1.744,-5.436 3.174,-6.685c-11.102,-1.262 -22.775,-5.553 -22.775,-24.713c-0,-5.457 1.949,-9.92 5.147,-13.416c-0.516,-1.265 -2.231,-6.348 0.488,-13.233c0,0 4.199,-1.344 13.751,5.126c3.988,-1.108 8.266,-1.663 12.518,-1.682c4.245,0.019 8.523,0.574 12.517,1.682c9.546,-6.47 13.736,-5.126 13.736,-5.126c2.728,6.885 1.013,11.968 0.497,13.233c3.204,3.496 5.141,7.959 5.141,13.416c0,19.209 -11.691,23.436 -22.83,24.673c1.795,1.544 3.394,4.595 3.394,9.26c0,6.682 -0.061,12.076 -0.061,13.715c0,1.338 0.899,2.894 3.438,2.406c19.853,-6.627 34.166,-25.354 34.166,-47.438c-0,-27.616 -22.389,-50.002 -50.005,-50.002"/>
+  </g>
+</svg></span></a><a class="icon-link" href="https://discord.gg/XF3CXcMzqD"><i class="icofont-laika" title="Chat">&#xeed5;</i></a><a class="icon-link" href="https://twitter.com/typelevel"><i class="icofont-laika" title="Twitter">&#xed7a;</i></a>
+      </div>
+
+      <ul class="nav-list">
+        <li class="level1"><a href="index.html">Cats</a></li>
+        <li class="level1 active"><a href="#">Type Classes</a></li>
+        <li class="level1"><a href="datatypes.html">Data Types</a></li>
+        <li class="level1"><a href="algebra.html">Algebra</a></li>
+        <li class="level1"><a href="motivations.html">Motivations</a></li>
+        <li class="level1"><a href="resources_for_learners.html">Resources for Learners</a></li>
+        <li class="level1"><a href="jump_start_guide.html">Jump Start Guide</a></li>
+        <li class="level1"><a href="imports.html">Imports</a></li>
+        <li class="level1"><a href="faq.html">FAQ</a></li>
+        <li class="level1"><a href="CONTRIBUTING.html">Contributor guide</a></li>
+        <li class="level1"><a href="colophon.html">Colophon</a></li>
+        <li class="level1"><a href="nomenclature.html">Glossary</a></li>
+        <li class="level1"><a href="guidelines.html">Guidelines</a></li>
+        <li class="level1"><a href="typelevelEcosystem.html">Typelevel Ecosystem</a></li>
+        <li class="level1 nav-header">Type Classes</li>
+        <li class="level2"><a href="typeclasses/alternative.html">Alternative</a></li>
+        <li class="level2"><a href="typeclasses/applicative.html">Applicative</a></li>
+        <li class="level2"><a href="typeclasses/applicativemonaderror.html">ApplicativeError and MonadError</a></li>
+        <li class="level2"><a href="typeclasses/applicativetraverse.html">Applicative and Traversable Functors</a></li>
+        <li class="level2"><a href="typeclasses/arrow.html">Arrow</a></li>
+        <li class="level2"><a href="typeclasses/arrowchoice.html">Arrow Choice</a></li>
+        <li class="level2"><a href="typeclasses/bifunctor.html">Bifunctor</a></li>
+        <li class="level2"><a href="typeclasses/bimonad.html">Bimonad</a></li>
+        <li class="level2"><a href="typeclasses/comonad.html">Comonad</a></li>
+        <li class="level2"><a href="typeclasses/contravariant.html">Contravariant</a></li>
+        <li class="level2"><a href="typeclasses/contravariantmonoidal.html">Contravariant Monoidal</a></li>
+        <li class="level2"><a href="typeclasses/eq.html">Eq</a></li>
+        <li class="level2"><a href="typeclasses/foldable.html">Foldable</a></li>
+        <li class="level2"><a href="typeclasses/functor.html">Functor</a></li>
+        <li class="level2"><a href="typeclasses/invariant.html">Invariant</a></li>
+        <li class="level2"><a href="typeclasses/invariantmonoidal.html">Invariant Monoidal</a></li>
+        <li class="level2"><a href="typeclasses/lawtesting.html">Law testing</a></li>
+        <li class="level2"><a href="typeclasses/monad.html">Monad</a></li>
+        <li class="level2"><a href="typeclasses/monoid.html">Monoid</a></li>
+        <li class="level2"><a href="typeclasses/monoidk.html">MonoidK</a></li>
+        <li class="level2"><a href="typeclasses/nonemptytraverse.html">NonEmptyTraverse</a></li>
+        <li class="level2"><a href="typeclasses/parallel.html">Parallel</a></li>
+        <li class="level2"><a href="typeclasses/reducible.html">Reducible</a></li>
+        <li class="level2"><a href="typeclasses/semigroup.html">Semigroup</a></li>
+        <li class="level2"><a href="typeclasses/semigroupk.html">SemigroupK</a></li>
+        <li class="level2"><a href="typeclasses/show.html">Show</a></li>
+        <li class="level2"><a href="typeclasses/traverse.html">Traverse</a></li>
+        <li class="level1 nav-header">Data Types</li>
+        <li class="level2"><a href="datatypes/chain.html">Chain</a></li>
+        <li class="level2"><a href="datatypes/const.html">Const</a></li>
+        <li class="level2"><a href="datatypes/contt.html">ContT</a></li>
+        <li class="level2"><a href="datatypes/either.html">Either</a></li>
+        <li class="level2"><a href="datatypes/eithert.html">EitherT</a></li>
+        <li class="level2"><a href="datatypes/eval.html">Eval</a></li>
+        <li class="level2"><a href="datatypes/freeapplicative.html">Free Applicative</a></li>
+        <li class="level2"><a href="datatypes/freemonad.html">Free Monad</a></li>
+        <li class="level2"><a href="datatypes/functionk.html">FunctionK</a></li>
+        <li class="level2"><a href="datatypes/id.html">Id</a></li>
+        <li class="level2"><a href="datatypes/ior.html">Ior</a></li>
+        <li class="level2"><a href="datatypes/iort.html">IorT</a></li>
+        <li class="level2"><a href="datatypes/kleisli.html">Kleisli</a></li>
+        <li class="level2"><a href="datatypes/nel.html">NonEmptyList</a></li>
+        <li class="level2"><a href="datatypes/nested.html">Nested</a></li>
+        <li class="level2"><a href="datatypes/oneand.html">OneAnd</a></li>
+        <li class="level2"><a href="datatypes/optiont.html">OptionT</a></li>
+        <li class="level2"><a href="datatypes/state.html">State</a></li>
+        <li class="level2"><a href="datatypes/validated.html">Validated</a></li>
+        <li class="level2"><a href="datatypes/writer.html">Writer</a></li>
+        <li class="level2"><a href="datatypes/writert.html">WriterT</a></li>
+      </ul>
+
+      <ul class="nav-list">
+        <li class="level1 nav-header">Related Projects</li>
+        
+          <li class="level2"><a href="https://typelevel.org/cats-effect/">cats-effect</a></li>
+        
+          <li class="level2"><a href="https://typelevel.org/mouse">Mouse</a></li>
+        
+          <li class="level2"><a href="https://github.com/typelevel/discipline/">discipline</a></li>
+        
+      </ul>
+
+    </nav>
+
+    <div id="container">
+
+      <nav id="page-nav">
+        <p class="header"><a href="#">Type Classes</a></p>
+
+        <ul class="nav-list">
+          <li class="level1"><a href="#example-collapsing-a-list">Example: collapsing a list</a></li>
+          <li class="level1"><a href="#type-classes-vs-subtyping">Type classes vs. subtyping</a></li>
+          <li class="level2"><a href="#implicit-derivation">Implicit derivation</a></li>
+          <li class="level1"><a href="#a-note-on-syntax">A note on syntax</a></li>
+          <li class="level1"><a href="#laws">Laws</a></li>
+          <li class="level2"><a href="#type-classes-in-cats">Type classes in Cats</a></li>
+          <li class="level2"><a href="#incomplete-type-class-instances-in-cats">Incomplete type class instances in cats</a></li>
+          <li class="level2"><a href="#further-reading">Further reading</a></li>
+        </ul>
+
+        <p class="footer"></p>
+      </nav>
+
+      <main class="content">
+
+        <h1 id="type-classes" class="title">Type Classes</h1>
+        <p>Type classes are a powerful tool used in functional programming to enable ad-hoc polymorphism, more commonly
+        known as overloading. Where many object-oriented languages leverage subtyping for polymorphic code, functional
+        programming tends towards a combination of parametric polymorphism (think type parameters, like Java generics)
+        and ad-hoc polymorphism.</p>
+        
+        <h2 id="example-collapsing-a-list" class="section">Example: collapsing a list<a class="anchor-link right" href="#example-collapsing-a-list"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>The following code snippets show code that sums a list of integers, concatenates a list of strings, and unions a list
+        of sets.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">def</span><span> </span><span class="declaration-name">sumInts</span><span>(</span><span class="identifier">list</span><span>: </span><span class="type-name">List</span><span>[</span><span class="type-name">Int</span><span>]): </span><span class="type-name">Int</span><span> = </span><span class="identifier">list</span><span>.</span><span class="identifier">foldRight</span><span>(</span><span class="number-literal">0</span><span>)(</span><span class="identifier">_</span><span> + </span><span class="identifier">_</span><span>)
+
+</span><span class="keyword">def</span><span> </span><span class="declaration-name">concatStrings</span><span>(</span><span class="identifier">list</span><span>: </span><span class="type-name">List</span><span>[</span><span class="type-name">String</span><span>]): </span><span class="type-name">String</span><span> = </span><span class="identifier">list</span><span>.</span><span class="identifier">foldRight</span><span>(</span><span class="string-literal">&quot;&quot;</span><span>)(</span><span class="identifier">_</span><span> ++ </span><span class="identifier">_</span><span>)
+
+</span><span class="keyword">def</span><span> </span><span class="declaration-name">unionSets</span><span>[</span><span class="type-name">A</span><span>](</span><span class="identifier">list</span><span>: </span><span class="type-name">List</span><span>[</span><span class="type-name">Set</span><span>[</span><span class="type-name">A</span><span>]]): </span><span class="type-name">Set</span><span>[</span><span class="type-name">A</span><span>] = </span><span class="identifier">list</span><span>.</span><span class="identifier">foldRight</span><span>(</span><span class="type-name">Set</span><span>.</span><span class="identifier">empty</span><span>[</span><span class="type-name">A</span><span>])(</span><span class="identifier">_</span><span> </span><span class="identifier">union</span><span> </span><span class="identifier">_</span><span>)</span></code></pre>
+        <p>All of these follow the same pattern: an initial value (0, empty string, empty set) and a combining function
+        (<code>+</code>, <code>++</code>, <code>union</code>). We&#39;d like to abstract over this so we can write the function once instead of once for every type
+        so we pull out the necessary pieces into an interface.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">trait</span><span> </span><span class="type-name">Monoid</span><span>[</span><span class="type-name">A</span><span>] {
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">empty</span><span>: </span><span class="type-name">A</span><span>
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">combine</span><span>(</span><span class="identifier">x</span><span>: </span><span class="type-name">A</span><span>, </span><span class="identifier">y</span><span>: </span><span class="type-name">A</span><span>): </span><span class="type-name">A</span><span>
+}
+
+</span><span class="comment">// Implementation for Int
+</span><span class="keyword">val</span><span> </span><span class="identifier">intAdditionMonoid</span><span>: </span><span class="type-name">Monoid</span><span>[</span><span class="type-name">Int</span><span>] = </span><span class="keyword">new</span><span> </span><span class="type-name">Monoid</span><span>[</span><span class="type-name">Int</span><span>] {
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">empty</span><span>: </span><span class="type-name">Int</span><span> = </span><span class="number-literal">0</span><span>
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">combine</span><span>(</span><span class="identifier">x</span><span>: </span><span class="type-name">Int</span><span>, </span><span class="identifier">y</span><span>: </span><span class="type-name">Int</span><span>): </span><span class="type-name">Int</span><span> = </span><span class="identifier">x</span><span> + </span><span class="identifier">y</span><span>
+}</span></code></pre>
+        <p>The name <code>Monoid</code> is taken from abstract algebra which specifies precisely this kind of structure.</p>
+        <p>We can now write the functions above against this interface.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">def</span><span> </span><span class="declaration-name">combineAll</span><span>[</span><span class="type-name">A</span><span>](</span><span class="identifier">list</span><span>: </span><span class="type-name">List</span><span>[</span><span class="type-name">A</span><span>], </span><span class="identifier">m</span><span>: </span><span class="type-name">Monoid</span><span>[</span><span class="type-name">A</span><span>]): </span><span class="type-name">A</span><span> = </span><span class="identifier">list</span><span>.</span><span class="identifier">foldRight</span><span>(</span><span class="identifier">m</span><span>.</span><span class="identifier">empty</span><span>)(</span><span class="identifier">m</span><span>.</span><span class="identifier">combine</span><span>)</span></code></pre>
+        
+        <h2 id="type-classes-vs-subtyping" class="section">Type classes vs. subtyping<a class="anchor-link right" href="#type-classes-vs-subtyping"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>The definition above takes an actual monoid argument instead of doing the usual object-oriented practice of using
+        subtype constraints.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="comment">// Subtyping
+</span><span class="keyword">def</span><span> </span><span class="declaration-name">combineAll</span><span>[</span><span class="type-name">A</span><span> &lt;: </span><span class="type-name">Monoid</span><span>[</span><span class="type-name">A</span><span>]](</span><span class="identifier">list</span><span>: </span><span class="type-name">List</span><span>[</span><span class="type-name">A</span><span>]): </span><span class="type-name">A</span><span> = ???</span></code></pre>
+        <p>This has a subtle difference with the earlier explicit example. In order to seed the <code>foldRight</code> with the empty value,
+        we need to get a hold of it given only the type <code>A</code>. Taking <code>Monoid[A]</code> as an argument gives us this by calling the
+        appropriate <code>empty</code> method on it. With the subtype example, the <code>empty</code> method would be on a <strong>value</strong> of type
+        <code>Monoid[A]</code> itself, which we are only getting from the <code>list</code> argument. If <code>list</code> is empty, we have no values to work
+        with and therefore can&#39;t get the empty value. Not to mention the oddity of getting a constant value from a non-static
+        object.</p>
+        <hr>
+        <p>For another motivating difference, consider the simple pair type.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">final</span><span> </span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Pair</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>](</span><span class="identifier">first</span><span>: </span><span class="type-name">A</span><span>, </span><span class="identifier">second</span><span>: </span><span class="type-name">B</span><span>)</span></code></pre>
+        <p>Defining a <code>Monoid[Pair[A, B]]</code> depends on the ability to define a <code>Monoid[A]</code> and <code>Monoid[B]</code>, where the definition
+        is point-wise, i.e. the first element of the first pair combines with the first element of the second pair and the second element of the first pair combines with the second element of the second pair. With subtyping such a constraint would be encoded as something like</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">final</span><span> </span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Pair</span><span>[</span><span class="type-name">A</span><span> &lt;: </span><span class="type-name">Monoid</span><span>[</span><span class="type-name">A</span><span>], </span><span class="type-name">B</span><span> &lt;: </span><span class="type-name">Monoid</span><span>[</span><span class="type-name">B</span><span>]](</span><span class="identifier">first</span><span>: </span><span class="type-name">A</span><span>, </span><span class="identifier">second</span><span>: </span><span class="type-name">B</span><span>) </span><span class="keyword">extends</span><span> </span><span class="type-name">Monoid</span><span>[</span><span class="type-name">Pair</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>]] {
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">empty</span><span>: </span><span class="type-name">Pair</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>] = ???
+
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">combine</span><span>(</span><span class="identifier">x</span><span>: </span><span class="type-name">Pair</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>], </span><span class="identifier">y</span><span>: </span><span class="type-name">Pair</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>]): </span><span class="type-name">Pair</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>] = ???
+}</span></code></pre>
+        <p>Not only is the type signature of <code>Pair</code> now messy but it also forces all instances of <code>Pair</code> to have a <code>Monoid</code>
+        instance, whereas <code>Pair</code> should be able to carry any types it wants and if the types happens to have a
+        <code>Monoid</code> instance then so would it. We could try bubbling down the constraint into the methods themselves.</p>
+        <pre><code class="nohighlight"><span class="keyword">final</span><span> </span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Pair</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>](</span><span class="identifier">first</span><span>: </span><span class="type-name">A</span><span>, </span><span class="identifier">second</span><span>: </span><span class="type-name">B</span><span>) </span><span class="keyword">extends</span><span> </span><span class="type-name">Monoid</span><span>[</span><span class="type-name">Pair</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>]] {
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">empty</span><span>(</span><span class="keyword">implicit</span><span> </span><span class="identifier">eva</span><span>: </span><span class="type-name">A</span><span> &lt;:&lt; </span><span class="type-name">Monoid</span><span>[</span><span class="type-name">A</span><span>], </span><span class="identifier">evb</span><span>: </span><span class="type-name">B</span><span> &lt;:&lt; </span><span class="type-name">Monoid</span><span>[</span><span class="type-name">B</span><span>]): </span><span class="type-name">Pair</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>] = ???
+
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">combine</span><span>(</span><span class="identifier">x</span><span>: </span><span class="type-name">Pair</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>], </span><span class="identifier">y</span><span>: </span><span class="type-name">Pair</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>])(</span><span class="keyword">implicit</span><span> </span><span class="identifier">eva</span><span>: </span><span class="type-name">A</span><span> &lt;:&lt; </span><span class="type-name">Monoid</span><span>[</span><span class="type-name">A</span><span>], </span><span class="identifier">evb</span><span>: </span><span class="type-name">B</span><span> &lt;:&lt; </span><span class="type-name">Monoid</span><span>[</span><span class="type-name">B</span><span>]): </span><span class="type-name">Pair</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>] = ???
+}
+</span><span class="comment">// error: class Pair needs to be abstract, since:
+// it has 2 unimplemented members.
+// /** As seen from class Pair, the missing signatures are as follows.
+//  *  For convenience, these are usable as stub implementations.
+//  */
+//   def combine(x: Pair[A,B],y: Pair[A,B]): Pair[A,B] = ???
+//   def empty: Pair[A,B] = ???
+// 
+// final case class Pair[A, B](first: A, second: B) extends Monoid[Pair[A, B]] {
+// ^</span></code></pre>
+        <p>But now these don&#39;t conform to the interface of <code>Monoid</code> due to the implicit constraints.</p>
+        
+        <h3 id="implicit-derivation" class="section">Implicit derivation<a class="anchor-link right" href="#implicit-derivation"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <p>Note that a <code>Monoid[Pair[A, B]]</code> is derivable given <code>Monoid[A]</code> and <code>Monoid[B]</code>:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">final</span><span> </span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Pair</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>](</span><span class="identifier">first</span><span>: </span><span class="type-name">A</span><span>, </span><span class="identifier">second</span><span>: </span><span class="type-name">B</span><span>)
+
+</span><span class="keyword">def</span><span> </span><span class="declaration-name">deriveMonoidPair</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>](</span><span class="type-name">A</span><span>: </span><span class="type-name">Monoid</span><span>[</span><span class="type-name">A</span><span>], </span><span class="type-name">B</span><span>: </span><span class="type-name">Monoid</span><span>[</span><span class="type-name">B</span><span>]): </span><span class="type-name">Monoid</span><span>[</span><span class="type-name">Pair</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>]] =
+  </span><span class="keyword">new</span><span> </span><span class="type-name">Monoid</span><span>[</span><span class="type-name">Pair</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>]] {
+    </span><span class="keyword">def</span><span> </span><span class="declaration-name">empty</span><span>: </span><span class="type-name">Pair</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>] = </span><span class="type-name">Pair</span><span>(</span><span class="type-name">A</span><span>.</span><span class="identifier">empty</span><span>, </span><span class="type-name">B</span><span>.</span><span class="identifier">empty</span><span>)
+
+    </span><span class="keyword">def</span><span> </span><span class="declaration-name">combine</span><span>(</span><span class="identifier">x</span><span>: </span><span class="type-name">Pair</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>], </span><span class="identifier">y</span><span>: </span><span class="type-name">Pair</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>]): </span><span class="type-name">Pair</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>] =
+      </span><span class="type-name">Pair</span><span>(</span><span class="type-name">A</span><span>.</span><span class="identifier">combine</span><span>(</span><span class="identifier">x</span><span>.</span><span class="identifier">first</span><span>, </span><span class="identifier">y</span><span>.</span><span class="identifier">first</span><span>), </span><span class="type-name">B</span><span>.</span><span class="identifier">combine</span><span>(</span><span class="identifier">x</span><span>.</span><span class="identifier">second</span><span>, </span><span class="identifier">y</span><span>.</span><span class="identifier">second</span><span>))
+  }</span></code></pre>
+        <p>One of the most powerful features of type classes is the ability to do this kind of derivation automatically.
+        We can do this through Scala&#39;s implicit mechanism.</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="type-name">Monoid</span><span>
+
+</span><span class="keyword">object</span><span> </span><span class="type-name">Demo</span><span> { 
+  </span><span class="keyword">final</span><span> </span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Pair</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>](</span><span class="identifier">first</span><span>: </span><span class="type-name">A</span><span>, </span><span class="identifier">second</span><span>: </span><span class="type-name">B</span><span>)
+
+  </span><span class="keyword">object</span><span> </span><span class="type-name">Pair</span><span> {
+    </span><span class="keyword">implicit</span><span> </span><span class="keyword">def</span><span> </span><span class="declaration-name">tuple2Instance</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>](</span><span class="keyword">implicit</span><span> </span><span class="type-name">A</span><span>: </span><span class="type-name">Monoid</span><span>[</span><span class="type-name">A</span><span>], </span><span class="type-name">B</span><span>: </span><span class="type-name">Monoid</span><span>[</span><span class="type-name">B</span><span>]): </span><span class="type-name">Monoid</span><span>[</span><span class="type-name">Pair</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>]] =
+      </span><span class="keyword">new</span><span> </span><span class="type-name">Monoid</span><span>[</span><span class="type-name">Pair</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>]] {
+        </span><span class="keyword">def</span><span> </span><span class="declaration-name">empty</span><span>: </span><span class="type-name">Pair</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>] = </span><span class="type-name">Pair</span><span>(</span><span class="type-name">A</span><span>.</span><span class="identifier">empty</span><span>, </span><span class="type-name">B</span><span>.</span><span class="identifier">empty</span><span>)
+
+        </span><span class="keyword">def</span><span> </span><span class="declaration-name">combine</span><span>(</span><span class="identifier">x</span><span>: </span><span class="type-name">Pair</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>], </span><span class="identifier">y</span><span>: </span><span class="type-name">Pair</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>]): </span><span class="type-name">Pair</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>] =
+          </span><span class="type-name">Pair</span><span>(</span><span class="type-name">A</span><span>.</span><span class="identifier">combine</span><span>(</span><span class="identifier">x</span><span>.</span><span class="identifier">first</span><span>, </span><span class="identifier">y</span><span>.</span><span class="identifier">first</span><span>), </span><span class="type-name">B</span><span>.</span><span class="identifier">combine</span><span>(</span><span class="identifier">x</span><span>.</span><span class="identifier">second</span><span>, </span><span class="identifier">y</span><span>.</span><span class="identifier">second</span><span>))
+      }
+  }
+}</span></code></pre>
+        <p>We also change any functions that have a <code>Monoid</code> constraint on the type parameter to take the argument implicitly,
+        and any instances of the type class to be implicit.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">intAdditionMonoid</span><span>: </span><span class="type-name">Monoid</span><span>[</span><span class="type-name">Int</span><span>] = </span><span class="keyword">new</span><span> </span><span class="type-name">Monoid</span><span>[</span><span class="type-name">Int</span><span>] {
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">empty</span><span>: </span><span class="type-name">Int</span><span> = </span><span class="number-literal">0</span><span>
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">combine</span><span>(</span><span class="identifier">x</span><span>: </span><span class="type-name">Int</span><span>, </span><span class="identifier">y</span><span>: </span><span class="type-name">Int</span><span>): </span><span class="type-name">Int</span><span> = </span><span class="identifier">x</span><span> + </span><span class="identifier">y</span><span>
+}
+
+</span><span class="keyword">def</span><span> </span><span class="declaration-name">combineAll</span><span>[</span><span class="type-name">A</span><span>](</span><span class="identifier">list</span><span>: </span><span class="type-name">List</span><span>[</span><span class="type-name">A</span><span>])(</span><span class="keyword">implicit</span><span> </span><span class="type-name">A</span><span>: </span><span class="type-name">Monoid</span><span>[</span><span class="type-name">A</span><span>]): </span><span class="type-name">A</span><span> = </span><span class="identifier">list</span><span>.</span><span class="identifier">foldRight</span><span>(</span><span class="type-name">A</span><span>.</span><span class="identifier">empty</span><span>)(</span><span class="type-name">A</span><span>.</span><span class="identifier">combine</span><span>)</span></code></pre>
+        <p>Now we can also <code>combineAll</code> a list of <code>Pair</code>s as long as <code>Pair</code>&#39;s type parameters themselves have <code>Monoid</code>
+        instances.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">stringMonoid</span><span>: </span><span class="type-name">Monoid</span><span>[</span><span class="type-name">String</span><span>] = </span><span class="keyword">new</span><span> </span><span class="type-name">Monoid</span><span>[</span><span class="type-name">String</span><span>] {
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">empty</span><span>: </span><span class="type-name">String</span><span> = </span><span class="string-literal">&quot;&quot;</span><span>
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">combine</span><span>(</span><span class="identifier">x</span><span>: </span><span class="type-name">String</span><span>, </span><span class="identifier">y</span><span>: </span><span class="type-name">String</span><span>): </span><span class="type-name">String</span><span> = </span><span class="identifier">x</span><span> ++ </span><span class="identifier">y</span><span>
+}</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="type-name">Demo</span><span>.{</span><span class="type-name">Pair</span><span> =&gt; </span><span class="type-name">Paired</span><span>}
+
+</span><span class="identifier">combineAll</span><span>(</span><span class="type-name">List</span><span>(</span><span class="type-name">Paired</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="string-literal">&quot;hello&quot;</span><span>), </span><span class="type-name">Paired</span><span>(</span><span class="number-literal">2</span><span>, </span><span class="string-literal">&quot; &quot;</span><span>), </span><span class="type-name">Paired</span><span>(</span><span class="number-literal">3</span><span>, </span><span class="string-literal">&quot;world&quot;</span><span>)))
+</span><span class="comment">// res2: Demo.Pair[Int, String] = Pair(6, &quot;hello world&quot;)</span></code></pre>
+        
+        <h2 id="a-note-on-syntax" class="section">A note on syntax<a class="anchor-link right" href="#a-note-on-syntax"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>In many cases, including the <code>combineAll</code> function above, the implicit arguments can be written with syntactic sugar.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">def</span><span> </span><span class="declaration-name">combineAll</span><span>[</span><span class="type-name">A</span><span> : </span><span class="type-name">Monoid</span><span>](</span><span class="identifier">list</span><span>: </span><span class="type-name">List</span><span>[</span><span class="type-name">A</span><span>]): </span><span class="type-name">A</span><span> = ???</span></code></pre>
+        <p>While nicer to read as a user, it comes at a cost for the implementer.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="type-name">Monoid</span><span>
+
+</span><span class="comment">// Defined in the standard library, shown for illustration purposes
+// Implicitly looks in implicit scope for a value of type `A` and just hands it back
+</span><span class="keyword">def</span><span> </span><span class="declaration-name">implicitly</span><span>[</span><span class="type-name">A</span><span>](</span><span class="keyword">implicit</span><span> </span><span class="identifier">ev</span><span>: </span><span class="type-name">A</span><span>): </span><span class="type-name">A</span><span> = </span><span class="identifier">ev</span><span>
+
+</span><span class="keyword">def</span><span> </span><span class="declaration-name">combineAll</span><span>[</span><span class="type-name">A</span><span> : </span><span class="type-name">Monoid</span><span>](</span><span class="identifier">list</span><span>: </span><span class="type-name">List</span><span>[</span><span class="type-name">A</span><span>]): </span><span class="type-name">A</span><span> =
+  </span><span class="identifier">list</span><span>.</span><span class="identifier">foldRight</span><span>(</span><span class="identifier">implicitly</span><span>[</span><span class="type-name">Monoid</span><span>[</span><span class="type-name">A</span><span>]].</span><span class="identifier">empty</span><span>)(</span><span class="identifier">implicitly</span><span>[</span><span class="type-name">Monoid</span><span>[</span><span class="type-name">A</span><span>]].</span><span class="identifier">combine</span><span>)</span></code></pre>
+        <p>For this reason, many libraries that provide type classes provide a utility method on the companion object of the type
+        class, usually under the name <code>apply</code>, that skirts the need to call <code>implicitly</code> everywhere.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">object</span><span> </span><span class="type-name">Monoid</span><span> {
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">apply</span><span>[</span><span class="type-name">A</span><span> : </span><span class="type-name">Monoid</span><span>]: </span><span class="type-name">Monoid</span><span>[</span><span class="type-name">A</span><span>] = </span><span class="identifier">implicitly</span><span>[</span><span class="type-name">Monoid</span><span>[</span><span class="type-name">A</span><span>]]
+}
+
+</span><span class="keyword">def</span><span> </span><span class="declaration-name">combineAll</span><span>[</span><span class="type-name">A</span><span> : </span><span class="type-name">Monoid</span><span>](</span><span class="identifier">list</span><span>: </span><span class="type-name">List</span><span>[</span><span class="type-name">A</span><span>]): </span><span class="type-name">A</span><span> =
+  </span><span class="identifier">list</span><span>.</span><span class="identifier">foldRight</span><span>(</span><span class="type-name">Monoid</span><span>[</span><span class="type-name">A</span><span>].</span><span class="identifier">empty</span><span>)(</span><span class="type-name">Monoid</span><span>[</span><span class="type-name">A</span><span>].</span><span class="identifier">combine</span><span>)</span></code></pre>
+        <p>Cats uses <a href="https://github.com/typelevel/simulacrum" title="First class syntax support for type classes in Scala">simulacrum</a> for defining type classes which will auto-generate such an <code>apply</code> method.</p>
+        
+        <h1 id="laws" class="section">Laws<a class="anchor-link right" href="#laws"><i class="icofont-laika">&#xef71;</i></a></h1>
+        <p>Conceptually, all type classes come with laws. These laws constrain implementations for a given
+        type and can be exploited and used to reason about generic code.</p>
+        <p>For instance, the <code>Monoid</code> type class requires that
+        <code>combine</code> be associative and <code>empty</code> be an identity element for <code>combine</code>. That means the following
+        equalities should hold for any choice of <code>x</code>, <code>y</code>, and <code>z</code>.</p>
+        <pre><code>combine(x, combine(y, z)) = combine(combine(x, y), z)
+combine(x, id) = combine(id, x) = x</code></pre>
+        <p>With these laws in place, functions parametrized over a <code>Monoid</code> can leverage them for say, performance
+        reasons. A function that collapses a <code>List[A]</code> into a single <code>A</code> can do so with <code>foldLeft</code> or
+        <code>foldRight</code> since <code>combine</code> is assumed to be associative, or it can break apart the list into smaller
+        lists and collapse in parallel, such as</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">list</span><span> = </span><span class="type-name">List</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="number-literal">2</span><span>, </span><span class="number-literal">3</span><span>, </span><span class="number-literal">4</span><span>, </span><span class="number-literal">5</span><span>)
+</span><span class="keyword">val</span><span> (</span><span class="identifier">left</span><span>, </span><span class="identifier">right</span><span>) = </span><span class="identifier">list</span><span>.</span><span class="identifier">splitAt</span><span>(</span><span class="number-literal">2</span><span>)</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="comment">// Imagine the following two operations run in parallel
+</span><span class="keyword">val</span><span> </span><span class="identifier">sumLeft</span><span> = </span><span class="identifier">combineAll</span><span>(</span><span class="identifier">left</span><span>)
+</span><span class="comment">// sumLeft: Int = 3
+</span><span class="keyword">val</span><span> </span><span class="identifier">sumRight</span><span> = </span><span class="identifier">combineAll</span><span>(</span><span class="identifier">right</span><span>)
+</span><span class="comment">// sumRight: Int = 12
+</span><span>
+</span><span class="comment">// Now gather the results
+</span><span class="keyword">val</span><span> </span><span class="identifier">result</span><span> = </span><span class="type-name">Monoid</span><span>[</span><span class="type-name">Int</span><span>].</span><span class="identifier">combine</span><span>(</span><span class="identifier">sumLeft</span><span>, </span><span class="identifier">sumRight</span><span>)
+</span><span class="comment">// result: Int = 15</span></code></pre>
+        <p>Cats provides laws for type classes via the <code>kernel-laws</code> and <code>laws</code> modules which makes law checking
+        type class instances easy.</p>
+        <p>You can find out more about law testing <a href="typeclasses/lawtesting.html">here</a>.</p>
+        
+        <h2 id="type-classes-in-cats" class="section">Type classes in Cats<a class="anchor-link right" href="#type-classes-in-cats"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p><img src="https://cdn.rawgit.com/tpolecat/cats-infographic/master/cats.svg" alt="infographic" style="width: 100%;"/>
+        From <a href="https://github.com/tpolecat/cats-infographic">cats-infographic by @tpolecat</a>.</p>
+        
+        <h2 id="incomplete-type-class-instances-in-cats" class="section">Incomplete type class instances in cats<a class="anchor-link right" href="#incomplete-type-class-instances-in-cats"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>Originally from <a href="https://gist.github.com/alexknvl/d63508ddb6a728015ace53cb70a1fd5d">@alexknvl</a></p>
+        <table>
+          <thead>
+            <tr>
+              <th>Type</th>
+              <th class="align-center">Functor</th>
+              <th class="align-center">Apply</th>
+              <th class="align-center">Applicative</th>
+              <th class="align-center">Monad</th>
+              <th class="align-center">MonoidK</th>
+              <th class="align-center">ApplicativeError</th>
+              <th class="align-center">MonadError</th>
+              <th class="align-center">CoflatMap</th>
+              <th class="align-center">Comonad</th>
+              <th class="align-center">Bimonad</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>Id[A]</code></td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✗</td>
+              <td class="align-center">✗</td>
+              <td class="align-center">✗</td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✔</td>
+            </tr>
+            <tr>
+              <td><code>Eval[A]</code></td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✗</td>
+              <td class="align-center">✗</td>
+              <td class="align-center">✗</td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✔</td>
+            </tr>
+            <tr>
+              <td><code>Option[A]</code></td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✗</td>
+              <td class="align-center">✗</td>
+            </tr>
+            <tr>
+              <td><code>Const[K, A]</code></td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✔ (<code>K:Monoid</code>)</td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✗</td>
+              <td class="align-center">✗</td>
+              <td class="align-center">✗</td>
+              <td class="align-center">✗</td>
+              <td class="align-center">✗</td>
+              <td class="align-center">✗</td>
+              <td class="align-center">✗</td>
+            </tr>
+            <tr>
+              <td><code>Either[E, A]</code></td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✗</td>
+              <td class="align-center">✗</td>
+              <td class="align-center">✗</td>
+            </tr>
+            <tr>
+              <td><code>List[A]</code></td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✗</td>
+              <td class="align-center">✗</td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✗</td>
+              <td class="align-center">✗</td>
+            </tr>
+            <tr>
+              <td><code>NonEmptyList[A]</code></td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✗</td>
+              <td class="align-center">✗</td>
+              <td class="align-center">✗</td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✔</td>
+            </tr>
+            <tr>
+              <td><code>Stream[A]</code></td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✗</td>
+              <td class="align-center">✗</td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✗</td>
+              <td class="align-center">✗</td>
+            </tr>
+            <tr>
+              <td><code>Map[K, A]</code></td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✗</td>
+              <td class="align-center">✗</td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✗</td>
+              <td class="align-center">✗</td>
+              <td class="align-center">✗</td>
+              <td class="align-center">✗</td>
+              <td class="align-center">✗</td>
+            </tr>
+            <tr>
+              <td><code>Validated[E, A]</code></td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✔ (<code>E: Semigroup</code>)</td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✗</td>
+              <td class="align-center">✗</td>
+              <td class="align-center">✔ (<code>E: Semigroup</code>)</td>
+              <td class="align-center">✗</td>
+              <td class="align-center">✗</td>
+              <td class="align-center">✗</td>
+              <td class="align-center">✗</td>
+            </tr>
+            <tr>
+              <td><code>Reader[E, A]</code></td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✗</td>
+              <td class="align-center">✗</td>
+              <td class="align-center">✗</td>
+              <td class="align-center">✗</td>
+              <td class="align-center">✗</td>
+              <td class="align-center">✗</td>
+            </tr>
+            <tr>
+              <td><code>Writer[E, A]</code></td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✔ (<code>E:Monoid</code>)</td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✗</td>
+              <td class="align-center">✗</td>
+              <td class="align-center">✗</td>
+              <td class="align-center">✔</td>
+              <td class="align-center">✗</td>
+              <td class="align-center">✗</td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <h2 id="further-reading" class="section">Further reading<a class="anchor-link right" href="#further-reading"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <ul>
+          <li><a href="http://tpolecat.github.io/2015/04/29/f-bounds.html" title="Returning the &quot;Current&quot; Type in Scala">Returning the &quot;Current&quot; Type in Scala</a></li>
+        </ul>
+
+        <hr style="margin-top: 30px"/>
+        <footer style="font-size: 90%; text-align: center">
+          cats is a <a href="https://typelevel.org/">Typelevel</a> project distributed under the <a href="https://opensource.org/licenses/MIT">MIT</a> license.
+        </footer>
+
+      </main>
+
+    </div>
+
+  </body>
+</html>

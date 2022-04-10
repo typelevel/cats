@@ -1,0 +1,142 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  padding: 0;
+}
+#header {
+  width: 100%;
+  min-height: 250px;
+  background-image: linear-gradient(var(--gradient-top), var(--gradient-bottom));
+  padding: 40px 5px 30px;
+  margin: 0;
+  text-align: center;
+}
+
+#header a, #header a:hover {
+  color: var(--primary-medium);
+}
+#header #docs a {
+  font-weight: normal;
+}
+.teasers {
+  width: 100%;
+  padding: 0;
+  margin: 35px auto 0 auto;
+  text-align: center;
+  max-width: 700px;
+}
+.teasers ~ .teasers {
+  margin: 0 auto;
+}
+.teaser {
+  flex: 0 0 28%;
+  margin: 0 0 25px 0;
+  padding: 0 35px;
+}
+#header-left {
+  color: var(--primary-medium);
+  margin: 0 auto;
+}
+#header-right {
+  color: var(--primary-medium);
+  padding: 0 20px;
+  text-align: left;
+  margin: 35px auto 0;
+}
+p {
+  margin: 0;
+  padding: 0;
+}
+ul {
+  list-style: none;
+  display: block;
+  margin: 0;
+}
+#docs {
+  font-size: 17px;
+  border: 1px solid var(--primary-medium);
+  border-radius: 5px;
+  margin-bottom: 15px;
+  margin-top: 18px;
+  padding: 0;
+}
+#docs p {
+  padding: 6px 10px 6px 10px;
+  border-bottom: 1px solid var(--primary-medium);
+  background-color: rgba(255, 255, 255, 0.15);
+  margin-bottom: 5px;
+}
+li {
+  padding: 0 10px 0 10px;
+  display: block;
+  font-size: 17px;
+}
+.large {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+.medium {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+#header-left h2 {
+  color: var(--primary-medium);
+  font-size: 19px;
+}
+h2 {
+  font-size: 20px;
+  margin-top: 0;
+  line-height: 28px;
+  margin-bottom: 5px;
+}
+@media (min-width: 700px) {
+  #header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+  }
+  #header-left {
+    max-width: 450px;
+    margin: 0;
+  }
+  #header-left h2 {
+    font-size: 22px;
+  }
+  #header-right {
+    max-width: 450px;
+    margin: 0;
+    padding-left: 30px;
+    padding-right: 0;
+  }
+}
+@media (min-width: 820px) {
+  #header-right {
+    padding-left: 120px;
+  }
+  #header {
+    padding: 40px 30px 30px;
+  }
+}
+@media (min-width: 1000px) {
+  .teasers {
+    max-width: 1500px;
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+  }
+  .teaser {
+    margin: 0 0 15px 0;
+  }
+}
+@media (max-width: 350px) {
+  #header-left img {
+    width: 100%;
+    height: auto;
+  }
+}

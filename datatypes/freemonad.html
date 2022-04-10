@@ -1,675 +1,798 @@
-<!DOCTYPE html><html><head><title>Cats: FreeMonads</title><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Cats contributors" /><meta name="description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="og:image" content="/cats/img/poster.png" /><meta name="image" property="og:image" content="/cats/img/poster.png" /><meta name="og:title" content="Cats: FreeMonads" /><meta name="title" property="og:title" content="Cats: FreeMonads" /><meta name="og:site_name" content="Cats" /><meta name="og:url" content="http://typelevel.org/cats/" /><meta name="og:type" content="website" /><meta name="og:description" content="Lightweight, modular, and extensible library for functional programming" /><link rel="icon" type="image/png" href="/cats/img/favicon.png" /><meta name="twitter:title" content="Cats: FreeMonads" /><meta name="twitter:image" content="/cats/img/poster.png" /><meta name="twitter:description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="twitter:card" content="summary_large_image" /><link rel="icon" type="image/png" sizes="16x16" href="/cats/img/favicon16x16.png" /><link rel="icon" type="image/png" sizes="24x24" href="/cats/img/favicon24x24.png" /><link rel="icon" type="image/png" sizes="32x32" href="/cats/img/favicon32x32.png" /><link rel="icon" type="image/png" sizes="48x48" href="/cats/img/favicon48x48.png" /><link rel="icon" type="image/png" sizes="57x57" href="/cats/img/favicon57x57.png" /><link rel="icon" type="image/png" sizes="60x60" href="/cats/img/favicon60x60.png" /><link rel="icon" type="image/png" sizes="64x64" href="/cats/img/favicon64x64.png" /><link rel="icon" type="image/png" sizes="70x70" href="/cats/img/favicon70x70.png" /><link rel="icon" type="image/png" sizes="72x72" href="/cats/img/favicon72x72.png" /><link rel="icon" type="image/png" sizes="76x76" href="/cats/img/favicon76x76.png" /><link rel="icon" type="image/png" sizes="96x96" href="/cats/img/favicon96x96.png" /><link rel="icon" type="image/png" sizes="114x114" href="/cats/img/favicon114x114.png" /><link rel="icon" type="image/png" sizes="120x120" href="/cats/img/favicon120x120.png" /><link rel="icon" type="image/png" sizes="128x128" href="/cats/img/favicon128x128.png" /><link rel="icon" type="image/png" sizes="144x144" href="/cats/img/favicon144x144.png" /><link rel="icon" type="image/png" sizes="150x150" href="/cats/img/favicon150x150.png" /><link rel="icon" type="image/png" sizes="152x152" href="/cats/img/favicon152x152.png" /><link rel="icon" type="image/png" sizes="196x196" href="/cats/img/favicon196x196.png" /><link rel="icon" type="image/png" sizes="310x310" href="/cats/img/favicon310x310.png" /><link rel="icon" type="image/png" sizes="310x150" href="/cats/img/favicon310x150.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" /><link rel="stylesheet" href="/cats/highlight/styles/atom-one-light.css" /><link rel="stylesheet" href="/cats/css/pattern-style.css" /></head><body class="docs"><div id="wrapper"><div id="sidebar-wrapper"><ul id="sidebar" class="sidebar-nav"><li class="sidebar-brand"><a href="/cats/" class="brand"><div class="brand-wrapper"><span>Cats</span></div></a></li><li><a href="/cats/datatypes/writert.html" class="">WriterT</a></li><li><a href="/cats/datatypes/chain.html" class="">Chain</a></li><li><a href="/cats/datatypes/const.html" class="">Const</a></li><li><a href="/cats/datatypes/contt.html" class="">ContT</a></li><li><a href="/cats/datatypes.html" class="">Data Types</a></li><li><a href="/cats/datatypes/either.html" class="">Either</a></li><li><a href="/cats/datatypes/eithert.html" class="">EitherT</a></li><li><a href="/cats/datatypes/eval.html" class="">Eval</a></li><li><a href="/cats/datatypes/freeapplicative.html" class="">FreeApplicatives</a></li><li><a href="/cats/datatypes/freemonad.html" class=" active ">FreeMonads</a></li><li><a href="/cats/datatypes/functionk.html" class="">FunctionK</a></li><li><a href="/cats/datatypes/id.html" class="">Id</a></li><li><a href="/cats/datatypes/ior.html" class="">Ior</a></li><li><a href="/cats/datatypes/iort.html" class="">IorT</a></li><li><a href="/cats/datatypes/kleisli.html" class="">Kleisli</a></li><li><a href="/cats/datatypes/nel.html" class="">NonEmptyList</a></li><li><a href="/cats/datatypes/nested.html" class="">Nested</a></li><li><a href="/cats/datatypes/oneand.html" class="">OneAnd</a></li><li><a href="/cats/datatypes/optiont.html" class="">OptionT</a></li><li><a href="/cats/datatypes/state.html" class="">State</a></li><li><a href="/cats/datatypes/validated.html" class="">Validated</a></li><li><a href="/cats/datatypes/writer.html" class="">Writer</a></li></ul></div><div id="page-content-wrapper"><div class="nav"><div class="container-fluid"><div class="row"><div class="col-lg-12"><div class="action-menu pull-left clearfix"><a href="#menu-toggle" id="menu-toggle"><i class="fa fa-bars" aria-hidden="true"></i></a></div><ul class="pull-right"><li class="search-nav hidden-xs hidden-sm"><div id="search-dropdown"><label><i class="fa fa-search"></i>Search</label><input id="search-bar" type="text" placeholder="Enter keywords here..." onclick="displayToggleSearch(event)" /><ul id="search-dropdown-content" class="dropdown dropdown-content"></ul></div></li><li id="gh-eyes-item" class="hidden-xs to-uppercase"><a href="https://github.com/typelevel/cats" target="_blank" rel="noopener noreferrer"><i class="fa fa-eye"></i><span>Watchers<span id="eyes" class="label label-default">--</span></span></a></li><li id="gh-stars-item" class="hidden-xs to-uppercase"><a href="https://github.com/typelevel/cats" target="_blank" rel="noopener noreferrer"><i class="fa fa-star-o"></i><span>Stars<span id="stars" class="label label-default">--</span></span></a></li><li><a href="#" onclick="shareSiteTwitter('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-twitter"></i></a></li><li><a href="#" onclick="shareSiteFacebook('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-facebook"></i></a></li></ul></div></div></div></div><div id="content" data-github-owner="typelevel" data-github-repo="cats"><div class="content-wrapper"><section><h1 id="free-monad">Free Monad</h1>
-
-<h2 id="what-is-it">What is it?</h2>
-
-<p>A <em>free monad</em> is a construction which allows you to build a <em>monad</em>
-from any <em>Functor</em>. Like other <em>monads</em>, it is a pure way to represent
-and manipulate computations.</p>
-
-<p>In particular, <em>free monads</em> provide a practical way to:</p>
-
-<ul>
-  <li>represent stateful computations as data, and run them</li>
-  <li>run recursive computations in a stack-safe way</li>
-  <li>build an embedded DSL (domain-specific language)</li>
-  <li>retarget a computation to another interpreter using natural transformations</li>
-</ul>
-
-<blockquote>
-  <p>(In Cats, the type representing a <em>free monad</em> is abbreviated as <code class="language-plaintext highlighter-rouge">Free[_]</code>.)</p>
-</blockquote>
-
-<h2 id="using-free-monads">Using Free Monads</h2>
-
-<p>If you’d like to use Cats’ free monad, you’ll need to add a library dependency
-for the <code class="language-plaintext highlighter-rouge">cats-free</code> module.</p>
-
-<p>A good way to get a sense for how <em>free monads</em> work is to see them in
-action. The next section uses <code class="language-plaintext highlighter-rouge">Free[_]</code> to create an embedded DSL
-(Domain Specific Language).</p>
-
-<p>If you’re interested in the theory behind <em>free monads</em>, the
-<a href="#what-is-free-in-theory">What is Free in theory?</a> section discusses free monads
-in terms of category theory.</p>
-
-<h3 id="study-your-topic">Study your topic</h3>
-
-<p>Let’s imagine that we want to create a DSL for a key-value store. We
-want to be able to do three things with keys:</p>
-
-<ul>
-  <li><em>put</em> a <code class="language-plaintext highlighter-rouge">value</code> into the store, associated with its <code class="language-plaintext highlighter-rouge">key</code>.</li>
-  <li><em>get</em> a <code class="language-plaintext highlighter-rouge">value</code> from the store given its <code class="language-plaintext highlighter-rouge">key</code>.</li>
-  <li><em>delete</em> a <code class="language-plaintext highlighter-rouge">value</code> from the store given its <code class="language-plaintext highlighter-rouge">key</code>.</li>
-</ul>
-
-<p>The idea is to write a sequence of these operations in the embedded
-DSL as a “program”, compile the “program”, and finally execute the
-“program” to interact with the actual key-value store.</p>
-
-<p>For example:</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">put</span><span class="o">(</span><span class="s">"toto"</span><span class="o">,</span> <span class="mi">3</span><span class="o">)</span>
-<span class="nf">get</span><span class="o">(</span><span class="s">"toto"</span><span class="o">)</span> <span class="c1">// returns 3</span>
-<span class="nf">delete</span><span class="o">(</span><span class="s">"toto"</span><span class="o">)</span>
-</code></pre></div></div>
-
-<p>But we want:</p>
-
-<ul>
-  <li>the computation to be represented as a pure, immutable value</li>
-  <li>to separate the creation and execution of the program</li>
-  <li>to be able to support many different methods of execution</li>
-</ul>
-
-<h3 id="study-your-grammar">Study your grammar</h3>
-
-<p>We have 3 commands to interact with our KeyValue store:</p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">Put</code> a value associated with a key into the store</li>
-  <li><code class="language-plaintext highlighter-rouge">Get</code> a value associated with a key out of the store</li>
-  <li><code class="language-plaintext highlighter-rouge">Delete</code> a value associated with a key from the store</li>
-</ul>
-
-<h3 id="create-an-adt-representing-your-grammar">Create an ADT representing your grammar</h3>
-
-<p>ADT stands for <em>Algebraic Data Type</em>. In this context, it refers to a
-closed set of types which can be combined to build up complex,
-recursive values.</p>
-
-<p>We need to create an ADT to represent our key-value operations:</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">sealed</span> <span class="k">trait</span> <span class="nc">KVStoreA</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span>
-<span class="nc">case</span> <span class="k">class</span> <span class="nc">Put</span><span class="o">[</span><span class="kt">T</span><span class="o">](</span><span class="n">key</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">value</span><span class="k">:</span> <span class="kt">T</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">KVStoreA</span><span class="o">[</span><span class="kt">Unit</span><span class="o">]</span>
-<span class="k">case</span> <span class="k">class</span> <span class="nc">Get</span><span class="o">[</span><span class="kt">T</span><span class="o">](</span><span class="n">key</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">KVStoreA</span><span class="o">[</span><span class="kt">Option</span><span class="o">[</span><span class="kt">T</span><span class="o">]]</span>
-<span class="k">case</span> <span class="k">class</span> <span class="nc">Delete</span><span class="o">(</span><span class="n">key</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">KVStoreA</span><span class="o">[</span><span class="kt">Unit</span><span class="o">]</span>
-</code></pre></div></div>
-
-<h3 id="free-your-adt">Free your ADT</h3>
-
-<p>There are five basic steps to “freeing” the ADT:</p>
-
-<ol>
-  <li>Create a type based on <code class="language-plaintext highlighter-rouge">Free[_]</code> and <code class="language-plaintext highlighter-rouge">KVStoreA[_]</code>.</li>
-  <li>Create smart constructors for <code class="language-plaintext highlighter-rouge">KVStore[_]</code> using <code class="language-plaintext highlighter-rouge">liftF</code>.</li>
-  <li>Build a program out of key-value DSL operations.</li>
-  <li>Build a compiler for programs of DSL operations.</li>
-  <li>Execute our compiled program.</li>
-</ol>
-
-<h4 id="1-create-a-free-type-based-on-your-adt">1. Create a <code class="language-plaintext highlighter-rouge">Free</code> type based on your ADT</h4>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.free.Free</span>
-
-<span class="k">type</span> <span class="kt">KVStore</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Free</span><span class="o">[</span><span class="kt">KVStoreA</span>, <span class="kt">A</span><span class="o">]</span>
-</code></pre></div></div>
-
-<h4 id="2-create-smart-constructors-using-liftf">2. Create smart constructors using <code class="language-plaintext highlighter-rouge">liftF</code></h4>
-
-<p>These methods will make working with our DSL a lot nicer, and will
-lift <code class="language-plaintext highlighter-rouge">KVStoreA[_]</code> values into our <code class="language-plaintext highlighter-rouge">KVStore[_]</code> monad (note the
-missing “A” in the second type).</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.free.Free.liftF</span>
-
-<span class="c1">// Put returns nothing (i.e. Unit).</span>
-<span class="k">def</span> <span class="nf">put</span><span class="o">[</span><span class="kt">T</span><span class="o">](</span><span class="n">key</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">value</span><span class="k">:</span> <span class="kt">T</span><span class="o">)</span><span class="k">:</span> <span class="kt">KVStore</span><span class="o">[</span><span class="kt">Unit</span><span class="o">]</span> <span class="k">=</span>
-  <span class="n">liftF</span><span class="o">[</span><span class="kt">KVStoreA</span>, <span class="kt">Unit</span><span class="o">](</span><span class="nc">Put</span><span class="o">[</span><span class="kt">T</span><span class="o">](</span><span class="n">key</span><span class="o">,</span> <span class="n">value</span><span class="o">))</span>
-
-<span class="c1">// Get returns a T value.</span>
-<span class="k">def</span> <span class="nf">get</span><span class="o">[</span><span class="kt">T</span><span class="o">](</span><span class="n">key</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">KVStore</span><span class="o">[</span><span class="kt">Option</span><span class="o">[</span><span class="kt">T</span><span class="o">]]</span> <span class="k">=</span>
-  <span class="n">liftF</span><span class="o">[</span><span class="kt">KVStoreA</span>, <span class="kt">Option</span><span class="o">[</span><span class="kt">T</span><span class="o">]](</span><span class="nc">Get</span><span class="o">[</span><span class="kt">T</span><span class="o">](</span><span class="n">key</span><span class="o">))</span>
-
-<span class="c1">// Delete returns nothing (i.e. Unit).</span>
-<span class="k">def</span> <span class="nf">delete</span><span class="o">(</span><span class="n">key</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">KVStore</span><span class="o">[</span><span class="kt">Unit</span><span class="o">]</span> <span class="k">=</span>
-  <span class="nf">liftF</span><span class="o">(</span><span class="nc">Delete</span><span class="o">(</span><span class="n">key</span><span class="o">))</span>
-
-<span class="c1">// Update composes get and set, and returns nothing.</span>
-<span class="k">def</span> <span class="nf">update</span><span class="o">[</span><span class="kt">T</span><span class="o">](</span><span class="n">key</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">f</span><span class="k">:</span> <span class="kt">T</span> <span class="o">=&gt;</span> <span class="n">T</span><span class="o">)</span><span class="k">:</span> <span class="kt">KVStore</span><span class="o">[</span><span class="kt">Unit</span><span class="o">]</span> <span class="k">=</span>
-  <span class="k">for</span> <span class="o">{</span>
-    <span class="n">vMaybe</span> <span class="k">&lt;-</span> <span class="n">get</span><span class="o">[</span><span class="kt">T</span><span class="o">](</span><span class="n">key</span><span class="o">)</span>
-    <span class="k">_</span> <span class="k">&lt;-</span> <span class="nv">vMaybe</span><span class="o">.</span><span class="py">map</span><span class="o">(</span><span class="n">v</span> <span class="k">=&gt;</span> <span class="n">put</span><span class="o">[</span><span class="kt">T</span><span class="o">](</span><span class="n">key</span><span class="o">,</span> <span class="nf">f</span><span class="o">(</span><span class="n">v</span><span class="o">))).</span><span class="py">getOrElse</span><span class="o">(</span><span class="nv">Free</span><span class="o">.</span><span class="py">pure</span><span class="o">(()))</span>
-  <span class="o">}</span> <span class="nf">yield</span> <span class="o">()</span>
-</code></pre></div></div>
-
-<h4 id="3-build-a-program">3. Build a program</h4>
-
-<p>Now that we can construct <code class="language-plaintext highlighter-rouge">KVStore[_]</code> values we can use our DSL to
-write “programs” using a <em>for-comprehension</em>:</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">program</span><span class="k">:</span> <span class="kt">KVStore</span><span class="o">[</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]]</span> <span class="k">=</span>
-  <span class="k">for</span> <span class="o">{</span>
-    <span class="k">_</span> <span class="k">&lt;-</span> <span class="nf">put</span><span class="o">(</span><span class="s">"wild-cats"</span><span class="o">,</span> <span class="mi">2</span><span class="o">)</span>
-    <span class="k">_</span> <span class="k">&lt;-</span> <span class="n">update</span><span class="o">[</span><span class="kt">Int</span><span class="o">](</span><span class="s">"wild-cats"</span><span class="o">,</span> <span class="o">(</span><span class="k">_</span> <span class="o">+</span> <span class="mi">12</span><span class="o">))</span>
-    <span class="k">_</span> <span class="k">&lt;-</span> <span class="nf">put</span><span class="o">(</span><span class="s">"tame-cats"</span><span class="o">,</span> <span class="mi">5</span><span class="o">)</span>
-    <span class="n">n</span> <span class="k">&lt;-</span> <span class="n">get</span><span class="o">[</span><span class="kt">Int</span><span class="o">](</span><span class="s">"wild-cats"</span><span class="o">)</span>
-    <span class="k">_</span> <span class="k">&lt;-</span> <span class="nf">delete</span><span class="o">(</span><span class="s">"tame-cats"</span><span class="o">)</span>
-  <span class="o">}</span> <span class="k">yield</span> <span class="n">n</span>
-</code></pre></div></div>
-
-<p>This looks like a monadic flow. However, it just builds a recursive
-data structure representing the sequence of operations.</p>
-
-<h4 id="4-write-a-compiler-for-your-program">4. Write a compiler for your program</h4>
-
-<p>As you may have understood now, <code class="language-plaintext highlighter-rouge">Free[_]</code> is used to create an embedded
-DSL. By itself, this DSL only represents a sequence of operations
-(defined by a recursive data structure); it doesn’t produce anything.</p>
-
-<p><code class="language-plaintext highlighter-rouge">Free[_]</code> is a programming language inside your programming language!</p>
-
-<p><strong>So, like any other programming language, we need to compile our
-  abstract language into an <em>effective</em> language and then run it.</strong></p>
-
-<p>To do this, we will use a <em>natural transformation</em> between type
-containers.  Natural transformations go between types like <code class="language-plaintext highlighter-rouge">F[_]</code> and
-<code class="language-plaintext highlighter-rouge">G[_]</code> (this particular transformation would be written as
-<code class="language-plaintext highlighter-rouge">FunctionK[F,G]</code> or as done here using the symbolic
-alternative as <code class="language-plaintext highlighter-rouge">F ~&gt; G</code>).</p>
-
-<p>In our case, we will use a simple mutable map to represent our key
-value store:</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.arrow.FunctionK</span>
-<span class="k">import</span> <span class="nn">cats.</span><span class="o">{</span><span class="nc">Id</span><span class="o">,</span> <span class="o">~&gt;}</span>
-<span class="k">import</span> <span class="nn">scala.collection.mutable</span>
-
-<span class="c1">// the program will crash if a key is not found,</span>
-<span class="c1">// or if a type is incorrectly specified.</span>
-<span class="k">def</span> <span class="nf">impureCompiler</span><span class="k">:</span> <span class="kt">KVStoreA</span> <span class="kt">~&gt;</span> <span class="kt">Id</span>  <span class="o">=</span>
-  <span class="nf">new</span> <span class="o">(</span><span class="nc">KVStoreA</span> <span class="o">~&gt;</span> <span class="nc">Id</span><span class="o">)</span> <span class="o">{</span>
-
-    <span class="c1">// a very simple (and imprecise) key-value store</span>
-    <span class="k">val</span> <span class="nv">kvs</span> <span class="k">=</span> <span class="nv">mutable</span><span class="o">.</span><span class="py">Map</span><span class="o">.</span><span class="py">empty</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Any</span><span class="o">]</span>
-
-    <span class="k">def</span> <span class="nf">apply</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">KVStoreA</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span><span class="k">:</span> <span class="kt">Id</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span>
-      <span class="n">fa</span> <span class="k">match</span> <span class="o">{</span>
-        <span class="k">case</span> <span class="nc">Put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="n">value</span><span class="o">)</span> <span class="k">=&gt;</span>
-          <span class="nf">println</span><span class="o">(</span><span class="n">s</span><span class="s">"put($key, $value)"</span><span class="o">)</span>
-          <span class="nf">kvs</span><span class="o">(</span><span class="n">key</span><span class="o">)</span> <span class="k">=</span> <span class="nf">value</span>
-          <span class="o">()</span>
-        <span class="k">case</span> <span class="nc">Get</span><span class="o">(</span><span class="n">key</span><span class="o">)</span> <span class="k">=&gt;</span>
-          <span class="nf">println</span><span class="o">(</span><span class="n">s</span><span class="s">"get($key)"</span><span class="o">)</span>
-          <span class="nv">kvs</span><span class="o">.</span><span class="py">get</span><span class="o">(</span><span class="n">key</span><span class="o">).</span><span class="py">map</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">asInstanceOf</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span>
-        <span class="k">case</span> <span class="nc">Delete</span><span class="o">(</span><span class="n">key</span><span class="o">)</span> <span class="k">=&gt;</span>
-          <span class="nf">println</span><span class="o">(</span><span class="n">s</span><span class="s">"delete($key)"</span><span class="o">)</span>
-          <span class="nv">kvs</span><span class="o">.</span><span class="py">remove</span><span class="o">(</span><span class="n">key</span><span class="o">)</span>
-          <span class="o">()</span>
-      <span class="o">}</span>
-  <span class="o">}</span>
-</code></pre></div></div>
-
-<p>Please note this <code class="language-plaintext highlighter-rouge">impureCompiler</code> is impure – it mutates <code class="language-plaintext highlighter-rouge">kvs</code> and
-also produces logging output using <code class="language-plaintext highlighter-rouge">println</code>.  The whole purpose of
-functional programming isn’t to prevent side-effects, it is just to
-push side-effects to the boundaries of your system in a well-known and
-controlled way.</p>
-
-<p><code class="language-plaintext highlighter-rouge">Id[_]</code> represents the simplest type container: the type itself. Thus,
-<code class="language-plaintext highlighter-rouge">Id[Int]</code> is just <code class="language-plaintext highlighter-rouge">Int</code>. This means that our program will execute
-immediately, and block until the final value can be returned.</p>
-
-<p>However, we could easily use other type containers for different
-behavior, such as:</p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">Future[_]</code> for asynchronous computation</li>
-  <li><code class="language-plaintext highlighter-rouge">List[_]</code> for gathering multiple results</li>
-  <li><code class="language-plaintext highlighter-rouge">Option[_]</code> to support optional results</li>
-  <li><code class="language-plaintext highlighter-rouge">Either[E, *]</code> to support failure</li>
-  <li>a pseudo-random monad to support non-determinism</li>
-  <li>and so on…</li>
-</ul>
-
-<h4 id="5-run-your-program">5. Run your program</h4>
-
-<p>The final step is naturally running your program after compiling it.</p>
-
-<p><code class="language-plaintext highlighter-rouge">Free[_]</code> is just a recursive structure that can be seen as sequence
-of operations producing other operations. In this way it is similar to
-<code class="language-plaintext highlighter-rouge">List[_]</code>. We often use folds (e.g. <code class="language-plaintext highlighter-rouge">foldRight</code>) to obtain a single
-value from a list; this recurses over the structure, combining its
-contents.</p>
-
-<p>The idea behind running a <code class="language-plaintext highlighter-rouge">Free[_]</code> is exactly the same. We fold the
-recursive structure by:</p>
-
-<ul>
-  <li>consuming each operation.</li>
-  <li>compiling the operation into our effective language using
-  <code class="language-plaintext highlighter-rouge">impureCompiler</code> (applying its effects if any).</li>
-  <li>computing next operation.</li>
-  <li>continue recursively until reaching a <code class="language-plaintext highlighter-rouge">Pure</code> state, and returning it.</li>
-</ul>
-
-<p>This operation is called <code class="language-plaintext highlighter-rouge">Free.foldMap</code>:</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">final</span> <span class="k">def</span> <span class="nf">foldMap</span><span class="o">[</span><span class="kt">M</span><span class="o">[</span><span class="k">_</span><span class="o">]](</span><span class="n">f</span><span class="k">:</span> <span class="kt">FunctionK</span><span class="o">[</span><span class="kt">S</span>,<span class="kt">M</span><span class="o">])(</span><span class="n">M</span><span class="k">:</span> <span class="kt">Monad</span><span class="o">[</span><span class="kt">M</span><span class="o">])</span><span class="k">:</span> <span class="kt">M</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="o">...</span>
-</code></pre></div></div>
-
-<p><code class="language-plaintext highlighter-rouge">M</code> must be a <code class="language-plaintext highlighter-rouge">Monad</code> to be flattenable (the famous monoid aspect
-under <code class="language-plaintext highlighter-rouge">Monad</code>). As <code class="language-plaintext highlighter-rouge">Id</code> is a <code class="language-plaintext highlighter-rouge">Monad</code>, we can use <code class="language-plaintext highlighter-rouge">foldMap</code>.</p>
-
-<p>To run your <code class="language-plaintext highlighter-rouge">Free</code> with previous <code class="language-plaintext highlighter-rouge">impureCompiler</code>:</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">result</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nv">program</span><span class="o">.</span><span class="py">foldMap</span><span class="o">(</span><span class="n">impureCompiler</span><span class="o">)</span>
-<span class="c1">// put(wild-cats, 2)</span>
-<span class="c1">// get(wild-cats)</span>
-<span class="c1">// put(wild-cats, 14)</span>
-<span class="c1">// put(tame-cats, 5)</span>
-<span class="c1">// get(wild-cats)</span>
-<span class="c1">// delete(tame-cats)</span>
-<span class="c1">// result: Option[Int] = Some(14)</span>
-</code></pre></div></div>
-
-<p>An important aspect of <code class="language-plaintext highlighter-rouge">foldMap</code> is its <strong>stack-safety</strong>. It evaluates
-each step of computation on the stack then unstack and restart. This
-process is known as trampolining.</p>
-
-<p>As long as your natural transformation is stack-safe, <code class="language-plaintext highlighter-rouge">foldMap</code> will
-never overflow your stack.  Trampolining is heap-intensive but
-stack-safety provides the reliability required to use <code class="language-plaintext highlighter-rouge">Free[_]</code> for
-data-intensive tasks, as well as infinite processes such as streams.</p>
-
-<h4 id="6-use-a-pure-compiler-optional">6. Use a pure compiler (optional)</h4>
-
-<p>The previous examples used an effectful natural transformation. This
-works, but you might prefer folding your <code class="language-plaintext highlighter-rouge">Free</code> in a “purer” way. The
-<a href="state.html">State</a> data structure can be used to keep track of the program
-state in an immutable map, avoiding mutation altogether.</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.State</span>
-
-<span class="k">type</span> <span class="kt">KVStoreState</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">State</span><span class="o">[</span><span class="kt">Map</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Any</span><span class="o">]</span>, <span class="kt">A</span><span class="o">]</span>
-<span class="k">val</span> <span class="nv">pureCompiler</span><span class="k">:</span> <span class="kt">KVStoreA</span> <span class="kt">~&gt;</span> <span class="kt">KVStoreState</span> <span class="o">=</span> <span class="nf">new</span> <span class="o">(</span><span class="nc">KVStoreA</span> <span class="o">~&gt;</span> <span class="nc">KVStoreState</span><span class="o">)</span> <span class="o">{</span>
-  <span class="k">def</span> <span class="nf">apply</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">KVStoreA</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span><span class="k">:</span> <span class="kt">KVStoreState</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span>
-    <span class="n">fa</span> <span class="k">match</span> <span class="o">{</span>
-      <span class="k">case</span> <span class="nc">Put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="n">value</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nv">State</span><span class="o">.</span><span class="py">modify</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">updated</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="n">value</span><span class="o">))</span>
-      <span class="k">case</span> <span class="nc">Get</span><span class="o">(</span><span class="n">key</span><span class="o">)</span> <span class="k">=&gt;</span>
-        <span class="nv">State</span><span class="o">.</span><span class="py">inspect</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">get</span><span class="o">(</span><span class="n">key</span><span class="o">).</span><span class="py">map</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">asInstanceOf</span><span class="o">[</span><span class="kt">A</span><span class="o">]))</span>
-      <span class="k">case</span> <span class="nc">Delete</span><span class="o">(</span><span class="n">key</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nv">State</span><span class="o">.</span><span class="py">modify</span><span class="o">(</span><span class="k">_</span> <span class="o">-</span> <span class="n">key</span><span class="o">)</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<p>(You can see that we are again running into some places where Scala’s
-support for pattern matching is limited by the JVM’s type erasure, but
-it’s not too hard to get around.)</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">result</span><span class="k">:</span> <span class="o">(</span><span class="kt">Map</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Any</span><span class="o">],</span> <span class="nc">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">])</span> <span class="k">=</span> <span class="nv">program</span><span class="o">.</span><span class="py">foldMap</span><span class="o">(</span><span class="n">pureCompiler</span><span class="o">).</span><span class="py">run</span><span class="o">(</span><span class="nv">Map</span><span class="o">.</span><span class="py">empty</span><span class="o">).</span><span class="py">value</span>
-<span class="c1">// result: (Map[String, Any], Option[Int]) = (Map("wild-cats" -&gt; 14), Some(14))</span>
-</code></pre></div></div>
-
-<h2 id="composing-free-monads-adts">Composing Free monads ADTs.</h2>
-
-<p>Real world applications often time combine different algebras.
-The injection type class described by Swierstra in <a href="http://www.staff.science.uu.nl/~swier004/publications/2008-jfp.pdf">Data types à la carte</a>
-lets us compose different algebras in the context of <code class="language-plaintext highlighter-rouge">Free</code>.</p>
-
-<p>Let’s see a trivial example of unrelated ADT’s getting composed as a <code class="language-plaintext highlighter-rouge">EitherK</code> that can form a more complex program.</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.EitherK</span>
-<span class="k">import</span> <span class="nn">cats.free.Free</span>
-<span class="k">import</span> <span class="nn">cats.</span><span class="o">{</span><span class="nc">Id</span><span class="o">,</span> <span class="nc">InjectK</span><span class="o">,</span> <span class="o">~&gt;}</span>
-<span class="k">import</span> <span class="nn">scala.collection.mutable.ListBuffer</span>
-</code></pre></div></div>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/* Handles user interaction */</span>
-<span class="k">sealed</span> <span class="k">trait</span> <span class="nc">Interact</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span>
-<span class="nc">case</span> <span class="k">class</span> <span class="nc">Ask</span><span class="o">(</span><span class="n">prompt</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">Interact</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span>
-<span class="k">case</span> <span class="k">class</span> <span class="nc">Tell</span><span class="o">(</span><span class="n">msg</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">Interact</span><span class="o">[</span><span class="kt">Unit</span><span class="o">]</span>
-
-<span class="cm">/* Represents persistence operations */</span>
-<span class="k">sealed</span> <span class="k">trait</span> <span class="nc">DataOp</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span>
-<span class="nc">case</span> <span class="k">class</span> <span class="nc">AddCat</span><span class="o">(</span><span class="n">a</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">DataOp</span><span class="o">[</span><span class="kt">Unit</span><span class="o">]</span>
-<span class="k">case</span> <span class="k">class</span> <span class="nc">GetAllCats</span><span class="o">()</span> <span class="k">extends</span> <span class="nc">DataOp</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">String</span><span class="o">]]</span>
-</code></pre></div></div>
-
-<p>Once the ADTs are defined we can formally state that a <code class="language-plaintext highlighter-rouge">Free</code> program is the EitherK of its Algebras.</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="kt">CatsApp</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">EitherK</span><span class="o">[</span><span class="kt">DataOp</span>, <span class="kt">Interact</span>, <span class="kt">A</span><span class="o">]</span>
-</code></pre></div></div>
-
-<p>In order to take advantage of monadic composition we use smart constructors to lift our Algebra to the <code class="language-plaintext highlighter-rouge">Free</code> context.</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Interacts</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]](</span><span class="k">implicit</span> <span class="n">I</span><span class="k">:</span> <span class="kt">InjectK</span><span class="o">[</span><span class="kt">Interact</span>, <span class="kt">F</span><span class="o">])</span> <span class="o">{</span>
-  <span class="k">def</span> <span class="nf">tell</span><span class="o">(</span><span class="n">msg</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Free</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">Unit</span><span class="o">]</span> <span class="k">=</span> <span class="nv">Free</span><span class="o">.</span><span class="py">liftInject</span><span class="o">[</span><span class="kt">F</span><span class="o">](</span><span class="nc">Tell</span><span class="o">(</span><span class="n">msg</span><span class="o">))</span>
-  <span class="k">def</span> <span class="nf">ask</span><span class="o">(</span><span class="n">prompt</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Free</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nv">Free</span><span class="o">.</span><span class="py">liftInject</span><span class="o">[</span><span class="kt">F</span><span class="o">](</span><span class="nc">Ask</span><span class="o">(</span><span class="n">prompt</span><span class="o">))</span>
-<span class="o">}</span>
-
-<span class="k">object</span> <span class="nc">Interacts</span> <span class="o">{</span>
-  <span class="k">implicit</span> <span class="k">def</span> <span class="nf">interacts</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]](</span><span class="k">implicit</span> <span class="n">I</span><span class="k">:</span> <span class="kt">InjectK</span><span class="o">[</span><span class="kt">Interact</span>, <span class="kt">F</span><span class="o">])</span><span class="k">:</span> <span class="kt">Interacts</span><span class="o">[</span><span class="kt">F</span><span class="o">]</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Interacts</span><span class="o">[</span><span class="kt">F</span><span class="o">]</span>
-<span class="o">}</span>
-
-<span class="k">class</span> <span class="nc">DataSource</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]](</span><span class="k">implicit</span> <span class="n">I</span><span class="k">:</span> <span class="kt">InjectK</span><span class="o">[</span><span class="kt">DataOp</span>, <span class="kt">F</span><span class="o">])</span> <span class="o">{</span>
-  <span class="k">def</span> <span class="nf">addCat</span><span class="o">(</span><span class="n">a</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Free</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">Unit</span><span class="o">]</span> <span class="k">=</span> <span class="nv">Free</span><span class="o">.</span><span class="py">liftInject</span><span class="o">[</span><span class="kt">F</span><span class="o">](</span><span class="nc">AddCat</span><span class="o">(</span><span class="n">a</span><span class="o">))</span>
-  <span class="k">def</span> <span class="nf">getAllCats</span><span class="k">:</span> <span class="kt">Free</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">List</span><span class="o">[</span><span class="kt">String</span><span class="o">]]</span> <span class="k">=</span> <span class="nv">Free</span><span class="o">.</span><span class="py">liftInject</span><span class="o">[</span><span class="kt">F</span><span class="o">](</span><span class="nc">GetAllCats</span><span class="o">())</span>
-<span class="o">}</span>
-
-<span class="k">object</span> <span class="nc">DataSource</span> <span class="o">{</span>
-  <span class="k">implicit</span> <span class="k">def</span> <span class="nf">dataSource</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]](</span><span class="k">implicit</span> <span class="n">I</span><span class="k">:</span> <span class="kt">InjectK</span><span class="o">[</span><span class="kt">DataOp</span>, <span class="kt">F</span><span class="o">])</span><span class="k">:</span> <span class="kt">DataSource</span><span class="o">[</span><span class="kt">F</span><span class="o">]</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">DataSource</span><span class="o">[</span><span class="kt">F</span><span class="o">]</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<p>ADTs are now easily composed and trivially intertwined inside monadic contexts.</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">program</span><span class="o">(</span><span class="k">implicit</span> <span class="n">I</span> <span class="k">:</span> <span class="kt">Interacts</span><span class="o">[</span><span class="kt">CatsApp</span><span class="o">],</span> <span class="n">D</span> <span class="k">:</span> <span class="kt">DataSource</span><span class="o">[</span><span class="kt">CatsApp</span><span class="o">])</span><span class="k">:</span> <span class="kt">Free</span><span class="o">[</span><span class="kt">CatsApp</span>, <span class="kt">Unit</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
-
-  <span class="k">import</span> <span class="nn">I._</span><span class="o">,</span> <span class="nv">D</span><span class="o">.</span><span class="py">_</span>
-
-  <span class="k">for</span> <span class="o">{</span>
-    <span class="n">cat</span> <span class="k">&lt;-</span> <span class="nf">ask</span><span class="o">(</span><span class="s">"What's the kitty's name?"</span><span class="o">)</span>
-    <span class="k">_</span> <span class="k">&lt;-</span> <span class="nf">addCat</span><span class="o">(</span><span class="n">cat</span><span class="o">)</span>
-    <span class="n">cats</span> <span class="k">&lt;-</span> <span class="n">getAllCats</span>
-    <span class="k">_</span> <span class="k">&lt;-</span> <span class="nf">tell</span><span class="o">(</span><span class="nv">cats</span><span class="o">.</span><span class="py">toString</span><span class="o">)</span>
-  <span class="o">}</span> <span class="nf">yield</span> <span class="o">()</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<p>Finally we write one interpreter per ADT and combine them with a <code class="language-plaintext highlighter-rouge">FunctionK</code> to <code class="language-plaintext highlighter-rouge">EitherK</code> so they can be
-compiled and applied to our <code class="language-plaintext highlighter-rouge">Free</code> program.</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">object</span> <span class="nc">ConsoleCatsInterpreter</span> <span class="nf">extends</span> <span class="o">(</span><span class="nc">Interact</span> <span class="o">~&gt;</span> <span class="nc">Id</span><span class="o">)</span> <span class="o">{</span>
-  <span class="k">def</span> <span class="nf">apply</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">i</span><span class="k">:</span> <span class="kt">Interact</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span> <span class="k">=</span> <span class="n">i</span> <span class="k">match</span> <span class="o">{</span>
-    <span class="k">case</span> <span class="nc">Ask</span><span class="o">(</span><span class="n">prompt</span><span class="o">)</span> <span class="k">=&gt;</span>
-      <span class="nf">println</span><span class="o">(</span><span class="n">prompt</span><span class="o">)</span>
-      <span class="nf">readLine</span><span class="o">()</span>
-    <span class="k">case</span> <span class="nc">Tell</span><span class="o">(</span><span class="n">msg</span><span class="o">)</span> <span class="k">=&gt;</span>
-      <span class="nf">println</span><span class="o">(</span><span class="n">msg</span><span class="o">)</span>
-  <span class="o">}</span>
-<span class="o">}</span>
-
-<span class="k">object</span> <span class="nc">InMemoryDatasourceInterpreter</span> <span class="nf">extends</span> <span class="o">(</span><span class="nc">DataOp</span> <span class="o">~&gt;</span> <span class="nc">Id</span><span class="o">)</span> <span class="o">{</span>
-
-  <span class="k">private</span><span class="o">[</span><span class="kt">this</span><span class="o">]</span> <span class="k">val</span> <span class="nv">memDataSet</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">ListBuffer</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span>
-
-  <span class="k">def</span> <span class="nf">apply</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">DataOp</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span> <span class="k">=</span> <span class="n">fa</span> <span class="k">match</span> <span class="o">{</span>
-    <span class="k">case</span> <span class="nc">AddCat</span><span class="o">(</span><span class="n">a</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nv">memDataSet</span><span class="o">.</span><span class="py">append</span><span class="o">(</span><span class="n">a</span><span class="o">);</span> <span class="o">()</span>
-    <span class="k">case</span> <span class="nc">GetAllCats</span><span class="o">()</span> <span class="k">=&gt;</span> <span class="nv">memDataSet</span><span class="o">.</span><span class="py">toList</span>
-  <span class="o">}</span>
-<span class="o">}</span>
-
-<span class="k">val</span> <span class="nv">interpreter</span><span class="k">:</span> <span class="kt">CatsApp</span> <span class="kt">~&gt;</span> <span class="kt">Id</span> <span class="o">=</span> <span class="nc">InMemoryDatasourceInterpreter</span> <span class="n">or</span> <span class="nc">ConsoleCatsInterpreter</span>
-</code></pre></div></div>
-
-<p>Now if we run our program and type in “snuggles” when prompted, we see something like this:</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">DataSource._</span><span class="o">,</span> <span class="nv">Interacts</span><span class="o">.</span><span class="py">_</span>
-</code></pre></div></div>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">evaled</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="nv">program</span><span class="o">.</span><span class="py">foldMap</span><span class="o">(</span><span class="n">interpreter</span><span class="o">)</span>
-<span class="c1">// What's the kitty's name?</span>
-<span class="c1">// List(snuggles)</span>
-</code></pre></div></div>
-
-<h2 id="for-the-curious-ones-what-is-free-in-theory"><a name="what-is-free-in-theory"></a>For the curious ones: what is Free in theory?</h2>
-
-<p>Mathematically-speaking, a <em>free monad</em> (at least in the programming
-language context) is a construction that is left adjoint to a
-forgetful functor whose domain is the category of Monads and whose
-co-domain is the category of Endofunctors. Huh?</p>
-
-<p>Concretely, <strong>it is just a clever construction that allows us to build a
-<em>very simple</em> Monad from any <em>functor</em></strong>.</p>
-
-<p>The above forgetful functor takes a <code class="language-plaintext highlighter-rouge">Monad</code> and:</p>
-
-<ul>
-  <li>forgets its <em>monadic</em> part (e.g. the <code class="language-plaintext highlighter-rouge">flatMap</code> function)</li>
-  <li>forgets its <em>pointed</em> part (e.g. the <code class="language-plaintext highlighter-rouge">pure</code> function)</li>
-  <li>finally keeps the <em>functor</em> part (e.g. the <code class="language-plaintext highlighter-rouge">map</code> function)</li>
-</ul>
-
-<p>By reversing all arrows to build the left-adjoint, we deduce that the
-free monad is basically a construction that:</p>
-
-<ul>
-  <li>takes a <em>functor</em></li>
-  <li>adds the <em>pointed</em> part (e.g. <code class="language-plaintext highlighter-rouge">pure</code>)</li>
-  <li>adds the <em>monadic</em> behavior (e.g. <code class="language-plaintext highlighter-rouge">flatMap</code>)</li>
-</ul>
-
-<p>In terms of implementation, to build a <em>monad</em> from a <em>functor</em> we use
-the following classic inductive definition:</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">sealed</span> <span class="k">abstract</span> <span class="k">class</span> <span class="nc">Free</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]</span>, <span class="kt">A</span><span class="o">]</span>
-<span class="nc">case</span> <span class="k">class</span> <span class="nc">Pure</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]</span>, <span class="kt">A</span><span class="o">](</span><span class="n">a</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">Free</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">A</span><span class="o">]</span>
-<span class="k">case</span> <span class="k">class</span> <span class="nc">Suspend</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]</span>, <span class="kt">A</span><span class="o">](</span><span class="n">a</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">Free</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">A</span><span class="o">]])</span> <span class="k">extends</span> <span class="nc">Free</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">A</span><span class="o">]</span>
-</code></pre></div></div>
-
-<p>(<em>This generalizes the concept of fixed point functor</em>.)</p>
-
-<p>In this representation:</p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">Pure</code> builds a <code class="language-plaintext highlighter-rouge">Free</code> instance from an <code class="language-plaintext highlighter-rouge">A</code> value (it <em>reifies</em> the
-<code class="language-plaintext highlighter-rouge">pure</code> function)</li>
-  <li><code class="language-plaintext highlighter-rouge">Suspend</code> builds a new <code class="language-plaintext highlighter-rouge">Free</code> by applying <code class="language-plaintext highlighter-rouge">F</code> to a previous <code class="language-plaintext highlighter-rouge">Free</code>
-(it <em>reifies</em> the <code class="language-plaintext highlighter-rouge">flatMap</code> function)</li>
-</ul>
-
-<p>So a typical <code class="language-plaintext highlighter-rouge">Free</code> structure might look like:</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">Suspend</span><span class="o">(</span><span class="nf">F</span><span class="o">(</span><span class="nc">Suspend</span><span class="o">(</span><span class="nf">F</span><span class="o">(</span><span class="nc">Suspend</span><span class="o">(</span><span class="nf">F</span><span class="o">(....(</span><span class="nc">Pure</span><span class="o">(</span><span class="n">a</span><span class="o">))))))))</span>
-</code></pre></div></div>
-
-<p><code class="language-plaintext highlighter-rouge">Free</code> is a recursive structure. It uses <code class="language-plaintext highlighter-rouge">A</code> in <code class="language-plaintext highlighter-rouge">F[A]</code> as the
-recursion “carrier” with a terminal element <code class="language-plaintext highlighter-rouge">Pure</code>.</p>
-
-<p>From a computational point of view, <code class="language-plaintext highlighter-rouge">Free</code> recursive structure can be
-seen as a sequence of operations.</p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">Pure</code> returns an <code class="language-plaintext highlighter-rouge">A</code> value and ends the entire computation.</li>
-  <li><code class="language-plaintext highlighter-rouge">Suspend</code> is a continuation; it suspends the current computation
-with the suspension functor <code class="language-plaintext highlighter-rouge">F</code> (which can represent a command for
-example) and hands control to the caller. <code class="language-plaintext highlighter-rouge">A</code> represents a value
-bound to this computation.</li>
-</ul>
-
-<p>Please note this <code class="language-plaintext highlighter-rouge">Free</code> construction has the interesting quality of
-<em>encoding</em> the recursion on the heap instead of the stack as classic
-function calls would. This provides the stack-safety we heard about
-earlier, allowing very large <code class="language-plaintext highlighter-rouge">Free</code> structures to be evaluated safely.</p>
-
-<h3 id="for-the-very-curious-ones">For the very curious ones</h3>
-
-<p>If you look at implementation in cats, you will see another member of
-the <code class="language-plaintext highlighter-rouge">Free[_]</code> ADT:</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">case</span> <span class="k">class</span> <span class="nc">FlatMapped</span><span class="o">[</span><span class="kt">S</span><span class="o">[</span><span class="k">_</span><span class="o">]</span>, <span class="kt">B</span>, <span class="kt">C</span><span class="o">](</span><span class="n">c</span><span class="k">:</span> <span class="kt">Free</span><span class="o">[</span><span class="kt">S</span>, <span class="kt">C</span><span class="o">],</span> <span class="n">f</span><span class="k">:</span> <span class="kt">C</span> <span class="o">=&gt;</span> <span class="nc">Free</span><span class="o">[</span><span class="kt">S</span>, <span class="kt">B</span><span class="o">])</span> <span class="k">extends</span> <span class="nc">Free</span><span class="o">[</span><span class="kt">S</span>, <span class="kt">B</span><span class="o">]</span>
-</code></pre></div></div>
-
-<p><code class="language-plaintext highlighter-rouge">FlatMapped</code> represents a call to a subroutine <code class="language-plaintext highlighter-rouge">c</code> and when <code class="language-plaintext highlighter-rouge">c</code> is
-finished, it continues the computation by calling the function <code class="language-plaintext highlighter-rouge">f</code>
-with the result of <code class="language-plaintext highlighter-rouge">c</code>.</p>
-
-<p>It is actually an optimization of <code class="language-plaintext highlighter-rouge">Free</code> structure allowing to solve a
-problem of quadratic complexity implied by very deep recursive <code class="language-plaintext highlighter-rouge">Free</code>
-computations.</p>
-
-<p>It is exactly the same problem as repeatedly appending to a <code class="language-plaintext highlighter-rouge">List[_]</code>.
-As the sequence of operations becomes longer, the slower a <code class="language-plaintext highlighter-rouge">flatMap</code>
-“through” the structure will be. With <code class="language-plaintext highlighter-rouge">FlatMapped</code>, <code class="language-plaintext highlighter-rouge">Free</code> becomes a
-right-associated structure not subject to quadratic complexity.</p>
-
-<h2 id="freet">FreeT</h2>
-
-<p>Often times we want to interleave the syntax tree when building a Free monad
-with some other effect not declared as part of the ADT.
-FreeT solves this problem by allowing us to mix building steps of the AST
-with calling action in other base monad.</p>
-
-<p>In the following example a basic console application is shown.
-When the user inputs some text we use a separate <code class="language-plaintext highlighter-rouge">State</code> monad to track what the user
-typed.</p>
-
-<p>As we can observe in this case <code class="language-plaintext highlighter-rouge">FreeT</code> offers us the alternative to delegate denotations to <code class="language-plaintext highlighter-rouge">State</code>
-monad with stronger equational guarantees than if we were emulating the <code class="language-plaintext highlighter-rouge">State</code> ops in our own ADT.</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.free._</span>
-<span class="k">import</span> <span class="nn">cats._</span>
-<span class="k">import</span> <span class="nn">cats.data._</span>
-
-<span class="cm">/* A base ADT for the user interaction without state semantics */</span>
-<span class="k">sealed</span> <span class="k">abstract</span> <span class="k">class</span> <span class="nc">Teletype</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="nc">extends</span> <span class="nc">Product</span> <span class="k">with</span> <span class="nc">Serializable</span>
-<span class="k">final</span> <span class="k">case</span> <span class="k">class</span> <span class="nc">WriteLine</span><span class="o">(</span><span class="n">line</span> <span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">Teletype</span><span class="o">[</span><span class="kt">Unit</span><span class="o">]</span>
-<span class="k">final</span> <span class="k">case</span> <span class="k">class</span> <span class="nc">ReadLine</span><span class="o">(</span><span class="n">prompt</span> <span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">Teletype</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span>
-
-<span class="k">type</span> <span class="kt">TeletypeT</span><span class="o">[</span><span class="kt">M</span><span class="o">[</span><span class="k">_</span><span class="o">]</span>, <span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">FreeT</span><span class="o">[</span><span class="kt">Teletype</span>, <span class="kt">M</span>, <span class="kt">A</span><span class="o">]</span>
-<span class="k">type</span> <span class="kt">Log</span> <span class="o">=</span> <span class="nc">List</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span>
-
-<span class="k">type</span> <span class="kt">TeletypeState</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">State</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span>, <span class="kt">A</span><span class="o">]</span>
-
-<span class="cm">/** Teletype smart constructors */</span>
-<span class="k">object</span> <span class="nc">TeletypeOps</span> <span class="o">{</span>
-  <span class="k">def</span> <span class="nf">writeLine</span><span class="o">(</span><span class="n">line</span> <span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">:</span> <span class="kt">TeletypeT</span><span class="o">[</span><span class="kt">TeletypeState</span>, <span class="kt">Unit</span><span class="o">]</span> <span class="k">=</span>
-	<span class="nv">FreeT</span><span class="o">.</span><span class="py">liftF</span><span class="o">[</span><span class="kt">Teletype</span>, <span class="kt">TeletypeState</span>, <span class="kt">Unit</span><span class="o">](</span><span class="nc">WriteLine</span><span class="o">(</span><span class="n">line</span><span class="o">))</span>
-  <span class="k">def</span> <span class="nf">readLine</span><span class="o">(</span><span class="n">prompt</span> <span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">:</span> <span class="kt">TeletypeT</span><span class="o">[</span><span class="kt">TeletypeState</span>, <span class="kt">String</span><span class="o">]</span> <span class="k">=</span>
-	<span class="nv">FreeT</span><span class="o">.</span><span class="py">liftF</span><span class="o">[</span><span class="kt">Teletype</span>, <span class="kt">TeletypeState</span>, <span class="kt">String</span><span class="o">](</span><span class="nc">ReadLine</span><span class="o">(</span><span class="n">prompt</span><span class="o">))</span>
-  <span class="k">def</span> <span class="nf">log</span><span class="o">(</span><span class="n">s</span> <span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">:</span> <span class="kt">TeletypeT</span><span class="o">[</span><span class="kt">TeletypeState</span>, <span class="kt">Unit</span><span class="o">]</span> <span class="k">=</span>
-	<span class="nv">FreeT</span><span class="o">.</span><span class="py">liftT</span><span class="o">[</span><span class="kt">Teletype</span>, <span class="kt">TeletypeState</span>, <span class="kt">Unit</span><span class="o">](</span><span class="nv">State</span><span class="o">.</span><span class="py">modify</span><span class="o">(</span><span class="n">s</span> <span class="o">::</span> <span class="k">_</span><span class="o">))</span>
-<span class="o">}</span>
-
-<span class="k">def</span> <span class="nf">program</span> <span class="k">:</span> <span class="kt">TeletypeT</span><span class="o">[</span><span class="kt">TeletypeState</span>, <span class="kt">Unit</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
-  <span class="k">for</span> <span class="o">{</span>
-	<span class="n">userSaid</span> <span class="k">&lt;-</span> <span class="nv">TeletypeOps</span><span class="o">.</span><span class="py">readLine</span><span class="o">(</span><span class="s">"what's up?!"</span><span class="o">)</span>
-	<span class="k">_</span> <span class="k">&lt;-</span> <span class="nv">TeletypeOps</span><span class="o">.</span><span class="py">log</span><span class="o">(</span><span class="n">s</span><span class="s">"user said : $userSaid"</span><span class="o">)</span>
-	<span class="k">_</span> <span class="k">&lt;-</span> <span class="nv">TeletypeOps</span><span class="o">.</span><span class="py">writeLine</span><span class="o">(</span><span class="s">"thanks, see you soon!"</span><span class="o">)</span>
-  <span class="o">}</span> <span class="nf">yield</span> <span class="o">()</span>
-<span class="o">}</span>
-
-<span class="k">def</span> <span class="nf">interpreter</span> <span class="k">=</span> <span class="nf">new</span> <span class="o">(</span><span class="nc">Teletype</span> <span class="o">~&gt;</span> <span class="nc">TeletypeState</span><span class="o">)</span> <span class="o">{</span>
-  <span class="k">def</span> <span class="nf">apply</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">fa</span> <span class="k">:</span> <span class="kt">Teletype</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span> <span class="k">:</span> <span class="kt">TeletypeState</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
-	<span class="n">fa</span> <span class="k">match</span> <span class="o">{</span>
-	  <span class="k">case</span> <span class="nc">ReadLine</span><span class="o">(</span><span class="n">prompt</span><span class="o">)</span> <span class="k">=&gt;</span>
-		<span class="nf">println</span><span class="o">(</span><span class="n">prompt</span><span class="o">)</span>
-		<span class="k">val</span> <span class="nv">userInput</span> <span class="k">=</span> <span class="s">"hanging in here"</span> <span class="c1">//scala.io.StdIn.readLine()</span>
-		<span class="nv">StateT</span><span class="o">.</span><span class="py">pure</span><span class="o">[</span><span class="kt">Eval</span>, <span class="kt">List</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span>, <span class="kt">A</span><span class="o">](</span><span class="n">userInput</span><span class="o">)</span>
-	  <span class="k">case</span> <span class="nc">WriteLine</span><span class="o">(</span><span class="n">line</span><span class="o">)</span> <span class="k">=&gt;</span>
-		<span class="nv">StateT</span><span class="o">.</span><span class="py">pure</span><span class="o">[</span><span class="kt">Eval</span>, <span class="kt">List</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span>, <span class="kt">A</span><span class="o">](</span><span class="nf">println</span><span class="o">(</span><span class="n">line</span><span class="o">))</span>
-	<span class="o">}</span>
-  <span class="o">}</span>
-<span class="o">}</span>
-
-<span class="k">import</span> <span class="nn">TeletypeOps._</span>
-
-<span class="k">val</span> <span class="nv">state</span> <span class="k">=</span> <span class="nv">program</span><span class="o">.</span><span class="py">foldMap</span><span class="o">(</span><span class="n">interpreter</span><span class="o">)</span>
-<span class="c1">// state: TeletypeState[Unit] = cats.data.IndexedStateT@79ac2780</span>
-<span class="k">val</span> <span class="nv">initialState</span> <span class="k">=</span> <span class="nc">Nil</span>
-<span class="c1">// initialState: Nil.type = List()</span>
-<span class="nf">val</span> <span class="o">(</span><span class="n">stored</span><span class="o">,</span> <span class="k">_</span><span class="o">)</span> <span class="k">=</span> <span class="nv">state</span><span class="o">.</span><span class="py">run</span><span class="o">(</span><span class="n">initialState</span><span class="o">).</span><span class="py">value</span>
-<span class="c1">// what's up?!</span>
-<span class="c1">// thanks, see you soon!</span>
-<span class="c1">// stored: List[String] = List("user said : hanging in here")</span>
-</code></pre></div></div>
-
-<p>Another example is more basic usage of <code class="language-plaintext highlighter-rouge">FreeT</code> with some context <code class="language-plaintext highlighter-rouge">Ctx</code> for which we provide <code class="language-plaintext highlighter-rouge">Try</code> interpreter,
-combined with <code class="language-plaintext highlighter-rouge">OptionT</code> for reducing boilerplate.</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.free._</span>
-<span class="k">import</span> <span class="nn">cats._</span>
-<span class="k">import</span> <span class="nn">cats.data._</span>
-<span class="k">import</span> <span class="nn">cats.implicits._</span>
-<span class="k">import</span> <span class="nn">scala.util.Try</span>
-
-<span class="k">sealed</span> <span class="k">trait</span> <span class="nc">Ctx</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span>
-
-<span class="nc">case</span> <span class="k">class</span> <span class="nc">Action</span><span class="o">(</span><span class="n">value</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">Ctx</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span>
-
-<span class="k">def</span> <span class="nf">op1</span><span class="k">:</span> <span class="kt">FreeT</span><span class="o">[</span><span class="kt">Ctx</span>, <span class="kt">Option</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span>
-  <span class="nv">FreeT</span><span class="o">.</span><span class="py">liftF</span><span class="o">[</span><span class="kt">Ctx</span>, <span class="kt">Option</span>, <span class="kt">Int</span><span class="o">](</span><span class="nc">Action</span><span class="o">(</span><span class="mi">7</span><span class="o">))</span>
-
-<span class="k">def</span> <span class="nf">op2</span><span class="k">:</span> <span class="kt">FreeT</span><span class="o">[</span><span class="kt">Ctx</span>, <span class="kt">Option</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span>
-  <span class="nv">FreeT</span><span class="o">.</span><span class="py">liftT</span><span class="o">[</span><span class="kt">Ctx</span>, <span class="kt">Option</span>, <span class="kt">Int</span><span class="o">](</span><span class="nc">Some</span><span class="o">(</span><span class="mi">4</span><span class="o">))</span>
-
-<span class="k">def</span> <span class="nf">op3</span><span class="k">:</span> <span class="kt">FreeT</span><span class="o">[</span><span class="kt">Ctx</span>, <span class="kt">Option</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span>
-  <span class="nv">FreeT</span><span class="o">.</span><span class="py">pure</span><span class="o">[</span><span class="kt">Ctx</span>, <span class="kt">Option</span>, <span class="kt">Int</span><span class="o">](</span><span class="mi">1</span><span class="o">)</span>
-
-<span class="k">val</span> <span class="nv">opComplete</span><span class="k">:</span> <span class="kt">FreeT</span><span class="o">[</span><span class="kt">Ctx</span>, <span class="kt">Option</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span>
-  <span class="k">for</span> <span class="o">{</span>
-    <span class="n">a</span> <span class="k">&lt;-</span> <span class="n">op1</span>
-    <span class="n">b</span> <span class="k">&lt;-</span> <span class="n">op2</span>
-    <span class="n">c</span> <span class="k">&lt;-</span> <span class="n">op3</span>
-  <span class="o">}</span> <span class="k">yield</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">+</span> <span class="n">c</span>
-<span class="c1">// opComplete: FreeT[Ctx, Option, Int] = FlatMapped(</span>
-<span class="c1">//   Suspend(Some(Left(Action(7)))),</span>
-<span class="c1">//   &lt;function1&gt;</span>
-<span class="c1">// )</span>
-
-
-<span class="cm">/*  Our interpreters  */</span>
-
-<span class="k">type</span> <span class="kt">OptTry</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">OptionT</span><span class="o">[</span><span class="kt">Try</span>, <span class="kt">A</span><span class="o">]</span>
-
-<span class="k">def</span> <span class="nf">tryInterpreter</span><span class="k">:</span> <span class="kt">Ctx</span> <span class="kt">~&gt;</span> <span class="kt">OptTry</span> <span class="o">=</span> <span class="nf">new</span> <span class="o">(</span><span class="nc">Ctx</span> <span class="o">~&gt;</span> <span class="nc">OptTry</span><span class="o">)</span> <span class="o">{</span>
-  <span class="k">def</span> <span class="nf">apply</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">Ctx</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span><span class="k">:</span> <span class="kt">OptTry</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
-    <span class="n">fa</span> <span class="k">match</span> <span class="o">{</span>
-      <span class="k">case</span> <span class="nc">Action</span><span class="o">(</span><span class="n">value</span><span class="o">)</span> <span class="k">=&gt;</span>
-        <span class="nv">OptionT</span><span class="o">.</span><span class="py">liftF</span><span class="o">(</span><span class="nc">Try</span><span class="o">(</span><span class="n">value</span><span class="o">))</span>
-    <span class="o">}</span>
-  <span class="o">}</span>
-<span class="o">}</span>
-
-<span class="k">def</span> <span class="nf">optTryLift</span><span class="k">:</span> <span class="kt">Option</span> <span class="kt">~&gt;</span> <span class="kt">OptTry</span> <span class="o">=</span> <span class="nf">new</span> <span class="o">(</span><span class="nc">Option</span> <span class="o">~&gt;</span> <span class="nc">OptTry</span><span class="o">)</span> <span class="o">{</span>
-  <span class="k">def</span> <span class="nf">apply</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span><span class="k">:</span> <span class="kt">OptTry</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
-    <span class="n">fa</span> <span class="k">match</span> <span class="o">{</span>
-      <span class="k">case</span> <span class="nc">Some</span><span class="o">(</span><span class="n">value</span><span class="o">)</span> <span class="k">=&gt;</span>
-        <span class="nc">OptionT</span><span class="o">(</span><span class="nc">Try</span><span class="o">(</span><span class="nc">Option</span><span class="o">(</span><span class="n">value</span><span class="o">)))</span>
-      <span class="k">case</span> <span class="nc">None</span> <span class="k">=&gt;</span>
-        <span class="nv">OptionT</span><span class="o">.</span><span class="py">none</span>
-    <span class="o">}</span>
-  <span class="o">}</span>
-<span class="o">}</span>
-
-<span class="k">val</span> <span class="nv">hoisted</span> <span class="k">=</span> <span class="nv">opComplete</span><span class="o">.</span><span class="py">hoist</span><span class="o">(</span><span class="n">optTryLift</span><span class="o">)</span>
-<span class="c1">// hoisted: FreeT[Ctx, OptTry, Int] = FlatMapped(</span>
-<span class="c1">//   Suspend(OptionT(Success(Some(Left(Action(7)))))),</span>
-<span class="c1">//   scala.Function1$$Lambda$634/0x0000000801005580@2a5a8b7c</span>
-<span class="c1">// )</span>
-<span class="k">val</span> <span class="nv">evaluated</span> <span class="k">=</span> <span class="nv">hoisted</span><span class="o">.</span><span class="py">foldMap</span><span class="o">(</span><span class="n">tryInterpreter</span><span class="o">)</span>
-<span class="c1">// evaluated: OptTry[Int] = OptionT(Success(Some(12)))</span>
-<span class="k">val</span> <span class="nv">result</span> <span class="k">=</span> <span class="nv">evaluated</span><span class="o">.</span><span class="py">value</span>
-<span class="c1">// result: Try[Option[Int]] = Success(Some(12))</span>
-</code></pre></div></div>
-
-<h2 id="future-work-todo">Future Work (TODO)</h2>
-
-<p>There are many remarkable uses of <code class="language-plaintext highlighter-rouge">Free[_]</code>. In the future, we will
-include some here, such as:</p>
-
-<ul>
-  <li>Trampoline</li>
-  <li>Option</li>
-  <li>Iteratee</li>
-  <li>Source</li>
-  <li>etc…</li>
-</ul>
-
-<p>We will also discuss the <em>Coyoneda Trick</em>.</p>
-
-<h2 id="credits">Credits</h2>
-
-<p>This article was written by
-<a href="https://github.com/mandubian">Pascal Voitot</a> and edited by other
-members of the Cats community.</p>
-</section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/cats/highlight/highlight.pack.js"></script><script src="/cats/lunr/lunr.js"></script><script>
-// For all code blocks, copy the language from the containing div
-// to the inner code tag (where hljs expects it to be)
-const langPrefix = 'language-';
-document.querySelectorAll(`div[class^='${langPrefix}']`).forEach(function(div) {
-  div.classList.forEach(function(cssClass) {
-    if (cssClass.startsWith(langPrefix)) {
-      const lang = cssClass.substring(langPrefix.length);
-      div.querySelectorAll('pre code').forEach(function(code) {
-        code.classList.add(lang);
-      });
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Laika 0.18.1 + Helium Theme" />
+    <title>Free Monad</title>
+    
+      <meta name="author" content="Cody Allen"/>
+    
+      <meta name="author" content="Ross Baker"/>
+    
+      <meta name="author" content="P. Oscar Boykin"/>
+    
+      <meta name="author" content="Travis Brown"/>
+    
+      <meta name="author" content="Adelbert Chang"/>
+    
+      <meta name="author" content="Peter Neyens"/>
+    
+      <meta name="author" content="Rob Norris"/>
+    
+      <meta name="author" content="Erik Osheim"/>
+    
+      <meta name="author" content="LukaJCB"/>
+    
+      <meta name="author" content="Michael Pilquist"/>
+    
+      <meta name="author" content="Miles Sabin"/>
+    
+      <meta name="author" content="Daniel Spiewak"/>
+    
+      <meta name="author" content="Frank Thomas"/>
+    
+      <meta name="author" content="Julien Truffaut"/>
+    
+      <meta name="author" content="Kailuo Wang"/>
+    
+    
+      <meta name="description" content="docs"/>
+    
+    
+      <link rel="icon" sizes="32x32" type="image/png" href="https://typelevel.org/img/favicon.png"/>
+    
+    
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.207/distr/fira_code.css">
+    
+    <link rel="stylesheet" type="text/css" href="../helium/icofont.min.css" />
+    <link rel="stylesheet" type="text/css" href="../helium/laika-helium.css" />
+    <link rel="stylesheet" type="text/css" href="../site/styles.css" />
+    <script src="../helium/laika-helium.js"></script>
+    <script src="../js/sponsors.js"></script>
+    
+    
+    <script> /* for avoiding page load transitions */ </script>
+  </head>
+
+  <body>
+
+    <header id="top-bar">
+
+      <div class="row">
+        <a id="nav-icon">
+          <i class="icofont-laika" title="Navigation">&#xefa2;</i>
+        </a>
+        
+      </div>
+
+      <a class="image-link" href="https://typelevel.org"><img src="https://typelevel.org/img/logo.svg"></a>
+
+      <span class="row links"><a class="icon-link svg-link" href="https://typelevel.org/cats/api/"><span title="API"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M75,47.5c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm-50,-0c13.246,-0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,-0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm2.705,16.735l7.239,0l0.622,-4.904l-21.833,0l-0,4.904l7.589,0l0,22.067l6.383,0l-0,-22.067Zm58.076,7.265c-0,-8.757 -3.698,-14.166 -10.781,-14.166c-7.083,-0 -10.781,5.604 -10.781,14.166c0,8.757 3.698,14.166 10.781,14.166c7.083,0 10.781,-5.604 10.781,-14.166Zm-6.539,0c0,6.538 -1.128,9.496 -4.242,9.496c-2.997,0 -4.242,-2.88 -4.242,-9.496c-0,-6.616 1.206,-9.496 4.242,-9.496c3.036,-0 4.242,2.88 4.242,9.496Zm-29.242,-67c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm0.512,9.834c-7.122,-0 -12.609,5.098 -12.609,14.127c-0,9.263 5.215,14.205 12.532,14.205c4.164,0 7.083,-1.634 9.068,-3.658l-2.88,-3.697c-1.518,1.206 -3.153,2.413 -5.838,2.413c-3.697,-0 -6.266,-2.763 -6.266,-9.263c-0,-6.616 2.724,-9.379 6.149,-9.379c2.102,-0 3.892,0.778 5.371,1.984l3.113,-3.775c-2.257,-1.868 -4.748,-2.957 -8.64,-2.957Z"/>
+  </g>
+</svg></span></a><a class="icon-link svg-link" href="https://github.com/typelevel/cats"><span title="Source Code"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M49.995,1c-27.609,-0 -49.995,22.386 -49.995,50.002c-0,22.09 14.325,40.83 34.194,47.444c2.501,0.458 3.413,-1.086 3.413,-2.412c0,-1.185 -0.043,-4.331 -0.067,-8.503c-13.908,3.021 -16.843,-6.704 -16.843,-6.704c-2.274,-5.773 -5.552,-7.311 -5.552,-7.311c-4.54,-3.103 0.344,-3.042 0.344,-3.042c5.018,0.356 7.658,5.154 7.658,5.154c4.46,7.64 11.704,5.433 14.552,4.156c0.454,-3.232 1.744,-5.436 3.174,-6.685c-11.102,-1.262 -22.775,-5.553 -22.775,-24.713c-0,-5.457 1.949,-9.92 5.147,-13.416c-0.516,-1.265 -2.231,-6.348 0.488,-13.233c0,0 4.199,-1.344 13.751,5.126c3.988,-1.108 8.266,-1.663 12.518,-1.682c4.245,0.019 8.523,0.574 12.517,1.682c9.546,-6.47 13.736,-5.126 13.736,-5.126c2.728,6.885 1.013,11.968 0.497,13.233c3.204,3.496 5.141,7.959 5.141,13.416c0,19.209 -11.691,23.436 -22.83,24.673c1.795,1.544 3.394,4.595 3.394,9.26c0,6.682 -0.061,12.076 -0.061,13.715c0,1.338 0.899,2.894 3.438,2.406c19.853,-6.627 34.166,-25.354 34.166,-47.438c-0,-27.616 -22.389,-50.002 -50.005,-50.002"/>
+  </g>
+</svg></span></a><a class="icon-link" href="https://discord.gg/XF3CXcMzqD"><i class="icofont-laika" title="Chat">&#xeed5;</i></a><a class="icon-link" href="https://twitter.com/typelevel"><i class="icofont-laika" title="Twitter">&#xed7a;</i></a></span>
+
+    </header>
+
+    <nav id="sidebar">
+
+      <div class="row">
+        <a class="icon-link svg-link" href="https://typelevel.org/cats/api/"><span title="API"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M75,47.5c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm-50,-0c13.246,-0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,-0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm2.705,16.735l7.239,0l0.622,-4.904l-21.833,0l-0,4.904l7.589,0l0,22.067l6.383,0l-0,-22.067Zm58.076,7.265c-0,-8.757 -3.698,-14.166 -10.781,-14.166c-7.083,-0 -10.781,5.604 -10.781,14.166c0,8.757 3.698,14.166 10.781,14.166c7.083,0 10.781,-5.604 10.781,-14.166Zm-6.539,0c0,6.538 -1.128,9.496 -4.242,9.496c-2.997,0 -4.242,-2.88 -4.242,-9.496c-0,-6.616 1.206,-9.496 4.242,-9.496c3.036,-0 4.242,2.88 4.242,9.496Zm-29.242,-67c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm0.512,9.834c-7.122,-0 -12.609,5.098 -12.609,14.127c-0,9.263 5.215,14.205 12.532,14.205c4.164,0 7.083,-1.634 9.068,-3.658l-2.88,-3.697c-1.518,1.206 -3.153,2.413 -5.838,2.413c-3.697,-0 -6.266,-2.763 -6.266,-9.263c-0,-6.616 2.724,-9.379 6.149,-9.379c2.102,-0 3.892,0.778 5.371,1.984l3.113,-3.775c-2.257,-1.868 -4.748,-2.957 -8.64,-2.957Z"/>
+  </g>
+</svg></span></a><a class="icon-link svg-link" href="https://github.com/typelevel/cats"><span title="Source Code"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M49.995,1c-27.609,-0 -49.995,22.386 -49.995,50.002c-0,22.09 14.325,40.83 34.194,47.444c2.501,0.458 3.413,-1.086 3.413,-2.412c0,-1.185 -0.043,-4.331 -0.067,-8.503c-13.908,3.021 -16.843,-6.704 -16.843,-6.704c-2.274,-5.773 -5.552,-7.311 -5.552,-7.311c-4.54,-3.103 0.344,-3.042 0.344,-3.042c5.018,0.356 7.658,5.154 7.658,5.154c4.46,7.64 11.704,5.433 14.552,4.156c0.454,-3.232 1.744,-5.436 3.174,-6.685c-11.102,-1.262 -22.775,-5.553 -22.775,-24.713c-0,-5.457 1.949,-9.92 5.147,-13.416c-0.516,-1.265 -2.231,-6.348 0.488,-13.233c0,0 4.199,-1.344 13.751,5.126c3.988,-1.108 8.266,-1.663 12.518,-1.682c4.245,0.019 8.523,0.574 12.517,1.682c9.546,-6.47 13.736,-5.126 13.736,-5.126c2.728,6.885 1.013,11.968 0.497,13.233c3.204,3.496 5.141,7.959 5.141,13.416c0,19.209 -11.691,23.436 -22.83,24.673c1.795,1.544 3.394,4.595 3.394,9.26c0,6.682 -0.061,12.076 -0.061,13.715c0,1.338 0.899,2.894 3.438,2.406c19.853,-6.627 34.166,-25.354 34.166,-47.438c-0,-27.616 -22.389,-50.002 -50.005,-50.002"/>
+  </g>
+</svg></span></a><a class="icon-link" href="https://discord.gg/XF3CXcMzqD"><i class="icofont-laika" title="Chat">&#xeed5;</i></a><a class="icon-link" href="https://twitter.com/typelevel"><i class="icofont-laika" title="Twitter">&#xed7a;</i></a>
+      </div>
+
+      <ul class="nav-list">
+        <li class="level1"><a href="../index.html">Cats</a></li>
+        <li class="level1"><a href="../typeclasses.html">Type Classes</a></li>
+        <li class="level1"><a href="../datatypes.html">Data Types</a></li>
+        <li class="level1"><a href="../algebra.html">Algebra</a></li>
+        <li class="level1"><a href="../motivations.html">Motivations</a></li>
+        <li class="level1"><a href="../resources_for_learners.html">Resources for Learners</a></li>
+        <li class="level1"><a href="../jump_start_guide.html">Jump Start Guide</a></li>
+        <li class="level1"><a href="../imports.html">Imports</a></li>
+        <li class="level1"><a href="../faq.html">FAQ</a></li>
+        <li class="level1"><a href="../CONTRIBUTING.html">Contributor guide</a></li>
+        <li class="level1"><a href="../colophon.html">Colophon</a></li>
+        <li class="level1"><a href="../nomenclature.html">Glossary</a></li>
+        <li class="level1"><a href="../guidelines.html">Guidelines</a></li>
+        <li class="level1"><a href="../typelevelEcosystem.html">Typelevel Ecosystem</a></li>
+        <li class="level1 nav-header">Type Classes</li>
+        <li class="level2"><a href="../typeclasses/alternative.html">Alternative</a></li>
+        <li class="level2"><a href="../typeclasses/applicative.html">Applicative</a></li>
+        <li class="level2"><a href="../typeclasses/applicativemonaderror.html">ApplicativeError and MonadError</a></li>
+        <li class="level2"><a href="../typeclasses/applicativetraverse.html">Applicative and Traversable Functors</a></li>
+        <li class="level2"><a href="../typeclasses/arrow.html">Arrow</a></li>
+        <li class="level2"><a href="../typeclasses/arrowchoice.html">Arrow Choice</a></li>
+        <li class="level2"><a href="../typeclasses/bifunctor.html">Bifunctor</a></li>
+        <li class="level2"><a href="../typeclasses/bimonad.html">Bimonad</a></li>
+        <li class="level2"><a href="../typeclasses/comonad.html">Comonad</a></li>
+        <li class="level2"><a href="../typeclasses/contravariant.html">Contravariant</a></li>
+        <li class="level2"><a href="../typeclasses/contravariantmonoidal.html">Contravariant Monoidal</a></li>
+        <li class="level2"><a href="../typeclasses/eq.html">Eq</a></li>
+        <li class="level2"><a href="../typeclasses/foldable.html">Foldable</a></li>
+        <li class="level2"><a href="../typeclasses/functor.html">Functor</a></li>
+        <li class="level2"><a href="../typeclasses/invariant.html">Invariant</a></li>
+        <li class="level2"><a href="../typeclasses/invariantmonoidal.html">Invariant Monoidal</a></li>
+        <li class="level2"><a href="../typeclasses/lawtesting.html">Law testing</a></li>
+        <li class="level2"><a href="../typeclasses/monad.html">Monad</a></li>
+        <li class="level2"><a href="../typeclasses/monoid.html">Monoid</a></li>
+        <li class="level2"><a href="../typeclasses/monoidk.html">MonoidK</a></li>
+        <li class="level2"><a href="../typeclasses/nonemptytraverse.html">NonEmptyTraverse</a></li>
+        <li class="level2"><a href="../typeclasses/parallel.html">Parallel</a></li>
+        <li class="level2"><a href="../typeclasses/reducible.html">Reducible</a></li>
+        <li class="level2"><a href="../typeclasses/semigroup.html">Semigroup</a></li>
+        <li class="level2"><a href="../typeclasses/semigroupk.html">SemigroupK</a></li>
+        <li class="level2"><a href="../typeclasses/show.html">Show</a></li>
+        <li class="level2"><a href="../typeclasses/traverse.html">Traverse</a></li>
+        <li class="level1 nav-header">Data Types</li>
+        <li class="level2"><a href="chain.html">Chain</a></li>
+        <li class="level2"><a href="const.html">Const</a></li>
+        <li class="level2"><a href="contt.html">ContT</a></li>
+        <li class="level2"><a href="either.html">Either</a></li>
+        <li class="level2"><a href="eithert.html">EitherT</a></li>
+        <li class="level2"><a href="eval.html">Eval</a></li>
+        <li class="level2"><a href="freeapplicative.html">Free Applicative</a></li>
+        <li class="level2 active"><a href="#">Free Monad</a></li>
+        <li class="level2"><a href="functionk.html">FunctionK</a></li>
+        <li class="level2"><a href="id.html">Id</a></li>
+        <li class="level2"><a href="ior.html">Ior</a></li>
+        <li class="level2"><a href="iort.html">IorT</a></li>
+        <li class="level2"><a href="kleisli.html">Kleisli</a></li>
+        <li class="level2"><a href="nel.html">NonEmptyList</a></li>
+        <li class="level2"><a href="nested.html">Nested</a></li>
+        <li class="level2"><a href="oneand.html">OneAnd</a></li>
+        <li class="level2"><a href="optiont.html">OptionT</a></li>
+        <li class="level2"><a href="state.html">State</a></li>
+        <li class="level2"><a href="validated.html">Validated</a></li>
+        <li class="level2"><a href="writer.html">Writer</a></li>
+        <li class="level2"><a href="writert.html">WriterT</a></li>
+      </ul>
+
+      <ul class="nav-list">
+        <li class="level1 nav-header">Related Projects</li>
+        
+          <li class="level2"><a href="https://typelevel.org/cats-effect/">cats-effect</a></li>
+        
+          <li class="level2"><a href="https://typelevel.org/mouse">Mouse</a></li>
+        
+          <li class="level2"><a href="https://github.com/typelevel/discipline/">discipline</a></li>
+        
+      </ul>
+
+    </nav>
+
+    <div id="container">
+
+      <nav id="page-nav">
+        <p class="header"><a href="#">Free Monad</a></p>
+
+        <ul class="nav-list">
+          <li class="level1"><a href="#what-is-it">What is it?</a></li>
+          <li class="level1"><a href="#using-free-monads">Using Free Monads</a></li>
+          <li class="level2"><a href="#study-your-topic">Study your topic</a></li>
+          <li class="level2"><a href="#study-your-grammar">Study your grammar</a></li>
+          <li class="level2"><a href="#create-an-adt-representing-your-grammar">Create an ADT representing your grammar</a></li>
+          <li class="level2"><a href="#free-your-adt">Free your ADT</a></li>
+          <li class="level1"><a href="#composing-free-monads-adts">Composing Free monads ADTs.</a></li>
+          <li class="level1"><a href="#for-the-curious-ones-what-is-free-in-theory">For the curious ones: what is Free in theory?</a></li>
+          <li class="level2"><a href="#for-the-very-curious-ones">For the very curious ones</a></li>
+          <li class="level1"><a href="#freet">FreeT</a></li>
+          <li class="level1"><a href="#future-work-todo">Future Work (TODO)</a></li>
+          <li class="level1"><a href="#credits">Credits</a></li>
+        </ul>
+
+        <p class="footer"></p>
+      </nav>
+
+      <main class="content">
+
+        <h1 id="free-monad" class="title">Free Monad</h1>
+        
+        <h2 id="what-is-it" class="section">What is it?<a class="anchor-link right" href="#what-is-it"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>A <em>free monad</em> is a construction which allows you to build a <em>monad</em>
+        from any <em>Functor</em>. Like other <em>monads</em>, it is a pure way to represent
+        and manipulate computations.</p>
+        <p>In particular, <em>free monads</em> provide a practical way to:</p>
+        <ul>
+          <li>represent stateful computations as data, and run them</li>
+        </ul>
+        <ul>
+          <li>run recursive computations in a stack-safe way</li>
+        </ul>
+        <ul>
+          <li>build an embedded DSL (domain-specific language)</li>
+        </ul>
+        <ul>
+          <li>retarget a computation to another interpreter using natural transformations</li>
+        </ul>
+        <blockquote>(In Cats, the type representing a <em>free monad</em> is abbreviated as <code>Free[_]</code>.)</blockquote>
+        
+        <h2 id="using-free-monads" class="section">Using Free Monads<a class="anchor-link right" href="#using-free-monads"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>If you&#39;d like to use Cats&#39; free monad, you&#39;ll need to add a library dependency
+        for the <code>cats-free</code> module.</p>
+        <p>A good way to get a sense for how <em>free monads</em> work is to see them in
+        action. The next section uses <code>Free[_]</code> to create an embedded DSL
+        (Domain Specific Language).</p>
+        <p>If you&#39;re interested in the theory behind <em>free monads</em>, the
+        <a href="#for-the-curious-ones-what-is-free-in-theory">What is Free in theory?</a> section discusses free monads
+        in terms of category theory.</p>
+        
+        <h3 id="study-your-topic" class="section">Study your topic<a class="anchor-link right" href="#study-your-topic"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <p>Let&#39;s imagine that we want to create a DSL for a key-value store. We
+        want to be able to do three things with keys:</p>
+        <ul>
+          <li><em>put</em> a <code>value</code> into the store, associated with its <code>key</code>.</li>
+        </ul>
+        <ul>
+          <li><em>get</em> a <code>value</code> from the store given its <code>key</code>.</li>
+        </ul>
+        <ul>
+          <li><em>delete</em> a <code>value</code> from the store given its <code>key</code>.</li>
+        </ul>
+        <p>The idea is to write a sequence of these operations in the embedded
+        DSL as a &quot;program&quot;, compile the &quot;program&quot;, and finally execute the
+        &quot;program&quot; to interact with the actual key-value store.</p>
+        <p>For example:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">put</span><span>(</span><span class="string-literal">&quot;toto&quot;</span><span>, </span><span class="number-literal">3</span><span>)
+</span><span class="identifier">get</span><span>(</span><span class="string-literal">&quot;toto&quot;</span><span>) </span><span class="comment">// returns 3
+</span><span class="identifier">delete</span><span>(</span><span class="string-literal">&quot;toto&quot;</span><span>)</span></code></pre>
+        <p>But we want:</p>
+        <ul>
+          <li>the computation to be represented as a pure, immutable value</li>
+        </ul>
+        <ul>
+          <li>to separate the creation and execution of the program</li>
+        </ul>
+        <ul>
+          <li>to be able to support many different methods of execution</li>
+        </ul>
+        
+        <h3 id="study-your-grammar" class="section">Study your grammar<a class="anchor-link right" href="#study-your-grammar"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <p>We have 3 commands to interact with our KeyValue store:</p>
+        <ul>
+          <li><code>Put</code> a value associated with a key into the store</li>
+          <li><code>Get</code> a value associated with a key out of the store</li>
+          <li><code>Delete</code> a value associated with a key from the store</li>
+        </ul>
+        
+        <h3 id="create-an-adt-representing-your-grammar" class="section">Create an ADT representing your grammar<a class="anchor-link right" href="#create-an-adt-representing-your-grammar"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <p>ADT stands for <em>Algebraic Data Type</em>. In this context, it refers to a
+        closed set of types which can be combined to build up complex,
+        recursive values.</p>
+        <p>We need to create an ADT to represent our key-value operations:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">sealed</span><span> </span><span class="keyword">trait</span><span> </span><span class="type-name">KVStoreA</span><span>[</span><span class="type-name">A</span><span>]
+</span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Put</span><span>[</span><span class="type-name">T</span><span>](</span><span class="identifier">key</span><span>: </span><span class="type-name">String</span><span>, </span><span class="identifier">value</span><span>: </span><span class="type-name">T</span><span>) </span><span class="keyword">extends</span><span> </span><span class="type-name">KVStoreA</span><span>[</span><span class="type-name">Unit</span><span>]
+</span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Get</span><span>[</span><span class="type-name">T</span><span>](</span><span class="identifier">key</span><span>: </span><span class="type-name">String</span><span>) </span><span class="keyword">extends</span><span> </span><span class="type-name">KVStoreA</span><span>[</span><span class="type-name">Option</span><span>[</span><span class="type-name">T</span><span>]]
+</span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Delete</span><span>(</span><span class="identifier">key</span><span>: </span><span class="type-name">String</span><span>) </span><span class="keyword">extends</span><span> </span><span class="type-name">KVStoreA</span><span>[</span><span class="type-name">Unit</span><span>]</span></code></pre>
+        
+        <h3 id="free-your-adt" class="section">Free your ADT<a class="anchor-link right" href="#free-your-adt"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <p>There are five basic steps to &quot;freeing&quot; the ADT:</p>
+        <ol class="arabic">
+          <li>Create a type based on <code>Free[_]</code> and <code>KVStoreA[_]</code>.</li>
+          <li>Create smart constructors for <code>KVStore[_]</code> using <code>liftF</code>.</li>
+          <li>Build a program out of key-value DSL operations.</li>
+          <li>Build a compiler for programs of DSL operations.</li>
+          <li>Execute our compiled program.</li>
+        </ol>
+        
+        <h4 id="_1-create-a-free-type-based-on-your-adt" class="section">1. Create a <code>Free</code> type based on your ADT<a class="anchor-link right" href="#_1-create-a-free-type-based-on-your-adt"><i class="icofont-laika">&#xef71;</i></a></h4>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">free</span><span>.</span><span class="type-name">Free</span><span>
+
+</span><span class="keyword">type</span><span> </span><span class="type-name">KVStore</span><span>[</span><span class="type-name">A</span><span>] = </span><span class="type-name">Free</span><span>[</span><span class="type-name">KVStoreA</span><span>, </span><span class="type-name">A</span><span>]</span></code></pre>
+        
+        <h4 id="_2-create-smart-constructors-using-liftf" class="section">2. Create smart constructors using <code>liftF</code><a class="anchor-link right" href="#_2-create-smart-constructors-using-liftf"><i class="icofont-laika">&#xef71;</i></a></h4>
+        <p>These methods will make working with our DSL a lot nicer, and will
+        lift <code>KVStoreA[_]</code> values into our <code>KVStore[_]</code> monad (note the
+        missing &quot;A&quot; in the second type).</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">free</span><span>.</span><span class="type-name">Free</span><span>.</span><span class="identifier">liftF</span><span>
+
+</span><span class="comment">// Put returns nothing (i.e. Unit).
+</span><span class="keyword">def</span><span> </span><span class="declaration-name">put</span><span>[</span><span class="type-name">T</span><span>](</span><span class="identifier">key</span><span>: </span><span class="type-name">String</span><span>, </span><span class="identifier">value</span><span>: </span><span class="type-name">T</span><span>): </span><span class="type-name">KVStore</span><span>[</span><span class="type-name">Unit</span><span>] =
+  </span><span class="identifier">liftF</span><span>[</span><span class="type-name">KVStoreA</span><span>, </span><span class="type-name">Unit</span><span>](</span><span class="type-name">Put</span><span>[</span><span class="type-name">T</span><span>](</span><span class="identifier">key</span><span>, </span><span class="identifier">value</span><span>))
+
+</span><span class="comment">// Get returns a T value.
+</span><span class="keyword">def</span><span> </span><span class="declaration-name">get</span><span>[</span><span class="type-name">T</span><span>](</span><span class="identifier">key</span><span>: </span><span class="type-name">String</span><span>): </span><span class="type-name">KVStore</span><span>[</span><span class="type-name">Option</span><span>[</span><span class="type-name">T</span><span>]] =
+  </span><span class="identifier">liftF</span><span>[</span><span class="type-name">KVStoreA</span><span>, </span><span class="type-name">Option</span><span>[</span><span class="type-name">T</span><span>]](</span><span class="type-name">Get</span><span>[</span><span class="type-name">T</span><span>](</span><span class="identifier">key</span><span>))
+
+</span><span class="comment">// Delete returns nothing (i.e. Unit).
+</span><span class="keyword">def</span><span> </span><span class="declaration-name">delete</span><span>(</span><span class="identifier">key</span><span>: </span><span class="type-name">String</span><span>): </span><span class="type-name">KVStore</span><span>[</span><span class="type-name">Unit</span><span>] =
+  </span><span class="identifier">liftF</span><span>(</span><span class="type-name">Delete</span><span>(</span><span class="identifier">key</span><span>))
+
+</span><span class="comment">// Update composes get and set, and returns nothing.
+</span><span class="keyword">def</span><span> </span><span class="declaration-name">update</span><span>[</span><span class="type-name">T</span><span>](</span><span class="identifier">key</span><span>: </span><span class="type-name">String</span><span>, </span><span class="identifier">f</span><span>: </span><span class="type-name">T</span><span> =&gt; </span><span class="type-name">T</span><span>): </span><span class="type-name">KVStore</span><span>[</span><span class="type-name">Unit</span><span>] =
+  </span><span class="keyword">for</span><span> {
+    </span><span class="identifier">vMaybe</span><span> &lt;- </span><span class="identifier">get</span><span>[</span><span class="type-name">T</span><span>](</span><span class="identifier">key</span><span>)
+    </span><span class="identifier">_</span><span> &lt;- </span><span class="identifier">vMaybe</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">v</span><span> =&gt; </span><span class="identifier">put</span><span>[</span><span class="type-name">T</span><span>](</span><span class="identifier">key</span><span>, </span><span class="identifier">f</span><span>(</span><span class="identifier">v</span><span>))).</span><span class="identifier">getOrElse</span><span>(</span><span class="type-name">Free</span><span>.</span><span class="identifier">pure</span><span>(()))
+  } </span><span class="keyword">yield</span><span> ()</span></code></pre>
+        
+        <h4 id="_3-build-a-program" class="section">3. Build a program<a class="anchor-link right" href="#_3-build-a-program"><i class="icofont-laika">&#xef71;</i></a></h4>
+        <p>Now that we can construct <code>KVStore[_]</code> values we can use our DSL to
+        write &quot;programs&quot; using a <em>for-comprehension</em>:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">def</span><span> </span><span class="declaration-name">program</span><span>: </span><span class="type-name">KVStore</span><span>[</span><span class="type-name">Option</span><span>[</span><span class="type-name">Int</span><span>]] =
+  </span><span class="keyword">for</span><span> {
+    </span><span class="identifier">_</span><span> &lt;- </span><span class="identifier">put</span><span>(</span><span class="string-literal">&quot;wild-cats&quot;</span><span>, </span><span class="number-literal">2</span><span>)
+    </span><span class="identifier">_</span><span> &lt;- </span><span class="identifier">update</span><span>[</span><span class="type-name">Int</span><span>](</span><span class="string-literal">&quot;wild-cats&quot;</span><span>, (</span><span class="identifier">_</span><span> + </span><span class="number-literal">12</span><span>))
+    </span><span class="identifier">_</span><span> &lt;- </span><span class="identifier">put</span><span>(</span><span class="string-literal">&quot;tame-cats&quot;</span><span>, </span><span class="number-literal">5</span><span>)
+    </span><span class="identifier">n</span><span> &lt;- </span><span class="identifier">get</span><span>[</span><span class="type-name">Int</span><span>](</span><span class="string-literal">&quot;wild-cats&quot;</span><span>)
+    </span><span class="identifier">_</span><span> &lt;- </span><span class="identifier">delete</span><span>(</span><span class="string-literal">&quot;tame-cats&quot;</span><span>)
+  } </span><span class="keyword">yield</span><span> </span><span class="identifier">n</span></code></pre>
+        <p>This looks like a monadic flow. However, it just builds a recursive
+        data structure representing the sequence of operations.</p>
+        
+        <h4 id="_4-write-a-compiler-for-your-program" class="section">4. Write a compiler for your program<a class="anchor-link right" href="#_4-write-a-compiler-for-your-program"><i class="icofont-laika">&#xef71;</i></a></h4>
+        <p>As you may have understood now, <code>Free[_]</code> is used to create an embedded
+        DSL. By itself, this DSL only represents a sequence of operations
+        (defined by a recursive data structure); it doesn&#39;t produce anything.</p>
+        <p><code>Free[_]</code> is a programming language inside your programming language!</p>
+        <p><strong>So, like any other programming language, we need to compile our
+          abstract language into an <em>effective</em> language and then run it.</strong></p>
+        <p>To do this, we will use a <em>natural transformation</em> between type
+        containers.  Natural transformations go between types like <code>F[_]</code> and
+        <code>G[_]</code> (this particular transformation would be written as
+        <code>FunctionK[F,G]</code> or as done here using the symbolic
+        alternative as <code>F ~&gt; G</code>).</p>
+        <p>In our case, we will use a simple mutable map to represent our key
+        value store:</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">arrow</span><span>.</span><span class="type-name">FunctionK</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.{</span><span class="type-name">Id</span><span>, ~&gt;}
+</span><span class="keyword">import</span><span> </span><span class="identifier">scala</span><span>.</span><span class="identifier">collection</span><span>.</span><span class="identifier">mutable</span><span>
+
+</span><span class="comment">// the program will crash if a key is not found,
+// or if a type is incorrectly specified.
+</span><span class="keyword">def</span><span> </span><span class="declaration-name">impureCompiler</span><span>: </span><span class="type-name">KVStoreA</span><span> ~&gt; </span><span class="type-name">Id</span><span>  =
+  </span><span class="keyword">new</span><span> (</span><span class="type-name">KVStoreA</span><span> ~&gt; </span><span class="type-name">Id</span><span>) {
+
+    </span><span class="comment">// a very simple (and imprecise) key-value store
+</span><span>    </span><span class="keyword">val</span><span> </span><span class="identifier">kvs</span><span> = </span><span class="identifier">mutable</span><span>.</span><span class="type-name">Map</span><span>.</span><span class="identifier">empty</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Any</span><span>]
+
+    </span><span class="keyword">def</span><span> </span><span class="declaration-name">apply</span><span>[</span><span class="type-name">A</span><span>](</span><span class="identifier">fa</span><span>: </span><span class="type-name">KVStoreA</span><span>[</span><span class="type-name">A</span><span>]): </span><span class="type-name">Id</span><span>[</span><span class="type-name">A</span><span>] =
+      </span><span class="identifier">fa</span><span> </span><span class="keyword">match</span><span> {
+        </span><span class="keyword">case</span><span> </span><span class="type-name">Put</span><span>(</span><span class="identifier">key</span><span>, </span><span class="identifier">value</span><span>) =&gt;
+          </span><span class="identifier">println</span><span>(</span><span class="string-literal">s&quot;put(</span><span class="substitution">$key</span><span class="string-literal">, </span><span class="substitution">$value</span><span class="string-literal">)&quot;</span><span>)
+          </span><span class="identifier">kvs</span><span>(</span><span class="identifier">key</span><span>) = </span><span class="identifier">value</span><span>
+          ()
+        </span><span class="keyword">case</span><span> </span><span class="type-name">Get</span><span>(</span><span class="identifier">key</span><span>) =&gt;
+          </span><span class="identifier">println</span><span>(</span><span class="string-literal">s&quot;get(</span><span class="substitution">$key</span><span class="string-literal">)&quot;</span><span>)
+          </span><span class="identifier">kvs</span><span>.</span><span class="identifier">get</span><span>(</span><span class="identifier">key</span><span>).</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">asInstanceOf</span><span>[</span><span class="type-name">A</span><span>])
+        </span><span class="keyword">case</span><span> </span><span class="type-name">Delete</span><span>(</span><span class="identifier">key</span><span>) =&gt;
+          </span><span class="identifier">println</span><span>(</span><span class="string-literal">s&quot;delete(</span><span class="substitution">$key</span><span class="string-literal">)&quot;</span><span>)
+          </span><span class="identifier">kvs</span><span>.</span><span class="identifier">remove</span><span>(</span><span class="identifier">key</span><span>)
+          ()
+      }
+  }</span></code></pre>
+        <p>Please note this <code>impureCompiler</code> is impure -- it mutates <code>kvs</code> and
+        also produces logging output using <code>println</code>.  The whole purpose of
+        functional programming isn&#39;t to prevent side-effects, it is just to
+        push side-effects to the boundaries of your system in a well-known and
+        controlled way.</p>
+        <p><code>Id[_]</code> represents the simplest type container: the type itself. Thus,
+        <code>Id[Int]</code> is just <code>Int</code>. This means that our program will execute
+        immediately, and block until the final value can be returned.</p>
+        <p>However, we could easily use other type containers for different
+        behavior, such as:</p>
+        <ul>
+          <li><code>Future[_]</code> for asynchronous computation</li>
+        </ul>
+        <ul>
+          <li><code>List[_]</code> for gathering multiple results</li>
+        </ul>
+        <ul>
+          <li><code>Option[_]</code> to support optional results</li>
+        </ul>
+        <ul>
+          <li><code>Either[E, *]</code> to support failure</li>
+        </ul>
+        <ul>
+          <li>a pseudo-random monad to support non-determinism</li>
+        </ul>
+        <ul>
+          <li>and so on...</li>
+        </ul>
+        
+        <h4 id="_5-run-your-program" class="section">5. Run your program<a class="anchor-link right" href="#_5-run-your-program"><i class="icofont-laika">&#xef71;</i></a></h4>
+        <p>The final step is naturally running your program after compiling it.</p>
+        <p><code>Free[_]</code> is just a recursive structure that can be seen as sequence
+        of operations producing other operations. In this way it is similar to
+        <code>List[_]</code>. We often use folds (e.g. <code>foldRight</code>) to obtain a single
+        value from a list; this recurses over the structure, combining its
+        contents.</p>
+        <p>The idea behind running a <code>Free[_]</code> is exactly the same. We fold the
+        recursive structure by:</p>
+        <ul>
+          <li>consuming each operation.</li>
+        </ul>
+        <ul>
+          <li>compiling the operation into our effective language using
+          <code>impureCompiler</code> (applying its effects if any).</li>
+        </ul>
+        <ul>
+          <li>computing next operation.</li>
+        </ul>
+        <ul>
+          <li>continue recursively until reaching a <code>Pure</code> state, and returning it.</li>
+        </ul>
+        <p>This operation is called <code>Free.foldMap</code>:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">final</span><span> </span><span class="keyword">def</span><span> </span><span class="declaration-name">foldMap</span><span>[</span><span class="type-name">M</span><span>[</span><span class="identifier">_</span><span>]](</span><span class="identifier">f</span><span>: </span><span class="type-name">FunctionK</span><span>[</span><span class="type-name">S</span><span>,</span><span class="type-name">M</span><span>])(</span><span class="type-name">M</span><span>: </span><span class="type-name">Monad</span><span>[</span><span class="type-name">M</span><span>]): </span><span class="type-name">M</span><span>[</span><span class="type-name">A</span><span>] = ...</span></code></pre>
+        <p><code>M</code> must be a <code>Monad</code> to be flattenable (the famous monoid aspect
+        under <code>Monad</code>). As <code>Id</code> is a <code>Monad</code>, we can use <code>foldMap</code>.</p>
+        <p>To run your <code>Free</code> with previous <code>impureCompiler</code>:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">result</span><span>: </span><span class="type-name">Option</span><span>[</span><span class="type-name">Int</span><span>] = </span><span class="identifier">program</span><span>.</span><span class="identifier">foldMap</span><span>(</span><span class="identifier">impureCompiler</span><span>)
+</span><span class="comment">// put(wild-cats, 2)
+// get(wild-cats)
+// put(wild-cats, 14)
+// put(tame-cats, 5)
+// get(wild-cats)
+// delete(tame-cats)
+// result: Option[Int] = Some(14)</span></code></pre>
+        <p>An important aspect of <code>foldMap</code> is its <strong>stack-safety</strong>. It evaluates
+        each step of computation on the stack then unstack and restart. This
+        process is known as trampolining.</p>
+        <p>As long as your natural transformation is stack-safe, <code>foldMap</code> will
+        never overflow your stack.  Trampolining is heap-intensive but
+        stack-safety provides the reliability required to use <code>Free[_]</code> for
+        data-intensive tasks, as well as infinite processes such as streams.</p>
+        
+        <h4 id="_6-use-a-pure-compiler-optional" class="section">6. Use a pure compiler (optional)<a class="anchor-link right" href="#_6-use-a-pure-compiler-optional"><i class="icofont-laika">&#xef71;</i></a></h4>
+        <p>The previous examples used an effectful natural transformation. This
+        works, but you might prefer folding your <code>Free</code> in a &quot;purer&quot; way. The
+        <a href="state.html">State</a> data structure can be used to keep track of the program
+        state in an immutable map, avoiding mutation altogether.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">data</span><span>.</span><span class="type-name">State</span><span>
+
+</span><span class="keyword">type</span><span> </span><span class="type-name">KVStoreState</span><span>[</span><span class="type-name">A</span><span>] = </span><span class="type-name">State</span><span>[</span><span class="type-name">Map</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Any</span><span>], </span><span class="type-name">A</span><span>]
+</span><span class="keyword">val</span><span> </span><span class="identifier">pureCompiler</span><span>: </span><span class="type-name">KVStoreA</span><span> ~&gt; </span><span class="type-name">KVStoreState</span><span> = </span><span class="keyword">new</span><span> (</span><span class="type-name">KVStoreA</span><span> ~&gt; </span><span class="type-name">KVStoreState</span><span>) {
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">apply</span><span>[</span><span class="type-name">A</span><span>](</span><span class="identifier">fa</span><span>: </span><span class="type-name">KVStoreA</span><span>[</span><span class="type-name">A</span><span>]): </span><span class="type-name">KVStoreState</span><span>[</span><span class="type-name">A</span><span>] =
+    </span><span class="identifier">fa</span><span> </span><span class="keyword">match</span><span> {
+      </span><span class="keyword">case</span><span> </span><span class="type-name">Put</span><span>(</span><span class="identifier">key</span><span>, </span><span class="identifier">value</span><span>) =&gt; </span><span class="type-name">State</span><span>.</span><span class="identifier">modify</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">updated</span><span>(</span><span class="identifier">key</span><span>, </span><span class="identifier">value</span><span>))
+      </span><span class="keyword">case</span><span> </span><span class="type-name">Get</span><span>(</span><span class="identifier">key</span><span>) =&gt;
+        </span><span class="type-name">State</span><span>.</span><span class="identifier">inspect</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">get</span><span>(</span><span class="identifier">key</span><span>).</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">asInstanceOf</span><span>[</span><span class="type-name">A</span><span>]))
+      </span><span class="keyword">case</span><span> </span><span class="type-name">Delete</span><span>(</span><span class="identifier">key</span><span>) =&gt; </span><span class="type-name">State</span><span>.</span><span class="identifier">modify</span><span>(</span><span class="identifier">_</span><span> - </span><span class="identifier">key</span><span>)
     }
-  });
-});
+}</span></code></pre>
+        <p>(You can see that we are again running into some places where Scala&#39;s
+        support for pattern matching is limited by the JVM&#39;s type erasure, but
+        it&#39;s not too hard to get around.)</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">result</span><span>: (</span><span class="type-name">Map</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Any</span><span>], </span><span class="type-name">Option</span><span>[</span><span class="type-name">Int</span><span>]) = </span><span class="identifier">program</span><span>.</span><span class="identifier">foldMap</span><span>(</span><span class="identifier">pureCompiler</span><span>).</span><span class="identifier">run</span><span>(</span><span class="type-name">Map</span><span>.</span><span class="identifier">empty</span><span>).</span><span class="identifier">value</span><span>
+</span><span class="comment">// result: (Map[String, Any], Option[Int]) = (Map(&quot;wild-cats&quot; -&gt; 14), Some(14))</span></code></pre>
+        
+        <h2 id="composing-free-monads-adts" class="section">Composing Free monads ADTs.<a class="anchor-link right" href="#composing-free-monads-adts"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>Real world applications often time combine different algebras.
+        The injection type class described by Swierstra in <a href="http://www.staff.science.uu.nl/~swier004/publications/2008-jfp.pdf">Data types à la carte</a>
+        lets us compose different algebras in the context of <code>Free</code>.</p>
+        <p>Let&#39;s see a trivial example of unrelated ADT&#39;s getting composed as a <code>EitherK</code> that can form a more complex program.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">data</span><span>.</span><span class="type-name">EitherK</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">free</span><span>.</span><span class="type-name">Free</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.{</span><span class="type-name">Id</span><span>, </span><span class="type-name">InjectK</span><span>, ~&gt;}
+</span><span class="keyword">import</span><span> </span><span class="identifier">scala</span><span>.</span><span class="identifier">collection</span><span>.</span><span class="identifier">mutable</span><span>.</span><span class="type-name">ListBuffer</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="comment">/* Handles user interaction */</span><span>
+</span><span class="keyword">sealed</span><span> </span><span class="keyword">trait</span><span> </span><span class="type-name">Interact</span><span>[</span><span class="type-name">A</span><span>]
+</span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Ask</span><span>(</span><span class="identifier">prompt</span><span>: </span><span class="type-name">String</span><span>) </span><span class="keyword">extends</span><span> </span><span class="type-name">Interact</span><span>[</span><span class="type-name">String</span><span>]
+</span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Tell</span><span>(</span><span class="identifier">msg</span><span>: </span><span class="type-name">String</span><span>) </span><span class="keyword">extends</span><span> </span><span class="type-name">Interact</span><span>[</span><span class="type-name">Unit</span><span>]
 
-hljs.configure({languages:['scala','java','bash']});
-hljs.initHighlightingOnLoad();
-      </script><script src="/cats/js/sponsors.js"></script><script>console.info('\x57\x65\x62\x73\x69\x74\x65\x20\x62\x75\x69\x6c\x74\x20\x77\x69\x74\x68\x3a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x5f\x5f\x20\x20\x20\x20\x5f\x5f\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x5f\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x5f\x20\x5f\x5f\x0a\x20\x20\x20\x5f\x5f\x5f\x5f\x5f\x2f\x20\x2f\x5f\x20\x20\x2f\x20\x2f\x5f\x20\x20\x20\x20\x20\x20\x5f\x5f\x5f\x5f\x20\x5f\x5f\x5f\x20\x20\x28\x5f\x29\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x20\x20\x5f\x5f\x5f\x5f\x5f\x28\x5f\x29\x20\x2f\x5f\x5f\x5f\x5f\x20\x20\x5f\x5f\x5f\x5f\x5f\x0a\x20\x20\x2f\x20\x5f\x5f\x5f\x2f\x20\x5f\x5f\x20\x5c\x2f\x20\x5f\x5f\x2f\x5f\x5f\x5f\x5f\x5f\x2f\x20\x5f\x5f\x20\x60\x5f\x5f\x20\x5c\x2f\x20\x2f\x20\x5f\x5f\x5f\x2f\x20\x5f\x5f\x5f\x2f\x20\x5f\x5f\x20\x5c\x2f\x20\x5f\x5f\x5f\x2f\x20\x2f\x20\x5f\x5f\x2f\x20\x5f\x20\x5c\x2f\x20\x5f\x5f\x5f\x2f\x0a\x20\x28\x5f\x5f\x20\x20\x29\x20\x2f\x5f\x2f\x20\x2f\x20\x2f\x5f\x2f\x5f\x5f\x5f\x5f\x5f\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x5f\x5f\x2f\x20\x2f\x20\x20\x2f\x20\x2f\x5f\x2f\x20\x28\x5f\x5f\x20\x20\x29\x20\x2f\x20\x2f\x5f\x2f\x20\x20\x5f\x5f\x28\x5f\x5f\x20\x20\x29\x0a\x2f\x5f\x5f\x5f\x5f\x2f\x5f\x2e\x5f\x5f\x5f\x2f\x5c\x5f\x5f\x2f\x20\x20\x20\x20\x20\x2f\x5f\x2f\x20\x2f\x5f\x2f\x20\x2f\x5f\x2f\x5f\x2f\x5c\x5f\x5f\x5f\x2f\x5f\x2f\x20\x20\x20\x5c\x5f\x5f\x5f\x5f\x2f\x5f\x5f\x5f\x5f\x2f\x5f\x2f\x5c\x5f\x5f\x2f\x5c\x5f\x5f\x5f\x2f\x5f\x5f\x5f\x5f\x2f\x0a\x0a\x68\x74\x74\x70\x73\x3a\x2f\x2f\x34\x37\x64\x65\x67\x2e\x67\x69\x74\x68\x75\x62\x2e\x69\x6f\x2f\x73\x62\x74\x2d\x6d\x69\x63\x72\x6f\x73\x69\x74\x65\x73')</script><script>((window.gitter = {}).chat = {}).options = {
-room: 'typelevel/cats'};</script><script src="https://sidecar.gitter.im/dist/sidecar.v1.js"></script><script src="/cats/js/search.js"></script><script src="/cats/js/main.js"></script></body></html>
+</span><span class="comment">/* Represents persistence operations */</span><span>
+</span><span class="keyword">sealed</span><span> </span><span class="keyword">trait</span><span> </span><span class="type-name">DataOp</span><span>[</span><span class="type-name">A</span><span>]
+</span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">AddCat</span><span>(</span><span class="identifier">a</span><span>: </span><span class="type-name">String</span><span>) </span><span class="keyword">extends</span><span> </span><span class="type-name">DataOp</span><span>[</span><span class="type-name">Unit</span><span>]
+</span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">GetAllCats</span><span>() </span><span class="keyword">extends</span><span> </span><span class="type-name">DataOp</span><span>[</span><span class="type-name">List</span><span>[</span><span class="type-name">String</span><span>]]</span></code></pre>
+        <p>Once the ADTs are defined we can formally state that a <code>Free</code> program is the EitherK of its Algebras.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">type</span><span> </span><span class="type-name">CatsApp</span><span>[</span><span class="type-name">A</span><span>] = </span><span class="type-name">EitherK</span><span>[</span><span class="type-name">DataOp</span><span>, </span><span class="type-name">Interact</span><span>, </span><span class="type-name">A</span><span>]</span></code></pre>
+        <p>In order to take advantage of monadic composition we use smart constructors to lift our Algebra to the <code>Free</code> context.</p>
+        <pre><code class="nohighlight"><span class="keyword">class</span><span> </span><span class="type-name">Interacts</span><span>[</span><span class="type-name">F</span><span>[</span><span class="identifier">_</span><span>]](</span><span class="keyword">implicit</span><span> </span><span class="type-name">I</span><span>: </span><span class="type-name">InjectK</span><span>[</span><span class="type-name">Interact</span><span>, </span><span class="type-name">F</span><span>]) {
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">tell</span><span>(</span><span class="identifier">msg</span><span>: </span><span class="type-name">String</span><span>): </span><span class="type-name">Free</span><span>[</span><span class="type-name">F</span><span>, </span><span class="type-name">Unit</span><span>] = </span><span class="type-name">Free</span><span>.</span><span class="identifier">liftInject</span><span>[</span><span class="type-name">F</span><span>](</span><span class="type-name">Tell</span><span>(</span><span class="identifier">msg</span><span>))
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">ask</span><span>(</span><span class="identifier">prompt</span><span>: </span><span class="type-name">String</span><span>): </span><span class="type-name">Free</span><span>[</span><span class="type-name">F</span><span>, </span><span class="type-name">String</span><span>] = </span><span class="type-name">Free</span><span>.</span><span class="identifier">liftInject</span><span>[</span><span class="type-name">F</span><span>](</span><span class="type-name">Ask</span><span>(</span><span class="identifier">prompt</span><span>))
+}
+
+</span><span class="keyword">object</span><span> </span><span class="type-name">Interacts</span><span> {
+  </span><span class="keyword">implicit</span><span> </span><span class="keyword">def</span><span> </span><span class="declaration-name">interacts</span><span>[</span><span class="type-name">F</span><span>[</span><span class="identifier">_</span><span>]](</span><span class="keyword">implicit</span><span> </span><span class="type-name">I</span><span>: </span><span class="type-name">InjectK</span><span>[</span><span class="type-name">Interact</span><span>, </span><span class="type-name">F</span><span>]): </span><span class="type-name">Interacts</span><span>[</span><span class="type-name">F</span><span>] = </span><span class="keyword">new</span><span> </span><span class="type-name">Interacts</span><span>[</span><span class="type-name">F</span><span>]
+}
+
+</span><span class="keyword">class</span><span> </span><span class="type-name">DataSource</span><span>[</span><span class="type-name">F</span><span>[</span><span class="identifier">_</span><span>]](</span><span class="keyword">implicit</span><span> </span><span class="type-name">I</span><span>: </span><span class="type-name">InjectK</span><span>[</span><span class="type-name">DataOp</span><span>, </span><span class="type-name">F</span><span>]) {
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">addCat</span><span>(</span><span class="identifier">a</span><span>: </span><span class="type-name">String</span><span>): </span><span class="type-name">Free</span><span>[</span><span class="type-name">F</span><span>, </span><span class="type-name">Unit</span><span>] = </span><span class="type-name">Free</span><span>.</span><span class="identifier">liftInject</span><span>[</span><span class="type-name">F</span><span>](</span><span class="type-name">AddCat</span><span>(</span><span class="identifier">a</span><span>))
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">getAllCats</span><span>: </span><span class="type-name">Free</span><span>[</span><span class="type-name">F</span><span>, </span><span class="type-name">List</span><span>[</span><span class="type-name">String</span><span>]] = </span><span class="type-name">Free</span><span>.</span><span class="identifier">liftInject</span><span>[</span><span class="type-name">F</span><span>](</span><span class="type-name">GetAllCats</span><span>())
+}
+
+</span><span class="keyword">object</span><span> </span><span class="type-name">DataSource</span><span> {
+  </span><span class="keyword">implicit</span><span> </span><span class="keyword">def</span><span> </span><span class="declaration-name">dataSource</span><span>[</span><span class="type-name">F</span><span>[</span><span class="identifier">_</span><span>]](</span><span class="keyword">implicit</span><span> </span><span class="type-name">I</span><span>: </span><span class="type-name">InjectK</span><span>[</span><span class="type-name">DataOp</span><span>, </span><span class="type-name">F</span><span>]): </span><span class="type-name">DataSource</span><span>[</span><span class="type-name">F</span><span>] = </span><span class="keyword">new</span><span> </span><span class="type-name">DataSource</span><span>[</span><span class="type-name">F</span><span>]
+}</span></code></pre>
+        <p>ADTs are now easily composed and trivially intertwined inside monadic contexts.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">def</span><span> </span><span class="declaration-name">program</span><span>(</span><span class="keyword">implicit</span><span> </span><span class="type-name">I</span><span> : </span><span class="type-name">Interacts</span><span>[</span><span class="type-name">CatsApp</span><span>], </span><span class="type-name">D</span><span> : </span><span class="type-name">DataSource</span><span>[</span><span class="type-name">CatsApp</span><span>]): </span><span class="type-name">Free</span><span>[</span><span class="type-name">CatsApp</span><span>, </span><span class="type-name">Unit</span><span>] = {
+
+  </span><span class="keyword">import</span><span> </span><span class="type-name">I</span><span>.</span><span class="identifier">_</span><span>, </span><span class="type-name">D</span><span>.</span><span class="identifier">_</span><span>
+
+  </span><span class="keyword">for</span><span> {
+    </span><span class="identifier">cat</span><span> &lt;- </span><span class="identifier">ask</span><span>(</span><span class="string-literal">&quot;What&#39;s the kitty&#39;s name?&quot;</span><span>)
+    </span><span class="identifier">_</span><span> &lt;- </span><span class="identifier">addCat</span><span>(</span><span class="identifier">cat</span><span>)
+    </span><span class="identifier">cats</span><span> &lt;- </span><span class="identifier">getAllCats</span><span>
+    </span><span class="identifier">_</span><span> &lt;- </span><span class="identifier">tell</span><span>(</span><span class="identifier">cats</span><span>.</span><span class="identifier">toString</span><span>)
+  } </span><span class="keyword">yield</span><span> ()
+}</span></code></pre>
+        <p>Finally we write one interpreter per ADT and combine them with a <code>FunctionK</code> to <code>EitherK</code> so they can be
+        compiled and applied to our <code>Free</code> program.</p>
+        <pre><code class="nohighlight"><span class="keyword">object</span><span> </span><span class="type-name">ConsoleCatsInterpreter</span><span> </span><span class="keyword">extends</span><span> (</span><span class="type-name">Interact</span><span> ~&gt; </span><span class="type-name">Id</span><span>) {
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">apply</span><span>[</span><span class="type-name">A</span><span>](</span><span class="identifier">i</span><span>: </span><span class="type-name">Interact</span><span>[</span><span class="type-name">A</span><span>]) = </span><span class="identifier">i</span><span> </span><span class="keyword">match</span><span> {
+    </span><span class="keyword">case</span><span> </span><span class="type-name">Ask</span><span>(</span><span class="identifier">prompt</span><span>) =&gt;
+      </span><span class="identifier">println</span><span>(</span><span class="identifier">prompt</span><span>)
+      </span><span class="identifier">readLine</span><span>()
+    </span><span class="keyword">case</span><span> </span><span class="type-name">Tell</span><span>(</span><span class="identifier">msg</span><span>) =&gt;
+      </span><span class="identifier">println</span><span>(</span><span class="identifier">msg</span><span>)
+  }
+}
+
+</span><span class="keyword">object</span><span> </span><span class="type-name">InMemoryDatasourceInterpreter</span><span> </span><span class="keyword">extends</span><span> (</span><span class="type-name">DataOp</span><span> ~&gt; </span><span class="type-name">Id</span><span>) {
+
+  </span><span class="keyword">private</span><span>[</span><span class="keyword">this</span><span>] </span><span class="keyword">val</span><span> </span><span class="identifier">memDataSet</span><span> = </span><span class="keyword">new</span><span> </span><span class="type-name">ListBuffer</span><span>[</span><span class="type-name">String</span><span>]
+
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">apply</span><span>[</span><span class="type-name">A</span><span>](</span><span class="identifier">fa</span><span>: </span><span class="type-name">DataOp</span><span>[</span><span class="type-name">A</span><span>]) = </span><span class="identifier">fa</span><span> </span><span class="keyword">match</span><span> {
+    </span><span class="keyword">case</span><span> </span><span class="type-name">AddCat</span><span>(</span><span class="identifier">a</span><span>) =&gt; </span><span class="identifier">memDataSet</span><span>.</span><span class="identifier">append</span><span>(</span><span class="identifier">a</span><span>); ()
+    </span><span class="keyword">case</span><span> </span><span class="type-name">GetAllCats</span><span>() =&gt; </span><span class="identifier">memDataSet</span><span>.</span><span class="identifier">toList</span><span>
+  }
+}
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">interpreter</span><span>: </span><span class="type-name">CatsApp</span><span> ~&gt; </span><span class="type-name">Id</span><span> = </span><span class="type-name">InMemoryDatasourceInterpreter</span><span> </span><span class="identifier">or</span><span> </span><span class="type-name">ConsoleCatsInterpreter</span></code></pre>
+        <p>Now if we run our program and type in &quot;snuggles&quot; when prompted, we see something like this:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="type-name">DataSource</span><span>.</span><span class="identifier">_</span><span>, </span><span class="type-name">Interacts</span><span>.</span><span class="identifier">_</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">evaled</span><span>: </span><span class="type-name">Unit</span><span> = </span><span class="identifier">program</span><span>.</span><span class="identifier">foldMap</span><span>(</span><span class="identifier">interpreter</span><span>)
+</span><span class="comment">// What&#39;s the kitty&#39;s name?
+// List(snuggles)</span></code></pre>
+        
+        <h2 id="for-the-curious-ones-what-is-free-in-theory" class="section">For the curious ones: what is Free in theory?<a class="anchor-link right" href="#for-the-curious-ones-what-is-free-in-theory"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>Mathematically-speaking, a <em>free monad</em> (at least in the programming
+        language context) is a construction that is left adjoint to a
+        forgetful functor whose domain is the category of Monads and whose
+        co-domain is the category of Endofunctors. Huh?</p>
+        <p>Concretely, <strong>it is just a clever construction that allows us to build a
+        <em>very simple</em> Monad from any <em>functor</em></strong>.</p>
+        <p>The above forgetful functor takes a <code>Monad</code> and:</p>
+        <ul>
+          <li>forgets its <em>monadic</em> part (e.g. the <code>flatMap</code> function)</li>
+        </ul>
+        <ul>
+          <li>forgets its <em>pointed</em> part (e.g. the <code>pure</code> function)</li>
+        </ul>
+        <ul>
+          <li>finally keeps the <em>functor</em> part (e.g. the <code>map</code> function)</li>
+        </ul>
+        <p>By reversing all arrows to build the left-adjoint, we deduce that the
+        free monad is basically a construction that:</p>
+        <ul>
+          <li>takes a <em>functor</em></li>
+        </ul>
+        <ul>
+          <li>adds the <em>pointed</em> part (e.g. <code>pure</code>)</li>
+        </ul>
+        <ul>
+          <li>adds the <em>monadic</em> behavior (e.g. <code>flatMap</code>)</li>
+        </ul>
+        <p>In terms of implementation, to build a <em>monad</em> from a <em>functor</em> we use
+        the following classic inductive definition:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">sealed</span><span> </span><span class="keyword">abstract</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Free</span><span>[</span><span class="type-name">F</span><span>[</span><span class="identifier">_</span><span>], </span><span class="type-name">A</span><span>]
+</span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Pure</span><span>[</span><span class="type-name">F</span><span>[</span><span class="identifier">_</span><span>], </span><span class="type-name">A</span><span>](</span><span class="identifier">a</span><span>: </span><span class="type-name">A</span><span>) </span><span class="keyword">extends</span><span> </span><span class="type-name">Free</span><span>[</span><span class="type-name">F</span><span>, </span><span class="type-name">A</span><span>]
+</span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Suspend</span><span>[</span><span class="type-name">F</span><span>[</span><span class="identifier">_</span><span>], </span><span class="type-name">A</span><span>](</span><span class="identifier">a</span><span>: </span><span class="type-name">F</span><span>[</span><span class="type-name">Free</span><span>[</span><span class="type-name">F</span><span>, </span><span class="type-name">A</span><span>]]) </span><span class="keyword">extends</span><span> </span><span class="type-name">Free</span><span>[</span><span class="type-name">F</span><span>, </span><span class="type-name">A</span><span>]</span></code></pre>
+        <p>(<em>This generalizes the concept of fixed point functor</em>.)</p>
+        <p>In this representation:</p>
+        <ul>
+          <li><code>Pure</code> builds a <code>Free</code> instance from an <code>A</code> value (it <em>reifies</em> the
+          <code>pure</code> function)</li>
+        </ul>
+        <ul>
+          <li><code>Suspend</code> builds a new <code>Free</code> by applying <code>F</code> to a previous <code>Free</code>
+          (it <em>reifies</em> the <code>flatMap</code> function)</li>
+        </ul>
+        <p>So a typical <code>Free</code> structure might look like:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="type-name">Suspend</span><span>(</span><span class="type-name">F</span><span>(</span><span class="type-name">Suspend</span><span>(</span><span class="type-name">F</span><span>(</span><span class="type-name">Suspend</span><span>(</span><span class="type-name">F</span><span>(....(</span><span class="type-name">Pure</span><span>(</span><span class="identifier">a</span><span>))))))))</span></code></pre>
+        <p><code>Free</code> is a recursive structure. It uses <code>A</code> in <code>F[A]</code> as the
+        recursion &quot;carrier&quot; with a terminal element <code>Pure</code>.</p>
+        <p>From a computational point of view, <code>Free</code> recursive structure can be
+        seen as a sequence of operations.</p>
+        <ul>
+          <li><code>Pure</code> returns an <code>A</code> value and ends the entire computation.</li>
+        </ul>
+        <ul>
+          <li><code>Suspend</code> is a continuation; it suspends the current computation
+          with the suspension functor <code>F</code> (which can represent a command for
+          example) and hands control to the caller. <code>A</code> represents a value
+          bound to this computation.</li>
+        </ul>
+        <p>Please note this <code>Free</code> construction has the interesting quality of
+        <em>encoding</em> the recursion on the heap instead of the stack as classic
+        function calls would. This provides the stack-safety we heard about
+        earlier, allowing very large <code>Free</code> structures to be evaluated safely.</p>
+        
+        <h3 id="for-the-very-curious-ones" class="section">For the very curious ones<a class="anchor-link right" href="#for-the-very-curious-ones"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <p>If you look at implementation in cats, you will see another member of
+        the <code>Free[_]</code> ADT:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">FlatMapped</span><span>[</span><span class="type-name">S</span><span>[</span><span class="identifier">_</span><span>], </span><span class="type-name">B</span><span>, </span><span class="type-name">C</span><span>](</span><span class="identifier">c</span><span>: </span><span class="type-name">Free</span><span>[</span><span class="type-name">S</span><span>, </span><span class="type-name">C</span><span>], </span><span class="identifier">f</span><span>: </span><span class="type-name">C</span><span> =&gt; </span><span class="type-name">Free</span><span>[</span><span class="type-name">S</span><span>, </span><span class="type-name">B</span><span>]) </span><span class="keyword">extends</span><span> </span><span class="type-name">Free</span><span>[</span><span class="type-name">S</span><span>, </span><span class="type-name">B</span><span>]</span></code></pre>
+        <p><code>FlatMapped</code> represents a call to a subroutine <code>c</code> and when <code>c</code> is
+        finished, it continues the computation by calling the function <code>f</code>
+        with the result of <code>c</code>.</p>
+        <p>It is actually an optimization of <code>Free</code> structure allowing to solve a
+        problem of quadratic complexity implied by very deep recursive <code>Free</code>
+        computations.</p>
+        <p>It is exactly the same problem as repeatedly appending to a <code>List[_]</code>.
+        As the sequence of operations becomes longer, the slower a <code>flatMap</code>
+        &quot;through&quot; the structure will be. With <code>FlatMapped</code>, <code>Free</code> becomes a
+        right-associated structure not subject to quadratic complexity.</p>
+        
+        <h2 id="freet" class="section">FreeT<a class="anchor-link right" href="#freet"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>Often times we want to interleave the syntax tree when building a Free monad
+        with some other effect not declared as part of the ADT.
+        FreeT solves this problem by allowing us to mix building steps of the AST
+        with calling action in other base monad.</p>
+        <p>In the following example a basic console application is shown.
+        When the user inputs some text we use a separate <code>State</code> monad to track what the user
+        typed.</p>
+        <p>As we can observe in this case <code>FreeT</code> offers us the alternative to delegate denotations to <code>State</code>
+        monad with stronger equational guarantees than if we were emulating the <code>State</code> ops in our own ADT.</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">free</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">data</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="comment">/* A base ADT for the user interaction without state semantics */</span><span>
+</span><span class="keyword">sealed</span><span> </span><span class="keyword">abstract</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Teletype</span><span>[</span><span class="type-name">A</span><span>] </span><span class="keyword">extends</span><span> </span><span class="type-name">Product</span><span> </span><span class="keyword">with</span><span> </span><span class="type-name">Serializable</span><span>
+</span><span class="keyword">final</span><span> </span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">WriteLine</span><span>(</span><span class="identifier">line</span><span> : </span><span class="type-name">String</span><span>) </span><span class="keyword">extends</span><span> </span><span class="type-name">Teletype</span><span>[</span><span class="type-name">Unit</span><span>]
+</span><span class="keyword">final</span><span> </span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">ReadLine</span><span>(</span><span class="identifier">prompt</span><span> : </span><span class="type-name">String</span><span>) </span><span class="keyword">extends</span><span> </span><span class="type-name">Teletype</span><span>[</span><span class="type-name">String</span><span>]
+
+</span><span class="keyword">type</span><span> </span><span class="type-name">TeletypeT</span><span>[</span><span class="type-name">M</span><span>[</span><span class="identifier">_</span><span>], </span><span class="type-name">A</span><span>] = </span><span class="type-name">FreeT</span><span>[</span><span class="type-name">Teletype</span><span>, </span><span class="type-name">M</span><span>, </span><span class="type-name">A</span><span>]
+</span><span class="keyword">type</span><span> </span><span class="type-name">Log</span><span> = </span><span class="type-name">List</span><span>[</span><span class="type-name">String</span><span>]
+
+</span><span class="keyword">type</span><span> </span><span class="type-name">TeletypeState</span><span>[</span><span class="type-name">A</span><span>] = </span><span class="type-name">State</span><span>[</span><span class="type-name">List</span><span>[</span><span class="type-name">String</span><span>], </span><span class="type-name">A</span><span>]
+
+</span><span class="comment">/** Teletype smart constructors */</span><span>
+</span><span class="keyword">object</span><span> </span><span class="type-name">TeletypeOps</span><span> {
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">writeLine</span><span>(</span><span class="identifier">line</span><span> : </span><span class="type-name">String</span><span>) : </span><span class="type-name">TeletypeT</span><span>[</span><span class="type-name">TeletypeState</span><span>, </span><span class="type-name">Unit</span><span>] =
+	</span><span class="type-name">FreeT</span><span>.</span><span class="identifier">liftF</span><span>[</span><span class="type-name">Teletype</span><span>, </span><span class="type-name">TeletypeState</span><span>, </span><span class="type-name">Unit</span><span>](</span><span class="type-name">WriteLine</span><span>(</span><span class="identifier">line</span><span>))
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">readLine</span><span>(</span><span class="identifier">prompt</span><span> : </span><span class="type-name">String</span><span>) : </span><span class="type-name">TeletypeT</span><span>[</span><span class="type-name">TeletypeState</span><span>, </span><span class="type-name">String</span><span>] =
+	</span><span class="type-name">FreeT</span><span>.</span><span class="identifier">liftF</span><span>[</span><span class="type-name">Teletype</span><span>, </span><span class="type-name">TeletypeState</span><span>, </span><span class="type-name">String</span><span>](</span><span class="type-name">ReadLine</span><span>(</span><span class="identifier">prompt</span><span>))
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">log</span><span>(</span><span class="identifier">s</span><span> : </span><span class="type-name">String</span><span>) : </span><span class="type-name">TeletypeT</span><span>[</span><span class="type-name">TeletypeState</span><span>, </span><span class="type-name">Unit</span><span>] =
+	</span><span class="type-name">FreeT</span><span>.</span><span class="identifier">liftT</span><span>[</span><span class="type-name">Teletype</span><span>, </span><span class="type-name">TeletypeState</span><span>, </span><span class="type-name">Unit</span><span>](</span><span class="type-name">State</span><span>.</span><span class="identifier">modify</span><span>(</span><span class="identifier">s</span><span> :: </span><span class="identifier">_</span><span>))
+}
+
+</span><span class="keyword">def</span><span> </span><span class="declaration-name">program</span><span> : </span><span class="type-name">TeletypeT</span><span>[</span><span class="type-name">TeletypeState</span><span>, </span><span class="type-name">Unit</span><span>] = {
+  </span><span class="keyword">for</span><span> {
+	</span><span class="identifier">userSaid</span><span> &lt;- </span><span class="type-name">TeletypeOps</span><span>.</span><span class="identifier">readLine</span><span>(</span><span class="string-literal">&quot;what&#39;s up?!&quot;</span><span>)
+	</span><span class="identifier">_</span><span> &lt;- </span><span class="type-name">TeletypeOps</span><span>.</span><span class="identifier">log</span><span>(</span><span class="string-literal">s&quot;user said : </span><span class="substitution">$userSaid</span><span class="string-literal">&quot;</span><span>)
+	</span><span class="identifier">_</span><span> &lt;- </span><span class="type-name">TeletypeOps</span><span>.</span><span class="identifier">writeLine</span><span>(</span><span class="string-literal">&quot;thanks, see you soon!&quot;</span><span>)
+  } </span><span class="keyword">yield</span><span> ()
+}
+
+</span><span class="keyword">def</span><span> </span><span class="declaration-name">interpreter</span><span> = </span><span class="keyword">new</span><span> (</span><span class="type-name">Teletype</span><span> ~&gt; </span><span class="type-name">TeletypeState</span><span>) {
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">apply</span><span>[</span><span class="type-name">A</span><span>](</span><span class="identifier">fa</span><span> : </span><span class="type-name">Teletype</span><span>[</span><span class="type-name">A</span><span>]) : </span><span class="type-name">TeletypeState</span><span>[</span><span class="type-name">A</span><span>] = {
+	</span><span class="identifier">fa</span><span> </span><span class="keyword">match</span><span> {
+	  </span><span class="keyword">case</span><span> </span><span class="type-name">ReadLine</span><span>(</span><span class="identifier">prompt</span><span>) =&gt;
+		</span><span class="identifier">println</span><span>(</span><span class="identifier">prompt</span><span>)
+		</span><span class="keyword">val</span><span> </span><span class="identifier">userInput</span><span> = </span><span class="string-literal">&quot;hanging in here&quot;</span><span> </span><span class="comment">//scala.io.StdIn.readLine()
+</span><span>		</span><span class="type-name">StateT</span><span>.</span><span class="identifier">pure</span><span>[</span><span class="type-name">Eval</span><span>, </span><span class="type-name">List</span><span>[</span><span class="type-name">String</span><span>], </span><span class="type-name">A</span><span>](</span><span class="identifier">userInput</span><span>)
+	  </span><span class="keyword">case</span><span> </span><span class="type-name">WriteLine</span><span>(</span><span class="identifier">line</span><span>) =&gt;
+		</span><span class="type-name">StateT</span><span>.</span><span class="identifier">pure</span><span>[</span><span class="type-name">Eval</span><span>, </span><span class="type-name">List</span><span>[</span><span class="type-name">String</span><span>], </span><span class="type-name">A</span><span>](</span><span class="identifier">println</span><span>(</span><span class="identifier">line</span><span>))
+	}
+  }
+}
+
+</span><span class="keyword">import</span><span> </span><span class="type-name">TeletypeOps</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">state</span><span> = </span><span class="identifier">program</span><span>.</span><span class="identifier">foldMap</span><span>(</span><span class="identifier">interpreter</span><span>)
+</span><span class="comment">// state: TeletypeState[Unit] = cats.data.IndexedStateT@182ed465
+</span><span class="keyword">val</span><span> </span><span class="identifier">initialState</span><span> = </span><span class="type-name">Nil</span><span>
+</span><span class="comment">// initialState: Nil.type = List()
+</span><span class="keyword">val</span><span> (</span><span class="identifier">stored</span><span>, </span><span class="identifier">_</span><span>) = </span><span class="identifier">state</span><span>.</span><span class="identifier">run</span><span>(</span><span class="identifier">initialState</span><span>).</span><span class="identifier">value</span><span>
+</span><span class="comment">// what&#39;s up?!
+// thanks, see you soon!
+// stored: List[String] = List(&quot;user said : hanging in here&quot;)</span></code></pre>
+        <p>Another example is more basic usage of <code>FreeT</code> with some context <code>Ctx</code> for which we provide <code>Try</code> interpreter,
+        combined with <code>OptionT</code> for reducing boilerplate.</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">free</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">data</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">scala</span><span>.</span><span class="identifier">util</span><span>.</span><span class="type-name">Try</span><span>
+
+</span><span class="keyword">sealed</span><span> </span><span class="keyword">trait</span><span> </span><span class="type-name">Ctx</span><span>[</span><span class="type-name">A</span><span>]
+
+</span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Action</span><span>(</span><span class="identifier">value</span><span>: </span><span class="type-name">Int</span><span>) </span><span class="keyword">extends</span><span> </span><span class="type-name">Ctx</span><span>[</span><span class="type-name">Int</span><span>]
+
+</span><span class="keyword">def</span><span> </span><span class="declaration-name">op1</span><span>: </span><span class="type-name">FreeT</span><span>[</span><span class="type-name">Ctx</span><span>, </span><span class="type-name">Option</span><span>, </span><span class="type-name">Int</span><span>] =
+  </span><span class="type-name">FreeT</span><span>.</span><span class="identifier">liftF</span><span>[</span><span class="type-name">Ctx</span><span>, </span><span class="type-name">Option</span><span>, </span><span class="type-name">Int</span><span>](</span><span class="type-name">Action</span><span>(</span><span class="number-literal">7</span><span>))
+
+</span><span class="keyword">def</span><span> </span><span class="declaration-name">op2</span><span>: </span><span class="type-name">FreeT</span><span>[</span><span class="type-name">Ctx</span><span>, </span><span class="type-name">Option</span><span>, </span><span class="type-name">Int</span><span>] =
+  </span><span class="type-name">FreeT</span><span>.</span><span class="identifier">liftT</span><span>[</span><span class="type-name">Ctx</span><span>, </span><span class="type-name">Option</span><span>, </span><span class="type-name">Int</span><span>](</span><span class="type-name">Some</span><span>(</span><span class="number-literal">4</span><span>))
+
+</span><span class="keyword">def</span><span> </span><span class="declaration-name">op3</span><span>: </span><span class="type-name">FreeT</span><span>[</span><span class="type-name">Ctx</span><span>, </span><span class="type-name">Option</span><span>, </span><span class="type-name">Int</span><span>] =
+  </span><span class="type-name">FreeT</span><span>.</span><span class="identifier">pure</span><span>[</span><span class="type-name">Ctx</span><span>, </span><span class="type-name">Option</span><span>, </span><span class="type-name">Int</span><span>](</span><span class="number-literal">1</span><span>)
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">opComplete</span><span>: </span><span class="type-name">FreeT</span><span>[</span><span class="type-name">Ctx</span><span>, </span><span class="type-name">Option</span><span>, </span><span class="type-name">Int</span><span>] =
+  </span><span class="keyword">for</span><span> {
+    </span><span class="identifier">a</span><span> &lt;- </span><span class="identifier">op1</span><span>
+    </span><span class="identifier">b</span><span> &lt;- </span><span class="identifier">op2</span><span>
+    </span><span class="identifier">c</span><span> &lt;- </span><span class="identifier">op3</span><span>
+  } </span><span class="keyword">yield</span><span> </span><span class="identifier">a</span><span> + </span><span class="identifier">b</span><span> + </span><span class="identifier">c</span><span>
+</span><span class="comment">// opComplete: FreeT[Ctx, Option, Int] = FlatMapped(
+//   Suspend(Some(Left(Action(7)))),
+//   &lt;function1&gt;
+// )
+</span><span>
+
+</span><span class="comment">/*  Our interpreters  */</span><span>
+
+</span><span class="keyword">type</span><span> </span><span class="type-name">OptTry</span><span>[</span><span class="type-name">A</span><span>] = </span><span class="type-name">OptionT</span><span>[</span><span class="type-name">Try</span><span>, </span><span class="type-name">A</span><span>]
+
+</span><span class="keyword">def</span><span> </span><span class="declaration-name">tryInterpreter</span><span>: </span><span class="type-name">Ctx</span><span> ~&gt; </span><span class="type-name">OptTry</span><span> = </span><span class="keyword">new</span><span> (</span><span class="type-name">Ctx</span><span> ~&gt; </span><span class="type-name">OptTry</span><span>) {
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">apply</span><span>[</span><span class="type-name">A</span><span>](</span><span class="identifier">fa</span><span>: </span><span class="type-name">Ctx</span><span>[</span><span class="type-name">A</span><span>]): </span><span class="type-name">OptTry</span><span>[</span><span class="type-name">A</span><span>] = {
+    </span><span class="identifier">fa</span><span> </span><span class="keyword">match</span><span> {
+      </span><span class="keyword">case</span><span> </span><span class="type-name">Action</span><span>(</span><span class="identifier">value</span><span>) =&gt;
+        </span><span class="type-name">OptionT</span><span>.</span><span class="identifier">liftF</span><span>(</span><span class="type-name">Try</span><span>(</span><span class="identifier">value</span><span>))
+    }
+  }
+}
+
+</span><span class="keyword">def</span><span> </span><span class="declaration-name">optTryLift</span><span>: </span><span class="type-name">Option</span><span> ~&gt; </span><span class="type-name">OptTry</span><span> = </span><span class="keyword">new</span><span> (</span><span class="type-name">Option</span><span> ~&gt; </span><span class="type-name">OptTry</span><span>) {
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">apply</span><span>[</span><span class="type-name">A</span><span>](</span><span class="identifier">fa</span><span>: </span><span class="type-name">Option</span><span>[</span><span class="type-name">A</span><span>]): </span><span class="type-name">OptTry</span><span>[</span><span class="type-name">A</span><span>] = {
+    </span><span class="identifier">fa</span><span> </span><span class="keyword">match</span><span> {
+      </span><span class="keyword">case</span><span> </span><span class="type-name">Some</span><span>(</span><span class="identifier">value</span><span>) =&gt;
+        </span><span class="type-name">OptionT</span><span>(</span><span class="type-name">Try</span><span>(</span><span class="type-name">Option</span><span>(</span><span class="identifier">value</span><span>)))
+      </span><span class="keyword">case</span><span> </span><span class="type-name">None</span><span> =&gt;
+        </span><span class="type-name">OptionT</span><span>.</span><span class="identifier">none</span><span>
+    }
+  }
+}
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">hoisted</span><span> = </span><span class="identifier">opComplete</span><span>.</span><span class="identifier">hoist</span><span>(</span><span class="identifier">optTryLift</span><span>)
+</span><span class="comment">// hoisted: FreeT[Ctx, OptTry, Int] = FlatMapped(
+//   Suspend(OptionT(Success(Some(Left(Action(7)))))),
+//   scala.Function1$$Lambda$983/1293677337@423b62fc
+// )
+</span><span class="keyword">val</span><span> </span><span class="identifier">evaluated</span><span> = </span><span class="identifier">hoisted</span><span>.</span><span class="identifier">foldMap</span><span>(</span><span class="identifier">tryInterpreter</span><span>)
+</span><span class="comment">// evaluated: OptTry[Int] = OptionT(Success(Some(12)))
+</span><span class="keyword">val</span><span> </span><span class="identifier">result</span><span> = </span><span class="identifier">evaluated</span><span>.</span><span class="identifier">value</span><span>
+</span><span class="comment">// result: Try[Option[Int]] = Success(Some(12))</span></code></pre>
+        
+        <h2 id="future-work-todo" class="section">Future Work (TODO)<a class="anchor-link right" href="#future-work-todo"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>There are many remarkable uses of <code>Free[_]</code>. In the future, we will
+        include some here, such as:</p>
+        <ul>
+          <li>Trampoline</li>
+        </ul>
+        <ul>
+          <li>Option</li>
+        </ul>
+        <ul>
+          <li>Iteratee</li>
+        </ul>
+        <ul>
+          <li>Source</li>
+        </ul>
+        <ul>
+          <li>etc...</li>
+        </ul>
+        <p>We will also discuss the <em>Coyoneda Trick</em>.</p>
+        
+        <h2 id="credits" class="section">Credits<a class="anchor-link right" href="#credits"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>This article was written by
+        <a href="https://github.com/mandubian">Pascal Voitot</a> and edited by other
+        members of the Cats community.</p>
+
+        <hr style="margin-top: 30px"/>
+        <footer style="font-size: 90%; text-align: center">
+          cats is a <a href="https://typelevel.org/">Typelevel</a> project distributed under the <a href="https://opensource.org/licenses/MIT">MIT</a> license.
+        </footer>
+
+      </main>
+
+    </div>
+
+  </body>
+</html>

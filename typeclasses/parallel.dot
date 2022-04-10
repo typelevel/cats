@@ -1,0 +1,34 @@
+digraph parallel {
+  node [shape=none, fontname=courier]
+  edge [fontname=courier]
+  
+  label=<Parallel[<font color="red3">M</font>[_]] { type <font color="green3">F</font>[_] }<br/><br/>>
+  labelloc=top
+  fontname="courier-bold"
+
+  subgraph cluster_parallel {
+    label=""
+    color=white
+  
+    F [label=<<font color="green3">F</font>[_]>]
+    M [label=<<font color="red3">M</font>[_]>]
+
+    M:ne -> F:nw [label="parallel", fontcolor=green3]
+    F -> M:se [label="sequential", fontcolor=red3]
+    
+    { rank=same M F }
+  }
+
+  subgraph cluster_tc {
+    label=""
+    color=white
+    
+    Ap [label=<Applicative[<font color="green3">F</font>&#93;>]
+    Monad [label=<Monad[<font color="red3">M</font>&#93;>]
+  }
+
+  F -> Ap [style=dotted dir=none]
+  M -> Monad [style=dotted dir=none]
+
+  { rank=same Monad Ap }
+}

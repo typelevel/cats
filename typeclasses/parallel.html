@@ -1,127 +1,286 @@
-<!DOCTYPE html><html><head><title>Cats: Parallel</title><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Cats contributors" /><meta name="description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="og:image" content="/cats/img/poster.png" /><meta name="image" property="og:image" content="/cats/img/poster.png" /><meta name="og:title" content="Cats: Parallel" /><meta name="title" property="og:title" content="Cats: Parallel" /><meta name="og:site_name" content="Cats" /><meta name="og:url" content="http://typelevel.org/cats/" /><meta name="og:type" content="website" /><meta name="og:description" content="Lightweight, modular, and extensible library for functional programming" /><link rel="icon" type="image/png" href="/cats/img/favicon.png" /><meta name="twitter:title" content="Cats: Parallel" /><meta name="twitter:image" content="/cats/img/poster.png" /><meta name="twitter:description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="twitter:card" content="summary_large_image" /><link rel="icon" type="image/png" sizes="16x16" href="/cats/img/favicon16x16.png" /><link rel="icon" type="image/png" sizes="24x24" href="/cats/img/favicon24x24.png" /><link rel="icon" type="image/png" sizes="32x32" href="/cats/img/favicon32x32.png" /><link rel="icon" type="image/png" sizes="48x48" href="/cats/img/favicon48x48.png" /><link rel="icon" type="image/png" sizes="57x57" href="/cats/img/favicon57x57.png" /><link rel="icon" type="image/png" sizes="60x60" href="/cats/img/favicon60x60.png" /><link rel="icon" type="image/png" sizes="64x64" href="/cats/img/favicon64x64.png" /><link rel="icon" type="image/png" sizes="70x70" href="/cats/img/favicon70x70.png" /><link rel="icon" type="image/png" sizes="72x72" href="/cats/img/favicon72x72.png" /><link rel="icon" type="image/png" sizes="76x76" href="/cats/img/favicon76x76.png" /><link rel="icon" type="image/png" sizes="96x96" href="/cats/img/favicon96x96.png" /><link rel="icon" type="image/png" sizes="114x114" href="/cats/img/favicon114x114.png" /><link rel="icon" type="image/png" sizes="120x120" href="/cats/img/favicon120x120.png" /><link rel="icon" type="image/png" sizes="128x128" href="/cats/img/favicon128x128.png" /><link rel="icon" type="image/png" sizes="144x144" href="/cats/img/favicon144x144.png" /><link rel="icon" type="image/png" sizes="150x150" href="/cats/img/favicon150x150.png" /><link rel="icon" type="image/png" sizes="152x152" href="/cats/img/favicon152x152.png" /><link rel="icon" type="image/png" sizes="196x196" href="/cats/img/favicon196x196.png" /><link rel="icon" type="image/png" sizes="310x310" href="/cats/img/favicon310x310.png" /><link rel="icon" type="image/png" sizes="310x150" href="/cats/img/favicon310x150.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" /><link rel="stylesheet" href="/cats/highlight/styles/atom-one-light.css" /><link rel="stylesheet" href="/cats/css/pattern-style.css" /></head><body class="docs"><div id="wrapper"><div id="sidebar-wrapper"><ul id="sidebar" class="sidebar-nav"><li class="sidebar-brand"><a href="/cats/" class="brand"><div class="brand-wrapper"><span>Cats</span></div></a></li><li><a href="/cats/typeclasses/alternative.html" class="">Alternative</a></li><li><a href="/cats/typeclasses/applicative.html" class="">Applicative</a></li><li><a href="/cats/typeclasses/applicativemonaderror.html" class="">Applicative Error</a></li><li><a href="/cats/typeclasses/applicativetraverse.html" class="">Applicative and Traversable Functors</a></li><li><a href="/cats/typeclasses/arrow.html" class="">Arrow</a></li><li><a href="/cats/typeclasses/arrowchoice.html" class="">Arrow Choice</a></li><li><a href="/cats/typeclasses/bifunctor.html" class="">Bifunctor</a></li><li><a href="/cats/typeclasses/comonad.html" class="">Comonad</a></li><li><a href="/cats/typeclasses/contravariant.html" class="">Contravariant</a></li><li><a href="/cats/typeclasses/contravariantmonoidal.html" class="">Contravariant Monoidal</a></li><li><a href="/cats/typeclasses/eq.html" class="">Eq</a></li><li><a href="/cats/typeclasses/foldable.html" class="">Foldable</a></li><li><a href="/cats/typeclasses/functor.html" class="">Functor</a></li><li><a href="/cats/typeclasses/invariant.html" class="">Invariant</a></li><li><a href="/cats/typeclasses/invariantmonoidal.html" class="">InvariantMonoidal</a></li><li><a href="/cats/typeclasses/lawtesting.html" class="">Law Testing</a></li><li><a href="/cats/typeclasses/monad.html" class="">Monad</a></li><li><a href="/cats/typeclasses/monoid.html" class="">Monoid</a></li><li><a href="/cats/typeclasses/monoidk.html" class="">MonoidK</a></li><li><a href="/cats/typeclasses/nonemptytraverse.html" class="">NonEmptyTraverse</a></li><li><a href="/cats/typeclasses/parallel.html" class=" active ">Parallel</a></li><li><a href="/cats/typeclasses/reducible.html" class="">Reducible</a></li><li><a href="/cats/typeclasses/semigroup.html" class="">Semigroup</a></li><li><a href="/cats/typeclasses/semigroupk.html" class="">SemigroupK</a></li><li><a href="/cats/typeclasses/show.html" class="">Show</a></li><li><a href="/cats/typeclasses/traverse.html" class="">Traverse</a></li><li><a href="/cats/typeclasses.html" class="">Type Classes</a></li></ul></div><div id="page-content-wrapper"><div class="nav"><div class="container-fluid"><div class="row"><div class="col-lg-12"><div class="action-menu pull-left clearfix"><a href="#menu-toggle" id="menu-toggle"><i class="fa fa-bars" aria-hidden="true"></i></a></div><ul class="pull-right"><li class="search-nav hidden-xs hidden-sm"><div id="search-dropdown"><label><i class="fa fa-search"></i>Search</label><input id="search-bar" type="text" placeholder="Enter keywords here..." onclick="displayToggleSearch(event)" /><ul id="search-dropdown-content" class="dropdown dropdown-content"></ul></div></li><li id="gh-eyes-item" class="hidden-xs to-uppercase"><a href="https://github.com/typelevel/cats" target="_blank" rel="noopener noreferrer"><i class="fa fa-eye"></i><span>Watchers<span id="eyes" class="label label-default">--</span></span></a></li><li id="gh-stars-item" class="hidden-xs to-uppercase"><a href="https://github.com/typelevel/cats" target="_blank" rel="noopener noreferrer"><i class="fa fa-star-o"></i><span>Stars<span id="stars" class="label label-default">--</span></span></a></li><li><a href="#" onclick="shareSiteTwitter('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-twitter"></i></a></li><li><a href="#" onclick="shareSiteFacebook('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-facebook"></i></a></li></ul></div></div></div></div><div id="content" data-github-owner="typelevel" data-github-repo="cats"><div class="content-wrapper"><section><h1 id="parallel">Parallel</h1>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Laika 0.18.1 + Helium Theme" />
+    <title>Parallel</title>
+    
+      <meta name="author" content="Cody Allen"/>
+    
+      <meta name="author" content="Ross Baker"/>
+    
+      <meta name="author" content="P. Oscar Boykin"/>
+    
+      <meta name="author" content="Travis Brown"/>
+    
+      <meta name="author" content="Adelbert Chang"/>
+    
+      <meta name="author" content="Peter Neyens"/>
+    
+      <meta name="author" content="Rob Norris"/>
+    
+      <meta name="author" content="Erik Osheim"/>
+    
+      <meta name="author" content="LukaJCB"/>
+    
+      <meta name="author" content="Michael Pilquist"/>
+    
+      <meta name="author" content="Miles Sabin"/>
+    
+      <meta name="author" content="Daniel Spiewak"/>
+    
+      <meta name="author" content="Frank Thomas"/>
+    
+      <meta name="author" content="Julien Truffaut"/>
+    
+      <meta name="author" content="Kailuo Wang"/>
+    
+    
+      <meta name="description" content="docs"/>
+    
+    
+      <link rel="icon" sizes="32x32" type="image/png" href="https://typelevel.org/img/favicon.png"/>
+    
+    
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.207/distr/fira_code.css">
+    
+    <link rel="stylesheet" type="text/css" href="../helium/icofont.min.css" />
+    <link rel="stylesheet" type="text/css" href="../helium/laika-helium.css" />
+    <link rel="stylesheet" type="text/css" href="../site/styles.css" />
+    <script src="../helium/laika-helium.js"></script>
+    <script src="../js/sponsors.js"></script>
+    
+    
+    <script> /* for avoiding page load transitions */ </script>
+  </head>
 
-<p>When browsing the various <code class="language-plaintext highlighter-rouge">Monads</code> included in Cats,
-you may have noticed that some of them have data types that are actually of the same structure,
-but instead have instances of <code class="language-plaintext highlighter-rouge">Applicative</code>. E.g. <code class="language-plaintext highlighter-rouge">Either</code> and <code class="language-plaintext highlighter-rouge">Validated</code>.</p>
+  <body>
 
-<p>This is because defining a <code class="language-plaintext highlighter-rouge">Monad</code> instance for data types like <code class="language-plaintext highlighter-rouge">Validated</code> would be inconsistent with its error-accumulating behaviour.
-In short, <code class="language-plaintext highlighter-rouge">Monads</code> describe dependent computations and <code class="language-plaintext highlighter-rouge">Applicatives</code> describe independent computations.</p>
+    <header id="top-bar">
 
-<p>Sometimes however, we want to use both in conjunction with each other.
-In the example of <code class="language-plaintext highlighter-rouge">Either</code> and <code class="language-plaintext highlighter-rouge">Validated</code> it is trivial albeit cumbersome to convert between the two types.
-Below is a short example of a situation where we might run into this.
-For simplicity, we’ll use <code class="language-plaintext highlighter-rouge">String</code> as our type to represent errors.</p>
+      <div class="row">
+        <a id="nav-icon">
+          <i class="icofont-laika" title="Navigation">&#xefa2;</i>
+        </a>
+        
+      </div>
 
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
-<span class="k">import</span> <span class="nn">cats.data._</span>
+      <a class="image-link" href="https://typelevel.org"><img src="https://typelevel.org/img/logo.svg"></a>
 
-<span class="k">case</span> <span class="k">class</span> <span class="nc">Name</span><span class="o">(</span><span class="n">value</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span>
-<span class="k">case</span> <span class="k">class</span> <span class="nc">Age</span><span class="o">(</span><span class="n">value</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span>
-<span class="k">case</span> <span class="k">class</span> <span class="nc">Person</span><span class="o">(</span><span class="n">name</span><span class="k">:</span> <span class="kt">Name</span><span class="o">,</span> <span class="n">age</span><span class="k">:</span> <span class="kt">Age</span><span class="o">)</span>
+      <span class="row links"><a class="icon-link svg-link" href="https://typelevel.org/cats/api/"><span title="API"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M75,47.5c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm-50,-0c13.246,-0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,-0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm2.705,16.735l7.239,0l0.622,-4.904l-21.833,0l-0,4.904l7.589,0l0,22.067l6.383,0l-0,-22.067Zm58.076,7.265c-0,-8.757 -3.698,-14.166 -10.781,-14.166c-7.083,-0 -10.781,5.604 -10.781,14.166c0,8.757 3.698,14.166 10.781,14.166c7.083,0 10.781,-5.604 10.781,-14.166Zm-6.539,0c0,6.538 -1.128,9.496 -4.242,9.496c-2.997,0 -4.242,-2.88 -4.242,-9.496c-0,-6.616 1.206,-9.496 4.242,-9.496c3.036,-0 4.242,2.88 4.242,9.496Zm-29.242,-67c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm0.512,9.834c-7.122,-0 -12.609,5.098 -12.609,14.127c-0,9.263 5.215,14.205 12.532,14.205c4.164,0 7.083,-1.634 9.068,-3.658l-2.88,-3.697c-1.518,1.206 -3.153,2.413 -5.838,2.413c-3.697,-0 -6.266,-2.763 -6.266,-9.263c-0,-6.616 2.724,-9.379 6.149,-9.379c2.102,-0 3.892,0.778 5.371,1.984l3.113,-3.775c-2.257,-1.868 -4.748,-2.957 -8.64,-2.957Z"/>
+  </g>
+</svg></span></a><a class="icon-link svg-link" href="https://github.com/typelevel/cats"><span title="Source Code"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M49.995,1c-27.609,-0 -49.995,22.386 -49.995,50.002c-0,22.09 14.325,40.83 34.194,47.444c2.501,0.458 3.413,-1.086 3.413,-2.412c0,-1.185 -0.043,-4.331 -0.067,-8.503c-13.908,3.021 -16.843,-6.704 -16.843,-6.704c-2.274,-5.773 -5.552,-7.311 -5.552,-7.311c-4.54,-3.103 0.344,-3.042 0.344,-3.042c5.018,0.356 7.658,5.154 7.658,5.154c4.46,7.64 11.704,5.433 14.552,4.156c0.454,-3.232 1.744,-5.436 3.174,-6.685c-11.102,-1.262 -22.775,-5.553 -22.775,-24.713c-0,-5.457 1.949,-9.92 5.147,-13.416c-0.516,-1.265 -2.231,-6.348 0.488,-13.233c0,0 4.199,-1.344 13.751,5.126c3.988,-1.108 8.266,-1.663 12.518,-1.682c4.245,0.019 8.523,0.574 12.517,1.682c9.546,-6.47 13.736,-5.126 13.736,-5.126c2.728,6.885 1.013,11.968 0.497,13.233c3.204,3.496 5.141,7.959 5.141,13.416c0,19.209 -11.691,23.436 -22.83,24.673c1.795,1.544 3.394,4.595 3.394,9.26c0,6.682 -0.061,12.076 -0.061,13.715c0,1.338 0.899,2.894 3.438,2.406c19.853,-6.627 34.166,-25.354 34.166,-47.438c-0,-27.616 -22.389,-50.002 -50.005,-50.002"/>
+  </g>
+</svg></span></a><a class="icon-link" href="https://discord.gg/XF3CXcMzqD"><i class="icofont-laika" title="Chat">&#xeed5;</i></a><a class="icon-link" href="https://twitter.com/typelevel"><i class="icofont-laika" title="Twitter">&#xed7a;</i></a></span>
 
-<span class="k">def</span> <span class="nf">parse</span><span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">NonEmptyList</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
-  <span class="nf">if</span> <span class="o">(</span><span class="nv">s</span><span class="o">.</span><span class="py">matches</span><span class="o">(</span><span class="s">"-?[0-9]+"</span><span class="o">))</span> <span class="nc">Right</span><span class="o">(</span><span class="nv">s</span><span class="o">.</span><span class="py">toInt</span><span class="o">)</span>
-  <span class="k">else</span> <span class="nc">Left</span><span class="o">(</span><span class="nv">NonEmptyList</span><span class="o">.</span><span class="py">one</span><span class="o">(</span><span class="n">s</span><span class="s">"$s is not a valid integer."</span><span class="o">))</span>
-<span class="o">}</span>
+    </header>
 
-<span class="k">def</span> <span class="nf">validateAge</span><span class="o">(</span><span class="n">a</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">NonEmptyList</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span>, <span class="kt">Age</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
-  <span class="nf">if</span> <span class="o">(</span><span class="n">a</span> <span class="o">&gt;</span> <span class="mi">18</span><span class="o">)</span> <span class="nc">Right</span><span class="o">(</span><span class="nc">Age</span><span class="o">(</span><span class="n">a</span><span class="o">))</span>
-  <span class="k">else</span> <span class="nc">Left</span><span class="o">(</span><span class="nv">NonEmptyList</span><span class="o">.</span><span class="py">one</span><span class="o">(</span><span class="n">s</span><span class="s">"$a is not old enough"</span><span class="o">))</span>
-<span class="o">}</span>
+    <nav id="sidebar">
 
-<span class="k">def</span> <span class="nf">validateName</span><span class="o">(</span><span class="n">n</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">NonEmptyList</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span>, <span class="kt">Name</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
-  <span class="nf">if</span> <span class="o">(</span><span class="nv">n</span><span class="o">.</span><span class="py">length</span> <span class="o">&gt;=</span> <span class="mi">8</span><span class="o">)</span> <span class="nc">Right</span><span class="o">(</span><span class="nc">Name</span><span class="o">(</span><span class="n">n</span><span class="o">))</span>
-  <span class="k">else</span> <span class="nc">Left</span><span class="o">(</span><span class="nv">NonEmptyList</span><span class="o">.</span><span class="py">one</span><span class="o">(</span><span class="n">s</span><span class="s">"$n Does not have enough characters"</span><span class="o">))</span>
-<span class="o">}</span>
-</code></pre></div></div>
+      <div class="row">
+        <a class="icon-link svg-link" href="https://typelevel.org/cats/api/"><span title="API"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M75,47.5c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm-50,-0c13.246,-0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,-0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm2.705,16.735l7.239,0l0.622,-4.904l-21.833,0l-0,4.904l7.589,0l0,22.067l6.383,0l-0,-22.067Zm58.076,7.265c-0,-8.757 -3.698,-14.166 -10.781,-14.166c-7.083,-0 -10.781,5.604 -10.781,14.166c0,8.757 3.698,14.166 10.781,14.166c7.083,0 10.781,-5.604 10.781,-14.166Zm-6.539,0c0,6.538 -1.128,9.496 -4.242,9.496c-2.997,0 -4.242,-2.88 -4.242,-9.496c-0,-6.616 1.206,-9.496 4.242,-9.496c3.036,-0 4.242,2.88 4.242,9.496Zm-29.242,-67c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm0.512,9.834c-7.122,-0 -12.609,5.098 -12.609,14.127c-0,9.263 5.215,14.205 12.532,14.205c4.164,0 7.083,-1.634 9.068,-3.658l-2.88,-3.697c-1.518,1.206 -3.153,2.413 -5.838,2.413c-3.697,-0 -6.266,-2.763 -6.266,-9.263c-0,-6.616 2.724,-9.379 6.149,-9.379c2.102,-0 3.892,0.778 5.371,1.984l3.113,-3.775c-2.257,-1.868 -4.748,-2.957 -8.64,-2.957Z"/>
+  </g>
+</svg></span></a><a class="icon-link svg-link" href="https://github.com/typelevel/cats"><span title="Source Code"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M49.995,1c-27.609,-0 -49.995,22.386 -49.995,50.002c-0,22.09 14.325,40.83 34.194,47.444c2.501,0.458 3.413,-1.086 3.413,-2.412c0,-1.185 -0.043,-4.331 -0.067,-8.503c-13.908,3.021 -16.843,-6.704 -16.843,-6.704c-2.274,-5.773 -5.552,-7.311 -5.552,-7.311c-4.54,-3.103 0.344,-3.042 0.344,-3.042c5.018,0.356 7.658,5.154 7.658,5.154c4.46,7.64 11.704,5.433 14.552,4.156c0.454,-3.232 1.744,-5.436 3.174,-6.685c-11.102,-1.262 -22.775,-5.553 -22.775,-24.713c-0,-5.457 1.949,-9.92 5.147,-13.416c-0.516,-1.265 -2.231,-6.348 0.488,-13.233c0,0 4.199,-1.344 13.751,5.126c3.988,-1.108 8.266,-1.663 12.518,-1.682c4.245,0.019 8.523,0.574 12.517,1.682c9.546,-6.47 13.736,-5.126 13.736,-5.126c2.728,6.885 1.013,11.968 0.497,13.233c3.204,3.496 5.141,7.959 5.141,13.416c0,19.209 -11.691,23.436 -22.83,24.673c1.795,1.544 3.394,4.595 3.394,9.26c0,6.682 -0.061,12.076 -0.061,13.715c0,1.338 0.899,2.894 3.438,2.406c19.853,-6.627 34.166,-25.354 34.166,-47.438c-0,-27.616 -22.389,-50.002 -50.005,-50.002"/>
+  </g>
+</svg></span></a><a class="icon-link" href="https://discord.gg/XF3CXcMzqD"><i class="icofont-laika" title="Chat">&#xeed5;</i></a><a class="icon-link" href="https://twitter.com/typelevel"><i class="icofont-laika" title="Twitter">&#xed7a;</i></a>
+      </div>
 
-<p>Now we want to parse two Strings into a value of <code class="language-plaintext highlighter-rouge">Person</code>:</p>
+      <ul class="nav-list">
+        <li class="level1"><a href="../index.html">Cats</a></li>
+        <li class="level1"><a href="../typeclasses.html">Type Classes</a></li>
+        <li class="level1"><a href="../datatypes.html">Data Types</a></li>
+        <li class="level1"><a href="../algebra.html">Algebra</a></li>
+        <li class="level1"><a href="../motivations.html">Motivations</a></li>
+        <li class="level1"><a href="../resources_for_learners.html">Resources for Learners</a></li>
+        <li class="level1"><a href="../jump_start_guide.html">Jump Start Guide</a></li>
+        <li class="level1"><a href="../imports.html">Imports</a></li>
+        <li class="level1"><a href="../faq.html">FAQ</a></li>
+        <li class="level1"><a href="../CONTRIBUTING.html">Contributor guide</a></li>
+        <li class="level1"><a href="../colophon.html">Colophon</a></li>
+        <li class="level1"><a href="../nomenclature.html">Glossary</a></li>
+        <li class="level1"><a href="../guidelines.html">Guidelines</a></li>
+        <li class="level1"><a href="../typelevelEcosystem.html">Typelevel Ecosystem</a></li>
+        <li class="level1 nav-header">Type Classes</li>
+        <li class="level2"><a href="alternative.html">Alternative</a></li>
+        <li class="level2"><a href="applicative.html">Applicative</a></li>
+        <li class="level2"><a href="applicativemonaderror.html">ApplicativeError and MonadError</a></li>
+        <li class="level2"><a href="applicativetraverse.html">Applicative and Traversable Functors</a></li>
+        <li class="level2"><a href="arrow.html">Arrow</a></li>
+        <li class="level2"><a href="arrowchoice.html">Arrow Choice</a></li>
+        <li class="level2"><a href="bifunctor.html">Bifunctor</a></li>
+        <li class="level2"><a href="bimonad.html">Bimonad</a></li>
+        <li class="level2"><a href="comonad.html">Comonad</a></li>
+        <li class="level2"><a href="contravariant.html">Contravariant</a></li>
+        <li class="level2"><a href="contravariantmonoidal.html">Contravariant Monoidal</a></li>
+        <li class="level2"><a href="eq.html">Eq</a></li>
+        <li class="level2"><a href="foldable.html">Foldable</a></li>
+        <li class="level2"><a href="functor.html">Functor</a></li>
+        <li class="level2"><a href="invariant.html">Invariant</a></li>
+        <li class="level2"><a href="invariantmonoidal.html">Invariant Monoidal</a></li>
+        <li class="level2"><a href="lawtesting.html">Law testing</a></li>
+        <li class="level2"><a href="monad.html">Monad</a></li>
+        <li class="level2"><a href="monoid.html">Monoid</a></li>
+        <li class="level2"><a href="monoidk.html">MonoidK</a></li>
+        <li class="level2"><a href="nonemptytraverse.html">NonEmptyTraverse</a></li>
+        <li class="level2 active"><a href="#">Parallel</a></li>
+        <li class="level2"><a href="reducible.html">Reducible</a></li>
+        <li class="level2"><a href="semigroup.html">Semigroup</a></li>
+        <li class="level2"><a href="semigroupk.html">SemigroupK</a></li>
+        <li class="level2"><a href="show.html">Show</a></li>
+        <li class="level2"><a href="traverse.html">Traverse</a></li>
+        <li class="level1 nav-header">Data Types</li>
+        <li class="level2"><a href="../datatypes/chain.html">Chain</a></li>
+        <li class="level2"><a href="../datatypes/const.html">Const</a></li>
+        <li class="level2"><a href="../datatypes/contt.html">ContT</a></li>
+        <li class="level2"><a href="../datatypes/either.html">Either</a></li>
+        <li class="level2"><a href="../datatypes/eithert.html">EitherT</a></li>
+        <li class="level2"><a href="../datatypes/eval.html">Eval</a></li>
+        <li class="level2"><a href="../datatypes/freeapplicative.html">Free Applicative</a></li>
+        <li class="level2"><a href="../datatypes/freemonad.html">Free Monad</a></li>
+        <li class="level2"><a href="../datatypes/functionk.html">FunctionK</a></li>
+        <li class="level2"><a href="../datatypes/id.html">Id</a></li>
+        <li class="level2"><a href="../datatypes/ior.html">Ior</a></li>
+        <li class="level2"><a href="../datatypes/iort.html">IorT</a></li>
+        <li class="level2"><a href="../datatypes/kleisli.html">Kleisli</a></li>
+        <li class="level2"><a href="../datatypes/nel.html">NonEmptyList</a></li>
+        <li class="level2"><a href="../datatypes/nested.html">Nested</a></li>
+        <li class="level2"><a href="../datatypes/oneand.html">OneAnd</a></li>
+        <li class="level2"><a href="../datatypes/optiont.html">OptionT</a></li>
+        <li class="level2"><a href="../datatypes/state.html">State</a></li>
+        <li class="level2"><a href="../datatypes/validated.html">Validated</a></li>
+        <li class="level2"><a href="../datatypes/writer.html">Writer</a></li>
+        <li class="level2"><a href="../datatypes/writert.html">WriterT</a></li>
+      </ul>
 
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">parsePerson</span><span class="o">(</span><span class="n">ageString</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">nameString</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">=</span>
-  <span class="k">for</span> <span class="o">{</span>
-    <span class="n">age</span> <span class="k">&lt;-</span> <span class="nf">parse</span><span class="o">(</span><span class="n">ageString</span><span class="o">)</span>
-    <span class="n">person</span> <span class="k">&lt;-</span> <span class="o">(</span><span class="nf">validateName</span><span class="o">(</span><span class="n">nameString</span><span class="o">).</span><span class="py">toValidated</span><span class="o">,</span> <span class="nf">validateAge</span><span class="o">(</span><span class="n">age</span><span class="o">).</span><span class="py">toValidated</span><span class="o">)</span>
-       <span class="o">.</span><span class="py">mapN</span><span class="o">(</span><span class="nc">Person</span><span class="o">)</span>
-       <span class="o">.</span><span class="py">toEither</span>
-  <span class="o">}</span> <span class="k">yield</span> <span class="n">person</span>
-</code></pre></div></div>
+      <ul class="nav-list">
+        <li class="level1 nav-header">Related Projects</li>
+        
+          <li class="level2"><a href="https://typelevel.org/cats-effect/">cats-effect</a></li>
+        
+          <li class="level2"><a href="https://typelevel.org/mouse">Mouse</a></li>
+        
+          <li class="level2"><a href="https://github.com/typelevel/discipline/">discipline</a></li>
+        
+      </ul>
 
-<p>We had to convert to and from <code class="language-plaintext highlighter-rouge">Validated</code> manually.
-While this is still manageble, it gets worse the more <code class="language-plaintext highlighter-rouge">Eithers</code> we want to combine in parallel.</p>
+    </nav>
 
-<p>To mitigate this pain, Cats introduces a type class <code class="language-plaintext highlighter-rouge">Parallel</code> that abstracts over <code class="language-plaintext highlighter-rouge">Monads</code> which also support parallel composition.
-It is simply defined in terms of conversion functions between the two data types:</p>
+    <div id="container">
 
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">trait</span> <span class="nc">Parallel</span><span class="o">[</span><span class="kt">M</span><span class="o">[</span><span class="k">_</span><span class="o">]]</span> <span class="o">{</span>
-  <span class="k">type</span> <span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]</span>
+      <nav id="page-nav">
+        <p class="header"><a href="#">Parallel</a></p>
 
-  <span class="k">def</span> <span class="nf">sequential</span><span class="k">:</span> <span class="kt">F</span> <span class="kt">~&gt;</span> <span class="kt">M</span>
+        <ul class="nav-list">
+          <li class="level1"><a href="#nonemptyparallel-a-weakened-parallel">NonEmptyParallel - a weakened Parallel</a></li>
+        </ul>
 
-  <span class="k">def</span> <span class="nf">parallel</span><span class="k">:</span> <span class="kt">M</span> <span class="kt">~&gt;</span> <span class="kt">F</span>
-<span class="o">}</span>
-</code></pre></div></div>
-<p>Where <code class="language-plaintext highlighter-rouge">M[_]</code> has to have an instance of <code class="language-plaintext highlighter-rouge">Monad</code> and <code class="language-plaintext highlighter-rouge">F[_]</code> an instance of <code class="language-plaintext highlighter-rouge">Applicative</code>.</p>
+        <p class="footer"></p>
+      </nav>
 
-<p><img src="../img/parallel.png" alt="The `Parallel` typeclass transforms between `Monad` `M[_]` and `Applicative` `F[_]`." /></p>
+      <main class="content">
 
-<p>Recall that <code class="language-plaintext highlighter-rouge">~&gt;</code> is just an alias for <a href="../datatypes/functionk.html"><code class="language-plaintext highlighter-rouge">FunctionK</code></a>.
-This allows us to get rid of most of our boilerplate from earlier:</p>
+        <h1 id="parallel" class="title">Parallel</h1>
+        <p>When browsing the various <code>Monads</code> included in Cats,
+        you may have noticed that some of them have data types that are actually of the same structure,
+        but instead have instances of <code>Applicative</code>. E.g. <code>Either</code> and <code>Validated</code>.</p>
+        <p>This is because defining a <code>Monad</code> instance for data types like <code>Validated</code> would be inconsistent with its error-accumulating behaviour.
+        In short, <code>Monads</code> describe dependent computations and <code>Applicatives</code> describe independent computations.</p>
+        <p>Sometimes however, we want to use both in conjunction with each other.
+        In the example of <code>Either</code> and <code>Validated</code> it is trivial albeit cumbersome to convert between the two types.
+        Below is a short example of a situation where we might run into this.
+        For simplicity, we&#39;ll use <code>String</code> as our type to represent errors.</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">data</span><span>.</span><span class="identifier">_</span><span>
 
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">parsePerson</span><span class="o">(</span><span class="n">ageString</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">nameString</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">=</span>
-  <span class="k">for</span> <span class="o">{</span>
-    <span class="n">age</span> <span class="k">&lt;-</span> <span class="nf">parse</span><span class="o">(</span><span class="n">ageString</span><span class="o">)</span>
-    <span class="n">person</span> <span class="k">&lt;-</span> <span class="o">(</span><span class="nf">validateName</span><span class="o">(</span><span class="n">nameString</span><span class="o">),</span> <span class="nf">validateAge</span><span class="o">(</span><span class="n">age</span><span class="o">)).</span><span class="py">parMapN</span><span class="o">(</span><span class="nc">Person</span><span class="o">)</span>
-  <span class="o">}</span> <span class="k">yield</span> <span class="n">person</span>
-</code></pre></div></div>
+</span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Name</span><span>(</span><span class="identifier">value</span><span>: </span><span class="type-name">String</span><span>)
+</span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Age</span><span>(</span><span class="identifier">value</span><span>: </span><span class="type-name">Int</span><span>)
+</span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Person</span><span>(</span><span class="identifier">name</span><span>: </span><span class="type-name">Name</span><span>, </span><span class="identifier">age</span><span>: </span><span class="type-name">Age</span><span>)
 
-<p>We can also traverse over a <code class="language-plaintext highlighter-rouge">Traverse</code> using <code class="language-plaintext highlighter-rouge">Parallel</code>:</p>
+</span><span class="keyword">def</span><span> </span><span class="declaration-name">parse</span><span>(</span><span class="identifier">s</span><span>: </span><span class="type-name">String</span><span>): </span><span class="type-name">Either</span><span>[</span><span class="type-name">NonEmptyList</span><span>[</span><span class="type-name">String</span><span>], </span><span class="type-name">Int</span><span>] = {
+  </span><span class="keyword">if</span><span> (</span><span class="identifier">s</span><span>.</span><span class="identifier">matches</span><span>(</span><span class="string-literal">&quot;-?[0-9]+&quot;</span><span>)) </span><span class="type-name">Right</span><span>(</span><span class="identifier">s</span><span>.</span><span class="identifier">toInt</span><span>)
+  </span><span class="keyword">else</span><span> </span><span class="type-name">Left</span><span>(</span><span class="type-name">NonEmptyList</span><span>.</span><span class="identifier">one</span><span>(</span><span class="string-literal">s&quot;</span><span class="substitution">$s</span><span class="string-literal"> is not a valid integer.&quot;</span><span>))
+}
 
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">List</span><span class="o">(</span><span class="nv">Either</span><span class="o">.</span><span class="py">right</span><span class="o">(</span><span class="mi">42</span><span class="o">),</span> <span class="nv">Either</span><span class="o">.</span><span class="py">left</span><span class="o">(</span><span class="nv">NonEmptyList</span><span class="o">.</span><span class="py">one</span><span class="o">(</span><span class="s">"Error 1"</span><span class="o">)),</span> <span class="nv">Either</span><span class="o">.</span><span class="py">left</span><span class="o">(</span><span class="nv">NonEmptyList</span><span class="o">.</span><span class="py">one</span><span class="o">(</span><span class="s">"Error 2"</span><span class="o">))).</span><span class="py">parSequence</span>
-<span class="c1">// res0: Either[NonEmptyList[String], List[Int]] = Left(</span>
-<span class="c1">//   NonEmptyList("Error 1", List("Error 2"))</span>
-<span class="c1">// )</span>
-</code></pre></div></div>
+</span><span class="keyword">def</span><span> </span><span class="declaration-name">validateAge</span><span>(</span><span class="identifier">a</span><span>: </span><span class="type-name">Int</span><span>): </span><span class="type-name">Either</span><span>[</span><span class="type-name">NonEmptyList</span><span>[</span><span class="type-name">String</span><span>], </span><span class="type-name">Age</span><span>] = {
+  </span><span class="keyword">if</span><span> (</span><span class="identifier">a</span><span> &gt; </span><span class="number-literal">18</span><span>) </span><span class="type-name">Right</span><span>(</span><span class="type-name">Age</span><span>(</span><span class="identifier">a</span><span>))
+  </span><span class="keyword">else</span><span> </span><span class="type-name">Left</span><span>(</span><span class="type-name">NonEmptyList</span><span>.</span><span class="identifier">one</span><span>(</span><span class="string-literal">s&quot;</span><span class="substitution">$a</span><span class="string-literal"> is not old enough&quot;</span><span>))
+}
 
-<p>Parallel is also really useful for <code class="language-plaintext highlighter-rouge">zipping</code> collections. The standard <code class="language-plaintext highlighter-rouge">Applicative</code> instance for <code class="language-plaintext highlighter-rouge">List</code>, <code class="language-plaintext highlighter-rouge">Vector</code>, etc.
-behaves like the cartesian product of the individual collections:</p>
+</span><span class="keyword">def</span><span> </span><span class="declaration-name">validateName</span><span>(</span><span class="identifier">n</span><span>: </span><span class="type-name">String</span><span>): </span><span class="type-name">Either</span><span>[</span><span class="type-name">NonEmptyList</span><span>[</span><span class="type-name">String</span><span>], </span><span class="type-name">Name</span><span>] = {
+  </span><span class="keyword">if</span><span> (</span><span class="identifier">n</span><span>.</span><span class="identifier">length</span><span> &gt;= </span><span class="number-literal">8</span><span>) </span><span class="type-name">Right</span><span>(</span><span class="type-name">Name</span><span>(</span><span class="identifier">n</span><span>))
+  </span><span class="keyword">else</span><span> </span><span class="type-name">Left</span><span>(</span><span class="type-name">NonEmptyList</span><span>.</span><span class="identifier">one</span><span>(</span><span class="string-literal">s&quot;</span><span class="substitution">$n</span><span class="string-literal"> Does not have enough characters&quot;</span><span>))
+}</span></code></pre>
+        <p>Now we want to parse two Strings into a value of <code>Person</code>:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">def</span><span> </span><span class="declaration-name">parsePerson</span><span>(</span><span class="identifier">ageString</span><span>: </span><span class="type-name">String</span><span>, </span><span class="identifier">nameString</span><span>: </span><span class="type-name">String</span><span>) =
+  </span><span class="keyword">for</span><span> {
+    </span><span class="identifier">age</span><span> &lt;- </span><span class="identifier">parse</span><span>(</span><span class="identifier">ageString</span><span>)
+    </span><span class="identifier">person</span><span> &lt;- (</span><span class="identifier">validateName</span><span>(</span><span class="identifier">nameString</span><span>).</span><span class="identifier">toValidated</span><span>, </span><span class="identifier">validateAge</span><span>(</span><span class="identifier">age</span><span>).</span><span class="identifier">toValidated</span><span>)
+       .</span><span class="identifier">mapN</span><span>(</span><span class="type-name">Person</span><span>)
+       .</span><span class="identifier">toEither</span><span>
+  } </span><span class="keyword">yield</span><span> </span><span class="identifier">person</span></code></pre>
+        <p>We had to convert to and from <code>Validated</code> manually.
+        While this is still manageble, it gets worse the more <code>Eithers</code> we want to combine in parallel.</p>
+        <p>To mitigate this pain, Cats introduces a type class <code>Parallel</code> that abstracts over <code>Monads</code> which also support parallel composition.
+        It is simply defined in terms of conversion functions between the two data types:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">trait</span><span> </span><span class="type-name">Parallel</span><span>[</span><span class="type-name">M</span><span>[</span><span class="identifier">_</span><span>]] {
+  </span><span class="keyword">type</span><span> </span><span class="type-name">F</span><span>[</span><span class="identifier">_</span><span>]
 
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">(</span><span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">),</span> <span class="nc">List</span><span class="o">(</span><span class="mi">4</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="mi">6</span><span class="o">)).</span><span class="py">mapN</span><span class="o">(</span><span class="k">_</span> <span class="o">+</span> <span class="k">_</span><span class="o">)</span>
-<span class="c1">// res1: List[Int] = List(5, 6, 7, 6, 7, 8, 7, 8, 9)</span>
-</code></pre></div></div>
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">sequential</span><span>: </span><span class="type-name">F</span><span> ~&gt; </span><span class="type-name">M</span><span>
 
-<p>However often we will want to <code class="language-plaintext highlighter-rouge">zip</code> two or more collections together.
-We can define a different <code class="language-plaintext highlighter-rouge">ap</code> for most of them and use the <code class="language-plaintext highlighter-rouge">parMapN</code> syntax for that:</p>
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">parallel</span><span>: </span><span class="type-name">M</span><span> ~&gt; </span><span class="type-name">F</span><span>
+}</span></code></pre>
+        <p>Where <code>M[_]</code> has to have an instance of <code>Monad</code> and <code>F[_]</code> an instance of <code>Applicative</code>.</p>
+        <p><img src="../img/parallel.png" alt="The `Parallel` typeclass transforms between `Monad` `M[_]` and `Applicative` `F[_]`."></p>
+        <p>Recall that <code>~&gt;</code> is just an alias for <a href="../datatypes/functionk.html"><code>FunctionK</code></a>.
+        This allows us to get rid of most of our boilerplate from earlier:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">def</span><span> </span><span class="declaration-name">parsePerson</span><span>(</span><span class="identifier">ageString</span><span>: </span><span class="type-name">String</span><span>, </span><span class="identifier">nameString</span><span>: </span><span class="type-name">String</span><span>) =
+  </span><span class="keyword">for</span><span> {
+    </span><span class="identifier">age</span><span> &lt;- </span><span class="identifier">parse</span><span>(</span><span class="identifier">ageString</span><span>)
+    </span><span class="identifier">person</span><span> &lt;- (</span><span class="identifier">validateName</span><span>(</span><span class="identifier">nameString</span><span>), </span><span class="identifier">validateAge</span><span>(</span><span class="identifier">age</span><span>)).</span><span class="identifier">parMapN</span><span>(</span><span class="type-name">Person</span><span>)
+  } </span><span class="keyword">yield</span><span> </span><span class="identifier">person</span></code></pre>
+        <p>We can also traverse over a <code>Traverse</code> using <code>Parallel</code>:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="type-name">List</span><span>(</span><span class="type-name">Either</span><span>.</span><span class="identifier">right</span><span>(</span><span class="number-literal">42</span><span>), </span><span class="type-name">Either</span><span>.</span><span class="identifier">left</span><span>(</span><span class="type-name">NonEmptyList</span><span>.</span><span class="identifier">one</span><span>(</span><span class="string-literal">&quot;Error 1&quot;</span><span>)), </span><span class="type-name">Either</span><span>.</span><span class="identifier">left</span><span>(</span><span class="type-name">NonEmptyList</span><span>.</span><span class="identifier">one</span><span>(</span><span class="string-literal">&quot;Error 2&quot;</span><span>))).</span><span class="identifier">parSequence</span><span>
+</span><span class="comment">// res0: Either[NonEmptyList[String], List[Int]] = Left(
+//   NonEmptyList(&quot;Error 1&quot;, List(&quot;Error 2&quot;))
+// )</span></code></pre>
+        <p>Parallel is also really useful for <code>zipping</code> collections. The standard <code>Applicative</code> instance for <code>List</code>, <code>Vector</code>, etc.
+        behaves like the cartesian product of the individual collections:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span>(</span><span class="type-name">List</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="number-literal">2</span><span>, </span><span class="number-literal">3</span><span>), </span><span class="type-name">List</span><span>(</span><span class="number-literal">4</span><span>, </span><span class="number-literal">5</span><span>, </span><span class="number-literal">6</span><span>)).</span><span class="identifier">mapN</span><span>(</span><span class="identifier">_</span><span> + </span><span class="identifier">_</span><span>)
+</span><span class="comment">// res1: List[Int] = List(5, 6, 7, 6, 7, 8, 7, 8, 9)</span></code></pre>
+        <p>However often we will want to <code>zip</code> two or more collections together.
+        We can define a different <code>ap</code> for most of them and use the <code>parMapN</code> syntax for that:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span>(</span><span class="type-name">List</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="number-literal">2</span><span>, </span><span class="number-literal">3</span><span>), </span><span class="type-name">List</span><span>(</span><span class="number-literal">4</span><span>, </span><span class="number-literal">5</span><span>, </span><span class="number-literal">6</span><span>)).</span><span class="identifier">parMapN</span><span>(</span><span class="identifier">_</span><span> + </span><span class="identifier">_</span><span>)
+</span><span class="comment">// res2: List[Int] = List(5, 7, 9)</span></code></pre>
+        
+        <h2 id="nonemptyparallel-a-weakened-parallel" class="section">NonEmptyParallel - a weakened Parallel<a class="anchor-link right" href="#nonemptyparallel-a-weakened-parallel"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>Some types cannot form a <code>Monad</code> or an <code>Applicative</code> because it&#39;s not possible to implement the <code>pure</code> function for them.
+        However, these types can often have instances for <code>FlatMap</code> or <code>Apply</code>.
+        For types like these we can use the <code>NonEmptyParallel</code> type class.
+        An example for one of these is <code>ZipList</code>.</p>
+        <p>With instances of <code>NonEmptyParallel</code> it&#39;s not possible to use the <code>parTraverse</code> and <code>parSequence</code> functions,
+        but we can still use <code>parMapN</code> and also <code>parNonEmptyTraverse</code> and <code>parNonEmptySequence</code>,
+        which are analogous to the functions defined on <a href="nonemptytraverse.html"><code>NonEmptyTraverse</code></a>.</p>
 
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">(</span><span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">),</span> <span class="nc">List</span><span class="o">(</span><span class="mi">4</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="mi">6</span><span class="o">)).</span><span class="py">parMapN</span><span class="o">(</span><span class="k">_</span> <span class="o">+</span> <span class="k">_</span><span class="o">)</span>
-<span class="c1">// res2: List[Int] = List(5, 7, 9)</span>
-</code></pre></div></div>
+        <hr style="margin-top: 30px"/>
+        <footer style="font-size: 90%; text-align: center">
+          cats is a <a href="https://typelevel.org/">Typelevel</a> project distributed under the <a href="https://opensource.org/licenses/MIT">MIT</a> license.
+        </footer>
 
-<h2 id="nonemptyparallel---a-weakened-parallel">NonEmptyParallel - a weakened Parallel</h2>
+      </main>
 
-<p>Some types cannot form a <code class="language-plaintext highlighter-rouge">Monad</code> or an <code class="language-plaintext highlighter-rouge">Applicative</code> because it’s not possible to implement the <code class="language-plaintext highlighter-rouge">pure</code> function for them.
-However, these types can often have instances for <code class="language-plaintext highlighter-rouge">FlatMap</code> or <code class="language-plaintext highlighter-rouge">Apply</code>.
-For types like these we can use the <code class="language-plaintext highlighter-rouge">NonEmptyParallel</code> type class.
-An example for one of these is <code class="language-plaintext highlighter-rouge">ZipList</code>.</p>
+    </div>
 
-<p>With instances of <code class="language-plaintext highlighter-rouge">NonEmptyParallel</code> it’s not possible to use the <code class="language-plaintext highlighter-rouge">parTraverse</code> and <code class="language-plaintext highlighter-rouge">parSequence</code> functions,
-but we can still use <code class="language-plaintext highlighter-rouge">parMapN</code> and also <code class="language-plaintext highlighter-rouge">parNonEmptyTraverse</code> and <code class="language-plaintext highlighter-rouge">parNonEmptySequence</code>,
-which are analogous to the functions defined on <a href="nonemptytraverse.html"><code class="language-plaintext highlighter-rouge">NonEmptyTraverse</code></a>.</p>
-</section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/cats/highlight/highlight.pack.js"></script><script src="/cats/lunr/lunr.js"></script><script>
-// For all code blocks, copy the language from the containing div
-// to the inner code tag (where hljs expects it to be)
-const langPrefix = 'language-';
-document.querySelectorAll(`div[class^='${langPrefix}']`).forEach(function(div) {
-  div.classList.forEach(function(cssClass) {
-    if (cssClass.startsWith(langPrefix)) {
-      const lang = cssClass.substring(langPrefix.length);
-      div.querySelectorAll('pre code').forEach(function(code) {
-        code.classList.add(lang);
-      });
-    }
-  });
-});
-
-hljs.configure({languages:['scala','java','bash']});
-hljs.initHighlightingOnLoad();
-      </script><script src="/cats/js/sponsors.js"></script><script>console.info('\x57\x65\x62\x73\x69\x74\x65\x20\x62\x75\x69\x6c\x74\x20\x77\x69\x74\x68\x3a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x5f\x5f\x20\x20\x20\x20\x5f\x5f\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x5f\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x5f\x20\x5f\x5f\x0a\x20\x20\x20\x5f\x5f\x5f\x5f\x5f\x2f\x20\x2f\x5f\x20\x20\x2f\x20\x2f\x5f\x20\x20\x20\x20\x20\x20\x5f\x5f\x5f\x5f\x20\x5f\x5f\x5f\x20\x20\x28\x5f\x29\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x20\x20\x5f\x5f\x5f\x5f\x5f\x28\x5f\x29\x20\x2f\x5f\x5f\x5f\x5f\x20\x20\x5f\x5f\x5f\x5f\x5f\x0a\x20\x20\x2f\x20\x5f\x5f\x5f\x2f\x20\x5f\x5f\x20\x5c\x2f\x20\x5f\x5f\x2f\x5f\x5f\x5f\x5f\x5f\x2f\x20\x5f\x5f\x20\x60\x5f\x5f\x20\x5c\x2f\x20\x2f\x20\x5f\x5f\x5f\x2f\x20\x5f\x5f\x5f\x2f\x20\x5f\x5f\x20\x5c\x2f\x20\x5f\x5f\x5f\x2f\x20\x2f\x20\x5f\x5f\x2f\x20\x5f\x20\x5c\x2f\x20\x5f\x5f\x5f\x2f\x0a\x20\x28\x5f\x5f\x20\x20\x29\x20\x2f\x5f\x2f\x20\x2f\x20\x2f\x5f\x2f\x5f\x5f\x5f\x5f\x5f\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x5f\x5f\x2f\x20\x2f\x20\x20\x2f\x20\x2f\x5f\x2f\x20\x28\x5f\x5f\x20\x20\x29\x20\x2f\x20\x2f\x5f\x2f\x20\x20\x5f\x5f\x28\x5f\x5f\x20\x20\x29\x0a\x2f\x5f\x5f\x5f\x5f\x2f\x5f\x2e\x5f\x5f\x5f\x2f\x5c\x5f\x5f\x2f\x20\x20\x20\x20\x20\x2f\x5f\x2f\x20\x2f\x5f\x2f\x20\x2f\x5f\x2f\x5f\x2f\x5c\x5f\x5f\x5f\x2f\x5f\x2f\x20\x20\x20\x5c\x5f\x5f\x5f\x5f\x2f\x5f\x5f\x5f\x5f\x2f\x5f\x2f\x5c\x5f\x5f\x2f\x5c\x5f\x5f\x5f\x2f\x5f\x5f\x5f\x5f\x2f\x0a\x0a\x68\x74\x74\x70\x73\x3a\x2f\x2f\x34\x37\x64\x65\x67\x2e\x67\x69\x74\x68\x75\x62\x2e\x69\x6f\x2f\x73\x62\x74\x2d\x6d\x69\x63\x72\x6f\x73\x69\x74\x65\x73')</script><script>((window.gitter = {}).chat = {}).options = {
-room: 'typelevel/cats'};</script><script src="https://sidecar.gitter.im/dist/sidecar.v1.js"></script><script src="/cats/js/search.js"></script><script src="/cats/js/main.js"></script></body></html>
+  </body>
+</html>

@@ -1,344 +1,572 @@
-<!DOCTYPE html><html><head><title>Cats: Home</title><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Cats contributors" /><meta name="description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="og:image" content="/cats/img/poster.png" /><meta name="image" property="og:image" content="/cats/img/poster.png" /><meta name="og:title" content="Cats: Home" /><meta name="title" property="og:title" content="Cats: Home" /><meta name="og:site_name" content="Cats" /><meta name="og:url" content="http://typelevel.org/cats/" /><meta name="og:type" content="website" /><meta name="og:description" content="Lightweight, modular, and extensible library for functional programming" /><link rel="icon" type="image/png" href="/cats/img/favicon.png" /><meta name="twitter:title" content="Cats: Home" /><meta name="twitter:image" content="/cats/img/poster.png" /><meta name="twitter:description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="twitter:card" content="summary_large_image" /><link rel="icon" type="image/png" sizes="16x16" href="/cats/img/favicon16x16.png" /><link rel="icon" type="image/png" sizes="24x24" href="/cats/img/favicon24x24.png" /><link rel="icon" type="image/png" sizes="32x32" href="/cats/img/favicon32x32.png" /><link rel="icon" type="image/png" sizes="48x48" href="/cats/img/favicon48x48.png" /><link rel="icon" type="image/png" sizes="57x57" href="/cats/img/favicon57x57.png" /><link rel="icon" type="image/png" sizes="60x60" href="/cats/img/favicon60x60.png" /><link rel="icon" type="image/png" sizes="64x64" href="/cats/img/favicon64x64.png" /><link rel="icon" type="image/png" sizes="70x70" href="/cats/img/favicon70x70.png" /><link rel="icon" type="image/png" sizes="72x72" href="/cats/img/favicon72x72.png" /><link rel="icon" type="image/png" sizes="76x76" href="/cats/img/favicon76x76.png" /><link rel="icon" type="image/png" sizes="96x96" href="/cats/img/favicon96x96.png" /><link rel="icon" type="image/png" sizes="114x114" href="/cats/img/favicon114x114.png" /><link rel="icon" type="image/png" sizes="120x120" href="/cats/img/favicon120x120.png" /><link rel="icon" type="image/png" sizes="128x128" href="/cats/img/favicon128x128.png" /><link rel="icon" type="image/png" sizes="144x144" href="/cats/img/favicon144x144.png" /><link rel="icon" type="image/png" sizes="150x150" href="/cats/img/favicon150x150.png" /><link rel="icon" type="image/png" sizes="152x152" href="/cats/img/favicon152x152.png" /><link rel="icon" type="image/png" sizes="196x196" href="/cats/img/favicon196x196.png" /><link rel="icon" type="image/png" sizes="310x310" href="/cats/img/favicon310x310.png" /><link rel="icon" type="image/png" sizes="310x150" href="/cats/img/favicon310x150.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" /><link rel="stylesheet" href="/cats/highlight/styles/atom-one-light.css" /><link rel="stylesheet" href="/cats/css/pattern-style.css" /></head><body><header id="site-header"><div class="navbar-wrapper"><div class="container"><div class="row"><div class="col-xs-3"><a href="/cats/" class="brand"><div class="icon-wrapper"><span>Cats</span></div></a></div><div class="col-xs-9"><nav class="text-right"><ul class=""><li class="search-nav hidden-xs"><div id="search-dropdown"><label><i class="fa fa-search"></i>Search</label><input id="search-bar" type="text" placeholder="Enter keywords here..." onclick="displayToggleSearch(event)" /><ul id="search-dropdown-content" class="dropdown dropdown-content"></ul></div></li><li><a class="transparent-on-hover" href="https://github.com/typelevel/cats" target="_blank" rel="noopener noreferrer"><i class="fa fa-github"></i><span class="hidden-sm hidden-xs">GitHub</span></a></li><li><a class="transparent-on-hover" href="/cats/api/cats/index.html"><i class="fa fa-file-text"></i><span class="hidden-sm hidden-xs">API Documentation</span></a></li></ul></nav></div></div></div></div><div class="jumbotron"><div class="container"><h1 class="text-center">Lightweight, modular, and extensible library for functional programming</h1><h2></h2><p class="text-center"><a href="https://github.com/typelevel/cats" target="_blank" rel="noopener noreferrer" class="btn btn-outline-inverse">View on GitHub</a></p></div></div><div id="horizontal-menu"><ul class="horizontal-nav"><li><a class=" active " href="/cats/">Home</a></li><li><a class="" href="/cats/typeclasses.html">Type Classes</a></li><li><a class="" href="/cats/datatypes.html">Data Types</a></li><li><a class="" href="/cats/motivations.html">Motivations</a></li><li><a class="" href="/cats/resources_for_learners.html">Resources for Learners</a></li><li><a class="" href="/cats/faq.html">FAQ</a></li><li><a class="" href="/cats/contributing.html">Contributing</a></li><li><a class="" href="/cats/colophon.html">Colophon</a></li><li><a class="" href="/cats/nomenclature.html">Glossary</a></li><li><a class="" href="/cats/guidelines.html">Guidelines</a></li><li><a class="" href="/cats/typelevelEcosystem.html">Typelevel Ecosystem</a></li></ul></div></header><main id="site-main"><section class="use"><div class="container"><div id="content"><h3 id="community-announcements">Community Announcements</h3>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Laika 0.18.1 + Helium Theme" />
+    <title>Cats</title>
+    
+      <meta name="author" content="Cody Allen"/>
+    
+      <meta name="author" content="Ross Baker"/>
+    
+      <meta name="author" content="P. Oscar Boykin"/>
+    
+      <meta name="author" content="Travis Brown"/>
+    
+      <meta name="author" content="Adelbert Chang"/>
+    
+      <meta name="author" content="Peter Neyens"/>
+    
+      <meta name="author" content="Rob Norris"/>
+    
+      <meta name="author" content="Erik Osheim"/>
+    
+      <meta name="author" content="LukaJCB"/>
+    
+      <meta name="author" content="Michael Pilquist"/>
+    
+      <meta name="author" content="Miles Sabin"/>
+    
+      <meta name="author" content="Daniel Spiewak"/>
+    
+      <meta name="author" content="Frank Thomas"/>
+    
+      <meta name="author" content="Julien Truffaut"/>
+    
+      <meta name="author" content="Kailuo Wang"/>
+    
+    
+      <meta name="description" content="docs"/>
+    
+    
+      <link rel="icon" sizes="32x32" type="image/png" href="https://typelevel.org/img/favicon.png"/>
+    
+    
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.207/distr/fira_code.css">
+    
+    <link rel="stylesheet" type="text/css" href="helium/icofont.min.css" />
+    <link rel="stylesheet" type="text/css" href="helium/laika-helium.css" />
+    <link rel="stylesheet" type="text/css" href="site/styles.css" />
+    <script src="helium/laika-helium.js"></script>
+    <script src="js/sponsors.js"></script>
+    
+    
+    <script> /* for avoiding page load transitions */ </script>
+  </head>
 
-<ul>
-  <li><strong>Oct 31 2020</strong> <a href="https://github.com/typelevel/cats/releases/tag/v2.3.0-M1">Cats 2.3.0-M1 is released</a> with Dotty supported</li>
-  <li><strong>Sept 3 2020</strong> <a href="https://github.com/typelevel/cats/releases/tag/v2.2.0">Cats 2.2.0 is released</a></li>
-  <li><strong>Dec 18 2019</strong> <a href="https://github.com/typelevel/cats/releases/tag/v2.1.0">Cats 2.1.0 is released</a></li>
-  <li><strong>Sep 9 2019</strong> <a href="https://github.com/typelevel/cats/releases/tag/v2.0.0">Cats 2.0.0 is released</a></li>
-  <li><strong>Jun 3 2019</strong> <a href="https://github.com/typelevel/cats/releases/tag/v1.6.1">Cats 1.6.1 is released</a> with backported bug fixes</li>
-  <li><strong>Apr 26 2019</strong> <a href="https://typelevel.org/blog/2019/04/24/typelevel-sustainability-program-announcement.html">We launched a sustainability program</a>. Please consider supporting us.</li>
-</ul>
+  <body>
 
-<h2 id="cats">Cats</h2>
+    <header id="top-bar">
 
-<p><img src="https://raw.githubusercontent.com/typelevel/cats/main/docs/src/main/resources/microsite/img/cats2.png" alt="Cats graphic" /></p>
+      <div class="row">
+        <a id="nav-icon">
+          <i class="icofont-laika" title="Navigation">&#xefa2;</i>
+        </a>
+        
+      </div>
 
-<p><a href="https://index.scala-lang.org/typelevel/cats/cats-core"><img src="https://index.scala-lang.org/typelevel/cats/cats-core/latest-by-scala-version.svg?targetType=Js" alt="cats-core Scala version support" /></a> <img src="https://github.com/typelevel/cats/workflows/Continuous%20Integration/badge.svg" alt="Continuous Integration" />
-<a href="https://opencollective.com/typelevel"><img src="https://opencollective.com/typelevel/all/badge.svg?label=financial+contributors" alt="Financial Contributors on Open Collective" /></a> <a href="https://gitter.im/typelevel/cats"><img src="https://badges.gitter.im/Join%20Chat.svg" alt="Chat" /></a>
-<a href="https://discord.gg/hWd4eS244g"><img src="https://img.shields.io/discord/632277896739946517.svg?label=&amp;logo=discord&amp;logoColor=ffffff&amp;color=404244&amp;labelColor=6A7EC2" alt="Discord" /></a></p>
+      <a class="image-link" href="https://typelevel.org"><img src="https://typelevel.org/img/logo.svg"></a>
 
-<h3 id="overview">Overview</h3>
+      <span class="row links"><a class="icon-link svg-link" href="https://typelevel.org/cats/api/"><span title="API"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M75,47.5c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm-50,-0c13.246,-0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,-0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm2.705,16.735l7.239,0l0.622,-4.904l-21.833,0l-0,4.904l7.589,0l0,22.067l6.383,0l-0,-22.067Zm58.076,7.265c-0,-8.757 -3.698,-14.166 -10.781,-14.166c-7.083,-0 -10.781,5.604 -10.781,14.166c0,8.757 3.698,14.166 10.781,14.166c7.083,0 10.781,-5.604 10.781,-14.166Zm-6.539,0c0,6.538 -1.128,9.496 -4.242,9.496c-2.997,0 -4.242,-2.88 -4.242,-9.496c-0,-6.616 1.206,-9.496 4.242,-9.496c3.036,-0 4.242,2.88 4.242,9.496Zm-29.242,-67c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm0.512,9.834c-7.122,-0 -12.609,5.098 -12.609,14.127c-0,9.263 5.215,14.205 12.532,14.205c4.164,0 7.083,-1.634 9.068,-3.658l-2.88,-3.697c-1.518,1.206 -3.153,2.413 -5.838,2.413c-3.697,-0 -6.266,-2.763 -6.266,-9.263c-0,-6.616 2.724,-9.379 6.149,-9.379c2.102,-0 3.892,0.778 5.371,1.984l3.113,-3.775c-2.257,-1.868 -4.748,-2.957 -8.64,-2.957Z"/>
+  </g>
+</svg></span></a><a class="icon-link svg-link" href="https://github.com/typelevel/cats"><span title="Source Code"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M49.995,1c-27.609,-0 -49.995,22.386 -49.995,50.002c-0,22.09 14.325,40.83 34.194,47.444c2.501,0.458 3.413,-1.086 3.413,-2.412c0,-1.185 -0.043,-4.331 -0.067,-8.503c-13.908,3.021 -16.843,-6.704 -16.843,-6.704c-2.274,-5.773 -5.552,-7.311 -5.552,-7.311c-4.54,-3.103 0.344,-3.042 0.344,-3.042c5.018,0.356 7.658,5.154 7.658,5.154c4.46,7.64 11.704,5.433 14.552,4.156c0.454,-3.232 1.744,-5.436 3.174,-6.685c-11.102,-1.262 -22.775,-5.553 -22.775,-24.713c-0,-5.457 1.949,-9.92 5.147,-13.416c-0.516,-1.265 -2.231,-6.348 0.488,-13.233c0,0 4.199,-1.344 13.751,5.126c3.988,-1.108 8.266,-1.663 12.518,-1.682c4.245,0.019 8.523,0.574 12.517,1.682c9.546,-6.47 13.736,-5.126 13.736,-5.126c2.728,6.885 1.013,11.968 0.497,13.233c3.204,3.496 5.141,7.959 5.141,13.416c0,19.209 -11.691,23.436 -22.83,24.673c1.795,1.544 3.394,4.595 3.394,9.26c0,6.682 -0.061,12.076 -0.061,13.715c0,1.338 0.899,2.894 3.438,2.406c19.853,-6.627 34.166,-25.354 34.166,-47.438c-0,-27.616 -22.389,-50.002 -50.005,-50.002"/>
+  </g>
+</svg></span></a><a class="icon-link" href="https://discord.gg/XF3CXcMzqD"><i class="icofont-laika" title="Chat">&#xeed5;</i></a><a class="icon-link" href="https://twitter.com/typelevel"><i class="icofont-laika" title="Twitter">&#xed7a;</i></a></span>
 
-<p>Cats is a library which provides abstractions for functional programming in the <a href="https://scala-lang.org">Scala programming language</a>.
-The name is a playful shortening of the word <em>category</em>.</p>
+    </header>
 
-<p>Scala supports both object-oriented and functional programming, and this is reflected in the hybrid approach of the
-standard library. Cats strives to provide functional programming abstractions that are core, <a href="http://typelevel.org/cats/#binary-compatibility-and-versioning">binary compatible</a>, <a href="http://typelevel.org/cats/motivations#modularity">modular</a>, <a href="http://typelevel.org/cats/motivations#approachability">approachable</a> and <a href="http://typelevel.org//cats/motivations#efficiency">efficient</a>. A broader goal of Cats is to provide a foundation for an <a href="https://typelevel.org/cats/#ecosystem">ecosystem of pure, typeful libraries</a> to support functional programming in Scala applications.</p>
+    <nav id="sidebar">
 
-<p>For more detail about Cats’ motivations, go <a href="http://typelevel.org/cats/motivations">here</a>.</p>
+      <div class="row">
+        <a class="icon-link svg-link" href="https://typelevel.org/cats/api/"><span title="API"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M75,47.5c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm-50,-0c13.246,-0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,-0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm2.705,16.735l7.239,0l0.622,-4.904l-21.833,0l-0,4.904l7.589,0l0,22.067l6.383,0l-0,-22.067Zm58.076,7.265c-0,-8.757 -3.698,-14.166 -10.781,-14.166c-7.083,-0 -10.781,5.604 -10.781,14.166c0,8.757 3.698,14.166 10.781,14.166c7.083,0 10.781,-5.604 10.781,-14.166Zm-6.539,0c0,6.538 -1.128,9.496 -4.242,9.496c-2.997,0 -4.242,-2.88 -4.242,-9.496c-0,-6.616 1.206,-9.496 4.242,-9.496c3.036,-0 4.242,2.88 4.242,9.496Zm-29.242,-67c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm0.512,9.834c-7.122,-0 -12.609,5.098 -12.609,14.127c-0,9.263 5.215,14.205 12.532,14.205c4.164,0 7.083,-1.634 9.068,-3.658l-2.88,-3.697c-1.518,1.206 -3.153,2.413 -5.838,2.413c-3.697,-0 -6.266,-2.763 -6.266,-9.263c-0,-6.616 2.724,-9.379 6.149,-9.379c2.102,-0 3.892,0.778 5.371,1.984l3.113,-3.775c-2.257,-1.868 -4.748,-2.957 -8.64,-2.957Z"/>
+  </g>
+</svg></span></a><a class="icon-link svg-link" href="https://github.com/typelevel/cats"><span title="Source Code"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M49.995,1c-27.609,-0 -49.995,22.386 -49.995,50.002c-0,22.09 14.325,40.83 34.194,47.444c2.501,0.458 3.413,-1.086 3.413,-2.412c0,-1.185 -0.043,-4.331 -0.067,-8.503c-13.908,3.021 -16.843,-6.704 -16.843,-6.704c-2.274,-5.773 -5.552,-7.311 -5.552,-7.311c-4.54,-3.103 0.344,-3.042 0.344,-3.042c5.018,0.356 7.658,5.154 7.658,5.154c4.46,7.64 11.704,5.433 14.552,4.156c0.454,-3.232 1.744,-5.436 3.174,-6.685c-11.102,-1.262 -22.775,-5.553 -22.775,-24.713c-0,-5.457 1.949,-9.92 5.147,-13.416c-0.516,-1.265 -2.231,-6.348 0.488,-13.233c0,0 4.199,-1.344 13.751,5.126c3.988,-1.108 8.266,-1.663 12.518,-1.682c4.245,0.019 8.523,0.574 12.517,1.682c9.546,-6.47 13.736,-5.126 13.736,-5.126c2.728,6.885 1.013,11.968 0.497,13.233c3.204,3.496 5.141,7.959 5.141,13.416c0,19.209 -11.691,23.436 -22.83,24.673c1.795,1.544 3.394,4.595 3.394,9.26c0,6.682 -0.061,12.076 -0.061,13.715c0,1.338 0.899,2.894 3.438,2.406c19.853,-6.627 34.166,-25.354 34.166,-47.438c-0,-27.616 -22.389,-50.002 -50.005,-50.002"/>
+  </g>
+</svg></span></a><a class="icon-link" href="https://discord.gg/XF3CXcMzqD"><i class="icofont-laika" title="Chat">&#xeed5;</i></a><a class="icon-link" href="https://twitter.com/typelevel"><i class="icofont-laika" title="Twitter">&#xed7a;</i></a>
+      </div>
 
-<h2 id="contributors">Contributors</h2>
+      <ul class="nav-list">
+        <li class="level1 active"><a href="#">Cats</a></li>
+        <li class="level1"><a href="typeclasses.html">Type Classes</a></li>
+        <li class="level1"><a href="datatypes.html">Data Types</a></li>
+        <li class="level1"><a href="algebra.html">Algebra</a></li>
+        <li class="level1"><a href="motivations.html">Motivations</a></li>
+        <li class="level1"><a href="resources_for_learners.html">Resources for Learners</a></li>
+        <li class="level1"><a href="jump_start_guide.html">Jump Start Guide</a></li>
+        <li class="level1"><a href="imports.html">Imports</a></li>
+        <li class="level1"><a href="faq.html">FAQ</a></li>
+        <li class="level1"><a href="CONTRIBUTING.html">Contributor guide</a></li>
+        <li class="level1"><a href="colophon.html">Colophon</a></li>
+        <li class="level1"><a href="nomenclature.html">Glossary</a></li>
+        <li class="level1"><a href="guidelines.html">Guidelines</a></li>
+        <li class="level1"><a href="typelevelEcosystem.html">Typelevel Ecosystem</a></li>
+        <li class="level1 nav-header">Type Classes</li>
+        <li class="level2"><a href="typeclasses/alternative.html">Alternative</a></li>
+        <li class="level2"><a href="typeclasses/applicative.html">Applicative</a></li>
+        <li class="level2"><a href="typeclasses/applicativemonaderror.html">ApplicativeError and MonadError</a></li>
+        <li class="level2"><a href="typeclasses/applicativetraverse.html">Applicative and Traversable Functors</a></li>
+        <li class="level2"><a href="typeclasses/arrow.html">Arrow</a></li>
+        <li class="level2"><a href="typeclasses/arrowchoice.html">Arrow Choice</a></li>
+        <li class="level2"><a href="typeclasses/bifunctor.html">Bifunctor</a></li>
+        <li class="level2"><a href="typeclasses/bimonad.html">Bimonad</a></li>
+        <li class="level2"><a href="typeclasses/comonad.html">Comonad</a></li>
+        <li class="level2"><a href="typeclasses/contravariant.html">Contravariant</a></li>
+        <li class="level2"><a href="typeclasses/contravariantmonoidal.html">Contravariant Monoidal</a></li>
+        <li class="level2"><a href="typeclasses/eq.html">Eq</a></li>
+        <li class="level2"><a href="typeclasses/foldable.html">Foldable</a></li>
+        <li class="level2"><a href="typeclasses/functor.html">Functor</a></li>
+        <li class="level2"><a href="typeclasses/invariant.html">Invariant</a></li>
+        <li class="level2"><a href="typeclasses/invariantmonoidal.html">Invariant Monoidal</a></li>
+        <li class="level2"><a href="typeclasses/lawtesting.html">Law testing</a></li>
+        <li class="level2"><a href="typeclasses/monad.html">Monad</a></li>
+        <li class="level2"><a href="typeclasses/monoid.html">Monoid</a></li>
+        <li class="level2"><a href="typeclasses/monoidk.html">MonoidK</a></li>
+        <li class="level2"><a href="typeclasses/nonemptytraverse.html">NonEmptyTraverse</a></li>
+        <li class="level2"><a href="typeclasses/parallel.html">Parallel</a></li>
+        <li class="level2"><a href="typeclasses/reducible.html">Reducible</a></li>
+        <li class="level2"><a href="typeclasses/semigroup.html">Semigroup</a></li>
+        <li class="level2"><a href="typeclasses/semigroupk.html">SemigroupK</a></li>
+        <li class="level2"><a href="typeclasses/show.html">Show</a></li>
+        <li class="level2"><a href="typeclasses/traverse.html">Traverse</a></li>
+        <li class="level1 nav-header">Data Types</li>
+        <li class="level2"><a href="datatypes/chain.html">Chain</a></li>
+        <li class="level2"><a href="datatypes/const.html">Const</a></li>
+        <li class="level2"><a href="datatypes/contt.html">ContT</a></li>
+        <li class="level2"><a href="datatypes/either.html">Either</a></li>
+        <li class="level2"><a href="datatypes/eithert.html">EitherT</a></li>
+        <li class="level2"><a href="datatypes/eval.html">Eval</a></li>
+        <li class="level2"><a href="datatypes/freeapplicative.html">Free Applicative</a></li>
+        <li class="level2"><a href="datatypes/freemonad.html">Free Monad</a></li>
+        <li class="level2"><a href="datatypes/functionk.html">FunctionK</a></li>
+        <li class="level2"><a href="datatypes/id.html">Id</a></li>
+        <li class="level2"><a href="datatypes/ior.html">Ior</a></li>
+        <li class="level2"><a href="datatypes/iort.html">IorT</a></li>
+        <li class="level2"><a href="datatypes/kleisli.html">Kleisli</a></li>
+        <li class="level2"><a href="datatypes/nel.html">NonEmptyList</a></li>
+        <li class="level2"><a href="datatypes/nested.html">Nested</a></li>
+        <li class="level2"><a href="datatypes/oneand.html">OneAnd</a></li>
+        <li class="level2"><a href="datatypes/optiont.html">OptionT</a></li>
+        <li class="level2"><a href="datatypes/state.html">State</a></li>
+        <li class="level2"><a href="datatypes/validated.html">Validated</a></li>
+        <li class="level2"><a href="datatypes/writer.html">Writer</a></li>
+        <li class="level2"><a href="datatypes/writert.html">WriterT</a></li>
+      </ul>
 
-<h3 id="code-contributors">Code Contributors</h3>
+      <ul class="nav-list">
+        <li class="level1 nav-header">Related Projects</li>
+        
+          <li class="level2"><a href="https://typelevel.org/cats-effect/">cats-effect</a></li>
+        
+          <li class="level2"><a href="https://typelevel.org/mouse">Mouse</a></li>
+        
+          <li class="level2"><a href="https://github.com/typelevel/discipline/">discipline</a></li>
+        
+      </ul>
 
-<p>This project exists thanks to <a href="https://github.com/typelevel/cats/graphs/contributors">all the people who contribute</a>. We welcome contributions to Cats and would love for you to help build
-Cats. See our <a href="https://typelevel.org/cats/contributing.html">contributor guide</a> for more
-information about how you can get involved as a developer. If you are looking for something to start with, <a href="https://github.com/typelevel/cats/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22">here is a beginner friendly list</a>.</p>
+    </nav>
 
-<h3 id="financial-contributors">Financial Contributors</h3>
+    <div id="container">
 
-<p><a href="https://opencollective.com/typelevel">Become a financial contributor</a> and help us sustain our community. Donations directly support office hours for maintainers, better documentation and strategic initiatives.</p>
+      <nav id="page-nav">
+        <p class="header"><a href="#">Cats</a></p>
 
-<h4>Platinum Sponsors</h4>
-<p><a href="https://opencollective.com/typelevel/contribute/platinum-sposor-12420/checkout">Platinum sponsorship</a> starts at $950 USD/month.</p>
-<div id="platinum-sponsors">
-  <noscript>Platinum Sponsors appear here at <a href="https://typelevel.org/cats/">https://typelevel.org/cats</a></noscript>
-</div>
+        <ul class="nav-list">
+          <li class="level1"><a href="#overview">Overview</a></li>
+          <li class="level1"><a href="#why-cats">Why &quot;cats&quot;?</a></li>
+          <li class="level1"><a href="#contributors">Contributors</a></li>
+          <li class="level2"><a href="#code-contributors">Code Contributors</a></li>
+          <li class="level2"><a href="#financial-contributors">Financial Contributors</a></li>
+          <li class="level2"><a href="#getting-started">Getting Started</a></li>
+          <li class="level2"><a href="#documentation">Documentation</a></li>
+          <li class="level2"><a href="#community">Community</a></li>
+          <li class="level2"><a href="#binary-compatibility-and-versioning">Binary compatibility and versioning</a></li>
+          <li class="level2"><a href="#adopters">Adopters</a></li>
+          <li class="level2"><a href="#maintainers">Maintainers</a></li>
+          <li class="level2"><a href="#copyright-and-license">Copyright and License</a></li>
+        </ul>
 
-<h4>Gold Sponsors</h4>
-<p><a href="https://opencollective.com/typelevel/contribute/gold-sponsor-12419/checkout">Gold Sponsorship</a> starts at $420 USD/month.</p>
-<div id="gold-sponsors">
-  <noscript>Gold Sponsors appear here at <a href="https://typelevel.org/cats/">https://typelevel.org/cats</a></noscript>
-</div>
+        <p class="footer"></p>
+      </nav>
 
-<h4>Silver Sponsors</h4>
-<p><a href="https://opencollective.com/typelevel/contribute/silver-sponsor-11780/checkout">Silver Sponsorship</a> starts at $180 USD/month.</p>
-<div id="silver-sponsors">
-  <noscript>Silver Sponsors appear here at <a href="https://typelevel.org/cats/">https://typelevel.org/cats</a></noscript>
-</div>
+      <main class="content">
 
-<h4>Backers</h4>
-<p>Become a <a href="https://opencollective.com/typelevel/contribute/backer-11779/checkout">Backer</a> with a recurring donation of just $5 USD/month.</p>
-<div id="backers">
-  <noscript>Backers appear here at <a href="https://typelevel.org/cats/">https://typelevel.org/cats</a></noscript>
-</div>
+        <h1 id="cats" class="title">Cats</h1>
+        <p><img src="https://raw.githubusercontent.com/typelevel/cats/main/docs/src/main/resources/microsite/img/cats2.png" alt="Cats graphic"></p>
+        <p><a href="https://index.scala-lang.org/typelevel/cats/cats-core"><img src="https://index.scala-lang.org/typelevel/cats/cats-core/latest-by-scala-version.svg?targetType=Js" alt="cats-core Scala version support"></a> <img src="https://github.com/typelevel/cats/workflows/Continuous%20Integration/badge.svg" alt="Continuous Integration">
+        <a href="https://opencollective.com/typelevel"><img src="https://opencollective.com/typelevel/all/badge.svg?label=financial+contributors" alt="Financial Contributors on Open Collective"></a>
+        <a href="https://discord.gg/XF3CXcMzqD"><img src="https://img.shields.io/discord/632277896739946517.svg?label=&logo=discord&logoColor=ffffff&color=404244&labelColor=6A7EC2" alt="Discord"></a></p>
+        
+        <h3 id="overview" class="section">Overview<a class="anchor-link right" href="#overview"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <p>Cats is a library which provides abstractions for functional programming in the <a href="https://scala-lang.org">Scala programming language</a>.</p>
+        <p>Scala supports both object-oriented and functional programming, and this is reflected in the hybrid approach of the
+        standard library. Cats strives to provide functional programming abstractions that are core, <a href="#binary-compatibility-and-versioning">binary compatible</a>, <a href="https://typelevel.org/cats/motivations.html#modularity">modular</a>, <a href="https://typelevel.org/cats/motivations.html#approachability">approachable</a> and <a href="https://typelevel.org/cats/motivations.html#efficiency">efficient</a>. A broader goal of Cats is to provide a foundation for an <a href="https://typelevel.org/cats/typelevelEcosystem.html">ecosystem of pure, typeful libraries</a> to support functional programming in Scala applications.</p>
+        <p>For more detail about Cats&#39; motivations, go <a href="https://typelevel.org/cats/motivations.html">here</a>.</p>
+        
+        <h3 id="why-cats" class="section">Why &quot;cats&quot;?<a class="anchor-link right" href="#why-cats"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <p>The name is a playful shortening of the word <em>category</em>, from &quot;<a href="https://en.wikipedia.org/wiki/Category_theory">category theory</a>&quot;.</p>
+        <p>Regardless, you do not need to know anything about category theory to use Cats.</p>
+        
+        <h2 id="contributors" class="section">Contributors<a class="anchor-link right" href="#contributors"><i class="icofont-laika">&#xef71;</i></a></h2>
+        
+        <h3 id="code-contributors" class="section">Code Contributors<a class="anchor-link right" href="#code-contributors"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <p>This project exists thanks to <a href="https://github.com/typelevel/cats/graphs/contributors">all the people who contribute</a>. We welcome contributions to Cats and would love for you to help build
+        Cats. See our <a href="CONTRIBUTING.html">contributor guide</a> for more
+        information about how you can get involved as a developer. If you are looking for something to start with, <a href="https://github.com/typelevel/cats/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22">here is a beginner friendly list</a>.</p>
+        
+        <h3 id="financial-contributors" class="section">Financial Contributors<a class="anchor-link right" href="#financial-contributors"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <p><a href="https://opencollective.com/typelevel">Become a financial contributor</a> and help us sustain our community. Donations directly support office hours for maintainers, better documentation and strategic initiatives.</p>
+        <h4>Platinum Sponsors</h4>
+        <p><a href="https://opencollective.com/typelevel/contribute/platinum-sposor-12420/checkout">Platinum sponsorship</a> starts at $950 USD/month.
+        <div id="platinum-sponsors">
+          <noscript>Platinum Sponsors appear here at <a href="">https://typelevel.org/cats</a></noscript>
+        </div></p>
+        <h4>Gold Sponsors</h4>
+        <p><a href="https://opencollective.com/typelevel/contribute/gold-sponsor-12419/checkout">Gold Sponsorship</a> starts at $420 USD/month.
+        <div id="gold-sponsors">
+          <noscript>Gold Sponsors appear here at <a href="">https://typelevel.org/cats</a></noscript>
+        </div></p>
+        <h4>Silver Sponsors</h4>
+        <p><a href="https://opencollective.com/typelevel/contribute/silver-sponsor-11780/checkout">Silver Sponsorship</a> starts at $180 USD/month.
+        <div id="silver-sponsors">
+          <noscript>Silver Sponsors appear here at <a href="">https://typelevel.org/cats</a></noscript>
+        </div></p>
+        <h4>Backers</h4>
+        <p>Become a <a href="https://opencollective.com/typelevel/contribute/backer-11779/checkout">Backer</a> with a recurring donation of just $5 USD/month.
+        <div id="backers">
+          <noscript>Backers appear here at <a href="">https://typelevel.org/cats</a></noscript>
+        </div></p>
+        <h4>Other contributors</h4>
+        <p>We thankfully accept <a href="https://opencollective.com/typelevel/donate">one-time and recurring</a> contributions as well.
+        <div id="other-contributors">
+          <noscript>Other contributors appear here at <a href="">https://typelevel.org/cats</a></noscript>
+        </div></p>
+        <p><script src="/cats/js/sponsors.js"></script></p>
+        
+        <h3 id="getting-started" class="section">Getting Started<a class="anchor-link right" href="#getting-started"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <p>Cats is available for <a href="http://www.scala-js.org/">Scala.js</a> and <a href="https://www.scala-native.org/">Scala Native</a>, as well as the standard JVM runtime.</p>
+        <p>Cats relies on improved type inference via the fix for <a href="https://github.com/scala/bug/issues/2712">SI-2712</a>, which is not enabled by default. For <strong>Scala 2.11.9+ or 2.12</strong> you should add the following to your <code>build.sbt</code>:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">scalacOptions</span><span> += </span><span class="string-literal">&quot;-Ypartial-unification&quot;</span></code></pre>
+        <p>(Partial unification is on by default since Scala 2.13, the compiler no longer accepts <code>-Ypartial-unification</code>)</p>
+        <p><strong>Or</strong>, if you need to support older versions of Scala you can use the <a href="https://github.com/fiadliel/sbt-partial-unification#sbt-partial-unification">sbt-partial-unification</a> plugin which extends support back through <strong>Scala 2.10.6 or later</strong>, to add it, simply add this line to your <code>plugins.sbt</code>:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">addSbtPlugin</span><span>(</span><span class="string-literal">&quot;org.lyranthe.sbt&quot;</span><span> % </span><span class="string-literal">&quot;partial-unification&quot;</span><span> % </span><span class="string-literal">&quot;1.1.2&quot;</span><span>)</span></code></pre>
+        <p>And then create the Cats dependency, by adding the following to your <code>build.sbt</code>:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">libraryDependencies</span><span> += </span><span class="string-literal">&quot;org.typelevel&quot;</span><span> %% </span><span class="string-literal">&quot;cats-core&quot;</span><span> % </span><span class="string-literal">&quot;2.3.0&quot;</span></code></pre>
+        <p>This will pull in the cats-core module. If you require some other
+        functionality, you can pick-and-choose from amongst these modules
+        (used in place of <code>&quot;cats-core&quot;</code>):</p>
+        <ul>
+          <li><code>cats-kernel</code>: Small set of basic type classes (<em>required</em>).</li>
+        </ul>
+        <ul>
+          <li><code>cats-core</code>: Most core type classes and functionality (<em>required</em>).</li>
+        </ul>
+        <ul>
+          <li><code>cats-laws</code>: Laws for testing type class instances.</li>
+        </ul>
+        <ul>
+          <li><code>cats-free</code>: Free structures such as the free monad, and supporting type classes.</li>
+        </ul>
+        <ul>
+          <li><code>cats-testkit</code>: lib for writing tests for type class instances using laws.</li>
+        </ul>
+        <ul>
+          <li><code>algebra</code>: Type classes to represent algebraic structures.</li>
+        </ul>
+        <ul>
+          <li>
+            <p><code>alleycats-core</code>: Cats instances and classes which are not lawful.</p>
+            <p>There are several other Cats modules that are in separate repos so that they can
+            maintain independent release cycles.</p>
+          </li>
+        </ul>
+        <ul>
+          <li><a href="https://github.com/typelevel/cats-effect"><code>cats-effect</code></a>: standard <code>IO</code> type together with <code>Sync</code>, <code>Async</code> and <code>Effect</code> type classes</li>
+        </ul>
+        <ul>
+          <li><a href="https://github.com/typelevel/cats-mtl"><code>cats-mtl</code></a>: transformer typeclasses for Cats&#39; Monads, Applicatives and Functors.</li>
+        </ul>
+        <ul>
+          <li><a href="https://github.com/typelevel/mouse"><code>mouse</code></a>: a small companion to Cats that provides convenient syntax (aka extension methods)</li>
+        </ul>
+        <ul>
+          <li><a href="https://github.com/typelevel/kittens"><code>kittens</code></a>: automatic type class instance derivation for Cats and generic utility functions</li>
+        </ul>
+        <ul>
+          <li><a href="https://github.com/typelevel/cats-tagless"><code>cats-tagless</code></a>: Utilities for tagless final encoded algebras</li>
+        </ul>
+        <ul>
+          <li><a href="https://github.com/typelevel/cats-collections"><code>cats-collections</code></a>: Data structures which facilitate pure functional programming</li>
+        </ul>
+        <ul>
+          <li><a href="https://github.com/typelevel/cats-testkit-scalatest"><code>cats-testkit-scalatest</code></a>: Cats testkit integration with Scalatest</li>
+        </ul>
+        <p>Past release notes for Cats are available in <a href="https://github.com/typelevel/cats/blob/main/CHANGES.md">CHANGES.md</a>.</p>
+        
+        <h3 id="documentation" class="section">Documentation<a class="anchor-link right" href="#documentation"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <p>Links:</p>
+        <ol class="arabic">
+          <li>Website: <a href="https://typelevel.org/cats/">typelevel.org/cats/</a></li>
+          <li>ScalaDoc: <a href="https://typelevel.org/cats/api/">typelevel.org/cats/api/</a></li>
+          <li>Type classes: <a href="https://typelevel.org/cats/typeclasses.md">typelevel.org/cats/typeclasses</a></li>
+          <li>Data types: <a href="https://typelevel.org/cats/datatypes.md">typelevel.org/cats/datatypes.html</a></li>
+          <li>Algebra overview: <a href="https://typelevel.org/cats/algebra.md">typelevel.org/cats/algebra.html</a></li>
+          <li>Glossary: <a href="https://typelevel.org/cats/nomenclature.md">typelevel.org/cats/nomenclature.html</a></li>
+          <li>Resources for Learners: <a href="https://typelevel.org/cats/resources_for_learners.md">typelevel.org/cats/resources<em>for</em>learners.html</a></li>
+          <li>FAQ: <a href="https://typelevel.org/cats/faq.md">typelevel.org/cats/faq.html</a></li>
+          <li>The Typelevel Ecosystem: <a href="https://typelevel.org/cats/typelevelEcosystem.md">typelevel.org/cats/typelevelEcosystem.html</a></li>
+        </ol>
+        
+        <h3 id="community" class="section">Community<a class="anchor-link right" href="#community"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <p>Discussion around Cats is currently happening on GitHub issues, PR pages,
+        and Discord:</p>
+        <p>The <a href="https://discord.gg/XF3CXcMzqD">Typelevel Discord</a> has #cats and #cats-dev
+        channels, as well as community channels such as #beginners.  Please join us!</p>
+        <p>People are expected to follow the
+        <a href="https://www.scala-lang.org/conduct/">Scala Code of Conduct</a> when
+        discussing Cats on GitHub, Discord, or other venues.</p>
+        <p>We hope that our community will be respectful, helpful, and kind. If
+        you find yourself embroiled in a situation that becomes heated, or
+        that fails to live up to our expectations, you should disengage and
+        contact one of the <a href="#maintainers">project maintainers</a> in private. We
+        hope to avoid letting minor aggressions and misunderstandings escalate
+        into larger problems.</p>
+        <p>If you are being harassed, please contact one of <a href="#maintainers">us</a>
+        immediately so that we can support you.</p>
+        
+        <h3 id="binary-compatibility-and-versioning" class="section">Binary compatibility and versioning<a class="anchor-link right" href="#binary-compatibility-and-versioning"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <p>After <code>1.0.0</code> release, we <a href="https://github.com/typelevel/cats/issues/1233">decided</a>
+        to use <em>MAJOR.MINOR.PATCH</em> <a href="http://semver.org/">Semantic Versioning 2.0.0</a>
+        going forward, which is different from the <em>EPOCH.MAJOR.MINOR</em> scheme common among
+        Java and Scala libraries (including the Scala lang).</p>
+        <p>Cats strives to provide a solid and stable foundation for an ecosystem of
+        FP libraries. Thus, we treat backward binary compatibility maintenance with a high priority.
+        In semantic versioning, backward breaking change is <strong>ONLY</strong> allowed between <em>MAJOR</em> versions.
+        We will maintain backward binary compatibility between <em>PATCH</em> AND <em>MINOR</em> versions.
+        For example, when we release Cats <code>1.1.0</code>, it will be backward binary compatible
+        with the previous <code>1.0.x</code> versions. I.E. the new JAR will be a drop-in replacement for
+        the old one. This is critical when your application has a diamond
+        dependency on Cats - depending on two or more libraries that all depend on Cats.
+        If one library upgrades to the new <code>1.1.0</code> Cats before the other one does, your
+        application still runs thanks to this backward binary compatibility.</p>
+        <p>Also worth noting is that according to semantic versioning,
+        <em>MINOR</em> version Y (x.Y.z | x &gt; 0) MUST be incremented
+        if new, backwards compatible functionality is introduced to the public API.
+        It MUST be incremented if any public API functionality is marked as deprecated.</p>
+        <p>Any binary breaking changes will require a <em>MAJOR</em> version bump, which we will be very
+        cautious about. We will also consider using <code>organization</code> and package name for major
+        versioning in the future. But that decision is yet to be made.</p>
+        
+        <h3 id="adopters" class="section">Adopters<a class="anchor-link right" href="#adopters"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <p>Here&#39;s a (non-exhaustive) list of companies that use Cats in production. Don&#39;t see yours? <a href="https://github.com/typelevel/cats/edit/main/README.md">You can add it in a PR!</a> And if you can, consider <a href="https://opencollective.com/typelevel">supporting us</a>.</p>
+        <ul>
+          <li><a href="https://www.47deg.com">47 Degrees</a></li>
+          <li><a href="https://abacusprotocol.com">Abacus Protocol</a></li>
+          <li><a href="https://experienceleague.adobe.com/docs/analytics-platform/using/cja-connections/cca/overview.html?lang=en">Adobe (CCA team)</a></li>
+          <li><a href="https://anduintransact.com">Anduin Transactions</a></li>
+          <li><a href="https://news.ycombinator.com/item?id=16969118">Apple Inc. (FEAR team)</a></li>
+          <li><a href="https://www.autoscout24.com">AutoScout24</a></li>
+          <li><a href="https://avantstay.com/">AvantStay</a></li>
+          <li><a href="https://avast.com">Avast</a></li>
+          <li><a href="https://www.azavea.com/">Azavea</a></li>
+          <li><a href="https://www.babylonhealth.com/">BabylonHealth</a></li>
+          <li><a href="https://banno.com/">Banno Group inside of Jack Henry &amp; Associates</a></li>
+          <li><a href="https://basefarm.com/">Basefarm</a></li>
+          <li><a href="https://buildo.io">buildo</a></li>
+          <li><a href="https://getbux.com/">BUX</a></li>
+          <li><a href="https://www.chartboost.com/">Chartboost</a></li>
+          <li><a href="https://clearscore.com/">ClearScore</a></li>
+          <li><a href="https://cleverbase.com/en/">Cleverbase</a></li>
+          <li><a href="https://www.codacy.com/">Codacy</a></li>
+          <li><a href="https://codedx.com/">Code Dx</a></li>
+          <li><a href="https://codecentric.de">Codecentric</a></li>
+          <li><a href="https://www.colisweb.com/">Colisweb</a></li>
+          <li><a href="https://compstak.com">CompStak</a></li>
+          <li><a href="https://coya.com/">Coya</a></li>
+          <li><a href="https://datumbrain.com/">Datum Brain</a></li>
+          <li><a href="https://disney.com/">Disney</a></li>
+          <li><a href="https://zd.drip.im">Dripower LTD</a></li>
+          <li><a href="https://drivetribe.com/">DriveTribe</a></li>
+          <li><a href="https://dwolla.com/">Dwolla</a></li>
+          <li><a href="http://enear.co">e.near</a></li>
+          <li><a href="https://eon.com">E.ON</a></li>
+          <li><a href="https://www.earnest.com">Earnest</a></li>
+          <li><a href="https://www.ebay.com">eBay Inc.</a></li>
+          <li><a href="https://eloquentix.com">Eloquentix</a></li>
+          <li><a href="https://www.esailors.de">eSailors</a></li>
+          <li><a href="https://www.evolutiongaming.com/">Evolution Gaming</a></li>
+          <li><a href="https://market.evotor.ru/">Evotor Marketplace</a></li>
+          <li><a href="https://exelonix.com/">Exelonix</a></li>
+          <li><a href="https://formation.ai">formation.ai</a></li>
+          <li><a href="https://free2move.com">Free2Move</a></li>
+          <li><a href="https://www.gemini.edu">Gemini Observatory</a></li>
+          <li><a href="https://hellosoda.com">HelloSoda</a></li>
+          <li><a href="https://hi.fi">HiFi</a></li>
+          <li><a href="https://www.homeaway.com">HomeAway</a></li>
+          <li><a href="https://hootsuite.com/">Hootsuite Inc.</a></li>
+          <li><a href="https://iheart.com">iHeartRadio</a></li>
+          <li><a href="https://www.immobilienscout24.de/">ImmobilienScout24</a></li>
+          <li><a href="https://www.immozentral.com/">Immozentral</a></li>
+          <li><a href="https://www.ing.com">ING Bank</a></li>
+          <li><a href="https://inner-product.com">Inner Product</a></li>
+          <li><a href="https://www.innfactory.de/">innFactory GmbH</a></li>
+          <li><a href="https://www.intenthq.com/">Intent HQ</a></li>
+          <li><a href="https://www.iofod.com/">iofod</a></li>
+          <li><a href="https://www.iteratorshq.com/">Iterators</a></li>
+          <li><a href="https://www.itv.com/">ITV</a></li>
+          <li><a href="https://www.kaluza.com">Kaluza</a></li>
+          <li><a href="https://lego.com">Lego</a></li>
+          <li><a href="https://lightform.com/">Lightform</a></li>
+          <li><a href="https://www.lookout.com">Lookout</a></li>
+          <li><a href="https://www.medidata.com/">Medidata</a></li>
+          <li><a href="https://merits.com">Merit</a></li>
+          <li><a href="https://www.metacommerce.ru">Metacommerce</a></li>
+          <li><a href="https://www.myob.com">MYOB</a></li>
+          <li><a href="https://ncredinburgh.com/">NCR Edinburgh</a></li>
+          <li><a href="https://jobs.netflix.com">Netflix</a></li>
+          <li><a href="https://www.networkedassets.com/">NetworkedAssets</a></li>
+          <li><a href="https://www.nezasa.com">Nezasa</a></li>
+          <li><a href="https://ocadotechnology.com">Ocado Technology</a></li>
+          <li><a href="https://ovoenergy.com">OVO Energy</a></li>
+          <li><a href="https://packlink.com/">Packlink</a></li>
+          <li><a href="https://permutive.com/">Permutive</a></li>
+          <li><a href="https://precog.com">Precog</a></li>
+          <li><a href="https://www.raiffeisen.ru/">Raiffeisenbank Russia</a></li>
+          <li><a href="https://www.rakuten.com">Rakuten</a></li>
+          <li><a href="https://www.rbccm.com">RBC Capital Markets</a></li>
+          <li><a href="https://www.realestate.com.au/">REA Group</a></li>
+          <li><a href="https://wearerealitygames.com">Reality Games</a></li>
+          <li><a href="https://revonte.com">Revonte</a></li>
+          <li><a href="https://rewardsnetwork.com">Rewards Network</a></li>
+          <li><a href="https://www.rms.com/">RMS</a></li>
+          <li><a href="https://rudder.io">Rudder</a></li>
+          <li><a href="https://scala.epfl.ch">Scala Center</a></li>
+          <li><a href="https://scalac.io">Scalac</a></li>
+          <li><a href="https://securityscorecard.io/">SecurityScorecard</a></li>
+          <li><a href="https://www.seek.com.au/">SEEK Limited</a></li>
+          <li><a href="https://snowplowanalytics.com/">Snowplow Analytics</a></li>
+          <li><a href="https://softwaremill.com">SoftwareMill</a></li>
+          <li><a href="https://www.spiceworks.com/">Spiceworks</a></li>
+          <li><a href="https://spotahome.com">Spotahome</a></li>
+          <li><a href="https://www.spotify.com">Spotify</a></li>
+          <li><a href="https://www.spotx.tv/">SpotX</a></li>
+          <li><a href="https://www.springernature.com">SpringerNature</a></li>
+          <li><a href="https://www.srf.ch">SRF</a></li>
+          <li><a href="https://www.sc.com">Standard Chartered</a></li>
+          <li><a href="https://stripe.com">Stripe</a></li>
+          <li><a href="https://www.philips.com/">SWCoE at Philips</a></li>
+          <li><a href="https://swop.cx/">SWOP</a></li>
+          <li><a href="https://www.tapad.com/">Tapad</a></li>
+          <li><a href="https://www.tecsisa.com">Tecsisa</a></li>
+          <li><a href="http://teikametrics.com">Teikametrics</a></li>
+          <li><a href="https://www.tenable.com">Tenable</a></li>
+          <li><a href="https://www.theguardian.com">The Guardian</a></li>
+          <li><a href="https://tinkoff.ru">Tinkoff</a></li>
+          <li><a href="https://tranzzo.com">Tranzzo</a></li>
+          <li><a href="https://underscore.io/">Underscore Consulting</a></li>
+          <li><a href="https://vidiq.com/">vidIQ</a></li>
+          <li><a href="https://wavesplatform.com/">Waves Platform</a></li>
+          <li><a href="https://www.wegtam.com">Wegtam GmbH</a></li>
+          <li><a href="https://www.wejo.com/">Wejo</a></li>
+          <li><a href="https://www.wework.com">WeWork</a></li>
+          <li><a href="https://www.wix.com">Wix.com</a></li>
+          <li><a href="https://wolt.com/">Wolt</a></li>
+          <li><a href="https://xite.com/">XITE</a></li>
+          <li><a href="https://zalando.com">Zalando</a></li>
+          <li><a href="https://www.zendesk.com">Zendesk</a></li>
+        </ul>
+        
+        <h3 id="maintainers" class="section">Maintainers<a class="anchor-link right" href="#maintainers"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <p>The current maintainers (people who can merge pull requests) are:</p>
+        <ul>
+          <li><a href="https://github.com/rossabaker">rossabaker</a> Ross Baker</li>
+        </ul>
+        <ul>
+          <li><a href="https://github.com/armanbilge">armanbilge</a> Arman Bilge</li>
+        </ul>
+        <ul>
+          <li><a href="https://github.com/johnynek">johnynek</a> P. Oscar Boykin</li>
+        </ul>
+        <ul>
+          <li><a href="https://github.com/adelbertc">adelbertc</a> Adelbert Chang</li>
+        </ul>
+        <ul>
+          <li><a href="https://github.com/danicheg">danicheg</a> Daniel Esik</li>
+        </ul>
+        <ul>
+          <li><a href="https://github.com/LukaJCB">LukaJCB</a> Luka Jacobowitz</li>
+        </ul>
+        <ul>
+          <li><a href="https://github.com/peterneyens">peterneyens</a> Peter Neyens</li>
+        </ul>
+        <ul>
+          <li><a href="https://github.com/tpolecat">tpolecat</a> Rob Norris</li>
+        </ul>
+        <ul>
+          <li><a href="https://github.com/non">non</a> Erik Osheim</li>
+        </ul>
+        <ul>
+          <li><a href="https://github.com/barambani">barambani</a> Filippo Mariotti</li>
+        </ul>
+        <ul>
+          <li><a href="https://github.com/mpilquist">mpilquist</a> Michael Pilquist</li>
+        </ul>
+        <ul>
+          <li><a href="https://github.com/milessabin">milessabin</a> Miles Sabin</li>
+        </ul>
+        <ul>
+          <li><a href="https://github.com/djspiewak">djspiewak</a> Daniel Spiewak</li>
+        </ul>
+        <ul>
+          <li><a href="https://github.com/fthomas">fthomas</a> Frank Thomas</li>
+        </ul>
+        <ul>
+          <li><a href="https://github.com/satorg">satorg</a> Sergey Torgashov</li>
+        </ul>
+        <ul>
+          <li><a href="https://github.com/julien-truffaut">julien-truffaut</a> Julien Truffaut</li>
+        </ul>
+        <ul>
+          <li><a href="https://github.com/kailuowang">kailuowang</a> Kailuo Wang</li>
+        </ul>
+        <p>Retired committers include:</p>
+        <ul>
+          <li><a href="https://github.com/ceedubs">ceedubs</a> Cody Allen</li>
+        </ul>
+        <ul>
+          <li><a href="https://github.com/travisbrown">travisbrown</a> Travis Brown</li>
+        </ul>
+        <p>We are currently following a practice of requiring at least two
+        sign-offs to merge code PRs (and for large or contentious issues we may
+        wait for more). For typos, documentation improvements or minor build fix we
+        relax this to a single sign-off. More detail in the <a href="https://github.com/typelevel/cats/blob/main/PROCESS.md">process document</a>.</p>
+        
+        <h3 id="copyright-and-license" class="section">Copyright and License<a class="anchor-link right" href="#copyright-and-license"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <p>All code is available to you under the MIT license, available at
+        <a href="http://opensource.org/licenses/mit-license.php">http://opensource.org/licenses/mit-license.php</a> and also in the
+        <a href="https://github.com/typelevel/cats/blob/main/COPYING">COPYING</a> file. The design is informed by many other
+        projects, in particular <a href="https://github.com/scalaz/scalaz">Scalaz</a>.</p>
+        <p>Copyright the maintainers, 2015-2022.</p>
 
-<h4>Other contributors</h4>
-<p>We thankfully accept <a href="https://opencollective.com/typelevel/donate">one-time and recurring</a> contributions as well.</p>
-<div id="other-contributors">
-  <noscript>Other contributors appear here at <a href="https://typelevel.org/cats/">https://typelevel.org/cats</a></noscript>
-</div>
+        <hr style="margin-top: 30px"/>
+        <footer style="font-size: 90%; text-align: center">
+          cats is a <a href="https://typelevel.org/">Typelevel</a> project distributed under the <a href="https://opensource.org/licenses/MIT">MIT</a> license.
+        </footer>
 
-<script src="/cats/js/sponsors.js"></script>
+      </main>
 
-<h3 id="getting-started">Getting Started</h3>
+    </div>
 
-<p>Cats is available for <a href="http://www.scala-js.org/">Scala.js</a> and <a href="https://www.scala-native.org/">Scala Native</a>, as well as the standard JVM runtime.</p>
-
-<p>Cats relies on improved type inference via the fix for <a href="https://github.com/scala/bug/issues/2712">SI-2712</a>, which is not enabled by default. For <strong>Scala 2.11.9+ or 2.12</strong> you should add the following to your <code class="language-plaintext highlighter-rouge">build.sbt</code>:</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">scalacOptions</span> <span class="o">+=</span> <span class="s">"-Ypartial-unification"</span>
-</code></pre></div></div>
-
-<p>(Partial unification is on by default since Scala 2.13, the compiler no longer accepts <code class="language-plaintext highlighter-rouge">-Ypartial-unification</code>)</p>
-
-<p><strong>Or</strong>, if you need to support older versions of Scala you can use the <a href="https://github.com/fiadliel/sbt-partial-unification#sbt-partial-unification">sbt-partial-unification</a> plugin which extends support back through <strong>Scala 2.10.6 or later</strong>, to add it, simply add this line to your <code class="language-plaintext highlighter-rouge">plugins.sbt</code>:</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">addSbtPlugin</span><span class="o">(</span><span class="s">"org.lyranthe.sbt"</span> <span class="o">%</span> <span class="s">"partial-unification"</span> <span class="o">%</span> <span class="s">"1.1.2"</span><span class="o">)</span>
-</code></pre></div></div>
-
-<p>And then create the Cats dependency, by adding the following to your <code class="language-plaintext highlighter-rouge">build.sbt</code>:</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">libraryDependencies</span> <span class="o">+=</span> <span class="s">"org.typelevel"</span> <span class="o">%%</span> <span class="s">"cats-core"</span> <span class="o">%</span> <span class="s">"2.3.0"</span>
-</code></pre></div></div>
-
-<p>This will pull in the cats-core module. If you require some other
-functionality, you can pick-and-choose from amongst these modules
-(used in place of <code class="language-plaintext highlighter-rouge">"cats-core"</code>):</p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">cats-kernel</code>: Small set of basic type classes (<em>required</em>).</li>
-  <li><code class="language-plaintext highlighter-rouge">cats-core</code>: Most core type classes and functionality (<em>required</em>).</li>
-  <li><code class="language-plaintext highlighter-rouge">cats-laws</code>: Laws for testing type class instances.</li>
-  <li><code class="language-plaintext highlighter-rouge">cats-free</code>: Free structures such as the free monad, and supporting type classes.</li>
-  <li><code class="language-plaintext highlighter-rouge">cats-testkit</code>: lib for writing tests for type class instances using laws.</li>
-  <li><code class="language-plaintext highlighter-rouge">algebra</code>: Type classes to represent algebraic structures.</li>
-  <li><code class="language-plaintext highlighter-rouge">alleycats-core</code>: Cats instances and classes which are not lawful.</li>
-</ul>
-
-<p>There are several other Cats modules that are in separate repos so that they can 
- maintain independent release cycles.</p>
-
-<ul>
-  <li><a href="https://github.com/typelevel/cats-effect"><code class="language-plaintext highlighter-rouge">cats-effect</code></a>: standard <code class="language-plaintext highlighter-rouge">IO</code> type together with <code class="language-plaintext highlighter-rouge">Sync</code>, <code class="language-plaintext highlighter-rouge">Async</code> and <code class="language-plaintext highlighter-rouge">Effect</code> type classes</li>
-  <li><a href="https://github.com/typelevel/cats-mtl"><code class="language-plaintext highlighter-rouge">cats-mtl</code></a>: transformer typeclasses for Cats’ Monads, Applicatives and Functors.</li>
-  <li><a href="https://github.com/typelevel/mouse"><code class="language-plaintext highlighter-rouge">mouse</code></a>: a small companion to Cats that provides convenient syntax (aka extension methods)</li>
-  <li><a href="https://github.com/typelevel/kittens"><code class="language-plaintext highlighter-rouge">kittens</code></a>: automatic type class instance derivation for Cats and generic utility functions</li>
-  <li><a href="https://github.com/typelevel/cats-tagless"><code class="language-plaintext highlighter-rouge">cats-tagless</code></a>: Utilities for tagless final encoded algebras</li>
-  <li><a href="https://github.com/typelevel/cats-collections"><code class="language-plaintext highlighter-rouge">cats-collections</code></a>: Data structures which facilitate pure functional programming</li>
-  <li><a href="https://github.com/typelevel/cats-testkit-scalatest"><code class="language-plaintext highlighter-rouge">cats-testkit-scalatest</code></a>: Cats testkit integration with Scalatest</li>
-</ul>
-
-<p>Past release notes for Cats are available in <a href="https://github.com/typelevel/cats/blob/main/CHANGES.md">CHANGES.md</a>.</p>
-
-<h3 id="documentation">Documentation</h3>
-
-<p>Links:</p>
-
-<ol>
-  <li>Website: <a href="https://typelevel.org/cats/">typelevel.org/cats/</a></li>
-  <li>ScalaDoc: <a href="https://typelevel.org/cats/api/">typelevel.org/cats/api/</a></li>
-  <li>Type classes: <a href="https://typelevel.org/cats/typeclasses.html">typelevel.org/cats/typeclasses</a></li>
-  <li>Data types: <a href="https://typelevel.org/cats/datatypes.html">typelevel.org/cats/datatypes.html</a></li>
-  <li>Algebra overview: <a href="https://typelevel.org/cats/algebra.html">typelevel.org/cats/algebra.html</a></li>
-  <li>Glossary: <a href="https://typelevel.org/cats/nomenclature.html">typelevel.org/cats/nomenclature.html</a></li>
-  <li>Resources for Learners: <a href="https://typelevel.org/cats/resources_for_learners.html">typelevel.org/cats/resources_for_learners.html</a></li>
-  <li>FAQ: <a href="https://typelevel.org/cats/faq.html">typelevel.org/cats/faq.html</a></li>
-  <li>The Typelevel Ecosystem: <a href="https://typelevel.org/cats/typelevelEcosystem.html">typelevel.org/cats/typelevelEcosystem.html</a></li>
-</ol>
-
-<h3 id="community">Community</h3>
-
-<p>Discussion around Cats is currently happening on Github issues, PR pages, 
-two Gitter channels, and we’re also trying out Discord:</p>
-
-<p><a href="https://discord.gg/XF3CXcMzqD">Typelevel Discord</a> has access to all of the 
-Typelevel library channels as well as community channels.  Please join us!</p>
-
-<p><a href="https://gitter.im/typelevel/cats">Gitter channel cats</a> is for general user 
-questions and discussions, and</p>
-
-<p><a href="https://gitter.im/typelevel/cats-dev">Gitter channel cats-dev</a>
-is dedicated for Cats development related discussions. For people who wants to 
-follow closely and/or to participate in the decisions in Cats development, 
-this is the room to join.</p>
-
-<p>People are expected to follow the
-<a href="https://www.scala-lang.org/conduct/">Scala Code of Conduct</a> when
-discussing Cats on the Github page, Gitter channel, or other
-venues.</p>
-
-<p>We hope that our community will be respectful, helpful, and kind. If
-you find yourself embroiled in a situation that becomes heated, or
-that fails to live up to our expectations, you should disengage and
-contact one of the <a href="#maintainers">project maintainers</a> in private. We
-hope to avoid letting minor aggressions and misunderstandings escalate
-into larger problems.</p>
-
-<p>If you are being harassed, please contact one of <a href="#maintainers">us</a>
-immediately so that we can support you.</p>
-
-<h3 id="binary-compatibility-and-versioning">Binary compatibility and versioning</h3>
-
-<p>After <code class="language-plaintext highlighter-rouge">1.0.0</code> release, we <a href="https://github.com/typelevel/cats/issues/1233">decided</a> 
-to use <em>MAJOR.MINOR.PATCH</em> <a href="http://semver.org/">Semantic Versioning 2.0.0</a>
-going forward, which is different from the <em>EPOCH.MAJOR.MINOR</em> scheme common among 
-Java and Scala libraries (including the Scala lang).</p>
-
-<p>Cats strives to provide a solid and stable foundation for an ecosystem of
-FP libraries. Thus, we treat backward binary compatibility maintenance with a high priority. 
-In semantic versioning, backward breaking change is <strong>ONLY</strong> allowed between <em>MAJOR</em> versions.
-We will maintain backward binary compatibility between <em>PATCH</em> AND <em>MINOR</em> versions.
-For example, when we release Cats <code class="language-plaintext highlighter-rouge">1.1.0</code>, it will be backward binary compatible 
-with the previous <code class="language-plaintext highlighter-rouge">1.0.x</code> versions. I.E. the new JAR will be a drop-in replacement for 
-the old one. This is critical when your application has a diamond
-dependency on Cats - depending on two or more libraries that all depend on Cats. 
-If one library upgrades to the new <code class="language-plaintext highlighter-rouge">1.1.0</code> Cats before the other one does, your 
-application still runs thanks to this backward binary compatibility.</p>
-
-<p>Also worth noting is that according to semantic versioning, 
-<em>MINOR</em> version Y (x.Y.z | x &gt; 0) MUST be incremented 
-if new, backwards compatible functionality is introduced to the public API. 
-It MUST be incremented if any public API functionality is marked as deprecated.</p>
-
-<p>Any binary breaking changes will require a <em>MAJOR</em> version bump, which we will be very
-cautious about. We will also consider using <code class="language-plaintext highlighter-rouge">organization</code> and package name for major 
-versioning in the future. But that decision is yet to be made.</p>
-
-<h3 id="adopters">Adopters</h3>
-
-<p>Here’s a (non-exhaustive) list of companies that use Cats in production. Don’t see yours? <a href="https://github.com/typelevel/cats/edit/main/README.md">You can add it in a PR!</a> And if you can, consider <a href="https://donorbox.org/typelevel-sustainability-program-2019?default_interval=m">supporting us</a>.</p>
-
-<ul>
-  <li><a href="https://abacusprotocol.com">Abacus Protocol</a></li>
-  <li><a href="https://anduintransact.com">Anduin Transactions</a></li>
-  <li><a href="https://news.ycombinator.com/item?id=16969118">Apple Inc. (FEAR team)</a></li>
-  <li><a href="https://www.autoscout24.com">AutoScout24</a></li>
-  <li><a href="https://avantstay.com/">AvantStay</a></li>
-  <li><a href="https://avast.com">Avast</a></li>
-  <li><a href="https://www.babylonhealth.com/">BabylonHealth</a></li>
-  <li><a href="https://banno.com/">Banno Group inside of Jack Henry &amp; Associates</a></li>
-  <li><a href="https://basefarm.com/">Basefarm</a></li>
-  <li><a href="https://buildo.io">buildo</a></li>
-  <li><a href="https://www.chartboost.com/">Chartboost</a></li>
-  <li><a href="https://cleverbase.com/en/">Cleverbase</a></li>
-  <li><a href="https://www.codacy.com/">Codacy</a></li>
-  <li><a href="https://codecentric.de">Codecentric</a></li>
-  <li><a href="https://www.colisweb.com/">Colisweb</a></li>
-  <li><a href="https://coya.com/">Coya</a></li>
-  <li><a href="https://datumbrain.com/">Datum Brain</a></li>
-  <li><a href="https://drivetribe.com/">DriveTribe</a></li>
-  <li><a href="https://dwolla.com/">Dwolla</a></li>
-  <li><a href="https://www.earnest.com">Earnest</a></li>
-  <li><a href="https://www.ebay.com">eBay Inc.</a></li>
-  <li><a href="https://eloquentix.com">Eloquentix</a></li>
-  <li><a href="https://www.esailors.de">eSailors</a></li>
-  <li><a href="https://www.evolutiongaming.com/">Evolution Gaming</a></li>
-  <li><a href="https://market.evotor.ru/">Evotor Marketplace</a></li>
-  <li><a href="http://enear.co">e.near</a></li>
-  <li><a href="https://eon.com">E.ON</a></li>
-  <li><a href="https://formation.ai">formation.ai</a></li>
-  <li><a href="https://free2move.com">Free2Move</a></li>
-  <li><a href="https://hellosoda.com">HelloSoda</a></li>
-  <li><a href="https://hi.fi">HiFi</a></li>
-  <li><a href="https://www.homeaway.com">HomeAway</a></li>
-  <li><a href="https://hootsuite.com/">Hootsuite Inc.</a></li>
-  <li><a href="https://iheart.com">iHeartRadio</a></li>
-  <li><a href="https://www.immobilienscout24.de/">ImmobilienScout24</a></li>
-  <li><a href="https://www.immozentral.com/">Immozentral</a></li>
-  <li><a href="https://www.innfactory.de/">innFactory GmbH</a></li>
-  <li><a href="https://www.iteratorshq.com/">Iterators</a></li>
-  <li><a href="https://www.itv.com/">ITV</a></li>
-  <li><a href="https://lightform.com/">Lightform</a></li>
-  <li><a href="https://www.lookout.com">Lookout</a></li>
-  <li><a href="https://merits.com">Merit</a></li>
-  <li><a href="https://www.metacommerce.ru">Metacommerce</a></li>
-  <li><a href="https://www.myob.com">MYOB</a></li>
-  <li><a href="https://jobs.netflix.com">Netflix</a></li>
-  <li><a href="https://www.nezasa.com">Nezasa</a></li>
-  <li><a href="https://ncredinburgh.com/">NCR Edinburgh</a></li>
-  <li><a href="https://ocadotechnology.com">Ocado Technology</a></li>
-  <li><a href="https://packlink.com/">Packlink</a></li>
-  <li><a href="https://permutive.com/">Permutive</a></li>
-  <li><a href="https://www.raiffeisen.ru/">Raiffeisenbank Russia</a></li>
-  <li><a href="https://www.rakuten.com">Rakuten</a></li>
-  <li><a href="https://www.realestate.com.au/">REA Group</a></li>
-  <li><a href="https://wearerealitygames.com">Reality Games</a></li>
-  <li><a href="https://rewardsnetwork.com">Rewards Network</a></li>
-  <li><a href="https://www.rbccm.com">RBC Capital Markets</a></li>
-  <li><a href="https://rudder.io">Rudder</a></li>
-  <li><a href="https://scalac.io">Scalac</a></li>
-  <li><a href="https://scala.epfl.ch">Scala Center</a></li>
-  <li><a href="https://securityscorecard.io/">SecurityScorecard</a></li>
-  <li><a href="https://snowplowanalytics.com/">Snowplow Analytics</a></li>
-  <li><a href="https://www.spiceworks.com/">Spiceworks</a></li>
-  <li><a href="https://spotahome.com">Spotahome</a></li>
-  <li><a href="https://www.spotify.com">Spotify</a></li>
-  <li><a href="https://www.springernature.com">SpringerNature</a></li>
-  <li><a href="https://www.srf.ch">SRF</a></li>
-  <li><a href="https://stripe.com">Stripe</a></li>
-  <li><a href="https://www.tecsisa.com">Tecsisa</a></li>
-  <li><a href="http://teikametrics.com">Teikametrics</a></li>
-  <li><a href="https://tinkoff.ru">Tinkoff</a></li>
-  <li><a href="https://tranzzo.com">Tranzzo</a></li>
-  <li><a href="https://www.theguardian.com">The Guardian</a></li>
-  <li><a href="https://underscore.io/">Underscore Consulting</a></li>
-  <li><a href="https://wavesplatform.com/">Waves Platform</a></li>
-  <li><a href="https://www.wegtam.com">Wegtam GmbH</a></li>
-  <li><a href="https://www.wejo.com/">Wejo</a></li>
-  <li><a href="https://www.wework.com">WeWork</a></li>
-  <li><a href="https://www.wix.com">Wix.com</a></li>
-  <li><a href="https://wolt.com/">Wolt</a></li>
-  <li><a href="https://zalando.com">Zalando</a></li>
-  <li><a href="https://www.47deg.com">47 Degrees</a></li>
-</ul>
-
-<h3 id="maintainers">Maintainers</h3>
-
-<p>The current maintainers (people who can merge pull requests) are:</p>
-
-<ul>
-  <li><a href="https://github.com/ceedubs">ceedubs</a> Cody Allen</li>
-  <li><a href="https://github.com/rossabaker">rossabaker</a> Ross Baker</li>
-  <li><a href="https://github.com/johnynek">johnynek</a> P. Oscar Boykin</li>
-  <li><a href="https://github.com/travisbrown">travisbrown</a> Travis Brown</li>
-  <li><a href="https://github.com/adelbertc">adelbertc</a> Adelbert Chang</li>
-  <li><a href="https://github.com/LukaJCB">LukaJCB</a> Luka Jacobowitz</li>
-  <li><a href="https://github.com/peterneyens">peterneyens</a> Peter Neyens</li>
-  <li><a href="https://github.com/tpolecat">tpolecat</a> Rob Norris</li>
-  <li><a href="https://github.com/non">non</a> Erik Osheim</li>
-  <li><a href="https://github.com/barambani">barambani</a> Filippo Mariotti</li>
-  <li><a href="https://github.com/mpilquist">mpilquist</a> Michael Pilquist</li>
-  <li><a href="https://github.com/milessabin">milessabin</a> Miles Sabin</li>
-  <li><a href="https://github.com/djspiewak">djspiewak</a> Daniel Spiewak</li>
-  <li><a href="https://github.com/fthomas">fthomas</a> Frank Thomas</li>
-  <li><a href="https://github.com/julien-truffaut">julien-truffaut</a> Julien Truffaut</li>
-  <li><a href="https://github.com/kailuowang">kailuowang</a> Kailuo Wang</li>
-</ul>
-
-<p>We are currently following a practice of requiring at least two
-sign-offs to merge code PRs (and for large or contentious issues we may
-wait for more). For typos, documentation improvements or minor build fix we
-relax this to a single sign-off. More detail in the <a href="https://github.com/typelevel/cats/blob/main/PROCESS.md">process document</a>.</p>
-
-<h3 id="copyright-and-license">Copyright and License</h3>
-
-<p>All code is available to you under the MIT license, available at
-http://opensource.org/licenses/mit-license.php and also in the
-<a href="COPYING">COPYING</a> file. The design is informed by many other
-projects, in particular <a href="https://github.com/scalaz/scalaz">Scalaz</a>.</p>
-
-<p>Copyright the maintainers, 2015-2021.</p>
-
-</div></div></section><section class="technologies"><div class="container"><div class="row"></div></div></section></main><footer id="site-footer"><div class="container"><div class="row"><div class="col-xs-6"><p>Cats is designed and developed by <a href="https://github.com/typelevel/cats" target="_blank" rel="noopener noreferrer">Cats contributors</a></p></div><div class="col-xs-6"><p class="text-right"><a href="https://github.com/typelevel/cats" target="_blank" rel="noopener noreferrer"><span class="fa fa-github"></span>View on GitHub</a></p></div></div><div class="row"><div class="col-xs-6">
-<p>© 2020 <a href="https://github.com/typelevel/cats#maintainers">The Cats Maintainers</a></p>
-<p style="font-size: 80%; margin-top: 10px">Website built with <a href="https://47deg.github.io/sbt-microsites/">sbt-microsites © 2020 47 Degrees</a></p>
-</div></div></div></footer><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/cats/highlight/highlight.pack.js"></script><script src="/cats/lunr/lunr.js"></script><script>
-// For all code blocks, copy the language from the containing div
-// to the inner code tag (where hljs expects it to be)
-const langPrefix = 'language-';
-document.querySelectorAll(`div[class^='${langPrefix}']`).forEach(function(div) {
-  div.classList.forEach(function(cssClass) {
-    if (cssClass.startsWith(langPrefix)) {
-      const lang = cssClass.substring(langPrefix.length);
-      div.querySelectorAll('pre code').forEach(function(code) {
-        code.classList.add(lang);
-      });
-    }
-  });
-});
-
-hljs.configure({languages:['scala','java','bash']});
-hljs.initHighlightingOnLoad();
-      </script><script src="/cats/js/sponsors.js"></script><script>console.info('\x57\x65\x62\x73\x69\x74\x65\x20\x62\x75\x69\x6c\x74\x20\x77\x69\x74\x68\x3a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x5f\x5f\x20\x20\x20\x20\x5f\x5f\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x5f\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x5f\x20\x5f\x5f\x0a\x20\x20\x20\x5f\x5f\x5f\x5f\x5f\x2f\x20\x2f\x5f\x20\x20\x2f\x20\x2f\x5f\x20\x20\x20\x20\x20\x20\x5f\x5f\x5f\x5f\x20\x5f\x5f\x5f\x20\x20\x28\x5f\x29\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x20\x20\x5f\x5f\x5f\x5f\x5f\x28\x5f\x29\x20\x2f\x5f\x5f\x5f\x5f\x20\x20\x5f\x5f\x5f\x5f\x5f\x0a\x20\x20\x2f\x20\x5f\x5f\x5f\x2f\x20\x5f\x5f\x20\x5c\x2f\x20\x5f\x5f\x2f\x5f\x5f\x5f\x5f\x5f\x2f\x20\x5f\x5f\x20\x60\x5f\x5f\x20\x5c\x2f\x20\x2f\x20\x5f\x5f\x5f\x2f\x20\x5f\x5f\x5f\x2f\x20\x5f\x5f\x20\x5c\x2f\x20\x5f\x5f\x5f\x2f\x20\x2f\x20\x5f\x5f\x2f\x20\x5f\x20\x5c\x2f\x20\x5f\x5f\x5f\x2f\x0a\x20\x28\x5f\x5f\x20\x20\x29\x20\x2f\x5f\x2f\x20\x2f\x20\x2f\x5f\x2f\x5f\x5f\x5f\x5f\x5f\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x5f\x5f\x2f\x20\x2f\x20\x20\x2f\x20\x2f\x5f\x2f\x20\x28\x5f\x5f\x20\x20\x29\x20\x2f\x20\x2f\x5f\x2f\x20\x20\x5f\x5f\x28\x5f\x5f\x20\x20\x29\x0a\x2f\x5f\x5f\x5f\x5f\x2f\x5f\x2e\x5f\x5f\x5f\x2f\x5c\x5f\x5f\x2f\x20\x20\x20\x20\x20\x2f\x5f\x2f\x20\x2f\x5f\x2f\x20\x2f\x5f\x2f\x5f\x2f\x5c\x5f\x5f\x5f\x2f\x5f\x2f\x20\x20\x20\x5c\x5f\x5f\x5f\x5f\x2f\x5f\x5f\x5f\x5f\x2f\x5f\x2f\x5c\x5f\x5f\x2f\x5c\x5f\x5f\x5f\x2f\x5f\x5f\x5f\x5f\x2f\x0a\x0a\x68\x74\x74\x70\x73\x3a\x2f\x2f\x34\x37\x64\x65\x67\x2e\x67\x69\x74\x68\x75\x62\x2e\x69\x6f\x2f\x73\x62\x74\x2d\x6d\x69\x63\x72\x6f\x73\x69\x74\x65\x73')</script><script>((window.gitter = {}).chat = {}).options = {
-room: 'typelevel/cats'};</script><script src="https://sidecar.gitter.im/dist/sidecar.v1.js"></script><script src="/cats/js/version-selector.js"></script><script src="/cats/js/search.js"></script></body></html>
+  </body>
+</html>

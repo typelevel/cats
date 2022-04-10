@@ -1,454 +1,587 @@
-<!DOCTYPE html><html><head><title>Cats: FAQ</title><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Cats contributors" /><meta name="description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="og:image" content="/cats/img/poster.png" /><meta name="image" property="og:image" content="/cats/img/poster.png" /><meta name="og:title" content="Cats: FAQ" /><meta name="title" property="og:title" content="Cats: FAQ" /><meta name="og:site_name" content="Cats" /><meta name="og:url" content="http://typelevel.org/cats/" /><meta name="og:type" content="website" /><meta name="og:description" content="Lightweight, modular, and extensible library for functional programming" /><link rel="icon" type="image/png" href="/cats/img/favicon.png" /><meta name="twitter:title" content="Cats: FAQ" /><meta name="twitter:image" content="/cats/img/poster.png" /><meta name="twitter:description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="twitter:card" content="summary_large_image" /><link rel="icon" type="image/png" sizes="16x16" href="/cats/img/favicon16x16.png" /><link rel="icon" type="image/png" sizes="24x24" href="/cats/img/favicon24x24.png" /><link rel="icon" type="image/png" sizes="32x32" href="/cats/img/favicon32x32.png" /><link rel="icon" type="image/png" sizes="48x48" href="/cats/img/favicon48x48.png" /><link rel="icon" type="image/png" sizes="57x57" href="/cats/img/favicon57x57.png" /><link rel="icon" type="image/png" sizes="60x60" href="/cats/img/favicon60x60.png" /><link rel="icon" type="image/png" sizes="64x64" href="/cats/img/favicon64x64.png" /><link rel="icon" type="image/png" sizes="70x70" href="/cats/img/favicon70x70.png" /><link rel="icon" type="image/png" sizes="72x72" href="/cats/img/favicon72x72.png" /><link rel="icon" type="image/png" sizes="76x76" href="/cats/img/favicon76x76.png" /><link rel="icon" type="image/png" sizes="96x96" href="/cats/img/favicon96x96.png" /><link rel="icon" type="image/png" sizes="114x114" href="/cats/img/favicon114x114.png" /><link rel="icon" type="image/png" sizes="120x120" href="/cats/img/favicon120x120.png" /><link rel="icon" type="image/png" sizes="128x128" href="/cats/img/favicon128x128.png" /><link rel="icon" type="image/png" sizes="144x144" href="/cats/img/favicon144x144.png" /><link rel="icon" type="image/png" sizes="150x150" href="/cats/img/favicon150x150.png" /><link rel="icon" type="image/png" sizes="152x152" href="/cats/img/favicon152x152.png" /><link rel="icon" type="image/png" sizes="196x196" href="/cats/img/favicon196x196.png" /><link rel="icon" type="image/png" sizes="310x310" href="/cats/img/favicon310x310.png" /><link rel="icon" type="image/png" sizes="310x150" href="/cats/img/favicon310x150.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" /><link rel="stylesheet" href="/cats/highlight/styles/atom-one-light.css" /><link rel="stylesheet" href="/cats/css/pattern-style.css" /></head><body><header id="site-header"><div class="navbar-wrapper navbar-inverse"><div class="container"><div class="navbar-header"><button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="/cats/" class="brand"><div class="icon-wrapper"><span>Cats</span></div></a></div><nav class="text-right"><ul class=""><li class="search-nav hidden-xs"><div id="search-dropdown"><label><i class="fa fa-search"></i>Search</label><input id="search-bar" type="text" placeholder="Enter keywords here..." onclick="displayToggleSearch(event)" /><ul id="search-dropdown-content" class="dropdown dropdown-content"></ul></div></li><li><a class="transparent-on-hover" href="https://github.com/typelevel/cats" target="_blank" rel="noopener noreferrer"><i class="fa fa-github"></i><span class="hidden-sm hidden-xs">GitHub</span></a></li><li><a class="transparent-on-hover" href="/cats/api/cats/index.html"><i class="fa fa-file-text"></i><span class="hidden-sm hidden-xs">API Documentation</span></a></li></ul></nav></div></div><div class="jumbotron" style="background-image:url('/cats/img/jumbotron_pattern.png')"></div><div id="horizontal-menu"><ul class="horizontal-nav"><li><a class="" href="/cats/">Home</a></li><li><a class="" href="/cats/typeclasses.html">Type Classes</a></li><li><a class="" href="/cats/datatypes.html">Data Types</a></li><li><a class="" href="/cats/motivations.html">Motivations</a></li><li><a class="" href="/cats/resources_for_learners.html">Resources for Learners</a></li><li><a class=" active " href="/cats/faq.html">FAQ</a></li><li><a class="" href="/cats/contributing.html">Contributing</a></li><li><a class="" href="/cats/colophon.html">Colophon</a></li><li><a class="" href="/cats/nomenclature.html">Glossary</a></li><li><a class="" href="/cats/guidelines.html">Guidelines</a></li><li><a class="" href="/cats/typelevelEcosystem.html">Typelevel Ecosystem</a></li></ul></div></header><main id="site-main" class="page-site-main"><section class="use"><div class="container"><div id="content"><h1 id="frequently-asked-questions">Frequently Asked Questions</h1>
-
-<h2 id="questions">Questions</h2>
-<ul>
-  <li><a href="#what-imports">What imports do I need?</a></li>
-  <li><a href="#quick-wins">I am new to pure functional programming, what quick wins can I get from Cats?</a></li>
-  <li><a href="#diff-scalaz">What is the difference between Cats and Scalaz?</a></li>
-  <li><a href="#either">Where is right-biased <code class="language-plaintext highlighter-rouge">Either</code>?</a></li>
-  <li><a href="#si-2712">Why is the compiler having trouble with types with more than one type parameter?</a></li>
-  <li><a href="#future-instances">Why can’t the compiler find implicit instances for Future?</a></li>
-  <li><a href="seq-instances">Where are implicit instances for <code class="language-plaintext highlighter-rouge">Seq</code></a></li>
-  <li><a href="#example-compile">Why is some example code not compiling for me?</a></li>
-  <li><a href="#traverse">How can I turn my List of <code class="language-plaintext highlighter-rouge">&lt;something&gt;</code> into a <code class="language-plaintext highlighter-rouge">&lt;something&gt;</code> of a list?</a></li>
-  <li><a href="#listt">Where is <code class="language-plaintext highlighter-rouge">ListT</code>?</a></li>
-  <li><a href="#applicative-monad-transformers">Where are <code class="language-plaintext highlighter-rouge">Applicative</code>s for monad transformers?</a></li>
-  <li><a href="#task">Where is <code class="language-plaintext highlighter-rouge">IO</code>/<code class="language-plaintext highlighter-rouge">Task</code>?</a></li>
-  <li><a href="#simulacrum">What does <code class="language-plaintext highlighter-rouge">@typeclass</code> mean?</a></li>
-  <li><a href="#kind-projector">What do types like <code class="language-plaintext highlighter-rouge">?</code> and <code class="language-plaintext highlighter-rouge">λ</code> mean?</a></li>
-  <li><a href="#tailrecm">What is <code class="language-plaintext highlighter-rouge">tailRecM</code>?</a></li>
-  <li><a href="#symbol">What does this symbol mean?</a></li>
-  <li><a href="#law-testing">How can I test instances against their type classes’ laws?</a></li>
-  <li><a href="#contributing">How can I help?</a></li>
-  <li><a href="#monad-transformer-variance">Why aren’t monad transformers like <code class="language-plaintext highlighter-rouge">OptionT</code> and <code class="language-plaintext highlighter-rouge">EitherT</code> covariant like <code class="language-plaintext highlighter-rouge">Option</code> and <code class="language-plaintext highlighter-rouge">Either</code>?</a></li>
-  <li><a href="#ammonite">How to try Cats in a REPL?</a></li>
-</ul>
-
-<h2 id="what-imports-do-i-need"><a id="what-imports" href="#what-imports"></a>What imports do I need?</h2>
-
-<p>The easiest approach to Cats imports is to import everything that’s commonly needed:</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats._</span>
-<span class="k">import</span> <span class="nn">cats.data._</span>
-<span class="k">import</span> <span class="nn">cats.implicits._</span>
-</code></pre></div></div>
-
-<p>This should be all that you need, but if you’d like to learn more about the details of imports than you can check out the <a href="typeclasses/imports.html">import guide</a>.</p>
-
-<h2 id="i-am-new-to-pure-functional-programming-what-quick-wins-can-i-get-from-cats"><a id="quick-wins" href="#quick-wins"></a>I am new to pure functional programming, what quick wins can I get from Cats?</h2>
-
-<p>Please refer to the <a href="/cats/jump_start_guide.html">jump start guide</a>.</p>
-
-<h2 id="what-is-the-difference-between-cats-and-scalaz"><a id="diff-scalaz" href="#diff-scalaz"></a>What is the difference between Cats and Scalaz?</h2>
-
-<p>Cats and <a href="https://github.com/scalaz/scalaz">Scalaz</a> have the same goal: to facilitate pure functional programming in Scala applications. However the underlying core strategy is different; Scalaz took the approach of trying to provide a single batteries-included <em>standard library</em> for FP that powers the Scala applications. Cats, on the other hand, aims to help build an <a href="/cats/#ecosystem">ecosystem</a> of pure FP libraries by providing a solid and stable foundation; these libraries can have their own styles and personalities, competing with each other, while at the same time playing nice. It is through this ecosystem of FP libraries (cats included) that Scala applications can be powered with “FP awesome-ness” and beyond by picking whatever best fit their needs.</p>
-
-<p>Based on this core strategy, Cats takes a <a href="/cats/motivations#modularity">modular</a> approach and focuses on providing core, <a href="/cats/#binary-compatibility-and-versioning">binary compatible</a>, <a href="/cats/motivations#approachability">approachable</a> and <a href="/cats/motivations#efficiency">efficient</a> abstractions. It provides a welcoming and supportive environment for the <a href="https://gitter.im/typelevel/cats">user community</a> governed by the <a href="https://www.scala-lang.org/conduct/">Scala code of conduct</a>. It also takes great effort in supplying a comprehensive and beginner-friendly <a href="/cats/#documentation">documentation</a>.</p>
-
-<h2 id="where-is-right-biased-either"><a id="either" href="#either"></a>Where is right-biased Either?</h2>
-<p>Up through Cats 0.7.x we had <code class="language-plaintext highlighter-rouge">cats.data.Xor</code>, which was effectively <code class="language-plaintext highlighter-rouge">scala.util.Either</code>, but right-biased by default and with
-a bunch of useful combinators around it. In Scala 2.12.x <code class="language-plaintext highlighter-rouge">Either</code>
-<a href="https://github.com/scala/scala/pull/5135">became right-biased</a> so we revisited the use of <code class="language-plaintext highlighter-rouge">Xor</code> and
-<a href="https://github.com/typelevel/cats/issues/1192">decided</a> that in the interest of interoperability, we would remove <code class="language-plaintext highlighter-rouge">Xor</code> in the Cats 0.8.0 release and
-fill in the gaps in the <code class="language-plaintext highlighter-rouge">scala.util.Either</code> API via
-<a href="https://github.com/typelevel/cats/blob/main/core/src/main/scala/cats/syntax/either.scala">syntax enrichment</a>.</p>
-
-<p>This syntax and the type class instances for <code class="language-plaintext highlighter-rouge">Either</code> can be imported using <code class="language-plaintext highlighter-rouge">cats.implicits._</code>, which will also bring in syntactic enrichment and instances for other standard library types, or you can import them individually with <code class="language-plaintext highlighter-rouge">cats.syntax.either._</code> and <code class="language-plaintext highlighter-rouge">cats.instances.either._</code>.</p>
-
-<p>There are a few minor mismatches between <code class="language-plaintext highlighter-rouge">Xor</code> and <code class="language-plaintext highlighter-rouge">Either</code>. For example, in some cases you may need to specify a type parameter for an enrichment method on <code class="language-plaintext highlighter-rouge">Either</code> (such as <code class="language-plaintext highlighter-rouge">leftMap</code>) even though it was properly inferred for <code class="language-plaintext highlighter-rouge">Xor</code>. See the <a href="http://typelevel.org/cats/datatypes/either.html#either-in-the-small-either-in-the-large"><code class="language-plaintext highlighter-rouge">Either</code> section of this guide</a> for more information about these issues.</p>
-
-<p>Similarly, <code class="language-plaintext highlighter-rouge">cats.data.XorT</code> has been replaced with <code class="language-plaintext highlighter-rouge">cats.data.EitherT</code>, although since this is a type defined in Cats, you don’t need to import syntax or instances for it (although you may need imports for the underlying monad).</p>
-
-<h2 id="why-is-the-compiler-having-trouble-with-types-with-more-than-one-type-parameter"><a id="si-2712" href="#si-2712"></a>Why is the compiler having trouble with types with more than one type parameter?</h2>
-
-<p>When you encounter a situation where the same code works fine with a type with one type parameter, e.g. List[A], but doesn’t work with types with more than one, e.g. Either[A, B], you probably hit <a href="https://issues.scala-lang.org/browse/SI-2712">SI-2712</a>. Without going into the details, it’s highly recommended to enable a partial SI-2712 fix in your project. The easiest way to achieve that is through this <a href="https://github.com/fiadliel/sbt-partial-unification">sbt plugin</a>.
-Cats used to provide mitigation to this issue semi-transparently, but given the fact that the fix is now mainstream, we decided to drop that mitigation machinery in favor of reducing the complexity. See this <a href="https://github.com/typelevel/cats/issues/1073">issue</a> for details.</p>
-
-<h2 id="why-is-some-example-code-not-compiling-for-me"><a id="example-compile" href="#example-compile"></a>Why is some example code not compiling for me?</h2>
-
-<p>A portion of example code requires either the <a href="https://github.com/typelevel/kind-projector">Kind-projector</a> compiler plugin or partial unification turned on in scalac. The easiest way to turn partial unification on is through this <a href="https://github.com/fiadliel/sbt-partial-unification">sbt plugin</a>.</p>
-
-<h2 id="why-cant-the-compiler-find-implicit-instances-for-future"><a id="future-instances" href="#future-instances"></a>Why can’t the compiler find implicit instances for Future?</h2>
-
-<p>If you have already followed the <a href="#what-imports">imports advice</a> but are still getting error messages like <code class="language-plaintext highlighter-rouge">could not find implicit value for parameter e: cats.Monad[scala.concurrent.Future]</code> or <code class="language-plaintext highlighter-rouge">value |+| is not a member of scala.concurrent.Future[Int]</code>, then make sure that you have an implicit <code class="language-plaintext highlighter-rouge">scala.concurrent.ExecutionContext</code> in scope. The easiest way to do this is to <code class="language-plaintext highlighter-rouge">import scala.concurrent.ExecutionContext.Implicits.global</code>, but note that you may want to use a different execution context for your production application.</p>
-
-<h2 id="where-are-implicit-instances-for-seq"><a id="seq-instances" href="#seq-instances"></a>Where are implicit instances for <code class="language-plaintext highlighter-rouge">Seq</code>?</h2>
-
-<p>As of <code class="language-plaintext highlighter-rouge">cats-2.3</code>, instances for <code class="language-plaintext highlighter-rouge">collection.immutable.Seq</code> are provided by cats.
-Mind that, up to <code class="language-plaintext highlighter-rouge">scala-2.12</code>, <code class="language-plaintext highlighter-rouge">Seq</code> was an alias for <code class="language-plaintext highlighter-rouge">collection.Seq</code> and lawful instances can’t be provided for it due to its potential mutability.
-In <code class="language-plaintext highlighter-rouge">scala-2.13</code>, <code class="language-plaintext highlighter-rouge">Seq</code> was changed to <code class="language-plaintext highlighter-rouge">collection.immutable.Seq</code> which greatly improves <code class="language-plaintext highlighter-rouge">Seq</code>’s interoperability with cats.</p>
-
-<h2 id="how-can-i-turn-my-list-of-something-into-a-something-of-a-list"><a id="traverse" href="#traverse"></a>How can I turn my List of <code class="language-plaintext highlighter-rouge">&lt;something&gt;</code> into a <code class="language-plaintext highlighter-rouge">&lt;something&gt;</code> of a list?</h2>
-
-<p>It’s really common to have a <code class="language-plaintext highlighter-rouge">List</code> of values with types like <code class="language-plaintext highlighter-rouge">Option</code>, <code class="language-plaintext highlighter-rouge">Either</code>, or <code class="language-plaintext highlighter-rouge">Validated</code> that you would like to turn “inside out” into an <code class="language-plaintext highlighter-rouge">Option</code> (or <code class="language-plaintext highlighter-rouge">Either</code> or <code class="language-plaintext highlighter-rouge">Validated</code>) of a <code class="language-plaintext highlighter-rouge">List</code>. The <code class="language-plaintext highlighter-rouge">sequence</code> and <code class="language-plaintext highlighter-rouge">traverse</code> methods are <em>really</em> handy for this. You can read more about them in the <a href="/cats/typeclasses/traverse.html">Traverse documentation</a>.</p>
-
-<h2 id="where-is-listt"><a id="listt" href="#listt"></a>Where is ListT?</h2>
-
-<p>There are monad transformers for various types, such as <a href="/cats/datatypes/optiont.html">OptionT</a>, so people often wonder why there isn’t a <code class="language-plaintext highlighter-rouge">ListT</code>. For example, in the following example, people might reach for <code class="language-plaintext highlighter-rouge">ListT</code> to simplify making nested <code class="language-plaintext highlighter-rouge">map</code> and <code class="language-plaintext highlighter-rouge">exists</code> calls:</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">l</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">]]</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">4</span><span class="o">,</span> <span class="mi">5</span><span class="o">))</span>
-
-<span class="k">def</span> <span class="nf">isEven</span><span class="o">(</span><span class="n">i</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span>
-</code></pre></div></div>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">l</span><span class="o">.</span><span class="py">map</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">map</span><span class="o">(</span><span class="k">_</span> <span class="o">+</span> <span class="mi">1</span><span class="o">))</span>
-<span class="c1">// res1: Option[List[Int]] = Some(List(2, 3, 4, 5, 6))</span>
-<span class="nv">l</span><span class="o">.</span><span class="py">exists</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">exists</span><span class="o">(</span><span class="n">isEven</span><span class="o">))</span>
-<span class="c1">// res2: Boolean = true</span>
-</code></pre></div></div>
-
-<p>A naive implementation of <code class="language-plaintext highlighter-rouge">ListT</code> suffers from associativity issues; see <a href="https://gist.github.com/tpolecat/1227e22e3161b5816e014c00650f3b57">this gist</a> for an example. It’s possible to create a <code class="language-plaintext highlighter-rouge">ListT</code> that doesn’t have these issues, but it tends to be pretty inefficient. For many use-cases, <a href="https://github.com/typelevel/cats/blob/main/core/src/main/scala/cats/data/Nested.scala">Nested</a> can be used to achieve the desired results.</p>
-
-<p>Here is how we could achieve the effect of the previous example using <code class="language-plaintext highlighter-rouge">Nested</code>:</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.Nested</span>
-<span class="k">import</span> <span class="nn">cats.implicits._</span>
-</code></pre></div></div>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">nl</span> <span class="k">=</span> <span class="nc">Nested</span><span class="o">(</span><span class="n">l</span><span class="o">)</span>
-<span class="c1">// nl: Nested[Option, List, Int] = Nested(Some(List(1, 2, 3, 4, 5)))</span>
-<span class="nv">nl</span><span class="o">.</span><span class="py">map</span><span class="o">(</span><span class="k">_</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span>
-<span class="c1">// res3: Nested[Option, List, Int] = Nested(Some(List(2, 3, 4, 5, 6)))</span>
-<span class="nv">nl</span><span class="o">.</span><span class="py">exists</span><span class="o">(</span><span class="n">isEven</span><span class="o">)</span>
-<span class="c1">// res4: Boolean = true</span>
-</code></pre></div></div>
-
-<p>We can even perform more complicated operations, such as a <code class="language-plaintext highlighter-rouge">traverse</code> of the nested structure:</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.ValidatedNel</span>
-<span class="k">type</span> <span class="kt">ErrorsOr</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">ValidatedNel</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">A</span><span class="o">]</span>
-<span class="k">def</span> <span class="nf">even</span><span class="o">(</span><span class="n">i</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">ErrorsOr</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nf">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="nv">i</span><span class="o">.</span><span class="py">validNel</span> <span class="k">else</span> <span class="n">s</span><span class="s">"$i is odd"</span><span class="o">.</span><span class="py">invalidNel</span>
-</code></pre></div></div>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">nl</span><span class="o">.</span><span class="py">traverse</span><span class="o">(</span><span class="n">even</span><span class="o">)</span>
-<span class="c1">// res5: ErrorsOr[Nested[Option, List, Int]] = Invalid(</span>
-<span class="c1">//   NonEmptyList("1 is odd", List("3 is odd", "5 is odd"))</span>
-<span class="c1">// )</span>
-</code></pre></div></div>
-
-<h2 id="where-are-applicatives-for-monad-transformers"><a id="applicative-monad-transformers" href="#applicative-monad-transformers">Where are <code class="language-plaintext highlighter-rouge">Applicative</code>s for monad transformers?</a></h2>
-
-<p>An <code class="language-plaintext highlighter-rouge">Applicative</code> instance for <code class="language-plaintext highlighter-rouge">OptionT[F, *]</code>/<code class="language-plaintext highlighter-rouge">EitherT[F, E, *]</code>, built without a corresponding <code class="language-plaintext highlighter-rouge">Monad</code> instance for <code class="language-plaintext highlighter-rouge">F</code>, would be unlawful, so it’s not included. See <a href="https://typelevel.org/cats/guidelines.html#applicative-monad-transformers">the guidelines</a> for a more detailed explanation.</p>
-
-<p>As an alternative, using <code class="language-plaintext highlighter-rouge">.toNested</code> on the monad transformer is recommended, although its <code class="language-plaintext highlighter-rouge">ap</code> will still be inconsistent with the Monad instance’s.`.</p>
-
-<h2 id="where-is-iotask"><a id="task" href="#task"></a>Where is IO/Task?</h2>
-
-<p>In purely functional programming, a monadic <code class="language-plaintext highlighter-rouge">IO</code> or <code class="language-plaintext highlighter-rouge">Task</code> type is often used to handle side effects such as file/network IO. In some languages and frameworks, such a type also serves as the primary abstraction through which parallelism is achieved.  Nearly every real-world purely functional application or service is going to require such a data type, and this gives rise to an obvious question: why doesn’t Cats include such a type?</p>
-
-<p>The answer is that Cats <em>does</em> include an <code class="language-plaintext highlighter-rouge">IO</code>, it just isn’t included in the core library.  The decision was made to split <code class="language-plaintext highlighter-rouge">IO</code> away from cats-core and (indeed the whole Cats release cycle!) in order to make it easier to ensure modular versioning and compatibility across the ecosystem.  The <a href="https://github.com/typelevel/cats-effect">cats-effect</a> project defines a type, <code class="language-plaintext highlighter-rouge">cats.effect.IO</code>, which is intended to be a very minimal, very performant data type for managing synchronous and asynchronous side-effects, integrated into the Cats ecosystem.</p>
-
-<p>However, we acknowledge that this type may not meet everyone’s needs. The cats-effect project characterizes the space of side-effect-capturing data types with a set of typeclasses (deriving from <code class="language-plaintext highlighter-rouge">cats.Monad</code>), and so all such data types are, broadly-speaking, mutually compatible and interchangeable in many generic contexts. For example, <a href="https://monix.io">Monix</a> provides support for IO, concurrency, and streaming and integrates with the cats-effect type classes.</p>
-
-<p>It may be worth keeping in mind that <code class="language-plaintext highlighter-rouge">IO</code> and <code class="language-plaintext highlighter-rouge">Task</code> are pretty blunt instruments (they are essentially the <code class="language-plaintext highlighter-rouge">Any</code> of side effect management), and you may want to narrow the scope of your effects throughout most of your application. The <a href="/cats/datatypes/freemonad.html">free monad</a> documentation describes a way to abstractly define controlled effects and interpret them into a type such as <code class="language-plaintext highlighter-rouge">IO</code> or <code class="language-plaintext highlighter-rouge">Task</code> as late as possible. As more of your code becomes pure through these controlled effects the less it matters which type you end up choosing to represent your side effects.</p>
-
-<h2 id="what-does-typeclass-mean"><a id="simulacrum" href="#simulacrum"></a>What does <code class="language-plaintext highlighter-rouge">@typeclass</code> mean?</h2>
-
-<p>Cats defines and implements numerous type classes. Unfortunately, encoding these type classes in Scala can incur a large amount of boilerplate. To address this, <a href="https://github.com/typelevel/simulacrum">Simulacrum</a> introduces <code class="language-plaintext highlighter-rouge">@typeclass</code>, a macro annotation which generates a lot of this boilerplate. This elevates type classes to a first class construct and increases the legibility and maintainability of the code. Use of simulacrum also ensures consistency in how the type classes are encoded across a project. Cats uses simulacrum wherever possible to encode type classes, and you can read more about it at the <a href="https://github.com/typelevel/simulacrum">project page</a>.</p>
-
-<p>Note that the one area where simulacrum is intentionally not used is in the <code class="language-plaintext highlighter-rouge">cats-kernel</code> module. The <code class="language-plaintext highlighter-rouge">cats-kernel</code> module is intended to be a shared dependency for a number of projects, and as such, it is important that it is both lightweight and very stable from a binary compatibility perspective. At some point there may be a transition from simulacrum to <a href="https://github.com/typelevel/typeclassic">typeclassic</a>, and the binary compatibility of moving between simulacrum and typeclassic is unclear at this point. Avoiding the dependency on simulacrum in <code class="language-plaintext highlighter-rouge">cats-kernel</code>, provides insulation against any potential binary compatibility problems in such a transition.</p>
-
-<h2 id="what-do-types-like--and-λ-mean"><a id="kind-projector" href="#kind-projector"></a>What do types like <code class="language-plaintext highlighter-rouge">?</code> and <code class="language-plaintext highlighter-rouge">λ</code> mean?</h2>
-
-<p>Cats defines a wealth of type classes and type class instances. For a number of the type class and instance combinations, there is a mismatch between the type parameter requirements of the type class and the type parameter requirements of the data type for which the instance is being defined. For example, the <a href="/cats/datatypes/either.html">Either</a> data type is a type constructor with two type parameters. We would like to be able to define a <a href="/cats/typeclasses/monad.html">Monad</a> for <code class="language-plaintext highlighter-rouge">Either</code>, but the <code class="language-plaintext highlighter-rouge">Monad</code> type class operates on type constructors having only one type parameter.</p>
-
-<p><strong>Enter type lambdas!</strong> Type lambdas provide a mechanism to allow one or more of the type parameters for a particular type constructor to be fixed. In the case of <code class="language-plaintext highlighter-rouge">Either</code> then, when defining a <code class="language-plaintext highlighter-rouge">Monad</code> for <code class="language-plaintext highlighter-rouge">Either</code>, we want to fix one of the type parameters at the point where a <code class="language-plaintext highlighter-rouge">Monad</code> instance is summoned, so that the type parameters line up. As <code class="language-plaintext highlighter-rouge">Either</code> is right biased, a type lambda can be used to fix the left type parameter and allow the right type parameter to continue to vary when <code class="language-plaintext highlighter-rouge">Either</code> is treated as a <code class="language-plaintext highlighter-rouge">Monad</code>. The right biased nature of <code class="language-plaintext highlighter-rouge">Either</code> is discussed further in the <a href="/cats/datatypes/either.html"><code class="language-plaintext highlighter-rouge">Either</code> documentation</a>.</p>
-
-<p><strong>Enter <a href="https://github.com/typelevel/kind-projector">kind-projector</a>!</strong> kind-projector is a compiler plugin which provides a convenient syntax for dealing with type lambdas. The symbols <code class="language-plaintext highlighter-rouge">?</code> and <code class="language-plaintext highlighter-rouge">λ</code> are treated specially by kind-projector, and expanded into the more verbose definitions that would be required were it not to be used. You can read more about kind-projector at the <a href="https://github.com/typelevel/kind-projector">project page</a>.</p>
-
-<h2 id="what-is-tailrecm"><a id="tailrecm" href="#tailrecm"></a>What is <code class="language-plaintext highlighter-rouge">tailRecM</code>?</h2>
-
-<p>The <code class="language-plaintext highlighter-rouge">FlatMap</code> type class has a <code class="language-plaintext highlighter-rouge">tailRecM</code> method with the following signature:</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">tailRecM</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">a</span><span class="k">:</span> <span class="kt">A</span><span class="o">)(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">F</span><span class="o">[</span><span class="kt">Either</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">]])</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span>
-</code></pre></div></div>
-
-<p>When you are defining a <code class="language-plaintext highlighter-rouge">FlatMap</code> instance, its <code class="language-plaintext highlighter-rouge">tailRecM</code> implementation must have two properties in order for the instance to be considered lawful. The first property is that <code class="language-plaintext highlighter-rouge">tailRecM</code> must return the same result that you would get if you recursively called <code class="language-plaintext highlighter-rouge">flatMap</code> until you got a <code class="language-plaintext highlighter-rouge">Right</code> value (assuming you had unlimited stack space—we’ll get to that in a moment). In other words, it must give the same result as this implementation:</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">trait</span> <span class="nc">Monad</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]]</span> <span class="o">{</span>
-  <span class="k">def</span> <span class="nf">pure</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">x</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="o">???</span>
-  <span class="k">def</span> <span class="nf">flatMap</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">F</span><span class="o">[</span><span class="kt">B</span><span class="o">])</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span> <span class="k">=</span> <span class="o">???</span>
-
-  <span class="k">def</span> <span class="nf">tailRecM</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">a</span><span class="k">:</span> <span class="kt">A</span><span class="o">)(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">F</span><span class="o">[</span><span class="kt">Either</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">]])</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span> <span class="k">=</span>
-    <span class="nf">flatMap</span><span class="o">(</span><span class="nf">f</span><span class="o">(</span><span class="n">a</span><span class="o">))</span> <span class="o">{</span>
-      <span class="k">case</span> <span class="nc">Right</span><span class="o">(</span><span class="n">b</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nf">pure</span><span class="o">(</span><span class="n">b</span><span class="o">)</span>
-      <span class="k">case</span> <span class="nc">Left</span><span class="o">(</span><span class="n">nextA</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nf">tailRecM</span><span class="o">(</span><span class="n">nextA</span><span class="o">)(</span><span class="n">f</span><span class="o">)</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<p>The reason we can’t simply use this implementation for all type constructors (and the reason that <code class="language-plaintext highlighter-rouge">tailRecM</code> is useful at all) is that for many monadic types, recursively <code class="language-plaintext highlighter-rouge">flatMap</code>-ing in this way will quickly exhaust the stack.</p>
-
-<p><code class="language-plaintext highlighter-rouge">Option</code> is one example of a monadic type whose <code class="language-plaintext highlighter-rouge">flatMap</code> consumes stack in such a way that nesting <code class="language-plaintext highlighter-rouge">flatMap</code> calls deeply enough (usually around a couple thousand levels) will result in a stack overflow. We can provide a stack-safe <code class="language-plaintext highlighter-rouge">tailRecM</code> implementation for <code class="language-plaintext highlighter-rouge">Option</code>, though:</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.FlatMap</span>
-<span class="k">import</span> <span class="nn">scala.annotation.tailrec</span>
-
-<span class="k">implicit</span> <span class="k">val</span> <span class="nv">optionFlatMap</span><span class="k">:</span> <span class="kt">FlatMap</span><span class="o">[</span><span class="kt">Option</span><span class="o">]</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">FlatMap</span><span class="o">[</span><span class="kt">Option</span><span class="o">]</span> <span class="o">{</span>
-  <span class="k">def</span> <span class="nf">map</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">B</span><span class="o">)</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span> <span class="k">=</span> <span class="nv">fa</span><span class="o">.</span><span class="py">map</span><span class="o">(</span><span class="n">f</span><span class="o">)</span>
-  <span class="k">def</span> <span class="nf">flatMap</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="nc">Option</span><span class="o">[</span><span class="kt">B</span><span class="o">])</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span> <span class="k">=</span> <span class="nv">fa</span><span class="o">.</span><span class="py">flatMap</span><span class="o">(</span><span class="n">f</span><span class="o">)</span>
-
-  <span class="nd">@tailrec</span>
-  <span class="k">def</span> <span class="nf">tailRecM</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">a</span><span class="k">:</span> <span class="kt">A</span><span class="o">)(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="nc">Option</span><span class="o">[</span><span class="kt">Either</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">]])</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span> <span class="k">=</span> <span class="nf">f</span><span class="o">(</span><span class="n">a</span><span class="o">)</span> <span class="k">match</span> <span class="o">{</span>
-    <span class="k">case</span> <span class="nc">None</span> <span class="k">=&gt;</span> <span class="nc">None</span>
-    <span class="k">case</span> <span class="nc">Some</span><span class="o">(</span><span class="nc">Left</span><span class="o">(</span><span class="n">a1</span><span class="o">))</span> <span class="k">=&gt;</span> <span class="nf">tailRecM</span><span class="o">(</span><span class="n">a1</span><span class="o">)(</span><span class="n">f</span><span class="o">)</span>
-    <span class="k">case</span> <span class="nc">Some</span><span class="o">(</span><span class="nc">Right</span><span class="o">(</span><span class="n">b</span><span class="o">))</span> <span class="k">=&gt;</span> <span class="nc">Some</span><span class="o">(</span><span class="n">b</span><span class="o">)</span>
-  <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<p>Now we don’t have to worry about overflowing the stack, no matter how many times we have to call <code class="language-plaintext highlighter-rouge">tailRecM</code> before we get a <code class="language-plaintext highlighter-rouge">Right</code>.</p>
-
-<p>This is useful because any operation that you would write using recursive <code class="language-plaintext highlighter-rouge">flatMap</code>s can be rewritten to use <code class="language-plaintext highlighter-rouge">tailRecM</code>, and if the <code class="language-plaintext highlighter-rouge">FlatMap</code> instance for your type constructor is lawful, you don’t have to worry about stack safety.</p>
-
-<p>The downside is that how you write a lawful <code class="language-plaintext highlighter-rouge">tailRecM</code> for your type constructor may not always be obvious. For some type constructors, such as <code class="language-plaintext highlighter-rouge">Future</code>, recursively <code class="language-plaintext highlighter-rouge">flatMap</code>-ing is already safe, and the first simple implementation above will be lawful. For types like <code class="language-plaintext highlighter-rouge">Option</code> and <code class="language-plaintext highlighter-rouge">Try</code>, you’ll need to arrange the recursion in such a way that the <code class="language-plaintext highlighter-rouge">tailRecM</code> calls are tail calls (which you can confirm with Scala’s <code class="language-plaintext highlighter-rouge">tailrec</code> annotation). Collection types require yet another approach (see for example the <a href="https://github.com/typelevel/cats/pull/1041/files#diff-e4d8b82ab5544972195d955591ffe18cR31">implementation for <code class="language-plaintext highlighter-rouge">List</code></a>).</p>
-
-<p>If you’re having trouble figuring out how to implement <code class="language-plaintext highlighter-rouge">tailRecM</code> lawfully, you can try to find an instance in Cats itself for a type that is semantically similar to yours (all of the <code class="language-plaintext highlighter-rouge">FlatMap</code> instances provided by Cats have lawful, stack-safe <code class="language-plaintext highlighter-rouge">tailRecM</code> implementations).</p>
-
-<p>In some cases you may decide that providing a lawful <code class="language-plaintext highlighter-rouge">tailRecM</code> may be impractical or even impossible (if so we’d like to hear about it). For these cases we provide a way of testing all of the monad laws <em>except</em> for the stack safety of <code class="language-plaintext highlighter-rouge">tailRecM</code>: just replace <code class="language-plaintext highlighter-rouge">MonadTests[F].monad[A, B, C]</code> in your tests with <code class="language-plaintext highlighter-rouge">MonadTests[F].stackUnsafeMonad[A, B, C]</code>.</p>
-
-<h2 id="what-does-this-symbol-mean"><a id="symbol" href="#symbol"></a>What does this symbol mean?</h2>
-
-<p>Below is a list of symbols used in Cats.</p>
-
-<p>The <code class="language-plaintext highlighter-rouge">~&gt;</code>, <code class="language-plaintext highlighter-rouge">⊥</code>, <code class="language-plaintext highlighter-rouge">⊤</code>, <code class="language-plaintext highlighter-rouge">:&lt;:</code> and <code class="language-plaintext highlighter-rouge">:≺:</code> symbols can be imported with <code class="language-plaintext highlighter-rouge">import cats._</code>.</p>
-
-<p>All other symbols can be imported with <code class="language-plaintext highlighter-rouge">import cats.implicits._</code></p>
-
-<table>
-  <thead>
-    <tr>
-      <th>Symbol</th>
-      <th>Name</th>
-      <th>Nickname</th>
-      <th>Type Class</th>
-      <th>Signature</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code class="language-plaintext highlighter-rouge">fa *&gt; fb</code></td>
-      <td>product right</td>
-      <td> </td>
-      <td><code class="language-plaintext highlighter-rouge">Apply[F[_]]</code></td>
-      <td><code class="language-plaintext highlighter-rouge">productR(fa: F[A])(fb: F[B]): F[B]</code></td>
-    </tr>
-    <tr>
-      <td><code class="language-plaintext highlighter-rouge">fa &lt;* fb</code></td>
-      <td>product left</td>
-      <td> </td>
-      <td><code class="language-plaintext highlighter-rouge">Apply[F[_]]</code></td>
-      <td><code class="language-plaintext highlighter-rouge">productL(fa: F[A])(fb: F[B]): F[A]</code></td>
-    </tr>
-    <tr>
-      <td><code class="language-plaintext highlighter-rouge">x === y</code></td>
-      <td>equals</td>
-      <td> </td>
-      <td><code class="language-plaintext highlighter-rouge">Eq[A]</code></td>
-      <td><code class="language-plaintext highlighter-rouge">eqv(x: A, y: A): Boolean</code></td>
-    </tr>
-    <tr>
-      <td><code class="language-plaintext highlighter-rouge">x =!= y</code></td>
-      <td>not equals</td>
-      <td> </td>
-      <td><code class="language-plaintext highlighter-rouge">Eq[A]</code></td>
-      <td><code class="language-plaintext highlighter-rouge">neqv(x: A, y: A): Boolean</code></td>
-    </tr>
-    <tr>
-      <td><code class="language-plaintext highlighter-rouge">fa &gt;&gt;= f</code></td>
-      <td>flatMap</td>
-      <td> </td>
-      <td><code class="language-plaintext highlighter-rouge">FlatMap[F[_]]</code></td>
-      <td><code class="language-plaintext highlighter-rouge">flatMap(fa: F[A])(f: A =&gt; F[B]): F[B]</code></td>
-    </tr>
-    <tr>
-      <td><code class="language-plaintext highlighter-rouge">fa &gt;&gt; fb</code></td>
-      <td>followed by</td>
-      <td> </td>
-      <td><code class="language-plaintext highlighter-rouge">FlatMap[F[_]]</code></td>
-      <td><code class="language-plaintext highlighter-rouge">&gt;&gt;(fb: =&gt; F[B]): F[B]</code></td>
-    </tr>
-    <tr>
-      <td><code>x &#124;-&#124; y</code></td>
-      <td>remove</td>
-      <td> </td>
-      <td><code class="language-plaintext highlighter-rouge">Group[A]</code></td>
-      <td><code class="language-plaintext highlighter-rouge">remove(x: A, y: A): A</code></td>
-    </tr>
-    <tr>
-      <td><code class="language-plaintext highlighter-rouge">x &gt; y</code></td>
-      <td>greater than</td>
-      <td> </td>
-      <td><code class="language-plaintext highlighter-rouge">PartialOrder[A]</code></td>
-      <td><code class="language-plaintext highlighter-rouge">gt(x: A, y: A): Boolean</code></td>
-    </tr>
-    <tr>
-      <td><code class="language-plaintext highlighter-rouge">x &gt;= y</code></td>
-      <td>greater than or equal</td>
-      <td> </td>
-      <td><code class="language-plaintext highlighter-rouge">PartialOrder[A]</code></td>
-      <td><code class="language-plaintext highlighter-rouge">gteq(x: A, y: A): Boolean</code></td>
-    </tr>
-    <tr>
-      <td><code class="language-plaintext highlighter-rouge">x &lt; y</code></td>
-      <td>less than</td>
-      <td> </td>
-      <td><code class="language-plaintext highlighter-rouge">PartialOrder[A]</code></td>
-      <td><code class="language-plaintext highlighter-rouge">lt(x: A, y: A): Boolean</code></td>
-    </tr>
-    <tr>
-      <td><code class="language-plaintext highlighter-rouge">x &lt;= y</code></td>
-      <td>less than or equal</td>
-      <td> </td>
-      <td><code class="language-plaintext highlighter-rouge">PartialOrder[A]</code></td>
-      <td><code class="language-plaintext highlighter-rouge">lteq(x: A, y: A): Boolean</code></td>
-    </tr>
-    <tr>
-      <td><code>x &#124;+&#124; y</code></td>
-      <td>Semigroup combine</td>
-      <td> </td>
-      <td><code class="language-plaintext highlighter-rouge">Semigroup[A]</code></td>
-      <td><code class="language-plaintext highlighter-rouge">combine(x: A, y: A): A</code></td>
-    </tr>
-    <tr>
-      <td><code class="language-plaintext highlighter-rouge">x &lt;+&gt; y</code></td>
-      <td>SemigroupK combine</td>
-      <td> </td>
-      <td><code class="language-plaintext highlighter-rouge">SemigroupK[F[_]]</code></td>
-      <td><code class="language-plaintext highlighter-rouge">combineK(x: F[A], y: F[A]): F[A]</code></td>
-    </tr>
-    <tr>
-      <td><code class="language-plaintext highlighter-rouge">f &lt;&lt;&lt; g</code></td>
-      <td>Arrow compose</td>
-      <td> </td>
-      <td><code class="language-plaintext highlighter-rouge">Compose[F[_, _]]</code></td>
-      <td><code class="language-plaintext highlighter-rouge">compose(f: F[B, C], g: F[A, B]): F[A, C]</code></td>
-    </tr>
-    <tr>
-      <td><code class="language-plaintext highlighter-rouge">f &gt;&gt;&gt; g</code></td>
-      <td>Arrow andThen</td>
-      <td> </td>
-      <td><code class="language-plaintext highlighter-rouge">Compose[F[_, _]]</code></td>
-      <td><code class="language-plaintext highlighter-rouge">andThen(f: F[B, C], g: F[A, B]): F[A, C]</code></td>
-    </tr>
-    <tr>
-      <td><code class="language-plaintext highlighter-rouge">f &amp;&amp;&amp; g</code></td>
-      <td>Arrow merge</td>
-      <td> </td>
-      <td><code class="language-plaintext highlighter-rouge">Arrow[F[_, _]]</code></td>
-      <td><code class="language-plaintext highlighter-rouge">merge[A, B, C](f: F[A, B], g: F[A, C]): F[A, (B, C)]</code></td>
-    </tr>
-    <tr>
-      <td><code class="language-plaintext highlighter-rouge">f -&lt; g</code></td>
-      <td>Arrow combine and bypass</td>
-      <td> </td>
-      <td><code class="language-plaintext highlighter-rouge">Arrow[F[_, _]]</code></td>
-      <td><code class="language-plaintext highlighter-rouge">combineAndByPass[A, B, C](f: F[A, B], g: F[B, C]): F[A, (B, C)]</code></td>
-    </tr>
-    <tr>
-      <td><code class="language-plaintext highlighter-rouge">F ~&gt; G</code></td>
-      <td>natural transformation</td>
-      <td> </td>
-      <td><code class="language-plaintext highlighter-rouge">FunctionK[F[_], G[_]]</code></td>
-      <td><code class="language-plaintext highlighter-rouge">FunctionK</code> alias</td>
-    </tr>
-    <tr>
-      <td><code class="language-plaintext highlighter-rouge">F :&lt;: G</code></td>
-      <td>injectK</td>
-      <td> </td>
-      <td><code class="language-plaintext highlighter-rouge">InjectK[F[_], G[_]]</code></td>
-      <td><code class="language-plaintext highlighter-rouge">InjectK</code> alias</td>
-    </tr>
-    <tr>
-      <td><code class="language-plaintext highlighter-rouge">F :≺: G</code></td>
-      <td>injectK</td>
-      <td> </td>
-      <td><code class="language-plaintext highlighter-rouge">InjectK[F[_], G[_]]</code></td>
-      <td><code class="language-plaintext highlighter-rouge">InjectK</code> alias</td>
-    </tr>
-    <tr>
-      <td><code class="language-plaintext highlighter-rouge">fa &amp;&gt; fb</code></td>
-      <td>parallel product right</td>
-      <td> </td>
-      <td><code class="language-plaintext highlighter-rouge">Parallel[M[_]]</code></td>
-      <td><code class="language-plaintext highlighter-rouge">parProductR[A, B](ma: M[A])(mb: M[B]): M[B]</code></td>
-    </tr>
-    <tr>
-      <td><code class="language-plaintext highlighter-rouge">fa &lt;&amp; fb</code></td>
-      <td>parallel product left</td>
-      <td> </td>
-      <td><code class="language-plaintext highlighter-rouge">Parallel[M[_]]</code></td>
-      <td><code class="language-plaintext highlighter-rouge">parProductL[A, B](ma: M[A])(mb: M[B]): M[A]</code></td>
-    </tr>
-    <tr>
-      <td><code class="language-plaintext highlighter-rouge">⊥</code></td>
-      <td>bottom</td>
-      <td> </td>
-      <td>N/A</td>
-      <td><code class="language-plaintext highlighter-rouge">Nothing</code></td>
-    </tr>
-    <tr>
-      <td><code class="language-plaintext highlighter-rouge">⊤</code></td>
-      <td>top</td>
-      <td> </td>
-      <td>N/A</td>
-      <td><code class="language-plaintext highlighter-rouge">Any</code></td>
-    </tr>
-    <tr>
-      <td><code class="language-plaintext highlighter-rouge">fa &lt;&lt; fb</code> (Deprecated)</td>
-      <td>product left</td>
-      <td> </td>
-      <td><code class="language-plaintext highlighter-rouge">FlatMap[F[_]]</code></td>
-      <td><code class="language-plaintext highlighter-rouge">productL(fa: F[A])(fb: F[B]): F[A]</code></td>
-    </tr>
-  </tbody>
-</table>
-
-<h2 id="how-can-i-test-instances-against-their-type-classes-laws"><a id="law-testing" href="#law-testing"></a>How can I test instances against their type classes’ laws?</h2>
-
-<p>You can find more information <a href="typeclasses/lawtesting.html">here</a>.</p>
-
-<h2 id="how-can-i-help"><a id="contributing" href="#contributing"></a>How can I help?</h2>
-
-<p>The Сats community welcomes and encourages contributions, even if you are completely new to Сats and functional programming. Here are a few ways to help out:</p>
-
-<ul>
-  <li>Find an undocumented method and write a ScalaDoc entry for it. See <a href="https://github.com/typelevel/cats/blob/main/core/src/main/scala/cats/arrow/Arrow.scala">Arrow.scala</a> for some examples of ScalaDoc entries that use <a href="https://github.com/tkawachi/sbt-doctest">sbt-doctest</a>.</li>
-  <li>Find an <a href="https://github.com/typelevel/cats/issues?q=is%3Aopen+is%3Aissue+label%3Aready">open issue</a>, leave a comment on it to let people know you are working on it, and submit a pull request. If you are new to Сats, you may want to look for items with the <a href="https://github.com/typelevel/cats/issues?q=is%3Aopen+is%3Aissue+label%3A%22low-hanging+fruit%22">low-hanging-fruit</a> label.</li>
-</ul>
-
-<p>See the <a href="/cats/contributing.html">contributing guide</a> for more information.</p>
-
-<h2 id="how-to-try-cats-in-a-repl"><a id="ammonite" href="#ammonite"></a>How to try Cats in a REPL?</h2>
-
-<p>The easiest way is probably using <a href="http://ammonite.io/">Ammonite-REPL</a>. Install it following the instructions there. Then in the amm console you can type in</p>
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// interp.configureCompiler(_.settings.YpartialUnification.value = true) // If using scala 2.11 or 2.12</span>
-<span class="k">import</span> <span class="nn">$ivy.</span><span class="n">`org.typelevel::cats-core:2.1.1`</span><span class="o">,</span> <span class="nv">cats</span><span class="o">.</span><span class="py">_</span><span class="o">,</span> <span class="nv">cats</span><span class="o">.</span><span class="py">data</span><span class="o">.</span><span class="py">_</span><span class="o">,</span> <span class="nv">cats</span><span class="o">.</span><span class="py">implicits</span><span class="o">.</span><span class="py">_</span>
-</code></pre></div></div>
-<p>Or if you want, you can add these lines to <code class="language-plaintext highlighter-rouge">~/.ammonite/predef.sc</code> so that they are enabled every ammonite session.</p>
-
-<h2 id="why-arent-monad-transformers-like-optiont-and-eithert-covariant-like-option-and-either"><a id="monad-transformer-variance" href="#monad-transformer-variance"></a>Why aren’t monad transformers like <code class="language-plaintext highlighter-rouge">OptionT</code> and <code class="language-plaintext highlighter-rouge">EitherT</code> covariant like <code class="language-plaintext highlighter-rouge">Option</code> and <code class="language-plaintext highlighter-rouge">Either</code>?</h2>
-
-<p>Please see <a href="https://typelevel.org/blog/2018/09/29/monad-transformer-variance.html">Variance of Monad Transformers</a> on the Typelevel blog.</p>
-</div></div></section></main><footer id="site-footer"><div class="container"><div class="row"><div class="col-xs-6"><p>Cats is designed and developed by <a href="https://github.com/typelevel/cats" target="_blank" rel="noopener noreferrer">Cats contributors</a></p></div><div class="col-xs-6"><p class="text-right"><a href="https://github.com/typelevel/cats" target="_blank" rel="noopener noreferrer"><span class="fa fa-github"></span>View on GitHub</a></p></div></div><div class="row"><div class="col-xs-6">
-<p>© 2020 <a href="https://github.com/typelevel/cats#maintainers">The Cats Maintainers</a></p>
-<p style="font-size: 80%; margin-top: 10px">Website built with <a href="https://47deg.github.io/sbt-microsites/">sbt-microsites © 2020 47 Degrees</a></p>
-</div></div></div></footer><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/cats/highlight/highlight.pack.js"></script><script src="/cats/lunr/lunr.js"></script><script>
-// For all code blocks, copy the language from the containing div
-// to the inner code tag (where hljs expects it to be)
-const langPrefix = 'language-';
-document.querySelectorAll(`div[class^='${langPrefix}']`).forEach(function(div) {
-  div.classList.forEach(function(cssClass) {
-    if (cssClass.startsWith(langPrefix)) {
-      const lang = cssClass.substring(langPrefix.length);
-      div.querySelectorAll('pre code').forEach(function(code) {
-        code.classList.add(lang);
-      });
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Laika 0.18.1 + Helium Theme" />
+    <title>FAQ</title>
+    
+      <meta name="author" content="Cody Allen"/>
+    
+      <meta name="author" content="Ross Baker"/>
+    
+      <meta name="author" content="P. Oscar Boykin"/>
+    
+      <meta name="author" content="Travis Brown"/>
+    
+      <meta name="author" content="Adelbert Chang"/>
+    
+      <meta name="author" content="Peter Neyens"/>
+    
+      <meta name="author" content="Rob Norris"/>
+    
+      <meta name="author" content="Erik Osheim"/>
+    
+      <meta name="author" content="LukaJCB"/>
+    
+      <meta name="author" content="Michael Pilquist"/>
+    
+      <meta name="author" content="Miles Sabin"/>
+    
+      <meta name="author" content="Daniel Spiewak"/>
+    
+      <meta name="author" content="Frank Thomas"/>
+    
+      <meta name="author" content="Julien Truffaut"/>
+    
+      <meta name="author" content="Kailuo Wang"/>
+    
+    
+      <meta name="description" content="docs"/>
+    
+    
+      <link rel="icon" sizes="32x32" type="image/png" href="https://typelevel.org/img/favicon.png"/>
+    
+    
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.207/distr/fira_code.css">
+    
+    <link rel="stylesheet" type="text/css" href="helium/icofont.min.css" />
+    <link rel="stylesheet" type="text/css" href="helium/laika-helium.css" />
+    <link rel="stylesheet" type="text/css" href="site/styles.css" />
+    <script src="helium/laika-helium.js"></script>
+    <script src="js/sponsors.js"></script>
+    
+    
+    <script> /* for avoiding page load transitions */ </script>
+  </head>
+
+  <body>
+
+    <header id="top-bar">
+
+      <div class="row">
+        <a id="nav-icon">
+          <i class="icofont-laika" title="Navigation">&#xefa2;</i>
+        </a>
+        
+      </div>
+
+      <a class="image-link" href="https://typelevel.org"><img src="https://typelevel.org/img/logo.svg"></a>
+
+      <span class="row links"><a class="icon-link svg-link" href="https://typelevel.org/cats/api/"><span title="API"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M75,47.5c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm-50,-0c13.246,-0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,-0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm2.705,16.735l7.239,0l0.622,-4.904l-21.833,0l-0,4.904l7.589,0l0,22.067l6.383,0l-0,-22.067Zm58.076,7.265c-0,-8.757 -3.698,-14.166 -10.781,-14.166c-7.083,-0 -10.781,5.604 -10.781,14.166c0,8.757 3.698,14.166 10.781,14.166c7.083,0 10.781,-5.604 10.781,-14.166Zm-6.539,0c0,6.538 -1.128,9.496 -4.242,9.496c-2.997,0 -4.242,-2.88 -4.242,-9.496c-0,-6.616 1.206,-9.496 4.242,-9.496c3.036,-0 4.242,2.88 4.242,9.496Zm-29.242,-67c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm0.512,9.834c-7.122,-0 -12.609,5.098 -12.609,14.127c-0,9.263 5.215,14.205 12.532,14.205c4.164,0 7.083,-1.634 9.068,-3.658l-2.88,-3.697c-1.518,1.206 -3.153,2.413 -5.838,2.413c-3.697,-0 -6.266,-2.763 -6.266,-9.263c-0,-6.616 2.724,-9.379 6.149,-9.379c2.102,-0 3.892,0.778 5.371,1.984l3.113,-3.775c-2.257,-1.868 -4.748,-2.957 -8.64,-2.957Z"/>
+  </g>
+</svg></span></a><a class="icon-link svg-link" href="https://github.com/typelevel/cats"><span title="Source Code"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M49.995,1c-27.609,-0 -49.995,22.386 -49.995,50.002c-0,22.09 14.325,40.83 34.194,47.444c2.501,0.458 3.413,-1.086 3.413,-2.412c0,-1.185 -0.043,-4.331 -0.067,-8.503c-13.908,3.021 -16.843,-6.704 -16.843,-6.704c-2.274,-5.773 -5.552,-7.311 -5.552,-7.311c-4.54,-3.103 0.344,-3.042 0.344,-3.042c5.018,0.356 7.658,5.154 7.658,5.154c4.46,7.64 11.704,5.433 14.552,4.156c0.454,-3.232 1.744,-5.436 3.174,-6.685c-11.102,-1.262 -22.775,-5.553 -22.775,-24.713c-0,-5.457 1.949,-9.92 5.147,-13.416c-0.516,-1.265 -2.231,-6.348 0.488,-13.233c0,0 4.199,-1.344 13.751,5.126c3.988,-1.108 8.266,-1.663 12.518,-1.682c4.245,0.019 8.523,0.574 12.517,1.682c9.546,-6.47 13.736,-5.126 13.736,-5.126c2.728,6.885 1.013,11.968 0.497,13.233c3.204,3.496 5.141,7.959 5.141,13.416c0,19.209 -11.691,23.436 -22.83,24.673c1.795,1.544 3.394,4.595 3.394,9.26c0,6.682 -0.061,12.076 -0.061,13.715c0,1.338 0.899,2.894 3.438,2.406c19.853,-6.627 34.166,-25.354 34.166,-47.438c-0,-27.616 -22.389,-50.002 -50.005,-50.002"/>
+  </g>
+</svg></span></a><a class="icon-link" href="https://discord.gg/XF3CXcMzqD"><i class="icofont-laika" title="Chat">&#xeed5;</i></a><a class="icon-link" href="https://twitter.com/typelevel"><i class="icofont-laika" title="Twitter">&#xed7a;</i></a></span>
+
+    </header>
+
+    <nav id="sidebar">
+
+      <div class="row">
+        <a class="icon-link svg-link" href="https://typelevel.org/cats/api/"><span title="API"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M75,47.5c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm-50,-0c13.246,-0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,-0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm2.705,16.735l7.239,0l0.622,-4.904l-21.833,0l-0,4.904l7.589,0l0,22.067l6.383,0l-0,-22.067Zm58.076,7.265c-0,-8.757 -3.698,-14.166 -10.781,-14.166c-7.083,-0 -10.781,5.604 -10.781,14.166c0,8.757 3.698,14.166 10.781,14.166c7.083,0 10.781,-5.604 10.781,-14.166Zm-6.539,0c0,6.538 -1.128,9.496 -4.242,9.496c-2.997,0 -4.242,-2.88 -4.242,-9.496c-0,-6.616 1.206,-9.496 4.242,-9.496c3.036,-0 4.242,2.88 4.242,9.496Zm-29.242,-67c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm0.512,9.834c-7.122,-0 -12.609,5.098 -12.609,14.127c-0,9.263 5.215,14.205 12.532,14.205c4.164,0 7.083,-1.634 9.068,-3.658l-2.88,-3.697c-1.518,1.206 -3.153,2.413 -5.838,2.413c-3.697,-0 -6.266,-2.763 -6.266,-9.263c-0,-6.616 2.724,-9.379 6.149,-9.379c2.102,-0 3.892,0.778 5.371,1.984l3.113,-3.775c-2.257,-1.868 -4.748,-2.957 -8.64,-2.957Z"/>
+  </g>
+</svg></span></a><a class="icon-link svg-link" href="https://github.com/typelevel/cats"><span title="Source Code"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M49.995,1c-27.609,-0 -49.995,22.386 -49.995,50.002c-0,22.09 14.325,40.83 34.194,47.444c2.501,0.458 3.413,-1.086 3.413,-2.412c0,-1.185 -0.043,-4.331 -0.067,-8.503c-13.908,3.021 -16.843,-6.704 -16.843,-6.704c-2.274,-5.773 -5.552,-7.311 -5.552,-7.311c-4.54,-3.103 0.344,-3.042 0.344,-3.042c5.018,0.356 7.658,5.154 7.658,5.154c4.46,7.64 11.704,5.433 14.552,4.156c0.454,-3.232 1.744,-5.436 3.174,-6.685c-11.102,-1.262 -22.775,-5.553 -22.775,-24.713c-0,-5.457 1.949,-9.92 5.147,-13.416c-0.516,-1.265 -2.231,-6.348 0.488,-13.233c0,0 4.199,-1.344 13.751,5.126c3.988,-1.108 8.266,-1.663 12.518,-1.682c4.245,0.019 8.523,0.574 12.517,1.682c9.546,-6.47 13.736,-5.126 13.736,-5.126c2.728,6.885 1.013,11.968 0.497,13.233c3.204,3.496 5.141,7.959 5.141,13.416c0,19.209 -11.691,23.436 -22.83,24.673c1.795,1.544 3.394,4.595 3.394,9.26c0,6.682 -0.061,12.076 -0.061,13.715c0,1.338 0.899,2.894 3.438,2.406c19.853,-6.627 34.166,-25.354 34.166,-47.438c-0,-27.616 -22.389,-50.002 -50.005,-50.002"/>
+  </g>
+</svg></span></a><a class="icon-link" href="https://discord.gg/XF3CXcMzqD"><i class="icofont-laika" title="Chat">&#xeed5;</i></a><a class="icon-link" href="https://twitter.com/typelevel"><i class="icofont-laika" title="Twitter">&#xed7a;</i></a>
+      </div>
+
+      <ul class="nav-list">
+        <li class="level1"><a href="index.html">Cats</a></li>
+        <li class="level1"><a href="typeclasses.html">Type Classes</a></li>
+        <li class="level1"><a href="datatypes.html">Data Types</a></li>
+        <li class="level1"><a href="algebra.html">Algebra</a></li>
+        <li class="level1"><a href="motivations.html">Motivations</a></li>
+        <li class="level1"><a href="resources_for_learners.html">Resources for Learners</a></li>
+        <li class="level1"><a href="jump_start_guide.html">Jump Start Guide</a></li>
+        <li class="level1"><a href="imports.html">Imports</a></li>
+        <li class="level1 active"><a href="#">FAQ</a></li>
+        <li class="level1"><a href="CONTRIBUTING.html">Contributor guide</a></li>
+        <li class="level1"><a href="colophon.html">Colophon</a></li>
+        <li class="level1"><a href="nomenclature.html">Glossary</a></li>
+        <li class="level1"><a href="guidelines.html">Guidelines</a></li>
+        <li class="level1"><a href="typelevelEcosystem.html">Typelevel Ecosystem</a></li>
+        <li class="level1 nav-header">Type Classes</li>
+        <li class="level2"><a href="typeclasses/alternative.html">Alternative</a></li>
+        <li class="level2"><a href="typeclasses/applicative.html">Applicative</a></li>
+        <li class="level2"><a href="typeclasses/applicativemonaderror.html">ApplicativeError and MonadError</a></li>
+        <li class="level2"><a href="typeclasses/applicativetraverse.html">Applicative and Traversable Functors</a></li>
+        <li class="level2"><a href="typeclasses/arrow.html">Arrow</a></li>
+        <li class="level2"><a href="typeclasses/arrowchoice.html">Arrow Choice</a></li>
+        <li class="level2"><a href="typeclasses/bifunctor.html">Bifunctor</a></li>
+        <li class="level2"><a href="typeclasses/bimonad.html">Bimonad</a></li>
+        <li class="level2"><a href="typeclasses/comonad.html">Comonad</a></li>
+        <li class="level2"><a href="typeclasses/contravariant.html">Contravariant</a></li>
+        <li class="level2"><a href="typeclasses/contravariantmonoidal.html">Contravariant Monoidal</a></li>
+        <li class="level2"><a href="typeclasses/eq.html">Eq</a></li>
+        <li class="level2"><a href="typeclasses/foldable.html">Foldable</a></li>
+        <li class="level2"><a href="typeclasses/functor.html">Functor</a></li>
+        <li class="level2"><a href="typeclasses/invariant.html">Invariant</a></li>
+        <li class="level2"><a href="typeclasses/invariantmonoidal.html">Invariant Monoidal</a></li>
+        <li class="level2"><a href="typeclasses/lawtesting.html">Law testing</a></li>
+        <li class="level2"><a href="typeclasses/monad.html">Monad</a></li>
+        <li class="level2"><a href="typeclasses/monoid.html">Monoid</a></li>
+        <li class="level2"><a href="typeclasses/monoidk.html">MonoidK</a></li>
+        <li class="level2"><a href="typeclasses/nonemptytraverse.html">NonEmptyTraverse</a></li>
+        <li class="level2"><a href="typeclasses/parallel.html">Parallel</a></li>
+        <li class="level2"><a href="typeclasses/reducible.html">Reducible</a></li>
+        <li class="level2"><a href="typeclasses/semigroup.html">Semigroup</a></li>
+        <li class="level2"><a href="typeclasses/semigroupk.html">SemigroupK</a></li>
+        <li class="level2"><a href="typeclasses/show.html">Show</a></li>
+        <li class="level2"><a href="typeclasses/traverse.html">Traverse</a></li>
+        <li class="level1 nav-header">Data Types</li>
+        <li class="level2"><a href="datatypes/chain.html">Chain</a></li>
+        <li class="level2"><a href="datatypes/const.html">Const</a></li>
+        <li class="level2"><a href="datatypes/contt.html">ContT</a></li>
+        <li class="level2"><a href="datatypes/either.html">Either</a></li>
+        <li class="level2"><a href="datatypes/eithert.html">EitherT</a></li>
+        <li class="level2"><a href="datatypes/eval.html">Eval</a></li>
+        <li class="level2"><a href="datatypes/freeapplicative.html">Free Applicative</a></li>
+        <li class="level2"><a href="datatypes/freemonad.html">Free Monad</a></li>
+        <li class="level2"><a href="datatypes/functionk.html">FunctionK</a></li>
+        <li class="level2"><a href="datatypes/id.html">Id</a></li>
+        <li class="level2"><a href="datatypes/ior.html">Ior</a></li>
+        <li class="level2"><a href="datatypes/iort.html">IorT</a></li>
+        <li class="level2"><a href="datatypes/kleisli.html">Kleisli</a></li>
+        <li class="level2"><a href="datatypes/nel.html">NonEmptyList</a></li>
+        <li class="level2"><a href="datatypes/nested.html">Nested</a></li>
+        <li class="level2"><a href="datatypes/oneand.html">OneAnd</a></li>
+        <li class="level2"><a href="datatypes/optiont.html">OptionT</a></li>
+        <li class="level2"><a href="datatypes/state.html">State</a></li>
+        <li class="level2"><a href="datatypes/validated.html">Validated</a></li>
+        <li class="level2"><a href="datatypes/writer.html">Writer</a></li>
+        <li class="level2"><a href="datatypes/writert.html">WriterT</a></li>
+      </ul>
+
+      <ul class="nav-list">
+        <li class="level1 nav-header">Related Projects</li>
+        
+          <li class="level2"><a href="https://typelevel.org/cats-effect/">cats-effect</a></li>
+        
+          <li class="level2"><a href="https://typelevel.org/mouse">Mouse</a></li>
+        
+          <li class="level2"><a href="https://github.com/typelevel/discipline/">discipline</a></li>
+        
+      </ul>
+
+    </nav>
+
+    <div id="container">
+
+      <nav id="page-nav">
+        <p class="header"><a href="#">FAQ</a></p>
+
+        <ul class="nav-list">
+          <li class="level1"><a href="#what-imports-do-i-need">What imports do I need?</a></li>
+          <li class="level1"><a href="#i-am-new-to-pure-functional-programming-what-quick-wins-can-i-get-from-cats">I am new to pure functional programming, what quick wins can I get from Cats?</a></li>
+          <li class="level1"><a href="#what-is-the-difference-between-cats-and-scalaz">What is the difference between Cats and Scalaz?</a></li>
+          <li class="level1"><a href="#where-is-right-biased-either">Where is right-biased Either?</a></li>
+          <li class="level1"><a href="#why-is-the-compiler-having-trouble-with-types-with-more-than-one-type-parameter">Why is the compiler having trouble with types with more than one type parameter?</a></li>
+          <li class="level1"><a href="#why-is-some-example-code-not-compiling-for-me">Why is some example code not compiling for me?</a></li>
+          <li class="level1"><a href="#why-can-t-the-compiler-find-implicit-instances-for-future">Why can&#39;t the compiler find implicit instances for Future?</a></li>
+          <li class="level1"><a href="#where-are-implicit-instances-for-seq">Where are implicit instances for <code>Seq</code>?</a></li>
+          <li class="level1"><a href="#how-can-i-turn-my-list-of-something-into-a-something-of-a-list">How can I turn my List of <code>&lt;something&gt;</code> into a <code>&lt;something&gt;</code> of a list?</a></li>
+          <li class="level1"><a href="#where-is-listt">Where is ListT?</a></li>
+          <li class="level1"><a href="#where-are-applicatives-for-monad-transformers">Where are <code>Applicative</code>s for monad transformers?</a></li>
+          <li class="level1"><a href="#where-is-io-task">Where is IO/Task?</a></li>
+          <li class="level1"><a href="#what-does-typeclass-mean">What does <code>@typeclass</code> mean?</a></li>
+          <li class="level1"><a href="#what-do-types-like-and-λ-mean">What do types like <code>?</code> and <code>λ</code> mean?</a></li>
+          <li class="level1"><a href="#what-is-tailrecm">What is <code>tailRecM</code>?</a></li>
+          <li class="level1"><a href="#what-does-this-symbol-mean">What does this symbol mean?</a></li>
+          <li class="level1"><a href="#how-can-i-test-instances-against-their-type-classes-laws">How can I test instances against their type classes&#39; laws?</a></li>
+          <li class="level1"><a href="#how-can-i-help">How can I help?</a></li>
+          <li class="level1"><a href="#how-to-try-cats-in-a-repl">How to try Cats in a REPL?</a></li>
+          <li class="level1"><a href="#why-aren-t-monad-transformers-like-optiont-and-eithert-covariant-like-option-and-either">Why aren&#39;t monad transformers like <code>OptionT</code> and <code>EitherT</code> covariant like <code>Option</code> and <code>Either</code>?</a></li>
+        </ul>
+
+        <p class="footer"></p>
+      </nav>
+
+      <main class="content">
+
+        <h1 id="frequently-asked-questions" class="title">Frequently Asked Questions</h1>
+        <ul class="nav-list">
+          <li class="level1 active"><a href="#">FAQ</a></li>
+          <li class="level2"><a href="#what-imports-do-i-need">What imports do I need?</a></li>
+          <li class="level2"><a href="#i-am-new-to-pure-functional-programming-what-quick-wins-can-i-get-from-cats">I am new to pure functional programming, what quick wins can I get from Cats?</a></li>
+          <li class="level2"><a href="#what-is-the-difference-between-cats-and-scalaz">What is the difference between Cats and Scalaz?</a></li>
+          <li class="level2"><a href="#where-is-right-biased-either">Where is right-biased Either?</a></li>
+          <li class="level2"><a href="#why-is-the-compiler-having-trouble-with-types-with-more-than-one-type-parameter">Why is the compiler having trouble with types with more than one type parameter?</a></li>
+          <li class="level2"><a href="#why-is-some-example-code-not-compiling-for-me">Why is some example code not compiling for me?</a></li>
+          <li class="level2"><a href="#why-can-t-the-compiler-find-implicit-instances-for-future">Why can&#39;t the compiler find implicit instances for Future?</a></li>
+          <li class="level2"><a href="#where-are-implicit-instances-for-seq">Where are implicit instances for <code>Seq</code>?</a></li>
+          <li class="level2"><a href="#how-can-i-turn-my-list-of-something-into-a-something-of-a-list">How can I turn my List of <code>&lt;something&gt;</code> into a <code>&lt;something&gt;</code> of a list?</a></li>
+          <li class="level2"><a href="#where-is-listt">Where is ListT?</a></li>
+          <li class="level2"><a href="#where-are-applicatives-for-monad-transformers">Where are <code>Applicative</code>s for monad transformers?</a></li>
+          <li class="level2"><a href="#where-is-io-task">Where is IO/Task?</a></li>
+          <li class="level2"><a href="#what-does-typeclass-mean">What does <code>@typeclass</code> mean?</a></li>
+          <li class="level2"><a href="#what-do-types-like-and-λ-mean">What do types like <code>?</code> and <code>λ</code> mean?</a></li>
+          <li class="level2"><a href="#what-is-tailrecm">What is <code>tailRecM</code>?</a></li>
+          <li class="level2"><a href="#what-does-this-symbol-mean">What does this symbol mean?</a></li>
+          <li class="level2"><a href="#how-can-i-test-instances-against-their-type-classes-laws">How can I test instances against their type classes&#39; laws?</a></li>
+          <li class="level2"><a href="#how-can-i-help">How can I help?</a></li>
+          <li class="level2"><a href="#how-to-try-cats-in-a-repl">How to try Cats in a REPL?</a></li>
+          <li class="level2"><a href="#why-aren-t-monad-transformers-like-optiont-and-eithert-covariant-like-option-and-either">Why aren&#39;t monad transformers like <code>OptionT</code> and <code>EitherT</code> covariant like <code>Option</code> and <code>Either</code>?</a></li>
+        </ul>
+        
+        <h2 id="what-imports-do-i-need" class="section">What imports do I need?<a class="anchor-link right" href="#what-imports-do-i-need"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>The easiest approach to Cats imports is to import everything that&#39;s commonly needed:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">data</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span></code></pre>
+        <p>This should be all that you need, but if you&#39;d like to learn more about the details of imports than you can check out the <a href="imports.html">import guide</a>.</p>
+        
+        <h2 id="i-am-new-to-pure-functional-programming-what-quick-wins-can-i-get-from-cats" class="section">I am new to pure functional programming, what quick wins can I get from Cats?<a class="anchor-link right" href="#i-am-new-to-pure-functional-programming-what-quick-wins-can-i-get-from-cats"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>Please refer to the <a href="jump_start_guide.html">jump start guide</a>.</p>
+        
+        <h2 id="what-is-the-difference-between-cats-and-scalaz" class="section">What is the difference between Cats and Scalaz?<a class="anchor-link right" href="#what-is-the-difference-between-cats-and-scalaz"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>Cats and <a href="https://github.com/scalaz/scalaz">Scalaz</a> have the same goal: to facilitate pure functional programming in Scala applications. However the underlying core strategy is different; Scalaz took the approach of trying to provide a single batteries-included <em>standard library</em> for FP that powers the Scala applications. Cats, on the other hand, aims to help build an <a href="/cats/#ecosystem">ecosystem</a> of pure FP libraries by providing a solid and stable foundation; these libraries can have their own styles and personalities, competing with each other, while at the same time playing nice. It is through this ecosystem of FP libraries (cats included) that Scala applications can be powered with &quot;FP awesome-ness&quot; and beyond by picking whatever best fit their needs.</p>
+        <p>Based on this core strategy, Cats takes a <a href="/cats/motivations#modularity">modular</a> approach and focuses on providing core, <a href="/cats/#binary-compatibility-and-versioning">binary compatible</a>, <a href="/cats/motivations#approachability">approachable</a> and <a href="/cats/motivations#efficiency">efficient</a> abstractions. It provides a welcoming and supportive environment for the <a href="https://discord.gg/XF3CXcMzqD">user community</a> governed by the <a href="https://www.scala-lang.org/conduct/">Scala Code of Conduct</a>. It also takes great effort in supplying a comprehensive and beginner-friendly <a href="/cats/#documentation">documentation</a>.</p>
+        
+        <h2 id="where-is-right-biased-either" class="section">Where is right-biased Either?<a class="anchor-link right" href="#where-is-right-biased-either"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>Up through Cats 0.7.x we had <code>cats.data.Xor</code>, which was effectively <code>scala.util.Either</code>, but right-biased by default and with
+        a bunch of useful combinators around it. In Scala 2.12.x <code>Either</code>
+        <a href="https://github.com/scala/scala/pull/5135">became right-biased</a> so we revisited the use of <code>Xor</code> and
+        <a href="https://github.com/typelevel/cats/issues/1192">decided</a> that in the interest of interoperability, we would remove <code>Xor</code> in the Cats 0.8.0 release and
+        fill in the gaps in the <code>scala.util.Either</code> API via
+        <a href="https://github.com/typelevel/cats/blob/main/core/src/main/scala/cats/syntax/either.scala">syntax enrichment</a>.</p>
+        <p>This syntax and the type class instances for <code>Either</code> can be imported using <code>cats.implicits._</code>, which will also bring in syntactic enrichment and instances for other standard library types, or you can import them individually with <code>cats.syntax.either._</code> and <code>cats.instances.either._</code>.</p>
+        <p>There are a few minor mismatches between <code>Xor</code> and <code>Either</code>. For example, in some cases you may need to specify a type parameter for an enrichment method on <code>Either</code> (such as <code>leftMap</code>) even though it was properly inferred for <code>Xor</code>. See the <a href="datatypes/either.html#either-in-the-small-either-in-the-large"><code>Either</code> section of this guide</a> for more information about these issues.</p>
+        <p>Similarly, <code>cats.data.XorT</code> has been replaced with <code>cats.data.EitherT</code>, although since this is a type defined in Cats, you don&#39;t need to import syntax or instances for it (although you may need imports for the underlying monad).</p>
+        
+        <h2 id="why-is-the-compiler-having-trouble-with-types-with-more-than-one-type-parameter" class="section">Why is the compiler having trouble with types with more than one type parameter?<a class="anchor-link right" href="#why-is-the-compiler-having-trouble-with-types-with-more-than-one-type-parameter"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>When you encounter a situation where the same code works fine with a type with one type parameter, e.g. <code>List[A]</code>, but doesn&#39;t work with types with more than one, e.g. <code>Either[A, B]</code>, you probably hit <a href="https://issues.scala-lang.org/browse/SI-2712">SI-2712</a>. Without going into the details, it&#39;s highly recommended to enable a partial SI-2712 fix in your project. The easiest way to achieve that is through this <a href="https://github.com/fiadliel/sbt-partial-unification">sbt plugin</a>.
+        Cats used to provide mitigation to this issue semi-transparently, but given the fact that the fix is now mainstream, we decided to drop that mitigation machinery in favor of reducing the complexity. See this <a href="https://github.com/typelevel/cats/issues/1073">issue</a> for details.</p>
+        
+        <h2 id="why-is-some-example-code-not-compiling-for-me" class="section">Why is some example code not compiling for me?<a class="anchor-link right" href="#why-is-some-example-code-not-compiling-for-me"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>A portion of example code requires either the <a href="https://github.com/typelevel/kind-projector">Kind-projector</a> compiler plugin or partial unification turned on in scalac. The easiest way to turn partial unification on is through this <a href="https://github.com/fiadliel/sbt-partial-unification">sbt plugin</a>.</p>
+        
+        <h2 id="why-can-t-the-compiler-find-implicit-instances-for-future" class="section">Why can&#39;t the compiler find implicit instances for Future?<a class="anchor-link right" href="#why-can-t-the-compiler-find-implicit-instances-for-future"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>If you have already followed the <a href="#what-imports-do-i-need">imports advice</a> but are still getting error messages like <code>could not find implicit value for parameter e: cats.Monad[scala.concurrent.Future]</code> or <code>value |+| is not a member of scala.concurrent.Future[Int]</code>, then make sure that you have an implicit <code>scala.concurrent.ExecutionContext</code> in scope. The easiest way to do this is to <code>import scala.concurrent.ExecutionContext.Implicits.global</code>, but note that you may want to use a different execution context for your production application.</p>
+        
+        <h2 id="where-are-implicit-instances-for-seq" class="section">Where are implicit instances for <code>Seq</code>?<a class="anchor-link right" href="#where-are-implicit-instances-for-seq"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>As of <code>cats-2.3</code>, instances for <code>collection.immutable.Seq</code> are provided by cats.
+        Mind that, up to <code>scala-2.12</code>, <code>Seq</code> was an alias for <code>collection.Seq</code> and lawful instances can&#39;t be provided for it due to its potential mutability.
+        In <code>scala-2.13</code>, <code>Seq</code> was changed to <code>collection.immutable.Seq</code> which greatly improves <code>Seq</code>&#39;s interoperability with cats.</p>
+        
+        <h2 id="how-can-i-turn-my-list-of-something-into-a-something-of-a-list" class="section">How can I turn my List of <code>&lt;something&gt;</code> into a <code>&lt;something&gt;</code> of a list?<a class="anchor-link right" href="#how-can-i-turn-my-list-of-something-into-a-something-of-a-list"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>It&#39;s really common to have a <code>List</code> of values with types like <code>Option</code>, <code>Either</code>, or <code>Validated</code> that you would like to turn &quot;inside out&quot; into an <code>Option</code> (or <code>Either</code> or <code>Validated</code>) of a <code>List</code>. The <code>sequence</code> and <code>traverse</code> methods are <em>really</em> handy for this. You can read more about them in the <a href="typeclasses/traverse.html">Traverse documentation</a>.</p>
+        
+        <h2 id="where-is-listt" class="section">Where is ListT?<a class="anchor-link right" href="#where-is-listt"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>There are monad transformers for various types, such as <a href="datatypes/optiont.html">OptionT</a>, so people often wonder why there isn&#39;t a <code>ListT</code>. For example, in the following example, people might reach for <code>ListT</code> to simplify making nested <code>map</code> and <code>exists</code> calls:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">l</span><span>: </span><span class="type-name">Option</span><span>[</span><span class="type-name">List</span><span>[</span><span class="type-name">Int</span><span>]] = </span><span class="type-name">Some</span><span>(</span><span class="type-name">List</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="number-literal">2</span><span>, </span><span class="number-literal">3</span><span>, </span><span class="number-literal">4</span><span>, </span><span class="number-literal">5</span><span>))
+
+</span><span class="keyword">def</span><span> </span><span class="declaration-name">isEven</span><span>(</span><span class="identifier">i</span><span>: </span><span class="type-name">Int</span><span>): </span><span class="type-name">Boolean</span><span> = </span><span class="identifier">i</span><span> % </span><span class="number-literal">2</span><span> == </span><span class="number-literal">0</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">l</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span> + </span><span class="number-literal">1</span><span>))
+</span><span class="comment">// res1: Option[List[Int]] = Some(List(2, 3, 4, 5, 6))
+</span><span class="identifier">l</span><span>.</span><span class="identifier">exists</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">exists</span><span>(</span><span class="identifier">isEven</span><span>))
+</span><span class="comment">// res2: Boolean = true</span></code></pre>
+        <p>A naive implementation of <code>ListT</code> suffers from associativity issues; see <a href="https://gist.github.com/tpolecat/1227e22e3161b5816e014c00650f3b57">this gist</a> for an example. It&#39;s possible to create a <code>ListT</code> that doesn&#39;t have these issues, but it tends to be pretty inefficient. For many use-cases, <a href="https://github.com/typelevel/cats/blob/main/core/src/main/scala/cats/data/Nested.scala">Nested</a> can be used to achieve the desired results.</p>
+        <p>Here is how we could achieve the effect of the previous example using <code>Nested</code>:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">data</span><span>.</span><span class="type-name">Nested</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">nl</span><span> = </span><span class="type-name">Nested</span><span>(</span><span class="identifier">l</span><span>)
+</span><span class="comment">// nl: Nested[Option, List, Int] = Nested(Some(List(1, 2, 3, 4, 5)))
+</span><span class="identifier">nl</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span> + </span><span class="number-literal">1</span><span>)
+</span><span class="comment">// res3: Nested[Option, List, Int] = Nested(Some(List(2, 3, 4, 5, 6)))
+</span><span class="identifier">nl</span><span>.</span><span class="identifier">exists</span><span>(</span><span class="identifier">isEven</span><span>)
+</span><span class="comment">// res4: Boolean = true</span></code></pre>
+        <p>We can even perform more complicated operations, such as a <code>traverse</code> of the nested structure:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">data</span><span>.</span><span class="type-name">ValidatedNel</span><span>
+</span><span class="keyword">type</span><span> </span><span class="type-name">ErrorsOr</span><span>[</span><span class="type-name">A</span><span>] = </span><span class="type-name">ValidatedNel</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">A</span><span>]
+</span><span class="keyword">def</span><span> </span><span class="declaration-name">even</span><span>(</span><span class="identifier">i</span><span>: </span><span class="type-name">Int</span><span>): </span><span class="type-name">ErrorsOr</span><span>[</span><span class="type-name">Int</span><span>] = </span><span class="keyword">if</span><span> (</span><span class="identifier">i</span><span> % </span><span class="number-literal">2</span><span> == </span><span class="number-literal">0</span><span>) </span><span class="identifier">i</span><span>.</span><span class="identifier">validNel</span><span> </span><span class="keyword">else</span><span> </span><span class="string-literal">s&quot;</span><span class="substitution">$i</span><span class="string-literal"> is odd&quot;</span><span>.</span><span class="identifier">invalidNel</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">nl</span><span>.</span><span class="identifier">traverse</span><span>(</span><span class="identifier">even</span><span>)
+</span><span class="comment">// res5: ErrorsOr[Nested[Option, List, Int]] = Invalid(
+//   NonEmptyList(&quot;1 is odd&quot;, List(&quot;3 is odd&quot;, &quot;5 is odd&quot;))
+// )</span></code></pre>
+        
+        <h2 id="where-are-applicatives-for-monad-transformers" class="section">Where are <code>Applicative</code>s for monad transformers?<a class="anchor-link right" href="#where-are-applicatives-for-monad-transformers"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>An <code>Applicative</code> instance for <code>OptionT[F, *]</code>/<code>EitherT[F, E, *]</code>, built without a corresponding <code>Monad</code> instance for <code>F</code>, would be unlawful, so it&#39;s not included. See <a href="guidelines.html#applicative-instances-for-monad-transformers">the guidelines</a> for a more detailed explanation.</p>
+        <p>As an alternative, using <code>.toNested</code> on the monad transformer is recommended, although its <code>ap</code> will still be inconsistent with the Monad instance&#39;s.`.</p>
+        
+        <h2 id="where-is-io-task" class="section">Where is IO/Task?<a class="anchor-link right" href="#where-is-io-task"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>In purely functional programming, a monadic <code>IO</code> or <code>Task</code> type is often used to handle side effects such as file/network IO. In some languages and frameworks, such a type also serves as the primary abstraction through which parallelism is achieved.  Nearly every real-world purely functional application or service is going to require such a data type, and this gives rise to an obvious question: why doesn&#39;t Cats include such a type?</p>
+        <p>The answer is that Cats <em>does</em> include an <code>IO</code>, it just isn&#39;t included in the core library.  The decision was made to split <code>IO</code> away from cats-core and (indeed the whole Cats release cycle!) in order to make it easier to ensure modular versioning and compatibility across the ecosystem.  The <a href="https://github.com/typelevel/cats-effect">cats-effect</a> project defines a type, <code>cats.effect.IO</code>, which is intended to be a very minimal, very performant data type for managing synchronous and asynchronous side-effects, integrated into the Cats ecosystem.</p>
+        <p>However, we acknowledge that this type may not meet everyone&#39;s needs. The cats-effect project characterizes the space of side-effect-capturing data types with a set of typeclasses (deriving from <code>cats.Monad</code>), and so all such data types are, broadly-speaking, mutually compatible and interchangeable in many generic contexts. For example, <a href="https://monix.io">Monix</a> provides support for IO, concurrency, and streaming and integrates with the cats-effect type classes.</p>
+        <p>It may be worth keeping in mind that <code>IO</code> and <code>Task</code> are pretty blunt instruments (they are essentially the <code>Any</code> of side effect management), and you may want to narrow the scope of your effects throughout most of your application. The <a href="datatypes/freemonad.html">free monad</a> documentation describes a way to abstractly define controlled effects and interpret them into a type such as <code>IO</code> or <code>Task</code> as late as possible. As more of your code becomes pure through these controlled effects the less it matters which type you end up choosing to represent your side effects.</p>
+        
+        <h2 id="what-does-typeclass-mean" class="section">What does <code>@typeclass</code> mean?<a class="anchor-link right" href="#what-does-typeclass-mean"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>Cats defines and implements numerous type classes. Unfortunately, encoding these type classes in Scala can incur a large amount of boilerplate. To address this, <a href="https://github.com/typelevel/simulacrum">Simulacrum</a> introduces <code>@typeclass</code>, a macro annotation which generates a lot of this boilerplate. This elevates type classes to a first class construct and increases the legibility and maintainability of the code. Use of simulacrum also ensures consistency in how the type classes are encoded across a project. Cats uses simulacrum wherever possible to encode type classes, and you can read more about it at the <a href="https://github.com/typelevel/simulacrum">project page</a>.</p>
+        <p>Note that the one area where simulacrum is intentionally not used is in the <code>cats-kernel</code> module. The <code>cats-kernel</code> module is intended to be a shared dependency for a number of projects, and as such, it is important that it is both lightweight and very stable from a binary compatibility perspective. At some point there may be a transition from simulacrum to <a href="https://github.com/typelevel/typeclassic">typeclassic</a>, and the binary compatibility of moving between simulacrum and typeclassic is unclear at this point. Avoiding the dependency on simulacrum in <code>cats-kernel</code>, provides insulation against any potential binary compatibility problems in such a transition.</p>
+        
+        <h2 id="what-do-types-like-and-λ-mean" class="section">What do types like <code>?</code> and <code>λ</code> mean?<a class="anchor-link right" href="#what-do-types-like-and-λ-mean"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>Cats defines a wealth of type classes and type class instances. For a number of the type class and instance combinations, there is a mismatch between the type parameter requirements of the type class and the type parameter requirements of the data type for which the instance is being defined. For example, the <a href="datatypes/either.html">Either</a> data type is a type constructor with two type parameters. We would like to be able to define a <a href="typeclasses/monad.html">Monad</a> for <code>Either</code>, but the <code>Monad</code> type class operates on type constructors having only one type parameter.</p>
+        <p><strong>Enter type lambdas!</strong> Type lambdas provide a mechanism to allow one or more of the type parameters for a particular type constructor to be fixed. In the case of <code>Either</code> then, when defining a <code>Monad</code> for <code>Either</code>, we want to fix one of the type parameters at the point where a <code>Monad</code> instance is summoned, so that the type parameters line up. As <code>Either</code> is right biased, a type lambda can be used to fix the left type parameter and allow the right type parameter to continue to vary when <code>Either</code> is treated as a <code>Monad</code>. The right biased nature of <code>Either</code> is discussed further in the <a href="datatypes/either.html"><code>Either</code> documentation</a>.</p>
+        <p><strong>Enter <a href="https://github.com/typelevel/kind-projector">kind-projector</a>!</strong> kind-projector is a compiler plugin which provides a convenient syntax for dealing with type lambdas. The symbols <code>?</code> and <code>λ</code> are treated specially by kind-projector, and expanded into the more verbose definitions that would be required were it not to be used. You can read more about kind-projector at the <a href="https://github.com/typelevel/kind-projector">project page</a>.</p>
+        
+        <h2 id="what-is-tailrecm" class="section">What is <code>tailRecM</code>?<a class="anchor-link right" href="#what-is-tailrecm"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>The <code>FlatMap</code> type class has a <code>tailRecM</code> method with the following signature:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">def</span><span> </span><span class="declaration-name">tailRecM</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>](</span><span class="identifier">a</span><span>: </span><span class="type-name">A</span><span>)(</span><span class="identifier">f</span><span>: </span><span class="type-name">A</span><span> =&gt; </span><span class="type-name">F</span><span>[</span><span class="type-name">Either</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>]]): </span><span class="type-name">F</span><span>[</span><span class="type-name">B</span><span>]</span></code></pre>
+        <p>When you are defining a <code>FlatMap</code> instance, its <code>tailRecM</code> implementation must have two properties in order for the instance to be considered lawful. The first property is that <code>tailRecM</code> must return the same result that you would get if you recursively called <code>flatMap</code> until you got a <code>Right</code> value (assuming you had unlimited stack space—we&#39;ll get to that in a moment). In other words, it must give the same result as this implementation:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">trait</span><span> </span><span class="type-name">Monad</span><span>[</span><span class="type-name">F</span><span>[</span><span class="identifier">_</span><span>]] {
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">pure</span><span>[</span><span class="type-name">A</span><span>](</span><span class="identifier">x</span><span>: </span><span class="type-name">A</span><span>): </span><span class="type-name">F</span><span>[</span><span class="type-name">A</span><span>] = ???
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">flatMap</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>](</span><span class="identifier">fa</span><span>: </span><span class="type-name">F</span><span>[</span><span class="type-name">A</span><span>])(</span><span class="identifier">f</span><span>: </span><span class="type-name">A</span><span> =&gt; </span><span class="type-name">F</span><span>[</span><span class="type-name">B</span><span>]): </span><span class="type-name">F</span><span>[</span><span class="type-name">B</span><span>] = ???
+
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">tailRecM</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>](</span><span class="identifier">a</span><span>: </span><span class="type-name">A</span><span>)(</span><span class="identifier">f</span><span>: </span><span class="type-name">A</span><span> =&gt; </span><span class="type-name">F</span><span>[</span><span class="type-name">Either</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>]]): </span><span class="type-name">F</span><span>[</span><span class="type-name">B</span><span>] =
+    </span><span class="identifier">flatMap</span><span>(</span><span class="identifier">f</span><span>(</span><span class="identifier">a</span><span>)) {
+      </span><span class="keyword">case</span><span> </span><span class="type-name">Right</span><span>(</span><span class="identifier">b</span><span>) =&gt; </span><span class="identifier">pure</span><span>(</span><span class="identifier">b</span><span>)
+      </span><span class="keyword">case</span><span> </span><span class="type-name">Left</span><span>(</span><span class="identifier">nextA</span><span>) =&gt; </span><span class="identifier">tailRecM</span><span>(</span><span class="identifier">nextA</span><span>)(</span><span class="identifier">f</span><span>)
     }
-  });
-});
+}</span></code></pre>
+        <p>The reason we can&#39;t simply use this implementation for all type constructors (and the reason that <code>tailRecM</code> is useful at all) is that for many monadic types, recursively <code>flatMap</code>-ing in this way will quickly exhaust the stack.</p>
+        <p><code>Option</code> is one example of a monadic type whose <code>flatMap</code> consumes stack in such a way that nesting <code>flatMap</code> calls deeply enough (usually around a couple thousand levels) will result in a stack overflow. We can provide a stack-safe <code>tailRecM</code> implementation for <code>Option</code>, though:</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="type-name">FlatMap</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">scala</span><span>.</span><span class="identifier">annotation</span><span>.</span><span class="identifier">tailrec</span><span>
 
-hljs.configure({languages:['scala','java','bash']});
-hljs.initHighlightingOnLoad();
-      </script><script src="/cats/js/sponsors.js"></script><script>console.info('\x57\x65\x62\x73\x69\x74\x65\x20\x62\x75\x69\x6c\x74\x20\x77\x69\x74\x68\x3a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x5f\x5f\x20\x20\x20\x20\x5f\x5f\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x5f\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x5f\x20\x5f\x5f\x0a\x20\x20\x20\x5f\x5f\x5f\x5f\x5f\x2f\x20\x2f\x5f\x20\x20\x2f\x20\x2f\x5f\x20\x20\x20\x20\x20\x20\x5f\x5f\x5f\x5f\x20\x5f\x5f\x5f\x20\x20\x28\x5f\x29\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x20\x20\x5f\x5f\x5f\x5f\x5f\x28\x5f\x29\x20\x2f\x5f\x5f\x5f\x5f\x20\x20\x5f\x5f\x5f\x5f\x5f\x0a\x20\x20\x2f\x20\x5f\x5f\x5f\x2f\x20\x5f\x5f\x20\x5c\x2f\x20\x5f\x5f\x2f\x5f\x5f\x5f\x5f\x5f\x2f\x20\x5f\x5f\x20\x60\x5f\x5f\x20\x5c\x2f\x20\x2f\x20\x5f\x5f\x5f\x2f\x20\x5f\x5f\x5f\x2f\x20\x5f\x5f\x20\x5c\x2f\x20\x5f\x5f\x5f\x2f\x20\x2f\x20\x5f\x5f\x2f\x20\x5f\x20\x5c\x2f\x20\x5f\x5f\x5f\x2f\x0a\x20\x28\x5f\x5f\x20\x20\x29\x20\x2f\x5f\x2f\x20\x2f\x20\x2f\x5f\x2f\x5f\x5f\x5f\x5f\x5f\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x5f\x5f\x2f\x20\x2f\x20\x20\x2f\x20\x2f\x5f\x2f\x20\x28\x5f\x5f\x20\x20\x29\x20\x2f\x20\x2f\x5f\x2f\x20\x20\x5f\x5f\x28\x5f\x5f\x20\x20\x29\x0a\x2f\x5f\x5f\x5f\x5f\x2f\x5f\x2e\x5f\x5f\x5f\x2f\x5c\x5f\x5f\x2f\x20\x20\x20\x20\x20\x2f\x5f\x2f\x20\x2f\x5f\x2f\x20\x2f\x5f\x2f\x5f\x2f\x5c\x5f\x5f\x5f\x2f\x5f\x2f\x20\x20\x20\x5c\x5f\x5f\x5f\x5f\x2f\x5f\x5f\x5f\x5f\x2f\x5f\x2f\x5c\x5f\x5f\x2f\x5c\x5f\x5f\x5f\x2f\x5f\x5f\x5f\x5f\x2f\x0a\x0a\x68\x74\x74\x70\x73\x3a\x2f\x2f\x34\x37\x64\x65\x67\x2e\x67\x69\x74\x68\x75\x62\x2e\x69\x6f\x2f\x73\x62\x74\x2d\x6d\x69\x63\x72\x6f\x73\x69\x74\x65\x73')</script><script>((window.gitter = {}).chat = {}).options = {
-room: 'typelevel/cats'};</script><script src="https://sidecar.gitter.im/dist/sidecar.v1.js"></script><script src="/cats/js/version-selector.js"></script><script src="/cats/js/search.js"></script></body></html>
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">optionFlatMap</span><span>: </span><span class="type-name">FlatMap</span><span>[</span><span class="type-name">Option</span><span>] = </span><span class="keyword">new</span><span> </span><span class="type-name">FlatMap</span><span>[</span><span class="type-name">Option</span><span>] {
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">map</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>](</span><span class="identifier">fa</span><span>: </span><span class="type-name">Option</span><span>[</span><span class="type-name">A</span><span>])(</span><span class="identifier">f</span><span>: </span><span class="type-name">A</span><span> =&gt; </span><span class="type-name">B</span><span>): </span><span class="type-name">Option</span><span>[</span><span class="type-name">B</span><span>] = </span><span class="identifier">fa</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">f</span><span>)
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">flatMap</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>](</span><span class="identifier">fa</span><span>: </span><span class="type-name">Option</span><span>[</span><span class="type-name">A</span><span>])(</span><span class="identifier">f</span><span>: </span><span class="type-name">A</span><span> =&gt; </span><span class="type-name">Option</span><span>[</span><span class="type-name">B</span><span>]): </span><span class="type-name">Option</span><span>[</span><span class="type-name">B</span><span>] = </span><span class="identifier">fa</span><span>.</span><span class="identifier">flatMap</span><span>(</span><span class="identifier">f</span><span>)
+
+  </span><span class="annotation">@tailrec</span><span>
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">tailRecM</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>](</span><span class="identifier">a</span><span>: </span><span class="type-name">A</span><span>)(</span><span class="identifier">f</span><span>: </span><span class="type-name">A</span><span> =&gt; </span><span class="type-name">Option</span><span>[</span><span class="type-name">Either</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>]]): </span><span class="type-name">Option</span><span>[</span><span class="type-name">B</span><span>] = </span><span class="identifier">f</span><span>(</span><span class="identifier">a</span><span>) </span><span class="keyword">match</span><span> {
+    </span><span class="keyword">case</span><span> </span><span class="type-name">None</span><span> =&gt; </span><span class="type-name">None</span><span>
+    </span><span class="keyword">case</span><span> </span><span class="type-name">Some</span><span>(</span><span class="type-name">Left</span><span>(</span><span class="identifier">a1</span><span>)) =&gt; </span><span class="identifier">tailRecM</span><span>(</span><span class="identifier">a1</span><span>)(</span><span class="identifier">f</span><span>)
+    </span><span class="keyword">case</span><span> </span><span class="type-name">Some</span><span>(</span><span class="type-name">Right</span><span>(</span><span class="identifier">b</span><span>)) =&gt; </span><span class="type-name">Some</span><span>(</span><span class="identifier">b</span><span>)
+  }
+}</span></code></pre>
+        <p>Now we don&#39;t have to worry about overflowing the stack, no matter how many times we have to call <code>tailRecM</code> before we get a <code>Right</code>.</p>
+        <p>This is useful because any operation that you would write using recursive <code>flatMap</code>s can be rewritten to use <code>tailRecM</code>, and if the <code>FlatMap</code> instance for your type constructor is lawful, you don&#39;t have to worry about stack safety.</p>
+        <p>The downside is that how you write a lawful <code>tailRecM</code> for your type constructor may not always be obvious. For some type constructors, such as <code>Future</code>, recursively <code>flatMap</code>-ing is already safe, and the first simple implementation above will be lawful. For types like <code>Option</code> and <code>Try</code>, you&#39;ll need to arrange the recursion in such a way that the <code>tailRecM</code> calls are tail calls (which you can confirm with Scala&#39;s <code>tailrec</code> annotation). Collection types require yet another approach (see for example the <a href="https://github.com/typelevel/cats/pull/1041/files#diff-e4d8b82ab5544972195d955591ffe18cR31">implementation for <code>List</code></a>).</p>
+        <p>If you&#39;re having trouble figuring out how to implement <code>tailRecM</code> lawfully, you can try to find an instance in Cats itself for a type that is semantically similar to yours (all of the <code>FlatMap</code> instances provided by Cats have lawful, stack-safe <code>tailRecM</code> implementations).</p>
+        <p>In some cases you may decide that providing a lawful <code>tailRecM</code> may be impractical or even impossible (if so we&#39;d like to hear about it). For these cases we provide a way of testing all of the monad laws <em>except</em> for the stack safety of <code>tailRecM</code>: just replace <code>MonadTests[F].monad[A, B, C]</code> in your tests with <code>MonadTests[F].stackUnsafeMonad[A, B, C]</code>.</p>
+        
+        <h2 id="what-does-this-symbol-mean" class="section">What does this symbol mean?<a class="anchor-link right" href="#what-does-this-symbol-mean"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>Below is a list of symbols used in Cats.</p>
+        <p>The <code>~&gt;</code>, <code>⊥</code>, <code>⊤</code>, <code>:&lt;:</code> and <code>:≺:</code> symbols can be imported with <code>import cats._</code>.</p>
+        <p>All other symbols can be imported with <code>import cats.implicits._</code></p>
+        <table>
+          <thead>
+            <tr>
+              <th>Symbol</th>
+              <th>Name</th>
+              <th>Nickname</th>
+              <th>Type Class</th>
+              <th>Signature</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>fa *&gt; fb</code></td>
+              <td>product right</td>
+              <td></td>
+              <td><code>Apply[F[_]]</code></td>
+              <td><code>productR(fa: F[A])(fb: F[B]): F[B]</code></td>
+            </tr>
+            <tr>
+              <td><code>fa &lt;* fb</code></td>
+              <td>product left</td>
+              <td></td>
+              <td><code>Apply[F[_]]</code></td>
+              <td><code>productL(fa: F[A])(fb: F[B]): F[A]</code></td>
+            </tr>
+            <tr>
+              <td><code>x === y</code></td>
+              <td>equals</td>
+              <td></td>
+              <td><code>Eq[A]</code></td>
+              <td><code>eqv(x: A, y: A): Boolean</code></td>
+            </tr>
+            <tr>
+              <td><code>x =!= y</code></td>
+              <td>not equals</td>
+              <td></td>
+              <td><code>Eq[A]</code></td>
+              <td><code>neqv(x: A, y: A): Boolean</code></td>
+            </tr>
+            <tr>
+              <td><code>fa &gt;&gt;= f</code></td>
+              <td>flatMap</td>
+              <td></td>
+              <td><code>FlatMap[F[_]]</code></td>
+              <td><code>flatMap(fa: F[A])(f: A =&gt; F[B]): F[B]</code></td>
+            </tr>
+            <tr>
+              <td><code>fa &gt;&gt; fb</code></td>
+              <td>followed by</td>
+              <td></td>
+              <td><code>FlatMap[F[_]]</code></td>
+              <td><code>&gt;&gt;(fb: =&gt; F[B]): F[B]</code></td>
+            </tr>
+            <tr>
+              <td><code>x &#124;-&#124; y</code></td>
+              <td>remove</td>
+              <td></td>
+              <td><code>Group[A]</code></td>
+              <td><code>remove(x: A, y: A): A</code></td>
+            </tr>
+            <tr>
+              <td><code>x &gt; y</code></td>
+              <td>greater than</td>
+              <td></td>
+              <td><code>PartialOrder[A]</code></td>
+              <td><code>gt(x: A, y: A): Boolean</code></td>
+            </tr>
+            <tr>
+              <td><code>x &gt;= y</code></td>
+              <td>greater than or equal</td>
+              <td></td>
+              <td><code>PartialOrder[A]</code></td>
+              <td><code>gteq(x: A, y: A): Boolean</code></td>
+            </tr>
+            <tr>
+              <td><code>x &lt; y</code></td>
+              <td>less than</td>
+              <td></td>
+              <td><code>PartialOrder[A]</code></td>
+              <td><code>lt(x: A, y: A): Boolean</code></td>
+            </tr>
+            <tr>
+              <td><code>x &lt;= y</code></td>
+              <td>less than or equal</td>
+              <td></td>
+              <td><code>PartialOrder[A]</code></td>
+              <td><code>lteq(x: A, y: A): Boolean</code></td>
+            </tr>
+            <tr>
+              <td><code>x &#124;+&#124; y</code></td>
+              <td>Semigroup combine</td>
+              <td></td>
+              <td><code>Semigroup[A]</code></td>
+              <td><code>combine(x: A, y: A): A</code></td>
+            </tr>
+            <tr>
+              <td><code>x &lt;+&gt; y</code></td>
+              <td>SemigroupK combine</td>
+              <td></td>
+              <td><code>SemigroupK[F[_]]</code></td>
+              <td><code>combineK(x: F[A], y: F[A]): F[A]</code></td>
+            </tr>
+            <tr>
+              <td><code>f &lt;&lt;&lt; g</code></td>
+              <td>Arrow compose</td>
+              <td></td>
+              <td><code>Compose[F[_, _]]</code></td>
+              <td><code>compose(f: F[B, C], g: F[A, B]): F[A, C]</code></td>
+            </tr>
+            <tr>
+              <td><code>f &gt;&gt;&gt; g</code></td>
+              <td>Arrow andThen</td>
+              <td></td>
+              <td><code>Compose[F[_, _]]</code></td>
+              <td><code>andThen(f: F[B, C], g: F[A, B]): F[A, C]</code></td>
+            </tr>
+            <tr>
+              <td><code>f &amp;&amp;&amp; g</code></td>
+              <td>Arrow merge</td>
+              <td></td>
+              <td><code>Arrow[F[_, _]]</code></td>
+              <td><code>merge[A, B, C](f: F[A, B], g: F[A, C]): F[A, (B, C)]</code></td>
+            </tr>
+            <tr>
+              <td><code>f -&lt; g</code></td>
+              <td>Arrow combine and bypass</td>
+              <td></td>
+              <td><code>Arrow[F[_, _]]</code></td>
+              <td><code>combineAndByPass[A, B, C](f: F[A, B], g: F[B, C]): F[A, (B, C)]</code></td>
+            </tr>
+            <tr>
+              <td><code>F ~&gt; G</code></td>
+              <td>natural transformation</td>
+              <td></td>
+              <td><code>FunctionK[F[_], G[_]]</code></td>
+              <td><code>FunctionK</code> alias</td>
+            </tr>
+            <tr>
+              <td><code>F :&lt;: G</code></td>
+              <td>injectK</td>
+              <td></td>
+              <td><code>InjectK[F[_], G[_]]</code></td>
+              <td><code>InjectK</code> alias</td>
+            </tr>
+            <tr>
+              <td><code>F :≺: G</code></td>
+              <td>injectK</td>
+              <td></td>
+              <td><code>InjectK[F[_], G[_]]</code></td>
+              <td><code>InjectK</code> alias</td>
+            </tr>
+            <tr>
+              <td><code>fa &amp;&gt; fb</code></td>
+              <td>parallel product right</td>
+              <td></td>
+              <td><code>Parallel[M[_]]</code></td>
+              <td><code>parProductR[A, B](ma: M[A])(mb: M[B]): M[B]</code></td>
+            </tr>
+            <tr>
+              <td><code>fa &lt;&amp; fb</code></td>
+              <td>parallel product left</td>
+              <td></td>
+              <td><code>Parallel[M[_]]</code></td>
+              <td><code>parProductL[A, B](ma: M[A])(mb: M[B]): M[A]</code></td>
+            </tr>
+            <tr>
+              <td><code>⊥</code></td>
+              <td>bottom</td>
+              <td></td>
+              <td>N/A</td>
+              <td><code>Nothing</code></td>
+            </tr>
+            <tr>
+              <td><code>⊤</code></td>
+              <td>top</td>
+              <td></td>
+              <td>N/A</td>
+              <td><code>Any</code></td>
+            </tr>
+            <tr>
+              <td><code>fa &lt;&lt; fb</code> (Deprecated)</td>
+              <td>product left</td>
+              <td></td>
+              <td><code>FlatMap[F[_]]</code></td>
+              <td><code>productL(fa: F[A])(fb: F[B]): F[A]</code></td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <h2 id="how-can-i-test-instances-against-their-type-classes-laws" class="section">How can I test instances against their type classes&#39; laws?<a class="anchor-link right" href="#how-can-i-test-instances-against-their-type-classes-laws"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>You can find more information <a href="typeclasses/lawtesting.html">here</a>.</p>
+        
+        <h2 id="how-can-i-help" class="section">How can I help?<a class="anchor-link right" href="#how-can-i-help"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>The Сats community welcomes and encourages contributions, even if you are completely new to Сats and functional programming. Here are a few ways to help out:</p>
+        <ul>
+          <li>Find an undocumented method and write a ScalaDoc entry for it. See <a href="https://github.com/typelevel/cats/blob/main/core/src/main/scala/cats/arrow/Arrow.scala">Arrow.scala</a> for some examples of ScalaDoc entries that use <a href="https://github.com/tkawachi/sbt-doctest">sbt-doctest</a>.</li>
+          <li>Find an <a href="https://github.com/typelevel/cats/issues?q=is%3Aopen+is%3Aissue+label%3Aready">open issue</a>, leave a comment on it to let people know you are working on it, and submit a pull request. If you are new to Сats, you may want to look for items with the <a href="https://github.com/typelevel/cats/issues?q=is%3Aopen+is%3Aissue+label%3A%22low-hanging+fruit%22">low-hanging-fruit</a> label.</li>
+        </ul>
+        <p>See the <a href="CONTRIBUTING.html">contributing guide</a> for more information.</p>
+        
+        <h2 id="how-to-try-cats-in-a-repl" class="section">How to try Cats in a REPL?<a class="anchor-link right" href="#how-to-try-cats-in-a-repl"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>The easiest way is probably using <a href="http://ammonite.io/">Ammonite-REPL</a>. Install it following the instructions there. Then in the amm console you can type in</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="comment">// interp.configureCompiler(_.settings.YpartialUnification.value = true) // If using scala 2.11 or 2.12
+</span><span class="keyword">import</span><span> </span><span class="identifier">$ivy</span><span>.</span><span class="identifier">`org.typelevel::cats-core:2.1.1`</span><span>, </span><span class="identifier">cats</span><span>.</span><span class="identifier">_</span><span>, </span><span class="identifier">cats</span><span>.</span><span class="identifier">data</span><span>.</span><span class="identifier">_</span><span>, </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span></code></pre>
+        <p>Or if you want, you can add these lines to <code>~/.ammonite/predef.sc</code> so that they are enabled every ammonite session.</p>
+        
+        <h2 id="why-aren-t-monad-transformers-like-optiont-and-eithert-covariant-like-option-and-either" class="section">Why aren&#39;t monad transformers like <code>OptionT</code> and <code>EitherT</code> covariant like <code>Option</code> and <code>Either</code>?<a class="anchor-link right" href="#why-aren-t-monad-transformers-like-optiont-and-eithert-covariant-like-option-and-either"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>Please see <a href="https://typelevel.org/blog/2018/09/29/monad-transformer-variance.html">Variance of Monad Transformers</a> on the Typelevel blog.</p>
+
+        <hr style="margin-top: 30px"/>
+        <footer style="font-size: 90%; text-align: center">
+          cats is a <a href="https://typelevel.org/">Typelevel</a> project distributed under the <a href="https://opensource.org/licenses/MIT">MIT</a> license.
+        </footer>
+
+      </main>
+
+    </div>
+
+  </body>
+</html>

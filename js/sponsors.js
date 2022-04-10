@@ -60,39 +60,39 @@ sponsors();
 addSponsor('gold-sponsors', {
     name: "47 Degrees",
     website: "https://47deg.com",
-    imageUrl: "https://typelevel.org/cats/img/sponsors/47_degree.png"
+    imageUrl: "img/sponsors/47_degree.png"
 });
 addSponsor('gold-sponsors', {
     name: "Iterators",
     website: "https://iteratorshq.com",
-    imageUrl: "https://typelevel.org/cats/img/sponsors/iterators.png",
+    imageUrl: "img/sponsors/iterators.png",
     marginBottom: 20
 });
 addSponsor('gold-sponsors', {
     name: "Triplequote",
     website: "https://triplequote.com",
-    imageUrl: "https://typelevel.org/cats/img/sponsors/triplequote.png",
+    imageUrl: "img/sponsors/triplequote.png",
     marginBottom: 20
 });
 addSponsor('gold-sponsors', {
     name: "Underscore",
     website: "https://underscore.com",
-    imageUrl: "https://typelevel.org/cats/img/sponsors/underscore.png",
+    imageUrl: "img/sponsors/underscore.png",
     marginBottom: 10
 });
 addSponsor('silver-sponsors', {
     name: "Ebiznext",
     website: "https://ebiznext.com",
-    imageUrl: "https://typelevel.org/cats/img/sponsors/ebiznext.png",
+    imageUrl: "img/sponsors/ebiznext.png",
     marginBottom: 10
 });
 addSponsor('silver-sponsors', {
     name: "Inner Product",
     website: "https://inner-product.com",
-    imageUrl: "https://typelevel.org/cats/img/sponsors/inner-product.png"
+    imageUrl: "img/sponsors/inner-product.png"
 });
 addSponsor('silver-sponsors', {
     name: "Evolution Gaming Engineering",
     website: "https://evolutiongaming.com",
-    imageUrl: "https://typelevel.org/cats/img/sponsors/evolution_gaming_engineering.png"
+    imageUrl: "img/sponsors/evolution_gaming_engineering.png"
 });

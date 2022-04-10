@@ -1,113 +1,273 @@
-<!DOCTYPE html><html><head><title>Cats: Contravariant</title><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Cats contributors" /><meta name="description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="og:image" content="/cats/img/poster.png" /><meta name="image" property="og:image" content="/cats/img/poster.png" /><meta name="og:title" content="Cats: Contravariant" /><meta name="title" property="og:title" content="Cats: Contravariant" /><meta name="og:site_name" content="Cats" /><meta name="og:url" content="http://typelevel.org/cats/" /><meta name="og:type" content="website" /><meta name="og:description" content="Lightweight, modular, and extensible library for functional programming" /><link rel="icon" type="image/png" href="/cats/img/favicon.png" /><meta name="twitter:title" content="Cats: Contravariant" /><meta name="twitter:image" content="/cats/img/poster.png" /><meta name="twitter:description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="twitter:card" content="summary_large_image" /><link rel="icon" type="image/png" sizes="16x16" href="/cats/img/favicon16x16.png" /><link rel="icon" type="image/png" sizes="24x24" href="/cats/img/favicon24x24.png" /><link rel="icon" type="image/png" sizes="32x32" href="/cats/img/favicon32x32.png" /><link rel="icon" type="image/png" sizes="48x48" href="/cats/img/favicon48x48.png" /><link rel="icon" type="image/png" sizes="57x57" href="/cats/img/favicon57x57.png" /><link rel="icon" type="image/png" sizes="60x60" href="/cats/img/favicon60x60.png" /><link rel="icon" type="image/png" sizes="64x64" href="/cats/img/favicon64x64.png" /><link rel="icon" type="image/png" sizes="70x70" href="/cats/img/favicon70x70.png" /><link rel="icon" type="image/png" sizes="72x72" href="/cats/img/favicon72x72.png" /><link rel="icon" type="image/png" sizes="76x76" href="/cats/img/favicon76x76.png" /><link rel="icon" type="image/png" sizes="96x96" href="/cats/img/favicon96x96.png" /><link rel="icon" type="image/png" sizes="114x114" href="/cats/img/favicon114x114.png" /><link rel="icon" type="image/png" sizes="120x120" href="/cats/img/favicon120x120.png" /><link rel="icon" type="image/png" sizes="128x128" href="/cats/img/favicon128x128.png" /><link rel="icon" type="image/png" sizes="144x144" href="/cats/img/favicon144x144.png" /><link rel="icon" type="image/png" sizes="150x150" href="/cats/img/favicon150x150.png" /><link rel="icon" type="image/png" sizes="152x152" href="/cats/img/favicon152x152.png" /><link rel="icon" type="image/png" sizes="196x196" href="/cats/img/favicon196x196.png" /><link rel="icon" type="image/png" sizes="310x310" href="/cats/img/favicon310x310.png" /><link rel="icon" type="image/png" sizes="310x150" href="/cats/img/favicon310x150.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" /><link rel="stylesheet" href="/cats/highlight/styles/atom-one-light.css" /><link rel="stylesheet" href="/cats/css/pattern-style.css" /></head><body class="docs"><div id="wrapper"><div id="sidebar-wrapper"><ul id="sidebar" class="sidebar-nav"><li class="sidebar-brand"><a href="/cats/" class="brand"><div class="brand-wrapper"><span>Cats</span></div></a></li><li><a href="/cats/typeclasses/alternative.html" class="">Alternative</a></li><li><a href="/cats/typeclasses/applicative.html" class="">Applicative</a></li><li><a href="/cats/typeclasses/applicativemonaderror.html" class="">Applicative Error</a></li><li><a href="/cats/typeclasses/applicativetraverse.html" class="">Applicative and Traversable Functors</a></li><li><a href="/cats/typeclasses/arrow.html" class="">Arrow</a></li><li><a href="/cats/typeclasses/arrowchoice.html" class="">Arrow Choice</a></li><li><a href="/cats/typeclasses/bifunctor.html" class="">Bifunctor</a></li><li><a href="/cats/typeclasses/comonad.html" class="">Comonad</a></li><li><a href="/cats/typeclasses/contravariant.html" class=" active ">Contravariant</a></li><li><a href="/cats/typeclasses/contravariantmonoidal.html" class="">Contravariant Monoidal</a></li><li><a href="/cats/typeclasses/eq.html" class="">Eq</a></li><li><a href="/cats/typeclasses/foldable.html" class="">Foldable</a></li><li><a href="/cats/typeclasses/functor.html" class="">Functor</a></li><li><a href="/cats/typeclasses/invariant.html" class="">Invariant</a></li><li><a href="/cats/typeclasses/invariantmonoidal.html" class="">InvariantMonoidal</a></li><li><a href="/cats/typeclasses/lawtesting.html" class="">Law Testing</a></li><li><a href="/cats/typeclasses/monad.html" class="">Monad</a></li><li><a href="/cats/typeclasses/monoid.html" class="">Monoid</a></li><li><a href="/cats/typeclasses/monoidk.html" class="">MonoidK</a></li><li><a href="/cats/typeclasses/nonemptytraverse.html" class="">NonEmptyTraverse</a></li><li><a href="/cats/typeclasses/parallel.html" class="">Parallel</a></li><li><a href="/cats/typeclasses/reducible.html" class="">Reducible</a></li><li><a href="/cats/typeclasses/semigroup.html" class="">Semigroup</a></li><li><a href="/cats/typeclasses/semigroupk.html" class="">SemigroupK</a></li><li><a href="/cats/typeclasses/show.html" class="">Show</a></li><li><a href="/cats/typeclasses/traverse.html" class="">Traverse</a></li><li><a href="/cats/typeclasses.html" class="">Type Classes</a></li></ul></div><div id="page-content-wrapper"><div class="nav"><div class="container-fluid"><div class="row"><div class="col-lg-12"><div class="action-menu pull-left clearfix"><a href="#menu-toggle" id="menu-toggle"><i class="fa fa-bars" aria-hidden="true"></i></a></div><ul class="pull-right"><li class="search-nav hidden-xs hidden-sm"><div id="search-dropdown"><label><i class="fa fa-search"></i>Search</label><input id="search-bar" type="text" placeholder="Enter keywords here..." onclick="displayToggleSearch(event)" /><ul id="search-dropdown-content" class="dropdown dropdown-content"></ul></div></li><li id="gh-eyes-item" class="hidden-xs to-uppercase"><a href="https://github.com/typelevel/cats" target="_blank" rel="noopener noreferrer"><i class="fa fa-eye"></i><span>Watchers<span id="eyes" class="label label-default">--</span></span></a></li><li id="gh-stars-item" class="hidden-xs to-uppercase"><a href="https://github.com/typelevel/cats" target="_blank" rel="noopener noreferrer"><i class="fa fa-star-o"></i><span>Stars<span id="stars" class="label label-default">--</span></span></a></li><li><a href="#" onclick="shareSiteTwitter('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-twitter"></i></a></li><li><a href="#" onclick="shareSiteFacebook('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-facebook"></i></a></li></ul></div></div></div></div><div id="content" data-github-owner="typelevel" data-github-repo="cats"><div class="content-wrapper"><section><h1 id="contravariant">Contravariant</h1>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Laika 0.18.1 + Helium Theme" />
+    <title>Contravariant</title>
+    
+      <meta name="author" content="Cody Allen"/>
+    
+      <meta name="author" content="Ross Baker"/>
+    
+      <meta name="author" content="P. Oscar Boykin"/>
+    
+      <meta name="author" content="Travis Brown"/>
+    
+      <meta name="author" content="Adelbert Chang"/>
+    
+      <meta name="author" content="Peter Neyens"/>
+    
+      <meta name="author" content="Rob Norris"/>
+    
+      <meta name="author" content="Erik Osheim"/>
+    
+      <meta name="author" content="LukaJCB"/>
+    
+      <meta name="author" content="Michael Pilquist"/>
+    
+      <meta name="author" content="Miles Sabin"/>
+    
+      <meta name="author" content="Daniel Spiewak"/>
+    
+      <meta name="author" content="Frank Thomas"/>
+    
+      <meta name="author" content="Julien Truffaut"/>
+    
+      <meta name="author" content="Kailuo Wang"/>
+    
+    
+      <meta name="description" content="docs"/>
+    
+    
+      <link rel="icon" sizes="32x32" type="image/png" href="https://typelevel.org/img/favicon.png"/>
+    
+    
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.207/distr/fira_code.css">
+    
+    <link rel="stylesheet" type="text/css" href="../helium/icofont.min.css" />
+    <link rel="stylesheet" type="text/css" href="../helium/laika-helium.css" />
+    <link rel="stylesheet" type="text/css" href="../site/styles.css" />
+    <script src="../helium/laika-helium.js"></script>
+    <script src="../js/sponsors.js"></script>
+    
+    
+    <script> /* for avoiding page load transitions */ </script>
+  </head>
 
-<p>The <code class="language-plaintext highlighter-rouge">Contravariant</code> type class is for functors that define a <code class="language-plaintext highlighter-rouge">contramap</code>
-function with the following type:</p>
+  <body>
 
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">contramap</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">B</span> <span class="o">=&gt;</span> <span class="n">A</span><span class="o">)</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span>
-</code></pre></div></div>
+    <header id="top-bar">
 
-<p>It looks like regular (also called <code class="language-plaintext highlighter-rouge">Covariant</code>) <a href="functor.html"><code class="language-plaintext highlighter-rouge">Functor</code></a>’s <code class="language-plaintext highlighter-rouge">map</code>,
-but with the <code class="language-plaintext highlighter-rouge">f</code> transformation reversed.</p>
+      <div class="row">
+        <a id="nav-icon">
+          <i class="icofont-laika" title="Navigation">&#xefa2;</i>
+        </a>
+        
+      </div>
 
-<p>Generally speaking, if you have some context <code class="language-plaintext highlighter-rouge">F[A]</code> for type <code class="language-plaintext highlighter-rouge">A</code>,
-and you can get an <code class="language-plaintext highlighter-rouge">A</code> value out of a <code class="language-plaintext highlighter-rouge">B</code> value — <code class="language-plaintext highlighter-rouge">Contravariant</code> allows you to get the <code class="language-plaintext highlighter-rouge">F[B]</code> context for <code class="language-plaintext highlighter-rouge">B</code>.</p>
+      <a class="image-link" href="https://typelevel.org"><img src="https://typelevel.org/img/logo.svg"></a>
 
-<p>Examples of <code class="language-plaintext highlighter-rouge">Contravariant</code> instances are <a href="show.html"><code class="language-plaintext highlighter-rouge">Show</code></a> and <code class="language-plaintext highlighter-rouge">scala.math.Ordering</code> (along with <code class="language-plaintext highlighter-rouge">cats.kernel.Order</code>).</p>
+      <span class="row links"><a class="icon-link svg-link" href="https://typelevel.org/cats/api/"><span title="API"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M75,47.5c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm-50,-0c13.246,-0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,-0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm2.705,16.735l7.239,0l0.622,-4.904l-21.833,0l-0,4.904l7.589,0l0,22.067l6.383,0l-0,-22.067Zm58.076,7.265c-0,-8.757 -3.698,-14.166 -10.781,-14.166c-7.083,-0 -10.781,5.604 -10.781,14.166c0,8.757 3.698,14.166 10.781,14.166c7.083,0 10.781,-5.604 10.781,-14.166Zm-6.539,0c0,6.538 -1.128,9.496 -4.242,9.496c-2.997,0 -4.242,-2.88 -4.242,-9.496c-0,-6.616 1.206,-9.496 4.242,-9.496c3.036,-0 4.242,2.88 4.242,9.496Zm-29.242,-67c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm0.512,9.834c-7.122,-0 -12.609,5.098 -12.609,14.127c-0,9.263 5.215,14.205 12.532,14.205c4.164,0 7.083,-1.634 9.068,-3.658l-2.88,-3.697c-1.518,1.206 -3.153,2.413 -5.838,2.413c-3.697,-0 -6.266,-2.763 -6.266,-9.263c-0,-6.616 2.724,-9.379 6.149,-9.379c2.102,-0 3.892,0.778 5.371,1.984l3.113,-3.775c-2.257,-1.868 -4.748,-2.957 -8.64,-2.957Z"/>
+  </g>
+</svg></span></a><a class="icon-link svg-link" href="https://github.com/typelevel/cats"><span title="Source Code"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M49.995,1c-27.609,-0 -49.995,22.386 -49.995,50.002c-0,22.09 14.325,40.83 34.194,47.444c2.501,0.458 3.413,-1.086 3.413,-2.412c0,-1.185 -0.043,-4.331 -0.067,-8.503c-13.908,3.021 -16.843,-6.704 -16.843,-6.704c-2.274,-5.773 -5.552,-7.311 -5.552,-7.311c-4.54,-3.103 0.344,-3.042 0.344,-3.042c5.018,0.356 7.658,5.154 7.658,5.154c4.46,7.64 11.704,5.433 14.552,4.156c0.454,-3.232 1.744,-5.436 3.174,-6.685c-11.102,-1.262 -22.775,-5.553 -22.775,-24.713c-0,-5.457 1.949,-9.92 5.147,-13.416c-0.516,-1.265 -2.231,-6.348 0.488,-13.233c0,0 4.199,-1.344 13.751,5.126c3.988,-1.108 8.266,-1.663 12.518,-1.682c4.245,0.019 8.523,0.574 12.517,1.682c9.546,-6.47 13.736,-5.126 13.736,-5.126c2.728,6.885 1.013,11.968 0.497,13.233c3.204,3.496 5.141,7.959 5.141,13.416c0,19.209 -11.691,23.436 -22.83,24.673c1.795,1.544 3.394,4.595 3.394,9.26c0,6.682 -0.061,12.076 -0.061,13.715c0,1.338 0.899,2.894 3.438,2.406c19.853,-6.627 34.166,-25.354 34.166,-47.438c-0,-27.616 -22.389,-50.002 -50.005,-50.002"/>
+  </g>
+</svg></span></a><a class="icon-link" href="https://discord.gg/XF3CXcMzqD"><i class="icofont-laika" title="Chat">&#xeed5;</i></a><a class="icon-link" href="https://twitter.com/typelevel"><i class="icofont-laika" title="Twitter">&#xed7a;</i></a></span>
 
-<h2 id="contravariant-instance-for-show">Contravariant instance for Show.</h2>
+    </header>
 
-<p>Say we have a class <code class="language-plaintext highlighter-rouge">Money</code> with a <code class="language-plaintext highlighter-rouge">Show</code> instance, and a <code class="language-plaintext highlighter-rouge">Salary</code> class:</p>
+    <nav id="sidebar">
 
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats._</span>
+      <div class="row">
+        <a class="icon-link svg-link" href="https://typelevel.org/cats/api/"><span title="API"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M75,47.5c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm-50,-0c13.246,-0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,-0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm2.705,16.735l7.239,0l0.622,-4.904l-21.833,0l-0,4.904l7.589,0l0,22.067l6.383,0l-0,-22.067Zm58.076,7.265c-0,-8.757 -3.698,-14.166 -10.781,-14.166c-7.083,-0 -10.781,5.604 -10.781,14.166c0,8.757 3.698,14.166 10.781,14.166c7.083,0 10.781,-5.604 10.781,-14.166Zm-6.539,0c0,6.538 -1.128,9.496 -4.242,9.496c-2.997,0 -4.242,-2.88 -4.242,-9.496c-0,-6.616 1.206,-9.496 4.242,-9.496c3.036,-0 4.242,2.88 4.242,9.496Zm-29.242,-67c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm0.512,9.834c-7.122,-0 -12.609,5.098 -12.609,14.127c-0,9.263 5.215,14.205 12.532,14.205c4.164,0 7.083,-1.634 9.068,-3.658l-2.88,-3.697c-1.518,1.206 -3.153,2.413 -5.838,2.413c-3.697,-0 -6.266,-2.763 -6.266,-9.263c-0,-6.616 2.724,-9.379 6.149,-9.379c2.102,-0 3.892,0.778 5.371,1.984l3.113,-3.775c-2.257,-1.868 -4.748,-2.957 -8.64,-2.957Z"/>
+  </g>
+</svg></span></a><a class="icon-link svg-link" href="https://github.com/typelevel/cats"><span title="Source Code"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M49.995,1c-27.609,-0 -49.995,22.386 -49.995,50.002c-0,22.09 14.325,40.83 34.194,47.444c2.501,0.458 3.413,-1.086 3.413,-2.412c0,-1.185 -0.043,-4.331 -0.067,-8.503c-13.908,3.021 -16.843,-6.704 -16.843,-6.704c-2.274,-5.773 -5.552,-7.311 -5.552,-7.311c-4.54,-3.103 0.344,-3.042 0.344,-3.042c5.018,0.356 7.658,5.154 7.658,5.154c4.46,7.64 11.704,5.433 14.552,4.156c0.454,-3.232 1.744,-5.436 3.174,-6.685c-11.102,-1.262 -22.775,-5.553 -22.775,-24.713c-0,-5.457 1.949,-9.92 5.147,-13.416c-0.516,-1.265 -2.231,-6.348 0.488,-13.233c0,0 4.199,-1.344 13.751,5.126c3.988,-1.108 8.266,-1.663 12.518,-1.682c4.245,0.019 8.523,0.574 12.517,1.682c9.546,-6.47 13.736,-5.126 13.736,-5.126c2.728,6.885 1.013,11.968 0.497,13.233c3.204,3.496 5.141,7.959 5.141,13.416c0,19.209 -11.691,23.436 -22.83,24.673c1.795,1.544 3.394,4.595 3.394,9.26c0,6.682 -0.061,12.076 -0.061,13.715c0,1.338 0.899,2.894 3.438,2.406c19.853,-6.627 34.166,-25.354 34.166,-47.438c-0,-27.616 -22.389,-50.002 -50.005,-50.002"/>
+  </g>
+</svg></span></a><a class="icon-link" href="https://discord.gg/XF3CXcMzqD"><i class="icofont-laika" title="Chat">&#xeed5;</i></a><a class="icon-link" href="https://twitter.com/typelevel"><i class="icofont-laika" title="Twitter">&#xed7a;</i></a>
+      </div>
 
-<span class="k">import</span> <span class="nn">cats.implicits._</span>
+      <ul class="nav-list">
+        <li class="level1"><a href="../index.html">Cats</a></li>
+        <li class="level1"><a href="../typeclasses.html">Type Classes</a></li>
+        <li class="level1"><a href="../datatypes.html">Data Types</a></li>
+        <li class="level1"><a href="../algebra.html">Algebra</a></li>
+        <li class="level1"><a href="../motivations.html">Motivations</a></li>
+        <li class="level1"><a href="../resources_for_learners.html">Resources for Learners</a></li>
+        <li class="level1"><a href="../jump_start_guide.html">Jump Start Guide</a></li>
+        <li class="level1"><a href="../imports.html">Imports</a></li>
+        <li class="level1"><a href="../faq.html">FAQ</a></li>
+        <li class="level1"><a href="../CONTRIBUTING.html">Contributor guide</a></li>
+        <li class="level1"><a href="../colophon.html">Colophon</a></li>
+        <li class="level1"><a href="../nomenclature.html">Glossary</a></li>
+        <li class="level1"><a href="../guidelines.html">Guidelines</a></li>
+        <li class="level1"><a href="../typelevelEcosystem.html">Typelevel Ecosystem</a></li>
+        <li class="level1 nav-header">Type Classes</li>
+        <li class="level2"><a href="alternative.html">Alternative</a></li>
+        <li class="level2"><a href="applicative.html">Applicative</a></li>
+        <li class="level2"><a href="applicativemonaderror.html">ApplicativeError and MonadError</a></li>
+        <li class="level2"><a href="applicativetraverse.html">Applicative and Traversable Functors</a></li>
+        <li class="level2"><a href="arrow.html">Arrow</a></li>
+        <li class="level2"><a href="arrowchoice.html">Arrow Choice</a></li>
+        <li class="level2"><a href="bifunctor.html">Bifunctor</a></li>
+        <li class="level2"><a href="bimonad.html">Bimonad</a></li>
+        <li class="level2"><a href="comonad.html">Comonad</a></li>
+        <li class="level2 active"><a href="#">Contravariant</a></li>
+        <li class="level2"><a href="contravariantmonoidal.html">Contravariant Monoidal</a></li>
+        <li class="level2"><a href="eq.html">Eq</a></li>
+        <li class="level2"><a href="foldable.html">Foldable</a></li>
+        <li class="level2"><a href="functor.html">Functor</a></li>
+        <li class="level2"><a href="invariant.html">Invariant</a></li>
+        <li class="level2"><a href="invariantmonoidal.html">Invariant Monoidal</a></li>
+        <li class="level2"><a href="lawtesting.html">Law testing</a></li>
+        <li class="level2"><a href="monad.html">Monad</a></li>
+        <li class="level2"><a href="monoid.html">Monoid</a></li>
+        <li class="level2"><a href="monoidk.html">MonoidK</a></li>
+        <li class="level2"><a href="nonemptytraverse.html">NonEmptyTraverse</a></li>
+        <li class="level2"><a href="parallel.html">Parallel</a></li>
+        <li class="level2"><a href="reducible.html">Reducible</a></li>
+        <li class="level2"><a href="semigroup.html">Semigroup</a></li>
+        <li class="level2"><a href="semigroupk.html">SemigroupK</a></li>
+        <li class="level2"><a href="show.html">Show</a></li>
+        <li class="level2"><a href="traverse.html">Traverse</a></li>
+        <li class="level1 nav-header">Data Types</li>
+        <li class="level2"><a href="../datatypes/chain.html">Chain</a></li>
+        <li class="level2"><a href="../datatypes/const.html">Const</a></li>
+        <li class="level2"><a href="../datatypes/contt.html">ContT</a></li>
+        <li class="level2"><a href="../datatypes/either.html">Either</a></li>
+        <li class="level2"><a href="../datatypes/eithert.html">EitherT</a></li>
+        <li class="level2"><a href="../datatypes/eval.html">Eval</a></li>
+        <li class="level2"><a href="../datatypes/freeapplicative.html">Free Applicative</a></li>
+        <li class="level2"><a href="../datatypes/freemonad.html">Free Monad</a></li>
+        <li class="level2"><a href="../datatypes/functionk.html">FunctionK</a></li>
+        <li class="level2"><a href="../datatypes/id.html">Id</a></li>
+        <li class="level2"><a href="../datatypes/ior.html">Ior</a></li>
+        <li class="level2"><a href="../datatypes/iort.html">IorT</a></li>
+        <li class="level2"><a href="../datatypes/kleisli.html">Kleisli</a></li>
+        <li class="level2"><a href="../datatypes/nel.html">NonEmptyList</a></li>
+        <li class="level2"><a href="../datatypes/nested.html">Nested</a></li>
+        <li class="level2"><a href="../datatypes/oneand.html">OneAnd</a></li>
+        <li class="level2"><a href="../datatypes/optiont.html">OptionT</a></li>
+        <li class="level2"><a href="../datatypes/state.html">State</a></li>
+        <li class="level2"><a href="../datatypes/validated.html">Validated</a></li>
+        <li class="level2"><a href="../datatypes/writer.html">Writer</a></li>
+        <li class="level2"><a href="../datatypes/writert.html">WriterT</a></li>
+      </ul>
 
-<span class="k">case</span> <span class="k">class</span> <span class="nc">Money</span><span class="o">(</span><span class="n">amount</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span>
-<span class="k">case</span> <span class="k">class</span> <span class="nc">Salary</span><span class="o">(</span><span class="n">size</span><span class="k">:</span> <span class="kt">Money</span><span class="o">)</span>
+      <ul class="nav-list">
+        <li class="level1 nav-header">Related Projects</li>
+        
+          <li class="level2"><a href="https://typelevel.org/cats-effect/">cats-effect</a></li>
+        
+          <li class="level2"><a href="https://typelevel.org/mouse">Mouse</a></li>
+        
+          <li class="level2"><a href="https://github.com/typelevel/discipline/">discipline</a></li>
+        
+      </ul>
 
-<span class="k">implicit</span> <span class="k">val</span> <span class="nv">showMoney</span><span class="k">:</span> <span class="kt">Show</span><span class="o">[</span><span class="kt">Money</span><span class="o">]</span> <span class="k">=</span> <span class="nv">Show</span><span class="o">.</span><span class="py">show</span><span class="o">(</span><span class="n">m</span> <span class="k">=&gt;</span> <span class="n">s</span><span class="s">"$$${m.amount}"</span><span class="o">)</span>
-</code></pre></div></div>
+    </nav>
 
-<p>If we want to show a <code class="language-plaintext highlighter-rouge">Salary</code> instance, we can just convert it to a <code class="language-plaintext highlighter-rouge">Money</code> instance and show that instead.</p>
+    <div id="container">
 
-<p>Let’s use <code class="language-plaintext highlighter-rouge">Show</code>’s <code class="language-plaintext highlighter-rouge">Contravariant</code>:</p>
+      <nav id="page-nav">
+        <p class="header"><a href="#">Contravariant</a></p>
 
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">implicit</span> <span class="k">val</span> <span class="nv">showSalary</span><span class="k">:</span> <span class="kt">Show</span><span class="o">[</span><span class="kt">Salary</span><span class="o">]</span> <span class="k">=</span> <span class="nv">showMoney</span><span class="o">.</span><span class="py">contramap</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">size</span><span class="o">)</span>
-<span class="c1">// showSalary: Show[Salary] = cats.Show$$anon$2@2c6db413</span>
+        <ul class="nav-list">
+          <li class="level1"><a href="#contravariant-instance-for-show">Contravariant instance for Show.</a></li>
+          <li class="level1"><a href="#contravariant-instance-for-scala-math-ordering">Contravariant instance for scala.math.Ordering.</a></li>
+          <li class="level1"><a href="#subtyping">Subtyping</a></li>
+        </ul>
 
-<span class="nc">Salary</span><span class="o">(</span><span class="nc">Money</span><span class="o">(</span><span class="mi">1000</span><span class="o">)).</span><span class="py">show</span>
-<span class="c1">// res0: String = "$1000"</span>
-</code></pre></div></div>
+        <p class="footer"></p>
+      </nav>
 
-<h2 id="contravariant-instance-for-scalamathordering">Contravariant instance for scala.math.Ordering.</h2>
+      <main class="content">
 
-<p>The <code class="language-plaintext highlighter-rouge">Show</code> example is trivial and quite far-fetched, let’s see how <code class="language-plaintext highlighter-rouge">Contravariant</code> can help with orderings.</p>
+        <h1 id="contravariant" class="title">Contravariant</h1>
+        <p>The <code>Contravariant</code> type class is for functors that define a <code>contramap</code>
+        function with the following type:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">def</span><span> </span><span class="declaration-name">contramap</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>](</span><span class="identifier">fa</span><span>: </span><span class="type-name">F</span><span>[</span><span class="type-name">A</span><span>])(</span><span class="identifier">f</span><span>: </span><span class="type-name">B</span><span> =&gt; </span><span class="type-name">A</span><span>): </span><span class="type-name">F</span><span>[</span><span class="type-name">B</span><span>]</span></code></pre>
+        <p>It looks like regular (also called <code>Covariant</code>) <a href="functor.html"><code>Functor</code></a>&#39;s <code>map</code>,
+        but with the <code>f</code> transformation reversed.</p>
+        <p>Generally speaking, if you have some context <code>F[A]</code> for type <code>A</code>,
+        and you can get an <code>A</code> value out of a <code>B</code> value — <code>Contravariant</code> allows you to get the <code>F[B]</code> context for <code>B</code>.</p>
+        <p>Examples of <code>Contravariant</code> instances are <a href="show.html"><code>Show</code></a> and <code>scala.math.Ordering</code> (along with <code>cats.kernel.Order</code>).</p>
+        
+        <h2 id="contravariant-instance-for-show" class="section">Contravariant instance for Show.<a class="anchor-link right" href="#contravariant-instance-for-show"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>Say we have a class <code>Money</code> with a <code>Show</code> instance, and a <code>Salary</code> class:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">_</span><span>
 
-<p>The <code class="language-plaintext highlighter-rouge">scala.math.Ordering</code> type class defines comparison operations, e.g. <code class="language-plaintext highlighter-rouge">compare</code>:</p>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
 
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">Ordering</span><span class="o">.</span><span class="py">Int</span><span class="o">.</span><span class="py">compare</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mi">1</span><span class="o">)</span>
-<span class="c1">// res1: Int = 1</span>
-<span class="nv">Ordering</span><span class="o">.</span><span class="py">Int</span><span class="o">.</span><span class="py">compare</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">)</span>
-<span class="c1">// res2: Int = -1</span>
-</code></pre></div></div>
+</span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Money</span><span>(</span><span class="identifier">amount</span><span>: </span><span class="type-name">Int</span><span>)
+</span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Salary</span><span>(</span><span class="identifier">size</span><span>: </span><span class="type-name">Money</span><span>)
 
-<p>There’s also a method, called <code class="language-plaintext highlighter-rouge">by</code>, that creates new <code class="language-plaintext highlighter-rouge">Orderings</code> out of existing ones:</p>
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">showMoney</span><span>: </span><span class="type-name">Show</span><span>[</span><span class="type-name">Money</span><span>] = </span><span class="type-name">Show</span><span>.</span><span class="identifier">show</span><span>(</span><span class="identifier">m</span><span> =&gt; </span><span class="string-literal">s&quot;$$</span><span class="substitution">${m.amount}</span><span class="string-literal">&quot;</span><span>)</span></code></pre>
+        <p>If we want to show a <code>Salary</code> instance, we can just convert it to a <code>Money</code> instance and show that instead.</p>
+        <p>Let&#39;s use <code>Show</code>&#39;s <code>Contravariant</code>:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">showSalary</span><span>: </span><span class="type-name">Show</span><span>[</span><span class="type-name">Salary</span><span>] = </span><span class="identifier">showMoney</span><span>.</span><span class="identifier">contramap</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">size</span><span>)
+</span><span class="comment">// showSalary: Show[Salary] = cats.Show$$anon$2@3ebf6f29
+</span><span>
+</span><span class="type-name">Salary</span><span>(</span><span class="type-name">Money</span><span>(</span><span class="number-literal">1000</span><span>)).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res0: String = &quot;$1000&quot;</span></code></pre>
+        
+        <h2 id="contravariant-instance-for-scala-math-ordering" class="section">Contravariant instance for scala.math.Ordering.<a class="anchor-link right" href="#contravariant-instance-for-scala-math-ordering"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>The <code>Show</code> example is trivial and quite far-fetched, let&#39;s see how <code>Contravariant</code> can help with orderings.</p>
+        <p>The <code>scala.math.Ordering</code> type class defines comparison operations, e.g. <code>compare</code>:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="type-name">Ordering</span><span>.</span><span class="type-name">Int</span><span>.</span><span class="identifier">compare</span><span>(</span><span class="number-literal">2</span><span>, </span><span class="number-literal">1</span><span>)
+</span><span class="comment">// res1: Int = 1
+</span><span class="type-name">Ordering</span><span>.</span><span class="type-name">Int</span><span>.</span><span class="identifier">compare</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="number-literal">2</span><span>)
+</span><span class="comment">// res2: Int = -1</span></code></pre>
+        <p>There&#39;s also a method, called <code>by</code>, that creates new <code>Orderings</code> out of existing ones:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">def</span><span> </span><span class="declaration-name">by</span><span>[</span><span class="type-name">T</span><span>, </span><span class="type-name">S</span><span>](</span><span class="identifier">f</span><span>: </span><span class="type-name">T</span><span> =&gt; </span><span class="type-name">S</span><span>)(</span><span class="keyword">implicit</span><span> </span><span class="identifier">ord</span><span>: </span><span class="type-name">Ordering</span><span>[</span><span class="type-name">S</span><span>]): </span><span class="type-name">Ordering</span><span>[</span><span class="type-name">T</span><span>]</span></code></pre>
+        <p>In fact, it is just <code>contramap</code>, defined in a slightly different way! We supply <code>T =&gt; S</code> to receive <code>F[S] =&gt; F[T]</code> back.</p>
+        <p>So let&#39;s use it to our advantage and get <code>Ordering[Money]</code> for free:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="comment">// we need this for `&lt;` to work
+</span><span class="keyword">import</span><span> </span><span class="identifier">scala</span><span>.</span><span class="identifier">math</span><span>.</span><span class="type-name">Ordered</span><span>.</span><span class="identifier">_</span><span>
 
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">by</span><span class="o">[</span><span class="kt">T</span>, <span class="kt">S</span><span class="o">](</span><span class="n">f</span><span class="k">:</span> <span class="kt">T</span> <span class="o">=&gt;</span> <span class="n">S</span><span class="o">)(</span><span class="k">implicit</span> <span class="n">ord</span><span class="k">:</span> <span class="kt">Ordering</span><span class="o">[</span><span class="kt">S</span><span class="o">])</span><span class="k">:</span> <span class="kt">Ordering</span><span class="o">[</span><span class="kt">T</span><span class="o">]</span>
-</code></pre></div></div>
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">moneyOrdering</span><span>: </span><span class="type-name">Ordering</span><span>[</span><span class="type-name">Money</span><span>] = </span><span class="type-name">Ordering</span><span>.</span><span class="identifier">by</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">amount</span><span>)
+</span><span class="comment">// moneyOrdering: Ordering[Money] = scala.math.Ordering$$anon$5@13f3c438
+</span><span>
+</span><span class="type-name">Money</span><span>(</span><span class="number-literal">100</span><span>) &lt; </span><span class="type-name">Money</span><span>(</span><span class="number-literal">200</span><span>)
+</span><span class="comment">// res3: Boolean = true</span></code></pre>
+        
+        <h2 id="subtyping" class="section">Subtyping<a class="anchor-link right" href="#subtyping"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>Contravariant functors have a natural relationship with subtyping, dual to that of covariant functors:</p>
+        <pre><code class="nohighlight"><span class="keyword">class</span><span> </span><span class="type-name">A</span><span>
+</span><span class="keyword">class</span><span> </span><span class="type-name">B</span><span> </span><span class="keyword">extends</span><span> </span><span class="type-name">A</span><span>
+</span><span class="keyword">val</span><span> </span><span class="identifier">b</span><span>: </span><span class="type-name">B</span><span> = </span><span class="keyword">new</span><span> </span><span class="type-name">B</span><span>
+</span><span class="comment">// b: B = repl.MdocSession$App$B@5242ccd6
+</span><span class="keyword">val</span><span> </span><span class="identifier">a</span><span>: </span><span class="type-name">A</span><span> = </span><span class="identifier">b</span><span>
+</span><span class="comment">// a: A = repl.MdocSession$App$B@5242ccd6
+</span><span class="keyword">val</span><span> </span><span class="identifier">showA</span><span>: </span><span class="type-name">Show</span><span>[</span><span class="type-name">A</span><span>] = </span><span class="type-name">Show</span><span>.</span><span class="identifier">show</span><span>(</span><span class="identifier">a</span><span> =&gt; </span><span class="string-literal">&quot;a!&quot;</span><span>)
+</span><span class="comment">// showA: Show[A] = cats.Show$$anon$2@55642275
+</span><span class="keyword">val</span><span> </span><span class="identifier">showB1</span><span>: </span><span class="type-name">Show</span><span>[</span><span class="type-name">B</span><span>] = </span><span class="identifier">showA</span><span>.</span><span class="identifier">contramap</span><span>(</span><span class="identifier">b</span><span> =&gt; </span><span class="identifier">b</span><span>: </span><span class="type-name">A</span><span>)
+</span><span class="comment">// showB1: Show[B] = cats.Show$$anon$2@10e7d9d7
+</span><span class="keyword">val</span><span> </span><span class="identifier">showB2</span><span>: </span><span class="type-name">Show</span><span>[</span><span class="type-name">B</span><span>] = </span><span class="identifier">showA</span><span>.</span><span class="identifier">contramap</span><span>(</span><span class="identifier">identity</span><span>[</span><span class="type-name">A</span><span>])
+</span><span class="comment">// showB2: Show[B] = cats.Show$$anon$2@1d381df7
+</span><span class="keyword">val</span><span> </span><span class="identifier">showB3</span><span>: </span><span class="type-name">Show</span><span>[</span><span class="type-name">B</span><span>] = </span><span class="type-name">Contravariant</span><span>[</span><span class="type-name">Show</span><span>].</span><span class="identifier">narrow</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>](</span><span class="identifier">showA</span><span>)
+</span><span class="comment">// showB3: Show[B] = cats.Show$$anon$2@55642275</span></code></pre>
+        <p>Subtyping relationships are &quot;lifted backwards&quot; by contravariant functors, such that if <code>F</code> is a
+        lawful contravariant functor and <code>B &lt;: A</code> then <code>F[A] &lt;: F[B]</code>, which is expressed by <code>Contravariant.narrow</code>.</p>
 
-<p>In fact, it is just <code class="language-plaintext highlighter-rouge">contramap</code>, defined in a slightly different way! We supply <code class="language-plaintext highlighter-rouge">T =&gt; S</code> to receive <code class="language-plaintext highlighter-rouge">F[S] =&gt; F[T]</code> back.</p>
+        <hr style="margin-top: 30px"/>
+        <footer style="font-size: 90%; text-align: center">
+          cats is a <a href="https://typelevel.org/">Typelevel</a> project distributed under the <a href="https://opensource.org/licenses/MIT">MIT</a> license.
+        </footer>
 
-<p>So let’s use it to our advantage and get <code class="language-plaintext highlighter-rouge">Ordering[Money]</code> for free:</p>
+      </main>
 
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// we need this for `&lt;` to work</span>
-<span class="k">import</span> <span class="nn">scala.math.Ordered._</span>
+    </div>
 
-<span class="k">implicit</span> <span class="k">val</span> <span class="nv">moneyOrdering</span><span class="k">:</span> <span class="kt">Ordering</span><span class="o">[</span><span class="kt">Money</span><span class="o">]</span> <span class="k">=</span> <span class="nv">Ordering</span><span class="o">.</span><span class="py">by</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">amount</span><span class="o">)</span>
-<span class="c1">// moneyOrdering: Ordering[Money] = scala.math.Ordering$$anon$5@17b61db7</span>
-
-<span class="nc">Money</span><span class="o">(</span><span class="mi">100</span><span class="o">)</span> <span class="o">&lt;</span> <span class="nc">Money</span><span class="o">(</span><span class="mi">200</span><span class="o">)</span>
-<span class="c1">// res3: Boolean = true</span>
-</code></pre></div></div>
-
-<h2 id="subtyping">Subtyping</h2>
-
-<p>Contravariant functors have a natural relationship with subtyping, dual to that of covariant functors:</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">A</span>
-<span class="k">class</span> <span class="nc">B</span> <span class="k">extends</span> <span class="n">A</span>
-<span class="k">val</span> <span class="nv">b</span><span class="k">:</span> <span class="kt">B</span> <span class="o">=</span> <span class="k">new</span> <span class="n">B</span>
-<span class="c1">// b: B = repl.MdocSession$App$B@771e0165</span>
-<span class="k">val</span> <span class="nv">a</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=</span> <span class="n">b</span>
-<span class="c1">// a: A = repl.MdocSession$App$B@771e0165</span>
-<span class="k">val</span> <span class="nv">showA</span><span class="k">:</span> <span class="kt">Show</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nv">Show</span><span class="o">.</span><span class="py">show</span><span class="o">(</span><span class="n">a</span> <span class="k">=&gt;</span> <span class="s">"a!"</span><span class="o">)</span>
-<span class="c1">// showA: Show[A] = cats.Show$$anon$2@5985b02a</span>
-<span class="k">val</span> <span class="nv">showB1</span><span class="k">:</span> <span class="kt">Show</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span> <span class="k">=</span> <span class="nv">showA</span><span class="o">.</span><span class="py">contramap</span><span class="o">(</span><span class="n">b</span> <span class="k">=&gt;</span> <span class="n">b</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span>
-<span class="c1">// showB1: Show[B] = cats.Show$$anon$2@79eb668b</span>
-<span class="k">val</span> <span class="nv">showB2</span><span class="k">:</span> <span class="kt">Show</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span> <span class="k">=</span> <span class="nv">showA</span><span class="o">.</span><span class="py">contramap</span><span class="o">(</span><span class="n">identity</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span>
-<span class="c1">// showB2: Show[B] = cats.Show$$anon$2@2cddc7f6</span>
-<span class="k">val</span> <span class="nv">showB3</span><span class="k">:</span> <span class="kt">Show</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Contravariant</span><span class="o">[</span><span class="kt">Show</span><span class="o">].</span><span class="py">narrow</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">showA</span><span class="o">)</span>
-<span class="c1">// showB3: Show[B] = cats.Show$$anon$2@5985b02a</span>
-</code></pre></div></div>
-
-<p>Subtyping relationships are “lifted backwards” by contravariant functors, such that if <code class="language-plaintext highlighter-rouge">F</code> is a
-lawful contravariant functor and <code class="language-plaintext highlighter-rouge">B &lt;: A</code> then <code class="language-plaintext highlighter-rouge">F[A] &lt;: F[B]</code>, which is expressed by <code class="language-plaintext highlighter-rouge">Contravariant.narrow</code>.</p>
-</section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/cats/highlight/highlight.pack.js"></script><script src="/cats/lunr/lunr.js"></script><script>
-// For all code blocks, copy the language from the containing div
-// to the inner code tag (where hljs expects it to be)
-const langPrefix = 'language-';
-document.querySelectorAll(`div[class^='${langPrefix}']`).forEach(function(div) {
-  div.classList.forEach(function(cssClass) {
-    if (cssClass.startsWith(langPrefix)) {
-      const lang = cssClass.substring(langPrefix.length);
-      div.querySelectorAll('pre code').forEach(function(code) {
-        code.classList.add(lang);
-      });
-    }
-  });
-});
-
-hljs.configure({languages:['scala','java','bash']});
-hljs.initHighlightingOnLoad();
-      </script><script src="/cats/js/sponsors.js"></script><script>console.info('\x57\x65\x62\x73\x69\x74\x65\x20\x62\x75\x69\x6c\x74\x20\x77\x69\x74\x68\x3a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x5f\x5f\x20\x20\x20\x20\x5f\x5f\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x5f\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x5f\x20\x5f\x5f\x0a\x20\x20\x20\x5f\x5f\x5f\x5f\x5f\x2f\x20\x2f\x5f\x20\x20\x2f\x20\x2f\x5f\x20\x20\x20\x20\x20\x20\x5f\x5f\x5f\x5f\x20\x5f\x5f\x5f\x20\x20\x28\x5f\x29\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x20\x20\x5f\x5f\x5f\x5f\x5f\x28\x5f\x29\x20\x2f\x5f\x5f\x5f\x5f\x20\x20\x5f\x5f\x5f\x5f\x5f\x0a\x20\x20\x2f\x20\x5f\x5f\x5f\x2f\x20\x5f\x5f\x20\x5c\x2f\x20\x5f\x5f\x2f\x5f\x5f\x5f\x5f\x5f\x2f\x20\x5f\x5f\x20\x60\x5f\x5f\x20\x5c\x2f\x20\x2f\x20\x5f\x5f\x5f\x2f\x20\x5f\x5f\x5f\x2f\x20\x5f\x5f\x20\x5c\x2f\x20\x5f\x5f\x5f\x2f\x20\x2f\x20\x5f\x5f\x2f\x20\x5f\x20\x5c\x2f\x20\x5f\x5f\x5f\x2f\x0a\x20\x28\x5f\x5f\x20\x20\x29\x20\x2f\x5f\x2f\x20\x2f\x20\x2f\x5f\x2f\x5f\x5f\x5f\x5f\x5f\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x5f\x5f\x2f\x20\x2f\x20\x20\x2f\x20\x2f\x5f\x2f\x20\x28\x5f\x5f\x20\x20\x29\x20\x2f\x20\x2f\x5f\x2f\x20\x20\x5f\x5f\x28\x5f\x5f\x20\x20\x29\x0a\x2f\x5f\x5f\x5f\x5f\x2f\x5f\x2e\x5f\x5f\x5f\x2f\x5c\x5f\x5f\x2f\x20\x20\x20\x20\x20\x2f\x5f\x2f\x20\x2f\x5f\x2f\x20\x2f\x5f\x2f\x5f\x2f\x5c\x5f\x5f\x5f\x2f\x5f\x2f\x20\x20\x20\x5c\x5f\x5f\x5f\x5f\x2f\x5f\x5f\x5f\x5f\x2f\x5f\x2f\x5c\x5f\x5f\x2f\x5c\x5f\x5f\x5f\x2f\x5f\x5f\x5f\x5f\x2f\x0a\x0a\x68\x74\x74\x70\x73\x3a\x2f\x2f\x34\x37\x64\x65\x67\x2e\x67\x69\x74\x68\x75\x62\x2e\x69\x6f\x2f\x73\x62\x74\x2d\x6d\x69\x63\x72\x6f\x73\x69\x74\x65\x73')</script><script>((window.gitter = {}).chat = {}).options = {
-room: 'typelevel/cats'};</script><script src="https://sidecar.gitter.im/dist/sidecar.v1.js"></script><script src="/cats/js/search.js"></script><script src="/cats/js/main.js"></script></body></html>
+  </body>
+</html>

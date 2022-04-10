@@ -1,208 +1,371 @@
-<!DOCTYPE html><html><head><title>Cats: EitherT</title><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Cats contributors" /><meta name="description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="og:image" content="/cats/img/poster.png" /><meta name="image" property="og:image" content="/cats/img/poster.png" /><meta name="og:title" content="Cats: EitherT" /><meta name="title" property="og:title" content="Cats: EitherT" /><meta name="og:site_name" content="Cats" /><meta name="og:url" content="http://typelevel.org/cats/" /><meta name="og:type" content="website" /><meta name="og:description" content="Lightweight, modular, and extensible library for functional programming" /><link rel="icon" type="image/png" href="/cats/img/favicon.png" /><meta name="twitter:title" content="Cats: EitherT" /><meta name="twitter:image" content="/cats/img/poster.png" /><meta name="twitter:description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="twitter:card" content="summary_large_image" /><link rel="icon" type="image/png" sizes="16x16" href="/cats/img/favicon16x16.png" /><link rel="icon" type="image/png" sizes="24x24" href="/cats/img/favicon24x24.png" /><link rel="icon" type="image/png" sizes="32x32" href="/cats/img/favicon32x32.png" /><link rel="icon" type="image/png" sizes="48x48" href="/cats/img/favicon48x48.png" /><link rel="icon" type="image/png" sizes="57x57" href="/cats/img/favicon57x57.png" /><link rel="icon" type="image/png" sizes="60x60" href="/cats/img/favicon60x60.png" /><link rel="icon" type="image/png" sizes="64x64" href="/cats/img/favicon64x64.png" /><link rel="icon" type="image/png" sizes="70x70" href="/cats/img/favicon70x70.png" /><link rel="icon" type="image/png" sizes="72x72" href="/cats/img/favicon72x72.png" /><link rel="icon" type="image/png" sizes="76x76" href="/cats/img/favicon76x76.png" /><link rel="icon" type="image/png" sizes="96x96" href="/cats/img/favicon96x96.png" /><link rel="icon" type="image/png" sizes="114x114" href="/cats/img/favicon114x114.png" /><link rel="icon" type="image/png" sizes="120x120" href="/cats/img/favicon120x120.png" /><link rel="icon" type="image/png" sizes="128x128" href="/cats/img/favicon128x128.png" /><link rel="icon" type="image/png" sizes="144x144" href="/cats/img/favicon144x144.png" /><link rel="icon" type="image/png" sizes="150x150" href="/cats/img/favicon150x150.png" /><link rel="icon" type="image/png" sizes="152x152" href="/cats/img/favicon152x152.png" /><link rel="icon" type="image/png" sizes="196x196" href="/cats/img/favicon196x196.png" /><link rel="icon" type="image/png" sizes="310x310" href="/cats/img/favicon310x310.png" /><link rel="icon" type="image/png" sizes="310x150" href="/cats/img/favicon310x150.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" /><link rel="stylesheet" href="/cats/highlight/styles/atom-one-light.css" /><link rel="stylesheet" href="/cats/css/pattern-style.css" /></head><body class="docs"><div id="wrapper"><div id="sidebar-wrapper"><ul id="sidebar" class="sidebar-nav"><li class="sidebar-brand"><a href="/cats/" class="brand"><div class="brand-wrapper"><span>Cats</span></div></a></li><li><a href="/cats/datatypes/writert.html" class="">WriterT</a></li><li><a href="/cats/datatypes/chain.html" class="">Chain</a></li><li><a href="/cats/datatypes/const.html" class="">Const</a></li><li><a href="/cats/datatypes/contt.html" class="">ContT</a></li><li><a href="/cats/datatypes.html" class="">Data Types</a></li><li><a href="/cats/datatypes/either.html" class="">Either</a></li><li><a href="/cats/datatypes/eithert.html" class=" active ">EitherT</a></li><li><a href="/cats/datatypes/eval.html" class="">Eval</a></li><li><a href="/cats/datatypes/freeapplicative.html" class="">FreeApplicatives</a></li><li><a href="/cats/datatypes/freemonad.html" class="">FreeMonads</a></li><li><a href="/cats/datatypes/functionk.html" class="">FunctionK</a></li><li><a href="/cats/datatypes/id.html" class="">Id</a></li><li><a href="/cats/datatypes/ior.html" class="">Ior</a></li><li><a href="/cats/datatypes/iort.html" class="">IorT</a></li><li><a href="/cats/datatypes/kleisli.html" class="">Kleisli</a></li><li><a href="/cats/datatypes/nel.html" class="">NonEmptyList</a></li><li><a href="/cats/datatypes/nested.html" class="">Nested</a></li><li><a href="/cats/datatypes/oneand.html" class="">OneAnd</a></li><li><a href="/cats/datatypes/optiont.html" class="">OptionT</a></li><li><a href="/cats/datatypes/state.html" class="">State</a></li><li><a href="/cats/datatypes/validated.html" class="">Validated</a></li><li><a href="/cats/datatypes/writer.html" class="">Writer</a></li></ul></div><div id="page-content-wrapper"><div class="nav"><div class="container-fluid"><div class="row"><div class="col-lg-12"><div class="action-menu pull-left clearfix"><a href="#menu-toggle" id="menu-toggle"><i class="fa fa-bars" aria-hidden="true"></i></a></div><ul class="pull-right"><li class="search-nav hidden-xs hidden-sm"><div id="search-dropdown"><label><i class="fa fa-search"></i>Search</label><input id="search-bar" type="text" placeholder="Enter keywords here..." onclick="displayToggleSearch(event)" /><ul id="search-dropdown-content" class="dropdown dropdown-content"></ul></div></li><li id="gh-eyes-item" class="hidden-xs to-uppercase"><a href="https://github.com/typelevel/cats" target="_blank" rel="noopener noreferrer"><i class="fa fa-eye"></i><span>Watchers<span id="eyes" class="label label-default">--</span></span></a></li><li id="gh-stars-item" class="hidden-xs to-uppercase"><a href="https://github.com/typelevel/cats" target="_blank" rel="noopener noreferrer"><i class="fa fa-star-o"></i><span>Stars<span id="stars" class="label label-default">--</span></span></a></li><li><a href="#" onclick="shareSiteTwitter('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-twitter"></i></a></li><li><a href="#" onclick="shareSiteFacebook('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-facebook"></i></a></li></ul></div></div></div></div><div id="content" data-github-owner="typelevel" data-github-repo="cats"><div class="content-wrapper"><section><h1 id="eithert">EitherT</h1>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Laika 0.18.1 + Helium Theme" />
+    <title>EitherT</title>
+    
+      <meta name="author" content="Cody Allen"/>
+    
+      <meta name="author" content="Ross Baker"/>
+    
+      <meta name="author" content="P. Oscar Boykin"/>
+    
+      <meta name="author" content="Travis Brown"/>
+    
+      <meta name="author" content="Adelbert Chang"/>
+    
+      <meta name="author" content="Peter Neyens"/>
+    
+      <meta name="author" content="Rob Norris"/>
+    
+      <meta name="author" content="Erik Osheim"/>
+    
+      <meta name="author" content="LukaJCB"/>
+    
+      <meta name="author" content="Michael Pilquist"/>
+    
+      <meta name="author" content="Miles Sabin"/>
+    
+      <meta name="author" content="Daniel Spiewak"/>
+    
+      <meta name="author" content="Frank Thomas"/>
+    
+      <meta name="author" content="Julien Truffaut"/>
+    
+      <meta name="author" content="Kailuo Wang"/>
+    
+    
+      <meta name="description" content="docs"/>
+    
+    
+      <link rel="icon" sizes="32x32" type="image/png" href="https://typelevel.org/img/favicon.png"/>
+    
+    
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.207/distr/fira_code.css">
+    
+    <link rel="stylesheet" type="text/css" href="../helium/icofont.min.css" />
+    <link rel="stylesheet" type="text/css" href="../helium/laika-helium.css" />
+    <link rel="stylesheet" type="text/css" href="../site/styles.css" />
+    <script src="../helium/laika-helium.js"></script>
+    <script src="../js/sponsors.js"></script>
+    
+    
+    <script> /* for avoiding page load transitions */ </script>
+  </head>
 
-<p><code class="language-plaintext highlighter-rouge">Either</code> can be used for error handling in most situations. However, when
-<code class="language-plaintext highlighter-rouge">Either</code> is placed into effectful types such as <code class="language-plaintext highlighter-rouge">Option</code> or<code class="language-plaintext highlighter-rouge">Future</code>, a large
-amount of boilerplate is required to handle errors. For example, consider the
-following program:</p>
+  <body>
 
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">scala.util.Try</span>
-<span class="k">import</span> <span class="nn">cats.implicits._</span>
+    <header id="top-bar">
 
-<span class="k">def</span> <span class="nf">parseDouble</span><span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Double</span><span class="o">]</span> <span class="k">=</span>
-  <span class="nc">Try</span><span class="o">(</span><span class="nv">s</span><span class="o">.</span><span class="py">toDouble</span><span class="o">).</span><span class="py">map</span><span class="o">(</span><span class="nc">Right</span><span class="o">(</span><span class="k">_</span><span class="o">)).</span><span class="py">getOrElse</span><span class="o">(</span><span class="nc">Left</span><span class="o">(</span><span class="n">s</span><span class="s">"$s is not a number"</span><span class="o">))</span>
+      <div class="row">
+        <a id="nav-icon">
+          <i class="icofont-laika" title="Navigation">&#xefa2;</i>
+        </a>
+        
+      </div>
 
-<span class="k">def</span> <span class="nf">divide</span><span class="o">(</span><span class="n">a</span><span class="k">:</span> <span class="kt">Double</span><span class="o">,</span> <span class="n">b</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Double</span><span class="o">]</span> <span class="k">=</span>
-  <span class="nv">Either</span><span class="o">.</span><span class="py">cond</span><span class="o">(</span><span class="n">b</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">a</span> <span class="o">/</span> <span class="n">b</span><span class="o">,</span> <span class="s">"Cannot divide by zero"</span><span class="o">)</span>
+      <a class="image-link" href="https://typelevel.org"><img src="https://typelevel.org/img/logo.svg"></a>
 
-<span class="k">def</span> <span class="nf">divisionProgram</span><span class="o">(</span><span class="n">inputA</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">inputB</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Double</span><span class="o">]</span> <span class="k">=</span>
-  <span class="k">for</span> <span class="o">{</span>
-    <span class="n">a</span> <span class="k">&lt;-</span> <span class="nf">parseDouble</span><span class="o">(</span><span class="n">inputA</span><span class="o">)</span>
-    <span class="n">b</span> <span class="k">&lt;-</span> <span class="nf">parseDouble</span><span class="o">(</span><span class="n">inputB</span><span class="o">)</span>
-    <span class="n">result</span> <span class="k">&lt;-</span> <span class="nf">divide</span><span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span>
-  <span class="o">}</span> <span class="k">yield</span> <span class="n">result</span>
+      <span class="row links"><a class="icon-link svg-link" href="https://typelevel.org/cats/api/"><span title="API"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M75,47.5c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm-50,-0c13.246,-0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,-0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm2.705,16.735l7.239,0l0.622,-4.904l-21.833,0l-0,4.904l7.589,0l0,22.067l6.383,0l-0,-22.067Zm58.076,7.265c-0,-8.757 -3.698,-14.166 -10.781,-14.166c-7.083,-0 -10.781,5.604 -10.781,14.166c0,8.757 3.698,14.166 10.781,14.166c7.083,0 10.781,-5.604 10.781,-14.166Zm-6.539,0c0,6.538 -1.128,9.496 -4.242,9.496c-2.997,0 -4.242,-2.88 -4.242,-9.496c-0,-6.616 1.206,-9.496 4.242,-9.496c3.036,-0 4.242,2.88 4.242,9.496Zm-29.242,-67c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm0.512,9.834c-7.122,-0 -12.609,5.098 -12.609,14.127c-0,9.263 5.215,14.205 12.532,14.205c4.164,0 7.083,-1.634 9.068,-3.658l-2.88,-3.697c-1.518,1.206 -3.153,2.413 -5.838,2.413c-3.697,-0 -6.266,-2.763 -6.266,-9.263c-0,-6.616 2.724,-9.379 6.149,-9.379c2.102,-0 3.892,0.778 5.371,1.984l3.113,-3.775c-2.257,-1.868 -4.748,-2.957 -8.64,-2.957Z"/>
+  </g>
+</svg></span></a><a class="icon-link svg-link" href="https://github.com/typelevel/cats"><span title="Source Code"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M49.995,1c-27.609,-0 -49.995,22.386 -49.995,50.002c-0,22.09 14.325,40.83 34.194,47.444c2.501,0.458 3.413,-1.086 3.413,-2.412c0,-1.185 -0.043,-4.331 -0.067,-8.503c-13.908,3.021 -16.843,-6.704 -16.843,-6.704c-2.274,-5.773 -5.552,-7.311 -5.552,-7.311c-4.54,-3.103 0.344,-3.042 0.344,-3.042c5.018,0.356 7.658,5.154 7.658,5.154c4.46,7.64 11.704,5.433 14.552,4.156c0.454,-3.232 1.744,-5.436 3.174,-6.685c-11.102,-1.262 -22.775,-5.553 -22.775,-24.713c-0,-5.457 1.949,-9.92 5.147,-13.416c-0.516,-1.265 -2.231,-6.348 0.488,-13.233c0,0 4.199,-1.344 13.751,5.126c3.988,-1.108 8.266,-1.663 12.518,-1.682c4.245,0.019 8.523,0.574 12.517,1.682c9.546,-6.47 13.736,-5.126 13.736,-5.126c2.728,6.885 1.013,11.968 0.497,13.233c3.204,3.496 5.141,7.959 5.141,13.416c0,19.209 -11.691,23.436 -22.83,24.673c1.795,1.544 3.394,4.595 3.394,9.26c0,6.682 -0.061,12.076 -0.061,13.715c0,1.338 0.899,2.894 3.438,2.406c19.853,-6.627 34.166,-25.354 34.166,-47.438c-0,-27.616 -22.389,-50.002 -50.005,-50.002"/>
+  </g>
+</svg></span></a><a class="icon-link" href="https://discord.gg/XF3CXcMzqD"><i class="icofont-laika" title="Chat">&#xeed5;</i></a><a class="icon-link" href="https://twitter.com/typelevel"><i class="icofont-laika" title="Twitter">&#xed7a;</i></a></span>
 
-<span class="nf">divisionProgram</span><span class="o">(</span><span class="s">"4"</span><span class="o">,</span> <span class="s">"2"</span><span class="o">)</span> <span class="c1">// Right(2.0)</span>
-<span class="c1">// res0: Either[String, Double] = Right(2.0) // Right(2.0)</span>
-<span class="nf">divisionProgram</span><span class="o">(</span><span class="s">"a"</span><span class="o">,</span> <span class="s">"b"</span><span class="o">)</span> <span class="c1">// Left("a is not a number")</span>
-<span class="c1">// res1: Either[String, Double] = Left("a is not a number")</span>
-</code></pre></div></div>
+    </header>
 
-<p>Suppose <code class="language-plaintext highlighter-rouge">parseDouble</code> and <code class="language-plaintext highlighter-rouge">divide</code> are rewritten to be asynchronous and return
-<code class="language-plaintext highlighter-rouge">Future[Either[String, Double]]</code> instead. The for-comprehension can no longer be
-used since <code class="language-plaintext highlighter-rouge">divisionProgram</code> must now compose <code class="language-plaintext highlighter-rouge">Future</code> and <code class="language-plaintext highlighter-rouge">Either</code> together,
-which means that the error handling must be performed explicitly to ensure that
-the proper types are returned:</p>
+    <nav id="sidebar">
 
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">scala.concurrent.ExecutionContext.Implicits.global</span>
-<span class="k">import</span> <span class="nn">scala.concurrent.Future</span>
+      <div class="row">
+        <a class="icon-link svg-link" href="https://typelevel.org/cats/api/"><span title="API"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M75,47.5c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm-50,-0c13.246,-0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,-0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm2.705,16.735l7.239,0l0.622,-4.904l-21.833,0l-0,4.904l7.589,0l0,22.067l6.383,0l-0,-22.067Zm58.076,7.265c-0,-8.757 -3.698,-14.166 -10.781,-14.166c-7.083,-0 -10.781,5.604 -10.781,14.166c0,8.757 3.698,14.166 10.781,14.166c7.083,0 10.781,-5.604 10.781,-14.166Zm-6.539,0c0,6.538 -1.128,9.496 -4.242,9.496c-2.997,0 -4.242,-2.88 -4.242,-9.496c-0,-6.616 1.206,-9.496 4.242,-9.496c3.036,-0 4.242,2.88 4.242,9.496Zm-29.242,-67c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm0.512,9.834c-7.122,-0 -12.609,5.098 -12.609,14.127c-0,9.263 5.215,14.205 12.532,14.205c4.164,0 7.083,-1.634 9.068,-3.658l-2.88,-3.697c-1.518,1.206 -3.153,2.413 -5.838,2.413c-3.697,-0 -6.266,-2.763 -6.266,-9.263c-0,-6.616 2.724,-9.379 6.149,-9.379c2.102,-0 3.892,0.778 5.371,1.984l3.113,-3.775c-2.257,-1.868 -4.748,-2.957 -8.64,-2.957Z"/>
+  </g>
+</svg></span></a><a class="icon-link svg-link" href="https://github.com/typelevel/cats"><span title="Source Code"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M49.995,1c-27.609,-0 -49.995,22.386 -49.995,50.002c-0,22.09 14.325,40.83 34.194,47.444c2.501,0.458 3.413,-1.086 3.413,-2.412c0,-1.185 -0.043,-4.331 -0.067,-8.503c-13.908,3.021 -16.843,-6.704 -16.843,-6.704c-2.274,-5.773 -5.552,-7.311 -5.552,-7.311c-4.54,-3.103 0.344,-3.042 0.344,-3.042c5.018,0.356 7.658,5.154 7.658,5.154c4.46,7.64 11.704,5.433 14.552,4.156c0.454,-3.232 1.744,-5.436 3.174,-6.685c-11.102,-1.262 -22.775,-5.553 -22.775,-24.713c-0,-5.457 1.949,-9.92 5.147,-13.416c-0.516,-1.265 -2.231,-6.348 0.488,-13.233c0,0 4.199,-1.344 13.751,5.126c3.988,-1.108 8.266,-1.663 12.518,-1.682c4.245,0.019 8.523,0.574 12.517,1.682c9.546,-6.47 13.736,-5.126 13.736,-5.126c2.728,6.885 1.013,11.968 0.497,13.233c3.204,3.496 5.141,7.959 5.141,13.416c0,19.209 -11.691,23.436 -22.83,24.673c1.795,1.544 3.394,4.595 3.394,9.26c0,6.682 -0.061,12.076 -0.061,13.715c0,1.338 0.899,2.894 3.438,2.406c19.853,-6.627 34.166,-25.354 34.166,-47.438c-0,-27.616 -22.389,-50.002 -50.005,-50.002"/>
+  </g>
+</svg></span></a><a class="icon-link" href="https://discord.gg/XF3CXcMzqD"><i class="icofont-laika" title="Chat">&#xeed5;</i></a><a class="icon-link" href="https://twitter.com/typelevel"><i class="icofont-laika" title="Twitter">&#xed7a;</i></a>
+      </div>
 
-<span class="k">def</span> <span class="nf">parseDoubleAsync</span><span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Either</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Double</span><span class="o">]]</span> <span class="k">=</span>
-  <span class="nv">Future</span><span class="o">.</span><span class="py">successful</span><span class="o">(</span><span class="nf">parseDouble</span><span class="o">(</span><span class="n">s</span><span class="o">))</span>
-<span class="k">def</span> <span class="nf">divideAsync</span><span class="o">(</span><span class="n">a</span><span class="k">:</span> <span class="kt">Double</span><span class="o">,</span> <span class="n">b</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Either</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Double</span><span class="o">]]</span> <span class="k">=</span>
-  <span class="nv">Future</span><span class="o">.</span><span class="py">successful</span><span class="o">(</span><span class="nf">divide</span><span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">))</span>
+      <ul class="nav-list">
+        <li class="level1"><a href="../index.html">Cats</a></li>
+        <li class="level1"><a href="../typeclasses.html">Type Classes</a></li>
+        <li class="level1"><a href="../datatypes.html">Data Types</a></li>
+        <li class="level1"><a href="../algebra.html">Algebra</a></li>
+        <li class="level1"><a href="../motivations.html">Motivations</a></li>
+        <li class="level1"><a href="../resources_for_learners.html">Resources for Learners</a></li>
+        <li class="level1"><a href="../jump_start_guide.html">Jump Start Guide</a></li>
+        <li class="level1"><a href="../imports.html">Imports</a></li>
+        <li class="level1"><a href="../faq.html">FAQ</a></li>
+        <li class="level1"><a href="../CONTRIBUTING.html">Contributor guide</a></li>
+        <li class="level1"><a href="../colophon.html">Colophon</a></li>
+        <li class="level1"><a href="../nomenclature.html">Glossary</a></li>
+        <li class="level1"><a href="../guidelines.html">Guidelines</a></li>
+        <li class="level1"><a href="../typelevelEcosystem.html">Typelevel Ecosystem</a></li>
+        <li class="level1 nav-header">Type Classes</li>
+        <li class="level2"><a href="../typeclasses/alternative.html">Alternative</a></li>
+        <li class="level2"><a href="../typeclasses/applicative.html">Applicative</a></li>
+        <li class="level2"><a href="../typeclasses/applicativemonaderror.html">ApplicativeError and MonadError</a></li>
+        <li class="level2"><a href="../typeclasses/applicativetraverse.html">Applicative and Traversable Functors</a></li>
+        <li class="level2"><a href="../typeclasses/arrow.html">Arrow</a></li>
+        <li class="level2"><a href="../typeclasses/arrowchoice.html">Arrow Choice</a></li>
+        <li class="level2"><a href="../typeclasses/bifunctor.html">Bifunctor</a></li>
+        <li class="level2"><a href="../typeclasses/bimonad.html">Bimonad</a></li>
+        <li class="level2"><a href="../typeclasses/comonad.html">Comonad</a></li>
+        <li class="level2"><a href="../typeclasses/contravariant.html">Contravariant</a></li>
+        <li class="level2"><a href="../typeclasses/contravariantmonoidal.html">Contravariant Monoidal</a></li>
+        <li class="level2"><a href="../typeclasses/eq.html">Eq</a></li>
+        <li class="level2"><a href="../typeclasses/foldable.html">Foldable</a></li>
+        <li class="level2"><a href="../typeclasses/functor.html">Functor</a></li>
+        <li class="level2"><a href="../typeclasses/invariant.html">Invariant</a></li>
+        <li class="level2"><a href="../typeclasses/invariantmonoidal.html">Invariant Monoidal</a></li>
+        <li class="level2"><a href="../typeclasses/lawtesting.html">Law testing</a></li>
+        <li class="level2"><a href="../typeclasses/monad.html">Monad</a></li>
+        <li class="level2"><a href="../typeclasses/monoid.html">Monoid</a></li>
+        <li class="level2"><a href="../typeclasses/monoidk.html">MonoidK</a></li>
+        <li class="level2"><a href="../typeclasses/nonemptytraverse.html">NonEmptyTraverse</a></li>
+        <li class="level2"><a href="../typeclasses/parallel.html">Parallel</a></li>
+        <li class="level2"><a href="../typeclasses/reducible.html">Reducible</a></li>
+        <li class="level2"><a href="../typeclasses/semigroup.html">Semigroup</a></li>
+        <li class="level2"><a href="../typeclasses/semigroupk.html">SemigroupK</a></li>
+        <li class="level2"><a href="../typeclasses/show.html">Show</a></li>
+        <li class="level2"><a href="../typeclasses/traverse.html">Traverse</a></li>
+        <li class="level1 nav-header">Data Types</li>
+        <li class="level2"><a href="chain.html">Chain</a></li>
+        <li class="level2"><a href="const.html">Const</a></li>
+        <li class="level2"><a href="contt.html">ContT</a></li>
+        <li class="level2"><a href="either.html">Either</a></li>
+        <li class="level2 active"><a href="#">EitherT</a></li>
+        <li class="level2"><a href="eval.html">Eval</a></li>
+        <li class="level2"><a href="freeapplicative.html">Free Applicative</a></li>
+        <li class="level2"><a href="freemonad.html">Free Monad</a></li>
+        <li class="level2"><a href="functionk.html">FunctionK</a></li>
+        <li class="level2"><a href="id.html">Id</a></li>
+        <li class="level2"><a href="ior.html">Ior</a></li>
+        <li class="level2"><a href="iort.html">IorT</a></li>
+        <li class="level2"><a href="kleisli.html">Kleisli</a></li>
+        <li class="level2"><a href="nel.html">NonEmptyList</a></li>
+        <li class="level2"><a href="nested.html">Nested</a></li>
+        <li class="level2"><a href="oneand.html">OneAnd</a></li>
+        <li class="level2"><a href="optiont.html">OptionT</a></li>
+        <li class="level2"><a href="state.html">State</a></li>
+        <li class="level2"><a href="validated.html">Validated</a></li>
+        <li class="level2"><a href="writer.html">Writer</a></li>
+        <li class="level2"><a href="writert.html">WriterT</a></li>
+      </ul>
 
-<span class="k">def</span> <span class="nf">divisionProgramAsync</span><span class="o">(</span><span class="n">inputA</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">inputB</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Either</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Double</span><span class="o">]]</span> <span class="k">=</span>
-  <span class="nf">parseDoubleAsync</span><span class="o">(</span><span class="n">inputA</span><span class="o">)</span> <span class="n">flatMap</span> <span class="o">{</span> <span class="n">eitherA</span> <span class="k">=&gt;</span>
-    <span class="nf">parseDoubleAsync</span><span class="o">(</span><span class="n">inputB</span><span class="o">)</span> <span class="n">flatMap</span> <span class="o">{</span> <span class="n">eitherB</span> <span class="k">=&gt;</span>
-      <span class="o">(</span><span class="n">eitherA</span><span class="o">,</span> <span class="n">eitherB</span><span class="o">)</span> <span class="k">match</span> <span class="o">{</span>
-        <span class="nf">case</span> <span class="o">(</span><span class="nc">Right</span><span class="o">(</span><span class="n">a</span><span class="o">),</span> <span class="nc">Right</span><span class="o">(</span><span class="n">b</span><span class="o">))</span> <span class="k">=&gt;</span> <span class="nf">divideAsync</span><span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span>
-        <span class="nf">case</span> <span class="o">(</span><span class="nc">Left</span><span class="o">(</span><span class="n">err</span><span class="o">),</span> <span class="k">_</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nv">Future</span><span class="o">.</span><span class="py">successful</span><span class="o">(</span><span class="nc">Left</span><span class="o">(</span><span class="n">err</span><span class="o">))</span>
-        <span class="nf">case</span> <span class="o">(</span><span class="k">_</span><span class="o">,</span> <span class="nc">Left</span><span class="o">(</span><span class="n">err</span><span class="o">))</span> <span class="k">=&gt;</span> <span class="nv">Future</span><span class="o">.</span><span class="py">successful</span><span class="o">(</span><span class="nc">Left</span><span class="o">(</span><span class="n">err</span><span class="o">))</span>
-      <span class="o">}</span>
-    <span class="o">}</span>
-  <span class="o">}</span>
-</code></pre></div></div>
+      <ul class="nav-list">
+        <li class="level1 nav-header">Related Projects</li>
+        
+          <li class="level2"><a href="https://typelevel.org/cats-effect/">cats-effect</a></li>
+        
+          <li class="level2"><a href="https://typelevel.org/mouse">Mouse</a></li>
+        
+          <li class="level2"><a href="https://github.com/typelevel/discipline/">discipline</a></li>
+        
+      </ul>
 
-<p>Clearly, the updated code is less readable and more verbose: the details of the
-program are now mixed with the error handling. In addition, as more <code class="language-plaintext highlighter-rouge">Either</code>s
-and <code class="language-plaintext highlighter-rouge">Futures</code> are included, the amount of boilerplate required to properly
-handle the errors will increase dramatically.</p>
+    </nav>
 
-<h2 id="eithert-1">EitherT</h2>
+    <div id="container">
 
-<p><code class="language-plaintext highlighter-rouge">EitherT[F[_], A, B]</code> is a lightweight wrapper for <code class="language-plaintext highlighter-rouge">F[Either[A, B]]</code> that makes
-it easy to compose <code class="language-plaintext highlighter-rouge">Either</code>s and <code class="language-plaintext highlighter-rouge">F</code>s together. To use <code class="language-plaintext highlighter-rouge">EitherT</code>, values of
-<code class="language-plaintext highlighter-rouge">Either</code>, <code class="language-plaintext highlighter-rouge">F</code>, <code class="language-plaintext highlighter-rouge">A</code>, and <code class="language-plaintext highlighter-rouge">B</code> are first converted into <code class="language-plaintext highlighter-rouge">EitherT</code>, and the
-resulting <code class="language-plaintext highlighter-rouge">EitherT</code> values are then composed using combinators. For example, the
-asynchronous division program can be rewritten as follows:</p>
+      <nav id="page-nav">
+        <p class="header"><a href="#">EitherT</a></p>
 
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.EitherT</span>
-<span class="k">import</span> <span class="nn">cats.implicits._</span>
+        <ul class="nav-list">
+          <li class="level1"><a href="#eithert-2">EitherT</a></li>
+          <li class="level1"><a href="#from-a-or-b-to-eithert-f-a-b">From <code>A</code> or <code>B</code> to <code>EitherT[F, A, B]</code></a></li>
+          <li class="level1"><a href="#from-f-a-or-f-b-to-eithert-f-a-b">From <code>F[A]</code> or <code>F[B]</code> to <code>EitherT[F, A, B]</code></a></li>
+          <li class="level1"><a href="#from-either-a-b-or-f-either-a-b-to-eithert-f-a-b">From <code>Either[A, B]</code> or <code>F[Either[A, B]]</code> to <code>EitherT[F, A, B]</code></a></li>
+          <li class="level1"><a href="#from-option-b-or-f-option-b-to-eithert-f-a-b">From <code>Option[B]</code> or <code>F[Option[B]]</code> to <code>EitherT[F, A, B]</code></a></li>
+          <li class="level1"><a href="#from-applicativeerror-f-e-to-eithert-f-e-a">From <code>ApplicativeError[F, E]</code> to <code>EitherT[F, E, A]</code></a></li>
+          <li class="level1"><a href="#extracting-an-f-either-a-b-from-an-eithert-f-a-b">Extracting an <code>F[Either[A, B]]</code> from an <code>EitherT[F, A, B]</code></a></li>
+        </ul>
 
-<span class="k">def</span> <span class="nf">divisionProgramAsync</span><span class="o">(</span><span class="n">inputA</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">inputB</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">EitherT</span><span class="o">[</span><span class="kt">Future</span>, <span class="kt">String</span>, <span class="kt">Double</span><span class="o">]</span> <span class="k">=</span>
-  <span class="k">for</span> <span class="o">{</span>
-    <span class="n">a</span> <span class="k">&lt;-</span> <span class="nc">EitherT</span><span class="o">(</span><span class="nf">parseDoubleAsync</span><span class="o">(</span><span class="n">inputA</span><span class="o">))</span>
-    <span class="n">b</span> <span class="k">&lt;-</span> <span class="nc">EitherT</span><span class="o">(</span><span class="nf">parseDoubleAsync</span><span class="o">(</span><span class="n">inputB</span><span class="o">))</span>
-    <span class="n">result</span> <span class="k">&lt;-</span> <span class="nc">EitherT</span><span class="o">(</span><span class="nf">divideAsync</span><span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">))</span>
-  <span class="o">}</span> <span class="k">yield</span> <span class="n">result</span>
+        <p class="footer"></p>
+      </nav>
 
-<span class="nf">divisionProgramAsync</span><span class="o">(</span><span class="s">"4"</span><span class="o">,</span> <span class="s">"2"</span><span class="o">).</span><span class="py">value</span>
-<span class="c1">// res2: Future[Either[String, Double]] = Future(Success(Right(2.0)))</span>
-<span class="nf">divisionProgramAsync</span><span class="o">(</span><span class="s">"a"</span><span class="o">,</span> <span class="s">"b"</span><span class="o">).</span><span class="py">value</span>
-<span class="c1">// res3: Future[Either[String, Double]] = Future(Success(Left(a is not a number)))</span>
-</code></pre></div></div>
+      <main class="content">
 
-<p>Note that when <code class="language-plaintext highlighter-rouge">F</code> is a monad, then <code class="language-plaintext highlighter-rouge">EitherT</code> will also form a monad, allowing
-monadic combinators such as <code class="language-plaintext highlighter-rouge">flatMap</code> to be used in composing <code class="language-plaintext highlighter-rouge">EitherT</code> values.</p>
+        <h1 id="eithert-1" class="title">EitherT</h1>
+        <p><code>Either</code> can be used for error handling in most situations. However, when
+        <code>Either</code> is placed into effectful types such as <code>Option</code> or<code>Future</code>, a large
+        amount of boilerplate is required to handle errors. For example, consider the
+        following program:</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">scala</span><span>.</span><span class="identifier">util</span><span>.</span><span class="type-name">Try</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
 
-<h2 id="from-a-or-b-to-eithertf-a-b">From <code class="language-plaintext highlighter-rouge">A</code> or <code class="language-plaintext highlighter-rouge">B</code> to <code class="language-plaintext highlighter-rouge">EitherT[F, A, B]</code></h2>
+</span><span class="keyword">def</span><span> </span><span class="declaration-name">parseDouble</span><span>(</span><span class="identifier">s</span><span>: </span><span class="type-name">String</span><span>): </span><span class="type-name">Either</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Double</span><span>] =
+  </span><span class="type-name">Try</span><span>(</span><span class="identifier">s</span><span>.</span><span class="identifier">toDouble</span><span>).</span><span class="identifier">map</span><span>(</span><span class="type-name">Right</span><span>(</span><span class="identifier">_</span><span>)).</span><span class="identifier">getOrElse</span><span>(</span><span class="type-name">Left</span><span>(</span><span class="string-literal">s&quot;</span><span class="substitution">$s</span><span class="string-literal"> is not a number&quot;</span><span>))
 
-<p>To obtain a left version or a right version of <code class="language-plaintext highlighter-rouge">EitherT</code> when given an <code class="language-plaintext highlighter-rouge">A</code> or a
-<code class="language-plaintext highlighter-rouge">B</code>, use <code class="language-plaintext highlighter-rouge">EitherT.leftT</code> and <code class="language-plaintext highlighter-rouge">EitherT.rightT</code> (which is an alias for
-<code class="language-plaintext highlighter-rouge">EitherT.pure</code>), respectively.</p>
+</span><span class="keyword">def</span><span> </span><span class="declaration-name">divide</span><span>(</span><span class="identifier">a</span><span>: </span><span class="type-name">Double</span><span>, </span><span class="identifier">b</span><span>: </span><span class="type-name">Double</span><span>): </span><span class="type-name">Either</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Double</span><span>] =
+  </span><span class="type-name">Either</span><span>.</span><span class="identifier">cond</span><span>(</span><span class="identifier">b</span><span> != </span><span class="number-literal">0</span><span>, </span><span class="identifier">a</span><span> / </span><span class="identifier">b</span><span>, </span><span class="string-literal">&quot;Cannot divide by zero&quot;</span><span>)
 
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">number</span><span class="k">:</span> <span class="kt">EitherT</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nv">EitherT</span><span class="o">.</span><span class="py">rightT</span><span class="o">(</span><span class="mi">5</span><span class="o">)</span>
-<span class="k">val</span> <span class="nv">error</span><span class="k">:</span> <span class="kt">EitherT</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nv">EitherT</span><span class="o">.</span><span class="py">leftT</span><span class="o">(</span><span class="s">"Not a number"</span><span class="o">)</span>
-</code></pre></div></div>
+</span><span class="keyword">def</span><span> </span><span class="declaration-name">divisionProgram</span><span>(</span><span class="identifier">inputA</span><span>: </span><span class="type-name">String</span><span>, </span><span class="identifier">inputB</span><span>: </span><span class="type-name">String</span><span>): </span><span class="type-name">Either</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Double</span><span>] =
+  </span><span class="keyword">for</span><span> {
+    </span><span class="identifier">a</span><span> &lt;- </span><span class="identifier">parseDouble</span><span>(</span><span class="identifier">inputA</span><span>)
+    </span><span class="identifier">b</span><span> &lt;- </span><span class="identifier">parseDouble</span><span>(</span><span class="identifier">inputB</span><span>)
+    </span><span class="identifier">result</span><span> &lt;- </span><span class="identifier">divide</span><span>(</span><span class="identifier">a</span><span>, </span><span class="identifier">b</span><span>)
+  } </span><span class="keyword">yield</span><span> </span><span class="identifier">result</span><span>
 
-<h2 id="from-fa-or-fb-to-eithertf-a-b">From <code class="language-plaintext highlighter-rouge">F[A]</code> or <code class="language-plaintext highlighter-rouge">F[B]</code> to <code class="language-plaintext highlighter-rouge">EitherT[F, A, B]</code></h2>
+</span><span class="identifier">divisionProgram</span><span>(</span><span class="string-literal">&quot;4&quot;</span><span>, </span><span class="string-literal">&quot;2&quot;</span><span>) </span><span class="comment">// Right(2.0)
+// res0: Either[String, Double] = Right(2.0) // Right(2.0)
+</span><span class="identifier">divisionProgram</span><span>(</span><span class="string-literal">&quot;a&quot;</span><span>, </span><span class="string-literal">&quot;b&quot;</span><span>) </span><span class="comment">// Left(&quot;a is not a number&quot;)
+// res1: Either[String, Double] = Left(&quot;a is not a number&quot;)</span></code></pre>
+        <p>Suppose <code>parseDouble</code> and <code>divide</code> are rewritten to be asynchronous and return
+        <code>Future[Either[String, Double]]</code> instead. The for-comprehension can no longer be
+        used since <code>divisionProgram</code> must now compose <code>Future</code> and <code>Either</code> together,
+        which means that the error handling must be performed explicitly to ensure that
+        the proper types are returned:</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">scala</span><span>.</span><span class="identifier">concurrent</span><span>.</span><span class="type-name">ExecutionContext</span><span>.</span><span class="type-name">Implicits</span><span>.</span><span class="identifier">global</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">scala</span><span>.</span><span class="identifier">concurrent</span><span>.</span><span class="type-name">Future</span><span>
 
-<p>Similarly, use <code class="language-plaintext highlighter-rouge">EitherT.left</code> and <code class="language-plaintext highlighter-rouge">EitherT.right</code> to convert an <code class="language-plaintext highlighter-rouge">F[A]</code> or an <code class="language-plaintext highlighter-rouge">F[B]</code>
-into an <code class="language-plaintext highlighter-rouge">EitherT</code>. It is also possible to use <code class="language-plaintext highlighter-rouge">EitherT.liftF</code> as an alias for
-<code class="language-plaintext highlighter-rouge">EitherT.right</code>.</p>
+</span><span class="keyword">def</span><span> </span><span class="declaration-name">parseDoubleAsync</span><span>(</span><span class="identifier">s</span><span>: </span><span class="type-name">String</span><span>): </span><span class="type-name">Future</span><span>[</span><span class="type-name">Either</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Double</span><span>]] =
+  </span><span class="type-name">Future</span><span>.</span><span class="identifier">successful</span><span>(</span><span class="identifier">parseDouble</span><span>(</span><span class="identifier">s</span><span>))
+</span><span class="keyword">def</span><span> </span><span class="declaration-name">divideAsync</span><span>(</span><span class="identifier">a</span><span>: </span><span class="type-name">Double</span><span>, </span><span class="identifier">b</span><span>: </span><span class="type-name">Double</span><span>): </span><span class="type-name">Future</span><span>[</span><span class="type-name">Either</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Double</span><span>]] =
+  </span><span class="type-name">Future</span><span>.</span><span class="identifier">successful</span><span>(</span><span class="identifier">divide</span><span>(</span><span class="identifier">a</span><span>, </span><span class="identifier">b</span><span>))
 
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">numberO</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="mi">5</span><span class="o">)</span>
-<span class="k">val</span> <span class="nv">errorO</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"Not a number"</span><span class="o">)</span>
-
-<span class="k">val</span> <span class="nv">number</span><span class="k">:</span> <span class="kt">EitherT</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nv">EitherT</span><span class="o">.</span><span class="py">right</span><span class="o">(</span><span class="n">numberO</span><span class="o">)</span>
-<span class="k">val</span> <span class="nv">error</span><span class="k">:</span> <span class="kt">EitherT</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nv">EitherT</span><span class="o">.</span><span class="py">left</span><span class="o">(</span><span class="n">errorO</span><span class="o">)</span>
-</code></pre></div></div>
-
-<h2 id="from-eithera-b-or-feithera-b-to-eithertf-a-b">From <code class="language-plaintext highlighter-rouge">Either[A, B]</code> or <code class="language-plaintext highlighter-rouge">F[Either[A, B]]</code> to <code class="language-plaintext highlighter-rouge">EitherT[F, A, B]</code></h2>
-
-<p>Use <code class="language-plaintext highlighter-rouge">EitherT.fromEither</code> to lift a value of <code class="language-plaintext highlighter-rouge">Either[A, B]</code> into <code class="language-plaintext highlighter-rouge">EitherT[F, A, B]</code>.
-An <code class="language-plaintext highlighter-rouge">F[Either[A, B]]</code> can be converted into <code class="language-plaintext highlighter-rouge">EitherT</code> using the <code class="language-plaintext highlighter-rouge">EitherT</code> constructor.</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">numberE</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Right</span><span class="o">(</span><span class="mi">100</span><span class="o">)</span>
-<span class="k">val</span> <span class="nv">errorE</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Left</span><span class="o">(</span><span class="s">"Not a number"</span><span class="o">)</span>
-<span class="k">val</span> <span class="nv">numberFE</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Either</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">]]</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="nc">Right</span><span class="o">(</span><span class="mi">250</span><span class="o">))</span>
-
-<span class="k">val</span> <span class="nv">numberET</span><span class="k">:</span> <span class="kt">EitherT</span><span class="o">[</span><span class="kt">List</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nv">EitherT</span><span class="o">.</span><span class="py">fromEither</span><span class="o">(</span><span class="n">numberE</span><span class="o">)</span>
-<span class="k">val</span> <span class="nv">errorET</span><span class="k">:</span> <span class="kt">EitherT</span><span class="o">[</span><span class="kt">List</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nv">EitherT</span><span class="o">.</span><span class="py">fromEither</span><span class="o">(</span><span class="n">errorE</span><span class="o">)</span>
-<span class="k">val</span> <span class="nv">numberFET</span><span class="k">:</span> <span class="kt">EitherT</span><span class="o">[</span><span class="kt">List</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">EitherT</span><span class="o">(</span><span class="n">numberFE</span><span class="o">)</span>
-</code></pre></div></div>
-
-<h2 id="from-optionb-or-foptionb-to-eithertf-a-b">From <code class="language-plaintext highlighter-rouge">Option[B]</code> or <code class="language-plaintext highlighter-rouge">F[Option[B]]</code> to <code class="language-plaintext highlighter-rouge">EitherT[F, A, B]</code></h2>
-
-<p>An <code class="language-plaintext highlighter-rouge">Option[B]</code> or an <code class="language-plaintext highlighter-rouge">F[Option[B]]</code>, along with a default value, can be passed to
-<code class="language-plaintext highlighter-rouge">EitherT.fromOption</code> and <code class="language-plaintext highlighter-rouge">EitherT.fromOptionF</code>, respectively, to produce an
-<code class="language-plaintext highlighter-rouge">EitherT</code>. For <code class="language-plaintext highlighter-rouge">F[Option[B]]</code> and default <code class="language-plaintext highlighter-rouge">F[A]</code>, there is <code class="language-plaintext highlighter-rouge">EitherT.fromOptionM</code>.</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">myOption</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">None</span>
-<span class="c1">// myOption: Option[Int] = None</span>
-<span class="k">val</span> <span class="nv">myOptionList</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]]</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="nc">None</span><span class="o">,</span> <span class="nc">Some</span><span class="o">(</span><span class="mi">2</span><span class="o">),</span> <span class="nc">Some</span><span class="o">(</span><span class="mi">3</span><span class="o">),</span> <span class="nc">None</span><span class="o">,</span> <span class="nc">Some</span><span class="o">(</span><span class="mi">5</span><span class="o">))</span>
-<span class="c1">// myOptionList: List[Option[Int]] = List(</span>
-<span class="c1">//   None,</span>
-<span class="c1">//   Some(2),</span>
-<span class="c1">//   Some(3),</span>
-<span class="c1">//   None,</span>
-<span class="c1">//   Some(5)</span>
-<span class="c1">// )</span>
-
-<span class="k">val</span> <span class="nv">myOptionET</span> <span class="k">=</span> <span class="nv">EitherT</span><span class="o">.</span><span class="py">fromOption</span><span class="o">[</span><span class="kt">Future</span><span class="o">](</span><span class="n">myOption</span><span class="o">,</span> <span class="s">"option not defined"</span><span class="o">)</span>
-<span class="c1">// myOptionET: EitherT[Future, String, Int] = EitherT(</span>
-<span class="c1">//   Future(Success(Left(option not defined)))</span>
-<span class="c1">// )</span>
-<span class="k">val</span> <span class="nv">myOptionListET</span> <span class="k">=</span> <span class="nv">EitherT</span><span class="o">.</span><span class="py">fromOptionF</span><span class="o">(</span><span class="n">myOptionList</span><span class="o">,</span> <span class="s">"option not defined"</span><span class="o">)</span>
-<span class="c1">// myOptionListET: EitherT[List, String, Int] = EitherT(</span>
-<span class="c1">//   List(</span>
-<span class="c1">//     Left("option not defined"),</span>
-<span class="c1">//     Right(2),</span>
-<span class="c1">//     Right(3),</span>
-<span class="c1">//     Left("option not defined"),</span>
-<span class="c1">//     Right(5)</span>
-<span class="c1">//   )</span>
-<span class="c1">// )</span>
-<span class="k">val</span> <span class="nv">myOptionListETM</span> <span class="k">=</span> <span class="nv">EitherT</span><span class="o">.</span><span class="py">fromOptionM</span><span class="o">(</span><span class="n">myOptionList</span><span class="o">,</span> <span class="nc">List</span><span class="o">(</span><span class="s">"option not defined"</span><span class="o">))</span>
-<span class="c1">// myOptionListETM: EitherT[List, String, Int] = EitherT(</span>
-<span class="c1">//   List(</span>
-<span class="c1">//     Left("option not defined"),</span>
-<span class="c1">//     Right(2),</span>
-<span class="c1">//     Right(3),</span>
-<span class="c1">//     Left("option not defined"),</span>
-<span class="c1">//     Right(5)</span>
-<span class="c1">//   )</span>
-<span class="c1">// )</span>
-</code></pre></div></div>
-
-<h2 id="from-applicativeerrorf-e-to-eithertf-e-a">From <code class="language-plaintext highlighter-rouge">ApplicativeError[F, E]</code> to <code class="language-plaintext highlighter-rouge">EitherT[F, E, A]</code></h2>
-
-<p>An <code class="language-plaintext highlighter-rouge">ApplicativeError[F, E]</code> or a <code class="language-plaintext highlighter-rouge">MonadError[F, E]</code>, can be converted into <code class="language-plaintext highlighter-rouge">EitherT[F, E, A]</code> 
-using the <code class="language-plaintext highlighter-rouge">attemptT</code> method on them.</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">myTry</span><span class="k">:</span> <span class="kt">Try</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Try</span><span class="o">(</span><span class="mi">2</span><span class="o">)</span>
-<span class="k">val</span> <span class="nv">myFuture</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nv">Future</span><span class="o">.</span><span class="py">failed</span><span class="o">(</span><span class="k">new</span> <span class="nc">Exception</span><span class="o">())</span>
-
-<span class="k">val</span> <span class="nv">myTryET</span><span class="k">:</span> <span class="kt">EitherT</span><span class="o">[</span><span class="kt">Try</span>, <span class="kt">Throwable</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nv">myTry</span><span class="o">.</span><span class="py">attemptT</span>
-<span class="k">val</span> <span class="nv">myFutureET</span><span class="k">:</span> <span class="kt">EitherT</span><span class="o">[</span><span class="kt">Future</span>, <span class="kt">Throwable</span>, <span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nv">myFuture</span><span class="o">.</span><span class="py">attemptT</span>
-</code></pre></div></div>
-
-<h2 id="extracting-an-feithera-b-from-an-eithertf-a-b">Extracting an <code class="language-plaintext highlighter-rouge">F[Either[A, B]]</code> from an <code class="language-plaintext highlighter-rouge">EitherT[F, A, B]</code></h2>
-
-<p>Use the <code class="language-plaintext highlighter-rouge">value</code> method defined on <code class="language-plaintext highlighter-rouge">EitherT</code> to retrieve the underlying <code class="language-plaintext highlighter-rouge">F[Either[A, B]]</code>:</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">errorT</span><span class="k">:</span> <span class="kt">EitherT</span><span class="o">[</span><span class="kt">Future</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nv">EitherT</span><span class="o">.</span><span class="py">leftT</span><span class="o">(</span><span class="s">"foo"</span><span class="o">)</span>
-<span class="c1">// errorT: EitherT[Future, String, Int] = EitherT(Future(Success(Left(foo))))</span>
-
-<span class="k">val</span> <span class="nv">error</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Either</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">]]</span> <span class="k">=</span> <span class="nv">errorT</span><span class="o">.</span><span class="py">value</span>
-<span class="c1">// error: Future[Either[String, Int]] = Future(Success(Left(foo)))</span>
-</code></pre></div></div>
-</section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/cats/highlight/highlight.pack.js"></script><script src="/cats/lunr/lunr.js"></script><script>
-// For all code blocks, copy the language from the containing div
-// to the inner code tag (where hljs expects it to be)
-const langPrefix = 'language-';
-document.querySelectorAll(`div[class^='${langPrefix}']`).forEach(function(div) {
-  div.classList.forEach(function(cssClass) {
-    if (cssClass.startsWith(langPrefix)) {
-      const lang = cssClass.substring(langPrefix.length);
-      div.querySelectorAll('pre code').forEach(function(code) {
-        code.classList.add(lang);
-      });
+</span><span class="keyword">def</span><span> </span><span class="declaration-name">divisionProgramAsync</span><span>(</span><span class="identifier">inputA</span><span>: </span><span class="type-name">String</span><span>, </span><span class="identifier">inputB</span><span>: </span><span class="type-name">String</span><span>): </span><span class="type-name">Future</span><span>[</span><span class="type-name">Either</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Double</span><span>]] =
+  </span><span class="identifier">parseDoubleAsync</span><span>(</span><span class="identifier">inputA</span><span>) </span><span class="identifier">flatMap</span><span> { </span><span class="identifier">eitherA</span><span> =&gt;
+    </span><span class="identifier">parseDoubleAsync</span><span>(</span><span class="identifier">inputB</span><span>) </span><span class="identifier">flatMap</span><span> { </span><span class="identifier">eitherB</span><span> =&gt;
+      (</span><span class="identifier">eitherA</span><span>, </span><span class="identifier">eitherB</span><span>) </span><span class="keyword">match</span><span> {
+        </span><span class="keyword">case</span><span> (</span><span class="type-name">Right</span><span>(</span><span class="identifier">a</span><span>), </span><span class="type-name">Right</span><span>(</span><span class="identifier">b</span><span>)) =&gt; </span><span class="identifier">divideAsync</span><span>(</span><span class="identifier">a</span><span>, </span><span class="identifier">b</span><span>)
+        </span><span class="keyword">case</span><span> (</span><span class="type-name">Left</span><span>(</span><span class="identifier">err</span><span>), </span><span class="identifier">_</span><span>) =&gt; </span><span class="type-name">Future</span><span>.</span><span class="identifier">successful</span><span>(</span><span class="type-name">Left</span><span>(</span><span class="identifier">err</span><span>))
+        </span><span class="keyword">case</span><span> (</span><span class="identifier">_</span><span>, </span><span class="type-name">Left</span><span>(</span><span class="identifier">err</span><span>)) =&gt; </span><span class="type-name">Future</span><span>.</span><span class="identifier">successful</span><span>(</span><span class="type-name">Left</span><span>(</span><span class="identifier">err</span><span>))
+      }
     }
-  });
-});
+  }</span></code></pre>
+        <p>Clearly, the updated code is less readable and more verbose: the details of the
+        program are now mixed with the error handling. In addition, as more <code>Either</code>s
+        and <code>Futures</code> are included, the amount of boilerplate required to properly
+        handle the errors will increase dramatically.</p>
+        
+        <h2 id="eithert-2" class="section">EitherT<a class="anchor-link right" href="#eithert-2"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p><code>EitherT[F[_], A, B]</code> is a lightweight wrapper for <code>F[Either[A, B]]</code> that makes
+        it easy to compose <code>Either</code>s and <code>F</code>s together. To use <code>EitherT</code>, values of
+        <code>Either</code>, <code>F</code>, <code>A</code>, and <code>B</code> are first converted into <code>EitherT</code>, and the
+        resulting <code>EitherT</code> values are then composed using combinators. For example, the
+        asynchronous division program can be rewritten as follows:</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">data</span><span>.</span><span class="type-name">EitherT</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
 
-hljs.configure({languages:['scala','java','bash']});
-hljs.initHighlightingOnLoad();
-      </script><script src="/cats/js/sponsors.js"></script><script>console.info('\x57\x65\x62\x73\x69\x74\x65\x20\x62\x75\x69\x6c\x74\x20\x77\x69\x74\x68\x3a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x5f\x5f\x20\x20\x20\x20\x5f\x5f\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x5f\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x5f\x20\x5f\x5f\x0a\x20\x20\x20\x5f\x5f\x5f\x5f\x5f\x2f\x20\x2f\x5f\x20\x20\x2f\x20\x2f\x5f\x20\x20\x20\x20\x20\x20\x5f\x5f\x5f\x5f\x20\x5f\x5f\x5f\x20\x20\x28\x5f\x29\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x20\x20\x5f\x5f\x5f\x5f\x5f\x28\x5f\x29\x20\x2f\x5f\x5f\x5f\x5f\x20\x20\x5f\x5f\x5f\x5f\x5f\x0a\x20\x20\x2f\x20\x5f\x5f\x5f\x2f\x20\x5f\x5f\x20\x5c\x2f\x20\x5f\x5f\x2f\x5f\x5f\x5f\x5f\x5f\x2f\x20\x5f\x5f\x20\x60\x5f\x5f\x20\x5c\x2f\x20\x2f\x20\x5f\x5f\x5f\x2f\x20\x5f\x5f\x5f\x2f\x20\x5f\x5f\x20\x5c\x2f\x20\x5f\x5f\x5f\x2f\x20\x2f\x20\x5f\x5f\x2f\x20\x5f\x20\x5c\x2f\x20\x5f\x5f\x5f\x2f\x0a\x20\x28\x5f\x5f\x20\x20\x29\x20\x2f\x5f\x2f\x20\x2f\x20\x2f\x5f\x2f\x5f\x5f\x5f\x5f\x5f\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x5f\x5f\x2f\x20\x2f\x20\x20\x2f\x20\x2f\x5f\x2f\x20\x28\x5f\x5f\x20\x20\x29\x20\x2f\x20\x2f\x5f\x2f\x20\x20\x5f\x5f\x28\x5f\x5f\x20\x20\x29\x0a\x2f\x5f\x5f\x5f\x5f\x2f\x5f\x2e\x5f\x5f\x5f\x2f\x5c\x5f\x5f\x2f\x20\x20\x20\x20\x20\x2f\x5f\x2f\x20\x2f\x5f\x2f\x20\x2f\x5f\x2f\x5f\x2f\x5c\x5f\x5f\x5f\x2f\x5f\x2f\x20\x20\x20\x5c\x5f\x5f\x5f\x5f\x2f\x5f\x5f\x5f\x5f\x2f\x5f\x2f\x5c\x5f\x5f\x2f\x5c\x5f\x5f\x5f\x2f\x5f\x5f\x5f\x5f\x2f\x0a\x0a\x68\x74\x74\x70\x73\x3a\x2f\x2f\x34\x37\x64\x65\x67\x2e\x67\x69\x74\x68\x75\x62\x2e\x69\x6f\x2f\x73\x62\x74\x2d\x6d\x69\x63\x72\x6f\x73\x69\x74\x65\x73')</script><script>((window.gitter = {}).chat = {}).options = {
-room: 'typelevel/cats'};</script><script src="https://sidecar.gitter.im/dist/sidecar.v1.js"></script><script src="/cats/js/search.js"></script><script src="/cats/js/main.js"></script></body></html>
+</span><span class="keyword">def</span><span> </span><span class="declaration-name">divisionProgramAsync</span><span>(</span><span class="identifier">inputA</span><span>: </span><span class="type-name">String</span><span>, </span><span class="identifier">inputB</span><span>: </span><span class="type-name">String</span><span>): </span><span class="type-name">EitherT</span><span>[</span><span class="type-name">Future</span><span>, </span><span class="type-name">String</span><span>, </span><span class="type-name">Double</span><span>] =
+  </span><span class="keyword">for</span><span> {
+    </span><span class="identifier">a</span><span> &lt;- </span><span class="type-name">EitherT</span><span>(</span><span class="identifier">parseDoubleAsync</span><span>(</span><span class="identifier">inputA</span><span>))
+    </span><span class="identifier">b</span><span> &lt;- </span><span class="type-name">EitherT</span><span>(</span><span class="identifier">parseDoubleAsync</span><span>(</span><span class="identifier">inputB</span><span>))
+    </span><span class="identifier">result</span><span> &lt;- </span><span class="type-name">EitherT</span><span>(</span><span class="identifier">divideAsync</span><span>(</span><span class="identifier">a</span><span>, </span><span class="identifier">b</span><span>))
+  } </span><span class="keyword">yield</span><span> </span><span class="identifier">result</span><span>
+
+</span><span class="identifier">divisionProgramAsync</span><span>(</span><span class="string-literal">&quot;4&quot;</span><span>, </span><span class="string-literal">&quot;2&quot;</span><span>).</span><span class="identifier">value</span><span>
+</span><span class="comment">// res2: Future[Either[String, Double]] = Future(Success(Right(2.0)))
+</span><span class="identifier">divisionProgramAsync</span><span>(</span><span class="string-literal">&quot;a&quot;</span><span>, </span><span class="string-literal">&quot;b&quot;</span><span>).</span><span class="identifier">value</span><span>
+</span><span class="comment">// res3: Future[Either[String, Double]] = Future(Success(Left(a is not a number)))</span></code></pre>
+        <p>Note that when <code>F</code> is a monad, then <code>EitherT</code> will also form a monad, allowing
+        monadic combinators such as <code>flatMap</code> to be used in composing <code>EitherT</code> values.</p>
+        
+        <h2 id="from-a-or-b-to-eithert-f-a-b" class="section">From <code>A</code> or <code>B</code> to <code>EitherT[F, A, B]</code><a class="anchor-link right" href="#from-a-or-b-to-eithert-f-a-b"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>To obtain a left version or a right version of <code>EitherT</code> when given an <code>A</code> or a
+        <code>B</code>, use <code>EitherT.leftT</code> and <code>EitherT.rightT</code> (which is an alias for
+        <code>EitherT.pure</code>), respectively.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">number</span><span>: </span><span class="type-name">EitherT</span><span>[</span><span class="type-name">Option</span><span>, </span><span class="type-name">String</span><span>, </span><span class="type-name">Int</span><span>] = </span><span class="type-name">EitherT</span><span>.</span><span class="identifier">rightT</span><span>(</span><span class="number-literal">5</span><span>)
+</span><span class="keyword">val</span><span> </span><span class="identifier">error</span><span>: </span><span class="type-name">EitherT</span><span>[</span><span class="type-name">Option</span><span>, </span><span class="type-name">String</span><span>, </span><span class="type-name">Int</span><span>] = </span><span class="type-name">EitherT</span><span>.</span><span class="identifier">leftT</span><span>(</span><span class="string-literal">&quot;Not a number&quot;</span><span>)</span></code></pre>
+        
+        <h2 id="from-f-a-or-f-b-to-eithert-f-a-b" class="section">From <code>F[A]</code> or <code>F[B]</code> to <code>EitherT[F, A, B]</code><a class="anchor-link right" href="#from-f-a-or-f-b-to-eithert-f-a-b"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>Similarly, use <code>EitherT.left</code> and <code>EitherT.right</code> to convert an <code>F[A]</code> or an <code>F[B]</code>
+        into an <code>EitherT</code>. It is also possible to use <code>EitherT.liftF</code> as an alias for
+        <code>EitherT.right</code>.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">numberO</span><span>: </span><span class="type-name">Option</span><span>[</span><span class="type-name">Int</span><span>] = </span><span class="type-name">Some</span><span>(</span><span class="number-literal">5</span><span>)
+</span><span class="keyword">val</span><span> </span><span class="identifier">errorO</span><span>: </span><span class="type-name">Option</span><span>[</span><span class="type-name">String</span><span>] = </span><span class="type-name">Some</span><span>(</span><span class="string-literal">&quot;Not a number&quot;</span><span>)
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">number</span><span>: </span><span class="type-name">EitherT</span><span>[</span><span class="type-name">Option</span><span>, </span><span class="type-name">String</span><span>, </span><span class="type-name">Int</span><span>] = </span><span class="type-name">EitherT</span><span>.</span><span class="identifier">right</span><span>(</span><span class="identifier">numberO</span><span>)
+</span><span class="keyword">val</span><span> </span><span class="identifier">error</span><span>: </span><span class="type-name">EitherT</span><span>[</span><span class="type-name">Option</span><span>, </span><span class="type-name">String</span><span>, </span><span class="type-name">Int</span><span>] = </span><span class="type-name">EitherT</span><span>.</span><span class="identifier">left</span><span>(</span><span class="identifier">errorO</span><span>)</span></code></pre>
+        
+        <h2 id="from-either-a-b-or-f-either-a-b-to-eithert-f-a-b" class="section">From <code>Either[A, B]</code> or <code>F[Either[A, B]]</code> to <code>EitherT[F, A, B]</code><a class="anchor-link right" href="#from-either-a-b-or-f-either-a-b-to-eithert-f-a-b"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>Use <code>EitherT.fromEither</code> to lift a value of <code>Either[A, B]</code> into <code>EitherT[F, A, B]</code>.
+        An <code>F[Either[A, B]]</code> can be converted into <code>EitherT</code> using the <code>EitherT</code> constructor.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">numberE</span><span>: </span><span class="type-name">Either</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Int</span><span>] = </span><span class="type-name">Right</span><span>(</span><span class="number-literal">100</span><span>)
+</span><span class="keyword">val</span><span> </span><span class="identifier">errorE</span><span>: </span><span class="type-name">Either</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Int</span><span>] = </span><span class="type-name">Left</span><span>(</span><span class="string-literal">&quot;Not a number&quot;</span><span>)
+</span><span class="keyword">val</span><span> </span><span class="identifier">numberFE</span><span>: </span><span class="type-name">List</span><span>[</span><span class="type-name">Either</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Int</span><span>]] = </span><span class="type-name">List</span><span>(</span><span class="type-name">Right</span><span>(</span><span class="number-literal">250</span><span>))
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">numberET</span><span>: </span><span class="type-name">EitherT</span><span>[</span><span class="type-name">List</span><span>, </span><span class="type-name">String</span><span>, </span><span class="type-name">Int</span><span>] = </span><span class="type-name">EitherT</span><span>.</span><span class="identifier">fromEither</span><span>(</span><span class="identifier">numberE</span><span>)
+</span><span class="keyword">val</span><span> </span><span class="identifier">errorET</span><span>: </span><span class="type-name">EitherT</span><span>[</span><span class="type-name">List</span><span>, </span><span class="type-name">String</span><span>, </span><span class="type-name">Int</span><span>] = </span><span class="type-name">EitherT</span><span>.</span><span class="identifier">fromEither</span><span>(</span><span class="identifier">errorE</span><span>)
+</span><span class="keyword">val</span><span> </span><span class="identifier">numberFET</span><span>: </span><span class="type-name">EitherT</span><span>[</span><span class="type-name">List</span><span>, </span><span class="type-name">String</span><span>, </span><span class="type-name">Int</span><span>] = </span><span class="type-name">EitherT</span><span>(</span><span class="identifier">numberFE</span><span>)</span></code></pre>
+        
+        <h2 id="from-option-b-or-f-option-b-to-eithert-f-a-b" class="section">From <code>Option[B]</code> or <code>F[Option[B]]</code> to <code>EitherT[F, A, B]</code><a class="anchor-link right" href="#from-option-b-or-f-option-b-to-eithert-f-a-b"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>An <code>Option[B]</code> or an <code>F[Option[B]]</code>, along with a default value, can be passed to
+        <code>EitherT.fromOption</code> and <code>EitherT.fromOptionF</code>, respectively, to produce an
+        <code>EitherT</code>. For <code>F[Option[B]]</code> and default <code>F[A]</code>, there is <code>EitherT.fromOptionM</code>.</p>
+        <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">myOption</span><span>: </span><span class="type-name">Option</span><span>[</span><span class="type-name">Int</span><span>] = </span><span class="type-name">None</span><span>
+</span><span class="comment">// myOption: Option[Int] = None
+</span><span class="keyword">val</span><span> </span><span class="identifier">myOptionList</span><span>: </span><span class="type-name">List</span><span>[</span><span class="type-name">Option</span><span>[</span><span class="type-name">Int</span><span>]] = </span><span class="type-name">List</span><span>(</span><span class="type-name">None</span><span>, </span><span class="type-name">Some</span><span>(</span><span class="number-literal">2</span><span>), </span><span class="type-name">Some</span><span>(</span><span class="number-literal">3</span><span>), </span><span class="type-name">None</span><span>, </span><span class="type-name">Some</span><span>(</span><span class="number-literal">5</span><span>))
+</span><span class="comment">// myOptionList: List[Option[Int]] = List(
+//   None,
+//   Some(2),
+//   Some(3),
+//   None,
+//   Some(5)
+// )
+</span><span>
+</span><span class="keyword">val</span><span> </span><span class="identifier">myOptionET</span><span> = </span><span class="type-name">EitherT</span><span>.</span><span class="identifier">fromOption</span><span>[</span><span class="type-name">Future</span><span>](</span><span class="identifier">myOption</span><span>, </span><span class="string-literal">&quot;option not defined&quot;</span><span>)
+</span><span class="comment">// myOptionET: EitherT[Future, String, Int] = EitherT(
+//   Future(Success(Left(option not defined)))
+// )
+</span><span class="keyword">val</span><span> </span><span class="identifier">myOptionListET</span><span> = </span><span class="type-name">EitherT</span><span>.</span><span class="identifier">fromOptionF</span><span>(</span><span class="identifier">myOptionList</span><span>, </span><span class="string-literal">&quot;option not defined&quot;</span><span>)
+</span><span class="comment">// myOptionListET: EitherT[List, String, Int] = EitherT(
+//   List(
+//     Left(&quot;option not defined&quot;),
+//     Right(2),
+//     Right(3),
+//     Left(&quot;option not defined&quot;),
+//     Right(5)
+//   )
+// )
+</span><span class="keyword">val</span><span> </span><span class="identifier">myOptionListETM</span><span> = </span><span class="type-name">EitherT</span><span>.</span><span class="identifier">fromOptionM</span><span>(</span><span class="identifier">myOptionList</span><span>, </span><span class="type-name">List</span><span>(</span><span class="string-literal">&quot;option not defined&quot;</span><span>))
+</span><span class="comment">// myOptionListETM: EitherT[List, String, Int] = EitherT(
+//   List(
+//     Left(&quot;option not defined&quot;),
+//     Right(2),
+//     Right(3),
+//     Left(&quot;option not defined&quot;),
+//     Right(5)
+//   )
+// )</span></code></pre>
+        
+        <h2 id="from-applicativeerror-f-e-to-eithert-f-e-a" class="section">From <code>ApplicativeError[F, E]</code> to <code>EitherT[F, E, A]</code><a class="anchor-link right" href="#from-applicativeerror-f-e-to-eithert-f-e-a"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>An <code>ApplicativeError[F, E]</code> or a <code>MonadError[F, E]</code>, can be converted into <code>EitherT[F, E, A]</code> 
+        using the <code>attemptT</code> method on them.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">myTry</span><span>: </span><span class="type-name">Try</span><span>[</span><span class="type-name">Int</span><span>] = </span><span class="type-name">Try</span><span>(</span><span class="number-literal">2</span><span>)
+</span><span class="keyword">val</span><span> </span><span class="identifier">myFuture</span><span>: </span><span class="type-name">Future</span><span>[</span><span class="type-name">String</span><span>] = </span><span class="type-name">Future</span><span>.</span><span class="identifier">failed</span><span>(</span><span class="keyword">new</span><span> </span><span class="type-name">Exception</span><span>())
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">myTryET</span><span>: </span><span class="type-name">EitherT</span><span>[</span><span class="type-name">Try</span><span>, </span><span class="type-name">Throwable</span><span>, </span><span class="type-name">Int</span><span>] = </span><span class="identifier">myTry</span><span>.</span><span class="identifier">attemptT</span><span>
+</span><span class="keyword">val</span><span> </span><span class="identifier">myFutureET</span><span>: </span><span class="type-name">EitherT</span><span>[</span><span class="type-name">Future</span><span>, </span><span class="type-name">Throwable</span><span>, </span><span class="type-name">String</span><span>] = </span><span class="identifier">myFuture</span><span>.</span><span class="identifier">attemptT</span></code></pre>
+        
+        <h2 id="extracting-an-f-either-a-b-from-an-eithert-f-a-b" class="section">Extracting an <code>F[Either[A, B]]</code> from an <code>EitherT[F, A, B]</code><a class="anchor-link right" href="#extracting-an-f-either-a-b-from-an-eithert-f-a-b"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>Use the <code>value</code> method defined on <code>EitherT</code> to retrieve the underlying <code>F[Either[A, B]]</code>:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">errorT</span><span>: </span><span class="type-name">EitherT</span><span>[</span><span class="type-name">Future</span><span>, </span><span class="type-name">String</span><span>, </span><span class="type-name">Int</span><span>] = </span><span class="type-name">EitherT</span><span>.</span><span class="identifier">leftT</span><span>(</span><span class="string-literal">&quot;foo&quot;</span><span>)
+</span><span class="comment">// errorT: EitherT[Future, String, Int] = EitherT(Future(Success(Left(foo))))
+</span><span>
+</span><span class="keyword">val</span><span> </span><span class="identifier">error</span><span>: </span><span class="type-name">Future</span><span>[</span><span class="type-name">Either</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Int</span><span>]] = </span><span class="identifier">errorT</span><span>.</span><span class="identifier">value</span><span>
+</span><span class="comment">// error: Future[Either[String, Int]] = Future(Success(Left(foo)))</span></code></pre>
+
+        <hr style="margin-top: 30px"/>
+        <footer style="font-size: 90%; text-align: center">
+          cats is a <a href="https://typelevel.org/">Typelevel</a> project distributed under the <a href="https://opensource.org/licenses/MIT">MIT</a> license.
+        </footer>
+
+      </main>
+
+    </div>
+
+  </body>
+</html>

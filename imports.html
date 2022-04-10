@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="Laika 0.18.1 + Helium Theme" />
-    <title>Motivations</title>
+    <title>Imports</title>
     
       <meta name="author" content="Cody Allen"/>
     
@@ -102,10 +102,10 @@
         <li class="level1"><a href="typeclasses.html">Type Classes</a></li>
         <li class="level1"><a href="datatypes.html">Data Types</a></li>
         <li class="level1"><a href="algebra.html">Algebra</a></li>
-        <li class="level1 active"><a href="#">Motivations</a></li>
+        <li class="level1"><a href="motivations.html">Motivations</a></li>
         <li class="level1"><a href="resources_for_learners.html">Resources for Learners</a></li>
         <li class="level1"><a href="jump_start_guide.html">Jump Start Guide</a></li>
-        <li class="level1"><a href="imports.html">Imports</a></li>
+        <li class="level1 active"><a href="#">Imports</a></li>
         <li class="level1"><a href="faq.html">FAQ</a></li>
         <li class="level1"><a href="CONTRIBUTING.html">Contributor guide</a></li>
         <li class="level1"><a href="colophon.html">Colophon</a></li>
@@ -180,12 +180,9 @@
     <div id="container">
 
       <nav id="page-nav">
-        <p class="header"><a href="#">Motivations</a></p>
+        <p class="header"><a href="#">Imports</a></p>
 
         <ul class="nav-list">
-          <li class="level1"><a href="#modularity">Modularity</a></li>
-          <li class="level1"><a href="#documentation">Documentation</a></li>
-          <li class="level1"><a href="#efficiency">Efficiency</a></li>
         </ul>
 
         <p class="footer"></p>
@@ -193,42 +190,50 @@
 
       <main class="content">
 
-        <h1 id="approachability" class="title">Approachability</h1>
-        <p>As this library evolves, we are placing a lot of emphasis on trying to
-        make decisions which will help keep this library approachable for
-        people new to the concepts in this library. We are collecting
-        anecdotes from successes and failures we have experienced in the past
-        in trying to teach others about these concepts, and trying to make
-        decisions which will help ease the process of getting acquainted to
-        the library for a newcomer. If you have any feedback for us in this
-        regard, we would love to hear from you. See the <a href="CONTRIBUTING.html">Contributing
-        page</a> to find out ways to give us feedback.</p>
-        
-        <h4 id="modularity" class="section">Modularity<a class="anchor-link right" href="#modularity"><i class="icofont-laika">&#xef71;</i></a></h4>
-        <p>We are trying to make the library modular. It will have a tight
-        core which will contain only the <a href="typeclasses.html">type classes</a>,
-        the bare minimum of data structures that are needed to support
-        them, and type class instances for those data structures and standard
-        library types.</p>
-        
-        <h4 id="documentation" class="section">Documentation<a class="anchor-link right" href="#documentation"><i class="icofont-laika">&#xef71;</i></a></h4>
-        <p>We feel that having lots of documentation is a very important goal for
-        our project. It will be a big win towards our goal of
-        approachability. We will strive to have the code well documented, we
-        will strive to have lots of documentation external to the code, and we
-        will strive to have a large corpus of compiler verified examples of
-        how the software can be used.</p>
-        <p>Writing documentation is a huge part of developing software, and one
-        that is often neglected. It is also a very easy way to get started
-        with <a href="CONTRIBUTING.html">contributing</a> to the project.</p>
-        
-        <h4 id="efficiency" class="section">Efficiency<a class="anchor-link right" href="#efficiency"><i class="icofont-laika">&#xef71;</i></a></h4>
-        <p>Although unfortunately there are times when programming only with
-        pure functions and writing efficient code in Scala can be at odds, we
-        are attempting to do our best at keeping our library as efficient as
-        we can without making unnecessary sacrifices of purity and
-        usability. Where sacrifices have to be made, we will strive to make
-        these obvious, and will keep them well documented.</p>
+        <h1 id="imports" class="title">Imports</h1>
+        <p>The easiest approach to Сats imports is to import everything that&#39;s commonly needed:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">data</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span></code></pre>
+        <p>The <code>cats._</code> import brings in quite a few <a href="typeclasses.html">type classes</a> (similar to interfaces) such as <a href="typeclasses/monad.html">Monad</a>, <a href="typeclasses/semigroup.html">Semigroup</a>, and <a href="typeclasses/foldable.html">Foldable</a>. Instead of the entire <code>cats</code> package, you can import only the types that you need, for example:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="type-name">Monad</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="type-name">Semigroup</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="type-name">Foldable</span></code></pre>
+        <p>The <code>cats.data._</code>, import brings in data structures such as <a href="datatypes/validated.html">Validated</a> and <a href="datatypes/state.html">State</a>. Instead of the entire <code>cats.data</code> package, you can import only the types that you need, for example:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">data</span><span>.</span><span class="type-name">Validated</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">data</span><span>.</span><span class="type-name">State</span></code></pre>
+        <p>The <code>cats.syntax.all._</code> import adds syntax enrichment onto certain types to provide some handy methods such as right-biased <code>Either</code> combinators:</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="comment">// Сats adds right-biased combinators to the standard library&#39;s Either
+</span><span class="keyword">val</span><span> </span><span class="identifier">e</span><span>: </span><span class="type-name">Either</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Int</span><span>] = </span><span class="type-name">Right</span><span>(</span><span class="number-literal">3</span><span>)
+</span><span class="comment">// e: Either[String, Int] = Right(3)
+</span><span class="identifier">e</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span> + </span><span class="number-literal">1</span><span>)
+</span><span class="comment">// res4: Either[String, Int] = Right(4)
+</span><span>
+</span><span class="comment">// cats adds an orEmpty method to the standard library&#39;s Option
+</span><span class="keyword">val</span><span> </span><span class="identifier">o</span><span>: </span><span class="type-name">Option</span><span>[</span><span class="type-name">String</span><span>] = </span><span class="type-name">None</span><span>
+</span><span class="comment">// o: Option[String] = None
+</span><span class="identifier">o</span><span>.</span><span class="identifier">orEmpty</span><span>
+</span><span class="comment">// res5: String = &quot;&quot;</span></code></pre>
+        <p>If you&#39;d like to import à la carte, you can do so, by importing from <code>cats.syntax</code> for syntax enrichment.
+        For example, if you&#39;d like to import the <code>Semigroup</code> syntax:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">semigroup</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="string-literal">&quot;Hello, &quot;</span><span> |+| </span><span class="string-literal">&quot;World!&quot;</span><span>
+</span><span class="comment">// res7: String = &quot;Hello, World!&quot;</span></code></pre>
+        <p>The import adds the <code>|+|</code> syntax.</p>
+        <p><strong>Note</strong>: Beware that if you import a type class instance or its syntax twice, you will receive conflicting implicits with a less than helpful error message.
+        This usually happens when importing different type classes in the same hierarchy or when importing syntax enrichment for all type classes using <code>cats.syntax.all._</code> or <code>cats.implicits._</code> together with a more specific import like <code>cats.syntax.option._</code> or <code>cats.instances.either._</code>.
+        Below is an example of this phenomenon:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="number-literal">1</span><span> |+| </span><span class="number-literal">2</span><span>
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">semigroup</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="number-literal">3</span><span> |+| </span><span class="number-literal">5</span><span> </span><span class="comment">// error: value |+| is not a member of Int</span></code></pre>
+        <p>Compilation fails on the second invocation of <code>|+|</code> because we now have conflicting implicits from <code>Semigroup</code>.</p>
 
         <hr style="margin-top: 30px"/>
         <footer style="font-size: 90%; text-align: center">

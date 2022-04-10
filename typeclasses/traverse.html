@@ -1,173 +1,323 @@
-<!DOCTYPE html><html><head><title>Cats: Traverse</title><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Cats contributors" /><meta name="description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="og:image" content="/cats/img/poster.png" /><meta name="image" property="og:image" content="/cats/img/poster.png" /><meta name="og:title" content="Cats: Traverse" /><meta name="title" property="og:title" content="Cats: Traverse" /><meta name="og:site_name" content="Cats" /><meta name="og:url" content="http://typelevel.org/cats/" /><meta name="og:type" content="website" /><meta name="og:description" content="Lightweight, modular, and extensible library for functional programming" /><link rel="icon" type="image/png" href="/cats/img/favicon.png" /><meta name="twitter:title" content="Cats: Traverse" /><meta name="twitter:image" content="/cats/img/poster.png" /><meta name="twitter:description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="twitter:card" content="summary_large_image" /><link rel="icon" type="image/png" sizes="16x16" href="/cats/img/favicon16x16.png" /><link rel="icon" type="image/png" sizes="24x24" href="/cats/img/favicon24x24.png" /><link rel="icon" type="image/png" sizes="32x32" href="/cats/img/favicon32x32.png" /><link rel="icon" type="image/png" sizes="48x48" href="/cats/img/favicon48x48.png" /><link rel="icon" type="image/png" sizes="57x57" href="/cats/img/favicon57x57.png" /><link rel="icon" type="image/png" sizes="60x60" href="/cats/img/favicon60x60.png" /><link rel="icon" type="image/png" sizes="64x64" href="/cats/img/favicon64x64.png" /><link rel="icon" type="image/png" sizes="70x70" href="/cats/img/favicon70x70.png" /><link rel="icon" type="image/png" sizes="72x72" href="/cats/img/favicon72x72.png" /><link rel="icon" type="image/png" sizes="76x76" href="/cats/img/favicon76x76.png" /><link rel="icon" type="image/png" sizes="96x96" href="/cats/img/favicon96x96.png" /><link rel="icon" type="image/png" sizes="114x114" href="/cats/img/favicon114x114.png" /><link rel="icon" type="image/png" sizes="120x120" href="/cats/img/favicon120x120.png" /><link rel="icon" type="image/png" sizes="128x128" href="/cats/img/favicon128x128.png" /><link rel="icon" type="image/png" sizes="144x144" href="/cats/img/favicon144x144.png" /><link rel="icon" type="image/png" sizes="150x150" href="/cats/img/favicon150x150.png" /><link rel="icon" type="image/png" sizes="152x152" href="/cats/img/favicon152x152.png" /><link rel="icon" type="image/png" sizes="196x196" href="/cats/img/favicon196x196.png" /><link rel="icon" type="image/png" sizes="310x310" href="/cats/img/favicon310x310.png" /><link rel="icon" type="image/png" sizes="310x150" href="/cats/img/favicon310x150.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" /><link rel="stylesheet" href="/cats/highlight/styles/atom-one-light.css" /><link rel="stylesheet" href="/cats/css/pattern-style.css" /></head><body class="docs"><div id="wrapper"><div id="sidebar-wrapper"><ul id="sidebar" class="sidebar-nav"><li class="sidebar-brand"><a href="/cats/" class="brand"><div class="brand-wrapper"><span>Cats</span></div></a></li><li><a href="/cats/typeclasses/alternative.html" class="">Alternative</a></li><li><a href="/cats/typeclasses/applicative.html" class="">Applicative</a></li><li><a href="/cats/typeclasses/applicativemonaderror.html" class="">Applicative Error</a></li><li><a href="/cats/typeclasses/applicativetraverse.html" class="">Applicative and Traversable Functors</a></li><li><a href="/cats/typeclasses/arrow.html" class="">Arrow</a></li><li><a href="/cats/typeclasses/arrowchoice.html" class="">Arrow Choice</a></li><li><a href="/cats/typeclasses/bifunctor.html" class="">Bifunctor</a></li><li><a href="/cats/typeclasses/comonad.html" class="">Comonad</a></li><li><a href="/cats/typeclasses/contravariant.html" class="">Contravariant</a></li><li><a href="/cats/typeclasses/contravariantmonoidal.html" class="">Contravariant Monoidal</a></li><li><a href="/cats/typeclasses/eq.html" class="">Eq</a></li><li><a href="/cats/typeclasses/foldable.html" class="">Foldable</a></li><li><a href="/cats/typeclasses/functor.html" class="">Functor</a></li><li><a href="/cats/typeclasses/invariant.html" class="">Invariant</a></li><li><a href="/cats/typeclasses/invariantmonoidal.html" class="">InvariantMonoidal</a></li><li><a href="/cats/typeclasses/lawtesting.html" class="">Law Testing</a></li><li><a href="/cats/typeclasses/monad.html" class="">Monad</a></li><li><a href="/cats/typeclasses/monoid.html" class="">Monoid</a></li><li><a href="/cats/typeclasses/monoidk.html" class="">MonoidK</a></li><li><a href="/cats/typeclasses/nonemptytraverse.html" class="">NonEmptyTraverse</a></li><li><a href="/cats/typeclasses/parallel.html" class="">Parallel</a></li><li><a href="/cats/typeclasses/reducible.html" class="">Reducible</a></li><li><a href="/cats/typeclasses/semigroup.html" class="">Semigroup</a></li><li><a href="/cats/typeclasses/semigroupk.html" class="">SemigroupK</a></li><li><a href="/cats/typeclasses/show.html" class="">Show</a></li><li><a href="/cats/typeclasses/traverse.html" class=" active ">Traverse</a></li><li><a href="/cats/typeclasses.html" class="">Type Classes</a></li></ul></div><div id="page-content-wrapper"><div class="nav"><div class="container-fluid"><div class="row"><div class="col-lg-12"><div class="action-menu pull-left clearfix"><a href="#menu-toggle" id="menu-toggle"><i class="fa fa-bars" aria-hidden="true"></i></a></div><ul class="pull-right"><li class="search-nav hidden-xs hidden-sm"><div id="search-dropdown"><label><i class="fa fa-search"></i>Search</label><input id="search-bar" type="text" placeholder="Enter keywords here..." onclick="displayToggleSearch(event)" /><ul id="search-dropdown-content" class="dropdown dropdown-content"></ul></div></li><li id="gh-eyes-item" class="hidden-xs to-uppercase"><a href="https://github.com/typelevel/cats" target="_blank" rel="noopener noreferrer"><i class="fa fa-eye"></i><span>Watchers<span id="eyes" class="label label-default">--</span></span></a></li><li id="gh-stars-item" class="hidden-xs to-uppercase"><a href="https://github.com/typelevel/cats" target="_blank" rel="noopener noreferrer"><i class="fa fa-star-o"></i><span>Stars<span id="stars" class="label label-default">--</span></span></a></li><li><a href="#" onclick="shareSiteTwitter('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-twitter"></i></a></li><li><a href="#" onclick="shareSiteFacebook('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-facebook"></i></a></li></ul></div></div></div></div><div id="content" data-github-owner="typelevel" data-github-repo="cats"><div class="content-wrapper"><section><h1 id="traverse">Traverse</h1>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Laika 0.18.1 + Helium Theme" />
+    <title>Traverse</title>
+    
+      <meta name="author" content="Cody Allen"/>
+    
+      <meta name="author" content="Ross Baker"/>
+    
+      <meta name="author" content="P. Oscar Boykin"/>
+    
+      <meta name="author" content="Travis Brown"/>
+    
+      <meta name="author" content="Adelbert Chang"/>
+    
+      <meta name="author" content="Peter Neyens"/>
+    
+      <meta name="author" content="Rob Norris"/>
+    
+      <meta name="author" content="Erik Osheim"/>
+    
+      <meta name="author" content="LukaJCB"/>
+    
+      <meta name="author" content="Michael Pilquist"/>
+    
+      <meta name="author" content="Miles Sabin"/>
+    
+      <meta name="author" content="Daniel Spiewak"/>
+    
+      <meta name="author" content="Frank Thomas"/>
+    
+      <meta name="author" content="Julien Truffaut"/>
+    
+      <meta name="author" content="Kailuo Wang"/>
+    
+    
+      <meta name="description" content="docs"/>
+    
+    
+      <link rel="icon" sizes="32x32" type="image/png" href="https://typelevel.org/img/favicon.png"/>
+    
+    
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.207/distr/fira_code.css">
+    
+    <link rel="stylesheet" type="text/css" href="../helium/icofont.min.css" />
+    <link rel="stylesheet" type="text/css" href="../helium/laika-helium.css" />
+    <link rel="stylesheet" type="text/css" href="../site/styles.css" />
+    <script src="../helium/laika-helium.js"></script>
+    <script src="../js/sponsors.js"></script>
+    
+    
+    <script> /* for avoiding page load transitions */ </script>
+  </head>
 
-<p>In the <code class="language-plaintext highlighter-rouge">Applicative</code> tutorial we saw a more polymorphic version of the standard library
-<code class="language-plaintext highlighter-rouge">Future.traverse</code> and <code class="language-plaintext highlighter-rouge">Future.sequence</code> functions, generalizing <code class="language-plaintext highlighter-rouge">Future</code> to be any
-<code class="language-plaintext highlighter-rouge">F[_]</code> that’s <code class="language-plaintext highlighter-rouge">Applicative</code>.</p>
+  <body>
 
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.Applicative</span>
+    <header id="top-bar">
 
-<span class="k">def</span> <span class="nf">traverse</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]</span><span class="kt">:</span> <span class="kt">Applicative</span>, <span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">as</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">F</span><span class="o">[</span><span class="kt">B</span><span class="o">])</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">B</span><span class="o">]]</span> <span class="k">=</span>
-  <span class="nv">as</span><span class="o">.</span><span class="py">foldRight</span><span class="o">(</span><span class="nc">Applicative</span><span class="o">[</span><span class="kt">F</span><span class="o">].</span><span class="py">pure</span><span class="o">(</span><span class="nv">List</span><span class="o">.</span><span class="py">empty</span><span class="o">[</span><span class="kt">B</span><span class="o">]))</span> <span class="o">{</span> <span class="o">(</span><span class="n">a</span><span class="k">:</span> <span class="kt">A</span><span class="o">,</span> <span class="n">acc</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">B</span><span class="o">]])</span> <span class="k">=&gt;</span>
-    <span class="k">val</span> <span class="nv">fb</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span> <span class="k">=</span> <span class="nf">f</span><span class="o">(</span><span class="n">a</span><span class="o">)</span>
-    <span class="nc">Applicative</span><span class="o">[</span><span class="kt">F</span><span class="o">].</span><span class="py">map2</span><span class="o">(</span><span class="n">fb</span><span class="o">,</span> <span class="n">acc</span><span class="o">)(</span><span class="k">_</span> <span class="o">::</span> <span class="k">_</span><span class="o">)</span>
-  <span class="o">}</span>
-</code></pre></div></div>
+      <div class="row">
+        <a id="nav-icon">
+          <i class="icofont-laika" title="Navigation">&#xefa2;</i>
+        </a>
+        
+      </div>
 
-<p>Here <code class="language-plaintext highlighter-rouge">traverse</code> still has knowledge of <code class="language-plaintext highlighter-rouge">List</code>, but we could just as easily use
-<code class="language-plaintext highlighter-rouge">Vector</code> or some similar data type. Another example is a binary tree:</p>
+      <a class="image-link" href="https://typelevel.org"><img src="https://typelevel.org/img/logo.svg"></a>
 
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">object</span> <span class="nc">tree</span> <span class="o">{</span>
-  <span class="k">sealed</span> <span class="k">abstract</span> <span class="k">class</span> <span class="nc">Tree</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="nc">extends</span> <span class="nc">Product</span> <span class="k">with</span> <span class="nc">Serializable</span> <span class="o">{</span>
-    <span class="k">def</span> <span class="nf">traverse</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]</span><span class="kt">:</span> <span class="kt">Applicative</span>, <span class="kt">B</span><span class="o">](</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">F</span><span class="o">[</span><span class="kt">B</span><span class="o">])</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">Tree</span><span class="o">[</span><span class="kt">B</span><span class="o">]]</span> <span class="k">=</span> <span class="k">this</span> <span class="k">match</span> <span class="o">{</span>
-      <span class="k">case</span> <span class="nv">Tree</span><span class="o">.</span><span class="py">Empty</span><span class="o">()</span>         <span class="k">=&gt;</span> <span class="nc">Applicative</span><span class="o">[</span><span class="kt">F</span><span class="o">].</span><span class="py">pure</span><span class="o">(</span><span class="nv">Tree</span><span class="o">.</span><span class="py">Empty</span><span class="o">())</span>
-      <span class="k">case</span> <span class="nv">Tree</span><span class="o">.</span><span class="py">Branch</span><span class="o">(</span><span class="n">v</span><span class="o">,</span> <span class="n">l</span><span class="o">,</span> <span class="n">r</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nc">Applicative</span><span class="o">[</span><span class="kt">F</span><span class="o">].</span><span class="py">map3</span><span class="o">(</span><span class="nf">f</span><span class="o">(</span><span class="n">v</span><span class="o">),</span> <span class="nv">l</span><span class="o">.</span><span class="py">traverse</span><span class="o">(</span><span class="n">f</span><span class="o">),</span> <span class="nv">r</span><span class="o">.</span><span class="py">traverse</span><span class="o">(</span><span class="n">f</span><span class="o">))(</span><span class="nv">Tree</span><span class="o">.</span><span class="py">Branch</span><span class="o">(</span><span class="k">_</span><span class="o">,</span> <span class="k">_</span><span class="o">,</span> <span class="k">_</span><span class="o">))</span>
-    <span class="o">}</span>
-  <span class="o">}</span>
+      <span class="row links"><a class="icon-link svg-link" href="https://typelevel.org/cats/api/"><span title="API"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M75,47.5c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm-50,-0c13.246,-0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,-0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm2.705,16.735l7.239,0l0.622,-4.904l-21.833,0l-0,4.904l7.589,0l0,22.067l6.383,0l-0,-22.067Zm58.076,7.265c-0,-8.757 -3.698,-14.166 -10.781,-14.166c-7.083,-0 -10.781,5.604 -10.781,14.166c0,8.757 3.698,14.166 10.781,14.166c7.083,0 10.781,-5.604 10.781,-14.166Zm-6.539,0c0,6.538 -1.128,9.496 -4.242,9.496c-2.997,0 -4.242,-2.88 -4.242,-9.496c-0,-6.616 1.206,-9.496 4.242,-9.496c3.036,-0 4.242,2.88 4.242,9.496Zm-29.242,-67c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm0.512,9.834c-7.122,-0 -12.609,5.098 -12.609,14.127c-0,9.263 5.215,14.205 12.532,14.205c4.164,0 7.083,-1.634 9.068,-3.658l-2.88,-3.697c-1.518,1.206 -3.153,2.413 -5.838,2.413c-3.697,-0 -6.266,-2.763 -6.266,-9.263c-0,-6.616 2.724,-9.379 6.149,-9.379c2.102,-0 3.892,0.778 5.371,1.984l3.113,-3.775c-2.257,-1.868 -4.748,-2.957 -8.64,-2.957Z"/>
+  </g>
+</svg></span></a><a class="icon-link svg-link" href="https://github.com/typelevel/cats"><span title="Source Code"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M49.995,1c-27.609,-0 -49.995,22.386 -49.995,50.002c-0,22.09 14.325,40.83 34.194,47.444c2.501,0.458 3.413,-1.086 3.413,-2.412c0,-1.185 -0.043,-4.331 -0.067,-8.503c-13.908,3.021 -16.843,-6.704 -16.843,-6.704c-2.274,-5.773 -5.552,-7.311 -5.552,-7.311c-4.54,-3.103 0.344,-3.042 0.344,-3.042c5.018,0.356 7.658,5.154 7.658,5.154c4.46,7.64 11.704,5.433 14.552,4.156c0.454,-3.232 1.744,-5.436 3.174,-6.685c-11.102,-1.262 -22.775,-5.553 -22.775,-24.713c-0,-5.457 1.949,-9.92 5.147,-13.416c-0.516,-1.265 -2.231,-6.348 0.488,-13.233c0,0 4.199,-1.344 13.751,5.126c3.988,-1.108 8.266,-1.663 12.518,-1.682c4.245,0.019 8.523,0.574 12.517,1.682c9.546,-6.47 13.736,-5.126 13.736,-5.126c2.728,6.885 1.013,11.968 0.497,13.233c3.204,3.496 5.141,7.959 5.141,13.416c0,19.209 -11.691,23.436 -22.83,24.673c1.795,1.544 3.394,4.595 3.394,9.26c0,6.682 -0.061,12.076 -0.061,13.715c0,1.338 0.899,2.894 3.438,2.406c19.853,-6.627 34.166,-25.354 34.166,-47.438c-0,-27.616 -22.389,-50.002 -50.005,-50.002"/>
+  </g>
+</svg></span></a><a class="icon-link" href="https://discord.gg/XF3CXcMzqD"><i class="icofont-laika" title="Chat">&#xeed5;</i></a><a class="icon-link" href="https://twitter.com/typelevel"><i class="icofont-laika" title="Twitter">&#xed7a;</i></a></span>
 
-  <span class="k">object</span> <span class="nc">Tree</span> <span class="o">{</span>
-    <span class="k">final</span> <span class="k">case</span> <span class="k">class</span> <span class="nc">Empty</span><span class="o">[</span><span class="kt">A</span><span class="o">]()</span> <span class="k">extends</span> <span class="nc">Tree</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span>
-    <span class="k">final</span> <span class="k">case</span> <span class="k">class</span> <span class="nc">Branch</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">value</span><span class="k">:</span> <span class="kt">A</span><span class="o">,</span> <span class="n">left</span><span class="k">:</span> <span class="kt">Tree</span><span class="o">[</span><span class="kt">A</span><span class="o">],</span> <span class="n">right</span><span class="k">:</span> <span class="kt">Tree</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span> <span class="k">extends</span> <span class="nc">Tree</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span>
-  <span class="o">}</span>
-<span class="o">}</span>
+    </header>
 
-<span class="k">import</span> <span class="nn">tree._</span>
-</code></pre></div></div>
+    <nav id="sidebar">
 
-<p>This suggests an abstraction over “things that can be traversed over,” hence <code class="language-plaintext highlighter-rouge">Traverse</code>.</p>
+      <div class="row">
+        <a class="icon-link svg-link" href="https://typelevel.org/cats/api/"><span title="API"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M75,47.5c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm-50,-0c13.246,-0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,-0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm2.705,16.735l7.239,0l0.622,-4.904l-21.833,0l-0,4.904l7.589,0l0,22.067l6.383,0l-0,-22.067Zm58.076,7.265c-0,-8.757 -3.698,-14.166 -10.781,-14.166c-7.083,-0 -10.781,5.604 -10.781,14.166c0,8.757 3.698,14.166 10.781,14.166c7.083,0 10.781,-5.604 10.781,-14.166Zm-6.539,0c0,6.538 -1.128,9.496 -4.242,9.496c-2.997,0 -4.242,-2.88 -4.242,-9.496c-0,-6.616 1.206,-9.496 4.242,-9.496c3.036,-0 4.242,2.88 4.242,9.496Zm-29.242,-67c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm0.512,9.834c-7.122,-0 -12.609,5.098 -12.609,14.127c-0,9.263 5.215,14.205 12.532,14.205c4.164,0 7.083,-1.634 9.068,-3.658l-2.88,-3.697c-1.518,1.206 -3.153,2.413 -5.838,2.413c-3.697,-0 -6.266,-2.763 -6.266,-9.263c-0,-6.616 2.724,-9.379 6.149,-9.379c2.102,-0 3.892,0.778 5.371,1.984l3.113,-3.775c-2.257,-1.868 -4.748,-2.957 -8.64,-2.957Z"/>
+  </g>
+</svg></span></a><a class="icon-link svg-link" href="https://github.com/typelevel/cats"><span title="Source Code"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M49.995,1c-27.609,-0 -49.995,22.386 -49.995,50.002c-0,22.09 14.325,40.83 34.194,47.444c2.501,0.458 3.413,-1.086 3.413,-2.412c0,-1.185 -0.043,-4.331 -0.067,-8.503c-13.908,3.021 -16.843,-6.704 -16.843,-6.704c-2.274,-5.773 -5.552,-7.311 -5.552,-7.311c-4.54,-3.103 0.344,-3.042 0.344,-3.042c5.018,0.356 7.658,5.154 7.658,5.154c4.46,7.64 11.704,5.433 14.552,4.156c0.454,-3.232 1.744,-5.436 3.174,-6.685c-11.102,-1.262 -22.775,-5.553 -22.775,-24.713c-0,-5.457 1.949,-9.92 5.147,-13.416c-0.516,-1.265 -2.231,-6.348 0.488,-13.233c0,0 4.199,-1.344 13.751,5.126c3.988,-1.108 8.266,-1.663 12.518,-1.682c4.245,0.019 8.523,0.574 12.517,1.682c9.546,-6.47 13.736,-5.126 13.736,-5.126c2.728,6.885 1.013,11.968 0.497,13.233c3.204,3.496 5.141,7.959 5.141,13.416c0,19.209 -11.691,23.436 -22.83,24.673c1.795,1.544 3.394,4.595 3.394,9.26c0,6.682 -0.061,12.076 -0.061,13.715c0,1.338 0.899,2.894 3.438,2.406c19.853,-6.627 34.166,-25.354 34.166,-47.438c-0,-27.616 -22.389,-50.002 -50.005,-50.002"/>
+  </g>
+</svg></span></a><a class="icon-link" href="https://discord.gg/XF3CXcMzqD"><i class="icofont-laika" title="Chat">&#xeed5;</i></a><a class="icon-link" href="https://twitter.com/typelevel"><i class="icofont-laika" title="Twitter">&#xed7a;</i></a>
+      </div>
 
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">trait</span> <span class="nc">Traverse</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]]</span> <span class="o">{</span>
-  <span class="k">def</span> <span class="nf">traverse</span><span class="o">[</span><span class="kt">G</span><span class="o">[</span><span class="k">_</span><span class="o">]</span><span class="kt">:</span> <span class="kt">Applicative</span>, <span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">G</span><span class="o">[</span><span class="kt">B</span><span class="o">])</span><span class="k">:</span> <span class="kt">G</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="kt">B</span><span class="o">]]</span>
-<span class="o">}</span>
+      <ul class="nav-list">
+        <li class="level1"><a href="../index.html">Cats</a></li>
+        <li class="level1"><a href="../typeclasses.html">Type Classes</a></li>
+        <li class="level1"><a href="../datatypes.html">Data Types</a></li>
+        <li class="level1"><a href="../algebra.html">Algebra</a></li>
+        <li class="level1"><a href="../motivations.html">Motivations</a></li>
+        <li class="level1"><a href="../resources_for_learners.html">Resources for Learners</a></li>
+        <li class="level1"><a href="../jump_start_guide.html">Jump Start Guide</a></li>
+        <li class="level1"><a href="../imports.html">Imports</a></li>
+        <li class="level1"><a href="../faq.html">FAQ</a></li>
+        <li class="level1"><a href="../CONTRIBUTING.html">Contributor guide</a></li>
+        <li class="level1"><a href="../colophon.html">Colophon</a></li>
+        <li class="level1"><a href="../nomenclature.html">Glossary</a></li>
+        <li class="level1"><a href="../guidelines.html">Guidelines</a></li>
+        <li class="level1"><a href="../typelevelEcosystem.html">Typelevel Ecosystem</a></li>
+        <li class="level1 nav-header">Type Classes</li>
+        <li class="level2"><a href="alternative.html">Alternative</a></li>
+        <li class="level2"><a href="applicative.html">Applicative</a></li>
+        <li class="level2"><a href="applicativemonaderror.html">ApplicativeError and MonadError</a></li>
+        <li class="level2"><a href="applicativetraverse.html">Applicative and Traversable Functors</a></li>
+        <li class="level2"><a href="arrow.html">Arrow</a></li>
+        <li class="level2"><a href="arrowchoice.html">Arrow Choice</a></li>
+        <li class="level2"><a href="bifunctor.html">Bifunctor</a></li>
+        <li class="level2"><a href="bimonad.html">Bimonad</a></li>
+        <li class="level2"><a href="comonad.html">Comonad</a></li>
+        <li class="level2"><a href="contravariant.html">Contravariant</a></li>
+        <li class="level2"><a href="contravariantmonoidal.html">Contravariant Monoidal</a></li>
+        <li class="level2"><a href="eq.html">Eq</a></li>
+        <li class="level2"><a href="foldable.html">Foldable</a></li>
+        <li class="level2"><a href="functor.html">Functor</a></li>
+        <li class="level2"><a href="invariant.html">Invariant</a></li>
+        <li class="level2"><a href="invariantmonoidal.html">Invariant Monoidal</a></li>
+        <li class="level2"><a href="lawtesting.html">Law testing</a></li>
+        <li class="level2"><a href="monad.html">Monad</a></li>
+        <li class="level2"><a href="monoid.html">Monoid</a></li>
+        <li class="level2"><a href="monoidk.html">MonoidK</a></li>
+        <li class="level2"><a href="nonemptytraverse.html">NonEmptyTraverse</a></li>
+        <li class="level2"><a href="parallel.html">Parallel</a></li>
+        <li class="level2"><a href="reducible.html">Reducible</a></li>
+        <li class="level2"><a href="semigroup.html">Semigroup</a></li>
+        <li class="level2"><a href="semigroupk.html">SemigroupK</a></li>
+        <li class="level2"><a href="show.html">Show</a></li>
+        <li class="level2 active"><a href="#">Traverse</a></li>
+        <li class="level1 nav-header">Data Types</li>
+        <li class="level2"><a href="../datatypes/chain.html">Chain</a></li>
+        <li class="level2"><a href="../datatypes/const.html">Const</a></li>
+        <li class="level2"><a href="../datatypes/contt.html">ContT</a></li>
+        <li class="level2"><a href="../datatypes/either.html">Either</a></li>
+        <li class="level2"><a href="../datatypes/eithert.html">EitherT</a></li>
+        <li class="level2"><a href="../datatypes/eval.html">Eval</a></li>
+        <li class="level2"><a href="../datatypes/freeapplicative.html">Free Applicative</a></li>
+        <li class="level2"><a href="../datatypes/freemonad.html">Free Monad</a></li>
+        <li class="level2"><a href="../datatypes/functionk.html">FunctionK</a></li>
+        <li class="level2"><a href="../datatypes/id.html">Id</a></li>
+        <li class="level2"><a href="../datatypes/ior.html">Ior</a></li>
+        <li class="level2"><a href="../datatypes/iort.html">IorT</a></li>
+        <li class="level2"><a href="../datatypes/kleisli.html">Kleisli</a></li>
+        <li class="level2"><a href="../datatypes/nel.html">NonEmptyList</a></li>
+        <li class="level2"><a href="../datatypes/nested.html">Nested</a></li>
+        <li class="level2"><a href="../datatypes/oneand.html">OneAnd</a></li>
+        <li class="level2"><a href="../datatypes/optiont.html">OptionT</a></li>
+        <li class="level2"><a href="../datatypes/state.html">State</a></li>
+        <li class="level2"><a href="../datatypes/validated.html">Validated</a></li>
+        <li class="level2"><a href="../datatypes/writer.html">Writer</a></li>
+        <li class="level2"><a href="../datatypes/writert.html">WriterT</a></li>
+      </ul>
 
-<span class="c1">// Example implementation for List</span>
-<span class="k">implicit</span> <span class="k">val</span> <span class="nv">traverseForList</span><span class="k">:</span> <span class="kt">Traverse</span><span class="o">[</span><span class="kt">List</span><span class="o">]</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Traverse</span><span class="o">[</span><span class="kt">List</span><span class="o">]</span> <span class="o">{</span>
-  <span class="k">def</span> <span class="nf">traverse</span><span class="o">[</span><span class="kt">G</span><span class="o">[</span><span class="k">_</span><span class="o">]</span><span class="kt">:</span> <span class="kt">Applicative</span>, <span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">G</span><span class="o">[</span><span class="kt">B</span><span class="o">])</span><span class="k">:</span> <span class="kt">G</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">B</span><span class="o">]]</span> <span class="k">=</span>
-    <span class="nv">fa</span><span class="o">.</span><span class="py">foldRight</span><span class="o">(</span><span class="nc">Applicative</span><span class="o">[</span><span class="kt">G</span><span class="o">].</span><span class="py">pure</span><span class="o">(</span><span class="nv">List</span><span class="o">.</span><span class="py">empty</span><span class="o">[</span><span class="kt">B</span><span class="o">]))</span> <span class="o">{</span> <span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">acc</span><span class="o">)</span> <span class="k">=&gt;</span>
-      <span class="nc">Applicative</span><span class="o">[</span><span class="kt">G</span><span class="o">].</span><span class="py">map2</span><span class="o">(</span><span class="nf">f</span><span class="o">(</span><span class="n">a</span><span class="o">),</span> <span class="n">acc</span><span class="o">)(</span><span class="k">_</span> <span class="o">::</span> <span class="k">_</span><span class="o">)</span>
-    <span class="o">}</span>
-<span class="o">}</span>
+      <ul class="nav-list">
+        <li class="level1 nav-header">Related Projects</li>
+        
+          <li class="level2"><a href="https://typelevel.org/cats-effect/">cats-effect</a></li>
+        
+          <li class="level2"><a href="https://typelevel.org/mouse">Mouse</a></li>
+        
+          <li class="level2"><a href="https://github.com/typelevel/discipline/">discipline</a></li>
+        
+      </ul>
 
-<span class="c1">// Example implementation for Tree</span>
-<span class="k">implicit</span> <span class="k">val</span> <span class="nv">traverseForTree</span><span class="k">:</span> <span class="kt">Traverse</span><span class="o">[</span><span class="kt">Tree</span><span class="o">]</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Traverse</span><span class="o">[</span><span class="kt">Tree</span><span class="o">]</span> <span class="o">{</span>
-  <span class="k">def</span> <span class="nf">traverse</span><span class="o">[</span><span class="kt">G</span><span class="o">[</span><span class="k">_</span><span class="o">]</span><span class="kt">:</span> <span class="kt">Applicative</span>, <span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">Tree</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">G</span><span class="o">[</span><span class="kt">B</span><span class="o">])</span><span class="k">:</span> <span class="kt">G</span><span class="o">[</span><span class="kt">Tree</span><span class="o">[</span><span class="kt">B</span><span class="o">]]</span> <span class="k">=</span>
-    <span class="nv">fa</span><span class="o">.</span><span class="py">traverse</span><span class="o">(</span><span class="n">f</span><span class="o">)</span>
-<span class="o">}</span>
-</code></pre></div></div>
+    </nav>
 
-<h2 id="a-note-on-sequencing">A note on sequencing</h2>
+    <div id="container">
 
-<p>Sometimes you will be given a traversable that has effectful values already, such as
-a <code class="language-plaintext highlighter-rouge">List[Option[A]]</code>. Since the values themselves are effects, traversing with <code class="language-plaintext highlighter-rouge">identity</code>
-will turn the traversable “inside out.”</p>
+      <nav id="page-nav">
+        <p class="header"><a href="#">Traverse</a></p>
 
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
-</code></pre></div></div>
+        <ul class="nav-list">
+          <li class="level1"><a href="#a-note-on-sequencing">A note on sequencing</a></li>
+          <li class="level1"><a href="#traversables-are-functors">Traversables are Functors</a></li>
+          <li class="level1"><a href="#traversables-are-foldable">Traversables are Foldable</a></li>
+          <li class="level1"><a href="#further-reading">Further Reading</a></li>
+        </ul>
 
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">list</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="nc">Some</span><span class="o">(</span><span class="mi">1</span><span class="o">),</span> <span class="nc">Some</span><span class="o">(</span><span class="mi">2</span><span class="o">),</span> <span class="nc">None</span><span class="o">)</span>
-<span class="c1">// list: List[Option[Int]] = List(Some(1), Some(2), None)</span>
-<span class="k">val</span> <span class="nv">traversed</span> <span class="k">=</span> <span class="nv">list</span><span class="o">.</span><span class="py">traverse</span><span class="o">(</span><span class="n">identity</span><span class="o">)</span>
-<span class="c1">// traversed: Option[List[Int]] = None</span>
-</code></pre></div></div>
+        <p class="footer"></p>
+      </nav>
 
-<p>Cats provides a convenience method for this called <code class="language-plaintext highlighter-rouge">sequence</code>.</p>
+      <main class="content">
 
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">sequenced</span> <span class="k">=</span> <span class="nv">list</span><span class="o">.</span><span class="py">sequence</span>
-<span class="c1">// sequenced: Option[List[Int]] = None</span>
-</code></pre></div></div>
+        <h1 id="traverse" class="title">Traverse</h1>
+        <p>In the <code>Applicative</code> tutorial we saw a more polymorphic version of the standard library
+        <code>Future.traverse</code> and <code>Future.sequence</code> functions, generalizing <code>Future</code> to be any
+        <code>F[_]</code> that&#39;s <code>Applicative</code>.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="type-name">Applicative</span><span>
 
-<p>In general <code class="language-plaintext highlighter-rouge">t.map(f).sequence</code> can be replaced with <code class="language-plaintext highlighter-rouge">t.traverse(f)</code>.</p>
-
-<h2 id="traversables-are-functors">Traversables are Functors</h2>
-
-<p>As it turns out every <code class="language-plaintext highlighter-rouge">Traverse</code> is a lawful <code class="language-plaintext highlighter-rouge">Functor</code>. By carefully picking the <code class="language-plaintext highlighter-rouge">G</code> to
-use in <code class="language-plaintext highlighter-rouge">traverse</code> we can implement <code class="language-plaintext highlighter-rouge">map</code>.</p>
-
-<p>First let’s look at the two signatures.</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.</span><span class="o">{</span><span class="nc">Applicative</span><span class="o">,</span> <span class="nc">Traverse</span><span class="o">}</span>
-
-<span class="k">def</span> <span class="nf">traverse</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]</span><span class="kt">:</span> <span class="kt">Traverse</span>, <span class="kt">G</span><span class="o">[</span><span class="k">_</span><span class="o">]</span><span class="kt">:</span> <span class="kt">Applicative</span>, <span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">G</span><span class="o">[</span><span class="kt">B</span><span class="o">])</span><span class="k">:</span> <span class="kt">G</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="kt">B</span><span class="o">]]</span> <span class="k">=</span> <span class="o">???</span>
-
-<span class="k">def</span> <span class="nf">map</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]</span><span class="kt">:</span> <span class="kt">Traverse</span>, <span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">B</span><span class="o">)</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span> <span class="k">=</span> <span class="o">???</span>
-</code></pre></div></div>
-
-<p>Both have an <code class="language-plaintext highlighter-rouge">F[A]</code> parameter and a similar <code class="language-plaintext highlighter-rouge">f</code> parameter. <code class="language-plaintext highlighter-rouge">traverse</code> expects the return type
-of <code class="language-plaintext highlighter-rouge">f</code> to be <code class="language-plaintext highlighter-rouge">G[B]</code> whereas <code class="language-plaintext highlighter-rouge">map</code> just wants <code class="language-plaintext highlighter-rouge">B</code>. Similarly the return type of <code class="language-plaintext highlighter-rouge">traverse</code> is
-<code class="language-plaintext highlighter-rouge">G[F[B]]</code> whereas for <code class="language-plaintext highlighter-rouge">map</code> it’s just <code class="language-plaintext highlighter-rouge">F[B]</code>. This suggests we need to pick a <code class="language-plaintext highlighter-rouge">G</code> such that
-<code class="language-plaintext highlighter-rouge">G[A]</code> communicates exactly as much information as <code class="language-plaintext highlighter-rouge">A</code>. We can conjure one up by simply wrapping
-an <code class="language-plaintext highlighter-rouge">A</code>.</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">final</span> <span class="k">case</span> <span class="k">class</span> <span class="nc">Id</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">value</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span>
-</code></pre></div></div>
-
-<p>In order to call <code class="language-plaintext highlighter-rouge">traverse</code> <code class="language-plaintext highlighter-rouge">Id</code> needs to be <code class="language-plaintext highlighter-rouge">Applicative</code> which is straightforward - note that while
-<code class="language-plaintext highlighter-rouge">Id</code> just wraps an <code class="language-plaintext highlighter-rouge">A</code>, it is still a type constructor which matches the shape required by <code class="language-plaintext highlighter-rouge">Applicative</code>.</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">implicit</span> <span class="k">val</span> <span class="nv">applicativeForId</span><span class="k">:</span> <span class="kt">Applicative</span><span class="o">[</span><span class="kt">Id</span><span class="o">]</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Applicative</span><span class="o">[</span><span class="kt">Id</span><span class="o">]</span> <span class="o">{</span>
-  <span class="k">def</span> <span class="nf">ap</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">ff</span><span class="k">:</span> <span class="kt">Id</span><span class="o">[</span><span class="kt">A</span> <span class="k">=&gt;</span> <span class="kt">B</span><span class="o">])(</span><span class="n">fa</span><span class="k">:</span> <span class="kt">Id</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span><span class="k">:</span> <span class="kt">Id</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Id</span><span class="o">(</span><span class="nv">ff</span><span class="o">.</span><span class="py">value</span><span class="o">(</span><span class="nv">fa</span><span class="o">.</span><span class="py">value</span><span class="o">))</span>
-
-  <span class="k">def</span> <span class="nf">pure</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">a</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span><span class="k">:</span> <span class="kt">Id</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Id</span><span class="o">(</span><span class="n">a</span><span class="o">)</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<p>Now we can implement <code class="language-plaintext highlighter-rouge">map</code> by wrapping and unwrapping <code class="language-plaintext highlighter-rouge">Id</code> as necessary.</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.Functor</span>
-
-<span class="k">trait</span> <span class="nc">Traverse</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]]</span> <span class="nc">extends</span> <span class="nc">Functor</span><span class="o">[</span><span class="kt">F</span><span class="o">]</span> <span class="o">{</span>
-  <span class="k">def</span> <span class="nf">traverse</span><span class="o">[</span><span class="kt">G</span><span class="o">[</span><span class="k">_</span><span class="o">]</span><span class="kt">:</span> <span class="kt">Applicative</span>, <span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">G</span><span class="o">[</span><span class="kt">B</span><span class="o">])</span><span class="k">:</span> <span class="kt">G</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="kt">B</span><span class="o">]]</span>
-
-  <span class="k">def</span> <span class="nf">map</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">B</span><span class="o">)</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span> <span class="k">=</span>
-    <span class="nf">traverse</span><span class="o">(</span><span class="n">fa</span><span class="o">)(</span><span class="n">a</span> <span class="k">=&gt;</span> <span class="nc">Id</span><span class="o">(</span><span class="nf">f</span><span class="o">(</span><span class="n">a</span><span class="o">))).</span><span class="py">value</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<p><code class="language-plaintext highlighter-rouge">Id</code> is provided in Cats as a type alias <code class="language-plaintext highlighter-rouge">type Id[A] = A</code>.</p>
-
-<h2 id="traversables-are-foldable">Traversables are Foldable</h2>
-
-<p>The <code class="language-plaintext highlighter-rouge">Foldable</code> type class abstracts over “things that can be folded over” similar to how
-<code class="language-plaintext highlighter-rouge">Traverse</code> abstracts over “things that can be traversed.” It turns out <code class="language-plaintext highlighter-rouge">Traverse</code> is strictly
-more powerful than <code class="language-plaintext highlighter-rouge">Foldable</code> - that is, <code class="language-plaintext highlighter-rouge">foldLeft</code> and <code class="language-plaintext highlighter-rouge">foldRight</code> can be implemented
-in terms of <code class="language-plaintext highlighter-rouge">traverse</code> by picking the right <code class="language-plaintext highlighter-rouge">Applicative</code>. However, <code class="language-plaintext highlighter-rouge">cats.Traverse</code> does not
-implement <code class="language-plaintext highlighter-rouge">foldLeft</code> and <code class="language-plaintext highlighter-rouge">foldRight</code> as the actual implementation tends to be ineffecient.</p>
-
-<p>For brevity and demonstration purposes we’ll implement the equivalent <code class="language-plaintext highlighter-rouge">foldMap</code> method in terms
-of <code class="language-plaintext highlighter-rouge">traverse</code> by using <code class="language-plaintext highlighter-rouge">cats.data.Const</code>. You can then implement <code class="language-plaintext highlighter-rouge">foldRight</code> in terms of <code class="language-plaintext highlighter-rouge">foldMap</code>,
-and <code class="language-plaintext highlighter-rouge">foldLeft</code> can then be implemented in terms of <code class="language-plaintext highlighter-rouge">foldRight</code>, though the resulting implementations
-may be slow.</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.</span><span class="o">{</span><span class="nc">Applicative</span><span class="o">,</span> <span class="nc">Monoid</span><span class="o">,</span> <span class="nc">Traverse</span><span class="o">}</span>
-<span class="k">import</span> <span class="nn">cats.data.Const</span>
-
-<span class="k">def</span> <span class="nf">foldMap</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]</span><span class="kt">:</span> <span class="kt">Traverse</span>, <span class="kt">A</span>, <span class="kt">B:</span> <span class="kt">Monoid</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">B</span><span class="o">)</span><span class="k">:</span> <span class="kt">B</span> <span class="o">=</span>
-  <span class="nc">Traverse</span><span class="o">[</span><span class="kt">F</span><span class="o">].</span><span class="py">traverse</span><span class="o">[</span><span class="kt">Const</span><span class="o">[</span><span class="kt">B</span>, <span class="kt">*</span><span class="o">]</span>, <span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="o">)(</span><span class="n">a</span> <span class="k">=&gt;</span> <span class="nc">Const</span><span class="o">(</span><span class="nf">f</span><span class="o">(</span><span class="n">a</span><span class="o">))).</span><span class="py">getConst</span>
-</code></pre></div></div>
-
-<p>This works because <code class="language-plaintext highlighter-rouge">Const[B, *]</code> is an <code class="language-plaintext highlighter-rouge">Applicative</code> if <code class="language-plaintext highlighter-rouge">B</code> is a <code class="language-plaintext highlighter-rouge">Monoid</code>, as explained in <a href="../datatypes/const.html#example-2-traverse">the documentation of <code class="language-plaintext highlighter-rouge">Const</code></a>.</p>
-
-<h2 id="further-reading">Further Reading</h2>
-
-<ul>
-  <li><a href="https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf" title="The Essence of the Iterator Pattern">The Essence of the Iterator Pattern</a> - Gibbons, Oliveira. JFP 2009.</li>
-</ul>
-
-</section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/cats/highlight/highlight.pack.js"></script><script src="/cats/lunr/lunr.js"></script><script>
-// For all code blocks, copy the language from the containing div
-// to the inner code tag (where hljs expects it to be)
-const langPrefix = 'language-';
-document.querySelectorAll(`div[class^='${langPrefix}']`).forEach(function(div) {
-  div.classList.forEach(function(cssClass) {
-    if (cssClass.startsWith(langPrefix)) {
-      const lang = cssClass.substring(langPrefix.length);
-      div.querySelectorAll('pre code').forEach(function(code) {
-        code.classList.add(lang);
-      });
+</span><span class="keyword">def</span><span> </span><span class="declaration-name">traverse</span><span>[</span><span class="type-name">F</span><span>[</span><span class="identifier">_</span><span>]: </span><span class="type-name">Applicative</span><span>, </span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>](</span><span class="identifier">as</span><span>: </span><span class="type-name">List</span><span>[</span><span class="type-name">A</span><span>])(</span><span class="identifier">f</span><span>: </span><span class="type-name">A</span><span> =&gt; </span><span class="type-name">F</span><span>[</span><span class="type-name">B</span><span>]): </span><span class="type-name">F</span><span>[</span><span class="type-name">List</span><span>[</span><span class="type-name">B</span><span>]] =
+  </span><span class="identifier">as</span><span>.</span><span class="identifier">foldRight</span><span>(</span><span class="type-name">Applicative</span><span>[</span><span class="type-name">F</span><span>].</span><span class="identifier">pure</span><span>(</span><span class="type-name">List</span><span>.</span><span class="identifier">empty</span><span>[</span><span class="type-name">B</span><span>])) { (</span><span class="identifier">a</span><span>: </span><span class="type-name">A</span><span>, </span><span class="identifier">acc</span><span>: </span><span class="type-name">F</span><span>[</span><span class="type-name">List</span><span>[</span><span class="type-name">B</span><span>]]) =&gt;
+    </span><span class="keyword">val</span><span> </span><span class="identifier">fb</span><span>: </span><span class="type-name">F</span><span>[</span><span class="type-name">B</span><span>] = </span><span class="identifier">f</span><span>(</span><span class="identifier">a</span><span>)
+    </span><span class="type-name">Applicative</span><span>[</span><span class="type-name">F</span><span>].</span><span class="identifier">map2</span><span>(</span><span class="identifier">fb</span><span>, </span><span class="identifier">acc</span><span>)(</span><span class="identifier">_</span><span> :: </span><span class="identifier">_</span><span>)
+  }</span></code></pre>
+        <p>Here <code>traverse</code> still has knowledge of <code>List</code>, but we could just as easily use
+        <code>Vector</code> or some similar data type. Another example is a binary tree:</p>
+        <pre><code class="nohighlight"><span class="keyword">object</span><span> </span><span class="identifier">tree</span><span> {
+  </span><span class="keyword">sealed</span><span> </span><span class="keyword">abstract</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Tree</span><span>[</span><span class="type-name">A</span><span>] </span><span class="keyword">extends</span><span> </span><span class="type-name">Product</span><span> </span><span class="keyword">with</span><span> </span><span class="type-name">Serializable</span><span> {
+    </span><span class="keyword">def</span><span> </span><span class="declaration-name">traverse</span><span>[</span><span class="type-name">F</span><span>[</span><span class="identifier">_</span><span>]: </span><span class="type-name">Applicative</span><span>, </span><span class="type-name">B</span><span>](</span><span class="identifier">f</span><span>: </span><span class="type-name">A</span><span> =&gt; </span><span class="type-name">F</span><span>[</span><span class="type-name">B</span><span>]): </span><span class="type-name">F</span><span>[</span><span class="type-name">Tree</span><span>[</span><span class="type-name">B</span><span>]] = </span><span class="keyword">this</span><span> </span><span class="keyword">match</span><span> {
+      </span><span class="keyword">case</span><span> </span><span class="type-name">Tree</span><span>.</span><span class="type-name">Empty</span><span>()         =&gt; </span><span class="type-name">Applicative</span><span>[</span><span class="type-name">F</span><span>].</span><span class="identifier">pure</span><span>(</span><span class="type-name">Tree</span><span>.</span><span class="type-name">Empty</span><span>())
+      </span><span class="keyword">case</span><span> </span><span class="type-name">Tree</span><span>.</span><span class="type-name">Branch</span><span>(</span><span class="identifier">v</span><span>, </span><span class="identifier">l</span><span>, </span><span class="identifier">r</span><span>) =&gt; </span><span class="type-name">Applicative</span><span>[</span><span class="type-name">F</span><span>].</span><span class="identifier">map3</span><span>(</span><span class="identifier">f</span><span>(</span><span class="identifier">v</span><span>), </span><span class="identifier">l</span><span>.</span><span class="identifier">traverse</span><span>(</span><span class="identifier">f</span><span>), </span><span class="identifier">r</span><span>.</span><span class="identifier">traverse</span><span>(</span><span class="identifier">f</span><span>))(</span><span class="type-name">Tree</span><span>.</span><span class="type-name">Branch</span><span>(</span><span class="identifier">_</span><span>, </span><span class="identifier">_</span><span>, </span><span class="identifier">_</span><span>))
     }
-  });
-});
+  }
 
-hljs.configure({languages:['scala','java','bash']});
-hljs.initHighlightingOnLoad();
-      </script><script src="/cats/js/sponsors.js"></script><script>console.info('\x57\x65\x62\x73\x69\x74\x65\x20\x62\x75\x69\x6c\x74\x20\x77\x69\x74\x68\x3a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x5f\x5f\x20\x20\x20\x20\x5f\x5f\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x5f\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x5f\x20\x5f\x5f\x0a\x20\x20\x20\x5f\x5f\x5f\x5f\x5f\x2f\x20\x2f\x5f\x20\x20\x2f\x20\x2f\x5f\x20\x20\x20\x20\x20\x20\x5f\x5f\x5f\x5f\x20\x5f\x5f\x5f\x20\x20\x28\x5f\x29\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x20\x20\x5f\x5f\x5f\x5f\x5f\x28\x5f\x29\x20\x2f\x5f\x5f\x5f\x5f\x20\x20\x5f\x5f\x5f\x5f\x5f\x0a\x20\x20\x2f\x20\x5f\x5f\x5f\x2f\x20\x5f\x5f\x20\x5c\x2f\x20\x5f\x5f\x2f\x5f\x5f\x5f\x5f\x5f\x2f\x20\x5f\x5f\x20\x60\x5f\x5f\x20\x5c\x2f\x20\x2f\x20\x5f\x5f\x5f\x2f\x20\x5f\x5f\x5f\x2f\x20\x5f\x5f\x20\x5c\x2f\x20\x5f\x5f\x5f\x2f\x20\x2f\x20\x5f\x5f\x2f\x20\x5f\x20\x5c\x2f\x20\x5f\x5f\x5f\x2f\x0a\x20\x28\x5f\x5f\x20\x20\x29\x20\x2f\x5f\x2f\x20\x2f\x20\x2f\x5f\x2f\x5f\x5f\x5f\x5f\x5f\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x5f\x5f\x2f\x20\x2f\x20\x20\x2f\x20\x2f\x5f\x2f\x20\x28\x5f\x5f\x20\x20\x29\x20\x2f\x20\x2f\x5f\x2f\x20\x20\x5f\x5f\x28\x5f\x5f\x20\x20\x29\x0a\x2f\x5f\x5f\x5f\x5f\x2f\x5f\x2e\x5f\x5f\x5f\x2f\x5c\x5f\x5f\x2f\x20\x20\x20\x20\x20\x2f\x5f\x2f\x20\x2f\x5f\x2f\x20\x2f\x5f\x2f\x5f\x2f\x5c\x5f\x5f\x5f\x2f\x5f\x2f\x20\x20\x20\x5c\x5f\x5f\x5f\x5f\x2f\x5f\x5f\x5f\x5f\x2f\x5f\x2f\x5c\x5f\x5f\x2f\x5c\x5f\x5f\x5f\x2f\x5f\x5f\x5f\x5f\x2f\x0a\x0a\x68\x74\x74\x70\x73\x3a\x2f\x2f\x34\x37\x64\x65\x67\x2e\x67\x69\x74\x68\x75\x62\x2e\x69\x6f\x2f\x73\x62\x74\x2d\x6d\x69\x63\x72\x6f\x73\x69\x74\x65\x73')</script><script>((window.gitter = {}).chat = {}).options = {
-room: 'typelevel/cats'};</script><script src="https://sidecar.gitter.im/dist/sidecar.v1.js"></script><script src="/cats/js/search.js"></script><script src="/cats/js/main.js"></script></body></html>
+  </span><span class="keyword">object</span><span> </span><span class="type-name">Tree</span><span> {
+    </span><span class="keyword">final</span><span> </span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Empty</span><span>[</span><span class="type-name">A</span><span>]() </span><span class="keyword">extends</span><span> </span><span class="type-name">Tree</span><span>[</span><span class="type-name">A</span><span>]
+    </span><span class="keyword">final</span><span> </span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Branch</span><span>[</span><span class="type-name">A</span><span>](</span><span class="identifier">value</span><span>: </span><span class="type-name">A</span><span>, </span><span class="identifier">left</span><span>: </span><span class="type-name">Tree</span><span>[</span><span class="type-name">A</span><span>], </span><span class="identifier">right</span><span>: </span><span class="type-name">Tree</span><span>[</span><span class="type-name">A</span><span>]) </span><span class="keyword">extends</span><span> </span><span class="type-name">Tree</span><span>[</span><span class="type-name">A</span><span>]
+  }
+}
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">tree</span><span>.</span><span class="identifier">_</span></code></pre>
+        <p>This suggests an abstraction over &quot;things that can be traversed over,&quot; hence <code>Traverse</code>.</p>
+        <pre><code class="nohighlight"><span class="keyword">trait</span><span> </span><span class="type-name">Traverse</span><span>[</span><span class="type-name">F</span><span>[</span><span class="identifier">_</span><span>]] {
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">traverse</span><span>[</span><span class="type-name">G</span><span>[</span><span class="identifier">_</span><span>]: </span><span class="type-name">Applicative</span><span>, </span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>](</span><span class="identifier">fa</span><span>: </span><span class="type-name">F</span><span>[</span><span class="type-name">A</span><span>])(</span><span class="identifier">f</span><span>: </span><span class="type-name">A</span><span> =&gt; </span><span class="type-name">G</span><span>[</span><span class="type-name">B</span><span>]): </span><span class="type-name">G</span><span>[</span><span class="type-name">F</span><span>[</span><span class="type-name">B</span><span>]]
+}
+
+</span><span class="comment">// Example implementation for List
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">traverseForList</span><span>: </span><span class="type-name">Traverse</span><span>[</span><span class="type-name">List</span><span>] = </span><span class="keyword">new</span><span> </span><span class="type-name">Traverse</span><span>[</span><span class="type-name">List</span><span>] {
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">traverse</span><span>[</span><span class="type-name">G</span><span>[</span><span class="identifier">_</span><span>]: </span><span class="type-name">Applicative</span><span>, </span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>](</span><span class="identifier">fa</span><span>: </span><span class="type-name">List</span><span>[</span><span class="type-name">A</span><span>])(</span><span class="identifier">f</span><span>: </span><span class="type-name">A</span><span> =&gt; </span><span class="type-name">G</span><span>[</span><span class="type-name">B</span><span>]): </span><span class="type-name">G</span><span>[</span><span class="type-name">List</span><span>[</span><span class="type-name">B</span><span>]] =
+    </span><span class="identifier">fa</span><span>.</span><span class="identifier">foldRight</span><span>(</span><span class="type-name">Applicative</span><span>[</span><span class="type-name">G</span><span>].</span><span class="identifier">pure</span><span>(</span><span class="type-name">List</span><span>.</span><span class="identifier">empty</span><span>[</span><span class="type-name">B</span><span>])) { (</span><span class="identifier">a</span><span>, </span><span class="identifier">acc</span><span>) =&gt;
+      </span><span class="type-name">Applicative</span><span>[</span><span class="type-name">G</span><span>].</span><span class="identifier">map2</span><span>(</span><span class="identifier">f</span><span>(</span><span class="identifier">a</span><span>), </span><span class="identifier">acc</span><span>)(</span><span class="identifier">_</span><span> :: </span><span class="identifier">_</span><span>)
+    }
+}
+
+</span><span class="comment">// Example implementation for Tree
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">traverseForTree</span><span>: </span><span class="type-name">Traverse</span><span>[</span><span class="type-name">Tree</span><span>] = </span><span class="keyword">new</span><span> </span><span class="type-name">Traverse</span><span>[</span><span class="type-name">Tree</span><span>] {
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">traverse</span><span>[</span><span class="type-name">G</span><span>[</span><span class="identifier">_</span><span>]: </span><span class="type-name">Applicative</span><span>, </span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>](</span><span class="identifier">fa</span><span>: </span><span class="type-name">Tree</span><span>[</span><span class="type-name">A</span><span>])(</span><span class="identifier">f</span><span>: </span><span class="type-name">A</span><span> =&gt; </span><span class="type-name">G</span><span>[</span><span class="type-name">B</span><span>]): </span><span class="type-name">G</span><span>[</span><span class="type-name">Tree</span><span>[</span><span class="type-name">B</span><span>]] =
+    </span><span class="identifier">fa</span><span>.</span><span class="identifier">traverse</span><span>(</span><span class="identifier">f</span><span>)
+}</span></code></pre>
+        
+        <h2 id="a-note-on-sequencing" class="section">A note on sequencing<a class="anchor-link right" href="#a-note-on-sequencing"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>Sometimes you will be given a traversable that has effectful values already, such as
+        a <code>List[Option[A]]</code>. Since the values themselves are effects, traversing with <code>identity</code>
+        will turn the traversable &quot;inside out.&quot;</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">list</span><span> = </span><span class="type-name">List</span><span>(</span><span class="type-name">Some</span><span>(</span><span class="number-literal">1</span><span>), </span><span class="type-name">Some</span><span>(</span><span class="number-literal">2</span><span>), </span><span class="type-name">None</span><span>)
+</span><span class="comment">// list: List[Option[Int]] = List(Some(1), Some(2), None)
+</span><span class="keyword">val</span><span> </span><span class="identifier">traversed</span><span> = </span><span class="identifier">list</span><span>.</span><span class="identifier">traverse</span><span>(</span><span class="identifier">identity</span><span>)
+</span><span class="comment">// traversed: Option[List[Int]] = None</span></code></pre>
+        <p>Cats provides a convenience method for this called <code>sequence</code>.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">sequenced</span><span> = </span><span class="identifier">list</span><span>.</span><span class="identifier">sequence</span><span>
+</span><span class="comment">// sequenced: Option[List[Int]] = None</span></code></pre>
+        <p>In general <code>t.map(f).sequence</code> can be replaced with <code>t.traverse(f)</code>.</p>
+        
+        <h2 id="traversables-are-functors" class="section">Traversables are Functors<a class="anchor-link right" href="#traversables-are-functors"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>As it turns out every <code>Traverse</code> is a lawful <code>Functor</code>. By carefully picking the <code>G</code> to
+        use in <code>traverse</code> we can implement <code>map</code>.</p>
+        <p>First let&#39;s look at the two signatures.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.{</span><span class="type-name">Applicative</span><span>, </span><span class="type-name">Traverse</span><span>}
+
+</span><span class="keyword">def</span><span> </span><span class="declaration-name">traverse</span><span>[</span><span class="type-name">F</span><span>[</span><span class="identifier">_</span><span>]: </span><span class="type-name">Traverse</span><span>, </span><span class="type-name">G</span><span>[</span><span class="identifier">_</span><span>]: </span><span class="type-name">Applicative</span><span>, </span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>](</span><span class="identifier">fa</span><span>: </span><span class="type-name">F</span><span>[</span><span class="type-name">A</span><span>])(</span><span class="identifier">f</span><span>: </span><span class="type-name">A</span><span> =&gt; </span><span class="type-name">G</span><span>[</span><span class="type-name">B</span><span>]): </span><span class="type-name">G</span><span>[</span><span class="type-name">F</span><span>[</span><span class="type-name">B</span><span>]] = ???
+
+</span><span class="keyword">def</span><span> </span><span class="declaration-name">map</span><span>[</span><span class="type-name">F</span><span>[</span><span class="identifier">_</span><span>]: </span><span class="type-name">Traverse</span><span>, </span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>](</span><span class="identifier">fa</span><span>: </span><span class="type-name">F</span><span>[</span><span class="type-name">A</span><span>])(</span><span class="identifier">f</span><span>: </span><span class="type-name">A</span><span> =&gt; </span><span class="type-name">B</span><span>): </span><span class="type-name">F</span><span>[</span><span class="type-name">B</span><span>] = ???</span></code></pre>
+        <p>Both have an <code>F[A]</code> parameter and a similar <code>f</code> parameter. <code>traverse</code> expects the return type
+        of <code>f</code> to be <code>G[B]</code> whereas <code>map</code> just wants <code>B</code>. Similarly the return type of <code>traverse</code> is
+        <code>G[F[B]]</code> whereas for <code>map</code> it&#39;s just <code>F[B]</code>. This suggests we need to pick a <code>G</code> such that
+        <code>G[A]</code> communicates exactly as much information as <code>A</code>. We can conjure one up by simply wrapping
+        an <code>A</code>.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">final</span><span> </span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Id</span><span>[</span><span class="type-name">A</span><span>](</span><span class="identifier">value</span><span>: </span><span class="type-name">A</span><span>)</span></code></pre>
+        <p>In order to call <code>traverse</code> <code>Id</code> needs to be <code>Applicative</code> which is straightforward - note that while
+        <code>Id</code> just wraps an <code>A</code>, it is still a type constructor which matches the shape required by <code>Applicative</code>.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">applicativeForId</span><span>: </span><span class="type-name">Applicative</span><span>[</span><span class="type-name">Id</span><span>] = </span><span class="keyword">new</span><span> </span><span class="type-name">Applicative</span><span>[</span><span class="type-name">Id</span><span>] {
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">ap</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>](</span><span class="identifier">ff</span><span>: </span><span class="type-name">Id</span><span>[</span><span class="type-name">A</span><span> =&gt; </span><span class="type-name">B</span><span>])(</span><span class="identifier">fa</span><span>: </span><span class="type-name">Id</span><span>[</span><span class="type-name">A</span><span>]): </span><span class="type-name">Id</span><span>[</span><span class="type-name">B</span><span>] = </span><span class="type-name">Id</span><span>(</span><span class="identifier">ff</span><span>.</span><span class="identifier">value</span><span>(</span><span class="identifier">fa</span><span>.</span><span class="identifier">value</span><span>))
+
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">pure</span><span>[</span><span class="type-name">A</span><span>](</span><span class="identifier">a</span><span>: </span><span class="type-name">A</span><span>): </span><span class="type-name">Id</span><span>[</span><span class="type-name">A</span><span>] = </span><span class="type-name">Id</span><span>(</span><span class="identifier">a</span><span>)
+}</span></code></pre>
+        <p>Now we can implement <code>map</code> by wrapping and unwrapping <code>Id</code> as necessary.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="type-name">Functor</span><span>
+
+</span><span class="keyword">trait</span><span> </span><span class="type-name">Traverse</span><span>[</span><span class="type-name">F</span><span>[</span><span class="identifier">_</span><span>]] </span><span class="keyword">extends</span><span> </span><span class="type-name">Functor</span><span>[</span><span class="type-name">F</span><span>] {
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">traverse</span><span>[</span><span class="type-name">G</span><span>[</span><span class="identifier">_</span><span>]: </span><span class="type-name">Applicative</span><span>, </span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>](</span><span class="identifier">fa</span><span>: </span><span class="type-name">F</span><span>[</span><span class="type-name">A</span><span>])(</span><span class="identifier">f</span><span>: </span><span class="type-name">A</span><span> =&gt; </span><span class="type-name">G</span><span>[</span><span class="type-name">B</span><span>]): </span><span class="type-name">G</span><span>[</span><span class="type-name">F</span><span>[</span><span class="type-name">B</span><span>]]
+
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">map</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>](</span><span class="identifier">fa</span><span>: </span><span class="type-name">F</span><span>[</span><span class="type-name">A</span><span>])(</span><span class="identifier">f</span><span>: </span><span class="type-name">A</span><span> =&gt; </span><span class="type-name">B</span><span>): </span><span class="type-name">F</span><span>[</span><span class="type-name">B</span><span>] =
+    </span><span class="identifier">traverse</span><span>(</span><span class="identifier">fa</span><span>)(</span><span class="identifier">a</span><span> =&gt; </span><span class="type-name">Id</span><span>(</span><span class="identifier">f</span><span>(</span><span class="identifier">a</span><span>))).</span><span class="identifier">value</span><span>
+}</span></code></pre>
+        <p><code>Id</code> is provided in Cats as a type alias <code>type Id[A] = A</code>.</p>
+        
+        <h2 id="traversables-are-foldable" class="section">Traversables are Foldable<a class="anchor-link right" href="#traversables-are-foldable"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>The <code>Foldable</code> type class abstracts over &quot;things that can be folded over&quot; similar to how
+        <code>Traverse</code> abstracts over &quot;things that can be traversed.&quot; It turns out <code>Traverse</code> is strictly
+        more powerful than <code>Foldable</code> - that is, <code>foldLeft</code> and <code>foldRight</code> can be implemented
+        in terms of <code>traverse</code> by picking the right <code>Applicative</code>. However, <code>cats.Traverse</code> does not
+        implement <code>foldLeft</code> and <code>foldRight</code> as the actual implementation tends to be ineffecient.</p>
+        <p>For brevity and demonstration purposes we&#39;ll implement the equivalent <code>foldMap</code> method in terms
+        of <code>traverse</code> by using <code>cats.data.Const</code>. You can then implement <code>foldRight</code> in terms of <code>foldMap</code>,
+        and <code>foldLeft</code> can then be implemented in terms of <code>foldRight</code>, though the resulting implementations
+        may be slow.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.{</span><span class="type-name">Applicative</span><span>, </span><span class="type-name">Monoid</span><span>, </span><span class="type-name">Traverse</span><span>}
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">data</span><span>.</span><span class="type-name">Const</span><span>
+
+</span><span class="keyword">def</span><span> </span><span class="declaration-name">foldMap</span><span>[</span><span class="type-name">F</span><span>[</span><span class="identifier">_</span><span>]: </span><span class="type-name">Traverse</span><span>, </span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>: </span><span class="type-name">Monoid</span><span>](</span><span class="identifier">fa</span><span>: </span><span class="type-name">F</span><span>[</span><span class="type-name">A</span><span>])(</span><span class="identifier">f</span><span>: </span><span class="type-name">A</span><span> =&gt; </span><span class="type-name">B</span><span>): </span><span class="type-name">B</span><span> =
+  </span><span class="type-name">Traverse</span><span>[</span><span class="type-name">F</span><span>].</span><span class="identifier">traverse</span><span>[</span><span class="type-name">Const</span><span>[</span><span class="type-name">B</span><span>, *], </span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>](</span><span class="identifier">fa</span><span>)(</span><span class="identifier">a</span><span> =&gt; </span><span class="type-name">Const</span><span>(</span><span class="identifier">f</span><span>(</span><span class="identifier">a</span><span>))).</span><span class="identifier">getConst</span></code></pre>
+        <p>This works because <code>Const[B, *]</code> is an <code>Applicative</code> if <code>B</code> is a <code>Monoid</code>, as explained in <a href="../datatypes/const.html#example-2-traverse">the documentation of <code>Const</code></a>.</p>
+        
+        <h2 id="further-reading" class="section">Further Reading<a class="anchor-link right" href="#further-reading"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <ul>
+          <li><a href="https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf" title="The Essence of the Iterator Pattern">The Essence of the Iterator Pattern</a> - Gibbons, Oliveira. JFP 2009.</li>
+        </ul>
+
+        <hr style="margin-top: 30px"/>
+        <footer style="font-size: 90%; text-align: center">
+          cats is a <a href="https://typelevel.org/">Typelevel</a> project distributed under the <a href="https://opensource.org/licenses/MIT">MIT</a> license.
+        </footer>
+
+      </main>
+
+    </div>
+
+  </body>
+</html>
