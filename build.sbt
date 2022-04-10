@@ -313,7 +313,7 @@ lazy val bench = project
         Seq(
           "org.scalaz" %% "scalaz-core" % "7.2.23",
           "org.spire-math" %% "chain" % "0.3.0",
-          "co.fs2" %% "fs2-core" % "0.10.4"
+          "co.fs2" %% "fs2-core" % "0.10.7"
         )
       else Nil
     },
