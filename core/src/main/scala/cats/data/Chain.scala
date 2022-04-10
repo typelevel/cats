@@ -505,8 +505,37 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
   /**
    * Reverses this `Chain`
    */
-  def reverse: Chain[A] =
-    fromSeq(reverseIterator.toVector)
+  def reverse: Chain[A] = {
+    def loop(h: Chain.NonEmpty[A], tail: List[Chain.NonEmpty[A]], acc: Chain[A]): Chain[A] =
+      h match {
+        case Append(l, r) => loop(l, r :: tail, acc)
+        case sing @ Singleton(_) =>
+          val nextAcc = sing.concat(acc)
+          tail match {
+            case h1 :: t1 =>
+              loop(h1, t1, nextAcc)
+            case _ =>
+              nextAcc
+          }
+        case Wrap(seq) =>
+          val nextAcc = Wrap(seq.reverse).concat(acc)
+          tail match {
+            case h1 :: t1 =>
+              loop(h1, t1, nextAcc)
+            case _ =>
+              nextAcc
+          }
+      }
+
+    this match {
+      case Append(l, r) =>
+        loop(l, r :: Nil, Empty)
+      case Wrap(seq) => Wrap(seq.reverse)
+      case _         =>
+        // Empty | Singleton(_)
+        this
+    }
+  }
 
   /**
    * Yields to Some(a, Chain[A]) with `a` removed where `f` holds for the first time,
