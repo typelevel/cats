@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 package data
 
@@ -32,7 +53,7 @@ import Chain.{
  * O(1) `uncons`, such that walking the sequence via N successive `uncons`
  * steps takes O(N).
  */
-sealed abstract class Chain[+A] {
+sealed abstract class Chain[+A] extends ChainCompat[A] {
 
   /**
    * Returns the head and tail of this Chain if non empty, none otherwise. Amortized O(1).
@@ -566,31 +587,25 @@ sealed abstract class Chain[+A] {
    * Returns the number of elements in this structure
    */
   final def length: Long = {
-    // TODO: consider optimizing for `Chain.Wrap` case.
-    //       Some underlying seq may not need enumerating all elements to calculate its size.
-    val iter = iterator
-    var i: Long = 0
-    while (iter.hasNext) { i += 1; iter.next(); }
-    i
+    @annotation.tailrec
+    def loop(chains: List[Chain[A]], acc: Long): Long =
+      chains match {
+        case Nil => acc
+        case h :: tail =>
+          h match {
+            case Empty        => loop(tail, acc)
+            case Wrap(seq)    => loop(tail, acc + seq.length)
+            case Singleton(a) => loop(tail, acc + 1)
+            case Append(l, r) => loop(l :: r :: tail, acc)
+          }
+      }
+    loop(this :: Nil, 0L)
   }
 
   /**
    * Alias for length
    */
   final def size: Long = length
-
-  /**
-   * The number of elements in this chain, if it can be cheaply computed, -1 otherwise.
-   * Cheaply usually means: Not requiring a collection traversal.
-   */
-  final def knownSize: Long =
-    // TODO: consider optimizing for `Chain.Wrap` case – call the underlying `knownSize` method.
-    //       Note that `knownSize` was introduced since Scala 2.13 only.
-    this match {
-      case _ if isEmpty       => 0
-      case Chain.Singleton(_) => 1
-      case _                  => -1
-    }
 
   /**
    * Compares the length of this chain to a test value.
