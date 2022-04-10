@@ -22,8 +22,6 @@
 package cats
 package laws
 package discipline
-
-import cats.instances.option._
 import cats.kernel.CommutativeMonoid
 import org.scalacheck.{Arbitrary, Cogen, Prop}
 import Prop._

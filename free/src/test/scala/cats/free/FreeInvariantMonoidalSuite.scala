@@ -24,7 +24,6 @@ package cats.free
 import cats.{Id, InvariantMonoidal}
 import cats.arrow.FunctionK
 import cats.kernel.Eq
-import cats.instances.all._
 import cats.laws.discipline.{InvariantMonoidalTests, MiniInt, SerializableTests}
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms

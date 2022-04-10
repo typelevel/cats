@@ -99,7 +99,6 @@ class SeqSuite extends CatsSuite {
 final class SeqInstancesSuite extends munit.FunSuite {
 
   test("NonEmptyParallel instance in cats.instances.seq") {
-    import cats.instances.seq._
     import cats.syntax.parallel._
 
     (Seq(1, 2, 3), Seq("A", "B", "C")).parTupled

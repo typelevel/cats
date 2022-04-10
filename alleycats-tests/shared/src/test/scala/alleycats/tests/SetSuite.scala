@@ -24,7 +24,6 @@ package alleycats.tests
 import alleycats.laws.discipline._
 import alleycats.std.all._
 import cats.{Alternative, Foldable}
-import cats.instances.all._
 import cats.kernel.laws.discipline.SerializableTests
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.laws.discipline.arbitrary._

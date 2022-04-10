@@ -23,7 +23,7 @@ package cats.bench
 
 import cats.Monoid
 import cats.data.Chain
-import cats.implicits._
+import cats.syntax.all._
 import chain.{Chain => OldChain}
 import org.openjdk.jmh.annotations.{Benchmark, Scope, State}
 

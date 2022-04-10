@@ -22,9 +22,6 @@
 package cats.bench
 
 import cats.Applicative
-import cats.instances.either._
-import cats.instances.int._
-import cats.instances.vector._
 import cats.kernel.Monoid
 import cats.syntax.foldable._
 import org.openjdk.jmh.annotations.{Benchmark, Scope, State}

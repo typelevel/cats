@@ -24,7 +24,6 @@ package laws
 package discipline
 
 import cats.kernel.{BoundedSemilattice, CommutativeGroup, CommutativeMonoid}
-import cats.instances.int._
 
 /**
  * Similar to `Int`, but with a much smaller domain. The exact range of [[MiniInt]] may be tuned from time to time, so

@@ -23,7 +23,6 @@ package cats
 package laws
 
 import cats.arrow.Arrow
-import cats.instances.function._
 import cats.syntax.arrow._
 import cats.syntax.compose._
 import cats.syntax.strong._

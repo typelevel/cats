@@ -24,7 +24,6 @@ package cats.free
 import cats.{~>, Applicative, Apply, Id}
 import cats.arrow.FunctionK
 import cats.data.State
-import cats.instances.all._
 import cats.kernel.Eq
 import cats.laws.discipline.{ApplicativeTests, SerializableTests}
 import cats.laws.discipline.SemigroupalTests.Isomorphisms

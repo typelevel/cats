@@ -25,7 +25,6 @@ import cats.~>
 import cats.arrow.FunctionK
 import cats.Invariant
 import cats.Semigroup
-import cats.instances.all._
 import cats.kernel.Eq
 import cats.laws.discipline.{InvariantTests, SerializableTests}
 import cats.tests.CatsSuite

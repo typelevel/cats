@@ -22,7 +22,6 @@
 package alleycats.tests
 
 import cats.Traverse
-import cats.instances.all._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.{SerializableTests, ShortCircuitingTests, TraverseFilterTests}
 

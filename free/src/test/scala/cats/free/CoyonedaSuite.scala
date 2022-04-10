@@ -23,7 +23,6 @@ package cats.free
 
 import cats.Functor
 import cats.arrow.FunctionK
-import cats.instances.all._
 import cats.kernel.Eq
 import cats.laws.discipline.{FunctorTests, SerializableTests}
 import cats.tests.CatsSuite

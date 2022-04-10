@@ -125,7 +125,6 @@ class ListSuite extends CatsSuite {
 final class ListInstancesSuite extends munit.FunSuite {
 
   test("NonEmptyParallel instance in cats.instances.list") {
-    import cats.instances.list._
     import cats.syntax.parallel._
 
     (List(1, 2, 3), List("A", "B", "C")).parTupled

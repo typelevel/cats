@@ -126,7 +126,6 @@ class VectorSuite extends CatsSuite {
 final class VectorInstancesSuite extends munit.FunSuite {
 
   test("NonEmptyParallel instance in cats.instances.vector") {
-    import cats.instances.vector._
     import cats.syntax.parallel._
 
     (Vector(1, 2, 3), Vector("A", "B", "C")).parTupled

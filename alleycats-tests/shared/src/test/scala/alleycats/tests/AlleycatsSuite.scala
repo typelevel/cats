@@ -23,7 +23,6 @@ package alleycats.tests
 
 import alleycats.std.MapInstances
 import cats._
-import cats.instances.all._
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalacheck.Test.Parameters
 

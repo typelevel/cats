@@ -23,7 +23,6 @@ package cats
 package instances
 
 import cats.data.Chain
-import cats.instances.StaticMethods.appendAll
 import cats.kernel.compat.scalaVersionSpecific._
 import cats.kernel.instances.StaticMethods.wrapMutableIndexedSeq
 import cats.syntax.show._

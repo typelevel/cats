@@ -24,7 +24,6 @@ package cats.free
 import cats._
 import cats.arrow.FunctionK
 import cats.data.EitherK
-import cats.instances.all._
 import cats.kernel.Eq
 import cats.syntax.eq._
 import cats.laws.discipline.{DeferTests, FoldableTests, MonadTests, SerializableTests, TraverseTests}

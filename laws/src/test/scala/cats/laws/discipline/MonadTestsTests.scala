@@ -22,8 +22,6 @@
 package cats
 package laws
 package discipline
-
-import cats.instances.all._
 import cats.laws.discipline.arbitrary._
 import munit.DisciplineSuite
 

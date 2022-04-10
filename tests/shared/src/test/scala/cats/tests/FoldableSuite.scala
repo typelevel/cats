@@ -23,7 +23,6 @@ package cats.tests
 
 import cats._
 import cats.data._
-import cats.instances.order._
 import cats.kernel.compat.scalaVersionSpecific._
 import cats.laws.discipline.arbitrary._
 import cats.syntax.all._

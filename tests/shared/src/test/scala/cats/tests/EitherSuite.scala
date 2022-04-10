@@ -399,7 +399,6 @@ class EitherSuite extends CatsSuite {
 final class EitherInstancesSuite extends munit.FunSuite {
 
   test("parallel instance in cats.instances.either") {
-    import cats.instances.either._
     import cats.syntax.parallel._
 
     def either: Either[String, Int] = Left("Test")

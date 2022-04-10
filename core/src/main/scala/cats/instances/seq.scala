@@ -23,7 +23,6 @@ package cats
 package instances
 
 import cats.data.{Chain, ZipSeq}
-import cats.instances.StaticMethods.appendAll
 import cats.kernel.compat.scalaVersionSpecific._
 
 import scala.annotation.tailrec

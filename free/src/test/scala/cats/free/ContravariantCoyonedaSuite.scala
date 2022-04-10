@@ -23,7 +23,6 @@ package cats.free
 
 import cats.{~>, Contravariant}
 import cats.arrow.FunctionK
-import cats.instances.all._
 import cats.kernel.Eq
 import cats.laws.discipline.{ContravariantTests, SerializableTests}
 import cats.tests.CatsSuite

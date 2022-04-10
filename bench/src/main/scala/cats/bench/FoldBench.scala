@@ -22,10 +22,6 @@
 package cats.bench
 
 import cats.data.Const
-import cats.instances.string._
-import cats.instances.list._
-import cats.instances.vector._
-import cats.instances.option._
 import cats.{Foldable, Traverse}
 import org.openjdk.jmh.annotations.{Benchmark, Scope, State}
 

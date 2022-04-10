@@ -22,9 +22,6 @@
 package cats.bench
 
 import cats.{Always, Applicative, Eval, Traverse}
-import cats.instances.either._
-import cats.instances.list._
-import cats.instances.vector._
 import org.openjdk.jmh.annotations.{Benchmark, Scope, State}
 
 @State(Scope.Benchmark)
