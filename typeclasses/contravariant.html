@@ -216,7 +216,7 @@
         <p>If we want to show a <code>Salary</code> instance, we can just convert it to a <code>Money</code> instance and show that instead.</p>
         <p>Let&#39;s use <code>Show</code>&#39;s <code>Contravariant</code>:</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">showSalary</span><span>: </span><span class="type-name">Show</span><span>[</span><span class="type-name">Salary</span><span>] = </span><span class="identifier">showMoney</span><span>.</span><span class="identifier">contramap</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">size</span><span>)
-</span><span class="comment">// showSalary: Show[Salary] = cats.Show$$anon$2@76c4a2ba
+</span><span class="comment">// showSalary: Show[Salary] = cats.Show$$anon$2@181d7e61
 </span><span>
 </span><span class="type-name">Salary</span><span>(</span><span class="type-name">Money</span><span>(</span><span class="number-literal">1000</span><span>)).</span><span class="identifier">show</span><span>
 </span><span class="comment">// res0: String = &quot;$1000&quot;</span></code></pre>
@@ -236,7 +236,7 @@
 </span><span class="keyword">import</span><span> </span><span class="identifier">scala</span><span>.</span><span class="identifier">math</span><span>.</span><span class="type-name">Ordered</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">moneyOrdering</span><span>: </span><span class="type-name">Ordering</span><span>[</span><span class="type-name">Money</span><span>] = </span><span class="type-name">Ordering</span><span>.</span><span class="identifier">by</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">amount</span><span>)
-</span><span class="comment">// moneyOrdering: Ordering[Money] = scala.math.Ordering$$anon$5@d87e948
+</span><span class="comment">// moneyOrdering: Ordering[Money] = scala.math.Ordering$$anon$5@2e97b6a9
 </span><span>
 </span><span class="type-name">Money</span><span>(</span><span class="number-literal">100</span><span>) &lt; </span><span class="type-name">Money</span><span>(</span><span class="number-literal">200</span><span>)
 </span><span class="comment">// res3: Boolean = true</span></code></pre>
@@ -246,17 +246,17 @@
         <pre><code class="nohighlight"><span class="keyword">class</span><span> </span><span class="type-name">A</span><span>
 </span><span class="keyword">class</span><span> </span><span class="type-name">B</span><span> </span><span class="keyword">extends</span><span> </span><span class="type-name">A</span><span>
 </span><span class="keyword">val</span><span> </span><span class="identifier">b</span><span>: </span><span class="type-name">B</span><span> = </span><span class="keyword">new</span><span> </span><span class="type-name">B</span><span>
-</span><span class="comment">// b: B = repl.MdocSession$App$B@3e064f7e
+</span><span class="comment">// b: B = repl.MdocSession$App$B@4840a176
 </span><span class="keyword">val</span><span> </span><span class="identifier">a</span><span>: </span><span class="type-name">A</span><span> = </span><span class="identifier">b</span><span>
-</span><span class="comment">// a: A = repl.MdocSession$App$B@3e064f7e
+</span><span class="comment">// a: A = repl.MdocSession$App$B@4840a176
 </span><span class="keyword">val</span><span> </span><span class="identifier">showA</span><span>: </span><span class="type-name">Show</span><span>[</span><span class="type-name">A</span><span>] = </span><span class="type-name">Show</span><span>.</span><span class="identifier">show</span><span>(</span><span class="identifier">a</span><span> =&gt; </span><span class="string-literal">&quot;a!&quot;</span><span>)
-</span><span class="comment">// showA: Show[A] = cats.Show$$anon$2@5cf51982
+</span><span class="comment">// showA: Show[A] = cats.Show$$anon$2@22db322f
 </span><span class="keyword">val</span><span> </span><span class="identifier">showB1</span><span>: </span><span class="type-name">Show</span><span>[</span><span class="type-name">B</span><span>] = </span><span class="identifier">showA</span><span>.</span><span class="identifier">contramap</span><span>(</span><span class="identifier">b</span><span> =&gt; </span><span class="identifier">b</span><span>: </span><span class="type-name">A</span><span>)
-</span><span class="comment">// showB1: Show[B] = cats.Show$$anon$2@f77b1d4
+</span><span class="comment">// showB1: Show[B] = cats.Show$$anon$2@51c6ae63
 </span><span class="keyword">val</span><span> </span><span class="identifier">showB2</span><span>: </span><span class="type-name">Show</span><span>[</span><span class="type-name">B</span><span>] = </span><span class="identifier">showA</span><span>.</span><span class="identifier">contramap</span><span>(</span><span class="identifier">identity</span><span>[</span><span class="type-name">A</span><span>])
-</span><span class="comment">// showB2: Show[B] = cats.Show$$anon$2@3d08d4db
+</span><span class="comment">// showB2: Show[B] = cats.Show$$anon$2@42f7680c
 </span><span class="keyword">val</span><span> </span><span class="identifier">showB3</span><span>: </span><span class="type-name">Show</span><span>[</span><span class="type-name">B</span><span>] = </span><span class="type-name">Contravariant</span><span>[</span><span class="type-name">Show</span><span>].</span><span class="identifier">narrow</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>](</span><span class="identifier">showA</span><span>)
-</span><span class="comment">// showB3: Show[B] = cats.Show$$anon$2@5cf51982</span></code></pre>
+</span><span class="comment">// showB3: Show[B] = cats.Show$$anon$2@22db322f</span></code></pre>
         <p>Subtyping relationships are &quot;lifted backwards&quot; by contravariant functors, such that if <code>F</code> is a
         lawful contravariant functor and <code>B &lt;: A</code> then <code>F[A] &lt;: F[B]</code>, which is expressed by <code>Contravariant.narrow</code>.</p>
 
