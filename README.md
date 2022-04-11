@@ -1,6 +1,6 @@
 ## Cats
 
-![Cats graphic](https://raw.githubusercontent.com/typelevel/cats/main/docs/src/main/resources/microsite/img/cats2.png)
+![Cats graphic](https://typelevel.org/cats/img/cats2.png)
 
 [![cats-core Scala version support](https://index.scala-lang.org/typelevel/cats/cats-core/latest-by-scala-version.svg?targetType=Js)](https://index.scala-lang.org/typelevel/cats/cats-core) ![Continuous Integration](https://github.com/typelevel/cats/workflows/Continuous%20Integration/badge.svg)
 [![Financial Contributors on Open Collective](https://opencollective.com/typelevel/all/badge.svg?label=financial+contributors)](https://opencollective.com/typelevel)
@@ -11,9 +11,9 @@
 Cats is a library which provides abstractions for functional programming in the [Scala programming language](https://scala-lang.org).
 
 Scala supports both object-oriented and functional programming, and this is reflected in the hybrid approach of the
-standard library. Cats strives to provide functional programming abstractions that are core, [binary compatible](http://typelevel.org/cats/#binary-compatibility-and-versioning), [modular](http://typelevel.org/cats/motivations#modularity), [approachable](http://typelevel.org/cats/motivations#approachability) and [efficient](http://typelevel.org//cats/motivations#efficiency). A broader goal of Cats is to provide a foundation for an [ecosystem of pure, typeful libraries](https://typelevel.org/cats/#ecosystem) to support functional programming in Scala applications.
+standard library. Cats strives to provide functional programming abstractions that are core, [binary compatible](#binary-compatibility-and-versioning), [modular](https://typelevel.org/cats/motivations.html#modularity), [approachable](https://typelevel.org/cats/motivations.html#approachability) and [efficient](https://typelevel.org/cats/motivations.html#efficiency). A broader goal of Cats is to provide a foundation for an [ecosystem of pure, typeful libraries](https://typelevel.org/cats/typelevelEcosystem.html) to support functional programming in Scala applications.
 
-For more detail about Cats' motivations, go [here](http://typelevel.org/cats/motivations).
+For more detail about Cats' motivations, go [here](https://typelevel.org/cats/motivations.html).
 
 ### Why "cats"?
 
@@ -26,7 +26,7 @@ Regardless, you do not need to know anything about category theory to use Cats.
 ### Code Contributors
 
 This project exists thanks to [all the people who contribute](https://github.com/typelevel/cats/graphs/contributors). We welcome contributions to Cats and would love for you to help build
-Cats. See our [contributor guide](https://typelevel.org/cats/contributing.html) for more
+Cats. See our [contributor guide](CONTRIBUTING.md) for more
 information about how you can get involved as a developer. If you are looking for something to start with, [here is a beginner friendly list](https://github.com/typelevel/cats/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22).
 
 ### Financial Contributors
@@ -36,31 +36,31 @@ information about how you can get involved as a developer. If you are looking fo
 <h4>Platinum Sponsors</h4>
 <a href="https://opencollective.com/typelevel/contribute/platinum-sposor-12420/checkout">Platinum sponsorship</a> starts at $950 USD/month.
 <div id="platinum-sponsors">
-  <noscript>Platinum Sponsors appear here at <a href="https://typelevel.org/cats/">https://typelevel.org/cats</a></noscript>
+  <noscript>Platinum Sponsors appear here at <a href="">https://typelevel.org/cats</a></noscript>
 </div>
 
 <h4>Gold Sponsors</h4>
 <a href="https://opencollective.com/typelevel/contribute/gold-sponsor-12419/checkout">Gold Sponsorship</a> starts at $420 USD/month.
 <div id="gold-sponsors">
-  <noscript>Gold Sponsors appear here at <a href="https://typelevel.org/cats/">https://typelevel.org/cats</a></noscript>
+  <noscript>Gold Sponsors appear here at <a href="">https://typelevel.org/cats</a></noscript>
 </div>
 
 <h4>Silver Sponsors</h4>
 <a href="https://opencollective.com/typelevel/contribute/silver-sponsor-11780/checkout">Silver Sponsorship</a> starts at $180 USD/month.
 <div id="silver-sponsors">
-  <noscript>Silver Sponsors appear here at <a href="https://typelevel.org/cats/">https://typelevel.org/cats</a></noscript>
+  <noscript>Silver Sponsors appear here at <a href="">https://typelevel.org/cats</a></noscript>
 </div>
 
 <h4>Backers</h4>
 Become a <a href="https://opencollective.com/typelevel/contribute/backer-11779/checkout">Backer</a> with a recurring donation of just $5 USD/month.
 <div id="backers">
-  <noscript>Backers appear here at <a href="https://typelevel.org/cats/">https://typelevel.org/cats</a></noscript>
+  <noscript>Backers appear here at <a href="">https://typelevel.org/cats</a></noscript>
 </div>
 
 <h4>Other contributors</h4>
 We thankfully accept <a href="https://opencollective.com/typelevel/donate">one-time and recurring</a> contributions as well.
 <div id="other-contributors">
-  <noscript>Other contributors appear here at <a href="https://typelevel.org/cats/">https://typelevel.org/cats</a></noscript>
+  <noscript>Other contributors appear here at <a href="">https://typelevel.org/cats</a></noscript>
 </div>
 
 <script src="/cats/js/sponsors.js"></script>
@@ -120,13 +120,13 @@ Links:
 
 1. Website: [typelevel.org/cats/](https://typelevel.org/cats/)
 2. ScalaDoc: [typelevel.org/cats/api/](https://typelevel.org/cats/api/)
-3. Type classes: [typelevel.org/cats/typeclasses](https://typelevel.org/cats/typeclasses.html)
-4. Data types: [typelevel.org/cats/datatypes.html](https://typelevel.org/cats/datatypes.html)
-5. Algebra overview: [typelevel.org/cats/algebra.html](https://typelevel.org/cats/algebra.html)
-6. Glossary: [typelevel.org/cats/nomenclature.html](https://typelevel.org/cats/nomenclature.html)
-7. Resources for Learners: [typelevel.org/cats/resources_for_learners.html](https://typelevel.org/cats/resources_for_learners.html)
-8. FAQ: [typelevel.org/cats/faq.html](https://typelevel.org/cats/faq.html)
-9. The Typelevel Ecosystem: [typelevel.org/cats/typelevelEcosystem.html](https://typelevel.org/cats/typelevelEcosystem.html)
+3. Type classes: [typelevel.org/cats/typeclasses](https://typelevel.org/cats/typeclasses.md)
+4. Data types: [typelevel.org/cats/datatypes.html](https://typelevel.org/cats/datatypes.md)
+5. Algebra overview: [typelevel.org/cats/algebra.html](https://typelevel.org/cats/algebra.md)
+6. Glossary: [typelevel.org/cats/nomenclature.html](https://typelevel.org/cats/nomenclature.md)
+7. Resources for Learners: [typelevel.org/cats/resources_for_learners.html](https://typelevel.org/cats/resources_for_learners.md)
+8. FAQ: [typelevel.org/cats/faq.html](https://typelevel.org/cats/faq.md)
+9. The Typelevel Ecosystem: [typelevel.org/cats/typelevelEcosystem.html](https://typelevel.org/cats/typelevelEcosystem.md)
 
 ### Community
 
@@ -196,12 +196,13 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [buildo](https://buildo.io)
 - [BUX](https://getbux.com/)
 - [Chartboost](https://www.chartboost.com/)
+- [ClearScore](https://clearscore.com/)
 - [Cleverbase](https://cleverbase.com/en/)
 - [Codacy](https://www.codacy.com/)
 - [Code Dx](https://codedx.com/)
 - [Codecentric](https://codecentric.de)
 - [Colisweb](https://www.colisweb.com/)
-- [CompStak](compstak.com)
+- [CompStak](https://compstak.com)
 - [Coya](https://coya.com/)
 - [Datum Brain](https://datumbrain.com/)
 - [Disney](https://disney.com/)
@@ -334,7 +335,7 @@ relax this to a single sign-off. More detail in the [process document](https://g
 
 All code is available to you under the MIT license, available at
 http://opensource.org/licenses/mit-license.php and also in the
-[COPYING](COPYING) file. The design is informed by many other
+[COPYING](https://github.com/typelevel/cats/blob/main/COPYING) file. The design is informed by many other
 projects, in particular [Scalaz](https://github.com/scalaz/scalaz).
 
-Copyright the maintainers, 2015-2021.
+Copyright the maintainers, 2015-2022.

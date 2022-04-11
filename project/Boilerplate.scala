@@ -279,7 +279,7 @@ object Boilerplate {
         -  /** @group MapArity */
         -  def map$arity[${`A..N`}, Z]($fparams)(f: (${`A..N`}) => Z): F[Z] = Semigroupal.map$arity($fparams)(f)(self, self)
         -  /** @group TupleArity */
-        -  def tuple$arity[${`A..N`}, Z]($fparams): F[(${`A..N`})] = Semigroupal.tuple$arity($fparams)(self, self)
+        -  def tuple$arity[${`A..N`}]($fparams): F[(${`A..N`})] = Semigroupal.tuple$arity($fparams)(self, self)
       |}
       """
     }
