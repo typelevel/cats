@@ -71,8 +71,33 @@ object Semigroupal extends ScalaVersionSpecificSemigroupalInstances with Semigro
   implicit def catsSemigroupalForId: Semigroupal[Id] = catsInstancesForId
   implicit def catsSemigroupalForOption: Semigroupal[Option] = cats.instances.option.catsStdInstancesForOption
   implicit def catsSemigroupalForTry: Semigroupal[Try] = cats.instances.try_.catsStdInstancesForTry
+
+  @deprecated(
+    // format: off
+    message =
+"""
+Instances for scala.concurrent.Future have been deprecated,
+and will be moved into alleycats-core in cats 3.
+
+The rationale for the change is that given the nature of Future
+cats can't guarantee the appropriate behaviour of its instance.
+
+If you want to silence this warning you can add this to your scalacOptions:
+"-Wconf:cat=deprecation&origin=cats\\..*\\..*ForFuture:s"
+
+You may also prepare for this change and use alleycats right now.
+Import the library: "org.typelevel" %% "alleycats-core" % "..."
+And import alleycats.std.future._ in this file;
+if you require the future instances in multiple files
+you can add the following scalacOptions to automatically add the import in all files:
+"-Yimports", "java.lang", "scala", "scala.Predef", "alleycats.std.future"
+""",
+    // format: on
+    since = "2.8.0"
+  )
   implicit def catsSemigroupalForFuture(implicit ec: ExecutionContext): Semigroupal[Future] =
     cats.instances.future.catsStdInstancesForFuture(ec)
+
   implicit def catsSemigroupalForList: Semigroupal[List] = cats.instances.list.catsStdInstancesForList
   implicit def catsSemigroupalForSeq: Semigroupal[Seq] = cats.instances.seq.catsStdInstancesForSeq
   implicit def catsSemigroupalForVector: Semigroupal[Vector] = cats.instances.vector.catsStdInstancesForVector

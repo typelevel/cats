@@ -26,7 +26,7 @@ import scala.concurrent.Future
 
 object future extends FutureInstances
 
-trait FutureInstances {
+trait FutureInstances extends cats.instances.FutureInstances {
 
   implicit val alleycatsStdFuturePure: Pure[Future] =
     new Pure[Future] {

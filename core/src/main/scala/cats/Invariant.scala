@@ -153,6 +153,30 @@ object Invariant extends ScalaVersionSpecificInvariantInstances with InvariantIn
 
   implicit def catsInstancesForTry: MonadThrow[Try] with CoflatMap[Try] =
     cats.instances.try_.catsStdInstancesForTry
+
+  @deprecated(
+    // format: off
+    message =
+"""
+Instances for scala.concurrent.Future have been deprecated,
+and will be moved into alleycats-core in cats 3.
+
+The rationale for the change is that given the nature of Future
+cats can't guarantee the appropriate behaviour of its instance.
+
+If you want to silence this warning you can add this to your scalacOptions:
+"-Wconf:cat=deprecation&origin=cats\\..*\\..*ForFuture:s"
+
+You may also prepare for this change and use alleycats right now.
+Import the library: "org.typelevel" %% "alleycats-core" % "..."
+And import alleycats.std.future._ in this file;
+if you require the future instances in multiple files
+you can add the following scalacOptions to automatically add the import in all files:
+"-Yimports", "java.lang", "scala", "scala.Predef", "alleycats.std.future"
+""",
+    // format: on
+    since = "2.8.0"
+  )
   implicit def catsInstancesForFuture(implicit
     ec: ExecutionContext
   ): MonadThrow[Future] with CoflatMap[Future] =
