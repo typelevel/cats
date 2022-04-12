@@ -166,15 +166,10 @@ ThisBuild / mimaBinaryIssueFilters ++= {
     )
 }
 
-// TODO: remove these filters after MiMa 1.1.0 is released with improved support for Scala 3
 ThisBuild / mimaBinaryIssueFilters ++= {
   if (tlIsScala3.value)
     Seq(
       exclude[DirectMissingMethodProblem]("cats.free.ContravariantCoyoneda.unsafeApply"),
-      exclude[DirectMissingMethodProblem]("cats.free.ContravariantCoyoneda.ks"),
-      exclude[DirectMissingMethodProblem]("cats.free.ContravariantCoyoneda.unsafeApply"),
-      exclude[DirectMissingMethodProblem]("cats.free.Coyoneda.unsafeApply"),
-      exclude[DirectMissingMethodProblem]("cats.free.Coyoneda.ks"),
       exclude[DirectMissingMethodProblem]("cats.free.Coyoneda.unsafeApply")
     )
   else Nil

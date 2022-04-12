@@ -43,28 +43,6 @@ ThisBuild / githubWorkflowAddedJobs ++= Seq(
   )
 )
 
-def scalaVersionSpecificFolders(srcName: String, srcBaseDir: java.io.File, scalaVersion: String) = {
-  def extraDirs(suffix: String) =
-    List(CrossType.Pure, CrossType.Full)
-      .flatMap(_.sharedSrcDir(srcBaseDir, srcName).toList.map(f => file(f.getPath + suffix)))
-  CrossVersion.partialVersion(scalaVersion) match {
-    case Some((2, y))     => if (y >= 13) extraDirs("-2.13+") else Nil
-    case Some((0 | 3, _)) => extraDirs("-2.13+")
-    case _                => Nil
-  }
-}
-
-lazy val commonSettings = Seq(
-  Compile / unmanagedSourceDirectories ++= scalaVersionSpecificFolders("main", baseDirectory.value, scalaVersion.value),
-  Test / unmanagedSourceDirectories ++= scalaVersionSpecificFolders("test", baseDirectory.value, scalaVersion.value),
-  Compile / packageSrc / mappings ++= {
-    val base = (Compile / sourceManaged).value
-    (Compile / managedSources).value.map { file =>
-      file -> file.relativeTo(base).get.getPath
-    }
-  }
-)
-
 lazy val macroSettings = Seq(
   libraryDependencies ++= {
     if (tlIsScala3.value)
@@ -146,7 +124,7 @@ lazy val kernel = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .crossType(CrossType.Pure)
   .in(file("kernel"))
   .settings(moduleName := "cats-kernel", name := "Cats kernel")
-  .settings(commonSettings, testingDependencies)
+  .settings(testingDependencies)
   .settings(Compile / sourceGenerators += (Compile / sourceManaged).map(KernelBoiler.gen).taskValue)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings, cats1BincompatSettings)
@@ -156,7 +134,6 @@ lazy val kernelLaws = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .in(file("kernel-laws"))
   .dependsOn(kernel)
   .settings(moduleName := "cats-kernel-laws", name := "Cats kernel laws")
-  .settings(commonSettings)
   .settings(disciplineDependencies)
   .settings(testingDependencies)
   .jsSettings(commonJsSettings)
@@ -173,7 +150,6 @@ lazy val algebra = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .in(file("algebra-core"))
   .dependsOn(kernel)
   .settings(moduleName := "algebra", name := "Cats algebra")
-  .settings(commonSettings)
   .settings(Compile / sourceGenerators += (Compile / sourceManaged).map(AlgebraBoilerplate.gen).taskValue)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
@@ -188,7 +164,6 @@ lazy val algebraLaws = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .in(file("algebra-laws"))
   .dependsOn(kernelLaws, algebra)
   .settings(moduleName := "algebra-laws", name := "Cats algebra laws")
-  .settings(commonSettings)
   .settings(disciplineDependencies)
   .settings(testingDependencies)
   .jsSettings(commonJsSettings)
@@ -200,7 +175,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .crossType(CrossType.Pure)
   .dependsOn(kernel)
   .settings(moduleName := "cats-core", name := "Cats core")
-  .settings(commonSettings, macroSettings, simulacrumSettings)
+  .settings(macroSettings, simulacrumSettings)
   .settings(Compile / sourceGenerators += (Compile / sourceManaged).map(Boilerplate.gen).taskValue)
   .settings(
     libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % Test,
@@ -215,7 +190,6 @@ lazy val laws = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .crossType(CrossType.Pure)
   .dependsOn(kernel, core, kernelLaws)
   .settings(moduleName := "cats-laws", name := "Cats laws")
-  .settings(commonSettings)
   .settings(disciplineDependencies)
   .settings(testingDependencies)
   .jsSettings(commonJsSettings)
@@ -226,7 +200,6 @@ lazy val free = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .crossType(CrossType.Pure)
   .dependsOn(core, tests % "test-internal -> test")
   .settings(moduleName := "cats-free", name := "Cats Free")
-  .settings(commonSettings)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings, cats1BincompatSettings)
   .nativeSettings(commonNativeSettings)
@@ -235,7 +208,6 @@ lazy val tests = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .dependsOn(testkit % Test)
   .enablePlugins(NoPublishPlugin)
   .settings(moduleName := "cats-tests")
-  .settings(commonSettings)
   .settings(testingDependencies)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
@@ -247,7 +219,6 @@ lazy val testkit = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .enablePlugins(BuildInfoPlugin)
   .settings(buildInfoKeys := Seq[BuildInfoKey](scalaVersion), buildInfoPackage := "cats.tests")
   .settings(moduleName := "cats-testkit")
-  .settings(commonSettings)
   .settings(disciplineDependencies)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
@@ -258,7 +229,6 @@ lazy val alleycatsCore = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .in(file("alleycats-core"))
   .dependsOn(core)
   .settings(moduleName := "alleycats-core", name := "Alleycats core")
-  .settings(commonSettings)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
   .nativeSettings(commonNativeSettings)
@@ -268,7 +238,6 @@ lazy val alleycatsLaws = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .in(file("alleycats-laws"))
   .dependsOn(alleycatsCore, laws)
   .settings(moduleName := "alleycats-laws", name := "Alleycats laws")
-  .settings(commonSettings)
   .settings(disciplineDependencies)
   .settings(testingDependencies)
   .jsSettings(commonJsSettings)
@@ -280,7 +249,6 @@ lazy val alleycatsTests = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .dependsOn(alleycatsLaws, tests % "test-internal -> test")
   .enablePlugins(NoPublishPlugin)
   .settings(moduleName := "alleycats-tests")
-  .settings(commonSettings)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
   .nativeSettings(commonNativeSettings)
@@ -298,14 +266,12 @@ lazy val unidocs = project
     scalacOptions ~= { _.filterNot(_.startsWith("-W")) }, // weird nsc bug
     ScalaUnidoc / unidoc / scalacOptions ++= Seq("-groups", "-diagrams")
   )
-  .settings(commonSettings)
 
 // bench is currently JVM-only
 
 lazy val bench = project
   .dependsOn(core.jvm, free.jvm, laws.jvm)
   .settings(moduleName := "cats-bench")
-  .settings(commonSettings)
   .settings(commonJvmSettings)
   .settings(
     libraryDependencies ++= {
