@@ -68,6 +68,14 @@ sealed abstract class UnorderedFoldableSuite[F[_]](name: String)(implicit
       assert(fa.count(Function.const(true)) === (fa.size))
     }
   }
+
+  test(s"UnorderedFoldable[$name].contains") {
+    forAll { (fa: F[String], v: String) =>
+      implicit val F: UnorderedFoldable[F] = instance
+      assert(fa.contains_(v) === (iterator(fa).contains(v)))
+    }
+  }
+
   checkAll("F[Int]", UnorderedFoldableTests[F](instance).unorderedFoldable[Int, Int])
 }
 

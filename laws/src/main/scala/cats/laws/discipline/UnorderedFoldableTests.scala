@@ -49,7 +49,10 @@ trait UnorderedFoldableTests[F[_]] extends Laws {
       "forall true if empty" -> forAll(laws.forallEmpty[A] _),
       "nonEmpty reference" -> forAll(laws.nonEmptyRef[A] _),
       "exists is lazy" -> forAll(laws.existsLazy[A] _),
-      "forall is lazy" -> forAll(laws.forallLazy[A] _)
+      "forall is lazy" -> forAll(laws.forallLazy[A] _),
+      "contains consistent with exists" -> forAll(laws.containsConsistentWithExists[A] _),
+      "contains consistent with forall" -> forAll(laws.containsConsistentWithForall[A] _),
+      "contains all elements from itself" -> forAll(laws.containsAllElementsFromItself[A] _)
     )
 }
 

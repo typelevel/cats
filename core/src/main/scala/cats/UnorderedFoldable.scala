@@ -37,6 +37,12 @@ import simulacrum.{noop, typeclass}
     unorderedFoldMap(fa)(identity)
 
   /**
+   * Tests if `fa` contains `v` using the `Eq` instance for `A`
+   */
+  def contains_[A](fa: F[A], v: A)(implicit ev: Eq[A]): Boolean =
+    exists(fa)(a => ev.eqv(a, v))
+
+  /**
    * Returns true if there are no elements. Otherwise false.
    */
   def isEmpty[A](fa: F[A]): Boolean =

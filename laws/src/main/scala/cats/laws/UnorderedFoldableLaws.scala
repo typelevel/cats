@@ -69,6 +69,14 @@ trait UnorderedFoldableLaws[F[_]] {
   def nonEmptyRef[A](fa: F[A]): IsEq[Boolean] =
     F.nonEmpty(fa) <-> !F.isEmpty(fa)
 
+  def containsConsistentWithExists[A](fa: F[A], v: A)(implicit eq: Eq[A]): IsEq[Boolean] =
+    F.contains_(fa, v) <-> F.exists(fa)(a => eq.eqv(a, v))
+
+  def containsConsistentWithForall[A](fa: F[A], v: A)(implicit eq: Eq[A]): IsEq[Boolean] =
+    !F.contains_(fa, v) <-> F.forall(fa)(a => eq.neqv(a, v))
+
+  def containsAllElementsFromItself[A](fa: F[A])(implicit eq: Eq[A]): Boolean =
+    F.forall(fa)(a => F.contains_(fa, a))
 }
 
 object UnorderedFoldableLaws {
