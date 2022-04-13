@@ -21,9 +21,11 @@
 
 package cats.data
 
+import cats.Show
 import cats.kernel.Hash
 import cats.kernel.instances.StaticMethods
-import cats.Show
+import cats.syntax.eq._
+import java.util.Arrays
 
 /**
   * An immutable hash set using [[cats.kernel.Hash]] for hashing.
@@ -137,32 +139,12 @@ final class HashSet[A](
    * @return `true` if this set and `that` are equal, `false` otherwise.
    */
   def ===(that: HashSet[A]): Boolean = {
-    (this eq that) || {
-      val iterThis = iterator
-      val iterThat = that.iterator
-      this == that
-
-      while (iterThis.hasNext && iterThat.hasNext) {
-        if (hash.neqv(iterThis.next(), iterThat.next())) return false
-      }
-
-      iterThis.hasNext == iterThat.hasNext
-    }
+    (this eq that) || (this.rootNode === that.rootNode)
   }
 
   override def equals(that: Any): Boolean = that match {
     case set: HashSet[_] =>
-      (this eq set) || {
-        val iterThis = iterator
-        val iterThat = set.iterator
-
-        while (iterThis.hasNext && iterThat.hasNext) {
-          if (iterThis.next() != iterThat.next()) return false
-        }
-
-        iterThis.hasNext == iterThat.hasNext
-      }
-
+      (this eq set) || (this.rootNode == set.rootNode)
     case _ =>
       false
   }
@@ -305,6 +287,19 @@ object HashSet {
     def remove(removeElement: A, removeElementHash: Int, depth: Int): Node[A]
 
     /**
+     * Typesafe equality operator.
+     *
+     * This method is similar to [[scala.Any#==]] except that it only allows two [[cats.data.HashSet.Node]]
+     * values of the same element type to be compared to each other, and uses equality provided
+     * by [[cats.kernel.Eq]] instances, rather than using the universal equality provided by
+     * [[java.lang.Object#equals]].
+     *
+     * @param that the [[cats.data.HashSet.Node]] to check for equality with this set.
+     * @return `true` if this set and `that` are equal, `false` otherwise.
+     */
+    def ===(that: Node[A]): Boolean
+
+    /**
       * An approximation of the CHAMP "branch size", used for the deletion algorithm.
       *
       * The branch size indicates the number of elements transitively reachable from this node, but that is expensive to compute.
@@ -389,6 +384,26 @@ object HashSet {
           new BitMapNode(bitPos, 0, newContents.toArray, newContents.size)
         }
       }
+
+    def ===(that: Node[A]): Boolean = {
+      (this eq that) || {
+        that match {
+          case node: CollisionNode[_] =>
+            (this.collisionHash === node.collisionHash) &&
+            this.contents.forall(a => node.contents.exists(hash.eqv(a, _)))
+          case _ =>
+            false
+        }
+      }
+    }
+
+    override def equals(that: Any): Boolean = that match {
+      case node: CollisionNode[_] =>
+        (this.collisionHash === node.collisionHash) &&
+        this.contents.forall(node.contents.contains)
+      case _ =>
+        false
+    }
 
     override def toString(): String = {
       s"""CollisionNode(hash=${collisionHash}, values=${contents.mkString("[", ",", "]")})"""
@@ -624,6 +639,46 @@ object HashSet {
       }
     }
 
+    override def ===(that: Node[A]): Boolean = {
+      (this eq that) || {
+        that match {
+          case node: BitMapNode[_] =>
+            (this.valueMap === node.valueMap) &&
+            (this.nodeMap === node.nodeMap) &&
+            (this.size === node.size) && {
+              var i = 0
+              while (i < valueElements) {
+                if (hash.neqv(getValue(i), node.getValue(i))) return false
+                i += 1
+              }
+              i = 0
+              while (i < nodeElements) {
+                if (!(getNode(i) === node.getNode(i))) return false
+                i += 1
+              }
+              true
+            }
+          case _ =>
+            false
+        }
+      }
+    }
+
+    override def equals(that: Any): Boolean = that match {
+      case node: BitMapNode[_] =>
+        (this eq node) || {
+          (this.valueMap == node.valueMap) &&
+          (this.nodeMap == node.nodeMap) &&
+          (this.size == node.size) &&
+          Arrays.equals(
+            this.contents.asInstanceOf[Array[Object]],
+            node.contents.asInstanceOf[Array[Object]]
+          )
+        }
+      case _ =>
+        false
+    }
+
     override def toString(): String = {
       val valueMapStr =
         "0".repeat(Integer.numberOfLeadingZeros(if (valueMap != 0) valueMap else 1)) + Integer.toBinaryString(valueMap)
@@ -683,11 +738,11 @@ object HashSet {
       Integer.bitCount(bitMap & (bitPos - 1))
 
     /**
-        * Creates a new empty bitmap node.
-        *
-        * @param hash the [[cats.kernel.Hash]] instance to use to hash elements.
-        * @return a new empty bitmap node.
-        */
+      * Creates a new empty bitmap node.
+      *
+      * @param hash the [[cats.kernel.Hash]] instance to use to hash elements.
+      * @return a new empty bitmap node.
+      */
     def empty[A](implicit hash: Hash[A]): Node[A] =
       new BitMapNode(0, 0, Array.empty[Any], 0)
   }

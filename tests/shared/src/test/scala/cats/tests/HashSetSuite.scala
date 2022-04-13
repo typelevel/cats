@@ -62,7 +62,7 @@ class HashSetSuite extends CatsSuite {
     forAll { (leftInts: List[Int], rightInts: List[Int]) =>
       val left = HashSet.fromSeq(leftInts)
       val right = HashSet.fromSeq(rightInts)
-      assert((leftInts === rightInts) === (left === right))
+      assert((leftInts.distinct === rightInts.distinct) === (left === right))
     }
   }
 
