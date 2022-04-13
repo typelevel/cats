@@ -380,6 +380,12 @@ class ChainSuite extends CatsSuite {
     }
   }
 
+  test("Chain#distinctBy is consistent with List#distinctBy") {
+    forAll { (a: Chain[Int], f: Int => String) =>
+      assertEquals(a.distinctBy(f).toList, a.toList.distinctBy(f))
+    }
+  }
+
   test("=== is consistent with == (issue #2540)") {
     assertEquals(Chain.one(1) |+| Chain.one(2) |+| Chain.one(3), Chain.fromSeq(List(1, 2, 3)))
 
