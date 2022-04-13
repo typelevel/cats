@@ -270,7 +270,6 @@ object HashSet {
       * @param newElement the element to add.
       * @param newElementHash the hash of the element to add.
       * @param depth the 0-indexed depth in the trie structure.
-      * @param hash the [[cats.kernel.Hash]] instance to use to hash elements.
       * @return a new [[HashSet.Node]] containing the element to add.
       */
     def add(newElement: A, newElementHash: Int, depth: Int): Node[A]
@@ -281,7 +280,6 @@ object HashSet {
       * @param removeElement the element to remove.
       * @param removeElementHash the 32-bit hash of the element to remove.
       * @param depth the 0-indexed depth in the trie structure.
-      * @param eq the [[cats.kernel.Eq]] instance to use to compare elements.
       * @return a new [[HashSet.Node]] with the element removed.
       */
     def remove(removeElement: A, removeElementHash: Int, depth: Int): Node[A]
@@ -414,9 +412,10 @@ object HashSet {
     * A CHAMP bitmap node. Stores value element and node element positions in the `contents` array
     * in the `valueMap` and `nodeMap` integer bitmaps.
     *
-    * @param valueMap
-    * @param nodeMap
-    * @param contents
+    * @param valueMap integer bitmap indicating the notional positions of value elements in the `contents` array.
+    * @param nodeMap integer bitmap indicating the notional positions of node elements in the `contents` array.
+    * @param contents an array of `A` value elements and `Node[A]` sub-node elements.
+    * @param size the number of value elements in this subtree.
     */
   final class BitMapNode[A](
     val valueMap: Int,
