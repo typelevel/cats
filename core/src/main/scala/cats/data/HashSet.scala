@@ -388,6 +388,7 @@ object HashSet {
         that match {
           case node: CollisionNode[_] =>
             (this.collisionHash === node.collisionHash) &&
+            (this.contents.size === node.contents.size) &&
             this.contents.forall(a => node.contents.exists(hash.eqv(a, _)))
           case _ =>
             false
@@ -397,7 +398,8 @@ object HashSet {
 
     override def equals(that: Any): Boolean = that match {
       case node: CollisionNode[_] =>
-        (this.collisionHash === node.collisionHash) &&
+        (this.collisionHash == node.collisionHash) &&
+        (this.contents.size == node.contents.size) &&
         this.contents.forall(node.contents.contains)
       case _ =>
         false
