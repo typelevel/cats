@@ -681,9 +681,9 @@ object HashSet {
 
     override def toString(): String = {
       val valueMapStr =
-        "0".repeat(Integer.numberOfLeadingZeros(if (valueMap != 0) valueMap else 1)) + Integer.toBinaryString(valueMap)
+        ("0" * Integer.numberOfLeadingZeros(if (valueMap != 0) valueMap else 1)) + Integer.toBinaryString(valueMap)
       val nodeMapStr =
-        "0".repeat(Integer.numberOfLeadingZeros(if (nodeMap != 0) nodeMap else 1)) + Integer.toBinaryString(nodeMap)
+        ("0" * Integer.numberOfLeadingZeros(if (nodeMap != 0) nodeMap else 1)) + Integer.toBinaryString(nodeMap)
 
       s"""BitMapNode(valueMap=$valueMapStr, nodeMap=$nodeMapStr, contents=${contents.mkString("[", ", ", "]")})"""
     }
