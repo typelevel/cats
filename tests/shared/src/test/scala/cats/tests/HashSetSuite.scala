@@ -22,6 +22,11 @@
 package cats.tests
 
 import cats.data.HashSet
+import cats.kernel.laws.discipline.CommutativeMonoidTests
+import cats.kernel.laws.discipline.HashTests
+import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.UnorderedFoldableTests
+import cats.laws.discipline.SerializableTests
 import cats.syntax.eq._
 import org.scalacheck.Gen
 import org.scalacheck.Prop.forAll
@@ -36,6 +41,17 @@ class HashSetSuite extends CatsSuite {
   } yield (first, second)
 
   val colliding = Gen.listOf(Gen.oneOf(collisions))
+
+  checkAll("HashSet[Int]", HashTests[HashSet[Int]].hash)
+  checkAll("Hash[HashSet[Int]]", SerializableTests.serializable(HashSet.catsDataHashForHashSet[Int]))
+
+  checkAll("HashSet[Int]", UnorderedFoldableTests[HashSet].unorderedFoldable[Int, Int])
+  checkAll("UnorderedFoldable[HashSet]", SerializableTests.serializable(HashSet.catsDataUnorderedFoldableForHashSet))
+
+  checkAll("HashSet[String]", CommutativeMonoidTests[HashSet[String]].commutativeMonoid)
+  checkAll("CommutativeMonoid[HashSet[String]]",
+           SerializableTests.serializable(HashSet.catsDataCommutativeMonoidForHashSet[String])
+  )
 
   test("show") {
     assert(HashSet(1, 2, 3).show === "HashSet(1, 2, 3)")
@@ -75,6 +91,18 @@ class HashSetSuite extends CatsSuite {
       val hashSet = HashSet.fromSeq(ints)
       assert(hashSet.size === ints.distinct.size)
     }
+  }
+
+  test("union") {
+    assert(HashSet.empty[Int].union(HashSet(1, 2, 3)) === HashSet(1, 2, 3))
+    assert(HashSet(1, 2, 3).union(HashSet.empty[Int]) === HashSet(1, 2, 3))
+
+    assert(HashSet(1, 2, 3).union(HashSet(1, 2, 3)) === HashSet(1, 2, 3))
+
+    assert(HashSet(1, 2, 3).union(HashSet(4, 5, 6)) === HashSet(1, 2, 3, 4, 5, 6))
+
+    assert(HashSet("Aa").union(HashSet("BB")) == HashSet("Aa", "BB"))
+    assert(HashSet("Aa", "BB").union(HashSet("Aa", "BB", "Ca", "DB")) == HashSet("Aa", "BB", "Ca", "DB"))
   }
 
   property("Empty HashSet never contains") {
@@ -240,6 +268,15 @@ class HashSetSuite extends CatsSuite {
       hashSet.foreach { _ => size += 1 }
 
       assert(hashSet.size === size)
+    }
+  }
+
+  property("union consistent with Scala Set union") {
+    forAll { (left: List[Int], right: List[Int]) =>
+      val scalaSet = Set(left: _*) | Set(right: _*)
+      val catsSet = HashSet.fromSeq(left).union(HashSet.fromSeq(right))
+      assert(scalaSet.forall(catsSet.contains))
+      catsSet.foreach(int => assert(scalaSet.contains(int)))
     }
   }
 }

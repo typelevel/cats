@@ -22,6 +22,8 @@
 package cats.data
 
 import cats.Show
+import cats.UnorderedFoldable
+import cats.kernel.CommutativeMonoid
 import cats.kernel.Hash
 import cats.kernel.instances.StaticMethods
 import cats.syntax.eq._
@@ -125,6 +127,23 @@ final class HashSet[A](
       this
     else
       new HashSet(newRootNode)
+  }
+
+  final def union(set: HashSet[A]): HashSet[A] = {
+    if (this.isEmpty)
+      set
+    else if (set.isEmpty)
+      this
+    else {
+      val newRootNode = set.iterator.foldLeft(rootNode) { case (node, a) =>
+        node.add(a, hash.hash(a), 0)
+      }
+
+      if (newRootNode eq rootNode)
+        this
+      else
+        new HashSet(newRootNode)
+    }
   }
 
   /**
@@ -328,6 +347,7 @@ object HashSet {
     * this node type is used to collect all of the colliding elements and implement the [[HashSet.Node]]
     * interface at a performance cost compared with a [[HashSet.BitMapNode]].
     *
+    * @tparam A the type of the elements contained in this node.
     * @param collisionHash the hash value at which all of the contents of this node collide.
     * @param contents the value elements whose hashes collide.
     */
@@ -414,6 +434,7 @@ object HashSet {
     * A CHAMP bitmap node. Stores value element and node element positions in the `contents` array
     * in the `valueMap` and `nodeMap` integer bitmaps.
     *
+    * @tparam A the type of the elements contained in this node.
     * @param valueMap integer bitmap indicating the notional positions of value elements in the `contents` array.
     * @param nodeMap integer bitmap indicating the notional positions of node elements in the `contents` array.
     * @param contents an array of `A` value elements and `Node[A]` sub-node elements.
@@ -893,4 +914,24 @@ object HashSet {
     }
   }
 
+  implicit val catsDataUnorderedFoldableForHashSet: UnorderedFoldable[HashSet] =
+    new UnorderedFoldable[HashSet] {
+      def unorderedFoldMap[B, C](fa: HashSet[B])(f: B => C)(implicit C: CommutativeMonoid[C]): C =
+        fa.iterator.foldLeft(C.empty)((c, b) => C.combine(c, f(b)))
+    }
+
+  implicit def catsDataCommutativeMonoidForHashSet[A](implicit hash: Hash[A]): CommutativeMonoid[HashSet[A]] =
+    new CommutativeMonoid[HashSet[A]] {
+      def empty: HashSet[A] = HashSet.empty[A]
+      def combine(x: HashSet[A], y: HashSet[A]): HashSet[A] = x.union(y)
+    }
+
+  implicit def catsDataShowForHashSet[A](implicit A: Show[A]): Show[HashSet[A]] =
+    Show.show[HashSet[A]](_.show)
+
+  implicit def catsDataHashForHashSet[A](implicit A: Hash[A]): Hash[HashSet[A]] =
+    new Hash[HashSet[A]] {
+      def hash(hs: HashSet[A]): Int = hs.hashCode
+      def eqv(x: HashSet[A], y: HashSet[A]): Boolean = x === y
+    }
 }
