@@ -50,7 +50,7 @@ final class NestedFoldableOps[F[_], G[_], A](private val fga: F[G[A]]) extends A
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val l: List[Set[Int]] = List(Set(1, 2), Set(2, 3), Set(3, 4))
    * scala> l.foldK
@@ -70,29 +70,15 @@ final class FoldableOps[F[_], A](private val fa: F[A]) extends AnyVal {
   def foldA[G[_], B](implicit F: Foldable[F], ev: A <:< G[B], G: Applicative[G], B: Monoid[B]): G[B] =
     F.foldA[G, B](fa.asInstanceOf[F[G[B]]])
 
-  /**
-   * test if `F[A]` contains an `A`, named contains_ to avoid conflict with existing contains which uses universal equality
-   *
-   * Example:
-   * {{{
-   * scala> import cats.implicits._
-   *
-   * scala> val l: List[Int] = List(1, 2, 3, 4)
-   * scala> l.contains_(1)
-   * res0: Boolean = true
-   * scala> l.contains_(5)
-   * res1: Boolean = false
-   * }}}
-   */
-  def contains_(v: A)(implicit ev: Eq[A], F: Foldable[F]): Boolean =
-    F.exists(fa)(ev.eqv(_, v))
+  private[syntax] def contains_(v: A, eq: Eq[A], F: Foldable[F]): Boolean =
+    F.contains_(fa, v)(eq)
 
   /**
    * Intercalate with a prefix and a suffix
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val l: List[String] = List("1", "2", "3")
    * scala> l.foldSmash("List(", ",", ")")
@@ -109,7 +95,7 @@ final class FoldableOps[F[_], A](private val fa: F[A]) extends AnyVal {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val l: List[Int] = List(1, 2, 3)
    * scala> l.mkString_("L[", ";", "]")
@@ -139,7 +125,7 @@ final class FoldableOps[F[_], A](private val fa: F[A]) extends AnyVal {
    *
    * For example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> def parseInt(s: String): Either[String, Int] = Either.catchOnly[NumberFormatException](s.toInt).leftMap(_.getMessage)
    * scala> val keys1 = List("1", "2", "4", "5")
    * scala> val map1 = Map(4 -> "Four", 5 -> "Five")
@@ -170,7 +156,7 @@ final class FoldableOps[F[_], A](private val fa: F[A]) extends AnyVal {
    *
    * For example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val list = List(1,2,3,4)
    * scala> list.findM(n => (n >= 2).asRight[String])
    * res0: Either[String,Option[Int]] = Right(Some(2))
@@ -185,23 +171,25 @@ final class FoldableOps[F[_], A](private val fa: F[A]) extends AnyVal {
    * res3: Either[String,Option[Int]] = Left(error)
    * }}}
    */
-  def findM[G[_]](p: A => G[Boolean])(implicit F: Foldable[F], G: Monad[G]): G[Option[A]] = F.findM[G, A](fa)(p)
+  def findM[G[_]](p: A => G[Boolean])(implicit F: Foldable[F], G: Monad[G]): G[Option[A]] =
+    F.findM[G, A](fa)(p)
 
   /**
    * Tear down a subset of this structure using a `PartialFunction`.
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val xs = List(1, 2, 3, 4)
    * scala> xs.collectFold { case n if n % 2 == 0 => n }
    * res0: Int = 6
    * }}}
    */
-  def collectFold[M](f: PartialFunction[A, M])(implicit F: Foldable[F], M: Monoid[M]): M = F.collectFold[A, M](fa)(f)
+  def collectFold[M](f: PartialFunction[A, M])(implicit F: Foldable[F], M: Monoid[M]): M =
+    F.collectFold[A, M](fa)(f)
 
   /**
    * Tear down a subset of this structure using a `A => Option[M]`.
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val xs = List(1, 2, 3, 4)
    * scala> def f(n: Int): Option[Int] = if (n % 2 == 0) Some(n) else None
    * scala> xs.collectFoldSome(f)
@@ -209,7 +197,8 @@ final class FoldableOps[F[_], A](private val fa: F[A]) extends AnyVal {
    * }}}
    */
   @deprecated("Use collectFoldSome", "2.1.0-RC1")
-  def collectSomeFold[M](f: A => Option[M])(implicit F: Foldable[F], M: Monoid[M]): M = F.collectFoldSome[A, M](fa)(f)
+  def collectSomeFold[M](f: A => Option[M])(implicit F: Foldable[F], M: Monoid[M]): M =
+    F.collectFoldSome[A, M](fa)(f)
 }
 
 final class FoldableOps0[F[_], A](private val fa: F[A]) extends AnyVal {
@@ -221,7 +210,7 @@ final class FoldableOps0[F[_], A](private val fa: F[A]) extends AnyVal {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val l: List[Int] = List(1, 2, 3)
    * scala> l.mkString_(",")
@@ -239,21 +228,22 @@ final class FoldableOps0[F[_], A](private val fa: F[A]) extends AnyVal {
    * combining them using the `MonoidK[G]` instance.
    *
    * {{{
-   * scala> import cats._, cats.implicits._
+   * scala> import cats._, cats.syntax.all._
    * scala> val f: Int => Endo[String] = i => (s => s + i)
    * scala> val x: Endo[String] = List(1, 2, 3).foldMapK(f)
    * scala> val a = x("foo")
    * a: String = "foo321"
    * }}}
    */
-  def foldMapK[G[_], B](f: A => G[B])(implicit F: Foldable[F], G: MonoidK[G]): G[B] = F.foldMapK(fa)(f)
+  def foldMapK[G[_], B](f: A => G[B])(implicit F: Foldable[F], G: MonoidK[G]): G[B] =
+    F.foldMapK(fa)(f)
 
   /**
    * Separate this Foldable into a Tuple by an effectful separating function `A => H[B, C]` for some `Bifoldable[H]`
    * Equivalent to `Functor#map` over `Alternative#separate`
    *
    * {{{
-   * scala> import cats.implicits._, cats.data.Const
+   * scala> import cats.syntax.all._, cats.data.Const
    * scala> val list = List(1,2,3,4)
    * scala> list.partitionBifold(a => (a, "value " + a.toString))
    * res0: (List[Int], List[String]) = (List(1, 2, 3, 4),List(value 1, value 2, value 3, value 4))
@@ -272,7 +262,7 @@ final class FoldableOps0[F[_], A](private val fa: F[A]) extends AnyVal {
    * Equivalent to `Traverse#traverse` over `Alternative#separate`
    *
    * {{{
-   * scala> import cats.implicits._, cats.data.Const
+   * scala> import cats.syntax.all._, cats.data.Const
    * scala> val list = List(1,2,3,4)
    * `Const`'s second parameter is never instantiated, so we can use an impossible type:
    * scala> list.partitionBifoldM(a => Option(Const[Int, Nothing with Any](a)))
@@ -289,7 +279,7 @@ final class FoldableOps0[F[_], A](private val fa: F[A]) extends AnyVal {
    * Equivalent to `Traverse#traverse` over `Alternative#separate`
    *
    * {{{
-   * scala> import cats.implicits._, cats.Eval
+   * scala> import cats.syntax.all._, cats.Eval
    * scala> val list = List(1,2,3,4)
    * scala> val partitioned1 = list.partitionEitherM(a => if (a % 2 == 0) Eval.now(Either.left[String, Int](a.toString)) else Eval.now(Either.right[String, Int](a)))
    * Since `Eval.now` yields a lazy computation, we need to force it to inspect the result:
@@ -305,23 +295,40 @@ final class FoldableOps0[F[_], A](private val fa: F[A]) extends AnyVal {
   )(implicit A: Alternative[F], F: Foldable[F], M: Monad[G]): G[(F[B], F[C])] =
     F.partitionEitherM[G, A, B, C](fa)(f)(A, M)
 
-  def sliding2(implicit F: Foldable[F]): List[(A, A)] = F.sliding2(fa)
-  def sliding3(implicit F: Foldable[F]): List[(A, A, A)] = F.sliding3(fa)
-  def sliding4(implicit F: Foldable[F]): List[(A, A, A, A)] = F.sliding4(fa)
-  def sliding5(implicit F: Foldable[F]): List[(A, A, A, A, A)] = F.sliding5(fa)
-  def sliding6(implicit F: Foldable[F]): List[(A, A, A, A, A, A)] = F.sliding6(fa)
-  def sliding7(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A)] = F.sliding7(fa)
-  def sliding8(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A)] = F.sliding8(fa)
-  def sliding9(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A, A)] = F.sliding9(fa)
-  def sliding10(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A, A, A)] = F.sliding10(fa)
-  def sliding11(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A, A, A, A)] = F.sliding11(fa)
-  def sliding12(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A, A, A, A, A)] = F.sliding12(fa)
-  def sliding13(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A, A, A, A, A, A)] = F.sliding13(fa)
-  def sliding14(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A, A, A, A, A, A, A)] = F.sliding14(fa)
-  def sliding15(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A, A, A, A, A, A, A, A)] = F.sliding15(fa)
-  def sliding16(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A)] = F.sliding16(fa)
-  def sliding17(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A)] = F.sliding17(fa)
-  def sliding18(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A)] = F.sliding18(fa)
+  def sliding2(implicit F: Foldable[F]): List[(A, A)] =
+    F.sliding2(fa)
+  def sliding3(implicit F: Foldable[F]): List[(A, A, A)] =
+    F.sliding3(fa)
+  def sliding4(implicit F: Foldable[F]): List[(A, A, A, A)] =
+    F.sliding4(fa)
+  def sliding5(implicit F: Foldable[F]): List[(A, A, A, A, A)] =
+    F.sliding5(fa)
+  def sliding6(implicit F: Foldable[F]): List[(A, A, A, A, A, A)] =
+    F.sliding6(fa)
+  def sliding7(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A)] =
+    F.sliding7(fa)
+  def sliding8(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A)] =
+    F.sliding8(fa)
+  def sliding9(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A, A)] =
+    F.sliding9(fa)
+  def sliding10(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A, A, A)] =
+    F.sliding10(fa)
+  def sliding11(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A, A, A, A)] =
+    F.sliding11(fa)
+  def sliding12(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A, A, A, A, A)] =
+    F.sliding12(fa)
+  def sliding13(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A, A, A, A, A, A)] =
+    F.sliding13(fa)
+  def sliding14(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A, A, A, A, A, A, A)] =
+    F.sliding14(fa)
+  def sliding15(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A, A, A, A, A, A, A, A)] =
+    F.sliding15(fa)
+  def sliding16(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A)] =
+    F.sliding16(fa)
+  def sliding17(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A)] =
+    F.sliding17(fa)
+  def sliding18(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A)] =
+    F.sliding18(fa)
   def sliding19(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A)] =
     F.sliding19(fa)
   def sliding20(implicit F: Foldable[F]): List[(A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A)] =

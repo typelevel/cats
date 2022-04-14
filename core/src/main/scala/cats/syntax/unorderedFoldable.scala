@@ -30,11 +30,29 @@ trait UnorderedFoldableSyntax extends UnorderedFoldable.ToUnorderedFoldableOps {
 final class UnorderedFoldableOps[F[_], A](private val fa: F[A]) extends AnyVal {
 
   /**
+   * Tests if this `F[A]` contains `v` using the `Eq` instance for `A`,
+   * named contains_ to avoid conflict with existing contains which uses universal equality.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.syntax.all._
+   *
+   * scala> val l: List[Int] = List(1, 2, 3, 4)
+   * scala> l.contains_(1)
+   * res0: Boolean = true
+   * scala> l.contains_(5)
+   * res1: Boolean = false
+   * }}}
+   */
+  def contains_(v: A)(implicit ev: Eq[A], F: UnorderedFoldable[F]): Boolean =
+    F.contains_(fa, v)
+
+  /**
    * Count the number of elements in the structure that satisfy the given predicate.
    *
    * For example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val map1 = Map[Int, String]()
    * scala> val p1: String => Boolean = _.length > 0
    * scala> map1.count(p1)
