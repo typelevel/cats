@@ -26,6 +26,7 @@ ThisBuild / crossScalaVersions := Seq(Scala212, Scala213, Scala3)
 ThisBuild / scalaVersion := Scala212
 
 ThisBuild / tlFatalWarnings := false
+ThisBuild / tlFatalWarningsInCi := false
 
 ThisBuild / githubWorkflowBuildMatrixExclusions +=
   MatrixExclude(Map("project" -> "rootNative", "scala" -> Scala3))
