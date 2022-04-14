@@ -101,8 +101,8 @@ class HashSetSuite extends CatsSuite {
 
     assert(HashSet(1, 2, 3).union(HashSet(4, 5, 6)) === HashSet(1, 2, 3, 4, 5, 6))
 
-    assert(HashSet("Aa").union(HashSet("BB")) == HashSet("Aa", "BB"))
-    assert(HashSet("Aa", "BB").union(HashSet("Aa", "BB", "Ca", "DB")) == HashSet("Aa", "BB", "Ca", "DB"))
+    assert(HashSet("Aa").union(HashSet("BB")) === HashSet("Aa", "BB"))
+    assert(HashSet("Aa", "BB").union(HashSet("Aa", "BB", "Ca", "DB")) === HashSet("Aa", "BB", "Ca", "DB"))
   }
 
   property("Empty HashSet never contains") {
