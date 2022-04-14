@@ -203,7 +203,7 @@ class HashSetSuite extends CatsSuite {
 
       assert(ints.forall(iterated.contains))
       assert(iterated.forall(ints.contains))
-      assert(iterated.distinct.toList === iterated.toList)
+      assert(iterated.toList.distinct === iterated.toList)
       assert(iterated.forall(hashSet.contains))
     }
   }
@@ -230,7 +230,7 @@ class HashSetSuite extends CatsSuite {
 
       assert(ints.forall(foreached.contains))
       assert(foreached.forall(ints.contains))
-      assert(foreached.distinct.toList === foreached.toList)
+      assert(foreached.toList.distinct === foreached.toList)
       assert(foreached.forall(hashSet.contains))
     }
   }
