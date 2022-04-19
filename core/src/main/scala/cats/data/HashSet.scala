@@ -39,7 +39,8 @@ import java.util.Arrays
   * @tparam A the type of the elements contained in this hash set.
   * @param hash the [[cats.kernel.Hash]] instance used for hashing values.
   */
-final class HashSet[A] private (private val rootNode: HashSet.Node[A])(implicit hash: Hash[A]) {
+final class HashSet[A] private (private val rootNode: HashSet.Node[A])(implicit hash: Hash[A])
+    extends HashSetCompat[A] {
 
   /**
     * An iterator for this set that can be used only once.
