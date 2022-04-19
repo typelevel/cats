@@ -415,6 +415,16 @@ object arbitrary extends ArbitraryInstances0 with ScalaVersionSpecific.Arbitrary
 
   implicit val catsLawsArbitraryForMiniInt: Arbitrary[MiniInt] =
     Arbitrary(Gen.oneOf(MiniInt.allValues))
+
+  implicit def catsLawsArbitraryForHashMap[K, V](implicit
+    K: Arbitrary[K],
+    V: Arbitrary[V],
+    hash: Hash[K]
+  ): Arbitrary[HashMap[K, V]] =
+    Arbitrary(getArbitrary[List[(K, V)]].map(HashMap.fromSeq(_)(hash)))
+
+  implicit def catsLawsCogenForHashSet[K, V](implicit K: Cogen[K], V: Cogen[V]): Cogen[HashMap[K, V]] =
+    Cogen.it[HashMap[K, V], (K, V)](_.iterator)
 }
 
 sealed private[discipline] trait ArbitraryInstances0 {

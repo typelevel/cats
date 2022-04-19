@@ -81,6 +81,27 @@ private[kernel] class HashCompat {
   }
 
   // adapted from scala.util.hashing.MurmurHash3
+  def unorderedHash[A](xs: TraversableOnce[A])(implicit A: Hash[A]): Int = {
+    import scala.util.hashing.MurmurHash3._
+    var a = 0
+    var b = 0
+    var c = 1
+    var n = 0
+    xs.foreach { x =>
+      val h = A.hash(x)
+      a += h
+      b ^= h
+      if (h != 0) c *= h
+      n += 1
+    }
+    var h = setSeed
+    h = mix(h, a)
+    h = mix(h, b)
+    h = mixLast(h, c)
+    finalizeHash(h, n)
+  }
+
+  // adapted from scala.util.hashing.MurmurHash3
   def orderedHash[A](xs: TraversableOnce[A])(implicit A: Hash[A]): Int = {
     import scala.util.hashing.MurmurHash3._
     var n = 0
