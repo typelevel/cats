@@ -618,7 +618,7 @@ object HashSet {
 
         // If this element will be propagated or inlined, calculate the new valueMap at depth - 1
         val newBitPos =
-          if (allElements == 2 && depth > 0)
+          if (valueElements == 2 && nodeElements == 0 && depth > 0)
             Node.bitPosFrom(Node.maskFrom(removeElementHash, depth - 1))
           else
             valueMap ^ bitPos
@@ -654,7 +654,7 @@ object HashSet {
 
       if (newSubNode eq subNode)
         this
-      else if (allElements == 1) {
+      else if (valueElements == 0 && nodeElements == 1) {
         if (newSubNode.sizeHint == Node.SizeOne) {
           newSubNode
         } else {
