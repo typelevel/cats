@@ -955,7 +955,9 @@ object Foldable {
   def iterateRight[A, B](iterable: Iterable[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
     iterateRight(Eval.always(iterable.iterator), lb)(f)
 
-  private[cats] def iterateRight[A, B](iterator: Eval[Iterator[A]], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = {
+  private[cats] def iterateRight[A, B](iterator: Eval[Iterator[A]], lb: Eval[B])(
+    f: (A, Eval[B]) => Eval[B]
+  ): Eval[B] = {
     def loop(it: Iterator[A]): Eval[B] =
       Eval.defer(if (it.hasNext) f(it.next(), loop(it)) else lb)
 
