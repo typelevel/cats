@@ -37,6 +37,8 @@ import cats.kernel.instances.StaticMethods
 import cats.syntax.eq._
 import java.util.Arrays
 
+import HashMap.improve
+
 /**
  * An immutable hash map using [[cats.kernel.Hash]] for hashing.
  *
@@ -102,7 +104,7 @@ final class HashMap[K, +V] private[data] (private[data] val rootNode: HashMap.No
     * @return `true` if the map contains `key`, `false` otherwise.
     */
   final def contains(key: K): Boolean =
-    rootNode.contains(key, hashKey.hash(key), 0)
+    rootNode.contains(key, improve(hashKey.hash(key)), 0)
 
   /**
     * Get the value associated with `key` in this map.
@@ -111,7 +113,7 @@ final class HashMap[K, +V] private[data] (private[data] val rootNode: HashMap.No
     * @return A [[scala.Some]] containing the value if present, else [[scala.None]].
     */
   final def get(key: K): Option[V] =
-    rootNode.get(key, hashKey.hash(key), 0)
+    rootNode.get(key, improve(hashKey.hash(key)), 0)
 
   /**
     * Get the value associated with `key` in this map, or `default` if not present.
@@ -132,7 +134,7 @@ final class HashMap[K, +V] private[data] (private[data] val rootNode: HashMap.No
     * @return a new map that contains all key-value pairs of this map and that also contains a mapping from `key` to `value`.
     */
   final def add[VV >: V](key: K, value: VV): HashMap[K, VV] = {
-    val keyHash = hashKey.hash(key)
+    val keyHash = improve(hashKey.hash(key))
     val newRootNode = rootNode.add(key, keyHash, value, 0)
 
     if (newRootNode eq rootNode)
@@ -148,7 +150,7 @@ final class HashMap[K, +V] private[data] (private[data] val rootNode: HashMap.No
     * @return a new map that contains all elements of this map but that does not contain `key`.
     */
   final def remove(key: K): HashMap[K, V] = {
-    val keyHash = hashKey.hash(key)
+    val keyHash = improve(hashKey.hash(key))
     val newRootNode = rootNode.remove(key, keyHash, 0)
 
     if (newRootNode eq rootNode)
@@ -214,6 +216,8 @@ final class HashMap[K, +V] private[data] (private[data] val rootNode: HashMap.No
 }
 
 object HashMap extends HashMapInstances {
+  final private[data] def improve(hash: Int): Int =
+    scala.util.hashing.byteswap32(hash)
 
   /**
     * Creates a new empty [[cats.data.HashMap]] which uses `hashKey` for hashing.
@@ -243,7 +247,7 @@ object HashMap extends HashMapInstances {
   */
   final def fromSeq[K, V](seq: Seq[(K, V)])(implicit hashKey: Hash[K]): HashMap[K, V] = {
     val rootNode = seq.foldLeft(Node.empty[K, V]) { case (node, (k, v)) =>
-      node.add(k, hashKey.hash(k), v, 0)
+      node.add(k, improve(hashKey.hash(k)), v, 0)
     }
     new HashMap(rootNode)
   }
@@ -709,7 +713,7 @@ object HashMap extends HashMapInstances {
         mergeValuesIntoNode(
           bitPos,
           existingKey,
-          hashKey.hash(existingKey),
+          improve(hashKey.hash(existingKey)),
           existingValue,
           newKey,
           newKeyHash,

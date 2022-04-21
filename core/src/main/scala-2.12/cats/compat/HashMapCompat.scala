@@ -21,6 +21,8 @@
 
 package cats.data
 
+import HashMap.improve
+
 private[data] trait HashMapCompat[K, +V] { self: HashMap[K, V] =>
 
   /**
@@ -31,10 +33,10 @@ private[data] trait HashMapCompat[K, +V] { self: HashMap[K, V] =>
     */
   final def concat[VV >: V](traversable: TraversableOnce[(K, VV)]): HashMap[K, VV] = {
     val newRootNode = traversable.foldLeft(self.rootNode: HashMap.Node[K, VV]) { case (node, (k, v)) =>
-      node.add(k, self.hashKey.hash(k), v, 0)
+      node.add(k, improve(self.hashKey.hash(k)), v, 0)
     }
 
-    if (newRootNode eq rootNode)
+    if (newRootNode eq self.rootNode)
       this
     else
       new HashMap(newRootNode)
@@ -48,7 +50,7 @@ private[data] trait HashMapCompat[K, +V] { self: HashMap[K, V] =>
     */
   final def concat[VV >: V](hm: HashMap[K, VV]): HashMap[K, VV] = {
     val newRootNode = hm.iterator.foldLeft(self.rootNode: HashMap.Node[K, VV]) { case (node, (k, v)) =>
-      node.add(k, self.hashKey.hash(k), v, 0)
+      node.add(k, improve(self.hashKey.hash(k)), v, 0)
     }
 
     if (newRootNode eq self.rootNode)

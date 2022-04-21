@@ -70,7 +70,7 @@ class HashMapSuite extends CatsSuite {
     kvs.reverse.distinctBy(_._1).reverse
 
   test("show") {
-    assert(HashMap("a" -> 1, "b" -> 2, "c" -> 3).show === "HashMap(a -> 1, b -> 2, c -> 3)")
+    assert(HashMap("a" -> 1, "b" -> 2, "c" -> 3).show === "HashMap(c -> 3, a -> 1, b -> 2)")
     assert(HashMap.empty[String, Int].show === "HashMap()")
   }
 

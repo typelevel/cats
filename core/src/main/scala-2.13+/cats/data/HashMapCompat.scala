@@ -23,6 +23,8 @@ package cats.data
 
 private[data] trait HashMapCompat[K, +V] extends IterableOnce[(K, V)] { self: HashMap[K, V] =>
 
+  import HashMap.improve
+
   override def knownSize = self.size
 
   /**
@@ -33,7 +35,7 @@ private[data] trait HashMapCompat[K, +V] extends IterableOnce[(K, V)] { self: Ha
     */
   final def concat[VV >: V](iterable: IterableOnce[(K, VV)]): HashMap[K, VV] = {
     val newRootNode = iterable.iterator.foldLeft(self.rootNode: HashMap.Node[K, VV]) { case (node, (k, v)) =>
-      node.add(k, self.hashKey.hash(k), v, 0)
+      node.add(k, improve(self.hashKey.hash(k)), v, 0)
     }
 
     if (newRootNode eq self.rootNode)
