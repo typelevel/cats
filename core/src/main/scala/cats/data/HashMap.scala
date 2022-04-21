@@ -1106,7 +1106,7 @@ sealed abstract private[data] class HashMapInstances extends HashMapInstances1 {
           Always(G.pure(HashMap.empty[K, V]))
 
         val gHashMap = Foldable
-          .iterateRight(hashMap.iterator, emptyHm) { case ((k, u), hm) =>
+          .iterateRight(Eval.always(hashMap.iterator), emptyHm) { case ((k, u), hm) =>
             G.map2Eval(f(u), hm) { (v, map) =>
               map.add(k, v)
             }

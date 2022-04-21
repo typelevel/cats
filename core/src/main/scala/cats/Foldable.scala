@@ -953,13 +953,13 @@ object Foldable {
   private val sentinel: Function1[Any, Any] = new scala.runtime.AbstractFunction1[Any, Any] { def apply(a: Any) = this }
 
   def iterateRight[A, B](iterable: Iterable[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
-    iterateRight(iterable.iterator, lb)(f)
+    iterateRight(Eval.always(iterable.iterator), lb)(f)
 
-  private[cats] def iterateRight[A, B](iterator: Iterator[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = {
+  private[cats] def iterateRight[A, B](iterator: Eval[Iterator[A]], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = {
     def loop(it: Iterator[A]): Eval[B] =
       Eval.defer(if (it.hasNext) f(it.next(), loop(it)) else lb)
 
-    Eval.always(iterator).flatMap(loop)
+    iterator.flatMap(loop)
   }
 
   def iterateRightDefer[G[_]: Defer, A, B](iterable: Iterable[A], lb: G[B])(f: (A, G[B]) => G[B]): G[B] = {
