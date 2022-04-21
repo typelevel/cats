@@ -365,6 +365,31 @@ object HashMap extends HashMapInstances {
      * @return `true` if this node and `that` are equal, `false` otherwise.
      */
     def ===[VV >: V](that: Node[K, VV])(implicit eqValue: Eq[VV]): Boolean
+
+    /**
+      * An approximation of the CHAMP "branch size", used for the deletion algorithm.
+      *
+      * The branch size indicates the number of elements transitively reachable from this node, but that is expensive to compute.
+      *
+      * There are three important cases when implementing the deletion algorithm:
+      * - a sub-tree has no elements ([[Node.SizeNone]])
+      * - a sub-tree has exactly one element ([[Node.SizeOne]])
+      * - a sub-tree has more than one element ([[Node.SizeMany]])
+      *
+      * This approximation assumes that nodes contain many elements (because the deletion algorithm inlines singleton nodes).
+      *
+      * @return either [[Node.SizeNone]], [[Node.SizeOne]] or [[Node.SizeMany]]
+      */
+    final def sizeHint = {
+      if (nodeElements > 0)
+        Node.SizeMany
+      else
+        (valueElements: @annotation.switch) match {
+          case 0 => Node.SizeNone
+          case 1 => Node.SizeOne
+          case _ => Node.SizeMany
+        }
+    }
   }
 
   /**
@@ -784,13 +809,13 @@ object HashMap extends HashMapInstances {
 
       if (newSubNode eq subNode)
         this
-      else if (allElements == 1) {
-        if (newSubNode.size == 1) {
+      else if (valueElements == 0 && nodeElements == 1) {
+        if (newSubNode.sizeHint == Node.SizeOne) {
           newSubNode
         } else {
           replaceNode(index, subNode, newSubNode)
         }
-      } else if (newSubNode.size == 1) {
+      } else if (newSubNode.sizeHint == Node.SizeOne) {
         inlineSubNodeKeyValue(bitPos, newSubNode)
       } else {
         replaceNode(index, subNode, newSubNode)
@@ -869,6 +894,10 @@ object HashMap extends HashMapInstances {
     final val BitPartitionSize = 5
     final val BitPartitionMask = (1 << BitPartitionSize) - 1
     final val MaxDepth = 7
+
+    final val SizeNone = 0
+    final val SizeOne = 1
+    final val SizeMany = 2
 
     /**
       * The `mask` is a 5-bit segment of a 32-bit element hash.
