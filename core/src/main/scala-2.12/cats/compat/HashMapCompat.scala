@@ -30,7 +30,7 @@ private[data] trait HashMapCompat[K, +V] { self: HashMap[K, V] =>
     * @return a new map that contains all key-value pairs of this map and `traversable`.
     */
   final def concat[VV >: V](traversable: TraversableOnce[(K, VV)]): HashMap[K, VV] = {
-    val newRootNode = traversable.foldLeft(rootNode: HashMap.Node[K, VV]) { case (node, (k, v)) =>
+    val newRootNode = traversable.foldLeft(self.rootNode: HashMap.Node[K, VV]) { case (node, (k, v)) =>
       node.add(k, self.hashKey.hash(k), v, 0)
     }
 

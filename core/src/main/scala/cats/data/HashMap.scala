@@ -47,7 +47,7 @@ import java.util.Arrays
  * @tparam V the type of the values contained in this hash map.
  * @param hashKey the [[cats.kernel.Hash]] instance used for hashing keys.
  */
-final class HashMap[K, +V] private[data] (private val rootNode: HashMap.Node[K, V])(implicit val hashKey: Hash[K])
+final class HashMap[K, +V] private[data] (private[data] val rootNode: HashMap.Node[K, V])(implicit val hashKey: Hash[K])
     extends HashMapCompat[K, V] {
 
   /**
@@ -248,7 +248,7 @@ object HashMap extends HashMapInstances {
     new HashMap(rootNode)
   }
 
-  sealed abstract private class Node[K, +V] {
+  sealed abstract private[data] class Node[K, +V] {
 
     /**
       * @return The number of value and node elements in the contents array of this trie node.
@@ -401,7 +401,7 @@ object HashMap extends HashMapInstances {
     * @param collisionHash the hash value at which all of the contents of this node collide.
     * @param contents the value elements whose hashes collide.
     */
-  final private class CollisionNode[K, +V](
+  final private[HashMap] class CollisionNode[K, +V](
     val collisionHash: Int,
     val contents: Vector[(K, V)]
   )(implicit hashKey: Hash[K])
@@ -511,7 +511,7 @@ object HashMap extends HashMapInstances {
     * @param contents an array of `A` value elements and `Node[A]` sub-node elements.
     * @param size the number of value elements in this subtree.
     */
-  final private class BitMapNode[K, +V](
+  final private[HashMap] class BitMapNode[K, +V](
     val valueMap: Int,
     val nodeMap: Int,
     val contents: Array[Any],
@@ -887,7 +887,7 @@ object HashMap extends HashMapInstances {
     }
   }
 
-  object Node {
+  private[HashMap] object Node {
     final val StrideLength = 2
     final val BitPartitionSize = 5
     final val BitPartitionMask = (1 << BitPartitionSize) - 1
