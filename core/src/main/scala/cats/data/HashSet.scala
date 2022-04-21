@@ -29,6 +29,8 @@ import cats.kernel.instances.StaticMethods
 import cats.syntax.eq._
 import java.util.Arrays
 
+import HashSet.improve
+
 /**
   * An immutable hash set using [[cats.kernel.Hash]] for hashing.
   *
@@ -94,7 +96,7 @@ final class HashSet[A] private (private val rootNode: HashSet.Node[A])(implicit 
     * @return `true` if the set contains `value`, `false` otherwise.
     */
   final def contains(value: A): Boolean =
-    rootNode.contains(value, hash.hash(value), 0)
+    rootNode.contains(value, improve(hash.hash(value)), 0)
 
   /**
     * Creates a new set with an additional element, unless the element is already present.
@@ -103,7 +105,7 @@ final class HashSet[A] private (private val rootNode: HashSet.Node[A])(implicit 
     * @return a new set that contains all elements of this set and that also contains `value`.
     */
   final def add(value: A): HashSet[A] = {
-    val valueHash = hash.hash(value)
+    val valueHash = improve(hash.hash(value))
     val newRootNode = rootNode.add(value, valueHash, 0)
 
     if (newRootNode eq rootNode)
@@ -119,7 +121,7 @@ final class HashSet[A] private (private val rootNode: HashSet.Node[A])(implicit 
     * @return a new set that contains all elements of this set but that does not contain `value`.
     */
   final def remove(value: A): HashSet[A] = {
-    val valueHash = hash.hash(value)
+    val valueHash = improve(hash.hash(value))
     val newRootNode = rootNode.remove(value, valueHash, 0)
 
     if (newRootNode eq rootNode)
@@ -141,7 +143,7 @@ final class HashSet[A] private (private val rootNode: HashSet.Node[A])(implicit 
       this
     else {
       val newRootNode = set.iterator.foldLeft(rootNode) { case (node, a) =>
-        node.add(a, hash.hash(a), 0)
+        node.add(a, improve(hash.hash(a)), 0)
       }
 
       if (newRootNode eq rootNode)
@@ -193,6 +195,8 @@ final class HashSet[A] private (private val rootNode: HashSet.Node[A])(implicit 
 }
 
 object HashSet {
+  final private[HashSet] def improve(hash: Int): Int =
+    scala.util.hashing.byteswap32(hash)
 
   /**
     * Creates a new empty [[cats.data.HashSet]] which uses `hash` for hashing.
@@ -222,7 +226,7 @@ object HashSet {
   */
   final def fromSeq[A](seq: Seq[A])(implicit hash: Hash[A]): HashSet[A] = {
     val rootNode = seq.foldLeft(Node.empty[A]) { case (node, a) =>
-      node.add(a, hash.hash(a), 0)
+      node.add(a, improve(hash.hash(a)), 0)
     }
     new HashSet(rootNode)
   }
@@ -562,7 +566,7 @@ object HashSet {
         mergeValuesIntoNode(
           bitPos,
           existingElement,
-          hash.hash(existingElement),
+          improve(hash.hash(existingElement)),
           newElement,
           newElementHash,
           depth + 1
