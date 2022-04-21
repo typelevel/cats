@@ -133,64 +133,46 @@ class HashSetSuite extends CatsSuite {
     }
   }
 
-  property("add with collisions consistent with contains") {
-    forAll(colliding) { (collisions: List[(String, String)]) =>
-      val hashSet = collisions.foldLeft(HashSet.empty[String]) { case (hs, (l, r)) =>
-        hs.add(l).add(r)
-      }
-
-      collisions.foreach { case (l, r) =>
-        assert(hashSet.contains(l))
-        assert(hashSet.contains(r))
-
-        val removeL = hashSet.remove(l)
-        assert(removeL.contains(r))
-        assert(!removeL.contains(l))
-
-        val removeR = hashSet.remove(r)
-        assert(removeR.contains(l))
-        assert(!removeR.contains(r))
-
-        val removeLR = removeL.remove(r)
-        assert(!removeLR.contains(l))
-        assert(!removeLR.contains(r))
-      }
-    }
-  }
-
   property("remove consistent with contains") {
     forAll { (ints: List[Int]) =>
       val hashSet = HashSet.fromSeq(ints)
 
-      ints.foreach { i =>
-        assert(hashSet.contains(i))
-        assert(!hashSet.remove(i).contains(i))
+      ints.distinct.foldLeft(hashSet) { case (hs, i) =>
+        assert(hs.contains(i))
+        assert(!hs.remove(i).contains(i))
+        hs.remove(i)
       }
+
+      ()
     }
   }
 
-  property("remove with collisions consistent with contains") {
+  property("add and remove with collisions consistent with contains") {
     forAll(colliding) { (strings: List[(String, String)]) =>
       val hashSet = strings.foldLeft(HashSet.empty[String]) { case (hs, (l, r)) =>
         hs.add(l).add(r)
       }
 
-      strings.foreach { case (l, r) =>
-        assert(hashSet.contains(l))
-        assert(hashSet.contains(r))
+      strings.distinctBy(_._1).foldLeft(hashSet) { case (hs, (l, r)) =>
+        assert(hs.contains(l))
+        assert(hs.contains(r))
 
-        val removeL = hashSet.remove(l)
+        val removeL = hs.remove(l)
         assert(removeL.contains(r))
         assert(!removeL.contains(l))
 
-        val removeR = hashSet.remove(r)
+        val removeR = hs.remove(r)
         assert(removeR.contains(l))
         assert(!removeR.contains(r))
 
         val removeLR = removeL.remove(r)
         assert(!removeLR.contains(l))
         assert(!removeLR.contains(r))
+
+        removeLR
       }
+
+      ()
     }
   }
 

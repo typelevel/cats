@@ -606,7 +606,7 @@ object HashSet {
       }
     }
 
-    final private def removeValue(bitPos: Int, removeElement: A, removeElementHash: Int): Node[A] = {
+    final private def removeValue(bitPos: Int, removeElement: A, removeElementHash: Int, depth: Int): Node[A] = {
       val index = Node.indexFrom(valueMap, bitPos)
       val existingElement = getValue(index)
       if (!hash.eqv(existingElement, removeElement)) {
@@ -615,9 +615,18 @@ object HashSet {
         Node.empty
       } else {
         val newContents = new Array[Any](contents.length - 1)
+
+        // If this element will be propagated or inlined, calculate the new valueMap at depth - 1
+        val newBitPos =
+          if (allElements == 2 && depth > 0)
+            Node.bitPosFrom(Node.maskFrom(removeElementHash, depth - 1))
+          else
+            valueMap ^ bitPos
+
         System.arraycopy(contents, 0, newContents, 0, index)
         System.arraycopy(contents, index + 1, newContents, index, contents.length - index - 1)
-        new BitMapNode(valueMap ^ bitPos, nodeMap, newContents, size - 1)
+
+        new BitMapNode(newBitPos, nodeMap, newContents, size - 1)
       }
     }
 
@@ -633,10 +642,11 @@ object HashSet {
       new BitMapNode(valueMap | bitPos, nodeMap ^ bitPos, newContents, size - 1)
     }
 
-    final private def removeValueFromSubNode(bitPos: Int,
-                                             removeElement: A,
-                                             removeElementHash: Int,
-                                             depth: Int
+    final private def removeValueFromSubNode(
+      bitPos: Int,
+      removeElement: A,
+      removeElementHash: Int,
+      depth: Int
     ): Node[A] = {
       val index = Node.indexFrom(nodeMap, bitPos)
       val subNode = getNode(index)
@@ -662,7 +672,7 @@ object HashSet {
       val bitPos = Node.bitPosFrom(mask)
 
       if (hasValueAt(bitPos)) {
-        removeValue(bitPos, removeElement, removeElementHash)
+        removeValue(bitPos, removeElement, removeElementHash, depth)
       } else if (hasNodeAt(bitPos)) {
         removeValueFromSubNode(bitPos, removeElement, removeElementHash, depth)
       } else {
