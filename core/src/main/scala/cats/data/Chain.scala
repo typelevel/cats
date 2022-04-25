@@ -19,6 +19,26 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/* This file is derived in part from https://github.com/scala/scala/blob/v2.13.8/src/library/scala/collection/Iterable.scala
+ * Modified by Typelevel for redistribution in Cats.
+ *
+ * Copyright EPFL and Lightbend, Inc.
+ * Scala
+ * Copyright (c) 2002-2022 EPFL
+ * Copyright (c) 2011-2022 Lightbend, Inc.
+ *
+ * Scala includes software developed at
+ * LAMP/EPFL (https://lamp.epfl.ch/) and
+ * Lightbend, Inc. (https://www.lightbend.com/).
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package cats
 package data
 
@@ -659,10 +679,10 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
 
   /**
    * Compares the length of this chain to a test value.
-   * 
+   *
    * The method does not call `length` directly; its running time
    * is `O(length min len)` instead of `O(length)`.
-   * 
+   *
    * @param  len the test value that gets compared with the length.
    * @return a negative value if `this.length < len`,
    *         zero if `this.length == len` or
@@ -670,7 +690,7 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
    * @note   an adapted version of
              [[https://github.com/scala/scala/blob/v2.13.8/src/library/scala/collection/Iterable.scala#L272-L288 Iterable#sizeCompare]]
              from Scala Library v2.13.8 is used in a part of the implementation.
-   * 
+   *
    * {{{
    * scala> import cats.data.Chain
    * scala> val chain = Chain(1, 2, 3)
@@ -764,7 +784,7 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
 
   /**
    * Remove duplicates. Duplicates are checked using `Order[_]` instance.
-   * 
+   *
    * Example:
    * {{{
    * scala> import cats.data.Chain
@@ -793,7 +813,7 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
 
   /**
    * Remove duplicates by a predicate. Duplicates are checked using `Order[_]` instance.
-   * 
+   *
    * Example:
    * {{{
    * scala> import cats.data.Chain
