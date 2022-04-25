@@ -23,6 +23,26 @@ package cats
 package kernel
 package compat
 
+/* This file is derived in part from https://github.com/scala/scala/blob/v2.13.0-RC1/src/library/scala/util/hashing/MurmurHash3.scala
+ * Modified by Typelevel for redistribution in Cats.
+ *
+ * Copyright EPFL and Lightbend, Inc.
+ * Scala
+ * Copyright (c) 2002-2022 EPFL
+ * Copyright (c) 2011-2022 Lightbend, Inc.
+ *
+ * Scala includes software developed at
+ * LAMP/EPFL (https://lamp.epfl.ch/) and
+ * Lightbend, Inc. (https://www.lightbend.com/).
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 private[kernel] class HashCompat {
   // Adapted from scala.util.hashing.MurmurHash#productHash.
   private[kernel] def product1HashWithPrefix(_1Hash: Int, prefix: String): Int = {
