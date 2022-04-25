@@ -27,14 +27,43 @@ import scala.annotation.tailrec
 import cats.arrow.FunctionK
 
 /**
- * A free operational monad for some functor `S`. Binding is done
- * using the heap instead of the stack, allowing tail-call
- * elimination.
- */
+  * A Free is an object that represents a sequence of operations in the Monad
+  * typeclass for a type `S[_]` of effects, and yields a value of type A.
+  * An instance of `Free` may contain (or generate in evaluation) effectful
+  * values of type S, also called as suspended effects.
+  *
+  * An instance of `Free[S, A]` can be one of:
+  * - A pure free, which is an object that wraps a value of type `A`.
+  * - A suspended free, which wraps an effect of type `S[A]` that yield
+  *   a value of type `A`.
+  * - A Flat-mapped node that binds a `Free` object (left-hand-side) with a
+  *   continuation. This continuation is a function that takes the value
+  *   yielded by the left-hand-side and generates a new Free from it.
+  *
+  * A free operational monad for some functor `S`.
+  *
+  * Binding is done using the heap instead of the stack, allowing tail-call
+  * elimination.
+  *
+  * _Note_: despite the name, this datatype is closer to a _freer_ monad,
+  * as described in (https://okmij.org/ftp/Computation/free-monad.html).
+  * It encodes the operations of the Monad typeclass for any datatype `S` of
+  * suspended effects, _without_ requiring an instance of Functor for `S`.
+  *
+  * Reference: https://okmij.org/ftp/Computation/free-monad.html
+  *
+  */
 sealed abstract class Free[S[_], A] extends Product with Serializable with FreeFoldStep[S, A] {
 
   import Free.{FlatMapped, Pure, Suspend}
 
+  /**
+    * Note: even if `this` Free object is pure, i.e. has no suspended effects
+    * in S, the `f` function is not executed until and unless
+    *
+    * @return A new Free instance that yields the result of applying the
+    *  function `f` to the value yielded by `this` free. 
+    */
   final def map[B](f: A => B): Free[S, B] =
     flatMap(a => Pure(f(a)))
 
@@ -68,8 +97,12 @@ sealed abstract class Free[S[_], A] extends Product with Serializable with FreeF
     resume.fold(s, r)
 
   /**
-   * Takes one evaluation step in the Free monad, re-associating left-nested binds in the process.
-   */
+    * Takes one evaluation step in the Free monad, re-associating left-nested binds in the process.
+    *
+    * @return A `Free` equivalent to `this`, but without left-nested binds.
+    * I.e., the resulting `Free` is either a pure value, or a suspended S
+    * effect, or a bind where the left-hand-side is a suspended effect.
+    */
   @tailrec
   final def step: Free[S, A] =
     this match {
@@ -79,8 +112,13 @@ sealed abstract class Free[S[_], A] extends Product with Serializable with FreeF
     }
 
   /**
-   * Evaluate a single layer of the free monad.
-   */
+   * Evaluates this free monad up to and right after its first suspended effect.
+    * @return If unrolling of `this` free ends by reaching a pure value, then
+    * it returns that pure value wrapped in a Right.
+    * On the other hand, if unrolling reaches a suspended effect `t: S`, then this
+    * methods returns a Left with a new S, that yields the Free object
+    * obtained by continuing the Free after the suspended effect.
+    */
   @tailrec
   final def resume(implicit S: Functor[S]): Either[S[Free[S, A]], A] =
     this match {
@@ -204,7 +242,7 @@ sealed abstract class Free[S[_], A] extends Product with Serializable with FreeF
 object Free extends FreeInstances {
 
   /**
-   * Return from the computation with the given value.
+   * A `Free` value that just yields the given value.
    */
   final private[free] case class Pure[S[_], A](a: A) extends Free[S, A]
 
@@ -219,12 +257,16 @@ object Free extends FreeInstances {
   final private[free] case class FlatMapped[S[_], B, C](c: Free[S, C], f: C => Free[S, B]) extends Free[S, B]
 
   /**
-   * Lift a pure `A` value into the free monad.
-   */
+    * Creates an instance of Free that yields the given value.
+    *
+    * @param a  The value that the returned Free object will yield.
+    * @return An instance of the Free datatype that would 
+    */
   def pure[S[_], A](a: A): Free[S, A] = Pure(a)
 
   /**
-   * Lift an `F[A]` value into the free monad.
+   * Creates an instance of Free with the given F effect. Evaluating the
+   * result free would evaluate that effect and yield its result.
    */
   def liftF[F[_], A](value: F[A]): Free[F, A] = Suspend(value)
 
@@ -266,7 +308,7 @@ object Free extends FreeInstances {
     defer(value)
 
   /**
-   * Defer the creation of a `Free[F, A]` value.
+   * Defers the creation of a `Free[F, A]` value.
    */
   def defer[F[_], A](value: => Free[F, A]): Free[F, A] =
     pure(()).flatMap(_ => value)
