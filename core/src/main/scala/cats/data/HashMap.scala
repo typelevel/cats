@@ -1128,6 +1128,18 @@ sealed abstract private[data] class HashMapInstances extends HashMapInstances1 {
 
       override def size[A](fa: HashMap[K, A]): Long = fa.size.toLong
 
+      override def contains_[A](fa: HashMap[K, A], v: A)(implicit ev: Eq[A]): Boolean =
+        fa.iterator.exists { case (_, value) => ev.eqv(v, value) }
+
+      override def exists[A](fa: HashMap[K, A])(p: A => Boolean): Boolean =
+        fa.iterator.exists { case (_, value) => p(value) }
+
+      override def forall[A](fa: HashMap[K, A])(p: A => Boolean): Boolean =
+        fa.iterator.forall { case (_, value) => p(value) }
+
+      override def count[A](fa: HashMap[K, A])(p: A => Boolean): Long =
+        fa.iterator.foldLeft(0L) { case (c, (_, value)) => if (p(value)) c + 1L else c }
+
       def unorderedFoldMap[U, V](hm: HashMap[K, U])(f: U => V)(implicit V: CommutativeMonoid[V]): V =
         V.combineAll(hm.iterator.map { case (_, u) => f(u) })
 
