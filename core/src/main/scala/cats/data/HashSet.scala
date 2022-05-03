@@ -961,8 +961,21 @@ object HashSet {
 
   implicit val catsDataUnorderedFoldableForHashSet: UnorderedFoldable[HashSet] =
     new UnorderedFoldable[HashSet] {
+      override def isEmpty[A](fa: HashSet[A]): Boolean = fa.isEmpty
+
+      override def nonEmpty[A](fa: HashSet[A]): Boolean = fa.nonEmpty
+
+      override def size[A](fa: HashSet[A]): Long = fa.size.toLong
+
+      override def exists[A](fa: HashSet[A])(p: A => Boolean): Boolean = fa.iterator.exists(p)
+
+      override def forall[A](fa: HashSet[A])(p: A => Boolean): Boolean = fa.iterator.forall(p)
+
+      override def count[A](fa: HashSet[A])(p: A => Boolean): Long =
+        fa.iterator.foldLeft(0L) { case (c, a) => if (p(a)) c + 1L else c }
+
       def unorderedFoldMap[B, C](fa: HashSet[B])(f: B => C)(implicit C: CommutativeMonoid[C]): C =
-        fa.iterator.foldLeft(C.empty)((c, b) => C.combine(c, f(b)))
+        C.combineAll(fa.iterator.map(f))
     }
 
   implicit def catsDataCommutativeMonoidForHashSet[A](implicit hash: Hash[A]): CommutativeMonoid[HashSet[A]] =
