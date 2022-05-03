@@ -1122,6 +1122,12 @@ object HashMap extends HashMapInstances {
 sealed abstract private[data] class HashMapInstances extends HashMapInstances1 {
   implicit def catsDataUnorderedTraverseForHashMap[K: Hash]: UnorderedTraverse[HashMap[K, *]] =
     new UnorderedTraverse[HashMap[K, *]] {
+      override def nonEmpty[A](fa: HashMap[K, A]): Boolean = fa.nonEmpty
+
+      override def isEmpty[A](fa: HashMap[K, A]): Boolean = fa.isEmpty
+
+      override def size[A](fa: HashMap[K, A]): Long = fa.size.toLong
+
       def unorderedFoldMap[U, V](hm: HashMap[K, U])(f: U => V)(implicit V: CommutativeMonoid[V]): V =
         V.combineAll(hm.iterator.map { case (_, u) => f(u) })
 
