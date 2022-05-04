@@ -36,8 +36,8 @@ import scala.util.control.TailCalls.TailRec
 @typeclass trait Invariant[F[_]] extends Serializable { self =>
 
   /**
-   * Transform an `F[A]` into an `F[B]` by providing an isomorphism between `A`
-   * and `B`.
+   * Transform an `F[A]` into an `F[B]` by providing a transformation from `A`
+   * to `B` and its inverse from `B` to `A` i.e. `f.andThen(g) == identity`.
    *
    * Example:
    * {{{
