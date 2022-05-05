@@ -201,6 +201,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Codacy](https://www.codacy.com/)
 - [Code Dx](https://codedx.com/)
 - [Codecentric](https://codecentric.de)
+- [Cognite](https://www.cognite.com)
 - [Colisweb](https://www.colisweb.com/)
 - [CompStak](https://compstak.com)
 - [Coya](https://coya.com/)
