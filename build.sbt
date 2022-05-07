@@ -278,7 +278,7 @@ lazy val bench = project
     libraryDependencies ++= {
       if (scalaVersion.value.startsWith("2.12"))
         Seq(
-          "org.scalaz" %% "scalaz-core" % "7.2.34",
+          "org.scalaz" %% "scalaz-core" % "7.3.6",
           "org.spire-math" %% "chain" % "0.3.0",
           "co.fs2" %% "fs2-core" % "0.10.7"
         )
