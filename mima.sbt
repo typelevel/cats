@@ -102,7 +102,11 @@ ThisBuild / mimaBinaryIssueFilters ++= {
       )
     ) ++ // New issues found since mima 0.8.0 (#3596, #3641)
     Seq(
-      exclude[NewMixinForwarderProblem]("cats.kernel.Band.combineN")
+      exclude[NewMixinForwarderProblem]("cats.kernel.Band#mcI#sp.combineN"),
+      exclude[NewMixinForwarderProblem]("cats.kernel.Band#mcD#sp.combineN"),
+      exclude[NewMixinForwarderProblem]("cats.kernel.Band#mcJ#sp.combineN"),
+      exclude[NewMixinForwarderProblem]("cats.kernel.Band.combineN"),
+      exclude[NewMixinForwarderProblem]("cats.kernel.Band#mcF#sp.combineN")
     ) ++ // Additional methods in package-private traits
     Seq(
       exclude[ReversedMissingMethodProblem]("cats.data.NonEmptyCollection.grouped")
