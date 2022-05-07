@@ -118,7 +118,7 @@ ThisBuild / mimaBinaryIssueFilters ++= {
       exclude[IncompatibleSignatureProblem]("*")
     ) ++ // New issues found since mima 0.8.0 (#3596, #3641)
     Seq(
-      exclude[NewMixinForwarderProblem]("cats.kernel.Band.combineN"),
+      exclude[NewMixinForwarderProblem]("cats.kernel.Band.combineN")
     ) ++ // Additional methods in package-private traits
     Seq(
       exclude[ReversedMissingMethodProblem]("cats.data.NonEmptyCollection.grouped")
