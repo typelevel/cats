@@ -30,6 +30,10 @@ import scala.{specialized => sp}
 trait Band[@sp(Int, Long, Float, Double) A] extends Any with Semigroup[A] {
   override protected[this] def repeatedCombineN(a: A, n: Int): A =
     a // combine(a, a) == a
+
+  override def combineN(a: A, n: Int): A = // duplicated from semigroup for bincompat
+    if (n <= 0) throw new IllegalArgumentException("Repeated combining for semigroups must have n > 0")
+    else repeatedCombineN(a, n)
 }
 
 object Band extends SemigroupFunctions[Band] {
