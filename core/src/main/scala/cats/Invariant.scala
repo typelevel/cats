@@ -37,7 +37,7 @@ import scala.util.control.TailCalls.TailRec
 
   /**
    * Transform an `F[A]` into an `F[B]` by providing a transformation from `A`
-   * to `B` and its inverse from `B` to `A` i.e. `f.andThen(g) == identity`.
+   * to `B` and its left inverse (aka retraction) from `B` to `A` i.e. `f.andThen(g) == identity`.
    *
    * Example:
    * {{{
