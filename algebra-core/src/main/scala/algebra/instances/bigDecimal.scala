@@ -29,7 +29,7 @@ import algebra.ring._
 package object bigDecimal extends BigDecimalInstances
 
 trait BigDecimalInstances extends cats.kernel.instances.BigDecimalInstances {
-  implicit val bigDecimalAlgebra: BigDecimalAlgebra = new BigDecimalAlgebra()
+  implicit val bigDecimalAlgebra: BigDecimalAlgebra = new BigDecimalAlgebra
 }
 
 class BigDecimalAlgebra(mc: MathContext) extends Field[BigDecimal] with Serializable {

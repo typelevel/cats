@@ -63,7 +63,7 @@ class TrySuite extends CatsSuite {
 
   test("show") {
     forAll { (fs: Try[String]) =>
-      assert(fs.show === (fs.toString))
+      assert(fs.show === fs.toString)
     }
   }
 
@@ -105,7 +105,7 @@ class TrySuite extends CatsSuite {
 
   test("fromTry works") {
     forAll { (t: Try[Int]) =>
-      assert((MonadThrow[Try].fromTry(t)) === t)
+      assert(MonadThrow[Try].fromTry(t) === t)
     }
   }
 
@@ -117,21 +117,21 @@ class TrySuite extends CatsSuite {
   test("Kleisli associativity") {
     forAll { (l: Long, f: Long => Try[Int], g: Int => Try[Char], h: Char => Try[String]) =>
       val isEq = FlatMapLaws[Try].kleisliAssociativity(f, g, h, l)
-      assert(isEq.lhs === (isEq.rhs))
+      assert(isEq.lhs === isEq.rhs)
     }
   }
 
   test("Cokleisli associativity") {
     forAll { (l: Try[Long], f: Try[Long] => Int, g: Try[Int] => Char, h: Try[Char] => String) =>
       val isEq = CoflatMapLaws[Try].cokleisliAssociativity(f, g, h, l)
-      assert(isEq.lhs === (isEq.rhs))
+      assert(isEq.lhs === isEq.rhs)
     }
   }
 
   test("applicative composition") {
     forAll { (fa: Try[Int], fab: Try[Int => Long], fbc: Try[Long => Char]) =>
       val isEq = ApplicativeLaws[Try].applicativeComposition(fa, fab, fbc)
-      assert(isEq.lhs === (isEq.rhs))
+      assert(isEq.lhs === isEq.rhs)
     }
   }
 
@@ -140,14 +140,14 @@ class TrySuite extends CatsSuite {
   test("Kleisli left identity") {
     forAll { (a: Int, f: Int => Try[Long]) =>
       val isEq = monadLaws.kleisliLeftIdentity(a, f)
-      assert(isEq.lhs === (isEq.rhs))
+      assert(isEq.lhs === isEq.rhs)
     }
   }
 
   test("Kleisli right identity") {
     forAll { (a: Int, f: Int => Try[Long]) =>
       val isEq = monadLaws.kleisliRightIdentity(a, f)
-      assert(isEq.lhs === (isEq.rhs))
+      assert(isEq.lhs === isEq.rhs)
     }
   }
 

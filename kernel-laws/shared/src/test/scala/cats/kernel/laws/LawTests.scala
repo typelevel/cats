@@ -54,7 +54,7 @@ object KernelCheck {
   implicit val arbitraryFiniteDuration: Arbitrary[FiniteDuration] = {
     // max range is +/- 292 years, but we give ourselves some extra headroom
     // to ensure that we can add these things up. they crash on overflow.
-    val n = (292L * 365) / 500
+    val n = 292L * 365 / 500
     Arbitrary(
       Gen.oneOf(
         Gen.choose(-n, n).map(FiniteDuration(_, DAYS)),
@@ -374,7 +374,7 @@ class Tests extends TestsConfig with DisciplineSuite {
           else if (y.subsetOf(x)) Some(1)
           else None
 
-        override def lteq(x: Set[A], y: Set[A]): Boolean = (x.subsetOf(y)) || (x == y)
+        override def lteq(x: Set[A], y: Set[A]): Boolean = x.subsetOf(y) || x == y
       }
     checkAll("fromPartialOrdering[Int]", PartialOrderTests(PartialOrder.fromPartialOrdering[Set[Int]]).partialOrder)
   }

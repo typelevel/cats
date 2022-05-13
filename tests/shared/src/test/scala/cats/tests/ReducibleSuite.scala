@@ -42,8 +42,8 @@ class ReducibleSuiteAdditional extends CatsSuite with ReducibleSuiteAdditionalSt
       def split[A](nel: NonEmptyList[A]): (A, List[A]) = (nel.head, nel.tail)
     }
     val nel = NonEmptyList.of(1, 2, 3)
-    assert(R.get(nel)(1L) === (nel.get(1L)))
-    assert(R.size(nel) === (nel.size.toLong))
+    assert(R.get(nel)(1L) === nel.get(1L))
+    assert(R.size(nel) === nel.size.toLong)
     assert(R.get(nel)(4L) === None)
   }
 
@@ -64,11 +64,11 @@ class ReducibleSuiteAdditional extends CatsSuite with ReducibleSuiteAdditionalSt
     assert(R.reduceLeftTo(names)(_.length)((sum, s) => s.length + sum) === totalLength)
     assert(R.reduceMap(names)(_.length) === totalLength)
     val sumLeftM = R.reduceLeftM(names)(Some(_): Option[String]) { (acc, x) =>
-      (Some(acc + x): Option[String])
+      Some(acc + x): Option[String]
     }
     assert(sumLeftM == Some("AaronBettyCalvinDeirdra"))
     val sumMapM = R.reduceMapM(names) { x =>
-      (Some(x): Option[String])
+      Some(x): Option[String]
     }
     assert(sumMapM == Some("AaronBettyCalvinDeirdra"))
     val isNotCalvin: String => Option[String] =
@@ -129,7 +129,7 @@ sealed trait ReducibleSuiteAdditionalStreamSpecific { self: ReducibleSuiteAdditi
     val n = 100000
     val xs = NES(Right(0), Stream.from(1).map(i => if (i < n) Right(i) else Left(i)))
 
-    assert(xs.reduceA === (Left(n)))
+    assert(xs.reduceA === Left(n))
   }
 }
 
@@ -154,26 +154,26 @@ abstract class ReducibleSuite[F[_]: Reducible](name: String)(implicit
     val n = 100000L
     val expected = n * (n + 1) / 2
     val actual = range(1L, n).reduceLeftM(Option.apply)(nonzero)
-    assert(actual === (Some(expected)))
+    assert(actual === Some(expected))
   }
 
   test(s"Reducible[$name].reduceA successful case") {
     val expected = 6
     val actual = fromValues(1.asRight[String], 2.asRight[String], 3.asRight[String]).reduceA
-    assert(actual === (expected.asRight[String]))
+    assert(actual === expected.asRight[String])
   }
 
   test(s"Reducible[$name].reduceA failure case") {
     val expected = "boom!!!"
     val actual = fromValues(1.asRight, "boom!!!".asLeft, 3.asRight).reduceA
-    assert(actual === (expected.asLeft[Int]))
+    assert(actual === expected.asLeft[Int])
   }
 
   test(s"Reducible[$name].reduceMapA successful case") {
     val expected = "123"
     val actual = range(1, 3).reduceMapA(_.toString.some)
 
-    assert(actual === (expected.some))
+    assert(actual === expected.some)
   }
 
   test(s"Reducible[$name].reduceMapA failure case") {
@@ -181,25 +181,25 @@ abstract class ReducibleSuite[F[_]: Reducible](name: String)(implicit
 
     val expected = "boom!!!"
     val actual = range(1, 3).reduceMapA(intToString)
-    assert(actual === (expected.asLeft[Int]))
+    assert(actual === expected.asLeft[Int])
   }
 
   test(s"Reducible[$name].toNonEmptyList/toList consistency") {
     forAll { (fa: F[Int]) =>
-      assert(fa.toList.toNel === (Some(fa.toNonEmptyList)))
+      assert(fa.toList.toNel === Some(fa.toNonEmptyList))
     }
   }
 
   test(s"Reducible[$name].nonEmptyIntercalate") {
     forAll { (fa: F[String], a: String) =>
-      fa.nonEmptyIntercalate(a) === (fa.toList.mkString(a))
+      fa.nonEmptyIntercalate(a) === fa.toList.mkString(a)
     }
   }
 
   test("Reducible#nonEmptyPartition retains size") {
     forAll { (fi: F[Int], f: Int => Either[String, String]) =>
       val folded = fi.nonEmptyPartition(f).fold(identity, identity, _ ++ _.toList)
-      assert(folded.size.toLong === (fi.size))
+      assert(folded.size.toLong === fi.size)
     }
   }
 
@@ -209,10 +209,10 @@ abstract class ReducibleSuite[F[_]: Reducible](name: String)(implicit
       val h: Int => Either[String, Double] = f.andThen(Left.apply)
 
       val withG = fi.nonEmptyPartition(g).right.getOrElse(NonEmptyList.one(""))
-      assert(withG === (Reducible[F].toNonEmptyList(fi).map(f)))
+      assert(withG === Reducible[F].toNonEmptyList(fi).map(f))
 
       val withH = fi.nonEmptyPartition(h).left.getOrElse(NonEmptyList.one(""))
-      assert(withH === (Reducible[F].toNonEmptyList(fi).map(f)))
+      assert(withH === Reducible[F].toNonEmptyList(fi).map(f))
     }
   }
 

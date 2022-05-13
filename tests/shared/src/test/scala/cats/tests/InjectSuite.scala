@@ -41,7 +41,7 @@ class InjectSuite extends CatsSuite {
       val expr1: StringOrInt = Inject[String, StringOrInt].inj(x)
       val expr2: StringOrInt = Inject[Int, StringOrInt].inj(y)
       val res = distr(expr1, expr2)
-      assert(res === (Some(s"$x $y")))
+      assert(res === Some(s"$x $y"))
     }
   }
 
@@ -56,7 +56,7 @@ class InjectSuite extends CatsSuite {
       val expr1: StringOrInt = Inject[String, StringOrInt].apply(x)
       val expr2: StringOrInt = Inject[Int, StringOrInt].apply(y)
       val res = distr(expr1, expr2)
-      assert(res === (Some(s"$x $y")))
+      assert(res === Some(s"$x $y"))
     }
   }
 
@@ -75,7 +75,7 @@ class InjectSuite extends CatsSuite {
   test("null identity") {
     val stringNull = null.asInstanceOf[String]
     assert(Inject.catsReflexiveInjectInstance[String].inj(stringNull) === stringNull)
-    assert(Inject.catsReflexiveInjectInstance[String].prj(stringNull) === (Some(stringNull)))
+    assert(Inject.catsReflexiveInjectInstance[String].prj(stringNull) === Some(stringNull))
   }
 
   checkAll("Inject[String, StringOrInt]", InjectTests[String, StringOrInt].inject)

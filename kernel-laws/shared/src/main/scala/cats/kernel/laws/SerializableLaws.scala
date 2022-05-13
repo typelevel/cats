@@ -49,7 +49,7 @@ object SerializableLaws {
       Prop { _ =>
         import java.io.{ByteArrayInputStream, ByteArrayOutputStream, ObjectInputStream, ObjectOutputStream}
 
-        val baos = new ByteArrayOutputStream()
+        val baos = new ByteArrayOutputStream
         val oos = new ObjectOutputStream(baos)
         var ois: ObjectInputStream = null
         try {

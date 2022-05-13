@@ -535,10 +535,10 @@ sealed abstract private[data] class NonEmptyVectorInstances {
       def flatMap: FlatMap[NonEmptyVector] = NonEmptyVector.catsDataInstancesForNonEmptyVector
 
       def sequential: ZipNonEmptyVector ~> NonEmptyVector =
-        new (ZipNonEmptyVector ~> NonEmptyVector) { def apply[A](a: ZipNonEmptyVector[A]): NonEmptyVector[A] = a.value }
+        new ZipNonEmptyVector ~> NonEmptyVector { def apply[A](a: ZipNonEmptyVector[A]): NonEmptyVector[A] = a.value }
 
       def parallel: NonEmptyVector ~> ZipNonEmptyVector =
-        new (NonEmptyVector ~> ZipNonEmptyVector) {
+        new NonEmptyVector ~> ZipNonEmptyVector {
           def apply[A](nev: NonEmptyVector[A]): ZipNonEmptyVector[A] = new ZipNonEmptyVector(nev)
         }
     }

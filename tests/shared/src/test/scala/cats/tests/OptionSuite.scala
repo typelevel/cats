@@ -72,7 +72,7 @@ class OptionSuite extends CatsSuite {
     assert(1.some.show === "Some(1)")
 
     forAll { (fs: Option[String]) =>
-      assert(fs.show === (fs.toString))
+      assert(fs.show === fs.toString)
     }
   }
 
@@ -84,21 +84,21 @@ class OptionSuite extends CatsSuite {
   test("Kleisli associativity") {
     forAll { (l: Long, f: Long => Option[Int], g: Int => Option[Char], h: Char => Option[String]) =>
       val isEq = FlatMapLaws[Option].kleisliAssociativity(f, g, h, l)
-      assert(isEq.lhs === (isEq.rhs))
+      assert(isEq.lhs === isEq.rhs)
     }
   }
 
   test("Cokleisli associativity") {
     forAll { (l: Option[Long], f: Option[Long] => Int, g: Option[Int] => Char, h: Option[Char] => String) =>
       val isEq = CoflatMapLaws[Option].cokleisliAssociativity(f, g, h, l)
-      assert(isEq.lhs === (isEq.rhs))
+      assert(isEq.lhs === isEq.rhs)
     }
   }
 
   test("applicative composition") {
     forAll { (fa: Option[Int], fab: Option[Int => Long], fbc: Option[Long => Char]) =>
       val isEq = ApplicativeLaws[Option].applicativeComposition(fa, fab, fbc)
-      assert(isEq.lhs === (isEq.rhs))
+      assert(isEq.lhs === isEq.rhs)
     }
   }
 
@@ -107,14 +107,14 @@ class OptionSuite extends CatsSuite {
   test("Kleisli left identity") {
     forAll { (a: Int, f: Int => Option[Long]) =>
       val isEq = monadLaws.kleisliLeftIdentity(a, f)
-      assert(isEq.lhs === (isEq.rhs))
+      assert(isEq.lhs === isEq.rhs)
     }
   }
 
   test("Kleisli right identity") {
     forAll { (a: Int, f: Int => Option[Long]) =>
       val isEq = monadLaws.kleisliRightIdentity(a, f)
-      assert(isEq.lhs === (isEq.rhs))
+      assert(isEq.lhs === isEq.rhs)
     }
   }
 
@@ -132,7 +132,7 @@ class OptionSuite extends CatsSuite {
   }
 
   test("toOptionT consistency") {
-    assert(List(false) === (1.some.toOptionT[List].isEmpty))
-    assert(List(true) === (Option.empty[Int].toOptionT[List].isEmpty))
+    assert(List(false) === 1.some.toOptionT[List].isEmpty)
+    assert(List(true) === Option.empty[Int].toOptionT[List].isEmpty)
   }
 }

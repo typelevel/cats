@@ -65,7 +65,7 @@ class StateTBench {
 
   def fn(seed: Long): Eval[(Long, Int)] =
     Eval.now {
-      val newSeed = (seed * 0x5deece66dL + 0xbL) & 0xffffffffffffL
+      val newSeed = seed * 0x5deece66dL + 0xbL & 0xffffffffffffL
       val n = (newSeed >>> 16).toInt
       (newSeed, n)
     }
@@ -78,6 +78,6 @@ class StateTBench {
       int1 <- randInt
       int2 <- randInt
     } yield {
-      (int1.toLong << 32) | int2
+      int1.toLong << 32 | int2
     }
 }

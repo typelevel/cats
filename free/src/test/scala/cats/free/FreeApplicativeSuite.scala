@@ -198,7 +198,7 @@ object FreeApplicativeSuite {
   implicit def catsLawsArbitraryForListNatTrans: Arbitrary[List ~> List] =
     Arbitrary(
       Gen.oneOf(FunctionK.id[List],
-                new (List ~> List) {
+                new List ~> List {
                   def apply[A](fa: List[A]): List[A] =
                     fa ++ fa
                 }

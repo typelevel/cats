@@ -96,9 +96,9 @@ class LazyListSuite extends CatsSuite {
         // depending on the internal state of the LazyList. Show[LazyList] should return
         // consistent values independent of internal state.
         unevaluatedLL.tail
-        assert(initialShow === (unevaluatedLL.show))
+        assert(initialShow === unevaluatedLL.show)
       } else {
-        assert(lazyList.show === (lazyList.toString))
+        assert(lazyList.show === lazyList.toString)
       }
     }
   }

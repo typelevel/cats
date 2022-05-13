@@ -71,14 +71,14 @@ class RegressionSuite extends CatsSuite with ScalaVersionSpecificRegressionSuite
 
     // test result order
     val ons = List(Option(1), Option(2), Option(3))
-    assert(Traverse[List].sequence(ons) === (Some(List(1, 2, 3))))
+    assert(Traverse[List].sequence(ons) === Some(List(1, 2, 3)))
 
     // test order of effects using a contrived, unsafe state monad.
     val names = List("Alice", "Bob", "Claire")
     val allocated = names.map(alloc)
     val state = Traverse[List].sequence[State[Int, *], Person](allocated)
     val (people, counter) = state.run(0)
-    assert(people === (List(Person(0, "Alice"), Person(1, "Bob"), Person(2, "Claire"))))
+    assert(people === List(Person(0, "Alice"), Person(1, "Bob"), Person(2, "Claire")))
     assert(counter === 3)
 
     // ensure that side-effects occurred in "correct" order
@@ -137,7 +137,7 @@ class RegressionSuite extends CatsSuite with ScalaVersionSpecificRegressionSuite
       count = 0
     }
 
-    assert(List(1, 2, 6, 8).traverse(validate) === (Either.left("6 is greater than 5")))
+    assert(List(1, 2, 6, 8).traverse(validate) === Either.left("6 is greater than 5"))
     // shouldn't have ever evaluated validate(8)
     checkAndResetCount(3)
 
@@ -150,19 +150,19 @@ class RegressionSuite extends CatsSuite with ScalaVersionSpecificRegressionSuite
 
     type StringMap[A] = SortedMap[String, A]
     val intMap: StringMap[Int] = SortedMap("A" -> 1, "B" -> 2, "C" -> 6, "D" -> 8)
-    assert(intMap.traverse(validate) === (Either.left("6 is greater than 5")))
+    assert(intMap.traverse(validate) === Either.left("6 is greater than 5"))
     checkAndResetCount(3)
 
-    assert(NonEmptyList.of(1, 2, 6, 8).traverse(validate) === (Either.left("6 is greater than 5")))
+    assert(NonEmptyList.of(1, 2, 6, 8).traverse(validate) === Either.left("6 is greater than 5"))
     checkAndResetCount(3)
 
-    assert(NonEmptyList.of(6, 8).traverse(validate) === (Either.left("6 is greater than 5")))
+    assert(NonEmptyList.of(6, 8).traverse(validate) === Either.left("6 is greater than 5"))
     checkAndResetCount(1)
 
-    assert(Vector(1, 2, 6, 8).traverse(validate) === (Either.left("6 is greater than 5")))
+    assert(Vector(1, 2, 6, 8).traverse(validate) === Either.left("6 is greater than 5"))
     checkAndResetCount(3)
 
-    assert(List(1, 2, 6, 8).traverse_(validate) === (Either.left("6 is greater than 5")))
+    assert(List(1, 2, 6, 8).traverse_(validate) === Either.left("6 is greater than 5"))
     checkAndResetCount(3)
 
     {
@@ -172,13 +172,13 @@ class RegressionSuite extends CatsSuite with ScalaVersionSpecificRegressionSuite
     }
     checkAndResetCount(3)
 
-    assert(Vector(1, 2, 6, 8).traverse_(validate) === (Either.left("6 is greater than 5")))
+    assert(Vector(1, 2, 6, 8).traverse_(validate) === Either.left("6 is greater than 5"))
     checkAndResetCount(3)
 
-    assert(NonEmptyList.of(1, 2, 6, 7, 8).traverse_(validate) === (Either.left("6 is greater than 5")))
+    assert(NonEmptyList.of(1, 2, 6, 7, 8).traverse_(validate) === Either.left("6 is greater than 5"))
     checkAndResetCount(3)
 
-    assert(NonEmptyList.of(6, 7, 8).traverse_(validate) === (Either.left("6 is greater than 5")))
+    assert(NonEmptyList.of(6, 7, 8).traverse_(validate) === Either.left("6 is greater than 5"))
     checkAndResetCount(1)
   }
 
@@ -201,6 +201,6 @@ class RegressionSuite extends CatsSuite with ScalaVersionSpecificRegressionSuite
 
   test("#2809 MonadErrorOps.reject runs effects only once") {
     val program = StateT.modify[Either[Throwable, *], Int](_ + 1).reject { case _ if false => new Throwable }
-    assert(program.runS(0).toOption === (Some(1)))
+    assert(program.runS(0).toOption === Some(1))
   }
 }

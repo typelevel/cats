@@ -362,7 +362,7 @@ object WriterT extends WriterTInstances with WriterTFunctions with WriterTFuncti
    * }}}
    */
   def liftK[F[_], L](implicit monoidL: Monoid[L], F: Applicative[F]): F ~> WriterT[F, L, *] =
-    new (F ~> WriterT[F, L, *]) { def apply[A](a: F[A]): WriterT[F, L, A] = WriterT.liftF(a) }
+    new F ~> WriterT[F, L, *] { def apply[A](a: F[A]): WriterT[F, L, A] = WriterT.liftF(a) }
 
   @deprecated("Use liftF instead", "1.0.0-RC2")
   def lift[F[_], L, V](fv: F[V])(implicit monoidL: Monoid[L], F: Applicative[F]): WriterT[F, L, V] =
@@ -429,12 +429,12 @@ sealed abstract private[data] class WriterTInstances2 extends WriterTInstances3 
       def monad: Monad[WriterT[M, L, *]] = catsDataMonadForWriterT
 
       def sequential: WriterT[P.F, L, *] ~> WriterT[M, L, *] =
-        new (WriterT[P.F, L, *] ~> WriterT[M, L, *]) {
+        new WriterT[P.F, L, *] ~> WriterT[M, L, *] {
           def apply[A](wfl: WriterT[P.F, L, A]): WriterT[M, L, A] = WriterT(P.sequential(wfl.run))
         }
 
       def parallel: WriterT[M, L, *] ~> WriterT[P.F, L, *] =
-        new (WriterT[M, L, *] ~> WriterT[P.F, L, *]) {
+        new WriterT[M, L, *] ~> WriterT[P.F, L, *] {
           def apply[A](wml: WriterT[M, L, A]): WriterT[P.F, L, A] = WriterT(P.parallel(wml.run))
         }
     }
@@ -838,5 +838,5 @@ private[data] trait WriterTFunctions {
    * Lifts a FunctionK operating on effects to a FunctionK operating on WriterT with these effects.
    */
   def liftFunctionK[F[_], G[_], A](f: F ~> G): WriterT[F, A, *] ~> WriterT[G, A, *] =
-    new (WriterT[F, A, *] ~> WriterT[G, A, *]) { def apply[B](k: WriterT[F, A, B]): WriterT[G, A, B] = k.mapK(f) }
+    new WriterT[F, A, *] ~> WriterT[G, A, *] { def apply[B](k: WriterT[F, A, B]): WriterT[G, A, B] = k.mapK(f) }
 }

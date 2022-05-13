@@ -177,14 +177,14 @@ class EvalSuite extends CatsSuite {
   test("cokleisli left identity") {
     forAll { (fa: Eval[Int], f: Eval[Int] => Long) =>
       val isEq = ComonadLaws[Eval].cokleisliLeftIdentity(fa, f)
-      assert(isEq.lhs === (isEq.rhs))
+      assert(isEq.lhs === isEq.rhs)
     }
   }
 
   test("cokleisli right identity") {
     forAll { (fa: Eval[Int], f: Eval[Int] => Long) =>
       val isEq = ComonadLaws[Eval].cokleisliRightIdentity(fa, f)
-      assert(isEq.lhs === (isEq.rhs))
+      assert(isEq.lhs === isEq.rhs)
     }
   }
 

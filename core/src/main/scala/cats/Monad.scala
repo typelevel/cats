@@ -155,7 +155,7 @@ import simulacrum.{noop, typeclass}
 
     def step(branches: Branches): F[Either[Branches, A]] =
       branches match {
-        case (cond, conseq) :: tail =>
+        case cond, conseq :: tail =>
           flatMap(cond) { b => if (b) map(conseq)(Right(_)) else pure(Left(tail)) }
         case Nil =>
           map(els)(Right(_))

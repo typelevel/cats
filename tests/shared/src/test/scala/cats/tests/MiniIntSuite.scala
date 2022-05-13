@@ -57,13 +57,13 @@ class MiniIntSuite extends CatsSuite {
 
   test("int roundtrip") {
     forAll { (i: MiniInt) =>
-      assert(MiniInt.fromInt(i.toInt) === (Some(i)))
+      assert(MiniInt.fromInt(i.toInt) === Some(i))
     }
   }
 
   test("int bounds") {
     forAll(Gen.chooseNum(MiniInt.minIntValue, MiniInt.maxIntValue)) { (i: Int) =>
-      assert(MiniInt.fromInt(i).map(_.toInt) === (Some(i)))
+      assert(MiniInt.fromInt(i).map(_.toInt) === Some(i))
     }
   }
 }

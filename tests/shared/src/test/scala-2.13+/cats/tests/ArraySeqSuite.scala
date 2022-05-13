@@ -89,7 +89,7 @@ class ArraySeqSuite extends CatsSuite {
 
   test("MonoidK.algebra consistent with Monoid") {
     forAll { (xs: ArraySeq[Int], ys: ArraySeq[Int]) =>
-      assert(MonoidK[ArraySeq].algebra[Int].combine(xs, ys) === (Monoid[ArraySeq[Int]].combine(xs, ys)))
+      assert(MonoidK[ArraySeq].algebra[Int].combine(xs, ys) === Monoid[ArraySeq[Int]].combine(xs, ys))
     }
   }
 }

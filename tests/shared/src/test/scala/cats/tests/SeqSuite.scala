@@ -71,7 +71,7 @@ class SeqSuite extends CatsSuite {
 
   test("show") {
     forAll { (seq: Seq[String]) =>
-      assert(seq.show === (seq.toString))
+      assert(seq.show === seq.toString)
     }
   }
 

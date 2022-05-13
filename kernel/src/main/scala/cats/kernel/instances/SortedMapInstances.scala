@@ -50,7 +50,7 @@ trait SortedMapInstances extends SortedMapInstances3 {
 
   @deprecated("Use catsKernelStdHashForSortedMap override without Order", "2.2.0-M3")
   def catsKernelStdHashForSortedMap[K, V](hashK: Hash[K], orderK: Order[K], hashV: Hash[V]): Hash[SortedMap[K, V]] =
-    new SortedMapHash[K, V]()(hashV, hashK)
+    new SortedMapHash[K, V](hashV, hashK)
 
   implicit def catsKernelStdCommutativeSemigroupForSortedMap[K, V: CommutativeSemigroup]
     : CommutativeSemigroup[SortedMap[K, V]] =
@@ -67,7 +67,7 @@ private[instances] trait SortedMapInstances1 {
 
   @deprecated("Use catsKernelStdEqForSortedMap override without Order", "2.2.0-M3")
   def catsKernelStdEqForSortedMap[K, V](orderK: Order[K], eqV: Eq[V]): Eq[SortedMap[K, V]] =
-    new SortedMapEq[K, V]()(eqV)
+    new SortedMapEq[K, V](eqV)
 }
 
 private[instances] trait SortedMapInstances2 extends SortedMapInstances1 {
@@ -110,10 +110,10 @@ private[instances] class SortedMapPartialOrder[K, V](implicit V: PartialOrder[V]
   }
 }
 
-class SortedMapHash[K, V](implicit V: Hash[V], K: Hash[K]) extends SortedMapEq[K, V]()(V) with Hash[SortedMap[K, V]] {
+class SortedMapHash[K, V](implicit V: Hash[V], K: Hash[K]) extends SortedMapEq[K, V](V) with Hash[SortedMap[K, V]] {
 
   @deprecated("Use the constructor _without_ Order instead, since Order is not required", "2.2.0-M3")
-  private[instances] def this(V: Hash[V], O: Order[K], K: Hash[K]) = this()(V, K)
+  private[instances] def this(V: Hash[V], O: Order[K], K: Hash[K]) = this(V, K)
 
   // adapted from [[scala.util.hashing.MurmurHash3]],
   // but modified standard `Any#hashCode` to `ev.hash`.
@@ -139,7 +139,7 @@ class SortedMapHash[K, V](implicit V: Hash[V], K: Hash[K]) extends SortedMapEq[K
 class SortedMapEq[K, V](implicit V: Eq[V]) extends Eq[SortedMap[K, V]] {
 
   @deprecated("Use the constructor _without_ Order instead, since Order is not required", "2.2.0")
-  private[instances] def this(V: Eq[V], O: Order[K]) = this()(V)
+  private[instances] def this(V: Eq[V], O: Order[K]) = this(V)
 
   def eqv(x: SortedMap[K, V], y: SortedMap[K, V]): Boolean =
     if (x eq y) true

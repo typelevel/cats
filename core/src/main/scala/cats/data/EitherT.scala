@@ -786,7 +786,7 @@ object EitherT extends EitherTInstances {
    * }}}
    */
   final def liftK[F[_], A](implicit F: Functor[F]): F ~> EitherT[F, A, *] =
-    new (F ~> EitherT[F, A, *]) { def apply[B](fb: F[B]): EitherT[F, A, B] = right(fb) }
+    new F ~> EitherT[F, A, *] { def apply[B](fb: F[B]): EitherT[F, A, B] = right(fb) }
 
   /**
    * Lifts an effect into EitherT, catching all errors from the effect and lifting them into EitherT's error channel.
@@ -805,7 +805,7 @@ object EitherT extends EitherTInstances {
    * }}}
    */
   final def liftAttemptK[F[_], E](implicit F: ApplicativeError[F, E]): F ~> EitherT[F, E, *] =
-    new (F ~> EitherT[F, E, *]) {
+    new F ~> EitherT[F, E, *] {
       def apply[A](fa: F[A]): EitherT[F, E, A] = EitherT(F.attempt(fa))
     }
 
@@ -994,7 +994,7 @@ abstract private[data] class EitherTInstances extends EitherTInstances1 {
       def monad: Monad[EitherT[M, E, *]] = cats.data.EitherT.catsDataMonadErrorForEitherT
 
       def sequential: Nested[P.F, Validated[E, *], *] ~> EitherT[M, E, *] =
-        new (Nested[P.F, Validated[E, *], *] ~> EitherT[M, E, *]) {
+        new Nested[P.F, Validated[E, *], *] ~> EitherT[M, E, *] {
           def apply[A](nested: Nested[P.F, Validated[E, *], A]): EitherT[M, E, A] = {
             val mva = P.sequential(nested.value)
             EitherT(Functor[M].map(mva)(_.toEither))
@@ -1002,7 +1002,7 @@ abstract private[data] class EitherTInstances extends EitherTInstances1 {
         }
 
       def parallel: EitherT[M, E, *] ~> Nested[P.F, Validated[E, *], *] =
-        new (EitherT[M, E, *] ~> Nested[P.F, Validated[E, *], *]) {
+        new EitherT[M, E, *] ~> Nested[P.F, Validated[E, *], *] {
           def apply[A](eitherT: EitherT[M, E, A]): Nested[P.F, Validated[E, *], A] = {
             val fea = P.parallel(eitherT.value)
             Nested(P.applicative.map(fea)(Validated.fromEither))
@@ -1025,7 +1025,7 @@ abstract private[data] class EitherTInstances extends EitherTInstances1 {
       def monad: Monad[EitherT[M, E, *]] = cats.data.EitherT.catsDataMonadErrorForEitherT
 
       def sequential: Nested[P.F, Either[E, *], *] ~> EitherT[M, E, *] =
-        new (Nested[P.F, Either[E, *], *] ~> EitherT[M, E, *]) {
+        new Nested[P.F, Either[E, *], *] ~> EitherT[M, E, *] {
           def apply[A](nested: Nested[P.F, Either[E, *], A]): EitherT[M, E, A] = {
             val mva = P.sequential(nested.value)
             EitherT(Functor[M].map(mva)(x => x))
@@ -1033,7 +1033,7 @@ abstract private[data] class EitherTInstances extends EitherTInstances1 {
         }
 
       def parallel: EitherT[M, E, *] ~> Nested[P.F, Either[E, *], *] =
-        new (EitherT[M, E, *] ~> Nested[P.F, Either[E, *], *]) {
+        new EitherT[M, E, *] ~> Nested[P.F, Either[E, *], *] {
           def apply[A](eitherT: EitherT[M, E, A]): Nested[P.F, Either[E, *], A] = {
             val fea = P.parallel(eitherT.value)
             Nested(P.applicative.map(fea)(x => x))
@@ -1090,13 +1090,13 @@ abstract private[data] class EitherTInstances1 extends EitherTInstances2 {
       def monad: Monad[EitherT[M, E, *]] = cats.data.EitherT.catsDataMonadErrorForEitherT
 
       def sequential: Nested[M, Validated[E, *], *] ~> EitherT[M, E, *] =
-        new (Nested[M, Validated[E, *], *] ~> EitherT[M, E, *]) {
+        new Nested[M, Validated[E, *], *] ~> EitherT[M, E, *] {
           def apply[A](nested: Nested[M, Validated[E, *], A]): EitherT[M, E, A] =
             EitherT(Monad[M].map(nested.value)(_.toEither))
         }
 
       def parallel: EitherT[M, E, *] ~> Nested[M, Validated[E, *], *] =
-        new (EitherT[M, E, *] ~> Nested[M, Validated[E, *], *]) {
+        new EitherT[M, E, *] ~> Nested[M, Validated[E, *], *] {
           def apply[A](eitherT: EitherT[M, E, A]): Nested[M, Validated[E, *], A] =
             Nested(Monad[M].map(eitherT.value)(Validated.fromEither))
         }

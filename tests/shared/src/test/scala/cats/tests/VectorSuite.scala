@@ -74,7 +74,7 @@ class VectorSuite extends CatsSuite {
     assert(Vector.empty[Int].show === "Vector()")
 
     forAll { (vec: Vector[String]) =>
-      assert(vec.show === (vec.toString))
+      assert(vec.show === vec.toString)
     }
   }
 

@@ -375,7 +375,7 @@ sealed private[data] trait CommonIRWSTConstructors {
    * }}}
    */
   def liftK[F[_], E, L, S](implicit F: Applicative[F], L: Monoid[L]): F ~> IndexedReaderWriterStateT[F, E, L, S, S, *] =
-    new (F ~> IndexedReaderWriterStateT[F, E, L, S, S, *]) {
+    new F ~> IndexedReaderWriterStateT[F, E, L, S, S, *] {
       def apply[A](a: F[A]): IndexedReaderWriterStateT[F, E, L, S, S, A] = IndexedReaderWriterStateT.liftF(a)
     }
 

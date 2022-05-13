@@ -40,14 +40,14 @@ class MonadSuite extends CatsSuite {
   test("whileM_") {
     forAll(smallPosInt) { (max: Int) =>
       val (result, _) = increment.whileM_(StateT.inspect(i => !(i >= max))).run(0)
-      assert(result === (Math.max(0, max)))
+      assert(result === Math.max(0, max))
     }
   }
 
   test("whileM") {
     forAll(smallPosInt) { (max: Int) =>
       val (result, aggregation) = incrementAndGet.whileM[Vector](StateT.inspect(i => !(i >= max))).run(0)
-      assert(result === (Math.max(0, max)))
+      assert(result === Math.max(0, max))
       assert(aggregation === (if (max > 0) (1 to max).toVector else Vector.empty))
     }
   }
@@ -63,7 +63,7 @@ class MonadSuite extends CatsSuite {
     forAll(smallPosInt) { (max: Int) =>
       val (result, aggregation) = incrementAndGet.untilM[Vector](StateT.inspect(_ >= max)).run(-1)
       assert(result === max)
-      assert(aggregation === ((0 to max).toVector))
+      assert(aggregation === (0 to max).toVector)
     }
   }
 
@@ -80,7 +80,7 @@ class MonadSuite extends CatsSuite {
   test("iterateWhile") {
     forAll(smallPosInt) { (max: Int) =>
       val (result, _) = incrementAndGet.iterateWhile(_ < max).run(-1)
-      assert(result === (Math.max(0, max)))
+      assert(result === Math.max(0, max))
     }
   }
 
@@ -92,7 +92,7 @@ class MonadSuite extends CatsSuite {
   test("iterateUntil") {
     forAll(smallPosInt) { (max: Int) =>
       val (result, _) = incrementAndGet.iterateUntil(_ == max).run(-1)
-      assert(result === (Math.max(0, max)))
+      assert(result === Math.max(0, max))
     }
   }
 
@@ -104,25 +104,25 @@ class MonadSuite extends CatsSuite {
   test("iterateWhileM") {
     forAll(smallPosInt) { (max: Int) =>
       val (n, sum) = 0.iterateWhileM(s => incrementAndGet.map(_ + s))(_ < max).run(0)
-      assert(sum === (n * (n + 1) / 2))
+      assert(sum === n * (n + 1) / 2)
     }
   }
 
   test("iterateWhileM is stack safe") {
     val (n, sum) = 0.iterateWhileM(s => incrementAndGet.map(_ + s))(_ < 50000000).run(0)
-    assert(sum === (n * (n + 1) / 2))
+    assert(sum === n * (n + 1) / 2)
   }
 
   test("iterateUntilM") {
     forAll(smallPosInt) { (max: Int) =>
       val (n, sum) = 0.iterateUntilM(s => incrementAndGet.map(_ + s))(_ > max).run(0)
-      assert(sum === (n * (n + 1) / 2))
+      assert(sum === n * (n + 1) / 2)
     }
   }
 
   test("iterateUntilM is stack safe") {
     val (n, sum) = 0.iterateUntilM(s => incrementAndGet.map(_ + s))(_ > 50000000).run(0)
-    assert(sum === (n * (n + 1) / 2))
+    assert(sum === n * (n + 1) / 2)
   }
 
   test("ifElseM") {

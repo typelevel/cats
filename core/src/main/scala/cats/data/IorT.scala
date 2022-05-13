@@ -304,7 +304,7 @@ object IorT extends IorTInstances {
    * }}}
    */
   final def liftK[F[_], A](implicit F: Functor[F]): F ~> IorT[F, A, *] =
-    new (F ~> IorT[F, A, *]) {
+    new F ~> IorT[F, A, *] {
       def apply[B](fb: F[B]): IorT[F, A, B] = right(fb)
     }
 
@@ -496,11 +496,11 @@ abstract private[data] class IorTInstances extends IorTInstances1 {
       type F[x] = IorT[P.F, E, x]
 
       val parallel: IorT[M, E, *] ~> IorT[P.F, E, *] =
-        new (IorT[M, E, *] ~> IorT[P.F, E, *]) {
+        new IorT[M, E, *] ~> IorT[P.F, E, *] {
           def apply[A](fm: IorT[M, E, A]): IorT[P.F, E, A] = IorT(P.parallel(fm.value))
         }
       val sequential: IorT[P.F, E, *] ~> IorT[M, E, *] =
-        new (IorT[P.F, E, *] ~> IorT[M, E, *]) {
+        new IorT[P.F, E, *] ~> IorT[M, E, *] {
           def apply[A](ff: IorT[P.F, E, A]): IorT[M, E, A] = IorT(P.sequential(ff.value))
         }
 
@@ -528,11 +528,11 @@ abstract private[data] class IorTInstances extends IorTInstances1 {
       type Dummy // fix to make this one more specific than the catsDataParallelForIorTWithSequentialEffect, see https://github.com/typelevel/cats/pull/2335#issuecomment-408249775
 
       val parallel: IorT[M, E, *] ~> IorT[P.F, E, *] =
-        new (IorT[M, E, *] ~> IorT[P.F, E, *]) {
+        new IorT[M, E, *] ~> IorT[P.F, E, *] {
           def apply[A](fm: IorT[M, E, A]): IorT[P.F, E, A] = IorT(P.parallel(fm.value))
         }
       val sequential: IorT[P.F, E, *] ~> IorT[M, E, *] =
-        new (IorT[P.F, E, *] ~> IorT[M, E, *]) {
+        new IorT[P.F, E, *] ~> IorT[M, E, *] {
           def apply[A](ff: IorT[P.F, E, A]): IorT[M, E, A] = IorT(P.sequential(ff.value))
         }
 

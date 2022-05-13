@@ -70,7 +70,7 @@ class InvariantCoyonedaSuite extends CatsSuite {
 
   test("mapK and run is same as applying natural trans") {
     forAll { (x: Option[Int], y: Option[Int]) =>
-      val nt = new (Magma ~> Magma) {
+      val nt = new Magma ~> Magma {
         def apply[A](m: Magma[A]): Magma[A] = (x, y) => m(y, x)
       }
       val m: Magma[Option[Int]] = _.orElse(_)

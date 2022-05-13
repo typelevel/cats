@@ -119,188 +119,188 @@ class IorTSuite extends CatsSuite {
 
   test("fold with Id consistent with Ior fold") {
     forAll { (iort: IorT[Id, String, Int], fa: String => Long, fb: Int => Long, fab: (String, Int) => Long) =>
-      assert(iort.fold(fa, fb, fab) === (iort.value.fold(fa, fb, fab)))
+      assert(iort.fold(fa, fb, fab) === iort.value.fold(fa, fb, fab))
     }
   }
 
   test("foldF with Id consistent with Ior fold") {
     forAll { (iort: IorT[Id, String, Int], fa: String => Long, fb: Int => Long, fab: (String, Int) => Long) =>
-      assert(iort.foldF(fa, fb, fab) === (iort.value.fold(fa, fb, fab)))
+      assert(iort.foldF(fa, fb, fab) === iort.value.fold(fa, fb, fab))
     }
   }
 
   test("isLeft with Id consistent with Ior isLeft") {
     forAll { (iort: IorT[Id, String, Int]) =>
-      assert(iort.isLeft === (iort.value.isLeft))
+      assert(iort.isLeft === iort.value.isLeft)
     }
   }
 
   test("isRight with Id consistent with Ior isRight") {
     forAll { (iort: IorT[Id, String, Int]) =>
-      assert(iort.isRight === (iort.value.isRight))
+      assert(iort.isRight === iort.value.isRight)
     }
   }
 
   test("isBoth with Id consistent with Ior isBoth") {
     forAll { (iort: IorT[Id, String, Int]) =>
-      assert(iort.isBoth === (iort.value.isBoth))
+      assert(iort.isBoth === iort.value.isBoth)
     }
   }
 
   test("isBoth consistent with swap") {
     forAll { (iort: IorT[List, String, Int]) =>
-      assert(iort.isBoth === (iort.swap.isBoth))
+      assert(iort.isBoth === iort.swap.isBoth)
     }
   }
 
   test("double swap is noop") {
     forAll { (iort: IorT[List, String, Int]) =>
-      assert(iort.swap.swap.value === (iort.value))
+      assert(iort.swap.swap.value === iort.value)
     }
   }
 
   test("getOrElse with Id consistent with Ior getOrElse") {
     forAll { (iort: IorT[Id, String, Int], i: Int) =>
-      assert(iort.getOrElse(i) === (iort.value.getOrElse(i)))
+      assert(iort.getOrElse(i) === iort.value.getOrElse(i))
     }
   }
 
   test("getOrElseF with Id consistent with Ior getOrElse") {
     forAll { (iort: IorT[Id, String, Int], i: Int) =>
-      assert(iort.getOrElseF(i) === (iort.value.getOrElse(i)))
+      assert(iort.getOrElseF(i) === iort.value.getOrElse(i))
     }
   }
 
   test("valueOr with Id consistent with Ior valueOr") {
     forAll { (iort: IorT[Id, String, Int], f: String => Int) =>
-      assert(iort.valueOr(f) === (iort.value.valueOr(f)))
+      assert(iort.valueOr(f) === iort.value.valueOr(f))
     }
   }
 
   test("forall with Id consistent with Ior forall") {
     forAll { (iort: IorT[Id, String, Int], f: Int => Boolean) =>
-      assert(iort.forall(f) === (iort.value.forall(f)))
+      assert(iort.forall(f) === iort.value.forall(f))
     }
   }
 
   test("exists with Id consistent with Ior exists") {
     forAll { (iort: IorT[Id, String, Int], f: Int => Boolean) =>
-      assert(iort.exists(f) === (iort.value.exists(f)))
+      assert(iort.exists(f) === iort.value.exists(f))
     }
   }
 
   test("toOption consistent with isLeft") {
     forAll { (iort: IorT[List, String, Int]) =>
-      assert(iort.toOption.isDefined.map(!_) === (iort.isLeft))
+      assert(iort.toOption.isDefined.map(!_) === iort.isLeft)
     }
   }
 
   test("toEither consistent with toOption") {
     forAll { (iort: IorT[List, String, Int]) =>
-      assert(iort.toEither.toOption === (iort.toOption))
+      assert(iort.toEither.toOption === iort.toOption)
     }
   }
 
   test("toEither consistent with isLeft") {
     forAll { (iort: IorT[List, String, Int]) =>
-      assert(iort.toEither.isLeft === (iort.isLeft))
+      assert(iort.toEither.isLeft === iort.isLeft)
     }
   }
 
   test("toNested has no loss") {
     forAll { (iort: IorT[List, String, Int]) =>
-      assert(iort.toNested.value === (iort.value))
+      assert(iort.toNested.value === iort.value)
     }
   }
 
   test("toNestedValidated consistent with Ior toValidated") {
     forAll { (iort: IorT[List, String, Int]) =>
-      assert(iort.toNestedValidated.value === (iort.value.map(_.toValidated)))
+      assert(iort.toNestedValidated.value === iort.value.map(_.toValidated))
     }
   }
 
   test("toValidated consistent with Ior toValidated") {
     forAll { (iort: IorT[List, String, Int]) =>
-      assert(iort.toValidated === (iort.value.map(_.toValidated)))
+      assert(iort.toValidated === iort.value.map(_.toValidated))
     }
   }
 
   test("to consistent with toOption") {
     forAll { (iort: IorT[List, String, Int]) =>
-      assert(iort.to[Option] === (iort.toOption.value))
+      assert(iort.to[Option] === iort.toOption.value)
     }
   }
 
   test("collectRight with List consistent with flattening a to[List]") {
     forAll { (iort: IorT[List, String, Int]) =>
-      assert(iort.collectRight === (iort.to[List].flatten))
+      assert(iort.collectRight === iort.to[List].flatten)
     }
   }
 
   test("merge with Id consistent with Ior merge") {
     forAll { (iort: IorT[Id, Int, Int]) =>
-      assert(iort.merge === (iort.value.merge))
+      assert(iort.merge === iort.value.merge)
     }
   }
 
   test("mapK consistent with f(value)+pure") {
-    val f: List ~> Option = new (List ~> Option) { def apply[A](a: List[A]): Option[A] = a.headOption }
+    val f: List ~> Option = new List ~> Option { def apply[A](a: List[A]): Option[A] = a.headOption }
     forAll { (iort: IorT[List, String, Int]) =>
-      assert(iort.mapK(f) === (IorT(f(iort.value))))
+      assert(iort.mapK(f) === IorT(f(iort.value)))
     }
   }
 
   test("leftMap with Id consistent with Ior leftMap") {
     forAll { (iort: IorT[Id, String, Int], f: String => Long) =>
-      assert(iort.leftMap(f).value === (iort.value.leftMap(f)))
+      assert(iort.leftMap(f).value === iort.value.leftMap(f))
     }
   }
 
   test("leftFlatMap consistent with leftMap") {
     forAll { (iort: IorT[List, String, Int], f: String => String) =>
-      assert(iort.leftFlatMap(v => IorT.left[Int](List(f(v)))) === (iort.leftMap(f)))
+      assert(iort.leftFlatMap(v => IorT.left[Int](List(f(v)))) === iort.leftMap(f))
     }
   }
 
   test("leftFlatMap consistent with swap and then flatMap") {
     forAll { (iort: IorT[List, String, Int], f: String => IorT[List, String, Int]) =>
-      assert(iort.leftFlatMap(f) === (iort.swap.flatMap(a => f(a).swap).swap))
+      assert(iort.leftFlatMap(f) === iort.swap.flatMap(a => f(a).swap).swap)
     }
   }
 
   test("leftSemiflatMap consistent with leftMap") {
     forAll { (iort: IorT[List, String, Int], f: String => String) =>
-      assert(iort.leftSemiflatMap(v => List(f(v))) === (iort.leftMap(f)))
+      assert(iort.leftSemiflatMap(v => List(f(v))) === iort.leftMap(f))
     }
   }
 
   test("leftSemiflatmap consistent with swap and the semiflatMap") {
     forAll { (iort: IorT[List, String, Int], f: String => List[String]) =>
-      assert(iort.leftSemiflatMap(f) === (iort.swap.semiflatMap(a => f(a)).swap))
+      assert(iort.leftSemiflatMap(f) === iort.swap.semiflatMap(a => f(a)).swap)
     }
   }
 
   test("transform consistent with value.map") {
     forAll { (iort: IorT[List, String, Int], f: Ior[String, Int] => Ior[Long, Double]) =>
-      assert(iort.transform(f) === (IorT(iort.value.map(f))))
+      assert(iort.transform(f) === IorT(iort.value.map(f)))
     }
   }
 
   test("applyAlt with Id consistent with map") {
     forAll { (iort: IorT[Id, String, Int], f: Int => String) =>
-      assert(iort.applyAlt(IorT.pure(f)) === (iort.map(f)))
+      assert(iort.applyAlt(IorT.pure(f)) === iort.map(f))
     }
   }
 
   test("flatMapF consistent with flatMap") {
     forAll { (iort: IorT[List, String, Int], f: Int => IorT[List, String, Int]) =>
-      assert(iort.flatMapF(f(_).value) === (iort.flatMap(f)))
+      assert(iort.flatMapF(f(_).value) === iort.flatMap(f))
     }
   }
 
   test("subflatMap consistent with value.map+flatMap") {
     forAll { (iort: IorT[List, String, Int], f: Int => Ior[String, Double]) =>
-      assert(iort.subflatMap(f) === (IorT(iort.value.map(_.flatMap(f)))))
+      assert(iort.subflatMap(f) === IorT(iort.value.map(_.flatMap(f))))
     }
   }
 
@@ -316,49 +316,61 @@ class IorTSuite extends CatsSuite {
 
   test("IorT.left with Option isLeft") {
     forAll { (option: Option[String]) =>
-      assert(IorT.left[Int](option).isLeft === (option.map(_ => true)))
+      assert(
+        IorT.left[Int](option).isLeft === option.map(
+        _ => true)
+      )
     }
   }
 
   test("IorT.leftT isLeft") {
     forAll { (s: String) =>
-      assert(IorT.leftT[Option, Int](s).isLeft === (Some(true)))
+      assert(IorT.leftT[Option, Int](s).isLeft === Some(true))
     }
   }
 
   test("IorT.right with Option isRight") {
     forAll { (option: Option[Int]) =>
-      assert(IorT.right[String](option).isRight === (option.map(_ => true)))
+      assert(
+        IorT.right[String](option).isRight === option.map(
+        _ => true)
+      )
     }
   }
 
   test("IorT.rightT consistent with IorT.pure") {
     forAll { (i: Int) =>
-      assert(IorT.rightT[Option, String](i).value === (IorT.pure[Option, String](i).value))
+      assert(IorT.rightT[Option, String](i).value === IorT.pure[Option, String](i).value)
     }
   }
 
   test("IorT.both isBoth with Option consistent with Option zip") {
     forAll { (optionS: Option[String], optionI: Option[Int]) =>
-      assert(IorT.both(optionS, optionI).isBoth === (optionS.zip(optionI).headOption.map(_ => true)))
+      assert(
+        IorT.both(optionS, optionI).isBoth === optionS
+          .zip(optionI)
+          .headOption
+          .map(
+          _ => true)
+      )
     }
   }
 
   test("IorT.bothT isBoth") {
     forAll { (s: String, i: Int) =>
-      assert(IorT.bothT[Option](s, i).isBoth === (Some(true)))
+      assert(IorT.bothT[Option](s, i).isBoth === Some(true))
     }
   }
 
   test("IorT.pure isRight") {
     forAll { (i: Int) =>
-      assert(IorT.rightT[Option, String](i).isRight === (Some(true)))
+      assert(IorT.rightT[Option, String](i).isRight === Some(true))
     }
   }
 
   test("IorT.liftF consistent with IorT.right") {
     forAll { (option: Option[Int]) =>
-      assert(IorT.liftF[Option, String, Int](option).value === (IorT.right[String](option).value))
+      assert(IorT.liftF[Option, String, Int](option).value === IorT.right[String](option).value)
     }
   }
 
@@ -382,19 +394,19 @@ class IorTSuite extends CatsSuite {
 
   test("IorT.fromOption isLeft consistent with Option isEmpty") {
     forAll { (option: Option[Int], s: String) =>
-      assert(IorT.fromOption[Id](option, s).isLeft === (option.isEmpty))
+      assert(IorT.fromOption[Id](option, s).isLeft === option.isEmpty)
     }
   }
 
   test("IorT.fromOptionF isLeft consistent with Option isEmpty") {
     forAll { (option: Option[Int], s: String) =>
-      assert(IorT.fromOptionF[Id, String, Int](option, s).isLeft === (option.isEmpty))
+      assert(IorT.fromOptionF[Id, String, Int](option, s).isLeft === option.isEmpty)
     }
   }
 
   test("IorT.fromOptionM consistent with IorT.fromOptionF") {
     forAll { (option: Option[Int], s: String) =>
-      assert(IorT.fromOptionM[Id, String, Int](option, s) === (IorT.fromOptionF[Id, String, Int](option, s)))
+      assert(IorT.fromOptionM[Id, String, Int](option, s) === IorT.fromOptionF[Id, String, Int](option, s))
     }
   }
 

@@ -69,7 +69,7 @@ class SortedMapSuite extends CatsSuite {
     forAll { (map: SortedMap[Int, String]) =>
       assert(map.show.nonEmpty)
       assert(map.show.startsWith("SortedMap("))
-      assert(map.show === (implicitly[Show[SortedMap[Int, String]]].show(map)))
+      assert(map.show === implicitly[Show[SortedMap[Int, String]]].show(map))
     }
   }
 

@@ -54,7 +54,7 @@ class LazyListPartialOrder[A](implicit ev: PartialOrder[A]) extends PartialOrder
     else StaticMethods.iteratorPartialCompare(xs.iterator, ys.iterator)
 }
 
-class LazyListHash[A](implicit ev: Hash[A]) extends LazyListEq[A]()(ev) with Hash[LazyList[A]] {
+class LazyListHash[A](implicit ev: Hash[A]) extends LazyListEq[A](ev) with Hash[LazyList[A]] {
   def hash(xs: LazyList[A]): Int = StaticMethods.orderedHash(xs)
 }
 

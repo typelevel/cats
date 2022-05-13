@@ -64,7 +64,7 @@ private[instances] trait FunctionInstancesBinCompat0 {
 
   implicit def catsStdDeferForFunction1[A]: Defer[A => *] =
     new Defer[A => *] {
-      case class Deferred[B](fa: () => A => B) extends (A => B) {
+      case class Deferred[B](fa: () => A => B) extends A => B {
         def apply(a: A) = {
           @annotation.tailrec
           def loop(f: () => A => B): B =
@@ -215,7 +215,7 @@ sealed private[instances] trait Function1Instances0 {
 
   implicit def catsStdDistributiveForFunction1[T1]: Distributive[T1 => *] =
     new Distributive[T1 => *] {
-      def distribute[F[_]: Functor, A, B](fa: F[A])(f: A => (T1 => B)): T1 => F[B] = { t1 =>
+      def distribute[F[_]: Functor, A, B](fa: F[A])(f: A => T1 => B): T1 => F[B] = { t1 =>
         Functor[F].map(fa)(a => f(a)(t1))
       }
 

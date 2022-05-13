@@ -61,7 +61,7 @@ private[instances] trait MapInstances1 {
     new MapMonoid[K, V]
 }
 
-class MapHash[K, V](implicit V: Hash[V]) extends MapEq[K, V]()(V) with Hash[Map[K, V]] {
+class MapHash[K, V](implicit V: Hash[V]) extends MapEq[K, V](V) with Hash[Map[K, V]] {
   // adapted from [[scala.util.hashing.MurmurHash3]],
   // but modified standard `Any#hashCode` to `ev.hash`.
   import scala.util.hashing.MurmurHash3._

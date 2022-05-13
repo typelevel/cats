@@ -126,7 +126,7 @@ object ContT {
    * }}}
    */
   def liftK[M[_], B](implicit M: FlatMap[M]): M ~> ContT[M, B, *] =
-    new (M ~> ContT[M, B, *]) {
+    new M ~> ContT[M, B, *] {
       def apply[A](ma: M[A]): ContT[M, B, A] = ContT.liftF(ma)
     }
 

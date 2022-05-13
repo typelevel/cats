@@ -48,7 +48,7 @@ trait DeferLaws[F[_]] {
       else F.defer(loop(c - 1))
 
     val cnt = if (Platform.isJvm) 20000 else 2000
-    loop(cnt) <-> (fa(()))
+    loop(cnt) <-> fa(())
   }
 
   def deferMatchesFix[A](fa: Unit => F[A]): IsEq[F[A]] = {

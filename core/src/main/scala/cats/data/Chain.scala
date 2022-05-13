@@ -265,7 +265,7 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
     @tailrec
     def go(rem: Chain[A]): Chain[A] =
       rem.uncons match {
-        case Some((a, tail)) =>
+        case Some(a, tail) =>
           if (p(a)) go(tail)
           else rem
 
@@ -458,7 +458,7 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
 
       m.get(k) match {
         case Some(cat) => m = m.updated(key = k, value = cat :+ f(elem))
-        case None      => m += (k -> NonEmptyChain.one(f(elem)))
+        case None      => m += k -> NonEmptyChain.one(f(elem))
       }
     }
 
@@ -517,7 +517,7 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
 
       m.get(k) match {
         case Some(b) => m = m.updated(key = k, value = combine(b, f(elem)))
-        case None    => m += (k -> f(elem))
+        case None    => m += k -> f(elem)
       }
     }
 
@@ -569,7 +569,7 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
     @tailrec
     def go(rem: Chain[A], acc: Chain[A]): Option[(A, Chain[A])] =
       rem.uncons match {
-        case Some((a, tail)) =>
+        case Some(a, tail) =>
           if (!f(a)) go(tail, acc :+ a)
           else Some((a, acc ++ tail))
 
@@ -1118,7 +1118,7 @@ object Chain extends ChainInstances {
     private[this] var rights: List[NonEmpty[A]] = Nil
     private[this] var currentIterator: Iterator[A] = null
 
-    override def hasNext: Boolean = (c ne null) || ((currentIterator ne null) && currentIterator.hasNext)
+    override def hasNext: Boolean = (c ne null) || (currentIterator ne null) && currentIterator.hasNext
 
     override def next(): A = {
       @tailrec def go: A =
@@ -1171,7 +1171,7 @@ object Chain extends ChainInstances {
     private[this] var lefts: List[NonEmpty[A]] = Nil
     private[this] var currentIterator: Iterator[A] = null
 
-    override def hasNext: Boolean = (c ne null) || ((currentIterator ne null) && currentIterator.hasNext)
+    override def hasNext: Boolean = (c ne null) || (currentIterator ne null) && currentIterator.hasNext
 
     override def next(): A = {
       @tailrec def go: A =
@@ -1229,8 +1229,8 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
       def foldRight[A, B](fa: Chain[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = {
         def loop(as: Chain[A]): Eval[B] =
           as.uncons match {
-            case Some((h, t)) => f(h, Eval.defer(loop(t)))
-            case None         => lb
+            case Some(h, t) => f(h, Eval.defer(loop(t)))
+            case None       => lb
           }
 
         Eval.defer(loop(fa))
@@ -1252,8 +1252,8 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
       def coflatMap[A, B](fa: Chain[A])(f: Chain[A] => B): Chain[B] = {
         @tailrec def go(as: Chain[A], res: ListBuffer[B]): Chain[B] =
           as.uncons match {
-            case Some((_, t)) => go(t, res += f(as))
-            case None         => Chain.fromSeq(res.result())
+            case Some(_, t) => go(t, res += f(as))
+            case None       => Chain.fromSeq(res.result())
           }
 
         go(fa, ListBuffer.empty)
@@ -1279,7 +1279,7 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
           rest match {
             case hd :: tl =>
               hd.uncons match {
-                case Some((hdh, hdt)) =>
+                case Some(hdh, hdt) =>
                   hdh match {
                     case Right(b) =>
                       go(hdt :: tl, acc :+ b)

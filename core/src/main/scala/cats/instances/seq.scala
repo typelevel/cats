@@ -111,7 +111,7 @@ trait SeqInstances extends cats.kernel.instances.SeqInstances {
                   buf += b
                   loop()
                 case Left(a) =>
-                  state = (fn(a).iterator) :: h :: tail
+                  state = fn(a).iterator :: h :: tail
                   loop()
               }
           }
@@ -221,9 +221,9 @@ trait SeqInstances extends cats.kernel.instances.SeqInstances {
       def apply: Apply[ZipSeq] = ZipSeq.catsDataCommutativeApplyForZipSeq
 
       def sequential: ZipSeq ~> Seq =
-        new (ZipSeq ~> Seq) { def apply[A](a: ZipSeq[A]): Seq[A] = a.value }
+        new ZipSeq ~> Seq { def apply[A](a: ZipSeq[A]): Seq[A] = a.value }
 
       def parallel: Seq ~> ZipSeq =
-        new (Seq ~> ZipSeq) { def apply[A](v: Seq[A]): ZipSeq[A] = new ZipSeq(v) }
+        new Seq ~> ZipSeq { def apply[A](v: Seq[A]): ZipSeq[A] = new ZipSeq(v) }
     }
 }

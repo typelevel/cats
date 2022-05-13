@@ -70,20 +70,20 @@ class EitherKSuite extends CatsSuite {
 
   test("swap negates isLeft/isRight") {
     forAll { (x: EitherK[Option, Option, Int]) =>
-      assert(x.isLeft =!= (x.swap.isLeft))
-      assert(x.isRight =!= (x.swap.isRight))
+      assert(x.isLeft =!= x.swap.isLeft)
+      assert(x.isRight =!= x.swap.isRight)
     }
   }
 
   test("isLeft consistent with isRight") {
     forAll { (x: EitherK[Option, Option, Int]) =>
-      assert(x.isLeft =!= (x.isRight))
+      assert(x.isLeft =!= x.isRight)
     }
   }
 
   test("toValidated + toEither is identity") {
     forAll { (x: EitherK[Option, List, Int]) =>
-      assert(x.toValidated.toEither === (x.run))
+      assert(x.toValidated.toEither === x.run)
     }
   }
 }

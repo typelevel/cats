@@ -81,7 +81,7 @@ import scala.annotation.tailrec
  *   }
  * }}}
  */
-sealed abstract class AndThen[-T, +R] extends (T => R) with Product with Serializable {
+sealed abstract class AndThen[-T, +R] extends T => R with Product with Serializable {
 
   import AndThen._
 

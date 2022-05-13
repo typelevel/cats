@@ -239,9 +239,9 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
       def monad: Monad[Either[E, *]] = cats.instances.either.catsStdInstancesForEither
 
       def sequential: Validated[E, *] ~> Either[E, *] =
-        new (Validated[E, *] ~> Either[E, *]) { def apply[A](a: Validated[E, A]): Either[E, A] = a.toEither }
+        new Validated[E, *] ~> Either[E, *] { def apply[A](a: Validated[E, A]): Either[E, A] = a.toEither }
 
       def parallel: Either[E, *] ~> Validated[E, *] =
-        new (Either[E, *] ~> Validated[E, *]) { def apply[A](a: Either[E, A]): Validated[E, A] = a.toValidated }
+        new Either[E, *] ~> Validated[E, *] { def apply[A](a: Either[E, A]): Validated[E, A] = a.toValidated }
     }
 }

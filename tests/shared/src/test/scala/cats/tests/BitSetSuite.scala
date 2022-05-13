@@ -37,7 +37,7 @@ class BitSetSuite extends CatsSuite {
     assert(BitSet.empty.show === "BitSet()")
 
     forAll { (fs: BitSet) =>
-      assert(fs.show === (fs.toString))
+      assert(fs.show === fs.toString)
     }
   }
 

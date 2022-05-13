@@ -478,8 +478,8 @@ abstract class NonEmptyReducible[F[_], G[_]](implicit G: Foldable[G]) extends Re
   def reduceRightTo[A, B](fa: F[A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B] = {
     def loop(now: A, source: Source[A]): Eval[B] =
       source.uncons match {
-        case Some((next, s)) => g(now, Eval.defer(loop(next, s.value)))
-        case None            => Eval.later(f(now))
+        case Some(next, s) => g(now, Eval.defer(loop(next, s.value)))
+        case None          => Eval.later(f(now))
       }
 
     Always(split(fa)).flatMap { case (a, ga) =>

@@ -220,7 +220,7 @@ class FreeTSuite extends CatsSuite {
           a <- FreeT.liftInject[Id, F](test1(x, identity))
           b <- FreeT.liftInject[Id, F](test2(y, identity))
         } yield a + b
-      assert(res[T].foldMap(eitherKInterpreter) == (x + y))
+      assert(res[T].foldMap(eitherKInterpreter) == x + y)
     }
   }
 

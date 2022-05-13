@@ -138,11 +138,11 @@ object Signed extends SignedFunctions[Signed] {
     def *(that: Sign): Sign = Sign(this.toInt * that.toInt)
 
     def **(that: Int): Sign = this match {
-      case Positive                    => Positive
-      case Zero if that == 0           => Positive
-      case Zero                        => Zero
-      case Negative if (that % 2) == 0 => Positive
-      case Negative                    => Negative
+      case Positive                  => Positive
+      case Zero if that == 0         => Positive
+      case Zero                      => Zero
+      case Negative if that % 2 == 0 => Positive
+      case Negative                  => Negative
     }
   }
 

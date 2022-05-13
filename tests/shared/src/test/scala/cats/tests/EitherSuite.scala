@@ -136,25 +136,25 @@ class EitherSuite extends CatsSuite {
 
   test("fromTry is left for failed Try") {
     forAll { (t: Try[Int]) =>
-      assert(t.isFailure === (Either.fromTry(t).isLeft))
+      assert(t.isFailure === Either.fromTry(t).isLeft)
     }
   }
 
   test("fromOption isLeft consistent with Option.isEmpty") {
     forAll { (o: Option[Int], s: String) =>
-      assert(Either.fromOption(o, s).isLeft === (o.isEmpty))
+      assert(Either.fromOption(o, s).isLeft === o.isEmpty)
     }
   }
 
   test("leftNel is consistent with left(NEL)") {
     forAll { (s: String) =>
-      assert(Either.leftNel[String, Int](s) === (Either.left[NonEmptyList[String], Int](NonEmptyList.one(s))))
+      assert(Either.leftNel[String, Int](s) === Either.left[NonEmptyList[String], Int](NonEmptyList.one(s)))
     }
   }
 
   test("rightNel is consistent with right") {
     forAll { (i: Int) =>
-      assert(Either.rightNel[String, Int](i) === (Either.right[NonEmptyList[String], Int](i)))
+      assert(Either.rightNel[String, Int](i) === Either.right[NonEmptyList[String], Int](i))
     }
   }
 
@@ -166,23 +166,23 @@ class EitherSuite extends CatsSuite {
 
   test("leftNec is consistent with left(NEC)") {
     forAll { (s: String) =>
-      assert(Either.leftNec[String, Int](s) === (Either.left[NonEmptyChain[String], Int](NonEmptyChain.one(s))))
+      assert(Either.leftNec[String, Int](s) === Either.left[NonEmptyChain[String], Int](NonEmptyChain.one(s)))
     }
   }
   test("rightNec is consistent with right") {
     forAll { (i: Int) =>
-      assert(Either.rightNec[String, Int](i) === (Either.right[NonEmptyChain[String], Int](i)))
+      assert(Either.rightNec[String, Int](i) === Either.right[NonEmptyChain[String], Int](i))
     }
   }
 
   test("leftNes is consistent with left(NES)") {
     forAll { (s: String) =>
-      assert(Either.leftNes[String, Int](s) === (Either.left[NonEmptySet[String], Int](NonEmptySet.one(s))))
+      assert(Either.leftNes[String, Int](s) === Either.left[NonEmptySet[String], Int](NonEmptySet.one(s)))
     }
   }
   test("rightNes is consistent with right") {
     forAll { (i: Int) =>
-      assert(Either.rightNes[String, Int](i) === (Either.right[NonEmptySet[String], Int](i)))
+      assert(Either.rightNes[String, Int](i) === Either.right[NonEmptySet[String], Int](i))
     }
   }
 
@@ -205,14 +205,14 @@ class EitherSuite extends CatsSuite {
       x.foreach { _ =>
         count += 1
       }
-      assert((count == 0) === (x.isLeft))
+      assert(count == 0 === x.isLeft)
     }
   }
 
   test("getOrElse ignores default for right") {
     forAll { (x: Either[Int, String], s: String, t: String) =>
       if (x.isRight) {
-        assert(x.getOrElse(s) === (x.getOrElse(t)))
+        assert(x.getOrElse(s) === x.getOrElse(t))
       }
     }
   }
@@ -220,7 +220,7 @@ class EitherSuite extends CatsSuite {
   test("orElse") {
     forAll { (x: Either[Int, String], y: Either[Int, String]) =>
       val z = x.orElse(y)
-      assert((z === x) || (z === y) === true)
+      assert(z === x || z === y === true)
     }
   }
 
@@ -256,7 +256,7 @@ class EitherSuite extends CatsSuite {
 
   test("valueOr consistent with swap then map then merge") {
     forAll { (x: Either[Int, String], f: Int => String) =>
-      assert(x.valueOr(f) === (x.swap.map(f).merge))
+      assert(x.valueOr(f) === x.swap.map(f).merge)
     }
   }
 
@@ -292,18 +292,18 @@ class EitherSuite extends CatsSuite {
 
   test("isLeft consistency") {
     forAll { (x: Either[Int, String]) =>
-      assert(x.isLeft === (x.toOption.isEmpty))
-      assert(x.isLeft === (x.toList.isEmpty))
-      assert(x.isLeft === (x.toValidated.isInvalid))
-      assert(x.isLeft === (x.toValidatedNel.isInvalid))
-      assert(x.isLeft === (x.toValidatedNec.isInvalid))
-      assert(Option(x.isLeft) === (x.toEitherT[Option].isLeft))
+      assert(x.isLeft === x.toOption.isEmpty)
+      assert(x.isLeft === x.toList.isEmpty)
+      assert(x.isLeft === x.toValidated.isInvalid)
+      assert(x.isLeft === x.toValidatedNel.isInvalid)
+      assert(x.isLeft === x.toValidatedNec.isInvalid)
+      assert(Option(x.isLeft) === x.toEitherT[Option].isLeft)
     }
   }
 
   test("withValidated") {
     forAll { (x: Either[Int, String], f: Int => Double) =>
-      assert(x.withValidated(_.bimap(f, identity)) === (x.leftMap(f)))
+      assert(x.withValidated(_.bimap(f, identity)) === x.leftMap(f))
     }
   }
 
@@ -315,38 +315,38 @@ class EitherSuite extends CatsSuite {
 
   test("to consistent with toList") {
     forAll { (x: Either[Int, String]) =>
-      assert(x.to[List] === (x.toList))
+      assert(x.to[List] === x.toList)
     }
   }
 
   test("to consistent with toOption") {
     forAll { (x: Either[Int, String]) =>
-      assert(x.to[Option] === (x.toOption))
+      assert(x.to[Option] === x.toOption)
     }
   }
 
   test("partialCompare consistent with PartialOrder") {
     forAll { (x: Either[Int, String], y: Either[Int, String]) =>
-      assert(x.partialCompare(y) === (partialOrder.partialCompare(x, y)))
+      assert(x.partialCompare(y) === partialOrder.partialCompare(x, y))
     }
   }
 
   test("toEitherNec Left") {
     val either = Either.left[String, Int]("oops")
-    assert(either.toEitherNec === (Either.left[NonEmptyChain[String], Int](NonEmptyChain.one("oops"))))
+    assert(either.toEitherNec === Either.left[NonEmptyChain[String], Int](NonEmptyChain.one("oops")))
   }
   test("toEitherNec Right") {
     val either = Either.right[String, Int](42)
-    assert(either.toEitherNec === (Either.right[NonEmptyChain[String], Int](42)))
+    assert(either.toEitherNec === Either.right[NonEmptyChain[String], Int](42))
   }
 
   test("toEitherNes Left") {
     val either = Either.left[String, Int]("oops")
-    assert(either.toEitherNes === (Either.left[NonEmptySet[String], Int](NonEmptySet.one("oops"))))
+    assert(either.toEitherNes === Either.left[NonEmptySet[String], Int](NonEmptySet.one("oops")))
   }
   test("toEitherNes Right") {
     val either = Either.right[String, Int](42)
-    assert(either.toEitherNes === (Either.right[NonEmptySet[String], Int](42)))
+    assert(either.toEitherNes === Either.right[NonEmptySet[String], Int](42))
   }
 
   test("show Right") {
@@ -361,37 +361,37 @@ class EitherSuite extends CatsSuite {
 
   test("toEitherNel Left") {
     val either = Either.left[String, Int]("oops")
-    assert(either.toEitherNel === (Either.left[NonEmptyList[String], Int](NonEmptyList.one("oops"))))
+    assert(either.toEitherNel === Either.left[NonEmptyList[String], Int](NonEmptyList.one("oops")))
   }
 
   test("toEitherNel Right") {
     val either = Either.right[String, Int](42)
-    assert(either.toEitherNel === (Either.right[NonEmptyList[String], Int](42)))
+    assert(either.toEitherNel === Either.right[NonEmptyList[String], Int](42))
   }
 
   test("ap consistent with Applicative") {
     val fab = implicitly[Applicative[Either[String, *]]]
     forAll { (fa: Either[String, Int], f: Int => String) =>
-      assert(fa.ap(Either.right(f)) === (fab.map(fa)(f)))
+      assert(fa.ap(Either.right(f)) === fab.map(fa)(f))
     }
   }
 
   test("liftTo syntax consistent with fromEither") {
     val ev = ApplicativeError[Validated[String, *], String]
     forAll { (fa: Either[String, Int]) =>
-      assert(fa.liftTo[Validated[String, *]] === (ev.fromEither(fa)))
+      assert(fa.liftTo[Validated[String, *]] === ev.fromEither(fa))
     }
   }
 
   test("leftFlatMap consistent with leftMap") {
     forAll { (either: Either[String, Int], f: String => String) =>
-      assert(either.leftFlatMap(v => Left(f(v))) === (either.leftMap(f)))
+      assert(either.leftFlatMap(v => Left(f(v))) === either.leftMap(f))
     }
   }
 
   test("leftFlatMap consistent with swap and then flatMap") {
     forAll { (either: Either[String, Int], f: String => Either[String, Int]) =>
-      assert(either.leftFlatMap(f) === (either.swap.flatMap(a => f(a).swap).swap))
+      assert(either.leftFlatMap(f) === either.swap.flatMap(a => f(a).swap).swap)
     }
   }
 }
@@ -412,7 +412,7 @@ class DeprecatedEitherSuite extends CatsSuite {
   test("raiseOrPure syntax consistent with fromEither") {
     val ev = ApplicativeError[Validated[String, *], String]
     forAll { (fa: Either[String, Int]) =>
-      assert(fa.raiseOrPure[Validated[String, *]] === (ev.fromEither(fa)))
+      assert(fa.raiseOrPure[Validated[String, *]] === ev.fromEither(fa))
     }
   }
 }

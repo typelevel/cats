@@ -132,7 +132,7 @@ private[instances] trait FunctionInstances4 {
 }
 
 final private[instances] case class CombineFunction1[A, B](left: A => B, right: A => B, semiB: Semigroup[B])
-    extends (A => B) {
+    extends A => B {
   private def call(fn: A => B, a: A): TailRec[B] =
     fn match {
       case ref: CombineFunction1[A, B] @unchecked =>
@@ -175,7 +175,7 @@ trait Function1Group[A, B] extends Function1Monoid[A, B] with Group[A => B] {
 }
 
 final private[instances] case class CombineFunction0[A](left: () => A, right: () => A, semiA: Semigroup[A])
-    extends (() => A) {
+    extends () => A {
   private def call(fn: () => A): TailRec[A] =
     fn match {
       case ref: CombineFunction0[A] @unchecked =>

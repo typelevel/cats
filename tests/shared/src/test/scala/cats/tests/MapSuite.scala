@@ -76,7 +76,7 @@ class MapSuite extends CatsSuite {
     forAll { (map: Map[Int, String]) =>
       assert(map.show.nonEmpty === true)
       assert(map.show.startsWith("Map(") === true)
-      assert(map.show === (implicitly[Show[Map[Int, String]]].show(map)))
+      assert(map.show === implicitly[Show[Map[Int, String]]].show(map))
     }
   }
 

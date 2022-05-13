@@ -119,7 +119,7 @@ class ValidatedSuite extends CatsSuite {
 
   test("ap2 combines failures in order") {
     val plus = (_: Int) + (_: Int)
-    assert(Applicative[Validated[String, *]].ap2(Valid(plus))(Invalid("1"), Invalid("2")) === (Invalid("12")))
+    assert(Applicative[Validated[String, *]].ap2(Valid(plus))(Invalid("1"), Invalid("2")) === Invalid("12"))
   }
 
   test("catchOnly catches matching exceptions") {
@@ -139,7 +139,7 @@ class ValidatedSuite extends CatsSuite {
 
   test("fromTry is invalid for failed try") {
     forAll { (t: Try[Int]) =>
-      assert(t.isFailure === (Validated.fromTry(t).isInvalid))
+      assert(t.isFailure === Validated.fromTry(t).isInvalid)
     }
   }
 
@@ -165,7 +165,7 @@ class ValidatedSuite extends CatsSuite {
         assert(v.forall(p) === true)
         assert(v.exists(p) === false)
       } else {
-        assert(v.forall(p) === (v.exists(p)))
+        assert(v.forall(p) === v.exists(p))
       }
     }
   }
@@ -181,7 +181,7 @@ class ValidatedSuite extends CatsSuite {
 
   test("getOrElse consistent with orElse") {
     forAll { (v: Validated[String, Int], u: Validated[String, Int], i: Int) =>
-      assert(v.getOrElse(u.getOrElse(i)) === (v.orElse(u).getOrElse(i)))
+      assert(v.getOrElse(u.getOrElse(i)) === v.orElse(u).getOrElse(i))
     }
   }
 
@@ -212,7 +212,7 @@ class ValidatedSuite extends CatsSuite {
 
   test("valueOr consistent with swap then map then merge") {
     forAll { (v: Validated[String, Int], f: String => Int) =>
-      assert(v.valueOr(f) === (v.swap.map(f).merge))
+      assert(v.valueOr(f) === v.swap.map(f).merge)
     }
   }
 
@@ -224,8 +224,8 @@ class ValidatedSuite extends CatsSuite {
 
   test("toList and toOption are empty for invalid") {
     forAll { (v: Validated[String, Int]) =>
-      assert(v.isInvalid === (v.toList.isEmpty))
-      assert(v.isInvalid === (v.toOption.isEmpty))
+      assert(v.isInvalid === v.toList.isEmpty)
+      assert(v.isInvalid === v.toOption.isEmpty)
     }
   }
 
@@ -238,7 +238,7 @@ class ValidatedSuite extends CatsSuite {
 
   test("andThen consistent with Either's flatMap") {
     forAll { (v: Validated[String, Int], f: Int => Validated[String, Int]) =>
-      assert(v.andThen(f) === (v.withEither(_.flatMap(f(_).toEither))))
+      assert(v.andThen(f) === v.withEither(_.flatMap(f(_).toEither)))
     }
   }
 
@@ -247,14 +247,14 @@ class ValidatedSuite extends CatsSuite {
       if (i % 2 == 0) Validated.valid(i)
       else Validated.invalid(s"$i is not even")
 
-    assert((Validated.valid(3).andThen(even)) === (Validated.invalid("3 is not even")))
-    assert((Validated.valid(4).andThen(even)) === (Validated.valid(4)))
-    assert((Validated.invalid("foo").andThen(even)) === (Validated.invalid("foo")))
+    assert(Validated.valid(3).andThen(even) === Validated.invalid("3 is not even"))
+    assert(Validated.valid(4).andThen(even) === Validated.valid(4))
+    assert(Validated.invalid("foo").andThen(even) === Validated.invalid("foo"))
   }
 
   test("fromOption consistent with Either.fromOption") {
     forAll { (o: Option[Int], s: String) =>
-      assert(Validated.fromOption(o, s) === (Either.fromOption(o, s).toValidated))
+      assert(Validated.fromOption(o, s) === Either.fromOption(o, s).toValidated)
     }
   }
 
@@ -266,7 +266,7 @@ class ValidatedSuite extends CatsSuite {
 
   test("fromIor consistent with Ior.toValidated") {
     forAll { (i: Ior[String, Int]) =>
-      assert(Validated.fromIor(i) === (i.toValidated))
+      assert(Validated.fromIor(i) === i.toValidated)
     }
   }
 
@@ -307,7 +307,7 @@ class ValidatedSuite extends CatsSuite {
     val y: ValidatedNel[String, Boolean] = Validated.invalidNel("error 2")
 
     val z = x.map2(y)((i, b) => if (b) i + 1 else i)
-    assert(z === (NonEmptyList.of("error 1", "error 2").invalid[Int]))
+    assert(z === NonEmptyList.of("error 1", "error 2").invalid[Int])
   }
 
   test("ensure on Invalid is identity") {
@@ -321,7 +321,7 @@ class ValidatedSuite extends CatsSuite {
   test("ensure should fail if predicate not satisfied") {
     forAll { (x: Validated[String, Int], s: String, p: Int => Boolean) =>
       if (x.exists(!p(_))) {
-        assert(x.ensure(s)(p) === (Validated.invalid(s)))
+        assert(x.ensure(s)(p) === Validated.invalid(s))
       }
     }
   }
@@ -344,19 +344,19 @@ class ValidatedSuite extends CatsSuite {
 
   test("cond consistent with Either.cond + toValidated") {
     forAll { (cond: Boolean, s: String, i: Int) =>
-      assert(Validated.cond(cond, s, i) === (Either.cond(cond, s, i).toValidated))
+      assert(Validated.cond(cond, s, i) === Either.cond(cond, s, i).toValidated)
     }
   }
 
   test("condNel consistent with Either.cond + toValidatedNel") {
     forAll { (cond: Boolean, s: String, i: Int) =>
-      assert(Validated.condNel(cond, s, i) === (Either.cond(cond, s, i).toValidatedNel))
+      assert(Validated.condNel(cond, s, i) === Either.cond(cond, s, i).toValidatedNel)
     }
   }
 
   test("condNec consistent with Either.cond + toValidatedNec") {
     forAll { (cond: Boolean, s: String, i: Int) =>
-      assert(Validated.condNec(cond, s, i) === (Either.cond(cond, s, i).toValidatedNec))
+      assert(Validated.condNec(cond, s, i) === Either.cond(cond, s, i).toValidatedNec)
     }
   }
 
@@ -368,10 +368,10 @@ class ValidatedSuite extends CatsSuite {
 
   test("liftTo works with specialized errors") {
     implicit val eqThrow: Eq[Throwable] = Eq.fromUniversalEquals
-    val ex: IllegalArgumentException = new IllegalArgumentException()
+    val ex: IllegalArgumentException = new IllegalArgumentException
     val validated: Validated[IllegalArgumentException, Int] = Validated.Invalid(ex)
     val lifted: Either[Throwable, Int] = validated.liftTo[Either[Throwable, *]]
 
-    assert(lifted === (Left[Throwable, Int](ex)))
+    assert(lifted === Left[Throwable, Int](ex))
   }
 }

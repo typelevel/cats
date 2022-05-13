@@ -123,7 +123,7 @@ class AndThenSuite extends CatsSuite with ScalaCheckSuite {
           val ary = fns.toArray
 
           def loop(start: Int, end: Int): Gen[AndThen[A, A]] =
-            if (start == (end - 1)) Gen.const(AndThen(ary(start)))
+            if (start == end - 1) Gen.const(AndThen(ary(start)))
             else if (start >= end) Gen.const(AndThen(identity[A]))
             else {
               Gen.choose(start, end - 1).flatMap { middle =>

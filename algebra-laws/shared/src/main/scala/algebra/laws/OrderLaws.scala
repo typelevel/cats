@@ -87,14 +87,14 @@ trait OrderLaws[A] extends Laws {
       A.lteqv(x, y) ?== A.gteqv(y, x)
     },
     "lt" -> forAll { (x: A, y: A) =>
-      A.lt(x, y) ?== (A.lteqv(x, y) && A.neqv(x, y))
+      A.lt(x, y) ?== A.lteqv(x, y) && A.neqv(x, y)
     },
     "gt" -> forAll { (x: A, y: A) =>
       A.lt(x, y) ?== A.gt(y, x)
     },
     "partialCompare" -> forAll { (x: A, y: A) =>
       val c = A.partialCompare(x, y)
-      ((c < 0) ?== A.lt(x, y)) && ((c == 0) ?== A.eqv(x, y)) && ((c > 0) ?== A.gt(x, y))
+      (c < 0 ?== A.lt(x, y)) && (c == 0 ?== A.eqv(x, y)) && (c > 0 ?== A.gt(x, y))
     },
     "pmin" -> forAll { (x: A, y: A) =>
       val c = A.partialCompare(x, y)
@@ -122,7 +122,7 @@ trait OrderLaws[A] extends Laws {
     },
     "compare" -> forAll { (x: A, y: A) =>
       val c = A.compare(x, y)
-      ((c < 0) ?== A.lt(x, y)) && ((c == 0) ?== A.eqv(x, y)) && ((c > 0) ?== A.gt(x, y))
+      (c < 0 ?== A.lt(x, y)) && (c == 0 ?== A.eqv(x, y)) && (c > 0 ?== A.gt(x, y))
     },
     "min" -> forAll { (x: A, y: A) =>
       val c = A.compare(x, y)

@@ -34,7 +34,7 @@ trait CommutativeArrowLaws[F[_, _]] extends ArrowLaws[F] {
   implicit override def F: CommutativeArrow[F]
 
   def arrowCommutative[A, B, C, D](f: F[A, B], g: F[C, D]): IsEq[F[(A, C), (B, D)]] =
-    (f.first[C] >>> g.second[B]) <-> (g.second[A] >>> f.first[D])
+    f.first[C] >>> g.second[B] <-> (g.second[A] >>> f.first[D])
 
 }
 

@@ -48,20 +48,20 @@ class OrderSuite extends CatsSuite {
 
   test("order ops syntax") {
     forAll { (i: Ord, j: Ord) =>
-      assert((i.compare(j)) === (Order.compare(i, j)))
-      assert((i.min(j)) === (Order.min(i, j)))
-      assert((i.max(j)) === (Order.max(i, j)))
-      assert((i.comparison(j)) === (Order.comparison(i, j)))
+      assert(i.compare(j) === Order.compare(i, j))
+      assert(i.min(j) === Order.min(i, j))
+      assert(i.max(j) === Order.max(i, j))
+      assert(i.comparison(j) === Order.comparison(i, j))
 
       // partial order syntax should also work when an Order instance exists
-      assert((i > j) === (PartialOrder.gt(i, j)))
-      assert((i >= j) === (PartialOrder.gteqv(i, j)))
-      assert((i < j) === (PartialOrder.lt(i, j)))
-      assert((i <= j) === (PartialOrder.lteqv(i, j)))
-      assert((i.partialCompare(j)) === (PartialOrder.partialCompare(i, j)))
-      assert((i.tryCompare(j)) === (PartialOrder.tryCompare(i, j)))
-      assert((i.pmin(j)) === (PartialOrder.pmin(i, j)))
-      assert((i.pmax(j)) === (PartialOrder.pmax(i, j)))
+      assert(i > j === PartialOrder.gt(i, j))
+      assert(i >= j === PartialOrder.gteqv(i, j))
+      assert(i < j === PartialOrder.lt(i, j))
+      assert(i <= j === PartialOrder.lteqv(i, j))
+      assert(i.partialCompare(j) === PartialOrder.partialCompare(i, j))
+      assert(i.tryCompare(j) === PartialOrder.tryCompare(i, j))
+      assert(i.pmin(j) === PartialOrder.pmin(i, j))
+      assert(i.pmax(j) === PartialOrder.pmax(i, j))
     }
   }
 }

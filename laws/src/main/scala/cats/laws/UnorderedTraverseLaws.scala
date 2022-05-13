@@ -28,7 +28,7 @@ trait UnorderedTraverseLaws[F[_]] extends UnorderedFoldableLaws[F] {
   implicit def F: UnorderedTraverse[F]
 
   def unorderedTraverseIdentity[A, B](fa: F[A])(f: A => B)(implicit ev: Functor[F]): IsEq[F[B]] =
-    F.unorderedTraverse[Id, A, B](fa)(f) <-> (ev.map(fa)(f))
+    F.unorderedTraverse[Id, A, B](fa)(f) <-> ev.map(fa)(f)
 
   def unorderedTraverseSequentialComposition[A, B, C, M[_], N[_]](fa: F[A], f: A => M[B], g: B => N[C])(implicit
     N: CommutativeApplicative[N],

@@ -144,7 +144,7 @@ trait ScalaVersionSpecificParallelSuite { self: ParallelSuite =>
 
   test("ParTupled of LazyList should be consistent with ParMap of Tuple.apply") {
     forAll { (fa: LazyList[Int], fb: LazyList[Int], fc: LazyList[Int], fd: LazyList[Int]) =>
-      assert((fa, fb, fc, fd).parTupled === ((fa, fb, fc, fd).parMapN(Tuple4.apply)))
+      assert((fa, fb, fc, fd).parTupled === (fa, fb, fc, fd).parMapN(Tuple4.apply))
     }
   }
 
@@ -173,11 +173,11 @@ trait ScalaVersionSpecificRegressionSuite { self: RegressionSuite =>
       count = 0
     }
 
-    assert(LazyList(1, 2, 6, 8).traverse(validate) === (Either.left("6 is greater than 5")))
+    assert(LazyList(1, 2, 6, 8).traverse(validate) === Either.left("6 is greater than 5"))
     // shouldn't have ever evaluated validate(8)
     checkAndResetCount(3)
 
-    assert(LazyList(1, 2, 6, 8).traverse_(validate) === (Either.left("6 is greater than 5")))
+    assert(LazyList(1, 2, 6, 8).traverse_(validate) === Either.left("6 is greater than 5"))
     checkAndResetCount(3)
   }
 }
@@ -194,7 +194,7 @@ trait ScalaVersionSpecificAlgebraInvariantSuite {
   protected val integralForMiniInt: Integral[MiniInt] = new Integral[MiniInt] {
     def compare(x: MiniInt, y: MiniInt): Int = Order[MiniInt].compare(x, y)
     def plus(x: MiniInt, y: MiniInt): MiniInt = x + y
-    def minus(x: MiniInt, y: MiniInt): MiniInt = x + (-y)
+    def minus(x: MiniInt, y: MiniInt): MiniInt = x + -y
     def times(x: MiniInt, y: MiniInt): MiniInt = x * y
     def negate(x: MiniInt): MiniInt = -x
     def fromInt(x: Int): MiniInt = MiniInt.unsafeFromInt(x)

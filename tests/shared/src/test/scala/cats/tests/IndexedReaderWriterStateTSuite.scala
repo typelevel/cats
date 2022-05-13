@@ -43,9 +43,9 @@ class ReaderWriterStateTSuite extends CatsSuite {
     forAll { (context: String, initial: Int) =>
       val (log, state, result) = addAndLog(5).run(context, initial).value
 
-      assert(log === (Vector(s"${context}: Added 5")))
-      assert(state === (initial + 5))
-      assert(result === (initial + 5))
+      assert(log === Vector(s"${context}: Added 5"))
+      assert(state === initial + 5)
+      assert(result === initial + 5)
     }
   }
 
@@ -101,8 +101,8 @@ class ReaderWriterStateTSuite extends CatsSuite {
       val rwst: ReaderWriterState[String, Vector[String], Int, Int] = ReaderWriterStateT.pure(value)
       val irwst: ReaderWriterState[String, Vector[String], Int, Int] = IndexedReaderWriterStateT.pure(value)
 
-      assert(rws.run(context, value) === (rwst.run(context, value)))
-      assert(rwst.run(context, value) === (irwst.run(context, value)))
+      assert(rws.run(context, value) === rwst.run(context, value))
+      assert(rwst.run(context, value) === irwst.run(context, value))
     }
   }
 
@@ -119,8 +119,8 @@ class ReaderWriterStateTSuite extends CatsSuite {
       val rwst: ReaderWriterState[String, Vector[String], Int, Int] = ReaderWriterStateT.get
       val irwst: ReaderWriterState[String, Vector[String], Int, Int] = IndexedReaderWriterStateT.get
 
-      assert(rws.run(context, initial) === (rwst.run(context, initial)))
-      assert(rwst.run(context, initial) === (irwst.run(context, initial)))
+      assert(rws.run(context, initial) === rwst.run(context, initial))
+      assert(rwst.run(context, initial) === irwst.run(context, initial))
     }
   }
 
@@ -129,7 +129,7 @@ class ReaderWriterStateTSuite extends CatsSuite {
       val singleton = ReaderWriterState.get[String, String, Int]
       val instance = ReaderWriterState.pure[String, String, Int, Unit](()).get
 
-      assert(singleton.run(context, initial) === (instance.run(context, initial)))
+      assert(singleton.run(context, initial) === instance.run(context, initial))
     }
   }
 
@@ -138,7 +138,7 @@ class ReaderWriterStateTSuite extends CatsSuite {
       val singleton = ReaderWriterState.inspect[String, String, Int, String](_.toString)
       val instance = ReaderWriterState.pure[String, String, Int, Unit](()).inspect(_.toString)
 
-      assert(singleton.run(context, initial) === (instance.run(context, initial)))
+      assert(singleton.run(context, initial) === instance.run(context, initial))
     }
   }
 
@@ -148,8 +148,8 @@ class ReaderWriterStateTSuite extends CatsSuite {
       val rwst: ReaderWriterState[String, Vector[String], Int, Int] = ReaderWriterStateT.inspect(f)
       val irwst: ReaderWriterState[String, Vector[String], Int, Int] = IndexedReaderWriterStateT.inspect(f)
 
-      assert(rws.run(context, initial) === (rwst.run(context, initial)))
-      assert(rwst.run(context, initial) === (irwst.run(context, initial)))
+      assert(rws.run(context, initial) === rwst.run(context, initial))
+      assert(rwst.run(context, initial) === irwst.run(context, initial))
     }
   }
 
@@ -159,8 +159,8 @@ class ReaderWriterStateTSuite extends CatsSuite {
       val rwst: ReaderWriterState[String, String, Int, Int] = ReaderWriterStateT.inspectF(f.andThen(Eval.now))
       val irwst: ReaderWriterState[String, String, Int, Int] = IndexedReaderWriterStateT.inspectF(f.andThen(Eval.now))
 
-      assert(rws.run(context, initial) === (rwst.run(context, initial)))
-      assert(rwst.run(context, initial) === (irwst.run(context, initial)))
+      assert(rws.run(context, initial) === rwst.run(context, initial))
+      assert(rwst.run(context, initial) === irwst.run(context, initial))
     }
   }
 
@@ -170,8 +170,8 @@ class ReaderWriterStateTSuite extends CatsSuite {
       val rwst: ReaderWriterState[String, Vector[String], Int, Unit] = ReaderWriterStateT.modify(f)
       val irwst: ReaderWriterState[String, Vector[String], Int, Unit] = IndexedReaderWriterStateT.modify(f)
 
-      assert(rws.run(context, initial) === (rwst.run(context, initial)))
-      assert(rwst.run(context, initial) === (irwst.run(context, initial)))
+      assert(rws.run(context, initial) === rwst.run(context, initial))
+      assert(rwst.run(context, initial) === irwst.run(context, initial))
     }
   }
 
@@ -182,8 +182,8 @@ class ReaderWriterStateTSuite extends CatsSuite {
       val irwst: ReaderWriterState[String, Vector[String], Int, Unit] =
         IndexedReaderWriterStateT.modifyF(f.andThen(Eval.now))
 
-      assert(rws.run(context, initial) === (rwst.run(context, initial)))
-      assert(rwst.run(context, initial) === (irwst.run(context, initial)))
+      assert(rws.run(context, initial) === rwst.run(context, initial))
+      assert(rwst.run(context, initial) === irwst.run(context, initial))
     }
   }
 
@@ -193,8 +193,8 @@ class ReaderWriterStateTSuite extends CatsSuite {
       val rwst: ReaderWriterState[String, Vector[String], Int, Int] = ReaderWriterStateT.liftF(Eval.now(value))
       val irwst: ReaderWriterState[String, Vector[String], Int, Int] = IndexedReaderWriterStateT.liftF(Eval.now(value))
 
-      assert(rws.run(context, initial) === (rwst.run(context, initial)))
-      assert(rwst.run(context, initial) === (irwst.run(context, initial)))
+      assert(rws.run(context, initial) === rwst.run(context, initial))
+      assert(rwst.run(context, initial) === irwst.run(context, initial))
     }
   }
 
@@ -204,8 +204,8 @@ class ReaderWriterStateTSuite extends CatsSuite {
       val rwst: ReaderWriterState[String, Vector[String], Int, Unit] = ReaderWriterStateT.set(next)
       val irwst: ReaderWriterState[String, Vector[String], Int, Unit] = IndexedReaderWriterStateT.set(next)
 
-      assert(rws.run(context, initial) === (rwst.run(context, initial)))
-      assert(rwst.run(context, initial) === (irwst.run(context, initial)))
+      assert(rws.run(context, initial) === rwst.run(context, initial))
+      assert(rwst.run(context, initial) === irwst.run(context, initial))
     }
   }
 
@@ -215,8 +215,8 @@ class ReaderWriterStateTSuite extends CatsSuite {
       val rwst: ReaderWriterState[String, Vector[String], Int, Unit] = ReaderWriterStateT.setF(Eval.now(next))
       val irwst: ReaderWriterState[String, Vector[String], Int, Unit] = IndexedReaderWriterStateT.setF(Eval.now(next))
 
-      assert(rws.run(context, initial) === (rwst.run(context, initial)))
-      assert(rwst.run(context, initial) === (irwst.run(context, initial)))
+      assert(rws.run(context, initial) === rwst.run(context, initial))
+      assert(rwst.run(context, initial) === irwst.run(context, initial))
     }
   }
 
@@ -226,8 +226,8 @@ class ReaderWriterStateTSuite extends CatsSuite {
       val rwst: ReaderWriterState[String, String, Int, Unit] = ReaderWriterStateT.tell(log)
       val irwst: ReaderWriterState[String, String, Int, Unit] = IndexedReaderWriterStateT.tell(log)
 
-      assert(rws.run(context, initial) === (rwst.run(context, initial)))
-      assert(rwst.run(context, initial) === (irwst.run(context, initial)))
+      assert(rws.run(context, initial) === rwst.run(context, initial))
+      assert(rwst.run(context, initial) === irwst.run(context, initial))
     }
   }
 
@@ -237,8 +237,8 @@ class ReaderWriterStateTSuite extends CatsSuite {
       val rwst: ReaderWriterState[String, String, Int, Unit] = ReaderWriterStateT.tellF(Eval.now(log))
       val irwst: ReaderWriterState[String, String, Int, Unit] = IndexedReaderWriterStateT.tellF(Eval.now(log))
 
-      assert(rws.run(context, initial) === (rwst.run(context, initial)))
-      assert(rwst.run(context, initial) === (irwst.run(context, initial)))
+      assert(rws.run(context, initial) === rwst.run(context, initial))
+      assert(rwst.run(context, initial) === irwst.run(context, initial))
     }
   }
 
@@ -252,7 +252,7 @@ class ReaderWriterStateTSuite extends CatsSuite {
     val rws = addAndLog(5) *> addAndLog(10)
     val (log, state, result) = rws.run("context", 0).value
 
-    assert(log === (Vector("context: Added 5", "context: Added 10")))
+    assert(log === Vector("context: Added 5", "context: Added 10"))
     assert(state === 15)
     assert(result === 15)
   }
@@ -273,40 +273,40 @@ class ReaderWriterStateTSuite extends CatsSuite {
 
         val flatMapF = rwst.flatMapF(f).tell(log)
 
-        assert(flatMap.run(context, initial) === (flatMapF.run(context, initial)))
+        assert(flatMap.run(context, initial) === flatMapF.run(context, initial))
     }
   }
 
   test("runEmpty, runEmptyS, runEmptyA and runEmptyL are consistent") {
     forAll { (f: ReaderWriterStateT[Option, String, String, String, Int], c: String) =>
-      assert((f.runEmptyL(c), f.runEmptyS(c), f.runEmptyA(c)).tupled === (f.runEmpty(c)))
+      assert((f.runEmptyL(c), f.runEmptyS(c), f.runEmptyA(c)).tupled === f.runEmpty(c))
     }
   }
 
   test("reset on pure is a noop") {
     forAll { (c: String, s: Int, a: Int) =>
       val pure = ReaderWriterState.pure[String, String, Int, Int](a)
-      assert(pure.reset.run(c, s) === (pure.run(c, s)))
+      assert(pure.reset.run(c, s) === pure.run(c, s))
     }
   }
 
   test("modify identity is a noop") {
     forAll { (f: ReaderWriterStateT[Option, String, String, String, Int], c: String, initial: String) =>
-      assert(f.modify(identity).run(c, initial) === (f.run(c, initial)))
+      assert(f.modify(identity).run(c, initial) === f.run(c, initial))
     }
   }
 
   test("modify modifies only the state") {
     forAll { (rws: ReaderWriterStateT[Option, String, String, Long, Long], c: String, f: Long => Long, initial: Long) =>
-      assert(rws.modify(f).runS(c, initial) === (rws.runS(c, initial).map(f)))
-      assert(rws.modify(f).runA(c, initial) === (rws.runA(c, initial)))
+      assert(rws.modify(f).runS(c, initial) === rws.runS(c, initial).map(f))
+      assert(rws.modify(f).runA(c, initial) === rws.runA(c, initial))
     }
   }
 
   test("reset modifies only the log") {
     forAll { (rws: ReaderWriterState[String, String, Int, Int], c: String, s: Int) =>
-      assert(rws.reset.runA(c, s) === (rws.runA(c, s)))
-      assert(rws.reset.runS(c, s) === (rws.runS(c, s)))
+      assert(rws.reset.runA(c, s) === rws.runA(c, s))
+      assert(rws.reset.runS(c, s) === rws.runS(c, s))
     }
   }
 
@@ -318,7 +318,7 @@ class ReaderWriterStateTSuite extends CatsSuite {
         _ <- ReaderWriterStateT.set[Option, String, String, Long](f(l))
       } yield ()
 
-      assert(s1.run(c, initial) === (s2.run(c, initial)))
+      assert(s1.run(c, initial) === s2.run(c, initial))
     }
   }
 
@@ -327,7 +327,7 @@ class ReaderWriterStateTSuite extends CatsSuite {
       val s1 = ReaderWriterStateT.set[Option, String, String, Long](s)
       val s2 = ReaderWriterStateT.modify[Option, String, String, Long](_ => s)
 
-      assert(s1.run(c, initial) === (s2.run(c, initial)))
+      assert(s1.run(c, initial) === s2.run(c, initial))
     }
   }
 
@@ -336,14 +336,14 @@ class ReaderWriterStateTSuite extends CatsSuite {
       val s1 = ReaderWriterStateT.setF[Option, String, String, Long](s)
       val s2 = ReaderWriterStateT.modifyF[Option, String, String, Long](_ => s)
 
-      assert(s1.run(c, initial) === (s2.run(c, initial)))
+      assert(s1.run(c, initial) === s2.run(c, initial))
     }
   }
 
   test("ReaderWriterStateT.mapK transforms effect") {
-    val f: Eval ~> Id = new (Eval ~> Id) { def apply[A](a: Eval[A]): A = a.value }
+    val f: Eval ~> Id = new Eval ~> Id { def apply[A](a: Eval[A]): A = a.value }
     forAll { (state: ReaderWriterStateT[Eval, Long, String, String, Int], env: Long, initial: String) =>
-      assert(state.mapK(f).runA(env, initial) === (state.runA(env, initial).value))
+      assert(state.mapK(f).runA(env, initial) === state.runA(env, initial).value)
     }
   }
 
@@ -357,7 +357,7 @@ class ReaderWriterStateTSuite extends CatsSuite {
 
   test(".get and .flatMap with .get are equivalent") {
     forAll { (c: String, initial: Long, rws: ReaderWriterState[String, String, Long, Long]) =>
-      assert(rws.get.run(c, initial) === (rws.flatMap(_ => ReaderWriterState.get).run(c, initial)))
+      assert(rws.get.run(c, initial) === rws.flatMap(_ => ReaderWriterState.get).run(c, initial))
     }
   }
 

@@ -88,7 +88,7 @@ class NonEmptyChainSuite extends NonEmptyCollectionSuite[Chain, NonEmptyChain, N
 
   test("size is consistent with toChain.size") {
     forAll { (ci: NonEmptyChain[Int]) =>
-      assert(ci.size === (ci.toChain.size))
+      assert(ci.size === ci.toChain.size)
     }
   }
 
@@ -106,13 +106,13 @@ class NonEmptyChainSuite extends NonEmptyCollectionSuite[Chain, NonEmptyChain, N
 
   test("exists should be consistent with find + isDefined") {
     forAll { (ci: NonEmptyChain[Int], f: Int => Boolean) =>
-      assert(ci.exists(f) === (ci.find(f).isDefined))
+      assert(ci.exists(f) === ci.find(f).isDefined)
     }
   }
 
   test("deleteFirst consistent with find") {
     forAll { (ci: NonEmptyChain[Int], f: Int => Boolean) =>
-      assert(ci.find(f) === (ci.deleteFirst(f).map(_._1)))
+      assert(ci.find(f) === ci.deleteFirst(f).map(_._1))
     }
   }
 
@@ -142,7 +142,7 @@ class NonEmptyChainSuite extends NonEmptyCollectionSuite[Chain, NonEmptyChain, N
 
   test("fromChain . toChain is Option.some") {
     forAll { (ci: NonEmptyChain[Int]) =>
-      assert(NonEmptyChain.fromChain(ci.toChain) === (Some(ci)))
+      assert(NonEmptyChain.fromChain(ci.toChain) === Some(ci))
     }
   }
 
@@ -152,7 +152,7 @@ class NonEmptyChainSuite extends NonEmptyCollectionSuite[Chain, NonEmptyChain, N
 
   test("fromSeq . toList . iterator is id") {
     forAll { (ci: NonEmptyChain[Int]) =>
-      assert(NonEmptyChain.fromSeq(ci.iterator.toSeq) === (Option(ci)))
+      assert(NonEmptyChain.fromSeq(ci.iterator.toSeq) === Option(ci))
     }
   }
 
@@ -202,25 +202,25 @@ class NonEmptyChainSuite extends NonEmptyCollectionSuite[Chain, NonEmptyChain, N
 
   test("reverse consistent with Chain#reverse") {
     forAll { (ci: NonEmptyChain[Int]) =>
-      assert(ci.reverse.toChain === (ci.toChain.reverse))
+      assert(ci.reverse.toChain === ci.toChain.reverse)
     }
   }
 
   test("NonEmptyChain#distinct is consistent with List#distinct") {
     forAll { (ci: NonEmptyChain[Int]) =>
-      assert(ci.distinct.toList === (ci.toList.distinct))
+      assert(ci.distinct.toList === ci.toList.distinct)
     }
   }
 
   test("init") {
     forAll { (ci: NonEmptyChain[Int]) =>
-      assert(ci.init.toList === (ci.toList.init))
+      assert(ci.init.toList === ci.toList.init)
     }
   }
 
   test("last") {
     forAll { (ci: NonEmptyChain[Int]) =>
-      assert(ci.last === (ci.toList.last))
+      assert(ci.last === ci.toList.last)
     }
   }
 

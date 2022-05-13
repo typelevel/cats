@@ -66,14 +66,14 @@ class WriterTSuite extends CatsSuite {
   test("reset on pure is a noop") {
     forAll { (i: Int) =>
       val w = Monad[WriterT[List, Int, *]].pure(i)
-      assert(w === (w.reset))
+      assert(w === w.reset)
     }
   }
 
   test("reset consistency") {
     forAll { (i: Int, w1: WriterT[Id, Int, Int], w2: WriterT[Id, Int, Int]) =>
       // if the value is the same, everything should be the same
-      assert(w1.map(_ => i).reset === (w2.map(_ => i).reset))
+      assert(w1.map(_ => i).reset === w2.map(_ => i).reset)
     }
   }
 
@@ -111,7 +111,7 @@ class WriterTSuite extends CatsSuite {
     forAll { (i: Int) =>
       val writer: Writer[String, Int] = Writer.value(i)
       val writerT: WriterT[Option, String, Int] = WriterT.liftF(Some(i))
-      assert(writer.run.some === (writerT.run))
+      assert(writer.run.some === writerT.run)
     }
   }
 
@@ -123,8 +123,8 @@ class WriterTSuite extends CatsSuite {
   test("tell appends to log") {
     val w1: Writer[String, Int] = Writer.value(3)
     val w2 = w1.tell("foo")
-    assert(w2 === (Writer("foo", 3)))
-    assert(w2.tell("bar") === (Writer("foobar", 3)))
+    assert(w2 === Writer("foo", 3))
+    assert(w2.tell("bar") === Writer("foobar", 3))
   }
 
   test("tell instantiates a Writer") {
@@ -133,13 +133,13 @@ class WriterTSuite extends CatsSuite {
 
   test("listen returns a tuple of value and log") {
     val w: Writer[String, Int] = Writer("foo", 3)
-    assert(w.listen === (Writer("foo", (3, "foo"))))
+    assert(w.listen === Writer("foo", (3, "foo")))
   }
 
   test("mapK consistent with f(value)+pure") {
-    val f: List ~> Option = new (List ~> Option) { def apply[A](a: List[A]): Option[A] = a.headOption }
+    val f: List ~> Option = new List ~> Option { def apply[A](a: List[A]): Option[A] = a.headOption }
     forAll { (writert: WriterT[List, String, Int]) =>
-      assert(writert.mapK(f) === (WriterT(f(writert.run))))
+      assert(writert.mapK(f) === WriterT(f(writert.run)))
     }
   }
 

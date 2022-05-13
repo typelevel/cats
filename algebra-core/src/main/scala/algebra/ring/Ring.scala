@@ -108,7 +108,7 @@ trait RingFunctions[R[T] <: Ring[T]] extends AdditiveGroupFunctions[R] with Mult
       import java.lang.Long.numberOfTrailingZeros
       require(!isInfinite(a) && !isNaN(a), "Double must be representable as a fraction.")
       val bits = doubleToLongBits(a)
-      val expBits = ((bits >> 52) & 0x7ff).toInt
+      val expBits = (bits >> 52 & 0x7ff).toInt
       val mBits = bits & 0x000fffffffffffffL
       // If expBits is 0, then this is a subnormal and we drop the implicit
       // 1 bit.

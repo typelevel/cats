@@ -52,6 +52,6 @@ class SetSemiring[A] extends Semiring[Set[A]] {
 
 class SetBoolRng[A] extends BoolRng[Set[A]] {
   def zero: Set[A] = Set.empty
-  def plus(x: Set[A], y: Set[A]): Set[A] = (x -- y) | (y -- x) // this is xor
+  def plus(x: Set[A], y: Set[A]): Set[A] = x -- y | y -- x // this is xor
   def times(x: Set[A], y: Set[A]): Set[A] = x & y
 }

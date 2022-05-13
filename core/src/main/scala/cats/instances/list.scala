@@ -285,10 +285,10 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
       def apply: Apply[ZipList] = ZipList.catsDataCommutativeApplyForZipList
 
       def sequential: ZipList ~> List =
-        new (ZipList ~> List) { def apply[A](a: ZipList[A]): List[A] = a.value }
+        new ZipList ~> List { def apply[A](a: ZipList[A]): List[A] = a.value }
 
       def parallel: List ~> ZipList =
-        new (List ~> ZipList) { def apply[A](v: List[A]): ZipList[A] = new ZipList(v) }
+        new List ~> ZipList { def apply[A](v: List[A]): ZipList[A] = new ZipList(v) }
     }
 }
 

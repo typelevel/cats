@@ -469,7 +469,7 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
 
       m.get(k) match {
         case Some(builder) => builder += f(elem)
-        case None          => m += (k -> (List.newBuilder[B] += f(elem)))
+        case None          => m += k -> (List.newBuilder[B] += f(elem))
       }
     }
 
@@ -568,7 +568,7 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
 
       m.get(k) match {
         case Some(b) => m = m.updated(key = k, value = combine(b, f(elem)))
-        case None    => m += (k -> f(elem))
+        case None    => m += k -> f(elem)
       }
     }
 
@@ -894,10 +894,10 @@ sealed abstract private[data] class NonEmptyListInstances extends NonEmptyListIn
       def apply: Apply[ZipNonEmptyList] = ZipNonEmptyList.catsDataCommutativeApplyForZipNonEmptyList
 
       def sequential: ZipNonEmptyList ~> NonEmptyList =
-        new (ZipNonEmptyList ~> NonEmptyList) { def apply[B](nel: ZipNonEmptyList[B]): NonEmptyList[B] = nel.value }
+        new ZipNonEmptyList ~> NonEmptyList { def apply[B](nel: ZipNonEmptyList[B]): NonEmptyList[B] = nel.value }
 
       def parallel: NonEmptyList ~> ZipNonEmptyList =
-        new (NonEmptyList ~> ZipNonEmptyList) {
+        new NonEmptyList ~> ZipNonEmptyList {
           def apply[B](nel: NonEmptyList[B]): ZipNonEmptyList[B] = new ZipNonEmptyList(nel)
         }
     }

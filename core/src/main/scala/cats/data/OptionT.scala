@@ -403,7 +403,7 @@ object OptionT extends OptionTInstances {
    * }}}
    */
   def liftK[F[_]](implicit F: Functor[F]): F ~> OptionT[F, *] =
-    new (F ~> OptionT[F, *]) { def apply[A](a: F[A]): OptionT[F, A] = OptionT.liftF(a) }
+    new F ~> OptionT[F, *] { def apply[A](a: F[A]): OptionT[F, A] = OptionT.liftF(a) }
 
   /**
    * Creates a non-empty `OptionT[F, A]` from an `A` value if the given condition is `true`.
@@ -423,7 +423,7 @@ object OptionT extends OptionTInstances {
    * Same as `whenF`, but expressed as a FunctionK for use with mapK.
    */
   def whenK[F[_]](cond: Boolean)(implicit F: Applicative[F]): F ~> OptionT[F, *] =
-    new (F ~> OptionT[F, *]) { def apply[A](a: F[A]): OptionT[F, A] = OptionT.whenF(cond)(a) }
+    new F ~> OptionT[F, *] { def apply[A](a: F[A]): OptionT[F, A] = OptionT.whenF(cond)(a) }
 
   /**
    * Creates a non-empty `OptionT[F, A]` from an `A` if the given condition is `false`.
@@ -443,7 +443,7 @@ object OptionT extends OptionTInstances {
    * Same as `unlessF`, but expressed as a FunctionK for use with mapK.
    */
   def unlessK[F[_]](cond: Boolean)(implicit F: Applicative[F]): F ~> OptionT[F, *] =
-    new (F ~> OptionT[F, *]) { def apply[A](a: F[A]): OptionT[F, A] = OptionT.unlessF(cond)(a) }
+    new F ~> OptionT[F, *] { def apply[A](a: F[A]): OptionT[F, A] = OptionT.unlessF(cond)(a) }
 }
 
 sealed abstract private[data] class OptionTInstances extends OptionTInstances0 {
@@ -507,12 +507,12 @@ sealed abstract private[data] class OptionTInstances extends OptionTInstances0 {
       def monad: Monad[OptionT[M, *]] = cats.data.OptionT.catsDataMonadErrorMonadForOptionT[M]
 
       def sequential: Nested[P.F, Option, *] ~> OptionT[M, *] =
-        new (Nested[P.F, Option, *] ~> OptionT[M, *]) {
+        new Nested[P.F, Option, *] ~> OptionT[M, *] {
           def apply[A](nested: Nested[P.F, Option, A]): OptionT[M, A] = OptionT(P.sequential(nested.value))
         }
 
       def parallel: OptionT[M, *] ~> Nested[P.F, Option, *] =
-        new (OptionT[M, *] ~> Nested[P.F, Option, *]) {
+        new OptionT[M, *] ~> Nested[P.F, Option, *] {
           def apply[A](optT: OptionT[M, A]): Nested[P.F, Option, A] = Nested(P.parallel(optT.value))
         }
     }
@@ -650,8 +650,8 @@ private trait OptionTContravariantMonoidal[F[_]] extends ContravariantMonoidal[O
     OptionT(
       F.contramap(F.product(fa.value, fb.value))((t: Option[(A, B)]) =>
         t match {
-          case Some((x, y)) => (Some(x), Some(y))
-          case None         => (None, None)
+          case Some(x, y) => (Some(x), Some(y))
+          case None       => (None, None)
         }
       )
     )

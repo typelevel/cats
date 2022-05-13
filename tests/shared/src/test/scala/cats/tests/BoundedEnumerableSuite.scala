@@ -27,11 +27,11 @@ import cats.syntax.eq._
 class BoundedEnumerableSuite extends CatsSuite {
 
   test("membersAscending") {
-    assert(BoundedEnumerable[Boolean].membersAscending.toList === (List(false, true)))
+    assert(BoundedEnumerable[Boolean].membersAscending.toList === List(false, true))
   }
 
   test("membersDescending") {
-    assert(BoundedEnumerable[Boolean].membersDescending.toList === (List(true, false)))
+    assert(BoundedEnumerable[Boolean].membersDescending.toList === List(true, false))
   }
 
   test("cycleNext") {

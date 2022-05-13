@@ -36,30 +36,30 @@ class ApplicativeSuite extends CatsSuite {
   test("replicateA creates a List of 'n' copies of given Applicative 'fa'") {
     val A = Applicative[Option]
     val fa = A.pure(1)
-    assert(fa.replicateA(5) === (Some(List(1, 1, 1, 1, 1))))
+    assert(fa.replicateA(5) === Some(List(1, 1, 1, 1, 1)))
   }
 
   test("whenA return given argument when cond is true") {
     forAll { (l: List[Int]) =>
-      assert(l.whenA(true) === (List.fill(l.length)(())))
+      assert(l.whenA(true) === List.fill(l.length)(()))
     }
   }
 
   test("whenA lift Unit to F when cond is false") {
     forAll { (l: List[Int]) =>
-      assert(l.whenA(false) === (List(())))
+      assert(l.whenA(false) === List(()))
     }
   }
 
   test("unlessA return given argument when cond is false") {
     forAll { (l: List[Int]) =>
-      assert(l.unlessA(false) === (List.fill(l.length)(())))
+      assert(l.unlessA(false) === List.fill(l.length)(()))
     }
   }
 
   test("unlessA lift Unit to F when cond is true") {
     forAll { (l: List[Int]) =>
-      assert(l.unlessA(true) === (List(())))
+      assert(l.unlessA(true) === List(()))
     }
   }
 

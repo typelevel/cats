@@ -38,7 +38,7 @@ trait ScalaVersionSpecificAlgebraInvariantSuite {
   protected val integralForMiniInt: Integral[MiniInt] = new Integral[MiniInt] {
     def compare(x: MiniInt, y: MiniInt): Int = Order[MiniInt].compare(x, y)
     def plus(x: MiniInt, y: MiniInt): MiniInt = x + y
-    def minus(x: MiniInt, y: MiniInt): MiniInt = x + (-y)
+    def minus(x: MiniInt, y: MiniInt): MiniInt = x + -y
     def times(x: MiniInt, y: MiniInt): MiniInt = x * y
     def negate(x: MiniInt): MiniInt = -x
     def fromInt(x: Int): MiniInt = MiniInt.unsafeFromInt(x)

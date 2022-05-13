@@ -62,7 +62,7 @@ class StreamPartialOrder[A](implicit ev: PartialOrder[A]) extends PartialOrder[S
 }
 
 @deprecated("Use cats.kernel.instances.lazyList", "2.0.0-RC2")
-class StreamHash[A](implicit ev: Hash[A]) extends StreamEq[A]()(ev) with Hash[Stream[A]] {
+class StreamHash[A](implicit ev: Hash[A]) extends StreamEq[A](ev) with Hash[Stream[A]] {
   def hash(xs: Stream[A]): Int = StaticMethods.orderedHash(xs)
 }
 

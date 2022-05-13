@@ -30,7 +30,7 @@ trait AlternativeLaws[F[_]] extends NonEmptyAlternativeLaws[F] with MonoidKLaws[
   implicit override def algebra[A]: Monoid[F[A]] = F.algebra[A]
 
   def alternativeRightAbsorption[A, B](ff: F[A => B]): IsEq[F[B]] =
-    (ff.ap(F.empty[A])) <-> F.empty[B]
+    ff.ap(F.empty[A]) <-> F.empty[B]
 
   // Perhaps should be deprecated in favor of nonEmptyAlternativeLeftDistributivity
   def alternativeLeftDistributivity[A, B](fa: F[A], fa2: F[A], f: A => B): IsEq[F[B]] =

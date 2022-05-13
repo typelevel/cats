@@ -270,7 +270,7 @@ trait RingLaws[A] extends GroupLaws[A] { self =>
     "euclidean function" -> forAll { (x: A, y: A) =>
       pred(y) ==> {
         val (_, r) = A.equotmod(x, y)
-        A.isZero(r) || (A.euclideanFunction(r) < A.euclideanFunction(y))
+        A.isZero(r) || A.euclideanFunction(r) < A.euclideanFunction(y)
       }
     },
     "submultiplicative function" -> forAll { (x: A, y: A) =>

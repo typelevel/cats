@@ -94,7 +94,7 @@ trait Representable[F[_]] extends Serializable { self =>
       }
 
       def tabulate[A](f: Representation => A): F[G[A]] = {
-        val fc: self.Representation => (G.Representation => A) = (rf: self.Representation) =>
+        val fc: self.Representation => G.Representation => A = (rf: self.Representation) =>
           (rg: G.Representation) => f((rf, rg))
 
         self.F.map(self.tabulate(fc))(G.tabulate(_))

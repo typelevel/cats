@@ -40,8 +40,8 @@ class SemigroupSuite extends CatsSuite {
     val add: (Int, Int) => Int = (a, b) => a + b
 
     forAll { (a: Int, b: Int) =>
-      assert(Semigroup.instance(mult).combine(a, b) === (a * b))
-      assert(Semigroup.instance(add).combine(a, b) === (a + b))
+      assert(Semigroup.instance(mult).combine(a, b) === a * b)
+      assert(Semigroup.instance(add).combine(a, b) === a + b)
     }
   }
 

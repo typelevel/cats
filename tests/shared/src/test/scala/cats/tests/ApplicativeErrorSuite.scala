@@ -38,15 +38,15 @@ class ApplicativeErrorSuite extends CatsSuite {
   }
 
   test("handleError syntax transforms an error to a success") {
-    assert(failed.handleError(_ => 7) === (Some(7)))
+    assert(failed.handleError(_ => 7) === Some(7))
   }
 
   test("handleErrorWith transforms an error to a success") {
-    assert(failed.handleErrorWith(_ => Some(7)) === (Some(7)))
+    assert(failed.handleErrorWith(_ => Some(7)) === Some(7))
   }
 
   test("attempt syntax creates a wrapped Either") {
-    assert(failed.attempt === (Option(Left(()))))
+    assert(failed.attempt === Option(Left(())))
   }
 
   test("attemptNarrow[EE] syntax creates an F[Either[EE, A]]") {
@@ -60,8 +60,8 @@ class ApplicativeErrorSuite extends CatsSuite {
 
     val failed: Either[Err, Int] = ErrA().raiseError[Either[Err, *], Int]
 
-    assert(failed.attemptNarrow[ErrA] === (ErrA().asLeft[Int].asRight[Err]))
-    assert(failed.attemptNarrow[ErrB] === (Either.left[Err, Either[ErrB, Int]](ErrA())))
+    assert(failed.attemptNarrow[ErrA] === ErrA().asLeft[Int].asRight[Err])
+    assert(failed.attemptNarrow[ErrB] === Either.left[Err, Either[ErrB, Int]](ErrA()))
   }
 
   test("attemptNarrow works for parametrized types") {
@@ -74,11 +74,11 @@ class ApplicativeErrorSuite extends CatsSuite {
     implicit val eqForNum: Eq[Num] = Eq.fromUniversalEquals[Num]
 
     val e: Either[T[Int], Unit] = Num(1).asLeft[Unit]
-    assert(e.attemptNarrow[Num] === (e.asRight[T[Int]]))
+    assert(e.attemptNarrow[Num] === e.asRight[T[Int]])
     assert(compileErrors("e.attemptNarrow[Str.type]").nonEmpty)
 
     val e2: Either[T[String], Unit] = Str.asLeft[Unit]
-    assert(e2.attemptNarrow[Str.type] === (e2.asRight[T[String]]))
+    assert(e2.attemptNarrow[Str.type] === e2.asRight[T[String]])
     assert(compileErrors("e2.attemptNarrow[Num]").nonEmpty)
 
     val e3: Either[List[T[String]], Unit] = List(Str).asLeft[Unit]
@@ -86,15 +86,15 @@ class ApplicativeErrorSuite extends CatsSuite {
   }
 
   test("attemptT syntax creates an EitherT") {
-    assert(failed.attemptT === (EitherT[Option, Unit, Int](Option(Left(())))))
+    assert(failed.attemptT === EitherT[Option, Unit, Int](Option(Left(()))))
   }
 
   test("recover syntax transforms an error to a success") {
-    assert(failed.recover { case _ => 7 } === (Some(7)))
+    assert(failed.recover { case _ => 7 } === Some(7))
   }
 
   test("recoverWith transforms an error to a success") {
-    assert(failed.recoverWith { case _ => Some(7) } === (Some(7)))
+    assert(failed.recoverWith { case _ => Some(7) } === Some(7))
   }
 
   {
@@ -119,12 +119,12 @@ class ApplicativeErrorSuite extends CatsSuite {
       }
 
     test("orElse leaves a success unchanged") {
-      assert(OptionWrapper(17.some).orElse(OptionWrapper(None)).option === (OptionWrapper(17.some).option))
+      assert(OptionWrapper(17.some).orElse(OptionWrapper(None)).option === OptionWrapper(17.some).option)
     }
 
     test("orElse transforms an error to the alternative") {
       assert(
-        ().raiseError[OptionWrapper, Int].orElse(OptionWrapper(17.some)).option === (OptionWrapper(17.some).option)
+        ().raiseError[OptionWrapper, Int].orElse(OptionWrapper(17.some)).option === OptionWrapper(17.some).option
       )
     }
   }

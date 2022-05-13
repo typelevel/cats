@@ -72,7 +72,7 @@ class OptionPartialOrder[A](implicit A: PartialOrder[A]) extends PartialOrder[Op
     }
 }
 
-class OptionHash[A](implicit A: Hash[A]) extends OptionEq[A]()(A) with Hash[Option[A]] {
+class OptionHash[A](implicit A: Hash[A]) extends OptionEq[A](A) with Hash[Option[A]] {
   def hash(x: Option[A]): Int =
     x match {
       case None     => None.hashCode()
@@ -106,5 +106,5 @@ class OptionMonoid[A](implicit A: Semigroup[A]) extends Monoid[Option[A]] {
 }
 
 private class OptionCommutativeMonoid[A](implicit A: CommutativeSemigroup[A])
-    extends OptionMonoid[A]()(A)
+    extends OptionMonoid[A](A)
     with CommutativeMonoid[Option[A]]

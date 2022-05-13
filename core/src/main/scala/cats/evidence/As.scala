@@ -85,7 +85,7 @@ object As extends AsInstances with AsSupport {
    * In truth, "all values of `A Is B` are `refl`". `reflAny` is that
    * single value.
    */
-  private[this] val reflAny = new (Any As Any) {
+  private[this] val reflAny = new Any As Any {
     def substitute[F[-_]](fa: F[Any]) = fa
   }
 

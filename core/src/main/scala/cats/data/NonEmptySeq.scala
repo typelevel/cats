@@ -533,10 +533,10 @@ sealed abstract private[data] class NonEmptySeqInstances {
       def flatMap: FlatMap[NonEmptySeq] = NonEmptySeq.catsDataInstancesForNonEmptySeq
 
       def sequential: ZipNonEmptySeq ~> NonEmptySeq =
-        new (ZipNonEmptySeq ~> NonEmptySeq) { def apply[A](a: ZipNonEmptySeq[A]): NonEmptySeq[A] = a.value }
+        new ZipNonEmptySeq ~> NonEmptySeq { def apply[A](a: ZipNonEmptySeq[A]): NonEmptySeq[A] = a.value }
 
       def parallel: NonEmptySeq ~> ZipNonEmptySeq =
-        new (NonEmptySeq ~> ZipNonEmptySeq) {
+        new NonEmptySeq ~> ZipNonEmptySeq {
           def apply[A](nev: NonEmptySeq[A]): ZipNonEmptySeq[A] = new ZipNonEmptySeq(nev)
         }
     }

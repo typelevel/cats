@@ -192,10 +192,10 @@ sealed abstract class Free[S[_], A] extends Product with Serializable with FreeF
    * }}}
    */
   final def inject[G[_]](implicit ev: InjectK[S, G]): Free[G, A] =
-    mapK(new (S ~> G) { def apply[B](sb: S[B]): G[B] = ev.inj(sb) })
+    mapK(new S ~> G { def apply[B](sb: S[B]): G[B] = ev.inj(sb) })
 
   final def toFreeT[G[_]: Applicative]: FreeT[S, G, A] =
-    foldMap[FreeT[S, G, *]](new (S ~> FreeT[S, G, *]) { def apply[B](sb: S[B]): FreeT[S, G, B] = FreeT.liftF(sb) })
+    foldMap[FreeT[S, G, *]](new S ~> FreeT[S, G, *] { def apply[B](sb: S[B]): FreeT[S, G, B] = FreeT.liftF(sb) })
 
   override def toString: String =
     "Free(...)"
@@ -239,7 +239,7 @@ object Free extends FreeInstances {
    * }}}
    */
   def liftK[F[_]]: F ~> Free[F, *] =
-    new (F ~> Free[F, *]) { def apply[A](fa: F[A]): Free[F, A] = Free.liftF(fa) }
+    new F ~> Free[F, *] { def apply[A](fa: F[A]): Free[F, A] = Free.liftF(fa) }
 
   /**
    * Same as [[pure]] but expressed as a FunctionK
@@ -250,7 +250,7 @@ object Free extends FreeInstances {
    * }}}
    */
   def liftId[F[_]]: Id ~> Free[F, *] =
-    new (Id ~> Free[F, *]) { def apply[A](fa: Id[A]): Free[F, A] = Free.pure(fa) }
+    new Id ~> Free[F, *] { def apply[A](fa: Id[A]): Free[F, A] = Free.pure(fa) }
 
   /**
    * Absorb a step into the free monad.

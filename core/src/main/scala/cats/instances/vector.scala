@@ -108,7 +108,7 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
                   buf += b
                   loop()
                 case Left(a) =>
-                  state = (fn(a).iterator) :: h :: tail
+                  state = fn(a).iterator :: h :: tail
                   loop()
               }
           }
@@ -230,10 +230,10 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
       def apply: Apply[ZipVector] = ZipVector.catsDataCommutativeApplyForZipVector
 
       def sequential: ZipVector ~> Vector =
-        new (ZipVector ~> Vector) { def apply[A](a: ZipVector[A]): Vector[A] = a.value }
+        new ZipVector ~> Vector { def apply[A](a: ZipVector[A]): Vector[A] = a.value }
 
       def parallel: Vector ~> ZipVector =
-        new (Vector ~> ZipVector) { def apply[A](v: Vector[A]): ZipVector[A] = new ZipVector(v) }
+        new Vector ~> ZipVector { def apply[A](v: Vector[A]): ZipVector[A] = new ZipVector(v) }
     }
 }
 

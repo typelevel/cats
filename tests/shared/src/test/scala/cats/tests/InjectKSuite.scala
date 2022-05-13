@@ -96,7 +96,7 @@ class InjectKSuite extends CatsSuite {
       val expr1: T[Int] = InjectK[Test1Algebra, T].inj(Test1(x, _ + 1))
       val expr2: T[Int] = InjectK[Test2Algebra, T].inj(Test2(y, _ * 2))
       val res = distr[T, Int](expr1, expr2)
-      assert(res === (Some(x + y)))
+      assert(res === Some(x + y))
     }
   }
 
@@ -113,7 +113,7 @@ class InjectKSuite extends CatsSuite {
       val expr1: T[Int] = InjectK[Test1Algebra, T].apply(Test1(x, _ + 1))
       val expr2: T[Int] = InjectK[Test2Algebra, T].apply(Test2(y, _ * 2))
       val res = distr[T, Int](expr1, expr2)
-      assert(res === (Some(x + y)))
+      assert(res === Some(x + y))
     }
   }
 
@@ -132,7 +132,7 @@ class InjectKSuite extends CatsSuite {
   test("null identity") {
     val listIntNull = null.asInstanceOf[List[Int]]
     assert(InjectK.catsReflexiveInjectKInstance[List].inj[Int](listIntNull) === listIntNull)
-    assert(InjectK.catsReflexiveInjectKInstance[List].prj[Int](listIntNull) === (Some(listIntNull)))
+    assert(InjectK.catsReflexiveInjectKInstance[List].prj[Int](listIntNull) === Some(listIntNull))
   }
 
   checkAll("InjectK[Test1Algebra, T]", InjectKTests[Test1Algebra, T].injectK[String])

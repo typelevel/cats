@@ -63,7 +63,7 @@ object MiniInt {
 
   def fromInt(i: Int): Option[MiniInt] = if (isInDomain(i)) Some(unsafeFromInt(i)) else None
 
-  def wrapped(intBits: Int): MiniInt = new MiniInt(intBits & (-1 >>> intShift))
+  def wrapped(intBits: Int): MiniInt = new MiniInt(intBits & -1 >>> intShift)
 
   def unsafeFromInt(i: Int): MiniInt =
     if (isInDomain(i)) {

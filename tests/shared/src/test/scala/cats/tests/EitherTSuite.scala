@@ -202,85 +202,85 @@ class EitherTSuite extends CatsSuite {
 
   test("toValidated") {
     forAll { (eithert: EitherT[List, String, Int]) =>
-      assert(eithert.toValidated.map(_.toEither) === (eithert.value))
+      assert(eithert.toValidated.map(_.toEither) === eithert.value)
     }
   }
 
   test("toValidatedNel") {
     forAll { (eithert: EitherT[List, String, Int]) =>
-      assert(eithert.toValidatedNel.map(_.toEither.leftMap(_.head)) === (eithert.value))
+      assert(eithert.toValidatedNel.map(_.toEither.leftMap(_.head)) === eithert.value)
     }
   }
 
   test("toValidatedNec") {
     forAll { (eithert: EitherT[List, String, Int]) =>
-      assert(eithert.toValidatedNec.map(_.toEither.leftMap(_.head)) === (eithert.value))
+      assert(eithert.toValidatedNec.map(_.toEither.leftMap(_.head)) === eithert.value)
     }
   }
 
   test("toNested") {
     forAll { (eithert: EitherT[List, String, Int]) =>
-      assert(eithert.toNested.value === (eithert.value))
+      assert(eithert.toNested.value === eithert.value)
     }
   }
 
   test("toNestedValidated") {
     forAll { (eithert: EitherT[List, String, Int]) =>
-      assert(eithert.toNestedValidated.value === (eithert.value.map(_.toValidated)))
+      assert(eithert.toNestedValidated.value === eithert.value.map(_.toValidated))
     }
   }
 
   test("toNestedValidatedNel") {
     forAll { (eithert: EitherT[List, String, Int]) =>
-      assert(eithert.toNestedValidatedNel.value === (eithert.value.map(_.toValidatedNel)))
+      assert(eithert.toNestedValidatedNel.value === eithert.value.map(_.toValidatedNel))
     }
   }
 
   test("toNestedValidatedNec") {
     forAll { (eithert: EitherT[List, String, Int]) =>
-      assert(eithert.toNestedValidatedNec.value === (eithert.value.map(_.toValidatedNec)))
+      assert(eithert.toNestedValidatedNec.value === eithert.value.map(_.toValidatedNec))
     }
   }
 
   test("withValidated") {
     forAll { (eithert: EitherT[List, String, Int], f: String => Char, g: Int => Double) =>
-      assert(eithert.withValidated(_.bimap(f, g)) === (eithert.bimap(f, g)))
+      assert(eithert.withValidated(_.bimap(f, g)) === eithert.bimap(f, g))
     }
   }
 
   test("fromEither") {
     forAll { (either: Either[String, Int]) =>
-      assert((Some(either.isLeft): Option[Boolean]) === (EitherT.fromEither[Option](either).isLeft))
+      assert((Some(either.isLeft): Option[Boolean]) === EitherT.fromEither[Option](either).isLeft)
     }
   }
 
   test("fromOption isLeft consistent with Option.isEmpty") {
     forAll { (o: Option[Int], s: String) =>
-      assert(EitherT.fromOption[Id](o, s).isLeft === (o.isEmpty))
+      assert(EitherT.fromOption[Id](o, s).isLeft === o.isEmpty)
     }
   }
 
   test("fromOptionF isLeft consistent with Option isEmpty") {
     forAll { (option: Option[Int], s: String) =>
-      assert(EitherT.fromOptionF[Id, String, Int](option, s).isLeft === (option.isEmpty))
+      assert(EitherT.fromOptionF[Id, String, Int](option, s).isLeft === option.isEmpty)
     }
   }
 
   test("fromOptionM consistent with fromOptionF") {
     forAll { (option: Option[Int], s: String) =>
-      assert(EitherT.fromOptionM[Id, String, Int](option, s) === (EitherT.fromOptionF[Id, String, Int](option, s)))
+      assert(EitherT.fromOptionM[Id, String, Int](option, s) === EitherT.fromOptionF[Id, String, Int](option, s))
     }
   }
 
   test("cond consistent with Either.cond") {
     forAll { (cond: Boolean, s: String, i: Int) =>
-      assert(EitherT.cond[Id](cond, s, i).value === (Either.cond(cond, s, i)))
+      assert(EitherT.cond[Id](cond, s, i).value === Either.cond(cond, s, i))
     }
   }
 
   test("isLeft negation of isRight") {
     forAll { (eithert: EitherT[List, String, Int]) =>
-      assert(eithert.isLeft === (eithert.isRight.map(!_)))
+      assert(eithert.isLeft === eithert.isRight.map(!_))
     }
   }
 
@@ -292,19 +292,19 @@ class EitherTSuite extends CatsSuite {
 
   test("swap negates isRight") {
     forAll { (eithert: EitherT[List, String, Int]) =>
-      assert(eithert.swap.isRight === (eithert.isRight.map(!_)))
+      assert(eithert.swap.isRight === eithert.isRight.map(!_))
     }
   }
 
   test("toOption on Right returns Some") {
     forAll { (eithert: EitherT[List, String, Int]) =>
-      assert(eithert.toOption.isDefined === (eithert.isRight))
+      assert(eithert.toOption.isDefined === eithert.isRight)
     }
   }
 
   test("toEither preserves isRight") {
     forAll { (eithert: EitherT[List, String, Int]) =>
-      assert(eithert.value.map(_.isRight) === (eithert.isRight))
+      assert(eithert.value.map(_.isRight) === eithert.isRight)
     }
   }
 
@@ -358,77 +358,77 @@ class EitherTSuite extends CatsSuite {
 
   test("transform consistent with value.map") {
     forAll { (eithert: EitherT[List, String, Int], f: Either[String, Int] => Either[Long, Double]) =>
-      assert(eithert.transform(f) === (EitherT(eithert.value.map(f))))
+      assert(eithert.transform(f) === EitherT(eithert.value.map(f)))
     }
   }
 
   test("mapK consistent with f(value)+pure") {
-    val f: List ~> Option = new (List ~> Option) { def apply[A](a: List[A]): Option[A] = a.headOption }
+    val f: List ~> Option = new List ~> Option { def apply[A](a: List[A]): Option[A] = a.headOption }
     forAll { (eithert: EitherT[List, String, Int]) =>
-      assert(eithert.mapK(f) === (EitherT(f(eithert.value))))
+      assert(eithert.mapK(f) === EitherT(f(eithert.value)))
     }
   }
 
   test("semiflatMap consistent with value.flatMap+f+pure") {
     forAll { (eithert: EitherT[List, String, Int], f: Int => List[String]) =>
-      assert(eithert.semiflatMap(f) === (EitherT(eithert.value.flatMap {
+      assert(eithert.semiflatMap(f) === EitherT(eithert.value.flatMap {
         case l @ Left(_) => List(l.asInstanceOf[Either[String, String]])
         case Right(b)    => f(b).map(Right(_))
-      })))
+      }))
     }
   }
 
   test("subflatMap consistent with value.map+flatMap") {
     forAll { (eithert: EitherT[List, String, Int], f: Int => Either[String, Double]) =>
-      assert(eithert.subflatMap(f) === (EitherT(eithert.value.map(_.flatMap(f)))))
+      assert(eithert.subflatMap(f) === EitherT(eithert.value.map(_.flatMap(f))))
     }
   }
 
   test("flatMap and flatMapF consistent") {
     forAll { (eithert: EitherT[List, String, Int], f: Int => EitherT[List, String, Int]) =>
-      assert(eithert.flatMap(f) === (eithert.flatMapF(f(_).value)))
+      assert(eithert.flatMap(f) === eithert.flatMapF(f(_).value))
     }
   }
 
   test("fold with Id consistent with Either fold") {
     forAll { (eithert: EitherT[Id, String, Int], f: String => Long, g: Int => Long) =>
-      assert(eithert.fold(f, g) === (eithert.value.fold(f, g)))
+      assert(eithert.fold(f, g) === eithert.value.fold(f, g))
     }
   }
 
   test("foldF with Id consistent with Either fold") {
     forAll { (eithert: EitherT[Id, String, Int], f: String => Long, g: Int => Long) =>
-      assert(eithert.foldF(f, g) === (eithert.value.fold(f, g)))
+      assert(eithert.foldF(f, g) === eithert.value.fold(f, g))
     }
   }
 
   test("valueOr with Id consistent with Either valueOr") {
     forAll { (eithert: EitherT[Id, String, Int], f: String => Int) =>
-      assert(eithert.valueOr(f) === (eithert.value.valueOr(f)))
+      assert(eithert.valueOr(f) === eithert.value.valueOr(f))
     }
   }
 
   test("valueOrF with Id consistent with Either valueOr") {
     forAll { (eithert: EitherT[Id, String, Int], f: String => Int) =>
-      assert(eithert.valueOrF(f) === (eithert.value.valueOr(f)))
+      assert(eithert.valueOrF(f) === eithert.value.valueOr(f))
     }
   }
 
   test("getOrElse with Id consistent with Either getOrElse") {
     forAll { (eithert: EitherT[Id, String, Int], i: Int) =>
-      assert(eithert.getOrElse(i) === (eithert.value.getOrElse(i)))
+      assert(eithert.getOrElse(i) === eithert.value.getOrElse(i))
     }
   }
 
   test("getOrElseF with Id consistent with Either getOrElse") {
     forAll { (eithert: EitherT[Id, String, Int], i: Int) =>
-      assert(eithert.getOrElseF(i) === (eithert.value.getOrElse(i)))
+      assert(eithert.getOrElseF(i) === eithert.value.getOrElse(i))
     }
   }
 
   test("orElse with Id consistent with Either orElse") {
     forAll { (eithert: EitherT[Id, String, Int], fallback: EitherT[Id, String, Int]) =>
-      assert(eithert.orElse(fallback).value === (eithert.value.orElse(fallback.value)))
+      assert(eithert.orElse(fallback).value === eithert.value.orElse(fallback.value))
     }
   }
 
@@ -443,25 +443,25 @@ class EitherTSuite extends CatsSuite {
 
   test("forall with Id consistent with Either forall") {
     forAll { (eithert: EitherT[Id, String, Int], f: Int => Boolean) =>
-      assert(eithert.forall(f) === (eithert.value.forall(f)))
+      assert(eithert.forall(f) === eithert.value.forall(f))
     }
   }
 
   test("exists with Id consistent with Either exists") {
     forAll { (eithert: EitherT[Id, String, Int], f: Int => Boolean) =>
-      assert(eithert.exists(f) === (eithert.value.exists(f)))
+      assert(eithert.exists(f) === eithert.value.exists(f))
     }
   }
 
   test("leftMap with Id consistent with Either leftMap") {
     forAll { (eithert: EitherT[Id, String, Int], f: String => Long) =>
-      assert(eithert.leftMap(f).value === (eithert.value.leftMap(f)))
+      assert(eithert.leftMap(f).value === eithert.value.leftMap(f))
     }
   }
 
   test("compare with Id consistent with Either compare") {
     forAll { (x: EitherT[Id, String, Int], y: EitherT[Id, String, Int]) =>
-      assert(x.compare(y) === (x.value.compare(y.value)))
+      assert(x.compare(y) === x.value.compare(y.value))
     }
   }
 
@@ -474,49 +474,49 @@ class EitherTSuite extends CatsSuite {
   test("traverse with Id consistent with Either traverse") {
     forAll { (x: EitherT[Id, String, Int], f: Int => Option[Long]) =>
       val e: Either[String, Int] = x.value
-      assert(x.traverse(f).map(_.value) === (e.traverse(f)))
+      assert(x.traverse(f).map(_.value) === e.traverse(f))
     }
   }
 
   test("foldLeft with Id consistent with Either foldLeft") {
     forAll { (x: EitherT[Id, String, Int], l: Long, f: (Long, Int) => Long) =>
-      assert(x.foldLeft(l)(f) === (x.value.foldLeft(l)(f)))
+      assert(x.foldLeft(l)(f) === x.value.foldLeft(l)(f))
     }
   }
 
   test("foldRight with Id consistent with Either foldRight") {
     forAll { (x: EitherT[Id, String, Int], l: Eval[Long], f: (Int, Eval[Long]) => Eval[Long]) =>
-      assert(x.foldRight(l)(f) === (x.value.foldRight(l)(f)))
+      assert(x.foldRight(l)(f) === x.value.foldRight(l)(f))
     }
   }
 
   test("collectRight with Option consistent with flattening a to[Option]") {
     forAll { (et: EitherT[Option, String, Int]) =>
-      assert(et.collectRight === (et.to[Option].flatten))
+      assert(et.collectRight === et.to[Option].flatten)
     }
   }
 
   test("applyAlt with Id consistent with EitherT map") {
     forAll { (et: EitherT[Id, String, Int], f: Int => String) =>
-      assert(et.applyAlt(EitherT.pure(f)) === (et.map(f)))
+      assert(et.applyAlt(EitherT.pure(f)) === et.map(f))
     }
   }
 
   test("merge with Id consistent with Either merge") {
     forAll { (x: EitherT[Id, Int, Int]) =>
-      assert(x.merge === (x.value.merge))
+      assert(x.merge === x.value.merge)
     }
   }
 
   test("to consistent with toOption") {
     forAll { (x: EitherT[List, String, Int]) =>
-      assert(x.to[Option] === (x.toOption.value))
+      assert(x.to[Option] === x.toOption.value)
     }
   }
 
   test("toEither consistent with toOption") {
     forAll { (x: EitherT[List, String, Int]) =>
-      assert(x.value.map(_.toOption) === (x.toOption.value))
+      assert(x.value.map(_.toOption) === x.toOption.value)
     }
   }
 
@@ -539,7 +539,7 @@ class EitherTSuite extends CatsSuite {
   test("ensure should fail if predicate not satisfied") {
     forAll { (x: EitherT[Id, String, Int], s: String, p: Int => Boolean) =>
       if (x.isRight && !p(x.getOrElse(0))) {
-        assert(x.ensure(s)(p) === (EitherT.leftT[Id, Int](s)))
+        assert(x.ensure(s)(p) === EitherT.leftT[Id, Int](s))
       }
     }
   }
@@ -575,46 +575,46 @@ class EitherTSuite extends CatsSuite {
 
   test("leftFlatMap consistent with leftMap") {
     forAll { (eithert: EitherT[List, String, Int], f: String => String) =>
-      assert(eithert.leftFlatMap(v => EitherT.left[Int](List(f(v)))) === (eithert.leftMap(f)))
+      assert(eithert.leftFlatMap(v => EitherT.left[Int](List(f(v)))) === eithert.leftMap(f))
     }
   }
 
   test("leftFlatMap consistent with swap and then flatMap") {
     forAll { (eithert: EitherT[List, String, Int], f: String => EitherT[List, String, Int]) =>
-      assert(eithert.leftFlatMap(f) === (eithert.swap.flatMap(a => f(a).swap).swap))
+      assert(eithert.leftFlatMap(f) === eithert.swap.flatMap(a => f(a).swap).swap)
     }
   }
 
   test("leftSemiflatMap consistent with leftMap") {
     forAll { (eithert: EitherT[List, String, Int], f: String => String) =>
-      assert(eithert.leftSemiflatMap(v => List(f(v))) === (eithert.leftMap(f)))
+      assert(eithert.leftSemiflatMap(v => List(f(v))) === eithert.leftMap(f))
     }
   }
 
   test("leftSemiflatmap consistent with swap and the semiflatMap") {
     forAll { (eithert: EitherT[List, String, Int], f: String => List[String]) =>
-      assert(eithert.leftSemiflatMap(f) === (eithert.swap.semiflatMap(a => f(a)).swap))
+      assert(eithert.leftSemiflatMap(f) === eithert.swap.semiflatMap(a => f(a)).swap)
     }
   }
 
   test("semiflatTap does not change the return value") {
     type TestEffect[A] = State[List[Int], A]
     forAll { (eithert: EitherT[TestEffect, String, Int], f: Int => TestEffect[Int], initial: List[Int]) =>
-      assert(eithert.semiflatTap(v => f(v)).value.runA(initial) === (eithert.value.runA(initial)))
+      assert(eithert.semiflatTap(v => f(v)).value.runA(initial) === eithert.value.runA(initial))
     }
   }
 
   test("semiflatTap runs the effect") {
     type TestEffect[A] = State[List[Int], A]
     forAll { (eithert: EitherT[TestEffect, String, Int], f: Int => TestEffect[Int], initial: List[Int]) =>
-      assert(eithert.semiflatTap(v => f(v)).value.runS(initial) === (eithert.semiflatMap(f).value.runS(initial)))
+      assert(eithert.semiflatTap(v => f(v)).value.runS(initial) === eithert.semiflatMap(f).value.runS(initial))
     }
   }
 
   test("leftSemiflatTap does not change the return value") {
     type TestEffect[A] = State[List[Int], A]
     forAll { (eithert: EitherT[TestEffect, String, Int], f: String => TestEffect[Int], initial: List[Int]) =>
-      assert(eithert.leftSemiflatTap(v => f(v)).value.runA(initial) === (eithert.value.runA(initial)))
+      assert(eithert.leftSemiflatTap(v => f(v)).value.runA(initial) === eithert.value.runA(initial))
     }
   }
 
@@ -622,7 +622,7 @@ class EitherTSuite extends CatsSuite {
     type TestEffect[A] = State[List[Int], A]
     forAll { (eithert: EitherT[TestEffect, String, Int], f: String => TestEffect[Int], initial: List[Int]) =>
       assert(
-        eithert.leftSemiflatTap(v => f(v)).value.runS(initial) === (eithert.leftSemiflatMap(f).value.runS(initial))
+        eithert.leftSemiflatTap(v => f(v)).value.runS(initial) === eithert.leftSemiflatMap(f).value.runS(initial)
       )
     }
   }
@@ -639,19 +639,25 @@ class EitherTSuite extends CatsSuite {
 
   test("biSemiflatMap consistent with leftSemiflatMap and semiFlatmap") {
     forAll { (eithert: EitherT[List, String, Int], fa: String => List[Int], fb: Int => List[String]) =>
-      assert(eithert.biSemiflatMap(fa, fb) === (eithert.leftSemiflatMap(fa).semiflatMap(fb)))
+      assert(eithert.biSemiflatMap(fa, fb) === eithert.leftSemiflatMap(fa).semiflatMap(fb))
     }
   }
 
   test("biSemiflatMap consistent with leftSemiflatMap") {
     forAll { (eithert: EitherT[List, String, Int], fa: String => List[Int]) =>
-      assert(eithert.biSemiflatMap(fa, List(_)) === (eithert.leftSemiflatMap(a => fa(a))))
+      assert(
+        eithert.biSemiflatMap(fa, List(_)) === eithert.leftSemiflatMap(
+        a => fa(a))
+      )
     }
   }
 
   test("biSemiflatMap consistent with semiflatMap") {
     forAll { (eithert: EitherT[List, String, Int], fb: Int => List[String]) =>
-      assert(eithert.biSemiflatMap(List(_), fb) === (eithert.semiflatMap(b => fb(b))))
+      assert(
+        eithert.biSemiflatMap(List(_), fb) === eithert.semiflatMap(
+        b => fb(b))
+      )
     }
   }
 
@@ -659,7 +665,7 @@ class EitherTSuite extends CatsSuite {
     forAll { (eithert: EitherT[List, String, Int], fb: Int => EitherT[List, String, Int]) =>
       val noChangeLeft = (s: String) => EitherT.left[Int](List(s))
 
-      assert(eithert.biflatMap(noChangeLeft, fb) === (eithert.flatMap(fb)))
+      assert(eithert.biflatMap(noChangeLeft, fb) === eithert.flatMap(fb))
     }
   }
 
@@ -667,7 +673,7 @@ class EitherTSuite extends CatsSuite {
     forAll { (eithert: EitherT[List, String, Int], fa: String => EitherT[List, String, Int]) =>
       val noChangeRight = (i: Int) => EitherT.right[String](List(i))
 
-      assert(eithert.biflatMap(fa, noChangeRight) === (eithert.leftFlatMap(fa)))
+      assert(eithert.biflatMap(fa, noChangeRight) === eithert.leftFlatMap(fa))
     }
   }
 
@@ -676,7 +682,7 @@ class EitherTSuite extends CatsSuite {
       val leftFun = (_: String) => EitherT.left[Int](List(string))
       val rightFun = (_: Int) => EitherT.right[String](List(int))
 
-      assert(eithert.biflatMap(leftFun, rightFun) === (eithert.leftFlatMap(leftFun).flatMap(rightFun)))
+      assert(eithert.biflatMap(leftFun, rightFun) === eithert.leftFlatMap(leftFun).flatMap(rightFun))
     }
   }
 

@@ -29,10 +29,10 @@ trait NonEmptyAlternativeLaws[F[_]] extends ApplicativeLaws[F] with SemigroupKLa
   implicit def algebra[A]: Semigroup[F[A]] = F.algebra[A]
 
   def nonEmptyAlternativeLeftDistributivity[A, B](fa: F[A], fa2: F[A], f: A => B): IsEq[F[B]] =
-    ((fa |+| fa2).map(f)) <-> ((fa.map(f)) |+| (fa2.map(f)))
+    (fa |+| fa2).map(f) <-> (fa.map(f) |+| fa2.map(f))
 
   def nonEmptyAlternativeRightDistributivity[A, B](fa: F[A], ff: F[A => B], fg: F[A => B]): IsEq[F[B]] =
-    ((ff |+| fg).ap(fa)) <-> ((ff.ap(fa)) |+| (fg.ap(fa)))
+    (ff |+| fg).ap(fa) <-> (ff.ap(fa) |+| fg.ap(fa))
 
   def nonEmptyAlternativePrependKConsitentWithPureAndCombineK[A](fa: F[A], a: A): IsEq[F[A]] =
     fa.prependK(a) <-> (a.pure[F] <+> fa)

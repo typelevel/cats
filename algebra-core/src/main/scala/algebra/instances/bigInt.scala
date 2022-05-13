@@ -49,7 +49,7 @@ class BigIntAlgebra extends EuclideanRing[BigInt] with Serializable {
   override def fromBigInt(n: BigInt): BigInt = n
 
   override def lcm(a: BigInt, b: BigInt)(implicit ev: Eq[BigInt]): BigInt =
-    if (a.signum == 0 || b.signum == 0) zero else (a / a.gcd(b)) * b
+    if (a.signum == 0 || b.signum == 0) zero else a / a.gcd(b) * b
   override def gcd(a: BigInt, b: BigInt)(implicit ev: Eq[BigInt]): BigInt = a.gcd(b)
 
   def euclideanFunction(a: BigInt): BigInt = a.abs

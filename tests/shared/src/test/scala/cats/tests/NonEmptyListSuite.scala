@@ -110,7 +110,7 @@ class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonE
     forAll { (nel: NonEmptyList[Int]) =>
       assert(nel.show.nonEmpty)
       assert(nel.show.startsWith("NonEmptyList(") === true)
-      assert(nel.show === (implicitly[Show[NonEmptyList[Int]]].show(nel)))
+      assert(nel.show === implicitly[Show[NonEmptyList[Int]]].show(nel))
       assert(nel.show.contains(nel.head.show) === true)
     }
   }
@@ -124,7 +124,7 @@ class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonE
     forAll { (i: Int, tail: List[Int]) =>
       val list = i :: tail
       val nonEmptyList = NonEmptyList.of(i, tail: _*)
-      assert(list === (nonEmptyList.toList))
+      assert(list === nonEmptyList.toList)
     }
   }
 
@@ -132,62 +132,62 @@ class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonE
     forAll { (init: List[Int], last: Int) =>
       val list = init :+ last
       val nonEmptyList = NonEmptyList.ofInitLast(init, last)
-      assert(list === (nonEmptyList.toList))
+      assert(list === nonEmptyList.toList)
     }
   }
 
   test("NonEmptyList#filter is consistent with List#filter") {
     forAll { (nel: NonEmptyList[Int], p: Int => Boolean) =>
       val list = nel.toList
-      assert(nel.filter(p) === (list.filter(p)))
+      assert(nel.filter(p) === list.filter(p))
     }
   }
 
   test("NonEmptyList#filterNot is consistent with List#filterNot") {
     forAll { (nel: NonEmptyList[Int], p: Int => Boolean) =>
       val list = nel.toList
-      assert(nel.filterNot(p) === (list.filterNot(p)))
+      assert(nel.filterNot(p) === list.filterNot(p))
     }
   }
 
   test("NonEmptyList#collect is consistent with List#collect") {
     forAll { (nel: NonEmptyList[Int], pf: PartialFunction[Int, String]) =>
       val list = nel.toList
-      assert(nel.collect(pf) === (list.collect(pf)))
+      assert(nel.collect(pf) === list.collect(pf))
     }
   }
 
   test("NonEmptyList#find is consistent with List#find") {
     forAll { (nel: NonEmptyList[Int], p: Int => Boolean) =>
       val list = nel.toList
-      assert(nel.find(p) === (list.find(p)))
+      assert(nel.find(p) === list.find(p))
     }
   }
 
   test("NonEmptyList#exists is consistent with List#exists") {
     forAll { (nel: NonEmptyList[Int], p: Int => Boolean) =>
       val list = nel.toList
-      assert(nel.exists(p) === (list.exists(p)))
+      assert(nel.exists(p) === list.exists(p))
     }
   }
 
   test("NonEmptyList#forall is consistent with List#forall") {
     forAll { (nel: NonEmptyList[Int], p: Int => Boolean) =>
       val list = nel.toList
-      assert(nel.forall(p) === (list.forall(p)))
+      assert(nel.forall(p) === list.forall(p))
     }
   }
 
   test("NonEmptyList#map is consistent with List#map") {
     forAll { (nel: NonEmptyList[Int], p: Int => String) =>
       val list = nel.toList
-      assert(nel.map(p).toList === (list.map(p)))
+      assert(nel.map(p).toList === list.map(p))
     }
   }
 
   test("reduceLeft consistent with foldLeft") {
     forAll { (nel: NonEmptyList[Int], f: (Int, Int) => Int) =>
-      assert(nel.reduceLeft(f) === (nel.tail.foldLeft(nel.head)(f)))
+      assert(nel.reduceLeft(f) === nel.tail.foldLeft(nel.head)(f))
     }
   }
 
@@ -206,13 +206,13 @@ class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonE
 
   test("reduce consistent with fold") {
     forAll { (nel: NonEmptyList[Int]) =>
-      assert(nel.reduce === (nel.fold))
+      assert(nel.reduce === nel.fold)
     }
   }
 
   test("reduce consistent with reduceK") {
     forAll { (nel: NonEmptyList[Option[Int]]) =>
-      assert(nel.reduce(SemigroupK[Option].algebra[Int]) === (nel.reduceK))
+      assert(nel.reduce(SemigroupK[Option].algebra[Int]) === nel.reduceK)
     }
   }
 
@@ -252,7 +252,7 @@ class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonE
 
   test("reduceMapM consistent with foldMapM") {
     forAll { (nel: NonEmptyList[Int], f: Int => Option[Int]) =>
-      assert(nel.reduceMapM(f) === (nel.foldMapM(f)))
+      assert(nel.reduceMapM(f) === nel.foldMapM(f))
     }
   }
 
@@ -262,13 +262,13 @@ class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonE
     }
 
     forAll { (nel: NonEmptyList[Int]) =>
-      assert(NonEmptyList.fromList(nel.toList) === (Some(nel)))
+      assert(NonEmptyList.fromList(nel.toList) === Some(nel))
     }
   }
 
   test("fromListUnsafe/fromList consistency") {
     forAll { (nel: NonEmptyList[Int]) =>
-      assert(NonEmptyList.fromList(nel.toList) === (Some(NonEmptyList.fromListUnsafe(nel.toList))))
+      assert(NonEmptyList.fromList(nel.toList) === Some(NonEmptyList.fromListUnsafe(nel.toList)))
     }
   }
 
@@ -287,31 +287,31 @@ class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonE
 
   test("NonEmptyList#distinct is consistent with List#distinct") {
     forAll { (nel: NonEmptyList[Int]) =>
-      assert(nel.distinct.toList === (nel.toList.distinct))
+      assert(nel.distinct.toList === nel.toList.distinct)
     }
   }
 
   test("NonEmptyList#reverse is consistent with List#reverse") {
     forAll { (nel: NonEmptyList[Int]) =>
-      assert(nel.reverse.toList === (nel.toList.reverse))
+      assert(nel.reverse.toList === nel.toList.reverse)
     }
   }
 
   test("NonEmptyList#zipWithIndex is consistent with List#zipWithIndex") {
     forAll { (nel: NonEmptyList[Int]) =>
-      assert(nel.zipWithIndex.toList === (nel.toList.zipWithIndex))
+      assert(nel.zipWithIndex.toList === nel.toList.zipWithIndex)
     }
   }
 
   test("NonEmptyList#last is consistent with List#last") {
     forAll { (nel: NonEmptyList[Int]) =>
-      assert(nel.last === (nel.toList.last))
+      assert(nel.last === nel.toList.last)
     }
   }
 
   test("NonEmptyList#init is consistent with List#init") {
     forAll { (nel: NonEmptyList[Int]) =>
-      assert(nel.init === (nel.toList.init))
+      assert(nel.init === nel.toList.init)
     }
   }
 
@@ -325,20 +325,20 @@ class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonE
 
   test("NonEmptyList#size and length is consistent with List#size") {
     forAll { (nel: NonEmptyList[Int]) =>
-      assert(nel.size === (nel.toList.size))
-      assert(nel.length === (nel.toList.size))
+      assert(nel.size === nel.toList.size)
+      assert(nel.length === nel.toList.size)
     }
   }
 
   test("NonEmptyList#sorted is consistent with List#sorted") {
     forAll { (nel: NonEmptyList[Int]) =>
-      assert(nel.sorted.toList === (nel.toList.sorted))
+      assert(nel.sorted.toList === nel.toList.sorted)
     }
   }
 
   test("NonEmptyList#sortBy is consistent with List#sortBy") {
     forAll { (nel: NonEmptyList[Int], f: Int => Int) =>
-      assert(nel.sortBy(f).toList === (nel.toList.sortBy(f)))
+      assert(nel.sortBy(f).toList === nel.toList.sortBy(f))
     }
   }
 
@@ -378,25 +378,25 @@ class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonE
     forAll { (nel: NonEmptyList[Int], l: List[Int], n: Int) =>
       assert((nel ++ l).toList === (nel.toList ::: l))
       assert(nel.concat(l).toList === (nel.toList ::: l))
-      assert(nel.concatNel(NonEmptyList(n, l)).toList === (nel.toList ::: (n :: l)))
+      assert(nel.concatNel(NonEmptyList(n, l)).toList === (nel.toList ::: n :: l))
     }
   }
 
   test("NonEmptyList#fromFoldabale is consistent with NonEmptyList#fromList") {
     forAll { (xs: List[Int]) =>
-      assert(NonEmptyList.fromList(xs) === (NonEmptyList.fromFoldable(xs)))
+      assert(NonEmptyList.fromList(xs) === NonEmptyList.fromFoldable(xs))
     }
   }
 
   test("NonEmptyList#fromReducible is consistent with Reducible#toNonEmptyList") {
     forAll { (xs: NonEmptyVector[Int]) =>
-      assert(NonEmptyList.fromReducible(xs) === (Reducible[NonEmptyVector].toNonEmptyList(xs)))
+      assert(NonEmptyList.fromReducible(xs) === Reducible[NonEmptyVector].toNonEmptyList(xs))
     }
   }
 
   test("NonEmptyList#zip is consistent with List#zip") {
     forAll { (a: NonEmptyList[Int], b: NonEmptyList[Int], f: (Int, Int) => Int) =>
-      assert(a.zip(b).toList === (a.toList.zip(b.toList)))
+      assert(a.zip(b).toList === a.toList.zip(b.toList))
     }
   }
 
@@ -418,19 +418,19 @@ class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonE
 
   test("NonEmptyList#toNem is consistent with List#toMap and creating NonEmptyMap from it") {
     forAll { (nel: NonEmptyList[(Int, String)]) =>
-      assert(nel.toNem === (NonEmptyMap.fromMapUnsafe(SortedMap.empty[Int, String] ++ nel.toList.toMap)))
+      assert(nel.toNem === NonEmptyMap.fromMapUnsafe(SortedMap.empty[Int, String] ++ nel.toList.toMap))
     }
   }
 
   test("NonEmptyList#toNes is consistent with List#toSet and creating NonEmptySet from it") {
     forAll { (nel: NonEmptyList[Int]) =>
-      assert(nel.toNes === (NonEmptySet.fromSetUnsafe(SortedSet.empty[Int] ++ nel.toList.toSet)))
+      assert(nel.toNes === NonEmptySet.fromSetUnsafe(SortedSet.empty[Int] ++ nel.toList.toSet))
     }
   }
 
   test("NonEmptyList#toNev is consistent with List#toVector and creating NonEmptyVector from it") {
     forAll { (nel: NonEmptyList[Int]) =>
-      assert(nel.toNev === (NonEmptyVector.fromVectorUnsafe(Vector.empty[Int] ++ nel.toList.toVector)))
+      assert(nel.toNev === NonEmptyVector.fromVectorUnsafe(Vector.empty[Int] ++ nel.toList.toVector))
     }
   }
 }
@@ -440,7 +440,7 @@ class DeprecatedNonEmptyListSuite extends CatsSuite {
 
   test("Deprecated NonEmptyList#concat is consistent with List#:::") {
     forAll { (nel: NonEmptyList[Int], l: List[Int], n: Int) =>
-      assert(nel.concatNel(NonEmptyList(n, l)).toList === (nel.toList ::: (n :: l)))
+      assert(nel.concatNel(NonEmptyList(n, l)).toList === (nel.toList ::: n :: l))
     }
   }
 }

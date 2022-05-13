@@ -62,7 +62,7 @@ class ContravariantCoyonedaSuite extends CatsSuite {
 
   test("mapK and run is same as applying natural trans") {
     forAll { (b: Boolean) =>
-      val nt = new ((* => String) ~> (* => Int)) {
+      val nt = new (* => String) ~> (* => Int) {
         def apply[A](f: A => String): A => Int = s => f(s).length
       }
       val o = (b: Boolean) => b.toString

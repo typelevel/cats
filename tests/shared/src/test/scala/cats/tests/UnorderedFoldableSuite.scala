@@ -51,28 +51,28 @@ sealed abstract class UnorderedFoldableSuite[F[_]](name: String)(implicit
 
   test(s"UnorderedFoldable[$name].nonEmpty") {
     forAll { (fa: F[String]) =>
-      assert(instance.nonEmpty(fa) === (instance.size(fa) > 0L))
+      assert(instance.nonEmpty(fa) === instance.size(fa) > 0L)
     }
   }
 
   test(s"UnorderedFoldable[$name].count") {
     forAll { (fa: F[String], p: String => Boolean) =>
       implicit val F: UnorderedFoldable[F] = instance
-      assert(fa.count(p) === (iterator(fa).count(p).toLong))
+      assert(fa.count(p) === iterator(fa).count(p).toLong)
     }
   }
 
   test(s"UnorderedFoldable[$name].size") {
     forAll { (fa: F[String]) =>
       implicit val F: UnorderedFoldable[F] = instance
-      assert(fa.count(Function.const(true)) === (fa.size))
+      assert(fa.count(Function.const(true)) === fa.size)
     }
   }
 
   test(s"UnorderedFoldable[$name].contains") {
     forAll { (fa: F[String], v: String) =>
       implicit val F: UnorderedFoldable[F] = instance
-      assert(fa.contains_(v) === (iterator(fa).contains(v)))
+      assert(fa.contains_(v) === iterator(fa).contains(v))
     }
   }
 
@@ -99,7 +99,7 @@ sealed abstract class SpecializedUnorderedFoldableSuite[F[_]: UnorderedFoldable]
 
   test(s"Specialized UnorderedFoldable[$name].count") {
     forAll { (fa: F[String], p: String => Boolean) =>
-      assert(fa.count(p) === (iterator(fa).count(p).toLong))
+      assert(fa.count(p) === iterator(fa).count(p).toLong)
     }
   }
 }

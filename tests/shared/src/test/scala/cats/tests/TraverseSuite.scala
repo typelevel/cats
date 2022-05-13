@@ -32,13 +32,13 @@ abstract class TraverseSuite[F[_]: Traverse](name: String)(implicit ArbFInt: Arb
 
   test(s"Traverse[$name].zipWithIndex") {
     forAll { (fa: F[Int]) =>
-      assert(fa.zipWithIndex.toList === (fa.toList.zipWithIndex))
+      assert(fa.zipWithIndex.toList === fa.toList.zipWithIndex)
     }
   }
 
   test(s"Traverse[$name].mapWithIndex") {
     forAll { (fa: F[Int], fn: ((Int, Int)) => Int) =>
-      assert(fa.mapWithIndex((a, i) => fn((a, i))).toList === (fa.toList.zipWithIndex.map(fn)))
+      assert(fa.mapWithIndex((a, i) => fn((a, i))).toList === fa.toList.zipWithIndex.map(fn))
     }
   }
 

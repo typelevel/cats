@@ -38,7 +38,7 @@ class ContravariantSuite extends CatsSuite {
     forAll { (i: Int) =>
       val const: Const[Int, Option[Int]] = Const[Int, Option[Int]](i)
       val narrowed: Const[Int, Some[Int]] = constInst.narrow[Option[Int], Some[Int]](const)
-      assert(narrowed === (constInst.contramap(const)(identity[Option[Int]](_: Some[Int]))))
+      assert(narrowed === constInst.contramap(const)(identity[Option[Int]](_: Some[Int])))
       assert(narrowed eq const)
     }
   }

@@ -45,7 +45,7 @@ class IndexedStateTSuite extends CatsSuite {
   import IndexedStateTSuite._
 
   test("basic state usage") {
-    assert(add1.run(1).value === (2 -> 1))
+    assert(add1.run(1).value === 2 -> 1)
   }
 
   test("basic IndexedStateT usage") {
@@ -76,8 +76,8 @@ class IndexedStateTSuite extends CatsSuite {
       val stateT: State[String, Int] = StateT.pure(i)
       val indexedStateT: State[String, Int] = IndexedStateT.pure(i)
 
-      assert(state.run(s) === (stateT.run(s)))
-      assert(state.run(s) === (indexedStateT.run(s)))
+      assert(state.run(s) === stateT.run(s))
+      assert(state.run(s) === indexedStateT.run(s))
     }
   }
 
@@ -87,8 +87,8 @@ class IndexedStateTSuite extends CatsSuite {
       val stateT: State[String, Int] = StateT.empty
       val indexedStateT: State[String, Int] = IndexedStateT.empty
 
-      assert(state.run(s) === (stateT.run(s)))
-      assert(state.run(s) === (indexedStateT.run(s)))
+      assert(state.run(s) === stateT.run(s))
+      assert(state.run(s) === indexedStateT.run(s))
     }
   }
 
@@ -98,8 +98,8 @@ class IndexedStateTSuite extends CatsSuite {
       val stateT: State[String, String] = StateT.get
       val indexedStateT: State[String, String] = IndexedStateT.get
 
-      assert(state.run(s) === (stateT.run(s)))
-      assert(state.run(s) === (indexedStateT.run(s)))
+      assert(state.run(s) === stateT.run(s))
+      assert(state.run(s) === indexedStateT.run(s))
     }
   }
 
@@ -109,8 +109,8 @@ class IndexedStateTSuite extends CatsSuite {
       val stateT: State[String, Int] = StateT.inspect(f)
       val indexedStateT: State[String, Int] = IndexedStateT.inspect(f)
 
-      assert(state.run(s) === (stateT.run(s)))
-      assert(state.run(s) === (indexedStateT.run(s)))
+      assert(state.run(s) === stateT.run(s))
+      assert(state.run(s) === indexedStateT.run(s))
     }
   }
 
@@ -120,8 +120,8 @@ class IndexedStateTSuite extends CatsSuite {
       val stateT: State[String, Int] = StateT.inspectF(f.andThen(Eval.now))
       val indexedStateT: State[String, Int] = IndexedStateT.inspectF(f.andThen(Eval.now))
 
-      assert(state.run(s) === (stateT.run(s)))
-      assert(state.run(s) === (indexedStateT.run(s)))
+      assert(state.run(s) === stateT.run(s))
+      assert(state.run(s) === indexedStateT.run(s))
     }
   }
 
@@ -131,8 +131,8 @@ class IndexedStateTSuite extends CatsSuite {
       val stateT: State[String, Unit] = StateT.modify(f)
       val indexedStateT: State[String, Unit] = IndexedStateT.modify(f)
 
-      assert(state.run(s) === (stateT.run(s)))
-      assert(state.run(s) === (indexedStateT.run(s)))
+      assert(state.run(s) === stateT.run(s))
+      assert(state.run(s) === indexedStateT.run(s))
     }
   }
 
@@ -142,8 +142,8 @@ class IndexedStateTSuite extends CatsSuite {
       val stateT: State[String, Unit] = StateT.modifyF(f.andThen(Eval.now))
       val indexedStateT: State[String, Unit] = IndexedStateT.modifyF(f.andThen(Eval.now))
 
-      assert(state.run(s) === (stateT.run(s)))
-      assert(state.run(s) === (indexedStateT.run(s)))
+      assert(state.run(s) === stateT.run(s))
+      assert(state.run(s) === indexedStateT.run(s))
     }
   }
 
@@ -153,8 +153,8 @@ class IndexedStateTSuite extends CatsSuite {
       val stateT: State[String, Int] = StateT.liftF(Eval.now(i))
       val indexedStateT: State[String, Int] = IndexedStateT.liftF(Eval.now(i))
 
-      assert(state.run(s) === (stateT.run(s)))
-      assert(state.run(s) === (indexedStateT.run(s)))
+      assert(state.run(s) === stateT.run(s))
+      assert(state.run(s) === indexedStateT.run(s))
     }
   }
 
@@ -164,8 +164,8 @@ class IndexedStateTSuite extends CatsSuite {
       val stateT: StateT[Eval, String, Unit] = StateT.set(s)
       val indexedStateT: StateT[Eval, String, Unit] = IndexedStateT.set(s)
 
-      assert(state.run(init) === (stateT.run(init)))
-      assert(state.run(init) === (indexedStateT.run(init)))
+      assert(state.run(init) === stateT.run(init))
+      assert(state.run(init) === indexedStateT.run(init))
     }
   }
 
@@ -175,8 +175,8 @@ class IndexedStateTSuite extends CatsSuite {
       val stateT: StateT[Eval, String, Unit] = StateT.setF(Eval.now(s))
       val indexedStateT: StateT[Eval, String, Unit] = IndexedStateT.setF(Eval.now(s))
 
-      assert(state.run(init) === (stateT.run(init)))
-      assert(state.run(init) === (indexedStateT.run(init)))
+      assert(state.run(init) === stateT.run(init))
+      assert(state.run(init) === indexedStateT.run(init))
     }
   }
 
@@ -187,19 +187,19 @@ class IndexedStateTSuite extends CatsSuite {
 
   test("Singleton and instance inspect are consistent") {
     forAll { (s: String, i: Int) =>
-      assert(State.inspect[Int, String](_.toString).run(i) === (State.pure[Int, Unit](()).inspect(_.toString).run(i)))
+      assert(State.inspect[Int, String](_.toString).run(i) === State.pure[Int, Unit](()).inspect(_.toString).run(i))
     }
   }
 
   test("flatMap and flatMapF consistent") {
     forAll { (stateT: StateT[Option, MiniInt, Int], f: Int => Option[Int]) =>
-      assert(stateT.flatMap(a => StateT(s => f(a).map(b => (s, b)))) === (stateT.flatMapF(f)))
+      assert(stateT.flatMap(a => StateT(s => f(a).map(b => (s, b)))) === stateT.flatMapF(f))
     }
   }
 
   test("runEmpty, runEmptyS, and runEmptyA consistent") {
     forAll { (f: StateT[List, Long, Int]) =>
-      assert((f.runEmptyS.zip(f.runEmptyA)) === (f.runEmpty))
+      assert(f.runEmptyS.zip(f.runEmptyA) === f.runEmpty)
     }
   }
 
@@ -211,13 +211,13 @@ class IndexedStateTSuite extends CatsSuite {
 
   test("modify modifies state") {
     forAll { (f: StateT[List, Long, Int], g: Long => Long, initial: Long) =>
-      assert(f.modify(g).runS(initial) === (f.runS(initial).map(g)))
+      assert(f.modify(g).runS(initial) === f.runS(initial).map(g))
     }
   }
 
   test("modify doesn't affect A value") {
     forAll { (f: StateT[List, Long, Int], g: Long => Long, initial: Long) =>
-      assert(f.modify(g).runA(initial) === (f.runA(initial)))
+      assert(f.modify(g).runA(initial) === f.runA(initial))
     }
   }
 
@@ -238,7 +238,7 @@ class IndexedStateTSuite extends CatsSuite {
     forAll { (init: String, update: String) =>
       val s1 = StateT.modify[Eval, String](_ => update)
       val s2 = StateT.set[Eval, String](update)
-      assert(s1.run(init) === (s2.run(init)))
+      assert(s1.run(init) === s2.run(init))
     }
   }
 
@@ -246,7 +246,7 @@ class IndexedStateTSuite extends CatsSuite {
     forAll { (init: String, update: String) =>
       val s1 = StateT.modifyF[Eval, String](_ => Eval.now(update))
       val s2 = StateT.setF(Eval.now(update))
-      assert(s1.run(init) === (s2.run(init)))
+      assert(s1.run(init) === s2.run(init))
     }
   }
 
@@ -259,7 +259,10 @@ class IndexedStateTSuite extends CatsSuite {
 
   test(".get equivalent to flatMap with State.get") {
     forAll { (s: State[MiniInt, Int]) =>
-      assert(s.get === (s.flatMap(_ => State.get)))
+      assert(
+        s.get === s.flatMap(
+        _ => State.get)
+      )
     }
   }
 
@@ -270,9 +273,9 @@ class IndexedStateTSuite extends CatsSuite {
   }
 
   test("StateT#mapK transforms effect") {
-    val f: Eval ~> Id = new (Eval ~> Id) { def apply[A](a: Eval[A]): A = a.value }
+    val f: Eval ~> Id = new Eval ~> Id { def apply[A](a: Eval[A]): A = a.value }
     forAll { (state: StateT[Eval, Long, Int], initial: Long) =>
-      assert(state.mapK(f).runA(initial) === (state.runA(initial).value))
+      assert(state.mapK(f).runA(initial) === state.runA(initial).value)
     }
   }
 
@@ -331,8 +334,8 @@ class IndexedStateTSuite extends CatsSuite {
       if (i > stackSafeTestSize) Left(i) else Right((i + 1, ()))
     }
     step.foreverM.run(0) match {
-      case Left(big)     => assert(big === stackSafeTestSize + 1)
-      case Right((_, _)) => fail("unreachable code due to Nothing, but scalac won't let us match on it")
+      case Left(big)   => assert(big === stackSafeTestSize + 1)
+      case Right(_, _) => fail("unreachable code due to Nothing, but scalac won't let us match on it")
     }
   }
 
@@ -343,8 +346,8 @@ class IndexedStateTSuite extends CatsSuite {
       }
     }
     result.run(0) match {
-      case Left(sum)     => assert(sum === stackSafeTestSize + 1)
-      case Right((_, _)) => fail("unreachable code due to Nothing, but scalac won't let us match on it")
+      case Left(sum)   => assert(sum === stackSafeTestSize + 1)
+      case Right(_, _) => fail("unreachable code due to Nothing, but scalac won't let us match on it")
     }
   }
 

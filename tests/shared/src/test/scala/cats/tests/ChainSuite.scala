@@ -91,19 +91,19 @@ class ChainSuite extends CatsSuite {
     assert(Show[Chain[Int]].show(Chain(1, 2, 3)) === "Chain(1, 2, 3)")
     assert(Chain.empty[Int].show === "Chain()")
     forAll { (l: Chain[String]) =>
-      assert(l.show === (l.toString))
+      assert(l.show === l.toString)
     }
   }
 
   test("headOption") {
     forAll { (s: Seq[Int]) =>
-      assert(Chain.fromSeq(s).headOption === (s.headOption))
+      assert(Chain.fromSeq(s).headOption === s.headOption)
     }
   }
 
   test("lastOption") {
     forAll { (c: Chain[Int]) =>
-      assert(c.lastOption === (c.toList.lastOption))
+      assert(c.lastOption === c.toList.lastOption)
     }
   }
 
@@ -132,7 +132,7 @@ class ChainSuite extends CatsSuite {
 
   test("size is consistent with toList.size") {
     forAll { (ci: Chain[Int]) =>
-      assert(ci.size.toInt === (ci.toList.size))
+      assert(ci.size.toInt === ci.toList.size)
     }
   }
 
@@ -200,13 +200,13 @@ class ChainSuite extends CatsSuite {
 
   test("exists should be consistent with find + isDefined") {
     forAll { (ci: Chain[Int], f: Int => Boolean) =>
-      assert(ci.exists(f) === (ci.find(f).isDefined))
+      assert(ci.exists(f) === ci.find(f).isDefined)
     }
   }
 
   test("deleteFirst consistent with find") {
     forAll { (ci: Chain[Int], f: Int => Boolean) =>
-      assert(ci.find(f) === (ci.deleteFirst(f).map(_._1)))
+      assert(ci.find(f) === ci.deleteFirst(f).map(_._1))
     }
   }
 
@@ -296,25 +296,25 @@ class ChainSuite extends CatsSuite {
 
   test("zipWithIndex is consistent with toList.zipWithIndex") {
     forAll { (ci: Chain[Int]) =>
-      assert(ci.zipWithIndex.toList === (ci.toList.zipWithIndex))
+      assert(ci.zipWithIndex.toList === ci.toList.zipWithIndex)
     }
   }
 
   test("zipWithIndex is stack-safe for a large chain constructed using concatenations") {
     val list = List.fill(10000)(1)
     val chain = list.foldLeft(Chain.empty[Int]) { case (acc, next) => acc.concat(Chain(next)) }
-    chain.zipWithIndex.toList === (list.zipWithIndex)
+    chain.zipWithIndex.toList === list.zipWithIndex
   }
 
   test("sortBy is consistent with toList.sortBy") {
     forAll { (ci: Chain[Int], f: Int => String) =>
-      assert(ci.sortBy(f).toList === (ci.toList.sortBy(f)))
+      assert(ci.sortBy(f).toList === ci.toList.sortBy(f))
     }
   }
 
   test("sorted is consistent with toList.sorted") {
     forAll { (ci: Chain[Int]) =>
-      assert(ci.sorted.toList === (ci.toList.sorted))
+      assert(ci.sorted.toList === ci.toList.sorted)
     }
   }
 
@@ -326,13 +326,13 @@ class ChainSuite extends CatsSuite {
 
   test("reverse consistent with List#reverse") {
     forAll { (ci: Chain[Int]) =>
-      assert(ci.reverse.toList === (ci.toList.reverse))
+      assert(ci.reverse.toList === ci.toList.reverse)
     }
   }
 
   test("(a ++ b).isEmpty ==> a.isEmpty and b.isEmpty") {
     forAll { (a: Chain[Int], b: Chain[Int]) =>
-      assert((a ++ b).nonEmpty || (a.isEmpty && b.isEmpty))
+      assert((a ++ b).nonEmpty || a.isEmpty && b.isEmpty)
     }
   }
 
@@ -348,8 +348,8 @@ class ChainSuite extends CatsSuite {
 
   test("(nil ++ a) eq a") {
     forAll { (a: Chain[Int]) =>
-      assert((Chain.nil ++ a) eq a)
-      assert((a ++ Chain.nil) eq a)
+      assert(Chain.nil ++ a eq a)
+      assert(a ++ Chain.nil eq a)
     }
   }
 
@@ -376,7 +376,7 @@ class ChainSuite extends CatsSuite {
 
   test("Chain#distinct is consistent with List#distinct") {
     forAll { (a: Chain[Int]) =>
-      assert(a.distinct.toList === (a.toList.distinct))
+      assert(a.distinct.toList === a.toList.distinct)
     }
   }
 
@@ -390,43 +390,43 @@ class ChainSuite extends CatsSuite {
     assertEquals(Chain.one(1) |+| Chain.one(2) |+| Chain.one(3), Chain.fromSeq(List(1, 2, 3)))
 
     forAll { (a: Chain[Int], b: Chain[Int]) =>
-      assert((a === b) === (a == b))
+      assert(a === b === (a == b))
     }
   }
 
   test("== returns false for non-Chains") {
     forAll { (a: Chain[Int], b: Int) =>
-      assert((a.equals(b)) === false)
+      assert(a.equals(b) === false)
     }
   }
 
   test("== returns false for Chains of different element types") {
     forAll { (a: Chain[Option[String]], b: Chain[String]) =>
-      assert((a.equals(b)) === (a.isEmpty && b.isEmpty))
+      assert(a.equals(b) === (a.isEmpty && b.isEmpty))
     }
   }
 
   test("Chain#hashCode is consistent with List#hashCode") {
     forAll { (x: Chain[Int]) =>
-      assert(x.hashCode === (x.toList.hashCode))
+      assert(x.hashCode === x.toList.hashCode)
     }
   }
 
   test("Chain#takeWhile is consistent with List#takeWhile") {
     forAll { (x: Chain[Int], p: Int => Boolean) =>
-      assert(x.takeWhile(p).toList === (x.toList.takeWhile(p)))
+      assert(x.takeWhile(p).toList === x.toList.takeWhile(p))
     }
   }
 
   test("Chain#dropWhile is consistent with List#dropWhile") {
     forAll { (x: Chain[Int], p: Int => Boolean) =>
-      assert(x.dropWhile(p).toList === (x.toList.dropWhile(p)))
+      assert(x.dropWhile(p).toList === x.toList.dropWhile(p))
     }
   }
 
   test("Chain#get is consistent with List#lift") {
     forAll { (x: Chain[Int], idx: Int) =>
-      assert(x.get(idx.toLong) === (x.toList.lift(idx)))
+      assert(x.get(idx.toLong) === x.toList.lift(idx))
     }
   }
 

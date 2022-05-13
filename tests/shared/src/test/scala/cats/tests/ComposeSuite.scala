@@ -39,7 +39,7 @@ class ComposeSuite extends CatsSuite {
   checkAll("Compose[Function1].algebra[MiniInt]", SemigroupTests[Endo[MiniInt]](functionAlgebra).semigroup)
 
   test("syntax") {
-    assertEquals((((_: Int) + 1) <<< ((_: Int) / 2))(2), 2)
-    assertEquals((((_: Int) + 1) >>> ((_: Int) / 2))(5), 3)
+    assertEquals(((_: Int) + 1) <<< ((_: Int) / 2) (2), 2)
+    assertEquals(((_: Int) + 1) >>> ((_: Int) / 2) (5), 3)
   }
 }

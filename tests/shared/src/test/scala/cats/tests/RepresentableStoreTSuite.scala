@@ -82,7 +82,7 @@ class RepresentableStoreTSuite extends CatsSuite {
 
   test("extract and peek are consistent") {
     forAll { (store: StoreT[Id, String, String]) =>
-      assert(store.extract === (store.peek(store.index)))
+      assert(store.extract === store.peek(store.index))
     }
   }
 

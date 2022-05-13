@@ -27,7 +27,7 @@ import cats.syntax.eq._
 
 class GroupSuite extends CatsSuite {
   test("combine minValue") {
-    assert(Group[Int].combineN(1, Int.MinValue) === (Int.MinValue))
+    assert(Group[Int].combineN(1, Int.MinValue) === Int.MinValue)
   }
 
   test("combine negative") {

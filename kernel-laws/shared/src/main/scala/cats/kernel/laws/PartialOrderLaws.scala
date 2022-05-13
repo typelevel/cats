@@ -50,7 +50,7 @@ trait PartialOrderLaws[A] extends EqLaws[A] {
 
   def partialCompare(x: A, y: A): IsEq[Boolean] = {
     val c = E.partialCompare(x, y)
-    (((c < 0) == E.lt(x, y)) && ((c == 0) == E.eqv(x, y)) && ((c > 0) == E.gt(x, y))) <-> true
+    (c < 0 == E.lt(x, y) && c == 0 == E.eqv(x, y) && c > 0 == E.gt(x, y)) <-> true
   }
 
   def pmin(x: A, y: A): IsEq[Boolean] = {

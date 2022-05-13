@@ -72,9 +72,9 @@ class StreamSuite extends CatsSuite {
         // depending on the internal state of the Stream. Show[Stream] should return
         // consistent values independent of internal state.
         unevaluatedLL.tail
-        assert(initialShow === (unevaluatedLL.show))
+        assert(initialShow === unevaluatedLL.show)
       } else {
-        assert(stream.show === (stream.toString))
+        assert(stream.show === stream.toString)
       }
     }
   }

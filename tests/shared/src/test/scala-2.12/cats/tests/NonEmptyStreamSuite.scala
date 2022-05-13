@@ -77,7 +77,7 @@ class NonEmptyStreamSuite extends CatsSuite {
     forAll { (nel: NonEmptyStream[Int]) =>
       assert(nel.show.nonEmpty === true)
       assert(nel.show.startsWith("OneAnd(") === true)
-      assert(nel.show === (implicitly[Show[NonEmptyStream[Int]]].show(nel)))
+      assert(nel.show === implicitly[Show[NonEmptyStream[Int]]].show(nel))
       assert(nel.show.contains(nel.head.show) === true)
     }
   }
@@ -91,35 +91,35 @@ class NonEmptyStreamSuite extends CatsSuite {
     forAll { (i: Int, tail: Stream[Int]) =>
       val stream = i #:: tail
       val oneAnd = NonEmptyStream(i, tail: _*)
-      assert(stream === (oneAnd.unwrap))
+      assert(stream === oneAnd.unwrap)
     }
   }
 
   test("NonEmptyStream#find is consistent with Stream#find") {
     forAll { (nel: NonEmptyStream[Int], p: Int => Boolean) =>
       val stream = nel.unwrap
-      assert(nel.find(p) === (stream.find(p)))
+      assert(nel.find(p) === stream.find(p))
     }
   }
 
   test("NonEmptyStream#exists is consistent with Stream#exists") {
     forAll { (nel: NonEmptyStream[Int], p: Int => Boolean) =>
       val stream = nel.unwrap
-      assert(nel.exists(p) === (stream.exists(p)))
+      assert(nel.exists(p) === stream.exists(p))
     }
   }
 
   test("NonEmptyStream#forall is consistent with Stream#forall") {
     forAll { (nel: NonEmptyStream[Int], p: Int => Boolean) =>
       val stream = nel.unwrap
-      assert(nel.forall(p) === (stream.forall(p)))
+      assert(nel.forall(p) === stream.forall(p))
     }
   }
 
   test("NonEmptyStream#map is consistent with Stream#map") {
     forAll { (nel: NonEmptyStream[Int], p: Int => String) =>
       val stream = nel.unwrap
-      assert(nel.map(p).unwrap === (stream.map(p)))
+      assert(nel.map(p).unwrap === stream.map(p))
     }
   }
 
@@ -152,13 +152,13 @@ class NonEmptyStreamSuite extends CatsSuite {
 
   test("reduce consistent with fold") {
     forAll { (nel: NonEmptyStream[Int]) =>
-      assert(nel.reduce === (nel.fold))
+      assert(nel.reduce === nel.fold)
     }
   }
 
   test("reduce consistent with reduceK") {
     forAll { (nel: NonEmptyStream[Option[Int]]) =>
-      assert(nel.reduce(SemigroupK[Option].algebra[Int]) === (nel.reduceK))
+      assert(nel.reduce(SemigroupK[Option].algebra[Int]) === nel.reduceK)
     }
   }
 
@@ -184,7 +184,7 @@ class NonEmptyStreamSuite extends CatsSuite {
 
   test("filter includes elements based on a predicate") {
     forAll { (nes: NonEmptyStream[Int], pred: Int => Boolean) =>
-      assert(nes.filter(pred) === (nes.unwrap.filter(pred)))
+      assert(nes.filter(pred) === nes.unwrap.filter(pred))
     }
   }
 

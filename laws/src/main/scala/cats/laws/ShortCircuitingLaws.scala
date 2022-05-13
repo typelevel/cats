@@ -130,7 +130,7 @@ trait ShortCircuitingLaws[F[_]] {
     f.invocations.get <-> size
   }
 
-  private[this] class RestrictedFunction[-A, +B](f: A => B, maxInvocationsAllowed: Long, empty: => B) extends (A => B) {
+  private[this] class RestrictedFunction[-A, +B](f: A => B, maxInvocationsAllowed: Long, empty: => B) extends A => B {
     val invocations = new AtomicLong(0)
 
     override def apply(v1: A): B =

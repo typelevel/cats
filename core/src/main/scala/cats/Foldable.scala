@@ -119,8 +119,8 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
   def foldRightDefer[G[_]: Defer, A, B](fa: F[A], gb: G[B])(fn: (A, G[B]) => G[B]): G[B] = {
     def loop(source: Source[A]): G[B] = {
       source.uncons match {
-        case Some((next, s)) => fn(next, Defer[G].defer(loop(s.value)))
-        case None            => gb
+        case Some(next, s) => fn(next, Defer[G].defer(loop(s.value)))
+        case None          => gb
       }
     }
     Defer[G].defer(loop(Source.fromFoldable(fa)(self)))
@@ -134,11 +134,11 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
 
   def reduceRightToOption[A, B](fa: F[A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[Option[B]] = {
     Source.fromFoldable(fa)(self).uncons match {
-      case Some((first, s)) =>
+      case Some(first, s) =>
         def loop(now: A, source: Source[A]): Eval[B] =
           source.uncons match {
-            case Some((next, s)) => g(now, Eval.defer(loop(next, s.value)))
-            case None            => Eval.later(f(now))
+            case Some(next, s) => g(now, Eval.defer(loop(next, s.value)))
+            case None          => Eval.later(f(now))
           }
 
         Eval.defer(loop(first, s.value).map(Some(_)))
@@ -392,7 +392,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
   @noop
   def collectFirstSomeM[G[_], A, B](fa: F[A])(f: A => G[Option[B]])(implicit G: Monad[G]): G[Option[B]] =
     G.tailRecM(Foldable.Source.fromFoldable(fa)(self))(_.uncons match {
-      case Some((a, src)) =>
+      case Some(a, src) =>
         G.map(f(a)) {
           case None => Left(src.value)
           case s    => Right(s)
@@ -478,8 +478,8 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
     val src = Foldable.Source.fromFoldable(fa)(self)
     G.tailRecM((z, src)) { case (b, src) =>
       src.uncons match {
-        case Some((a, src)) => G.map(f(b, a))(b => Left((b, src.value)))
-        case None           => G.pure(Right(b))
+        case Some(a, src) => G.map(f(b, a))(b => Left((b, src.value)))
+        case None         => G.pure(Right(b))
       }
     }
   }
@@ -668,8 +668,8 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
   @noop
   def findM[G[_], A](fa: F[A])(p: A => G[Boolean])(implicit G: Monad[G]): G[Option[A]] =
     G.tailRecM(Foldable.Source.fromFoldable(fa)(self))(_.uncons match {
-      case Some((a, src)) => G.map(p(a))(if (_) Right(Some(a)) else Left(src.value))
-      case None           => G.pure(Right(None))
+      case Some(a, src) => G.map(p(a))(if (_) Right(Some(a)) else Left(src.value))
+      case None         => G.pure(Right(None))
     })
 
   /**
@@ -718,8 +718,8 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
   def existsM[G[_], A](fa: F[A])(p: A => G[Boolean])(implicit G: Monad[G]): G[Boolean] =
     G.tailRecM(Foldable.Source.fromFoldable(fa)(self)) { src =>
       src.uncons match {
-        case Some((a, src)) => G.map(p(a))(bb => if (bb) Right(true) else Left(src.value))
-        case None           => G.pure(Right(false))
+        case Some(a, src) => G.map(p(a))(bb => if (bb) Right(true) else Left(src.value))
+        case None         => G.pure(Right(false))
       }
     }
 
@@ -753,8 +753,8 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
   def forallM[G[_], A](fa: F[A])(p: A => G[Boolean])(implicit G: Monad[G]): G[Boolean] =
     G.tailRecM(Foldable.Source.fromFoldable(fa)(self)) { src =>
       src.uncons match {
-        case Some((a, src)) => G.map(p(a))(bb => if (!bb) Right(false) else Left(src.value))
-        case None           => G.pure(Right(true))
+        case Some(a, src) => G.map(p(a))(bb => if (!bb) Right(false) else Left(src.value))
+        case None         => G.pure(Right(true))
       }
     }
 

@@ -81,7 +81,7 @@ object ArraySeqInstances {
     }
   }
 
-  private class ArraySeqHash[A](implicit ev: Hash[A]) extends ArraySeqEq[A]()(ev) with Hash[ArraySeq[A]] {
+  private class ArraySeqHash[A](implicit ev: Hash[A]) extends ArraySeqEq[A](ev) with Hash[ArraySeq[A]] {
     final def hash(xs: ArraySeq[A]): Int = StaticMethods.orderedHash(xs)
   }
 

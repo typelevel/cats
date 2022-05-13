@@ -159,7 +159,7 @@ class TupleSuite extends CatsSuite {
     val cart = ContravariantSemigroupal[Eq].composeFunctor[(Int, *)]
     val eq = cart.product(Eq[(Int, String)], Eq[(Int, Int)])
     forAll { (a: (Int, (String, Int)), b: (Int, (String, Int))) =>
-      assert((a == b) === (eq.eqv(a, b)))
+      assert(a == b === eq.eqv(a, b))
     }
   }
 
@@ -176,7 +176,7 @@ class TupleSuite extends CatsSuite {
   test("order") {
     forAll { (t: (Int, Int)) =>
       val u = t.swap
-      assert(Order[(Int, Int)].compare(t, u) === (scala.math.Ordering[(Int, Int)].compare(t, u)))
+      assert(Order[(Int, Int)].compare(t, u) === scala.math.Ordering[(Int, Int)].compare(t, u))
     }
   }
 

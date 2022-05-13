@@ -136,12 +136,12 @@ sealed abstract private[data] class OneAndInstances extends OneAndLowPriority0 {
       def applicative: Applicative[OneAnd[F0, *]] = catsDataApplicativeForOneAnd(Alternative[F0])
 
       def sequential: OneAnd[F0, *] ~> OneAnd[M, *] =
-        new (OneAnd[F0, *] ~> OneAnd[M, *]) {
+        new OneAnd[F0, *] ~> OneAnd[M, *] {
           def apply[B](ofb: OneAnd[F0, B]): OneAnd[M, B] = OneAnd(ofb.head, P.sequential(ofb.tail))
         }
 
       def parallel: OneAnd[M, *] ~> OneAnd[F0, *] =
-        new (OneAnd[M, *] ~> OneAnd[F0, *]) {
+        new OneAnd[M, *] ~> OneAnd[F0, *] {
           def apply[B](ofb: OneAnd[M, B]): OneAnd[F0, B] = OneAnd(ofb.head, P.parallel(ofb.tail))
         }
 

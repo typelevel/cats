@@ -36,7 +36,7 @@ object Await {
   def result[A](f: Future[A], atMost: FiniteDuration): A =
     f.value match {
       case Some(v) => v.get
-      case None    => throw new IllegalStateException()
+      case None    => throw new IllegalStateException
     }
 }
 

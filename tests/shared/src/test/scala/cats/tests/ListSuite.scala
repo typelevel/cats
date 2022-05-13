@@ -71,7 +71,7 @@ class ListSuite extends CatsSuite {
 
   test("nel => list => nel returns original nel")(
     forAll { (fa: NonEmptyList[Int]) =>
-      assert(fa.toList.toNel === (Some(fa)))
+      assert(fa.toList.toNel === Some(fa))
     }
   )
 
@@ -87,7 +87,7 @@ class ListSuite extends CatsSuite {
 
   test("groupByNelA should be consistent with groupByNel")(
     forAll { (fa: List[Int], f: Int => Int) =>
-      assert(fa.groupByNelA(f.andThen(Option(_))) === (Option(fa.groupByNel(f))))
+      assert(fa.groupByNelA(f.andThen(Option(_))) === Option(fa.groupByNel(f)))
     }
   )
 
@@ -107,7 +107,7 @@ class ListSuite extends CatsSuite {
     assert(List(1, 2, 3).show === "List(1, 2, 3)")
     assert((Nil: List[Int]).show === "List()")
     forAll { (l: List[String]) =>
-      assert(l.show === (l.toString))
+      assert(l.show === l.toString)
     }
   }
 
