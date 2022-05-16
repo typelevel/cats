@@ -461,7 +461,7 @@ object arbitrary extends ArbitraryInstances0 with ScalaVersionSpecific.Arbitrary
     )
   )
 
-  implicit def catsLawsCogenForHashSet[K, V](implicit K: Cogen[K], V: Cogen[V]): Cogen[HashMap[K, V]] =
+  implicit def catsLawsCogenForHashMap[K, V](implicit K: Cogen[K], V: Cogen[V]): Cogen[HashMap[K, V]] =
     Cogen.it[HashMap[K, V], (K, V)](_.iterator)
 }
 
