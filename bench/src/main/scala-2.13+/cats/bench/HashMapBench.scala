@@ -60,11 +60,11 @@ class HashMapBench {
 
   @Benchmark
   @OperationsPerInvocation(1000)
-  def hashMapAdd(bh: Blackhole): Unit = {
+  def hashMapUpdated(bh: Blackhole): Unit = {
     var hs = hashMap
     var i = 0
     while (i < 1000) {
-      hs = hs.add(-i.toLong, i)
+      hs = hs.updated(-i.toLong, i)
       i += 1
     }
     bh.consume(hs)
@@ -72,7 +72,7 @@ class HashMapBench {
 
   @Benchmark
   @OperationsPerInvocation(1000)
-  def scalaMapAdd(bh: Blackhole): Unit = {
+  def scalaMapUpdated(bh: Blackhole): Unit = {
     var ss = scalaMap
     var i = 0
     while (i < 1000) {
@@ -84,11 +84,11 @@ class HashMapBench {
 
   @Benchmark
   @OperationsPerInvocation(1000)
-  def hashMapRemove(bh: Blackhole): Unit = {
+  def hashMapRemoved(bh: Blackhole): Unit = {
     var hs = hashMap
     var i = 0L
     while (i < 1000L) {
-      hs = hs.remove(i)
+      hs = hs.removed(i)
       i += 1L
     }
     bh.consume(hs)

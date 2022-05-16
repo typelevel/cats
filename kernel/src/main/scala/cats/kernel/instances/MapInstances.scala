@@ -103,11 +103,17 @@ class MapMonoid[K, V](implicit V: Semigroup[V]) extends Monoid[Map[K, V]] {
   def combine(xs: Map[K, V], ys: Map[K, V]): Map[K, V] =
     if (xs.size <= ys.size) {
       xs.foldLeft(ys) { case (my, (k, x)) =>
-        my.updated(k, Semigroup.maybeCombine(x, my.get(k)))
+        my.get(k) match {
+          case Some(y) => my.updated(k, V.combine(x, y))
+          case None    => my.updated(k, x)
+        }
       }
     } else {
       ys.foldLeft(xs) { case (mx, (k, y)) =>
-        mx.updated(k, Semigroup.maybeCombine(mx.get(k), y))
+        mx.get(k) match {
+          case Some(x) => mx.updated(k, V.combine(x, y))
+          case None    => mx.updated(k, y)
+        }
       }
     }
 

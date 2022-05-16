@@ -91,7 +91,7 @@ private[kernel] class HashCompat {
       val h = A.hash(x)
       a += h
       b ^= h
-      if (h != 0) c *= h
+      c *= h | 1
       n += 1
     }
     var h = setSeed

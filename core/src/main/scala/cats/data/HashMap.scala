@@ -41,6 +41,8 @@
 
 package cats.data
 
+import cats.kernel.compat.scalaVersionSpecific._
+
 import cats.Always
 import cats.CommutativeApplicative
 import cats.Eval
@@ -81,12 +83,12 @@ final class HashMap[K, +V] private[data] (private[data] val rootNode: HashMap.No
     new HashMap.Iterator(rootNode)
 
   /**
-    * A reverse iterator for this map that can be used only once.
+    * An iterator for the keys of this map that can be used only once.
     *
-    * @return an iterator that iterates through this map in the reverse order of [[HashMap#iterator]].
+    * @return an iterator that iterates through the keys of this map.
     */
-  final def reverseIterator: Iterator[(K, V)] =
-    new HashMap.ReverseIterator(rootNode)
+  final def keysIterator: Iterator[K] =
+    iterator.map { case (k, _) => k }
 
   /**
     * The size of this map.
@@ -153,9 +155,9 @@ final class HashMap[K, +V] private[data] (private[data] val rootNode: HashMap.No
     * @param value the value to be added.
     * @return a new map that contains all key-value pairs of this map and that also contains a mapping from `key` to `value`.
     */
-  final def add[VV >: V](key: K, value: VV): HashMap[K, VV] = {
+  final def updated[VV >: V](key: K, value: VV): HashMap[K, VV] = {
     val keyHash = improve(hashKey.hash(key))
-    val newRootNode = rootNode.add(key, keyHash, value, 0)
+    val newRootNode = rootNode.updated(key, keyHash, value, 0)
 
     if (newRootNode eq rootNode)
       this
@@ -169,9 +171,9 @@ final class HashMap[K, +V] private[data] (private[data] val rootNode: HashMap.No
     * @param key the key to be removed.
     * @return a new map that contains all elements of this map but that does not contain `key`.
     */
-  final def remove(key: K): HashMap[K, V] = {
+  final def removed(key: K): HashMap[K, V] = {
     val keyHash = improve(hashKey.hash(key))
-    val newRootNode = rootNode.remove(key, keyHash, 0)
+    val newRootNode = rootNode.removed(key, keyHash, 0)
 
     if (newRootNode eq rootNode)
       this
@@ -267,7 +269,41 @@ object HashMap extends HashMapInstances {
   */
   final def fromSeq[K, V](seq: Seq[(K, V)])(implicit hashKey: Hash[K]): HashMap[K, V] = {
     val rootNode = seq.foldLeft(Node.empty[K, V]) { case (node, (k, v)) =>
-      node.add(k, improve(hashKey.hash(k)), v, 0)
+      node.updated(k, improve(hashKey.hash(k)), v, 0)
+    }
+    new HashMap(rootNode)
+  }
+
+  /**
+  * Creates a new [[cats.data.HashMap]] which contains all elements of `iterable`.
+  *
+  * @param iterable the iterable source of elements to add to the [[cats.data.HashMap]].
+  * @param hashKey the [[cats.kernel.Hash]] instance used for hashing values.
+  * @return a new [[cats.data.HashMap]] which contains all elements of `seq`.
+  */
+  final def fromIterableOnce[K, V](iterable: IterableOnce[(K, V)])(implicit hashKey: Hash[K]): HashMap[K, V] = {
+    iterable match {
+      case seq: Seq[(K, V) @unchecked] =>
+        fromSeq(seq)
+      case notSeq =>
+        val rootNode = notSeq.iterator.foldLeft(Node.empty[K, V]) { case (node, (k, v)) =>
+          node.updated(k, improve(hashKey.hash(k)), v, 0)
+        }
+        new HashMap(rootNode)
+    }
+  }
+
+  /**
+  * Creates a new [[cats.data.HashMap]] which contains all elements of `fkv`.
+  *
+  * @param fkv the [[cats.Foldable]] structure of elements to add to the [[cats.data.HashMap]].
+  * @param F the [[cats.Foldable]] instance used for folding the structure.
+  * @param hashKey the [[cats.kernel.Hash]] instance used for hashing values.
+  * @return a new [[cats.data.HashMap]] which contains all elements of `seq`.
+  */
+  final def fromFoldable[F[_], K, V](fkv: F[(K, V)])(implicit F: Foldable[F], hashKey: Hash[K]): HashMap[K, V] = {
+    val rootNode = F.foldLeft(fkv, Node.empty[K, V]) { case (node, (k, v)) =>
+      node.updated(k, improve(hashKey.hash(k)), v, 0)
     }
     new HashMap(rootNode)
   }
@@ -277,17 +313,17 @@ object HashMap extends HashMapInstances {
     /**
       * @return The number of value and node elements in the contents array of this trie node.
       */
-    def allElements: Int
+    def allElementsCount: Int
 
     /**
       * @return The number of value elements in the contents array of this trie node.
       */
-    def valueElements: Int
+    def keyValueCount: Int
 
     /**
       * @return The number of node elements in the contents array of this trie node.
       */
-    def nodeElements: Int
+    def nodeCount: Int
 
     /**
      * @return the number of value elements in this subtree.
@@ -326,7 +362,7 @@ object HashMap extends HashMapInstances {
     /**
       * @return a [[scala.Boolean]] indicating whether the current trie node contains any value elements.
       */
-    def hasValues: Boolean
+    def hasKeyValues: Boolean
 
     /**
       * Apply f to each key-value pair of the current trie node and its sub-nodes for its side effects.
@@ -364,7 +400,7 @@ object HashMap extends HashMapInstances {
       * @param depth the 0-indexed depth in the trie structure.
       * @return a new [[HashMap.Node]] containing the element to add.
       */
-    def add[VV >: V](newKey: K, newKeyHash: Int, value: VV, depth: Int): Node[K, VV]
+    def updated[VV >: V](newKey: K, newKeyHash: Int, value: VV, depth: Int): Node[K, VV]
 
     /**
       * The current trie node updated to remove the provided key.
@@ -374,7 +410,7 @@ object HashMap extends HashMapInstances {
       * @param depth the 0-indexed depth in the trie structure.
       * @return a new [[HashMap.Node]] with the element removed.
       */
-    def remove(removeKey: K, removeKeyHash: Int, depth: Int): Node[K, V]
+    def removed(removeKey: K, removeKeyHash: Int, depth: Int): Node[K, V]
 
     /**
      * Typesafe equality operator.
@@ -405,10 +441,10 @@ object HashMap extends HashMapInstances {
       * @return either [[Node.SizeNone]], [[Node.SizeOne]] or [[Node.SizeMany]]
       */
     final def sizeHint = {
-      if (nodeElements > 0)
+      if (nodeCount > 0)
         Node.SizeMany
       else
-        (valueElements: @annotation.switch) match {
+        (keyValueCount: @annotation.switch) match {
           case 0 => Node.SizeNone
           case 1 => Node.SizeOne
           case _ => Node.SizeMany
@@ -421,30 +457,33 @@ object HashMap extends HashMapInstances {
     * this node type is used to collect all of the colliding elements and implement the [[HashMap.Node]]
     * interface at a performance cost compared with a [[HashMap.BitMapNode]].
     *
-    * @tparam A the type of the elements contained in this node.
+    * @tparam K the type of the keys contained in this node.
+    * @tparam V the type of the values contained in this node.
     * @param collisionHash the hash value at which all of the contents of this node collide.
     * @param contents the value elements whose hashes collide.
     */
   final private[HashMap] class CollisionNode[K, +V](
     val collisionHash: Int,
-    val contents: Vector[(K, V)]
+    val contents: NonEmptyVector[(K, V)]
   )(implicit hashKey: Hash[K])
       extends Node[K, V] {
 
     final def hasNodes: Boolean = false
 
-    final def hasValues: Boolean = true
+    final def hasKeyValues: Boolean = true
 
-    final def allElements: Int = valueElements
+    final def allElementsCount: Int = keyValueCount
 
-    final def valueElements: Int = contents.size
+    final def keyValueCount: Int = contents.length
 
-    final def nodeElements: Int = 0
+    final def nodeCount: Int = 0
 
-    final def size: Int = contents.size
+    final def size: Int = contents.length
 
-    final def foreach[U](f: (K, V) => U): Unit =
-      contents.foreach(f.tupled)
+    final def foreach[U](f: (K, V) => U): Unit = {
+      val fnTupled = f.tupled
+      contents.iterator.foreach(fnTupled)
+    }
 
     final def contains(key: K, keyHash: Int, depth: Int): Boolean =
       collisionHash == keyHash && contents.exists { case (k, _) => hashKey.eqv(key, k) }
@@ -454,30 +493,32 @@ object HashMap extends HashMapInstances {
       else contents.collectFirst { case (k, v) if hashKey.eqv(key, k) => v }
 
     final def getKey(index: Int): K =
-      contents(index)._1
+      contents.getUnsafe(index)._1
 
     final def getValue(index: Int): V =
-      contents(index)._2
+      contents.getUnsafe(index)._2
 
     final def getMapping(index: Int): (K, V) =
-      contents(index)
+      contents.getUnsafe(index)
 
     final def getNode(index: Int): Node[K, V] =
       throw new IndexOutOfBoundsException("No sub-nodes present in hash-collision leaf node.")
 
-    final def add[VV >: V](newKey: K, newKeyHash: Int, newValue: VV, depth: Int): Node[K, VV] =
-      if (contains(newKey, newKeyHash, depth))
-        this
-      else
+    final def updated[VV >: V](newKey: K, newKeyHash: Int, newValue: VV, depth: Int): Node[K, VV] =
+      if (!contains(newKey, newKeyHash, depth))
         new CollisionNode(newKeyHash, contents :+ (newKey -> newValue))
+      else {
+        val newContents = contents.filterNot { case (k, _) => hashKey.eqv(newKey, k) }
+        new CollisionNode[K, VV](collisionHash, NonEmptyVector(newKey -> newValue, newContents))
+      }
 
-    final override def remove(key: K, keyHash: Int, depth: Int): Node[K, V] =
+    final override def removed(key: K, keyHash: Int, depth: Int): Node[K, V] =
       if (!contains(key, keyHash, depth))
         this
       else {
         val newContents = contents.filterNot { case (k, _) => hashKey.eqv(key, k) }
-        if (newContents.size > 1)
-          new CollisionNode(collisionHash, newContents)
+        if (newContents.lengthCompare(1) > 0)
+          new CollisionNode(collisionHash, NonEmptyVector.fromVectorUnsafe(newContents))
         else {
           // This is a singleton node so the depth doesn't matter;
           // we only need to index into it to inline the value in our parent node
@@ -485,14 +526,13 @@ object HashMap extends HashMapInstances {
           val bitPos = Node.bitPosFrom(mask)
           val newContentsArray = new Array[Any](Node.StrideLength * newContents.length)
           var i = 0
-          while (i < newContents.length) {
-            val (k, v) = newContents(i)
+          newContents.foreach { case (k, v) =>
             val keyIndex = Node.StrideLength * i
             newContentsArray(keyIndex) = k
             newContentsArray(keyIndex + 1) = v
             i += 1
           }
-          new BitMapNode[K, V](bitPos, 0, newContentsArray, newContents.size)
+          new BitMapNode[K, V](bitPos, 0, newContentsArray, newContents.length)
         }
       }
 
@@ -501,7 +541,7 @@ object HashMap extends HashMapInstances {
         that match {
           case node: CollisionNode[_, _] =>
             (this.collisionHash === node.collisionHash) &&
-            (this.contents.size === node.contents.size) &&
+            (this.contents.length === node.contents.length) &&
             this.contents.forall { case (kl, vl) =>
               node.contents.exists { case (kr, vr) => hashKey.eqv(kl, kr) && eqValue.eqv(vl, vr) }
             }
@@ -514,55 +554,70 @@ object HashMap extends HashMapInstances {
     final override def equals(that: Any): Boolean = that match {
       case node: CollisionNode[_, _] =>
         (this.collisionHash == node.collisionHash) &&
-        (this.contents.size == node.contents.size) &&
-        this.contents.forall(node.contents.contains)
+        (this.contents.length == node.contents.length) &&
+        this.contents.forall(kv => node.contents.exists(_ == kv))
       case _ =>
         false
     }
 
     final override def toString(): String = {
-      s"""CollisionNode(hash=${collisionHash}, values=${contents.mkString("[", ",", "]")})"""
+      s"""CollisionNode(hash=${collisionHash}, values=${contents.iterator.mkString("[", ",", "]")})"""
     }
   }
 
   /**
-    * A CHAMP bitmap node. Stores value element and node element positions in the `contents` array
-    * in the `valueMap` and `nodeMap` integer bitmaps.
+    * A CHAMP bitmap node. Stores key-value pair and node positions in the `contents` array in the `keyValueMap` and
+    * `nodeMap` integer bitmaps respectively.
     *
-    * @tparam A the type of the elements contained in this node.
-    * @param valueMap integer bitmap indicating the notional positions of value elements in the `contents` array.
+    * The index of an element is calculated from a 5-bit segment of the hash of the key. The segment to use is
+    * determined according to the depth in the structure, starting with the least significant bits at the root level.
+    *
+    * When there are collisions in the 5-bit segment of the hash at the current depth in the structure, a new subnode
+    * must be created in order to store the colliding elements. In this subnode, the next 5-bit segment is used to
+    * determine the order of elements.
+    *
+    * Key-value pairs are stored at consecutive indices in the array, indexed from the start of the array
+    * and ordered according to the relative indices calculated from the hash of the key.
+    *
+    * Sub-nodes are stored at the end of the array, indexed from the end of the array and ordered according
+    * to the relative indices calculated from the hash of their keys. As a result of this indexing method
+    * they are stored in reverse order.
+    *
+    * @tparam K the type of the keys contained in this node.
+    * @tparam V the type of the values contained in this node.
+    * @param keyValueMap integer bitmap indicating the notional positions of key-value elements in the `contents` array.
     * @param nodeMap integer bitmap indicating the notional positions of node elements in the `contents` array.
     * @param contents an array of `A` value elements and `Node[A]` sub-node elements.
     * @param size the number of value elements in this subtree.
     */
   final private[HashMap] class BitMapNode[K, +V](
-    val valueMap: Int,
+    val keyValueMap: Int,
     val nodeMap: Int,
     val contents: Array[Any],
     val size: Int
   )(implicit hashKey: Hash[K])
       extends Node[K, V] {
 
-    final def hasValues: Boolean =
-      valueMap != 0
+    final def hasKeyValues: Boolean =
+      keyValueMap != 0
 
     final def hasNodes: Boolean =
       nodeMap != 0
 
-    final def allElements: Int =
-      valueElements + nodeElements
+    final def allElementsCount: Int =
+      keyValueCount + nodeCount
 
-    final def valueElements: Int =
-      Integer.bitCount(valueMap)
+    final def keyValueCount: Int =
+      Integer.bitCount(keyValueMap)
 
-    final def nodeElements: Int =
+    final def nodeCount: Int =
       Integer.bitCount(nodeMap)
 
     final private def hasNodeAt(bitPos: Int): Boolean =
       (nodeMap & bitPos) != 0
 
-    final private def hasValueAt(bitPos: Int): Boolean =
-      (valueMap & bitPos) != 0
+    final private def hasKeyValueAt(bitPos: Int): Boolean =
+      (keyValueMap & bitPos) != 0
 
     final def getKey(index: Int): K =
       contents(Node.StrideLength * index).asInstanceOf[K]
@@ -570,22 +625,25 @@ object HashMap extends HashMapInstances {
     final def getValue(index: Int): V =
       contents(Node.StrideLength * index + 1).asInstanceOf[V]
 
-    final def getMapping(index: Int): (K, V) =
-      contents(Node.StrideLength * index).asInstanceOf[K] ->
-        contents(Node.StrideLength * index + 1).asInstanceOf[V]
+    final def getMapping(index: Int): (K, V) = {
+      val keyValueOffset = Node.StrideLength * index
+      contents(keyValueOffset).asInstanceOf[K] ->
+        contents(keyValueOffset + 1).asInstanceOf[V]
+    }
 
     final def getNode(index: Int): Node[K, V] =
       contents(contents.length - 1 - index).asInstanceOf[Node[K, V]]
 
     final def foreach[U](f: (K, V) => U): Unit = {
       var i = 0
-      while (i < valueElements) {
-        f.tupled(getMapping(i))
+      val fnTupled = f.tupled
+      while (i < keyValueCount) {
+        fnTupled(getMapping(i))
         i += 1
       }
 
       i = 0
-      while (i < nodeElements) {
+      while (i < nodeCount) {
         getNode(i).foreach(f)
         i += 1
       }
@@ -595,8 +653,8 @@ object HashMap extends HashMapInstances {
       val mask = Node.maskFrom(keyHash, depth)
       val bitPos = Node.bitPosFrom(mask)
 
-      if (hasValueAt(bitPos)) {
-        val index = Node.indexFrom(valueMap, bitPos)
+      if (hasKeyValueAt(bitPos)) {
+        val index = Node.indexFrom(keyValueMap, bitPos)
         hashKey.eqv(key, getKey(index))
       } else if (hasNodeAt(bitPos)) {
         val index = Node.indexFrom(nodeMap, bitPos)
@@ -610,8 +668,8 @@ object HashMap extends HashMapInstances {
       val mask = Node.maskFrom(keyHash, depth)
       val bitPos = Node.bitPosFrom(mask)
 
-      if (hasValueAt(bitPos)) {
-        val index = Node.indexFrom(valueMap, bitPos)
+      if (hasKeyValueAt(bitPos)) {
+        val index = Node.indexFrom(keyValueMap, bitPos)
         if (hashKey.eqv(key, getKey(index))) {
           Some(getValue(index))
         } else {
@@ -635,16 +693,16 @@ object HashMap extends HashMapInstances {
       depth: Int
     ): Node[K, VV] = {
       if (depth >= Node.MaxDepth) {
-        new CollisionNode[K, VV](leftHash, Vector(left -> leftValue, right -> rightValue))
+        new CollisionNode[K, VV](leftHash, NonEmptyVector.of(left -> leftValue, right -> rightValue))
       } else {
         val leftMask = Node.maskFrom(leftHash, depth)
         val rightMask = Node.maskFrom(rightHash, depth)
         if (leftMask != rightMask) {
-          val valueMap = Node.bitPosFrom(leftMask) | Node.bitPosFrom(rightMask)
+          val keyValueMap = Node.bitPosFrom(leftMask) | Node.bitPosFrom(rightMask)
           if (leftMask < rightMask) {
-            new BitMapNode[K, VV](valueMap, 0, Array(left, leftValue, right, rightValue), 2)
+            new BitMapNode[K, VV](keyValueMap, 0, Array(left, leftValue, right, rightValue), 2)
           } else {
-            new BitMapNode[K, VV](valueMap, 0, Array(right, rightValue, left, leftValue), 2)
+            new BitMapNode[K, VV](keyValueMap, 0, Array(right, rightValue, left, leftValue), 2)
           }
         } else {
           val nodeMap = Node.bitPosFrom(leftMask)
@@ -665,7 +723,7 @@ object HashMap extends HashMapInstances {
       depth: Int
     ): Node[K, VV] = {
       val newNode = mergeValues(left, leftHash, leftValue, right, rightHash, rightValue, depth)
-      val valueIndex = Node.StrideLength * Node.indexFrom(valueMap, bitPos)
+      val valueIndex = Node.StrideLength * Node.indexFrom(keyValueMap, bitPos)
       val nodeIndex = contents.length - Node.StrideLength - Node.indexFrom(nodeMap, bitPos)
       val newContents = new Array[Any](contents.length - 1)
 
@@ -682,7 +740,7 @@ object HashMap extends HashMapInstances {
         contents.length - nodeIndex - Node.StrideLength
       )
 
-      new BitMapNode[K, V](valueMap ^ bitPos, nodeMap | bitPos, newContents, size + 1)
+      new BitMapNode[K, V](keyValueMap ^ bitPos, nodeMap | bitPos, newContents, size + 1)
     }
 
     final private def replaceNode[VV >: V](index: Int, oldNode: Node[K, VV], newNode: Node[K, VV]): Node[K, VV] = {
@@ -690,7 +748,7 @@ object HashMap extends HashMapInstances {
       val newContents = new Array[Any](contents.length)
       System.arraycopy(contents, 0, newContents, 0, contents.length)
       newContents(targetIndex) = newNode
-      new BitMapNode[K, V](valueMap, nodeMap, newContents, size + (newNode.size - oldNode.size))
+      new BitMapNode[K, V](keyValueMap, nodeMap, newContents, size + (newNode.size - oldNode.size))
     }
 
     final private def updateNode[VV >: V](
@@ -702,7 +760,7 @@ object HashMap extends HashMapInstances {
     ): Node[K, VV] = {
       val index = Node.indexFrom(nodeMap, bitPos)
       val subNode = getNode(index)
-      val newSubNode = subNode.add(newKey, newKeyHash, newValue, depth + 1)
+      val newSubNode = subNode.updated(newKey, newKeyHash, newValue, depth + 1)
 
       if (newSubNode eq subNode)
         this
@@ -715,7 +773,7 @@ object HashMap extends HashMapInstances {
       val newContents = new Array[Any](contents.length)
       System.arraycopy(contents, 0, newContents, 0, contents.length)
       newContents(valueIndex) = newValue
-      new BitMapNode[K, V](valueMap, nodeMap, newContents, size)
+      new BitMapNode[K, V](keyValueMap, nodeMap, newContents, size)
     }
 
     final private def updateKeyValue[VV >: V](
@@ -725,7 +783,7 @@ object HashMap extends HashMapInstances {
       newValue: VV,
       depth: Int
     ): Node[K, VV] = {
-      val index = Node.indexFrom(valueMap, bitPos)
+      val index = Node.indexFrom(keyValueMap, bitPos)
       val (existingKey, existingValue) = getMapping(index)
       if (hashKey.eqv(existingKey, newKey)) {
         replaceValueAtIndex(index, newValue)
@@ -743,20 +801,20 @@ object HashMap extends HashMapInstances {
     }
 
     final private def appendKeyValue[VV >: V](bitPos: Int, newKey: K, newValue: VV): Node[K, VV] = {
-      val index = Node.StrideLength * Node.indexFrom(valueMap, bitPos)
+      val index = Node.StrideLength * Node.indexFrom(keyValueMap, bitPos)
       val newContents = new Array[Any](contents.length + Node.StrideLength)
       System.arraycopy(contents, 0, newContents, 0, index)
       newContents(index) = newKey
       newContents(index + 1) = newValue
       System.arraycopy(contents, index, newContents, index + Node.StrideLength, contents.length - index)
-      new BitMapNode[K, V](valueMap | bitPos, nodeMap, newContents, size + 1)
+      new BitMapNode[K, V](keyValueMap | bitPos, nodeMap, newContents, size + 1)
     }
 
-    final def add[VV >: V](newKey: K, newKeyHash: Int, newValue: VV, depth: Int): Node[K, VV] = {
+    final def updated[VV >: V](newKey: K, newKeyHash: Int, newValue: VV, depth: Int): Node[K, VV] = {
       val mask = Node.maskFrom(newKeyHash, depth)
       val bitPos = Node.bitPosFrom(mask)
 
-      if (hasValueAt(bitPos)) {
+      if (hasKeyValueAt(bitPos)) {
         updateKeyValue(bitPos, newKey, newKeyHash, newValue, depth)
       } else if (hasNodeAt(bitPos)) {
         updateNode(bitPos, newKey, newKeyHash, newValue, depth)
@@ -766,22 +824,24 @@ object HashMap extends HashMapInstances {
     }
 
     final private def removeKeyValue(bitPos: Int, removeKey: K, removeKeyHash: Int, depth: Int): Node[K, V] = {
-      val index = Node.indexFrom(valueMap, bitPos)
+      val index = Node.indexFrom(keyValueMap, bitPos)
       val existingKey = getKey(index)
       if (!hashKey.eqv(existingKey, removeKey)) {
         this
-      } else if (allElements == 1) {
+      } else if (allElementsCount == 1) {
         Node.empty[K, V]
       } else {
         val keyIndex = Node.StrideLength * index
         val newContents = new Array[Any](contents.length - Node.StrideLength)
 
-        // If this element will be propagated or inlined, calculate the new valueMap at depth - 1
+        /* Single-element nodes are inlined. If this element should be propagated or
+         * inlined once an entry is deleted, calculate the new keyValueMap at depth - 1
+         */
         val newBitPos =
-          if (valueElements == 2 && nodeElements == 0 && depth > 0)
+          if (keyValueCount == 2 && nodeCount == 0 && depth > 0)
             Node.bitPosFrom(Node.maskFrom(removeKeyHash, depth - 1))
           else
-            valueMap ^ bitPos
+            keyValueMap ^ bitPos
 
         System.arraycopy(contents, 0, newContents, 0, keyIndex)
 
@@ -799,7 +859,7 @@ object HashMap extends HashMapInstances {
 
     final private def inlineSubNodeKeyValue[VV >: V](bitPos: Int, newSubNode: Node[K, VV]): Node[K, VV] = {
       val nodeIndex = contents.length - 1 - Node.indexFrom(nodeMap, bitPos)
-      val keyIndex = Node.StrideLength * Node.indexFrom(valueMap, bitPos)
+      val keyIndex = Node.StrideLength * Node.indexFrom(keyValueMap, bitPos)
       val newContents = new Array[Any](contents.length + 1)
       val (key, value) = newSubNode.getMapping(0)
 
@@ -818,7 +878,7 @@ object HashMap extends HashMapInstances {
         contents.length - nodeIndex - 1
       )
 
-      new BitMapNode[K, V](valueMap | bitPos, nodeMap ^ bitPos, newContents, size - 1)
+      new BitMapNode[K, V](keyValueMap | bitPos, nodeMap ^ bitPos, newContents, size - 1)
     }
 
     final private def removeKeyValueFromSubNode(
@@ -829,11 +889,11 @@ object HashMap extends HashMapInstances {
     ): Node[K, V] = {
       val index = Node.indexFrom(nodeMap, bitPos)
       val subNode = getNode(index)
-      val newSubNode = subNode.remove(removeKey, removeKeyHash, depth + 1)
+      val newSubNode = subNode.removed(removeKey, removeKeyHash, depth + 1)
 
       if (newSubNode eq subNode)
         this
-      else if (valueElements == 0 && nodeElements == 1) {
+      else if (keyValueCount == 0 && nodeCount == 1) {
         if (newSubNode.sizeHint == Node.SizeOne) {
           newSubNode
         } else {
@@ -846,11 +906,11 @@ object HashMap extends HashMapInstances {
       }
     }
 
-    final override def remove(removeKey: K, removeKeyHash: Int, depth: Int): Node[K, V] = {
+    final override def removed(removeKey: K, removeKeyHash: Int, depth: Int): Node[K, V] = {
       val mask = Node.maskFrom(removeKeyHash, depth)
       val bitPos = Node.bitPosFrom(mask)
 
-      if (hasValueAt(bitPos)) {
+      if (hasKeyValueAt(bitPos)) {
         removeKeyValue(bitPos, removeKey, removeKeyHash, depth)
       } else if (hasNodeAt(bitPos)) {
         removeKeyValueFromSubNode(bitPos, removeKey, removeKeyHash, depth)
@@ -863,18 +923,18 @@ object HashMap extends HashMapInstances {
       (this eq that) || {
         that match {
           case node: BitMapNode[_, _] =>
-            (this.valueMap === node.valueMap) &&
+            (this.keyValueMap === node.keyValueMap) &&
             (this.nodeMap === node.nodeMap) &&
             (this.size === node.size) && {
               var i = 0
-              while (i < valueElements) {
+              while (i < keyValueCount) {
                 val (kl, vl) = getMapping(i)
                 val (kr, vr) = node.getMapping(i)
                 if (hashKey.neqv(kl, kr) || eqValue.neqv(vl, vr)) return false
                 i += 1
               }
               i = 0
-              while (i < nodeElements) {
+              while (i < nodeCount) {
                 if (!(getNode(i).===[VV](node.getNode(i)))) return false
                 i += 1
               }
@@ -889,7 +949,7 @@ object HashMap extends HashMapInstances {
     final override def equals(that: Any): Boolean = that match {
       case node: BitMapNode[_, _] =>
         (this eq node) || {
-          (this.valueMap == node.valueMap) &&
+          (this.keyValueMap == node.keyValueMap) &&
           (this.nodeMap == node.nodeMap) &&
           (this.size == node.size) &&
           Arrays.equals(
@@ -902,14 +962,16 @@ object HashMap extends HashMapInstances {
     }
 
     final override def toString(): String = {
-      val valueMapStr =
-        ("0" * Integer.numberOfLeadingZeros(if (valueMap != 0) valueMap else 1)) + Integer.toBinaryString(valueMap)
+      val keyValueMapStr =
+        ("0" * Integer.numberOfLeadingZeros(if (keyValueMap != 0) keyValueMap else 1)) + Integer.toBinaryString(
+          keyValueMap
+        )
       val nodeMapStr =
         ("0" * Integer.numberOfLeadingZeros(if (nodeMap != 0) nodeMap else 1)) + Integer.toBinaryString(nodeMap)
       val contentsStr =
         contents.mkString("[", ", ", "]")
 
-      s"""BitMapNode(valueMap=$valueMapStr, nodeMap=$nodeMapStr, size=$size, contents=${contentsStr})"""
+      s"""BitMapNode(keyValueMap=$keyValueMapStr, nodeMap=$nodeMapStr, size=$size, contents=${contentsStr})"""
     }
   }
 
@@ -989,7 +1051,7 @@ object HashMap extends HashMapInstances {
     def this(rootNode: Node[K, V]) = {
       this()
       if (rootNode.hasNodes) pushNode(rootNode)
-      if (rootNode.hasValues) pushValues(rootNode)
+      if (rootNode.hasKeyValues) pushValues(rootNode)
     }
 
     final private def pushNode(node: Node[K, V]): Unit = {
@@ -1001,13 +1063,13 @@ object HashMap extends HashMapInstances {
       nodeStack(currentDepth) = node
 
       nodeIndicesAndLengths(cursorIndex) = 0
-      nodeIndicesAndLengths(lengthIndex) = node.nodeElements
+      nodeIndicesAndLengths(lengthIndex) = node.nodeCount
     }
 
     final private def pushValues(node: Node[K, V]): Unit = {
       currentNode = node
       currentValuesIndex = 0
-      currentValuesLength = node.valueElements
+      currentValuesLength = node.keyValueCount
     }
 
     final private def getMoreValues(): Boolean = {
@@ -1028,7 +1090,7 @@ object HashMap extends HashMapInstances {
             pushNode(nextNode)
           }
 
-          if (nextNode.hasValues) {
+          if (nextNode.hasKeyValues) {
             pushValues(nextNode)
             foundMoreValues = true
           }
@@ -1053,70 +1115,6 @@ object HashMap extends HashMapInstances {
       value
     }
   }
-
-  private[HashMap] class ReverseIterator[K, V] extends scala.collection.AbstractIterator[(K, V)] {
-    private var currentNode: Node[K, V] = null
-
-    private var currentValuesIndex: Int = -1
-
-    private var currentDepth: Int = -1
-
-    private val nodeStack: Array[Node[K, V]] =
-      new Array(Node.MaxDepth + 1)
-
-    private val nodeIndices: Array[Int] =
-      new Array(Node.MaxDepth + 1)
-
-    def this(rootNode: Node[K, V]) = {
-      this()
-      pushNode(rootNode)
-      getMoreValues()
-    }
-
-    final private def pushNode(node: Node[K, V]): Unit = {
-      currentDepth += 1
-      nodeStack(currentDepth) = node
-      nodeIndices(currentDepth) = node.nodeElements - 1
-    }
-
-    final private def pushValues(node: Node[K, V]): Unit = {
-      currentNode = node
-      currentValuesIndex = node.valueElements - 1
-    }
-
-    final private def getMoreValues(): Boolean = {
-      var foundMoreValues = false
-
-      while (!foundMoreValues && currentDepth >= 0) {
-        val nodeIndex = nodeIndices(currentDepth)
-        nodeIndices(currentDepth) -= 1
-
-        if (nodeIndex >= 0) {
-          pushNode(nodeStack(currentDepth).getNode(nodeIndex))
-        } else {
-          val currentNode = nodeStack(currentDepth)
-          currentDepth -= 1
-          if (currentNode.hasValues) {
-            pushValues(currentNode)
-            foundMoreValues = true
-          }
-        }
-      }
-
-      foundMoreValues
-    }
-
-    final override def hasNext: Boolean =
-      (currentValuesIndex >= 0) || getMoreValues()
-
-    final override def next(): (K, V) = {
-      if (!hasNext) throw new NoSuchElementException
-      val value = currentNode.getMapping(currentValuesIndex)
-      currentValuesIndex -= 1
-      value
-    }
-  }
-
 }
 
 sealed abstract private[data] class HashMapInstances extends HashMapInstances1 {
@@ -1150,9 +1148,9 @@ sealed abstract private[data] class HashMapInstances extends HashMapInstances1 {
           Always(G.pure(HashMap.empty[K, V]))
 
         val gHashMap = Foldable
-          .iterateRight(Eval.always(hashMap.iterator), emptyHm) { case ((k, u), hm) =>
+          .iterateRight(() => hashMap.iterator, emptyHm) { case ((k, u), hm) =>
             G.map2Eval(f(u), hm) { (v, map) =>
-              map.add(k, v)
+              map.updated(k, v)
             }
           }
 
@@ -1185,11 +1183,17 @@ class HashMapMonoid[K: Hash, V](implicit V: Semigroup[V]) extends Monoid[HashMap
   def combine(xs: HashMap[K, V], ys: HashMap[K, V]): HashMap[K, V] = {
     if (xs.size <= ys.size) {
       xs.iterator.foldLeft(ys) { case (my, (k, x)) =>
-        my.add(k, Semigroup.maybeCombine(x, my.get(k)))
+        my.get(k) match {
+          case Some(y) => my.updated(k, V.combine(x, y))
+          case None    => my.updated(k, x)
+        }
       }
     } else {
       ys.iterator.foldLeft(xs) { case (mx, (k, y)) =>
-        mx.add(k, Semigroup.maybeCombine(mx.get(k), y))
+        mx.get(k) match {
+          case Some(x) => mx.updated(k, V.combine(x, y))
+          case None    => mx.updated(k, y)
+        }
       }
     }
   }

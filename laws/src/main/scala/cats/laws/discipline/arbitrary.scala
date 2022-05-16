@@ -420,8 +420,46 @@ object arbitrary extends ArbitraryInstances0 with ScalaVersionSpecific.Arbitrary
     K: Arbitrary[K],
     V: Arbitrary[V],
     hash: Hash[K]
-  ): Arbitrary[HashMap[K, V]] =
-    Arbitrary(getArbitrary[List[(K, V)]].map(HashMap.fromSeq(_)(hash)))
+  ): Arbitrary[HashMap[K, V]] = Arbitrary(
+    Gen.oneOf(
+      // empty
+      Gen.const(HashMap.empty),
+      // fromSeq
+      getArbitrary[Seq[(K, V)]].map(HashMap.fromSeq(_)(hash)),
+      // fromIterableOnce
+      getArbitrary[Seq[(K, V)]].map(seq => HashMap.fromIterableOnce(seq.view)),
+      // fromFoldable
+      getArbitrary[Seq[(K, V)]].map(HashMap.fromFoldable(_)),
+      // updated
+      Gen.delay(for {
+        hm <- getArbitrary[HashMap[K, V]]
+        (k, v) <- getArbitrary[(K, V)]
+      } yield hm.updated(k, v)),
+      // updated existing
+      Gen.delay(for {
+        hm <- getArbitrary[HashMap[K, V]]
+        if hm.nonEmpty
+        k <- Gen.oneOf(hm.keysIterator.toList)
+        v <- getArbitrary[V]
+      } yield hm.updated(k, v)),
+      // removed
+      Gen.delay(for {
+        hm <- getArbitrary[HashMap[K, V]]
+        k <- getArbitrary[K]
+      } yield hm.removed(k)),
+      // removed existing
+      Gen.delay(for {
+        hm <- getArbitrary[HashMap[K, V]]
+        if hm.nonEmpty
+        k <- Gen.oneOf(hm.keysIterator.toList)
+      } yield hm.removed(k)),
+      // concat
+      Gen.delay(for {
+        left <- getArbitrary[HashMap[K, V]]
+        right <- getArbitrary[HashMap[K, V]]
+      } yield left.concat(right))
+    )
+  )
 
   implicit def catsLawsCogenForHashSet[K, V](implicit K: Cogen[K], V: Cogen[V]): Cogen[HashMap[K, V]] =
     Cogen.it[HashMap[K, V], (K, V)](_.iterator)

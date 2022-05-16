@@ -40,6 +40,7 @@ private[cats] trait NonEmptyCollection[+A, U[+_], NE[+_]] extends Any {
   def filter(f: A => Boolean): U[A]
   def filterNot(p: A => Boolean): U[A]
   def collect[B](pf: PartialFunction[A, B]): U[B]
+  def collectFirst[B](pf: PartialFunction[A, B]): Option[B]
   def find(p: A => Boolean): Option[A]
   def exists(p: A => Boolean): Boolean
   def forall(p: A => Boolean): Boolean

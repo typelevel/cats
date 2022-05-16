@@ -24,32 +24,18 @@ package cats.tests
 import cats.data.HashMap
 import cats.kernel.laws.discipline.CommutativeMonoidTests
 import cats.kernel.laws.discipline.HashTests
-import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.UnorderedTraverseTests
 import cats.laws.discipline.SerializableTests
+import cats.laws.discipline.UnorderedTraverseTests
+import cats.laws.discipline.arbitrary._
 import cats.syntax.eq._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalacheck.Prop.forAll
+
 import scala.collection.mutable
+import scala.util.Random
 
 class HashMapSuite extends CatsSuite {
-  // Examples from https://stackoverflow.com/questions/9406775/why-does-string-hashcode-in-java-have-many-conflicts
-  val collidingStrings = for {
-    left <- ('A' to 'Y').toList
-    first = List(left, 'a').mkString
-    second = List((left + 1).toChar, 'B').mkString
-  } yield (first, second)
-
-  val collidingKv = Gen.oneOf(collidingStrings).flatMap { case (leftStr, rightStr) =>
-    for {
-      leftInt <- arbitrary[Int]
-      rightInt <- arbitrary[Int]
-    } yield (leftStr -> leftInt, rightStr -> rightInt)
-  }
-
-  val collidingKvs = Gen.listOf(collidingKv)
-
   checkAll("HashMap[Int, String]", HashTests[HashMap[Int, String]].hash)
   checkAll("Hash[HashMap[Int, String]]", SerializableTests.serializable(HashMap.catsDataHashForHashMap[Int, String]))
 
@@ -64,6 +50,34 @@ class HashMapSuite extends CatsSuite {
   checkAll("CommutativeMonoid[HashMap[Int, Int]]",
            SerializableTests.serializable(HashMap.catsDataCommutativeMonoidForHashMap[Int, Int])
   )
+
+  // Based on https://stackoverflow.com/questions/9406775/why-does-string-hashcode-in-java-have-many-conflicts
+  // We can produce a collision for any string by adding 1 to and subtracting 31 from two consecutive chars.
+  def collidingString(str: String) = {
+    if (str.length < 2)
+      str
+    else {
+      val randomOffset = Random.nextInt(str.length - 1)
+      val firstChar = str.substring(randomOffset).charAt(0)
+      val secondChar = str.substring(randomOffset).charAt(1)
+
+      if (!Character.isDefined(firstChar + 1) || !Character.isDefined(secondChar - 31))
+        str
+      else
+        str
+          .updated(randomOffset, (firstChar + 1).toChar)
+          .updated(randomOffset + 1, (secondChar - 31).toChar)
+    }
+  }
+
+  def genStringKey(hm: HashMap[String, Int]): Gen[String] =
+    if (hm.isEmpty)
+      arbitrary[String]
+    else
+      Gen.oneOf(
+        Gen.oneOf(hm.keysIterator.toList).map(collidingString),
+        arbitrary[String]
+      )
 
   // Key-value pairs with the last binding for each distinct key
   def distinctBindings[K, V](kvs: List[(K, V)]) =
@@ -84,15 +98,13 @@ class HashMapSuite extends CatsSuite {
   }
 
   test("===") {
-    forAll { (kvs: List[(Int, String)]) =>
-      val left = HashMap.fromSeq(kvs)
-      val right = HashMap.fromSeq(kvs)
-      assert(left === right)
+    forAll { (hashMap: HashMap[Int, String]) =>
+      assert(hashMap === hashMap)
     }
 
-    forAll { (leftKvs: List[(Int, String)], rightKvs: List[(Int, String)]) =>
-      val left = HashMap.fromSeq(leftKvs)
-      val right = HashMap.fromSeq(rightKvs)
+    forAll { (left: HashMap[Int, String], right: HashMap[Int, String]) =>
+      val leftKvs = distinctBindings(left.iterator.toList)
+      val rightKvs = distinctBindings(right.iterator.toList)
       assert((distinctBindings(leftKvs) === distinctBindings(rightKvs)) === (left === right))
     }
   }
@@ -102,50 +114,65 @@ class HashMapSuite extends CatsSuite {
     assert(HashMap(1 -> "a", 2 -> "b", 3 -> "c").size === 3)
     assert(HashMap("Aa" -> 1, "BB" -> 2).size == 2)
 
-    forAll { (kvs: List[(Int, String)]) =>
-      val hashMap = HashMap.fromSeq(kvs)
-      assert(hashMap.size === distinctBindings(kvs).size)
+    forAll { (hashMap: HashMap[Int, String]) =>
+      val distinctKvs = distinctBindings(hashMap.iterator.toList)
+      assert(hashMap.size === distinctKvs.size)
     }
   }
 
   test("get") {
-    forAll { (kvs: List[(Int, String)]) =>
-      val hashMap = HashMap.fromSeq(kvs)
-      distinctBindings(kvs).foreach { case (k, v) =>
-        hashMap.get(k) === Some(v)
+    forAll { (hashMap: HashMap[Int, String]) =>
+      distinctBindings(hashMap.iterator.toList)
+        .foreach { case (k, v) =>
+          hashMap.get(k) === Some(v)
+        }
+    }
+  }
+
+  test("updated") {
+    forAll { (initial: HashMap[String, Int], value: Int) =>
+      forAll(genStringKey(initial)) { (key: String) =>
+        val updated = initial.updated(key, value)
+        assert(updated.contains(key))
+        assert(updated.get(key) === Some(value))
+        if (initial.contains(key))
+          assert(updated.size === initial.size)
+        else
+          assert(updated.size === (initial.size + 1))
+      }
+    }
+  }
+
+  test("removed") {
+    forAll { (initial: HashMap[String, Int]) =>
+      forAll(genStringKey(initial)) { (key: String) =>
+        val removed = initial.removed(key)
+        assert(!removed.contains(key))
+        assert(removed.get(key) === None)
+        if (initial.contains(key))
+          assert(removed.size === (initial.size - 1))
+        else
+          assert(removed === initial)
       }
     }
   }
 
   test("concat") {
-    forAll { (leftKvs: List[(Int, String)], rightKvs: List[(Int, String)]) =>
+    forAll { (left: HashMap[Int, String], right: HashMap[Int, String]) =>
+      val leftKvs = left.iterator.toList
+      val rightKvs = right.iterator.toList
       val distinctKvs = distinctBindings(leftKvs ++ rightKvs)
-      val left = HashMap.fromSeq(leftKvs)
-      val right = HashMap.fromSeq(rightKvs)
       val both = left.concat(right)
       assert(both === HashMap.fromSeq(leftKvs ++ rightKvs))
+      assert(both.size === distinctKvs.size)
       distinctKvs.foreach { case (k, v) =>
         assert(both.contains(k))
         assert(both.get(k) === Some(v))
+        if (right.contains(k))
+          assert(both.get(k) === right.get(k))
+        else
+          assert(both.get(k) === left.get(k))
       }
-    }
-  }
-
-  property("Empty HashMap never contains") {
-    forAll { (i: Int) =>
-      assert(!HashMap.empty[Int, String].contains(i))
-    }
-  }
-
-  property("Empty HashMap add consistent with contains") {
-    forAll { (i: Int, s: String) =>
-      assert(HashMap.empty[Int, String].add(i, s).contains(i))
-    }
-  }
-
-  property("Empty HashMap add and remove consistent with contains") {
-    forAll { (i: Int, s: String) =>
-      assert(!HashMap.empty[Int, String].add(i, s).remove(i).contains(i))
     }
   }
 
@@ -159,133 +186,67 @@ class HashMapSuite extends CatsSuite {
     }
   }
 
-  property("remove consistent with contains") {
+  property("fromIterableOnce consistent with contains") {
     forAll { (kvs: List[(Int, String)]) =>
-      val distinctKvs = distinctBindings(kvs)
-      val hashMap = HashMap.fromSeq(kvs)
+      val hashMap = HashMap.fromIterableOnce(kvs.view)
 
-      distinctKvs.foldLeft(hashMap) { case (hm, (i, _)) =>
-        if (!hm.contains(i)) {
-          println(hm)
-          println(i)
-          println(hm.contains(i))
-        }
-        assert(hm.contains(i))
-        assert(!hm.remove(i).contains(i))
-        hm.remove(i)
+      kvs.foreach { case (k, _) =>
+        assert(hashMap.contains(k))
       }
-
-      ()
     }
   }
 
-  property("add and remove with collisions consistent with contains") {
-    forAll(collidingKvs) { (collisions: List[((String, Int), (String, Int))]) =>
+  property("fromFoldable consistent with contains") {
+    forAll { (kvs: List[(Int, String)]) =>
+      val hashMap = HashMap.fromFoldable(kvs)
 
-      val distinctCollisions = collisions.distinctBy(_._1._1)
-
-      val hashMap = distinctCollisions.foldLeft(HashMap.empty[String, Int]) { case (hm, ((lk, lv), (rk, rv))) =>
-        hm.add(lk, lv).add(rk, rv)
+      kvs.foreach { case (k, _) =>
+        assert(hashMap.contains(k))
       }
-
-      distinctCollisions.foldLeft(hashMap) { case (hm, ((lk, _), (rk, _))) =>
-        assert(hm.contains(lk))
-        assert(hm.contains(rk))
-
-        val removeL = hm.remove(lk)
-        assert(removeL.contains(rk))
-        assert(!removeL.contains(lk))
-
-        val removeR = hm.remove(rk)
-        assert(removeR.contains(lk))
-        assert(!removeR.contains(rk))
-
-        val removeLR = removeL.remove(rk)
-        assert(!removeLR.contains(lk))
-        assert(!removeLR.contains(rk))
-
-        removeLR
-      }
-
-      ()
     }
   }
 
   property("iterator consistent with contains") {
-    forAll { (kvs: List[(Int, String)]) =>
-      val hashMap = HashMap.fromSeq(kvs)
-      val distinctKvs = distinctBindings(kvs)
-
+    forAll { (hashMap: HashMap[Int, String]) =>
       val iterated = mutable.ListBuffer[(Int, String)]()
       hashMap.iterator.foreach { iterated += _ }
-
-      assert(distinctKvs.forall(iterated.contains))
-      assert(iterated.forall(distinctKvs.contains))
       assert(iterated.toList.distinctBy(_._1) === iterated.toList)
       assert(iterated.forall { case (k, _) => hashMap.contains(k) })
     }
   }
 
-  property("iterator consistent with reverseIterator") {
-    forAll { (kvs: List[(Int, String)]) =>
-      val hashMap = HashMap.fromSeq(kvs)
-
-      val iterated = mutable.ListBuffer[(Int, String)]()
-      val reverseIterated = mutable.ListBuffer[(Int, String)]()
-      hashMap.iterator.foreach { iterated += _ }
-      hashMap.reverseIterator.foreach { reverseIterated += _ }
-
-      assert(iterated.toList === reverseIterated.toList.reverse)
-    }
-  }
-
   property("foreach consistent with contains") {
-    forAll { (kvs: List[(Int, String)]) =>
-      val hashMap = HashMap.fromSeq(kvs)
-      val distinctKvs = distinctBindings(kvs)
-
+    forAll { (hashMap: HashMap[Int, String]) =>
       val foreached = mutable.ListBuffer[(Int, String)]()
       hashMap.foreach { (i: Int, s: String) => foreached += ((i, s)) }
-
-      assert(distinctKvs.forall(foreached.contains))
-      assert(foreached.forall(distinctKvs.contains))
       assert(foreached.toList.distinct === foreached.toList)
       assert(foreached.forall { case (k, _) => hashMap.contains(k) })
     }
   }
 
   property("foreach and iterator consistent") {
-    forAll { (kvs: List[(Int, String)]) =>
-      val hashMap = HashMap.fromSeq(kvs)
-
+    forAll { (hashMap: HashMap[Int, String]) =>
       val iterated = mutable.ListBuffer[(Int, String)]()
       val foreached = mutable.ListBuffer[(Int, String)]()
       hashMap.iterator.foreach { iterated += _ }
       hashMap.foreach { (i: Int, s: String) => foreached += ((i, s)) }
-
       assert(foreached.forall(iterated.contains))
       assert(iterated.forall(foreached.contains))
     }
   }
 
   property("size consistent with iterator") {
-    forAll { (kvs: List[(Int, String)]) =>
-      val hashMap = HashMap.fromSeq(kvs)
-
+    forAll { (hashMap: HashMap[Int, String]) =>
       var size = 0
       hashMap.iterator.foreach { _ => size += 1 }
-
       assert(hashMap.size === size)
     }
   }
 
   property("size consistent with foreach") {
-    forAll { (kvs: List[(Int, String)]) =>
-      val hashMap = HashMap.fromSeq(kvs)
-
+    forAll { (hashMap: HashMap[Int, String]) =>
       var size = 0
       hashMap.foreach { case _ => size += 1 }
-
       assert(hashMap.size === size)
     }
   }

@@ -217,6 +217,16 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
     }
 
   /**
+   * Find the first element matching the partial function, if one exists
+   */
+  def collectFirst[B](pf: PartialFunction[A, B]): Option[B] =
+    if (pf.isDefinedAt(head)) {
+      Some(pf.apply(head))
+    } else {
+      tail.collectFirst(pf)
+    }
+
+  /**
    * Find the first element matching the predicate, if one exists
    */
   def find(p: A => Boolean): Option[A] =

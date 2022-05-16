@@ -33,7 +33,7 @@ private[data] trait HashMapCompat[K, +V] { self: HashMap[K, V] =>
     */
   final def concat[VV >: V](traversable: TraversableOnce[(K, VV)]): HashMap[K, VV] = {
     val newRootNode = traversable.foldLeft(self.rootNode: HashMap.Node[K, VV]) { case (node, (k, v)) =>
-      node.add(k, improve(self.hashKey.hash(k)), v, 0)
+      node.updated(k, improve(self.hashKey.hash(k)), v, 0)
     }
 
     if (newRootNode eq self.rootNode)
@@ -50,7 +50,7 @@ private[data] trait HashMapCompat[K, +V] { self: HashMap[K, V] =>
     */
   final def concat[VV >: V](hm: HashMap[K, VV]): HashMap[K, VV] = {
     val newRootNode = hm.iterator.foldLeft(self.rootNode: HashMap.Node[K, VV]) { case (node, (k, v)) =>
-      node.add(k, improve(self.hashKey.hash(k)), v, 0)
+      node.updated(k, improve(self.hashKey.hash(k)), v, 0)
     }
 
     if (newRootNode eq self.rootNode)

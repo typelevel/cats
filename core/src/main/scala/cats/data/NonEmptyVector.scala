@@ -99,6 +99,8 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
 
   def collect[B](pf: PartialFunction[A, B]): Vector[B] = toVector.collect(pf)
 
+  def collectFirst[B](pf: PartialFunction[A, B]): Option[B] = toVector.collectFirst(pf)
+
   /**
    * Alias for [[concat]]
    */
