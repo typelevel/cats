@@ -1,10 +1,32 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats.data
 
 import scala.collection.immutable.AbstractMap
 import scala.util.hashing.MurmurHash3
 
 private[data] trait HashMapCompatCompanion {
-  private[data] class WrappedHashMap[K, V](private[WrappedHashMap] val hashMap: HashMap[K, V]) extends AbstractMap[K, V] {
+  private[data] class WrappedHashMap[K, V](private[WrappedHashMap] val hashMap: HashMap[K, V])
+      extends AbstractMap[K, V] {
     final def iterator: collection.Iterator[(K, V)] = hashMap.iterator
     final def get(key: K): Option[V] = hashMap.get(key)
     final def +[V1 >: V](kv: (K, V1)): Map[K, V1] = new WrappedHashMap(hashMap.updated(kv._1, kv._2))
