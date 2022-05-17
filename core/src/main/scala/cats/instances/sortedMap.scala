@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats.instances
 
 import cats._
@@ -27,7 +48,6 @@ trait SortedMapInstances extends SortedMapInstances2 {
   implicit def catsStdShowForSortedMap[A, B](orderA: Order[A], showA: Show[A], showB: Show[B]): Show[SortedMap[A, B]] =
     catsStdShowForSortedMap(showA, showB)
 
-  // scalastyle:off method.length
   implicit def catsStdInstancesForSortedMap[K]
     : Traverse[SortedMap[K, *]] with FlatMap[SortedMap[K, *]] with Align[SortedMap[K, *]] =
     new Traverse[SortedMap[K, *]] with FlatMap[SortedMap[K, *]] with Align[SortedMap[K, *]] {
@@ -114,6 +134,8 @@ trait SortedMapInstances extends SortedMapInstances2 {
         A.combineAll(fa.values)
 
       override def toList[A](fa: SortedMap[K, A]): List[A] = fa.values.toList
+
+      override def toIterable[A](fa: SortedMap[K, A]): Iterable[A] = fa.values
 
       override def collectFirst[A, B](fa: SortedMap[K, A])(pf: PartialFunction[A, B]): Option[B] =
         fa.collectFirst(new PartialFunction[(K, A), B] {

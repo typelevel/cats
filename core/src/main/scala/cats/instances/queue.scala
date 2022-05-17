@@ -1,7 +1,30 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 package instances
 
 import cats.data.Chain
+import cats.instances.StaticMethods.appendAll
+import cats.kernel.compat.scalaVersionSpecific._
 import cats.kernel.instances.StaticMethods.wrapMutableIndexedSeq
 import cats.syntax.show._
 import scala.annotation.tailrec
@@ -16,6 +39,21 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
       def empty[A]: Queue[A] = Queue.empty
 
       def combineK[A](x: Queue[A], y: Queue[A]): Queue[A] = x ++ y
+
+      override def combineAllOptionK[A](as: IterableOnce[Queue[A]]): Option[Queue[A]] = {
+        val iter = as.iterator
+        if (iter.isEmpty) None else Some(appendAll(iter, Queue.newBuilder[A]).result())
+      }
+
+      override def fromIterableOnce[A](as: IterableOnce[A]): Queue[A] = {
+        val builder = Queue.newBuilder[A]
+        builder ++= as
+        builder.result()
+      }
+
+      override def prependK[A](a: A, fa: Queue[A]): Queue[A] = a +: fa
+
+      override def appendK[A](fa: Queue[A], a: A): Queue[A] = fa.enqueue(a)
 
       def pure[A](x: A): Queue[A] = Queue(x)
 
@@ -131,6 +169,8 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
 
       override def toList[A](fa: Queue[A]): List[A] = fa.toList
 
+      override def toIterable[A](fa: Queue[A]): Iterable[A] = fa
+
       override def reduceLeftOption[A](fa: Queue[A])(f: (A, A) => A): Option[A] =
         fa.reduceLeftOption(f)
 
@@ -164,6 +204,7 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
   implicit def catsStdTraverseFilterForQueue: TraverseFilter[Queue] = QueueInstances.catsStdTraverseFilterForQueue
 }
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 private object QueueInstances {
   private val catsStdTraverseFilterForQueue: TraverseFilter[Queue] = new TraverseFilter[Queue] {
     val traverse: Traverse[Queue] = cats.instances.queue.catsStdInstancesForQueue

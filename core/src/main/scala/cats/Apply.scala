@@ -1,15 +1,34 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 
 import simulacrum.{noop, typeclass}
 import cats.data.Ior
-import scala.annotation.implicitNotFound
 
 /**
  * Weaker version of Applicative[F]; has apply but not pure.
  *
  * Must obey the laws defined in cats.laws.ApplyLaws.
  */
-@implicitNotFound("Could not find an instance of Apply for ${F}")
 @typeclass(excludeParents = List("ApplyArityFunctions"))
 trait Apply[F[_]] extends Functor[F] with InvariantSemigroupal[F] with ApplyArityFunctions[F] { self =>
 
@@ -224,35 +243,8 @@ trait Apply[F[_]] extends Functor[F] with InvariantSemigroupal[F] with ApplyArit
       val G = Apply[G]
     }
 
-  /**
-   * An `if-then-else` lifted into the `F` context.
-   * This function combines the effects of the `fcond` condition and of the two branches,
-   * in the order in which they are given.
-   *
-   * The value of the result is, depending on the value of the condition,
-   * the value of the first argument, or the value of the second argument.
-   *
-   * Example:
-   * {{{
-   * scala> import cats.implicits._
-   *
-   * scala> val b1: Option[Boolean] = Some(true)
-   * scala> val asInt1: Option[Int] = Apply[Option].ifA(b1)(Some(1), Some(0))
-   * scala> asInt1.get
-   * res0: Int = 1
-   *
-   * scala> val b2: Option[Boolean] = Some(false)
-   * scala> val asInt2: Option[Int] = Apply[Option].ifA(b2)(Some(1), Some(0))
-   * scala> asInt2.get
-   * res1: Int = 0
-   *
-   * scala> val b3: Option[Boolean] = Some(true)
-   * scala> val asInt3: Option[Int] = Apply[Option].ifA(b3)(Some(1), None)
-   * asInt2: Option[Int] = None
-   *
-   * }}}
-   */
   @noop
+  @deprecated("Dangerous method, use ifM (a flatMap) or ifF (a map) instead", "2.6.2")
   def ifA[A](fcond: F[Boolean])(ifTrue: F[A], ifFalse: F[A]): F[A] = {
     def ite(b: Boolean)(ifTrue: A, ifFalse: A) = if (b) ifTrue else ifFalse
     ap2(map(fcond)(ite))(ifTrue, ifFalse)

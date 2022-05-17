@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 package instances
 
@@ -9,7 +30,6 @@ import scala.annotation.tailrec
 
 trait TryInstances extends TryInstances1 {
 
-  // scalastyle:off method.length
   implicit def catsStdInstancesForTry: MonadThrow[Try] with CoflatMap[Try] with Traverse[Try] with Monad[Try] =
     new TryCoflatMap with MonadThrow[Try] with Traverse[Try] with Monad[Try] {
       def pure[A](x: A): Try[A] = Success(x)
@@ -76,9 +96,11 @@ trait TryInstances extends TryInstances1 {
         ta match { case Success(a) => Try(map(a)); case Failure(e) => Try(recover(e)) }
 
       override def redeemWith[A, B](ta: Try[A])(recover: Throwable => Try[B], bind: A => Try[B]): Try[B] =
-        try ta match {
-          case Success(a) => bind(a); case Failure(e) => recover(e)
-        } catch { case NonFatal(e) => Failure(e) }
+        try
+          ta match {
+            case Success(a) => bind(a); case Failure(e) => recover(e)
+          }
+        catch { case NonFatal(e) => Failure(e) }
 
       override def recover[A](ta: Try[A])(pf: PartialFunction[Throwable, A]): Try[A] =
         ta.recover(pf)
@@ -105,10 +127,7 @@ trait TryInstances extends TryInstances1 {
         if (idx == 0L) fa.toOption else None
 
       override def size[A](fa: Try[A]): Long =
-        fa match {
-          case Failure(_) => 0L
-          case Success(_) => 1L
-        }
+        if (fa.isSuccess) 1L else 0L
 
       override def find[A](fa: Try[A])(f: A => Boolean): Option[A] =
         fa.toOption.filter(f)
@@ -142,8 +161,15 @@ trait TryInstances extends TryInstances1 {
       override def catchNonFatal[A](a: => A)(implicit ev: Throwable <:< Throwable): Try[A] = Try(a)
 
       override def catchNonFatalEval[A](a: Eval[A])(implicit ev: Throwable <:< Throwable): Try[A] = Try(a.value)
+
+      private[this] val successUnit: Try[Unit] = Success(())
+
+      override def void[A](t: Try[A]): Try[Unit] =
+        if (t.isSuccess) successUnit
+        else t.asInstanceOf[Try[Unit]]
+
+      override def unit: Try[Unit] = successUnit
     }
-  // scalastyle:on method.length
 
   implicit def catsStdShowForTry[A](implicit A: Show[A]): Show[Try[A]] =
     new Show[Try[A]] {

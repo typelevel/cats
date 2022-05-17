@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 package data
 
@@ -77,6 +98,28 @@ sealed class NonEmptyMapOps[K, A](val value: NonEmptyMap[K, A]) {
    */
   def map[B](f: A => B): NonEmptyMap[K, B] =
     NonEmptyMapImpl.create(Functor[SortedMap[K, *]].map(toSortedMap)(f))
+
+  /**
+   * Applies f to all the keys leaving elements unchanged.
+   */
+  def mapKeys[L](f: K => L)(implicit orderL: Order[L]): NonEmptyMap[L, A] = {
+    implicit val orderingL: Ordering[L] = orderL.toOrdering
+    NonEmptyMapImpl.create(toSortedMap.map(Bifunctor[Tuple2].leftMap(_)(f)))
+  }
+
+  /**
+   * Applies f to both keys and elements simultaneously.
+   */
+  def mapBoth[L, B](f: (K, A) => (L, B))(implicit orderL: Order[L]): NonEmptyMap[L, B] = {
+    implicit val orderingL: Ordering[L] = orderL.toOrdering
+    NonEmptyMapImpl.create(toSortedMap.map(Function.tupled(f)))
+  }
+
+  /**
+   * Transforms the elements only by applying f to both elements and associated keys.
+   */
+  def transform[B](f: (K, A) => B): NonEmptyMap[K, B] =
+    NonEmptyMapImpl.create(toSortedMap.transform(f))
 
   /**
    * Optionally returns the value associated with the given key.

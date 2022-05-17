@@ -1,7 +1,30 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 package instances
 
 import cats.data.{Chain, ZipList}
+import cats.instances.StaticMethods.appendAll
+import cats.kernel.compat.scalaVersionSpecific._
 import cats.kernel.instances.StaticMethods.wrapMutableIndexedSeq
 import cats.syntax.show._
 
@@ -17,7 +40,18 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
     new Traverse[List] with Alternative[List] with Monad[List] with CoflatMap[List] with Align[List] {
       def empty[A]: List[A] = Nil
 
-      def combineK[A](x: List[A], y: List[A]): List[A] = x ++ y
+      def combineK[A](x: List[A], y: List[A]): List[A] = x ::: y
+
+      override def combineAllOptionK[A](as: IterableOnce[List[A]]): Option[List[A]] = {
+        val iter = as.iterator
+        if (iter.isEmpty) None else Some(appendAll(iter, List.newBuilder[A]).result())
+      }
+
+      override def fromIterableOnce[A](as: IterableOnce[A]): List[A] = as.iterator.toList
+
+      override def prependK[A](a: A, fa: List[A]): List[A] = a :: fa
+
+      override def appendK[A](fa: List[A], a: A): List[A] = fa :+ a
 
       def pure[A](x: A): List[A] = x :: Nil
 
@@ -95,6 +129,46 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
             wrapMutableIndexedSeq(as)
           }(f))(_.toList)
 
+      /**
+       * This avoids making a very deep stack by building a tree instead
+       */
+      override def traverse_[G[_], A, B](fa: List[A])(f: A => G[B])(implicit G: Applicative[G]): G[Unit] = {
+        // the cost of this is O(size log size)
+        // c(n) = n + 2 * c(n/2) = n + 2(n/2 log (n/2)) = n + n (logn - 1) = n log n
+        // invariant: size >= 1
+        def runHalf(size: Int, fa: List[A]): Eval[G[Unit]] =
+          if (size > 1) {
+            val leftSize = size / 2
+            val rightSize = size - leftSize
+            val (leftL, rightL) = fa.splitAt(leftSize)
+            runHalf(leftSize, leftL)
+              .flatMap { left =>
+                val right = runHalf(rightSize, rightL)
+                G.map2Eval(left, right) { (_, _) => () }
+              }
+          } else {
+            // avoid pattern matching when we know that there is only one element
+            val a = fa.head
+            // we evaluate this at most one time,
+            // always is a bit cheaper in such cases
+            //
+            // Here is the point of the laziness using Eval:
+            // we avoid calling f(a) or G.void in the
+            // event that the computation has already
+            // failed. We do not use laziness to avoid
+            // traversing fa, which we will do fully
+            // in all cases.
+            Eval.always {
+              val gb = f(a)
+              G.void(gb)
+            }
+          }
+
+        val len = fa.length
+        if (len == 0) G.unit
+        else runHalf(len, fa).value
+      }
+
       def functor: Functor[List] = this
 
       def align[A, B](fa: List[A], fb: List[B]): List[A Ior B] =
@@ -162,6 +236,8 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
 
       override def toList[A](fa: List[A]): List[A] = fa
 
+      override def toIterable[A](fa: List[A]): Iterable[A] = fa
+
       override def reduceLeftOption[A](fa: List[A])(f: (A, A) => A): Option[A] =
         fa.reduceLeftOption(f)
 
@@ -179,6 +255,20 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
 
       override def collectFirstSome[A, B](fa: List[A])(f: A => Option[B]): Option[B] =
         fa.collectFirst(Function.unlift(f))
+
+      override def unit: List[Unit] = _unit
+      private[this] val _unit: List[Unit] = () :: Nil
+
+      override def void[A](fa: List[A]): List[Unit] = {
+        @tailrec
+        def build(fa: List[A], acc: List[Unit]): List[Unit] =
+          if (fa.isEmpty) acc
+          else build(fa.tail, () :: acc)
+
+        // by checking here we can avoid allocating a duplicate unit
+        if (fa.isEmpty) Nil
+        else build(fa.tail, unit)
+      }
     }
 
   implicit def catsStdShowForList[A: Show]: Show[List[A]] =
@@ -202,6 +292,7 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
     }
 }
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 private[instances] trait ListInstancesBinCompat0 {
   implicit val catsStdTraverseFilterForList: TraverseFilter[List] = new TraverseFilter[List] {
     val traverse: Traverse[List] = cats.instances.list.catsStdInstancesForList

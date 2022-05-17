@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 
 import cats.kernel.CommutativeSemigroup
@@ -5,7 +26,6 @@ import scala.collection.immutable.{Queue, Seq, SortedMap, SortedSet}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 import simulacrum.typeclass
-import scala.annotation.implicitNotFound
 
 /**
  * [[Semigroupal]] captures the idea of composing independent effectful values.
@@ -17,7 +37,6 @@ import scala.annotation.implicitNotFound
  * That same idea is also manifested in the form of [[Apply]], and indeed [[Apply]] extends both
  * [[Semigroupal]] and [[Functor]] to illustrate this.
  */
-@implicitNotFound("Could not find an instance of Semigroupal for ${F}")
 @typeclass trait Semigroupal[F[_]] extends Serializable {
 
   /**
@@ -49,6 +68,7 @@ import scala.annotation.implicitNotFound
 }
 
 object Semigroupal extends ScalaVersionSpecificSemigroupalInstances with SemigroupalArityFunctions {
+  implicit def catsSemigroupalForId: Semigroupal[Id] = catsInstancesForId
   implicit def catsSemigroupalForOption: Semigroupal[Option] = cats.instances.option.catsStdInstancesForOption
   implicit def catsSemigroupalForTry: Semigroupal[Try] = cats.instances.try_.catsStdInstancesForTry
   implicit def catsSemigroupalForFuture(implicit ec: ExecutionContext): Semigroupal[Future] =
