@@ -39,10 +39,10 @@ private[data] trait HashMapCompatCompanion {
     final override def valuesIterator: Iterator[V] = hashMap.valuesIterator
     final override def isEmpty: Boolean = hashMap.isEmpty
     final override def nonEmpty: Boolean = hashMap.nonEmpty
-    final override def hashCode: Int = MurmurHash3.mapHash(this)
+    final override def hashCode: Int = hashMap.hashCode
     final override def equals(that: Any): Boolean = that match {
       case map: WrappedHashMap[_, _] =>
-        (this eq map) || (this.hashMap == map.hashMap)
+        this.hashMap == map.hashMap
       case other =>
         super.equals(other)
     }

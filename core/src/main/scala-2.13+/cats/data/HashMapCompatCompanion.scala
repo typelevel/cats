@@ -42,10 +42,10 @@ private[data] trait HashMapCompatCompanion {
     final override def nonEmpty: Boolean = hashMap.nonEmpty
     final override def concat[V2 >: V](suffix: IterableOnce[(K, V2)]): Map[K, V2] =
       new WrappedHashMap(hashMap.concat(suffix))
-    final override def hashCode: Int = MurmurHash3.mapHash(this)
+    final override def hashCode: Int = hashMap.hashCode
     final override def equals(that: Any): Boolean = that match {
       case map: WrappedHashMap[_, _] =>
-        (this eq map) || (this.hashMap == map.hashMap)
+        this.hashMap == map.hashMap
       case other =>
         super.equals(other)
     }
