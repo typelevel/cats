@@ -60,6 +60,7 @@ import cats.syntax.eq._
 import java.util.Arrays
 
 import HashMap.improve
+import HashMap.WrappedHashMap
 
 /**
  * An immutable hash map using [[cats.kernel.Hash]] for hashing.
@@ -89,6 +90,14 @@ final class HashMap[K, +V] private[data] (private[data] val rootNode: HashMap.No
     */
   final def keysIterator: Iterator[K] =
     iterator.map { case (k, _) => k }
+
+  /**
+    * An iterator for the values of this map that can be used only once.
+    *
+    * @return an iterator that iterates through the keys of this map.
+    */
+  final def valuesIterator: Iterator[V] =
+    iterator.map { case (_, v) => v }
 
   /**
     * The size of this map.
@@ -177,6 +186,9 @@ final class HashMap[K, +V] private[data] (private[data] val rootNode: HashMap.No
       new HashMap(newRootNode)
   }
 
+  final def toMap: collection.immutable.Map[K, V] =
+    new WrappedHashMap(this)
+
   /**
    * Typesafe equality operator.
    *
@@ -233,7 +245,7 @@ final class HashMap[K, +V] private[data] (private[data] val rootNode: HashMap.No
     iterator.map { case (k, v) => s"$k -> $v" }.mkString("HashMap(", ", ", ")")
 }
 
-object HashMap extends HashMapInstances {
+object HashMap extends HashMapInstances with HashMapCompatCompanion {
   final private[data] def improve(hash: Int): Int =
     scala.util.hashing.byteswap32(hash)
 
@@ -275,7 +287,7 @@ object HashMap extends HashMapInstances {
   *
   * @param iterable the iterable source of elements to add to the [[cats.data.HashMap]].
   * @param hashKey the [[cats.kernel.Hash]] instance used for hashing values.
-  * @return a new [[cats.data.HashMap]] which contains all elements of `seq`.
+  * @return a new [[cats.data.HashMap]] which contains all elements of `iterable`.
   */
   final def fromIterableOnce[K, V](iterable: IterableOnce[(K, V)])(implicit hashKey: Hash[K]): HashMap[K, V] = {
     iterable match {
@@ -295,7 +307,7 @@ object HashMap extends HashMapInstances {
   * @param fkv the [[cats.Foldable]] structure of elements to add to the [[cats.data.HashMap]].
   * @param F the [[cats.Foldable]] instance used for folding the structure.
   * @param hashKey the [[cats.kernel.Hash]] instance used for hashing values.
-  * @return a new [[cats.data.HashMap]] which contains all elements of `seq`.
+  * @return a new [[cats.data.HashMap]] which contains all elements of `fkv`.
   */
   final def fromFoldable[F[_], K, V](fkv: F[(K, V)])(implicit F: Foldable[F], hashKey: Hash[K]): HashMap[K, V] = {
     val rootNode = F.foldLeft(fkv, Node.empty[K, V]) { case (node, (k, v)) =>

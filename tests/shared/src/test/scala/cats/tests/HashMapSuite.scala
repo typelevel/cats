@@ -264,4 +264,12 @@ class HashMapSuite extends CatsSuite {
         assertEquals(left, right)
     }
   }
+
+  property("toMap consistent with fromIterableOnce") {
+    forAll { (scalaMap: Map[Int, String]) =>
+      val hashMap = HashMap.fromIterableOnce(scalaMap)
+      val wrappedHashMap = hashMap.toMap
+      assertEquals(scalaMap, wrappedHashMap)
+    }
+  }
 }
