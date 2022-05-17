@@ -41,7 +41,10 @@
 
 package cats.data
 
+import cats.kernel.compat.scalaVersionSpecific._
+
 import cats.Show
+import cats.Foldable
 import cats.UnorderedFoldable
 import cats.kernel.CommutativeMonoid
 import cats.kernel.Hash
@@ -50,6 +53,7 @@ import cats.syntax.eq._
 import java.util.Arrays
 
 import HashSet.improve
+import HashSet.WrappedHashSet
 
 /**
   * An immutable hash set using [[cats.kernel.Hash]] for hashing.
@@ -71,14 +75,6 @@ final class HashSet[A] private (private val rootNode: HashSet.Node[A])(implicit 
     */
   final def iterator: Iterator[A] =
     new HashSet.Iterator(rootNode)
-
-  /**
-    * A reverse iterator for this set that can be used only once.
-    *
-    * @return an iterator that iterates through this set in the reverse order of [[HashSet#iterator]].
-    */
-  final def reverseIterator: Iterator[A] =
-    new HashSet.ReverseIterator(rootNode)
 
   /**
     * The size of this set.
@@ -161,17 +157,29 @@ final class HashSet[A] private (private val rootNode: HashSet.Node[A])(implicit 
       set
     else if (set.isEmpty)
       this
-    else {
-      val newRootNode = set.iterator.foldLeft(rootNode) { case (node, a) =>
-        node.add(a, improve(hash.hash(a)), 0)
-      }
-
-      if (newRootNode eq rootNode)
-        this
-      else
-        new HashSet(newRootNode)
-    }
+    else
+      union(set.iterator)
   }
+
+  /**
+    * Creates a new set with all of the elements of both this set and the provided `iterable`.
+    *
+    * @param set the iterable whose values should be added to this set.
+    * @return a new set that contains all elements of this set and all of the elements of `iterable`.
+    */
+  final def union(iterable: IterableOnce[A]): HashSet[A] = {
+    val newRootNode = iterable.iterator.foldLeft(rootNode) { case (node, a) =>
+      node.add(a, improve(hash.hash(a)), 0)
+    }
+
+    if (newRootNode eq rootNode)
+      this
+    else
+      new HashSet(newRootNode)
+  }
+
+  def toSet: Set[A] =
+    new WrappedHashSet(this)
 
   /**
    * Typesafe equality operator.
@@ -214,7 +222,7 @@ final class HashSet[A] private (private val rootNode: HashSet.Node[A])(implicit 
     iterator.mkString("HashSet(", ", ", ")")
 }
 
-object HashSet {
+object HashSet extends HashSetCompatCompanion {
   final private[HashSet] def improve(hash: Int): Int =
     scala.util.hashing.byteswap32(hash)
 
@@ -251,22 +259,56 @@ object HashSet {
     new HashSet(rootNode)
   }
 
+  /**
+  * Creates a new [[cats.data.HashSet]] which contains all elements of `iterable`.
+  *
+  * @param seq the iterable source of elements to add to the [[cats.data.HashSet]].
+  * @param hash the [[cats.kernel.Hash]] instance used for hashing values.
+  * @return a new [[cats.data.HashSet]] which contains all elements of `iterable`.
+  */
+  final def fromIterableOnce[A](iterable: IterableOnce[A])(implicit hash: Hash[A]): HashSet[A] = {
+    iterable match {
+      case seq: Seq[A @unchecked] =>
+        fromSeq(seq)
+      case notSeq =>
+        val rootNode = notSeq.iterator.foldLeft(Node.empty[A]) { case (node, a) =>
+          node.add(a, improve(hash.hash(a)), 0)
+        }
+        new HashSet(rootNode)
+    }
+  }
+
+  /**
+  * Creates a new [[cats.data.HashSet]] which contains all elements of `fkv`.
+  *
+  * @param fa the [[cats.Foldable]] structure of elements to add to the [[cats.data.HashSet]].
+  * @param F the [[cats.Foldable]] instance used for folding the structure.
+  * @param hash the [[cats.kernel.Hash]] instance used for hashing values.
+  * @return a new [[cats.data.HashSet]] which contains all elements of `fa`.
+  */
+  final def fromFoldable[F[_], A](fa: F[A])(implicit F: Foldable[F], hash: Hash[A]): HashSet[A] = {
+    val rootNode = F.foldLeft(fa, Node.empty[A]) { case (node, a) =>
+      node.add(a, improve(hash.hash(a)), 0)
+    }
+    new HashSet(rootNode)
+  }
+
   sealed abstract private class Node[A] {
 
     /**
       * @return The number of value and node elements in the contents array of this trie node.
       */
-    def allElements: Int
+    def allElementsCount: Int
 
     /**
       * @return The number of value elements in the contents array of this trie node.
       */
-    def valueElements: Int
+    def valueCount: Int
 
     /**
       * @return The number of node elements in the contents array of this trie node.
       */
-    def nodeElements: Int
+    def nodeCount: Int
 
     /**
      * @return the number of value elements in this subtree.
@@ -360,10 +402,10 @@ object HashSet {
       * @return either [[Node.SizeNone]], [[Node.SizeOne]] or [[Node.SizeMany]]
       */
     final def sizeHint = {
-      if (nodeElements > 0)
+      if (nodeCount > 0)
         Node.SizeMany
       else
-        (valueElements: @annotation.switch) match {
+        (valueCount: @annotation.switch) match {
           case 0 => Node.SizeNone
           case 1 => Node.SizeOne
           case _ => Node.SizeMany
@@ -382,7 +424,7 @@ object HashSet {
     */
   final private class CollisionNode[A](
     val collisionHash: Int,
-    val contents: Vector[A]
+    val contents: NonEmptyVector[A]
   )(implicit hash: Hash[A])
       extends Node[A] {
 
@@ -390,22 +432,22 @@ object HashSet {
 
     final def hasValues: Boolean = true
 
-    final def allElements: Int = valueElements
+    final def allElementsCount: Int = valueCount
 
-    final def valueElements: Int = contents.size
+    final def valueCount: Int = contents.length
 
-    final def nodeElements: Int = 0
+    final def nodeCount: Int = 0
 
-    final def size: Int = contents.size
+    final def size: Int = contents.length
 
     final def foreach[U](f: A => U): Unit =
-      contents.foreach(f)
+      contents.iterator.foreach(f)
 
     final def contains(element: A, elementHash: Int, depth: Int): Boolean =
       collisionHash == elementHash && contents.exists(hash.eqv(element, _))
 
     final def getValue(index: Int): A =
-      contents(index)
+      contents.getUnsafe(index)
 
     final def getNode(index: Int): Node[A] =
       throw new IndexOutOfBoundsException("No sub-nodes present in hash-collision leaf node.")
@@ -422,7 +464,7 @@ object HashSet {
       else {
         val newContents = contents.filterNot(hash.eqv(element, _))
         if (newContents.size > 1)
-          new CollisionNode(collisionHash, newContents)
+          new CollisionNode(collisionHash, NonEmptyVector.fromVectorUnsafe(newContents))
         else {
           // This is a singleton node so the depth doesn't matter;
           // we only need to index into it to inline the value in our parent node
@@ -437,7 +479,7 @@ object HashSet {
         that match {
           case node: CollisionNode[_] =>
             (this.collisionHash === node.collisionHash) &&
-            (this.contents.size === node.contents.size) &&
+            (this.contents.length === node.contents.length) &&
             this.contents.forall(a => node.contents.exists(hash.eqv(a, _)))
           case _ =>
             false
@@ -448,20 +490,34 @@ object HashSet {
     final override def equals(that: Any): Boolean = that match {
       case node: CollisionNode[_] =>
         (this.collisionHash == node.collisionHash) &&
-        (this.contents.size == node.contents.size) &&
-        this.contents.forall(node.contents.contains)
+        (this.contents.length == node.contents.length) &&
+        this.contents.forall(a => node.contents.exists(_ == a))
       case _ =>
         false
     }
 
     final override def toString(): String = {
-      s"""CollisionNode(hash=${collisionHash}, values=${contents.mkString("[", ",", "]")})"""
+      s"""CollisionNode(hash=${collisionHash}, values=${contents.iterator.mkString("[", ",", "]")})"""
     }
   }
 
   /**
-    * A CHAMP bitmap node. Stores value element and node element positions in the `contents` array
-    * in the `valueMap` and `nodeMap` integer bitmaps.
+    * A CHAMP bitmap node. Stores value and node positions in the `contents` array in the `valueMap` and `nodeMap`
+    * integer bitmaps respectively.
+    *
+    * The index of an element is calculated from a 5-bit segment of the hash of the element. The segment to use is
+    * determined according to the depth in the structure, starting with the least significant bits at the root level.
+    *
+    * When there are collisions in the 5-bit segment of the hash at the current depth in the structure, a new subnode
+    * must be created in order to store the colliding elements. In this subnode, the next 5-bit segment is used to
+    * determine the order of elements.
+    *
+    * Values are indexed from the start of the array and ordered according to the relative indices calculated from
+    * their hashes.
+    *
+    * Sub-nodes are stored at the end of the array, indexed from the end of the array and ordered according
+    * to the relative indices calculated from the hashes of their elements. As a result of this indexing
+    * method they are stored in reverse order.
     *
     * @tparam A the type of the elements contained in this node.
     * @param valueMap integer bitmap indicating the notional positions of value elements in the `contents` array.
@@ -483,13 +539,13 @@ object HashSet {
     final def hasNodes: Boolean =
       nodeMap != 0
 
-    final def allElements: Int =
-      valueElements + nodeElements
+    final def allElementsCount: Int =
+      valueCount + nodeCount
 
-    final def valueElements: Int =
+    final def valueCount: Int =
       Integer.bitCount(valueMap)
 
-    final def nodeElements: Int =
+    final def nodeCount: Int =
       Integer.bitCount(nodeMap)
 
     final private def hasNodeAt(bitPos: Int): Boolean =
@@ -506,13 +562,13 @@ object HashSet {
 
     final def foreach[U](f: A => U): Unit = {
       var i = 0
-      while (i < valueElements) {
+      while (i < valueCount) {
         f(getValue(i))
         i += 1
       }
 
       i = 0
-      while (i < nodeElements) {
+      while (i < nodeCount) {
         getNode(i).foreach(f)
         i += 1
       }
@@ -520,7 +576,7 @@ object HashSet {
 
     final private def mergeValues(left: A, leftHash: Int, right: A, rightHash: Int, depth: Int): Node[A] = {
       if (depth >= Node.MaxDepth) {
-        new CollisionNode[A](leftHash, Vector(left, right))
+        new CollisionNode[A](leftHash, NonEmptyVector.of(left, right))
       } else {
         val leftMask = Node.maskFrom(leftHash, depth)
         val rightMask = Node.maskFrom(rightHash, depth)
@@ -635,22 +691,27 @@ object HashSet {
       val existingElement = getValue(index)
       if (!hash.eqv(existingElement, removeElement)) {
         this
-      } else if (allElements == 1) {
+      } else if (allElementsCount == 1) {
         Node.empty
       } else {
         val newContents = new Array[Any](contents.length - 1)
 
-        // If this element will be propagated or inlined, calculate the new valueMap at depth - 1
-        val newBitPos =
-          if (valueElements == 2 && nodeElements == 0 && depth > 0)
-            Node.bitPosFrom(Node.maskFrom(removeElementHash, depth - 1))
+        /* Single-element nodes are always inlined unless they reach the root level.
+         *
+         * If the node is inlined the valueMap is not used, so we calculate the new
+         * valueMap at root level just in case this node is propagated as the new
+         * root node.
+         */
+        val newValueMap =
+          if (valueCount == 2 && nodeCount == 0 && depth > 0)
+            Node.bitPosFrom(Node.maskFrom(removeElementHash, depth = 0))
           else
             valueMap ^ bitPos
 
         System.arraycopy(contents, 0, newContents, 0, index)
         System.arraycopy(contents, index + 1, newContents, index, contents.length - index - 1)
 
-        new BitMapNode(newBitPos, nodeMap, newContents, size - 1)
+        new BitMapNode(newValueMap, nodeMap, newContents, size - 1)
       }
     }
 
@@ -678,7 +739,7 @@ object HashSet {
 
       if (newSubNode eq subNode)
         this
-      else if (valueElements == 0 && nodeElements == 1) {
+      else if (valueCount == 0 && nodeCount == 1) {
         if (newSubNode.sizeHint == Node.SizeOne) {
           newSubNode
         } else {
@@ -712,12 +773,12 @@ object HashSet {
             (this.nodeMap === node.nodeMap) &&
             (this.size === node.size) && {
               var i = 0
-              while (i < valueElements) {
+              while (i < valueCount) {
                 if (hash.neqv(getValue(i), node.getValue(i))) return false
                 i += 1
               }
               i = 0
-              while (i < nodeElements) {
+              while (i < nodeCount) {
                 if (!(getNode(i) === node.getNode(i))) return false
                 i += 1
               }
@@ -843,13 +904,13 @@ object HashSet {
       nodeStack(currentDepth) = node
 
       nodeIndicesAndLengths(cursorIndex) = 0
-      nodeIndicesAndLengths(lengthIndex) = node.nodeElements
+      nodeIndicesAndLengths(lengthIndex) = node.nodeCount
     }
 
     final private def pushValues(node: Node[A]): Unit = {
       currentNode = node
       currentValuesIndex = 0
-      currentValuesLength = node.valueElements
+      currentValuesLength = node.valueCount
     }
 
     final private def getMoreValues(): Boolean = {
@@ -892,69 +953,6 @@ object HashSet {
       if (!hasNext) throw new NoSuchElementException
       val value = currentNode.getValue(currentValuesIndex)
       currentValuesIndex += 1
-      value
-    }
-  }
-
-  private[HashSet] class ReverseIterator[A] extends scala.collection.AbstractIterator[A] {
-    private var currentNode: Node[A] = null
-
-    private var currentValuesIndex: Int = -1
-
-    private var currentDepth: Int = -1
-
-    private val nodeStack: Array[Node[A]] =
-      new Array(Node.MaxDepth + 1)
-
-    private val nodeIndices: Array[Int] =
-      new Array(Node.MaxDepth + 1)
-
-    def this(rootNode: Node[A]) = {
-      this()
-      pushNode(rootNode)
-      getMoreValues()
-    }
-
-    final private def pushNode(node: Node[A]): Unit = {
-      currentDepth += 1
-      nodeStack(currentDepth) = node
-      nodeIndices(currentDepth) = node.nodeElements - 1
-    }
-
-    final private def pushValues(node: Node[A]): Unit = {
-      currentNode = node
-      currentValuesIndex = node.valueElements - 1
-    }
-
-    final private def getMoreValues(): Boolean = {
-      var foundMoreValues = false
-
-      while (!foundMoreValues && currentDepth >= 0) {
-        val nodeIndex = nodeIndices(currentDepth)
-        nodeIndices(currentDepth) -= 1
-
-        if (nodeIndex >= 0) {
-          pushNode(nodeStack(currentDepth).getNode(nodeIndex))
-        } else {
-          val currentNode = nodeStack(currentDepth)
-          currentDepth -= 1
-          if (currentNode.hasValues) {
-            pushValues(currentNode)
-            foundMoreValues = true
-          }
-        }
-      }
-
-      foundMoreValues
-    }
-
-    final override def hasNext: Boolean =
-      (currentValuesIndex >= 0) || getMoreValues()
-
-    final override def next(): A = {
-      if (!hasNext) throw new NoSuchElementException
-      val value = currentNode.getValue(currentValuesIndex)
-      currentValuesIndex -= 1
       value
     }
   }

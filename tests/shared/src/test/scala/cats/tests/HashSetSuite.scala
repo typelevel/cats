@@ -28,19 +28,13 @@ import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.UnorderedFoldableTests
 import cats.laws.discipline.SerializableTests
 import cats.syntax.eq._
+import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalacheck.Prop.forAll
 import scala.collection.mutable
+import scala.util.Random
 
 class HashSetSuite extends CatsSuite {
-  // Examples from https://stackoverflow.com/questions/9406775/why-does-string-hashcode-in-java-have-many-conflicts
-  val collisions = for {
-    left <- ('A' to 'Y').toList
-    first = List(left, 'a').mkString
-    second = List((left + 1).toChar, 'B').mkString
-  } yield (first, second)
-
-  val colliding = Gen.listOf(Gen.oneOf(collisions))
 
   checkAll("HashSet[Int]", HashTests[HashSet[Int]].hash)
   checkAll("Hash[HashSet[Int]]", SerializableTests.serializable(HashSet.catsDataHashForHashSet[Int]))
@@ -52,6 +46,34 @@ class HashSetSuite extends CatsSuite {
   checkAll("CommutativeMonoid[HashSet[String]]",
            SerializableTests.serializable(HashSet.catsDataCommutativeMonoidForHashSet[String])
   )
+
+  // Based on https://stackoverflow.com/questions/9406775/why-does-string-hashcode-in-java-have-many-conflicts
+  // We can produce a collision for any string by adding 1 to and subtracting 31 from two consecutive chars.
+  def collidingString(str: String) = {
+    if (str.length < 2)
+      str
+    else {
+      val randomOffset = Random.nextInt(str.length - 1)
+      val firstChar = str.substring(randomOffset).charAt(0)
+      val secondChar = str.substring(randomOffset).charAt(1)
+
+      if (!Character.isDefined(firstChar + 1) || !Character.isDefined(secondChar - 31))
+        str
+      else
+        str
+          .updated(randomOffset, (firstChar + 1).toChar)
+          .updated(randomOffset + 1, (secondChar - 31).toChar)
+    }
+  }
+
+  def genString(hs: HashSet[String]): Gen[String] =
+    if (hs.isEmpty)
+      arbitrary[String]
+    else
+      Gen.oneOf(
+        Gen.oneOf(hs.iterator.toList).map(collidingString),
+        arbitrary[String]
+      )
 
   test("show") {
     assert(HashSet(1, 2, 3).show === "HashSet(1, 2, 3)")
@@ -69,16 +91,14 @@ class HashSetSuite extends CatsSuite {
   }
 
   test("===") {
-    forAll { (ints: List[Int]) =>
-      val left = HashSet.fromSeq(ints)
-      val right = HashSet.fromSeq(ints)
-      assert(left === right)
+    forAll { (hashSet: HashSet[Int]) =>
+      assert(hashSet === hashSet)
     }
 
-    forAll { (leftInts: List[Int], rightInts: List[Int]) =>
-      val left = HashSet.fromSeq(leftInts)
-      val right = HashSet.fromSeq(rightInts)
-      assert((leftInts.distinct === rightInts.distinct) === (left === right))
+    forAll { (left: HashSet[Int], right: HashSet[Int]) =>
+      val lefts = left.iterator.toList
+      val rights = right.iterator.toList
+      assert((lefts === rights) === (left === right))
     }
   }
 
@@ -87,9 +107,8 @@ class HashSetSuite extends CatsSuite {
     assert(HashSet(1, 2, 3).size === 3)
     assert(HashSet("Aa", "BB").size == 2)
 
-    forAll { (ints: List[Int]) =>
-      val hashSet = HashSet.fromSeq(ints)
-      assert(hashSet.size === ints.distinct.size)
+    forAll { (hashSet: HashSet[Int]) =>
+      assert(hashSet.iterator.toList.size === hashSet.size)
     }
   }
 
@@ -103,23 +122,40 @@ class HashSetSuite extends CatsSuite {
 
     assert(HashSet("Aa").union(HashSet("BB")) === HashSet("Aa", "BB"))
     assert(HashSet("Aa", "BB").union(HashSet("Aa", "BB", "Ca", "DB")) === HashSet("Aa", "BB", "Ca", "DB"))
-  }
 
-  property("Empty HashSet never contains") {
-    forAll { (i: Int) =>
-      assert(!HashSet.empty[Int].contains(i))
+    forAll { (left: HashSet[Int], right: HashSet[Int]) =>
+      val both = left.union(right)
+      val lefts = left.iterator.toList
+      val rights = right.iterator.toList
+      (lefts ++ rights).foreach { v =>
+        assert(both.contains(v))
+      }
     }
   }
 
-  property("Empty HashSet add consistent with contains") {
-    forAll { (i: Int) =>
-      assert(HashSet.empty[Int].add(i).contains(i))
+  test("add") {
+    forAll { (initial: HashSet[String]) =>
+      forAll(genString(initial)) { (value: String) =>
+        val updated = initial.add(value)
+        assert(updated.contains(value))
+        if (initial.contains(value))
+          assert(updated.size === initial.size)
+        else
+          assert(updated.size === (initial.size + 1))
+      }
     }
   }
 
-  property("Empty HashSet add and remove consistent with contains") {
-    forAll { (i: Int) =>
-      assert(!HashSet.empty[Int].add(i).remove(i).contains(i))
+  test("remove") {
+    forAll { (initial: HashSet[String]) =>
+      forAll(genString(initial)) { (value: String) =>
+        val removed = initial.remove(value)
+        assert(!removed.contains(value))
+        if (initial.contains(value))
+          assert(removed.size === (initial.size - 1))
+        else
+          assert(removed === initial)
+      }
     }
   }
 
@@ -133,123 +169,83 @@ class HashSetSuite extends CatsSuite {
     }
   }
 
-  property("remove consistent with contains") {
+  property("fromIterableOnce consistent with contains") {
     forAll { (ints: List[Int]) =>
-      val hashSet = HashSet.fromSeq(ints)
+      val hashSet = HashSet.fromIterableOnce(ints.view)
 
-      ints.distinct.foldLeft(hashSet) { case (hs, i) =>
-        assert(hs.contains(i))
-        assert(!hs.remove(i).contains(i))
-        hs.remove(i)
+      ints.foreach { i =>
+        assert(hashSet.contains(i))
       }
-
-      ()
     }
   }
 
-  property("add and remove with collisions consistent with contains") {
-    forAll(colliding) { (strings: List[(String, String)]) =>
-      val hashSet = strings.foldLeft(HashSet.empty[String]) { case (hs, (l, r)) =>
-        hs.add(l).add(r)
+  property("fromFoldable consistent with contains") {
+    forAll { (ints: List[Int]) =>
+      val hashSet = HashSet.fromFoldable(ints)
+
+      ints.foreach { i =>
+        assert(hashSet.contains(i))
       }
-
-      strings.distinctBy(_._1).foldLeft(hashSet) { case (hs, (l, r)) =>
-        assert(hs.contains(l))
-        assert(hs.contains(r))
-
-        val removeL = hs.remove(l)
-        assert(removeL.contains(r))
-        assert(!removeL.contains(l))
-
-        val removeR = hs.remove(r)
-        assert(removeR.contains(l))
-        assert(!removeR.contains(r))
-
-        val removeLR = removeL.remove(r)
-        assert(!removeLR.contains(l))
-        assert(!removeLR.contains(r))
-
-        removeLR
-      }
-
-      ()
     }
   }
 
   property("iterator consistent with contains") {
-    forAll { (ints: List[Int]) =>
-      val hashSet = HashSet.fromSeq(ints)
-
+    forAll { (hashSet: HashSet[Int]) =>
       val iterated = mutable.ListBuffer[Int]()
       hashSet.iterator.foreach { iterated += _ }
-
-      assert(ints.forall(iterated.contains))
-      assert(iterated.forall(ints.contains))
       assert(iterated.toList.distinct === iterated.toList)
       assert(iterated.forall(hashSet.contains))
     }
   }
 
-  property("iterator consistent with reverseIterator") {
-    forAll { (ints: List[Int]) =>
-      val hashSet = HashSet.fromSeq(ints)
-
-      val iterated = mutable.ListBuffer[Int]()
-      val reverseIterated = mutable.ListBuffer[Int]()
-      hashSet.iterator.foreach { iterated += _ }
-      hashSet.reverseIterator.foreach { reverseIterated += _ }
-
-      assert(iterated.toList === reverseIterated.toList.reverse)
-    }
-  }
-
   property("foreach consistent with contains") {
-    forAll { (ints: List[Int]) =>
-      val hashSet = HashSet.fromSeq(ints)
-
+    forAll { (hashSet: HashSet[Int]) =>
       val foreached = mutable.ListBuffer[Int]()
       hashSet.foreach { foreached += _ }
-
-      assert(ints.forall(foreached.contains))
-      assert(foreached.forall(ints.contains))
       assert(foreached.toList.distinct === foreached.toList)
       assert(foreached.forall(hashSet.contains))
     }
   }
 
   property("foreach and iterator consistent") {
-    forAll { (ints: List[Int]) =>
-      val hashSet = HashSet.fromSeq(ints)
-
+    forAll { (hashSet: HashSet[Int]) =>
       val iterated = mutable.ListBuffer[Int]()
       val foreached = mutable.ListBuffer[Int]()
       hashSet.iterator.foreach { iterated += _ }
       hashSet.foreach { foreached += _ }
-
       assert(foreached.forall(iterated.contains))
       assert(iterated.forall(foreached.contains))
     }
   }
 
   property("size consistent with iterator") {
-    forAll { (ints: List[Int]) =>
-      val hashSet = HashSet.fromSeq(ints)
-
+    forAll { (hashSet: HashSet[Int]) =>
       var size = 0
       hashSet.iterator.foreach { _ => size += 1 }
-
       assert(hashSet.size === size)
     }
   }
 
   property("size consistent with foreach") {
-    forAll { (ints: List[Int]) =>
-      val hashSet = HashSet.fromSeq(ints)
-
+    forAll { (hashSet: HashSet[Int]) =>
       var size = 0
       hashSet.foreach { _ => size += 1 }
-
       assert(hashSet.size === size)
+    }
+  }
+
+  property("show consistent with ===") {
+    forAll { (left: HashSet[Int], right: HashSet[Int]) =>
+      if (left.show === right.show)
+        assert(left === right)
+    }
+  }
+
+  property("toSet consistent with fromIterableOnce") {
+    forAll { (scalaSet: Set[Int]) =>
+      val hashSet = HashSet.fromIterableOnce(scalaSet)
+      val wrappedHashSet = hashSet.toSet
+      assertEquals(scalaSet, wrappedHashSet)
     }
   }
 

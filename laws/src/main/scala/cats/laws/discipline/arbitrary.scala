@@ -417,7 +417,45 @@ object arbitrary extends ArbitraryInstances0 with ScalaVersionSpecific.Arbitrary
     Arbitrary(Gen.oneOf(MiniInt.allValues))
 
   implicit def catsLawsArbitraryForHashSet[A](implicit A: Arbitrary[A], hash: Hash[A]): Arbitrary[HashSet[A]] =
-    Arbitrary(getArbitrary[List[A]].map(HashSet.fromSeq(_)(hash)))
+    Arbitrary(
+      Gen.oneOf(
+        // empty
+        Gen.const(HashSet.empty),
+        // fromSeq
+        getArbitrary[Seq[A]].map(HashSet.fromSeq(_)(hash)),
+        // fromIterableOnce
+        getArbitrary[Seq[A]].map(seq => HashSet.fromIterableOnce(seq.view)),
+        // fromFoldable
+        getArbitrary[Seq[A]].map(HashSet.fromFoldable(_)),
+        // add
+        Gen.delay(for {
+          hs <- getArbitrary[HashSet[A]]
+          a <- getArbitrary[A]
+        } yield hs.add(a)),
+        // add existing
+        Gen.delay(for {
+          hs <- getArbitrary[HashSet[A]]
+          if hs.nonEmpty
+          a <- Gen.oneOf(hs.iterator.toList)
+        } yield hs.add(a)),
+        // remove
+        Gen.delay(for {
+          hs <- getArbitrary[HashSet[A]]
+          a <- getArbitrary[A]
+        } yield hs.remove(a)),
+        // remove existing
+        Gen.delay(for {
+          hs <- getArbitrary[HashSet[A]]
+          if hs.nonEmpty
+          a <- Gen.oneOf(hs.iterator.toList)
+        } yield hs.remove(a)),
+        // union
+        Gen.delay(for {
+          left <- getArbitrary[HashSet[A]]
+          right <- getArbitrary[HashSet[A]]
+        } yield left.union(right))
+      )
+    )
 
   implicit def catsLawsCogenForHashSet[A](implicit A: Cogen[A]): Cogen[HashSet[A]] =
     Cogen.it[HashSet[A], A](_.iterator)
