@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package algebra
 package laws
 
@@ -259,11 +280,25 @@ trait RingLaws[A] extends GroupLaws[A] { self =>
     }
   )
 
+  def semifield(implicit A: Semifield[A]) = new RingProperties(
+    name = "semifield",
+    al = additiveCommutativeMonoid,
+    ml = multiplicativeGroup,
+    parents = Seq(rig)
+  )
+
+  def commutativeSemifield(implicit A: CommutativeSemifield[A]) = new RingProperties(
+    name = "semifield",
+    al = additiveCommutativeMonoid,
+    ml = multiplicativeCommutativeGroup,
+    parents = Seq(semifield, commutativeRig)
+  )
+
   def divisionRing(implicit A: DivisionRing[A]) = new RingProperties(
     name = "division ring",
     al = additiveCommutativeGroup,
     ml = multiplicativeGroup,
-    parents = Seq(ring),
+    parents = Seq(ring, semifield),
     "fromDouble" -> forAll { (n: Double) =>
       if (Platform.isJvm) {
         // TODO: BigDecimal(n) is busted in scalajs, so we skip this test.
@@ -311,7 +346,7 @@ trait RingLaws[A] extends GroupLaws[A] { self =>
     name = "field",
     al = additiveCommutativeGroup,
     ml = multiplicativeCommutativeGroup,
-    parents = Seq(euclideanRing, divisionRing)
+    parents = Seq(euclideanRing, divisionRing, commutativeSemifield)
   )
 
   // Approximate fields such a Float or Double, even through filtered using FPFilter, do not work well with
