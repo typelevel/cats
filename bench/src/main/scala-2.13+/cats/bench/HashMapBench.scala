@@ -76,7 +76,7 @@ class HashMapBench {
     var ss = scalaMap
     var i = 0
     while (i < 1000) {
-      ss += (-i.toLong -> i)
+      ss = ss.updated(-i.toLong, i)
       i += 1
     }
     bh.consume(ss)

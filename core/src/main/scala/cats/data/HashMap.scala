@@ -94,7 +94,7 @@ final class HashMap[K, +V] private[data] (private[data] val rootNode: HashMap.No
   /**
     * An iterator for the values of this map that can be used only once.
     *
-    * @return an iterator that iterates through the keys of this map.
+    * @return an iterator that iterates through the values of this map.
     */
   final def valuesIterator: Iterator[V] =
     iterator.map { case (_, v) => v }
