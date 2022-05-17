@@ -25,10 +25,10 @@ package syntax
 trait ApplicativeSyntax {
   implicit final def catsSyntaxApplicativeId[A](a: A): ApplicativeIdOps[A] =
     new ApplicativeIdOps[A](a)
-  implicit final def catsSyntaxApplicativeByName[F[_], A](fa: => F[A]): ApplicativeOpsByName[F, A] =
-    new ApplicativeOpsByName[F, A](() => fa)
+  implicit final def catsSyntaxApplicativeByName[F[_], A](fa: => F[A]): ApplicativeByNameOps[F, A] =
+    new ApplicativeByNameOps[F, A](() => fa)
   @deprecated("Use by-name version", "2.8.0")
-  def catsSyntaxApplicative[F[_], A](fa: F[A]): ApplicativeOps[F, A] =
+  final def catsSyntaxApplicative[F[_], A](fa: F[A]): ApplicativeOps[F, A] =
     new ApplicativeOps[F, A](fa)
 }
 
@@ -43,7 +43,7 @@ final class ApplicativeOps[F[_], A](private val fa: F[A]) extends AnyVal {
   def whenA(cond: Boolean)(implicit F: Applicative[F]): F[Unit] = F.whenA(cond)(fa)
 }
 
-final class ApplicativeOpsByName[F[_], A](private val fa: () => F[A]) extends AnyVal {
+final class ApplicativeByNameOps[F[_], A](private val fa: () => F[A]) extends AnyVal {
   def replicateA(n: Int)(implicit F: Applicative[F]): F[List[A]] = F.replicateA(n, fa())
   def unlessA(cond: Boolean)(implicit F: Applicative[F]): F[Unit] = F.unlessA(cond)(fa())
   def whenA(cond: Boolean)(implicit F: Applicative[F]): F[Unit] = F.whenA(cond)(fa())
