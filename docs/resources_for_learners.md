@@ -27,15 +27,15 @@
  * [Functional Structures in Scala](https://www.youtube.com/playlist?list=PLFrwDVdSrYE6dy14XCmUtRAJuhCxuzJp0) 
    by [Michael Pilquist](https://github.com/MPilquist) offers a series
    of lectures about basic functional structures. 
- * Category Theory for Programmers 
+ * **Category Theory for Programmers**
    by [Bartosz Milewski](https://github.com/BartoszMilewski) is a series 
    of category theory lectures oriented towards programmers. 
    The code examples are written in Haskell and C++, 
    but the course is designed for programmers of any background, 
    even the ones without a strong maths knowledge. 
-   * [part 1](https://www.youtube.com/playlist?list=PLbgaMIhjbmEnaH_LTkxLI7FMa2HsnawM_) 
-   * [part 2](https://www.youtube.com/playlist?list=PLbgaMIhjbmElia1eCEZNvsVscFef9m0dm) 
-   * [part 3](https://www.youtube.com/playlist?list=PLbgaMIhjbmEn64WVX4B08B4h2rOtueWIL) 
+    * [part 1](https://www.youtube.com/playlist?list=PLbgaMIhjbmEnaH_LTkxLI7FMa2HsnawM_) 
+    * [part 2](https://www.youtube.com/playlist?list=PLbgaMIhjbmElia1eCEZNvsVscFef9m0dm) 
+    * [part 3](https://www.youtube.com/playlist?list=PLbgaMIhjbmEn64WVX4B08B4h2rOtueWIL) 
 * [Easy and efficient data validation with Cats](https://www.youtube.com/watch?v=P8nGAo3Jp-Q) by [Daniela Sfregola](https://danielasfregola.com/)  this talk introduces Cats, and some of its most interesting components for data validation. In particular, we’ll discuss some options to achieve efficient and expressive data validation. We will also argue that, compared to other options in the language, Cats is particularly suited for the task thanks to its easy-to-use data types and more approachable syntax.
 * [Cats by example](https://www.youtube.com/playlist?list=PLy4hTMY6erDBmvZiEDjtCTP8XCdhaXc2c) by [Thomas Höfer](https://twitter.com/TomTriple) provides a beginner series on various datatypes from Cats. 
 
