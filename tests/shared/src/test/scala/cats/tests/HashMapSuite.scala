@@ -250,4 +250,22 @@ class HashMapSuite extends CatsSuite {
       assert(hashMap.size === size)
     }
   }
+
+  property("show consistent with ===") {
+    forAll { (left: HashMap[Int, String], right: HashMap[Int, String]) =>
+      if (left.show === right.show)
+        assert(left === right)
+      else
+        assert(left =!= right)
+    }
+  }
+
+  property("toString consistent with equals") {
+    forAll { (left: HashMap[Int, String], right: HashMap[Int, String]) =>
+      if (left.toString == right.toString)
+        assertEquals(left, right)
+      else
+        assertNotEquals(left, right)
+    }
+  }
 }
