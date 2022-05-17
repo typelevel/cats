@@ -255,8 +255,6 @@ class HashMapSuite extends CatsSuite {
     forAll { (left: HashMap[Int, String], right: HashMap[Int, String]) =>
       if (left.show === right.show)
         assert(left === right)
-      else
-        assert(left =!= right)
     }
   }
 
@@ -264,8 +262,6 @@ class HashMapSuite extends CatsSuite {
     forAll { (left: HashMap[Int, String], right: HashMap[Int, String]) =>
       if (left.toString == right.toString)
         assertEquals(left, right)
-      else
-        assertNotEquals(left, right)
     }
   }
 }
