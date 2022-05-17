@@ -158,11 +158,7 @@ final class HashMap[K, +V] private[data] (private[data] val rootNode: HashMap.No
   final def updated[VV >: V](key: K, value: VV): HashMap[K, VV] = {
     val keyHash = improve(hashKey.hash(key))
     val newRootNode = rootNode.updated(key, keyHash, value, 0)
-
-    if (newRootNode eq rootNode)
-      this
-    else
-      new HashMap(newRootNode)
+    new HashMap(newRootNode)
   }
 
   /**

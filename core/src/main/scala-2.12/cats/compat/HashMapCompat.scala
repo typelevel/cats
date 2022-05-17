@@ -48,14 +48,6 @@ private[data] trait HashMapCompat[K, +V] { self: HashMap[K, V] =>
     * @param traversable the collection of key-value pairs to be added.
     * @return a new map that contains all key-value pairs of this map and `traversable`.
     */
-  final def concat[VV >: V](hm: HashMap[K, VV]): HashMap[K, VV] = {
-    val newRootNode = hm.iterator.foldLeft(self.rootNode: HashMap.Node[K, VV]) { case (node, (k, v)) =>
-      node.updated(k, improve(self.hashKey.hash(k)), v, 0)
-    }
-
-    if (newRootNode eq self.rootNode)
-      this
-    else
-      new HashMap(newRootNode)
-  }
+  final def concat[VV >: V](hm: HashMap[K, VV]): HashMap[K, VV] =
+    concat(hm.iterator)
 }
