@@ -834,12 +834,15 @@ object HashMap extends HashMapInstances {
         val keyIndex = Node.StrideLength * index
         val newContents = new Array[Any](contents.length - Node.StrideLength)
 
-        /* Single-element nodes are inlined. If this element should be propagated or
-         * inlined once an entry is deleted, calculate the new keyValueMap at depth - 1
+        /* Single-element nodes are always inlined unless they reach the root level.
+         *
+         * If the node is inlined the keyValueMap is not used, so we calculate the new
+         * keyValueMap at root level just in case this node is propagated as the new
+         * root node.
          */
-        val newBitPos =
+        val newKeyValueMap =
           if (keyValueCount == 2 && nodeCount == 0 && depth > 0)
-            Node.bitPosFrom(Node.maskFrom(removeKeyHash, depth - 1))
+            Node.bitPosFrom(Node.maskFrom(removeKeyHash, depth = 0))
           else
             keyValueMap ^ bitPos
 
@@ -853,7 +856,7 @@ object HashMap extends HashMapInstances {
           contents.length - keyIndex - Node.StrideLength
         )
 
-        new BitMapNode[K, V](newBitPos, nodeMap, newContents, size - 1)
+        new BitMapNode[K, V](newKeyValueMap, nodeMap, newContents, size - 1)
       }
     }
 
