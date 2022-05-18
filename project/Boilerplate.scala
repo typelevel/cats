@@ -309,7 +309,7 @@ object Boilerplate {
       | * @groupprio FlatMapArity 999
       | */
       |trait FlatMapArityFunctions[F[_]] { self: FlatMap[F] =>
-        -  /** @group MapArity */
+        -  /** @group FlatMapArity */
         -  def flatMap$arity[${`A..N`}, Z]($fparams)(f: (${`A..N`}) => F[Z]): F[Z] = self.flatten(self.map$arity($fparams)(f))
       |}
       """
