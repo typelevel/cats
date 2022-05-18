@@ -1,15 +1,36 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats.kernel
 package laws
 
 import cats.kernel.laws.discipline._
 import cats.platform.Platform
-
 import munit.DisciplineSuite
 import org.scalacheck.{Arbitrary, Cogen, Gen, Prop}
 import Prop.forAll
 import Arbitrary.arbitrary
+import cats.kernel.instances.all.catsKernelStdOrderForDeadline
 
-import scala.concurrent.duration.{Duration, FiniteDuration}
+import scala.concurrent.duration.{Deadline, Duration, FiniteDuration}
 import scala.collection.immutable.{BitSet, Queue, SortedMap, SortedSet}
 import scala.util.Random
 import java.util.UUID
@@ -46,6 +67,9 @@ object KernelCheck {
       )
     )
   }
+
+  implicit val arbitraryDeadline: Arbitrary[Deadline] =
+    Arbitrary(arbitraryFiniteDuration.arbitrary.map(Deadline.apply))
 
   // `Duration.Undefined`, `Duration.Inf` and `Duration.MinusInf` break the tests
   implicit val arbitraryDuration: Arbitrary[Duration] =
@@ -88,6 +112,9 @@ object KernelCheck {
 
   implicit val cogenUUID: Cogen[UUID] =
     Cogen[(Long, Long)].contramap(u => (u.getMostSignificantBits, u.getLeastSignificantBits))
+
+  implicit val cogenDeadline: Cogen[Deadline] =
+    Cogen[FiniteDuration].contramap(_.time)
 }
 
 class TestsConfig extends ScalaCheckSuite {
@@ -142,6 +169,9 @@ class Tests extends TestsConfig with DisciplineSuite {
   checkAll("PartialOrder[Vector[HasPartialOrder[Int]]]", PartialOrderTests[Vector[HasPartialOrder[Int]]].partialOrder)
   checkAll("PartialOrder[Stream[HasPartialOrder[Int]]]", PartialOrderTests[Stream[HasPartialOrder[Int]]].partialOrder)
   checkAll("PartialOrder[Queue[HasPartialOrder[Int]]]", PartialOrderTests[Queue[HasPartialOrder[Int]]].partialOrder)
+  checkAll("PartialOrder[SortedMap[Int, HasPartialOrder[Int]]]",
+           PartialOrderTests[SortedMap[Int, HasPartialOrder[Int]]].partialOrder
+  )
   checkAll("Semilattice.asMeetPartialOrder[Set[Int]]",
            PartialOrderTests(Semilattice.asMeetPartialOrder[Set[Int]]).partialOrder
   )
@@ -156,6 +186,7 @@ class Tests extends TestsConfig with DisciplineSuite {
   checkAll("Order[BigInt]", OrderTests[BigInt].order)
   checkAll("Order[Duration]", OrderTests[Duration].order)
   checkAll("Order[FiniteDuration]", OrderTests[FiniteDuration].order)
+  checkAll("Order[Deadline]", OrderTests[Deadline].order)
   checkAll("Order[UUID]", OrderTests[UUID].order)
   checkAll("Order[List[Int]]", OrderTests[List[Int]].order)
   checkAll("Order[Option[String]]", OrderTests[Option[String]].order)
@@ -164,6 +195,7 @@ class Tests extends TestsConfig with DisciplineSuite {
   checkAll("Order[Stream[Int]]", OrderTests[Stream[Int]].order)
   checkAll("Order[Queue[Int]]", OrderTests[Queue[Int]].order)
   checkAll("Order[SortedSet[String]", OrderTests[SortedSet[String]].order)
+  checkAll("Order[SortedMap[Int, String]]", OrderTests[SortedMap[Int, String]].order)
   checkAll("fromOrdering[Int]", OrderTests(Order.fromOrdering[Int]).order)
   checkAll("Order.reverse(Order[Int])", OrderTests(Order.reverse(Order[Int])).order)
   checkAll("Order.reverse(Order.reverse(Order[Int]))", OrderTests(Order.reverse(Order.reverse(Order[Int]))).order)

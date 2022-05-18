@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 package data
 
@@ -99,7 +120,7 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
     fold(Ior.both(_, right), _ => Ior.right(right), (a, _) => Ior.both(a, right))
 
   /**
-   * When a Left value is present in the Ior, combine it will the value specified.
+   * When a Left value is present in the Ior, combine it with the value specified.
    *
    * When the Left value is absent, set it to the value specified.
    *
@@ -125,7 +146,7 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
     fold(l => Ior.left(AA.combine(l, left)), Ior.both(left, _), (l, r) => Ior.both(AA.combine(l, left), r))
 
   /**
-   * When a Right value is present in the Ior, combine it will the value specified.
+   * When a Right value is present in the Ior, combine it with the value specified.
    *
    * When the Right value is absent, set it to the value specified.
    *
@@ -730,7 +751,6 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
    * res3: Ior[String, Int] = Both(abc,579)
    * }}}
    */
-  // scalastyle:off cyclomatic.complexity
   final def combine[AA >: A, BB >: B](that: AA Ior BB)(implicit AA: Semigroup[AA], BB: Semigroup[BB]): AA Ior BB =
     this match {
       case Ior.Left(a1) =>
@@ -752,7 +772,6 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
           case Ior.Both(a2, b2) => Ior.Both(AA.combine(a1, a2), BB.combine(b1, b2))
         }
     }
-  // scalastyle:on cyclomatic.complexity
 
   final def ===[AA >: A, BB >: B](that: AA Ior BB)(implicit AA: Eq[AA], BB: Eq[BB]): Boolean =
     fold(
@@ -883,7 +902,6 @@ sealed abstract private[data] class IorInstances extends IorInstances0 {
       override def bimap[A, B, C, D](fab: A Ior B)(f: A => C, g: B => D): C Ior D = fab.bimap(f, g)
     }
 
-  // scalastyle:off cyclomatic.complexity
   implicit def catsDataParallelForIor[E](implicit E: Semigroup[E]): Parallel.Aux[Ior[E, *], Ior[E, *]] =
     new Parallel[Ior[E, *]] {
       type F[x] = Ior[E, x]
@@ -920,7 +938,6 @@ sealed abstract private[data] class IorInstances extends IorInstances0 {
 
       lazy val monad: Monad[Ior[E, *]] = Monad[Ior[E, *]]
     }
-  // scalastyle:on cyclomatic.complexity
 
 }
 

@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 package instances
 
@@ -33,6 +54,12 @@ private[cats] object ArraySeqInstances {
 
       def combineK[A](xs: ArraySeq[A], ys: ArraySeq[A]): ArraySeq[A] =
         xs.concat(ys)
+
+      override def fromIterableOnce[A](as: IterableOnce[A]): ArraySeq[A] = ArraySeq.untagged.from(as)
+
+      override def prependK[A](a: A, fa: ArraySeq[A]): ArraySeq[A] = fa.prepended(a)
+
+      override def appendK[A](fa: ArraySeq[A], a: A): ArraySeq[A] = fa.appended(a)
 
       override def algebra[A]: Monoid[ArraySeq[A]] =
         new cats.kernel.instances.ArraySeqInstances.ArraySeqMonoid

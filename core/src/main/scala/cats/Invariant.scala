@@ -1,10 +1,30 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 
 import cats.arrow.Arrow
 import cats.kernel._
 import simulacrum.typeclass
 import cats.kernel.compat.scalaVersionSpecific._
-import scala.annotation.implicitNotFound
 import scala.collection.immutable.{Queue, Seq, SortedMap}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
@@ -13,7 +33,6 @@ import scala.util.control.TailCalls.TailRec
 /**
  * Must obey the laws defined in cats.laws.InvariantLaws.
  */
-@implicitNotFound("Could not find an instance of Invariant for ${F}")
 @typeclass trait Invariant[F[_]] extends Serializable { self =>
 
   /**
@@ -107,6 +126,10 @@ object Invariant extends ScalaVersionSpecificInvariantInstances with InvariantIn
   implicit def catsInstancesForId
     : Distributive[Id] with Bimonad[Id] with CommutativeMonad[Id] with NonEmptyTraverse[Id] =
     cats.catsInstancesForId
+  @deprecated("Added for bincompat", "2.8.0")
+  @cats.compat.targetName("catsInstancesForId")
+  private[cats] def catsInstancesForIdCompat2_6_1: Comonad[Id] =
+    cats.catsInstancesForId
   implicit def catsMonadErrorForEither[A]: MonadError[Either[A, *], A] =
     cats.instances.either.catsStdInstancesForEither[A]
   implicit def catsInstancesForOption
@@ -159,6 +182,8 @@ object Invariant extends ScalaVersionSpecificInvariantInstances with InvariantIn
     cats.instances.invariant.catsInvariantForNumeric
   implicit def catsInvariantForIntegral: Invariant[Integral] =
     cats.instances.invariant.catsInvariantForIntegral
+  implicit def catsInvariantForFractional: Invariant[Fractional] =
+    cats.instances.invariant.catsInvariantForFractional
 
   implicit val catsInvariantMonoid: Invariant[Monoid] = new Invariant[Monoid] {
 

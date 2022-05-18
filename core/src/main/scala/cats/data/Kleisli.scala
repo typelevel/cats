@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 package data
 
@@ -656,8 +677,19 @@ private[data] trait KleisliApply[F[_], A] extends Apply[Kleisli[F, A, *]] with K
 
   override def map2Eval[B, C, Z](fa: Kleisli[F, A, B], fb: Eval[Kleisli[F, A, C]])(
     f: (B, C) => Z
-  ): Eval[Kleisli[F, A, Z]] =
-    Eval.now(Kleisli(a => F.map2Eval(fa.run(a), fb.map(_.run(a)))(f).value))
+  ): Eval[Kleisli[F, A, Z]] = {
+    // We should only evaluate fb once
+    val memoFb = fb.memoize
+
+    Eval.now(Kleisli { a =>
+      val fb = fa.run(a)
+      val efc = memoFb.map(_.run(a))
+      val efz: Eval[F[Z]] = F.map2Eval(fb, efc)(f)
+      // This is not safe and results in stack overflows:
+      // see: https://github.com/typelevel/cats/issues/3947
+      efz.value
+    })
+  }
 
   override def product[B, C](fb: Kleisli[F, A, B], fc: Kleisli[F, A, C]): Kleisli[F, A, (B, C)] =
     Kleisli(a => F.product(fb.run(a), fc.run(a)))
@@ -668,6 +700,9 @@ private[data] trait KleisliFunctor[F[_], A] extends Functor[Kleisli[F, A, *]] {
 
   override def map[B, C](fa: Kleisli[F, A, B])(f: B => C): Kleisli[F, A, C] =
     fa.map(f)
+
+  override def void[B](fa: Kleisli[F, A, B]): Kleisli[F, A, Unit] =
+    Kleisli(a => F.void(fa.run(a)))
 }
 
 private trait KleisliDistributive[F[_], R] extends Distributive[Kleisli[F, R, *]] {

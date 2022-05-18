@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats.kernel
 
 import java.util.UUID
@@ -55,7 +76,7 @@ object Eq
     with EqToEquivConversion
     with ScalaVersionSpecificOrderInstances
     with instances.TupleOrderInstances
-    with OrderInstances0 {
+    with OrderInstances1 {
 
   /**
    * Access an implicit `Eq[A]`.
@@ -224,7 +245,12 @@ private[kernel] trait OrderInstances0 extends PartialOrderInstances {
     cats.kernel.instances.seq.catsKernelStdOrderForSeq[A]
 }
 
-private[kernel] trait PartialOrderInstances extends PartialOrderInstances0 {
+private[kernel] trait OrderInstances1 extends OrderInstances0 {
+  implicit def catsKernelOrderForSortedMap[K, V: Order]: Order[SortedMap[K, V]] =
+    cats.kernel.instances.sortedMap.catsKernelStdOrderForSortedMap[K, V]
+}
+
+private[kernel] trait PartialOrderInstances extends PartialOrderInstances1 {
   implicit def catsKernelPartialOrderForOption[A: PartialOrder]: PartialOrder[Option[A]] =
     cats.kernel.instances.option.catsKernelStdPartialOrderForOption[A]
   implicit def catsKernelPartialOrderForList[A: PartialOrder]: PartialOrder[List[A]] =
@@ -240,6 +266,11 @@ private[kernel] trait PartialOrderInstances extends PartialOrderInstances0 {
 private[kernel] trait PartialOrderInstances0 extends HashInstances {
   implicit def catsKernelPartialOrderForSeq[A: PartialOrder]: PartialOrder[Seq[A]] =
     cats.kernel.instances.seq.catsKernelStdPartialOrderForSeq[A]
+}
+
+private[kernel] trait PartialOrderInstances1 extends PartialOrderInstances0 {
+  implicit def catsKernelPartialOrderForSortedMap[K, V: PartialOrder]: PartialOrder[SortedMap[K, V]] =
+    cats.kernel.instances.sortedMap.catsKernelStdPartialOrderForSortedMap[K, V]
 }
 
 private[kernel] trait HashInstances extends HashInstances0 {

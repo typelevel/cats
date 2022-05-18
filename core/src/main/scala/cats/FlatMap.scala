@@ -1,8 +1,28 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 
 import simulacrum.typeclass
 import simulacrum.noop
-import scala.annotation.implicitNotFound
 
 /**
  * FlatMap type class gives us flatMap, which allows us to have a value
@@ -19,7 +39,6 @@ import scala.annotation.implicitNotFound
  *
  * Must obey the laws defined in cats.laws.FlatMapLaws.
  */
-@implicitNotFound("Could not find an instance of FlatMap for ${F}")
 @typeclass trait FlatMap[F[_]] extends Apply[F] {
   def flatMap[A, B](fa: F[A])(f: A => F[B]): F[B]
 
@@ -96,6 +115,9 @@ import scala.annotation.implicitNotFound
 
   override def map2[A, B, Z](fa: F[A], fb: F[B])(f: (A, B) => Z): F[Z] =
     flatMap(fa)(a => map(fb)(b => f(a, b)))
+
+  override def map2Eval[A, B, Z](fa: F[A], fb: Eval[F[B]])(f: (A, B) => Z): Eval[F[Z]] =
+    Eval.now(flatMap(fa)(a => map(fb.value)(b => f(a, b))))
 
   override def productR[A, B](fa: F[A])(fb: F[B]): F[B] =
     flatMap(fa)(_ => fb)
