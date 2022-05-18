@@ -22,7 +22,8 @@
 package cats
 package arrow
 
-private[arrow] class FunctionKMacroMethods:
+private[arrow] class FunctionKMacroMethods {
+
   /**
    * Lifts function `f` of `[X] => F[X] => G[X]` into a `FunctionK[F, G]`.
    *
@@ -31,5 +32,8 @@ private[arrow] class FunctionKMacroMethods:
    * }}}
    */
   def lift[F[_], G[_]](f: [X] => F[X] => G[X]): FunctionK[F, G] =
-    new FunctionK[F, G]:
+    new FunctionK[F, G] {
       def apply[A](fa: F[A]): G[A] = f(fa)
+    }
+
+}
