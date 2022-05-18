@@ -27,6 +27,7 @@ object Boilerplate {
     GenSemigroupalBuilders,
     GenSemigroupalArityFunctions,
     GenApplyArityFunctions,
+    GenFlatMapArityFunctions,
     GenTupleSemigroupalSyntax,
     GenParallelArityFunctions,
     GenParallelArityFunctions2,
@@ -285,6 +286,36 @@ object Boilerplate {
     }
   }
 
+  object GenFlatMapArityFunctions extends Template {
+    def filename(root: File) = root / "cats" / "FlatMapArityFunctions.scala"
+    override def range = 2 to maxArity
+    def content(tv: TemplateVals) = {
+      import tv._
+
+      val tpes = synTypes.map { tpe =>
+        s"F[$tpe]"
+      }
+      val fargs = (0 until arity).map("f" + _)
+      val fparams = fargs.zip(tpes).map { case (v, t) => s"$v:$t" }.mkString(", ")
+
+      block"""
+      |package cats
+      |
+      |/**
+      | * @groupprio Ungrouped 0
+      | *
+      | * @groupname FlatMapArity flatMap arity
+      | * @groupdesc FlatMapArity Higher-arity flatMap methods
+      | * @groupprio FlatMapArity 999
+      | */
+      |trait FlatMapArityFunctions[F[_]] { self: FlatMap[F] =>
+        -  /** @group MapArity */
+        -  def flatMap$arity[${`A..N`}, Z]($fparams)(f: (${`A..N`}) => F[Z]): F[Z] = self.flatten(self.map$arity($fparams)(f))
+      |}
+      """
+    }
+  }
+
   final case class ParallelNestedExpansions(arity: Int) {
     val products = (0 until (arity - 2))
       .foldRight(s"Parallel.parProduct(m${arity - 2}, m${arity - 1})")((i, acc) => s"Parallel.parProduct(m$i, $acc)")
@@ -520,7 +551,7 @@ object Boilerplate {
         if (arity == 1)
           s"def flatMap[Z](f: (${`A..N`}) => F[Z])(implicit flatMap: FlatMap[F]): F[Z] = flatMap.flatMap($tupleArgs)(f)"
         else
-          s"def flatMapN[Z](f: (${`A..N`}) => F[Z])(implicit flatMap: FlatMap[F], semigroupal: Semigroupal[F]): F[Z] = flatMap.flatten(Semigroupal.map$arity($tupleArgs)(f))"
+          s"def flatMapN[Z](f: (${`A..N`}) => F[Z])(implicit flatMap: FlatMap[F]): F[Z] = flatMap.flatMap$arity($tupleArgs)(f)"
 
       block"""
       |package cats
