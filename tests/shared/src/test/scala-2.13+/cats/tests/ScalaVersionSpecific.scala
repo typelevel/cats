@@ -23,13 +23,9 @@ package cats.tests
 
 import cats._
 import cats.data.NonEmptyLazyList
-import cats.laws.discipline.DeprecatedEqInstances
-import cats.laws.discipline.ExhaustiveCheck
-import cats.laws.discipline.MiniInt
-import cats.laws.discipline.NonEmptyParallelTests
-import cats.laws.discipline.ParallelTests
-import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.{ExhaustiveCheck, MiniFloat, MiniInt, NonEmptyParallelTests, ParallelTests}
 import cats.laws.discipline.eq._
+import cats.laws.discipline.arbitrary._
 import cats.syntax.all._
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop._
@@ -208,16 +204,37 @@ trait ScalaVersionSpecificAlgebraInvariantSuite {
   }
 
   // This version-specific instance is required since 2.12 and below do not have parseString on the Numeric class
-  implicit protected def eqNumeric[A: Eq: ExhaustiveCheck]: Eq[Numeric[A]] = Eq.by { numeric =>
-    // This allows us to catch the case where the fromInt overflows. We use the None to compare two Numeric instances,
-    // verifying that when fromInt throws for one, it throws for the other.
-    val fromMiniInt: MiniInt => Option[A] =
-      miniInt =>
-        try Some(numeric.fromInt(miniInt.toInt))
-        catch {
-          case _: IllegalArgumentException => None // MiniInt overflow
-        }
+  protected val fractionalForMiniFloat: Fractional[MiniFloat] = new Fractional[MiniFloat] {
+    def compare(x: MiniFloat, y: MiniFloat): Int = Order[MiniFloat].compare(x, y)
+    def plus(x: MiniFloat, y: MiniFloat): MiniFloat = x + y
+    def minus(x: MiniFloat, y: MiniFloat): MiniFloat = x + (-y)
+    def times(x: MiniFloat, y: MiniFloat): MiniFloat = x * y
+    def div(x: MiniFloat, y: MiniFloat): MiniFloat = x / y
+    def negate(x: MiniFloat): MiniFloat = -x
+    def fromInt(x: Int): MiniFloat = MiniFloat.from(x)
+    def toInt(x: MiniFloat): Int = x.toInt
+    def toLong(x: MiniFloat): Long = x.toInt.toLong
+    def toFloat(x: MiniFloat): Float = x.toInt.toFloat
+    def toDouble(x: MiniFloat): Double = x.toInt.toDouble
+    def parseString(str: String): Option[MiniFloat] = Fractional[Float].parseString(str).map(MiniFloat.from(_))
+  }
 
+  /**
+   * Emulates the behaviour of `Numeric#fromInt`, but using MiniInt as the input. This allows us to exercise the
+   * implementation of `fromInt` for an instance of `Numeric` while still taking advantage of the `ExhaustiveCheck`
+   * instance for `MiniInt`.
+   *
+   * Note that this will return `None` when `fromInt` overflows. We can use this to compare two `Numeric` instances,
+   * verifying that when `fromInt` throws for one, it throws for the other.
+   */
+  private def numericFromMiniInt[A](miniInt: MiniInt, numeric: Numeric[A]): Option[A] =
+    try Some(numeric.fromInt(miniInt.toInt))
+    catch {
+      case _: IllegalArgumentException => None // MiniInt overflow
+    }
+
+  // This version-specific instance is required since 2.12 and below do not have parseString on the Numeric class
+  implicit protected def eqNumeric[A: Eq: ExhaustiveCheck]: Eq[Numeric[A]] = Eq.by { numeric =>
     val parseMiniIntStrings: Option[MiniInt] => Option[A] = {
       case Some(miniInt) => numeric.parseString(miniInt.toInt.toString)
       case None          => numeric.parseString("invalid") // Use this to test parsing of non-numeric strings
@@ -229,7 +246,7 @@ trait ScalaVersionSpecificAlgebraInvariantSuite {
       numeric.minus _,
       numeric.times _,
       numeric.negate _,
-      fromMiniInt,
+      numericFromMiniInt[A](_, numeric),
       numeric.toInt _,
       numeric.toLong _,
       numeric.toFloat _,
@@ -239,14 +256,9 @@ trait ScalaVersionSpecificAlgebraInvariantSuite {
   }
 
   // This version-specific instance is required since 2.12 and below do not have parseString on the Numeric class
-  @annotation.nowarn("cat=deprecation")
-  implicit protected def eqFractional[A: Eq: Arbitrary]: Eq[Fractional[A]] = {
-    // This deprecated instance is required since there is not `ExhaustiveCheck` for any types for which a `Fractional`
-    // can easily be defined
-    import DeprecatedEqInstances.catsLawsEqForFn1
-
+  implicit protected def eqFractional[A: Eq: ExhaustiveCheck]: Eq[Fractional[A]] = {
     Eq.by { fractional =>
-      val parseFloatStrings: Option[Double] => Option[A] = {
+      val parseMiniFloatStrings: Option[MiniFloat] => Option[A] = {
         case Some(f) => fractional.parseString(f.toString)
         case None    => fractional.parseString("invalid") // Use this to test parsing of non-numeric strings
       }
@@ -257,12 +269,12 @@ trait ScalaVersionSpecificAlgebraInvariantSuite {
         fractional.minus _,
         fractional.times _,
         fractional.negate _,
-        fractional.fromInt _,
+        numericFromMiniInt[A](_, fractional),
         fractional.toInt _,
         fractional.toLong _,
         fractional.toFloat _,
         fractional.toDouble _,
-        parseFloatStrings
+        parseMiniFloatStrings
       )
     }
   }

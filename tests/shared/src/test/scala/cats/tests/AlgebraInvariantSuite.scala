@@ -24,14 +24,7 @@ package cats.tests
 import cats.{CommutativeApplicative, CommutativeApply, Invariant, InvariantMonoidal}
 import cats.kernel._
 import cats.kernel.laws.discipline.{GroupTests, MonoidTests, SemigroupTests, _}
-import cats.laws.discipline.{
-  ExhaustiveCheck,
-  InvariantMonoidalTests,
-  InvariantSemigroupalTests,
-  InvariantTests,
-  MiniInt,
-  SerializableTests
-}
+import cats.laws.discipline.{ExhaustiveCheck, InvariantMonoidalTests, InvariantSemigroupalTests, InvariantTests, MiniFloat, MiniInt, SerializableTests}
 import cats.laws.discipline.MiniInt._
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
@@ -181,9 +174,8 @@ class AlgebraInvariantSuite extends CatsSuite with ScalaVersionSpecificAlgebraIn
 
   implicit private val arbNumericMiniInt: Arbitrary[Numeric[MiniInt]] = Arbitrary(Gen.const(integralForMiniInt))
   implicit private val arbIntegralMiniInt: Arbitrary[Integral[MiniInt]] = Arbitrary(Gen.const(integralForMiniInt))
-  implicit private val arbFractionalFloat: Arbitrary[Fractional[Float]] = Arbitrary(
-    Gen.const(implicitly[Fractional[Float]])
-  )
+  implicit private val arbFractionalFloat: Arbitrary[Fractional[MiniFloat]] =
+    Arbitrary(Gen.const(fractionalForMiniFloat))
 
   implicit protected def eqIntegral[A: Eq: ExhaustiveCheck]: Eq[Integral[A]] = {
     def makeDivisionOpSafe(unsafeF: (A, A) => A): (A, A) => Option[A] =
@@ -220,7 +212,7 @@ class AlgebraInvariantSuite extends CatsSuite with ScalaVersionSpecificAlgebraIn
 
   checkAll("Invariant[Numeric]", InvariantTests[Numeric].invariant[MiniInt, Boolean, Boolean])
   checkAll("Invariant[Integral]", InvariantTests[Integral].invariant[MiniInt, Boolean, Boolean])
-  checkAll("Invariant[Fractional]", InvariantTests[Fractional].invariant[Float, Boolean, Boolean])
+  checkAll("Invariant[Fractional]", InvariantTests[Fractional].invariant[MiniFloat, Boolean, Boolean])
 
   {
     val S: Semigroup[Int] = Semigroup[Int].imap(identity)(identity)
