@@ -180,8 +180,9 @@ import simulacrum.{noop, typeclass}
    * }}}
    */
   def replicateM_[A](n: Int, fa: F[A]): F[Unit] = {
-    tailRecM(n){ n => if (n <= 0) map(unit)(Right.apply)
-    else map(fa)(_ => Left(n - 1))
+    tailRecM(n) { n =>
+      if (n <= 0) map(unit)(Right.apply)
+      else map(fa)(_ => Left(n - 1))
     }
   }
 }
