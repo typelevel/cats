@@ -163,6 +163,27 @@ import simulacrum.{noop, typeclass}
 
     tailRecM(branches.toList)(step)
   }
+
+  /**
+   * Given `fa` and `n`, apply `fa` `n` times discarding results to return F[Unit].
+   *
+   * Example:
+   * {{{
+   * scala> import cats.data.State
+   *
+   * scala> type Counter[A] = State[Int, A]
+   * scala> val getAndIncrement: Counter[Int] = State { i => (i + 1, i) }
+   * scala> val getAndIncrement5: Counter[Unit] =
+   *      | Monad[Counter].replicateM_(5, getAndIncrement)
+   * scala> getAndIncrement5.run(0).value
+   * res0: (Int, Unit) = (5,())
+   * }}}
+   */
+  def replicateM_[A](n: Int, fa: F[A]): F[Unit] = {
+    tailRecM(n){ n => if (n <= 0) map(unit)(Right.apply)
+    else map(fa)(_ => Left(n - 1))
+    }
+  }
 }
 
 object Monad {

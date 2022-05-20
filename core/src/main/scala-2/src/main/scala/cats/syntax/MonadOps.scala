@@ -30,4 +30,5 @@ final class MonadOps[F[_], A](private val fa: F[A]) extends AnyVal {
   def untilM_(p: F[Boolean])(implicit M: Monad[F]): F[Unit] = M.untilM_(fa)(p)
   def iterateWhile(p: A => Boolean)(implicit M: Monad[F]): F[A] = M.iterateWhile(fa)(p)
   def iterateUntil(p: A => Boolean)(implicit M: Monad[F]): F[A] = M.iterateUntil(fa)(p)
+  def replicateM_(n: Int)(implicit M: Monad[F]): F[Unit] = M.replicateM_(n, fa)
 }
