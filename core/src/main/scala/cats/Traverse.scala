@@ -134,11 +134,18 @@ trait Traverse[F[_]] extends Functor[F] with Foldable[F] with UnorderedTraverse[
     traverse[Id, A, B](fa)(f)
 
   /**
+   * Akin to [[map]], but allows to keep track of a state value
+   * when calling the function.
+   */
+  def mapAccumulate[S, A, B](init: S, fa: F[A])(f: (S, A) => (S, B)): (S, F[B]) =
+    traverse(fa)(a => State(s => f(s, a))).run(init).value
+
+  /**
    * Akin to [[map]], but also provides the value's index in structure
    * F when calling the function.
    */
   def mapWithIndex[A, B](fa: F[A])(f: (A, Int) => B): F[B] =
-    traverse(fa)(a => State((s: Int) => (s + 1, f(a, s)))).runA(0).value
+    mapAccumulate(0, fa)((i, a) => (i + 1) -> f(a, i))._2
 
   /**
    * Akin to [[traverse]], but also provides the value's index in
@@ -200,10 +207,14 @@ object Traverse {
       typeClassInstance.sequence[G, B](self.asInstanceOf[F[G[B]]])
     def flatSequence[G[_], B](implicit ev$1: A <:< G[F[B]], G: Applicative[G], F: FlatMap[F]): G[F[B]] =
       typeClassInstance.flatSequence[G, B](self.asInstanceOf[F[G[F[B]]]])(G, F)
-    def mapWithIndex[B](f: (A, Int) => B): F[B] = typeClassInstance.mapWithIndex[A, B](self)(f)
+    def mapAccumulate[S, B](init: S)(f: (S, A) => (S, B)): (S, F[B]) =
+      typeClassInstance.mapAccumulate[S, A, B](init, self)(f)
+    def mapWithIndex[B](f: (A, Int) => B): F[B] =
+      typeClassInstance.mapWithIndex[A, B](self)(f)
     def traverseWithIndexM[G[_], B](f: (A, Int) => G[B])(implicit G: Monad[G]): G[F[B]] =
       typeClassInstance.traverseWithIndexM[G, A, B](self)(f)(G)
-    def zipWithIndex: F[(A, Int)] = typeClassInstance.zipWithIndex[A](self)
+    def zipWithIndex: F[(A, Int)] =
+      typeClassInstance.zipWithIndex[A](self)
   }
   trait AllOps[F[_], A]
       extends Ops[F, A]
