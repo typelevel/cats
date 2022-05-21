@@ -24,7 +24,15 @@ package cats.tests
 import cats.{CommutativeApplicative, CommutativeApply, Invariant, InvariantMonoidal}
 import cats.kernel._
 import cats.kernel.laws.discipline.{GroupTests, MonoidTests, SemigroupTests, _}
-import cats.laws.discipline.{ExhaustiveCheck, InvariantMonoidalTests, InvariantSemigroupalTests, InvariantTests, MiniFloat, MiniInt, SerializableTests}
+import cats.laws.discipline.{
+  ExhaustiveCheck,
+  InvariantMonoidalTests,
+  InvariantSemigroupalTests,
+  InvariantTests,
+  MiniFloat,
+  MiniInt,
+  SerializableTests
+}
 import cats.laws.discipline.MiniInt._
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
