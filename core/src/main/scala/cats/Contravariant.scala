@@ -20,12 +20,11 @@
  */
 
 package cats
-import simulacrum.typeclass
 
 /**
  * Must obey the laws defined in cats.laws.ContravariantLaws.
  */
-@typeclass trait Contravariant[F[_]] extends Invariant[F] { self =>
+trait Contravariant[F[_]] extends Invariant[F] { self =>
   def contramap[A, B](fa: F[A])(f: B => A): F[B]
   override def imap[A, B](fa: F[A])(f: A => B)(fi: B => A): F[B] = contramap(fa)(fi)
 
@@ -51,10 +50,6 @@ import simulacrum.typeclass
 }
 
 object Contravariant {
-
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
 
   /**
    * Summon an instance of [[Contravariant]] for `F`.
@@ -94,9 +89,5 @@ object Contravariant {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToContravariantOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }

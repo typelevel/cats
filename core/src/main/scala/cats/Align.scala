@@ -21,8 +21,6 @@
 
 package cats
 
-import simulacrum.typeclass
-
 import cats.data.Ior
 import scala.collection.immutable.{Seq, SortedMap}
 
@@ -32,7 +30,7 @@ import scala.collection.immutable.{Seq, SortedMap}
  *
  * Must obey the laws in cats.laws.AlignLaws
  */
-@typeclass trait Align[F[_]] extends Serializable {
+trait Align[F[_]] extends Serializable {
 
   def functor: Functor[F]
 
@@ -163,10 +161,6 @@ object Align extends ScalaVersionSpecificAlignInstances {
         )
     }
 
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
-
   /**
    * Summon an instance of [[Align]] for `F`.
    */
@@ -209,9 +203,5 @@ object Align extends ScalaVersionSpecificAlignInstances {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToAlignOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }

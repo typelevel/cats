@@ -21,13 +21,11 @@
 
 package cats
 
-import simulacrum.typeclass
-
 /**
  * [[ContravariantSemigroupal]] is nothing more than something both contravariant
  * and Semigroupal. It comes up enough to be useful, and composes well
  */
-@typeclass trait ContravariantSemigroupal[F[_]] extends InvariantSemigroupal[F] with Contravariant[F] { self =>
+trait ContravariantSemigroupal[F[_]] extends InvariantSemigroupal[F] with Contravariant[F] { self =>
   override def composeFunctor[G[_]: Functor]: ContravariantSemigroupal[λ[α => F[G[α]]]] =
     new ComposedSemigroupal[F, G] {
       def F = self
@@ -39,10 +37,6 @@ import simulacrum.typeclass
 object ContravariantSemigroupal extends SemigroupalArityFunctions {
   def semigroup[F[_], A](implicit f: ContravariantSemigroupal[F]): Semigroup[F[A]] =
     new ContravariantSemigroupalSemigroup[F, A](f)
-
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
 
   /**
    * Summon an instance of [[ContravariantSemigroupal]] for `F`.
@@ -84,10 +78,6 @@ object ContravariantSemigroupal extends SemigroupalArityFunctions {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToContravariantSemigroupalOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }
 

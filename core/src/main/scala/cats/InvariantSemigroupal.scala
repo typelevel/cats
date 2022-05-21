@@ -21,13 +21,11 @@
 
 package cats
 
-import simulacrum.typeclass
-
 /**
  * [[InvariantSemigroupal]] is nothing more than something both invariant
  * and Semigroupal. It comes up enough to be useful, and composes well
  */
-@typeclass trait InvariantSemigroupal[F[_]] extends Semigroupal[F] with Invariant[F] { self =>
+trait InvariantSemigroupal[F[_]] extends Semigroupal[F] with Invariant[F] { self =>
 
   def composeApply[G[_]: Apply]: InvariantSemigroupal[λ[α => F[G[α]]]] =
     new ComposedInvariantApplySemigroupal[F, G] {
@@ -44,10 +42,6 @@ object InvariantSemigroupal extends SemigroupalArityFunctions {
    */
   def semigroup[F[_], A](implicit F: InvariantSemigroupal[F], A: Semigroup[A]): Semigroup[F[A]] =
     new InvariantSemigroupalSemigroup[F, A](F, A)
-
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
 
   /**
    * Summon an instance of [[InvariantSemigroupal]] for `F`.
@@ -87,10 +81,6 @@ object InvariantSemigroupal extends SemigroupalArityFunctions {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToInvariantSemigroupalOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }
 

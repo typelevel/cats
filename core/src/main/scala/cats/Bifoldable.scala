@@ -21,12 +21,10 @@
 
 package cats
 
-import simulacrum.typeclass
-
 /**
  * A type class abstracting over types that give rise to two independent [[cats.Foldable]]s.
  */
-@typeclass trait Bifoldable[F[_, _]] extends Serializable { self =>
+trait Bifoldable[F[_, _]] extends Serializable { self =>
 
   /**
    * Collapse the structure with a left-associative function
@@ -110,10 +108,6 @@ object Bifoldable extends cats.instances.NTupleBitraverseInstances {
   @deprecated("Use catsStdBitraverseForTuple2 in cats.instances.NTupleBitraverseInstances", "2.4.0")
   def catsBitraverseForTuple2: Bitraverse[Tuple2] = cats.instances.tuple.catsStdBitraverseForTuple2
 
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
-
   /**
    * Summon an instance of [[Bifoldable]] for `F`.
    */
@@ -154,10 +148,6 @@ object Bifoldable extends cats.instances.NTupleBitraverseInstances {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToBifoldableOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }
 

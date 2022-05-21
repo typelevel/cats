@@ -21,15 +21,9 @@
 
 package cats
 
-import simulacrum.typeclass
-
-@typeclass trait Bimonad[F[_]] extends Monad[F] with Comonad[F]
+trait Bimonad[F[_]] extends Monad[F] with Comonad[F]
 
 object Bimonad {
-
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
 
   /**
    * Summon an instance of [[Bimonad]] for `F`.
@@ -67,9 +61,5 @@ object Bimonad {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToBimonadOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }

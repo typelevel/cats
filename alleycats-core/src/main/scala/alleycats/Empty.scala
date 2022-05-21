@@ -24,9 +24,7 @@ package alleycats
 import cats.{Eq, Monoid}
 import cats.syntax.eq._
 
-import simulacrum.typeclass
-
-@typeclass trait Empty[A] extends Serializable {
+trait Empty[A] extends Serializable {
   def empty: A
 
   def isEmpty(a: A)(implicit ev: Eq[A]): Boolean =
@@ -41,10 +39,6 @@ object Empty extends EmptyInstances0 {
     new Empty[A] { lazy val empty: A = a }
 
   def fromEmptyK[F[_], T](implicit ekf: EmptyK[F]): Empty[F[T]] = ekf.synthesize[T]
-
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
 
   /**
    * Summon an instance of [[Empty]] for `A`.
@@ -82,10 +76,6 @@ object Empty extends EmptyInstances0 {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToEmptyOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }
 

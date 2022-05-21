@@ -21,14 +21,12 @@
 
 package cats
 
-import simulacrum.typeclass
-
 /**
  * `CoflatMap` is the dual of `FlatMap`.
  *
  * Must obey the laws in cats.laws.CoflatMapLaws
  */
-@typeclass trait CoflatMap[F[_]] extends Functor[F] {
+trait CoflatMap[F[_]] extends Functor[F] {
 
   /**
    * `coflatMap` is the dual of `flatMap` on `FlatMap`. It applies
@@ -69,10 +67,6 @@ import simulacrum.typeclass
 
 object CoflatMap {
 
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
-
   /**
    * Summon an instance of [[CoflatMap]] for `F`.
    */
@@ -111,9 +105,5 @@ object CoflatMap {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToCoflatMapOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }

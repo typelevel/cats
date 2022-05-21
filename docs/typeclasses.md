@@ -112,7 +112,7 @@ We can do this through Scala's implicit mechanism.
 ```scala mdoc:reset-object
 import cats.Monoid
 
-object Demo { 
+object Demo {
   final case class Pair[A, B](first: A, second: B)
 
   object Pair {
@@ -187,8 +187,6 @@ def combineAll[A : Monoid](list: List[A]): A =
   list.foldRight(Monoid[A].empty)(Monoid[A].combine)
 ```
 
-Cats uses [simulacrum][simulacrum] for defining type classes which will auto-generate such an `apply` method.
-
 # Laws
 
 Conceptually, all type classes come with laws. These laws constrain implementations for a given
@@ -262,4 +260,3 @@ Originally from [@alexknvl](https://gist.github.com/alexknvl/d63508ddb6a728015ac
 
 
 [fbounds]: http://tpolecat.github.io/2015/04/29/f-bounds.html "Returning the "Current" Type in Scala"
-[simulacrum]: https://github.com/typelevel/simulacrum "First class syntax support for type classes in Scala"

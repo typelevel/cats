@@ -23,7 +23,7 @@ package cats
 
 import scala.annotation.tailrec
 import scala.collection.immutable.{Seq, SortedMap, SortedSet}
-import simulacrum.typeclass
+
 import cats.data.Ior
 import cats.kernel.compat.scalaVersionSpecific._
 
@@ -45,7 +45,7 @@ import cats.kernel.compat.scalaVersionSpecific._
  *    The combination operation just depends on the structure of F,
  *    but not the structure of A.
  */
-@typeclass trait SemigroupK[F[_]] extends Serializable { self =>
+trait SemigroupK[F[_]] extends Serializable { self =>
 
   /**
    * Combine two F[A] values.
@@ -57,7 +57,7 @@ import cats.kernel.compat.scalaVersionSpecific._
    * res0: List[Int] = List(1, 2, 3, 4)
    * }}}
    */
-  @simulacrum.op("<+>", alias = true)
+
   def combineK[A](x: F[A], y: F[A]): F[A]
 
   /**
@@ -213,10 +213,6 @@ object SemigroupK extends ScalaVersionSpecificMonoidKInstances with SemigroupKIn
     cats.instances.sortedMap.catsStdMonoidKForSortedMap[K]
   implicit def catsMonoidKForEndo: MonoidK[Endo] = cats.instances.function.catsStdMonoidKForFunction1
 
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
-
   /**
    * Summon an instance of [[SemigroupK]] for `F`.
    */
@@ -255,10 +251,6 @@ object SemigroupK extends ScalaVersionSpecificMonoidKInstances with SemigroupKIn
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToSemigroupKOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }
 
