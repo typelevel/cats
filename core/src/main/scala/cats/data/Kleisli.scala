@@ -8,7 +8,7 @@ import cats.evidence.As
 /**
  * Represents a function `A => F[B]`.
  */
-sealed case class Kleisli[F[_], -A, B](run: A => F[B]) { self =>
+final case class Kleisli[F[_], -A, B](run: A => F[B]) { self =>
 
   private[data] def ap[C, AA <: A](f: Kleisli[F, AA, B => C])(implicit F: Apply[F]): Kleisli[F, AA, C] =
     Kleisli(a => F.ap(f.run(a))(run(a)))
