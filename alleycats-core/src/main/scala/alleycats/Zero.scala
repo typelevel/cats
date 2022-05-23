@@ -24,9 +24,7 @@ package alleycats
 import cats.Eq
 import cats.syntax.eq._
 
-import simulacrum.typeclass
-
-@typeclass trait Zero[A] extends Serializable {
+trait Zero[A] extends Serializable {
   def zero: A
 
   def isZero(a: A)(implicit ev: Eq[A]): Boolean =
@@ -39,10 +37,6 @@ import simulacrum.typeclass
 object Zero {
   def apply[A](a: => A): Zero[A] =
     new Zero[A] { lazy val zero: A = a }
-
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
 
   /**
    * Summon an instance of [[Zero]] for `A`.
@@ -80,9 +74,5 @@ object Zero {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToZeroOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }

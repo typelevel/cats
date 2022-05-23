@@ -21,8 +21,6 @@
 
 package cats
 
-import simulacrum.typeclass
-
 /**
  * Commutative FlatMap.
  *
@@ -32,13 +30,9 @@ import simulacrum.typeclass
  *
  * Must obey the laws defined in cats.laws.CommutativeFlatMapLaws.
  */
-@typeclass trait CommutativeFlatMap[F[_]] extends FlatMap[F] with CommutativeApply[F]
+trait CommutativeFlatMap[F[_]] extends FlatMap[F] with CommutativeApply[F]
 
 object CommutativeFlatMap {
-
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
 
   /**
    * Summon an instance of [[CommutativeFlatMap]] for `F`.
@@ -76,9 +70,5 @@ object CommutativeFlatMap {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToCommutativeFlatMapOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }

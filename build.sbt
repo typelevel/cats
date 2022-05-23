@@ -1,7 +1,5 @@
 ThisBuild / tlBaseVersion := "2.8"
 
-ThisBuild / scalafixDependencies += "org.typelevel" %% "simulacrum-scalafix" % "0.5.3"
-
 val scalaCheckVersion = "1.15.4"
 
 val disciplineVersion = "1.4.0"
@@ -58,15 +56,6 @@ lazy val cats1BincompatSettings = Seq(
     if (scalaVersion.value.startsWith("2.12")) Set("1.0.1", "1.1.0", "1.2.0", "1.3.1", "1.4.0", "1.5.0", "1.6.1")
     else Set.empty
   }
-)
-
-lazy val simulacrumSettings = Seq(
-  libraryDependencies ++= (if (tlIsScala3.value) Nil else Seq(compilerPlugin(scalafixSemanticdb))),
-  scalacOptions ++= (
-    if (tlIsScala3.value) Nil
-    else Seq(s"-P:semanticdb:targetroot:${baseDirectory.value}/target/.semanticdb", "-Yrangepos")
-  ),
-  libraryDependencies += "org.typelevel" %% "simulacrum-scalafix-annotations" % "0.5.4"
 )
 
 ThisBuild / tlVersionIntroduced := Map("3" -> "2.6.1")
@@ -176,7 +165,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .crossType(CrossType.Pure)
   .dependsOn(kernel)
   .settings(moduleName := "cats-core", name := "Cats core")
-  .settings(macroSettings, simulacrumSettings)
+  .settings(macroSettings)
   .settings(Compile / sourceGenerators += (Compile / sourceManaged).map(Boilerplate.gen).taskValue)
   .settings(
     libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % Test,

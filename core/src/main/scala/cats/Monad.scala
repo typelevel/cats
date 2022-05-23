@@ -21,8 +21,6 @@
 
 package cats
 
-import simulacrum.{noop, typeclass}
-
 /**
  * Monad.
  *
@@ -32,7 +30,7 @@ import simulacrum.{noop, typeclass}
  *
  * Must obey the laws defined in cats.laws.MonadLaws.
  */
-@typeclass trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
+trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
   override def map[A, B](fa: F[A])(f: A => B): F[B] =
     flatMap(fa)(a => pure(f(a)))
 
@@ -43,7 +41,7 @@ import simulacrum.{noop, typeclass}
    * This implementation uses append on each evaluation result,
    * so avoid data structures with non-constant append performance, e.g. `List`.
    */
-  @noop
+
   def whileM[G[_], A](p: F[Boolean])(body: => F[A])(implicit G: Alternative[G]): F[G[A]] = {
     val b = Eval.later(body)
     tailRecM[G[A], G[A]](G.empty)(xs =>
@@ -63,7 +61,7 @@ import simulacrum.{noop, typeclass}
    * returns `true`. The condition is evaluated before the loop body.
    * Discards results.
    */
-  @noop
+
   def whileM_[A](p: F[Boolean])(body: => F[A]): F[Unit] = {
     val continue: Either[Unit, Unit] = Left(())
     val stop: F[Either[Unit, Unit]] = pure(Right(()))
@@ -149,7 +147,7 @@ import simulacrum.{noop, typeclass}
    * [[https://github.com/typelevel/cats/pull/3553#discussion_r468121480 implementation]] due to P. Oscar Boykin
    * @see See [[https://gitter.im/typelevel/cats-effect?at=5f297e4314c413356f56d230]] for the discussion.
    */
-  @noop
+
   def ifElseM[A](branches: (F[Boolean], F[A])*)(els: F[A]): F[A] = {
     type Branches = List[(F[Boolean], F[A])]
 
@@ -166,10 +164,6 @@ import simulacrum.{noop, typeclass}
 }
 
 object Monad {
-
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
 
   /**
    * Summon an instance of [[Monad]] for `F`.
@@ -212,9 +206,5 @@ object Monad {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToMonadOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }

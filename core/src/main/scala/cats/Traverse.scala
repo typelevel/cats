@@ -24,8 +24,6 @@ package cats
 import cats.data.State
 import cats.data.StateT
 
-import simulacrum.typeclass
-
 /**
  * Traverse, also known as Traversable.
  *
@@ -37,7 +35,7 @@ import simulacrum.typeclass
  *
  * See: [[https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf The Essence of the Iterator Pattern]]
  */
-@typeclass trait Traverse[F[_]] extends Functor[F] with Foldable[F] with UnorderedTraverse[F] { self =>
+trait Traverse[F[_]] extends Functor[F] with Foldable[F] with UnorderedTraverse[F] { self =>
 
   /**
    * Given a function which returns a G effect, thread this effect
@@ -172,10 +170,6 @@ import simulacrum.typeclass
 
 object Traverse {
 
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
-
   /**
    * Summon an instance of [[Traverse]] for `F`.
    */
@@ -230,9 +224,5 @@ object Traverse {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToTraverseOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }

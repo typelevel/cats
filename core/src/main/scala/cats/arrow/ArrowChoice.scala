@@ -22,12 +22,10 @@
 package cats
 package arrow
 
-import simulacrum.typeclass
-
 /**
  * Must obey the laws defined in cats.laws.ArrowChoiceLaws.
  */
-@typeclass trait ArrowChoice[F[_, _]] extends Arrow[F] with Choice[F] { self =>
+trait ArrowChoice[F[_, _]] extends Arrow[F] with Choice[F] { self =>
 
   /**
    * ArrowChoice yields Arrows with choice, allowing distribution
@@ -50,7 +48,7 @@ import simulacrum.typeclass
    * res1: Either[Long,Double] = Right(3.0)
    * }}}
    */
-  @simulacrum.op("+++", alias = true)
+
   def choose[A, B, C, D](f: F[A, C])(g: F[B, D]): F[Either[A, B], Either[C, D]]
 
   def left[A, B, C](fab: F[A, B]): F[Either[A, C], Either[B, C]] =
@@ -64,10 +62,6 @@ import simulacrum.typeclass
 }
 
 object ArrowChoice {
-
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
 
   /**
    * Summon an instance of [[ArrowChoice]] for `F`.
@@ -109,9 +103,5 @@ object ArrowChoice {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToArrowChoiceOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }

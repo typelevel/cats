@@ -22,15 +22,13 @@
 package cats
 package arrow
 
-import simulacrum.typeclass
-
 /**
  * A [[Profunctor]] is a [[Contravariant]] functor on its first type parameter
  * and a [[Functor]] on its second type parameter.
  *
  * Must obey the laws defined in cats.laws.ProfunctorLaws.
  */
-@typeclass trait Profunctor[F[_, _]] extends Serializable { self =>
+trait Profunctor[F[_, _]] extends Serializable { self =>
 
   /**
    * Contramap on the first type parameter and map on the second type parameter
@@ -99,10 +97,6 @@ object Profunctor {
   implicit def catsStrongForPartialFunction: Strong[PartialFunction] =
     cats.instances.partialFunction.catsStdInstancesForPartialFunction
 
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
-
   /**
    * Summon an instance of [[Profunctor]] for `F`.
    */
@@ -142,9 +136,5 @@ object Profunctor {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToProfunctorOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }

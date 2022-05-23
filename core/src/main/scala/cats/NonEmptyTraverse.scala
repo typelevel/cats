@@ -21,15 +21,13 @@
 
 package cats
 
-import simulacrum.typeclass
-
 /**
  * NonEmptyTraverse, also known as Traversable1.
  *
  * `NonEmptyTraverse` is like a non-empty `Traverse`. In addition to the traverse and sequence
  * methods it provides nonEmptyTraverse and nonEmptySequence methods which require an `Apply` instance instead of `Applicative`.
  */
-@typeclass trait NonEmptyTraverse[F[_]] extends Traverse[F] with Reducible[F] { self =>
+trait NonEmptyTraverse[F[_]] extends Traverse[F] with Reducible[F] { self =>
 
   /**
    * Given a function which returns a G effect, thread this effect
@@ -117,10 +115,6 @@ import simulacrum.typeclass
 
 object NonEmptyTraverse {
 
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
-
   /**
    * Summon an instance of [[NonEmptyTraverse]] for `F`.
    */
@@ -165,9 +159,5 @@ object NonEmptyTraverse {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToNonEmptyTraverseOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }

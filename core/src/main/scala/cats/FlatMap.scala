@@ -21,9 +21,6 @@
 
 package cats
 
-import simulacrum.typeclass
-import simulacrum.noop
-
 /**
  * FlatMap type class gives us flatMap, which allows us to have a value
  * in a context (F[A]) and then feed that into a function that takes
@@ -39,7 +36,6 @@ import simulacrum.noop
  *
  * Must obey the laws defined in cats.laws.FlatMapLaws.
  */
-@typeclass(excludeParents = List("FlatMapArityFunctions"))
 trait FlatMap[F[_]] extends Apply[F] with FlatMapArityFunctions[F] {
   def flatMap[A, B](fa: F[A])(f: A => F[B]): F[B]
 
@@ -79,7 +75,7 @@ trait FlatMap[F[_]] extends Apply[F] with FlatMapArityFunctions[F] {
   def productREval[A, B](fa: F[A])(fb: Eval[F[B]]): F[B] = flatMap(fa)(_ => fb.value)
 
   @deprecated("Use productREval instead.", "1.0.0-RC2")
-  @noop private[cats] def followedByEval[A, B](fa: F[A])(fb: Eval[F[B]]): F[B] = productREval(fa)(fb)
+  private[cats] def followedByEval[A, B](fa: F[A])(fb: Eval[F[B]]): F[B] = productREval(fa)(fb)
 
   /**
    * Sequentially compose two actions, discarding any value produced by the second. This variant of
@@ -103,7 +99,7 @@ trait FlatMap[F[_]] extends Apply[F] with FlatMapArityFunctions[F] {
   def productLEval[A, B](fa: F[A])(fb: Eval[F[B]]): F[A] = flatMap(fa)(a => as(fb.value, a))
 
   @deprecated("Use productLEval instead.", "1.0.0-RC2")
-  @noop private[cats] def forEffectEval[A, B](fa: F[A])(fb: Eval[F[B]]): F[A] = productLEval(fa)(fb)
+  private[cats] def forEffectEval[A, B](fa: F[A])(fb: Eval[F[B]]): F[A] = productLEval(fa)(fb)
 
   override def ap[A, B](ff: F[A => B])(fa: F[A]): F[B] =
     flatMap(ff)(f => map(fa)(f))
@@ -142,7 +138,7 @@ trait FlatMap[F[_]] extends Apply[F] with FlatMapArityFunctions[F] {
   /**
    * `if` lifted into monad.
    */
-  @noop
+
   def ifM[B](fa: F[Boolean])(ifTrue: => F[B], ifFalse: => F[B]): F[B] =
     flatMap(fa)(if (_) ifTrue else ifFalse)
 
@@ -188,7 +184,7 @@ trait FlatMap[F[_]] extends Apply[F] with FlatMapArityFunctions[F] {
    * allocating single element lists, but if we have a k > 1, we will allocate
    * exponentially increasing memory and very quickly OOM.
    */
-  @noop
+
   def foreverM[A, B](fa: F[A]): F[B] = {
     // allocate two things once for efficiency.
     val leftUnit = Left(())
@@ -201,7 +197,7 @@ trait FlatMap[F[_]] extends Apply[F] with FlatMapArityFunctions[F] {
    * A may be some state, we may take the current state, run some effect to get
    * a new state and repeat.
    */
-  @noop
+
   def iterateForeverM[A, B](a: A)(f: A => F[A]): F[B] =
     tailRecM[A, B](a)(f.andThen { fa =>
       map(fa)(Left(_): Either[A, B])
@@ -212,7 +208,7 @@ trait FlatMap[F[_]] extends Apply[F] with FlatMapArityFunctions[F] {
    * for polling type operations on State (or RNG) Monads, or in effect
    * monads.
    */
-  @noop
+
   def untilDefinedM[A](foa: F[Option[A]]): F[A] = {
     val leftUnit: Either[Unit, A] = Left(())
     val feither: F[Either[Unit, A]] = map(foa) {
@@ -224,10 +220,6 @@ trait FlatMap[F[_]] extends Apply[F] with FlatMapArityFunctions[F] {
 }
 
 object FlatMap {
-
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
 
   /**
    * Summon an instance of [[FlatMap]] for `F`.
@@ -271,9 +263,5 @@ object FlatMap {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToFlatMapOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }

@@ -24,12 +24,11 @@ package cats
 import cats.kernel.CommutativeMonoid
 import scala.collection.immutable.{Queue, Seq, SortedMap, SortedSet}
 import scala.util.Try
-import simulacrum.{noop, typeclass}
 
 /**
  * `UnorderedFoldable` is like a `Foldable` for unordered containers.
  */
-@typeclass trait UnorderedFoldable[F[_]] extends Serializable {
+trait UnorderedFoldable[F[_]] extends Serializable {
 
   def unorderedFoldMap[A, B: CommutativeMonoid](fa: F[A])(f: A => B): B
 
@@ -94,7 +93,7 @@ import simulacrum.{noop, typeclass}
    * res1: Long = 2
    * }}}
    */
-  @noop
+
   def count[A](fa: F[A])(p: A => Boolean): Long =
     unorderedFoldMap(fa)(a => if (p(a)) 1L else 0L)
 }
@@ -144,10 +143,6 @@ object UnorderedFoldable
   def catsInstancesForTuple[A]: Traverse[(A, *)] with Reducible[(A, *)] =
     cats.instances.tuple.catsStdInstancesForTuple2[A]
 
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
-
   /**
    * Summon an instance of [[UnorderedFoldable]] for `F`.
    */
@@ -190,9 +185,5 @@ object UnorderedFoldable
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToUnorderedFoldableOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }
