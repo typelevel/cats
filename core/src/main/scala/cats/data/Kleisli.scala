@@ -127,10 +127,10 @@ final case class Kleisli[F[_], -A, B](run: A => F[B]) { self =>
    * Yield computed B combined with input value.
    */
   def tapWith[C, AA <: A](f: (AA, B) => C)(implicit F: Functor[F]): Kleisli[F, AA, C] =
-    Kleisli(a => F.map(apply(a))(b => f(a, b)))
+    Kleisli(a => F.map(run(a))(b => f(a, b)))
 
   def tapWithF[C, AA <: A](f: (AA, B) => F[C])(implicit F: FlatMap[F]): Kleisli[F, AA, C] =
-    Kleisli(a => F.flatMap(apply(a))(b => f(a, b)))
+    Kleisli(a => F.flatMap(run(a))(b => f(a, b)))
 
   def toReader: Reader[A, F[B]] = Kleisli[Id, A, F[B]](run)
 
