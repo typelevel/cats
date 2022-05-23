@@ -263,10 +263,10 @@
         <p>When there are multiple instances provided implicitly, if the type class of them are in the same inheritance hierarchy,
         the instances need to be separated out into different abstract class/traits so that they don&#39;t conflict with each other. The names of these abstract classes/traits should be numbered with a priority with 0 being the highest priority. The abstract classes/trait
         with higher priority inherits from the ones with lower priority. The most specific (whose type class is the lowest in the hierarchy) instance should be placed in the abstract class/ trait with the highest priority.  Here is an example.</p>
-        <pre><code class="nohighlight"><span class="annotation">@typeclass</span><span>
+        <pre><code class="nohighlight"><span>
 </span><span class="keyword">trait</span><span> </span><span class="type-name">Functor</span><span>[</span><span class="type-name">F</span><span>[</span><span class="identifier">_</span><span>]]
 
-</span><span class="annotation">@typeclass</span><span>
+
 </span><span class="keyword">trait</span><span> </span><span class="type-name">Monad</span><span>[</span><span class="type-name">F</span><span>[</span><span class="identifier">_</span><span>]] </span><span class="keyword">extends</span><span> </span><span class="type-name">Functor</span><span>
 
 ...

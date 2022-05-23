@@ -285,7 +285,7 @@
         We can do this through Scala&#39;s implicit mechanism.</p>
         <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="type-name">Monoid</span><span>
 
-</span><span class="keyword">object</span><span> </span><span class="type-name">Demo</span><span> { 
+</span><span class="keyword">object</span><span> </span><span class="type-name">Demo</span><span> {
   </span><span class="keyword">final</span><span> </span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Pair</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>](</span><span class="identifier">first</span><span>: </span><span class="type-name">A</span><span>, </span><span class="identifier">second</span><span>: </span><span class="type-name">B</span><span>)
 
   </span><span class="keyword">object</span><span> </span><span class="type-name">Pair</span><span> {
@@ -337,7 +337,6 @@
 
 </span><span class="keyword">def</span><span> </span><span class="declaration-name">combineAll</span><span>[</span><span class="type-name">A</span><span> : </span><span class="type-name">Monoid</span><span>](</span><span class="identifier">list</span><span>: </span><span class="type-name">List</span><span>[</span><span class="type-name">A</span><span>]): </span><span class="type-name">A</span><span> =
   </span><span class="identifier">list</span><span>.</span><span class="identifier">foldRight</span><span>(</span><span class="type-name">Monoid</span><span>[</span><span class="type-name">A</span><span>].</span><span class="identifier">empty</span><span>)(</span><span class="type-name">Monoid</span><span>[</span><span class="type-name">A</span><span>].</span><span class="identifier">combine</span><span>)</span></code></pre>
-        <p>Cats uses <a href="https://github.com/typelevel/simulacrum" title="First class syntax support for type classes in Scala">simulacrum</a> for defining type classes which will auto-generate such an <code>apply</code> method.</p>
         
         <h1 id="laws" class="section">Laws<a class="anchor-link right" href="#laws"><i class="icofont-laika">&#xef71;</i></a></h1>
         <p>Conceptually, all type classes come with laws. These laws constrain implementations for a given
