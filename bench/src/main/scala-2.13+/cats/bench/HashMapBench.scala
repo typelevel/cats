@@ -96,7 +96,7 @@ class HashMapBench {
 
   @Benchmark
   @OperationsPerInvocation(1000)
-  def scalaMapRemove(bh: Blackhole): Unit = {
+  def scalaMapRemoved(bh: Blackhole): Unit = {
     var ss = scalaMap
     var i = 0L
     while (i < 1000L) {
