@@ -95,6 +95,35 @@ import scala.collection.immutable.IndexedSeq
     }
 
   /**
+   * Given `fa` and `n`, apply `fa` `n` times discarding results to return F[Unit].
+   *
+   * Example:
+   * {{{
+   * scala> import cats.data.State
+   *
+   * scala> type Counter[A] = State[Int, A]
+   * scala> val getAndIncrement: Counter[Int] = State { i => (i + 1, i) }
+   * scala> val getAndIncrement5: Counter[Unit] =
+   *      | Applicative[Counter].replicateA_(5, getAndIncrement)
+   * scala> getAndIncrement5.run(0).value
+   * res0: (Int, Unit) = (5,())
+   * }}}
+   */
+  def replicateA_[A](n: Int, fa: F[A]): F[Unit] = {
+    val fvoid = void(fa)
+    def loop(n: Int): F[Unit] =
+      if (n <= 0) unit
+      else if (n == 1) fvoid
+      else {
+        val half = loop(n >> 1)
+        val both = productR(half)(half)
+        if ((n & 1) == 1) productR(both)(fvoid)
+        else both
+      }
+    loop(n)
+  }
+
+  /**
    * Compose an `Applicative[F]` and an `Applicative[G]` into an
    * `Applicative[λ[α => F[G[α]]]]`.
    *

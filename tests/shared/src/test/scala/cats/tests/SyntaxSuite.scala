@@ -411,6 +411,7 @@ object SyntaxSuite {
     val a = mock[A]
     val fa = a.pure[F]
     val replicateA = fa.replicateA(1)
+    val replicateA_ = fa.replicateA_(1)
   }
 
   def testFlatMap[F[_]: FlatMap, A, B, C, D]: Unit = {
@@ -463,12 +464,6 @@ object SyntaxSuite {
 
   def testApplicativeErrorSubtype[F[_], A](implicit F: ApplicativeError[F, CharSequence]): Unit = {
     val fea = "meow".raiseError[F, A]
-  }
-
-  def testMonad[F[_],A](implicit F: Monad[F]): Unit = {
-    val a = mock[A]
-    val fa = a.pure[F]
-    fa.replicateM_(5)
   }
 
   def testMonadError[F[_, _], E, A, B](implicit F: MonadError[F[E, *], E]): Unit = {

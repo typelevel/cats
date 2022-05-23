@@ -21,16 +21,13 @@
 
 package cats.tests
 
-import cats.{Eval, Id, Monad}
-import cats.data.{IndexedStateT, State, StateT}
-import cats.instances.unit
+import cats.data.{IndexedStateT, StateT}
 import cats.syntax.apply._
-import cats.syntax.monad._
-import cats.syntax.applicative._
-import cats.syntax.functor._
-import org.scalacheck.{Arbitrary, Gen}
 import cats.syntax.eq._
+import cats.syntax.monad._
+import cats.{Eval, Id, Monad}
 import org.scalacheck.Prop._
+import org.scalacheck.{Arbitrary, Gen}
 
 class MonadSuite extends CatsSuite {
   implicit val testInstance: Monad[StateT[Id, Int, *]] = IndexedStateT.catsDataMonadForIndexedStateT[Id, Int]
@@ -155,18 +152,6 @@ class MonadSuite extends CatsSuite {
     val actual =
       Monad[Eval].ifElseM(Eval.later(false) -> Eval.later(1), Eval.later(true) -> Eval.later(2))(Eval.later(5))
     assert(actual.value === 2)
-  }
-
-  test("replicateM_ executes the Monad action 'fa' 'n' times") {
-    val O = Monad[Option]
-    val fa = O.pure(0)
-    assert(fa.replicateM_(5) === Option(unit))
-
-    val increment: State[Int, Int] = State { i => (i + 1, i) }
-
-    assert(increment.replicateM_(5).runS(0).value === 5)
-    assert(increment.replicateM_(5).run(0).value === ((5,())))
-    assert(increment.replicateM_(5).run(0).value === increment.replicateA(5).void.run(0).value)
   }
 
 }
