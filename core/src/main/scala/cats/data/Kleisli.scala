@@ -38,28 +38,28 @@ sealed case class Kleisli[F[_], -A, B](run: A => F[B]) { self =>
    * }}}
    */
   def map[C](f: B => C)(implicit F: Functor[F]): Kleisli[F, A, C] =
-    Kleisli(a => F.map(apply(a))(f))
+    Kleisli(a => F.map(run(a))(f))
 
   def mapF[N[_], C](f: F[B] => N[C]): Kleisli[N, A, C] =
-    Kleisli(a => f(apply(a)))
+    Kleisli(a => f(run(a)))
 
   /**
    * Modify the context `F` using transformation `f`.
    */
   def mapK[G[_]](f: F ~> G): Kleisli[G, A, B] =
-    Kleisli[G, A, B](a => f(apply(a)))
+    Kleisli[G, A, B](a => f(run(a)))
 
   def flatMap[C, AA <: A](f: B => Kleisli[F, AA, C])(implicit F: FlatMap[F]): Kleisli[F, AA, C] =
-    Kleisli.shift(a => F.flatMap[B, C](apply(a))((b: B) => f(b).apply(a)))
+    Kleisli.shift(a => F.flatMap[B, C](run(a))((b: B) => f(b).run(a)))
 
   def flatMapF[C](f: B => F[C])(implicit F: FlatMap[F]): Kleisli[F, A, C] =
-    Kleisli.shift(a => F.flatMap(apply(a))(f))
+    Kleisli.shift(a => F.flatMap(run(a))(f))
 
   /**
    * Composes [[run]] with a function `B => F[C]` not lifted into Kleisli.
    */
   def andThen[C](f: B => F[C])(implicit F: FlatMap[F]): Kleisli[F, A, C] =
-    Kleisli.shift(a => F.flatMap(apply(a))(f))
+    Kleisli.shift(a => F.flatMap(run(a))(f))
 
   /**
    * Tip to tail Kleisli arrow composition.
@@ -105,7 +105,7 @@ sealed case class Kleisli[F[_], -A, B](run: A => F[B]) { self =>
     mapK(f)
 
   def lower(implicit F: Applicative[F]): Kleisli[F, A, F[B]] =
-    Kleisli(a => F.pure(apply(a)))
+    Kleisli(a => F.pure(run(a)))
 
   def first[C](implicit F: Functor[F]): Kleisli[F, (A, C), (B, C)] =
     Kleisli { case (a, c) => F.fproduct(apply(a))(_ => c) }
