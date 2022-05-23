@@ -296,7 +296,7 @@ sealed private[data] trait KleisliFunctions {
    * Lifts a function to a Kleisli.
    * {{{
    * scala> import cats.data.Kleisli
-   * scala> val stringify = Kleisli.fromFunction[Option, Int].run(_.toString)
+   * scala> val stringify = Kleisli.fromFunction[Option, Int].apply(_.toString)
    * scala> stringify.run(42)
    * res0: Option[String] = Some(42)
    * }}}
