@@ -63,6 +63,16 @@ class ApplicativeSuite extends CatsSuite {
     }
   }
 
+  test("by-name ops are lazy") {
+    var i = 0
+    Option(i += 1).whenA(false)
+    assertEquals(i, 0)
+
+    var j = 0
+    Option(j += 1).unlessA(true)
+    assertEquals(j, 0)
+  }
+
   {
     implicit val optionMonoid: Monoid[Option[Int]] = Applicative.monoid[Option, Int]
     checkAll("Applicative[Option].monoid", MonoidTests[Option[Int]](optionMonoid).monoid)
