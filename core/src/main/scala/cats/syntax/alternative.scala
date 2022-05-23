@@ -23,7 +23,7 @@ package cats
 package syntax
 
 trait AlternativeSyntax {
-  // TODO: use simulacrum instances eventually
+
   implicit final def catsSyntaxUnite[F[_], G[_], A](fga: F[G[A]]): UniteOps[F, G, A] =
     new UniteOps[F, G, A](fga)
 
@@ -45,7 +45,7 @@ sealed private[syntax] trait UniteOpsBinCompat0[F[_], G[_], A] extends Any { sel
 
   /**
    * See [[[Alternative.unite[G[_],A](fga:F[G[A]])(implicitFM:cats\.FlatMap[F]*]]]
-   * 
+   *
    * Example:
    * {{{
    * scala> import cats.implicits._
@@ -68,7 +68,7 @@ final class SeparateOps[F[_], G[_, _], A, B](protected val fgab: F[G[A, B]])
 
   /**
    * See [[Alternative.separateFoldable]]
-   * 
+   *
    * Example:
    * {{{
    * scala> import cats.implicits._
@@ -85,7 +85,7 @@ sealed private[syntax] trait SeparateOpsBinCompat0[F[_], G[_, _], A, B] extends 
 
   /**
    * See [[[Alternative.separate[G[_,_],A,B](fgab:F[G[A,B]])(implicitFM:cats\.FlatMap[F]* Alternative.separate]]]
-   * 
+   *
    * Example:
    * {{{
    * scala> import cats.implicits._
@@ -102,7 +102,7 @@ final class GuardOps(private val condition: Boolean) extends AnyVal {
 
   /**
    * See [[Alternative.guard]]
-   * 
+   *
    * Example:
    * {{{
    * scala> import cats.implicits._

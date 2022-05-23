@@ -21,14 +21,12 @@
 
 package cats
 
-import simulacrum.typeclass
-
 /**
  * Invariant version of a Monoidal.
  *
  * Must obey the laws defined in cats.laws.InvariantMonoidalLaws.
  */
-@typeclass trait InvariantMonoidal[F[_]] extends InvariantSemigroupal[F] {
+trait InvariantMonoidal[F[_]] extends InvariantSemigroupal[F] {
 
   /**
    * `point` lifts any value into a Monoidal Functor.
@@ -54,10 +52,6 @@ object InvariantMonoidal {
    */
   def monoid[F[_], A](implicit F: InvariantMonoidal[F], A: Monoid[A]): Monoid[F[A]] =
     new InvariantMonoidalMonoid[F, A](F, A)
-
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
 
   /**
    * Summon an instance of [[InvariantMonoidal]] for `F`.
@@ -95,10 +89,6 @@ object InvariantMonoidal {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToInvariantMonoidalOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }
 

@@ -22,9 +22,8 @@
 package alleycats
 
 import cats.{Applicative, FlatMap, Monad}
-import simulacrum.typeclass
 
-@typeclass trait Pure[F[_]] extends Serializable {
+trait Pure[F[_]] extends Serializable {
   def pure[A](a: A): F[A]
 }
 
@@ -43,10 +42,6 @@ object Pure {
       def flatMap[A, B](fa: F[A])(f: A => F[B]): F[B] = fm.flatMap(fa)(f)
       def tailRecM[A, B](a: A)(f: (A) => F[Either[A, B]]): F[B] = fm.tailRecM(a)(f)
     }
-
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
 
   /**
    * Summon an instance of [[Pure]] for `F`.
@@ -82,9 +77,5 @@ object Pure {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToPureOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }

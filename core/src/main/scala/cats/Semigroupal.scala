@@ -25,7 +25,6 @@ import cats.kernel.CommutativeSemigroup
 import scala.collection.immutable.{Queue, Seq, SortedMap, SortedSet}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
-import simulacrum.typeclass
 
 /**
  * [[Semigroupal]] captures the idea of composing independent effectful values.
@@ -37,7 +36,7 @@ import simulacrum.typeclass
  * That same idea is also manifested in the form of [[Apply]], and indeed [[Apply]] extends both
  * [[Semigroupal]] and [[Functor]] to illustrate this.
  */
-@typeclass trait Semigroupal[F[_]] extends Serializable {
+trait Semigroupal[F[_]] extends Serializable {
 
   /**
    * Combine an `F[A]` and an `F[B]` into an `F[(A, B)]` that maintains the effects of both `fa` and `fb`.
@@ -108,10 +107,6 @@ object Semigroupal extends ScalaVersionSpecificSemigroupalInstances with Semigro
   implicit val catsSemigroupalForCommutativeSemigroup: Semigroupal[CommutativeSemigroup] =
     cats.instances.invariant.catsInvariantMonoidalCommutativeSemigroup
 
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
-
   /**
    * Summon an instance of [[Semigroupal]] for `F`.
    */
@@ -147,9 +142,5 @@ object Semigroupal extends ScalaVersionSpecificSemigroupalInstances with Semigro
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToSemigroupalOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }

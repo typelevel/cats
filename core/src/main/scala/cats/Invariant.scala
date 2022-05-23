@@ -23,7 +23,7 @@ package cats
 
 import cats.arrow.Arrow
 import cats.kernel._
-import simulacrum.typeclass
+
 import cats.kernel.compat.scalaVersionSpecific._
 import scala.collection.immutable.{Queue, Seq, SortedMap}
 import scala.concurrent.{ExecutionContext, Future}
@@ -33,7 +33,7 @@ import scala.util.control.TailCalls.TailRec
 /**
  * Must obey the laws defined in cats.laws.InvariantLaws.
  */
-@typeclass trait Invariant[F[_]] extends Serializable { self =>
+trait Invariant[F[_]] extends Serializable { self =>
 
   /**
    * Transform an `F[A]` into an `F[B]` by providing a transformation from `A`
@@ -271,10 +271,6 @@ object Invariant extends ScalaVersionSpecificInvariantInstances with InvariantIn
   @deprecated("Use catsStdInstancesForTuple2 in cats.instances.NTupleMonadInstances", "2.4.0")
   def catsComonadForTuple2[A]: Comonad[(A, *)] = cats.instances.tuple.catsStdInstancesForTuple2[A]
 
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
-
   /**
    * Summon an instance of [[Invariant]] for `F`.
    */
@@ -310,10 +306,6 @@ object Invariant extends ScalaVersionSpecificInvariantInstances with InvariantIn
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToInvariantOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }
 

@@ -21,8 +21,6 @@
 
 package cats
 
-import simulacrum.typeclass
-
 /**
  * Commutative Monad.
  *
@@ -32,13 +30,9 @@ import simulacrum.typeclass
  *
  * Must obey the laws defined in cats.laws.CommutativeMonadLaws.
  */
-@typeclass trait CommutativeMonad[F[_]] extends Monad[F] with CommutativeFlatMap[F] with CommutativeApplicative[F]
+trait CommutativeMonad[F[_]] extends Monad[F] with CommutativeFlatMap[F] with CommutativeApplicative[F]
 
 object CommutativeMonad {
-
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
 
   /**
    * Summon an instance of [[CommutativeMonad]] for `F`.
@@ -80,9 +74,5 @@ object CommutativeMonad {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToCommutativeMonadOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }

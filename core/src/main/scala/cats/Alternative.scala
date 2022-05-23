@@ -21,10 +21,9 @@
 
 package cats
 
-import simulacrum.typeclass
 import cats.kernel.compat.scalaVersionSpecific._
 
-@typeclass trait Alternative[F[_]] extends NonEmptyAlternative[F] with MonoidK[F] { self =>
+trait Alternative[F[_]] extends NonEmptyAlternative[F] with MonoidK[F] { self =>
 
   // Note: `protected` is only necessary to enforce binary compatibility
   // since neither `private` nor `private[cats]` work properly here.
@@ -79,7 +78,7 @@ import cats.kernel.compat.scalaVersionSpecific._
 
   /**
    * Separate the inner foldable values into the "lefts" and "rights".
-   * 
+   *
    * A variant of [[[separate[G[_,_],A,B](fgab:F[G[A,B]])(implicitFM:cats\.FlatMap[F]* separate]]]
    * that is specialized for Fs that have Foldable instances which allows for a single-pass implementation
    * (as opposed to {{{separate}}} which is 2-pass).
@@ -132,10 +131,6 @@ import cats.kernel.compat.scalaVersionSpecific._
 @suppressUnusedImportWarningForScalaVersionSpecific
 object Alternative {
 
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
-
   /**
    * Summon an instance of [[Alternative]] for `F`.
    */
@@ -179,7 +174,4 @@ object Alternative {
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToAlternativeOps
 
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 }
