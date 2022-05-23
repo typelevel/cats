@@ -167,8 +167,12 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
         if (len == 0) G.unit
         else runHalf(len, 0).value
       }
+
+      override def mapAccumulate[S, A, B](init: S, fa: Vector[A])(f: (S, A) => (S, B)): (S, Vector[B]) =
+        StaticMethods.mapAccumulateFromStrictFunctor(init, fa, f)(this)
+
       override def mapWithIndex[A, B](fa: Vector[A])(f: (A, Int) => B): Vector[B] =
-        fa.iterator.zipWithIndex.map(ai => f(ai._1, ai._2)).toVector
+        StaticMethods.mapWithIndexFromStrictFunctor(fa, f)(this)
 
       override def zipWithIndex[A](fa: Vector[A]): Vector[(A, Int)] =
         fa.zipWithIndex
@@ -176,7 +180,8 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
       override def exists[A](fa: Vector[A])(p: A => Boolean): Boolean =
         fa.exists(p)
 
-      override def isEmpty[A](fa: Vector[A]): Boolean = fa.isEmpty
+      override def isEmpty[A](fa: Vector[A]): Boolean =
+        fa.isEmpty
 
       override def foldM[G[_], A, B](fa: Vector[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] = {
         val length = fa.length

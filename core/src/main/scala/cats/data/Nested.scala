@@ -347,6 +347,15 @@ private[data] trait NestedTraverse[F[_], G[_]]
 
   override def traverse[H[_]: Applicative, A, B](fga: Nested[F, G, A])(f: A => H[B]): H[Nested[F, G, B]] =
     Applicative[H].map(FG.traverse(fga.value)(f))(Nested(_))
+
+  override def mapAccumulate[S, A, B](init: S, fga: Nested[F, G, A])(f: (S, A) => (S, B)): (S, Nested[F, G, B]) = {
+    val (finalState, fgb) = FG.mapAccumulate(init, fga.value)(f)
+    (finalState, Nested(fgb))
+  }
+
+  override def mapWithIndex[A, B](fga: Nested[F, G, A])(f: (A, Int) => B): Nested[F, G, B] = {
+    Nested(FG.mapWithIndex(fga.value)(f))
+  }
 }
 
 private[data] trait NestedDistributive[F[_], G[_]] extends Distributive[Nested[F, G, *]] with NestedFunctor[F, G] {

@@ -42,8 +42,9 @@
 package cats
 package data
 
+import cats.instances.StaticMethods
 import cats.kernel.compat.scalaVersionSpecific._
-import cats.kernel.instances.StaticMethods
+import cats.kernel.instances.{StaticMethods => KernelStaticMethods}
 
 import scala.annotation.tailrec
 import scala.collection.immutable.SortedMap
@@ -854,7 +855,8 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
     builder.result()
   }
 
-  def hash[AA >: A](implicit hashA: Hash[AA]): Int = StaticMethods.orderedHash((this: Chain[AA]).iterator)
+  def hash[AA >: A](implicit hashA: Hash[AA]): Int =
+    KernelStaticMethods.orderedHash((this: Chain[AA]).iterator)
 
   override def toString: String = show(Show.show[A](_.toString))
 
@@ -1265,8 +1267,17 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
           traverseViaChain {
             val as = collection.mutable.ArrayBuffer[A]()
             as ++= fa.iterator
-            StaticMethods.wrapMutableIndexedSeq(as)
+            KernelStaticMethods.wrapMutableIndexedSeq(as)
           }(f)
+
+      override def mapAccumulate[S, A, B](init: S, fa: Chain[A])(f: (S, A) => (S, B)): (S, Chain[B]) =
+        StaticMethods.mapAccumulateFromStrictFunctor(init, fa, f)(this)
+
+      override def mapWithIndex[A, B](fa: Chain[A])(f: (A, Int) => B): Chain[B] =
+        StaticMethods.mapWithIndexFromStrictFunctor(fa, f)(this)
+
+      override def zipWithIndex[A](fa: Chain[A]): Chain[(A, Int)] =
+        fa.zipWithIndex
 
       def empty[A]: Chain[A] = Chain.nil
       def combineK[A](c: Chain[A], c2: Chain[A]): Chain[A] = Chain.concat(c, c2)
@@ -1367,7 +1378,7 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
         traverseFilterViaChain {
           val as = collection.mutable.ArrayBuffer[A]()
           as ++= fa.iterator
-          StaticMethods.wrapMutableIndexedSeq(as)
+          KernelStaticMethods.wrapMutableIndexedSeq(as)
         }(f)
 
     override def filterA[G[_], A](fa: Chain[A])(f: A => G[Boolean])(implicit G: Applicative[G]): G[Chain[A]] =
