@@ -1224,7 +1224,8 @@ class HashMapMonoid[K: Hash, V](implicit V: Semigroup[V]) extends Monoid[HashMap
         ys.get(k) match {
           case Some(y) =>
             node.updated(k, improve(xs.hashKey.hash(k)), V.combine(x, y), replaceExisting = true, depth = 0)
-          case None => node.updated(k, improve(xs.hashKey.hash(k)), x, replaceExisting = true, depth = 0)
+          case None =>
+            node.updated(k, improve(xs.hashKey.hash(k)), x, replaceExisting = true, depth = 0)
         }
       }
     } else {
@@ -1232,7 +1233,8 @@ class HashMapMonoid[K: Hash, V](implicit V: Semigroup[V]) extends Monoid[HashMap
         xs.get(k) match {
           case Some(x) =>
             node.updated(k, improve(ys.hashKey.hash(k)), V.combine(x, y), replaceExisting = true, depth = 0)
-          case None => node.updated(k, improve(ys.hashKey.hash(k)), y, replaceExisting = true, depth = 0)
+          case None =>
+            node.updated(k, improve(ys.hashKey.hash(k)), y, replaceExisting = true, depth = 0)
         }
       }
     }
