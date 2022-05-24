@@ -43,6 +43,7 @@ trait ApplicativeTests[F[_]] extends ApplyTests[F] {
     EqFB: Eq[F[B]],
     EqFC: Eq[F[C]],
     EqFABC: Eq[F[(A, B, C)]],
+    EqFUnit: Eq[F[Unit]],
     iso: Isomorphisms[F]
   ): RuleSet =
     new DefaultRuleSet(
@@ -54,6 +55,7 @@ trait ApplicativeTests[F[_]] extends ApplyTests[F] {
       "applicative map" -> forAll(laws.applicativeMap[A, B] _),
       "applicative unit" -> forAll(laws.applicativeUnit[A] _),
       "ap consistent with product + map" -> forAll(laws.apProductConsistent[A, B] _),
+      "replicateA_ consistent with replicateA.void" -> forAll(laws.replicateAVoidReplicateA_Consistent[A] _),
       "monoidal left identity" -> forAll((fa: F[A]) => iso.leftIdentity(laws.monoidalLeftIdentity(fa))),
       "monoidal right identity" -> forAll((fa: F[A]) => iso.rightIdentity(laws.monoidalRightIdentity(fa)))
     )

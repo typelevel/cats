@@ -44,6 +44,7 @@ trait CommutativeApplicativeTests[F[_]] extends CommutativeApplyTests[F] with Ap
     EqFC: Eq[F[C]],
     EqFABC: Eq[F[(A, B, C)]],
     EqFInt: Eq[F[Int]],
+    EqFUnit: Eq[F[Unit]],
     iso: Isomorphisms[F]
   ): RuleSet =
     new RuleSet {

@@ -49,6 +49,7 @@ trait BimonadTests[F[_]] extends MonadTests[F] with ComonadTests[F] {
     EqFC: Eq[F[C]],
     EqFABC: Eq[F[(A, B, C)]],
     EqFInt: Eq[F[Int]],
+    EqFUnit: Eq[F[Unit]],
     iso: Isomorphisms[F]
   ): RuleSet =
     new RuleSet {

@@ -43,6 +43,7 @@ trait AlternativeTests[F[_]] extends NonEmptyAlternativeTests[F] with MonoidKTes
     EqFB: Eq[F[B]],
     EqFC: Eq[F[C]],
     EqFABC: Eq[F[(A, B, C)]],
+    EqFUnit: Eq[F[Unit]],
     iso: Isomorphisms[F]
   ): RuleSet =
     new RuleSet {

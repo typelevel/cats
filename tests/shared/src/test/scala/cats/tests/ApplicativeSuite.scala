@@ -44,13 +44,14 @@ class ApplicativeSuite extends CatsSuite {
   test("replicateA_ executes the Applicative action 'fa' 'n' times") {
     val A = Applicative[Option]
     val fa = A.pure(0)
-    assert(fa.replicateA_(5) === Option(unit))
-
     val increment: State[Int, Int] = State { i => (i + 1, i) }
 
-    assert(increment.replicateA_(5).runS(0).value === 5)
-    assert(increment.replicateA_(5).run(0).value === ((5, ())))
-    assert(increment.replicateA_(5).run(0).value === increment.replicateA(5).void.run(0).value)
+    for (num <- 0 to 10) {
+      assert(fa.replicateA_(num) === Option(unit))
+      assert(increment.replicateA_(num).runS(0).value === num)
+      assert(increment.replicateA_(num).run(0).value === ((num, ())))
+      assert(increment.replicateA_(num).run(0).value === increment.replicateA(num).void.run(0).value)
+    }
   }
 
   test("whenA return given argument when cond is true") {

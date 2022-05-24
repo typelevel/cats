@@ -52,6 +52,7 @@ trait ApplicativeErrorTests[F[_], E] extends ApplicativeTests[F] {
     EqFEitherEA: Eq[F[Either[E, A]]],
     EqEitherTFEA: Eq[EitherT[F, E, A]],
     EqFABC: Eq[F[(A, B, C)]],
+    EqFUnit: Eq[F[Unit]],
     iso: Isomorphisms[F]
   ): RuleSet =
     new RuleSet {
