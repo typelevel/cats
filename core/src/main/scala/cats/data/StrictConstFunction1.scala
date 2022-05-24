@@ -1,4 +1,5 @@
-package cats.data
+package cats
+package data
 
 /** A `Function1` with constant value and strictly evaluated combinators. Not suitable
  * for composing with side-effecting functions. */
