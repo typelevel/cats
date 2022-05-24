@@ -167,7 +167,16 @@ class IorTSuite extends CatsSuite {
 
   test("getOrElseF with Id consistent with Ior getOrElse") {
     forAll { (iort: IorT[Id, String, Int], i: Int) =>
-      assert(iort.getOrElseF(i) === (iort.value.getOrElse(i)))
+      assert(iort.getOrElseF(i) === iort.value.getOrElse(i))
+    }
+  }
+
+  test("getOrRaise consistent with IorT.getOrElseF(F.raiseError(e))") {
+    forAll { (iort: IorT[Either[String, *], String, Int], error: String) =>
+      assertEquals(
+        obtained = iort.getOrRaise(error),
+        expected = iort.getOrElseF(Left(error))
+      )
     }
   }
 

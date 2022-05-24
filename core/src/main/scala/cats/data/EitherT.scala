@@ -133,6 +133,26 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
       case Right(b) => F.pure(b)
     }
 
+  /***
+   * 
+   * Like [[getOrElseF]] but accept an error `E` and raise it when the inner `Either` is `Left`
+   *    
+   * Equivalent to `getOrElseF(F.raiseError(e)))`
+   *    
+   * Example:
+   * {{{
+   * scala> import cats.data.EitherT
+   * scala> import cats.implicits._
+   * scala> import scala.util.{Success, Failure, Try}
+  
+   * scala> val eitherT: EitherT[Try,String,Int] = EitherT[Try,String,Int](Success(Left("abc")))
+   * scala> eitherT.getOrRaise(new RuntimeException("ERROR!"))
+   * res0: Try[Int] = Failure(java.lang.RuntimeException: ERROR!)
+   * }}}
+   */
+  def getOrRaise[E](e: => E)(implicit F: MonadError[F, _ >: E]): F[B] =
+    getOrElseF(F.raiseError(e))
+
   /**
    * Example:
    * {{{
