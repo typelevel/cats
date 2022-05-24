@@ -55,8 +55,8 @@ final case class Kleisli[F[_], -A, B](run: A => F[B]) { self =>
     }
 
   def flatMapF[C](f: B => F[C])(implicit F: FlatMap[F]): Kleisli[F, A, C] = run match {
-    case StrictConstFunction1(fb) => Kleisli(StrictConstFunction1(F.flatMap(fb)(f)))
-    case _                        => Kleisli.shift(a => F.flatMap(run(a))(f))
+    case run: StrictConstFunction1[_] => Kleisli(run.andThen(F.flatMap(_: F[B])(f)))
+    case _                            => Kleisli.shift(a => F.flatMap(run(a))(f))
   }
 
   /**
@@ -77,19 +77,22 @@ final case class Kleisli[F[_], -A, B](run: A => F[B]) { self =>
    * }}}
    */
   def andThen[C](k: Kleisli[F, B, C])(implicit F: FlatMap[F]): Kleisli[F, A, C] =
-    this.andThen(k.run)
+    k.run match {
+      case _: StrictConstFunction1[_] => k.asInstanceOf[Kleisli[F, A, C]]
+      case _                          => this.andThen(k.run)
+    }
 
   def compose[Z, AA <: A](f: Z => F[AA])(implicit F: FlatMap[F]): Kleisli[F, Z, B] =
     Kleisli.shift((z: Z) => F.flatMap(f(z))(run))
 
   def compose[Z, AA <: A](k: Kleisli[F, Z, AA])(implicit F: FlatMap[F]): Kleisli[F, Z, B] =
-    this.compose(k.run)
+    k.andThen(this)
 
   def traverse[G[_], AA <: A](f: G[AA])(implicit F: Applicative[F], G: Traverse[G]): F[G[B]] =
     G.traverse(f)(run)
 
   def lift[G[_]](implicit G: Applicative[G]): Kleisli[λ[α => G[F[α]]], A, B] =
-    Kleisli[λ[α => G[F[α]]], A, B](run.andThen(Applicative[G].pure))
+    mapF[λ[α => G[F[α]]], B](G.pure)
 
   /**
    * Contramap the input using `f`, where `f` may modify the input type of the Kleisli arrow.
@@ -109,7 +112,7 @@ final case class Kleisli[F[_], -A, B](run: A => F[B]) { self =>
     mapK(f)
 
   def lower(implicit F: Applicative[F]): Kleisli[F, A, F[B]] =
-    Kleisli(run.andThen(F.pure))
+    mapF(F.pure)
 
   def first[C](implicit F: Functor[F]): Kleisli[F, (A, C), (B, C)] =
     Kleisli { case (a, c) => F.fproduct(run(a))(_ => c) }
