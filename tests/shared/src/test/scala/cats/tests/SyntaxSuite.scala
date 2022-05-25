@@ -184,7 +184,7 @@ object SyntaxSuite {
     val gunit: G[F[A]] = fga.nonEmptySequence
   }
 
-  def testParallel[M[_]: Monad, F[_], T[_]: Traverse, A, B](implicit P: Parallel.Aux[M, F]): Unit = {
+  def testParallel[M[_]: Parallel, T[_]: Traverse, A, B]: Unit = {
     val ta = mock[T[A]]
     val f = mock[A => M[B]]
     val mtb = ta.parTraverse(f)
@@ -192,6 +192,12 @@ object SyntaxSuite {
     val tma = mock[T[M[A]]]
     val mta = tma.parSequence
 
+    val ma = mock[M[A]]
+
+    val mla: M[List[A]] = ma.parReplicateA(mock[Int])
+  }
+
+  def testNonEmptyParallel[M[_]: NonEmptyParallel, A, B]: Unit = {
     val ma = mock[M[A]]
     val mb = mock[M[B]]
 
@@ -205,7 +211,6 @@ object SyntaxSuite {
     val mb4: M[B] = ma.parProductR(mb)
     val mab2: M[(A, B)] = ma.parProduct(mb)
     val mb5: M[B] = mab.parAp(ma)
-    val mla: M[List[A]] = ma.parReplicateA(mock[Int])
   }
 
   def testParallelUnorderedTraverse[M[_]: Monad, F[_]: CommutativeApplicative, T[_]: UnorderedTraverse: FlatMap, A, B](
