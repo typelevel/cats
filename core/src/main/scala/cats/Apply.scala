@@ -1,6 +1,26 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 
-import simulacrum.{noop, typeclass}
 import cats.data.Ior
 
 /**
@@ -8,7 +28,6 @@ import cats.data.Ior
  *
  * Must obey the laws defined in cats.laws.ApplyLaws.
  */
-@typeclass(excludeParents = List("ApplyArityFunctions"))
 trait Apply[F[_]] extends Functor[F] with InvariantSemigroupal[F] with ApplyArityFunctions[F] { self =>
 
   /**
@@ -132,14 +151,14 @@ trait Apply[F[_]] extends Functor[F] with InvariantSemigroupal[F] with ApplyArit
    * Alias for [[productR]].
    */
   @deprecated("Use *> or productR instead.", "1.0.0-RC2")
-  @noop @inline final private[cats] def followedBy[A, B](fa: F[A])(fb: F[B]): F[B] =
+  @inline final private[cats] def followedBy[A, B](fa: F[A])(fb: F[B]): F[B] =
     productR(fa)(fb)
 
   /**
    * Alias for [[productL]].
    */
   @deprecated("Use <* or productL instead.", "1.0.0-RC2")
-  @noop @inline final private[cats] def forEffect[A, B](fa: F[A])(fb: F[B]): F[A] =
+  @inline final private[cats] def forEffect[A, B](fa: F[A])(fb: F[B]): F[A] =
     productL(fa)(fb)
 
   /**
@@ -222,7 +241,6 @@ trait Apply[F[_]] extends Functor[F] with InvariantSemigroupal[F] with ApplyArit
       val G = Apply[G]
     }
 
-  @noop
   @deprecated("Dangerous method, use ifM (a flatMap) or ifF (a map) instead", "2.6.2")
   def ifA[A](fcond: F[Boolean])(ifTrue: F[A], ifFalse: F[A]): F[A] = {
     def ite(b: Boolean)(ifTrue: A, ifFalse: A) = if (b) ifTrue else ifFalse
@@ -246,10 +264,6 @@ object Apply {
       def align[A, B](fa: F[A], fb: F[B]): F[Ior[A, B]] = Apply[F].map2(fa, fb)(Ior.both)
       def functor: Functor[F] = Apply[F]
     }
-
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
 
   /**
    * Summon an instance of [[Apply]] for `F`.
@@ -299,10 +313,6 @@ object Apply {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToApplyOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }
 

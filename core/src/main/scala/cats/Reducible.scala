@@ -1,8 +1,28 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 
 import cats.Foldable.Source
 import cats.data.{Ior, NonEmptyList}
-import simulacrum.{noop, typeclass}
 
 /**
  * Data structures that can be reduced to a summary value.
@@ -17,7 +37,7 @@ import simulacrum.{noop, typeclass}
  *  - `reduceLeftTo(fa)(f)(g)` eagerly reduces with an additional mapping function
  *  - `reduceRightTo(fa)(f)(g)` lazily reduces with an additional mapping function
  */
-@typeclass trait Reducible[F[_]] extends Foldable[F] { self =>
+trait Reducible[F[_]] extends Foldable[F] { self =>
 
   /**
    * Left-associative reduction on `F` using the function `f`.
@@ -85,7 +105,7 @@ import simulacrum.{noop, typeclass}
    * a: String = "foo321"
    * }}}
    */
-  @noop
+
   def reduceMapK[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: SemigroupK[G]): G[B] =
     reduceLeftTo(fa)(f)((b, a) => G.combineK(b, f(a)))
 
@@ -106,10 +126,8 @@ import simulacrum.{noop, typeclass}
    * semigroup for `G[_]`.
    *
    * This method is similar to [[reduce]], but may short-circuit.
-   *
-   * See [[https://github.com/typelevel/simulacrum/issues/162 this issue]] for an explanation of `@noop` usage.
    */
-  @noop def reduceA[G[_], A](fga: F[G[A]])(implicit G: Apply[G], A: Semigroup[A]): G[A] =
+  def reduceA[G[_], A](fga: F[G[A]])(implicit G: Apply[G], A: Semigroup[A]): G[A] =
     reduceMapA(fga)(identity)
 
   /**
@@ -346,10 +364,6 @@ import simulacrum.{noop, typeclass}
 
 object Reducible {
 
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
-
   /**
    * Summon an instance of [[Reducible]] for `F`.
    */
@@ -419,10 +433,6 @@ object Reducible {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToReducibleOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }
 

@@ -1,8 +1,27 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 
-import simulacrum.typeclass
-
-@typeclass trait NonEmptyAlternative[F[_]] extends Applicative[F] with SemigroupK[F] { self =>
+trait NonEmptyAlternative[F[_]] extends Applicative[F] with SemigroupK[F] { self =>
 
   /**
    * Lift `a` into `F[_]` and prepend it to `fa`.
@@ -34,9 +53,6 @@ import simulacrum.typeclass
 }
 
 object NonEmptyAlternative {
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
 
   /**
    * Summon an instance of [[NonEmptyAlternative]] for `F`.
@@ -57,8 +73,7 @@ object NonEmptyAlternative {
     type TypeClassType <: NonEmptyAlternative[F]
     def self: F[A]
     val typeClassInstance: TypeClassType
-    // Note: `prependK` has to be added manually since simulacrum is not able to handle `self` as a second parameter.
-    // def prependK(a: A): F[A] = typeClassInstance.prependK[A](a, self)
+    def prependK(a: A): F[A] = typeClassInstance.prependK[A](a, self)
     def appendK(a: A): F[A] = typeClassInstance.appendK[A](self, a)
   }
   trait AllOps[F[_], A] extends Ops[F, A] with Applicative.AllOps[F, A] with SemigroupK.AllOps[F, A] {
@@ -76,7 +91,4 @@ object NonEmptyAlternative {
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToNonEmptyAlternativeOps
 
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 }
