@@ -69,19 +69,13 @@ We thankfully accept <a href="https://opencollective.com/typelevel/donate">one-t
 
 Cats is available for [Scala.js](http://www.scala-js.org/) and [Scala Native](https://www.scala-native.org/), as well as the standard JVM runtime.
 
-Cats relies on improved type inference via the fix for [SI-2712](https://github.com/scala/bug/issues/2712), which is not enabled by default. For **Scala 2.11.9+ or 2.12** you should add the following to your `build.sbt`:
+Cats relies on improved type inference via the fix for [SI-2712](https://github.com/scala/bug/issues/2712), which is not enabled by default. For **Scala 2.12** you should add the following to your `build.sbt`:
 
 ```scala
 scalacOptions += "-Ypartial-unification"
 ```
 
 (Partial unification is on by default since Scala 2.13, the compiler no longer accepts `-Ypartial-unification`)
-
-**Or**, if you need to support older versions of Scala you can use the [sbt-partial-unification](https://github.com/fiadliel/sbt-partial-unification#sbt-partial-unification) plugin which extends support back through **Scala 2.10.6 or later**, to add it, simply add this line to your `plugins.sbt`:
-
-```scala
-addSbtPlugin("org.lyranthe.sbt" % "partial-unification" % "1.1.2")
-```
 
 And then create the Cats dependency, by adding the following to your `build.sbt`:
 
