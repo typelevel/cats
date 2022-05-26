@@ -36,7 +36,7 @@ package cats
  *
  * Must obey the laws defined in cats.laws.FlatMapLaws.
  */
-trait FlatMap[F[_]] extends Apply[F] {
+trait FlatMap[F[_]] extends Apply[F] with FlatMapArityFunctions[F] {
   def flatMap[A, B](fa: F[A])(f: A => F[B]): F[B]
 
   /**
