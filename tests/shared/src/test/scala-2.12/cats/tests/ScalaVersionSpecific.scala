@@ -94,21 +94,4 @@ trait ScalaVersionSpecificAlgebraInvariantSuite {
     )
   }
 
-  // This version-specific instance is required since 2.12 and below do not have parseString on the Numeric class
-  implicit protected def eqFractional[A: Eq: ExhaustiveCheck]: Eq[Fractional[A]] = {
-    Eq.by { fractional =>
-      (
-        fractional.compare _,
-        fractional.plus _,
-        fractional.minus _,
-        fractional.times _,
-        fractional.negate _,
-        numericFromMiniInt[A](_, fractional),
-        fractional.toInt _,
-        fractional.toLong _,
-        fractional.toFloat _,
-        fractional.toDouble _
-      )
-    }
-  }
 }

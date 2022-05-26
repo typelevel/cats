@@ -209,6 +209,14 @@ class AlgebraInvariantSuite extends CatsSuite with ScalaVersionSpecificAlgebraIn
     }
   }
 
+  implicit protected def eqFractional[A: Eq: ExhaustiveCheck]: Eq[Fractional[A]] =
+    Eq.by { fractional =>
+      (
+        fractional: Numeric[A],
+        fractional.div(_, _)
+      )
+    }
+
   checkAll("InvariantMonoidal[Semigroup]", SemigroupTests[Int](InvariantMonoidal[Semigroup].point(0)).semigroup)
   checkAll("InvariantMonoidal[CommutativeSemigroup]",
            CommutativeSemigroupTests[Int](InvariantMonoidal[CommutativeSemigroup].point(0)).commutativeSemigroup
