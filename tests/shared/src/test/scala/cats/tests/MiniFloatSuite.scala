@@ -384,6 +384,11 @@ class MiniFloatSuite extends CatsSuite {
   checkAll("MiniFloat", HashTests[MiniFloat].hash)
   checkAll("Hash[MiniFloat]", SerializableTests.serializable(Hash[MiniFloat]))
 
+  // This specific case has failed for ScalaNative on the CI. Testing specifically to ensure we don't miss a flaky test.
+  test("NaN hash is consistent with universal hash") {
+    HashTests[MiniFloat].laws.sameAsUniversalHash(MiniFloat.NaN, MiniFloat.NaN)
+  }
+
   {
     implicit val m: CommutativeMonoid[MiniFloat] with BoundedSemilattice[MiniFloat] = miniFloatMax
     checkAll("CommutativeMonoid[MiniFloat] maximum", CommutativeMonoidTests[MiniFloat].commutativeMonoid)
