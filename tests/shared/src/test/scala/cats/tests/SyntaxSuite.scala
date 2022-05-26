@@ -421,6 +421,11 @@ object SyntaxSuite {
 
     tfabc.flatMapN(ff)
 
+    val tfa = mock[Tuple1[F[A]]]
+    val ffone = mock[A => F[Z]]
+
+    tfa.flatMap(ffone)
+
     val x = mock[Function[A, F[B]]]
     val y = mock[Function[B, F[C]]]
     val z = mock[Function[C, F[D]]]
