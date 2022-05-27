@@ -46,7 +46,6 @@ trait CommutativeMonadTests[F[_]]
     EqFC: Eq[F[C]],
     EqFABC: Eq[F[(A, B, C)]],
     EqFInt: Eq[F[Int]],
-    EqFUnit: Eq[F[Unit]],
     iso: Isomorphisms[F]
   ): RuleSet =
     new RuleSet {

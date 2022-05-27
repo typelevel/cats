@@ -52,7 +52,6 @@ trait MonadErrorTests[F[_], E] extends ApplicativeErrorTests[F, E] with MonadTes
     EqEitherTFEA: Eq[EitherT[F, E, A]],
     EqFABC: Eq[F[(A, B, C)]],
     EqFInt: Eq[F[Int]],
-    EqFUnit: Eq[F[Unit]],
     iso: Isomorphisms[F]
   ): RuleSet =
     new RuleSet {
