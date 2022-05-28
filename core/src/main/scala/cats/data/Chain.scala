@@ -46,8 +46,8 @@ import cats.kernel.compat.scalaVersionSpecific._
 import cats.kernel.instances.StaticMethods
 
 import scala.annotation.tailrec
+import scala.collection.immutable
 import scala.collection.immutable.SortedMap
-import scala.collection.immutable.{IndexedSeq => ImIndexedSeq, Seq => ImSeq}
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 
@@ -937,7 +937,7 @@ object Chain extends ChainInstances with ChainCompanionCompat {
    * The only places we create Wrap is in fromSeq and in methods that preserve
    * length: zipWithIndex, map, sort
    */
-  final private[data] case class Wrap[A](seq: ImSeq[A]) extends NonEmpty[A]
+  final private[data] case class Wrap[A](seq: immutable.Seq[A]) extends NonEmpty[A]
 
   def unapplySeq[A](chain: Chain[A]): Option[Seq[A]] =
     Some(chain.toList)
@@ -990,7 +990,7 @@ object Chain extends ChainInstances with ChainCompanionCompat {
     fromSeq(as)
 
   def traverseViaChain[G[_], A, B](
-    as: ImIndexedSeq[A]
+    as: immutable.IndexedSeq[A]
   )(f: A => G[B])(implicit G: Applicative[G]): G[Chain[B]] =
     if (as.isEmpty) G.pure(Chain.nil)
     else {
@@ -1036,7 +1036,7 @@ object Chain extends ChainInstances with ChainCompanionCompat {
     }
 
   def traverseFilterViaChain[G[_], A, B](
-    as: ImIndexedSeq[A]
+    as: immutable.IndexedSeq[A]
   )(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Chain[B]] =
     if (as.isEmpty) G.pure(Chain.nil)
     else {
