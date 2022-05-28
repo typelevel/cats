@@ -19,21 +19,19 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package cats
-package arrow
+package cats.tests
 
-private[arrow] class FunctionKMacroMethods {
+import cats.arrow.FunctionK
+import cats.implicits._
+import org.scalacheck.Prop._
+import cats.laws.discipline.arbitrary._
 
-  /**
-   * Lifts function `f` of `[X] => F[X] => G[X]` into a `FunctionK[F, G]`.
-   *
-   * {{{
-   *   val headOptionK = FunctionK.lift[List, Option]([X] => (_: List[X]).headOption)
-   * }}}
-   */
-  def lift[F[_], G[_]](f: [X] => F[X] => G[X]): FunctionK[F, G] =
-    new FunctionK[F, G] {
-      def apply[A](fa: F[A]): G[A] = f(fa)
+class FunctionKLiftSuite extends CatsSuite {
+
+  test("lift a polymorphic function directly") {
+    val fHeadOption = FunctionK.lift[List, Option]([X] => (_: List[X]).headOption)
+    forAll { (a: List[Int]) =>
+      assert(fHeadOption(a) === a.headOption)
     }
-
+  }
 }
