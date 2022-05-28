@@ -686,7 +686,7 @@
 </span><span class="keyword">import</span><span> </span><span class="type-name">TeletypeOps</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="keyword">val</span><span> </span><span class="identifier">state</span><span> = </span><span class="identifier">program</span><span>.</span><span class="identifier">foldMap</span><span>(</span><span class="identifier">interpreter</span><span>)
-</span><span class="comment">// state: TeletypeState[Unit] = cats.data.IndexedStateT@65cd2e61
+</span><span class="comment">// state: TeletypeState[Unit] = cats.data.IndexedStateT@2662fe9a
 </span><span class="keyword">val</span><span> </span><span class="identifier">initialState</span><span> = </span><span class="type-name">Nil</span><span>
 </span><span class="comment">// initialState: Nil.type = List()
 </span><span class="keyword">val</span><span> (</span><span class="identifier">stored</span><span>, </span><span class="identifier">_</span><span>) = </span><span class="identifier">state</span><span>.</span><span class="identifier">run</span><span>(</span><span class="identifier">initialState</span><span>).</span><span class="identifier">value</span><span>
@@ -753,7 +753,7 @@
 </span><span class="keyword">val</span><span> </span><span class="identifier">hoisted</span><span> = </span><span class="identifier">opComplete</span><span>.</span><span class="identifier">hoist</span><span>(</span><span class="identifier">optTryLift</span><span>)
 </span><span class="comment">// hoisted: FreeT[Ctx, OptTry, Int] = FlatMapped(
 //   Suspend(OptionT(Success(Some(Left(Action(7)))))),
-//   scala.Function1$$Lambda$339/914356853@6cb60bdc
+//   scala.Function1$$Lambda$286/606508809@45951a22
 // )
 </span><span class="keyword">val</span><span> </span><span class="identifier">evaluated</span><span> = </span><span class="identifier">hoisted</span><span>.</span><span class="identifier">foldMap</span><span>(</span><span class="identifier">tryInterpreter</span><span>)
 </span><span class="comment">// evaluated: OptTry[Int] = OptionT(Success(Some(12)))
