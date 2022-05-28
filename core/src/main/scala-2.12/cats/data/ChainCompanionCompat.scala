@@ -4,7 +4,6 @@ import cats.data.Chain.{nil, one, Wrap}
 import cats.kernel.compat.scalaVersionSpecific.IterableOnce
 
 import scala.collection.immutable
-import scala.collection.Seq
 
 private[data] trait ChainCompanionCompat {
 
