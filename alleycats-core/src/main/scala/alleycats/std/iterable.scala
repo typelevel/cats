@@ -65,6 +65,18 @@ trait IterableInstances {
       override def traverse[G[_], A, B](fa: Iterable[A])(f: A => G[B])(implicit G: Applicative[G]): G[Iterable[B]] =
         if (fa.isEmpty) G.pure(Iterable.empty)
         else G.map(Chain.traverseViaChain(toImIndexedSeq(fa))(f))(_.toVector)
+
+      override def mapAccumulate[S, A, B](init: S, fa: Iterable[A])(f: (S, A) => (S, B)): (S, Iterable[B]) = {
+        val iter = fa.iterator
+        var s = init
+        val vec = Vector.newBuilder[B]
+        while (iter.hasNext) {
+          val (snext, b) = f(s, iter.next())
+          vec += b
+          s = snext
+        }
+        (s, vec.result())
+      }
     }
 
   implicit def alleycatsStdIterableTraverseFilter: TraverseFilter[Iterable] = new TraverseFilter[Iterable] {

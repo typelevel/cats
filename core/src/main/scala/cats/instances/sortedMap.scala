@@ -65,6 +65,9 @@ trait SortedMapInstances extends SortedMapInstances2 {
           }) { chain => chain.foldLeft(SortedMap.empty[K, B]) { case (m, (k, b)) => m.updated(k, b) } }
       }
 
+      override def mapAccumulate[S, A, B](init: S, fa: SortedMap[K, A])(f: (S, A) => (S, B)): (S, SortedMap[K, B]) =
+        StaticMethods.mapAccumulateFromStrictFunctor(init, fa, f)(this)
+
       def flatMap[A, B](fa: SortedMap[K, A])(f: A => SortedMap[K, B]): SortedMap[K, B] = {
         implicit val ordering: Ordering[K] = fa.ordering
         fa.flatMap { case (k, a) => f(a).get(k).map((k, _)) }
