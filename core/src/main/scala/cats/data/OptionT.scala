@@ -140,6 +140,24 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
     F.flatMap(value)(_.fold(default)(F.pure))
 
   /**
+   * Like [[getOrElseF]] but accept an error `E` and raise it when the inner `Option` is `None`
+   * 
+   * Equivalent to `getOrElseF(F.raiseError(e)))`
+   * 
+   * {{{
+   * scala> import cats.data.OptionT
+   * scala> import cats.implicits._
+   * scala> import scala.util.{Success, Failure, Try}
+   *
+   * scala> val optionT: OptionT[Try, Int] = OptionT[Try, Int](Success(None))
+   * scala> optionT.getOrRaise(new RuntimeException("ERROR!"))
+   * res0: Try[Int] = Failure(java.lang.RuntimeException: ERROR!)
+   * }}}
+   */
+  def getOrRaise[E](e: => E)(implicit F: MonadError[F, _ >: E]): F[A] =
+    getOrElseF(F.raiseError(e))
+
+  /**
    * Example:
    * {{{
    *  scala> import cats.data.OptionT

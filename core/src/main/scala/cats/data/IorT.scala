@@ -61,6 +61,26 @@ final case class IorT[F[_], A, B](value: F[Ior[A, B]]) {
       case Ior.Both(_, b) => F.pure(b)
     }
 
+  /***
+   *
+   * Like [[getOrElseF]] but accept an error `E` and raise it when the inner `Ior` is `Left`
+   *
+   * Equivalent to `getOrElseF(F.raiseError(e)))`
+   *
+   * Example:
+   * {{{
+   * scala> import cats.data.IorT
+   * scala> import cats.implicits._
+   * scala> import scala.util.{Success, Failure, Try}
+
+   * scala> val iorT: IorT[Try,String,Int] = IorT.leftT("abc")
+   * scala> iorT.getOrRaise(new RuntimeException("ERROR!"))
+   * res0: Try[Int] = Failure(java.lang.RuntimeException: ERROR!)
+   * }}}
+   */
+  def getOrRaise[E](e: => E)(implicit F: MonadError[F, _ >: E]): F[B] =
+    getOrElseF(F.raiseError(e))
+
   def valueOr[BB >: B](f: A => BB)(implicit F: Functor[F], BB: Semigroup[BB]): F[BB] = F.map(value)(_.valueOr(f))
 
   def forall(f: B => Boolean)(implicit F: Functor[F]): F[Boolean] = F.map(value)(_.forall(f))
