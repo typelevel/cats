@@ -77,6 +77,12 @@ trait IterableInstances {
         }
         (s, vec.result())
       }
+
+      override def zipWithIndex[A](fa: Iterable[A]): Iterable[(A, Int)] =
+        fa.zipWithIndex
+
+      override def mapWithIndex[A, B](fa: Iterable[A])(f: (A, Int) => B): Iterable[B] =
+        fa.zipWithIndex.map { case (a, i) => f(a, i) }
     }
 
   implicit def alleycatsStdIterableTraverseFilter: TraverseFilter[Iterable] = new TraverseFilter[Iterable] {
