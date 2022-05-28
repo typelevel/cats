@@ -1,6 +1,25 @@
-package cats
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 
-import simulacrum.typeclass
+package cats
 
 /**
  * NonEmptyTraverse, also known as Traversable1.
@@ -8,7 +27,7 @@ import simulacrum.typeclass
  * `NonEmptyTraverse` is like a non-empty `Traverse`. In addition to the traverse and sequence
  * methods it provides nonEmptyTraverse and nonEmptySequence methods which require an `Apply` instance instead of `Applicative`.
  */
-@typeclass trait NonEmptyTraverse[F[_]] extends Traverse[F] with Reducible[F] { self =>
+trait NonEmptyTraverse[F[_]] extends Traverse[F] with Reducible[F] { self =>
 
   /**
    * Given a function which returns a G effect, thread this effect
@@ -96,10 +115,6 @@ import simulacrum.typeclass
 
 object NonEmptyTraverse {
 
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
-
   /**
    * Summon an instance of [[NonEmptyTraverse]] for `F`.
    */
@@ -144,9 +159,5 @@ object NonEmptyTraverse {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToNonEmptyTraverseOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }
