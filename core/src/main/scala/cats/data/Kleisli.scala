@@ -98,10 +98,7 @@ final case class Kleisli[F[_], -A, B](run: A => F[B]) { self =>
    * }}}
    */
   def andThen[C](k: Kleisli[F, B, C])(implicit F: FlatMap[F]): Kleisli[F, A, C] =
-    k.run match {
-      case _: StrictConstFunction1[_] => k.asInstanceOf[Kleisli[F, A, C]]
-      case _                          => this.andThen(k.run)
-    }
+    this.andThen(k.run)
 
   def compose[Z, AA <: A](f: Z => F[AA])(implicit F: FlatMap[F]): Kleisli[F, Z, B] =
     Kleisli.shift((z: Z) => F.flatMap(f(z))(run))
