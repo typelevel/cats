@@ -37,7 +37,7 @@ final class ListOps[A](private val la: List[A]) extends AnyVal {
    * Example:
    * {{{
    * scala> import cats.data.NonEmptyList
-   * scala> import cats.syntax.list_
+   * scala> import cats.syntax.list._
    *
    * scala> val result1: List[Int] = List(1, 2)
    * scala> result1.toNel

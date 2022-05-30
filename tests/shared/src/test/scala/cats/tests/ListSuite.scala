@@ -90,7 +90,7 @@ class ListSuite extends CatsSuite {
       assert(
         (fa.groupByNelMap(f, g).map { case (k, v) => (k, v.toList) }: Map[Int, List[Int]]) === fa
           .groupBy(f)
-          .mapValues(_.map(g))
+          .map { case (k, v) => (k, v.map(g)) }
       )
     }
   )
