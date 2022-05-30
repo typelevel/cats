@@ -87,7 +87,11 @@ class ListSuite extends CatsSuite {
 
   test("groupByNelMap should be consistent with groupBy + map")(
     forAll { (fa: List[Int], f: Int => Int, g: Int => Int) =>
-      assert((fa.groupByNelMap(f, g).map { case (k, v) => (k, v.toList) }: Map[Int, List[Int]]) === fa.groupBy(f).mapValues(_.map(g)))
+      assert(
+        (fa.groupByNelMap(f, g).map { case (k, v) => (k, v.toList) }: Map[Int, List[Int]]) === fa
+          .groupBy(f)
+          .mapValues(_.map(g))
+      )
     }
   )
 
