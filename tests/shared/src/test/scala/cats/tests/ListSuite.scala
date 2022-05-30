@@ -76,7 +76,7 @@ class ListSuite extends CatsSuite {
   )
 
   test("toNel on empty list returns None") {
-    assert(List.empty[Int].toNel === None)
+    assertEquals(List.empty[Int].toNel, None)
   }
 
   test("groupByNel should be consistent with groupBy")(
@@ -104,8 +104,8 @@ class ListSuite extends CatsSuite {
   )
 
   test("show") {
-    assert(List(1, 2, 3).show === "List(1, 2, 3)")
-    assert((Nil: List[Int]).show === "List()")
+    assertEquals(List(1, 2, 3).show, "List(1, 2, 3)")
+    assertEquals((Nil: List[Int]).show, "List()")
     forAll { (l: List[String]) =>
       assert(l.show === (l.toString))
     }
@@ -118,7 +118,7 @@ class ListSuite extends CatsSuite {
       .apply()
       .sum
 
-    assert(sumAll == lst.sum)
+    assertEquals(sumAll, lst.sum)
   }
 }
 
