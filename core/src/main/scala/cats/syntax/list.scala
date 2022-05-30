@@ -110,7 +110,7 @@ final class ListOps[A](private val la: List[A]) extends AnyVal {
    * scala> import cats.syntax.all._
    * scala> val list = List(12, -2, 3, -5)
    * scala> val expectedResult = SortedMap(false -> NonEmptyList.of("-2", "-5"), true -> NonEmptyList.of("12", "3"))
-   * scala> val result = list.groupByNelMap(_ >= 0)(_.toString)
+   * scala> val result = list.groupByNelMap(_ >= 0, _.toString)
    * scala> result === expectedResult
    * res0: Boolean = true
    * }}}
