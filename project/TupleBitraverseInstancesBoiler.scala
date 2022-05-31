@@ -19,7 +19,7 @@ object GenTupleBitraverseInstances extends Template {
     |
     |private[cats] trait NTupleBitraverseInstances {
 ${if (arity > 1)
-      block"""
+        block"""
     -  implicit final def catsStdBitraverseForTuple$arity${`[A0, A(N - 2)]`}: Bitraverse[${`(A..N - 2, *, *)`}] =
     -    new Bitraverse[${`(A..N - 2, *, *)`}] {
     -      def bitraverse[G[_], A, B, C, D](fa: (${`A0, A(N - 2)`}A, B))(f: A => G[C], g: B => G[D])(implicit G: Applicative[G]): G[(${`A0, A(N - 2)`}C, D)] =
@@ -29,8 +29,8 @@ ${if (arity > 1)
     -      def bifoldRight[A, B, C](fa: (${`A0, A(N - 2)`}A, B), c: Eval[C])(f: (A, Eval[C]) => Eval[C], g: (B, Eval[C]) => Eval[C]): Eval[C] =
     -        g(fa._$arity, f(fa._${arity - 1}, c))
     -    }"""
-    else
-      block"""
+      else
+        block"""
     -"""}
     |}"""
   }

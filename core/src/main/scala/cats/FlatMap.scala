@@ -1,8 +1,25 @@
-package cats
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 
-import simulacrum.typeclass
-import simulacrum.noop
-import scala.annotation.implicitNotFound
+package cats
 
 /**
  * FlatMap type class gives us flatMap, which allows us to have a value
@@ -19,8 +36,7 @@ import scala.annotation.implicitNotFound
  *
  * Must obey the laws defined in cats.laws.FlatMapLaws.
  */
-@implicitNotFound("Could not find an instance of FlatMap for ${F}")
-@typeclass trait FlatMap[F[_]] extends Apply[F] {
+trait FlatMap[F[_]] extends Apply[F] with FlatMapArityFunctions[F] {
   def flatMap[A, B](fa: F[A])(f: A => F[B]): F[B]
 
   /**
@@ -59,7 +75,7 @@ import scala.annotation.implicitNotFound
   def productREval[A, B](fa: F[A])(fb: Eval[F[B]]): F[B] = flatMap(fa)(_ => fb.value)
 
   @deprecated("Use productREval instead.", "1.0.0-RC2")
-  @noop private[cats] def followedByEval[A, B](fa: F[A])(fb: Eval[F[B]]): F[B] = productREval(fa)(fb)
+  private[cats] def followedByEval[A, B](fa: F[A])(fb: Eval[F[B]]): F[B] = productREval(fa)(fb)
 
   /**
    * Sequentially compose two actions, discarding any value produced by the second. This variant of
@@ -83,7 +99,7 @@ import scala.annotation.implicitNotFound
   def productLEval[A, B](fa: F[A])(fb: Eval[F[B]]): F[A] = flatMap(fa)(a => as(fb.value, a))
 
   @deprecated("Use productLEval instead.", "1.0.0-RC2")
-  @noop private[cats] def forEffectEval[A, B](fa: F[A])(fb: Eval[F[B]]): F[A] = productLEval(fa)(fb)
+  private[cats] def forEffectEval[A, B](fa: F[A])(fb: Eval[F[B]]): F[A] = productLEval(fa)(fb)
 
   override def ap[A, B](ff: F[A => B])(fa: F[A]): F[B] =
     flatMap(ff)(f => map(fa)(f))
@@ -96,6 +112,9 @@ import scala.annotation.implicitNotFound
 
   override def map2[A, B, Z](fa: F[A], fb: F[B])(f: (A, B) => Z): F[Z] =
     flatMap(fa)(a => map(fb)(b => f(a, b)))
+
+  override def map2Eval[A, B, Z](fa: F[A], fb: Eval[F[B]])(f: (A, B) => Z): Eval[F[Z]] =
+    Eval.now(flatMap(fa)(a => map(fb.value)(b => f(a, b))))
 
   override def productR[A, B](fa: F[A])(fb: F[B]): F[B] =
     flatMap(fa)(_ => fb)
@@ -119,7 +138,7 @@ import scala.annotation.implicitNotFound
   /**
    * `if` lifted into monad.
    */
-  @noop
+
   def ifM[B](fa: F[Boolean])(ifTrue: => F[B], ifFalse: => F[B]): F[B] =
     flatMap(fa)(if (_) ifTrue else ifFalse)
 
@@ -165,7 +184,7 @@ import scala.annotation.implicitNotFound
    * allocating single element lists, but if we have a k > 1, we will allocate
    * exponentially increasing memory and very quickly OOM.
    */
-  @noop
+
   def foreverM[A, B](fa: F[A]): F[B] = {
     // allocate two things once for efficiency.
     val leftUnit = Left(())
@@ -178,7 +197,7 @@ import scala.annotation.implicitNotFound
    * A may be some state, we may take the current state, run some effect to get
    * a new state and repeat.
    */
-  @noop
+
   def iterateForeverM[A, B](a: A)(f: A => F[A]): F[B] =
     tailRecM[A, B](a)(f.andThen { fa =>
       map(fa)(Left(_): Either[A, B])
@@ -189,7 +208,7 @@ import scala.annotation.implicitNotFound
    * for polling type operations on State (or RNG) Monads, or in effect
    * monads.
    */
-  @noop
+
   def untilDefinedM[A](foa: F[Option[A]]): F[A] = {
     val leftUnit: Either[Unit, A] = Left(())
     val feither: F[Either[Unit, A]] = map(foa) {
@@ -201,10 +220,6 @@ import scala.annotation.implicitNotFound
 }
 
 object FlatMap {
-
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
 
   /**
    * Summon an instance of [[FlatMap]] for `F`.
@@ -248,9 +263,5 @@ object FlatMap {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToFlatMapOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }

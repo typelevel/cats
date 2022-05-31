@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 package data
 
@@ -7,6 +28,21 @@ final case class IorT[F[_], A, B](value: F[Ior[A, B]]) {
 
   def fold[C](fa: A => C, fb: B => C, fab: (A, B) => C)(implicit F: Functor[F]): F[C] =
     F.map(value)(_.fold(fa, fb, fab))
+
+  /**
+   * Transform this `IorT[F, A, B]` into a `F[C]`.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.data.{Ior, IorT}
+   *
+   * scala> val iorT: IorT[List, String, Int] = IorT[List, String, Int](List(Ior.Right(123),Ior.Left("abc"), Ior.Both("abc", 123)))
+   * scala> iorT.foldF(string => string.split("").toList, int => List(int.toString), (string, int) => string.split("").toList ++ List(int.toString))
+   * val res0: List[String] = List(123, a, b, c, a, b, c, 123)
+   * }}}
+   */
+  def foldF[C](fa: A => F[C], fb: B => F[C], fab: (A, B) => F[C])(implicit F: FlatMap[F]): F[C] =
+    F.flatMap(value)(_.fold(fa, fb, fab))
 
   def isLeft(implicit F: Functor[F]): F[Boolean] = F.map(value)(_.isLeft)
 
@@ -24,6 +60,26 @@ final case class IorT[F[_], A, B](value: F[Ior[A, B]]) {
       case Ior.Right(b)   => F.pure(b)
       case Ior.Both(_, b) => F.pure(b)
     }
+
+  /***
+   *
+   * Like [[getOrElseF]] but accept an error `E` and raise it when the inner `Ior` is `Left`
+   *
+   * Equivalent to `getOrElseF(F.raiseError(e)))`
+   *
+   * Example:
+   * {{{
+   * scala> import cats.data.IorT
+   * scala> import cats.implicits._
+   * scala> import scala.util.{Success, Failure, Try}
+
+   * scala> val iorT: IorT[Try,String,Int] = IorT.leftT("abc")
+   * scala> iorT.getOrRaise(new RuntimeException("ERROR!"))
+   * res0: Try[Int] = Failure(java.lang.RuntimeException: ERROR!)
+   * }}}
+   */
+  def getOrRaise[E](e: => E)(implicit F: MonadError[F, _ >: E]): F[B] =
+    getOrElseF(F.raiseError(e))
 
   def valueOr[BB >: B](f: A => BB)(implicit F: Functor[F], BB: Semigroup[BB]): F[BB] = F.map(value)(_.valueOr(f))
 

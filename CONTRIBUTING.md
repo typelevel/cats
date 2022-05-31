@@ -24,7 +24,7 @@ skip these steps and jump straight to submitting a pull request.
 
  1. [Find something that belongs in cats](#find-something-that-belongs-in-cats)
  2. [Let us know you are working on it](#let-us-know-you-are-working-on-it)
- 3. [Build the project](#build-project)
+ 3. [Build the project](#build-the-project)
  4. [Implement your contribution](#write-code)
  5. [Write tests](#write-tests)
  6. [Write documentation](#contributing-documentation)
@@ -46,7 +46,7 @@ pull request. The preferred ways to do that are to either:
 
  * [create a GitHub issue](https://github.com/typelevel/cats/issues/new)
    describing your idea.
- * get feedback in the [cats Gitter room](https://gitter.im/typelevel/cats).
+ * get feedback in the [Typelevel Discord](https://discord.gg/XF3CXcMzqD)
 
 Things that belong in Cats generally have the following characteristics:
 
@@ -105,7 +105,7 @@ To build Cats you should have
  * `console`: launch a REPL
  * `test`: run the tests
  * `unidoc`: generate the documentation
- * `scalastyle`: run the style-checker on the code
+ * `fmt`: run formatting of the code
  * `validate`: run tests, style-checker, and doc generation
 
 #### Scala and Scala.js
@@ -133,7 +133,7 @@ builds:
 
 ### Write code
 
-[See guidelines](https://typelevel.org/cats/guidelines.html).
+[See guidelines](guidelines.md).
 
 ### Attributions
 
@@ -151,11 +151,11 @@ for law checking, and imports all syntax and standard instances for convenience.
  [Discipline](https://github.com/typelevel/discipline), is the name of the test and will be output to the
  console as part of the test execution. By convention:
  - When checking laws, this parameter generally takes a form that describes the data type being tested.
- For example the name *"Validated[String, Int]"* might be used when testing a type class instance
+ For example the name `"Validated[String, Int]"` might be used when testing a type class instance
  that the `Validated` data type supports.
  - An exception to this is serializability tests, where the type class name is also included in the name.
  For example, in the case of `Validated`, the serializability test would take the form,
- *"Applicative[Validated[String, Int]]"*, to indicate that this test is verifying that the `Applicative`
+ `"Applicative[Validated[String, Int]]"`, to indicate that this test is verifying that the `Applicative`
  type class instance for the `Validated` data type is serializable.
  - This convention helps to ensure clear and easy to understand output, with minimal duplication in the output.
 - It is also a goal that, for every combination of data type and supported type class instance:
@@ -187,32 +187,20 @@ As a side note, the latter command uses [sbt-mima](https://github.com/lightbend/
 ### source for the documentation
 The documentation for this website is stored alongside the source, in the [docs subproject](https://github.com/typelevel/cats/tree/main/docs).
 
-* The source for the tut compiled pages is in `docs/src/main/mdoc`
-* The menu structure for these pages is in `docs/src/main/resources/microsite/data/menu.yml`
-
 ### Generating the Site
 
-run `sbt docs/makeMicrosite`
+The microsite generation requires a specific scala version that might
+differ from the project's one. We strongly suggest to check the CI's
+workflow to discover the proper version:
+[CI scala-version matrix](https://github.com/typelevel/cats/blob/main/.github/workflows/ci.yml#L230) and [CI makeMicrosite
+command](https://github.com/typelevel/cats/blob/main/.github/workflows/ci.yml#L281)
+
+At the moment the command is:
+`sbt ++2.12.15 docs/tlSite`
 
 ### Previewing the site
 
-1. Install jekyll locally. Depending on your platform, you might do this with:
-
-    `yum install jekyll`
-
-    `apt-get install ruby-full; gem install jekyll`
-
-    `gem install jekyll`
-
-    Or just dropping into a `nix-shell` if you are using the [Nix Cats development environment](#nix-cats-development-environment).
-
-2. In a shell, navigate to the generated site directory in `cats-docs/target/site`
-
-3. Start jekyll with `jekyll serve -b /cats`
-
-4. Navigate to http://localhost:4000/cats/ in your browser
-
-5. Make changes to your site, and run `sbt docs/makeMicrosite` to regenerate the site. The changes should be reflected as soon as you run `makeMicrosite`.
+Run `docs/tlSitePreview` in the sbt console. This will start a preview server at http://localhost:4242/ that will automatically refresh as you make edits.
 
 ### Compiler verified documentation
 
@@ -251,8 +239,8 @@ the contribution process for the cats project.
 
 It may take a while to familiarize yourself with this document, but if
 we are doing our job right, you shouldn't have to spend months poring
-over the project source code or lurking the
-[Gitter room](https://gitter.im/typelevel/cats) before you feel comfortable
+over the project source code or lurking on Discord
+before you feel comfortable
 contributing. In fact, if you encounter any confusion or frustration
 during the contribution process, please create a GitHub issue and
 we'll do our best to improve the process.
@@ -260,8 +248,8 @@ we'll do our best to improve the process.
 ## Getting in touch
 
 Discussion around Cats is currently happening in the
-[Gitter channel](https://gitter.im/typelevel/cats) as well as on Github
-issue and PR pages.
+[Typelevel Discord](https://discord.gg/XF3CXcMzqD)
+as well as on GitHub issue and PR pages.
 
 Feel free to open an issue if you notice a bug, have an idea for a
 feature, or have a question about the code. Pull requests are also
@@ -269,8 +257,7 @@ gladly accepted.
 
 People are expected to follow the
 [Scala Code of Conduct](https://www.scala-lang.org/conduct/) when
-discussing Cats on the Github page, Gitter channel, or other
-venues.
+discussing Cats on GitHub, Discord, or other venues.
 
 We hope that our community will be respectful, helpful, and kind. If
 you find yourself embroiled in a situation that becomes heated, or

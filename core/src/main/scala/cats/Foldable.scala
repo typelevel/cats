@@ -1,11 +1,30 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 
 import scala.collection.mutable
 import cats.kernel.CommutativeMonoid
-import simulacrum.{noop, typeclass}
-import Foldable.{sentinel, Source}
 
-import scala.annotation.implicitNotFound
+import Foldable.{sentinel, Source}
 
 /**
  * Data structures that can be folded to a summary value.
@@ -29,8 +48,6 @@ import scala.annotation.implicitNotFound
  *
  * See: [[http://www.cs.nott.ac.uk/~pszgmh/fold.pdf A tutorial on the universality and expressiveness of fold]]
  */
-@implicitNotFound("Could not find an instance of Foldable for ${F}")
-@typeclass(excludeParents = List("FoldableNFunctions"))
 trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { self =>
 
   /**
@@ -337,11 +354,11 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * res1: Option[String] = None
    * }}}
    */
-  def collectFirstSome[A, B](fa: F[A])(f: A => Option[B]): Option[B] =
-    foldRight(fa, Eval.now(Option.empty[B])) { (a, lb) =>
-      val ob = f(a)
-      if (ob.isDefined) Eval.now(ob) else lb
-    }.value
+  def collectFirstSome[A, B](fa: F[A])(f: A => Option[B]): Option[B] = {
+    val maybeEmpty = toIterable(fa).iterator.map(f).dropWhile(_.isEmpty)
+    if (maybeEmpty.hasNext) maybeEmpty.next()
+    else None
+  }
 
   /**
    * Monadic version of `collectFirstSome`.
@@ -371,7 +388,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * res3: scala.util.Either[String,Option[String]] = Right(Some(Four))
    * }}}
    */
-  @noop
+
   def collectFirstSomeM[G[_], A, B](fa: F[A])(f: A => G[Option[B]])(implicit G: Monad[G]): G[Option[B]] =
     G.tailRecM(Foldable.Source.fromFoldable(fa)(self))(_.uncons match {
       case Some((a, src)) =>
@@ -391,7 +408,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * res0: Int = 6
    * }}}
    */
-  @noop
+
   def collectFold[A, B](fa: F[A])(f: PartialFunction[A, B])(implicit B: Monoid[B]): B =
     foldLeft(fa, B.empty)((acc, a) => B.combine(acc, f.applyOrElse(a, (_: A) => B.empty)))
 
@@ -479,10 +496,8 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * scala> F.foldA(List(Either.right[String, Int](1), Either.right[String, Int](2)))
    * res0: Either[String, Int] = Right(3)
    * }}}
-   *
-   * See [[https://github.com/typelevel/simulacrum/issues/162 this issue]] for an explanation of `@noop` usage.
    */
-  @noop def foldA[G[_], A](fga: F[G[A]])(implicit G: Applicative[G], A: Monoid[A]): G[A] =
+  def foldA[G[_], A](fga: F[G[A]])(implicit G: Applicative[G], A: Monoid[A]): G[A] =
     foldMapA(fga)(identity)
 
   /**
@@ -497,7 +512,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * a: String = "foo321"
    * }}}
    */
-  @noop
+
   def foldMapK[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: MonoidK[G]): G[B] =
     foldRight(fa, Eval.now(G.empty[B])) { (a, evalGb) =>
       G.combineKEval(f(a), evalGb)
@@ -622,9 +637,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * Find the first element matching the predicate, if one exists.
    */
   def find[A](fa: F[A])(f: A => Boolean): Option[A] =
-    foldRight(fa, Now(Option.empty[A])) { (a, lb) =>
-      if (f(a)) Now(Some(a)) else lb
-    }.value
+    toIterable(fa).find(f)
 
   /**
    * Find the first element matching the effectful predicate, if one exists.
@@ -649,7 +662,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * res3: Either[String,Option[Int]] = Left(error)
    * }}}
    */
-  @noop
+
   def findM[G[_], A](fa: F[A])(p: A => G[Boolean])(implicit G: Monad[G]): G[Option[A]] =
     G.tailRecM(Foldable.Source.fromFoldable(fa)(self))(_.uncons match {
       case Some((a, src)) => G.map(p(a))(if (_) Right(Some(a)) else Left(src.value))
@@ -662,9 +675,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * If there are no elements, the result is `false`.
    */
   override def exists[A](fa: F[A])(p: A => Boolean): Boolean =
-    foldRight(fa, Eval.False) { (a, lb) =>
-      if (p(a)) Eval.True else lb
-    }.value
+    toIterable(fa).exists(p)
 
   /**
    * Check whether all elements satisfy the predicate.
@@ -672,9 +683,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * If there are no elements, the result is `true`.
    */
   override def forall[A](fa: F[A])(p: A => Boolean): Boolean =
-    foldRight(fa, Eval.True) { (a, lb) =>
-      if (p(a)) lb else Eval.False
-    }.value
+    toIterable(fa).forall(p)
 
   /**
    * Check whether at least one element satisfies the effectful predicate.
@@ -792,9 +801,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * match `p`.
    */
   def takeWhile_[A](fa: F[A])(p: A => Boolean): List[A] =
-    foldRight(fa, Now(List.empty[A])) { (a, llst) =>
-      if (p(a)) llst.map(a :: _) else Now(Nil)
-    }.value
+    toIterable(fa).iterator.takeWhile(p).toList
 
   /**
    * Convert F[A] to a List[A], dropping all initial elements which
@@ -872,7 +879,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * res1: (List[Int], List[Nothing with Any]) = (List(1, 2, 3, 4),List())
    * }}}
    */
-  @noop
+
   def partitionBifold[H[_, _], A, B, C](
     fa: F[A]
   )(f: A => H[B, C])(implicit A: Alternative[F], H: Bifoldable[H]): (F[B], F[C]) = {
@@ -898,7 +905,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * res0: Option[(List[Int], List[Nothing with Any])] = Some((List(1, 2, 3, 4),List()))
    * }}}
    */
-  @noop
+
   def partitionBifoldM[G[_], H[_, _], A, B, C](
     fa: F[A]
   )(f: A => G[H[B, C]])(implicit A: Alternative[F], M: Monad[G], H: Bifoldable[H]): G[(F[B], F[C])] = {
@@ -930,7 +937,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * res1: (List[Nothing], List[Int]) = (List(),List(4, 8, 12, 16))
    * }}}
    */
-  @noop
+
   def partitionEitherM[G[_], A, B, C](
     fa: F[A]
   )(f: A => G[Either[B, C]])(implicit A: Alternative[F], M: Monad[G]): G[(F[B], F[C])] = {
@@ -983,10 +990,6 @@ object Foldable {
     def fromFoldable[F[_], A](fa: F[A])(implicit F: Foldable[F]): Source[A] =
       F.foldRight[A, Source[A]](fa, Now(Empty))((a, evalSrc) => Later(cons(a, evalSrc))).value
   }
-
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
 
   /**
    * Summon an instance of [[Foldable]] for `F`.
@@ -1082,9 +1085,5 @@ object Foldable {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToFoldableOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }

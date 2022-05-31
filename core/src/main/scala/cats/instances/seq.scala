@@ -1,13 +1,36 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 package instances
 
-import cats.data.{Chain, ZipSeq}
+import cats.data.{Chain, Ior, ZipSeq}
+import cats.instances.StaticMethods.appendAll
+import cats.kernel.compat.scalaVersionSpecific._
 
 import scala.annotation.tailrec
 import scala.collection.{+:, mutable}
 import scala.collection.immutable.Seq
-import cats.data.Ior
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 trait SeqInstances extends cats.kernel.instances.SeqInstances {
   implicit val catsStdInstancesForSeq
     : Traverse[Seq] with Monad[Seq] with Alternative[Seq] with CoflatMap[Seq] with Align[Seq] =
@@ -16,6 +39,21 @@ trait SeqInstances extends cats.kernel.instances.SeqInstances {
       def empty[A]: Seq[A] = Seq.empty[A]
 
       def combineK[A](x: Seq[A], y: Seq[A]): Seq[A] = x ++ y
+
+      override def combineAllOptionK[A](as: IterableOnce[Seq[A]]): Option[Seq[A]] = {
+        val iter = as.iterator
+        if (iter.isEmpty) None else Some(appendAll(iter, Seq.newBuilder[A]).result())
+      }
+
+      override def fromIterableOnce[A](as: IterableOnce[A]): Seq[A] = {
+        val builder = Seq.newBuilder[A]
+        builder ++= as
+        builder.result()
+      }
+
+      override def prependK[A](a: A, fa: Seq[A]): Seq[A] = a +: fa
+
+      override def appendK[A](fa: Seq[A], a: A): Seq[A] = fa :+ a
 
       def pure[A](x: A): Seq[A] = Seq(x)
 
@@ -95,7 +133,7 @@ trait SeqInstances extends cats.kernel.instances.SeqInstances {
         G.map(Chain.traverseViaChain(fa.toIndexedSeq)(f))(_.toVector)
 
       override def mapWithIndex[A, B](fa: Seq[A])(f: (A, Int) => B): Seq[B] =
-        fa.iterator.zipWithIndex.map(ai => f(ai._1, ai._2)).toIndexedSeq
+        fa.zipWithIndex.map(ai => f(ai._1, ai._2))
 
       override def zipWithIndex[A](fa: Seq[A]): Seq[(A, Int)] =
         fa.zipWithIndex
@@ -116,6 +154,8 @@ trait SeqInstances extends cats.kernel.instances.SeqInstances {
       override def fold[A](fa: Seq[A])(implicit A: Monoid[A]): A = A.combineAll(fa)
 
       override def toList[A](fa: Seq[A]): List[A] = fa.toList
+
+      override def toIterable[A](fa: Seq[A]): Iterable[A] = fa
 
       override def reduceLeftOption[A](fa: Seq[A])(f: (A, A) => A): Option[A] =
         fa.reduceLeftOption(f)
