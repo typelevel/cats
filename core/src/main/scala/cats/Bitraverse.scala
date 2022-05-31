@@ -1,11 +1,30 @@
-package cats
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 
-import simulacrum.{noop, typeclass}
+package cats
 
 /**
  * A type class abstracting over types that give rise to two independent [[cats.Traverse]]s.
  */
-@typeclass trait Bitraverse[F[_, _]] extends Bifoldable[F] with Bifunctor[F] { self =>
+trait Bitraverse[F[_, _]] extends Bifoldable[F] with Bifunctor[F] { self =>
 
   /**
    * Traverse each side of the structure with the given functions.
@@ -81,7 +100,7 @@ import simulacrum.{noop, typeclass}
    *  res2: Option[(Int, String)] = None
    *  }}}
    */
-  @noop
+
   def leftTraverse[G[_], A, B, C](fab: F[A, B])(f: A => G[C])(implicit G: Applicative[G]): G[F[C, B]] =
     bitraverse(fab)(f, G.pure(_))
 
@@ -106,16 +125,12 @@ import simulacrum.{noop, typeclass}
    * res3: Option[Either[String,Int]] = None
    * }}}
    */
-  @noop
+
   def leftSequence[G[_], A, B](fgab: F[G[A], B])(implicit G: Applicative[G]): G[F[A, B]] =
     bitraverse(fgab)(identity, G.pure(_))
 }
 
 object Bitraverse {
-
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
 
   /**
    * Summon an instance of [[Bitraverse]] for `F`.
@@ -157,10 +172,6 @@ object Bitraverse {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToBitraverseOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }
 

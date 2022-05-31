@@ -1,10 +1,30 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 
 import cats.kernel.CommutativeSemigroup
 import scala.collection.immutable.{Queue, Seq, SortedMap, SortedSet}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
-import simulacrum.typeclass
 
 /**
  * [[Semigroupal]] captures the idea of composing independent effectful values.
@@ -16,7 +36,7 @@ import simulacrum.typeclass
  * That same idea is also manifested in the form of [[Apply]], and indeed [[Apply]] extends both
  * [[Semigroupal]] and [[Functor]] to illustrate this.
  */
-@typeclass trait Semigroupal[F[_]] extends Serializable {
+trait Semigroupal[F[_]] extends Serializable {
 
   /**
    * Combine an `F[A]` and an `F[B]` into an `F[(A, B)]` that maintains the effects of both `fa` and `fb`.
@@ -87,10 +107,6 @@ object Semigroupal extends ScalaVersionSpecificSemigroupalInstances with Semigro
   implicit val catsSemigroupalForCommutativeSemigroup: Semigroupal[CommutativeSemigroup] =
     cats.instances.invariant.catsInvariantMonoidalCommutativeSemigroup
 
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
-
   /**
    * Summon an instance of [[Semigroupal]] for `F`.
    */
@@ -126,9 +142,5 @@ object Semigroupal extends ScalaVersionSpecificSemigroupalInstances with Semigro
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToSemigroupalOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }

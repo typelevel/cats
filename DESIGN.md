@@ -7,7 +7,6 @@ ensure correctness.
 
 Cats will be designed to use modern *best practices*:
 
- * [simulacrum](https://github.com/typelevel/simulacrum) for minimizing type class boilerplate
  * [machinist](https://github.com/typelevel/machinist) for optimizing implicit operators
  * [scalacheck](http://scalacheck.org) for property-based testing
  * [discipline](https://github.com/typelevel/discipline) for encoding and testing laws
@@ -36,11 +35,11 @@ Cats provides the following modules:
 
  * `core`: Definitions for widely-used type classes and data types.
  * `laws`: The encoded laws for type classes defined in `core`, exported to assist third-party testing.
- * `kernel`: Definitions for the basic algebraic type classes 
+ * `kernel`: Definitions for the basic algebraic type classes
  * `kernel-laws`: The encoded laws for type classes defined in `kernel`, exported to assist third-party testing.
  * `free`: Free structures such as the free monad, and supporting type classes.
  * `tests`: Verifies the laws, and runs any other tests. Not published.
- * `bench`: Benchmarking suites. Not published. 
+ * `bench`: Benchmarking suites. Not published.
 
 As the type class families grow, it's possible that additional modules
 will be added as well. Modules which depend on other libraries
