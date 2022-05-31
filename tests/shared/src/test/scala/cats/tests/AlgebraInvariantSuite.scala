@@ -179,11 +179,27 @@ class AlgebraInvariantSuite extends CatsSuite with ScalaVersionSpecificAlgebraIn
   implicit private val arbCommutativeGroupInt: Arbitrary[CommutativeGroup[Int]] =
     Arbitrary(genCommutativeGroupInt)
 
+  protected val integralForMiniInt: Numeric[MiniInt] with Integral[MiniInt] = new MiniIntNumeric
+    with Integral[MiniInt] {
+    def quot(x: MiniInt, y: MiniInt): MiniInt = MiniInt.unsafeFromInt(x.toInt / y.toInt)
+    def rem(x: MiniInt, y: MiniInt): MiniInt = MiniInt.unsafeFromInt(x.toInt % y.toInt)
+  }
+
+  // This is a spurious instance since MiniInt is not a Fractional data type. But we use it since we don't have a
+  // Fractional type for which ExhaustiveCheck is also implemented. See https://github.com/typelevel/cats/pull/4033
+  protected val fractionalForMiniInt: Numeric[MiniInt] with Fractional[MiniInt] = new MiniIntNumeric
+    with Fractional[MiniInt] {
+    def div(x: MiniInt, y: MiniInt): MiniInt =
+      if (y == MiniInt.zero) {
+        MiniInt.maxValue
+      } else {
+        x / y
+      }
+  }
+
   implicit private val arbNumericMiniInt: Arbitrary[Numeric[MiniInt]] = Arbitrary(Gen.const(integralForMiniInt))
   implicit private val arbIntegralMiniInt: Arbitrary[Integral[MiniInt]] = Arbitrary(Gen.const(integralForMiniInt))
-  implicit private val arbFractionalFloat: Arbitrary[Fractional[Float]] = Arbitrary(
-    Gen.const(implicitly[Fractional[Float]])
-  )
+  implicit private val arbFractionalFloat: Arbitrary[Fractional[MiniInt]] = Arbitrary(Gen.const(fractionalForMiniInt))
 
   implicit protected def eqIntegral[A: Eq: ExhaustiveCheck]: Eq[Integral[A]] = {
     def makeDivisionOpSafe(unsafeF: (A, A) => A): (A, A) => Option[A] =
@@ -209,6 +225,14 @@ class AlgebraInvariantSuite extends CatsSuite with ScalaVersionSpecificAlgebraIn
     }
   }
 
+  implicit protected def eqFractional[A: Eq: ExhaustiveCheck]: Eq[Fractional[A]] =
+    Eq.by { fractional =>
+      (
+        fractional: Numeric[A],
+        fractional.div(_, _)
+      )
+    }
+
   checkAll("InvariantMonoidal[Semigroup]", SemigroupTests[Int](InvariantMonoidal[Semigroup].point(0)).semigroup)
   checkAll("InvariantMonoidal[CommutativeSemigroup]",
            CommutativeSemigroupTests[Int](InvariantMonoidal[CommutativeSemigroup].point(0)).commutativeSemigroup
@@ -217,10 +241,6 @@ class AlgebraInvariantSuite extends CatsSuite with ScalaVersionSpecificAlgebraIn
   checkAll("InvariantSemigroupal[Monoid]",
            InvariantSemigroupalTests[Monoid].invariantSemigroupal[Option[MiniInt], Option[Boolean], Option[Boolean]]
   )
-
-  checkAll("Invariant[Numeric]", InvariantTests[Numeric].invariant[MiniInt, Boolean, Boolean])
-  checkAll("Invariant[Integral]", InvariantTests[Integral].invariant[MiniInt, Boolean, Boolean])
-  checkAll("Invariant[Fractional]", InvariantTests[Fractional].invariant[Float, Boolean, Boolean])
 
   {
     val S: Semigroup[Int] = Semigroup[Int].imap(identity)(identity)
@@ -309,6 +329,10 @@ class AlgebraInvariantSuite extends CatsSuite with ScalaVersionSpecificAlgebraIn
 
   checkAll("Invariant[CommutativeGroup]", InvariantTests[CommutativeGroup].invariant[MiniInt, Boolean, Boolean])
   checkAll("Invariant[CommutativeGroup]", SerializableTests.serializable(Invariant[CommutativeGroup]))
+
+  checkAll("Invariant[Numeric]", InvariantTests[Numeric].invariant[MiniInt, Boolean, Boolean])
+  checkAll("Invariant[Integral]", InvariantTests[Integral].invariant[MiniInt, Boolean, Boolean])
+  checkAll("Invariant[Fractional]", InvariantTests[Fractional].invariant[MiniInt, Boolean, Boolean])
 
   checkAll("InvariantMonoidal[Semigroup]",
            InvariantMonoidalTests[Semigroup].invariantMonoidal[Option[MiniInt], Option[Boolean], Option[Boolean]]
