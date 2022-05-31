@@ -47,8 +47,8 @@ import cats.kernel.compat.scalaVersionSpecific._
 import cats.kernel.instances.{StaticMethods => KernelStaticMethods}
 
 import scala.annotation.tailrec
+import scala.collection.immutable
 import scala.collection.immutable.SortedMap
-import scala.collection.immutable.{IndexedSeq => ImIndexedSeq}
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 
@@ -906,7 +906,7 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
 }
 
 @suppressUnusedImportWarningForScalaVersionSpecific
-object Chain extends ChainInstances {
+object Chain extends ChainInstances with ChainCompanionCompat {
 
   private val sentinel: Function1[Any, Any] = new scala.runtime.AbstractFunction1[Any, Any] { def apply(a: Any) = this }
 
@@ -939,7 +939,7 @@ object Chain extends ChainInstances {
    * The only places we create Wrap is in fromSeq and in methods that preserve
    * length: zipWithIndex, map, sort
    */
-  final private[data] case class Wrap[A](seq: Seq[A]) extends NonEmpty[A]
+  final private[data] case class Wrap[A](seq: immutable.Seq[A]) extends NonEmpty[A]
 
   def unapplySeq[A](chain: Chain[A]): Option[Seq[A]] =
     Some(chain.toList)
@@ -986,33 +986,13 @@ object Chain extends ChainInstances {
     o.fold(Chain.empty[A])(Chain.one)
 
   /**
-   * Creates a Chain from the specified sequence.
-   */
-  def fromSeq[A](s: Seq[A]): Chain[A] =
-    if (s.isEmpty) nil
-    else if (s.lengthCompare(1) == 0) one(s.head)
-    else Wrap(s)
-
-  /**
-   * Creates a Chain from the specified IterableOnce.
-   */
-  def fromIterableOnce[A](xs: IterableOnce[A]): Chain[A] =
-    xs match {
-      case s: Seq[A @unchecked] =>
-        // Seq is a subclass of IterableOnce, so the type has to be compatible
-        Chain.fromSeq(s) // pay O(1) not O(N) cost
-      case notSeq =>
-        Chain.fromSeq(notSeq.iterator.toSeq)
-    }
-
-  /**
    * Creates a Chain from the specified elements.
    */
   def apply[A](as: A*): Chain[A] =
     fromSeq(as)
 
   def traverseViaChain[G[_], A, B](
-    as: ImIndexedSeq[A]
+    as: immutable.IndexedSeq[A]
   )(f: A => G[B])(implicit G: Applicative[G]): G[Chain[B]] =
     if (as.isEmpty) G.pure(Chain.nil)
     else {
@@ -1058,7 +1038,7 @@ object Chain extends ChainInstances {
     }
 
   def traverseFilterViaChain[G[_], A, B](
-    as: ImIndexedSeq[A]
+    as: immutable.IndexedSeq[A]
   )(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Chain[B]] =
     if (as.isEmpty) G.pure(Chain.nil)
     else {
