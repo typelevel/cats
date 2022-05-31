@@ -270,7 +270,7 @@
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">data</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="type-name">NonEmptyChain</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="number-literal">2</span><span>, </span><span class="number-literal">3</span><span>, </span><span class="number-literal">4</span><span>)
-</span><span class="comment">// res0: NonEmptyChain[Int] = Append(Singleton(1), Wrap(WrappedArray(2, 3, 4)))
+</span><span class="comment">// res0: NonEmptyChain[Int] = Append(Singleton(1), Wrap(Vector(2, 3, 4)))
 </span><span>
 </span><span class="type-name">NonEmptyChain</span><span>.</span><span class="identifier">fromNonEmptyList</span><span>(</span><span class="type-name">NonEmptyList</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="type-name">List</span><span>(</span><span class="number-literal">2</span><span>, </span><span class="number-literal">3</span><span>)))
 </span><span class="comment">// res1: NonEmptyChain[Int] = Wrap(List(1, 2, 3))
@@ -283,7 +283,7 @@
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">data</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="type-name">NonEmptyChain</span><span>.</span><span class="identifier">fromChain</span><span>(</span><span class="type-name">Chain</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="number-literal">2</span><span>, </span><span class="number-literal">3</span><span>))
-</span><span class="comment">// res4: Option[NonEmptyChain[Int]] = Some(Wrap(WrappedArray(1, 2, 3)))
+</span><span class="comment">// res4: Option[NonEmptyChain[Int]] = Some(Wrap(Vector(1, 2, 3)))
 </span><span class="type-name">NonEmptyChain</span><span>.</span><span class="identifier">fromSeq</span><span>(</span><span class="type-name">List</span><span>.</span><span class="identifier">empty</span><span>[</span><span class="type-name">Int</span><span>])
 </span><span class="comment">// res5: Option[NonEmptyChain[Int]] = None
 </span><span class="type-name">NonEmptyChain</span><span>.</span><span class="identifier">fromSeq</span><span>(</span><span class="type-name">Vector</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="number-literal">2</span><span>, </span><span class="number-literal">3</span><span>))
@@ -292,11 +292,11 @@
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">data</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="type-name">NonEmptyChain</span><span>.</span><span class="identifier">fromChainAppend</span><span>(</span><span class="type-name">Chain</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="number-literal">2</span><span>, </span><span class="number-literal">3</span><span>), </span><span class="number-literal">4</span><span>)
-</span><span class="comment">// res7: NonEmptyChain[Int] = Append(Wrap(WrappedArray(1, 2, 3)), Singleton(4))
+</span><span class="comment">// res7: NonEmptyChain[Int] = Append(Wrap(Vector(1, 2, 3)), Singleton(4))
 </span><span class="type-name">NonEmptyChain</span><span>.</span><span class="identifier">fromChainAppend</span><span>(</span><span class="type-name">Chain</span><span>.</span><span class="identifier">empty</span><span>[</span><span class="type-name">Int</span><span>], </span><span class="number-literal">1</span><span>)
 </span><span class="comment">// res8: NonEmptyChain[Int] = Singleton(1)
 </span><span class="type-name">NonEmptyChain</span><span>.</span><span class="identifier">fromChainPrepend</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="type-name">Chain</span><span>(</span><span class="number-literal">2</span><span>, </span><span class="number-literal">3</span><span>))
-</span><span class="comment">// res9: NonEmptyChain[Int] = Append(Singleton(1), Wrap(WrappedArray(2, 3)))</span></code></pre>
+</span><span class="comment">// res9: NonEmptyChain[Int] = Append(Singleton(1), Wrap(Vector(2, 3)))</span></code></pre>
 
         <hr style="margin-top: 30px"/>
         <footer style="font-size: 90%; text-align: center">
