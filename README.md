@@ -210,6 +210,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [eBay Inc.](https://www.ebay.com)
 - [Eloquentix](https://eloquentix.com)
 - [eSailors](https://www.esailors.de)
+- [Etsy](https://etsy.com)
 - [Evolution Gaming](https://www.evolutiongaming.com/)
 - [Evotor Marketplace](https://market.evotor.ru/)
 - [Exelonix](https://exelonix.com/)
