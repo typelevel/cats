@@ -83,7 +83,7 @@ class FuncSuite extends CatsSuite {
 
   test("product") {
     val f = appFunc { (x: Int) =>
-      (Some(x + 10): Option[Int])
+      Some(x + 10): Option[Int]
     }
     val g = appFunc { (x: Int) =>
       List(x * 2)
@@ -95,7 +95,7 @@ class FuncSuite extends CatsSuite {
 
   test("traverse") {
     val f = Func.appFunc { (x: Int) =>
-      (Some(x + 10): Option[Int])
+      Some(x + 10): Option[Int]
     }
     val xs = f.traverse(List(1, 2, 3))
     assert(xs === (Some(List(11, 12, 13))))
