@@ -119,6 +119,7 @@
         <li class="level2"><a href="../typeclasses/applicativetraverse.html">Applicative and Traversable Functors</a></li>
         <li class="level2"><a href="../typeclasses/arrow.html">Arrow</a></li>
         <li class="level2"><a href="../typeclasses/arrowchoice.html">Arrow Choice</a></li>
+        <li class="level2"><a href="../typeclasses/bifoldable.html">Bifoldable</a></li>
         <li class="level2"><a href="../typeclasses/bifunctor.html">Bifunctor</a></li>
         <li class="level2"><a href="../typeclasses/bimonad.html">Bimonad</a></li>
         <li class="level2"><a href="../typeclasses/comonad.html">Comonad</a></li>
@@ -227,7 +228,7 @@
   </span><span class="identifier">println</span><span>(</span><span class="string-literal">&quot;Running expensive calculation...&quot;</span><span>)
   </span><span class="number-literal">1</span><span> + </span><span class="number-literal">2</span><span> * </span><span class="number-literal">3</span><span>
 }
-</span><span class="comment">// lazyEval: Eval[Int] = cats.Later@1b862683
+</span><span class="comment">// lazyEval: Eval[Int] = cats.Later@47e4684e
 </span><span>
 </span><span class="identifier">lazyEval</span><span>.</span><span class="identifier">value</span><span>
 </span><span class="comment">// Running expensive calculation...
@@ -246,7 +247,7 @@
   </span><span class="identifier">println</span><span>(</span><span class="string-literal">&quot;Running expensive calculation...&quot;</span><span>)
   </span><span class="number-literal">1</span><span> + </span><span class="number-literal">2</span><span> * </span><span class="number-literal">3</span><span>
 }
-</span><span class="comment">// always: Eval[Int] = cats.Always@1f1b2acc
+</span><span class="comment">// always: Eval[Int] = cats.Always@c5fe036
 </span><span>
 </span><span class="identifier">always</span><span>.</span><span class="identifier">value</span><span>
 </span><span class="comment">// Running expensive calculation...
