@@ -187,9 +187,23 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
    * res2: Boolean = false
    * }}}
    */
-  final def isLeft: Boolean = fold(_ => true, _ => false, (_, _) => false)
-  final def isRight: Boolean = fold(_ => false, _ => true, (_, _) => false)
-  final def isBoth: Boolean = fold(_ => false, _ => false, (_, _) => true)
+  final def isLeft: Boolean =
+    this match {
+      case Ior.Left(_) => true
+      case _           => false
+    }
+
+  final def isRight: Boolean =
+    this match {
+      case Ior.Right(_) => true
+      case _            => false
+    }
+
+  final def isBoth: Boolean =
+    this match {
+      case Ior.Both(_, _) => true
+      case _              => false
+    }
 
   /**
    * Example:
@@ -225,7 +239,12 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
    * res2: Option[Int] = Some(123)
    * }}}
    */
-  final def right: Option[B] = fold(_ => None, b => Some(b), (_, b) => Some(b))
+  final def right: Option[B] =
+    this match {
+      case Ior.Right(b)   => Some(b)
+      case Ior.Both(_, b) => Some(b)
+      case Ior.Left(_)    => None
+    }
 
   /**
    * Example:
@@ -947,12 +966,24 @@ sealed abstract private[data] class IorInstances0 {
     new Traverse[Ior[A, *]] {
       def traverse[F[_]: Applicative, B, C](fa: A Ior B)(f: B => F[C]): F[A Ior C] =
         fa.traverse(f)
+
+      override def mapAccumulate[S, B, C](init: S, fa: Ior[A, B])(f: (S, B) => (S, C)): (S, Ior[A, C]) =
+        fa match {
+          case l @ Ior.Left(_) => (init, l)
+          case Ior.Right(b) =>
+            val (snext, c) = f(init, b)
+            (snext, Ior.Right(c))
+          case Ior.Both(a, b) =>
+            val (snext, c) = f(init, b)
+            (snext, Ior.Both(a, c))
+        }
       def foldLeft[B, C](fa: A Ior B, b: C)(f: (C, B) => C): C =
         fa.foldLeft(b)(f)
       def foldRight[B, C](fa: A Ior B, lc: Eval[C])(f: (B, Eval[C]) => Eval[C]): Eval[C] =
         fa.foldRight(lc)(f)
 
-      override def size[B](fa: A Ior B): Long = fa.fold(_ => 0L, _ => 1L, (_, _) => 1L)
+      override def size[B](fa: A Ior B): Long =
+        if (fa.isLeft) 0L else 1L
 
       override def get[B](fa: A Ior B)(idx: Long): Option[B] =
         if (idx == 0L) fa.toOption else None
