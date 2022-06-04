@@ -1,6 +1,6 @@
 ThisBuild / tlBaseVersion := "2.8"
 
-val scalaCheckVersion = "1.15.4"
+val scalaCheckVersion = "1.16.0"
 
 val disciplineVersion = "1.4.0"
 
