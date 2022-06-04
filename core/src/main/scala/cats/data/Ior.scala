@@ -187,9 +187,23 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
    * res2: Boolean = false
    * }}}
    */
-  final def isLeft: Boolean = fold(_ => true, _ => false, (_, _) => false)
-  final def isRight: Boolean = fold(_ => false, _ => true, (_, _) => false)
-  final def isBoth: Boolean = fold(_ => false, _ => false, (_, _) => true)
+  final def isLeft: Boolean =
+    this match {
+      case Ior.Left(_) => true
+      case _           => false
+    }
+
+  final def isRight: Boolean =
+    this match {
+      case Ior.Right(_) => true
+      case _            => false
+    }
+
+  final def isBoth: Boolean =
+    this match {
+      case Ior.Both(_, _) => true
+      case _              => false
+    }
 
   /**
    * Example:
@@ -969,10 +983,7 @@ sealed abstract private[data] class IorInstances0 {
         fa.foldRight(lc)(f)
 
       override def size[B](fa: A Ior B): Long =
-        fa match {
-          case Ior.Right(_) | Ior.Both(_, _) => 1L
-          case Ior.Left(_)                   => 0L
-        }
+        if (fa.isLeft) 0L else 1L
 
       override def get[B](fa: A Ior B)(idx: Long): Option[B] =
         if (idx == 0L) fa.toOption else None

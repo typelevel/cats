@@ -49,6 +49,7 @@ trait MapInstances {
         val iter = fa.iterator
         var s = init
         val m = Map.newBuilder[K, B]
+        m.sizeHint(fa.size)
         while (iter.hasNext) {
           val (k, a) = iter.next()
           val (snext, b) = f(s, a)
