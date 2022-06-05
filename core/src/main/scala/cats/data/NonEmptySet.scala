@@ -340,7 +340,7 @@ sealed class NonEmptySetOps[A](val value: NonEmptySet[A]) {
    */
   def zipWith[B, C](b: NonEmptySet[B])(f: (A, B) => C)(implicit C: Order[C]): NonEmptySet[C] = {
     implicit val cOrdering: Ordering[C] = C.toOrdering
-    NonEmptySetImpl.create((toSortedSet.lazyZip(b.toSortedSet)).map(f))
+    NonEmptySetImpl.create(toSortedSet.lazyZip(b.toSortedSet).map(f))
   }
 
   /**
