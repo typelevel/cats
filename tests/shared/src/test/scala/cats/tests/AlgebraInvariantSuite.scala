@@ -185,21 +185,8 @@ class AlgebraInvariantSuite extends CatsSuite with ScalaVersionSpecificAlgebraIn
     def rem(x: MiniInt, y: MiniInt): MiniInt = MiniInt.unsafeFromInt(x.toInt % y.toInt)
   }
 
-  // This is a spurious instance since MiniInt is not a Fractional data type. But we use it since we don't have a
-  // Fractional type for which ExhaustiveCheck is also implemented. See https://github.com/typelevel/cats/pull/4033
-  protected val fractionalForMiniInt: Numeric[MiniInt] with Fractional[MiniInt] = new MiniIntNumeric
-    with Fractional[MiniInt] {
-    def div(x: MiniInt, y: MiniInt): MiniInt =
-      if (y == MiniInt.zero) {
-        MiniInt.maxValue
-      } else {
-        x / y
-      }
-  }
-
   implicit private val arbNumericMiniInt: Arbitrary[Numeric[MiniInt]] = Arbitrary(Gen.const(integralForMiniInt))
   implicit private val arbIntegralMiniInt: Arbitrary[Integral[MiniInt]] = Arbitrary(Gen.const(integralForMiniInt))
-  implicit private val arbFractionalFloat: Arbitrary[Fractional[MiniInt]] = Arbitrary(Gen.const(fractionalForMiniInt))
 
   implicit protected def eqIntegral[A: Eq: ExhaustiveCheck]: Eq[Integral[A]] = {
     def makeDivisionOpSafe(unsafeF: (A, A) => A): (A, A) => Option[A] =
@@ -332,7 +319,22 @@ class AlgebraInvariantSuite extends CatsSuite with ScalaVersionSpecificAlgebraIn
 
   checkAll("Invariant[Numeric]", InvariantTests[Numeric].invariant[MiniInt, Boolean, Boolean])
   checkAll("Invariant[Integral]", InvariantTests[Integral].invariant[MiniInt, Boolean, Boolean])
-  checkAll("Invariant[Fractional]", InvariantTests[Fractional].invariant[MiniInt, Boolean, Boolean])
+
+  {
+    // This is a spurious instance since MiniInt is not a Fractional data type. But we use it since we don't have a
+    // Fractional type for which ExhaustiveCheck is also implemented. See https://github.com/typelevel/cats/pull/4033
+    val fractionalForMiniInt: Fractional[MiniInt] = new MiniIntNumeric with Fractional[MiniInt] {
+      def div(x: MiniInt, y: MiniInt): MiniInt =
+        if (y == MiniInt.zero) {
+          MiniInt.maxValue
+        } else {
+          x / y
+        }
+    }
+    implicit val arbFractionalMiniInt: Arbitrary[Fractional[MiniInt]] = Arbitrary(Gen.const(fractionalForMiniInt))
+
+    checkAll("Invariant[Fractional]", InvariantTests[Fractional].invariant[MiniInt, Boolean, Boolean])
+  }
 
   checkAll("InvariantMonoidal[Semigroup]",
            InvariantMonoidalTests[Semigroup].invariantMonoidal[Option[MiniInt], Option[Boolean], Option[Boolean]]
