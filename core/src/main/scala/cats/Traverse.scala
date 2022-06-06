@@ -1,10 +1,28 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 
 import cats.data.State
 import cats.data.StateT
-
-import simulacrum.typeclass
-import scala.annotation.implicitNotFound
 
 /**
  * Traverse, also known as Traversable.
@@ -17,8 +35,7 @@ import scala.annotation.implicitNotFound
  *
  * See: [[https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf The Essence of the Iterator Pattern]]
  */
-@implicitNotFound("Could not find an instance of Traverse for ${F}")
-@typeclass trait Traverse[F[_]] extends Functor[F] with Foldable[F] with UnorderedTraverse[F] { self =>
+trait Traverse[F[_]] extends Functor[F] with Foldable[F] with UnorderedTraverse[F] { self =>
 
   /**
    * Given a function which returns a G effect, thread this effect
@@ -117,11 +134,18 @@ import scala.annotation.implicitNotFound
     traverse[Id, A, B](fa)(f)
 
   /**
+   * Akin to [[map]], but allows to keep track of a state value
+   * when calling the function.
+   */
+  def mapAccumulate[S, A, B](init: S, fa: F[A])(f: (S, A) => (S, B)): (S, F[B]) =
+    traverse(fa)(a => State(s => f(s, a))).run(init).value
+
+  /**
    * Akin to [[map]], but also provides the value's index in structure
    * F when calling the function.
    */
   def mapWithIndex[A, B](fa: F[A])(f: (A, Int) => B): F[B] =
-    traverse(fa)(a => State((s: Int) => (s + 1, f(a, s)))).runA(0).value
+    mapAccumulate(0, fa)((i, a) => (i + 1) -> f(a, i))._2
 
   /**
    * Akin to [[traverse]], but also provides the value's index in
@@ -153,10 +177,6 @@ import scala.annotation.implicitNotFound
 
 object Traverse {
 
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
-
   /**
    * Summon an instance of [[Traverse]] for `F`.
    */
@@ -187,10 +207,14 @@ object Traverse {
       typeClassInstance.sequence[G, B](self.asInstanceOf[F[G[B]]])
     def flatSequence[G[_], B](implicit ev$1: A <:< G[F[B]], G: Applicative[G], F: FlatMap[F]): G[F[B]] =
       typeClassInstance.flatSequence[G, B](self.asInstanceOf[F[G[F[B]]]])(G, F)
-    def mapWithIndex[B](f: (A, Int) => B): F[B] = typeClassInstance.mapWithIndex[A, B](self)(f)
+    def mapAccumulate[S, B](init: S)(f: (S, A) => (S, B)): (S, F[B]) =
+      typeClassInstance.mapAccumulate[S, A, B](init, self)(f)
+    def mapWithIndex[B](f: (A, Int) => B): F[B] =
+      typeClassInstance.mapWithIndex[A, B](self)(f)
     def traverseWithIndexM[G[_], B](f: (A, Int) => G[B])(implicit G: Monad[G]): G[F[B]] =
       typeClassInstance.traverseWithIndexM[G, A, B](self)(f)(G)
-    def zipWithIndex: F[(A, Int)] = typeClassInstance.zipWithIndex[A](self)
+    def zipWithIndex: F[(A, Int)] =
+      typeClassInstance.zipWithIndex[A](self)
   }
   trait AllOps[F[_], A]
       extends Ops[F, A]
@@ -211,9 +235,5 @@ object Traverse {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToTraverseOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }

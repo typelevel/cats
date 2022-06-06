@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 
 import cats.ApplicativeError.CatchOnlyPartiallyApplied
@@ -116,7 +137,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    * `F[A]` values.
    */
   def recover[A](fa: F[A])(pf: PartialFunction[E, A]): F[A] =
-    handleErrorWith(fa)(e => (pf.andThen(pure(_))).applyOrElse(e, raiseError[A](_)))
+    handleErrorWith(fa)(e => pf.andThen(pure(_)).applyOrElse(e, raiseError[A](_)))
 
   /**
    * Recover from certain errors by mapping them to an `F[A]` value.
@@ -217,7 +238,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    * }}}
    */
   def onError[A](fa: F[A])(pf: PartialFunction[E, F[Unit]]): F[A] =
-    handleErrorWith(fa)(e => (pf.andThen(map2(_, raiseError[A](e))((_, b) => b))).applyOrElse(e, raiseError))
+    handleErrorWith(fa)(e => pf.andThen(map2(_, raiseError[A](e))((_, b) => b)).applyOrElse(e, raiseError))
 
   /**
    * Often E is Throwable. Here we try to call pure or catch

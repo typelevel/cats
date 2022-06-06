@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 package data
 
@@ -609,6 +630,15 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
       case e @ Invalid(_) => F.pure(e)
     }
 
+  def mapAccumulate[S, EE >: E, B](init: S)(f: (S, A) => (S, B)): (S, Validated[EE, B]) =
+    this match {
+      case Valid(a) =>
+        val (snext, b) = f(init, a)
+        (snext, Valid(b))
+
+      case e @ Invalid(_) => (init, e)
+    }
+
   /**
    * apply the given function to the value with the given B when
    * valid, otherwise return the given B
@@ -977,6 +1007,9 @@ sealed abstract private[data] class ValidatedInstances2 {
 
       override def traverse[G[_]: Applicative, A, B](fa: Validated[E, A])(f: (A) => G[B]): G[Validated[E, B]] =
         fa.traverse(f)
+
+      override def mapAccumulate[S, A, B](init: S, fa: Validated[E, A])(f: (S, A) => (S, B)): (S, Validated[E, B]) =
+        fa.mapAccumulate(init)(f)
 
       override def foldLeft[A, B](fa: Validated[E, A], b: B)(f: (B, A) => B): B =
         fa.foldLeft(b)(f)

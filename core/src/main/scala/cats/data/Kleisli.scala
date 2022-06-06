@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 package data
 
@@ -25,7 +46,7 @@ final case class Kleisli[F[_], -A, B](run: A => F[B]) { self =>
    * Performs [[local]] and [[map]] simultaneously.
    */
   def dimap[C, D](f: C => A)(g: B => D)(implicit F: Functor[F]): Kleisli[F, C, D] =
-    Kleisli(c => F.map(run(f(c)))(g))
+    Kleisli(run.compose(f).andThen(F.map(_)(g)))
 
   /**
    * Modify the output of the Kleisli function with `f`.
@@ -36,29 +57,34 @@ final case class Kleisli[F[_], -A, B](run: A => F[B]) { self =>
    * res0: Option[Double] = Some(1.0)
    * }}}
    */
-  def map[C](f: B => C)(implicit F: Functor[F]): Kleisli[F, A, C] =
-    Kleisli(a => F.map(run(a))(f))
+  def map[C](f: B => C)(implicit F: Functor[F]): Kleisli[F, A, C] = mapF(F.map(_)(f))
 
-  def mapF[N[_], C](f: F[B] => N[C]): Kleisli[N, A, C] =
-    Kleisli(a => f(run(a)))
+  def mapF[N[_], C](f: F[B] => N[C]): Kleisli[N, A, C] = Kleisli(run.andThen(f))
+
+  def mapFilter[B1](f: B => Option[B1])(implicit F: FunctorFilter[F]): Kleisli[F, A, B1] =
+    Kleisli[F, A, B1](run.andThen(F.mapFilter(_)(f)))
 
   /**
    * Modify the context `F` using transformation `f`.
    */
-  def mapK[G[_]](f: F ~> G): Kleisli[G, A, B] =
-    Kleisli[G, A, B](a => f(run(a)))
+  def mapK[G[_]](f: F ~> G): Kleisli[G, A, B] = mapF(f.apply)
 
   def flatMap[C, AA <: A](f: B => Kleisli[F, AA, C])(implicit F: FlatMap[F]): Kleisli[F, AA, C] =
-    Kleisli.shift(a => F.flatMap[B, C](run(a))((b: B) => f(b).run(a)))
+    run match {
+      case StrictConstFunction1(fb) => Kleisli(a => F.flatMap(fb)(f(_).run(a)))
+      case _                        => Kleisli.shift(a => F.flatMap[B, C](run(a))(f(_).run(a)))
+    }
 
-  def flatMapF[C](f: B => F[C])(implicit F: FlatMap[F]): Kleisli[F, A, C] =
-    Kleisli.shift(a => F.flatMap(run(a))(f))
+  def flatMapF[C](f: B => F[C])(implicit F: FlatMap[F]): Kleisli[F, A, C] = run match {
+    case run: StrictConstFunction1[_] => Kleisli(run.andThen(F.flatMap(_: F[B])(f)))
+    case _                            => Kleisli.shift(a => F.flatMap(run(a))(f))
+  }
 
   /**
    * Composes [[run]] with a function `B => F[C]` not lifted into Kleisli.
    */
   def andThen[C](f: B => F[C])(implicit F: FlatMap[F]): Kleisli[F, A, C] =
-    Kleisli.shift(a => F.flatMap(run(a))(f))
+    flatMapF(f)
 
   /**
    * Tip to tail Kleisli arrow composition.
@@ -78,13 +104,13 @@ final case class Kleisli[F[_], -A, B](run: A => F[B]) { self =>
     Kleisli.shift((z: Z) => F.flatMap(f(z))(run))
 
   def compose[Z, AA <: A](k: Kleisli[F, Z, AA])(implicit F: FlatMap[F]): Kleisli[F, Z, B] =
-    this.compose(k.run)
+    k.andThen(this)
 
   def traverse[G[_], AA <: A](f: G[AA])(implicit F: Applicative[F], G: Traverse[G]): F[G[B]] =
     G.traverse(f)(run)
 
   def lift[G[_]](implicit G: Applicative[G]): Kleisli[λ[α => G[F[α]]], A, B] =
-    Kleisli[λ[α => G[F[α]]], A, B](a => Applicative[G].pure(run(a)))
+    mapF[λ[α => G[F[α]]], B](G.pure)
 
   /**
    * Contramap the input using `f`, where `f` may modify the input type of the Kleisli arrow.
@@ -97,14 +123,14 @@ final case class Kleisli[F[_], -A, B](run: A => F[B]) { self =>
    * }}}
    */
   def local[AA](f: AA => A): Kleisli[F, AA, B] =
-    Kleisli(aa => run(f(aa)))
+    Kleisli(run.compose(f))
 
   @deprecated("Use mapK", "1.0.0-RC2")
   private[cats] def transform[G[_]](f: FunctionK[F, G]): Kleisli[G, A, B] =
     mapK(f)
 
   def lower(implicit F: Applicative[F]): Kleisli[F, A, F[B]] =
-    Kleisli(a => F.pure(run(a)))
+    mapF(F.pure)
 
   def first[C](implicit F: Functor[F]): Kleisli[F, (A, C), (B, C)] =
     Kleisli { case (a, c) => F.fproduct(run(a))(_ => c) }
@@ -204,7 +230,7 @@ sealed private[data] trait KleisliFunctions {
    * }}}
    */
   def liftF[F[_], A, B](x: F[B]): Kleisli[F, A, B] =
-    Kleisli(_ => x)
+    Kleisli(StrictConstFunction1(x))
 
   /**
    * Same as [[liftF]], but expressed as a FunctionK for use with mapK
@@ -221,7 +247,7 @@ sealed private[data] trait KleisliFunctions {
 
   @deprecated("Use liftF instead", "1.0.0-RC2")
   private[cats] def lift[F[_], A, B](x: F[B]): Kleisli[F, A, B] =
-    Kleisli(_ => x)
+    liftF(x)
 
   /**
    * Creates a Kleisli arrow ignoring its input and lifting the given `B` into applicative context `F`.
@@ -233,7 +259,7 @@ sealed private[data] trait KleisliFunctions {
    * }}}
    */
   def pure[F[_], A, B](x: B)(implicit F: Applicative[F]): Kleisli[F, A, B] =
-    Kleisli(_ => F.pure(x))
+    liftF(F.pure(x))
 
   /**
    * Creates a Kleisli arrow which can lift an `A` into applicative context `F`.
@@ -255,8 +281,7 @@ sealed private[data] trait KleisliFunctions {
    * res0: Option[Int] = Some(1)
    * }}}
    */
-  def local[M[_], A, R](f: R => R)(fa: Kleisli[M, R, A]): Kleisli[M, R, A] =
-    Kleisli(r => fa.run(f(r)))
+  def local[M[_], A, R](f: R => R)(fa: Kleisli[M, R, A]): Kleisli[M, R, A] = fa.local(f)
 
   /**
    * Lifts a function to a Kleisli.
@@ -681,7 +706,7 @@ private[data] trait KleisliFunctor[F[_], A] extends Functor[Kleisli[F, A, *]] {
     fa.map(f)
 
   override def void[B](fa: Kleisli[F, A, B]): Kleisli[F, A, Unit] =
-    Kleisli(a => F.void(fa.run(a)))
+    Kleisli(fa.run.andThen(F.void))
 }
 
 private trait KleisliDistributive[F[_], R] extends Distributive[Kleisli[F, R, *]] {
@@ -699,8 +724,5 @@ private[this] trait KleisliFunctorFilter[F[_], R] extends FunctorFilter[Kleisli[
 
   def functor: Functor[Kleisli[F, R, *]] = Kleisli.catsDataFunctorForKleisli(FF.functor)
 
-  def mapFilter[A, B](fa: Kleisli[F, R, A])(f: A => Option[B]): Kleisli[F, R, B] =
-    Kleisli[F, R, B] { r =>
-      FF.mapFilter(fa.run(r))(f)
-    }
+  def mapFilter[A, B](fa: Kleisli[F, R, A])(f: A => Option[B]): Kleisli[F, R, B] = fa.mapFilter(f)(FF)
 }

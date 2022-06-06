@@ -21,7 +21,7 @@ one sign-off is required (although for major edits waiting for two
 For serious emergencies or work on the build which can't easily be
 reviewed or tested, pushing directly to main may be OK (but is
 definitely not encouraged). In these cases it's best to comment in
-Gitter or elsewhere about what happened and what was done.
+Discord or elsewhere about what happened and what was done.
 
 ### Versioning
 

@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats.syntax
 
 import cats.{
@@ -7,7 +28,10 @@ import cats.{
   Foldable,
   Monad,
   Monoid,
+  NonEmptyParallel,
   Parallel,
+  Reducible,
+  Semigroup,
   Traverse,
   TraverseFilter,
   UnorderedTraverse
@@ -29,13 +53,24 @@ trait ParallelSyntax extends TupleParallelSyntax {
   implicit final def catsSyntaxParallelSequence1[T[_]: Traverse, M[_], A](tma: T[M[A]]): ParallelSequenceOps1[T, M, A] =
     new ParallelSequenceOps1(tma)
 
-  implicit final def catsSyntaxParallelAp[M[_]: FlatMap, A](ma: M[A]): ParallelApOps[M, A] =
+  @deprecated("Kept for binary compatibility", "2.8.0")
+  final def catsSyntaxParallelAp[M[_]: FlatMap, A](ma: M[A]): ParallelApOps[M, A] =
     new ParallelApOps(ma)
+
+  implicit final def catsSyntaxParallelAp1[M[_], A](ma: M[A]): ParallelApOps1[M, A] =
+    new ParallelApOps1(ma)
+
+  implicit final def catsSyntaxNonEmptyParallelAp[M[_], A](ma: M[A]): NonEmptyParallelApOps[M, A] =
+    new NonEmptyParallelApOps(ma)
 }
 
 trait ParallelApplySyntax {
-  implicit final def catsSyntaxParallelApply[F[_], A, B](fa: F[A => B]): ParallelApplyOps[F, A, B] =
+  @deprecated("Kept for binary compatibility", "2.8.0")
+  final def catsSyntaxParallelApply[F[_], A, B](fa: F[A => B]): ParallelApplyOps[F, A, B] =
     new ParallelApplyOps(fa)
+
+  implicit final def catsSyntaxNonEmptyParallelApply[F[_], A, B](fa: F[A => B]): NonEmptyParallelApplyOps[F, A, B] =
+    new NonEmptyParallelApplyOps(fa)
 }
 
 trait ParallelFlatSyntax {
@@ -122,6 +157,11 @@ trait ParallelUnorderedTraverseSyntax {
 trait ParallelFoldMapASyntax {
   implicit final def catsSyntaxParallelFoldMapA[T[_], A](ta: T[A]): ParallelFoldMapAOps[T, A] =
     new ParallelFoldMapAOps(ta)
+}
+
+trait ParallelReduceMapASyntax {
+  implicit final def catsSyntaxParallelReduceMapA[T[_], A](ta: T[A]): ParallelReduceMapAOps[T, A] =
+    new ParallelReduceMapAOps(ta)
 }
 
 @deprecated("Kept for binary compatibility", "2.6.0")
@@ -229,8 +269,8 @@ final class ParallelUnorderedFlatSequenceOps[T[_], M[_], A](private val tmta: T[
     Parallel.parUnorderedFlatSequence(tmta)
 }
 
+@deprecated("Kept for binary compatibility", "2.8.0")
 final class ParallelApOps[M[_], A](private val ma: M[A]) extends AnyVal {
-
   def &>[B](mb: M[B])(implicit P: Parallel[M]): M[B] =
     P.parProductR(ma)(mb)
 
@@ -245,14 +285,48 @@ final class ParallelApOps[M[_], A](private val ma: M[A]) extends AnyVal {
 
   def parProduct[B](mb: M[B])(implicit P: Parallel[M]): M[(A, B)] =
     Parallel.parProduct(ma, mb)
+
+  def parReplicateA(n: Int)(implicit P: Parallel[M]): M[List[A]] =
+    Parallel.parReplicateA(n, ma)
 }
 
+final class ParallelApOps1[M[_], A](private val ma: M[A]) extends AnyVal {
+  def parReplicateA(n: Int)(implicit P: Parallel[M]): M[List[A]] =
+    Parallel.parReplicateA(n, ma)
+}
+
+final class NonEmptyParallelApOps[M[_], A](private val ma: M[A]) extends AnyVal {
+  def &>[B](mb: M[B])(implicit P: NonEmptyParallel[M]): M[B] =
+    P.parProductR[A, B](ma)(mb)
+
+  def <&[B](mb: M[B])(implicit P: NonEmptyParallel[M]): M[A] =
+    P.parProductL[A, B](ma)(mb)
+
+  def parProductL[B](mb: M[B])(implicit P: NonEmptyParallel[M]): M[A] =
+    P.parProductL[A, B](ma)(mb)
+
+  def parProductR[B](mb: M[B])(implicit P: NonEmptyParallel[M]): M[B] =
+    P.parProductR[A, B](ma)(mb)
+
+  def parProduct[B](mb: M[B])(implicit P: NonEmptyParallel[M]): M[(A, B)] =
+    Parallel.parProduct(ma, mb)
+}
+
+@deprecated("Kept for binary compatibility", "2.8.0")
 final class ParallelApplyOps[M[_], A, B](private val mab: M[A => B]) extends AnyVal {
   def <&>(ma: M[A])(implicit P: Parallel[M]): M[B] =
     Parallel.parAp(mab)(ma)(P)
 
   def parAp(ma: M[A])(implicit P: Parallel[M]): M[B] =
     Parallel.parAp(mab)(ma)
+}
+
+final class NonEmptyParallelApplyOps[M[_], A, B](private val mab: M[A => B]) extends AnyVal {
+  def <&>(ma: M[A])(implicit P: NonEmptyParallel[M]): M[B] =
+    Parallel.parAp[M, A, B](mab)(ma)(P)
+
+  def parAp(ma: M[A])(implicit P: NonEmptyParallel[M]): M[B] =
+    Parallel.parAp[M, A, B](mab)(ma)
 }
 
 final class ParallelBitraverseOps[T[_, _], A, B](private val tab: T[A, B]) extends AnyVal {
@@ -278,4 +352,9 @@ final class ParallelLeftSequenceOps[T[_, _], M[_], A, B](private val tmab: T[M[A
 final class ParallelFoldMapAOps[T[_], A](private val ma: T[A]) extends AnyVal {
   def parFoldMapA[M[_], B](f: A => M[B])(implicit T: Foldable[T], P: Parallel[M], B: Monoid[B]): M[B] =
     Parallel.parFoldMapA(ma)(f)
+}
+
+final class ParallelReduceMapAOps[T[_], A](private val ma: T[A]) extends AnyVal {
+  def parReduceMapA[M[_], B](f: A => M[B])(implicit T: Reducible[T], P: NonEmptyParallel[M], B: Semigroup[B]): M[B] =
+    Parallel.parReduceMapA(ma)(f)
 }
