@@ -129,6 +129,11 @@ lazy val algebraSettings = Seq[Setting[_]](
   tlVersionIntroduced := List("2.12", "2.13", "3").map(_ -> "2.7.0").toMap
 )
 
+lazy val algebraNativeSettings = Seq[Setting[_]](
+  tlMimaPreviousVersions ~= (_ - "2.2.3"),
+  tlVersionIntroduced += ("3" -> "2.8.0")
+)
+
 lazy val algebra = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .crossType(CrossType.Pure)
   .in(file("algebra-core"))
@@ -143,9 +148,7 @@ lazy val algebra = crossProject(JSPlatform, JVMPlatform, NativePlatform)
     libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % Test,
     testingDependencies
   )
-  .nativeSettings(
-    tlVersionIntroduced += ("3" -> "2.8.0")
-  )
+  .nativeSettings(algebraNativeSettings)
 
 lazy val algebraLaws = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .in(file("algebra-laws"))
@@ -157,6 +160,7 @@ lazy val algebraLaws = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .jvmSettings(commonJvmSettings)
   .nativeSettings(commonNativeSettings)
   .settings(algebraSettings)
+  .nativeSettings(algebraNativeSettings)
 
 lazy val core = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .crossType(CrossType.Pure)
