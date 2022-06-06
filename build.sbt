@@ -143,6 +143,9 @@ lazy val algebra = crossProject(JSPlatform, JVMPlatform, NativePlatform)
     libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % Test,
     testingDependencies
   )
+  .nativeSettings(
+    tlVersionIntroduced += ("3" -> "2.8.0")
+  )
 
 lazy val algebraLaws = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .in(file("algebra-laws"))
