@@ -4,7 +4,7 @@ val scalaCheckVersion = "1.16.0"
 
 val disciplineVersion = "1.5.1"
 
-val disciplineMunitVersion = "1.0.9"
+val disciplineMunitVersion = "2.0.0-M1"
 
 val munitVersion = "0.7.29"
 
