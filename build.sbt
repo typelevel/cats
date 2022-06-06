@@ -26,10 +26,6 @@ ThisBuild / scalaVersion := Scala212
 ThisBuild / tlFatalWarnings := false
 ThisBuild / tlFatalWarningsInCi := false
 
-ThisBuild / githubWorkflowBuildMatrixExclusions +=
-  MatrixExclude(Map("project" -> "rootNative", "scala" -> Scala3))
-// Dotty is not yet supported by Scala Native
-
 ThisBuild / githubWorkflowAddedJobs ++= Seq(
   WorkflowJob(
     "scalafix",
@@ -73,9 +69,7 @@ lazy val commonJsSettings = Seq(
 
 lazy val commonNativeSettings = Seq(
   doctestGenTests := Seq.empty,
-  // Currently scala-native does not support Dotty
-  crossScalaVersions := { (ThisBuild / crossScalaVersions).value.filterNot(Scala3 == _) },
-  tlVersionIntroduced ++= List("2.12", "2.13").map(_ -> "2.4.0").toMap
+  tlVersionIntroduced ++= List("2.12", "2.13").map(_ -> "2.4.0").toMap + ("3" -> "2.8.0")
 )
 
 lazy val disciplineDependencies = Seq(

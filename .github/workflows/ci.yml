@@ -48,8 +48,6 @@ jobs:
             java: temurin@17
           - project: rootNative
             java: graalvm@11
-          - project: rootNative
-            scala: 3.1.2
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout current branch (full)
@@ -330,6 +328,16 @@ jobs:
           name: target-${{ matrix.os }}-${{ matrix.java }}-3.1.2-rootJVM
 
       - name: Inflate target directories (3.1.2, rootJVM)
+        run: |
+          tar xf targets.tar
+          rm targets.tar
+
+      - name: Download target directories (3.1.2, rootNative)
+        uses: actions/download-artifact@v2
+        with:
+          name: target-${{ matrix.os }}-${{ matrix.java }}-3.1.2-rootNative
+
+      - name: Inflate target directories (3.1.2, rootNative)
         run: |
           tar xf targets.tar
           rm targets.tar
