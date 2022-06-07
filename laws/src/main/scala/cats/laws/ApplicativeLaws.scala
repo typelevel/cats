@@ -59,8 +59,8 @@ trait ApplicativeLaws[F[_]] extends ApplyLaws[F] {
   def applicativeUnit[A](a: A): IsEq[F[A]] =
     F.unit.map(_ => a) <-> F.pure(a)
 
-  def replicateAVoidReplicateA_Consistent[A](fa: F[A]): IsEq[F[Unit]] =
-    F.replicateA_(2, fa) <-> F.replicateA(2, fa).void
+  def replicateAVoidReplicateA_Consistent[A](n: Int, fa: F[A]): IsEq[F[Unit]] =
+    F.replicateA_(n, fa) <-> F.replicateA(n, fa).void
 
   // The following are the lax monoidal functor identity laws - the associativity law is covered by
   // Semigroupal's associativity law.

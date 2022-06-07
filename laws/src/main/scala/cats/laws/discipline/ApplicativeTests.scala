@@ -25,7 +25,7 @@ package discipline
 
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import org.scalacheck.Prop._
-import org.scalacheck.{Arbitrary, Cogen, Prop}
+import org.scalacheck.{Arbitrary, Cogen, Gen, Prop}
 
 trait ApplicativeTests[F[_]] extends ApplyTests[F] {
   def laws: ApplicativeLaws[F]
@@ -60,7 +60,7 @@ trait ApplicativeTests[F[_]] extends ApplyTests[F] {
       "replicateA_ consistent with replicateA.void" -> forAll { (a: A) =>
         // Should be an implicit parameter but that is not a binary-compatible change
         implicit val eqFUnit = makeEqFUnit[A](a)
-        forAll(laws.replicateAVoidReplicateA_Consistent[A] _)
+        forAll(Gen.resize(4,ArbFA.arbitrary))(laws.replicateAVoidReplicateA_Consistent[A] (4,_))
       },
       "monoidal left identity" -> forAll((fa: F[A]) => iso.leftIdentity(laws.monoidalLeftIdentity(fa))),
       "monoidal right identity" -> forAll((fa: F[A]) => iso.rightIdentity(laws.monoidalRightIdentity(fa)))
