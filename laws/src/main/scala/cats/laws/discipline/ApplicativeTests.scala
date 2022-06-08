@@ -59,7 +59,7 @@ trait ApplicativeTests[F[_]] extends ApplyTests[F] {
       "ap consistent with product + map" -> forAll(laws.apProductConsistent[A, B] _),
       "replicateA_ consistent with replicateA.void" -> forAll { (a: A) =>
         // Should be an implicit parameter but that is not a binary-compatible change
-        implicit val eqFUnit = makeEqFUnit[A](a)
+        implicit val eqFUnit: Eq[F[Unit]] = makeEqFUnit[A](a)
         forAll(Gen.resize(4, ArbFA.arbitrary))(laws.replicateAVoidReplicateA_Consistent[A](4, _))
       },
       "monoidal left identity" -> forAll((fa: F[A]) => iso.leftIdentity(laws.monoidalLeftIdentity(fa))),
