@@ -23,7 +23,6 @@ package cats.tests
 
 import cats._
 import cats.data.NonEmptyLazyList
-import cats.laws.discipline.DeprecatedEqInstances
 import cats.laws.discipline.ExhaustiveCheck
 import cats.laws.discipline.MiniInt
 import cats.laws.discipline.NonEmptyParallelTests
@@ -31,7 +30,6 @@ import cats.laws.discipline.ParallelTests
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import cats.syntax.all._
-import org.scalacheck.Arbitrary
 import org.scalacheck.Prop._
 
 trait ScalaVersionSpecificFoldableSuite { self: FoldableSuiteAdditional =>
@@ -191,7 +189,7 @@ trait ScalaVersionSpecificTraverseSuite { self: TraverseSuiteAdditional =>
 trait ScalaVersionSpecificAlgebraInvariantSuite {
 
   // This version-specific instance is required since 2.12 and below do not have parseString on the Numeric class
-  protected val integralForMiniInt: Integral[MiniInt] = new Integral[MiniInt] {
+  protected trait MiniIntNumeric extends Numeric[MiniInt] {
     def compare(x: MiniInt, y: MiniInt): Int = Order[MiniInt].compare(x, y)
     def plus(x: MiniInt, y: MiniInt): MiniInt = x + y
     def minus(x: MiniInt, y: MiniInt): MiniInt = x + (-y)
@@ -202,8 +200,6 @@ trait ScalaVersionSpecificAlgebraInvariantSuite {
     def toLong(x: MiniInt): Long = x.toInt.toLong
     def toFloat(x: MiniInt): Float = x.toInt.toFloat
     def toDouble(x: MiniInt): Double = x.toInt.toDouble
-    def quot(x: MiniInt, y: MiniInt): MiniInt = MiniInt.unsafeFromInt(x.toInt / y.toInt)
-    def rem(x: MiniInt, y: MiniInt): MiniInt = MiniInt.unsafeFromInt(x.toInt % y.toInt)
     def parseString(str: String): Option[MiniInt] = Integral[Int].parseString(str).flatMap(MiniInt.fromInt)
   }
 
@@ -236,35 +232,6 @@ trait ScalaVersionSpecificAlgebraInvariantSuite {
       numeric.toDouble _,
       parseMiniIntStrings
     )
-  }
-
-  // This version-specific instance is required since 2.12 and below do not have parseString on the Numeric class
-  @annotation.nowarn("cat=deprecation")
-  implicit protected def eqFractional[A: Eq: Arbitrary]: Eq[Fractional[A]] = {
-    // This deprecated instance is required since there is not `ExhaustiveCheck` for any types for which a `Fractional`
-    // can easily be defined
-    import DeprecatedEqInstances.catsLawsEqForFn1
-
-    Eq.by { fractional =>
-      val parseFloatStrings: Option[Double] => Option[A] = {
-        case Some(f) => fractional.parseString(f.toString)
-        case None    => fractional.parseString("invalid") // Use this to test parsing of non-numeric strings
-      }
-
-      (
-        fractional.compare _,
-        fractional.plus _,
-        fractional.minus _,
-        fractional.times _,
-        fractional.negate _,
-        fractional.fromInt _,
-        fractional.toInt _,
-        fractional.toLong _,
-        fractional.toFloat _,
-        fractional.toDouble _,
-        parseFloatStrings
-      )
-    }
   }
 
 }
