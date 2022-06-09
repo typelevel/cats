@@ -303,6 +303,16 @@ class OptionTSuite extends CatsSuite {
       )
     }
   }
+
+  test("OptionT[Try, A].getOrRaise consistent with OptionT.getOrElseF(F.raiseError(e))") {
+    forAll { (o: Either[String, Option[Int]], error: String) =>
+      assertEquals(
+        obtained = OptionT[Either[String, *], Int](o).getOrRaise(error),
+        expected = OptionT[Either[String, *], Int](o).getOrElseF(Left(error))
+      )
+    }
+  }
+
   test("OptionT[Id, A].collect consistent with Option.collect") {
     forAll { (o: Option[Int], f: Int => Option[String]) =>
       val p = Function.unlift(f)

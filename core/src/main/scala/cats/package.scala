@@ -115,6 +115,8 @@ package object cats {
         f(a, lb)
       def nonEmptyTraverse[G[_], A, B](a: A)(f: A => G[B])(implicit G: Apply[G]): G[B] =
         f(a)
+      override def mapAccumulate[S, A, B](init: S, fa: Id[A])(f: (S, A) => (S, B)): (S, Id[B]) =
+        f(init, fa)
       override def foldMap[A, B](fa: Id[A])(f: A => B)(implicit B: Monoid[B]): B = f(fa)
       override def reduce[A](fa: Id[A])(implicit A: Semigroup[A]): A =
         fa

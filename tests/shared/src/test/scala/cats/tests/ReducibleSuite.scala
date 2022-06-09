@@ -64,11 +64,11 @@ class ReducibleSuiteAdditional extends CatsSuite with ReducibleSuiteAdditionalSt
     assert(R.reduceLeftTo(names)(_.length)((sum, s) => s.length + sum) === totalLength)
     assert(R.reduceMap(names)(_.length) === totalLength)
     val sumLeftM = R.reduceLeftM(names)(Some(_): Option[String]) { (acc, x) =>
-      (Some(acc + x): Option[String])
+      Some(acc + x): Option[String]
     }
     assert(sumLeftM == Some("AaronBettyCalvinDeirdra"))
     val sumMapM = R.reduceMapM(names) { x =>
-      (Some(x): Option[String])
+      Some(x): Option[String]
     }
     assert(sumMapM == Some("AaronBettyCalvinDeirdra"))
     val isNotCalvin: String => Option[String] =

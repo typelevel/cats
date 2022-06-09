@@ -22,7 +22,6 @@
 package cats
 
 import cats.kernel.CommutativeMonoid
-import simulacrum.typeclass
 
 /**
  * Commutative Applicative.
@@ -33,7 +32,7 @@ import simulacrum.typeclass
  *
  * Must obey the laws defined in cats.laws.CommutativeApplicativeLaws.
  */
-@typeclass trait CommutativeApplicative[F[_]] extends Applicative[F] with CommutativeApply[F]
+trait CommutativeApplicative[F[_]] extends Applicative[F] with CommutativeApply[F]
 
 object CommutativeApplicative {
   def commutativeMonoidFor[F[_]: CommutativeApplicative, A: CommutativeMonoid]: CommutativeMonoid[F[A]] =
@@ -46,10 +45,6 @@ object CommutativeApplicative {
         CommutativeApplicative[F]
           .map2(x, y)(CommutativeMonoid[A].combine)
     }
-
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
 
   /**
    * Summon an instance of [[CommutativeApplicative]] for `F`.
@@ -89,9 +84,5 @@ object CommutativeApplicative {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToCommutativeApplicativeOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }

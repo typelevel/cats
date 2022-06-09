@@ -21,8 +21,6 @@
 
 package cats
 
-import simulacrum.typeclass
-
 /**
  * [[ContravariantMonoidal]] functors are functors that supply
  * a unit along the diagonal map for the `contramap2` operation.
@@ -32,7 +30,7 @@ import simulacrum.typeclass
  * Based on ekmett's contravariant library:
  * https://hackage.haskell.org/package/contravariant-1.4/docs/Data-Functor-Contravariant-Divisible.html
  */
-@typeclass trait ContravariantMonoidal[F[_]] extends ContravariantSemigroupal[F] with InvariantMonoidal[F] {
+trait ContravariantMonoidal[F[_]] extends ContravariantSemigroupal[F] with InvariantMonoidal[F] {
 
   /**
    * `trivial` produces an instance of `F` for any type `A`
@@ -45,10 +43,6 @@ import simulacrum.typeclass
 object ContravariantMonoidal extends SemigroupalArityFunctions {
   def monoid[F[_], A](implicit f: ContravariantMonoidal[F]): Monoid[F[A]] =
     new ContravariantMonoidalMonoid[F, A](f)
-
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
 
   /**
    * Summon an instance of [[ContravariantMonoidal]] for `F`.
@@ -91,10 +85,6 @@ object ContravariantMonoidal extends SemigroupalArityFunctions {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToContravariantMonoidalOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }
 

@@ -74,6 +74,15 @@ trait TryInstances extends TryInstances1 {
           case f: Failure[_] => G.pure(castFailure[B](f))
         }
 
+      override def mapAccumulate[S, A, B](init: S, fa: Try[A])(f: (S, A) => (S, B)): (S, Try[B]) = {
+        fa match {
+          case Success(a) =>
+            val (snext, b) = f(init, a)
+            (snext, Success(b))
+          case f: Failure[_] => (init, castFailure[B](f))
+        }
+      }
+
       @tailrec final def tailRecM[B, C](b: B)(f: B => Try[Either[B, C]]): Try[C] =
         f(b) match {
           case f: Failure[_]     => castFailure[C](f)

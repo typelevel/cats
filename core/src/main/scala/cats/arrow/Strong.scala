@@ -22,12 +22,10 @@
 package cats
 package arrow
 
-import simulacrum.typeclass
-
 /**
  * Must obey the laws defined in cats.laws.StrongLaws.
  */
-@typeclass trait Strong[F[_, _]] extends Profunctor[F] {
+trait Strong[F[_, _]] extends Profunctor[F] {
 
   /**
    * Create a new `F` that takes two inputs, but only modifies the first input
@@ -61,10 +59,6 @@ import simulacrum.typeclass
 }
 
 object Strong {
-
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
 
   /**
    * Summon an instance of [[Strong]] for `F`.
@@ -104,9 +98,5 @@ object Strong {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToStrongOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }

@@ -22,7 +22,6 @@
 package cats
 
 import cats.data.State
-import simulacrum.{noop, typeclass}
 
 import scala.collection.immutable.{HashSet, TreeSet}
 
@@ -34,7 +33,6 @@ import scala.collection.immutable.{HashSet, TreeSet}
  * Based on Haskell's [[https://hackage.haskell.org/package/witherable-0.1.3.3/docs/Data-Witherable.html Data.Witherable]]
  */
 
-@typeclass
 trait TraverseFilter[F[_]] extends FunctorFilter[F] {
   def traverse: Traverse[F]
 
@@ -66,7 +64,7 @@ trait TraverseFilter[F[_]] extends FunctorFilter[F] {
    * b: Either[String, List[Int]] = Right(List(1, 5, 3))
    * }}}
    */
-  @noop
+
   def sequenceFilter[G[_], A](fgoa: F[G[Option[A]]])(implicit G: Applicative[G]): G[F[A]] =
     traverseFilter(fgoa)(identity)
 
@@ -137,10 +135,6 @@ trait TraverseFilter[F[_]] extends FunctorFilter[F] {
 
 object TraverseFilter {
 
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
-
   /**
    * Summon an instance of [[TraverseFilter]] for `F`.
    */
@@ -185,9 +179,5 @@ object TraverseFilter {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToTraverseFilterOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }

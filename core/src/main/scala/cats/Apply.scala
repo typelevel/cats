@@ -21,7 +21,6 @@
 
 package cats
 
-import simulacrum.{noop, typeclass}
 import cats.data.Ior
 
 /**
@@ -29,7 +28,6 @@ import cats.data.Ior
  *
  * Must obey the laws defined in cats.laws.ApplyLaws.
  */
-@typeclass(excludeParents = List("ApplyArityFunctions"))
 trait Apply[F[_]] extends Functor[F] with InvariantSemigroupal[F] with ApplyArityFunctions[F] { self =>
 
   /**
@@ -153,14 +151,14 @@ trait Apply[F[_]] extends Functor[F] with InvariantSemigroupal[F] with ApplyArit
    * Alias for [[productR]].
    */
   @deprecated("Use *> or productR instead.", "1.0.0-RC2")
-  @noop @inline final private[cats] def followedBy[A, B](fa: F[A])(fb: F[B]): F[B] =
+  @inline final private[cats] def followedBy[A, B](fa: F[A])(fb: F[B]): F[B] =
     productR(fa)(fb)
 
   /**
    * Alias for [[productL]].
    */
   @deprecated("Use <* or productL instead.", "1.0.0-RC2")
-  @noop @inline final private[cats] def forEffect[A, B](fa: F[A])(fb: F[B]): F[A] =
+  @inline final private[cats] def forEffect[A, B](fa: F[A])(fb: F[B]): F[A] =
     productL(fa)(fb)
 
   /**
@@ -243,7 +241,6 @@ trait Apply[F[_]] extends Functor[F] with InvariantSemigroupal[F] with ApplyArit
       val G = Apply[G]
     }
 
-  @noop
   @deprecated("Dangerous method, use ifM (a flatMap) or ifF (a map) instead", "2.6.2")
   def ifA[A](fcond: F[Boolean])(ifTrue: F[A], ifFalse: F[A]): F[A] = {
     def ite(b: Boolean)(ifTrue: A, ifFalse: A) = if (b) ifTrue else ifFalse
@@ -267,10 +264,6 @@ object Apply {
       def align[A, B](fa: F[A], fb: F[B]): F[Ior[A, B]] = Apply[F].map2(fa, fb)(Ior.both)
       def functor: Functor[F] = Apply[F]
     }
-
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
 
   /**
    * Summon an instance of [[Apply]] for `F`.
@@ -320,10 +313,6 @@ object Apply {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToApplyOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }
 

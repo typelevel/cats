@@ -175,6 +175,15 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
           case Some(a) => Applicative[G].map(f(a))(Some(_))
         }
 
+      override def mapAccumulate[S, A, B](init: S, fa: Option[A])(f: (S, A) => (S, B)): (S, Option[B]) = {
+        fa match {
+          case Some(a) =>
+            val (snext, b) = f(init, a)
+            (snext, Some(b))
+          case None => (init, None)
+        }
+      }
+
       override def reduceLeftToOption[A, B](fa: Option[A])(f: A => B)(g: (B, A) => B): Option[B] =
         fa.map(f)
 

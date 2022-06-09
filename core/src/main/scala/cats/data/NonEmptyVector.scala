@@ -23,11 +23,12 @@ package cats
 package data
 
 import cats.data.NonEmptyVector.ZipNonEmptyVector
+import cats.instances.StaticMethods
+import cats.kernel.compat.scalaVersionSpecific._
 
 import scala.annotation.tailrec
 import scala.collection.mutable
 import scala.collection.immutable.{SortedMap, TreeMap, TreeSet, VectorBuilder}
-import kernel.compat.scalaVersionSpecific._
 
 /**
  * A data type which represents a `Vector` guaranteed to contain at least one element.
@@ -435,6 +436,14 @@ sealed abstract private[data] class NonEmptyVectorInstances {
         fa: NonEmptyVector[A]
       )(f: (A) => G[B])(implicit G: Applicative[G]): G[NonEmptyVector[B]] =
         G.map2Eval(f(fa.head), Always(Traverse[Vector].traverse(fa.tail)(f)))(NonEmptyVector(_, _)).value
+
+      override def mapAccumulate[S, A, B](init: S, fa: NonEmptyVector[A])(
+        f: (S, A) => (S, B)
+      ): (S, NonEmptyVector[B]) =
+        StaticMethods.mapAccumulateFromStrictFunctor(init, fa, f)(this)
+
+      override def mapWithIndex[A, B](fa: NonEmptyVector[A])(f: (A, Int) => B): NonEmptyVector[B] =
+        StaticMethods.mapWithIndexFromStrictFunctor(fa, f)(this)
 
       override def zipWithIndex[A](fa: NonEmptyVector[A]): NonEmptyVector[(A, Int)] =
         fa.zipWithIndex

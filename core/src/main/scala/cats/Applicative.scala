@@ -23,7 +23,7 @@ package cats
 
 import cats.arrow.Arrow
 import cats.data.Chain
-import simulacrum.typeclass
+
 import scala.collection.immutable.IndexedSeq
 
 /**
@@ -36,7 +36,7 @@ import scala.collection.immutable.IndexedSeq
  *
  * Must obey the laws defined in cats.laws.ApplicativeLaws.
  */
-@typeclass trait Applicative[F[_]] extends Apply[F] with InvariantMonoidal[F] { self =>
+trait Applicative[F[_]] extends Apply[F] with InvariantMonoidal[F] { self =>
 
   /**
    * `pure` lifts any value into the Applicative Functor.
@@ -286,10 +286,6 @@ object Applicative {
       def map[A, B](fa: F[A])(f: A => B): F[B] = F.map(fa)(f)
     }
 
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
-
   /**
    * Summon an instance of [[Applicative]] for `F`.
    */
@@ -326,10 +322,6 @@ object Applicative {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToApplicativeOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }
 

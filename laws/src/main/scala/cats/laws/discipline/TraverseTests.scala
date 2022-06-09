@@ -59,11 +59,12 @@ trait TraverseTests[F[_]] extends FunctorTests[F] with FoldableTests[F] with Uno
     EqYFM: Eq[Y[F[M]]],
     EqOptionA: Eq[Option[A]]
   ): RuleSet = {
-    implicit def EqXFBYFB: Eq[(X[F[B]], Y[F[B]])] =
+    implicit val EqXFBYFB: Eq[(X[F[B]], Y[F[B]])] =
       new Eq[(X[F[B]], Y[F[B]])] {
         override def eqv(x: (X[F[B]], Y[F[B]]), y: (X[F[B]], Y[F[B]])): Boolean =
           EqXFB.eqv(x._1, y._1) && EqYFB.eqv(x._2, y._2)
       }
+
     new RuleSet {
       def name: String = "traverse"
       def bases: Seq[(String, RuleSet)] = Nil
@@ -76,6 +77,7 @@ trait TraverseTests[F[_]] extends FunctorTests[F] with FoldableTests[F] with Uno
           "traverse traverseTap" -> forAll(laws.traverseTap[B, M, X] _),
           "traverse derive foldMap" -> forAll(laws.foldMapDerived[A, M] _),
           "traverse order consistency" -> forAll(laws.traverseOrderConsistent[A] _),
+          "traverse ref mapAccumulate" -> forAll(laws.mapAccumulateRef[M, A, C] _),
           "traverse ref mapWithIndex" -> forAll(laws.mapWithIndexRef[A, C] _),
           "traverse ref traverseWithIndexM" -> forAll(laws.traverseWithIndexMRef[Option, A, C] _),
           "traverse ref zipWithIndex" -> forAll(laws.zipWithIndexRef[A, C] _)

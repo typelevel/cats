@@ -184,7 +184,7 @@ object SyntaxSuite {
     val gunit: G[F[A]] = fga.nonEmptySequence
   }
 
-  def testParallel[M[_]: Monad, F[_], T[_]: Traverse, A, B](implicit P: Parallel.Aux[M, F]): Unit = {
+  def testParallel[M[_]: Parallel, T[_]: Traverse, A, B]: Unit = {
     val ta = mock[T[A]]
     val f = mock[A => M[B]]
     val mtb = ta.parTraverse(f)
@@ -192,6 +192,12 @@ object SyntaxSuite {
     val tma = mock[T[M[A]]]
     val mta = tma.parSequence
 
+    val ma = mock[M[A]]
+
+    val mla: M[List[A]] = ma.parReplicateA(mock[Int])
+  }
+
+  def testNonEmptyParallel[M[_]: NonEmptyParallel, A, B]: Unit = {
     val ma = mock[M[A]]
     val mb = mock[M[B]]
 
@@ -205,7 +211,6 @@ object SyntaxSuite {
     val mb4: M[B] = ma.parProductR(mb)
     val mab2: M[(A, B)] = ma.parProduct(mb)
     val mb5: M[B] = mab.parAp(ma)
-    val mla: M[List[A]] = ma.parReplicateA(mock[Int])
   }
 
   def testParallelUnorderedTraverse[M[_]: Monad, F[_]: CommutativeApplicative, T[_]: UnorderedTraverse: FlatMap, A, B](
@@ -414,10 +419,19 @@ object SyntaxSuite {
     val replicateA_ = fa.replicateA_(1)
   }
 
-  def testFlatMap[F[_]: FlatMap, A, B, C, D]: Unit = {
+  def testFlatMap[F[_]: FlatMap, A, B, C, D, Z]: Unit = {
     val a = mock[A]
     val returnValue = mock[F[Either[A, B]]]
     val done = a.tailRecM[F, B](a => returnValue)
+    val tfabc = mock[(F[A], F[B], F[C])]
+    val ff = mock[(A, B, C) => F[Z]]
+
+    tfabc.flatMapN(ff)
+
+    val tfa = mock[Tuple1[F[A]]]
+    val ffone = mock[A => F[Z]]
+
+    tfa.flatMap(ffone)
 
     val x = mock[Function[A, F[B]]]
     val y = mock[Function[B, F[C]]]

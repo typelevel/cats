@@ -441,11 +441,11 @@ class FoldableSuiteAdditional
     val names = List("Aaron", "Betty", "Calvin", "Deirdra")
     assert(F.foldMap(names)(_.length) === (names.map(_.length).sum))
     val sumM = F.foldM(names, "") { (acc, x) =>
-      (Some(acc + x): Option[String])
+      Some(acc + x): Option[String]
     }
     assert(sumM == Some("AaronBettyCalvinDeirdra"))
     val sumMapM = F.foldMapM(names) { x =>
-      (Some(x): Option[String])
+      Some(x): Option[String]
     }
     assert(sumMapM == Some("AaronBettyCalvinDeirdra"))
 

@@ -124,6 +124,9 @@ private[cats] trait ComposedTraverse[F[_], G[_]]
 
   override def traverse[H[_]: Applicative, A, B](fga: F[G[A]])(f: A => H[B]): H[F[G[B]]] =
     F.traverse(fga)(ga => G.traverse(ga)(f))
+
+  override def mapAccumulate[S, A, B](init: S, fga: F[G[A]])(f: (S, A) => (S, B)): (S, F[G[B]]) =
+    F.mapAccumulate(init, fga)((s, ga) => G.mapAccumulate(s, ga)(f))
 }
 
 private[cats] trait ComposedNonEmptyTraverse[F[_], G[_]]

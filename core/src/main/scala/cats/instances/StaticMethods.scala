@@ -21,15 +21,43 @@
 
 package cats.instances
 
+import cats.Functor
+
 import scala.collection.mutable.Builder
 
-private[instances] object StaticMethods {
+private[cats] object StaticMethods {
 
   def appendAll[F <: Iterable[A], A](it: Iterator[F], bldr: Builder[A, F]): bldr.type = {
     while (it.hasNext) {
       bldr ++= it.next()
     }
     bldr
+  }
+
+  def mapAccumulateFromStrictFunctor[S, F[_], A, B](init: S, fa: F[A], f: (S, A) => (S, B))(implicit
+    ev: Functor[F]
+  ): (S, F[B]) = {
+    var state = init
+
+    val fb = ev.map(fa) { a =>
+      val (newState, b) = f(state, a)
+      state = newState
+      b
+    }
+
+    (state, fb)
+  }
+
+  def mapWithIndexFromStrictFunctor[F[_], A, B](fa: F[A], f: (A, Int) => B)(implicit ev: Functor[F]): F[B] = {
+    var idx = 0
+
+    ev.map(fa) { a =>
+      val b = f(a, idx)
+
+      idx += 1
+
+      b
+    }
   }
 
 }

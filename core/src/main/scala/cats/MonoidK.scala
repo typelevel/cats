@@ -23,8 +23,6 @@ package cats
 
 import cats.kernel.compat.scalaVersionSpecific._
 
-import simulacrum.typeclass
-
 /**
  * MonoidK is a universal monoid which operates on kinds.
  *
@@ -45,7 +43,7 @@ import simulacrum.typeclass
  *    combination operation and empty value just depend on the
  *    structure of F, but not on the structure of A.
  */
-@typeclass trait MonoidK[F[_]] extends SemigroupK[F] { self =>
+trait MonoidK[F[_]] extends SemigroupK[F] { self =>
 
   /**
    * Given a type A, create an "empty" F[A] value.
@@ -155,10 +153,6 @@ import simulacrum.typeclass
 @suppressUnusedImportWarningForScalaVersionSpecific
 object MonoidK {
 
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
-
   /**
    * Summon an instance of [[MonoidK]] for `F`.
    */
@@ -195,9 +189,5 @@ object MonoidK {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToMonoidKOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }

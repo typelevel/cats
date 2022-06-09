@@ -22,12 +22,10 @@
 package cats
 package arrow
 
-import simulacrum.typeclass
-
 /**
  * Must obey the laws defined in cats.laws.ArrowLaws.
  */
-@typeclass trait Arrow[F[_, _]] extends Category[F] with Strong[F] { self =>
+trait Arrow[F[_, _]] extends Category[F] with Strong[F] { self =>
 
   /**
    *  Lift a function into the context of an Arrow.
@@ -66,7 +64,7 @@ import simulacrum.typeclass
    * Note that the arrow laws do not guarantee the non-interference between the _effects_ of
    * `f` and `g` in the context of F. This means that `f *** g` may not be equivalent to `g *** f`.
    */
-  @simulacrum.op("***", alias = true)
+
   def split[A, B, C, D](f: F[A, B], g: F[C, D]): F[(A, C), (B, D)] =
     andThen(first(f), second(g))
 
@@ -86,16 +84,12 @@ import simulacrum.typeclass
    * Note that the arrow laws do not guarantee the non-interference between the _effects_ of
    *  `f` and `g` in the context of F. This means that `f &&& g` may not be equivalent to `g &&& f`.
    */
-  @simulacrum.op("&&&", alias = true)
+
   def merge[A, B, C](f: F[A, B], g: F[A, C]): F[A, (B, C)] =
     andThen(lift((x: A) => (x, x)), split(f, g))
 }
 
 object Arrow {
-
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
 
   /**
    * Summon an instance of [[Arrow]] for `F`.
@@ -137,9 +131,5 @@ object Arrow {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToArrowOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }

@@ -129,11 +129,11 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
             chain.foldLeft(Queue.empty[B])(_ :+ _)
           }
 
-      override def mapWithIndex[A, B](fa: Queue[A])(f: (A, Int) => B): Queue[B] = {
-        val b = Queue.newBuilder[B]
-        fa.iterator.zipWithIndex.map(ai => f(ai._1, ai._2)).foreach(b += _)
-        b.result()
-      }
+      override def mapAccumulate[S, A, B](init: S, fa: Queue[A])(f: (S, A) => (S, B)): (S, Queue[B]) =
+        StaticMethods.mapAccumulateFromStrictFunctor(init, fa, f)(this)
+
+      override def mapWithIndex[A, B](fa: Queue[A])(f: (A, Int) => B): Queue[B] =
+        StaticMethods.mapWithIndexFromStrictFunctor(fa, f)(this)
 
       override def zipWithIndex[A](fa: Queue[A]): Queue[(A, Int)] =
         fa.zipWithIndex

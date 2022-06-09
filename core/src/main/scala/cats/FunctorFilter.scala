@@ -22,12 +22,11 @@
 package cats
 
 import scala.collection.immutable.{Queue, Seq, SortedMap}
-import simulacrum.typeclass
 
 /**
  * `FunctorFilter[F]` allows you to `map` and filter out elements simultaneously.
  */
-@typeclass
+
 trait FunctorFilter[F[_]] extends Serializable {
   def functor: Functor[F]
 
@@ -110,10 +109,6 @@ object FunctorFilter extends ScalaVersionSpecificTraverseFilterInstances with Fu
   implicit def catsTraverseFilterForQueue: TraverseFilter[Queue] =
     cats.instances.queue.catsStdTraverseFilterForQueue
 
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
-
   /**
    * Summon an instance of [[FunctorFilter]] for `F`.
    */
@@ -154,10 +149,6 @@ object FunctorFilter extends ScalaVersionSpecificTraverseFilterInstances with Fu
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToFunctorFilterOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }
 

@@ -21,8 +21,6 @@
 
 package cats
 
-import simulacrum.typeclass
-
 /**
  * Comonad
  *
@@ -31,7 +29,7 @@ import simulacrum.typeclass
  *
  * Must obey the laws defined in cats.laws.ComonadLaws.
  */
-@typeclass trait Comonad[F[_]] extends CoflatMap[F] {
+trait Comonad[F[_]] extends CoflatMap[F] {
 
   /**
    * `extract` is the dual of `pure` on Monad (via `Applicative`)
@@ -50,10 +48,6 @@ import simulacrum.typeclass
 }
 
 object Comonad {
-
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
 
   /**
    * Summon an instance of [[Comonad]] for `F`.
@@ -92,9 +86,5 @@ object Comonad {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToComonadOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }

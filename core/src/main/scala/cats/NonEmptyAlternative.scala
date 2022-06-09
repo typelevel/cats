@@ -21,9 +21,7 @@
 
 package cats
 
-import simulacrum.typeclass
-
-@typeclass trait NonEmptyAlternative[F[_]] extends Applicative[F] with SemigroupK[F] { self =>
+trait NonEmptyAlternative[F[_]] extends Applicative[F] with SemigroupK[F] { self =>
 
   /**
    * Lift `a` into `F[_]` and prepend it to `fa`.
@@ -55,9 +53,6 @@ import simulacrum.typeclass
 }
 
 object NonEmptyAlternative {
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
 
   /**
    * Summon an instance of [[NonEmptyAlternative]] for `F`.
@@ -78,8 +73,7 @@ object NonEmptyAlternative {
     type TypeClassType <: NonEmptyAlternative[F]
     def self: F[A]
     val typeClassInstance: TypeClassType
-    // Note: `prependK` has to be added manually since simulacrum is not able to handle `self` as a second parameter.
-    // def prependK(a: A): F[A] = typeClassInstance.prependK[A](a, self)
+    def prependK(a: A): F[A] = typeClassInstance.prependK[A](a, self)
     def appendK(a: A): F[A] = typeClassInstance.appendK[A](self, a)
   }
   trait AllOps[F[_], A] extends Ops[F, A] with Applicative.AllOps[F, A] with SemigroupK.AllOps[F, A] {
@@ -97,7 +91,4 @@ object NonEmptyAlternative {
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToNonEmptyAlternativeOps
 
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 }

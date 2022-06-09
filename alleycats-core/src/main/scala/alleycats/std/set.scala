@@ -120,6 +120,18 @@ trait SetInstances {
         }.value
       }
 
+      override def mapAccumulate[S, A, B](init: S, fa: Set[A])(f: (S, A) => (S, B)): (S, Set[B]) = {
+        val iter = fa.iterator
+        var s = init
+        val set = Set.newBuilder[B]
+        while (iter.hasNext) {
+          val (snext, b) = f(s, iter.next())
+          set += b
+          s = snext
+        }
+        (s, set.result())
+      }
+
       override def get[A](fa: Set[A])(idx: Long): Option[A] = {
         @tailrec
         def go(idx: Int, it: Iterator[A]): Option[A] =

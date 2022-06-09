@@ -141,6 +141,11 @@ sealed private[data] trait IdTTraverse[F[_]] extends Traverse[IdT[F, *]] with Id
 
   def traverse[G[_]: Applicative, A, B](fa: IdT[F, A])(f: A => G[B]): G[IdT[F, B]] =
     fa.traverse(f)
+
+  override def mapAccumulate[S, A, B](init: S, fa: IdT[F, A])(f: (S, A) => (S, B)): (S, IdT[F, B]) = {
+    val (snext, fb) = F0.mapAccumulate(init, fa.value)(f)
+    (snext, IdT(fb))
+  }
 }
 
 sealed private[data] trait IdTNonEmptyTraverse[F[_]]

@@ -630,6 +630,15 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
       case e @ Invalid(_) => F.pure(e)
     }
 
+  def mapAccumulate[S, EE >: E, B](init: S)(f: (S, A) => (S, B)): (S, Validated[EE, B]) =
+    this match {
+      case Valid(a) =>
+        val (snext, b) = f(init, a)
+        (snext, Valid(b))
+
+      case e @ Invalid(_) => (init, e)
+    }
+
   /**
    * apply the given function to the value with the given B when
    * valid, otherwise return the given B
@@ -998,6 +1007,9 @@ sealed abstract private[data] class ValidatedInstances2 {
 
       override def traverse[G[_]: Applicative, A, B](fa: Validated[E, A])(f: (A) => G[B]): G[Validated[E, B]] =
         fa.traverse(f)
+
+      override def mapAccumulate[S, A, B](init: S, fa: Validated[E, A])(f: (S, A) => (S, B)): (S, Validated[E, B]) =
+        fa.mapAccumulate(init)(f)
 
       override def foldLeft[A, B](fa: Validated[E, A], b: B)(f: (B, A) => B): B =
         fa.foldLeft(b)(f)

@@ -120,6 +120,9 @@ sealed abstract private[data] class ConstInstances extends ConstInstances0 {
 
       def traverse[G[_]: Applicative, A, B](fa: Const[C, A])(f: A => G[B]): G[Const[C, B]] =
         fa.traverse(f)
+
+      override def mapAccumulate[S, A, B](init: S, fa: Const[C, A])(f: (S, A) => (S, B)): (S, Const[C, B]) =
+        (init, fa.retag)
     }
 
   implicit def catsDataTraverseFilterForConst[C]: TraverseFilter[Const[C, *]] =
