@@ -310,9 +310,22 @@ class ParallelSuite
     }
   }
 
+  test("ParReplicateA_ should be equivalent to fill parSequence_") {
+    forAll(Gen.choose(1, 20), Arbitrary.arbitrary[Either[String, String]]) {
+      (repetitions: Int, e: Either[String, String]) =>
+        assert(Parallel.parReplicateA_(repetitions, e) === Parallel.parSequence_(List.fill(repetitions)(e)))
+    }
+  }
+
   test("ParReplicateA 2 should be equivalent to parMap2 List") {
     forAll { (e: Either[String, String]) =>
       assert(Parallel.parReplicateA(2, e) === Parallel.parMap2(e, e)((s1, s2) => List(s1, s2)))
+    }
+  }
+
+  test("ParReplicateA_ 2 should be equivalent to parMap2.void List") {
+    forAll { (e: Either[String, String]) =>
+      assert(Parallel.parReplicateA_(2, e) === Parallel.parMap2(e, e)((s1, s2) => List(s1, s2)).void)
     }
   }
 
