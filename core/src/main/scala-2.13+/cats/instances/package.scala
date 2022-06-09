@@ -40,7 +40,18 @@ package object instances {
   object deadline extends DeadlineInstances
   object function extends FunctionInstances with FunctionInstancesBinCompat0
   object partialFunction extends PartialFunctionInstances
+
+  /**
+   * @deprecated
+   *   Any non-pure use of [[scala.concurrent.Future Future]] with Cats is error prone
+   *   (particularly the semantics of [[cats.Traverse#traverse traverse]] with regard to execution order are unspecified).
+   *   We recommend using [[https://typelevel.org/cats-effect/ Cats Effect]] as a replacement for ''every'' use case of [[scala.concurrent.Future Future]].
+   *   However, at this time there are no plans to remove these instances from Cats.
+   *
+   * @see [[https://github.com/typelevel/cats/issues/4176 Changes in Future traverse behavior between 2.6 and 2.7]]
+   */
   object future extends FutureInstances
+
   object int extends IntInstances
   object invariant extends InvariantMonoidalInstances with InvariantInstances with InvariantInstancesBinCompat0
   object list extends ListInstances with ListInstancesBinCompat0

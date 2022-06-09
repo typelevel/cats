@@ -288,8 +288,19 @@ private[kernel] trait MonoidInstances extends BandInstances {
     cats.kernel.instances.either.catsDataMonoidForEither[A, B]
   implicit def catsKernelMonoidForTry[A: Monoid]: Monoid[Try[A]] =
     new TryMonoid[A](Monoid[A])
+
+  /**
+   * @deprecated
+   *   Any non-pure use of [[scala.concurrent.Future Future]] with Cats is error prone
+   *   (particularly the semantics of [[cats.Traverse#traverse traverse]] with regard to execution order are unspecified).
+   *   We recommend using [[https://typelevel.org/cats-effect/ Cats Effect]] as a replacement for ''every'' use case of [[scala.concurrent.Future Future]].
+   *   However, at this time there are no plans to remove these instances from Cats.
+   *
+   * @see [[https://github.com/typelevel/cats/issues/4176 Changes in Future traverse behavior between 2.6 and 2.7]]
+   */
   implicit def catsKernelMonoidForFuture[A](implicit A: Monoid[A], ec: ExecutionContext): Monoid[Future[A]] =
     new FutureMonoid[A](A, ec)
+
   implicit def catsKernelMonoidForOption[A: Semigroup]: Monoid[Option[A]] =
     cats.kernel.instances.option.catsKernelStdMonoidForOption[A]
   implicit def catsKernelMonoidForSeq[A]: Monoid[Seq[A]] =
@@ -319,6 +330,15 @@ private[kernel] trait SemigroupInstances {
     cats.kernel.instances.either.catsDataSemigroupForEither[A, B]
   implicit def catsKernelSemigroupForTry[A: Semigroup]: Semigroup[Try[A]] =
     new TrySemigroup[A](Semigroup[A])
+
+  /**
+   * @deprecated
+   *   Any non-pure use of [[scala.concurrent.Future Future]] with Cats is error prone
+   *   (particularly the semantics of [[cats.Traverse#traverse traverse]] with regard to execution order are unspecified).
+   *   We recommend using [[https://typelevel.org/cats-effect/ Cats Effect]] as a replacement for ''every'' use case of [[scala.concurrent.Future Future]].
+   *
+   * @see [[https://github.com/typelevel/cats/issues/4176 Changes in Future traverse behavior between 2.6 and 2.7]]
+   */
   implicit def catsKernelSemigroupForFuture[A](implicit A: Semigroup[A], ec: ExecutionContext): Semigroup[Future[A]] =
     new FutureSemigroup[A](A, ec)
 }

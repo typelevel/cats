@@ -25,6 +25,15 @@ package instances
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
+/**
+ * @deprecated
+ *   Any non-pure use of [[scala.concurrent.Future Future]] with Cats is error prone
+ *   (particularly the semantics of [[cats.Traverse#traverse traverse]] with regard to execution order are unspecified).
+ *   We recommend using [[https://typelevel.org/cats-effect/ Cats Effect]] as a replacement for ''every'' use case of [[scala.concurrent.Future Future]].
+ *   However, at this time there are no plans to remove these instances from Cats.
+ *
+ * @see [[https://github.com/typelevel/cats/issues/4176 Changes in Future traverse behavior between 2.6 and 2.7]]
+ */
 trait FutureInstances extends FutureInstances1 {
 
   implicit def catsStdInstancesForFuture(implicit
