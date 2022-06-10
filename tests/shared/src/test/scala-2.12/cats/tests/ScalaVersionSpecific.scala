@@ -25,8 +25,6 @@ import cats.kernel.{Eq, Order}
 import cats.laws.discipline.{ExhaustiveCheck, MiniInt}
 import cats.laws.discipline.MiniInt._
 import cats.laws.discipline.eq._
-import cats.laws.discipline.DeprecatedEqInstances
-import org.scalacheck.Arbitrary
 
 trait ScalaVersionSpecificFoldableSuite
 trait ScalaVersionSpecificParallelSuite
@@ -35,7 +33,7 @@ trait ScalaVersionSpecificTraverseSuite
 
 trait ScalaVersionSpecificAlgebraInvariantSuite {
   // This version-specific instance is required since 2.12 and below do not have parseString on the Numeric class
-  protected val integralForMiniInt: Integral[MiniInt] = new Integral[MiniInt] {
+  protected trait MiniIntNumeric extends Numeric[MiniInt] {
     def compare(x: MiniInt, y: MiniInt): Int = Order[MiniInt].compare(x, y)
     def plus(x: MiniInt, y: MiniInt): MiniInt = x + y
     def minus(x: MiniInt, y: MiniInt): MiniInt = x + (-y)
@@ -46,8 +44,6 @@ trait ScalaVersionSpecificAlgebraInvariantSuite {
     def toLong(x: MiniInt): Long = x.toInt.toLong
     def toFloat(x: MiniInt): Float = x.toInt.toFloat
     def toDouble(x: MiniInt): Double = x.toInt.toDouble
-    def quot(x: MiniInt, y: MiniInt): MiniInt = MiniInt.unsafeFromInt(x.toInt / y.toInt)
-    def rem(x: MiniInt, y: MiniInt): MiniInt = MiniInt.unsafeFromInt(x.toInt % y.toInt)
   }
 
   // This version-specific instance is required since 2.12 and below do not have parseString on the Numeric class
@@ -75,24 +71,4 @@ trait ScalaVersionSpecificAlgebraInvariantSuite {
     )
   }
 
-  // This version-specific instance is required since 2.12 and below do not have parseString on the Numeric class
-  @annotation.nowarn("cat=deprecation")
-  implicit protected def eqFractional[A: Eq: Arbitrary]: Eq[Fractional[A]] = {
-    import DeprecatedEqInstances.catsLawsEqForFn1
-
-    Eq.by { fractional =>
-      (
-        fractional.compare _,
-        fractional.plus _,
-        fractional.minus _,
-        fractional.times _,
-        fractional.negate _,
-        fractional.fromInt _,
-        fractional.toInt _,
-        fractional.toLong _,
-        fractional.toFloat _,
-        fractional.toDouble _
-      )
-    }
-  }
 }
