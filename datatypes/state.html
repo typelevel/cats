@@ -415,7 +415,7 @@
   </span><span class="identifier">_</span><span> &lt;- </span><span class="identifier">close</span><span>
   </span><span class="identifier">_</span><span> &lt;- </span><span class="identifier">open</span><span>
 } </span><span class="keyword">yield</span><span> ()
-</span><span class="comment">// valid: IndexedStateT[Eval, Closed.type, Open.type, Unit] = cats.data.IndexedStateT@6a26f0a9</span></code></pre>
+</span><span class="comment">// valid: IndexedStateT[Eval, Closed.type, Open.type, Unit] = cats.data.IndexedStateT@70ebe040</span></code></pre>
         <p>Note that the inferred type of <code>valid</code> correctly models that this computation can be executed only with an initial <code>Closed</code> state.</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">valid</span><span>.</span><span class="identifier">run</span><span>(</span><span class="type-name">Open</span><span>)
 </span><span class="comment">// error: type mismatch;
@@ -424,7 +424,7 @@
 // valid.run(Open)
 //           ^^^^</span></code></pre>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">valid</span><span>.</span><span class="identifier">run</span><span>(</span><span class="type-name">Closed</span><span>)
-</span><span class="comment">// res6: Eval[(Open.type, Unit)] = cats.Eval$$anon$1@7af57749</span></code></pre>
+</span><span class="comment">// res6: Eval[(Open.type, Unit)] = cats.Eval$$anon$1@39999fc2</span></code></pre>
 
         <hr style="margin-top: 30px"/>
         <footer style="font-size: 90%; text-align: center">
