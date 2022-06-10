@@ -88,7 +88,7 @@ class AndThenSuite extends CatsSuite with ScalaCheckSuite {
     val fs = (0 until count).map(_ => (i: Int) => i + 1)
     val result = fs.foldLeft(AndThen((x: Int) => x))(_.andThen(_))(42)
 
-    assertEquals(result, (count + 42))
+    assertEquals(result, count + 42)
   }
 
   test("compose is stack safe") {
@@ -96,7 +96,7 @@ class AndThenSuite extends CatsSuite with ScalaCheckSuite {
     val fs = (0 until count).map(_ => (i: Int) => i + 1)
     val result = fs.foldLeft(AndThen((x: Int) => x))(_.compose(_))(42)
 
-    assertEquals(result, (count + 42))
+    assertEquals(result, count + 42)
   }
 
   test("Function1 andThen is stack safe") {
@@ -181,7 +181,7 @@ class AndThenSuite extends CatsSuite with ScalaCheckSuite {
     forAll(genLeft[Int]) { at =>
       val notInit = AndThen.isRightAssociated(at)
       val done = AndThen.isRightAssociated(AndThen.toRightAssociated(at))
-      (!notInit && done)
+      !notInit && done
     } &&
     // check that right associating doesn't change the function value
     forAll(genAndThen[Int], Gen.choose(Int.MinValue, Int.MaxValue)) { (at, i) =>

@@ -288,7 +288,7 @@ class KleisliSuite extends CatsSuite {
 
   test("lift") {
     val f = Kleisli { (x: Int) =>
-      (Some(x + 1): Option[Int])
+      Some(x + 1): Option[Int]
     }
     val l = f.lift[List]
     assert((List(1, 2, 3) >>= l.run) === (List(Some(2), Some(3), Some(4))))

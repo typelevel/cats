@@ -288,11 +288,16 @@ final class ParallelApOps[M[_], A](private val ma: M[A]) extends AnyVal {
 
   def parReplicateA(n: Int)(implicit P: Parallel[M]): M[List[A]] =
     Parallel.parReplicateA(n, ma)
+
+  def parReplicateA_(n: Int)(implicit P: Parallel[M]): M[Unit] =
+    Parallel.parReplicateA_(n, ma)
 }
 
 final class ParallelApOps1[M[_], A](private val ma: M[A]) extends AnyVal {
   def parReplicateA(n: Int)(implicit P: Parallel[M]): M[List[A]] =
     Parallel.parReplicateA(n, ma)
+  def parReplicateA_(n: Int)(implicit P: Parallel[M]): M[Unit] =
+    Parallel.parReplicateA_(n, ma)
 }
 
 final class NonEmptyParallelApOps[M[_], A](private val ma: M[A]) extends AnyVal {

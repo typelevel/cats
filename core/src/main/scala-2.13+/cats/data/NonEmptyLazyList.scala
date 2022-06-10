@@ -213,7 +213,7 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
    * Tests if some element is contained in this NonEmptyLazyList
    */
   final def contains(a: A)(implicit A: Eq[A]): Boolean =
-    toLazyList.contains(a)
+    toLazyList.exists(A.eqv(_, a))
 
   /**
    * Tests whether a predicate holds for all elements

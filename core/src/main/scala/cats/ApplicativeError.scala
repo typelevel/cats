@@ -137,7 +137,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    * `F[A]` values.
    */
   def recover[A](fa: F[A])(pf: PartialFunction[E, A]): F[A] =
-    handleErrorWith(fa)(e => (pf.andThen(pure(_))).applyOrElse(e, raiseError[A](_)))
+    handleErrorWith(fa)(e => pf.andThen(pure(_)).applyOrElse(e, raiseError[A](_)))
 
   /**
    * Recover from certain errors by mapping them to an `F[A]` value.
@@ -238,7 +238,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    * }}}
    */
   def onError[A](fa: F[A])(pf: PartialFunction[E, F[Unit]]): F[A] =
-    handleErrorWith(fa)(e => (pf.andThen(map2(_, raiseError[A](e))((_, b) => b))).applyOrElse(e, raiseError))
+    handleErrorWith(fa)(e => pf.andThen(map2(_, raiseError[A](e))((_, b) => b)).applyOrElse(e, raiseError))
 
   /**
    * Often E is Throwable. Here we try to call pure or catch

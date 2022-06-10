@@ -32,7 +32,7 @@ trait UnorderedFoldableLaws[F[_]] {
 
   def forallConsistentWithExists[A](fa: F[A], p: A => Boolean): Boolean =
     if (F.forall(fa)(p)) {
-      val negationExists = F.exists(fa)(a => !(p(a)))
+      val negationExists = F.exists(fa)(a => !p(a))
 
       // if p is true for all elements, then there cannot be an element for which
       // it does not hold.
