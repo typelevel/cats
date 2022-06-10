@@ -28,7 +28,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        scala: [2.12.16, 2.13.8, 3.0.2]
+        scala: [2.12.16, 2.13.8, 3.1.2]
         java: [temurin@8, temurin@17, graalvm@11]
         project: [rootJS, rootJVM, rootNative]
         exclude:
