@@ -1,12 +1,12 @@
 ThisBuild / tlBaseVersion := "2.8"
 
-val scalaCheckVersion = "1.15.4"
+val scalaCheckVersion = "1.16.0"
 
-val disciplineVersion = "1.4.0"
+val disciplineVersion = "1.5.1"
 
-val disciplineMunitVersion = "1.0.9"
+val disciplineMunitVersion = "2.0.0-M2"
 
-val munitVersion = "0.7.29"
+val munitVersion = "1.0.0-M5"
 
 val kindProjectorVersion = "0.13.2"
 
@@ -25,10 +25,6 @@ ThisBuild / scalaVersion := Scala212
 
 ThisBuild / tlFatalWarnings := false
 ThisBuild / tlFatalWarningsInCi := false
-
-ThisBuild / githubWorkflowBuildMatrixExclusions +=
-  MatrixExclude(Map("project" -> "rootNative", "scala" -> Scala3))
-// Dotty is not yet supported by Scala Native
 
 ThisBuild / githubWorkflowAddedJobs ++= Seq(
   WorkflowJob(
@@ -73,9 +69,7 @@ lazy val commonJsSettings = Seq(
 
 lazy val commonNativeSettings = Seq(
   doctestGenTests := Seq.empty,
-  // Currently scala-native does not support Dotty
-  crossScalaVersions := { (ThisBuild / crossScalaVersions).value.filterNot(Scala3 == _) },
-  tlVersionIntroduced ++= List("2.12", "2.13").map(_ -> "2.4.0").toMap
+  tlVersionIntroduced ++= List("2.12", "2.13").map(_ -> "2.4.0").toMap + ("3" -> "2.8.0")
 )
 
 lazy val disciplineDependencies = Seq(
@@ -135,6 +129,11 @@ lazy val algebraSettings = Seq[Setting[_]](
   tlVersionIntroduced := List("2.12", "2.13", "3").map(_ -> "2.7.0").toMap
 )
 
+lazy val algebraNativeSettings = Seq[Setting[_]](
+  tlMimaPreviousVersions ~= (_ - "2.2.3"),
+  tlVersionIntroduced += ("3" -> "2.8.0")
+)
+
 lazy val algebra = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .crossType(CrossType.Pure)
   .in(file("algebra-core"))
@@ -149,6 +148,7 @@ lazy val algebra = crossProject(JSPlatform, JVMPlatform, NativePlatform)
     libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % Test,
     testingDependencies
   )
+  .nativeSettings(algebraNativeSettings)
 
 lazy val algebraLaws = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .in(file("algebra-laws"))
@@ -160,6 +160,7 @@ lazy val algebraLaws = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .jvmSettings(commonJvmSettings)
   .nativeSettings(commonNativeSettings)
   .settings(algebraSettings)
+  .nativeSettings(algebraNativeSettings)
 
 lazy val core = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .crossType(CrossType.Pure)
