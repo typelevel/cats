@@ -26,7 +26,14 @@ import cats.kernel._
 
 import scala.collection.immutable._
 
-private[data] object NonEmptyMapImpl extends NonEmptyMapInstances with Newtype2 {
+/**
+ * Actual implementation for [[cats.data.NonEmptyMap]]
+ *
+ * @note This object is kept public for the sake of binary compatibility only
+ *       and therefore is subject to changes in future versions of Cats.
+ *       Do not use directly - use [[cats.data.NonEmptyMap]] instead.
+ */
+object NonEmptyMapImpl extends NonEmptyMapInstances with Newtype2 {
 
   private[data] def create[K, A](m: SortedMap[K, A]): Type[K, A] =
     m.asInstanceOf[Type[K, A]]
