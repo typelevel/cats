@@ -163,6 +163,7 @@
         <li class="level2"><a href="validated.html">Validated</a></li>
         <li class="level2"><a href="writer.html">Writer</a></li>
         <li class="level2"><a href="writert.html">WriterT</a></li>
+        <li class="level2"><a href="statet.html">StateT</a></li>
       </ul>
 
       <ul class="nav-list">
@@ -228,7 +229,7 @@
   </span><span class="identifier">println</span><span>(</span><span class="string-literal">&quot;Running expensive calculation...&quot;</span><span>)
   </span><span class="number-literal">1</span><span> + </span><span class="number-literal">2</span><span> * </span><span class="number-literal">3</span><span>
 }
-</span><span class="comment">// lazyEval: Eval[Int] = cats.Later@3636e164
+</span><span class="comment">// lazyEval: Eval[Int] = cats.Later@1068aa25
 </span><span>
 </span><span class="identifier">lazyEval</span><span>.</span><span class="identifier">value</span><span>
 </span><span class="comment">// Running expensive calculation...
@@ -247,7 +248,7 @@
   </span><span class="identifier">println</span><span>(</span><span class="string-literal">&quot;Running expensive calculation...&quot;</span><span>)
   </span><span class="number-literal">1</span><span> + </span><span class="number-literal">2</span><span> * </span><span class="number-literal">3</span><span>
 }
-</span><span class="comment">// always: Eval[Int] = cats.Always@7a7ad638
+</span><span class="comment">// always: Eval[Int] = cats.Always@22066b1c
 </span><span>
 </span><span class="identifier">always</span><span>.</span><span class="identifier">value</span><span>
 </span><span class="comment">// Running expensive calculation...

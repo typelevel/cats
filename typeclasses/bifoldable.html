@@ -163,6 +163,7 @@
         <li class="level2"><a href="../datatypes/validated.html">Validated</a></li>
         <li class="level2"><a href="../datatypes/writer.html">Writer</a></li>
         <li class="level2"><a href="../datatypes/writert.html">WriterT</a></li>
+        <li class="level2"><a href="../datatypes/statet.html">StateT</a></li>
       </ul>
 
       <ul class="nav-list">
@@ -303,7 +304,7 @@
     (</span><span class="identifier">s</span><span>, </span><span class="identifier">acc</span><span>) =&gt; </span><span class="identifier">acc</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span> |+| </span><span class="identifier">s</span><span>),
     (</span><span class="identifier">s</span><span>, </span><span class="identifier">acc</span><span>) =&gt; </span><span class="identifier">acc</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span> |+| </span><span class="identifier">s</span><span>)
   )
-</span><span class="comment">// right: Eval[String] = cats.Eval$$anon$1@3bc90762
+</span><span class="comment">// right: Eval[String] = cats.Eval$$anon$1@6bc29bf4
 </span><span>
 </span><span class="identifier">left</span><span> === </span><span class="identifier">expected</span><span>
 </span><span class="comment">// res2: Boolean = true
@@ -319,7 +320,7 @@
     (</span><span class="identifier">s</span><span>, </span><span class="identifier">acc</span><span>) =&gt; </span><span class="identifier">acc</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span> |+| </span><span class="identifier">s</span><span>),
     (</span><span class="identifier">s</span><span>, </span><span class="identifier">acc</span><span>) =&gt; </span><span class="identifier">acc</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span> |+| </span><span class="identifier">s</span><span>)
   )
-</span><span class="comment">// reversedRight: Eval[String] = cats.Eval$$anon$1@6adb9a56
+</span><span class="comment">// reversedRight: Eval[String] = cats.Eval$$anon$1@39ae9493
 </span><span>
 </span><span class="identifier">reversedRight</span><span>.</span><span class="identifier">value</span><span> === </span><span class="identifier">expected</span><span>
 </span><span class="comment">// res4: Boolean = false</span></code></pre>

@@ -163,6 +163,7 @@
         <li class="level2"><a href="validated.html">Validated</a></li>
         <li class="level2"><a href="writer.html">Writer</a></li>
         <li class="level2"><a href="writert.html">WriterT</a></li>
+        <li class="level2"><a href="statet.html">StateT</a></li>
       </ul>
 
       <ul class="nav-list">
@@ -341,7 +342,7 @@
 //   (seed.next, seed.long)
 //               ^^^^^^^^^</span></code></pre>
         <p>Oops! That doesn&#39;t work: <code>State[S, A]</code> requires that we return a pure next <code>S</code> in the <code>State.apply</code> constructor. We could define <code>nextLong</code> as <code>State[Future[AsyncSeed], Future[Long]]</code>, but that would get us into even more trouble:</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">nextLong</span><span>: </span><span class="type-name">State</span><span>[</span><span class="type-name">Future</span><span>[</span><span class="type-name">AsyncSeed</span><span>], </span><span class="type-name">Future</span><span>[</span><span class="type-name">Long</span><span>]] = </span><span class="type-name">State</span><span> { </span><span class="identifier">seedF</span><span> =&gt; 
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">nextLong</span><span>: </span><span class="type-name">State</span><span>[</span><span class="type-name">Future</span><span>[</span><span class="type-name">AsyncSeed</span><span>], </span><span class="type-name">Future</span><span>[</span><span class="type-name">Long</span><span>]] = </span><span class="type-name">State</span><span> { </span><span class="identifier">seedF</span><span> =&gt;
   </span><span class="identifier">seedF</span><span>.</span><span class="identifier">map</span><span> { </span><span class="identifier">seed</span><span> =&gt;
     (</span><span class="identifier">seed</span><span>.</span><span class="identifier">next</span><span>, </span><span class="identifier">seed</span><span>.</span><span class="identifier">long</span><span>)
   }
@@ -352,7 +353,7 @@
 //   seedF.map { seed =&gt;
 //             ^</span></code></pre>
         <p>The <code>seed</code> that <code>State.apply</code> passes in is now a <code>Future</code>, so we must map it. But we can&#39;t return a <code>Future[(Future[S], [A])]</code>; so what do we do?</p>
-        <p>Luckily, <code>State[S, A]</code> is an alias for <code>StateT[Eval, S, A]</code> - a monad transformer defined as <code>StateT[F[_], S, A]</code>. This data type represents computations of the form <code>S =&gt; F[(S, A)]</code>. </p>
+        <p>Luckily, <code>State[S, A]</code> is an alias for <code>StateT[Eval, S, A]</code> - a monad transformer defined as <code>StateT[F[_], S, A]</code>. This data type represents computations of the form <code>S =&gt; F[(S, A)]</code>.</p>
         <p>If we plug in our concrete types, we get <code>AsyncSeed =&gt; Future[(AsyncSeed, A)]</code>, which is something we can work with:</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">data</span><span>.</span><span class="type-name">StateT</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">instances</span><span>.</span><span class="identifier">future</span><span>.</span><span class="identifier">_</span><span>
@@ -364,7 +365,7 @@
         <p>Now, what do we get back if we invoke <code>run</code> on our <code>nextLong</code> action?</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">nextLong</span><span>.</span><span class="identifier">run</span><span>(</span><span class="type-name">AsyncSeed</span><span>(</span><span class="number-literal">0</span><span>))
 </span><span class="comment">// res3: Future[(AsyncSeed, Long)] = Future(Success((AsyncSeed(1442695040888963407),0)))</span></code></pre>
-        <p>Since every intermediate computation returns a <code>Future</code>, the composite computation returns a <code>Future</code> as well. To summarize, <code>StateT[F[_], S, A]</code> allows us to interleave effects of type <code>F[_]</code> in the computations wrapped by it. </p>
+        <p>Since every intermediate computation returns a <code>Future</code>, the composite computation returns a <code>Future</code> as well. To summarize, <code>StateT[F[_], S, A]</code> allows us to interleave effects of type <code>F[_]</code> in the computations wrapped by it.</p>
         <p>It should be noted that different combinators on <code>StateT</code> impose different constraints on <code>F</code>; for example, <code>map</code> only requires that <code>F</code> has a <code>Functor</code> instance, but <code>flatMap</code> naturally requires <code>F</code> to have a <code>FlatMap</code> instance. Have a look at the method signatures for the details.</p>
         
         <h2 id="changing-states" class="section">Changing States<a class="anchor-link right" href="#changing-states"><i class="icofont-laika">&#xef71;</i></a></h2>
@@ -415,7 +416,7 @@
   </span><span class="identifier">_</span><span> &lt;- </span><span class="identifier">close</span><span>
   </span><span class="identifier">_</span><span> &lt;- </span><span class="identifier">open</span><span>
 } </span><span class="keyword">yield</span><span> ()
-</span><span class="comment">// valid: IndexedStateT[Eval, Closed.type, Open.type, Unit] = cats.data.IndexedStateT@70ebe040</span></code></pre>
+</span><span class="comment">// valid: IndexedStateT[Eval, Closed.type, Open.type, Unit] = cats.data.IndexedStateT@48e0b9d6</span></code></pre>
         <p>Note that the inferred type of <code>valid</code> correctly models that this computation can be executed only with an initial <code>Closed</code> state.</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">valid</span><span>.</span><span class="identifier">run</span><span>(</span><span class="type-name">Open</span><span>)
 </span><span class="comment">// error: type mismatch;
@@ -424,7 +425,7 @@
 // valid.run(Open)
 //           ^^^^</span></code></pre>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">valid</span><span>.</span><span class="identifier">run</span><span>(</span><span class="type-name">Closed</span><span>)
-</span><span class="comment">// res6: Eval[(Open.type, Unit)] = cats.Eval$$anon$1@39999fc2</span></code></pre>
+</span><span class="comment">// res6: Eval[(Open.type, Unit)] = cats.Eval$$anon$1@20489e6</span></code></pre>
 
         <hr style="margin-top: 30px"/>
         <footer style="font-size: 90%; text-align: center">
