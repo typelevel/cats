@@ -171,20 +171,3 @@ TableReservationSystem.processBookings(
 The full source code of this example can be found at this
 [gist](https://gist.github.com/benkio/baa4fe1d50751cd602c4175f1bb39f4d)
 or [scastie](https://scastie.scala-lang.org/YhJmET6PRJKvrZTfrZJkbQ)
-
-## Conclusions
-
-If you would like to explore a more complex example involving: I/O
-operations, State condition checks and a more advanced way to compose
-`StateT` computations. We suggest to check out the _hangman game_ from
-the following links:
-
-[gist](https://gist.github.com/benkio/46f5aea4f15ec059f02d6bfe9bd25e99)
-or [scastie](https://scastie.scala-lang.org/4Ab7xspkRJ2q9UKQ9OHrUQ).
-
-This should give you a more in depth understanding of what the
-`StateT` is capable of.
-
-We hope these examples help to clarify how `StateT` can be used in
-designing a computation based on state machine steps that may require
-side effects or other capabilities, eg `Option`, `List`, `Applicative` etc.
