@@ -24,8 +24,6 @@ package cats
 import cats.arrow.Arrow
 import cats.data.Chain
 
-import scala.collection.immutable.IndexedSeq
-
 /**
  * Applicative functor.
  *
@@ -87,11 +85,25 @@ trait Applicative[F[_]] extends Apply[F] with InvariantMonoidal[F] { self =>
    */
   def replicateA[A](n: Int, fa: F[A]): F[List[A]] =
     if (n <= 0) pure(Nil)
-    else {
-      map(Chain.traverseViaChain(new IndexedSeq[F[A]] {
-        override def length = n
-        override def apply(i: Int) = fa
-      })(identity)(this))(_.toList)
+    else if (n == 1) {
+      // if n == 1 don't incur the penalty two maps: .map(Chain.one(_)).map(_.toList)
+      map(fa)(_ :: Nil)
+    } else {
+      val one = map(fa)(Chain.one(_))
+
+      // invariant: n >= 1
+      def loop(n: Int): F[Chain[A]] =
+        if (n == 1) one
+        else {
+          // n >= 2
+          // so (n >> 1) >= 1 and we are allowed to call loop
+          val half = loop(n >> 1)
+          val both = map2(half, half)(_.concat(_))
+          if ((n & 1) == 1) map2(one, both)(_.concat(_))
+          else both
+        }
+
+      map(loop(n))(_.toList)
     }
 
   /**
@@ -109,19 +121,22 @@ trait Applicative[F[_]] extends Apply[F] with InvariantMonoidal[F] { self =>
    * res0: (Int, Unit) = (5,())
    * }}}
    */
-  def replicateA_[A](n: Int, fa: F[A]): F[Unit] = {
-    val fvoid = void(fa)
-    def loop(n: Int): F[Unit] =
-      if (n <= 0) unit
-      else if (n == 1) fvoid
-      else {
-        val half = loop(n >> 1)
-        val both = productR(half)(half)
-        if ((n & 1) == 1) productR(both)(fvoid)
-        else both
-      }
-    loop(n)
-  }
+  def replicateA_[A](n: Int, fa: F[A]): F[Unit] =
+    if (n <= 0) unit
+    else {
+      val fvoid = void(fa)
+      // invariant n >= 1
+      def loop(n: Int): F[Unit] =
+        if (n == 1) fvoid
+        else {
+          // since n >= 2, then (n >> 1) >= 1 so we can call loop
+          val half = loop(n >> 1)
+          val both = productR(half)(half)
+          if ((n & 1) == 1) productR(both)(fvoid)
+          else both
+        }
+      loop(n)
+    }
 
   /**
    * Compose an `Applicative[F]` and an `Applicative[G]` into an
