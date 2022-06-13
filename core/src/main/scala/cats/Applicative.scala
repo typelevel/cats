@@ -105,7 +105,7 @@ trait Applicative[F[_]] extends Apply[F] with InvariantMonoidal[F] { self =>
             if ((n & 1) == 1) map2(acc, fa)(_.concat(_)) else acc
           )
 
-      map(loop(one, n, pure(Chain.empty)))(_.toList)
+      map(loop(one, n - 1, one))(_.toList)
     }
 
   /**
@@ -125,6 +125,7 @@ trait Applicative[F[_]] extends Apply[F] with InvariantMonoidal[F] { self =>
    */
   def replicateA_[A](n: Int, fa: F[A]): F[Unit] =
     if (n <= 0) unit
+    else if (n == 1) void(fa)
     else {
       val fvoid = void(fa)
 
@@ -140,7 +141,7 @@ trait Applicative[F[_]] extends Apply[F] with InvariantMonoidal[F] { self =>
             if ((n & 1) == 1) productR(acc)(fa) else acc
           )
 
-      loop(fvoid, n, unit)
+      loop(fvoid, n - 1, fvoid)
     }
 
   /**
