@@ -21,7 +21,7 @@ val Scala213 = "2.13.8"
 val Scala3 = "3.1.2"
 
 ThisBuild / crossScalaVersions := Seq(Scala212, Scala213, Scala3)
-ThisBuild / scalaVersion := Scala212
+ThisBuild / scalaVersion := Scala213
 
 ThisBuild / tlFatalWarnings := false
 ThisBuild / tlFatalWarningsInCi := false
