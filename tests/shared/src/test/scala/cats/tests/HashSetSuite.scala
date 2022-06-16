@@ -257,4 +257,33 @@ class HashSetSuite extends CatsSuite {
       catsSet.foreach(int => assert(scalaSet.contains(int)))
     }
   }
+
+  property("diff consistent with Scala Set diff") {
+    forAll { (left: List[Int], right: List[Int]) =>
+      val scalaSet = Set(left: _*) -- Set(right: _*)
+      val catsSet = HashSet.fromSeq(left).diff(HashSet.fromSeq(right))
+      assert(scalaSet.forall(catsSet.contains))
+      catsSet.foreach(int => assert(scalaSet.contains(int)))
+    }
+  }
+
+  property("filter consistent with Scala Set filter") {
+    forAll { (scalaSet: Set[Int], pred: Int => Boolean) =>
+      val catsSet = HashSet.fromIterableOnce(scalaSet)
+      val filteredCatsSet = catsSet.filter(pred)
+      val filteredScalaSet = scalaSet.filter(pred)
+      assert(filteredScalaSet.forall(filteredCatsSet.contains))
+      filteredCatsSet.foreach(int => assert(filteredScalaSet.contains(int)))
+    }
+  }
+
+  property("filterNot consistent with Scala Set filterNot") {
+    forAll { (scalaSet: Set[Int], pred: Int => Boolean) =>
+      val catsSet = HashSet.fromIterableOnce(scalaSet)
+      val filteredCatsSet = catsSet.filterNot(pred)
+      val filteredScalaSet = scalaSet.filterNot(pred)
+      assert(filteredScalaSet.forall(filteredCatsSet.contains))
+      filteredCatsSet.foreach(int => assert(filteredScalaSet.contains(int)))
+    }
+  }
 }

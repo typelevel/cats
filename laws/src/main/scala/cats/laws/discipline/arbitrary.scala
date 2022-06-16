@@ -416,7 +416,11 @@ object arbitrary extends ArbitraryInstances0 with ScalaVersionSpecific.Arbitrary
   implicit val catsLawsArbitraryForMiniInt: Arbitrary[MiniInt] =
     Arbitrary(Gen.oneOf(MiniInt.allValues))
 
-  implicit def catsLawsArbitraryForHashSet[A](implicit A: Arbitrary[A], hash: Hash[A]): Arbitrary[HashSet[A]] =
+  implicit def catsLawsArbitraryForHashSet[A](implicit
+    A: Arbitrary[A],
+    C: Cogen[A],
+    hash: Hash[A]
+  ): Arbitrary[HashSet[A]] =
     Arbitrary(
       Gen.oneOf(
         // empty
@@ -453,7 +457,22 @@ object arbitrary extends ArbitraryInstances0 with ScalaVersionSpecific.Arbitrary
         Gen.delay(for {
           left <- getArbitrary[HashSet[A]]
           right <- getArbitrary[HashSet[A]]
-        } yield left.union(right))
+        } yield left.union(right)),
+        // diff
+        Gen.delay(for {
+          left <- getArbitrary[HashSet[A]]
+          right <- getArbitrary[HashSet[A]]
+        } yield left.diff(right)),
+        // filter
+        Gen.delay(for {
+          set <- getArbitrary[HashSet[A]]
+          pred <- getArbitrary[A => Boolean]
+        } yield set.filter(pred)),
+        // filterNot
+        Gen.delay(for {
+          set <- getArbitrary[HashSet[A]]
+          pred <- getArbitrary[A => Boolean]
+        } yield set.filterNot(pred))
       )
     )
 

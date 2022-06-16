@@ -178,6 +178,62 @@ final class HashSet[A] private (private val rootNode: HashSet.Node[A])(implicit 
       new HashSet(newRootNode)
   }
 
+  final def diff(set: HashSet[A]): HashSet[A] = {
+    if (this.isEmpty)
+      this
+    else if (set.isEmpty)
+      this
+    else
+      diff(set.iterator)
+  }
+
+  final def diff(iterable: IterableOnce[A]): HashSet[A] = {
+    val newRootNode = iterable.iterator.foldLeft(rootNode) { case (node, a) =>
+      node.remove(a, improve(hash.hash(a)), 0)
+    }
+
+    if (newRootNode eq rootNode)
+      this
+    else
+      new HashSet(newRootNode)
+  }
+
+  final def filter(f: A => Boolean): HashSet[A] = {
+    if (isEmpty)
+      this
+    else {
+      val newRootNode = iterator.foldLeft(rootNode) { case (node, a) =>
+        if (f(a))
+          node
+        else
+          node.remove(a, improve(hash.hash(a)), 0)
+      }
+
+      if (newRootNode eq rootNode)
+        this
+      else
+        new HashSet(newRootNode)
+    }
+  }
+
+  final def filterNot(f: A => Boolean): HashSet[A] = {
+    if (isEmpty)
+      this
+    else {
+      val newRootNode = iterator.foldLeft(rootNode) { case (node, a) =>
+        if (f(a))
+          node.remove(a, improve(hash.hash(a)), 0)
+        else
+          node
+      }
+
+      if (newRootNode eq rootNode)
+        this
+      else
+        new HashSet(newRootNode)
+    }
+  }
+
   def toSet: Set[A] =
     new WrappedHashSet(this)
 

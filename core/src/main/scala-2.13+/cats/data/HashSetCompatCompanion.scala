@@ -34,6 +34,9 @@ private[data] trait HashSetCompatCompanion {
     override def isEmpty: Boolean = hashSet.isEmpty
     override def foreach[U](f: A => U): Unit = hashSet.foreach(f)
     override def concat(that: IterableOnce[A]): Set[A] = new WrappedHashSet(hashSet.union(that))
+    override def diff(that: scala.collection.Set[A]): Set[A] = new WrappedHashSet(hashSet.diff(that))
+    override def filter(pred: A => Boolean): Set[A] = new WrappedHashSet(hashSet.filter(pred))
+    override def filterNot(pred: A => Boolean): Set[A] = new WrappedHashSet(hashSet.filterNot(pred))
     override def hashCode: Int = hashSet.hashCode
     override def equals(that: Any): Boolean = that match {
       case set: WrappedHashSet[_] =>

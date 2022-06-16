@@ -38,6 +38,7 @@ class HashSetBench {
   var otherHashSet: HashSet[Long] = _
   var scalaSet: SHashSet[Long] = _
   var otherScalaSet: SHashSet[Long] = _
+  var pred: Long => Boolean = _
 
   def hashSetOfSize(n: Int) = HashSet.fromSeq(1L to (n.toLong))
   def scalaSetOfSize(n: Int) = SHashSet.newBuilder[Long].++=(1L to (n.toLong)).result()
@@ -48,6 +49,7 @@ class HashSetBench {
     otherHashSet = hashSetOfSize(size)
     scalaSet = scalaSetOfSize(size)
     otherScalaSet = scalaSetOfSize(size)
+    pred = (l: Long) => l % 2 == 0
   }
 
   @Benchmark
@@ -157,6 +159,30 @@ class HashSetBench {
   @Benchmark
   def scalaSetUnion(bh: Blackhole): Unit =
     bh.consume(scalaSet | otherScalaSet)
+
+  @Benchmark
+  def hashSetDiff(bh: Blackhole): Unit =
+    bh.consume(hashSet.diff(otherHashSet))
+
+  @Benchmark
+  def scalaSetDiff(bh: Blackhole): Unit =
+    bh.consume(scalaSet -- otherScalaSet)
+
+  @Benchmark
+  def hashSetFilter(bh: Blackhole): Unit =
+    bh.consume(hashSet.filter(pred))
+
+  @Benchmark
+  def scalaSetFilter(bh: Blackhole): Unit =
+    bh.consume(scalaSet.filter(pred))
+
+  @Benchmark
+  def hashSetFilterNot(bh: Blackhole): Unit =
+    bh.consume(hashSet.filterNot(pred))
+
+  @Benchmark
+  def scalaSetFilterNot(bh: Blackhole): Unit =
+    bh.consume(scalaSet.filterNot(pred))
 
   @Benchmark
   def hashSetUniversalEquals(bh: Blackhole): Unit =
