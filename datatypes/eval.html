@@ -11,11 +11,15 @@
     
       <meta name="author" content="Ross Baker"/>
     
+      <meta name="author" content="Arman Bilge"/>
+    
       <meta name="author" content="P. Oscar Boykin"/>
     
       <meta name="author" content="Travis Brown"/>
     
       <meta name="author" content="Adelbert Chang"/>
+    
+      <meta name="author" content="Daniel Esik"/>
     
       <meta name="author" content="Peter Neyens"/>
     
@@ -32,6 +36,8 @@
       <meta name="author" content="Daniel Spiewak"/>
     
       <meta name="author" content="Frank Thomas"/>
+    
+      <meta name="author" content="Sergey Torgashov"/>
     
       <meta name="author" content="Julien Truffaut"/>
     
@@ -229,7 +235,7 @@
   </span><span class="identifier">println</span><span>(</span><span class="string-literal">&quot;Running expensive calculation...&quot;</span><span>)
   </span><span class="number-literal">1</span><span> + </span><span class="number-literal">2</span><span> * </span><span class="number-literal">3</span><span>
 }
-</span><span class="comment">// lazyEval: Eval[Int] = cats.Later@62a98410
+</span><span class="comment">// lazyEval: Eval[Int] = cats.Later@5f8113a7
 </span><span>
 </span><span class="identifier">lazyEval</span><span>.</span><span class="identifier">value</span><span>
 </span><span class="comment">// Running expensive calculation...
@@ -248,7 +254,7 @@
   </span><span class="identifier">println</span><span>(</span><span class="string-literal">&quot;Running expensive calculation...&quot;</span><span>)
   </span><span class="number-literal">1</span><span> + </span><span class="number-literal">2</span><span> * </span><span class="number-literal">3</span><span>
 }
-</span><span class="comment">// always: Eval[Int] = cats.Always@7e335d53
+</span><span class="comment">// always: Eval[Int] = cats.Always@402e63d3
 </span><span>
 </span><span class="identifier">always</span><span>.</span><span class="identifier">value</span><span>
 </span><span class="comment">// Running expensive calculation...

@@ -11,11 +11,15 @@
     
       <meta name="author" content="Ross Baker"/>
     
+      <meta name="author" content="Arman Bilge"/>
+    
       <meta name="author" content="P. Oscar Boykin"/>
     
       <meta name="author" content="Travis Brown"/>
     
       <meta name="author" content="Adelbert Chang"/>
+    
+      <meta name="author" content="Daniel Esik"/>
     
       <meta name="author" content="Peter Neyens"/>
     
@@ -32,6 +36,8 @@
       <meta name="author" content="Daniel Spiewak"/>
     
       <meta name="author" content="Frank Thomas"/>
+    
+      <meta name="author" content="Sergey Torgashov"/>
     
       <meta name="author" content="Julien Truffaut"/>
     
@@ -235,7 +241,7 @@
 </span><span>    </span><span class="keyword">override</span><span> </span><span class="keyword">def</span><span> </span><span class="declaration-name">tailRecM</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>](</span><span class="identifier">a</span><span>: </span><span class="type-name">A</span><span>)(</span><span class="identifier">fn</span><span>: </span><span class="type-name">A</span><span> =&gt; </span><span class="type-name">NonEmptyList</span><span>[</span><span class="type-name">Either</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>]]): </span><span class="type-name">NonEmptyList</span><span>[</span><span class="type-name">B</span><span>] =
       ???
   }
-</span><span class="comment">// nelBimonad: AnyRef with Bimonad[NonEmptyList] = repl.MdocSession$App$$anon$1@d26168f</span></code></pre>
+</span><span class="comment">// nelBimonad: AnyRef with Bimonad[NonEmptyList] = repl.MdocSession$App$$anon$1@1d592da1</span></code></pre>
         <p>Note the equivalence:</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">nelBimonad</span><span>.</span><span class="identifier">pure</span><span>(</span><span class="boolean-literal">true</span><span>).</span><span class="identifier">extract</span><span> === </span><span class="type-name">NonEmptyList</span><span>.</span><span class="identifier">one</span><span>(</span><span class="boolean-literal">true</span><span>).</span><span class="identifier">head</span><span>
 </span><span class="comment">// res0: Boolean = true</span></code></pre>
