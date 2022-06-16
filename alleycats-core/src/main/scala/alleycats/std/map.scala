@@ -45,11 +45,25 @@ trait MapInstances {
             G.map(f(a))((k, _))
           }) { chain => chain.foldLeft(Map.empty[K, B]) { case (m, (k, b)) => m.updated(k, b) } }
 
+      override def mapAccumulate[S, A, B](init: S, fa: Map[K, A])(f: (S, A) => (S, B)): (S, Map[K, B]) = {
+        val iter = fa.iterator
+        var s = init
+        val m = Map.newBuilder[K, B]
+        m.sizeHint(fa.size)
+        while (iter.hasNext) {
+          val (k, a) = iter.next()
+          val (snext, b) = f(s, a)
+          m += k -> b
+          s = snext
+        }
+        (s, m.result())
+      }
+
       override def map[A, B](fa: Map[K, A])(f: A => B): Map[K, B] =
         fa.map { case (k, a) => (k, f(a)) }
 
       def foldLeft[A, B](fa: Map[K, A], b: B)(f: (B, A) => B): B =
-        fa.foldLeft(b) { case (x, (k, a)) => f(x, a) }
+        fa.foldLeft(b) { case (x, (_, a)) => f(x, a) }
 
       def foldRight[A, B](fa: Map[K, A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
         Foldable.iterateRight(fa.values, lb)(f)

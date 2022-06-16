@@ -21,9 +21,7 @@
 
 package alleycats
 
-import simulacrum.typeclass
-
-@typeclass trait EmptyK[F[_]] extends Serializable { self =>
+trait EmptyK[F[_]] extends Serializable { self =>
   def empty[A]: F[A]
 
   def synthesize[A]: Empty[F[A]] =
@@ -33,10 +31,6 @@ import simulacrum.typeclass
 }
 
 object EmptyK extends EmptyKInstances0 {
-
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
 
   /**
    * Summon an instance of [[EmptyK]] for `F`.
@@ -72,10 +66,6 @@ object EmptyK extends EmptyKInstances0 {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToEmptyKOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }
 

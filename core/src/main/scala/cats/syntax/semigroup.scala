@@ -23,7 +23,7 @@ package cats
 package syntax
 
 trait SemigroupSyntax {
-  // TODO: use simulacrum instances eventually
+
   implicit final def catsSyntaxSemigroup[A: Semigroup](a: A): SemigroupOps[A] =
     new SemigroupOps[A](a)
 }

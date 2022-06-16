@@ -20,9 +20,8 @@
  */
 
 package cats
-import simulacrum.typeclass
 
-@typeclass trait Distributive[F[_]] extends Functor[F] { self =>
+trait Distributive[F[_]] extends Functor[F] { self =>
 
   /**
    * Given a function which returns a distributive `F`, apply that value across the structure G.
@@ -43,10 +42,6 @@ import simulacrum.typeclass
 }
 
 object Distributive {
-
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
 
   /**
    * Summon an instance of [[Distributive]] for `F`.
@@ -84,9 +79,5 @@ object Distributive {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToDistributiveOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }

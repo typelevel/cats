@@ -22,9 +22,8 @@
 package alleycats
 
 import cats.SemigroupK
-import simulacrum.typeclass
 
-@typeclass trait ConsK[F[_]] extends Serializable {
+trait ConsK[F[_]] extends Serializable {
   def cons[A](hd: A, tl: F[A]): F[A]
 }
 
@@ -33,10 +32,6 @@ object ConsK {
     new ConsK[F] {
       def cons[A](hd: A, tl: F[A]): F[A] = s.combineK(p.pure(hd), tl)
     }
-
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
 
   /**
    * Summon an instance of [[ConsK]] for `F`.
@@ -72,9 +67,5 @@ object ConsK {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToConsKOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }

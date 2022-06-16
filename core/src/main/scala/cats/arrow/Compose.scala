@@ -22,8 +22,6 @@
 package cats
 package arrow
 
-import simulacrum.typeclass
-
 /**
  * Must obey the laws defined in cats.laws.ComposeLaws.
  *
@@ -39,12 +37,10 @@ import simulacrum.typeclass
  * res1: Int = 301
  * }}}
  */
-@typeclass trait Compose[F[_, _]] extends Serializable { self =>
+trait Compose[F[_, _]] extends Serializable { self =>
 
-  @simulacrum.op("<<<", alias = true)
   def compose[A, B, C](f: F[B, C], g: F[A, B]): F[A, C]
 
-  @simulacrum.op(">>>", alias = true)
   def andThen[A, B, C](f: F[A, B], g: F[B, C]): F[A, C] =
     compose(g, f)
 
@@ -66,10 +62,6 @@ object Compose {
 
   implicit def catsInstancesForPartialFunction: ArrowChoice[PartialFunction] with CommutativeArrow[PartialFunction] =
     cats.instances.partialFunction.catsStdInstancesForPartialFunction
-
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
 
   /**
    * Summon an instance of [[Compose]] for `F`.
@@ -109,9 +101,5 @@ object Compose {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToComposeOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }

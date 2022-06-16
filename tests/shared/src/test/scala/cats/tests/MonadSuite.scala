@@ -21,13 +21,13 @@
 
 package cats.tests
 
-import cats.{Eval, Id, Monad}
 import cats.data.{IndexedStateT, StateT}
 import cats.syntax.apply._
-import cats.syntax.monad._
-import org.scalacheck.{Arbitrary, Gen}
 import cats.syntax.eq._
+import cats.syntax.monad._
+import cats.{Eval, Id, Monad}
 import org.scalacheck.Prop._
+import org.scalacheck.{Arbitrary, Gen}
 
 class MonadSuite extends CatsSuite {
   implicit val testInstance: Monad[StateT[Id, Int, *]] = IndexedStateT.catsDataMonadForIndexedStateT[Id, Int]

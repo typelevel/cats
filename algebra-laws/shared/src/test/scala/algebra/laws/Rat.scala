@@ -52,7 +52,7 @@ class Rat(val num: BigInt, val den: BigInt) extends Serializable { lhs =>
   def signum: Int = num.signum
 
   def +(rhs: Rat): Rat =
-    Rat((lhs.num * rhs.den) + (rhs.num * lhs.den), (lhs.den * rhs.den))
+    Rat((lhs.num * rhs.den) + (rhs.num * lhs.den), lhs.den * rhs.den)
 
   def unary_- : Rat =
     Rat(-lhs.num, lhs.den)

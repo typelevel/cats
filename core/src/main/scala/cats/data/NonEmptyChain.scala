@@ -22,11 +22,19 @@
 package cats
 package data
 
-import NonEmptyChainImpl.create
+import cats.instances.StaticMethods
 import cats.kernel._
+
 import scala.collection.immutable.SortedMap
 
-private[data] object NonEmptyChainImpl extends NonEmptyChainInstances with ScalaVersionSpecificNonEmptyChainImpl {
+/**
+ * Actual implementation for [[cats.data.NonEmptyChain]]
+ *
+ * @note This object is kept public for the sake of binary compatibility only
+ *       and therefore is subject to changes in future versions of Cats.
+ *       Do not use directly - use [[cats.data.NonEmptyChain]] instead.
+ */
+object NonEmptyChainImpl extends NonEmptyChainInstances with ScalaVersionSpecificNonEmptyChainImpl {
   // The following 3 types are components of a technique to
   // create a no-boxing newtype. It's copied from the
   // newtypes lib by @alexknvl
@@ -80,10 +88,12 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
     extends AnyVal
     with NonEmptyCollection[A, Chain, NonEmptyChain] {
 
+  import NonEmptyChainImpl.{create, unwrap}
+
   /**
    * Converts this chain to a `Chain`
    */
-  final def toChain: Chain[A] = NonEmptyChainImpl.unwrap(value)
+  final def toChain: Chain[A] = unwrap(value)
 
   /**
    * Returns a new NonEmptyChain consisting of `a` followed by this. O(1) runtime.
@@ -622,6 +632,15 @@ sealed abstract private[data] class NonEmptyChainInstances extends NonEmptyChain
 
         loop(fa.head, fa.tail).value
       }
+
+      override def mapAccumulate[S, A, B](init: S, fa: NonEmptyChain[A])(f: (S, A) => (S, B)): (S, NonEmptyChain[B]) =
+        StaticMethods.mapAccumulateFromStrictFunctor(init, fa, f)(this)
+
+      override def mapWithIndex[A, B](fa: NonEmptyChain[A])(f: (A, Int) => B): NonEmptyChain[B] =
+        StaticMethods.mapWithIndexFromStrictFunctor(fa, f)(this)
+
+      override def zipWithIndex[A](fa: NonEmptyChain[A]): NonEmptyChain[(A, Int)] =
+        fa.zipWithIndex
 
       override def size[A](fa: NonEmptyChain[A]): Long = fa.length
 

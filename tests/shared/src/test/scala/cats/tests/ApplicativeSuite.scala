@@ -21,14 +21,15 @@
 
 package cats.tests
 
-import cats.{Align, Applicative, Apply, CoflatMap}
-import cats.data.{Const, Validated}
+import cats.data.{Const, State, Validated}
 import cats.kernel.Monoid
 import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests}
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.{AlignTests, CoflatMapTests}
 import cats.syntax.applicative._
 import cats.syntax.eq._
+import cats.syntax.functor._
+import cats.{Align, Applicative, Apply, CoflatMap}
 import org.scalacheck.Prop._
 
 class ApplicativeSuite extends CatsSuite {
@@ -37,6 +38,20 @@ class ApplicativeSuite extends CatsSuite {
     val A = Applicative[Option]
     val fa = A.pure(1)
     assert(fa.replicateA(5) === (Some(List(1, 1, 1, 1, 1))))
+  }
+
+  test("replicateA_ executes the Applicative action 'fa' 'n' times") {
+    val A = Applicative[Option]
+    val fa = A.pure(0)
+    val increment: State[Int, Int] = State { i => (i + 1, i) }
+    val aUnit = A.unit
+
+    for (num <- 0 to 10) {
+      assertEquals(fa.replicateA_(num), aUnit)
+      assertEquals(increment.replicateA_(num).runS(0).value, num)
+      assertEquals(increment.replicateA_(num).run(0).value, ((num, ())))
+      assertEquals(increment.replicateA_(num).run(0).value, increment.replicateA(num).void.run(0).value)
+    }
   }
 
   test("whenA return given argument when cond is true") {
@@ -61,6 +76,16 @@ class ApplicativeSuite extends CatsSuite {
     forAll { (l: List[Int]) =>
       assert(l.unlessA(true) === (List(())))
     }
+  }
+
+  test("by-name ops are lazy") {
+    var i = 0
+    Option(i += 1).whenA(false)
+    assertEquals(i, 0)
+
+    var j = 0
+    Option(j += 1).unlessA(true)
+    assertEquals(j, 0)
   }
 
   {

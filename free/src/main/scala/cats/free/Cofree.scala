@@ -198,7 +198,7 @@ private trait CofreeReducible[F[_]] extends Reducible[Cofree[F, *]] {
     F.foldLeft(fa.tailForced, z(fa.head))((b, cof) => foldLeft(cof, b)(f))
 
   override def reduceRightTo[A, B](fa: Cofree[F, A])(z: A => B)(f: (A, Eval[B]) => Eval[B]): Eval[B] =
-    foldRight(fa, Eval.now((None: Option[B]))) { case (l, e) =>
+    foldRight(fa, Eval.now(None: Option[B])) { case (l, e) =>
       e.flatMap {
         case None    => Eval.now(Some(z(l)))
         case Some(r) => f(l, Eval.now(r)).map(Some(_))

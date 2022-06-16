@@ -20,13 +20,12 @@
  */
 
 package cats
-import simulacrum.typeclass
 
 /**
  * A type class of types which give rise to two independent, covariant
  * functors.
  */
-@typeclass trait Bifunctor[F[_, _]] extends Serializable { self =>
+trait Bifunctor[F[_, _]] extends Serializable { self =>
 
   /**
    * The quintessential method of the Bifunctor trait, it applies a
@@ -84,10 +83,6 @@ object Bifunctor extends cats.instances.NTupleBifunctorInstances {
   @deprecated("Use catsStdBitraverseForTuple2 in cats.instances.NTupleBitraverseInstances", "2.4.0")
   def catsBifunctorForTuple2: Bifunctor[Tuple2] = cats.instances.tuple.catsStdBitraverseForTuple2
 
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
-
   /**
    * Summon an instance of [[Bifunctor]] for `F`.
    */
@@ -126,9 +121,6 @@ object Bifunctor extends cats.instances.NTupleBifunctorInstances {
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToBifunctorOps
 
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 }
 
 private[cats] trait ComposedBifunctor[F[_, _], G[_, _]] extends Bifunctor[λ[(A, B) => F[G[A, B], G[A, B]]]] {

@@ -1,14 +1,12 @@
 ThisBuild / tlBaseVersion := "2.8"
 
-ThisBuild / scalafixDependencies += "org.typelevel" %% "simulacrum-scalafix" % "0.5.3"
+val scalaCheckVersion = "1.16.0"
 
-val scalaCheckVersion = "1.15.4"
+val disciplineVersion = "1.5.1"
 
-val disciplineVersion = "1.4.0"
+val disciplineMunitVersion = "2.0.0-M2"
 
-val disciplineMunitVersion = "1.0.9"
-
-val munitVersion = "0.7.29"
+val munitVersion = "1.0.0-M5"
 
 val kindProjectorVersion = "0.13.2"
 
@@ -18,19 +16,15 @@ val GraalVM11 = JavaSpec.graalvm("11")
 
 ThisBuild / githubWorkflowJavaVersions := Seq(PrimaryJava, LTSJava, GraalVM11)
 
-val Scala212 = "2.12.15"
+val Scala212 = "2.12.16"
 val Scala213 = "2.13.8"
-val Scala3 = "3.0.2"
+val Scala3 = "3.1.2"
 
 ThisBuild / crossScalaVersions := Seq(Scala212, Scala213, Scala3)
 ThisBuild / scalaVersion := Scala212
 
 ThisBuild / tlFatalWarnings := false
 ThisBuild / tlFatalWarningsInCi := false
-
-ThisBuild / githubWorkflowBuildMatrixExclusions +=
-  MatrixExclude(Map("project" -> "rootNative", "scala" -> Scala3))
-// Dotty is not yet supported by Scala Native
 
 ThisBuild / githubWorkflowAddedJobs ++= Seq(
   WorkflowJob(
@@ -60,15 +54,6 @@ lazy val cats1BincompatSettings = Seq(
   }
 )
 
-lazy val simulacrumSettings = Seq(
-  libraryDependencies ++= (if (tlIsScala3.value) Nil else Seq(compilerPlugin(scalafixSemanticdb))),
-  scalacOptions ++= (
-    if (tlIsScala3.value) Nil
-    else Seq(s"-P:semanticdb:targetroot:${baseDirectory.value}/target/.semanticdb", "-Yrangepos")
-  ),
-  libraryDependencies += "org.typelevel" %% "simulacrum-scalafix-annotations" % "0.5.4"
-)
-
 ThisBuild / tlVersionIntroduced := Map("3" -> "2.6.1")
 
 lazy val commonJvmSettings = Seq(
@@ -84,9 +69,7 @@ lazy val commonJsSettings = Seq(
 
 lazy val commonNativeSettings = Seq(
   doctestGenTests := Seq.empty,
-  // Currently scala-native does not support Dotty
-  crossScalaVersions := { (ThisBuild / crossScalaVersions).value.filterNot(Scala3 == _) },
-  tlVersionIntroduced ++= List("2.12", "2.13").map(_ -> "2.4.0").toMap
+  tlVersionIntroduced ++= List("2.12", "2.13").map(_ -> "2.4.0").toMap + ("3" -> "2.8.0")
 )
 
 lazy val disciplineDependencies = Seq(
@@ -146,6 +129,11 @@ lazy val algebraSettings = Seq[Setting[_]](
   tlVersionIntroduced := List("2.12", "2.13", "3").map(_ -> "2.7.0").toMap
 )
 
+lazy val algebraNativeSettings = Seq[Setting[_]](
+  tlMimaPreviousVersions ~= (_ - "2.2.3"),
+  tlVersionIntroduced += ("3" -> "2.8.0")
+)
+
 lazy val algebra = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .crossType(CrossType.Pure)
   .in(file("algebra-core"))
@@ -160,6 +148,7 @@ lazy val algebra = crossProject(JSPlatform, JVMPlatform, NativePlatform)
     libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % Test,
     testingDependencies
   )
+  .nativeSettings(algebraNativeSettings)
 
 lazy val algebraLaws = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .in(file("algebra-laws"))
@@ -171,12 +160,13 @@ lazy val algebraLaws = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .jvmSettings(commonJvmSettings)
   .nativeSettings(commonNativeSettings)
   .settings(algebraSettings)
+  .nativeSettings(algebraNativeSettings)
 
 lazy val core = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .crossType(CrossType.Pure)
   .dependsOn(kernel)
   .settings(moduleName := "cats-core", name := "Cats core")
-  .settings(macroSettings, simulacrumSettings)
+  .settings(macroSettings)
   .settings(Compile / sourceGenerators += (Compile / sourceManaged).map(Boilerplate.gen).taskValue)
   .settings(
     libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % Test,
@@ -278,7 +268,7 @@ lazy val bench = project
     libraryDependencies ++= {
       if (scalaVersion.value.startsWith("2.12"))
         Seq(
-          "org.scalaz" %% "scalaz-core" % "7.2.34",
+          "org.scalaz" %% "scalaz-core" % "7.3.6",
           "org.spire-math" %% "chain" % "0.3.0",
           "co.fs2" %% "fs2-core" % "0.10.7"
         )
