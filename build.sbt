@@ -313,9 +313,11 @@ ThisBuild / startYear := Some(2015)
 ThisBuild / developers ++= List(
   tlGitHubDev("ceedubs", "Cody Allen"),
   tlGitHubDev("rossabaker", "Ross Baker"),
+  tlGitHubDev("armanbilge", "Arman Bilge"),
   tlGitHubDev("johnynek", "P. Oscar Boykin"),
   tlGitHubDev("travisbrown", "Travis Brown"),
   tlGitHubDev("adelbertc", "Adelbert Chang"),
+  tlGitHubDev("danicheg", "Daniel Esik"),
   tlGitHubDev("peterneyens", "Peter Neyens"),
   tlGitHubDev("tpolecat", "Rob Norris"),
   tlGitHubDev("non", "Erik Osheim"),
@@ -324,6 +326,7 @@ ThisBuild / developers ++= List(
   tlGitHubDev("milessabin", "Miles Sabin"),
   tlGitHubDev("djspiewak", "Daniel Spiewak"),
   tlGitHubDev("fthomas", "Frank Thomas"),
+  tlGitHubDev("satorg", "Sergey Torgashov"),
   tlGitHubDev("julien-truffaut", "Julien Truffaut"),
   tlGitHubDev("kailuowang", "Kailuo Wang")
 )
