@@ -246,9 +246,13 @@ object SyntaxSuite {
     val fb = mock[M[B]]
     val fc = mock[M[C]]
     val f = mock[(A, B, C) => Z]
+    val mf = mock[(A, B, C) => M[Z]]
 
     tfabc.parMapN(f)
     (fa, fb, fc).parMapN(f)
+
+    tfabc.flatParMapN(mf)
+    (fa, fb, fc).flatParMapN(mf)
   }
 
   def testParallelBi[M[_], F[_], T[_, _]: Bitraverse, A, B, C, D](implicit P: Parallel.Aux[M, F]): Unit = {
