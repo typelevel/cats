@@ -1,4 +1,4 @@
-ThisBuild / tlBaseVersion := "2.8"
+ThisBuild / tlBaseVersion := "2.9"
 
 val scalaCheckVersion = "1.16.0"
 
@@ -296,7 +296,6 @@ lazy val docs = project
   .settings(
     tlFatalWarnings := false,
     laikaConfig ~= { _.withRawContent },
-    tlSiteApiUrl := Some(url("https://typelevel.org/cats/api/")),
     tlSiteRelatedProjects := Seq(
       TypelevelProject.CatsEffect,
       "Mouse" -> url("https://typelevel.org/mouse"),
