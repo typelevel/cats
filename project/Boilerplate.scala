@@ -351,7 +351,7 @@ object Boilerplate {
         -    p.flatMap.map(${nestedExpansion.products}) { case ${nestedExpansion.`(a..n)`} => f(${`a..n`}) }
         -
         -  def flatParMap$arity[M[_], ${`A..N`}, Z]($fparams)(f: (${`A..N`}) => M[Z])(implicit p: NonEmptyParallel[M]): M[Z] =
-        -    p.flatMap.flatten(p.flatMap.map(${nestedExpansion.products}) { case ${nestedExpansion.`(a..n)`} => f(${`a..n`}) })
+        -    p.flatMap.flatMap(${nestedExpansion.products}) { case ${nestedExpansion.`(a..n)`} => f(${`a..n`}) }
       |}
       """
     }
