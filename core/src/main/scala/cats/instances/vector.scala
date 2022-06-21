@@ -174,6 +174,9 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
       override def mapWithIndex[A, B](fa: Vector[A])(f: (A, Int) => B): Vector[B] =
         StaticMethods.mapWithIndexFromStrictFunctor(fa, f)(this)
 
+      override def mapWithLongIndex[A, B](fa: Vector[A])(f: (A, Long) => B): Vector[B] =
+        StaticMethods.mapWithLongIndexFromStrictFunctor(fa, f)(this)
+
       override def zipWithIndex[A](fa: Vector[A]): Vector[(A, Int)] =
         fa.zipWithIndex
 

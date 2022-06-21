@@ -639,6 +639,9 @@ sealed abstract private[data] class NonEmptyChainInstances extends NonEmptyChain
       override def mapWithIndex[A, B](fa: NonEmptyChain[A])(f: (A, Int) => B): NonEmptyChain[B] =
         StaticMethods.mapWithIndexFromStrictFunctor(fa, f)(this)
 
+      override def mapWithLongIndex[A, B](fa: NonEmptyChain[A])(f: (A, Long) => B): NonEmptyChain[B] =
+        StaticMethods.mapWithLongIndexFromStrictFunctor(fa, f)(this)
+
       override def zipWithIndex[A](fa: NonEmptyChain[A]): NonEmptyChain[(A, Int)] =
         fa.zipWithIndex
 

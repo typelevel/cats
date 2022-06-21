@@ -794,6 +794,9 @@ sealed abstract private[data] class NonEmptyListInstances extends NonEmptyListIn
       override def mapWithIndex[A, B](fa: NonEmptyList[A])(f: (A, Int) => B): NonEmptyList[B] =
         StaticMethods.mapWithIndexFromStrictFunctor(fa, f)(this)
 
+      override def mapWithLongIndex[A, B](fa: NonEmptyList[A])(f: (A, Long) => B): NonEmptyList[B] =
+        StaticMethods.mapWithLongIndexFromStrictFunctor(fa, f)(this)
+
       override def zipWithIndex[A](fa: NonEmptyList[A]): NonEmptyList[(A, Int)] =
         fa.zipWithIndex
 

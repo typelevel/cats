@@ -132,13 +132,13 @@ trait TraverseLaws[F[_]] extends FunctorLaws[F] with FoldableLaws[F] with Unorde
 
   def mapWithLongIndexRef[A, B](fa: F[A], f: (A, Long) => B): IsEq[F[B]] = {
     val lhs = F.mapWithLongIndex(fa)(f)
-    val rhs = F.traverse(fa)(a => State((s: Long) => (s + 1, f(a, s)))).runA(0).value
+    val rhs = F.traverse(fa)(a => State((s: Long) => (s + 1, f(a, s)))).runA(0L).value
     lhs <-> rhs
   }
 
   def traverseWithLongIndexMRef[G[_], A, B](fa: F[A], f: (A, Long) => G[B])(implicit G: Monad[G]): IsEq[G[F[B]]] = {
     val lhs = F.traverseWithLongIndexM(fa)(f)
-    val rhs = F.traverse(fa)(a => StateT((s: Long) => G.map(f(a, s))(b => (s + 1, b)))).runA(0)
+    val rhs = F.traverse(fa)(a => StateT((s: Long) => G.map(f(a, s))(b => (s + 1, b)))).runA(0L)
     lhs <-> rhs
   }
 

@@ -1256,6 +1256,9 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
       override def mapWithIndex[A, B](fa: Chain[A])(f: (A, Int) => B): Chain[B] =
         StaticMethods.mapWithIndexFromStrictFunctor(fa, f)(this)
 
+      override def mapWithLongIndex[A, B](fa: Chain[A])(f: (A, Long) => B): Chain[B] =
+        StaticMethods.mapWithLongIndexFromStrictFunctor(fa, f)(this)
+
       override def zipWithIndex[A](fa: Chain[A]): Chain[(A, Int)] =
         fa.zipWithIndex
 

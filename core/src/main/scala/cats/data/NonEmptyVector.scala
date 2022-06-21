@@ -442,6 +442,9 @@ sealed abstract private[data] class NonEmptyVectorInstances {
       ): (S, NonEmptyVector[B]) =
         StaticMethods.mapAccumulateFromStrictFunctor(init, fa, f)(this)
 
+      override def mapWithLongIndex[A, B](fa: NonEmptyVector[A])(f: (A, Long) => B): NonEmptyVector[B] =
+        StaticMethods.mapWithLongIndexFromStrictFunctor(fa, f)(this)
+
       override def mapWithIndex[A, B](fa: NonEmptyVector[A])(f: (A, Int) => B): NonEmptyVector[B] =
         StaticMethods.mapWithIndexFromStrictFunctor(fa, f)(this)
 
