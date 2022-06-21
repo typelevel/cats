@@ -1,4 +1,4 @@
-ThisBuild / tlBaseVersion := "2.8"
+ThisBuild / tlBaseVersion := "2.9"
 
 val scalaCheckVersion = "1.16.0"
 
@@ -296,7 +296,6 @@ lazy val docs = project
   .settings(
     tlFatalWarnings := false,
     laikaConfig ~= { _.withRawContent },
-    tlSiteApiUrl := Some(url("https://typelevel.org/cats/api/")),
     tlSiteRelatedProjects := Seq(
       TypelevelProject.CatsEffect,
       "Mouse" -> url("https://typelevel.org/mouse"),
@@ -313,9 +312,11 @@ ThisBuild / startYear := Some(2015)
 ThisBuild / developers ++= List(
   tlGitHubDev("ceedubs", "Cody Allen"),
   tlGitHubDev("rossabaker", "Ross Baker"),
+  tlGitHubDev("armanbilge", "Arman Bilge"),
   tlGitHubDev("johnynek", "P. Oscar Boykin"),
   tlGitHubDev("travisbrown", "Travis Brown"),
   tlGitHubDev("adelbertc", "Adelbert Chang"),
+  tlGitHubDev("danicheg", "Daniel Esik"),
   tlGitHubDev("peterneyens", "Peter Neyens"),
   tlGitHubDev("tpolecat", "Rob Norris"),
   tlGitHubDev("non", "Erik Osheim"),
@@ -324,6 +325,7 @@ ThisBuild / developers ++= List(
   tlGitHubDev("milessabin", "Miles Sabin"),
   tlGitHubDev("djspiewak", "Daniel Spiewak"),
   tlGitHubDev("fthomas", "Frank Thomas"),
+  tlGitHubDev("satorg", "Sergey Torgashov"),
   tlGitHubDev("julien-truffaut", "Julien Truffaut"),
   tlGitHubDev("kailuowang", "Kailuo Wang")
 )

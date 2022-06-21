@@ -232,7 +232,6 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Iterators](https://www.iteratorshq.com/)
 - [ITV](https://www.itv.com/)
 - [Kaluza](https://www.kaluza.com)
-- [Lego](https://lego.com)
 - [Lightform](https://lightform.com/)
 - [Lookout](https://www.lookout.com)
 - [Medidata](https://www.medidata.com/)

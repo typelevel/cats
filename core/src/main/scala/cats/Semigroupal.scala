@@ -70,8 +70,19 @@ object Semigroupal extends ScalaVersionSpecificSemigroupalInstances with Semigro
   implicit def catsSemigroupalForId: Semigroupal[Id] = catsInstancesForId
   implicit def catsSemigroupalForOption: Semigroupal[Option] = cats.instances.option.catsStdInstancesForOption
   implicit def catsSemigroupalForTry: Semigroupal[Try] = cats.instances.try_.catsStdInstancesForTry
+
+  /**
+   * @deprecated
+   *   Any non-pure use of [[scala.concurrent.Future Future]] with Cats is error prone
+   *   (particularly the semantics of [[cats.Traverse#traverse traverse]] with regard to execution order are unspecified).
+   *   We recommend using [[https://typelevel.org/cats-effect/ Cats Effect `IO`]] as a replacement for ''every'' use case of [[scala.concurrent.Future Future]].
+   *   However, at this time there are no plans to remove these instances from Cats.
+   *
+   * @see [[https://github.com/typelevel/cats/issues/4176 Changes in Future traverse behavior between 2.6 and 2.7]]
+   */
   implicit def catsSemigroupalForFuture(implicit ec: ExecutionContext): Semigroupal[Future] =
     cats.instances.future.catsStdInstancesForFuture(ec)
+
   implicit def catsSemigroupalForList: Semigroupal[List] = cats.instances.list.catsStdInstancesForList
   implicit def catsSemigroupalForSeq: Semigroupal[Seq] = cats.instances.seq.catsStdInstancesForSeq
   implicit def catsSemigroupalForVector: Semigroupal[Vector] = cats.instances.vector.catsStdInstancesForVector
