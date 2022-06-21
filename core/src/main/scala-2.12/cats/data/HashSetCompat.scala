@@ -21,4 +21,17 @@
 
 package cats.data
 
-private[data] trait HashSetCompat[A]
+import scala.collection.GenSet
+
+private[data] trait HashSetCompat[A] { self: HashSet[A] =>
+
+  final def intersect(set: GenSet[A]): HashSet[A] = {
+    if (this.isEmpty)
+      this
+    else if (set.isEmpty)
+      HashSet.empty[A]
+    else
+      filter(set.contains)
+  }
+
+}

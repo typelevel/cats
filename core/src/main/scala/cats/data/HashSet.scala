@@ -65,7 +65,7 @@ import HashSet.WrappedHashSet
   * @tparam A the type of the elements contained in this hash set.
   * @param hash the [[cats.kernel.Hash]] instance used for hashing values.
   */
-final class HashSet[A] private (private val rootNode: HashSet.Node[A])(implicit hash: Hash[A])
+final class HashSet[A] private (private val rootNode: HashSet.Node[A])(implicit val hash: Hash[A])
     extends HashSetCompat[A] {
 
   /**
@@ -157,8 +157,10 @@ final class HashSet[A] private (private val rootNode: HashSet.Node[A])(implicit 
       set
     else if (set.isEmpty)
       this
+    else if (this.size <= set.size)
+      set.union(this.iterator)
     else
-      union(set.iterator)
+      this.union(set.iterator)
   }
 
   /**
@@ -196,6 +198,17 @@ final class HashSet[A] private (private val rootNode: HashSet.Node[A])(implicit 
       this
     else
       new HashSet(newRootNode)
+  }
+
+  final def intersect(set: HashSet[A]): HashSet[A] = {
+    if (this.isEmpty)
+      this
+    else if (set.isEmpty)
+      set
+    else if (this.size <= set.size)
+      set.filter(this.contains)
+    else
+      this.filter(set.contains)
   }
 
   final def filter(f: A => Boolean): HashSet[A] = {

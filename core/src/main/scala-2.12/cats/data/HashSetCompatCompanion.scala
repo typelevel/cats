@@ -40,8 +40,11 @@ private[data] trait HashSetCompatCompanion {
     override def foreach[U](f: A => U): Unit = hashSet.foreach(f)
     override def union(that: GenSet[A]): Set[A] = new WrappedHashSet(hashSet.union(that.iterator))
     override def diff(that: GenSet[A]): Set[A] = new WrappedHashSet(hashSet.diff(that.iterator))
+    override def intersect(that: GenSet[A]): Set[A] = new WrappedHashSet(hashSet.intersect(that))
     override def ++(elems: GenTraversableOnce[A]): Set[A] = new WrappedHashSet(hashSet.union(elems.toIterator))
     override def --(xs: GenTraversableOnce[A]): Set[A] = new WrappedHashSet(hashSet.diff(xs.toIterator))
+    override def &(that: GenSet[A]): Set[A] = new WrappedHashSet(hashSet.intersect(that))
+    override def &~(that: GenSet[A]): Set[A] = new WrappedHashSet(hashSet.diff(that.iterator))
     override def filter(p: A => Boolean): Set[A] = new WrappedHashSet(hashSet.filter(p))
     override def filterNot(p: A => Boolean): Set[A] = new WrappedHashSet(hashSet.filterNot(p))
     override def hashCode: Int = hashSet.hashCode

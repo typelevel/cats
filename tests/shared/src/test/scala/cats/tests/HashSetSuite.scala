@@ -267,6 +267,15 @@ class HashSetSuite extends CatsSuite {
     }
   }
 
+  property("intersect consistent with Scala Set intersect") {
+    forAll { (left: List[Int], right: List[Int]) =>
+      val scalaSet = Set(left: _*) & Set(right: _*)
+      val catsSet = HashSet.fromSeq(left).intersect(HashSet.fromSeq(right))
+      assert(scalaSet.forall(catsSet.contains))
+      catsSet.foreach(int => assert(scalaSet.contains(int)))
+    }
+  }
+
   property("filter consistent with Scala Set filter") {
     forAll { (scalaSet: Set[Int], pred: Int => Boolean) =>
       val catsSet = HashSet.fromIterableOnce(scalaSet)

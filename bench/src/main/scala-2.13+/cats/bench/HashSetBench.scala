@@ -169,6 +169,14 @@ class HashSetBench {
     bh.consume(scalaSet.diff(otherScalaSet))
 
   @Benchmark
+  def hashSetIntersect(bh: Blackhole): Unit =
+    bh.consume(hashSet.intersect(otherHashSet))
+
+  @Benchmark
+  def scalaSetIntersect(bh: Blackhole): Unit =
+    bh.consume(scalaSet & otherScalaSet)
+
+  @Benchmark
   def hashSetFilter(bh: Blackhole): Unit =
     bh.consume(hashSet.filter(pred))
 
