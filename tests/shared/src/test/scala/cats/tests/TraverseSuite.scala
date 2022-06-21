@@ -36,6 +36,12 @@ abstract class TraverseSuite[F[_]: Traverse](name: String)(implicit ArbFInt: Arb
     }
   }
 
+  test(s"Traverse[$name].zipWithLongIndex") {
+    forAll { (fa: F[Int]) =>
+      assert(fa.zipWithLongIndex.toList === (fa.toList.zipWithLongIndex))
+    }
+  }
+
   test(s"Traverse[$name].mapAccumulate") {
     forAll { (init: Int, fa: F[Int], fn: ((Int, Int)) => (Int, Int)) =>
       val lhs = fa.mapAccumulate(init)((s, a) => fn((s, a)))
@@ -55,10 +61,24 @@ abstract class TraverseSuite[F[_]: Traverse](name: String)(implicit ArbFInt: Arb
     }
   }
 
+  test(s"Traverse[$name].mapWithLongIndex") {
+    forAll { (fa: F[Int], fn: ((Int, Long)) => Int) =>
+      assert(fa.mapWithLongIndex((a, i) => fn((a, i))).toList === (fa.toList.zipWithLongIndex.map(fn)))
+    }
+  }
+
   test(s"Traverse[$name].traverseWithIndexM") {
     forAll { (fa: F[Int], fn: ((Int, Int)) => (Int, Int)) =>
       val left = fa.traverseWithIndexM((a, i) => fn((a, i))).fmap(_.toList)
       val (xs, values) = fa.toList.zipWithIndex.map(fn).unzip
+      assert(left === ((xs.combineAll, values)))
+    }
+  }
+
+  test(s"Traverse[$name].traverseWithLongIndexM") {
+    forAll { (fa: F[Int], fn: ((Int, Long)) => (Int, Long)) =>
+      val left = fa.traverseWithLongIndexM((a, i) => fn((a, i))).fmap(_.toList)
+      val (xs, values) = fa.toList.zipWithLongIndex.map(fn).unzip
       assert(left === ((xs.combineAll, values)))
     }
   }
