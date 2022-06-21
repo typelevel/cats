@@ -35,15 +35,13 @@ private[data] trait HashMapCompat[K, +V] extends IterableOnce[(K, V)] { self: Ha
     */
   final def concat[VV >: V](iterable: IterableOnce[(K, VV)]): HashMap[K, VV] = {
     val newRootNode = iterable match {
-      case hm: HashMap[K, V] @unchecked =>
-        if (self.size <= hm.size) {
-          hm.rootNode.concat(self.rootNode, replaceExisting = false, depth = 0)
-        } else {
-          self.rootNode.concat(hm.rootNode, replaceExisting = true, depth = 0)
+      case hm: HashMap[K, V] @unchecked if self.size <= hm.size =>
+        self.iterator.foldLeft(hm.rootNode: HashMap.Node[K, VV]) { case (node, (k, v)) =>
+          node.updated(k, improve(self.hashKey.hash(k)), v, replaceExisting = false, 0)
         }
       case _ =>
         iterable.iterator.foldLeft(self.rootNode: HashMap.Node[K, VV]) { case (node, (k, v)) =>
-          node.updated(k, improve(self.hashKey.hash(k)), v, replaceExisting = true, depth = 0)
+          node.updated(k, improve(self.hashKey.hash(k)), v, replaceExisting = true, 0)
         }
     }
 
