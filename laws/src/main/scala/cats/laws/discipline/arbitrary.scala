@@ -463,6 +463,11 @@ object arbitrary extends ArbitraryInstances0 with ScalaVersionSpecific.Arbitrary
           left <- getArbitrary[HashSet[A]]
           right <- getArbitrary[HashSet[A]]
         } yield left.diff(right)),
+        // intersect
+        Gen.delay(for {
+          left <- getArbitrary[HashSet[A]]
+          right <- getArbitrary[HashSet[A]]
+        } yield left.intersect(right)),
         // filter
         Gen.delay(for {
           set <- getArbitrary[HashSet[A]]
