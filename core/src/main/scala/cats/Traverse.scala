@@ -184,7 +184,7 @@ trait Traverse[F[_]] extends Functor[F] with Foldable[F] with UnorderedTraverse[
     * Same as [[zipWithIndex]] but the index type is [[Long]] instead of [[Int]].
     */
   def zipWithLongIndex[A](fa: F[A]): F[(A, Long)] =
-    traverseWithLongIndexM[cats.Id, A, (A, Long)](fa)((a, long) => (a, long))
+    mapWithLongIndex(fa)((a, long) => (a, long))
 
   override def unorderedTraverse[G[_]: CommutativeApplicative, A, B](sa: F[A])(f: (A) => G[B]): G[F[B]] =
     traverse(sa)(f)
