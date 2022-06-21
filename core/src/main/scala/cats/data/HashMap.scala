@@ -972,7 +972,7 @@ object HashMap extends HashMapInstances with HashMapCompatCompanion {
               }
               i = 0
               while (i < nodeCount) {
-                if (!(getNode(i).===[VV](node.getNode(i)))) return false
+                if (!getNode(i).===[VV](node.getNode(i))) return false
                 i += 1
               }
               true
