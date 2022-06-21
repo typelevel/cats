@@ -106,6 +106,12 @@ trait TraverseLaws[F[_]] extends FunctorLaws[F] with FoldableLaws[F] with Unorde
     first <-> traverseFirst
   }
 
+  def mapAccumulateRef[S, A, B](init: S, fa: F[A], f: (S, A) => (S, B)): IsEq[(S, F[B])] = {
+    val lhs = F.mapAccumulate(init, fa)(f)
+    val rhs = F.traverse(fa)(a => State(s => f(s, a))).run(init).value
+    lhs <-> rhs
+  }
+
   def mapWithIndexRef[A, B](fa: F[A], f: (A, Int) => B): IsEq[F[B]] = {
     val lhs = F.mapWithIndex(fa)(f)
     val rhs = F.traverse(fa)(a => State((s: Int) => (s + 1, f(a, s)))).runA(0).value

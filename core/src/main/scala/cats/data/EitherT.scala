@@ -133,6 +133,26 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
       case Right(b) => F.pure(b)
     }
 
+  /***
+   * 
+   * Like [[getOrElseF]] but accept an error `E` and raise it when the inner `Either` is `Left`
+   *    
+   * Equivalent to `getOrElseF(F.raiseError(e)))`
+   *    
+   * Example:
+   * {{{
+   * scala> import cats.data.EitherT
+   * scala> import cats.implicits._
+   * scala> import scala.util.{Success, Failure, Try}
+  
+   * scala> val eitherT: EitherT[Try,String,Int] = EitherT[Try,String,Int](Success(Left("abc")))
+   * scala> eitherT.getOrRaise(new RuntimeException("ERROR!"))
+   * res0: Try[Int] = Failure(java.lang.RuntimeException: ERROR!)
+   * }}}
+   */
+  def getOrRaise[E](e: => E)(implicit F: MonadError[F, _ >: E]): F[B] =
+    getOrElseF(F.raiseError(e))
+
   /**
    * Example:
    * {{{
@@ -506,6 +526,11 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
     f: B => G[D]
   )(implicit traverseF: Traverse[F], applicativeG: Applicative[G]): G[EitherT[F, A, D]] =
     applicativeG.map(traverseF.traverse(value)(axb => Traverse[Either[A, *]].traverse(axb)(f)))(EitherT.apply)
+
+  def mapAccumulate[S, C](init: S)(f: (S, B) => (S, C))(implicit traverseF: Traverse[F]): (S, EitherT[F, A, C]) = {
+    val (snext, vnext) = traverseF.mapAccumulate(init, value)(Traverse[Either[A, *]].mapAccumulate[S, B, C](_, _)(f))
+    (snext, EitherT(vnext))
+  }
 
   def foldLeft[C](c: C)(f: (C, B) => C)(implicit F: Foldable[F]): C =
     F.foldLeft(value, c) {
@@ -1230,6 +1255,9 @@ sealed private[data] trait EitherTTraverse[F[_], L] extends Traverse[EitherT[F, 
 
   override def traverse[G[_]: Applicative, A, B](fa: EitherT[F, L, A])(f: A => G[B]): G[EitherT[F, L, B]] =
     fa.traverse(f)
+
+  override def mapAccumulate[S, A, B](init: S, fa: EitherT[F, L, A])(f: (S, A) => (S, B)): (S, EitherT[F, L, B]) =
+    fa.mapAccumulate(init)(f)
 }
 
 sealed private[data] trait EitherTBifoldable[F[_]] extends Bifoldable[EitherT[F, *, *]] {

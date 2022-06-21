@@ -426,6 +426,24 @@ class EitherTSuite extends CatsSuite {
     }
   }
 
+  test("getOrRaise consistent with EitherT.getOrElseF(F.raiseError(e))") {
+    forAll { (eithert: EitherT[Either[String, *], String, Int], error: String) =>
+      assertEquals(
+        obtained = eithert.getOrRaise(error),
+        expected = eithert.getOrElseF(Left(error))
+      )
+    }
+  }
+
+  test("getOrRaise consistent with EitherT.leftMap(_ => error).rethrowT") {
+    forAll { (eithert: EitherT[Either[String, *], String, Int], error: String) =>
+      assertEquals(
+        obtained = eithert.getOrRaise(error),
+        expected = eithert.leftMap(_ => error).rethrowT
+      )
+    }
+  }
+
   test("orElse with Id consistent with Either orElse") {
     forAll { (eithert: EitherT[Id, String, Int], fallback: EitherT[Id, String, Int]) =>
       assert(eithert.orElse(fallback).value === (eithert.value.orElse(fallback.value)))

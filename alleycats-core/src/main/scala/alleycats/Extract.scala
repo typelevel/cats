@@ -23,9 +23,7 @@ package alleycats
 
 import cats.{CoflatMap, Comonad}
 
-import simulacrum.typeclass
-
-@typeclass trait Extract[F[_]] extends Serializable {
+trait Extract[F[_]] extends Serializable {
   def extract[A](fa: F[A]): A
 }
 
@@ -43,10 +41,6 @@ object Extract {
       override def map[A, B](fa: F[A])(f: A => B): F[B] = cf.map(fa)(f)
       def coflatMap[A, B](fa: F[A])(f: F[A] => B): F[B] = cf.coflatMap(fa)(f)
     }
-
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
 
   /**
    * Summon an instance of [[Extract]] for `F`.
@@ -83,9 +77,5 @@ object Extract {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToExtractOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }

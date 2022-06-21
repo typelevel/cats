@@ -226,7 +226,7 @@ val nextLong: State[AsyncSeed, Future[Long]] = State { seed =>
 
 Oops! That doesn't work: `State[S, A]` requires that we return a pure next `S` in the `State.apply` constructor. We could define `nextLong` as `State[Future[AsyncSeed], Future[Long]]`, but that would get us into even more trouble:
 ```scala mdoc:fail
-val nextLong: State[Future[AsyncSeed], Future[Long]] = State { seedF => 
+val nextLong: State[Future[AsyncSeed], Future[Long]] = State { seedF =>
   seedF.map { seed =>
     (seed.next, seed.long)
   }
@@ -235,7 +235,7 @@ val nextLong: State[Future[AsyncSeed], Future[Long]] = State { seedF =>
 
 The `seed` that `State.apply` passes in is now a `Future`, so we must map it. But we can't return a `Future[(Future[S], [A])]`; so what do we do?
 
-Luckily, `State[S, A]` is an alias for `StateT[Eval, S, A]` - a monad transformer defined as `StateT[F[_], S, A]`. This data type represents computations of the form `S => F[(S, A)]`. 
+Luckily, `State[S, A]` is an alias for `StateT[Eval, S, A]` - a monad transformer defined as `StateT[F[_], S, A]`. This data type represents computations of the form `S => F[(S, A)]`.
 
 If we plug in our concrete types, we get `AsyncSeed => Future[(AsyncSeed, A)]`, which is something we can work with:
 ```scala mdoc:silent
@@ -253,7 +253,7 @@ Now, what do we get back if we invoke `run` on our `nextLong` action?
 nextLong.run(AsyncSeed(0))
 ```
 
-Since every intermediate computation returns a `Future`, the composite computation returns a `Future` as well. To summarize, `StateT[F[_], S, A]` allows us to interleave effects of type `F[_]` in the computations wrapped by it. 
+Since every intermediate computation returns a `Future`, the composite computation returns a `Future` as well. To summarize, `StateT[F[_], S, A]` allows us to interleave effects of type `F[_]` in the computations wrapped by it.
 
 It should be noted that different combinators on `StateT` impose different constraints on `F`; for example, `map` only requires that `F` has a `Functor` instance, but `flatMap` naturally requires `F` to have a `FlatMap` instance. Have a look at the method signatures for the details.
 

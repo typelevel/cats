@@ -23,11 +23,11 @@ package cats
 package data
 
 import cats.data.NonEmptySeq.ZipNonEmptySeq
+import cats.kernel.compat.scalaVersionSpecific._
 
 import scala.annotation.tailrec
 import scala.collection.mutable
 import scala.collection.immutable.{Seq, SortedMap, TreeMap, TreeSet}
-import kernel.compat.scalaVersionSpecific._
 
 /**
  * A data type which represents a `Seq` guaranteed to contain at least one element.
@@ -262,6 +262,9 @@ final class NonEmptySeq[+A] private (val toSeq: Seq[A]) extends AnyVal with NonE
   def reverse: NonEmptySeq[A] =
     new NonEmptySeq(toSeq.reverse)
 
+  def mapWithIndex[B](f: (A, Int) => B): NonEmptySeq[B] =
+    new NonEmptySeq(toSeq.zipWithIndex.map(ai => f(ai._1, ai._2)))
+
   def zipWithIndex: NonEmptySeq[(A, Int)] =
     new NonEmptySeq(toSeq.zipWithIndex)
 
@@ -435,6 +438,9 @@ sealed abstract private[data] class NonEmptySeqInstances {
         fa: NonEmptySeq[A]
       )(f: (A) => G[B])(implicit G: Applicative[G]): G[NonEmptySeq[B]] =
         G.map2Eval(f(fa.head), Always(Traverse[Seq].traverse(fa.tail)(f)))(NonEmptySeq(_, _)).value
+
+      override def mapWithIndex[A, B](fa: NonEmptySeq[A])(f: (A, Int) => B): NonEmptySeq[B] =
+        fa.mapWithIndex(f)
 
       override def zipWithIndex[A](fa: NonEmptySeq[A]): NonEmptySeq[(A, Int)] =
         fa.zipWithIndex

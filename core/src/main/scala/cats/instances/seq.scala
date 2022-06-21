@@ -22,14 +22,13 @@
 package cats
 package instances
 
-import cats.data.{Chain, ZipSeq}
+import cats.data.{Chain, Ior, ZipSeq}
 import cats.instances.StaticMethods.appendAll
 import cats.kernel.compat.scalaVersionSpecific._
 
 import scala.annotation.tailrec
 import scala.collection.{+:, mutable}
 import scala.collection.immutable.Seq
-import cats.data.Ior
 
 @suppressUnusedImportWarningForScalaVersionSpecific
 trait SeqInstances extends cats.kernel.instances.SeqInstances {
@@ -134,7 +133,7 @@ trait SeqInstances extends cats.kernel.instances.SeqInstances {
         G.map(Chain.traverseViaChain(fa.toIndexedSeq)(f))(_.toVector)
 
       override def mapWithIndex[A, B](fa: Seq[A])(f: (A, Int) => B): Seq[B] =
-        fa.iterator.zipWithIndex.map(ai => f(ai._1, ai._2)).toIndexedSeq
+        fa.zipWithIndex.map(ai => f(ai._1, ai._2))
 
       override def zipWithIndex[A](fa: Seq[A]): Seq[(A, Int)] =
         fa.zipWithIndex

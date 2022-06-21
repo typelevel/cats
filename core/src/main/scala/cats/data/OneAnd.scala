@@ -257,6 +257,12 @@ sealed abstract private[data] class OneAndLowPriority1 extends OneAndLowPriority
       def traverse[G[_], A, B](fa: OneAnd[F, A])(f: (A) => G[B])(implicit G: Applicative[G]): G[OneAnd[F, B]] =
         G.map2Eval(f(fa.head), Always(F.traverse(fa.tail)(f)))(OneAnd(_, _)).value
 
+      override def mapAccumulate[S, A, B](init: S, fa: OneAnd[F, A])(f: (S, A) => (S, B)): (S, OneAnd[F, B]) = {
+        val (s1, b) = f(init, fa.head)
+        val (s2, fb) = F.mapAccumulate(s1, fa.tail)(f)
+        (s2, OneAnd(b, fb))
+      }
+
       def foldLeft[A, B](fa: OneAnd[F, A], b: B)(f: (B, A) => B): B =
         fa.foldLeft(b)(f)
 

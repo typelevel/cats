@@ -22,9 +22,7 @@
 package cats
 package arrow
 
-import simulacrum.typeclass
-
-@typeclass trait Choice[F[_, _]] extends Category[F] {
+trait Choice[F[_, _]] extends Category[F] {
 
   /**
    * Given two `F`s (`f` and `g`) with a common target type, create a new `F`
@@ -45,7 +43,7 @@ import simulacrum.typeclass
    * res0: String = false is a boolean
    * }}}
    */
-  @simulacrum.op("|||", alias = true)
+
   def choice[A, B, C](f: F[A, C], g: F[B, C]): F[Either[A, B], C]
 
   /**
@@ -68,10 +66,6 @@ import simulacrum.typeclass
 }
 
 object Choice {
-
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
 
   /**
    * Summon an instance of [[Choice]] for `F`.
@@ -111,9 +105,5 @@ object Choice {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToChoiceOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }

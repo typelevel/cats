@@ -23,9 +23,8 @@ package alleycats
 
 import cats.Eq
 import cats.syntax.eq._
-import simulacrum.typeclass
 
-@typeclass trait One[A] extends Serializable {
+trait One[A] extends Serializable {
   def one: A
 
   def isOne(a: A)(implicit ev: Eq[A]): Boolean =
@@ -38,10 +37,6 @@ import simulacrum.typeclass
 object One {
   def apply[A](a: => A): One[A] =
     new One[A] { lazy val one: A = a }
-
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
 
   /**
    * Summon an instance of [[One]] for `A`.
@@ -79,9 +74,5 @@ object One {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToOneOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }

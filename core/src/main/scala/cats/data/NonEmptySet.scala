@@ -25,9 +25,17 @@ package data
 import cats.kernel._
 
 import scala.collection.immutable._
+
 import kernel.compat.scalaVersionSpecific._
 
-private[data] object NonEmptySetImpl extends NonEmptySetInstances with Newtype {
+/**
+ * Actual implementation for [[cats.data.NonEmptySet]]
+ *
+ * @note This object is kept public for the sake of binary compatibility only
+ *       and therefore is subject to changes in future versions of Cats.
+ *       Do not use directly - use [[cats.data.NonEmptySet]] instead.
+ */
+object NonEmptySetImpl extends NonEmptySetInstances with Newtype {
 
   private[data] def create[A](s: SortedSet[A]): Type[A] =
     s.asInstanceOf[Type[A]]
@@ -340,7 +348,7 @@ sealed class NonEmptySetOps[A](val value: NonEmptySet[A]) {
    */
   def zipWith[B, C](b: NonEmptySet[B])(f: (A, B) => C)(implicit C: Order[C]): NonEmptySet[C] = {
     implicit val cOrdering: Ordering[C] = C.toOrdering
-    NonEmptySetImpl.create((toSortedSet.lazyZip(b.toSortedSet)).map(f))
+    NonEmptySetImpl.create(toSortedSet.lazyZip(b.toSortedSet).map(f))
   }
 
   /**
@@ -433,7 +441,8 @@ sealed abstract private[data] class NonEmptySetInstances0 extends NonEmptySetIns
 }
 
 sealed abstract private[data] class NonEmptySetInstances1 {
-  private[data] def catsDataEqForNonEmptySet[A](implicit A: Order[A]): Eq[NonEmptySet[A]] =
+  @deprecated("use catsDataEqForNonEmptySetFromEqA instead", "2.8.0")
+  def catsDataEqForNonEmptySet[A](implicit A: Order[A]): Eq[NonEmptySet[A]] =
     catsDataEqForNonEmptySetFromEqA[A]
 
   implicit def catsDataEqForNonEmptySetFromEqA[A](implicit A: Eq[A]): Eq[NonEmptySet[A]] =

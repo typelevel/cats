@@ -88,6 +88,11 @@ sealed private[instances] trait Tuple2Instances extends Tuple2Instances1 {
 
       override def map[A, B](fa: (X, A))(f: A => B): (X, B) = (fa._1, f(fa._2))
 
+      override def mapAccumulate[S, A, B](init: S, fa: (X, A))(f: (S, A) => (S, B)): (S, (X, B)) = {
+        val (snext, b) = f(init, fa._2)
+        (snext, (fa._1, b))
+      }
+
       def coflatMap[A, B](fa: (X, A))(f: ((X, A)) => B): (X, B) = (fa._1, f(fa))
 
       def extract[A](fa: (X, A)): A = fa._2

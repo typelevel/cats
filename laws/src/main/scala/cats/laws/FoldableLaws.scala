@@ -146,7 +146,7 @@ trait FoldableLaws[F[_]] extends UnorderedFoldableLaws[F] {
     F.collectFirst(fa)(pf) <-> F.collectFirstSome(fa)(pf.lift)
 
   def orderedConsistency[A: Eq](x: F[A], y: F[A])(implicit ev: Eq[F[A]]): IsEq[List[A]] =
-    if (x === y) (F.toList(x) <-> F.toList(y))
+    if (x === y) F.toList(x) <-> F.toList(y)
     else List.empty[A] <-> List.empty[A]
 
 }

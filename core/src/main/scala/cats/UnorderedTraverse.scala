@@ -21,12 +21,10 @@
 
 package cats
 
-import simulacrum.typeclass
-
 /**
  * `UnorderedTraverse` is like a `Traverse` for unordered containers.
  */
-@typeclass trait UnorderedTraverse[F[_]] extends UnorderedFoldable[F] {
+trait UnorderedTraverse[F[_]] extends UnorderedFoldable[F] {
   def unorderedTraverse[G[_]: CommutativeApplicative, A, B](sa: F[A])(f: A => G[B]): G[F[B]]
 
   def unorderedSequence[G[_]: CommutativeApplicative, A](fga: F[G[A]]): G[F[A]] =
@@ -34,10 +32,6 @@ import simulacrum.typeclass
 }
 
 object UnorderedTraverse {
-
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
 
   /**
    * Summon an instance of [[UnorderedTraverse]] for `F`.
@@ -79,9 +73,5 @@ object UnorderedTraverse {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToUnorderedTraverseOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }

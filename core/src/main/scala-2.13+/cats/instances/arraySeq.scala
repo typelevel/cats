@@ -22,7 +22,7 @@
 package cats
 package instances
 
-import cats.data.Ior
+import cats.data.{Chain, Ior}
 import scala.annotation.tailrec
 import scala.collection.immutable.ArraySeq
 import scala.collection.mutable.Builder
@@ -103,12 +103,11 @@ private[cats] object ArraySeqInstances {
       override def foldMap[A, B](fa: ArraySeq[A])(f: A => B)(implicit B: Monoid[B]): B =
         B.combineAll(fa.iterator.map(f))
 
-      def traverse[G[_], A, B](fa: ArraySeq[A])(f: A => G[B])(implicit G: Applicative[G]): G[ArraySeq[B]] = {
-        def loop(i: Int): Eval[G[ArraySeq[B]]] =
-          if (i < fa.length) G.map2Eval(f(fa(i)), Eval.defer(loop(i + 1)))(_ +: _)
-          else Eval.now(G.pure(ArraySeq.untagged.empty))
-        loop(0).value
-      }
+      def traverse[G[_], A, B](fa: ArraySeq[A])(f: A => G[B])(implicit G: Applicative[G]): G[ArraySeq[B]] =
+        G.map(Chain.traverseViaChain(fa)(f))(_.iterator.to(ArraySeq.untagged))
+
+      override def mapAccumulate[S, A, B](init: S, fa: ArraySeq[A])(f: (S, A) => (S, B)): (S, ArraySeq[B]) =
+        StaticMethods.mapAccumulateFromStrictFunctor(init, fa, f)(this)
 
       override def mapWithIndex[A, B](fa: ArraySeq[A])(f: (A, Int) => B): ArraySeq[B] =
         ArraySeq.untagged.tabulate(n = fa.length) { i =>

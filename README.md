@@ -69,7 +69,7 @@ We thankfully accept <a href="https://opencollective.com/typelevel/donate">one-t
 
 Cats is available for [Scala.js](http://www.scala-js.org/) and [Scala Native](https://www.scala-native.org/), as well as the standard JVM runtime.
 
-Cats relies on improved type inference via the fix for [SI-2712](https://github.com/scala/bug/issues/2712), which is not enabled by default. For **Scala 2.11.9+ or 2.12** you should add the following to your `build.sbt`:
+Cats relies on improved type inference via the fix for [SI-2712](https://github.com/scala/bug/issues/2712), which is not enabled by default. For **Scala 2.12** you should add the following to your `build.sbt`:
 
 ```scala
 scalacOptions += "-Ypartial-unification"
@@ -77,16 +77,10 @@ scalacOptions += "-Ypartial-unification"
 
 (Partial unification is on by default since Scala 2.13, the compiler no longer accepts `-Ypartial-unification`)
 
-**Or**, if you need to support older versions of Scala you can use the [sbt-partial-unification](https://github.com/fiadliel/sbt-partial-unification#sbt-partial-unification) plugin which extends support back through **Scala 2.10.6 or later**, to add it, simply add this line to your `plugins.sbt`:
-
-```scala
-addSbtPlugin("org.lyranthe.sbt" % "partial-unification" % "1.1.2")
-```
-
 And then create the Cats dependency, by adding the following to your `build.sbt`:
 
 ```scala
-libraryDependencies += "org.typelevel" %% "cats-core" % "2.3.0"
+libraryDependencies += "org.typelevel" %% "cats-core" % "2.7.0"
 ```
 
 This will pull in the cats-core module. If you require some other
@@ -120,13 +114,13 @@ Links:
 
 1. Website: [typelevel.org/cats/](https://typelevel.org/cats/)
 2. ScalaDoc: [typelevel.org/cats/api/](https://typelevel.org/cats/api/)
-3. Type classes: [typelevel.org/cats/typeclasses](https://typelevel.org/cats/typeclasses.md)
-4. Data types: [typelevel.org/cats/datatypes.html](https://typelevel.org/cats/datatypes.md)
-5. Algebra overview: [typelevel.org/cats/algebra.html](https://typelevel.org/cats/algebra.md)
-6. Glossary: [typelevel.org/cats/nomenclature.html](https://typelevel.org/cats/nomenclature.md)
-7. Resources for Learners: [typelevel.org/cats/resources_for_learners.html](https://typelevel.org/cats/resources_for_learners.md)
-8. FAQ: [typelevel.org/cats/faq.html](https://typelevel.org/cats/faq.md)
-9. The Typelevel Ecosystem: [typelevel.org/cats/typelevelEcosystem.html](https://typelevel.org/cats/typelevelEcosystem.md)
+3. Type classes: [typelevel.org/cats/typeclasses.html](https://typelevel.org/cats/typeclasses.html)
+4. Data types: [typelevel.org/cats/datatypes.html](https://typelevel.org/cats/datatypes.html)
+5. Algebra overview: [typelevel.org/cats/algebra.html](https://typelevel.org/cats/algebra.html)
+6. Glossary: [typelevel.org/cats/nomenclature.html](https://typelevel.org/cats/nomenclature.html)
+7. Resources for Learners: [typelevel.org/cats/resources_for_learners.html](https://typelevel.org/cats/resources_for_learners.html)
+8. FAQ: [typelevel.org/cats/faq.html](https://typelevel.org/cats/faq.html)
+9. The Typelevel Ecosystem: [typelevel.org/cats/typelevelEcosystem.html](https://typelevel.org/cats/typelevelEcosystem.html)
 
 ### Community
 
@@ -201,6 +195,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Codacy](https://www.codacy.com/)
 - [Code Dx](https://codedx.com/)
 - [Codecentric](https://codecentric.de)
+- [Cognite](https://www.cognite.com)
 - [Colisweb](https://www.colisweb.com/)
 - [CompStak](https://compstak.com)
 - [Coya](https://coya.com/)
@@ -215,6 +210,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [eBay Inc.](https://www.ebay.com)
 - [Eloquentix](https://eloquentix.com)
 - [eSailors](https://www.esailors.de)
+- [Etsy](https://etsy.com)
 - [Evolution Gaming](https://www.evolutiongaming.com/)
 - [Evotor Marketplace](https://market.evotor.ru/)
 - [Exelonix](https://exelonix.com/)
@@ -236,7 +232,6 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Iterators](https://www.iteratorshq.com/)
 - [ITV](https://www.itv.com/)
 - [Kaluza](https://www.kaluza.com)
-- [Lego](https://lego.com)
 - [Lightform](https://lightform.com/)
 - [Lookout](https://www.lookout.com)
 - [Medidata](https://www.medidata.com/)
@@ -248,6 +243,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [NetworkedAssets](https://www.networkedassets.com/)
 - [Nezasa](https://www.nezasa.com)
 - [Ocado Technology](https://ocadotechnology.com)
+- [On Air Entertainment](https://onairentertainment.com/)
 - [OVO Energy](https://ovoenergy.com)
 - [Packlink](https://packlink.com/)
 - [Permutive](https://permutive.com/)

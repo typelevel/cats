@@ -9,7 +9,6 @@ We would like to thank the maintainers of these supporting projects,
 and we'd encourage you to check out these projects and consider
 integrating them into your own projects.
 
- * [simulacrum](https://github.com/typelevel/simulacrum) for minimizing type class boilerplate
  * [scalacheck](http://scalacheck.org) for property-based testing
  * [discipline](https://github.com/typelevel/discipline) for encoding and testing laws
  * [kind-projector](https://github.com/typelevel/kind-projector) for type lambda syntax

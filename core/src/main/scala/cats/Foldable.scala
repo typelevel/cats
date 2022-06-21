@@ -23,7 +23,7 @@ package cats
 
 import scala.collection.mutable
 import cats.kernel.CommutativeMonoid
-import simulacrum.{noop, typeclass}
+
 import Foldable.{sentinel, Source}
 
 /**
@@ -48,7 +48,6 @@ import Foldable.{sentinel, Source}
  *
  * See: [[http://www.cs.nott.ac.uk/~pszgmh/fold.pdf A tutorial on the universality and expressiveness of fold]]
  */
-@typeclass(excludeParents = List("FoldableNFunctions"))
 trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { self =>
 
   /**
@@ -389,7 +388,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * res3: scala.util.Either[String,Option[String]] = Right(Some(Four))
    * }}}
    */
-  @noop
+
   def collectFirstSomeM[G[_], A, B](fa: F[A])(f: A => G[Option[B]])(implicit G: Monad[G]): G[Option[B]] =
     G.tailRecM(Foldable.Source.fromFoldable(fa)(self))(_.uncons match {
       case Some((a, src)) =>
@@ -409,7 +408,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * res0: Int = 6
    * }}}
    */
-  @noop
+
   def collectFold[A, B](fa: F[A])(f: PartialFunction[A, B])(implicit B: Monoid[B]): B =
     foldLeft(fa, B.empty)((acc, a) => B.combine(acc, f.applyOrElse(a, (_: A) => B.empty)))
 
@@ -497,10 +496,8 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * scala> F.foldA(List(Either.right[String, Int](1), Either.right[String, Int](2)))
    * res0: Either[String, Int] = Right(3)
    * }}}
-   *
-   * See [[https://github.com/typelevel/simulacrum/issues/162 this issue]] for an explanation of `@noop` usage.
    */
-  @noop def foldA[G[_], A](fga: F[G[A]])(implicit G: Applicative[G], A: Monoid[A]): G[A] =
+  def foldA[G[_], A](fga: F[G[A]])(implicit G: Applicative[G], A: Monoid[A]): G[A] =
     foldMapA(fga)(identity)
 
   /**
@@ -515,7 +512,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * a: String = "foo321"
    * }}}
    */
-  @noop
+
   def foldMapK[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: MonoidK[G]): G[B] =
     foldRight(fa, Eval.now(G.empty[B])) { (a, evalGb) =>
       G.combineKEval(f(a), evalGb)
@@ -665,7 +662,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * res3: Either[String,Option[Int]] = Left(error)
    * }}}
    */
-  @noop
+
   def findM[G[_], A](fa: F[A])(p: A => G[Boolean])(implicit G: Monad[G]): G[Option[A]] =
     G.tailRecM(Foldable.Source.fromFoldable(fa)(self))(_.uncons match {
       case Some((a, src)) => G.map(p(a))(if (_) Right(Some(a)) else Left(src.value))
@@ -882,7 +879,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * res1: (List[Int], List[Nothing with Any]) = (List(1, 2, 3, 4),List())
    * }}}
    */
-  @noop
+
   def partitionBifold[H[_, _], A, B, C](
     fa: F[A]
   )(f: A => H[B, C])(implicit A: Alternative[F], H: Bifoldable[H]): (F[B], F[C]) = {
@@ -908,7 +905,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * res0: Option[(List[Int], List[Nothing with Any])] = Some((List(1, 2, 3, 4),List()))
    * }}}
    */
-  @noop
+
   def partitionBifoldM[G[_], H[_, _], A, B, C](
     fa: F[A]
   )(f: A => G[H[B, C]])(implicit A: Alternative[F], M: Monad[G], H: Bifoldable[H]): G[(F[B], F[C])] = {
@@ -940,7 +937,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * res1: (List[Nothing], List[Int]) = (List(),List(4, 8, 12, 16))
    * }}}
    */
-  @noop
+
   def partitionEitherM[G[_], A, B, C](
     fa: F[A]
   )(f: A => G[Either[B, C]])(implicit A: Alternative[F], M: Monad[G]): G[(F[B], F[C])] = {
@@ -998,10 +995,6 @@ object Foldable {
     def fromFoldable[F[_], A](fa: F[A])(implicit F: Foldable[F]): Source[A] =
       F.foldRight[A, Source[A]](fa, Now(Empty))((a, evalSrc) => Later(cons(a, evalSrc))).value
   }
-
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
 
   /**
    * Summon an instance of [[Foldable]] for `F`.
@@ -1097,9 +1090,5 @@ object Foldable {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToFoldableOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }

@@ -86,10 +86,10 @@ the instances need to be separated out into different abstract class/traits so t
 with higher priority inherits from the ones with lower priority. The most specific (whose type class is the lowest in the hierarchy) instance should be placed in the abstract class/ trait with the highest priority.  Here is an example.
 
 ```scala
-@typeclass
+
 trait Functor[F[_]]
 
-@typeclass
+
 trait Monad[F[_]] extends Functor
 
 ...

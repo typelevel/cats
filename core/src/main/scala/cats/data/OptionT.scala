@@ -140,6 +140,24 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
     F.flatMap(value)(_.fold(default)(F.pure))
 
   /**
+   * Like [[getOrElseF]] but accept an error `E` and raise it when the inner `Option` is `None`
+   * 
+   * Equivalent to `getOrElseF(F.raiseError(e)))`
+   * 
+   * {{{
+   * scala> import cats.data.OptionT
+   * scala> import cats.implicits._
+   * scala> import scala.util.{Success, Failure, Try}
+   *
+   * scala> val optionT: OptionT[Try, Int] = OptionT[Try, Int](Success(None))
+   * scala> optionT.getOrRaise(new RuntimeException("ERROR!"))
+   * res0: Try[Int] = Failure(java.lang.RuntimeException: ERROR!)
+   * }}}
+   */
+  def getOrRaise[E](e: => E)(implicit F: MonadError[F, _ >: E]): F[A] =
+    getOrElseF(F.raiseError(e))
+
+  /**
    * Example:
    * {{{
    *  scala> import cats.data.OptionT
@@ -303,6 +321,11 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
 
   def traverse[G[_], B](f: A => G[B])(implicit F: Traverse[F], G: Applicative[G]): G[OptionT[F, B]] =
     G.map(F.compose(Traverse[Option]).traverse(value)(f))(OptionT.apply)
+
+  def mapAccumulate[S, B](init: S)(f: (S, A) => (S, B))(implicit traverseF: Traverse[F]): (S, OptionT[F, B]) = {
+    val (snext, vnext) = traverseF.mapAccumulate(init, value)(Traverse[Option].mapAccumulate(_, _)(f))
+    (snext, OptionT(vnext))
+  }
 
   def foldLeft[B](b: B)(f: (B, A) => B)(implicit F: Foldable[F]): B =
     F.compose(Foldable[Option]).foldLeft(value, b)(f)
@@ -672,6 +695,9 @@ sealed private[data] trait OptionTTraverse[F[_]] extends Traverse[OptionT[F, *]]
 
   def traverse[G[_]: Applicative, A, B](fa: OptionT[F, A])(f: A => G[B]): G[OptionT[F, B]] =
     fa.traverse(f)
+
+  override def mapAccumulate[S, A, B](init: S, fa: OptionT[F, A])(f: (S, A) => (S, B)): (S, OptionT[F, B]) =
+    fa.mapAccumulate(init)(f)
 }
 
 private[data] trait OptionTSemigroup[F[_], A] extends Semigroup[OptionT[F, A]] {

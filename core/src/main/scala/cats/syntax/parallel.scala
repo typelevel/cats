@@ -53,13 +53,24 @@ trait ParallelSyntax extends TupleParallelSyntax {
   implicit final def catsSyntaxParallelSequence1[T[_]: Traverse, M[_], A](tma: T[M[A]]): ParallelSequenceOps1[T, M, A] =
     new ParallelSequenceOps1(tma)
 
-  implicit final def catsSyntaxParallelAp[M[_]: FlatMap, A](ma: M[A]): ParallelApOps[M, A] =
+  @deprecated("Kept for binary compatibility", "2.8.0")
+  final def catsSyntaxParallelAp[M[_]: FlatMap, A](ma: M[A]): ParallelApOps[M, A] =
     new ParallelApOps(ma)
+
+  implicit final def catsSyntaxParallelAp1[M[_], A](ma: M[A]): ParallelApOps1[M, A] =
+    new ParallelApOps1(ma)
+
+  implicit final def catsSyntaxNonEmptyParallelAp[M[_], A](ma: M[A]): NonEmptyParallelApOps[M, A] =
+    new NonEmptyParallelApOps(ma)
 }
 
 trait ParallelApplySyntax {
-  implicit final def catsSyntaxParallelApply[F[_], A, B](fa: F[A => B]): ParallelApplyOps[F, A, B] =
+  @deprecated("Kept for binary compatibility", "2.8.0")
+  final def catsSyntaxParallelApply[F[_], A, B](fa: F[A => B]): ParallelApplyOps[F, A, B] =
     new ParallelApplyOps(fa)
+
+  implicit final def catsSyntaxNonEmptyParallelApply[F[_], A, B](fa: F[A => B]): NonEmptyParallelApplyOps[F, A, B] =
+    new NonEmptyParallelApplyOps(fa)
 }
 
 trait ParallelFlatSyntax {
@@ -258,8 +269,8 @@ final class ParallelUnorderedFlatSequenceOps[T[_], M[_], A](private val tmta: T[
     Parallel.parUnorderedFlatSequence(tmta)
 }
 
+@deprecated("Kept for binary compatibility", "2.8.0")
 final class ParallelApOps[M[_], A](private val ma: M[A]) extends AnyVal {
-
   def &>[B](mb: M[B])(implicit P: Parallel[M]): M[B] =
     P.parProductR(ma)(mb)
 
@@ -277,14 +288,50 @@ final class ParallelApOps[M[_], A](private val ma: M[A]) extends AnyVal {
 
   def parReplicateA(n: Int)(implicit P: Parallel[M]): M[List[A]] =
     Parallel.parReplicateA(n, ma)
+
+  def parReplicateA_(n: Int)(implicit P: Parallel[M]): M[Unit] =
+    Parallel.parReplicateA_(n, ma)
 }
 
+final class ParallelApOps1[M[_], A](private val ma: M[A]) extends AnyVal {
+  def parReplicateA(n: Int)(implicit P: Parallel[M]): M[List[A]] =
+    Parallel.parReplicateA(n, ma)
+  def parReplicateA_(n: Int)(implicit P: Parallel[M]): M[Unit] =
+    Parallel.parReplicateA_(n, ma)
+}
+
+final class NonEmptyParallelApOps[M[_], A](private val ma: M[A]) extends AnyVal {
+  def &>[B](mb: M[B])(implicit P: NonEmptyParallel[M]): M[B] =
+    P.parProductR[A, B](ma)(mb)
+
+  def <&[B](mb: M[B])(implicit P: NonEmptyParallel[M]): M[A] =
+    P.parProductL[A, B](ma)(mb)
+
+  def parProductL[B](mb: M[B])(implicit P: NonEmptyParallel[M]): M[A] =
+    P.parProductL[A, B](ma)(mb)
+
+  def parProductR[B](mb: M[B])(implicit P: NonEmptyParallel[M]): M[B] =
+    P.parProductR[A, B](ma)(mb)
+
+  def parProduct[B](mb: M[B])(implicit P: NonEmptyParallel[M]): M[(A, B)] =
+    Parallel.parProduct(ma, mb)
+}
+
+@deprecated("Kept for binary compatibility", "2.8.0")
 final class ParallelApplyOps[M[_], A, B](private val mab: M[A => B]) extends AnyVal {
   def <&>(ma: M[A])(implicit P: Parallel[M]): M[B] =
     Parallel.parAp(mab)(ma)(P)
 
   def parAp(ma: M[A])(implicit P: Parallel[M]): M[B] =
     Parallel.parAp(mab)(ma)
+}
+
+final class NonEmptyParallelApplyOps[M[_], A, B](private val mab: M[A => B]) extends AnyVal {
+  def <&>(ma: M[A])(implicit P: NonEmptyParallel[M]): M[B] =
+    Parallel.parAp[M, A, B](mab)(ma)(P)
+
+  def parAp(ma: M[A])(implicit P: NonEmptyParallel[M]): M[B] =
+    Parallel.parAp[M, A, B](mab)(ma)
 }
 
 final class ParallelBitraverseOps[T[_, _], A, B](private val tab: T[A, B]) extends AnyVal {

@@ -23,6 +23,7 @@ package cats
 package data
 
 import cats.data.NonEmptyList.ZipNonEmptyList
+import cats.instances.StaticMethods
 
 import scala.annotation.tailrec
 import scala.collection.immutable.{SortedMap, TreeMap, TreeSet}
@@ -796,6 +797,15 @@ sealed abstract private[data] class NonEmptyListInstances extends NonEmptyListIn
         fa: NonEmptyList[A]
       )(f: A => G[B])(implicit G: Applicative[G]): G[NonEmptyList[B]] =
         fa.traverse(f)
+
+      override def mapAccumulate[S, A, B](init: S, fa: NonEmptyList[A])(f: (S, A) => (S, B)): (S, NonEmptyList[B]) =
+        StaticMethods.mapAccumulateFromStrictFunctor(init, fa, f)(this)
+
+      override def mapWithIndex[A, B](fa: NonEmptyList[A])(f: (A, Int) => B): NonEmptyList[B] =
+        StaticMethods.mapWithIndexFromStrictFunctor(fa, f)(this)
+
+      override def zipWithIndex[A](fa: NonEmptyList[A]): NonEmptyList[(A, Int)] =
+        fa.zipWithIndex
 
       override def foldLeft[A, B](fa: NonEmptyList[A], b: B)(f: (B, A) => B): B =
         fa.foldLeft(b)(f)

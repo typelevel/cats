@@ -45,7 +45,7 @@ trait FlatMapLaws[F[_]] extends ApplyLaws[F] {
    */
   def kleisliAssociativity[A, B, C, D](f: A => F[B], g: B => F[C], h: C => F[D], a: A): IsEq[F[D]] = {
     val (kf, kg, kh) = (Kleisli(f), Kleisli(g), Kleisli(h))
-    (kf.andThen(kg)).andThen(kh).run(a) <-> kf.andThen(kg.andThen(kh)).run(a)
+    kf.andThen(kg).andThen(kh).run(a) <-> kf.andThen(kg.andThen(kh)).run(a)
   }
 
   def mproductConsistency[A, B](fa: F[A], fb: A => F[B]): IsEq[F[(A, B)]] =

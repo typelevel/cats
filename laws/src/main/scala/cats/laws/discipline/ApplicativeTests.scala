@@ -24,11 +24,14 @@ package laws
 package discipline
 
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import org.scalacheck.{Arbitrary, Cogen, Prop}
-import Prop._
+import org.scalacheck.Prop._
+import org.scalacheck.{Arbitrary, Cogen, Gen}
 
 trait ApplicativeTests[F[_]] extends ApplyTests[F] {
   def laws: ApplicativeLaws[F]
+
+  private def makeEqFUnit[A](a: A)(implicit EqFA: Eq[F[A]]): Eq[F[Unit]] =
+    Eq.by(fa => laws.F.as(fa, a))
 
   def applicative[A: Arbitrary, B: Arbitrary, C: Arbitrary](implicit
     ArbFA: Arbitrary[F[A]],
@@ -44,7 +47,7 @@ trait ApplicativeTests[F[_]] extends ApplyTests[F] {
     EqFC: Eq[F[C]],
     EqFABC: Eq[F[(A, B, C)]],
     iso: Isomorphisms[F]
-  ): RuleSet =
+  ): RuleSet = {
     new DefaultRuleSet(
       name = "applicative",
       parent = Some(apply[A, B, C]),
@@ -54,9 +57,15 @@ trait ApplicativeTests[F[_]] extends ApplyTests[F] {
       "applicative map" -> forAll(laws.applicativeMap[A, B] _),
       "applicative unit" -> forAll(laws.applicativeUnit[A] _),
       "ap consistent with product + map" -> forAll(laws.apProductConsistent[A, B] _),
+      "replicateA_ consistent with replicateA.void" -> forAll { (a: A) =>
+        // Should be an implicit parameter but that is not a binary-compatible change
+        implicit val eqFUnit: Eq[F[Unit]] = makeEqFUnit[A](a)
+        forAll(Gen.resize(4, ArbFA.arbitrary))(laws.replicateAVoidReplicateA_Consistent[A](4, _))
+      },
       "monoidal left identity" -> forAll((fa: F[A]) => iso.leftIdentity(laws.monoidalLeftIdentity(fa))),
       "monoidal right identity" -> forAll((fa: F[A]) => iso.rightIdentity(laws.monoidalRightIdentity(fa)))
     )
+  }
 }
 
 object ApplicativeTests {

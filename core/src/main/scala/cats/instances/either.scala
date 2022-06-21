@@ -101,6 +101,15 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
           case Right(b)       => F.map(f(b))(Right(_))
         }
 
+      override def mapAccumulate[S, B, C](init: S, fa: Either[A, B])(f: (S, B) => (S, C)): (S, Either[A, C]) = {
+        fa match {
+          case Right(b) =>
+            val (snext, c) = f(init, b)
+            (snext, Right(c))
+          case l @ Left(_) => (init, l.rightCast)
+        }
+      }
+
       def foldLeft[B, C](fa: Either[A, B], c: C)(f: (C, B) => C): C =
         fa match {
           case Left(_)  => c
