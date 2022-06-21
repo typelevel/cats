@@ -89,6 +89,14 @@ abstract class TraverseSuite[F[_]: Traverse](name: String)(implicit ArbFInt: Arb
     }
   }
 
+  test(s"Traverse[$name].updated") {
+    forAll { (fa: F[Int], i: Int, b: Int) =>
+      val updatedThenToList: Option[List[Int]] = fa.updated(i.toLong, b).fmap(_.toList)
+      val toListThenUpdated: Option[List[Int]] = scala.util.Try(fa.toList.updated(i, b)).toOption
+      assert(updatedThenToList == toListThenUpdated)
+    }
+  }
+
 }
 
 object TraverseSuite {

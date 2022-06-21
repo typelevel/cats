@@ -186,6 +186,30 @@ trait Traverse[F[_]] extends Functor[F] with Foldable[F] with UnorderedTraverse[
   def zipWithLongIndex[A](fa: F[A]): F[(A, Long)] =
     mapWithLongIndex(fa)((a, long) => (a, long))
 
+  /**
+   * If `fa` contains the element at index `idx`, 
+   * return the version of `fa` where the element at `idx` is replaced with `b`. 
+   * If there is no element with such an index, return `None`. 
+   *
+   * The behavior is consistent with the Scala collection library's
+   * `updated` for collections such as `List`.
+   */
+  def updated[A, B >: A](fa: F[A], idx: Long, b: B): Option[F[B]] =
+    traverseWithLongIndexM[State[Boolean, *], A, B](fa) { case (elem, i) =>
+      State((updated: Boolean) =>
+        if (i == idx) {
+          // update at idx, set "updated" to true
+          (true, b)
+        } else {
+          (updated, elem)
+        }
+      )
+    }.run(false).value match {
+      // if the element was updated, return the updated F[B]
+      case (true, fb) => Some(fb)
+      case (false, _) => None
+    }
+
   override def unorderedTraverse[G[_]: CommutativeApplicative, A, B](sa: F[A])(f: (A) => G[B]): G[F[B]] =
     traverse(sa)(f)
 
@@ -239,6 +263,8 @@ object Traverse {
       typeClassInstance.traverseWithLongIndexM[G, A, B](self)(f)
     def mapWithLongIndex[B](f: (A, Long) => B): F[B] =
       typeClassInstance.mapWithLongIndex[A, B](self)(f)
+    def updated[B >: A](idx: Long, b: B): Option[F[B]] =
+      typeClassInstance.updated(self, idx, b)
   }
   trait AllOps[F[_], A]
       extends Ops[F, A]
