@@ -338,6 +338,130 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
       case Invalid(e) => raiseError(e)
       case Valid(a)   => pure(a)
     }
+
+  /**
+   * Equivalent of a [[scala.Predef#assert(assertion:Boolean,message:=>Any)*]] assertion in `F[_]`.
+   *
+   * Tests an expression, sequencing an exception of type [[java.lang.AssertionError]] if false.
+   *
+   * Assertions can be disabled by using the scalac option `-Xdisable-assertions`, or by
+   * configuring the scalac option `-Xelide-below` with a value greater than
+   * [[scala.annotation.elidable.ASSERTION ASSERTION]].
+   *
+   * When assertions are disabled exceptions are not sequenced, and this method is equivalent to
+   * [[cats.InvariantMonoidal#unit]]
+   *
+   * @param assertion
+   *   the expression to test
+   * @param message
+   *   a String to include in the failure message
+   */
+  def assert(assertion: Boolean, message: => String)(implicit ev: Throwable <:< E): F[Unit] =
+    catchOnly[AssertionError](Predef.assert(assertion, message))
+
+  /**
+   * Equivalent of a [[scala.Predef#assert(assertion:Boolean)*]] assertion in `F[_]`.
+   *
+   * Tests an expression, sequencing an exception of type [[java.lang.AssertionError]] if false.
+   *
+   * Assertions can be disabled by using the scalac option `-Xdisable-assertions`, or by
+   * configuring the scalac option `-Xelide-below` with a value greater than
+   * [[scala.annotation.elidable.ASSERTION ASSERTION]].
+   *
+   * When assertions are disabled exceptions are not sequenced, and this method is equivalent to
+   * [[cats.InvariantMonoidal#unit]]
+   *
+   * @param assertion
+   *   the expression to test
+   */
+  def assert(assertion: Boolean)(implicit ev: Throwable <:< E): F[Unit] =
+    catchOnly[AssertionError](Predef.assert(assertion))
+
+  /**
+   * Equivalent of a [[scala.Predef#assume(assumption:Boolean,message:=>Any)*]] assumption in `F[_]`.
+   *
+   * Tests an expression, sequencing an exception of type [[java.lang.AssertionError]] if false.
+   *
+   * This method differs from
+   * [[cats.ApplicativeError#assert(assertion:Boolean,message:=>String)* assert]] only in the
+   * intent expressed: `assert` contains a predicate which needs to be proven, while `assume`
+   * contains an axiom for a static checker.
+   *
+   * Assertions can be disabled by using the scalac option `-Xdisable-assertions`, or by
+   * configuring the scalac option `-Xelide-below` with a value greater than
+   * [[scala.annotation.elidable.ASSERTION ASSERTION]].
+   *
+   * When assertions are disabled exceptions are not sequenced, and this method is equivalent to
+   * [[cats.InvariantMonoidal#unit]]
+   *
+   * @param assumption
+   *   the expression to test
+   * @param message
+   *   a String to include in the failure message
+   */
+  def assume(assumption: Boolean, message: => String)(implicit ev: Throwable <:< E): F[Unit] =
+    catchOnly[AssertionError](Predef.assume(assumption, message))
+
+  /**
+   * Equivalent of a [[scala.Predef#assume(assumption:Boolean)*]] assumption in `F[_]`.
+   *
+   * Tests an expression, sequencing an exception of type [[java.lang.AssertionError]] if false.
+   *
+   * This method differs from [[cats.ApplicativeError#assert(assertion:Boolean)* assert]] only
+   * in the intent expressed: `assert` contains a predicate which needs to be proven, while
+   * `assume` contains an axiom for a static checker.
+   *
+   * Assertions can be disabled by using the scalac option `-Xdisable-assertions`, or by
+   * configuring the scalac option `-Xelide-below` with a value greater than
+   * [[scala.annotation.elidable.ASSERTION ASSERTION]].
+   *
+   * When assertions are disabled exceptions are not sequenced, and this method is equivalent to
+   * [[cats.InvariantMonoidal#unit]]
+   *
+   * @param assumption
+   *   the expression to test
+   */
+  def assume(assumption: Boolean)(implicit ev: Throwable <:< E): F[Unit] =
+    catchOnly[AssertionError](Predef.assume(assumption))
+
+  /**
+   * Equivalent of a [[scala.Predef#require(requirement:Boolean,message:=>Any)*]] requirement in  `F[_]`.
+   *
+   * Tests an expression, sequencing an exception of type [[java.lang.IllegalArgumentException]]
+   * if false.
+   *
+   * This method is similar to
+   * [[cats.ApplicativeError#assert(assertion:Boolean,message:=>String)* assert]], but blames
+   * the caller of the method for violating the condition.
+   *
+   * Since requirements express a precondition that must be met by the caller, they cannot be
+   * disabled using `-Xdisable-assertions`.
+   *
+   * @param requirement
+   *   the expression to test
+   * @param message
+   *   a String to include in the failure message
+   */
+  def require(requirement: Boolean, message: => String)(implicit ev: Throwable <:< E): F[Unit] =
+    catchOnly[IllegalArgumentException](Predef.require(requirement, message))
+
+  /**
+   * Equivalent of a [[scala.Predef#require(requirement:Boolean)*]] requirement in `F[_]`.
+   *
+   * Tests an expression, sequencing an exception of type [[java.lang.IllegalArgumentException]]
+   * if false.
+   *
+   * This method is similar to [[cats.ApplicativeError#assert(assertion:Boolean)* assert]],
+   * but blames the caller of the method for violating the condition.
+   *
+   * Since requirements express a precondition that must be met by the caller, they cannot be
+   * disabled using `-Xdisable-assertions`.
+   *
+   * @param requirement
+   *   the expression to test
+   */
+  def require(requirement: Boolean)(implicit ev: Throwable <:< E): F[Unit] =
+    catchOnly[IllegalArgumentException](Predef.require(requirement))
 }
 
 object ApplicativeError {

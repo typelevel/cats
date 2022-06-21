@@ -85,6 +85,54 @@ class ApplicativeErrorSuite extends CatsSuite {
     // assertEquals(compileErrors("e3.attemptNarrow[List[Str.type]]"), "")
   }
 
+  test("assert is equivalent to Predef.assert") {
+    val A = ApplicativeError[Either[Throwable, *], Throwable]
+    assertEquals(A.assert(true), A.unit)
+    assertEquals(A.assert(true, "foo"), A.unit)
+    val catsAssert = A.assert(false)
+    val predefAssert = intercept[AssertionError] { Predef.assert(false) }
+    assert(catsAssert.isLeft)
+    assert(catsAssert.left.get.isInstanceOf[AssertionError])
+    assertEquals(catsAssert.left.get.getMessage, predefAssert.getMessage)
+    val catsAssertWithMsg = A.assert(false, "foo")
+    val predefAssertWithMsg = intercept[AssertionError] { Predef.assert(false, "foo") }
+    assert(catsAssertWithMsg.isLeft)
+    assert(catsAssertWithMsg.left.get.isInstanceOf[AssertionError])
+    assertEquals(catsAssertWithMsg.left.get.getMessage, predefAssertWithMsg.getMessage)
+  }
+
+  test("assume is equivalent to Predef.assume") {
+    val A = ApplicativeError[Either[Throwable, *], Throwable]
+    assertEquals(A.assume(true), A.unit)
+    assertEquals(A.assume(true, "foo"), A.unit)
+    val catsAssume = A.assume(false)
+    val predefAssume = intercept[AssertionError] { Predef.assume(false) }
+    assert(catsAssume.isLeft)
+    assert(catsAssume.left.get.isInstanceOf[AssertionError])
+    assertEquals(catsAssume.left.get.getMessage, predefAssume.getMessage)
+    val catsAssumeWithMsg = A.assume(false, "foo")
+    val predefAssumeWithMsg = intercept[AssertionError] { Predef.assume(false, "foo") }
+    assert(catsAssumeWithMsg.isLeft)
+    assert(catsAssumeWithMsg.left.get.isInstanceOf[AssertionError])
+    assertEquals(catsAssumeWithMsg.left.get.getMessage, predefAssumeWithMsg.getMessage)
+  }
+
+  test("require is equivalent to Predef.require") {
+    val A = ApplicativeError[Either[Throwable, *], Throwable]
+    assertEquals(A.require(true), A.unit)
+    assertEquals(A.require(true, "foo"), A.unit)
+    val catsRequire = A.require(false)
+    val predefRequire = intercept[IllegalArgumentException] { Predef.require(false) }
+    assert(catsRequire.isLeft)
+    assert(catsRequire.left.get.isInstanceOf[IllegalArgumentException])
+    assertEquals(catsRequire.left.get.getMessage, predefRequire.getMessage)
+    val catsRequireWithMsg = A.require(false, "foo")
+    val predefRequireWithMsg = intercept[IllegalArgumentException] { Predef.require(false, "foo") }
+    assert(catsRequireWithMsg.isLeft)
+    assert(catsRequireWithMsg.left.get.isInstanceOf[IllegalArgumentException])
+    assertEquals(catsRequireWithMsg.left.get.getMessage, predefRequireWithMsg.getMessage)
+  }
+
   test("attemptT syntax creates an EitherT") {
     assert(failed.attemptT === (EitherT[Option, Unit, Int](Option(Left(())))))
   }
