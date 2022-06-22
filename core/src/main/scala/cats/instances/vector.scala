@@ -130,6 +130,13 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
       final override def traverse[G[_], A, B](fa: Vector[A])(f: A => G[B])(implicit G: Applicative[G]): G[Vector[B]] =
         G.map(Chain.traverseViaChain(fa)(f))(_.toVector)
 
+      final override def updated_[A, B >: A](fa: Vector[A], idx: Long, b: B): Option[Vector[B]] =
+        if (idx >= 0L && idx < fa.size.toLong) {
+          Some(fa.updated(idx.toInt, b))
+        } else {
+          None
+        }
+
       /**
        * This avoids making a very deep stack by building a tree instead
        */
