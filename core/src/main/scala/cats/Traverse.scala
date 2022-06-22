@@ -198,19 +198,16 @@ trait Traverse[F[_]] extends Functor[F] with Foldable[F] with UnorderedTraverse[
     if (idx < 0L)
       None
     else
-      traverse[State[Long, *], A, B](fa)(elem =>
-        State { i =>
-          if (i == idx)
-            (i + 1, b)
-          else
-            (i + 1, elem)
-        }
-      ).run(0L).value match {
+      mapAccumulate(0L, fa) { case (i, a) =>
+        if (i == idx)
+          (i + 1, b)
+        else
+          (i + 1, a)
+      } match {
         case (i, fb) if i > idx => Some(fb)
         case _                  => None
       }
   }
-
   override def unorderedTraverse[G[_]: CommutativeApplicative, A, B](sa: F[A])(f: (A) => G[B]): G[F[B]] =
     traverse(sa)(f)
 
