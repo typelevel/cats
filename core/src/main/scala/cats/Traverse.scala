@@ -188,22 +188,28 @@ trait Traverse[F[_]] extends Functor[F] with Foldable[F] with UnorderedTraverse[
 
   /**
    * If `fa` contains the element at index `idx`, 
-   * return the version of `fa` where the element at `idx` is replaced with `b`. 
+   * return the copy of `fa` where the element at `idx` is replaced with `b`. 
    * If there is no element with such an index, return `None`. 
    *
    * The behavior is consistent with the Scala collection library's
    * `updated` for collections such as `List`.
    */
-  def updated[A, B >: A](fa: F[A], idx: Long, b: B): Option[F[B]] =
-    traverse[State[(Long, Boolean), *], A, B](fa)(elem =>
-      State {
-        case (i, _) if i == idx => ((i + 1, true), b)
-        case (i, updated)       => ((i + 1, updated), elem)
+  def updated[A, B >: A](fa: F[A], idx: Long, b: B): Option[F[B]] = {
+    if (idx < 0L)
+      None
+    else
+      traverse[State[Long, *], A, B](fa)(elem =>
+        State { i =>
+          if (i == idx)
+            (i + 1, b)
+          else
+            (i + 1, elem)
+        }
+      ).run(0L).value match {
+        case (i, fb) if i > idx => Some(fb)
+        case _                  => None
       }
-    ).run((0L, false)).value match {
-      case ((_, true), fb) => Some(fb)
-      case ((_, false), _) => None
-    }
+  }
 
   override def unorderedTraverse[G[_]: CommutativeApplicative, A, B](sa: F[A])(f: (A) => G[B]): G[F[B]] =
     traverse(sa)(f)
