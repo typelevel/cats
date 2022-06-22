@@ -195,19 +195,14 @@ trait Traverse[F[_]] extends Functor[F] with Foldable[F] with UnorderedTraverse[
    * `updated` for collections such as `List`.
    */
   def updated[A, B >: A](fa: F[A], idx: Long, b: B): Option[F[B]] =
-    traverseWithLongIndexM[State[Boolean, *], A, B](fa) { case (elem, i) =>
-      State((updated: Boolean) =>
-        if (i == idx) {
-          // update at idx, set "updated" to true
-          (true, b)
-        } else {
-          (updated, elem)
-        }
-      )
-    }.run(false).value match {
-      // if the element was updated, return the updated F[B]
-      case (true, fb) => Some(fb)
-      case (false, _) => None
+    traverse[State[(Long, Boolean), *], A, B](fa)(elem =>
+      State {
+        case (i, _) if i == idx => ((i + 1, true), b)
+        case (i, updated)       => ((i + 1, updated), elem)
+      }
+    ).run((0L, false)).value match {
+      case ((_, true), fb) => Some(fb)
+      case ((_, false), _) => None
     }
 
   override def unorderedTraverse[G[_]: CommutativeApplicative, A, B](sa: F[A])(f: (A) => G[B]): G[F[B]] =
