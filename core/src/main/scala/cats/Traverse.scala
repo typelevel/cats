@@ -194,16 +194,16 @@ trait Traverse[F[_]] extends Functor[F] with Foldable[F] with UnorderedTraverse[
    * The behavior is consistent with the Scala collection library's
    * `updated` for collections such as `List`.
    */
-  def updated[A, B >: A](fa: F[A], idx: Long, b: B): Option[F[B]] = {
+  def updated_[A, B >: A](fa: F[A], idx: Long, b: B): Option[F[B]] = {
     if (idx < 0L)
       None
     else
-      mapAccumulate(0L, fa) { case (i, a) =>
+      mapAccumulate(0L, fa)((i, a) =>
         if (i == idx)
           (i + 1, b)
         else
           (i + 1, a)
-      } match {
+      ) match {
         case (i, fb) if i > idx => Some(fb)
         case _                  => None
       }
@@ -261,8 +261,8 @@ object Traverse {
       typeClassInstance.traverseWithLongIndexM[G, A, B](self)(f)
     def mapWithLongIndex[B](f: (A, Long) => B): F[B] =
       typeClassInstance.mapWithLongIndex[A, B](self)(f)
-    def updated[B >: A](idx: Long, b: B): Option[F[B]] =
-      typeClassInstance.updated(self, idx, b)
+    def updated_[B >: A](idx: Long, b: B): Option[F[B]] =
+      typeClassInstance.updated_(self, idx, b)
   }
   trait AllOps[F[_], A]
       extends Ops[F, A]
