@@ -594,7 +594,7 @@ have to override `ap` to get the behavior we want.
 ```scala mdoc:silent:nest
 import cats.Monad
 
-implicit def inconsistentValidatedMonad[E: Semigroup]: Monad[Validated[E, *]] =
+implicit def accumulatingValidatedMonad[E: Semigroup]: Monad[Validated[E, *]] =
   new Monad[Validated[E, *]] {
     def flatMap[A, B](fa: Validated[E, A])(f: A => Validated[E, B]): Validated[E, B] =
       fa match {
@@ -625,6 +625,8 @@ implicit def inconsistentValidatedMonad[E: Semigroup]: Monad[Validated[E, *]] =
 But then the behavior of `flatMap` would be inconsistent with that of `ap`, and this will violate one of the [FlatMap laws](https://github.com/typelevel/cats/blob/main/laws/src/main/scala/cats/laws/FlatMapLaws.scala), `flatMapConsistentApply`:
 
 ```scala
+// the `<->` operator means "is equivalent to" and returns a data structure
+// that can be used to prove the equivalence of the two expressions
 def flatMapConsistentApply[A, B](fa: F[A], fab: F[A => B]): IsEq[F[B]] = 
   fab.ap(fa) <-> fab.flatMap(f => fa.map(f))
 ```
@@ -633,7 +635,7 @@ def flatMapConsistentApply[A, B](fa: F[A], fab: F[A => B]): IsEq[F[B]] =
 import cats.laws._
 
 val inconsistentFlatMapLawsForValidated = 
-  FlatMapLaws[Validated[NonEmptyChain[String], *]](inconsistentValidatedMonad)
+  FlatMapLaws[Validated[NonEmptyChain[String], *]](accumulatingValidatedMonad)
 
 val fa  = Validated.invalidNec[String, Int]("oops")
 val fab = Validated.invalidNec[String, Int => Double]("Broken function")
