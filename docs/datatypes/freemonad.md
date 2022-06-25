@@ -185,7 +185,7 @@ def impureCompiler: KVStoreA ~> Id  =
           ()
         case Get(key) =>
           println(s"get($key)")
-          kvs.get(key).map(_.asInstanceOf[A])
+          kvs.get(key).asInstanceOf[A]
         case Delete(key) =>
           println(s"delete($key)")
           kvs.remove(key)
@@ -273,7 +273,7 @@ val pureCompiler: KVStoreA ~> KVStoreState = new (KVStoreA ~> KVStoreState) {
     fa match {
       case Put(key, value) => State.modify(_.updated(key, value))
       case Get(key) =>
-        State.inspect(_.get(key).map(_.asInstanceOf[A]))
+        State.inspect(_.get(key).asInstanceOf[A])
       case Delete(key) => State.modify(_ - key)
     }
 }
