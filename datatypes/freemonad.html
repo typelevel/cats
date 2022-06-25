@@ -377,7 +377,7 @@
           ()
         </span><span class="keyword">case</span><span> </span><span class="type-name">Get</span><span>(</span><span class="identifier">key</span><span>) =&gt;
           </span><span class="identifier">println</span><span>(</span><span class="string-literal">s&quot;get(</span><span class="substitution">$key</span><span class="string-literal">)&quot;</span><span>)
-          </span><span class="identifier">kvs</span><span>.</span><span class="identifier">get</span><span>(</span><span class="identifier">key</span><span>).</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">asInstanceOf</span><span>[</span><span class="type-name">A</span><span>])
+          </span><span class="identifier">kvs</span><span>.</span><span class="identifier">get</span><span>(</span><span class="identifier">key</span><span>).</span><span class="identifier">asInstanceOf</span><span>[</span><span class="type-name">A</span><span>]
         </span><span class="keyword">case</span><span> </span><span class="type-name">Delete</span><span>(</span><span class="identifier">key</span><span>) =&gt;
           </span><span class="identifier">println</span><span>(</span><span class="string-literal">s&quot;delete(</span><span class="substitution">$key</span><span class="string-literal">)&quot;</span><span>)
           </span><span class="identifier">kvs</span><span>.</span><span class="identifier">remove</span><span>(</span><span class="identifier">key</span><span>)
@@ -469,7 +469,7 @@
     </span><span class="identifier">fa</span><span> </span><span class="keyword">match</span><span> {
       </span><span class="keyword">case</span><span> </span><span class="type-name">Put</span><span>(</span><span class="identifier">key</span><span>, </span><span class="identifier">value</span><span>) =&gt; </span><span class="type-name">State</span><span>.</span><span class="identifier">modify</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">updated</span><span>(</span><span class="identifier">key</span><span>, </span><span class="identifier">value</span><span>))
       </span><span class="keyword">case</span><span> </span><span class="type-name">Get</span><span>(</span><span class="identifier">key</span><span>) =&gt;
-        </span><span class="type-name">State</span><span>.</span><span class="identifier">inspect</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">get</span><span>(</span><span class="identifier">key</span><span>).</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">asInstanceOf</span><span>[</span><span class="type-name">A</span><span>]))
+        </span><span class="type-name">State</span><span>.</span><span class="identifier">inspect</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">get</span><span>(</span><span class="identifier">key</span><span>).</span><span class="identifier">asInstanceOf</span><span>[</span><span class="type-name">A</span><span>])
       </span><span class="keyword">case</span><span> </span><span class="type-name">Delete</span><span>(</span><span class="identifier">key</span><span>) =&gt; </span><span class="type-name">State</span><span>.</span><span class="identifier">modify</span><span>(</span><span class="identifier">_</span><span> - </span><span class="identifier">key</span><span>)
     }
 }</span></code></pre>
@@ -694,7 +694,7 @@
 </span><span class="keyword">import</span><span> </span><span class="type-name">TeletypeOps</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="keyword">val</span><span> </span><span class="identifier">state</span><span> = </span><span class="identifier">program</span><span>.</span><span class="identifier">foldMap</span><span>(</span><span class="identifier">interpreter</span><span>)
-</span><span class="comment">// state: TeletypeState[Unit] = cats.data.IndexedStateT@59ed6935
+</span><span class="comment">// state: TeletypeState[Unit] = cats.data.IndexedStateT@823466
 </span><span class="keyword">val</span><span> </span><span class="identifier">initialState</span><span> = </span><span class="type-name">Nil</span><span>
 </span><span class="comment">// initialState: Nil.type = List()
 </span><span class="keyword">val</span><span> (</span><span class="identifier">stored</span><span>, </span><span class="identifier">_</span><span>) = </span><span class="identifier">state</span><span>.</span><span class="identifier">run</span><span>(</span><span class="identifier">initialState</span><span>).</span><span class="identifier">value</span><span>
@@ -761,7 +761,7 @@
 </span><span class="keyword">val</span><span> </span><span class="identifier">hoisted</span><span> = </span><span class="identifier">opComplete</span><span>.</span><span class="identifier">hoist</span><span>(</span><span class="identifier">optTryLift</span><span>)
 </span><span class="comment">// hoisted: FreeT[Ctx, OptTry, Int] = FlatMapped(
 //   Suspend(OptionT(Success(Some(Left(Action(7)))))),
-//   scala.Function1$$Lambda$13873/958346186@31cc03bc
+//   scala.Function1$$Lambda$13904/647553243@4fd7818c
 // )
 </span><span class="keyword">val</span><span> </span><span class="identifier">evaluated</span><span> = </span><span class="identifier">hoisted</span><span>.</span><span class="identifier">foldMap</span><span>(</span><span class="identifier">tryInterpreter</span><span>)
 </span><span class="comment">// evaluated: OptTry[Int] = OptionT(Success(Some(12)))
