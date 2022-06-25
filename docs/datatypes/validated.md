@@ -636,7 +636,6 @@ val inconsistentFlatMapLawsForValidated =
   FlatMapLaws[Validated[NonEmptyChain[String], *]](inconsistentValidatedMonad)
 
 val fa  = Validated.invalidNec[String, Int]("oops")
-val fb  = (i:Int) => Validated.invalidNec[String, Double](s"$i")
 val fab = Validated.invalidNec[String, Int => Double]("Broken function")
 ```
 
