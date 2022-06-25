@@ -4,7 +4,7 @@ When browsing the various `Monads` included in Cats,
 you may have noticed that some of them have data types that are actually of the same structure,
 but instead have instances of `Applicative`. E.g. `Either` and `Validated`.
 
-This is because defining a `Monad` instance for data types like `Validated` would be inconsistent with its error-accumulating behaviour.
+This is because defining a `Monad` instance for data types like `Validated` [would be inconsistent](../datatypes/validated.md#of-flatmaps-and-eithers) with its error-accumulating behaviour.
 In short, `Monads` describe dependent computations and `Applicatives` describe independent computations.
 
 Sometimes however, we want to use both in conjunction with each other.
