@@ -626,7 +626,7 @@ But then the behavior of `flatMap` would be inconsistent with that of `ap`, and 
 
 ```scala
 // the `<->` operator means "is equivalent to" and returns a data structure
-// that can be used to prove the equivalence of the two expressions
+// `IsEq` that is used to verify the equivalence of the two expressions
 def flatMapConsistentApply[A, B](fa: F[A], fab: F[A => B]): IsEq[F[B]] = 
   fab.ap(fa) <-> fab.flatMap(f => fa.map(f))
 ```
