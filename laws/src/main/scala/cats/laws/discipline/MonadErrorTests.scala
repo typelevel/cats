@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 package laws
 package discipline
@@ -32,23 +53,22 @@ trait MonadErrorTests[F[_], E] extends ApplicativeErrorTests[F, E] with MonadTes
     EqFABC: Eq[F[(A, B, C)]],
     EqFInt: Eq[F[Int]],
     iso: Isomorphisms[F]
-  ): RuleSet = {
+  ): RuleSet =
     new RuleSet {
       def name: String = "monadError"
       def bases: Seq[(String, RuleSet)] = Nil
       def parents: Seq[RuleSet] = Seq(applicativeError[A, B, C], monad[A, B, C])
-      def props: Seq[(String, Prop)] = Seq(
-        "monadError left zero" -> forAll(laws.monadErrorLeftZero[A, B] _),
-        "monadError ensure consistency" -> forAll(laws.monadErrorEnsureConsistency[A] _),
-        "monadError ensureOr consistency" -> forAll(laws.monadErrorEnsureOrConsistency[A] _),
-        "monadError adaptError pure" -> forAll(laws.adaptErrorPure[A] _),
-        "monadError adaptError raise" -> forAll(laws.adaptErrorRaise[A] _),
-        "monadError rethrow attempt" -> forAll(laws.rethrowAttempt[A] _),
-        "monadError redeem is derived from attempt and map" -> forAll(laws.redeemDerivedFromAttemptMap[A, B] _),
-        "monadError redeemWith is derived from attempt and flatMap" -> forAll(laws.redeemWithDerivedFromAttemptFlatMap[A, B] _)
-      )
+      def props: Seq[(String, Prop)] =
+        Seq(
+          "monadError left zero" -> forAll(laws.monadErrorLeftZero[A, B] _),
+          "monadError ensure consistency" -> forAll(laws.monadErrorEnsureConsistency[A] _),
+          "monadError ensureOr consistency" -> forAll(laws.monadErrorEnsureOrConsistency[A] _),
+          "monadError rethrow attempt" -> forAll(laws.rethrowAttempt[A] _),
+          "monadError redeemWith is derived from attempt and flatMap" -> forAll(
+            laws.redeemWithDerivedFromAttemptFlatMap[A, B] _
+          )
+        )
     }
-  }
 }
 
 object MonadErrorTests {

@@ -1,8 +1,30 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 
 import cats.arrow.Arrow
-import cats.instances.list._
-import simulacrum.typeclass
+import cats.data.Chain
+
+import scala.annotation.tailrec
 
 /**
  * Applicative functor.
@@ -14,9 +36,7 @@ import simulacrum.typeclass
  *
  * Must obey the laws defined in cats.laws.ApplicativeLaws.
  */
-@typeclass trait Applicative[F[_]] extends Apply[F] with InvariantMonoidal[F] { self =>
-
-
+trait Applicative[F[_]] extends Apply[F] with InvariantMonoidal[F] { self =>
 
   /**
    * `pure` lifts any value into the Applicative Functor.
@@ -66,7 +86,63 @@ import simulacrum.typeclass
    * }}}
    */
   def replicateA[A](n: Int, fa: F[A]): F[List[A]] =
-    Traverse[List].sequence(List.fill(n)(fa))(this)
+    if (n <= 0) pure(Nil)
+    else if (n == 1) {
+      // if n == 1 don't incur the penalty two maps: .map(Chain.one(_)).map(_.toList)
+      map(fa)(_ :: Nil)
+    } else {
+      val one = map(fa)(Chain.one(_))
+
+      // invariant: n >= 1
+      @tailrec def loop(fa: F[Chain[A]], n: Int, acc: F[Chain[A]]): F[Chain[A]] =
+        if (n == 1) map2(fa, acc)(_.concat(_))
+        else
+          // n >= 2
+          // so (n >> 1) >= 1 and we are allowed to call loop
+          loop(
+            map2(fa, fa)(_.concat(_)),
+            n >> 1,
+            if ((n & 1) == 1) map2(acc, fa)(_.concat(_)) else acc
+          )
+
+      map(loop(one, n - 1, one))(_.toList)
+    }
+
+  /**
+   * Given `fa` and `n`, apply `fa` `n` times discarding results to return F[Unit].
+   *
+   * Example:
+   * {{{
+   * scala> import cats.data.State
+   *
+   * scala> type Counter[A] = State[Int, A]
+   * scala> val getAndIncrement: Counter[Int] = State { i => (i + 1, i) }
+   * scala> val getAndIncrement5: Counter[Unit] =
+   *      | Applicative[Counter].replicateA_(5, getAndIncrement)
+   * scala> getAndIncrement5.run(0).value
+   * res0: (Int, Unit) = (5,())
+   * }}}
+   */
+  def replicateA_[A](n: Int, fa: F[A]): F[Unit] =
+    if (n <= 0) unit
+    else if (n == 1) void(fa)
+    else {
+      val fvoid = void(fa)
+
+      // invariant: n >= 1
+      @tailrec def loop(fa: F[Unit], n: Int, acc: F[Unit]): F[Unit] =
+        if (n == 1) productR(fa)(acc)
+        else
+          // n >= 2
+          // so (n >> 1) >= 1 and we are allowed to call loop
+          loop(
+            productR(fa)(fa),
+            n >> 1,
+            if ((n & 1) == 1) productR(acc)(fa) else acc
+          )
+
+      loop(fvoid, n - 1, fvoid)
+    }
 
   /**
    * Compose an `Applicative[F]` and an `Applicative[G]` into an
@@ -161,7 +237,7 @@ import simulacrum.typeclass
    * }}}
    */
   def unlessA[A](cond: Boolean)(f: => F[A]): F[Unit] =
-    if (cond) pure(()) else void(f)
+    if (cond) unit else void(f)
 
   /**
    * Returns the given argument (mapped to Unit) if `cond` is `true`, otherwise,
@@ -185,7 +261,7 @@ import simulacrum.typeclass
    * }}}
    */
   def whenA[A](cond: Boolean)(f: => F[A]): F[Unit] =
-    if (cond) void(f) else pure(())
+    if (cond) void(f) else unit
 
 }
 
@@ -203,14 +279,13 @@ object Applicative {
    * scala> import cats.Applicative.catsApplicativeForArrow
    * scala> val toLong: Int => Long = _.toLong
    * scala> val double: Int => Int = 2*_
-   * scala> val f: Int => (Long, Int) = catsApplicativeForArrow.product(toLong, double)
+   * scala> val f: Int => (Long, Int) = catsApplicativeForArrow[Function1, Int].product(toLong, double)
    * scala> f(3)
    * res0: (Long, Int) = (3,6)
    * }}}
    */
-  implicit def catsApplicativeForArrow[F[_, _], A](implicit F: Arrow[F]): Applicative[F[A, ?]] =
+  def catsApplicativeForArrow[F[_, _], A](implicit F: Arrow[F]): Applicative[F[A, *]] =
     new ArrowApplicative[F, A](F)
-
 
   /**
    * Creates a CoflatMap for an Applicative `F`.
@@ -232,13 +307,52 @@ object Applicative {
       def map[A, B](fa: F[A])(f: A => B): F[B] = F.map(fa)(f)
     }
 
+  /**
+   * Summon an instance of [[Applicative]] for `F`.
+   */
+  @inline def apply[F[_]](implicit instance: Applicative[F]): Applicative[F] = instance
+
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllApplicativeOps[F[_], A](target: F[A])(implicit tc: Applicative[F]): AllOps[F, A] {
+      type TypeClassType = Applicative[F]
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = Applicative[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
+  trait Ops[F[_], A] extends Serializable {
+    type TypeClassType <: Applicative[F]
+    def self: F[A]
+    val typeClassInstance: TypeClassType
+  }
+  trait AllOps[F[_], A] extends Ops[F, A] with Apply.AllOps[F, A] with InvariantMonoidal.AllOps[F, A] {
+    type TypeClassType <: Applicative[F]
+  }
+  trait ToApplicativeOps extends Serializable {
+    implicit def toApplicativeOps[F[_], A](target: F[A])(implicit tc: Applicative[F]): Ops[F, A] {
+      type TypeClassType = Applicative[F]
+    } =
+      new Ops[F, A] {
+        type TypeClassType = Applicative[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object nonInheritedOps extends ToApplicativeOps
+
 }
 
-private[cats] class ApplicativeMonoid[F[_], A](f: Applicative[F], monoid: Monoid[A]) extends ApplySemigroup(f, monoid) with Monoid[F[A]] {
+private[cats] class ApplicativeMonoid[F[_], A](f: Applicative[F], monoid: Monoid[A])
+    extends ApplySemigroup(f, monoid)
+    with Monoid[F[A]] {
   def empty: F[A] = f.pure(monoid.empty)
 }
 
-private[cats] class ArrowApplicative[F[_, _], A](F: Arrow[F]) extends Applicative[F[A, ?]] {
+private[cats] class ArrowApplicative[F[_, _], A](F: Arrow[F]) extends Applicative[F[A, *]] {
   def pure[B](b: B): F[A, B] = F.lift[A, B](_ => b)
   override def map[B, C](fb: F[A, B])(f: B => C): F[A, C] = F.rmap(fb)(f)
   def ap[B, C](ff: F[A, B => C])(fb: F[A, B]): F[A, C] =

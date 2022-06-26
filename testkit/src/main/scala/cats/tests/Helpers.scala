@@ -1,11 +1,29 @@
-package cats
-package tests
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 
+package cats.tests
+
+import cats.kernel._
 import org.scalacheck.{Arbitrary, Cogen}
-import Arbitrary.arbitrary
-
-import cats.kernel.{ CommutativeSemigroup, CommutativeMonoid, CommutativeGroup }
-import cats.kernel.{ Band, Semilattice, BoundedSemilattice }
+import org.scalacheck.Arbitrary.arbitrary
 
 /**
  * Helpers provides new concrete types where we control exactly which
@@ -45,8 +63,8 @@ object Helpers {
   object POrd extends Arb(new POrd(_)) {
     implicit object O extends PartialOrder[POrd] {
       def partialCompare(x: POrd, y: POrd): Double =
-        if (x.n >= 0 && y.n >= 0) (x.n compare y.n).toDouble
-        else if (x.n <= 0 && y.n <= 0) (y.n compare x.n).toDouble
+        if (x.n >= 0 && y.n >= 0) x.n.compare(y.n).toDouble
+        else if (x.n <= 0 && y.n <= 0) y.n.compare(x.n).toDouble
         else Double.NaN
     }
   }
@@ -55,7 +73,7 @@ object Helpers {
   case class Ord(n: Int) extends N
   object Ord extends Arb(new Ord(_)) {
     implicit object O extends Order[Ord] {
-      def compare(x: Ord, y: Ord): Int = x.n compare y.n
+      def compare(x: Ord, y: Ord): Int = x.n.compare(y.n)
     }
   }
 
@@ -113,7 +131,7 @@ object Helpers {
   object Mono extends Companion(new Mono(_)) {
     implicit object Alg extends Monoid[Mono] {
       def empty: Mono = Mono(Int.MaxValue)
-      def combine(x: Mono, y: Mono): Mono = Mono(x.n min y.n)
+      def combine(x: Mono, y: Mono): Mono = Mono(x.n.min(y.n))
     }
   }
 
@@ -122,7 +140,7 @@ object Helpers {
   object CMono extends Companion(new CMono(_)) {
     implicit object Alg extends CommutativeMonoid[CMono] {
       def empty: CMono = CMono(Int.MaxValue)
-      def combine(x: CMono, y: CMono): CMono = CMono(x.n min y.n)
+      def combine(x: CMono, y: CMono): CMono = CMono(x.n.min(y.n))
     }
   }
 

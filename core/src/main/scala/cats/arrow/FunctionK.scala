@@ -1,50 +1,69 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 package arrow
 
 import cats.data.{EitherK, Tuple2K}
 
-import cats.macros.MacroCompat
-
 /**
-  * `FunctionK[F[_], G[_]]` is a functor transformation from `F` to `G`
-  * in the same manner that function `A => B` is a morphism from values
-  * of type `A` to `B`.
-  * An easy way to create a FunctionK instance is to use the Polymorphic
-  * lambdas provided by non/kind-projector v0.9+. E.g.
-  * {{{
-  *   val listToOption = λ[FunctionK[List, Option]](_.headOption)
-  * }}}
-  */
+ * `FunctionK[F[_], G[_]]` is a functor transformation from `F` to `G`
+ * in the same manner that function `A => B` is a morphism from values
+ * of type `A` to `B`.
+ * An easy way to create a FunctionK instance is to use the Polymorphic
+ * lambdas provided by typelevel/kind-projector v0.9+. E.g.
+ * {{{
+ *   val listToOption = λ[FunctionK[List, Option]](_.headOption)
+ * }}}
+ */
 trait FunctionK[F[_], G[_]] extends Serializable { self =>
 
   /**
-    * Applies this functor transformation from `F` to `G`
-    */
+   * Applies this functor transformation from `F` to `G`
+   */
   def apply[A](fa: F[A]): G[A]
 
   /**
-    * Composes two instances of FunctionK into a new FunctionK with this
-    * transformation applied last.
-    */
+   * Composes two instances of FunctionK into a new FunctionK with this
+   * transformation applied last.
+   */
   def compose[E[_]](f: FunctionK[E, F]): FunctionK[E, G] =
-    λ[FunctionK[E, G]](fa => self(f(fa)))
+    new FunctionK[E, G] { def apply[A](fa: E[A]): G[A] = self(f(fa)) }
 
   /**
-    * Composes two instances of FunctionK into a new FunctionK with this
-    * transformation applied first.
-    */
+   * Composes two instances of FunctionK into a new FunctionK with this
+   * transformation applied first.
+   */
   def andThen[H[_]](f: FunctionK[G, H]): FunctionK[F, H] =
     f.compose(self)
 
   /**
-    * Composes two instances of FunctionK into a new FunctionK that transforms
-    * a [[cats.data.EitherK]] to a single functor.
-    *
-    * This transformation will be used to transform left `F` values while
-    * `h` will be used to transform right `H` values.
-    */
-  def or[H[_]](h: FunctionK[H, G]): FunctionK[EitherK[F, H, ?], G] =
-    λ[FunctionK[EitherK[F, H, ?], G]](fa => fa.fold(self, h))
+   * Composes two instances of FunctionK into a new FunctionK that transforms
+   * a [[cats.data.EitherK]] to a single functor.
+   *
+   * This transformation will be used to transform left `F` values while
+   * `h` will be used to transform right `H` values.
+   */
+  def or[H[_]](h: FunctionK[H, G]): FunctionK[EitherK[F, H, *], G] =
+    new FunctionK[EitherK[F, H, *], G] { def apply[A](fa: EitherK[F, H, A]): G[A] = fa.fold(self, h) }
 
   /**
    * Composes two instances of `FunctionK` into a new `FunctionK` that transforms
@@ -59,104 +78,24 @@ trait FunctionK[F[_], G[_]] extends Serializable { self =>
    * res0: cats.data.Tuple2K[Option,Vector,Int] = Tuple2K(Some(1),Vector(1, 2, 3))
    * }}}
    */
-  def and[H[_]](h: FunctionK[F, H]): FunctionK[F, Tuple2K[G, H, ?]] =
-    λ[FunctionK[F, Tuple2K[G, H, ?]]](fa => Tuple2K(self(fa), h(fa)))
-}
-
-object FunctionK {
+  def and[H[_]](h: FunctionK[F, H]): FunctionK[F, Tuple2K[G, H, *]] =
+    new FunctionK[F, Tuple2K[G, H, *]] { def apply[A](fa: F[A]): Tuple2K[G, H, A] = Tuple2K(self(fa), h(fa)) }
 
   /**
-    * The identity transformation of `F` to `F`
-    */
-  def id[F[_]]: FunctionK[F, F] = λ[FunctionK[F, F]](fa => fa)
-
+   * Widens the output type of this `FunctionK` from `G` to `G0`
+   */
+  def widen[G0[x] >: G[x]]: FunctionK[F, G0] = this.asInstanceOf[FunctionK[F, G0]]
 
   /**
-    * Lifts function `f` of `F[A] => G[A]` into a `FunctionK[F, G]`.
-    *
-    * {{{
-    *   def headOption[A](list: List[A]): Option[A] = list.headOption
-    *   val lifted: FunctionK[List, Option] = FunctionK.lift(headOption)
-    * }}}
-    *
-    * Note: This method has a macro implementation that returns a new
-    * `FunctionK` instance as follows:
-    *
-    * {{{
-    *   new FunctionK[F, G] {
-    *     def apply[A](fa: F[A]): G[A] = f(fa)
-    *   }
-    * }}}
-    *
-    * Additionally, the type parameters on `f` must not be specified.
-    */
-  def lift[F[_], G[_]](f: (F[α] ⇒ G[α]) forSome { type α }): FunctionK[F, G] =
-    macro FunctionKMacros.lift[F, G]
-
+   * Narrows the input type of this `FunctionK` from `F` to `F0`
+   */
+  def narrow[F0[x] <: F[x]]: FunctionK[F0, G] = this.asInstanceOf[FunctionK[F0, G]]
 }
 
-private[arrow] object FunctionKMacros extends MacroCompat {
+object FunctionK extends FunctionKMacroMethods {
 
-  def lift[F[_], G[_]](c: Context)(
-    f: c.Expr[(F[α] ⇒ G[α]) forSome { type α }]
-  )(
-    implicit evF: c.WeakTypeTag[F[_]], evG: c.WeakTypeTag[G[_]]
-  ): c.Expr[FunctionK[F, G]] =
-    c.Expr[FunctionK[F, G]](new Lifter[c.type ](c).lift[F, G](f.tree))
-    // ^^note: extra space after c.type to appease scalastyle
-
-  private[this] class Lifter[C <: Context](val c: C) {
-    import c.universe._
-
-    def lift[F[_], G[_]](tree: Tree)(
-      implicit evF: c.WeakTypeTag[F[_]], evG: c.WeakTypeTag[G[_]]
-    ): Tree = unblock(tree) match {
-      case q"($param) => $trans[..$typeArgs](${ arg: Ident })" if param.name == arg.name ⇒
-
-        typeArgs
-          .collect { case tt: TypeTree => tt }
-          .find(tt => Option(tt.original).isDefined)
-          .foreach { param => c.abort(param.pos,
-            s"type parameter $param must not be supplied when lifting function $trans to FunctionK")
-        }
-
-        val F = punchHole(evF.tpe)
-        val G = punchHole(evG.tpe)
-
-        q"""
-        new FunctionK[$F, $G] {
-          def apply[A](fa: $F[A]): $G[A] = $trans(fa)
-        }
-       """
-      case other ⇒
-        c.abort(other.pos, s"Unexpected tree $other when lifting to FunctionK")
-    }
-
-    private[this] def unblock(tree: Tree): Tree = tree match {
-      case Block(Nil, expr) ⇒ expr
-      case _                ⇒ tree
-    }
-
-    private[this] def punchHole(tpe: Type): Tree = tpe match {
-      case PolyType(undet :: Nil, underlying: TypeRef) ⇒
-        val α = compatNewTypeName(c, "α")
-        def rebind(typeRef: TypeRef): Tree =
-          if (typeRef.sym == undet) tq"$α"
-          else {
-            val args = typeRef.args.map {
-              case ref: TypeRef => rebind(ref)
-              case arg => tq"$arg"
-            }
-            tq"${typeRef.sym}[..$args]"
-          }
-        val rebound = rebind(underlying)
-        tq"""({type λ[$α] = $rebound})#λ"""
-      case TypeRef(pre, sym, Nil) ⇒
-        tq"$sym"
-      case _ =>
-        c.abort(c.enclosingPosition, s"Unexpected type $tpe when lifting to FunctionK")
-    }
-
-  }
-
+  /**
+   * The identity transformation of `F` to `F`
+   */
+  def id[F[_]]: FunctionK[F, F] = new FunctionK[F, F] { def apply[A](fa: F[A]): F[A] = fa }
 }

@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats.kernel
 
 import scala.{specialized => sp}
@@ -6,9 +27,7 @@ import scala.{specialized => sp}
  * Semilattices are commutative semigroups whose operation
  * (i.e. combine) is also idempotent.
  */
-trait Semilattice[@sp(Int, Long, Float, Double) A] extends Any
-  with Band[A]
-  with CommutativeSemigroup[A] { self =>
+trait Semilattice[@sp(Int, Long, Float, Double) A] extends Any with Band[A] with CommutativeSemigroup[A] { self =>
 
   /**
    * Given Eq[A], return a PartialOrder[A] using the `combine`
@@ -25,7 +44,8 @@ trait Semilattice[@sp(Int, Long, Float, Double) A] extends Any
   def asMeetPartialOrder(implicit ev: Eq[A]): PartialOrder[A] =
     new PartialOrder[A] {
       def partialCompare(x: A, y: A): Double =
-        if (ev.eqv(x, y)) 0.0 else {
+        if (ev.eqv(x, y)) 0.0
+        else {
           val z = self.combine(x, y)
           if (ev.eqv(x, z)) -1.0 else if (ev.eqv(y, z)) 1.0 else Double.NaN
         }
@@ -46,7 +66,8 @@ trait Semilattice[@sp(Int, Long, Float, Double) A] extends Any
   def asJoinPartialOrder(implicit ev: Eq[A]): PartialOrder[A] =
     new PartialOrder[A] {
       def partialCompare(x: A, y: A): Double =
-        if (ev.eqv(x, y)) 0.0 else {
+        if (ev.eqv(x, y)) 0.0
+        else {
           val z = self.combine(x, y)
           if (ev.eqv(y, z)) -1.0 else if (ev.eqv(x, z)) 1.0 else Double.NaN
         }
@@ -66,4 +87,12 @@ object Semilattice extends SemilatticeFunctions[Semilattice] {
    * Access an implicit `Semilattice[A]`.
    */
   @inline final def apply[@sp(Int, Long, Float, Double) A](implicit ev: Semilattice[A]): Semilattice[A] = ev
+
+  /**
+   * Create a `Semilattice` instance from the given function.
+   */
+  @inline def instance[A](cmb: (A, A) => A): Semilattice[A] =
+    new Semilattice[A] {
+      override def combine(x: A, y: A): A = cmb(x, y)
+    }
 }

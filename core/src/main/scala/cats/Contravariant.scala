@@ -1,9 +1,30 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
-import simulacrum.typeclass
+
 /**
  * Must obey the laws defined in cats.laws.ContravariantLaws.
  */
-@typeclass trait Contravariant[F[_]] extends Invariant[F] { self =>
+trait Contravariant[F[_]] extends Invariant[F] { self =>
   def contramap[A, B](fa: F[A])(f: B => A): F[B]
   override def imap[A, B](fa: F[A])(f: A => B)(fi: B => A): F[B] = contramap(fa)(fi)
 
@@ -26,4 +47,47 @@ import simulacrum.typeclass
       val F = self
       val G = Functor[G]
     }
+}
+
+object Contravariant {
+
+  /**
+   * Summon an instance of [[Contravariant]] for `F`.
+   */
+  @inline def apply[F[_]](implicit instance: Contravariant[F]): Contravariant[F] = instance
+
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllContravariantOps[F[_], A](target: F[A])(implicit tc: Contravariant[F]): AllOps[F, A] {
+      type TypeClassType = Contravariant[F]
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = Contravariant[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
+  trait Ops[F[_], A] extends Serializable {
+    type TypeClassType <: Contravariant[F]
+    def self: F[A]
+    val typeClassInstance: TypeClassType
+    def contramap[B](f: B => A): F[B] = typeClassInstance.contramap[A, B](self)(f)
+    def narrow[B <: A]: F[B] = typeClassInstance.narrow[A, B](self)
+  }
+  trait AllOps[F[_], A] extends Ops[F, A] with Invariant.AllOps[F, A] {
+    type TypeClassType <: Contravariant[F]
+  }
+  trait ToContravariantOps extends Serializable {
+    implicit def toContravariantOps[F[_], A](target: F[A])(implicit tc: Contravariant[F]): Ops[F, A] {
+      type TypeClassType = Contravariant[F]
+    } =
+      new Ops[F, A] {
+        type TypeClassType = Contravariant[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object nonInheritedOps extends ToContravariantOps
+
 }

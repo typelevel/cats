@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 package laws
 
@@ -9,31 +30,25 @@ trait ReducibleLaws[F[_]] extends FoldableLaws[F] {
   def reduceLeftToConsistentWithReduceMap[A, B](
     fa: F[A],
     f: A => B
-  )(implicit
-    B: Semigroup[B]
-  ): IsEq[B] =
+  )(implicit B: Semigroup[B]): IsEq[B] =
     fa.reduceMap(f) <-> fa.reduceLeftTo(f)((b, a) => b |+| f(a))
 
   def reduceRightToConsistentWithReduceMap[A, B](
     fa: F[A],
     f: A => B
-  )(implicit
-    B: Semigroup[B]
-  ): IsEq[B] =
+  )(implicit B: Semigroup[B]): IsEq[B] =
     fa.reduceMap(f) <-> fa.reduceRightTo(f)((a, eb) => eb.map(f(a) |+| _)).value
 
   def reduceRightToConsistentWithReduceRightToOption[A, B](
     fa: F[A],
     f: A => B
-  )(implicit
-    B: Semigroup[B]
-  ): IsEq[Option[B]] =
+  )(implicit B: Semigroup[B]): IsEq[Option[B]] =
     fa.reduceRightToOption(f)((a, eb) => eb.map(f(a) |+| _)).value <->
       fa.reduceRightTo(f)((a, eb) => eb.map(f(a) |+| _)).map(Option(_)).value
 
   def reduceRightConsistentWithReduceRightOption[A](fa: F[A], f: (A, A) => A): IsEq[Option[A]] =
-    fa.reduceRight((a1, e2) => Now(f(a1, e2.value))).map(Option(_)).value <->
-      fa.reduceRightOption((a1, e2) => Now(f(a1, e2.value))).value
+    fa.reduceRight((a1, e2) => e2.map(f(a1, _))).map(Option(_)).value <->
+      fa.reduceRightOption((a1, e2) => e2.map(f(a1, _))).value
 
   def reduceReduceLeftConsistent[B](fa: F[B])(implicit B: Semigroup[B]): IsEq[B] =
     fa.reduce <-> fa.reduceLeft(B.combine)

@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 package laws
 package discipline
@@ -33,10 +54,13 @@ trait ArrowChoiceTests[F[_, _]] extends ArrowTests[F] with ChoiceTests[F] {
     EqFACBD: Eq[F[(A, C), (B, D)]],
     EqFADCD: Eq[F[(A, D), (C, D)]],
     EqFADCG: Eq[F[(A, D), (C, G)]],
-    EqFAEDE: Eq[F[(A, E), (D, E)]],
+    EqFDADB: Eq[F[(D, A), (D, B)]],
+    EqFCADB: Eq[F[(C, A), (D, B)]],
     EqFABC: Eq[F[A, (B, C)]],
-    EqFEAED: Eq[F[(E, A), (E, D)]],
     EqFACDBCD: Eq[F[((A, C), D), (B, (C, D))]],
+    EqFACDBCD2: Eq[F[((A, C), D), ((B, C), D)]],
+    EqFDCADCB: Eq[F[(D, (C, A)), (D, (C, B))]],
+    EqFCAB: Eq[F[(C, A), B]],
     EqFEitherABD: Eq[F[Either[A, B], D]],
     EqFEitherCoABC: Eq[F[A, Either[B, C]]],
     REqFEitherACD: Eq[F[Either[A, D], Either[C, D]]],
@@ -48,18 +72,20 @@ trait ArrowChoiceTests[F[_, _]] extends ArrowTests[F] with ChoiceTests[F] {
     new RuleSet {
       def name: String = "arrowChoice"
       def bases: Seq[(String, RuleSet)] = Nil
-      def parents: Seq[RuleSet] = Seq(
-        arrow[A, B, C, D, E, G],
-        choice[A, B, C, D]
-      )
-      def props: Seq[(String, Prop)] = Seq(
-        "left and lift commute" -> forAll(laws.leftLiftCommute[A, B, C] _),
-        "left and compose commute" -> forAll(laws.leftComposeCommute[A, B, C, D] _),
-        "left and right consistent" -> forAll(laws.leftRightConsistent[A, B, C] _),
-        "left and then lift (Left.apply) commutes" -> forAll(laws.leftAndThenLiftedLeftApplyCommutes[A, B, C] _),
-        "left and then identity +++ _ commutes" -> forAll(laws.leftAndThenRightIdentityCommutes[A, B, C, D] _),
-        "left commutes with sum association" -> forAll(laws.leftTwiceCommutesWithSumAssociation[A, B, C, D] _)
-      )
+      def parents: Seq[RuleSet] =
+        Seq(
+          arrow[A, B, C, D, E, G],
+          choice[A, B, C, D]
+        )
+      def props: Seq[(String, Prop)] =
+        Seq(
+          "left and lift commute" -> forAll(laws.leftLiftCommute[A, B, C] _),
+          "left and compose commute" -> forAll(laws.leftComposeCommute[A, B, C, D] _),
+          "left and right consistent" -> forAll(laws.leftRightConsistent[A, B, C] _),
+          "left and then lift (Left.apply) commutes" -> forAll(laws.leftAndThenLiftedLeftApplyCommutes[A, B, C] _),
+          "left and then identity +++ _ commutes" -> forAll(laws.leftAndThenRightIdentityCommutes[A, B, C, D] _),
+          "left commutes with sum association" -> forAll(laws.leftTwiceCommutesWithSumAssociation[A, B, C, D] _)
+        )
     }
 }
 object ArrowChoiceTests {

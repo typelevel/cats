@@ -1,35 +1,60 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats.kernel
 
 import java.lang.Double.isNaN
 import scala.{specialized => sp}
+import compat.scalaVersionSpecific._
 
 /**
  * The `PartialOrder` type class is used to define a partial ordering on some type `A`.
  *
  * A partial order is defined by a relation <=, which obeys the following laws:
  *
- * - x <= x (reflexivity)
- * - if x <= y and y <= x, then x = y (anti-symmetry)
- * - if x <= y and y <= z, then x <= z (transitivity)
+ *   - x <= x (reflexivity)
+ *   - if x <= y and y <= x, then x = y (anti-symmetry)
+ *   - if x <= y and y <= z, then x <= z (transitivity)
  *
  * To compute both <= and >= at the same time, we use a Double number
  * to encode the result of the comparisons x <= y and x >= y.
  * The truth table is defined as follows:
  *
- * x <= y    x >= y      Double
- * true      true        = 0.0     (corresponds to x = y)
- * false     false       = NaN     (x and y cannot be compared)
- * true      false       = -1.0    (corresponds to x < y)
- * false     true        = 1.0     (corresponds to x > y)
+ * | x <= y | x >= y | result | note |
+ * | :--    | :--    | --:    | :-- |
+ * | true   |true    | 0.0    | (corresponds to x = y) |
+ * | false  |false   | NaN    | (x and y cannot be compared) |
+ * | true   |false   | -1.0   | (corresponds to x < y) |
+ * | false  |true    | 1.0    | (corresponds to x > y) |
  */
 trait PartialOrder[@sp A] extends Any with Eq[A] { self =>
+
   /**
    * Result of comparing `x` with `y`. Returns NaN if operands are not
    * comparable. If operands are comparable, returns a Double whose
    * sign is:
-   * - negative iff `x < y`
-   * - zero     iff `x = y`
-   * - positive iff `x > y`
+   *
+   *   - negative iff `x < y`
+   *   - zero     iff `x = y`
+   *   - positive iff `x > y`
    */
   def partialCompare(x: A, y: A): Double
 
@@ -44,13 +69,14 @@ trait PartialOrder[@sp A] extends Any with Eq[A] { self =>
    * Result of comparing `x` with `y`. Returns None if operands are
    * not comparable. If operands are comparable, returns Some[Int]
    * where the Int sign is:
-   * - negative iff `x < y`
-   * - zero     iff `x = y`
-   * - positive iff `x > y`
+   *
+   *   - negative iff `x < y`
+   *   - zero     iff `x = y`
+   *   - positive iff `x > y`
    */
   def tryCompare(x: A, y: A): Option[Int] = {
-    val c = partialCompare(x, y)
-    if (isNaN(c)) None else Some(c.signum)
+    val c = partialCompare(x, y).sign
+    if (isNaN(c)) None else Some(c.toInt)
   }
 
   /**
@@ -68,7 +94,7 @@ trait PartialOrder[@sp A] extends Any with Eq[A] { self =>
    */
   def pmax(x: A, y: A): Option[A] = {
     val c = partialCompare(x, y)
-    if (c >= 0)  Some(x)
+    if (c >= 0) Some(x)
     else if (c < 0) Some(y)
     else None
   }
@@ -123,7 +149,9 @@ abstract class PartialOrderFunctions[P[T] <: PartialOrder[T]] extends EqFunction
     ev.gt(x, y)
 }
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 object PartialOrder extends PartialOrderFunctions[PartialOrder] with PartialOrderToPartialOrderingConversion {
+
   /**
    * Access an implicit `PartialOrder[A]`.
    */
@@ -139,8 +167,8 @@ object PartialOrder extends PartialOrderFunctions[PartialOrder] with PartialOrde
     }
 
   /**
-    * Defines a partial order on `A` from p where all arrows switch direction.
-    */
+   * Defines a partial order on `A` from p where all arrows switch direction.
+   */
   def reverse[@sp A](p: PartialOrder[A]): PartialOrder[A] =
     new PartialOrder[A] {
       def partialCompare(x: A, y: A): Double = p.partialCompare(y, x)
@@ -154,12 +182,12 @@ object PartialOrder extends PartialOrderFunctions[PartialOrder] with PartialOrde
       def partialCompare(x: A, y: A) = f(x, y)
     }
 
-  def fromPartialOrdering[A](implicit ev: PartialOrdering[A]): PartialOrder[A] = new PartialOrder[A] {
-    def partialCompare(x: A, y: A): Double =
-      ev.tryCompare(x, y).fold(Double.NaN)(_.toDouble)
-  }
+  def fromPartialOrdering[A](implicit ev: PartialOrdering[A]): PartialOrder[A] =
+    new PartialOrder[A] {
+      def partialCompare(x: A, y: A): Double =
+        ev.tryCompare(x, y).fold(Double.NaN)(_.toDouble)
+    }
 }
-
 
 trait PartialOrderToPartialOrderingConversion {
   implicit def catsKernelPartialOrderingForPartialOrder[A](implicit ev: PartialOrder[A]): PartialOrdering[A] =
