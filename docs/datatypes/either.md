@@ -52,7 +52,7 @@ are missing from it. Instead, you call `.right` or `.left` to get a `RightProjec
 `LeftProjection` (respectively) which does have the combinators. The direction of the projection indicates the direction
 of bias. For instance, calling `map` on a `RightProjection` acts on the `Right` of an `Either`.
 
-```scala mdoc
+```scala mdoc:reset
 val e1: Either[String, Int] = Right(5)
 e1.right.map(_ + 1)
 
