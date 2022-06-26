@@ -670,10 +670,10 @@ private trait OptionTContravariantMonoidal[F[_]] extends ContravariantMonoidal[O
 
   override def product[A, B](fa: OptionT[F, A], fb: OptionT[F, B]): OptionT[F, (A, B)] =
     OptionT(
-      F.contramap(F.product(fa.value, fb.value))({
+      F.contramap(F.product(fa.value, fb.value)) {
         case Some((x, y)) => (Some(x), Some(y))
         case None         => (None, None)
-      })
+      }
     )
 }
 

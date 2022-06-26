@@ -85,8 +85,8 @@ private[instances] trait FunctionInstancesBinCompat0 {
       def unit: Unit => Boolean = Function.const(false)
       def contramap[A, B](fa: A => Boolean)(f: B => A): B => Boolean =
         fa.compose(f)
-      def product[A, B](fa: A => Boolean, fb: B => Boolean): ((A, B)) => Boolean = {
-        case (a, b) => fa(a) || fb(b)
+      def product[A, B](fa: A => Boolean, fb: B => Boolean): ((A, B)) => Boolean = { case (a, b) =>
+        fa(a) || fb(b)
       }
       def sum[A, B](fa: A => Boolean, fb: B => Boolean): Either[A, B] => Boolean =
         either => either.fold(fa, fb)

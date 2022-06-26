@@ -191,7 +191,6 @@ object Invariant extends ScalaVersionSpecificInvariantInstances with InvariantIn
   implicit def catsInvariantForFractional: Invariant[Fractional] =
     cats.instances.invariant.catsInvariantForFractional
 
-
   implicit def catsDecidableForEquiv: Decidable[Equiv] =
     cats.instances.equiv.catsDecidableForEquiv
   implicit def catsDecidableForEq: Decidable[Eq] =

@@ -29,6 +29,7 @@ trait Decidable[F[_]] extends ContravariantMonoidal[F] {
 }
 
 object Decidable {
+
   /**
    * Summon an instance of [[Decidable]] for `F`.
    */
