@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 package data
 
@@ -105,14 +126,12 @@ final class IndexedReaderWriterStateT[F[_], E, L, SA, SB, A](val runF: F[(E, SA)
   )(implicit F: FlatMap[F], L: Semigroup[L]): IndexedReaderWriterStateT[F, E, L, SA, SC, B] =
     IndexedReaderWriterStateT.shift {
       F.map(runF) { rwsfa => (e: E, sa: SA) =>
-        F.flatMap(rwsfa(e, sa)) {
-          case (la, sb, a) =>
-            F.flatMap(f(a).runF) { rwsfb =>
-              F.map(rwsfb(e, sb)) {
-                case (lb, sc, b) =>
-                  (L.combine(la, lb), sc, b)
-              }
+        F.flatMap(rwsfa(e, sa)) { case (la, sb, a) =>
+          F.flatMap(f(a).runF) { rwsfb =>
+            F.map(rwsfb(e, sb)) { case (lb, sc, b) =>
+              (L.combine(la, lb), sc, b)
             }
+          }
         }
       }
     }
@@ -123,9 +142,8 @@ final class IndexedReaderWriterStateT[F[_], E, L, SA, SB, A](val runF: F[(E, SA)
   def flatMapF[B](faf: A => F[B])(implicit F: FlatMap[F]): IndexedReaderWriterStateT[F, E, L, SA, SB, B] =
     IndexedReaderWriterStateT.shift {
       F.map(runF) { rwsfa => (e: E, sa: SA) =>
-        F.flatMap(rwsfa(e, sa)) {
-          case (l, sb, a) =>
-            F.map(faf(a))((l, sb, _))
+        F.flatMap(rwsfa(e, sa)) { case (l, sb, a) =>
+          F.map(faf(a))((l, sb, _))
         }
       }
     }
@@ -138,10 +156,9 @@ final class IndexedReaderWriterStateT[F[_], E, L, SA, SB, A](val runF: F[(E, SA)
   )(implicit F: Functor[F]): IndexedReaderWriterStateT[F, E, LL, SA, SC, B] =
     IndexedReaderWriterStateT.applyF {
       F.map(runF) { rwsfa => (e: E, s: SA) =>
-        F.map(rwsfa(e, s)) {
-          case (l, sb, a) =>
-            val (ll, sc, b) = f(l, sb, a)
-            (ll, sc, b)
+        F.map(rwsfa(e, s)) { case (l, sb, a) =>
+          val (ll, sc, b) = f(l, sb, a)
+          (ll, sc, b)
         }
       }
     }
@@ -211,9 +228,8 @@ final class IndexedReaderWriterStateT[F[_], E, L, SA, SB, A](val runF: F[(E, SA)
   def transformS[R](f: R => SA, g: (R, SB) => R)(implicit F: Functor[F]): IndexedReaderWriterStateT[F, E, L, R, R, A] =
     IndexedReaderWriterStateT.applyF {
       F.map(runF) { rwsfa => (e: E, r: R) =>
-        F.map(rwsfa(e, f(r))) {
-          case (l, sb, a) =>
-            (l, g(r, sb), a)
+        F.map(rwsfa(e, f(r))) { case (l, sb, a) =>
+          (l, g(r, sb), a)
         }
       }
     }
@@ -720,12 +736,10 @@ sealed abstract private[data] class IRWSTStrong[F[_], E, L, T]
   def first[A, B, C](
     fa: IndexedReaderWriterStateT[F, E, L, A, B, T]
   ): IndexedReaderWriterStateT[F, E, L, (A, C), (B, C), T] =
-    IndexedReaderWriterStateT {
-      case (e, (a, c)) =>
-        F.map(fa.run(e, a)) {
-          case (l, b, t) =>
-            (l, (b, c), t)
-        }
+    IndexedReaderWriterStateT { case (e, (a, c)) =>
+      F.map(fa.run(e, a)) { case (l, b, t) =>
+        (l, (b, c), t)
+      }
     }
 
   def second[A, B, C](
@@ -762,15 +776,13 @@ sealed abstract private[data] class RWSTMonad[F[_], E, L, S]
     initA: A
   )(f: A => ReaderWriterStateT[F, E, L, S, Either[A, B]]): ReaderWriterStateT[F, E, L, S, B] =
     ReaderWriterStateT { (e, initS) =>
-      F.tailRecM((L.empty, initS, initA)) {
-        case (currL, currS, currA) =>
-          F.map(f(currA).run(e, currS)) {
-            case (nextL, nextS, ab) =>
-              ab match {
-                case Right(b) => Right((L.combine(currL, nextL), nextS, b))
-                case Left(a)  => Left((L.combine(currL, nextL), nextS, a))
-              }
+      F.tailRecM((L.empty, initS, initA)) { case (currL, currS, currA) =>
+        F.map(f(currA).run(e, currS)) { case (nextL, nextS, ab) =>
+          ab match {
+            case Right(b) => Right((L.combine(currL, nextL), nextS, b))
+            case Left(a)  => Left((L.combine(currL, nextL), nextS, a))
           }
+        }
       }
     }
 }

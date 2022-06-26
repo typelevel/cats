@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 
 package object syntax {
@@ -50,6 +71,7 @@ package object syntax {
       with ParallelUnorderedTraverseSyntax
       with ParallelFoldMapASyntax
       with ParallelTraverseFilterSyntax
+      with ParallelReduceMapASyntax
   object partialOrder extends PartialOrderSyntax
   object profunctor extends ProfunctorSyntax
   object reducible extends ReducibleSyntax with ReducibleSyntaxBinCompat0
@@ -57,6 +79,7 @@ package object syntax {
   object semigroup extends SemigroupSyntax
   object semigroupal extends SemigroupalSyntax
   object semigroupk extends SemigroupKSyntax
+  object seq extends SeqSyntax
   object show extends ShowSyntax
   object strong extends StrongSyntax
   object try_ extends TrySyntax
@@ -69,4 +92,5 @@ package object syntax {
   object vector extends VectorSyntax
   object writer extends WriterSyntax
   object set extends SetSyntax
+  object nonEmptyAlternative extends NonEmptyAlternativeSyntax
 }

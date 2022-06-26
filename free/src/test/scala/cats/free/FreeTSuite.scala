@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats.free
 
 import cats._
@@ -9,6 +30,8 @@ import cats.syntax.applicative._
 import cats.syntax.either._
 import cats.tests.CatsSuite
 import org.scalacheck.{Arbitrary, Cogen, Gen}
+import cats.syntax.eq._
+import org.scalacheck.Prop._
 
 class FreeTSuite extends CatsSuite {
 
@@ -58,7 +81,7 @@ class FreeTSuite extends CatsSuite {
           Applicative[FreeTOption].pure(Either.right[Int, Unit](()))
       )
 
-    Eq[FreeTOption[Unit]].eqv(expected, result) should ===(true)
+    assert(Eq[FreeTOption[Unit]].eqv(expected, result))
   }
 
   test("Stack safe with 50k left-associated flatMaps") {
@@ -68,7 +91,7 @@ class FreeTSuite extends CatsSuite {
         fu.flatMap(u => Applicative[FreeTOption].pure(u))
       )
 
-    Eq[FreeTOption[Unit]].eqv(expected, result) should ===(true)
+    assert(Eq[FreeTOption[Unit]].eqv(expected, result))
   }
 
   test("Stack safe with flatMap followed by 50k maps") {
@@ -76,13 +99,13 @@ class FreeTSuite extends CatsSuite {
     val result =
       (0 until 50000).foldLeft(().pure[FreeTOption].flatMap(_.pure[FreeTOption]))((fu, i) => fu.map(identity))
 
-    Eq[FreeTOption[Unit]].eqv(expected, result) should ===(true)
+    assert(Eq[FreeTOption[Unit]].eqv(expected, result))
   }
 
   test("mapK to universal id equivalent to original instance") {
     forAll { (a: FreeTOption[Int]) =>
       val b = a.mapK(FunctionK.id)
-      Eq[FreeTOption[Int]].eqv(a, b) should ===(true)
+      assert(Eq[FreeTOption[Int]].eqv(a, b))
     }
   }
 
@@ -96,9 +119,9 @@ class FreeTSuite extends CatsSuite {
   test("compile to universal id equivalent to original instance") {
     forAll { (a: FreeTOption[Int]) =>
       val b = a.compile(FunctionK.id)
-      Eq[FreeTOption[Int]].eqv(a, b) should ===(true)
+      assert(Eq[FreeTOption[Int]].eqv(a, b))
       val fk = FreeT.compile[Option, Option, Option](FunctionK.id)
-      a should ===(fk(a))
+      assert(a === fk(a))
     }
   }
 
@@ -114,8 +137,8 @@ class FreeTSuite extends CatsSuite {
       val x = a.runM(identity)
       val y = a.foldMap(FunctionK.id)
       val fk = FreeT.foldMap[Option, Option](FunctionK.id)
-      Eq[Option[Int]].eqv(x, y) should ===(true)
-      y should ===(fk(a))
+      assert(Eq[Option[Int]].eqv(x, y))
+      assert(y === fk(a))
     }
   }
 
@@ -125,7 +148,7 @@ class FreeTSuite extends CatsSuite {
     val F = MonadError[F, Unit]
 
     val eff = F.flatMap(F.pure(()))(_ => F.raiseError[String](()))
-    F.attempt(eff).runM(Some(_)) should ===(Some(Left(())))
+    assert(F.attempt(eff).runM(Some(_)) === Some(Left(())))
   }
 
   sealed trait Test1Algebra[A]
@@ -197,20 +220,20 @@ class FreeTSuite extends CatsSuite {
           a <- FreeT.liftInject[Id, F](test1(x, identity))
           b <- FreeT.liftInject[Id, F](test2(y, identity))
         } yield a + b
-      (res[T].foldMap(eitherKInterpreter)) == (x + y) should ===(true)
+      assert(res[T].foldMap(eitherKInterpreter) == (x + y))
     }
   }
 
   test("== should not return true for unequal instances") {
     val a = FreeT.pure[List, Option, Int](1).flatMap(x => FreeT.pure(2))
     val b = FreeT.pure[List, Option, Int](3).flatMap(x => FreeT.pure(4))
-    a == b should be(false)
+    assert(a != b)
   }
 
   test("toString is stack-safe") {
     val result =
       (0 until 50000).foldLeft(().pure[FreeTOption].flatMap(_.pure[FreeTOption]))((fu, i) => fu.map(identity))
-    result.toString.length should be > 0
+    assert(result.toString.length > 0)
   }
 
   private[free] def liftTCompilationTests() = {

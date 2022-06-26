@@ -1,9 +1,28 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 
 import cats.Foldable.Source
 import cats.data.{Ior, NonEmptyList}
-import simulacrum.{noop, typeclass}
-import scala.annotation.implicitNotFound
 
 /**
  * Data structures that can be reduced to a summary value.
@@ -18,8 +37,7 @@ import scala.annotation.implicitNotFound
  *  - `reduceLeftTo(fa)(f)(g)` eagerly reduces with an additional mapping function
  *  - `reduceRightTo(fa)(f)(g)` lazily reduces with an additional mapping function
  */
-@implicitNotFound("Could not find an instance of Reducible for ${F}")
-@typeclass trait Reducible[F[_]] extends Foldable[F] { self =>
+trait Reducible[F[_]] extends Foldable[F] { self =>
 
   /**
    * Left-associative reduction on `F` using the function `f`.
@@ -46,6 +64,13 @@ import scala.annotation.implicitNotFound
    * semigroup for `G[_]`.
    *
    * This method is a generalization of `reduce`.
+   *
+   * {{{
+   * scala> import cats.Reducible
+   * scala> import cats.data._
+   * scala> Reducible[NonEmptyVector].reduceK(NonEmptyVector.of(NonEmptyList.of(1, 2, 3), NonEmptyList.of(4, 5, 6), NonEmptyList.of(7, 8, 9)))
+   * res0: NonEmptyList[Int] = NonEmptyList(1, 2, 3, 4, 5, 6, 7, 8, 9)
+   * }}}
    */
   def reduceK[G[_], A](fga: F[G[A]])(implicit G: SemigroupK[G]): G[A] =
     reduce(fga)(G.algebra)
@@ -53,6 +78,17 @@ import scala.annotation.implicitNotFound
   /**
    * Apply `f` to each element of `fa` and combine them using the
    * given `Semigroup[B]`.
+   *
+   * {{{
+   * scala> import cats.Reducible
+   * scala> import cats.data.NonEmptyList
+   * scala> Reducible[NonEmptyList].reduceMap(NonEmptyList.of(1, 2, 3))(v => v.toString * v)
+   * res0: String = 122333
+   *
+   * scala> val gt5: Int => Option[Int] = (num: Int) => Some(num).filter(_ > 5)
+   * scala> Reducible[NonEmptyList].reduceMap(NonEmptyList.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10))(gt5)
+   * res1: Option[Int] = Some(40)
+   * }}}
    */
   def reduceMap[A, B](fa: F[A])(f: A => B)(implicit B: Semigroup[B]): B =
     reduceLeftTo(fa)(f)((b, a) => B.combine(b, f(a)))
@@ -62,14 +98,14 @@ import scala.annotation.implicitNotFound
    * given `SemigroupK[G]`.
    *
    * {{{
-   * scala> import cats._, cats.data._, cats.implicits._
+   * scala> import cats._, cats.data._
    * scala> val f: Int => Endo[String] = i => (s => s + i)
    * scala> val x: Endo[String] = Reducible[NonEmptyList].reduceMapK(NonEmptyList.of(1, 2, 3))(f)
    * scala> val a = x("foo")
    * a: String = "foo321"
    * }}}
    */
-  @noop
+
   def reduceMapK[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: SemigroupK[G]): G[B] =
     reduceLeftTo(fa)(f)((b, a) => G.combineK(b, f(a)))
 
@@ -90,10 +126,8 @@ import scala.annotation.implicitNotFound
    * semigroup for `G[_]`.
    *
    * This method is similar to [[reduce]], but may short-circuit.
-   *
-   * See [[https://github.com/typelevel/simulacrum/issues/162 this issue]] for an explanation of `@noop` usage.
    */
-  @noop def reduceA[G[_], A](fga: F[G[A]])(implicit G: Apply[G], A: Semigroup[A]): G[A] =
+  def reduceA[G[_], A](fga: F[G[A]])(implicit G: Apply[G], A: Semigroup[A]): G[A] =
     reduceMapA(fga)(identity)
 
   /**
@@ -105,7 +139,6 @@ import scala.annotation.implicitNotFound
    * {{{
    * scala> import cats.Reducible
    * scala> import cats.data.NonEmptyList
-   * scala> import cats.implicits._
    * scala> val evenOpt: Int => Option[Int] =
    *      |   i => if (i % 2 == 0) Some(i) else None
    * scala> val allEven = NonEmptyList.of(2,4,6,8,10)
@@ -130,7 +163,6 @@ import scala.annotation.implicitNotFound
    * {{{
    * scala> import cats.Reducible
    * scala> import cats.data.NonEmptyList
-   * scala> import cats.implicits._
    * scala> val evenOpt: Int => Option[Int] =
    *      |   i => if (i % 2 == 0) Some(i) else None
    * scala> val allEven = NonEmptyList.of(2,4,6,8,10)
@@ -181,8 +213,10 @@ import scala.annotation.implicitNotFound
    * available for `G` and want to take advantage of short-circuiting
    * the traversal.
    */
-  def nonEmptyTraverse_[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Apply[G]): G[Unit] =
-    G.void(reduceLeftTo(fa)(f)((x, y) => G.map2(x, f(y))((_, b) => b)))
+  def nonEmptyTraverse_[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Apply[G]): G[Unit] = {
+    val f1 = f.andThen(G.void)
+    reduceRightTo(fa)(f1)((x, y) => G.map2Eval(f1(x), y)((_, b) => b)).value
+  }
 
   /**
    * Sequence `F[G[A]]` using `Apply[G]`.
@@ -192,7 +226,7 @@ import scala.annotation.implicitNotFound
    * [[nonEmptyTraverse_]] documentation for a description of the differences.
    */
   def nonEmptySequence_[G[_], A](fga: F[G[A]])(implicit G: Apply[G]): G[Unit] =
-    G.void(reduceLeft(fga)((x, y) => G.map2(x, y)((_, b) => b)))
+    nonEmptyTraverse_(fga)(identity)
 
   def toNonEmptyList[A](fa: F[A]): NonEmptyList[A] =
     reduceRightTo(fa)(a => NonEmptyList(a, Nil)) { (a, lnel) =>
@@ -228,10 +262,53 @@ import scala.annotation.implicitNotFound
     maximum(fa)(Order.by(f))
 
   /**
+   * Find all the minimum `A` items in this structure.
+   * For all elements in the result Order.eqv(x, y) is true. Preserves order.
+   *
+   * @see [[maximumNel]] for maximum instead of minimum.
+   */
+  def minimumNel[A](fa: F[A])(implicit A: Order[A]): NonEmptyList[A] =
+    reduceLeftTo(fa)(NonEmptyList.one) {
+      case (l @ NonEmptyList(b, _), a) if A.compare(a, b) > 0  => l
+      case (l @ NonEmptyList(b, _), a) if A.compare(a, b) == 0 => a :: l
+      case (_, a)                                              => NonEmptyList.one(a)
+    }.reverse
+
+  /**
+   * Find all the maximum `A` items in this structure.
+   * For all elements in the result Order.eqv(x, y) is true. Preserves order.
+   *
+   * @see [[minimumNel]] for minimum instead of maximum.
+   */
+  def maximumNel[A](fa: F[A])(implicit A: Order[A]): NonEmptyList[A] =
+    reduceLeftTo(fa)(NonEmptyList.one) {
+      case (l @ NonEmptyList(b, _), a) if A.compare(a, b) < 0  => l
+      case (l @ NonEmptyList(b, _), a) if A.compare(a, b) == 0 => a :: l
+      case (_, a)                                              => NonEmptyList.one(a)
+    }.reverse
+
+  /**
+   * Find all the minimum `A` items in this structure according to an `Order.by(f)`.
+   * For all elements in the result Order.eqv(x, y) is true. Preserves order.
+   *
+   * @see [[maximumByNel]] for maximum instead of minimum.
+   */
+  def minimumByNel[A, B: Order](fa: F[A])(f: A => B): NonEmptyList[A] =
+    minimumNel(fa)(Order.by(f))
+
+  /**
+   * Find all the maximum `A` items in this structure according to an `Order.by(f)`.
+   * For all elements in the result Order.eqv(x, y) is true. Preserves order.
+   *
+   * @see [[minimumByNel]] for minimum instead of maximum.
+   */
+  def maximumByNel[A, B: Order](fa: F[A])(f: A => B): NonEmptyList[A] =
+    maximumNel(fa)(Order.by(f))
+
+  /**
    * Intercalate/insert an element between the existing elements while reducing.
    *
    * {{{
-   * scala> import cats.implicits._
    * scala> import cats.data.NonEmptyList
    * scala> val nel = NonEmptyList.of("a", "b", "c")
    * scala> Reducible[NonEmptyList].nonEmptyIntercalate(nel, "-")
@@ -287,10 +364,6 @@ import scala.annotation.implicitNotFound
 
 object Reducible {
 
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
-
   /**
    * Summon an instance of [[Reducible]] for `F`.
    */
@@ -335,6 +408,12 @@ object Reducible {
     def maximum(implicit A: Order[A]): A = typeClassInstance.maximum[A](self)(A)
     def minimumBy[B](f: A => B)(implicit ev$1: Order[B]): A = typeClassInstance.minimumBy[A, B](self)(f)
     def maximumBy[B](f: A => B)(implicit ev$1: Order[B]): A = typeClassInstance.maximumBy[A, B](self)(f)
+    def minimumNel(implicit A: Order[A]): NonEmptyList[A] = typeClassInstance.minimumNel[A](self)(A)
+    def maximumNel(implicit A: Order[A]): NonEmptyList[A] = typeClassInstance.maximumNel[A](self)(A)
+    def minimumByNel[B](f: A => B)(implicit ev$1: Order[B]): NonEmptyList[A] =
+      typeClassInstance.minimumByNel[A, B](self)(f)
+    def maximumByNel[B](f: A => B)(implicit ev$1: Order[B]): NonEmptyList[A] =
+      typeClassInstance.maximumByNel[A, B](self)(f)
     def nonEmptyIntercalate(a: A)(implicit A: Semigroup[A]): A = typeClassInstance.nonEmptyIntercalate[A](self, a)(A)
     def nonEmptyPartition[B, C](f: A => Either[B, C]): Ior[NonEmptyList[B], NonEmptyList[C]] =
       typeClassInstance.nonEmptyPartition[A, B, C](self)(f)
@@ -355,10 +434,6 @@ object Reducible {
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToReducibleOps
 
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
-
 }
 
 /**
@@ -367,6 +442,9 @@ object Reducible {
  *
  * This class can be used on any type where the first value (`A`) and
  * the "rest" of the values (`G[A]`) can be easily found.
+ *
+ * This class is only a helper, does not define a typeclass and should not be used outside of Cats.
+ * Also see the discussion: PR #3541 and issue #3069.
  */
 abstract class NonEmptyReducible[F[_], G[_]](implicit G: Foldable[G]) extends Reducible[F] {
   def split[A](fa: F[A]): (A, G[A])
@@ -377,9 +455,8 @@ abstract class NonEmptyReducible[F[_], G[_]](implicit G: Foldable[G]) extends Re
   }
 
   def foldRight[A, B](fa: F[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
-    Always(split(fa)).flatMap {
-      case (a, ga) =>
-        f(a, G.foldRight(ga, lb)(f))
+    Always(split(fa)).flatMap { case (a, ga) =>
+      f(a, G.foldRight(ga, lb)(f))
     }
 
   def reduceLeftTo[A, B](fa: F[A])(f: A => B)(g: (B, A) => B): B = {
@@ -394,9 +471,8 @@ abstract class NonEmptyReducible[F[_], G[_]](implicit G: Foldable[G]) extends Re
         case None            => Eval.later(f(now))
       }
 
-    Always(split(fa)).flatMap {
-      case (a, ga) =>
-        Eval.defer(loop(a, Foldable.Source.fromFoldable(ga)))
+    Always(split(fa)).flatMap { case (a, ga) =>
+      Eval.defer(loop(a, Foldable.Source.fromFoldable(ga)))
     }
   }
 

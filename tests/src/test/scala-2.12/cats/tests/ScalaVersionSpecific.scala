@@ -1,6 +1,0 @@
-package cats.tests
-
-trait ScalaVersionSpecificFoldableSuite
-trait ScalaVersionSpecificParallelSuite
-trait ScalaVersionSpecificRegressionSuite
-trait ScalaVersionSpecificTraverseSuite

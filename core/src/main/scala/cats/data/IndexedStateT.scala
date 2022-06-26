@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 package data
 
@@ -20,9 +41,8 @@ final class IndexedStateT[F[_], SA, SB, A](val runF: F[SA => F[(SB, A)]]) extend
   def flatMap[B, SC](fas: A => IndexedStateT[F, SB, SC, B])(implicit F: FlatMap[F]): IndexedStateT[F, SA, SC, B] =
     IndexedStateT.applyF(F.map(runF) { safsba =>
       AndThen(safsba).andThen { fsba =>
-        F.flatMap(fsba) {
-          case (sb, a) =>
-            fas(a).run(sb)
+        F.flatMap(fsba) { case (sb, a) =>
+          fas(a).run(sb)
         }
       }
     })
@@ -199,6 +219,15 @@ private[data] trait CommonStateTConstructors {
 
   def get[F[_], S](implicit F: Applicative[F]): IndexedStateT[F, S, S, S] =
     IndexedStateT(s => F.pure((s, s)))
+
+  /**
+   * Turn `State[A, F[B]]` into `StateT[F, A, B]`
+   */
+  def fromState[F[_], A, B](s: State[A, F[B]])(implicit F: Applicative[F]): StateT[F, A, B] =
+    s.transformF { eval =>
+      val (a, fb) = eval.value
+      F.map(fb)((a, _))
+    }
 }
 
 object IndexedStateT extends IndexedStateTInstances with CommonStateTConstructors0 {
@@ -405,12 +434,10 @@ sealed abstract private[data] class IndexedStateTStrong[F[_], V]
   implicit def F: Monad[F]
 
   def first[A, B, C](fa: IndexedStateT[F, A, B, V]): IndexedStateT[F, (A, C), (B, C), V] =
-    IndexedStateT {
-      case (a, c) =>
-        F.map(fa.run(a)) {
-          case (b, v) =>
-            ((b, c), v)
-        }
+    IndexedStateT { case (a, c) =>
+      F.map(fa.run(a)) { case (b, v) =>
+        ((b, c), v)
+      }
     }
 
   def second[A, B, C](fa: IndexedStateT[F, A, B, V]): IndexedStateT[F, (C, A), (C, B), V] =
@@ -430,15 +457,13 @@ sealed abstract private[data] class IndexedStateTMonad[F[_], S]
 
   def tailRecM[A, B](a: A)(f: A => IndexedStateT[F, S, S, Either[A, B]]): IndexedStateT[F, S, S, B] =
     IndexedStateT[F, S, S, B](s =>
-      F.tailRecM[(S, A), (S, B)]((s, a)) {
-        case (s, a) =>
-          F.map(f(a).run(s)) {
-            case (s, ab) =>
-              ab match {
-                case Right(b) => Right((s, b))
-                case Left(a)  => Left((s, a))
-              }
+      F.tailRecM[(S, A), (S, B)]((s, a)) { case (s, a) =>
+        F.map(f(a).run(s)) { case (s, ab) =>
+          ab match {
+            case Right(b) => Right((s, b))
+            case Left(a)  => Left((s, a))
           }
+        }
       }
     )
 }

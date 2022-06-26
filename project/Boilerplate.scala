@@ -1,5 +1,7 @@
 import sbt._
 
+import scala.annotation.tailrec
+
 /**
  * Copied, with some modifications, from https://github.com/milessabin/shapeless/blob/master/project/Boilerplate.scala
  *
@@ -25,10 +27,17 @@ object Boilerplate {
     GenSemigroupalBuilders,
     GenSemigroupalArityFunctions,
     GenApplyArityFunctions,
+    GenFlatMapArityFunctions,
     GenTupleSemigroupalSyntax,
     GenParallelArityFunctions,
     GenParallelArityFunctions2,
-    GenTupleParallelSyntax
+    GenFoldableArityFunctions,
+    GenTupleParallelSyntax,
+    GenTupleShowInstances,
+    GenTupleMonadInstances,
+    GenTupleBifunctorInstances,
+    GenTupleBitraverseInstances,
+    GenTupleUnorderedFoldableInstances
   )
 
   val header = "// auto-generated boilerplate by /project/Boilerplate.scala" // TODO: put something meaningful here?
@@ -48,14 +57,50 @@ object Boilerplate {
   final class TemplateVals(val arity: Int) {
     val synTypes = (0 until arity).map(n => s"A$n")
     val synVals = (0 until arity).map(n => s"a$n")
-    val synTypedVals = (synVals.zip(synTypes)).map { case (v, t) => v + ":" + t }
+    val synTypedVals = synVals.zip(synTypes).map { case (v, t) => v + ":" + t }
     val `A..N` = synTypes.mkString(", ")
     val `a..n` = synVals.mkString(", ")
     val `_.._` = Seq.fill(arity)("_").mkString(", ")
-    val `(A..N)` = if (arity == 1) "Tuple1[A]" else synTypes.mkString("(", ", ", ")")
+    val `(A..N)` = if (arity == 1) "Tuple1[A0]" else synTypes.mkString("(", ", ", ")")
     val `(_.._)` = if (arity == 1) "Tuple1[_]" else Seq.fill(arity)("_").mkString("(", ", ", ")")
     val `(a..n)` = if (arity == 1) "Tuple1(a)" else synVals.mkString("(", ", ", ")")
     val `a:A..n:N` = synTypedVals.mkString(", ")
+
+    val `A..(N - 1)` = (0 until (arity - 1)).map(n => s"A$n")
+    val `A..(N - 2)` = (0 until (arity - 2)).map(n => s"A$n")
+    val `A0, A(N - 1)` = if (arity <= 1) "" else `A..(N - 1)`.mkString(", ")
+    val `A0, A(N - 2)` = if (arity <= 2) "" else `A..(N - 2)`.mkString("", ", ", ", ")
+    val `[A0, A(N - 2)]` = if (arity <= 2) "" else `A..(N - 2)`.mkString("[", ", ", "]")
+    val `(A..N - 2, *, *)` =
+      if (arity <= 2) "(*, *)"
+      else `A..(N - 2)`.mkString("(", ", ", ", *, *)")
+    val `a..(n - 1)` = (0 until (arity - 1)).map(n => s"a$n")
+    val `fa._1..fa._(n - 2)` =
+      if (arity <= 2) "" else (0 until (arity - 2)).map(n => s"fa._${n + 1}").mkString("", ", ", ", ")
+    val `pure(fa._1..(n - 2))` =
+      if (arity <= 2) "" else (0 until (arity - 2)).map(n => s"G.pure(fa._${n + 1})").mkString("", ", ", ", ")
+    val `a0, a(n - 1)` = if (arity <= 1) "" else `a..(n - 1)`.mkString(", ")
+    val `[A0, A(N - 1)]` = if (arity <= 1) "" else `A..(N - 1)`.mkString("[", ", ", "]")
+    val `(A0, A(N - 1))` =
+      if (arity == 1) "Tuple1[A0]"
+      else if (arity == 2) "A0"
+      else `A..(N - 1)`.mkString("(", ", ", ")")
+    val `(A..N - 1, *)` =
+      if (arity == 1) "Tuple1"
+      else `A..(N - 1)`.mkString("(", ", ", ", *)")
+    val `(fa._1..(n - 1))` =
+      if (arity <= 1) "Tuple1.apply" else (0 until (arity - 1)).map(n => s"fa._${n + 1}").mkString("(", ", ", ", _)")
+
+    def `A0, A(N - 1)&`(a: String): String =
+      if (arity <= 1) s"Tuple1[$a]" else `A..(N - 1)`.mkString("(", ", ", s", $a)")
+
+    def `fa._1..(n - 1) & `(a: String): String =
+      if (arity <= 1) s"Tuple1($a)" else (0 until (arity - 1)).map(n => s"fa._${n + 1}").mkString("(", ", ", s", $a)")
+
+    def `constraints A..N`(c: String): String = synTypes.map(tpe => s"$tpe: $c[$tpe]").mkString("(implicit ", ", ", ")")
+    def `constraints A..(N-1)`(c: String): String =
+      if (arity <= 1) "" else `A..(N - 1)`.map(tpe => s"$tpe: $c[$tpe]").mkString("(implicit ", ", ", ")")
+    def `parameters A..(N-1)`(c: String): String = `A..(N - 1)`.map(tpe => s"$tpe: $c[$tpe]").mkString(", ")
   }
 
   trait Template {
@@ -63,6 +108,7 @@ object Boilerplate {
     def content(tv: TemplateVals): String
     def range = 1 to maxArity
     def body: String = {
+      @tailrec
       def expandInstances(contents: IndexedSeq[Array[String]], acc: Array[String] = Array.empty): Array[String] =
         if (!contents.exists(_.exists(_.startsWith("-"))))
           acc.map(_.tail)
@@ -107,8 +153,7 @@ object Boilerplate {
       val tpes = synTypes.map { tpe =>
         s"F[$tpe]"
       }
-      val tpesString = synTypes.mkString(", ")
-      val params = (synVals.zip(tpes)).map { case (v, t) => s"$v:$t" }.mkString(", ")
+      val params = synVals.zip(tpes).map { case (v, t) => s"$v:$t" }.mkString(", ")
       val next = if (arity + 1 <= maxArity) {
         s"def |@|[Z](z: F[Z]) = new SemigroupalBuilder${arity + 1}(${`a..n`}, z)"
       } else {
@@ -178,7 +223,7 @@ object Boilerplate {
         s"F[$tpe]"
       }
       val fargs = (0 until arity).map("f" + _)
-      val fparams = (fargs.zip(tpes)).map { case (v, t) => s"$v:$t" }.mkString(", ")
+      val fparams = fargs.zip(tpes).map { case (v, t) => s"$v:$t" }.mkString(", ")
 
       val a = arity / 2
       val b = arity - a
@@ -235,7 +280,37 @@ object Boilerplate {
         -  /** @group MapArity */
         -  def map$arity[${`A..N`}, Z]($fparams)(f: (${`A..N`}) => Z): F[Z] = Semigroupal.map$arity($fparams)(f)(self, self)
         -  /** @group TupleArity */
-        -  def tuple$arity[${`A..N`}, Z]($fparams): F[(${`A..N`})] = Semigroupal.tuple$arity($fparams)(self, self)
+        -  def tuple$arity[${`A..N`}]($fparams): F[(${`A..N`})] = Semigroupal.tuple$arity($fparams)(self, self)
+      |}
+      """
+    }
+  }
+
+  object GenFlatMapArityFunctions extends Template {
+    def filename(root: File) = root / "cats" / "FlatMapArityFunctions.scala"
+    override def range = 2 to maxArity
+    def content(tv: TemplateVals) = {
+      import tv._
+
+      val tpes = synTypes.map { tpe =>
+        s"F[$tpe]"
+      }
+      val fargs = (0 until arity).map("f" + _)
+      val fparams = fargs.zip(tpes).map { case (v, t) => s"$v:$t" }.mkString(", ")
+
+      block"""
+      |package cats
+      |
+      |/**
+      | * @groupprio Ungrouped 0
+      | *
+      | * @groupname FlatMapArity flatMap arity
+      | * @groupdesc FlatMapArity Higher-arity flatMap methods
+      | * @groupprio FlatMapArity 999
+      | */
+      |trait FlatMapArityFunctions[F[_]] { self: FlatMap[F] =>
+        -  /** @group FlatMapArity */
+        -  def flatMap$arity[${`A..N`}, Z]($fparams)(f: (${`A..N`}) => F[Z]): F[Z] = self.flatten(self.map$arity($fparams)(f))
       |}
       """
     }
@@ -257,8 +332,7 @@ object Boilerplate {
         s"M[$tpe]"
       }
       val fargs = (0 until arity).map("m" + _)
-      val fparams = (fargs.zip(tpes)).map { case (v, t) => s"$v:$t" }.mkString(", ")
-      val fargsS = fargs.mkString(", ")
+      val fparams = fargs.zip(tpes).map { case (v, t) => s"$v:$t" }.mkString(", ")
       val nestedExpansion = ParallelNestedExpansions(arity)
 
       block"""
@@ -290,8 +364,7 @@ object Boilerplate {
         s"M[$tpe]"
       }
       val fargs = (0 until arity).map("m" + _)
-      val fparams = (fargs.zip(tpes)).map { case (v, t) => s"$v:$t" }.mkString(", ")
-      val fargsS = fargs.mkString(", ")
+      val fparams = fargs.zip(tpes).map { case (v, t) => s"$v:$t" }.mkString(", ")
       val nestedExpansion = ParallelNestedExpansions(arity)
 
       block"""
@@ -323,7 +396,7 @@ object Boilerplate {
         s"F[$tpe]"
       }
       val fargs = (0 until arity).map("f" + _)
-      val fparams = (fargs.zip(tpes)).map { case (v, t) => s"$v:$t" }.mkString(", ")
+      val fparams = fargs.zip(tpes).map { case (v, t) => s"$v:$t" }.mkString(", ")
       val fargsS = fargs.mkString(", ")
 
       val nestedProducts = (0 until (arity - 2))
@@ -391,13 +464,7 @@ object Boilerplate {
 
       val tuple = s"Tuple$arity[$tpesString]"
       val tupleTpe = s"t$arity: $tuple"
-      val tupleArgs = (1 to arity).map { case n => s"t$arity._$n" }.mkString(", ")
-
-      val n = if (arity == 1) {
-        ""
-      } else {
-        arity.toString
-      }
+      val tupleArgs = (1 to arity).map(n => s"t$arity._$n").mkString(", ")
 
       val parMap =
         if (arity == 1)
@@ -442,7 +509,7 @@ object Boilerplate {
 
       val tuple = s"Tuple$arity[$tpesString]"
       val tupleTpe = s"t$arity: $tuple"
-      val tupleArgs = (1 to arity).map { case n => s"t$arity._$n" }.mkString(", ")
+      val tupleArgs = (1 to arity).map(n => s"t$arity._$n").mkString(", ")
 
       val n = if (arity == 1) {
         ""
@@ -480,11 +547,15 @@ object Boilerplate {
         else
           s"def traverseN[G[_]: Applicative, Z](f: (${`A..N`}) => G[Z])(implicit traverse: Traverse[F], semigroupal: Semigroupal[F]): G[F[Z]] = Semigroupal.traverse$arity($tupleArgs)(f)"
 
+      val flatMap =
+        if (arity == 1)
+          s"def flatMap[Z](f: (${`A..N`}) => F[Z])(implicit flatMap: FlatMap[F]): F[Z] = flatMap.flatMap($tupleArgs)(f)"
+        else
+          s"def flatMapN[Z](f: (${`A..N`}) => F[Z])(implicit flatMap: FlatMap[F]): F[Z] = flatMap.flatMap$arity($tupleArgs)(f)"
+
       block"""
       |package cats
       |package syntax
-      |
-      |
       |
       |trait TupleSemigroupalSyntax {
         -  implicit def catsSyntaxTuple${arity}Semigroupal[F[_], ${`A..N`}]($tupleTpe): Tuple${arity}SemigroupalOps[F, ${`A..N`}] = new Tuple${arity}SemigroupalOps(t$arity)
@@ -494,6 +565,7 @@ object Boilerplate {
         -  $map
         -  $contramap
         -  $imap
+        -  $flatMap
         -  $tupled
         -  $traverse
         -  def apWith[Z](f: F[(${`A..N`}) => Z])(implicit apply: Apply[F]): F[Z] = apply.ap$n(f)($tupleArgs)
@@ -503,4 +575,49 @@ object Boilerplate {
     }
   }
 
+  object GenFoldableArityFunctions extends Template {
+    def filename(root: File) = root / "cats" / "FoldableNFunctions.scala"
+    override def range = 2 to maxArity
+    def content(tv: TemplateVals) = {
+      import tv._
+
+      val tupleTpe = Iterator.fill(arity)("A").mkString("(", ", ", ")")
+      val tupleXN = Iterator.tabulate(arity)(i => s"x($i)").mkString("(", ", ", ")")
+
+      block"""
+      |package cats
+      |
+      |/**
+      | * @groupprio Ungrouped 0
+      | *
+      | * @groupname FoldableSlidingN foldable arity
+      | * @groupdesc FoldableSlidingN
+      | *   Group sequential elements into fixed sized tuples by passing a "sliding window" over them.
+      | * 
+      | *   A foldable with fewer elements than the window size will return an empty list unlike `Iterable#sliding(size: Int)`.
+      | *   Example:
+      | *   {{{
+      | *   import cats.Foldable
+      | *   scala> Foldable[List].sliding2((1 to 10).toList)
+      | *   val res0: List[(Int, Int)] = List((1,2), (2,3), (3,4), (4,5), (5,6), (6,7), (7,8), (8,9), (9,10))
+      | *
+      | *   scala> Foldable[List].sliding4((1 to 10).toList)
+      | *   val res1: List[(Int, Int, Int, Int)] = List((1,2,3,4), (2,3,4,5), (3,4,5,6), (4,5,6,7), (5,6,7,8), (6,7,8,9), (7,8,9,10))
+      | *   
+      | *   scala> Foldable[List].sliding4((1 to 2).toList)
+      | *   val res2: List[(Int, Int, Int, Int)] = List()
+      | *
+      | *   }}}
+      | *   
+      | * @groupprio FoldableSlidingN 999
+      | *
+      | */
+      |trait FoldableNFunctions[F[_]] { self: Foldable[F] =>
+        -  /** @group FoldableSlidingN */
+        -  def sliding$arity[A](fa: F[A]): List[$tupleTpe] =
+        -    toIterable(fa).iterator.sliding($arity).withPartial(false).map(x => $tupleXN).toList
+      |}
+      """
+    }
+  }
 }

@@ -1,8 +1,29 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package alleycats
 package std
 
 import alleycats.compat.scalaVersionSpecific._
-import cats.{Always, Applicative, Eval, Foldable, Monad, Monoid, Traverse, TraverseFilter}
+import cats.{Alternative, Always, Applicative, Eval, Foldable, Monad, Monoid, Traverse, TraverseFilter}
 
 import scala.annotation.tailrec
 
@@ -10,7 +31,7 @@ object set extends SetInstances
 
 @suppressUnusedImportWarningForScalaVersionSpecific
 trait SetInstances {
-  // This method advertises parametricity, but relies on using
+  // Monad advertises parametricity, but Set relies on using
   // universal hash codes and equality, which hurts our ability to
   // rely on free theorems.
   //
@@ -30,8 +51,12 @@ trait SetInstances {
   // contain three. Since `g` is not a function (speaking strictly)
   // this would not be considered a law violation, but it still makes
   // people uncomfortable.
-  implicit val alleyCatsStdSetMonad: Monad[Set] =
-    new Monad[Set] {
+  //
+  // If we accept Monad for Set, we can also have Alternative, as
+  // Alternative only requires MonoidK (already accepted by cats-core) and
+  // the Applicative that comes from Monad.
+  implicit val alleyCatsStdSetMonad: Monad[Set] with Alternative[Set] =
+    new Monad[Set] with Alternative[Set] {
       def pure[A](a: A): Set[A] = Set(a)
       override def map[A, B](fa: Set[A])(f: A => B): Set[B] = fa.map(f)
       def flatMap[A, B](fa: Set[A])(f: A => Set[B]): Set[B] = fa.flatMap(f)
@@ -65,6 +90,14 @@ trait SetInstances {
         go(f(a))
         bldr.result()
       }
+
+      override def empty[A]: Set[A] = Set.empty
+
+      override def combineK[A](x: Set[A], y: Set[A]): Set[A] = x | y
+
+      override def prependK[A](a: A, fa: Set[A]): Set[A] = fa + a
+
+      override def appendK[A](fa: Set[A], a: A): Set[A] = fa + a
     }
 
   // Since iteration order is not guaranteed for sets, folds and other
@@ -87,13 +120,25 @@ trait SetInstances {
         }.value
       }
 
+      override def mapAccumulate[S, A, B](init: S, fa: Set[A])(f: (S, A) => (S, B)): (S, Set[B]) = {
+        val iter = fa.iterator
+        var s = init
+        val set = Set.newBuilder[B]
+        while (iter.hasNext) {
+          val (snext, b) = f(s, iter.next())
+          set += b
+          s = snext
+        }
+        (s, set.result())
+      }
+
       override def get[A](fa: Set[A])(idx: Long): Option[A] = {
         @tailrec
         def go(idx: Int, it: Iterator[A]): Option[A] =
           if (it.hasNext) {
-            if (idx == 0) Some(it.next)
+            if (idx == 0) Some(it.next())
             else {
-              it.next
+              it.next()
               go(idx - 1, it)
             }
           } else None
@@ -113,6 +158,8 @@ trait SetInstances {
       override def fold[A](fa: Set[A])(implicit A: Monoid[A]): A = A.combineAll(fa)
 
       override def toList[A](fa: Set[A]): List[A] = fa.toList
+
+      override def toIterable[A](fa: Set[A]): Iterable[A] = fa
 
       override def reduceLeftOption[A](fa: Set[A])(f: (A, A) => A): Option[A] =
         fa.reduceLeftOption(f)

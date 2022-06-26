@@ -1,3 +1,284 @@
+## Version 2.6.0
+
+_2021 April 20_
+
+Cats 2.6.0 is a binary-compatible release in the 2.x series. It provides support for Scala 2.12, 2.13, 3.0.0-RC2 and 3.0.0-RC3.
+
+### Additions
+
+* #3831 Add composition to Representable by @TimWSpence 
+* #3832 Representable instance for Tuple2K by @TimWSpence 
+* #3837 Provide instance of `Alternative[Set]` in alleycats by @rtyley 
+* #3836 RepresentableStoreT by @TimWSpence 
+
+### Changes
+
+* #3847 Make deprecated catsDataInstancesForNonEmptyMap not implicit by @joroKr21 (source breaking)
+* #3720, #3852 fix show interpolation ambiguity with Seq/List by @tnielens 
+* #2254, #3856 Remove redundant Monad constraints from Parallel syntax by @joroKr21 
+* #3851 Update 'Jump Start Guide' page to modern cats by @chaitanyawaikar
+
+## Version 2.5.0
+
+_2021 March 29_
+
+Cats 2.5.0 is a binary-compatible release in the 2.x series. It provides support for Scala 2.12, 2.13, 3.0.0-RC1 and 3.0.0-RC2.
+
+### Additions
+
+* #3808 Chain add fromOption factory method by @nikiforo 
+* #3826, #3827 Add syntax for parProduct and parAp by @nigredo-tori 
+* #3804, #3805 Add Ior.mergeWith and AlignMergeWith by @nigredo-tori 
+* #3806 Add Align instance for Nested by @nigredo-tori 
+* #3643, #3823 Add sumAll & productAll by @phongngtuan, @larsrh 
+
+### Changes
+
+* #3818 update Scala to 2.13.5 by @sh0hei 
+* #3825 Use -scalajs-mapSourceURI in Scala 3 builds by @fthomas 
+* #3377, #3807 Replace Band instance for NonEmptyMap with a Semigroup instance consistent with SortedMap by @nigredo-tori 
+* #3480, #3833 Rename master to main by @travisbrown, @larsrh 
+
+#### Documentation
+
+* #3814 typo in `ApplicativeError` by @wibisono 
+
+## Version 2.4.1
+
+_2021 February 10_
+
+This release fixes a problem in Cats 2.4.0. It is not binary compatible with Cats 2.4.0. We urge everyone to skip 2.4.0 and upgrade directly to 2.4.1.
+
+Cats 2.4.1 is a hotfix release in the 2.x series. It is binary compatible to every previous release in the 2.x series, _except for Cats 2.4.0_.
+
+The following release notes contain all cumulative changes since Cats 2.3.1.
+
+### Additions
+
+* #3220, #3222, #3773 Add Invariant instances for Numeric and Integral by @tmccarthy & @kubukoz 
+* #3650, #3579 add grouped to NonEmptyCollection by @bbstilson & @larsrh 
+* #3299, #3293 Generate Show instances for Tuple3 and higher by @barambani 
+* #3727 .slidingN using tuples by @Slakah 
+* #3750, #1549 Support scala-native 0.4 by @arashi01 
+* #3771 add NonEmptyChain.of by @larsrh 
+* #3318 add syntax for unzip on functors by @yangzai 
+* #3680 Add more group-like methods to NonEmptyList & Chain by @BalmungSan 
+* #3748 Delimited continuations via shiftT/resetT for ContT by @TimWSpence 
+* #3747 Add callCC to ContT by @TimWSpence 
+* #3765 Add NonEmptyList.take by @saeltz 
+* #2087, #3753 add Monoid[Comparison] for lexographical ordering by @adelbertc & @larsrh 
+* #3759 Provide BoundedEnumerable[Byte] instance by @ashleymercer 
+* #3699 Allow finding a list of maxiumum/minimum items for Foldable/Reducible by @Billzabob & @larsrh 
+* #3730 Add NonEmptyList.zip by @saeltz 
+* #3724 Trivial semigroup instances by @RaasAhsan 
+* #3707, #3710 Add missing Free.liftK and Free.liftId by @phongngtuan 
+
+### Changes
+
+* #3776, #3777 Removed and replaced inconsistent Parallel derivation for EitherT by @djspiewak 
+  * this change is potentially source-breaking: an existing `implicit` has been made un-`implicit`, but another `implicit` with a different semantics has been provided (core)
+  * more discussion at typelevel/cats-effect#1645
+  * this change emits new deprecation warnings
+* #3734, #3772 Cogen for (Finite)Duration to fix test failures by @larsrh 
+  * this change is only internal in tests
+* #2207, #3758 deprecate Free.inject by @larsrh 
+  * this change emits new deprecation warnings
+* #3702 specialized EqOps by @YannMoisan 
+  * this change accidentally broke source compatibility, please upgrade to 2.4.1
+  * reverted by #3784, #3785 by @larsrh 
+* #3677 Added EmptyK instance for Map by @LMnet 
+  * this change marks a previously non-`implicit` method as `implicit` (alleycats)
+
+#### Documentation
+
+* #3722 Rename productM to mproduct in the glossary by @BenFradet 
+* #3745 Adjust to GitHub Actions by @sh0hei 
+* #3744 Improve scaladoc for EitherT.rethrowT by @majk-p 
+* #3732 scaladoc fixes for PartialOrder by @martijnhoekstra 
+* #3728 Fix a link in typelevelEcosystem.md by @akiomik 
+* #3726 update README by @gokyo 
+
+## Version 2.4.0
+
+_2021 February 9_
+
+Cats 2.4.0 contains an unintended source-breaking change, please upgrade directly to 2.4.1.
+
+## Version 2.3.1
+
+_2020 December 18_
+
+Cats 2.3.1 adds support for Scala 3.0.0-M3 and is published for Scala 2.12, 2.13, and 3.0.0-M2 as well.
+
+### Changes From 2.3.0
+
+- #3696 Add `ApplicativeThrow` and `MonadThrow` to cats package object (from cats-effect) (@agustafson)
+- #3698 Add addLeft/addRight for Ior (@keirlawson)
+- #3639 Created documentation for monaderror, merged it with applicative error (@dhinojosa)
+- #3402 Simplify FunctionK.lift macro (@joroKr21)
+- #3708 Use as rather than map and discard (@johnynek)
+
+## Version 2.3.0
+
+_2020 November 26_
+
+Welcome to the first stable release of Cats on Scala 3… milestone 2! We will continue releasing minor versions within the 2.3.x lineage against Scala 3.0.0 until it reaches a final stable release. The decision to push a stable release of Cats in advance of this date was made in order to simplify versioning within the downstream ecosystem.
+
+### Changes From 2.2.0
+
+- #3673 – tweak Band impl so it can more easily be combined with Monoid in a single instance (@Dwolla)
+- #3609 – A new dedicated cats ecosystem page (@benkio)
+- #3630 – FunctionK: methods to narrow input / widen output types (@bplommer)
+- #3620, #3624 – Typeclass instances for `immutable.Seq` (@JosephMoniz)
+- #3603 – Add method `distinct` to TraverseFilter (@takayahilton)
+
+## Version 2.3.0-M2
+
+_2020 November 6_ 🍂
+
+Added support for Scala/Dotty 3.0.0-M1.
+
+### Other improvements
+
+* #3661 fix typo in Scaladoc by @fixxer 
+* #3666, #3667 add `simulacrum-scalafix-annotations` to the classpath, build for 3.0.0-M1 by @djspiewak
+
+## Version 2.3.0-M1
+
+_2020 October 31_ 🎃
+
+The purpose of this milestone is that adventurous users can try out first-class Dotty support before we cut a final 2.3.0 release. Note that for the Dotty builds, binary compatibility between this milestone release and 2.3.0 may break in some situations. Also, if you are using the laws, sbt may complain about conflicting Scala version suffixes. This will be fixed in time for the final release.
+
+### Changes & additions
+
+* #3603 `distinct` for `TraverseFilter` by @takayahilton
+* #3620, #3624 instances for `immutable.Seq` by @JosephMoniz
+* #3630 methods to narrow input/widen output types on `FunctionK` by @bplommer
+* #3636 Dotty support by @LukaJCB and @larsrh
+* #3647 `traverseTap` by @majk-p
+* #3648 add a law relating `defer` and `fix` in `Defer` by @johnynek
+
+### Other improvements
+
+* #3373 test for `zipWithIndex` stack safety by @dantb
+* #3595 migrate from tut to mdoc by @keynmol
+* #3608 document `scalafixAll` to migrate test code as well by @bjaglin
+* #3609 Cats ecosystem website by @benkio
+* #3616 documentation on `ApplicativeError` by @dhinojosa
+* #3616 documentation on `Writer` and `WriterT` by @benkio
+
+## Version 2.2.0
+
+_2020 September 3_
+
+### 3 API / feature enhancements
+
+* [#3566](https://github.com/typelevel/cats/pull/3566) Scalafix rule to remove instance imports when upgrading to 2.2.0  by @cb372
+* [#3579](https://github.com/typelevel/cats/pull/3579) Add `toValidated` to TrySyntax  by @gagandeepkalra
+* [#3576](https://github.com/typelevel/cats/pull/3576) Remove unused private method  by @takayahilton
+
+### 3 documentation improvements
+
+* [#3586](https://github.com/typelevel/cats/pull/3586) Fix typo in FoldableTests (constistency -> consistency)  by @tmccarthy
+* [#3581](https://github.com/typelevel/cats/pull/3581) Add monix-bio to related projects  by @Avasil
+* [#3580](https://github.com/typelevel/cats/pull/3580) Add Parallel typeclass diagram to docs.  by @izeigerman
+
+### 5 build improvements
+
+* [#3591](https://github.com/typelevel/cats/pull/3591) Update sbt-scalafix to 0.9.20  by @scala-steward
+* [#3589](https://github.com/typelevel/cats/pull/3589) Update discipline-munit to 0.2.4  by @scala-steward
+* [#3588](https://github.com/typelevel/cats/pull/3588) Update munit-scalacheck to 0.7.12  by @scala-steward
+* [#3585](https://github.com/typelevel/cats/pull/3585) Update sbt-dotty to 0.4.2  by @scala-steward
+* [#3578](https://github.com/typelevel/cats/pull/3578) Update discipline-scalatest to 2.0.1  by @scala-steward
+
+## Version 2.2.0-RC4
+
+_2020 August 21_
+
+### 2 API / feature enhancements
+
+* [#3572](https://github.com/typelevel/cats/pull/3572) Add Future instances to implicit scope  by @travisbrown
+* [#3573](https://github.com/typelevel/cats/pull/3573) Avoid all evaluation of NonEmptyLazyList#reduceRightTo  by @takayahilton
+
+### 2 documentation improvements
+
+* [#3575](https://github.com/typelevel/cats/pull/3575) Missing a "]" in CONTRIBUTING.md  by @benkio
+* [#3574](https://github.com/typelevel/cats/pull/3574) Update README.md  by @diesalbla
+
+
+## Version 2.2.0-RC3
+
+_2020 August 15_
+
+### 1 bug fix
+
+* [#3565](https://github.com/typelevel/cats/pull/3565) Fix ReducibleLaws causing stack overflow by calling `Eval.now` early  by @bastewart
+
+
+### 15 API / feature enhancements
+
+* [#3569](https://github.com/typelevel/cats/pull/3569) Change AndThen to directly check isRightAssociated  by @johnynek
+* [#3567](https://github.com/typelevel/cats/pull/3567) Avoid all evaluation of LazyList#foldRightDefer  by @takayahilton
+* [#3560](https://github.com/typelevel/cats/pull/3560) Improve AndThen use of Single  by @johnynek
+* [#3553](https://github.com/typelevel/cats/pull/3553) add ifElseM  by @mtomko
+* [#3556](https://github.com/typelevel/cats/pull/3556) Order for writert  by @TimWSpence
+* [#3527](https://github.com/typelevel/cats/pull/3527) Add toRightAssociated to AndThen  by @johnynek
+* [#3555](https://github.com/typelevel/cats/pull/3555) Order for IorT  by @TimWSpence
+* [#3554](https://github.com/typelevel/cats/pull/3554) Order for Ior  by @TimWSpence
+* [#3540](https://github.com/typelevel/cats/pull/3540) Remove traverseForEither in Traverse companion object  by @LukaJCB
+* [#3549](https://github.com/typelevel/cats/pull/3549) Enable breakout in Reducible[NonEmptyVector].reduceMapA  by @takayahilton
+* [#3545](https://github.com/typelevel/cats/pull/3545) Enable breakout in functions nonEmptyTraverse_ and nonEmptySequence_  by @takayahilton
+* [#3533](https://github.com/typelevel/cats/pull/3533) Improve invariants and performance in Chain  by @johnynek
+* [#3535](https://github.com/typelevel/cats/pull/3535) Improve traverseViaChain API  by @johnynek
+* [#3538](https://github.com/typelevel/cats/pull/3538) Preliminary Munit port  by @LukaJCB
+* [#3528](https://github.com/typelevel/cats/pull/3528) Optimize toNonEmptyList of Reducible[NonEmptyChain]  by @takayahilton
+
+
+### 4 documentation improvements
+
+* [#3562](https://github.com/typelevel/cats/pull/3562) Comments on NonEmptyReducible not being a typeclass  by @akopich
+* [#3537](https://github.com/typelevel/cats/pull/3537) add coulomb-cats to ecosystem list  by @erikerlandson
+* [#3531](https://github.com/typelevel/cats/pull/3531) adding Hootsuite Inc. to the list of Adopters  by @jyoo980
+* [#3526](https://github.com/typelevel/cats/pull/3526) Update README.md  by @Immozentral
+
+
+### 11 build improvements
+
+* [#3564](https://github.com/typelevel/cats/pull/3564) Remove redundant parentheses  by @barambani
+* [#3561](https://github.com/typelevel/cats/pull/3561) Update munit-scalacheck to 0.7.11  by @scala-steward
+* [#3558](https://github.com/typelevel/cats/pull/3558) Update sbt-doctest to 0.9.7  by @scala-steward
+* [#3557](https://github.com/typelevel/cats/pull/3557) Update sbt-buildinfo to 0.10.0  by @scala-steward
+* [#3546](https://github.com/typelevel/cats/pull/3546) Fix alleycats-tests on Scala.js  by @joroKr21
+* [#3548](https://github.com/typelevel/cats/pull/3548) Test freeJS with FastOptStage to save some CO2  by @joroKr21
+* [#3544](https://github.com/typelevel/cats/pull/3544) Scala 2.12.3 and 2.12.12  by @barambani
+* [#3543](https://github.com/typelevel/cats/pull/3543) Update discipline-munit to 0.2.3  by @scala-steward
+* [#3542](https://github.com/typelevel/cats/pull/3542) Update sbt-scalafmt to 2.4.2  by @scala-steward
+* [#3539](https://github.com/typelevel/cats/pull/3539) Update discipline-core to 1.0.3  by @scala-steward
+* [#3530](https://github.com/typelevel/cats/pull/3530) Update discipline-scalatest to 2.0.0  by @scala-steward
+
+
+## Version 2.2.0-RC2
+
+_2020 July 21
+
+### 7 API / feature enhancements
+
+* [#3524](https://github.com/typelevel/cats/pull/3524) A method `StateT.fromState` turning `State[A, F[B]]` into `StateT[F,A, B]` is added.  by @akopich
+* [#3498](https://github.com/typelevel/cats/pull/3498) Enable breakout in functions reduceRightToOption and reduceRightTo.  by @takayahilton
+* [#3519](https://github.com/typelevel/cats/pull/3519) remove casts from Eval, fix stack overflow in Eval  by @johnynek
+* [#3521](https://github.com/typelevel/cats/pull/3521) make collection traversals stack safe  by @johnynek
+* [#3516](https://github.com/typelevel/cats/pull/3516) Override some Option Apply/Applicative methods  by @johnynek
+* [#3518](https://github.com/typelevel/cats/pull/3518) remove some casts in AndThen  by @johnynek
+* [#3515](https://github.com/typelevel/cats/pull/3515) Add some more implementations to Function0 and Function1 Monads  by @johnynek
+
+
+### 3 build improvements
+
+* [#3525](https://github.com/typelevel/cats/pull/3525) Update scalafmt-core to 2.6.4  by @scala-steward
+* [#3520](https://github.com/typelevel/cats/pull/3520) Update sbt-scalafix to 0.9.19  by @scala-steward
+* [#3514](https://github.com/typelevel/cats/pull/3514) Scalafmt-core 2.6.3  by @barambani
+
+
 ## Version 2.2.0-RC1
 
 _2020 July 6_

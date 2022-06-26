@@ -1,8 +1,29 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats.kernel
 package instances
 
 trait ByteInstances {
-  implicit val catsKernelStdOrderForByte: Order[Byte] with Hash[Byte] with LowerBounded[Byte] with UpperBounded[Byte] =
+  implicit val catsKernelStdOrderForByte: Order[Byte] with Hash[Byte] with BoundedEnumerable[Byte] =
     new ByteOrder
   implicit val catsKernelStdGroupForByte: CommutativeGroup[Byte] = new ByteGroup
 }
@@ -14,12 +35,19 @@ class ByteGroup extends CommutativeGroup[Byte] {
   override def remove(x: Byte, y: Byte): Byte = (x - y).toByte
 }
 
+trait ByteEnumerable extends BoundedEnumerable[Byte] {
+  override def partialNext(a: Byte): Option[Byte] =
+    if (order.eqv(a, maxBound)) None else Some((a + 1).toByte)
+  override def partialPrevious(a: Byte): Option[Byte] =
+    if (order.eqv(a, minBound)) None else Some((a - 1).toByte)
+}
+
 trait ByteBounded extends LowerBounded[Byte] with UpperBounded[Byte] {
   override def minBound: Byte = Byte.MinValue
   override def maxBound: Byte = Byte.MaxValue
 }
 
-class ByteOrder extends Order[Byte] with Hash[Byte] with ByteBounded { self =>
+class ByteOrder extends Order[Byte] with Hash[Byte] with ByteBounded with ByteEnumerable { self =>
 
   def hash(x: Byte): Int = x.hashCode()
 
@@ -38,5 +66,5 @@ class ByteOrder extends Order[Byte] with Hash[Byte] with ByteBounded { self =>
   override def max(x: Byte, y: Byte): Byte =
     java.lang.Math.max(x.toInt, y.toInt).toByte
 
-  override val partialOrder: PartialOrder[Byte] = self
+  override val order: Order[Byte] = self
 }

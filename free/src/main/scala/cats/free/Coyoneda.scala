@@ -1,7 +1,29 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 package free
 
 import cats.arrow.FunctionK
+import cats.data.AndThen
 
 /**
  * The dual view of the Yoneda lemma. The free functor on `F`.
@@ -23,16 +45,11 @@ sealed abstract class Coyoneda[F[_], A] extends Serializable { self =>
   val fi: F[Pivot]
 
   /**
-   * The list of transformer functions, to be composed and lifted into `F` by `run`.
-   */
-  private[cats] val ks: List[Any => Any]
-
-  /**
    * The list of transformer functions composed into a single function, to be lifted into `F` by `run`.
    */
-  final def k: Pivot => A = Function.chain(ks.reverse)(_).asInstanceOf[A]
+  def k: Pivot => A
 
-  import Coyoneda.{unsafeApply, Aux}
+  import Coyoneda.Aux
 
   /**
    * Converts to `F[A]` given that `F` is a functor
@@ -58,13 +75,13 @@ sealed abstract class Coyoneda[F[_], A] extends Serializable { self =>
    * the underlying `F`.
    */
   final def map[B](f: A => B): Aux[F, B, Pivot] =
-    unsafeApply(fi)(f.asInstanceOf[Any => Any] :: ks)
+    Coyoneda(fi)(AndThen(k).andThen(f))
 
   /**
    * Modify the context `F` using transformation `f`.
    */
   final def mapK[G[_]](f: F ~> G): Aux[G, A, Pivot] =
-    unsafeApply(f(fi))(ks)
+    Coyoneda(f(fi))(k)
 
   @deprecated("Use mapK", "1.0.0-RC2")
   final private[free] def transform[G[_]](f: FunctionK[F, G]): Aux[G, A, Pivot] =
@@ -83,22 +100,15 @@ object Coyoneda {
   /**
    * `F[A]` converts to `Coyoneda[F,A]` for any `F`
    */
-  def lift[F[_], A](fa: F[A]): Coyoneda[F, A] = apply(fa)(identity[A])
+  def lift[F[_], A](fa: F[A]): Aux[F, A, A] = apply(fa)(identity[A])
 
   /**
    * Like `lift(fa).map(k0)`.
    */
   def apply[F[_], A, B](fa: F[A])(k0: A => B): Aux[F, B, A] =
-    unsafeApply(fa)(k0.asInstanceOf[Any => Any] :: Nil)
-
-  /**
-   * Creates a `Coyoneda[F, A]` for any `F`, taking an `F[A]`
-   * and a list of [[Functor.map]]ped functions to apply later
-   */
-  private[cats] def unsafeApply[F[_], A, B](fa: F[A])(ks0: List[Any => Any]): Aux[F, B, A] =
     new Coyoneda[F, B] {
       type Pivot = A
-      val ks = ks0
+      val k = k0
       val fi = fa
     }
 

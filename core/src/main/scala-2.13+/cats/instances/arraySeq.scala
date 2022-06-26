@@ -1,7 +1,28 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 package instances
 
-import cats.data.Ior
+import cats.data.{Chain, Ior}
 import scala.annotation.tailrec
 import scala.collection.immutable.ArraySeq
 import scala.collection.mutable.Builder
@@ -33,6 +54,12 @@ private[cats] object ArraySeqInstances {
 
       def combineK[A](xs: ArraySeq[A], ys: ArraySeq[A]): ArraySeq[A] =
         xs.concat(ys)
+
+      override def fromIterableOnce[A](as: IterableOnce[A]): ArraySeq[A] = ArraySeq.untagged.from(as)
+
+      override def prependK[A](a: A, fa: ArraySeq[A]): ArraySeq[A] = fa.prepended(a)
+
+      override def appendK[A](fa: ArraySeq[A], a: A): ArraySeq[A] = fa.appended(a)
 
       override def algebra[A]: Monoid[ArraySeq[A]] =
         new cats.kernel.instances.ArraySeqInstances.ArraySeqMonoid
@@ -76,12 +103,11 @@ private[cats] object ArraySeqInstances {
       override def foldMap[A, B](fa: ArraySeq[A])(f: A => B)(implicit B: Monoid[B]): B =
         B.combineAll(fa.iterator.map(f))
 
-      def traverse[G[_], A, B](fa: ArraySeq[A])(f: A => G[B])(implicit G: Applicative[G]): G[ArraySeq[B]] = {
-        def loop(i: Int): Eval[G[ArraySeq[B]]] =
-          if (i < fa.length) G.map2Eval(f(fa(i)), Eval.defer(loop(i + 1)))(_ +: _)
-          else Eval.now(G.pure(ArraySeq.untagged.empty))
-        loop(0).value
-      }
+      def traverse[G[_], A, B](fa: ArraySeq[A])(f: A => G[B])(implicit G: Applicative[G]): G[ArraySeq[B]] =
+        G.map(Chain.traverseViaChain(fa)(f))(_.iterator.to(ArraySeq.untagged))
+
+      override def mapAccumulate[S, A, B](init: S, fa: ArraySeq[A])(f: (S, A) => (S, B)): (S, ArraySeq[B]) =
+        StaticMethods.mapAccumulateFromStrictFunctor(init, fa, f)(this)
 
       override def mapWithIndex[A, B](fa: ArraySeq[A])(f: (A, Int) => B): ArraySeq[B] =
         ArraySeq.untagged.tabulate(n = fa.length) { i =>
@@ -100,7 +126,7 @@ private[cats] object ArraySeqInstances {
             case h :: tail if h.isEmpty =>
               loop(state = tail)
             case h :: tail =>
-              h.next match {
+              h.next() match {
                 case Right(b) =>
                   buf += b
                   loop(state)
@@ -129,10 +155,9 @@ private[cats] object ArraySeqInstances {
         fa.isEmpty
 
       override def foldM[G[_], A, B](fa: ArraySeq[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] =
-        G.tailRecM((z, 0)) {
-          case (b, i) =>
-            if (i < fa.length) G.map(f(b, fa(i)))(b => Left((b, i + 1)))
-            else G.pure(Right(b))
+        G.tailRecM((z, 0)) { case (b, i) =>
+          if (i < fa.length) G.map(f(b, fa(i)))(b => Left((b, i + 1)))
+          else G.pure(Right(b))
         }
 
       override def fold[A](fa: ArraySeq[A])(implicit A: Monoid[A]): A =
@@ -191,15 +216,13 @@ private[cats] object ArraySeqInstances {
       def traverseFilter[G[_], A, B](
         fa: ArraySeq[A]
       )(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[ArraySeq[B]] =
-        fa.foldRight(Eval.now(G.pure(ArraySeq.untagged.empty[B]))) {
-          case (x, xse) =>
-            G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o))
+        fa.foldRight(Eval.now(G.pure(ArraySeq.untagged.empty[B]))) { case (x, xse) =>
+          G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o))
         }.value
 
       override def filterA[G[_], A](fa: ArraySeq[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[ArraySeq[A]] =
-        fa.foldRight(Eval.now(G.pure(ArraySeq.untagged.empty[A]))) {
-          case (x, xse) =>
-            G.map2Eval(f(x), xse)((b, vec) => if (b) x +: vec else vec)
+        fa.foldRight(Eval.now(G.pure(ArraySeq.untagged.empty[A]))) { case (x, xse) =>
+          G.map2Eval(f(x), xse)((b, vec) => if (b) x +: vec else vec)
         }.value
     }
 }

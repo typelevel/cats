@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 package arrow
 
@@ -59,6 +80,16 @@ trait FunctionK[F[_], G[_]] extends Serializable { self =>
    */
   def and[H[_]](h: FunctionK[F, H]): FunctionK[F, Tuple2K[G, H, *]] =
     new FunctionK[F, Tuple2K[G, H, *]] { def apply[A](fa: F[A]): Tuple2K[G, H, A] = Tuple2K(self(fa), h(fa)) }
+
+  /**
+   * Widens the output type of this `FunctionK` from `G` to `G0`
+   */
+  def widen[G0[x] >: G[x]]: FunctionK[F, G0] = this.asInstanceOf[FunctionK[F, G0]]
+
+  /**
+   * Narrows the input type of this `FunctionK` from `F` to `F0`
+   */
+  def narrow[F0[x] <: F[x]]: FunctionK[F0, G] = this.asInstanceOf[FunctionK[F0, G]]
 }
 
 object FunctionK extends FunctionKMacroMethods {
@@ -67,5 +98,4 @@ object FunctionK extends FunctionKMacroMethods {
    * The identity transformation of `F` to `F`
    */
   def id[F[_]]: FunctionK[F, F] = new FunctionK[F, F] { def apply[A](fa: F[A]): F[A] = fa }
-
 }

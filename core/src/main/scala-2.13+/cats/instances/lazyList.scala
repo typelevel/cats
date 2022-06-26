@@ -1,13 +1,36 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 package instances
 
 import cats.kernel
+import cats.kernel.compat.scalaVersionSpecific._
 import cats.syntax.show._
 import cats.data.Ior
 import cats.data.ZipLazyList
 
 import scala.annotation.tailrec
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 trait LazyListInstances extends cats.kernel.instances.LazyListInstances {
 
   implicit val catsStdInstancesForLazyList
@@ -21,6 +44,17 @@ trait LazyListInstances extends cats.kernel.instances.LazyListInstances {
       def empty[A]: LazyList[A] = LazyList.empty
 
       def combineK[A](x: LazyList[A], y: LazyList[A]): LazyList[A] = x.lazyAppendedAll(y)
+
+      override def combineAllOptionK[A](as: IterableOnce[LazyList[A]]): Option[LazyList[A]] = {
+        val iter = as.iterator
+        if (iter.isEmpty) None else Some(LazyList.from(iter.flatMap(_.iterator)))
+      }
+
+      override def fromIterableOnce[A](as: IterableOnce[A]): LazyList[A] = LazyList.from(as)
+
+      override def prependK[A](a: A, fa: LazyList[A]): LazyList[A] = fa.prepended(a)
+
+      override def appendK[A](fa: LazyList[A], a: A): LazyList[A] = fa.appended(a)
 
       def pure[A](x: A): LazyList[A] = LazyList(x)
 
@@ -72,7 +106,7 @@ trait LazyListInstances extends cats.kernel.instances.LazyListInstances {
         val kernel = Iterator.unfold[Option[B], Iterator[Either[A, B]]](Iterator(Left(a))) { it =>
           if (!it.hasNext) None
           else
-            it.next match {
+            it.next() match {
               case Left(a)  => Some((None, fn(a).iterator ++ it))
               case Right(b) => Some((Some(b), it))
             }

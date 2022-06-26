@@ -1,7 +1,30 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 package instances
 
 import cats.data.{Chain, ZipVector}
+import cats.instances.StaticMethods.appendAll
+import cats.kernel.compat.scalaVersionSpecific._
 import cats.syntax.show._
 
 import scala.annotation.tailrec
@@ -17,6 +40,18 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
       def empty[A]: Vector[A] = Vector.empty[A]
 
       def combineK[A](x: Vector[A], y: Vector[A]): Vector[A] = x ++ y
+
+      override def combineAllOptionK[A](as: IterableOnce[Vector[A]]): Option[Vector[A]] = {
+        val iter = as.iterator
+        if (iter.isEmpty) None else Some(appendAll(iter, Vector.newBuilder[A]).result())
+      }
+
+      override def fromIterableOnce[A](as: IterableOnce[A]): Vector[A] =
+        as.iterator.toVector
+
+      override def prependK[A](a: A, fa: Vector[A]): Vector[A] = a +: fa
+
+      override def appendK[A](fa: Vector[A], a: A): Vector[A] = fa :+ a
 
       def pure[A](x: A): Vector[A] = Vector(x)
 
@@ -68,7 +103,7 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
               state = tail
               loop()
             case h :: tail =>
-              h.next match {
+              h.next() match {
                 case Right(b) =>
                   buf += b
                   loop()
@@ -78,7 +113,7 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
               }
           }
         loop()
-        buf.result
+        buf.result()
       }
 
       override def size[A](fa: Vector[A]): Long = fa.size.toLong
@@ -93,55 +128,51 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
       }
 
       final override def traverse[G[_], A, B](fa: Vector[A])(f: A => G[B])(implicit G: Applicative[G]): G[Vector[B]] =
-        if (fa.isEmpty) G.pure(empty)
-        else {
-          // this is a specialized version of Chain.traverseViaChain since
-          // we don't need to materialize the Vector first
+        G.map(Chain.traverseViaChain(fa)(f))(_.toVector)
 
-          // we branch out by this factor
-          val width = 128
-          // By making a tree here we don't blow the stack
-          // even if the List is very long
-          // by construction, this is never called with start == end
-          def loop(start: Int, end: Int): Eval[G[Chain[B]]] =
-            if (end - start <= width) {
-              // Here we are at the leafs of the trees
-              // we don't use map2Eval since it is always
-              // at most width in size.
-              val aend = fa(end - 1)
-              var flist = Eval.later(G.map(f(aend))(_ :: Nil))
-              var idx = end - 2
-              while (start <= idx) {
-                val a = fa(idx)
-                // don't capture a var in the defer
-                val right = flist
-                flist = Eval.defer(G.map2Eval(f(a), right)(_ :: _))
-                idx = idx - 1
+      /**
+       * This avoids making a very deep stack by building a tree instead
+       */
+      override def traverse_[G[_], A, B](fa: Vector[A])(f: A => G[B])(implicit G: Applicative[G]): G[Unit] = {
+        // the cost of this is O(size)
+        // c(n) = 1 + 2 * c(n/2)
+        // invariant: size >= 1
+        def runHalf(size: Int, idx: Int): Eval[G[Unit]] =
+          if (size > 1) {
+            val leftSize = size / 2
+            val rightSize = size - leftSize
+            runHalf(leftSize, idx)
+              .flatMap { left =>
+                val right = runHalf(rightSize, idx + leftSize)
+                G.map2Eval(left, right) { (_, _) => () }
               }
-              flist.map { glist => G.map(glist)(Chain.fromSeq(_)) }
-            } else {
-              // we have width + 1 or more nodes left
-              val step = (end - start) / width
-
-              var fchain = Eval.defer(loop(start, start + step))
-              var start0 = start + step
-              var end0 = start0 + step
-
-              while (start0 < end) {
-                val end1 = math.min(end, end0)
-                val right = loop(start0, end1)
-                fchain = fchain.flatMap(G.map2Eval(_, right)(_.concat(_)))
-                start0 = start0 + step
-                end0 = end0 + step
-              }
-              fchain
+          } else {
+            val a = fa(idx)
+            // we evaluate this at most one time,
+            // always is a bit cheaper in such cases
+            //
+            // Here is the point of the laziness using Eval:
+            // we avoid calling f(a) or G.void in the
+            // event that the computation has already
+            // failed. We do not use laziness to avoid
+            // traversing fa, which we will do fully
+            // in all cases.
+            Eval.always {
+              val gb = f(a)
+              G.void(gb)
             }
+          }
 
-          G.map(loop(0, fa.size).value)(_.toVector)
-        }
+        val len = fa.length
+        if (len == 0) G.unit
+        else runHalf(len, 0).value
+      }
+
+      override def mapAccumulate[S, A, B](init: S, fa: Vector[A])(f: (S, A) => (S, B)): (S, Vector[B]) =
+        StaticMethods.mapAccumulateFromStrictFunctor(init, fa, f)(this)
 
       override def mapWithIndex[A, B](fa: Vector[A])(f: (A, Int) => B): Vector[B] =
-        fa.iterator.zipWithIndex.map(ai => f(ai._1, ai._2)).toVector
+        StaticMethods.mapWithIndexFromStrictFunctor(fa, f)(this)
 
       override def zipWithIndex[A](fa: Vector[A]): Vector[(A, Int)] =
         fa.zipWithIndex
@@ -149,20 +180,22 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
       override def exists[A](fa: Vector[A])(p: A => Boolean): Boolean =
         fa.exists(p)
 
-      override def isEmpty[A](fa: Vector[A]): Boolean = fa.isEmpty
+      override def isEmpty[A](fa: Vector[A]): Boolean =
+        fa.isEmpty
 
       override def foldM[G[_], A, B](fa: Vector[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] = {
         val length = fa.length
-        G.tailRecM((z, 0)) {
-          case (b, i) =>
-            if (i < length) G.map(f(b, fa(i)))(b => Left((b, i + 1)))
-            else G.pure(Right(b))
+        G.tailRecM((z, 0)) { case (b, i) =>
+          if (i < length) G.map(f(b, fa(i)))(b => Left((b, i + 1)))
+          else G.pure(Right(b))
         }
       }
 
       override def fold[A](fa: Vector[A])(implicit A: Monoid[A]): A = A.combineAll(fa)
 
       override def toList[A](fa: Vector[A]): List[A] = fa.toList
+
+      override def toIterable[A](fa: Vector[A]): Iterable[A] = fa
 
       override def reduceLeftOption[A](fa: Vector[A])(f: (A, A) => A): Option[A] =
         fa.reduceLeftOption(f)
@@ -209,6 +242,7 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
     }
 }
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 private[instances] trait VectorInstancesBinCompat0 {
   implicit val catsStdTraverseFilterForVector: TraverseFilter[Vector] = new TraverseFilter[Vector] {
     val traverse: Traverse[Vector] = cats.instances.vector.catsStdInstancesForVector
@@ -225,55 +259,7 @@ private[instances] trait VectorInstancesBinCompat0 {
     override def flattenOption[A](fa: Vector[Option[A]]): Vector[A] = fa.flatten
 
     def traverseFilter[G[_], A, B](fa: Vector[A])(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[Vector[B]] =
-      if (fa.isEmpty) G.pure(Vector.empty[B])
-      else {
-        // we branch out by this factor
-        val width = 128
-        // By making a tree here we don't blow the stack
-        // even if the List is very long
-        // by construction, this is never called with start == end
-        def loop(start: Int, end: Int): Eval[G[Chain[B]]] =
-          if (end - start <= width) {
-            // Here we are at the leafs of the trees
-            // we don't use map2Eval since it is always
-            // at most width in size.
-            val aend = fa(end - 1)
-            var flist = Eval.later(G.map(f(aend)) { optB =>
-              if (optB.isDefined) optB.get :: Nil
-              else Nil
-            })
-            var idx = end - 2
-            while (start <= idx) {
-              val a = fa(idx)
-              // don't capture a var in the defer
-              val right = flist
-              flist = Eval.defer(G.map2Eval(f(a), right) { (optB, tail) =>
-                if (optB.isDefined) optB.get :: tail
-                else tail
-              })
-              idx = idx - 1
-            }
-            flist.map { glist => G.map(glist)(Chain.fromSeq(_)) }
-          } else {
-            // we have width + 1 or more nodes left
-            val step = (end - start) / width
-
-            var fchain = Eval.defer(loop(start, start + step))
-            var start0 = start + step
-            var end0 = start0 + step
-
-            while (start0 < end) {
-              val end1 = math.min(end, end0)
-              val right = loop(start0, end1)
-              fchain = fchain.flatMap(G.map2Eval(_, right)(_.concat(_)))
-              start0 = start0 + step
-              end0 = end0 + step
-            }
-            fchain
-          }
-
-        G.map(loop(0, fa.size).value)(_.toVector)
-      }
+      G.map(Chain.traverseFilterViaChain(fa)(f))(_.toVector)
 
     override def filterA[G[_], A](fa: Vector[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[Vector[A]] =
       traverse

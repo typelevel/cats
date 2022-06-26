@@ -1,11 +1,30 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 
 import scala.collection.mutable
 import cats.kernel.CommutativeMonoid
-import simulacrum.{noop, typeclass}
-import Foldable.{sentinel, Source}
 
-import scala.annotation.implicitNotFound
+import Foldable.{sentinel, Source}
 
 /**
  * Data structures that can be folded to a summary value.
@@ -29,8 +48,7 @@ import scala.annotation.implicitNotFound
  *
  * See: [[http://www.cs.nott.ac.uk/~pszgmh/fold.pdf A tutorial on the universality and expressiveness of fold]]
  */
-@implicitNotFound("Could not find an instance of Foldable for ${F}")
-@typeclass trait Foldable[F[_]] extends UnorderedFoldable[F] { self =>
+trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { self =>
 
   /**
    * Left associative fold on 'F' using the function 'f'.
@@ -97,12 +115,15 @@ import scala.annotation.implicitNotFound
    */
   def foldRight[A, B](fa: F[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B]
 
-  def foldRightDefer[G[_]: Defer, A, B](fa: F[A], gb: G[B])(fn: (A, G[B]) => G[B]): G[B] =
-    Defer[G].defer(
-      foldLeft(fa, (z: G[B]) => z) { (acc, elem) => z =>
-        Defer[G].defer(acc(fn(elem, z)))
-      }(gb)
-    )
+  def foldRightDefer[G[_]: Defer, A, B](fa: F[A], gb: G[B])(fn: (A, G[B]) => G[B]): G[B] = {
+    def loop(source: Source[A]): G[B] = {
+      source.uncons match {
+        case Some((next, s)) => fn(next, Defer[G].defer(loop(s.value)))
+        case None            => gb
+      }
+    }
+    Defer[G].defer(loop(Source.fromFoldable(fa)(self)))
+  }
 
   def reduceLeftToOption[A, B](fa: F[A])(f: A => B)(g: (B, A) => B): Option[B] =
     foldLeft(fa, Option.empty[B]) {
@@ -237,6 +258,68 @@ import scala.annotation.implicitNotFound
     maximumOption(fa)(Order.by(f))
 
   /**
+   * Find all the minimum `A` items in this structure.
+   * For all elements in the result Order.eqv(x, y) is true. Preserves order.
+   *
+   * @see [[Reducible#minimumNel]] for a version that doesn't need to return an
+   * `Option` for structures that are guaranteed to be non-empty.
+   *
+   * @see [[maximumList]] for maximum instead of minimum.
+   */
+  def minimumList[A](fa: F[A])(implicit A: Order[A]): List[A] =
+    foldLeft(fa, List.empty[A]) {
+      case (l @ (b :: _), a) if A.compare(a, b) > 0  => l
+      case (l @ (b :: _), a) if A.compare(a, b) == 0 => a :: l
+      case (_, a)                                    => a :: Nil
+    }.reverse
+
+  /**
+   * Find all the maximum `A` items in this structure.
+   * For all elements in the result Order.eqv(x, y) is true. Preserves order.
+   *
+   * @see [[Reducible#maximumNel]] for a version that doesn't need to return an
+   * `Option` for structures that are guaranteed to be non-empty.
+   *
+   * @see [[minimumList]] for minimum instead of maximum.
+   */
+  def maximumList[A](fa: F[A])(implicit A: Order[A]): List[A] =
+    foldLeft(fa, List.empty[A]) {
+      case (l @ (b :: _), a) if A.compare(a, b) < 0  => l
+      case (l @ (b :: _), a) if A.compare(a, b) == 0 => a :: l
+      case (_, a)                                    => a :: Nil
+    }.reverse
+
+  /**
+   * Find all the minimum `A` items in this structure according to an `Order.by(f)`.
+   * For all elements in the result Order.eqv(x, y) is true. Preserves order.
+   *
+   * @see [[Reducible#minimumByNel]] for a version that doesn't need to return an
+   * `Option` for structures that are guaranteed to be non-empty.
+   *
+   * @see [[maximumByList]] for maximum instead of minimum.
+   */
+  def minimumByList[A, B: Order](fa: F[A])(f: A => B): List[A] =
+    minimumList(fa)(Order.by(f))
+
+  /**
+   * Find all the maximum `A` items in this structure according to an `Order.by(f)`.
+   * For all elements in the result Order.eqv(x, y) is true. Preserves order.
+   *
+   * @see [[Reducible#maximumByNel]] for a version that doesn't need to return an
+   * `Option` for structures that are guaranteed to be non-empty.
+   *
+   * @see [[minimumByList]] for minimum instead of maximum.
+   */
+  def maximumByList[A, B: Order](fa: F[A])(f: A => B): List[A] =
+    maximumList(fa)(Order.by(f))
+
+  def sumAll[A](fa: F[A])(implicit A: Numeric[A]): A =
+    foldLeft(fa, A.zero)(A.plus)
+
+  def productAll[A](fa: F[A])(implicit A: Numeric[A]): A =
+    foldLeft(fa, A.one)(A.times)
+
+  /**
    * Get the element at the index of the `Foldable`.
    */
   def get[A](fa: F[A])(idx: Long): Option[A] =
@@ -271,11 +354,11 @@ import scala.annotation.implicitNotFound
    * res1: Option[String] = None
    * }}}
    */
-  def collectFirstSome[A, B](fa: F[A])(f: A => Option[B]): Option[B] =
-    foldRight(fa, Eval.now(Option.empty[B])) { (a, lb) =>
-      val ob = f(a)
-      if (ob.isDefined) Eval.now(ob) else lb
-    }.value
+  def collectFirstSome[A, B](fa: F[A])(f: A => Option[B]): Option[B] = {
+    val maybeEmpty = toIterable(fa).iterator.map(f).dropWhile(_.isEmpty)
+    if (maybeEmpty.hasNext) maybeEmpty.next()
+    else None
+  }
 
   /**
    * Monadic version of `collectFirstSome`.
@@ -305,7 +388,7 @@ import scala.annotation.implicitNotFound
    * res3: scala.util.Either[String,Option[String]] = Right(Some(Four))
    * }}}
    */
-  @noop
+
   def collectFirstSomeM[G[_], A, B](fa: F[A])(f: A => G[Option[B]])(implicit G: Monad[G]): G[Option[B]] =
     G.tailRecM(Foldable.Source.fromFoldable(fa)(self))(_.uncons match {
       case Some((a, src)) =>
@@ -325,7 +408,7 @@ import scala.annotation.implicitNotFound
    * res0: Int = 6
    * }}}
    */
-  @noop
+
   def collectFold[A, B](fa: F[A])(f: PartialFunction[A, B])(implicit B: Monoid[B]): B =
     foldLeft(fa, B.empty)((acc, a) => B.combine(acc, f.applyOrElse(a, (_: A) => B.empty)))
 
@@ -392,12 +475,11 @@ import scala.annotation.implicitNotFound
    */
   def foldM[G[_], A, B](fa: F[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] = {
     val src = Foldable.Source.fromFoldable(fa)(self)
-    G.tailRecM((z, src)) {
-      case (b, src) =>
-        src.uncons match {
-          case Some((a, src)) => G.map(f(b, a))(b => Left((b, src.value)))
-          case None           => G.pure(Right(b))
-        }
+    G.tailRecM((z, src)) { case (b, src) =>
+      src.uncons match {
+        case Some((a, src)) => G.map(f(b, a))(b => Left((b, src.value)))
+        case None           => G.pure(Right(b))
+      }
     }
   }
 
@@ -414,10 +496,8 @@ import scala.annotation.implicitNotFound
    * scala> F.foldA(List(Either.right[String, Int](1), Either.right[String, Int](2)))
    * res0: Either[String, Int] = Right(3)
    * }}}
-   *
-   * See [[https://github.com/typelevel/simulacrum/issues/162 this issue]] for an explanation of `@noop` usage.
    */
-  @noop def foldA[G[_], A](fga: F[G[A]])(implicit G: Applicative[G], A: Monoid[A]): G[A] =
+  def foldA[G[_], A](fga: F[G[A]])(implicit G: Applicative[G], A: Monoid[A]): G[A] =
     foldMapA(fga)(identity)
 
   /**
@@ -432,7 +512,7 @@ import scala.annotation.implicitNotFound
    * a: String = "foo321"
    * }}}
    */
-  @noop
+
   def foldMapK[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: MonoidK[G]): G[B] =
     foldRight(fa, Eval.now(G.empty[B])) { (a, evalGb) =>
       G.combineKEval(f(a), evalGb)
@@ -557,9 +637,7 @@ import scala.annotation.implicitNotFound
    * Find the first element matching the predicate, if one exists.
    */
   def find[A](fa: F[A])(f: A => Boolean): Option[A] =
-    foldRight(fa, Now(Option.empty[A])) { (a, lb) =>
-      if (f(a)) Now(Some(a)) else lb
-    }.value
+    toIterable(fa).find(f)
 
   /**
    * Find the first element matching the effectful predicate, if one exists.
@@ -584,7 +662,7 @@ import scala.annotation.implicitNotFound
    * res3: Either[String,Option[Int]] = Left(error)
    * }}}
    */
-  @noop
+
   def findM[G[_], A](fa: F[A])(p: A => G[Boolean])(implicit G: Monad[G]): G[Option[A]] =
     G.tailRecM(Foldable.Source.fromFoldable(fa)(self))(_.uncons match {
       case Some((a, src)) => G.map(p(a))(if (_) Right(Some(a)) else Left(src.value))
@@ -597,9 +675,7 @@ import scala.annotation.implicitNotFound
    * If there are no elements, the result is `false`.
    */
   override def exists[A](fa: F[A])(p: A => Boolean): Boolean =
-    foldRight(fa, Eval.False) { (a, lb) =>
-      if (p(a)) Eval.True else lb
-    }.value
+    toIterable(fa).exists(p)
 
   /**
    * Check whether all elements satisfy the predicate.
@@ -607,9 +683,7 @@ import scala.annotation.implicitNotFound
    * If there are no elements, the result is `true`.
    */
   override def forall[A](fa: F[A])(p: A => Boolean): Boolean =
-    foldRight(fa, Eval.True) { (a, lb) =>
-      if (p(a)) lb else Eval.False
-    }.value
+    toIterable(fa).forall(p)
 
   /**
    * Check whether at least one element satisfies the effectful predicate.
@@ -727,9 +801,7 @@ import scala.annotation.implicitNotFound
    * match `p`.
    */
   def takeWhile_[A](fa: F[A])(p: A => Boolean): List[A] =
-    foldRight(fa, Now(List.empty[A])) { (a, llst) =>
-      if (p(a)) llst.map(a :: _) else Now(Nil)
-    }.value
+    toIterable(fa).iterator.takeWhile(p).toList
 
   /**
    * Convert F[A] to a List[A], dropping all initial elements which
@@ -774,13 +846,13 @@ import scala.annotation.implicitNotFound
     val bld = List.newBuilder[A]
     val it = xs.iterator
     if (it.hasNext) {
-      bld += it.next
+      bld += it.next()
       while (it.hasNext) {
         bld += x
-        bld += it.next
+        bld += it.next()
       }
     }
-    bld.result
+    bld.result()
   }
 
   def compose[G[_]: Foldable]: Foldable[λ[α => F[G[α]]]] =
@@ -807,7 +879,7 @@ import scala.annotation.implicitNotFound
    * res1: (List[Int], List[Nothing with Any]) = (List(1, 2, 3, 4),List())
    * }}}
    */
-  @noop
+
   def partitionBifold[H[_, _], A, B, C](
     fa: F[A]
   )(f: A => H[B, C])(implicit A: Alternative[F], H: Bifoldable[H]): (F[B], F[C]) = {
@@ -833,7 +905,7 @@ import scala.annotation.implicitNotFound
    * res0: Option[(List[Int], List[Nothing with Any])] = Some((List(1, 2, 3, 4),List()))
    * }}}
    */
-  @noop
+
   def partitionBifoldM[G[_], H[_, _], A, B, C](
     fa: F[A]
   )(f: A => G[H[B, C]])(implicit A: Alternative[F], M: Monad[G], H: Bifoldable[H]): G[(F[B], F[C])] = {
@@ -865,7 +937,7 @@ import scala.annotation.implicitNotFound
    * res1: (List[Nothing], List[Int]) = (List(),List(4, 8, 12, 16))
    * }}}
    */
-  @noop
+
   def partitionEitherM[G[_], A, B, C](
     fa: F[A]
   )(f: A => G[Either[B, C]])(implicit A: Alternative[F], M: Monad[G]): G[(F[B], F[C])] = {
@@ -879,7 +951,7 @@ object Foldable {
 
   def iterateRight[A, B](iterable: Iterable[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = {
     def loop(it: Iterator[A]): Eval[B] =
-      Eval.defer(if (it.hasNext) f(it.next, loop(it)) else lb)
+      Eval.defer(if (it.hasNext) f(it.next(), loop(it)) else lb)
 
     Eval.always(iterable.iterator).flatMap(loop)
   }
@@ -919,10 +991,6 @@ object Foldable {
       F.foldRight[A, Source[A]](fa, Now(Empty))((a, evalSrc) => Later(cons(a, evalSrc))).value
   }
 
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
-
   /**
    * Summon an instance of [[Foldable]] for `F`.
    */
@@ -959,12 +1027,18 @@ object Foldable {
       typeClassInstance.minimumByOption[A, B](self)(f)
     def maximumByOption[B](f: A => B)(implicit ev$1: Order[B]): Option[A] =
       typeClassInstance.maximumByOption[A, B](self)(f)
+    def minimumList(implicit A: Order[A]): List[A] = typeClassInstance.minimumList[A](self)(A)
+    def maximumList(implicit A: Order[A]): List[A] = typeClassInstance.maximumList[A](self)(A)
+    def minimumByList[B](f: A => B)(implicit ev$1: Order[B]): List[A] = typeClassInstance.minimumByList[A, B](self)(f)
+    def maximumByList[B](f: A => B)(implicit ev$1: Order[B]): List[A] = typeClassInstance.maximumByList[A, B](self)(f)
     def get(idx: Long): Option[A] = typeClassInstance.get[A](self)(idx)
     def collectFirst[B](pf: PartialFunction[A, B]): Option[B] = typeClassInstance.collectFirst[A, B](self)(pf)
     def collectFirstSome[B](f: A => Option[B]): Option[B] = typeClassInstance.collectFirstSome[A, B](self)(f)
     def collectFoldSome[B](f: A => Option[B])(implicit B: Monoid[B]): B =
       typeClassInstance.collectFoldSome[A, B](self)(f)(B)
     def fold(implicit A: Monoid[A]): A = typeClassInstance.fold[A](self)(A)
+    def sumAll(implicit A: Numeric[A]): A = typeClassInstance.sumAll[A](self)
+    def productAll(implicit A: Numeric[A]): A = typeClassInstance.productAll[A](self)
     def combineAll(implicit ev$1: Monoid[A]): A = typeClassInstance.combineAll[A](self)
     def combineAllOption(implicit ev: Semigroup[A]): Option[A] = typeClassInstance.combineAllOption[A](self)(ev)
     def toIterable: Iterable[A] = typeClassInstance.toIterable[A](self)
@@ -1011,9 +1085,5 @@ object Foldable {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToFoldableOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }

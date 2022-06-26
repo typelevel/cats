@@ -1,7 +1,25 @@
-package cats
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 
-import simulacrum.{noop, typeclass}
-import scala.annotation.implicitNotFound
+package cats
 
 /**
  * Functor.
@@ -10,8 +28,7 @@ import scala.annotation.implicitNotFound
  *
  * Must obey the laws defined in cats.laws.FunctorLaws.
  */
-@implicitNotFound("Could not find an instance of Functor for ${F}")
-@typeclass trait Functor[F[_]] extends Invariant[F] { self =>
+trait Functor[F[_]] extends Invariant[F] { self =>
   def map[A, B](fa: F[A])(f: A => B): F[B]
 
   override def imap[A, B](fa: F[A])(f: A => B)(g: B => A): F[B] = map(fa)(f)
@@ -173,7 +190,7 @@ import scala.annotation.implicitNotFound
    * res0: (List[Int], List[Int]) = (List(1, 3),List(2, 4))
    * }}}
    */
-  @noop
+
   def unzip[A, B](fab: F[(A, B)]): (F[A], F[B]) = (map(fab)(_._1), map(fab)(_._2))
 
   /**
@@ -188,7 +205,7 @@ import scala.annotation.implicitNotFound
    * res0: List[Int] = List(1, 0, 0)
    * }}}
    */
-  @noop
+
   def ifF[A](fb: F[Boolean])(ifTrue: => A, ifFalse: => A): F[A] = map(fb)(x => if (x) ifTrue else ifFalse)
 
   def compose[G[_]: Functor]: Functor[λ[α => F[G[α]]]] =
@@ -205,10 +222,6 @@ import scala.annotation.implicitNotFound
 }
 
 object Functor {
-
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
 
   /**
    * Summon an instance of [[Functor]] for `F`.
@@ -255,9 +268,5 @@ object Functor {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToFunctorOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }

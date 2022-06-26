@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 package instances
 
@@ -35,7 +56,6 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
         }
     }
 
-  // scalastyle:off method.length
   implicit def catsStdInstancesForEither[A]
     : MonadError[Either[A, *], A] with Traverse[Either[A, *]] with Align[Either[A, *]] =
     new MonadError[Either[A, *], A] with Traverse[Either[A, *]] with Align[Either[A, *]] {
@@ -80,6 +100,15 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
           case left @ Left(_) => F.pure(left.rightCast[C])
           case Right(b)       => F.map(f(b))(Right(_))
         }
+
+      override def mapAccumulate[S, B, C](init: S, fa: Either[A, B])(f: (S, B) => (S, C)): (S, Either[A, C]) = {
+        fa match {
+          case Right(b) =>
+            val (snext, c) = f(init, b)
+            (snext, Right(c))
+          case l @ Left(_) => (init, l.rightCast)
+        }
+      }
 
       def foldLeft[B, C](fa: Either[A, B], c: C)(f: (C, B) => C): C =
         fa match {
@@ -152,7 +181,12 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
         fab.forall(p)
 
       override def toList[B](fab: Either[A, B]): List[B] =
-        fab.fold(_ => Nil, _ :: Nil)
+        fab match {
+          case Right(a) => a :: Nil
+          case Left(_)  => Nil
+        }
+
+      override def toIterable[B](fab: Either[A, B]): Iterable[B] = toList(fab)
 
       override def isEmpty[B](fab: Either[A, B]): Boolean =
         fab.isLeft
@@ -176,8 +210,11 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
             }
         }
 
+      override def void[B](e: Either[A, B]): Either[A, Unit] =
+        if (e.isRight) Either.unit
+        else e.asInstanceOf[Either[A, Unit]] // it is Left(a)
+
     }
-  // scalastyle:on method.length
 
   implicit def catsStdSemigroupKForEither[L]: SemigroupK[Either[L, *]] =
     new SemigroupK[Either[L, *]] {

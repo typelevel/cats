@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 package laws
 
@@ -24,7 +45,7 @@ trait FlatMapLaws[F[_]] extends ApplyLaws[F] {
    */
   def kleisliAssociativity[A, B, C, D](f: A => F[B], g: B => F[C], h: C => F[D], a: A): IsEq[F[D]] = {
     val (kf, kg, kh) = (Kleisli(f), Kleisli(g), Kleisli(h))
-    (kf.andThen(kg)).andThen(kh).run(a) <-> kf.andThen(kg.andThen(kh)).run(a)
+    kf.andThen(kg).andThen(kh).run(a) <-> kf.andThen(kg.andThen(kh)).run(a)
   }
 
   def mproductConsistency[A, B](fa: F[A], fb: A => F[B]): IsEq[F[(A, B)]] =
@@ -32,10 +53,9 @@ trait FlatMapLaws[F[_]] extends ApplyLaws[F] {
 
   def tailRecMConsistentFlatMap[A](a: A, f: A => F[A]): IsEq[F[A]] = {
     def bounce(n: Int) =
-      F.tailRecM[(A, Int), A]((a, n)) {
-        case (a0, i) =>
-          if (i > 0) f(a0).map(a1 => Left((a1, i - 1)))
-          else f(a0).map(Right(_))
+      F.tailRecM[(A, Int), A]((a, n)) { case (a0, i) =>
+        if (i > 0) f(a0).map(a1 => Left((a1, i - 1)))
+        else f(a0).map(Right(_))
       }
     /*
      * The law is for n >= 1

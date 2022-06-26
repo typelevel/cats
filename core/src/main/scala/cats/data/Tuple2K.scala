@@ -1,7 +1,28 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 package data
 
-import cats.Contravariant
+import cats.arrow.FunctionK
 
 /**
  * [[Tuple2K]] is a product to two independent functor values.
@@ -19,7 +40,27 @@ final case class Tuple2K[F[_], G[_], A](first: F[A], second: G[A]) {
   def swap: Tuple2K[G, F, A] = Tuple2K(second, first)
 }
 
-object Tuple2K extends Tuple2KInstances
+object Tuple2K extends Tuple2KInstances {
+  private[this] val _1k = new FunctionK[Tuple2K[Id, Id, *], Id] {
+    def apply[A](fa: Tuple2K[Id, Id, A]) = fa.first
+  }
+
+  private[this] val _2k = new FunctionK[Tuple2K[Id, Id, *], Id] {
+    def apply[A](fa: Tuple2K[Id, Id, A]) = fa.second
+  }
+
+  /**
+   * Higher-kinded version of [[Tuple2K.first]]
+   */
+  def firstK[F[_], G[_]]: Tuple2K[F, G, *] ~> F =
+    _1k.asInstanceOf[Tuple2K[F, G, *] ~> F]
+
+  /**
+   * Higher-kinded version of [[Tuple2K.second]]
+   */
+  def secondK[F[_], G[_]]: Tuple2K[F, G, *] ~> G =
+    _2k.asInstanceOf[Tuple2K[F, G, *] ~> G]
+}
 
 sealed abstract private[data] class Tuple2KInstances extends Tuple2KInstances0 {
   implicit def catsDataOrderForTuple2K[F[_], G[_], A](implicit
@@ -96,6 +137,28 @@ sealed abstract private[data] class Tuple2KInstances1 extends Tuple2KInstances2 
       def F: Foldable[F] = FF
       def G: Foldable[G] = GF
     }
+
+  implicit def catsDataRepresentableForTuple2K[F[_], G[_]](implicit
+    FF: Representable[F],
+    GG: Representable[G]
+  ): Representable.Aux[Tuple2K[F, G, *], Either[FF.Representation, GG.Representation]] =
+    new Representable[Tuple2K[F, G, *]] {
+      type Representation = Either[FF.Representation, GG.Representation]
+
+      val F = new Tuple2KFunctor[F, G] {
+        val F = FF.F
+        val G = GG.F
+      }
+
+      def index[A](f: Tuple2K[F, G, A]): Representation => A = {
+        case Left(i)  => FF.index(f.first)(i)
+        case Right(i) => GG.index(f.second)(i)
+      }
+
+      def tabulate[A](f: Representation => A): Tuple2K[F, G, A] =
+        Tuple2K(FF.tabulate((x: FF.Representation) => f(Left(x))), GG.tabulate((x: GG.Representation) => f(Right(x))))
+    }
+
 }
 
 sealed abstract private[data] class Tuple2KInstances2 extends Tuple2KInstances3 {

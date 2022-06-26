@@ -1,8 +1,30 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 
 import cats.arrow.Arrow
-import simulacrum.typeclass
-import scala.annotation.implicitNotFound
+import cats.data.Chain
+
+import scala.annotation.tailrec
 
 /**
  * Applicative functor.
@@ -14,8 +36,7 @@ import scala.annotation.implicitNotFound
  *
  * Must obey the laws defined in cats.laws.ApplicativeLaws.
  */
-@implicitNotFound("Could not find an instance of Applicative for ${F}")
-@typeclass trait Applicative[F[_]] extends Apply[F] with InvariantMonoidal[F] { self =>
+trait Applicative[F[_]] extends Apply[F] with InvariantMonoidal[F] { self =>
 
   /**
    * `pure` lifts any value into the Applicative Functor.
@@ -65,7 +86,63 @@ import scala.annotation.implicitNotFound
    * }}}
    */
   def replicateA[A](n: Int, fa: F[A]): F[List[A]] =
-    Traverse[List].sequence(List.fill(n)(fa))(this)
+    if (n <= 0) pure(Nil)
+    else if (n == 1) {
+      // if n == 1 don't incur the penalty two maps: .map(Chain.one(_)).map(_.toList)
+      map(fa)(_ :: Nil)
+    } else {
+      val one = map(fa)(Chain.one(_))
+
+      // invariant: n >= 1
+      @tailrec def loop(fa: F[Chain[A]], n: Int, acc: F[Chain[A]]): F[Chain[A]] =
+        if (n == 1) map2(fa, acc)(_.concat(_))
+        else
+          // n >= 2
+          // so (n >> 1) >= 1 and we are allowed to call loop
+          loop(
+            map2(fa, fa)(_.concat(_)),
+            n >> 1,
+            if ((n & 1) == 1) map2(acc, fa)(_.concat(_)) else acc
+          )
+
+      map(loop(one, n - 1, one))(_.toList)
+    }
+
+  /**
+   * Given `fa` and `n`, apply `fa` `n` times discarding results to return F[Unit].
+   *
+   * Example:
+   * {{{
+   * scala> import cats.data.State
+   *
+   * scala> type Counter[A] = State[Int, A]
+   * scala> val getAndIncrement: Counter[Int] = State { i => (i + 1, i) }
+   * scala> val getAndIncrement5: Counter[Unit] =
+   *      | Applicative[Counter].replicateA_(5, getAndIncrement)
+   * scala> getAndIncrement5.run(0).value
+   * res0: (Int, Unit) = (5,())
+   * }}}
+   */
+  def replicateA_[A](n: Int, fa: F[A]): F[Unit] =
+    if (n <= 0) unit
+    else if (n == 1) void(fa)
+    else {
+      val fvoid = void(fa)
+
+      // invariant: n >= 1
+      @tailrec def loop(fa: F[Unit], n: Int, acc: F[Unit]): F[Unit] =
+        if (n == 1) productR(fa)(acc)
+        else
+          // n >= 2
+          // so (n >> 1) >= 1 and we are allowed to call loop
+          loop(
+            productR(fa)(fa),
+            n >> 1,
+            if ((n & 1) == 1) productR(acc)(fa) else acc
+          )
+
+      loop(fvoid, n - 1, fvoid)
+    }
 
   /**
    * Compose an `Applicative[F]` and an `Applicative[G]` into an
@@ -236,10 +313,6 @@ object Applicative {
       def map[A, B](fa: F[A])(f: A => B): F[B] = F.map(fa)(f)
     }
 
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
-
   /**
    * Summon an instance of [[Applicative]] for `F`.
    */
@@ -276,10 +349,6 @@ object Applicative {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToApplicativeOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }
 

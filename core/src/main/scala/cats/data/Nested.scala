@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 package data
 
@@ -58,6 +79,15 @@ sealed abstract private[data] class NestedInstances extends NestedInstances0 {
       implicit val F: Traverse[F] = F0
       implicit val G: TraverseFilter[G] = G0
     }
+
+  implicit def catsDataAlignForNested[F[_], G[_]](implicit
+    F0: Align[F],
+    G0: Align[G]
+  ): Align[Nested[F, G, *]] =
+    new NestedAlign[F, G] {
+      implicit val F: Align[F] = F0
+      implicit val G: Align[G] = G0
+    }
 }
 
 sealed abstract private[data] class NestedInstances0 extends NestedInstances1 {
@@ -74,6 +104,24 @@ sealed abstract private[data] class NestedInstances0 extends NestedInstances1 {
       implicit val F: Functor[F] = F0
       implicit val G: FunctorFilter[G] = G0
     }
+
+  implicit def catsDataRepresentableForNested[F[_], G[_]](implicit
+    F0: Representable[F],
+    G0: Representable[G]
+  ): Representable.Aux[Nested[F, G, *], (F0.Representation, G0.Representation)] = new Representable[Nested[F, G, *]] {
+    val FG = F0.compose(G0)
+
+    val F = new NestedFunctor[F, G] {
+      val FG = F0.F.compose(G0.F)
+    }
+
+    type Representation = FG.Representation
+
+    def index[A](f: Nested[F, G, A]): Representation => A = FG.index(f.value)
+
+    def tabulate[A](f: Representation => A): Nested[F, G, A] = Nested(FG.tabulate(f))
+  }
+
 }
 
 sealed abstract private[data] class NestedInstances1 extends NestedInstances2 {
@@ -305,6 +353,15 @@ private[data] trait NestedTraverse[F[_], G[_]]
 
   override def traverse[H[_]: Applicative, A, B](fga: Nested[F, G, A])(f: A => H[B]): H[Nested[F, G, B]] =
     Applicative[H].map(FG.traverse(fga.value)(f))(Nested(_))
+
+  override def mapAccumulate[S, A, B](init: S, fga: Nested[F, G, A])(f: (S, A) => (S, B)): (S, Nested[F, G, B]) = {
+    val (finalState, fgb) = FG.mapAccumulate(init, fga.value)(f)
+    (finalState, Nested(fgb))
+  }
+
+  override def mapWithIndex[A, B](fga: Nested[F, G, A])(f: (A, Int) => B): Nested[F, G, B] = {
+    Nested(FG.mapWithIndex(fga.value)(f))
+  }
 }
 
 private[data] trait NestedDistributive[F[_], G[_]] extends Distributive[Nested[F, G, *]] with NestedFunctor[F, G] {
@@ -418,4 +475,29 @@ abstract private[data] class NestedTraverseFilter[F[_], G[_]]
     fga: Nested[F, G, A]
   )(f: A => H[Option[B]])(implicit H: Applicative[H]): H[Nested[F, G, B]] =
     H.map(F.traverse[H, G[A], G[B]](fga.value)(ga => G.traverseFilter(ga)(f)))(Nested[F, G, B])
+}
+
+abstract private[data] class NestedAlign[F[_], G[_]] extends Align[Nested[F, G, *]] {
+  implicit val F: Align[F]
+  implicit val G: Align[G]
+
+  override def functor: Functor[Nested[F, G, *]] =
+    Nested.catsDataFunctorForNested(F.functor, G.functor)
+
+  override def align[A, B](
+    fa: Nested[F, G, A],
+    fb: Nested[F, G, B]
+  ): Nested[F, G, Ior[A, B]] =
+    Nested(
+      F.functor.map(
+        F.align(fa.value, fb.value)
+      ) {
+        case Ior.Left(ga) =>
+          G.functor.map(ga)(Ior.Left(_))
+        case Ior.Right(gb) =>
+          G.functor.map(gb)(Ior.Right(_))
+        case Ior.Both(ga, gb) =>
+          G.align(ga, gb)
+      }
+    )
 }

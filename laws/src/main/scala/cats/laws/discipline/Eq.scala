@@ -1,8 +1,29 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 package laws
 package discipline
 
-import cats.data.{AndThen, RepresentableStore}
+import cats.data.{AndThen, RepresentableStore, StoreT}
 import cats.instances.boolean._
 import cats.instances.int._
 import cats.instances.string._
@@ -121,6 +142,9 @@ object eq {
     eqS: Eq[S]
   ): Eq[RepresentableStore[F, S, A]] =
     Eq.instance((s1, s2) => eqFA.eqv(s1.fa, s2.fa) && eqS.eqv(s1.index, s2.index))
+
+  implicit def catsLawsEqForStoreT[F[_], S, A](implicit eqF: Eq[F[S => A]], eqS: Eq[S]): Eq[StoreT[F, S, A]] =
+    Eq.instance((s1, s2) => eqF.eqv(s1.runF, s2.runF) && eqS.eqv(s1.index, s2.index))
 }
 
 @deprecated(
@@ -241,8 +265,8 @@ object eq {
     arbAA: Arbitrary[(A, A)],
     eqA: Eq[A]
   ): Eq[CommutativeSemigroup[A]] = {
-    implicit val eqABool: Eq[(A, Boolean)] = Eq.instance {
-      case ((x, boolX), (y, boolY)) => x === y && boolX === boolY
+    implicit val eqABool: Eq[(A, Boolean)] = Eq.instance { case ((x, boolX), (y, boolY)) =>
+      x === y && boolX === boolY
     }
 
     Eq.by[CommutativeSemigroup[A], ((A, A)) => (A, Boolean)](f =>
@@ -264,8 +288,8 @@ object eq {
     eqMA: Eq[Monoid[A]],
     eqA: Eq[A]
   ): Eq[Group[A]] = {
-    implicit val eqABool: Eq[(A, Boolean)] = Eq.instance {
-      case ((x, boolX), (y, boolY)) => x === y && boolX === boolY
+    implicit val eqABool: Eq[(A, Boolean)] = Eq.instance { case ((x, boolX), (y, boolY)) =>
+      x === y && boolX === boolY
     }
 
     val inverseEq = Eq.by[Group[A], ((A, A)) => (A, Boolean)](f =>

@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 package laws
 package discipline
@@ -6,7 +27,7 @@ import cats.data.NonEmptyList.ZipNonEmptyList
 import cats.data.NonEmptyVector.ZipNonEmptyVector
 
 import scala.util.{Failure, Success, Try}
-import scala.collection.immutable.{SortedMap, SortedSet}
+import scala.collection.immutable.{Seq, SortedMap, SortedSet}
 import cats.data._
 import org.scalacheck.{Arbitrary, Cogen, Gen}
 import org.scalacheck.Arbitrary.{arbitrary => getArbitrary}
@@ -52,6 +73,12 @@ object arbitrary extends ArbitraryInstances0 with ScalaVersionSpecific.Arbitrary
   implicit def catsLawsCogenForOneAnd[F[_], A](implicit A: Cogen[A], F: Cogen[F[A]]): Cogen[OneAnd[F, A]] =
     Cogen((seed, x) => F.perturb(A.perturb(seed, x.head), x.tail))
 
+  implicit def catsLawsArbitraryForNonEmptySeq[A](implicit A: Arbitrary[A]): Arbitrary[NonEmptySeq[A]] =
+    Arbitrary(implicitly[Arbitrary[Seq[A]]].arbitrary.flatMap(fa => A.arbitrary.map(a => NonEmptySeq(a, fa))))
+
+  implicit def catsLawsCogenForNonEmptySeq[A](implicit A: Cogen[A]): Cogen[NonEmptySeq[A]] =
+    Cogen[Seq[A]].contramap(_.toSeq)
+
   implicit def catsLawsArbitraryForNonEmptyVector[A](implicit A: Arbitrary[A]): Arbitrary[NonEmptyVector[A]] =
     Arbitrary(implicitly[Arbitrary[Vector[A]]].arbitrary.flatMap(fa => A.arbitrary.map(a => NonEmptyVector(a, fa))))
 
@@ -63,6 +90,9 @@ object arbitrary extends ArbitraryInstances0 with ScalaVersionSpecific.Arbitrary
 
   implicit def catsLawsCogenForNonEmptySet[A: Order: Cogen]: Cogen[NonEmptySet[A]] =
     Cogen[SortedSet[A]].contramap(_.toSortedSet)
+
+  implicit def catsLawsArbitraryForZipSeq[A](implicit A: Arbitrary[A]): Arbitrary[ZipSeq[A]] =
+    Arbitrary(implicitly[Arbitrary[Seq[A]]].arbitrary.map(v => new ZipSeq(v)))
 
   implicit def catsLawsArbitraryForZipVector[A](implicit A: Arbitrary[A]): Arbitrary[ZipVector[A]] =
     Arbitrary(implicitly[Arbitrary[Vector[A]]].arbitrary.map(v => new ZipVector(v)))
@@ -144,6 +174,24 @@ object arbitrary extends ArbitraryInstances0 with ScalaVersionSpecific.Arbitrary
 
   implicit def catsLawsCogenForOptionT[F[_], A](implicit F: Cogen[F[Option[A]]]): Cogen[OptionT[F, A]] =
     F.contramap(_.value)
+
+  implicit def catsLawsArbitraryForRepresentableStoreT[W[_], F[_], S, A](implicit
+    W: Arbitrary[W[F[A]]],
+    S: Arbitrary[S],
+    F: Representable.Aux[F, S]
+  ): Arbitrary[RepresentableStoreT[W, F, S, A]] =
+    Arbitrary(
+      for {
+        runF <- W.arbitrary
+        index <- S.arbitrary
+      } yield RepresentableStoreT(runF, index)
+    )
+
+  implicit def catsLawsCogenForRepresentableStoreT[W[_], F[_], S, A](implicit
+    W: Cogen[W[F[A]]],
+    S: Cogen[S]
+  ): Cogen[RepresentableStoreT[W, F, S, A]] =
+    Cogen((seed, st) => S.perturb(W.perturb(seed, st.runF), st.index))
 
   implicit def catsLawsArbitraryForIdT[F[_], A](implicit F: Arbitrary[F[A]]): Arbitrary[IdT[F, A]] =
     Arbitrary(F.arbitrary.map(IdT.apply))

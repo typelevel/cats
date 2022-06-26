@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats.free
 
 import cats.{~>, Comonad, Eval, Id, Reducible, Traverse}
@@ -9,6 +30,7 @@ import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.syntax.list._
 import cats.tests.{CatsSuite, Spooky}
 import org.scalacheck.{Arbitrary, Cogen, Gen}
+import cats.syntax.eq._
 
 class CofreeSuite extends CatsSuite {
 
@@ -32,7 +54,7 @@ class CofreeSuite extends CatsSuite {
   test("Cofree.unfold") {
     val unfoldedHundred: CofreeNel[Int] = Cofree.unfold[Option, Int](0)(i => if (i == 100) None else Some(i + 1))
     val nelUnfoldedHundred: NonEmptyList[Int] = NonEmptyList.fromListUnsafe(List.tabulate(101)(identity))
-    cofNelToNel(unfoldedHundred) should ===(nelUnfoldedHundred)
+    assert(cofNelToNel(unfoldedHundred) === nelUnfoldedHundred)
   }
 
   test("Cofree.ana") {
@@ -41,7 +63,7 @@ class CofreeSuite extends CatsSuite {
                                                                        _.head
       )
     val nelUnfoldedHundred: NonEmptyList[Int] = NonEmptyList.fromListUnsafe(List.tabulate(101)(identity))
-    cofNelToNel(anaHundred) should ===(nelUnfoldedHundred)
+    assert(cofNelToNel(anaHundred) === nelUnfoldedHundred)
   }
 
   test("Cofree.tailForced") {
@@ -50,9 +72,9 @@ class CofreeSuite extends CatsSuite {
       Cofree.unfold[Id, Int](spooky.counter) { _ =>
         spooky.increment(); spooky.counter
       }
-    spooky.counter should ===(0)
+    assert(spooky.counter === 0)
     incrementor.tailForced
-    spooky.counter should ===(1)
+    assert(spooky.counter === 1)
   }
 
   test("Cofree.forceTail") {
@@ -61,9 +83,9 @@ class CofreeSuite extends CatsSuite {
       Cofree.unfold[Id, Int](spooky.counter) { _ =>
         spooky.increment(); spooky.counter
       }
-    spooky.counter should ===(0)
+    assert(spooky.counter === 0)
     incrementor.forceTail
-    spooky.counter should ===(1)
+    assert(spooky.counter === 1)
   }
 
   test("Cofree.forceAll") {
@@ -77,9 +99,9 @@ class CofreeSuite extends CatsSuite {
           Some(spooky.counter)
         }
       )
-    spooky.counter should ===(0)
+    assert(spooky.counter === 0)
     incrementor.forceAll
-    spooky.counter should ===(5)
+    assert(spooky.counter === 5)
   }
 
   test("Cofree.mapBranchingRoot") {
@@ -88,7 +110,7 @@ class CofreeSuite extends CatsSuite {
       def apply[A](a: Option[A]): Option[A] = None
     })
     val nelUnfoldedOne: NonEmptyList[Int] = NonEmptyList.one(0)
-    cofNelToNel(withNoneRoot) should ===(nelUnfoldedOne)
+    assert(cofNelToNel(withNoneRoot) === nelUnfoldedOne)
   }
 
   val unfoldedHundred: Cofree[Option, Int] = Cofree.unfold[Option, Int](0)(i => if (i == 100) None else Some(i + 1))
@@ -97,8 +119,8 @@ class CofreeSuite extends CatsSuite {
     val toNelS = unfoldedHundred.mapBranchingS(toList)
     val toNelT = unfoldedHundred.mapBranchingT(toList)
     val nelUnfoldedOne: NonEmptyList[Int] = NonEmptyList.fromListUnsafe(List.tabulate(101)(identity))
-    cofRoseTreeToNel(toNelS) should ===(nelUnfoldedOne)
-    cofRoseTreeToNel(toNelT) should ===(nelUnfoldedOne)
+    assert(cofRoseTreeToNel(toNelS) === nelUnfoldedOne)
+    assert(cofRoseTreeToNel(toNelT) === nelUnfoldedOne)
   }
 
   val nelUnfoldedHundred: NonEmptyList[Int] = NonEmptyList.fromListUnsafe(List.tabulate(101)(identity))
@@ -110,7 +132,7 @@ class CofreeSuite extends CatsSuite {
           Eval.now(NonEmptyList(i, lb.fold[List[Int]](Nil)(_.toList)))
         )
         .value
-    cata should ===(nelUnfoldedHundred)
+    assert(cata === nelUnfoldedHundred)
   }
 
   test("Cofree.cata is stack-safe") {
@@ -121,7 +143,7 @@ class CofreeSuite extends CatsSuite {
         .cata[Option, Int, Int](unfolded)((i, lb) => Eval.now(lb.fold(0)(_ + i)))
         .value
 
-    cata should ===(sum)
+    assert(cata === sum)
   }
 
   test("Cofree.cataM") {
@@ -141,8 +163,8 @@ class CofreeSuite extends CatsSuite {
         )(folder)(inclusion)
         .value
         .value
-    cataHundred should ===(Some(nelUnfoldedHundred))
-    cataHundredOne should ===(None)
+    assert(cataHundred === Some(nelUnfoldedHundred))
+    assert(cataHundredOne === None)
   }
 
 }

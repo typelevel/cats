@@ -1,7 +1,29 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 
-import simulacrum.{noop, typeclass}
-import scala.annotation.implicitNotFound
+import cats.data.State
+
+import scala.collection.immutable.{HashSet, TreeSet}
 
 /**
  * `TraverseFilter`, also known as `Witherable`, represents list-like structures
@@ -11,8 +33,6 @@ import scala.annotation.implicitNotFound
  * Based on Haskell's [[https://hackage.haskell.org/package/witherable-0.1.3.3/docs/Data-Witherable.html Data.Witherable]]
  */
 
-@implicitNotFound("Could not find an instance of TraverseFilter for ${F}")
-@typeclass
 trait TraverseFilter[F[_]] extends FunctorFilter[F] {
   def traverse: Traverse[F]
 
@@ -44,7 +64,7 @@ trait TraverseFilter[F[_]] extends FunctorFilter[F] {
    * b: Either[String, List[Int]] = Right(List(1, 5, 3))
    * }}}
    */
-  @noop
+
   def sequenceFilter[G[_], A](fgoa: F[G[Option[A]]])(implicit G: Applicative[G]): G[F[A]] =
     traverseFilter(fgoa)(identity)
 
@@ -85,13 +105,35 @@ trait TraverseFilter[F[_]] extends FunctorFilter[F] {
 
   override def mapFilter[A, B](fa: F[A])(f: A => Option[B]): F[B] =
     traverseFilter[Id, A, B](fa)(f)
+
+  /**
+   * Removes duplicate elements from a list, keeping only the first occurrence.
+   */
+  def ordDistinct[A](fa: F[A])(implicit O: Order[A]): F[A] = {
+    implicit val ord: Ordering[A] = O.toOrdering
+
+    traverseFilter[State[TreeSet[A], *], A, A](fa)(a =>
+      State(alreadyIn => if (alreadyIn(a)) (alreadyIn, None) else (alreadyIn + a, Some(a)))
+    )
+      .run(TreeSet.empty)
+      .value
+      ._2
+  }
+
+  /**
+   * Removes duplicate elements from a list, keeping only the first occurrence.
+   * This is usually faster than ordDistinct, especially for things that have a slow comparion (like String).
+   */
+  def hashDistinct[A](fa: F[A])(implicit H: Hash[A]): F[A] =
+    traverseFilter[State[HashSet[A], *], A, A](fa)(a =>
+      State(alreadyIn => if (alreadyIn(a)) (alreadyIn, None) else (alreadyIn + a, Some(a)))
+    )
+      .run(HashSet.empty)
+      .value
+      ._2
 }
 
 object TraverseFilter {
-
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
 
   /**
    * Summon an instance of [[TraverseFilter]] for `F`.
@@ -119,6 +161,8 @@ object TraverseFilter {
       typeClassInstance.filterA[G, A](self)(f)(G)
     def traverseEither[G[_], B, C](f: A => G[Either[C, B]])(g: (A, C) => G[Unit])(implicit G: Monad[G]): G[F[B]] =
       typeClassInstance.traverseEither[G, A, B, C](self)(f)(g)(G)
+    def ordDistinct(implicit O: Order[A]): F[A] = typeClassInstance.ordDistinct(self)
+    def hashDistinct(implicit H: Hash[A]): F[A] = typeClassInstance.hashDistinct(self)
   }
   trait AllOps[F[_], A] extends Ops[F, A] with FunctorFilter.AllOps[F, A] {
     type TypeClassType <: TraverseFilter[F]
@@ -135,9 +179,5 @@ object TraverseFilter {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToTraverseFilterOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }

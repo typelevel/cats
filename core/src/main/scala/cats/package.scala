@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 import scala.annotation.tailrec
 
 /**
@@ -64,10 +85,14 @@ package object cats {
    * encodes pure unary function application.
    */
   type Id[A] = A
+  object Id {
+    def apply[A](a: A): Id[A] = a
+  }
+
   type Endo[A] = A => A
-  implicit val catsInstancesForId
-    : Bimonad[Id] with CommutativeMonad[Id] with Comonad[Id] with NonEmptyTraverse[Id] with Distributive[Id] =
-    new Bimonad[Id] with CommutativeMonad[Id] with Comonad[Id] with NonEmptyTraverse[Id] with Distributive[Id] {
+
+  val catsInstancesForId: Bimonad[Id] with CommutativeMonad[Id] with NonEmptyTraverse[Id] with Distributive[Id] =
+    new Bimonad[Id] with CommutativeMonad[Id] with NonEmptyTraverse[Id] with Distributive[Id] {
       def pure[A](a: A): A = a
       def extract[A](a: A): A = a
       def flatMap[A, B](a: A)(f: A => B): B = f(a)
@@ -82,6 +107,7 @@ package object cats {
       override def ap[A, B](ff: A => B)(fa: A): B = ff(fa)
       override def flatten[A](ffa: A): A = ffa
       override def map2[A, B, Z](fa: A, fb: B)(f: (A, B) => Z): Z = f(fa, fb)
+      override def map2Eval[A, B, Z](fa: A, fb: Eval[B])(f: (A, B) => Z): Eval[Z] = fb.map(f(fa, _))
       override def lift[A, B](f: A => B): A => B = f
       override def imap[A, B](fa: A)(f: A => B)(fi: B => A): B = f(fa)
       def foldLeft[A, B](a: A, b: B)(f: (B, A) => B) = f(b, a)
@@ -89,6 +115,8 @@ package object cats {
         f(a, lb)
       def nonEmptyTraverse[G[_], A, B](a: A)(f: A => G[B])(implicit G: Apply[G]): G[B] =
         f(a)
+      override def mapAccumulate[S, A, B](init: S, fa: Id[A])(f: (S, A) => (S, B)): (S, Id[B]) =
+        f(init, fa)
       override def foldMap[A, B](fa: Id[A])(f: A => B)(implicit B: Monoid[B]): B = f(fa)
       override def reduce[A](fa: Id[A])(implicit A: Semigroup[A]): A =
         fa
@@ -142,4 +170,14 @@ package object cats {
   val Semigroup = cats.kernel.Semigroup
   val Monoid = cats.kernel.Monoid
   val Group = cats.kernel.Group
+
+  type ApplicativeThrow[F[_]] = ApplicativeError[F, Throwable]
+  object ApplicativeThrow {
+    def apply[F[_]](implicit ev: ApplicativeThrow[F]): ApplicativeThrow[F] = ev
+  }
+
+  type MonadThrow[F[_]] = MonadError[F, Throwable]
+  object MonadThrow {
+    def apply[F[_]](implicit ev: MonadThrow[F]): MonadThrow[F] = ev
+  }
 }

@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 
 /**
@@ -13,7 +34,7 @@ package cats
  * Inspired by the Haskell representable package
  * http://hackage.haskell.org/package/representable-functors-3.2.0.2/docs/Data-Functor-Representable.html
  */
-trait Representable[F[_]] extends Serializable {
+trait Representable[F[_]] extends Serializable { self =>
 
   def F: Functor[F]
 
@@ -58,6 +79,28 @@ trait Representable[F[_]] extends Serializable {
    * }}}
    */
   def tabulate[A](f: Representation => A): F[A]
+
+  def compose[G[_]](implicit
+    G: Representable[G]
+  ): Representable.Aux[λ[α => F[G[α]]], (self.Representation, G.Representation)] =
+    new Representable[λ[α => F[G[α]]]] { inner =>
+      override val F = self.F.compose(G.F)
+
+      type Representation = (self.Representation, G.Representation)
+
+      def index[A](f: F[G[A]]): Representation => A = (repr: Representation) => {
+        val ga: G[A] = self.index(f).apply(repr._1)
+        G.index(ga).apply(repr._2)
+      }
+
+      def tabulate[A](f: Representation => A): F[G[A]] = {
+        val fc: self.Representation => (G.Representation => A) = (rf: self.Representation) =>
+          (rg: G.Representation) => f((rf, rg))
+
+        self.F.map(self.tabulate(fc))(G.tabulate(_))
+      }
+
+    }
 }
 
 private trait RepresentableMonad[F[_], R] extends Monad[F] {

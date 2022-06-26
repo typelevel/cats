@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 package data
 
@@ -167,7 +188,8 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
 
   /**
    * Converts this NonEmptyLazyList to a `NonEmptyList`.
-   */ // TODO also add toNonEmptyLazyList to NonEmptyList?
+   */
+  // TODO also add toNonEmptyLazyList to NonEmptyList?
   final def toNonEmptyList: NonEmptyList[A] =
     NonEmptyList.fromListUnsafe(toLazyList.toList)
 
@@ -191,7 +213,7 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
    * Tests if some element is contained in this NonEmptyLazyList
    */
   final def contains(a: A)(implicit A: Eq[A]): Boolean =
-    toLazyList.contains(a)
+    toLazyList.exists(A.eqv(_, a))
 
   /**
    * Tests whether a predicate holds for all elements
@@ -264,8 +286,8 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
    */
   final def reduceLeftTo[B](f: A => B)(g: (B, A) => B): B = {
     val iter = toLazyList.iterator
-    var result = f(iter.next)
-    while (iter.hasNext) { result = g(result, iter.next) }
+    var result = f(iter.next())
+    while (iter.hasNext) { result = g(result, iter.next()) }
     result
   }
 
@@ -281,8 +303,8 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
    */
   final def reduceRightTo[B](f: A => B)(g: (A, B) => B): B = {
     val iter = toLazyList.reverseIterator
-    var result = f(iter.next)
-    while (iter.hasNext) { result = g(iter.next, result) }
+    var result = f(iter.next())
+    while (iter.hasNext) { result = g(iter.next(), result) }
     result
   }
 
@@ -394,8 +416,8 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
       }
     }
 
-    m.map {
-      case (k, v) => (k, create(v.result))
+    m.map { case (k, v) =>
+      (k, create(v.result()))
     }: TreeMap[B, NonEmptyLazyList[A]]
   }
 
@@ -415,6 +437,27 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
    */
   final def groupByNem[B](f: A => B)(implicit B: Order[B]): NonEmptyMap[B, NonEmptyLazyList[A]] =
     NonEmptyMap.fromMapUnsafe(groupBy(f))
+
+  /**
+   * Partitions elements in fixed size `NonEmptyLazyList`s.
+   *
+   * {{{
+   * scala> import cats.data.NonEmptyLazyList
+   * scala> import cats.implicits._
+   * scala> val nel = NonEmptyLazyList.fromLazyListUnsafe(LazyList(12, -2, 3, -5))
+   * scala> val expectedResult = List(
+   *      |   NonEmptyLazyList.fromLazyListUnsafe(LazyList(12, -2)),
+   *      |   NonEmptyLazyList.fromLazyListUnsafe(LazyList(3, -5))
+   *      | )
+   * scala> val result = nel.grouped(2)
+   * scala> result.toList === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  def grouped(size: Int): Iterator[NonEmptyLazyList[A]] = {
+    require(size >= 1, f"size=$size%d, but size must be positive")
+    toLazyList.grouped(size).map(NonEmptyLazyList.fromLazyListUnsafe)
+  }
 
   /**
    * Creates new `NonEmptyMap`, similarly to List#toMap from scala standard library.
@@ -484,9 +527,12 @@ sealed abstract private[data] class NonEmptyLazyListInstances extends NonEmptyLa
       def reduceLeftTo[A, B](fa: NonEmptyLazyList[A])(f: A => B)(g: (B, A) => B): B = fa.reduceLeftTo(f)(g)
 
       def reduceRightTo[A, B](fa: NonEmptyLazyList[A])(f: A => B)(g: (A, cats.Eval[B]) => cats.Eval[B]): cats.Eval[B] =
-        Eval.defer(fa.reduceRightTo(a => Eval.now(f(a))) { (a, b) =>
-          Eval.defer(g(a, b))
-        })
+        fa.tail match {
+          case head +: tail =>
+            val nell = NonEmptyLazyList.fromLazyListPrepend(head, tail)
+            g(fa.head, Eval.defer(reduceRightTo(nell)(f)(g)))
+          case _ => Eval.later(f(fa.head))
+        }
 
       private val alignInstance = Align[LazyList].asInstanceOf[Align[NonEmptyLazyList]]
 

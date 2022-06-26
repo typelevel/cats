@@ -1,10 +1,30 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 
 import cats.kernel.CommutativeSemigroup
-import scala.collection.immutable.{Queue, SortedMap, SortedSet}
+import scala.collection.immutable.{Queue, Seq, SortedMap, SortedSet}
+import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
-import simulacrum.typeclass
-import scala.annotation.implicitNotFound
 
 /**
  * [[Semigroupal]] captures the idea of composing independent effectful values.
@@ -16,8 +36,7 @@ import scala.annotation.implicitNotFound
  * That same idea is also manifested in the form of [[Apply]], and indeed [[Apply]] extends both
  * [[Semigroupal]] and [[Functor]] to illustrate this.
  */
-@implicitNotFound("Could not find an instance of Semigroupal for ${F}")
-@typeclass trait Semigroupal[F[_]] extends Serializable {
+trait Semigroupal[F[_]] extends Serializable {
 
   /**
    * Combine an `F[A]` and an `F[B]` into an `F[(A, B)]` that maintains the effects of both `fa` and `fb`.
@@ -48,9 +67,24 @@ import scala.annotation.implicitNotFound
 }
 
 object Semigroupal extends ScalaVersionSpecificSemigroupalInstances with SemigroupalArityFunctions {
+  implicit def catsSemigroupalForId: Semigroupal[Id] = catsInstancesForId
   implicit def catsSemigroupalForOption: Semigroupal[Option] = cats.instances.option.catsStdInstancesForOption
   implicit def catsSemigroupalForTry: Semigroupal[Try] = cats.instances.try_.catsStdInstancesForTry
+
+  /**
+   * @deprecated
+   *   Any non-pure use of [[scala.concurrent.Future Future]] with Cats is error prone
+   *   (particularly the semantics of [[cats.Traverse#traverse traverse]] with regard to execution order are unspecified).
+   *   We recommend using [[https://typelevel.org/cats-effect/ Cats Effect `IO`]] as a replacement for ''every'' use case of [[scala.concurrent.Future Future]].
+   *   However, at this time there are no plans to remove these instances from Cats.
+   *
+   * @see [[https://github.com/typelevel/cats/issues/4176 Changes in Future traverse behavior between 2.6 and 2.7]]
+   */
+  implicit def catsSemigroupalForFuture(implicit ec: ExecutionContext): Semigroupal[Future] =
+    cats.instances.future.catsStdInstancesForFuture(ec)
+
   implicit def catsSemigroupalForList: Semigroupal[List] = cats.instances.list.catsStdInstancesForList
+  implicit def catsSemigroupalForSeq: Semigroupal[Seq] = cats.instances.seq.catsStdInstancesForSeq
   implicit def catsSemigroupalForVector: Semigroupal[Vector] = cats.instances.vector.catsStdInstancesForVector
   implicit def catsSemigroupalForQueue: Semigroupal[Queue] = cats.instances.queue.catsStdInstancesForQueue
   implicit def catsSemigroupalForMap[K]: Semigroupal[Map[K, *]] = cats.instances.map.catsStdInstancesForMap[K]
@@ -85,10 +119,6 @@ object Semigroupal extends ScalaVersionSpecificSemigroupalInstances with Semigro
     cats.instances.invariant.catsInvariantMonoidalCommutativeSemigroup
   implicit val catsSemigroupalForPredicate: Semigroupal[* => Boolean] =
     cats.instances.function.catsStdDecidableForPredicate
-
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
 
   /**
    * Summon an instance of [[Semigroupal]] for `F`.
@@ -125,9 +155,5 @@ object Semigroupal extends ScalaVersionSpecificSemigroupalInstances with Semigro
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToSemigroupalOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }

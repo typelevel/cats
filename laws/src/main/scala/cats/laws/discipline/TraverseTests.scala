@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 package laws
 package discipline
@@ -38,11 +59,12 @@ trait TraverseTests[F[_]] extends FunctorTests[F] with FoldableTests[F] with Uno
     EqYFM: Eq[Y[F[M]]],
     EqOptionA: Eq[Option[A]]
   ): RuleSet = {
-    implicit def EqXFBYFB: Eq[(X[F[B]], Y[F[B]])] =
+    implicit val EqXFBYFB: Eq[(X[F[B]], Y[F[B]])] =
       new Eq[(X[F[B]], Y[F[B]])] {
         override def eqv(x: (X[F[B]], Y[F[B]]), y: (X[F[B]], Y[F[B]])): Boolean =
           EqXFB.eqv(x._1, y._1) && EqYFB.eqv(x._2, y._2)
       }
+
     new RuleSet {
       def name: String = "traverse"
       def bases: Seq[(String, RuleSet)] = Nil
@@ -52,8 +74,10 @@ trait TraverseTests[F[_]] extends FunctorTests[F] with FoldableTests[F] with Uno
           "traverse identity" -> forAll(laws.traverseIdentity[A, C] _),
           "traverse sequential composition" -> forAll(laws.traverseSequentialComposition[A, B, C, X, Y] _),
           "traverse parallel composition" -> forAll(laws.traverseParallelComposition[A, B, X, Y] _),
+          "traverse traverseTap" -> forAll(laws.traverseTap[B, M, X] _),
           "traverse derive foldMap" -> forAll(laws.foldMapDerived[A, M] _),
           "traverse order consistency" -> forAll(laws.traverseOrderConsistent[A] _),
+          "traverse ref mapAccumulate" -> forAll(laws.mapAccumulateRef[M, A, C] _),
           "traverse ref mapWithIndex" -> forAll(laws.mapWithIndexRef[A, C] _),
           "traverse ref traverseWithIndexM" -> forAll(laws.traverseWithIndexMRef[Option, A, C] _),
           "traverse ref zipWithIndex" -> forAll(laws.zipWithIndexRef[A, C] _)

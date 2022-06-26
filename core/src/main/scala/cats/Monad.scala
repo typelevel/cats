@@ -1,7 +1,25 @@
-package cats
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 
-import simulacrum.{noop, typeclass}
-import scala.annotation.implicitNotFound
+package cats
 
 /**
  * Monad.
@@ -12,8 +30,7 @@ import scala.annotation.implicitNotFound
  *
  * Must obey the laws defined in cats.laws.MonadLaws.
  */
-@implicitNotFound("Could not find an instance of Monad for ${F}")
-@typeclass trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
+trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
   override def map[A, B](fa: F[A])(f: A => B): F[B] =
     flatMap(fa)(a => pure(f(a)))
 
@@ -24,14 +41,14 @@ import scala.annotation.implicitNotFound
    * This implementation uses append on each evaluation result,
    * so avoid data structures with non-constant append performance, e.g. `List`.
    */
-  @noop
+
   def whileM[G[_], A](p: F[Boolean])(body: => F[A])(implicit G: Alternative[G]): F[G[A]] = {
     val b = Eval.later(body)
     tailRecM[G[A], G[A]](G.empty)(xs =>
       ifM(p)(
         ifTrue = {
           map(b.value) { bv =>
-            Left(G.combineK(xs, G.pure(bv)))
+            Left(G.appendK(xs, bv))
           }
         },
         ifFalse = pure(Right(xs))
@@ -44,16 +61,14 @@ import scala.annotation.implicitNotFound
    * returns `true`. The condition is evaluated before the loop body.
    * Discards results.
    */
-  @noop
+
   def whileM_[A](p: F[Boolean])(body: => F[A]): F[Unit] = {
     val continue: Either[Unit, Unit] = Left(())
     val stop: F[Either[Unit, Unit]] = pure(Right(()))
     val b = Eval.later(body)
     tailRecM(())(_ =>
       ifM(p)(
-        ifTrue = {
-          map(b.value)(_ => continue)
-        },
+        ifTrue = as(b.value, continue),
         ifFalse = stop
       )
     )
@@ -68,7 +83,7 @@ import scala.annotation.implicitNotFound
    */
   def untilM[G[_], A](f: F[A])(cond: => F[Boolean])(implicit G: Alternative[G]): F[G[A]] = {
     val p = Eval.later(cond)
-    flatMap(f)(x => map(whileM(map(p.value)(!_))(f))(xs => G.combineK(G.pure(x), xs)))
+    flatMap(f)(x => map(whileM(map(p.value)(!_))(f))(xs => G.prependK(x, xs)))
   }
 
   /**
@@ -117,13 +132,38 @@ import scala.annotation.implicitNotFound
   def iterateUntilM[A](init: A)(f: A => F[A])(p: A => Boolean): F[A] =
     iterateWhileM(init)(f)(!p(_))
 
+  /**
+   * Simulates an if/else-if/else in the context of an F. It evaluates conditions until
+   * one evaluates to true, and returns the associated F[A]. If no condition is true,
+   * returns els.
+   *
+   * {{{
+   * scala> import cats._
+   * scala> Monad[Eval].ifElseM(Eval.later(false) -> Eval.later(1), Eval.later(true) -> Eval.later(2))(Eval.later(5)).value
+   * res0: Int = 2
+   * }}}
+   *
+   * Based on a [[https://gist.github.com/1b92a6e338f4e1537692e748c54b9743 gist]] by Daniel Spiewak with a stack-safe
+   * [[https://github.com/typelevel/cats/pull/3553#discussion_r468121480 implementation]] due to P. Oscar Boykin
+   * @see See [[https://gitter.im/typelevel/cats-effect?at=5f297e4314c413356f56d230]] for the discussion.
+   */
+
+  def ifElseM[A](branches: (F[Boolean], F[A])*)(els: F[A]): F[A] = {
+    type Branches = List[(F[Boolean], F[A])]
+
+    def step(branches: Branches): F[Either[Branches, A]] =
+      branches match {
+        case (cond, conseq) :: tail =>
+          flatMap(cond) { b => if (b) map(conseq)(Right(_)) else pure(Left(tail)) }
+        case Nil =>
+          map(els)(Right(_))
+      }
+
+    tailRecM(branches.toList)(step)
+  }
 }
 
 object Monad {
-
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
 
   /**
    * Summon an instance of [[Monad]] for `F`.
@@ -166,9 +206,5 @@ object Monad {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToMonadOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }

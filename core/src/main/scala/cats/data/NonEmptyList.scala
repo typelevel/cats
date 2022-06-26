@@ -1,7 +1,29 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 package data
 
 import cats.data.NonEmptyList.ZipNonEmptyList
+import cats.instances.StaticMethods
 
 import scala.annotation.tailrec
 import scala.collection.immutable.{SortedMap, TreeMap, TreeSet}
@@ -53,6 +75,18 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
     }
 
   final def iterator: Iterator[A] = toList.iterator
+
+  /**
+   * Returns the first n elements of this NonEmptyList as a List.
+   *
+   * {{{
+   * scala> import cats.data.NonEmptyList
+   * scala> val nel = NonEmptyList.of(1, 2, 3, 4, 5)
+   * scala> nel.take(3)
+   * res0: scala.collection.immutable.List[Int] = List(1, 2, 3)
+   * }}}
+   */
+  def take(n: Int): List[A] = toList.take(n)
 
   /**
    * The size of this NonEmptyList
@@ -287,6 +321,20 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
   }
 
   /**
+   * Zips this `NonEmptyList` with another `NonEmptyList` and returns the pairs of elements.
+   *
+   * {{{
+   * scala> import cats.data.NonEmptyList
+   * scala> val as = NonEmptyList.of(1, 2, 3)
+   * scala> val bs = NonEmptyList.of("A", "B", "C")
+   * scala> as.zip(bs)
+   * res0: cats.data.NonEmptyList[(Int, String)] = NonEmptyList((1,A), (2,B), (3,C))
+   * }}}
+   */
+  def zip[B](nel: NonEmptyList[B]): NonEmptyList[(A, B)] =
+    NonEmptyList((head, nel.head), tail.zip(nel.tail))
+
+  /**
    * Zips this `NonEmptyList` with another `NonEmptyList` and applies a function for each pair of elements.
    *
    * {{{
@@ -325,10 +373,10 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
     var idx = 1
     val it = tail.iterator
     while (it.hasNext) {
-      bldr += ((it.next, idx))
+      bldr += ((it.next(), idx))
       idx += 1
     }
-    NonEmptyList((head, 0), bldr.result)
+    NonEmptyList((head, 0), bldr.result())
   }
 
   /**
@@ -376,23 +424,8 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
    * res0: Boolean = true
    * }}}
    */
-  def groupBy[B](f: A => B)(implicit B: Order[B]): SortedMap[B, NonEmptyList[A]] = {
-    implicit val ordering: Ordering[B] = B.toOrdering
-    var m = TreeMap.empty[B, mutable.Builder[A, List[A]]]
-
-    for { elem <- toList } {
-      val k = f(elem)
-
-      m.get(k) match {
-        case None          => m += ((k, List.newBuilder[A] += elem))
-        case Some(builder) => builder += elem
-      }
-    }
-
-    m.map {
-      case (k, v) => (k, NonEmptyList.fromListUnsafe(v.result))
-    }: TreeMap[B, NonEmptyList[A]]
-  }
+  def groupBy[B](f: A => B)(implicit B: Order[B]): SortedMap[B, NonEmptyList[A]] =
+    groupMap(key = f)(identity)
 
   /**
    * Groups elements inside this `NonEmptyList` according to the `Order`
@@ -410,6 +443,179 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
    */
   def groupByNem[B](f: A => B)(implicit B: Order[B]): NonEmptyMap[B, NonEmptyList[A]] =
     NonEmptyMap.fromMapUnsafe(groupBy(f))
+
+  /**
+   * Groups elements inside this `NonEmptyList` according to the `Order`
+   * of the keys produced by the given key function.
+   * And each element in a group is transformed into a value of type B
+   * using the mapping function.
+   *
+   * {{{
+   * scala> import scala.collection.immutable.SortedMap
+   * scala> import cats.data.NonEmptyList
+   * scala> import cats.implicits._
+   * scala> val nel = NonEmptyList.of(12, -2, 3, -5)
+   * scala> val expectedResult = SortedMap(false -> NonEmptyList.of("-2", "-5"), true -> NonEmptyList.of("12", "3"))
+   * scala> val result = nel.groupMap(_ >= 0)(_.toString)
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  def groupMap[K, B](key: A => K)(f: A => B)(implicit K: Order[K]): SortedMap[K, NonEmptyList[B]] = {
+    implicit val ordering: Ordering[K] = K.toOrdering
+    var m = TreeMap.empty[K, mutable.Builder[B, List[B]]]
+
+    for (elem <- toList) {
+      val k = key(elem)
+
+      m.get(k) match {
+        case Some(builder) => builder += f(elem)
+        case None          => m += (k -> (List.newBuilder[B] += f(elem)))
+      }
+    }
+
+    m.map { case (k, v) =>
+      (k, NonEmptyList.fromListUnsafe(v.result()))
+    }
+  }
+
+  /**
+   * Groups elements inside this `NonEmptyList` according to the `Order`
+   * of the keys produced by the given key function.
+   * And each element in a group is transformed into a value of type B
+   * using the mapping function.
+   *
+   * {{{
+   * scala> import cats.data.{NonEmptyList, NonEmptyMap}
+   * scala> import cats.implicits._
+   * scala> val nel = NonEmptyList.of(12, -2, 3, -5)
+   * scala> val expectedResult = NonEmptyMap.of(false -> NonEmptyList.of("-2", "-5"), true -> NonEmptyList.of("12", "3"))
+   * scala> val result = nel.groupMapNem(_ >= 0)(_.toString)
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  def groupMapNem[K, B](key: A => K)(f: A => B)(implicit K: Order[K]): NonEmptyMap[K, NonEmptyList[B]] =
+    NonEmptyMap.fromMapUnsafe(groupMap(key)(f))
+
+  /**
+   * Groups elements inside this `NonEmptyList` according to the `Order`
+   * of the keys produced by the given key function.
+   * Then each element in a group is transformed into a value of type B
+   * using the mapping function.
+   * And finally they are all reduced into a single value
+   * using their `Semigroup`.
+   *
+   * {{{
+   * scala> import scala.collection.immutable.SortedMap
+   * scala> import cats.data.NonEmptyList
+   * scala> import cats.implicits._
+   * scala> val nel = NonEmptyList.of("Hello", "World", "Goodbye", "World")
+   * scala> val expectedResult = SortedMap("goodbye" -> 1, "hello" -> 1, "world" -> 2)
+   * scala> val result = nel.groupMapReduce(_.trim.toLowerCase)(_ => 1)
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  def groupMapReduce[K, B](key: A => K)(f: A => B)(implicit K: Order[K], B: Semigroup[B]): SortedMap[K, B] =
+    groupMapReduceWith(key)(f)(B.combine)
+
+  /**
+   * Groups elements inside this `NonEmptyList` according to the `Order`
+   * of the keys produced by the given key function.
+   * Then each element in a group is transformed into a value of type B
+   * using the mapping function.
+   * And finally they are all reduced into a single value
+   * using their `Semigroup`.
+   *
+   * {{{
+   * scala> import cats.data.{NonEmptyList, NonEmptyMap}
+   * scala> import cats.implicits._
+   * scala> val nel = NonEmptyList.of("Hello", "World", "Goodbye", "World")
+   * scala> val expectedResult = NonEmptyMap.of("goodbye" -> 1, "hello" -> 1, "world" -> 2)
+   * scala> val result = nel.groupMapReduceNem(_.trim.toLowerCase)(_ => 1)
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  def groupMapReduceNem[K, B](key: A => K)(f: A => B)(implicit K: Order[K], B: Semigroup[B]): NonEmptyMap[K, B] =
+    NonEmptyMap.fromMapUnsafe(groupMapReduce(key)(f))
+
+  /**
+   * Groups elements inside this `NonEmptyList` according to the `Order`
+   * of the keys produced by the given key function.
+   * Then each element in a group is transformed into a value of type B
+   * using the mapping function.
+   * And finally they are all reduced into a single value
+   * using the provided combine function.
+   *
+   * {{{
+   * scala> import scala.collection.immutable.SortedMap
+   * scala> import cats.data.NonEmptyList
+   * scala> import cats.implicits._
+   * scala> val nel = NonEmptyList.of("Hello", "World", "Goodbye", "World")
+   * scala> val expectedResult = SortedMap("goodbye" -> 1, "hello" -> 1, "world" -> 2)
+   * scala> val result = nel.groupMapReduceWith(_.trim.toLowerCase)(_ => 1)(_ + _)
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  def groupMapReduceWith[K, B](key: A => K)(f: A => B)(combine: (B, B) => B)(implicit K: Order[K]): SortedMap[K, B] = {
+    implicit val ordering: Ordering[K] = K.toOrdering
+    var m = TreeMap.empty[K, B]
+
+    for (elem <- toList) {
+      val k = key(elem)
+
+      m.get(k) match {
+        case Some(b) => m = m.updated(key = k, value = combine(b, f(elem)))
+        case None    => m += (k -> f(elem))
+      }
+    }
+
+    m
+  }
+
+  /**
+   * Groups elements inside this `NonEmptyList` according to the `Order`
+   * of the keys produced by the given key function.
+   * Then each element in a group is transformed into a value of type B
+   * using the mapping function.
+   * And finally they are all reduced into a single value
+   * using the provided combine function.
+   *
+   * {{{
+   * scala> import cats.data.{NonEmptyList, NonEmptyMap}
+   * scala> import cats.implicits._
+   * scala> val nel = NonEmptyList.of("Hello", "World", "Goodbye", "World")
+   * scala> val expectedResult = NonEmptyMap.of("goodbye" -> 1, "hello" -> 1, "world" -> 2)
+   * scala> val result = nel.groupMapReduceWithNem(_.trim.toLowerCase)(_ => 1)(_ + _)
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  def groupMapReduceWithNem[K, B](key: A => K)(f: A => B)(combine: (B, B) => B)(implicit
+    K: Order[K]
+  ): NonEmptyMap[K, B] =
+    NonEmptyMap.fromMapUnsafe(groupMapReduceWith(key)(f)(combine))
+
+  /**
+   * Partitions elements in fixed size `NonEmptyList`s.
+   *
+   * {{{
+   * scala> import cats.data.NonEmptyList
+   * scala> import cats.implicits._
+   * scala> val nel = NonEmptyList.of(12, -2, 3, -5)
+   * scala> val expectedResult = List(NonEmptyList.of(12, -2), NonEmptyList.of(3, -5))
+   * scala> val result = nel.grouped(2)
+   * scala> result.toList === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  def grouped(size: Int): Iterator[NonEmptyList[A]] = {
+    require(size >= 1, f"size=$size%d, but size must be positive")
+    toList.grouped(size).map(NonEmptyList.fromListUnsafe)
+  }
 
   /**
    * Creates new `NonEmptyMap`, similarly to List#toMap from scala standard library.
@@ -528,6 +734,12 @@ object NonEmptyList extends NonEmptyListInstances {
 
 sealed abstract private[data] class NonEmptyListInstances extends NonEmptyListInstances0 {
 
+  /**
+   * This is not a bug. The declared type of `catsDataInstancesForNonEmptyList` intentionally ignores
+   * `NonEmptyReducible` trait for it not being a typeclass.
+   *
+   * Also see the discussion: PR #3541 and issue #3069.
+   */
   implicit val catsDataInstancesForNonEmptyList
     : SemigroupK[NonEmptyList] with Bimonad[NonEmptyList] with NonEmptyTraverse[NonEmptyList] with Align[NonEmptyList] =
     new NonEmptyReducible[NonEmptyList, List]
@@ -575,6 +787,15 @@ sealed abstract private[data] class NonEmptyListInstances extends NonEmptyListIn
         fa: NonEmptyList[A]
       )(f: A => G[B])(implicit G: Applicative[G]): G[NonEmptyList[B]] =
         fa.traverse(f)
+
+      override def mapAccumulate[S, A, B](init: S, fa: NonEmptyList[A])(f: (S, A) => (S, B)): (S, NonEmptyList[B]) =
+        StaticMethods.mapAccumulateFromStrictFunctor(init, fa, f)(this)
+
+      override def mapWithIndex[A, B](fa: NonEmptyList[A])(f: (A, Int) => B): NonEmptyList[B] =
+        StaticMethods.mapWithIndexFromStrictFunctor(fa, f)(this)
+
+      override def zipWithIndex[A](fa: NonEmptyList[A]): NonEmptyList[(A, Int)] =
+        fa.zipWithIndex
 
       override def foldLeft[A, B](fa: NonEmptyList[A], b: B)(f: (B, A) => B): B =
         fa.foldLeft(b)(f)
@@ -634,6 +855,8 @@ sealed abstract private[data] class NonEmptyListInstances extends NonEmptyListIn
         fa.exists(p)
 
       override def toList[A](fa: NonEmptyList[A]): List[A] = fa.toList
+
+      override def toIterable[A](fa: NonEmptyList[A]): Iterable[A] = fa.toList
 
       override def toNonEmptyList[A](fa: NonEmptyList[A]): NonEmptyList[A] = fa
 

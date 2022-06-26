@@ -1,10 +1,32 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats.free
 
-import cats.{:<:, Foldable, Functor, Id, Monad, Traverse}
+import cats._
 import cats.arrow.FunctionK
 import cats.data.EitherK
 import cats.instances.all._
 import cats.kernel.Eq
+import cats.syntax.eq._
 import cats.laws.discipline.{DeferTests, FoldableTests, MonadTests, SerializableTests, TraverseTests}
 import cats.laws.discipline.arbitrary.catsLawsArbitraryForFn0
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
@@ -12,6 +34,7 @@ import cats.syntax.apply._
 import cats.tests.CatsSuite
 import org.scalacheck.{Arbitrary, Cogen, Gen}
 import org.scalacheck.Arbitrary.arbFunction1
+import org.scalacheck.Prop._
 
 class FreeSuite extends CatsSuite {
   import FreeSuite._
@@ -45,20 +68,20 @@ class FreeSuite extends CatsSuite {
   test("toString is stack-safe") {
     val r = Free.pure[List, Int](333)
     val rr = (1 to 1000000).foldLeft(r)((r, _) => r.map(_ + 1))
-    rr.toString.length should be > 0
+    assert(rr.toString.length > 0)
   }
 
   test("compile id") {
     forAll { (x: Free[List, Int]) =>
-      x.compile(FunctionK.id[List]) should ===(x)
+      assert(x.compile(FunctionK.id[List]) === x)
       val fk = Free.compile(FunctionK.id[List])
-      fk(x) === x
+      assert(fk(x) === x)
     }
   }
 
   test("defer doesn't change value") {
     forAll { (x: Free[List, Int]) =>
-      Free.defer(x) should ===(x)
+      assert(Free.defer(x) === x)
     }
   }
 
@@ -72,10 +95,10 @@ class FreeSuite extends CatsSuite {
     forAll { (x: Free[List, Int]) =>
       val mapped = x.compile(headOptionU)
       val folded = mapped.foldMap(FunctionK.id[Option])
-      folded should ===(x.foldMap(headOptionU))
+      assert(folded === x.foldMap(headOptionU))
 
       val fk = Free.foldMap(headOptionU)
-      folded should ===(fk(x))
+      assert(folded === fk(x))
     }
   }
 
@@ -83,7 +106,7 @@ class FreeSuite extends CatsSuite {
     val n = 50000
     val fa =
       Monad[Free[Option, *]].tailRecM(0)(i => Free.pure[Option, Either[Int, Int]](if (i < n) Left(i + 1) else Right(i)))
-    fa should ===(Free.pure[Option, Int](n))
+    assert(fa === Free.pure[Option, Int](n))
   }
 
   trait FTestApi[A]
@@ -102,7 +125,7 @@ class FreeSuite extends CatsSuite {
     def runner: FunctionK[FTestApi, Id] =
       new FunctionK[FTestApi, Id] {
         def apply[A](a: FTestApi[A]): A =
-          a match {
+          (a: @unchecked) match {
             case TB(i) => i + 1
           }
       }
@@ -113,7 +136,7 @@ class FreeSuite extends CatsSuite {
   }
 
   test("toFreeT is stack-safe") {
-    FTestApi.a(0).toFreeT[Id].foldMap(FTestApi.runner) should ===(FTestApi.a(0).foldMap(FTestApi.runner))
+    assert(FTestApi.a(0).toFreeT[Id].foldMap(FTestApi.runner) === FTestApi.a(0).foldMap(FTestApi.runner))
   }
 
   test(".runTailRec") {
@@ -194,17 +217,6 @@ class FreeSuite extends CatsSuite {
 
   val eitherKInterpreter: FunctionK[T, Id] = Test1Interpreter.or(Test2Interpreter)
 
-  test(".inject") {
-    forAll { (x: Int, y: Int) =>
-      def res[F[_]](implicit I0: Test1Algebra :<: F, I1: Test2Algebra :<: F): Free[F, Int] =
-        for {
-          a <- Free.inject[Test1Algebra, F](test1(x, identity))
-          b <- Free.inject[Test2Algebra, F](test2(y, identity))
-        } yield a + b
-      (res[T].foldMap(eitherKInterpreter)) == (x + y) should ===(true)
-    }
-  }
-
   test(".liftInject") {
     forAll { (x: Int, y: Int) =>
       def res[F[_]](implicit I0: Test1Algebra :<: F, I1: Test2Algebra :<: F): Free[F, Int] =
@@ -212,11 +224,9 @@ class FreeSuite extends CatsSuite {
           a <- Free.liftInject[F](test1(x, identity))
           b <- Free.liftInject[F](test2(y, identity))
         } yield a + b
-      (res[T].foldMap(eitherKInterpreter)) == (x + y) should ===(true)
+      assert(res[T].foldMap(eitherKInterpreter) == (x + y))
     }
   }
-
-  val x: Free[T, Int] = Free.inject[Test1Algebra, T](Test1(1, identity))
 
   test(".injectRoll") {
     def distr[F[_], A](
@@ -231,7 +241,7 @@ class FreeSuite extends CatsSuite {
       val expr1: Free[T, Int] = Free.injectRoll[T, Test1Algebra, Int](Test1(x, Free.pure))
       val expr2: Free[T, Int] = Free.injectRoll[T, Test2Algebra, Int](Test2(y, Free.pure))
       val res = distr[T, Int](expr1 *> expr2)
-      res.map(_.foldMap(eitherKInterpreter)) should ===(Some(Free.pure[Id, Int](x + y).foldMap(FunctionK.id)))
+      assert(res.map(_.foldMap(eitherKInterpreter)) === Some(Free.pure[Id, Int](x + y).foldMap(FunctionK.id)))
     }
   }
 }

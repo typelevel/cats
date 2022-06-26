@@ -1,15 +1,45 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 package instances
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
+/**
+ * @deprecated
+ *   Any non-pure use of [[scala.concurrent.Future Future]] with Cats is error prone
+ *   (particularly the semantics of [[cats.Traverse#traverse traverse]] with regard to execution order are unspecified).
+ *   We recommend using [[https://typelevel.org/cats-effect/ Cats Effect `IO`]] as a replacement for ''every'' use case of [[scala.concurrent.Future Future]].
+ *   However, at this time there are no plans to remove these instances from Cats.
+ *
+ * @see [[https://github.com/typelevel/cats/issues/4176 Changes in Future traverse behavior between 2.6 and 2.7]]
+ */
 trait FutureInstances extends FutureInstances1 {
 
   implicit def catsStdInstancesForFuture(implicit
     ec: ExecutionContext
-  ): MonadError[Future, Throwable] with CoflatMap[Future] with Monad[Future] =
-    new FutureCoflatMap with MonadError[Future, Throwable] with Monad[Future] with StackSafeMonad[Future] {
+  ): MonadThrow[Future] with CoflatMap[Future] with Monad[Future] =
+    new FutureCoflatMap with MonadThrow[Future] with Monad[Future] with StackSafeMonad[Future] {
       override def pure[A](x: A): Future[A] =
         Future.successful(x)
       override def flatMap[A, B](fa: Future[A])(f: A => Future[B]): Future[B] =

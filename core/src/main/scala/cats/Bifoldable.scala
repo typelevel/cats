@@ -1,21 +1,83 @@
-package cats
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 
-import simulacrum.typeclass
-import scala.annotation.implicitNotFound
+package cats
 
 /**
  * A type class abstracting over types that give rise to two independent [[cats.Foldable]]s.
  */
-@implicitNotFound("Could not find an instance of Bifoldable for ${F}")
-@typeclass trait Bifoldable[F[_, _]] extends Serializable { self =>
+trait Bifoldable[F[_, _]] extends Serializable { self =>
 
   /**
    * Collapse the structure with a left-associative function
+   *
+   * Example:
+   * {{{
+   * scala> import cats.Bifoldable
+   * scala> val fab = (List(1), 2)
+   *
+   * Folding by addition to zero:
+   * scala> Bifoldable[Tuple2].bifoldLeft(fab, Option(0))((c, a) => c.map(_ + a.head), (c, b) => c.map(_ + b))
+   * res0: Option[Int] = Some(3)
+   * }}}
+   *
+   * With syntax extensions, `bifoldLeft` can be used like:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> fab.bifoldLeft(Option(0))((c, a) => c.map(_ + a.head), (c, b) => c.map(_ + b))
+   * res1: Option[Int] = Some(3)
+   * }}}
    */
   def bifoldLeft[A, B, C](fab: F[A, B], c: C)(f: (C, A) => C, g: (C, B) => C): C
 
   /**
    * Collapse the structure with a right-associative function
+   * Right associative lazy bifold on `F` using the folding function 'f' and 'g'.
+   *
+   * This method evaluates `c` lazily (in some cases it will not be
+   * needed), and returns a lazy value. We are using `(_, Eval[C]) =>
+   * Eval[C]` to support laziness in a stack-safe way. Chained
+   * computation should be performed via .map and .flatMap.
+   *
+   * For more detailed information about how this method works see the
+   * documentation for `Eval[_]`.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.Bifoldable
+   * scala> val fab = (List(1), 2)
+   *
+   * Folding by addition to zero:
+   * scala> val bifolded1 = Bifoldable[Tuple2].bifoldRight(fab, Eval.now(0))((a, c) => c.map(_ + a.head), (b, c) => c.map(_ + b))
+   * scala> bifolded1.value
+   * res0: Int = 3
+   * }}}
+   *
+   * With syntax extensions, `bifoldRight` can be used like:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> val bifolded2 = fab.bifoldRight(Eval.now(0))((a, c) => c.map(_ + a.head), (b, c) => c.map(_ + b))
+   * scala> bifolded2.value
+   * res1: Int = 3
+   * }}}
    */
   def bifoldRight[A, B, C](fab: F[A, B], c: Eval[C])(f: (A, Eval[C]) => Eval[C], g: (B, Eval[C]) => Eval[C]): Eval[C]
 
@@ -40,13 +102,11 @@ import scala.annotation.implicitNotFound
   }
 }
 
-object Bifoldable {
+object Bifoldable extends cats.instances.NTupleBitraverseInstances {
   implicit def catsBitraverseForEither: Bitraverse[Either] = cats.instances.either.catsStdBitraverseForEither
-  implicit def catsBitraverseForTuple2: Bitraverse[Tuple2] = cats.instances.tuple.catsStdBitraverseForTuple2
 
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
+  @deprecated("Use catsStdBitraverseForTuple2 in cats.instances.NTupleBitraverseInstances", "2.4.0")
+  def catsBitraverseForTuple2: Bitraverse[Tuple2] = cats.instances.tuple.catsStdBitraverseForTuple2
 
   /**
    * Summon an instance of [[Bifoldable]] for `F`.
@@ -88,10 +148,6 @@ object Bifoldable {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToBifoldableOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }
 

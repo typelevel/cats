@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 package data
 
@@ -5,7 +26,14 @@ import cats.kernel._
 
 import scala.collection.immutable._
 
-private[data] object NonEmptyMapImpl extends NonEmptyMapInstances with Newtype2 {
+/**
+ * Actual implementation for [[cats.data.NonEmptyMap]]
+ *
+ * @note This object is kept public for the sake of binary compatibility only
+ *       and therefore is subject to changes in future versions of Cats.
+ *       Do not use directly - use [[cats.data.NonEmptyMap]] instead.
+ */
+object NonEmptyMapImpl extends NonEmptyMapInstances with Newtype2 {
 
   private[data] def create[K, A](m: SortedMap[K, A]): Type[K, A] =
     m.asInstanceOf[Type[K, A]]
@@ -77,6 +105,28 @@ sealed class NonEmptyMapOps[K, A](val value: NonEmptyMap[K, A]) {
    */
   def map[B](f: A => B): NonEmptyMap[K, B] =
     NonEmptyMapImpl.create(Functor[SortedMap[K, *]].map(toSortedMap)(f))
+
+  /**
+   * Applies f to all the keys leaving elements unchanged.
+   */
+  def mapKeys[L](f: K => L)(implicit orderL: Order[L]): NonEmptyMap[L, A] = {
+    implicit val orderingL: Ordering[L] = orderL.toOrdering
+    NonEmptyMapImpl.create(toSortedMap.map(Bifunctor[Tuple2].leftMap(_)(f)))
+  }
+
+  /**
+   * Applies f to both keys and elements simultaneously.
+   */
+  def mapBoth[L, B](f: (K, A) => (L, B))(implicit orderL: Order[L]): NonEmptyMap[L, B] = {
+    implicit val orderingL: Ordering[L] = orderL.toOrdering
+    NonEmptyMapImpl.create(toSortedMap.map(Function.tupled(f)))
+  }
+
+  /**
+   * Transforms the elements only by applying f to both elements and associated keys.
+   */
+  def transform[B](f: (K, A) => B): NonEmptyMap[K, B] =
+    NonEmptyMapImpl.create(toSortedMap.transform(f))
 
   /**
    * Optionally returns the value associated with the given key.
@@ -183,12 +233,11 @@ sealed class NonEmptyMapOps[K, A](val value: NonEmptyMap[K, A]) {
    * with every other value using the given function `g`.
    */
   def reduceRightTo[B](f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B] =
-    Always((head, tail)).flatMap {
-      case ((_, a), ga) =>
-        Foldable[SortedMap[K, *]].reduceRightToOption(ga)(f)(g).flatMap {
-          case Some(b) => g(a, Now(b))
-          case None    => Later(f(a))
-        }
+    Always((head, tail)).flatMap { case ((_, a), ga) =>
+      Foldable[SortedMap[K, *]].reduceRightToOption(ga)(f)(g).flatMap {
+        case Some(b) => g(a, Now(b))
+        case None    => Later(f(a))
+      }
     }
 
   /**
@@ -196,16 +245,6 @@ sealed class NonEmptyMapOps[K, A](val value: NonEmptyMap[K, A]) {
    */
   def reduce(implicit S: Semigroup[A]): A =
     reduceLeft(S.combine)
-
-  private def reduceRightToOptionWithKey[V, B](
-    fa: SortedMap[K, V]
-  )(f: (K, V) => B)(g: ((K, V), Eval[B]) => Eval[B]): Eval[Option[B]] =
-    Foldable.iterateRight(fa.toIterable, Now(Option.empty[B])) { (a, lb) =>
-      lb.flatMap {
-        case Some(b) => g(a, Now(b)).map(Some(_))
-        case None    => Later(Some(f.tupled(a)))
-      }
-    }
 
   /**
    * Given a function which returns a G effect, thread this effect
@@ -313,7 +352,7 @@ sealed abstract private[data] class NonEmptyMapInstances extends NonEmptyMapInst
     }
 
   @deprecated("Use catsDataInstancesForNonEmptyMap override without Order", "2.2.0-M3")
-  implicit def catsDataInstancesForNonEmptyMap[K](
+  def catsDataInstancesForNonEmptyMap[K](
     orderK: Order[K]
   ): SemigroupK[NonEmptyMap[K, *]] with NonEmptyTraverse[NonEmptyMap[K, *]] with Align[NonEmptyMap[K, *]] =
     catsDataInstancesForNonEmptyMap[K]
@@ -328,9 +367,18 @@ sealed abstract private[data] class NonEmptyMapInstances extends NonEmptyMapInst
   implicit def catsDataShowForNonEmptyMap[K: Show, A: Show]: Show[NonEmptyMap[K, A]] =
     Show.show[NonEmptyMap[K, A]](_.show)
 
-  implicit def catsDataBandForNonEmptyMap[K, A]: Band[NonEmptyMap[K, A]] =
+  @deprecated("Use catsDataSemigroupForNonEmptyMap", "2.5.0")
+  def catsDataBandForNonEmptyMap[K, A]: Band[NonEmptyMap[K, A]] =
     new Band[NonEmptyMap[K, A]] {
       def combine(x: NonEmptyMap[K, A], y: NonEmptyMap[K, A]): NonEmptyMap[K, A] = x ++ y
+    }
+
+  implicit def catsDataSemigroupForNonEmptyMap[K, A: Semigroup]: Semigroup[NonEmptyMap[K, A]] =
+    new Semigroup[NonEmptyMap[K, A]] {
+      def combine(x: NonEmptyMap[K, A], y: NonEmptyMap[K, A]): NonEmptyMap[K, A] =
+        NonEmptyMap.fromMapUnsafe(
+          Semigroup[SortedMap[K, A]].combine(x.toSortedMap, y.toSortedMap)
+        )
     }
 }
 

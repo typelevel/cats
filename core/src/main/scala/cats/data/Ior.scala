@@ -1,7 +1,27 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 package data
 
-import cats.Bifunctor
 import cats.arrow.FunctionK
 import cats.data.Validated.{Invalid, Valid}
 
@@ -100,6 +120,58 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
     fold(Ior.both(_, right), _ => Ior.right(right), (a, _) => Ior.both(a, right))
 
   /**
+   * When a Left value is present in the Ior, combine it with the value specified.
+   *
+   * When the Left value is absent, set it to the value specified.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.data.Ior
+   * scala> import cats.implicits._
+   *
+   * scala> val ior1 = "abc".leftIor[Int]
+   * scala> ior1.addLeft("def")
+   * res0: Ior[String, Int] = Left(abcdef)
+   *
+   * scala> val ior2 = 123.rightIor[String]
+   * scala> ior2.addLeft("abc")
+   * res1: cats.data.Ior[String,Int] = Both(abc,123)
+   *
+   * scala> val ior3 = Ior.Both("abc",123)
+   * scala> ior3.addLeft("def")
+   * res2: Ior[String, Int] = Both(abcdef,123)
+   * }}}
+   */
+  final def addLeft[AA >: A](left: AA)(implicit AA: Semigroup[AA]): AA Ior B =
+    fold(l => Ior.left(AA.combine(l, left)), Ior.both(left, _), (l, r) => Ior.both(AA.combine(l, left), r))
+
+  /**
+   * When a Right value is present in the Ior, combine it with the value specified.
+   *
+   * When the Right value is absent, set it to the value specified.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.data.Ior
+   * scala> import cats.implicits._
+   *
+   * scala> val ior1 = "abc".leftIor[Int]
+   * scala> ior1.addRight(123)
+   * res0: Ior[String, Int] = Both(abc,123)
+   *
+   * scala> val ior2 = 123.rightIor[String]
+   * scala> ior2.addRight(123)
+   * res1: Ior[String, Int] = Right(246)
+   *
+   * scala> val ior3 = Ior.Both("abc",123)
+   * scala> ior3.addRight(123)
+   * res2: Ior[String, Int] = Both(abc,246)
+   * }}}
+   */
+  final def addRight[BB >: B](right: BB)(implicit BB: Semigroup[BB]): A Ior BB =
+    fold(Ior.both(_, right), r => Ior.right(BB.combine(r, right)), (l, r) => Ior.both(l, BB.combine(r, right)))
+
+  /**
    * Example:
    * {{{
    * scala> import cats.data.Ior
@@ -115,9 +187,23 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
    * res2: Boolean = false
    * }}}
    */
-  final def isLeft: Boolean = fold(_ => true, _ => false, (_, _) => false)
-  final def isRight: Boolean = fold(_ => false, _ => true, (_, _) => false)
-  final def isBoth: Boolean = fold(_ => false, _ => false, (_, _) => true)
+  final def isLeft: Boolean =
+    this match {
+      case Ior.Left(_) => true
+      case _           => false
+    }
+
+  final def isRight: Boolean =
+    this match {
+      case Ior.Right(_) => true
+      case _            => false
+    }
+
+  final def isBoth: Boolean =
+    this match {
+      case Ior.Both(_, _) => true
+      case _              => false
+    }
 
   /**
    * Example:
@@ -153,7 +239,12 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
    * res2: Option[Int] = Some(123)
    * }}}
    */
-  final def right: Option[B] = fold(_ => None, b => Some(b), (_, b) => Some(b))
+  final def right: Option[B] =
+    this match {
+      case Ior.Right(b)   => Some(b)
+      case Ior.Both(_, b) => Some(b)
+      case Ior.Left(_)    => None
+    }
 
   /**
    * Example:
@@ -651,6 +742,8 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
     fold(identity, ev, (a, _) => a)
   final def mergeRight[AA >: A](implicit ev: B <:< AA): AA =
     fold(identity, ev, (_, b) => ev(b))
+  final def mergeWith[AA >: A](f: (A, B) => AA)(implicit ev: B <:< AA): AA =
+    fold(identity, ev, f)
 
   /**
    * Example:
@@ -677,7 +770,6 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
    * res3: Ior[String, Int] = Both(abc,579)
    * }}}
    */
-  // scalastyle:off cyclomatic.complexity
   final def combine[AA >: A, BB >: B](that: AA Ior BB)(implicit AA: Semigroup[AA], BB: Semigroup[BB]): AA Ior BB =
     this match {
       case Ior.Left(a1) =>
@@ -699,7 +791,6 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
           case Ior.Both(a2, b2) => Ior.Both(AA.combine(a1, a2), BB.combine(b1, b2))
         }
     }
-  // scalastyle:on cyclomatic.complexity
 
   final def ===[AA >: A, BB >: B](that: AA Ior BB)(implicit AA: Eq[AA], BB: Eq[BB]): Boolean =
     fold(
@@ -707,6 +798,20 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
       b => that.fold(a2 => false, b2 => BB.eqv(b, b2), (a2, b2) => false),
       (a, b) => that.fold(a2 => false, b2 => false, (a2, b2) => AA.eqv(a, a2) && BB.eqv(b, b2))
     )
+
+  final def compare[AA >: A, BB >: B](that: AA Ior BB)(implicit AA: Order[AA], BB: Order[BB]): Int =
+    (this, that) match {
+      case (Ior.Left(a1), Ior.Left(a2))   => AA.compare(a1, a2)
+      case (Ior.Left(_), _)               => -1
+      case (Ior.Right(b1), Ior.Right(b2)) => BB.compare(b1, b2)
+      case (Ior.Right(_), Ior.Left(_))    => 1
+      case (Ior.Right(_), Ior.Both(_, _)) => -1
+      case (Ior.Both(a1, b1), Ior.Both(a2, b2)) => {
+        val r = AA.compare(a1, a2)
+        if (r == 0) BB.compare(b1, b2) else r
+      }
+      case (Ior.Both(_, _), _) => 1
+    }
 
   final def show[AA >: A, BB >: B](implicit AA: Show[AA], BB: Show[BB]): String =
     fold(
@@ -752,9 +857,10 @@ sealed abstract private[data] class IorInstances extends IorInstances0 {
       }
   }
 
-  implicit def catsDataEqForIor[A: Eq, B: Eq]: Eq[A Ior B] =
-    new Eq[A Ior B] {
-      def eqv(x: A Ior B, y: A Ior B): Boolean = x === y
+  implicit def catsDataOrderForIor[A: Order, B: Order]: Order[A Ior B] =
+    new Order[A Ior B] {
+
+      def compare(x: Ior[A, B], y: Ior[A, B]): Int = x.compare(y)
     }
 
   implicit def catsDataShowForIor[A: Show, B: Show]: Show[A Ior B] =
@@ -815,7 +921,6 @@ sealed abstract private[data] class IorInstances extends IorInstances0 {
       override def bimap[A, B, C, D](fab: A Ior B)(f: A => C, g: B => D): C Ior D = fab.bimap(f, g)
     }
 
-  // scalastyle:off cyclomatic.complexity
   implicit def catsDataParallelForIor[E](implicit E: Semigroup[E]): Parallel.Aux[Ior[E, *], Ior[E, *]] =
     new Parallel[Ior[E, *]] {
       type F[x] = Ior[E, x]
@@ -852,7 +957,6 @@ sealed abstract private[data] class IorInstances extends IorInstances0 {
 
       lazy val monad: Monad[Ior[E, *]] = Monad[Ior[E, *]]
     }
-  // scalastyle:on cyclomatic.complexity
 
 }
 
@@ -862,12 +966,24 @@ sealed abstract private[data] class IorInstances0 {
     new Traverse[Ior[A, *]] {
       def traverse[F[_]: Applicative, B, C](fa: A Ior B)(f: B => F[C]): F[A Ior C] =
         fa.traverse(f)
+
+      override def mapAccumulate[S, B, C](init: S, fa: Ior[A, B])(f: (S, B) => (S, C)): (S, Ior[A, C]) =
+        fa match {
+          case l @ Ior.Left(_) => (init, l)
+          case Ior.Right(b) =>
+            val (snext, c) = f(init, b)
+            (snext, Ior.Right(c))
+          case Ior.Both(a, b) =>
+            val (snext, c) = f(init, b)
+            (snext, Ior.Both(a, c))
+        }
       def foldLeft[B, C](fa: A Ior B, b: C)(f: (C, B) => C): C =
         fa.foldLeft(b)(f)
       def foldRight[B, C](fa: A Ior B, lc: Eval[C])(f: (B, Eval[C]) => Eval[C]): Eval[C] =
         fa.foldRight(lc)(f)
 
-      override def size[B](fa: A Ior B): Long = fa.fold(_ => 0L, _ => 1L, (_, _) => 1L)
+      override def size[B](fa: A Ior B): Long =
+        if (fa.isLeft) 0L else 1L
 
       override def get[B](fa: A Ior B)(idx: Long): Option[B] =
         if (idx == 0L) fa.toOption else None
@@ -878,6 +994,12 @@ sealed abstract private[data] class IorInstances0 {
 
       override def map[B, C](fa: A Ior B)(f: B => C): A Ior C =
         fa.map(f)
+    }
+
+  implicit def catsDataEqForIor[A: Eq, B: Eq]: Eq[A Ior B] =
+    new Eq[A Ior B] {
+
+      def eqv(x: A Ior B, y: A Ior B): Boolean = x === y
     }
 }
 

@@ -1,10 +1,28 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 
-import simulacrum.typeclass
-
 import cats.data.Ior
-import scala.collection.immutable.SortedMap
-import scala.annotation.implicitNotFound
+import scala.collection.immutable.{Seq, SortedMap}
 
 /**
  * `Align` supports zipping together structures with different shapes,
@@ -12,8 +30,7 @@ import scala.annotation.implicitNotFound
  *
  * Must obey the laws in cats.laws.AlignLaws
  */
-@implicitNotFound("Could not find an instance of Align for ${F}")
-@typeclass trait Align[F[_]] extends Serializable {
+trait Align[F[_]] extends Serializable {
 
   def functor: Functor[F]
 
@@ -55,6 +72,19 @@ import scala.annotation.implicitNotFound
    */
   def alignCombine[A: Semigroup](fa1: F[A], fa2: F[A]): F[A] =
     alignWith(fa1, fa2)(_.merge)
+
+  /**
+   * Align two structures with the same element, combining results according to the given function.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> Align[List].alignMergeWith(List(1, 2), List(10, 11, 12))(_ + _)
+   * res0: List[Int] = List(11, 13, 12)
+   * }}}
+   */
+  def alignMergeWith[A](fa1: F[A], fa2: F[A])(f: (A, A) => A): F[A] =
+    functor.map(align(fa1, fa2))(_.mergeWith(f))
 
   /**
    * Same as `align`, but forgets from the type that one of the two elements must be present.
@@ -111,6 +141,7 @@ object Align extends ScalaVersionSpecificAlignInstances {
 
   implicit def catsAlignForList: Align[List] = cats.instances.list.catsStdInstancesForList
   implicit def catsAlignForOption: Align[Option] = cats.instances.option.catsStdInstancesForOption
+  implicit def catsAlignForSeq: Align[Seq] = cats.instances.seq.catsStdInstancesForSeq
   implicit def catsAlignForVector: Align[Vector] = cats.instances.vector.catsStdInstancesForVector
   implicit def catsAlignForMap[K]: Align[Map[K, *]] = cats.instances.map.catsStdInstancesForMap[K]
   implicit def catsAlignForSortedMap[K]: Align[SortedMap[K, *]] =
@@ -129,10 +160,6 @@ object Align extends ScalaVersionSpecificAlignInstances {
           else Ior.right(iterB.next())
         )
     }
-
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
 
   /**
    * Summon an instance of [[Align]] for `F`.
@@ -157,6 +184,7 @@ object Align extends ScalaVersionSpecificAlignInstances {
     def align[B](fb: F[B]): F[Ior[A, B]] = typeClassInstance.align[A, B](self, fb)
     def alignWith[B, C](fb: F[B])(f: Ior[A, B] => C): F[C] = typeClassInstance.alignWith[A, B, C](self, fb)(f)
     def alignCombine(fa2: F[A])(implicit ev$1: Semigroup[A]): F[A] = typeClassInstance.alignCombine[A](self, fa2)
+    def alignMergeWith(fa2: F[A])(f: (A, A) => A): F[A] = typeClassInstance.alignMergeWith[A](self, fa2)(f)
     def padZip[B](fb: F[B]): F[(Option[A], Option[B])] = typeClassInstance.padZip[A, B](self, fb)
     def padZipWith[B, C](fb: F[B])(f: (Option[A], Option[B]) => C): F[C] =
       typeClassInstance.padZipWith[A, B, C](self, fb)(f)
@@ -175,9 +203,5 @@ object Align extends ScalaVersionSpecificAlignInstances {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToAlignOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }

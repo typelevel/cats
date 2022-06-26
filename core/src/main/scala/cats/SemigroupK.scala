@@ -1,9 +1,31 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 
-import scala.collection.immutable.{SortedMap, SortedSet}
-import simulacrum.typeclass
+import scala.annotation.tailrec
+import scala.collection.immutable.{Seq, SortedMap, SortedSet}
+
 import cats.data.Ior
-import scala.annotation.implicitNotFound
+import cats.kernel.compat.scalaVersionSpecific._
 
 /**
  * SemigroupK is a universal semigroup which operates on kinds.
@@ -23,8 +45,7 @@ import scala.annotation.implicitNotFound
  *    The combination operation just depends on the structure of F,
  *    but not the structure of A.
  */
-@implicitNotFound("Could not find an instance of SemigroupK for ${F}")
-@typeclass trait SemigroupK[F[_]] extends Serializable { self =>
+trait SemigroupK[F[_]] extends Serializable { self =>
 
   /**
    * Combine two F[A] values.
@@ -36,7 +57,7 @@ import scala.annotation.implicitNotFound
    * res0: List[Int] = List(1, 2, 3, 4)
    * }}}
    */
-  @simulacrum.op("<+>", alias = true)
+
   def combineK[A](x: F[A], y: F[A]): F[A]
 
   /**
@@ -110,9 +131,67 @@ import scala.annotation.implicitNotFound
    */
   def sum[A, B](fa: F[A], fb: F[B])(implicit F: Functor[F]): F[Either[A, B]] =
     combineK(F.map(fa)(Left(_)), F.map(fb)(Right(_)))
+
+  /**
+   * Return `a` combined with itself `n` times.
+   *
+   * Example:
+   * {{{
+   * scala> SemigroupK[List].combineNK(List(1), 5)
+   * res0: List[Int] = List(1, 1, 1, 1, 1)
+   *
+   * }}}
+   */
+  def combineNK[A](a: F[A], n: Int): F[A] =
+    if (n <= 0) throw new IllegalArgumentException("Repeated combining for semigroupKs must have n > 0")
+    else repeatedCombineNK(a, n)
+
+  /**
+   * Return `a` combined with itself more than once.
+   */
+  protected[this] def repeatedCombineNK[A](a: F[A], n: Int): F[A] = {
+    @tailrec def loop(b: F[A], k: Int, extra: F[A]): F[A] =
+      if (k == 1) combineK(b, extra)
+      else {
+        val x = if ((k & 1) == 1) combineK(b, extra) else extra
+        loop(combineK(b, b), k >>> 1, x)
+      }
+    if (n == 1) a else loop(a, n - 1, a)
+  }
+
+  /**
+   * Given a sequence of `as`, combine them and return the total.
+   *
+   * If the sequence is empty, returns None. Otherwise, returns Some(total).
+   *
+   * Example:
+   * {{{
+   * scala> SemigroupK[List].combineAllOptionK(List(List("One"), List("Two"), List("Three")))
+   * res0: Option[List[String]] = Some(List(One, Two, Three))
+   *
+   * scala> SemigroupK[List].combineAllOptionK[String](List.empty)
+   * res1: Option[List[String]] = None
+   * }}}
+   */
+  def combineAllOptionK[A](as: IterableOnce[F[A]]): Option[F[A]] =
+    as.iterator.reduceOption(combineK[A])
+
+  /**
+   * return a semigroupK that reverses the order
+   * so combineK(a, b) == reverse.combineK(b, a)
+   */
+  def reverse: SemigroupK[F] =
+    new SemigroupK[F] {
+      def combineK[A](a: F[A], b: F[A]): F[A] = self.combineK(b, a)
+      // a + a + a + ... is the same when reversed
+      override def combineNK[A](a: F[A], n: Int): F[A] = self.combineNK(a, n)
+      override def reverse = self
+    }
+
 }
 
-object SemigroupK extends ScalaVersionSpecificMonoidKInstances {
+@suppressUnusedImportWarningForScalaVersionSpecific
+object SemigroupK extends ScalaVersionSpecificMonoidKInstances with SemigroupKInstances0 {
   def align[F[_]: SemigroupK: Functor]: Align[F] =
     new Align[F] {
       def align[A, B](fa: F[A], fb: F[B]): F[Ior[A, B]] =
@@ -133,10 +212,6 @@ object SemigroupK extends ScalaVersionSpecificMonoidKInstances {
   implicit def catsMonoidKForSortedMap[K: Order]: MonoidK[SortedMap[K, *]] =
     cats.instances.sortedMap.catsStdMonoidKForSortedMap[K]
   implicit def catsMonoidKForEndo: MonoidK[Endo] = cats.instances.function.catsStdMonoidKForFunction1
-
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
 
   /**
    * Summon an instance of [[SemigroupK]] for `F`.
@@ -177,8 +252,10 @@ object SemigroupK extends ScalaVersionSpecificMonoidKInstances {
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToSemigroupKOps
 
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
+}
+
+trait SemigroupKInstances0 {
+
+  implicit def catsMonoidKForSeq: MonoidK[Seq] = cats.instances.seq.catsStdInstancesForSeq
 
 }

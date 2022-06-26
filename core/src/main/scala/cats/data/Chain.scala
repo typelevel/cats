@@ -1,81 +1,156 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+/* This file is derived in part from https://github.com/scala/scala/blob/v2.13.8/src/library/scala/collection/Iterable.scala
+ * Modified by Typelevel for redistribution in Cats.
+ *
+ * Copyright EPFL and Lightbend, Inc.
+ * Scala
+ * Copyright (c) 2002-2022 EPFL
+ * Copyright (c) 2011-2022 Lightbend, Inc.
+ *
+ * Scala includes software developed at
+ * LAMP/EPFL (https://lamp.epfl.ch/) and
+ * Lightbend, Inc. (https://www.lightbend.com/).
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package cats
 package data
 
-import Chain._
-import cats.kernel.instances.StaticMethods
+import cats.instances.StaticMethods
+import cats.kernel.compat.scalaVersionSpecific._
+import cats.kernel.instances.{StaticMethods => KernelStaticMethods}
 
 import scala.annotation.tailrec
-import scala.collection.immutable.{SortedMap, TreeSet}
+import scala.collection.immutable
+import scala.collection.immutable.SortedMap
+import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
+
+import Chain.{
+  empty,
+  fromSeq,
+  nil,
+  one,
+  sentinel,
+  traverseFilterViaChain,
+  traverseViaChain,
+  Append,
+  ChainIterator,
+  ChainReverseIterator,
+  Empty,
+  NonEmpty,
+  Singleton,
+  Wrap
+}
 
 /**
  * Trivial catenable sequence. Supports O(1) append, and (amortized)
  * O(1) `uncons`, such that walking the sequence via N successive `uncons`
  * steps takes O(N).
  */
-sealed abstract class Chain[+A] {
+sealed abstract class Chain[+A] extends ChainCompat[A] {
 
   /**
    * Returns the head and tail of this Chain if non empty, none otherwise. Amortized O(1).
    */
-  final def uncons: Option[(A, Chain[A])] = {
-    var c: Chain[A] = this
-    val rights = new collection.mutable.ArrayBuffer[Chain[A]]
-    // scalastyle:off null
-    var result: Option[(A, Chain[A])] = null
-    while (result eq null) {
-      c match {
-        case Singleton(a) =>
-          val next =
-            if (rights.isEmpty) nil
-            else rights.reduceLeft((x, y) => Append(y, x))
-          result = Some(a -> next)
-        case Append(l, r) => c = l; rights += r
-        case Wrap(seq) =>
-          val tail = fromSeq(seq.tail)
-          val next =
-            if (rights.isEmpty) tail
-            else tail ++ rights.reduceLeft((x, y) => Append(y, x))
-          result = Some((seq.head, next))
-        case Empty =>
-          // Empty is only top level, it is never internal to an Append
-          result = None
-      }
+  final def uncons: Option[(A, Chain[A])] =
+    this match {
+      case non: Chain.NonEmpty[A] =>
+        var c: NonEmpty[A] = non
+        var rights: Chain.NonEmpty[A] = null
+        var result: (A, Chain[A]) = null
+        while (result eq null) {
+          c match {
+            case Singleton(a) =>
+              val next =
+                if (rights eq null) nil
+                else rights
+              result = (a, next)
+            case Append(l, r) =>
+              rights =
+                if (rights eq null) r
+                else Append(r, rights)
+              c = l
+            case Wrap(seq) =>
+              val tail = fromSeq(seq.tail)
+              val next =
+                if (rights eq null) tail
+                else {
+                  tail match {
+                    case non: Chain.NonEmpty[A] => Append(non, rights)
+                    case _                      => rights
+                  }
+                }
+              result = (seq.head, next)
+          }
+        }
+        Some(result)
+      case _ => None
     }
-    // scalastyle:on null
-    result
-  }
 
   /**
    * Returns the init and last of this Chain if non empty, none otherwise. Amortized O(1).
    */
-  final def initLast: Option[(Chain[A], A)] = {
-    var c: Chain[A] = this
-    val lefts = new collection.mutable.ArrayBuffer[Chain[A]]
-    // scalastyle:off null
-    var result: Option[(Chain[A], A)] = null
-    while (result eq null) {
-      c match {
-        case Singleton(a) =>
-          val pre =
-            if (lefts.isEmpty) nil
-            else lefts.reduceLeft((x, y) => Append(x, y))
-          result = Some(pre -> a)
-        case Append(l, r) => c = r; lefts += l
-        case Wrap(seq) =>
-          val init = fromSeq(seq.init)
-          val pre =
-            if (lefts.isEmpty) init
-            else lefts.reduceLeft((x, y) => Append(x, y)) ++ init
-          result = Some((pre, seq.last))
-        case Empty =>
-          // Empty is only top level, it is never internal to an Append
-          result = None
-      }
+  final def initLast: Option[(Chain[A], A)] =
+    this match {
+      case non: Chain.NonEmpty[A] =>
+        var c: NonEmpty[A] = non
+        var lefts: NonEmpty[A] = null
+        var result: (Chain[A], A) = null
+        while (result eq null) {
+          c match {
+            case Singleton(a) =>
+              val pre =
+                if (lefts eq null) nil
+                else lefts
+              result = (pre, a)
+            case Append(l, r) =>
+              lefts =
+                if (lefts eq null) l
+                else Append(lefts, l)
+              c = r
+            case Wrap(seq) =>
+              val init = fromSeq(seq.init)
+              val pre =
+                if (lefts eq null) init
+                else {
+                  init match {
+                    case non: Chain.NonEmpty[A] => Append(lefts, non)
+                    case _                      => lefts
+                  }
+                }
+              result = (pre, seq.last)
+          }
+        }
+        Some(result)
+      case _ => None
     }
-    // scalastyle:on null
-    result
-  }
 
   /**
    * Returns the head of this Chain if non empty, none otherwise. Amortized O(1).
@@ -90,12 +165,16 @@ sealed abstract class Chain[+A] {
   /**
    * Returns true if there are no elements in this collection.
    */
-  def isEmpty: Boolean
+  def isEmpty: Boolean = !this.isInstanceOf[Chain.NonEmpty[_]]
 
   /**
    * Returns false if there are no elements in this collection.
    */
   final def nonEmpty: Boolean = !isEmpty
+
+  // Quick check whether the chain is either empty or contains one element only.
+  @inline private def isEmptyOrSingleton: Boolean =
+    isEmpty || this.isInstanceOf[Chain.Singleton[_]]
 
   /**
    * Concatenates this with `c` in O(1) runtime.
@@ -148,7 +227,7 @@ sealed abstract class Chain[+A] {
   final def flatMap[B](f: A => Chain[B]): Chain[B] = {
     var result = empty[B]
     val iter = iterator
-    while (iter.hasNext) { result = result ++ f(iter.next) }
+    while (iter.hasNext) { result = result ++ f(iter.next()) }
     result
   }
 
@@ -158,7 +237,7 @@ sealed abstract class Chain[+A] {
   final def foldLeft[B](z: B)(f: (B, A) => B): B = {
     var result = z
     val iter = iterator
-    while (iter.hasNext) { result = f(result, iter.next) }
+    while (iter.hasNext) { result = f(result, iter.next()) }
     result
   }
 
@@ -202,7 +281,7 @@ sealed abstract class Chain[+A] {
   final def foldRight[B](z: B)(f: (A, B) => B): B = {
     var result = z
     val iter = reverseIterator
-    while (iter.hasNext) { result = f(iter.next, result) }
+    while (iter.hasNext) { result = f(iter.next(), result) }
     result
   }
 
@@ -329,40 +408,158 @@ sealed abstract class Chain[+A] {
    */
   final def zipWithIndex: Chain[(A, Int)] =
     this match {
-      case Empty        => Empty
       case Singleton(a) => Singleton((a, 0))
-      case Append(left, right) =>
-        val leftSize = left.length.toInt
-        Append(left.zipWithIndex, right.zipWithIndex.map { case (a, i) => (a, leftSize + i) })
+      case a @ Append(_, _) =>
+        Wrap(a.iterator.zipWithIndex.toVector)
       case Wrap(seq) => Wrap(seq.zipWithIndex)
+      case _         => Empty
     }
 
   /**
    * Groups elements inside this `Chain` according to the `Order`
    * of the keys produced by the given mapping function.
+   *
+   * {{{
+   * scala> import scala.collection.immutable.SortedMap
+   * scala> import cats.data.{Chain, NonEmptyChain}
+   * scala> import cats.implicits._
+   * scala> val chain = Chain(12, -2, 3, -5)
+   * scala> val expectedResult = SortedMap(false -> NonEmptyChain(-2, -5), true -> NonEmptyChain(12, 3))
+   * scala> val result = chain.groupBy(_ >= 0)
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   * }}}
    */
-  final def groupBy[B](f: A => B)(implicit B: Order[B]): SortedMap[B, NonEmptyChain[A]] = {
-    implicit val ordering: Ordering[B] = B.toOrdering
-    var m = SortedMap.empty[B, NonEmptyChain[A]]
-    val iter = iterator
+  final def groupBy[B](f: A => B)(implicit B: Order[B]): SortedMap[B, NonEmptyChain[A]] =
+    groupMap(key = f)(identity)
 
-    while (iter.hasNext) {
-      val elem = iter.next
-      val k = f(elem)
+  /**
+   * Groups elements inside this `Chain` according to the `Order`
+   * of the keys produced by the given key function.
+   * And each element in a group is transformed into a value of type B
+   * using the mapping function.
+   *
+   * {{{
+   * scala> import scala.collection.immutable.SortedMap
+   * scala> import cats.data.{Chain, NonEmptyChain}
+   * scala> import cats.implicits._
+   * scala> val chain = Chain(12, -2, 3, -5)
+   * scala> val expectedResult = SortedMap(false -> NonEmptyChain("-2", "-5"), true -> NonEmptyChain("12", "3"))
+   * scala> val result = chain.groupMap(_ >= 0)(_.toString)
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  final def groupMap[K, B](key: A => K)(f: A => B)(implicit K: Order[K]): SortedMap[K, NonEmptyChain[B]] = {
+    implicit val ordering: Ordering[K] = K.toOrdering
+    var m = SortedMap.empty[K, NonEmptyChain[B]]
+
+    for (elem <- iterator) {
+      val k = key(elem)
 
       m.get(k) match {
-        case None      => m += ((k, NonEmptyChain.one(elem))); ()
-        case Some(cat) => m = m.updated(k, cat :+ elem)
+        case Some(cat) => m = m.updated(key = k, value = cat :+ f(elem))
+        case None      => m += (k -> NonEmptyChain.one(f(elem)))
       }
     }
+
+    m
+  }
+
+  /**
+   * Groups elements inside this `Chain` according to the `Order`
+   * of the keys produced by the given key function.
+   * Then each element in a group is transformed into a value of type B
+   * using the mapping function.
+   * And finally they are all reduced into a single value
+   * using their `Semigroup`
+   *
+   * {{{
+   * scala> import scala.collection.immutable.SortedMap
+   * scala> import cats.data.Chain
+   * scala> import cats.implicits._
+   * scala> val chain = Chain("Hello", "World", "Goodbye", "World")
+   * scala> val expectedResult = SortedMap("goodbye" -> 1, "hello" -> 1, "world" -> 2)
+   * scala> val result = chain.groupMapReduce(_.trim.toLowerCase)(_ => 1)
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  final def groupMapReduce[K, B](key: A => K)(f: A => B)(implicit K: Order[K], S: Semigroup[B]): SortedMap[K, B] =
+    groupMapReduceWith(key)(f)(S.combine)
+
+  /**
+   * Groups elements inside this `Chain` according to the `Order`
+   * of the keys produced by the given key function.
+   * Then each element in a group is transformed into a value of type B
+   * using the mapping function.
+   * And finally they are all reduced into a single value
+   * using the provided combine function.
+   *
+   * {{{
+   * scala> import scala.collection.immutable.SortedMap
+   * scala> import cats.data.Chain
+   * scala> import cats.implicits._
+   * scala> val chain = Chain("Hello", "World", "Goodbye", "World")
+   * scala> val expectedResult = SortedMap("goodbye" -> 1, "hello" -> 1, "world" -> 2)
+   * scala> val result = chain.groupMapReduceWith(_.trim.toLowerCase)(_ => 1)(_ + _)
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  final def groupMapReduceWith[K, B](key: A => K)(f: A => B)(combine: (B, B) => B)(implicit
+    K: Order[K]
+  ): SortedMap[K, B] = {
+    implicit val ordering: Ordering[K] = K.toOrdering
+    var m = SortedMap.empty[K, B]
+
+    for (elem <- iterator) {
+      val k = key(elem)
+
+      m.get(k) match {
+        case Some(b) => m = m.updated(key = k, value = combine(b, f(elem)))
+        case None    => m += (k -> f(elem))
+      }
+    }
+
     m
   }
 
   /**
    * Reverses this `Chain`
    */
-  def reverse: Chain[A] =
-    fromSeq(reverseIterator.toVector)
+  def reverse: Chain[A] = {
+    @annotation.tailrec
+    def loop[B <: A](h: Chain.NonEmpty[B], tail: List[Chain.NonEmpty[B]], acc: Chain[A]): Chain[A] =
+      h match {
+        case Append(l, r) => loop(l, r :: tail, acc)
+        case sing @ Singleton(_) =>
+          val nextAcc = sing.concat(acc)
+          tail match {
+            case h1 :: t1 =>
+              loop(h1, t1, nextAcc)
+            case _ =>
+              nextAcc
+          }
+        case Wrap(seq) =>
+          val nextAcc = Wrap(seq.reverse).concat(acc)
+          tail match {
+            case h1 :: t1 =>
+              loop(h1, t1, nextAcc)
+            case _ =>
+              nextAcc
+          }
+      }
+
+    this match {
+      case Append(l, r) =>
+        loop(l, r :: Nil, Empty)
+      case Wrap(seq) => Wrap(seq.reverse)
+      case _         =>
+        // Empty | Singleton(_)
+        this
+    }
+  }
 
   /**
    * Yields to Some(a, Chain[A]) with `a` removed where `f` holds for the first time,
@@ -383,69 +580,97 @@ sealed abstract class Chain[+A] {
   }
 
   /**
-   * Applies the supplied function to each element, left to right.
-   */
-  final private def foreach(f: A => Unit): Unit =
-    foreachUntil { a =>
-      f(a); false
-    }
-
-  /**
    * Applies the supplied function to each element, left to right, but stops when true is returned
    */
-  // scalastyle:off null return cyclomatic.complexity
-  final private def foreachUntil(f: A => Boolean): Unit = {
-    var c: Chain[A] = this
-    val rights = new collection.mutable.ArrayBuffer[Chain[A]]
+  final private def foreachUntil(f: A => Boolean): Unit =
+    this match {
+      case non: Chain.NonEmpty[A] =>
+        var c: Chain.NonEmpty[A] = non
+        // a stack of rights
+        var rights: List[Chain.NonEmpty[A]] = Nil
 
-    while (c ne null) {
-      c match {
-        case Singleton(a) =>
-          val b = f(a)
-          if (b) return ()
-          c =
-            if (rights.isEmpty) Empty
-            else rights.reduceLeft((x, y) => Append(y, x))
-          rights.clear()
-        case Append(l, r) => c = l; rights += r
-        case Wrap(seq) =>
-          val iterator = seq.iterator
-          while (iterator.hasNext) {
-            val b = f(iterator.next)
-            if (b) return ()
+        while (c ne null) {
+          c match {
+            case Singleton(a) =>
+              val b = f(a)
+              if (b) return ()
+              c =
+                if (rights.isEmpty) null
+                else {
+                  val head = rights.head
+                  rights = rights.tail
+                  head
+                }
+            case Append(l, r) =>
+              rights = r :: rights
+              c = l
+            case Wrap(seq) =>
+              val iterator = seq.iterator
+              while (iterator.hasNext) {
+                val b = f(iterator.next())
+                if (b) return ()
+              }
+              c =
+                if (rights.isEmpty) null
+                else {
+                  val head = rights.head
+                  rights = rights.tail
+                  head
+                }
           }
-          c =
-            if (rights.isEmpty) Empty
-            else rights.reduceLeft((x, y) => Append(y, x))
-          rights.clear()
-        case Empty =>
-          // Empty is only top level, it is never internal to an Append
-          c = null
-      }
+        }
+      case _ => ()
     }
-  }
-  // scalastyle:on null return cyclomatic.complexity
 
   final def iterator: Iterator[A] =
     this match {
-      case Wrap(seq) => seq.iterator
-      case _         => new ChainIterator[A](this)
+      case Wrap(seq)      => seq.iterator
+      case Singleton(a)   => Iterator.single(a)
+      case app: Append[A] => new ChainIterator[A](app)
+      case _              => Iterator.empty
     }
 
   final def reverseIterator: Iterator[A] =
     this match {
-      case Wrap(seq) => seq.reverseIterator
-      case _         => new ChainReverseIterator[A](this)
+      case Wrap(seq)      => seq.reverseIterator
+      case Singleton(a)   => Iterator.single(a)
+      case app: Append[A] => new ChainReverseIterator[A](app)
+      case _              => Iterator.empty
     }
 
   /**
    * Returns the number of elements in this structure
    */
   final def length: Long = {
-    val iter = iterator
-    var i: Long = 0
-    while (iter.hasNext) { i += 1; iter.next; }
-    i
+    // This is an optimized (unboxed) implementation
+    // of the same code as foldLeft
+    @annotation.tailrec
+    def loop(head: Chain.NonEmpty[A], tail: List[Chain.NonEmpty[A]], acc: Long): Long =
+      head match {
+        case Append(l, r) => loop(l, r :: tail, acc)
+        case Singleton(_) =>
+          val nextAcc = acc + 1L
+          tail match {
+            case h1 :: t1 =>
+              loop(h1, t1, nextAcc)
+            case _ =>
+              nextAcc
+          }
+        case Wrap(seq) =>
+          val nextAcc = acc + seq.length.toLong
+          tail match {
+            case h1 :: t1 =>
+              loop(h1, t1, nextAcc)
+            case _ =>
+              nextAcc
+          }
+      }
+
+    this match {
+      case ne: Chain.NonEmpty[A] =>
+        loop(ne, Nil, 0L)
+      case _ => 0L
+    }
   }
 
   /**
@@ -454,16 +679,90 @@ sealed abstract class Chain[+A] {
   final def size: Long = length
 
   /**
+   * Compares the length of this chain to a test value.
+   *
+   * The method does not call `length` directly; its running time
+   * is `O(length min len)` instead of `O(length)`.
+   *
+   * @param  len the test value that gets compared with the length.
+   * @return a negative value if `this.length < len`,
+   *         zero if `this.length == len` or
+   *         a positive value if `this.length > len`.
+   * @note   an adapted version of
+             [[https://github.com/scala/scala/blob/v2.13.8/src/library/scala/collection/Iterable.scala#L272-L288 Iterable#sizeCompare]]
+             from Scala Library v2.13.8 is used in a part of the implementation.
+   *
+   * {{{
+   * scala> import cats.data.Chain
+   * scala> val chain = Chain(1, 2, 3)
+   * scala> val isLessThan4 = chain.lengthCompare(4) < 0
+   * scala> val isEqualTo3 = chain.lengthCompare(3) == 0
+   * scala> val isGreaterThan2 = chain.lengthCompare(2) > 0
+   * scala> isLessThan4 && isEqualTo3 && isGreaterThan2
+   * res0: Boolean = true
+   * }}}
+   */
+  final def lengthCompare(len: Long): Int = {
+    // This is an optimized (unboxed) implementation
+    // of the same code as foldLeft
+    @annotation.tailrec
+    def loop(head: Chain.NonEmpty[A], tail: List[Chain.NonEmpty[A]], len: Long): Int =
+      if (len <= 0L) 1 // head is nonempty
+      else
+        head match {
+          case Append(l, r) => loop(l, r :: tail, len)
+          case Singleton(_) =>
+            tail match {
+              case h1 :: t1 =>
+                loop(h1, t1, len - 1L)
+              case _ =>
+                java.lang.Long.compare(1L, len)
+            }
+          case Wrap(seq) =>
+            val c =
+              if (len <= Int.MaxValue) seq.lengthCompare(len.toInt)
+              else -1
+            tail match {
+              case h1 :: t1 =>
+                if (c >= 0) 1 // there is definitely more in tail
+                else loop(h1, t1, len - seq.length)
+              case _ => c
+            }
+        }
+
+    this match {
+      case ne: Chain.NonEmpty[A] =>
+        loop(ne, Nil, len)
+      case _ => java.lang.Long.compare(0L, len)
+    }
+  }
+
+  /**
+   * Alias for lengthCompare
+   */
+  final def sizeCompare(size: Long): Int = lengthCompare(size)
+
+  /**
    * Converts to a list.
    */
   final def toList: List[A] =
-    iterator.toList
+    this match {
+      case Wrap(seq)      => seq.toList // this may be a List already
+      case Singleton(a)   => a :: Nil
+      case app: Append[A] => (new ChainIterator(app)).toList
+      case _              => Nil
+    }
 
   /**
    * Converts to a vector.
    */
   final def toVector: Vector[A] =
-    iterator.toVector
+    this match {
+      case Wrap(seq)      => seq.toVector // this may be a Vector already
+      case Singleton(a)   => Vector.empty :+ a
+      case app: Append[A] => (new ChainIterator(app)).toVector
+      case _              => Vector.empty
+    }
 
   /**
    * Typesafe equality operator.
@@ -478,9 +777,7 @@ sealed abstract class Chain[+A] {
       val iterX = iterator
       val iterY = that.iterator
       while (iterX.hasNext && iterY.hasNext) {
-        // scalastyle:off return
-        if (!A.eqv(iterX.next, iterY.next)) return false
-        // scalastyle:on return
+        if (!A.eqv(iterX.next(), iterY.next())) return false
       }
 
       iterX.hasNext == iterY.hasNext
@@ -488,19 +785,59 @@ sealed abstract class Chain[+A] {
 
   /**
    * Remove duplicates. Duplicates are checked using `Order[_]` instance.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.data.Chain
+   * scala> val chain = Chain(1, 2, 2, 3)
+   * scala> chain.distinct
+   * res0: cats.data.Chain[Int] = Chain(1, 2, 3)
+   * }}}
    */
   def distinct[AA >: A](implicit O: Order[AA]): Chain[AA] = {
-    implicit val ord: Ordering[AA] = O.toOrdering
+    if (isEmptyOrSingleton) this
+    else {
+      implicit val ord: Ordering[AA] = O.toOrdering
 
-    var alreadyIn = TreeSet.empty[AA]
-
-    foldLeft(Chain.empty[AA]) { (elementsSoFar, b) =>
-      if (alreadyIn.contains(b)) {
-        elementsSoFar
-      } else {
-        alreadyIn += b
-        elementsSoFar :+ b
+      val bldr = Vector.newBuilder[AA]
+      val seen = mutable.TreeSet.empty[AA]
+      val it = iterator
+      while (it.hasNext) {
+        val next = it.next()
+        if (seen.add(next))
+          bldr += next
       }
+      // Result can contain a single element only.
+      Chain.fromSeq(bldr.result())
+    }
+  }
+
+  /**
+   * Remove duplicates by a predicate. Duplicates are checked using `Order[_]` instance.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.data.Chain
+   * scala> val chain = Chain(1, 2, 3, 4)
+   * scala> chain.distinctBy(_ / 2)
+   * res0: cats.data.Chain[Int] = Chain(1, 2, 4)
+   * }}}
+   */
+  def distinctBy[B](f: A => B)(implicit O: Order[B]): Chain[A] = {
+    if (isEmptyOrSingleton) this
+    else {
+      implicit val ord: Ordering[B] = O.toOrdering
+
+      val bldr = Vector.newBuilder[A]
+      val seen = mutable.TreeSet.empty[B]
+      val it = iterator
+      while (it.hasNext) {
+        val next = it.next()
+        if (seen.add(f(next)))
+          bldr += next
+      }
+      // Result can contain a single element only.
+      Chain.fromSeq(bldr.result())
     }
   }
 
@@ -508,24 +845,27 @@ sealed abstract class Chain[+A] {
     val builder = new StringBuilder("Chain(")
     var first = true
 
-    foreach { a =>
+    foreachUntil { a =>
       if (first) {
         builder ++= AA.show(a); first = false
       } else builder ++= ", " + AA.show(a)
-      ()
+      false
     }
     builder += ')'
-    builder.result
+    builder.result()
   }
 
-  def hash[AA >: A](implicit hashA: Hash[AA]): Int = StaticMethods.orderedHash((this: Chain[AA]).iterator)
+  def hash[AA >: A](implicit hashA: Hash[AA]): Int =
+    KernelStaticMethods.orderedHash((this: Chain[AA]).iterator)
 
   override def toString: String = show(Show.show[A](_.toString))
 
   override def equals(o: Any): Boolean =
-    if (o.isInstanceOf[Chain[_]])
-      (this: Chain[Any]).===(o.asInstanceOf[Chain[Any]])(Eq.fromUniversalEquals[Any])
-    else false
+    o match {
+      case thatChain: Chain[_] =>
+        (this: Chain[Any]).===(thatChain: Chain[Any])(Eq.fromUniversalEquals[Any])
+      case _ => false
+    }
 
   override def hashCode: Int = hash(Hash.fromUniversalHashCode[A])
 
@@ -548,39 +888,58 @@ sealed abstract class Chain[+A] {
 
   final def sortBy[B](f: A => B)(implicit B: Order[B]): Chain[A] =
     this match {
-      case Empty        => this
-      case Singleton(_) => this
       case Append(_, _) => Wrap(toVector.sortBy(f)(B.toOrdering))
       case Wrap(seq)    => Wrap(seq.sortBy(f)(B.toOrdering))
+      case _            =>
+        // Empty | Singleton(_)
+        this
     }
 
   final def sorted[AA >: A](implicit AA: Order[AA]): Chain[AA] =
     this match {
-      case Empty        => this
-      case Singleton(_) => this
       case Append(_, _) => Wrap(toVector.sorted(AA.toOrdering))
       case Wrap(seq)    => Wrap(seq.sorted(AA.toOrdering))
+      case _            =>
+        // Empty | Singleton(_)
+        this
     }
 }
 
-object Chain extends ChainInstances {
+@suppressUnusedImportWarningForScalaVersionSpecific
+object Chain extends ChainInstances with ChainCompanionCompat {
 
   private val sentinel: Function1[Any, Any] = new scala.runtime.AbstractFunction1[Any, Any] { def apply(a: Any) = this }
 
-  private[data] case object Empty extends Chain[Nothing] {
-    def isEmpty: Boolean = true
+  sealed abstract private[data] class NonEmpty[A] extends Chain[A]
+
+  private[data] case object Empty extends Chain[Nothing]
+  final private[data] case class Singleton[A](a: A) extends NonEmpty[A]
+  final private[data] case class Append[A](leftNE: NonEmpty[A], rightNE: NonEmpty[A]) extends NonEmpty[A] {
+    // for binary compatibility with versions prior to 2.2.0 using left and right as Chain
+    def this(left: Chain[A], right: Chain[A]) =
+      this(left.asInstanceOf[NonEmpty[A]], right.asInstanceOf[NonEmpty[A]])
+
+    def left: Chain[A] = leftNE
+    def right: Chain[A] = rightNE
+
+    def copy(left: Chain[A], right: Chain[A]): Append[A] = new Append(left, right)
+    def `copy$default$1`: Chain[A] = left
+    def `copy$default$2`: Chain[A] = right
   }
-  final private[data] case class Singleton[A](a: A) extends Chain[A] {
-    def isEmpty: Boolean = false
+  private[data] object Append {
+    // for binary compatibility with versions prior to 2.2.0
+    def apply[A](left: Chain[A], right: Chain[A]): Append[A] = new Append(left, right)
   }
-  final private[data] case class Append[A](left: Chain[A], right: Chain[A]) extends Chain[A] {
-    def isEmpty: Boolean =
-      false // b/c `concat` constructor doesn't allow either branch to be empty
-  }
-  final private[data] case class Wrap[A](seq: Seq[A]) extends Chain[A] {
-    override def isEmpty: Boolean =
-      false // b/c `fromSeq` constructor doesn't allow either branch to be empty
-  }
+
+  /*
+   * Invariant: (seq.length >= 2)
+   * if the length is zero, fromSeq returns Empty
+   * if the length is one, fromSeq returns Singleton
+   *
+   * The only places we create Wrap is in fromSeq and in methods that preserve
+   * length: zipWithIndex, map, sort
+   */
+  final private[data] case class Wrap[A](seq: immutable.Seq[A]) extends NonEmpty[A]
 
   def unapplySeq[A](chain: Chain[A]): Option[Seq[A]] =
     Some(chain.toList)
@@ -611,17 +970,20 @@ object Chain extends ChainInstances {
    * Concatenates two Chains.
    */
   def concat[A](c: Chain[A], c2: Chain[A]): Chain[A] =
-    if (c.isEmpty) c2
-    else if (c2.isEmpty) c
-    else Append(c, c2)
+    c match {
+      case non: NonEmpty[A] =>
+        c2 match {
+          case non2: NonEmpty[A] => Append(non, non2)
+          case _                 => non
+        }
+      case _ => c2
+    }
 
   /**
-   * Creates a Chain from the specified sequence.
+   * Creates a Chain from the specified option.
    */
-  def fromSeq[A](s: Seq[A]): Chain[A] =
-    if (s.isEmpty) nil
-    else if (s.lengthCompare(1) == 0) one(s.head)
-    else Wrap(s)
+  def fromOption[A](o: Option[A]): Chain[A] =
+    o.fold(Chain.empty[A])(Chain.one)
 
   /**
    * Creates a Chain from the specified elements.
@@ -629,13 +991,13 @@ object Chain extends ChainInstances {
   def apply[A](as: A*): Chain[A] =
     fromSeq(as)
 
-  def traverseViaChain[G[_], A, B](iter: Iterator[A])(f: A => G[B])(implicit G: Applicative[G]): G[Chain[B]] =
-    if (!iter.hasNext) G.pure(Chain.nil)
+  def traverseViaChain[G[_], A, B](
+    as: immutable.IndexedSeq[A]
+  )(f: A => G[B])(implicit G: Applicative[G]): G[Chain[B]] =
+    if (as.isEmpty) G.pure(Chain.nil)
     else {
       // we branch out by this factor
       val width = 128
-      val as = collection.mutable.Buffer[A]()
-      as ++= iter
       // By making a tree here we don't blow the stack
       // even if the List is very long
       // by construction, this is never called with start == end
@@ -676,14 +1038,12 @@ object Chain extends ChainInstances {
     }
 
   def traverseFilterViaChain[G[_], A, B](
-    iter: Iterator[A]
+    as: immutable.IndexedSeq[A]
   )(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Chain[B]] =
-    if (!iter.hasNext) G.pure(Chain.nil)
+    if (as.isEmpty) G.pure(Chain.nil)
     else {
       // we branch out by this factor
       val width = 128
-      val as = collection.mutable.Buffer[A]()
-      as ++= iter
       // By making a tree here we don't blow the stack
       // even if the List is very long
       // by construction, this is never called with start == end
@@ -729,10 +1089,15 @@ object Chain extends ChainInstances {
       loop(0, as.size).value
     }
 
-  // scalastyle:off null
-  private class ChainIterator[A](self: Chain[A]) extends Iterator[A] {
-    private[this] var c: Chain[A] = if (self.isEmpty) null else self
-    private[this] val rights = new collection.mutable.ArrayBuffer[Chain[A]]
+  private class ChainIterator[A](self: NonEmpty[A]) extends Iterator[A] {
+    def this(chain: Chain[A]) =
+      this(chain match {
+        case non: NonEmpty[A] => non
+        case _                => null: NonEmpty[A]
+      })
+
+    private[this] var c: NonEmpty[A] = self
+    private[this] var rights: List[NonEmpty[A]] = Nil
     private[this] var currentIterator: Iterator[A] = null
 
     override def hasNext: Boolean = (c ne null) || ((currentIterator ne null) && currentIterator.hasNext)
@@ -748,21 +1113,27 @@ object Chain extends ChainInstances {
             case Singleton(a) =>
               c =
                 if (rights.isEmpty) null
-                else rights.reduceLeft((x, y) => Append(y, x))
-              rights.clear()
+                else {
+                  val head = rights.head
+                  rights = rights.tail
+                  head
+                }
               a
             case Append(l, r) =>
               c = l
-              rights += r
+              rights = r :: rights
               go
             case Wrap(seq) =>
               c =
                 if (rights.isEmpty) null
-                else rights.reduceLeft((x, y) => Append(y, x))
-              rights.clear()
+                else {
+                  val head = rights.head
+                  rights = rights.tail
+                  head
+                }
               currentIterator = seq.iterator
-              currentIterator.next
-            case null | Empty =>
+              currentIterator.next()
+            case null =>
               throw new java.util.NoSuchElementException("next called on empty iterator")
           }
         }
@@ -770,12 +1141,16 @@ object Chain extends ChainInstances {
       go
     }
   }
-  // scalastyle:on null
 
-  // scalastyle:off null
-  private class ChainReverseIterator[A](self: Chain[A]) extends Iterator[A] {
-    private[this] var c: Chain[A] = if (self.isEmpty) null else self
-    private[this] val lefts = new collection.mutable.ArrayBuffer[Chain[A]]
+  private class ChainReverseIterator[A](self: NonEmpty[A]) extends Iterator[A] {
+    def this(chain: Chain[A]) =
+      this(chain match {
+        case non: NonEmpty[A] => non
+        case _                => null: NonEmpty[A]
+      })
+
+    private[this] var c: NonEmpty[A] = self
+    private[this] var lefts: List[NonEmpty[A]] = Nil
     private[this] var currentIterator: Iterator[A] = null
 
     override def hasNext: Boolean = (c ne null) || ((currentIterator ne null) && currentIterator.hasNext)
@@ -791,21 +1166,27 @@ object Chain extends ChainInstances {
             case Singleton(a) =>
               c =
                 if (lefts.isEmpty) null
-                else lefts.reduceLeft((x, y) => Append(x, y))
-              lefts.clear()
+                else {
+                  val head = lefts.head
+                  lefts = lefts.tail
+                  head
+                }
               a
             case Append(l, r) =>
               c = r
-              lefts += l
+              lefts = l :: lefts
               go
             case Wrap(seq) =>
               c =
                 if (lefts.isEmpty) null
-                else lefts.reduceLeft((x, y) => Append(x, y))
-              lefts.clear()
+                else {
+                  val head = lefts.head
+                  lefts = lefts.tail
+                  head
+                }
               currentIterator = seq.reverseIterator
-              currentIterator.next
-            case null | Empty =>
+              currentIterator.next()
+            case null =>
               throw new java.util.NoSuchElementException("next called on empty iterator")
           }
         }
@@ -813,7 +1194,6 @@ object Chain extends ChainInstances {
       go
     }
   }
-  // scalastyle:on null
 }
 
 sealed abstract private[data] class ChainInstances extends ChainInstances1 {
@@ -830,15 +1210,16 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
         fa.foldLeft(b)(f)
       def foldRight[A, B](fa: Chain[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = {
         def loop(as: Chain[A]): Eval[B] =
-          // In Scala 2 the compiler silently ignores the fact that it can't
-          // prove that this match is exhaustive, but Dotty warns, so we
-          // explicitly mark it as unchecked.
-          (as: @unchecked) match {
-            case Chain.nil => lb
-            case h ==: t   => f(h, Eval.defer(loop(t)))
+          as.uncons match {
+            case Some((h, t)) => f(h, Eval.defer(loop(t)))
+            case None         => lb
           }
+
         Eval.defer(loop(fa))
       }
+
+      override def foldMap[A, B](fa: Chain[A])(f: A => B)(implicit B: Monoid[B]): B =
+        B.combineAll(fa.iterator.map(f))
 
       override def map[A, B](fa: Chain[A])(f: A => B): Chain[B] = fa.map(f)
       override def toList[A](fa: Chain[A]): List[A] = fa.toList
@@ -862,34 +1243,46 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
 
       def traverse[G[_], A, B](fa: Chain[A])(f: A => G[B])(implicit G: Applicative[G]): G[Chain[B]] =
         if (fa.isEmpty) G.pure(Chain.nil)
-        else traverseViaChain(fa.iterator)(f)
+        else
+          traverseViaChain {
+            val as = collection.mutable.ArrayBuffer[A]()
+            as ++= fa.iterator
+            KernelStaticMethods.wrapMutableIndexedSeq(as)
+          }(f)
+
+      override def mapAccumulate[S, A, B](init: S, fa: Chain[A])(f: (S, A) => (S, B)): (S, Chain[B]) =
+        StaticMethods.mapAccumulateFromStrictFunctor(init, fa, f)(this)
+
+      override def mapWithIndex[A, B](fa: Chain[A])(f: (A, Int) => B): Chain[B] =
+        StaticMethods.mapWithIndexFromStrictFunctor(fa, f)(this)
+
+      override def zipWithIndex[A](fa: Chain[A]): Chain[(A, Int)] =
+        fa.zipWithIndex
 
       def empty[A]: Chain[A] = Chain.nil
       def combineK[A](c: Chain[A], c2: Chain[A]): Chain[A] = Chain.concat(c, c2)
+      override def fromIterableOnce[A](xs: IterableOnce[A]): Chain[A] = Chain.fromIterableOnce(xs)
       def pure[A](a: A): Chain[A] = Chain.one(a)
       def flatMap[A, B](fa: Chain[A])(f: A => Chain[B]): Chain[B] =
         fa.flatMap(f)
       def tailRecM[A, B](a: A)(f: A => Chain[Either[A, B]]): Chain[B] = {
-        var acc: Chain[B] = Chain.nil
-        @tailrec def go(rest: List[Chain[Either[A, B]]]): Unit =
+        @tailrec def go(rest: List[Chain[Either[A, B]]], acc: Chain[B]): Chain[B] =
           rest match {
             case hd :: tl =>
               hd.uncons match {
                 case Some((hdh, hdt)) =>
                   hdh match {
                     case Right(b) =>
-                      acc = acc :+ b
-                      go(hdt :: tl)
+                      go(hdt :: tl, acc :+ b)
                     case Left(a) =>
-                      go(f(a) :: hdt :: tl)
+                      go(f(a) :: hdt :: tl, acc)
                   }
                 case None =>
-                  go(tl)
+                  go(tl, acc)
               }
-            case _ => ()
+            case _ => acc
           }
-        go(f(a) :: Nil)
-        acc
+        go(f(a) :: Nil, Chain.nil)
       }
 
       override def map2[A, B, Z](fa: Chain[A], fb: Chain[B])(f: (A, B) => Z): Chain[Z] =
@@ -936,10 +1329,8 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
           val iterX = x.iterator
           val iterY = y.iterator
           while (iterX.hasNext && iterY.hasNext) {
-            val n = A0.compare(iterX.next, iterY.next)
-            // scalastyle:off return
+            val n = A0.compare(iterX.next(), iterY.next())
             if (n != 0) return n
-            // scalastyle:on return
           }
 
           if (iterX.hasNext) 1
@@ -963,7 +1354,12 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
 
     def traverseFilter[G[_], A, B](fa: Chain[A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Chain[B]] =
       if (fa.isEmpty) G.pure(Chain.nil)
-      else traverseFilterViaChain(fa.iterator)(f)
+      else
+        traverseFilterViaChain {
+          val as = collection.mutable.ArrayBuffer[A]()
+          as ++= fa.iterator
+          KernelStaticMethods.wrapMutableIndexedSeq(as)
+        }(f)
 
     override def filterA[G[_], A](fa: Chain[A])(f: A => G[Boolean])(implicit G: Applicative[G]): G[Chain[A]] =
       traverse
@@ -1006,10 +1402,8 @@ private[data] trait ChainPartialOrder[A] extends PartialOrder[Chain[A]] {
       val iterX = x.iterator
       val iterY = y.iterator
       while (iterX.hasNext && iterY.hasNext) {
-        val n = A.partialCompare(iterX.next, iterY.next)
-        // scalastyle:off return
+        val n = A.partialCompare(iterX.next(), iterY.next())
         if (n != 0.0) return n
-        // scalastyle:on return
       }
 
       if (iterX.hasNext) 1.0

@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 package kernel
 
@@ -67,6 +88,8 @@ object BoundedEnumerable {
     cats.kernel.instances.unit.catsKernelStdOrderForUnit
   implicit def catsKernelBoundedEnumerableForBoolean: BoundedEnumerable[Boolean] =
     cats.kernel.instances.boolean.catsKernelStdOrderForBoolean
+  implicit def catsKernelBoundedEnumerableForByte: BoundedEnumerable[Byte] =
+    cats.kernel.instances.byte.catsKernelStdOrderForByte
   implicit def catsKernelBoundedEnumerableForInt: BoundedEnumerable[Int] =
     cats.kernel.instances.int.catsKernelStdOrderForInt
   implicit def catsKernelBoundedEnumerableForShort: BoundedEnumerable[Short] =
@@ -77,6 +100,21 @@ object BoundedEnumerable {
     cats.kernel.instances.char.catsKernelStdOrderForChar
 
   @inline def apply[A](implicit e: BoundedEnumerable[A]): BoundedEnumerable[A] = e
+
+  /**
+   * Defines a `BoundedEnumerable[A]` from the given enumerable such that
+   * all arrows / successor functions switch direction.
+   */
+  def reverse[@sp A](e: BoundedEnumerable[A]): BoundedEnumerable[A] =
+    new BoundedEnumerable[A] {
+      override def order: Order[A] = Order.reverse(e.order)
+
+      override def partialNext(a: A): Option[A] = e.partialPrevious(a)
+      override def partialPrevious(a: A): Option[A] = e.partialNext(a)
+
+      override def minBound: A = e.maxBound
+      override def maxBound: A = e.minBound
+    }
 }
 
 trait LowerBoundedEnumerable[@sp A] extends PartialNextLowerBounded[A] with Next[A] {

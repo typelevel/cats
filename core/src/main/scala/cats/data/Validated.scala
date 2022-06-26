@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 package data
 
@@ -609,6 +630,15 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
       case e @ Invalid(_) => F.pure(e)
     }
 
+  def mapAccumulate[S, EE >: E, B](init: S)(f: (S, A) => (S, B)): (S, Validated[EE, B]) =
+    this match {
+      case Valid(a) =>
+        val (snext, b) = f(init, a)
+        (snext, Valid(b))
+
+      case e @ Invalid(_) => (init, e)
+    }
+
   /**
    * apply the given function to the value with the given B when
    * valid, otherwise return the given B
@@ -814,6 +844,8 @@ object Validated extends ValidatedInstances with ValidatedFunctions with Validat
   final case class Valid[+A](a: A) extends Validated[Nothing, A]
   final case class Invalid[+E](e: E) extends Validated[E, Nothing]
 
+  private[data] val validUnit: Validated[Nothing, Unit] = Valid(())
+
   /**
    * Evaluates the specified block, catching exceptions of the specified type and returning them on the invalid side of
    * the resulting `Validated`. Uncaught exceptions are propagated.
@@ -970,12 +1002,14 @@ sealed abstract private[data] class ValidatedInstances2 {
       def eqv(x: Validated[A, B], y: Validated[A, B]): Boolean = x === y
     }
 
-  // scalastyle:off method.length
   implicit def catsDataTraverseFunctorForValidated[E]: Traverse[Validated[E, *]] =
     new Traverse[Validated[E, *]] {
 
       override def traverse[G[_]: Applicative, A, B](fa: Validated[E, A])(f: (A) => G[B]): G[Validated[E, B]] =
         fa.traverse(f)
+
+      override def mapAccumulate[S, A, B](init: S, fa: Validated[E, A])(f: (S, A) => (S, B)): (S, Validated[E, B]) =
+        fa.mapAccumulate(init)(f)
 
       override def foldLeft[A, B](fa: Validated[E, A], b: B)(f: (B, A) => B): B =
         fa.foldLeft(b)(f)
@@ -1031,8 +1065,11 @@ sealed abstract private[data] class ValidatedInstances2 {
         }
 
       override def isEmpty[A](fa: Validated[E, A]): Boolean = fa.isInvalid
+
+      override def void[A](fa: Validated[E, A]): Validated[E, Unit] =
+        if (fa.isValid) Validated.validUnit
+        else fa.asInstanceOf[Validated[E, Unit]]
     }
-  // scalastyle:off method.length
 }
 
 private[data] class ValidatedApplicative[E: Semigroup] extends CommutativeApplicative[Validated[E, *]] {
@@ -1046,6 +1083,8 @@ private[data] class ValidatedApplicative[E: Semigroup] extends CommutativeApplic
 
   override def product[A, B](fa: Validated[E, A], fb: Validated[E, B]): Validated[E, (A, B)] =
     fa.product(fb)(Semigroup[E])
+
+  override def unit: Validated[E, Unit] = Validated.validUnit
 }
 
 private[data] trait ValidatedFunctions {

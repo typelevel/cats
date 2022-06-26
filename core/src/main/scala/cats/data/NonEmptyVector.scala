@@ -1,12 +1,34 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 package data
 
 import cats.data.NonEmptyVector.ZipNonEmptyVector
+import cats.instances.StaticMethods
+import cats.kernel.compat.scalaVersionSpecific._
 
 import scala.annotation.tailrec
 import scala.collection.mutable
 import scala.collection.immutable.{SortedMap, TreeMap, TreeSet, VectorBuilder}
-import kernel.compat.scalaVersionSpecific._
 
 /**
  * A data type which represents a `Vector` guaranteed to contain at least one element.
@@ -278,8 +300,8 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
       }
     }
 
-    m.map {
-      case (k, v) => (k, NonEmptyVector.fromVectorUnsafe(v.result))
+    m.map { case (k, v) =>
+      (k, NonEmptyVector.fromVectorUnsafe(v.result()))
     }: TreeMap[B, NonEmptyVector[A]]
   }
 
@@ -299,6 +321,24 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
    */
   final def groupByNem[B](f: A => B)(implicit B: Order[B]): NonEmptyMap[B, NonEmptyVector[A]] =
     NonEmptyMap.fromMapUnsafe(groupBy(f))
+
+  /**
+   * Partitions elements in fixed size `NonEmptyVector`s.
+   *
+   * {{{
+   * scala> import cats.data.NonEmptyVector
+   * scala> import cats.implicits._
+   * scala> val nel = NonEmptyVector.of(12, -2, 3, -5)
+   * scala> val expectedResult = List(NonEmptyVector.of(12, -2), NonEmptyVector.of(3, -5))
+   * scala> val result = nel.grouped(2)
+   * scala> result.toList === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  def grouped(size: Int): Iterator[NonEmptyVector[A]] = {
+    require(size >= 1, f"size=$size%d, but size must be positive")
+    toVector.grouped(size).map(NonEmptyVector.fromVectorUnsafe)
+  }
 
   /**
    * Creates new `NonEmptyMap`, similarly to List#toMap from scala standard library.
@@ -332,6 +372,12 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
 @suppressUnusedImportWarningForScalaVersionSpecific
 sealed abstract private[data] class NonEmptyVectorInstances {
 
+  /**
+   * This is not a bug. The declared type of `catsDataInstancesForNonEmptyVector` intentionally ignores
+   * `NonEmptyReducible` trait for it not being a typeclass.
+   *
+   * Also see the discussion: PR #3541 and issue #3069.
+   */
   implicit val catsDataInstancesForNonEmptyVector: SemigroupK[NonEmptyVector]
     with Bimonad[NonEmptyVector]
     with NonEmptyTraverse[NonEmptyVector]
@@ -390,6 +436,14 @@ sealed abstract private[data] class NonEmptyVectorInstances {
         fa: NonEmptyVector[A]
       )(f: (A) => G[B])(implicit G: Applicative[G]): G[NonEmptyVector[B]] =
         G.map2Eval(f(fa.head), Always(Traverse[Vector].traverse(fa.tail)(f)))(NonEmptyVector(_, _)).value
+
+      override def mapAccumulate[S, A, B](init: S, fa: NonEmptyVector[A])(
+        f: (S, A) => (S, B)
+      ): (S, NonEmptyVector[B]) =
+        StaticMethods.mapAccumulateFromStrictFunctor(init, fa, f)(this)
+
+      override def mapWithIndex[A, B](fa: NonEmptyVector[A])(f: (A, Int) => B): NonEmptyVector[B] =
+        StaticMethods.mapWithIndexFromStrictFunctor(fa, f)(this)
 
       override def zipWithIndex[A](fa: NonEmptyVector[A]): NonEmptyVector[(A, Int)] =
         fa.zipWithIndex
@@ -455,6 +509,8 @@ sealed abstract private[data] class NonEmptyVectorInstances {
 
       override def toList[A](fa: NonEmptyVector[A]): List[A] = fa.toVector.toList
 
+      override def toIterable[A](fa: NonEmptyVector[A]): Iterable[A] = fa.toVector
+
       override def toNonEmptyList[A](fa: NonEmptyVector[A]): NonEmptyList[A] =
         NonEmptyList(fa.head, fa.tail.toList)
 
@@ -507,7 +563,7 @@ object NonEmptyVector extends NonEmptyVectorInstances with Serializable {
     val buf = Vector.newBuilder[A]
     buf += head
     tail.foreach(buf += _)
-    new NonEmptyVector(buf.result)
+    new NonEmptyVector(buf.result())
   }
 
   def one[A](head: A): NonEmptyVector[A] = apply(head, Vector.empty[A])

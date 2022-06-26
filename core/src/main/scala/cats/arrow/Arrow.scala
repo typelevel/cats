@@ -1,14 +1,31 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 package arrow
-
-import simulacrum.typeclass
-import scala.annotation.implicitNotFound
 
 /**
  * Must obey the laws defined in cats.laws.ArrowLaws.
  */
-@implicitNotFound("Could not find an instance of Arrow for ${F}")
-@typeclass trait Arrow[F[_, _]] extends Category[F] with Strong[F] { self =>
+trait Arrow[F[_, _]] extends Category[F] with Strong[F] { self =>
 
   /**
    *  Lift a function into the context of an Arrow.
@@ -47,7 +64,7 @@ import scala.annotation.implicitNotFound
    * Note that the arrow laws do not guarantee the non-interference between the _effects_ of
    * `f` and `g` in the context of F. This means that `f *** g` may not be equivalent to `g *** f`.
    */
-  @simulacrum.op("***", alias = true)
+
   def split[A, B, C, D](f: F[A, B], g: F[C, D]): F[(A, C), (B, D)] =
     andThen(first(f), second(g))
 
@@ -67,16 +84,12 @@ import scala.annotation.implicitNotFound
    * Note that the arrow laws do not guarantee the non-interference between the _effects_ of
    *  `f` and `g` in the context of F. This means that `f &&& g` may not be equivalent to `g &&& f`.
    */
-  @simulacrum.op("&&&", alias = true)
+
   def merge[A, B, C](f: F[A, B], g: F[A, C]): F[A, (B, C)] =
     andThen(lift((x: A) => (x, x)), split(f, g))
 }
 
 object Arrow {
-
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
 
   /**
    * Summon an instance of [[Arrow]] for `F`.
@@ -118,9 +131,5 @@ object Arrow {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToArrowOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }

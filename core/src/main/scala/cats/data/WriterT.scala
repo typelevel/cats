@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 package data
 
@@ -66,8 +87,8 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
    * }}}
    */
   def listen(implicit F: Functor[F]): WriterT[F, L, (V, L)] =
-    WriterT(F.map(run) {
-      case (l, v) => (l, (v, l))
+    WriterT(F.map(run) { case (l, v) =>
+      (l, (v, l))
     })
 
   /**
@@ -88,8 +109,8 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
    * }}}
    */
   def ap[Z](f: WriterT[F, L, V => Z])(implicit F: Apply[F], L: Semigroup[L]): WriterT[F, L, Z] =
-    WriterT(F.map2(f.run, run) {
-      case ((l1, fvz), (l2, v)) => (L.combine(l1, l2), fvz(v))
+    WriterT(F.map2(f.run, run) { case ((l1, fvz), (l2, v)) =>
+      (L.combine(l1, l2), fvz(v))
     })
 
   /**
@@ -320,6 +341,9 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
     G.map(
       F.traverse(run)(lv => G.tupleLeft(f(lv._2), lv._1))
     )(WriterT.apply)
+
+  def compare(that: WriterT[F, L, V])(implicit Ord: Order[F[(L, V)]]): Int =
+    Ord.compare(run, that.run)
 }
 
 object WriterT extends WriterTInstances with WriterTFunctions with WriterTFunctions0 {
@@ -377,6 +401,11 @@ sealed abstract private[data] class WriterTInstances1 extends WriterTInstances2 
 
   implicit def catsDataFoldableForWriterTId[L](implicit F: Foldable[Id]): Foldable[WriterT[Id, L, *]] =
     catsDataFoldableForWriterT[Id, L](F)
+
+  implicit def catsDataOrderForWriterT[F[_], L, V](implicit Ord: Order[F[(L, V)]]): Order[WriterT[F, L, V]] =
+    new Order[WriterT[F, L, V]] {
+      def compare(x: WriterT[F, L, V], y: WriterT[F, L, V]): Int = x.compare(y)
+    }
 }
 
 sealed abstract private[data] class WriterTInstances2 extends WriterTInstances3 {
@@ -829,4 +858,10 @@ private[data] trait WriterTFunctions {
 
   def valueT[F[_], L, V](vf: F[V])(implicit functorF: Functor[F], monoidL: Monoid[L]): WriterT[F, L, V] =
     WriterT.putT[F, L, V](vf)(monoidL.empty)
+
+  /**
+   * Lifts a FunctionK operating on effects to a FunctionK operating on WriterT with these effects.
+   */
+  def liftFunctionK[F[_], G[_], A](f: F ~> G): WriterT[F, A, *] ~> WriterT[G, A, *] =
+    new (WriterT[F, A, *] ~> WriterT[G, A, *]) { def apply[B](k: WriterT[F, A, B]): WriterT[G, A, B] = k.mapK(f) }
 }
