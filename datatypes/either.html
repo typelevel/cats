@@ -192,6 +192,7 @@
 
         <ul class="nav-list">
           <li class="level1"><a href="#either-2">Either</a></li>
+          <li class="level2"><a href="#lifting-values-into-an-either">Lifting Values into an Either</a></li>
           <li class="level2"><a href="#either-vs-validated"><code>Either</code> vs <code>Validated</code></a></li>
           <li class="level2"><a href="#syntax">Syntax</a></li>
           <li class="level2"><a href="#example-usage-round-1">Example usage: Round 1</a></li>
@@ -232,6 +233,15 @@
         
         <h2 id="either-2" class="section">Either<a class="anchor-link right" href="#either-2"><i class="icofont-laika">&#xef71;</i></a></h2>
         
+        <h3 id="lifting-values-into-an-either" class="section">Lifting Values into an Either<a class="anchor-link right" href="#lifting-values-into-an-either"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <p><code>asRight</code> and <code>asLeft</code> are provided by Cats to lift a value into an Either. The advantage of these operations over the <code>Right</code> and <code>Left</code> constructors provided in the standard library is that the lifted value can help guide type inference.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">e1</span><span> = </span><span class="number-literal">5</span><span>.</span><span class="identifier">asRight</span><span>[</span><span class="type-name">String</span><span>]
+</span><span class="comment">// e1: Either[String, Int] = Right(5)
+</span><span class="keyword">val</span><span> </span><span class="identifier">e2</span><span> = </span><span class="string-literal">&quot;error&quot;</span><span>.</span><span class="identifier">asLeft</span><span>[</span><span class="type-name">Int</span><span>]
+</span><span class="comment">// e2: Either[String, Int] = Left(&quot;error&quot;)</span></code></pre>
+        
         <h3 id="either-vs-validated" class="section"><code>Either</code> vs <code>Validated</code><a class="anchor-link right" href="#either-vs-validated"><i class="icofont-laika">&#xef71;</i></a></h3>
         <p>In general, <code>Validated</code> is used to accumulate errors, while <code>Either</code> is used to short-circuit a computation upon the first error. For more information, see the <code>Validated</code> vs <code>Either</code> section of the <a href="validated.html"><code>Validated</code> documentation</a>.</p>
         
@@ -243,12 +253,12 @@
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">e1</span><span>: </span><span class="type-name">Either</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Int</span><span>] = </span><span class="type-name">Right</span><span>(</span><span class="number-literal">5</span><span>)
 </span><span class="comment">// e1: Either[String, Int] = Right(5)
 </span><span class="identifier">e1</span><span>.</span><span class="identifier">right</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span> + </span><span class="number-literal">1</span><span>)
-</span><span class="comment">// res0: Either[String, Int] = Right(6)
+</span><span class="comment">// res1: Either[String, Int] = Right(6)
 </span><span>
 </span><span class="keyword">val</span><span> </span><span class="identifier">e2</span><span>: </span><span class="type-name">Either</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Int</span><span>] = </span><span class="type-name">Left</span><span>(</span><span class="string-literal">&quot;hello&quot;</span><span>)
 </span><span class="comment">// e2: Either[String, Int] = Left(&quot;hello&quot;)
 </span><span class="identifier">e2</span><span>.</span><span class="identifier">right</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span> + </span><span class="number-literal">1</span><span>)
-</span><span class="comment">// res1: Either[String, Int] = Left(&quot;hello&quot;)</span></code></pre>
+</span><span class="comment">// res2: Either[String, Int] = Left(&quot;hello&quot;)</span></code></pre>
         <p>Note the return types are themselves back to <code>Either</code>, so if we want to make more calls to
         <code>flatMap</code> or <code>map</code> then we again must call <code>right</code> or <code>left</code>.</p>
         <p>However, the convention is almost always to right-bias <code>Either</code>. Indeed in Scala 2.12.x <code>Either</code> is
@@ -263,12 +273,12 @@
 </span><span class="keyword">val</span><span> </span><span class="identifier">right</span><span>: </span><span class="type-name">Either</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Int</span><span>] = </span><span class="type-name">Right</span><span>(</span><span class="number-literal">5</span><span>)
 </span><span class="comment">// right: Either[String, Int] = Right(5)
 </span><span class="identifier">right</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span> + </span><span class="number-literal">1</span><span>)
-</span><span class="comment">// res2: Either[String, Int] = Right(6)
+</span><span class="comment">// res3: Either[String, Int] = Right(6)
 </span><span>
 </span><span class="keyword">val</span><span> </span><span class="identifier">left</span><span>: </span><span class="type-name">Either</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Int</span><span>] = </span><span class="type-name">Left</span><span>(</span><span class="string-literal">&quot;hello&quot;</span><span>)
 </span><span class="comment">// left: Either[String, Int] = Left(&quot;hello&quot;)
 </span><span class="identifier">left</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span> + </span><span class="number-literal">1</span><span>)
-</span><span class="comment">// res3: Either[String, Int] = Left(&quot;hello&quot;)</span></code></pre>
+</span><span class="comment">// res4: Either[String, Int] = Left(&quot;hello&quot;)</span></code></pre>
         <p>For the rest of this tutorial we will assume the syntax enrichment is in scope giving us right-biased <code>Either</code>
         and a bunch of other useful combinators (both on <code>Either</code> and the companion object).</p>
         <p>Because <code>Either</code> is right-biased, it is possible to define a <code>Monad</code> instance for it.
