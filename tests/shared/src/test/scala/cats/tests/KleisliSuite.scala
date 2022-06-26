@@ -23,12 +23,11 @@ package cats.tests
 
 import cats._
 import cats.arrow._
-import cats.data._
-import cats.implicits._
+import cats.data.{Const, EitherT, Kleisli, Reader, ReaderT}
 import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests}
-import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
+import cats.laws.discipline._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.laws.discipline.{DeferTests, MonoidKTests, SemigroupKTests}
 import cats.syntax.all._
@@ -133,7 +132,7 @@ class KleisliSuite extends CatsSuite {
              DecidableTests[Kleisli[Predicate, MiniInt, *]].decidable[MiniInt, MiniInt, MiniInt]
     )
     checkAll(
-      "Decidable[Kleisli[Option, Int, ?]]",
+      "Decidable[Kleisli[Option, Int, *]]",
       SerializableTests.serializable[Decidable[Kleisli[Predicate, MiniInt, *]]](
         Decidable[Kleisli[Predicate, MiniInt, *]]
       )
@@ -143,11 +142,11 @@ class KleisliSuite extends CatsSuite {
   {
     implicit val catsDataContravariantMonoidalForKleisli =
       Kleisli.catsDataContravariantMonoidalForKleisli[Const[String, *], Int]
-    checkAll("Kleisli[Const[String, ?], MiniInt, ?]",
+    checkAll("Kleisli[Const[String, *], MiniInt, *]",
              ContravariantMonoidalTests[Kleisli[Const[String, *], MiniInt, *]].contravariantMonoidal[Int, Int, Int]
     )
-    checkAll("ContravariantMonoidal[Kleisli[Option, Int, ?]]",
-             SerializableTests.serializable(ContravariantMonoidal[Kleisli[Const[String, ?], Int, ?]])
+    checkAll("ContravariantMonoidal[Kleisli[Option, Int, *]]",
+             SerializableTests.serializable(ContravariantMonoidal[Kleisli[Const[String, *], Int, *]])
     )
   }
 

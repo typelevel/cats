@@ -28,6 +28,7 @@ import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.{DecidableTests, MiniInt}
 import cats.{Contravariant, ContravariantMonoidal, ContravariantSemigroupal}
 import cats.laws.discipline.eq._
+import cats.tests.Predicate
 import org.scalacheck.{Arbitrary, Cogen}
 import org.scalacheck.Prop._
 

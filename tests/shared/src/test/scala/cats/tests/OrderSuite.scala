@@ -21,7 +21,7 @@
 
 package cats.tests
 
-import cats.{Contravariant, ContravariantMonoidal, Decidable, Invariant}
+import cats.{Contravariant, ContravariantMonoidal, Invariant}
 import cats.kernel.{Order, PartialOrder}
 import cats.kernel.laws.discipline.{OrderTests, SerializableTests}
 import cats.laws.discipline.{ContravariantMonoidalTests, MiniInt}
@@ -36,7 +36,6 @@ class OrderSuite extends CatsSuite {
     Invariant[Order]
     Contravariant[Order]
     ContravariantMonoidal[Order]
-    Decidable[Order]
   }
 
   checkAll("Int", OrderTests[Int].order)
@@ -46,9 +45,6 @@ class OrderSuite extends CatsSuite {
 
   checkAll("Order", ContravariantMonoidalTests[Order].contravariantMonoidal[MiniInt, Boolean, Boolean])
   checkAll("ContravariantMonoidal[Order]", SerializableTests.serializable(ContravariantMonoidal[Order]))
-
-  checkAll("Order", Decidable[Order].decidable[MiniInt, Boolean, Boolean])
-  checkAll("Decidable[Order]", SerializableTests.serializable(Decidable[Order]))
 
   test("order ops syntax") {
     forAll { (i: Ord, j: Ord) =>

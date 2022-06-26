@@ -40,6 +40,6 @@ class EquivSuite extends CatsSuite {
   checkAll("ContravariantMonoidal[Equiv]",
            ContravariantMonoidalTests[Equiv].contravariantMonoidal[MiniInt, Boolean, Boolean]
   )
-  checkAll("Decidable[Equiv]", DecidableTests.decidable[MiniInt, Boolean, Boolean])
+  checkAll("Decidable[Equiv]", DecidableTests[Equiv].decidable[MiniInt, Boolean, Boolean])
   checkAll("Decidable[Equiv]", SerializableTests.serializable(Decidable[Equiv]))
 }

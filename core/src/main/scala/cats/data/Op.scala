@@ -44,7 +44,7 @@ sealed abstract private[data] class OpInstances extends OpInstances0 {
   implicit def catsDataDecidableForOp[Arr[_, _], R](implicit
     ArrC: ArrowChoice[Arr],
     monn: Monoid[R]
-  ): Decidable[Op[Arr, R, ?]] =
+  ): Decidable[Op[Arr, R, *]] =
     new OpDecidable[Arr, R] {
       def Arr: ArrowChoice[Arr] = ArrC
       def M: Monoid[R] = monn
@@ -65,12 +65,12 @@ sealed abstract private[data] class OpInstances0 {
   implicit def catsDataContravariantMonoidalForOp[Arr[_, _], R](implicit
     ArrC: Arrow[Arr],
     M0: Monoid[R]
-  ): ContravariantMonoidal[Op[Arr, R, ?]] =
+  ): ContravariantMonoidal[Op[Arr, R, *]] =
     new OpContravariantMonoidal[Arr, R] { def Arr = ArrC; def M = M0 }
 }
 
 sealed abstract private[data] class OpInstances1 {
-  implicit def catsDataContravariantForOp[Arr[_, _], R](implicit ArrC: Arrow[Arr]): Contravariant[Op[Arr, R, ?]] =
+  implicit def catsDataContravariantForOp[Arr[_, _], R](implicit ArrC: Arrow[Arr]): Contravariant[Op[Arr, R, *]] =
     new OpContravariant[Arr, R] { def Arr = ArrC }
 }
 
@@ -87,7 +87,7 @@ private[data] trait OpCompose[Arr[_, _]] extends Compose[Op[Arr, *, *]] {
     f.compose(g)
 }
 
-private[data] trait OpDecidable[Arr[_, _], R] extends Decidable[Op[Arr, R, ?]] with OpContravariantMonoidal[Arr, R] {
+private[data] trait OpDecidable[Arr[_, _], R] extends Decidable[Op[Arr, R, *]] with OpContravariantMonoidal[Arr, R] {
   implicit def Arr: ArrowChoice[Arr]
   implicit def M: Monoid[R]
 
@@ -100,7 +100,7 @@ private[data] trait OpDecidable[Arr[_, _], R] extends Decidable[Op[Arr, R, ?]] w
 
 private[data] trait OpContravariantMonoidal[Arr[_, _], R]
     extends OpContravariant[Arr, R]
-    with ContravariantMonoidal[Op[Arr, R, ?]] {
+    with ContravariantMonoidal[Op[Arr, R, *]] {
   implicit def Arr: Arrow[Arr]
   implicit def M: Monoid[R]
 
@@ -111,7 +111,7 @@ private[data] trait OpContravariantMonoidal[Arr[_, _], R]
     Op(Arr.compose(Arr.lift((M.combine _).tupled), Arr.split(fa.run, fb.run)))
 }
 
-private[data] trait OpContravariant[Arr[_, _], R] extends Contravariant[Op[Arr, R, ?]] {
+private[data] trait OpContravariant[Arr[_, _], R] extends Contravariant[Op[Arr, R, *]] {
   implicit def Arr: Arrow[Arr]
 
   def contramap[A, B](fa: Op[Arr, R, A])(f: B => A): Op[Arr, R, B] =

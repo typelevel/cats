@@ -522,7 +522,7 @@ sealed abstract private[data] class WriterTInstances7 extends WriterTInstances8 
 
   implicit def catsDataDecidableForWriterT[F[_], L](implicit
     F: Decidable[F]
-  ): Decidable[WriterT[F, L, ?]] =
+  ): Decidable[WriterT[F, L, *]] =
     new WriterTDecidable[F, L] {
       implicit val F0: Decidable[F] = F
     }

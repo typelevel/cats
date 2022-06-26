@@ -582,7 +582,7 @@ sealed abstract private[data] class OptionTInstances1 extends OptionTInstances2 
 
   implicit def catsDataContravariantMonoidalForOptionT[F[_]](implicit
     F0: ContravariantMonoidal[F]
-  ): ContravariantMonoidal[OptionT[F, ?]] =
+  ): ContravariantMonoidal[OptionT[F, *]] =
     new OptionTContravariantMonoidal[F] { implicit val F = F0 }
 }
 

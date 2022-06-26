@@ -147,7 +147,6 @@ object Invariant extends ScalaVersionSpecificInvariantInstances with InvariantIn
   implicit def catsFlatMapForSortedMap[K]: FlatMap[SortedMap[K, *]] =
     cats.instances.sortedMap.catsStdInstancesForSortedMap[K]
   implicit def catsBimonadForFunction0: Bimonad[Function0] = cats.instances.function.catsStdBimonadForFunction0
-  implicit def catsMonadForFunction1[I]: Monad[I => *] = cats.instances.function.catsStdMonadForFunction1[I]
   implicit def catsContravariantMonoidalForFunction1[R: Monoid]: ContravariantMonoidal[* => R] =
     cats.instances.function.catsStdContravariantMonoidalForFunction1[R]
   implicit def catsFunctorForPair: Functor[λ[P => (P, P)]] = cats.instances.tuple.catsDataFunctorForPair
@@ -173,6 +172,8 @@ object Invariant extends ScalaVersionSpecificInvariantInstances with InvariantIn
     cats.instances.order.catsContravariantMonoidalForOrder
   implicit def catsContravariantMonoidalForPartialOrder: ContravariantMonoidal[PartialOrder] =
     cats.instances.partialOrder.catsContravariantMonoidalForPartialOrder
+  implicit def catsContravariantMonoidalForOrdering: ContravariantMonoidal[Ordering] =
+    cats.instances.ordering.catsContravariantMonoidalForOrdering
   implicit def catsContravariantMonoidalForPartialOrdering: ContravariantMonoidal[PartialOrdering] =
     cats.instances.partialOrdering.catsContravariantMonoidalForPartialOrdering
   implicit def catsContravariantForHash: Contravariant[Hash] =
@@ -190,10 +191,6 @@ object Invariant extends ScalaVersionSpecificInvariantInstances with InvariantIn
   implicit def catsInvariantForFractional: Invariant[Fractional] =
     cats.instances.invariant.catsInvariantForFractional
 
-  implicit def catsContravariantMonoidalForOrder: ContravariantMonoidal[Order] =
-    cats.instances.order.catsContravariantMonoidalForOrder
-  implicit def catsContravariantMonoidalForOrdering: ContravariantMonoidal[Ordering] =
-    cats.instances.ordering.catsContravariantMonoidalForOrdering
 
   implicit def catsDecidableForEquiv: Decidable[Equiv] =
     cats.instances.equiv.catsDecidableForEquiv

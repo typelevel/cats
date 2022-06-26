@@ -1,7 +1,6 @@
 package cats
 
 import cats.data.INothing
-import simulacrum.typeclass
 
 import scala.annotation.implicitNotFound
 
@@ -18,7 +17,7 @@ import scala.annotation.implicitNotFound
  * https://hackage.haskell.org/package/contravariant-1.4/docs/Data-Functor-Contravariant-Divisible.html#g:2
  */
 @implicitNotFound("Could not find an instance of Decidable for ${F}")
-@typeclass trait Decidable[F[_]] extends ContravariantMonoidal[F] {
+trait Decidable[F[_]] extends ContravariantMonoidal[F] {
   def sum[A, B](fa: F[A], fb: F[B]): F[Either[A, B]]
 
   def decide[A, B, C](fa: F[A], fb: F[B])(f: C => Either[A, B]): F[C] =
@@ -30,10 +29,6 @@ import scala.annotation.implicitNotFound
 }
 
 object Decidable {
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
-
   /**
    * Summon an instance of [[Decidable]] for `F`.
    */
@@ -73,9 +68,4 @@ object Decidable {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToDecidableOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
-
 }

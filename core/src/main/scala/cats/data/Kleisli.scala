@@ -373,7 +373,7 @@ sealed abstract private[data] class KleisliInstances0 extends KleisliInstances0_
 
   implicit def catsDataDecidableForKleisli[F[_], A](implicit
     F0: Decidable[F]
-  ): Decidable[Kleisli[F, A, ?]] =
+  ): Decidable[Kleisli[F, A, *]] =
     new KleisliDecidable[F, A] { def F: Decidable[F] = F0 }
 }
 

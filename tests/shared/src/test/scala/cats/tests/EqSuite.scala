@@ -21,10 +21,10 @@
 
 package cats.tests
 
-import cats.{Contravariant, ContravariantMonoidal, ContravariantSemigroupal, Invariant, Semigroupal}
+import cats.{Contravariant, ContravariantMonoidal, ContravariantSemigroupal, Decidable, Invariant, Semigroupal}
 import cats.kernel.Eq
 import cats.kernel.laws.discipline.SerializableTests
-import cats.laws.discipline.{Decideable, MiniInt}
+import cats.laws.discipline.{DecidableTests, MiniInt}
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 
@@ -35,7 +35,7 @@ class EqSuite extends CatsSuite {
   ContravariantSemigroupal[Eq]
   Decidable[Eq]
 
-  checkAll("Eq", Decidable[Eq].decidable[MiniInt, Boolean, Boolean])
+  checkAll("Eq", DecidableTests[Eq].decidable[MiniInt, Boolean, Boolean])
   checkAll("Decidable[Eq]", SerializableTests.serializable(Decidable[Eq]))
 
 }
