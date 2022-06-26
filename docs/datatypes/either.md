@@ -30,6 +30,17 @@ How then do we communicate an error? By making it explicit in the data type we r
 
 ## Either
 
+### Lifting Values into an Either
+
+`asRight` and `asLeft` are provided by Cats to lift a value into an Either. The advantage of these operations over the `Right` and `Left` constructors provided in the standard library is that the lifted value can help guide type inference.
+
+```scala mdoc
+import cats.syntax.all._
+
+val e1 = 5.asRight[String]
+val e2 = "error".asLeft[Int]
+```
+
 ### `Either` vs `Validated`
 
 In general, `Validated` is used to accumulate errors, while `Either` is used to short-circuit a computation upon the first error. For more information, see the `Validated` vs `Either` section of the [`Validated` documentation](validated.md).
