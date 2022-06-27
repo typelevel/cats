@@ -1,10 +1,3 @@
----
-layout: docs
-title: "Decidable"
-section: "typeclasses"
-source: "core/src/main/scala/cats/Decidable.scala"
-scaladoc: "#cats.Decidable"
----
 # Decidable
 
 The `Decidable` type class is an extension of [`ContravariantMonoidal`](contravariantmonoidal.html) that allows the
@@ -12,7 +5,7 @@ definition of a `sum` function, allowing us to make choices in consuming our inp
 
 It is the contravariant analogue of the [`Alternative`](alternative.html) type class.
 
-```tut:silent
+```scala mdoc:silent
 import cats.ContravariantMonoidal
 import cats.data.INothing
 
@@ -38,7 +31,7 @@ The classic example of a `Decidable` is that of predicates `A => Boolean`, leani
 
 We can write the instance as:
 
-```tut:silent
+```scala mdoc:silent
 implicit val decideableForPredicates = new Decidable[* => Boolean] {
   def zero[A]: INothing => Boolean = _ => true 
   def unit: Unit => Boolean = Function.const(false)
@@ -56,7 +49,7 @@ implicit val decideableForPredicates = new Decidable[* => Boolean] {
 
 This can be used to combine predicates over both sum types and product types.
 
-```tut
+```scala mdoc
 def isEven(i: Int): Boolean = i % 2 == 0
 def isDivisibleByThree(l: Long): Boolean = l % 3 == 0
 
