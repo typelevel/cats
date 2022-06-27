@@ -23,8 +23,6 @@ package cats
 
 import cats.data.INothing
 
-import scala.annotation.implicitNotFound
-
 /**
  * [[Decidable]] functors are functors that supply
  * a `decide` operation allowing choices to be made.
@@ -37,7 +35,6 @@ import scala.annotation.implicitNotFound
  * Based on ekmett's contravariant library:
  * https://hackage.haskell.org/package/contravariant-1.4/docs/Data-Functor-Contravariant-Divisible.html#g:2
  */
-@implicitNotFound("Could not find an instance of Decidable for ${F}")
 trait Decidable[F[_]] extends ContravariantMonoidal[F] {
   def sum[A, B](fa: F[A], fb: F[B]): F[Either[A, B]]
 
