@@ -191,12 +191,6 @@ class RegressionSuite extends CatsSuite with ScalaVersionSpecificRegressionSuite
       MonadError[EitherT[Option, String, *], Unit]
     }
 
-    {
-      implicit val me: MonadError[EitherT[Option, String, *], Unit] =
-        EitherT.catsDataMonadErrorFForEitherT[Option, Unit, String]
-      EitherT.right[String](Option(1)).handleErrorWith((_: Unit) => EitherT.pure(2))
-    }
-
   }
 
   test("#2809 MonadErrorOps.reject runs effects only once") {
