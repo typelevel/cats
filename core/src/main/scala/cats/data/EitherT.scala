@@ -320,11 +320,10 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
    *
    * @see [[handleErrorF]] for recovering errors thrown in `F[_]`
    */
-  def handleError(f: A => B)(implicit F: Functor[F]): EitherT[F, A, B] =
+  def handleError[A1](f: A => B)(implicit F: Functor[F]): EitherT[F, A1, B] =
     EitherT(F.map(value) {
-      case Left(a) => Right(f(a))
-      // N.B. pattern match does not do `case Right(_)` on purpose
-      case right => right
+      case Left(a)  => Right(f(a))
+      case Right(a) => Right(a)
     })
 
   /**
@@ -352,8 +351,8 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
    *
    * @see [[handleError]] for recovering errors expressed via `EitherT`
    */
-  def handleErrorF[E](f: E => B)(implicit F: ApplicativeError[F, E]): EitherT[F, A, B] =
-    EitherT(F.handleError(value)(e => Right(f(e))))
+  def handleErrorF[A1 >: A, E](f: E => B)(implicit F: ApplicativeError[F, E]): EitherT[F, A1, B] =
+    EitherT(F.widen(F.handleError(value)(e => Right(f(e)))))
 
   /**
    * Handle any error, potentially recovering from it, by mapping it via
@@ -391,7 +390,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
    *
    * @see [[handleErrorWithF]] for recovering errors thrown in `F[_]`
    */
-  def handleErrorWith(f: A => EitherT[F, A, B])(implicit F: Monad[F]): EitherT[F, A, B] =
+  def handleErrorWith[A1 >: A](f: A => EitherT[F, A1, B])(implicit F: Monad[F]): EitherT[F, A1, B] =
     EitherT(F.flatMap(value) {
       case Left(a) => f(a).value
       // N.B. pattern match does not do `case Right(_)` on purpose
@@ -430,8 +429,8 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
    *
    * @see [[handleErrorWith]] for recovering errors expressed via `EitherT`
    */
-  def handleErrorWithF[E](f: E => EitherT[F, A, B])(implicit F: ApplicativeError[F, E]): EitherT[F, A, B] =
-    EitherT(F.handleErrorWith(value)(f(_).value))
+  def handleErrorWithF[A1 >: A, E](f: E => EitherT[F, A1, B])(implicit F: ApplicativeError[F, E]): EitherT[F, A1, B] =
+    EitherT(F.handleErrorWith[Either[A1, B]](F.widen(value))(f(_).value))
 
   /**
    * Example:
