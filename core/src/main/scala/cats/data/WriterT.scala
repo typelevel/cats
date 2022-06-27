@@ -773,7 +773,7 @@ sealed private[data] trait WriterTDecidable[F[_], L]
       )
     )
 
-  override def zero[A]: WriterT[F, L, INothing] = WriterT(F0.contramap(F0.zero)(_._2))
+  override def zero: WriterT[F, L, Nothing] = WriterT[F, L, Nothing](F0.contramap[Nothing, (L, Nothing)](F0.zero)(_._2))
 }
 
 sealed private[data] trait WriterTContravariantMonoidal[F[_], L] extends ContravariantMonoidal[WriterT[F, L, *]] {

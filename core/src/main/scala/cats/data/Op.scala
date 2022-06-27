@@ -94,8 +94,10 @@ private[data] trait OpDecidable[Arr[_, _], R] extends Decidable[Op[Arr, R, *]] w
   def sum[A, B](fa: Op[Arr, R, A], fb: Op[Arr, R, B]): Op[Arr, R, Either[A, B]] =
     Op(Arr.choice(fa.run, fb.run))
 
-  override def zero[A]: Op[Arr, R, INothing] =
-    Op(Arr.lift(INothing.absurd))
+  override def zero: Op[Arr, R, Nothing] =
+    Op[Arr, R, Nothing](
+      Arr.lift[Nothing, R](_ => throw new Exception("Materialized a value of type `Nothing`, this is a bug!"))
+    )
 }
 
 private[data] trait OpContravariantMonoidal[Arr[_, _], R]

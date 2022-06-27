@@ -21,8 +21,6 @@
 
 package cats
 
-import cats.data.INothing
-
 private[cats] trait ComposedDistributive[F[_], G[_]] extends Distributive[λ[α => F[G[α]]]] with ComposedFunctor[F, G] {
   outer =>
   def F: Distributive[F]
@@ -187,7 +185,7 @@ private[cats] trait ComposedApplicativeDecidable[F[_], G[_]]
   def sum[A, B](fa: F[G[A]], fb: F[G[B]]): F[G[Either[A, B]]] =
     F.map(F.product(fa, fb))(Function.tupled(G.sum))
 
-  override def zero[A]: F[G[INothing]] = F.pure(G.zero)
+  override def zero: F[G[Nothing]] = F.pure(G.zero)
 }
 
 private[cats] trait ComposedApplicativeContravariantMonoidal[F[_], G[_]]

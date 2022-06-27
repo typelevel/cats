@@ -22,10 +22,6 @@
 package cats
 package instances
 
-import cats.data.INothing
-import cats.instances.either._
-import cats.syntax.apply._
-
 trait EquivInstances extends EquivInstances0 {
   implicit def catsDecidableForEquiv: Decidable[Equiv] =
     new Decidable[Equiv] {
@@ -58,17 +54,14 @@ trait EquivInstances extends EquivInstances0 {
 
       def sum[A, B](fa: Equiv[A], fb: Equiv[B]): Equiv[Either[A, B]] =
         new Equiv[Either[A, B]] {
-          def equiv(x: Either[A, B], y: Either[A, B]): Boolean =
-            if (x.isRight)
-              if (y.isRight)
-                (x, y).mapN(fb.equiv).toOption.get
-              else false
-            else if (y.isLeft)
-              (x.swap, y.swap).mapN(fa.equiv).toOption.get
-            else false
+          def equiv(x: Either[A, B], y: Either[A, B]): Boolean = (x, y) match {
+            case (Left(a1), Left(a2))   => fa.equiv(a1, a2)
+            case (Right(b1), Right(b2)) => fb.equiv(b1, b2)
+            case _                      => false
+          }
         }
 
-      override def zero[A]: Equiv[INothing] = Equiv.by(_ => ())
+      override def zero: Equiv[Nothing] = Equiv.by[Nothing, Unit](_ => ())
     }
 }
 

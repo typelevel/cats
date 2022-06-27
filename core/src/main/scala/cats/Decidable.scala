@@ -21,8 +21,6 @@
 
 package cats
 
-import cats.data.INothing
-
 /**
  * [[Decidable]] functors are functors that supply
  * a `decide` operation allowing choices to be made.
@@ -42,8 +40,8 @@ trait Decidable[F[_]] extends ContravariantMonoidal[F] {
     contramap(sum(fa, fb))(f)
 
   def chosen[B, C](fb: F[B], fc: F[C]): F[Either[B, C]] = sum(fb, fc)
-  def lose[A](f: A => INothing): F[A] = contramap[INothing, A](zero)(f)
-  def zero[A]: F[INothing]
+  def lose[A](f: A => Nothing): F[A] = contramap[Nothing, A](zero)(f)
+  def zero: F[Nothing]
 }
 
 object Decidable {

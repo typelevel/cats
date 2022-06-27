@@ -23,7 +23,7 @@ package cats
 package instances
 
 import cats.arrow.{ArrowChoice, Category, CommutativeArrow}
-import cats.data.{AndThen, INothing}
+import cats.data.AndThen
 
 import annotation.tailrec
 
@@ -90,7 +90,7 @@ private[instances] trait FunctionInstancesBinCompat0 {
       }
       def sum[A, B](fa: A => Boolean, fb: B => Boolean): Either[A, B] => Boolean =
         either => either.fold(fa, fb)
-      def zero[A]: INothing => Boolean = _ => true
+      def zero: Nothing => Boolean = _ => true
     }
 }
 

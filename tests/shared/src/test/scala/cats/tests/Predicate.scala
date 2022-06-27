@@ -22,7 +22,6 @@
 package cats.tests
 
 import cats.Decidable
-import cats.data.INothing
 import cats.kernel.Eq
 import cats.laws.discipline.eq._
 import cats.laws.discipline.ExhaustiveCheck
@@ -39,7 +38,7 @@ object Predicate {
         Predicate(x => fa.run(f(x)))
       def sum[A, B](fa: Predicate[A], fb: Predicate[B]): Predicate[Either[A, B]] =
         Predicate(_.fold(fa.run, fb.run))
-      def zero[A]: Predicate[INothing] = Predicate(_ => true)
+      def zero: Predicate[Nothing] = Predicate[Nothing](_ => true)
     }
 
   implicit def eqPredicate[A: ExhaustiveCheck]: Eq[Predicate[A]] =

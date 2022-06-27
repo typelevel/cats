@@ -625,8 +625,8 @@ sealed private[data] trait KleisliDecidable[F[_], D]
   def sum[A, B](fa: Kleisli[F, D, A], fb: Kleisli[F, D, B]): Kleisli[F, D, Either[A, B]] =
     Kleisli(d => F.sum(fa.run(d), fb.run(d)))
 
-  override def zero[A]: ReaderT[F, D, INothing] =
-    Kleisli(_ => F.zero)
+  override def zero: ReaderT[F, D, Nothing] =
+    Kleisli[F, D, Nothing](_ => F.zero)
 }
 
 sealed private[data] trait KleisliContravariantMonoidal[F[_], D] extends ContravariantMonoidal[Kleisli[F, D, *]] {

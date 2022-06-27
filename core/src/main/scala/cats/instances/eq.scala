@@ -22,10 +22,6 @@
 package cats
 package instances
 
-import cats.data.INothing
-import cats.instances.either._
-import cats.syntax.apply._
-
 trait EqInstances extends kernel.instances.EqInstances with EqInstances0 {
   implicit def catsDecidableForEq: Decidable[Eq] =
     new Decidable[Eq] {
@@ -50,17 +46,13 @@ trait EqInstances extends kernel.instances.EqInstances with EqInstances0 {
         }
 
       def sum[A, B](fa: Eq[A], fb: Eq[B]): Eq[Either[A, B]] =
-        Eq.instance { (left, right) =>
-          if (left.isRight)
-            if (right.isRight)
-              (left, right).mapN(fb.eqv).toOption.get
-            else false
-          else if (right.isLeft)
-            (left.swap, right.swap).mapN(fa.eqv).toOption.get
-          else false
+        Eq.instance {
+          case (Left(a1), Left(a2))   => fa.eqv(a1, a2)
+          case (Right(b1), Right(b2)) => fb.eqv(b1, b2)
+          case _                      => false
         }
 
-      override def zero[A]: Eq[INothing] = Eq.allEqual[INothing]
+      override def zero: Eq[Nothing] = Eq.allEqual[Nothing]
     }
 }
 
