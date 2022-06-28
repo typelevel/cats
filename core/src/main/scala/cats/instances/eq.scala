@@ -52,7 +52,7 @@ trait EqInstances extends kernel.instances.EqInstances with EqInstances0 {
           case _                      => false
         }
 
-      override def zero: Eq[Nothing] = Eq.allEqual[Nothing]
+      override val zero: Eq[Nothing] = Eq.allEqual[Nothing]
     }
 }
 

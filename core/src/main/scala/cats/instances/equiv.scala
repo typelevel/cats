@@ -61,7 +61,7 @@ trait EquivInstances extends EquivInstances0 {
           }
         }
 
-      override def zero: Equiv[Nothing] = Equiv.by[Nothing, Unit](_ => ())
+      override val zero: Equiv[Nothing] = Equiv.by[Nothing, Unit](_ => ())
     }
 }
 

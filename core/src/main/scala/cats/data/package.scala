@@ -142,6 +142,4 @@ package object data extends ScalaVersionSpecificPackage {
       RepresentableStoreT.pure[W, Function1[S, *], S, A](x)
 
   }
-
-  def absurd[A](n: Nothing): A = throw new Exception("Somehow instantiated a value of INothing, this is a bug.")
 }
