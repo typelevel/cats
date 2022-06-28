@@ -176,6 +176,10 @@ object Invariant extends ScalaVersionSpecificInvariantInstances with InvariantIn
     cats.instances.ordering.catsContravariantMonoidalForOrdering
   implicit def catsContravariantMonoidalForPartialOrdering: ContravariantMonoidal[PartialOrdering] =
     cats.instances.partialOrdering.catsContravariantMonoidalForPartialOrdering
+  def catsContravariantMonoidalForEq: ContravariantMonoidal[Eq] =
+    cats.instances.eq.catsContravariantMonoidalForEq
+  def catsContravariantMonoidalForEquiv: ContravariantMonoidal[Equiv] =
+    cats.instances.equiv.catsContravariantMonoidalForEquiv
   implicit def catsContravariantForHash: Contravariant[Hash] =
     cats.instances.all.catsContravariantForHash
   implicit def catsInvariantMonoidalForSemigroup: InvariantMonoidal[Semigroup] =
