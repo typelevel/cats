@@ -82,7 +82,7 @@ private[instances] trait FunctionInstancesBinCompat0 {
 
   implicit def catsStdDecidableForPredicate: Decidable[* => Boolean] =
     new Decidable[* => Boolean] {
-      def unit: Unit => Boolean = Function.const(false)
+      val unit: Unit => Boolean = Function.const(false)
       def contramap[A, B](fa: A => Boolean)(f: B => A): B => Boolean =
         fa.compose(f)
       def product[A, B](fa: A => Boolean, fb: B => Boolean): ((A, B)) => Boolean = { case (a, b) =>
