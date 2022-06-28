@@ -40,7 +40,7 @@ trait Decidable[F[_]] extends ContravariantMonoidal[F] {
   def decide[A, B, C](fa: F[A], fb: F[B])(f: C => Either[A, B]): F[C] =
     contramap(sum(fa, fb))(f)
 
-  def chosen[B, C](fb: F[B], fc: F[C]): F[Either[B, C]] = sum(fb, fc)
+  final def chosen[B, C](fb: F[B], fc: F[C]): F[Either[B, C]] = sum(fb, fc)
   def lose[A](f: A => Nothing): F[A] = contramap[Nothing, A](zero)(f)
 }
 
