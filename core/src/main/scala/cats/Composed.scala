@@ -183,7 +183,7 @@ private[cats] trait ComposedApplicativeDecidable[F[_], G[_]]
   def G: Decidable[G]
 
   def sum[A, B](fa: F[G[A]], fb: F[G[B]]): F[G[Either[A, B]]] =
-    F.map(F.product(fa, fb))(Function.tupled(G.sum))
+    F.map2(fa, fb)(G.sum)
 
   override val zero: F[G[Nothing]] = F.pure(G.zero)
 }
