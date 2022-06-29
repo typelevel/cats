@@ -106,7 +106,7 @@ private[data] trait OpContravariantMonoidal[Arr[_, _], R]
   implicit def Arr: Arrow[Arr]
   implicit def M: Monoid[R]
 
-  def unit: Op[Arr, R, Unit] =
+  val unit: Op[Arr, R, Unit] =
     Op(Arr.lift(Function.const(M.empty)))
 
   def product[A, B](fa: Op[Arr, R, A], fb: Op[Arr, R, B]): Op[Arr, R, (A, B)] =
