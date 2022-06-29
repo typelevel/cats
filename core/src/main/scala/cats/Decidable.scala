@@ -67,7 +67,6 @@ object Decidable {
     val typeClassInstance: TypeClassType
     def sum[B](fb: F[B]): F[Either[A, B]] = typeClassInstance.sum[A, B](self, fb)
     def decide[B, C](fb: F[B])(f: C => Either[A, B]): F[C] = typeClassInstance.decide[A, B, C](self, fb)(f)
-    def chosen[B](fc: F[B]): F[Either[A, B]] = typeClassInstance.chosen[A, B](self, fc)
   }
   trait AllOps[F[_], A] extends Ops[F, A] with ContravariantMonoidal.AllOps[F, A] {
     type TypeClassType <: Decidable[F]
