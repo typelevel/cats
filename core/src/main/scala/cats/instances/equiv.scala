@@ -73,7 +73,7 @@ private[instances] trait EquivInstances0 {
        * Defaults to trivially contracting the type
        * to a point
        */
-      def unit: Equiv[Unit] =
+      val unit: Equiv[Unit] =
         new Equiv[Unit] {
           def equiv(x: Unit, y: Unit): Boolean = true
         }
