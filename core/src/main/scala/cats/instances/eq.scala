@@ -30,7 +30,7 @@ trait EqInstances extends kernel.instances.EqInstances with EqInstances0 {
        * Defaults to the trivial equivalence relation
        * contracting the type to a point
        */
-      def unit: Eq[Unit] = Eq.allEqual
+      val unit: Eq[Unit] = Eq.allEqual
 
       /**
        * Derive an `Eq` for `B` given an `Eq[A]` and a function `B => A`.

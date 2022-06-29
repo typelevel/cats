@@ -90,7 +90,7 @@ private[instances] trait FunctionInstancesBinCompat0 {
       }
       def sum[A, B](fa: A => Boolean, fb: B => Boolean): Either[A, B] => Boolean =
         either => either.fold(fa, fb)
-      val zero: Nothing => Boolean = _ => true
+      val zero: Nothing => Boolean = Function.const(true)
     }
 }
 

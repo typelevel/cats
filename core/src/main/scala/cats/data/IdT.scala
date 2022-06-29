@@ -100,7 +100,7 @@ sealed private[data] trait IdTDecidable[F[_]] extends Decidable[IdT[F, *]] with 
   override def sum[A, B](fa: IdT[F, A], fb: IdT[F, B]): IdT[F, Either[A, B]] =
     IdT(F0.sum(fa.value, fb.value))
 
-  override def zero: IdT[F, Nothing] = IdT[F, Nothing](F0.zero)
+  override val zero: IdT[F, Nothing] = IdT[F, Nothing](F0.zero)
 }
 
 sealed private[data] trait IdTContravariantMonoidal[F[_]] extends ContravariantMonoidal[IdT[F, *]] {

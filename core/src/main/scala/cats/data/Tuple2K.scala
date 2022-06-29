@@ -318,7 +318,7 @@ sealed private[data] trait Tuple2KDecidable[F[_], G[_]]
   def sum[A, B](fa: Tuple2K[F, G, A], fb: Tuple2K[F, G, B]): Tuple2K[F, G, Either[A, B]] =
     Tuple2K(F.sum(fa.first, fb.first), G.sum(fa.second, fb.second))
 
-  def zero: Tuple2K[F, G, Nothing] = Tuple2K[F, G, Nothing](F.zero, G.zero)
+  val zero: Tuple2K[F, G, Nothing] = Tuple2K[F, G, Nothing](F.zero, G.zero)
 }
 
 sealed private[data] trait Tuple2KContravariantMonoidal[F[_], G[_]]

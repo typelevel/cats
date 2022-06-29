@@ -185,7 +185,7 @@ private[cats] trait ComposedApplicativeDecidable[F[_], G[_]]
   def sum[A, B](fa: F[G[A]], fb: F[G[B]]): F[G[Either[A, B]]] =
     F.map(F.product(fa, fb))(Function.tupled(G.sum))
 
-  override def zero: F[G[Nothing]] = F.pure(G.zero)
+  override val zero: F[G[Nothing]] = F.pure(G.zero)
 }
 
 private[cats] trait ComposedApplicativeContravariantMonoidal[F[_], G[_]]

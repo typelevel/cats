@@ -408,7 +408,7 @@ private[data] trait NestedDecidable[F[_], G[_]]
   def sum[A, B](fa: Nested[F, G, A], fb: Nested[F, G, B]): Nested[F, G, Either[A, B]] =
     Nested(FG.sum(fa.value, fb.value))
 
-  def zero: Nested[F, G, Nothing] = Nested[F, G, Nothing](FG.zero)
+  val zero: Nested[F, G, Nothing] = Nested[F, G, Nothing](FG.zero)
 }
 
 private[data] trait NestedContravariantMonoidal[F[_], G[_]] extends ContravariantMonoidal[Nested[F, G, *]] {

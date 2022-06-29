@@ -59,7 +59,7 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
   implicit def catsStdInstancesForEither[A]
     : MonadError[Either[A, *], A] with Traverse[Either[A, *]] with Align[Either[A, *]] =
     new MonadError[Either[A, *], A] with Traverse[Either[A, *]] with Align[Either[A, *]] {
-      override def unit: Either[A, Unit] = Either.unit
+      override val unit: Either[A, Unit] = Either.unit
 
       def pure[B](b: B): Either[A, B] = Right(b)
 

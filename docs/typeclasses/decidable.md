@@ -7,15 +7,13 @@ It is the contravariant analogue of the [`Alternative`](alternative.html) type c
 
 ```scala mdoc:silent
 import cats.ContravariantMonoidal
-import cats.data.INothing
 
 trait Decidable[F[_]] extends ContravariantMonoidal[F] {
   def sum[A, B](fa: F[A], fb: F[B]): F[Either[A, B]]
+  def zero[A]: F[Nothing]
 
   def decide[A, B, C](fa: F[A], fb: F[B])(f: C => Either[A, B]): F[C] =
     contramap(sum(fa, fb))(f)
-
-  def zero[A]: F[INothing]
 }
 object Decidable {
   def apply[F[_]](implicit dec: Decidable[F]): Decidable[F] =
@@ -33,7 +31,7 @@ We can write the instance as:
 
 ```scala mdoc:silent
 implicit val decideableForPredicates = new Decidable[* => Boolean] {
-  def zero[A]: INothing => Boolean = _ => true 
+  def zero[A]: Nothing => Boolean = _ => true 
   def unit: Unit => Boolean = Function.const(false)
   def contramap[A, B](fa: A => Boolean)(f: B => A): B => Boolean =
     fa.compose(f)
