@@ -33,6 +33,7 @@ class EqSuite extends CatsSuite {
   Contravariant[Eq]
   Semigroupal[Eq]
   ContravariantSemigroupal[Eq]
+  ContravariantMonoidal[Eq]
   Decidable[Eq]
 
   checkAll("Eq", DecidableTests[Eq].decidable[MiniInt, Boolean, Boolean])

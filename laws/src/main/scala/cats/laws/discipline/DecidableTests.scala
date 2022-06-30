@@ -50,7 +50,7 @@ trait DecidableTests[F[_]] extends ContravariantMonoidalTests[F] {
       val parents = Seq(contravariantMonoidal[A, B, C])
       val bases = Seq.empty
       val props = Seq(
-        "decideable left identity" ->
+        "decidable left identity" ->
           forAll(laws.decidableDecideLeftIdentity[A] _),
         "decidable right identity" ->
           forAll(laws.decidableDecideRightIdentity[A] _),
@@ -58,7 +58,7 @@ trait DecidableTests[F[_]] extends ContravariantMonoidalTests[F] {
           forAll(laws.decidableSumAssociativity[A, B, C] _),
         "decidable right distributivity" ->
           forAll(laws.decidableRightDistributivity[A, B, C] _),
-        "dedicable right sum distributivituy" ->
+        "decidable right sum distributivity" ->
           forAll(laws.decidableRightDistributivitySum[A, B, C] _)
       )
     }
