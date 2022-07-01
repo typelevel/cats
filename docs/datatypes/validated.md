@@ -634,7 +634,7 @@ def flatMapConsistentApply[A, B](fa: F[A], fab: F[A => B]): IsEq[F[B]] =
 ```scala mdoc:silent
 import cats.laws._
 
-val inconsistentFlatMapLawsForValidated = 
+val flatMapLawsForAccumulatingValidatedMonad = 
   FlatMapLaws[Validated[NonEmptyChain[String], *]](accumulatingValidatedMonad)
 
 val fa  = Validated.invalidNec[String, Int]("oops")
@@ -642,7 +642,7 @@ val fab = Validated.invalidNec[String, Int => Double]("Broken function")
 ```
 
 ```scala mdoc
-inconsistentFlatMapLawsForValidated.flatMapConsistentApply(fa , fab)
+flatMapLawsForAccumulatingValidatedMonad.flatMapConsistentApply(fa , fab)
 ```
 
 Therefore, `Validated` has only an `Applicative` instance.
