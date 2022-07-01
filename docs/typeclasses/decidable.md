@@ -1,9 +1,9 @@
 # Decidable
 
-The `Decidable` type class is an extension of [`ContravariantMonoidal`](contravariantmonoidal.html) that allows the
+The `Decidable` type class is an extension of [`ContravariantMonoidal`](contravariantmonoidal.md) that allows the
 definition of a `sum` function, allowing us to make choices in consuming our input.
 
-It is the contravariant analogue of the [`Alternative`](alternative.html) type class.
+It is the contravariant analogue of the [`Alternative`](alternative.md) type class.
 
 ```scala mdoc:silent
 import cats.ContravariantMonoidal
