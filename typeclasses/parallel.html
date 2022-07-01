@@ -203,7 +203,7 @@
         <p>When browsing the various <code>Monads</code> included in Cats,
         you may have noticed that some of them have data types that are actually of the same structure,
         but instead have instances of <code>Applicative</code>. E.g. <code>Either</code> and <code>Validated</code>.</p>
-        <p>This is because defining a <code>Monad</code> instance for data types like <code>Validated</code> would be inconsistent with its error-accumulating behaviour.
+        <p>This is because defining a <code>Monad</code> instance for data types like <code>Validated</code> <a href="../datatypes/validated.html#of-flatmaps-and-eithers">would be inconsistent</a> with its error-accumulating behaviour.
         In short, <code>Monads</code> describe dependent computations and <code>Applicatives</code> describe independent computations.</p>
         <p>Sometimes however, we want to use both in conjunction with each other.
         In the example of <code>Either</code> and <code>Validated</code> it is trivial albeit cumbersome to convert between the two types.
