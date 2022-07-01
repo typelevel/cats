@@ -442,11 +442,17 @@ sealed abstract private[data] class NonEmptyVectorInstances {
       ): (S, NonEmptyVector[B]) =
         StaticMethods.mapAccumulateFromStrictFunctor(init, fa, f)(this)
 
+      override def mapWithLongIndex[A, B](fa: NonEmptyVector[A])(f: (A, Long) => B): NonEmptyVector[B] =
+        StaticMethods.mapWithLongIndexFromStrictFunctor(fa, f)(this)
+
       override def mapWithIndex[A, B](fa: NonEmptyVector[A])(f: (A, Int) => B): NonEmptyVector[B] =
         StaticMethods.mapWithIndexFromStrictFunctor(fa, f)(this)
 
       override def zipWithIndex[A](fa: NonEmptyVector[A]): NonEmptyVector[(A, Int)] =
         fa.zipWithIndex
+
+      override def updated_[A, B >: A](fa: NonEmptyVector[A], idx: Long, b: B): Option[NonEmptyVector[B]] =
+        Traverse[Vector].updated_(fa.toVector, idx, b).map(NonEmptyVector.fromVectorUnsafe)
 
       override def foldLeft[A, B](fa: NonEmptyVector[A], b: B)(f: (B, A) => B): B =
         fa.foldLeft(b)(f)

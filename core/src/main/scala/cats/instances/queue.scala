@@ -132,6 +132,9 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
       override def mapAccumulate[S, A, B](init: S, fa: Queue[A])(f: (S, A) => (S, B)): (S, Queue[B]) =
         StaticMethods.mapAccumulateFromStrictFunctor(init, fa, f)(this)
 
+      override def mapWithLongIndex[A, B](fa: Queue[A])(f: (A, Long) => B): Queue[B] =
+        StaticMethods.mapWithLongIndexFromStrictFunctor(fa, f)(this)
+
       override def mapWithIndex[A, B](fa: Queue[A])(f: (A, Int) => B): Queue[B] =
         StaticMethods.mapWithIndexFromStrictFunctor(fa, f)(this)
 

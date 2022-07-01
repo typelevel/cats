@@ -168,6 +168,46 @@ trait Traverse[F[_]] extends Functor[F] with Foldable[F] with UnorderedTraverse[
   def zipWithIndex[A](fa: F[A]): F[(A, Int)] =
     mapWithIndex(fa)((a, i) => (a, i))
 
+  /**
+    * Same as [[traverseWithIndexM]] but the index type is [[Long]] instead of [[Int]].
+    */
+  def traverseWithLongIndexM[G[_], A, B](fa: F[A])(f: (A, Long) => G[B])(implicit G: Monad[G]): G[F[B]] =
+    traverse(fa)(a => StateT((s: Long) => G.map(f(a, s))(b => (s + 1, b)))).runA(0L)
+
+  /**
+    * Same as [[mapWithIndex]] but the index type is [[Long]] instead of [[Int]].
+    */
+  def mapWithLongIndex[A, B](fa: F[A])(f: (A, Long) => B): F[B] =
+    traverseWithLongIndexM[cats.Id, A, B](fa)((a, long) => f(a, long))
+
+  /**
+    * Same as [[zipWithIndex]] but the index type is [[Long]] instead of [[Int]].
+    */
+  def zipWithLongIndex[A](fa: F[A]): F[(A, Long)] =
+    mapWithLongIndex(fa)((a, long) => (a, long))
+
+  /**
+   * If `fa` contains the element at index `idx`, 
+   * return the copy of `fa` where the element at `idx` is replaced with `b`. 
+   * If there is no element with such an index, return `None`. 
+   *
+   * The behavior is consistent with the Scala collection library's
+   * `updated` for collections such as `List`.
+   */
+  def updated_[A, B >: A](fa: F[A], idx: Long, b: B): Option[F[B]] = {
+    if (idx < 0L)
+      None
+    else
+      mapAccumulate(0L, fa)((i, a) =>
+        if (i == idx)
+          (i + 1, b)
+        else
+          (i + 1, a)
+      ) match {
+        case (i, fb) if i > idx => Some(fb)
+        case _                  => None
+      }
+  }
   override def unorderedTraverse[G[_]: CommutativeApplicative, A, B](sa: F[A])(f: (A) => G[B]): G[F[B]] =
     traverse(sa)(f)
 
@@ -215,6 +255,14 @@ object Traverse {
       typeClassInstance.traverseWithIndexM[G, A, B](self)(f)(G)
     def zipWithIndex: F[(A, Int)] =
       typeClassInstance.zipWithIndex[A](self)
+    def zipWithLongIndex: F[(A, Long)] =
+      typeClassInstance.zipWithLongIndex[A](self)
+    def traverseWithLongIndexM[G[_], B](f: (A, Long) => G[B])(implicit G: Monad[G]): G[F[B]] =
+      typeClassInstance.traverseWithLongIndexM[G, A, B](self)(f)
+    def mapWithLongIndex[B](f: (A, Long) => B): F[B] =
+      typeClassInstance.mapWithLongIndex[A, B](self)(f)
+    def updated_[B >: A](idx: Long, b: B): Option[F[B]] =
+      typeClassInstance.updated_(self, idx, b)
   }
   trait AllOps[F[_], A]
       extends Ops[F, A]

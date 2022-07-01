@@ -130,6 +130,13 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
       final override def traverse[G[_], A, B](fa: Vector[A])(f: A => G[B])(implicit G: Applicative[G]): G[Vector[B]] =
         G.map(Chain.traverseViaChain(fa)(f))(_.toVector)
 
+      final override def updated_[A, B >: A](fa: Vector[A], idx: Long, b: B): Option[Vector[B]] =
+        if (idx >= 0L && idx < fa.size.toLong) {
+          Some(fa.updated(idx.toInt, b))
+        } else {
+          None
+        }
+
       /**
        * This avoids making a very deep stack by building a tree instead
        */
@@ -173,6 +180,9 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
 
       override def mapWithIndex[A, B](fa: Vector[A])(f: (A, Int) => B): Vector[B] =
         StaticMethods.mapWithIndexFromStrictFunctor(fa, f)(this)
+
+      override def mapWithLongIndex[A, B](fa: Vector[A])(f: (A, Long) => B): Vector[B] =
+        StaticMethods.mapWithLongIndexFromStrictFunctor(fa, f)(this)
 
       override def zipWithIndex[A](fa: Vector[A]): Vector[(A, Int)] =
         fa.zipWithIndex
