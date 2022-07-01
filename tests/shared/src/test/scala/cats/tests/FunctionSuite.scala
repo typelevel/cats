@@ -184,7 +184,8 @@ class FunctionSuite extends CatsSuite {
   )
 
   // Isos for Decidable
-  implicit val isoCodomainBoolean = SemigroupalTests.Isomorphisms.invariant[Function1[*, Boolean]]
+  implicit val isoCodomainBoolean: Isomorphisms[Function1[*, Boolean]] =
+    SemigroupalTests.Isomorphisms.invariant[Function1[*, Boolean]]
   checkAll("Function1[?, Boolean]", DecidableTests[Function1[*, Boolean]].decidable[MiniInt, MiniInt, MiniInt])
   checkAll("Decidable[? => Boolean]", SerializableTests.serializable(Decidable[Function1[*, Boolean]]))
 

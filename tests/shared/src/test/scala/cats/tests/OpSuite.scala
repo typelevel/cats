@@ -44,13 +44,14 @@ class OpSuite extends CatsSuite {
   }
 
   {
-    implicit val catsDataDecidableForOp = Op.catsDataDecidableForOp[Function1, Int]
+    implicit val catsDataDecidableForOp: Decidable[Op[Function1, Int, *]] = Op.catsDataDecidableForOp[Function1, Int]
     checkAll("Op[Function1, Monoid, ?]", DecidableTests[Op[Function1, Int, *]].decidable[MiniInt, MiniInt, MiniInt])
     checkAll("Decidable[Op[Function1, Monoid, ?]]", SerializableTests.serializable(Decidable[Op[Function1, Int, *]]))
   }
 
   {
-    implicit val catsDataContravariantMonoidalForOp = Op.catsDataContravariantMonoidalForOp[Function1, Int]
+    implicit val catsDataContravariantMonoidalForOp: ContravariantMonoidal[Op[Function1, Int, *]] =
+      Op.catsDataContravariantMonoidalForOp[Function1, Int]
     checkAll("Op[Function1, Monoid, ?]",
              ContravariantMonoidalTests[Op[Function1, Int, *]].contravariantMonoidal[MiniInt, MiniInt, MiniInt]
     )
@@ -61,7 +62,8 @@ class OpSuite extends CatsSuite {
   }
 
   {
-    implicit val catsDataContravariantForOp = Op.catsDataContravariantMonoidalForOp[Function1, Unit]
+    implicit val catsDataContravariantForOp: ContravariantMonoidal[Op[Function1, Unit, *]] =
+      Op.catsDataContravariantMonoidalForOp[Function1, Unit]
     checkAll("Op[Function1, Unit, ?]",
              ContravariantTests[Op[Function1, Unit, *]].contravariant[MiniInt, MiniInt, MiniInt]
     )
