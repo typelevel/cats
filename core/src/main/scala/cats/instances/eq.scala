@@ -55,7 +55,7 @@ trait EqInstances extends kernel.instances.EqInstances with EqInstances0 {
       override val zero: Eq[Nothing] = Eq.allEqual[Nothing]
     }
 
-  val catsContravariantMonoidalForEq: ContravariantMonoidal[Eq] = 
+  val catsContravariantMonoidalForEq: ContravariantMonoidal[Eq] =
     catsContravariantMonoidalForEqForBinCompat
 }
 
