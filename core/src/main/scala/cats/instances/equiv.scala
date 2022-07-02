@@ -63,10 +63,13 @@ trait EquivInstances extends EquivInstances0 {
 
       override val zero: Equiv[Nothing] = Equiv.by[Nothing, Unit](_ => ())
     }
+
+    val catsContravariantMonoidalForEquiv: ContravariantMonoidal[Equiv] = 
+      catsContravariantMonoidalForEquivForBinCompat
 }
 
 private[instances] trait EquivInstances0 {
-  implicit def catsContravariantMonoidalForEquiv: ContravariantMonoidal[Equiv] =
+  implicit def catsContravariantMonoidalForEquivForBinCompat: ContravariantMonoidal[Equiv] =
     new ContravariantMonoidal[Equiv] {
 
       /**
