@@ -22,7 +22,6 @@
 package cats.bench
 
 import cats.data.Chain
-import fs2.Chunk
 import org.openjdk.jmh.annotations.{Benchmark, Scope, State}
 
 @State(Scope.Thread)
@@ -30,48 +29,38 @@ class ChainBench {
 
   private val intOption = Option(1)
   private val smallChain = Chain(1, 2, 3, 4, 5)
-  private val smallChunk = Chunk(1, 2, 3, 4, 5)
   private val smallVector = Vector(1, 2, 3, 4, 5)
   private val smallList = List(1, 2, 3, 4, 5)
 
   private val largeChain = (0 to 1000)
     .foldLeft(Chain.empty[Int])((acc, _) => acc ++ Chain.fromSeq(0 to 1000))
-  private val largeChunk = Chunk.seq(0 to 1000000)
   private val largeVector = (0 to 1000000).toVector
   private val largeList = (0 to 1000000).toList
   @Benchmark def mapSmallChain: Chain[Int] = smallChain.map(_ + 1)
-  @Benchmark def mapsmallChunk: Chunk[Int] = smallChunk.map(_ + 1)
   @Benchmark def mapSmallVector: Vector[Int] = smallVector.map(_ + 1)
   @Benchmark def mapSmallList: List[Int] = smallList.map(_ + 1)
   @Benchmark def mapLargeChain: Chain[Int] = largeChain.map(_ + 1)
-  @Benchmark def maplargeChunk: Chunk[Int] = largeChunk.map(_ + 1)
   @Benchmark def mapLargeVector: Vector[Int] = largeVector.map(_ + 1)
   @Benchmark def mapLargeList: List[Int] = largeList.map(_ + 1)
   @Benchmark def foldLeftSmallChain: Int = smallChain.foldLeft(0)(_ + _)
-  @Benchmark def foldLeftsmallChunk: Int = smallChunk.foldLeft(0)(_ + _)
   @Benchmark def foldLeftSmallVector: Int = smallVector.foldLeft(0)(_ + _)
   @Benchmark def foldLeftSmallList: Int = smallList.foldLeft(0)(_ + _)
   @Benchmark def foldLeftLargeChain: Int = largeChain.foldLeft(0)(_ + _)
-  @Benchmark def foldLeftlargeChunk: Int = largeChunk.foldLeft(0)(_ + _)
   @Benchmark def foldLeftLargeVector: Int = largeVector.foldLeft(0)(_ + _)
   @Benchmark def foldLeftLargeList: Int = largeList.foldLeft(0)(_ + _)
   @Benchmark def consSmallChain: Chain[Int] = 0 +: smallChain
-  @Benchmark def conssmallChunk: Chunk[Int] = Chunk(0) ++ smallChunk
   @Benchmark def consSmallVector: Vector[Int] = 0 +: smallVector
   @Benchmark def consSmallList: List[Int] = 0 +: smallList
 
   @Benchmark def consLargeChain: Chain[Int] = 0 +: largeChain
-  @Benchmark def conslargeChunk: Chunk[Int] = Chunk(0) ++ largeChunk
   @Benchmark def consLargeVector: Vector[Int] = 0 +: largeVector
   @Benchmark def consLargeList: List[Int] = 0 +: largeList
 
   @Benchmark def createTinyChain: Chain[Int] = Chain(1)
-  @Benchmark def createTinyChunk: Chunk[Int] = Chunk(1)
   @Benchmark def createTinyVector: Vector[Int] = Vector(1)
   @Benchmark def createTinyList: List[Int] = List(1)
 
   @Benchmark def createSmallChain: Chain[Int] = Chain(1, 2, 3, 4, 5)
-  @Benchmark def createsmallChunk: Chunk[Int] = Chunk(1, 2, 3, 4, 5)
   @Benchmark def createSmallVector: Vector[Int] = Vector(1, 2, 3, 4, 5)
   @Benchmark def createSmallList: List[Int] = List(1, 2, 3, 4, 5)
 
