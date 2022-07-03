@@ -144,6 +144,18 @@ into larger problems.
 If you are being harassed, please contact one of [us](#maintainers)
 immediately so that we can support you.
 
+### Learning
+
+Below you can find third-party long-form materials strictly focused on Cats:
+
+* (book) [Scala with Cats](https://underscore.io/books/scala-with-cats/)
+  by Noel Welsh and Dave Gurnell
+* (course) [Rock the JVM Cats course](https://rockthejvm.com/p/cats/)
+* (tutorial) [herding cats](http://eed3si9n.com/herding-cats/) by Eugene Yokota
+* (tutorial) [Scala Exercises](https://www.scala-exercises.org/cats) by 47 Degrees
+
+Check [this page](https://typelevel.org/cats/resources_for_learners.html) for a wider range of materials where the Cats library is used in the context of category theory, Scala projects and more.
+
 ### Binary compatibility and versioning
 
 After `1.0.0` release, we [decided](https://github.com/typelevel/cats/issues/1233)
