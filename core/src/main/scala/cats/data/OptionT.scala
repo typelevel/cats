@@ -552,6 +552,11 @@ sealed abstract private[data] class OptionTInstances0 extends OptionTInstances1 
       implicit val F = F0
     }
 
+  implicit def catsDataContravariantMonoidalForOptionT[F[_]](implicit
+    F0: ContravariantMonoidal[F]
+  ): ContravariantMonoidal[OptionT[F, *]] =
+    new OptionTContravariantMonoidal[F] { implicit val F = F0 }
+
   implicit def catsDataMonoidKForOptionT[F[_]](implicit F0: Monad[F]): MonoidK[OptionT[F, *]] =
     new OptionTMonoidK[F] { implicit val F = F0 }
 
@@ -579,11 +584,6 @@ sealed abstract private[data] class OptionTInstances1 extends OptionTInstances2 
 
   implicit def catsDataMonadErrorMonadForOptionT[F[_]](implicit F0: Monad[F]): MonadError[OptionT[F, *], Unit] =
     new OptionTMonadErrorMonad[F] { implicit val F = F0 }
-
-  implicit def catsDataContravariantMonoidalForOptionT[F[_]](implicit
-    F0: ContravariantMonoidal[F]
-  ): ContravariantMonoidal[OptionT[F, *]] =
-    new OptionTContravariantMonoidal[F] { implicit val F = F0 }
 }
 
 sealed abstract private[data] class OptionTInstances2 extends OptionTInstances3 {
