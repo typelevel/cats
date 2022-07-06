@@ -17,10 +17,6 @@ trait Decidable[F[_]] extends ContravariantMonoidal[F] {
 
   def lose[A](f: A => Nothing): F[A] = contramap[Nothing, A](zero)(f)
 }
-object Decidable {
-  def apply[F[_]](implicit dec: Decidable[F]): Decidable[F] =
-    dec
-}
 ```
 
 `sum` lets us implement the `decide` function. Note how `decide` says, no matter what the outcome of a possibly multi-outcome procedure, I can consume either outcome.
@@ -54,8 +50,8 @@ def isEven(i: Int): Boolean = i % 2 == 0
 def isDivisibleByThree(l: Long): Boolean = l % 3 == 0
 
 def isEvenRightOrDivisibleThreeLeft: Either[Int, Long] => Boolean =
-  Decidable[* => Boolean].sum(isEven, isDivisibleByThree)
+  decideableForPredicates.sum(isEven, isDivisibleByThree)
 
 def isEvenRightAndDivisibleThreeLeft: ((Int, Long)) => Boolean =
-  Decidable[* => Boolean].product(isEven, isDivisibleByThree)
+  decideableForPredicates.product(isEven, isDivisibleByThree)
 ```
