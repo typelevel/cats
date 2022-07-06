@@ -176,8 +176,11 @@ object Invariant extends ScalaVersionSpecificInvariantInstances with InvariantIn
     cats.instances.ordering.catsContravariantMonoidalForOrdering
   implicit def catsContravariantMonoidalForPartialOrdering: ContravariantMonoidal[PartialOrdering] =
     cats.instances.partialOrdering.catsContravariantMonoidalForPartialOrdering
+
+  @deprecated("Prefer cats.instances.eq.catsDecidableForEq, which supersedes this instance", "2.9.0")
   def catsContravariantMonoidalForEq: ContravariantMonoidal[Eq] =
     cats.instances.eq.catsContravariantMonoidalForEq
+  @deprecated("Prefer cats.instances.eq.catsDecidableForEquiv, which supersedes this instance", "2.9.0")
   def catsContravariantMonoidalForEquiv: ContravariantMonoidal[Equiv] =
     cats.instances.equiv.catsContravariantMonoidalForEquiv
   implicit def catsContravariantForHash: Contravariant[Hash] =

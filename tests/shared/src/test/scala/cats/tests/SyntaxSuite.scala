@@ -124,7 +124,7 @@ object SyntaxSuite {
   def testDecidableFunctor[F[_]: Decidable, A, B, C]: Unit = {
     val fa = mock[F[A]]
     val fb = mock[F[B]]
-    val f =  mock[C => Either[A, B]]
+    val f = mock[C => Either[A, B]]
     val fc = fa.sum(fb)
     val fd = fa.decide(fb)(f)
   }
