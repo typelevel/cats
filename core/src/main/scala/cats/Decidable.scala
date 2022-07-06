@@ -50,17 +50,6 @@ object Decidable {
    */
   @inline def apply[F[_]](implicit instance: Decidable[F]): Decidable[F] = instance
 
-  @deprecated("Use cats.syntax object imports", "2.2.0")
-  object ops {
-    implicit def toAllDecidableOps[F[_], A](target: F[A])(implicit tc: Decidable[F]): AllOps[F, A] {
-      type TypeClassType = Decidable[F]
-    } =
-      new AllOps[F, A] {
-        type TypeClassType = Decidable[F]
-        val self: F[A] = target
-        val typeClassInstance: TypeClassType = tc
-      }
-  }
   trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: Decidable[F]
     def self: F[A]
@@ -81,6 +70,4 @@ object Decidable {
         val typeClassInstance: TypeClassType = tc
       }
   }
-  @deprecated("Use cats.syntax object imports", "2.2.0")
-  object nonInheritedOps extends ToDecidableOps
 }
