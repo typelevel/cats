@@ -765,12 +765,10 @@ sealed private[data] trait WriterTDecidable[F[_], L]
 
   override def sum[A, B](fa: WriterT[F, L, A], fb: WriterT[F, L, B]): WriterT[F, L, Either[A, B]] =
     WriterT(
-      F0.decide(fa.run, fb.run)((e: (L, Either[A, B])) =>
-        e match {
-          case (l, Right(b)) => Right((l, b))
-          case (l, Left(a))  => Left((l, a))
-        }
-      )
+      F0.decide(fa.run, fb.run) {
+        case (l, Right(b)) => Right((l, b))
+        case (l, Left(a))  => Left((l, a))
+      }
     )
 
   override val zero: WriterT[F, L, Nothing] = WriterT[F, L, Nothing](F0.contramap[Nothing, (L, Nothing)](F0.zero)(_._2))
