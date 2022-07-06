@@ -31,7 +31,7 @@ package cats
  * Must obey laws in `cats.laws.DecidableLaws`.
  *
  * Based on ekmett's contravariant library:
- * https://hackage.haskell.org/package/contravariant-1.4/docs/Data-Functor-Contravariant-Divisible.html#g:2
+ * [[https://hackage.haskell.org/package/contravariant-1.4/docs/Data-Functor-Contravariant-Divisible.html#g:2]]
  */
 trait Decidable[F[_]] extends ContravariantMonoidal[F] {
   def sum[A, B](fa: F[A], fb: F[B]): F[Either[A, B]]
