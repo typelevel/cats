@@ -14,6 +14,8 @@ trait Decidable[F[_]] extends ContravariantMonoidal[F] {
 
   def decide[A, B, C](fa: F[A], fb: F[B])(f: C => Either[A, B]): F[C] =
     contramap(sum(fa, fb))(f)
+
+  def lose[A](f: A => Nothing): F[A] = contramap[Nothing, A](zero)(f)
 }
 object Decidable {
   def apply[F[_]](implicit dec: Decidable[F]): Decidable[F] =
