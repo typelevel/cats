@@ -140,9 +140,6 @@ class KleisliSuite extends CatsSuite {
   }
 
   {
-    implicit val catsDataContravariantMonoidalForKleisliLocal
-      : ContravariantMonoidal[Kleisli[Const[String, *], Int, *]] =
-      Kleisli.catsDataContravariantMonoidalForKleisli[Const[String, *], Int]
     checkAll("Kleisli[Const[String, *], MiniInt, *]",
              ContravariantMonoidalTests[Kleisli[Const[String, *], MiniInt, *]].contravariantMonoidal[Int, Int, Int]
     )
