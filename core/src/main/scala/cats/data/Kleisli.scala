@@ -625,7 +625,7 @@ sealed private[data] trait KleisliDecidable[F[_], D]
   def sum[A, B](fa: Kleisli[F, D, A], fb: Kleisli[F, D, B]): Kleisli[F, D, Either[A, B]] =
     Kleisli(d => F.sum(fa.run(d), fb.run(d)))
 
-  override val zero: ReaderT[F, D, Nothing] =
+  override val zero: Kleisli[F, D, Nothing] =
     Kleisli[F, D, Nothing](_ => F.zero)
 }
 
