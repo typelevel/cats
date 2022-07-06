@@ -285,6 +285,13 @@ class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonE
     }
   }
 
+  test("++: consistent with List#:::") {
+    forAll { (nel: NonEmptyList[Int], i: List[Int]) =>
+      assert((i ++: nel).toList === (i ::: nel.toList))
+      assert(nel.prependAll(i).toList === (i ::: nel.toList))
+    }
+  }
+
   test("NonEmptyList#distinct is consistent with List#distinct") {
     forAll { (nel: NonEmptyList[Int]) =>
       assert(nel.distinct.toList === (nel.toList.distinct))
@@ -379,6 +386,13 @@ class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonE
       assert((nel ++ l).toList === (nel.toList ::: l))
       assert(nel.concat(l).toList === (nel.toList ::: l))
       assert(nel.concatNel(NonEmptyList(n, l)).toList === (nel.toList ::: (n :: l)))
+    }
+  }
+
+  test("NonEmptyList#concat(Option) is consistent with List#++") {
+    forAll { (nel: NonEmptyList[Int], l: Option[Int], n: Int) =>
+      assert((nel ++ l).toList === (nel.toList ++ l))
+      assert(nel.concat(l).toList === (nel.toList ++ l))
     }
   }
 
