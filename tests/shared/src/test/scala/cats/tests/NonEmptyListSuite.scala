@@ -389,13 +389,6 @@ class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonE
     }
   }
 
-  test("NonEmptyList#concat(Option) is consistent with List#++") {
-    forAll { (nel: NonEmptyList[Int], l: Option[Int], n: Int) =>
-      assert((nel ++ l).toList === (nel.toList ++ l))
-      assert(nel.concat(l).toList === (nel.toList ++ l))
-    }
-  }
-
   test("NonEmptyList#fromFoldabale is consistent with NonEmptyList#fromList") {
     forAll { (xs: List[Int]) =>
       assert(NonEmptyList.fromList(xs) === (NonEmptyList.fromFoldable(xs)))

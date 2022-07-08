@@ -111,14 +111,8 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
   def ++[AA >: A](l: List[AA]): NonEmptyList[AA] =
     concat(l)
 
-  def ++[AA >: A](other: Option[AA]): NonEmptyList[AA] =
-    concat(other)
-
   def concat[AA >: A](other: List[AA]): NonEmptyList[AA] =
     NonEmptyList(head, tail ::: other)
-
-  def concat[AA >: A](other: Option[AA]): NonEmptyList[AA] =
-    concat(other.toList)
 
   @deprecated("Use concatNel", since = "1.0.0-RC1")
   private[data] def concat[AA >: A](other: NonEmptyList[AA]): NonEmptyList[AA] =
