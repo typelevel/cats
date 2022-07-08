@@ -288,7 +288,7 @@ class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonE
   test("++: consistent with List#:::") {
     forAll { (nel: NonEmptyList[Int], i: List[Int]) =>
       assert((i ++: nel).toList === (i ::: nel.toList))
-      assert(nel.prependAll(i).toList === (i ::: nel.toList))
+      assert(nel.prependList(i).toList === (i ::: nel.toList))
     }
   }
 

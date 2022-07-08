@@ -134,7 +134,7 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
     NonEmptyList(a, head :: tail)
 
   /**
-   * Alias for prependAll
+   * Alias for [[prependList]]
    * 
    * {{{
    * scala> import cats.data.NonEmptyList
@@ -145,20 +145,20 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
    * }}}
    */
   def ++:[AA >: A](other: List[AA]): NonEmptyList[AA] =
-    prependAll(other)
+    prependList(other)
 
-  /** 
-   * Prepend another List
+  /**
+   * Prepend another `List`
    *
    * {{{
    * scala> import cats.data.NonEmptyList
    * scala> val nel = NonEmptyList.of(1, 2, 3)
    * scala> val list = List(-1, 0)
-   * scala> list ++: nel
+   * scala> nel.prependList(list)
    * res0: cats.data.NonEmptyList[Int] = NonEmptyList(-1, 0, 1, 2, 3)
    * }}}
    */
-  def prependAll[AA >: A](other: List[AA]): NonEmptyList[AA] =
+  def prependList[AA >: A](other: List[AA]): NonEmptyList[AA] =
     other match {
       case Nil          => this
       case head :: tail => head :: prependAll[AA](tail)
