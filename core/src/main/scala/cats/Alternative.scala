@@ -1,8 +1,29 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 
-import simulacrum.typeclass
+import cats.kernel.compat.scalaVersionSpecific._
 
-@typeclass trait Alternative[F[_]] extends NonEmptyAlternative[F] with MonoidK[F] { self =>
+trait Alternative[F[_]] extends NonEmptyAlternative[F] with MonoidK[F] { self =>
 
   // Note: `protected` is only necessary to enforce binary compatibility
   // since neither `private` nor `private[cats]` work properly here.
@@ -57,7 +78,7 @@ import simulacrum.typeclass
 
   /**
    * Separate the inner foldable values into the "lefts" and "rights".
-   * 
+   *
    * A variant of [[[separate[G[_,_],A,B](fgab:F[G[A,B]])(implicitFM:cats\.FlatMap[F]* separate]]]
    * that is specialized for Fs that have Foldable instances which allows for a single-pass implementation
    * (as opposed to {{{separate}}} which is 2-pass).
@@ -99,13 +120,16 @@ import simulacrum.typeclass
       val F = self
       val G = Applicative[G]
     }
+
+  def fromIterableOnce[A](as: IterableOnce[A]): F[A] =
+    combineAllK(as.iterator.map(pure(_)))
+
+  final def fromFoldable[G[_]: Foldable, A](as: G[A]): F[A] =
+    fromIterableOnce(Foldable[G].toIterable(as))
 }
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 object Alternative {
-
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
 
   /**
    * Summon an instance of [[Alternative]] for `F`.
@@ -150,7 +174,4 @@ object Alternative {
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToAlternativeOps
 
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 }

@@ -1,8 +1,30 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 package instances
 
 import scala.annotation.tailrec
 import cats.data.Ior
+import cats.kernel.compat.scalaVersionSpecific._
 
 trait OptionInstances extends cats.kernel.instances.OptionInstances {
 
@@ -24,6 +46,25 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
       def empty[A]: Option[A] = None
 
       def combineK[A](x: Option[A], y: Option[A]): Option[A] = if (x.isDefined) x else y
+
+      override def combineAllOptionK[A](as: IterableOnce[Option[A]]): Option[Option[A]] = {
+        val it = as.iterator
+        if (it.hasNext) {
+          while (true) {
+            val o = it.next()
+            if (o.isDefined) return Some(o)
+            if (!it.hasNext) return Some(None)
+          }
+          sys.error("unreachable")
+        } else {
+          return None
+        }
+      }
+
+      override def fromIterableOnce[A](as: IterableOnce[A]): Option[A] = {
+        val iter = as.iterator
+        if (iter.hasNext) Some(iter.next()) else None
+      }
 
       override def prependK[A](a: A, fa: Option[A]): Option[A] = Some(a)
       override def appendK[A](fa: Option[A], a: A): Option[A] = if (fa.isDefined) fa else Some(a)
@@ -134,6 +175,15 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
           case Some(a) => Applicative[G].map(f(a))(Some(_))
         }
 
+      override def mapAccumulate[S, A, B](init: S, fa: Option[A])(f: (S, A) => (S, B)): (S, Option[B]) = {
+        fa match {
+          case Some(a) =>
+            val (snext, b) = f(init, a)
+            (snext, Some(b))
+          case None => (init, None)
+        }
+      }
+
       override def reduceLeftToOption[A, B](fa: Option[A])(f: A => B)(g: (B, A) => B): Option[B] =
         fa.map(f)
 
@@ -212,6 +262,7 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
     }
 }
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 private[instances] trait OptionInstancesBinCompat0 {
   implicit val catsStdTraverseFilterForOption: TraverseFilter[Option] = new TraverseFilter[Option] {
     val traverse: Traverse[Option] = cats.instances.option.catsStdInstancesForOption

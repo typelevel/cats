@@ -1,8 +1,28 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 
 import cats.Foldable.Source
 import cats.data.{Ior, NonEmptyList}
-import simulacrum.{noop, typeclass}
 
 /**
  * Data structures that can be reduced to a summary value.
@@ -17,7 +37,7 @@ import simulacrum.{noop, typeclass}
  *  - `reduceLeftTo(fa)(f)(g)` eagerly reduces with an additional mapping function
  *  - `reduceRightTo(fa)(f)(g)` lazily reduces with an additional mapping function
  */
-@typeclass trait Reducible[F[_]] extends Foldable[F] { self =>
+trait Reducible[F[_]] extends Foldable[F] { self =>
 
   /**
    * Left-associative reduction on `F` using the function `f`.
@@ -44,6 +64,13 @@ import simulacrum.{noop, typeclass}
    * semigroup for `G[_]`.
    *
    * This method is a generalization of `reduce`.
+   *
+   * {{{
+   * scala> import cats.Reducible
+   * scala> import cats.data._
+   * scala> Reducible[NonEmptyVector].reduceK(NonEmptyVector.of(NonEmptyList.of(1, 2, 3), NonEmptyList.of(4, 5, 6), NonEmptyList.of(7, 8, 9)))
+   * res0: NonEmptyList[Int] = NonEmptyList(1, 2, 3, 4, 5, 6, 7, 8, 9)
+   * }}}
    */
   def reduceK[G[_], A](fga: F[G[A]])(implicit G: SemigroupK[G]): G[A] =
     reduce(fga)(G.algebra)
@@ -51,6 +78,17 @@ import simulacrum.{noop, typeclass}
   /**
    * Apply `f` to each element of `fa` and combine them using the
    * given `Semigroup[B]`.
+   *
+   * {{{
+   * scala> import cats.Reducible
+   * scala> import cats.data.NonEmptyList
+   * scala> Reducible[NonEmptyList].reduceMap(NonEmptyList.of(1, 2, 3))(v => v.toString * v)
+   * res0: String = 122333
+   *
+   * scala> val gt5: Int => Option[Int] = (num: Int) => Some(num).filter(_ > 5)
+   * scala> Reducible[NonEmptyList].reduceMap(NonEmptyList.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10))(gt5)
+   * res1: Option[Int] = Some(40)
+   * }}}
    */
   def reduceMap[A, B](fa: F[A])(f: A => B)(implicit B: Semigroup[B]): B =
     reduceLeftTo(fa)(f)((b, a) => B.combine(b, f(a)))
@@ -60,14 +98,14 @@ import simulacrum.{noop, typeclass}
    * given `SemigroupK[G]`.
    *
    * {{{
-   * scala> import cats._, cats.data._, cats.implicits._
+   * scala> import cats._, cats.data._
    * scala> val f: Int => Endo[String] = i => (s => s + i)
    * scala> val x: Endo[String] = Reducible[NonEmptyList].reduceMapK(NonEmptyList.of(1, 2, 3))(f)
    * scala> val a = x("foo")
    * a: String = "foo321"
    * }}}
    */
-  @noop
+
   def reduceMapK[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: SemigroupK[G]): G[B] =
     reduceLeftTo(fa)(f)((b, a) => G.combineK(b, f(a)))
 
@@ -88,10 +126,8 @@ import simulacrum.{noop, typeclass}
    * semigroup for `G[_]`.
    *
    * This method is similar to [[reduce]], but may short-circuit.
-   *
-   * See [[https://github.com/typelevel/simulacrum/issues/162 this issue]] for an explanation of `@noop` usage.
    */
-  @noop def reduceA[G[_], A](fga: F[G[A]])(implicit G: Apply[G], A: Semigroup[A]): G[A] =
+  def reduceA[G[_], A](fga: F[G[A]])(implicit G: Apply[G], A: Semigroup[A]): G[A] =
     reduceMapA(fga)(identity)
 
   /**
@@ -103,7 +139,6 @@ import simulacrum.{noop, typeclass}
    * {{{
    * scala> import cats.Reducible
    * scala> import cats.data.NonEmptyList
-   * scala> import cats.implicits._
    * scala> val evenOpt: Int => Option[Int] =
    *      |   i => if (i % 2 == 0) Some(i) else None
    * scala> val allEven = NonEmptyList.of(2,4,6,8,10)
@@ -128,7 +163,6 @@ import simulacrum.{noop, typeclass}
    * {{{
    * scala> import cats.Reducible
    * scala> import cats.data.NonEmptyList
-   * scala> import cats.implicits._
    * scala> val evenOpt: Int => Option[Int] =
    *      |   i => if (i % 2 == 0) Some(i) else None
    * scala> val allEven = NonEmptyList.of(2,4,6,8,10)
@@ -275,7 +309,6 @@ import simulacrum.{noop, typeclass}
    * Intercalate/insert an element between the existing elements while reducing.
    *
    * {{{
-   * scala> import cats.implicits._
    * scala> import cats.data.NonEmptyList
    * scala> val nel = NonEmptyList.of("a", "b", "c")
    * scala> Reducible[NonEmptyList].nonEmptyIntercalate(nel, "-")
@@ -330,10 +363,6 @@ import simulacrum.{noop, typeclass}
 }
 
 object Reducible {
-
-  /* ======================================================================== */
-  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /* ======================================================================== */
 
   /**
    * Summon an instance of [[Reducible]] for `F`.
@@ -404,10 +433,6 @@ object Reducible {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToReducibleOps
-
-  /* ======================================================================== */
-  /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /* ======================================================================== */
 
 }
 

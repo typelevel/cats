@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 package data
 
@@ -111,6 +132,26 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
       case Left(_)  => default
       case Right(b) => F.pure(b)
     }
+
+  /***
+   * 
+   * Like [[getOrElseF]] but accept an error `E` and raise it when the inner `Either` is `Left`
+   *    
+   * Equivalent to `getOrElseF(F.raiseError(e)))`
+   *    
+   * Example:
+   * {{{
+   * scala> import cats.data.EitherT
+   * scala> import cats.implicits._
+   * scala> import scala.util.{Success, Failure, Try}
+  
+   * scala> val eitherT: EitherT[Try,String,Int] = EitherT[Try,String,Int](Success(Left("abc")))
+   * scala> eitherT.getOrRaise(new RuntimeException("ERROR!"))
+   * res0: Try[Int] = Failure(java.lang.RuntimeException: ERROR!)
+   * }}}
+   */
+  def getOrRaise[E](e: => E)(implicit F: MonadError[F, _ >: E]): F[B] =
+    getOrElseF(F.raiseError(e))
 
   /**
    * Example:
@@ -486,6 +527,11 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
   )(implicit traverseF: Traverse[F], applicativeG: Applicative[G]): G[EitherT[F, A, D]] =
     applicativeG.map(traverseF.traverse(value)(axb => Traverse[Either[A, *]].traverse(axb)(f)))(EitherT.apply)
 
+  def mapAccumulate[S, C](init: S)(f: (S, B) => (S, C))(implicit traverseF: Traverse[F]): (S, EitherT[F, A, C]) = {
+    val (snext, vnext) = traverseF.mapAccumulate(init, value)(Traverse[Either[A, *]].mapAccumulate[S, B, C](_, _)(f))
+    (snext, EitherT(vnext))
+  }
+
   def foldLeft[C](c: C)(f: (C, B) => C)(implicit F: Foldable[F]): C =
     F.foldLeft(value, c) {
       case (c, Right(b)) => f(c, b)
@@ -647,6 +693,11 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
         case Left(a)  => Validated.invalidNec(a)
       }
     )
+
+  /** Convert this `EitherT[F, A, B]` into an `IorT[F, A, B]`.
+   */
+  def toIor(implicit F: Functor[F]): IorT[F, A, B] =
+    IorT.fromEitherF(value)
 }
 
 object EitherT extends EitherTInstances {
@@ -1204,6 +1255,9 @@ sealed private[data] trait EitherTTraverse[F[_], L] extends Traverse[EitherT[F, 
 
   override def traverse[G[_]: Applicative, A, B](fa: EitherT[F, L, A])(f: A => G[B]): G[EitherT[F, L, B]] =
     fa.traverse(f)
+
+  override def mapAccumulate[S, A, B](init: S, fa: EitherT[F, L, A])(f: (S, A) => (S, B)): (S, EitherT[F, L, B]) =
+    fa.mapAccumulate(init)(f)
 }
 
 sealed private[data] trait EitherTBifoldable[F[_]] extends Bifoldable[EitherT[F, *, *]] {
