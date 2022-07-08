@@ -385,6 +385,7 @@ class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonE
     forAll { (nel: NonEmptyList[Int], l: List[Int], n: Int) =>
       assert((nel ++ l).toList === (nel.toList ::: l))
       assert(nel.concat(l).toList === (nel.toList ::: l))
+      assert(nel.appendList(l).toList === (nel.toList ::: l))
       assert(nel.concatNel(NonEmptyList(n, l)).toList === (nel.toList ::: (n :: l)))
     }
   }
