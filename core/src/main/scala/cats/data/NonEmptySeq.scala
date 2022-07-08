@@ -120,6 +120,18 @@ final class NonEmptySeq[+A] private (val toSeq: Seq[A]) extends AnyVal with NonE
   def concat[AA >: A](other: Seq[AA]): NonEmptySeq[AA] = new NonEmptySeq(toSeq ++ other)
 
   /**
+   * Append another `Seq` to this, producing a new `NonEmptySeq`.
+   * 
+   * {{{
+   * scala> import cats.data.NonEmptySeq
+   * scala> val neSeq = NonEmptySeq.of(1, 2, 3)
+   * scala> neSeq.appendSeq(Seq(4, 5))
+   * res0: cats.data.NonEmptySeq[Int] = NonEmptySeq(1, 2, 3, 4, 5)
+   * }}}
+   */
+   def appendSeq[AA >: A](other: Seq[AA]): NonEmptySeq[AA] = concat(other)
+
+  /**
    * Append another `NonEmptySeq` to this, producing a new `NonEmptySeq`.
    */
   def concatNeSeq[AA >: A](other: NonEmptySeq[AA]): NonEmptySeq[AA] = new NonEmptySeq(toSeq ++ other.toSeq)
@@ -149,6 +161,19 @@ final class NonEmptySeq[+A] private (val toSeq: Seq[A]) extends AnyVal with NonE
    * Alias for [[prepend]]
    */
   def +:[AA >: A](a: AA): NonEmptySeq[AA] = prepend(a)
+
+  /**
+   * Alias for [[prependSeq]]
+   * 
+   * {{{
+   * scala> import cats.data.NonEmptySeq
+   * scala> val neSeq = NonEmptySeq.of(4, 5, 6)
+   * scala> Seq(1, 2, 3) ++: neSeq
+   * res0: cats.data.NonEmptySeq[Int] = NonEmptySeq(1, 2, 3, 4, 5, 6)
+   * }}}
+   */
+  def ++:[AA >: A](seq: Seq[AA]): NonEmptySeq[AA] =
+    prependSeq(seq)
 
   /**
    * Find the first element matching the predicate, if one exists
