@@ -262,6 +262,16 @@ import cats.implicits._
 We don't have to mention the type or specify the number of values we're composing
 together, so there's a little less boilerplate here.
 
+Another very useful `Apply` syntax is `tupled`, which allows a tuple of effectful values to be composed into a single effectful value containing a tuple. 
+
+```scala mdoc
+import cats.implicits._
+
+val optPair: Option[(String, String)] = (username, password).tupled
+```
+
+(See also: variant `parTupled`, useful for composing tuples of executable tasks (eg `IO` from [Cats Effect](https://typelevel.org/cats-effect/docs/concepts#concurrent)) into a single task to run in [parallel](parallel.md))
+
 ## Further Reading
 
 * [Applicative Programming with Effects][applicativePaper] - McBride, Patterson. JFP 2008.
