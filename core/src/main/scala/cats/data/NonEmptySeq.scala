@@ -121,13 +121,6 @@ final class NonEmptySeq[+A] private (val toSeq: Seq[A]) extends AnyVal with NonE
 
   /**
    * Append another `Seq` to this, producing a new `NonEmptySeq`.
-   * 
-   * {{{
-   * scala> import cats.data.NonEmptySeq
-   * scala> val neSeq = NonEmptySeq.of(1, 2, 3)
-   * scala> neSeq.appendSeq(Seq(4, 5))
-   * res0: cats.data.NonEmptySeq[Int] = NonEmptySeq(1, 2, 3, 4, 5)
-   * }}}
    */
   def appendSeq[AA >: A](other: Seq[AA]): NonEmptySeq[AA] = concat(other)
 
