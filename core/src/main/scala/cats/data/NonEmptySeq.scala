@@ -163,19 +163,6 @@ final class NonEmptySeq[+A] private (val toSeq: Seq[A]) extends AnyVal with NonE
   def +:[AA >: A](a: AA): NonEmptySeq[AA] = prepend(a)
 
   /**
-   * Alias for [[prependSeq]]
-   * 
-   * {{{
-   * scala> import cats.data.NonEmptySeq
-   * scala> val neSeq = NonEmptySeq.of(4, 5, 6)
-   * scala> Seq(1, 2, 3) ++: neSeq
-   * res0: cats.data.NonEmptySeq[Int] = NonEmptySeq(1, 2, 3, 4, 5, 6)
-   * }}}
-   */
-  def ++:[AA >: A](seq: Seq[AA]): NonEmptySeq[AA] =
-    prependSeq(seq)
-
-  /**
    * Find the first element matching the predicate, if one exists
    */
   def find(f: A => Boolean): Option[A] = toSeq.find(f)
