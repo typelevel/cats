@@ -129,7 +129,7 @@ final class NonEmptySeq[+A] private (val toSeq: Seq[A]) extends AnyVal with NonE
    * res0: cats.data.NonEmptySeq[Int] = NonEmptySeq(1, 2, 3, 4, 5)
    * }}}
    */
-   def appendSeq[AA >: A](other: Seq[AA]): NonEmptySeq[AA] = concat(other)
+  def appendSeq[AA >: A](other: Seq[AA]): NonEmptySeq[AA] = concat(other)
 
   /**
    * Append another `NonEmptySeq` to this, producing a new `NonEmptySeq`.
