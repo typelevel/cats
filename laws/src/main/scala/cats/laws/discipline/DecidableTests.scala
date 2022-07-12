@@ -50,6 +50,8 @@ trait DecidableTests[F[_]] extends ContravariantMonoidalTests[F] {
       val parents = Seq(contravariantMonoidal[A, B, C])
       val bases = Seq.empty
       val props = Seq(
+        "decide consistency" ->
+          forAll(laws.decideConsistency[A, B, C] _),
         "decidable left identity" ->
           forAll(laws.decidableDecideLeftIdentity[A] _),
         "decidable right identity" ->
