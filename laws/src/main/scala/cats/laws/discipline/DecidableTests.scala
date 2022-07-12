@@ -23,7 +23,7 @@ package cats
 package laws
 package discipline
 
-import org.scalacheck.{Arbitrary, Cogen}
+import org.scalacheck.{Arbitrary, Cogen, Gen}
 import org.scalacheck.Prop._
 
 trait DecidableTests[F[_]] extends ContravariantMonoidalTests[F] {
@@ -49,9 +49,12 @@ trait DecidableTests[F[_]] extends ContravariantMonoidalTests[F] {
       val name = "decideable"
       val parents = Seq(contravariantMonoidal[A, B, C])
       val bases = Seq.empty
+      implicit def arbNothingFunc: Arbitrary[A => Either[A, Nothing]] = Arbitrary(Gen.const((a: A) => Left(a)))
       val props = Seq(
         "decide consistency" ->
           forAll(laws.decideConsistency[A, B, C] _),
+        "decide right identity (zero)" ->
+          forAll(laws.decideRightAbsorption[A] _),
         "decidable left identity" ->
           forAll(laws.decidableDecideLeftIdentity[A] _),
         "decidable right identity" ->

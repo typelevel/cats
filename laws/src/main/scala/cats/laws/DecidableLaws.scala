@@ -28,6 +28,9 @@ trait DecidableLaws[F[_]] extends ContravariantMonoidalLaws[F] {
   def decideConsistency[A, B, C](fa: F[A], fb: F[B], f: C => Either[A, B]): IsEq[F[C]] =
     F.decide(fa, fb)(f) <-> F.contramap(F.sum(fa, fb))(f)
 
+  def decideRightIdentity[A](fa: F[A], f: A => Either[A, Nothing]): IsEq[F[A]] =
+    F.decide[A, Nothing, A](fa, F.zero)(f) <-> fa
+
   def decidableDecideLeftIdentity[A](fa: F[A]): IsEq[F[A]] =
     F.decide(fa, F.trivial[A])(Left.apply[A, A]) <-> fa
 
