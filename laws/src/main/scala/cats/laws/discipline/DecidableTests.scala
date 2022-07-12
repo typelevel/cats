@@ -49,12 +49,15 @@ trait DecidableTests[F[_]] extends ContravariantMonoidalTests[F] {
       val name = "decideable"
       val parents = Seq(contravariantMonoidal[A, B, C])
       val bases = Seq.empty
-      implicit def arbNothingFunc: Arbitrary[A => Either[A, Nothing]] = Arbitrary(Gen.const((a: A) => Left(a)))
+      implicit def arbNothingFuncLeft: Arbitrary[A => Either[A, Nothing]] = Arbitrary(Gen.const((a: A) => Left(a)))
+      implicit def arbNothingFuncRight: Arbitrary[A => Either[Nothing, A]] = Arbitrary(Gen.const((a: A) => Right(a)))
       val props = Seq(
         "decide consistency" ->
           forAll(laws.decideConsistency[A, B, C] _),
         "decide right identity (zero)" ->
-          forAll(laws.decideRightAbsorption[A] _),
+          forAll(laws.decideRightIdentity[A] _),
+        "decide left identity (zero)" ->
+          forAll(laws.decideLeftIdentity[A] _),
         "decidable left identity" ->
           forAll(laws.decidableDecideLeftIdentity[A] _),
         "decidable right identity" ->
