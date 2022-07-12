@@ -23,7 +23,7 @@ package cats
 package laws
 package discipline
 
-import org.scalacheck.{Arbitrary, Cogen}
+import org.scalacheck.{Arbitrary, Cogen, Gen}
 import org.scalacheck.Prop._
 
 trait DecidableTests[F[_]] extends ContravariantMonoidalTests[F] {
@@ -46,12 +46,18 @@ trait DecidableTests[F[_]] extends ContravariantMonoidalTests[F] {
     iso: SemigroupalTests.Isomorphisms[F]
   ): RuleSet =
     new RuleSet {
+      implicit val ArbNothing: Arbitrary[Nothing => Nothing] = Arbitrary(Gen.const((n: Nothing) => n))
+      implicit val eqNothing: Eq[F[Nothing]] = Eq.by[F[Nothing], Unit]((_: F[Nothing]) => ())
       val name = "decideable"
       val parents = Seq(contravariantMonoidal[A, B, C])
       val bases = Seq.empty
       val props = Seq(
+        "lose consistency" ->
+          forAll(laws.loseConsistency[Nothing] _),
         "decide consistency" ->
           forAll(laws.decideConsistency[A, B, C] _),
+        "decide right absorption" ->
+          forAll(laws.decideRightAbsorption[A] _),
         "decide right identity (zero)" ->
           forAll(laws.decideRightIdentity[A] _),
         "decide left identity (zero)" ->

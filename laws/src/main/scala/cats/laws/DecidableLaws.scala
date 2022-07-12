@@ -25,8 +25,14 @@ package laws
 trait DecidableLaws[F[_]] extends ContravariantMonoidalLaws[F] {
   implicit override def F: Decidable[F]
 
+  def loseConsistency[A](f: A => Nothing): IsEq[F[A]] =
+    F.lose(f) <-> F.contramap[Nothing, A](F.zero)(f)
+
   def decideConsistency[A, B, C](fa: F[A], fb: F[B], f: C => Either[A, B]): IsEq[F[C]] =
     F.decide(fa, fb)(f) <-> F.contramap(F.sum(fa, fb))(f)
+
+  def decideRightAbsorption[A](fa: F[A]): IsEq[F[Nothing]] =
+    F.contramap[(A, Nothing), Nothing](F.product[A, Nothing](fa, F.zero))((n: Nothing) => (n: A, n)) <-> F.zero
 
   def decideRightIdentity[A](fa: F[A]): IsEq[F[A]] =
     F.decide[Nothing, A, A](F.zero, fa)(Right.apply) <-> fa
