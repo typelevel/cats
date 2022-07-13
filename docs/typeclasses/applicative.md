@@ -270,7 +270,11 @@ import cats.implicits._
 val optPair: Option[(String, String)] = (username, password).tupled
 ```
 
-(See also: variant `parTupled`, useful for composing tuples of executable tasks (eg `IO` from [Cats Effect](https://typelevel.org/cats-effect/docs/concepts#concurrent)) into a single task to run in [parallel](parallel.md))
+### See also Parallel variants
+
+Both `tupled` and `mapN` have [parallel](parallel.md) variant operations, named `parTupled` and `parMapN` respectively. Regular `tupled`/`mapN` evaluate their effects from left to right ("sequentially"), while `parTupled`/`parMapN` evaluate in an indeterminate order, or in parallel.
+
+The difference can be understood intuitively when the effect is an executable task, such as `IO` from [Cats Effect](https://typelevel.org/cats-effect/docs/concepts#concurrent). In this case, the parallel forms support composing tuples of tasks into a single task that will run its components in parallel.
 
 ## Further Reading
 
