@@ -197,6 +197,7 @@
           <li class="level1"><a href="#traverse">Traverse</a></li>
           <li class="level1"><a href="#apply-a-weakened-applicative">Apply - a weakened Applicative</a></li>
           <li class="level1"><a href="#syntax">Syntax</a></li>
+          <li class="level2"><a href="#see-also-parallel-variants">See also Parallel variants</a></li>
           <li class="level1"><a href="#further-reading">Further Reading</a></li>
         </ul>
 
@@ -407,6 +408,15 @@
 </span><span class="comment">// res7: Option[Option[Connection]] = Some(None)</span></code></pre>
         <p>We don&#39;t have to mention the type or specify the number of values we&#39;re composing
         together, so there&#39;s a little less boilerplate here.</p>
+        <p>Another very useful <code>Apply</code> syntax is <code>tupled</code>, which allows a tuple of effectful values to be composed into a single effectful value containing a tuple. </p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">optPair</span><span>: </span><span class="type-name">Option</span><span>[(</span><span class="type-name">String</span><span>, </span><span class="type-name">String</span><span>)] = (</span><span class="identifier">username</span><span>, </span><span class="identifier">password</span><span>).</span><span class="identifier">tupled</span><span>
+</span><span class="comment">// optPair: Option[(String, String)] = Some((&quot;username&quot;, &quot;password&quot;))</span></code></pre>
+        
+        <h3 id="see-also-parallel-variants" class="section">See also Parallel variants<a class="anchor-link right" href="#see-also-parallel-variants"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <p>Both <code>tupled</code> and <code>mapN</code> have <a href="parallel.html">parallel</a> variant operations, named <code>parTupled</code> and <code>parMapN</code> respectively. Regular <code>tupled</code>/<code>mapN</code> evaluate their effects from left to right (&quot;sequentially&quot;), while <code>parTupled</code>/<code>parMapN</code> evaluate in an indeterminate order, or in parallel.</p>
+        <p>The difference can be understood intuitively when the effect is an executable task, such as <code>IO</code> from <a href="https://typelevel.org/cats-effect/docs/concepts#concurrent">Cats Effect</a>. In this case, the parallel variants enable you to compose tuples of tasks into a single task that will run its sub-tasks concurrently.</p>
         
         <h2 id="further-reading" class="section">Further Reading<a class="anchor-link right" href="#further-reading"><i class="icofont-laika">&#xef71;</i></a></h2>
         <ul>
