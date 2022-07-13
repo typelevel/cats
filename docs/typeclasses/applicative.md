@@ -274,7 +274,7 @@ val optPair: Option[(String, String)] = (username, password).tupled
 
 Both `tupled` and `mapN` have [parallel](parallel.md) variant operations, named `parTupled` and `parMapN` respectively. Regular `tupled`/`mapN` evaluate their effects from left to right ("sequentially"), while `parTupled`/`parMapN` evaluate in an indeterminate order, or in parallel.
 
-The difference can be understood intuitively when the effect is an executable task, such as `IO` from [Cats Effect](https://typelevel.org/cats-effect/docs/concepts#concurrent). In this case, the parallel forms support composing tuples of tasks into a single task that will run its components in parallel.
+The difference can be understood intuitively when the effect is an executable task, such as `IO` from [Cats Effect](https://typelevel.org/cats-effect/docs/concepts#concurrent). In this case, the parallel variants enable you to compose tuples of tasks into a single task that will run its sub-tasks concurrently.
 
 ## Further Reading
 
