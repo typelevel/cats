@@ -21,23 +21,18 @@
 
 package cats.tests
 
+import cats.implicits.toFoldableOps
 import cats.{Bimonad, CommutativeMonad, Eval, Reducible}
 import cats.laws.ComonadLaws
-import cats.laws.discipline.{
-  BimonadTests,
-  CommutativeMonadTests,
-  DeferTests,
-  ReducibleTests,
-  SemigroupalTests,
-  SerializableTests
-}
+import cats.laws.discipline.{BimonadTests, CommutativeMonadTests, DeferTests, ReducibleTests, SemigroupalTests, SerializableTests}
 import cats.laws.discipline.arbitrary._
 import cats.kernel.{Eq, Monoid, Order, PartialOrder, Semigroup}
 import cats.kernel.laws.discipline.{EqTests, GroupTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
 import org.scalacheck.{Arbitrary, Cogen, Gen}
 import org.scalacheck.Arbitrary.arbitrary
+
 import scala.annotation.tailrec
-import scala.math.min
+import scala.math.{abs, min}
 import cats.syntax.eq._
 import org.scalacheck.Prop._
 
@@ -125,6 +120,34 @@ class EvalSuite extends CatsSuite {
       else Eval.defer(Eval.defer(inc(a, count - 1))).flatMap { i => Eval.now(i + 1) }
 
     assert(inc(Eval.now(0), 1000000).value == 1000000)
+  }
+  test("Eval can foldM without blowing up the stack") {
+    def replaceValues(obj: Any): Any =
+      obj match {
+        case v: Vector[Any] =>
+          replaceVectorValues(v)
+        case _ =>
+          "*"
+      }
+    def replaceVectorValues(vector: Vector[Any]): Vector[Any] =
+      vector.foldM[Eval, Vector[Any]](Vector.empty[Any]) {
+        case (replacedVector, obj) =>
+          Eval.later(replacedVector :+ replaceValues(obj))
+      }.value
+
+    def deepVector(depth: Int): Vector[Any] = {
+      var i = depth
+      var v = Vector.empty[Any]
+      while (i >= 0) {
+        i-=1
+        v = Vector(v)
+      }
+      v
+    }
+
+    val deepV = deepVector(10000)
+    assert(replaceValues(deepV).isInstanceOf[Vector[Any]])
+
   }
 
   {
