@@ -356,7 +356,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    * @param message
    *   a String to include in the failure message
    */
-  def assert(assertion: Boolean, message: => String)(implicit ev: Throwable <:< E): F[Unit] =
+  final def assert(assertion: Boolean, message: => String)(implicit ev: Throwable <:< E): F[Unit] =
     catchOnly[AssertionError](Predef.assert(assertion, message))
 
   /**
@@ -374,7 +374,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    * @param assertion
    *   the expression to test
    */
-  def assert(assertion: Boolean)(implicit ev: Throwable <:< E): F[Unit] =
+  final def assert(assertion: Boolean)(implicit ev: Throwable <:< E): F[Unit] =
     catchOnly[AssertionError](Predef.assert(assertion))
 
   /**
@@ -399,7 +399,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    * @param message
    *   a String to include in the failure message
    */
-  def assume(assumption: Boolean, message: => String)(implicit ev: Throwable <:< E): F[Unit] =
+  final def assume(assumption: Boolean, message: => String)(implicit ev: Throwable <:< E): F[Unit] =
     catchOnly[AssertionError](Predef.assume(assumption, message))
 
   /**
@@ -421,7 +421,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    * @param assumption
    *   the expression to test
    */
-  def assume(assumption: Boolean)(implicit ev: Throwable <:< E): F[Unit] =
+  final def assume(assumption: Boolean)(implicit ev: Throwable <:< E): F[Unit] =
     catchOnly[AssertionError](Predef.assume(assumption))
 
   /**
@@ -442,7 +442,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    * @param message
    *   a String to include in the failure message
    */
-  def require(requirement: Boolean, message: => String)(implicit ev: Throwable <:< E): F[Unit] =
+  final def require(requirement: Boolean, message: => String)(implicit ev: Throwable <:< E): F[Unit] =
     catchOnly[IllegalArgumentException](Predef.require(requirement, message))
 
   /**
@@ -460,7 +460,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    * @param requirement
    *   the expression to test
    */
-  def require(requirement: Boolean)(implicit ev: Throwable <:< E): F[Unit] =
+  final def require(requirement: Boolean)(implicit ev: Throwable <:< E): F[Unit] =
     catchOnly[IllegalArgumentException](Predef.require(requirement))
 }
 
