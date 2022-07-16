@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 package laws
 
@@ -15,9 +36,9 @@ trait ArrowChoiceLaws[F[_, _]] extends ArrowLaws[F] with ChoiceLaws[F] {
 
   def sumAssoc[A, B, C](e: Either[Either[A, B], C]): Either[A, Either[B, C]] =
     e match {
-      case Left(Left(x)) => Left(x)
+      case Left(Left(x))  => Left(x)
       case Left(Right(y)) => Right(Left(y))
-      case Right(z) => Right(Right(z))
+      case Right(z)       => Right(Right(z))
     }
 
   def leftLiftCommute[A, B, C](f: A => B): IsEq[F[Either[A, C], Either[B, C]]] =
@@ -36,7 +57,9 @@ trait ArrowChoiceLaws[F[_, _]] extends ArrowLaws[F] with ChoiceLaws[F] {
   def leftAndThenRightIdentityCommutes[A, B, C, D](f: F[A, B], g: C => D): IsEq[F[Either[A, C], Either[B, D]]] =
     (F.left(f) >>> F.lift(identity[B] _ +++ g)) <-> (F.lift(identity[A] _ +++ g) >>> F.left(f))
 
-  def leftTwiceCommutesWithSumAssociation[A, B, C, D](f: F[A, D]): IsEq[F[Either[Either[A, B], C], Either[D, Either[B, C]]]] =
+  def leftTwiceCommutesWithSumAssociation[A, B, C, D](
+    f: F[A, D]
+  ): IsEq[F[Either[Either[A, B], C], Either[D, Either[B, C]]]] =
     (F.left(F.left[A, D, B](f)) >>> F.lift(sumAssoc[D, B, C])) <->
       (F.lift(sumAssoc[A, B, C]) >>> F.left(f))
 }

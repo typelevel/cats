@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 package instances
 
@@ -7,30 +28,34 @@ import scala.annotation.tailrec
 
 trait TupleInstances extends Tuple2Instances with cats.kernel.instances.TupleInstances
 
-trait Tuple2InstancesBinCompat0 {
+private[instances] trait Tuple2InstancesBinCompat0 {
 
   /**
    * Witness for: (A, A) <-> Boolean => A
    */
-  implicit def catsDataRepresentableForPair(implicit PF: Functor[λ[P => (P, P)]]): Representable.Aux[λ[P => (P, P)], Boolean] = new Representable[λ[P => (P, P)]] {
-    override type Representation = Boolean
-    override val F: Functor[λ[P => (P, P)]] = PF
+  implicit def catsDataRepresentableForPair(implicit
+    PF: Functor[λ[P => (P, P)]]
+  ): Representable.Aux[λ[P => (P, P)], Boolean] =
+    new Representable[λ[P => (P, P)]] {
+      override type Representation = Boolean
+      override val F: Functor[λ[P => (P, P)]] = PF
 
-    override def tabulate[A](f: Boolean => A): (A, A) = (f(true), f(false))
+      override def tabulate[A](f: Boolean => A): (A, A) = (f(true), f(false))
 
-    override def index[A](pair: (A, A)): Boolean => A = {
-      case true => pair._1
-      case false => pair._2
+      override def index[A](pair: (A, A)): Boolean => A = {
+        case true  => pair._1
+        case false => pair._2
+      }
     }
-  }
 
   implicit val catsDataFunctorForPair: Functor[λ[P => (P, P)]] = new Functor[λ[P => (P, P)]] {
     override def map[A, B](fa: (A, A))(f: A => B): (B, B) = (f(fa._1), f(fa._2))
   }
 }
 
-sealed trait Tuple2Instances extends Tuple2Instances1 {
-  implicit val catsStdBitraverseForTuple2: Bitraverse[Tuple2] =
+sealed private[instances] trait Tuple2Instances extends Tuple2Instances1 {
+  @deprecated("Use catsStdBitraverseForTuple2 in cats.instances.NTupleBitraverseInstances", "2.4.0")
+  val catsStdBitraverseForTuple2: Bitraverse[Tuple2] =
     new Bitraverse[Tuple2] {
       def bitraverse[G[_]: Applicative, A, B, C, D](fab: (A, B))(f: A => G[C], g: B => G[D]): G[(C, D)] =
         Applicative[G].tuple2(f(fab._1), g(fab._2))
@@ -38,18 +63,22 @@ sealed trait Tuple2Instances extends Tuple2Instances1 {
       def bifoldLeft[A, B, C](fab: (A, B), c: C)(f: (C, A) => C, g: (C, B) => C): C =
         g(f(c, fab._1), fab._2)
 
-      def bifoldRight[A, B, C](fab: (A, B), c: Eval[C])(f: (A, Eval[C]) => Eval[C], g: (B, Eval[C]) => Eval[C]): Eval[C] =
+      def bifoldRight[A, B, C](fab: (A, B), c: Eval[C])(f: (A, Eval[C]) => Eval[C],
+                                                        g: (B, Eval[C]) => Eval[C]
+      ): Eval[C] =
         g(fab._2, f(fab._1, c))
     }
 
-  implicit def catsStdShowForTuple2[A, B](implicit aShow: Show[A], bShow: Show[B]): Show[(A, B)] = new Show[(A, B)] {
-    override def show(f: (A, B)): String = {
-      s"(${aShow.show(f._1)},${bShow.show(f._2)})"
+  @deprecated("Use catsStdShowForTuple2 in cats.instances.NTupleShowInstances", "2.4.0")
+  def catsStdShowForTuple2[A, B](implicit aShow: Show[A], bShow: Show[B]): Show[(A, B)] =
+    new Show[(A, B)] {
+      override def show(f: (A, B)): String =
+        s"(${aShow.show(f._1)},${bShow.show(f._2)})"
     }
-  }
 
-  implicit def catsStdInstancesForTuple2[X]: Traverse[(X, ?)] with Comonad[(X, ?)] with Reducible[(X, ?)] =
-    new Traverse[(X, ?)] with Comonad[(X, ?)] with Reducible[(X, ?)] {
+  @deprecated("Use catsStdInstancesForTuple2 in cats.instances.NTupleMonadInstances", "2.4.0")
+  def catsStdInstancesForTuple2[X]: Traverse[(X, *)] with Comonad[(X, *)] with Reducible[(X, *)] =
+    new Traverse[(X, *)] with Comonad[(X, *)] with Reducible[(X, *)] {
       def traverse[G[_], A, B](fa: (X, A))(f: A => G[B])(implicit G: Applicative[G]): G[(X, B)] =
         G.map(f(fa._2))((fa._1, _))
 
@@ -58,6 +87,11 @@ sealed trait Tuple2Instances extends Tuple2Instances1 {
       def foldRight[A, B](fa: (X, A), lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = f(fa._2, lb)
 
       override def map[A, B](fa: (X, A))(f: A => B): (X, B) = (fa._1, f(fa._2))
+
+      override def mapAccumulate[S, A, B](init: S, fa: (X, A))(f: (S, A) => (S, B)): (S, (X, B)) = {
+        val (snext, b) = f(init, fa._2)
+        (snext, (fa._1, b))
+      }
 
       def coflatMap[A, B](fa: (X, A))(f: ((X, A)) => B): (X, B) = (fa._1, f(fa))
 
@@ -90,6 +124,10 @@ sealed trait Tuple2Instances extends Tuple2Instances1 {
 
       override def size[A](fa: (X, A)): Long = 1L
 
+      override def toList[A](fa: (X, A)): List[A] = fa._2 :: Nil
+
+      override def toIterable[A](fa: (X, A)): Iterable[A] = toList(fa)
+
       override def get[A](fa: (X, A))(idx: Long): Option[A] =
         if (idx == 0L) Some(fa._2) else None
 
@@ -101,31 +139,35 @@ sealed trait Tuple2Instances extends Tuple2Instances1 {
     }
 }
 
-sealed trait Tuple2Instances1 extends Tuple2Instances2 {
-  implicit def catsStdCommutativeMonadForTuple2[X](implicit MX: CommutativeMonoid[X]): CommutativeMonad[(X, ?)] =
-    new FlatMapTuple2[X](MX) with CommutativeMonad[(X, ?)] {
+sealed private[instances] trait Tuple2Instances1 extends Tuple2Instances2 {
+  @deprecated("Use catsStdCommutativeMonadForTuple2 in cats.instances.NTupleMonadInstances", "2.4.0")
+  def catsStdCommutativeMonadForTuple2[X](implicit MX: CommutativeMonoid[X]): CommutativeMonad[(X, *)] =
+    new FlatMapTuple2[X](MX) with CommutativeMonad[(X, *)] {
       def pure[A](a: A): (X, A) = (MX.empty, a)
     }
 }
 
-sealed trait Tuple2Instances2 extends Tuple2Instances3 {
-  implicit def catsStdCommutativeFlatMapForTuple2[X](implicit MX: CommutativeSemigroup[X]): CommutativeFlatMap[(X, ?)] =
-    new FlatMapTuple2[X](MX) with CommutativeFlatMap[(X, ?)]
+sealed private[instances] trait Tuple2Instances2 extends Tuple2Instances3 {
+  @deprecated("Use catsStdCommutativeFlatMapForTuple2 in cats.instances.NTupleMonadInstances", "2.4.0")
+  def catsStdCommutativeFlatMapForTuple2[X](implicit MX: CommutativeSemigroup[X]): CommutativeFlatMap[(X, *)] =
+    new FlatMapTuple2[X](MX) with CommutativeFlatMap[(X, *)]
 }
 
-sealed trait Tuple2Instances3 extends Tuple2Instances4 {
-  implicit def catsStdMonadForTuple2[X](implicit MX: Monoid[X]): Monad[(X, ?)] =
-    new FlatMapTuple2[X](MX) with Monad[(X, ?)] {
+sealed private[instances] trait Tuple2Instances3 extends Tuple2Instances4 {
+  @deprecated("Use catsStdMonadForTuple2 in cats.instances.NTupleMonadInstances", "2.4.0")
+  def catsStdMonadForTuple2[X](implicit MX: Monoid[X]): Monad[(X, *)] =
+    new FlatMapTuple2[X](MX) with Monad[(X, *)] {
       def pure[A](a: A): (X, A) = (MX.empty, a)
     }
 }
 
-sealed trait Tuple2Instances4 {
-  implicit def catsStdFlatMapForTuple2[X](implicit SX: Semigroup[X]): FlatMap[(X, ?)] =
+sealed private[instances] trait Tuple2Instances4 {
+  @deprecated("Use catsStdFlatMapForTuple2 on cats.instances.NTupleMonadInstances", "2.4.0")
+  def catsStdFlatMapForTuple2[X](implicit SX: Semigroup[X]): FlatMap[(X, *)] =
     new FlatMapTuple2[X](SX)
 }
 
-private[instances] class FlatMapTuple2[X](s: Semigroup[X]) extends FlatMap[(X, ?)] {
+private[instances] class FlatMapTuple2[X](s: Semigroup[X]) extends FlatMap[(X, *)] {
   override def ap[A, B](ff: (X, A => B))(fa: (X, A)): (X, B) = {
     val x = s.combine(ff._1, fa._1)
     val b = ff._2(fa._2)
@@ -163,10 +205,10 @@ private[instances] class FlatMapTuple2[X](s: Semigroup[X]) extends FlatMap[(X, ?
     def loop(x: X, aa: A): (X, B) =
       f(aa) match {
         case (nextX, Left(nextA)) => loop(s.combine(x, nextX), nextA)
-        case (nextX, Right(b)) => (s.combine(x, nextX), b)
+        case (nextX, Right(b))    => (s.combine(x, nextX), b)
       }
     f(a) match {
-      case (x, Right(b)) => (x, b)
+      case (x, Right(b))    => (x, b)
       case (x, Left(nextA)) => loop(x, nextA)
     }
   }

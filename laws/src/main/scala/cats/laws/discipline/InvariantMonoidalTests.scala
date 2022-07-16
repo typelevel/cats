@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 package laws
 package discipline
@@ -20,16 +41,16 @@ trait InvariantMonoidalTests[F[_]] extends InvariantSemigroupalTests[F] {
     EqFABC2: Eq[F[(A, B, C)]],
     iso: Isomorphisms[F],
     EqFA: Eq[F[A]],
+    EqFB: Eq[F[B]],
     EqFC: Eq[F[C]]
   ): RuleSet =
     new RuleSet {
       val name = "invariantMonoidal"
-      val parents = Seq(invariant[A, B, C], semigroupal[A, B, C])
+      val parents = Seq(invariantSemigroupal[A, B, C])
       val bases = Seq.empty
       val props = Seq(
         "invariant monoidal left identity" -> forAll((fa: F[A]) => laws.invariantMonoidalLeftIdentity(fa)),
-        "invariant monoidal right identity" -> forAll((fa: F[A]) => laws.invariantMonoidalRightIdentity(fa)),
-        "invariant monoidal associativity" -> forAll((fa: F[A], fb: F[B], fc: F[C]) => laws.invariantMonoidalAssociativity(fa, fb, fc))
+        "invariant monoidal right identity" -> forAll((fa: F[A]) => laws.invariantMonoidalRightIdentity(fa))
       )
     }
 }

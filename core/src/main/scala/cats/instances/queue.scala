@@ -1,6 +1,31 @@
+/*
+ * Copyright (c) 2015 Typelevel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package cats
 package instances
 
+import cats.data.Chain
+import cats.instances.StaticMethods.appendAll
+import cats.kernel.compat.scalaVersionSpecific._
+import cats.kernel.instances.StaticMethods.wrapMutableIndexedSeq
 import cats.syntax.show._
 import scala.annotation.tailrec
 import scala.collection.immutable.Queue
@@ -8,11 +33,27 @@ import scala.util.Try
 
 trait QueueInstances extends cats.kernel.instances.QueueInstances {
 
-  implicit val catsStdInstancesForQueue: Traverse[Queue] with Alternative[Queue] with Monad[Queue] with CoflatMap[Queue] =
+  implicit val catsStdInstancesForQueue
+    : Traverse[Queue] with Alternative[Queue] with Monad[Queue] with CoflatMap[Queue] =
     new Traverse[Queue] with Alternative[Queue] with Monad[Queue] with CoflatMap[Queue] {
       def empty[A]: Queue[A] = Queue.empty
 
       def combineK[A](x: Queue[A], y: Queue[A]): Queue[A] = x ++ y
+
+      override def combineAllOptionK[A](as: IterableOnce[Queue[A]]): Option[Queue[A]] = {
+        val iter = as.iterator
+        if (iter.isEmpty) None else Some(appendAll(iter, Queue.newBuilder[A]).result())
+      }
+
+      override def fromIterableOnce[A](as: IterableOnce[A]): Queue[A] = {
+        val builder = Queue.newBuilder[A]
+        builder ++= as
+        builder.result()
+      }
+
+      override def prependK[A](a: A, fa: Queue[A]): Queue[A] = a +: fa
+
+      override def appendK[A](fa: Queue[A], a: A): Queue[A] = fa.enqueue(a)
 
       def pure[A](x: A): Queue[A] = Queue(x)
 
@@ -40,11 +81,11 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
                 val (e, es) = q.dequeue
                 e match {
                   case Right(b) => bldr += b; go(es :: tail)
-                  case Left(a) => go(f(a) :: es :: tail)
+                  case Left(a)  => go(f(a) :: es :: tail)
                 }
               }
             case Nil =>
-              bldr.result
+              bldr.result()
           }
         go(f(a) :: Nil)
       }
@@ -52,7 +93,7 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
       def coflatMap[A, B](fa: Queue[A])(f: Queue[A] => B): Queue[B] = {
         val bldr = Queue.newBuilder[B]
         @tailrec def loop(as: Queue[A]): Queue[B] =
-          if (as.isEmpty) bldr.result
+          if (as.isEmpty) bldr.result()
           else {
             val (_, rest) = as.dequeue
             bldr += f(as)
@@ -78,15 +119,24 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
         B.combineAll(fa.iterator.map(f))
 
       def traverse[G[_], A, B](fa: Queue[A])(f: A => G[B])(implicit G: Applicative[G]): G[Queue[B]] =
-        foldRight[A, G[Queue[B]]](fa, Always(G.pure(Queue.empty))){ (a, lglb) =>
-          G.map2Eval(f(a), lglb)(_ +: _)
-        }.value
+        if (fa.isEmpty) G.pure(Queue.empty[B])
+        else
+          G.map(Chain.traverseViaChain {
+            val as = collection.mutable.ArrayBuffer[A]()
+            as ++= fa
+            wrapMutableIndexedSeq(as)
+          }(f)) { chain =>
+            chain.foldLeft(Queue.empty[B])(_ :+ _)
+          }
 
-      override def mapWithIndex[A, B](fa: Queue[A])(f: (A, Int) => B): Queue[B] = {
-        val b = Queue.newBuilder[B]
-        fa.iterator.zipWithIndex.map(ai => f(ai._1, ai._2)).foreach(b += _)
-        b.result
-      }
+      override def mapAccumulate[S, A, B](init: S, fa: Queue[A])(f: (S, A) => (S, B)): (S, Queue[B]) =
+        StaticMethods.mapAccumulateFromStrictFunctor(init, fa, f)(this)
+
+      override def mapWithLongIndex[A, B](fa: Queue[A])(f: (A, Long) => B): Queue[B] =
+        StaticMethods.mapWithLongIndexFromStrictFunctor(fa, f)(this)
+
+      override def mapWithIndex[A, B](fa: Queue[A])(f: (A, Int) => B): Queue[B] =
+        StaticMethods.mapWithIndexFromStrictFunctor(fa, f)(this)
 
       override def zipWithIndex[A](fa: Queue[A]): Queue[(A, Int)] =
         fa.zipWithIndex
@@ -109,7 +159,9 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
           if (xs.isEmpty) G.pure(Right(b))
           else {
             val (a, tail) = xs.dequeue
-            G.map(f(b, a)) { bnext => Left((tail, bnext)) }
+            G.map(f(b, a)) { bnext =>
+              Left((tail, bnext))
+            }
           }
         }
 
@@ -119,6 +171,8 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
       override def fold[A](fa: Queue[A])(implicit A: Monoid[A]): A = A.combineAll(fa)
 
       override def toList[A](fa: Queue[A]): List[A] = fa.toList
+
+      override def toIterable[A](fa: Queue[A]): Iterable[A] = fa
 
       override def reduceLeftOption[A](fa: Queue[A])(f: (A, A) => A): Option[A] =
         fa.reduceLeftOption(f)
@@ -140,12 +194,51 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
 
       override def collectFirst[A, B](fa: Queue[A])(pf: PartialFunction[A, B]): Option[B] = fa.collectFirst(pf)
 
-      override def collectFirstSome[A, B](fa: Queue[A])(f: A => Option[B]): Option[B] = fa.collectFirst(Function.unlift(f))
+      override def collectFirstSome[A, B](fa: Queue[A])(f: A => Option[B]): Option[B] =
+        fa.collectFirst(Function.unlift(f))
     }
 
-  implicit def catsStdShowForQueue[A:Show]: Show[Queue[A]] =
+  implicit def catsStdShowForQueue[A: Show]: Show[Queue[A]] =
     new Show[Queue[A]] {
       def show(fa: Queue[A]): String =
         fa.iterator.map(_.show).mkString("Queue(", ", ", ")")
     }
+
+  implicit def catsStdTraverseFilterForQueue: TraverseFilter[Queue] = QueueInstances.catsStdTraverseFilterForQueue
+}
+
+@suppressUnusedImportWarningForScalaVersionSpecific
+private object QueueInstances {
+  private val catsStdTraverseFilterForQueue: TraverseFilter[Queue] = new TraverseFilter[Queue] {
+    val traverse: Traverse[Queue] = cats.instances.queue.catsStdInstancesForQueue
+
+    override def mapFilter[A, B](fa: Queue[A])(f: (A) => Option[B]): Queue[B] =
+      fa.collect(Function.unlift(f))
+
+    override def filter[A](fa: Queue[A])(f: (A) => Boolean): Queue[A] = fa.filter(f)
+
+    override def filterNot[A](fa: Queue[A])(f: A => Boolean): Queue[A] = fa.filterNot(f)
+
+    override def collect[A, B](fa: Queue[A])(f: PartialFunction[A, B]): Queue[B] = fa.collect(f)
+
+    override def flattenOption[A](fa: Queue[Option[A]]): Queue[A] = fa.flatten
+
+    def traverseFilter[G[_], A, B](fa: Queue[A])(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[Queue[B]] =
+      if (fa.isEmpty) G.pure(Queue.empty[B])
+      else
+        G.map(Chain.traverseFilterViaChain {
+          val as = collection.mutable.ArrayBuffer[A]()
+          as ++= fa
+          wrapMutableIndexedSeq(as)
+        }(f)) { chain =>
+          chain.foldLeft(Queue.empty[B])(_ :+ _)
+        }
+
+    override def filterA[G[_], A](fa: Queue[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[Queue[A]] =
+      traverse
+        .foldRight(fa, Eval.now(G.pure(Queue.empty[A])))((x, xse) =>
+          G.map2Eval(f(x), xse)((b, queue) => if (b) x +: queue else queue)
+        )
+        .value
+  }
 }
