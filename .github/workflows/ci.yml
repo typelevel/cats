@@ -262,26 +262,6 @@ jobs:
           tar xf targets.tar
           rm targets.tar
 
-      - name: Download target directories (2.12.16, rootJVM)
-        uses: actions/download-artifact@v2
-        with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-2.12.16-rootJVM
-
-      - name: Inflate target directories (2.12.16, rootJVM)
-        run: |
-          tar xf targets.tar
-          rm targets.tar
-
-      - name: Download target directories (2.12.16, rootJVM)
-        uses: actions/download-artifact@v2
-        with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-2.12.16-rootJVM
-
-      - name: Inflate target directories (2.12.16, rootJVM)
-        run: |
-          tar xf targets.tar
-          rm targets.tar
-
       - name: Download target directories (2.13.8, rootJS)
         uses: actions/download-artifact@v2
         with:
