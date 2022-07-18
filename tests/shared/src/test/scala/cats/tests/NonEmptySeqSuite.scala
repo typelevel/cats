@@ -28,7 +28,7 @@ import org.scalacheck.Prop._
 
 import scala.collection.immutable.Seq
 
-class NonEmtpySeqSuite extends NonEmptyCollectionSuite[Seq, NonEmptySeq, NonEmptySeq]{
+class NonEmptySeqSuite extends NonEmptyCollectionSuite[Seq, NonEmptySeq, NonEmptySeq] {
   protected def toList[A](value: NonEmptySeq[A]): List[A] = value.toSeq.toList
   protected def underlyingToList[A](underlying: Seq[A]): List[A] = underlying.toList
   protected def toNonEmptyCollection[A](value: NonEmptySeq[A]): NonEmptySeq[A] = value
