@@ -75,16 +75,6 @@ class SeqSuite extends CatsSuite {
     }
   }
 
-  test("neSeq => Seq => neSeq returns original neSeq")(
-    forAll { (fa: NonEmptySeq[Int]) =>
-      assert(fa.toSeq.toNeSeq == Some(fa))
-    }
-  )
-
-  test("toNeSeq on empty Seq returns None") {
-    assert(Seq.empty[Int].toNeSeq == None)
-  }
-
   test("traverse is stack-safe") {
     val seq = (0 until 100000).toSeq
     val sumAll = Traverse[Seq]
