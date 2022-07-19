@@ -39,12 +39,17 @@ class NonEmptySeqSuite extends NonEmptyCollectionSuite[Seq, NonEmptySeq, NonEmpt
     }
   )
 
-  test("NonEmptySeq#concat/concatNeSeq/appendSeq is consistent with Seq#++")(
-    forAll { (fa: NonEmptySeq[Int], fb: Seq[Int], n: Int) =>
+  test("NonEmptySeq#concat/appendSeq is consistent with Seq#++")(
+    forAll { (fa: NonEmptySeq[Int], fb: Seq[Int]) =>
       assert((fa ++ fb).toSeq == fa.toSeq ++ fb)
       assert(fa.concat(fb).toSeq == fa.toSeq ++ fb)
       assert(fa.appendSeq(fb).toSeq == fa.toSeq ++ fb)
-      assert(fa.concatNeSeq(NonEmptySeq(n, fb)).toSeq == fa.toSeq :+ n ++: fb)
+    }
+  )
+
+  test("NonEmptySeq#concatNeSeq is consistent with concat")(
+    forAll { (fa: NonEmptySeq[Int], fb: NonEmptySeq[Int]) =>
+      assert(fa.concatNeSeq(fb).toSeq == fa.concat(fb.toSeq).toSeq)
     }
   )
 
