@@ -218,13 +218,13 @@
         
         <h3 id="typeclass-definition-1" class="section">TypeClass Definition<a class="anchor-link right" href="#typeclass-definition-1"><i class="icofont-laika">&#xef71;</i></a></h3>
         <p><code>ApplicativeError</code> is defined by the following <code>trait</code></p>
-        <pre><code>trait ApplicativeError[F[_], E] extends Applicative[F] {
-  def raiseError[A](e: E): F[A]
-  def handleErrorWith[A](fa: F[A])(f: E =&gt; F[A]): F[A]
-  def handleError[A](fa: F[A])(f: E =&gt; A): F[A]
-  def attempt[A](fa: F[A]): F[Either[E, A]]
-  //More functions elided
-}</code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">trait</span><span> </span><span class="type-name">ApplicativeError</span><span>[</span><span class="type-name">F</span><span>[</span><span class="identifier">_</span><span>], </span><span class="type-name">E</span><span>] </span><span class="keyword">extends</span><span> </span><span class="type-name">Applicative</span><span>[</span><span class="type-name">F</span><span>] {
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">raiseError</span><span>[</span><span class="type-name">A</span><span>](</span><span class="identifier">e</span><span>: </span><span class="type-name">E</span><span>): </span><span class="type-name">F</span><span>[</span><span class="type-name">A</span><span>]
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">handleErrorWith</span><span>[</span><span class="type-name">A</span><span>](</span><span class="identifier">fa</span><span>: </span><span class="type-name">F</span><span>[</span><span class="type-name">A</span><span>])(</span><span class="identifier">f</span><span>: </span><span class="type-name">E</span><span> =&gt; </span><span class="type-name">F</span><span>[</span><span class="type-name">A</span><span>]): </span><span class="type-name">F</span><span>[</span><span class="type-name">A</span><span>]
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">handleError</span><span>[</span><span class="type-name">A</span><span>](</span><span class="identifier">fa</span><span>: </span><span class="type-name">F</span><span>[</span><span class="type-name">A</span><span>])(</span><span class="identifier">f</span><span>: </span><span class="type-name">E</span><span> =&gt; </span><span class="type-name">A</span><span>): </span><span class="type-name">F</span><span>[</span><span class="type-name">A</span><span>]
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">attempt</span><span>[</span><span class="type-name">A</span><span>](</span><span class="identifier">fa</span><span>: </span><span class="type-name">F</span><span>[</span><span class="type-name">A</span><span>]): </span><span class="type-name">F</span><span>[</span><span class="type-name">Either</span><span>[</span><span class="type-name">E</span><span>, </span><span class="type-name">A</span><span>]]
+  </span><span class="comment">//More functions elided
+</span><span>}</span></code></pre>
         
         <h3 id="use-case-1" class="section">Use Case<a class="anchor-link right" href="#use-case-1"><i class="icofont-laika">&#xef71;</i></a></h3>
         
