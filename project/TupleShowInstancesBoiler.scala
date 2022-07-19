@@ -26,9 +26,7 @@ object GenTupleShowInstances extends Template {
     |
     |private[cats] trait NTupleShowInstances {
     -  implicit final def catsStdShowForTuple$arity[${`A..N`}]${`constraints A..N`("Show")}: Show[${`(A..N)`}] =
-    -    new Show[${`(A..N)`}] {
-    -      def show(f: ${`(A..N)`}): String = $showMethod
-    -    }
+    -    Show.show(f => $showMethod)
     |}"""
   }
 }

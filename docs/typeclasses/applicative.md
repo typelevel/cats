@@ -262,6 +262,20 @@ import cats.implicits._
 We don't have to mention the type or specify the number of values we're composing
 together, so there's a little less boilerplate here.
 
+Another very useful `Apply` syntax is `tupled`, which allows a tuple of effectful values to be composed into a single effectful value containing a tuple. 
+
+```scala mdoc
+import cats.implicits._
+
+val optPair: Option[(String, String)] = (username, password).tupled
+```
+
+### See also Parallel variants
+
+Both `tupled` and `mapN` have [parallel](parallel.md) variant operations, named `parTupled` and `parMapN` respectively. Regular `tupled`/`mapN` evaluate their effects from left to right ("sequentially"), while `parTupled`/`parMapN` evaluate in an indeterminate order, or in parallel.
+
+The difference can be understood intuitively when the effect is an executable task, such as `IO` from [Cats Effect](https://typelevel.org/cats-effect/docs/concepts#concurrent). In this case, the parallel variants enable you to compose tuples of tasks into a single task that will run its sub-tasks concurrently.
+
 ## Further Reading
 
 * [Applicative Programming with Effects][applicativePaper] - McBride, Patterson. JFP 2008.

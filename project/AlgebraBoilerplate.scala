@@ -44,9 +44,7 @@ object AlgebraBoilerplate {
     val synVals = (0 until arity).map(n => s"a$n")
     val `A..N` = synTypes.mkString(", ")
     val `a..n` = synVals.mkString(", ")
-    val `_.._` = Seq.fill(arity)("_").mkString(", ")
     val `(A..N)` = if (arity == 1) "Tuple1[A0]" else synTypes.mkString("(", ", ", ")")
-    val `(_.._)` = if (arity == 1) "Tuple1[_]" else Seq.fill(arity)("_").mkString("(", ", ", ")")
     val `(a..n)` = if (arity == 1) "Tuple1(a)" else synVals.mkString("(", ", ", ")")
   }
 
@@ -86,32 +84,32 @@ object AlgebraBoilerplate {
       import tv._
 
       def constraints(constraint: String) =
-        synTypes.map(tpe => s"${tpe}: ${constraint}[${tpe}]").mkString(", ")
+        synTypes.map(tpe => s"$tpe: $constraint[$tpe]").mkString(", ")
 
       def tuple(results: TraversableOnce[String]) = {
         val resultsVec = results.toVector
         val a = synTypes.size
         val r = s"${0.until(a).map(i => resultsVec(i)).mkString(", ")}"
         if (a == 1) "Tuple1(" ++ r ++ ")"
-        else s"(${r})"
+        else s"($r)"
       }
 
       def binMethod(name: String) =
         synTypes.zipWithIndex.iterator.map { case (tpe, i) =>
           val j = i + 1
-          s"${tpe}.${name}(x._${j}, y._${j})"
+          s"$tpe.$name(x._$j, y._$j)"
         }
 
       def binTuple(name: String) =
         tuple(binMethod(name))
 
       def unaryTuple(name: String) = {
-        val m = synTypes.zipWithIndex.map { case (tpe, i) => s"${tpe}.${name}(x._${i + 1})" }
+        val m = synTypes.zipWithIndex.map { case (tpe, i) => s"$tpe.$name(x._${i + 1})" }
         tuple(m)
       }
 
       def nullaryTuple(name: String) = {
-        val m = synTypes.map(tpe => s"${tpe}.${name}")
+        val m = synTypes.map(tpe => s"$tpe.$name")
         tuple(m)
       }
 
@@ -125,34 +123,34 @@ object AlgebraBoilerplate {
         -
         -  implicit def tuple${arity}Rig[${`A..N`}](implicit ${constraints("Rig")}): Rig[${`(A..N)`}] =
         -    new Rig[${`(A..N)`}] {
-        -      def one: ${`(A..N)`} = ${nullaryTuple("one")}
-        -      def plus(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("plus")}
-        -      def times(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("times")}
-        -      def zero: ${`(A..N)`} = ${nullaryTuple("zero")}
+        -      def zero = ${nullaryTuple("zero")}
+        -      def one = ${nullaryTuple("one")}
+        -      def plus(x: ${`(A..N)`}, y: ${`(A..N)`}) = ${binTuple("plus")}
+        -      def times(x: ${`(A..N)`}, y: ${`(A..N)`}) = ${binTuple("times")}
         -    }
         -
         -  implicit def tuple${arity}Ring[${`A..N`}](implicit ${constraints("Ring")}): Ring[${`(A..N)`}] =
         -    new Ring[${`(A..N)`}] {
-        -      def one: ${`(A..N)`} = ${nullaryTuple("one")}
-        -      def plus(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("plus")}
-        -      def times(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("times")}
-        -      def zero: ${`(A..N)`} = ${nullaryTuple("zero")}
-        -      def negate(x: ${`(A..N)`}): ${`(A..N)`} = ${unaryTuple("negate")}
+        -      def zero = ${nullaryTuple("zero")}
+        -      def one = ${nullaryTuple("one")}
+        -      def negate(x: ${`(A..N)`}) = ${unaryTuple("negate")}
+        -      def plus(x: ${`(A..N)`}, y: ${`(A..N)`}) = ${binTuple("plus")}
+        -      def times(x: ${`(A..N)`}, y: ${`(A..N)`}) = ${binTuple("times")}
         -    }
         -
         -  implicit def tuple${arity}Rng[${`A..N`}](implicit ${constraints("Rng")}): Rng[${`(A..N)`}] =
         -    new Rng[${`(A..N)`}] {
-        -      def plus(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("plus")}
-        -      def times(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("times")}
-        -      def zero: ${`(A..N)`} = ${nullaryTuple("zero")}
-        -      def negate(x: ${`(A..N)`}): ${`(A..N)`} = ${unaryTuple("negate")}
+        -      def zero = ${nullaryTuple("zero")}
+        -      def negate(x: ${`(A..N)`}) = ${unaryTuple("negate")}
+        -      def plus(x: ${`(A..N)`}, y: ${`(A..N)`}) = ${binTuple("plus")}
+        -      def times(x: ${`(A..N)`}, y: ${`(A..N)`}) = ${binTuple("times")}
         -    }
         -
         -  implicit def tuple${arity}Semiring[${`A..N`}](implicit ${constraints("Semiring")}): Semiring[${`(A..N)`}] =
         -    new Semiring[${`(A..N)`}] {
-        -      def plus(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("plus")}
-        -      def times(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("times")}
-        -      def zero: ${`(A..N)`} = ${nullaryTuple("zero")}
+        -      def zero = ${nullaryTuple("zero")}
+        -      def plus(x: ${`(A..N)`}, y: ${`(A..N)`}) = ${binTuple("plus")}
+        -      def times(x: ${`(A..N)`}, y: ${`(A..N)`}) = ${binTuple("times")}
         -    }
         |}
       """

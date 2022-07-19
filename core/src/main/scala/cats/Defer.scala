@@ -69,7 +69,7 @@ trait Defer[F[_]] extends Serializable {
    * of the above F[A] run forever.
    */
   def fix[A](fn: F[A] => F[A]): F[A] = {
-    lazy val res: F[A] = defer(fn(res))
+    lazy val res: F[A] = fn(defer(res))
     res
   }
 }

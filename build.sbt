@@ -1,12 +1,12 @@
-ThisBuild / tlBaseVersion := "2.8"
+ThisBuild / tlBaseVersion := "2.9"
 
 val scalaCheckVersion = "1.16.0"
 
 val disciplineVersion = "1.5.1"
 
-val disciplineMunitVersion = "2.0.0-M2"
+val disciplineMunitVersion = "2.0.0-M3"
 
-val munitVersion = "1.0.0-M5"
+val munitVersion = "1.0.0-M6"
 
 val kindProjectorVersion = "0.13.2"
 
@@ -18,7 +18,7 @@ ThisBuild / githubWorkflowJavaVersions := Seq(PrimaryJava, LTSJava, GraalVM11)
 
 val Scala212 = "2.12.16"
 val Scala213 = "2.13.8"
-val Scala3 = "3.1.2"
+val Scala3 = "3.1.3"
 
 ThisBuild / crossScalaVersions := Seq(Scala212, Scala213, Scala3)
 ThisBuild / scalaVersion := Scala213
@@ -265,15 +265,9 @@ lazy val bench = project
   .settings(moduleName := "cats-bench")
   .settings(commonJvmSettings)
   .settings(
-    libraryDependencies ++= {
-      if (scalaVersion.value.startsWith("2.12"))
-        Seq(
-          "org.scalaz" %% "scalaz-core" % "7.3.6",
-          "org.spire-math" %% "chain" % "0.3.0",
-          "co.fs2" %% "fs2-core" % "0.10.7"
-        )
-      else Nil
-    },
+    libraryDependencies ++= Seq(
+      "org.scalaz" %% "scalaz-core" % "7.3.6"
+    ),
     evictionErrorLevel := Level.Warn
   )
   .enablePlugins(NoPublishPlugin, JmhPlugin)
@@ -296,7 +290,6 @@ lazy val docs = project
   .settings(
     tlFatalWarnings := false,
     laikaConfig ~= { _.withRawContent },
-    tlSiteApiUrl := Some(url("https://typelevel.org/cats/api/")),
     tlSiteRelatedProjects := Seq(
       TypelevelProject.CatsEffect,
       "Mouse" -> url("https://typelevel.org/mouse"),
@@ -313,9 +306,11 @@ ThisBuild / startYear := Some(2015)
 ThisBuild / developers ++= List(
   tlGitHubDev("ceedubs", "Cody Allen"),
   tlGitHubDev("rossabaker", "Ross Baker"),
+  tlGitHubDev("armanbilge", "Arman Bilge"),
   tlGitHubDev("johnynek", "P. Oscar Boykin"),
   tlGitHubDev("travisbrown", "Travis Brown"),
   tlGitHubDev("adelbertc", "Adelbert Chang"),
+  tlGitHubDev("danicheg", "Daniel Esik"),
   tlGitHubDev("peterneyens", "Peter Neyens"),
   tlGitHubDev("tpolecat", "Rob Norris"),
   tlGitHubDev("non", "Erik Osheim"),
@@ -324,6 +319,7 @@ ThisBuild / developers ++= List(
   tlGitHubDev("milessabin", "Miles Sabin"),
   tlGitHubDev("djspiewak", "Daniel Spiewak"),
   tlGitHubDev("fthomas", "Frank Thomas"),
+  tlGitHubDev("satorg", "Sergey Torgashov"),
   tlGitHubDev("julien-truffaut", "Julien Truffaut"),
   tlGitHubDev("kailuowang", "Kailuo Wang")
 )

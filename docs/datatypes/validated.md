@@ -589,8 +589,63 @@ validatedMonad.tuple2(Validated.invalidNec[String, Int]("oops"), Validated.inval
 ```
 
 This one short circuits! Therefore, if we were to define a `Monad` (or `FlatMap`) instance for `Validated` we would
-have to override `ap` to get the behavior we want. But then the behavior of `flatMap` would be inconsistent with
-that of `ap`, not good. Therefore, `Validated` has only an `Applicative` instance.
+have to override `ap` to get the behavior we want. 
+
+```scala mdoc:silent:nest
+import cats.Monad
+
+implicit def accumulatingValidatedMonad[E: Semigroup]: Monad[Validated[E, *]] =
+  new Monad[Validated[E, *]] {
+    def flatMap[A, B](fa: Validated[E, A])(f: A => Validated[E, B]): Validated[E, B] =
+      fa match {
+        case Valid(a)     => f(a)
+        case i@Invalid(_) => i
+      }
+
+    def pure[A](x: A): Validated[E, A] = Valid(x)
+
+    @annotation.tailrec
+    def tailRecM[A, B](a: A)(f: A => Validated[E, Either[A, B]]): Validated[E, B] =
+      f(a) match {
+        case Valid(Right(b)) => Valid(b)
+        case Valid(Left(a)) => tailRecM(a)(f)
+        case i@Invalid(_) => i
+      }
+
+    override def ap[A, B](f: Validated[E, A => B])(fa: Validated[E, A]): Validated[E, B] =
+      (fa, f) match {
+        case (Valid(a), Valid(fab)) => Valid(fab(a))
+        case (i@Invalid(_), Valid(_)) => i
+        case (Valid(_), i@Invalid(_)) => i
+        case (Invalid(e1), Invalid(e2)) => Invalid(Semigroup[E].combine(e1, e2))
+      }
+  }
+```
+
+But then the behavior of `flatMap` would be inconsistent with that of `ap`, and this will violate one of the [FlatMap laws](https://github.com/typelevel/cats/blob/main/laws/src/main/scala/cats/laws/FlatMapLaws.scala), `flatMapConsistentApply`:
+
+```scala
+// the `<->` operator means "is equivalent to" and returns a data structure
+// `IsEq` that is used to verify the equivalence of the two expressions
+def flatMapConsistentApply[A, B](fa: F[A], fab: F[A => B]): IsEq[F[B]] = 
+  fab.ap(fa) <-> fab.flatMap(f => fa.map(f))
+```
+
+```scala mdoc:silent
+import cats.laws._
+
+val flatMapLawsForAccumulatingValidatedMonad = 
+  FlatMapLaws[Validated[NonEmptyChain[String], *]](accumulatingValidatedMonad)
+
+val fa  = Validated.invalidNec[String, Int]("oops")
+val fab = Validated.invalidNec[String, Int => Double]("Broken function")
+```
+
+```scala mdoc
+flatMapLawsForAccumulatingValidatedMonad.flatMapConsistentApply(fa , fab)
+```
+
+Therefore, `Validated` has only an `Applicative` instance.
 
 ## `Validated` vs `Either`
 
@@ -618,8 +673,6 @@ val houseNumber = config.parse[Int]("house_number").andThen{ n =>
 The `withEither` method allows you to temporarily turn a `Validated` instance into an `Either` instance and apply it to a function.
 
 ```scala mdoc:silent
-import cats.implicits._ // get Either#flatMap
-
 def positive(field: String, i: Int): Either[ConfigError, Int] = {
   if (i >= 0) Right(i)
   else Left(ParseError(field))

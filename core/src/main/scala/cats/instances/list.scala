@@ -188,6 +188,9 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
       override def mapAccumulate[S, A, B](init: S, fa: List[A])(f: (S, A) => (S, B)): (S, List[B]) =
         StaticMethods.mapAccumulateFromStrictFunctor(init, fa, f)(this)
 
+      override def mapWithLongIndex[A, B](fa: List[A])(f: (A, Long) => B): List[B] =
+        StaticMethods.mapWithLongIndexFromStrictFunctor(fa, f)(this)
+
       override def mapWithIndex[A, B](fa: List[A])(f: (A, Int) => B): List[B] =
         StaticMethods.mapWithIndexFromStrictFunctor(fa, f)(this)
 
