@@ -21,11 +21,10 @@
 
 package cats.kernel.compat
 
+import scala.annotation.nowarn
+
 /** Simulates the behaviour of `@unused` annotation originally implemented
   * in Scala 2.13 and above.
-  * 
-  * @note copied from
-  *       [[https://github.com/scala/scala-collection-compat/blob/e35e330fca28c78c39fa2d4812fa33ce892f19e3/compat/src/main/scala-2.11_2.12/scala/annotation/unused.scala scala-collection-compat]]
-  *       source code.
   */
-final private[cats] class unused extends deprecated("unused", "unused")
+@nowarn("msg=subclassing ClassfileAnnotation does not\nmake your annotation visible at runtime.")
+final private[cats] class unused extends nowarn("cat=unused")
