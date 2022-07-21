@@ -102,29 +102,25 @@ which are lazy in their right hand argument to traverse the entire
 structure unnecessarily. For example, if you have:
 
 ```scala mdoc
-val allFalse = Stream.continually(false)
+val allFalse = LazyList.continually(false)
 ```
 
-which is an infinite stream of `false` values, and if you wanted to
+which is an infinite list of `false` values, and if you wanted to
 reduce this to a single false value using the logical and (`&&`). You
 intuitively know that the result of this operation should be
-`false`. It is not necessary to consider the entire stream in order to
+`false`. It is not necessary to consider the entire list in order to
 determine this result, you only need to consider the first
 value. Using `foldRight` from the standard library *will* try to
-consider the entire stream, and thus will eventually cause a stack
-overflow:
+consider the entire list, and thus will eventually cause an out-of-memory error:
 
-```scala mdoc
-try {
-  allFalse.foldRight(true)(_ && _)
-} catch {
-  case e:StackOverflowError => println(e)
-}
+```scala
+// beware! throws OutOfMemoryError, which is irrecoverable
+allFalse.foldRight(true)(_ && _)
 ```
 
 With the lazy `foldRight` on `Foldable`, the calculation terminates
 after looking at only one value:
 
 ```scala mdoc
-Foldable[Stream].foldRight(allFalse, Eval.True)((a,b) => if (a) b else Eval.False).value
+Foldable[LazyList].foldRight(allFalse, Eval.True)((a,b) => if (a) b else Eval.False).value
 ```

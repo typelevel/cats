@@ -24,7 +24,7 @@ import cats.data.NonEmptyList
 val snippets = NonEmptyList.of("What do you do", "What are you doing")
 
 def countWords(text: String): Map[String, Int] =
-  text.split(" ").groupBy(identity).mapValues(_.length)
+  text.split(" ").groupBy(identity).view.mapValues(_.length).toMap
 
 snippets.nonEmptyTraverse(countWords)
 ```

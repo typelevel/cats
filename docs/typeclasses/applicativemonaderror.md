@@ -9,7 +9,7 @@ that represent the quality of an exception or an error, for example, `Either[E, 
 ### TypeClass Definition
 `ApplicativeError` is defined by the following `trait`
 
-```
+```scala
 trait ApplicativeError[F[_], E] extends Applicative[F] {
   def raiseError[A](e: E): F[A]
   def handleErrorWith[A](fa: F[A])(f: E => F[A]): F[A]
