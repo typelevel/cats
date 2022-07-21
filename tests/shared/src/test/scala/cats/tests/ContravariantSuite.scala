@@ -21,11 +21,13 @@
 
 package cats.tests
 
+import cats.Eq
 import cats.data.Const
 import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests}
 import cats.kernel.{Monoid, Semigroup}
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.{DecidableTests, MiniInt}
+import cats.laws.discipline.ExhaustiveCheck.catsLawExhaustiveCheckForNothing
 import cats.{Contravariant, ContravariantMonoidal, ContravariantSemigroupal}
 import org.scalacheck.Prop._
 
@@ -41,10 +43,13 @@ class ContravariantSuite extends CatsSuite {
     }
   }
 
-  checkAll(
-    "Decidable[Predicate]",
-    DecidableTests[Predicate].decidable[Boolean, Boolean, Boolean]
-  )
+  {
+    implicit val eqForPredicateNothing: Eq[Predicate[Nothing]] = Predicate.eqPredicate[Nothing]
+    checkAll(
+      "Decidable[Predicate]",
+      DecidableTests[Predicate].decidable[Boolean, Boolean, Boolean]
+    )
+  }
 
   {
     implicit val predicateMonoid: Monoid[Predicate[MiniInt]] = ContravariantMonoidal.monoid[Predicate, MiniInt]

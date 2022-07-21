@@ -36,6 +36,9 @@ class EqSuite extends CatsSuite {
   ContravariantMonoidal[Eq]
   Decidable[Eq]
 
+  // Since equivalence on functions (Nothing, Nothing) => Boolean is
+  // equivalence on Nothing => Boolean it should be vacuously true
+  implicit val eqForEqNothing: Eq[Eq[Nothing]] = Eq.allEqual[Eq[Nothing]]
   checkAll("Eq", DecidableTests[Eq].decidable[MiniInt, Boolean, Boolean])
   checkAll("Decidable[Eq]", SerializableTests.serializable(Decidable[Eq]))
 

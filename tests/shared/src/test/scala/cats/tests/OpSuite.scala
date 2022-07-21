@@ -44,6 +44,8 @@ class OpSuite extends CatsSuite {
   }
 
   {
+    // Op[Function1, Monoid, Nothing] = Nothing => (A: Monoid) which is vacously equivalent
+    implicit val eqForOpFunction1Nothing: Eq[Op[Function1, Int, Nothing]] = Eq.allEqual
     checkAll("Op[Function1, Monoid, ?]", DecidableTests[Op[Function1, Int, *]].decidable[MiniInt, MiniInt, MiniInt])
     checkAll("Decidable[Op[Function1, Monoid, ?]]", SerializableTests.serializable(Decidable[Op[Function1, Int, *]]))
   }

@@ -186,6 +186,8 @@ class FunctionSuite extends CatsSuite {
   // Isos for Decidable
   implicit val isoCodomainBoolean: Isomorphisms[Function1[*, Boolean]] =
     SemigroupalTests.Isomorphisms.invariant[Function1[*, Boolean]]
+  // Vacuously true that all elements of the empty set are equivalent
+  implicit val eqNothingPreciates: Eq[Nothing => Boolean] = Eq.allEqual[Nothing => Boolean]
   checkAll("Function1[?, Boolean]", DecidableTests[Function1[*, Boolean]].decidable[MiniInt, MiniInt, MiniInt])
   checkAll("Decidable[? => Boolean]", SerializableTests.serializable(Decidable[Function1[*, Boolean]]))
 

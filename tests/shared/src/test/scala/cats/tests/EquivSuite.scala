@@ -21,7 +21,7 @@
 
 package cats.tests
 
-import cats.{Contravariant, ContravariantMonoidal, ContravariantSemigroupal, Decidable, Invariant, Semigroupal}
+import cats.{Contravariant, ContravariantMonoidal, ContravariantSemigroupal, Decidable, Eq, Invariant, Semigroupal}
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline._
 import cats.laws.discipline.eq._
@@ -40,6 +40,10 @@ class EquivSuite extends CatsSuite {
   checkAll("ContravariantMonoidal[Equiv]",
            ContravariantMonoidalTests[Equiv].contravariantMonoidal[MiniInt, Boolean, Boolean]
   )
+
+  // Since equivalence on functions (Nothing, Nothing) => Boolean is
+  // equivalence on Nothing => Boolean it should be vacuously true
+  implicit val eqEquivNothing: Eq[Equiv[Nothing]] = Eq.allEqual[Equiv[Nothing]]
   checkAll("Decidable[Equiv]", DecidableTests[Equiv].decidable[MiniInt, Boolean, Boolean])
   checkAll("Decidable[Equiv]", SerializableTests.serializable(Decidable[Equiv]))
 }

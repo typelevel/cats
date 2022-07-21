@@ -128,6 +128,10 @@ class KleisliSuite extends CatsSuite {
   checkAll("Alternative[Kleisli[Option, Int, *]]", SerializableTests.serializable(Alternative[Kleisli[Option, Int, *]]))
 
   {
+    // Kleisli[Predicate, MiniInt, Nothing]] == MiniInt => Predicate[Nothing] == MiniInt => (Nothing => Boolean)
+    // but all predicates on nothing are equivalent, so all such mappings are equivalent
+    implicit val eqKleisliPreciateNothing: Eq[Kleisli[Predicate, MiniInt, Nothing]] =
+      Eq.allEqual[Kleisli[Predicate, MiniInt, Nothing]]
     checkAll("Kleisli[Predicate, MiniInt, MiniInt]",
              DecidableTests[Kleisli[Predicate, MiniInt, *]].decidable[MiniInt, MiniInt, MiniInt]
     )

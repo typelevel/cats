@@ -43,11 +43,11 @@ trait DecidableTests[F[_]] extends ContravariantMonoidalTests[F] {
     EqCC: Eq[F[Either[C, C]]],
     EqFEitABC: Eq[F[Either[Either[A, B], C]]],
     EqFTupAEitBC: Eq[F[(A, Either[B, C])]],
+    EqFNothing: Eq[F[Nothing]],
     iso: SemigroupalTests.Isomorphisms[F]
   ): RuleSet =
     new RuleSet {
       implicit val ArbNothing: Arbitrary[Nothing => Nothing] = Arbitrary(Gen.const((n: Nothing) => n))
-      implicit val eqNothing: Eq[F[Nothing]] = Eq.by[F[Nothing], Unit]((_: F[Nothing]) => ())
       val name = "decideable"
       val parents = Seq(contravariantMonoidal[A, B, C])
       val bases = Seq.empty

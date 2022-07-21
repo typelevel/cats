@@ -140,6 +140,7 @@ class NestedSuite extends CatsSuite {
 
   {
     // Applicative + Decidable functor composition
+    implicit val eqForOptionPredicateNothing: Eq[Nested[Option, Predicate, Nothing]] = Eq.allEqual
     checkAll("Nested[Option, Predicate, ?]",
              DecidableTests[Nested[Option, Predicate, *]].decidable[MiniInt, MiniInt, MiniInt]
     )
