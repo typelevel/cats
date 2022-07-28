@@ -103,6 +103,12 @@ abstract class NonEmptyCollectionSuite[U[+_], NE[+_], NEC[x] <: NonEmptyCollecti
     }
   }
 
+  test("collectFirst is consistent with iterator.toList.collectFirst") {
+    forAll { (is: NE[Int], pf: PartialFunction[Int, String]) =>
+      assert(is.collectFirst(pf) === is.iterator.toList.collectFirst(pf))
+    }
+  }
+
   test("find is consistent with iterator.toList.find") {
     forAll { (is: NE[Int], pred: Int => Boolean) =>
       assert(is.find(pred) === (is.iterator.toList.find(pred)))

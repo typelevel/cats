@@ -97,6 +97,8 @@ final class NonEmptySeq[+A] private (val toSeq: Seq[A]) extends AnyVal with NonE
 
   def collect[B](pf: PartialFunction[A, B]): Seq[B] = toSeq.collect(pf)
 
+  def collectFirst[B](pf: PartialFunction[A, B]): Option[B] = toSeq.collectFirst(pf)
+
   /**
    * Alias for [[concat]]
    */
