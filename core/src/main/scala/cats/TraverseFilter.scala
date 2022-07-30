@@ -22,6 +22,7 @@
 package cats
 
 import cats.data.State
+import cats.implicits.toTraverseOps
 
 import scala.collection.immutable.{HashSet, TreeSet}
 
@@ -55,6 +56,12 @@ trait TraverseFilter[F[_]] extends FunctorFilter[F] {
    * }}}
    */
   def traverseFilter[G[_], A, B](fa: F[A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[F[B]]
+
+  /**
+   * A combined [[traverse]] and [[collect]].
+   */
+  def traverseCollect[G[_], A, B](fa: F[A], f: PartialFunction[A, G[B]])(implicit F: TraverseFilter[F], G: Applicative[G]): G[F[B]] =
+    F.traverseFilter(fa)(a => f.lift(a).sequence)
 
   /**
    * {{{
