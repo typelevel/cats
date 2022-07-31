@@ -59,12 +59,14 @@ trait TraverseFilter[F[_]] extends FunctorFilter[F] {
 
   /**
    * A combined [[traverse]] and [[collect]].
+   *
+   *
    */
-  def traverseCollect[G[_], A, B](fa: F[A], f: PartialFunction[A, G[B]])(implicit
+  def traverseCollect[G[_], A, B](fa: F[A])(f: PartialFunction[A, G[B]])(implicit
     F: TraverseFilter[F],
     G: Applicative[G]
   ): G[F[B]] =
-    F.traverseFilter(fa)(a => f.lift(a).sequence)
+    traverseFilter(fa)(a => f.lift(a).sequence)
 
   /**
    * {{{
