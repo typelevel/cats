@@ -60,12 +60,15 @@ trait TraverseFilter[F[_]] extends FunctorFilter[F] {
   /**
    * A combined [[traverse]] and [[collect]].
    *
-   *
+   * scala> import cats.implicits._
+   * scala> val m: Map[Int, String] = Map(1 -> "one", 2 -> "two")
+   * scala> val l: List[Int] = List(1, 2, 3, 4)
+   * scala> def asString: PartialFunction[Int, Eval[Option[String]]] = { case n if n % 2 == 0 => Now(m.get(n)) }
+   * scala> val result: Eval[List[String]] = l.traverseCollect(asString)
+   * scala> result.value
+   * res0: List[String] = List(two)
    */
-  def traverseCollect[G[_], A, B](fa: F[A])(f: PartialFunction[A, G[B]])(implicit
-    F: TraverseFilter[F],
-    G: Applicative[G]
-  ): G[F[B]] =
+  def traverseCollect[G[_], A, B](fa: F[A])(f: PartialFunction[A, G[B]])(implicit G: Applicative[G]): G[F[B]] =
     traverseFilter(fa)(a => f.lift(a).sequence)
 
   /**
