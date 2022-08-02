@@ -50,13 +50,14 @@ trait TraverseFilterTests[F[_]] extends FunctorFilterTests[F] {
     EqMNFC: Eq[Nested[Option, Option, F[C]]]
   ): RuleSet = {
     implicit val arbFAOB: Arbitrary[PartialFunction[A, Option[B]]] =
-    Arbitrary(ArbFABoo.arbitrary.map { pfab =>
-    { case a if pfab.isDefinedAt(a) =>
-      val b = pfab(a)
-      if (((a.hashCode ^ b.hashCode) & 1) == 1) Some(b)
-      else None
-    }
-    })
+      Arbitrary(ArbFABoo.arbitrary.map { pfab =>
+        {
+          case a if pfab.isDefinedAt(a) =>
+            val b = pfab(a)
+            if (((a.hashCode ^ b.hashCode) & 1) == 1) Some(b)
+            else None
+        }
+      })
 
     new DefaultRuleSet(
       name = "traverseFilter",
