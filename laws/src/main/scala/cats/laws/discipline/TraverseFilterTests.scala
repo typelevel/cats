@@ -35,7 +35,6 @@ trait TraverseFilterTests[F[_]] extends FunctorFilterTests[F] {
     ArbFA: Arbitrary[F[A]],
     ArbFOA: Arbitrary[F[Option[A]]],
     ArbFABoo: Arbitrary[PartialFunction[A, B]],
-    ArbFAOB: Arbitrary[PartialFunction[A, Option[B]]],
     ArbAOB: Arbitrary[A => Option[B]],
     ArbAOA: Arbitrary[A => Option[A]],
     ArbAOOB: Arbitrary[A => Option[Option[B]]],
@@ -48,7 +47,6 @@ trait TraverseFilterTests[F[_]] extends FunctorFilterTests[F] {
     EqFB: Eq[F[B]],
     EqFC: Eq[F[C]],
     EqGFA: Eq[Option[F[A]]],
-    EqGFB: Eq[Option[F[B]]],
     EqMNFC: Eq[Nested[Option, Option, F[C]]]
   ): RuleSet =
     new DefaultRuleSet(
