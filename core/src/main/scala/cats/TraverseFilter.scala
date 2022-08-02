@@ -66,7 +66,7 @@ trait TraverseFilter[F[_]] extends FunctorFilter[F] {
    * scala> def asString: PartialFunction[Int, Eval[Option[String]]] = { case n if n % 2 == 0 => Now(m.get(n)) }
    * scala> val result: Eval[List[Option[String]]] = l.traverseCollect(asString)
    * scala> result.value
-   * res0: List[Option[String]] = List(Some("two"))
+   * res0: List[Option[String]] = List(Some(two), None)
    */
   def traverseCollect[G[_], A, B](fa: F[A])(f: PartialFunction[A, G[B]])(implicit G: Applicative[G]): G[F[B]] =
     traverseFilter(fa)(a => f.lift(a).sequence)
