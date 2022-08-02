@@ -53,9 +53,7 @@ trait TraverseFilterLaws[F[_]] extends FunctorFilterLaws[F] {
   ): IsEq[G[F[B]]] =
     fa.traverseEither(a => f(a).map(_.toRight(e)))((_, _) => Applicative[G].unit) <-> fa.traverseFilter(f)
 
-  def traverseCollectRef[G[_], A, B](
-    fa: F[A]
-  )(f: PartialFunction[A, G[B]])(implicit G: Applicative[G]): IsEq[G[F[B]]] = {
+  def traverseCollectRef[G[_], A, B](fa: F[A], f: PartialFunction[A, G[B]])(implicit G: Applicative[G]): IsEq[G[F[B]]] = {
     val lhs = fa.traverseCollect(f)
     val rhs = fa.traverseFilter(a => f.lift(a).sequence)
     lhs <-> rhs
