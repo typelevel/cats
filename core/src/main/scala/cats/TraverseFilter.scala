@@ -68,7 +68,7 @@ trait TraverseFilter[F[_]] extends FunctorFilter[F] {
    * res0: List[Option[String]] = List(Some(two), None)
    */
   def traverseCollect[G[_], A, B](fa: F[A])(f: PartialFunction[A, G[B]])(implicit G: Applicative[G]): G[F[B]] =
-    traverseFilter(fa)(a => f.lift(a).map(G.map(_)(Option(_))).getOrElse(G.pure(None)))
+    traverseFilter(fa)(a => Traverse[Option].sequence(f.lift(a)))
 
   /**
    * {{{
