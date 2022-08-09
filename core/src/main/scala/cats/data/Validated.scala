@@ -1137,7 +1137,7 @@ private[data] trait ValidatedFunctions {
     try {
       valid(f)
     } catch {
-      case scala.util.control.NonFatal(t) => invalid(t)
+      case t if scala.util.control.NonFatal(t) => invalid(t)
     }
 
   /**
