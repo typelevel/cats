@@ -269,13 +269,7 @@ object arbitrary extends ArbitraryInstances0 with ScalaVersionSpecific.Arbitrary
   // implies equal, in order to avoid producing invalid instances.
 
   implicit def catsLawsArbitraryForEq[A: Arbitrary]: Arbitrary[Eq[A]] =
-    Arbitrary(
-      getArbitrary[Int => Int].map(f =>
-        new Eq[A] {
-          def eqv(x: A, y: A): Boolean = f(x.##) == f(y.##)
-        }
-      )
-    )
+    Arbitrary(getArbitrary[Int => Int].map(f => Eq.by(x => f(x.##))))
 
   implicit def catsLawsArbitraryForEquiv[A: Arbitrary]: Arbitrary[Equiv[A]] =
     Arbitrary(getArbitrary[Eq[A]].map(Eq.catsKernelEquivForEq(_)))

@@ -148,9 +148,7 @@ sealed abstract private[data] class OneAndInstances extends OneAndLowPriority0 {
     }
 
   implicit def catsDataEqForOneAnd[A, F[_]](implicit A: Eq[A], FA: Eq[F[A]]): Eq[OneAnd[F, A]] =
-    new Eq[OneAnd[F, A]] {
-      def eqv(x: OneAnd[F, A], y: OneAnd[F, A]): Boolean = x === y
-    }
+    Eq.instance(_ === _)
 
   implicit def catsDataShowForOneAnd[A, F[_]](implicit A: Show[A], FA: Show[F[A]]): Show[OneAnd[F, A]] =
     Show.show[OneAnd[F, A]](_.show)

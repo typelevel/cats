@@ -104,10 +104,7 @@ object eq {
     }
 
   implicit def catsLawsEqForMonoid[A](implicit eqSA: Eq[Semigroup[A]], eqA: Eq[A]): Eq[Monoid[A]] =
-    new Eq[Monoid[A]] {
-      def eqv(f: Monoid[A], g: Monoid[A]): Boolean =
-        eqSA.eqv(f, g) && eqA.eqv(f.empty, g.empty)
-    }
+    Eq.instance((f, g) => eqSA.eqv(f, g) && eqA.eqv(f.empty, g.empty))
 
   implicit def catsLawsEqForSemilattice[A](implicit
     eqBA: Eq[Band[A]],
@@ -161,16 +158,13 @@ object eq {
     "1.7"
   )
   implicit def catsLawsEqForFn1[A, B](implicit A: Arbitrary[A], B: Eq[B]): Eq[A => B] =
-    new Eq[A => B] {
-      val sampleCnt: Int = if (Platform.isJvm) 50 else 30
-
-      def eqv(f: A => B, g: A => B): Boolean = {
-        val samples = List.fill(sampleCnt)(A.arbitrary.sample).collect {
-          case Some(a) => a
-          case None    => sys.error("Could not generate arbitrary values to compare two functions")
-        }
-        samples.forall(s => B.eqv(f(s), g(s)))
+    Eq.instance { (f, g) =>
+      val sampleCnt = if (Platform.isJvm) 50 else 30
+      val samples = List.fill(sampleCnt)(A.arbitrary.sample).collect {
+        case Some(a) => a
+        case None    => sys.error("Could not generate arbitrary values to compare two functions")
       }
+      samples.forall(s => B.eqv(f(s), g(s)))
     }
 
   /**
@@ -199,16 +193,13 @@ object eq {
    * the behavior of `f(x, b)` and `f(y, b)` across many `b` samples.
    */
   def sampledEq[A, B: Arbitrary, C: Eq](samples: Int)(f: (A, B) => C): Eq[A] =
-    new Eq[A] {
+    Eq.instance { (x, y) =>
       val gen = Arbitrary.arbitrary[B]
-      def eqv(x: A, y: A): Boolean =
-        Iterator
-          .range(1, samples)
-          .map(_ => gen.sample)
-          .map(_.getOrElse(sys.error(s"generator $gen failed")))
-          .forall { b =>
-            f(x, b) === f(y, b)
-          }
+      Iterator
+        .range(1, samples)
+        .map(_ => gen.sample)
+        .map(_.getOrElse(sys.error(s"generator $gen failed")))
+        .forall(b => f(x, b) === f(y, b))
     }
 
   implicit def catsLawsEqForEq[A](implicit arbA: Arbitrary[(A, A)]): Eq[Eq[A]] =
@@ -236,20 +227,16 @@ object eq {
     sampledEq[Ordering[A], (A, A), Int](100) { case (p, (l, r)) => p.compare(l, r) }
 
   /**
-   * Creates an approximation of Eq[Hash[A]] by generating 100 values for A
+   * Creates an approximation of `Eq[Hash[A]]` by generating 100 values for A
    * and comparing the application of the two hash functions.
    */
   implicit def catsLawsEqForHash[A](implicit arbA: Arbitrary[A]): Eq[Hash[A]] =
-    new Eq[Hash[A]] {
-      def eqv(f: Hash[A], g: Hash[A]): Boolean = {
-        val samples = List.fill(100)(arbA.arbitrary.sample).collect {
-          case Some(a) => a
-          case None    => sys.error("Could not generate arbitrary values to compare two Hash[A]")
-        }
-        samples.forall { x =>
-          f.hash(x) == g.hash(x)
-        }
+    Eq.instance { (f, g) =>
+      val samples = List.fill(100)(arbA.arbitrary.sample).collect {
+        case Some(a) => a
+        case None    => sys.error("Could not generate arbitrary values to compare two Hash[A]")
       }
+      samples.forall(x => f.hash(x) == g.hash(x))
     }
 
   /**

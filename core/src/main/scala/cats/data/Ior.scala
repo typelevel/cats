@@ -992,10 +992,7 @@ sealed abstract private[data] class IorInstances0 {
     }
 
   implicit def catsDataEqForIor[A: Eq, B: Eq]: Eq[A Ior B] =
-    new Eq[A Ior B] {
-
-      def eqv(x: A Ior B, y: A Ior B): Boolean = x === y
-    }
+    Eq.instance(_ === _)
 }
 
 sealed private[data] trait IorFunctions {

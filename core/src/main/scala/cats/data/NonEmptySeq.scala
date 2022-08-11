@@ -523,9 +523,7 @@ sealed abstract private[data] class NonEmptySeqInstances {
     }
 
   implicit def catsDataEqForNonEmptySeq[A](implicit A: Eq[A]): Eq[NonEmptySeq[A]] =
-    new Eq[NonEmptySeq[A]] {
-      def eqv(x: NonEmptySeq[A], y: NonEmptySeq[A]): Boolean = x === y
-    }
+    Eq.instance(_ === _)
 
   implicit def catsDataShowForNonEmptySeq[A](implicit A: Show[A]): Show[NonEmptySeq[A]] =
     Show.show[NonEmptySeq[A]](_.show)

@@ -32,6 +32,8 @@ import cats.tests.{CatsSuite, Spooky}
 import org.scalacheck.{Arbitrary, Cogen, Gen}
 import cats.syntax.eq._
 
+import scala.annotation.tailrec
+
 class CofreeSuite extends CatsSuite {
 
   import CofreeSuite._
@@ -177,16 +179,14 @@ sealed trait CofreeSuiteInstances {
   type CofreeRoseTree[A] = Cofree[List, A]
 
   implicit def cofNelEq[A](implicit e: Eq[A]): Eq[CofreeNel[A]] =
-    new Eq[CofreeNel[A]] {
-      override def eqv(a: CofreeNel[A], b: CofreeNel[A]): Boolean = {
-        def tr(a: CofreeNel[A], b: CofreeNel[A]): Boolean =
-          (a.tailForced, b.tailForced) match {
-            case (Some(at), Some(bt)) if e.eqv(a.head, b.head) => tr(at, bt)
-            case (None, None) if e.eqv(a.head, b.head)         => true
-            case _                                             => false
-          }
-        tr(a, b)
-      }
+    Eq.instance { (a, b) =>
+      @tailrec def tr(a: CofreeNel[A], b: CofreeNel[A]): Boolean =
+        (a.tailForced, b.tailForced) match {
+          case (Some(at), Some(bt)) if e.eqv(a.head, b.head) => tr(at, bt)
+          case (None, None) if e.eqv(a.head, b.head)         => true
+          case _                                             => false
+        }
+      tr(a, b)
     }
 
   implicit def CofreeOptionCogen[A: Cogen]: Cogen[CofreeNel[A]] =

@@ -125,20 +125,18 @@ object FPApprox {
 
   // An Eq instance that returns true if 2 values *could* be equal.
   implicit def fpApproxEq[A: Field: Order: Epsilon]: Eq[FPApprox[A]] =
-    new Eq[FPApprox[A]] {
-      def eqv(x: FPApprox[A], y: FPApprox[A]): Boolean = {
-        // We want to check if z +/- error contains 0
-        if (x.approx == y.approx) {
-          true
+    Eq.instance { (x, y) =>
+      // We want to check if z +/- error contains 0
+      if (x.approx == y.approx) {
+        true
+      } else {
+        val z = x - y
+        val err = z.error
+        if (Epsilon.isFinite(err)) {
+          Order.lteqv(Ring[A].minus(z.approx, err), Ring[A].zero) &&
+          Order.gteqv(Ring[A].plus(z.approx, err), Ring[A].zero)
         } else {
-          val z = x - y
-          val err = z.error
-          if (Epsilon.isFinite(err)) {
-            Order.lteqv(Ring[A].minus(z.approx, err), Ring[A].zero) &&
-            Order.gteqv(Ring[A].plus(z.approx, err), Ring[A].zero)
-          } else {
-            true
-          }
+          true
         }
       }
     }

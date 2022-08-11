@@ -463,10 +463,7 @@ sealed abstract private[cats] class EvalInstances0 extends EvalInstances1 {
 
 sealed abstract private[cats] class EvalInstances1 {
   implicit def catsEqForEval[A: Eq]: Eq[Eval[A]] =
-    new Eq[Eval[A]] {
-      def eqv(lx: Eval[A], ly: Eval[A]): Boolean =
-        Eq[A].eqv(lx.value, ly.value)
-    }
+    Eq.by(_.value)
 
   implicit def catsSemigroupForEval[A: Semigroup]: Semigroup[Eval[A]] =
     new EvalSemigroup[A] { val algebra = Semigroup[A] }

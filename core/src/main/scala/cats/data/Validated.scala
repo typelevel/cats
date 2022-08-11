@@ -996,9 +996,7 @@ sealed abstract private[data] class ValidatedInstances1 extends ValidatedInstanc
 
 sealed abstract private[data] class ValidatedInstances2 {
   implicit def catsDataEqForValidated[A: Eq, B: Eq]: Eq[Validated[A, B]] =
-    new Eq[Validated[A, B]] {
-      def eqv(x: Validated[A, B], y: Validated[A, B]): Boolean = x === y
-    }
+    Eq.instance(_ === _)
 
   implicit def catsDataTraverseFunctorForValidated[E]: Traverse[Validated[E, *]] =
     new Traverse[Validated[E, *]] {

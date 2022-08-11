@@ -69,9 +69,7 @@ private[instances] trait FunctionInstances0 extends FunctionInstances1 {
 private[instances] trait FunctionInstances1 extends FunctionInstances2 {
 
   implicit def catsKernelEqForFunction0[A](implicit ev: Eq[A]): Eq[() => A] =
-    new Eq[() => A] {
-      def eqv(x: () => A, y: () => A): Boolean = ev.eqv(x(), y())
-    }
+    Eq.by(_.apply())
 
   implicit def catsKernelCommutativeMonoidForFunction0[A](implicit
     M: CommutativeMonoid[A]

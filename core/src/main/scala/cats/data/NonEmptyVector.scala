@@ -534,9 +534,7 @@ sealed abstract private[data] class NonEmptyVectorInstances {
     }
 
   implicit def catsDataEqForNonEmptyVector[A](implicit A: Eq[A]): Eq[NonEmptyVector[A]] =
-    new Eq[NonEmptyVector[A]] {
-      def eqv(x: NonEmptyVector[A], y: NonEmptyVector[A]): Boolean = x === y
-    }
+    Eq.instance(_ === _)
 
   implicit def catsDataShowForNonEmptyVector[A](implicit A: Show[A]): Show[NonEmptyVector[A]] =
     Show.show[NonEmptyVector[A]](_.show)

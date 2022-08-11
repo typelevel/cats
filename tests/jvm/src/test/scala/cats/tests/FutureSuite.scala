@@ -41,11 +41,9 @@ class FutureSuite extends CatsSuite {
     f.map(Either.right[Throwable, A]).recover { case t => Either.left(t) }
 
   implicit def eqfa[A: Eq]: Eq[Future[A]] =
-    new Eq[Future[A]] {
-      def eqv(fx: Future[A], fy: Future[A]): Boolean = {
-        val fz = futureEither(fx).zip(futureEither(fy))
-        Await.result(fz.map { case (tx, ty) => tx === ty }, timeout)
-      }
+    Eq.instance { (fx, fy) =>
+      val fz = futureEither(fx).zip(futureEither(fy))
+      Await.result(fz.map { case (tx, ty) => tx === ty }, timeout)
     }
 
   implicit def cogen[A: Cogen]: Cogen[Future[A]] =

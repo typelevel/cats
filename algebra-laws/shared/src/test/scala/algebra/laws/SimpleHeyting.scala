@@ -74,7 +74,6 @@ object SimpleHeyting {
 
   implicit val arbitrary: Arbitrary[SimpleHeyting] = Arbitrary(oneOf(Zero, Half, One))
 
-  implicit val eq: Eq[SimpleHeyting] = new Eq[SimpleHeyting] {
-    def eqv(x: SimpleHeyting, y: SimpleHeyting): Boolean = x == y
-  }
+  implicit val eq: Eq[SimpleHeyting] =
+    Eq.fromUniversalEquals
 }
