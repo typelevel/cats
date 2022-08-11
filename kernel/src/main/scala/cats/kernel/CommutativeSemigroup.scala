@@ -54,8 +54,6 @@ object CommutativeSemigroup extends SemigroupFunctions[CommutativeSemigroup] {
   /**
    * Create a `CommutativeSemigroup` instance from the given function.
    */
-  @inline def instance[A](cmb: (A, A) => A): CommutativeSemigroup[A] =
-    new CommutativeSemigroup[A] {
-      override def combine(x: A, y: A): A = cmb(x, y)
-    }
+  @inline def instance[@sp(Int, Long, Float, Double) A](cmb: (A, A) => A): CommutativeSemigroup[A] =
+    cmb(_, _)
 }

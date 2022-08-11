@@ -24,15 +24,11 @@ To construct a `Semigroup` from a single value, we can define a trivial `Semigro
 import cats.Semigroup
 
 def unit: Semigroup[Unit] =
-  new Semigroup[Unit] {
-    def combine(x: Unit, y: Unit): Unit = ()
-  }
+  Semigroup.instance((_, _) => ())
 
 def product[A, B](fa: Semigroup[A], fb: Semigroup[B]): Semigroup[(A, B)] =
-  new Semigroup[(A, B)] {
-    def combine(x: (A, B), y: (A, B)): (A, B) = (x, y) match {
-      case ((xa, xb), (ya, yb)) => fa.combine(xa, ya) -> fb.combine(xb, yb)
-    }
+  Semigroup.instances { case ((xa, xb), (ya, yb)) =>
+    fa.combine(xa, ya) -> fb.combine(xb, yb)
   }
 ```
 

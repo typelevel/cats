@@ -95,9 +95,7 @@ trait SemigroupK[F[_]] extends Serializable { self =>
    * }}}
    */
   def algebra[A]: Semigroup[F[A]] =
-    new Semigroup[F[A]] {
-      def combine(x: F[A], y: F[A]): F[A] = self.combineK(x, y)
-    }
+    Semigroup.instance(combineK)
 
   /**
    * "Compose" with a `G[_]` type to form a `SemigroupK` for `λ[α => F[G[α]]]`.

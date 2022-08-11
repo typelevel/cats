@@ -23,12 +23,6 @@ package algebra
 
 object Instances {
 
-  def t2HasSemigroup[A, B](implicit eva: Semigroup[A], evb: Semigroup[B]) =
-    new Semigroup[(A, B)] {
-      def combine(x: (A, B), y: (A, B)): (A, B) =
-        (eva.combine(x._1, y._1), evb.combine(x._2, y._2))
-    }
-
   val stringHasMonoid =
     new Monoid[String] {
       def empty: String = ""
