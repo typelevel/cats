@@ -42,8 +42,6 @@ object Band extends SemigroupFunctions[Band] {
   /**
    * Create a `Band` instance from the given function.
    */
-  @inline def instance[A](cmb: (A, A) => A): Band[A] =
-    new Band[A] {
-      override def combine(x: A, y: A): A = cmb(x, y)
-    }
+  @inline def instance[@sp(Int, Long, Float, Double) A](cmb: (A, A) => A): Band[A] =
+    cmb(_, _)
 }

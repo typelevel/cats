@@ -369,9 +369,7 @@ sealed abstract private[data] class NonEmptyMapInstances extends NonEmptyMapInst
 
   @deprecated("Use catsDataSemigroupForNonEmptyMap", "2.5.0")
   def catsDataBandForNonEmptyMap[K, A]: Band[NonEmptyMap[K, A]] =
-    new Band[NonEmptyMap[K, A]] {
-      def combine(x: NonEmptyMap[K, A], y: NonEmptyMap[K, A]): NonEmptyMap[K, A] = x ++ y
-    }
+    Band.instance(_ ++ _)
 
   implicit def catsDataSemigroupForNonEmptyMap[K, A: Semigroup]: Semigroup[NonEmptyMap[K, A]] =
     Semigroup.instance { (x, y) =>

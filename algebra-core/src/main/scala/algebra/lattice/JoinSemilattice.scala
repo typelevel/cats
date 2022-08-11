@@ -29,13 +29,11 @@ import scala.{specialized => sp}
  * operation is called "join", and which can be thought of as a least
  * upper bound.
  */
-trait JoinSemilattice[@sp(Int, Long, Float, Double) A] extends Any with Serializable { self =>
+trait JoinSemilattice[@sp(Int, Long, Float, Double) A] extends Any with Serializable {
   def join(lhs: A, rhs: A): A
 
   def joinSemilattice: Semilattice[A] =
-    new Semilattice[A] {
-      def combine(x: A, y: A): A = self.join(x, y)
-    }
+    Semilattice.instance(join)
 
   def joinPartialOrder(implicit ev: Eq[A]): PartialOrder[A] =
     joinSemilattice.asJoinPartialOrder

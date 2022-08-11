@@ -93,8 +93,6 @@ object MiniInt {
     def combine(x: MiniInt, y: MiniInt): MiniInt = x * y
   }
 
-  val miniIntOr: BoundedSemilattice[MiniInt] = new BoundedSemilattice[MiniInt] {
-    val empty = MiniInt.zero
-    def combine(x: MiniInt, y: MiniInt): MiniInt = x | y
-  }
+  val miniIntOr: BoundedSemilattice[MiniInt] =
+    BoundedSemilattice.instance(MiniInt.zero, _ | _)
 }

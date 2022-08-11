@@ -24,15 +24,12 @@ package lattice
 
 import scala.{specialized => sp}
 
-trait BoundedJoinSemilattice[@sp(Int, Long, Float, Double) A] extends Any with JoinSemilattice[A] { self =>
+trait BoundedJoinSemilattice[@sp(Int, Long, Float, Double) A] extends Any with JoinSemilattice[A] {
   def zero: A
   def isZero(a: A)(implicit ev: Eq[A]): Boolean = ev.eqv(a, zero)
 
   override def joinSemilattice: BoundedSemilattice[A] =
-    new BoundedSemilattice[A] {
-      def empty: A = self.zero
-      def combine(x: A, y: A): A = join(x, y)
-    }
+    BoundedSemilattice.instance(zero, join)
 }
 
 trait BoundedJoinSemilatticeFunctions[B[A] <: BoundedJoinSemilattice[A]] extends JoinSemilatticeFunctions[B] {

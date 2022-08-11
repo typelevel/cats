@@ -430,9 +430,7 @@ sealed abstract private[data] class NonEmptySetInstances extends NonEmptySetInst
     Show.show[NonEmptySet[A]](_.show)
 
   implicit def catsDataSemilatticeForNonEmptySet[A]: Semilattice[NonEmptySet[A]] =
-    new Semilattice[NonEmptySet[A]] {
-      def combine(x: NonEmptySet[A], y: NonEmptySet[A]): NonEmptySet[A] = x | y
-    }
+    Semilattice.instance(_ | _)
 }
 
 sealed abstract private[data] class NonEmptySetInstances0 extends NonEmptySetInstances1 {

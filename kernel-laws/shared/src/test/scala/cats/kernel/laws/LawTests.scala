@@ -424,9 +424,7 @@ class Tests extends TestsConfig with DisciplineSuite {
   // esoteric machinery follows...
 
   implicit lazy val band: Band[(Int, Int)] =
-    new Band[(Int, Int)] {
-      def combine(a: (Int, Int), b: (Int, Int)) = (a._1, b._2)
-    }
+    Band.instance((a, b) => (a._1, b._2))
 
   {
     // In order to check the monoid laws for `Order[N]`, we need

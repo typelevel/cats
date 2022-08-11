@@ -89,8 +89,6 @@ object Semilattice extends SemilatticeFunctions[Semilattice] {
   /**
    * Create a `Semilattice` instance from the given function.
    */
-  @inline def instance[A](cmb: (A, A) => A): Semilattice[A] =
-    new Semilattice[A] {
-      override def combine(x: A, y: A): A = cmb(x, y)
-    }
+  @inline def instance[@sp(Int, Long, Float, Double) A](cmb: (A, A) => A): Semilattice[A] =
+    cmb(_, _)
 }
