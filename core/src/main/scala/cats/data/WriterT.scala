@@ -449,9 +449,7 @@ sealed abstract private[data] class WriterTInstances2 extends WriterTInstances3 
     }
 
   implicit def catsDataShowForWriterT[F[_], L, V](implicit F: Show[F[(L, V)]]): Show[WriterT[F, L, V]] =
-    new Show[WriterT[F, L, V]] {
-      override def show(f: WriterT[F, L, V]): String = f.show
-    }
+    Show.show(_.show)
 
   implicit def catsDataMonoidForWriterTId[L: Monoid, V: Monoid]: Monoid[WriterT[Id, L, V]] =
     catsDataMonoidForWriterT[Id, L, V]

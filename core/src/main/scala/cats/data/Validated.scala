@@ -928,9 +928,7 @@ sealed abstract private[data] class ValidatedInstances extends ValidatedInstance
     }
 
   implicit def catsDataShowForValidated[A, B](implicit A: Show[A], B: Show[B]): Show[Validated[A, B]] =
-    new Show[Validated[A, B]] {
-      def show(f: Validated[A, B]): String = f.show
-    }
+    Show.show(_.show)
 
   implicit val catsDataBitraverseForValidated: Bitraverse[Validated] =
     new Bitraverse[Validated] {

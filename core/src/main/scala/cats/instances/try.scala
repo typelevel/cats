@@ -181,12 +181,9 @@ trait TryInstances extends TryInstances1 {
     }
 
   implicit def catsStdShowForTry[A](implicit A: Show[A]): Show[Try[A]] =
-    new Show[Try[A]] {
-      def show(fa: Try[A]): String =
-        fa match {
-          case Success(a) => s"Success(${A.show(a)})"
-          case Failure(e) => s"Failure($e)"
-        }
+    Show.show {
+      case Success(a) => s"Success(${A.show(a)})"
+      case Failure(e) => s"Failure($e)"
     }
 
   /**

@@ -104,9 +104,7 @@ sealed abstract private[data] class ConstInstances extends ConstInstances0 {
     }
 
   implicit def catsDataShowForConst[A: Show, B]: Show[Const[A, B]] =
-    new Show[Const[A, B]] {
-      def show(f: Const[A, B]): String = f.show
-    }
+    Show.show(_.show)
 
   implicit def catsDataTraverseForConst[C]: Traverse[Const[C, *]] =
     new Traverse[Const[C, *]] {

@@ -232,12 +232,9 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
     }
 
   implicit def catsStdShowForEither[A, B](implicit A: Show[A], B: Show[B]): Show[Either[A, B]] =
-    new Show[Either[A, B]] {
-      def show(x: Either[A, B]): String =
-        x match {
-          case Left(a)  => "Left(" + A.show(a) + ")"
-          case Right(b) => "Right(" + B.show(b) + ")"
-        }
+    Show.show {
+      case Left(a)  => "Left(" + A.show(a) + ")"
+      case Right(b) => "Right(" + B.show(b) + ")"
     }
 
   implicit def catsParallelForEitherAndValidated[E: Semigroup]: Parallel.Aux[Either[E, *], Validated[E, *]] =
