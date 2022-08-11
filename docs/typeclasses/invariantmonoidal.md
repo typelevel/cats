@@ -27,7 +27,7 @@ def unit: Semigroup[Unit] =
   Semigroup.instance((_, _) => ())
 
 def product[A, B](fa: Semigroup[A], fb: Semigroup[B]): Semigroup[(A, B)] =
-  Semigroup.instances { case ((xa, xb), (ya, yb)) =>
+  Semigroup.instance { case ((xa, xb), (ya, yb)) =>
     fa.combine(xa, ya) -> fb.combine(xb, yb)
   }
 ```
