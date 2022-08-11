@@ -75,20 +75,19 @@ private[instances] trait EitherInstances0 extends EitherInstances1 {
     A: PartialOrder[A],
     B: PartialOrder[B]
   ): PartialOrder[Either[A, B]] =
-    new PartialOrder[Either[A, B]] {
-      def partialCompare(x: Either[A, B], y: Either[A, B]): Double =
-        x match {
-          case Left(xx) =>
-            y match {
-              case Left(yy) => A.partialCompare(xx, yy)
-              case Right(_) => -1.0
-            }
-          case Right(xx) =>
-            y match {
-              case Left(_)   => 1.0
-              case Right(yy) => B.partialCompare(xx, yy)
-            }
-        }
+    PartialOrder.from { (x, y) =>
+      x match {
+        case Left(xx) =>
+          y match {
+            case Left(yy) => A.partialCompare(xx, yy)
+            case Right(_) => -1.0
+          }
+        case Right(xx) =>
+          y match {
+            case Left(_)   => 1.0
+            case Right(yy) => B.partialCompare(xx, yy)
+          }
+      }
     }
 
   implicit def catsStdHashForEither[A, B](implicit A: Hash[A], B: Hash[B]): Hash[Either[A, B]] = new EitherHash[A, B]

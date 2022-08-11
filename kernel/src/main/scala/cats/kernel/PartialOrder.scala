@@ -162,31 +162,22 @@ object PartialOrder extends PartialOrderFunctions[PartialOrder] with PartialOrde
    * function `f`.
    */
   def by[@sp A, @sp B](f: A => B)(implicit ev: PartialOrder[B]): PartialOrder[A] =
-    new PartialOrder[A] {
-      def partialCompare(x: A, y: A): Double = ev.partialCompare(f(x), f(y))
-    }
+    from((x, y) => ev.partialCompare(f(x), f(y)))
 
   /**
    * Defines a partial order on `A` from p where all arrows switch direction.
    */
   def reverse[@sp A](p: PartialOrder[A]): PartialOrder[A] =
-    new PartialOrder[A] {
-      def partialCompare(x: A, y: A): Double = p.partialCompare(y, x)
-    }
+    from((x, y) => p.partialCompare(y, x))
 
   /**
    * Define a `PartialOrder[A]` using the given function `f`.
    */
   def from[@sp A](f: (A, A) => Double): PartialOrder[A] =
-    new PartialOrder[A] {
-      def partialCompare(x: A, y: A) = f(x, y)
-    }
+    f(_, _)
 
   def fromPartialOrdering[A](implicit ev: PartialOrdering[A]): PartialOrder[A] =
-    new PartialOrder[A] {
-      def partialCompare(x: A, y: A): Double =
-        ev.tryCompare(x, y).fold(Double.NaN)(_.toDouble)
-    }
+    from((x, y) => ev.tryCompare(x, y).fold(Double.NaN)(_.toDouble))
 }
 
 trait PartialOrderToPartialOrderingConversion {

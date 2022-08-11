@@ -47,9 +47,7 @@ private[instances] trait FunctionInstances0 extends FunctionInstances1 {
     }
 
   implicit def catsKernelPartialOrderForFunction0[A](implicit ev: PartialOrder[A]): PartialOrder[() => A] =
-    new PartialOrder[() => A] {
-      def partialCompare(x: () => A, y: () => A): Double = ev.partialCompare(x(), y())
-    }
+    PartialOrder.by(_.apply())
 
   implicit def catsKernelGroupForFunction0[A](implicit G: Group[A]): Group[() => A] =
     new Function0Group[A] { def A: Group[A] = G }

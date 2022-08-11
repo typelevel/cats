@@ -53,11 +53,7 @@ sealed private[instances] trait FutureInstances0 extends FutureInstances1 {
 
 sealed private[instances] trait FutureInstances1 extends FutureInstances2 {
   def futurePartialOrder[A: PartialOrder](atMost: FiniteDuration)(implicit ec: E): PartialOrder[Future[A]] =
-    new PartialOrder[Future[A]] {
-      def partialCompare(x: Future[A], y: Future[A]): Double =
-        Await.result(x.zip(y).map { case (x, y) => x.partialCompare(y) }, atMost)
-    }
-
+    PartialOrder.from((x, y) => Await.result(x.zip(y).map { case (x, y) => x.partialCompare(y) }, atMost))
 }
 
 sealed private[instances] trait FutureInstances2 {

@@ -196,10 +196,7 @@ sealed abstract private[data] class ConstInstances2 extends ConstInstances3 {
     }
 
   implicit def catsDataPartialOrderForConst[A: PartialOrder, B]: PartialOrder[Const[A, B]] =
-    new PartialOrder[Const[A, B]] {
-      def partialCompare(x: Const[A, B], y: Const[A, B]): Double =
-        x.partialCompare(y)
-    }
+    PartialOrder.from(_ partialCompare _)
 
   implicit def catsDataApplicativeForConst[C](implicit C: Monoid[C]): Applicative[Const[C, *]] =
     new ConstApplicative[C] { val C0: Monoid[C] = C }

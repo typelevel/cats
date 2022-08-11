@@ -281,14 +281,9 @@ object arbitrary extends ArbitraryInstances0 with ScalaVersionSpecific.Arbitrary
     Arbitrary(getArbitrary[Eq[A]].map(Eq.catsKernelEquivForEq(_)))
 
   implicit def catsLawsArbitraryForPartialOrder[A: Arbitrary]: Arbitrary[PartialOrder[A]] =
-    Arbitrary(
-      getArbitrary[Int => Double].map(f =>
-        new PartialOrder[A] {
-          def partialCompare(x: A, y: A): Double =
-            if (x.## == y.##) 0.0 else f(x.##) - f(y.##)
-        }
-      )
-    )
+    Arbitrary(getArbitrary[Int => Double].map { f =>
+      PartialOrder.from((x, y) => if (x.## == y.##) 0.0 else f(x.##) - f(y.##))
+    })
 
   implicit def catsLawsArbitraryForPartialOrdering[A: Arbitrary]: Arbitrary[PartialOrdering[A]] =
     Arbitrary(getArbitrary[PartialOrder[A]].map(PartialOrder.catsKernelPartialOrderingForPartialOrder(_)))

@@ -42,13 +42,12 @@ trait Semilattice[@sp(Int, Long, Float, Double) A] extends Any with Band[A] with
    *    NaN otherwise
    */
   def asMeetPartialOrder(implicit ev: Eq[A]): PartialOrder[A] =
-    new PartialOrder[A] {
-      def partialCompare(x: A, y: A): Double =
-        if (ev.eqv(x, y)) 0.0
-        else {
-          val z = self.combine(x, y)
-          if (ev.eqv(x, z)) -1.0 else if (ev.eqv(y, z)) 1.0 else Double.NaN
-        }
+    PartialOrder.from { (x, y) =>
+      if (ev.eqv(x, y)) 0.0
+      else {
+        val z = self.combine(x, y)
+        if (ev.eqv(x, z)) -1.0 else if (ev.eqv(y, z)) 1.0 else Double.NaN
+      }
     }
 
   /**
@@ -64,13 +63,12 @@ trait Semilattice[@sp(Int, Long, Float, Double) A] extends Any with Band[A] with
    *    NaN otherwise
    */
   def asJoinPartialOrder(implicit ev: Eq[A]): PartialOrder[A] =
-    new PartialOrder[A] {
-      def partialCompare(x: A, y: A): Double =
-        if (ev.eqv(x, y)) 0.0
-        else {
-          val z = self.combine(x, y)
-          if (ev.eqv(y, z)) -1.0 else if (ev.eqv(x, z)) 1.0 else Double.NaN
-        }
+    PartialOrder.from { (x, y) =>
+      if (ev.eqv(x, y)) 0.0
+      else {
+        val z = self.combine(x, y)
+        if (ev.eqv(y, z)) -1.0 else if (ev.eqv(x, z)) 1.0 else Double.NaN
+      }
     }
 }
 

@@ -455,10 +455,7 @@ sealed abstract private[cats] class EvalInstances extends EvalInstances0 {
 
 sealed abstract private[cats] class EvalInstances0 extends EvalInstances1 {
   implicit def catsPartialOrderForEval[A: PartialOrder]: PartialOrder[Eval[A]] =
-    new PartialOrder[Eval[A]] {
-      def partialCompare(lx: Eval[A], ly: Eval[A]): Double =
-        PartialOrder[A].partialCompare(lx.value, ly.value)
-    }
+    PartialOrder.by(_.value)
 
   implicit def catsMonoidForEval[A: Monoid]: Monoid[Eval[A]] =
     new EvalMonoid[A] { val algebra = Monoid[A] }
