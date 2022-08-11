@@ -29,9 +29,7 @@ import scala.util.control.TailCalls.{done, tailcall, TailRec}
 trait FunctionInstances extends FunctionInstances0 {
 
   implicit def catsKernelOrderForFunction0[A](implicit ev: Order[A]): Order[() => A] =
-    new Order[() => A] {
-      def compare(x: () => A, y: () => A): Int = ev.compare(x(), y())
-    }
+    Order.by(_.apply())
 
   implicit def catsKernelCommutativeGroupForFunction0[A](implicit G: CommutativeGroup[A]): CommutativeGroup[() => A] =
     new Function0Group[A] with CommutativeGroup[() => A] { def A: Group[A] = G }

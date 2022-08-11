@@ -48,10 +48,7 @@ sealed private[instances] trait FutureInstances0 extends FutureInstances1 {
     }
 
   def futureOrder[A: Order](atMost: FiniteDuration)(implicit ec: E): Order[Future[A]] =
-    new Order[Future[A]] {
-      def compare(x: Future[A], y: Future[A]): Int =
-        Await.result(x.zip(y).map { case (x, y) => x.compare(y) }, atMost)
-    }
+    Order.from((x, y) => Await.result(x.zip(y).map { case (x, y) => x.compare(y) }, atMost))
 }
 
 sealed private[instances] trait FutureInstances1 extends FutureInstances2 {

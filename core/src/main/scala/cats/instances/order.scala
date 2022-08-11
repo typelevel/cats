@@ -43,11 +43,9 @@ trait OrderInstances extends kernel.instances.OrderInstances {
         Order.by(f)(fa)
 
       def product[A, B](fa: Order[A], fb: Order[B]): Order[(A, B)] =
-        new Order[(A, B)] {
-          def compare(x: (A, B), y: (A, B)): Int = {
-            val z = fa.compare(x._1, y._1)
-            if (z == 0) fb.compare(x._2, y._2) else z
-          }
+        Order.from { (x, y) =>
+          val z = fa.compare(x._1, y._1)
+          if (z == 0) fb.compare(x._2, y._2) else z
         }
     }
 }

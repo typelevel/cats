@@ -431,10 +431,7 @@ sealed abstract private[cats] class EvalInstances extends EvalInstances0 {
     }
 
   implicit def catsOrderForEval[A: Order]: Order[Eval[A]] =
-    new Order[Eval[A]] {
-      def compare(lx: Eval[A], ly: Eval[A]): Int =
-        Order[A].compare(lx.value, ly.value)
-    }
+    Order.by(_.value)
 
   implicit def catsGroupForEval[A: Group]: Group[Eval[A]] =
     new EvalGroup[A] { val algebra: Group[A] = Group[A] }

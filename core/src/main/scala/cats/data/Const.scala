@@ -91,10 +91,7 @@ sealed abstract private[data] class ConstInstances extends ConstInstances0 {
     }
 
   implicit def catsDataOrderForConst[A: Order, B]: Order[Const[A, B]] =
-    new Order[Const[A, B]] {
-      def compare(x: Const[A, B], y: Const[A, B]): Int =
-        x.compare(y)
-    }
+    Order.from(_ compare _)
 
   implicit def catsDataAlignForConst[A: Semigroup]: Align[Const[A, *]] =
     new Align[Const[A, *]] {

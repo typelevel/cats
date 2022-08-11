@@ -858,10 +858,7 @@ sealed abstract private[data] class IorInstances extends IorInstances0 {
   }
 
   implicit def catsDataOrderForIor[A: Order, B: Order]: Order[A Ior B] =
-    new Order[A Ior B] {
-
-      def compare(x: Ior[A, B], y: Ior[A, B]): Int = x.compare(y)
-    }
+    Order.from(_ compare _)
 
   implicit def catsDataShowForIor[A: Show, B: Show]: Show[A Ior B] =
     Show.show(_.show)
