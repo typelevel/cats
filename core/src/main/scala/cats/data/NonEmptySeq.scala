@@ -522,8 +522,7 @@ sealed abstract private[data] class NonEmptySeqInstances {
         NonEmptySeq.fromSeqUnsafe(Align[Seq].alignWith(fa.toSeq, fb.toSeq)(f))
     }
 
-  implicit def catsDataEqForNonEmptySeq[A](implicit A: Eq[A]): Eq[NonEmptySeq[A]] =
-    Eq.instance(_ === _)
+  implicit def catsDataEqForNonEmptySeq[A: Eq]: Eq[NonEmptySeq[A]] = _ === _
 
   implicit def catsDataShowForNonEmptySeq[A](implicit A: Show[A]): Show[NonEmptySeq[A]] =
     Show.show[NonEmptySeq[A]](_.show)

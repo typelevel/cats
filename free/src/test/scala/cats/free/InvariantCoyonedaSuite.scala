@@ -50,11 +50,10 @@ class InvariantCoyonedaSuite extends CatsSuite {
 
   // We can't really test that magmas are equal but we can try it with a bunch of test data.
   implicit def invariantCoyonedaEq[A: Arbitrary: Eq]: Eq[InvariantCoyoneda[Magma, A]] =
-    Eq.instance { (cca, ccb) =>
+    (cca, ccb) =>
       Arbitrary.arbitrary[List[(A, A)]].sample.get.forall { case (x, y) =>
         cca.run.apply(x, y) == ccb.run.apply(x, y)
       }
-    }
 
   // Needed to help implicit resolution?
   implicit val invariantCoyonedaMagma: Invariant[InvariantCoyoneda[Magma, *]] =

@@ -41,11 +41,10 @@ class ContravariantCoyonedaSuite extends CatsSuite {
 
   // We can't really test that functions are equal but we can try it with a bunch of test data.
   implicit def contravariantCoyonedaEq[A: Arbitrary, T](implicit eqft: Eq[T]): Eq[ContravariantCoyoneda[* => T, A]] =
-    Eq.instance { (cca, ccb) =>
+    (cca, ccb) =>
       Arbitrary.arbitrary[List[A]].sample.get.forall { a =>
         eqft.eqv(cca.run.apply(a), ccb.run.apply(a))
       }
-    }
 
   // This instance cannot be summoned implicitly. This is not specific to contravariant coyoneda;
   // it doesn't work for Functor[Coyoneda[* => String, *]] either.

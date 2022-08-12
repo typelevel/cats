@@ -989,8 +989,7 @@ sealed abstract private[data] class IorInstances0 {
         fa.map(f)
     }
 
-  implicit def catsDataEqForIor[A: Eq, B: Eq]: Eq[A Ior B] =
-    Eq.instance(_ === _)
+  implicit def catsDataEqForIor[A: Eq, B: Eq]: Eq[A Ior B] = _ === _
 }
 
 sealed private[data] trait IorFunctions {

@@ -1391,7 +1391,9 @@ sealed abstract private[data] class ChainInstances2 extends ChainInstances3 {
 
 sealed abstract private[data] class ChainInstances3 {
   implicit def catsDataEqForChain[A](implicit A: Eq[A]): Eq[Chain[A]] =
-    Eq.instance(_ === _)
+    new Eq[Chain[A]] {
+      def eqv(x: Chain[A], y: Chain[A]): Boolean = x === y
+    }
 }
 
 private[data] trait ChainPartialOrder[A] extends PartialOrder[Chain[A]] {

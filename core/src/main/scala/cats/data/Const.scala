@@ -201,9 +201,7 @@ sealed abstract private[data] class ConstInstances2 extends ConstInstances3 {
 }
 
 sealed abstract private[data] class ConstInstances3 extends ConstInstances4 {
-
-  implicit def catsDataEqForConst[A: Eq, B]: Eq[Const[A, B]] =
-    Eq.instance(_ === _)
+  implicit def catsDataEqForConst[A: Eq, B]: Eq[Const[A, B]] = _ === _
 
   implicit def catsDataApplyForConst[C](implicit C: Semigroup[C]): Apply[Const[C, *]] =
     new ConstApply[C] { val C0: Semigroup[C] = C }

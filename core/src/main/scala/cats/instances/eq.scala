@@ -41,8 +41,6 @@ trait EqInstances extends kernel.instances.EqInstances {
         Eq.by(f)(fa)
 
       def product[A, B](fa: Eq[A], fb: Eq[B]): Eq[(A, B)] =
-        Eq.instance { (left, right) =>
-          fa.eqv(left._1, right._1) && fb.eqv(left._2, right._2)
-        }
+        (left, right) => fa.eqv(left._1, right._1) && fb.eqv(left._2, right._2)
     }
 }

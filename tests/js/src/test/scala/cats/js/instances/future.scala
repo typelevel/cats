@@ -58,5 +58,5 @@ sealed private[instances] trait FutureInstances1 extends FutureInstances2 {
 
 sealed private[instances] trait FutureInstances2 {
   def futureEq[A: Eq](atMost: FiniteDuration)(implicit ec: E): Eq[Future[A]] =
-    Eq.instance((x, y) => Await.result(x.zip(y).map { case (x, y) => x === y }, atMost))
+    (x, y) => Await.result(x.zip(y).map { case (x, y) => x === y }, atMost)
 }
