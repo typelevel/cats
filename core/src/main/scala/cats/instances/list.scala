@@ -275,7 +275,7 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
     }
 
   implicit def catsStdShowForList[A: Show]: Show[List[A]] =
-    Show.show(_.iterator.map(Show[A].show).mkString("List(", ", ", ")"))
+    _.iterator.map(Show[A].show).mkString("List(", ", ", ")")
 
   implicit def catsStdNonEmptyParallelForListZipList: NonEmptyParallel.Aux[List, ZipList] =
     new NonEmptyParallel[List] {

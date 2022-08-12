@@ -54,13 +54,10 @@ private trait FreeStructuralInstances0 extends FreeStructuralInstances1 {
     SF: Functor[S],
     S: => Show[S[Free[S, A]]],
     A: Show[A]
-  ): Show[Free[S, A]] =
-    Show.show { fsa =>
-      fsa.resume match {
-        case Right(a)  => A.show(a)
-        case Left(sfa) => S.show(sfa)
-      }
-    }
+  ): Show[Free[S, A]] = _.resume match {
+    case Right(a)  => A.show(a)
+    case Left(sfa) => S.show(sfa)
+  }
 
   implicit def catsFreeHashForFree[S[_], A](implicit
     SF: Functor[S],

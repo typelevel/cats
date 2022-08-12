@@ -858,7 +858,8 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
   def hash[AA >: A](implicit hashA: Hash[AA]): Int =
     KernelStaticMethods.orderedHash((this: Chain[AA]).iterator)
 
-  override def toString: String = show(Show.show[A](_.toString))
+  override def toString: String =
+    show(Show.fromToString)
 
   override def equals(o: Any): Boolean =
     o match {
@@ -1320,8 +1321,7 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
       }
     }
 
-  implicit def catsDataShowForChain[A](implicit A: Show[A]): Show[Chain[A]] =
-    Show.show[Chain[A]](_.show)
+  implicit def catsDataShowForChain[A: Show]: Show[Chain[A]] = _.show
 
   implicit def catsDataOrderForChain[A](implicit A0: Order[A]): Order[Chain[A]] =
     new Order[Chain[A]] with ChainPartialOrder[A] {

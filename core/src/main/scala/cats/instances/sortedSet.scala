@@ -84,7 +84,7 @@ trait SortedSetInstances extends SortedSetInstances1 {
     }
 
   implicit def catsStdShowForSortedSet[A: Show]: Show[SortedSet[A]] =
-    Show.show(_.iterator.map(Show[A].show).mkString("SortedSet(", ", ", ")"))
+    _.iterator.map(Show[A].show).mkString("SortedSet(", ", ", ")")
 
   @deprecated("Use cats.kernel.instances.sortedSet.catsKernelStdOrderForSortedSet", "2.0.0-RC2")
   private[instances] def catsKernelStdOrderForSortedSet[A: Order]: Order[SortedSet[A]] =

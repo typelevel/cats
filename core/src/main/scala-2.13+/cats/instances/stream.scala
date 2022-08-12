@@ -196,7 +196,7 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
 
   @deprecated("Use cats.instances.lazyList", "2.0.0-RC2")
   implicit def catsStdShowForStream[A: Show]: Show[Stream[A]] =
-    Show.show(stream => if (stream.isEmpty) "Stream()" else s"Stream(${stream.head.show}, ?)")
+    stream => if (stream.isEmpty) "Stream()" else s"Stream(${stream.head.show}, ?)"
 
   @deprecated("Use catsStdParallelForZipLazyList", "2.0.0-RC2")
   implicit def catsStdParallelForStreamZipStream: Parallel.Aux[Stream, ZipStream] =

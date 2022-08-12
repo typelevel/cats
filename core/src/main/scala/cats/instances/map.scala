@@ -32,11 +32,9 @@ import cats.data.Ior
 trait MapInstances extends cats.kernel.instances.MapInstances {
 
   implicit def catsStdShowForMap[A, B](implicit showA: Show[A], showB: Show[B]): Show[Map[A, B]] =
-    Show.show(
-      _.iterator
-        .map { case (a, b) => showA.show(a) + " -> " + showB.show(b) }
-        .mkString("Map(", ", ", ")")
-    )
+    _.iterator
+      .map { case (a, b) => showA.show(a) + " -> " + showB.show(b) }
+      .mkString("Map(", ", ", ")")
 
   implicit def catsStdInstancesForMap[K]: UnorderedTraverse[Map[K, *]] with FlatMap[Map[K, *]] with Align[Map[K, *]] =
     new UnorderedTraverse[Map[K, *]] with FlatMap[Map[K, *]] with Align[Map[K, *]] {

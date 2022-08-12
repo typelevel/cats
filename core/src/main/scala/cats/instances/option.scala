@@ -252,11 +252,10 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
         if (oa.isDefined) someUnit else None
     }
 
-  implicit def catsStdShowForOption[A](implicit A: Show[A]): Show[Option[A]] =
-    Show.show {
-      case Some(a) => s"Some(${A.show(a)})"
-      case None    => "None"
-    }
+  implicit def catsStdShowForOption[A](implicit A: Show[A]): Show[Option[A]] = {
+    case Some(a) => s"Some(${A.show(a)})"
+    case None    => "None"
+  }
 }
 
 @suppressUnusedImportWarningForScalaVersionSpecific

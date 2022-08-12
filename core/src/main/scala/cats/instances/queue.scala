@@ -199,7 +199,7 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
     }
 
   implicit def catsStdShowForQueue[A: Show]: Show[Queue[A]] =
-    Show.show(_.iterator.map(Show[A].show).mkString("Queue(", ", ", ")"))
+    _.iterator.map(Show[A].show).mkString("Queue(", ", ", ")")
 
   implicit def catsStdTraverseFilterForQueue: TraverseFilter[Queue] = QueueInstances.catsStdTraverseFilterForQueue
 }

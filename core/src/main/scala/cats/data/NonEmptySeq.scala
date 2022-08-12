@@ -524,8 +524,7 @@ sealed abstract private[data] class NonEmptySeqInstances {
 
   implicit def catsDataEqForNonEmptySeq[A: Eq]: Eq[NonEmptySeq[A]] = _ === _
 
-  implicit def catsDataShowForNonEmptySeq[A](implicit A: Show[A]): Show[NonEmptySeq[A]] =
-    Show.show[NonEmptySeq[A]](_.show)
+  implicit def catsDataShowForNonEmptySeq[A: Show]: Show[NonEmptySeq[A]] = _.show
 
   implicit def catsDataSemigroupForNonEmptySeq[A]: Semigroup[NonEmptySeq[A]] =
     catsDataInstancesForNonEmptySeq.algebra

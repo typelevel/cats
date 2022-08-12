@@ -149,8 +149,7 @@ sealed abstract private[data] class OneAndInstances extends OneAndLowPriority0 {
 
   implicit def catsDataEqForOneAnd[A, F[_]](implicit A: Eq[A], FA: Eq[F[A]]): Eq[OneAnd[F, A]] = _ === _
 
-  implicit def catsDataShowForOneAnd[A, F[_]](implicit A: Show[A], FA: Show[F[A]]): Show[OneAnd[F, A]] =
-    Show.show[OneAnd[F, A]](_.show)
+  implicit def catsDataShowForOneAnd[A, F[_]](implicit A: Show[A], FA: Show[F[A]]): Show[OneAnd[F, A]] = _.show
 
   implicit def catsDataSemigroupKForOneAnd[F[_]: Alternative]: SemigroupK[OneAnd[F, *]] =
     new SemigroupK[OneAnd[F, *]] {

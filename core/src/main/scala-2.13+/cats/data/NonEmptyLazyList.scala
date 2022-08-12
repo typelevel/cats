@@ -553,8 +553,7 @@ sealed abstract private[data] class NonEmptyLazyListInstances extends NonEmptyLa
   implicit def catsDataSemigroupForNonEmptyLazyList[A]: Semigroup[NonEmptyLazyList[A]] =
     Semigroup[LazyList[A]].asInstanceOf[Semigroup[NonEmptyLazyList[A]]]
 
-  implicit def catsDataShowForNonEmptyLazyList[A](implicit A: Show[A]): Show[NonEmptyLazyList[A]] =
-    Show.show[NonEmptyLazyList[A]](_.show)
+  implicit def catsDataShowForNonEmptyLazyList[A: Show]: Show[NonEmptyLazyList[A]] = _.show
 
   implicit def catsDataParallelForNonEmptyLazyList: Parallel.Aux[NonEmptyLazyList, OneAnd[ZipLazyList, *]] =
     new Parallel[NonEmptyLazyList] {

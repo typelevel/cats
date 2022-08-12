@@ -364,8 +364,7 @@ sealed abstract private[data] class NonEmptyMapInstances extends NonEmptyMapInst
   def catsDataHashForNonEmptyMap[K, A](hashK: Hash[K], orderK: Order[K], hashA: Hash[A]): Hash[NonEmptyMap[K, A]] =
     catsDataHashForNonEmptyMap(hashK, hashA)
 
-  implicit def catsDataShowForNonEmptyMap[K: Show, A: Show]: Show[NonEmptyMap[K, A]] =
-    Show.show[NonEmptyMap[K, A]](_.show)
+  implicit def catsDataShowForNonEmptyMap[K: Show, A: Show]: Show[NonEmptyMap[K, A]] = _.show
 
   @deprecated("Use catsDataSemigroupForNonEmptyMap", "2.5.0")
   def catsDataBandForNonEmptyMap[K, A]: Band[NonEmptyMap[K, A]] =

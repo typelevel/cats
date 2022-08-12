@@ -927,8 +927,7 @@ sealed abstract private[data] class ValidatedInstances extends ValidatedInstance
       override def eqv(x: Validated[A, B], y: Validated[A, B]): Boolean = x === y
     }
 
-  implicit def catsDataShowForValidated[A, B](implicit A: Show[A], B: Show[B]): Show[Validated[A, B]] =
-    Show.show(_.show)
+  implicit def catsDataShowForValidated[A: Show, B: Show]: Show[Validated[A, B]] = _.show
 
   implicit val catsDataBitraverseForValidated: Bitraverse[Validated] =
     new Bitraverse[Validated] {

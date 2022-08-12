@@ -229,7 +229,7 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
     }
 
   implicit def catsStdShowForVector[A: Show]: Show[Vector[A]] =
-    Show.show(_.iterator.map(Show[A].show).mkString("Vector(", ", ", ")"))
+    _.iterator.map(Show[A].show).mkString("Vector(", ", ", ")")
 
   implicit def catsStdNonEmptyParallelForVectorZipVector: NonEmptyParallel.Aux[Vector, ZipVector] =
     new NonEmptyParallel[Vector] {

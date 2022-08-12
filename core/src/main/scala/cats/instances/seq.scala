@@ -207,7 +207,7 @@ trait SeqInstances extends cats.kernel.instances.SeqInstances {
   }
 
   implicit def catsStdShowForSeq[A: Show]: Show[Seq[A]] =
-    Show.show(_.map(Show[A].show).toString)
+    _.map(Show[A].show).toString
 
   implicit def catsStdNonEmptyParallelForSeqZipSeq: NonEmptyParallel.Aux[Seq, ZipSeq] =
     new NonEmptyParallel[Seq] {

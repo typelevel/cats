@@ -446,8 +446,7 @@ sealed abstract private[data] class WriterTInstances2 extends WriterTInstances3 
         fab.bimap(f, g)
     }
 
-  implicit def catsDataShowForWriterT[F[_], L, V](implicit F: Show[F[(L, V)]]): Show[WriterT[F, L, V]] =
-    Show.show(_.show)
+  implicit def catsDataShowForWriterT[F[_], L, V](implicit F: Show[F[(L, V)]]): Show[WriterT[F, L, V]] = _.show
 
   implicit def catsDataMonoidForWriterTId[L: Monoid, V: Monoid]: Monoid[WriterT[Id, L, V]] =
     catsDataMonoidForWriterT[Id, L, V]

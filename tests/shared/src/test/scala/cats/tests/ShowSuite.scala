@@ -39,13 +39,13 @@ class ShowSuite extends CatsSuite {
   sealed trait TimeOfDay
   case object Morning extends TimeOfDay
   object TimeOfDay {
-    implicit val showTimeOfDay: Show[TimeOfDay] = Show.show { case Morning => "morning" }
+    implicit val showTimeOfDay: Show[TimeOfDay] = { case Morning => "morning" }
   }
 
   test("show string interpolator") {
     case class Cat(name: String)
     object Cat {
-      implicit val showCat: Show[Cat] = Show.show(_.name)
+      implicit val showCat: Show[Cat] = _.name
     }
     val tod: TimeOfDay = Morning
     val cat = Cat("Whiskers")
