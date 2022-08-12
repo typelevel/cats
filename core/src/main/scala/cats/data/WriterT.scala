@@ -403,7 +403,7 @@ sealed abstract private[data] class WriterTInstances1 extends WriterTInstances2 
     catsDataFoldableForWriterT[Id, L](F)
 
   implicit def catsDataOrderForWriterT[F[_], L, V](implicit Ord: Order[F[(L, V)]]): Order[WriterT[F, L, V]] =
-    Order.from(_ compare _)
+    _ compare _
 }
 
 sealed abstract private[data] class WriterTInstances2 extends WriterTInstances3 {

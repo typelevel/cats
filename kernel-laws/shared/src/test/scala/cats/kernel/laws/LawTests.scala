@@ -353,13 +353,11 @@ class Tests extends TestsConfig with DisciplineSuite {
   // Comparison related
 
   // Something that can give NaN for test
-  def subsetPartialOrder[A]: PartialOrder[Set[A]] =
-    PartialOrder.from { (x, y) =>
-      if (x == y) 0.0
-      else if (x.subsetOf(y)) -1.0
-      else if (y.subsetOf(x)) 1.0
-      else Double.NaN
-    }
+  def subsetPartialOrder[A]: PartialOrder[Set[A]] = (x, y) =>
+    if (x == y) 0.0
+    else if (x.subsetOf(y)) -1.0
+    else if (y.subsetOf(x)) 1.0
+    else Double.NaN
 
   checkAll("subsetPartialOrder[Int]", PartialOrderTests(subsetPartialOrder[Int]).partialOrder)
 

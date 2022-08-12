@@ -25,19 +25,20 @@ package instances
 trait EitherInstances extends EitherInstances0 {
 
   implicit def catsStdOrderForEither[A, B](implicit A: Order[A], B: Order[B]): Order[Either[A, B]] =
-    Order.from { (x, y) =>
-      x match {
-        case Left(xx) =>
-          y match {
-            case Left(yy) => A.compare(xx, yy)
-            case Right(_) => -1
-          }
-        case Right(xx) =>
-          y match {
-            case Left(_)   => 1
-            case Right(yy) => B.compare(xx, yy)
-          }
-      }
+    new Order[Either[A, B]] {
+      def compare(x: Either[A, B], y: Either[A, B]): Int =
+        x match {
+          case Left(xx) =>
+            y match {
+              case Left(yy) => A.compare(xx, yy)
+              case Right(_) => -1
+            }
+          case Right(xx) =>
+            y match {
+              case Left(_)   => 1
+              case Right(yy) => B.compare(xx, yy)
+            }
+        }
     }
 
   implicit def catsDataMonoidForEither[A, B](implicit B: Monoid[B]): Monoid[Either[A, B]] =
@@ -74,19 +75,20 @@ private[instances] trait EitherInstances0 extends EitherInstances1 {
     A: PartialOrder[A],
     B: PartialOrder[B]
   ): PartialOrder[Either[A, B]] =
-    PartialOrder.from { (x, y) =>
-      x match {
-        case Left(xx) =>
-          y match {
-            case Left(yy) => A.partialCompare(xx, yy)
-            case Right(_) => -1.0
-          }
-        case Right(xx) =>
-          y match {
-            case Left(_)   => 1.0
-            case Right(yy) => B.partialCompare(xx, yy)
-          }
-      }
+    new PartialOrder[Either[A, B]] {
+      def partialCompare(x: Either[A, B], y: Either[A, B]): Double =
+        x match {
+          case Left(xx) =>
+            y match {
+              case Left(yy) => A.partialCompare(xx, yy)
+              case Right(_) => -1.0
+            }
+          case Right(xx) =>
+            y match {
+              case Left(_)   => 1.0
+              case Right(yy) => B.partialCompare(xx, yy)
+            }
+        }
     }
 
   implicit def catsStdHashForEither[A, B](implicit A: Hash[A], B: Hash[B]): Hash[Either[A, B]] = new EitherHash[A, B]
