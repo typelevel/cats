@@ -29,7 +29,10 @@ trait BoundedJoinSemilattice[@sp(Int, Long, Float, Double) A] extends Any with J
   def isZero(a: A)(implicit ev: Eq[A]): Boolean = ev.eqv(a, zero)
 
   override def joinSemilattice: BoundedSemilattice[A] =
-    BoundedSemilattice.instance(zero, join)
+    new BoundedSemilattice[A] {
+      def empty: A = zero
+      def combine(x: A, y: A): A = join(x, y)
+    }
 }
 
 trait BoundedJoinSemilatticeFunctions[B[A] <: BoundedJoinSemilattice[A]] extends JoinSemilatticeFunctions[B] {

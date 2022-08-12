@@ -29,7 +29,10 @@ trait BoundedMeetSemilattice[@sp(Int, Long, Float, Double) A] extends Any with M
   def isOne(a: A)(implicit ev: Eq[A]): Boolean = ev.eqv(a, one)
 
   override def meetSemilattice: BoundedSemilattice[A] =
-    BoundedSemilattice.instance(one, meet)
+    new BoundedSemilattice[A] {
+      def empty: A = one
+      def combine(x: A, y: A): A = meet(x, y)
+    }
 }
 
 trait BoundedMeetSemilatticeFunctions[B[A] <: BoundedMeetSemilattice[A]] extends MeetSemilatticeFunctions[B] {

@@ -32,8 +32,7 @@ import scala.{specialized => sp}
 trait JoinSemilattice[@sp(Int, Long, Float, Double) A] extends Any with Serializable {
   def join(lhs: A, rhs: A): A
 
-  def joinSemilattice: Semilattice[A] =
-    Semilattice.instance(join)
+  def joinSemilattice: Semilattice[A] = join(_, _)
 
   def joinPartialOrder(implicit ev: Eq[A]): PartialOrder[A] =
     joinSemilattice.asJoinPartialOrder

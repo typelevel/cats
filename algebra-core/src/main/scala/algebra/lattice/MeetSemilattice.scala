@@ -32,8 +32,7 @@ import scala.{specialized => sp}
 trait MeetSemilattice[@sp(Int, Long, Float, Double) A] extends Any with Serializable {
   def meet(lhs: A, rhs: A): A
 
-  def meetSemilattice: Semilattice[A] =
-    Semilattice.instance(meet)
+  def meetSemilattice: Semilattice[A] = meet(_, _)
 
   def meetPartialOrder(implicit ev: Eq[A]): PartialOrder[A] =
     meetSemilattice.asMeetPartialOrder
