@@ -45,10 +45,10 @@ trait InvariantMonoidalInstances {
 
   implicit val catsInvariantMonoidalSemigroup: InvariantMonoidal[Semigroup] = new InvariantMonoidal[Semigroup] {
     def product[A, B](fa: Semigroup[A], fb: Semigroup[B]): Semigroup[(A, B)] =
-      Semigroup.instance((x, y) => fa.combine(x._1, y._1) -> fb.combine(x._2, y._2))
+      (x, y) => fa.combine(x._1, y._1) -> fb.combine(x._2, y._2)
 
     def imap[A, B](fa: Semigroup[A])(f: A => B)(g: B => A): Semigroup[B] =
-      Semigroup.instance((x, y) => f(fa.combine(g(x), g(y))))
+      (x, y) => f(fa.combine(g(x), g(y)))
 
     def unit: Semigroup[Unit] = implicitly
   }
@@ -56,10 +56,10 @@ trait InvariantMonoidalInstances {
   implicit val catsInvariantMonoidalCommutativeSemigroup: InvariantMonoidal[CommutativeSemigroup] =
     new InvariantMonoidal[CommutativeSemigroup] {
       def product[A, B](fa: CommutativeSemigroup[A], fb: CommutativeSemigroup[B]): CommutativeSemigroup[(A, B)] =
-        CommutativeSemigroup.instance((x, y) => fa.combine(x._1, y._1) -> fb.combine(x._2, y._2))
+        (x, y) => fa.combine(x._1, y._1) -> fb.combine(x._2, y._2)
 
       def imap[A, B](fa: CommutativeSemigroup[A])(f: A => B)(g: B => A): CommutativeSemigroup[B] =
-        CommutativeSemigroup.instance((x, y) => f(fa.combine(g(x), g(y))))
+        (x, y) => f(fa.combine(g(x), g(y)))
 
       def unit: CommutativeSemigroup[Unit] = implicitly
     }

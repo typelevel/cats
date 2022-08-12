@@ -861,8 +861,7 @@ sealed abstract private[data] class IorInstances extends IorInstances0 {
 
   implicit def catsDataShowForIor[A: Show, B: Show]: Show[A Ior B] = _.show
 
-  implicit def catsDataSemigroupForIor[A: Semigroup, B: Semigroup]: Semigroup[Ior[A, B]] =
-    Semigroup.instance(_ combine _)
+  implicit def catsDataSemigroupForIor[A: Semigroup, B: Semigroup]: Semigroup[Ior[A, B]] = _ combine _
 
   implicit def catsDataMonadErrorForIor[A: Semigroup]: MonadError[Ior[A, *], A] =
     new MonadError[Ior[A, *], A] {

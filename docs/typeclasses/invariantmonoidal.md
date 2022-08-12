@@ -23,13 +23,11 @@ To construct a `Semigroup` from a single value, we can define a trivial `Semigro
 ```scala mdoc:silent
 import cats.Semigroup
 
-def unit: Semigroup[Unit] =
-  Semigroup.instance((_, _) => ())
+def unit: Semigroup[Unit] = (_, _) => ()
 
-def product[A, B](fa: Semigroup[A], fb: Semigroup[B]): Semigroup[(A, B)] =
-  Semigroup.instance { case ((xa, xb), (ya, yb)) =>
-    fa.combine(xa, ya) -> fb.combine(xb, yb)
-  }
+def product[A, B](fa: Semigroup[A], fb: Semigroup[B]): Semigroup[(A, B)] = {
+  case ((xa, xb), (ya, yb)) => fa.combine(xa, ya) -> fb.combine(xb, yb)
+}
 ```
 
 Given an instance of `InvariantMonoidal` for `Semigroup`, we are able to combine existing `Semigroup` instances to form a new `Semigroup` by using the `Semigroupal` syntax:

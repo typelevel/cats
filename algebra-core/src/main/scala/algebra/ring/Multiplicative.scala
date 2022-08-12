@@ -26,8 +26,7 @@ import scala.{specialized => sp}
 import scala.annotation.{nowarn, tailrec}
 
 trait MultiplicativeSemigroup[@sp(Int, Long, Float, Double) A] extends Any with Serializable {
-  def multiplicative: Semigroup[A] =
-    Semigroup.instance(times)
+  def multiplicative: Semigroup[A] = times(_, _)
 
   def times(x: A, y: A): A
 
@@ -56,8 +55,7 @@ trait MultiplicativeSemigroup[@sp(Int, Long, Float, Double) A] extends Any with 
 }
 
 trait MultiplicativeCommutativeSemigroup[@sp(Int, Long, Float, Double) A] extends Any with MultiplicativeSemigroup[A] {
-  override def multiplicative: CommutativeSemigroup[A] =
-    CommutativeSemigroup.instance(times)
+  override def multiplicative: CommutativeSemigroup[A] = times(_, _)
 }
 
 trait MultiplicativeMonoid[@sp(Int, Long, Float, Double) A] extends Any with MultiplicativeSemigroup[A] {

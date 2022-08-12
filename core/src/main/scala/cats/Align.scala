@@ -135,7 +135,7 @@ trait Align[F[_]] extends Serializable {
 
 object Align extends ScalaVersionSpecificAlignInstances {
   def semigroup[F[_], A](implicit F: Align[F], A: Semigroup[A]): Semigroup[F[A]] =
-    Semigroup.instance(F.alignCombine[A])
+    F.alignCombine(_, _)
 
   implicit def catsAlignForList: Align[List] = cats.instances.list.catsStdInstancesForList
   implicit def catsAlignForOption: Align[Option] = cats.instances.option.catsStdInstancesForOption

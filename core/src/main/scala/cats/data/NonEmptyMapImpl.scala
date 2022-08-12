@@ -371,9 +371,7 @@ sealed abstract private[data] class NonEmptyMapInstances extends NonEmptyMapInst
     Band.instance(_ ++ _)
 
   implicit def catsDataSemigroupForNonEmptyMap[K, A: Semigroup]: Semigroup[NonEmptyMap[K, A]] =
-    Semigroup.instance { (x, y) =>
-      NonEmptyMap.fromMapUnsafe(Semigroup[SortedMap[K, A]].combine(x.toSortedMap, y.toSortedMap))
-    }
+    (x, y) => NonEmptyMap.fromMapUnsafe(Semigroup[SortedMap[K, A]].combine(x.toSortedMap, y.toSortedMap))
 }
 
 sealed abstract private[data] class NonEmptyMapInstances0 {

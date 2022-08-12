@@ -974,11 +974,7 @@ sealed abstract private[data] class ValidatedInstances extends ValidatedInstance
 
 sealed abstract private[data] class ValidatedInstances1 extends ValidatedInstances2 {
 
-  implicit def catsDataSemigroupForValidated[A, B](implicit
-    A: Semigroup[A],
-    B: Semigroup[B]
-  ): Semigroup[Validated[A, B]] =
-    Semigroup.instance(_ combine _)
+  implicit def catsDataSemigroupForValidated[A: Semigroup, B: Semigroup]: Semigroup[Validated[A, B]] = _ combine _
 
   implicit def catsDataCommutativeApplicativeForValidated[E: CommutativeSemigroup]
     : CommutativeApplicative[Validated[E, *]] =

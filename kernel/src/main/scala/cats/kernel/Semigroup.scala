@@ -21,8 +21,6 @@
 
 package cats.kernel
 
-import cats.kernel.Semigroup.instance
-
 import scala.annotation.tailrec
 import scala.collection.immutable.{BitSet, Queue, Seq, SortedMap, SortedSet}
 import scala.concurrent.{ExecutionContext, Future}
@@ -122,7 +120,7 @@ trait Semigroup[@sp(Int, Long, Float, Double) A] extends Any with Serializable {
    * This name matches the term used in Foldable and Reducible and a similar Haskell function.
    */
   def intercalate(middle: A): Semigroup[A] =
-    instance((a, b) => self.combine(a, self.combine(middle, b)))
+    (a, b) => self.combine(a, self.combine(middle, b))
 }
 
 abstract class SemigroupFunctions[S[T] <: Semigroup[T]] {
@@ -168,20 +166,17 @@ object Semigroup
   /**
    * Create a `Semigroup` instance from the given function.
    */
-  @inline def instance[@sp(Int, Long, Float, Double) A](cmb: (A, A) => A): Semigroup[A] =
-    cmb(_, _)
+  @inline def instance[A](cmb: (A, A) => A): Semigroup[A] = cmb(_, _)
 
   /**
    * Create a `Semigroup` instance that always returns the lefthand side.
    */
-  @inline def first[A]: Semigroup[A] =
-    instance((x, _) => x)
+  @inline def first[A]: Semigroup[A] = (x, _) => x
 
   /**
    * Create a `Semigroup` instance that always returns the righthand side.
    */
-  @inline def last[A]: Semigroup[A] =
-    instance((_, y) => y)
+  @inline def last[A]: Semigroup[A] = (_, y) => y
 
   implicit def catsKernelBoundedSemilatticeForBitSet: BoundedSemilattice[BitSet] =
     cats.kernel.instances.bitSet.catsKernelStdSemilatticeForBitSet

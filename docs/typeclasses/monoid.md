@@ -82,8 +82,7 @@ final case class NonEmptyList[A](head: A, tail: List[A]) {
 }
 
 object NonEmptyList {
-  implicit def nonEmptyListSemigroup[A]: Semigroup[NonEmptyList[A]] =
-    Semigroup.instance(_ ++ _)
+  implicit def nonEmptyListSemigroup[A]: Semigroup[NonEmptyList[A]] = _ ++ _
 }
 ```
 
