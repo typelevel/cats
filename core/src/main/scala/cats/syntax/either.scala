@@ -390,7 +390,7 @@ final class EitherObjectOps(private val either: Either.type) extends AnyVal {
     try {
       right(f)
     } catch {
-      case scala.util.control.NonFatal(t) => left(t)
+      case t if scala.util.control.NonFatal(t) => left(t)
     }
 
   /**

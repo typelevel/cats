@@ -61,7 +61,7 @@ object SerializableLaws {
           ois.close()
           Result(status = Proof)
         } catch {
-          case NonFatal(t) =>
+          case t if NonFatal(t) =>
             Result(status = Exception(t))
         } finally {
           oos.close()
