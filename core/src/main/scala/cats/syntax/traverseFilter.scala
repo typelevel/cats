@@ -28,8 +28,8 @@ private[syntax] trait TraverseFilterSyntaxBinCompat0 {
   implicit def toSequenceFilterOps[F[_], G[_], A](fgoa: F[G[Option[A]]]): SequenceFilterOps[F, G, A] =
     new SequenceFilterOps(fgoa)
 
-  implicit def toTraverseCollectOps[F[_], G[_], A](fa: F[A]): TraverseCollectOps[F, G, A] =
-    new TraverseCollectOps(fa)
+  implicit def toTraverseFilterOps[F[_], G[_], A](fa: F[A]): TraverseFilterOps[F, G, A] =
+    new TraverseFilterOps(fa)
 }
 
 final class SequenceFilterOps[F[_], G[_], A](private val fgoa: F[G[Option[A]]]) extends AnyVal {
@@ -45,7 +45,7 @@ final class SequenceFilterOps[F[_], G[_], A](private val fgoa: F[G[Option[A]]]) 
   def sequenceFilter(implicit F: TraverseFilter[F], G: Applicative[G]): G[F[A]] = F.sequenceFilter(fgoa)
 }
 
-final class TraverseCollectOps[F[_], G[_], A](private val fa: F[A]) extends AnyVal {
+final class TraverseFilterOps[F[_], G[_], A](private val fa: F[A]) extends AnyVal {
 
   def traverseCollect[B](f: PartialFunction[A, G[B]])(implicit
     F: TraverseFilter[F],
