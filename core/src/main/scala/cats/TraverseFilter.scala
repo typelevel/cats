@@ -57,6 +57,22 @@ trait TraverseFilter[F[_]] extends FunctorFilter[F] {
   def traverseFilter[G[_], A, B](fa: F[A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[F[B]]
 
   /**
+   * A combined [[traverse]] and [[collect]].
+   *
+   * scala> import cats.implicits._
+   * scala> val m: Map[Int, String] = Map(1 -> "one", 2 -> "two")
+   * scala> val l: List[Int] = List(1, 2, 3, 4)
+   * scala> def asString: PartialFunction[Int, Eval[Option[String]]] = { case n if n % 2 == 0 => Now(m.get(n)) }
+   * scala> val result: Eval[List[Option[String]]] = l.traverseCollect(asString)
+   * scala> result.value
+   * res0: List[Option[String]] = List(Some(two), None)
+   */
+  def traverseCollect[G[_], A, B](fa: F[A])(f: PartialFunction[A, G[B]])(implicit G: Applicative[G]): G[F[B]] = {
+    val optF = f.lift
+    traverseFilter(fa)(a => Traverse[Option].sequence(optF(a)))
+  }
+
+  /**
    * {{{
    * scala> import cats.implicits._
    * scala> val a: List[Either[String, Option[Int]]] = List(Right(Some(1)), Right(Some(5)), Right(Some(3)))
