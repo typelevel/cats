@@ -69,7 +69,7 @@ trait TraverseFilterTests[F[_]] extends FunctorFilterTests[F] {
       "traverseEither consistent with traverseFilter" -> forAll(
         laws.traverseEitherConsistentWithTraverseFilter[Option, F[A], A, B] _
       ),
-      "traverseFilter ref traverseCollect" -> forAll(laws.traverseCollectRef[Option, A, B] _)
+      "traverseCollect reference" -> forAll(laws.traverseCollectRef[Option, A, B] _)
     )
   }
 }
