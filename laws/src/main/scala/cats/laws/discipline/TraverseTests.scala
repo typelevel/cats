@@ -31,9 +31,14 @@ import Prop._
 trait TraverseTests[F[_]] extends FunctorTests[F] with FoldableTests[F] with UnorderedTraverseTests[F] {
   def laws: TraverseLaws[F]
 
-  def traverse[A: Arbitrary, B: Arbitrary, C: Arbitrary, M: Arbitrary, X[_]: CommutativeApplicative, Y[
-    _
-  ]: CommutativeApplicative](implicit
+  def traverse[
+    A: Arbitrary,
+    B: Arbitrary,
+    C: Arbitrary,
+    M: Arbitrary,
+    X[_]: CommutativeApplicative,
+    Y[_]: CommutativeApplicative
+  ](implicit
     ArbFA: Arbitrary[F[A]],
     ArbFB: Arbitrary[F[B]],
     ArbXB: Arbitrary[X[B]],
@@ -80,7 +85,11 @@ trait TraverseTests[F[_]] extends FunctorTests[F] with FoldableTests[F] with Uno
           "traverse ref mapAccumulate" -> forAll(laws.mapAccumulateRef[M, A, C] _),
           "traverse ref mapWithIndex" -> forAll(laws.mapWithIndexRef[A, C] _),
           "traverse ref traverseWithIndexM" -> forAll(laws.traverseWithIndexMRef[Option, A, C] _),
-          "traverse ref zipWithIndex" -> forAll(laws.zipWithIndexRef[A, C] _)
+          "traverse ref zipWithIndex" -> forAll(laws.zipWithIndexRef[A, C] _),
+          "traverse ref zipWithLongIndex" -> forAll(laws.zipWithLongIndexRef[A, C] _),
+          "traverse ref mapWithLongIndex" -> forAll(laws.mapWithLongIndexRef[A, C] _),
+          "traverse ref traverseWithLongIndexM" -> forAll(laws.traverseWithLongIndexMRef[Option, A, C] _),
+          "traverse ref updated" -> forAll(laws.updatedRef[A, A](_, _, _))
         )
     }
   }
