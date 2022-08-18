@@ -56,8 +56,6 @@ trait DecidableTests[F[_]] extends ContravariantMonoidalTests[F] {
           forAll(laws.loseConsistency[Nothing] _),
         "decide consistency" ->
           forAll(laws.decideConsistency[A, B, C] _),
-        "decide right absorption" ->
-          forAll(laws.decideRightAbsorption[A] _),
         "decide right identity (zero)" ->
           forAll(laws.decideRightIdentity[A] _),
         "decide left identity (zero)" ->
