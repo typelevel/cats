@@ -140,14 +140,8 @@ class NestedSuite extends CatsSuite {
 
   {
     // Applicative + Decidable functor composition
-    // Now, you might think:
-    // Nested[Option, Predicate, Nothing] = Option[Predicate[Nothing]] = Option[Nothing => Boolean]
-    // If  we have both Some and Some then equal, if we have both None then equal, else NOT equal
-    // since predicates on Nothing are vacuously equivalent.
-    // But since there are no values of `Some[Nothing]`, really this type is just... `None`.
-    // So they're all equal. The stronger instance (because of the trick arbitraries at play)
-    // ends up testing spurious values so it gets a bit wonky.
-    implicit val eqForOptionPredicateNothing: Eq[Nested[Option, Predicate, Nothing]] = Eq.allEqual
+    // Only two values here, one for Some and one for None
+    implicit val eqForOptionPredicateNothing: Eq[Nested[Option, Predicate, Nothing]] = Eq.by(_.value.isDefined)
     checkAll("Nested[Option, Predicate, ?]",
              DecidableTests[Nested[Option, Predicate, *]].decidable[MiniInt, MiniInt, MiniInt]
     )
