@@ -22,12 +22,13 @@
 package cats.tests
 
 import cats._
-import cats.data.{EitherT, NonEmptyChain, NonEmptyList, NonEmptySet, Validated}
+import cats.data.{EitherT, NonEmptyChain, NonEmptyList, NonEmptySet, NonEmptyVector, Validated}
 import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.syntax.either._
+
 import scala.util.Try
 import cats.syntax.eq._
 import org.scalacheck.Prop._
@@ -175,11 +176,24 @@ class EitherSuite extends CatsSuite {
     }
   }
 
+  test("leftNev is consistent with left(NEC)") {
+    forAll { (s: String) =>
+      assert(Either.leftNev[String, Int](s) === (Either.left[NonEmptyVector[String], Int](NonEmptyVector.one(s))))
+    }
+  }
+
+  test("rightNev is consistent with right") {
+    forAll { (i: Int) =>
+      assert(Either.rightNev[String, Int](i) === (Either.right[NonEmptyVector[String], Int](i)))
+    }
+  }
+
   test("leftNes is consistent with left(NES)") {
     forAll { (s: String) =>
       assert(Either.leftNes[String, Int](s) === (Either.left[NonEmptySet[String], Int](NonEmptySet.one(s))))
     }
   }
+
   test("rightNes is consistent with right") {
     forAll { (i: Int) =>
       assert(Either.rightNes[String, Int](i) === (Either.right[NonEmptySet[String], Int](i)))
@@ -367,6 +381,16 @@ class EitherSuite extends CatsSuite {
   test("toEitherNel Right") {
     val either = Either.right[String, Int](42)
     assert(either.toEitherNel === (Either.right[NonEmptyList[String], Int](42)))
+  }
+
+  test("toEitherVec Left") {
+    val either = Either.left[String, Int]("oops")
+    assert(either.toEitherNev === (Either.left[NonEmptyVector[String], Int](NonEmptyVector.one("oops"))))
+  }
+
+  test("toEitherVec Right") {
+    val either = Either.right[String, Int](42)
+    assert(either.toEitherNev === (Either.right[NonEmptyVector[String], Int](42)))
   }
 
   test("ap consistent with Applicative") {

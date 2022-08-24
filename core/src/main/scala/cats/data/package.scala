@@ -29,6 +29,7 @@ package object data extends ScalaVersionSpecificPackage {
   type IorNes[B, +A] = Ior[NonEmptySet[B], A]
   type EitherNel[+E, +A] = Either[NonEmptyList[E], A]
   type EitherNec[+E, +A] = Either[NonEmptyChain[E], A]
+  type EitherNev[+E, +A] = Either[NonEmptyVector[E], A]
   type EitherNes[E, +A] = Either[NonEmptySet[E], A]
   type ValidatedNec[+E, +A] = Validated[NonEmptyChain[E], A]
 

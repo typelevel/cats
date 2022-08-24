@@ -337,6 +337,8 @@ final class EitherOps[A, B](private val eab: Either[A, B]) extends AnyVal {
 
   def toEitherNel[AA >: A]: EitherNel[AA, B] = leftMap(NonEmptyList.one)
 
+  def toEitherNev[AA >: A]: EitherNev[AA, B] = leftMap(NonEmptyVector.one)
+
   @deprecated("use liftTo instead", "2.0.0")
   def raiseOrPure[F[_]](implicit ev: ApplicativeError[F, A]): F[B] =
     ev.fromEither(eab)
@@ -363,6 +365,10 @@ final class EitherObjectOps(private val either: Either.type) extends AnyVal {
   def leftNec[A, B](a: A): EitherNec[A, B] = Left(NonEmptyChain.one(a))
 
   def rightNec[A, B](b: B): EitherNec[A, B] = Right(b)
+
+  def leftNev[A, B](a: A): EitherNev[A, B] = Left(NonEmptyVector.one(a))
+
+  def rightNev[A, B](b: B): EitherNev[A, B] = Right(b)
 
   def leftNes[A, B](a: A)(implicit O: Order[A]): EitherNes[A, B] = Left(NonEmptySet.one(a))
 
