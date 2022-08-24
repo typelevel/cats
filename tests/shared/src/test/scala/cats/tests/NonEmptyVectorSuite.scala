@@ -256,6 +256,12 @@ class NonEmptyVectorSuite extends NonEmptyCollectionSuite[Vector, NonEmptyVector
     }
   }
 
+  test("appendVector is consistent with concat") {
+    forAll { (nonEmptyVector: NonEmptyVector[Int], vector: Vector[Int]) =>
+      assert(nonEmptyVector.appendVector(vector) === nonEmptyVector.concat(vector))
+    }
+  }
+
   test(":+ is consistent with concat") {
     forAll { (nonEmptyVector: NonEmptyVector[Int], i: Int) =>
       assert(nonEmptyVector :+ i === (nonEmptyVector.concat(Vector(i))))

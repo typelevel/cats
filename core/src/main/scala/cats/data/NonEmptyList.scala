@@ -134,6 +134,37 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
     NonEmptyList(a, head :: tail)
 
   /**
+   * Alias for [[prependList]]
+   * 
+   * {{{
+   * scala> import cats.data.NonEmptyList
+   * scala> val nel = NonEmptyList.of(1, 2, 3)
+   * scala> val list = List(-1, 0)
+   * scala> list ++: nel
+   * res0: cats.data.NonEmptyList[Int] = NonEmptyList(-1, 0, 1, 2, 3)
+   * }}}
+   */
+  def ++:[AA >: A](other: List[AA]): NonEmptyList[AA] =
+    prependList(other)
+
+  /**
+   * Prepend another `List`
+   *
+   * {{{
+   * scala> import cats.data.NonEmptyList
+   * scala> val nel = NonEmptyList.of(1, 2, 3)
+   * scala> val list = List(-1, 0)
+   * scala> nel.prependList(list)
+   * res0: cats.data.NonEmptyList[Int] = NonEmptyList(-1, 0, 1, 2, 3)
+   * }}}
+   */
+  def prependList[AA >: A](other: List[AA]): NonEmptyList[AA] =
+    other match {
+      case Nil          => this
+      case head :: tail => NonEmptyList(head, tail ::: toList)
+    }
+
+  /**
    * Alias for append
    *
    * {{{
@@ -148,6 +179,19 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
 
   def append[AA >: A](a: AA): NonEmptyList[AA] =
     NonEmptyList(head, tail :+ a)
+
+  /**
+   * Alias for [[concat]]
+   *
+   * {{{
+   * scala> import cats.data.NonEmptyList
+   * scala> val nel = NonEmptyList.of(1, 2, 3)
+   * scala> nel.appendList(List(4, 5))
+   * res0: cats.data.NonEmptyList[Int] = NonEmptyList(1, 2, 3, 4, 5)
+   * }}}
+   */
+  def appendList[AA >: A](other: List[AA]): NonEmptyList[AA] =
+    concat(other)
 
   /**
    * Alias for concatNel
