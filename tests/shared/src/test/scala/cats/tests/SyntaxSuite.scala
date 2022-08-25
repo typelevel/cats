@@ -580,4 +580,11 @@ object SyntaxSuite {
 
     val result: Either[A, List[B]] = f.sequenceFilter
   }
+
+  def testTraverseCollect[A, B]: Unit = {
+    val list = mock[List[A]]
+    val f = mock[PartialFunction[A, Option[B]]]
+
+    val result: Option[List[B]] = list.traverseCollect(f)
+  }
 }

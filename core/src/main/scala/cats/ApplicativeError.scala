@@ -247,7 +247,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
   def catchNonFatal[A](a: => A)(implicit ev: Throwable <:< E): F[A] =
     try pure(a)
     catch {
-      case NonFatal(e) => raiseError(e)
+      case e if NonFatal(e) => raiseError(e)
     }
 
   /**
@@ -257,7 +257,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
   def catchNonFatalEval[A](a: Eval[A])(implicit ev: Throwable <:< E): F[A] =
     try pure(a.value)
     catch {
-      case NonFatal(e) => raiseError(e)
+      case e if NonFatal(e) => raiseError(e)
     }
 
   /**

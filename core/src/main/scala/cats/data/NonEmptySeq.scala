@@ -122,6 +122,11 @@ final class NonEmptySeq[+A] private (val toSeq: Seq[A]) extends AnyVal with NonE
   def concat[AA >: A](other: Seq[AA]): NonEmptySeq[AA] = new NonEmptySeq(toSeq ++ other)
 
   /**
+   * Append another `Seq` to this, producing a new `NonEmptySeq`.
+   */
+  def appendSeq[AA >: A](other: Seq[AA]): NonEmptySeq[AA] = concat(other)
+
+  /**
    * Append another `NonEmptySeq` to this, producing a new `NonEmptySeq`.
    */
   def concatNeSeq[AA >: A](other: NonEmptySeq[AA]): NonEmptySeq[AA] = new NonEmptySeq(toSeq ++ other.toSeq)

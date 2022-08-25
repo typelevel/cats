@@ -25,8 +25,8 @@ package discipline
 
 import cats.instances.option._
 import cats.kernel.CommutativeMonoid
+import org.scalacheck.Prop._
 import org.scalacheck.{Arbitrary, Cogen, Prop}
-import Prop._
 
 trait TraverseTests[F[_]] extends FunctorTests[F] with FoldableTests[F] with UnorderedTraverseTests[F] {
   def laws: TraverseLaws[F]
@@ -78,7 +78,11 @@ trait TraverseTests[F[_]] extends FunctorTests[F] with FoldableTests[F] with Uno
         "traverse ref mapAccumulate" -> forAll(laws.mapAccumulateRef[M, A, C] _),
         "traverse ref mapWithIndex" -> forAll(laws.mapWithIndexRef[A, C] _),
         "traverse ref traverseWithIndexM" -> forAll(laws.traverseWithIndexMRef[Option, A, C] _),
-        "traverse ref zipWithIndex" -> forAll(laws.zipWithIndexRef[A, C] _)
+        "traverse ref zipWithIndex" -> forAll(laws.zipWithIndexRef[A, C] _),
+        "traverse ref zipWithLongIndex" -> forAll(laws.zipWithLongIndexRef[A, C] _),
+        "traverse ref mapWithLongIndex" -> forAll(laws.mapWithLongIndexRef[A, C] _),
+        "traverse ref traverseWithLongIndexM" -> forAll(laws.traverseWithLongIndexMRef[Option, A, C] _),
+        "traverse ref updated" -> forAll(laws.updatedRef[A, A](_, _, _))
       )
   }
 }
