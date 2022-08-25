@@ -22,7 +22,7 @@
 package cats.tests
 
 import cats.{Bitraverse, MonadError, Semigroupal, Show, Traverse}
-import cats.data.{EitherT, Ior, NonEmptyChain, NonEmptyList, NonEmptySet}
+import cats.data.{EitherT, Ior, NonEmptyChain, NonEmptyList, NonEmptySet, NonEmptyVector}
 import cats.kernel.{Eq, Semigroup}
 import cats.kernel.laws.discipline.{OrderTests, SemigroupTests}
 import cats.laws.discipline.{
@@ -299,6 +299,19 @@ class IorSuite extends CatsSuite {
     assert(ior.toIorNec === (Ior.both[NonEmptyChain[String], Int](NonEmptyChain.one("oops"), 42)))
   }
 
+  test("toIorNev Left") {
+    val ior = Ior.left[String, Int]("oops")
+    assert(ior.toIorNev === (Ior.left[NonEmptyVector[String], Int](NonEmptyVector.one("oops"))))
+  }
+  test("toIorNev Right") {
+    val ior = Ior.right[String, Int](42)
+    assert(ior.toIorNev === (Ior.right[NonEmptyVector[String], Int](42)))
+  }
+  test("toIorNev Both") {
+    val ior = Ior.both[String, Int]("oops", 42)
+    assert(ior.toIorNev === (Ior.both[NonEmptyVector[String], Int](NonEmptyVector.one("oops"), 42)))
+  }
+
   test("toIorNes Left") {
     val ior = Ior.left[String, Int]("oops")
     assert(ior.toIorNes === (Ior.left[NonEmptySet[String], Int](NonEmptySet.one("oops"))))
@@ -339,9 +352,21 @@ class IorSuite extends CatsSuite {
     }
   }
 
+  test("leftNev") {
+    forAll { (x: String) =>
+      assert(Ior.leftNev(x).left === (Some(NonEmptyVector.one(x))))
+    }
+  }
+
   test("bothNel") {
     forAll { (x: Int, y: String) =>
       assert(Ior.bothNel(y, x).onlyBoth === (Some((NonEmptyList.one(y), x))))
+    }
+  }
+
+  test("bothNev") {
+    forAll { (x: Int, y: String) =>
+      assert(Ior.bothNev(y, x).onlyBoth === (Some((NonEmptyVector.one(y), x))))
     }
   }
 

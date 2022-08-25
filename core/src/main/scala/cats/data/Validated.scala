@@ -359,6 +359,29 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
     }
 
   /**
+   * Lift the Invalid value into a NonEmptyVector.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> val v1 = "error".invalid[Int]
+   * scala> val v2 = 123.valid[String]
+   *
+   * scala> v1.toValidatedNev
+   * res0: ValidatedNev[String, Int] = Invalid(NonEmptyVector(error))
+   *
+   * scala> v2.toValidatedNev
+   * res1: ValidatedNev[String, Int] = Valid(123)
+   * }}}
+   */
+  def toValidatedNev[EE >: E, AA >: A]: ValidatedNev[EE, AA] =
+    this match {
+      case v @ Valid(_) => v
+      case Invalid(e)   => Validated.invalidNev(e)
+    }
+
+  /**
    * Lift the Invalid value into a NonEmptyChain.
    *
    * Example:
@@ -1111,6 +1134,8 @@ private[data] trait ValidatedFunctions {
    */
   def invalidNel[E, A](e: E): ValidatedNel[E, A] = Validated.Invalid(NonEmptyList(e, Nil))
 
+  def invalidNev[E, A](e: E): ValidatedNev[E, A] = Validated.Invalid(NonEmptyVector(e, Vector.empty[E]))
+
   /**
    * Converts a `A` to a `Validated[E, A]`.
    *
@@ -1132,6 +1157,8 @@ private[data] trait ValidatedFunctions {
    * }}}
    */
   def validNel[E, A](a: A): ValidatedNel[E, A] = Validated.Valid(a)
+
+  def validNev[E, A](a: A): ValidatedNev[E, A] = Validated.Valid(a)
 
   def catchNonFatal[A](f: => A): Validated[Throwable, A] =
     try {
@@ -1178,6 +1205,13 @@ private[data] trait ValidatedFunctions {
    */
   final def condNel[E, A](test: Boolean, a: => A, e: => E): ValidatedNel[E, A] =
     if (test) validNel(a) else invalidNel(e)
+
+  /**
+   * If the condition is satisfied, return the given `A` as valid NEV,
+   * otherwise return the given `E` as invalid NEV.
+   */
+  final def condNev[E, A](test: Boolean, a: => A, e: => E): ValidatedNev[E, A] =
+    if (test) validNev(a) else invalidNev(e)
 }
 
 private[data] trait ValidatedFunctionsBinCompat0 {

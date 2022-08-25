@@ -212,6 +212,12 @@ class EitherTSuite extends CatsSuite {
     }
   }
 
+  test("toValidatedNev") {
+    forAll { (eithert: EitherT[List, String, Int]) =>
+      assert(eithert.toValidatedNev.map(_.toEither.leftMap(_.head)) === (eithert.value))
+    }
+  }
+
   test("toValidatedNec") {
     forAll { (eithert: EitherT[List, String, Int]) =>
       assert(eithert.toValidatedNec.map(_.toEither.leftMap(_.head)) === (eithert.value))
@@ -233,6 +239,12 @@ class EitherTSuite extends CatsSuite {
   test("toNestedValidatedNel") {
     forAll { (eithert: EitherT[List, String, Int]) =>
       assert(eithert.toNestedValidatedNel.value === (eithert.value.map(_.toValidatedNel)))
+    }
+  }
+
+  test("toNestedValidatedNev") {
+    forAll { (eithert: EitherT[List, String, Int]) =>
+      assert(eithert.toNestedValidatedNev.value === (eithert.value.map(_.toValidatedNev)))
     }
   }
 

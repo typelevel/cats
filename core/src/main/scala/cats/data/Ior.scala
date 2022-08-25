@@ -375,6 +375,8 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
 
   final def toIorNec[AA >: A]: IorNec[AA, B] = leftMap(NonEmptyChain.one)
 
+  final def toIorNev[AA >: A]: IorNev[AA, B] = leftMap(NonEmptyVector.one)
+
   /**
    * Example:
    * {{{
@@ -1070,5 +1072,7 @@ sealed private[data] trait IorFunctions {
 
 sealed private[data] trait IorFunctions2 {
   def leftNec[A, B](a: A): IorNec[A, B] = Ior.left(NonEmptyChain.one(a))
+  def leftNev[A, B](a: A): IorNev[A, B] = Ior.left(NonEmptyVector.one(a))
   def bothNec[A, B](a: A, b: B): IorNec[A, B] = Ior.both(NonEmptyChain.one(a), b)
+  def bothNev[A, B](a: A, b: B): IorNev[A, B] = Ior.both(NonEmptyVector.one(a), b)
 }

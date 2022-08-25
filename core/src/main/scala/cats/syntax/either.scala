@@ -160,6 +160,12 @@ final class EitherOps[A, B](private val eab: Either[A, B]) extends AnyVal {
       case Right(b) => Validated.valid(b)
     }
 
+  def toValidatedNev[AA >: A]: ValidatedNev[AA, B] =
+    eab match {
+      case Left(a)  => Validated.invalidNev(a)
+      case Right(b) => Validated.valid(b)
+    }
+
   def withValidated[AA, BB](f: Validated[A, B] => Validated[AA, BB]): Either[AA, BB] =
     f(toValidated).toEither
 
