@@ -89,6 +89,9 @@ class KleisliSuite extends CatsSuite {
            SerializableTests.serializable(CommutativeMonad[Kleisli[Id, Int, *]])
   )
 
+  checkAll("Kleisli[Id, MiniInt, *]", AlignTests[Kleisli[Id, MiniInt, *]].align[Int, Int, Int, Int])
+  checkAll("Kleisli[Option, MiniInt, *]", AlignTests[Kleisli[Option, MiniInt, *]].align[Int, Int, Int, Int])
+
   checkAll("Kleisli[List, *, *]",
            ArrowTests[Kleisli[List, *, *]].arrow[MiniInt, MiniInt, MiniInt, MiniInt, MiniInt, Boolean]
   )

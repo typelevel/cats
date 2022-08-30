@@ -22,10 +22,12 @@
 package cats.tests
 
 import cats.laws.discipline._
+import cats.laws.discipline.arbitrary._
 import cats.syntax.applicative._
 import cats.syntax.eq._
 import cats.{Bimonad, CommutativeMonad, Id, Reducible, Semigroupal, Traverse}
 import org.scalacheck.Prop._
+import cats.Align
 
 class IdSuite extends CatsSuite {
   implicit val iso: SemigroupalTests.Isomorphisms[Id] =
@@ -42,6 +44,9 @@ class IdSuite extends CatsSuite {
 
   checkAll("Id[Int]", ReducibleTests[Id].reducible[Option, Int, Int])
   checkAll("Reducible[Id]", SerializableTests.serializable(Reducible[Id]))
+
+  checkAll("Id[Int]", AlignTests[Id].align[Int, Int, Int, Int])
+  checkAll("Align[Id]", SerializableTests.serializable(Align[Id]))
 
   test("Id#apply") {
     forAll { (i: Int) =>
