@@ -153,7 +153,7 @@ package object cats {
   }
 
   implicit val catsAlignForId: Align[Id] = new Align[Id] {
-    override val functor: Functor[Id] = catsInstancesForId
+    override val functor: Functor[Id] = Functor[Id]
 
     override def align[A, B](fa: Id[A], fb: Id[B]): Id[Ior[A, B]] = Ior.both(fa, fb)
 

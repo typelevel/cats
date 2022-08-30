@@ -415,11 +415,11 @@ sealed abstract private[data] class KleisliInstances0_5 extends KleisliInstances
     }
 
   implicit def catsDataAlignForKleisli[F[_], R](implicit
-    evAlign: Align[F],
-    evFunctor: Functor[Kleisli[F, R, *]]
+    evFunctor: Functor[Kleisli[F, R, *]],
+    evAlign: Align[F]
   ): Align[Kleisli[F, R, *]] = new KleisliAlign[F, R] {
-    implicit val functor: Functor[Kleisli[F, R, *]] = evFunctor
-    implicit val FA: Align[F] = evAlign
+    override val functor: Functor[Kleisli[F, R, *]] = evFunctor
+    override val FA: Align[F] = evAlign
   }
 }
 
@@ -727,8 +727,7 @@ private trait KleisliDistributive[F[_], R] extends Distributive[Kleisli[F, R, *]
 }
 
 private trait KleisliAlign[F[_], R] extends Align[Kleisli[F, R, *]] {
-  implicit def functor: Functor[Kleisli[F, R, *]]
-  implicit def FA: Align[F]
+  def FA: Align[F]
 
   override def align[A, B](fa: Kleisli[F, R, A], fb: Kleisli[F, R, B]): Kleisli[F, R, Ior[A, B]] =
     Kleisli(r => FA.align(fa.run(r), fb.run(r)))
