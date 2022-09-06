@@ -857,21 +857,11 @@ sealed abstract private[data] class IorInstances extends IorInstances0 {
       }
   }
 
-  implicit def catsDataOrderForIor[A: Order, B: Order]: Order[A Ior B] =
-    new Order[A Ior B] {
+  implicit def catsDataOrderForIor[A: Order, B: Order]: Order[A Ior B] = _ compare _
 
-      def compare(x: Ior[A, B], y: Ior[A, B]): Int = x.compare(y)
-    }
+  implicit def catsDataShowForIor[A: Show, B: Show]: Show[A Ior B] = _.show
 
-  implicit def catsDataShowForIor[A: Show, B: Show]: Show[A Ior B] =
-    new Show[A Ior B] {
-      def show(f: A Ior B): String = f.show
-    }
-
-  implicit def catsDataSemigroupForIor[A: Semigroup, B: Semigroup]: Semigroup[Ior[A, B]] =
-    new Semigroup[Ior[A, B]] {
-      def combine(x: Ior[A, B], y: Ior[A, B]) = x.combine(y)
-    }
+  implicit def catsDataSemigroupForIor[A: Semigroup, B: Semigroup]: Semigroup[Ior[A, B]] = _ combine _
 
   implicit def catsDataMonadErrorForIor[A: Semigroup]: MonadError[Ior[A, *], A] =
     new MonadError[Ior[A, *], A] {
@@ -996,11 +986,7 @@ sealed abstract private[data] class IorInstances0 {
         fa.map(f)
     }
 
-  implicit def catsDataEqForIor[A: Eq, B: Eq]: Eq[A Ior B] =
-    new Eq[A Ior B] {
-
-      def eqv(x: A Ior B, y: A Ior B): Boolean = x === y
-    }
+  implicit def catsDataEqForIor[A: Eq, B: Eq]: Eq[A Ior B] = _ === _
 }
 
 sealed private[data] trait IorFunctions {

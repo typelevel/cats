@@ -26,7 +26,7 @@ import cats.data.Chain
 import cats.instances.StaticMethods.appendAll
 import cats.kernel.compat.scalaVersionSpecific._
 import cats.kernel.instances.StaticMethods.wrapMutableIndexedSeq
-import cats.syntax.show._
+
 import scala.annotation.tailrec
 import scala.collection.immutable.Queue
 import scala.util.Try
@@ -199,10 +199,7 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
     }
 
   implicit def catsStdShowForQueue[A: Show]: Show[Queue[A]] =
-    new Show[Queue[A]] {
-      def show(fa: Queue[A]): String =
-        fa.iterator.map(_.show).mkString("Queue(", ", ", ")")
-    }
+    _.iterator.map(Show[A].show).mkString("Queue(", ", ", ")")
 
   implicit def catsStdTraverseFilterForQueue: TraverseFilter[Queue] = QueueInstances.catsStdTraverseFilterForQueue
 }

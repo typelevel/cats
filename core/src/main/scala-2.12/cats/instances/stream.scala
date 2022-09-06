@@ -194,9 +194,7 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
     }
 
   implicit def catsStdShowForStream[A: Show]: Show[Stream[A]] =
-    new Show[Stream[A]] {
-      def show(fa: Stream[A]): String = if (fa.isEmpty) "Stream()" else s"Stream(${fa.head.show}, ?)"
-    }
+    stream => if (stream.isEmpty) "Stream()" else s"Stream(${stream.head.show}, ?)"
 
   implicit def catsStdParallelForStreamZipStream: Parallel.Aux[Stream, ZipStream] =
     new Parallel[Stream] {

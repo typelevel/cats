@@ -135,7 +135,7 @@ implicit def semigroupTree[A: Semigroup]: Semigroup[Tree[A]] = new Semigroup[Tre
     case (Leaf, _) => Leaf
     case (_, Leaf) => Leaf
     case (Node(xp, xLeft, xRight), Node(yp, yLeft, yRight)) =>
-      Node(xp |+| yp, xLeft |+| yLeft, xRight |+| yRight)
+      Node(xp |+| yp, combine(xLeft, yLeft), combine(xRight, yRight))
   }
 }
 ```

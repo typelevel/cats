@@ -176,9 +176,7 @@ trait LazyListInstances extends cats.kernel.instances.LazyListInstances {
     }
 
   implicit def catsStdShowForLazyList[A: Show]: Show[LazyList[A]] =
-    new Show[LazyList[A]] {
-      def show(fa: LazyList[A]): String = if (fa.isEmpty) "LazyList()" else s"LazyList(${fa.head.show}, ?)"
-    }
+    list => if (list.isEmpty) "LazyList()" else s"LazyList(${list.head.show}, ?)"
 
   implicit val catsStdTraverseFilterForLazyList: TraverseFilter[LazyList] = new TraverseFilter[LazyList] {
     val traverse: Traverse[LazyList] = catsStdInstancesForLazyList

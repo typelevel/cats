@@ -29,9 +29,7 @@ import scala.util.control.TailCalls.{done, tailcall, TailRec}
 trait FunctionInstances extends FunctionInstances0 {
 
   implicit def catsKernelOrderForFunction0[A](implicit ev: Order[A]): Order[() => A] =
-    new Order[() => A] {
-      def compare(x: () => A, y: () => A): Int = ev.compare(x(), y())
-    }
+    Order.by(_.apply())
 
   implicit def catsKernelCommutativeGroupForFunction0[A](implicit G: CommutativeGroup[A]): CommutativeGroup[() => A] =
     new Function0Group[A] with CommutativeGroup[() => A] { def A: Group[A] = G }
@@ -49,9 +47,7 @@ private[instances] trait FunctionInstances0 extends FunctionInstances1 {
     }
 
   implicit def catsKernelPartialOrderForFunction0[A](implicit ev: PartialOrder[A]): PartialOrder[() => A] =
-    new PartialOrder[() => A] {
-      def partialCompare(x: () => A, y: () => A): Double = ev.partialCompare(x(), y())
-    }
+    PartialOrder.by(_.apply())
 
   implicit def catsKernelGroupForFunction0[A](implicit G: Group[A]): Group[() => A] =
     new Function0Group[A] { def A: Group[A] = G }
@@ -73,9 +69,7 @@ private[instances] trait FunctionInstances0 extends FunctionInstances1 {
 private[instances] trait FunctionInstances1 extends FunctionInstances2 {
 
   implicit def catsKernelEqForFunction0[A](implicit ev: Eq[A]): Eq[() => A] =
-    new Eq[() => A] {
-      def eqv(x: () => A, y: () => A): Boolean = ev.eqv(x(), y())
-    }
+    Eq.by(_.apply())
 
   implicit def catsKernelCommutativeMonoidForFunction0[A](implicit
     M: CommutativeMonoid[A]

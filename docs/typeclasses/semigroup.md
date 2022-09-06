@@ -20,9 +20,7 @@ A common example of a semigroup is the type `Int` with the operation `+`.
 ```scala mdoc:reset:silent
 import cats.Semigroup
 
-implicit val intAdditionSemigroup: Semigroup[Int] = new Semigroup[Int] {
-  def combine(x: Int, y: Int): Int = x + y
-}
+implicit val intAdditionSemigroup: Semigroup[Int] = _ + _
 
 val x = 1
 val y = 2

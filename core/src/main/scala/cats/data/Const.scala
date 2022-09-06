@@ -90,11 +90,7 @@ sealed abstract private[data] class ConstInstances extends ConstInstances0 {
       override def minBound: Const[A, B] = Const(A.minBound)
     }
 
-  implicit def catsDataOrderForConst[A: Order, B]: Order[Const[A, B]] =
-    new Order[Const[A, B]] {
-      def compare(x: Const[A, B], y: Const[A, B]): Int =
-        x.compare(y)
-    }
+  implicit def catsDataOrderForConst[A: Order, B]: Order[Const[A, B]] = _ compare _
 
   implicit def catsDataAlignForConst[A: Semigroup]: Align[Const[A, *]] =
     new Align[Const[A, *]] {
@@ -103,10 +99,7 @@ sealed abstract private[data] class ConstInstances extends ConstInstances0 {
       def functor: Functor[Const[A, *]] = catsDataFunctorForConst
     }
 
-  implicit def catsDataShowForConst[A: Show, B]: Show[Const[A, B]] =
-    new Show[Const[A, B]] {
-      def show(f: Const[A, B]): String = f.show
-    }
+  implicit def catsDataShowForConst[A: Show, B]: Show[Const[A, B]] = _.show
 
   implicit def catsDataTraverseForConst[C]: Traverse[Const[C, *]] =
     new Traverse[Const[C, *]] {
@@ -195,28 +188,16 @@ sealed abstract private[data] class ConstInstances1 extends ConstInstances2 {
 
 sealed abstract private[data] class ConstInstances2 extends ConstInstances3 {
 
-  implicit def catsDataSemigroupForConst[A: Semigroup, B]: Semigroup[Const[A, B]] =
-    new Semigroup[Const[A, B]] {
-      def combine(x: Const[A, B], y: Const[A, B]): Const[A, B] = x.combine(y)
-    }
+  implicit def catsDataSemigroupForConst[A: Semigroup, B]: Semigroup[Const[A, B]] = _ combine _
 
-  implicit def catsDataPartialOrderForConst[A: PartialOrder, B]: PartialOrder[Const[A, B]] =
-    new PartialOrder[Const[A, B]] {
-      def partialCompare(x: Const[A, B], y: Const[A, B]): Double =
-        x.partialCompare(y)
-    }
+  implicit def catsDataPartialOrderForConst[A: PartialOrder, B]: PartialOrder[Const[A, B]] = _ partialCompare _
 
   implicit def catsDataApplicativeForConst[C](implicit C: Monoid[C]): Applicative[Const[C, *]] =
     new ConstApplicative[C] { val C0: Monoid[C] = C }
 }
 
 sealed abstract private[data] class ConstInstances3 extends ConstInstances4 {
-
-  implicit def catsDataEqForConst[A: Eq, B]: Eq[Const[A, B]] =
-    new Eq[Const[A, B]] {
-      def eqv(x: Const[A, B], y: Const[A, B]): Boolean =
-        x === y
-    }
+  implicit def catsDataEqForConst[A: Eq, B]: Eq[Const[A, B]] = _ === _
 
   implicit def catsDataApplyForConst[C](implicit C: Semigroup[C]): Apply[Const[C, *]] =
     new ConstApply[C] { val C0: Semigroup[C] = C }

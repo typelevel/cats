@@ -59,21 +59,16 @@ object FreeStructuralSuite {
   sealed trait ExprF[A] extends Product with Serializable
 
   object ExprF {
-
-    implicit def eq[A: Eq]: Eq[ExprF[A]] =
-      Eq.instance {
-        case (Add(left1, right1), Add(left2, right2)) =>
-          left1 === left2 && right1 === right2
-
-        case (Neg(inner1), Neg(inner2)) =>
-          inner1 === inner2
-
-        case (Num(value1), Num(value2)) =>
-          value1 === value2
-
-        case (_, _) =>
-          false
-      }
+    implicit def eq[A: Eq]: Eq[ExprF[A]] = {
+      case (Add(left1, right1), Add(left2, right2)) =>
+        left1 === left2 && right1 === right2
+      case (Neg(inner1), Neg(inner2)) =>
+        inner1 === inner2
+      case (Num(value1), Num(value2)) =>
+        value1 === value2
+      case (_, _) =>
+        false
+    }
 
     implicit def traverse: Traverse[ExprF] =
       new Traverse[ExprF] {

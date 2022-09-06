@@ -44,7 +44,6 @@ object BoundedSemilattice extends SemilatticeFunctions[BoundedSemilattice] {
   @inline def instance[A](emptyValue: A, cmb: (A, A) => A): BoundedSemilattice[A] =
     new BoundedSemilattice[A] {
       override val empty: A = emptyValue
-
       override def combine(x: A, y: A): A = cmb(x, y)
     }
 }

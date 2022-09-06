@@ -72,11 +72,6 @@ class AlgebraInvariantSuite extends CatsSuite with ScalaVersionSpecificAlgebraIn
       def combine(x: Option[A], y: Option[A]): Option[A] = y
     }
 
-  private val boundedSemilatticeMiniInt: BoundedSemilattice[MiniInt] = new BoundedSemilattice[MiniInt] {
-    def empty: MiniInt = MiniInt.zero
-    def combine(x: MiniInt, y: MiniInt): MiniInt = x | y
-  }
-
   private val genBoundedSemilatticeMiniInt: Gen[BoundedSemilattice[MiniInt]] =
     Gen.const(miniIntOr)
 

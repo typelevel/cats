@@ -27,7 +27,7 @@ import cats.instances.StaticMethods.appendAll
 import cats.kernel.compat.scalaVersionSpecific._
 
 import scala.annotation.tailrec
-import scala.collection.{+:, mutable}
+import scala.collection.mutable
 import scala.collection.immutable.Seq
 
 @suppressUnusedImportWarningForScalaVersionSpecific
@@ -207,10 +207,7 @@ trait SeqInstances extends cats.kernel.instances.SeqInstances {
   }
 
   implicit def catsStdShowForSeq[A: Show]: Show[Seq[A]] =
-    new Show[Seq[A]] {
-      def show(fa: Seq[A]): String =
-        fa.toString()
-    }
+    _.map(Show[A].show).toString
 
   implicit def catsStdNonEmptyParallelForSeqZipSeq: NonEmptyParallel.Aux[Seq, ZipSeq] =
     new NonEmptyParallel[Seq] {

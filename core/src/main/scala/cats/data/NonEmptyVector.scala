@@ -545,13 +545,9 @@ sealed abstract private[data] class NonEmptyVectorInstances {
         NonEmptyVector.fromVectorUnsafe(Align[Vector].alignWith(fa.toVector, fb.toVector)(f))
     }
 
-  implicit def catsDataEqForNonEmptyVector[A](implicit A: Eq[A]): Eq[NonEmptyVector[A]] =
-    new Eq[NonEmptyVector[A]] {
-      def eqv(x: NonEmptyVector[A], y: NonEmptyVector[A]): Boolean = x === y
-    }
+  implicit def catsDataEqForNonEmptyVector[A: Eq]: Eq[NonEmptyVector[A]] = _ === _
 
-  implicit def catsDataShowForNonEmptyVector[A](implicit A: Show[A]): Show[NonEmptyVector[A]] =
-    Show.show[NonEmptyVector[A]](_.show)
+  implicit def catsDataShowForNonEmptyVector[A: Show]: Show[NonEmptyVector[A]] = _.show
 
   implicit def catsDataSemigroupForNonEmptyVector[A]: Semigroup[NonEmptyVector[A]] =
     catsDataInstancesForNonEmptyVector.algebra

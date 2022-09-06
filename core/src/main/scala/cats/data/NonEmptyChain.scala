@@ -682,9 +682,7 @@ sealed abstract private[data] class NonEmptyChainInstances extends NonEmptyChain
   implicit def catsDataSemigroupForNonEmptyChain[A]: Semigroup[NonEmptyChain[A]] =
     Semigroup[Chain[A]].asInstanceOf[Semigroup[NonEmptyChain[A]]]
 
-  implicit def catsDataShowForNonEmptyChain[A](implicit A: Show[A]): Show[NonEmptyChain[A]] =
-    Show.show[NonEmptyChain[A]](_.show)
-
+  implicit def catsDataShowForNonEmptyChain[A: Show]: Show[NonEmptyChain[A]] = _.show
 }
 
 sealed abstract private[data] class NonEmptyChainInstances1 extends NonEmptyChainInstances2 {

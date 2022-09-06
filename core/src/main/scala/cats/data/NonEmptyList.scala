@@ -941,8 +941,7 @@ sealed abstract private[data] class NonEmptyListInstances extends NonEmptyListIn
 
     }
 
-  implicit def catsDataShowForNonEmptyList[A](implicit A: Show[A]): Show[NonEmptyList[A]] =
-    Show.show[NonEmptyList[A]](_.show)
+  implicit def catsDataShowForNonEmptyList[A: Show]: Show[NonEmptyList[A]] = _.show
 
   implicit def catsDataSemigroupForNonEmptyList[A]: Semigroup[NonEmptyList[A]] =
     SemigroupK[NonEmptyList].algebra[A]

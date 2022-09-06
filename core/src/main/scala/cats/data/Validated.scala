@@ -927,10 +927,7 @@ sealed abstract private[data] class ValidatedInstances extends ValidatedInstance
       override def eqv(x: Validated[A, B], y: Validated[A, B]): Boolean = x === y
     }
 
-  implicit def catsDataShowForValidated[A, B](implicit A: Show[A], B: Show[B]): Show[Validated[A, B]] =
-    new Show[Validated[A, B]] {
-      def show(f: Validated[A, B]): String = f.show
-    }
+  implicit def catsDataShowForValidated[A: Show, B: Show]: Show[Validated[A, B]] = _.show
 
   implicit val catsDataBitraverseForValidated: Bitraverse[Validated] =
     new Bitraverse[Validated] {
@@ -977,13 +974,7 @@ sealed abstract private[data] class ValidatedInstances extends ValidatedInstance
 
 sealed abstract private[data] class ValidatedInstances1 extends ValidatedInstances2 {
 
-  implicit def catsDataSemigroupForValidated[A, B](implicit
-    A: Semigroup[A],
-    B: Semigroup[B]
-  ): Semigroup[Validated[A, B]] =
-    new Semigroup[Validated[A, B]] {
-      def combine(x: Validated[A, B], y: Validated[A, B]): Validated[A, B] = x.combine(y)
-    }
+  implicit def catsDataSemigroupForValidated[A: Semigroup, B: Semigroup]: Semigroup[Validated[A, B]] = _ combine _
 
   implicit def catsDataCommutativeApplicativeForValidated[E: CommutativeSemigroup]
     : CommutativeApplicative[Validated[E, *]] =
@@ -997,10 +988,7 @@ sealed abstract private[data] class ValidatedInstances1 extends ValidatedInstanc
 }
 
 sealed abstract private[data] class ValidatedInstances2 {
-  implicit def catsDataEqForValidated[A: Eq, B: Eq]: Eq[Validated[A, B]] =
-    new Eq[Validated[A, B]] {
-      def eqv(x: Validated[A, B], y: Validated[A, B]): Boolean = x === y
-    }
+  implicit def catsDataEqForValidated[A: Eq, B: Eq]: Eq[Validated[A, B]] = _ === _
 
   implicit def catsDataTraverseFunctorForValidated[E]: Traverse[Validated[E, *]] =
     new Traverse[Validated[E, *]] {

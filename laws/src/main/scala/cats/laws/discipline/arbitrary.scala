@@ -269,38 +269,19 @@ object arbitrary extends ArbitraryInstances0 with ScalaVersionSpecific.Arbitrary
   // implies equal, in order to avoid producing invalid instances.
 
   implicit def catsLawsArbitraryForEq[A: Arbitrary]: Arbitrary[Eq[A]] =
-    Arbitrary(
-      getArbitrary[Int => Int].map(f =>
-        new Eq[A] {
-          def eqv(x: A, y: A): Boolean = f(x.##) == f(y.##)
-        }
-      )
-    )
+    Arbitrary(getArbitrary[Int => Int].map(f => Eq.by(x => f(x.##))))
 
   implicit def catsLawsArbitraryForEquiv[A: Arbitrary]: Arbitrary[Equiv[A]] =
     Arbitrary(getArbitrary[Eq[A]].map(Eq.catsKernelEquivForEq(_)))
 
   implicit def catsLawsArbitraryForPartialOrder[A: Arbitrary]: Arbitrary[PartialOrder[A]] =
-    Arbitrary(
-      getArbitrary[Int => Double].map(f =>
-        new PartialOrder[A] {
-          def partialCompare(x: A, y: A): Double =
-            if (x.## == y.##) 0.0 else f(x.##) - f(y.##)
-        }
-      )
-    )
+    Arbitrary(getArbitrary[Int => Double].map(f => PartialOrder.by(x => f(x.##))))
 
   implicit def catsLawsArbitraryForPartialOrdering[A: Arbitrary]: Arbitrary[PartialOrdering[A]] =
     Arbitrary(getArbitrary[PartialOrder[A]].map(PartialOrder.catsKernelPartialOrderingForPartialOrder(_)))
 
   implicit def catsLawsArbitraryForOrder[A: Arbitrary]: Arbitrary[Order[A]] =
-    Arbitrary(
-      getArbitrary[Int => Int].map(f =>
-        new Order[A] {
-          def compare(x: A, y: A): Int = java.lang.Integer.compare(f(x.##), f(y.##))
-        }
-      )
-    )
+    Arbitrary(getArbitrary[Int => Int].map(f => Order.by(x => f(x.##))))
 
   implicit def catsLawsArbitraryForSortedMap[K: Arbitrary: Order, V: Arbitrary]: Arbitrary[SortedMap[K, V]] =
     Arbitrary(getArbitrary[Map[K, V]].map(s => SortedMap.empty[K, V](implicitly[Order[K]].toOrdering) ++ s))

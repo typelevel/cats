@@ -80,8 +80,7 @@ object Show extends ScalaVersionSpecificShowInstances with ShowInstances {
   }
 
   implicit val catsContravariantForShow: Contravariant[Show] = new Contravariant[Show] {
-    def contramap[A, B](fa: Show[A])(f: B => A): Show[B] =
-      show[B]((fa.show _).compose(f))
+    def contramap[A, B](fa: Show[A])(f: B => A): Show[B] = b => fa.show(f(b))
   }
 
   implicit def catsShowForUnit: Show[Unit] = cats.instances.unit.catsStdShowForUnit

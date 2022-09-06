@@ -30,7 +30,15 @@ import cats.laws.NonEmptyTraverseLaws
 trait NonEmptyTraverseTests[F[_]] extends TraverseTests[F] with ReducibleTests[F] {
   def laws: NonEmptyTraverseLaws[F]
 
-  def nonEmptyTraverse[G[_]: Applicative, A: Arbitrary, B: Arbitrary, C: Arbitrary, M: Arbitrary, X[_], Y[_]](implicit
+  def nonEmptyTraverse[
+    G[_]: Applicative,
+    A: Arbitrary,
+    B: Arbitrary,
+    C: Arbitrary,
+    M: Arbitrary,
+    X[_],
+    Y[_]
+  ](implicit
     ArbFA: Arbitrary[F[A]],
     ArbXB: Arbitrary[X[B]],
     ArbYB: Arbitrary[Y[B]],
@@ -64,26 +72,19 @@ trait NonEmptyTraverseTests[F[_]] extends TraverseTests[F] with ReducibleTests[F
     EqYFB: Eq[Y[F[B]]],
     EqYFM: Eq[Y[F[M]]],
     EqOptionA: Eq[Option[A]]
-  ): RuleSet = {
-    implicit def EqXFBYFB: Eq[(X[F[B]], Y[F[B]])] =
-      new Eq[(X[F[B]], Y[F[B]])] {
-        override def eqv(x: (X[F[B]], Y[F[B]]), y: (X[F[B]], Y[F[B]])): Boolean =
-          EqXFB.eqv(x._1, y._1) && EqYFB.eqv(x._2, y._2)
-      }
-    new RuleSet {
-      def name: String = "nonEmptyTraverse"
-      def bases: Seq[(String, RuleSet)] = Nil
-      def parents: Seq[RuleSet] = Seq(traverse[A, B, C, M, X, Y], reducible[G, A, B])
-      def props: Seq[(String, Prop)] =
-        Seq(
-          "nonEmptyTraverse identity" -> forAll(laws.nonEmptyTraverseIdentity[A, C] _),
-          "nonEmptyTraverse sequential composition" -> forAll(
-            laws.nonEmptyTraverseSequentialComposition[A, B, C, X, Y] _
-          ),
-          "nonEmptyTraverse parallel composition" -> forAll(laws.nonEmptyTraverseParallelComposition[A, B, X, Y] _),
-          "nonEmptyTraverse derive reduceMap" -> forAll(laws.reduceMapDerived[A, M] _)
-        )
-    }
+  ): RuleSet = new RuleSet {
+    def name: String = "nonEmptyTraverse"
+    def bases: Seq[(String, RuleSet)] = Nil
+    def parents: Seq[RuleSet] = Seq(traverse[A, B, C, M, X, Y], reducible[G, A, B])
+    def props: Seq[(String, Prop)] =
+      Seq(
+        "nonEmptyTraverse identity" -> forAll(laws.nonEmptyTraverseIdentity[A, C] _),
+        "nonEmptyTraverse sequential composition" -> forAll(
+          laws.nonEmptyTraverseSequentialComposition[A, B, C, X, Y] _
+        ),
+        "nonEmptyTraverse parallel composition" -> forAll(laws.nonEmptyTraverseParallelComposition[A, B, X, Y] _),
+        "nonEmptyTraverse derive reduceMap" -> forAll(laws.reduceMapDerived[A, M] _)
+      )
   }
 }
 

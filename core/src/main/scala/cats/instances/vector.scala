@@ -22,15 +22,12 @@
 package cats
 package instances
 
-import cats.data.{Chain, ZipVector}
+import cats.data.{Chain, Ior, ZipVector}
 import cats.instances.StaticMethods.appendAll
 import cats.kernel.compat.scalaVersionSpecific._
-import cats.syntax.show._
 
 import scala.annotation.tailrec
-import scala.collection.+:
 import scala.collection.immutable.VectorBuilder
-import cats.data.Ior
 
 trait VectorInstances extends cats.kernel.instances.VectorInstances {
   implicit val catsStdInstancesForVector
@@ -232,10 +229,7 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
     }
 
   implicit def catsStdShowForVector[A: Show]: Show[Vector[A]] =
-    new Show[Vector[A]] {
-      def show(fa: Vector[A]): String =
-        fa.iterator.map(_.show).mkString("Vector(", ", ", ")")
-    }
+    _.iterator.map(Show[A].show).mkString("Vector(", ", ", ")")
 
   implicit def catsStdNonEmptyParallelForVectorZipVector: NonEmptyParallel.Aux[Vector, ZipVector] =
     new NonEmptyParallel[Vector] {

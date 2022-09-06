@@ -115,9 +115,7 @@ trait Order[@sp A] extends Any with PartialOrder[A] { self =>
    * instance.
    */
   def toOrdering: Ordering[A] =
-    new Ordering[A] {
-      def compare(x: A, y: A): Int = self.compare(x, y)
-    }
+    compare(_, _)
 }
 
 abstract class OrderFunctions[O[T] <: Order[T]] extends PartialOrderFunctions[O] {
@@ -158,17 +156,13 @@ object Order extends OrderFunctions[Order] with OrderToOrderingConversion {
    * function `f`.
    */
   def by[@sp A, @sp B](f: A => B)(implicit ev: Order[B]): Order[A] =
-    new Order[A] {
-      def compare(x: A, y: A): Int = ev.compare(f(x), f(y))
-    }
+    (x, y) => ev.compare(f(x), f(y))
 
   /**
    * Defines an ordering on `A` from the given order such that all arrows switch direction.
    */
   def reverse[@sp A](order: Order[A]): Order[A] =
-    new Order[A] {
-      def compare(x: A, y: A): Int = order.compare(y, x)
-    }
+    (x, y) => order.compare(y, x)
 
   /**
    * Returns a new `Order[A]` instance that first compares by the first
@@ -177,22 +171,16 @@ object Order extends OrderFunctions[Order] with OrderToOrderingConversion {
    * That is, `Order.whenEqual(x, y)` creates an `Order` that first orders by `x` and
    * then (if two elements are equal) falls back to `y` for the comparison.
    */
-  def whenEqual[@sp A](first: Order[A], second: Order[A]): Order[A] =
-    new Order[A] {
-      def compare(x: A, y: A) = {
-        val c = first.compare(x, y)
-        if (c == 0) second.compare(x, y)
-        else c
-      }
-    }
+  def whenEqual[@sp A](first: Order[A], second: Order[A]): Order[A] = { (x, y) =>
+    val c = first.compare(x, y)
+    if (c == 0) second.compare(x, y)
+    else c
+  }
 
   /**
    * Define an `Order[A]` using the given function `f`.
    */
-  def from[@sp A](f: (A, A) => Int): Order[A] =
-    new Order[A] {
-      def compare(x: A, y: A) = f(x, y)
-    }
+  def from[@sp A](f: (A, A) => Int): Order[A] = f(_, _)
 
   /**
    * Define an `Order[A]` using the given 'less than' function `f`.
@@ -215,9 +203,7 @@ object Order extends OrderFunctions[Order] with OrderToOrderingConversion {
    * An `Order` instance that considers all `A` instances to be equal.
    */
   def allEqual[A]: Order[A] =
-    new Order[A] {
-      def compare(x: A, y: A): Int = 0
-    }
+    (_, _) => 0
 
   /**
    * A `Monoid[Order[A]]` can be generated for all `A` with the following
@@ -243,13 +229,8 @@ object Order extends OrderFunctions[Order] with OrderToOrderingConversion {
   def fromOrdering[A](implicit ev: Ordering[A]): Order[A] =
     new Order[A] {
       def compare(x: A, y: A): Int = ev.compare(x, y)
-
       override def toOrdering: Ordering[A] = ev
     }
 
-  def fromComparable[A <: Comparable[A]]: Order[A] =
-    new Order[A] {
-      override def compare(x: A, y: A): Int =
-        x.compareTo(y)
-    }
+  def fromComparable[A <: Comparable[A]]: Order[A] = _ compareTo _
 }

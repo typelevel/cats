@@ -302,14 +302,9 @@ trait FreeTSuiteInstances {
     override def map[A, B](fa: JustFunctor[A])(f: A => B): JustFunctor[B] = JustFunctor(f(fa.a))
   }
 
-  implicit def freeTOptionEq[A](implicit A: Eq[A], OM: Monad[Option]): Eq[FreeTOption[A]] =
-    new Eq[FreeTOption[A]] {
-      def eqv(a: FreeTOption[A], b: FreeTOption[A]) = Eq[Option[A]].eqv(a.runM(identity), b.runM(identity))
-    }
+  implicit def freeTOptionEq[A](implicit A: Eq[A]): Eq[FreeTOption[A]] =
+    Eq.by(_.runM(identity))
 
-  implicit def freeTStateEq[A](implicit A: Eq[A], SM: Monad[IntState]): Eq[FreeTState[A]] =
-    new Eq[FreeTState[A]] {
-      def eqv(a: FreeTState[A], b: FreeTState[A]) =
-        Eq[IntState[A]].eqv(a.runM(identity)(SM, SM), b.runM(identity)(SM, SM))
-    }
+  implicit def freeTStateEq[A](implicit A: Eq[A]): Eq[FreeTState[A]] =
+    Eq.by(_.runM(identity))
 }

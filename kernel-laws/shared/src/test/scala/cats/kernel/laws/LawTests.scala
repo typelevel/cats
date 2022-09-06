@@ -353,14 +353,11 @@ class Tests extends TestsConfig with DisciplineSuite {
   // Comparison related
 
   // Something that can give NaN for test
-  def subsetPartialOrder[A]: PartialOrder[Set[A]] =
-    new PartialOrder[Set[A]] {
-      def partialCompare(x: Set[A], y: Set[A]): Double =
-        if (x == y) 0.0
-        else if (x.subsetOf(y)) -1.0
-        else if (y.subsetOf(x)) 1.0
-        else Double.NaN
-    }
+  def subsetPartialOrder[A]: PartialOrder[Set[A]] = (x, y) =>
+    if (x == y) 0.0
+    else if (x.subsetOf(y)) -1.0
+    else if (y.subsetOf(x)) 1.0
+    else Double.NaN
 
   checkAll("subsetPartialOrder[Int]", PartialOrderTests(subsetPartialOrder[Int]).partialOrder)
 
@@ -425,9 +422,7 @@ class Tests extends TestsConfig with DisciplineSuite {
   // esoteric machinery follows...
 
   implicit lazy val band: Band[(Int, Int)] =
-    new Band[(Int, Int)] {
-      def combine(a: (Int, Int), b: (Int, Int)) = (a._1, b._2)
-    }
+    Band.instance((a, b) => (a._1, b._2))
 
   {
     // In order to check the monoid laws for `Order[N]`, we need
@@ -463,15 +458,11 @@ class Tests extends TestsConfig with DisciplineSuite {
     implicit val NOrderEq: Eq[Order[N]] = Eq.by { (order: Order[N]) =>
       Vector.tabulate(nMax)(N).sorted(order.toOrdering)
     }
-    implicit val NEqEq: Eq[Eq[N]] = new Eq[Eq[N]] {
-      def eqv(a: Eq[N], b: Eq[N]) =
-        Iterator
-          .tabulate(nMax)(N)
-          .flatMap { x =>
-            Iterator.tabulate(nMax)(N).map((x, _))
-          }
-          .forall { case (x, y) => a.eqv(x, y) == b.eqv(x, y) }
-    }
+    implicit val NEqEq: Eq[Eq[N]] = (a, b) =>
+      Iterator
+        .tabulate(nMax)(N)
+        .flatMap(x => Iterator.tabulate(nMax)(N).map((x, _)))
+        .forall { case (x, y) => a.eqv(x, y) == b.eqv(x, y) }
 
     implicit val monoidOrderN: Monoid[Order[N]] with Band[Order[N]] = Order.whenEqualMonoid[N]
     checkAll("Monoid[Order[N]]", MonoidTests[Order[N]].monoid)

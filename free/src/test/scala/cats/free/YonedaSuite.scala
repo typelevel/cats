@@ -35,9 +35,7 @@ class YonedaSuite extends CatsSuite {
     Arbitrary(F.arbitrary.map(Yoneda(_)))
 
   implicit def yonedaEq[F[_]: Functor, A](implicit FA: Eq[F[A]]): Eq[Yoneda[F, A]] =
-    new Eq[Yoneda[F, A]] {
-      def eqv(a: Yoneda[F, A], b: Yoneda[F, A]): Boolean = FA.eqv(a.run, b.run)
-    }
+    Eq.by(_.run)
 
   checkAll("Yoneda[Option, *]", FunctorTests[Yoneda[Option, *]].functor[Int, Int, Int])
   checkAll("Functor[Yoneda[Option, *]]", SerializableTests.serializable(Functor[Yoneda[Option, *]]))

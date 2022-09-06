@@ -180,29 +180,18 @@ trait TryInstances extends TryInstances1 {
       override def unit: Try[Unit] = successUnit
     }
 
-  implicit def catsStdShowForTry[A](implicit A: Show[A]): Show[Try[A]] =
-    new Show[Try[A]] {
-      def show(fa: Try[A]): String =
-        fa match {
-          case Success(a) => s"Success(${A.show(a)})"
-          case Failure(e) => s"Failure($e)"
-        }
-    }
+  implicit def catsStdShowForTry[A](implicit A: Show[A]): Show[Try[A]] = {
+    case Success(a) => s"Success(${A.show(a)})"
+    case Failure(e) => s"Failure($e)"
+  }
 
   /**
    * you may wish to do equality by making `implicit val eqT: Eq[Throwable] = Eq.allEqual`
    * doing a fine grained equality on Throwable can make the code very execution
    * order dependent
    */
-  implicit def catsStdEqForTry[A, T](implicit A: Eq[A], T: Eq[Throwable]): Eq[Try[A]] =
-    new Eq[Try[A]] {
-      def eqv(x: Try[A], y: Try[A]): Boolean =
-        (x, y) match {
-          case (Success(a), Success(b)) => A.eqv(a, b)
-          case (Failure(a), Failure(b)) => T.eqv(a, b)
-          case _                        => false
-        }
-    }
+  implicit def catsStdEqForTry[A](implicit A: Eq[A], T: Eq[Throwable]): Eq[Try[A]] =
+    Eq.catsStdEqForTry
 }
 
 private[instances] object TryInstances {

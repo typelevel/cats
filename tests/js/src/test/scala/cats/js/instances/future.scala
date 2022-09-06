@@ -48,25 +48,15 @@ sealed private[instances] trait FutureInstances0 extends FutureInstances1 {
     }
 
   def futureOrder[A: Order](atMost: FiniteDuration)(implicit ec: E): Order[Future[A]] =
-    new Order[Future[A]] {
-      def compare(x: Future[A], y: Future[A]): Int =
-        Await.result(x.zip(y).map { case (x, y) => x.compare(y) }, atMost)
-    }
+    (x, y) => Await.result(x.zip(y).map { case (x, y) => x.compare(y) }, atMost)
 }
 
 sealed private[instances] trait FutureInstances1 extends FutureInstances2 {
   def futurePartialOrder[A: PartialOrder](atMost: FiniteDuration)(implicit ec: E): PartialOrder[Future[A]] =
-    new PartialOrder[Future[A]] {
-      def partialCompare(x: Future[A], y: Future[A]): Double =
-        Await.result(x.zip(y).map { case (x, y) => x.partialCompare(y) }, atMost)
-    }
-
+    (x, y) => Await.result(x.zip(y).map { case (x, y) => x.partialCompare(y) }, atMost)
 }
 
 sealed private[instances] trait FutureInstances2 {
   def futureEq[A: Eq](atMost: FiniteDuration)(implicit ec: E): Eq[Future[A]] =
-    new Eq[Future[A]] {
-      def eqv(x: Future[A], y: Future[A]): Boolean =
-        Await.result(x.zip(y).map { case (x, y) => x === y }, atMost)
-    }
+    (x, y) => Await.result(x.zip(y).map { case (x, y) => x === y }, atMost)
 }

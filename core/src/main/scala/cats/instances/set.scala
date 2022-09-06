@@ -24,8 +24,6 @@ package instances
 
 import cats.kernel.CommutativeMonoid
 
-import cats.syntax.show._
-
 trait SetInstances extends cats.kernel.instances.SetInstances {
 
   implicit val catsStdInstancesForSet: UnorderedTraverse[Set] with MonoidK[Set] =
@@ -61,8 +59,5 @@ trait SetInstances extends cats.kernel.instances.SetInstances {
     }
 
   implicit def catsStdShowForSet[A: Show]: Show[Set[A]] =
-    new Show[Set[A]] {
-      def show(fa: Set[A]): String =
-        fa.iterator.map(_.show).mkString("Set(", ", ", ")")
-    }
+    _.iterator.map(Show[A].show).mkString("Set(", ", ", ")")
 }

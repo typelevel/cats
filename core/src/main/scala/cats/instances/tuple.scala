@@ -70,11 +70,9 @@ sealed private[instances] trait Tuple2Instances extends Tuple2Instances1 {
     }
 
   @deprecated("Use catsStdShowForTuple2 in cats.instances.NTupleShowInstances", "2.4.0")
-  def catsStdShowForTuple2[A, B](implicit aShow: Show[A], bShow: Show[B]): Show[(A, B)] =
-    new Show[(A, B)] {
-      override def show(f: (A, B)): String =
-        s"(${aShow.show(f._1)},${bShow.show(f._2)})"
-    }
+  def catsStdShowForTuple2[A, B](implicit aShow: Show[A], bShow: Show[B]): Show[(A, B)] = { case (a, b) =>
+    s"(${aShow.show(a)},${bShow.show(b)})"
+  }
 
   @deprecated("Use catsStdInstancesForTuple2 in cats.instances.NTupleMonadInstances", "2.4.0")
   def catsStdInstancesForTuple2[X]: Traverse[(X, *)] with Comonad[(X, *)] with Reducible[(X, *)] =

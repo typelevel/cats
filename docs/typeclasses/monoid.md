@@ -82,10 +82,7 @@ final case class NonEmptyList[A](head: A, tail: List[A]) {
 }
 
 object NonEmptyList {
-  implicit def nonEmptyListSemigroup[A]: Semigroup[NonEmptyList[A]] =
-    new Semigroup[NonEmptyList[A]] {
-      def combine(x: NonEmptyList[A], y: NonEmptyList[A]): NonEmptyList[A] = x ++ y
-    }
+  implicit def nonEmptyListSemigroup[A]: Semigroup[NonEmptyList[A]] = _ ++ _
 }
 ```
 

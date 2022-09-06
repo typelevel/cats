@@ -36,9 +36,7 @@ class CoyonedaSuite extends CatsSuite {
     Arbitrary(F.arbitrary.map(Coyoneda.lift))
 
   implicit def coyonedaEq[F[_]: Functor, A](implicit FA: Eq[F[A]]): Eq[Coyoneda[F, A]] =
-    new Eq[Coyoneda[F, A]] {
-      def eqv(a: Coyoneda[F, A], b: Coyoneda[F, A]): Boolean = FA.eqv(a.run, b.run)
-    }
+    Eq.by(_.run)
 
   checkAll("Coyoneda[Option, *]", FunctorTests[Coyoneda[Option, *]].functor[Int, Int, Int])
   checkAll("Functor[Coyoneda[Option, *]]", SerializableTests.serializable(Functor[Coyoneda[Option, *]]))

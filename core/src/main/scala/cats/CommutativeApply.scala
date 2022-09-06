@@ -36,11 +36,7 @@ trait CommutativeApply[F[_]] extends Apply[F]
 
 object CommutativeApply {
   def commutativeSemigroupFor[F[_]: CommutativeApply, A: CommutativeSemigroup]: CommutativeSemigroup[F[A]] =
-    new CommutativeSemigroup[F[A]] {
-      override def combine(x: F[A], y: F[A]): F[A] =
-        CommutativeApply[F]
-          .map2(x, y)(CommutativeSemigroup[A].combine)
-    }
+    CommutativeApply[F].map2(_, _)(CommutativeSemigroup[A].combine)
 
   /**
    * Summon an instance of [[CommutativeApply]] for `F`.

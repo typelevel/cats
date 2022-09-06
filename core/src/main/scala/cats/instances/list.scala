@@ -22,16 +22,13 @@
 package cats
 package instances
 
-import cats.data.{Chain, ZipList}
+import cats.data.{Chain, Ior, ZipList}
 import cats.instances.StaticMethods.appendAll
 import cats.kernel.compat.scalaVersionSpecific._
 import cats.kernel.instances.StaticMethods.wrapMutableIndexedSeq
-import cats.syntax.show._
 
 import scala.annotation.tailrec
 import scala.collection.mutable.ListBuffer
-
-import cats.data.Ior
 
 trait ListInstances extends cats.kernel.instances.ListInstances {
 
@@ -278,10 +275,7 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
     }
 
   implicit def catsStdShowForList[A: Show]: Show[List[A]] =
-    new Show[List[A]] {
-      def show(fa: List[A]): String =
-        fa.iterator.map(_.show).mkString("List(", ", ", ")")
-    }
+    _.iterator.map(Show[A].show).mkString("List(", ", ", ")")
 
   implicit def catsStdNonEmptyParallelForListZipList: NonEmptyParallel.Aux[List, ZipList] =
     new NonEmptyParallel[List] {

@@ -36,9 +36,7 @@ trait ArraySeqInstances extends cats.kernel.instances.ArraySeqInstances {
     ArraySeqInstances.stdTraverseFilterInstance
 
   implicit def catsStdShowForArraySeq[A](implicit ev: Show[A]): Show[ArraySeq[A]] =
-    Show.show { arraySeq =>
-      arraySeq.iterator.map(ev.show).mkString("ArraySeq(", ", ", ")")
-    }
+    _.iterator.map(ev.show).mkString("ArraySeq(", ", ", ")")
 }
 
 private[cats] object ArraySeqInstances {

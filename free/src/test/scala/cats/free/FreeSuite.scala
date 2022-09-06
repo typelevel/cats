@@ -285,8 +285,5 @@ sealed trait FreeSuiteInstances1 {
     Arbitrary(freeGen[F, A](4))
 
   implicit def freeEq[S[_]: Monad, A](implicit SA: Eq[S[A]]): Eq[Free[S, A]] =
-    new Eq[Free[S, A]] {
-      def eqv(a: Free[S, A], b: Free[S, A]): Boolean =
-        SA.eqv(a.runM(identity), b.runM(identity))
-    }
+    Eq.by(_.runM(identity))
 }
