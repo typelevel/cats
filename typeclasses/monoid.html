@@ -251,7 +251,7 @@
         <p>There are some types that can form a <code>Semigroup</code> but not a <code>Monoid</code>. For example, the
         following <code>NonEmptyList</code> type forms a semigroup through <code>++</code>, but has no corresponding
         identity element to form a monoid.</p>
-        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="type-name">Semigroup</span><span>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="type-name">Semigroup</span><span>
 
 </span><span class="keyword">final</span><span> </span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">NonEmptyList</span><span>[</span><span class="type-name">A</span><span>](</span><span class="identifier">head</span><span>: </span><span class="type-name">A</span><span>, </span><span class="identifier">tail</span><span>: </span><span class="type-name">List</span><span>[</span><span class="type-name">A</span><span>]) {
   </span><span class="keyword">def</span><span> ++(</span><span class="identifier">other</span><span>: </span><span class="type-name">NonEmptyList</span><span>[</span><span class="type-name">A</span><span>]): </span><span class="type-name">NonEmptyList</span><span>[</span><span class="type-name">A</span><span>] = </span><span class="type-name">NonEmptyList</span><span>(</span><span class="identifier">head</span><span>, </span><span class="identifier">tail</span><span> ++ </span><span class="identifier">other</span><span>.</span><span class="identifier">toList</span><span>)
@@ -260,10 +260,7 @@
 }
 
 </span><span class="keyword">object</span><span> </span><span class="type-name">NonEmptyList</span><span> {
-  </span><span class="keyword">implicit</span><span> </span><span class="keyword">def</span><span> </span><span class="declaration-name">nonEmptyListSemigroup</span><span>[</span><span class="type-name">A</span><span>]: </span><span class="type-name">Semigroup</span><span>[</span><span class="type-name">NonEmptyList</span><span>[</span><span class="type-name">A</span><span>]] =
-    </span><span class="keyword">new</span><span> </span><span class="type-name">Semigroup</span><span>[</span><span class="type-name">NonEmptyList</span><span>[</span><span class="type-name">A</span><span>]] {
-      </span><span class="keyword">def</span><span> </span><span class="declaration-name">combine</span><span>(</span><span class="identifier">x</span><span>: </span><span class="type-name">NonEmptyList</span><span>[</span><span class="type-name">A</span><span>], </span><span class="identifier">y</span><span>: </span><span class="type-name">NonEmptyList</span><span>[</span><span class="type-name">A</span><span>]): </span><span class="type-name">NonEmptyList</span><span>[</span><span class="type-name">A</span><span>] = </span><span class="identifier">x</span><span> ++ </span><span class="identifier">y</span><span>
-    }
+  </span><span class="keyword">implicit</span><span> </span><span class="keyword">def</span><span> </span><span class="declaration-name">nonEmptyListSemigroup</span><span>[</span><span class="type-name">A</span><span>]: </span><span class="type-name">Semigroup</span><span>[</span><span class="type-name">NonEmptyList</span><span>[</span><span class="type-name">A</span><span>]] = </span><span class="identifier">_</span><span> ++ </span><span class="identifier">_</span><span>
 }</span></code></pre>
         <p>How then can we collapse a <code>List[NonEmptyList[A]]</code> ? For such types that only have a <code>Semigroup</code> we can
         lift into <code>Option</code> to get a <code>Monoid</code>.</p>
