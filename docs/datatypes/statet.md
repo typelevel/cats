@@ -8,6 +8,7 @@ capable of error handling via `MonadThrow[F]`, then Cats derives an
 instance of `MonadThrow[StateT[F, S, *]]`.
 
 The type parameters are:
+
 - `F[_]` represents the effect in which the computation is performed.
 - `S` represents the underlying state, shared between each step of the
   state machine.
