@@ -207,11 +207,13 @@
         <code>StateT</code> may acquire new capabilities via <code>F</code>: for example, if <code>F</code> is
         capable of error handling via <code>MonadThrow[F]</code>, then Cats derives an
         instance of <code>MonadThrow[StateT[F, S, *]]</code>.</p>
-        <p>The type parameters are:
-        - <code>F[_]</code> represents the effect in which the computation is performed.
-        - <code>S</code> represents the underlying state, shared between each step of the
-          state machine.
-        - <code>A</code> represents the return value.</p>
+        <p>The type parameters are:</p>
+        <ul>
+          <li><code>F[_]</code> represents the effect in which the computation is performed.</li>
+          <li><code>S</code> represents the underlying state, shared between each step of the
+          state machine.</li>
+          <li><code>A</code> represents the return value.</li>
+        </ul>
         <p>It can be seen as a way to add the capability to manipulate a shared
         state to an existing computation in the context of <code>F</code>.</p>
         <p>This definition could be confusing, but it will become clear after
