@@ -114,6 +114,7 @@
         <li class="level1"><a href="../imports.html">Imports</a></li>
         <li class="level1"><a href="../faq.html">FAQ</a></li>
         <li class="level1"><a href="../CONTRIBUTING.html">Contributor guide</a></li>
+        <li class="level1"><a href="../ADOPTERS.html">Adopters</a></li>
         <li class="level1"><a href="../colophon.html">Colophon</a></li>
         <li class="level1"><a href="../nomenclature.html">Glossary</a></li>
         <li class="level1"><a href="../guidelines.html">Guidelines</a></li>
@@ -235,7 +236,7 @@
   </span><span class="identifier">println</span><span>(</span><span class="string-literal">&quot;Running expensive calculation...&quot;</span><span>)
   </span><span class="number-literal">1</span><span> + </span><span class="number-literal">2</span><span> * </span><span class="number-literal">3</span><span>
 }
-</span><span class="comment">// lazyEval: Eval[Int] = cats.Later@6e284f45
+</span><span class="comment">// lazyEval: Eval[Int] = cats.Later@6edad5c2
 </span><span>
 </span><span class="identifier">lazyEval</span><span>.</span><span class="identifier">value</span><span>
 </span><span class="comment">// Running expensive calculation...
@@ -254,7 +255,7 @@
   </span><span class="identifier">println</span><span>(</span><span class="string-literal">&quot;Running expensive calculation...&quot;</span><span>)
   </span><span class="number-literal">1</span><span> + </span><span class="number-literal">2</span><span> * </span><span class="number-literal">3</span><span>
 }
-</span><span class="comment">// always: Eval[Int] = cats.Always@eae99bd
+</span><span class="comment">// always: Eval[Int] = cats.Always@51c76170
 </span><span>
 </span><span class="identifier">always</span><span>.</span><span class="identifier">value</span><span>
 </span><span class="comment">// Running expensive calculation...

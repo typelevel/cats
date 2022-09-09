@@ -114,6 +114,7 @@
         <li class="level1"><a href="imports.html">Imports</a></li>
         <li class="level1"><a href="faq.html">FAQ</a></li>
         <li class="level1"><a href="CONTRIBUTING.html">Contributor guide</a></li>
+        <li class="level1"><a href="ADOPTERS.html">Adopters</a></li>
         <li class="level1"><a href="colophon.html">Colophon</a></li>
         <li class="level1"><a href="nomenclature.html">Glossary</a></li>
         <li class="level1"><a href="guidelines.html">Guidelines</a></li>
@@ -197,7 +198,6 @@
           <li class="level2"><a href="#code-contributors">Code Contributors</a></li>
           <li class="level2"><a href="#financial-contributors">Financial Contributors</a></li>
           <li class="level2"><a href="#getting-started">Getting Started</a></li>
-          <li class="level2"><a href="#documentation">Documentation</a></li>
           <li class="level2"><a href="#community">Community</a></li>
           <li class="level2"><a href="#binary-compatibility-and-versioning">Binary compatibility and versioning</a></li>
           <li class="level2"><a href="#adopters">Adopters</a></li>
@@ -274,65 +274,25 @@
         (used in place of <code>&quot;cats-core&quot;</code>):</p>
         <ul>
           <li><code>cats-kernel</code>: Small set of basic type classes (<em>required</em>).</li>
-        </ul>
-        <ul>
           <li><code>cats-core</code>: Most core type classes and functionality (<em>required</em>).</li>
-        </ul>
-        <ul>
           <li><code>cats-laws</code>: Laws for testing type class instances.</li>
-        </ul>
-        <ul>
           <li><code>cats-free</code>: Free structures such as the free monad, and supporting type classes.</li>
-        </ul>
-        <ul>
           <li><code>cats-testkit</code>: lib for writing tests for type class instances using laws.</li>
-        </ul>
-        <ul>
           <li><code>algebra</code>: Type classes to represent algebraic structures.</li>
+          <li><code>alleycats-core</code>: Cats instances and classes which are not lawful.</li>
         </ul>
-        <ul>
-          <li>
-            <p><code>alleycats-core</code>: Cats instances and classes which are not lawful.</p>
-            <p>There are several other Cats modules that are in separate repos so that they can
-            maintain independent release cycles.</p>
-          </li>
-        </ul>
+        <p>There are several other Cats modules that are in separate repos so that they can
+        maintain independent release cycles.</p>
         <ul>
           <li><a href="https://github.com/typelevel/cats-effect"><code>cats-effect</code></a>: standard <code>IO</code> type together with <code>Sync</code>, <code>Async</code> and <code>Effect</code> type classes</li>
-        </ul>
-        <ul>
           <li><a href="https://github.com/typelevel/cats-mtl"><code>cats-mtl</code></a>: transformer typeclasses for Cats&#39; Monads, Applicatives and Functors.</li>
-        </ul>
-        <ul>
           <li><a href="https://github.com/typelevel/mouse"><code>mouse</code></a>: a small companion to Cats that provides convenient syntax (aka extension methods)</li>
-        </ul>
-        <ul>
           <li><a href="https://github.com/typelevel/kittens"><code>kittens</code></a>: automatic type class instance derivation for Cats and generic utility functions</li>
-        </ul>
-        <ul>
           <li><a href="https://github.com/typelevel/cats-tagless"><code>cats-tagless</code></a>: Utilities for tagless final encoded algebras</li>
-        </ul>
-        <ul>
           <li><a href="https://github.com/typelevel/cats-collections"><code>cats-collections</code></a>: Data structures which facilitate pure functional programming</li>
-        </ul>
-        <ul>
           <li><a href="https://github.com/typelevel/cats-testkit-scalatest"><code>cats-testkit-scalatest</code></a>: Cats testkit integration with Scalatest</li>
         </ul>
         <p>Past release notes for Cats are available in <a href="https://github.com/typelevel/cats/blob/main/CHANGES.md">CHANGES.md</a>.</p>
-        
-        <h3 id="documentation" class="section">Documentation<a class="anchor-link right" href="#documentation"><i class="icofont-laika">&#xef71;</i></a></h3>
-        <p>Links:</p>
-        <ol class="arabic">
-          <li>Website: <a href="https://typelevel.org/cats/">typelevel.org/cats/</a></li>
-          <li>ScalaDoc: <a href="https://typelevel.org/cats/api/">typelevel.org/cats/api/</a></li>
-          <li>Type classes: <a href="https://typelevel.org/cats/typeclasses.html">typelevel.org/cats/typeclasses.html</a></li>
-          <li>Data types: <a href="https://typelevel.org/cats/datatypes.html">typelevel.org/cats/datatypes.html</a></li>
-          <li>Algebra overview: <a href="https://typelevel.org/cats/algebra.html">typelevel.org/cats/algebra.html</a></li>
-          <li>Glossary: <a href="https://typelevel.org/cats/nomenclature.html">typelevel.org/cats/nomenclature.html</a></li>
-          <li>Resources for Learners: <a href="https://typelevel.org/cats/resources_for_learners.html">typelevel.org/cats/resources<em>for</em>learners.html</a></li>
-          <li>FAQ: <a href="https://typelevel.org/cats/faq.html">typelevel.org/cats/faq.html</a></li>
-          <li>The Typelevel Ecosystem: <a href="https://typelevel.org/cats/typelevelEcosystem.html">typelevel.org/cats/typelevelEcosystem.html</a></li>
-        </ol>
         
         <h3 id="community" class="section">Community<a class="anchor-link right" href="#community"><i class="icofont-laika">&#xef71;</i></a></h3>
         <p>Discussion around Cats is currently happening on GitHub issues, PR pages,
@@ -375,184 +335,32 @@
         versioning in the future. But that decision is yet to be made.</p>
         
         <h3 id="adopters" class="section">Adopters<a class="anchor-link right" href="#adopters"><i class="icofont-laika">&#xef71;</i></a></h3>
-        <p>Here&#39;s a (non-exhaustive) list of companies that use Cats in production. Don&#39;t see yours? <a href="https://github.com/typelevel/cats/edit/main/README.md">You can add it in a PR!</a> And if you can, consider <a href="https://opencollective.com/typelevel">supporting us</a>.</p>
-        <ul>
-          <li><a href="https://www.47deg.com">47 Degrees</a></li>
-          <li><a href="https://abacusprotocol.com">Abacus Protocol</a></li>
-          <li><a href="https://experienceleague.adobe.com/docs/analytics-platform/using/cja-connections/cca/overview.html?lang=en">Adobe (CCA team)</a></li>
-          <li><a href="https://anduintransact.com">Anduin Transactions</a></li>
-          <li><a href="https://news.ycombinator.com/item?id=16969118">Apple Inc. (FEAR team)</a></li>
-          <li><a href="https://www.autoscout24.com">AutoScout24</a></li>
-          <li><a href="https://avantstay.com/">AvantStay</a></li>
-          <li><a href="https://avast.com">Avast</a></li>
-          <li><a href="https://www.azavea.com/">Azavea</a></li>
-          <li><a href="https://www.babylonhealth.com/">BabylonHealth</a></li>
-          <li><a href="https://banno.com/">Banno Group inside of Jack Henry &amp; Associates</a></li>
-          <li><a href="https://basefarm.com/">Basefarm</a></li>
-          <li><a href="https://buildo.io">buildo</a></li>
-          <li><a href="https://getbux.com/">BUX</a></li>
-          <li><a href="https://www.chartboost.com/">Chartboost</a></li>
-          <li><a href="https://clearscore.com/">ClearScore</a></li>
-          <li><a href="https://cleverbase.com/en/">Cleverbase</a></li>
-          <li><a href="https://www.codacy.com/">Codacy</a></li>
-          <li><a href="https://codedx.com/">Code Dx</a></li>
-          <li><a href="https://codecentric.de">Codecentric</a></li>
-          <li><a href="https://www.cognite.com">Cognite</a></li>
-          <li><a href="https://www.colisweb.com/">Colisweb</a></li>
-          <li><a href="https://compstak.com">CompStak</a></li>
-          <li><a href="https://coya.com/">Coya</a></li>
-          <li><a href="https://datumbrain.com/">Datum Brain</a></li>
-          <li><a href="https://disney.com/">Disney</a></li>
-          <li><a href="https://zd.drip.im">Dripower LTD</a></li>
-          <li><a href="https://drivetribe.com/">DriveTribe</a></li>
-          <li><a href="https://dwolla.com/">Dwolla</a></li>
-          <li><a href="http://enear.co">e.near</a></li>
-          <li><a href="https://eon.com">E.ON</a></li>
-          <li><a href="https://www.earnest.com">Earnest</a></li>
-          <li><a href="https://www.ebay.com">eBay Inc.</a></li>
-          <li><a href="https://eloquentix.com">Eloquentix</a></li>
-          <li><a href="https://www.esailors.de">eSailors</a></li>
-          <li><a href="https://etsy.com">Etsy</a></li>
-          <li><a href="https://www.evolutiongaming.com/">Evolution Gaming</a></li>
-          <li><a href="https://market.evotor.ru/">Evotor Marketplace</a></li>
-          <li><a href="https://exelonix.com/">Exelonix</a></li>
-          <li><a href="https://formation.ai">formation.ai</a></li>
-          <li><a href="https://free2move.com">Free2Move</a></li>
-          <li><a href="https://www.gemini.edu">Gemini Observatory</a></li>
-          <li><a href="https://hellosoda.com">HelloSoda</a></li>
-          <li><a href="https://hi.fi">HiFi</a></li>
-          <li><a href="https://www.homeaway.com">HomeAway</a></li>
-          <li><a href="https://hootsuite.com/">Hootsuite Inc.</a></li>
-          <li><a href="https://iheart.com">iHeartRadio</a></li>
-          <li><a href="https://www.immobilienscout24.de/">ImmobilienScout24</a></li>
-          <li><a href="https://www.immozentral.com/">Immozentral</a></li>
-          <li><a href="https://www.ing.com">ING Bank</a></li>
-          <li><a href="https://inner-product.com">Inner Product</a></li>
-          <li><a href="https://www.innfactory.de/">innFactory GmbH</a></li>
-          <li><a href="https://www.intenthq.com/">Intent HQ</a></li>
-          <li><a href="https://www.iofod.com/">iofod</a></li>
-          <li><a href="https://www.iteratorshq.com/">Iterators</a></li>
-          <li><a href="https://www.itv.com/">ITV</a></li>
-          <li><a href="https://www.kaluza.com">Kaluza</a></li>
-          <li><a href="https://lightform.com/">Lightform</a></li>
-          <li><a href="https://www.lookout.com">Lookout</a></li>
-          <li><a href="https://www.medidata.com/">Medidata</a></li>
-          <li><a href="https://merits.com">Merit</a></li>
-          <li><a href="https://www.metacommerce.ru">Metacommerce</a></li>
-          <li><a href="https://www.myob.com">MYOB</a></li>
-          <li><a href="https://ncredinburgh.com/">NCR Edinburgh</a></li>
-          <li><a href="https://jobs.netflix.com">Netflix</a></li>
-          <li><a href="https://www.networkedassets.com/">NetworkedAssets</a></li>
-          <li><a href="https://www.nezasa.com">Nezasa</a></li>
-          <li><a href="https://ocadotechnology.com">Ocado Technology</a></li>
-          <li><a href="https://onairentertainment.com/">On Air Entertainment</a></li>
-          <li><a href="https://ovoenergy.com">OVO Energy</a></li>
-          <li><a href="https://packlink.com/">Packlink</a></li>
-          <li><a href="https://permutive.com/">Permutive</a></li>
-          <li><a href="https://precog.com">Precog</a></li>
-          <li><a href="https://www.raiffeisen.ru/">Raiffeisenbank Russia</a></li>
-          <li><a href="https://www.rakuten.com">Rakuten</a></li>
-          <li><a href="https://www.rbccm.com">RBC Capital Markets</a></li>
-          <li><a href="https://www.realestate.com.au/">REA Group</a></li>
-          <li><a href="https://wearerealitygames.com">Reality Games</a></li>
-          <li><a href="https://revonte.com">Revonte</a></li>
-          <li><a href="https://rewardsnetwork.com">Rewards Network</a></li>
-          <li><a href="https://www.rms.com/">RMS</a></li>
-          <li><a href="https://rudder.io">Rudder</a></li>
-          <li><a href="https://scala.epfl.ch">Scala Center</a></li>
-          <li><a href="https://scalac.io">Scalac</a></li>
-          <li><a href="https://securityscorecard.io/">SecurityScorecard</a></li>
-          <li><a href="https://www.seek.com.au/">SEEK Limited</a></li>
-          <li><a href="https://snowplowanalytics.com/">Snowplow Analytics</a></li>
-          <li><a href="https://softwaremill.com">SoftwareMill</a></li>
-          <li><a href="https://www.spiceworks.com/">Spiceworks</a></li>
-          <li><a href="https://spotahome.com">Spotahome</a></li>
-          <li><a href="https://www.spotify.com">Spotify</a></li>
-          <li><a href="https://www.spotx.tv/">SpotX</a></li>
-          <li><a href="https://www.springernature.com">SpringerNature</a></li>
-          <li><a href="https://www.srf.ch">SRF</a></li>
-          <li><a href="https://www.sc.com">Standard Chartered</a></li>
-          <li><a href="https://stripe.com">Stripe</a></li>
-          <li><a href="https://www.philips.com/">SWCoE at Philips</a></li>
-          <li><a href="https://swop.cx/">SWOP</a></li>
-          <li><a href="https://www.tapad.com/">Tapad</a></li>
-          <li><a href="https://www.tecsisa.com">Tecsisa</a></li>
-          <li><a href="http://teikametrics.com">Teikametrics</a></li>
-          <li><a href="https://www.tenable.com">Tenable</a></li>
-          <li><a href="https://www.theguardian.com">The Guardian</a></li>
-          <li><a href="https://tinkoff.ru">Tinkoff</a></li>
-          <li><a href="https://tranzzo.com">Tranzzo</a></li>
-          <li><a href="https://underscore.io/">Underscore Consulting</a></li>
-          <li><a href="https://vidiq.com/">vidIQ</a></li>
-          <li><a href="https://wavesplatform.com/">Waves Platform</a></li>
-          <li><a href="https://www.wegtam.com">Wegtam GmbH</a></li>
-          <li><a href="https://www.wejo.com/">Wejo</a></li>
-          <li><a href="https://www.wework.com">WeWork</a></li>
-          <li><a href="https://www.wix.com">Wix.com</a></li>
-          <li><a href="https://wolt.com/">Wolt</a></li>
-          <li><a href="https://xite.com/">XITE</a></li>
-          <li><a href="https://zalando.com">Zalando</a></li>
-          <li><a href="https://www.zendesk.com">Zendesk</a></li>
-        </ul>
+        <p>A (non-exhaustive) list of companies that use Cats in production is featured on the <a href="ADOPTERS.html">Adopters page</a>. Don&#39;t see yours? <a href="https://github.com/typelevel/cats/edit/main/ADOPTERS.md">You can add it in a PR!</a> And if you can, consider <a href="https://opencollective.com/typelevel">supporting us</a>.</p>
         
         <h3 id="maintainers" class="section">Maintainers<a class="anchor-link right" href="#maintainers"><i class="icofont-laika">&#xef71;</i></a></h3>
         <p>The current maintainers (people who can merge pull requests) are:</p>
         <ul>
           <li><a href="https://github.com/rossabaker">rossabaker</a> Ross Baker</li>
-        </ul>
-        <ul>
           <li><a href="https://github.com/armanbilge">armanbilge</a> Arman Bilge</li>
-        </ul>
-        <ul>
           <li><a href="https://github.com/johnynek">johnynek</a> P. Oscar Boykin</li>
-        </ul>
-        <ul>
           <li><a href="https://github.com/adelbertc">adelbertc</a> Adelbert Chang</li>
-        </ul>
-        <ul>
           <li><a href="https://github.com/danicheg">danicheg</a> Daniel Esik</li>
-        </ul>
-        <ul>
           <li><a href="https://github.com/LukaJCB">LukaJCB</a> Luka Jacobowitz</li>
-        </ul>
-        <ul>
           <li><a href="https://github.com/peterneyens">peterneyens</a> Peter Neyens</li>
-        </ul>
-        <ul>
           <li><a href="https://github.com/tpolecat">tpolecat</a> Rob Norris</li>
-        </ul>
-        <ul>
           <li><a href="https://github.com/non">non</a> Erik Osheim</li>
-        </ul>
-        <ul>
           <li><a href="https://github.com/barambani">barambani</a> Filippo Mariotti</li>
-        </ul>
-        <ul>
           <li><a href="https://github.com/mpilquist">mpilquist</a> Michael Pilquist</li>
-        </ul>
-        <ul>
           <li><a href="https://github.com/milessabin">milessabin</a> Miles Sabin</li>
-        </ul>
-        <ul>
           <li><a href="https://github.com/djspiewak">djspiewak</a> Daniel Spiewak</li>
-        </ul>
-        <ul>
           <li><a href="https://github.com/fthomas">fthomas</a> Frank Thomas</li>
-        </ul>
-        <ul>
           <li><a href="https://github.com/satorg">satorg</a> Sergey Torgashov</li>
-        </ul>
-        <ul>
           <li><a href="https://github.com/julien-truffaut">julien-truffaut</a> Julien Truffaut</li>
-        </ul>
-        <ul>
           <li><a href="https://github.com/kailuowang">kailuowang</a> Kailuo Wang</li>
         </ul>
         <p>Retired committers include:</p>
         <ul>
           <li><a href="https://github.com/ceedubs">ceedubs</a> Cody Allen</li>
-        </ul>
-        <ul>
           <li><a href="https://github.com/travisbrown">travisbrown</a> Travis Brown</li>
         </ul>
         <p>We are currently following a practice of requiring at least two
