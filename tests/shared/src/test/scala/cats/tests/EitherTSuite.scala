@@ -655,6 +655,33 @@ class EitherTSuite extends CatsSuite {
     }
   }
 
+  test("biSemiflatTap does not change the return value") {
+    type TestEffect[A] = State[List[Int], A]
+    forAll {
+      (eithert: EitherT[TestEffect, String, Int],
+       fa: String => TestEffect[Int],
+       fb: Int => TestEffect[Int],
+       initial: List[Int]
+      ) =>
+        assert(eithert.biSemiflatTap(v => fa(v), v => fb(v)).value.runA(initial) === eithert.value.runA(initial))
+    }
+  }
+
+  test("biSemiflatTap consistent with leftSemiflatTap and semiFlatTap") {
+    type TestEffect[A] = State[List[Int], A]
+    forAll {
+      (eithert: EitherT[TestEffect, String, Int],
+       fa: String => TestEffect[Int],
+       fb: Int => TestEffect[Int],
+       initial: List[Int]
+      ) =>
+        assert(
+          eithert.biSemiflatTap(fa, fb).value.runS(initial) ===
+            eithert.leftSemiflatTap(fa).semiflatTap(fb).value.runS(initial)
+        )
+    }
+  }
+
   test("biSemiflatMap consistent with leftSemiflatMap and semiFlatmap") {
     forAll { (eithert: EitherT[List, String, Int], fa: String => List[Int], fb: Int => List[String]) =>
       assert(eithert.biSemiflatMap(fa, fb) === (eithert.leftSemiflatMap(fa).semiflatMap(fb)))
