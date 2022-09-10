@@ -80,7 +80,7 @@ scalacOptions += "-Ypartial-unification"
 And then create the Cats dependency, by adding the following to your `build.sbt`:
 
 ```scala
-libraryDependencies += "org.typelevel" %% "cats-core" % "2.7.0"
+libraryDependencies += "org.typelevel" %% "cats-core" % "@VERSION@"
 ```
 
 This will pull in the cats-core module. If you require some other
