@@ -130,6 +130,19 @@ object arbitrary extends ArbitraryInstances0 with ScalaVersionSpecific.Arbitrary
       a <- A.arbitrary
     } yield NonEmptyMap((k, a), fa))
 
+  @deprecated("Preserved for bincompat", "2.9.0")
+  def cogenNonEmptyMap[K, A](kOrder: Order[K],
+                             kCogen: Cogen[K],
+                             aOrder: Order[A],
+                             aCogen: Cogen[A]
+  ): Cogen[NonEmptyMap[K, A]] = {
+    implicit val orderingK: Order[K] = kOrder
+    implicit val cogenK: Cogen[K] = kCogen
+    implicit val cogenA: Cogen[A] = aCogen
+
+    Cogen[SortedMap[K, A]].contramap(_.toSortedMap)
+  }
+
   implicit def cogenNonEmptyMap[K: Order: Cogen, A: Cogen]: Cogen[NonEmptyMap[K, A]] =
     Cogen[SortedMap[K, A]].contramap(_.toSortedMap)
 
@@ -282,6 +295,19 @@ object arbitrary extends ArbitraryInstances0 with ScalaVersionSpecific.Arbitrary
 
   implicit def catsLawsArbitraryForOrder[A: Arbitrary]: Arbitrary[Order[A]] =
     Arbitrary(getArbitrary[Int => Int].map(f => Order.by(x => f(x.##))))
+
+  @deprecated("Preserved for bincompat", "2.9.0")
+  def catsLawsCogenForSortedMap[K, V](kOrder: Order[K],
+                                      kCogen: Cogen[K],
+                                      vOrder: Order[V],
+                                      vCogen: Cogen[V]
+  ): Cogen[SortedMap[K, V]] = {
+    implicit val orderingK: Ordering[K] = kOrder.toOrdering
+    implicit val cogenK: Cogen[K] = kCogen
+    implicit val cogenA: Cogen[V] = vCogen
+
+    implicitly[Cogen[Map[K, V]]].contramap(_.toMap)
+  }
 
   implicit def catsLawsArbitraryForSortedMap[K: Arbitrary: Order, V: Arbitrary]: Arbitrary[SortedMap[K, V]] =
     Arbitrary(getArbitrary[Map[K, V]].map(s => SortedMap.empty[K, V](implicitly[Order[K]].toOrdering) ++ s))
