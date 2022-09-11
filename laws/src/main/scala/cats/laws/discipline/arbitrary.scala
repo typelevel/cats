@@ -130,7 +130,7 @@ object arbitrary extends ArbitraryInstances0 with ScalaVersionSpecific.Arbitrary
       a <- A.arbitrary
     } yield NonEmptyMap((k, a), fa))
 
-  implicit def cogenNonEmptyMap[K: Order: Cogen, A: Order: Cogen]: Cogen[NonEmptyMap[K, A]] =
+  implicit def cogenNonEmptyMap[K: Order: Cogen, A: Cogen]: Cogen[NonEmptyMap[K, A]] =
     Cogen[SortedMap[K, A]].contramap(_.toSortedMap)
 
   implicit def catsLawsArbitraryForEitherT[F[_], A, B](implicit
@@ -286,9 +286,8 @@ object arbitrary extends ArbitraryInstances0 with ScalaVersionSpecific.Arbitrary
   implicit def catsLawsArbitraryForSortedMap[K: Arbitrary: Order, V: Arbitrary]: Arbitrary[SortedMap[K, V]] =
     Arbitrary(getArbitrary[Map[K, V]].map(s => SortedMap.empty[K, V](implicitly[Order[K]].toOrdering) ++ s))
 
-  implicit def catsLawsCogenForSortedMap[K: Order: Cogen, V: Order: Cogen]: Cogen[SortedMap[K, V]] = {
+  implicit def catsLawsCogenForSortedMap[K: Order: Cogen, V: Cogen]: Cogen[SortedMap[K, V]] = {
     implicit val orderingK: Ordering[K] = Order[K].toOrdering
-    implicit val orderingV: Ordering[V] = Order[V].toOrdering
 
     implicitly[Cogen[Map[K, V]]].contramap(_.toMap)
   }
