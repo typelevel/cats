@@ -26,17 +26,23 @@ abstract private[data] class AbstractNonEmptyInstances[F[_], NonEmptyF[_]](impli
   MF: Monad[F],
   CF: CoflatMap[F],
   TF: Traverse[F],
-  SF: SemigroupK[F]
+  SF: Alternative[F]
 ) extends Bimonad[NonEmptyF]
     with NonEmptyTraverse[NonEmptyF]
-    with SemigroupK[NonEmptyF] {
+    with NonEmptyAlternative[NonEmptyF] {
   val monadInstance = MF.asInstanceOf[Monad[NonEmptyF]]
   val coflatMapInstance = CF.asInstanceOf[CoflatMap[NonEmptyF]]
   val traverseInstance = Traverse[F].asInstanceOf[Traverse[NonEmptyF]]
-  val semiGroupKInstance = SemigroupK[F].asInstanceOf[SemigroupK[NonEmptyF]]
+  val alternativeInstance = Alternative[F].asInstanceOf[Alternative[NonEmptyF]]
 
   def combineK[A](a: NonEmptyF[A], b: NonEmptyF[A]): NonEmptyF[A] =
-    semiGroupKInstance.combineK(a, b)
+    alternativeInstance.combineK(a, b)
+
+  override def prependK[A](a: A, fa: NonEmptyF[A]): NonEmptyF[A] =
+    alternativeInstance.prependK(a, fa)
+
+  override def appendK[A](fa: NonEmptyF[A], a: A): NonEmptyF[A] =
+    alternativeInstance.appendK(fa, a)
 
   def pure[A](x: A): NonEmptyF[A] = monadInstance.pure(x)
 

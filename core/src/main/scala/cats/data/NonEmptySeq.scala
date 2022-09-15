@@ -381,22 +381,38 @@ final class NonEmptySeq[+A] private (val toSeq: Seq[A]) extends AnyVal with NonE
 @suppressUnusedImportWarningForScalaVersionSpecific
 sealed abstract private[data] class NonEmptySeqInstances {
 
+  @deprecated(
+    "maintained for the sake of binary compatibility only - use catsDataInstancesForNonEmptySeqBinCompat1 instead",
+    "2.9.0"
+  )
+  def catsDataInstancesForNonEmptySeq
+    : SemigroupK[NonEmptySeq] with Bimonad[NonEmptySeq] with NonEmptyTraverse[NonEmptySeq] with Align[NonEmptySeq] =
+    catsDataInstancesForNonEmptySeqBinCompat1
+
   /**
    * This is not a bug. The declared type of `catsDataInstancesForNonEmptySeq` intentionally ignores
    * `NonEmptyReducible` trait for it not being a typeclass.
    *
    * Also see the discussion: PR #3541 and issue #3069.
    */
-  implicit val catsDataInstancesForNonEmptySeq
-    : SemigroupK[NonEmptySeq] with Bimonad[NonEmptySeq] with NonEmptyTraverse[NonEmptySeq] with Align[NonEmptySeq] =
+  implicit val catsDataInstancesForNonEmptySeqBinCompat1: NonEmptyAlternative[NonEmptySeq]
+    with Bimonad[NonEmptySeq]
+    with NonEmptyTraverse[NonEmptySeq]
+    with Align[NonEmptySeq] =
     new NonEmptyReducible[NonEmptySeq, Seq]
-      with SemigroupK[NonEmptySeq]
+      with NonEmptyAlternative[NonEmptySeq]
       with Bimonad[NonEmptySeq]
       with NonEmptyTraverse[NonEmptySeq]
       with Align[NonEmptySeq] {
 
       def combineK[A](a: NonEmptySeq[A], b: NonEmptySeq[A]): NonEmptySeq[A] =
         a.concatNeSeq(b)
+
+      override def prependK[A](a: A, fa: NonEmptySeq[A]): NonEmptySeq[A] =
+        fa.prepend(a)
+
+      override def appendK[A](fa: NonEmptySeq[A], a: A): NonEmptySeq[A] =
+        fa.append(a)
 
       override def split[A](fa: NonEmptySeq[A]): (A, Seq[A]) = (fa.head, fa.tail)
 
@@ -532,14 +548,14 @@ sealed abstract private[data] class NonEmptySeqInstances {
   implicit def catsDataShowForNonEmptySeq[A: Show]: Show[NonEmptySeq[A]] = _.show
 
   implicit def catsDataSemigroupForNonEmptySeq[A]: Semigroup[NonEmptySeq[A]] =
-    catsDataInstancesForNonEmptySeq.algebra
+    catsDataInstancesForNonEmptySeqBinCompat1.algebra
 
   implicit def catsDataParallelForNonEmptySeq: NonEmptyParallel.Aux[NonEmptySeq, ZipNonEmptySeq] =
     new NonEmptyParallel[NonEmptySeq] {
       type F[x] = ZipNonEmptySeq[x]
 
       def apply: Apply[ZipNonEmptySeq] = ZipNonEmptySeq.catsDataCommutativeApplyForZipNonEmptySeq
-      def flatMap: FlatMap[NonEmptySeq] = NonEmptySeq.catsDataInstancesForNonEmptySeq
+      def flatMap: FlatMap[NonEmptySeq] = NonEmptySeq.catsDataInstancesForNonEmptySeqBinCompat1
 
       def sequential: ZipNonEmptySeq ~> NonEmptySeq =
         new (ZipNonEmptySeq ~> NonEmptySeq) { def apply[A](a: ZipNonEmptySeq[A]): NonEmptySeq[A] = a.value }

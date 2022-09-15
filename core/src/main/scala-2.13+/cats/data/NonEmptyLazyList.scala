@@ -509,7 +509,7 @@ sealed abstract private[data] class NonEmptyLazyListInstances extends NonEmptyLa
 
   implicit val catsDataInstancesForNonEmptyLazyList: Bimonad[NonEmptyLazyList]
     with NonEmptyTraverse[NonEmptyLazyList]
-    with SemigroupK[NonEmptyLazyList]
+    with NonEmptyAlternative[NonEmptyLazyList]
     with Align[NonEmptyLazyList] =
     new AbstractNonEmptyInstances[LazyList, NonEmptyLazyList] with Align[NonEmptyLazyList] {
 

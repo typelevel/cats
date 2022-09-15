@@ -21,24 +21,21 @@
 
 package cats.tests
 
-import cats.{Align, Bimonad, SemigroupK, Show, Traverse}
-import cats.data.{NonEmptyLazyList, NonEmptyLazyListOps, NonEmptyVector}
-import cats.kernel.{Eq, Hash, Order, PartialOrder, Semigroup}
-import cats.kernel.laws.discipline.{EqTests, HashTests, OrderTests, PartialOrderTests, SemigroupTests}
-import cats.laws.discipline.{
-  AlignTests,
-  BimonadTests,
-  NonEmptyTraverseTests,
-  SemigroupKTests,
-  SerializableTests,
-  ShortCircuitingTests
-}
+import cats._
+import cats.data.NonEmptyLazyList
+import cats.data.NonEmptyLazyListOps
+import cats.data.NonEmptyVector
+import cats.kernel.laws.discipline.EqTests
+import cats.kernel.laws.discipline.HashTests
+import cats.kernel.laws.discipline.OrderTests
+import cats.kernel.laws.discipline.PartialOrderTests
+import cats.kernel.laws.discipline.SemigroupTests
+import cats.kernel.laws.discipline.SerializableTests
+import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.syntax.either._
-import cats.syntax.foldable._
 import cats.syntax.eq._
-import cats.Reducible
-import cats.Eval
+import cats.syntax.foldable._
 import org.scalacheck.Prop._
 
 class NonEmptyLazyListSuite extends NonEmptyCollectionSuite[LazyList, NonEmptyLazyList, NonEmptyLazyListOps] {
@@ -52,8 +49,10 @@ class NonEmptyLazyListSuite extends NonEmptyCollectionSuite[LazyList, NonEmptyLa
   checkAll(s"NonEmptyLazyList[Int]", HashTests[NonEmptyLazyList[Int]].hash)
   checkAll(s"Hash[NonEmptyLazyList[Int]]", SerializableTests.serializable(Hash[NonEmptyLazyList[Int]]))
 
-  checkAll("NonEmptyLazyList[Int]", SemigroupKTests[NonEmptyLazyList].semigroupK[Int])
-  checkAll("SemigroupK[NonEmptyLazyList]", SerializableTests.serializable(SemigroupK[NonEmptyLazyList]))
+  checkAll("NonEmptyLazyList[Int]", NonEmptyAlternativeTests[NonEmptyLazyList].nonEmptyAlternative[Int, Int, Int])
+  checkAll("NonEmptyAlternative[NonEmptyLazyList]",
+           SerializableTests.serializable(NonEmptyAlternative[NonEmptyLazyList])
+  )
 
   checkAll("NonEmptyLazyList[Int] with Option",
            NonEmptyTraverseTests[NonEmptyLazyList].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option]
