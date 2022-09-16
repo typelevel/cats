@@ -287,7 +287,7 @@ Eval[UserUpdateResult]</code> as the continuation:</p>
 }
 </span><span class="comment">// anotherComputation: ContT[Eval, UserUpdateResult, Map[String, String]] = FromFn(
 //   runAndThen = Single(
-//     f = cats.data.ContT$$Lambda$12716/39620636@1eda338f,
+//     f = cats.data.ContT$$Lambda$12692/2034569241@1eda338f,
 //     index = 0
 //   )
 // )
@@ -315,7 +315,7 @@ Eval[UserUpdateResult]</code> as the continuation:</p>
   }
 </span><span class="comment">// updateUserModel: ContT[Eval, UserUpdateResult, User] = FromFn(
 //   runAndThen = Single(
-//     f = cats.data.ContT$$Lambda$12716/39620636@6ead6315,
+//     f = cats.data.ContT$$Lambda$12692/2034569241@6ead6315,
 //     index = 0
 //   )
 // )
@@ -349,7 +349,7 @@ Eval[UserUpdateResult]</code> as the continuation:</p>
   </span><span class="identifier">updateUserModel</span><span> </span><span class="identifier">flatMap</span><span> </span><span class="identifier">persistToDb</span><span> </span><span class="identifier">flatMap</span><span> </span><span class="identifier">publishEvent</span><span>
 </span><span class="comment">// chainOfContinuations: ContT[Eval, UserUpdateResult, UserUpdateResult] = FromFn(
 //   runAndThen = Single(
-//     f = cats.data.ContT$$Lambda$12720/2142489349@56a14889,
+//     f = cats.data.ContT$$Lambda$12696/259663123@56a14889,
 //     index = 0
 //   )
 // )
