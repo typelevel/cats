@@ -116,7 +116,7 @@ jobs:
           key: ${{ runner.os }}-sbt-cache-v2-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
 
       - name: Check that workflows are up to date
-        run: sbt 'project ${{ matrix.project }}' '++${{ matrix.scala }}' 'project /' githubWorkflowCheck
+        run: sbt githubWorkflowCheck
 
       - name: Check headers and formatting
         if: matrix.java == 'temurin@8'
