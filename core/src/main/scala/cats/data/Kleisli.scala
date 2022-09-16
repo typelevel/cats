@@ -488,6 +488,11 @@ sealed abstract private[data] class KleisliInstances2 extends KleisliInstances3 
 }
 
 sealed abstract private[data] class KleisliInstances3 extends KleisliInstances4 {
+  implicit def catsDataNonEmptyAlternativeForKleisli[F[_], A](implicit
+    F0: NonEmptyAlternative[F]
+  ): NonEmptyAlternative[Kleisli[F, A, *]] =
+    new KleisliNonEmptyAlternative[F, A] { def F: NonEmptyAlternative[F] = F0 }
+
   implicit def catsDataMonoidKForKleisli[F[_], A](implicit F0: MonoidK[F]): MonoidK[Kleisli[F, A, *]] =
     new KleisliMonoidK[F, A] { def F: MonoidK[F] = F0 }
 
@@ -642,9 +647,22 @@ sealed private[data] trait KleisliMonoidK[F[_], A] extends MonoidK[Kleisli[F, A,
   override def empty[B]: Kleisli[F, A, B] = Kleisli.liftF(F.empty[B])
 }
 
+private[data] trait KleisliNonEmptyAlternative[F[_], A]
+    extends NonEmptyAlternative[Kleisli[F, A, *]]
+    with KleisliApplicative[F, A]
+    with KleisliSemigroupK[F, A] {
+  implicit def F: NonEmptyAlternative[F]
+
+  override def prependK[B](b: B, fa: Kleisli[F, A, B]): Kleisli[F, A, B] =
+    Kleisli(a => F.prependK(b, fa.run(a)))
+
+  override def appendK[B](fa: Kleisli[F, A, B], b: B): Kleisli[F, A, B] =
+    Kleisli(a => F.appendK(fa.run(a), b))
+}
+
 private[data] trait KleisliAlternative[F[_], A]
     extends Alternative[Kleisli[F, A, *]]
-    with KleisliApplicative[F, A]
+    with KleisliNonEmptyAlternative[F, A]
     with KleisliMonoidK[F, A] {
   implicit def F: Alternative[F]
 }

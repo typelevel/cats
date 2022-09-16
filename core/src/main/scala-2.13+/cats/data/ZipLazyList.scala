@@ -45,6 +45,12 @@ object ZipLazyList {
 
       def combineK[A](x: ZipLazyList[A], y: ZipLazyList[A]): ZipLazyList[A] =
         ZipLazyList(cats.instances.lazyList.catsStdInstancesForLazyList.combineK(x.value, y.value))
+
+      override def prependK[A](a: A, fa: ZipLazyList[A]): ZipLazyList[A] =
+        ZipLazyList(cats.instances.lazyList.catsStdInstancesForLazyList.prependK(a, fa.value))
+
+      override def appendK[A](fa: ZipLazyList[A], a: A): ZipLazyList[A] =
+        ZipLazyList(cats.instances.lazyList.catsStdInstancesForLazyList.appendK(fa.value, a))
     }
 
   implicit def catsDataEqForZipLazyList[A: Eq]: Eq[ZipLazyList[A]] =

@@ -363,6 +363,25 @@ class WriterTSuite extends CatsSuite {
   }
 
   {
+    // F has an NonEmptyAlternative and L has a Monoid
+    implicit val F: NonEmptyAlternative[ListWrapper] = ListWrapper.nonEmptyAlternative
+    implicit val L: Monoid[ListWrapper[Int]] = ListWrapper.monoid[Int]
+
+    Functor[WriterT[ListWrapper, ListWrapper[Int], *]]
+    Apply[WriterT[ListWrapper, ListWrapper[Int], *]]
+    Applicative[WriterT[ListWrapper, ListWrapper[Int], *]]
+    NonEmptyAlternative[WriterT[ListWrapper, ListWrapper[Int], *]]
+    CoflatMap[WriterT[ListWrapper, ListWrapper[Int], *]]
+    checkAll("WriterT[ListWrapper, ListWrapper[Int], *]",
+             NonEmptyAlternativeTests[WriterT[ListWrapper, ListWrapper[Int], *]].nonEmptyAlternative[Int, Int, Int]
+    )
+    checkAll(
+      "NonEmptyAlternative[WriterT[ListWrapper, ListWrapper[Int], *]]",
+      SerializableTests.serializable(NonEmptyAlternative[WriterT[ListWrapper, ListWrapper[Int], *]])
+    )
+  }
+
+  {
     // F has an Alternative and L has a Monoid
     implicit val F: Alternative[ListWrapper] = ListWrapper.alternative
     implicit val L: Monoid[ListWrapper[Int]] = ListWrapper.monoid[Int]
@@ -370,6 +389,7 @@ class WriterTSuite extends CatsSuite {
     Functor[WriterT[ListWrapper, ListWrapper[Int], *]]
     Apply[WriterT[ListWrapper, ListWrapper[Int], *]]
     Applicative[WriterT[ListWrapper, ListWrapper[Int], *]]
+    NonEmptyAlternative[WriterT[ListWrapper, ListWrapper[Int], *]]
     Alternative[WriterT[ListWrapper, ListWrapper[Int], *]]
     CoflatMap[WriterT[ListWrapper, ListWrapper[Int], *]]
     checkAll("WriterT[ListWrapper, ListWrapper[Int], *]",

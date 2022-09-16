@@ -23,7 +23,7 @@ package cats.tests
 
 import cats._
 import cats.arrow._
-import cats.data.{Const, EitherT, Kleisli, Reader, ReaderT}
+import cats.data.{Const, EitherT, Kleisli, NonEmptyList, Reader, ReaderT}
 import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
@@ -129,6 +129,16 @@ class KleisliSuite extends CatsSuite {
 
   checkAll("Kleisli[Option, MiniInt, Int]", FlatMapTests[Kleisli[Option, MiniInt, *]].flatMap[Int, Int, Int])
   checkAll("FlatMap[Kleisli[Option, Int, *]]", SerializableTests.serializable(FlatMap[Kleisli[Option, Int, *]]))
+
+  checkAll("Kleisli[NonEmptyList, MiniInt, *]",
+           NonEmptyAlternativeTests[Kleisli[NonEmptyList, MiniInt, *]].nonEmptyAlternative[Int, Int, Int]
+  )
+  checkAll("Kleisli[Option, MiniInt, *]",
+           NonEmptyAlternativeTests[Kleisli[Option, MiniInt, *]].nonEmptyAlternative[Int, Int, Int]
+  )
+  checkAll("NonEmptyAlternative[Kleisli[Option, Int, *]]",
+           SerializableTests.serializable(NonEmptyAlternative[Kleisli[Option, Int, *]])
+  )
 
   checkAll("Kleisli[Option, MiniInt, *]", AlternativeTests[Kleisli[Option, MiniInt, *]].alternative[Int, Int, Int])
   checkAll("Alternative[Kleisli[Option, Int, *]]", SerializableTests.serializable(Alternative[Kleisli[Option, Int, *]]))
@@ -401,6 +411,7 @@ class KleisliSuite extends CatsSuite {
     Functor[Kleisli[List, Int, *]]
     Apply[Kleisli[List, Int, *]]
     Applicative[Kleisli[List, Int, *]]
+    NonEmptyAlternative[Kleisli[NonEmptyList, Int, *]]
     Alternative[Kleisli[List, Int, *]]
     Monad[Kleisli[List, Int, *]]
     Monoid[Kleisli[List, Int, String]]

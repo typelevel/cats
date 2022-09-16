@@ -170,6 +170,12 @@ sealed abstract private[data] class NestedInstances3 extends NestedInstances4 {
 }
 
 sealed abstract private[data] class NestedInstances4 extends NestedInstances5 {
+  implicit def catsDataNonEmptyAlternativeForNested[F[_]: NonEmptyAlternative, G[_]: Applicative]
+    : NonEmptyAlternative[Nested[F, G, *]] =
+    new NestedNonEmptyAlternative[F, G] {
+      val FG: NonEmptyAlternative[λ[α => F[G[α]]]] = NonEmptyAlternative[F].compose[G]
+    }
+
   implicit def catsDataApplicativeErrorForNested[F[_], G[_], E](implicit
     F: ApplicativeError[F, E],
     G0: Applicative[G]
@@ -322,9 +328,22 @@ private[data] trait NestedMonoidK[F[_], G[_]] extends MonoidK[Nested[F, G, *]] w
   def empty[A]: Nested[F, G, A] = Nested(FG.empty[A])
 }
 
+private[data] trait NestedNonEmptyAlternative[F[_], G[_]]
+    extends NonEmptyAlternative[Nested[F, G, *]]
+    with NestedApplicative[F, G]
+    with NestedSemigroupK[F, G] {
+  def FG: NonEmptyAlternative[λ[α => F[G[α]]]]
+
+  override def prependK[A](a: A, fa: Nested[F, G, A]): Nested[F, G, A] =
+    Nested(FG.prependK(a, fa.value))
+
+  override def appendK[A](fa: Nested[F, G, A], a: A): Nested[F, G, A] =
+    Nested(FG.appendK(fa.value, a))
+}
+
 private[data] trait NestedAlternative[F[_], G[_]]
     extends Alternative[Nested[F, G, *]]
-    with NestedApplicative[F, G]
+    with NestedNonEmptyAlternative[F, G]
     with NestedMonoidK[F, G] {
   def FG: Alternative[λ[α => F[G[α]]]]
 }

@@ -126,6 +126,7 @@ sealed abstract private[data] class Tuple2KInstances1 extends Tuple2KInstances2 
       def F: Alternative[F] = FF
       def G: Alternative[G] = GG
     }
+
   implicit def catsDataFoldableForTuple2K[F[_], G[_]](implicit
     FF: Foldable[F],
     GF: Foldable[G]
@@ -174,6 +175,14 @@ sealed abstract private[data] class Tuple2KInstances2 extends Tuple2KInstances3 
     new Tuple2KMonoidK[F, G] {
       def F: MonoidK[F] = FF
       def G: MonoidK[G] = GG
+    }
+  implicit def catsDataNonEmptyAlternativeForTuple2K[F[_], G[_]](implicit
+    FF: NonEmptyAlternative[F],
+    GG: NonEmptyAlternative[G]
+  ): NonEmptyAlternative[λ[α => Tuple2K[F, G, α]]] =
+    new Tuple2KNonEmptyAlternative[F, G] {
+      def F: NonEmptyAlternative[F] = FF
+      def G: NonEmptyAlternative[G] = GG
     }
 }
 
@@ -352,9 +361,23 @@ sealed private[data] trait Tuple2KMonoidK[F[_], G[_]]
     Tuple2K(F.empty[A], G.empty[A])
 }
 
+sealed private[data] trait Tuple2KNonEmptyAlternative[F[_], G[_]]
+    extends NonEmptyAlternative[λ[α => Tuple2K[F, G, α]]]
+    with Tuple2KApplicative[F, G]
+    with Tuple2KSemigroupK[F, G] {
+  def F: NonEmptyAlternative[F]
+  def G: NonEmptyAlternative[G]
+
+  override def prependK[A](a: A, fa: Tuple2K[F, G, A]): Tuple2K[F, G, A] =
+    Tuple2K(F.prependK(a, fa.first), G.prependK(a, fa.second))
+
+  override def appendK[A](fa: Tuple2K[F, G, A], a: A): Tuple2K[F, G, A] =
+    Tuple2K(F.appendK(fa.first, a), G.appendK(fa.second, a))
+}
+
 sealed private[data] trait Tuple2KAlternative[F[_], G[_]]
     extends Alternative[λ[α => Tuple2K[F, G, α]]]
-    with Tuple2KApplicative[F, G]
+    with Tuple2KNonEmptyAlternative[F, G]
     with Tuple2KMonoidK[F, G] {
   def F: Alternative[F]
   def G: Alternative[G]

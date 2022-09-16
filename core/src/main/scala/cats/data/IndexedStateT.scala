@@ -299,19 +299,25 @@ sealed abstract private[data] class IndexedStateTInstances extends IndexedStateT
 }
 
 sealed abstract private[data] class IndexedStateTInstances1 extends IndexedStateTInstances2 {
+  implicit def catsDataNonEmptyAlternativeForIndexedStateT[F[_], S](implicit
+    FM: Monad[F],
+    FA: NonEmptyAlternative[F]
+  ): NonEmptyAlternative[IndexedStateT[F, S, S, *]] with Monad[IndexedStateT[F, S, S, *]] =
+    new IndexedStateTNonEmptyAlternative[F, S] { implicit def F = FM; implicit def G = FA }
+
   implicit def catsDataMonadErrorForIndexedStateT[F[_], S, E](implicit
     F0: MonadError[F, E]
   ): MonadError[IndexedStateT[F, S, S, *], E] =
     new IndexedStateTMonadError[F, S, E] { implicit def F = F0 }
+}
 
+sealed abstract private[data] class IndexedStateTInstances2 extends IndexedStateTInstances3 {
   implicit def catsDataSemigroupKForIndexedStateT[F[_], SA, SB](implicit
     F0: Monad[F],
     G0: SemigroupK[F]
   ): SemigroupK[IndexedStateT[F, SA, SB, *]] =
     new IndexedStateTSemigroupK[F, SA, SB] { implicit def F = F0; implicit def G = G0 }
-}
 
-sealed abstract private[data] class IndexedStateTInstances2 extends IndexedStateTInstances3 {
   implicit def catsDataMonadForIndexedStateT[F[_], S](implicit F0: Monad[F]): Monad[IndexedStateT[F, S, S, *]] =
     new IndexedStateTMonad[F, S] { implicit def F = F0 }
 }
@@ -507,13 +513,27 @@ sealed abstract private[data] class IndexedStateTContravariantMonoidal[F[_], S]
     )
 }
 
-sealed abstract private[data] class IndexedStateTAlternative[F[_], S]
+sealed abstract private[data] class IndexedStateTNonEmptyAlternative[F[_], S]
     extends IndexedStateTMonad[F, S]
-    with Alternative[IndexedStateT[F, S, S, *]] {
-  def G: Alternative[F]
+    with NonEmptyAlternative[IndexedStateT[F, S, S, *]] {
+
+  def G: NonEmptyAlternative[F]
 
   def combineK[A](x: IndexedStateT[F, S, S, A], y: IndexedStateT[F, S, S, A]): IndexedStateT[F, S, S, A] =
     IndexedStateT[F, S, S, A](s => G.combineK(x.run(s), y.run(s)))(G)
+
+  override def prependK[A](a: A, fa: IndexedStateT[F, S, S, A]): IndexedStateT[F, S, S, A] =
+    IndexedStateT[F, S, S, A](s => G.prependK((s, a), fa.run(s)))(G)
+
+  override def appendK[A](fa: IndexedStateT[F, S, S, A], a: A): IndexedStateT[F, S, S, A] =
+    IndexedStateT[F, S, S, A](s => G.appendK(fa.run(s), (s, a)))(G)
+}
+
+sealed abstract private[data] class IndexedStateTAlternative[F[_], S]
+    extends IndexedStateTNonEmptyAlternative[F, S]
+    with Alternative[IndexedStateT[F, S, S, *]] {
+
+  def G: Alternative[F]
 
   def empty[A]: IndexedStateT[F, S, S, A] =
     IndexedStateT.liftF[F, S, A](G.empty[A])(G)
