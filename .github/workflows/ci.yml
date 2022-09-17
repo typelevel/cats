@@ -232,32 +232,32 @@ jobs:
             ~/Library/Caches/Coursier/v1
           key: ${{ runner.os }}-sbt-cache-v2-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
 
-      - name: Download target directories (2.12.16, rootJS)
+      - name: Download target directories (2.12.17, rootJS)
         uses: actions/download-artifact@v2
         with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-2.12.16-rootJS
+          name: target-${{ matrix.os }}-${{ matrix.java }}-2.12.17-rootJS
 
-      - name: Inflate target directories (2.12.16, rootJS)
+      - name: Inflate target directories (2.12.17, rootJS)
         run: |
           tar xf targets.tar
           rm targets.tar
 
-      - name: Download target directories (2.12.16, rootJVM)
+      - name: Download target directories (2.12.17, rootJVM)
         uses: actions/download-artifact@v2
         with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-2.12.16-rootJVM
+          name: target-${{ matrix.os }}-${{ matrix.java }}-2.12.17-rootJVM
 
-      - name: Inflate target directories (2.12.16, rootJVM)
+      - name: Inflate target directories (2.12.17, rootJVM)
         run: |
           tar xf targets.tar
           rm targets.tar
 
-      - name: Download target directories (2.12.16, rootNative)
+      - name: Download target directories (2.12.17, rootNative)
         uses: actions/download-artifact@v2
         with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-2.12.16-rootNative
+          name: target-${{ matrix.os }}-${{ matrix.java }}-2.12.17-rootNative
 
-      - name: Inflate target directories (2.12.16, rootNative)
+      - name: Inflate target directories (2.12.17, rootNative)
         run: |
           tar xf targets.tar
           rm targets.tar
