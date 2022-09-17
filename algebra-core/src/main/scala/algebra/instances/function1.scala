@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Typelevel
+ * Copyright (c) 2022 Typelevel
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -22,26 +22,21 @@
 package algebra
 package instances
 
-package object all extends AllInstances
+import algebra.lattice.Logic
 
-trait AllInstances
-    extends ArrayInstances
-    with BigDecimalInstances
-    with BigIntInstances
-    with BitSetInstances
-    with BooleanInstances
-    with ByteInstances
-    with CharInstances
-    with DoubleInstances
-    with FloatInstances
-    with Function1Instances
-    with IntInstances
-    with ListInstances
-    with LongInstances
-    with MapInstances
-    with OptionInstances
-    with SetInstances
-    with ShortInstances
-    with StringInstances
-    with TupleInstances
-    with UnitInstances
+package object function1 extends Function1Instances
+
+trait Function1Instances {
+  implicit def function1Logic[A]: Function1Logic[A] =
+    new Function1Logic[A]
+}
+
+class Function1Logic[A] extends Logic[A => Boolean] {
+  def zero: A => Boolean = _ => false
+  def one: A => Boolean = _ => true
+  def join(lhs: A => Boolean, rhs: A => Boolean): A => Boolean = x => lhs(x) || rhs(x)
+  def meet(lhs: A => Boolean, rhs: A => Boolean): A => Boolean = x => lhs(x) && rhs(x)
+  def and(a: A => Boolean, b: A => Boolean): A => Boolean = meet(a, b)
+  def or(a: A => Boolean, b: A => Boolean): A => Boolean = join(a, b)
+  def not(a: A => Boolean): A => Boolean = x => !a(x)
+}
