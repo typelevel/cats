@@ -88,6 +88,9 @@ lazy val testingDependencies = Seq(
   )
 )
 
+lazy val sharedSourceManaged =
+  Compile / sourceManaged := baseDirectory.value.getParentFile / "src" / "main" / "managed"
+
 lazy val cats = tlCrossRootProject
   .aggregate(
     kernel,
@@ -111,6 +114,7 @@ lazy val kernel = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .in(file("kernel"))
   .settings(moduleName := "cats-kernel", name := "Cats kernel")
   .settings(testingDependencies)
+  .settings(sharedSourceManaged)
   .settings(Compile / sourceGenerators += (Compile / sourceManaged).map(KernelBoiler.gen).taskValue)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings, cats1BincompatSettings)
@@ -143,6 +147,7 @@ lazy val algebra = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .in(file("algebra-core"))
   .dependsOn(kernel)
   .settings(moduleName := "algebra", name := "Cats algebra")
+  .settings(sharedSourceManaged)
   .settings(Compile / sourceGenerators += (Compile / sourceManaged).map(AlgebraBoilerplate.gen).taskValue)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
@@ -171,10 +176,9 @@ lazy val core = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .dependsOn(kernel)
   .settings(moduleName := "cats-core", name := "Cats core")
   .settings(macroSettings)
+  .settings(sharedSourceManaged)
   .settings(Compile / sourceGenerators += (Compile / sourceManaged).map(Boilerplate.gen).taskValue)
-  .settings(
-    libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % Test
-  )
+  .settings(libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % Test)
   .settings(testingDependencies)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings, cats1BincompatSettings)
@@ -286,7 +290,7 @@ lazy val docs = project
     mdocVariables += ("API_LINK_BASE" -> s"https://www.javadoc.io/doc/org.typelevel/cats-docs_2.13/${mdocVariables
         .value("VERSION")}/"),
     laikaConfig := {
-      import laika.config._
+      import laika.config.*
 
       laikaConfig.value.withRawContent
         .withConfigValue("version", mdocVariables.value("VERSION"))
