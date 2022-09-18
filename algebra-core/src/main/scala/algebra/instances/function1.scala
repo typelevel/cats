@@ -22,21 +22,32 @@
 package algebra
 package instances
 
-import algebra.lattice.Logic
+import algebra.lattice.{Logic, Heyting}
+//import cats.kernel.Eq
 
 package object function1 extends Function1Instances
 
 trait Function1Instances {
   implicit def function1Logic[A]: Function1Logic[A] =
     new Function1Logic[A]
+  implicit def function1Eq[A]: Eq[A => Boolean] = Eq.instance(_ == _)
 }
 
-class Function1Logic[A] extends Logic[A => Boolean] {
-  def zero: A => Boolean = _ => false
-  def one: A => Boolean = _ => true
-  def join(lhs: A => Boolean, rhs: A => Boolean): A => Boolean = x => lhs(x) || rhs(x)
-  def meet(lhs: A => Boolean, rhs: A => Boolean): A => Boolean = x => lhs(x) && rhs(x)
-  def and(a: A => Boolean, b: A => Boolean): A => Boolean = meet(a, b)
-  def or(a: A => Boolean, b: A => Boolean): A => Boolean = join(a, b)
-  def not(a: A => Boolean): A => Boolean = x => !a(x)
+class Function1Logic[A] extends Logic[A => Boolean] with Heyting[A => Boolean] {
+  // Type alias
+  private type AB = A => Boolean
+
+  def zero: AB = _ => false
+  def one: AB = _ => true
+  override def join(lhs: AB, rhs: AB): AB = x => lhs(x) || rhs(x)
+  override def meet(lhs: AB, rhs: AB): AB = x => lhs(x) && rhs(x)
+  def imp(a: AB, b: AB): AB = or(not(a), b)
+  def and(a: AB, b: AB): AB = meet(a, b)
+  def or(a: AB, b: AB): AB = join(a, b)
+  def not(a: AB): AB = x => !a(x)
+  def complement(a: AB): AB = not(a)
+  override def xor(a: AB, b: AB): AB = or(and(a, not(b)), and(not(a), b))
+  override def nand(a: AB, b: AB): AB = not(and(a, b))
+  override def nor(a: AB, b: AB): AB = not(or(a, b))
+  override def nxor(a: AB, b: AB): AB = not(xor(a, b))
 }
