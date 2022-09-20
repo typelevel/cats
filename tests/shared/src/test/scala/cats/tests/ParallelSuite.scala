@@ -390,6 +390,38 @@ class ParallelSuite
     }
   }
 
+  test("ParFlatMapN over List should be consistent with parMapN flatten") {
+    forAll { (as: List[Int], bs: List[Int], cs: List[Int]) =>
+      val mf: (Int, Int, Int) => List[Int] = _ :: _ :: _ :: Nil
+      assert((as, bs, cs).parFlatMapN(mf) == (as, bs, cs).parMapN(mf).flatten)
+    }
+  }
+
+  test("ParFlatMapN over NonEmptyList should be consistent with parMapN flatten") {
+    forAll { (as: NonEmptyList[Int], bs: NonEmptyList[Int], cs: NonEmptyList[Int]) =>
+      val mf: (Int, Int, Int) => NonEmptyList[Int] = (a, b, c) => NonEmptyList.of(a, b, c)
+      assert((as, bs, cs).parFlatMapN(mf) == (as, bs, cs).parMapN(mf).flatten)
+    }
+  }
+
+  test("ParFlatMap over List should be consistent with flatmap") {
+    forAll { as: List[Int] => assert(Tuple1(as).parFlatMap(_ :: Nil) == Tuple1(as).flatMap(_ :: Nil)) }
+  }
+
+  test("ParFlatMap over NonEmptyList should be consistent with flatmap") {
+    forAll { as: NonEmptyList[Int] =>
+      assert(Tuple1(as).parFlatMap(NonEmptyList.one) == Tuple1(as).flatMap(NonEmptyList.one))
+    }
+  }
+
+  test("ParMapN over f should be consistent with parFlatMapN over f lifted in Kleisli") {
+    forAll { (as: List[Int], bs: List[Int]) =>
+      val f: (Int, Int) => Int = _ + _
+      val mf: (Int, Int) => List[Int] = Function.untupled(Kleisli.fromFunction[List, (Int, Int)](f.tupled).run)
+      assert((as, bs).parMapN(f) == (as, bs).parFlatMapN(mf))
+    }
+  }
+
   test("ParTupled of NonEmptyList should be consistent with ParMap of Tuple.apply") {
     forAll { (fa: NonEmptyList[Int], fb: NonEmptyList[Int], fc: NonEmptyList[Int], fd: NonEmptyList[Int]) =>
       assert((fa, fb, fc, fd).parTupled === ((fa, fb, fc, fd).parMapN(Tuple4.apply)))
