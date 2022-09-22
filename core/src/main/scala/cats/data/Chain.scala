@@ -690,7 +690,7 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
    *         a positive value if `this.length > len`.
    * @note   an adapted version of
              [[https://github.com/scala/scala/blob/v2.13.8/src/library/scala/collection/Iterable.scala#L272-L288 Iterable#sizeCompare]]
-             from Scala Library v2.13.8 is used in a part of the implementation.
+             from Scala Library v2.13.9 is used in a part of the implementation.
    *
    * {{{
    * scala> import cats.data.Chain
