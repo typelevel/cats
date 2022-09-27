@@ -479,8 +479,7 @@ object Boilerplate {
         if (arity == 1)
           s"def parFlatMap[Z](f: (${`A..N`}) => M[Z])(implicit p: NonEmptyParallel[M]): M[Z] = p.flatMap.flatMap($tupleArgs)(f)"
         else
-          s"def parFlatMapN[Z](f: (${`A..N`}) => M[Z])(implicit p: NonEmptyParallel[M]): M[Z] = p.flatMap.flatten(Parallel.parMap$arity($tupleArgs)(f))"
-
+          s"def parFlatMapN[Z](f: (${`A..N`}) => M[Z])(implicit p: NonEmptyParallel[M]): M[Z] = Parallel.parFlatMap$arity($tupleArgs)(f)"
       val parTupled =
         if (arity == 1) ""
         else
