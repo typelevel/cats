@@ -414,10 +414,9 @@ class ParallelSuite
     }
   }
 
-  test("ParMapN over f should be consistent with parFlatMapN over f lifted in Kleisli") {
-    forAll { (as: List[Int], bs: List[Int]) =>
-      val f: (Int, Int) => Int = (a, b) => a + b
-      val mf: (Int, Int) => List[Int] = (a, b) => List(a + b)
+  test("ParMapN over f should be consistent with parFlatMapN over f lifted in List") {
+    forAll { (as: List[Int], bs: List[Int], f: (Int, Int) => Int) =>
+      val mf: (Int, Int) => List[Int] = (a, b) => f(a, b).pure[List]
       assert((as, bs).parMapN(f) == (as, bs).parFlatMapN(mf))
     }
   }
