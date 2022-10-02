@@ -62,6 +62,16 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
    * Catamorphism on the Option. This is identical to [[fold]], but it only has
    * one parameter list, which can result in better type inference in some
    * contexts.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.data.OptionT
+   *
+   * scala> val optionT: OptionT[List, Int] = OptionT[List, Int](List(Some(42), None))
+   * scala> optionT.cata[String]("default", x => x.toString + "!")
+   * res0: List[String] = List(42!, default)
+   * }}}
    */
   def cata[B](default: => B, f: A => B)(implicit F: Functor[F]): F[B] =
     fold(default)(f)
@@ -70,6 +80,16 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
    * Effectful catamorphism on the Option. This is identical to [[foldF]], but it only has
    * one parameter list, which can result in better type inference in some
    * contexts.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.data.OptionT
+   *
+   * scala> val optionT: OptionT[List, Int] = OptionT[List, Int](List(Some(42), None))
+   * scala> optionT.cataF[String](Nil, x => List(x.toString + "!"))
+   * res0: List[String] = List(42!)
+   * }}}
    */
   def cataF[B](default: => F[B], f: A => F[B])(implicit F: FlatMap[F]): F[B] =
     foldF(default)(f)
@@ -87,11 +107,34 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
   def map[B](f: A => B)(implicit F: Functor[F]): OptionT[F, B] =
     OptionT(F.map(value)(_.map(f)))
 
+  /**
+   * Example:
+   * {{{
+   *  scala> import cats.data.OptionT
+   *
+   *  scala> val optionT: OptionT[List, Int] = OptionT.some[List](99)
+   *  scala> optionT.imap[Char](_.toChar)(_.toInt)
+   *  res0: OptionT[List, Char] = OptionT(List(Some(c)))
+   * }}}
+   */
   def imap[B](f: A => B)(g: B => A)(implicit F: Invariant[F]): OptionT[F, B] =
     OptionT {
       F.imap(value)(_.map(f))(_.map(g))
     }
 
+  /**
+   * Example:
+   * {{{
+   *  scala> import cats.implicits._
+   *  scala> import cats.data.OptionT
+   *
+   *  scala> type ToString[A] = Function1[A, String]
+   *  scala> val optionIntToString: ToString[Option[Int]] = oi => oi.map(_.toString + "!").getOrElse("default")
+   *  scala> val optionT: OptionT[ToString, Int] = OptionT[ToString, Int](optionIntToString)
+   *  scala> optionT.contramap[Double](_.toInt).value(Some(5.4321))
+   *  res0: String = 5!
+   * }}}
+   */
   def contramap[B](f: B => A)(implicit F: Contravariant[F]): OptionT[F, B] =
     OptionT {
       F.contramap(value)(_.map(f))
@@ -99,43 +142,177 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
 
   /**
    * Modify the context `F` using transformation `f`.
+   * 
+   * Example:
+   * {{{
+   *  scala> import cats.~>
+   *  scala> import cats.implicits._
+   *  scala> import cats.data.OptionT
+   * 
+   *  scala> val optionToList: Option ~> List = new ~>[Option, List] { override def apply[A](o: Option[A]): List[A] = o.toList }
+   *  scala> val optionT: OptionT[Option, Int] = OptionT.some(42)
+   *  scala> optionT.mapK[List](optionToList)
+   *  res0: OptionT[List, Int] = OptionT(List(Some(42)))
+   * }}}
    */
   def mapK[G[_]](f: F ~> G): OptionT[G, A] = OptionT[G, A](f(value))
 
+  /**
+   * Example:
+   * {{{
+   *  scala> import cats.implicits._
+   *  scala> import cats.data.OptionT
+   *
+   *  scala> val optionT: OptionT[List, Int] = OptionT[List, Int](List(Some(3), Some(5)))
+   *  scala> optionT.semiflatMap(x => List(x, x * 6))
+   *  res0: OptionT[List, Int] = OptionT(List(Some(3), Some(18), Some(5), Some(30)))
+   * }}}
+   */
   def semiflatMap[B](f: A => F[B])(implicit F: Monad[F]): OptionT[F, B] =
     flatMap(a => OptionT.liftF(f(a)))
 
+  /**
+   * Example:
+   * {{{
+   *  scala> import cats.data.OptionT
+   *  scala> import scala.util.Try
+   *
+   *  scala> // prints "5"
+   *  scala> val optionT: OptionT[Try, Int] = OptionT[Try, Int](Try(Some(5)))
+   *  scala> optionT.semiflatTap(x => Try(println(x))).value
+   *  res0: Try[Option[Int]] = Success(Some(5))
+   * }}}
+   */
   def semiflatTap[B](f: A => F[B])(implicit F: Monad[F]): OptionT[F, A] =
     semiflatMap(a => F.as(f(a), a))
 
+  /**
+   * Example:
+   * {{{
+   *  scala> import cats.implicits._
+   *  scala> import cats.data.OptionT
+   *
+   *  scala> val optionT: OptionT[List, Int] = OptionT[List, Int](List(Some(2), Some(3), Some(4)))
+   *  scala> optionT.mapFilter(x => Option.when(x % 2 == 0)(x))
+   *  res0: OptionT[List, Int] = OptionT(List(Some(2), None, Some(4)))
+   * }}}
+   */
   def mapFilter[B](f: A => Option[B])(implicit F: Functor[F]): OptionT[F, B] =
     subflatMap(f)
 
+  /**
+   * Example:
+   * {{{
+   *  scala> import cats.implicits._
+   *  scala> import cats.data.OptionT
+   *
+   *  scala> val optionT: OptionT[List, Int] = OptionT[List, Int](List(Some(2), Some(3), Some(4)))
+   *  scala> optionT.flatMap(x => OptionT.when(x % 2 == 0)(x))
+   *  res0: OptionT[List, Int] = OptionT(List(Some(2), None, Some(4)))
+   * }}}
+   */
   def flatMap[B](f: A => OptionT[F, B])(implicit F: Monad[F]): OptionT[F, B] =
     flatMapF(a => f(a).value)
 
+  /**
+   * Example:
+   * {{{
+   *  scala> import cats.implicits._
+   *  scala> import cats.data.OptionT
+   *
+   *  scala> val optionT: OptionT[List, Int] = OptionT[List, Int](List(Some(2), Some(3), Some(4)))
+   *  scala> optionT.flatMapF(x => List(Option.when(x % 2 == 0)(x)))
+   *  res0: OptionT[List, Int] = OptionT(List(Some(2), None, Some(4)))
+   * }}}
+   */
   def flatMapF[B](f: A => F[Option[B]])(implicit F: Monad[F]): OptionT[F, B] =
     OptionT(F.flatMap(value)(_.fold(F.pure[Option[B]](None))(f)))
 
+  /**
+   * Example:
+   * {{{
+   *  scala> import cats.implicits._
+   *  scala> import cats.data.OptionT
+   *
+   *  scala> val optionT: OptionT[List, Int] = OptionT[List, Int](List(Some(2), Some(3), Some(4)))
+   *  scala> optionT.flatTransform(x => List(x.filter(_ % 2 == 0)))
+   *  res0: OptionT[List, Int] = OptionT(List(Some(2), None, Some(4)))
+   * }}}
+   */
   def flatTransform[B](f: Option[A] => F[Option[B]])(implicit F: Monad[F]): OptionT[F, B] =
     OptionT(F.flatMap(value)(f))
 
+  /**
+   * Example:
+   * {{{
+   *  scala> import cats.implicits._
+   *  scala> import cats.data.OptionT
+   *
+   *  scala> val optionT: OptionT[List, Int] = OptionT[List, Int](List(Some(2), Some(3), Some(4)))
+   *  scala> optionT.transform(_.filter(_ % 2 == 0))
+   *  res0: OptionT[List, Int] = OptionT(List(Some(2), None, Some(4)))
+   * }}}
+   */
   def transform[B](f: Option[A] => Option[B])(implicit F: Functor[F]): OptionT[F, B] =
     OptionT(F.map(value)(f))
 
+  /**
+   * Example:
+   * {{{
+   *  scala> import cats.implicits._
+   *  scala> import cats.data.OptionT
+   *
+   *  scala> val optionT: OptionT[List, Int] = OptionT[List, Int](List(Some(2), Some(3), Some(4)))
+   *  scala> optionT.subflatMap(x => Option.when(x % 2 == 0)(x))
+   *  res0: OptionT[List, Int] = OptionT(List(Some(2), None, Some(4)))
+   * }}}
+   */
   def subflatMap[B](f: A => Option[B])(implicit F: Functor[F]): OptionT[F, B] =
     transform(_.flatMap(f))
 
   /**
    * Perform an effect if the value inside the is a `None`, leaving the value untouched. Equivalent to [[orElseF]]
    * with an effect returning `None` as argument.
+   * 
+   * Example:
+   * {{{
+   *  scala> import cats.data.OptionT
+   *  scala> import scala.util.Try
+   *
+   *  scala> // prints "no value"
+   *  scala> val optionT: OptionT[Try, Int] = OptionT[Try, Int](Try(None))
+   *  scala> optionT.flatTapNone(Try(println("no value"))).value
+   *  res0: Try[Option[Int]] = Success(None)
+   * }}}
    */
   def flatTapNone[B](ifNone: => F[B])(implicit F: Monad[F]): OptionT[F, A] =
     OptionT(F.flatTap(value)(_.fold(F.void(ifNone))(_ => F.unit)))
 
+  /**
+   * Example:
+   * {{{
+   *  scala> import cats.implicits._
+   *  scala> import cats.data.OptionT
+   *
+   *  scala> val optionT: OptionT[List, Int] = OptionT[List, Int](List(Some(2), None, Some(4)))
+   *  scala> optionT.getOrElse(42)
+   *  res0: List[Int] = List(2, 42, 4)
+   * }}}
+   */
   def getOrElse[B >: A](default: => B)(implicit F: Functor[F]): F[B] =
     F.map(value)(_.getOrElse(default))
 
+  /**
+   * Example:
+   * {{{
+   *  scala> import cats.implicits._
+   *  scala> import cats.data.OptionT
+   *
+   *  scala> val optionT: OptionT[List, Int] = OptionT[List, Int](List(Some(2), None, Some(4)))
+   *  scala> optionT.getOrElseF(List(42))
+   *  res0: List[Int] = List(2, 42, 4)
+   * }}}
+   */
   def getOrElseF[B >: A](default: => F[B])(implicit F: Monad[F]): F[B] =
     F.flatMap(value)(_.fold(default)(F.pure))
 
@@ -147,7 +324,7 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
    * {{{
    * scala> import cats.data.OptionT
    * scala> import cats.implicits._
-   * scala> import scala.util.{Success, Failure, Try}
+   * scala> import scala.util.{Success, Try}
    *
    * scala> val optionT: OptionT[Try, Int] = OptionT[Try, Int](Success(None))
    * scala> optionT.getOrRaise(new RuntimeException("ERROR!"))
@@ -172,6 +349,17 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
   def collect[B](f: PartialFunction[A, B])(implicit F: Functor[F]): OptionT[F, B] =
     OptionT(F.map(value)(_.collect(f)))
 
+  /**
+   * Example:
+   * {{{
+   *  scala> import cats.implicits._
+   *  scala> import cats.data.OptionT
+   *
+   *  scala> val optionT: OptionT[List, Int] = OptionT[List, Int](List(Some(2), None, Some(3)))
+   *  scala> optionT.exists(_ % 2 == 0)
+   *  res0: List[Boolean] = List(true, false, false)
+   * }}}
+   */
   def exists(f: A => Boolean)(implicit F: Functor[F]): F[Boolean] =
     F.map(value)(_.exists(f))
 
@@ -225,6 +413,17 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
   def filterNot(p: A => Boolean)(implicit F: Functor[F]): OptionT[F, A] =
     OptionT(F.map(value)(_.filterNot(p)))
 
+  /**
+   * Example:
+   * {{{
+   *  scala> import cats.implicits._
+   *  scala> import cats.data.OptionT
+   *
+   *  scala> val optionT: OptionT[List, Int] = OptionT[List, Int](List(Some(2), None, Some(3)))
+   *  scala> optionT.forall(_ % 2 == 0)
+   *  res0: List[Boolean] = List(true, true, false)
+   * }}}
+   */
   def forall(f: A => Boolean)(implicit F: Functor[F]): F[Boolean] =
     F.map(value)(_.forall(f))
 
@@ -267,21 +466,80 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
   def orElse(default: => OptionT[F, A])(implicit F: Monad[F]): OptionT[F, A] =
     orElseF(default.value)
 
+  /**
+   * Example:
+   * {{{
+   *  scala> import cats.data.OptionT
+   *  scala> import cats.implicits._
+   *
+   *  scala> val optionT: OptionT[List, Int] = OptionT(List(Some(2), None, Some(4)))
+   *  scala> optionT.orElseF(List(Some(3)))
+   *  res0: OptionT[List, Int] = OptionT(List(Some(2), Some(3), Some(4)))
+   * }}}
+   */
   def orElseF(default: => F[Option[A]])(implicit F: Monad[F]): OptionT[F, A] =
     OptionT(F.flatMap(value) {
       case s @ Some(_) => F.pure(s)
       case None        => default
     })
 
+  /**
+   * Example:
+   * {{{
+   *  scala> import cats.data.EitherT
+   *  scala> import cats.data.OptionT
+   *  scala> import cats.implicits._
+   *
+   *  scala> val optionT: OptionT[List, Int] = OptionT(List(Some(2), None, Some(4)))
+   *  scala> optionT.toRight[Int](3)
+   *  res0: EitherT[List, Int, Int] = EitherT(List(Right(2), Left(3), Right(4)))
+   * }}}
+   */
   def toRight[L](left: => L)(implicit F: Functor[F]): EitherT[F, L, A] =
     EitherT(cata(Left(left), Right.apply))
 
+  /**
+   * Example:
+   * {{{
+   *  scala> import cats.data.EitherT
+   *  scala> import cats.data.OptionT
+   *  scala> import cats.implicits._
+   *
+   *  scala> val optionT: OptionT[List, Int] = OptionT(List(Some(2), None, Some(4)))
+   *  scala> optionT.toRightF[Int](List(3))
+   *  res0: EitherT[List, Int, Int] = EitherT(List(Right(2), Left(3), Right(4)))
+   * }}}
+   */
   def toRightF[L](left: => F[L])(implicit F: Monad[F]): EitherT[F, L, A] =
     EitherT(cataF(F.map(left)(Left.apply[L, A]), a => F.pure(Right(a))))
 
+  /**
+   * Example:
+   * {{{
+   *  scala> import cats.data.EitherT
+   *  scala> import cats.data.OptionT
+   *  scala> import cats.implicits._
+   *
+   *  scala> val optionT: OptionT[List, Int] = OptionT(List(Some(2), None, Some(4)))
+   *  scala> optionT.toLeft[Int](3)
+   *  res0: EitherT[List, Int, Int] = EitherT(List(Left(2), Right(3), Left(4)))
+   * }}}
+   */
   def toLeft[R](right: => R)(implicit F: Functor[F]): EitherT[F, A, R] =
     EitherT(cata(Right(right), Left.apply))
 
+  /**
+   * Example:
+   * {{{
+   *  scala> import cats.data.EitherT
+   *  scala> import cats.data.OptionT
+   *  scala> import cats.implicits._
+   *
+   *  scala> val optionT: OptionT[List, Int] = OptionT(List(Some(2), None, Some(4)))
+   *  scala> optionT.toLeftF[Int](List(3))
+   *  res0: EitherT[List, Int, Int] = EitherT(List(Left(2), Right(3), Left(4)))
+   * }}}
+   */
   def toLeftF[R](right: => F[R])(implicit F: Monad[F]): EitherT[F, A, R] =
     EitherT(cataF(F.map(right)(Right.apply[A, R]), a => F.pure(Left(a))))
 
@@ -313,23 +571,91 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
   def compare(that: OptionT[F, A])(implicit o: Order[F[Option[A]]]): Int =
     o.compare(value, that.value)
 
+  /**
+   * Example:
+   * {{{
+   *  scala> import cats.data.OptionT
+   *
+   *  scala> val optionT: OptionT[List, Double] = OptionT(List(Some(0.1), None, Some(0.5)))
+   *  scala> optionT.partialCompare(OptionT[List, Double](List(Some(2))))
+   *  res0: Double = -1.0
+   *
+   *  scala> optionT.partialCompare(OptionT[List, Double](List(Some(0.1), None, Some(0.5))))
+   *  res0: Double = 0.0
+   * }}}
+   */
   def partialCompare(that: OptionT[F, A])(implicit p: PartialOrder[F[Option[A]]]): Double =
     p.partialCompare(value, that.value)
 
+  /**
+   * Example:
+   * {{{
+   *  scala> import cats.data.OptionT
+   *
+   *  scala> val optionT: OptionT[List, Int] = OptionT(List(Some(2), None, Some(5)))
+   *  scala> optionT === OptionT[List, Int](List(Some(2), None))
+   *  res0: Boolean = false
+   *
+   *  scala> optionT === OptionT[List, Int](List(Some(2), None, Some(5)))
+   *  res0: Boolean = true
+   * }}}
+   */
   def ===(that: OptionT[F, A])(implicit eq: Eq[F[Option[A]]]): Boolean =
     eq.eqv(value, that.value)
 
+  /**
+   * Example:
+   * {{{
+   *  scala> import cats.data.OptionT
+   *  scala> import scala.util.Right
+   *
+   *  scala> val optionT: OptionT[List, Int] = OptionT(List(Some(2), None, Some(5)))
+   *  scala> optionT.traverse[Either[Int, *], Int](x => Right[Int, Int](x))
+   *  res0: Either[Int, OptionT[List, Int]] = Right(OptionT(List(Some(2), None, Some(5))))
+   * }}}
+   */
   def traverse[G[_], B](f: A => G[B])(implicit F: Traverse[F], G: Applicative[G]): G[OptionT[F, B]] =
     G.map(F.compose(Traverse[Option]).traverse(value)(f))(OptionT.apply)
 
+  /**
+   * Example:
+   * {{{
+   *  scala> import cats.data.OptionT
+   *
+   *  scala> val optionT: OptionT[List, Int] = OptionT(List(Some(2), None, Some(5)))
+   *  scala> optionT.mapAccumulate(0)((s, a) => (s + a, s"$a!"))
+   *  res0: (Int, OptionT[List, String]) = (7,OptionT(List(Some(2!), None, Some(5!))))
+   * }}}
+   */
   def mapAccumulate[S, B](init: S)(f: (S, A) => (S, B))(implicit traverseF: Traverse[F]): (S, OptionT[F, B]) = {
     val (snext, vnext) = traverseF.mapAccumulate(init, value)(Traverse[Option].mapAccumulate(_, _)(f))
     (snext, OptionT(vnext))
   }
 
+  /**
+   * Example:
+   * {{{
+   *  scala> import cats.data.OptionT
+   *
+   *  scala> val optionT: OptionT[List, Int] = OptionT(List(Some(2), None, Some(5)))
+   *  scala> optionT.foldLeft(0)((acc, x) => acc + x)
+   *  res0: Int = 7
+   * }}}
+   */
   def foldLeft[B](b: B)(f: (B, A) => B)(implicit F: Foldable[F]): B =
     F.compose(Foldable[Option]).foldLeft(value, b)(f)
 
+  /**
+   * Example:
+   * {{{
+   *  scala> import cats.Eval
+   *  scala> import cats.data.OptionT
+   *
+   *  scala> val optionT: OptionT[List, Int] = OptionT(List(Some(2), None, Some(5)))
+   *  scala> optionT.foldRight(Eval.One)((x, acc) => Eval.later(x * acc.value)).value
+   *  res0: Int = 10
+   * }}}
+   */
   def foldRight[B](lb: Eval[B])(f: (A, Eval[B]) => Eval[B])(implicit F: Foldable[F]): Eval[B] =
     F.compose(Foldable[Option]).foldRight(value, lb)(f)
 
