@@ -40,7 +40,6 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
    * scala> import cats.data.OptionT
    *
    * scala> val optionT: OptionT[List, Int] = OptionT[List, Int](List(Some(23), None))
@@ -65,7 +64,6 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
    * scala> import cats.data.OptionT
    *
    * scala> val optionT: OptionT[List, Int] = OptionT[List, Int](List(Some(42), None))
@@ -83,7 +81,6 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
    * scala> import cats.data.OptionT
    *
    * scala> val optionT: OptionT[List, Int] = OptionT[List, Int](List(Some(42), None))
@@ -125,13 +122,12 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
   /**
    * Example:
    * {{{
-   *  scala> import cats.implicits._
+   *  scala> import cats.Show
    *  scala> import cats.data.OptionT
    *
-   *  scala> type ToString[A] = Function1[A, String]
-   *  scala> val optionIntToString: ToString[Option[Int]] = oi => oi.map(_.toString + "!").getOrElse("default")
-   *  scala> val optionT: OptionT[ToString, Int] = OptionT[ToString, Int](optionIntToString)
-   *  scala> optionT.contramap[Double](_.toInt).value(Some(5.4321))
+   *  scala> val showIntOption: Show[Option[Int]] = oi => oi.map(_.toString + "!").getOrElse("default")
+   *  scala> val optionT: OptionT[Show, Int] = OptionT[Show, Int](showIntOption)
+   *  scala> optionT.contramap[Double](_.toInt).value.show(Some(5.4321))
    *  res0: String = 5!
    * }}}
    */
@@ -146,7 +142,6 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
    * Example:
    * {{{
    *  scala> import cats.~>
-   *  scala> import cats.implicits._
    *  scala> import cats.data.OptionT
    * 
    *  scala> val optionToList: Option ~> List = new ~>[Option, List] { override def apply[A](o: Option[A]): List[A] = o.toList }
@@ -160,7 +155,6 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
   /**
    * Example:
    * {{{
-   *  scala> import cats.implicits._
    *  scala> import cats.data.OptionT
    *
    *  scala> val optionT: OptionT[List, Int] = OptionT[List, Int](List(Some(3), Some(5)))
@@ -175,12 +169,12 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
    * Example:
    * {{{
    *  scala> import cats.data.OptionT
-   *  scala> import scala.util.Try
    *
-   *  scala> // prints "5"
-   *  scala> val optionT: OptionT[Try, Int] = OptionT[Try, Int](Try(Some(5)))
-   *  scala> optionT.semiflatTap(x => Try(println(x))).value
-   *  res0: Try[Option[Int]] = Success(Some(5))
+   *  scala> val optionT: OptionT[Either[String, *], Int] = OptionT.some[Either[String, *]](3)
+   *  scala> optionT.semiflatTap { case 1 | 2 | 3 => Right("hit!"); case _ => Left("miss!") }
+   *  res0: OptionT[Either[String, *], Int] = OptionT(Right(Some(3)))
+   *  scala> optionT.semiflatTap { case 0 | 1 | 2 => Right("hit!"); case _ => Left("miss!") }
+   *  res1: OptionT[Either[String, *], Int] = OptionT(Left(miss!))
    * }}}
    */
   def semiflatTap[B](f: A => F[B])(implicit F: Monad[F]): OptionT[F, A] =
@@ -189,11 +183,10 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
   /**
    * Example:
    * {{{
-   *  scala> import cats.implicits._
    *  scala> import cats.data.OptionT
    *
    *  scala> val optionT: OptionT[List, Int] = OptionT[List, Int](List(Some(2), Some(3), Some(4)))
-   *  scala> optionT.mapFilter(x => Option.when(x % 2 == 0)(x))
+   *  scala> optionT.mapFilter(x => Option(x).filter(_ % 2 == 0))
    *  res0: OptionT[List, Int] = OptionT(List(Some(2), None, Some(4)))
    * }}}
    */
@@ -203,7 +196,6 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
   /**
    * Example:
    * {{{
-   *  scala> import cats.implicits._
    *  scala> import cats.data.OptionT
    *
    *  scala> val optionT: OptionT[List, Int] = OptionT[List, Int](List(Some(2), Some(3), Some(4)))
@@ -217,11 +209,10 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
   /**
    * Example:
    * {{{
-   *  scala> import cats.implicits._
    *  scala> import cats.data.OptionT
    *
    *  scala> val optionT: OptionT[List, Int] = OptionT[List, Int](List(Some(2), Some(3), Some(4)))
-   *  scala> optionT.flatMapF(x => List(Option.when(x % 2 == 0)(x)))
+   *  scala> optionT.flatMapF(x => List(Option(x).filter(_ % 2 == 0)))
    *  res0: OptionT[List, Int] = OptionT(List(Some(2), None, Some(4)))
    * }}}
    */
@@ -231,7 +222,6 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
   /**
    * Example:
    * {{{
-   *  scala> import cats.implicits._
    *  scala> import cats.data.OptionT
    *
    *  scala> val optionT: OptionT[List, Int] = OptionT[List, Int](List(Some(2), Some(3), Some(4)))
@@ -245,7 +235,6 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
   /**
    * Example:
    * {{{
-   *  scala> import cats.implicits._
    *  scala> import cats.data.OptionT
    *
    *  scala> val optionT: OptionT[List, Int] = OptionT[List, Int](List(Some(2), Some(3), Some(4)))
@@ -259,11 +248,10 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
   /**
    * Example:
    * {{{
-   *  scala> import cats.implicits._
    *  scala> import cats.data.OptionT
    *
    *  scala> val optionT: OptionT[List, Int] = OptionT[List, Int](List(Some(2), Some(3), Some(4)))
-   *  scala> optionT.subflatMap(x => Option.when(x % 2 == 0)(x))
+   *  scala> optionT.subflatMap(x => Option(x).filter(_ % 2 == 0))
    *  res0: OptionT[List, Int] = OptionT(List(Some(2), None, Some(4)))
    * }}}
    */
@@ -277,12 +265,11 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
    * Example:
    * {{{
    *  scala> import cats.data.OptionT
-   *  scala> import scala.util.Try
    *
    *  scala> // prints "no value"
-   *  scala> val optionT: OptionT[Try, Int] = OptionT[Try, Int](Try(None))
-   *  scala> optionT.flatTapNone(Try(println("no value"))).value
-   *  res0: Try[Option[Int]] = Success(None)
+   *  scala> val optionT: OptionT[Either[String, *], Int] = OptionT[Either[String, *], Int](Right(None))
+   *  scala> optionT.flatTapNone(Left("no value!"))
+   *  res0: OptionT[Either[String, *], Int] = OptionT(Left(no value!))
    * }}}
    */
   def flatTapNone[B](ifNone: => F[B])(implicit F: Monad[F]): OptionT[F, A] =
@@ -291,7 +278,6 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
   /**
    * Example:
    * {{{
-   *  scala> import cats.implicits._
    *  scala> import cats.data.OptionT
    *
    *  scala> val optionT: OptionT[List, Int] = OptionT[List, Int](List(Some(2), None, Some(4)))
@@ -305,7 +291,6 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
   /**
    * Example:
    * {{{
-   *  scala> import cats.implicits._
    *  scala> import cats.data.OptionT
    *
    *  scala> val optionT: OptionT[List, Int] = OptionT[List, Int](List(Some(2), None, Some(4)))
@@ -323,7 +308,6 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
    * 
    * {{{
    * scala> import cats.data.OptionT
-   * scala> import cats.implicits._
    * scala> import scala.util.{Success, Try}
    *
    * scala> val optionT: OptionT[Try, Int] = OptionT[Try, Int](Success(None))
@@ -352,7 +336,6 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
   /**
    * Example:
    * {{{
-   *  scala> import cats.implicits._
    *  scala> import cats.data.OptionT
    *
    *  scala> val optionT: OptionT[List, Int] = OptionT[List, Int](List(Some(2), None, Some(3)))
@@ -416,7 +399,6 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
   /**
    * Example:
    * {{{
-   *  scala> import cats.implicits._
    *  scala> import cats.data.OptionT
    *
    *  scala> val optionT: OptionT[List, Int] = OptionT[List, Int](List(Some(2), None, Some(3)))
@@ -470,7 +452,6 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
    * Example:
    * {{{
    *  scala> import cats.data.OptionT
-   *  scala> import cats.implicits._
    *
    *  scala> val optionT: OptionT[List, Int] = OptionT(List(Some(2), None, Some(4)))
    *  scala> optionT.orElseF(List(Some(3)))
@@ -488,7 +469,6 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
    * {{{
    *  scala> import cats.data.EitherT
    *  scala> import cats.data.OptionT
-   *  scala> import cats.implicits._
    *
    *  scala> val optionT: OptionT[List, Int] = OptionT(List(Some(2), None, Some(4)))
    *  scala> optionT.toRight[Int](3)
@@ -503,7 +483,6 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
    * {{{
    *  scala> import cats.data.EitherT
    *  scala> import cats.data.OptionT
-   *  scala> import cats.implicits._
    *
    *  scala> val optionT: OptionT[List, Int] = OptionT(List(Some(2), None, Some(4)))
    *  scala> optionT.toRightF[Int](List(3))
@@ -518,7 +497,6 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
    * {{{
    *  scala> import cats.data.EitherT
    *  scala> import cats.data.OptionT
-   *  scala> import cats.implicits._
    *
    *  scala> val optionT: OptionT[List, Int] = OptionT(List(Some(2), None, Some(4)))
    *  scala> optionT.toLeft[Int](3)
@@ -533,7 +511,6 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
    * {{{
    *  scala> import cats.data.EitherT
    *  scala> import cats.data.OptionT
-   *  scala> import cats.implicits._
    *
    *  scala> val optionT: OptionT[List, Int] = OptionT(List(Some(2), None, Some(4)))
    *  scala> optionT.toLeftF[Int](List(3))
@@ -667,8 +644,8 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
    * inconsistent with the behavior of the `ap` from `Monad` of `OptionT`.
    *
    * {{{
-   * scala> import cats.implicits._
    * scala> import cats.data.OptionT
+   * scala> import cats.syntax.all._
    * scala> val ff: OptionT[List, Int => String] =
    *      |   OptionT(List(Option(_.toString), None))
    * scala> val fa: OptionT[List, Int] = OptionT(List(Option(1), Option(2)))
@@ -695,7 +672,6 @@ object OptionT extends OptionTInstances {
    * Creates a `OptionT[A]` from an `A`
    *
    * {{{
-   * scala> import cats.implicits._
    * scala> OptionT.pure[List](2)
    * res0: OptionT[List, Int] = OptionT(List(Some(2)))
    * }}}
@@ -706,7 +682,6 @@ object OptionT extends OptionTInstances {
    * An alias for pure
    *
    * {{{
-   * scala> import cats.implicits._
    * scala> OptionT.some[List](2)
    * res0: OptionT[List, Int] = OptionT(List(Some(2)))
    * }}}
@@ -720,7 +695,6 @@ object OptionT extends OptionTInstances {
    * Transforms an `Option` into an `OptionT`, lifted into the specified `Applicative`.
    *
    * {{{
-   * scala> import cats.implicits._
    * scala> val o: Option[Int] = Some(2)
    * scala> OptionT.fromOption[List](o)
    * res0: OptionT[List, Int] = OptionT(List(Some(2)))
@@ -744,7 +718,7 @@ object OptionT extends OptionTInstances {
   /**
    * Same as [[liftF]], but expressed as a FunctionK for use with mapK
    * {{{
-   * scala> import cats._, data._,  implicits._
+   * scala> import cats._, data._,  syntax.all._
    * scala> val a: EitherT[Eval, String, Int] = 1.pure[EitherT[Eval, String, *]]
    * scala> val b: EitherT[OptionT[Eval, *], String, Int] = a.mapK(OptionT.liftK)
    * scala> b.value.value.value
