@@ -42,12 +42,14 @@
 package cats.kernel
 package instances
 
+import cats.kernel.compat.scalaVersionSpecific._
+import cats.kernel.compat.unused
+
 import scala.collection.mutable
-import compat.scalaVersionSpecific._
 
 @suppressUnusedImportWarningForScalaVersionSpecific
 trait MapInstances extends MapInstances1 {
-  implicit def catsKernelStdHashForMap[K: Hash, V: Hash]: Hash[Map[K, V]] =
+  implicit def catsKernelStdHashForMap[K, V](implicit @unused K: Hash[K], V: Hash[V]): Hash[Map[K, V]] =
     new MapHash[K, V]
 
   implicit def catsKernelStdCommutativeMonoidForMap[K, V: CommutativeSemigroup]: CommutativeMonoid[Map[K, V]] =
