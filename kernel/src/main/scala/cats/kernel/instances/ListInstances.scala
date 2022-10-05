@@ -132,6 +132,6 @@ class ListMonoid[A] extends Monoid[List[A]] { self =>
 
 object ListMonoid {
   @nowarn("msg=deprecated")
-  private val singleton: Monoid[List[Any]] = new ListMonoid[Any]
+  private[this] val singleton: Monoid[List[Any]] = new ListMonoid[Any]
   def apply[A]: Monoid[List[A]] = singleton.asInstanceOf[Monoid[List[A]]]
 }

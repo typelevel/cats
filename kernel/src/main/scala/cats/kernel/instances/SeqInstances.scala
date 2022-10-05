@@ -84,6 +84,6 @@ class SeqMonoid[A] extends Monoid[Seq[A]] {
 
 object SeqMonoid {
   @nowarn("msg=deprecated")
-  private val singleton: Monoid[Seq[Any]] = new SeqMonoid[Any]
+  private[this] val singleton: Monoid[Seq[Any]] = new SeqMonoid[Any]
   def apply[A]: SeqMonoid[A] = singleton.asInstanceOf[SeqMonoid[A]]
 }

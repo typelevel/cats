@@ -80,6 +80,6 @@ class LazyListMonoid[A] extends Monoid[LazyList[A]] {
 
 object LazyListMonoid {
   @nowarn("msg=deprecated")
-  private val singleton: Monoid[LazyList[Any]] = new LazyListMonoid[Any]
+  private[this] val singleton: Monoid[LazyList[Any]] = new LazyListMonoid[Any]
   def apply[A]: Monoid[LazyList[A]] = singleton.asInstanceOf[Monoid[LazyList[A]]]
 }

@@ -82,7 +82,7 @@ class VectorMonoid[A] extends Monoid[Vector[A]] {
 
 object VectorMonoid {
   @nowarn("msg=deprecated")
-  private val singleton: Monoid[Vector[Any]] = new VectorMonoid[Any]
+  private[this] val singleton: Monoid[Vector[Any]] = new VectorMonoid[Any]
 
   def apply[A]: Monoid[Vector[A]] = singleton.asInstanceOf[Monoid[Vector[A]]]
 }

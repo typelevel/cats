@@ -83,7 +83,7 @@ class QueueMonoid[A] extends Monoid[Queue[A]] {
 
 object QueueMonoid {
   @nowarn("msg=deprecated")
-  private val singleton: Monoid[Queue[Any]] = new QueueMonoid[Any]
+  private[this] val singleton: Monoid[Queue[Any]] = new QueueMonoid[Any]
 
   def apply[A]: Monoid[Queue[A]] = singleton.asInstanceOf[Monoid[Queue[A]]]
 }
