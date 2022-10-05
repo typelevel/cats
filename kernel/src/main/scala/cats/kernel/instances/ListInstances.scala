@@ -29,8 +29,11 @@ import compat.scalaVersionSpecific._
 trait ListInstances extends ListInstances1 {
   implicit def catsKernelStdOrderForList[A: Order]: Order[List[A]] =
     new ListOrder[A]
+
+  implicit private[this] val theListMonoidInstance: Monoid[List[Any]] = new ListMonoid[Any]
+
   implicit def catsKernelStdMonoidForList[A]: Monoid[List[A]] =
-    new ListMonoid[A]
+    theListMonoidInstance.asInstanceOf[Monoid[List[A]]]
 }
 
 private[instances] trait ListInstances1 extends ListInstances2 {
