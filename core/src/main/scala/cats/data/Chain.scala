@@ -1197,7 +1197,7 @@ object Chain extends ChainInstances with ChainCompanionCompat {
 }
 
 sealed abstract private[data] class ChainInstances extends ChainInstances1 {
-  implicit def catsDataMonoidForChain[A]: Monoid[Chain[A]] = ChainMonoid[A]
+  implicit def catsDataMonoidForChain[A]: Monoid[Chain[A]] = theMonoid.asInstanceOf[Monoid[Chain[A]]]
 
   implicit val catsDataInstancesForChain
     : Traverse[Chain] with Alternative[Chain] with Monad[Chain] with CoflatMap[Chain] with Align[Chain] =
@@ -1369,6 +1369,12 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
 
   }
 
+  private[this] val theMonoid: Monoid[Chain[Any]] = new Monoid[Chain[Any]] {
+    def empty: Chain[Any] = Chain.nil
+
+    def combine(c: Chain[Any], c2: Chain[Any]): Chain[Any] = Chain.concat(c, c2)
+  }
+
 }
 
 sealed abstract private[data] class ChainInstances1 extends ChainInstances2 {
@@ -1411,14 +1417,4 @@ private[data] trait ChainPartialOrder[A] extends PartialOrder[Chain[A]] {
     }
 
   override def eqv(x: Chain[A], y: Chain[A]): Boolean = x === y
-}
-
-private[data] object ChainMonoid {
-  private val singleton: Monoid[Chain[Any]] = new Monoid[Chain[Any]] {
-    def empty: Chain[Any] = Chain.nil
-
-    def combine(c: Chain[Any], c2: Chain[Any]): Chain[Any] = Chain.concat(c, c2)
-  }
-
-  def apply[A]: Monoid[Chain[A]] = singleton.asInstanceOf[Monoid[Chain[A]]]
 }
