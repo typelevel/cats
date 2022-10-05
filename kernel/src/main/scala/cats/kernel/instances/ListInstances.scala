@@ -30,10 +30,8 @@ trait ListInstances extends ListInstances1 {
   implicit def catsKernelStdOrderForList[A: Order]: Order[List[A]] =
     new ListOrder[A]
 
-  implicit private[this] val theListMonoidInstance: Monoid[List[Any]] = new ListMonoid[Any]
-
   implicit def catsKernelStdMonoidForList[A]: Monoid[List[A]] =
-    theListMonoidInstance.asInstanceOf[Monoid[List[A]]]
+    ListInstances.theListMonoidInstance.asInstanceOf[Monoid[List[A]]]
 }
 
 private[instances] trait ListInstances1 extends ListInstances2 {
@@ -47,6 +45,10 @@ private[instances] trait ListInstances1 extends ListInstances2 {
 private[instances] trait ListInstances2 {
   implicit def catsKernelStdEqForList[A: Eq]: Eq[List[A]] =
     new ListEq[A]
+}
+
+private[kernel] object ListInstances {
+  implicit private[this] val theListMonoidInstance: Monoid[List[Any]] = new ListMonoid[Any]
 }
 
 class ListOrder[A](implicit ev: Order[A]) extends Order[List[A]] {
