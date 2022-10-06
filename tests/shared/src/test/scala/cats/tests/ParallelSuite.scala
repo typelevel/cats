@@ -391,26 +391,27 @@ class ParallelSuite
   }
 
   test("ParFlatMapN over List should be consistent with parMapN flatten") {
-    forAll { (as: List[Int], bs: List[Int], cs: List[Int]) =>
-      val mf: (Int, Int, Int) => List[Int] = _ :: _ :: _ :: Nil
+    forAll { (as: List[Int], bs: List[Int], cs: List[Int], mf: (Int, Int, Int) => List[Int]) =>
       assert((as, bs, cs).parFlatMapN(mf) == (as, bs, cs).parMapN(mf).flatten)
     }
   }
 
   test("ParFlatMapN over NonEmptyList should be consistent with parMapN flatten") {
-    forAll { (as: NonEmptyList[Int], bs: NonEmptyList[Int], cs: NonEmptyList[Int]) =>
-      val mf: (Int, Int, Int) => NonEmptyList[Int] = (a, b, c) => NonEmptyList.of(a, b, c)
-      assert((as, bs, cs).parFlatMapN(mf) == (as, bs, cs).parMapN(mf).flatten)
+    forAll {
+      (as: NonEmptyList[Int], bs: NonEmptyList[Int], cs: NonEmptyList[Int], mf: (Int, Int, Int) => NonEmptyList[Int]) =>
+        assert((as, bs, cs).parFlatMapN(mf) == (as, bs, cs).parMapN(mf).flatten)
     }
   }
 
   test("ParFlatMap over List should be consistent with flatmap") {
-    forAll { as: List[Int] => assert(Tuple1(as).parFlatMap(_ :: Nil) == Tuple1(as).flatMap(_ :: Nil)) }
+    forAll { (as: List[Int], mf: Int => List[Int]) =>
+      assert(Tuple1(as).parFlatMap(mf) == Tuple1(as).flatMap(mf))
+    }
   }
 
   test("ParFlatMap over NonEmptyList should be consistent with flatmap") {
-    forAll { as: NonEmptyList[Int] =>
-      assert(Tuple1(as).parFlatMap(NonEmptyList.one) == Tuple1(as).flatMap(NonEmptyList.one))
+    forAll { (as: NonEmptyList[Int], mf: Int => NonEmptyList[Int]) =>
+      assert(Tuple1(as).parFlatMap(mf) == Tuple1(as).flatMap(mf))
     }
   }
 
