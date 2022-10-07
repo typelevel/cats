@@ -19,6 +19,8 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package cats.compat
+package cats
 
-private[cats] type targetName = scala.annotation.targetName
+package object compat {
+  private[cats] type targetName = scala.annotation.targetName
+}

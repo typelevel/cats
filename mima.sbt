@@ -145,6 +145,10 @@ ThisBuild / mimaBinaryIssueFilters ++= {
       exclude[ReversedAbstractMethodProblem]("cats.free.ContravariantCoyoneda.k"),
       exclude[DirectAbstractMethodProblem]("cats.free.Coyoneda.k"),
       exclude[ReversedAbstractMethodProblem]("cats.free.Coyoneda.k")
+    ) ++ // https://github.com/typelevel/cats/issues/4304
+    Seq(
+      exclude[MissingClassProblem]("cats.compat.compat$package"),
+      exclude[MissingClassProblem]("cats.compat.compat$package$")
     )
 }
 
