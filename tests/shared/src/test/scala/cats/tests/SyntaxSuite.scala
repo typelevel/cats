@@ -241,14 +241,32 @@ object SyntaxSuite {
   }
 
   def testParallelTuple[M[_]: Monad, F[_], A, B, C, Z](implicit P: NonEmptyParallel.Aux[M, F]) = {
-    val tfabc = mock[(M[A], M[B], M[C])]
     val fa = mock[M[A]]
     val fb = mock[M[B]]
     val fc = mock[M[C]]
-    val f = mock[(A, B, C) => Z]
 
-    tfabc.parMapN(f)
-    (fa, fb, fc).parMapN(f)
+    val tfabc = mock[(M[A], M[B], M[C])]
+    val fthree = mock[(A, B, C) => Z]
+    val mfthree = mock[(A, B, C) => M[Z]]
+
+    tfabc.parMapN(fthree)
+    (fa, fb, fc).parMapN(fthree)
+    tfabc.parFlatMapN(mfthree)
+    (fa, fb, fc).parFlatMapN(mfthree)
+
+    val tfab = mock[(M[A], M[B])]
+    val ftwo = mock[(A, B) => Z]
+    val mftwo = mock[(A, B) => M[Z]]
+
+    tfab.parMapN(ftwo)
+    (fa, fb).parMapN(ftwo)
+    tfab.parFlatMapN(mftwo)
+    (fa, fb).parFlatMapN(mftwo)
+
+    val tfa = mock[Tuple1[M[A]]]
+    val mfone = mock[A => M[Z]]
+
+    tfa.parFlatMap(mfone)
   }
 
   def testParallelBi[M[_], F[_], T[_, _]: Bitraverse, A, B, C, D](implicit P: Parallel.Aux[M, F]): Unit = {
