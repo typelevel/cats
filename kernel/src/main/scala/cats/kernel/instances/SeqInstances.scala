@@ -23,6 +23,8 @@ package cats.kernel
 package instances
 
 import compat.scalaVersionSpecific._
+
+import scala.annotation.nowarn
 import scala.collection.immutable.Seq
 
 @suppressUnusedImportWarningForScalaVersionSpecific
@@ -30,7 +32,7 @@ trait SeqInstances extends SeqInstances1 {
   implicit def catsKernelStdOrderForSeq[A: Order]: Order[Seq[A]] =
     new SeqOrder[A]
   implicit def catsKernelStdMonoidForSeq[A]: Monoid[Seq[A]] =
-    new SeqMonoid[A]
+    SeqMonoid[A]
 }
 
 private[instances] trait SeqInstances1 extends SeqInstances2 {
@@ -68,6 +70,7 @@ class SeqEq[A](implicit ev: Eq[A]) extends Eq[Seq[A]] {
     else StaticMethods.iteratorEq(xs.iterator, ys.iterator)
 }
 
+@deprecated("Use SeqMonoid.apply, which does not allocate a new instance", "2.9.0")
 class SeqMonoid[A] extends Monoid[Seq[A]] {
   def empty: Seq[A] = Seq.empty
   def combine(x: Seq[A], y: Seq[A]): Seq[A] = x ++ y
@@ -77,4 +80,10 @@ class SeqMonoid[A] extends Monoid[Seq[A]] {
 
   override def combineAll(xs: IterableOnce[Seq[A]]): Seq[A] =
     StaticMethods.combineAllIterable(Seq.newBuilder[A], xs)
+}
+
+object SeqMonoid {
+  @nowarn("msg=deprecated")
+  private[this] val singleton: Monoid[Seq[Any]] = new SeqMonoid[Any]
+  def apply[A]: SeqMonoid[A] = singleton.asInstanceOf[SeqMonoid[A]]
 }

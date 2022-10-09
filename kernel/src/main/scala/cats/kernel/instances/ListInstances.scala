@@ -22,15 +22,16 @@
 package cats.kernel
 package instances
 
-import scala.annotation.tailrec
+import scala.annotation.{nowarn, tailrec}
 import compat.scalaVersionSpecific._
 
 @suppressUnusedImportWarningForScalaVersionSpecific
 trait ListInstances extends ListInstances1 {
   implicit def catsKernelStdOrderForList[A: Order]: Order[List[A]] =
     new ListOrder[A]
+
   implicit def catsKernelStdMonoidForList[A]: Monoid[List[A]] =
-    new ListMonoid[A]
+    ListMonoid[A]
 }
 
 private[instances] trait ListInstances1 extends ListInstances2 {
@@ -104,6 +105,7 @@ class ListEq[A](implicit ev: Eq[A]) extends Eq[List[A]] {
   }
 }
 
+@deprecated("Use ListMonoid.apply, which does not allocate a new instance", "2.9.0")
 class ListMonoid[A] extends Monoid[List[A]] { self =>
   def empty: List[A] = Nil
   def combine(x: List[A], y: List[A]): List[A] = x ::: y
@@ -126,4 +128,10 @@ class ListMonoid[A] extends Monoid[List[A]] { self =>
 
       override def reverse = self
     }
+}
+
+object ListMonoid {
+  @nowarn("msg=deprecated")
+  private[this] val singleton: Monoid[List[Any]] = new ListMonoid[Any]
+  def apply[A]: Monoid[List[A]] = singleton.asInstanceOf[Monoid[List[A]]]
 }
