@@ -65,7 +65,7 @@ trait ApplicativeErrorLaws[F[_], E] extends ApplicativeLaws[F] {
     F.onError(F.pure(a)) { case x => f(x) } <-> F.pure(a)
 
   def onErrorRaise[A](fa: F[A], e: E, fb: F[Unit]): IsEq[F[A]] =
-    F.onError(F.raiseError[A](e)) { case err => fb } <-> F.map2(fb, F.raiseError[A](e))((_, b) => b)
+    F.onError(F.raiseError[A](e)) { case _ => fb } <-> F.map2(fb, F.raiseError[A](e))((_, b) => b)
 
   def adaptErrorPure[A](a: A, f: E => E): IsEq[F[A]] =
     F.adaptError(F.pure(a)) { case x => f(x) } <-> F.pure(a)
