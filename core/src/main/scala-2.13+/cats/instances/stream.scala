@@ -104,7 +104,7 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
               case Left(a) #:: tail =>
                 stack = fn(a) #::: tail
                 advance()
-              case empty =>
+              case _ => // empty
                 state = Right(None)
             }
 

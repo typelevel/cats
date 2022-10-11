@@ -209,7 +209,7 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
 
       override def find[A](fa: Vector[A])(f: A => Boolean): Option[A] = fa.find(f)
 
-      override def algebra[A]: Monoid[Vector[A]] = new kernel.instances.VectorMonoid[A]
+      override def algebra[A]: Monoid[Vector[A]] = kernel.instances.VectorMonoid[A]
 
       def functor: Functor[Vector] = this
 

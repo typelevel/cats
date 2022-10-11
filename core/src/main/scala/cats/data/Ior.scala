@@ -794,9 +794,9 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
 
   final def ===[AA >: A, BB >: B](that: AA Ior BB)(implicit AA: Eq[AA], BB: Eq[BB]): Boolean =
     fold(
-      a => that.fold(a2 => AA.eqv(a, a2), b2 => false, (a2, b2) => false),
-      b => that.fold(a2 => false, b2 => BB.eqv(b, b2), (a2, b2) => false),
-      (a, b) => that.fold(a2 => false, b2 => false, (a2, b2) => AA.eqv(a, a2) && BB.eqv(b, b2))
+      a => that.fold(a2 => AA.eqv(a, a2), _ => false, (_, _) => false),
+      b => that.fold(_ => false, b2 => BB.eqv(b, b2), (_, _) => false),
+      (a, b) => that.fold(_ => false, _ => false, (a2, b2) => AA.eqv(a, a2) && BB.eqv(b, b2))
     )
 
   final def compare[AA >: A, BB >: B](that: AA Ior BB)(implicit AA: Order[AA], BB: Order[BB]): Int =
@@ -938,9 +938,9 @@ sealed abstract private[data] class IorInstances extends IorInstances0 {
               }
             case Ior.Left(e1) =>
               ff match {
-                case Ior.Right(f)    => Ior.Left(e1)
-                case Ior.Both(e2, f) => Ior.Left(E.combine(e2, e1))
                 case Ior.Left(e2)    => Ior.Left(E.combine(e2, e1))
+                case Ior.Both(e2, _) => Ior.Left(E.combine(e2, e1))
+                case _               => Ior.Left(e1)
               }
           }
       }

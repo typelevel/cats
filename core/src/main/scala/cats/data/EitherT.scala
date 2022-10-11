@@ -1019,7 +1019,6 @@ abstract private[data] class EitherTInstances extends EitherTInstances1 {
       type F[x] = Nested[P.F, Validated[E, *], x]
 
       implicit val monadM: Monad[M] = P.monad
-      implicit val monadEither: Monad[Either[E, *]] = cats.instances.either.catsStdInstancesForEither
 
       def applicative: Applicative[Nested[P.F, Validated[E, *], *]] =
         cats.data.Nested.catsDataApplicativeForNested(P.applicative, Validated.catsDataApplicativeErrorForValidated)
@@ -1115,7 +1114,6 @@ abstract private[data] class EitherTInstances1 extends EitherTInstances2 {
       type F[x] = Nested[M, Validated[E, *], x]
 
       implicit val appValidated: Applicative[Validated[E, *]] = Validated.catsDataApplicativeErrorForValidated
-      implicit val monadEither: Monad[Either[E, *]] = cats.instances.either.catsStdInstancesForEither
 
       def applicative: Applicative[Nested[M, Validated[E, *], *]] =
         cats.data.Nested.catsDataApplicativeForNested[M, Validated[E, *]]
@@ -1187,14 +1185,14 @@ private[data] trait EitherTSemigroupK[F[_], L] extends SemigroupK[EitherT[F, L, 
   implicit val F: Monad[F]
   def combineK[A](x: EitherT[F, L, A], y: EitherT[F, L, A]): EitherT[F, L, A] =
     EitherT(F.flatMap(x.value) {
-      case l @ Left(_)  => y.value
       case r @ Right(_) => F.pure(r)
+      case _            => y.value
     })
 
   override def combineKEval[A](x: EitherT[F, L, A], y: Eval[EitherT[F, L, A]]): Eval[EitherT[F, L, A]] =
     Eval.now(EitherT(F.flatMap(x.value) {
-      case l @ Left(_)  => y.value.value
       case r @ Right(_) => F.pure(r: Either[L, A])
+      case _            => y.value.value
     }))
 }
 
