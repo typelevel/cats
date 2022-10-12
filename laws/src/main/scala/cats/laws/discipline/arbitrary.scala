@@ -130,7 +130,20 @@ object arbitrary extends ArbitraryInstances0 with ScalaVersionSpecific.Arbitrary
       a <- A.arbitrary
     } yield NonEmptyMap((k, a), fa))
 
-  implicit def cogenNonEmptyMap[K: Order: Cogen, A: Order: Cogen]: Cogen[NonEmptyMap[K, A]] =
+  @deprecated("Preserved for bincompat", "2.9.0")
+  def cogenNonEmptyMap[K, A](kOrder: Order[K],
+                             kCogen: Cogen[K],
+                             aOrder: Order[A],
+                             aCogen: Cogen[A]
+  ): Cogen[NonEmptyMap[K, A]] = {
+    implicit val orderingK: Order[K] = kOrder
+    implicit val cogenK: Cogen[K] = kCogen
+    implicit val cogenA: Cogen[A] = aCogen
+
+    cogenNonEmptyMap[K, A]
+  }
+
+  implicit def cogenNonEmptyMap[K: Order: Cogen, A: Cogen]: Cogen[NonEmptyMap[K, A]] =
     Cogen[SortedMap[K, A]].contramap(_.toSortedMap)
 
   implicit def catsLawsArbitraryForEitherT[F[_], A, B](implicit
@@ -286,9 +299,21 @@ object arbitrary extends ArbitraryInstances0 with ScalaVersionSpecific.Arbitrary
   implicit def catsLawsArbitraryForSortedMap[K: Arbitrary: Order, V: Arbitrary]: Arbitrary[SortedMap[K, V]] =
     Arbitrary(getArbitrary[Map[K, V]].map(s => SortedMap.empty[K, V](implicitly[Order[K]].toOrdering) ++ s))
 
-  implicit def catsLawsCogenForSortedMap[K: Order: Cogen, V: Order: Cogen]: Cogen[SortedMap[K, V]] = {
+  @deprecated("Preserved for bincompat", "2.9.0")
+  def catsLawsCogenForSortedMap[K, V](kOrder: Order[K],
+                                      kCogen: Cogen[K],
+                                      vOrder: Order[V],
+                                      vCogen: Cogen[V]
+  ): Cogen[SortedMap[K, V]] = {
+    implicit val orderingK: Order[K] = kOrder
+    implicit val cogenK: Cogen[K] = kCogen
+    implicit val cogenA: Cogen[V] = vCogen
+
+    catsLawsCogenForSortedMap[K, V]
+  }
+
+  implicit def catsLawsCogenForSortedMap[K: Order: Cogen, V: Cogen]: Cogen[SortedMap[K, V]] = {
     implicit val orderingK: Ordering[K] = Order[K].toOrdering
-    implicit val orderingV: Ordering[V] = Order[V].toOrdering
 
     implicitly[Cogen[Map[K, V]]].contramap(_.toMap)
   }

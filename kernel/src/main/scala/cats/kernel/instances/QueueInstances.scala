@@ -25,12 +25,13 @@ package instances
 import scala.collection.immutable.Queue
 import compat.scalaVersionSpecific._
 
+import scala.annotation.nowarn
+
 @suppressUnusedImportWarningForScalaVersionSpecific
 trait QueueInstances extends QueueInstances1 {
   implicit def catsKernelStdOrderForQueue[A: Order]: Order[Queue[A]] =
     new QueueOrder[A]
-  implicit def catsKernelStdMonoidForQueue[A]: Monoid[Queue[A]] =
-    new QueueMonoid[A]
+  implicit def catsKernelStdMonoidForQueue[A]: Monoid[Queue[A]] = QueueMonoid[A]
 }
 
 private[instances] trait QueueInstances1 extends QueueInstances2 {
@@ -68,6 +69,7 @@ class QueueEq[A](implicit ev: Eq[A]) extends Eq[Queue[A]] {
     else StaticMethods.iteratorEq(xs.iterator, ys.iterator)
 }
 
+@deprecated("Use QueueMonoid.apply, which does not allocate a new instance", "2.9.0")
 class QueueMonoid[A] extends Monoid[Queue[A]] {
   def empty: Queue[A] = Queue.empty[A]
   def combine(x: Queue[A], y: Queue[A]): Queue[A] = x ++ y
@@ -77,4 +79,11 @@ class QueueMonoid[A] extends Monoid[Queue[A]] {
 
   override def combineAll(xs: IterableOnce[Queue[A]]): Queue[A] =
     StaticMethods.combineAllIterable(Queue.newBuilder[A], xs)
+}
+
+object QueueMonoid {
+  @nowarn("msg=deprecated")
+  private[this] val singleton: Monoid[Queue[Any]] = new QueueMonoid[Any]
+
+  def apply[A]: Monoid[Queue[A]] = singleton.asInstanceOf[Monoid[Queue[A]]]
 }
