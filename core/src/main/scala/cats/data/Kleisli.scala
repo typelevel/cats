@@ -413,6 +413,14 @@ sealed abstract private[data] class KleisliInstances0_5 extends KleisliInstances
       def tabulate[A](f: Representation => A): Kleisli[M, E, A] =
         Kleisli[M, E, A](e => R.tabulate(r => f((e, r))))
     }
+
+  implicit def catsDataAlignForKleisli[F[_], R](implicit
+    evFunctor: Functor[Kleisli[F, R, *]],
+    evAlign: Align[F]
+  ): Align[Kleisli[F, R, *]] = new KleisliAlign[F, R] {
+    override val functor: Functor[Kleisli[F, R, *]] = evFunctor
+    override val FA: Align[F] = evAlign
+  }
 }
 
 sealed abstract private[data] class KleisliInstances1 extends KleisliInstances2 {
@@ -716,6 +724,13 @@ private trait KleisliDistributive[F[_], R] extends Distributive[Kleisli[F, R, *]
     Kleisli(r => F.distribute(a)(f(_).run(r)))
 
   def map[A, B](fa: Kleisli[F, R, A])(f: A => B): Kleisli[F, R, B] = fa.map(f)
+}
+
+private trait KleisliAlign[F[_], R] extends Align[Kleisli[F, R, *]] {
+  def FA: Align[F]
+
+  override def align[A, B](fa: Kleisli[F, R, A], fb: Kleisli[F, R, B]): Kleisli[F, R, Ior[A, B]] =
+    Kleisli(r => FA.align(fa.run(r), fb.run(r)))
 }
 
 private[this] trait KleisliFunctorFilter[F[_], R] extends FunctorFilter[Kleisli[F, R, *]] {
