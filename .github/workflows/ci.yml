@@ -28,7 +28,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        scala: [2.12.17, 2.13.10, 3.1.3]
+        scala: [2.12.17, 2.13.10, 3.2.0]
         java: [temurin@8, temurin@17, graalvm@11]
         project: [rootJS, rootJVM, rootNative]
         exclude:
@@ -36,9 +36,9 @@ jobs:
             java: temurin@17
           - scala: 2.12.17
             java: graalvm@11
-          - scala: 3.1.3
+          - scala: 3.2.0
             java: temurin@17
-          - scala: 3.1.3
+          - scala: 3.2.0
             java: graalvm@11
           - project: rootJS
             java: temurin@17
@@ -292,32 +292,32 @@ jobs:
           tar xf targets.tar
           rm targets.tar
 
-      - name: Download target directories (3.1.3, rootJS)
+      - name: Download target directories (3.2.0, rootJS)
         uses: actions/download-artifact@v2
         with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-3.1.3-rootJS
+          name: target-${{ matrix.os }}-${{ matrix.java }}-3.2.0-rootJS
 
-      - name: Inflate target directories (3.1.3, rootJS)
+      - name: Inflate target directories (3.2.0, rootJS)
         run: |
           tar xf targets.tar
           rm targets.tar
 
-      - name: Download target directories (3.1.3, rootJVM)
+      - name: Download target directories (3.2.0, rootJVM)
         uses: actions/download-artifact@v2
         with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-3.1.3-rootJVM
+          name: target-${{ matrix.os }}-${{ matrix.java }}-3.2.0-rootJVM
 
-      - name: Inflate target directories (3.1.3, rootJVM)
+      - name: Inflate target directories (3.2.0, rootJVM)
         run: |
           tar xf targets.tar
           rm targets.tar
 
-      - name: Download target directories (3.1.3, rootNative)
+      - name: Download target directories (3.2.0, rootNative)
         uses: actions/download-artifact@v2
         with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-3.1.3-rootNative
+          name: target-${{ matrix.os }}-${{ matrix.java }}-3.2.0-rootNative
 
-      - name: Inflate target directories (3.1.3, rootNative)
+      - name: Inflate target directories (3.2.0, rootNative)
         run: |
           tar xf targets.tar
           rm targets.tar
