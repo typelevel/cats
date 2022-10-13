@@ -22,11 +22,14 @@
 package cats.kernel
 package instances
 
+import scala.annotation.nowarn
+
 trait LazyListInstances extends LazyListInstances1 {
   implicit def catsKernelStdOrderForLazyList[A: Order]: Order[LazyList[A]] =
     new LazyListOrder[A]
+
   implicit def catsKernelStdMonoidForLazyList[A]: Monoid[LazyList[A]] =
-    new LazyListMonoid[A]
+    LazyListMonoid[A]
 }
 
 private[instances] trait LazyListInstances1 extends LazyListInstances2 {
@@ -64,6 +67,7 @@ class LazyListEq[A](implicit ev: Eq[A]) extends Eq[LazyList[A]] {
     else StaticMethods.iteratorEq(xs.iterator, ys.iterator)
 }
 
+@deprecated("Use LazyListMonoid.apply, which does not allocate a new instance", "2.9.0")
 class LazyListMonoid[A] extends Monoid[LazyList[A]] {
   def empty: LazyList[A] = LazyList.empty
   def combine(x: LazyList[A], y: LazyList[A]): LazyList[A] = x ++ y
@@ -72,4 +76,10 @@ class LazyListMonoid[A] extends Monoid[LazyList[A]] {
 
   override def combineAll(xs: IterableOnce[LazyList[A]]): LazyList[A] =
     StaticMethods.combineAllIterable(LazyList.newBuilder[A], xs)
+}
+
+object LazyListMonoid {
+  @nowarn("msg=deprecated")
+  private[this] val singleton: Monoid[LazyList[Any]] = new LazyListMonoid[Any]
+  def apply[A]: Monoid[LazyList[A]] = singleton.asInstanceOf[Monoid[LazyList[A]]]
 }

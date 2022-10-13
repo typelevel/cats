@@ -28,7 +28,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        scala: [2.12.17, 2.13.8, 3.1.3]
+        scala: [2.12.17, 2.13.10, 3.1.3]
         java: [temurin@8, temurin@17, graalvm@11]
         project: [rootJS, rootJVM, rootNative]
         exclude:
@@ -163,7 +163,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        scala: [2.13.8]
+        scala: [2.13.10]
         java: [temurin@8]
     runs-on: ${{ matrix.os }}
     steps:
@@ -262,32 +262,32 @@ jobs:
           tar xf targets.tar
           rm targets.tar
 
-      - name: Download target directories (2.13.8, rootJS)
+      - name: Download target directories (2.13.10, rootJS)
         uses: actions/download-artifact@v2
         with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-2.13.8-rootJS
+          name: target-${{ matrix.os }}-${{ matrix.java }}-2.13.10-rootJS
 
-      - name: Inflate target directories (2.13.8, rootJS)
+      - name: Inflate target directories (2.13.10, rootJS)
         run: |
           tar xf targets.tar
           rm targets.tar
 
-      - name: Download target directories (2.13.8, rootJVM)
+      - name: Download target directories (2.13.10, rootJVM)
         uses: actions/download-artifact@v2
         with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-2.13.8-rootJVM
+          name: target-${{ matrix.os }}-${{ matrix.java }}-2.13.10-rootJVM
 
-      - name: Inflate target directories (2.13.8, rootJVM)
+      - name: Inflate target directories (2.13.10, rootJVM)
         run: |
           tar xf targets.tar
           rm targets.tar
 
-      - name: Download target directories (2.13.8, rootNative)
+      - name: Download target directories (2.13.10, rootNative)
         uses: actions/download-artifact@v2
         with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-2.13.8-rootNative
+          name: target-${{ matrix.os }}-${{ matrix.java }}-2.13.10-rootNative
 
-      - name: Inflate target directories (2.13.8, rootNative)
+      - name: Inflate target directories (2.13.10, rootNative)
         run: |
           tar xf targets.tar
           rm targets.tar
@@ -341,7 +341,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        scala: [2.13.8]
+        scala: [2.13.10]
         java: [temurin@8]
     runs-on: ${{ matrix.os }}
     steps:
@@ -420,7 +420,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        scala: [2.13.8]
+        scala: [2.13.10]
         java: [temurin@8]
     runs-on: ${{ matrix.os }}
     steps:
