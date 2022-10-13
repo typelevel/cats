@@ -268,9 +268,9 @@
   </span><span class="keyword">def</span><span> </span><span class="declaration-name">combine</span><span>(</span><span class="identifier">x</span><span>: </span><span class="type-name">Pair</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>], </span><span class="identifier">y</span><span>: </span><span class="type-name">Pair</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>])(</span><span class="keyword">implicit</span><span> </span><span class="identifier">eva</span><span>: </span><span class="type-name">A</span><span> &lt;:&lt; </span><span class="type-name">Monoid</span><span>[</span><span class="type-name">A</span><span>], </span><span class="identifier">evb</span><span>: </span><span class="type-name">B</span><span> &lt;:&lt; </span><span class="type-name">Monoid</span><span>[</span><span class="type-name">B</span><span>]): </span><span class="type-name">Pair</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>] = ???
 }
 </span><span class="comment">// error: class Pair needs to be abstract.
-// Missing implementations for 2 members. Stub implementations follow:
-//   def combine(x: Pair[A,B], y: Pair[A,B]): Pair[A,B] = ???
-//   def empty: Pair[A,B] = ???
+// Missing implementations for 2 members of trait Monoid.
+//   def combine(x: Pair[A,B], y: Pair[A,B]): Pair[A,B] = ??? // implements `def combine(x: A, y: A): A`
+//   def empty: Pair[A,B] = ??? // implements `def empty: A`
 // 
 // final case class Pair[A, B](first: A, second: B) extends Monoid[Pair[A, B]] {
 // ^</span></code></pre>
