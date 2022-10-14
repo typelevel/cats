@@ -249,10 +249,15 @@ lazy val unidocs = project
   .settings(
     name := "cats-docs",
     ScalaUnidoc / unidoc / unidocProjectFilter := inProjects(kernel.jvm,
+                                                             kernelLaws.jvm,
                                                              core.jvm,
+                                                             laws.jvm,
                                                              free.jvm,
                                                              algebra.jvm,
-                                                             alleycatsCore.jvm
+                                                             algebraLaws.jvm,
+                                                             alleycatsCore.jvm,
+                                                             alleycatsLaws.jvm,
+                                                             testkit.jvm
     ),
     scalacOptions ~= { _.filterNot(_.startsWith("-W")) }, // weird nsc bug
     ScalaUnidoc / unidoc / scalacOptions ++= Seq("-groups", "-diagrams")
