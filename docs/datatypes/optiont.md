@@ -67,7 +67,7 @@ val result: Future[Option[String]] = ot.value // Future(Some("Hello Jane Doe"))
 
 ## From `A` to `OptionT[F,A]`
 
-If you have only an `A` and you wish to *lift* it into an `OptionT[F,A]` assuming you have an [`Applicative`]({{ site.baseurl }}/typeclasses/applicative.md) instance for `F` you can use `some` which is an alias for `pure`. There also exists a `none` method which can be used to create an `OptionT[F,A]`, where the `Option` wrapped `A` type is actually a `None`:
+If you have only an `A` and you wish to *lift* it into an `OptionT[F,A]` assuming you have an [`Applicative`](../typeclasses/applicative.md) instance for `F` you can use `some` which is an alias for `pure`. There also exists a `none` method which can be used to create an `OptionT[F,A]`, where the `Option` wrapped `A` type is actually a `None`:
 
 ```scala mdoc:silent
 val greet: OptionT[Future,String] = OptionT.pure("Hola!")
