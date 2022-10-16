@@ -203,8 +203,4 @@ class RegressionSuite extends CatsSuite with ScalaVersionSpecificRegressionSuite
     val program = StateT.modify[Either[Throwable, *], Int](_ + 1).reject { case _ if false => new Throwable }
     assert(program.runS(0).toOption === (Some(1)))
   }
-
-  test("#4244 ambiguous `contains_` syntax") {
-    assertEquals(List("a").map(List("a").contains_), List(true))
-  }
 }
