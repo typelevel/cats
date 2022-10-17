@@ -23,7 +23,7 @@ package cats
 
 import cats.data.State
 
-import scala.collection.immutable.{HashSet, TreeSet}
+import scala.collection.immutable.{IntMap, TreeSet}
 
 /**
  * `TraverseFilter`, also known as `Witherable`, represents list-like structures
@@ -140,23 +140,17 @@ trait TraverseFilter[F[_]] extends FunctorFilter[F] {
    * Removes duplicate elements from a list, keeping only the first occurrence.
    * This is usually faster than ordDistinct, especially for things that have a slow comparion (like String).
    */
-  def hashDistinct[A](fa: F[A])(implicit H: Hash[A]): F[A] = {
-
-    final class Wrapper(val value: A) {
-      override def equals(x: Any): Boolean =
-        // cast is safe b/c wrapper is used only internally with HashSet
-        H.eqv(value, x.asInstanceOf[Wrapper].value)
-      override def hashCode(): Int = H.hash(value)
-    }
-
-    traverseFilter[State[HashSet[Wrapper], *], A, A](fa) { a =>
-      val wrapped = new Wrapper(a)
-      State(alreadyIn => if (alreadyIn(wrapped)) (alreadyIn, None) else (alreadyIn + wrapped, Some(a)))
-    }
-      .run(HashSet.empty)
-      .value
-      ._2
-  }
+  def hashDistinct[A](fa: F[A])(implicit H: Hash[A]): F[A] =
+    traverseFilter(fa) { a =>
+      State { (distinct: IntMap[List[A]]) =>
+        val ahash = H.hash(a)
+        val existing = distinct.getOrElse(ahash, Nil)
+        if (Traverse[List].contains_(existing, a))
+          (distinct, None)
+        else
+          (distinct.updated(ahash, a :: existing), Some(a))
+      }
+    }.run(IntMap.empty).value._2
 }
 
 object TraverseFilter {
