@@ -144,14 +144,14 @@ trait TraverseFilter[F[_]] extends FunctorFilter[F] {
     traverseFilter(fa) { a =>
       State { (distinct: IntMap[List[A]]) =>
         val ahash = H.hash(a)
-        val existing = distinct.get(ahash) match {
-          case Some(existing) => existing
-          case None           => Nil
+        distinct.get(ahash) match {
+          case None => (distinct.updated(ahash, a :: Nil), Some(a))
+          case Some(existing) =>
+            if (Traverse[List].contains_(existing, a))
+              (distinct, None)
+            else
+              (distinct.updated(ahash, a :: existing), Some(a))
         }
-        if (Traverse[List].contains_(existing, a))
-          (distinct, None)
-        else
-          (distinct.updated(ahash, a :: existing), Some(a))
       }
     }.run(IntMap.empty).value._2
 }
