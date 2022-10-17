@@ -195,6 +195,16 @@ class ContTSuite extends CatsSuite {
     assert(contT.run(Eval.now(_)).value === maxIters)
   }
 
+  // test from issue 2950
+  test("ContT.map stack-safety") {
+    val maxIters = 20000
+    var k = ContT.defer[Eval, Int, Int](0)
+    for (_ <- 1 to maxIters) {
+      k = k.map(x => x + 1)
+    }
+    assert(k.run(_.pure[Eval]).value == maxIters)
+  }
+
   test("ContT.callCC short-circuits and invokes the continuation") {
     forAll { (cb: Unit => Eval[Int]) =>
       var shouldNotChange = false
