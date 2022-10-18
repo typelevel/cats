@@ -844,26 +844,15 @@ private trait RWSTNonEmptyAlternative1[F[_], E, L, S]
   def G: NonEmptyAlternative[F]
   implicit def L: Monoid[L]
 
-  // Enforces binary compatibility for RWSTAlternative1 between 2.6.1 and newer versions.
-  final protected def pure0[A](a: A): ReaderWriterStateT[F, E, L, S, A] =
+  def pure[A](a: A): ReaderWriterStateT[F, E, L, S, A] =
     ReaderWriterStateT.pure[F, E, L, S, A](a)
-
-  // Enforces binary compatibility for RWSTAlternative1 between 2.6.1 and newer versions.
-  final protected def ap0[A, B](
-    ff: ReaderWriterStateT[F, E, L, S, A => B]
-  )(
-    fa: ReaderWriterStateT[F, E, L, S, A]
-  ): ReaderWriterStateT[F, E, L, S, B] =
-    ff.flatMap(f => fa.map(f)(F))(F, L)
-
-  def pure[A](a: A): ReaderWriterStateT[F, E, L, S, A] = pure0(a)
 
   def ap[A, B](
     ff: ReaderWriterStateT[F, E, L, S, A => B]
   )(
     fa: ReaderWriterStateT[F, E, L, S, A]
   ): ReaderWriterStateT[F, E, L, S, B] =
-    ap0(ff)(fa)
+    ff.flatMap(f => fa.map(f)(F))(F, L)
 
   override def prependK[A](
     a: A,
@@ -892,15 +881,13 @@ private trait RWSTAlternative1[F[_], E, L, S]
 
   def empty[A]: ReaderWriterStateT[F, E, L, S, A] = ReaderWriterStateT.liftF(G.empty[A])
 
-  // Must exist in this trait for binary compatibility.
   override def pure[A](a: A): ReaderWriterStateT[F, E, L, S, A] =
-    pure0(a)
+    super.pure(a)
 
-  // Must exist in this trait for binary compatibility.
   override def ap[A, B](
     ff: ReaderWriterStateT[F, E, L, S, A => B]
   )(
     fa: ReaderWriterStateT[F, E, L, S, A]
   ): ReaderWriterStateT[F, E, L, S, B] =
-    ap0(ff)(fa)
+    super.ap(ff)(fa)
 }
