@@ -23,7 +23,7 @@ package cats
 
 import cats.data.State
 
-import scala.collection.immutable.{HashSet, TreeSet}
+import scala.collection.immutable.{IntMap, TreeSet}
 
 /**
  * `TraverseFilter`, also known as `Witherable`, represents list-like structures
@@ -141,12 +141,19 @@ trait TraverseFilter[F[_]] extends FunctorFilter[F] {
    * This is usually faster than ordDistinct, especially for things that have a slow comparion (like String).
    */
   def hashDistinct[A](fa: F[A])(implicit H: Hash[A]): F[A] =
-    traverseFilter[State[HashSet[A], *], A, A](fa)(a =>
-      State(alreadyIn => if (alreadyIn(a)) (alreadyIn, None) else (alreadyIn + a, Some(a)))
-    )
-      .run(HashSet.empty)
-      .value
-      ._2
+    traverseFilter(fa) { a =>
+      State { (distinct: IntMap[List[A]]) =>
+        val ahash = H.hash(a)
+        distinct.get(ahash) match {
+          case None => (distinct.updated(ahash, a :: Nil), Some(a))
+          case Some(existing) =>
+            if (Traverse[List].contains_(existing, a))
+              (distinct, None)
+            else
+              (distinct.updated(ahash, a :: existing), Some(a))
+        }
+      }
+    }.run(IntMap.empty).value._2
 }
 
 object TraverseFilter {

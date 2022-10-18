@@ -30,10 +30,12 @@ trait HashLaws[A] extends EqLaws[A] {
   def hashCompatibility(x: A, y: A): IsEq[Boolean] =
     (!E.eqv(x, y) || (Hash.hash(x) == Hash.hash(y))) <-> true
 
+  @deprecated("This law is no longer enforced", "2.9.0")
   def sameAsUniversalHash(x: A, y: A): IsEq[Boolean] =
     ((E.hash(x) == x.hashCode) && (Hash.fromUniversalHashCode[A].hash(x) == x.hashCode()) &&
       (E.eqv(x, y) == Hash.fromUniversalHashCode[A].eqv(x, y))) <-> true
 
+  @deprecated("This law is no longer enforced", "2.9.0")
   def sameAsScalaHashing(x: A, y: A, scalaHashing: Hashing[A]): IsEq[Boolean] =
     ((E.hash(x) == Hash.fromHashing(scalaHashing).hash(x)) &&
       (E.eqv(x, y) == Hash.fromHashing(scalaHashing).eqv(x, y))) <-> true
