@@ -1186,13 +1186,13 @@ private[data] trait EitherTSemigroupK[F[_], L] extends SemigroupK[EitherT[F, L, 
   def combineK[A](x: EitherT[F, L, A], y: EitherT[F, L, A]): EitherT[F, L, A] =
     EitherT(F.flatMap(x.value) {
       case r @ Right(_) => F.pure(r)
-      case _            => y.value
+      case Left(_)      => y.value
     })
 
   override def combineKEval[A](x: EitherT[F, L, A], y: Eval[EitherT[F, L, A]]): Eval[EitherT[F, L, A]] =
     Eval.now(EitherT(F.flatMap(x.value) {
       case r @ Right(_) => F.pure(r: Either[L, A])
-      case _            => y.value.value
+      case Left(_)      => y.value.value
     }))
 }
 

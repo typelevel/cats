@@ -201,12 +201,12 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
           case Right(b) =>
             fc match {
               case Right(c) => Right(f(Ior.both(b, c)))
-              case _        => Right(f(Ior.left(b)))
+              case Left(_)  => Right(f(Ior.left(b)))
             }
           case left @ Left(_) =>
             fc match {
               case Right(c) => Right(f(Ior.right(c)))
-              case _        => left.rightCast[D]
+              case Left(_)  => left.rightCast[D]
             }
         }
 

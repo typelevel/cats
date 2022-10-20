@@ -941,7 +941,7 @@ sealed abstract private[data] class IorInstances extends IorInstances0 {
               ff match {
                 case Ior.Left(e2)    => Ior.Left(E.combine(e2, e1))
                 case Ior.Both(e2, _) => Ior.Left(E.combine(e2, e1))
-                case _               => Ior.Left(e1)
+                case Ior.Right(_)    => Ior.Left(e1)
               }
           }
       }
