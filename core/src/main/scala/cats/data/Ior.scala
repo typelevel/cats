@@ -793,22 +793,11 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
     }
 
   final def ===[AA >: A, BB >: B](that: AA Ior BB)(implicit AA: Eq[AA], BB: Eq[BB]): Boolean =
-    this match {
-      case Ior.Left(a) =>
-        that match {
-          case Ior.Left(aa) => AA.eqv(a, aa)
-          case _            => false
-        }
-      case Ior.Right(b) =>
-        that match {
-          case Ior.Right(bb) => BB.eqv(b, bb)
-          case _             => false
-        }
-      case Ior.Both(a, b) =>
-        that match {
-          case Ior.Both(aa, bb) => AA.eqv(a, aa) && BB.eqv(b, bb)
-          case _                => false
-        }
+    (this, that) match {
+      case (Ior.Left(a), Ior.Left(aa))        => AA.eqv(a, aa)
+      case (Ior.Right(b), Ior.Right(bb))      => BB.eqv(b, bb)
+      case (Ior.Both(a, b), Ior.Both(aa, bb)) => AA.eqv(a, aa) && BB.eqv(b, bb)
+      case _                                  => false
     }
 
   final def compare[AA >: A, BB >: B](that: AA Ior BB)(implicit AA: Order[AA], BB: Order[BB]): Int =
