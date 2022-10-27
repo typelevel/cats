@@ -52,7 +52,7 @@ object ArraySeqInstances {
   final private class ArraySeqOrder[A](implicit ev: Order[A]) extends Order[ArraySeq[A]] {
     final def compare(xs: ArraySeq[A], ys: ArraySeq[A]): Int = {
       @tailrec def loop(i: Int): Int =
-        (i < xs.length, i < ys.length) match {
+        (xs.sizeIs > i, ys.sizeIs > i) match {
           case (true, true) =>
             val n = ev.compare(xs(i), ys(i))
             if (n != 0) n else loop(i + 1)
@@ -68,7 +68,7 @@ object ArraySeqInstances {
   private class ArraySeqPartialOrder[A](implicit ev: PartialOrder[A]) extends PartialOrder[ArraySeq[A]] {
     final def partialCompare(xs: ArraySeq[A], ys: ArraySeq[A]): Double = {
       @tailrec def loop(i: Int): Double =
-        (i < xs.length, i < ys.length) match {
+        (xs.sizeIs > i, ys.sizeIs > i) match {
           case (true, true) =>
             val n = ev.partialCompare(xs(i), ys(i))
             if (n != 0) n else loop(i + 1)
@@ -88,7 +88,7 @@ object ArraySeqInstances {
   private class ArraySeqEq[A](implicit ev: Eq[A]) extends Eq[ArraySeq[A]] {
     final def eqv(xs: ArraySeq[A], ys: ArraySeq[A]): Boolean = {
       @tailrec def loop(i: Int): Boolean =
-        (i < xs.length, i < ys.length) match {
+        (xs.sizeIs > i, ys.sizeIs > i) match {
           case (true, true)   => if (ev.eqv(xs(i), ys(i))) loop(i + 1) else false
           case (true, false)  => false
           case (false, true)  => false
