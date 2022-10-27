@@ -154,7 +154,7 @@ private[cats] object ArraySeqInstances {
 
       override def foldM[G[_], A, B](fa: ArraySeq[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] =
         G.tailRecM((z, 0)) { case (b, i) =>
-          if (i < fa.length) G.map(f(b, fa(i)))(b => Left((b, i + 1)))
+          if (fa.sizeIs > i) G.map(f(b, fa(i)))(b => Left((b, i + 1)))
           else G.pure(Right(b))
         }
 
