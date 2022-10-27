@@ -61,8 +61,8 @@ trait ApplicativeErrorLaws[F[_], E] extends ApplicativeLaws[F] {
   def attemptFromEitherConsistentWithPure[A](eab: Either[E, A]): IsEq[F[Either[E, A]]] =
     F.attempt(F.fromEither(eab)) <-> F.pure(eab)
 
-  def voidErrorConsistentWithVoidHandleError[A](fa: F[A]): IsEq[F[Unit]] =
-    F.voidError(fa) <-> F.handleError(F.void(fa))(_ => ())
+  def voidErrorConsistentWithHandleError(fu: F[Unit]): IsEq[F[Unit]] =
+    F.voidError(fu) <-> F.handleError(fu)(Function.const(()))
 
   def onErrorPure[A](a: A, f: E => F[Unit]): IsEq[F[A]] =
     F.onError(F.pure(a)) { case x => f(x) } <-> F.pure(a)

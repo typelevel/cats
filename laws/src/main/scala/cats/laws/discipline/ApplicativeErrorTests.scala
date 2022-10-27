@@ -78,7 +78,7 @@ trait ApplicativeErrorTests[F[_], E] extends ApplicativeTests[F] {
           "applicativeError voidError consistent with void+handleError" -> forAll { (a: A) =>
             // Should be an implicit parameter but that is not a binary-compatible change
             implicit val eqFUnit: Eq[F[Unit]] = makeEqFUnit[A](a)
-            forAll(laws.voidErrorConsistentWithVoidHandleError[A] _)
+            forAll(laws.voidErrorConsistentWithHandleError _)
           },
           "applicativeError onError pure" -> forAll(laws.onErrorPure[A] _),
           "applicativeError onError raise" -> forAll(laws.onErrorRaise[A] _),

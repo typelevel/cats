@@ -34,6 +34,11 @@ trait ApplicativeErrorSyntax {
     fa: F[A]
   )(implicit F: ApplicativeError[F, E]): ApplicativeErrorOps[F, E, A] =
     new ApplicativeErrorOps[F, E, A](fa)
+
+  implicit final def catsSyntaxApplicativeErrorFUnit[F[_], E](
+    fu: F[Unit]
+  ): ApplicativeErrorFUnitOps[F, E] =
+    new ApplicativeErrorFUnitOps[F, E](fu)
 }
 
 /**
@@ -65,9 +70,6 @@ final class ApplicativeErrorIdOps[E](private val e: E) extends AnyVal {
 final class ApplicativeErrorOps[F[_], E, A](private val fa: F[A]) extends AnyVal {
   def handleError(f: E => A)(implicit F: ApplicativeError[F, E]): F[A] =
     F.handleError(fa)(f)
-
-  def voidError(implicit F: ApplicativeError[F, E]): F[Unit] =
-    F.voidError(fa)
 
   def handleErrorWith(f: E => F[A])(implicit F: ApplicativeError[F, E]): F[A] =
     F.handleErrorWith(fa)(f)
@@ -145,4 +147,9 @@ final class ApplicativeErrorOps[F[_], E, A](private val fa: F[A]) extends AnyVal
    */
   def orRaise(other: => E)(implicit F: ApplicativeError[F, E]): F[A] =
     adaptErr { case _ => other }
+}
+
+final class ApplicativeErrorFUnitOps[F[_], E](private val fu: F[Unit]) extends AnyVal {
+  def voidError(implicit F: ApplicativeError[F, E]): F[Unit] =
+    F.voidError(fu)
 }
