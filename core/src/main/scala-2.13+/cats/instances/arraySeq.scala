@@ -147,7 +147,7 @@ private[cats] object ArraySeqInstances {
         fa.forall(p)
 
       override def get[A](fa: ArraySeq[A])(idx: Long): Option[A] =
-        if (idx >= 0 && idx < fa.length && idx.isValidInt) Some(fa(idx.toInt)) else None
+        if (idx >= 0 && idx.isValidInt && fa.sizeIs > idx.toInt) Some(fa(idx.toInt)) else None
 
       override def isEmpty[A](fa: ArraySeq[A]): Boolean =
         fa.isEmpty
