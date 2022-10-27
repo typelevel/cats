@@ -227,7 +227,7 @@ final class NonEmptySeq[+A] private (val toSeq: Seq[A]) extends AnyVal with NonE
    * universal .toString method.
    */
   def show[AA >: A](implicit AA: Show[AA]): String =
-    s"NonEmptySeq(${toSeq.iterator.map(Show[AA].show).mkString(", ")})"
+    s"NonEmptySeq(${toSeq.iterator.map(AA.show).mkString(", ")})"
 
   def length: Int = toSeq.length
 
