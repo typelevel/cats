@@ -121,6 +121,10 @@ trait ScalaVersionSpecificFoldableSuite { self: FoldableSuiteAdditional =>
     assert((1 #:: boomLazyList[Int]).findM[Id](_ > 0) == Some(1))
     assert((1 #:: boomLazyList[Int]).collectFirstSomeM[Id, Int](Option.apply) == Some(1))
   }
+
+  test("#4244 ambiguous `contains_` syntax") {
+    assertEquals(List("a").map(List("a").contains_), List(true))
+  }
 }
 
 trait ScalaVersionSpecificParallelSuite { self: ParallelSuite =>
