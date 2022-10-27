@@ -182,11 +182,12 @@ private[cats] object ArraySeqInstances {
       def functor: Functor[ArraySeq] = this
 
       def align[A, B](fa: ArraySeq[A], fb: ArraySeq[B]): ArraySeq[Ior[A, B]] = {
-        val aLarger = fa.size >= fb.size
+        val fbSize = fb.size
+        val aLarger = fa.sizeIs >= fbSize
         if (aLarger) {
-          fa.lazyZip(fb).map(Ior.both) ++ fa.drop(fb.size).map(Ior.left)
+          fa.lazyZip(fb).map(Ior.both) ++ fa.drop(fbSize).map(Ior.left)
         } else {
-          fa.lazyZip(fb).map(Ior.both) ++ fb.drop(fa.size).map(Ior.right)
+          fa.lazyZip(fb).map(Ior.both) ++ fb.drop(fbSize).map(Ior.right)
         }
       }
 
