@@ -227,11 +227,11 @@ final class NonEmptySeq[+A] private (val toSeq: Seq[A]) extends AnyVal with NonE
    * universal .toString method.
    */
   def show[AA >: A](implicit AA: Show[AA]): String =
-    s"NonEmptySeq(${toSeq.map(Show[AA].show).mkString(", ")})"
+    s"NonEmptySeq(${toSeq.iterator.map(AA.show).mkString(", ")})"
 
   def length: Int = toSeq.length
 
-  override def toString: String = s"NonEmptySeq(${toSeq.map(_.toString).mkString(", ")})"
+  override def toString: String = s"NonEmptySeq(${toSeq.iterator.map(_.toString).mkString(", ")})"
 
   /**
    * Remove duplicates. Duplicates are checked using `Order[_]` instance.
