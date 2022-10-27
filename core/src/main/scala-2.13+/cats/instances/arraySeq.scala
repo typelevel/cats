@@ -93,7 +93,7 @@ private[cats] object ArraySeqInstances {
 
       def foldRight[A, B](fa: ArraySeq[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = {
         def loop(i: Int): Eval[B] =
-          if (i < fa.length) f(fa(i), Eval.defer(loop(i + 1))) else lb
+          if (fa.sizeIs > i) f(fa(i), Eval.defer(loop(i + 1))) else lb
 
         Eval.defer(loop(0))
       }
