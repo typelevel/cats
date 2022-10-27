@@ -908,8 +908,8 @@ sealed abstract private[data] class ValidatedInstances extends ValidatedInstance
             }
           case Valid(a) =>
             fb match {
-              case Invalid(e) => Valid(f(Ior.left(a)))
               case Valid(b)   => Valid(f(Ior.both(a, b)))
+              case Invalid(_) => Valid(f(Ior.left(a)))
             }
         }
     }

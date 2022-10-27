@@ -190,7 +190,7 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
         fa.iterator.dropWhile(p).toList
 
       override def algebra[A]: Monoid[Queue[A]] =
-        new kernel.instances.QueueMonoid[A]
+        kernel.instances.QueueMonoid[A]
 
       override def collectFirst[A, B](fa: Queue[A])(pf: PartialFunction[A, B]): Option[B] = fa.collectFirst(pf)
 

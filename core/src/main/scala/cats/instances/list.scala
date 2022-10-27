@@ -252,7 +252,7 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
 
       override def dropWhile_[A](fa: List[A])(p: A => Boolean): List[A] = fa.dropWhile(p)
 
-      override def algebra[A]: Monoid[List[A]] = new kernel.instances.ListMonoid[A]
+      override def algebra[A]: Monoid[List[A]] = kernel.instances.ListMonoid[A]
 
       override def collectFirst[A, B](fa: List[A])(pf: PartialFunction[A, B]): Option[B] = fa.collectFirst(pf)
 

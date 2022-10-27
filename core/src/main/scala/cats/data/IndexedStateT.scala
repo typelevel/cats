@@ -482,8 +482,8 @@ sealed abstract private[data] class IndexedStateTContravariantMonoidal[F[_], S]
   implicit def F: ContravariantMonoidal[F]
   implicit def G: Applicative[F]
 
-  override def unit: IndexedStateT[F, S, S, Unit] =
-    IndexedStateT.applyF(G.pure((s: S) => F.trivial[(S, Unit)]))
+  override val unit: IndexedStateT[F, S, S, Unit] =
+    IndexedStateT.applyF(G.pure((_: S) => F.trivial[(S, Unit)]))
 
   override def contramap[A, B](fa: IndexedStateT[F, S, S, A])(f: B => A): IndexedStateT[F, S, S, B] =
     contramap2(fa, trivial)(((a: A) => (a, a)).compose(f))

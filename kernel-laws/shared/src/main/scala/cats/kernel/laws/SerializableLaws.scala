@@ -57,7 +57,7 @@ object SerializableLaws {
           oos.close()
           val bais = new ByteArrayInputStream(baos.toByteArray())
           ois = new ObjectInputStream(bais)
-          val a2 = ois.readObject()
+          val _ = ois.readObject()
           ois.close()
           Result(status = Proof)
         } catch {

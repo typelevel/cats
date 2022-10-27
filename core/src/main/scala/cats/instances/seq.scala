@@ -162,7 +162,7 @@ trait SeqInstances extends cats.kernel.instances.SeqInstances {
 
       override def find[A](fa: Seq[A])(f: A => Boolean): Option[A] = fa.find(f)
 
-      override def algebra[A]: Monoid[Seq[A]] = new kernel.instances.SeqMonoid[A]
+      override def algebra[A]: Monoid[Seq[A]] = kernel.instances.SeqMonoid[A]
 
       def functor: Functor[Seq] = this
 

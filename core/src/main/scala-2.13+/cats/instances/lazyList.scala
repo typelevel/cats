@@ -159,7 +159,7 @@ trait LazyListInstances extends cats.kernel.instances.LazyListInstances {
 
       override def find[A](fa: LazyList[A])(f: A => Boolean): Option[A] = fa.find(f)
 
-      override def algebra[A]: Monoid[LazyList[A]] = new kernel.instances.LazyListMonoid[A]
+      override def algebra[A]: Monoid[LazyList[A]] = kernel.instances.LazyListMonoid[A]
 
       override def collectFirst[A, B](fa: LazyList[A])(pf: PartialFunction[A, B]): Option[B] = fa.collectFirst(pf)
 
