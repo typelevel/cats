@@ -105,6 +105,13 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
   def handleError[A](fa: F[A])(f: E => A): F[A] = handleErrorWith(fa)(f.andThen(pure))
 
   /**
+   * Void any error, by mapping it to `Unit`.
+   *
+   * @see [[handleError]] to map to an `A` value instead of `Unit`.
+   */
+  def voidError[A](fa: F[A]): F[Unit] = handleError(void(fa))(_ => ())
+
+  /**
    * Handle errors by turning them into [[scala.util.Either]] values.
    *
    * If there is no error, then an `scala.util.Right` value will be returned instead.

@@ -66,6 +66,9 @@ final class ApplicativeErrorOps[F[_], E, A](private val fa: F[A]) extends AnyVal
   def handleError(f: E => A)(implicit F: ApplicativeError[F, E]): F[A] =
     F.handleError(fa)(f)
 
+  def voidError(implicit F: ApplicativeError[F, E]): F[Unit] =
+    F.voidError(fa)
+
   def handleErrorWith(f: E => F[A])(implicit F: ApplicativeError[F, E]): F[A] =
     F.handleErrorWith(fa)(f)
 

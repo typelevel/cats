@@ -474,6 +474,8 @@ object SyntaxSuite {
     val ea = mock[E => A]
     val gea1 = ga.handleError(ea)
 
+    val vea = ga.voidError
+
     val egea = mock[E => G[A]]
     val gea2 = ga.handleErrorWith(egea)
 
