@@ -60,4 +60,14 @@ private[cats] object StaticMethods {
     }
   }
 
+  def mapWithLongIndexFromStrictFunctor[F[_], A, B](fa: F[A], f: (A, Long) => B)(implicit ev: Functor[F]): F[B] = {
+    var idx: Long = 0L
+
+    ev.map(fa) { a =>
+      val b = f(a, idx)
+      idx += 1
+      b
+    }
+  }
+
 }

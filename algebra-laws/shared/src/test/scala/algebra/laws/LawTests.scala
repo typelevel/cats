@@ -177,13 +177,11 @@ class LawTests extends munit.DisciplineSuite {
     implicit val NOrderEq: Eq[Order[N]] = Eq.by { (order: Order[N]) =>
       Vector.tabulate(nMax)(N).sorted(order.toOrdering)
     }
-    implicit val NEqEq: Eq[Eq[N]] = new Eq[Eq[N]] {
-      def eqv(a: Eq[N], b: Eq[N]) =
-        Iterator
-          .tabulate(nMax)(N)
-          .flatMap { x => Iterator.tabulate(nMax)(N).map((x, _)) }
-          .forall { case (x, y) => a.eqv(x, y) == b.eqv(x, y) }
-    }
+    implicit val NEqEq: Eq[Eq[N]] = (a, b) =>
+      Iterator
+        .tabulate(nMax)(N)
+        .flatMap { x => Iterator.tabulate(nMax)(N).map((x, _)) }
+        .forall { case (x, y) => a.eqv(x, y) == b.eqv(x, y) }
 
     implicit val monoidOrderN: Monoid[Order[N]] = Order.whenEqualMonoid[N]
     checkAll("Order[N]", GroupLaws[Order[N]].monoid)

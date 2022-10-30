@@ -793,11 +793,12 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
     }
 
   final def ===[AA >: A, BB >: B](that: AA Ior BB)(implicit AA: Eq[AA], BB: Eq[BB]): Boolean =
-    fold(
-      a => that.fold(a2 => AA.eqv(a, a2), b2 => false, (a2, b2) => false),
-      b => that.fold(a2 => false, b2 => BB.eqv(b, b2), (a2, b2) => false),
-      (a, b) => that.fold(a2 => false, b2 => false, (a2, b2) => AA.eqv(a, a2) && BB.eqv(b, b2))
-    )
+    (this, that) match {
+      case (Ior.Left(a), Ior.Left(aa))        => AA.eqv(a, aa)
+      case (Ior.Right(b), Ior.Right(bb))      => BB.eqv(b, bb)
+      case (Ior.Both(a, b), Ior.Both(aa, bb)) => AA.eqv(a, aa) && BB.eqv(b, bb)
+      case _                                  => false
+    }
 
   final def compare[AA >: A, BB >: B](that: AA Ior BB)(implicit AA: Order[AA], BB: Order[BB]): Int =
     (this, that) match {
@@ -857,21 +858,11 @@ sealed abstract private[data] class IorInstances extends IorInstances0 {
       }
   }
 
-  implicit def catsDataOrderForIor[A: Order, B: Order]: Order[A Ior B] =
-    new Order[A Ior B] {
+  implicit def catsDataOrderForIor[A: Order, B: Order]: Order[A Ior B] = _ compare _
 
-      def compare(x: Ior[A, B], y: Ior[A, B]): Int = x.compare(y)
-    }
+  implicit def catsDataShowForIor[A: Show, B: Show]: Show[A Ior B] = _.show
 
-  implicit def catsDataShowForIor[A: Show, B: Show]: Show[A Ior B] =
-    new Show[A Ior B] {
-      def show(f: A Ior B): String = f.show
-    }
-
-  implicit def catsDataSemigroupForIor[A: Semigroup, B: Semigroup]: Semigroup[Ior[A, B]] =
-    new Semigroup[Ior[A, B]] {
-      def combine(x: Ior[A, B], y: Ior[A, B]) = x.combine(y)
-    }
+  implicit def catsDataSemigroupForIor[A: Semigroup, B: Semigroup]: Semigroup[Ior[A, B]] = _ combine _
 
   implicit def catsDataMonadErrorForIor[A: Semigroup]: MonadError[Ior[A, *], A] =
     new MonadError[Ior[A, *], A] {
@@ -948,9 +939,9 @@ sealed abstract private[data] class IorInstances extends IorInstances0 {
               }
             case Ior.Left(e1) =>
               ff match {
-                case Ior.Right(f)    => Ior.Left(e1)
-                case Ior.Both(e2, f) => Ior.Left(E.combine(e2, e1))
                 case Ior.Left(e2)    => Ior.Left(E.combine(e2, e1))
+                case Ior.Both(e2, _) => Ior.Left(E.combine(e2, e1))
+                case Ior.Right(_)    => Ior.Left(e1)
               }
           }
       }
@@ -996,11 +987,7 @@ sealed abstract private[data] class IorInstances0 {
         fa.map(f)
     }
 
-  implicit def catsDataEqForIor[A: Eq, B: Eq]: Eq[A Ior B] =
-    new Eq[A Ior B] {
-
-      def eqv(x: A Ior B, y: A Ior B): Boolean = x === y
-    }
+  implicit def catsDataEqForIor[A: Eq, B: Eq]: Eq[A Ior B] = _ === _
 }
 
 sealed private[data] trait IorFunctions {

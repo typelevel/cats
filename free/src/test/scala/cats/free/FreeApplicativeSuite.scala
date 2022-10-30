@@ -190,10 +190,7 @@ object FreeApplicativeSuite {
     Arbitrary(freeGen[F, A](4))
 
   implicit def freeApplicativeEq[S[_]: Applicative, A](implicit SA: Eq[S[A]]): Eq[FreeApplicative[S, A]] =
-    new Eq[FreeApplicative[S, A]] {
-      def eqv(a: FreeApplicative[S, A], b: FreeApplicative[S, A]): Boolean =
-        SA.eqv(a.fold, b.fold)
-    }
+    Eq.by(_.fold)
 
   implicit def catsLawsArbitraryForListNatTrans: Arbitrary[List ~> List] =
     Arbitrary(

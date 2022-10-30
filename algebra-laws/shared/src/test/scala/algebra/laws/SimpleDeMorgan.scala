@@ -68,7 +68,6 @@ object SimpleDeMorgan {
 
   implicit val arbitrary: Arbitrary[SimpleDeMorgan] = Arbitrary(oneOf(False, Unknown, True))
 
-  implicit val eq: Eq[SimpleDeMorgan] = new Eq[SimpleDeMorgan] {
-    def eqv(x: SimpleDeMorgan, y: SimpleDeMorgan): Boolean = x == y
-  }
+  implicit val eq: Eq[SimpleDeMorgan] =
+    Eq.fromUniversalEquals
 }

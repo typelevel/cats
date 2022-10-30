@@ -106,10 +106,7 @@ sealed abstract private[data] class Tuple2KInstances0 extends Tuple2KInstances1 
       def G: Traverse[G] = GF
     }
   implicit def catsDataEqForTuple2K[F[_], G[_], A](implicit FF: Eq[F[A]], GG: Eq[G[A]]): Eq[Tuple2K[F, G, A]] =
-    new Eq[Tuple2K[F, G, A]] {
-      def eqv(x: Tuple2K[F, G, A], y: Tuple2K[F, G, A]): Boolean =
-        FF.eqv(x.first, y.first) && GG.eqv(x.second, y.second)
-    }
+    (x, y) => FF.eqv(x.first, y.first) && GG.eqv(x.second, y.second)
 }
 
 sealed abstract private[data] class Tuple2KInstances1 extends Tuple2KInstances2 {

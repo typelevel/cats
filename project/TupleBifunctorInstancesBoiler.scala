@@ -5,7 +5,7 @@ import Boilerplate.{Template, TemplateVals}
 import sbt.File
 
 object GenTupleBifunctorInstances extends Template {
-  override def range = 1 to 11
+  override def range = 2 to 11
   override def filename(root: sbt.File): File =
     root / "cats" / "instances" / "NTupleBifunctorInstances.scala"
 
@@ -18,15 +18,17 @@ object GenTupleBifunctorInstances extends Template {
     |package instances
     |
     |private[cats] trait NTupleBifunctorInstances {
-${if (arity > 1)
-        block"""
+    |
+    |  private def instance[F[_, _]](bim: (F[Any, Any], Any => Any, Any => Any) => F[Any, Any]): Bifunctor[F] =
+    |    new Bifunctor[F] {
+    |      def bimap[A, B, C, D](fab: F[A, B])(f: A => C, g: B => D): F[C, D] =
+    |        bim(fab.asInstanceOf[F[Any, Any]], f.asInstanceOf[Any => Any], g.asInstanceOf[Any => Any]).asInstanceOf[F[C, D]]
+    |    }
+    -
     -  implicit final def catsStdBifunctorForTuple$arity${`[A0, A(N - 2)]`}: Bifunctor[${`(A..N - 2, *, *)`}] =
-    -    new Bifunctor[${`(A..N - 2, *, *)`}] {
-    -      def bimap[A, B, C, D](fa: (${`A0, A(N - 2)`}A, B))(f: A => C, g: B => D): (${`A0, A(N - 2)`}C, D) = (${`fa._1..fa._(n - 2)`}f(fa._${arity - 1}), g(fa._$arity))
-    -    }"""
-      else
-        block"""
-    -"""}
+    -    instance[${`(A..N - 2, *, *)`}] { (fab, f, g) =>
+    -      fab.copy(_${arity - 1} = f(fab._${arity - 1}), _$arity = g(fab._$arity))
+    -    }
     |}"""
   }
 }

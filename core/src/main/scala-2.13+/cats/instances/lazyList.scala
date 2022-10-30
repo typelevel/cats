@@ -159,7 +159,7 @@ trait LazyListInstances extends cats.kernel.instances.LazyListInstances {
 
       override def find[A](fa: LazyList[A])(f: A => Boolean): Option[A] = fa.find(f)
 
-      override def algebra[A]: Monoid[LazyList[A]] = new kernel.instances.LazyListMonoid[A]
+      override def algebra[A]: Monoid[LazyList[A]] = kernel.instances.LazyListMonoid[A]
 
       override def collectFirst[A, B](fa: LazyList[A])(pf: PartialFunction[A, B]): Option[B] = fa.collectFirst(pf)
 
@@ -176,9 +176,7 @@ trait LazyListInstances extends cats.kernel.instances.LazyListInstances {
     }
 
   implicit def catsStdShowForLazyList[A: Show]: Show[LazyList[A]] =
-    new Show[LazyList[A]] {
-      def show(fa: LazyList[A]): String = if (fa.isEmpty) "LazyList()" else s"LazyList(${fa.head.show}, ?)"
-    }
+    list => if (list.isEmpty) "LazyList()" else s"LazyList(${list.head.show}, ?)"
 
   implicit val catsStdTraverseFilterForLazyList: TraverseFilter[LazyList] = new TraverseFilter[LazyList] {
     val traverse: Traverse[LazyList] = catsStdInstancesForLazyList

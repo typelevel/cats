@@ -431,10 +431,7 @@ sealed abstract private[cats] class EvalInstances extends EvalInstances0 {
     }
 
   implicit def catsOrderForEval[A: Order]: Order[Eval[A]] =
-    new Order[Eval[A]] {
-      def compare(lx: Eval[A], ly: Eval[A]): Int =
-        Order[A].compare(lx.value, ly.value)
-    }
+    Order.by(_.value)
 
   implicit def catsGroupForEval[A: Group]: Group[Eval[A]] =
     new EvalGroup[A] { val algebra: Group[A] = Group[A] }
@@ -458,10 +455,7 @@ sealed abstract private[cats] class EvalInstances extends EvalInstances0 {
 
 sealed abstract private[cats] class EvalInstances0 extends EvalInstances1 {
   implicit def catsPartialOrderForEval[A: PartialOrder]: PartialOrder[Eval[A]] =
-    new PartialOrder[Eval[A]] {
-      def partialCompare(lx: Eval[A], ly: Eval[A]): Double =
-        PartialOrder[A].partialCompare(lx.value, ly.value)
-    }
+    PartialOrder.by(_.value)
 
   implicit def catsMonoidForEval[A: Monoid]: Monoid[Eval[A]] =
     new EvalMonoid[A] { val algebra = Monoid[A] }
@@ -469,10 +463,7 @@ sealed abstract private[cats] class EvalInstances0 extends EvalInstances1 {
 
 sealed abstract private[cats] class EvalInstances1 {
   implicit def catsEqForEval[A: Eq]: Eq[Eval[A]] =
-    new Eq[Eval[A]] {
-      def eqv(lx: Eval[A], ly: Eval[A]): Boolean =
-        Eq[A].eqv(lx.value, ly.value)
-    }
+    Eq.by(_.value)
 
   implicit def catsSemigroupForEval[A: Semigroup]: Semigroup[Eval[A]] =
     new EvalSemigroup[A] { val algebra = Semigroup[A] }

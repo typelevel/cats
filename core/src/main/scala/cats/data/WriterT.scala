@@ -403,9 +403,7 @@ sealed abstract private[data] class WriterTInstances1 extends WriterTInstances2 
     catsDataFoldableForWriterT[Id, L](F)
 
   implicit def catsDataOrderForWriterT[F[_], L, V](implicit Ord: Order[F[(L, V)]]): Order[WriterT[F, L, V]] =
-    new Order[WriterT[F, L, V]] {
-      def compare(x: WriterT[F, L, V], y: WriterT[F, L, V]): Int = x.compare(y)
-    }
+    _ compare _
 }
 
 sealed abstract private[data] class WriterTInstances2 extends WriterTInstances3 {
@@ -448,10 +446,7 @@ sealed abstract private[data] class WriterTInstances2 extends WriterTInstances3 
         fab.bimap(f, g)
     }
 
-  implicit def catsDataShowForWriterT[F[_], L, V](implicit F: Show[F[(L, V)]]): Show[WriterT[F, L, V]] =
-    new Show[WriterT[F, L, V]] {
-      override def show(f: WriterT[F, L, V]): String = f.show
-    }
+  implicit def catsDataShowForWriterT[F[_], L, V](implicit F: Show[F[(L, V)]]): Show[WriterT[F, L, V]] = _.show
 
   implicit def catsDataMonoidForWriterTId[L: Monoid, V: Monoid]: Monoid[WriterT[Id, L, V]] =
     catsDataMonoidForWriterT[Id, L, V]

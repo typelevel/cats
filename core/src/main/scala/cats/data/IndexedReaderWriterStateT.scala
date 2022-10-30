@@ -246,7 +246,7 @@ final class IndexedReaderWriterStateT[F[_], E, L, SA, SB, A](val runF: F[(E, SA)
    * Inspect a value from the input state, without modifying the state.
    */
   def inspect[B](f: SB => B)(implicit F: Functor[F]): IndexedReaderWriterStateT[F, E, L, SA, SB, B] =
-    transform { (l, sb, a) =>
+    transform { (l, sb, _) =>
       (l, sb, f(sb))
     }
 
@@ -287,7 +287,7 @@ final class IndexedReaderWriterStateT[F[_], E, L, SA, SB, A](val runF: F[(E, SA)
    * Retrieve the value written to the log.
    */
   def written(implicit F: Functor[F]): IndexedReaderWriterStateT[F, E, L, SA, SB, L] =
-    transform { (l, sb, a) =>
+    transform { (l, sb, _) =>
       (l, sb, l)
     }
 

@@ -22,7 +22,6 @@
 package cats
 package arrow
 
-import scala.language.experimental.macros
 import scala.reflect.macros.blackbox
 
 private[arrow] class FunctionKMacroMethods {

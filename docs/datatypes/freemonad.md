@@ -169,8 +169,7 @@ import cats.arrow.FunctionK
 import cats.{Id, ~>}
 import scala.collection.mutable
 
-// the program will crash if a key is not found,
-// or if a type is incorrectly specified.
+// the program will crash if a type is incorrectly specified.
 def impureCompiler: KVStoreA ~> Id  =
   new (KVStoreA ~> Id) {
 

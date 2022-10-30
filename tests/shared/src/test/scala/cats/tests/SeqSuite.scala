@@ -22,7 +22,7 @@
 package cats.tests
 
 import cats.{Align, Alternative, CoflatMap, Monad, Semigroupal, Traverse, TraverseFilter}
-import cats.data.{NonEmptySeq, ZipSeq}
+import cats.data.ZipSeq
 import cats.laws.discipline.{
   AlignTests,
   AlternativeTests,
@@ -37,7 +37,6 @@ import cats.laws.discipline.{
 }
 import cats.laws.discipline.arbitrary._
 import cats.syntax.show._
-import cats.syntax.seq._
 import cats.syntax.eq._
 import org.scalacheck.Prop._
 import scala.collection.immutable.Seq
@@ -73,16 +72,6 @@ class SeqSuite extends CatsSuite {
     forAll { (seq: Seq[String]) =>
       assert(seq.show === (seq.toString))
     }
-  }
-
-  test("neSeq => Seq => neSeq returns original neSeq")(
-    forAll { (fa: NonEmptySeq[Int]) =>
-      assert(fa.toSeq.toNeSeq == Some(fa))
-    }
-  )
-
-  test("toNeSeq on empty Seq returns None") {
-    assert(Seq.empty[Int].toNeSeq == None)
   }
 
   test("traverse is stack-safe") {

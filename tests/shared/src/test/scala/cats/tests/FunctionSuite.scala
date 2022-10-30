@@ -38,7 +38,6 @@ import cats.{
 import cats.arrow.{ArrowChoice, Choice, CommutativeArrow}
 import cats.instances.function._
 import cats.kernel._
-import cats.kernel.laws.HashLaws
 import cats.kernel.laws.discipline.{
   BandTests,
   BoundedSemilatticeTests,
@@ -47,6 +46,7 @@ import cats.kernel.laws.discipline.{
   CommutativeSemigroupTests,
   EqTests,
   GroupTests,
+  HashTests,
   MonoidTests,
   OrderTests,
   PartialOrderTests,
@@ -138,12 +138,7 @@ class FunctionSuite extends CatsSuite {
   checkAll("Function0[Grp]", GroupTests[Function0[Grp]].group)
   checkAll("Function0[CGrp]", CommutativeGroupTests[Function0[CGrp]].commutativeGroup)
   checkAll("Function0[Distributive]", DistributiveTests[Function0].distributive[Int, Int, Int, Id, Function0])
-
-  property("Function0[Hsh]") {
-    forAll { (x: Function0[Hsh], y: Function0[Hsh]) =>
-      HashLaws[Function0[Hsh]].hashCompatibility(x, y)
-    }
-  }
+  checkAll("Function0[Hsh]", HashTests[Function0[Hsh]].hash)
 
   // Test for Arrow applicative
   Applicative[String => *]

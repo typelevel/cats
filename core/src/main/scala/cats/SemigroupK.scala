@@ -86,7 +86,7 @@ trait SemigroupK[F[_]] extends Serializable { self =>
     y.map(yy => combineK(x, yy))
 
   /**
-   * Given a type A, create a concrete Semigroup[F[A]].
+   * Given a type A, create a concrete `Semigroup[F[A]]`.
    *
    * Example:
    * {{{
@@ -94,10 +94,7 @@ trait SemigroupK[F[_]] extends Serializable { self =>
    * scala> val s: Semigroup[List[Int]] = SemigroupK[List].algebra[Int]
    * }}}
    */
-  def algebra[A]: Semigroup[F[A]] =
-    new Semigroup[F[A]] {
-      def combine(x: F[A], y: F[A]): F[A] = self.combineK(x, y)
-    }
+  def algebra[A]: Semigroup[F[A]] = combineK(_, _)
 
   /**
    * "Compose" with a `G[_]` type to form a `SemigroupK` for `λ[α => F[G[α]]]`.

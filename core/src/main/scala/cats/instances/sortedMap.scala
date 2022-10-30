@@ -103,7 +103,7 @@ trait SortedMapInstances extends SortedMapInstances2 {
 
       def tailRecM[A, B](a: A)(f: A => SortedMap[K, Either[A, B]]): SortedMap[K, B] = {
         val fa = f(a)
-        var bldr = SortedMap.newBuilder[K, B](fa.ordering)
+        val bldr = SortedMap.newBuilder[K, B](fa.ordering)
 
         @tailrec def descend(k: K, either: Either[A, B]): Unit =
           either match {
@@ -204,10 +204,7 @@ class SortedMapEq[K, V](implicit V: Eq[V], O: Order[K]) extends cats.kernel.inst
 @deprecated("Use cats.kernel.instances.SortedMapCommutativeMonoid", "2.0.0-RC2")
 class SortedMapCommutativeMonoid[K, V](implicit V: CommutativeSemigroup[V], O: Order[K])
     extends SortedMapMonoid[K, V]
-    with CommutativeMonoid[SortedMap[K, V]] {
-  private[this] val underlying: CommutativeMonoid[SortedMap[K, V]] =
-    new cats.kernel.instances.SortedMapCommutativeMonoid[K, V]
-}
+    with CommutativeMonoid[SortedMap[K, V]]
 
 @deprecated("Use cats.kernel.instances.SortedMapMonoid", "2.0.0-RC2")
 class SortedMapMonoid[K, V](implicit V: Semigroup[V], O: Order[K]) extends cats.kernel.instances.SortedMapMonoid[K, V]

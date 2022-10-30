@@ -74,12 +74,9 @@ object Hash extends HashFunctions[Hash] {
       def hash(x: A) = x.hashCode()
       def eqv(x: A, y: A) = x == y
     }
-
 }
 
 trait HashToHashingConversion {
   implicit def catsKernelHashToHashing[A](implicit ev: Hash[A]): Hashing[A] =
-    new Hashing[A] {
-      override def hash(x: A): Int = ev.hash(x)
-    }
+    ev.hash(_)
 }

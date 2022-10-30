@@ -27,7 +27,7 @@ import cats.instances.StaticMethods.appendAll
 import cats.kernel.compat.scalaVersionSpecific._
 
 import scala.annotation.tailrec
-import scala.collection.{+:, mutable}
+import scala.collection.mutable
 import scala.collection.immutable.Seq
 
 @suppressUnusedImportWarningForScalaVersionSpecific
@@ -162,7 +162,7 @@ trait SeqInstances extends cats.kernel.instances.SeqInstances {
 
       override def find[A](fa: Seq[A])(f: A => Boolean): Option[A] = fa.find(f)
 
-      override def algebra[A]: Monoid[Seq[A]] = new kernel.instances.SeqMonoid[A]
+      override def algebra[A]: Monoid[Seq[A]] = kernel.instances.SeqMonoid[A]
 
       def functor: Functor[Seq] = this
 
@@ -207,10 +207,7 @@ trait SeqInstances extends cats.kernel.instances.SeqInstances {
   }
 
   implicit def catsStdShowForSeq[A: Show]: Show[Seq[A]] =
-    new Show[Seq[A]] {
-      def show(fa: Seq[A]): String =
-        fa.toString()
-    }
+    _.map(Show[A].show).toString
 
   implicit def catsStdNonEmptyParallelForSeqZipSeq: NonEmptyParallel.Aux[Seq, ZipSeq] =
     new NonEmptyParallel[Seq] {

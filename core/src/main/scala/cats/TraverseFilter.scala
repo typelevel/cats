@@ -23,7 +23,7 @@ package cats
 
 import cats.data.State
 
-import scala.collection.immutable.{HashSet, TreeSet}
+import scala.collection.immutable.{IntMap, TreeSet}
 
 /**
  * `TraverseFilter`, also known as `Witherable`, represents list-like structures
@@ -55,6 +55,22 @@ trait TraverseFilter[F[_]] extends FunctorFilter[F] {
    * }}}
    */
   def traverseFilter[G[_], A, B](fa: F[A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[F[B]]
+
+  /**
+   * A combined [[traverse]] and [[collect]].
+   *
+   * scala> import cats.implicits._
+   * scala> val m: Map[Int, String] = Map(1 -> "one", 2 -> "two")
+   * scala> val l: List[Int] = List(1, 2, 3, 4)
+   * scala> def asString: PartialFunction[Int, Eval[Option[String]]] = { case n if n % 2 == 0 => Now(m.get(n)) }
+   * scala> val result: Eval[List[Option[String]]] = l.traverseCollect(asString)
+   * scala> result.value
+   * res0: List[Option[String]] = List(Some(two), None)
+   */
+  def traverseCollect[G[_], A, B](fa: F[A])(f: PartialFunction[A, G[B]])(implicit G: Applicative[G]): G[F[B]] = {
+    val optF = f.lift
+    traverseFilter(fa)(a => Traverse[Option].sequence(optF(a)))
+  }
 
   /**
    * {{{
@@ -125,12 +141,19 @@ trait TraverseFilter[F[_]] extends FunctorFilter[F] {
    * This is usually faster than ordDistinct, especially for things that have a slow comparion (like String).
    */
   def hashDistinct[A](fa: F[A])(implicit H: Hash[A]): F[A] =
-    traverseFilter[State[HashSet[A], *], A, A](fa)(a =>
-      State(alreadyIn => if (alreadyIn(a)) (alreadyIn, None) else (alreadyIn + a, Some(a)))
-    )
-      .run(HashSet.empty)
-      .value
-      ._2
+    traverseFilter(fa) { a =>
+      State { (distinct: IntMap[List[A]]) =>
+        val ahash = H.hash(a)
+        distinct.get(ahash) match {
+          case None => (distinct.updated(ahash, a :: Nil), Some(a))
+          case Some(existing) =>
+            if (Traverse[List].contains_(existing, a))
+              (distinct, None)
+            else
+              (distinct.updated(ahash, a :: existing), Some(a))
+        }
+      }
+    }.run(IntMap.empty).value._2
 }
 
 object TraverseFilter {

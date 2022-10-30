@@ -49,10 +49,7 @@ trait Compose[F[_, _]] extends Serializable { self =>
       def combineK[A](f1: F[A, A], f2: F[A, A]): F[A, A] = self.compose(f1, f2)
     }
 
-  def algebra[A]: Semigroup[F[A, A]] =
-    new Semigroup[F[A, A]] {
-      def combine(f1: F[A, A], f2: F[A, A]): F[A, A] = self.compose(f1, f2)
-    }
+  def algebra[A]: Semigroup[F[A, A]] = compose(_, _)
 }
 
 object Compose {

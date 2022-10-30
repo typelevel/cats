@@ -27,7 +27,11 @@ trait FoldableSyntax extends Foldable.ToFoldableOps with UnorderedFoldable.ToUno
   implicit final def catsSyntaxNestedFoldable[F[_]: Foldable, G[_], A](fga: F[G[A]]): NestedFoldableOps[F, G, A] =
     new NestedFoldableOps[F, G, A](fga)
 
-  implicit final def catsSyntaxFoldOps[F[_]: Foldable, A](fa: F[A]): FoldableOps[F, A] =
+  implicit final def catsSyntaxFoldOps[F[_], A](fa: F[A]): FoldableOps[F, A] =
+    new FoldableOps[F, A](fa)
+
+  @deprecated("Use overload without Foldable parameter", "2.9.0")
+  final def catsSyntaxFoldOps[F[_], A](fa: F[A], F: Foldable[F]): FoldableOps[F, A] =
     new FoldableOps[F, A](fa)
 }
 

@@ -32,12 +32,9 @@ import cats.data.Ior
 trait MapInstances extends cats.kernel.instances.MapInstances {
 
   implicit def catsStdShowForMap[A, B](implicit showA: Show[A], showB: Show[B]): Show[Map[A, B]] =
-    new Show[Map[A, B]] {
-      def show(m: Map[A, B]): String =
-        m.iterator
-          .map { case (a, b) => showA.show(a) + " -> " + showB.show(b) }
-          .mkString("Map(", ", ", ")")
-    }
+    _.iterator
+      .map { case (a, b) => showA.show(a) + " -> " + showB.show(b) }
+      .mkString("Map(", ", ", ")")
 
   implicit def catsStdInstancesForMap[K]: UnorderedTraverse[Map[K, *]] with FlatMap[Map[K, *]] with Align[Map[K, *]] =
     new UnorderedTraverse[Map[K, *]] with FlatMap[Map[K, *]] with Align[Map[K, *]] {
@@ -78,8 +75,8 @@ trait MapInstances extends cats.kernel.instances.MapInstances {
       def flatMap[A, B](fa: Map[K, A])(f: (A) => Map[K, B]): Map[K, B] =
         fa.flatMap { case (k, a) => f(a).get(k).map((k, _)) }
 
-      def unorderedFoldMap[A, B: CommutativeMonoid](fa: Map[K, A])(f: (A) => B) =
-        fa.foldLeft(Monoid[B].empty) { case (b, (k, a)) => Monoid[B].combine(b, f(a)) }
+      def unorderedFoldMap[A, B: CommutativeMonoid](fa: Map[K, A])(f: A => B): B =
+        Monoid[B].combineAll(fa.valuesIterator.map(f))
 
       def tailRecM[A, B](a: A)(f: A => Map[K, Either[A, B]]): Map[K, B] = {
         val bldr = Map.newBuilder[K, B]

@@ -100,6 +100,8 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
 
   def collect[B](pf: PartialFunction[A, B]): Vector[B] = toVector.collect(pf)
 
+  def collectFirst[B](pf: PartialFunction[A, B]): Option[B] = toVector.collectFirst(pf)
+
   /**
    * Alias for [[concat]]
    */
@@ -121,6 +123,18 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
    * Append another `Vector` to this, producing a new `NonEmptyVector`.
    */
   def concat[AA >: A](other: Vector[AA]): NonEmptyVector[AA] = new NonEmptyVector(toVector ++ other)
+
+  /**
+   * Append another `Vector` to this, producing a new `NonEmptyVector`
+   * 
+   * {{{
+   * scala> import cats.data.NonEmptyVector
+   * scala> val nev = NonEmptyVector.of(1, 2, 3)
+   * scala> nev.appendVector(Vector(4, 5))
+   * res0: cats.data.NonEmptyVector[Int] = NonEmptyVector(1, 2, 3, 4, 5)
+   * }}}
+   */
+  def appendVector[AA >: A](other: Vector[AA]): NonEmptyVector[AA] = concat(other)
 
   /**
    * Append another `NonEmptyVector` to this, producing a new `NonEmptyVector`.
@@ -372,24 +386,40 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
 @suppressUnusedImportWarningForScalaVersionSpecific
 sealed abstract private[data] class NonEmptyVectorInstances {
 
+  @deprecated(
+    "maintained for the sake of binary compatibility only - use catsDataInstancesForNonEmptyChainBinCompat1 instead",
+    "2.9.0"
+  )
+  def catsDataInstancesForNonEmptyVector: SemigroupK[NonEmptyVector]
+    with Bimonad[NonEmptyVector]
+    with NonEmptyTraverse[NonEmptyVector]
+    with Align[NonEmptyVector] =
+    catsDataInstancesForNonEmptyVectorBinCompat1
+
   /**
    * This is not a bug. The declared type of `catsDataInstancesForNonEmptyVector` intentionally ignores
    * `NonEmptyReducible` trait for it not being a typeclass.
    *
    * Also see the discussion: PR #3541 and issue #3069.
    */
-  implicit val catsDataInstancesForNonEmptyVector: SemigroupK[NonEmptyVector]
+  implicit val catsDataInstancesForNonEmptyVectorBinCompat1: NonEmptyAlternative[NonEmptyVector]
     with Bimonad[NonEmptyVector]
     with NonEmptyTraverse[NonEmptyVector]
     with Align[NonEmptyVector] =
     new NonEmptyReducible[NonEmptyVector, Vector]
-      with SemigroupK[NonEmptyVector]
+      with NonEmptyAlternative[NonEmptyVector]
       with Bimonad[NonEmptyVector]
       with NonEmptyTraverse[NonEmptyVector]
       with Align[NonEmptyVector] {
 
       def combineK[A](a: NonEmptyVector[A], b: NonEmptyVector[A]): NonEmptyVector[A] =
         a.concatNev(b)
+
+      override def prependK[A](a: A, fa: NonEmptyVector[A]): NonEmptyVector[A] =
+        fa.prepend(a)
+
+      override def appendK[A](fa: NonEmptyVector[A], a: A): NonEmptyVector[A] =
+        fa.append(a)
 
       override def split[A](fa: NonEmptyVector[A]): (A, Vector[A]) = (fa.head, fa.tail)
 
@@ -442,11 +472,17 @@ sealed abstract private[data] class NonEmptyVectorInstances {
       ): (S, NonEmptyVector[B]) =
         StaticMethods.mapAccumulateFromStrictFunctor(init, fa, f)(this)
 
+      override def mapWithLongIndex[A, B](fa: NonEmptyVector[A])(f: (A, Long) => B): NonEmptyVector[B] =
+        StaticMethods.mapWithLongIndexFromStrictFunctor(fa, f)(this)
+
       override def mapWithIndex[A, B](fa: NonEmptyVector[A])(f: (A, Int) => B): NonEmptyVector[B] =
         StaticMethods.mapWithIndexFromStrictFunctor(fa, f)(this)
 
       override def zipWithIndex[A](fa: NonEmptyVector[A]): NonEmptyVector[(A, Int)] =
         fa.zipWithIndex
+
+      override def updated_[A, B >: A](fa: NonEmptyVector[A], idx: Long, b: B): Option[NonEmptyVector[B]] =
+        Traverse[Vector].updated_(fa.toVector, idx, b).map(NonEmptyVector.fromVectorUnsafe)
 
       override def foldLeft[A, B](fa: NonEmptyVector[A], b: B)(f: (B, A) => B): B =
         fa.foldLeft(b)(f)
@@ -525,23 +561,19 @@ sealed abstract private[data] class NonEmptyVectorInstances {
         NonEmptyVector.fromVectorUnsafe(Align[Vector].alignWith(fa.toVector, fb.toVector)(f))
     }
 
-  implicit def catsDataEqForNonEmptyVector[A](implicit A: Eq[A]): Eq[NonEmptyVector[A]] =
-    new Eq[NonEmptyVector[A]] {
-      def eqv(x: NonEmptyVector[A], y: NonEmptyVector[A]): Boolean = x === y
-    }
+  implicit def catsDataEqForNonEmptyVector[A: Eq]: Eq[NonEmptyVector[A]] = _ === _
 
-  implicit def catsDataShowForNonEmptyVector[A](implicit A: Show[A]): Show[NonEmptyVector[A]] =
-    Show.show[NonEmptyVector[A]](_.show)
+  implicit def catsDataShowForNonEmptyVector[A: Show]: Show[NonEmptyVector[A]] = _.show
 
   implicit def catsDataSemigroupForNonEmptyVector[A]: Semigroup[NonEmptyVector[A]] =
-    catsDataInstancesForNonEmptyVector.algebra
+    catsDataInstancesForNonEmptyVectorBinCompat1.algebra
 
   implicit def catsDataParallelForNonEmptyVector: NonEmptyParallel.Aux[NonEmptyVector, ZipNonEmptyVector] =
     new NonEmptyParallel[NonEmptyVector] {
       type F[x] = ZipNonEmptyVector[x]
 
       def apply: Apply[ZipNonEmptyVector] = ZipNonEmptyVector.catsDataCommutativeApplyForZipNonEmptyVector
-      def flatMap: FlatMap[NonEmptyVector] = NonEmptyVector.catsDataInstancesForNonEmptyVector
+      def flatMap: FlatMap[NonEmptyVector] = NonEmptyVector.catsDataInstancesForNonEmptyVectorBinCompat1
 
       def sequential: ZipNonEmptyVector ~> NonEmptyVector =
         new (ZipNonEmptyVector ~> NonEmptyVector) { def apply[A](a: ZipNonEmptyVector[A]): NonEmptyVector[A] = a.value }

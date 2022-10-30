@@ -20,6 +20,7 @@
  */
 
 import scala.annotation.tailrec
+import cats.data.Ior
 
 /**
  * The `cats` root package contains all the trait signatures of most Scala type classes.
@@ -149,6 +150,13 @@ package object cats {
     override def tabulate[A](f: Unit => A): Id[A] = f(())
 
     override def index[A](f: Id[A]): Unit => A = (_: Unit) => f
+  }
+
+  implicit val catsAlignForId: Align[Id] = new Align[Id] {
+    override val functor: Functor[Id] = Functor[Id]
+
+    override def align[A, B](fa: Id[A], fb: Id[B]): Id[Ior[A, B]] = Ior.both(fa, fb)
+
   }
 
   implicit val catsParallelForId: Parallel.Aux[Id, Id] = Parallel.identity

@@ -35,7 +35,7 @@ trait ShortCircuitingLaws[F[_]] {
   def foldMapKShortCircuits[A](fa: F[A], empty: A)(implicit F: Foldable[F]): IsEq[Long] = {
     val size = fa.size
     val maxInvocationsAllowed = size / 2
-    val f = new RestrictedFunction[A, Option[A]]((a: A) => None, maxInvocationsAllowed, Some(empty))
+    val f = new RestrictedFunction[A, Option[A]](Function.const(None), maxInvocationsAllowed, Some(empty))
 
     fa.foldMapK(f)
     f.invocations.get <-> (maxInvocationsAllowed + 1).min(size)
@@ -44,7 +44,7 @@ trait ShortCircuitingLaws[F[_]] {
   def foldMapKWontShortCircuit[A](fa: F[A], empty: A)(implicit F: Foldable[F]): IsEq[Long] = {
     val size = fa.size
     val maxInvocationsAllowed = size / 2
-    val f = new RestrictedFunction[A, Option[A]]((a: A) => None, maxInvocationsAllowed, Some(empty))
+    val f = new RestrictedFunction[A, Option[A]](Function.const(None), maxInvocationsAllowed, Some(empty))
 
     fa.foldMapK(f)(F, nonShortCircuitingMonoidK)
     f.invocations.get <-> size

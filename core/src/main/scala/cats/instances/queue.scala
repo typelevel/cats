@@ -26,7 +26,7 @@ import cats.data.Chain
 import cats.instances.StaticMethods.appendAll
 import cats.kernel.compat.scalaVersionSpecific._
 import cats.kernel.instances.StaticMethods.wrapMutableIndexedSeq
-import cats.syntax.show._
+
 import scala.annotation.tailrec
 import scala.collection.immutable.Queue
 import scala.util.Try
@@ -132,6 +132,9 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
       override def mapAccumulate[S, A, B](init: S, fa: Queue[A])(f: (S, A) => (S, B)): (S, Queue[B]) =
         StaticMethods.mapAccumulateFromStrictFunctor(init, fa, f)(this)
 
+      override def mapWithLongIndex[A, B](fa: Queue[A])(f: (A, Long) => B): Queue[B] =
+        StaticMethods.mapWithLongIndexFromStrictFunctor(fa, f)(this)
+
       override def mapWithIndex[A, B](fa: Queue[A])(f: (A, Int) => B): Queue[B] =
         StaticMethods.mapWithIndexFromStrictFunctor(fa, f)(this)
 
@@ -187,7 +190,7 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
         fa.iterator.dropWhile(p).toList
 
       override def algebra[A]: Monoid[Queue[A]] =
-        new kernel.instances.QueueMonoid[A]
+        kernel.instances.QueueMonoid[A]
 
       override def collectFirst[A, B](fa: Queue[A])(pf: PartialFunction[A, B]): Option[B] = fa.collectFirst(pf)
 
@@ -196,10 +199,7 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
     }
 
   implicit def catsStdShowForQueue[A: Show]: Show[Queue[A]] =
-    new Show[Queue[A]] {
-      def show(fa: Queue[A]): String =
-        fa.iterator.map(_.show).mkString("Queue(", ", ", ")")
-    }
+    _.iterator.map(Show[A].show).mkString("Queue(", ", ", ")")
 
   implicit def catsStdTraverseFilterForQueue: TraverseFilter[Queue] = QueueInstances.catsStdTraverseFilterForQueue
 }

@@ -19,6 +19,18 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package cats.compat
+package cats.bench
 
-private[cats] type targetName = scala.annotation.targetName
+import cats.data.Chain
+import cats.implicits._
+import org.openjdk.jmh.annotations.{Benchmark, Scope, State}
+
+@State(Scope.Thread)
+class CollectionMonoidBench {
+
+  private val largeList = (0 to 1000000).toList
+
+  @Benchmark def accumulateChain: Chain[Int] = largeList.foldMap(Chain.one)
+  @Benchmark def accumulateVector: Vector[Int] = largeList.foldMap(Vector(_))
+  @Benchmark def accumulateList: List[Int] = largeList.foldMap(List(_))
+}

@@ -48,12 +48,7 @@ class FreeInvariantMonoidalSuite extends CatsSuite {
   implicit def freeInvariantMonoidalEq[S[_]: InvariantMonoidal, A](implicit
     SA: Eq[S[A]]
   ): Eq[FreeInvariantMonoidal[S, A]] =
-    new Eq[FreeInvariantMonoidal[S, A]] {
-      def eqv(a: FreeInvariantMonoidal[S, A], b: FreeInvariantMonoidal[S, A]): Boolean = {
-        val nt = FunctionK.id[S]
-        SA.eqv(a.foldMap(nt), b.foldMap(nt))
-      }
-    }
+    Eq.by(_.foldMap(FunctionK.id))
 
   implicit val isoFreeBinCodec: Isomorphisms[FreeInvariantMonoidal[BinCodec, *]] =
     Isomorphisms.invariant[FreeInvariantMonoidal[BinCodec, *]]

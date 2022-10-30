@@ -35,7 +35,7 @@ trait DeferLaws[F[_]] {
 
   def deferDoesNotEvaluate[A](fa: Unit => F[A]): IsEq[Boolean] = {
     var evaluated = false
-    val deferUnit = F.defer {
+    val _ = F.defer {
       evaluated = true;
       fa(())
     }

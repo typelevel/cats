@@ -617,10 +617,20 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
 
 sealed abstract private[data] class NonEmptyChainInstances extends NonEmptyChainInstances1 {
 
-  implicit val catsDataInstancesForNonEmptyChain: SemigroupK[NonEmptyChain]
+  @deprecated(
+    "maintained for the sake of binary compatibility only, use catsDataInstancesForNonEmptyChainBinCompat1 instead",
+    "2.9.0"
+  )
+  def catsDataInstancesForNonEmptyChain: SemigroupK[NonEmptyChain]
     with NonEmptyTraverse[NonEmptyChain]
     with Bimonad[NonEmptyChain]
     with Align[NonEmptyChain] =
+    catsDataInstancesForNonEmptyChainBinCompat1
+
+  implicit val catsDataInstancesForNonEmptyChainBinCompat1: Align[NonEmptyChain]
+    with Bimonad[NonEmptyChain]
+    with NonEmptyAlternative[NonEmptyChain]
+    with NonEmptyTraverse[NonEmptyChain] =
     new AbstractNonEmptyInstances[Chain, NonEmptyChain] with Align[NonEmptyChain] {
       def extract[A](fa: NonEmptyChain[A]): A = fa.head
 
@@ -638,6 +648,9 @@ sealed abstract private[data] class NonEmptyChainInstances extends NonEmptyChain
 
       override def mapWithIndex[A, B](fa: NonEmptyChain[A])(f: (A, Int) => B): NonEmptyChain[B] =
         StaticMethods.mapWithIndexFromStrictFunctor(fa, f)(this)
+
+      override def mapWithLongIndex[A, B](fa: NonEmptyChain[A])(f: (A, Long) => B): NonEmptyChain[B] =
+        StaticMethods.mapWithLongIndexFromStrictFunctor(fa, f)(this)
 
       override def zipWithIndex[A](fa: NonEmptyChain[A]): NonEmptyChain[(A, Int)] =
         fa.zipWithIndex
@@ -679,9 +692,7 @@ sealed abstract private[data] class NonEmptyChainInstances extends NonEmptyChain
   implicit def catsDataSemigroupForNonEmptyChain[A]: Semigroup[NonEmptyChain[A]] =
     Semigroup[Chain[A]].asInstanceOf[Semigroup[NonEmptyChain[A]]]
 
-  implicit def catsDataShowForNonEmptyChain[A](implicit A: Show[A]): Show[NonEmptyChain[A]] =
-    Show.show[NonEmptyChain[A]](_.show)
-
+  implicit def catsDataShowForNonEmptyChain[A: Show]: Show[NonEmptyChain[A]] = _.show
 }
 
 sealed abstract private[data] class NonEmptyChainInstances1 extends NonEmptyChainInstances2 {

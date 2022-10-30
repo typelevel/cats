@@ -130,7 +130,20 @@ object arbitrary extends ArbitraryInstances0 with ScalaVersionSpecific.Arbitrary
       a <- A.arbitrary
     } yield NonEmptyMap((k, a), fa))
 
-  implicit def cogenNonEmptyMap[K: Order: Cogen, A: Order: Cogen]: Cogen[NonEmptyMap[K, A]] =
+  @deprecated("Preserved for bincompat", "2.9.0")
+  def cogenNonEmptyMap[K, A](kOrder: Order[K],
+                             kCogen: Cogen[K],
+                             aOrder: Order[A],
+                             aCogen: Cogen[A]
+  ): Cogen[NonEmptyMap[K, A]] = {
+    implicit val orderingK: Order[K] = kOrder
+    implicit val cogenK: Cogen[K] = kCogen
+    implicit val cogenA: Cogen[A] = aCogen
+
+    cogenNonEmptyMap[K, A]
+  }
+
+  implicit def cogenNonEmptyMap[K: Order: Cogen, A: Cogen]: Cogen[NonEmptyMap[K, A]] =
     Cogen[SortedMap[K, A]].contramap(_.toSortedMap)
 
   implicit def catsLawsArbitraryForEitherT[F[_], A, B](implicit
@@ -269,45 +282,38 @@ object arbitrary extends ArbitraryInstances0 with ScalaVersionSpecific.Arbitrary
   // implies equal, in order to avoid producing invalid instances.
 
   implicit def catsLawsArbitraryForEq[A: Arbitrary]: Arbitrary[Eq[A]] =
-    Arbitrary(
-      getArbitrary[Int => Int].map(f =>
-        new Eq[A] {
-          def eqv(x: A, y: A): Boolean = f(x.##) == f(y.##)
-        }
-      )
-    )
+    Arbitrary(getArbitrary[Int => Int].map(f => Eq.by(x => f(x.##))))
 
   implicit def catsLawsArbitraryForEquiv[A: Arbitrary]: Arbitrary[Equiv[A]] =
     Arbitrary(getArbitrary[Eq[A]].map(Eq.catsKernelEquivForEq(_)))
 
   implicit def catsLawsArbitraryForPartialOrder[A: Arbitrary]: Arbitrary[PartialOrder[A]] =
-    Arbitrary(
-      getArbitrary[Int => Double].map(f =>
-        new PartialOrder[A] {
-          def partialCompare(x: A, y: A): Double =
-            if (x.## == y.##) 0.0 else f(x.##) - f(y.##)
-        }
-      )
-    )
+    Arbitrary(getArbitrary[Int => Double].map(f => PartialOrder.by(x => f(x.##))))
 
   implicit def catsLawsArbitraryForPartialOrdering[A: Arbitrary]: Arbitrary[PartialOrdering[A]] =
     Arbitrary(getArbitrary[PartialOrder[A]].map(PartialOrder.catsKernelPartialOrderingForPartialOrder(_)))
 
   implicit def catsLawsArbitraryForOrder[A: Arbitrary]: Arbitrary[Order[A]] =
-    Arbitrary(
-      getArbitrary[Int => Int].map(f =>
-        new Order[A] {
-          def compare(x: A, y: A): Int = java.lang.Integer.compare(f(x.##), f(y.##))
-        }
-      )
-    )
+    Arbitrary(getArbitrary[Int => Int].map(f => Order.by(x => f(x.##))))
 
   implicit def catsLawsArbitraryForSortedMap[K: Arbitrary: Order, V: Arbitrary]: Arbitrary[SortedMap[K, V]] =
     Arbitrary(getArbitrary[Map[K, V]].map(s => SortedMap.empty[K, V](implicitly[Order[K]].toOrdering) ++ s))
 
-  implicit def catsLawsCogenForSortedMap[K: Order: Cogen, V: Order: Cogen]: Cogen[SortedMap[K, V]] = {
+  @deprecated("Preserved for bincompat", "2.9.0")
+  def catsLawsCogenForSortedMap[K, V](kOrder: Order[K],
+                                      kCogen: Cogen[K],
+                                      vOrder: Order[V],
+                                      vCogen: Cogen[V]
+  ): Cogen[SortedMap[K, V]] = {
+    implicit val orderingK: Order[K] = kOrder
+    implicit val cogenK: Cogen[K] = kCogen
+    implicit val cogenA: Cogen[V] = vCogen
+
+    catsLawsCogenForSortedMap[K, V]
+  }
+
+  implicit def catsLawsCogenForSortedMap[K: Order: Cogen, V: Cogen]: Cogen[SortedMap[K, V]] = {
     implicit val orderingK: Ordering[K] = Order[K].toOrdering
-    implicit val orderingV: Ordering[V] = Order[V].toOrdering
 
     implicitly[Cogen[Map[K, V]]].contramap(_.toMap)
   }

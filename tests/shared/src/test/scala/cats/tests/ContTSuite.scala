@@ -40,12 +40,7 @@ class ContTSuite extends CatsSuite {
   implicit def eqContT[M[_], A, B](implicit arbFn: Arbitrary[B => M[A]], eqMA: Eq[M[A]]): Eq[ContT[M, A, B]] = {
     val genItems = Gen.listOfN(100, arbFn.arbitrary)
     val fns = genItems.sample.get
-    new Eq[ContT[M, A, B]] {
-      def eqv(a: ContT[M, A, B], b: ContT[M, A, B]) =
-        fns.forall { fn =>
-          eqMA.eqv(a.run(fn), b.run(fn))
-        }
-    }
+    (a, b) => fns.forall(fn => eqMA.eqv(a.run(fn), b.run(fn)))
   }
 
   checkAll("ContT[Function0, Int, *]", MonadTests[ContT[Function0, Int, *]].monad[Int, String, Int])

@@ -426,8 +426,7 @@ sealed abstract private[data] class NonEmptySetInstances extends NonEmptySetInst
       implicit override def A0: Order[A] = A
     }
 
-  implicit def catsDataShowForNonEmptySet[A](implicit A: Show[A]): Show[NonEmptySet[A]] =
-    Show.show[NonEmptySet[A]](_.show)
+  implicit def catsDataShowForNonEmptySet[A: Show]: Show[NonEmptySet[A]] = _.show
 
   implicit def catsDataSemilatticeForNonEmptySet[A]: Semilattice[NonEmptySet[A]] =
     new Semilattice[NonEmptySet[A]] {

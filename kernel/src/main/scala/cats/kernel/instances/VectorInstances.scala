@@ -23,12 +23,14 @@ package cats.kernel
 package instances
 import compat.scalaVersionSpecific._
 
+import scala.annotation.nowarn
+
 @suppressUnusedImportWarningForScalaVersionSpecific
 trait VectorInstances extends VectorInstances1 {
   implicit def catsKernelStdOrderForVector[A: Order]: Order[Vector[A]] =
     new VectorOrder[A]
   implicit def catsKernelStdMonoidForVector[A]: Monoid[Vector[A]] =
-    new VectorMonoid[A]
+    VectorMonoid[A]
 }
 
 private[instances] trait VectorInstances1 extends VectorInstances2 {
@@ -66,6 +68,7 @@ class VectorEq[A](implicit ev: Eq[A]) extends Eq[Vector[A]] {
     else StaticMethods.iteratorEq(xs.iterator, ys.iterator)
 }
 
+@deprecated("Use VectorMonoid.apply, which does not allocate a new instance", "2.9.0")
 class VectorMonoid[A] extends Monoid[Vector[A]] {
   def empty: Vector[A] = Vector.empty
   def combine(x: Vector[A], y: Vector[A]): Vector[A] = x ++ y
@@ -75,4 +78,11 @@ class VectorMonoid[A] extends Monoid[Vector[A]] {
 
   override def combineAll(xs: IterableOnce[Vector[A]]): Vector[A] =
     StaticMethods.combineAllIterable(Vector.newBuilder[A], xs)
+}
+
+object VectorMonoid {
+  @nowarn("msg=deprecated")
+  private[this] val singleton: Monoid[Vector[Any]] = new VectorMonoid[Any]
+
+  def apply[A]: Monoid[Vector[A]] = singleton.asInstanceOf[Monoid[Vector[A]]]
 }

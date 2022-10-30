@@ -48,7 +48,17 @@ trait TraverseFilterTests[F[_]] extends FunctorFilterTests[F] {
     EqFC: Eq[F[C]],
     EqGFA: Eq[Option[F[A]]],
     EqMNFC: Eq[Nested[Option, Option, F[C]]]
-  ): RuleSet =
+  ): RuleSet = {
+    implicit val arbFAOB: Arbitrary[PartialFunction[A, Option[B]]] =
+      Arbitrary(ArbFABoo.arbitrary.map { pfab =>
+        {
+          case a if pfab.isDefinedAt(a) =>
+            val b = pfab(a)
+            if (((a.hashCode ^ b.hashCode) & 1) == 1) Some(b)
+            else None
+        }
+      })
+
     new DefaultRuleSet(
       name = "traverseFilter",
       parent = Some(functorFilter[A, B, C]),
@@ -58,8 +68,10 @@ trait TraverseFilterTests[F[_]] extends FunctorFilterTests[F] {
       "filterA consistent with traverseFilter" -> forAll(laws.filterAConsistentWithTraverseFilter[Option, A] _),
       "traverseEither consistent with traverseFilter" -> forAll(
         laws.traverseEitherConsistentWithTraverseFilter[Option, F[A], A, B] _
-      )
+      ),
+      "traverseCollect reference" -> forAll(laws.traverseCollectRef[Option, A, B] _)
     )
+  }
 }
 
 object TraverseFilterTests {

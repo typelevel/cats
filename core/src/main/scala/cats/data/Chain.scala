@@ -690,7 +690,7 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
    *         a positive value if `this.length > len`.
    * @note   an adapted version of
              [[https://github.com/scala/scala/blob/v2.13.8/src/library/scala/collection/Iterable.scala#L272-L288 Iterable#sizeCompare]]
-             from Scala Library v2.13.8 is used in a part of the implementation.
+             from Scala Library v2.13.10 is used in a part of the implementation.
    *
    * {{{
    * scala> import cats.data.Chain
@@ -858,7 +858,8 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
   def hash[AA >: A](implicit hashA: Hash[AA]): Int =
     KernelStaticMethods.orderedHash((this: Chain[AA]).iterator)
 
-  override def toString: String = show(Show.show[A](_.toString))
+  override def toString: String =
+    show(Show.fromToString)
 
   override def equals(o: Any): Boolean =
     o match {
@@ -1197,11 +1198,7 @@ object Chain extends ChainInstances with ChainCompanionCompat {
 }
 
 sealed abstract private[data] class ChainInstances extends ChainInstances1 {
-  implicit def catsDataMonoidForChain[A]: Monoid[Chain[A]] =
-    new Monoid[Chain[A]] {
-      def empty: Chain[A] = Chain.nil
-      def combine(c: Chain[A], c2: Chain[A]): Chain[A] = Chain.concat(c, c2)
-    }
+  implicit def catsDataMonoidForChain[A]: Monoid[Chain[A]] = theMonoid.asInstanceOf[Monoid[Chain[A]]]
 
   implicit val catsDataInstancesForChain
     : Traverse[Chain] with Alternative[Chain] with Monad[Chain] with CoflatMap[Chain] with Align[Chain] =
@@ -1255,6 +1252,9 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
 
       override def mapWithIndex[A, B](fa: Chain[A])(f: (A, Int) => B): Chain[B] =
         StaticMethods.mapWithIndexFromStrictFunctor(fa, f)(this)
+
+      override def mapWithLongIndex[A, B](fa: Chain[A])(f: (A, Long) => B): Chain[B] =
+        StaticMethods.mapWithLongIndexFromStrictFunctor(fa, f)(this)
 
       override def zipWithIndex[A](fa: Chain[A]): Chain[(A, Int)] =
         fa.zipWithIndex
@@ -1317,8 +1317,7 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
       }
     }
 
-  implicit def catsDataShowForChain[A](implicit A: Show[A]): Show[Chain[A]] =
-    Show.show[Chain[A]](_.show)
+  implicit def catsDataShowForChain[A: Show]: Show[Chain[A]] = _.show
 
   implicit def catsDataOrderForChain[A](implicit A0: Order[A]): Order[Chain[A]] =
     new Order[Chain[A]] with ChainPartialOrder[A] {
@@ -1368,6 +1367,12 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
         )
         .value
 
+  }
+
+  private[this] val theMonoid: Monoid[Chain[Any]] = new Monoid[Chain[Any]] {
+    def empty: Chain[Any] = Chain.nil
+
+    def combine(c: Chain[Any], c2: Chain[Any]): Chain[Any] = Chain.concat(c, c2)
   }
 
 }

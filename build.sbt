@@ -1,12 +1,12 @@
 ThisBuild / tlBaseVersion := "2.9"
 
-val scalaCheckVersion = "1.16.0"
+val scalaCheckVersion = "1.17.0"
 
 val disciplineVersion = "1.5.1"
 
-val disciplineMunitVersion = "2.0.0-M2"
+val disciplineMunitVersion = "2.0.0-M3"
 
-val munitVersion = "1.0.0-M5"
+val munitVersion = "1.0.0-M6"
 
 val kindProjectorVersion = "0.13.2"
 
@@ -16,12 +16,12 @@ val GraalVM11 = JavaSpec.graalvm("11")
 
 ThisBuild / githubWorkflowJavaVersions := Seq(PrimaryJava, LTSJava, GraalVM11)
 
-val Scala212 = "2.12.16"
-val Scala213 = "2.13.8"
-val Scala3 = "3.1.3"
+val Scala212 = "2.12.17"
+val Scala213 = "2.13.10"
+val Scala3 = "3.2.0"
 
 ThisBuild / crossScalaVersions := Seq(Scala212, Scala213, Scala3)
-ThisBuild / scalaVersion := Scala212
+ThisBuild / scalaVersion := Scala213
 
 ThisBuild / tlFatalWarnings := false
 ThisBuild / tlFatalWarningsInCi := false
@@ -249,10 +249,15 @@ lazy val unidocs = project
   .settings(
     name := "cats-docs",
     ScalaUnidoc / unidoc / unidocProjectFilter := inProjects(kernel.jvm,
+                                                             kernelLaws.jvm,
                                                              core.jvm,
+                                                             laws.jvm,
                                                              free.jvm,
                                                              algebra.jvm,
-                                                             alleycatsCore.jvm
+                                                             algebraLaws.jvm,
+                                                             alleycatsCore.jvm,
+                                                             alleycatsLaws.jvm,
+                                                             testkit.jvm
     ),
     scalacOptions ~= { _.filterNot(_.startsWith("-W")) }, // weird nsc bug
     ScalaUnidoc / unidoc / scalacOptions ++= Seq("-groups", "-diagrams")
@@ -265,15 +270,9 @@ lazy val bench = project
   .settings(moduleName := "cats-bench")
   .settings(commonJvmSettings)
   .settings(
-    libraryDependencies ++= {
-      if (scalaVersion.value.startsWith("2.12"))
-        Seq(
-          "org.scalaz" %% "scalaz-core" % "7.3.6",
-          "org.spire-math" %% "chain" % "0.3.0",
-          "co.fs2" %% "fs2-core" % "0.10.7"
-        )
-      else Nil
-    },
+    libraryDependencies ++= Seq(
+      "org.scalaz" %% "scalaz-core" % "7.3.6"
+    ),
     evictionErrorLevel := Level.Warn
   )
   .enablePlugins(NoPublishPlugin, JmhPlugin)

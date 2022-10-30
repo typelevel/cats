@@ -21,13 +21,11 @@
 
 package cats.kernel
 
-import java.util.UUID
-
 import cats.kernel.compat.scalaVersionSpecific._
 
+import java.util.UUID
 import scala.collection.immutable.{BitSet, Queue, Seq, SortedMap, SortedSet}
 import scala.concurrent.duration.{Duration, FiniteDuration}
-import scala.math.Equiv
 import scala.util.{Failure, Success, Try}
 import scala.{specialized => sp}
 
@@ -65,9 +63,7 @@ trait EqToEquivConversion {
    * instance.
    */
   implicit def catsKernelEquivForEq[A](implicit ev: Eq[A]): Equiv[A] =
-    new Equiv[A] {
-      def equiv(a: A, b: A) = ev.eqv(a, b)
-    }
+    ev.eqv(_, _)
 }
 
 @suppressUnusedImportWarningForScalaVersionSpecific
@@ -88,35 +84,26 @@ object Eq
    * function `f`.
    */
   def by[@sp A, @sp B](f: A => B)(implicit ev: Eq[B]): Eq[A] =
-    new Eq[A] {
-      def eqv(x: A, y: A) = ev.eqv(f(x), f(y))
-    }
+    (x, y) => ev.eqv(f(x), f(y))
 
   /**
    * Return an Eq that gives the result of the and of eq1 and eq2
    * note this is idempotent
    */
   def and[@sp A](eq1: Eq[A], eq2: Eq[A]): Eq[A] =
-    new Eq[A] {
-      def eqv(x: A, y: A) = eq1.eqv(x, y) && eq2.eqv(x, y)
-    }
+    (x, y) => eq1.eqv(x, y) && eq2.eqv(x, y)
 
   /**
    * Return an Eq that gives the result of the or of this and that
    * Note this is idempotent
    */
   def or[@sp A](eq1: Eq[A], eq2: Eq[A]): Eq[A] =
-    new Eq[A] {
-      def eqv(x: A, y: A) = eq1.eqv(x, y) || eq2.eqv(x, y)
-    }
+    (x, y) => eq1.eqv(x, y) || eq2.eqv(x, y)
 
   /**
    * Create an `Eq` instance from an `eqv` implementation.
    */
-  def instance[A](f: (A, A) => Boolean): Eq[A] =
-    new Eq[A] {
-      def eqv(x: A, y: A) = f(x, y)
-    }
+  def instance[A](f: (A, A) => Boolean): Eq[A] = f(_, _)
 
   /**
    * An `Eq[A]` that delegates to universal equality (`==`).
@@ -124,18 +111,12 @@ object Eq
    * This can be useful for case classes, which have reasonable `equals`
    * implementations
    */
-  def fromUniversalEquals[A]: Eq[A] =
-    new Eq[A] {
-      def eqv(x: A, y: A) = x == y
-    }
+  def fromUniversalEquals[A]: Eq[A] = _ == _
 
   /**
    * Everything is the same
    */
-  def allEqual[A]: Eq[A] =
-    new Eq[A] {
-      def eqv(x: A, y: A) = true
-    }
+  def allEqual[A]: Eq[A] = (_, _) => true
 
   /**
    * This is a monoid that creates an Eq that
@@ -149,9 +130,7 @@ object Eq
         if (es.iterator.isEmpty) None
         else {
           val materialized = es.iterator.toVector
-          Some(new Eq[A] {
-            def eqv(x: A, y: A) = materialized.forall(_.eqv(x, y))
-          })
+          Some((x, y) => materialized.forall(_.eqv(x, y)))
         }
     }
 
@@ -166,9 +145,7 @@ object Eq
         if (es.iterator.isEmpty) None
         else {
           val materialized = es.iterator.toVector
-          Some(new Eq[A] {
-            def eqv(x: A, y: A) = materialized.exists(_.eqv(x, y))
-          })
+          Some((x, y) => materialized.exists(_.eqv(x, y)))
         }
     }
 
@@ -229,15 +206,11 @@ object Eq
    * doing a fine grained equality on Throwable can make the code very execution
    * order dependent
    */
-  implicit def catsStdEqForTry[A, T](implicit A: Eq[A], T: Eq[Throwable]): Eq[Try[A]] =
-    new Eq[Try[A]] {
-      def eqv(x: Try[A], y: Try[A]): Boolean =
-        (x, y) match {
-          case (Success(a), Success(b)) => A.eqv(a, b)
-          case (Failure(a), Failure(b)) => T.eqv(a, b)
-          case _                        => false
-        }
-    }
+  implicit def catsStdEqForTry[A](implicit A: Eq[A], T: Eq[Throwable]): Eq[Try[A]] = {
+    case (Success(a), Success(b)) => A.eqv(a, b)
+    case (Failure(a), Failure(b)) => T.eqv(a, b)
+    case _                        => false
+  }
 }
 
 private[kernel] trait OrderInstances0 extends PartialOrderInstances {

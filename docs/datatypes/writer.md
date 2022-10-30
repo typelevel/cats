@@ -142,7 +142,7 @@ applies a bunch of Math operations, logging each one of them.
 import cats.data.Writer
 import scala.math.sqrt
 
-val writer1: Writer[String, Double] = Writer.value(5.0).tell("Initial value ")
+val writer1: Writer[String, Double] = Writer.value[String, Double](5.0).tell("Initial value ")
 val writer2: Writer[String, Double => Double] = Writer("sqrt ", (i: Double) => sqrt(i))
 val writer3: Double => Writer[String, Double] = (x: Double) => Writer("add 1 ", x + 1)
 val writer4: Writer[String, Double => Double] = Writer("divided by 2 ", (x: Double) => x / 2)

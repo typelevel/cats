@@ -198,15 +198,15 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
 
       override def alignWith[B, C, D](fb: Either[A, B], fc: Either[A, C])(f: Ior[B, C] => D): Either[A, D] =
         fb match {
-          case left @ Left(a) =>
-            fc match {
-              case Left(_)  => left.rightCast[D]
-              case Right(c) => Right(f(Ior.right(c)))
-            }
           case Right(b) =>
             fc match {
-              case Left(a)  => Right(f(Ior.left(b)))
               case Right(c) => Right(f(Ior.both(b, c)))
+              case Left(_)  => Right(f(Ior.left(b)))
+            }
+          case left @ Left(_) =>
+            fc match {
+              case Right(c) => Right(f(Ior.right(c)))
+              case Left(_)  => left.rightCast[D]
             }
         }
 
@@ -231,14 +231,10 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
         }
     }
 
-  implicit def catsStdShowForEither[A, B](implicit A: Show[A], B: Show[B]): Show[Either[A, B]] =
-    new Show[Either[A, B]] {
-      def show(x: Either[A, B]): String =
-        x match {
-          case Left(a)  => "Left(" + A.show(a) + ")"
-          case Right(b) => "Right(" + B.show(b) + ")"
-        }
-    }
+  implicit def catsStdShowForEither[A, B](implicit A: Show[A], B: Show[B]): Show[Either[A, B]] = {
+    case Left(a)  => "Left(" + A.show(a) + ")"
+    case Right(b) => "Right(" + B.show(b) + ")"
+  }
 
   implicit def catsParallelForEitherAndValidated[E: Semigroup]: Parallel.Aux[Either[E, *], Validated[E, *]] =
     new Parallel[Either[E, *]] {

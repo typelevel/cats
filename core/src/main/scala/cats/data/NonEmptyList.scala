@@ -134,6 +134,37 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
     NonEmptyList(a, head :: tail)
 
   /**
+   * Alias for [[prependList]]
+   * 
+   * {{{
+   * scala> import cats.data.NonEmptyList
+   * scala> val nel = NonEmptyList.of(1, 2, 3)
+   * scala> val list = List(-1, 0)
+   * scala> list ++: nel
+   * res0: cats.data.NonEmptyList[Int] = NonEmptyList(-1, 0, 1, 2, 3)
+   * }}}
+   */
+  def ++:[AA >: A](other: List[AA]): NonEmptyList[AA] =
+    prependList(other)
+
+  /**
+   * Prepend another `List`
+   *
+   * {{{
+   * scala> import cats.data.NonEmptyList
+   * scala> val nel = NonEmptyList.of(1, 2, 3)
+   * scala> val list = List(-1, 0)
+   * scala> nel.prependList(list)
+   * res0: cats.data.NonEmptyList[Int] = NonEmptyList(-1, 0, 1, 2, 3)
+   * }}}
+   */
+  def prependList[AA >: A](other: List[AA]): NonEmptyList[AA] =
+    other match {
+      case Nil          => this
+      case head :: tail => NonEmptyList(head, tail ::: toList)
+    }
+
+  /**
    * Alias for append
    *
    * {{{
@@ -148,6 +179,19 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
 
   def append[AA >: A](a: AA): NonEmptyList[AA] =
     NonEmptyList(head, tail :+ a)
+
+  /**
+   * Alias for [[concat]]
+   *
+   * {{{
+   * scala> import cats.data.NonEmptyList
+   * scala> val nel = NonEmptyList.of(1, 2, 3)
+   * scala> nel.appendList(List(4, 5))
+   * res0: cats.data.NonEmptyList[Int] = NonEmptyList(1, 2, 3, 4, 5)
+   * }}}
+   */
+  def appendList[AA >: A](other: List[AA]): NonEmptyList[AA] =
+    concat(other)
 
   /**
    * Alias for concatNel
@@ -215,6 +259,16 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
       pf.apply(head) :: tail.collect(pf)
     } else {
       tail.collect(pf)
+    }
+
+  /**
+   * Find the first element matching the partial function, if one exists
+   */
+  def collectFirst[B](pf: PartialFunction[A, B]): Option[B] =
+    if (pf.isDefinedAt(head)) {
+      Some(pf.apply(head))
+    } else {
+      tail.collectFirst(pf)
     }
 
   /**
@@ -734,22 +788,38 @@ object NonEmptyList extends NonEmptyListInstances {
 
 sealed abstract private[data] class NonEmptyListInstances extends NonEmptyListInstances0 {
 
+  @deprecated(
+    "maintained for the sake of binary compatibility only - use catsDataInstancesForNonEmptyListBinCompat1 instead",
+    "2.9.0"
+  )
+  def catsDataInstancesForNonEmptyList
+    : SemigroupK[NonEmptyList] with Bimonad[NonEmptyList] with NonEmptyTraverse[NonEmptyList] with Align[NonEmptyList] =
+    catsDataInstancesForNonEmptyListBinCompat1
+
   /**
    * This is not a bug. The declared type of `catsDataInstancesForNonEmptyList` intentionally ignores
    * `NonEmptyReducible` trait for it not being a typeclass.
    *
    * Also see the discussion: PR #3541 and issue #3069.
    */
-  implicit val catsDataInstancesForNonEmptyList
-    : SemigroupK[NonEmptyList] with Bimonad[NonEmptyList] with NonEmptyTraverse[NonEmptyList] with Align[NonEmptyList] =
+  implicit val catsDataInstancesForNonEmptyListBinCompat1: NonEmptyAlternative[NonEmptyList]
+    with Bimonad[NonEmptyList]
+    with NonEmptyTraverse[NonEmptyList]
+    with Align[NonEmptyList] =
     new NonEmptyReducible[NonEmptyList, List]
-      with SemigroupK[NonEmptyList]
+      with NonEmptyAlternative[NonEmptyList]
       with Bimonad[NonEmptyList]
       with NonEmptyTraverse[NonEmptyList]
       with Align[NonEmptyList] {
 
       def combineK[A](a: NonEmptyList[A], b: NonEmptyList[A]): NonEmptyList[A] =
         a.concatNel(b)
+
+      override def prependK[A](a: A, fa: NonEmptyList[A]): NonEmptyList[A] =
+        fa.prepend(a)
+
+      override def appendK[A](fa: NonEmptyList[A], a: A): NonEmptyList[A] =
+        fa.append(a)
 
       override def split[A](fa: NonEmptyList[A]): (A, List[A]) = (fa.head, fa.tail)
 
@@ -793,6 +863,9 @@ sealed abstract private[data] class NonEmptyListInstances extends NonEmptyListIn
 
       override def mapWithIndex[A, B](fa: NonEmptyList[A])(f: (A, Int) => B): NonEmptyList[B] =
         StaticMethods.mapWithIndexFromStrictFunctor(fa, f)(this)
+
+      override def mapWithLongIndex[A, B](fa: NonEmptyList[A])(f: (A, Long) => B): NonEmptyList[B] =
+        StaticMethods.mapWithLongIndexFromStrictFunctor(fa, f)(this)
 
       override def zipWithIndex[A](fa: NonEmptyList[A]): NonEmptyList[(A, Int)] =
         fa.zipWithIndex
@@ -884,8 +957,7 @@ sealed abstract private[data] class NonEmptyListInstances extends NonEmptyListIn
 
     }
 
-  implicit def catsDataShowForNonEmptyList[A](implicit A: Show[A]): Show[NonEmptyList[A]] =
-    Show.show[NonEmptyList[A]](_.show)
+  implicit def catsDataShowForNonEmptyList[A: Show]: Show[NonEmptyList[A]] = _.show
 
   implicit def catsDataSemigroupForNonEmptyList[A]: Semigroup[NonEmptyList[A]] =
     SemigroupK[NonEmptyList].algebra[A]
@@ -899,7 +971,7 @@ sealed abstract private[data] class NonEmptyListInstances extends NonEmptyListIn
     new NonEmptyParallel[NonEmptyList] {
       type F[x] = ZipNonEmptyList[x]
 
-      def flatMap: FlatMap[NonEmptyList] = NonEmptyList.catsDataInstancesForNonEmptyList
+      def flatMap: FlatMap[NonEmptyList] = NonEmptyList.catsDataInstancesForNonEmptyListBinCompat1
 
       def apply: Apply[ZipNonEmptyList] = ZipNonEmptyList.catsDataCommutativeApplyForZipNonEmptyList
 

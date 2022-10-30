@@ -99,7 +99,7 @@ object Rules {
     }
 
   def collect0[A: Arbitrary: Eq](name: String, sym: String, id: A)(c: Seq[A] => A): (String, Prop) =
-    s"$name(Nil) == $sym" -> forAll { (a: A) =>
+    s"$name(Nil) == $sym" -> forAll { (_: A) =>
       c(Nil) ?== id
     }
 

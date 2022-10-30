@@ -113,7 +113,7 @@ sealed private[data] trait FuncApply[F[_], C] extends Apply[λ[α => Func[F, C, 
 sealed private[data] trait FuncApplicative[F[_], C] extends Applicative[λ[α => Func[F, C, α]]] with FuncApply[F, C] {
   def F: Applicative[F]
   def pure[A](a: A): Func[F, C, A] =
-    Func.func(c => F.pure(a))
+    Func.func(Function.const(F.pure(a)))
 }
 
 /**
@@ -167,5 +167,5 @@ sealed private[data] trait AppFuncApplicative[F[_], C] extends Applicative[λ[α
   override def product[A, B](fa: AppFunc[F, C, A], fb: AppFunc[F, C, B]): AppFunc[F, C, (A, B)] =
     Func.appFunc[F, C, (A, B)](c => F.product(fa.run(c), fb.run(c)))(F)
   def pure[A](a: A): AppFunc[F, C, A] =
-    Func.appFunc[F, C, A](c => F.pure(a))(F)
+    Func.appFunc[F, C, A](Function.const(F.pure(a)))(F)
 }
