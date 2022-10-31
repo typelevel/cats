@@ -39,7 +39,6 @@ import cats.syntax.apply._
 import cats.syntax.eq._
 import cats.syntax.semigroup._
 import cats.syntax.traverse._
-import org.scalacheck.Arbitrary
 import org.scalacheck.Prop._
 
 class IndexedReaderWriterStateTSuite extends CatsSuite {
@@ -272,7 +271,7 @@ class IndexedReaderWriterStateTSuite extends CatsSuite {
        log: String
       ) =>
         val flatMap = rwst.flatMap { a =>
-          ReaderWriterStateT { (e, s) =>
+          ReaderWriterStateT { (_, s) =>
             f(a).map((log, s, _))
           }
         }
@@ -523,13 +522,12 @@ object IndexedReaderWriterStateTSuite {
     }
 
   def addLogUnit(i: Int): ReaderWriterState[String, Unit, Int, Int] =
-    ReaderWriterState { (context, state) =>
+    ReaderWriterState { (_, state) =>
       ((), state + i, state + i)
     }
 
   implicit def IRWSTEq[F[_], E, L, SA, SB, A](implicit
     SA: ExhaustiveCheck[SA],
-    SB: Arbitrary[SB],
     E: ExhaustiveCheck[E],
     FLSB: Eq[F[(L, SB, A)]],
     F: Monad[F]
