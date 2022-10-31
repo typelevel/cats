@@ -22,22 +22,28 @@
 package cats.tests
 
 import cats._
-import cats.arrow.{Profunctor, Strong}
-import cats.data.{EitherT, IRWST, IndexedReaderWriterStateT, ReaderWriterState, ReaderWriterStateT}
-import cats.kernel.{Eq, Monoid}
-import cats.laws.discipline._
-import cats.laws.discipline.eq._
-import cats.laws.discipline.arbitrary._
+import cats.arrow.Profunctor
+import cats.arrow.Strong
+import cats.data.EitherT
+import cats.data.IRWST
+import cats.data.IndexedReaderWriterStateT
+import cats.data.ReaderWriterState
+import cats.data.ReaderWriterStateT
+import cats.kernel.Eq
+import cats.kernel.Monoid
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
+import cats.laws.discipline._
+import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.eq._
 import cats.syntax.apply._
+import cats.syntax.eq._
 import cats.syntax.semigroup._
 import cats.syntax.traverse._
 import org.scalacheck.Arbitrary
-import cats.syntax.eq._
 import org.scalacheck.Prop._
 
-class ReaderWriterStateTSuite extends CatsSuite {
-  import ReaderWriterStateTSuite._
+class IndexedReaderWriterStateTSuite extends CatsSuite {
+  import IndexedReaderWriterStateTSuite._
 
   test("Basic ReaderWriterState usage") {
     forAll { (context: String, initial: Int) =>
@@ -510,7 +516,7 @@ class ReaderWriterStateTSuite extends CatsSuite {
 
 }
 
-object ReaderWriterStateTSuite {
+object IndexedReaderWriterStateTSuite {
   def addAndLog(i: Int): ReaderWriterState[String, Vector[String], Int, Int] =
     ReaderWriterState { (context, state) =>
       (Vector(s"${context}: Added ${i}"), state + i, state + i)
