@@ -457,6 +457,24 @@ class IndexedReaderWriterStateTSuite extends CatsSuite {
     implicit val LWM: Monad[ListWrapper] = ListWrapper.monad
 
     val SA = {
+      implicit val LWA: NonEmptyAlternative[ListWrapper] = ListWrapper.nonEmptyAlternative
+      NonEmptyAlternative[IRWST[ListWrapper, Boolean, String, MiniInt, MiniInt, *]]
+    }
+
+    checkAll(
+      "IndexedReaderWriterStateT[ListWrapper, Boolean, String, MiniInt, MiniInt, *]",
+      NonEmptyAlternativeTests(SA).nonEmptyAlternative[Int, Int, Int]
+    )
+    checkAll(
+      "NonEmptyAlternativeTests[IndexedReaderWriterStateT[ListWrapper, Boolean, String, MiniInt, MiniInt, *]]",
+      SerializableTests.serializable(SA)
+    )
+  }
+
+  {
+    implicit val LWM: Monad[ListWrapper] = ListWrapper.monad
+
+    val SA = {
       implicit val LWA: Alternative[ListWrapper] = ListWrapper.alternative
       Alternative[IRWST[ListWrapper, Boolean, String, MiniInt, MiniInt, *]]
     }
