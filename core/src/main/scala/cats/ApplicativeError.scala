@@ -105,6 +105,27 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
   def handleError[A](fa: F[A])(f: E => A): F[A] = handleErrorWith(fa)(f.andThen(pure))
 
   /**
+   * Void any error, by mapping it to `Unit`.
+   *
+   * This is useful when errors are reported via a side-channel but not directly handled.
+   * For example in Cats Effect:
+   *
+   * {{{
+   * IO.deferred[OutcomeIO[A]].flatMap { oc =>
+   *   ioa.guaranteeCase(oc.complete(_).void).void.voidError.start
+   *   // ...
+   * }
+   * }}}
+   *
+   * Without the `.voidError`, the Cats Effect runtime would consider an error in `ioa` to be
+   * unhandled and elevate it to [[scala.concurrent.ExecutionContext.reportFailure ExecutionContext#reportFailure]].
+   *
+   * @see [[handleError]] to map to an `A` value instead of `Unit`.
+   * @see [[https://github.com/typelevel/cats-effect/issues/3152 cats-effect#3152]]
+   */
+  def voidError(fu: F[Unit]): F[Unit] = handleError(fu)(Function.const(()))
+
+  /**
    * Handle errors by turning them into [[scala.util.Either]] values.
    *
    * If there is no error, then an `scala.util.Right` value will be returned instead.

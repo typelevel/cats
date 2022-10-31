@@ -30,7 +30,7 @@ import org.scalacheck.{Arbitrary, Cogen, Gen}
 trait ApplicativeTests[F[_]] extends ApplyTests[F] {
   def laws: ApplicativeLaws[F]
 
-  private def makeEqFUnit[A](a: A)(implicit EqFA: Eq[F[A]]): Eq[F[Unit]] =
+  private[discipline] def makeEqFUnit[A](a: A)(implicit EqFA: Eq[F[A]]): Eq[F[Unit]] =
     Eq.by(fa => laws.F.as(fa, a))
 
   def applicative[A: Arbitrary, B: Arbitrary, C: Arbitrary](implicit
