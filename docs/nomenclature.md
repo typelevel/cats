@@ -163,6 +163,12 @@ Like the previous section, we use the `E` for the error parameter type.
 | `IterableOnce[A] => F[A]` | `fromIterableOnce`
 | `G[A] => F[A]` | `fromFoldable` | `G: Foldable`
 
+### NonEmptyAlternative
+| Type         | Method Name  | Constraints |
+|------------|--------------|-----------|
+| `A => F[A] => F[A]` | `prependK`
+| `F[A] => A => F[A]` | `appendK`
+
 ## Transformers
 
 ### Constructors and wrappers
