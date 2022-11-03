@@ -227,8 +227,8 @@ You can find out more about law testing [here](typeclasses/lawtesting.md).
 
 ## Type classes in Cats
 
-<img src="https://cdn.rawgit.com/tsobako/cats-infographic/master/cats.svg" alt="infographic" style="width: 100%;"/>
-From [cats-infographic by @tsobako, originally developed by @tpolecat](https://github.com/tsobako/cats-infographic).
+![Infographic](img/cats-typeclasses.svg)
+(From cats-infographic by @tsobako, originally developed by @tpolecat).
 
 
 ## Incomplete type class instances in cats
