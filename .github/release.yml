@@ -1,0 +1,31 @@
+changelog:
+  categories:
+
+  - title: Features
+    labels:
+    - enhancement
+
+  - title: Optimizations
+    labels:
+    - optimization
+
+  - title: Fixes
+    labels:
+    - bug
+
+  - title: Deprecations
+    labels:
+    - deprecation
+
+  - title: Documentation
+    labels:
+    - documentation
+
+  - title: Behind-the-scenes
+    labels:
+    - behind-the-scenes
+
+  # Not for published notes, just to make sure we don't forget any accidentally unlabeled PRs
+  - title: Uncategorized
+    labels:
+    - "*"
