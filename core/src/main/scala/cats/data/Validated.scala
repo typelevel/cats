@@ -358,6 +358,12 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
       case Invalid(e)   => Validated.invalidNel(e)
     }
 
+  def toValidatedA[F[_]: Applicative, EE >: E, AA >: A]: Validated[F[EE], AA] =
+    this match {
+      case v @ Valid(_) => v
+      case Invalid(e)   => Validated.invalidA(e)
+    }
+
   /**
    * Lift the Invalid value into a NonEmptyChain.
    *
@@ -1099,6 +1105,8 @@ private[data] trait ValidatedFunctions {
    */
   def invalidNel[E, A](e: E): ValidatedNel[E, A] = Validated.Invalid(NonEmptyList(e, Nil))
 
+  def invalidA[F[_]: Applicative, E, A](e: E): Validated[F[E], A] = Validated.Invalid(Applicative[F].pure(e))
+
   /**
    * Converts a `A` to a `Validated[E, A]`.
    *
@@ -1166,6 +1174,13 @@ private[data] trait ValidatedFunctions {
    */
   final def condNel[E, A](test: Boolean, a: => A, e: => E): ValidatedNel[E, A] =
     if (test) validNel(a) else invalidNel(e)
+
+  /**
+   * If the condition is satisfied, return the given `A` as valid,
+   * otherwise return the given `E` as invalid.
+   */
+  final def condA[F[_]: Applicative, E, A](test: Boolean, a: => A, e: => E): Validated[F[E], A] =
+    if (test) valid(a) else invalidA(e)
 }
 
 private[data] trait ValidatedFunctionsBinCompat0 {

@@ -610,6 +610,12 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
       case Left(a)  => Validated.invalidNel(a)
     }
 
+  def toValidatedA[G[_]: Applicative](implicit F: Functor[F]): F[Validated[G[A], B]] =
+    F.map(value) {
+      case Right(b) => Validated.valid(b)
+      case Left(a)  => Validated.invalidA(a)
+    }
+
   def toValidatedNec(implicit F: Functor[F]): F[ValidatedNec[A, B]] =
     F.map(value) {
       case Right(b) => Validated.valid(b)
@@ -688,6 +694,17 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
       F.map(value) {
         case Right(b) => Validated.valid(b)
         case Left(a)  => Validated.invalidNel(a)
+      }
+    )
+
+  /**
+   * Transform this `EitherT[F, A, B]` into a `[[Nested]][F, Validated[G[A], *], B]`.
+   */
+  def toNestedValidatedA[G[_]: Applicative](implicit F: Functor[F]): Nested[F, Validated[G[A], *], B] =
+    Nested[F, Validated[G[A], *], B](
+      F.map(value) {
+        case Right(b) => Validated.valid(b)
+        case Left(a)  => Validated.invalidA(a)
       }
     )
 

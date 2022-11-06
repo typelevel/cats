@@ -22,7 +22,7 @@
 package cats.tests
 
 import cats._
-import cats.data.{EitherT, Ior, IorT, State}
+import cats.data.{EitherT, Ior, IorT, NonEmptyVector, State}
 import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
@@ -212,6 +212,12 @@ class EitherTSuite extends CatsSuite {
     }
   }
 
+  test("toValidatedA") {
+    forAll { (eithert: EitherT[List, String, Int]) =>
+      assert(eithert.toValidatedA[NonEmptyVector].map(_.toEither.leftMap(_.head)) === (eithert.value))
+    }
+  }
+
   test("toValidatedNec") {
     forAll { (eithert: EitherT[List, String, Int]) =>
       assert(eithert.toValidatedNec.map(_.toEither.leftMap(_.head)) === (eithert.value))
@@ -233,6 +239,14 @@ class EitherTSuite extends CatsSuite {
   test("toNestedValidatedNel") {
     forAll { (eithert: EitherT[List, String, Int]) =>
       assert(eithert.toNestedValidatedNel.value === (eithert.value.map(_.toValidatedNel)))
+    }
+  }
+
+  test("toNestedValidatedA") {
+    forAll { (eithert: EitherT[List, String, Int]) =>
+      assert(
+        eithert.toNestedValidatedA[NonEmptyVector].value === eithert.value.map(_.toValidatedA[NonEmptyVector])
+      )
     }
   }
 

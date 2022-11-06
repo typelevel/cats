@@ -32,7 +32,7 @@ import cats.{
   Show,
   Traverse
 }
-import cats.data.{EitherT, Ior, NonEmptyChain, NonEmptyList, Validated, ValidatedNel}
+import cats.data.{EitherT, Ior, NonEmptyChain, NonEmptyList, NonEmptyVector, Validated, ValidatedNel}
 import cats.data.Validated.{Invalid, Valid}
 import cats.kernel.{Eq, Order, PartialOrder, Semigroup}
 import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
@@ -44,6 +44,7 @@ import cats.syntax.apply._
 import cats.syntax.either._
 import cats.syntax.validated._
 import org.scalacheck.Arbitrary._
+
 import scala.util.Try
 import cats.syntax.eq._
 import org.scalacheck.Prop._
@@ -351,6 +352,16 @@ class ValidatedSuite extends CatsSuite {
   test("condNel consistent with Either.cond + toValidatedNel") {
     forAll { (cond: Boolean, s: String, i: Int) =>
       assert(Validated.condNel(cond, s, i) === (Either.cond(cond, s, i).toValidatedNel))
+    }
+  }
+
+  test("condA consistent with Either.cond + toValidatedA") {
+    forAll { (cond: Boolean, s: String, i: Int) =>
+      assert(
+        Validated.condA[NonEmptyVector, Int, String](cond, s, i) === Either
+          .cond(cond, s, i)
+          .toValidatedA[NonEmptyVector]
+      )
     }
   }
 
