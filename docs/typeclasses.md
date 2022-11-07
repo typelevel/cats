@@ -245,10 +245,10 @@ graph BT;
         id2(PartialOrder):::kernel;
         id3(Hash):::kernel;
         id4(Order):::kernelImportant;
-         
-	    id2-->id1;
-	    id3-->id1;
-	    id4-->id2;
+
+        id2-->id1;
+        id3-->id1;
+        id4-->id2;
     end
 
     subgraph core
@@ -256,11 +256,11 @@ graph BT;
         id5(Bifoldable):::core;
         id6(Bifunctor):::core;
         id7(Bitraverse):::core;
-         
-	    id7-->id5;
-	    id7-->id6;
+
+        id7-->id5;
+        id7-->id6;
     end
-    
+
     subgraph kernel
         direction BT
         id8(Semigroup):::kernelImportant;
@@ -272,21 +272,21 @@ graph BT;
         id14(Group):::kernel;
         id15(BoundedSemilattice):::kernel;
         id16(CommutativeGroup):::kernel;
-         
-	    id9-->id8;
-	    id10-->id8;
-	    id11-->id8;
-	    id12-->id9;
-	    id12-->id10;
-	    id13-->id10;
-	    id13-->id11;
-	    id14-->id11;
-	    id15-->id12;
-	    id15-->id13;
-	    id16-->id13;
-	    id16-->id14;
+
+        id9-->id8;
+        id10-->id8;
+        id11-->id8;
+        id12-->id9;
+        id12-->id10;
+        id13-->id10;
+        id13-->id11;
+        id14-->id11;
+        id15-->id12;
+        id15-->id13;
+        id16-->id13;
+        id16-->id14;
     end
- 
+
     subgraph arrow
         direction BT
         id17(Compose):::arrow;
@@ -297,17 +297,17 @@ graph BT;
         id22(Arrow):::arrow;
         id23(ArrowChoice):::arrow;
         id24(CommutaticeArrow):::arrow;
-         
-	    id19-->id17;
-	    id20-->id18;
-	    id21-->id19;
-	    id22-->id19;
-	    id22-->id20;
-	    id23-->id21;
-	    id23-->id22;
-	    id24-->id22;
+
+        id19-->id17;
+        id20-->id18;
+        id21-->id19;
+        id22-->id19;
+        id22-->id20;
+        id23-->id21;
+        id23-->id22;
+        id24-->id22;
     end
-    
+
     subgraph core
         direction BT
         id25(UnorderedFoldable):::core;
@@ -390,7 +390,7 @@ graph BT;
         id55-->id56;
         id54-->id53;
     end
-    
+
     subgraph effect
         direction BT
         id57(Unique):::effect;
@@ -402,7 +402,7 @@ graph BT;
         id63(GenTemporal):::effect;
         id64(Sync):::effect;
         id65(Async):::effect;
-    
+
         id58-->id52;
         id59-->id57;
         id59-->id58;
@@ -416,48 +416,47 @@ graph BT;
         id65-->id63;
         id65-->id64;
     end
-    
+
     subgraph mtl
-	    direction BT
-	    id66(Applicative):::coreInMtl;
-	    id67(Functor):::coreInMtl;
-	    id68(Ask):::mtl;
-	    id69(Raise):::mtl;
-	    id70(Tell):::mtl;
-	    id71(Local):::mtl;
-	    id72(Handle):::mtl;
-	    id73(Listen):::mtl;
-	    id74(Monoid):::coreInMtl;
-	    id75(Monad):::coreInMtl;
-	    id76(Censor):::mtl;
-	    id77(Stateful):::mtl;
-	    id78(Chronicle):::mtl;
-	    
-	    id68-.->id66;
-	    id69-.->id67;
-	    id70-.->id67;
-	    id71--->id68;
-	    id72-.->id66;
-	    id72--->id69;
-	    id73--->id70;
-	    id76--->id73;
-	    id76-.->id74;
-	    id77-.->id75;
-	    id78-.->id75;
-	    id76-.->id66;
+        direction BT
+        id66(Applicative):::coreInMtl;
+        id67(Functor):::coreInMtl;
+        id68(Ask):::mtl;
+        id69(Raise):::mtl;
+        id70(Tell):::mtl;
+        id71(Local):::mtl;
+        id72(Handle):::mtl;
+        id73(Listen):::mtl;
+        id74(Monoid):::coreInMtl;
+        id75(Monad):::coreInMtl;
+        id76(Censor):::mtl;
+        id77(Stateful):::mtl;
+        id78(Chronicle):::mtl;
+
+        id68-.->id66;
+        id69-.->id67;
+        id70-.->id67;
+        id71--->id68;
+        id72-.->id66;
+        id72--->id69;
+        id73--->id70;
+        id76--->id73;
+        id76-.->id74;
+        id77-.->id75;
+        id78-.->id75;
+        id76-.->id66;
     end
-    
-    
+
     subgraph core
         direction BT
-	    id79(NotNull):::core;
-	    id80(Show):::core;
-	    id81(Inject):::core;
-	    id82(InjectK):::core;
-	    id83(Parallel):::core;
-	    id84(NonEmptyParallel):::core;
+        id79(NotNull):::core;
+        id80(Show):::core;
+        id81(Inject):::core;
+        id82(InjectK):::core;
+        id83(Parallel):::core;
+        id84(NonEmptyParallel):::core;
 
-	    id83-->id84;
+        id83-->id84;
     end
 ```
 (The typeclass graph based on @tpolecat's repository `cats-infographic`).
