@@ -285,6 +285,10 @@ object SyntaxSuite {
     val result3 = fapply3.applyN(fa, fb, fc)
 
     result3: F[T]
+
+    val result3Tupled = fapply3.tupledF((fa, fb, fc).tupled)
+
+    result3Tupled: F[T]
   }
 
   def testParallelBi[M[_], F[_], T[_, _]: Bitraverse, A, B, C, D](implicit P: Parallel.Aux[M, F]): Unit = {
