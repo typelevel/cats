@@ -32,6 +32,7 @@ abstract class AllSyntaxBinCompat
     with AllSyntaxBinCompat5
     with AllSyntaxBinCompat6
     with AllSyntaxBinCompat7
+    with AllSyntaxBinCompat8
 
 trait AllSyntax
     extends AlternativeSyntax
@@ -122,3 +123,10 @@ trait AllSyntaxBinCompat5 extends ParallelBitraverseSyntax
 trait AllSyntaxBinCompat6 extends ParallelUnorderedTraverseSyntax
 
 trait AllSyntaxBinCompat7 extends SeqSyntax
+
+trait AllSyntaxBinCompat8
+    extends PartialNextSyntax
+    with NextSyntax
+    with PartialPreviousSyntax
+    with PreviousSyntax
+    with BoundedEnumerableSyntax
