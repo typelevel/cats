@@ -22,7 +22,162 @@
 package cats
 package kernel
 
+import scala.collection.immutable.LazyList
+import scala.annotation.tailrec
 import scala.{specialized => sp}
+
+/** A typeclass for types which are countable. Formally this means that values
+  * can be mapped on to the natural numbers.
+  *
+  * Because Countable types may be mapped to the natural numbers, being an
+  * instance of `Countable` implies having a total ordering, e.g. an `Order`
+  * instance. It also implies having a `PartialNext` and `PartialPrevious` as
+  * all representations of the countable numbers, or a subset there of, have
+  * `PartialNext` and `PartialPrevious`.
+  *
+  * @note Types which are countable can be both finitely countable and
+  *       infinitely countable. The canonical example of this are the natural
+  *       numbers themselves. They are countable, but are infinite.
+  *
+  * @see [[https://hackage.haskell.org/package/base-4.15.0.0/docs/GHC-Enum.html]]
+  * @see [[https://en.wikipedia.org/wiki/Countable_set]]
+  */
+trait Countable[@sp A] extends PartialNext[A] with PartialPrevious[A]{
+  def order: Order[A]
+  def fromEnum(a: A): BigInt
+  def toEnum(i: BigInt): Option[A]
+
+  /** The fundamental function in the `Countable` class. Given a start position,
+    * an offset, and an optional last position, enumerate the values between
+    * `first` and `last` (or `MaxValue` or infinity), using a step of `by -
+    * first`.
+    *
+    * {{{
+    * scala> Countable[Int].enumFromThenToOpt(1, 3, Some(11)).toList
+    * val res0: List[Int] = List(1, 3, 5, 7, 9, 11)
+    * }}}
+    *
+    * All other enum like functions can be expressed in terms of this
+    * function.
+    */
+  def enumFromThenToOpt(first: A, by: A, last: Option[A]): LazyList[A] = {
+    val Zero: BigInt = BigInt(0)
+    val increment: BigInt = fromEnum(by) - fromEnum(first)
+
+    def loop(i: A): LazyList[A] =
+      if (increment > Zero) {
+        // forwards
+        partialNextByN(i, increment) match {
+          case Some(next) =>
+            if (last.fold(false)(order.gt(next, _))) {
+              LazyList.empty[A]
+            } else {
+              next #:: loop(next)
+            }
+          case _ =>
+            LazyList.empty[A]
+        }
+      } else {
+          // backwards or zero
+          partialPreviousByN(i, increment.abs) match {
+            case Some(next) =>
+              if (last.fold(false)(order.lt(next, _))) {
+                LazyList.empty
+              } else {
+                next #:: loop(next)
+              }
+            case _ =>
+              LazyList.empty
+          }
+      }
+
+    last match {
+      case Some(last) =>
+        order.compare(first, last) match {
+          case result if result < Zero =>
+            if (increment < Zero) {
+              LazyList.empty[A]
+            } else {
+              first #:: loop(first)
+            }
+          case result if result > Zero =>
+            if (increment > Zero) {
+              LazyList.empty[A]
+            } else {
+              first #:: loop(first)
+            }
+          case _ =>
+            first #:: loop(first)
+        }
+      case _ =>
+        first #:: loop(first)
+    }
+  }
+
+  /** Given a start position, an offset, and a last position, enumerate the
+    * values between `first` and `last`, using a step of `by - first`.
+    *
+    * {{{
+    * scala> Countable[Int].enumFromThenTo(1, 3, 11).toList
+    * val res0: List[Int] = List(1, 3, 5, 7, 9, 11)
+    * }}}
+    */
+  def enumFromThenTo(first: A, by: A, last: A): LazyList[A] =
+    enumFromThenToOpt(first, by, Some(last))
+
+  /** Given a start position and a last position, enumerate the
+    * values between `first` and `last`, using a step of 1.
+    *
+    * {{{
+    * scala> Countable[Int].enumFromTo(1, 5).toList
+    * val res0: List[Int] = List(1, 2, 3, 4, 5)
+    * }}}
+    */
+  def enumFromTo(first: A, last: A): LazyList[A] =
+    partialNext(first) match {
+      case Some(by) =>
+        enumFromThenTo(first, by, last)
+      case _ =>
+        if (order.lteqv(first, last)) {
+          LazyList(first)
+        } else {
+          LazyList.empty
+        }
+    }
+
+  /** Given a start position and a increment, enumerate the values starting at
+    * `first` until `MaxValue` or infinity if the type is unbounded.
+    *
+    * {{{
+    * scala> Countable[Int].enumFromThen(Int.MaxValue - 5, Int.MaxValue - 4).toList
+    * val res0: List[Int] = List(2147483642, 2147483643, 2147483644, 2147483645, 2147483646, 2147483647)
+    * }}}
+    */
+  def enumFromThen(first: A, by: A): LazyList[A] =
+    enumFromThenToOpt(first, by, None)
+
+  /** Given a start position, enumerate the values starting at `first` by 1,
+    * until `MaxValue` or infinity if the type is unbounded.
+    *
+    * {{{
+    * scala> Countable[Int].enumFrom(Int.MaxValue - 5).toList
+    * val res0: List[Int] = List(2147483642, 2147483643, 2147483644, 2147483645, 2147483646, 2147483647)
+    * }}}
+    */
+  def enumFrom(first: A): LazyList[A] =
+    partialNext(first) match {
+      case Some(by) =>
+        enumFromThen(first, by)
+      case _ =>
+        LazyList(first)
+    }
+
+  override final def partialOrder: PartialOrder[A] = order
+}
+
+object Countable {
+  def apply[A](implicit A: Countable[A]): Countable[A] = A
+}
 
 /**
  * A typeclass with an operation which returns a member which is
@@ -31,6 +186,26 @@ import scala.{specialized => sp}
 trait PartialNext[@sp A] {
   def partialOrder: PartialOrder[A]
   def partialNext(a: A): Option[A]
+
+  def partialNextByN(a: A, n: BigInt): Option[A] = {
+    val Zero: BigInt = BigInt(0)
+    val One: BigInt=  BigInt(1)
+
+    @tailrec
+    def loop(acc: A, n: BigInt): Option[A] =
+      if (n <= Zero) {
+        Some(acc)
+      } else {
+        partialNext(acc) match {
+          case Some(acc) =>
+            loop(acc, n - One)
+          case otherwise =>
+            otherwise
+        }
+      }
+
+    loop(a, n)
+  }
 }
 
 /**
@@ -49,6 +224,26 @@ trait Next[@sp A] extends PartialNext[A] {
 trait PartialPrevious[@sp A] {
   def partialOrder: PartialOrder[A]
   def partialPrevious(a: A): Option[A]
+
+  def partialPreviousByN(a: A, n: BigInt): Option[A] = {
+    val Zero: BigInt = BigInt(0)
+    val One: BigInt = BigInt(1)
+
+    @tailrec
+    def loop(acc: A, n: BigInt): Option[A] =
+      if (n <= Zero) {
+        Some(acc)
+      } else {
+        partialPrevious(acc) match {
+          case Some(acc) =>
+            loop(acc, n - One)
+          case otherwise =>
+            otherwise
+        }
+      }
+
+    loop(a, n)
+  }
 }
 
 /**
