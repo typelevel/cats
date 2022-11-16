@@ -32,7 +32,6 @@ abstract class AllSyntaxBinCompat
     with AllSyntaxBinCompat5
     with AllSyntaxBinCompat6
     with AllSyntaxBinCompat7
-    with AllSyntaxBinCompat8
 
 trait AllSyntax
     extends AlternativeSyntax
@@ -86,6 +85,15 @@ trait AllSyntax
     with ParallelFoldMapASyntax
     with ParallelTraverseFilterSyntax
     with ParallelReduceMapASyntax
+    with PartialNextSyntax
+    with NextSyntax
+    with PartialPreviousSyntax
+    with PreviousSyntax
+    with BoundedEnumerableSyntax
+
+// Note, since we dropped 2.11.x support, we no longer need to use bincompat
+// traits. All future syntax additions should be added to AllSyntax
+// directly. In 3.x.x we should clean this up.
 
 trait AllSyntaxBinCompat0 extends UnorderedTraverseSyntax with ApplicativeErrorExtension with TrySyntax
 
@@ -123,10 +131,3 @@ trait AllSyntaxBinCompat5 extends ParallelBitraverseSyntax
 trait AllSyntaxBinCompat6 extends ParallelUnorderedTraverseSyntax
 
 trait AllSyntaxBinCompat7 extends SeqSyntax
-
-trait AllSyntaxBinCompat8
-    extends PartialNextSyntax
-    with NextSyntax
-    with PartialPreviousSyntax
-    with PreviousSyntax
-    with BoundedEnumerableSyntax
