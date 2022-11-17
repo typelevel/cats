@@ -22,15 +22,15 @@
 package cats
 package kernel
 
-import scala.collection.immutable.LazyList
 import scala.annotation.tailrec
 import scala.{specialized => sp}
+import cats.kernel.{ScalaVersionSpecificLazyListCompat => LazyListLike}
 
 /** A typeclass for types which are countable. Formally this means that values
   * can be mapped on to the natural numbers.
   *
-  * Because Countable types may be mapped to the natural numbers, being an
-  * instance of `Countable` implies having a total ordering, e.g. an `Order`
+  * Because Enumerable types may be mapped to the natural numbers, being an
+  * instance of `Enumerable` implies having a total ordering, e.g. an `Order`
   * instance. It also implies having a `PartialNext` and `PartialPrevious` as
   * all representations of the countable numbers, or a subset there of, have
   * `PartialNext` and `PartialPrevious`.
@@ -42,52 +42,65 @@ import scala.{specialized => sp}
   * @see [[https://hackage.haskell.org/package/base-4.15.0.0/docs/GHC-Enum.html]]
   * @see [[https://en.wikipedia.org/wiki/Countable_set]]
   */
-trait Countable[@sp A] extends PartialNext[A] with PartialPrevious[A]{
+trait Enumerable[@sp A] extends PartialNext[A] with PartialPrevious[A]{
   def order: Order[A]
   def fromEnum(a: A): BigInt
   def toEnum(i: BigInt): Option[A]
 
-  /** The fundamental function in the `Countable` class. Given a start position,
-    * an offset, and an optional last position, enumerate the values between
-    * `first` and `last` (or `MaxValue` or infinity), using a step of `by -
-    * first`.
+  /** The fundamental function in the `Enumerable` class. Given a `first`
+    * element, a second element, and an optional `last` element, enumerate the
+    * values between `first` and `last` (or `MaxValue` or infinity), the step
+    * between the first and second element as the step between all elements.
     *
     * {{{
-    * scala> Countable[Int].enumFromThenToOpt(1, 3, Some(11)).toList
+    * scala> Enumerable[Int].enumFromThenToOpt(1, 3, Some(11)).toList
     * val res0: List[Int] = List(1, 3, 5, 7, 9, 11)
+    * }}}
+    *
+    * @note If the last element is defined, and the second element is less
+    *       than the last element, then the last element will not be part of
+    *       the result.
+    *
+    * @note The last element will only be included in the enumerated result if
+    *       it aligns with the step. For example, `enumFromThenToOpt(1, 3,
+    *       6).toList`, would be `List(1, 3, 5)`.
+    *
+    * {{{
+    * scala> Enumerable[Int].enumFromThenToOpt(1, 2, Some(1)).toList
+    * val res0: List[Int] = List(1)
     * }}}
     *
     * All other enum like functions can be expressed in terms of this
     * function.
     */
-  def enumFromThenToOpt(first: A, by: A, last: Option[A]): LazyList[A] = {
+  def enumFromThenToOpt(first: A, second: A, last: Option[A]): LazyListLike.T[A] = {
     val Zero: BigInt = BigInt(0)
-    val increment: BigInt = fromEnum(by) - fromEnum(first)
+    val increment: BigInt = fromEnum(second) - fromEnum(first)
 
-    def loop(i: A): LazyList[A] =
+    def loop(i: A): LazyListLike.T[A] =
       if (increment > Zero) {
         // forwards
         partialNextByN(i, increment) match {
           case Some(next) =>
             if (last.fold(false)(order.gt(next, _))) {
-              LazyList.empty[A]
+              LazyListLike.empty[A]
             } else {
               next #:: loop(next)
             }
           case _ =>
-            LazyList.empty[A]
+            LazyListLike.empty[A]
         }
       } else {
           // backwards or zero
           partialPreviousByN(i, increment.abs) match {
             case Some(next) =>
               if (last.fold(false)(order.lt(next, _))) {
-                LazyList.empty
+                LazyListLike.empty
               } else {
                 next #:: loop(next)
               }
             case _ =>
-              LazyList.empty
+              LazyListLike.empty
           }
       }
 
@@ -96,13 +109,13 @@ trait Countable[@sp A] extends PartialNext[A] with PartialPrevious[A]{
         order.compare(first, last) match {
           case result if result < Zero =>
             if (increment < Zero) {
-              LazyList.empty[A]
+              LazyListLike.empty[A]
             } else {
               first #:: loop(first)
             }
           case result if result > Zero =>
             if (increment > Zero) {
-              LazyList.empty[A]
+              LazyListLike.empty[A]
             } else {
               first #:: loop(first)
             }
@@ -114,69 +127,88 @@ trait Countable[@sp A] extends PartialNext[A] with PartialPrevious[A]{
     }
   }
 
-  /** Given a start position, an offset, and a last position, enumerate the
-    * values between `first` and `last`, using a step of `by - first`.
+  def enumFromByToOpt(first: A, step: BigInt, last: Option[A]): LazyListLike.T[A] =
+    toEnum(step).fold(
+      LazyListLike.empty[A]
+    )(second =>
+      enumFromThenToOpt(first, second, last)
+    )
+
+  /** Given a `first` element, a second element, and a last, enumerate the
+    * values between `first` and `last`, using a step between the `first` and
+    * the `second` element as step between all elements.
     *
     * {{{
-    * scala> Countable[Int].enumFromThenTo(1, 3, 11).toList
+    * scala> Enumerable[Int].enumFromThenTo(1, 3, 11).toList
     * val res0: List[Int] = List(1, 3, 5, 7, 9, 11)
     * }}}
+    *
+    * @see [[#enumFromThenToOpt]]
     */
-  def enumFromThenTo(first: A, by: A, last: A): LazyList[A] =
-    enumFromThenToOpt(first, by, Some(last))
+  def enumFromThenTo(first: A, second: A, last: A): LazyListLike.T[A] =
+    enumFromThenToOpt(first, second, Some(last))
 
-  /** Given a start position and a last position, enumerate the
+  def enumFromByTo(first: A, step: BigInt, last: A): LazyListLike.T[A] =
+    enumFromByToOpt(first, step, Some(last))
+
+  /** Given a first element and a last element, enumerate the
     * values between `first` and `last`, using a step of 1.
     *
     * {{{
-    * scala> Countable[Int].enumFromTo(1, 5).toList
+    * scala> Enumerable[Int].enumFromTo(1, 5).toList
     * val res0: List[Int] = List(1, 2, 3, 4, 5)
     * }}}
     */
-  def enumFromTo(first: A, last: A): LazyList[A] =
+  def enumFromTo(first: A, last: A): LazyListLike.T[A] =
     partialNext(first) match {
       case Some(by) =>
         enumFromThenTo(first, by, last)
       case _ =>
         if (order.lteqv(first, last)) {
-          LazyList(first)
+          LazyListLike(first)
         } else {
-          LazyList.empty
+          LazyListLike.empty
         }
     }
 
-  /** Given a start position and a increment, enumerate the values starting at
-    * `first` until `MaxValue` or infinity if the type is unbounded.
+  /** Given a first element and second element, enumerate all values in the
+    * domain starting at first using the step between first and second as the
+    * step between all elements. If the domain is infinite, e.g. natural
+    * numbers or `BigInt`, then this will be an infinite result.
     *
     * {{{
-    * scala> Countable[Int].enumFromThen(Int.MaxValue - 5, Int.MaxValue - 4).toList
+    * scala> Enumerable[Int].enumFromThen(Int.MaxValue - 5, Int.MaxValue - 4).toList
     * val res0: List[Int] = List(2147483642, 2147483643, 2147483644, 2147483645, 2147483646, 2147483647)
     * }}}
     */
-  def enumFromThen(first: A, by: A): LazyList[A] =
-    enumFromThenToOpt(first, by, None)
+  def enumFromThen(first: A, second: A): LazyListLike.T[A] =
+    enumFromThenToOpt(first, second, None)
 
-  /** Given a start position, enumerate the values starting at `first` by 1,
-    * until `MaxValue` or infinity if the type is unbounded.
+  def enumFromBy(first: A, by: BigInt): LazyListLike.T[A] =
+    enumFromByToOpt(first, by, None)
+
+  /** Given a first element, enumerate all values in the domain starting at
+    * first using a step of 1 between all elements. If the domain is infinite,
+    * e.g. natural numbers or `BigInt`, then this will be an infinite result.
     *
     * {{{
-    * scala> Countable[Int].enumFrom(Int.MaxValue - 5).toList
+    * scala> Enumerable[Int].enumFrom(Int.MaxValue - 5).toList
     * val res0: List[Int] = List(2147483642, 2147483643, 2147483644, 2147483645, 2147483646, 2147483647)
     * }}}
     */
-  def enumFrom(first: A): LazyList[A] =
+  def enumFrom(first: A): LazyListLike.T[A] =
     partialNext(first) match {
       case Some(by) =>
         enumFromThen(first, by)
       case _ =>
-        LazyList(first)
+        LazyListLike(first)
     }
 
   override final def partialOrder: PartialOrder[A] = order
 }
 
-object Countable {
-  def apply[A](implicit A: Countable[A]): Countable[A] = A
+object Enumerable {
+  def apply[A](implicit A: Enumerable[A]): Enumerable[A] = A
 }
 
 /**

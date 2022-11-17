@@ -23,7 +23,7 @@ package cats.kernel
 package instances
 
 trait IntInstances {
-  implicit val catsKernelStdOrderForInt: Order[Int] with Hash[Int] with BoundedEnumerable[Int] with Countable[Int] =
+  implicit val catsKernelStdOrderForInt: Order[Int] with Hash[Int] with BoundedEnumerable[Int] with Enumerable[Int] =
     new IntOrder
   implicit val catsKernelStdGroupForInt: CommutativeGroup[Int] = new IntGroup
 }
@@ -47,7 +47,7 @@ trait IntBounded extends LowerBounded[Int] with UpperBounded[Int] {
   override def maxBound: Int = Int.MaxValue
 }
 
-class IntOrder extends Order[Int] with Hash[Int] with IntBounded with IntEnumerable with Countable[Int] { self =>
+class IntOrder extends Order[Int] with Hash[Int] with IntBounded with IntEnumerable with Enumerable[Int] { self =>
   def hash(x: Int): Int = x.hashCode()
   def compare(x: Int, y: Int): Int =
     if (x < y) -1 else if (x > y) 1 else 0
