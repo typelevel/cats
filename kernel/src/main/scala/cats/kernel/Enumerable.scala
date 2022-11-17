@@ -45,7 +45,7 @@ import cats.kernel.{ScalaVersionSpecificLazyListCompat => LazyListLike}
 trait Enumerable[@sp A] extends PartialNext[A] with PartialPrevious[A]{
   def order: Order[A]
   def fromEnum(a: A): BigInt
-  def toEnum(i: BigInt): Option[A]
+  def toEnumOpt(i: BigInt): Option[A]
 
   /** The fundamental function in the `Enumerable` class. Given a `first`
     * element, a second element, and an optional `last` element, enumerate the
@@ -128,7 +128,7 @@ trait Enumerable[@sp A] extends PartialNext[A] with PartialPrevious[A]{
   }
 
   def enumFromByToOpt(first: A, step: BigInt, last: Option[A]): LazyListLike.T[A] =
-    toEnum(step).fold(
+    toEnumOpt(step).fold(
       LazyListLike.empty[A]
     )(second =>
       enumFromThenToOpt(first, second, last)
@@ -204,6 +204,20 @@ trait Enumerable[@sp A] extends PartialNext[A] with PartialPrevious[A]{
         LazyListLike(first)
     }
 
+  def membersDescending(implicit A: UpperBounded[A]): LazyListLike.T[A] =
+    partialPrevious(A.maxBound).fold(
+      LazyListLike.empty[A]
+    )(previous =>
+      enumFromThen(A.maxBound, previous)
+    )
+
+  def membersAscending(implicit A: LowerBounded[A]): LazyListLike.T[A] =
+    partialNext(A.minBound).fold(
+      LazyListLike.empty[A]
+    )(next =>
+      enumFromThen(A.minBound, next)
+    )
+
   override final def partialOrder: PartialOrder[A] = order
 }
 
@@ -238,6 +252,9 @@ trait PartialNext[@sp A] {
 
     loop(a, n)
   }
+
+  def nextOrMin(a: A)(implicit A: LowerBounded[A]): A =
+    partialNext(a).getOrElse(A.minBound)
 }
 
 /**
@@ -246,6 +263,10 @@ trait PartialNext[@sp A] {
  */
 trait Next[@sp A] extends PartialNext[A] {
   def next(a: A): A
+
+  override final def nextOrMin(a: A)(implicit A: LowerBounded[A]): A =
+    next(a)
+
   override def partialNext(a: A): Option[A] = Some(next(a))
 }
 
@@ -276,6 +297,9 @@ trait PartialPrevious[@sp A] {
 
     loop(a, n)
   }
+
+  def previousOrMax(a: A)(implicit A: UpperBounded[A]): A =
+    partialPrevious(a).getOrElse(A.maxBound)
 }
 
 /**
@@ -285,6 +309,10 @@ trait PartialPrevious[@sp A] {
 trait Previous[@sp A] extends PartialPrevious[A] {
   def partialOrder: PartialOrder[A]
   def previous(a: A): A
+
+  override final def previousOrMax(a: A)(implicit A: UpperBounded[A]): A =
+    previous(a)
+
   override def partialPrevious(a: A): Option[A] = Some(previous(a))
 }
 
@@ -292,9 +320,19 @@ trait Previous[@sp A] extends PartialPrevious[A] {
  * A typeclass which has both `previous` and `next` operations
  * such that `next . previous == identity`.
  */
+// TODO: Not sure what to do about UnboundedEnumerable. It should extend
+// Enumerable, but we can't do that without breaking
+// bincompat. BoundlessEnumerable could extened UnboundedEnumerable, but that
+// seems silly...
 trait UnboundedEnumerable[@sp A] extends Next[A] with Previous[A] {
   def order: Order[A]
   override def partialOrder: PartialOrder[A] = order
+}
+
+trait BoundlessEnumerable[@sp A] extends Enumerable[A] with Next[A] with Previous[A] {
+  def toEnum(i: BigInt): A
+
+  override final def toEnumOpt(i: BigInt): Option[A] = Some(toEnum(i))
 }
 
 trait BoundedEnumerable[@sp A] extends PartialPreviousUpperBounded[A] with PartialNextLowerBounded[A] {
@@ -302,12 +340,13 @@ trait BoundedEnumerable[@sp A] extends PartialPreviousUpperBounded[A] with Parti
   def order: Order[A]
   override def partialOrder: PartialOrder[A] = order
 
+  @deprecated(message = "Please use nextOrMin instead.", since = "2.10.0")
   def cycleNext(a: A): A =
-    partialNext(a).getOrElse(minBound)
+    nextOrMin(a)(this)
 
+  @deprecated(message = "Please use previousOrMax instead.", since = "2.10.0")
   def cyclePrevious(a: A): A =
-    partialPrevious(a).getOrElse(maxBound)
-
+    previousOrMax(a)(this)
 }
 
 object BoundedEnumerable {

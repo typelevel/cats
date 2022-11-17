@@ -67,7 +67,7 @@ class IntOrder extends Order[Int] with Hash[Int] with IntBounded with IntEnumera
   override val order: Order[Int] = self
 
   override final def fromEnum(a: Int): BigInt = BigInt(a)
-  override final def toEnum(i: BigInt): Option[Int] =
+  override final def toEnumOpt(i: BigInt): Option[Int] =
     if (i <= BigInt(Int.MaxValue) || i >= BigInt(Int.MinValue)) {
       Some(i.toInt)
     } else {
