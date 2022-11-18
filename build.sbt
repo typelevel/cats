@@ -6,7 +6,7 @@ val disciplineVersion = "1.5.1"
 
 val disciplineMunitVersion = "2.0.0-M3"
 
-val munitVersion = "1.0.0-M6"
+val munitVersion = "1.0.0-M7"
 
 val kindProjectorVersion = "0.13.2"
 
