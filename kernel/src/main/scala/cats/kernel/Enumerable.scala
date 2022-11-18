@@ -174,7 +174,7 @@ trait Enumerable[@sp A] extends PartialNext[A] with PartialPrevious[A]{
   /** Given a first element and second element, enumerate all values in the
     * domain starting at first using the step between first and second as the
     * step between all elements. If the domain is infinite, e.g. natural
-    * numbers or `BigInt`, then this will be an infinite result.
+    * numbers or integers, then this will be an infinite result.
     *
     * {{{
     * scala> Enumerable[Int].enumFromThen(Int.MaxValue - 5, Int.MaxValue - 4).toList
@@ -189,7 +189,7 @@ trait Enumerable[@sp A] extends PartialNext[A] with PartialPrevious[A]{
 
   /** Given a first element, enumerate all values in the domain starting at
     * first using a step of 1 between all elements. If the domain is infinite,
-    * e.g. natural numbers or `BigInt`, then this will be an infinite result.
+    * e.g. natural numbers or integers, then this will be an infinite result.
     *
     * {{{
     * scala> Enumerable[Int].enumFrom(Int.MaxValue - 5).toList
