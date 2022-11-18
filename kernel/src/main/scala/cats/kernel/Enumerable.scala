@@ -325,7 +325,7 @@ trait Previous[@sp A] extends PartialPrevious[A] {
  */
 // TODO: Not sure what to do about UnboundedEnumerable. It should extend
 // Enumerable, but we can't do that without breaking
-// bincompat. BoundlessEnumerable could extened UnboundedEnumerable, but that
+// bincompat. BoundlessEnumerable could extend UnboundedEnumerable, but that
 // seems silly...
 trait UnboundedEnumerable[@sp A] extends Next[A] with Previous[A] {
   def order: Order[A]
