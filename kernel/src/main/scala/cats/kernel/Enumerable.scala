@@ -188,8 +188,9 @@ trait Enumerable[@sp A] extends PartialNext[A] with PartialPrevious[A]{
     enumFromByToOpt(first, by, None)
 
   /** Given a first element, enumerate all values in the domain starting at
-    * first using a step of 1 between all elements. If the domain is infinite,
-    * e.g. natural numbers or integers, then this will be an infinite result.
+    * first using a step of difference between the next element and the first
+    * element. If the domain is infinite, e.g. natural numbers or integers,
+    * then this will be an infinite result.
     *
     * {{{
     * scala> Enumerable[Int].enumFrom(Int.MaxValue - 5).toList
@@ -226,6 +227,9 @@ trait Enumerable[@sp A] extends PartialNext[A] with PartialPrevious[A]{
 
 object Enumerable {
   def apply[A](implicit A: Enumerable[A]): Enumerable[A] = A
+
+  implicit def catsKernelEnumerableForInt: Enumerable[Int] =
+    cats.kernel.instances.int.catsKernelStdOrderForInt
 }
 
 /**
@@ -336,6 +340,13 @@ trait BoundlessEnumerable[@sp A] extends Enumerable[A] with Next[A] with Previou
   def toEnum(i: BigInt): A
 
   override final def toEnumOpt(i: BigInt): Option[A] = Some(toEnum(i))
+}
+
+object BoundlessEnumerable {
+  def apply[A: BoundlessEnumerable](implicit A: BoundlessEnumerable[A]): BoundlessEnumerable[A] = A
+
+  implicit def catsKernelBoundlessEnumerableForInt: BoundlessEnumerable[BigInt] =
+    cats.kernel.instances.bigInt.catsKernelStdOrderForBigInt
 }
 
 trait BoundedEnumerable[@sp A] extends PartialPreviousUpperBounded[A] with PartialNextLowerBounded[A] {

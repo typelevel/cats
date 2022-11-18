@@ -211,6 +211,10 @@ class Tests extends TestsConfig with DisciplineSuite {
   checkAll("UpperBounded[FiniteDuration]", UpperBoundedTests[FiniteDuration].upperBounded)
   checkAll("UpperBounded[UUID]", UpperBoundedTests[UUID].upperBounded)
 
+  checkAll("Enumerable[Int]", EnumerableTests[Int].enumerable)
+
+  checkAll("BoundlessEnumerable[BigInt]", BoundlessEnumerableTests[BigInt].boundlessEnumerable)
+
   checkAll("BoundedEnumerable[Unit]", BoundedEnumerableTests[Unit].boundedEnumerable)
   checkAll("BoundedEnumerable[Boolean]", BoundedEnumerableTests[Boolean].boundedEnumerable)
   checkAll("BoundedEnumerable[Byte]", BoundedEnumerableTests[Byte].boundedEnumerable)
