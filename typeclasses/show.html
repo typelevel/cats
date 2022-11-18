@@ -208,7 +208,7 @@
         Most often, this is unwanted behaviour, as the standard implementation of <code>toString</code> on non case classes is mostly gibberish.
         Consider the following example:</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span>(</span><span class="keyword">new</span><span> {}).</span><span class="identifier">toString</span><span>
-</span><span class="comment">// res0: String = &quot;repl.MdocSession$App$$anon$1@3290e6ba&quot;</span></code></pre>
+</span><span class="comment">// res0: String = &quot;repl.MdocSession$App$$anon$1@45d0eea5&quot;</span></code></pre>
         <p>The fact that this code compiles is a design flaw of the Java API.
         We want to make things like this impossible, by offering the <code>toString</code> equivalent as a type class, instead of the root of the class hierarchy.
         In short, <code>Show</code> allows us to only have String-conversions defined for the data types we actually want.</p>
@@ -224,12 +224,12 @@
 </span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Person</span><span>(</span><span class="identifier">name</span><span>: </span><span class="type-name">String</span><span>, </span><span class="identifier">age</span><span>: </span><span class="type-name">Int</span><span>)
 
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">showPerson</span><span>: </span><span class="type-name">Show</span><span>[</span><span class="type-name">Person</span><span>] = </span><span class="type-name">Show</span><span>.</span><span class="identifier">show</span><span>(</span><span class="identifier">person</span><span> =&gt; </span><span class="identifier">person</span><span>.</span><span class="identifier">name</span><span>)
-</span><span class="comment">// showPerson: Show[Person] = cats.Show$$$Lambda$14672/1146951956@66f9b71b
+</span><span class="comment">// showPerson: Show[Person] = cats.Show$$$Lambda$14804/669230970@4e4fd19
 </span><span>
 </span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Department</span><span>(</span><span class="identifier">id</span><span>: </span><span class="type-name">Int</span><span>, </span><span class="identifier">name</span><span>: </span><span class="type-name">String</span><span>)
 
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">showDep</span><span>: </span><span class="type-name">Show</span><span>[</span><span class="type-name">Department</span><span>] = </span><span class="type-name">Show</span><span>.</span><span class="identifier">fromToString</span><span>
-</span><span class="comment">// showDep: Show[Department] = cats.Show$$$Lambda$13779/316202387@32b45108</span></code></pre>
+</span><span class="comment">// showDep: Show[Department] = cats.Show$$$Lambda$13911/830309717@313276e1</span></code></pre>
         <p>This still may not seem useful to you, because case classes already automatically implement <code>toString</code>, while <code>show</code> would have to be implemented manually for each case class.
         Thankfully with the help of a small library called <a href="https://github.com/typelevel/kittens">kittens</a> a lot of type class instances including <code>Show</code> can be derived automatically!</p>
         <p>Cats also offers <code>Show</code> syntax to make working with it easier.
