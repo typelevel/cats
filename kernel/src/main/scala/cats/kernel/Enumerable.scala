@@ -218,6 +218,9 @@ trait Enumerable[@sp A] extends PartialNext[A] with PartialPrevious[A]{
       enumFromThen(A.minBound, next)
     )
 
+  def size(implicit A: LowerBounded[A], B: UpperBounded[A]): BigInt =
+    (fromEnum(B.maxBound) - fromEnum(A.minBound)) + BigInt(1)
+
   override final def partialOrder: PartialOrder[A] = order
 }
 
