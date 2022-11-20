@@ -588,7 +588,11 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * or effect. It is equivalent to `foldMapA` using the Unit monoid.
    */
   def traverse_[G[_], A](fa: F[A])(f: A => G[Unit])(implicit G: Applicative[G]): G[Unit] =
-    foldMapA(fa)(f)
+    foldRight(fa, Always(G.pure(()))) { (a, acc) =>
+      G.map2Eval(f(a), acc) { (_, _) =>
+        ()
+      }
+    }.value
 
   /**
    * Sequence `F[G[Unit]]` using `Applicative[G]`.

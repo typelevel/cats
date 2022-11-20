@@ -213,8 +213,10 @@ trait Reducible[F[_]] extends Foldable[F] { self =>
    * available for `G` and want to take advantage of short-circuiting
    * the traversal.
    */
-  def nonEmptyTraverse_[G[_], A](fa: F[A])(f: A => G[Unit])(implicit G: Apply[G]): G[Unit] =
-    reduceMapA(fa)(f)
+  def nonEmptyTraverse_[G[_], A](fa: F[A])(f: A => G[Unit])(implicit G: Apply[G]): G[Unit] = {
+    val f1 = f.andThen(G.void)
+    reduceRightTo(fa)(f1)((x, y) => G.map2Eval(f1(x), y)((_, b) => b)).value
+  }
 
   /**
    * Sequence `F[G[A]]` using `Apply[G]`.

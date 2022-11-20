@@ -54,7 +54,8 @@ object MimaExceptions {
     (
       cats.Bimonad[cats.data.NonEmptyChain],
       cats.NonEmptyTraverse[cats.data.NonEmptyChain],
-      cats.SemigroupK[cats.data.NonEmptyChain]
+      cats.SemigroupK[cats.data.NonEmptyChain],
+      List("foo", "bar", "baz").traverse_(x => Either.right(x))
     )
   )
 }
