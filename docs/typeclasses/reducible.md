@@ -42,7 +42,7 @@ def countChars(s: String) = s.toCharArray.groupBy(identity).view.mapValues(x => 
 
 Reducible[NonEmptyList].nonEmptyTraverse_(NonEmptyList.of("Hello", "World"))(countChars)
 Reducible[NonEmptyVector].nonEmptyTraverse_(NonEmptyVector.of("Hello", ""))(countChars)
-Reducible[NonEmptyList].nonEmptySequence_(NonEmptyList.of(Map(1 -> 'o'), Map(1 -> 'o')))
+Reducible[NonEmptyList].nonEmptySequence_(NonEmptyList.of(Map(1 -> ()), Map(1 -> ())))
 
 ```
 
