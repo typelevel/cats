@@ -56,8 +56,8 @@ def checkInt(s: String): Option[Unit] = scala.util.Try{ Integer.parseInt(s) ; ()
 
 Foldable[List].traverse_(List("1", "2"))(checkInt)
 Foldable[List].traverse_(List("1", "A"))(checkInt)
-Foldable[List].sequence_(List(Option(1), Option(2)))
-Foldable[List].sequence_(List(Option(1), None))
+Foldable[List].sequence_(List(Option(()), Option(())))
+Foldable[List].sequence_(List(Option(()), None))
 
 Foldable[List].forallM(List(1, 2, 3))(i => if (i < 2) Some(i % 2 == 0) else None)
 Foldable[List].existsM(List(1, 2, 3))(i => if (i < 2) Some(i % 2 == 0) else None)
