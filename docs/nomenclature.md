@@ -115,8 +115,8 @@ Like the previous section, we use the `E` for the error parameter type.
 | `F[A] => (A => G[B]) => G[B]` | `foldMapM` | `G: Monad` and `B: Monoid`
 | `F[A] => (A => B) => Option[B]` | `collectFirst` | The `A => B` is a `PartialFunction`
 | `F[A] => (A => Option[B]) => Option[B]` | `collectFirstSome` |
-| `F[A] => (A => G[B]) => G[Unit]` | `traverse_` | `G: Applicative`
-| `F[G[A]] => G[Unit]` | `sequence_` | `G: Applicative`
+| `F[A] => (A => G[Unit]) => G[Unit]` | `traverse_` | `G: Applicative`
+| `F[G[Unit]] => G[Unit]` | `sequence_` | `G: Applicative`
 | `F[A] => (A => Either[B, C] => (F[B], F[C])` | `partitionEither` | `G: Applicative`
 
 ### Reducible

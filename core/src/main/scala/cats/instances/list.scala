@@ -129,7 +129,7 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
       /**
        * This avoids making a very deep stack by building a tree instead
        */
-      override def traverse_[G[_], A, B](fa: List[A])(f: A => G[B])(implicit G: Applicative[G]): G[Unit] = {
+      override def traverse_[G[_], A](fa: List[A])(f: A => G[Unit])(implicit G: Applicative[G]): G[Unit] = {
         // the cost of this is O(size log size)
         // c(n) = n + 2 * c(n/2) = n + 2(n/2 log (n/2)) = n + n (logn - 1) = n log n
         // invariant: size >= 1
@@ -155,10 +155,7 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
             // failed. We do not use laziness to avoid
             // traversing fa, which we will do fully
             // in all cases.
-            Eval.always {
-              val gb = f(a)
-              G.void(gb)
-            }
+            Eval.always { f(a) }
           }
 
         val len = fa.length

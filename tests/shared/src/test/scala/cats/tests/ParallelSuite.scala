@@ -79,23 +79,23 @@ class ParallelSuite
   }
 
   test("ParTraverse_ identity should be equivalent to parSequence_") {
-    forAll { (es: SortedSet[Either[String, Int]]) =>
-      assert(Parallel.parTraverse_(es)(identity) === (Parallel.parSequence_[SortedSet, Either[String, *], Int](es)))
+    forAll { (es: SortedSet[Either[String, Unit]]) =>
+      assert(Parallel.parTraverse_(es)(identity) === (Parallel.parSequence_[SortedSet, Either[String, *]](es)))
     }
   }
 
   test("ParTraverse_ syntax should be equivalent to Parallel.parTraverse_") {
-    forAll { (es: SortedSet[Either[String, Int]]) =>
+    forAll { (es: SortedSet[Either[String, Unit]]) =>
       assert(
-        Parallel.parTraverse_[SortedSet, Either[String, *], Either[String, Int], Int](es)(identity) === (es
+        Parallel.parTraverse_[SortedSet, Either[String, *], Either[String, Unit]](es)(identity) === (es
           .parTraverse_(identity))
       )
     }
   }
 
   test("ParSequence_ syntax should be equivalent to Parallel.parSequence_") {
-    forAll { (es: SortedSet[Either[String, Int]]) =>
-      assert(Parallel.parSequence_[SortedSet, Either[String, *], Int](es) === (es.parSequence_))
+    forAll { (es: SortedSet[Either[String, Unit]]) =>
+      assert(Parallel.parSequence_[SortedSet, Either[String, *]](es) === (es.parSequence_))
     }
   }
 
@@ -106,7 +106,7 @@ class ParallelSuite
   }
 
   test("ParNonEmptyTraverse_ identity should be equivalent to parNonEmptySequence_") {
-    forAll { (es: NonEmptyList[Either[String, Int]]) =>
+    forAll { (es: NonEmptyList[Either[String, Unit]]) =>
       assert(Parallel.parNonEmptyTraverse_(es)(identity) === (Parallel.parNonEmptySequence_(es)))
     }
   }
@@ -311,8 +311,8 @@ class ParallelSuite
   }
 
   test("ParReplicateA_ should be equivalent to fill parSequence_") {
-    forAll(Gen.choose(1, 20), Arbitrary.arbitrary[Either[String, String]]) {
-      (repetitions: Int, e: Either[String, String]) =>
+    forAll(Gen.choose(1, 20), Arbitrary.arbitrary[Either[String, Unit]]) {
+      (repetitions: Int, e: Either[String, Unit]) =>
         assert(Parallel.parReplicateA_(repetitions, e) === Parallel.parSequence_(List.fill(repetitions)(e)))
     }
   }

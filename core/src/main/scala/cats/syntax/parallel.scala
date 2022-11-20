@@ -111,7 +111,7 @@ trait ParallelTraverseSyntax {
   implicit final def catsSyntaxParallelTraverse_[T[_]: Foldable, A](ta: T[A]): ParallelTraversable_Ops[T, A] =
     new ParallelTraversable_Ops(ta)
 
-  implicit final def catsSyntaxParallelSequence_[T[_]: Foldable, M[_], A](tma: T[M[A]]): ParallelSequence_Ops[T, M, A] =
+  implicit final def catsSyntaxParallelSequence_[T[_]: Foldable, M[_]](tma: T[M[Unit]]): ParallelSequence_Ops[T, M] =
     new ParallelSequence_Ops(tma)
 }
 
@@ -189,7 +189,7 @@ final class ParallelSequenceFilterOps[T[_], M[_], A](private val tmoa: T[M[Optio
 }
 
 final class ParallelTraversable_Ops[T[_], A](private val ta: T[A]) extends AnyVal {
-  def parTraverse_[M[_], B](f: A => M[B])(implicit T: Foldable[T], P: Parallel[M]): M[Unit] =
+  def parTraverse_[M[_]](f: A => M[Unit])(implicit T: Foldable[T], P: Parallel[M]): M[Unit] =
     Parallel.parTraverse_(ta)(f)
 }
 
@@ -217,7 +217,7 @@ final class ParallelSequenceOps1[T[_], M[_], A](private val tma: T[M[A]]) extend
     Parallel.parSequence(tma)
 }
 
-final class ParallelSequence_Ops[T[_], M[_], A](private val tma: T[M[A]]) extends AnyVal {
+final class ParallelSequence_Ops[T[_], M[_]](private val tma: T[M[Unit]]) extends AnyVal {
   def parSequence_(implicit T: Foldable[T], P: Parallel[M]): M[Unit] =
     Parallel.parSequence_(tma)
 }

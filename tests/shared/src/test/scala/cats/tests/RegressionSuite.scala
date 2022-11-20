@@ -162,23 +162,25 @@ class RegressionSuite extends CatsSuite with ScalaVersionSpecificRegressionSuite
     assert(Vector(1, 2, 6, 8).traverse(validate) === (Either.left("6 is greater than 5")))
     checkAndResetCount(3)
 
-    assert(List(1, 2, 6, 8).traverse_(validate) === (Either.left("6 is greater than 5")))
+    def validateVoid(i: Int): Either[String, Unit] = validate(i).void
+
+    assert(List(1, 2, 6, 8).traverse_(validateVoid) === (Either.left("6 is greater than 5")))
     checkAndResetCount(3)
 
     {
       @annotation.nowarn("cat=deprecation")
-      val obtained = Stream(1, 2, 6, 8).traverse_(validate)
+      val obtained = Stream(1, 2, 6, 8).traverse_(validateVoid)
       assert(obtained === Either.left("6 is greater than 5"))
     }
     checkAndResetCount(3)
 
-    assert(Vector(1, 2, 6, 8).traverse_(validate) === (Either.left("6 is greater than 5")))
+    assert(Vector(1, 2, 6, 8).traverse_(validateVoid) === (Either.left("6 is greater than 5")))
     checkAndResetCount(3)
 
-    assert(NonEmptyList.of(1, 2, 6, 7, 8).traverse_(validate) === (Either.left("6 is greater than 5")))
+    assert(NonEmptyList.of(1, 2, 6, 7, 8).traverse_(validateVoid) === (Either.left("6 is greater than 5")))
     checkAndResetCount(3)
 
-    assert(NonEmptyList.of(6, 7, 8).traverse_(validate) === (Either.left("6 is greater than 5")))
+    assert(NonEmptyList.of(6, 7, 8).traverse_(validateVoid) === (Either.left("6 is greater than 5")))
     checkAndResetCount(1)
   }
 

@@ -263,7 +263,7 @@ object Parallel extends ParallelArityFunctions2 {
    * Like `Foldable[A].sequence_`, but uses the applicative instance
    * corresponding to the Parallel instance instead.
    */
-  def parSequence_[T[_]: Foldable, M[_], A](tma: T[M[A]])(implicit P: Parallel[M]): M[Unit] = {
+  def parSequence_[T[_]: Foldable, M[_]](tma: T[M[Unit]])(implicit P: Parallel[M]): M[Unit] = {
     val fu: P.F[Unit] = Foldable[T].traverse_(tma)(P.parallel.apply(_))(P.applicative)
     P.sequential(fu)
   }
@@ -272,9 +272,9 @@ object Parallel extends ParallelArityFunctions2 {
    * Like `Foldable[A].traverse_`, but uses the applicative instance
    * corresponding to the Parallel instance instead.
    */
-  def parTraverse_[T[_]: Foldable, M[_], A, B](
+  def parTraverse_[T[_]: Foldable, M[_], A](
     ta: T[A]
-  )(f: A => M[B])(implicit P: Parallel[M]): M[Unit] = {
+  )(f: A => M[Unit])(implicit P: Parallel[M]): M[Unit] = {
     val gtb: P.F[Unit] = Foldable[T].traverse_(ta)(a => P.parallel(f(a)))(P.applicative)
     P.sequential(gtb)
   }
@@ -348,8 +348,8 @@ object Parallel extends ParallelArityFunctions2 {
    * Like `Reducible[A].nonEmptySequence_`, but uses the apply instance
    * corresponding to the Parallel instance instead.
    */
-  def parNonEmptySequence_[T[_]: Reducible, M[_], A](
-    tma: T[M[A]]
+  def parNonEmptySequence_[T[_]: Reducible, M[_]](
+    tma: T[M[Unit]]
   )(implicit P: NonEmptyParallel[M]): M[Unit] = {
     val fu: P.F[Unit] = Reducible[T].nonEmptyTraverse_(tma)(P.parallel.apply(_))(P.apply)
     P.sequential(fu)
@@ -359,9 +359,9 @@ object Parallel extends ParallelArityFunctions2 {
    * Like `Reducible[A].nonEmptyTraverse_`, but uses the apply instance
    * corresponding to the Parallel instance instead.
    */
-  def parNonEmptyTraverse_[T[_]: Reducible, M[_], A, B](
+  def parNonEmptyTraverse_[T[_]: Reducible, M[_], A](
     ta: T[A]
-  )(f: A => M[B])(implicit P: NonEmptyParallel[M]): M[Unit] = {
+  )(f: A => M[Unit])(implicit P: NonEmptyParallel[M]): M[Unit] = {
     val gtb: P.F[Unit] = Reducible[T].nonEmptyTraverse_(ta)(a => P.parallel(f(a)))(P.apply)
     P.sequential(gtb)
   }

@@ -137,11 +137,12 @@ object SyntaxSuite {
     val f3 = mock[Z => A]
     val a1: A = fz.foldMap(f3)
 
-    val f4 = mock[A => G[B]]
+    val f4 = mock[A => G[Unit]]
     val gu0: G[Unit] = fa.traverse_(f4)
 
+    val fgu = mock[F[G[Unit]]]
     val fga = mock[F[G[A]]]
-    val gu1: G[Unit] = fga.sequence_
+    val gu1: G[Unit] = fgu.sequence_
     val ga: G[A] = fga.foldK
 
     val f5 = mock[A => Boolean]
@@ -313,10 +314,11 @@ object SyntaxSuite {
     val f6 = mock[(A, Eval[B]) => Eval[B]]
     val lb: Eval[B] = fa.reduceRightTo(f4)(f6)
 
-    val f7 = mock[A => G[B]]
+    val f7 = mock[A => G[Unit]]
     val gu1: G[Unit] = fa.nonEmptyTraverse_(f7)
 
-    val gu2: G[Unit] = fga.nonEmptySequence_
+    val fgu = mock[F[G[Unit]]]
+    val gu2: G[Unit] = fgu.nonEmptySequence_
   }
 
   def testFunctor[F[_]: Functor, A, B]: Unit = {

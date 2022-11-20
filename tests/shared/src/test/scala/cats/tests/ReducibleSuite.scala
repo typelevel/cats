@@ -238,7 +238,7 @@ abstract class ReducibleSuite[F[_]: Reducible](name: String)(implicit
     val notAllEven = fromValues(2, 4, 6, 9, 10, 12, 14)
     val out = mutable.ListBuffer[Int]()
 
-    notAllEven.nonEmptyTraverse_ { a => out += a; if (a % 2 == 0) Some(a) else None }
+    notAllEven.nonEmptyTraverse_ { a => out += a; if (a % 2 == 0) Some(()) else None }
 
     assert(out.toList === List(2, 4, 6, 9))
   }

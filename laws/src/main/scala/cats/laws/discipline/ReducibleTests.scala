@@ -35,8 +35,8 @@ trait ReducibleTests[F[_]] extends FoldableTests[F] {
   def reducible[G[_]: Applicative, A: Arbitrary, B: Arbitrary](implicit
     ArbFA: Arbitrary[F[A]],
     ArbFB: Arbitrary[F[B]],
-    ArbFGA: Arbitrary[F[G[A]]],
-    ArbGB: Arbitrary[G[B]],
+    ArbFGU: Arbitrary[F[G[Unit]]],
+    ArbGU: Arbitrary[G[Unit]],
     CogenA: Cogen[A],
     CogenB: Cogen[B],
     EqG: Eq[G[Unit]],
@@ -58,8 +58,8 @@ trait ReducibleTests[F[_]] extends FoldableTests[F] {
         forAll(laws.reduceRightConsistentWithReduceRightOption[A] _),
       "reduce consistent with reduceLeft" ->
         forAll(laws.reduceReduceLeftConsistent[B] _),
-      "nonEmptyTraverse_ consistent with traverse_" -> forAll(laws.traverseConsistent[G, A, B] _),
-      "nonEmptySequence_ consistent with sequence_" -> forAll(laws.sequenceConsistent[G, A] _),
+      "nonEmptyTraverse_ consistent with traverse_" -> forAll(laws.traverseConsistent[G, A] _),
+      "nonEmptySequence_ consistent with sequence_" -> forAll(laws.sequenceConsistent[G] _),
       "size consistent with reduceMap" -> forAll(laws.sizeConsistent[A] _)
     )
 }

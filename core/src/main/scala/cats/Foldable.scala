@@ -569,36 +569,31 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
   /**
    * Traverse `F[A]` using `Applicative[G]`.
    *
-   * `A` values will be mapped into `G[B]` and combined using
+   * `A` values will be mapped into `G[Unit]` and combined using
    * `Applicative#map2`.
    *
    * For example:
    *
    * {{{
    * scala> import cats.implicits._
-   * scala> def parseInt(s: String): Option[Int] = Either.catchOnly[NumberFormatException](s.toInt).toOption
+   * scala> def checkInt(s: String): Option[Unit] = Either.catchOnly[NumberFormatException]{ s.toInt ; () }.toOption
    * scala> val F = Foldable[List]
-   * scala> F.traverse_(List("333", "444"))(parseInt)
+   * scala> F.traverse_(List("333", "444"))(checkInt)
    * res0: Option[Unit] = Some(())
-   * scala> F.traverse_(List("333", "zzz"))(parseInt)
+   * scala> F.traverse_(List("333", "zzz"))(checkInt)
    * res1: Option[Unit] = None
    * }}}
    *
    * This method is primarily useful when `G[_]` represents an action
-   * or effect, and the specific `A` aspect of `G[A]` is not otherwise
-   * needed.
+   * or effect. It is equivalent to `foldMapA` using the Unit monoid.
    */
-  def traverse_[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Applicative[G]): G[Unit] =
-    foldRight(fa, Always(G.pure(()))) { (a, acc) =>
-      G.map2Eval(f(a), acc) { (_, _) =>
-        ()
-      }
-    }.value
+  def traverse_[G[_], A](fa: F[A])(f: A => G[Unit])(implicit G: Applicative[G]): G[Unit] =
+    foldMapA(fa)(f)
 
   /**
-   * Sequence `F[G[A]]` using `Applicative[G]`.
+   * Sequence `F[G[Unit]]` using `Applicative[G]`.
    *
-   * This is similar to `traverse_` except it operates on `F[G[A]]`
+   * This is similar to `traverse_` except it operates on `F[G[Unit]]`
    * values, so no additional functions are needed.
    *
    * For example:
@@ -606,13 +601,13 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * {{{
    * scala> import cats.implicits._
    * scala> val F = Foldable[List]
-   * scala> F.sequence_(List(Option(1), Option(2), Option(3)))
+   * scala> F.sequence_(List(Option(()), Option(()), Option(())))
    * res0: Option[Unit] = Some(())
-   * scala> F.sequence_(List(Option(1), None, Option(3)))
+   * scala> F.sequence_(List(Option(()), None, Option(())))
    * res1: Option[Unit] = None
    * }}}
    */
-  def sequence_[G[_]: Applicative, A](fga: F[G[A]]): G[Unit] =
+  def sequence_[G[_]: Applicative](fga: F[G[Unit]]): G[Unit] =
     traverse_(fga)(identity)
 
   /**
@@ -1051,10 +1046,10 @@ object Foldable {
       typeClassInstance.foldMapM[G, A, B](self)(f)(G, B)
     def foldMapA[G[_], B](f: A => G[B])(implicit G: Applicative[G], B: Monoid[B]): G[B] =
       typeClassInstance.foldMapA[G, A, B](self)(f)(G, B)
-    def traverse_[G[_], B](f: A => G[B])(implicit G: Applicative[G]): G[Unit] =
-      typeClassInstance.traverse_[G, A, B](self)(f)(G)
-    def sequence_[G[_], B](implicit ev$1: A <:< G[B], ev$2: Applicative[G]): G[Unit] =
-      typeClassInstance.sequence_[G, B](self.asInstanceOf[F[G[B]]])
+    def traverse_[G[_]](f: A => G[Unit])(implicit G: Applicative[G]): G[Unit] =
+      typeClassInstance.traverse_[G, A](self)(f)(G)
+    def sequence_[G[_]](implicit ev$1: A <:< G[Unit], ev$2: Applicative[G]): G[Unit] =
+      typeClassInstance.sequence_[G](self.asInstanceOf[F[G[Unit]]])
     def foldK[G[_], B](implicit ev$1: A <:< G[B], G: MonoidK[G]): G[B] =
       typeClassInstance.foldK[G, B](self.asInstanceOf[F[G[B]]])(G)
     def find(f: A => Boolean): Option[A] = typeClassInstance.find[A](self)(f)

@@ -200,7 +200,7 @@ trait Reducible[F[_]] extends Foldable[F] { self =>
    * Traverse `F[A]` using `Apply[G]`.
    *
    * `A` values will be mapped into `G[B]` and combined using
-   * `Apply#map2`.
+   * `Apply#map2`. This is equivalent to `reduceMapA`.
    *
    * This method is similar to [[Foldable.traverse_]]. There are two
    * main differences:
@@ -213,10 +213,8 @@ trait Reducible[F[_]] extends Foldable[F] { self =>
    * available for `G` and want to take advantage of short-circuiting
    * the traversal.
    */
-  def nonEmptyTraverse_[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Apply[G]): G[Unit] = {
-    val f1 = f.andThen(G.void)
-    reduceRightTo(fa)(f1)((x, y) => G.map2Eval(f1(x), y)((_, b) => b)).value
-  }
+  def nonEmptyTraverse_[G[_], A](fa: F[A])(f: A => G[Unit])(implicit G: Apply[G]): G[Unit] =
+    reduceMapA(fa)(f)
 
   /**
    * Sequence `F[G[A]]` using `Apply[G]`.
@@ -225,7 +223,7 @@ trait Reducible[F[_]] extends Foldable[F] { self =>
    * an [[Apply]] instance for `G` instead of [[Applicative]]. See the
    * [[nonEmptyTraverse_]] documentation for a description of the differences.
    */
-  def nonEmptySequence_[G[_], A](fga: F[G[A]])(implicit G: Apply[G]): G[Unit] =
+  def nonEmptySequence_[G[_]](fga: F[G[Unit]])(implicit G: Apply[G]): G[Unit] =
     nonEmptyTraverse_(fga)(identity)
 
   def toNonEmptyList[A](fa: F[A]): NonEmptyList[A] =
@@ -399,10 +397,10 @@ object Reducible {
       typeClassInstance.reduceMapM[G, A, B](self)(f)(G, B)
     def reduceRightTo[B](f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B] =
       typeClassInstance.reduceRightTo[A, B](self)(f)(g)
-    def nonEmptyTraverse_[G[_], B](f: A => G[B])(implicit G: Apply[G]): G[Unit] =
-      typeClassInstance.nonEmptyTraverse_[G, A, B](self)(f)(G)
-    def nonEmptySequence_[G[_], B](implicit ev$1: A <:< G[B], G: Apply[G]): G[Unit] =
-      typeClassInstance.nonEmptySequence_[G, B](self.asInstanceOf[F[G[B]]])(G)
+    def nonEmptyTraverse_[G[_]](f: A => G[Unit])(implicit G: Apply[G]): G[Unit] =
+      typeClassInstance.nonEmptyTraverse_[G, A](self)(f)(G)
+    def nonEmptySequence_[G[_]](implicit ev$1: A <:< G[Unit], G: Apply[G]): G[Unit] =
+      typeClassInstance.nonEmptySequence_[G](self.asInstanceOf[F[G[Unit]]])(G)
     def toNonEmptyList: NonEmptyList[A] = typeClassInstance.toNonEmptyList[A](self)
     def minimum(implicit A: Order[A]): A = typeClassInstance.minimum[A](self)(A)
     def maximum(implicit A: Order[A]): A = typeClassInstance.maximum[A](self)(A)

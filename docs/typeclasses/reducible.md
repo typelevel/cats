@@ -38,7 +38,7 @@ Reducible[NonEmptyList].reduceLeftTo(NonEmptyList.of(1,2,3,4))(_.toString)((s,i)
 Reducible[NonEmptyList].reduceRightTo(NonEmptyList.of(1,2,3,4))(_.toString)((i,s) => Later(s.value + i)).value
 Reducible[NonEmptyList].nonEmptyIntercalate(NonEmptyList.of("a", "b", "c"), ", ")
 
-def countChars(s: String) = s.toCharArray.groupBy(identity).view.mapValues(_.length).toMap
+def countChars(s: String) = s.toCharArray.groupBy(identity).view.mapValues(x => { x.length ; () }).toMap
 
 Reducible[NonEmptyList].nonEmptyTraverse_(NonEmptyList.of("Hello", "World"))(countChars)
 Reducible[NonEmptyVector].nonEmptyTraverse_(NonEmptyVector.of("Hello", ""))(countChars)

@@ -52,10 +52,10 @@ Foldable[List].nonEmpty(List(1,2))
 Foldable[Option].toList(Option(1))
 Foldable[Option].toList(None)
 
-def parseInt(s: String): Option[Int] = scala.util.Try(Integer.parseInt(s)).toOption
+def checkInt(s: String): Option[Unit] = scala.util.Try{ Integer.parseInt(s) ; () }.toOption
 
-Foldable[List].traverse_(List("1", "2"))(parseInt)
-Foldable[List].traverse_(List("1", "A"))(parseInt)
+Foldable[List].traverse_(List("1", "2"))(checkInt)
+Foldable[List].traverse_(List("1", "A"))(checkInt)
 Foldable[List].sequence_(List(Option(1), Option(2)))
 Foldable[List].sequence_(List(Option(1), None))
 

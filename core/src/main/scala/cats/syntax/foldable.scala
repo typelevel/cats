@@ -47,7 +47,8 @@ private[syntax] trait FoldableSyntaxBinCompat1 {
 }
 
 final class NestedFoldableOps[F[_], G[_], A](private val fga: F[G[A]]) extends AnyVal {
-  def sequence_(implicit F: Foldable[F], G: Applicative[G]): G[Unit] = F.sequence_(fga)
+  def sequence_(implicit F: Foldable[F], G: Applicative[G], ev: A <:< Unit): G[Unit] =
+    F.sequence_(fga.asInstanceOf[F[G[Unit]]])
 
   /**
    * @see [[Foldable.foldK]].
