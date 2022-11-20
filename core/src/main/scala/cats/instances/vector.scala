@@ -161,7 +161,10 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
             // failed. We do not use laziness to avoid
             // traversing fa, which we will do fully
             // in all cases.
-            Eval.always { f(a) }
+            Eval.always {
+              val fb = f(a)
+              G.void(fb)
+            }
           }
 
         val len = fa.length
