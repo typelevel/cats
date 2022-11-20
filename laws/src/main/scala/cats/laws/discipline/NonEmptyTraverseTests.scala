@@ -44,11 +44,13 @@ trait NonEmptyTraverseTests[F[_]] extends TraverseTests[F] with ReducibleTests[F
     ArbYB: Arbitrary[Y[B]],
     ArbYC: Arbitrary[Y[C]],
     ArbFB: Arbitrary[F[B]],
+    ArbFM: Arbitrary[F[M]],
     ArbXM: Arbitrary[X[M]],
     ArbYM: Arbitrary[Y[M]],
-    ArbGU: Arbitrary[G[Unit]],
-    ArbFGU: Arbitrary[F[G[Unit]]],
+    ArbFGA: Arbitrary[F[G[A]]],
     ArbFXM: Arbitrary[F[X[M]]],
+    ArbGB: Arbitrary[G[B]],
+    ArbGM: Arbitrary[G[M]],
     CogenA: Cogen[A],
     CogenB: Cogen[B],
     CogenC: Cogen[C],
@@ -69,7 +71,9 @@ trait NonEmptyTraverseTests[F[_]] extends TraverseTests[F] with ReducibleTests[F
     EqXFM: Eq[X[F[M]]],
     EqYFB: Eq[Y[F[B]]],
     EqYFM: Eq[Y[F[M]]],
-    EqOptionA: Eq[Option[A]]
+    EqOptionA: Eq[Option[A]],
+    ArbGU: Arbitrary[G[Unit]],
+    ArbFGU: Arbitrary[F[G[Unit]]]
   ): RuleSet = new RuleSet {
     def name: String = "nonEmptyTraverse"
     def bases: Seq[(String, RuleSet)] = Nil

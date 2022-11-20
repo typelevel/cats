@@ -35,8 +35,8 @@ trait ReducibleTests[F[_]] extends FoldableTests[F] {
   def reducible[G[_]: Applicative, A: Arbitrary, B: Arbitrary](implicit
     ArbFA: Arbitrary[F[A]],
     ArbFB: Arbitrary[F[B]],
-    ArbFGU: Arbitrary[F[G[Unit]]],
-    ArbGU: Arbitrary[G[Unit]],
+    ArbFGA: Arbitrary[F[G[A]]],
+    ArbGB: Arbitrary[G[B]],
     CogenA: Cogen[A],
     CogenB: Cogen[B],
     EqG: Eq[G[Unit]],
@@ -45,7 +45,9 @@ trait ReducibleTests[F[_]] extends FoldableTests[F] {
     EqFA: Eq[F[A]],
     EqOptionA: Eq[Option[A]],
     MonoidA: CommutativeMonoid[A],
-    MonoidB: CommutativeMonoid[B]
+    MonoidB: CommutativeMonoid[B],
+    ArbFGU: Arbitrary[F[G[Unit]]],
+    ArbGU: Arbitrary[G[Unit]]
   ): RuleSet =
     new DefaultRuleSet(
       name = "reducible",
