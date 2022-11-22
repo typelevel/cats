@@ -221,6 +221,32 @@ trait Enumerable[@sp A] extends PartialNext[A] with PartialPrevious[A]{
       case _ =>
         LazyListLike(first)
     }
+
+  /** All members of this enumerable starting at the min bound and continuing
+    * upward.
+    *
+    * @note If the type has no max bound, then this will be an infinite
+    *       list.
+    */
+  def enumFromMin(implicit A: LowerBounded[A]): LazyListLike.T[A] =
+    partialNext(A.minBound).fold(
+      LazyListLike(A.minBound)
+    )(next =>
+      enumFromThen(A.minBound, next)
+    )
+
+  /** All members of this enumerable starting at the max bound and continuing
+    * downward.
+    *
+    * @note If the type has no min bound, then this will be an infinite
+    *       list.
+    */
+  def enumFromMax(implicit A: UpperBounded[A]): LazyListLike.T[A] =
+    partialPrevious(A.maxBound).fold(
+      LazyListLike(A.maxBound)
+    )(prev =>
+      enumFromThen(A.maxBound, prev)
+    )
 }
 
 object Enumerable {
@@ -270,6 +296,9 @@ trait PartialNext[@sp A] {
   def partialOrder: PartialOrder[A]
   def partialNext(a: A): Option[A]
 
+  /** As [[#partialNext]], but rather than getting the next element, it gets the
+    * Nth next element.
+    */
   def partialNextByN(a: A, n: BigInt): Option[A] = {
     val Zero: BigInt = BigInt(0)
     val One: BigInt=  BigInt(1)
@@ -290,8 +319,69 @@ trait PartialNext[@sp A] {
     loop(a, n)
   }
 
+  def nextOrMinByN(a: A, n: BigInt)(implicit A: LowerBounded[A]): A = {
+    val Zero: BigInt = BigInt(0)
+    val One: BigInt=  BigInt(1)
+
+    @tailrec
+    def loop(acc: A, n: BigInt): A =
+      if (n <= Zero) {
+        acc
+      } else {
+        partialNext(acc) match {
+          case Some(acc) =>
+            loop(acc, n - One)
+          case _ =>
+            loop(A.minBound, n - One)
+        }
+      }
+
+    loop(a, n)
+  }
+
+  /** Get the next value if defined, otherwise get the minBound. */
   def nextOrMin(a: A)(implicit A: LowerBounded[A]): A =
-    partialNext(a).getOrElse(A.minBound)
+    nextOrMinByN(a, BigInt(1))
+
+  /** Create an infinite cycling lazy list starting from the given value with
+    * each subsequent value N steps ahead of the last. When there is no next
+    * value, e.g. `partialNext` returns `None`, restart the cycle from the
+    * minBound.
+    */
+  def cycleForwardFromByN(start: A, n: BigInt)(implicit A: LowerBounded[A]): LazyListLike.T[A] =
+    start #:: cycleForwardFromBy(nextOrMinByN(start, n), n)
+
+  /** Create an infinite cycling lazy list starting from the given value. When
+    * there is no next value, e.g. `partialNext` returns `None`, restart the
+    * cycle from the minBound.
+    *
+    * @note This will only enumerate all the elements of the set if this type
+    *       is a [[BoundableEnumerable]]. If the type is a
+    *       [[BoundlessEnumerable]] then the cycle will never restart. If the
+    *       type is neither, then it is possible the first cycle will
+    *       enumerate elements that are not in following cycles. That is, if
+    *       `nextOrMin` starting from `minBound` yields `None` before reaching
+    *       `start`, `start` and elements following `start` will only be in
+    *       the first cycle. This is not possible for [[BoundableEnumerable]]
+    *       or [[BoundlessEnumerable]] types, but may be possible for types
+    *       which only have a [[PartialNext]] instance.
+    */
+  def cycleForwardFrom(start: A)(implicit A: LowerBounded[A]): LazyListLike.T[A] =
+    cycleForwardFromBy(start, BigInt(1))
+
+  /** As [[#cycleForwardFromByN]], but uses the minBound as the start value. */
+  def cycleForwardByN(n: BigInt)(implicit A: LowerBounded[A]): LazyListLike.T[A] =
+    cycleForwardFromByN(A.minBound, n)
+
+  /** As [[#cycleForwardFrom]], but uses the minBound as the start value.
+    *
+    * Because this cycle starts at the minBound, each cycle will have the same
+    * elements in it. However, as with [[#cycleForwardFrom]], each cycle will
+    * only contain all elements of `A` if `A` is either a
+    * [[BoundableEnumerable]] or [[BoundlessEnumerable]] type.
+    */
+  def cycleForward(implicit A: LowerBounded[A]): LazyListLike.T[A] =
+    cycleForwardFrom(A.minBound)
 }
 
 /**
@@ -379,45 +469,13 @@ object BoundlessEnumerable {
     cats.kernel.instances.bigInt.catsKernelStdOrderForBigInt
 }
 
-trait LowerBoundableEnumerable[@sp A] extends Enumerable[A] with LowerBounded[A] {
-
-  /** All members of this enumerable starting at the min bound and continuing
-    * upward.
-    *
-    * @note If the type has no max bound, then this will be an infinite
-    *       list.
-    */
-  def enumFromMin: LazyListLike.T[A] =
-    partialNext(minBound).fold(
-      LazyListLike.empty[A]
-    )(next =>
-      enumFromThen(minBound, next)
-    )
-}
-
-trait UpperBoundableEnumerable[@sp A] extends Enumerable[A] with UpperBounded[A] {
-
-  /** All members of this enumerable starting at the max bound and continuing
-    * downward.
-    *
-    * @note If the type has no min bound, then this will be an infinite
-    *       list.
-    */
-  def enumFromMax: LazyListLike.T[A] =
-    partialPrevious(maxBound).fold(
-      LazyListLike.empty[A]
-    )(previous =>
-      enumFromThen(maxBound, previous)
-    )
-}
-
 @deprecated(message = "Please use BoundableEnumerable instead.", since = "2.10.0")
 trait BoundedEnumerable[@sp A] extends PartialPreviousUpperBounded[A] with PartialNextLowerBounded[A] {
 
   def order: Order[A]
   override def partialOrder: PartialOrder[A] = order
 
-  @deprecated(message = "Please use nextOrMin instead.", since = "2.10.0")
+  @deprecated(message = "Please use nextOrMin.", since = "2.10.0")
   def cycleNext(a: A): A =
     nextOrMin(a)(this)
 
@@ -461,7 +519,7 @@ object BoundedEnumerable {
     }
 }
 
-trait BoundableEnumerable[@sp A] extends UpperBoundableEnumerable[A] with LowerBoundableEnumerable[A] {
+trait BoundableEnumerable[@sp A] extends Enumerable[A] with UpperBounded[A] with LowerBounded[A] {
 
   // If [[#fromEnum]] is defined in such a way that the elements of this set
   // map to elements of the set of integers ''in the same order'', then this
@@ -481,13 +539,13 @@ object BoundableEnumerable {
   def apply[A](implicit A: BoundableEnumerable[A]): BoundableEnumerable[A] = A
 }
 
-@deprecated(message = "Please use Next[A] and LowerBoundableEnumerable[A] instead.", since = "2.10.0")
+@deprecated(message = "Please use Enumerable instead.", since = "2.10.0")
 trait LowerBoundedEnumerable[@sp A] extends PartialNextLowerBounded[A] with Next[A] {
   def order: Order[A]
   override def partialOrder: PartialOrder[A] = order
 }
 
-@deprecated(message = "Please use Next[A] and UpperBoundableEnumerable[A] instead.", since = "2.10.0")
+@deprecated(message = "Please use Enumerable instead.", since = "2.10.0")
 trait UpperBoundedEnumerable[@sp A] extends PartialPreviousUpperBounded[A] with Previous[A] {
   def order: Order[A]
   override def partialOrder: PartialOrder[A] = order
