@@ -30,6 +30,7 @@ import Prop.forAll
 import Arbitrary.arbitrary
 import cats.kernel.instances.all.catsKernelStdOrderForDeadline
 
+import scala.annotation.nowarn
 import scala.concurrent.duration.{Deadline, Duration, FiniteDuration}
 import scala.collection.immutable.{BitSet, Queue, SortedMap, SortedSet}
 import scala.util.Random
@@ -215,22 +216,22 @@ class Tests extends TestsConfig with DisciplineSuite {
 
   checkAll("BoundlessEnumerable[BigInt]", BoundlessEnumerableTests[BigInt].boundlessEnumerable)
 
-  checkAll("BoundedEnumerable[Unit]", BoundedEnumerableTests[Unit].boundedEnumerable)
-  checkAll("BoundedEnumerable[Boolean]", BoundedEnumerableTests[Boolean].boundedEnumerable)
-  checkAll("BoundedEnumerable[Byte]", BoundedEnumerableTests[Byte].boundedEnumerable)
-  checkAll("BoundedEnumerable[Short]", BoundedEnumerableTests[Short].boundedEnumerable)
-  checkAll("BoundedEnumerable[Int]", BoundedEnumerableTests[Int].boundedEnumerable)
-  checkAll("BoundedEnumerable[Char]", BoundedEnumerableTests[Char].boundedEnumerable)
-  checkAll("BoundedEnumerable[Long]", BoundedEnumerableTests[Long].boundedEnumerable)
-  checkAll("BoundedEnumerable.reverse(BoundedEnumerable[Int])",
+  (checkAll("BoundedEnumerable[Unit]", BoundedEnumerableTests[Unit].boundedEnumerable): @nowarn("msg=BoundableEnumerable"))
+  (checkAll("BoundedEnumerable[Boolean]", BoundedEnumerableTests[Boolean].boundedEnumerable): @nowarn("msg=BoundableEnumerable"))
+  (checkAll("BoundedEnumerable[Byte]", BoundedEnumerableTests[Byte].boundedEnumerable): @nowarn("msg=BoundableEnumerable"))
+  (checkAll("BoundedEnumerable[Short]", BoundedEnumerableTests[Short].boundedEnumerable): @nowarn("msg=BoundableEnumerable"))
+  (checkAll("BoundedEnumerable[Int]", BoundedEnumerableTests[Int].boundedEnumerable): @nowarn("msg=BoundableEnumerable"))
+  (checkAll("BoundedEnumerable[Char]", BoundedEnumerableTests[Char].boundedEnumerable): @nowarn("msg=BoundableEnumerable"))
+  (checkAll("BoundedEnumerable[Long]", BoundedEnumerableTests[Long].boundedEnumerable): @nowarn("msg=BoundableEnumerable"))
+  (checkAll("BoundedEnumerable.reverse(BoundedEnumerable[Int])",
            BoundedEnumerableTests(BoundedEnumerable.reverse(BoundedEnumerable[Int])).boundedEnumerable
-  )
-  checkAll(
+  ):   @nowarn("msg=BoundableEnumerable"))
+  (checkAll(
     "BoundedEnumerable.reverse(BoundedEnumerable.reverse(BoundedEnumerable[Int]))",
     BoundedEnumerableTests(
       BoundedEnumerable.reverse(BoundedEnumerable.reverse(BoundedEnumerable[Int]))
     ).boundedEnumerable
-  )
+  ): @nowarn("msg=BoundableEnumerable"))
 
   checkAll("Monoid[String]", MonoidTests[String].monoid)
   checkAll("Monoid[String]", SerializableTests.serializable(Monoid[String]))

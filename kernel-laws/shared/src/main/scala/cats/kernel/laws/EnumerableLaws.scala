@@ -33,6 +33,20 @@ trait EnumerableLaws[A] extends PartialNextLaws[A] with PartialPreviousLaws[A] {
 
   def injectiveToNaturalNumbers(xs: Set[A]): IsEq[Int] =
     xs.map(En.fromEnum).size <-> xs.size
+
+  def hasTheSameOrderAsBigInt(x: A, y: A): IsEq[Comparison] =
+    En.order.comparison(x, y) <-> Order[BigInt].comparison(En.fromEnum(x), En.fromEnum(y))
+
+  def bigIntHasTheSameOrderAsA(xi: BigInt, yi: BigInt): IsEq[Boolean] =
+    En.toEnumOpt(xi).flatMap(x =>
+      En.toEnumOpt(yi).map(y =>
+        Order[BigInt].comparison(xi, yi) == En.order.comparison(x, y)
+      )
+    ).fold(
+      true <-> true
+    )(
+      _ <-> true
+    )
 }
 
 object EnumerableLaws {

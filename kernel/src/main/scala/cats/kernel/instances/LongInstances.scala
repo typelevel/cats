@@ -22,10 +22,17 @@
 package cats.kernel
 package instances
 
+import scala.annotation.nowarn
+
 trait LongInstances {
-  implicit val catsKernelStdOrderForLong: Order[Long] with Hash[Long] with BoundedEnumerable[Long] =
+  implicit val catsKernelStdBoundableEnumerableForLong: Order[Long] with Hash[Long] with BoundableEnumerable[Long] =
     new LongOrder
+
   implicit val catsKernelStdGroupForLong: CommutativeGroup[Long] = new LongGroup
+
+  @deprecated(message = "Please use catsKernelStdBoundableEnumerableForLong", since = "2.10.0")
+  val catsKernelStdOrderForLong: Order[Long] with Hash[Long] with BoundedEnumerable[Long] =
+    new LongOrder
 }
 
 class LongGroup extends CommutativeGroup[Long] {
@@ -35,6 +42,7 @@ class LongGroup extends CommutativeGroup[Long] {
   override def remove(x: Long, y: Long): Long = x - y
 }
 
+@deprecated(message = "Please use LongBoundableEnumerable.", since = "2.10.0")
 trait LongEnumerable extends BoundedEnumerable[Long] {
   override def partialNext(a: Long): Option[Long] =
     if (order.neqv(a, maxBound)) Some(a + 1L) else None
@@ -42,12 +50,28 @@ trait LongEnumerable extends BoundedEnumerable[Long] {
     if (order.neqv(a, minBound)) Some(a - 1L) else None
 }
 
+private[instances] trait LongBoundableEnumerable extends BoundableEnumerable[Long] {
+  override final def size: BigInt =
+    (BigInt(maxBound) - BigInt(minBound)) + BigInt(1)
+
+  override final def fromEnum(a: Long): BigInt =
+    BigInt(a)
+
+  override final def toEnumOpt(i: BigInt): Option[Long] =
+    if (i >= BigInt(minBound) && i <= BigInt(maxBound)) {
+      Some(i.toLong)
+    } else {
+      None
+    }
+}
+
 trait LongBounded extends UpperBounded[Long] with LowerBounded[Long] {
   override def minBound: Long = Long.MinValue
   override def maxBound: Long = Long.MaxValue
 }
 
-class LongOrder extends Order[Long] with Hash[Long] with LongBounded with LongEnumerable { self =>
+@nowarn("msg=LongBoundableEnumerable")
+class LongOrder extends Order[Long] with Hash[Long] with LongBounded with LongEnumerable with LongBoundableEnumerable { self =>
 
   def hash(x: Long): Int = x.hashCode()
 

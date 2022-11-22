@@ -94,6 +94,7 @@ trait PartialPreviousTests[A] extends PartialOrderTests[A] {
 
 }
 
+@deprecated(message = "Please use BoundableEnumerable and BoundableEnumerableTests", since = "2.10.0")
 trait BoundedEnumerableTests[A] extends OrderTests[A] with PartialNextTests[A] with PartialPreviousTests[A] {
 
   def laws: BoundedEnumerableLaws[A]
@@ -119,6 +120,7 @@ trait BoundedEnumerableTests[A] extends OrderTests[A] with PartialNextTests[A] w
 }
 
 object BoundedEnumerableTests {
+  @deprecated(message = "Please use BoundableEnumerable and BoundableEnumerableTests", since = "2.10.0")
   def apply[A: BoundedEnumerable]: BoundedEnumerableTests[A] =
     new BoundedEnumerableTests[A] { def laws: BoundedEnumerableLaws[A] = BoundedEnumerableLaws[A] }
 }

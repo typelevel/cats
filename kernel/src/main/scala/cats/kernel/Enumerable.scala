@@ -35,6 +35,14 @@ import cats.kernel.{ScalaVersionSpecificLazyListCompat => LazyListLike}
   * all representations of the countable numbers, or a subset there of, have
   * `PartialNext` and `PartialPrevious`.
   *
+  * Instances of `Enumerable` require that the if `Order[A].comparison(x, y)
+  * <-> Order[BigInt](fromEnum(x), fromEnum(y))`. The ordering of a value of
+  * `A` corresponds to the ordering of the `BigInt` mapping of that `A`. This
+  * is because all of the useful functions defined by `Enumerable` require
+  * this correspondence to provide their utility. For example, they use the
+  * difference between two elements of `A` mapped onto `BigInt` to understand
+  * the step between enumerated values.
+  *
   * @note Types which are countable can be both finitely countable and
   *       infinitely countable. The canonical example of this are the natural
   *       numbers themselves. They are countable, but are infinite.
@@ -44,7 +52,16 @@ import cats.kernel.{ScalaVersionSpecificLazyListCompat => LazyListLike}
   */
 trait Enumerable[@sp A] extends PartialNext[A] with PartialPrevious[A]{
   def order: Order[A]
+  override final def partialOrder: PartialOrder[A] = order
+
+  /** Convert a value of `A` into its corresponding integer representation.
+    */
   def fromEnum(a: A): BigInt
+
+  /** Attempt to convert a `BigInt` into its corresponding representation in
+    * this enumeration, yielding `None` if the given `BigInt` is outside the
+    * domain of this enumeration.
+    */
   def toEnumOpt(i: BigInt): Option[A]
 
   /** The fundamental function in the `Enumerable` class. Given a `first`
@@ -204,32 +221,45 @@ trait Enumerable[@sp A] extends PartialNext[A] with PartialPrevious[A]{
       case _ =>
         LazyListLike(first)
     }
-
-  def membersDescending(implicit A: UpperBounded[A]): LazyListLike.T[A] =
-    partialPrevious(A.maxBound).fold(
-      LazyListLike.empty[A]
-    )(previous =>
-      enumFromThen(A.maxBound, previous)
-    )
-
-  def membersAscending(implicit A: LowerBounded[A]): LazyListLike.T[A] =
-    partialNext(A.minBound).fold(
-      LazyListLike.empty[A]
-    )(next =>
-      enumFromThen(A.minBound, next)
-    )
-
-  def size(implicit A: LowerBounded[A], B: UpperBounded[A]): BigInt =
-    (fromEnum(B.maxBound) - fromEnum(A.minBound)) + BigInt(1)
-
-  override final def partialOrder: PartialOrder[A] = order
 }
 
 object Enumerable {
   def apply[A](implicit A: Enumerable[A]): Enumerable[A] = A
 
+  def reverse[A](A: Enumerable[A]): Enumerable[A] =
+    new Enumerable[A] {
+      override def fromEnum(a: A): BigInt =
+        -A.fromEnum(a)
+
+      override def toEnumOpt(i: BigInt): Option[A] =
+        A.toEnumOpt(-i)
+
+      override val order: Order[A] =
+        Order.reverse(A.order)
+
+      override def partialNext(a: A): Option[A] =
+        A.partialPrevious(a)
+
+      override def partialPrevious(a: A): Option[A] =
+        A.partialNext(a)
+    }
+
+  implicit def catsKernelEnumerableForBigInt: Enumerable[BigInt] =
+    cats.kernel.instances.bigInt.catsKernelStdOrderForBigInt
   implicit def catsKernelEnumerableForInt: Enumerable[Int] =
-    cats.kernel.instances.int.catsKernelStdOrderForInt
+    cats.kernel.instances.int.catsKernelStdBoundableEnumerableForInt
+  implicit def catsKernelEnumerableForUnit: Enumerable[Unit] =
+    cats.kernel.instances.unit.catsKernelStdBoundableEnumerableForUnit
+  implicit def catsKernelEnumerableForBoolean: Enumerable[Boolean] =
+    cats.kernel.instances.boolean.catsKernelStdBoundableEnumerableForBoolean
+  implicit def catsKernelEnumerableForByte: Enumerable[Byte] =
+    cats.kernel.instances.byte.catsKernelStdBoundableEnumerableForByte
+  implicit def catsKernelEnumerableForShort: Enumerable[Short] =
+    cats.kernel.instances.short.catsKernelStdBoundableEnumerableForShort
+  implicit def catsKernelEnumerableForLong: Enumerable[Long] =
+    cats.kernel.instances.long.catsKernelStdBoundableEnumerableForLong
+  implicit def catsKernelEnumerableForChar: Enumerable[Char] =
+    cats.kernel.instances.char.catsKernelStdBoundableEnumerableForChar
 }
 
 /**
@@ -343,12 +373,45 @@ trait BoundlessEnumerable[@sp A] extends Enumerable[A] with Next[A] with Previou
 }
 
 object BoundlessEnumerable {
-  def apply[A: BoundlessEnumerable](implicit A: BoundlessEnumerable[A]): BoundlessEnumerable[A] = A
+  def apply[A](implicit A: BoundlessEnumerable[A]): BoundlessEnumerable[A] = A
 
   implicit def catsKernelBoundlessEnumerableForInt: BoundlessEnumerable[BigInt] =
     cats.kernel.instances.bigInt.catsKernelStdOrderForBigInt
 }
 
+trait LowerBoundableEnumerable[@sp A] extends Enumerable[A] with LowerBounded[A] {
+
+  /** All members of this enumerable starting at the min bound and continuing
+    * upward.
+    *
+    * @note If the type has no max bound, then this will be an infinite
+    *       list.
+    */
+  def enumFromMin: LazyListLike.T[A] =
+    partialNext(minBound).fold(
+      LazyListLike.empty[A]
+    )(next =>
+      enumFromThen(minBound, next)
+    )
+}
+
+trait UpperBoundableEnumerable[@sp A] extends Enumerable[A] with UpperBounded[A] {
+
+  /** All members of this enumerable starting at the max bound and continuing
+    * downward.
+    *
+    * @note If the type has no min bound, then this will be an infinite
+    *       list.
+    */
+  def enumFromMax: LazyListLike.T[A] =
+    partialPrevious(maxBound).fold(
+      LazyListLike.empty[A]
+    )(previous =>
+      enumFromThen(maxBound, previous)
+    )
+}
+
+@deprecated(message = "Please use BoundableEnumerable instead.", since = "2.10.0")
 trait BoundedEnumerable[@sp A] extends PartialPreviousUpperBounded[A] with PartialNextLowerBounded[A] {
 
   def order: Order[A]
@@ -363,6 +426,7 @@ trait BoundedEnumerable[@sp A] extends PartialPreviousUpperBounded[A] with Parti
     previousOrMax(a)(this)
 }
 
+@deprecated(message = "Please use BoundableEnumerable instead.", since = "2.10.0")
 object BoundedEnumerable {
   implicit def catsKernelBoundedEnumerableForUnit: BoundedEnumerable[Unit] =
     cats.kernel.instances.unit.catsKernelStdOrderForUnit
@@ -397,11 +461,33 @@ object BoundedEnumerable {
     }
 }
 
+trait BoundableEnumerable[@sp A] extends UpperBoundableEnumerable[A] with LowerBoundableEnumerable[A] {
+
+  // If [[#fromEnum]] is defined in such a way that the elements of this set
+  // map to elements of the set of integers ''in the same order'', then this
+  // is can be defined as `fromEnum(maxBound) - fromEnum(maxBound) +
+  // BigInt(1)`, if and only if for all members of this set, `fromEnum(x) <
+  // fromEnum(y) => x < y`. Or in other words, this set can be ordered using
+  // `Order[BigInt]` and this set's mapping to `BigInt`. This property is
+  // likely to hold for most instances of this type, though it is not required
+  // to hold for the type to be a lawful instance. Indeed, an `Inverse[A]`
+  // type, which flips the ordering of the underlying type would not hold to
+  // this property for the simple derived implementation.
+  /** The number of elements in the set defined by this enumerable. */
+  def size: BigInt
+}
+
+object BoundableEnumerable {
+  def apply[A](implicit A: BoundableEnumerable[A]): BoundableEnumerable[A] = A
+}
+
+@deprecated(message = "Please use Next[A] and LowerBoundableEnumerable[A] instead.", since = "2.10.0")
 trait LowerBoundedEnumerable[@sp A] extends PartialNextLowerBounded[A] with Next[A] {
   def order: Order[A]
   override def partialOrder: PartialOrder[A] = order
 }
 
+@deprecated(message = "Please use Next[A] and UpperBoundableEnumerable[A] instead.", since = "2.10.0")
 trait UpperBoundedEnumerable[@sp A] extends PartialPreviousUpperBounded[A] with Previous[A] {
   def order: Order[A]
   override def partialOrder: PartialOrder[A] = order
