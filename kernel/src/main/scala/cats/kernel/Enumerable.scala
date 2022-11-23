@@ -97,7 +97,7 @@ trait Enumerable[@sp A] extends PartialNext[A] with PartialPrevious[A]{
     def loop(i: A): LazyListLike.T[A] =
       if (increment > Zero) {
         // forwards
-        partialNextByN(i, increment) match {
+        partialNextBy(i, increment) match {
           case Some(next) =>
             if (last.fold(false)(order.gt(next, _))) {
               LazyListLike.empty[A]
@@ -109,7 +109,7 @@ trait Enumerable[@sp A] extends PartialNext[A] with PartialPrevious[A]{
         }
       } else {
           // backwards or zero
-          partialPreviousByN(i, increment.abs) match {
+          partialPreviousBy(i, increment.abs) match {
             case Some(next) =>
               if (last.fold(false)(order.lt(next, _))) {
                 LazyListLike.empty
@@ -299,7 +299,7 @@ trait PartialNext[@sp A] {
   /** As [[#partialNext]], but rather than getting the next element, it gets the
     * Nth next element.
     */
-  def partialNextByN(a: A, n: BigInt): Option[A] = {
+  def partialNextBy(a: A, n: BigInt): Option[A] = {
     val Zero: BigInt = BigInt(0)
     val One: BigInt=  BigInt(1)
 
@@ -319,7 +319,13 @@ trait PartialNext[@sp A] {
     loop(a, n)
   }
 
-  def nextOrMinByN(a: A, n: BigInt)(implicit A: LowerBounded[A]): A = {
+  /** As [[#nextOrMin]], but steps forward N steps rather than 1 step.
+    *
+    * @note If this wraps around to the `minBound`, and there are still steps
+    *       to apply, it will not stop at `minBound`. For example,
+    *       `nextOrMinBy(Byte.MaxValue, 2) == -127`.
+    */
+  def nextOrMinBy(a: A, n: BigInt)(implicit A: LowerBounded[A]): A = {
     val Zero: BigInt = BigInt(0)
     val One: BigInt=  BigInt(1)
 
@@ -341,15 +347,15 @@ trait PartialNext[@sp A] {
 
   /** Get the next value if defined, otherwise get the minBound. */
   def nextOrMin(a: A)(implicit A: LowerBounded[A]): A =
-    nextOrMinByN(a, BigInt(1))
+    nextOrMinBy(a, BigInt(1))
 
   /** Create an infinite cycling lazy list starting from the given value with
     * each subsequent value N steps ahead of the last. When there is no next
     * value, e.g. `partialNext` returns `None`, restart the cycle from the
     * minBound.
     */
-  def cycleForwardFromByN(start: A, n: BigInt)(implicit A: LowerBounded[A]): LazyListLike.T[A] =
-    start #:: cycleForwardFromBy(nextOrMinByN(start, n), n)
+  def cycleForwardFromBy(start: A, n: BigInt)(implicit A: LowerBounded[A]): LazyListLike.T[A] =
+    start #:: cycleForwardFromBy(nextOrMinBy(start, n), n)
 
   /** Create an infinite cycling lazy list starting from the given value. When
     * there is no next value, e.g. `partialNext` returns `None`, restart the
@@ -370,8 +376,8 @@ trait PartialNext[@sp A] {
     cycleForwardFromBy(start, BigInt(1))
 
   /** As [[#cycleForwardFromByN]], but uses the minBound as the start value. */
-  def cycleForwardByN(n: BigInt)(implicit A: LowerBounded[A]): LazyListLike.T[A] =
-    cycleForwardFromByN(A.minBound, n)
+  def cycleForwardBy(n: BigInt)(implicit A: LowerBounded[A]): LazyListLike.T[A] =
+    cycleForwardFromBy(A.minBound, n)
 
   /** As [[#cycleForwardFrom]], but uses the minBound as the start value.
     *
@@ -384,50 +390,58 @@ trait PartialNext[@sp A] {
     cycleForwardFrom(A.minBound)
 }
 
+object PartialNext {
+
+  def apply[A](implicit A: PartialNext[A]): PartialNext[A] = A
+
+  implicit def catsKernelPartialNextForBigInt: Enumerable[BigInt] =
+    cats.kernel.instances.bigInt.catsKernelStdOrderForBigInt
+  implicit def catsKernelPartialNextForInt: Enumerable[Int] =
+    cats.kernel.instances.int.catsKernelStdBoundableEnumerableForInt
+  implicit def catsKernelPartialNextForUnit: Enumerable[Unit] =
+    cats.kernel.instances.unit.catsKernelStdBoundableEnumerableForUnit
+  implicit def catsKernelPartialNextForBoolean: Enumerable[Boolean] =
+    cats.kernel.instances.boolean.catsKernelStdBoundableEnumerableForBoolean
+  implicit def catsKernelPartialNextForByte: Enumerable[Byte] =
+    cats.kernel.instances.byte.catsKernelStdBoundableEnumerableForByte
+  implicit def catsKernelPartialNextForShort: Enumerable[Short] =
+    cats.kernel.instances.short.catsKernelStdBoundableEnumerableForShort
+  implicit def catsKernelPartialNextForLong: Enumerable[Long] =
+    cats.kernel.instances.long.catsKernelStdBoundableEnumerableForLong
+  implicit def catsKernelPartialNextForChar: Enumerable[Char] =
+    cats.kernel.instances.char.catsKernelStdBoundableEnumerableForChar
+}
+
 /**
  * A typeclass with an operation which returns a member which is
  * always greater than the one supplied.
  */
 trait Next[@sp A] extends PartialNext[A] {
   def next(a: A): A
-
-  override final def nextOrMin(a: A)(implicit A: LowerBounded[A]): A =
-    next(a)
-
   override def partialNext(a: A): Option[A] = Some(next(a))
 }
 
-/**
- * A typeclass with an operation which returns a member which is
- * smaller or `None` than the one supplied.
- */
-trait PartialPrevious[@sp A] {
-  def partialOrder: PartialOrder[A]
-  def partialPrevious(a: A): Option[A]
+object Next {
+  def apply[A](implicit A: Next[A]): Next[A] = A
 
-  def partialPreviousByN(a: A, n: BigInt): Option[A] = {
-    val Zero: BigInt = BigInt(0)
-    val One: BigInt = BigInt(1)
-
-    @tailrec
-    def loop(acc: A, n: BigInt): Option[A] =
-      if (n <= Zero) {
-        Some(acc)
-      } else {
-        partialPrevious(acc) match {
-          case Some(acc) =>
-            loop(acc, n - One)
-          case otherwise =>
-            otherwise
-        }
-      }
-
-    loop(a, n)
-  }
-
-  def previousOrMax(a: A)(implicit A: UpperBounded[A]): A =
-    partialPrevious(a).getOrElse(A.maxBound)
+  implicit def catsKernelNextForBigInt: Enumerable[BigInt] =
+    cats.kernel.instances.bigInt.catsKernelStdOrderForBigInt
+  implicit def catsKernelNextForInt: Enumerable[Int] =
+    cats.kernel.instances.int.catsKernelStdBoundableEnumerableForInt
+  implicit def catsKernelNextForUnit: Enumerable[Unit] =
+    cats.kernel.instances.unit.catsKernelStdBoundableEnumerableForUnit
+  implicit def catsKernelNextForBoolean: Enumerable[Boolean] =
+    cats.kernel.instances.boolean.catsKernelStdBoundableEnumerableForBoolean
+  implicit def catsKernelNextForByte: Enumerable[Byte] =
+    cats.kernel.instances.byte.catsKernelStdBoundableEnumerableForByte
+  implicit def catsKernelNextForShort: Enumerable[Short] =
+    cats.kernel.instances.short.catsKernelStdBoundableEnumerableForShort
+  implicit def catsKernelNextForLong: Enumerable[Long] =
+    cats.kernel.instances.long.catsKernelStdBoundableEnumerableForLong
+  implicit def catsKernelNextForChar: Enumerable[Char] =
+    cats.kernel.instances.char.catsKernelStdBoundableEnumerableForChar
 }
+
 
 /**
  * A typeclass with an operation which returns a member which is
@@ -436,9 +450,6 @@ trait PartialPrevious[@sp A] {
 trait Previous[@sp A] extends PartialPrevious[A] {
   def partialOrder: PartialOrder[A]
   def previous(a: A): A
-
-  override final def previousOrMax(a: A)(implicit A: UpperBounded[A]): A =
-    previous(a)
 
   override def partialPrevious(a: A): Option[A] = Some(previous(a))
 }
@@ -477,11 +488,11 @@ trait BoundedEnumerable[@sp A] extends PartialPreviousUpperBounded[A] with Parti
 
   @deprecated(message = "Please use nextOrMin.", since = "2.10.0")
   def cycleNext(a: A): A =
-    nextOrMin(a)(this)
+    partialNext(a).getOrElse(minBound)
 
   @deprecated(message = "Please use previousOrMax instead.", since = "2.10.0")
   def cyclePrevious(a: A): A =
-    previousOrMax(a)(this)
+    partialPrevious(a).getOrElse(maxBound)
 }
 
 @deprecated(message = "Please use BoundableEnumerable instead.", since = "2.10.0")
