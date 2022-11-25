@@ -271,7 +271,7 @@ lazy val bench = project
   .settings(commonJvmSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "org.scalaz" %% "scalaz-core" % "7.3.6"
+      "org.scalaz" %% "scalaz-core" % "7.3.7"
     ),
     evictionErrorLevel := Level.Warn
   )
