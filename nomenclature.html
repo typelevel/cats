@@ -204,6 +204,10 @@
           <li class="level2"><a href="#foldable">Foldable</a></li>
           <li class="level2"><a href="#reducible">Reducible</a></li>
           <li class="level2"><a href="#traverse">Traverse</a></li>
+          <li class="level2"><a href="#semigroupk">SemigroupK</a></li>
+          <li class="level2"><a href="#monoidk">MonoidK</a></li>
+          <li class="level2"><a href="#alternative">Alternative</a></li>
+          <li class="level2"><a href="#nonemptyalternative">NonEmptyAlternative</a></li>
           <li class="level1"><a href="#transformers">Transformers</a></li>
           <li class="level2"><a href="#constructors-and-wrappers">Constructors and wrappers</a></li>
           <li class="level2"><a href="#optiont">OptionT</a></li>
@@ -709,6 +713,143 @@
               <td><code>F[A] =&gt; ((A,Int) =&gt; G[B]) =&gt; G[F[B]]</code></td>
               <td><code>traverseWithIndex</code></td>
               <td><code>F: Monad</code></td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <h3 id="semigroupk" class="section">SemigroupK<a class="anchor-link right" href="#semigroupk"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Type</th>
+              <th>Method Name</th>
+              <th>Constraints</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>F[A] =&gt; F[A] =&gt; F[A]</code></td>
+              <td><code>combineK</code></td>
+              <td>
+              </td>
+            </tr>
+            <tr>
+              <td><code>F[A] =&gt; Int =&gt; F[A]</code></td>
+              <td><code>combineNK</code></td>
+              <td>
+              </td>
+            </tr>
+            <tr>
+              <td><code>F[A] =&gt; F[B] =&gt; F[Either[A, B]]</code></td>
+              <td><code>sum</code></td>
+              <td><code>F: Functor</code></td>
+            </tr>
+            <tr>
+              <td><code>IterableOnce[F[A]] =&gt; Option[F[A]]</code></td>
+              <td><code>combineAllOptionK</code></td>
+              <td>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <h3 id="monoidk" class="section">MonoidK<a class="anchor-link right" href="#monoidk"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Type</th>
+              <th>Method Name</th>
+              <th>Constraints</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>F[A]</code></td>
+              <td><code>empty</code></td>
+              <td>
+              </td>
+            </tr>
+            <tr>
+              <td><code>F[A] =&gt; Boolean</code></td>
+              <td><code>isEmpty</code></td>
+              <td>
+              </td>
+            </tr>
+            <tr>
+              <td><code>IterableOnce[F[A]] =&gt; F[A]</code></td>
+              <td><code>combineAllK</code></td>
+              <td>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <h3 id="alternative" class="section">Alternative<a class="anchor-link right" href="#alternative"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Type</th>
+              <th>Method Name</th>
+              <th>Constraints</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>F[G[A]] =&gt; F[A]</code></td>
+              <td><code>unite</code></td>
+              <td><code>F: FlatMap</code> and <code>G: Foldable</code></td>
+            </tr>
+            <tr>
+              <td><code>F[G[A, B]] =&gt; (F[A], F[B])</code></td>
+              <td><code>separate</code></td>
+              <td><code>F: FlatMap</code> and <code>G: Bifoldable</code></td>
+            </tr>
+            <tr>
+              <td><code>F[G[A, B]] =&gt; (F[A], F[B])</code></td>
+              <td><code>separateFoldable</code></td>
+              <td><code>F: Foldable</code> and <code>G: Bifoldable</code></td>
+            </tr>
+            <tr>
+              <td><code>Boolean =&gt; F[Unit]</code></td>
+              <td><code>guard</code></td>
+              <td>
+              </td>
+            </tr>
+            <tr>
+              <td><code>IterableOnce[A] =&gt; F[A]</code></td>
+              <td><code>fromIterableOnce</code></td>
+              <td>
+              </td>
+            </tr>
+            <tr>
+              <td><code>G[A] =&gt; F[A]</code></td>
+              <td><code>fromFoldable</code></td>
+              <td><code>G: Foldable</code></td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <h3 id="nonemptyalternative" class="section">NonEmptyAlternative<a class="anchor-link right" href="#nonemptyalternative"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Type</th>
+              <th>Method Name</th>
+              <th>Constraints</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>A =&gt; F[A] =&gt; F[A]</code></td>
+              <td><code>prependK</code></td>
+              <td>
+              </td>
+            </tr>
+            <tr>
+              <td><code>F[A] =&gt; A =&gt; F[A]</code></td>
+              <td><code>appendK</code></td>
+              <td>
+              </td>
             </tr>
           </tbody>
         </table>
