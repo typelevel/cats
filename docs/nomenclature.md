@@ -138,6 +138,36 @@ Like the previous section, we use the `E` for the error parameter type.
 | `F[A] => ((A,Int) => B) => F[B]` | `mapWithIndex` |
 | `F[A] => ((A,Int) => G[B]) => G[F[B]]` | `traverseWithIndex` | `F: Monad`
 
+### SemigroupK
+| Type         | Method Name  | Constraints |
+|------------|--------------|-----------|
+| `F[A] => F[A] => F[A]`| `combineK` | 
+| `F[A] => Int => F[A]` | `combineNK`
+| `F[A] => F[B] => F[Either[A, B]]` | `sum` | `F: Functor`
+| `IterableOnce[F[A]] => Option[F[A]]` | `combineAllOptionK`
+
+### MonoidK
+| Type         | Method Name  | Constraints |
+|------------|--------------|-----------|
+| `F[A]` | `empty`
+| `F[A] => Boolean` | `isEmpty`
+| `IterableOnce[F[A]] => F[A]` | `combineAllK`
+
+### Alternative
+| Type         | Method Name  | Constraints |
+|------------|--------------|-----------|
+| `F[G[A]] => F[A]`  | `unite` | `F: FlatMap` and `G: Foldable`
+| `F[G[A, B]] => (F[A], F[B])`  | `separate` | `F: FlatMap` and `G: Bifoldable`
+| `F[G[A, B]] => (F[A], F[B])`  | `separateFoldable` | `F: Foldable` and `G: Bifoldable`
+| `Boolean => F[Unit]` | `guard`
+| `IterableOnce[A] => F[A]` | `fromIterableOnce`
+| `G[A] => F[A]` | `fromFoldable` | `G: Foldable`
+
+### NonEmptyAlternative
+| Type         | Method Name  | Constraints |
+|------------|--------------|-----------|
+| `A => F[A] => F[A]` | `prependK`
+| `F[A] => A => F[A]` | `appendK`
 
 ## Transformers
 
