@@ -25,10 +25,6 @@ import cats.instances.list._
 import cats.instances.int._
 import cats.instances.map._
 
-import scalaz.std.anyVal._
-import scalaz.std.list._
-import scalaz.std.map._
-
 import org.openjdk.jmh.annotations.{Benchmark, Scope, State}
 
 @State(Scope.Benchmark)
@@ -50,11 +46,6 @@ class MapMonoidBench {
       cats.Monoid[Map[String, Int]].combine(acc, m)
     }
 
-  @Benchmark def combineScalaz: Map[String, Int] =
-    maps.foldLeft(Map.empty[String, Int]) { case (acc, m) =>
-      scalaz.Monoid[Map[String, Int]].append(acc, m)
-    }
-
   @Benchmark def combineDirect: Map[String, Int] =
     maps.foldLeft(Map.empty[String, Int]) { case (acc, m) =>
       m.foldLeft(acc) { case (m, (k, v)) =>
@@ -74,7 +65,4 @@ class MapMonoidBench {
 
   @Benchmark def foldMapCats: Map[String, Int] =
     cats.Foldable[List].foldMap(maps)(identity)
-
-  @Benchmark def foldMapScalaz: Map[String, Int] =
-    scalaz.Foldable[List].foldMap(maps)(identity)
 }

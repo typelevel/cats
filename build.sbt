@@ -270,9 +270,6 @@ lazy val bench = project
   .settings(moduleName := "cats-bench")
   .settings(commonJvmSettings)
   .settings(
-    libraryDependencies ++= Seq(
-      "org.scalaz" %% "scalaz-core" % "7.3.6"
-    ),
     evictionErrorLevel := Level.Warn
   )
   .enablePlugins(NoPublishPlugin, JmhPlugin)
