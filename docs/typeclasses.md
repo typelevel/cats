@@ -1,4 +1,8 @@
 # Type Classes
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({startOnLoad:true});</script>
+
 Type classes are a powerful tool used in functional programming to enable ad-hoc polymorphism, more commonly
 known as overloading. Where many object-oriented languages leverage subtyping for polymorphic code, functional
 programming tends towards a combination of parametric polymorphism (think type parameters, like Java generics)
@@ -227,17 +231,13 @@ You can find out more about law testing [here](typeclasses/lawtesting.md).
 
 ## Type classes in Cats
 
+Dotted line means that typeclass does not inherit other typeclass, but uses it.
+The highlighted type classes are the most important to learn in particular library.
+
 ```mermaid
 graph BT;
-
-    classDef core fill:#BBBBFF,stroke-width:2px,stroke:#000;
-    classDef coreImportant fill:#6666FF,stroke-width:2px,stroke:#000;
     classDef kernel fill:#FF99FF,stroke-width:2px,stroke:#000;
     classDef kernelImportant fill:#FF00FF,stroke-width:2px,stroke:#000;
-    classDef effect fill:#FFFF00,stroke-width:2px,stroke:#000;
-    classDef arrow fill:#FFFF99,stroke-width:2px,stroke:#000;
-    classDef coreInMtl fill:#AAAA88,stroke-width:2px,stroke:#000;
-    classDef mtl fill:#FFBBBB,stroke-width:2px,stroke:#000;
 
     subgraph kernel
         direction BT
@@ -249,16 +249,6 @@ graph BT;
         id2-->id1;
         id3-->id1;
         id4-->id2;
-    end
-
-    subgraph core
-        direction BT
-        id5(Bifoldable):::core;
-        id6(Bifunctor):::core;
-        id7(Bitraverse):::core;
-
-        id7-->id5;
-        id7-->id6;
     end
 
     subgraph kernel
@@ -286,27 +276,35 @@ graph BT;
         id16-->id13;
         id16-->id14;
     end
+```
 
-    subgraph arrow
+```mermaid
+graph BT;
+    classDef core fill:#BBBBFF,stroke-width:2px,stroke:#000;
+
+    subgraph core
         direction BT
-        id17(Compose):::arrow;
-        id18(Profunctor):::arrow;
-        id19(Category):::arrow;
-        id20(Strong):::arrow;
-        id21(Choice):::arrow;
-        id22(Arrow):::arrow;
-        id23(ArrowChoice):::arrow;
-        id24(CommutaticeArrow):::arrow;
+        id5(Bifoldable):::core;
+        id6(Bifunctor):::core;
+        id7(Bitraverse):::core;
+        id79(NotNull):::core;
+        id80(Show):::core;
+        id81(Inject):::core;
+        id82(InjectK):::core;
+        id83(Parallel):::core;
+        id84(NonEmptyParallel):::core;
 
-        id19-->id17;
-        id20-->id18;
-        id21-->id19;
-        id22-->id19;
-        id22-->id20;
-        id23-->id21;
-        id23-->id22;
-        id24-->id22;
+        id7-->id5;
+        id7-->id6;
+        id83-->id84;
     end
+```
+
+```mermaid
+graph BT;
+
+    classDef core fill:#BBBBFF,stroke-width:2px,stroke:#000;
+    classDef coreImportant fill:#6666FF,stroke-width:2px,stroke:#000;
 
     subgraph core
         direction BT
@@ -390,9 +388,16 @@ graph BT;
         id55-->id56;
         id54-->id53;
     end
+```
+
+```mermaid
+graph BT;
+    classDef core fill:#BBBBFF,stroke-width:2px,stroke:#000;
+    classDef effect fill:#FFFF00,stroke-width:2px,stroke:#000;
 
     subgraph effect
         direction BT
+        id52(MonadError):::core;
         id57(Unique):::effect;
         id58(MonadCancel):::effect;
         id59(GenSpawn):::effect;
@@ -416,6 +421,39 @@ graph BT;
         id65-->id63;
         id65-->id64;
     end
+```
+
+```mermaid
+graph BT;
+    classDef arrow fill:#FFFF99,stroke-width:2px,stroke:#000;
+
+    subgraph arrow
+        direction BT
+        id17(Compose):::arrow;
+        id18(Profunctor):::arrow;
+        id19(Category):::arrow;
+        id20(Strong):::arrow;
+        id21(Choice):::arrow;
+        id22(Arrow):::arrow;
+        id23(ArrowChoice):::arrow;
+        id24(CommutaticeArrow):::arrow;
+
+        id19-->id17;
+        id20-->id18;
+        id21-->id19;
+        id22-->id19;
+        id22-->id20;
+        id23-->id21;
+        id23-->id22;
+        id24-->id22;
+    end
+```
+
+```mermaid
+graph BT;
+
+    classDef coreInMtl fill:#AAAA88,stroke-width:2px,stroke:#000;
+    classDef mtl fill:#FFBBBB,stroke-width:2px,stroke:#000;
 
     subgraph mtl
         direction BT
@@ -446,19 +484,8 @@ graph BT;
         id78-.->id75;
         id76-.->id66;
     end
-
-    subgraph core
-        direction BT
-        id79(NotNull):::core;
-        id80(Show):::core;
-        id81(Inject):::core;
-        id82(InjectK):::core;
-        id83(Parallel):::core;
-        id84(NonEmptyParallel):::core;
-
-        id83-->id84;
-    end
 ```
+
 (The typeclass graph based on @tpolecat's repository `cats-infographic`).
 
 
