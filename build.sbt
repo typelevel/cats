@@ -8,8 +8,6 @@ val disciplineMunitVersion = "2.0.0-M3"
 
 val munitVersion = "1.0.0-M7"
 
-val kindProjectorVersion = "0.13.2"
-
 val PrimaryJava = JavaSpec.temurin("8")
 val LTSJava = JavaSpec.temurin("17")
 val GraalVM11 = JavaSpec.graalvm("11")
