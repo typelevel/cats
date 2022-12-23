@@ -45,6 +45,7 @@ And if you can, consider [supporting us](https://opencollective.com/typelevel).
 - [Exelonix](https://exelonix.com/)
 - [formation.ai](https://formation.ai)
 - [Free2Move](https://free2move.com)
+- [Gemini](https://gemini.com/)
 - [Gemini Observatory](https://www.gemini.edu)
 - [HelloSoda](https://hellosoda.com)
 - [HiFi](https://hi.fi)
