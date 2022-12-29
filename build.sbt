@@ -67,7 +67,10 @@ lazy val commonJsSettings = Seq(
   tlVersionIntroduced ++= List("2.12", "2.13").map(_ -> "2.1.0").toMap
 )
 
+lazy val NativeLink = Tags.Tag("native-link")
+Global / concurrentRestrictions += Tags.exclusive(NativeLink)
 lazy val commonNativeSettings = Seq(
+  Test / nativeLink := (Test / nativeLink).tag(NativeLink).value,
   doctestGenTests := Seq.empty,
   tlVersionIntroduced ++= List("2.12", "2.13").map(_ -> "2.4.0").toMap + ("3" -> "2.8.0")
 )
@@ -93,7 +96,7 @@ lazy val root = tlCrossRootProject
     algebraLaws,
     core,
     laws,
-    // free,
+    free,
     testkit,
     tests,
     alleycatsCore,
