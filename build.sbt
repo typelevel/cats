@@ -98,7 +98,6 @@ lazy val root = tlCrossRootProject
     tests,
     alleycatsCore,
     alleycatsLaws,
-    alleycatsTests,
     unidocs,
     bench,
     binCompatTest
@@ -225,21 +224,11 @@ lazy val alleycatsCore = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .nativeSettings(commonNativeSettings)
 
 lazy val alleycatsLaws = crossProject(JSPlatform, JVMPlatform, NativePlatform)
-  .crossType(CrossType.Pure)
   .in(file("alleycats-laws"))
-  .dependsOn(alleycatsCore, laws)
+  .dependsOn(alleycatsCore, laws, tests % "test-internal -> test")
   .settings(moduleName := "alleycats-laws", name := "Alleycats laws")
   .settings(disciplineDependencies)
   .settings(testingDependencies)
-  .jsSettings(commonJsSettings)
-  .jvmSettings(commonJvmSettings)
-  .nativeSettings(commonNativeSettings)
-
-lazy val alleycatsTests = crossProject(JSPlatform, JVMPlatform, NativePlatform)
-  .in(file("alleycats-tests"))
-  .dependsOn(alleycatsLaws, tests % "test-internal -> test")
-  .enablePlugins(NoPublishPlugin)
-  .settings(moduleName := "alleycats-tests")
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
   .nativeSettings(commonNativeSettings)
