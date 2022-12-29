@@ -89,16 +89,16 @@ lazy val root = tlCrossRootProject
   .aggregate(
     kernel,
     kernelLaws,
-    algebra,
-    algebraLaws,
+    // algebra,
+    // algebraLaws,
     core,
     laws,
-    free,
+    // free,
     testkit,
     tests,
-    alleycatsCore,
-    alleycatsLaws,
-    unidocs,
+    // alleycatsCore,
+    // alleycatsLaws,
+    // unidocs,
     bench,
     binCompatTest
   )
