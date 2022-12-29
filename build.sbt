@@ -68,7 +68,7 @@ lazy val commonJsSettings = Seq(
 )
 
 lazy val NativeLink = Tags.Tag("native-link")
-Global / concurrentRestrictions += Tags.exclusive(NativeLink)
+Global / concurrentRestrictions += Tags.limit(NativeLink, 1)
 lazy val commonNativeSettings = Seq(
   Test / nativeLink := (Test / nativeLink).tag(NativeLink).value,
   doctestGenTests := Seq.empty,
