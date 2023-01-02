@@ -37,7 +37,7 @@ final class ListOps[A](private val la: List[A]) extends AnyVal {
    * Example:
    * {{{
    * scala> import cats.data.NonEmptyList
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.list._
    *
    * scala> val result1: List[Int] = List(1, 2)
    * scala> result1.toNel
@@ -57,7 +57,7 @@ final class ListOps[A](private val la: List[A]) extends AnyVal {
    * {{{
    * scala> import cats.data.NonEmptyList
    * scala> import scala.collection.immutable.SortedMap
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val list = List(12, -2, 3, -5)
    *
@@ -79,7 +79,7 @@ final class ListOps[A](private val la: List[A]) extends AnyVal {
    * {{{
    * scala> import cats.data.NonEmptyList
    * scala> import scala.collection.immutable.SortedMap
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val list = List(12, -2, 3, -5)
    *
@@ -99,13 +99,42 @@ final class ListOps[A](private val la: List[A]) extends AnyVal {
   }
 
   /**
+   * Groups elements inside this [[List]] according to the [[Order]]
+   * of the keys produced by the given key function.
+   * And each element in a group is transformed into a value of type `B`
+   * using the mapping function.
+   *
+   * {{{
+   * scala> import scala.collection.immutable.SortedMap
+   * scala> import cats.data.NonEmptyList
+   * scala> import cats.syntax.all._
+   *
+   * scala> val list = List(12, -2, 3, -5)
+   * scala> val expectedResult = SortedMap(false -> NonEmptyList.of("-2", "-5"), true -> NonEmptyList.of("12", "3"))
+   * scala> val result = list.groupByNelMap(_ >= 0, _.toString)
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  def groupByNelMap[K, B](key: A => K, f: A => B)(implicit K: Order[K]): SortedMap[K, NonEmptyList[B]] = {
+    implicit val ordering: Ordering[K] = K.toOrdering
+
+    toNel match {
+      case None =>
+        SortedMap.empty[K, NonEmptyList[B]]
+      case Some(nel) =>
+        nel.groupMap(key)(f)
+    }
+  }
+
+  /**
    * Produces a `NonEmptyList` containing cumulative results of applying the
    * operator going left to right.
    *
    * Example:
    * {{{
    * scala> import cats.data.NonEmptyList
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val result1: List[Int] = List(1, 2)
    * scala> result1.scanLeftNel(100)(_ + _)
@@ -126,7 +155,7 @@ final class ListOps[A](private val la: List[A]) extends AnyVal {
    * Example:
    * {{{
    * scala> import cats.data.NonEmptyList
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val result1: List[Int] = List(1, 2)
    * scala> result1.scanRightNel(100)(_ + _)
@@ -154,7 +183,7 @@ final private[syntax] class ListOpsBinCompat0[A](private val la: List[A]) extend
    * {{{
    * scala> import cats.data.NonEmptyChain
    * scala> import scala.collection.immutable.SortedMap
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val list = List(12, -2, 3, -5)
    *
