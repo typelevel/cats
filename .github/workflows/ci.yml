@@ -51,21 +51,21 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout current branch (full)
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
       - name: Download Java (temurin@8)
         id: download-java-temurin-8
         if: matrix.java == 'temurin@8'
-        uses: typelevel/download-java@v1
+        uses: typelevel/download-java@v2
         with:
           distribution: temurin
           java-version: 8
 
       - name: Setup Java (temurin@8)
         if: matrix.java == 'temurin@8'
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           distribution: jdkfile
           java-version: 8
@@ -74,14 +74,14 @@ jobs:
       - name: Download Java (temurin@17)
         id: download-java-temurin-17
         if: matrix.java == 'temurin@17'
-        uses: typelevel/download-java@v1
+        uses: typelevel/download-java@v2
         with:
           distribution: temurin
           java-version: 17
 
       - name: Setup Java (temurin@17)
         if: matrix.java == 'temurin@17'
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           distribution: jdkfile
           java-version: 17
@@ -90,21 +90,21 @@ jobs:
       - name: Download Java (graalvm@11)
         id: download-java-graalvm-11
         if: matrix.java == 'graalvm@11'
-        uses: typelevel/download-java@v1
+        uses: typelevel/download-java@v2
         with:
           distribution: graalvm
           java-version: 11
 
       - name: Setup Java (graalvm@11)
         if: matrix.java == 'graalvm@11'
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           distribution: jdkfile
           java-version: 11
           jdkFile: ${{ steps.download-java-graalvm-11.outputs.jdkFile }}
 
       - name: Cache sbt
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             ~/.sbt
@@ -119,7 +119,7 @@ jobs:
         run: sbt githubWorkflowCheck
 
       - name: Check headers and formatting
-        if: matrix.java == 'temurin@8'
+        if: matrix.java == 'temurin@8' && matrix.os == 'ubuntu-latest'
         run: sbt 'project ${{ matrix.project }}' '++ ${{ matrix.scala }}' headerCheckAll scalafmtCheckAll 'project /' scalafmtSbtCheck
 
       - name: scalaJSLink
@@ -134,11 +134,11 @@ jobs:
         run: sbt 'project ${{ matrix.project }}' '++ ${{ matrix.scala }}' test
 
       - name: Check binary compatibility
-        if: matrix.java == 'temurin@8'
+        if: matrix.java == 'temurin@8' && matrix.os == 'ubuntu-latest'
         run: sbt 'project ${{ matrix.project }}' '++ ${{ matrix.scala }}' mimaReportBinaryIssues
 
       - name: Generate API documentation
-        if: matrix.java == 'temurin@8'
+        if: matrix.java == 'temurin@8' && matrix.os == 'ubuntu-latest'
         run: sbt 'project ${{ matrix.project }}' '++ ${{ matrix.scala }}' doc
 
       - name: Make target directories
@@ -151,7 +151,7 @@ jobs:
 
       - name: Upload target directories
         if: github.event_name != 'pull_request' && (startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/main')
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: target-${{ matrix.os }}-${{ matrix.java }}-${{ matrix.scala }}-${{ matrix.project }}
           path: targets.tar
@@ -168,21 +168,21 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout current branch (full)
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
       - name: Download Java (temurin@8)
         id: download-java-temurin-8
         if: matrix.java == 'temurin@8'
-        uses: typelevel/download-java@v1
+        uses: typelevel/download-java@v2
         with:
           distribution: temurin
           java-version: 8
 
       - name: Setup Java (temurin@8)
         if: matrix.java == 'temurin@8'
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           distribution: jdkfile
           java-version: 8
@@ -191,14 +191,14 @@ jobs:
       - name: Download Java (temurin@17)
         id: download-java-temurin-17
         if: matrix.java == 'temurin@17'
-        uses: typelevel/download-java@v1
+        uses: typelevel/download-java@v2
         with:
           distribution: temurin
           java-version: 17
 
       - name: Setup Java (temurin@17)
         if: matrix.java == 'temurin@17'
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           distribution: jdkfile
           java-version: 17
@@ -207,21 +207,21 @@ jobs:
       - name: Download Java (graalvm@11)
         id: download-java-graalvm-11
         if: matrix.java == 'graalvm@11'
-        uses: typelevel/download-java@v1
+        uses: typelevel/download-java@v2
         with:
           distribution: graalvm
           java-version: 11
 
       - name: Setup Java (graalvm@11)
         if: matrix.java == 'graalvm@11'
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           distribution: jdkfile
           java-version: 11
           jdkFile: ${{ steps.download-java-graalvm-11.outputs.jdkFile }}
 
       - name: Cache sbt
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             ~/.sbt
@@ -233,7 +233,7 @@ jobs:
           key: ${{ runner.os }}-sbt-cache-v2-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
 
       - name: Download target directories (2.12.17, rootJS)
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: target-${{ matrix.os }}-${{ matrix.java }}-2.12.17-rootJS
 
@@ -243,7 +243,7 @@ jobs:
           rm targets.tar
 
       - name: Download target directories (2.12.17, rootJVM)
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: target-${{ matrix.os }}-${{ matrix.java }}-2.12.17-rootJVM
 
@@ -253,7 +253,7 @@ jobs:
           rm targets.tar
 
       - name: Download target directories (2.12.17, rootNative)
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: target-${{ matrix.os }}-${{ matrix.java }}-2.12.17-rootNative
 
@@ -263,7 +263,7 @@ jobs:
           rm targets.tar
 
       - name: Download target directories (2.13.10, rootJS)
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: target-${{ matrix.os }}-${{ matrix.java }}-2.13.10-rootJS
 
@@ -273,7 +273,7 @@ jobs:
           rm targets.tar
 
       - name: Download target directories (2.13.10, rootJVM)
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: target-${{ matrix.os }}-${{ matrix.java }}-2.13.10-rootJVM
 
@@ -283,7 +283,7 @@ jobs:
           rm targets.tar
 
       - name: Download target directories (2.13.10, rootNative)
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: target-${{ matrix.os }}-${{ matrix.java }}-2.13.10-rootNative
 
@@ -293,7 +293,7 @@ jobs:
           rm targets.tar
 
       - name: Download target directories (3.2.1, rootJS)
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: target-${{ matrix.os }}-${{ matrix.java }}-3.2.1-rootJS
 
@@ -303,7 +303,7 @@ jobs:
           rm targets.tar
 
       - name: Download target directories (3.2.1, rootJVM)
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: target-${{ matrix.os }}-${{ matrix.java }}-3.2.1-rootJVM
 
@@ -313,7 +313,7 @@ jobs:
           rm targets.tar
 
       - name: Download target directories (3.2.1, rootNative)
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: target-${{ matrix.os }}-${{ matrix.java }}-3.2.1-rootNative
 
@@ -346,21 +346,21 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout current branch (full)
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
       - name: Download Java (temurin@8)
         id: download-java-temurin-8
         if: matrix.java == 'temurin@8'
-        uses: typelevel/download-java@v1
+        uses: typelevel/download-java@v2
         with:
           distribution: temurin
           java-version: 8
 
       - name: Setup Java (temurin@8)
         if: matrix.java == 'temurin@8'
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           distribution: jdkfile
           java-version: 8
@@ -369,14 +369,14 @@ jobs:
       - name: Download Java (temurin@17)
         id: download-java-temurin-17
         if: matrix.java == 'temurin@17'
-        uses: typelevel/download-java@v1
+        uses: typelevel/download-java@v2
         with:
           distribution: temurin
           java-version: 17
 
       - name: Setup Java (temurin@17)
         if: matrix.java == 'temurin@17'
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           distribution: jdkfile
           java-version: 17
@@ -385,21 +385,21 @@ jobs:
       - name: Download Java (graalvm@11)
         id: download-java-graalvm-11
         if: matrix.java == 'graalvm@11'
-        uses: typelevel/download-java@v1
+        uses: typelevel/download-java@v2
         with:
           distribution: graalvm
           java-version: 11
 
       - name: Setup Java (graalvm@11)
         if: matrix.java == 'graalvm@11'
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           distribution: jdkfile
           java-version: 11
           jdkFile: ${{ steps.download-java-graalvm-11.outputs.jdkFile }}
 
       - name: Cache sbt
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             ~/.sbt
@@ -425,21 +425,21 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout current branch (full)
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
       - name: Download Java (temurin@8)
         id: download-java-temurin-8
         if: matrix.java == 'temurin@8'
-        uses: typelevel/download-java@v1
+        uses: typelevel/download-java@v2
         with:
           distribution: temurin
           java-version: 8
 
       - name: Setup Java (temurin@8)
         if: matrix.java == 'temurin@8'
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           distribution: jdkfile
           java-version: 8
@@ -448,14 +448,14 @@ jobs:
       - name: Download Java (temurin@17)
         id: download-java-temurin-17
         if: matrix.java == 'temurin@17'
-        uses: typelevel/download-java@v1
+        uses: typelevel/download-java@v2
         with:
           distribution: temurin
           java-version: 17
 
       - name: Setup Java (temurin@17)
         if: matrix.java == 'temurin@17'
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           distribution: jdkfile
           java-version: 17
@@ -464,21 +464,21 @@ jobs:
       - name: Download Java (graalvm@11)
         id: download-java-graalvm-11
         if: matrix.java == 'graalvm@11'
-        uses: typelevel/download-java@v1
+        uses: typelevel/download-java@v2
         with:
           distribution: graalvm
           java-version: 11
 
       - name: Setup Java (graalvm@11)
         if: matrix.java == 'graalvm@11'
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           distribution: jdkfile
           java-version: 11
           jdkFile: ${{ steps.download-java-graalvm-11.outputs.jdkFile }}
 
       - name: Cache sbt
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             ~/.sbt
@@ -494,7 +494,7 @@ jobs:
 
       - name: Publish site
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
-        uses: peaceiris/actions-gh-pages@v3.8.0
+        uses: peaceiris/actions-gh-pages@v3.9.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: site/target/docs/site
