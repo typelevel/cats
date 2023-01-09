@@ -8,8 +8,6 @@ val disciplineMunitVersion = "2.0.0-M3"
 
 val munitVersion = "1.0.0-M7"
 
-val kindProjectorVersion = "0.13.2"
-
 val PrimaryJava = JavaSpec.temurin("8")
 val LTSJava = JavaSpec.temurin("17")
 val GraalVM11 = JavaSpec.graalvm("11")
@@ -67,7 +65,10 @@ lazy val commonJsSettings = Seq(
   tlVersionIntroduced ++= List("2.12", "2.13").map(_ -> "2.1.0").toMap
 )
 
+lazy val NativeLink = Tags.Tag("native-link")
+Global / concurrentRestrictions += Tags.limit(NativeLink, 1)
 lazy val commonNativeSettings = Seq(
+  Test / nativeLink := (Test / nativeLink).tag(NativeLink).value,
   doctestGenTests := Seq.empty,
   tlVersionIntroduced ++= List("2.12", "2.13").map(_ -> "2.4.0").toMap + ("3" -> "2.8.0")
 )
@@ -98,7 +99,6 @@ lazy val root = tlCrossRootProject
     tests,
     alleycatsCore,
     alleycatsLaws,
-    alleycatsTests,
     unidocs,
     bench,
     binCompatTest
@@ -225,21 +225,11 @@ lazy val alleycatsCore = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .nativeSettings(commonNativeSettings)
 
 lazy val alleycatsLaws = crossProject(JSPlatform, JVMPlatform, NativePlatform)
-  .crossType(CrossType.Pure)
   .in(file("alleycats-laws"))
-  .dependsOn(alleycatsCore, laws)
+  .dependsOn(alleycatsCore, laws, tests % "test-internal -> test")
   .settings(moduleName := "alleycats-laws", name := "Alleycats laws")
   .settings(disciplineDependencies)
   .settings(testingDependencies)
-  .jsSettings(commonJsSettings)
-  .jvmSettings(commonJvmSettings)
-  .nativeSettings(commonNativeSettings)
-
-lazy val alleycatsTests = crossProject(JSPlatform, JVMPlatform, NativePlatform)
-  .in(file("alleycats-tests"))
-  .dependsOn(alleycatsLaws, tests % "test-internal -> test")
-  .enablePlugins(NoPublishPlugin)
-  .settings(moduleName := "alleycats-tests")
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
   .nativeSettings(commonNativeSettings)
