@@ -220,18 +220,24 @@
         <p>As you might recall, <code>pure</code> wraps values in the context; <code>ap</code> allows us to do calculations in the context; <code>combineK</code> allows us to combine, for any given type <code>A</code>, any two contextual values <code>F[A]</code>; and <code>empty</code> provides the identity element for the combine operation.</p>
         <p>Like other type classes, <code>Alternative</code> instances must obey some laws, in addition to those otherwise applying to <code>MonoidK</code> and <code>Applicative instances</code>:</p>
         <ul>
-          <li>Right Absorption: Applying a contextual function <code>F[A =&gt; B]</code> to <code>empty [A]</code> should be <code>empty [B]</code>.</li>
-        </ul>
-        <ul>
-          <li><code>ff ap F.empty[A] = F.empty[B]</code>.</li>
-          <li>Left Distributivity:  Mapping over a combined element must be the combinations of the mapped elements.</li>
-        </ul>
-        <ul>
-          <li><code>(fa &lt;+&gt; fb) map f = ((fa map f) &lt;+&gt; (fb map f))</code> where <code>fa: F[A]</code> and <code>fb: F[B]</code> and <code>f: A =&gt; B</code>.</li>
-          <li>Right Distributivity: Applying the combination of two functions must be the combination of their applications.</li>
-        </ul>
-        <ul>
-          <li><code>(ff &lt;+&gt; fg) ap fa = (ff ap fa) &lt;+&gt; (fg ap fa)</code> where <code>ff: F[A =&gt; B]</code>, <code>fg: F[A =&gt; B]</code>, and <code>fa: F[A]</code>.</li>
+          <li>
+            <p>Right Absorption: Applying a contextual function <code>F[A =&gt; B]</code> to <code>empty [A]</code> should be <code>empty [B]</code>.</p>
+            <ul>
+              <li><code>ff ap F.empty[A] = F.empty[B]</code>.</li>
+            </ul>
+          </li>
+          <li>
+            <p>Left Distributivity:  Mapping over a combined element must be the combinations of the mapped elements.</p>
+            <ul>
+              <li><code>(fa &lt;+&gt; fb) map f = ((fa map f) &lt;+&gt; (fb map f))</code> where <code>fa: F[A]</code> and <code>fb: F[B]</code> and <code>f: A =&gt; B</code>.</li>
+            </ul>
+          </li>
+          <li>
+            <p>Right Distributivity: Applying the combination of two functions must be the combination of their applications.</p>
+            <ul>
+              <li><code>(ff &lt;+&gt; fg) ap fa = (ff ap fa) &lt;+&gt; (fg ap fa)</code> where <code>ff: F[A =&gt; B]</code>, <code>fg: F[A =&gt; B]</code>, and <code>fa: F[A]</code>.</li>
+            </ul>
+          </li>
         </ul>
         <p>These laws guarantee the compatibility of the otherwise possibly independent <code>Applicative</code> and <code>MonoidK</code> structures.</p>
         
