@@ -98,9 +98,13 @@ trait UnorderedFoldable[F[_]] extends Serializable {
     unorderedFoldMap(fa)(a => if (p(a)) 1L else 0L)
 }
 
+trait LowPriorityImplicits {
+  implicit def catsTraverseForSeq: Traverse[Seq] = cats.instances.seq.catsStdInstancesForSeq
+}
+
 object UnorderedFoldable
     extends ScalaVersionSpecificTraverseInstances
-    with cats.instances.NTupleUnorderedFoldableInstances {
+    with cats.instances.NTupleUnorderedFoldableInstances with LowPriorityImplicits{
 
   private val orEvalMonoid: CommutativeMonoid[Eval[Boolean]] = new CommutativeMonoid[Eval[Boolean]] {
     val empty: Eval[Boolean] = Eval.False
@@ -125,7 +129,6 @@ object UnorderedFoldable
   implicit def catsNonEmptyTraverseForId: NonEmptyTraverse[Id] = catsInstancesForId
   implicit def catsTraverseForOption: Traverse[Option] = cats.instances.option.catsStdInstancesForOption
   implicit def catsTraverseForList: Traverse[List] = cats.instances.list.catsStdInstancesForList
-  implicit def catsTraverseForSeq: Traverse[Seq] = cats.instances.seq.catsStdInstancesForSeq
   implicit def catsTraverseForVector: Traverse[Vector] = cats.instances.vector.catsStdInstancesForVector
   implicit def catsTraverseForQueue: Traverse[Queue] = cats.instances.queue.catsStdInstancesForQueue
   implicit def catsUnorderedTraverseForSet: UnorderedTraverse[Set] = cats.instances.set.catsStdInstancesForSet
