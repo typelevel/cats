@@ -98,13 +98,13 @@ trait UnorderedFoldable[F[_]] extends Serializable {
     unorderedFoldMap(fa)(a => if (p(a)) 1L else 0L)
 }
 
-protected trait UnorderedFoldableLowPriority {
+private[cats] trait UnorderedFoldableLowPriority {
   implicit def catsTraverseForSeq: Traverse[Seq] = cats.instances.seq.catsStdInstancesForSeq
 }
 
 object UnorderedFoldable
     extends ScalaVersionSpecificTraverseInstances
-    with cats.instances.NTupleUnorderedFoldableInstances 
+    with cats.instances.NTupleUnorderedFoldableInstances
     with UnorderedFoldableLowPriority {
 
   private val orEvalMonoid: CommutativeMonoid[Eval[Boolean]] = new CommutativeMonoid[Eval[Boolean]] {
