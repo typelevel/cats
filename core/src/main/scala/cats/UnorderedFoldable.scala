@@ -98,7 +98,7 @@ trait UnorderedFoldable[F[_]] extends Serializable {
     unorderedFoldMap(fa)(a => if (p(a)) 1L else 0L)
 }
 
-trait LowPriorityImplicits {
+private trait UnorderedFoldableLowPriority {
   implicit def catsTraverseForSeq: Traverse[Seq] = cats.instances.seq.catsStdInstancesForSeq
 }
 
