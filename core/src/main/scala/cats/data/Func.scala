@@ -32,16 +32,11 @@ import cats.Contravariant
 sealed abstract class Func[F[_], A, B] { self =>
   def run: A => F[B]
 
-  /**
-    * Composition of Functors, if we have a mapping from A => F[B] 
-    * and one morphism from B => C we can define a new functor that 
-    * consist on applying A => F[B] mapping, F[B] => F[C] using B => C
-    * then compose A => F[B] ∘ F[B] => F[C]
-    * 
-    * scala> val firstFunc = Func.func((x: Int) => List(x.toString))
-    * val firstFunc: cats.data.Func[List,Int,String] = ...
-    * scala> val secondFunc = firstFunc.map((x: String) => if (x=="0") None else Some(x))
-    * val secondFunc: cats.data.Func[List,Int,Option[String]] = ...
+  /** 
+    * scala> val f = Func.func((x: Int) => List(x.toString))
+    * val f: cats.data.Func[List,Int,String] = ...
+    * scala> val g = f.map((x: String) => if (x=="0") None else Some(x))
+    * val g: cats.data.Func[List,Int,Option[String]] = ...
     */
   def map[C](f: B => C)(implicit FF: Functor[F]): Func[F, A, C] =
     Func.func(a => FF.map(self.run(a))(f))
