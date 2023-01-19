@@ -12,14 +12,15 @@ val f: Func[List, Int, String] = Func.func((x: Int) => List(x.toString))
 
 val g: Func[List, Int, Option[String]] = f.map((x: String) => if (x=="0") None else Some(x))
 
-val natTransformation = new (Option ~> List) {
+val optToList = new (Option ~> List) {
   def apply[T](opt: Option[T]): List[T] =
     opt.toList
 }
 
 // We transform the elements of List, of type 
 // Option[String] to List[String]
-g.map(natTransformation(_))
+g.map(optToList(_))
+// val res0: cats.data.Func[List,Int,List[String]] = ...
 ```
 
 
@@ -28,11 +29,11 @@ g.map(natTransformation(_))
 
 AppFunc extends Func to wrap around a special type of functor: Applicative functors.
 
-Applicative functors can be `compose`d, can `traverse` traversable functors, and we can obtain a `product` between two AppFuncs. 
+Applicative functors can be `compose`d, can `traverse` traversable functors, and we can obtain a `product` between two AppFuncs.
 
 ## Composition
 
-All of functional programming revolves around composing, and functors cannot be left behind. If we are working with multiple contexts we might want to compose them, for example: we have a List of executions, and want to List things, and discart some (`Option`). 
+All of functional programming revolves around composing, and functors cannot be left behind. If we are working with multiple contexts we might want to compose them, for example: we want to List things, and discart some (`Option`). 
 
 To achieve this nested context behavior `AppFunc` uses the `Nested` datatype. 
 
@@ -60,7 +61,9 @@ For further reading: [hearding cats](http://eed3si9n.com/herding-cats/combining-
 ```
 ## Traverse
 
-Finally, the main subject of the [The Essence of the Iterator Pattern](https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf) is that given the properties of the applictive functor, we can iterate over traversable types applying an applicative functor. 
+Finally, the main subject of the [The Essence of the Iterator Pattern](https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf) is that given the properties of the applictive functor, we can iterate over traversable types applying an applicative functor.
+
+This explained in the implementation of the Applicative trait: [Applicative - Traverse](https://typelevel.org/cats/typeclasses/applicative.html#traverse)
 
 ```scala mdoc:silent:nest
 AppFuncF.traverse(List(1,2,3))
