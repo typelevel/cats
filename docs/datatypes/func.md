@@ -25,15 +25,15 @@ g.map(optToList(_))
 
 
 
-# AppFunc
+# AppFunc 
 
 AppFunc extends Func to wrap around a special type of functor: Applicative functors.
 
-Applicative functors can be `compose`d, can `traverse` traversable functors, and we can obtain a `product` between two AppFuncs.
+With applicative functors we can `compose`, form the `product`, and also `traverse` traversable functors
 
 ## Composition
 
-All of functional programming revolves around composing, and functors cannot be left behind. If we are working with multiple contexts we might want to compose them, for example: we want to List things, and discart some (`Option`). 
+All of functional programming revolves around composing, and functors cannot be left behind. If we are working with multiple contexts we might want to compose them, for example: we want to `List` things, and discart some (`Option`). 
 
 To achieve this nested context behavior `AppFunc` uses the `Nested` datatype. 
 
@@ -44,11 +44,9 @@ val AppFuncG: AppFunc[List,Int,Int] = Func.appFunc((o: Int) => {List(o+1)})
 (AppFuncF andThen AppFuncG).run(1) //Nested(Some(List(2)))
 
 (AppFuncF andThen AppFuncG).run(0) //Nested(None)
-
 // same thing with compose
 
 (AppFuncG compose AppFuncF)
-
 ```
 ## Product
 
