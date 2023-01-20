@@ -1,6 +1,10 @@
 # Func
 
-Func is a wrapper arround a `run` function `a => F[B]` where F is a functor. Given that, the Func data type is equiped with the known `map` function, and a `mapK` function to apply natural transformations (from a `F` Func get an `G` Func).
+Func is a wrapper around a `run` function `a => F[B]` where F is a functor. Given that, the Func data type is equipped with the known `map` function, and a `mapK` function to apply natural transformations (from a `F` Func get an `G` Func).
+
+The signature: `Func[F[_], A, B]` refers to an `F` functor, `A` source type and `B` target type (`F[B]`).
+
+If you are familiar with `Kleisli` you can recognize it has a similar signature: `Kleisli[F[_], -A, B]` and `Func[F[_], A, B]`. Well yes, `Func` is a less restrictive data type that wraps around functors, and only provides basic methods `run`, `map`, and `mapK`, while `Kleisli` is strong enough to provide composition, flatMap, and more. We will see a more useful data type just next with `AppFunc`. 
 
 ## Quick example
 
@@ -31,9 +35,12 @@ AppFunc extends Func to wrap around a special type of functor: Applicative funct
 
 With applicative functors we can `compose`, form the `product`, and also `traverse` traversable functors
 
+Signature: `AppFunc[F[_], A, B] extends Func[F, A, B]` 
+
+Now, for the reader familiar with `Kleisli`, we find an even more similar data type. `AppFunc` provides compositions of weaker constraint, allowing to compose `AppFunc[F[_], A, B]` with `AppFunc[G[_], C, A]`.   
 ## Composition
 
-All of functional programming revolves around composing, and functors cannot be left behind. If we are working with multiple contexts we might want to compose them, for example: we want to `List` things, and discart some (`Option`). 
+All of functional programming revolves around composing, and functors cannot be left behind. If we are working with multiple contexts we might want to compose them, for example: we want to `List` things, and discard some (`Option`). 
 
 To achieve this nested context behavior `AppFunc` uses the `Nested` datatype. 
 
@@ -58,8 +65,6 @@ For further reading: [hearding cats](http://eed3si9n.com/herding-cats/combining-
 (AppFuncF product AppFuncG).run(1)
 ```
 ## Traverse
-
-Finally, the main subject of the [The Essence of the Iterator Pattern](https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf) is that given the properties of the applictive functor, we can iterate over traversable types applying an applicative functor.
 
 This explained in the implementation of the Applicative trait: [Applicative - Traverse](https://typelevel.org/cats/typeclasses/applicative.html#traverse)
 
