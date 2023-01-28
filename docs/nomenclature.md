@@ -117,7 +117,7 @@ Like the previous section, we use the `E` for the error parameter type.
 | `F[A] => (A => Option[B]) => Option[B]` | `collectFirstSome` |
 | `F[A] => (A => G[B]) => G[Unit]` | `traverse_` | `G: Applicative`
 | `F[G[A]] => G[Unit]` | `sequence_` | `G: Applicative`
-| `F[A] => (A => Either[B, C] => (F[B], F[C])` | `partitionEither` | `G: Applicative`
+| `F[A] => (A => Either[B, C]) => (F[B], F[C])` | `partitionEither` | `G: Applicative`
 
 ### Reducible
 
