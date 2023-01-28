@@ -53,7 +53,7 @@ def first(l: List[Int]): Option[Int] = l.headOption
 
 The astute reader may have noticed that there's really no reason that this method needs to be tied directly to `Int`. We could use generics to make this a bit more general:
 
-```
+```scala mdoc:silent:reset
 def first[A](l: List[A]): Option[A] = l.headOption
 ```
 
