@@ -280,7 +280,7 @@
 </span><span class="comment">// res23: Option[Boolean] = Some(value = true)
 </span><span>
 </span><span class="keyword">val</span><span> </span><span class="identifier">prints</span><span>: </span><span class="type-name">Eval</span><span>[</span><span class="type-name">Unit</span><span>] = </span><span class="type-name">List</span><span>(</span><span class="type-name">Eval</span><span>.</span><span class="identifier">always</span><span>(</span><span class="identifier">println</span><span>(</span><span class="number-literal">1</span><span>)), </span><span class="type-name">Eval</span><span>.</span><span class="identifier">always</span><span>(</span><span class="identifier">println</span><span>(</span><span class="number-literal">2</span><span>))).</span><span class="identifier">sequence_</span><span>
-</span><span class="comment">// prints: Eval[Unit] = cats.Eval$$anon$4@7ec1363b
+</span><span class="comment">// prints: Eval[Unit] = cats.Eval$$anon$4@1fef5c30
 </span><span class="identifier">prints</span><span>.</span><span class="identifier">value</span><span>
 
 </span><span class="type-name">Foldable</span><span>[</span><span class="type-name">List</span><span>].</span><span class="identifier">dropWhile_</span><span>(</span><span class="type-name">List</span><span>[</span><span class="type-name">Int</span><span>](</span><span class="number-literal">2</span><span>,</span><span class="number-literal">4</span><span>,</span><span class="number-literal">5</span><span>,</span><span class="number-literal">6</span><span>,</span><span class="number-literal">7</span><span>))(</span><span class="identifier">_</span><span> % </span><span class="number-literal">2</span><span> == </span><span class="number-literal">0</span><span>)
