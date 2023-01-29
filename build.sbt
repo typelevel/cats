@@ -65,10 +65,8 @@ lazy val commonJsSettings = Seq(
   tlVersionIntroduced ++= List("2.12", "2.13").map(_ -> "2.1.0").toMap
 )
 
-lazy val NativeLink = Tags.Tag("native-link")
-Global / concurrentRestrictions += Tags.limit(NativeLink, 1)
+Global / concurrentRestrictions += Tags.limit(NativeTags.Link, 1)
 lazy val commonNativeSettings = Seq(
-  Test / nativeLink := (Test / nativeLink).tag(NativeLink).value,
   doctestGenTests := Seq.empty,
   tlVersionIntroduced ++= List("2.12", "2.13").map(_ -> "2.4.0").toMap + ("3" -> "2.8.0")
 )
