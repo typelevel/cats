@@ -358,7 +358,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
       case Invalid(e)   => Validated.invalidNel(e)
     }
 
-  def toValidatedA[F[_]: Applicative, EE >: E, AA >: A]: Validated[F[EE], AA] =
+  def toValidatedA[F[_]: Applicative, EE >: E]: Validated[F[EE], A] =
     this match {
       case v @ Valid(_) => v
       case Invalid(e)   => Validated.invalidA(e)

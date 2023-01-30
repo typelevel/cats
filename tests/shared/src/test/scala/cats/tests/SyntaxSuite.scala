@@ -596,7 +596,7 @@ object SyntaxSuite {
 
     val v1: Validated[B, A] = option.toInvalid(a)
     val v2: ValidatedNel[B, A] = option.toInvalidNel(a)
-    val v3: Validated[F[B], A] = option.toInvalidA[F, A](a)
+    val v3: Validated[F[B], A] = option.toInvalidA[F](a)
     val v4: ValidatedNec[B, A] = option.toInvalidNec(a)
     val v5: Validated[B, B] = option.toValid(b)
     val v6: ValidatedNel[B, B] = option.toValidNel(b)
