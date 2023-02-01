@@ -99,7 +99,7 @@ validateUser("john.doe", "password").fold(
 
 ```
 
-## Using NonEmptyChain with Ior
+## Using with NonEmptyChain
 
 Similar to [Validated](validated.md), there is also a type alias for using a `NonEmptyChain` on the left side.
 

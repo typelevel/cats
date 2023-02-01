@@ -29,7 +29,7 @@ This makes its [Monoid] instance [super performant][Benchmarks] and a much bette
 It does not have a [Monoid] instance since it cannot be empty, but it does have a [Semigroup] instance.
 Likewise, it defines a [NonEmptyTraverse] instance, but no @:api(cats.TraverseFilter) instance.
 
-Cats includes type aliases like [ValidatedNec][Meeting applicative] and [IorNec][Using NonEmptyChain with Ior] to simplify the usage of `NonEmptyChain`.
+Cats includes type aliases like [ValidatedNec][validated.md#meeting-applicative] and [IorNec](ior.md#using-with-nonemptychain) to simplify the usage of `NonEmptyChain`.
 
 There are numerous ways to construct a `NonEmptyChain`, e.g. you can create one from a single element, a `NonEmptyList` or a `NonEmptyVector`:
 
