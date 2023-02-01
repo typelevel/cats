@@ -123,7 +123,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    * @see [[handleError]] to map to an `A` value instead of `Unit`.
    * @see [[https://github.com/typelevel/cats-effect/issues/3152 cats-effect#3152]]
    */
-  def voidError(fu: F[Unit]): F[Unit] = handleError(fu)(Function.const(()))
+  def voidError(fu: F[_]): F[Unit] = handleError(fu)(Function.const(()))
 
   /**
    * Handle errors by turning them into [[scala.util.Either]] values.
