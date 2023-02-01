@@ -279,7 +279,23 @@ lazy val docs = project
   .enablePlugins(TypelevelSitePlugin)
   .settings(
     tlFatalWarnings := false,
-    laikaConfig ~= { _.withRawContent },
+    laikaConfig := {
+      import laika.rewrite.link._
+
+      laikaConfig.value.withRawContent.withConfigValue(
+        LinkConfig(apiLinks =
+          List(
+            ApiLinks(
+              baseUri = s"https://www.javadoc.io/doc/org.typelevel/cats-docs_2.13/${mdocVariables.value("VERSION")}/"
+            ),
+            ApiLinks(
+              baseUri = s"https://www.scala-lang.org/api/$Scala213/",
+              packagePrefix = "scala"
+            )
+          )
+        )
+      )
+    },
     tlSiteRelatedProjects := Seq(
       TypelevelProject.CatsEffect,
       "Mouse" -> url("https://typelevel.org/mouse"),

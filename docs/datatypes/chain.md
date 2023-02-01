@@ -1,28 +1,26 @@
 # Chain
 
-`Chain` is a data structure that allows constant time prepending and appending.
-This makes it especially efficient when used as a `Monoid`, e.g. with `Validated` or `Writer`.
-As such it aims to be used where `List` and `Vector` incur a performance penalty.
+@:api(cats.data.Chain) is a data structure that allows constant time prepending and appending.
+This makes it especially efficient when used as a [Monoid], e.g. with [Validated] or [Writer].
+As such it aims to be used where @:api(scala.collection.immutable.List) and @:api(scala.collection.immutable.Vector) incur a performance penalty.
 
 `List` is a great data type, it is very simple and easy to understand.
-It has very low overhead for the most important functions such as `fold` and `map` and also supports prepending a single element in constant time.
+It has very low overhead for the most important functions such as [fold][Foldable] and [map][Functor] and also supports prepending a single element in constant time.
 
-Traversing a data structure with something like `Writer[List[Log], A]` or `ValidatedNel[Error, A]` is  powerful and allows us to precisely specify what kind of iteration we want to do while remaining succint.
+Traversing a data structure with something like [Writer\[List\[Log\], A\]][Writer] or [ValidatedNel\[Error, A\]][Validated] is powerful and allows us to precisely specify what kind of iteration we want to do while remaining succinct.
 However, in terms of efficiency it's a whole different story unfortunately.
-That is because both of these traversals make use of the `List` monoid (or the `NonEmptyList` semigroup), which by the nature of `List` is very inefficient.
-If you use `traverse` with a data structure with `n` elements and `Writer` or `Validated` as the `Applicative` type, you will end up with a runtime of `O(n^2)`.
+That is because both of these traversals make use of the `List` monoid (or the [NonEmptyList] semigroup), which by the nature of `List` is very inefficient.
+If you use [traverse][Traverse] with a data structure with `n` elements and [Writer] or [Validated] as the [Applicative] type, you will end up with a runtime of `O(n^2)`.
 This is because, with `List`, appending a single element requires iterating over the entire data structure and therefore takes linear time.
 
-So `List` isn't all that great for this use case, so let's use `Vector` or `NonEmptyVector` instead, right?
+So @:api(scala.collection.immutable.List) isn't all that great for this use case, so let's use @:api(scala.collection.immutable.Vector) or @:api(cats.data.NonEmptyVector)` instead, right?
 
 Well, `Vector` has its own problems and in this case it's unfortunately not that much faster than `List` at all. You can check [this blog post](http://www.lihaoyi.com/post/BenchmarkingScalaCollections.html#vectors-are-ok) by Li Haoyi for some deeper insight into `Vector`'s issues.
 
 
 `Chain` evolved from what used to be `fs2.Catenable` and Erik Osheim's [Chain](https://github.com/non/chain ) library.
 Similar to `List`, it is also a very simple data structure, but unlike `List` it supports both constant O(1) time `append` and `prepend`.
-This makes its `Monoid` instance super performant and a much better fit for usage with `Validated`,`Writer`, `Ior` or `Const`.
-
-To utilize this Cats includes type aliases like `ValidatedNec` or `IorNec` as well as helper functions like `groupByNec` or `Validated.invalidNec`.
+This makes its [Monoid] instance super performant and a much better fit for usage with [Validated], [Writer], [Ior] or [Const].
 
 To get a good idea of the performance improvements, here are some benchmarks that test monoidal append (higher score is better):
 
@@ -108,9 +106,11 @@ This unbalanced tree will always allow iteration in linear time.
 
 ## NonEmptyChain 
 
-`NonEmptyChain` is the non empty version of `Chain` it does not have a `Monoid` instance since it cannot be empty, but it does have a `Semigroup` instance.
-Likewise, it defines a `NonEmptyTraverse` instance, but no `TraverseFilter` instance.
+[NonEmptyChain](https://www.javadoc.io/static/org.typelevel/cats-docs_2.13/2.9.0/cats/data/index.html#NonEmptyChain:cats.data.NonEmptyChainImpl.type) is the non empty version of `Chain` it does not have a [Monoid] instance since it cannot be empty, but it does have a [Semigroup] instance.
+Likewise, it defines a [NonEmptyTraverse] instance, but no @:api(cats.TraverseFilter) instance.
 
+
+To simplify its usage, Cats includes type aliases like `ValidatedNec` or `IorNec` as well as helper functions like `groupByNec` or `Validated.invalidNec`. 
 There are numerous ways to construct a `NonEmptyChain`, e.g. you can create one from a single element, a `NonEmptyList` or a `NonEmptyVector`:
 
 ```scala mdoc
@@ -126,7 +126,7 @@ NonEmptyChain.one(1)
 
 
 
-You can also create an `Option` of `NonEmptyChain` from a `Chain` or any other collection type:
+You can also create an @:api(scala.Option) of `NonEmptyChain` from a `Chain` or any other collection type:
 
 ```scala mdoc
 import cats.data._
