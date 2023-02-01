@@ -25,7 +25,7 @@ This makes its [Monoid] instance [super performant][Benchmarks] and a much bette
 
 ## NonEmptyChain 
 
-[NonEmptyChain][nec] is the non empty version of `Chain`.
+[NonEmptyChain][nec] is the non-empty version of `Chain`.
 It does not have a [Monoid] instance since it cannot be empty, but it does have a [Semigroup] instance.
 Likewise, it defines a [NonEmptyTraverse] instance, but no @:api(cats.TraverseFilter) instance.
 
