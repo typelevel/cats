@@ -20,39 +20,51 @@ Well, `Vector` has its own problems and in this case it's unfortunately not that
 
 `Chain` evolved from what used to be `fs2.Catenable` and Erik Osheim's [Chain](https://github.com/non/chain ) library.
 Similar to `List`, it is also a very simple data structure, but unlike `List` it supports both constant O(1) time `append` and `prepend`.
-This makes its [Monoid] instance super performant and a much better fit for usage with [Validated], [Writer], [Ior] or [Const].
+This makes its [Monoid] instance [super performant][Benchmarks] and a much better fit for usage with [Validated], [Writer], [Ior] or [Const].
 
-To get a good idea of the performance improvements, here are some benchmarks that test monoidal append (higher score is better):
 
-```
-[info] Benchmark                                  Mode  Cnt   Score   Error  Units
-[info] CollectionMonoidBench.accumulateChain     thrpt   20  51.911 ± 7.453  ops/s
-[info] CollectionMonoidBench.accumulateList      thrpt   20   6.973 ± 0.781  ops/s
-[info] CollectionMonoidBench.accumulateVector    thrpt   20   6.304 ± 0.129  ops/s
-```
+## NonEmptyChain 
 
-As you can see accumulating things with `Chain` is more than 7 times faster than `List` and over 8 times faster than `Vector`.
-So appending is a lot more performant than the standard library collections, but what about operations like `map` or `fold`?
-Fortunately we've also benchmarked these (again, higher score is better):
+[NonEmptyChain][nec] is the non empty version of `Chain`.
+It does not have a [Monoid] instance since it cannot be empty, but it does have a [Semigroup] instance.
+Likewise, it defines a [NonEmptyTraverse] instance, but no @:api(cats.TraverseFilter) instance.
 
-```
-[info] Benchmark                           Mode  Cnt          Score         Error  Units
-[info] ChainBench.foldLeftLargeChain      thrpt   20        117.267 ±       1.815  ops/s
-[info] ChainBench.foldLeftLargeList       thrpt   20        135.954 ±       3.340  ops/s
-[info] ChainBench.foldLeftLargeVector     thrpt   20         61.613 ±       1.326  ops/s
-[info]
-[info] ChainBench.mapLargeChain           thrpt   20         59.379 ±       0.866  ops/s
-[info] ChainBench.mapLargeList            thrpt   20         66.729 ±       7.165  ops/s
-[info] ChainBench.mapLargeVector          thrpt   20         61.374 ±       2.004  ops/s
+Cats includes type aliases like [ValidatedNec][Meeting applicative] and [IorNec][Using NonEmptyChain with Ior] to simplify the usage of `NonEmptyChain`.
+
+There are numerous ways to construct a `NonEmptyChain`, e.g. you can create one from a single element, a `NonEmptyList` or a `NonEmptyVector`:
+
+```scala mdoc
+import cats.data._
+
+NonEmptyChain(1, 2, 3, 4)
+
+NonEmptyChain.fromNonEmptyList(NonEmptyList(1, List(2, 3)))
+NonEmptyChain.fromNonEmptyVector(NonEmptyVector(1, Vector(2, 3)))
+
+NonEmptyChain.one(1)
 ```
 
-While not as dominant, `Chain` holds its ground fairly well.
-It won't have the random access performance of something like `Vector`, but in a lot of other cases, `Chain` seems to outperform it quite handily.
-So if you don't perform a lot of random access on your data structure, then you should be fine using `Chain` extensively instead.
 
-So next time you write any code that uses `List` or `Vector` as a `Monoid`, be sure to use `Chain` instead!
-You can also check out the benchmarks [here](https://github.com/typelevel/cats/blob/v1.3.0/bench/src/main/scala/cats/bench).
 
+You can also create an @:api(scala.Option) of `NonEmptyChain` from a `Chain` or any other collection type:
+
+```scala mdoc
+import cats.data._
+
+NonEmptyChain.fromChain(Chain(1, 2, 3))
+NonEmptyChain.fromSeq(List.empty[Int])
+NonEmptyChain.fromSeq(Vector(1, 2, 3))
+```
+
+Sometimes, you'll want to prepend or append a single element to a chain and return the result as a `NonEmptyChain`:
+
+```scala mdoc
+import cats.data._
+
+NonEmptyChain.fromChainAppend(Chain(1, 2, 3), 4)
+NonEmptyChain.fromChainAppend(Chain.empty[Int], 1)
+NonEmptyChain.fromChainPrepend(1, Chain(2, 3))
+```
 ## How it works
 
 `Chain` is a fairly simple data structure compared to something like `Vector`.
@@ -98,50 +110,40 @@ def fromSeq[A](s: Seq[A]): Chain[A] =
   else Wrap(s)
 ```
 
-
-
 In conclusion `Chain` supports constant time appending and prepending, because it builds an unbalance tree of `Append`s.
 This unbalanced tree will always allow iteration in linear time. 
 
+## Benchmarks
 
-## NonEmptyChain 
+To get a good idea of performance of `Chain`, here are some benchmarks that test monoidal append (higher score is better):
 
-[NonEmptyChain](https://www.javadoc.io/static/org.typelevel/cats-docs_2.13/2.9.0/cats/data/index.html#NonEmptyChain:cats.data.NonEmptyChainImpl.type) is the non empty version of `Chain` it does not have a [Monoid] instance since it cannot be empty, but it does have a [Semigroup] instance.
-Likewise, it defines a [NonEmptyTraverse] instance, but no @:api(cats.TraverseFilter) instance.
-
-
-To simplify its usage, Cats includes type aliases like `ValidatedNec` or `IorNec` as well as helper functions like `groupByNec` or `Validated.invalidNec`. 
-There are numerous ways to construct a `NonEmptyChain`, e.g. you can create one from a single element, a `NonEmptyList` or a `NonEmptyVector`:
-
-```scala mdoc
-import cats.data._
-
-NonEmptyChain(1, 2, 3, 4)
-
-NonEmptyChain.fromNonEmptyList(NonEmptyList(1, List(2, 3)))
-NonEmptyChain.fromNonEmptyVector(NonEmptyVector(1, Vector(2, 3)))
-
-NonEmptyChain.one(1)
+```
+[info] Benchmark                                  Mode  Cnt   Score   Error  Units
+[info] CollectionMonoidBench.accumulateChain     thrpt   20  51.911 ± 7.453  ops/s
+[info] CollectionMonoidBench.accumulateList      thrpt   20   6.973 ± 0.781  ops/s
+[info] CollectionMonoidBench.accumulateVector    thrpt   20   6.304 ± 0.129  ops/s
 ```
 
+As you can see accumulating things with `Chain` is more than 7 times faster than `List` and over 8 times faster than `Vector`.
+So appending is a lot more performant than the standard library collections, but what about operations like `map` or `fold`?
+Fortunately we've also benchmarked these (again, higher score is better):
 
-
-You can also create an @:api(scala.Option) of `NonEmptyChain` from a `Chain` or any other collection type:
-
-```scala mdoc
-import cats.data._
-
-NonEmptyChain.fromChain(Chain(1, 2, 3))
-NonEmptyChain.fromSeq(List.empty[Int])
-NonEmptyChain.fromSeq(Vector(1, 2, 3))
+```
+[info] Benchmark                           Mode  Cnt          Score         Error  Units
+[info] ChainBench.foldLeftLargeChain      thrpt   20        117.267 ±       1.815  ops/s
+[info] ChainBench.foldLeftLargeList       thrpt   20        135.954 ±       3.340  ops/s
+[info] ChainBench.foldLeftLargeVector     thrpt   20         61.613 ±       1.326  ops/s
+[info]
+[info] ChainBench.mapLargeChain           thrpt   20         59.379 ±       0.866  ops/s
+[info] ChainBench.mapLargeList            thrpt   20         66.729 ±       7.165  ops/s
+[info] ChainBench.mapLargeVector          thrpt   20         61.374 ±       2.004  ops/s
 ```
 
-Sometimes, you'll want to prepend or append a single element to a chain and return the result as a `NonEmptyChain`:
+While not as dominant, `Chain` holds its ground fairly well.
+It won't have the random access performance of something like `Vector`, but in a lot of other cases, `Chain` seems to outperform it quite handily.
+So if you don't perform a lot of random access on your data structure, then you should be fine using `Chain` extensively instead.
 
-```scala mdoc
-import cats.data._
+So next time you write any code that uses `List` or `Vector` as a `Monoid`, be sure to use `Chain` instead!
+You can also check out the benchmarks [here](https://github.com/typelevel/cats/blob/v1.3.0/bench/src/main/scala/cats/bench).
 
-NonEmptyChain.fromChainAppend(Chain(1, 2, 3), 4)
-NonEmptyChain.fromChainAppend(Chain.empty[Int], 1)
-NonEmptyChain.fromChainPrepend(1, Chain(2, 3))
-```
+[nec]: @API_LINK_BASE@/cats/data/index.html#NonEmptyChain:cats.data.NonEmptyChainImpl.type
