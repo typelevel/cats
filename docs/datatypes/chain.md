@@ -1,6 +1,6 @@
 # Chain
 
-@:api(cats.data.Chain) is a data structure that allows constant time prepending and appending.
+@:api(cats.data.Chain) is a data structure that allows constant time prepending, appending and concatenation.
 This makes it especially efficient when used as a [Monoid], e.g. with [Validated] or [Writer].
 As such it aims to be used where @:api(scala.collection.immutable.List) and @:api(scala.collection.immutable.Vector) incur a performance penalty.
 
@@ -18,8 +18,8 @@ So @:api(scala.collection.immutable.List) isn't all that great for this use case
 Well, `Vector` has its own problems and in this case it's unfortunately not that much faster than `List` at all. You can check [this blog post](http://www.lihaoyi.com/post/BenchmarkingScalaCollections.html#vectors-are-ok) by Li Haoyi for some deeper insight into `Vector`'s issues.
 
 
-`Chain` evolved from what used to be `fs2.Catenable` and Erik Osheim's [Chain](https://github.com/non/chain ) library.
-Similar to `List`, it is also a very simple data structure, but unlike `List` it supports both constant O(1) time `append` and `prepend`.
+`Chain` evolved from what used to be `fs2.Catenable` and Erik Osheim's [Chain](https://github.com/non/chain) library.
+Similar to `List`, it is also a very simple data structure, but unlike `List` it supports constant O(1) time `append`, `prepend` and `concat`.
 This makes its [Monoid] instance [super performant][Benchmarks] and a much better fit for usage with [Validated], [Writer], [Ior] or [Const].
 
 
@@ -29,7 +29,7 @@ This makes its [Monoid] instance [super performant][Benchmarks] and a much bette
 It does not have a [Monoid] instance since it cannot be empty, but it does have a [Semigroup] instance.
 Likewise, it defines a [NonEmptyTraverse] instance, but no @:api(cats.TraverseFilter) instance.
 
-Cats includes type aliases like [ValidatedNec](validated.md#meeting-applicative) and [IorNec](ior.md#using-with-nonemptychain) to simplify the usage of `NonEmptyChain`.
+To simplify the usage of `NonEmptyChain`, Cats includes type aliases like [ValidatedNec](validated.md#meeting-applicative) and [IorNec](ior.md#using-with-nonemptychain), as well as helper functions like `groupByNec` and `Validated.invalidNec`.
 
 There are numerous ways to construct a `NonEmptyChain`, e.g. you can create one from a single element, a `NonEmptyList` or a `NonEmptyVector`:
 
@@ -110,7 +110,8 @@ def fromSeq[A](s: Seq[A]): Chain[A] =
   else Wrap(s)
 ```
 
-In conclusion `Chain` supports constant time appending and prepending, because it builds an unbalance tree of `Append`s.
+In conclusion `Chain` supports constant time concatenation, because it builds an unbalance tree of `Append`s.
+`append` and `prepend` are treated as concatenation with single element collection to keep the same performance characteristics.
 This unbalanced tree will always allow iteration in linear time. 
 
 ## Benchmarks
@@ -144,6 +145,6 @@ It won't have the random access performance of something like `Vector`, but in a
 So if you don't perform a lot of random access on your data structure, then you should be fine using `Chain` extensively instead.
 
 So next time you write any code that uses `List` or `Vector` as a `Monoid`, be sure to use `Chain` instead!
-You can also check out the benchmarks [here](https://github.com/typelevel/cats/blob/v1.3.0/bench/src/main/scala/cats/bench).
+You can also check out the benchmarks [here](https://github.com/typelevel/cats/blob/v@VERSION@/bench/src/main/scala/cats/bench).
 
 [nec]: @API_LINK_BASE@/cats/data/index.html#NonEmptyChain:cats.data.NonEmptyChainImpl.type
