@@ -332,6 +332,12 @@ class OptionTSuite extends CatsSuite {
     }
   }
 
+  test("OptionT[Id, A].filterF consistent with Option.filter") {
+    forAll { (o: Option[Int], f: Int => Boolean) =>
+      assert(o.filter(f) === (OptionT[Id, Int](o).filterF(f).value))
+    }
+  }
+
   test("OptionT[Id, A].withFilter consistent with Option.withFilter") {
     forAll { (o: Option[Int], f: Int => Boolean) =>
       assert((for { x <- o if f(x) } yield x) === ((for { x <- OptionT[Id, Int](o) if f(x) } yield x).value))
