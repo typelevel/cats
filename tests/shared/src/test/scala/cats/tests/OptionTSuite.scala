@@ -378,6 +378,21 @@ class OptionTSuite extends CatsSuite {
     }
   }
 
+  test("OptionT.whenM[Id, A] consistent with Option.when") {
+    // Option.when is inlined here because it is not available before Scala 2.13
+    def when[A]: (Boolean, A) => Option[A] = (c: Boolean, a: A) => if (c) Some(a) else None
+
+    forAll { (i: Int, b: Boolean) =>
+      assert(OptionT.whenM[Id, Int](b)(i).value === (when(b, i)))
+    }
+  }
+
+  test("OptionT.whenF and OptionT.whenM consistent") {
+    forAll { (li: List[Int], bs: List[Boolean]) =>
+      assert(bs.flatMap(OptionT.whenF(_)(li).value) === OptionT.whenM(bs)(li).value)
+    }
+  }
+
   test("OptionT.whenK and OptionT.whenF consistent") {
     forAll { (li: List[Int], b: Boolean) =>
       assert(IdT(li).mapK(OptionT.whenK(b)).value === (OptionT.whenF(b)(li)))
