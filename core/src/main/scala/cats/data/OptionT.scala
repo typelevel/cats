@@ -375,12 +375,8 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
    */
   def filterF(p: A => F[Boolean])(implicit F: Monad[F]): OptionT[F, A] =
     OptionT(F.flatMap(value) {
-      case Some(a) =>
-        F.map(p(a)) {
-          case true  => Some(a)
-          case false => None
-        }
-      case None => F.pure(None)
+      case v @ Some(a) => F.map(p(a)) { if (_) v else None }
+      case None        => F.pure(None)
     })
 
   /**
