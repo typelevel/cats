@@ -118,54 +118,58 @@ This unbalanced tree will always allow iteration in linear time.
 
 To get a good idea of performance of `Chain`, here are some benchmarks that test monoidal append (higher score is better):
 
-|Benchmark                              |  Score |   Error  | Units|
-|---------------------------------------|--------|----------|------|
-|CollectionMonoidBench.accumulateChain  | 81.973 | ± 3.921  | ops/s|
-|CollectionMonoidBench.accumulateList   | 21.150 | ± 1.756  | ops/s|
-|CollectionMonoidBench.accumulateVector | 11.725 | ± 0.306  | ops/s|
+```
+Benchmark                                Mode  Cnt         Score         Error  Units
+CollectionMonoidBench.accumulateChain   thrpt   25        81.973 ±       3.921  ops/s
+CollectionMonoidBench.accumulateList    thrpt   25        21.150 ±       1.756  ops/s
+CollectionMonoidBench.accumulateVector  thrpt   25        11.725 ±       0.306  ops/s
+```
 
-As you can see accumulating things with `Chain` is almost 4 timess faster than `List` and nearly times faster than `Vector`.
+As you can see accumulating things with `Chain` is almost 4 timess faster than `List` and nearly 8 times faster than `Vector`.
 So appending is a lot more performant than the standard library collections, but what about operations like `map` or `fold`?
 Fortunately we've also benchmarked these (again, higher score is better):
 
-|Benchmark                      |         Score |         Error  | Units|
-|-------------------------------|---------------|----------------|------|
-|ChainBench.consLargeChain      | 143759156.264 | ± 5611584.788  | ops/s|
-|ChainBench.consLargeList       | 148512687.273 | ± 5992793.489  | ops/s|
-|ChainBench.consLargeVector     |   7249505.257 | ±  202436.549  | ops/s|
-|ChainBench.consSmallChain      | 119925876.637 | ± 1663011.363  | ops/s|
-|ChainBench.consSmallList       | 152664330.695 | ± 1828399.646  | ops/s|
-|ChainBench.consSmallVector     |  57686442.030 | ±  533768.670  | ops/s|
-|ChainBench.createSmallChain    |  87260308.052 | ±  960407.889  | ops/s|
-|ChainBench.createSmallList     |  20000981.857 | ±  396001.340  | ops/s|
-|ChainBench.createSmallVector   |  26311376.712 | ±  288871.258  | ops/s|
-|ChainBench.createTinyChain     |  75311482.869 | ± 1066466.694  | ops/s|
-|ChainBench.createTinyList      |  67502351.990 | ± 1071560.419  | ops/s|
-|ChainBench.createTinyVector    |  39676430.380 | ±  405717.649  | ops/s|
-|ChainBench.foldLeftLargeChain  |       117.866 | ±       3.343  | ops/s|
-|ChainBench.foldLeftLargeList   |       193.640 | ±       2.298  | ops/s|
-|ChainBench.foldLeftLargeVector |       178.370 | ±       0.830  | ops/s|
-|ChainBench.foldLeftSmallChain  |  43732934.777 | ±  362285.965  | ops/s|
-|ChainBench.foldLeftSmallList   |  51155941.055 | ±  882005.961  | ops/s|
-|ChainBench.foldLeftSmallVector |  41902918.940 | ±   53030.742  | ops/s|
-|ChainBench.lengthLargeChain    |    131831.918 | ±    1613.341  | ops/s|
-|ChainBench.lengthLargeList     |       271.015 | ±       0.962  | ops/s|
-|ChainBench.mapLargeChain       |        78.162 | ±       2.620  | ops/s|
-|ChainBench.mapLargeList        |        73.676 | ±       8.999  | ops/s|
-|ChainBench.mapLargeVector      |       132.443 | ±       2.360  | ops/s|
-|ChainBench.mapSmallChain       |  24047623.583 | ± 1834073.508  | ops/s|
-|ChainBench.mapSmallList        |  21482014.328 | ±  387854.819  | ops/s|
-|ChainBench.mapSmallVector      |  34707281.383 | ±  382477.558  | ops/s|
-|ChainBench.reverseLargeChain   |     37700.549 | ±     154.942  | ops/s|
-|ChainBench.reverseLargeList    |       142.832 | ±       3.626  | ops/s|
+```
+Benchmark                                Mode  Cnt          Score         Error  Units
+ChainBench.consLargeChain               thrpt   25  143759156.264 ± 5611584.788  ops/s
+ChainBench.consLargeList                thrpt   25  148512687.273 ± 5992793.489  ops/s
+ChainBench.consLargeVector              thrpt   25    7249505.257 ±  202436.549  ops/s
+ChainBench.consSmallChain               thrpt   25  119925876.637 ± 1663011.363  ops/s
+ChainBench.consSmallList                thrpt   25  152664330.695 ± 1828399.646  ops/s
+ChainBench.consSmallVector              thrpt   25   57686442.030 ±  533768.670  ops/s
+ChainBench.createChainOption            thrpt   25  167191685.222 ± 1474976.197  ops/s
+ChainBench.createChainSeqOption         thrpt   25   21264365.364 ±  372757.348  ops/s
+ChainBench.createSmallChain             thrpt   25   87260308.052 ±  960407.889  ops/s
+ChainBench.createSmallList              thrpt   25   20000981.857 ±  396001.340  ops/s
+ChainBench.createSmallVector            thrpt   25   26311376.712 ±  288871.258  ops/s
+ChainBench.createTinyChain              thrpt   25   75311482.869 ± 1066466.694  ops/s
+ChainBench.createTinyList               thrpt   25   67502351.990 ± 1071560.419  ops/s
+ChainBench.createTinyVector             thrpt   25   39676430.380 ±  405717.649  ops/s
+ChainBench.foldLeftLargeChain           thrpt   25        117.866 ±       3.343  ops/s
+ChainBench.foldLeftLargeList            thrpt   25        193.640 ±       2.298  ops/s
+ChainBench.foldLeftLargeVector          thrpt   25        178.370 ±       0.830  ops/s
+ChainBench.foldLeftSmallChain           thrpt   25   43732934.777 ±  362285.965  ops/s
+ChainBench.foldLeftSmallList            thrpt   25   51155941.055 ±  882005.961  ops/s
+ChainBench.foldLeftSmallVector          thrpt   25   41902918.940 ±   53030.742  ops/s
+ChainBench.lengthLargeChain             thrpt   25     131831.918 ±    1613.341  ops/s
+ChainBench.lengthLargeList              thrpt   25        271.015 ±       0.962  ops/s
+ChainBench.mapLargeChain                thrpt   25         78.162 ±       2.620  ops/s
+ChainBench.mapLargeList                 thrpt   25         73.676 ±       8.999  ops/s
+ChainBench.mapLargeVector               thrpt   25        132.443 ±       2.360  ops/s
+ChainBench.mapSmallChain                thrpt   25   24047623.583 ± 1834073.508  ops/s
+ChainBench.mapSmallList                 thrpt   25   21482014.328 ±  387854.819  ops/s
+ChainBench.mapSmallVector               thrpt   25   34707281.383 ±  382477.558  ops/s
+ChainBench.reverseLargeChain            thrpt   25      37700.549 ±     154.942  ops/s
+ChainBench.reverseLargeList             thrpt   25        142.832 ±       3.626  ops/s
+```
 
-While not as dominant, `Chain` holds its ground fairly well.
-It won't have the random access performance of something like `Vector`, but in a lot of other cases, `Chain` seems to outperform it quite handily.
-So if you don't perform a lot of random access on your data structure, then you should be fine using `Chain` extensively instead.
+While not dominant, `Chain` performance is in the middle of the pack for most operations benchmarked. 
+`Chain` does have poor random access performance, and should be avoided in favor of `Vector` for random access heavy use cases.
 
-So next time you write any code that uses `List` or `Vector` as a `Monoid`, be sure to use `Chain` instead!
+Chain excels with concatenation heavy workloads and has comparable performance to `List` and `Vector` for most other operations. 
+So next time you write any code that uses `List` or `Vector` as a [Monoid], be sure to use `Chain` instead!
 
-Note: All benchmarks above run using JMH 1.32 with Scala 2.13.8 on JDK 11. 
+> Note: All benchmarks above were run using JMH 1.32 with Scala 2.13.8 on JDK 11. 
 For full details, see [here](https://github.com/typelevel/cats/pull/4264).
 You can also check out the [benchmark source code](https://github.com/typelevel/cats/blob/v@VERSION@/bench/src/main/scala/cats/bench).
 
