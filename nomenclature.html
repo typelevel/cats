@@ -939,10 +939,30 @@
               <td><code>F: Functor</code></td>
             </tr>
             <tr>
+              <td><code>Boolean =&gt; F[A] =&gt; OT[F, A]</code></td>
+              <td><code>whenF</code></td>
+              <td><code>F: Applicative</code></td>
+            </tr>
+            <tr>
+              <td><code>F[Boolean] =&gt; F[A] =&gt; OT[F, A]</code></td>
+              <td><code>whenM</code></td>
+              <td><code>F: Monad</code></td>
+            </tr>
+            <tr>
               <td><code>OT[F, A] =&gt; F[Option[A]]</code></td>
               <td><code>value</code></td>
               <td>
               </td>
+            </tr>
+            <tr>
+              <td><code>OT[F, A] =&gt; A =&gt; Boolean =&gt; OT[F, A]</code></td>
+              <td><code>filter</code></td>
+              <td><code>F: Functor</code></td>
+            </tr>
+            <tr>
+              <td><code>OT[F, A] =&gt; A =&gt; F[Boolean] =&gt; OT[F, A]</code></td>
+              <td><code>filterF</code></td>
+              <td><code>F: Monad</code></td>
             </tr>
             <tr>
               <td><code>OT[F, A] =&gt; (A =&gt; B) =&gt; OT[F, B]</code></td>
