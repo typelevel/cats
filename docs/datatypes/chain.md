@@ -1,8 +1,11 @@
 # Chain
 
-@:api(cats.data.Chain) is a data structure that allows constant time prepending, appending and concatenation.
+@:api(cats.data.Chain) is an immutable sequence data structure that allows constant time prepending, appending and concatenation.
 This makes it especially efficient when used as a [Monoid], e.g. with [Validated] or [Writer].
 As such it aims to be used where @:api(scala.collection.immutable.List) and @:api(scala.collection.immutable.Vector) incur a performance penalty.
+Cats also includes type class implementations to support using `Chain` as a general-purpose collection type, including [Traverse], [Monad], and [Alternative].
+
+## Motivation
 
 `List` is a great data type, it is very simple and easy to understand.
 It has very low overhead for the most important functions such as [fold][Foldable] and [map][Functor] and also supports prepending a single element in constant time.
@@ -67,9 +70,9 @@ NonEmptyChain.fromChainPrepend(1, Chain(2, 3))
 ```
 ## How it works
 
-`Chain` is a fairly simple data structure compared to something like `Vector`.
-It's a simple ADT that has only 4 cases.
-It is either an empty `Chain` with no elements, a singleton `Chain` with exactly one element, a concatenation of two chains or a wrapper for another collection.
+`Chain` is implemented as a simple unbalanced binary tree ADT with four cases:
+an empty `Chain` with no elements, a singleton `Chain` with exactly one element, a concatenation of two chains, or a wrapper for another collection.
+
 In code it looks like this:
 
 ```scala mdoc
@@ -82,7 +85,7 @@ case class Wrap[A](seq: Seq[A]) extends Chain[A]
 ```
 
 The `Append` constructor is what gives us the fast concatenation ability.
-Concatenating two existing `Chain`s, is just a call to the `Append` constructor, which is always constant time `O(1)`.
+Concatenating two existing `Chain`s is just a call to the `Append` constructor, which is always constant time `O(1)`.
 
 In case we want to append or prepend a single element,
  all we have to do is wrap the element with the `Singleton` constructor and then use the `Append` constructor to append or prepend the `Singleton` `Chain`.
@@ -125,7 +128,7 @@ CollectionMonoidBench.accumulateList    thrpt   25        21.150 ±       1.756 
 CollectionMonoidBench.accumulateVector  thrpt   25        11.725 ±       0.306  ops/s
 ```
 
-As you can see accumulating things with `Chain` is almost 4 timess faster than `List` and nearly 8 times faster than `Vector`.
+As you can see accumulating things with `Chain` is almost 4 times faster than `List` and nearly 8 times faster than `Vector`.
 So appending is a lot more performant than the standard library collections, but what about operations like `map` or `fold`?
 Fortunately we've also benchmarked these (again, higher score is better):
 
