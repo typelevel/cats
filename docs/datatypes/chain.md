@@ -71,7 +71,7 @@ NonEmptyChain.fromChainPrepend(1, Chain(2, 3))
 ## How it works
 
 `Chain` is implemented as a simple unbalanced binary tree ADT with four cases:
-an empty `Chain` with no elements, a singleton `Chain` with exactly one element, a concatenation of two chains, or a wrapper for another collection.
+an empty `Chain` with no elements, a singleton `Chain` with exactly one element, a concatenation of two chains, or a wrapper for a @:api(scala.collection.immutable.Seq).
 
 In code it looks like this:
 
