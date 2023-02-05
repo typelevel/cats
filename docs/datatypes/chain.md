@@ -1,6 +1,9 @@
 # Chain
 
-@:api(cats.data.Chain) is an immutable sequence data structure that allows constant time prepending, appending and concatenation.
+[Chain API Documentation][@:api(cats.data.Chain)]
+
+
+`Chain` is an immutable sequence data structure that allows constant time prepending, appending and concatenation.
 This makes it especially efficient when used as a [Monoid], e.g. with [Validated] or [Writer].
 As such it aims to be used where @:api(scala.collection.immutable.List) and @:api(scala.collection.immutable.Vector) incur a performance penalty.
 Cats also includes type class implementations to support using `Chain` as a general-purpose collection type, including [Traverse], [Monad], and [Alternative].
