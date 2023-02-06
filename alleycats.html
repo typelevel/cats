@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="Laika 0.18.1 + Helium Theme" />
-    <title>Resources for Learners</title>
+    <title>Alleycats</title>
     
       <meta name="author" content="Cody Allen"/>
     
@@ -108,9 +108,9 @@
         <li class="level1"><a href="typeclasses.html">Type Classes</a></li>
         <li class="level1"><a href="datatypes.html">Data Types</a></li>
         <li class="level1"><a href="algebra.html">Algebra</a></li>
-        <li class="level1"><a href="alleycats.html">Alleycats</a></li>
+        <li class="level1 active"><a href="#">Alleycats</a></li>
         <li class="level1"><a href="motivations.html">Motivations</a></li>
-        <li class="level1 active"><a href="#">Resources for Learners</a></li>
+        <li class="level1"><a href="resources_for_learners.html">Resources for Learners</a></li>
         <li class="level1"><a href="jump_start_guide.html">Jump Start Guide</a></li>
         <li class="level1"><a href="imports.html">Imports</a></li>
         <li class="level1"><a href="faq.html">FAQ</a></li>
@@ -190,13 +190,19 @@
     <div id="container">
 
       <nav id="page-nav">
-        <p class="header"><a href="#">Resources for Learners</a></p>
+        <p class="header"><a href="#">Alleycats</a></p>
 
         <ul class="nav-list">
-          <li class="level1"><a href="#tutorials">Tutorials</a></li>
-          <li class="level1"><a href="#example-projects">Example Projects</a></li>
-          <li class="level1"><a href="#videos">Videos</a></li>
-          <li class="level1"><a href="#social-network">Social network</a></li>
+          <li class="level1"><a href="#overview">Overview</a></li>
+          <li class="level1"><a href="#type-classes">Type classes</a></li>
+          <li class="level2"><a href="#empty-a-zero-a-and-one-a">Empty[A], Zero[A], and One[A]</a></li>
+          <li class="level2"><a href="#pure-f-_-and-extract-f-_">Pure[F[_]] and Extract[F[_]]</a></li>
+          <li class="level2"><a href="#emptyk-f-_">EmptyK[F[_]]</a></li>
+          <li class="level1"><a href="#instances">Instances</a></li>
+          <li class="level2"><a href="#set-_-instances">Set[_] instances</a></li>
+          <li class="level2"><a href="#try-_-instances">Try[_] instances</a></li>
+          <li class="level2"><a href="#iterable-_-instances">Iterable[_] instances</a></li>
+          <li class="level1"><a href="#contributing">Contributing</a></li>
         </ul>
 
         <p class="footer"></p>
@@ -204,66 +210,102 @@
 
       <main class="content">
 
-        <h1 id="books" class="title">Books</h1>
-        <ul>
-          <li><a href="https://www.manning.com/books/functional-programming-in-scala">Functional Programming in Scala</a>
-          by Paul Chiusano and Rúnar Bjarnason - While this book does not
-          specifically cover Cats, it is a great introduction to functional
-          programming in Scala in general and covers some of the abstractions
-          that can be found in Cats.</li>
-        </ul>
-        <ul>
-          <li><a href="https://underscore.io/books/scala-with-cats/">Scala with Cats</a> 
-          by Noel Welsh and Dave Gurnell - The aims of this book are two-fold: 
-          to introduce monads, functors, and other functional programming patterns
-          as a way to structure program design, and to explain how these 
-          concepts are implemented in Cats.</li>
-        </ul>
+        <h1 id="alleycats" class="title">Alleycats</h1>
         
-        <h1 id="tutorials" class="section">Tutorials<a class="anchor-link right" href="#tutorials"><i class="icofont-laika">&#xef71;</i></a></h1>
-        <ul>
-          <li><a href="http://eed3si9n.com/herding-cats/">herding cats</a> by Eugene Yokota</li>
-        </ul>
-        <ul>
-          <li><a href="https://www.scala-exercises.org/cats">Scala Exercises</a> by 47 Degrees 
-          offers multiple online exercises to learn about the type classes and 
-          datatypes included in Cats.</li>
-        </ul>
+        <h2 id="overview" class="section">Overview<a class="anchor-link right" href="#overview"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>Alleycats is a module of the <a href="https://github.com/typelevel/cats">Cats</a>
+        project that exists to support types which are not entirely savory or
+        <em>law-abiding</em> but which may prove useful or necessary in some
+        situations.</p>
+        <p>In some cases, a type class instance can almost (but not quite) obey
+        the required laws (e.g. a <code>Monad</code> instance for <code>scala.util.Try</code>). In
+        other cases, type classes which lack laws or constraints may still be
+        useful in some cases (e.g. <code>Empty[_]</code>, a type class which provides
+        some notion of &quot;emptiness&quot;).</p>
+        <p>Rather than argue about whether to permit these types in Cats proper, we
+        provide a (slightly disreputable) home for them here.</p>
         
-        <h1 id="example-projects" class="section">Example Projects<a class="anchor-link right" href="#example-projects"><i class="icofont-laika">&#xef71;</i></a></h1>
-        <ul>
-          <li><a href="https://github.com/pauljamescleary/scala-pet-store">Scala Pet Store</a> 
-          Demonstrates FP techniques while maintaining approachability for people with an OO background. Uses tagless final for the core domain, and popular Typelevel libraries including Cats, Http4s, Circe and Doobie.</li>
-        </ul>
+        <h2 id="type-classes" class="section">Type classes<a class="anchor-link right" href="#type-classes"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>Alleycats introduces several new type classes. Here is an overview of
+        the instances introduced.</p>
         
-        <h1 id="videos" class="section">Videos<a class="anchor-link right" href="#videos"><i class="icofont-laika">&#xef71;</i></a></h1>
-        <ul>
-          <li><a href="https://www.youtube.com/playlist?list=PLFrwDVdSrYE6dy14XCmUtRAJuhCxuzJp0">Functional Structures in Scala</a> 
-          &nbsp; by <a href="https://github.com/MPilquist">Michael Pilquist</a> offers a series
-          of lectures about basic functional structures. </li>
-        </ul>
-        <ul>
-          <li>
-            <strong>Category Theory for Programmers</strong>
-            by <a href="https://github.com/BartoszMilewski">Bartosz Milewski</a> is a series 
-            of category theory lectures oriented towards programmers. 
-            The code examples are written in Haskell and C++, 
-            but the course is designed for programmers of any background, 
-            even the ones without a strong maths knowledge. 
-            <ul>
-              <li><a href="https://www.youtube.com/playlist?list=PLbgaMIhjbmEnaH_LTkxLI7FMa2HsnawM_">part 1</a> </li>
-              <li><a href="https://www.youtube.com/playlist?list=PLbgaMIhjbmElia1eCEZNvsVscFef9m0dm">part 2</a> </li>
-              <li><a href="https://www.youtube.com/playlist?list=PLbgaMIhjbmEn64WVX4B08B4h2rOtueWIL">part 3</a> </li>
-            </ul>
-          </li>
-          <li><a href="https://www.youtube.com/watch?v=P8nGAo3Jp-Q">Easy and efficient data validation with Cats</a> by <a href="https://danielasfregola.com/">Daniela Sfregola</a>  this talk introduces Cats, and some of its most interesting components for data validation. In particular, we’ll discuss some options to achieve efficient and expressive data validation. We will also argue that, compared to other options in the language, Cats is particularly suited for the task thanks to its easy-to-use data types and more approachable syntax.</li>
-          <li><a href="https://www.youtube.com/playlist?list=PLy4hTMY6erDBmvZiEDjtCTP8XCdhaXc2c">Cats by example</a> by <a href="https://twitter.com/TomTriple">Thomas Höfer</a> provides a beginner series on various datatypes from Cats. </li>
-        </ul>
+        <h3 id="empty-a-zero-a-and-one-a" class="section">Empty[A], Zero[A], and One[A]<a class="anchor-link right" href="#empty-a-zero-a-and-one-a"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <p>A commonly-requested type class is one that encodes the idea of a set
+        having an identity element. Normally this would be done by defining a
+        <code>Monoid[A]</code> instance, but in some cases the idea of emptiness is
+        independent of a particular associative operation.</p>
+        <p>In this case, <code>Empty[A]</code> may be used in place of <code>Monoid[A]</code>. It
+        provides access to the <em>identity</em> element (via the <code>.empty</code> method),
+        and can also provide <code>.isEmpty</code> and <code>.nonEmpty</code> if an <code>Eq[A]</code> is
+        available.</p>
+        <p>The two other type classes, <code>Zero[A]</code> and <code>One[A]</code>, are similar,
+        except they correspond to <code>AdditiveMonoid[A]</code> and
+        <code>MultiplicativeMonoid[A]</code> (found in the <code>algebra.ring</code> package). Their
+        methods are called <code>zero</code> and <code>one</code>, respectively.</p>
+        <p>While none of these type classes have their own laws, they are
+        required not to violate the monoid laws when applicable. This means
+        that if <code>Empty[A]</code> and <code>Semigroup[A]</code> are both available, that
+        <code>Empty[A].empty</code> <strong>must</strong> function as an identity element for
+        <code>Semigroup[A].combine</code>. In fact, together these instances can be
+        viewed as a <code>Monoid[A]</code> (and there is an implicit method to that
+        effect).</p>
+        <p>The same rules apply to <code>Zero[A]</code> and <code>One[A]</code> and their respective
+        associative operations.</p>
         
-        <h1 id="social-network" class="section">Social network<a class="anchor-link right" href="#social-network"><i class="icofont-laika">&#xef71;</i></a></h1>
-        <ul>
-          <li><a href="https://twitter.com/impurepics">@impurepics</a> regularly tweet informative and kawaii educational pieces about Cats and FP in Scala.<br></li>
-        </ul>
+        <h3 id="pure-f-_-and-extract-f-_" class="section">Pure[F[_]] and Extract[F[_]]<a class="anchor-link right" href="#pure-f-_-and-extract-f-_"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <p>The <code>Pure[F]</code> type class represents the <code>pure</code> method of
+        <code>Applicative[F]</code> separated from its <code>map</code> and <code>ap</code> methods. Like the
+        previous type classes, if <code>Pure[F]</code> and <code>Apply[F]</code> are both available
+        they are required to be consistent (and should provide a valid
+        <code>Applicative[F]</code> instance).</p>
+        <p>Similarly, <code>Extract[F]</code> represents the <code>extract</code> method of
+        <code>Comonad[F]</code> without <code>coflatMap</code> and <code>map</code> methods. When <code>Extract[F]</code>
+        and <code>CoflatMap[F]</code> are available, they should provide a valid
+        <code>Comonad[F]</code> instance.</p>
+        
+        <h3 id="emptyk-f-_" class="section">EmptyK[F[_]]<a class="anchor-link right" href="#emptyk-f-_"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <p>Finally, <code>EmptyK[F]</code> generalizes the <code>empty[A]</code> method from
+        <code>MonoidK[F]</code>. The pattern here is the same as before --
+        <code>SemigroupK[F]</code> and <code>EmptyK[F]</code> should provide a valid <code>MonoidK[F]</code>
+        instance.</p>
+        
+        <h2 id="instances" class="section">Instances<a class="anchor-link right" href="#instances"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>Alleycats also provides some &quot;disreputable&quot; type class instances.</p>
+        
+        <h3 id="set-_-instances" class="section">Set[_] instances<a class="anchor-link right" href="#set-_-instances"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <p>Scala&#39;s <code>Set[_]</code> takes advantage of the universal availability of
+        <code>.hashCode</code> and <code>.equals</code>. This makes it difficult to use
+        <a href="https://failex.blogspot.jp/2013/06/fake-theorems-for-free.html">parametricity</a>
+        to reason about sets, and casts some doubt on their use with functors
+        and monads.</p>
+        <p>Alleycats provides <code>Monad[Set]</code> and <code>Traverse[Set]</code>. You can import
+        these instances via <code>import alleycats.std.set._</code>.</p>
+        
+        <h3 id="try-_-instances" class="section">Try[_] instances<a class="anchor-link right" href="#try-_-instances"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <p>Scala&#39;s <code>Try[_]</code> is intended to replace the need for <code>try { ... }
+catch { ... }</code> syntax in Scala programs, to ease error-handling, and
+        to transport exceptions as data. Due to the way <code>Try</code> transparently
+        catches exceptions in <code>.map</code> and <code>.flatMap</code>, some people are skeptical
+        that <code>Try</code> fulfills the necessary functor/monad laws.</p>
+        <p>Alleycats provides a <code>Monad[Try]</code>. You can import this instance via
+        <code>import alleycats.std.try._</code>.</p>
+        
+        <h3 id="iterable-_-instances" class="section">Iterable[_] instances<a class="anchor-link right" href="#iterable-_-instances"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <p>Scala&#39;s <code>collection.Iterable[_]</code> offers no guarantees that it&#39;s immutable,
+        since it abstracts over the <code>mutable</code> and <code>immutable</code> variants. However it&#39;s
+        the type used to represent a <code>Map</code>s <code>values</code>, and its often desirable to treat the
+        values of a map as a <code>Foldable</code> collection. Alleycats provides a <code>Foldable[Iterable]</code>, eg:</p>
+        <pre><code>import cats.implicits._
+import alleycats.std.iterable._
+
+// Result &quot;AppleOrange&quot;
+Map(1 -&gt; &quot;Apple&quot;, 2 -&gt; &quot;Orange&quot;).values.combineAll</code></pre>
+        
+        <h2 id="contributing" class="section">Contributing<a class="anchor-link right" href="#contributing"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>This module&#39;s goal is to be very liberal about accepting type class
+        instances, but to only provide instances which are absent from
+        Cats proper. Law-abiding instances will end up in Cats, and everything else will
+        end up here.</p>
 
         <hr style="margin-top: 30px"/>
         <footer style="font-size: 90%; text-align: center">

@@ -108,6 +108,7 @@
         <li class="level1"><a href="../typeclasses.html">Type Classes</a></li>
         <li class="level1"><a href="../datatypes.html">Data Types</a></li>
         <li class="level1"><a href="../algebra.html">Algebra</a></li>
+        <li class="level1"><a href="../alleycats.html">Alleycats</a></li>
         <li class="level1"><a href="../motivations.html">Motivations</a></li>
         <li class="level1"><a href="../resources_for_learners.html">Resources for Learners</a></li>
         <li class="level1"><a href="../jump_start_guide.html">Jump Start Guide</a></li>
@@ -248,23 +249,23 @@
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="type-name">Semigroup</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span></code></pre>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="type-name">Semigroup</span><span>[</span><span class="type-name">Int</span><span>]
-</span><span class="comment">// res8: Semigroup[Int] = cats.kernel.instances.IntGroup@1d8af374
+</span><span class="comment">// res8: Semigroup[Int] = cats.kernel.instances.IntGroup@6b8b2b37
 </span><span class="type-name">Semigroup</span><span>[</span><span class="type-name">String</span><span>]
-</span><span class="comment">// res9: Semigroup[String] = cats.kernel.instances.StringMonoid@3171cc31</span></code></pre>
+</span><span class="comment">// res9: Semigroup[String] = cats.kernel.instances.StringMonoid@1294611b</span></code></pre>
         <p>Instances for type constructors regardless of their type parameter such as <code>List</code> (<code>++</code>)
         and <code>Set</code> (<code>union</code>)...</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="type-name">Semigroup</span><span>[</span><span class="type-name">List</span><span>[</span><span class="type-name">Byte</span><span>]]
-</span><span class="comment">// res10: Semigroup[List[Byte]] = cats.kernel.instances.ListMonoid@362cf56
+</span><span class="comment">// res10: Semigroup[List[Byte]] = cats.kernel.instances.ListMonoid@37b59aa9
 </span><span class="type-name">Semigroup</span><span>[</span><span class="type-name">Set</span><span>[</span><span class="type-name">Int</span><span>]]
-</span><span class="comment">// res11: Semigroup[Set[Int]] = cats.kernel.instances.SetSemilattice@5486eef0
+</span><span class="comment">// res11: Semigroup[Set[Int]] = cats.kernel.instances.SetSemilattice@dda3a94
 </span><span>
 </span><span class="keyword">trait</span><span> </span><span class="type-name">Foo</span><span>
 </span><span class="type-name">Semigroup</span><span>[</span><span class="type-name">List</span><span>[</span><span class="type-name">Foo</span><span>]]
-</span><span class="comment">// res12: Semigroup[List[Foo]] = cats.kernel.instances.ListMonoid@362cf56</span></code></pre>
+</span><span class="comment">// res12: Semigroup[List[Foo]] = cats.kernel.instances.ListMonoid@37b59aa9</span></code></pre>
         <p>And instances for type constructors that depend on (one of) their type parameters having instances such
         as tuples (pointwise <code>combine</code>).</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="type-name">Semigroup</span><span>[(</span><span class="type-name">List</span><span>[</span><span class="type-name">Foo</span><span>], </span><span class="type-name">Int</span><span>)]
-</span><span class="comment">// res13: Semigroup[(List[Foo], Int)] = cats.kernel.Monoid$$anon$2@1edda647</span></code></pre>
+</span><span class="comment">// res13: Semigroup[(List[Foo], Int)] = cats.kernel.Monoid$$anon$2@3f3a6a8b</span></code></pre>
         
         <h1 id="example-usage-merging-maps" class="section">Example usage: Merging maps<a class="anchor-link right" href="#example-usage-merging-maps"><i class="icofont-laika">&#xef71;</i></a></h1>
         <p>Consider a function that merges two <code>Map</code>s that combines values if they share

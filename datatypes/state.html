@@ -108,6 +108,7 @@
         <li class="level1"><a href="../typeclasses.html">Type Classes</a></li>
         <li class="level1"><a href="../datatypes.html">Data Types</a></li>
         <li class="level1"><a href="../algebra.html">Algebra</a></li>
+        <li class="level1"><a href="../alleycats.html">Alleycats</a></li>
         <li class="level1"><a href="../motivations.html">Motivations</a></li>
         <li class="level1"><a href="../resources_for_learners.html">Resources for Learners</a></li>
         <li class="level1"><a href="../jump_start_guide.html">Jump Start Guide</a></li>
@@ -453,7 +454,7 @@
   </span><span class="identifier">_</span><span> &lt;- </span><span class="identifier">close</span><span>
   </span><span class="identifier">_</span><span> &lt;- </span><span class="identifier">open</span><span>
 } </span><span class="keyword">yield</span><span> ()
-</span><span class="comment">// valid: IndexedStateT[Eval, Closed.type, Open.type, Unit] = cats.data.IndexedStateT@7ece4aab</span></code></pre>
+</span><span class="comment">// valid: IndexedStateT[Eval, Closed.type, Open.type, Unit] = cats.data.IndexedStateT@429a81db</span></code></pre>
         <p>Note that the inferred type of <code>valid</code> correctly models that this computation can be executed only with an initial <code>Closed</code> state.</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">valid</span><span>.</span><span class="identifier">run</span><span>(</span><span class="type-name">Open</span><span>)
 </span><span class="comment">// error: type mismatch;
@@ -462,7 +463,7 @@
 // valid.run(Open)
 //           ^^^^</span></code></pre>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">valid</span><span>.</span><span class="identifier">run</span><span>(</span><span class="type-name">Closed</span><span>)
-</span><span class="comment">// res6: Eval[(Open.type, Unit)] = cats.Eval$$anon$1@18cb0170</span></code></pre>
+</span><span class="comment">// res6: Eval[(Open.type, Unit)] = cats.Eval$$anon$1@1f24c6a8</span></code></pre>
 
         <hr style="margin-top: 30px"/>
         <footer style="font-size: 90%; text-align: center">
