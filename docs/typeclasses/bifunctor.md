@@ -19,7 +19,7 @@ convert it to an UNIX timestamp.
 
 ```scala mdoc:silent
 import cats._
-import cats.implicits._
+import cats.syntax.all._
 import java.time._
 
 case class DomainError(message: String)

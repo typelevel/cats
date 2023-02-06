@@ -18,7 +18,7 @@ One example application one could think of is, when we have a list of text snipp
 count the occurrence of each word in each snippet and return all the common words and their occurrences in each snippet:
 
 ```scala mdoc
-import cats.implicits._
+import cats.syntax.all._
 import cats.data.NonEmptyList
 
 val snippets = NonEmptyList.of("What do you do", "What are you doing")

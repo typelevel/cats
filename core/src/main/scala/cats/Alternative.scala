@@ -85,7 +85,7 @@ trait Alternative[F[_]] extends NonEmptyAlternative[F] with MonoidK[F] { self =>
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val l: List[Either[String, Int]] = List(Right(1), Left("error"))
    * scala> Alternative[List].separateFoldable(l)
    * res0: (List[String], List[Int]) = (List(error),List(1))
@@ -104,7 +104,7 @@ trait Alternative[F[_]] extends NonEmptyAlternative[F] with MonoidK[F] { self =>
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> def even(i: Int): Option[String] = Alternative[Option].guard(i % 2 == 0).as("even")
    * scala> even(2)
    * res0: Option[String] = Some(even)

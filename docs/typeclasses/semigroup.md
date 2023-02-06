@@ -38,7 +38,7 @@ Semigroup[Int].combine(Semigroup[Int].combine(x, y), z)
 Infix syntax is also available for types that have a `Semigroup` instance.
 
 ```scala mdoc
-import cats.implicits._
+import cats.syntax.all._
 
 1 |+| 2
 ```
@@ -47,7 +47,7 @@ A more compelling example which we'll see later in this tutorial is the `Semigro
 for `Map`s.
 
 ```scala mdoc:silent
-import cats.implicits._
+import cats.syntax.all._
 
 val map1 = Map("hello" -> 1, "world" -> 1)
 val map2 = Map("hello" -> 2, "cats"  -> 3)
@@ -65,7 +65,7 @@ Cats provides many `Semigroup` instances out of the box such as `Int` (`+`) and 
 
 ```scala mdoc:reset:silent
 import cats.Semigroup
-import cats.implicits._
+import cats.syntax.all._
 ```
 
 ```scala mdoc
@@ -99,7 +99,7 @@ type say, `Int` or `List[String]`, but we can write it once and for all for
 any type with a `Semigroup` instance.
 
 ```scala mdoc:silent
-import cats.implicits._
+import cats.syntax.all._
 
 def optionCombine[A: Semigroup](a: A, opt: Option[A]): A =
   opt.map(a |+| _).getOrElse(a)

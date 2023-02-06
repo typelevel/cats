@@ -13,7 +13,7 @@ Below is a short example of a situation where we might run into this.
 For simplicity, we'll use `String` as our type to represent errors.
 
 ```scala mdoc
-import cats.implicits._
+import cats.syntax.all._
 import cats.data._
 
 case class Name(value: String)

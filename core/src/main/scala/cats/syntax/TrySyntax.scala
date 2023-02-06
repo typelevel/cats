@@ -37,7 +37,7 @@ final class TryOps[A](private val self: Try[A]) extends AnyVal {
    * lift the `try` into a `F[_]` with `ApplicativeThrow[F]` instance
    *
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import util.Try
    *
    * scala> val s: Try[Int] = Try(3)

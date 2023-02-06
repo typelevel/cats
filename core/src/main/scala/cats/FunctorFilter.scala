@@ -37,7 +37,7 @@ trait FunctorFilter[F[_]] extends Serializable {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val m: Map[Int, String] = Map(1 -> "one", 3 -> "three")
    * scala> val l: List[Int] = List(1, 2, 3, 4)
    * scala> def asString(i: Int): Option[String] = m.get(i)
@@ -53,7 +53,7 @@ trait FunctorFilter[F[_]] extends Serializable {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val l: List[Int] = List(1, 2, 3, 4)
    * scala> FunctorFilter[List].collect(l){
    *      |   case 1 => "one"
@@ -71,7 +71,7 @@ trait FunctorFilter[F[_]] extends Serializable {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val l: List[Option[Int]] = List(Some(1), None, Some(3), None)
    * scala> l.flattenOption
    * res0: List[Int] = List(1, 3)

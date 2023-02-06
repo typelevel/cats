@@ -22,7 +22,7 @@ Say we have a class `Money` with a `Show` instance, and a `Salary` class:
 ```scala mdoc:silent
 import cats._
 
-import cats.implicits._
+import cats.syntax.all._
 
 case class Money(amount: Int)
 case class Salary(size: Money)

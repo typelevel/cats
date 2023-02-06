@@ -33,7 +33,7 @@ trait Bifunctor[F[_, _]] extends Serializable { self =>
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all.__
    *
    * scala> val x: (List[String], Int) = (List("foo", "bar"), 3)
    * scala> x.bimap(_.headOption, _.toLong + 1)
@@ -67,7 +67,7 @@ trait Bifunctor[F[_, _]] extends Serializable { self =>
    * Widens A into a supertype AA.
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> sealed trait Foo
    * scala> case object Bar extends Foo
    * scala> val x1: Either[Bar.type, Int] = Either.left(Bar)

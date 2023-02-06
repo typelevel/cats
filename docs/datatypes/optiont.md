@@ -31,7 +31,7 @@ As you can see, the implementations of all of these variations are very similar.
 
 ```scala mdoc:silent:nest
 import cats.data.OptionT
-import cats.implicits._
+import cats.syntax.all._
 
 val customGreetingT: OptionT[Future, String] = OptionT(customGreeting)
 

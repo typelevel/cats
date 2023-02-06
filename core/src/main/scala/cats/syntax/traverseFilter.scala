@@ -36,7 +36,7 @@ final class SequenceFilterOps[F[_], G[_], A](private val fgoa: F[G[Option[A]]]) 
 
   /**
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val a: List[Either[String, Option[Int]]] = List(Right(Some(1)), Right(Some(5)), Right(Some(3)))
    * scala> val b: Either[String, List[Int]] = a.sequenceFilter
    * b: Either[String, List[Int]] = Right(List(1, 5, 3))

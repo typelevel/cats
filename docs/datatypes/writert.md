@@ -89,7 +89,7 @@ only extends [`Applicative`](../typeclasses/applicative.md), but not [`Monad`](.
 ```scala mdoc:silent
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
-import cats.implicits._
+import cats.syntax.all._
 
 val validatedWriterT1 : WriterT[Validated[String, *], String, Int] = WriterT(Valid(("writerT value 1", 123)))
 val validatedWriterT2 : WriterT[Validated[String, *], String, Int] = WriterT(Valid(("writerT value 1", 123)))

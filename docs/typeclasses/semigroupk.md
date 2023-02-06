@@ -16,7 +16,7 @@ First some imports.
 
 ```scala mdoc:silent
 import cats._
-import cats.implicits._
+import cats.syntax.all._
 ```
 
 For `List`, the `Semigroup` instance's `combine` operation and the `SemigroupK`
@@ -52,7 +52,7 @@ There is inline syntax available for both `Semigroup` and
 from `SemigroupK` (called `Plus` in scalaz).
 
 ```scala mdoc:silent
-import cats.implicits._
+import cats.syntax.all._
 
 val one = Option(1)
 val two = Option(2)

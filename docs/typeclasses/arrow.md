@@ -19,7 +19,7 @@ Suppose we want to write a function `meanAndVar`, that takes a `List[Int]` and r
 
 ```scala mdoc:silent
 import cats.arrow.Arrow
-import cats.implicits._
+import cats.syntax.all._
 
 def combine[F[_, _]: Arrow, A, B, C](fab: F[A, B], fac: F[A, C]): F[A, (B, C)] =
   Arrow[F].lift((a: A) => (a, a)) >>> (fab *** fac)

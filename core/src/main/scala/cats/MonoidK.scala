@@ -50,7 +50,7 @@ trait MonoidK[F[_]] extends SemigroupK[F] { self =>
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> MonoidK[List].empty[Long]
    * res0: List[Long] = List()
    * }}}
@@ -77,7 +77,7 @@ trait MonoidK[F[_]] extends SemigroupK[F] { self =>
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> MonoidK[List].algebra[Long].empty
    * res0: List[Long] = List()
    * }}}
@@ -93,7 +93,7 @@ trait MonoidK[F[_]] extends SemigroupK[F] { self =>
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val monoidK = MonoidK[List].compose[Option]
    * scala> monoidK.combineK(List(Some(1)), List(Some(2), None))
    * res0: List[Option[Int]] = List(Some(1), Some(2), None)

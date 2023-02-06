@@ -26,7 +26,7 @@ First some imports.
 ```scala mdoc:silent
 import cats._
 import cats.data._
-import cats.implicits._
+import cats.syntax.all._
 import cats.instances.list._
 ```
 

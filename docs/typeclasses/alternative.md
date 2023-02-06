@@ -40,7 +40,7 @@ The relevant imports:
 
 ```scala mdoc:reset:silent
 import cats.Alternative
-import cats.implicits._
+import cats.syntax.all._
 ```
 
 And what we can do with them:

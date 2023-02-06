@@ -39,7 +39,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import cats.data.EitherT
    *
    * scala> val eitherT: EitherT[List, String, Int] = EitherT[List, String, Int](List(Left("456"), Right(123)))
@@ -54,7 +54,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import cats.data.EitherT
    *
    * scala> val eitherT: EitherT[List, String, Int] = EitherT[List, String, Int](List(Right(123),Left("abc")))
@@ -67,7 +67,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
   /**
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import cats.data.EitherT
    *
    * scala> val eitherT: EitherT[List,String,Int] = EitherT[List, String,Int](List(Right(123),Left("abc")))
@@ -80,7 +80,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
   /**
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import cats.data.EitherT
    *
    * scala> val eitherT: EitherT[List,String,Int] = EitherT[List, String,Int](List(Right(123),Left("abc")))
@@ -93,7 +93,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
   /**
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import cats.data.EitherT
    *
    * scala> val eitherT: EitherT[List,String,Int] = EitherT[List, String,Int](List(Right(123),Left("abc")))
@@ -106,7 +106,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
   /**
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import cats.data.EitherT
    *
    * scala> val eitherT: EitherT[List,String,Int] = EitherT[List, String,Int](List(Right(123),Left("abc")))
@@ -119,7 +119,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
   /**
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import cats.data.EitherT
    *
    * scala> val eitherT: EitherT[List,String,Int] = EitherT[List, String,Int](List(Right(123),Left("abc")))
@@ -142,7 +142,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
    * Example:
    * {{{
    * scala> import cats.data.EitherT
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import scala.util.{Success, Failure, Try}
   
    * scala> val eitherT: EitherT[Try,String,Int] = EitherT[Try,String,Int](Success(Left("abc")))
@@ -156,7 +156,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
   /**
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import cats.data.EitherT
    *
    * scala> val e1: EitherT[Option,String,Int] = EitherT[Option, String,Int](Some(Right(123)))
@@ -177,7 +177,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
   /**
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import cats.data.EitherT
    *
    * scala> val eitherT: EitherT[List,String,Int] =
@@ -200,7 +200,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
   /**
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import cats.data.EitherT
    *
    * scala> val eitherT: EitherT[List,String,Int] =
@@ -225,7 +225,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import cats.data.EitherT
    *
    * scala> val e1: EitherT[Option, Unit, Int] = EitherT[Option, Unit, Int](Some(Right(123)))
@@ -254,7 +254,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
   /**
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import cats.data.EitherT
    *
    * scala> val eitherT: EitherT[List, String, Int] = EitherT[List, String, Int](List(Right(123), Left("abc")))
@@ -267,7 +267,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
   /**
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import cats.data.EitherT
    *
    * scala> val eitherT: EitherT[List, String, Int] = EitherT[List, String, Int](List(Right(123), Left("abc")))
@@ -284,7 +284,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
   /**
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import cats.data.EitherT
    *
    * scala> val eitherT: EitherT[List, String, Int] = EitherT[List, String, Int](List(Right(123), Left("abc")))
@@ -297,7 +297,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
   /**
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import cats.data.EitherT
    *
    * scala> val eitherT: EitherT[List, String, Int] = EitherT[List, String, Int](List(Right(123), Left("abc")))
@@ -310,7 +310,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
   /**
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import cats.data.EitherT
    *
    * scala> val e1: EitherT[List, String, Int] = EitherT[List, String, Int](List(Right(123), Left("abc")))
@@ -335,7 +335,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
   /**
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import cats.data.EitherT
    *
    * scala> val e1: EitherT[List, String, Int] = EitherT[List, String, Int](List(Right(123), Left("abc")))
@@ -360,7 +360,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
   /**
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import cats.data.EitherT
    *
    * scala> val eitherT: EitherT[List, String, Int] = EitherT[List, String, Int](List(Right(123), Left("abc")))
@@ -373,7 +373,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
   /**
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import cats.data.EitherT
    *
    * scala> val eitherT: EitherT[List, String, Int] = EitherT[List, String, Int](List(Right(123), Left("abc")))
@@ -390,7 +390,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
   /**
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import cats.data.EitherT
    *
    * scala> val eitherT: EitherT[List, String, Int] =
@@ -408,7 +408,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
   /**
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import cats.data.EitherT
    *
    * scala> val eitherT: EitherT[List, String, Int] =
@@ -487,7 +487,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import cats.data.EitherT
    *
    * scala> val eitherT: EitherT[List, String, Int] = EitherT[List, String, Int](List(Left("abc"), Right(123)))
@@ -560,7 +560,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
    * Examples:
    * {{{
    * scala> import cats.data.EitherT
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val l1: EitherT[Option, String, Int] = EitherT.left(Some("error 1"))
    * scala> val l2: EitherT[Option, String, Int] = EitherT.left(Some("error 2"))
    * scala> val r3: EitherT[Option, String, Int] = EitherT.right(Some(3))
@@ -624,7 +624,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> type Error = String
    * scala> val v1: Validated[NonEmptyList[Error], Int] = Validated.invalidNel("error 1")
    * scala> val v2: Validated[NonEmptyList[Error], Int] = Validated.invalidNel("error 2")
@@ -647,7 +647,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
    *
    * {{{
    * scala> import cats.data.EitherT
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val ff: EitherT[List, String, Int => String] =
    *      |   EitherT(List(Either.right(_.toString), Either.left("error")))
    * scala> val fa: EitherT[List, String, Int] =
@@ -666,7 +666,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
    * Example:
    * {{{
    * scala> import cats.data.{EitherT, Validated}
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val f: Int => String = i => (i*2).toString
    * scala> val r1: EitherT[Option, String, Int => String] = EitherT.right(Some(f))
    * r1: cats.data.EitherT[Option,String,Int => String] = EitherT(Some(Right(<function1>)))
@@ -721,7 +721,7 @@ object EitherT extends EitherTInstances {
    * Creates a left version of `EitherT[F, A, B]` from a `F[A]`
    * {{{
    * scala> import cats.data.EitherT
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> EitherT.left[Int](Option("err"))
    * res0: cats.data.EitherT[Option,String,Int] = EitherT(Some(Left(err)))
    * }}}
@@ -739,7 +739,7 @@ object EitherT extends EitherTInstances {
    * Creates a left version of `EitherT[F, A, B]` from a `A`
    * {{{
    * scala> import cats.data.EitherT
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> EitherT.leftT[Option, Int]("err")
    * res0: cats.data.EitherT[Option,String,Int] = EitherT(Some(Left(err)))
    * }}}
@@ -757,7 +757,7 @@ object EitherT extends EitherTInstances {
    * Creates a right version of `EitherT[F, A, B]` from a `F[B]`
    * {{{
    * scala> import cats.data.EitherT
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> EitherT.right[String](Option(3))
    * res0: cats.data.EitherT[Option,String,Int] = EitherT(Some(Right(3)))
    * }}}
@@ -775,7 +775,7 @@ object EitherT extends EitherTInstances {
    * Creates a new `EitherT[F, A, B]` from a `B`
    * {{{
    * scala> import cats.data.EitherT
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> EitherT.pure[Option, String](3)
    * res0: cats.data.EitherT[Option,String,Int] = EitherT(Some(Right(3)))
    * }}}
@@ -786,7 +786,7 @@ object EitherT extends EitherTInstances {
    * Alias for [[pure]]
    * {{{
    * scala> import cats.data.EitherT
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> EitherT.rightT[Option, String](3)
    * res0: cats.data.EitherT[Option,String,Int] = EitherT(Some(Right(3)))
    * }}}
@@ -797,7 +797,7 @@ object EitherT extends EitherTInstances {
    * Alias for [[right]]
    * {{{
    * scala> import cats.data.EitherT
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val o: Option[Int] = Some(3)
    * scala> val n: Option[Int] = None
    * scala> EitherT.liftF(o)
@@ -851,7 +851,7 @@ object EitherT extends EitherTInstances {
    * Note: The return type is a FromEitherPartiallyApplied[F], which has an apply method
    * on it, allowing you to call fromEither like this:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val t: Either[String, Int] = Either.right(3)
    * scala> EitherT.fromEither[Option](t)
    * res0: EitherT[Option, String, Int] = EitherT(Some(Right(3)))
@@ -873,7 +873,7 @@ object EitherT extends EitherTInstances {
    * Transforms an `Option` into an `EitherT`, lifted into the specified `Applicative` and using
    *  the second argument if the `Option` is a `None`.
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val o: Option[Int] = None
    * scala> EitherT.fromOption[List](o, "Answer not known.")
    * res0: EitherT[List, String, Int]  = EitherT(List(Left(Answer not known.)))
@@ -901,7 +901,7 @@ object EitherT extends EitherTInstances {
   /**
    * Transforms an `F[Option]` into an `EitherT`, using the second argument if the `Option` is a `None`.
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val o: Option[Int] = None
    * scala> EitherT.fromOptionF(List(o), "Answer not known.")
    * res0: EitherT[List, String, Int]  = EitherT(List(Left(Answer not known.)))

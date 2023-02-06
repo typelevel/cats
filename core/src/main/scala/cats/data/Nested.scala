@@ -32,7 +32,7 @@ package data
  * {{{
  * scala> import cats.Functor
  * scala> import cats.data.Nested
- * scala> import cats.implicits._
+ * scala> import cats.syntax.all._
  * scala> val listOption: List[Option[Int]] = List(Some(1), None)
  * scala> val f: Int => String = i => (i * 2).toString
  * scala> Functor[List].map(listOption)(opt => opt.map(f))

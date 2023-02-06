@@ -77,7 +77,7 @@ import java.util.Date
 
 // import everything for simplicity:
 import cats._
-import cats.implicits._
+import cats.syntax.all._
 
 def longToDate: Long => Date = new Date(_)
 def dateToLong: Date => Long = _.getTime

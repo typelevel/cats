@@ -48,7 +48,7 @@ final class IndexedReaderWriterStateT[F[_], E, L, SA, SB, A](val runF: F[(E, SA)
    * Modify the initial environment using `f`.
    *
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> type Env = String
    * scala> type GlobalEnv = (Int, Env)
    * scala> type Log = List[String]
@@ -69,7 +69,7 @@ final class IndexedReaderWriterStateT[F[_], E, L, SA, SB, A](val runF: F[(E, SA)
   /**
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val x: IndexedReaderWriterStateT[Option, String, String, Int, Int, Unit] = IndexedReaderWriterStateT.tell("something")
    * scala> val y: IndexedReaderWriterStateT[Option, String, String, Int, Int, (Unit, String)] = x.listen
    * scala> y.run("environment", 17)
@@ -167,7 +167,7 @@ final class IndexedReaderWriterStateT[F[_], E, L, SA, SB, A](val runF: F[(E, SA)
    * Like [[transform]], but allows the context to change from `F` to `G`.
    *
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> type ErrorOr[A] = Either[String, A]
    * scala> type Env = String
    * scala> type Log = List[String]
@@ -189,7 +189,7 @@ final class IndexedReaderWriterStateT[F[_], E, L, SA, SB, A](val runF: F[(E, SA)
    * Like [[transform]], but does it in the monadic context `F`.
    *
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> type Env = String
    * scala> type Log = List[String]
    * scala> val xOpt0: IndexedReaderWriterStateT[Option, Env, Log, Int, Int, Int] = IndexedReaderWriterStateT.get
@@ -211,7 +211,7 @@ final class IndexedReaderWriterStateT[F[_], E, L, SA, SB, A](val runF: F[(E, SA)
    * Transform the state used. See [[StateT]] for more details.
    *
    * {{{
-   * scala> import cats.implicits._ // needed for StateT.apply
+   * scala> import cats.syntax.all._ // needed for StateT.apply
    * scala> type Env = String
    * scala> type Log = List[String]
    * scala> type S[SA, SB, A] = IndexedReaderWriterStateT[Option, Env, Log, SA, SB, A]
@@ -254,7 +254,7 @@ final class IndexedReaderWriterStateT[F[_], E, L, SA, SB, A](val runF: F[(E, SA)
    * Inspect a value from the environment and input state, without modifying the state.
    *
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> type Env = String
    * scala> type Log = List[String]
    * scala> val xOpt: IndexedReaderWriterStateT[Option, Env, Log, Int, Int, Int] = IndexedReaderWriterStateT.get

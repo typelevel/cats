@@ -26,7 +26,7 @@ val both = Ior.both("Warning", 3)
 Cats also offers syntax enrichment for `Ior`. The `leftIor` and `rightIor` functions can be imported from `cats.syntax.ior._`:
 
 ```scala mdoc:nest
-import cats.implicits._
+import cats.syntax.all._
 
 val right = 3.rightIor
 
@@ -41,7 +41,7 @@ For example, sometimes, we might want to accumulate warnings together with a val
 Here's an example of how we might be able to do that:
 
 ```scala mdoc:reset-object:silent
-import cats.implicits._
+import cats.syntax.all._
 import cats.data.{ NonEmptyChain => Nec, Ior}
 
 
@@ -108,7 +108,7 @@ type IorNec[B, A] = Ior[NonEmptyChain[B], A]
 
 
 ```scala mdoc:nest
-import cats.implicits._, cats.data.NonEmptyChain
+import cats.syntax.all._, cats.data.NonEmptyChain
 
 val left: IorNec[String, Int] = Ior.fromEither("Error".leftNec[Int])
 

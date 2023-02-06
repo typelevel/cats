@@ -35,7 +35,7 @@ trait CoflatMap[F[_]] extends Functor[F] {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import cats.CoflatMap
    * scala> val fa = Some(3)
    * scala> def f(a: Option[Int]): Int = a match {
@@ -53,7 +53,7 @@ trait CoflatMap[F[_]] extends Functor[F] {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import cats.CoflatMap
    * scala> val fa = Some(3)
    * fa: Option[Int] = Some(3)

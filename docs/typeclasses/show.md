@@ -52,7 +52,7 @@ Cats also offers `Show` syntax to make working with it easier.
 This includes the `show` method which can be called on anything with a `Show` instance in scope:
 
 ```scala mdoc
-import cats.implicits._
+import cats.syntax.all._
 
 val john = Person("John", 31)
 

@@ -43,7 +43,7 @@ trait Semigroupal[F[_]] extends Serializable {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val noneInt: Option[Int] = None
    * scala> val some3: Option[Int] = Some(3)

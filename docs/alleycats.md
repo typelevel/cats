@@ -103,7 +103,7 @@ the type used to represent a `Map`s `values`, and its often desirable to treat t
 values of a map as a `Foldable` collection. Alleycats provides a `Foldable[Iterable]`, eg:
 
 ```
-import cats.implicits._
+import cats.syntax.all._
 import alleycats.std.iterable._
 
 // Result "AppleOrange"

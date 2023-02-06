@@ -7,7 +7,7 @@ following program:
 
 ```scala mdoc
 import scala.util.Try
-import cats.implicits._
+import cats.syntax.all._
 
 def parseDouble(s: String): Either[String, Double] =
   Try(s.toDouble).map(Right(_)).getOrElse(Left(s"$s is not a number"))
@@ -68,7 +68,7 @@ asynchronous division program can be rewritten as follows:
 
 ```scala mdoc:nest
 import cats.data.EitherT
-import cats.implicits._
+import cats.syntax.all._
 
 def divisionProgramAsync(inputA: String, inputB: String): EitherT[Future, String, Double] =
   for {
