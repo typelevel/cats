@@ -33,7 +33,7 @@ trait Bifunctor[F[_, _]] extends Serializable { self =>
    *
    * Example:
    * {{{
-   * scala> import cats.syntax.all.__
+   * scala> import cats.syntax.all._
    *
    * scala> val x: (List[String], Int) = (List("foo", "bar"), 3)
    * scala> x.bimap(_.headOption, _.toLong + 1)

@@ -99,7 +99,7 @@ trait Apply[F[_]] extends Functor[F] with InvariantSemigroupal[F] with ApplyArit
    *
    * Example:
    * {{{
-   * scala> import cats.syntax.all.__
+   * scala> import cats.syntax.all._
    * scala> import cats.data.Validated
    * scala> import Validated.{Valid, Invalid}
    *

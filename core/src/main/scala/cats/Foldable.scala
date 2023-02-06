@@ -160,7 +160,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    *
    * Example:
    * {{{
-   * scala> import cats.syntax.all.___
+   * scala> import cats.syntax.all._
    * scala> val l = List(6, 3, 2)
    * This is equivalent to (6 - 3) - 2
    * scala> Foldable[List].reduceLeftOption(l)(_ - _)

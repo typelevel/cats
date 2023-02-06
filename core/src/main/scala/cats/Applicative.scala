@@ -174,7 +174,7 @@ trait Applicative[F[_]] extends Apply[F] with InvariantMonoidal[F] { self =>
    * Example:
    * {{{
    * scala> import cats.kernel.Comparison
-   * scala> import cats.syntax.all.__
+   * scala> import cats.syntax.all._
    *
    * // compares strings by alphabetical order
    * scala> val alpha: Order[String] = Order[String]

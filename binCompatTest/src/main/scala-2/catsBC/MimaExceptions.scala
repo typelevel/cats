@@ -21,6 +21,7 @@
 
 package catsBC
 import cats.InjectK
+import cats.instances.all._
 import cats.syntax.all._
 
 object MimaExceptions {
