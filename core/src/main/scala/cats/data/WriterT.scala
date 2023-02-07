@@ -31,7 +31,7 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
    * Example:
    * {{{
    * scala> import cats.data.WriterT
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val writer = WriterT.liftF[Option, List[String], Int](Some(123))
    * scala> writer.tell(List("a","b","c")).tell(List("d","e","f"))
@@ -45,7 +45,7 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
    * Example:
    * {{{
    * scala> import cats.data.WriterT
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val writer: WriterT[Option, List[String], Int] = WriterT.liftF(Some(123))
    * scala> writer.tell(List("a","b","c")).written.getOrElse(Nil)
@@ -59,7 +59,7 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
    * Example:
    * {{{
    * scala> import cats.data.WriterT
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val writer: WriterT[Option, List[String], Int] = WriterT.liftF(Some(123))
    * scala> val wt: WriterT[Option, List[String], Int] = writer.tell(List("error"))
@@ -76,7 +76,7 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
    * Example:
    * {{{
    * scala> import cats.data.WriterT
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val writer: WriterT[Option, String, Int] = WriterT.liftF(Some(123))
    * scala> val wt: WriterT[Option, String, Int] = writer.tell("error").tell(" log")
@@ -95,7 +95,7 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
    * Example:
    * {{{
    * scala> import cats.data.WriterT
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val writer: WriterT[Option, String, Int] = WriterT.liftF(Some(123))
    * scala> val wt: WriterT[Option, String, Int] = writer.tell("error")
@@ -117,7 +117,7 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
    * Example:
    * {{{
    * scala> import cats.data.WriterT
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val wr1: WriterT[Option, String, Int] = WriterT.liftF(None)
    * scala> val wr2 = wr1.tell("error")
@@ -143,7 +143,7 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
    * Example:
    * {{{
    * scala> import cats.data.WriterT
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val wr1: WriterT[Option, String, Int] = WriterT.liftF(Some(123))
    * scala> val wr2 = wr1.tell("log...")
@@ -163,7 +163,7 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
    * {{{
    * scala> import cats.data.WriterT
    * scala> import cats.arrow.FunctionK
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val optionWriter = WriterT.liftF[Option, String, Int](Some(123)).tell("log")
    * res0: WriterT[Option, String, Int](Some((log,123)))
@@ -187,7 +187,7 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
    * Example:
    * {{{
    * scala> import cats.data.WriterT
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val wr1 = WriterT.liftF[Option, String, Int](Some(123)).tell("error")
    * res0: WriterT[Option, String, Int] = WriterT(Some(error,123))
@@ -210,7 +210,7 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
    * Example:
    * {{{
    * scala> import cats.data.WriterT
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val wr1 = WriterT.liftF[Option, String, Int](Some(123)).tell("quack")
    * res0: WriterT[Option, String, Int] = WriterT(Some(quack,123))
@@ -226,7 +226,7 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
    * Example:
    * {{{
    * scala> import cats.data.WriterT
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val wr1 = WriterT.liftF[Option, String, Int](Some(123)).tell("456")
    * res0: WriterT[Option, String, Int] = WriterT(Some(456,123))
@@ -242,7 +242,7 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
    * Example:
    * {{{
    * scala> import cats.data.WriterT
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val writer = WriterT.liftF[Option, String, Int](Some(246)).tell("error")
    * res0: WriterT[Option, String, Int] = WriterT(Some((error,246)))
@@ -258,7 +258,7 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
    * Example:
    * {{{
    * scala> import cats.data.WriterT
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val writer = WriterT.liftF[Option, String, Int](Some(123)).tell("log")
    * scala> writer.swap
@@ -272,7 +272,7 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
    * Example:
    * {{{
    * scala> import cats.data.WriterT
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val writer = WriterT.liftF[Option, String, Int](Some(123)).tell("error")
    * scala> writer.reset
@@ -286,7 +286,7 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
    * Example:
    * {{{
    * scala> import cats.data.WriterT
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val writer = WriterT.liftF[Option, String, Int](Some(456)).tell("log...")
    * scala> writer.show
@@ -299,7 +299,7 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
    * Example:
    * {{{
    * scala> import cats.data.WriterT
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val writer = WriterT.liftF[Option, String, Int](Some(123)).tell("hi")
    * scala> writer.foldLeft(456)((acc,v) => acc + v)
@@ -314,7 +314,7 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
    * {{{
    * scala> import cats.data.WriterT
    * scala> import cats.Eval
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val writer = WriterT.liftF[Option, String, Int](Some(123)).tell("hi")
    * scala> writer
@@ -330,7 +330,7 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
    * Example:
    * {{{
    * scala> import cats.data.WriterT
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val writer = WriterT.liftF[Option, String, Int](Some(123)).tell("hi")
    * scala> writer.traverse[List,Int](i => List(i))

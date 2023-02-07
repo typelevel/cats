@@ -38,7 +38,7 @@ trait Function1Syntax {
      *
      * Example:
      * {{{
-     * scala> import cats.implicits._
+     * scala> import cats.syntax.all._
      *
      * scala> val someF: Option[Int => Long] = Some(_.toLong + 1L)
      * scala> val noneF: Option[Int => Long] = None
@@ -63,7 +63,7 @@ trait Function1Syntax {
      * Example:
      * {{{
      * scala> import scala.util._
-     * scala> import cats.implicits._
+     * scala> import cats.syntax.all._
      *
      * scala> val f: List[String] => Option[String] = _.headOption
      * scala> val g: String => Option[Int] = str => Try(str.toInt).toOption
@@ -88,7 +88,7 @@ trait Function1Syntax {
      * Example:
      * {{{
      * scala> import scala.util._
-     * scala> import cats.implicits._
+     * scala> import cats.syntax.all._
      *
      * scala> val f: String => Option[Int] = str => Try(str.toInt).toOption
      * scala> val g: List[String] => Option[String] = _.headOption

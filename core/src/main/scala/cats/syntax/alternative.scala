@@ -48,7 +48,7 @@ sealed private[syntax] trait UniteOpsBinCompat0[F[_], G[_], A] extends Any { sel
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val x: List[Vector[Int]] = List(Vector(1, 2), Vector(3, 4))
    * scala> x.unite
    * res0: List[Int] = List(1, 2, 3, 4)
@@ -71,7 +71,7 @@ final class SeparateOps[F[_], G[_, _], A, B](protected val fgab: F[G[A, B]])
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val l: List[Either[String, Int]] = List(Right(1), Left("error"))
    * scala> l.separateFoldable
    * res0: (List[String], List[Int]) = (List(error),List(1))
@@ -88,7 +88,7 @@ sealed private[syntax] trait SeparateOpsBinCompat0[F[_], G[_, _], A, B] extends 
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val l: List[Either[String, Int]] = List(Right(1), Left("error"))
    * scala> l.separate
    * res0: (List[String], List[Int]) = (List(error),List(1))
@@ -105,7 +105,7 @@ final class GuardOps(private val condition: Boolean) extends AnyVal {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> def even(i: Int): Option[String] = (i % 2 == 0).guard[Option].as("even")
    * scala> even(2)
    * res0: Option[String] = Some(even)

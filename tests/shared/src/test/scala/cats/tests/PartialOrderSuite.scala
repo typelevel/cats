@@ -27,7 +27,7 @@ import cats.kernel.laws.discipline.SerializableTests
 import cats.laws.discipline.{ContravariantMonoidalTests, MiniInt}
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
-import cats.implicits._
+import cats.syntax.all._
 import cats.tests.Helpers.POrd
 import org.scalacheck.Prop._
 

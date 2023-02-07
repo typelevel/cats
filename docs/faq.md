@@ -87,7 +87,7 @@ Here is how we could achieve the effect of the previous example using `Nested`:
 
 ```scala mdoc:silent
 import cats.data.Nested
-import cats.implicits._
+import cats.syntax.all._
 ```
 
 ```scala mdoc
@@ -193,7 +193,7 @@ Below is a list of symbols used in Cats.
 
 The `~>`, `⊥`, `⊤`, `:<:` and `:≺:` symbols can be imported with `import cats._`.
 
-All other symbols can be imported with `import cats.implicits._`
+All other symbols can be imported with `import cats.syntax.all._`
 
 | Symbol                           | Name                     | Nickname         | Type Class              | Signature                                                           |
 | -------------------------------- | -------------------------| ---------------- | ----------------------- | --------------------------------------------------------------------|

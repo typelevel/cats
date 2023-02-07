@@ -31,7 +31,7 @@ trait Choice[F[_, _]] extends Category[F] {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val b: Boolean => String = _.toString + " is a boolean"
    * scala> val i: Int => String =  _.toString + " is an integer"
    * scala> val f: (Either[Boolean, Int]) => String = b ||| i
@@ -52,7 +52,7 @@ trait Choice[F[_, _]] extends Category[F] {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val f: (Either[Int, Int]) => Int = Choice[Function1].codiagonal[Int]
    *
    * scala> f(Right(3))

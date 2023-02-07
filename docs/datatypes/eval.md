@@ -21,7 +21,7 @@ First of the strategies is eager evaluation, we can construct an `Eval` eagerly 
 
 ```scala mdoc
 import cats.Eval
-import cats.implicits._
+import cats.syntax.all._
 
 
 val eager = Eval.now {

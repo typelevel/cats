@@ -23,7 +23,7 @@ First some standard imports.
 ```scala mdoc:silent
 import cats._
 import cats.data._
-import cats.implicits._
+import cats.syntax.all._
 ```
 
 And examples.

@@ -41,7 +41,7 @@ trait Invariant[F[_]] extends Serializable { self =>
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import scala.concurrent.duration._
    *
    * scala> val durSemigroup: Semigroup[FiniteDuration] =
@@ -57,7 +57,7 @@ trait Invariant[F[_]] extends Serializable { self =>
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import scala.concurrent.duration._
    *
    * scala> val durSemigroupList: Semigroup[List[FiniteDuration]] =
@@ -78,7 +78,7 @@ trait Invariant[F[_]] extends Serializable { self =>
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import scala.concurrent.duration._
    *
    * scala> val durSemigroupList: Semigroup[List[FiniteDuration]] =
@@ -101,7 +101,7 @@ trait Invariant[F[_]] extends Serializable { self =>
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import scala.concurrent.duration._
    *
    * scala> type ToInt[T] = T => Int

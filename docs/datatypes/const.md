@@ -73,7 +73,7 @@ only thing we need is a `map` operation on the data type. Being good functional 
 
 ```scala mdoc:nest:silent
 import cats.Functor
-import cats.implicits._
+import cats.syntax.all._
 
 trait Lens[S, A] {
   def get(s: S): A

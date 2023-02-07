@@ -38,7 +38,7 @@ trait ArrowChoice[F[_, _]] extends Arrow[F] with Choice[F] { self =>
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val toLong: Int => Long = _.toLong
    * scala> val toDouble: Float => Double = _.toDouble
    * scala> val f: Either[Int, Float] => Either[Long, Double] = toLong +++ toDouble

@@ -13,7 +13,7 @@ validating an address:
 ```scala mdoc:silent
 import cats.data.Ior
 import cats.data.{ NonEmptyChain => Nec }
-import cats.implicits._
+import cats.syntax.all._
 import scala.util.{Success, Try}
 
 type Logs = Nec[String]

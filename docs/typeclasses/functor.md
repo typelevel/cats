@@ -59,7 +59,7 @@ Such composition can be achieved via the `Functor#compose` method.
 
 ```scala mdoc:reset:silent
 import cats.Functor
-import cats.implicits._
+import cats.syntax.all._
 ```
 
 ```scala mdoc
@@ -88,7 +88,7 @@ We can make this nicer at the cost of boxing with the `Nested` data type.
 
 ```scala mdoc:silent
 import cats.data.Nested
-import cats.implicits._
+import cats.syntax.all._
 ```
 
 ```scala mdoc

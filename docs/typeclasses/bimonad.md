@@ -23,7 +23,7 @@ Here is a possible implementation:
 ```scala mdoc
 import cats._
 import cats.data._
-import cats.implicits._
+import cats.syntax.all._
 
 implicit val nelBimonad =
   new Bimonad[NonEmptyList] {

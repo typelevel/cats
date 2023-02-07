@@ -45,7 +45,7 @@ trait TraverseFilter[F[_]] extends FunctorFilter[F] {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val m: Map[Int, String] = Map(1 -> "one", 3 -> "three")
    * scala> val l: List[Int] = List(1, 2, 3, 4)
    * scala> def asString(i: Int): Eval[Option[String]] = Now(m.get(i))
@@ -59,7 +59,7 @@ trait TraverseFilter[F[_]] extends FunctorFilter[F] {
   /**
    * A combined [[traverse]] and [[collect]].
    *
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val m: Map[Int, String] = Map(1 -> "one", 2 -> "two")
    * scala> val l: List[Int] = List(1, 2, 3, 4)
    * scala> def asString: PartialFunction[Int, Eval[Option[String]]] = { case n if n % 2 == 0 => Now(m.get(n)) }
@@ -74,7 +74,7 @@ trait TraverseFilter[F[_]] extends FunctorFilter[F] {
 
   /**
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val a: List[Either[String, Option[Int]]] = List(Right(Some(1)), Right(Some(5)), Right(Some(3)))
    * scala> val b: Either[String, List[Int]] = TraverseFilter[List].sequenceFilter(a)
    * b: Either[String, List[Int]] = Right(List(1, 5, 3))
@@ -92,7 +92,7 @@ trait TraverseFilter[F[_]] extends FunctorFilter[F] {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val l: List[Int] = List(1, 2, 3, 4)
    * scala> def odd(i: Int): Eval[Boolean] = Now(i % 2 == 1)
    * scala> val res: Eval[List[Int]] = l.filterA(odd)

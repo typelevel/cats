@@ -23,7 +23,7 @@ specify all of them. Often we have functions where there are one or more types t
 
 ```scala mdoc:silent
 import cats._
-import cats.implicits._
+import cats.syntax.all._
 import cats.data.OptionT
 ```
 ```scala mdoc

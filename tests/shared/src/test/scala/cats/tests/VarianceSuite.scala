@@ -23,7 +23,7 @@ package cats.tests
 
 import cats.arrow.Profunctor
 import cats.conversions.all._
-import cats.implicits._
+import cats.syntax.all._
 import cats.{Bifunctor, Contravariant, Functor}
 
 class VarianceSuite extends CatsSuite {

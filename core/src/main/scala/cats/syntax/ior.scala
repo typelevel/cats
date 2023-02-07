@@ -35,7 +35,7 @@ final class IorIdOps[A](private val a: A) extends AnyVal {
    * Example:
    * {{{
    * scala> import cats.data.Ior
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> "hello".rightIor[String]
    * res0: Ior[String, String] = Right(hello)
@@ -49,7 +49,7 @@ final class IorIdOps[A](private val a: A) extends AnyVal {
    * Example:
    * {{{
    * scala> import cats.data.Ior
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> "error".leftIor[String]
    * res0: Ior[String, String] = Left(error)

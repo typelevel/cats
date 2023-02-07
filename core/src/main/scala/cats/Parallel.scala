@@ -157,7 +157,7 @@ object Parallel extends ParallelArityFunctions2 {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import cats.data._
    * scala> val list: List[Int] = List(1, 2, 3, 4)
    * scala> def validate(n: Int): EitherNec[String, Option[Int]] =
@@ -182,7 +182,7 @@ object Parallel extends ParallelArityFunctions2 {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import cats.data._
    * scala> val list: List[EitherNec[String, Option[Int]]] = List(Left(NonEmptyChain.one("Error")), Left(NonEmptyChain.one("Warning!")))
    * scala> list.parSequenceFilter
@@ -201,7 +201,7 @@ object Parallel extends ParallelArityFunctions2 {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import cats.data._
    * scala> val list: List[Int] = List(1, 2, 3, 4)
    * scala> def validate(n: Int): EitherNec[String, Boolean] =

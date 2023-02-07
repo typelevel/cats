@@ -558,7 +558,7 @@ combined with `OptionT` for reducing boilerplate.
 import cats.free._
 import cats._
 import cats.data._
-import cats.implicits._
+import cats.syntax.all._
 import scala.util.Try
 
 sealed trait Ctx[A]

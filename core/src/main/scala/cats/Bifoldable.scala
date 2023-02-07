@@ -41,7 +41,7 @@ trait Bifoldable[F[_, _]] extends Serializable { self =>
    *
    * With syntax extensions, `bifoldLeft` can be used like:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> fab.bifoldLeft(Option(0))((c, a) => c.map(_ + a.head), (c, b) => c.map(_ + b))
    * res1: Option[Int] = Some(3)
    * }}}
@@ -73,7 +73,7 @@ trait Bifoldable[F[_, _]] extends Serializable { self =>
    *
    * With syntax extensions, `bifoldRight` can be used like:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val bifolded2 = fab.bifoldRight(Eval.now(0))((a, c) => c.map(_ + a.head), (b, c) => c.map(_ + b))
    * scala> bifolded2.value
    * res1: Int = 3

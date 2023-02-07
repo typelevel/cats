@@ -282,7 +282,7 @@ final class EitherOps[A, B](private val eab: Either[A, B]) extends AnyVal {
    *
    * Examples:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val l1: Either[String, Int] = Either.left("error 1")
    * scala> val l2: Either[String, Int] = Either.left("error 2")
    * scala> val r3: Either[String, Int] = Either.right(3)
@@ -323,7 +323,7 @@ final class EitherOps[A, B](private val eab: Either[A, B]) extends AnyVal {
    * Transform the `Either` into a [[cats.data.EitherT]] while lifting it into the specified Applicative.
    *
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val e: Either[String, Int] = Right(3)
    * scala> e.toEitherT[Option]
    * res0: cats.data.EitherT[Option, String, Int] = EitherT(Some(Right(3)))
@@ -345,7 +345,7 @@ final class EitherOps[A, B](private val eab: Either[A, B]) extends AnyVal {
    * lift the `Either` into a `F[_]` with `ApplicativeError[F, A]` instance
    *
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import cats.data.EitherT
    * scala> val e: Either[String, Int] = Right(3)
    * scala> e.liftTo[EitherT[Option, CharSequence, *]]
@@ -378,7 +378,7 @@ final class EitherObjectOps(private val either: Either.type) extends AnyVal {
    *
    * For example:
    * {{{
-   * scala> import cats.implicits._ // get syntax for Either
+   * scala> import cats.syntax.all._ // get syntax for Either
    * scala> Either.catchOnly[NumberFormatException] { "foo".toInt }
    * res0: Either[NumberFormatException, Int] = Left(java.lang.NumberFormatException: For input string: "foo")
    * }}}
@@ -451,7 +451,7 @@ final class EitherIdOps[A](private val obj: A) extends AnyVal {
    *
    * For example:
    * {{{
-   * scala> import cats.implicits._, cats.data.NonEmptyList
+   * scala> import cats.syntax.all._, cats.data.NonEmptyList
    * scala> "Err".leftNel[Int]
    * res0: Either[NonEmptyList[String], Int] = Left(NonEmptyList(Err))
    * }}}
@@ -463,7 +463,7 @@ final class EitherIdOps[A](private val obj: A) extends AnyVal {
    *
    * For example:
    * {{{
-   * scala> import cats.implicits._, cats.data.NonEmptyList
+   * scala> import cats.syntax.all._, cats.data.NonEmptyList
    * scala> 1.rightNel[String]
    * res0: Either[NonEmptyList[String], Int] = Right(1)
    * }}}
@@ -487,7 +487,7 @@ final private[syntax] class EitherIdOpsBinCompat0[A](private val value: A) exten
    *
    * For example:
    * {{{
-   * scala> import cats.implicits._, cats.data.NonEmptyChain
+   * scala> import cats.syntax.all._, cats.data.NonEmptyChain
    * scala> "Err".leftNec[Int]
    * res0: Either[NonEmptyChain[String], Int] = Left(Chain(Err))
    * }}}
@@ -499,7 +499,7 @@ final private[syntax] class EitherIdOpsBinCompat0[A](private val value: A) exten
    *
    * For example:
    * {{{
-   * scala> import cats.implicits._, cats.data.NonEmptyChain
+   * scala> import cats.syntax.all._, cats.data.NonEmptyChain
    * scala> 1.rightNec[String]
    * res0: Either[NonEmptyChain[String], Int] = Right(1)
    * }}}

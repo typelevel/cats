@@ -470,7 +470,7 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
    * {{{
    * scala> import scala.collection.immutable.SortedMap
    * scala> import cats.data.NonEmptyList
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val nel = NonEmptyList.of(12, -2, 3, -5)
    * scala> val expectedResult = SortedMap(false -> NonEmptyList.of(-2, -5), true -> NonEmptyList.of(12, 3))
    * scala> val result = nel.groupBy(_ >= 0)
@@ -487,7 +487,7 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
    *
    * {{{
    * scala> import cats.data.{NonEmptyList, NonEmptyMap}
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val nel = NonEmptyList.of(12, -2, 3, -5)
    * scala> val expectedResult = NonEmptyMap.of(false -> NonEmptyList.of(-2, -5), true -> NonEmptyList.of(12, 3))
    * scala> val result = nel.groupByNem(_ >= 0)
@@ -507,7 +507,7 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
    * {{{
    * scala> import scala.collection.immutable.SortedMap
    * scala> import cats.data.NonEmptyList
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val nel = NonEmptyList.of(12, -2, 3, -5)
    * scala> val expectedResult = SortedMap(false -> NonEmptyList.of("-2", "-5"), true -> NonEmptyList.of("12", "3"))
    * scala> val result = nel.groupMap(_ >= 0)(_.toString)
@@ -541,7 +541,7 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
    *
    * {{{
    * scala> import cats.data.{NonEmptyList, NonEmptyMap}
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val nel = NonEmptyList.of(12, -2, 3, -5)
    * scala> val expectedResult = NonEmptyMap.of(false -> NonEmptyList.of("-2", "-5"), true -> NonEmptyList.of("12", "3"))
    * scala> val result = nel.groupMapNem(_ >= 0)(_.toString)
@@ -563,7 +563,7 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
    * {{{
    * scala> import scala.collection.immutable.SortedMap
    * scala> import cats.data.NonEmptyList
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val nel = NonEmptyList.of("Hello", "World", "Goodbye", "World")
    * scala> val expectedResult = SortedMap("goodbye" -> 1, "hello" -> 1, "world" -> 2)
    * scala> val result = nel.groupMapReduce(_.trim.toLowerCase)(_ => 1)
@@ -584,7 +584,7 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
    *
    * {{{
    * scala> import cats.data.{NonEmptyList, NonEmptyMap}
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val nel = NonEmptyList.of("Hello", "World", "Goodbye", "World")
    * scala> val expectedResult = NonEmptyMap.of("goodbye" -> 1, "hello" -> 1, "world" -> 2)
    * scala> val result = nel.groupMapReduceNem(_.trim.toLowerCase)(_ => 1)
@@ -606,7 +606,7 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
    * {{{
    * scala> import scala.collection.immutable.SortedMap
    * scala> import cats.data.NonEmptyList
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val nel = NonEmptyList.of("Hello", "World", "Goodbye", "World")
    * scala> val expectedResult = SortedMap("goodbye" -> 1, "hello" -> 1, "world" -> 2)
    * scala> val result = nel.groupMapReduceWith(_.trim.toLowerCase)(_ => 1)(_ + _)
@@ -640,7 +640,7 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
    *
    * {{{
    * scala> import cats.data.{NonEmptyList, NonEmptyMap}
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val nel = NonEmptyList.of("Hello", "World", "Goodbye", "World")
    * scala> val expectedResult = NonEmptyMap.of("goodbye" -> 1, "hello" -> 1, "world" -> 2)
    * scala> val result = nel.groupMapReduceWithNem(_.trim.toLowerCase)(_ => 1)(_ + _)
@@ -658,7 +658,7 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
    *
    * {{{
    * scala> import cats.data.NonEmptyList
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val nel = NonEmptyList.of(12, -2, 3, -5)
    * scala> val expectedResult = List(NonEmptyList.of(12, -2), NonEmptyList.of(3, -5))
    * scala> val result = nel.grouped(2)
@@ -675,7 +675,7 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
    * Creates new `NonEmptyMap`, similarly to List#toMap from scala standard library.
    * {{{
    * scala> import cats.data.{NonEmptyList, NonEmptyMap}
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val nel = NonEmptyList((0, "a"), List((1, "b"),(0, "c"), (2, "d")))
    * scala> val expectedResult = NonEmptyMap.of(0 -> "c", 1 -> "b", 2 -> "d")
    * scala> val result = nel.toNem

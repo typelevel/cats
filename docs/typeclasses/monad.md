@@ -109,7 +109,7 @@ the results of earlier ones. This is embodied in `ifM`, which lifts an `if`
 statement into the monadic context.
 
 ```scala mdoc
-import cats.implicits._
+import cats.syntax.all._
 
 Monad[List].ifM(List(true, false, true))(ifTrue = List(1, 2), ifFalse = List(3, 4))
 ```
@@ -128,7 +128,7 @@ example).
 
 ```scala mdoc:silent:reset
 import cats.Monad
-import cats.implicits._
+import cats.syntax.all._
 
 case class OptionT[F[_], A](value: F[Option[A]])
 

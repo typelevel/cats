@@ -88,7 +88,7 @@ the `ScalaCheck` `Properties` provided by `cats-laws`.
 The following example is for MUnit.
 
 ```scala mdoc
-import cats.implicits._
+import cats.syntax.all._
 import cats.laws.discipline.FunctorTests
 import munit.DisciplineSuite
 import arbitraries._
@@ -128,7 +128,7 @@ So we have to import from there to test type classes like `Semigroup`, `Monoid`,
 Let's test it out by defining a `Semigroup` instance for our `Tree` type.
 
 ```scala mdoc
-import cats.implicits._
+import cats.syntax.all._
 
 implicit def semigroupTree[A: Semigroup]: Semigroup[Tree[A]] = new Semigroup[Tree[A]] {
   def combine(x: Tree[A], y: Tree[A]) = (x, y) match {
@@ -143,7 +143,7 @@ implicit def semigroupTree[A: Semigroup]: Semigroup[Tree[A]] = new Semigroup[Tre
 Then we can add the Semigroup tests to our suite:
 
 ```scala mdoc:nest
-import cats.implicits._
+import cats.syntax.all._
 import cats.kernel.laws.discipline.SemigroupTests
 import cats.laws.discipline.FunctorTests
 import munit.DisciplineSuite

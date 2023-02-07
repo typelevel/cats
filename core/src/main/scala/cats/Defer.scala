@@ -34,7 +34,7 @@ import scala.util.control.TailCalls.TailRec
  * so
  * {{{
  * scala> import cats._
- * scala> import cats.implicits._
+ * scala> import cats.syntax.all._
  *
  * scala> var evaluated = false
  * scala> val dfa = Defer[Eval].defer {

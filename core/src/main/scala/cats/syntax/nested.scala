@@ -38,7 +38,7 @@ final class NestedIdOps[F[_], G[_], A](private val value: F[G[A]]) extends AnyVa
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> List(Some(3), None).nested.map(_+1).value
    * res0: List[Option[Int]] = List(Some(4), None)
    * }}}

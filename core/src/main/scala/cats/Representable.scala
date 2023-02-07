@@ -45,7 +45,7 @@ trait Representable[F[_]] extends Serializable { self =>
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> type Pair[A] = (A, A)
    *
@@ -65,7 +65,7 @@ trait Representable[F[_]] extends Serializable { self =>
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> type Pair[A] = (A, A)
    *
@@ -154,7 +154,7 @@ object Representable {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> type Pair[A] = (A, A)
    *

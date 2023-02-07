@@ -25,7 +25,7 @@ First some imports:
 
 ```scala mdoc:silent
 import cats.{Monoid, MonoidK}
-import cats.implicits._
+import cats.syntax.all._
 ```
 
 Just like `Monoid[A]`, `MonoidK[F]` has an `empty` method, but it is parametrized on the type of the element contained in `F`:

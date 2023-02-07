@@ -64,7 +64,7 @@ a `List[Option[A]]`. Since the values themselves are effects, traversing with `i
 will turn the traversable "inside out."
 
 ```scala mdoc:reset:silent
-import cats.implicits._
+import cats.syntax.all._
 ```
 
 ```scala mdoc

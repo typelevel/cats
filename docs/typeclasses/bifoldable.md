@@ -28,7 +28,7 @@ First add the implicits:
 ```scala mdoc
 import cats._
 import cats.data._
-import cats.implicits._
+import cats.syntax.all._
 ```
 
 then let's define a summary class capable of storing this info:

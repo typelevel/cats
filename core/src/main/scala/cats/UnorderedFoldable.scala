@@ -81,7 +81,7 @@ trait UnorderedFoldable[F[_]] extends Serializable {
    *
    * For example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val map1 = Map[Int, String]()
    * scala> val p1: String => Boolean = _.length > 0
    * scala> UnorderedFoldable[Map[Int, *]].count(map1)(p1)

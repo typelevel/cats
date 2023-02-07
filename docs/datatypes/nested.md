@@ -23,7 +23,7 @@ x.map(_.map(_.toString))
 
 ```scala mdoc:silent
 import cats.data.Nested
-import cats.implicits._
+import cats.syntax.all._
 val nested: Nested[Option, Validated[String, *], Int] = Nested(Some(Valid(123)))
 ```
 
@@ -81,7 +81,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 import cats.Applicative
 import cats.data.Nested
-import cats.implicits._
+import cats.syntax.all._
 
 def createUsers(userInfos: List[UserInfo]): Future[Either[List[String], List[User]]] =
   userInfos.traverse(userInfo => Nested(createUser(userInfo))).value
