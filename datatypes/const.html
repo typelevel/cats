@@ -259,7 +259,7 @@
         <p>Note that both <code>modifyOption</code> and <code>modifyList</code> share the <em>exact</em> same implementation. If we look closely, the
         only thing we need is a <code>map</code> operation on the data type. Being good functional programmers, we abstract.</p>
         <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="type-name">Functor</span><span>
-</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="keyword">trait</span><span> </span><span class="type-name">Lens</span><span>[</span><span class="type-name">S</span><span>, </span><span class="type-name">A</span><span>] {
   </span><span class="keyword">def</span><span> </span><span class="declaration-name">get</span><span>(</span><span class="identifier">s</span><span>: </span><span class="type-name">S</span><span>): </span><span class="type-name">A</span><span>

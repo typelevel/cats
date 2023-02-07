@@ -298,7 +298,7 @@
         <p>A naive implementation of <code>ListT</code> suffers from associativity issues; see <a href="https://gist.github.com/tpolecat/1227e22e3161b5816e014c00650f3b57">this gist</a> for an example. It&#39;s possible to create a <code>ListT</code> that doesn&#39;t have these issues, but it tends to be pretty inefficient. For many use-cases, <a href="https://github.com/typelevel/cats/blob/main/core/src/main/scala/cats/data/Nested.scala">Nested</a> can be used to achieve the desired results.</p>
         <p>Here is how we could achieve the effect of the previous example using <code>Nested</code>:</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">data</span><span>.</span><span class="type-name">Nested</span><span>
-</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span></code></pre>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span></code></pre>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">nl</span><span> = </span><span class="type-name">Nested</span><span>(</span><span class="identifier">l</span><span>)
 </span><span class="comment">// nl: Nested[Option, List, Int] = Nested(
 //   value = Some(value = List(1, 2, 3, 4, 5))
@@ -372,7 +372,7 @@
         <h2 id="what-does-this-symbol-mean" class="section">What does this symbol mean?<a class="anchor-link right" href="#what-does-this-symbol-mean"><i class="icofont-laika">&#xef71;</i></a></h2>
         <p>Below is a list of symbols used in Cats.</p>
         <p>The <code>~&gt;</code>, <code>⊥</code>, <code>⊤</code>, <code>:&lt;:</code> and <code>:≺:</code> symbols can be imported with <code>import cats._</code>.</p>
-        <p>All other symbols can be imported with <code>import cats.implicits._</code></p>
+        <p>All other symbols can be imported with <code>import cats.syntax.all._</code></p>
         <table>
           <thead>
             <tr>

@@ -333,7 +333,7 @@
         <code>fromReducible</code> can avoid the <code>Option</code> in the return type, because it
         is only available for non-empty datastructures.</p>
         <p>Here are some examples:</p>
-        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="type-name">NonEmptyList</span><span>.</span><span class="identifier">fromFoldable</span><span>(</span><span class="type-name">List</span><span>())
 </span><span class="comment">// res9: Option[NonEmptyList[Nothing]] = None

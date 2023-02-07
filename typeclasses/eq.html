@@ -218,7 +218,7 @@
         <p>As you can probably see in the type signature of <code>eqv</code>, it is impossible to compare two values of different types,
         eliminating these types of bugs altogether.</p>
         <p>The <code>Eq</code> syntax package also offers some handy symbolic operators:</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="number-literal">1</span><span> === </span><span class="number-literal">1</span><span>
 </span><span class="comment">// res2: Boolean = true
@@ -230,14 +230,14 @@
         Another option is to use a small library called <a href="https://github.com/typelevel/kittens">kittens</a>, which can derive a lot of type class instances for our data types including <code>Eq</code>.</p>
         <p>The first option using <code>Eq.fromUniversalEquals</code> only defers to <code>==</code> and works like this:</p>
         <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">kernel</span><span>.</span><span class="type-name">Eq</span><span>
-</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span><span>
 
 
 </span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Foo</span><span>(</span><span class="identifier">a</span><span>: </span><span class="type-name">Int</span><span>, </span><span class="identifier">b</span><span>: </span><span class="type-name">String</span><span>)
 
 
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">eqFoo</span><span>: </span><span class="type-name">Eq</span><span>[</span><span class="type-name">Foo</span><span>] = </span><span class="type-name">Eq</span><span>.</span><span class="identifier">fromUniversalEquals</span><span>
-</span><span class="comment">// eqFoo: Eq[Foo] = cats.kernel.Eq$$anonfun$fromUniversalEquals$2@77cf1024
+</span><span class="comment">// eqFoo: Eq[Foo] = cats.kernel.Eq$$anonfun$fromUniversalEquals$2@68fd6481
 </span><span>
 
 </span><span class="type-name">Foo</span><span>(</span><span class="number-literal">10</span><span>, </span><span class="string-literal">&quot;&quot;</span><span>) === </span><span class="type-name">Foo</span><span>(</span><span class="number-literal">10</span><span>, </span><span class="string-literal">&quot;&quot;</span><span>)

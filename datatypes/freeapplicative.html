@@ -235,14 +235,14 @@
 </span><span class="keyword">val</span><span> </span><span class="identifier">hasNumber</span><span>: </span><span class="type-name">Validation</span><span>[</span><span class="type-name">Boolean</span><span>] = </span><span class="identifier">lift</span><span>(</span><span class="type-name">HasNumber</span><span>)</span></code></pre>
         <p>Because a <code>FreeApplicative</code> only supports the operations of <code>Applicative</code>, we do not get the nicety
         of a for-comprehension. We can however still use <code>Applicative</code> syntax provided by Cats.</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="keyword">val</span><span> </span><span class="identifier">prog</span><span>: </span><span class="type-name">Validation</span><span>[</span><span class="type-name">Boolean</span><span>] = (</span><span class="identifier">size</span><span>(</span><span class="number-literal">5</span><span>), </span><span class="identifier">hasNumber</span><span>).</span><span class="identifier">mapN</span><span> { </span><span class="keyword">case</span><span> (</span><span class="identifier">l</span><span>, </span><span class="identifier">r</span><span>) =&gt; </span><span class="identifier">l</span><span> &amp;&amp; </span><span class="identifier">r</span><span>}</span></code></pre>
         <p>As it stands, our program is just an instance of a data structure - nothing has happened
         at this point. To make our program useful we need to interpret it.</p>
         <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="type-name">Id</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">arrow</span><span>.</span><span class="type-name">FunctionK</span><span>
-</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="comment">// a function that takes a string as input
 </span><span class="keyword">type</span><span> </span><span class="type-name">FromString</span><span>[</span><span class="type-name">A</span><span>] = </span><span class="type-name">String</span><span> =&gt; </span><span class="type-name">A</span><span>
@@ -255,7 +255,7 @@
     }
 }</span></code></pre>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">validator</span><span> = </span><span class="identifier">prog</span><span>.</span><span class="identifier">foldMap</span><span>[</span><span class="type-name">FromString</span><span>](</span><span class="identifier">compiler</span><span>)
-</span><span class="comment">// validator: String =&gt; Boolean = cats.instances.Function1Instances$$anon$7$$Lambda$13396/1949927348@6b4b787a
+</span><span class="comment">// validator: String =&gt; Boolean = cats.instances.Function1Instances$$anon$7$$Lambda$13261/1692713770@171b8fed
 </span><span class="identifier">validator</span><span>(</span><span class="string-literal">&quot;1234&quot;</span><span>)
 </span><span class="comment">// res0: Boolean = false
 </span><span class="identifier">validator</span><span>(</span><span class="string-literal">&quot;12345&quot;</span><span>)
@@ -275,7 +275,7 @@
         <p>Because we have everything we need up front and know there can be no branching, we can easily
         write a validator that validates in parallel.</p>
         <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">data</span><span>.</span><span class="type-name">Kleisli</span><span>
-</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">scala</span><span>.</span><span class="identifier">concurrent</span><span>.</span><span class="type-name">Future</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">scala</span><span>.</span><span class="identifier">concurrent</span><span>.</span><span class="type-name">ExecutionContext</span><span>.</span><span class="type-name">Implicits</span><span>.</span><span class="identifier">global</span><span>
 
@@ -300,7 +300,7 @@
         we can completely ignore the return type of the operation and return just a <code>List[String]</code> - the
         <code>Const</code> data type is useful for this.</p>
         <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">data</span><span>.</span><span class="type-name">Const</span><span>
-</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="keyword">type</span><span> </span><span class="type-name">Log</span><span>[</span><span class="type-name">A</span><span>] = </span><span class="type-name">Const</span><span>[</span><span class="type-name">List</span><span>[</span><span class="type-name">String</span><span>], </span><span class="type-name">A</span><span>]
 

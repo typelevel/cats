@@ -248,7 +248,7 @@
         <code>FlatMap[F]</code> instance (we can call <code>flatMap</code> on <code>F[A]</code> values), we can
         compose two <code>Kleisli</code>s much like we can two functions.</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="type-name">FlatMap</span><span>
-</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="keyword">final</span><span> </span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Kleisli</span><span>[</span><span class="type-name">F</span><span>[</span><span class="identifier">_</span><span>], </span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>](</span><span class="identifier">run</span><span>: </span><span class="type-name">A</span><span> =&gt; </span><span class="type-name">F</span><span>[</span><span class="type-name">B</span><span>]) {
   </span><span class="keyword">def</span><span> </span><span class="declaration-name">compose</span><span>[</span><span class="type-name">Z</span><span>](</span><span class="identifier">k</span><span>: </span><span class="type-name">Kleisli</span><span>[</span><span class="type-name">F</span><span>, </span><span class="type-name">Z</span><span>, </span><span class="type-name">A</span><span>])(</span><span class="keyword">implicit</span><span> </span><span class="type-name">F</span><span>: </span><span class="type-name">FlatMap</span><span>[</span><span class="type-name">F</span><span>]): </span><span class="type-name">Kleisli</span><span>[</span><span class="type-name">F</span><span>, </span><span class="type-name">Z</span><span>, </span><span class="type-name">B</span><span>] =
@@ -256,7 +256,7 @@
 }</span></code></pre>
         <p>Returning to our earlier example:</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="comment">// Bring in cats.FlatMap[Option] instance
-</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="keyword">val</span><span> </span><span class="identifier">parse</span><span>: </span><span class="type-name">Kleisli</span><span>[</span><span class="type-name">Option</span><span>,</span><span class="type-name">String</span><span>,</span><span class="type-name">Int</span><span>] =
   </span><span class="type-name">Kleisli</span><span>((</span><span class="identifier">s</span><span>: </span><span class="type-name">String</span><span>) =&gt; </span><span class="keyword">if</span><span> (</span><span class="identifier">s</span><span>.</span><span class="identifier">matches</span><span>(</span><span class="string-literal">&quot;-?[0-9]+&quot;</span><span>)) </span><span class="type-name">Some</span><span>(</span><span class="identifier">s</span><span>.</span><span class="identifier">toInt</span><span>) </span><span class="keyword">else</span><span> </span><span class="type-name">None</span><span>)
@@ -295,7 +295,7 @@ traverse  | Applicative</code></pre>
         resolution will pick up the most specific instance it can (depending on the <code>F[_]</code>).</p>
         <p>An example of a <code>Monad</code> instance for <code>Kleisli</code> is shown below.</p>
         <p><em>Note</em>: the example below assumes usage of the <a href="https://github.com/typelevel/kind-projector">kind-projector compiler plugin</a> and will not compile if it is not being used in a project.</p>
-        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="comment">// We can define a FlatMap instance for Kleisli if the F[_] we chose has a FlatMap instance
 // Note the input type and F are fixed, with the output type left free

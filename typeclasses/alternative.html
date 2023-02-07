@@ -246,7 +246,7 @@
         <p>Let&#39;s examine an instance to get a feel for things. A useful instance of <code>Alternative</code> is that for <code>Vector</code>.</p>
         <p>The relevant imports:</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="type-name">Alternative</span><span>
-</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span></code></pre>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span></code></pre>
         <p>And what we can do with them:</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">empty</span><span> = </span><span class="type-name">Alternative</span><span>[</span><span class="type-name">Vector</span><span>].</span><span class="identifier">empty</span><span>[</span><span class="type-name">Int</span><span>]
 </span><span class="comment">// empty: Vector[Int] = Vector()

@@ -295,7 +295,7 @@ catch { ... }</code> syntax in Scala programs, to ease error-handling, and
         since it abstracts over the <code>mutable</code> and <code>immutable</code> variants. However it&#39;s
         the type used to represent a <code>Map</code>s <code>values</code>, and its often desirable to treat the
         values of a map as a <code>Foldable</code> collection. Alleycats provides a <code>Foldable[Iterable]</code>, eg:</p>
-        <pre><code>import cats.implicits._
+        <pre><code>import cats.syntax.all._
 import alleycats.std.iterable._
 
 // Result &quot;AppleOrange&quot;

@@ -215,7 +215,7 @@
         convert it to your own <code>DomainError</code>, and if the result was a success, you want to
         convert it to an UNIX timestamp.</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">_</span><span>
-</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">java</span><span>.</span><span class="identifier">time</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">DomainError</span><span>(</span><span class="identifier">message</span><span>: </span><span class="type-name">String</span><span>)
@@ -226,7 +226,7 @@
   </span><span class="identifier">error</span><span> =&gt; </span><span class="type-name">DomainError</span><span>(</span><span class="identifier">error</span><span>.</span><span class="identifier">getMessage</span><span>),
   </span><span class="identifier">dateTime</span><span> =&gt; </span><span class="identifier">dateTime</span><span>.</span><span class="identifier">toEpochSecond</span><span>
 )
-</span><span class="comment">// res0: Either[DomainError, Long] = Right(value = 1675718399L)</span></code></pre>
+</span><span class="comment">// res0: Either[DomainError, Long] = Right(value = 1675737086L)</span></code></pre>
         <p><code>Bifunctor</code> also defines a convenience function called <code>leftMap</code>, which is defined as follows:</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">def</span><span> </span><span class="declaration-name">leftMap</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>, </span><span class="type-name">C</span><span>](</span><span class="identifier">fab</span><span>: </span><span class="type-name">F</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>])(</span><span class="identifier">f</span><span>: </span><span class="type-name">A</span><span> =&gt; </span><span class="type-name">C</span><span>): </span><span class="type-name">F</span><span>[</span><span class="type-name">C</span><span>, </span><span class="type-name">B</span><span>] = </span><span class="identifier">bimap</span><span>(</span><span class="identifier">fab</span><span>)(</span><span class="identifier">f</span><span>, </span><span class="identifier">identity</span><span>)</span></code></pre>
         <p>There is no <code>rightMap</code> however - use <code>map</code> instead. The reasoning behind this is that in Cats, the instances of

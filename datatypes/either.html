@@ -270,7 +270,7 @@
         <a href="https://github.com/scala/scala/pull/5135">is implemented</a>
         in the standard library. Since Cats builds on 2.10.x and 2.11.x, the gaps have been filled via syntax
         enrichments available under <code>cats.syntax.either._</code> or <code>cats.implicits._</code>.</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="keyword">val</span><span> </span><span class="identifier">right</span><span>: </span><span class="type-name">Either</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Int</span><span>] = </span><span class="type-name">Right</span><span>(</span><span class="number-literal">5</span><span>)
 </span><span class="comment">// right: Either[String, Int] = Right(value = 5)
@@ -357,7 +357,7 @@
         <h3 id="example-usage-round-2" class="section">Example usage: Round 2<a class="anchor-link right" href="#example-usage-round-2"><i class="icofont-laika">&#xef71;</i></a></h3>
         <p>Instead of using exceptions as our error value, let&#39;s instead enumerate explicitly the things that
         can go wrong in our program.</p>
-        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="keyword">object</span><span> </span><span class="type-name">EitherStyle</span><span> {
   </span><span class="keyword">sealed</span><span> </span><span class="keyword">abstract</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Error</span><span>

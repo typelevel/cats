@@ -221,7 +221,7 @@
         <p>Let&#39;s compare the usage of <code>Monoid[A]</code> and <code>MonoidK[F]</code>.</p>
         <p>First some imports:</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.{</span><span class="type-name">Monoid</span><span>, </span><span class="type-name">MonoidK</span><span>}
-</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span></code></pre>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span></code></pre>
         <p>Just like <code>Monoid[A]</code>, <code>MonoidK[F]</code> has an <code>empty</code> method, but it is parametrized on the type of the element contained in <code>F</code>:</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="type-name">Monoid</span><span>[</span><span class="type-name">List</span><span>[</span><span class="type-name">String</span><span>]].</span><span class="identifier">empty</span><span>
 </span><span class="comment">// res0: List[String] = List()

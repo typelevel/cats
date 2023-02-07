@@ -220,7 +220,7 @@
 </span><span class="keyword">val</span><span> </span><span class="identifier">both</span><span> = </span><span class="type-name">Ior</span><span>.</span><span class="identifier">both</span><span>(</span><span class="string-literal">&quot;Warning&quot;</span><span>, </span><span class="number-literal">3</span><span>)
 </span><span class="comment">// both: Ior[String, Int] = Both(a = &quot;Warning&quot;, b = 3)</span></code></pre>
         <p>Cats also offers syntax enrichment for <code>Ior</code>. The <code>leftIor</code> and <code>rightIor</code> functions can be imported from <code>cats.syntax.ior._</code>:</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="keyword">val</span><span> </span><span class="identifier">right</span><span> = </span><span class="number-literal">3</span><span>.</span><span class="identifier">rightIor</span><span>
 </span><span class="comment">// right: Ior[Nothing, Int] = Right(b = 3)
@@ -232,7 +232,7 @@
         This means we can accumulate data on the left side while also being able to short-circuit upon the first left-side-only value.
         For example, sometimes, we might want to accumulate warnings together with a valid result and only halt the computation on a &quot;hard error&quot;
         Here&#39;s an example of how we might be able to do that:</p>
-        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">data</span><span>.{ </span><span class="type-name">NonEmptyChain</span><span> =&gt; </span><span class="type-name">Nec</span><span>, </span><span class="type-name">Ior</span><span>}
 
 
@@ -294,7 +294,7 @@
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">data</span><span>.</span><span class="type-name">NonEmptyChain</span><span>
 
 </span><span class="keyword">type</span><span> </span><span class="type-name">IorNec</span><span>[</span><span class="type-name">B</span><span>, </span><span class="type-name">A</span><span>] = </span><span class="type-name">Ior</span><span>[</span><span class="type-name">NonEmptyChain</span><span>[</span><span class="type-name">B</span><span>], </span><span class="type-name">A</span><span>]</span></code></pre>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>, </span><span class="identifier">cats</span><span>.</span><span class="identifier">data</span><span>.</span><span class="type-name">NonEmptyChain</span><span>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span><span>, </span><span class="identifier">cats</span><span>.</span><span class="identifier">data</span><span>.</span><span class="type-name">NonEmptyChain</span><span>
 
 </span><span class="keyword">val</span><span> </span><span class="identifier">left</span><span>: </span><span class="type-name">IorNec</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Int</span><span>] = </span><span class="type-name">Ior</span><span>.</span><span class="identifier">fromEither</span><span>(</span><span class="string-literal">&quot;Error&quot;</span><span>.</span><span class="identifier">leftNec</span><span>[</span><span class="type-name">Int</span><span>])
 </span><span class="comment">// left: IorNec[String, Int] = Left(a = Singleton(a = &quot;Error&quot;))</span></code></pre>

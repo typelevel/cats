@@ -218,7 +218,7 @@
         <h4 id="eval-now" class="section">Eval.now<a class="anchor-link right" href="#eval-now"><i class="icofont-laika">&#xef71;</i></a></h4>
         <p>First of the strategies is eager evaluation, we can construct an <code>Eval</code> eagerly using <code>Eval.now</code>:</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="type-name">Eval</span><span>
-</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span><span>
 
 
 </span><span class="keyword">val</span><span> </span><span class="identifier">eager</span><span> = </span><span class="type-name">Eval</span><span>.</span><span class="identifier">now</span><span> {
@@ -237,7 +237,7 @@
   </span><span class="identifier">println</span><span>(</span><span class="string-literal">&quot;Running expensive calculation...&quot;</span><span>)
   </span><span class="number-literal">1</span><span> + </span><span class="number-literal">2</span><span> * </span><span class="number-literal">3</span><span>
 }
-</span><span class="comment">// lazyEval: Eval[Int] = cats.Later@3d3fbf9f
+</span><span class="comment">// lazyEval: Eval[Int] = cats.Later@4a8d6728
 </span><span>
 </span><span class="identifier">lazyEval</span><span>.</span><span class="identifier">value</span><span>
 </span><span class="comment">// Running expensive calculation...
@@ -256,7 +256,7 @@
   </span><span class="identifier">println</span><span>(</span><span class="string-literal">&quot;Running expensive calculation...&quot;</span><span>)
   </span><span class="number-literal">1</span><span> + </span><span class="number-literal">2</span><span> * </span><span class="number-literal">3</span><span>
 }
-</span><span class="comment">// always: Eval[Int] = cats.Always@4f5a517a
+</span><span class="comment">// always: Eval[Int] = cats.Always@632e5864
 </span><span>
 </span><span class="identifier">always</span><span>.</span><span class="identifier">value</span><span>
 </span><span class="comment">// Running expensive calculation...

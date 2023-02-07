@@ -228,13 +228,13 @@
 </span><span class="type-name">Semigroup</span><span>[</span><span class="type-name">Int</span><span>].</span><span class="identifier">combine</span><span>(</span><span class="type-name">Semigroup</span><span>[</span><span class="type-name">Int</span><span>].</span><span class="identifier">combine</span><span>(</span><span class="identifier">x</span><span>, </span><span class="identifier">y</span><span>), </span><span class="identifier">z</span><span>)
 </span><span class="comment">// res3: Int = 6</span></code></pre>
         <p>Infix syntax is also available for types that have a <code>Semigroup</code> instance.</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="number-literal">1</span><span> |+| </span><span class="number-literal">2</span><span>
 </span><span class="comment">// res4: Int = 3</span></code></pre>
         <p>A more compelling example which we&#39;ll see later in this tutorial is the <code>Semigroup</code>
         for <code>Map</code>s.</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="keyword">val</span><span> </span><span class="identifier">map1</span><span> = </span><span class="type-name">Map</span><span>(</span><span class="string-literal">&quot;hello&quot;</span><span> -&gt; </span><span class="number-literal">1</span><span>, </span><span class="string-literal">&quot;world&quot;</span><span> -&gt; </span><span class="number-literal">1</span><span>)
 </span><span class="keyword">val</span><span> </span><span class="identifier">map2</span><span> = </span><span class="type-name">Map</span><span>(</span><span class="string-literal">&quot;hello&quot;</span><span> -&gt; </span><span class="number-literal">2</span><span>, </span><span class="string-literal">&quot;cats&quot;</span><span>  -&gt; </span><span class="number-literal">3</span><span>)</span></code></pre>
@@ -247,32 +247,32 @@
         <h1 id="example-instances" class="section">Example instances<a class="anchor-link right" href="#example-instances"><i class="icofont-laika">&#xef71;</i></a></h1>
         <p>Cats provides many <code>Semigroup</code> instances out of the box such as <code>Int</code> (<code>+</code>) and <code>String</code> (<code>++</code>)...</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="type-name">Semigroup</span><span>
-</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span></code></pre>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span></code></pre>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="type-name">Semigroup</span><span>[</span><span class="type-name">Int</span><span>]
-</span><span class="comment">// res8: Semigroup[Int] = cats.kernel.instances.IntGroup@6b8b2b37
+</span><span class="comment">// res8: Semigroup[Int] = cats.kernel.instances.IntGroup@5dab4998
 </span><span class="type-name">Semigroup</span><span>[</span><span class="type-name">String</span><span>]
-</span><span class="comment">// res9: Semigroup[String] = cats.kernel.instances.StringMonoid@1294611b</span></code></pre>
+</span><span class="comment">// res9: Semigroup[String] = cats.kernel.instances.StringMonoid@66a8b217</span></code></pre>
         <p>Instances for type constructors regardless of their type parameter such as <code>List</code> (<code>++</code>)
         and <code>Set</code> (<code>union</code>)...</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="type-name">Semigroup</span><span>[</span><span class="type-name">List</span><span>[</span><span class="type-name">Byte</span><span>]]
-</span><span class="comment">// res10: Semigroup[List[Byte]] = cats.kernel.instances.ListMonoid@37b59aa9
+</span><span class="comment">// res10: Semigroup[List[Byte]] = cats.kernel.instances.ListMonoid@36289064
 </span><span class="type-name">Semigroup</span><span>[</span><span class="type-name">Set</span><span>[</span><span class="type-name">Int</span><span>]]
-</span><span class="comment">// res11: Semigroup[Set[Int]] = cats.kernel.instances.SetSemilattice@dda3a94
+</span><span class="comment">// res11: Semigroup[Set[Int]] = cats.kernel.instances.SetSemilattice@6b508da2
 </span><span>
 </span><span class="keyword">trait</span><span> </span><span class="type-name">Foo</span><span>
 </span><span class="type-name">Semigroup</span><span>[</span><span class="type-name">List</span><span>[</span><span class="type-name">Foo</span><span>]]
-</span><span class="comment">// res12: Semigroup[List[Foo]] = cats.kernel.instances.ListMonoid@37b59aa9</span></code></pre>
+</span><span class="comment">// res12: Semigroup[List[Foo]] = cats.kernel.instances.ListMonoid@36289064</span></code></pre>
         <p>And instances for type constructors that depend on (one of) their type parameters having instances such
         as tuples (pointwise <code>combine</code>).</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="type-name">Semigroup</span><span>[(</span><span class="type-name">List</span><span>[</span><span class="type-name">Foo</span><span>], </span><span class="type-name">Int</span><span>)]
-</span><span class="comment">// res13: Semigroup[(List[Foo], Int)] = cats.kernel.Monoid$$anon$2@3f3a6a8b</span></code></pre>
+</span><span class="comment">// res13: Semigroup[(List[Foo], Int)] = cats.kernel.Monoid$$anon$2@6cb0fed9</span></code></pre>
         
         <h1 id="example-usage-merging-maps" class="section">Example usage: Merging maps<a class="anchor-link right" href="#example-usage-merging-maps"><i class="icofont-laika">&#xef71;</i></a></h1>
         <p>Consider a function that merges two <code>Map</code>s that combines values if they share
         the same key. It is straightforward to write these for <code>Map</code>s with values of
         type say, <code>Int</code> or <code>List[String]</code>, but we can write it once and for all for
         any type with a <code>Semigroup</code> instance.</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="keyword">def</span><span> </span><span class="declaration-name">optionCombine</span><span>[</span><span class="type-name">A</span><span>: </span><span class="type-name">Semigroup</span><span>](</span><span class="identifier">a</span><span>: </span><span class="type-name">A</span><span>, </span><span class="identifier">opt</span><span>: </span><span class="type-name">Option</span><span>[</span><span class="type-name">A</span><span>]): </span><span class="type-name">A</span><span> =
   </span><span class="identifier">opt</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">a</span><span> |+| </span><span class="identifier">_</span><span>).</span><span class="identifier">getOrElse</span><span>(</span><span class="identifier">a</span><span>)

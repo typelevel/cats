@@ -220,7 +220,7 @@
         validating an address:</p>
         <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">data</span><span>.</span><span class="type-name">Ior</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">data</span><span>.{ </span><span class="type-name">NonEmptyChain</span><span> =&gt; </span><span class="type-name">Nec</span><span> }
-</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">scala</span><span>.</span><span class="identifier">util</span><span>.{</span><span class="type-name">Success</span><span>, </span><span class="type-name">Try</span><span>}
 
 </span><span class="keyword">type</span><span> </span><span class="type-name">Logs</span><span> = </span><span class="type-name">Nec</span><span>[</span><span class="type-name">String</span><span>]

@@ -225,7 +225,7 @@
         <p>As you can see, the implementations of all of these variations are very similar. We want to call the <code>Option</code> operation (<code>map</code>, <code>filter</code>, <code>filterNot</code>, <code>getOrElse</code>), but since our <code>Option</code> is wrapped in a <code>Future</code>, we first need to <code>map</code> over the <code>Future</code>.</p>
         <p><code>OptionT</code> can help remove some of this boilerplate. It exposes methods that look like those on <code>Option</code>, but it handles the outer <code>map</code> call on the <code>Future</code> so we don&#39;t have to:</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">data</span><span>.</span><span class="type-name">OptionT</span><span>
-</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="keyword">val</span><span> </span><span class="identifier">customGreetingT</span><span>: </span><span class="type-name">OptionT</span><span>[</span><span class="type-name">Future</span><span>, </span><span class="type-name">String</span><span>] = </span><span class="type-name">OptionT</span><span>(</span><span class="identifier">customGreeting</span><span>)
 

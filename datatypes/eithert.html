@@ -213,7 +213,7 @@
         amount of boilerplate is required to handle errors. For example, consider the
         following program:</p>
         <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">scala</span><span>.</span><span class="identifier">util</span><span>.</span><span class="type-name">Try</span><span>
-</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="keyword">def</span><span> </span><span class="declaration-name">parseDouble</span><span>(</span><span class="identifier">s</span><span>: </span><span class="type-name">String</span><span>): </span><span class="type-name">Either</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Double</span><span>] =
   </span><span class="type-name">Try</span><span>(</span><span class="identifier">s</span><span>.</span><span class="identifier">toDouble</span><span>).</span><span class="identifier">map</span><span>(</span><span class="type-name">Right</span><span>(</span><span class="identifier">_</span><span>)).</span><span class="identifier">getOrElse</span><span>(</span><span class="type-name">Left</span><span>(</span><span class="string-literal">s&quot;</span><span class="substitution">$s</span><span class="string-literal"> is not a number&quot;</span><span>))
@@ -267,7 +267,7 @@
         resulting <code>EitherT</code> values are then composed using combinators. For example, the
         asynchronous division program can be rewritten as follows:</p>
         <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">data</span><span>.</span><span class="type-name">EitherT</span><span>
-</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="keyword">def</span><span> </span><span class="declaration-name">divisionProgramAsync</span><span>(</span><span class="identifier">inputA</span><span>: </span><span class="type-name">String</span><span>, </span><span class="identifier">inputB</span><span>: </span><span class="type-name">String</span><span>): </span><span class="type-name">EitherT</span><span>[</span><span class="type-name">Future</span><span>, </span><span class="type-name">String</span><span>, </span><span class="type-name">Double</span><span>] =
   </span><span class="keyword">for</span><span> {

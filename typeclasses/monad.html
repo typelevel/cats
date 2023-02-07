@@ -345,7 +345,7 @@
         <p><code>Monad</code> provides the ability to choose later operations in a sequence based on
         the results of earlier ones. This is embodied in <code>ifM</code>, which lifts an <code>if</code>
         statement into the monadic context.</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="type-name">Monad</span><span>[</span><span class="type-name">List</span><span>].</span><span class="identifier">ifM</span><span>(</span><span class="type-name">List</span><span>(</span><span class="boolean-literal">true</span><span>, </span><span class="boolean-literal">false</span><span>, </span><span class="boolean-literal">true</span><span>))(</span><span class="identifier">ifTrue</span><span> = </span><span class="type-name">List</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="number-literal">2</span><span>), </span><span class="identifier">ifFalse</span><span> = </span><span class="type-name">List</span><span>(</span><span class="number-literal">3</span><span>, </span><span class="number-literal">4</span><span>))
 </span><span class="comment">// res5: List[Int] = List(1, 2, 3, 4, 1, 2)</span></code></pre>
@@ -360,7 +360,7 @@
         example).</p>
         <p><em>Note</em>: the example below assumes usage of the <a href="https://github.com/typelevel/kind-projector">kind-projector compiler plugin</a> and will not compile if it is not being used in a project.</p>
         <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="type-name">Monad</span><span>
-</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">OptionT</span><span>[</span><span class="type-name">F</span><span>[</span><span class="identifier">_</span><span>], </span><span class="type-name">A</span><span>](</span><span class="identifier">value</span><span>: </span><span class="type-name">F</span><span>[</span><span class="type-name">Option</span><span>[</span><span class="type-name">A</span><span>]])
 

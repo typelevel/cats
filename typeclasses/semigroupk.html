@@ -214,7 +214,7 @@
         and, in fact, the <code>K</code> in <code>SemigroupK</code> stands for <code>Kind</code>.</p>
         <p>First some imports.</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">_</span><span>
-</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span></code></pre>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span></code></pre>
         <p>For <code>List</code>, the <code>Semigroup</code> instance&#39;s <code>combine</code> operation and the <code>SemigroupK</code>
         instance&#39;s <code>combineK</code> operation are both list concatenation:</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="type-name">SemigroupK</span><span>[</span><span class="type-name">List</span><span>].</span><span class="identifier">combineK</span><span>(</span><span class="type-name">List</span><span>(</span><span class="number-literal">1</span><span>,</span><span class="number-literal">2</span><span>,</span><span class="number-literal">3</span><span>), </span><span class="type-name">List</span><span>(</span><span class="number-literal">4</span><span>,</span><span class="number-literal">5</span><span>,</span><span class="number-literal">6</span><span>)) == </span><span class="type-name">Semigroup</span><span>[</span><span class="type-name">List</span><span>[</span><span class="type-name">Int</span><span>]].</span><span class="identifier">combine</span><span>(</span><span class="type-name">List</span><span>(</span><span class="number-literal">1</span><span>,</span><span class="number-literal">2</span><span>,</span><span class="number-literal">3</span><span>), </span><span class="type-name">List</span><span>(</span><span class="number-literal">4</span><span>,</span><span class="number-literal">5</span><span>,</span><span class="number-literal">6</span><span>))
@@ -242,7 +242,7 @@
         <code>SemigroupK</code>. Here we are following the convention from scalaz, that
         <code>|+|</code> is the operator from semigroup and that <code>&lt;+&gt;</code> is the operator
         from <code>SemigroupK</code> (called <code>Plus</code> in scalaz).</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="keyword">val</span><span> </span><span class="identifier">one</span><span> = </span><span class="type-name">Option</span><span>(</span><span class="number-literal">1</span><span>)
 </span><span class="keyword">val</span><span> </span><span class="identifier">two</span><span> = </span><span class="type-name">Option</span><span>(</span><span class="number-literal">2</span><span>)

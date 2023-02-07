@@ -261,7 +261,7 @@
   </span><span class="keyword">def</span><span> </span><span class="declaration-name">errorMessage</span><span>: </span><span class="type-name">String</span><span> = </span><span class="string-literal">&quot;You must be aged 18 and not older than 75 to use our services.&quot;</span><span>
 }</span></code></pre>
         <p>We have our <code>RegistrationData</code> case class that will hold the information the user has submitted, alongside the definition of the error model that we&#39;ll be using for displaying the possible errors of every field. Now, let&#39;s explore the proposed implementation:</p>
-        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="keyword">sealed</span><span> </span><span class="keyword">trait</span><span> </span><span class="type-name">FormValidator</span><span> {
  </span><span class="keyword">def</span><span> </span><span class="declaration-name">validateUserName</span><span>(</span><span class="identifier">userName</span><span>: </span><span class="type-name">String</span><span>): </span><span class="type-name">Either</span><span>[</span><span class="type-name">DomainValidation</span><span>, </span><span class="type-name">String</span><span>] =
@@ -343,7 +343,7 @@
         <p>Time to do some refactoring! We&#39;re going to try a <code>Validated</code> approach:</p>
         <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">data</span><span>.</span><span class="identifier">_</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">data</span><span>.</span><span class="type-name">Validated</span><span>.</span><span class="identifier">_</span><span>
-</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="keyword">def</span><span> </span><span class="declaration-name">validateUserName</span><span>(</span><span class="identifier">userName</span><span>: </span><span class="type-name">String</span><span>): </span><span class="type-name">Validated</span><span>[</span><span class="type-name">DomainValidation</span><span>, </span><span class="type-name">String</span><span>] = </span><span class="type-name">FormValidator</span><span>.</span><span class="identifier">validateUserName</span><span>(</span><span class="identifier">userName</span><span>).</span><span class="identifier">toValidated</span><span>
 
@@ -614,7 +614,7 @@
         <p>Time to parse.</p>
         <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="type-name">SemigroupK</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">data</span><span>.</span><span class="type-name">NonEmptyChain</span><span>
-</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">ConnectionParams</span><span>(</span><span class="identifier">url</span><span>: </span><span class="type-name">String</span><span>, </span><span class="identifier">port</span><span>: </span><span class="type-name">Int</span><span>)
 

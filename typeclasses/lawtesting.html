@@ -271,7 +271,7 @@
           </li>
         </ul>
         <p>The following example is for MUnit.</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">laws</span><span>.</span><span class="identifier">discipline</span><span>.</span><span class="type-name">FunctorTests</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">munit</span><span>.</span><span class="type-name">DisciplineSuite</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">arbitraries</span><span>.</span><span class="identifier">_</span><span>
@@ -302,7 +302,7 @@
         However, the law tests for the type classes inside <code>cats.kernel</code> are located in <code>cats.kernel.laws.discipline.*</code> instead.
         So we have to import from there to test type classes like <code>Semigroup</code>, <code>Monoid</code>, <code>Group</code> or <code>Semilattice</code>.</p>
         <p>Let&#39;s test it out by defining a <code>Semigroup</code> instance for our <code>Tree</code> type.</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">def</span><span> </span><span class="declaration-name">semigroupTree</span><span>[</span><span class="type-name">A</span><span>: </span><span class="type-name">Semigroup</span><span>]: </span><span class="type-name">Semigroup</span><span>[</span><span class="type-name">Tree</span><span>[</span><span class="type-name">A</span><span>]] = </span><span class="keyword">new</span><span> </span><span class="type-name">Semigroup</span><span>[</span><span class="type-name">Tree</span><span>[</span><span class="type-name">A</span><span>]] {
   </span><span class="keyword">def</span><span> </span><span class="declaration-name">combine</span><span>(</span><span class="identifier">x</span><span>: </span><span class="type-name">Tree</span><span>[</span><span class="type-name">A</span><span>], </span><span class="identifier">y</span><span>: </span><span class="type-name">Tree</span><span>[</span><span class="type-name">A</span><span>]) = (</span><span class="identifier">x</span><span>, </span><span class="identifier">y</span><span>) </span><span class="keyword">match</span><span> {
@@ -313,7 +313,7 @@
   }
 }</span></code></pre>
         <p>Then we can add the Semigroup tests to our suite:</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">kernel</span><span>.</span><span class="identifier">laws</span><span>.</span><span class="identifier">discipline</span><span>.</span><span class="type-name">SemigroupTests</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">laws</span><span>.</span><span class="identifier">discipline</span><span>.</span><span class="type-name">FunctorTests</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">munit</span><span>.</span><span class="type-name">DisciplineSuite</span><span>

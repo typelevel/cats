@@ -212,7 +212,7 @@
         <p>Knowing this, we can make use of <code>NonEmptyTraverse</code>, to traverse over a sequence of <code>Map</code>s.
         One example application one could think of is, when we have a list of text snippets,
         count the occurrence of each word in each snippet and return all the common words and their occurrences in each snippet:</p>
-        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">data</span><span>.</span><span class="type-name">NonEmptyList</span><span>
 
 </span><span class="keyword">val</span><span> </span><span class="identifier">snippets</span><span> = </span><span class="type-name">NonEmptyList</span><span>.</span><span class="identifier">of</span><span>(</span><span class="string-literal">&quot;What do you do&quot;</span><span>, </span><span class="string-literal">&quot;What are you doing&quot;</span><span>)

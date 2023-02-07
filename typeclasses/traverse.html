@@ -255,7 +255,7 @@
         <p>Sometimes you will be given a traversable that has effectful values already, such as
         a <code>List[Option[A]]</code>. Since the values themselves are effects, traversing with <code>identity</code>
         will turn the traversable &quot;inside out.&quot;</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span></code></pre>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">list</span><span> = </span><span class="type-name">List</span><span>(</span><span class="type-name">Some</span><span>(</span><span class="number-literal">1</span><span>), </span><span class="type-name">Some</span><span>(</span><span class="number-literal">2</span><span>), </span><span class="type-name">None</span><span>)
 </span><span class="comment">// list: List[Option[Int]] = List(Some(value = 1), Some(value = 2), None)
 </span><span class="keyword">val</span><span> </span><span class="identifier">traversed</span><span> = </span><span class="identifier">list</span><span>.</span><span class="identifier">traverse</span><span>(</span><span class="identifier">identity</span><span>)

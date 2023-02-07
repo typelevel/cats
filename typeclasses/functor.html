@@ -258,7 +258,7 @@
         <code>Functor</code> instances, then so does <code>F[G[_]]</code>.</p>
         <p>Such composition can be achieved via the <code>Functor#compose</code> method.</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="type-name">Functor</span><span>
-</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span></code></pre>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span></code></pre>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">listOption</span><span> = </span><span class="type-name">List</span><span>(</span><span class="type-name">Some</span><span>(</span><span class="number-literal">1</span><span>), </span><span class="type-name">None</span><span>, </span><span class="type-name">Some</span><span>(</span><span class="number-literal">2</span><span>))
 </span><span class="comment">// listOption: List[Option[Int]] = List(Some(value = 1), None, Some(value = 2))
 </span><span>
@@ -278,7 +278,7 @@
 }</span></code></pre>
         <p>We can make this nicer at the cost of boxing with the <code>Nested</code> data type.</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">data</span><span>.</span><span class="type-name">Nested</span><span>
-</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span></code></pre>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span></code></pre>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">nested</span><span>: </span><span class="type-name">Nested</span><span>[</span><span class="type-name">List</span><span>, </span><span class="type-name">Option</span><span>, </span><span class="type-name">Int</span><span>] = </span><span class="type-name">Nested</span><span>(</span><span class="identifier">listOption</span><span>)
 </span><span class="comment">// nested: Nested[List, Option, Int] = Nested(
 //   value = List(Some(value = 1), None, Some(value = 2))
