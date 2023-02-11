@@ -397,7 +397,7 @@ object OptionOps {
       ApplicativeError.liftFromOption(oa, ifEmpty)
   }
 
-  final private[syntax] class ToInvalidAPartiallyApplied[F[_], A](private val oa: Option[A]) extends AnyVal {
+  final class ToInvalidAPartiallyApplied[F[_], A](private val oa: Option[A]) extends AnyVal {
     def apply[B](b: => B)(implicit F: Applicative[F]): Validated[F[A], B] =
       oa.fold[Validated[F[A], B]](Validated.Valid[B](b))(Validated.invalidA[F, A, B])
   }
