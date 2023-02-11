@@ -392,7 +392,7 @@ final class OptionOps[A](private val oa: Option[A]) extends AnyVal {
 }
 
 object OptionOps {
-  final private[syntax] class LiftToPartiallyApplied[F[_], A](oa: Option[A]) {
+  final class LiftToPartiallyApplied[F[_], A](oa: Option[A]) {
     def apply[E](ifEmpty: => E)(implicit F: ApplicativeError[F, _ >: E]): F[A] =
       ApplicativeError.liftFromOption(oa, ifEmpty)
   }

@@ -390,7 +390,7 @@ class EitherSuite extends CatsSuite {
   test("toEitherA Left") {
     forAll { y: String =>
       assert(
-        y.asLeft[Int].toEitherA[NonEmptyVector, String] === Either.left[NonEmptyVector[String], Int](
+        y.asLeft[Int].toEitherA[NonEmptyVector] === Either.left[NonEmptyVector[String], Int](
           NonEmptyVector.one(y)
         )
       )
@@ -399,7 +399,7 @@ class EitherSuite extends CatsSuite {
 
   test("toEitherA Right") {
     forAll { x: Int =>
-      assert(x.asRight[String].toEitherA[NonEmptyVector, String] === (Either.right[NonEmptyVector[String], Int](x)))
+      assert(x.asRight[String].toEitherA[NonEmptyVector] === (Either.right[NonEmptyVector[String], Int](x)))
     }
   }
 
