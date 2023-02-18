@@ -26,7 +26,7 @@ WriterT[Option, String, Int](Some(("value", 10))).map(x => x * x)
 Plus, when composing multiple `WriterT` computations, those will be
 composed following the same behaviour of a
 [`Writer`](writer.md) and the
-generic `F`.  Let's see two examples with `Option` and [`Either`](either.md): if
+generic `F`.  Let's see two examples with `Option` and `Either`: if
 one of the computations has a `None` or a `Left`, the whole
 computation will return a `None` or a `Left` since the way the two
 types compose typically behaves that way. Moreover, when the
@@ -77,7 +77,7 @@ Just for completeness, we can have a look at the same example, but
 with
 [`Validated`](validated.md)
 since it as a slightly different behaviour than
-[`Either`](either.md). Instead
+`Either`. Instead
 of short-circuiting when the first error is encountered,
 [`Validated`](validated.md)
 will accumulate all the errors. In the following example, you can see
