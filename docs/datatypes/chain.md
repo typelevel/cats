@@ -1,7 +1,6 @@
 # Chain
 
-[Chain API Documentation][@:api(cats.data.Chain)]
-
+API Documentation: @:api(cats.data.Chain)
 
 `Chain` is an immutable sequence data structure that allows constant time prepending, appending and concatenation.
 This makes it especially efficient when used as a [Monoid], e.g. with [Validated] or [Writer].
