@@ -1,5 +1,7 @@
 # Parallel
 
+API Documentation: @:api(cats.Parallel)
+
 When browsing the various `Monads` included in Cats,
 you may have noticed that some of them have data types that are actually of the same structure,
 but instead have instances of `Applicative`. E.g. `Either` and `Validated`.

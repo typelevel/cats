@@ -1,5 +1,7 @@
 # Chain
 
+API Documentation: @:api(cats.data.Chain)
+
 `Chain` is a data structure that allows constant time prepending and appending.
 This makes it especially efficient when used as a `Monoid`, e.g. with `Validated` or `Writer`.
 As such it aims to be used where `List` and `Vector` incur a performance penalty.

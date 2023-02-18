@@ -1,5 +1,7 @@
 # Monoid
 
+API Documentation: @:api(cats.kernel.Monoid)
+
 `Monoid` extends the power of `Semigroup` by providing an additional `empty` value.
 
 ```scala mdoc:silent

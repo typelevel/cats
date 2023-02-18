@@ -1,4 +1,7 @@
 # Functor
+
+API Documentation: @:api(cats.Functor)
+
 `Functor` is a type class that abstracts over type constructors that can be `map`'ed over. Examples of such
 type constructors are `List`, `Option`, and `Future`.
 

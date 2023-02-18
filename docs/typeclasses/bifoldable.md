@@ -1,5 +1,8 @@
 # Bifoldable
 
+API Documentation: @:api(cats.Bifoldable)
+
+
 `Bifoldable[F[_,_]]` instances identify data structures with two independent `Foldable` that fold to the same summary value.
 
 As a reminder `Foldable` is implemented in terms of `foldLeft` and `foldRight`; similarly `Bifoldable` is implemented in terms of:

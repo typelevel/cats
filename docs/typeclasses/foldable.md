@@ -1,5 +1,7 @@
 # Foldable
 
+API Documentation: @:api(cats.Foldable)
+
 Foldable type class instances can be defined for data structures that can be 
 folded to a summary value.
 

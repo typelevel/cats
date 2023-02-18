@@ -1,5 +1,7 @@
 # Reducible
 
+API Documentation: @:api(cats.Reducible)
+
 `Reducible` extends the `Foldable` type class with additional `reduce` methods.
 
 You may have come by one of the `reduce`, `reduceLeft` or `reduceOption` defined in Scala's standard collections.

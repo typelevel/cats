@@ -1,4 +1,7 @@
 # Applicative
+
+API Documentation: @:api(cats.Applicative)
+
 `Applicative` extends [`Functor`](functor.md) with an `ap` and `pure` method.
 
 ```scala mdoc:silent

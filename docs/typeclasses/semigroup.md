@@ -1,5 +1,7 @@
 # Semigroup
 
+API Documentation: @:api(cats.kernel.Semigroup)
+
 If a type `A` can form a `Semigroup` it has an **associative** binary operation.
 
 ```scala mdoc:silent

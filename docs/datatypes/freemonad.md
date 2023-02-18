@@ -1,5 +1,7 @@
 # Free Monad
 
+API Documentation: @:api(cats.free.Free)
+
 ## What is it?
 
 A *free monad* is a construction which allows you to build a *monad*

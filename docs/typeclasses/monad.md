@@ -1,5 +1,7 @@
 # Monad
 
+API Documentation: @:api(cats.Monad)
+
 `Monad` extends the [`Applicative`](applicative.md) type class with a
 new function `flatten`. Flatten takes a value in a nested context (eg.
 `F[F[A]]` where F is the context) and "joins" the contexts together so

@@ -1,5 +1,7 @@
 # Alternative
 
+API Documentation: @:api(cats.Alternative)
+
 Alternative extends [`Applicative`](applicative.md) with a [`MonoidK`](monoidk.md).
 Let's stub out all the operations just to remind ourselves what that gets us.
 

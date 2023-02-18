@@ -1,5 +1,7 @@
 # OptionT
 
+API Documentation: @:api(cats.data.OptionT)
+
 `OptionT[F[_], A]` is a light wrapper on an `F[Option[A]]`. Speaking technically, it is a monad transformer for `Option`, but you don't need to know what that means for it to be useful. `OptionT` can be more convenient to work with than using `F[Option[A]]` directly.
 
 ## Reduce map boilerplate

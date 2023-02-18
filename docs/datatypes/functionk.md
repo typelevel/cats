@@ -1,4 +1,7 @@
 # FunctionK
+
+API Documentation: @:api(cats.arrow.FunctionK)
+
 A `FunctionK` transforms values from one first-order-kinded type (a type that takes a single type
 parameter, such as `List` or `Option`) into another first-order-kinded type. This transformation is
 universal, meaning that a `FunctionK[List, Option]` will translate all `List[A]` values into an
