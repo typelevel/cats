@@ -429,13 +429,8 @@
         <p>The documentation for this website is stored alongside the source, in the <a href="https://github.com/typelevel/cats/tree/main/docs">docs subproject</a>.</p>
         
         <h3 id="generating-the-site" class="section">Generating the Site<a class="anchor-link right" href="#generating-the-site"><i class="icofont-laika">&#xef71;</i></a></h3>
-        <p>The microsite generation requires a specific scala version that might
-        differ from the project&#39;s one. We strongly suggest to check the CI&#39;s
-        workflow to discover the proper version:
-        <a href="https://github.com/typelevel/cats/blob/main/.github/workflows/ci.yml#L230">CI scala-version matrix</a> and <a href="https://github.com/typelevel/cats/blob/main/.github/workflows/ci.yml#L281">CI makeMicrosite
-        command</a></p>
-        <p>At the moment the command is:
-        <code>sbt ++2.12.15 docs/tlSite</code></p>
+        <p>The command is: <code>sbt docs/tlSite</code></p>
+        <p>We suggest checking the CI&#39;s workflow to discover any changes at <a href="https://github.com/typelevel/cats/blob/v2.9.0/.github/workflows/ci.yml#L418">CI site job</a>.</p>
         
         <h3 id="previewing-the-site" class="section">Previewing the site<a class="anchor-link right" href="#previewing-the-site"><i class="icofont-laika">&#xef71;</i></a></h3>
         <p>Run <code>docs/tlSitePreview</code> in the sbt console. This will start a preview server at <a href="http://localhost:4242/">http://localhost:4242/</a> that will automatically refresh as you make edits.</p>
