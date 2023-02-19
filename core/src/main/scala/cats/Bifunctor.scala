@@ -77,7 +77,7 @@ trait Bifunctor[F[_, _]] extends Serializable { self =>
   def leftWiden[A, B, AA >: A](fab: F[A, B]): F[AA, B] = fab.asInstanceOf[F[AA, B]]
 
   /**
-   * Lift left into 
+   * Lift left into F using Applicative.
    * * Example:
    * {{{
    * scala> import cats.implicits._
