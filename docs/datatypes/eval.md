@@ -2,7 +2,6 @@
 
 API Documentation: @:api(cats.Eval)
 
-
 Eval is a data type for controlling synchronous evaluation.
 Its implementation is designed to provide stack-safety at all times using a technique called trampolining.
 
