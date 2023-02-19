@@ -22,7 +22,7 @@
 package cats.tests
 
 import cats._
-import cats.data.{EitherT, Ior, IorT, NonEmptyVector, State}
+import cats.data.{EitherT, Ior, IorT, State}
 import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._

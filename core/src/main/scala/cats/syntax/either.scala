@@ -372,8 +372,6 @@ final class EitherObjectOps(private val either: Either.type) extends AnyVal {
 
   def rightNel[A, B](b: B): EitherNel[A, B] = Right(b)
 
-  def leftA[F[_]: Applicative, A, B](a: A): Either[F[A], B] = Left(Applicative[F].pure(a))
-
   /**
    * Evaluates the specified block, catching exceptions of the specified type and returning them on the left side of
    * the resulting `Either`. Uncaught exceptions are propagated.

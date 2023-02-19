@@ -585,7 +585,6 @@ object SyntaxSuite {
     val v14: EitherNes[Nothing, B] = Either.rightNes(b)
     val v15: EitherNel[A, Nothing] = Either.leftNel(a)
     val v16: EitherNel[Nothing, B] = Either.rightNel(b)
-    val v17: Either[F[A], B] = Either.leftA[F, A, B](a)
   }
 
   def testOption[F[_]: Applicative, G[_], A, B: Monoid](): Unit = {

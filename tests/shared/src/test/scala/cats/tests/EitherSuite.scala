@@ -177,22 +177,6 @@ class EitherSuite extends CatsSuite {
     }
   }
 
-  test("leftA is consistent with left(NEV)") {
-    forAll { (s: String) =>
-      assert(
-        Either.leftA[NonEmptyVector, String, Int](s) === (Either.left[NonEmptyVector[String], Int](
-          NonEmptyVector.one(s)
-        ))
-      )
-    }
-  }
-
-  test("rightA is consistent with right") {
-    forAll { (i: Int) =>
-      assert(Either.right[NonEmptyVector[String], Int](i) === (Either.right[NonEmptyVector[String], Int](i)))
-    }
-  }
-
   test("leftNes is consistent with left(NES)") {
     forAll { (s: String) =>
       assert(Either.leftNes[String, Int](s) === (Either.left[NonEmptySet[String], Int](NonEmptySet.one(s))))
