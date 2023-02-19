@@ -1166,7 +1166,6 @@ private[data] trait ValidatedFunctions {
    */
   final def condNel[E, A](test: Boolean, a: => A, e: => E): ValidatedNel[E, A] =
     if (test) validNel(a) else invalidNel(e)
-
 }
 
 private[data] trait ValidatedFunctionsBinCompat0 {
