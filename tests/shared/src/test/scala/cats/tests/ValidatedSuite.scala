@@ -355,16 +355,6 @@ class ValidatedSuite extends CatsSuite {
     }
   }
 
-  test("condA consistent with Either.cond + toValidatedA") {
-    forAll { (cond: Boolean, s: String, i: Int) =>
-      assert(
-        Validated.condA[NonEmptyVector, Int, String](cond, s, i) === Either
-          .cond(cond, s, i)
-          .toValidatedA[NonEmptyVector]
-      )
-    }
-  }
-
   test("condNec consistent with Either.cond + toValidatedNec") {
     forAll { (cond: Boolean, s: String, i: Int) =>
       assert(Validated.condNec(cond, s, i) === (Either.cond(cond, s, i).toValidatedNec))

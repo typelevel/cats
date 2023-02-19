@@ -568,9 +568,9 @@ object SyntaxSuite {
 
     val v1: Validated[A, B] = either.toValidated
     val v2: ValidatedNel[A, B] = either.toValidatedNel
-    val v3: Validated[F[A], B] = either.toValidatedA[F]
+    val v3: Validated[F[A], B] = either.toValidated.leftLiftTo[F]
 
-    val v4: Either[F[A], B] = either.toEitherA
+    val v4: Either[F[A], B] = either.leftLiftTo[F]
     val v5: EitherT[F, A, B] = either.toEitherT
     val v6: EitherNel[A, B] = either.toEitherNel
     val v7: EitherNec[A, B] = either.toEitherNec
@@ -596,7 +596,7 @@ object SyntaxSuite {
 
     val v1: Validated[B, A] = option.toInvalid(a)
     val v2: ValidatedNel[B, A] = option.toInvalidNel(a)
-    val v3: Validated[F[B], A] = option.toInvalidA[F](a)
+    val v3: Validated[F[B], A] = option.toInvalid(a).leftLiftTo[F]
     val v4: ValidatedNec[B, A] = option.toInvalidNec(a)
     val v5: Validated[B, B] = option.toValid(b)
     val v6: ValidatedNel[B, B] = option.toValidNel(b)
@@ -619,7 +619,7 @@ object SyntaxSuite {
     val b = mock[B]
 
     val v1: Validated[A, B] = b.valid[A]
-    val v2: Validated[F[A], A] = a.invalidA[F, A]
+    val v2: Validated[F[A], A] = a.invalid[A].leftLiftTo[F]
     val v3: ValidatedNel[A, B] = b.validNel[A]
     val v4: Validated[A, B] = a.invalid[B]
     val v5: ValidatedNel[A, B] = a.invalidNel[B]

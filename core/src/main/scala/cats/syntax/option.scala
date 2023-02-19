@@ -33,7 +33,7 @@ import cats.data.{
   ValidatedNec,
   ValidatedNel
 }
-import cats.syntax.OptionOps.{LiftToPartiallyApplied, ToInvalidAPartiallyApplied}
+import cats.syntax.OptionOps.LiftToPartiallyApplied
 
 trait OptionSyntax {
   final def none[A]: Option[A] = Option.empty[A]
@@ -104,8 +104,6 @@ final class OptionOps[A](private val oa: Option[A]) extends AnyVal {
    */
   def toInvalidNel[B](b: => B): ValidatedNel[A, B] =
     oa.fold[ValidatedNel[A, B]](Validated.Valid(b))(Validated.invalidNel)
-
-  def toInvalidA[F[_]]: ToInvalidAPartiallyApplied[F, A] = new ToInvalidAPartiallyApplied[F, A](oa)
 
   /**
    * If the `Option` is a `Some`, wrap its value in a [[cats.data.Chain]]
@@ -395,10 +393,5 @@ object OptionOps {
   final class LiftToPartiallyApplied[F[_], A](oa: Option[A]) {
     def apply[E](ifEmpty: => E)(implicit F: ApplicativeError[F, _ >: E]): F[A] =
       ApplicativeError.liftFromOption(oa, ifEmpty)
-  }
-
-  final class ToInvalidAPartiallyApplied[F[_], A](private val oa: Option[A]) extends AnyVal {
-    def apply[B](b: => B)(implicit F: Applicative[F]): Validated[F[A], B] =
-      oa.fold[Validated[F[A], B]](Validated.Valid[B](b))(Validated.invalidA[F, A, B])
   }
 }

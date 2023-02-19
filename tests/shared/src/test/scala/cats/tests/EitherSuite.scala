@@ -23,11 +23,13 @@ package cats.tests
 
 import cats._
 import cats.data.{EitherT, NonEmptyChain, NonEmptyList, NonEmptySet, NonEmptyVector, Validated}
+import cats.syntax.bifunctor._
 import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.syntax.either._
+
 import scala.util.Try
 import cats.syntax.eq._
 import org.scalacheck.Prop._
@@ -314,7 +316,7 @@ class EitherSuite extends CatsSuite {
       assert(x.isLeft === (x.toValidated.isInvalid))
       assert(x.isLeft === (x.toValidatedNel.isInvalid))
       assert(x.isLeft === (x.toValidatedNec.isInvalid))
-      assert(x.isLeft === (x.toValidatedA[NonEmptyVector].isInvalid))
+      assert(x.isLeft === (x.leftLiftTo[NonEmptyVector].isLeft))
       assert(Option(x.isLeft) === (x.toEitherT[Option].isLeft))
     }
   }
@@ -387,19 +389,19 @@ class EitherSuite extends CatsSuite {
     assert(either.toEitherNel === (Either.right[NonEmptyList[String], Int](42)))
   }
 
-  test("toEitherA Left") {
+  test("liftLeftTo Left") {
     forAll { y: String =>
       assert(
-        y.asLeft[Int].toEitherA[NonEmptyVector] === Either.left[NonEmptyVector[String], Int](
+        y.asLeft[Int].leftLiftTo[NonEmptyVector] === Either.left[NonEmptyVector[String], Int](
           NonEmptyVector.one(y)
         )
       )
     }
   }
 
-  test("toEitherA Right") {
+  test("liftLeftTo Right") {
     forAll { x: Int =>
-      assert(x.asRight[String].toEitherA[NonEmptyVector] === (Either.right[NonEmptyVector[String], Int](x)))
+      assert(x.asRight[String].leftLiftTo[NonEmptyVector] === (Either.right[NonEmptyVector[String], Int](x)))
     }
   }
 

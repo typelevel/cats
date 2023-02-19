@@ -160,30 +160,6 @@ final class EitherOps[A, B](private val eab: Either[A, B]) extends AnyVal {
       case Right(b) => Validated.valid(b)
     }
 
-  /**
-   * Generic implementation of [[toValidatedNel]] for any F[_] with provided Applicative instance. 
-   *
-   * Examples:
-   * {{{
-   * scala> import cats.implicits._
-   * scala> import cats.data._
-   * 
-   * scala> val l: Either[String, Int] = Either.left("error")
-   * scala> val r: Either[String, Int] = Either.right(1)
-   *
-   * scala> l.toValidatedA[NonEmptyList]
-   * val res0: Validated[cats.data.NonEmptyList[String],Int] = Invalid(NonEmptyList(error 1))
-   *
-   * scala> r.toValidatedA[Vector]
-   * val res1: cats.data.Validated[Vector[String],Int] = Valid(1)
-   * }}}
-   */
-  def toValidatedA[F[_]: Applicative]: Validated[F[A], B] =
-    eab match {
-      case Left(a)  => Validated.invalidA(a)
-      case Right(b) => Validated.valid(b)
-    }
-
   def withValidated[AA, BB](f: Validated[A, B] => Validated[AA, BB]): Either[AA, BB] =
     f(toValidated).toEither
 
@@ -360,8 +336,6 @@ final class EitherOps[A, B](private val eab: Either[A, B]) extends AnyVal {
   def toEitherNes[AA >: A](implicit O: Order[AA]): EitherNes[AA, B] = leftMap(NonEmptySet.one(_))
 
   def toEitherNel[AA >: A]: EitherNel[AA, B] = leftMap(NonEmptyList.one)
-
-  def toEitherA[F[_]: Applicative]: Either[F[A], B] = leftMap(Applicative[F].pure)
 
   @deprecated("use liftTo instead", "2.0.0")
   def raiseOrPure[F[_]](implicit ev: ApplicativeError[F, A]): F[B] =

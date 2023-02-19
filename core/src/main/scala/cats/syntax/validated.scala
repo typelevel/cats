@@ -30,7 +30,6 @@ trait ValidatedSyntax {
 
 final class ValidatedIdSyntax[A](private val a: A) extends AnyVal {
   def valid[B]: Validated[B, A] = Validated.Valid(a)
-  def invalidA[F[_]: Applicative, B]: Validated[F[A], B] = Validated.invalidA(a)
   def validNel[B]: ValidatedNel[B, A] = Validated.Valid(a)
   def invalid[B]: Validated[A, B] = Validated.Invalid(a)
   def invalidNel[B]: ValidatedNel[A, B] = Validated.invalidNel(a)
