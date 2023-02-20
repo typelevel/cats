@@ -373,7 +373,7 @@ class EitherSuite extends CatsSuite {
     assert(either.toEitherNel === (Either.right[NonEmptyList[String], Int](42)))
   }
 
-  test("liftLeftTo Left") {
+  test("leftLiftTo Left") {
     forAll { y: String =>
       assert(
         y.asLeft[Int].leftLiftTo[NonEmptyVector] === Either.left[NonEmptyVector[String], Int](
@@ -383,7 +383,7 @@ class EitherSuite extends CatsSuite {
     }
   }
 
-  test("liftLeftTo Right") {
+  test("leftLiftTo Right") {
     forAll { x: Int =>
       assert(x.asRight[String].leftLiftTo[NonEmptyVector] === (Either.right[NonEmptyVector[String], Int](x)))
     }
