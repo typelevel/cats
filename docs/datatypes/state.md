@@ -1,5 +1,7 @@
 # State
 
+API Documentation: @:api(cats.data.IndexedStateT)
+
 `State` is a structure that provides a functional approach to handling application state. `State[S, A]` is basically a function `S => (S, A)`, where `S` is the type that represents your state and `A` is the result the function produces. In addition to returning the result of type `A`, the function returns a new `S` value, which is the updated state.
 
 ## Robots

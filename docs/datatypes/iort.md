@@ -1,5 +1,7 @@
 # IorT
 
+API Documentation: @:api(cats.data.IorT)
+
 `IorT[F[_], A, B]` is a light wrapper on an `F[Ior[A, B]]`. Similar to
 `OptionT[F[_], A]` and `EitherT[F[_], A, B]`, it is a monad transformer for
 `Ior`, that can be more convenient to work with than using `F[Ior[A, B]]`

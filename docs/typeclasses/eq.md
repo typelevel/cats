@@ -1,5 +1,7 @@
 # Eq
 
+API Documentation: @:api(cats.kernel.Eq)
+
 Eq is an alternative to the standard Java `equals` method.
 It is defined by the single method `eqv`:
 

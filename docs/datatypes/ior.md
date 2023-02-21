@@ -1,5 +1,7 @@
 # Ior
 
+API Documentation: @:api(cats.data.Ior)
+
 `Ior` represents an inclusive-or relationship between two data types.
 This makes it very similar to the [`Either`](either.md) data type, which represents an "exclusive-or" relationship.
 What this means, is that an `Ior[A, B]` (also written as `A Ior B`) can contain either an `A`, a `B`, or both an `A` and `B`.

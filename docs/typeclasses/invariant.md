@@ -1,5 +1,7 @@
 # Invariant
 
+API Documentation: @:api(cats.Invariant)
+
 The `Invariant` type class is for functors that define an `imap`
 function with the following type:
 

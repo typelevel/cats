@@ -1,5 +1,7 @@
 # Contravariant Monoidal
 
+API Documentation: @:api(cats.ContravariantMonoidal)
+
 The `ContravariantMonoidal` type class is for [`Contravariant`](contravariant.md) functors that can define a
 `product` function and a `unit` function.
 

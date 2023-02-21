@@ -1,4 +1,7 @@
 # Kleisli
+
+API Documentation: @:api(cats.data.Kleisli)
+
 Kleisli enables composition of functions that return a monadic value, for instance an `Option[Int]` 
 or a `Either[String, List[Double]]`, without having functions take an `Option` or `Either` as a parameter, 
 which can be strange and unwieldy.

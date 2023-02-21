@@ -1,5 +1,7 @@
 # EitherT
 
+API Documentation: @:api(cats.data.EitherT)
+
 `Either` can be used for error handling in most situations. However, when
 `Either` is placed into effectful types such as `Option` or`Future`, a large
 amount of boilerplate is required to handle errors. For example, consider the

@@ -1,5 +1,7 @@
 # Invariant Monoidal
 
+API Documentation: @:api(cats.InvariantMonoidal)
+
 `InvariantMonoidal` combines [`Invariant`](invariant.md) and `Semigroupal` with the addition of a `unit` methods, defined in isolation the `InvariantMonoidal` type class could be defined as follows:
 
 ```scala mdoc:compile-only

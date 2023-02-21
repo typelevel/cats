@@ -1,6 +1,8 @@
-{% laika.title = Nested %}
+# Nested
 
-# Motivation
+API Documentation: @:api(cats.data.Nested)
+
+## Motivation
 
 In day-to-day programming we quite often end up with data inside nested
 effects, e.g. an integer inside an `Either`, which in turn is nested inside
@@ -54,7 +56,7 @@ and `G[_]`. For example:
 
 You can see the full list of these rules in the `Nested` companion object.
 
-## A more interesting example
+### A more interesting example
 
 (courtesy of [Channing Walton and Luka Jacobowitz via
 Twitter](https://twitter.com/LukaJacobowitz/status/1017355319473786880),

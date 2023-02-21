@@ -1,5 +1,7 @@
 # Contravariant
 
+API Documentation: @:api(cats.Contravariant)
+
 The `Contravariant` type class is for functors that define a `contramap`
 function with the following type:
 

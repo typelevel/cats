@@ -1,5 +1,7 @@
 # WriterT
 
+API Documentation: @:api(cats.data.WriterT)
+
 `WriterT[F[_], L, V]` is a type wrapper on an `F[(L,
 V)]`. Speaking technically, it is a monad transformer for [`Writer`](writer.md),
 but you don't need to know what that means for it to be

@@ -1,5 +1,7 @@
 # Traverse
 
+API Documentation: @:api(cats.Traverse)
+
 In the `Applicative` tutorial we saw a more polymorphic version of the standard library
 `Future.traverse` and `Future.sequence` functions, generalizing `Future` to be any
 `F[_]` that's `Applicative`.

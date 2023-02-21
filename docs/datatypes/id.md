@@ -1,5 +1,7 @@
 # Id
 
+API Documentation: [Id](@API_LINK_BASE@cats/index.html#Id[A]=A)
+
 The identity monad can be seen as the ambient monad that encodes the
 effect of having no effect. It is ambient in the sense that plain pure
 values are values of `Id`.

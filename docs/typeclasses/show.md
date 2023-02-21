@@ -1,5 +1,7 @@
 # Show
 
+API Documentation: @:api(cats.Show)
+
 Show is an alternative to the Java `toString` method.
 It is defined by a single function `show`:
 

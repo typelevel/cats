@@ -1,5 +1,7 @@
 # NonEmptyList
 
+API Documentation: @:api(cats.data.NonEmptyList)
+
 ## Motivation
 
 We start with two examples of `NonEmptyList`s

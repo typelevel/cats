@@ -1,5 +1,7 @@
 # MonoidK
 
+API Documentation: @:api(cats.MonoidK)
+
 `MonoidK` is a universal monoid which operates on type constructors of one argument.
 
 This type class is useful when its type parameter `F[_]` has a

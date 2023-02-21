@@ -1,5 +1,7 @@
 # OneAnd
 
+API Documentation: @:api(cats.data.OneAnd)
+
 The `OneAnd[F[_],A]` data type represents a single element of type `A`
 that is guaranteed to be present (`head`) and in addition to this a
 second part that is wrapped inside an higher kinded type constructor

@@ -1,5 +1,7 @@
 # Validated
 
+API Documentation: @:api(cats.data.Validated)
+
 Imagine you are filling out a web form to signup for an account. You input your username and password and submit.
 Response comes back saying your username can't have dashes in it, so you make some changes and resubmit. Can't
 have special characters either. Change, resubmit. Passwords need to have at least one capital letter. Change,

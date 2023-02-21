@@ -1,5 +1,7 @@
 # Free Applicative
 
+API Documentation: @:api(cats.free.FreeApplicative)
+
 `FreeApplicative`s are similar to `Free` (monads) in that they provide a nice way to represent
 computations as data and are useful for building embedded DSLs (EDSLs). However, they differ
 from `Free` in that the kinds of operations they support are limited, much like the distinction

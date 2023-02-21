@@ -1,5 +1,7 @@
 # ApplicativeError and MonadError
 
+API Documentation: @:api(cats.ApplicativeError), @:api(cats.MonadError)
+
 ## Applicative Error
 
 ### Description
