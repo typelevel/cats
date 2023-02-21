@@ -193,6 +193,8 @@
         <p class="header"><a href="#">Ior</a></p>
 
         <ul class="nav-list">
+          <li class="level1"><a href="#using-with-nonemptychain">Using with NonEmptyChain</a></li>
+          <li class="level1"><a href="#conversions">Conversions</a></li>
         </ul>
 
         <p class="footer"></p>
@@ -290,6 +292,8 @@
   (</span><span class="identifier">warnings</span><span>, </span><span class="identifier">user</span><span>) =&gt; </span><span class="string-literal">s&quot;Warning: </span><span class="substitution">${user.name.value}</span><span class="string-literal">; The following warnings occurred: </span><span class="substitution">${warnings.show}</span><span class="string-literal">&quot;</span><span>
 )
 </span><span class="comment">// res4: String = &quot;Warning: john.doe; The following warnings occurred: NonEmptyChain(Dot in name is deprecated, Password should be longer)&quot;</span></code></pre>
+        
+        <h2 id="using-with-nonemptychain" class="section">Using with NonEmptyChain<a class="anchor-link right" href="#using-with-nonemptychain"><i class="icofont-laika">&#xef71;</i></a></h2>
         <p>Similar to <a href="validated.html">Validated</a>, there is also a type alias for using a <code>NonEmptyChain</code> on the left side.</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">data</span><span>.</span><span class="type-name">NonEmptyChain</span><span>
 
@@ -298,6 +302,8 @@
 
 </span><span class="keyword">val</span><span> </span><span class="identifier">left</span><span>: </span><span class="type-name">IorNec</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Int</span><span>] = </span><span class="type-name">Ior</span><span>.</span><span class="identifier">fromEither</span><span>(</span><span class="string-literal">&quot;Error&quot;</span><span>.</span><span class="identifier">leftNec</span><span>[</span><span class="type-name">Int</span><span>])
 </span><span class="comment">// left: IorNec[String, Int] = Left(a = Singleton(a = &quot;Error&quot;))</span></code></pre>
+        
+        <h2 id="conversions" class="section">Conversions<a class="anchor-link right" href="#conversions"><i class="icofont-laika">&#xef71;</i></a></h2>
         <p>We can also convert our <code>Ior</code> to <code>Either</code>, <code>Validated</code> or <code>Option</code>.
         All of these conversions will discard the left side value if both are available:</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="type-name">Ior</span><span>.</span><span class="identifier">both</span><span>(</span><span class="string-literal">&quot;Warning&quot;</span><span>, </span><span class="number-literal">42</span><span>).</span><span class="identifier">toEither</span><span>

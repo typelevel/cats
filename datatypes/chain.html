@@ -193,8 +193,10 @@
         <p class="header"><a href="#">Chain</a></p>
 
         <ul class="nav-list">
-          <li class="level1"><a href="#how-it-works">How it works</a></li>
+          <li class="level1"><a href="#motivation">Motivation</a></li>
           <li class="level1"><a href="#nonemptychain">NonEmptyChain</a></li>
+          <li class="level1"><a href="#how-it-works">How it works</a></li>
+          <li class="level1"><a href="#benchmarks">Benchmarks</a></li>
         </ul>
 
         <p class="footer"></p>
@@ -203,79 +205,31 @@
       <main class="content">
 
         <h1 id="chain" class="title">Chain</h1>
-        <p><code>Chain</code> is a data structure that allows constant time prepending and appending.
-        This makes it especially efficient when used as a <code>Monoid</code>, e.g. with <code>Validated</code> or <code>Writer</code>.
-        As such it aims to be used where <code>List</code> and <code>Vector</code> incur a performance penalty.</p>
+        <p>API Documentation: <a href="https://www.javadoc.io/doc/org.typelevel/cats-docs_2.13/2.9.0/cats/data/Chain.html">Chain</a></p>
+        <p><code>Chain</code> is an immutable sequence data structure that allows constant time prepending, appending and concatenation.
+        This makes it especially efficient when used as a <a href="../typeclasses/monoid.html#monoid">Monoid</a>, e.g. with <a href="validated.html#validated">Validated</a> or <a href="writer.html#writer">Writer</a>.
+        As such it aims to be used where <a href="https://www.scala-lang.org/api/2.13.10/scala/collection/immutable/List.html">List</a> and <a href="https://www.scala-lang.org/api/2.13.10/scala/collection/immutable/Vector.html">Vector</a> incur a performance penalty.
+        Cats also includes type class implementations to support using <code>Chain</code> as a general-purpose collection type, including <a href="../typeclasses/traverse.html#traverse">Traverse</a>, <a href="../typeclasses/monad.html#monad">Monad</a>, and <a href="../typeclasses/alternative.html#alternative">Alternative</a>.</p>
+        
+        <h2 id="motivation" class="section">Motivation<a class="anchor-link right" href="#motivation"><i class="icofont-laika">&#xef71;</i></a></h2>
         <p><code>List</code> is a great data type, it is very simple and easy to understand.
-        It has very low overhead for the most important functions such as <code>fold</code> and <code>map</code> and also supports prepending a single element in constant time.</p>
-        <p>Traversing a data structure with something like <code>Writer[List[Log], A]</code> or <code>ValidatedNel[Error, A]</code> is  powerful and allows us to precisely specify what kind of iteration we want to do while remaining succint.
+        It has very low overhead for the most important functions such as <a href="../typeclasses/foldable.html#foldable">fold</a> and <a href="../typeclasses/functor.html#functor">map</a> and also supports prepending a single element in constant time.</p>
+        <p>Traversing a data structure with something like <a href="writer.html#writer">Writer[List[Log], A]</a> or <a href="validated.html#validated">ValidatedNel[Error, A]</a> is powerful and allows us to precisely specify what kind of iteration we want to do while remaining succinct.
         However, in terms of efficiency it&#39;s a whole different story unfortunately.
-        That is because both of these traversals make use of the <code>List</code> monoid (or the <code>NonEmptyList</code> semigroup), which by the nature of <code>List</code> is very inefficient.
-        If you use <code>traverse</code> with a data structure with <code>n</code> elements and <code>Writer</code> or <code>Validated</code> as the <code>Applicative</code> type, you will end up with a runtime of <code>O(n^2)</code>.
+        That is because both of these traversals make use of the <code>List</code> monoid (or the <a href="nel.html#nonemptylist">NonEmptyList</a> semigroup), which by the nature of <code>List</code> is very inefficient.
+        If you use <a href="../typeclasses/traverse.html#traverse">traverse</a> with a data structure with <code>n</code> elements and <a href="writer.html#writer">Writer</a> or <a href="validated.html#validated">Validated</a> as the <a href="../typeclasses/applicative.html#applicative">Applicative</a> type, you will end up with a runtime of <code>O(n^2)</code>.
         This is because, with <code>List</code>, appending a single element requires iterating over the entire data structure and therefore takes linear time.</p>
-        <p>So <code>List</code> isn&#39;t all that great for this use case, so let&#39;s use <code>Vector</code> or <code>NonEmptyVector</code> instead, right?</p>
+        <p>So <a href="https://www.scala-lang.org/api/2.13.10/scala/collection/immutable/List.html">List</a> isn&#39;t all that great for this use case, so let&#39;s use <a href="https://www.scala-lang.org/api/2.13.10/scala/collection/immutable/Vector.html">Vector</a> or <a href="https://www.javadoc.io/doc/org.typelevel/cats-docs_2.13/2.9.0/cats/data/NonEmptyVector.html">NonEmptyVector</a>` instead, right?</p>
         <p>Well, <code>Vector</code> has its own problems and in this case it&#39;s unfortunately not that much faster than <code>List</code> at all. You can check <a href="http://www.lihaoyi.com/post/BenchmarkingScalaCollections.html#vectors-are-ok">this blog post</a> by Li Haoyi for some deeper insight into <code>Vector</code>&#39;s issues.</p>
         <p><code>Chain</code> evolved from what used to be <code>fs2.Catenable</code> and Erik Osheim&#39;s <a href="https://github.com/non/chain">Chain</a> library.
-        Similar to <code>List</code>, it is also a very simple data structure, but unlike <code>List</code> it supports both constant O(1) time <code>append</code> and <code>prepend</code>.
-        This makes its <code>Monoid</code> instance super performant and a much better fit for usage with <code>Validated</code>,<code>Writer</code>, <code>Ior</code> or <code>Const</code>.</p>
-        <p>To utilize this Cats includes type aliases like <code>ValidatedNec</code> or <code>IorNec</code> as well as helper functions like <code>groupByNec</code> or <code>Validated.invalidNec</code>.</p>
-        <p>To get a good idea of the performance improvements, here are some benchmarks that test monoidal append (higher score is better):</p>
-        <pre><code>[info] Benchmark                                  Mode  Cnt   Score   Error  Units
-[info] CollectionMonoidBench.accumulateChain     thrpt   20  51.911 ± 7.453  ops/s
-[info] CollectionMonoidBench.accumulateList      thrpt   20   6.973 ± 0.781  ops/s
-[info] CollectionMonoidBench.accumulateVector    thrpt   20   6.304 ± 0.129  ops/s</code></pre>
-        <p>As you can see accumulating things with <code>Chain</code> is more than 7 times faster than <code>List</code> and over 8 times faster than <code>Vector</code>.
-        So appending is a lot more performant than the standard library collections, but what about operations like <code>map</code> or <code>fold</code>?
-        Fortunately we&#39;ve also benchmarked these (again, higher score is better):</p>
-        <pre><code>[info] Benchmark                           Mode  Cnt          Score         Error  Units
-[info] ChainBench.foldLeftLargeChain      thrpt   20        117.267 ±       1.815  ops/s
-[info] ChainBench.foldLeftLargeList       thrpt   20        135.954 ±       3.340  ops/s
-[info] ChainBench.foldLeftLargeVector     thrpt   20         61.613 ±       1.326  ops/s
-[info]
-[info] ChainBench.mapLargeChain           thrpt   20         59.379 ±       0.866  ops/s
-[info] ChainBench.mapLargeList            thrpt   20         66.729 ±       7.165  ops/s
-[info] ChainBench.mapLargeVector          thrpt   20         61.374 ±       2.004  ops/s</code></pre>
-        <p>While not as dominant, <code>Chain</code> holds its ground fairly well.
-        It won&#39;t have the random access performance of something like <code>Vector</code>, but in a lot of other cases, <code>Chain</code> seems to outperform it quite handily.
-        So if you don&#39;t perform a lot of random access on your data structure, then you should be fine using <code>Chain</code> extensively instead.</p>
-        <p>So next time you write any code that uses <code>List</code> or <code>Vector</code> as a <code>Monoid</code>, be sure to use <code>Chain</code> instead!
-        You can also check out the benchmarks <a href="https://github.com/typelevel/cats/blob/v1.3.0/bench/src/main/scala/cats/bench">here</a>.</p>
-        
-        <h2 id="how-it-works" class="section">How it works<a class="anchor-link right" href="#how-it-works"><i class="icofont-laika">&#xef71;</i></a></h2>
-        <p><code>Chain</code> is a fairly simple data structure compared to something like <code>Vector</code>.
-        It&#39;s a simple ADT that has only 4 cases.
-        It is either an empty <code>Chain</code> with no elements, a singleton <code>Chain</code> with exactly one element, a concatenation of two chains or a wrapper for another collection.
-        In code it looks like this:</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">sealed</span><span> </span><span class="keyword">abstract</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Chain</span><span>[+</span><span class="type-name">A</span><span>]
-
-</span><span class="keyword">case</span><span> </span><span class="keyword">object</span><span> </span><span class="type-name">Empty</span><span> </span><span class="keyword">extends</span><span> </span><span class="type-name">Chain</span><span>[</span><span class="type-name">Nothing</span><span>]
-</span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Singleton</span><span>[</span><span class="type-name">A</span><span>](</span><span class="identifier">a</span><span>: </span><span class="type-name">A</span><span>) </span><span class="keyword">extends</span><span> </span><span class="type-name">Chain</span><span>[</span><span class="type-name">A</span><span>]
-</span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Append</span><span>[</span><span class="type-name">A</span><span>](</span><span class="identifier">left</span><span>: </span><span class="type-name">Chain</span><span>[</span><span class="type-name">A</span><span>], </span><span class="identifier">right</span><span>: </span><span class="type-name">Chain</span><span>[</span><span class="type-name">A</span><span>]) </span><span class="keyword">extends</span><span> </span><span class="type-name">Chain</span><span>[</span><span class="type-name">A</span><span>]
-</span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Wrap</span><span>[</span><span class="type-name">A</span><span>](</span><span class="identifier">seq</span><span>: </span><span class="type-name">Seq</span><span>[</span><span class="type-name">A</span><span>]) </span><span class="keyword">extends</span><span> </span><span class="type-name">Chain</span><span>[</span><span class="type-name">A</span><span>]</span></code></pre>
-        <p>The <code>Append</code> constructor is what gives us the fast concatenation ability.
-        Concatenating two existing <code>Chain</code>s, is just a call to the <code>Append</code> constructor, which is always constant time <code>O(1)</code>.</p>
-        <p>In case we want to append or prepend a single element,
-         all we have to do is wrap the element with the <code>Singleton</code> constructor and then use the <code>Append</code> constructor to append or prepend the <code>Singleton</code> <code>Chain</code>.</p>
-        <p>The <code>Wrap</code> constructor lifts any <code>Seq</code> into a <code>Chain</code>.
-        This can be useful for concatenating already created collections that don&#39;t have great concatenation performance.
-        <code>Append(Wrap(list1), Wrap(list2)).foldMap(f)</code> will in general be much faster than just concatenating <code>list1</code> and <code>list2</code> and folding the result.</p>
-        <p><code>Chain</code> doesn&#39;t directly expose the <code>Append</code> and <code>Wrap</code> constructors, because the arguments might refer to an empty <code>Chain</code> or <code>Seq</code>.
-        Instead of calling <code>Append</code> directly you can simply use <code>Chain.concat</code> or <code>++</code>, which will check if one of the arguments is empty:</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">def</span><span> </span><span class="declaration-name">concat</span><span>[</span><span class="type-name">A</span><span>](</span><span class="identifier">c</span><span>: </span><span class="type-name">Chain</span><span>[</span><span class="type-name">A</span><span>], </span><span class="identifier">c2</span><span>: </span><span class="type-name">Chain</span><span>[</span><span class="type-name">A</span><span>]): </span><span class="type-name">Chain</span><span>[</span><span class="type-name">A</span><span>] =
-  </span><span class="keyword">if</span><span> (</span><span class="identifier">c</span><span>.</span><span class="identifier">isEmpty</span><span>) </span><span class="identifier">c2</span><span>
-  </span><span class="keyword">else</span><span> </span><span class="keyword">if</span><span> (</span><span class="identifier">c2</span><span>.</span><span class="identifier">isEmpty</span><span>) </span><span class="identifier">c</span><span>
-  </span><span class="keyword">else</span><span> </span><span class="type-name">Append</span><span>(</span><span class="identifier">c</span><span>, </span><span class="identifier">c2</span><span>)</span></code></pre>
-        <p>To construct a <code>Chain</code> from a <code>Seq</code> you should use <code>Chain.fromSeq</code> which will also check for emptiness:</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">def</span><span> </span><span class="declaration-name">fromSeq</span><span>[</span><span class="type-name">A</span><span>](</span><span class="identifier">s</span><span>: </span><span class="type-name">Seq</span><span>[</span><span class="type-name">A</span><span>]): </span><span class="type-name">Chain</span><span>[</span><span class="type-name">A</span><span>] =
-  </span><span class="keyword">if</span><span> (</span><span class="identifier">s</span><span>.</span><span class="identifier">isEmpty</span><span>) </span><span class="identifier">nil</span><span>
-  </span><span class="keyword">else</span><span> </span><span class="keyword">if</span><span> (</span><span class="identifier">s</span><span>.</span><span class="identifier">lengthCompare</span><span>(</span><span class="number-literal">1</span><span>) == </span><span class="number-literal">0</span><span>) </span><span class="identifier">one</span><span>(</span><span class="identifier">s</span><span>.</span><span class="identifier">head</span><span>)
-  </span><span class="keyword">else</span><span> </span><span class="type-name">Wrap</span><span>(</span><span class="identifier">s</span><span>)</span></code></pre>
-        <p>In conclusion <code>Chain</code> supports constant time appending and prepending, because it builds an unbalance tree of <code>Append</code>s.
-        This unbalanced tree will always allow iteration in linear time. </p>
+        Similar to <code>List</code>, it is also a very simple data structure, but unlike <code>List</code> it supports constant O(1) time <code>append</code>, <code>prepend</code> and <code>concat</code>.
+        This makes its <a href="../typeclasses/monoid.html#monoid">Monoid</a> instance <a href="#benchmarks">super performant</a> and a much better fit for usage with <a href="validated.html#validated">Validated</a>, <a href="writer.html#writer">Writer</a>, <a href="ior.html#ior">Ior</a> or <a href="const.html#const">Const</a>.</p>
         
         <h2 id="nonemptychain" class="section">NonEmptyChain<a class="anchor-link right" href="#nonemptychain"><i class="icofont-laika">&#xef71;</i></a></h2>
-        <p><code>NonEmptyChain</code> is the non empty version of <code>Chain</code> it does not have a <code>Monoid</code> instance since it cannot be empty, but it does have a <code>Semigroup</code> instance.
-        Likewise, it defines a <code>NonEmptyTraverse</code> instance, but no <code>TraverseFilter</code> instance.</p>
+        <p><a href="https://www.javadoc.io/doc/org.typelevel/cats-docs_2.13/2.9.0//cats/data/index.html#NonEmptyChain:cats.data.NonEmptyChainImpl.type">NonEmptyChain</a> is the non-empty version of <code>Chain</code>.
+        It does not have a <a href="../typeclasses/monoid.html#monoid">Monoid</a> instance since it cannot be empty, but it does have a <a href="../typeclasses/semigroup.html#semigroup">Semigroup</a> instance.
+        Likewise, it defines a <a href="../typeclasses/nonemptytraverse.html#nonemptytraverse">NonEmptyTraverse</a> instance, but no <a href="https://www.javadoc.io/doc/org.typelevel/cats-docs_2.13/2.9.0/cats/TraverseFilter.html">TraverseFilter</a> instance.</p>
+        <p>To simplify the usage of <code>NonEmptyChain</code>, Cats includes type aliases like <a href="validated.html#meeting-applicative">ValidatedNec</a> and <a href="ior.html#using-with-nonemptychain">IorNec</a>, as well as helper functions like <code>groupByNec</code> and <code>Validated.invalidNec</code>.</p>
         <p>There are numerous ways to construct a <code>NonEmptyChain</code>, e.g. you can create one from a single element, a <code>NonEmptyList</code> or a <code>NonEmptyVector</code>:</p>
         <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">data</span><span>.</span><span class="identifier">_</span><span>
 
@@ -292,7 +246,7 @@
 </span><span>
 </span><span class="type-name">NonEmptyChain</span><span>.</span><span class="identifier">one</span><span>(</span><span class="number-literal">1</span><span>)
 </span><span class="comment">// res3: NonEmptyChain[Int] = Singleton(a = 1)</span></code></pre>
-        <p>You can also create an <code>Option</code> of <code>NonEmptyChain</code> from a <code>Chain</code> or any other collection type:</p>
+        <p>You can also create an <a href="https://www.scala-lang.org/api/2.13.10/scala/Option.html">Option</a> of <code>NonEmptyChain</code> from a <code>Chain</code> or any other collection type:</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">data</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="type-name">NonEmptyChain</span><span>.</span><span class="identifier">fromChain</span><span>(</span><span class="type-name">Chain</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="number-literal">2</span><span>, </span><span class="number-literal">3</span><span>))
@@ -318,6 +272,86 @@
 //   leftNE = Singleton(a = 1),
 //   rightNE = Wrap(seq = ArraySeq(2, 3))
 // )</span></code></pre>
+        
+        <h2 id="how-it-works" class="section">How it works<a class="anchor-link right" href="#how-it-works"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p><code>Chain</code> is implemented as a simple unbalanced binary tree ADT with four cases:
+        an empty <code>Chain</code> with no elements, a singleton <code>Chain</code> with exactly one element, a concatenation of two chains, or a wrapper for a <a href="https://www.scala-lang.org/api/2.13.10/scala/collection/immutable/Seq.html">Seq</a>.</p>
+        <p>In code it looks like this:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">sealed</span><span> </span><span class="keyword">abstract</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Chain</span><span>[+</span><span class="type-name">A</span><span>]
+
+</span><span class="keyword">case</span><span> </span><span class="keyword">object</span><span> </span><span class="type-name">Empty</span><span> </span><span class="keyword">extends</span><span> </span><span class="type-name">Chain</span><span>[</span><span class="type-name">Nothing</span><span>]
+</span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Singleton</span><span>[</span><span class="type-name">A</span><span>](</span><span class="identifier">a</span><span>: </span><span class="type-name">A</span><span>) </span><span class="keyword">extends</span><span> </span><span class="type-name">Chain</span><span>[</span><span class="type-name">A</span><span>]
+</span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Append</span><span>[</span><span class="type-name">A</span><span>](</span><span class="identifier">left</span><span>: </span><span class="type-name">Chain</span><span>[</span><span class="type-name">A</span><span>], </span><span class="identifier">right</span><span>: </span><span class="type-name">Chain</span><span>[</span><span class="type-name">A</span><span>]) </span><span class="keyword">extends</span><span> </span><span class="type-name">Chain</span><span>[</span><span class="type-name">A</span><span>]
+</span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Wrap</span><span>[</span><span class="type-name">A</span><span>](</span><span class="identifier">seq</span><span>: </span><span class="type-name">Seq</span><span>[</span><span class="type-name">A</span><span>]) </span><span class="keyword">extends</span><span> </span><span class="type-name">Chain</span><span>[</span><span class="type-name">A</span><span>]</span></code></pre>
+        <p>The <code>Append</code> constructor is what gives us the fast concatenation ability.
+        Concatenating two existing <code>Chain</code>s is just a call to the <code>Append</code> constructor, which is always constant time <code>O(1)</code>.</p>
+        <p>In case we want to append or prepend a single element,
+         all we have to do is wrap the element with the <code>Singleton</code> constructor and then use the <code>Append</code> constructor to append or prepend the <code>Singleton</code> <code>Chain</code>.</p>
+        <p>The <code>Wrap</code> constructor lifts any <code>Seq</code> into a <code>Chain</code>.
+        This can be useful for concatenating already created collections that don&#39;t have great concatenation performance.
+        <code>Append(Wrap(list1), Wrap(list2)).foldMap(f)</code> will in general be much faster than just concatenating <code>list1</code> and <code>list2</code> and folding the result.</p>
+        <p><code>Chain</code> doesn&#39;t directly expose the <code>Append</code> and <code>Wrap</code> constructors, because the arguments might refer to an empty <code>Chain</code> or <code>Seq</code>.
+        Instead of calling <code>Append</code> directly you can simply use <code>Chain.concat</code> or <code>++</code>, which will check if one of the arguments is empty:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">def</span><span> </span><span class="declaration-name">concat</span><span>[</span><span class="type-name">A</span><span>](</span><span class="identifier">c</span><span>: </span><span class="type-name">Chain</span><span>[</span><span class="type-name">A</span><span>], </span><span class="identifier">c2</span><span>: </span><span class="type-name">Chain</span><span>[</span><span class="type-name">A</span><span>]): </span><span class="type-name">Chain</span><span>[</span><span class="type-name">A</span><span>] =
+  </span><span class="keyword">if</span><span> (</span><span class="identifier">c</span><span>.</span><span class="identifier">isEmpty</span><span>) </span><span class="identifier">c2</span><span>
+  </span><span class="keyword">else</span><span> </span><span class="keyword">if</span><span> (</span><span class="identifier">c2</span><span>.</span><span class="identifier">isEmpty</span><span>) </span><span class="identifier">c</span><span>
+  </span><span class="keyword">else</span><span> </span><span class="type-name">Append</span><span>(</span><span class="identifier">c</span><span>, </span><span class="identifier">c2</span><span>)</span></code></pre>
+        <p>To construct a <code>Chain</code> from a <code>Seq</code> you should use <code>Chain.fromSeq</code> which will also check for emptiness:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">def</span><span> </span><span class="declaration-name">fromSeq</span><span>[</span><span class="type-name">A</span><span>](</span><span class="identifier">s</span><span>: </span><span class="type-name">Seq</span><span>[</span><span class="type-name">A</span><span>]): </span><span class="type-name">Chain</span><span>[</span><span class="type-name">A</span><span>] =
+  </span><span class="keyword">if</span><span> (</span><span class="identifier">s</span><span>.</span><span class="identifier">isEmpty</span><span>) </span><span class="identifier">nil</span><span>
+  </span><span class="keyword">else</span><span> </span><span class="keyword">if</span><span> (</span><span class="identifier">s</span><span>.</span><span class="identifier">lengthCompare</span><span>(</span><span class="number-literal">1</span><span>) == </span><span class="number-literal">0</span><span>) </span><span class="identifier">one</span><span>(</span><span class="identifier">s</span><span>.</span><span class="identifier">head</span><span>)
+  </span><span class="keyword">else</span><span> </span><span class="type-name">Wrap</span><span>(</span><span class="identifier">s</span><span>)</span></code></pre>
+        <p>In conclusion <code>Chain</code> supports constant time concatenation, because it builds an unbalance tree of <code>Append</code>s.
+        <code>append</code> and <code>prepend</code> are treated as concatenation with single element collection to keep the same performance characteristics.
+        This unbalanced tree will always allow iteration in linear time. </p>
+        
+        <h2 id="benchmarks" class="section">Benchmarks<a class="anchor-link right" href="#benchmarks"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <p>To get a good idea of performance of <code>Chain</code>, here are some benchmarks that test monoidal append (higher score is better):</p>
+        <pre><code>Benchmark                                Mode  Cnt         Score         Error  Units
+CollectionMonoidBench.accumulateChain   thrpt   25        81.973 ±       3.921  ops/s
+CollectionMonoidBench.accumulateList    thrpt   25        21.150 ±       1.756  ops/s
+CollectionMonoidBench.accumulateVector  thrpt   25        11.725 ±       0.306  ops/s</code></pre>
+        <p>As you can see accumulating things with <code>Chain</code> is almost 4 times faster than <code>List</code> and nearly 8 times faster than <code>Vector</code>.
+        So appending is a lot more performant than the standard library collections, but what about operations like <code>map</code> or <code>fold</code>?
+        Fortunately we&#39;ve also benchmarked these (again, higher score is better):</p>
+        <pre><code>Benchmark                                Mode  Cnt          Score         Error  Units
+ChainBench.consLargeChain               thrpt   25  143759156.264 ± 5611584.788  ops/s
+ChainBench.consLargeList                thrpt   25  148512687.273 ± 5992793.489  ops/s
+ChainBench.consLargeVector              thrpt   25    7249505.257 ±  202436.549  ops/s
+ChainBench.consSmallChain               thrpt   25  119925876.637 ± 1663011.363  ops/s
+ChainBench.consSmallList                thrpt   25  152664330.695 ± 1828399.646  ops/s
+ChainBench.consSmallVector              thrpt   25   57686442.030 ±  533768.670  ops/s
+ChainBench.createChainOption            thrpt   25  167191685.222 ± 1474976.197  ops/s
+ChainBench.createChainSeqOption         thrpt   25   21264365.364 ±  372757.348  ops/s
+ChainBench.createSmallChain             thrpt   25   87260308.052 ±  960407.889  ops/s
+ChainBench.createSmallList              thrpt   25   20000981.857 ±  396001.340  ops/s
+ChainBench.createSmallVector            thrpt   25   26311376.712 ±  288871.258  ops/s
+ChainBench.createTinyChain              thrpt   25   75311482.869 ± 1066466.694  ops/s
+ChainBench.createTinyList               thrpt   25   67502351.990 ± 1071560.419  ops/s
+ChainBench.createTinyVector             thrpt   25   39676430.380 ±  405717.649  ops/s
+ChainBench.foldLeftLargeChain           thrpt   25        117.866 ±       3.343  ops/s
+ChainBench.foldLeftLargeList            thrpt   25        193.640 ±       2.298  ops/s
+ChainBench.foldLeftLargeVector          thrpt   25        178.370 ±       0.830  ops/s
+ChainBench.foldLeftSmallChain           thrpt   25   43732934.777 ±  362285.965  ops/s
+ChainBench.foldLeftSmallList            thrpt   25   51155941.055 ±  882005.961  ops/s
+ChainBench.foldLeftSmallVector          thrpt   25   41902918.940 ±   53030.742  ops/s
+ChainBench.lengthLargeChain             thrpt   25     131831.918 ±    1613.341  ops/s
+ChainBench.lengthLargeList              thrpt   25        271.015 ±       0.962  ops/s
+ChainBench.mapLargeChain                thrpt   25         78.162 ±       2.620  ops/s
+ChainBench.mapLargeList                 thrpt   25         73.676 ±       8.999  ops/s
+ChainBench.mapLargeVector               thrpt   25        132.443 ±       2.360  ops/s
+ChainBench.mapSmallChain                thrpt   25   24047623.583 ± 1834073.508  ops/s
+ChainBench.mapSmallList                 thrpt   25   21482014.328 ±  387854.819  ops/s
+ChainBench.mapSmallVector               thrpt   25   34707281.383 ±  382477.558  ops/s
+ChainBench.reverseLargeChain            thrpt   25      37700.549 ±     154.942  ops/s
+ChainBench.reverseLargeList             thrpt   25        142.832 ±       3.626  ops/s</code></pre>
+        <p>While not dominant, <code>Chain</code> performance is in the middle of the pack for most operations benchmarked. 
+        <code>Chain</code> does have poor random access performance, and should be avoided in favor of <code>Vector</code> for random access heavy use cases.</p>
+        <p>Chain excels with concatenation heavy workloads and has comparable performance to <code>List</code> and <code>Vector</code> for most other operations. 
+        So next time you write any code that uses <code>List</code> or <code>Vector</code> as a <a href="../typeclasses/monoid.html#monoid">Monoid</a>, be sure to use <code>Chain</code> instead!</p>
+        <blockquote>Note: All benchmarks above were run using JMH 1.32 with Scala 2.13.8 on JDK 11. 
+        For full details, see <a href="https://github.com/typelevel/cats/pull/4264">here</a>.
+        You can also check out the <a href="https://github.com/typelevel/cats/blob/v2.9.0/bench/src/main/scala/cats/bench">benchmark source code</a>.</blockquote>
 
         <hr style="margin-top: 30px"/>
         <footer style="font-size: 90%; text-align: center">
