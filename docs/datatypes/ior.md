@@ -100,6 +100,9 @@ validateUser("john.doe", "password").fold(
 )
 
 ```
+
+## Using with NonEmptyChain
+
 Similar to [Validated](validated.md), there is also a type alias for using a `NonEmptyChain` on the left side.
 
 ```scala mdoc:silent
@@ -116,6 +119,7 @@ val left: IorNec[String, Int] = Ior.fromEither("Error".leftNec[Int])
 
 ```
 
+## Conversions
 
 We can also convert our `Ior` to `Either`, `Validated` or `Option`.
 All of these conversions will discard the left side value if both are available:

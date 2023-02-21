@@ -285,6 +285,7 @@ lazy val docs = project
       import laika.rewrite.link._
 
       laikaConfig.value.withRawContent
+        .withConfigValue("version", mdocVariables.value("VERSION"))
         .withConfigValue(
           LinkConfig(apiLinks =
             List(
