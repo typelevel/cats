@@ -204,6 +204,7 @@
       <main class="content">
 
         <h1 id="bifoldable" class="title">Bifoldable</h1>
+        <p>API Documentation: <a href="https://www.javadoc.io/doc/org.typelevel/cats-docs_2.13/2.9.0/cats/Bifoldable.html">Bifoldable</a></p>
         <p><code>Bifoldable[F[_,_]]</code> instances identify data structures with two independent <code>Foldable</code> that fold to the same summary value.</p>
         <p>As a reminder <code>Foldable</code> is implemented in terms of <code>foldLeft</code> and <code>foldRight</code>; similarly <code>Bifoldable</code> is implemented in terms of:</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span>  </span><span class="comment">//eagerly performs a left-associative bi-fold over `fab`
@@ -318,7 +319,7 @@
     (</span><span class="identifier">s</span><span>, </span><span class="identifier">acc</span><span>) =&gt; </span><span class="identifier">acc</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span> |+| </span><span class="identifier">s</span><span>),
     (</span><span class="identifier">s</span><span>, </span><span class="identifier">acc</span><span>) =&gt; </span><span class="identifier">acc</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span> |+| </span><span class="identifier">s</span><span>)
   )
-</span><span class="comment">// right: Eval[String] = cats.Eval$$anon$1@5264ec0d
+</span><span class="comment">// right: Eval[String] = cats.Eval$$anon$1@13def6ca
 </span><span>
 </span><span class="identifier">left</span><span> === </span><span class="identifier">expected</span><span>
 </span><span class="comment">// res2: Boolean = true
@@ -334,7 +335,7 @@
     (</span><span class="identifier">s</span><span>, </span><span class="identifier">acc</span><span>) =&gt; </span><span class="identifier">acc</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span> |+| </span><span class="identifier">s</span><span>),
     (</span><span class="identifier">s</span><span>, </span><span class="identifier">acc</span><span>) =&gt; </span><span class="identifier">acc</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span> |+| </span><span class="identifier">s</span><span>)
   )
-</span><span class="comment">// reversedRight: Eval[String] = cats.Eval$$anon$1@544f16d8
+</span><span class="comment">// reversedRight: Eval[String] = cats.Eval$$anon$1@20991bbf
 </span><span>
 </span><span class="identifier">reversedRight</span><span>.</span><span class="identifier">value</span><span> === </span><span class="identifier">expected</span><span>
 </span><span class="comment">// res4: Boolean = false</span></code></pre>

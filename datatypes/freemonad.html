@@ -213,6 +213,7 @@
       <main class="content">
 
         <h1 id="free-monad" class="title">Free Monad</h1>
+        <p>API Documentation: <a href="https://www.javadoc.io/doc/org.typelevel/cats-docs_2.13/2.9.0/cats/free/Free.html">Free</a></p>
         
         <h2 id="what-is-it" class="section">What is it?<a class="anchor-link right" href="#what-is-it"><i class="icofont-laika">&#xef71;</i></a></h2>
         <p>A <em>free monad</em> is a construction which allows you to build a <em>monad</em>
@@ -698,7 +699,7 @@
 </span><span class="keyword">import</span><span> </span><span class="type-name">TeletypeOps</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="keyword">val</span><span> </span><span class="identifier">state</span><span> = </span><span class="identifier">program</span><span>.</span><span class="identifier">foldMap</span><span>(</span><span class="identifier">interpreter</span><span>)
-</span><span class="comment">// state: TeletypeState[Unit] = cats.data.IndexedStateT@4434735
+</span><span class="comment">// state: TeletypeState[Unit] = cats.data.IndexedStateT@6370db2e
 </span><span class="keyword">val</span><span> </span><span class="identifier">initialState</span><span> = </span><span class="type-name">Nil</span><span>
 </span><span class="comment">// initialState: Nil.type = List()
 </span><span class="keyword">val</span><span> (</span><span class="identifier">stored</span><span>, </span><span class="identifier">_</span><span>) = </span><span class="identifier">state</span><span>.</span><span class="identifier">run</span><span>(</span><span class="identifier">initialState</span><span>).</span><span class="identifier">value</span><span>
@@ -769,7 +770,7 @@
 //       value = Success(value = Some(value = Left(value = Action(value = 7))))
 //     )
 //   ),
-//   f0 = scala.Function1$$Lambda$13849/73438897@3060248b
+//   f0 = scala.Function1$$Lambda$12783/739041161@1c14b383
 // )
 </span><span class="keyword">val</span><span> </span><span class="identifier">evaluated</span><span> = </span><span class="identifier">hoisted</span><span>.</span><span class="identifier">foldMap</span><span>(</span><span class="identifier">tryInterpreter</span><span>)
 </span><span class="comment">// evaluated: OptTry[Int] = OptionT(value = Success(value = Some(value = 12)))

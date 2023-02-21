@@ -201,6 +201,7 @@
       <main class="content">
 
         <h1 id="foldable" class="title">Foldable</h1>
+        <p>API Documentation: <a href="https://www.javadoc.io/doc/org.typelevel/cats-docs_2.13/2.9.0/cats/Foldable.html">Foldable</a></p>
         <p>Foldable type class instances can be defined for data structures that can be 
         folded to a summary value.</p>
         <p>In the case of a collection (such as <code>List</code> or <code>Vector</code>), these methods will fold
@@ -281,7 +282,7 @@
 </span><span class="comment">// res23: Option[Boolean] = Some(value = true)
 </span><span>
 </span><span class="keyword">val</span><span> </span><span class="identifier">prints</span><span>: </span><span class="type-name">Eval</span><span>[</span><span class="type-name">Unit</span><span>] = </span><span class="type-name">List</span><span>(</span><span class="type-name">Eval</span><span>.</span><span class="identifier">always</span><span>(</span><span class="identifier">println</span><span>(</span><span class="number-literal">1</span><span>)), </span><span class="type-name">Eval</span><span>.</span><span class="identifier">always</span><span>(</span><span class="identifier">println</span><span>(</span><span class="number-literal">2</span><span>))).</span><span class="identifier">sequence_</span><span>
-</span><span class="comment">// prints: Eval[Unit] = cats.Eval$$anon$4@a9fc936
+</span><span class="comment">// prints: Eval[Unit] = cats.Eval$$anon$4@56f41479
 </span><span class="identifier">prints</span><span>.</span><span class="identifier">value</span><span>
 
 </span><span class="type-name">Foldable</span><span>[</span><span class="type-name">List</span><span>].</span><span class="identifier">dropWhile_</span><span>(</span><span class="type-name">List</span><span>[</span><span class="type-name">Int</span><span>](</span><span class="number-literal">2</span><span>,</span><span class="number-literal">4</span><span>,</span><span class="number-literal">5</span><span>,</span><span class="number-literal">6</span><span>,</span><span class="number-literal">7</span><span>))(</span><span class="identifier">_</span><span> % </span><span class="number-literal">2</span><span> == </span><span class="number-literal">0</span><span>)

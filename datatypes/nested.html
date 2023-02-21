@@ -193,7 +193,8 @@
         <p class="header"><a href="#">Nested</a></p>
 
         <ul class="nav-list">
-          <li class="level1"><a href="#a-more-interesting-example">A more interesting example</a></li>
+          <li class="level1"><a href="#motivation">Motivation</a></li>
+          <li class="level2"><a href="#a-more-interesting-example">A more interesting example</a></li>
         </ul>
 
         <p class="footer"></p>
@@ -201,7 +202,10 @@
 
       <main class="content">
 
-        <h1 id="motivation" class="title">Motivation</h1>
+        <h1 id="nested" class="title">Nested</h1>
+        <p>API Documentation: <a href="https://www.javadoc.io/doc/org.typelevel/cats-docs_2.13/2.9.0/cats/data/Nested.html">Nested</a></p>
+        
+        <h2 id="motivation" class="section">Motivation<a class="anchor-link right" href="#motivation"><i class="icofont-laika">&#xef71;</i></a></h2>
         <p>In day-to-day programming we quite often end up with data inside nested
         effects, e.g. an integer inside an <code>Either</code>, which in turn is nested inside
         an <code>Option</code>:</p>
@@ -237,7 +241,7 @@
         </ul>
         <p>You can see the full list of these rules in the <code>Nested</code> companion object.</p>
         
-        <h2 id="a-more-interesting-example" class="section">A more interesting example<a class="anchor-link right" href="#a-more-interesting-example"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <h3 id="a-more-interesting-example" class="section">A more interesting example<a class="anchor-link right" href="#a-more-interesting-example"><i class="icofont-laika">&#xef71;</i></a></h3>
         <p>(courtesy of <a href="https://twitter.com/LukaJacobowitz/status/1017355319473786880">Channing Walton and Luka Jacobowitz via
         Twitter</a>,
         slightly adapted)</p>

@@ -207,6 +207,7 @@
       <main class="content">
 
         <h1 id="state" class="title">State</h1>
+        <p>API Documentation: <a href="https://www.javadoc.io/doc/org.typelevel/cats-docs_2.13/2.9.0/cats/data/IndexedStateT.html">IndexedStateT</a></p>
         <p><code>State</code> is a structure that provides a functional approach to handling application state. <code>State[S, A]</code> is basically a function <code>S =&gt; (S, A)</code>, where <code>S</code> is the type that represents your state and <code>A</code> is the result the function produces. In addition to returning the result of type <code>A</code>, the function returns a new <code>S</code> value, which is the updated state.</p>
         
         <h2 id="robots" class="section">Robots<a class="anchor-link right" href="#robots"><i class="icofont-laika">&#xef71;</i></a></h2>
@@ -454,7 +455,7 @@
   </span><span class="identifier">_</span><span> &lt;- </span><span class="identifier">close</span><span>
   </span><span class="identifier">_</span><span> &lt;- </span><span class="identifier">open</span><span>
 } </span><span class="keyword">yield</span><span> ()
-</span><span class="comment">// valid: IndexedStateT[Eval, Closed.type, Open.type, Unit] = cats.data.IndexedStateT@30bcf8e2</span></code></pre>
+</span><span class="comment">// valid: IndexedStateT[Eval, Closed.type, Open.type, Unit] = cats.data.IndexedStateT@5e3bc630</span></code></pre>
         <p>Note that the inferred type of <code>valid</code> correctly models that this computation can be executed only with an initial <code>Closed</code> state.</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">valid</span><span>.</span><span class="identifier">run</span><span>(</span><span class="type-name">Open</span><span>)
 </span><span class="comment">// error: type mismatch;
@@ -463,7 +464,7 @@
 // valid.run(Open)
 //           ^^^^</span></code></pre>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">valid</span><span>.</span><span class="identifier">run</span><span>(</span><span class="type-name">Closed</span><span>)
-</span><span class="comment">// res6: Eval[(Open.type, Unit)] = cats.Eval$$anon$1@5cd15ee1</span></code></pre>
+</span><span class="comment">// res6: Eval[(Open.type, Unit)] = cats.Eval$$anon$1@3e2107bf</span></code></pre>
 
         <hr style="margin-top: 30px"/>
         <footer style="font-size: 90%; text-align: center">

@@ -201,6 +201,7 @@
       <main class="content">
 
         <h1 id="eq" class="title">Eq</h1>
+        <p>API Documentation: <a href="https://www.javadoc.io/doc/org.typelevel/cats-docs_2.13/2.9.0/cats/kernel/Eq.html">Eq</a></p>
         <p>Eq is an alternative to the standard Java <code>equals</code> method.
         It is defined by the single method <code>eqv</code>:</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">def</span><span> </span><span class="declaration-name">eqv</span><span>(</span><span class="identifier">x</span><span>: </span><span class="type-name">A</span><span>, </span><span class="identifier">y</span><span>: </span><span class="type-name">A</span><span>): </span><span class="type-name">Boolean</span></code></pre>
@@ -237,7 +238,7 @@
 
 
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">eqFoo</span><span>: </span><span class="type-name">Eq</span><span>[</span><span class="type-name">Foo</span><span>] = </span><span class="type-name">Eq</span><span>.</span><span class="identifier">fromUniversalEquals</span><span>
-</span><span class="comment">// eqFoo: Eq[Foo] = cats.kernel.Eq$$anonfun$fromUniversalEquals$2@60a031de
+</span><span class="comment">// eqFoo: Eq[Foo] = cats.kernel.Eq$$anonfun$fromUniversalEquals$2@3de16388
 </span><span>
 
 </span><span class="type-name">Foo</span><span>(</span><span class="number-literal">10</span><span>, </span><span class="string-literal">&quot;&quot;</span><span>) === </span><span class="type-name">Foo</span><span>(</span><span class="number-literal">10</span><span>, </span><span class="string-literal">&quot;&quot;</span><span>)

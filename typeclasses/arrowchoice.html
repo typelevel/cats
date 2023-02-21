@@ -203,7 +203,8 @@
 
       <main class="content">
 
-        <h1 id="choice" class="title">Choice</h1>
+        <h1 id="arrow-choice" class="title">Arrow Choice</h1>
+        <p>API Documentation: <a href="https://www.javadoc.io/doc/org.typelevel/cats-docs_2.13/2.9.0/cats/arrow/Choice.html">Choice</a></p>
         <p>Usually we deal with function more often, we&#39;re so familiar with <code>A =&gt; B</code>.</p>
         <p>If we have two functions <code>A =&gt; C</code> and <code>B =&gt; C</code>, how can we compose them into a single function that can take either A or B and produce a C?</p>
         <p>So basically we just look for a function that has type <code>(A =&gt; C) =&gt; (B =&gt; C) =&gt; (Either[A, B] =&gt; C)</code>.</p>

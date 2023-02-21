@@ -203,6 +203,7 @@
       <main class="content">
 
         <h1 id="bifunctor" class="title">Bifunctor</h1>
+        <p>API Documentation: <a href="https://www.javadoc.io/doc/org.typelevel/cats-docs_2.13/2.9.0/cats/Bifunctor.html">Bifunctor</a></p>
         <p><code>Bifunctor</code> takes two type parameters instead of one, and is a functor in both
         of these parameters. It defines a function <code>bimap</code>, which allows for mapping over both
         arguments at the same time. Its signature is as follows:</p>
@@ -226,7 +227,7 @@
   </span><span class="identifier">error</span><span> =&gt; </span><span class="type-name">DomainError</span><span>(</span><span class="identifier">error</span><span>.</span><span class="identifier">getMessage</span><span>),
   </span><span class="identifier">dateTime</span><span> =&gt; </span><span class="identifier">dateTime</span><span>.</span><span class="identifier">toEpochSecond</span><span>
 )
-</span><span class="comment">// res0: Either[DomainError, Long] = Right(value = 1676947157L)</span></code></pre>
+</span><span class="comment">// res0: Either[DomainError, Long] = Right(value = 1676950640L)</span></code></pre>
         <p><code>Bifunctor</code> also defines a convenience function called <code>leftMap</code>, which is defined as follows:</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">def</span><span> </span><span class="declaration-name">leftMap</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>, </span><span class="type-name">C</span><span>](</span><span class="identifier">fab</span><span>: </span><span class="type-name">F</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>])(</span><span class="identifier">f</span><span>: </span><span class="type-name">A</span><span> =&gt; </span><span class="type-name">C</span><span>): </span><span class="type-name">F</span><span>[</span><span class="type-name">C</span><span>, </span><span class="type-name">B</span><span>] = </span><span class="identifier">bimap</span><span>(</span><span class="identifier">fab</span><span>)(</span><span class="identifier">f</span><span>, </span><span class="identifier">identity</span><span>)</span></code></pre>
         <p>There is no <code>rightMap</code> however - use <code>map</code> instead. The reasoning behind this is that in Cats, the instances of

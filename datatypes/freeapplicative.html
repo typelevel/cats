@@ -209,6 +209,7 @@
       <main class="content">
 
         <h1 id="free-applicative" class="title">Free Applicative</h1>
+        <p>API Documentation: <a href="https://www.javadoc.io/doc/org.typelevel/cats-docs_2.13/2.9.0/cats/free/FreeApplicative.html">FreeApplicative</a></p>
         <p><code>FreeApplicative</code>s are similar to <code>Free</code> (monads) in that they provide a nice way to represent
         computations as data and are useful for building embedded DSLs (EDSLs). However, they differ
         from <code>Free</code> in that the kinds of operations they support are limited, much like the distinction
@@ -255,7 +256,7 @@
     }
 }</span></code></pre>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">validator</span><span> = </span><span class="identifier">prog</span><span>.</span><span class="identifier">foldMap</span><span>[</span><span class="type-name">FromString</span><span>](</span><span class="identifier">compiler</span><span>)
-</span><span class="comment">// validator: String =&gt; Boolean = cats.instances.Function1Instances$$anon$7$$Lambda$14039/1032944667@403c0160
+</span><span class="comment">// validator: String =&gt; Boolean = cats.instances.Function1Instances$$anon$7$$Lambda$12973/241451766@646c73
 </span><span class="identifier">validator</span><span>(</span><span class="string-literal">&quot;1234&quot;</span><span>)
 </span><span class="comment">// res0: Boolean = false
 </span><span class="identifier">validator</span><span>(</span><span class="string-literal">&quot;12345&quot;</span><span>)
