@@ -59,7 +59,7 @@ val AppFuncG: AppFunc[List,Int,Int] = Func.appFunc((o: Int) => {List(o+1)})
 
 Applicative functors, like monads, are closed under product. Cats models product of two applicative functors (they can be different!) in the @:api(cats.data.Tuple2K) data type. 
 
-For further reading: [hearding cats](http://eed3si9n.com/herding-cats/combining-applicative.html#Product+of+applicative+functions) 
+For further reading: [herding cats](http://eed3si9n.com/herding-cats/combining-applicative.html#Product+of+applicative+functions) 
 
 ```scala mdoc:silent:nest
 (AppFuncF product AppFuncG).run(1)
