@@ -35,7 +35,7 @@ With applicative functors we can `compose`, form the `product`, and also `traver
 
 Signature: `AppFunc[F[_], A, B] extends Func[F, A, B]` 
 
-Now, for the reader familiar with `Kleisli`, we find an even more similar data type. `AppFunc` provides compositions of weaker constraint, allowing to compose `AppFunc[F[_], A, B]` with `AppFunc[G[_], C, A]`.   
+Now, for the reader familiar with `Kleisli`, we find an even more similar data type. `AppFunc` provides compositions of weaker constraint, allowing `AppFunc[F[_], A, B]` to be composed with `AppFunc[G[_], C, A]`.   
 ## Composition
 
 All of functional programming revolves around composing, and functors cannot be left behind. If we are working with multiple contexts we might want to compose them, for example: we want to `List` things, and discard some (`Option`). 
