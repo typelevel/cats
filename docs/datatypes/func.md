@@ -45,15 +45,15 @@ All of functional programming revolves around composing, and functors cannot be 
 To achieve this nested context behavior `AppFunc` uses the `Nested` datatype. 
 
 ```scala mdoc:silent:nest
-val AppFuncF: AppFunc[Option,Int,Int] = Func.appFunc((i: Int) => if (i==0) None else Some(i))
+val appFuncOption: AppFunc[Option,Int,Int] = Func.appFunc((i: Int) => if (i==0) None else Some(i))
 
-val AppFuncG: AppFunc[List,Int,Int] = Func.appFunc((o: Int) => {List(o+1)})
-(AppFuncF andThen AppFuncG).run(1) //Nested(Some(List(2)))
+val appFuncList: AppFunc[List,Int,Int] = Func.appFunc((o: Int) => {List(o+1)})
+(appFuncOption andThen appFuncList).run(1) //Nested(Some(List(2)))
 
-(AppFuncF andThen AppFuncG).run(0) //Nested(None)
+(appFuncOption andThen appFuncList).run(0) //Nested(None)
 // same thing with compose
 
-(AppFuncG compose AppFuncF)
+(appFuncList compose appFuncOption)
 ```
 ## Product
 
@@ -62,17 +62,17 @@ Applicative functors, like monads, are closed under product. Cats models product
 For further reading: [herding cats](http://eed3si9n.com/herding-cats/combining-applicative.html#Product+of+applicative+functions) 
 
 ```scala mdoc:silent:nest
-(AppFuncF product AppFuncG).run(1)
+(appFuncOption product appFuncList).run(1)
 ```
 ## Traverse
 
 This explained in the implementation of the Applicative trait: [Applicative - Traverse](https://typelevel.org/cats/typeclasses/applicative.html#traverse)
 
 ```scala mdoc:silent:nest
-AppFuncF.traverse(List(1,2,3))
+appFuncOption.traverse(List(1,2,3))
 // val res14: Option[List[Int]] = Some(List(1, 2, 3))
 
-AppFuncF.traverse(List(1,2,0))
+appFuncOption.traverse(List(1,2,0))
 //val res15: Option[List[Int]] = None
 ```
 
