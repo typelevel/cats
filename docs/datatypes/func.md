@@ -1,4 +1,4 @@
-# Func
+# Func and AppFunc
 
 Func is a wrapper around a `run` function `A => F[B]` where `F` is a functor. Given that, the Func data type is equipped with the known `map` function, and a `mapK` function to apply natural transformations (from a `Func[F[_], A, B]` get an `Func[G[_], A, B]`).
 
