@@ -73,7 +73,7 @@ in the standard library. Since Cats builds on 2.10.x and 2.11.x, the gaps have b
 enrichments available under `cats.syntax.either._` or `cats.implicits._`.
 
 ```scala mdoc
-import cats.implicits._
+import cats.syntax.all._
 
 val right: Either[String, Int] = Right(5)
 right.map(_ + 1)
@@ -181,7 +181,7 @@ Instead of using exceptions as our error value, let's instead enumerate explicit
 can go wrong in our program.
 
 ```scala mdoc:reset:silent
-import cats.implicits._
+import cats.syntax.all._
 
 object EitherStyle {
   sealed abstract class Error

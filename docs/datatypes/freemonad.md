@@ -1,5 +1,7 @@
 # Free Monad
 
+API Documentation: @:api(cats.free.Free)
+
 ## What is it?
 
 A *free monad* is a construction which allows you to build a *monad*
@@ -558,7 +560,7 @@ combined with `OptionT` for reducing boilerplate.
 import cats.free._
 import cats._
 import cats.data._
-import cats.implicits._
+import cats.syntax.all._
 import scala.util.Try
 
 sealed trait Ctx[A]

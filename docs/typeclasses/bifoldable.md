@@ -1,5 +1,7 @@
 # Bifoldable
 
+API Documentation: @:api(cats.Bifoldable)
+
 `Bifoldable[F[_,_]]` instances identify data structures with two independent `Foldable` that fold to the same summary value.
 
 As a reminder `Foldable` is implemented in terms of `foldLeft` and `foldRight`; similarly `Bifoldable` is implemented in terms of:
@@ -28,7 +30,7 @@ First add the implicits:
 ```scala mdoc
 import cats._
 import cats.data._
-import cats.implicits._
+import cats.syntax.all._
 ```
 
 then let's define a summary class capable of storing this info:

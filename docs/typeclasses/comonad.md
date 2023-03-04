@@ -1,5 +1,7 @@
 # Comonad
 
+API Documentation: @:api(cats.Comonad)
+
 `Comonad` is a `Functor` and provides duals of the [`Monad`](monad.md) `pure`
 and `flatMap` functions.  A dual to a function has the same types but the 
 direction of the arrows are reversed. Whether or not that is useful, or even possible, 
@@ -26,7 +28,7 @@ First some imports.
 ```scala mdoc:silent
 import cats._
 import cats.data._
-import cats.implicits._
+import cats.syntax.all._
 import cats.instances.list._
 ```
 

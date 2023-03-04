@@ -1,5 +1,7 @@
 # NonEmptyTraverse
 
+API Documentation: @:api(cats.NonEmptyTraverse)
+
 `NonEmptyTraverse` is a non-empty version of the [Traverse](traverse.md) type class, just like [Reducible](reducible.md) is a non-empty version of [Foldable](foldable.md).
 As such, it extends both `Reducible` and `Traverse` in the type class hierarchy.
 It provides the `nonEmptyTraverse` and `nonEmptySequence` methods that require an instance of `Apply` instead of `Applicative`:
@@ -18,7 +20,7 @@ One example application one could think of is, when we have a list of text snipp
 count the occurrence of each word in each snippet and return all the common words and their occurrences in each snippet:
 
 ```scala mdoc
-import cats.implicits._
+import cats.syntax.all._
 import cats.data.NonEmptyList
 
 val snippets = NonEmptyList.of("What do you do", "What are you doing")

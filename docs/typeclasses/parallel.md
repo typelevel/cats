@@ -1,5 +1,7 @@
 # Parallel
 
+API Documentation: @:api(cats.Parallel)
+
 When browsing the various `Monads` included in Cats,
 you may have noticed that some of them have data types that are actually of the same structure,
 but instead have instances of `Applicative`. E.g. `Either` and `Validated`.
@@ -13,7 +15,7 @@ Below is a short example of a situation where we might run into this.
 For simplicity, we'll use `String` as our type to represent errors.
 
 ```scala mdoc
-import cats.implicits._
+import cats.syntax.all._
 import cats.data._
 
 case class Name(value: String)

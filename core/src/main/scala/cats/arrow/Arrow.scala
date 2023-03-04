@@ -52,7 +52,7 @@ trait Arrow[F[_, _]] extends Category[F] with Strong[F] { self =>
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import cats.arrow.Arrow
    * scala> val toLong: Int => Long = _.toLong
    * scala> val toDouble: Float => Double = _.toDouble
@@ -73,7 +73,7 @@ trait Arrow[F[_, _]] extends Category[F] with Strong[F] { self =>
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val addEmpty: Int => Int = _ + 0
    * scala> val multiplyEmpty: Int => Double= _ * 1d
    * scala> val f: Int => (Int, Double) = addEmpty &&& multiplyEmpty

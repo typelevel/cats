@@ -1,5 +1,7 @@
 # Alternative
 
+API Documentation: @:api(cats.Alternative)
+
 Alternative extends [`Applicative`](applicative.md) with a [`MonoidK`](monoidk.md).
 Let's stub out all the operations just to remind ourselves what that gets us.
 
@@ -40,7 +42,7 @@ The relevant imports:
 
 ```scala mdoc:reset:silent
 import cats.Alternative
-import cats.implicits._
+import cats.syntax.all._
 ```
 
 And what we can do with them:

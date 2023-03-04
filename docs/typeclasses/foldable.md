@@ -1,5 +1,7 @@
 # Foldable
 
+API Documentation: @:api(cats.Foldable)
+
 Foldable type class instances can be defined for data structures that can be 
 folded to a summary value.
 
@@ -28,7 +30,7 @@ First some standard imports.
 
 ```scala mdoc:silent
 import cats._
-import cats.implicits._
+import cats.syntax.all._
 ```
 
 And examples.

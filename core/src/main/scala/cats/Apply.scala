@@ -36,7 +36,7 @@ trait Apply[F[_]] extends Functor[F] with InvariantSemigroupal[F] with ApplyArit
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val someF: Option[Int => Long] = Some(_.toLong + 1L)
    * scala> val noneF: Option[Int => Long] = None
@@ -65,7 +65,7 @@ trait Apply[F[_]] extends Functor[F] with InvariantSemigroupal[F] with ApplyArit
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import cats.data.Validated
    * scala> import Validated.{Valid, Invalid}
    *
@@ -99,7 +99,7 @@ trait Apply[F[_]] extends Functor[F] with InvariantSemigroupal[F] with ApplyArit
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import cats.data.Validated
    * scala> import Validated.{Valid, Invalid}
    *
@@ -174,7 +174,7 @@ trait Apply[F[_]] extends Functor[F] with InvariantSemigroupal[F] with ApplyArit
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val someInt: Option[Int] = Some(3)
    * scala> val noneInt: Option[Int] = None
@@ -212,7 +212,7 @@ trait Apply[F[_]] extends Functor[F] with InvariantSemigroupal[F] with ApplyArit
    *
    * {{{
    * scala> import cats.{Eval, Later}
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val bomb: Eval[Option[Int]] = Later(sys.error("boom"))
    * scala> val x: Option[Int] = None
    * scala> x.map2Eval(bomb)(_ + _).value
@@ -227,7 +227,7 @@ trait Apply[F[_]] extends Functor[F] with InvariantSemigroupal[F] with ApplyArit
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val alo = Apply[List].compose[Option]
    *

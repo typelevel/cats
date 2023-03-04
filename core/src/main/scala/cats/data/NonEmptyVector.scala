@@ -293,7 +293,7 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
    * {{{
    * scala> import scala.collection.immutable.SortedMap
    * scala> import cats.data.NonEmptyVector
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val nev = NonEmptyVector.of(12, -2, 3, -5)
    * scala> val expectedResult = SortedMap(false -> NonEmptyVector.of(-2, -5), true -> NonEmptyVector.of(12, 3))
    * scala> val result = nev.groupBy(_ >= 0)
@@ -325,7 +325,7 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
    *
    * {{{
    * scala> import cats.data.{NonEmptyMap, NonEmptyVector}
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val nel = NonEmptyVector.of(12, -2, 3, -5)
    * scala> val expectedResult = NonEmptyMap.of(false -> NonEmptyVector.of(-2, -5), true -> NonEmptyVector.of(12, 3))
    * scala> val result = nel.groupByNem(_ >= 0)
@@ -341,7 +341,7 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
    *
    * {{{
    * scala> import cats.data.NonEmptyVector
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val nel = NonEmptyVector.of(12, -2, 3, -5)
    * scala> val expectedResult = List(NonEmptyVector.of(12, -2), NonEmptyVector.of(3, -5))
    * scala> val result = nel.grouped(2)
@@ -358,7 +358,7 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
    * Creates new `NonEmptyMap`, similarly to List#toMap from scala standard library.
    * {{{
    * scala> import cats.data.{NonEmptyMap, NonEmptyVector}
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val nev = NonEmptyVector((0, "a"), Vector((1, "b"),(0, "c"), (2, "d")))
    * scala> val expectedResult = NonEmptyMap.of(0 -> "c", 1 -> "b", 2 -> "d")
    * scala> val result = nev.toNem

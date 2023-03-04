@@ -22,7 +22,7 @@
 package cats
 package laws
 
-import cats.implicits._
+import cats.syntax.all._
 
 trait ReducibleLaws[F[_]] extends FoldableLaws[F] {
   implicit def F: Reducible[F]

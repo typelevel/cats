@@ -1,4 +1,7 @@
 # FunctionK
+
+API Documentation: @:api(cats.arrow.FunctionK)
+
 A `FunctionK` transforms values from one first-order-kinded type (a type that takes a single type
 parameter, such as `List` or `Option`) into another first-order-kinded type. This transformation is
 universal, meaning that a `FunctionK[List, Option]` will translate all `List[A]` values into an
@@ -53,7 +56,7 @@ def first(l: List[Int]): Option[Int] = l.headOption
 
 The astute reader may have noticed that there's really no reason that this method needs to be tied directly to `Int`. We could use generics to make this a bit more general:
 
-```
+```scala mdoc:silent:reset
 def first[A](l: List[A]): Option[A] = l.headOption
 ```
 

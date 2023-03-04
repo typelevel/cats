@@ -28,7 +28,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        scala: [2.12.17, 2.13.10, 3.2.1]
+        scala: [2.12.17, 2.13.10, 3.2.2]
         java: [temurin@8, temurin@17, graalvm@11]
         project: [rootJS, rootJVM, rootNative]
         exclude:
@@ -36,9 +36,9 @@ jobs:
             java: temurin@17
           - scala: 2.12.17
             java: graalvm@11
-          - scala: 3.2.1
+          - scala: 3.2.2
             java: temurin@17
-          - scala: 3.2.1
+          - scala: 3.2.2
             java: graalvm@11
           - project: rootJS
             java: temurin@17
@@ -292,32 +292,32 @@ jobs:
           tar xf targets.tar
           rm targets.tar
 
-      - name: Download target directories (3.2.1, rootJS)
+      - name: Download target directories (3.2.2, rootJS)
         uses: actions/download-artifact@v3
         with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-3.2.1-rootJS
+          name: target-${{ matrix.os }}-${{ matrix.java }}-3.2.2-rootJS
 
-      - name: Inflate target directories (3.2.1, rootJS)
+      - name: Inflate target directories (3.2.2, rootJS)
         run: |
           tar xf targets.tar
           rm targets.tar
 
-      - name: Download target directories (3.2.1, rootJVM)
+      - name: Download target directories (3.2.2, rootJVM)
         uses: actions/download-artifact@v3
         with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-3.2.1-rootJVM
+          name: target-${{ matrix.os }}-${{ matrix.java }}-3.2.2-rootJVM
 
-      - name: Inflate target directories (3.2.1, rootJVM)
+      - name: Inflate target directories (3.2.2, rootJVM)
         run: |
           tar xf targets.tar
           rm targets.tar
 
-      - name: Download target directories (3.2.1, rootNative)
+      - name: Download target directories (3.2.2, rootNative)
         uses: actions/download-artifact@v3
         with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-3.2.1-rootNative
+          name: target-${{ matrix.os }}-${{ matrix.java }}-3.2.2-rootNative
 
-      - name: Inflate target directories (3.2.1, rootNative)
+      - name: Inflate target directories (3.2.2, rootNative)
         run: |
           tar xf targets.tar
           rm targets.tar
@@ -334,7 +334,7 @@ jobs:
           (echo "$PGP_PASSPHRASE"; echo; echo) | gpg --command-fd 0 --pinentry-mode loopback --change-passphrase $(gpg --list-secret-keys --with-colons 2> /dev/null | grep '^sec:' | cut --delimiter ':' --fields 5 | tail -n 1)
 
       - name: Publish
-        run: sbt '++ ${{ matrix.scala }}' tlRelease
+        run: sbt '++ ${{ matrix.scala }}' tlCiRelease
 
   scalafix:
     name: Scalafix

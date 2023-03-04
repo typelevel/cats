@@ -1,5 +1,7 @@
 # Traverse
 
+API Documentation: @:api(cats.Traverse)
+
 In the `Applicative` tutorial we saw a more polymorphic version of the standard library
 `Future.traverse` and `Future.sequence` functions, generalizing `Future` to be any
 `F[_]` that's `Applicative`.
@@ -64,7 +66,7 @@ a `List[Option[A]]`. Since the values themselves are effects, traversing with `i
 will turn the traversable "inside out."
 
 ```scala mdoc:reset:silent
-import cats.implicits._
+import cats.syntax.all._
 ```
 
 ```scala mdoc

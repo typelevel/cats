@@ -23,8 +23,25 @@ package cats.tests
 
 import cats._
 import cats.arrow.Compose
-import cats.data.{Binested, Nested, NonEmptyChain, NonEmptyList, NonEmptySet}
+import cats.data.{
+  Binested,
+  EitherNec,
+  EitherNel,
+  EitherNes,
+  EitherT,
+  Ior,
+  Nested,
+  NonEmptyChain,
+  NonEmptyList,
+  NonEmptySet,
+  OptionT,
+  Validated,
+  ValidatedNec,
+  ValidatedNel
+}
+import cats.syntax.OptionOps
 import cats.syntax.all._
+
 import scala.collection.immutable.{SortedMap, SortedSet}
 
 /**
@@ -542,6 +559,69 @@ object SyntaxSuite {
     val fga: F[G[A]] = mock[F[G[A]]]
 
     val nested: Nested[F, G, A] = fga.nested
+  }
+
+  def testEither[F[_]: Applicative, A: Order, B: Order](): Unit = {
+    val either = mock[Either[A, B]]
+    val a = mock[A]
+    val b = mock[B]
+
+    val v1: Validated[A, B] = either.toValidated
+    val v2: ValidatedNel[A, B] = either.toValidatedNel
+    val v3: Validated[F[A], B] = either.toValidated.leftLiftTo[F]
+
+    val v4: Either[F[A], B] = either.leftLiftTo[F]
+    val v5: EitherT[F, A, B] = either.toEitherT
+    val v6: EitherNel[A, B] = either.toEitherNel
+    val v7: EitherNec[A, B] = either.toEitherNec
+    val v8: EitherNes[A, B] = either.toEitherNes
+
+    val v9: Either[A, B] = Either.left[A, B](a)
+    val v10: Either[A, B] = Either.right[A, B](b)
+
+    val v11: EitherNec[A, Nothing] = Either.leftNec(a)
+    val v12: EitherNec[Nothing, B] = Either.rightNec(b)
+    val v13: EitherNes[A, Nothing] = Either.leftNes(a)
+    val v14: EitherNes[Nothing, B] = Either.rightNes(b)
+    val v15: EitherNel[A, Nothing] = Either.leftNel(a)
+    val v16: EitherNel[Nothing, B] = Either.rightNel(b)
+  }
+
+  def testOption[F[_]: Applicative, G[_], A, B: Monoid](): Unit = {
+    val option = mock[Option[B]]
+    val a = mock[A]
+    val b = mock[B]
+    implicit val aega: ApplicativeError[G, B] = mock[ApplicativeError[G, B]]
+
+    val v1: Validated[B, A] = option.toInvalid(a)
+    val v2: ValidatedNel[B, A] = option.toInvalidNel(a)
+    val v3: Validated[F[B], A] = option.toInvalid(a).leftLiftTo[F]
+    val v4: ValidatedNec[B, A] = option.toInvalidNec(a)
+    val v5: Validated[B, B] = option.toValid(b)
+    val v6: ValidatedNel[B, B] = option.toValidNel(b)
+    val v7: ValidatedNec[B, B] = option.toValidNec(b)
+    val v8: Ior[B, B] = option.toRightIor(b)
+    val v9: Ior[B, A] = option.toLeftIor(a)
+    val v10: EitherNel[B, B] = option.toRightNel(b)
+    val v11: EitherNec[B, B] = option.toRightNec(b)
+    val v12: EitherNel[B, A] = option.toLeftNel(a)
+    val v13: EitherNec[B, A] = option.toLeftNec(a)
+    val v14: B = option.orEmpty
+    val v15 = option.liftTo[F]
+    val v16: G[Unit] = option.raiseTo[G]
+    val v17: OptionT[F, B] = option.toOptionT[F]
+  }
+
+  def testValidated[F[_]: Applicative, A: Order, B: Order: Monoid](): Unit = {
+    val validated = mock[Validated[A, B]]
+    val a = mock[A]
+    val b = mock[B]
+
+    val v1: Validated[A, B] = b.valid[A]
+    val v2: Validated[F[A], A] = a.invalid[A].leftLiftTo[F]
+    val v3: ValidatedNel[A, B] = b.validNel[A]
+    val v4: Validated[A, B] = a.invalid[B]
+    val v5: ValidatedNel[A, B] = a.invalidNel[B]
   }
 
   def testBinested[F[_, _], G[_], H[_], A, B]: Unit = {

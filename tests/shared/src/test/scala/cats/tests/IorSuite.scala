@@ -22,7 +22,7 @@
 package cats.tests
 
 import cats.{Bitraverse, MonadError, Semigroupal, Show, Traverse}
-import cats.data.{EitherT, Ior, NonEmptyChain, NonEmptyList, NonEmptySet}
+import cats.data.{EitherT, Ior, NonEmptyChain, NonEmptyList, NonEmptySet, NonEmptyVector}
 import cats.kernel.{Eq, Semigroup}
 import cats.kernel.laws.discipline.{OrderTests, SemigroupTests}
 import cats.laws.discipline.{
@@ -323,8 +323,9 @@ class IorSuite extends CatsSuite {
   }
 
   test("toIorNel Both") {
-    val ior = Ior.both[String, Int]("oops", 42)
-    assert(ior.toIorNel === (Ior.both[NonEmptyList[String], Int](NonEmptyList.one("oops"), 42)))
+    forAll { (x: String, y: Int) =>
+      assert(Ior.both(x, y).toIorNel === (Ior.both[NonEmptyList[String], Int](NonEmptyList.one(x), y)))
+    }
   }
 
   test("leftNel") {

@@ -1,5 +1,7 @@
 # Contravariant Monoidal
 
+API Documentation: @:api(cats.ContravariantMonoidal)
+
 The `ContravariantMonoidal` type class is for [`Contravariant`](contravariant.md) functors that can define a
 `product` function and a `unit` function.
 
@@ -34,7 +36,7 @@ An example application would be the case of predicates. Consider the type,
 ```scala mdoc:silent:reset
 import cats._
 
-import cats.implicits._
+import cats.syntax.all._
 
 case class Predicate[A](run: A => Boolean)
 ```

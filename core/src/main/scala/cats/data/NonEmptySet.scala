@@ -81,7 +81,7 @@ sealed class NonEmptySetOps[A](val value: NonEmptySet[A]) {
    * Alias for [[union]]
    * {{{
    * scala> import cats.data.NonEmptySet
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val nes = NonEmptySet.of(1, 2, 4, 5)
    * scala> nes ++ NonEmptySet.of(1, 2, 7)
    * res0: cats.data.NonEmptySet[Int] = TreeSet(1, 2, 4, 5, 7)
@@ -93,7 +93,7 @@ sealed class NonEmptySetOps[A](val value: NonEmptySet[A]) {
    * Alias for [[union]]
    * {{{
    * scala> import cats.data.NonEmptySet
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val nes = NonEmptySet.of(1, 2, 4, 5)
    * scala> nes | NonEmptySet.of(1, 2, 7)
    * res0: cats.data.NonEmptySet[Int] = TreeSet(1, 2, 4, 5, 7)
@@ -105,7 +105,7 @@ sealed class NonEmptySetOps[A](val value: NonEmptySet[A]) {
    * Alias for [[diff]]
    * {{{
    * scala> import cats.data.NonEmptySet
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val nes = NonEmptySet.of(1, 2, 4, 5)
    * scala> nes -- NonEmptySet.of(1, 2, 7)
    * res0: scala.collection.immutable.SortedSet[Int] = TreeSet(4, 5)
@@ -117,7 +117,7 @@ sealed class NonEmptySetOps[A](val value: NonEmptySet[A]) {
    * Alias for [[diff]]
    * {{{
    * scala> import cats.data.NonEmptySet
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val nes = NonEmptySet.of(1, 2, 4, 5)
    * scala> nes &~ NonEmptySet.of(1, 2, 7)
    * res0: scala.collection.immutable.SortedSet[Int] = TreeSet(4, 5)
@@ -129,7 +129,7 @@ sealed class NonEmptySetOps[A](val value: NonEmptySet[A]) {
    * Alias for [[intersect]]
    * {{{
    * scala> import cats.data.NonEmptySet
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val nes = NonEmptySet.of(1, 2, 4, 5)
    * scala> nes & NonEmptySet.of(1, 2, 7)
    * res0: scala.collection.immutable.SortedSet[Int] = TreeSet(1, 2)
@@ -154,7 +154,7 @@ sealed class NonEmptySetOps[A](val value: NonEmptySet[A]) {
    * Converts this set to a `NonEmptyList`.
    * {{{
    * scala> import cats.data.NonEmptySet
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val nes = NonEmptySet.of(1, 2, 3, 4, 5)
    * scala> nes.toNonEmptyList
    * res0: cats.data.NonEmptyList[Int] = NonEmptyList(1, 2, 3, 4, 5)
@@ -181,7 +181,7 @@ sealed class NonEmptySetOps[A](val value: NonEmptySet[A]) {
    * Alias for [[contains]]
    * {{{
    * scala> import cats.data.NonEmptySet
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val nes = NonEmptySet.of(1, 2, 3, 4, 5)
    * scala> nes(3)
    * res0: Boolean = true
@@ -297,7 +297,7 @@ sealed class NonEmptySetOps[A](val value: NonEmptySet[A]) {
    * Map a function over all the elements of this set and concatenate the resulting sets into one.
    * {{{
    * scala> import cats.data.NonEmptySet
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val nes = NonEmptySet.of(1, 2, 3)
    * scala> nes.concatMap(n => NonEmptySet.of(n, n * 4, n * 5))
    * res0: cats.data.NonEmptySet[Int] = TreeSet(1, 2, 3, 4, 5, 8, 10, 12, 15)
@@ -339,7 +339,7 @@ sealed class NonEmptySetOps[A](val value: NonEmptySet[A]) {
    *
    * {{{
    * scala> import cats.data.NonEmptySet
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val as = NonEmptySet.of(1, 2, 3)
    * scala> val bs = NonEmptySet.of("A", "B", "C")
    * scala> as.zipWith(bs)(_.toString + _)

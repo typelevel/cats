@@ -1,5 +1,7 @@
 # SemigroupK
 
+API Documentation: @:api(cats.SemigroupK)
+
 `SemigroupK` has a very similar structure to [`Semigroup`](semigroup.md), the difference
 is that `SemigroupK` operates on type constructors of one argument. So, for
 example, whereas you can find a `Semigroup` for types which are fully
@@ -16,7 +18,7 @@ First some imports.
 
 ```scala mdoc:silent
 import cats._
-import cats.implicits._
+import cats.syntax.all._
 ```
 
 For `List`, the `Semigroup` instance's `combine` operation and the `SemigroupK`
@@ -52,7 +54,7 @@ There is inline syntax available for both `Semigroup` and
 from `SemigroupK` (called `Plus` in scalaz).
 
 ```scala mdoc:silent
-import cats.implicits._
+import cats.syntax.all._
 
 val one = Option(1)
 val two = Option(2)

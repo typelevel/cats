@@ -33,7 +33,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
   /**
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val v1= "error".invalid[Option[String]]
    * scala> val v2= Some("abc").valid[String]
@@ -54,7 +54,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
   /**
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val validated= "error".invalid[Unit]
    * scala> validated.isValid
@@ -70,7 +70,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
   /**
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val validated= "error".invalid[Unit]
    * scala> validated.isInvalid
@@ -97,7 +97,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val v1= "error".invalid[Int]
    * scala> val v2= 123.valid[String]
@@ -119,7 +119,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    * Return the Valid value, or the result of f if Invalid
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val v1 = Some("exception").invalid[String]
    * scala> val v2 = "OK".valid[Option[String]]
@@ -142,7 +142,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val v1 = List("error").invalid[Int]
    * scala> val v2 = 123.valid[List[String]]
@@ -165,7 +165,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val v1 = Some("error").invalid[Int]
    * scala> val v2 = 123.valid[Option[String]]
@@ -190,7 +190,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val v1 = Some("error").invalid[Int]
    * scala> val v2 = 123.valid[Option[String]]
@@ -215,7 +215,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val v1 = List("error1").invalid[Int]
    * scala> val v2 = 123.valid[List[String]]
@@ -247,7 +247,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val v1 = "error".invalid[Int]
    * scala> val v2 = 123.valid[String]
@@ -270,7 +270,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val v1 = List("error").invalid[Int]
    * scala> val v2 = 123.valid[List[String]]
@@ -293,7 +293,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val v1 = "error".invalid[Int]
    * scala> val v2 = 123.valid[String]
@@ -317,7 +317,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val v1 = Some("error").invalid[Int]
    * scala> val v2 = 123.valid[Option[String]]
@@ -340,7 +340,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val v1 = "error".invalid[Int]
    * scala> val v2 = 123.valid[String]
@@ -363,7 +363,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val v1 = "error".invalid[Int]
    * scala> val v2 = 123.valid[String]
@@ -387,7 +387,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val v1 = "error".invalid[Int]
    * scala> val v2 = 123.valid[String]
@@ -408,7 +408,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val v1: Validated[String, Int] = "error".invalid[Int]
    * scala> val v2: Validated[String, Int] = 123.valid[String]
@@ -429,7 +429,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
   /**
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val v1 = "error".invalid[Int]
    * scala> val v2 = "error2".invalid[Int]
@@ -474,7 +474,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
   /**
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val v1 = "error".invalid[Int]
    * scala> val v2 = "error".invalid[Int]
@@ -504,7 +504,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val v1 = "error".invalid[Int]
    * scala> val v2 = 123.valid[String]
@@ -530,7 +530,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import cats.data.ValidatedNec
    *
    * scala> val v1 = "error".invalidNec[Int]
@@ -562,7 +562,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val v1 = "error".invalid[Int]
    * scala> val v2 = 123.valid[String]
@@ -586,7 +586,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val v1 = "error".invalid[Int]
    * scala> val v2 = 123.valid[String]
@@ -612,7 +612,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val v1 = "error".invalid[Int]
    * scala> val v2 = 123.valid[String]
@@ -645,7 +645,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val v1 = "error".invalid[Int]
    * scala> val v2 = 123.valid[String]
@@ -669,7 +669,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import cats.Eval
    *
    * scala> val v1 = "error".invalid[Int]
@@ -709,7 +709,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val v1 = "error".invalid[Int]
    * scala> val v2 = 123.valid[String]
@@ -736,7 +736,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val v1 = "error".invalidNel[List[Int]]
    * scala> val v2 = "error2".invalidNel[List[Int]]
@@ -766,7 +766,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
   /**
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val v1 = "error".invalid[Int]
    * scala> val v2 = 123.valid[String]
@@ -787,7 +787,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
   /**
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val v1 = Seq("error").invalid[List[String]]
    * scala> val v2 = List("Ok").valid[Seq[String]]

@@ -1,5 +1,7 @@
 # Invariant Monoidal
 
+API Documentation: @:api(cats.InvariantMonoidal)
+
 `InvariantMonoidal` combines [`Invariant`](invariant.md) and `Semigroupal` with the addition of a `unit` methods, defined in isolation the `InvariantMonoidal` type class could be defined as follows:
 
 ```scala mdoc:compile-only
@@ -33,7 +35,7 @@ def product[A, B](fa: Semigroup[A], fb: Semigroup[B]): Semigroup[(A, B)] = {
 Given an instance of `InvariantMonoidal` for `Semigroup`, we are able to combine existing `Semigroup` instances to form a new `Semigroup` by using the `Semigroupal` syntax:
 
 ```scala mdoc:silent
-import cats.implicits._
+import cats.syntax.all._
 
 // Let's build a Semigroup for this case class
 case class Foo(a: String, c: List[Double])

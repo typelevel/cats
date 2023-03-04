@@ -57,7 +57,7 @@ final private[syntax] class ValidatedIdOpsBinCompat0[A](private val a: A) extend
    *
    * For example:
    * {{{
-   * scala> import cats.implicits._, cats.data._
+   * scala> import cats.syntax.all._, cats.data._
    * scala> 1.validNec[String]
    * res0: Validated[NonEmptyChain[String], Int] = Valid(1)
    * }}}
@@ -69,7 +69,7 @@ final private[syntax] class ValidatedIdOpsBinCompat0[A](private val a: A) extend
    *
    * For example:
    * {{{
-   * scala> import cats.implicits._, cats.data._
+   * scala> import cats.syntax.all._, cats.data._
    * scala> "Err".invalidNec[Int]
    * res0: Validated[NonEmptyChain[String], Int] = Invalid(Chain(Err))
    * }}}

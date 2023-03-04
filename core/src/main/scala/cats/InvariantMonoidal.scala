@@ -33,7 +33,7 @@ trait InvariantMonoidal[F[_]] extends InvariantSemigroupal[F] {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> InvariantMonoidal[Option].point(10)
    * res0: Option[Int] = Some(10)

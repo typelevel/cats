@@ -332,6 +332,12 @@ class OptionTSuite extends CatsSuite {
     }
   }
 
+  test("OptionT[Id, A].filterF consistent with Option.filter") {
+    forAll { (o: Option[Int], f: Int => Boolean) =>
+      assert(o.filter(f) === (OptionT[Id, Int](o).filterF(f).value))
+    }
+  }
+
   test("OptionT[Id, A].withFilter consistent with Option.withFilter") {
     forAll { (o: Option[Int], f: Int => Boolean) =>
       assert((for { x <- o if f(x) } yield x) === ((for { x <- OptionT[Id, Int](o) if f(x) } yield x).value))
@@ -375,6 +381,21 @@ class OptionTSuite extends CatsSuite {
     def when[A]: (Boolean, A) => Option[A] = (c: Boolean, a: A) => if (c) Some(a) else None
     forAll { (i: Int, b: Boolean) =>
       assert(OptionT.whenF[Id, Int](b)(i).value === (when(b, i)))
+    }
+  }
+
+  test("OptionT.whenM[Id, A] consistent with Option.when") {
+    // Option.when is inlined here because it is not available before Scala 2.13
+    def when[A]: (Boolean, A) => Option[A] = (c: Boolean, a: A) => if (c) Some(a) else None
+
+    forAll { (i: Int, b: Boolean) =>
+      assert(OptionT.whenM[Id, Int](b)(i).value === (when(b, i)))
+    }
+  }
+
+  test("OptionT.whenF and OptionT.whenM consistent") {
+    forAll { (li: List[Int], bs: List[Boolean]) =>
+      assert(bs.flatMap(OptionT.whenF(_)(li).value) === OptionT.whenM(bs)(li).value)
     }
   }
 

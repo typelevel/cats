@@ -1,5 +1,7 @@
 # MonoidK
 
+API Documentation: @:api(cats.MonoidK)
+
 `MonoidK` is a universal monoid which operates on type constructors of one argument.
 
 This type class is useful when its type parameter `F[_]` has a
@@ -25,7 +27,7 @@ First some imports:
 
 ```scala mdoc:silent
 import cats.{Monoid, MonoidK}
-import cats.implicits._
+import cats.syntax.all._
 ```
 
 Just like `Monoid[A]`, `MonoidK[F]` has an `empty` method, but it is parametrized on the type of the element contained in `F`:

@@ -1,5 +1,7 @@
 # Bimonad
 
+API Documentation: @:api(cats.Bimonad)
+
 The `Bimonad` trait directly extends `Monad` and `Comonad` without introducing new methods.  `Bimonad` is
 different from other `Bi` typeclasses like `Bifunctor`, `Bifoldable` or `Bitraverse` where the prefix describes
 a `F[_, _]`. The `Bimonad` is a `F[_]` and the `Bi` prefix has a different meaning here: it's both a `Monad` and a `Comonad`.  
@@ -23,7 +25,7 @@ Here is a possible implementation:
 ```scala mdoc
 import cats._
 import cats.data._
-import cats.implicits._
+import cats.syntax.all._
 
 implicit val nelBimonad =
   new Bimonad[NonEmptyList] {

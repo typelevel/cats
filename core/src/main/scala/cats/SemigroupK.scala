@@ -52,7 +52,7 @@ trait SemigroupK[F[_]] extends Serializable { self =>
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> SemigroupK[List].combineK(List(1, 2), List(3, 4))
    * res0: List[Int] = List(1, 2, 3, 4)
    * }}}
@@ -75,7 +75,7 @@ trait SemigroupK[F[_]] extends Serializable { self =>
    *
    * {{{
    * scala> import cats.{Eval, Later}
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val bomb: Eval[Option[Int]] = Later(sys.error("boom"))
    * scala> val x: Option[Int] = Some(42)
    * scala> x.combineKEval(bomb).value
@@ -90,7 +90,7 @@ trait SemigroupK[F[_]] extends Serializable { self =>
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val s: Semigroup[List[Int]] = SemigroupK[List].algebra[Int]
    * }}}
    */
@@ -103,7 +103,7 @@ trait SemigroupK[F[_]] extends Serializable { self =>
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> type ListOption[A] = List[Option[A]]
    * scala> val s: SemigroupK[ListOption] = SemigroupK[List].compose[Option]
    * scala> s.combineK(List(Some(1), None, Some(2)), List(Some(3), None))

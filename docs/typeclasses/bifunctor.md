@@ -1,5 +1,7 @@
 # Bifunctor
 
+API Documentation: @:api(cats.Bifunctor)
+
 `Bifunctor` takes two type parameters instead of one, and is a functor in both
 of these parameters. It defines a function `bimap`, which allows for mapping over both
 arguments at the same time. Its signature is as follows:
@@ -19,7 +21,7 @@ convert it to an UNIX timestamp.
 
 ```scala mdoc:silent
 import cats._
-import cats.implicits._
+import cats.syntax.all._
 import java.time._
 
 case class DomainError(message: String)

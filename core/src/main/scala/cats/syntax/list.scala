@@ -37,7 +37,7 @@ final class ListOps[A](private val la: List[A]) extends AnyVal {
    * Example:
    * {{{
    * scala> import cats.data.NonEmptyList
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val result1: List[Int] = List(1, 2)
    * scala> result1.toNel
@@ -57,7 +57,7 @@ final class ListOps[A](private val la: List[A]) extends AnyVal {
    * {{{
    * scala> import cats.data.NonEmptyList
    * scala> import scala.collection.immutable.SortedMap
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val list = List(12, -2, 3, -5)
    *
@@ -79,7 +79,7 @@ final class ListOps[A](private val la: List[A]) extends AnyVal {
    * {{{
    * scala> import cats.data.NonEmptyList
    * scala> import scala.collection.immutable.SortedMap
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val list = List(12, -2, 3, -5)
    *
@@ -105,7 +105,7 @@ final class ListOps[A](private val la: List[A]) extends AnyVal {
    * Example:
    * {{{
    * scala> import cats.data.NonEmptyList
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val result1: List[Int] = List(1, 2)
    * scala> result1.scanLeftNel(100)(_ + _)
@@ -126,7 +126,7 @@ final class ListOps[A](private val la: List[A]) extends AnyVal {
    * Example:
    * {{{
    * scala> import cats.data.NonEmptyList
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val result1: List[Int] = List(1, 2)
    * scala> result1.scanRightNel(100)(_ + _)
@@ -154,7 +154,7 @@ final private[syntax] class ListOpsBinCompat0[A](private val la: List[A]) extend
    * {{{
    * scala> import cats.data.NonEmptyChain
    * scala> import scala.collection.immutable.SortedMap
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val list = List(12, -2, 3, -5)
    *

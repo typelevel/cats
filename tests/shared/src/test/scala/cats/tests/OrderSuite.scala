@@ -28,7 +28,7 @@ import cats.laws.discipline.{ContravariantMonoidalTests, MiniInt}
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import cats.tests.Helpers.Ord
-import cats.implicits._
+import cats.syntax.all._
 import org.scalacheck.Prop._
 
 class OrderSuite extends CatsSuite {

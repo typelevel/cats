@@ -16,7 +16,7 @@ ThisBuild / githubWorkflowJavaVersions := Seq(PrimaryJava, LTSJava, GraalVM11)
 
 val Scala212 = "2.12.17"
 val Scala213 = "2.13.10"
-val Scala3 = "3.2.1"
+val Scala3 = "3.2.2"
 
 ThisBuild / crossScalaVersions := Seq(Scala212, Scala213, Scala3)
 ThisBuild / scalaVersion := Scala213
@@ -65,10 +65,8 @@ lazy val commonJsSettings = Seq(
   tlVersionIntroduced ++= List("2.12", "2.13").map(_ -> "2.1.0").toMap
 )
 
-lazy val NativeLink = Tags.Tag("native-link")
-Global / concurrentRestrictions += Tags.limit(NativeLink, 1)
+Global / concurrentRestrictions += Tags.limit(NativeTags.Link, 1)
 lazy val commonNativeSettings = Seq(
-  Test / nativeLink := (Test / nativeLink).tag(NativeLink).value,
   doctestGenTests := Seq.empty,
   tlVersionIntroduced ++= List("2.12", "2.13").map(_ -> "2.4.0").toMap + ("3" -> "2.8.0")
 )
@@ -281,7 +279,27 @@ lazy val docs = project
   .enablePlugins(TypelevelSitePlugin)
   .settings(
     tlFatalWarnings := false,
-    laikaConfig ~= { _.withRawContent },
+    mdocVariables += ("API_LINK_BASE" -> s"https://www.javadoc.io/doc/org.typelevel/cats-docs_2.13/${mdocVariables
+        .value("VERSION")}/"),
+    laikaConfig := {
+      import laika.rewrite.link._
+
+      laikaConfig.value.withRawContent
+        .withConfigValue("version", mdocVariables.value("VERSION"))
+        .withConfigValue(
+          LinkConfig(apiLinks =
+            List(
+              ApiLinks(
+                baseUri = s"https://www.javadoc.io/doc/org.typelevel/cats-docs_2.13/${mdocVariables.value("VERSION")}/"
+              ),
+              ApiLinks(
+                baseUri = s"https://www.scala-lang.org/api/$Scala213/",
+                packagePrefix = "scala"
+              )
+            )
+          )
+        )
+    },
     tlSiteRelatedProjects := Seq(
       TypelevelProject.CatsEffect,
       "Mouse" -> url("https://typelevel.org/mouse"),

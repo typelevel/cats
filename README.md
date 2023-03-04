@@ -36,31 +36,31 @@ information about how you can get involved as a developer. If you are looking fo
 <h4>Platinum Sponsors</h4>
 <a href="https://opencollective.com/typelevel/contribute/platinum-sposor-12420/checkout">Platinum sponsorship</a> starts at $950 USD/month.
 <div id="platinum-sponsors">
-  <noscript>Platinum Sponsors appear here at <a href="">https://typelevel.org/cats</a></noscript>
+  <noscript>Platinum Sponsors appear here at <a href="https://typelevel.org/cats/#financial-contributors">https://typelevel.org/cats</a></noscript>
 </div>
 
 <h4>Gold Sponsors</h4>
 <a href="https://opencollective.com/typelevel/contribute/gold-sponsor-12419/checkout">Gold Sponsorship</a> starts at $420 USD/month.
 <div id="gold-sponsors">
-  <noscript>Gold Sponsors appear here at <a href="">https://typelevel.org/cats</a></noscript>
+  <noscript>Gold Sponsors appear here at <a href="https://typelevel.org/cats/#financial-contributors">https://typelevel.org/cats</a></noscript>
 </div>
 
 <h4>Silver Sponsors</h4>
 <a href="https://opencollective.com/typelevel/contribute/silver-sponsor-11780/checkout">Silver Sponsorship</a> starts at $180 USD/month.
 <div id="silver-sponsors">
-  <noscript>Silver Sponsors appear here at <a href="">https://typelevel.org/cats</a></noscript>
+  <noscript>Silver Sponsors appear here at <a href="https://typelevel.org/cats/#financial-contributors">https://typelevel.org/cats</a></noscript>
 </div>
 
 <h4>Backers</h4>
 Become a <a href="https://opencollective.com/typelevel/contribute/backer-11779/checkout">Backer</a> with a recurring donation of just $5 USD/month.
 <div id="backers">
-  <noscript>Backers appear here at <a href="">https://typelevel.org/cats</a></noscript>
+  <noscript>Backers appear here at <a href="https://typelevel.org/cats/#financial-contributors">https://typelevel.org/cats</a></noscript>
 </div>
 
 <h4>Other contributors</h4>
 We thankfully accept <a href="https://opencollective.com/typelevel/donate">one-time and recurring</a> contributions as well.
 <div id="other-contributors">
-  <noscript>Other contributors appear here at <a href="">https://typelevel.org/cats</a></noscript>
+  <noscript>Other contributors appear here at <a href="https://typelevel.org/cats/#financial-contributors">https://typelevel.org/cats</a></noscript>
 </div>
 
 <script src="/cats/js/sponsors.js"></script>

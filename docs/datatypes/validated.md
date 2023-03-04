@@ -1,5 +1,7 @@
 # Validated
 
+API Documentation: @:api(cats.data.Validated)
+
 Imagine you are filling out a web form to signup for an account. You input your username and password and submit.
 Response comes back saying your username can't have dashes in it, so you make some changes and resubmit. Can't
 have special characters either. Change, resubmit. Passwords need to have at least one capital letter. Change,
@@ -70,7 +72,7 @@ case object AgeIsInvalid extends DomainValidation {
 We have our `RegistrationData` case class that will hold the information the user has submitted, alongside the definition of the error model that we'll be using for displaying the possible errors of every field. Now, let's explore the proposed implementation:
 
 ```scala mdoc:silent
-import cats.implicits._
+import cats.syntax.all._
 
 sealed trait FormValidator {
  def validateUserName(userName: String): Either[DomainValidation, String] =
@@ -167,7 +169,7 @@ Time to do some refactoring! We're going to try a `Validated` approach:
 ```scala mdoc:silent
 import cats.data._
 import cats.data.Validated._
-import cats.implicits._
+import cats.syntax.all._
 
 def validateUserName(userName: String): Validated[DomainValidation, String] = FormValidator.validateUserName(userName).toValidated
 
@@ -454,7 +456,7 @@ Time to parse.
 ```scala mdoc:silent:nest
 import cats.SemigroupK
 import cats.data.NonEmptyChain
-import cats.implicits._
+import cats.syntax.all._
 
 case class ConnectionParams(url: String, port: Int)
 

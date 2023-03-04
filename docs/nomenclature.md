@@ -117,7 +117,7 @@ Like the previous section, we use the `E` for the error parameter type.
 | `F[A] => (A => Option[B]) => Option[B]` | `collectFirstSome` |
 | `F[A] => (A => G[B]) => G[Unit]` | `traverse_` | `G: Applicative`
 | `F[G[A]] => G[Unit]` | `sequence_` | `G: Applicative`
-| `F[A] => (A => Either[B, C] => (F[B], F[C])` | `partitionEither` | `G: Applicative`
+| `F[A] => (A => Either[B, C]) => (F[B], F[C])` | `partitionEither` | `G: Applicative`
 
 ### Reducible
 
@@ -196,7 +196,11 @@ For convenience, in these types we use the symbol `OT` to abbreviate `OptionT`.
 | `=> OT[F, A]` | `none` | `F: Applicative` |
 | `A => OT[F, A]` | `some` or `pure` | `F: Applicative`
 | `F[A] => OT[F, A]` | `liftF`  | `F: Functor`
+| `Boolean => F[A] => OT[F, A]` | `whenF` | `F: Applicative`
+| `F[Boolean] => F[A] => OT[F, A]` | `whenM` | `F: Monad`
 | `OT[F, A] => F[Option[A]]` | `value`
+| `OT[F, A] => A => Boolean => OT[F, A]` | `filter` | `F: Functor`
+| `OT[F, A] => A => F[Boolean] => OT[F, A]` | `filterF` | `F: Monad`
 | `OT[F, A] => (A => B) => OT[F, B]` | `map`  | `F: Functor`
 | `OT[F, A] => (F ~> G) => OT[G, B]` | `mapK`
 | `OT[F, A] => (A => Option[B]) => OT[F, B]` | `mapFilter` | `F: Functor`

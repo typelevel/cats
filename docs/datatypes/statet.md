@@ -1,5 +1,7 @@
 # StateT
 
+API Documentation: @:api(cats.data.IndexedStateT)
+
 `StateT[F[_], S, A]` is a data type that generalizes `State` with the
 ability to compose with effects in `F[_]`. Because `StateT` is defined
 in terms of `F`, it is a monad only if `F` is a monad. Additionally,

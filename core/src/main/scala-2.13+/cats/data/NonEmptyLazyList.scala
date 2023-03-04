@@ -395,7 +395,7 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
    * {{{
    * scala> import scala.collection.immutable.SortedMap
    * scala> import cats.data.NonEmptyLazyList
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val nel = NonEmptyLazyList(12, -2, 3, -5)
    * scala> val expectedResult = SortedMap(false -> NonEmptyLazyList(-2, -5), true -> NonEmptyLazyList(12, 3))
    * scala> val result = nel.groupBy(_ >= 0)
@@ -427,7 +427,7 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
    *
    * {{{
    * scala> import cats.data.{NonEmptyLazyList, NonEmptyMap}
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val nel = NonEmptyLazyList(12, -2, 3, -5)
    * scala> val expectedResult = NonEmptyMap.of(false -> NonEmptyLazyList(-2, -5), true -> NonEmptyLazyList(12, 3))
    * scala> val result = nel.groupByNem(_ >= 0)
@@ -443,7 +443,7 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
    *
    * {{{
    * scala> import cats.data.NonEmptyLazyList
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val nel = NonEmptyLazyList.fromLazyListUnsafe(LazyList(12, -2, 3, -5))
    * scala> val expectedResult = List(
    *      |   NonEmptyLazyList.fromLazyListUnsafe(LazyList(12, -2)),
@@ -463,7 +463,7 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
    * Creates new `NonEmptyMap`, similarly to List#toMap from scala standard library.
    * {{{
    * scala> import cats.data.{NonEmptyLazyList, NonEmptyMap}
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val nel = NonEmptyLazyList.fromLazyListPrepend((0, "a"), LazyList((1, "b"),(0, "c"), (2, "d")))
    * scala> val expectedResult = NonEmptyMap.of(0 -> "c", 1 -> "b", 2 -> "d")
    * scala> val result = nel.toNem

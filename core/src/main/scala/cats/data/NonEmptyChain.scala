@@ -239,7 +239,7 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
    * Tests if some element is contained in this chain.
    * {{{
    * scala> import cats.data.NonEmptyChain
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val nec = NonEmptyChain(4, 5, 6)
    * scala> nec.contains(5)
    * res0: Boolean = true
@@ -266,7 +266,7 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
    * Returns a new `Chain` containing all elements where the result of `pf` is final defined.
    * {{{
    * scala> import cats.data.NonEmptyChain
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val nec = NonEmptyChain(4, 5, 6).map(n => if (n % 2 == 0) Some(n) else None)
    * scala> nec.collect { case Some(n) => n }
    * res0: cats.data.Chain[Int] = Chain(4, 6)
@@ -417,7 +417,7 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
    *
    * {{{
    * scala> import cats.data.{NonEmptyChain, NonEmptyMap}
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val nec = NonEmptyChain(12, -2, 3, -5)
    * scala> val expectedResult = NonEmptyMap.of(false -> NonEmptyChain(-2, -5), true -> NonEmptyChain(12, 3))
    * scala> val result = nec.groupBy(_ >= 0)
@@ -433,7 +433,7 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
    *
    * {{{
    * scala> import cats.data.NonEmptyChain
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val nel = NonEmptyChain.of(12, -2, 3, -5)
    * scala> val expectedResult = List(NonEmptyChain.of(12, -2), NonEmptyChain.of(3, -5))
    * scala> val result = nel.grouped(2)
@@ -452,7 +452,7 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
    *
    * {{{
    * scala> import cats.data.{NonEmptyChain, NonEmptyMap}
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val nec = NonEmptyChain(12, -2, 3, -5)
    * scala> val expectedResult = NonEmptyMap.of(false -> NonEmptyChain(-2, -5), true -> NonEmptyChain(12, 3))
    * scala> val result = nec.groupByNem(_ >= 0)
@@ -471,7 +471,7 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
    *
    * {{{
    * scala> import cats.data.{NonEmptyChain, NonEmptyMap}
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val nec = NonEmptyChain(12, -2, 3, -5)
    * scala> val expectedResult = NonEmptyMap.of(false -> NonEmptyChain("-2", "-5"), true -> NonEmptyChain("12", "3"))
    * scala> val result = nec.groupMap(_ >= 0)(_.toString)
@@ -490,7 +490,7 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
    *
    * {{{
    * scala> import cats.data.{NonEmptyChain, NonEmptyMap}
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val nec = NonEmptyChain(12, -2, 3, -5)
    * scala> val expectedResult = NonEmptyMap.of(false -> NonEmptyChain("-2", "-5"), true -> NonEmptyChain("12", "3"))
    * scala> val result = nec.groupMapNem(_ >= 0)(_.toString)
@@ -511,7 +511,7 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
    *
    * {{{
    * scala> import cats.data.{NonEmptyChain, NonEmptyMap}
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val nec = NonEmptyChain("Hello", "World", "Goodbye", "World")
    * scala> val expectedResult = NonEmptyMap.of("goodbye" -> 1, "hello" -> 1, "world" -> 2)
    * scala> val result = nec.groupMapReduce(_.trim.toLowerCase)(_ => 1)
@@ -532,7 +532,7 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
    *
    * {{{
    * scala> import cats.data.{NonEmptyChain, NonEmptyMap}
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val nec = NonEmptyChain("Hello", "World", "Goodbye", "World")
    * scala> val expectedResult = NonEmptyMap.of("goodbye" -> 1, "hello" -> 1, "world" -> 2)
    * scala> val result = nec.groupMapReduceNem(_.trim.toLowerCase)(_ => 1)
@@ -553,7 +553,7 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
    *
    * {{{
    * scala> import cats.data.{NonEmptyChain, NonEmptyMap}
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val nec = NonEmptyChain("Hello", "World", "Goodbye", "World")
    * scala> val expectedResult = NonEmptyMap.of("goodbye" -> 1, "hello" -> 1, "world" -> 2)
    * scala> val result = nec.groupMapReduceWith(_.trim.toLowerCase)(_ => 1)(_ + _)
@@ -576,7 +576,7 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
    *
    * {{{
    * scala> import cats.data.{NonEmptyChain, NonEmptyMap}
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val nec = NonEmptyChain("Hello", "World", "Goodbye", "World")
    * scala> val expectedResult = NonEmptyMap.of("goodbye" -> 1, "hello" -> 1, "world" -> 2)
    * scala> val result = nec.groupMapReduceWithNem(_.trim.toLowerCase)(_ => 1)(_ + _)

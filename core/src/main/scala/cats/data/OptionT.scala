@@ -363,6 +363,23 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
     OptionT(F.map(value)(_.filter(p)))
 
   /**
+   * Example:
+   * {{{
+   *  scala> import cats.data.OptionT
+   *
+   *  scala> val optionT: OptionT[List, Int] = OptionT[List, Int](List(Some(100), None, Some(421), Some(333)))
+   *  scala> optionT.filterF(n => List(n % 100 == 0, n.toString.toSet.size == 1))
+   *
+   *  res0: OptionT[List, Int] = OptionT(List(Some(100), None, None, None, None, None, Some(333)))
+   * }}}
+   */
+  def filterF(p: A => F[Boolean])(implicit F: Monad[F]): OptionT[F, A] =
+    OptionT(F.flatMap(value) {
+      case v @ Some(a) => F.map(p(a)) { if (_) v else None }
+      case None        => F.pure(None)
+    })
+
+  /**
    * It is used for desugaring 'for comprehensions'. OptionT wouldn't work in 'for-comprehensions' without
    * this method.
    * Example:
@@ -741,6 +758,14 @@ object OptionT extends OptionTInstances {
    */
   def whenF[F[_], A](cond: Boolean)(fa: => F[A])(implicit F: Applicative[F]): OptionT[F, A] =
     if (cond) OptionT.liftF(fa) else OptionT.none[F, A]
+
+  /**
+   * Creates a non-empty `OptionT[F, A]` from an `F[A]` value if the given F-condition is considered `true`.
+   * Otherwise, `none[F, A]` is returned. Analogous to `Option.when` but for effectful conditions.
+   */
+  def whenM[F[_], A](cond: F[Boolean])(fa: => F[A])(implicit F: Monad[F]): OptionT[F, A] = OptionT(
+    F.ifM(cond)(ifTrue = F.map(fa)(Some(_)), ifFalse = F.pure(None))
+  )
 
   /**
    * Same as `whenF`, but expressed as a FunctionK for use with mapK.

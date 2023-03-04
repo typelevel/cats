@@ -1,4 +1,7 @@
 # Const
+
+API Documentation: @:api(cats.data.Const)
+
 At first glance `Const` seems like a strange data type - it has two type parameters, yet only
 stores a value of the first type. What possible use is it? As it turns out, it does
 have its uses, which serve as a nice example of the consistency and elegance of functional programming.
@@ -73,7 +76,7 @@ only thing we need is a `map` operation on the data type. Being good functional 
 
 ```scala mdoc:nest:silent
 import cats.Functor
-import cats.implicits._
+import cats.syntax.all._
 
 trait Lens[S, A] {
   def get(s: S): A

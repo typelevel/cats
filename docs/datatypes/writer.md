@@ -1,5 +1,7 @@
 # Writer
 
+API Documentation: @:api(cats.data.WriterT)
+
 The `Writer[L, A]` datatype represents a computation that produces a
 tuple containing a value of type `L` and one of type `A`. Usually, the
 value `L` represents a description of the computation. A typical

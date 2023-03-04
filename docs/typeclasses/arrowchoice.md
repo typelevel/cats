@@ -1,6 +1,6 @@
-{% laika.title = Arrow Choice %}
+# Arrow Choice
 
-# Choice
+API Documentation: @:api(cats.arrow.Choice)
 
 Usually we deal with function more often, we're so familiar with `A => B`.
 

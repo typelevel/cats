@@ -32,7 +32,7 @@ trait Strong[F[_, _]] extends Profunctor[F] {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import cats.arrow.Strong
    * scala> val f: Int => Int = _ * 2
    * scala> val fab = Strong[Function1].first[Int,Int,Int](f)
@@ -47,7 +47,7 @@ trait Strong[F[_, _]] extends Profunctor[F] {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import cats.arrow.Strong
    * scala> val f: Int => Int = _ * 2
    * scala> val fab = Strong[Function1].second[Int,Int,Int](f)

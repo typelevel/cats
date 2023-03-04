@@ -63,7 +63,7 @@ final private[syntax] class BitraverseOpsBinCompat0[F[_, _], A, B](val fab: F[A,
    *
    *  Example:
    *  {{{
-   *  scala> import cats.implicits._
+   *  scala> import cats.syntax.all._
    *
    *  scala> val intAndString: (Int, String) = (7, "test")
    *
@@ -86,7 +86,7 @@ final class LeftNestedBitraverseOps[F[_, _], G[_], A, B](val fgab: F[G[A], B]) e
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val optionalErrorRight: Either[Option[String], Int] = Either.right(123)
    * scala> optionalErrorRight.leftSequence

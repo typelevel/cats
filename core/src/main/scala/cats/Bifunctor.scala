@@ -33,7 +33,7 @@ trait Bifunctor[F[_, _]] extends Serializable { self =>
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val x: (List[String], Int) = (List("foo", "bar"), 3)
    * scala> x.bimap(_.headOption, _.toLong + 1)
@@ -67,7 +67,7 @@ trait Bifunctor[F[_, _]] extends Serializable { self =>
    * Widens A into a supertype AA.
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> sealed trait Foo
    * scala> case object Bar extends Foo
    * scala> val x1: Either[Bar.type, Int] = Either.left(Bar)
@@ -75,6 +75,20 @@ trait Bifunctor[F[_, _]] extends Serializable { self =>
    * }}}
    */
   def leftWiden[A, B, AA >: A](fab: F[A, B]): F[AA, B] = fab.asInstanceOf[F[AA, B]]
+
+  /**
+   * Lift left into F using Applicative.
+   * * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> val x0: Either[String, Int] = Either.left("foo")
+   * scala> val x1: Either[List[String], Int] = x0.leftLiftTo[List]
+   * }}}
+   *
+   */
+  def leftLiftTo[A, B, C[_]](fab: F[A, B])(implicit C: Applicative[C]): F[C[A], B] =
+    leftMap[A, B, C[A]](fab)(C.pure[A])
+
 }
 
 object Bifunctor extends cats.instances.NTupleBifunctorInstances {
@@ -106,6 +120,9 @@ object Bifunctor extends cats.instances.NTupleBifunctorInstances {
     def bimap[C, D](f: A => C, g: B => D): F[C, D] = typeClassInstance.bimap[A, B, C, D](self)(f, g)
     def leftMap[C](f: A => C): F[C, B] = typeClassInstance.leftMap[A, B, C](self)(f)
     def leftWiden[C >: A]: F[C, B] = typeClassInstance.leftWiden[A, B, C](self)
+    def leftLiftTo[C[_]](implicit C: Applicative[C]): F[C[A], B] =
+      leftMap[C[A]](C.pure[A])
+
   }
   trait AllOps[F[_, _], A, B] extends Ops[F, A, B]
   trait ToBifunctorOps extends Serializable {
@@ -121,6 +138,11 @@ object Bifunctor extends cats.instances.NTupleBifunctorInstances {
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToBifunctorOps
 
+  implicit def bifunctorInFunctorInstance[F[_]: Functor, G[_, _]: Bifunctor]: Bifunctor[λ[(A, B) => F[G[A, B]]]] =
+    new Bifunctor[λ[(A, B) => F[G[A, B]]]] {
+      override def bimap[W, X, Y, Z](fab: F[G[W, X]])(f: W => Y, g: X => Z): F[G[Y, Z]] =
+        Functor[F].map(fab)(Bifunctor[G].bimap(_)(f, g))
+    }
 }
 
 private[cats] trait ComposedBifunctor[F[_, _], G[_, _]] extends Bifunctor[λ[(A, B) => F[G[A, B], G[A, B]]]] {
