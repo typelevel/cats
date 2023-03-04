@@ -2,9 +2,7 @@
 
 Func is a wrapper around a `run` function `A => F[B]` where `F` is a functor. Given that, the Func data type is equipped with the known `map` function, and a `mapK` function to apply natural transformations (from a `Func[F[_], A, B]` get an `Func[G[_], A, B]`).
 
-The signature: `Func[F[_], A, B]` refers to an `F` functor, `A` source type and `B` target type (`F[B]`).
-
-If you are familiar with `Kleisli` you can recognize it has a similar signature: `Kleisli[F[_], -A, B]` and `Func[F[_], A, B]`. Well yes, `Func` is a less restrictive data type that wraps around functors, and only provides basic methods `run`, `map`, and `mapK`, while `Kleisli` is strong enough to provide composition, flatMap, and more. We will see a more useful data type just next with `AppFunc`. 
+The signature `Func[F[_], A, B]` is very similar to the signature for [Kleisli]: `Kleisli[F[_], -A, B]`. The difference is that `Func` is a less restrictive data type that wraps around functors, and only provides basic methods `run`, `map`, and `mapK`, while `Kleisli` is strong enough to provide composition, flatMap, and more. We will see a more useful data type just next with `AppFunc`. 
 
 ## Quick example
 
