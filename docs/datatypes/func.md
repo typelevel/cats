@@ -1,8 +1,10 @@
 # Func and AppFunc
 
+API Documentation: @:api(cats.data.Func)
+
 Func is a wrapper around a `run` function `A => F[B]` where `F` is a functor. Given that, the Func data type is equipped with the known `map` function, and a `mapK` function to apply natural transformations (from a `Func[F[_], A, B]` get an `Func[G[_], A, B]`).
 
-The signature `Func[F[_], A, B]` is very similar to the signature for [Kleisli]: `Kleisli[F[_], -A, B]`. The difference is that `Func` is a less restrictive data type that wraps around functors, and only provides basic methods `run`, `map`, and `mapK`, while `Kleisli` is strong enough to provide composition, flatMap, and more. We will see a more useful data type just next with `AppFunc`. 
+The signature `Func[F[_], A, B]` is very similar to the signature for [Kleisli](../datatypes/kleisli.md): `Kleisli[F[_], -A, B]`. The difference is that `Func` is a less restrictive data type that wraps around functors, and only provides basic methods `run`, `map`, and `mapK`, while `Kleisli` is strong enough to provide composition, flatMap, and more. We will see a more useful data type just next with `AppFunc`. 
 
 ## Quick example
 
@@ -29,13 +31,13 @@ g.map(optToList(_))
 
 # AppFunc 
 
-AppFunc extends Func to wrap around a special type of functor: Applicative functors.
+AppFunc extends Func to wrap around a special type of functor: [Applicative] functors.
 
 With applicative functors we can `compose`, form the `product`, and also `traverse` traversable functors
 
 Signature: `AppFunc[F[_], A, B] extends Func[F, A, B]` 
 
-Now, for the reader familiar with `Kleisli`, we find an even more similar data type. `AppFunc` provides compositions of weaker constraint, allowing `AppFunc[F[_], A, B]` to be composed with `AppFunc[G[_], C, A]`.   
+Now, for the reader familiar with [Kleisli](../datatypes/kleisli.md), we find an even more similar data type. `AppFunc` provides compositions of weaker constraint, allowing `AppFunc[F[_], A, B]` to be composed with `AppFunc[G[_], C, A]`.   
 ## Composition
 
 All of functional programming revolves around composing, and functors cannot be left behind. If we are working with multiple contexts we might want to compose them, for example: we want to `List` things, and discard some (`Option`). 
