@@ -215,6 +215,34 @@ object Kleisli
   def applyK[F[_], A](a: A): Kleisli[F, A, *] ~> F =
     new (Kleisli[F, A, *] ~> F) { def apply[B](k: Kleisli[F, A, B]): F[B] = k.apply(a) }
 
+  /**
+   * Creates a `FunctionK` that transforms a `Kleisli[F, A, B]` into an `Kleisli[F, C, B]` using `C => A`.
+   * {{{
+   * scala> import cats.{~>}, cats.data.Kleisli
+   *
+   * scala> def nonEmpty(s: String): Option[String] = Option(s).filter(_.nonEmpty)
+   * scala> type KOS[A] = Kleisli[Option, String, A]
+   * scala> type KOLS[A] = Kleisli[Option, List[String], A]
+   * scala> val size: KOS[Int] = Kleisli(s => nonEmpty(s).map(_.size))
+   * scala> val exclaim: KOS[String] = Kleisli(s => nonEmpty(s).map(nes => s"${nes.toUpperCase}!"))
+   * scala> size("boo")
+   * res0: Option[Int] = Some(3)
+   *
+   * scala> exclaim("boo")
+   * res1: Option[String] = Some(BOO!)
+   *
+   * scala> val mkStringK: KOS ~> KOLS = Kleisli.localK(_.mkString)
+   * scala> mkStringK(size)(List("foo", "bar", "baz"))
+   * res2: Option[Int] = Some(9)
+   *
+   * scala> mkStringK(exclaim)(List("foo", "bar", "baz"))
+   * res3: Option[String] = Some(FOOBARBAZ!)
+   * }}}
+   */
+  def localK[F[_], A, C](f: C => A): Kleisli[F, A, *] ~> Kleisli[F, C, *] =
+    new (Kleisli[F, A, *] ~> Kleisli[F, C, *]) {
+      def apply[B](k: Kleisli[F, A, B]): Kleisli[F, C, B] = k.local(f)
+    }
 }
 
 sealed private[data] trait KleisliFunctions {
