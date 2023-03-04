@@ -3,3 +3,27 @@ header img {
   width: auto;
   margin-top: 6px;
 }
+
+h1>code {
+  font-size: var(--header1-font-size);
+}
+
+h2>code {
+  font-size: var(--header2-font-size);
+}
+
+h3>code {
+  font-size: var(--header3-font-size);
+}
+
+h4>code {
+  font-size: var(--header4-font-size);
+}
+
+h5>code {
+  font-size: var(--header5-font-size);
+}
+
+h6>code {
+  font-size: var(--header6-font-size);
+}
