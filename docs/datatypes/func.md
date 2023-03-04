@@ -1,6 +1,6 @@
 # Func
 
-Func is a wrapper around a `run` function `a => F[B]` where F is a functor. Given that, the Func data type is equipped with the known `map` function, and a `mapK` function to apply natural transformations (from a `F` Func get an `G` Func).
+Func is a wrapper around a `run` function `A => F[B]` where `F` is a functor. Given that, the Func data type is equipped with the known `map` function, and a `mapK` function to apply natural transformations (from a `Func[F[_], A, B]` get an `Func[G[_], A, B]`).
 
 The signature: `Func[F[_], A, B]` refers to an `F` functor, `A` source type and `B` target type (`F[B]`).
 
