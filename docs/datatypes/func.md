@@ -42,7 +42,7 @@ Now, for the reader familiar with [Kleisli](../datatypes/kleisli.md), we find an
 
 All of functional programming revolves around composing, and functors cannot be left behind. If we are working with multiple contexts we might want to compose them, for example: we want to `List` things, and discard some (`Option`). 
 
-To achieve this nested context behavior `AppFunc` uses the `Nested` datatype. 
+To achieve this nested context behavior `AppFunc` uses the [`Nested`] datatype. 
 
 ```scala mdoc:silent:nest
 val appFuncOption: AppFunc[Option,Int,Int] = Func.appFunc((i: Int) => if (i==0) None else Some(i))
