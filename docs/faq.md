@@ -211,7 +211,7 @@ All other symbols can be imported with `import cats.syntax.all._`
 | <code>x &#124;+&#124; y</code>   | Semigroup combine        |                  | `Semigroup[A]`          | `combine(x: A, y: A): A`                                            |
 | `x <+> y`                        | SemigroupK combine       |                  | `SemigroupK[F[_]]`      | `combineK(x: F[A], y: F[A]): F[A]`                                  |
 | `f <<< g`                        | Arrow compose            |                  | `Compose[F[_, _]]`      | `compose(f: F[B, C], g: F[A, B]): F[A, C]`                          |
-| `f >>> g`                        | Arrow andThen            |                  | `Compose[F[_, _]]`      | `andThen(f: F[B, C], g: F[A, B]): F[A, C]`                          |
+| `f >>> g`                        | Arrow andThen            |                  | `Compose[F[_, _]]`      | `andThen(f: F[A, B], g: F[B, C]): F[A, C]`                          |
 | `f &&& g`                        | Arrow merge              |                  | `Arrow[F[_, _]]`        | `merge[A, B, C](f: F[A, B], g: F[A, C]): F[A, (B, C)]`              |
 | `f -< g`                         | Arrow combine and bypass |                  | `Arrow[F[_, _]]`        | `combineAndByPass[A, B, C](f: F[A, B], g: F[B, C]): F[A, (B, C)]`   |
 | `F ~> G`                         | natural transformation   |                  | `FunctionK[F[_], G[_]]` | `FunctionK` alias                                                   |
