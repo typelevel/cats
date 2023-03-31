@@ -56,6 +56,7 @@ trait AllInstances
     with PartialOrderingInstances
     with QueueInstances
     with SetInstances
+    with ShowInstances
     with SortedMapInstances
     with SortedSetInstances
     with StreamInstances
