@@ -33,7 +33,7 @@ trait ShowInstances {
           def loop(f: () => Show[A]): String =
             f() match {
               case Deferred(f) => loop(f)
-              case next => next.show(t)
+              case next        => next.show(t)
             }
 
           loop(fa)

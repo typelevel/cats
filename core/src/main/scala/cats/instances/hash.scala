@@ -44,7 +44,7 @@ trait HashInstances extends kernel.instances.HashInstances {
           def loop(f: () => Hash[A]): Hash[A] =
             f() match {
               case Deferred(f) => loop(f)
-              case next => next
+              case next        => next
             }
 
           loop(fa)
@@ -55,7 +55,7 @@ trait HashInstances extends kernel.instances.HashInstances {
         /**
          * Returns `true` if `x` and `y` are equivalent, `false` otherwise.
          */
-        override def eqv(x: A, y: A): Boolean = resolve.eqv(x,y)
+        override def eqv(x: A, y: A): Boolean = resolve.eqv(x, y)
       }
 
       override def defer[A](fa: => Hash[A]): Hash[A] = {

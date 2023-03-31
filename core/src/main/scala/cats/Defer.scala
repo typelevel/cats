@@ -85,7 +85,8 @@ object Defer {
   implicit def catsDeferForOrder: Defer[Order] = cats.instances.order.catsDeferForOrder
   implicit def catsStdDeferForOrdering: Defer[Ordering] = cats.instances.ordering.catsStdDeferForOrdering
   implicit def catsDeferForPartialOrder: Defer[PartialOrder] = cats.instances.partialOrder.catsDeferForPartialOrder
-  implicit def catsStdDeferForPartialOrdering: Defer[PartialOrdering] = cats.instances.partialOrdering.catsStdDeferForPartialOrdering
+  implicit def catsStdDeferForPartialOrdering: Defer[PartialOrdering] =
+    cats.instances.partialOrdering.catsStdDeferForPartialOrdering
   implicit def catsDeferForShow: Defer[Show] = cats.implicits.catsDeferForShow
   implicit def catsDeferForTailRec: Defer[TailRec] = cats.instances.tailRec.catsInstancesForTailRec
 }

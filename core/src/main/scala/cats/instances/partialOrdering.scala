@@ -61,15 +61,15 @@ trait PartialOrderingInstances {
           def loop(f: () => PartialOrdering[A]): PartialOrdering[A] =
             f() match {
               case Deferred(f) => loop(f)
-              case next => next
+              case next        => next
             }
 
           loop(fa)
         }
 
-        override def tryCompare(x: A, y: A): Option[Int] = resolve.tryCompare(x,y)
+        override def tryCompare(x: A, y: A): Option[Int] = resolve.tryCompare(x, y)
 
-        override def lteq(x: A, y: A): Boolean = resolve.lteq(x,y)
+        override def lteq(x: A, y: A): Boolean = resolve.lteq(x, y)
       }
 
       override def defer[A](fa: => PartialOrdering[A]): PartialOrdering[A] = {

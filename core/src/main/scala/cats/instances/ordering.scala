@@ -54,7 +54,7 @@ trait OrderingInstances {
           def loop(f: () => Ordering[A]): Int =
             f() match {
               case Deferred(f) => loop(f)
-              case next => next.compare(x, y)
+              case next        => next.compare(x, y)
             }
 
           loop(fa)

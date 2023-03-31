@@ -63,7 +63,7 @@ trait EquivInstances {
           def loop(f: () => Equiv[A]): Boolean =
             f() match {
               case Deferred(f) => loop(f)
-              case next => next.equiv(x, y)
+              case next        => next.equiv(x, y)
             }
 
           loop(fa)

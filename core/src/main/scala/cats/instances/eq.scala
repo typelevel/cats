@@ -54,7 +54,7 @@ trait EqInstances extends kernel.instances.EqInstances {
           def loop(f: () => Eq[A]): Boolean =
             f() match {
               case Deferred(f) => loop(f)
-              case next => next.eqv(x,y)
+              case next        => next.eqv(x, y)
             }
 
           loop(fa)

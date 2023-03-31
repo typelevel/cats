@@ -52,7 +52,7 @@ trait PartialOrderInstances extends kernel.instances.PartialOrderInstances {
           def loop(f: () => PartialOrder[A]): Double =
             f() match {
               case Deferred(f) => loop(f)
-              case next => next.partialCompare(x, y)
+              case next        => next.partialCompare(x, y)
             }
 
           loop(fa)
