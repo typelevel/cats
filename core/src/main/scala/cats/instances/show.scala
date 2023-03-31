@@ -19,26 +19,30 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package cats.tests
+package cats
+package instances
 
-import cats.{Contravariant, ContravariantMonoidal, ContravariantSemigroupal, Invariant, Semigroupal}
-import cats.laws.discipline.arbitrary._
-import cats.laws.discipline._
-import cats.laws.discipline.eq._
+import scala.annotation.tailrec
 
-class OrderingSuite extends CatsSuite {
+trait ShowInstances {
+  implicit val catsDeferForShow: Defer[Show] =
+    new Defer[Show] {
+      case class Deferred[A](fa: () => Show[A]) extends Show[A] {
+        override def show(t: A): String = {
+          @tailrec
+          def loop(f: () => Show[A]): String =
+            f() match {
+              case Deferred(f) => loop(f)
+              case next => next.show(t)
+            }
 
-  Invariant[Ordering]
-  Contravariant[Ordering]
-  Semigroupal[Ordering]
-  ContravariantSemigroupal[Ordering]
-  ContravariantMonoidal[Ordering]
+          loop(fa)
+        }
+      }
 
-  checkAll("Contravariant[Ordering]", ContravariantTests[Ordering].contravariant[MiniInt, Int, Boolean])
-  checkAll("Semigroupal[Ordering]", SemigroupalTests[Ordering].semigroupal[MiniInt, Boolean, Boolean])
-  checkAll("ContravariantMonoidal[Ordering]",
-           ContravariantMonoidalTests[Ordering].contravariantMonoidal[MiniInt, Boolean, Boolean]
-  )
-  checkAll("ContravariantMonoidal[Ordering]", SerializableTests.serializable(ContravariantMonoidal[Ordering]))
-  checkAll("Defer[Order]", DeferTests[Ordering].defer[MiniInt])
+      override def defer[A](fa: => Show[A]): Show[A] = {
+        lazy val cachedFa = fa
+        Deferred(() => cachedFa)
+      }
+    }
 }

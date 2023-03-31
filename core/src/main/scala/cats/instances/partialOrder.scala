@@ -23,6 +23,8 @@ package cats
 package instances
 import cats.kernel.instances.unit._
 
+import scala.annotation.tailrec
+
 trait PartialOrderInstances extends kernel.instances.PartialOrderInstances {
   implicit val catsContravariantMonoidalForPartialOrder: ContravariantMonoidal[PartialOrder] =
     new ContravariantMonoidal[PartialOrder] {
@@ -40,5 +42,26 @@ trait PartialOrderInstances extends kernel.instances.PartialOrderInstances {
       }
 
       def unit: PartialOrder[Unit] = Order[Unit]
+    }
+
+  implicit val catsDeferForPartialOrder: Defer[PartialOrder] =
+    new Defer[PartialOrder] {
+      case class Deferred[A](fa: () => PartialOrder[A]) extends PartialOrder[A] {
+        override def partialCompare(x: A, y: A): Double = {
+          @tailrec
+          def loop(f: () => PartialOrder[A]): Double =
+            f() match {
+              case Deferred(f) => loop(f)
+              case next => next.partialCompare(x, y)
+            }
+
+          loop(fa)
+        }
+      }
+
+      override def defer[A](fa: => PartialOrder[A]): PartialOrder[A] = {
+        lazy val cachedFa = fa
+        Deferred(() => cachedFa)
+      }
     }
 }

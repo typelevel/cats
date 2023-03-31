@@ -22,6 +22,8 @@
 package cats
 package instances
 
+import scala.annotation.tailrec
+
 trait EqInstances extends kernel.instances.EqInstances {
   implicit val catsContravariantMonoidalForEq: ContravariantMonoidal[Eq] =
     new ContravariantMonoidal[Eq] {
@@ -42,5 +44,26 @@ trait EqInstances extends kernel.instances.EqInstances {
 
       def product[A, B](fa: Eq[A], fb: Eq[B]): Eq[(A, B)] =
         (left, right) => fa.eqv(left._1, right._1) && fb.eqv(left._2, right._2)
+    }
+
+  implicit val catsDeferForEq: Defer[Eq] =
+    new Defer[Eq] {
+      case class Deferred[A](fa: () => Eq[A]) extends Eq[A] {
+        override def eqv(x: A, y: A): Boolean = {
+          @tailrec
+          def loop(f: () => Eq[A]): Boolean =
+            f() match {
+              case Deferred(f) => loop(f)
+              case next => next.eqv(x,y)
+            }
+
+          loop(fa)
+        }
+      }
+
+      override def defer[A](fa: => Eq[A]): Eq[A] = {
+        lazy val cachedFa = fa
+        Deferred(() => cachedFa)
+      }
     }
 }
