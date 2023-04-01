@@ -46,7 +46,10 @@ trait EqInstances extends kernel.instances.EqInstances {
         (left, right) => fa.eqv(left._1, right._1) && fb.eqv(left._2, right._2)
     }
 
-  implicit val catsDeferForEq: Defer[Eq] =
+  implicit val catsDeferForEq: Defer[Eq] = EqInstances.catsDeferForEqCache
+}
+object EqInstances {
+  private val catsDeferForEqCache: Defer[Eq] =
     new Defer[Eq] {
       case class Deferred[A](fa: () => Eq[A]) extends Eq[A] {
         override def eqv(x: A, y: A): Boolean = {

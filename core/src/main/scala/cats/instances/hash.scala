@@ -36,7 +36,10 @@ trait HashInstances extends kernel.instances.HashInstances {
 
     }
 
-  implicit val catsDeferForHash: Defer[Hash] =
+  implicit val catsDeferForHash: Defer[Hash] = HashInstances.catsDeferForHashCache
+}
+object HashInstances {
+  private val catsDeferForHashCache: Defer[Hash] =
     new Defer[Hash] {
       case class Deferred[A](fa: () => Hash[A]) extends Hash[A] {
         private lazy val resolve: Hash[A] = {

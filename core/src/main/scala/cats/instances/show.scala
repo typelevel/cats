@@ -25,7 +25,10 @@ package instances
 import scala.annotation.tailrec
 
 trait ShowInstances {
-  implicit val catsDeferForShow: Defer[Show] =
+  implicit val catsDeferForShow: Defer[Show] = ShowInstances.catsDeferForShowCache
+}
+object ShowInstances {
+  private val catsDeferForShowCache: Defer[Show] =
     new Defer[Show] {
       case class Deferred[A](fa: () => Show[A]) extends Show[A] {
         override def show(t: A): String = {

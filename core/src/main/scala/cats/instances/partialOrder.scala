@@ -44,7 +44,10 @@ trait PartialOrderInstances extends kernel.instances.PartialOrderInstances {
       def unit: PartialOrder[Unit] = Order[Unit]
     }
 
-  implicit val catsDeferForPartialOrder: Defer[PartialOrder] =
+  implicit val catsDeferForPartialOrder: Defer[PartialOrder] = PartialOrderInstances.catsDeferForPartialOrderCache
+}
+object PartialOrderInstances {
+  private val catsDeferForPartialOrderCache: Defer[PartialOrder] =
     new Defer[PartialOrder] {
       case class Deferred[A](fa: () => PartialOrder[A]) extends PartialOrder[A] {
         override def partialCompare(x: A, y: A): Double = {

@@ -50,7 +50,10 @@ trait OrderInstances extends kernel.instances.OrderInstances {
       }
     }
 
-  implicit val catsDeferForOrder: Defer[Order] =
+  implicit val catsDeferForOrder: Defer[Order] = OrderInstances.catsDeferForOrderCache
+}
+object OrderInstances {
+  private val catsDeferForOrderCache: Defer[Order] =
     new Defer[Order] {
       case class Deferred[A](fa: () => Order[A]) extends Order[A] {
         override def compare(x: A, y: A): Int = {

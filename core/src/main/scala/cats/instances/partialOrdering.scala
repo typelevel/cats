@@ -54,6 +54,10 @@ trait PartialOrderingInstances {
     }
 
   implicit val catsStdDeferForPartialOrdering: Defer[PartialOrdering] =
+    PartialOrderingInstances.catsStdDeferForPartialOrderingCache
+}
+object PartialOrderingInstances {
+  private val catsStdDeferForPartialOrderingCache: Defer[PartialOrdering] =
     new Defer[PartialOrdering] {
       case class Deferred[A](fa: () => PartialOrdering[A]) extends PartialOrdering[A] {
         private lazy val resolve: PartialOrdering[A] = {
