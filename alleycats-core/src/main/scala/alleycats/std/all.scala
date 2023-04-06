@@ -30,3 +30,4 @@ object all
     with OptionInstances
     with TryInstances
     with IterableInstances
+    with SeqInstances
