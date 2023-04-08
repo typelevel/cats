@@ -106,4 +106,4 @@ Also, a `Bool` gives rise to a `BoolRing`, since each element can be defined as 
 
 ### Documentation Help
 
-We'd love your help with this documentation! You can edit this page in your browser by clicking [this link](https://github.com/typelevel/cats/edit/master/docs/src/main/mdoc/algebra.md).
+We'd love your help with this documentation! You can edit this page in your browser by clicking [this link](https://github.com/typelevel/cats/edit/main/docs/algebra.md).
