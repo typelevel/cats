@@ -40,6 +40,18 @@ trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
    * Collects the results into an arbitrary `Alternative` value, such as a `Vector`.
    * This implementation uses append on each evaluation result,
    * so avoid data structures with non-constant append performance, e.g. `List`.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.{Id, Monad}
+   * scala> import cats.data.StateT
+   * scala> import cats.syntax.all._
+   * scala> val appendStr: StateT[Id, String, Unit] = StateT.modify(_ + "a")
+   * scala> val appendStrAndGet: StateT[Id, String, String] = appendStr *> StateT.get
+   * scala> val (result, agg) = appendStrAndGet.whileM[Vector](StateT.inspect(i => !(i.length >= 5))).run("")
+   * result: String = aaaaa
+   * agg: Vector[String] = Vector(a, aa, aaa, aaaa, aaaaa)
+   * }}}
    */
 
   def whileM[G[_], A](p: F[Boolean])(body: => F[A])(implicit G: Alternative[G]): F[G[A]] = {
@@ -60,6 +72,16 @@ trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
    * Execute an action repeatedly as long as the given `Boolean` expression
    * returns `true`. The condition is evaluated before the loop body.
    * Discards results.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.{Id, Monad}
+   * scala> import cats.data.StateT
+   * scala> import cats.syntax.all._
+   * scala> val appendStr: StateT[Id, String, Unit] = StateT.modify(_ + "a")
+   * scala> val (result, _) = appendStr.whileM_(StateT.inspect(i => !(i.length >= 3))).run("")
+   * result: String = aaa
+   * }}}
    */
 
   def whileM_[A](p: F[Boolean])(body: => F[A]): F[Unit] = {

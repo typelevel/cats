@@ -137,6 +137,22 @@ trait FlatMap[F[_]] extends Apply[F] with FlatMapArityFunctions[F] {
 
   /**
    * `if` lifted into monad.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.Eval
+   * scala> import cats.syntax.all._
+   *
+   * scala> val b1 = Eval.now(true)
+   * scala> val asBool1 = b1.ifM(Eval.now(true), Eval.now(false))
+   * scala> asBool1.value
+   * res0: Boolean = true
+
+   * scala> val b2 = Eval.now(false)
+   * scala> val asBool2 = b2.ifM(Eval.now(true), Eval.now(false))
+   * scala> asBool2.value
+   * res1: Boolean = false
+   * }}}
    */
 
   def ifM[B](fa: F[Boolean])(ifTrue: => F[B], ifFalse: => F[B]): F[B] =
@@ -207,6 +223,15 @@ trait FlatMap[F[_]] extends Apply[F] with FlatMapArityFunctions[F] {
    * This repeats an F until we get defined values. This can be useful
    * for polling type operations on State (or RNG) Monads, or in effect
    * monads.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.data.State
+   * scala> val counter = State { i: Int => (i+1, if(i>100) Some(i) else None)}
+   * scala> val eval = counter.untilDefinedM.run(0)
+   * scala> eval.value
+   * res0: (Int, Int) = (102,101)
+   * }}}
    */
 
   def untilDefinedM[A](foa: F[Option[A]]): F[A] = {
