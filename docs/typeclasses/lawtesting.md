@@ -13,7 +13,7 @@ To make things easier, we'll also include the `scalacheck-shapeless` library in 
 
 ```scala
 libraryDependencies ++= Seq(
-  "org.typelevel" %% "cats-laws" % "2.9.0" % Test,
+  "org.typelevel" %% "cats-laws" % "@VERSION@" % Test,
   "com.github.alexarchambault" %% "scalacheck-shapeless_1.16" % "1.3.1" % Test
 )
 ```
