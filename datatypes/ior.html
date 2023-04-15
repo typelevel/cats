@@ -230,7 +230,7 @@
 </span><span>
 </span><span class="keyword">val</span><span> </span><span class="identifier">left</span><span> = </span><span class="string-literal">&quot;Error&quot;</span><span>.</span><span class="identifier">leftIor</span><span>
 </span><span class="comment">// left: Ior[String, Nothing] = Left(a = &quot;Error&quot;)</span></code></pre>
-        <p>When we look at the <code>Monad</code> or <code>Applicative</code> instances of <code>Ior</code>, we can see that they actually requires a <code>Semigroup</code> instance on the left side.
+        <p>When we look at the <code>Monad</code> or <code>Applicative</code> instances of <code>Ior</code>, we can see that they actually require a <code>Semigroup</code> instance on the left side.
         This is because <code>Ior</code> will actually accumulate failures on the left side, very similar to how the <a href="validated.html"><code>Validated</code></a> data type does.
         This means we can accumulate data on the left side while also being able to short-circuit upon the first left-side-only value.
         For example, sometimes, we might want to accumulate warnings together with a valid result and only halt the computation on a &quot;hard error&quot;
