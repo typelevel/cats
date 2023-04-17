@@ -102,6 +102,18 @@ trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
    * arbitrary `Alternative` value, such as a `Vector`.
    * This implementation uses append on each evaluation result,
    * so avoid data structures with non-constant append performance, e.g. `List`.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.{Id, Monad}
+   * scala> import cats.data.StateT
+   * scala> import cats.syntax.all._
+   * scala> val increment: StateT[Id, Int, Unit] = StateT.modify(_ + 1)
+   * scala> val incrementAndGet: StateT[Id, Int, Int] = increment *> StateT.get
+   * scala> val (result, aggregation) = incrementAndGet.untilM[Vector](StateT.inspect(_ >= 5)).run(-1)
+   * result: Int = 5
+   * aggregation: Vector[Int] = Vector(0, 1, 2, 3, 4, 5)
+   * }}}
    */
   def untilM[G[_], A](f: F[A])(cond: => F[Boolean])(implicit G: Alternative[G]): F[G[A]] = {
     val p = Eval.later(cond)
@@ -111,6 +123,16 @@ trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
   /**
    * Execute an action repeatedly until the `Boolean` condition returns `true`.
    * The condition is evaluated after the loop body. Discards results.
+   * 
+   * Example:
+   * {{{
+   * scala> import cats.{Id, Monad}
+   * scala> import cats.data.StateT
+   * scala> import cats.syntax.all._
+   * scala> val increment: StateT[Id, Int, Unit] = StateT.modify(_ + 1)
+   * scala> val (result, _) = increment.untilM_(StateT.inspect(_ >= 5)).run(-1)
+   * result: Int = 5
+   * }}}
    */
   def untilM_[A](f: F[A])(cond: => F[Boolean]): F[Unit] = {
     val p = Eval.later(cond)
@@ -120,6 +142,17 @@ trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
   /**
    * Execute an action repeatedly until its result fails to satisfy the given predicate
    * and return that result, discarding all others.
+   * 
+   * Example:
+   * {{{
+   * scala> import cats.{Id, Monad}
+   * scala> import cats.data.StateT
+   * scala> import cats.syntax.all._
+   * scala> val increment: StateT[Id, Int, Unit] = StateT.modify(_ + 1)
+   * scala> val incrementAndGet: StateT[Id, Int, Int] = increment *> StateT.get
+   * scala> val (result, _) = incrementAndGet.iterateWhile(_ < 5).run(-1)
+   * result: Int = 5
+   * }}}
    */
   def iterateWhile[A](f: F[A])(p: A => Boolean): F[A] =
     flatMap(f) { i =>
@@ -129,6 +162,17 @@ trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
   /**
    * Execute an action repeatedly until its result satisfies the given predicate
    * and return that result, discarding all others.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.{Id, Monad}
+   * scala> import cats.data.StateT
+   * scala> import cats.syntax.all._
+   * scala> val increment: StateT[Id, Int, Unit] = StateT.modify(_ + 1)
+   * scala> val incrementAndGet: StateT[Id, Int, Int] = increment *> StateT.get
+   * scala> val (result, _) = incrementAndGet.iterateUntil(_ == 5).run(-1)
+   * result: Int = 5
+   * }}}
    */
   def iterateUntil[A](f: F[A])(p: A => Boolean): F[A] =
     flatMap(f) { i =>
@@ -138,6 +182,18 @@ trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
   /**
    * Apply a monadic function iteratively until its result fails
    * to satisfy the given predicate and return that result.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.{Id, Monad}
+   * scala> import cats.data.StateT
+   * scala> import cats.syntax.all._
+   * scala> val increment: StateT[Id, Int, Unit] = StateT.modify(_ + 1)
+   * scala> val incrementAndGet: StateT[Id, Int, Int] = increment *> StateT.get
+   * scala> val (n, sum) = 0.iterateWhileM(s => incrementAndGet.map(_ + s))(_ < 5).run(0)
+   * n: Int = 3
+   * sum: Int = 6
+   * }}}
    */
   def iterateWhileM[A](init: A)(f: A => F[A])(p: A => Boolean): F[A] =
     tailRecM(init) { a =>
@@ -150,6 +206,18 @@ trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
   /**
    * Apply a monadic function iteratively until its result satisfies
    * the given predicate and return that result.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.{Id, Monad}
+   * scala> import cats.data.StateT
+   * scala> import cats.syntax.all._
+   * scala> val increment: StateT[Id, Int, Unit] = StateT.modify(_ + 1)
+   * scala> val incrementAndGet: StateT[Id, Int, Int] = increment *> StateT.get
+   * scala> val (n, sum) = 0.iterateUntilM(s => incrementAndGet.map(_ + s))(_ > 5).run(0)
+   * n: Int = 3
+   * sum: Int = 6
+   * }}}
    */
   def iterateUntilM[A](init: A)(f: A => F[A])(p: A => Boolean): F[A] =
     iterateWhileM(init)(f)(!p(_))
