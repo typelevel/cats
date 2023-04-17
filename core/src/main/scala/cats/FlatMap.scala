@@ -227,6 +227,7 @@ trait FlatMap[F[_]] extends Apply[F] with FlatMapArityFunctions[F] {
    * Example:
    * {{{
    * scala> import cats.data.State
+   * scala> import cats.syntax.all._
    * scala> val counter = State { i: Int => (i+1, if(i>100) Some(i) else None)}
    * scala> val eval = counter.untilDefinedM.run(0)
    * scala> eval.value
