@@ -187,9 +187,9 @@ trait Traverse[F[_]] extends Functor[F] with Foldable[F] with UnorderedTraverse[
     mapWithLongIndex(fa)((a, long) => (a, long))
 
   /**
-   * If `fa` contains the element at index `idx`, 
-   * return the copy of `fa` where the element at `idx` is replaced with `b`. 
-   * If there is no element with such an index, return `None`. 
+   * If `fa` contains the element at index `idx`,
+   * return the copy of `fa` where the element at `idx` is replaced with `b`.
+   * If there is no element with such an index, return `None`.
    *
    * The behavior is consistent with the Scala collection library's
    * `updated` for collections such as `List`.
@@ -213,6 +213,22 @@ trait Traverse[F[_]] extends Functor[F] with Foldable[F] with UnorderedTraverse[
 
   override def unorderedSequence[G[_]: CommutativeApplicative, A](fga: F[G[A]]): G[F[A]] =
     sequence(fga)
+
+  def foldTraverse[A, B, G[_]](fa: F[A])(f: A => G[B])(implicit G: Monad[G], M: Monoid[B]): G[B] =
+    foldM(fa, M.empty) { case (acc, a) =>
+      G.map(f(a)) { b =>
+        M.combine(acc, b)
+      }
+    }
+
+  def foldTraverseK[A, B, G[_], H[_]](fa: F[A])(f: A => G[H[B]])(implicit G: Monad[G], M: MonoidK[H]): G[H[B]] =
+    foldTraverse(fa)(f)(G, M.algebra)
+
+  def foldSequence[A, G[_]](fga: F[G[A]])(implicit G: Monad[G], M: Monoid[A]): G[A] =
+    foldTraverse(fga)(identity)
+
+  def foldSequenceK[A, G[_], H[_]](fgha: F[G[H[A]]])(implicit G: Monad[G], M: MonoidK[H]): G[H[A]] =
+    foldTraverseK(fgha)(identity)
 }
 
 object Traverse {
