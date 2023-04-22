@@ -214,6 +214,12 @@ trait Functor[F[_]] extends Invariant[F] { self =>
       val G = Functor[G]
     }
 
+  def composeBifunctor[G[_, _]: Bifunctor]: Bifunctor[λ[(α, β) => F[G[α, β]]]] =
+    new ComposedFunctorBifunctor[F, G] {
+      val F = self
+      val G = Bifunctor[G]
+    }
+
   override def composeContravariant[G[_]: Contravariant]: Contravariant[λ[α => F[G[α]]]] =
     new ComposedCovariantContravariant[F, G] {
       val F = self

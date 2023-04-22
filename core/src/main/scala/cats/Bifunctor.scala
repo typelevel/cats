@@ -138,11 +138,6 @@ object Bifunctor extends cats.instances.NTupleBifunctorInstances {
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToBifunctorOps
 
-  implicit def bifunctorInFunctorInstance[F[_]: Functor, G[_, _]: Bifunctor]: Bifunctor[λ[(A, B) => F[G[A, B]]]] =
-    new Bifunctor[λ[(A, B) => F[G[A, B]]]] {
-      override def bimap[W, X, Y, Z](fab: F[G[W, X]])(f: W => Y, g: X => Z): F[G[Y, Z]] =
-        Functor[F].map(fab)(Bifunctor[G].bimap(_)(f, g))
-    }
 }
 
 private[cats] trait ComposedBifunctor[F[_, _], G[_, _]] extends Bifunctor[λ[(A, B) => F[G[A, B], G[A, B]]]] {
