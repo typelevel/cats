@@ -278,8 +278,8 @@ final class NonEmptySeq[+A] private (val toSeq: Seq[A]) extends AnyVal with NonE
    * res0: cats.data.NonEmptySeq[(Int, String)] = NonEmptySeq((1,A), (2,B), (3,C))
    * }}}
    */
-  def zip[B](nel: NonEmptySeq[B]): NonEmptySeq[(A, B)] =
-    NonEmptySeq((head, nel.head), tail.zip(nel.tail))
+  def zip[B](nes: NonEmptySeq[B]): NonEmptySeq[(A, B)] =
+    NonEmptySeq((head, nes.head), tail.zip(nes.tail))
 
   def mapWithIndex[B](f: (A, Int) => B): NonEmptySeq[B] =
     new NonEmptySeq(toSeq.zipWithIndex.map(ai => f(ai._1, ai._2)))
