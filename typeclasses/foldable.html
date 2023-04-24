@@ -292,7 +292,7 @@
 </span><span class="comment">// res23: Option[Boolean] = Some(value = true)
 </span><span>
 </span><span class="keyword">val</span><span> </span><span class="identifier">prints</span><span>: </span><span class="type-name">Eval</span><span>[</span><span class="type-name">Unit</span><span>] = </span><span class="type-name">List</span><span>(</span><span class="type-name">Eval</span><span>.</span><span class="identifier">always</span><span>(</span><span class="identifier">println</span><span>(</span><span class="number-literal">1</span><span>)), </span><span class="type-name">Eval</span><span>.</span><span class="identifier">always</span><span>(</span><span class="identifier">println</span><span>(</span><span class="number-literal">2</span><span>))).</span><span class="identifier">sequence_</span><span>
-</span><span class="comment">// prints: Eval[Unit] = cats.Eval$$anon$4@911034d
+</span><span class="comment">// prints: Eval[Unit] = cats.Eval$$anon$4@368f1398
 </span><span class="identifier">prints</span><span>.</span><span class="identifier">value</span><span>
 
 </span><span class="type-name">Foldable</span><span>[</span><span class="type-name">List</span><span>].</span><span class="identifier">dropWhile_</span><span>(</span><span class="type-name">List</span><span>[</span><span class="type-name">Int</span><span>](</span><span class="number-literal">2</span><span>,</span><span class="number-literal">4</span><span>,</span><span class="number-literal">5</span><span>,</span><span class="number-literal">6</span><span>,</span><span class="number-literal">7</span><span>))(</span><span class="identifier">_</span><span> % </span><span class="number-literal">2</span><span> == </span><span class="number-literal">0</span><span>)
@@ -391,6 +391,12 @@
         after looking at only one value:</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="type-name">Foldable</span><span>[</span><span class="type-name">LazyList</span><span>].</span><span class="identifier">foldRight</span><span>(</span><span class="identifier">allFalse</span><span>, </span><span class="type-name">Eval</span><span>.</span><span class="type-name">True</span><span>)((</span><span class="identifier">a</span><span>,</span><span class="identifier">b</span><span>) =&gt; </span><span class="keyword">if</span><span> (</span><span class="identifier">a</span><span>) </span><span class="identifier">b</span><span> </span><span class="keyword">else</span><span> </span><span class="type-name">Eval</span><span>.</span><span class="type-name">False</span><span>).</span><span class="identifier">value</span><span>
 </span><span class="comment">// res29: Boolean = false</span></code></pre>
+        <p>Unfortunately, since <code>foldRight</code> is defined on many collections - this
+        extension clashes with the operation defined in <code>Foldable</code>.
+        To get past this and make sure you&#39;re getting the lazy <code>foldRight</code> defined
+        in <code>Foldable</code>, there&#39;s an alias <code>foldr</code>:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">allFalse</span><span>.</span><span class="identifier">foldr</span><span>(</span><span class="type-name">Eval</span><span>.</span><span class="type-name">True</span><span>)((</span><span class="identifier">a</span><span>,</span><span class="identifier">b</span><span>) =&gt; </span><span class="keyword">if</span><span> (</span><span class="identifier">a</span><span>) </span><span class="identifier">b</span><span> </span><span class="keyword">else</span><span> </span><span class="type-name">Eval</span><span>.</span><span class="type-name">False</span><span>).</span><span class="identifier">value</span><span>
+</span><span class="comment">// res30: Boolean = false</span></code></pre>
 
         <hr style="margin-top: 30px"/>
         <footer style="font-size: 90%; text-align: center">
