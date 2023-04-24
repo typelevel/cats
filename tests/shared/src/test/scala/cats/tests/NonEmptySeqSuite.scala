@@ -86,7 +86,7 @@ class NonEmptySeqSuite extends NonEmptyCollectionSuite[Seq, NonEmptySeq, NonEmpt
   }
 
   test("NonEmptySeq#zip is consistent with Seq#zip") {
-    forAll { (a: NonEmptySeq[Int], b: NonEmptySeq[Int], f: (Int, Int) => Int) =>
+    forAll { (a: NonEmptySeq[Int], b: NonEmptySeq[Int]) =>
       assert(a.zip(b).toSeq === (a.toSeq.zip(b.toSeq)))
     }
   }
