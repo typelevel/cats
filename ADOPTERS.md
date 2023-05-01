@@ -72,6 +72,7 @@ And if you can, consider [supporting us](https://opencollective.com/typelevel).
 - [Netflix](https://jobs.netflix.com)
 - [NetworkedAssets](https://www.networkedassets.com/)
 - [Nezasa](https://www.nezasa.com)
+- [Nirovision](https://www.nirovision.com)
 - [Ocado Technology](https://ocadotechnology.com)
 - [On Air Entertainment](https://onairentertainment.com/)
 - [OVO Energy](https://ovoenergy.com)
