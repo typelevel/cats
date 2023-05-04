@@ -47,7 +47,7 @@ object NonEmptyLazyList extends NonEmptyLazyListInstances {
     s.asInstanceOf[LazyList[A]]
 
   def fromLazyList[A](as: LazyList[A]): Option[NonEmptyLazyList[A]] =
-    if (as.nonEmpty) Option(create(as)) else None
+    if (as.nonEmpty) Some(create(as)) else None
 
   def fromLazyListUnsafe[A](ll: LazyList[A]): NonEmptyLazyList[A] =
     if (ll.nonEmpty) create(ll)
@@ -69,7 +69,7 @@ object NonEmptyLazyList extends NonEmptyLazyListInstances {
     create(ca :+ a)
 
   def apply[A](a: => A, as: A*): NonEmptyLazyList[A] =
-    create(LazyList.concat(LazyList(a), LazyList.from(as)))
+    create(a #:: LazyList.from(as))
 
   implicit def catsNonEmptyLazyListOps[A](value: NonEmptyLazyList[A]): NonEmptyLazyListOps[A] =
     new NonEmptyLazyListOps(value)
@@ -110,7 +110,7 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
    * Returns a new NonEmptyLazyList consisting of `a` followed by this
    */
   final def prepend[AA >: A](a: AA): NonEmptyLazyList[AA] =
-    create(a #:: toLazyList)
+    create(toLazyList.prepended(a))
 
   /**
    * Alias for [[prepend]].
@@ -121,6 +121,8 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
   /**
    * Alias for [[prepend]].
    */
+  // TODO: `a` should be by-name and this method should not be listed as an
+  //       alias for `prepend`, but it's too late to change that in this version
   final def #::[AA >: A](a: AA): NonEmptyLazyList[AA] =
     prepend(a)
 
@@ -158,8 +160,7 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
    * Appends the given LazyList
    */
   final def appendLazyList[AA >: A](nell: LazyList[AA]): NonEmptyLazyList[AA] =
-    if (nell.isEmpty) value
-    else create(toLazyList ++ nell)
+    create(toLazyList ++ nell)
 
   /**
    * Alias for `appendLazyList`
@@ -171,8 +172,7 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
    * Prepends the given LazyList
    */
   final def prependLazyList[AA >: A](c: LazyList[AA]): NonEmptyLazyList[AA] =
-    if (c.isEmpty) value
-    else create(c ++ toLazyList)
+    create(c ++ toLazyList)
 
   /**
    * Prepends the given NonEmptyLazyList
