@@ -48,6 +48,7 @@ class BifunctorSuite extends CatsSuite {
 
   {
     type Tuple2InsideOption[A, B] = Option[(A, B)]
+    implicit val composedBifunctor: Bifunctor[Tuple2InsideOption] = Functor[Option].composeBifunctor[(*, *)]
     checkAll(
       "Bifunctor[Option[(A, B)]",
       BifunctorTests[Tuple2InsideOption].bifunctor[String, String, String, Int, Int, Int]
