@@ -416,6 +416,30 @@ final class EitherObjectOps(private val either: Either.type) extends AnyVal {
    * Cached value of `Right(())` to avoid allocations for a common case.
    */
   def unit[A]: Either[A, Unit] = EitherUtil.unit
+
+  /**
+   * Returns `Left(ifTrue)` when the `cond` is true, otherwise `Right(())`
+   *
+   * @example {{{
+   * val tooMany = 5
+   * val x: Int = ???
+   * Either.raiseWhen(x >= tooMany)(new IllegalArgumentException("Too many"))
+   * }}}
+   */
+  def raiseWhen[A](cond: Boolean)(ifTrue: => A): Either[A, Unit] =
+    ApplicativeError[Either[A, *], A].raiseWhen(cond)(ifTrue)
+
+  /**
+   * Returns `Left(ifFalse)` when `cond` is false, otherwise `Right(())`
+   *
+   * @example {{{
+   * val tooMany = 5
+   * val x: Int = ???
+   * Either.raiseUnless(x < tooMany)(new IllegalArgumentException("Too many"))
+   * }}}
+   */
+  def raiseUnless[A](cond: Boolean)(ifFalse: => A): Either[A, Unit] =
+    ApplicativeError[Either[A, *], A].raiseUnless(cond)(ifFalse)
 }
 
 final class LeftOps[A, B](private val left: Left[A, B]) extends AnyVal {
