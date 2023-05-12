@@ -56,7 +56,7 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
    * res0: Int = 5
    * }}}
    */
-  def last: A = tail.lastOption.getOrElse(head)
+  def last: A = if (tail.isEmpty) head else tail.last
 
   /**
    * Selects all elements except the last
