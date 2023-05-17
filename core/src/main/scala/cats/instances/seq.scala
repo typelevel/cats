@@ -85,11 +85,8 @@ trait SeqInstances extends cats.kernel.instances.SeqInstances {
       def foldLeft[A, B](fa: Seq[A], b: B)(f: (B, A) => B): B =
         fa.foldLeft(b)(f)
 
-      def foldRight[A, B](fa: Seq[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = {
-        def loop(i: Int): Eval[B] =
-          if (i < fa.length) f(fa(i), Eval.defer(loop(i + 1))) else lb
-        Eval.defer(loop(0))
-      }
+      def foldRight[A, B](fa: Seq[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
+        Foldable.iterateRight(fa, lb)(f)
 
       override def foldMap[A, B](fa: Seq[A])(f: A => B)(implicit B: Monoid[B]): B =
         B.combineAll(fa.iterator.map(f))
