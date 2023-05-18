@@ -9,12 +9,10 @@ To test type class laws from Cats against your instances, you need to add a `cat
 ## Getting started
 
 First up, you will need to specify dependencies on `cats-laws` in your `build.sbt` file.
-To make things easier, we'll also include the `scalacheck-shapeless` library in this tutorial, so we don't have to manually write instances for ScalaCheck's `Arbitrary`.
 
 ```scala
 libraryDependencies ++= Seq(
-  "org.typelevel" %% "cats-laws" % "2.0.0" % Test,
-  "com.github.alexarchambault" %% "scalacheck-shapeless_1.14" % "1.2.3" % Test
+  "org.typelevel" %% "cats-laws" % "@VERSION@" % Test,
 )
 ```
 
@@ -58,7 +56,7 @@ For simplicity we'll just use `Eq.fromUniversalEquals`:
 implicit def eqTree[A: Eq]: Eq[Tree[A]] = Eq.fromUniversalEquals
 ```
 ScalaCheck requires `Arbitrary` instances for data types being tested. We have defined an `Arbitrary` instance for `Tree` here,
-but you won't need it if you import `org.scalacheck.ScalacheckShapeless._`).
+if you use Scala 2, you can avoid writing it manually with [scalacheck-shapeless](https://github.com/alexarchambault/scalacheck-shapeless).
 
 ```scala mdoc:silent
 
