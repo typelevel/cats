@@ -220,11 +220,9 @@
         <p>To test type class laws from Cats against your instances, you need to add a <code>cats-laws</code> dependency.</p>
         
         <h2 id="getting-started" class="section">Getting started<a class="anchor-link right" href="#getting-started"><i class="icofont-laika">&#xef71;</i></a></h2>
-        <p>First up, you will need to specify dependencies on <code>cats-laws</code> in your <code>build.sbt</code> file.
-        To make things easier, we&#39;ll also include the <code>scalacheck-shapeless</code> library in this tutorial, so we don&#39;t have to manually write instances for ScalaCheck&#39;s <code>Arbitrary</code>.</p>
+        <p>First up, you will need to specify dependencies on <code>cats-laws</code> in your <code>build.sbt</code> file.</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">libraryDependencies</span><span> ++= </span><span class="type-name">Seq</span><span>(
-  </span><span class="string-literal">&quot;org.typelevel&quot;</span><span> %% </span><span class="string-literal">&quot;cats-laws&quot;</span><span> % </span><span class="string-literal">&quot;2.0.0&quot;</span><span> % </span><span class="type-name">Test</span><span>,
-  </span><span class="string-literal">&quot;com.github.alexarchambault&quot;</span><span> %% </span><span class="string-literal">&quot;scalacheck-shapeless_1.14&quot;</span><span> % </span><span class="string-literal">&quot;1.2.3&quot;</span><span> % </span><span class="type-name">Test</span><span>
+  </span><span class="string-literal">&quot;org.typelevel&quot;</span><span> %% </span><span class="string-literal">&quot;cats-laws&quot;</span><span> % </span><span class="string-literal">&quot;2.9.0&quot;</span><span> % </span><span class="type-name">Test</span><span>,
 )</span></code></pre>
         
         <h2 id="example-testing-a-functor-instance" class="section">Example: Testing a Functor instance<a class="anchor-link right" href="#example-testing-a-functor-instance"><i class="icofont-laika">&#xef71;</i></a></h2>
@@ -252,7 +250,7 @@
         For simplicity we&#39;ll just use <code>Eq.fromUniversalEquals</code>:</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">implicit</span><span> </span><span class="keyword">def</span><span> </span><span class="declaration-name">eqTree</span><span>[</span><span class="type-name">A</span><span>: </span><span class="type-name">Eq</span><span>]: </span><span class="type-name">Eq</span><span>[</span><span class="type-name">Tree</span><span>[</span><span class="type-name">A</span><span>]] = </span><span class="type-name">Eq</span><span>.</span><span class="identifier">fromUniversalEquals</span></code></pre>
         <p>ScalaCheck requires <code>Arbitrary</code> instances for data types being tested. We have defined an <code>Arbitrary</code> instance for <code>Tree</code> here,
-        but you won&#39;t need it if you import <code>org.scalacheck.ScalacheckShapeless._</code>).</p>
+        if you use Scala 2, you can avoid writing it manually with <a href="https://github.com/alexarchambault/scalacheck-shapeless">scalacheck-shapeless</a>.</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">org</span><span>.</span><span class="identifier">scalacheck</span><span>.{</span><span class="type-name">Arbitrary</span><span>, </span><span class="type-name">Gen</span><span>}
 
