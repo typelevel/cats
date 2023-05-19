@@ -842,6 +842,28 @@ object EitherT extends EitherTInstances {
       def apply[A](fa: F[A]): EitherT[F, E, A] = EitherT(F.attempt(fa))
     }
 
+  /**
+   * Like [[liftAttemptK]] but gives your chance to map over original error.
+   *
+   * {{{
+   * scala> import cats._, data._, implicits._
+   * scala> val f: Unit => String = Function.const("panic!")
+   * scala> val a: Option[Int] = None
+   * scala> val b: EitherT[Option, Unit, Int] = EitherT.liftRedeemK[Option, Unit, String](f).apply(a)
+   * scala> b.value
+   * res0: Option[Either[Unit, Int]] = Some(Left("panic!"))
+   *
+   * scala> val a2: Option[Int] = Some(42)
+   * scala> val b2: EitherT[Option, Unit, Int] = EitherT.liftRedeemK[Option, Unit, String](f).apply(a2)
+   * scala> b2.value
+   * res1: Option[Either[Unit, Int]] = Some(Right(42))
+   * }}}
+   */
+  final def liftRedeemK[F[_], EA, EB](fe: EA => EB)(implicit F: ApplicativeError[F, EA]): F ~> EitherT[F, EB, *] =
+    new (F ~> EitherT[F, EB, *]) {
+      def apply[A](fa: F[A]): EitherT[F, EB, A] = EitherT(F.redeem(fa)(ea => Left(fe(ea)), Right.apply))
+    }
+
   @deprecated("Use EitherT.liftF.", "1.0.0-RC1")
   final def liftT[F[_], A, B](fb: F[B])(implicit F: Functor[F]): EitherT[F, A, B] = right(fb)
 
