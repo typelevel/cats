@@ -144,14 +144,14 @@ trait FlatMap[F[_]] extends Apply[F] with FlatMapArityFunctions[F] {
    * scala> import cats.syntax.all._
    *
    * scala> val b1 = Eval.now(true)
-   * scala> val asBool1 = b1.ifM(Eval.now(true), Eval.now(false))
-   * scala> asBool1.value
-   * res0: Boolean = true
+   * scala> val asString1 = b1.ifM(Eval.now("it's true!"), Eval.now("it's false!"))
+   * scala> asString1.value
+   * res0: String = it's true!
 
    * scala> val b2 = Eval.now(false)
-   * scala> val asBool2 = b2.ifM(Eval.now(true), Eval.now(false))
-   * scala> asBool2.value
-   * res1: Boolean = false
+   * scala> val asString2 = b2.ifM(Eval.now("it's true!"), Eval.now("it's false!"))
+   * scala> asString2.value
+   * res1: String = it's false!
    * }}}
    */
 
