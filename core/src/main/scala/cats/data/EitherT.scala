@@ -851,7 +851,7 @@ object EitherT extends EitherTInstances {
    * scala> val a: Option[Int] = None
    * scala> val b: EitherT[Option, String, Int] = EitherT.liftRedeemK[Option, Unit, String](f).apply(a)
    * scala> b.value
-   * res0: Option[Either[String, Int]] = Some(Left("panic!"))
+   * res0: Option[Either[String, Int]] = Some(Left(panic!))
    *
    * scala> val a2: Option[Int] = Some(42)
    * scala> val b2: EitherT[Option, String, Int] = EitherT.liftRedeemK[Option, Unit, String](f).apply(a2)
