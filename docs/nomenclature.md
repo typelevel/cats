@@ -136,7 +136,7 @@ Like the previous section, we use the `E` for the error parameter type.
 | `F[G[F[A]]] => G[F[A]]` | `flatSequence` | `G: Applicative` and `F: FlatMap`
 | `F[A] => F[(A,Int)]` | `zipWithIndex` |
 | `F[A] => ((A,Int) => B) => F[B]` | `mapWithIndex` |
-| `F[A] => ((A,Int) => G[B]) => G[F[B]]` | `traverseWithIndex` | `F: Monad`
+| `F[A] => ((A,Int) => G[B]) => G[F[B]]` | `traverseWithIndexM` | `F: Monad`
 
 ### SemigroupK
 | Type         | Method Name  | Constraints |
