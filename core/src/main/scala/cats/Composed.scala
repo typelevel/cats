@@ -46,6 +46,14 @@ private[cats] trait ComposedFunctor[F[_], G[_]] extends Functor[λ[α => F[G[α]
     F.map(fga)(ga => G.map(ga)(f))
 }
 
+private[cats] trait ComposedFunctorBifunctor[F[_], G[_, _]] extends Bifunctor[λ[(α, β) => F[G[α, β]]]] { outer =>
+  def F: Functor[F]
+  def G: Bifunctor[G]
+
+  def bimap[W, X, Y, Z](fab: F[G[W, X]])(f: W => Y, g: X => Z): F[G[Y, Z]] =
+    F.map(fab)(G.bimap(_)(f, g))
+}
+
 private[cats] trait ComposedApply[F[_], G[_]] extends Apply[λ[α => F[G[α]]]] with ComposedFunctor[F, G] { outer =>
   def F: Apply[F]
   def G: Apply[G]

@@ -414,6 +414,16 @@ class EitherSuite extends CatsSuite {
       assert(either.leftFlatMap(f) === (either.swap.flatMap(a => f(a).swap).swap))
     }
   }
+
+  test("raiseWhen raises when true") {
+    val result = Either.raiseWhen(true)("ok")
+    assert(result === Left("ok"))
+  }
+
+  test("raiseUnless raises when false") {
+    val result = Either.raiseUnless(false)("ok")
+    assert(result === Left("ok"))
+  }
 }
 
 final class EitherInstancesSuite extends munit.FunSuite {
