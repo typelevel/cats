@@ -849,17 +849,17 @@ object EitherT extends EitherTInstances {
    * scala> import cats._, data._, implicits._
    * scala> val f: Unit => String = Function.const("panic!")
    * scala> val a: Option[Int] = None
-   * scala> val b: EitherT[Option, String, Int] = EitherT.liftRedeemK[Option, Unit, String](f).apply(a)
+   * scala> val b: EitherT[Option, String, Int] = EitherT.liftAdaptErrorK[Option, Unit, String](f).apply(a)
    * scala> b.value
    * res0: Option[Either[String, Int]] = Some(Left(panic!))
    *
    * scala> val a2: Option[Int] = Some(42)
-   * scala> val b2: EitherT[Option, String, Int] = EitherT.liftRedeemK[Option, Unit, String](f).apply(a2)
+   * scala> val b2: EitherT[Option, String, Int] = EitherT.liftAdaptErrorK[Option, Unit, String](f).apply(a2)
    * scala> b2.value
    * res1: Option[Either[String, Int]] = Some(Right(42))
    * }}}
    */
-  final def liftRedeemK[F[_], EA, EB](fe: EA => EB)(implicit F: ApplicativeError[F, EA]): F ~> EitherT[F, EB, *] =
+  final def liftAdaptErrorK[F[_], EA, EB](fe: EA => EB)(implicit F: ApplicativeError[F, EA]): F ~> EitherT[F, EB, *] =
     new (F ~> EitherT[F, EB, *]) {
       def apply[A](fa: F[A]): EitherT[F, EB, A] = EitherT(F.redeem(fa)(ea => Left(fe(ea)), Right.apply))
     }
