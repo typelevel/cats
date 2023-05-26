@@ -37,7 +37,7 @@ import cats.data.Ior
  * - '''Syntax extensions''', each of which provides the methods of the type class defines as extension methods
  *   (which in Scala 2 are encoded as implicit classes) for values of any type `F`; given that an instance of the type class
  *   for the receiver type (`this`) is in the implicit scope.
- *   Symtax extensions are declared in the `cats.syntax` package.
+ *   Syntax extensions are declared in the `cats.syntax` package.
  * - A set of '''laws''', that are also generic on the type of the class, and are only defined on the operations of the type class.
  *   The purpose of these laws is to declare some algebraic relations (equations) between Scala expressions involving the operations
  *   of the type class, and test (but not verify) that implemented instances satisfy those equations.
