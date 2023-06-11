@@ -218,7 +218,7 @@
         <p>API Documentation: <a href="https://www.javadoc.io/doc/org.typelevel/cats-docs_2.13/2.9.0/cats/data/Chain.html">Chain</a></p>
         <p><code>Chain</code> is an immutable sequence data structure that allows constant time prepending, appending and concatenation.
         This makes it especially efficient when used as a <a href="../typeclasses/monoid.html#monoid">Monoid</a>, e.g. with <a href="validated.html#validated">Validated</a> or <a href="writer.html#writer">Writer</a>.
-        As such it aims to be used where <a href="https://www.scala-lang.org/api/2.13.10/scala/collection/immutable/List.html">List</a> and <a href="https://www.scala-lang.org/api/2.13.10/scala/collection/immutable/Vector.html">Vector</a> incur a performance penalty.
+        As such it aims to be used where <a href="https://www.scala-lang.org/api/2.13.11/scala/collection/immutable/List.html">List</a> and <a href="https://www.scala-lang.org/api/2.13.11/scala/collection/immutable/Vector.html">Vector</a> incur a performance penalty.
         Cats also includes type class implementations to support using <code>Chain</code> as a general-purpose collection type, including <a href="../typeclasses/traverse.html#traverse">Traverse</a>, <a href="../typeclasses/monad.html#monad">Monad</a>, and <a href="../typeclasses/alternative.html#alternative">Alternative</a>.</p>
         
         <h2 id="motivation" class="section">Motivation<a class="anchor-link right" href="#motivation"><i class="icofont-laika">&#xef71;</i></a></h2>
@@ -229,7 +229,7 @@
         That is because both of these traversals make use of the <code>List</code> monoid (or the <a href="nel.html#nonemptylist">NonEmptyList</a> semigroup), which by the nature of <code>List</code> is very inefficient.
         If you use <a href="../typeclasses/traverse.html#traverse">traverse</a> with a data structure with <code>n</code> elements and <a href="writer.html#writer">Writer</a> or <a href="validated.html#validated">Validated</a> as the <a href="../typeclasses/applicative.html#applicative">Applicative</a> type, you will end up with a runtime of <code>O(n^2)</code>.
         This is because, with <code>List</code>, appending a single element requires iterating over the entire data structure and therefore takes linear time.</p>
-        <p>So <a href="https://www.scala-lang.org/api/2.13.10/scala/collection/immutable/List.html">List</a> isn&#39;t all that great for this use case, so let&#39;s use <a href="https://www.scala-lang.org/api/2.13.10/scala/collection/immutable/Vector.html">Vector</a> or <a href="https://www.javadoc.io/doc/org.typelevel/cats-docs_2.13/2.9.0/cats/data/NonEmptyVector.html">NonEmptyVector</a>` instead, right?</p>
+        <p>So <a href="https://www.scala-lang.org/api/2.13.11/scala/collection/immutable/List.html">List</a> isn&#39;t all that great for this use case, so let&#39;s use <a href="https://www.scala-lang.org/api/2.13.11/scala/collection/immutable/Vector.html">Vector</a> or <a href="https://www.javadoc.io/doc/org.typelevel/cats-docs_2.13/2.9.0/cats/data/NonEmptyVector.html">NonEmptyVector</a>` instead, right?</p>
         <p>Well, <code>Vector</code> has its own problems and in this case it&#39;s unfortunately not that much faster than <code>List</code> at all. You can check <a href="http://www.lihaoyi.com/post/BenchmarkingScalaCollections.html#vectors-are-ok">this blog post</a> by Li Haoyi for some deeper insight into <code>Vector</code>&#39;s issues.</p>
         <p><code>Chain</code> evolved from what used to be <code>fs2.Catenable</code> and Erik Osheim&#39;s <a href="https://github.com/non/chain">Chain</a> library.
         Similar to <code>List</code>, it is also a very simple data structure, but unlike <code>List</code> it supports constant O(1) time <code>append</code>, <code>prepend</code> and <code>concat</code>.
@@ -256,7 +256,7 @@
 </span><span>
 </span><span class="type-name">NonEmptyChain</span><span>.</span><span class="identifier">one</span><span>(</span><span class="number-literal">1</span><span>)
 </span><span class="comment">// res3: NonEmptyChain[Int] = Singleton(a = 1)</span></code></pre>
-        <p>You can also create an <a href="https://www.scala-lang.org/api/2.13.10/scala/Option.html">Option</a> of <code>NonEmptyChain</code> from a <code>Chain</code> or any other collection type:</p>
+        <p>You can also create an <a href="https://www.scala-lang.org/api/2.13.11/scala/Option.html">Option</a> of <code>NonEmptyChain</code> from a <code>Chain</code> or any other collection type:</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">data</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="type-name">NonEmptyChain</span><span>.</span><span class="identifier">fromChain</span><span>(</span><span class="type-name">Chain</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="number-literal">2</span><span>, </span><span class="number-literal">3</span><span>))
@@ -285,7 +285,7 @@
         
         <h2 id="how-it-works" class="section">How it works<a class="anchor-link right" href="#how-it-works"><i class="icofont-laika">&#xef71;</i></a></h2>
         <p><code>Chain</code> is implemented as a simple unbalanced binary tree ADT with four cases:
-        an empty <code>Chain</code> with no elements, a singleton <code>Chain</code> with exactly one element, a concatenation of two chains, or a wrapper for a <a href="https://www.scala-lang.org/api/2.13.10/scala/collection/immutable/Seq.html">Seq</a>.</p>
+        an empty <code>Chain</code> with no elements, a singleton <code>Chain</code> with exactly one element, a concatenation of two chains, or a wrapper for a <a href="https://www.scala-lang.org/api/2.13.11/scala/collection/immutable/Seq.html">Seq</a>.</p>
         <p>In code it looks like this:</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">sealed</span><span> </span><span class="keyword">abstract</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Chain</span><span>[+</span><span class="type-name">A</span><span>]
 

@@ -375,15 +375,19 @@
   } </span><span class="keyword">yield</span><span> </span><span class="type-name">RegistrationData</span><span>(</span><span class="identifier">validatedUserName</span><span>, </span><span class="identifier">validatedPassword</span><span>, </span><span class="identifier">validatedFirstName</span><span>, </span><span class="identifier">validatedLastName</span><span>, </span><span class="identifier">validatedAge</span><span>)
 }
 </span><span class="comment">// error: value flatMap is not a member of cats.data.Validated[repl.MdocSession.App.DomainValidation,String]
+// did you mean leftMap?
 //     validatedUserName &lt;- validateUserName(username)
 //                          ^^^^^^^^^^^^^^^^^^^^^^^^^^
 // error: value flatMap is not a member of cats.data.Validated[repl.MdocSession.App.DomainValidation,String]
+// did you mean leftMap?
 //     validatedPassword &lt;- validatePassword(password)
 //                          ^^^^^^^^^^^^^^^^^^^^^^^^^^
 // error: value flatMap is not a member of cats.data.Validated[repl.MdocSession.App.DomainValidation,String]
+// did you mean leftMap?
 //     validatedFirstName &lt;- validateFirstName(firstName)
 //                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // error: value flatMap is not a member of cats.data.Validated[repl.MdocSession.App.DomainValidation,String]
+// did you mean leftMap?
 //     validatedLastName &lt;- validateLastName(lastName)
 //                          ^^^^^^^^^^^^^^^^^^^^^^^^^^</span></code></pre>
         <p>What we&#39;ve done here was to reuse the previously created validation functions and convert their output to a <code>Validated</code> instance with the <code>.toValidated</code> combinator. This one takes an <code>Either</code> and converts it to its equivalent <code>Validated</code>.
