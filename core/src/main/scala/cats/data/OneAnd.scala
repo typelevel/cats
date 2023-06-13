@@ -147,7 +147,14 @@ sealed abstract private[data] class OneAndInstances extends OneAndLowPriority0 {
 
     }
 
-  implicit def catsDataEqForOneAnd[A, F[_]](implicit A: Eq[A], FA: Eq[F[A]]): Eq[OneAnd[F, A]] = _ === _
+  implicit def catsDataOrderForOneAnd[A, F[_]](implicit A: Order[A], FA: Order[F[A]]): Order[OneAnd[F, A]] =
+    new Order[OneAnd[F, A]] {
+      def compare(x: OneAnd[F, A], y: OneAnd[F, A]): Int =
+        A.compare(x.head, y.head) match {
+          case 0   => FA.compare(x.tail, y.tail)
+          case neq => neq
+        }
+    }
 
   implicit def catsDataShowForOneAnd[A, F[_]](implicit A: Show[A], FA: Show[F[A]]): Show[OneAnd[F, A]] = _.show
 
@@ -268,6 +275,9 @@ sealed abstract private[data] class OneAndLowPriority1 extends OneAndLowPriority
 }
 
 sealed abstract private[data] class OneAndLowPriority0_5 extends OneAndLowPriority1 {
+
+  implicit def catsDataEqForOneAnd[A, F[_]](implicit A: Eq[A], FA: Eq[F[A]]): Eq[OneAnd[F, A]] = _ === _
+
   implicit def catsDataReducibleForOneAnd[F[_]](implicit F: Foldable[F]): Reducible[OneAnd[F, *]] =
     new NonEmptyReducible[OneAnd[F, *], F] {
       override def split[A](fa: OneAnd[F, A]): (A, F[A]) = (fa.head, fa.tail)
@@ -280,6 +290,20 @@ sealed abstract private[data] class OneAndLowPriority0_5 extends OneAndLowPriori
 }
 
 sealed abstract private[data] class OneAndLowPriority0 extends OneAndLowPriority0_5 {
+
+  implicit def catsDataPartialOrderForOneAnd[A, F[_]](implicit
+    A: PartialOrder[A],
+    FA: PartialOrder[F[A]]
+  ): PartialOrder[OneAnd[F, A]] =
+    new PartialOrder[OneAnd[F, A]] {
+      def partialCompare(x: OneAnd[F, A], y: OneAnd[F, A]): Double = {
+        A.partialCompare(x.head, y.head) match {
+          case 0.0 => FA.partialCompare(x.tail, y.tail)
+          case neq => neq
+        }
+      }
+    }
+
   implicit def catsDataNonEmptyTraverseForOneAnd[F[_]](implicit
     F: Traverse[F],
     F2: Alternative[F]
