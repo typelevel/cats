@@ -27,7 +27,7 @@ import cats.kernel.CommutativeMonoid
 import scala.annotation.tailrec
 import cats.arrow.Compose
 
-import cats.data.Ior
+import cats.data.{Chain, Ior}
 
 trait MapInstances extends cats.kernel.instances.MapInstances {
 
@@ -42,24 +42,11 @@ trait MapInstances extends cats.kernel.instances.MapInstances {
       def unorderedTraverse[G[_], A, B](
         fa: Map[K, A]
       )(f: A => G[B])(implicit G: CommutativeApplicative[G]): G[Map[K, B]] = {
-        // This stack-safe implementation was copied and adapted from List.traverse_
-        def runHalf(size: Int, fa: Map[K, A]): Eval[G[Map[K, B]]] =
-          if (size > 1) {
-            val leftSize = size / 2
-            val rightSize = size - leftSize
-            val (leftL, rightL) = fa.splitAt(leftSize)
-            runHalf(leftSize, leftL).flatMap { left =>
-              val right = runHalf(rightSize, rightL)
-              G.map2Eval(left, right) { (lm, rm) => lm ++ rm }
-            }
-          } else {
-            val (k, a) = fa.head
-            Eval.always(G.map(f(a))(b => Map(k -> b)))
-          }
-
-        val len = fa.size
-        if (len == 0) G.pure(Map.empty)
-        else runHalf(len, fa).value
+        if (fa.isEmpty) G.pure(Map.empty[K, B])
+        else
+          G.map(Chain.traverseViaChain(fa.toIndexedSeq) { case (k, a) =>
+            G.map(f(a))((k, _))
+          })(_.iterator.toMap)
       }
 
       override def map[A, B](fa: Map[K, A])(f: A => B): Map[K, B] =

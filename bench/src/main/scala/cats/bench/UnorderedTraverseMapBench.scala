@@ -30,10 +30,14 @@ import cats.data.Chain
 @BenchmarkMode(Array(Mode.AverageTime))
 @OutputTimeUnit(TimeUnit.MICROSECONDS)
 class UnorderedTraverseMapBench {
+  // These benchmarks were written to choose the fastest implementation
+  // for Map.unorderedTraverse, some results are available here:
+  // https://github.com/typelevel/cats/pull/4463#issuecomment-1599612154
+
   val instance = UnorderedTraverse[Map[Int, *]]
 
-  val xs1: Map[Int, Int] = (1 to 1_000).map(x => (x, x)).toMap
-  val xs2: Map[Int, Int] = (1 to 1_000_000).map(x => (x, x)).toMap
+  val xs1: Map[Int, Int] = (1 to 1000).map(x => (x, x)).toMap
+  val xs2: Map[Int, Int] = (1 to 1000000).map(x => (x, x)).toMap
 
   def unorderedTraverseViaTree[G[_], A, B](
     fa: Map[Int, A]
