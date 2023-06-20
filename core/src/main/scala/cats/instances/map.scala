@@ -42,15 +42,24 @@ trait MapInstances extends cats.kernel.instances.MapInstances {
       def unorderedTraverse[G[_], A, B](
         fa: Map[K, A]
       )(f: A => G[B])(implicit G: CommutativeApplicative[G]): G[Map[K, B]] = {
-        val gba: Eval[G[Map[K, B]]] = Always(G.pure(Map.empty))
-        val gbb = Foldable
-          .iterateRight(fa, gba) { (kv, lbuf) =>
-            G.map2Eval(f(kv._2), lbuf) { (b, buf) =>
-              buf + (kv._1 -> b)
+        // This stack-safe implementation was copied and adapted from List.traverse_
+        def runHalf(size: Int, fa: Map[K, A]): Eval[G[Map[K, B]]] =
+          if (size > 1) {
+            val leftSize = size / 2
+            val rightSize = size - leftSize
+            val (leftL, rightL) = fa.splitAt(leftSize)
+            runHalf(leftSize, leftL).flatMap { left =>
+              val right = runHalf(rightSize, rightL)
+              G.map2Eval(left, right) { (lm, rm) => lm.concat(rm) }
             }
+          } else {
+            val (k, a) = fa.head
+            Eval.always(G.map(f(a))(b => Map(k -> b)))
           }
-          .value
-        G.map(gbb)(_.toMap)
+
+        val len = fa.size
+        if (len == 0) G.pure(Map.empty)
+        else runHalf(len, fa).value
       }
 
       override def map[A, B](fa: Map[K, A])(f: A => B): Map[K, B] =
