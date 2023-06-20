@@ -86,8 +86,8 @@ class MapSuite extends CatsSuite {
 
   test("unorderedTraverse doesn't stack overflow with tuples") {
     // https://github.com/typelevel/cats/issues/4461
-    val sum = (1 to 1_000_000).sum
-    val map = (1 to 1_000_000).map(x => x -> x).toMap
+    val sum = (1 to 1000000).sum
+    val map = (1 to 1000000).map(x => x -> x).toMap
     val resL = map.unorderedTraverse(x => (x, x))
     val resV = (sum, map)
     assert(resL === resV)
@@ -95,7 +95,7 @@ class MapSuite extends CatsSuite {
 
   test("unorderedTraverse doesn't stack overflow with Options") {
     // https://github.com/typelevel/cats/issues/4461
-    val map = (1 to 1_000_000).map(x => x -> x).toMap
+    val map = (1 to 1000000).map(x => x -> x).toMap
     val resL = map.unorderedTraverse(x => x.some)
     val resV = Some(map)
     assert(resL === resV)
