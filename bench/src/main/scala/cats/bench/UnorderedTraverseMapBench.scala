@@ -64,7 +64,7 @@ class UnorderedTraverseMapBench {
     else
       G.map(Chain.traverseViaChain(fa.toIndexedSeq) { case (k, a) =>
         G.map(f(a))((k, _))
-      }) { chain => chain.foldLeft(Map.empty[Int, B]) { case (m, (k, b)) => m.updated(k, b) } }
+      })(_.iterator.toMap)
   }
 
   @Benchmark def unorderedTraverseTupleViaTree1: (Int, Map[Int, Int]) =
