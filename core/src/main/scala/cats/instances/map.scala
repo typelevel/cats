@@ -50,7 +50,7 @@ trait MapInstances extends cats.kernel.instances.MapInstances {
             val (leftL, rightL) = fa.splitAt(leftSize)
             runHalf(leftSize, leftL).flatMap { left =>
               val right = runHalf(rightSize, rightL)
-              G.map2Eval(left, right) { (lm, rm) => lm.concat(rm) }
+              G.map2Eval(left, right) { (lm, rm) => lm ++ rm }
             }
           } else {
             val (k, a) = fa.head
