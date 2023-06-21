@@ -82,18 +82,13 @@ class CokleisliSuite extends SlowCatsSuite {
   )
   checkAll("Arrow[Cokleisli[NonEmptyList, *, *]]", SerializableTests.serializable(Arrow[Cokleisli[NonEmptyList, *, *]]))
 
-  {
-    implicit def cokleisliIdEq[A, B](implicit evidence: Eq[A => B]): Eq[Cokleisli[Id, A, B]] =
-      Eq.by[Cokleisli[Id, A, B], A => B](_.run)
-
-    checkAll(
-      "Cokleisli[Id, MiniInt, MiniInt]",
-      CommutativeArrowTests[Cokleisli[Id, *, *]].commutativeArrow[MiniInt, MiniInt, MiniInt, MiniInt, MiniInt, MiniInt]
-    )
-    checkAll("CommutativeArrow[Cokleisli[Id, *, *]]",
-             SerializableTests.serializable(CommutativeArrow[Cokleisli[Id, *, *]])
-    )
-  }
+  checkAll(
+    "Cokleisli[Id, MiniInt, MiniInt]",
+    CommutativeArrowTests[Cokleisli[Id, *, *]].commutativeArrow[MiniInt, MiniInt, MiniInt, MiniInt, MiniInt, MiniInt]
+  )
+  checkAll("CommutativeArrow[Cokleisli[Id, *, *]]",
+           SerializableTests.serializable(CommutativeArrow[Cokleisli[Id, *, *]])
+  )
 
   test("contramapValue with Id consistent with lmap") {
     forAll { (c: Cokleisli[Id, Int, Long], f: MiniInt => Int) =>

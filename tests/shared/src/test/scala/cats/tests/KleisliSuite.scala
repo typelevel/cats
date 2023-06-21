@@ -39,9 +39,6 @@ class KleisliSuite extends CatsSuite {
   implicit def kleisliEq[F[_], A, B](implicit ev: Eq[A => F[B]]): Eq[Kleisli[F, A, B]] =
     Eq.by[Kleisli[F, A, B], A => F[B]](_.run)
 
-  implicit def readerEq[A, B](implicit ev: Eq[A => B]): Eq[Reader[A, B]] =
-    kleisliEq
-
   implicit val eitherTEq: Eq[EitherT[Kleisli[Option, MiniInt, *], Unit, Int]] =
     EitherT.catsDataEqForEitherT[Kleisli[Option, MiniInt, *], Unit, Int]
   implicit val eitherTEq2: Eq[EitherT[Reader[MiniInt, *], Unit, Int]] =

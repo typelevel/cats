@@ -10,7 +10,7 @@ val munitVersion = "1.0.0-M8"
 
 val PrimaryJava = JavaSpec.temurin("8")
 val LTSJava = JavaSpec.temurin("17")
-val GraalVM11 = JavaSpec.graalvm("11")
+val GraalVM11 = JavaSpec.graalvm("17")
 
 ThisBuild / githubWorkflowJavaVersions := Seq(PrimaryJava, LTSJava, GraalVM11)
 
@@ -19,10 +19,9 @@ val Scala213 = "2.13.11"
 val Scala3 = "3.3.0"
 
 ThisBuild / crossScalaVersions := Seq(Scala212, Scala213, Scala3)
-ThisBuild / scalaVersion := Scala213
+ThisBuild / scalaVersion := Scala3
 
 ThisBuild / tlFatalWarnings := false
-ThisBuild / tlFatalWarningsInCi := false
 
 ThisBuild / githubWorkflowAddedJobs ++= Seq(
   WorkflowJob(
@@ -300,11 +299,6 @@ lazy val docs = project
           )
         )
     },
-    tlSiteRelatedProjects := Seq(
-      TypelevelProject.CatsEffect,
-      "Mouse" -> url("https://typelevel.org/mouse"),
-      TypelevelProject.Discipline
-    ),
     libraryDependencies ++= Seq(
       "org.typelevel" %%% "discipline-munit" % disciplineMunitVersion
     )

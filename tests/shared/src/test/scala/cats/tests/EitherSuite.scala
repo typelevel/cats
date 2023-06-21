@@ -374,7 +374,7 @@ class EitherSuite extends CatsSuite {
   }
 
   test("leftLiftTo Left") {
-    forAll { y: String =>
+    forAll { (y: String) =>
       assert(
         y.asLeft[Int].leftLiftTo[NonEmptyVector] === Either.left[NonEmptyVector[String], Int](
           NonEmptyVector.one(y)
@@ -384,7 +384,7 @@ class EitherSuite extends CatsSuite {
   }
 
   test("leftLiftTo Right") {
-    forAll { x: Int =>
+    forAll { (x: Int) =>
       assert(x.asRight[String].leftLiftTo[NonEmptyVector] === (Either.right[NonEmptyVector[String], Int](x)))
     }
   }

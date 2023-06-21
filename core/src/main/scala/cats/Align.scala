@@ -145,6 +145,7 @@ object Align extends ScalaVersionSpecificAlignInstances {
   implicit def catsAlignForSortedMap[K]: Align[SortedMap[K, *]] =
     cats.instances.sortedMap.catsStdInstancesForSortedMap[K]
   implicit def catsAlignForEither[A]: Align[Either[A, *]] = cats.instances.either.catsStdInstancesForEither[A]
+  implicit def catsAlignForId: Align[Id] = cats.catsAlignForId
 
   private[cats] def alignWithIterator[A, B, C](fa: Iterable[A], fb: Iterable[B])(f: Ior[A, B] => C): Iterator[C] =
     new Iterator[C] {
