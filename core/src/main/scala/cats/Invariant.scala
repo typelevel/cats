@@ -25,6 +25,7 @@ import cats.arrow.Arrow
 import cats.kernel._
 
 import cats.kernel.compat.scalaVersionSpecific._
+import org.typelevel.scalaccompat.annotation.targetName3
 import scala.collection.immutable.{Queue, Seq, SortedMap}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
@@ -127,7 +128,7 @@ object Invariant extends ScalaVersionSpecificInvariantInstances with InvariantIn
     : Distributive[Id] with Bimonad[Id] with CommutativeMonad[Id] with NonEmptyTraverse[Id] =
     cats.catsInstancesForId
   @deprecated("Added for bincompat", "2.8.0")
-  @cats.compat.targetName("catsInstancesForId")
+  @targetName3("catsInstancesForId")
   private[cats] def catsInstancesForIdCompat2_6_1: Comonad[Id] =
     cats.catsInstancesForId
   implicit def catsMonadErrorForEither[A]: MonadError[Either[A, *], A] =
