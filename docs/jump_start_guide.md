@@ -268,7 +268,7 @@ The method headers in the table below are slightly simplified: the type paramete
 | `OptionT.liftF` | `F[A]` | `OptionT[F, A]` |
 | `OptionT.pure` | `A` | `OptionT[F, A]` |
 
-In production code you'll most commonly use the `OptionT(...)` syntax in order to wrap an instance of `Future[Option[A]]` into `Option[F, A]`.
+In production code you'll most commonly use the `OptionT(...)` syntax in order to wrap an instance of `Future[Option[A]]` into `OptionT[F, A]`.
 The other methods, in turn, prove useful to set up `OptionT`-typed dummy values in unit tests.
 
 We have already come across one of `OptionT`'s methods, namely `map`.
