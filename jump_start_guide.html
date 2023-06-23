@@ -431,7 +431,7 @@
             </tr>
           </tbody>
         </table>
-        <p>In production code you&#39;ll most commonly use the <code>OptionT(...)</code> syntax in order to wrap an instance of <code>Future[Option[A]]</code> into <code>Option[F, A]</code>.
+        <p>In production code you&#39;ll most commonly use the <code>OptionT(...)</code> syntax in order to wrap an instance of <code>Future[Option[A]]</code> into <code>OptionT[F, A]</code>.
         The other methods, in turn, prove useful to set up <code>OptionT</code>-typed dummy values in unit tests.</p>
         <p>We have already come across one of <code>OptionT</code>&#39;s methods, namely <code>map</code>.
         There are several other methods available and they mostly differ by the signature of the function they accept as the parameter.
