@@ -110,7 +110,7 @@ sealed abstract private[data] class ConstInstances extends ConstInstances0 {
   implicit def catsDataShowForConst[A: Show, B]: Show[Const[A, B]] = _.show
 
   implicit def catsDataTraverseForConst[C]: Traverse[Const[C, *]] =
-    new Traverse[Const[C, *]] {
+    new Traverse[Const[C, *]] with ConstFunctor[C] {
       def foldLeft[A, B](fa: Const[C, A], b: B)(f: (B, A) => B): B = b
 
       def foldRight[A, B](fa: Const[C, A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = lb
@@ -244,7 +244,7 @@ sealed abstract private[data] class ConstInstances3 extends ConstInstances4 {
 sealed abstract private[data] class ConstInstances4
 
 sealed private[data] trait ConstFunctor[C] extends Functor[Const[C, *]] {
-  def map[A, B](fa: Const[C, A])(f: A => B): Const[C, B] =
+  final override def map[A, B](fa: Const[C, A])(f: A => B): Const[C, B] =
     fa.retag[B]
 }
 
@@ -264,7 +264,7 @@ sealed private[data] trait ConstApply[C] extends ConstFunctor[C] with Apply[Cons
     fa.retag[(A, B)].combine(fb.retag[(A, B)])
 }
 
-sealed private[data] trait ConstApplicative[C] extends ConstApply[C] with Applicative[Const[C, *]] {
+sealed private[data] trait ConstApplicative[C] extends Applicative[Const[C, *]] with ConstApply[C] {
 
   implicit def C0: Monoid[C]
 
