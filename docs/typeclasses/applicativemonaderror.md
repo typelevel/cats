@@ -176,6 +176,42 @@ Running the following will result in `Right(0)`
 handlerErrorWith(attemptDivideApplicativeErrorAbove2(3, 0))
 ```
 
+### Handling Exceptions
+There will inevitably come a time when your nice `ApplicativeError` code will
+have to interact with exception-throwing code. Handling such situations is easy
+enough.
+
+```scala mdoc
+def parseInt[F[_]](input: String)(implicit F: ApplicativeError[F, Throwable]): F[Int] =
+  try {
+    F.pure(input.toInt)
+  } catch {
+    case nfe: NumberFormatException => F.raiseError(nfe)
+  }
+
+parseInt[Either[Throwable, *]]("123")
+parseInt[Either[Throwable, *]]("abc")
+```
+
+However, this can get tedious quickly. `ApplicativeError` has a `catchOnly`
+method that allows you to pass it a function, along with the type of exception
+you want to catch, and does the above for you.
+
+```scala mdoc:nest
+def parseInt[F[_]](input: String)(implicit F: ApplicativeError[F, Throwable]): F[Int] =
+  F.catchOnly[NumberFormatException](input.toInt)
+
+parseInt[Either[Throwable, *]]("abc")
+```
+
+If you want to catch all (non-fatal) throwables, you can use `catchNonFatal`.
+
+```scala mdoc:nest
+def parseInt[F[_]](input: String)(implicit F: ApplicativeError[F, Throwable]): F[Int] = F.catchNonFatal(input.toInt)
+
+parseInt[Either[Throwable, *]]("abc")
+```
+
 ## MonadError
 
 ### Description
@@ -190,7 +226,7 @@ The Definition for `MonadError` extends `Monad` which provides the
 methods, `flatMap`, `whileM_`.  `MonadError` also provides error 
 handling methods like `ensure`, `ensureOr`, `adaptError`, `rethrow`.
 
-```
+```scala
 trait MonadError[F[_], E] extends ApplicativeError[F, E] with Monad[F] {
   def ensure[A](fa: F[A])(error: => E)(predicate: A => Boolean): F[A] 
   def ensureOr[A](fa: F[A])(error: A => E)(predicate: A => Boolean): F[A]
