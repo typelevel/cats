@@ -39,7 +39,7 @@ fill in the gaps in the `scala.util.Either` API via
 
 This syntax and the type class instances for `Either` can be imported using `cats.syntax._`, which will also bring in syntactic enrichment and instances for other standard library types, or you can import only the `Either` enrichment with `cats.syntax.either._`.
 
-There are a few minor mismatches between `Xor` and `Either`. For example, in some cases you may need to specify a type parameter for an enrichment method on `Either` (such as `leftMap`) even though it was properly inferred for `Xor`, due `Either` having covariant type parameters.
+There are a few minor mismatches between `Xor` and `Either`. For example, in some cases you may need to specify a type parameter for an enrichment method on `Either` (such as `leftMap`) even though it was properly inferred for `Xor`, due to `Either` having covariant type parameters.
 
 Similarly, `cats.data.XorT` has been replaced with `cats.data.EitherT`, although since this is a type defined in Cats, you don't need to import syntax or instances for it (although you may need imports for the underlying monad).
 
