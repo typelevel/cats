@@ -309,6 +309,10 @@ object SyntaxSuite {
 
     result3: F[T]
 
+    val result1Tupled = fapply1.tupledF(fa)
+
+    result1Tupled: F[T]
+
     val result3Tupled = fapply3.tupledF((fa, fb, fc).tupled)
 
     result3Tupled: F[T]
