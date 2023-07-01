@@ -286,20 +286,26 @@ object SyntaxSuite {
     tfa.parFlatMap(mfone)
   }
 
-  def testApplyN[F[_]: Apply, A, B, C, T] = {
+  def testliftN[F[_]: Apply, A, B, C, T] = {
     val fa = mock[F[A]]
     val fb = mock[F[B]]
     val fc = mock[F[C]]
 
+    val fapply1 = mock[A => T]
+
+    val result1 = fapply1.liftN(fa)
+
+    result1: F[T]
+
     val fapply2 = mock[(A, B) => T]
 
-    val result2 = fapply2.applyN(fa, fb)
+    val result2 = fapply2.liftN(fa, fb)
 
     result2: F[T]
 
     val fapply3 = mock[(A, B, C) => T]
 
-    val result3 = fapply3.applyN(fa, fb, fc)
+    val result3 = fapply3.liftN(fa, fb, fc)
 
     result3: F[T]
 
