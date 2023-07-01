@@ -35,7 +35,7 @@ trait Profunctor[F[_, _]] extends Serializable { self =>
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import cats.arrow.Profunctor
    * scala> val fab: Double => Double = x => x + 0.3
    * scala> val f: Int => Double = x => x.toDouble / 2

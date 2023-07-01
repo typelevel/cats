@@ -50,7 +50,7 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
    * Example:
    * {{{
    * scala> import cats.data.Ior
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val rightF: Int => String = _.show
    * scala> val bothF: (String,Int) => String = (a,b) => a.combine(b.show)
@@ -79,7 +79,7 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
    * Example:
    * {{{
    * scala> import cats.data.Ior
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val ior1 = "abc".leftIor[Int]
    * scala> ior1.putLeft(true)
@@ -101,7 +101,7 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
    * Example:
    * {{{
    * scala> import cats.data.Ior
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val ior1 = "abc".leftIor[Int]
    * scala> ior1.putRight(123L)
@@ -127,7 +127,7 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
    * Example:
    * {{{
    * scala> import cats.data.Ior
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val ior1 = "abc".leftIor[Int]
    * scala> ior1.addLeft("def")
@@ -153,7 +153,7 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
    * Example:
    * {{{
    * scala> import cats.data.Ior
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val ior1 = "abc".leftIor[Int]
    * scala> ior1.addRight(123)
@@ -175,7 +175,7 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
    * Example:
    * {{{
    * scala> import cats.data.Ior
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> "abc".leftIor[Int].isLeft
    * res0: Boolean = true
@@ -209,7 +209,7 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
    * Example:
    * {{{
    * scala> import cats.data.Ior
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> "abc".leftIor[Int].left
    * res0: Option[String] = Some(abc)
@@ -227,7 +227,7 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
    * Example:
    * {{{
    * scala> import cats.data.Ior
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> "abc".leftIor[Int].right
    * res0: Option[Int] = None
@@ -250,7 +250,7 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
    * Example:
    * {{{
    * scala> import cats.data.Ior
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> "abc".leftIor[Int].onlyLeft
    * res0: Option[String] = Some(abc)
@@ -268,7 +268,7 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
    * Example:
    * {{{
    * scala> import cats.data.Ior
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> "abc".leftIor[Int].onlyRight
    * res0: Option[Int] = None
@@ -286,7 +286,7 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
    * Example:
    * {{{
    * scala> import cats.data.Ior
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> "abc".leftIor[Int].onlyLeftOrRight
    * res0: Option[Either[String, Int]] = Some(Left(abc))
@@ -304,7 +304,7 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
    * Example:
    * {{{
    * scala> import cats.data.Ior
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> "abc".leftIor[Int].onlyBoth
    * res0: Option[(String, Int)] = None
@@ -322,7 +322,7 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
    * Example:
    * {{{
    * scala> import cats.data.Ior
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> "abc".leftIor[Int].pad
    * res0: (Option[String], Option[Int]) = (Some(abc),None)
@@ -340,7 +340,7 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
    * Example:
    * {{{
    * scala> import cats.data.Ior
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> "abc".leftIor[Int].unwrap
    * res0: Either[Either[String, Int], (String, Int)] = Left(Left(abc))
@@ -359,7 +359,7 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
    * Example:
    * {{{
    * scala> import cats.data.Ior
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> "abc".leftIor[Int].toIorNes
    * res0: IorNes[String, Int] = Left(TreeSet(abc))
@@ -379,7 +379,7 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
    * Example:
    * {{{
    * scala> import cats.data.Ior
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> "abc".leftIor[Int].toIorNel
    * res0: IorNel[String, Int] = Left(NonEmptyList(abc))
@@ -397,7 +397,7 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
    * Example:
    * {{{
    * scala> import cats.data.Ior
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> "abc".leftIor[Int].toEither
    * res0: Either[String, Int] = Left(abc)
@@ -415,7 +415,7 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
    * Example:
    * {{{
    * scala> import cats.data.Ior
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> "abc".leftIor[Int].toValidated
    * res0: Validated[String, Int] = Invalid(abc)
@@ -433,7 +433,7 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
    * Example:
    * {{{
    * scala> import cats.data.Ior
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> "abc".leftIor[Int].toOption
    * res0: Option[Int] = None
@@ -451,7 +451,7 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
    * Example:
    * {{{
    * scala> import cats.data.Ior
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> "abc".leftIor[Int].toList
    * res0: List[Int] = List()
@@ -469,7 +469,7 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
    * Example:
    * {{{
    * scala> import cats.data.Ior
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> "abc".leftIor[Int].to[List, Int]
    * res0: List[Int] = List()
@@ -488,7 +488,7 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
    * Example:
    * {{{
    * scala> import cats.data.Ior
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> "abc".leftIor[Int].swap
    * res0: Ior[Int, String] = Right(abc)
@@ -506,7 +506,7 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
    * Example:
    * {{{
    * scala> import cats.data.Ior
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> "abc".leftIor[Int].exists(_ > 100)
    * res0: Boolean = false
@@ -524,7 +524,7 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
    * Example:
    * {{{
    * scala> import cats.data.Ior
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> "abc".leftIor[Int].forall(_ > 100)
    * res0: Boolean = true
@@ -542,7 +542,7 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
    * Example:
    * {{{
    * scala> import cats.data.Ior
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> "abc".leftIor[Int].getOrElse(456)
    * res0: Int = 456
@@ -560,7 +560,7 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
    * Example:
    * {{{
    * scala> import cats.data.Ior
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> "abc".leftIor[Int].valueOr(_.length)
    * res0: Int = 3
@@ -579,7 +579,7 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
    * Example:
    * {{{
    * scala> import cats.data.Ior
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> "abc".leftIor[Int].bimap(_.length, identity)
    * res0: Ior[Int, Int] = Left(3)
@@ -598,7 +598,7 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
    * Example:
    * {{{
    * scala> import cats.data.Ior
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> "abc".leftIor[Int].map(_ * 2)
    * res0: Ior[String, Int] = Left(abc)
@@ -616,7 +616,7 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
    * Example:
    * {{{
    * scala> import cats.data.Ior
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> "abc".leftIor[Int].leftMap(_.length)
    * res0: Ior[Int, Int] = Left(3)
@@ -634,7 +634,7 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
    * Example:
    * {{{
    * scala> import cats.data.Ior
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> "abc".leftIor[Int].flatMap(i => 456.rightIor[String])
    * res0: Ior[String, Int] = Left(abc)
@@ -671,7 +671,7 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
    * Example:
    * {{{
    * scala> import cats.data.Ior
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * // Nothing to show
    * scala> "abc".leftIor[Int].foreach(println)
@@ -695,7 +695,7 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
    * Example
    * {{{
    * scala> import cats.data.Ior
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> "abc".leftIor[Int].traverse(i => List(i, i * 2))
    * res0: List[Ior[String,Int]] = List(Left(abc))
@@ -718,7 +718,7 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
    * Example:
    * {{{
    * scala> import cats.data.Ior
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> "abc".leftIor[Int].foldLeft(List(456))((c,b) => b :: c)
    * res0: List[Int] = List(456)
@@ -749,7 +749,7 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
    * Example:
    * {{{
    * scala> import cats.data.Ior
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> "abc".leftIor[Int].combine("other".leftIor[Int])
    * res0: Ior[String, Int] = Left(abcother)

@@ -38,7 +38,7 @@ final class VectorOps[A](private val va: Vector[A]) extends AnyVal {
    * Example:
    * {{{
    * scala> import cats.data.NonEmptyVector
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val result1: Vector[Int] = Vector(1, 2)
    * scala> result1.toNev
@@ -58,7 +58,7 @@ final class VectorOps[A](private val va: Vector[A]) extends AnyVal {
    * {{{
    * scala> import cats.data.NonEmptyVector
    * scala> import scala.collection.immutable.SortedMap
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val vector = Vector(12, -2, 3, -5)
    *
@@ -80,7 +80,7 @@ final class VectorOps[A](private val va: Vector[A]) extends AnyVal {
    * {{{
    * scala> import cats.data.NonEmptyVector
    * scala> import scala.collection.immutable.SortedMap
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val vector = Vector(12, -2, 3, -5)
    *
@@ -111,7 +111,7 @@ final class VectorOps[A](private val va: Vector[A]) extends AnyVal {
    * Example:
    * {{{
    * scala> import cats.data.NonEmptyVector
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val result1: Vector[Int] = Vector(1, 2)
    * scala> result1.scanLeftNev(100)(_ + _)
@@ -132,7 +132,7 @@ final class VectorOps[A](private val va: Vector[A]) extends AnyVal {
    * Example:
    * {{{
    * scala> import cats.data.NonEmptyVector
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val result1: Vector[Int] = Vector(1, 2)
    * scala> result1.scanRightNev(100)(_ + _)

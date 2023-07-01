@@ -21,13 +21,25 @@
 
 package cats.tests
 
-import cats.{Alternative, Applicative, Foldable, Functor, Monad, SemigroupK, Traverse}
+import cats.Alternative
+import cats.Applicative
+import cats.Foldable
+import cats.Functor
+import cats.Monad
+import cats.SemigroupK
+import cats.Traverse
 import cats.data.OneAnd
+import cats.kernel.Eq
+import cats.kernel.Order
+import cats.kernel.PartialOrder
+import cats.kernel.laws.discipline.EqTests
+import cats.kernel.laws.discipline.OrderTests
+import cats.kernel.laws.discipline.PartialOrderTests
+import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.syntax.foldable._
-import cats.syntax.eq._
+import cats.syntax.order._
 import org.scalacheck.Prop._
 import org.scalacheck.Test.Parameters
 
@@ -35,6 +47,47 @@ class OneAndSuite extends CatsSuite {
   // Lots of collections here.. telling ScalaCheck to calm down a bit
   implicit override val scalaCheckTestParameters: Parameters =
     Parameters.default.withMinSuccessfulTests(20).withMaxSize(Parameters.default.minSize + 5)
+
+  // Test kernel instances
+  {
+    import Helpers.Eqed
+
+    checkAll("OneAnd[F, A]", EqTests[OneAnd[ListWrapper, Eqed]].eqv)
+    checkAll("Eq[OneAnd[F, A]]", SerializableTests.serializable(Eq[OneAnd[ListWrapper, Eqed]]))
+
+    property("Eq[OneAnd[F, A]]: must be consistent with Eq[Tuple2[A, F[A]]]") {
+      forAll { (x: OneAnd[ListWrapper, Eqed], y: OneAnd[ListWrapper, Eqed]) =>
+        assertEquals(x.eqv(y), (x.head, x.tail).eqv((y.head, y.tail)))
+      }
+    }
+  }
+  {
+    import Helpers.POrd
+
+    implicit val partialOrder: PartialOrder[ListWrapper[POrd]] = ListWrapper.partialOrder
+    checkAll("OneAnd[F, A]", PartialOrderTests[OneAnd[ListWrapper, POrd]].partialOrder)
+    checkAll("PartialOrder[OneAnd[F, A]]", SerializableTests.serializable(PartialOrder[OneAnd[ListWrapper, POrd]]))
+
+    property("PartialOrder[OneAnd[F, A]]: must be consistent with PartialOrder[Tuple2[A, F[A]]]") {
+      forAll { (x: OneAnd[ListWrapper, POrd], y: OneAnd[ListWrapper, POrd]) =>
+        // `NaN` cannot be compared directly; hence using `partialComparison` instead of `partialCompare`.
+        assertEquals(x.partialComparison(y), (x.head, x.tail).partialComparison((y.head, y.tail)))
+      }
+    }
+  }
+  {
+    import Helpers.Ord
+
+    implicit val order: Order[ListWrapper[Ord]] = ListWrapper.order
+    checkAll("OneAnd[F, A]", OrderTests[OneAnd[ListWrapper, Ord]].order)
+    checkAll("Order[OneAnd[F, A]]", SerializableTests.serializable(Order[OneAnd[ListWrapper, Ord]]))
+
+    property("Order[OneAnd[F, A]]: must be consistent with Order[Tuple2[A, F[A]]]") {
+      forAll { (x: OneAnd[ListWrapper, Ord], y: OneAnd[ListWrapper, Ord]) =>
+        assertEquals(x.compare(y), (x.head, x.tail).compare((y.head, y.tail)))
+      }
+    }
+  }
 
   {
     implicit val traverse: Traverse[OneAnd[ListWrapper, *]] = OneAnd.catsDataTraverseForOneAnd(ListWrapper.traverse)

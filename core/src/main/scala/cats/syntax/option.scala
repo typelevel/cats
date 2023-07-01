@@ -51,7 +51,7 @@ final class OptionIdOps[A](private val a: A) extends AnyVal {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> 3.some
    * res0: Option[Int] = Some(3)
    * }}}
@@ -69,7 +69,7 @@ final class OptionOps[A](private val oa: Option[A]) extends AnyVal {
    * Example:
    * {{{
    * scala> import cats.data.Validated
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val error1: Option[String] = Some("error!")
    * scala> error1.toInvalid(3)
@@ -91,7 +91,7 @@ final class OptionOps[A](private val oa: Option[A]) extends AnyVal {
    * Example:
    * {{{
    * scala> import cats.data.ValidatedNel
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val error1: Option[String] = Some("error!")
    * scala> error1.toInvalidNel(3)
@@ -114,7 +114,7 @@ final class OptionOps[A](private val oa: Option[A]) extends AnyVal {
    * Example:
    * {{{
    * scala> import cats.data.ValidatedNec
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val error1: Option[String] = Some("error!")
    * scala> error1.toInvalidNec(3)
@@ -136,7 +136,7 @@ final class OptionOps[A](private val oa: Option[A]) extends AnyVal {
    * Example:
    * {{{
    * scala> import cats.data.Validated
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val result1: Option[Int] = Some(3)
    * scala> result1.toValid("error!")
@@ -157,7 +157,7 @@ final class OptionOps[A](private val oa: Option[A]) extends AnyVal {
    * Example:
    * {{{
    * scala> import cats.data.ValidatedNel
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val result1: Option[Int] = Some(3)
    * scala> result1.toValidNel("error!")
@@ -179,7 +179,7 @@ final class OptionOps[A](private val oa: Option[A]) extends AnyVal {
    * Example:
    * {{{
    * scala> import cats.data.ValidatedNec
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val result1: Option[Int] = Some(3)
    * scala> result1.toValidNec("error!")
@@ -200,7 +200,7 @@ final class OptionOps[A](private val oa: Option[A]) extends AnyVal {
    * Example:
    * {{{
    * scala> import cats.data.Ior
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val result1: Option[Int] = Some(3)
    * scala> result1.toRightIor("error!")
@@ -220,7 +220,7 @@ final class OptionOps[A](private val oa: Option[A]) extends AnyVal {
    * Example:
    * {{{
    * scala> import cats.data.Ior
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val result1: Option[String] = Some("error!")
    * scala> result1.toLeftIor(3)
@@ -241,7 +241,7 @@ final class OptionOps[A](private val oa: Option[A]) extends AnyVal {
    * Example:
    * {{{
    * scala> import cats.data.EitherNel
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val result1: Option[Int] = Some(3)
    * scala> result1.toRightNel("error!")
@@ -262,7 +262,7 @@ final class OptionOps[A](private val oa: Option[A]) extends AnyVal {
    * Example:
    * {{{
    * scala> import cats.data.EitherNec
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val result1: Option[Int] = Some(3)
    * scala> result1.toRightNec("error!")
@@ -284,7 +284,7 @@ final class OptionOps[A](private val oa: Option[A]) extends AnyVal {
    * Example:
    * {{{
    * scala> import cats.data.EitherNel
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val error1: Option[String] = Some("error!")
    * scala> error1.toLeftNel(3)
@@ -307,7 +307,7 @@ final class OptionOps[A](private val oa: Option[A]) extends AnyVal {
    * Example:
    * {{{
    * scala> import cats.data.EitherNec
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val error1: Option[String] = Some("error!")
    * scala> error1.toLeftNec(3)
@@ -327,7 +327,7 @@ final class OptionOps[A](private val oa: Option[A]) extends AnyVal {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val someString: Option[String] = Some("hello")
    * scala> someString.orEmpty
@@ -345,7 +345,7 @@ final class OptionOps[A](private val oa: Option[A]) extends AnyVal {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> Some(1).liftTo[Either[CharSequence, *]]("Empty")
    * res0: scala.Either[CharSequence, Int] = Right(1)
    *
@@ -362,7 +362,7 @@ final class OptionOps[A](private val oa: Option[A]) extends AnyVal {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> type F[A] = Either[String, A]
    *
@@ -380,7 +380,7 @@ final class OptionOps[A](private val oa: Option[A]) extends AnyVal {
    * Transform the `Option` into a [[cats.data.OptionT]] while lifting it into the specified Applicative.
    *
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val op: Option[Int] = Some(3)
    * scala> op.toOptionT[List]
    * res0: cats.data.OptionT[List, Int] = OptionT(List(Some(3)))
@@ -390,7 +390,7 @@ final class OptionOps[A](private val oa: Option[A]) extends AnyVal {
 }
 
 object OptionOps {
-  final private[syntax] class LiftToPartiallyApplied[F[_], A](oa: Option[A]) {
+  final class LiftToPartiallyApplied[F[_], A](oa: Option[A]) {
     def apply[E](ifEmpty: => E)(implicit F: ApplicativeError[F, _ >: E]): F[A] =
       ApplicativeError.liftFromOption(oa, ifEmpty)
   }

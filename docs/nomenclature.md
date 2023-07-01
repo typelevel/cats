@@ -117,7 +117,7 @@ Like the previous section, we use the `E` for the error parameter type.
 | `F[A] => (A => Option[B]) => Option[B]` | `collectFirstSome` |
 | `F[A] => (A => G[B]) => G[Unit]` | `traverse_` | `G: Applicative`
 | `F[G[A]] => G[Unit]` | `sequence_` | `G: Applicative`
-| `F[A] => (A => Either[B, C] => (F[B], F[C])` | `partitionEither` | `G: Applicative`
+| `F[A] => (A => Either[B, C]) => (F[B], F[C])` | `partitionEither` | `G: Applicative`
 
 ### Reducible
 
@@ -136,8 +136,38 @@ Like the previous section, we use the `E` for the error parameter type.
 | `F[G[F[A]]] => G[F[A]]` | `flatSequence` | `G: Applicative` and `F: FlatMap`
 | `F[A] => F[(A,Int)]` | `zipWithIndex` |
 | `F[A] => ((A,Int) => B) => F[B]` | `mapWithIndex` |
-| `F[A] => ((A,Int) => G[B]) => G[F[B]]` | `traverseWithIndex` | `F: Monad`
+| `F[A] => ((A,Int) => G[B]) => G[F[B]]` | `traverseWithIndexM` | `F: Monad`
 
+### SemigroupK
+| Type         | Method Name  | Constraints |
+|------------|--------------|-----------|
+| `F[A] => F[A] => F[A]`| `combineK` | 
+| `F[A] => Int => F[A]` | `combineNK`
+| `F[A] => F[B] => F[Either[A, B]]` | `sum` | `F: Functor`
+| `IterableOnce[F[A]] => Option[F[A]]` | `combineAllOptionK`
+
+### MonoidK
+| Type         | Method Name  | Constraints |
+|------------|--------------|-----------|
+| `F[A]` | `empty`
+| `F[A] => Boolean` | `isEmpty`
+| `IterableOnce[F[A]] => F[A]` | `combineAllK`
+
+### Alternative
+| Type         | Method Name  | Constraints |
+|------------|--------------|-----------|
+| `F[G[A]] => F[A]`  | `unite` | `F: FlatMap` and `G: Foldable`
+| `F[G[A, B]] => (F[A], F[B])`  | `separate` | `F: FlatMap` and `G: Bifoldable`
+| `F[G[A, B]] => (F[A], F[B])`  | `separateFoldable` | `F: Foldable` and `G: Bifoldable`
+| `Boolean => F[Unit]` | `guard`
+| `IterableOnce[A] => F[A]` | `fromIterableOnce`
+| `G[A] => F[A]` | `fromFoldable` | `G: Foldable`
+
+### NonEmptyAlternative
+| Type         | Method Name  | Constraints |
+|------------|--------------|-----------|
+| `A => F[A] => F[A]` | `prependK`
+| `F[A] => A => F[A]` | `appendK`
 
 ## Transformers
 
@@ -166,7 +196,11 @@ For convenience, in these types we use the symbol `OT` to abbreviate `OptionT`.
 | `=> OT[F, A]` | `none` | `F: Applicative` |
 | `A => OT[F, A]` | `some` or `pure` | `F: Applicative`
 | `F[A] => OT[F, A]` | `liftF`  | `F: Functor`
+| `Boolean => F[A] => OT[F, A]` | `whenF` | `F: Applicative`
+| `F[Boolean] => F[A] => OT[F, A]` | `whenM` | `F: Monad`
 | `OT[F, A] => F[Option[A]]` | `value`
+| `OT[F, A] => A => Boolean => OT[F, A]` | `filter` | `F: Functor`
+| `OT[F, A] => A => F[Boolean] => OT[F, A]` | `filterF` | `F: Monad`
 | `OT[F, A] => (A => B) => OT[F, B]` | `map`  | `F: Functor`
 | `OT[F, A] => (F ~> G) => OT[G, B]` | `mapK`
 | `OT[F, A] => (A => Option[B]) => OT[F, B]` | `mapFilter` | `F: Functor`

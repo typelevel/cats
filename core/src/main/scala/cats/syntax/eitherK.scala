@@ -39,7 +39,7 @@ final class EitherKOps[F[_], A](private val fa: F[A]) extends AnyVal {
    * {{{
    * scala> import cats.data.EitherK
    * scala> import cats.Eval
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> List(1, 2, 3).leftc[Eval]
    * res0: EitherK[List, Eval, Int] = EitherK(Left(List(1, 2, 3)))
    * }}}
@@ -55,7 +55,7 @@ final class EitherKOps[F[_], A](private val fa: F[A]) extends AnyVal {
    * {{{
    * scala> import cats.data.EitherK
    * scala> import cats.Eval
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> List(1, 2, 3).rightc[Eval]
    * res0: EitherK[Eval, List, Int] = EitherK(Right(List(1, 2, 3)))
    * }}}

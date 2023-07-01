@@ -1,5 +1,7 @@
 # Arrow
 
+API Documentation: @:api(cats.arrow.Arrow)
+
 `Arrow` is a type class for modeling composable relationships between two types. One example of such a composable relationship is function `A => B`; other examples include `cats.data.Kleisli`(wrapping an `A => F[B]`, also known as `ReaderT`), and `cats.data.Cokleisli`(wrapping an `F[A] => B`). These type constructors all have `Arrow` instances. An arrow `F[A, B]` can be thought of as representing a computation from `A` to `B` with some context, just like a functor/applicative/monad `F[A]` represents a value `A` with some context.
 
 Having an `Arrow` instance for a type constructor `F[_, _]` means that an `F[_, _]` can be composed and combined with other `F[_, _]`s. You will be able to do things like:
@@ -19,7 +21,7 @@ Suppose we want to write a function `meanAndVar`, that takes a `List[Int]` and r
 
 ```scala mdoc:silent
 import cats.arrow.Arrow
-import cats.implicits._
+import cats.syntax.all._
 
 def combine[F[_, _]: Arrow, A, B, C](fab: F[A, B], fac: F[A, C]): F[A, (B, C)] =
   Arrow[F].lift((a: A) => (a, a)) >>> (fab *** fac)

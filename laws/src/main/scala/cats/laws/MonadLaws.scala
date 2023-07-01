@@ -23,7 +23,7 @@ package cats
 package laws
 
 import cats.data.Kleisli
-import cats.implicits._
+import cats.syntax.all._
 
 /**
  * Laws that must be obeyed by any `Monad`.

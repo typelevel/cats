@@ -25,7 +25,7 @@ package discipline
 
 /**
  * An `ExhuastiveCheck[A]` instance can be used similarly to a ScalaCheck
- * `Gen[A]` instance, but differs in that it generates a `Stream` of the entire
+ * `Gen[A]` instance, but differs in that it generates a `List` of the entire
  * domain of values as opposed to generating a random sampling of values.
  */
 trait ExhaustiveCheck[A] extends Serializable { self =>

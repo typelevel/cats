@@ -34,7 +34,7 @@ import cats.arrow._
  * {{{
  * scala> import cats.Bifunctor
  * scala> import cats.data.Binested
- * scala> import cats.implicits._
+ * scala> import cats.syntax.all._
  * scala> val eitherListOption: Either[List[Int], Option[String]] = Right(Some("cats"))
  * scala> val f: Int => String = _.toString
  * scala> val g: String => String = _ + "-bifunctor"

@@ -1,4 +1,7 @@
 # Applicative
+
+API Documentation: @:api(cats.Applicative)
+
 `Applicative` extends [`Functor`](functor.md) with an `ap` and `pure` method.
 
 ```scala mdoc:silent
@@ -80,7 +83,7 @@ def product3[F[_]: Applicative, A, B, C](fa: F[A], fb: F[B], fc: F[C]): F[(A, B,
 Let's see what happens if we try to compose two effectful values with just `map`.
 
 ```scala mdoc:silent
-import cats.implicits._
+import cats.syntax.all._
 
 val f: (Int, Char) => Double = (i, c) => (i + c).toDouble
 
@@ -102,7 +105,7 @@ does `F[G[_]]`.
 
 ```scala mdoc:silent
 import cats.data.Nested
-import cats.implicits._
+import cats.syntax.all._
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -172,7 +175,7 @@ This works...but if we look carefully at the implementation there's nothing `Opt
 another example let's implement the same function but for `Either`.
 
 ```scala mdoc:silent
-import cats.implicits._
+import cats.syntax.all._
 
 def traverseEither[E, A, B](as: List[A])(f: A => Either[E, B]): Either[E, List[B]] =
   as.foldRight(Right(List.empty[B]): Either[E, List[B]]) { (a: A, acc: Either[E, List[B]]) =>
@@ -203,7 +206,7 @@ This function is provided by Cats via the `Traverse[List]` instance and syntax, 
 tutorial.
 
 ```scala mdoc:silent
-import cats.implicits._
+import cats.syntax.all._
 ```
 
 ```scala mdoc
@@ -254,7 +257,7 @@ Applicative[Option].map3(username, password, url)(attemptConnect)
 With the applicative syntax, we can change this to the slightly shorter:
 
 ```scala mdoc
-import cats.implicits._
+import cats.syntax.all._
 
 (username, password, url).mapN(attemptConnect)
 ```
@@ -265,7 +268,7 @@ together, so there's a little less boilerplate here.
 Another very useful `Apply` syntax is `tupled`, which allows a tuple of effectful values to be composed into a single effectful value containing a tuple. 
 
 ```scala mdoc
-import cats.implicits._
+import cats.syntax.all._
 
 val optPair: Option[(String, String)] = (username, password).tupled
 ```

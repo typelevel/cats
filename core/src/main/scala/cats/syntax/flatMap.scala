@@ -85,7 +85,7 @@ final class FlattenOps[F[_], A](private val ffa: F[F[A]]) extends AnyVal {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> type ErrorOr[A] = Either[String, A]
    * scala> val x: ErrorOr[ErrorOr[Int]] = 3.asRight.asRight
    * scala> x.flatten
@@ -103,7 +103,7 @@ final class IfMOps[F[_]](private val fa: F[Boolean]) extends AnyVal {
    * Example:
    * {{{
    * scala> import cats.{Eval, Now}
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val b1: Eval[Boolean] = Now(true)
    * scala> val asInt1: Eval[Int] = b1.ifM(Now(1), Now(0))
@@ -124,7 +124,7 @@ final class FlatMapIdOps[A](private val a: A) extends AnyVal {
   /**
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val a: Int = 10
    * scala> a.tailRecM[Option,String](i => if (i == 20) Some(Right("done")) else Some(Left(i+1)))

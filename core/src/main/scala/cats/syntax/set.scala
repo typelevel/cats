@@ -38,7 +38,7 @@ final class SetOps[A](private val se: SortedSet[A]) extends AnyVal {
    * {{{
    * scala> import scala.collection.immutable.SortedSet
    * scala> import cats.data.NonEmptySet
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val result1: SortedSet[Int] = SortedSet(1, 2)
    * scala> result1.toNes
@@ -58,7 +58,7 @@ final class SetOps[A](private val se: SortedSet[A]) extends AnyVal {
    * {{{
    * scala> import cats.data.NonEmptySet
    * scala> import scala.collection.immutable.{SortedMap, SortedSet}
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val sortedSet = SortedSet(12, -2, 3, -5)
    *

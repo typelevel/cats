@@ -28,7 +28,7 @@ package arrow
  * Here's how you can use `>>>` and `<<<`
  * Example:
  * {{{
- * scala> import cats.implicits._
+ * scala> import cats.syntax.all._
  * scala> val f : Int => Int = (_ + 1)
  * scala> val g : Int => Int = (_ * 100)
  * scala> (f >>> g)(3)

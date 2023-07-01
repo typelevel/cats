@@ -1,5 +1,7 @@
 # NonEmptyList
 
+API Documentation: @:api(cats.data.NonEmptyList)
+
 ## Motivation
 
 We start with two examples of `NonEmptyList`s
@@ -165,7 +167,7 @@ is only available for non-empty datastructures.
 Here are some examples:
 
 ```scala mdoc
-import cats.implicits._
+import cats.syntax.all._
 
 NonEmptyList.fromFoldable(List())
 NonEmptyList.fromFoldable(List(1,2,3))

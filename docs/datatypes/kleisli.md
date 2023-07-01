@@ -1,4 +1,7 @@
 # Kleisli
+
+API Documentation: @:api(cats.data.Kleisli)
+
 Kleisli enables composition of functions that return a monadic value, for instance an `Option[Int]` 
 or a `Either[String, List[Double]]`, without having functions take an `Option` or `Either` as a parameter, 
 which can be strange and unwieldy.
@@ -56,7 +59,7 @@ compose two `Kleisli`s much like we can two functions.
 
 ```scala mdoc:silent
 import cats.FlatMap
-import cats.implicits._
+import cats.syntax.all._
 
 final case class Kleisli[F[_], A, B](run: A => F[B]) {
   def compose[Z](k: Kleisli[F, Z, A])(implicit F: FlatMap[F]): Kleisli[F, Z, B] =
@@ -68,7 +71,7 @@ Returning to our earlier example:
 
 ```scala mdoc:silent:nest
 // Bring in cats.FlatMap[Option] instance
-import cats.implicits._
+import cats.syntax.all._
 
 val parse: Kleisli[Option,String,Int] =
   Kleisli((s: String) => if (s.matches("-?[0-9]+")) Some(s.toInt) else None)
@@ -121,7 +124,7 @@ An example of a `Monad` instance for `Kleisli` is shown below.
 *Note*: the example below assumes usage of the [kind-projector compiler plugin](https://github.com/typelevel/kind-projector) and will not compile if it is not being used in a project.
 
 ```scala mdoc:silent
-import cats.implicits._
+import cats.syntax.all._
 
 // We can define a FlatMap instance for Kleisli if the F[_] we chose has a FlatMap instance
 // Note the input type and F are fixed, with the output type left free

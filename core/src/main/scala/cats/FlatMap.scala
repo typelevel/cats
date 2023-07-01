@@ -47,7 +47,7 @@ trait FlatMap[F[_]] extends Apply[F] with FlatMapArityFunctions[F] {
    * Example:
    * {{{
    * scala> import cats.Eval
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val nested: Eval[Eval[Int]] = Eval.now(Eval.now(3))
    * scala> val flattened: Eval[Int] = nested.flatten
@@ -65,7 +65,7 @@ trait FlatMap[F[_]] extends Apply[F] with FlatMapArityFunctions[F] {
    *
    * {{{
    * scala> import cats.Eval
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val fa: Option[Int] = Some(3)
    * scala> def fb: Option[String] = Some("foo")
    * scala> fa.productREval(Eval.later(fb))
@@ -84,7 +84,7 @@ trait FlatMap[F[_]] extends Apply[F] with FlatMapArityFunctions[F] {
    *
    * {{{
    * scala> import cats.Eval
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> var count = 0
    * scala> val fa: Option[Int] = Some(3)
    * scala> def fb: Option[Unit] = Some(count += 1)
@@ -127,7 +127,7 @@ trait FlatMap[F[_]] extends Apply[F] with FlatMapArityFunctions[F] {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> List("12", "34", "56").mproduct(_.toList)
    * res0: List[(String, Char)] = List((12,1), (12,2), (34,3), (34,4), (56,5), (56,6))
    * }}}

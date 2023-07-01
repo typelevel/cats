@@ -55,9 +55,10 @@ All ring-like structures are associative for both `+` and `*`, have commutative 
 |CommutativeRig      |             |       ✓|                 |               ✓|
 |Ring                |            ✓|       ✓|                 |                |
 |CommutativeRing     |            ✓|       ✓|                 |               ✓|
+|Semifield           |             |       ✓|                ✓|                |
+|CommutativeSemifield|             |       ✓|                ✓|               ✓|
 |Field               |            ✓|       ✓|                ✓|               ✓|
 
-With the exception of `CommutativeRig` and `Rng`, every lower structure is also an instance of the structures above it. For example, every `Ring` is a `Rig`, every `Field` is a `CommutativeRing`, and so on.
 
 (For a description of what the terminology in each column means, see [§algebraic properties and terminology](#algebraic-properties-and-terminology).)
 
@@ -106,4 +107,4 @@ Also, a `Bool` gives rise to a `BoolRing`, since each element can be defined as 
 
 ### Documentation Help
 
-We'd love your help with this documentation! You can edit this page in your browser by clicking [this link](https://github.com/typelevel/cats/edit/master/docs/src/main/mdoc/algebra.md).
+We'd love your help with this documentation! You can edit this page in your browser by clicking [this link](https://github.com/typelevel/cats/edit/main/docs/algebra.md).

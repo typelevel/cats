@@ -36,7 +36,7 @@ trait NonEmptyTraverse[F[_]] extends Traverse[F] with Reducible[F] { self =>
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import cats.data.NonEmptyList
    * scala> def countWords(words: List[String]): Map[String, Int] = words.groupBy(identity).map { case (k, v) => (k, v.length) }
    * scala> val expectedResult = Map("do" -> NonEmptyList.of(1, 2), "you" -> NonEmptyList.of(1, 1))
@@ -55,7 +55,7 @@ trait NonEmptyTraverse[F[_]] extends Traverse[F] with Reducible[F] { self =>
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import cats.data.NonEmptyList
    * scala> val x = NonEmptyList.of(Map("do" -> 1, "you" -> 1), Map("do" -> 2, "you" -> 1))
    * scala> val y = NonEmptyList.of(Map("How" -> 3, "do" -> 1, "you" -> 1), Map[String,Int]())
@@ -73,7 +73,7 @@ trait NonEmptyTraverse[F[_]] extends Traverse[F] with Reducible[F] { self =>
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import cats.data.NonEmptyList
    * scala> val x = NonEmptyList.of(List("How", "do", "you", "fly"), List("What", "do", "you", "do"))
    * scala> x.nonEmptyFlatTraverse(_.groupByNel(identity) : Map[String, NonEmptyList[String]])
@@ -89,7 +89,7 @@ trait NonEmptyTraverse[F[_]] extends Traverse[F] with Reducible[F] { self =>
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import cats.data.NonEmptyList
    * scala> val x = NonEmptyList.of(Map(0 ->NonEmptyList.of(1, 2)), Map(0 -> NonEmptyList.of(3)))
    * scala> val y: NonEmptyList[Map[Int, NonEmptyList[Int]]] = NonEmptyList.of(Map(), Map(1 -> NonEmptyList.of(3)))

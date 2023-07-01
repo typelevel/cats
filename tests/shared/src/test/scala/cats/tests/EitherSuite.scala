@@ -22,12 +22,14 @@
 package cats.tests
 
 import cats._
-import cats.data.{EitherT, NonEmptyChain, NonEmptyList, NonEmptySet, Validated}
+import cats.data.{EitherT, NonEmptyChain, NonEmptyList, NonEmptySet, NonEmptyVector, Validated}
+import cats.syntax.bifunctor._
 import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.syntax.either._
+
 import scala.util.Try
 import cats.syntax.eq._
 import org.scalacheck.Prop._
@@ -180,6 +182,7 @@ class EitherSuite extends CatsSuite {
       assert(Either.leftNes[String, Int](s) === (Either.left[NonEmptySet[String], Int](NonEmptySet.one(s))))
     }
   }
+
   test("rightNes is consistent with right") {
     forAll { (i: Int) =>
       assert(Either.rightNes[String, Int](i) === (Either.right[NonEmptySet[String], Int](i)))
@@ -297,6 +300,7 @@ class EitherSuite extends CatsSuite {
       assert(x.isLeft === (x.toValidated.isInvalid))
       assert(x.isLeft === (x.toValidatedNel.isInvalid))
       assert(x.isLeft === (x.toValidatedNec.isInvalid))
+      assert(x.isLeft === (x.leftLiftTo[NonEmptyVector].isLeft))
       assert(Option(x.isLeft) === (x.toEitherT[Option].isLeft))
     }
   }
@@ -369,6 +373,22 @@ class EitherSuite extends CatsSuite {
     assert(either.toEitherNel === (Either.right[NonEmptyList[String], Int](42)))
   }
 
+  test("leftLiftTo Left") {
+    forAll { y: String =>
+      assert(
+        y.asLeft[Int].leftLiftTo[NonEmptyVector] === Either.left[NonEmptyVector[String], Int](
+          NonEmptyVector.one(y)
+        )
+      )
+    }
+  }
+
+  test("leftLiftTo Right") {
+    forAll { x: Int =>
+      assert(x.asRight[String].leftLiftTo[NonEmptyVector] === (Either.right[NonEmptyVector[String], Int](x)))
+    }
+  }
+
   test("ap consistent with Applicative") {
     val fab = implicitly[Applicative[Either[String, *]]]
     forAll { (fa: Either[String, Int], f: Int => String) =>
@@ -393,6 +413,16 @@ class EitherSuite extends CatsSuite {
     forAll { (either: Either[String, Int], f: String => Either[String, Int]) =>
       assert(either.leftFlatMap(f) === (either.swap.flatMap(a => f(a).swap).swap))
     }
+  }
+
+  test("raiseWhen raises when true") {
+    val result = Either.raiseWhen(true)("ok")
+    assert(result === Left("ok"))
+  }
+
+  test("raiseUnless raises when false") {
+    val result = Either.raiseUnless(false)("ok")
+    assert(result === Left("ok"))
   }
 }
 

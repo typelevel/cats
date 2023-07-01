@@ -1,5 +1,7 @@
 # Foldable
 
+API Documentation: @:api(cats.Foldable)
+
 Foldable type class instances can be defined for data structures that can be 
 folded to a summary value.
 
@@ -28,7 +30,7 @@ First some standard imports.
 
 ```scala mdoc:silent
 import cats._
-import cats.implicits._
+import cats.syntax.all._
 ```
 
 And examples.
@@ -123,4 +125,13 @@ after looking at only one value:
 
 ```scala mdoc
 Foldable[LazyList].foldRight(allFalse, Eval.True)((a,b) => if (a) b else Eval.False).value
+```
+
+Unfortunately, since `foldRight` is defined on many collections - this
+extension clashes with the operation defined in `Foldable`.
+To get past this and make sure you're getting the lazy `foldRight` defined
+in `Foldable`, there's an alias `foldr`:
+
+```scala mdoc
+allFalse.foldr(Eval.True)((a,b) => if (a) b else Eval.False).value
 ```

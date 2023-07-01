@@ -1,5 +1,7 @@
 # Eval
 
+API Documentation: @:api(cats.Eval)
+
 Eval is a data type for controlling synchronous evaluation.
 Its implementation is designed to provide stack-safety at all times using a technique called trampolining.
 
@@ -21,7 +23,7 @@ First of the strategies is eager evaluation, we can construct an `Eval` eagerly 
 
 ```scala mdoc
 import cats.Eval
-import cats.implicits._
+import cats.syntax.all._
 
 
 val eager = Eval.now {

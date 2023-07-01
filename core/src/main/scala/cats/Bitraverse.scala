@@ -31,7 +31,7 @@ trait Bitraverse[F[_, _]] extends Bifoldable[F] with Bifunctor[F] { self =>
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> def parseInt(s: String): Option[Int] = Either.catchOnly[NumberFormatException](s.toInt).toOption
    *
@@ -49,7 +49,7 @@ trait Bitraverse[F[_, _]] extends Bifoldable[F] with Bifunctor[F] { self =>
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val rightSome: Either[Option[String], Option[Int]] = Either.right(Some(3))
    * scala> rightSome.bisequence
@@ -89,7 +89,7 @@ trait Bitraverse[F[_, _]] extends Bifoldable[F] with Bifunctor[F] { self =>
    *
    *  Example:
    *  {{{
-   *  scala> import cats.implicits._
+   *  scala> import cats.syntax.all._
    *
    *  scala> val intAndString: (Int, String) = (7, "test")
    *
@@ -110,7 +110,7 @@ trait Bitraverse[F[_, _]] extends Bifoldable[F] with Bifunctor[F] { self =>
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val optionalErrorRight: Either[Option[String], Int] = Either.right(123)
    * scala> optionalErrorRight.leftSequence

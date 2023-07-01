@@ -1,5 +1,7 @@
 # ContT
 
+API Documentation: @:api(cats.data.ContT)
+
 A pattern that appears sometimes in functional programming is that of a function
 first computing some kind of intermediate result and then passing that result to
 another function which was passed in as an argument, in order to delegate the

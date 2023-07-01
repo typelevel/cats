@@ -1,5 +1,7 @@
 # IorT
 
+API Documentation: @:api(cats.data.IorT)
+
 `IorT[F[_], A, B]` is a light wrapper on an `F[Ior[A, B]]`. Similar to
 `OptionT[F[_], A]` and `EitherT[F[_], A, B]`, it is a monad transformer for
 `Ior`, that can be more convenient to work with than using `F[Ior[A, B]]`
@@ -13,7 +15,7 @@ validating an address:
 ```scala mdoc:silent
 import cats.data.Ior
 import cats.data.{ NonEmptyChain => Nec }
-import cats.implicits._
+import cats.syntax.all._
 import scala.util.{Success, Try}
 
 type Logs = Nec[String]

@@ -267,6 +267,20 @@ final class NonEmptySeq[+A] private (val toSeq: Seq[A]) extends AnyVal with NonE
   def reverse: NonEmptySeq[A] =
     new NonEmptySeq(toSeq.reverse)
 
+  /**
+   * Zips this `NonEmptySeq` with another `NonEmptySeq` and returns the pairs of elements.
+   *
+   * {{{
+   * scala> import cats.data.NonEmptySeq
+   * scala> val as = NonEmptySeq.of(1, 2, 3)
+   * scala> val bs = NonEmptySeq.of("A", "B", "C")
+   * scala> as.zip(bs)
+   * res0: cats.data.NonEmptySeq[(Int, String)] = NonEmptySeq((1,A), (2,B), (3,C))
+   * }}}
+   */
+  def zip[B](nes: NonEmptySeq[B]): NonEmptySeq[(A, B)] =
+    NonEmptySeq((head, nes.head), tail.zip(nes.tail))
+
   def mapWithIndex[B](f: (A, Int) => B): NonEmptySeq[B] =
     new NonEmptySeq(toSeq.zipWithIndex.map(ai => f(ai._1, ai._2)))
 
@@ -286,7 +300,7 @@ final class NonEmptySeq[+A] private (val toSeq: Seq[A]) extends AnyVal with NonE
    * {{{
    * scala> import scala.collection.immutable.SortedMap
    * scala> import cats.data.NonEmptySeq
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val neSeq = NonEmptySeq.of(12, -2, 3, -5)
    * scala> val expectedResult = SortedMap(false -> NonEmptySeq.of(-2, -5), true -> NonEmptySeq.of(12, 3))
    * scala> val result = neSeq.groupBy(_ >= 0)
@@ -318,7 +332,7 @@ final class NonEmptySeq[+A] private (val toSeq: Seq[A]) extends AnyVal with NonE
    *
    * {{{
    * scala> import cats.data.{NonEmptyMap, NonEmptySeq}
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val nel = NonEmptySeq.of(12, -2, 3, -5)
    * scala> val expectedResult = NonEmptyMap.of(false -> NonEmptySeq.of(-2, -5), true -> NonEmptySeq.of(12, 3))
    * scala> val result = nel.groupByNem(_ >= 0)
@@ -334,7 +348,7 @@ final class NonEmptySeq[+A] private (val toSeq: Seq[A]) extends AnyVal with NonE
    *
    * {{{
    * scala> import cats.data.NonEmptySeq
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val nel = NonEmptySeq.of(12, -2, 3, -5)
    * scala> val expectedResult = List(NonEmptySeq.of(12, -2), NonEmptySeq.of(3, -5))
    * scala> val result = nel.grouped(2)
@@ -351,7 +365,7 @@ final class NonEmptySeq[+A] private (val toSeq: Seq[A]) extends AnyVal with NonE
    * Creates new `NonEmptyMap`, similarly to List#toMap from scala standard library.
    * {{{
    * scala> import cats.data.{NonEmptyMap, NonEmptySeq}
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import scala.collection.immutable.Seq
    * scala> val neSeq = NonEmptySeq((0, "a"), Seq((1, "b"),(0, "c"), (2, "d")))
    * scala> val expectedResult = NonEmptyMap.of(0 -> "c", 1 -> "b", 2 -> "d")

@@ -1,6 +1,6 @@
-## Alleycats
+# Alleycats
 
-### Overview
+## Overview
 
 Alleycats is a module of the [Cats](https://github.com/typelevel/cats)
 project that exists to support types which are not entirely savory or
@@ -16,12 +16,12 @@ some notion of "emptiness").
 Rather than argue about whether to permit these types in Cats proper, we
 provide a (slightly disreputable) home for them here.
 
-### Type classes
+## Type classes
 
 Alleycats introduces several new type classes. Here is an overview of
 the instances introduced.
 
-#### Empty[A], Zero[A], and One[A]
+### Empty\[A\], Zero\[A\], and One\[A\]
 
 A commonly-requested type class is one that encodes the idea of a set
 having an identity element. Normally this would be done by defining a
@@ -49,7 +49,7 @@ effect).
 The same rules apply to `Zero[A]` and `One[A]` and their respective
 associative operations.
 
-#### Pure[F[\_]] and Extract[F[\_]]
+### Pure\[F\[\_\]\] and Extract\[F\[\_\]\]
 
 The `Pure[F]` type class represents the `pure` method of
 `Applicative[F]` separated from its `map` and `ap` methods. Like the
@@ -62,18 +62,18 @@ Similarly, `Extract[F]` represents the `extract` method of
 and `CoflatMap[F]` are available, they should provide a valid
 `Comonad[F]` instance.
 
-#### EmptyK[F[\_]]
+### EmptyK\[F\[\_\]\]
 
 Finally, `EmptyK[F]` generalizes the `empty[A]` method from
 `MonoidK[F]`. The pattern here is the same as before --
 `SemigroupK[F]` and `EmptyK[F]` should provide a valid `MonoidK[F]`
 instance.
 
-### Instances
+## Instances
 
 Alleycats also provides some "disreputable" type class instances.
 
-#### Set[\_] instances
+### Set\[\_\] instances
 
 Scala's `Set[_]` takes advantage of the universal availability of
 `.hashCode` and `.equals`. This makes it difficult to use
@@ -84,7 +84,7 @@ and monads.
 Alleycats provides `Monad[Set]` and `Traverse[Set]`. You can import
 these instances via `import alleycats.std.set._`.
 
-#### Try[\_] instances
+### Try\[\_\] instances
 
 Scala's `Try[_]` is intended to replace the need for `try { ... }
 catch { ... }` syntax in Scala programs, to ease error-handling, and
@@ -95,7 +95,7 @@ that `Try` fulfills the necessary functor/monad laws.
 Alleycats provides a `Monad[Try]`. You can import this instance via
 `import alleycats.std.try._`.
 
-#### Iterable[\_] instances
+### Iterable\[\_\] instances
 
 Scala's `collection.Iterable[_]` offers no guarantees that it's immutable,
 since it abstracts over the `mutable` and `immutable` variants. However it's
@@ -103,14 +103,14 @@ the type used to represent a `Map`s `values`, and its often desirable to treat t
 values of a map as a `Foldable` collection. Alleycats provides a `Foldable[Iterable]`, eg:
 
 ```
-import cats.implicits._
+import cats.syntax.all._
 import alleycats.std.iterable._
 
 // Result "AppleOrange"
 Map(1 -> "Apple", 2 -> "Orange").values.combineAll
 ```
 
-### Contributing
+## Contributing
 
 This module's goal is to be very liberal about accepting type class
 instances, but to only provide instances which are absent from

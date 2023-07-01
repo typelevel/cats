@@ -22,7 +22,7 @@
 package cats
 package laws
 
-import cats.implicits._
+import cats.syntax.all._
 
 import scala.collection.mutable
 

@@ -1,5 +1,7 @@
 # Monoid
 
+API Documentation: @:api(cats.kernel.Monoid)
+
 `Monoid` extends the power of `Semigroup` by providing an additional `empty` value.
 
 ```scala mdoc:silent
@@ -51,7 +53,7 @@ def combineAll[A: Monoid](as: List[A]): A =
 which can be used for any type that has a `Monoid` instance.
 
 ```scala mdoc:silent
-import cats.implicits._
+import cats.syntax.all._
 ```
 
 ```scala mdoc
@@ -90,7 +92,7 @@ How then can we collapse a `List[NonEmptyList[A]]` ? For such types that only ha
 lift into `Option` to get a `Monoid`.
 
 ```scala mdoc:silent
-import cats.implicits._
+import cats.syntax.all._
 
 implicit def optionMonoid[A: Semigroup]: Monoid[Option[A]] = new Monoid[Option[A]] {
   def empty: Option[A] = None
@@ -114,7 +116,7 @@ Thus:
 ```scala mdoc:reset:silent
 import cats.Monoid
 import cats.data.NonEmptyList
-import cats.implicits._
+import cats.syntax.all._
 
 val list = List(NonEmptyList(1, List(2, 3)), NonEmptyList(4, List(5, 6)))
 val lifted = list.map(nel => Option(nel))

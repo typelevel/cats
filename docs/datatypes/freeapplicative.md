@@ -1,5 +1,7 @@
 # Free Applicative
 
+API Documentation: @:api(cats.free.FreeApplicative)
+
 `FreeApplicative`s are similar to `Free` (monads) in that they provide a nice way to represent
 computations as data and are useful for building embedded DSLs (EDSLs). However, they differ
 from `Free` in that the kinds of operations they support are limited, much like the distinction
@@ -37,7 +39,7 @@ Because a `FreeApplicative` only supports the operations of `Applicative`, we do
 of a for-comprehension. We can however still use `Applicative` syntax provided by Cats.
 
 ```scala mdoc:silent
-import cats.implicits._
+import cats.syntax.all._
 
 val prog: Validation[Boolean] = (size(5), hasNumber).mapN { case (l, r) => l && r}
 ```
@@ -48,7 +50,7 @@ at this point. To make our program useful we need to interpret it.
 ```scala mdoc:silent
 import cats.Id
 import cats.arrow.FunctionK
-import cats.implicits._
+import cats.syntax.all._
 
 // a function that takes a string as input
 type FromString[A] = String => A
@@ -86,7 +88,7 @@ write a validator that validates in parallel.
 
 ```scala mdoc:silent
 import cats.data.Kleisli
-import cats.implicits._
+import cats.syntax.all._
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -114,7 +116,7 @@ we can completely ignore the return type of the operation and return just a `Lis
 
 ```scala mdoc:silent
 import cats.data.Const
-import cats.implicits._
+import cats.syntax.all._
 
 type Log[A] = Const[List[String], A]
 

@@ -1,5 +1,7 @@
 # Show
 
+API Documentation: @:api(cats.Show)
+
 Show is an alternative to the Java `toString` method.
 It is defined by a single function `show`:
 
@@ -52,7 +54,7 @@ Cats also offers `Show` syntax to make working with it easier.
 This includes the `show` method which can be called on anything with a `Show` instance in scope:
 
 ```scala mdoc
-import cats.implicits._
+import cats.syntax.all._
 
 val john = Person("John", 31)
 

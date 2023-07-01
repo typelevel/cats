@@ -41,7 +41,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * // integer-rounded division
    * scala> def divide[F[_]](dividend: Int, divisor: Int)(implicit F: ApplicativeError[F, String]): F[Int] =
@@ -322,7 +322,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import cats.ApplicativeError
    * scala> val F = ApplicativeError[Either[String, *], String]
    *
@@ -344,7 +344,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import cats.ApplicativeError
    *
    * scala> ApplicativeError[Option, Unit].fromValidated(1.valid[Unit])
@@ -388,7 +388,7 @@ object ApplicativeError {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import cats.ApplicativeError
    *
    * scala> ApplicativeError.liftFromOption[Either[String, *]](Some(1), "Empty")

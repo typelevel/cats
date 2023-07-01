@@ -160,7 +160,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val l = List(6, 3, 2)
    * This is equivalent to (6 - 3) - 2
    * scala> Foldable[List].reduceLeftOption(l)(_ - _)
@@ -188,7 +188,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val l = List(6, 3, 2)
    * This is equivalent to 6 - (3 - 2)
    * scala> Foldable[List].reduceRightOption(l)((current, rest) => rest.map(current - _)).value
@@ -344,7 +344,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * Like `collectFirst` from `scala.collection.Traversable` but takes `A => Option[B]`
    * instead of `PartialFunction`s.
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val keys = List(1, 2, 4, 5)
    * scala> val map = Map(4 -> "Four", 5 -> "Five")
    * scala> keys.collectFirstSome(map.get)
@@ -368,7 +368,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    *
    * For example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> def parseInt(s: String): Either[String, Int] = Either.catchOnly[NumberFormatException](s.toInt).leftMap(_.getMessage)
    * scala> val keys1 = List("1", "2", "4", "5")
    * scala> val map1 = Map(4 -> "Four", 5 -> "Five")
@@ -402,7 +402,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
   /**
    * Tear down a subset of this structure using a `PartialFunction`.
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val xs = List(1, 2, 3, 4)
    * scala> Foldable[List].collectFold(xs) { case n if n % 2 == 0 => n }
    * res0: Int = 6
@@ -415,7 +415,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
   /**
    * Tear down a subset of this structure using a `A => Option[M]`.
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val xs = List(1, 2, 3, 4)
    * scala> def f(n: Int): Option[Int] = if (n % 2 == 0) Some(n) else None
    * scala> Foldable[List].collectFoldSome(xs)(f)
@@ -491,7 +491,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * For example:
    *
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val F = Foldable[List]
    * scala> F.foldA(List(Either.right[String, Int](1), Either.right[String, Int](2)))
    * res0: Either[String, Int] = Right(3)
@@ -532,7 +532,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    *
    * {{{
    * scala> import cats.Foldable
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val evenNumbers = List(2,4,6,8,10)
    * scala> val evenOpt: Int => Option[Int] =
    *      |   i => if (i % 2 == 0) Some(i) else None
@@ -553,7 +553,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    *
    * {{{
    * scala> import cats.Foldable
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val evenNumbers = List(2,4,6,8,10)
    * scala> val evenOpt: Int => Option[Int] =
    *      |   i => if (i % 2 == 0) Some(i) else None
@@ -575,7 +575,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * For example:
    *
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> def parseInt(s: String): Option[Int] = Either.catchOnly[NumberFormatException](s.toInt).toOption
    * scala> val F = Foldable[List]
    * scala> F.traverse_(List("333", "444"))(parseInt)
@@ -604,7 +604,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * For example:
    *
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val F = Foldable[List]
    * scala> F.sequence_(List(Option(1), Option(2), Option(3)))
    * res0: Option[Unit] = Some(())
@@ -624,7 +624,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * For example:
    *
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val F = Foldable[List]
    * scala> F.foldK(List(1 :: 2 :: Nil, 3 :: 4 :: 5 :: Nil))
    * res0: List[Int] = List(1, 2, 3, 4, 5)
@@ -647,7 +647,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    *
    * For example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val list = List(1,2,3,4)
    * scala> Foldable[List].findM(list)(n => (n >= 2).asRight[String])
    * res0: Either[String,Option[Int]] = Right(Some(2))
@@ -694,7 +694,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * For example:
    *
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val F = Foldable[List]
    * scala> F.existsM(List(1,2,3,4))(n => Option(n <= 4))
    * res0: Option[Boolean] = Some(true)
@@ -729,7 +729,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * For example:
    *
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val F = Foldable[List]
    * scala> F.forallM(List(1,2,3,4))(n => Option(n <= 4))
    * res0: Option[Boolean] = Some(true)
@@ -768,7 +768,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * Equivalent to `Functor#map` and then `Alternative#separate`.
    *
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val list = List(1,2,3,4)
    * scala> Foldable[List].partitionEither(list)(a => if (a % 2 == 0) Left(a.toString) else Right(a))
    * res0: (List[String], List[Int]) = (List(2, 4),List(1, 3))
@@ -825,7 +825,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * Intercalate/insert an element between the existing elements while folding.
    *
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> Foldable[List].intercalate(List("a","b","c"), "-")
    * res0: String = a-b-c
    * scala> Foldable[List].intercalate(List("a"), "-")
@@ -871,7 +871,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * Equivalent to `Functor#map` and then `Alternative#separate`.
    *
    * {{{
-   * scala> import cats.implicits._, cats.Foldable, cats.data.Const
+   * scala> import cats.syntax.all._, cats.Foldable, cats.data.Const
    * scala> val list = List(1,2,3,4)
    * scala> Foldable[List].partitionBifold(list)(a => ("value " + a.toString(), if (a % 2 == 0) -a else a))
    * res0: (List[String], List[Int]) = (List(value 1, value 2, value 3, value 4),List(1, -2, 3, -4))
@@ -898,7 +898,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * Equivalent to `Traverse#traverse` over `Alternative#separate`
    *
    * {{{
-   * scala> import cats.implicits._, cats.Foldable, cats.data.Const
+   * scala> import cats.syntax.all._, cats.Foldable, cats.data.Const
    * scala> val list = List(1,2,3,4)
    * `Const`'s second parameter is never instantiated, so we can use an impossible type:
    * scala> Foldable[List].partitionBifoldM(list)(a => Option(Const[Int, Nothing with Any](a)))
@@ -926,7 +926,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * Equivalent to `Traverse#traverse` over `Alternative#separate`
    *
    * {{{
-   * scala> import cats.implicits._, cats.Foldable, cats.Eval
+   * scala> import cats.syntax.all._, cats.Foldable, cats.Eval
    * scala> val list = List(1,2,3,4)
    * scala> val partitioned1 = Foldable[List].partitionEitherM(list)(a => if (a % 2 == 0) Eval.now(Either.left[String, Int](a.toString)) else Eval.now(Either.right[String, Int](a)))
    * Since `Eval.now` yields a lazy computation, we need to force it to inspect the result:

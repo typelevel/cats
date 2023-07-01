@@ -1,5 +1,7 @@
 # Eq
 
+API Documentation: @:api(cats.kernel.Eq)
+
 Eq is an alternative to the standard Java `equals` method.
 It is defined by the single method `eqv`:
 
@@ -32,7 +34,7 @@ eliminating these types of bugs altogether.
 The `Eq` syntax package also offers some handy symbolic operators:
 
 ```scala mdoc
-import cats.implicits._
+import cats.syntax.all._
 
 1 === 1
 
@@ -47,7 +49,7 @@ The first option using `Eq.fromUniversalEquals` only defers to `==` and works li
 
 ```scala mdoc
 import cats.kernel.Eq
-import cats.implicits._
+import cats.syntax.all._
 
 
 case class Foo(a: Int, b: String)

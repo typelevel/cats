@@ -41,7 +41,7 @@ trait Functor[F[_]] extends Invariant[F] { self =>
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val m: Map[Int, String] = Map(1 -> "hi", 2 -> "there", 3 -> "you")
    *
@@ -212,6 +212,12 @@ trait Functor[F[_]] extends Invariant[F] { self =>
     new ComposedFunctor[F, G] {
       val F = self
       val G = Functor[G]
+    }
+
+  def composeBifunctor[G[_, _]: Bifunctor]: Bifunctor[λ[(α, β) => F[G[α, β]]]] =
+    new ComposedFunctorBifunctor[F, G] {
+      val F = self
+      val G = Bifunctor[G]
     }
 
   override def composeContravariant[G[_]: Contravariant]: Contravariant[λ[α => F[G[α]]]] =

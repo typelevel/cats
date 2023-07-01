@@ -422,7 +422,7 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
    * {{{
    * scala> import scala.collection.immutable.SortedMap
    * scala> import cats.data.{Chain, NonEmptyChain}
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val chain = Chain(12, -2, 3, -5)
    * scala> val expectedResult = SortedMap(false -> NonEmptyChain(-2, -5), true -> NonEmptyChain(12, 3))
    * scala> val result = chain.groupBy(_ >= 0)
@@ -442,7 +442,7 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
    * {{{
    * scala> import scala.collection.immutable.SortedMap
    * scala> import cats.data.{Chain, NonEmptyChain}
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val chain = Chain(12, -2, 3, -5)
    * scala> val expectedResult = SortedMap(false -> NonEmptyChain("-2", "-5"), true -> NonEmptyChain("12", "3"))
    * scala> val result = chain.groupMap(_ >= 0)(_.toString)
@@ -477,7 +477,7 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
    * {{{
    * scala> import scala.collection.immutable.SortedMap
    * scala> import cats.data.Chain
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val chain = Chain("Hello", "World", "Goodbye", "World")
    * scala> val expectedResult = SortedMap("goodbye" -> 1, "hello" -> 1, "world" -> 2)
    * scala> val result = chain.groupMapReduce(_.trim.toLowerCase)(_ => 1)
@@ -499,7 +499,7 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
    * {{{
    * scala> import scala.collection.immutable.SortedMap
    * scala> import cats.data.Chain
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val chain = Chain("Hello", "World", "Goodbye", "World")
    * scala> val expectedResult = SortedMap("goodbye" -> 1, "hello" -> 1, "world" -> 2)
    * scala> val result = chain.groupMapReduceWith(_.trim.toLowerCase)(_ => 1)(_ + _)

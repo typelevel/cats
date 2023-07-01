@@ -45,7 +45,7 @@ trait MonadError[F[_], E] extends ApplicativeError[F, E] with Monad[F] {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import scala.util.{Try, Success}
    *
    * scala> val a: Try[Either[Throwable, Int]] = Success(Left(new java.lang.Exception))
@@ -108,7 +108,7 @@ trait MonadError[F[_], E] extends ApplicativeError[F, E] with Monad[F] {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import scala.util.{Try, Success, Failure}
    *
    * scala> def checkError(result: Either[Throwable, Int]): Try[String] = result.fold(_ => Failure(new java.lang.Exception), _ => Success("success"))

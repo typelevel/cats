@@ -70,7 +70,7 @@ final case class IorT[F[_], A, B](value: F[Ior[A, B]]) {
    * Example:
    * {{{
    * scala> import cats.data.IorT
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import scala.util.{Success, Failure, Try}
 
    * scala> val iorT: IorT[Try,String,Int] = IorT.leftT("abc")
@@ -195,7 +195,7 @@ object IorT extends IorTInstances {
    * Creates a left version of `IorT[F, A, B]` from a `F[A]`
    * {{{
    * scala> import cats.data.IorT
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> IorT.left[Int](Option("err"))
    * res0: cats.data.IorT[Option,String,Int] = IorT(Some(Left(err)))
    * }}}
@@ -213,7 +213,7 @@ object IorT extends IorTInstances {
    * Creates a left version of `IorT[F, A, B]` from a `A`
    * {{{
    * scala> import cats.data.IorT
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> IorT.leftT[Option, Int]("err")
    * res0: cats.data.IorT[Option,String,Int] = IorT(Some(Left(err)))
    *
@@ -232,7 +232,7 @@ object IorT extends IorTInstances {
    * Creates a right version of `IorT[F, A, B]` from a `F[B]`
    * {{{
    * scala> import cats.data.IorT
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> IorT.right[String](Option(3))
    * res0: cats.data.IorT[Option,String,Int] = IorT(Some(Right(3)))
    * }}}
@@ -243,7 +243,7 @@ object IorT extends IorTInstances {
    * Alias for [[pure]]
    * {{{
    * scala> import cats.data.IorT
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> IorT.rightT[Option, String](3)
    * res0: cats.data.IorT[Option,String,Int] = IorT(Some(Right(3)))
    * }}}
@@ -254,7 +254,7 @@ object IorT extends IorTInstances {
    * Creates a both version of `IorT[F, A, B]` from a `F[A]` and a `F[B]`
    * {{{
    * scala> import cats.data.IorT
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> IorT.both(Option("err"), Option(3))
    * res0: cats.data.IorT[Option,String,Int] = IorT(Some(Both(err,3)))
    * }}}
@@ -273,7 +273,7 @@ object IorT extends IorTInstances {
    * Creates a both version of `IorT[F, A, B]` from a `A` and a `B`
    * {{{
    * scala> import cats.data.IorT
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> IorT.bothT[Option]("err", 3)
    * res0: cats.data.IorT[Option,String,Int] = IorT(Some(Both(err,3)))
    * }}}
@@ -291,7 +291,7 @@ object IorT extends IorTInstances {
    * Creates a right version of `IorT[F, A, B]` from a `B`
    * {{{
    * scala> import cats.data.IorT
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> IorT.pure[Option, String](3)
    * res0: cats.data.IorT[Option,String,Int] = IorT(Some(Right(3)))
    * }}}
@@ -302,7 +302,7 @@ object IorT extends IorTInstances {
    * Alias for [[right]]
    * {{{
    * scala> import cats.data.IorT
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val o: Option[Int] = Some(3)
    * scala> val n: Option[Int] = None
    * scala> IorT.liftF(o)
@@ -339,7 +339,7 @@ object IorT extends IorTInstances {
    * Transforms an `Ior` into an `IorT`, lifted into the specified `Applicative`.
    * {{{
    * scala> import cats.data.{IorT, Ior}
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val i: Ior[String, Int] = Ior.both("warning", 3)
    * scala> IorT.fromIor[Option](i)
    * res0: cats.data.IorT[Option,String,Int] = IorT(Some(Both(warning,3)))
@@ -359,7 +359,7 @@ object IorT extends IorTInstances {
    * Transforms an `Either` into an `IorT`, lifted into the specified `Applicative`.
    * {{{
    * scala> import cats.data.IorT
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val e: Either[String, Int] = Either.right(3)
    * scala> IorT.fromEither[Option](e)
    * res0: cats.data.IorT[Option,String,Int] = IorT(Some(Right(3)))
@@ -371,7 +371,7 @@ object IorT extends IorTInstances {
    * Transforms an `F[Either]` into an `IorT`.
    * {{{
    * scala> import cats.data.IorT
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val e: Either[String, Int] = Either.right(3)
    * scala> IorT.fromEitherF(Option(e))
    * res0: cats.data.IorT[Option,String,Int] = IorT(Some(Right(3)))
@@ -393,7 +393,7 @@ object IorT extends IorTInstances {
    * the second argument if the `Option` is a `None`.
    * {{{
    * scala> import cats.data.IorT
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val o: Option[Int] = None
    * scala> IorT.fromOption[List](o, "Answer not known.")
    * res0: cats.data.IorT[List,String,Int] = IorT(List(Left(Answer not known.)))
@@ -407,7 +407,7 @@ object IorT extends IorTInstances {
    * Transforms an `F[Option]` into an `IorT`, using the second argument if the `Option` is a `None`.
    * {{{
    * scala> import cats.data.IorT
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val o: Option[Int] = None
    * scala> IorT.fromOptionF(List(o), "Answer not known.")
    * res0: cats.data.IorT[List,String,Int]  = IorT(List(Left(Answer not known.)))
@@ -442,7 +442,7 @@ object IorT extends IorTInstances {
    * `A` in `Ior.Left`, lifted into the specified `Applicative`.
    * {{{
    * scala> import cats.data.IorT
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val userInput = "hello world"
    * scala> IorT.cond[Option](
    *      |   userInput.forall(_.isDigit) && userInput.size == 10,
@@ -458,7 +458,7 @@ object IorT extends IorTInstances {
    * value of `IorT.left` on `F[A]`.
    * {{{
    * scala> import cats.data.IorT
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val userInput = "hello world"
    * scala> IorT.condF[Option, String, String](
    *      |   userInput.forall(_.isDigit) && userInput.size == 10,

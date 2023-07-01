@@ -43,7 +43,7 @@ trait Applicative[F[_]] extends Apply[F] with InvariantMonoidal[F] { self =>
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> Applicative[Option].pure(10)
    * res0: Option[Int] = Some(10)
@@ -59,7 +59,7 @@ trait Applicative[F[_]] extends Apply[F] with InvariantMonoidal[F] { self =>
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> Applicative[Option].unit
    * res0: Option[Unit] = Some(())
@@ -150,7 +150,7 @@ trait Applicative[F[_]] extends Apply[F] with InvariantMonoidal[F] { self =>
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> val alo = Applicative[List].compose[Option]
    *
@@ -174,7 +174,7 @@ trait Applicative[F[_]] extends Apply[F] with InvariantMonoidal[F] { self =>
    * Example:
    * {{{
    * scala> import cats.kernel.Comparison
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * // compares strings by alphabetical order
    * scala> val alpha: Order[String] = Order[String]
@@ -221,7 +221,7 @@ trait Applicative[F[_]] extends Apply[F] with InvariantMonoidal[F] { self =>
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> Applicative[List].unlessA(true)(List(1, 2, 3))
    * res0: List[Unit] = List(())
@@ -245,7 +245,7 @@ trait Applicative[F[_]] extends Apply[F] with InvariantMonoidal[F] { self =>
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    *
    * scala> Applicative[List].whenA(true)(List(1, 2, 3))
    * res0: List[Unit] = List((), (), ())
@@ -275,7 +275,7 @@ object Applicative {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> import cats.Applicative.catsApplicativeForArrow
    * scala> val toLong: Int => Long = _.toLong
    * scala> val double: Int => Int = 2*_
@@ -294,7 +294,7 @@ object Applicative {
    * Example:
    * {{{
    * scala> import cats._
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val fa = Some(3)
    * fa: Option[Int] = Some(3)
    * scala> Applicative.coflatMap[Option].coflatten(fa)
