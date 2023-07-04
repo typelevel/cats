@@ -38,7 +38,6 @@ trait ContravariantMonoidal[F[_]] extends ContravariantSemigroupal[F] with Invar
    * the diagonal
    */
   def trivial[A]: F[A] = contramap(unit)(_ => ())
-
 }
 object ContravariantMonoidal extends SemigroupalArityFunctions {
   def monoid[F[_], A](implicit f: ContravariantMonoidal[F]): Monoid[F[A]] =

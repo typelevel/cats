@@ -215,6 +215,12 @@ trait Applicative[F[_]] extends Apply[F] with InvariantMonoidal[F] { self =>
       val G = ContravariantMonoidal[G]
     }
 
+  def composeDecidable[G[_]: Decidable]: Decidable[λ[α => F[G[α]]]] =
+    new ComposedApplicativeDecidable[F, G] {
+      val F = self
+      val G = Decidable[G]
+    }
+
   /**
    * Returns the given argument (mapped to Unit) if `cond` is `false`,
    * otherwise, unit lifted into F.

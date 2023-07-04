@@ -21,14 +21,14 @@
 
 package cats.tests
 
-import cats.{Contravariant, ContravariantMonoidal, ContravariantSemigroupal}
+import cats.Eq
 import cats.data.Const
-import cats.kernel.{Eq, Monoid, Semigroup}
 import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests}
-import cats.laws.discipline.{ContravariantMonoidalTests, ExhaustiveCheck, MiniInt}
+import cats.kernel.{Monoid, Semigroup}
 import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.eq._
-import org.scalacheck.{Arbitrary, Cogen}
+import cats.laws.discipline.{DecidableTests, MiniInt}
+import cats.laws.discipline.ExhaustiveCheck.catsLawExhaustiveCheckForNothing
+import cats.{Contravariant, ContravariantMonoidal, ContravariantSemigroupal}
 import org.scalacheck.Prop._
 
 class ContravariantSuite extends CatsSuite {
@@ -43,26 +43,13 @@ class ContravariantSuite extends CatsSuite {
     }
   }
 
-  case class Predicate[A](run: A => Boolean)
-
-  implicit val contravariantMonoidalPredicate: ContravariantMonoidal[Predicate] =
-    new ContravariantMonoidal[Predicate] {
-      def unit: Predicate[Unit] = Predicate[Unit](Function.const(true))
-      def product[A, B](fa: Predicate[A], fb: Predicate[B]): Predicate[(A, B)] =
-        Predicate(x => fa.run(x._1) && fb.run(x._2))
-      def contramap[A, B](fa: Predicate[A])(f: B => A): Predicate[B] =
-        Predicate(x => fa.run(f(x)))
-    }
-
-  implicit def eqPredicate[A: ExhaustiveCheck]: Eq[Predicate[A]] =
-    Eq.by[Predicate[A], A => Boolean](_.run)
-
-  implicit def arbPredicate[A: Cogen]: Arbitrary[Predicate[A]] =
-    Arbitrary(implicitly[Arbitrary[A => Boolean]].arbitrary.map(f => Predicate(f)))
-
-  checkAll("ContravariantMonoidal[Predicate]",
-           ContravariantMonoidalTests[Predicate].contravariantMonoidal[Boolean, Boolean, Boolean]
-  )
+  {
+    implicit val eqForPredicateNothing: Eq[Predicate[Nothing]] = Predicate.eqPredicate[Nothing]
+    checkAll(
+      "Decidable[Predicate]",
+      DecidableTests[Predicate].decidable[Boolean, Boolean, Boolean]
+    )
+  }
 
   {
     implicit val predicateMonoid: Monoid[Predicate[MiniInt]] = ContravariantMonoidal.monoid[Predicate, MiniInt]

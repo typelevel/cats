@@ -399,6 +399,10 @@ sealed abstract private[data] class KleisliInstances0 extends KleisliInstances0_
       implicit def F: Monad[F] = F0
     }
 
+  implicit def catsDataDecidableForKleisli[F[_], A](implicit
+    F0: Decidable[F]
+  ): Decidable[Kleisli[F, A, *]] =
+    new KleisliDecidable[F, A] { def F: Decidable[F] = F0 }
 }
 
 sealed abstract private[data] class KleisliInstances0_5 extends KleisliInstances1 {
@@ -647,6 +651,18 @@ private[data] trait KleisliAlternative[F[_], A]
     with KleisliApplicative[F, A]
     with KleisliMonoidK[F, A] {
   implicit def F: Alternative[F]
+}
+
+sealed private[data] trait KleisliDecidable[F[_], D]
+    extends Decidable[Kleisli[F, D, *]]
+    with KleisliContravariantMonoidal[F, D] {
+  implicit def F: Decidable[F]
+
+  def sum[A, B](fa: Kleisli[F, D, A], fb: Kleisli[F, D, B]): Kleisli[F, D, Either[A, B]] =
+    Kleisli(d => F.sum(fa.run(d), fb.run(d)))
+
+  override val zero: Kleisli[F, D, Nothing] =
+    Kleisli[F, D, Nothing](_ => F.zero)
 }
 
 sealed private[data] trait KleisliContravariantMonoidal[F[_], D] extends ContravariantMonoidal[Kleisli[F, D, *]] {

@@ -164,7 +164,6 @@ sealed abstract private[data] class ConstInstances extends ConstInstances0 {
 }
 
 sealed abstract private[data] class ConstInstances0 extends ConstInstances1 {
-
   implicit def catsDataContravariantMonoidalForConst[D: Monoid]: ContravariantMonoidal[Const[D, *]] =
     new ContravariantMonoidal[Const[D, *]] {
       override def unit = Const.empty[D, Unit]

@@ -52,6 +52,8 @@ class Tuple2KSuite extends CatsSuite {
            SerializableTests.serializable(Contravariant[λ[α => Tuple2K[Show, Order, α]]])
   )
 
+  implicit val isoConst: Isomorphisms[λ[α => Tuple2K[Const[String, *], Const[String, *], α]]] =
+    Isomorphisms.invariant[λ[α => Tuple2K[Const[String, *], Const[String, *], α]]]
   checkAll(
     "Tuple2K[Const[String, *], Const[Int, *], Int]",
     ContravariantMonoidalTests[λ[α => Tuple2K[Const[String, *], Const[Int, *], α]]].contravariantMonoidal[Int, Int, Int]
@@ -60,6 +62,18 @@ class Tuple2KSuite extends CatsSuite {
     "ContravariantMonoidal[Tuple2K[Const[String, *], Const[Int, *], Int]]",
     SerializableTests.serializable(ContravariantMonoidal[λ[α => Tuple2K[Const[String, *], Const[Int, *], α]]])
   )
+
+  {
+    // Predicates on Nothing are vacuous, so their product are also
+    implicit val eqForTuple2KPredicateNothing: Eq[Tuple2K[Predicate, Predicate, Nothing]] = Eq.allEqual
+    checkAll("Tuple2K[Predicate, Predicate, MiniInt]",
+             DecidableTests[Tuple2K[Predicate, Predicate, *]].decidable[MiniInt, MiniInt, MiniInt]
+    )
+    checkAll(
+      "Decidable[Tuple2K[Predicate, Predicate, MiniInt]]",
+      SerializableTests.serializable(Decidable[Tuple2K[Predicate, Predicate, *]])
+    )
+  }
 
   checkAll("Show[Tuple2K[Option, Option, Int]]", SerializableTests.serializable(Show[Tuple2K[Option, Option, Int]]))
 

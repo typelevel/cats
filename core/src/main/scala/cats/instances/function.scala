@@ -22,7 +22,6 @@
 package cats
 package instances
 
-import cats.Contravariant
 import cats.arrow.{ArrowChoice, Category, CommutativeArrow}
 import cats.data.AndThen
 
@@ -79,6 +78,19 @@ private[instances] trait FunctionInstancesBinCompat0 {
         lazy val cachedFa = fa
         Deferred(() => cachedFa)
       }
+    }
+
+  implicit def catsStdDecidableForPredicate: Decidable[* => Boolean] =
+    new Decidable[* => Boolean] {
+      val unit: Unit => Boolean = Function.const(false)
+      def contramap[A, B](fa: A => Boolean)(f: B => A): B => Boolean =
+        fa.compose(f)
+      def product[A, B](fa: A => Boolean, fb: B => Boolean): ((A, B)) => Boolean = { case (a, b) =>
+        fa(a) || fb(b)
+      }
+      def sum[A, B](fa: A => Boolean, fb: B => Boolean): Either[A, B] => Boolean =
+        either => either.fold(fa, fb)
+      val zero: Nothing => Boolean = Function.const(true)
     }
 }
 
@@ -203,7 +215,6 @@ sealed private[instances] trait Function1Instances extends Function1Instances0 {
     override def combineK[A](x: Endo[A], y: Endo[A]): Endo[A] =
       AndThen(category.compose(x, y))
   }
-
 }
 
 sealed private[instances] trait Function1Instances0 {

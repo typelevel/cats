@@ -176,9 +176,12 @@ object Invariant extends ScalaVersionSpecificInvariantInstances with InvariantIn
     cats.instances.ordering.catsContravariantMonoidalForOrdering
   implicit def catsContravariantMonoidalForPartialOrdering: ContravariantMonoidal[PartialOrdering] =
     cats.instances.partialOrdering.catsContravariantMonoidalForPartialOrdering
-  implicit def catsContravariantMonoidalForEq: ContravariantMonoidal[Eq] =
+
+  @deprecated("Prefer cats.instances.eq.catsDecidableForEq, which supersedes this instance", "2.9.0")
+  def catsContravariantMonoidalForEq: ContravariantMonoidal[Eq] =
     cats.instances.eq.catsContravariantMonoidalForEq
-  implicit def catsContravariantMonoidalForEquiv: ContravariantMonoidal[Equiv] =
+  @deprecated("Prefer cats.instances.eq.catsDecidableForEquiv, which supersedes this instance", "2.9.0")
+  def catsContravariantMonoidalForEquiv: ContravariantMonoidal[Equiv] =
     cats.instances.equiv.catsContravariantMonoidalForEquiv
   implicit def catsContravariantForHash: Contravariant[Hash] =
     cats.instances.all.catsContravariantForHash
@@ -194,6 +197,13 @@ object Invariant extends ScalaVersionSpecificInvariantInstances with InvariantIn
     cats.instances.invariant.catsInvariantForIntegral
   implicit def catsInvariantForFractional: Invariant[Fractional] =
     cats.instances.invariant.catsInvariantForFractional
+
+  implicit def catsDecidableForEquiv: Decidable[Equiv] =
+    cats.instances.equiv.catsDecidableForEquiv
+  implicit def catsDecidableForEq: Decidable[Eq] =
+    cats.instances.eq.catsDecidableForEq
+  implicit def catsDecidableForPredicate: Decidable[* => Boolean] =
+    cats.instances.function.catsStdDecidableForPredicate
 
   implicit val catsInvariantMonoid: Invariant[Monoid] = new Invariant[Monoid] {
 

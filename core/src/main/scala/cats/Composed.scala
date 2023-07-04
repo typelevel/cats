@@ -184,6 +184,18 @@ private[cats] trait ComposedContravariantCovariant[F[_], G[_]] extends Contravar
     F.contramap(fga)(gb => G.map(gb)(f))
 }
 
+private[cats] trait ComposedApplicativeDecidable[F[_], G[_]]
+    extends Decidable[λ[α => F[G[α]]]]
+    with ComposedApplicativeContravariantMonoidal[F, G] { outer =>
+  def F: Applicative[F]
+  def G: Decidable[G]
+
+  def sum[A, B](fa: F[G[A]], fb: F[G[B]]): F[G[Either[A, B]]] =
+    F.map2(fa, fb)(G.sum)
+
+  override lazy val zero: F[G[Nothing]] = F.pure(G.zero)
+}
+
 private[cats] trait ComposedApplicativeContravariantMonoidal[F[_], G[_]]
     extends ContravariantMonoidal[λ[α => F[G[α]]]] { outer =>
   def F: Applicative[F]

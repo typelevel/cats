@@ -21,10 +21,10 @@
 
 package cats.tests
 
-import cats.{Contravariant, ContravariantMonoidal, ContravariantSemigroupal, Invariant, Semigroupal}
+import cats.{Contravariant, ContravariantMonoidal, ContravariantSemigroupal, Decidable, Invariant, Semigroupal}
 import cats.kernel.Eq
 import cats.kernel.laws.discipline.SerializableTests
-import cats.laws.discipline.{ContravariantMonoidalTests, MiniInt}
+import cats.laws.discipline.{DecidableTests, MiniInt}
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 
@@ -33,8 +33,13 @@ class EqSuite extends CatsSuite {
   Contravariant[Eq]
   Semigroupal[Eq]
   ContravariantSemigroupal[Eq]
+  ContravariantMonoidal[Eq]
+  Decidable[Eq]
 
-  checkAll("Eq", ContravariantMonoidalTests[Eq].contravariantMonoidal[MiniInt, Boolean, Boolean])
-  checkAll("ContravariantMonoidal[Eq]", SerializableTests.serializable(ContravariantMonoidal[Eq]))
+  // Since equivalence on functions (Nothing, Nothing) => Boolean is
+  // equivalence on Nothing => Boolean it should be vacuously true
+  implicit val eqForEqNothing: Eq[Eq[Nothing]] = Eq.allEqual[Eq[Nothing]]
+  checkAll("Eq", DecidableTests[Eq].decidable[MiniInt, Boolean, Boolean])
+  checkAll("Decidable[Eq]", SerializableTests.serializable(Decidable[Eq]))
 
 }

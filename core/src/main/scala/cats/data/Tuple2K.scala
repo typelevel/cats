@@ -76,13 +76,13 @@ sealed abstract private[data] class Tuple2KInstances extends Tuple2KInstances0 {
       def F: Show[F[A]] = FF
       def G: Show[G[A]] = GF
     }
-  implicit def catsDataContravariantMonoidalForTuple2k[F[_], G[_]](implicit
-    FD: ContravariantMonoidal[F],
-    GD: ContravariantMonoidal[G]
-  ): ContravariantMonoidal[λ[α => Tuple2K[F, G, α]]] =
-    new Tuple2KContravariantMonoidal[F, G] with Tuple2KContravariant[F, G] {
-      def F: ContravariantMonoidal[F] = FD
-      def G: ContravariantMonoidal[G] = GD
+  implicit def catsDataDecidableForTuple2k[F[_], G[_]](implicit
+    FD: Decidable[F],
+    GD: Decidable[G]
+  ): Decidable[λ[α => Tuple2K[F, G, α]]] =
+    new Tuple2KDecidable[F, G] with Tuple2KContravariant[F, G] {
+      def F: Decidable[F] = FD
+      def G: Decidable[G] = GD
     }
 
   implicit def catsDataDeferForTuple2K[F[_], G[_]](implicit F: Defer[F], G: Defer[G]): Defer[Tuple2K[F, G, *]] =
@@ -105,14 +105,6 @@ sealed abstract private[data] class Tuple2KInstances0 extends Tuple2KInstances1 
       def F: Traverse[F] = FF
       def G: Traverse[G] = GF
     }
-  implicit def catsDataContravariantForTuple2K[F[_], G[_]](implicit
-    FC: Contravariant[F],
-    GC: Contravariant[G]
-  ): Contravariant[λ[α => Tuple2K[F, G, α]]] =
-    new Tuple2KContravariant[F, G] {
-      def F: Contravariant[F] = FC
-      def G: Contravariant[G] = GC
-    }
   implicit def catsDataEqForTuple2K[F[_], G[_], A](implicit FF: Eq[F[A]], GG: Eq[G[A]]): Eq[Tuple2K[F, G, A]] =
     (x, y) => FF.eqv(x.first, y.first) && GG.eqv(x.second, y.second)
 }
@@ -125,6 +117,14 @@ sealed abstract private[data] class Tuple2KInstances1 extends Tuple2KInstances2 
     new Tuple2KAlternative[F, G] {
       def F: Alternative[F] = FF
       def G: Alternative[G] = GG
+    }
+  implicit def catsDataContravariantMonoidalForTuple2k[F[_], G[_]](implicit
+    FD: ContravariantMonoidal[F],
+    GD: ContravariantMonoidal[G]
+  ): ContravariantMonoidal[λ[α => Tuple2K[F, G, α]]] =
+    new Tuple2KContravariantMonoidal[F, G] with Tuple2KContravariant[F, G] {
+      def F: ContravariantMonoidal[F] = FD
+      def G: ContravariantMonoidal[G] = GD
     }
   implicit def catsDataFoldableForTuple2K[F[_], G[_]](implicit
     FF: Foldable[F],
@@ -166,6 +166,14 @@ sealed abstract private[data] class Tuple2KInstances2 extends Tuple2KInstances3 
     new Tuple2KMonad[F, G] {
       def F: Monad[F] = FM
       def G: Monad[G] = GM
+    }
+  implicit def catsDataContravariantForTuple2K[F[_], G[_]](implicit
+    FC: Contravariant[F],
+    GC: Contravariant[G]
+  ): Contravariant[λ[α => Tuple2K[F, G, α]]] =
+    new Tuple2KContravariant[F, G] {
+      def F: Contravariant[F] = FC
+      def G: Contravariant[G] = GC
     }
   implicit def catsDataMonoidKForTuple2K[F[_], G[_]](implicit
     FF: MonoidK[F],
@@ -296,6 +304,18 @@ sealed private[data] trait Tuple2KContravariant[F[_], G[_]] extends Contravarian
   def G: Contravariant[G]
   override def contramap[A, B](fa: Tuple2K[F, G, A])(f: B => A): Tuple2K[F, G, B] =
     Tuple2K(F.contramap(fa.first)(f), G.contramap(fa.second)(f))
+}
+
+sealed private[data] trait Tuple2KDecidable[F[_], G[_]]
+    extends Decidable[λ[α => Tuple2K[F, G, α]]]
+    with Tuple2KContravariantMonoidal[F, G] {
+  def F: Decidable[F]
+  def G: Decidable[G]
+
+  def sum[A, B](fa: Tuple2K[F, G, A], fb: Tuple2K[F, G, B]): Tuple2K[F, G, Either[A, B]] =
+    Tuple2K(F.sum(fa.first, fb.first), G.sum(fa.second, fb.second))
+
+  val zero: Tuple2K[F, G, Nothing] = Tuple2K[F, G, Nothing](F.zero, G.zero)
 }
 
 sealed private[data] trait Tuple2KContravariantMonoidal[F[_], G[_]]

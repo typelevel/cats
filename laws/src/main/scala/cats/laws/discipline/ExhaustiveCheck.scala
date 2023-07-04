@@ -40,6 +40,9 @@ object ExhaustiveCheck {
       val allValues: List[A] = values
     }
 
+  implicit val catsLawExhaustiveCheckForNothing: ExhaustiveCheck[Nothing] =
+    instance[Nothing](List.empty[Nothing])
+
   implicit val catsLawsExhaustiveCheckForBoolean: ExhaustiveCheck[Boolean] =
     instance(List(false, true))
 

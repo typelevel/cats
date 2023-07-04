@@ -20,30 +20,18 @@
  */
 
 package cats
-package instances
+package syntax
 
-import cats.kernel.instances.unit._
+import cats.Decidable
 
-trait OrderInstances extends kernel.instances.OrderInstances {
-  implicit val catsContravariantMonoidalForOrder: ContravariantMonoidal[Order] =
-    new ContravariantMonoidal[Order] {
+trait DecidableSyntax extends ContravariantMonoidalSyntax {
+  implicit final def catsSyntaxDecidable[F[_], A](
+    fa: F[A]
+  )(implicit F: Decidable[F]): Decidable.Ops[F, A] =
+    new Decidable.Ops[F, A] {
+      type TypeClassType = Decidable[F]
 
-      /**
-       * Provides trivial order
-       */
-      def unit: Order[Unit] = Order[Unit]
-
-      /**
-       * Derive an `Order` for `B` given an `Order[A]` and a function `B => A`.
-       *
-       * Note: resulting instances are law-abiding only when the functions used are injective (represent a one-to-one mapping)
-       */
-      def contramap[A, B](fa: Order[A])(f: B => A): Order[B] =
-        Order.by(f)(fa)
-
-      def product[A, B](fa: Order[A], fb: Order[B]): Order[(A, B)] = { (x, y) =>
-        val z = fa.compare(x._1, y._1)
-        if (z == 0) fb.compare(x._2, y._2) else z
-      }
+      val self = fa
+      val typeClassInstance = F
     }
 }

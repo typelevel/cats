@@ -132,10 +132,18 @@ object SyntaxSuite {
     val fb: F[B] = fa.imap(f)(g)
   }
 
-  def testInvariantFunctor[F[_]: Contravariant, A, B]: Unit = {
+  def testContravariantFunctor[F[_]: Contravariant, A, B]: Unit = {
     val fa = mock[F[A]]
     val f = mock[B => A]
     val fb: F[B] = fa.contramap(f)
+  }
+
+  def testDecidableFunctor[F[_]: Decidable, A, B, C]: Unit = {
+    val fa = mock[F[A]]
+    val fb = mock[F[B]]
+    val f = mock[C => Either[A, B]]
+    val fc = fa.sum(fb)
+    val fd = fa.decide(fb)(f)
   }
 
   def testFoldable[F[_]: Foldable, G[_]: Applicative: MonoidK, A: Monoid, B, Z]: Unit = {

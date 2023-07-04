@@ -65,12 +65,6 @@ sealed abstract private[data] class NestedInstances extends NestedInstances0 {
       val FG: NonEmptyTraverse[λ[α => F[G[α]]]] = NonEmptyTraverse[F].compose[G]
     }
 
-  implicit def catsDataContravariantMonoidalForApplicativeForNested[F[_]: Applicative, G[_]: ContravariantMonoidal]
-    : ContravariantMonoidal[Nested[F, G, *]] =
-    new NestedContravariantMonoidal[F, G] with NestedContravariant[F, G] {
-      val FG: ContravariantMonoidal[λ[α => F[G[α]]]] = Applicative[F].composeContravariantMonoidal[G]
-    }
-
   implicit def catsDataDeferForNested[F[_], G[_]](implicit F: Defer[F]): Defer[Nested[F, G, *]] =
     new Defer[Nested[F, G, *]] {
       def defer[A](fa: => Nested[F, G, A]): Nested[F, G, A] =
@@ -136,6 +130,12 @@ sealed abstract private[data] class NestedInstances1 extends NestedInstances2 {
       val FG: Reducible[λ[α => F[G[α]]]] = Reducible[F].compose[G]
     }
 
+  implicit def catsDataDecidableForApplicativeForNested[F[_]: Applicative, G[_]: Decidable]
+    : Decidable[Nested[F, G, *]] =
+    new NestedDecidable[F, G] with NestedContravariant[F, G] {
+      val FG: Decidable[λ[α => F[G[α]]]] = Applicative[F].composeDecidable[G]
+    }
+
   implicit def catsDataFunctorForContravariantForNested[F[_]: Contravariant, G[_]: Contravariant]
     : Functor[Nested[F, G, *]] =
     new NestedFunctor[F, G] {
@@ -147,6 +147,12 @@ sealed abstract private[data] class NestedInstances2 extends NestedInstances3 {
   implicit def catsDataFoldableForNested[F[_]: Foldable, G[_]: Foldable]: Foldable[Nested[F, G, *]] =
     new NestedFoldable[F, G] {
       val FG: Foldable[λ[α => F[G[α]]]] = Foldable[F].compose[G]
+    }
+
+  implicit def catsDataContravariantMonoidalForApplicativeForNested[F[_]: Applicative, G[_]: ContravariantMonoidal]
+    : ContravariantMonoidal[Nested[F, G, *]] =
+    new NestedContravariantMonoidal[F, G] with NestedContravariant[F, G] {
+      val FG: ContravariantMonoidal[λ[α => F[G[α]]]] = Applicative[F].composeContravariantMonoidal[G]
     }
 
   implicit def catsDataContravariantForCovariantNested[F[_]: Contravariant, G[_]: Functor]
@@ -392,6 +398,17 @@ private[data] trait NestedContravariant[F[_], G[_]] extends Contravariant[Nested
 
   override def contramap[A, B](fga: Nested[F, G, A])(f: B => A): Nested[F, G, B] =
     Nested(FG.contramap(fga.value)(f))
+}
+
+private[data] trait NestedDecidable[F[_], G[_]]
+    extends Decidable[Nested[F, G, *]]
+    with NestedContravariantMonoidal[F, G] {
+  def FG: Decidable[λ[α => F[G[α]]]]
+
+  def sum[A, B](fa: Nested[F, G, A], fb: Nested[F, G, B]): Nested[F, G, Either[A, B]] =
+    Nested(FG.sum(fa.value, fb.value))
+
+  lazy val zero: Nested[F, G, Nothing] = Nested[F, G, Nothing](FG.zero)
 }
 
 private[data] trait NestedContravariantMonoidal[F[_], G[_]] extends ContravariantMonoidal[Nested[F, G, *]] {

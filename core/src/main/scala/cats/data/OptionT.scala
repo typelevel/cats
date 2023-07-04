@@ -867,7 +867,6 @@ sealed abstract private[data] class OptionTInstances extends OptionTInstances0 {
 }
 
 sealed abstract private[data] class OptionTInstances0 extends OptionTInstances1 {
-
   // the Dummy type is to make this one more specific than catsDataMonadErrorMonadForOptionT on 2.13.x
   // see https://github.com/typelevel/cats/pull/2335#issuecomment-408249775
   implicit def catsDataMonadErrorForOptionT[F[_], E](implicit
@@ -996,12 +995,10 @@ private trait OptionTContravariantMonoidal[F[_]] extends ContravariantMonoidal[O
 
   override def product[A, B](fa: OptionT[F, A], fb: OptionT[F, B]): OptionT[F, (A, B)] =
     OptionT(
-      F.contramap(F.product(fa.value, fb.value))((t: Option[(A, B)]) =>
-        t match {
-          case Some((x, y)) => (Some(x), Some(y))
-          case None         => (None, None)
-        }
-      )
+      F.contramap(F.product(fa.value, fb.value)) {
+        case Some((x, y)) => (Some(x), Some(y))
+        case None         => (None, None)
+      }
     )
 }
 

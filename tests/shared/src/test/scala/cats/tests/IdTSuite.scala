@@ -89,6 +89,13 @@ class IdTSuite extends CatsSuite {
   }
 
   {
+    // Predicates on Nothing are vacuously equivalent, because all vacuously true, and IdT of these are the same
+    implicit val eqPredicateNothing: Eq[IdT[Predicate, Nothing]] = Eq.allEqual[IdT[Predicate, Nothing]]
+    checkAll("IdT[* => Boolean], ?]", DecidableTests[IdT[Predicate, *]].decidable[MiniInt, MiniInt, MiniInt])
+    checkAll("Decidable[IdT[* => Boolean, ?], ?]]", SerializableTests.serializable(Decidable[IdT[Predicate, *]]))
+  }
+
+  {
     implicit val F: FlatMap[ListWrapper] = ListWrapper.flatMap
 
     checkAll("IdT[ListWrapper, Int]", FlatMapTests[IdT[ListWrapper, *]].flatMap[Int, Int, Int])

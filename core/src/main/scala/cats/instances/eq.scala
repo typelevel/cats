@@ -23,14 +23,14 @@ package cats
 package instances
 
 trait EqInstances extends kernel.instances.EqInstances {
-  implicit val catsContravariantMonoidalForEq: ContravariantMonoidal[Eq] =
-    new ContravariantMonoidal[Eq] {
+  implicit def catsDecidableForEq: Decidable[Eq] =
+    new Decidable[Eq] {
 
       /**
        * Defaults to the trivial equivalence relation
        * contracting the type to a point
        */
-      def unit: Eq[Unit] = Eq.allEqual
+      val unit: Eq[Unit] = Eq.allEqual
 
       /**
        * Derive an `Eq` for `B` given an `Eq[A]` and a function `B => A`.
@@ -42,5 +42,17 @@ trait EqInstances extends kernel.instances.EqInstances {
 
       def product[A, B](fa: Eq[A], fb: Eq[B]): Eq[(A, B)] =
         (left, right) => fa.eqv(left._1, right._1) && fb.eqv(left._2, right._2)
+
+      def sum[A, B](fa: Eq[A], fb: Eq[B]): Eq[Either[A, B]] =
+        Eq.instance {
+          case (Left(a1), Left(a2))   => fa.eqv(a1, a2)
+          case (Right(b1), Right(b2)) => fb.eqv(b1, b2)
+          case _                      => false
+        }
+
+      override val zero: Eq[Nothing] = Eq.allEqual[Nothing]
     }
+
+  val catsContravariantMonoidalForEq: ContravariantMonoidal[Eq] =
+    catsDecidableForEq
 }

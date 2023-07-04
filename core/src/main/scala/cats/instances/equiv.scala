@@ -23,8 +23,8 @@ package cats
 package instances
 
 trait EquivInstances {
-  implicit val catsContravariantMonoidalForEquiv: ContravariantMonoidal[Equiv] =
-    new ContravariantMonoidal[Equiv] {
+  implicit def catsDecidableForEquiv: Decidable[Equiv] =
+    new Decidable[Equiv] {
 
       /**
        * Defaults to trivially contracting the type
@@ -51,5 +51,19 @@ trait EquivInstances {
           def equiv(l: (A, B), r: (A, B)): Boolean =
             fa.equiv(l._1, r._1) && fb.equiv(l._2, r._2)
         }
+
+      def sum[A, B](fa: Equiv[A], fb: Equiv[B]): Equiv[Either[A, B]] =
+        new Equiv[Either[A, B]] {
+          def equiv(x: Either[A, B], y: Either[A, B]): Boolean = (x, y) match {
+            case (Left(a1), Left(a2))   => fa.equiv(a1, a2)
+            case (Right(b1), Right(b2)) => fb.equiv(b1, b2)
+            case _                      => false
+          }
+        }
+
+      override val zero: Equiv[Nothing] = Equiv.by[Nothing, Unit](_ => ())
     }
+
+  val catsContravariantMonoidalForEquiv: ContravariantMonoidal[Equiv] =
+    catsDecidableForEquiv
 }
