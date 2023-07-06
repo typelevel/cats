@@ -50,16 +50,17 @@ object PartialOrderInstances {
   private val catsDeferForPartialOrderCache: Defer[PartialOrder] =
     new Defer[PartialOrder] {
       case class Deferred[A](fa: () => PartialOrder[A]) extends PartialOrder[A] {
-        override def partialCompare(x: A, y: A): Double = {
+        private lazy val resolved: PartialOrder[A] = {
           @tailrec
-          def loop(f: () => PartialOrder[A]): Double =
+          def loop(f: () => PartialOrder[A]): PartialOrder[A] =
             f() match {
               case Deferred(f) => loop(f)
-              case next        => next.partialCompare(x, y)
+              case next        => next
             }
 
           loop(fa)
         }
+        override def partialCompare(x: A, y: A): Double = resolved.partialCompare(x, y)
       }
 
       override def defer[A](fa: => PartialOrder[A]): PartialOrder[A] = {

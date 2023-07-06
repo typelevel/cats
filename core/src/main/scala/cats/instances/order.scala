@@ -56,16 +56,17 @@ object OrderInstances {
   private val catsDeferForOrderCache: Defer[Order] =
     new Defer[Order] {
       case class Deferred[A](fa: () => Order[A]) extends Order[A] {
-        override def compare(x: A, y: A): Int = {
+        private lazy val resolved: Order[A] = {
           @tailrec
-          def loop(f: () => Order[A]): Int =
+          def loop(f: () => Order[A]): Order[A] =
             f() match {
               case Deferred(f) => loop(f)
-              case next        => next.compare(x, y)
+              case next        => next
             }
 
           loop(fa)
         }
+        override def compare(x: A, y: A): Int = resolved.compare(x, y)
       }
 
       override def defer[A](fa: => Order[A]): Order[A] = {

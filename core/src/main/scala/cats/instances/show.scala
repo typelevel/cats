@@ -31,16 +31,17 @@ object ShowInstances {
   private val catsDeferForShowCache: Defer[Show] =
     new Defer[Show] {
       case class Deferred[A](fa: () => Show[A]) extends Show[A] {
-        override def show(t: A): String = {
+        private lazy val resolved: Show[A] = {
           @tailrec
-          def loop(f: () => Show[A]): String =
+          def loop(f: () => Show[A]): Show[A] =
             f() match {
               case Deferred(f) => loop(f)
-              case next        => next.show(t)
+              case next        => next
             }
 
           loop(fa)
         }
+        override def show(t: A): String = resolved.show(t)
       }
 
       override def defer[A](fa: => Show[A]): Show[A] = {

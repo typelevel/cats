@@ -61,16 +61,17 @@ object EquivInstances {
   private val catsDeferForEquivCache: Defer[Equiv] =
     new Defer[Equiv] {
       case class Deferred[A](fa: () => Equiv[A]) extends Equiv[A] {
-        override def equiv(x: A, y: A): Boolean = {
+        private lazy val resolved: Equiv[A] = {
           @tailrec
-          def loop(f: () => Equiv[A]): Boolean =
+          def loop(f: () => Equiv[A]): Equiv[A] =
             f() match {
               case Deferred(f) => loop(f)
-              case next        => next.equiv(x, y)
+              case next        => next
             }
 
           loop(fa)
         }
+        override def equiv(x: A, y: A): Boolean = resolved.equiv(x, y)
       }
 
       override def defer[A](fa: => Equiv[A]): Equiv[A] = {

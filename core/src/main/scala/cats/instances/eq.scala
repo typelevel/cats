@@ -52,16 +52,17 @@ object EqInstances {
   private val catsDeferForEqCache: Defer[Eq] =
     new Defer[Eq] {
       case class Deferred[A](fa: () => Eq[A]) extends Eq[A] {
-        override def eqv(x: A, y: A): Boolean = {
+        private lazy val resolved: Eq[A] = {
           @tailrec
-          def loop(f: () => Eq[A]): Boolean =
+          def loop(f: () => Eq[A]): Eq[A] =
             f() match {
               case Deferred(f) => loop(f)
-              case next        => next.eqv(x, y)
+              case next        => next
             }
 
           loop(fa)
         }
+        override def eqv(x: A, y: A): Boolean = resolved.eqv(x, y)
       }
 
       override def defer[A](fa: => Eq[A]): Eq[A] = {
