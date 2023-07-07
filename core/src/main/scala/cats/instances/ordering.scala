@@ -57,7 +57,7 @@ object OrderingInstances {
           def loop(f: () => Ordering[A]): Ordering[A] =
             f() match {
               case Deferred(f) => loop(f)
-              case next => next
+              case next        => next
             }
 
           loop(fa)
