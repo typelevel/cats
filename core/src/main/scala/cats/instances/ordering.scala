@@ -46,22 +46,23 @@ trait OrderingInstances {
         }
     }
 
-  implicit val catsStdDeferForOrdering: Defer[Ordering] = OrderingInstances.catsStdDeferForOrderingCache
+  implicit def catsStdDeferForOrdering: Defer[Ordering] = OrderingInstances.catsStdDeferForOrderingCache
 }
 object OrderingInstances {
   private val catsStdDeferForOrderingCache: Defer[Ordering] =
     new Defer[Ordering] {
       case class Deferred[A](fa: () => Ordering[A]) extends Ordering[A] {
-        override def compare(x: A, y: A): Int = {
+        private lazy val resolved: Ordering[A] = {
           @tailrec
-          def loop(f: () => Ordering[A]): Int =
+          def loop(f: () => Ordering[A]): Ordering[A] =
             f() match {
               case Deferred(f) => loop(f)
-              case next        => next.compare(x, y)
+              case next => next
             }
 
           loop(fa)
         }
+        override def compare(x: A, y: A): Int = resolved.compare(x, y)
       }
 
       override def defer[A](fa: => Ordering[A]): Ordering[A] = {

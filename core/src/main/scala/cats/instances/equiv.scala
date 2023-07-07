@@ -55,7 +55,7 @@ trait EquivInstances {
         }
     }
 
-  implicit val catsDeferForEquiv: Defer[Equiv] = EquivInstances.catsDeferForEquivCache
+  implicit def catsDeferForEquiv: Defer[Equiv] = EquivInstances.catsDeferForEquivCache
 }
 object EquivInstances {
   private val catsDeferForEquivCache: Defer[Equiv] =

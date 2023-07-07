@@ -44,7 +44,7 @@ trait PartialOrderInstances extends kernel.instances.PartialOrderInstances {
       def unit: PartialOrder[Unit] = Order[Unit]
     }
 
-  implicit val catsDeferForPartialOrder: Defer[PartialOrder] = PartialOrderInstances.catsDeferForPartialOrderCache
+  implicit def catsDeferForPartialOrder: Defer[PartialOrder] = PartialOrderInstances.catsDeferForPartialOrderCache
 }
 object PartialOrderInstances {
   private val catsDeferForPartialOrderCache: Defer[PartialOrder] =

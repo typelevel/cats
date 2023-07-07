@@ -36,7 +36,7 @@ trait HashInstances extends kernel.instances.HashInstances {
 
     }
 
-  implicit val catsDeferForHash: Defer[Hash] = HashInstances.catsDeferForHashCache
+  implicit def catsDeferForHash: Defer[Hash] = HashInstances.catsDeferForHashCache
 }
 object HashInstances {
   private val catsDeferForHashCache: Defer[Hash] =

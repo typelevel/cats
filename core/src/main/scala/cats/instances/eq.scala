@@ -46,7 +46,7 @@ trait EqInstances extends kernel.instances.EqInstances {
         (left, right) => fa.eqv(left._1, right._1) && fb.eqv(left._2, right._2)
     }
 
-  implicit val catsDeferForEq: Defer[Eq] = EqInstances.catsDeferForEqCache
+  implicit def catsDeferForEq: Defer[Eq] = EqInstances.catsDeferForEqCache
 }
 object EqInstances {
   private val catsDeferForEqCache: Defer[Eq] =

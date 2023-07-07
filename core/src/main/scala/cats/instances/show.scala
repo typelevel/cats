@@ -25,7 +25,7 @@ package instances
 import scala.annotation.tailrec
 
 trait ShowInstances {
-  implicit val catsDeferForShow: Defer[Show] = ShowInstances.catsDeferForShowCache
+  implicit def catsDeferForShow: Defer[Show] = ShowInstances.catsDeferForShowCache
 }
 object ShowInstances {
   private val catsDeferForShowCache: Defer[Show] =

@@ -53,7 +53,7 @@ trait PartialOrderingInstances {
       def unit: PartialOrdering[Unit] = cats.instances.unit.catsKernelStdOrderForUnit.toOrdering
     }
 
-  implicit val catsStdDeferForPartialOrdering: Defer[PartialOrdering] =
+  implicit def catsStdDeferForPartialOrdering: Defer[PartialOrdering] =
     PartialOrderingInstances.catsStdDeferForPartialOrderingCache
 }
 object PartialOrderingInstances {
