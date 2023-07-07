@@ -46,15 +46,17 @@ private[instances] trait FunctionInstancesBinCompat0 {
   implicit val catsSddDeferForFunction0: Defer[Function0] =
     new Defer[Function0] {
       case class Deferred[A](fa: () => Function0[A]) extends Function0[A] {
-        def apply() = {
+        private lazy val resolved: Function0[A] = {
           @annotation.tailrec
-          def loop(f: () => Function0[A]): A =
+          def loop(f: () => Function0[A]): Function0[A] =
             f() match {
               case Deferred(f) => loop(f)
-              case next        => next()
+              case next        => next
             }
+
           loop(fa)
         }
+        def apply(): A = resolved()
       }
       def defer[A](fa: => Function0[A]): Function0[A] = {
         lazy val cachedFa = fa
@@ -65,15 +67,17 @@ private[instances] trait FunctionInstancesBinCompat0 {
   implicit def catsStdDeferForFunction1[A]: Defer[A => *] =
     new Defer[A => *] {
       case class Deferred[B](fa: () => A => B) extends (A => B) {
-        def apply(a: A) = {
+        private lazy val resolved: A => B = {
           @annotation.tailrec
-          def loop(f: () => A => B): B =
+          def loop(f: () => A => B): A => B =
             f() match {
               case Deferred(f) => loop(f)
-              case next        => next(a)
+              case next        => next
             }
+
           loop(fa)
         }
+        def apply(a: A): B = resolved(a)
       }
       def defer[B](fa: => A => B): A => B = {
         lazy val cachedFa = fa
