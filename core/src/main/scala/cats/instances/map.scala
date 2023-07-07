@@ -27,7 +27,7 @@ import cats.kernel.CommutativeMonoid
 import scala.annotation.tailrec
 import cats.arrow.Compose
 
-import cats.data.Ior
+import cats.data.{Chain, Ior}
 
 trait MapInstances extends cats.kernel.instances.MapInstances {
 
@@ -42,15 +42,11 @@ trait MapInstances extends cats.kernel.instances.MapInstances {
       def unorderedTraverse[G[_], A, B](
         fa: Map[K, A]
       )(f: A => G[B])(implicit G: CommutativeApplicative[G]): G[Map[K, B]] = {
-        val gba: Eval[G[Map[K, B]]] = Always(G.pure(Map.empty))
-        val gbb = Foldable
-          .iterateRight(fa, gba) { (kv, lbuf) =>
-            G.map2Eval(f(kv._2), lbuf) { (b, buf) =>
-              buf + (kv._1 -> b)
-            }
-          }
-          .value
-        G.map(gbb)(_.toMap)
+        if (fa.isEmpty) G.pure(Map.empty[K, B])
+        else
+          G.map(Chain.traverseViaChain(fa.toIndexedSeq) { case (k, a) =>
+            G.map(f(a))((k, _))
+          })(_.iterator.toMap)
       }
 
       override def map[A, B](fa: Map[K, A])(f: A => B): Map[K, B] =
