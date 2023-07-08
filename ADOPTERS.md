@@ -78,6 +78,7 @@ And if you can, consider [supporting us](https://opencollective.com/typelevel).
 - [OVO Energy](https://ovoenergy.com)
 - [Packlink](https://packlink.com/)
 - [Permutive](https://permutive.com/)
+- [PITS Globale Datenrettungsdienste](https://www.pitsdatenrettung.de/)
 - [Precog](https://precog.com)
 - [Raiffeisenbank Russia](https://www.raiffeisen.ru/)
 - [Rakuten](https://www.rakuten.com)
