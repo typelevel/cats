@@ -178,10 +178,10 @@
         <li class="level2"><a href="oneand.html">OneAnd</a></li>
         <li class="level2"><a href="optiont.html">OptionT</a></li>
         <li class="level2"><a href="state.html">State</a></li>
+        <li class="level2"><a href="statet.html">StateT</a></li>
         <li class="level2"><a href="validated.html">Validated</a></li>
         <li class="level2"><a href="writer.html">Writer</a></li>
         <li class="level2"><a href="writert.html">WriterT</a></li>
-        <li class="level2"><a href="statet.html">StateT</a></li>
       </ul>
 
       <ul class="nav-list">
@@ -215,7 +215,7 @@
         <h1 id="ior" class="title">Ior</h1>
         <p>API Documentation: <a href="https://www.javadoc.io/doc/org.typelevel/cats-docs_2.13/2.9.0/cats/data/Ior.html">Ior</a></p>
         <p><code>Ior</code> represents an inclusive-or relationship between two data types.
-        This makes it very similar to the <a href="either.html"><code>Either</code></a> data type, which represents an &quot;exclusive-or&quot; relationship.
+        This makes it very similar to the <code>Either</code> data type, which represents an &quot;exclusive-or&quot; relationship.
         What this means, is that an <code>Ior[A, B]</code> (also written as <code>A Ior B</code>) can contain either an <code>A</code>, a <code>B</code>, or both an <code>A</code> and <code>B</code>.
         Another similarity to <code>Either</code> is that <code>Ior</code> is right-biased,
         which means that the <code>map</code> and <code>flatMap</code> functions will work on the right side of the <code>Ior</code>, in our case the <code>B</code> value.

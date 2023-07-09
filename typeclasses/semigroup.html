@@ -178,10 +178,10 @@
         <li class="level2"><a href="../datatypes/oneand.html">OneAnd</a></li>
         <li class="level2"><a href="../datatypes/optiont.html">OptionT</a></li>
         <li class="level2"><a href="../datatypes/state.html">State</a></li>
+        <li class="level2"><a href="../datatypes/statet.html">StateT</a></li>
         <li class="level2"><a href="../datatypes/validated.html">Validated</a></li>
         <li class="level2"><a href="../datatypes/writer.html">Writer</a></li>
         <li class="level2"><a href="../datatypes/writert.html">WriterT</a></li>
-        <li class="level2"><a href="../datatypes/statet.html">StateT</a></li>
       </ul>
 
       <ul class="nav-list">
@@ -260,23 +260,23 @@
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="type-name">Semigroup</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span></code></pre>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="type-name">Semigroup</span><span>[</span><span class="type-name">Int</span><span>]
-</span><span class="comment">// res8: Semigroup[Int] = cats.kernel.instances.IntGroup@15842aa8
+</span><span class="comment">// res8: Semigroup[Int] = cats.kernel.instances.IntGroup@423e1cb8
 </span><span class="type-name">Semigroup</span><span>[</span><span class="type-name">String</span><span>]
-</span><span class="comment">// res9: Semigroup[String] = cats.kernel.instances.StringMonoid@40e032c5</span></code></pre>
+</span><span class="comment">// res9: Semigroup[String] = cats.kernel.instances.StringMonoid@8f4ad02</span></code></pre>
         <p>Instances for type constructors regardless of their type parameter such as <code>List</code> (<code>++</code>)
         and <code>Set</code> (<code>union</code>)...</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="type-name">Semigroup</span><span>[</span><span class="type-name">List</span><span>[</span><span class="type-name">Byte</span><span>]]
-</span><span class="comment">// res10: Semigroup[List[Byte]] = cats.kernel.instances.ListMonoid@1113c02d
+</span><span class="comment">// res10: Semigroup[List[Byte]] = cats.kernel.instances.ListMonoid@509910f2
 </span><span class="type-name">Semigroup</span><span>[</span><span class="type-name">Set</span><span>[</span><span class="type-name">Int</span><span>]]
-</span><span class="comment">// res11: Semigroup[Set[Int]] = cats.kernel.instances.SetSemilattice@2dc38cd4
+</span><span class="comment">// res11: Semigroup[Set[Int]] = cats.kernel.instances.SetSemilattice@182c8f4e
 </span><span>
 </span><span class="keyword">trait</span><span> </span><span class="type-name">Foo</span><span>
 </span><span class="type-name">Semigroup</span><span>[</span><span class="type-name">List</span><span>[</span><span class="type-name">Foo</span><span>]]
-</span><span class="comment">// res12: Semigroup[List[Foo]] = cats.kernel.instances.ListMonoid@1113c02d</span></code></pre>
+</span><span class="comment">// res12: Semigroup[List[Foo]] = cats.kernel.instances.ListMonoid@509910f2</span></code></pre>
         <p>And instances for type constructors that depend on (one of) their type parameters having instances such
         as tuples (pointwise <code>combine</code>).</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="type-name">Semigroup</span><span>[(</span><span class="type-name">List</span><span>[</span><span class="type-name">Foo</span><span>], </span><span class="type-name">Int</span><span>)]
-</span><span class="comment">// res13: Semigroup[(List[Foo], Int)] = cats.kernel.Monoid$$anon$2@19a632ae</span></code></pre>
+</span><span class="comment">// res13: Semigroup[(List[Foo], Int)] = cats.kernel.Monoid$$anon$2@2a459b2f</span></code></pre>
         
         <h1 id="example-usage-merging-maps" class="section">Example usage: Merging maps<a class="anchor-link right" href="#example-usage-merging-maps"><i class="icofont-laika">&#xef71;</i></a></h1>
         <p>Consider a function that merges two <code>Map</code>s that combines values if they share

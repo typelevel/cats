@@ -178,10 +178,10 @@
         <li class="level2"><a href="datatypes/oneand.html">OneAnd</a></li>
         <li class="level2"><a href="datatypes/optiont.html">OptionT</a></li>
         <li class="level2"><a href="datatypes/state.html">State</a></li>
+        <li class="level2"><a href="datatypes/statet.html">StateT</a></li>
         <li class="level2"><a href="datatypes/validated.html">Validated</a></li>
         <li class="level2"><a href="datatypes/writer.html">Writer</a></li>
         <li class="level2"><a href="datatypes/writert.html">WriterT</a></li>
-        <li class="level2"><a href="datatypes/statet.html">StateT</a></li>
       </ul>
 
       <ul class="nav-list">
@@ -203,15 +203,16 @@
         <p class="header"><a href="#">Jump Start Guide</a></p>
 
         <ul class="nav-list">
-          <li class="level1"><a href="#helpers-for-option-and-either">Helpers for <code>Option</code> and <code>Either</code></a></li>
-          <li class="level2"><a href="#import-cats-syntax-all-_-1"><code>import cats.syntax.all._</code></a></li>
-          <li class="level2"><a href="#import-cats-syntax-all-_-2"><code>import cats.syntax.all._</code></a></li>
-          <li class="level2"><a href="#import-cats-syntax-all-_-3"><code>import cats.syntax.all._</code></a></li>
+          <li class="level1"><a href="#option-helpers">Option Helpers</a></li>
+          <li class="level1"><a href="#either-helpers">Either Helpers</a></li>
+          <li class="level1"><a href="#tuples">Tuples</a></li>
           <li class="level1"><a href="#traversing">Traversing</a></li>
-          <li class="level2"><a href="#import-cats-syntax-all-_-4"><code>import cats.syntax.all._</code></a></li>
-          <li class="level1"><a href="#monad-transformers">Monad transformers</a></li>
-          <li class="level2"><a href="#import-cats-data-optiont"><code>import cats.data.OptionT</code></a></li>
-          <li class="level2"><a href="#import-cats-data-eithert"><code>import cats.data.EitherT</code></a></li>
+          <li class="level2"><a href="#traverse"><code>traverse</code></a></li>
+          <li class="level2"><a href="#sequence"><code>sequence</code></a></li>
+          <li class="level2"><a href="#flattraverse"><code>flatTraverse</code></a></li>
+          <li class="level1"><a href="#monad-transformers">Monad Transformers</a></li>
+          <li class="level2"><a href="#optiont">OptionT</a></li>
+          <li class="level2"><a href="#eithert">EitherT</a></li>
           <li class="level1"><a href="#common-issues">Common issues</a></li>
         </ul>
 
@@ -230,9 +231,8 @@
         We are sticking to <a href="https://github.com/typelevel/cats/releases/tag/v1.0.1">version 1.0.1</a> in the entire post.</p>
         <p>Let&#39;s go through the library package-wise, looking at the syntax available in each package.</p>
         
-        <h1 id="helpers-for-option-and-either" class="section">Helpers for <code>Option</code> and <code>Either</code><a class="anchor-link right" href="#helpers-for-option-and-either"><i class="icofont-laika">&#xef71;</i></a></h1>
-        
-        <h2 id="import-cats-syntax-all-_-1" class="section"><code>import cats.syntax.all._</code><a class="anchor-link right" href="#import-cats-syntax-all-_-1"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <h1 id="option-helpers" class="section">Option Helpers<a class="anchor-link right" href="#option-helpers"><i class="icofont-laika">&#xef71;</i></a></h1>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span></code></pre>
         <p>Importing this package enables <code>obj.some</code> syntax — equivalent to <code>Some(obj)</code>.
         The only real difference is that the value is already upcast to <code>Option[T]</code> from <code>Some[T]</code>.</p>
         <p>Using <code>obj.some</code> instead of <code>Some(obj)</code> can sometimes e.g. improve readability when you need to provide dummy implementation for service methods for the purpose of testing.
@@ -243,9 +243,7 @@
   </span><span class="keyword">def</span><span> </span><span class="declaration-name">asFuture</span><span>: </span><span class="type-name">Future</span><span>[</span><span class="type-name">T</span><span>] = </span><span class="type-name">Future</span><span>.</span><span class="identifier">successful</span><span>(</span><span class="identifier">obj</span><span>)
 }</span></code></pre>
         <p>then you can use the chained syntax shown below:</p>
-        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span><span>
-
-</span><span class="keyword">class</span><span> </span><span class="type-name">Account</span><span> { </span><span class="comment">/* ... */</span><span> }
+        <pre><code class="nohighlight"><span class="keyword">class</span><span> </span><span class="type-name">Account</span><span> { </span><span class="comment">/* ... */</span><span> }
 
 </span><span class="keyword">trait</span><span> </span><span class="type-name">AccountService</span><span> {
   </span><span class="keyword">def</span><span> </span><span class="declaration-name">getAccountById</span><span>(</span><span class="identifier">id</span><span>: </span><span class="type-name">Int</span><span>): </span><span class="type-name">Future</span><span>[</span><span class="type-name">Option</span><span>[</span><span class="type-name">Account</span><span>]]
@@ -264,13 +262,12 @@
         <p><code>none[T]</code>, in turn, is shorthand for <code>Option.empty[T]</code> which is just <code>None</code>, but already upcast from <code>None.type</code> to <code>Option[T]</code>.
         Providing a more specialized type sometimes helps the Scala compiler properly infer the type of expressions containing <code>None</code>.</p>
         
-        <h2 id="import-cats-syntax-all-_-2" class="section"><code>import cats.syntax.all._</code><a class="anchor-link right" href="#import-cats-syntax-all-_-2"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <h1 id="either-helpers" class="section">Either Helpers<a class="anchor-link right" href="#either-helpers"><i class="icofont-laika">&#xef71;</i></a></h1>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span></code></pre>
         <p><code>obj.asRight</code> is <code>Right(obj)</code>, <code>obj.asLeft</code> is <code>Left(obj)</code>.
         In both cases the type of returned value is widened from <code>Right</code> or <code>Left</code> to <code>Either</code>.
         Just as was the case with <code>.some</code>, these helpers are handy to combine with <code>.asFuture</code> to improve readability:</p>
-        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span><span>
-
-</span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">User</span><span>(</span><span class="identifier">accountId</span><span>: </span><span class="type-name">Long</span><span>) { </span><span class="comment">/* ... */</span><span> }
+        <pre><code class="nohighlight"><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">User</span><span>(</span><span class="identifier">accountId</span><span>: </span><span class="type-name">Long</span><span>) { </span><span class="comment">/* ... */</span><span> }
 
 </span><span class="keyword">trait</span><span> </span><span class="type-name">UserService</span><span> {
   </span><span class="keyword">def</span><span> </span><span class="declaration-name">ensureUserExists</span><span>(</span><span class="identifier">id</span><span>: </span><span class="type-name">Int</span><span>): </span><span class="type-name">Future</span><span>[</span><span class="type-name">Either</span><span>[</span><span class="type-name">Exception</span><span>, </span><span class="type-name">User</span><span>]]
@@ -288,7 +285,7 @@
         If the provided <code>option</code> is <code>Some(x)</code>, it becomes <code>Right(x)</code>.
         Otherwise it becomes <code>Left</code> with the provided <code>ifNone</code> value inside.</p>
         
-        <h2 id="import-cats-syntax-all-_-3" class="section"><code>import cats.syntax.all._</code><a class="anchor-link right" href="#import-cats-syntax-all-_-3"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <h1 id="tuples" class="section">Tuples<a class="anchor-link right" href="#tuples"><i class="icofont-laika">&#xef71;</i></a></h1>
         <p>The <code>apply</code> package provides <code>(..., ..., ...).mapN</code> syntax, which allows for an intuitive construct for applying a function that takes more than one parameter to multiple effectful values (like futures).</p>
         <p>Let&#39;s say we have 3 futures, one of type <code>Int</code>, one of type <code>String</code>, one of type <code>User</code> and a method accepting three parameters — <code>Int</code>, <code>String</code> and <code>User</code>.</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">scala</span><span>.</span><span class="identifier">concurrent</span><span>.</span><span class="type-name">ExecutionContext</span><span>.</span><span class="type-name">Implicits</span><span>.</span><span class="identifier">global</span><span>
@@ -328,17 +325,14 @@
         But since the computations are independent of one another, it&#39;s perfectly viable to run them in parallel with <code>mapN</code> instead.</p>
         
         <h1 id="traversing" class="section">Traversing<a class="anchor-link right" href="#traversing"><i class="icofont-laika">&#xef71;</i></a></h1>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span></code></pre>
         
-        <h2 id="import-cats-syntax-all-_-4" class="section"><code>import cats.syntax.all._</code><a class="anchor-link right" href="#import-cats-syntax-all-_-4"><i class="icofont-laika">&#xef71;</i></a></h2>
-        
-        <h3 id="traverse" class="section"><code>traverse</code><a class="anchor-link right" href="#traverse"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <h2 id="traverse" class="section"><code>traverse</code><a class="anchor-link right" href="#traverse"><i class="icofont-laika">&#xef71;</i></a></h2>
         <p>If you have an instance <code>obj</code> of type <code>F[A]</code> that can be mapped over (like <code>Future</code>) and a function <code>fun</code> of type <code>A =&gt; G[B]</code>, then calling <code>obj.map(fun)</code> would give you <code>F[G[B]]</code>.
         In many common real-life cases, like when <code>F</code> is <code>Option</code> and <code>G</code> is <code>Future</code>, you would get <code>Option[Future[B]]</code>, which most likely isn&#39;t what you wanted.</p>
         <p><code>traverse</code> comes as a solution here.
         If you call <code>traverse</code> instead of <code>map</code>, like <code>obj.traverse(fun)</code>, you&#39;ll get <code>G[F[A]]</code>, which will be <code>Future[Option[B]]</code> in our case; this is much more useful and easier to process than <code>Option[Future[B]]</code>.</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span><span>
-
-</span><span class="keyword">def</span><span> </span><span class="declaration-name">updateUser</span><span>(</span><span class="identifier">user</span><span>: </span><span class="type-name">User</span><span>): </span><span class="type-name">Future</span><span>[</span><span class="type-name">User</span><span>] = { </span><span class="comment">/* ... */</span><span> ??? }
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">def</span><span> </span><span class="declaration-name">updateUser</span><span>(</span><span class="identifier">user</span><span>: </span><span class="type-name">User</span><span>): </span><span class="type-name">Future</span><span>[</span><span class="type-name">User</span><span>] = { </span><span class="comment">/* ... */</span><span> ??? }
 
 </span><span class="keyword">def</span><span> </span><span class="declaration-name">updateUsers</span><span>(</span><span class="identifier">users</span><span>: </span><span class="type-name">List</span><span>[</span><span class="type-name">User</span><span>]): </span><span class="type-name">Future</span><span>[</span><span class="type-name">List</span><span>[</span><span class="type-name">User</span><span>]] = {
   </span><span class="identifier">users</span><span>.</span><span class="identifier">traverse</span><span>(</span><span class="identifier">updateUser</span><span>)
@@ -346,22 +340,18 @@
         <p>As a side note, there is also a dedicated method <code>Future.traverse</code> in the <a href="http://www.scala-lang.org/api/current/scala/concurrent/Future$.html"><code>Future</code></a> companion object,
         but the Cats version is far more readable and can easily work on any structure for which certain type classes are available.</p>
         
-        <h3 id="sequence" class="section"><code>sequence</code><a class="anchor-link right" href="#sequence"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <h2 id="sequence" class="section"><code>sequence</code><a class="anchor-link right" href="#sequence"><i class="icofont-laika">&#xef71;</i></a></h2>
         <p><code>sequence</code> represents an even simpler concept: it can be thought of as simply swapping the types from <code>F[G[A]]</code> to <code>G[F[A]]</code> without even mapping the enclosed value like <code>traverse</code> does.</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span><span>
-
-</span><span class="keyword">val</span><span> </span><span class="identifier">foo</span><span>: </span><span class="type-name">List</span><span>[</span><span class="type-name">Future</span><span>[</span><span class="type-name">String</span><span>]] = </span><span class="type-name">List</span><span>(</span><span class="type-name">Future</span><span>(</span><span class="string-literal">&quot;hello&quot;</span><span>), </span><span class="type-name">Future</span><span>(</span><span class="string-literal">&quot;world&quot;</span><span>))
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">foo</span><span>: </span><span class="type-name">List</span><span>[</span><span class="type-name">Future</span><span>[</span><span class="type-name">String</span><span>]] = </span><span class="type-name">List</span><span>(</span><span class="type-name">Future</span><span>(</span><span class="string-literal">&quot;hello&quot;</span><span>), </span><span class="type-name">Future</span><span>(</span><span class="string-literal">&quot;world&quot;</span><span>))
 </span><span class="keyword">val</span><span> </span><span class="identifier">bar</span><span> = </span><span class="identifier">foo</span><span>.</span><span class="identifier">sequence</span><span> </span><span class="comment">// will have Future[List[String]] type</span></code></pre>
         <p><code>obj.sequence</code> is in fact implemented in Cats as <code>obj.traverse(identity)</code>.</p>
         <p>On the other hand, <code>obj.traverse(fun)</code> is roughly equivalent to <code>obj.map(fun).sequence</code>.</p>
         
-        <h3 id="flattraverse" class="section"><code>flatTraverse</code><a class="anchor-link right" href="#flattraverse"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <h2 id="flattraverse" class="section"><code>flatTraverse</code><a class="anchor-link right" href="#flattraverse"><i class="icofont-laika">&#xef71;</i></a></h2>
         <p>If you have an <code>obj</code> of type <code>F[A]</code> and a function <code>fun</code> of type <code>A =&gt; G[F[B]]</code>, then doing <code>obj.map(f)</code> yields result of type <code>F[G[F[B]]]</code> — very unlikely to be what you wanted.</p>
         <p>Traversing the <code>obj</code> instead of mapping helps a little — you&#39;ll get <code>G[F[F[B]]</code> instead.
         Since <code>G</code> is usually something like <code>Future</code> and <code>F</code> is <code>List</code> or <code>Option</code>, you would end up with <code>Future[Option[Option[A]]</code> or <code>Future[List[List[A]]]</code> — a bit awkward to process.</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span><span>
-
-</span><span class="keyword">lazy</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">valueOpt</span><span>: </span><span class="type-name">Option</span><span>[</span><span class="type-name">Int</span><span>] = { </span><span class="comment">/* ... */</span><span> ??? }
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">lazy</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">valueOpt</span><span>: </span><span class="type-name">Option</span><span>[</span><span class="type-name">Int</span><span>] = { </span><span class="comment">/* ... */</span><span> ??? }
 </span><span class="keyword">def</span><span> </span><span class="declaration-name">compute</span><span>(</span><span class="identifier">value</span><span>: </span><span class="type-name">Int</span><span>): </span><span class="type-name">Future</span><span>[</span><span class="type-name">Option</span><span>[</span><span class="type-name">Int</span><span>]] = { </span><span class="comment">/* ... */</span><span> ??? }
 </span><span class="keyword">def</span><span> </span><span class="declaration-name">computeOverValue</span><span>: </span><span class="type-name">Future</span><span>[</span><span class="type-name">Option</span><span>[</span><span class="type-name">Option</span><span>[</span><span class="type-name">Int</span><span>]]] = </span><span class="identifier">valueOpt</span><span>.</span><span class="identifier">traverse</span><span>(</span><span class="identifier">compute</span><span>) </span><span class="comment">// has type Future[Option[Option[Int]]], not good</span></code></pre>
         <p>The solution could be to map the result with a <code>_.flatten</code> call like:</p>
@@ -371,9 +361,10 @@
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">def</span><span> </span><span class="declaration-name">computeOverValue3</span><span>: </span><span class="type-name">Future</span><span>[</span><span class="type-name">Option</span><span>[</span><span class="type-name">Int</span><span>]] = </span><span class="identifier">valueOpt</span><span>.</span><span class="identifier">flatTraverse</span><span>(</span><span class="identifier">compute</span><span>)</span></code></pre>
         <p>and that solves our problem for good.</p>
         
-        <h1 id="monad-transformers" class="section">Monad transformers<a class="anchor-link right" href="#monad-transformers"><i class="icofont-laika">&#xef71;</i></a></h1>
+        <h1 id="monad-transformers" class="section">Monad Transformers<a class="anchor-link right" href="#monad-transformers"><i class="icofont-laika">&#xef71;</i></a></h1>
         
-        <h2 id="import-cats-data-optiont" class="section"><code>import cats.data.OptionT</code><a class="anchor-link right" href="#import-cats-data-optiont"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <h2 id="optiont" class="section">OptionT<a class="anchor-link right" href="#optiont"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">data</span><span>.</span><span class="type-name">OptionT</span></code></pre>
         <p>An instance of <a href="datatypes/optiont.html"><code>OptionT[F, A]</code></a> can be thought of as a wrapper over <code>F[Option[A]]</code>
         which adds a couple of useful methods specific to nested types that aren&#39;t available in <code>F</code> or <code>Option</code> itself.
         Most typically, your <code>F</code> will be <code>Future</code> (or sometimes slick&#39;s <code>DBIO</code>, but this requires having an implementation of Cats type classes like <code>Functor</code> or <code>Monad</code> for <code>DBIO</code>).
@@ -389,9 +380,7 @@
   }
 }</span></code></pre>
         <p>With the use of <code>OptionT</code>, this can be simplified as follows:</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">data</span><span>.</span><span class="type-name">OptionT</span><span>
-
-</span><span class="keyword">def</span><span> </span><span class="declaration-name">mappedResultFuture2</span><span>: </span><span class="type-name">OptionT</span><span>[</span><span class="type-name">Future</span><span>, </span><span class="type-name">String</span><span>] = </span><span class="type-name">OptionT</span><span>(</span><span class="identifier">resultFuture</span><span>).</span><span class="identifier">map</span><span> { </span><span class="identifier">value</span><span> =&gt;
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">def</span><span> </span><span class="declaration-name">mappedResultFuture2</span><span>: </span><span class="type-name">OptionT</span><span>[</span><span class="type-name">Future</span><span>, </span><span class="type-name">String</span><span>] = </span><span class="type-name">OptionT</span><span>(</span><span class="identifier">resultFuture</span><span>).</span><span class="identifier">map</span><span> { </span><span class="identifier">value</span><span> =&gt;
   </span><span class="comment">// Do something with the value and return String
 </span><span>  ???
 }</span></code></pre>
@@ -474,9 +463,7 @@
         </table>
         <p>In practice, you&#39;re most likely to use <code>map</code> and <code>semiflatMap</code>.</p>
         <p>As is always the case with <code>flatMap</code> and <code>map</code>, you can use it not only explicitly, but also under the hood in <code>for</code> comprehensions, as in the example below:</p>
-        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">data</span><span>.</span><span class="type-name">OptionT</span><span>
-
-</span><span class="keyword">class</span><span> </span><span class="type-name">Money</span><span> { </span><span class="comment">/* ... */</span><span> }
+        <pre><code class="nohighlight"><span class="keyword">class</span><span> </span><span class="type-name">Money</span><span> { </span><span class="comment">/* ... */</span><span> }
 
 </span><span class="keyword">def</span><span> </span><span class="declaration-name">findUserById</span><span>(</span><span class="identifier">userId</span><span>: </span><span class="type-name">Long</span><span>): </span><span class="type-name">OptionT</span><span>[</span><span class="type-name">Future</span><span>, </span><span class="type-name">User</span><span>] = { </span><span class="comment">/* ... */</span><span> ??? }
 
@@ -492,7 +479,8 @@
         <p>The <code>OptionT[Future, Money]</code> instance returned by <code>getReservedFundsForUser</code> will enclose a <code>None</code> value if any of the three composed methods returns an <code>OptionT</code> corresponding to <code>None</code>.
         Otherwise, if the result of all three calls contains <code>Some</code>, the final outcome will also contain <code>Some</code>.</p>
         
-        <h2 id="import-cats-data-eithert" class="section"><code>import cats.data.EitherT</code><a class="anchor-link right" href="#import-cats-data-eithert"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <h2 id="eithert" class="section">EitherT<a class="anchor-link right" href="#eithert"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">data</span><span>.</span><span class="type-name">EitherT</span></code></pre>
         <p><a href="datatypes/eithert.html"><code>EitherT[F, A, B]</code></a> is the monad transformer for <code>Either</code> — you can think of it as a wrapper over a <code>F[Either[A, B]]</code> value.</p>
         <p>Just as in the above section, I simplified the method headers, skipping type parameters or their context bounds and lower bounds.</p>
         <p>Let&#39;s have a quick look at how to create an <code>EitherT</code> instance:</p>
@@ -533,9 +521,7 @@
           </tbody>
         </table>
         <p>Another useful way to construct an <code>EitherT</code> instance is to use <code>OptionT</code>&#39;s methods <code>toLeft</code> and <code>toRight</code>:</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">data</span><span>.</span><span class="type-name">EitherT</span><span>
-
-</span><span class="keyword">abstract</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">BaseException</span><span>(</span><span class="identifier">message</span><span>: </span><span class="type-name">String</span><span>) </span><span class="keyword">extends</span><span> </span><span class="type-name">Exception</span><span>(</span><span class="identifier">message</span><span>)
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">abstract</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">BaseException</span><span>(</span><span class="identifier">message</span><span>: </span><span class="type-name">String</span><span>) </span><span class="keyword">extends</span><span> </span><span class="type-name">Exception</span><span>(</span><span class="identifier">message</span><span>)
 
 </span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">UserNotFoundException</span><span>(</span><span class="identifier">message</span><span>: </span><span class="type-name">String</span><span>) </span><span class="keyword">extends</span><span> </span><span class="type-name">BaseException</span><span>(</span><span class="identifier">message</span><span>)
 
