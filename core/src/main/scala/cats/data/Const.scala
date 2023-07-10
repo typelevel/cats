@@ -24,6 +24,8 @@ package data
 
 import cats.kernel.{CommutativeMonoid, CommutativeSemigroup, LowerBounded, UpperBounded}
 
+import scala.annotation.nowarn
+
 /**
  * [[Const]] is a phantom type, it does not contain a value of its second type parameter `B`
  * [[Const]] can be seen as a type level version of `Function.const[A, B]: A => B => A`
@@ -39,6 +41,7 @@ final case class Const[A, B](getConst: A) {
   def combine(that: Const[A, B])(implicit A: Semigroup[A]): Const[A, B] =
     Const(A.combine(getConst, that.getConst))
 
+  @nowarn("cat=unused")
   def traverse[F[_], C](f: B => F[C])(implicit F: Applicative[F]): F[Const[A, C]] =
     F.pure(retag[C])
 
@@ -50,6 +53,9 @@ final case class Const[A, B](getConst: A) {
 
   def compare(that: Const[A, B])(implicit A: Order[A]): Int =
     A.compare(getConst, that.getConst)
+
+  def hash(implicit A: Hash[A]): Int =
+    Const(A.hash(getConst)).hashCode()
 
   def show(implicit A: Show[A]): String =
     s"Const(${A.show(getConst)})"
@@ -92,17 +98,19 @@ sealed abstract private[data] class ConstInstances extends ConstInstances0 {
 
   implicit def catsDataOrderForConst[A: Order, B]: Order[Const[A, B]] = _ compare _
 
+  implicit def catsDataPartialOrderForConst[A: PartialOrder, B]: PartialOrder[Const[A, B]] = _ partialCompare _
+
   implicit def catsDataAlignForConst[A: Semigroup]: Align[Const[A, *]] =
     new Align[Const[A, *]] {
       def align[B, C](fa: Const[A, B], fb: Const[A, C]): Const[A, Ior[B, C]] =
         Const(Semigroup[A].combine(fa.getConst, fb.getConst))
-      def functor: Functor[Const[A, *]] = catsDataFunctorForConst
+      def functor: Functor[Const[A, *]] = catsDataTraverseForConst
     }
 
   implicit def catsDataShowForConst[A: Show, B]: Show[Const[A, B]] = _.show
 
   implicit def catsDataTraverseForConst[C]: Traverse[Const[C, *]] =
-    new Traverse[Const[C, *]] {
+    new Traverse[Const[C, *]] with ConstFunctor[C] {
       def foldLeft[A, B](fa: Const[C, A], b: B)(f: (B, A) => B): B = b
 
       def foldRight[A, B](fa: Const[C, A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = lb
@@ -121,22 +129,22 @@ sealed abstract private[data] class ConstInstances extends ConstInstances0 {
   implicit def catsDataTraverseFilterForConst[C]: TraverseFilter[Const[C, *]] =
     new TraverseFilter[Const[C, *]] {
 
-      override def mapFilter[A, B](fa: Const[C, A])(f: (A) => Option[B]): Const[C, B] = fa.retag
+      override def mapFilter[A, B](fa: Const[C, A])(f: A => Option[B]): Const[C, B] = fa.retag
 
       override def collect[A, B](fa: Const[C, A])(f: PartialFunction[A, B]): Const[C, B] = fa.retag
 
       override def flattenOption[A](fa: Const[C, Option[A]]): Const[C, A] = fa.retag
 
-      override def filter[A](fa: Const[C, A])(f: (A) => Boolean): Const[C, A] = fa.retag
+      override def filter[A](fa: Const[C, A])(f: A => Boolean): Const[C, A] = fa.retag
 
       override def filterNot[A](fa: Const[C, A])(f: A => Boolean): Const[C, A] = fa.retag
 
       def traverseFilter[G[_], A, B](
         fa: Const[C, A]
-      )(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[Const[C, B]] =
+      )(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Const[C, B]] =
         G.pure(fa.retag[B])
 
-      override def filterA[G[_], A](fa: Const[C, A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[Const[C, A]] =
+      override def filterA[G[_], A](fa: Const[C, A])(f: A => G[Boolean])(implicit G: Applicative[G]): G[Const[C, A]] =
         G.pure(fa)
 
       val traverse: Traverse[Const[C, *]] = Const.catsDataTraverseForConst[C]
@@ -151,6 +159,8 @@ sealed abstract private[data] class ConstInstances extends ConstInstances0 {
         x.combine(y)
     }
 
+  implicit def catsDataSemigroupForConst[A: Semigroup, B]: Semigroup[Const[A, B]] = _ combine _
+
   implicit val catsDataBifoldableForConst: Bifoldable[Const] =
     new Bifoldable[Const] {
       def bifoldLeft[A, B, C](fab: Const[A, B], c: C)(f: (C, A) => C, g: (C, B) => C): C =
@@ -161,9 +171,25 @@ sealed abstract private[data] class ConstInstances extends ConstInstances0 {
       ): Eval[C] =
         f(fab.getConst, c)
     }
+
+  implicit def catsDataMonoidKForConst[C: Monoid]: MonoidK[Const[C, *]] = new MonoidK[Const[C, *]] {
+    override def empty[A]: Const[C, A] = Const.empty
+    override def combineK[A](x: Const[C, A], y: Const[C, A]): Const[C, A] = x.combine(y)
+  }
+
+  implicit def catsDataSemigroupKForConst[C: Semigroup]: SemigroupK[Const[C, *]] = new SemigroupK[Const[C, *]] {
+    override def combineK[A](x: Const[C, A], y: Const[C, A]): Const[C, A] = x.combine(y)
+  }
 }
 
 sealed abstract private[data] class ConstInstances0 extends ConstInstances1 {
+
+  implicit def catsDataEqForConst[A: Eq, B]: Eq[Const[A, B]] = _ === _
+
+  implicit def catsDataHashForConst[A: Hash, B]: Hash[Const[A, B]] = new Hash[Const[A, B]] {
+    override def hash(x: Const[A, B]): Int = x.hash
+    override def eqv(x: Const[A, B], y: Const[A, B]): Boolean = x === y
+  }
 
   implicit def catsDataContravariantMonoidalForConst[D: Monoid]: ContravariantMonoidal[Const[D, *]] =
     new ContravariantMonoidal[Const[D, *]] {
@@ -174,13 +200,23 @@ sealed abstract private[data] class ConstInstances0 extends ConstInstances1 {
         fa.retag[(A, B)].combine(fb.retag[(A, B)])
     }
 
-  implicit def catsDataCommutativeApplicativeForConst[C](implicit
-    C: CommutativeMonoid[C]
-  ): CommutativeApplicative[Const[C, *]] =
-    new ConstApplicative[C] with CommutativeApplicative[Const[C, *]] { val C0: CommutativeMonoid[C] = C }
+  implicit def catsDataContravariantSemigroupalForConst[D: Semigroup]: ContravariantSemigroupal[Const[D, *]] =
+    new ContravariantSemigroupal[Const[D, *]] {
+      override def contramap[A, B](fa: Const[D, A])(f: B => A): Const[D, B] =
+        fa.retag[B]
+      override def product[A, B](fa: Const[D, A], fb: Const[D, B]): Const[D, (A, B)] =
+        fa.retag[(A, B)].combine(fb.retag[(A, B)])
+    }
 }
 
 sealed abstract private[data] class ConstInstances1 extends ConstInstances2 {
+
+  implicit def catsDataCommutativeApplicativeForConst[C](implicit
+    C: CommutativeMonoid[C]
+  ): CommutativeApplicative[Const[C, *]] =
+    new ConstApplicative[C] with CommutativeApplicative[Const[C, *]] {
+      val C0: CommutativeMonoid[C] = C
+    }
 
   implicit def catsDataCommutativeApplyForConst[C](implicit C: CommutativeSemigroup[C]): CommutativeApply[Const[C, *]] =
     new ConstApply[C] with CommutativeApply[Const[C, *]] { val C0: CommutativeSemigroup[C] = C }
@@ -188,32 +224,27 @@ sealed abstract private[data] class ConstInstances1 extends ConstInstances2 {
 
 sealed abstract private[data] class ConstInstances2 extends ConstInstances3 {
 
-  implicit def catsDataSemigroupForConst[A: Semigroup, B]: Semigroup[Const[A, B]] = _ combine _
-
-  implicit def catsDataPartialOrderForConst[A: PartialOrder, B]: PartialOrder[Const[A, B]] = _ partialCompare _
-
   implicit def catsDataApplicativeForConst[C](implicit C: Monoid[C]): Applicative[Const[C, *]] =
     new ConstApplicative[C] { val C0: Monoid[C] = C }
-}
-
-sealed abstract private[data] class ConstInstances3 extends ConstInstances4 {
-  implicit def catsDataEqForConst[A: Eq, B]: Eq[Const[A, B]] = _ === _
 
   implicit def catsDataApplyForConst[C](implicit C: Semigroup[C]): Apply[Const[C, *]] =
     new ConstApply[C] { val C0: Semigroup[C] = C }
 }
 
-sealed abstract private[data] class ConstInstances4 {
+sealed abstract private[data] class ConstInstances3 extends ConstInstances4 {
 
-  implicit def catsDataFunctorForConst[C]: Functor[Const[C, *]] =
+  @deprecated("Use catsDataTraverseForConst instead", "2.10.0")
+  def catsDataFunctorForConst[C]: Functor[Const[C, *]] =
     new ConstFunctor[C] {}
 
   implicit def catsDataContravariantForConst[C]: Contravariant[Const[C, *]] =
     new ConstContravariant[C] {}
 }
 
+sealed abstract private[data] class ConstInstances4
+
 sealed private[data] trait ConstFunctor[C] extends Functor[Const[C, *]] {
-  def map[A, B](fa: Const[C, A])(f: A => B): Const[C, B] =
+  final override def map[A, B](fa: Const[C, A])(f: A => B): Const[C, B] =
     fa.retag[B]
 }
 
@@ -233,7 +264,7 @@ sealed private[data] trait ConstApply[C] extends ConstFunctor[C] with Apply[Cons
     fa.retag[(A, B)].combine(fb.retag[(A, B)])
 }
 
-sealed private[data] trait ConstApplicative[C] extends ConstApply[C] with Applicative[Const[C, *]] {
+sealed private[data] trait ConstApplicative[C] extends Applicative[Const[C, *]] with ConstApply[C] {
 
   implicit def C0: Monoid[C]
 
