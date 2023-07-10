@@ -24,7 +24,7 @@ package cats.tests
 import cats.{Contravariant, ContravariantMonoidal, Invariant}
 import cats.kernel.{Order, PartialOrder}
 import cats.kernel.laws.discipline.SerializableTests
-import cats.laws.discipline.{ContravariantMonoidalTests, MiniInt}
+import cats.laws.discipline.{ContravariantMonoidalTests, DeferTests, MiniInt}
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import cats.syntax.all._
@@ -47,6 +47,7 @@ class PartialOrderSuite extends CatsSuite {
 
   checkAll("PartialOrder", ContravariantMonoidalTests[PartialOrder].contravariantMonoidal[MiniInt, Boolean, Boolean])
   checkAll("ContravariantMonoidal[PartialOrder]", SerializableTests.serializable(ContravariantMonoidal[PartialOrder]))
+  checkAll("Defer[PartialOrder]", DeferTests[PartialOrder].defer[MiniInt])
 
   test("companion object syntax") {
     forAll { (i: Int, j: Int) =>

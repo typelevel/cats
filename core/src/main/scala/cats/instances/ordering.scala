@@ -24,6 +24,8 @@ package instances
 
 import cats.kernel.instances.unit._
 
+import scala.annotation.tailrec
+
 trait OrderingInstances {
   implicit val catsContravariantMonoidalForOrdering: ContravariantMonoidal[Ordering] =
     new ContravariantMonoidal[Ordering] {
@@ -42,5 +44,30 @@ trait OrderingInstances {
             if (z == 0) fb.compare(x._2, y._2) else z
           }
         }
+    }
+
+  implicit def catsStdDeferForOrdering: Defer[Ordering] = OrderingInstances.catsStdDeferForOrderingCache
+}
+object OrderingInstances {
+  private val catsStdDeferForOrderingCache: Defer[Ordering] =
+    new Defer[Ordering] {
+      case class Deferred[A](fa: () => Ordering[A]) extends Ordering[A] {
+        private lazy val resolved: Ordering[A] = {
+          @tailrec
+          def loop(f: () => Ordering[A]): Ordering[A] =
+            f() match {
+              case Deferred(f) => loop(f)
+              case next        => next
+            }
+
+          loop(fa)
+        }
+        override def compare(x: A, y: A): Int = resolved.compare(x, y)
+      }
+
+      override def defer[A](fa: => Ordering[A]): Ordering[A] = {
+        lazy val cachedFa = fa
+        Deferred(() => cachedFa)
+      }
     }
 }

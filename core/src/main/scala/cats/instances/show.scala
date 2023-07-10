@@ -24,37 +24,16 @@ package instances
 
 import scala.annotation.tailrec
 
-trait EqInstances extends kernel.instances.EqInstances {
-  implicit val catsContravariantMonoidalForEq: ContravariantMonoidal[Eq] =
-    new ContravariantMonoidal[Eq] {
-
-      /**
-       * Defaults to the trivial equivalence relation
-       * contracting the type to a point
-       */
-      def unit: Eq[Unit] = Eq.allEqual
-
-      /**
-       * Derive an `Eq` for `B` given an `Eq[A]` and a function `B => A`.
-       *
-       * Note: resulting instances are law-abiding only when the functions used are injective (represent a one-to-one mapping)
-       */
-      def contramap[A, B](fa: Eq[A])(f: B => A): Eq[B] =
-        Eq.by(f)(fa)
-
-      def product[A, B](fa: Eq[A], fb: Eq[B]): Eq[(A, B)] =
-        (left, right) => fa.eqv(left._1, right._1) && fb.eqv(left._2, right._2)
-    }
-
-  implicit def catsDeferForEq: Defer[Eq] = EqInstances.catsDeferForEqCache
+trait ShowInstances {
+  implicit def catsDeferForShow: Defer[Show] = ShowInstances.catsDeferForShowCache
 }
-object EqInstances {
-  private val catsDeferForEqCache: Defer[Eq] =
-    new Defer[Eq] {
-      case class Deferred[A](fa: () => Eq[A]) extends Eq[A] {
-        private lazy val resolved: Eq[A] = {
+object ShowInstances {
+  private val catsDeferForShowCache: Defer[Show] =
+    new Defer[Show] {
+      case class Deferred[A](fa: () => Show[A]) extends Show[A] {
+        private lazy val resolved: Show[A] = {
           @tailrec
-          def loop(f: () => Eq[A]): Eq[A] =
+          def loop(f: () => Show[A]): Show[A] =
             f() match {
               case Deferred(f) => loop(f)
               case next        => next
@@ -62,10 +41,10 @@ object EqInstances {
 
           loop(fa)
         }
-        override def eqv(x: A, y: A): Boolean = resolved.eqv(x, y)
+        override def show(t: A): String = resolved.show(t)
       }
 
-      override def defer[A](fa: => Eq[A]): Eq[A] = {
+      override def defer[A](fa: => Show[A]): Show[A] = {
         lazy val cachedFa = fa
         Deferred(() => cachedFa)
       }
