@@ -37,5 +37,5 @@ class HashSuite extends CatsSuite {
 
   assert(1.hash == 1.hashCode)
   assert("ABC".hash == "ABC".hashCode)
-  checkAll("Defer[Equiv]", DeferTests[Hash].defer[MiniInt])
+  checkAll("Defer[Hash]", DeferTests[Hash].defer[MiniInt])
 }
