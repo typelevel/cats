@@ -31,8 +31,8 @@ trait ApplySyntax extends TupleSemigroupalSyntax {
       val typeClassInstance = F
     }
 
-  implicit final def applySyntaxBinCompat1[F[_], A](fa: F[A]): ApplySyntaxBinCompat1[F, A] =
-    new ApplySyntaxBinCompat1(fa)
+  implicit final def catsSyntaxApplyBinCompat1[F[_], A](fa: F[A]): ApplyBinCompat1[F, A] =
+    new ApplyBinCompat1(fa)
 
   implicit final def catsSyntaxApplyOps[F[_], A](fa: F[A]): ApplyOps[F, A] =
     new ApplyOps(fa)
@@ -43,7 +43,7 @@ private[syntax] trait ApplySyntaxBinCompat0 {
     new IfApplyOps[F](fa)
 }
 
-final class ApplySyntaxBinCompat1[F[_], A](private val fa: F[A]) extends AnyVal {
+final class ApplyBinCompat1[F[_], A](private val fa: F[A]) extends AnyVal {
   def ap[B, C](fb: F[B])(implicit ev$1: A <:< (B => C), F: Apply[F]): F[C] =
     F.ap(fa.asInstanceOf[F[B => C]])(fb)
   def productR[B](fb: F[B])(implicit F: Apply[F]): F[B] = F.productR[A, B](fa)(fb)
