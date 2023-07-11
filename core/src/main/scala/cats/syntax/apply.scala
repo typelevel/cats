@@ -23,13 +23,8 @@ package cats
 package syntax
 
 trait ApplySyntax extends TupleSemigroupalSyntax {
-  implicit final def catsSyntaxApply[F[_], A](fa: F[A])(implicit F: Apply[F]): Apply.Ops[F, A] =
-    new Apply.Ops[F, A] {
-      type TypeClassType = Apply[F]
-
-      val self = fa
-      val typeClassInstance = F
-    }
+  implicit final def applySyntaxBinCompat1[F[_], A](fa: F[A]): ApplySyntaxBinCompat1[F, A] =
+    new ApplySyntaxBinCompat1(fa)
 
   implicit final def catsSyntaxApplyOps[F[_], A](fa: F[A]): ApplyOps[F, A] =
     new ApplyOps(fa)
@@ -38,6 +33,22 @@ trait ApplySyntax extends TupleSemigroupalSyntax {
 private[syntax] trait ApplySyntaxBinCompat0 {
   implicit final def catsSyntaxIfApplyOps[F[_]](fa: F[Boolean]): IfApplyOps[F] =
     new IfApplyOps[F](fa)
+}
+
+final class ApplySyntaxBinCompat1[F[_], A](private val fa: F[A]) extends AnyVal {
+  def ap[B, C](fb: F[B])(implicit ev$1: A <:< (B => C), F: Apply[F]): F[C] =
+    F.ap(fa.asInstanceOf[F[B => C]])(fb)
+  def productR[B](fb: F[B])(implicit F: Apply[F]): F[B] = F.productR[A, B](fa)(fb)
+  def productL[B](fb: F[B])(implicit F: Apply[F]): F[A] = F.productL[A, B](fa)(fb)
+  @inline final def <*>[B, C](fa: F[B])(implicit ev$1: A <:< (B => C), F: Apply[F]): F[C] =
+    F.<*>[B, C](fa.asInstanceOf[F[B => C]])(fa)
+  @inline def *>[B](fb: F[B])(implicit F: Apply[F]): F[B] = F.*>[A, B](fa)(fb)
+  @inline def <*[B](fb: F[B])(implicit F: Apply[F]): F[A] = F.<*[A, B](fa)(fb)
+  def ap2[B, C, D](fa: F[B], fb: F[C])(implicit ev$1: A <:< ((B, C) => D), F: Apply[F]): F[D] =
+    F.ap2[B, C, D](fa.asInstanceOf[F[(B, C) => D]])(fa, fb)
+  def map2[B, C](fb: F[B])(f: (A, B) => C)(implicit F: Apply[F]): F[C] = F.map2[A, B, C](fa, fb)(f)
+  def map2Eval[B, C](fb: Eval[F[B]])(f: (A, B) => C)(implicit F: Apply[F]): Eval[F[C]] =
+    F.map2Eval[A, B, C](fa, fb)(f)
 }
 
 final class IfApplyOps[F[_]](private val fcond: F[Boolean]) extends AnyVal {
