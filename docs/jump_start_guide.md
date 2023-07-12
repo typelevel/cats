@@ -14,9 +14,11 @@ We are sticking to [version 1.0.1](https://github.com/typelevel/cats/releases/ta
 Let's go through the library package-wise, looking at the syntax available in each package.
 
 
-# Helpers for `Option` and `Either`
+# Option Helpers
 
-## `import cats.syntax.all._`
+```scala mdoc:silent
+import cats.syntax.all._
+```
 
 Importing this package enables `obj.some` syntax — equivalent to `Some(obj)`.
 The only real difference is that the value is already upcast to `Option[T]` from `Some[T]`.
@@ -35,8 +37,6 @@ implicit class ToFutureSuccessful[T](obj: T) {
 then you can use the chained syntax shown below:
 
 ```scala mdoc:silent
-import cats.syntax.all._
-
 class Account { /* ... */ }
 
 trait AccountService {
@@ -60,15 +60,17 @@ Chaining `.some.asFuture` at the end rather than putting it at the front also he
 Providing a more specialized type sometimes helps the Scala compiler properly infer the type of expressions containing `None`.
 
 
-## `import cats.syntax.all._`
+# Either Helpers
+
+```scala mdoc:silent
+import cats.syntax.all._
+```
 
 `obj.asRight` is `Right(obj)`, `obj.asLeft` is `Left(obj)`.
 In both cases the type of returned value is widened from `Right` or `Left` to `Either`.
 Just as was the case with `.some`, these helpers are handy to combine with `.asFuture` to improve readability:
 
 ```scala mdoc:silent
-import cats.syntax.all._
-
 case class User(accountId: Long) { /* ... */ }
 
 trait UserService {
@@ -90,7 +92,7 @@ If the provided `option` is `Some(x)`, it becomes `Right(x)`.
 Otherwise it becomes `Left` with the provided `ifNone` value inside.
 
 
-## `import cats.syntax.all._`
+# Tuples
 
 The `apply` package provides `(..., ..., ...).mapN` syntax, which allows for an intuitive construct for applying a function that takes more than one parameter to multiple effectful values (like futures).
 
@@ -153,9 +155,11 @@ But since the computations are independent of one another, it's perfectly viable
 
 # Traversing
 
-## ```import cats.syntax.all._```
+```scala mdoc:silent
+import cats.syntax.all._
+```
 
-### `traverse`
+## `traverse`
 
 If you have an instance `obj` of type `F[A]` that can be mapped over (like `Future`) and a function `fun` of type `A => G[B]`, then calling `obj.map(fun)` would give you `F[G[B]]`.
 In many common real-life cases, like when `F` is `Option` and `G` is `Future`, you would get `Option[Future[B]]`, which most likely isn't what you wanted.
@@ -164,8 +168,6 @@ In many common real-life cases, like when `F` is `Option` and `G` is `Future`, y
 If you call `traverse` instead of `map`, like `obj.traverse(fun)`, you'll get `G[F[A]]`, which will be `Future[Option[B]]` in our case; this is much more useful and easier to process than `Option[Future[B]]`.
 
 ```scala mdoc:silent
-import cats.syntax.all._
-
 def updateUser(user: User): Future[User] = { /* ... */ ??? }
 
 def updateUsers(users: List[User]): Future[List[User]] = {
@@ -176,13 +178,11 @@ def updateUsers(users: List[User]): Future[List[User]] = {
 As a side note, there is also a dedicated method `Future.traverse` in the [`Future`](http://www.scala-lang.org/api/current/scala/concurrent/Future$.html) companion object,
 but the Cats version is far more readable and can easily work on any structure for which certain type classes are available.
 
-### `sequence`
+## `sequence`
 
 `sequence` represents an even simpler concept: it can be thought of as simply swapping the types from `F[G[A]]` to `G[F[A]]` without even mapping the enclosed value like `traverse` does.
 
 ```scala mdoc:silent
-import cats.syntax.all._
-
 val foo: List[Future[String]] = List(Future("hello"), Future("world"))
 val bar = foo.sequence // will have Future[List[String]] type
 ```
@@ -191,7 +191,7 @@ val bar = foo.sequence // will have Future[List[String]] type
 
 On the other hand, `obj.traverse(fun)` is roughly equivalent to `obj.map(fun).sequence`.
 
-### `flatTraverse`
+## `flatTraverse`
 
 If you have an `obj` of type `F[A]` and a function `fun` of type `A => G[F[B]]`, then doing `obj.map(f)` yields result of type `F[G[F[B]]]` — very unlikely to be what you wanted.
 
@@ -199,8 +199,6 @@ Traversing the `obj` instead of mapping helps a little — you'll get `G[F[F[B]]
 Since `G` is usually something like `Future` and `F` is `List` or `Option`, you would end up with `Future[Option[Option[A]]` or `Future[List[List[A]]]` — a bit awkward to process.
 
 ```scala mdoc:silent
-import cats.syntax.all._
-
 lazy val valueOpt: Option[Int] = { /* ... */ ??? }
 def compute(value: Int): Future[Option[Int]] = { /* ... */ ??? }
 def computeOverValue: Future[Option[Option[Int]]] = valueOpt.traverse(compute) // has type Future[Option[Option[Int]]], not good
@@ -219,10 +217,13 @@ def computeOverValue3: Future[Option[Int]] = valueOpt.flatTraverse(compute)
 and that solves our problem for good.
 
 
+# Monad Transformers
 
-# Monad transformers
+## OptionT
 
-## `import cats.data.OptionT`
+```scala mdoc:silent
+import cats.data.OptionT
+```
 
 An instance of [`OptionT[F, A]`](datatypes/optiont.md) can be thought of as a wrapper over `F[Option[A]]`
 which adds a couple of useful methods specific to nested types that aren't available in `F` or `Option` itself.
@@ -245,8 +246,6 @@ def mappedResultFuture: Future[Option[String]] = resultFuture.map { maybeValue =
 With the use of `OptionT`, this can be simplified as follows:
 
 ```scala mdoc:silent
-import cats.data.OptionT
-
 def mappedResultFuture2: OptionT[Future, String] = OptionT(resultFuture).map { value =>
   // Do something with the value and return String
   ???
@@ -268,7 +267,7 @@ The method headers in the table below are slightly simplified: the type paramete
 | `OptionT.liftF` | `F[A]` | `OptionT[F, A]` |
 | `OptionT.pure` | `A` | `OptionT[F, A]` |
 
-In production code you'll most commonly use the `OptionT(...)` syntax in order to wrap an instance of `Future[Option[A]]` into `Option[F, A]`.
+In production code you'll most commonly use the `OptionT(...)` syntax in order to wrap an instance of `Future[Option[A]]` into `OptionT[F, A]`.
 The other methods, in turn, prove useful to set up `OptionT`-typed dummy values in unit tests.
 
 We have already come across one of `OptionT`'s methods, namely `map`.
@@ -288,8 +287,6 @@ In practice, you're most likely to use `map` and `semiflatMap`.
 As is always the case with `flatMap` and `map`, you can use it not only explicitly, but also under the hood in `for` comprehensions, as in the example below:
 
 ```scala mdoc:silent
-import cats.data.OptionT
-
 class Money { /* ... */ }
 
 def findUserById(userId: Long): OptionT[Future, User] = { /* ... */ ??? }
@@ -309,7 +306,11 @@ The `OptionT[Future, Money]` instance returned by `getReservedFundsForUser` will
 Otherwise, if the result of all three calls contains `Some`, the final outcome will also contain `Some`.
 
 
-## `import cats.data.EitherT`
+## EitherT
+
+```scala mdoc:silent
+import cats.data.EitherT
+```
 
 [`EitherT[F, A, B]`](datatypes/eithert.md) is the monad transformer for `Either` — you can think of it as a wrapper over a `F[Either[A, B]]` value.
 
@@ -328,8 +329,6 @@ Let's have a quick look at how to create an `EitherT` instance:
 Another useful way to construct an `EitherT` instance is to use `OptionT`'s methods `toLeft` and `toRight`:
 
 ```scala mdoc:silent
-import cats.data.EitherT
-
 abstract class BaseException(message: String) extends Exception(message)
 
 case class UserNotFoundException(message: String) extends BaseException(message)

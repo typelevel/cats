@@ -23,6 +23,9 @@ package cats.tests
 
 import cats.{Contravariant, Invariant}
 import cats.kernel.Hash
+import cats.laws.discipline.{DeferTests, MiniInt}
+import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.eq._
 import cats.syntax.hash._
 
 class HashSuite extends CatsSuite {
@@ -34,5 +37,5 @@ class HashSuite extends CatsSuite {
 
   assert(1.hash == 1.hashCode)
   assert("ABC".hash == "ABC".hashCode)
-
+  checkAll("Defer[Hash]", DeferTests[Hash].defer[MiniInt])
 }

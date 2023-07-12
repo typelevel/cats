@@ -43,4 +43,5 @@ class PartialOrderingSuite extends CatsSuite {
   checkAll("ContravariantMonoidal[PartialOrdering]",
            SerializableTests.serializable(ContravariantMonoidal[PartialOrdering])
   )
+  checkAll("Defer[PartialOrdering]", DeferTests[PartialOrdering].defer[MiniInt])
 }

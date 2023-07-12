@@ -40,4 +40,5 @@ class OrderingSuite extends CatsSuite {
            ContravariantMonoidalTests[Ordering].contravariantMonoidal[MiniInt, Boolean, Boolean]
   )
   checkAll("ContravariantMonoidal[Ordering]", SerializableTests.serializable(ContravariantMonoidal[Ordering]))
+  checkAll("Defer[Ordering]", DeferTests[Ordering].defer[MiniInt])
 }

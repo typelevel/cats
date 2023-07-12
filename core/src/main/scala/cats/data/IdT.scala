@@ -27,24 +27,86 @@ package data
  */
 final case class IdT[F[_], A](value: F[A]) {
 
+  /**
+   * Example:
+   * {{{
+   *  scala> import cats.data.IdT
+   *
+   *  scala> val idT: IdT[List, Int] = IdT(List(1, 2, 3))
+   *  scala> idT.map(_ + 1)
+   *  res0: IdT[List, Int] = IdT(List(2, 3, 4))
+   * }}}
+   */
   def map[B](f: A => B)(implicit F: Functor[F]): IdT[F, B] =
     IdT(F.map(value)(f))
 
   /**
    * Modify the context `F` using transformation `f`.
+   *
+   * Example:
+   * {{{
+   *  scala> import cats.~>
+   *  scala> import cats.data.IdT
+   *
+   *  scala> val vectorToList: Vector ~> List = new ~>[Vector, List] { override def apply[A](v: Vector[A]): List[A] = v.toList }
+   *  scala> val idT: IdT[Vector, Int] = IdT(Vector(1, 2, 3))
+   *  scala> idT.mapK[List](vectorToList)
+   *  res0: IdT[List, Int] = IdT(List(1, 2, 3))
+   * }}}
    */
   def mapK[G[_]](f: F ~> G): IdT[G, A] =
     IdT[G, A](f(value))
 
+  /**
+   * Example:
+   * {{{
+   *  scala> import cats.data.IdT
+   *
+   *  scala> val idT: IdT[List, Int] = IdT(List(1, 2, 3))
+   *  scala> idT.flatMap(x => IdT(List(x + 1)))
+   *  res0: IdT[List, Int] = IdT(List(2, 3, 4))
+   * }}}
+   */
   def flatMap[B](f: A => IdT[F, B])(implicit F: FlatMap[F]): IdT[F, B] =
     IdT(F.flatMap(value)(a => f(a).value))
 
+  /**
+   * Example:
+   * {{{
+   *  scala> import cats.data.IdT
+   *
+   *  scala> val idT: IdT[List, Int] = IdT(List(1, 2, 3))
+   *  scala> idT.flatMapF(x => List(Option(x).filter(_ % 2 == 0)))
+   *  res0: IdT[List, Option[Int]] = IdT(List(None, Some(2), None))
+   * }}}
+   */
   def flatMapF[B](f: A => F[B])(implicit F: FlatMap[F]): IdT[F, B] =
     IdT(F.flatMap(value)(f))
 
+  /**
+   * Example:
+   * {{{
+   *  scala> import cats.data.IdT
+   *
+   *  scala> val idT: IdT[List, Int] = IdT(List(1, 2, 3))
+   *  scala> idT.foldLeft(0)((acc, x) => acc + x)
+   *  res0: Int = 6
+   * }}}
+   */
   def foldLeft[B](b: B)(f: (B, A) => B)(implicit F: Foldable[F]): B =
     F.foldLeft(value, b)(f)
 
+  /**
+   * Example:
+   * {{{
+   *  scala> import cats.data.IdT
+   *  scala> import cats.Eval
+   *
+   *  scala> val idT: IdT[List, Int] = IdT(List(1, 2, 3))
+   *  scala> idT.foldRight(Eval.Zero)((x, acc) => Eval.later(x + acc.value)).value
+   *  res0: Int = 6
+   * }}}
+   */
   def foldRight[B](lb: Eval[B])(f: (A, Eval[B]) => Eval[B])(implicit F: Foldable[F]): Eval[B] =
     F.foldRight(value, lb)(f)
 
@@ -54,6 +116,16 @@ final case class IdT[F[_], A](value: F[A]) {
   def reduceRightTo[B](f: A => B)(g: (A, Eval[B]) => Eval[B])(implicit F: Reducible[F]): Eval[B] =
     F.reduceRightTo(value)(f)(g)
 
+  /**
+   * Example:
+   * {{{
+   *  scala> import cats.data.IdT
+   *
+   *  scala> val idT: IdT[List, Int] = IdT(List(1, 2, 3))
+   *  scala> idT.traverse[Option, Int](x => Option(x + 1))
+   *  res0: Option[IdT[List, Int]] = Some(IdT(List(2, 3, 4)))
+   * }}}
+   */
   def traverse[G[_], B](f: A => G[B])(implicit F: Traverse[F], G: Applicative[G]): G[IdT[F, B]] =
     G.map(F.traverse(value)(f))(IdT(_))
 

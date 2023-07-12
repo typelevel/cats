@@ -37,9 +37,9 @@ a bunch of useful combinators around it. In Scala 2.12.x `Either`
 fill in the gaps in the `scala.util.Either` API via
 [syntax enrichment](https://github.com/typelevel/cats/blob/main/core/src/main/scala/cats/syntax/either.scala).
 
-This syntax and the type class instances for `Either` can be imported using `cats.implicits._`, which will also bring in syntactic enrichment and instances for other standard library types, or you can import them individually with `cats.syntax.either._` and `cats.instances.either._`.
+This syntax and the type class instances for `Either` can be imported using `cats.syntax._`, which will also bring in syntactic enrichment and instances for other standard library types, or you can import only the `Either` enrichment with `cats.syntax.either._`.
 
-There are a few minor mismatches between `Xor` and `Either`. For example, in some cases you may need to specify a type parameter for an enrichment method on `Either` (such as `leftMap`) even though it was properly inferred for `Xor`. See the [`Either` section of this guide](datatypes/either.md#either-in-the-small-either-in-the-large) for more information about these issues.
+There are a few minor mismatches between `Xor` and `Either`. For example, in some cases you may need to specify a type parameter for an enrichment method on `Either` (such as `leftMap`) even though it was properly inferred for `Xor`, due to `Either` having covariant type parameters.
 
 Similarly, `cats.data.XorT` has been replaced with `cats.data.EitherT`, although since this is a type defined in Cats, you don't need to import syntax or instances for it (although you may need imports for the underlying monad).
 
@@ -126,9 +126,9 @@ It may be worth keeping in mind that `IO` and `Task` are pretty blunt instrument
 
 ## What do types like `?` and `λ` mean?
 
-Cats defines a wealth of type classes and type class instances. For a number of the type class and instance combinations, there is a mismatch between the type parameter requirements of the type class and the type parameter requirements of the data type for which the instance is being defined. For example, the [Either](datatypes/either.md) data type is a type constructor with two type parameters. We would like to be able to define a [Monad](typeclasses/monad.md) for `Either`, but the `Monad` type class operates on type constructors having only one type parameter.
+Cats defines a wealth of type classes and type class instances. For a number of the type class and instance combinations, there is a mismatch between the type parameter requirements of the type class and the type parameter requirements of the data type for which the instance is being defined. For example, the `Either` data type is a type constructor with two type parameters. We would like to be able to define a [Monad](typeclasses/monad.md) for `Either`, but the `Monad` type class operates on type constructors having only one type parameter.
 
-**Enter type lambdas!** Type lambdas provide a mechanism to allow one or more of the type parameters for a particular type constructor to be fixed. In the case of `Either` then, when defining a `Monad` for `Either`, we want to fix one of the type parameters at the point where a `Monad` instance is summoned, so that the type parameters line up. As `Either` is right biased, a type lambda can be used to fix the left type parameter and allow the right type parameter to continue to vary when `Either` is treated as a `Monad`. The right biased nature of `Either` is discussed further in the [`Either` documentation](datatypes/either.md).
+**Enter type lambdas!** Type lambdas provide a mechanism to allow one or more of the type parameters for a particular type constructor to be fixed. In the case of `Either` then, when defining a `Monad` for `Either`, we want to fix one of the type parameters at the point where a `Monad` instance is summoned, so that the type parameters line up. As `Either` is right biased, a type lambda can be used to fix the left type parameter and allow the right type parameter to continue to vary when `Either` is treated as a `Monad`.
 
 **Enter [kind-projector](https://github.com/typelevel/kind-projector)!** kind-projector is a compiler plugin which provides a convenient syntax for dealing with type lambdas. The symbols `?` and `λ` are treated specially by kind-projector, and expanded into the more verbose definitions that would be required were it not to be used. You can read more about kind-projector at the [project page](https://github.com/typelevel/kind-projector).
 
