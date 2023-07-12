@@ -329,7 +329,7 @@ jobs:
 
       - name: sbt update
         if: matrix.java == 'temurin@8' && steps.setup-java-temurin-8.outputs.cache-hit == 'false'
-        run: sbt '++ ${{ matrix.scala }}' reload +update
+        run: sbt reload +update
 
       - name: Setup Java (temurin@17)
         id: setup-java-temurin-17
@@ -342,7 +342,7 @@ jobs:
 
       - name: sbt update
         if: matrix.java == 'temurin@17' && steps.setup-java-temurin-17.outputs.cache-hit == 'false'
-        run: sbt '++ ${{ matrix.scala }}' reload +update
+        run: sbt reload +update
 
       - name: Setup Java (graalvm@17)
         id: setup-java-graalvm-17
@@ -355,13 +355,13 @@ jobs:
 
       - name: sbt update
         if: matrix.java == 'graalvm@17' && steps.setup-java-graalvm-17.outputs.cache-hit == 'false'
-        run: sbt '++ ${{ matrix.scala }}' reload +update
+        run: sbt reload +update
 
       - name: Submit Dependencies
         uses: scalacenter/sbt-dependency-submission@v2
         with:
-          modules-ignore: root rootJS docs testsJS rootJVM rootNative testsJVM binCompatTest testsNative bench
-          configs-ignore: test scala-tool scala-doc-tool
+          modules-ignore: rootjs_2.12 rootjs_2.13 rootjs_3 docs_2.12 docs_2.13 docs_3 cats-tests_sjs1_2.12 cats-tests_sjs1_2.13 cats-tests_sjs1_3 rootjvm_2.12 rootjvm_2.13 rootjvm_3 rootnative_2.12 rootnative_2.13 rootnative_3 cats-tests_2.12 cats-tests_2.13 cats-tests_3 bincompattest_2.12 bincompattest_2.13 bincompattest_3 cats-tests_native0.4_2.12 cats-tests_native0.4_2.13 cats-tests_native0.4_3 cats-bench_2.12 cats-bench_2.13 cats-bench_3
+          configs-ignore: test scala-tool scala-doc-tool test-internal
 
   validate-steward:
     name: Validate Steward Config
