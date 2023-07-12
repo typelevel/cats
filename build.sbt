@@ -31,7 +31,7 @@ ThisBuild / githubWorkflowAddedJobs ++= Seq(
       WorkflowStep.Run(List("cd scalafix", "sbt test"), name = Some("Scalafix tests"))
     ),
     javas = List(PrimaryJava),
-    scalas = List((ThisBuild / scalaVersion).value)
+    scalas = Nil
   )
 )
 
