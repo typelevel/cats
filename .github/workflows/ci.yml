@@ -36,9 +36,9 @@ jobs:
             java: temurin@17
           - scala: 2.12
             java: graalvm@17
-          - scala: 2.13
+          - scala: 3
             java: temurin@17
-          - scala: 2.13
+          - scala: 3
             java: graalvm@17
           - project: rootJS
             java: temurin@17
@@ -384,7 +384,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        scala: [3.3.0]
+        scala: [2.13.11]
         java: [temurin@8]
     runs-on: ${{ matrix.os }}
     steps:
