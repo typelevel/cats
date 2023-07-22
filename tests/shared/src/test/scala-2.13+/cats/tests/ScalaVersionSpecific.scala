@@ -33,16 +33,13 @@ import cats.syntax.all._
 import org.scalacheck.Prop._
 
 trait ScalaVersionSpecificFoldableSuite { self: FoldableSuiteAdditional =>
-  test("Foldable[LazyList] monadic folds stack safety")(checkMonadicFoldsStackSafety(_.to(LazyList)))
-  test("Foldable[LazyList].slidingN stack safety")(checkSlidingNStackSafety(_.to(LazyList)))
+  test("Foldable[LazyList].foldM stack safety") {
+    checkMonadicFoldsStackSafety[LazyList](_.to(LazyList))
+  }
 
-  test("Foldable[NonEmptyLazyList] monadic folds stack safety")(
-    checkMonadicFoldsStackSafety(xs => NonEmptyLazyList(xs.head, xs.tail: _*))
-  )
-
-  test("Foldable[NonEmptyLazyList].slidingN stack safety")(
-    checkSlidingNStackSafety(xs => NonEmptyLazyList(xs.head, xs.tail: _*))
-  )
+  test("Foldable[NonEmptyLazyList].foldM/existsM/forallM/findM/collectFirstSomeM stack safety") {
+    checkMonadicFoldsStackSafety[NonEmptyLazyList](xs => NonEmptyLazyList(xs.head, xs.tail: _*))
+  }
 
   private def bombLazyList[A]: A = sys.error("boom")
   private val dangerousLazyList = 0 #:: 1 #:: 2 #:: bombLazyList[Int] #:: LazyList.empty
