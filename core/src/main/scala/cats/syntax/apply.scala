@@ -42,16 +42,16 @@ private[syntax] trait ApplySyntaxBinCompat0 {
 }
 
 private[syntax] trait ApplySyntaxBinCompat1 {
-  implicit final def applyFABOps[F[_], A, B](fab: F[A => B]): ApplyFABOps[F, A, B] =
+  implicit final def catsSyntaxApplyFABOps[F[_], A, B](fab: F[A => B]): ApplyFABOps[F, A, B] =
     new ApplyFABOps[F, A, B](fab)
 
-  implicit final def apply2Ops[F[_], A, B, C](ff: F[(A, B) => C]): Apply2Ops[F, A, B, C] =
+  implicit final def catsSyntaxApply2Ops[F[_], A, B, C](ff: F[(A, B) => C]): Apply2Ops[F, A, B, C] =
     new Apply2Ops[F, A, B, C](ff)
 
-  implicit final def productOps[F[_], A, B](fa: F[A]): ProductOps[F, A, B] =
+  implicit final def catsSyntaxProductOps[F[_], A, B](fa: F[A]): ProductOps[F, A, B] =
     new ProductOps[F, A, B](fa)
 
-  implicit final def map2Ops[F[_], A, B, C](fa: F[A]): Map2Ops[F, A, B, C] =
+  implicit final def catsSyntaxMap2Ops[F[_], A, B, C](fa: F[A]): Map2Ops[F, A, B, C] =
     new Map2Ops[F, A, B, C](fa)
 }
 
