@@ -23,7 +23,7 @@ package cats
 package syntax
 
 trait ApplySyntax extends TupleSemigroupalSyntax {
-  @deprecated("Use `catsSyntaxApplyBinCompat1`", "2.10.0")
+  @deprecated("Use `ApplySyntaxBinCompat1`", "2.10.0")
   final def catsSyntaxApply[F[_], A](fa: F[A], F: Apply[F]): Apply.Ops[F, A] =
     new Apply.Ops[F, A] {
       type TypeClassType = Apply[F]
@@ -31,9 +31,6 @@ trait ApplySyntax extends TupleSemigroupalSyntax {
       val self = fa
       val typeClassInstance = F
     }
-
-  implicit final def catsSyntaxApplyBinCompat1[F[_], A](fa: F[A]): ApplyBinCompat1[F, A] =
-    new ApplyBinCompat1(fa)
 
   implicit final def catsSyntaxApplyOps[F[_], A](fa: F[A]): ApplyOps[F, A] =
     new ApplyOps(fa)
@@ -44,20 +41,46 @@ private[syntax] trait ApplySyntaxBinCompat0 {
     new IfApplyOps[F](fa)
 }
 
-final class ApplyBinCompat1[F[_], A](private val fa: F[A]) extends AnyVal {
-  def ap[B, C](fb: F[B])(implicit ev$1: A <:< (B => C), F: Apply[F]): F[C] =
-    F.ap(fa.asInstanceOf[F[B => C]])(fb)
-  def productR[B](fb: F[B])(implicit F: Apply[F]): F[B] = F.productR[A, B](fa)(fb)
-  def productL[B](fb: F[B])(implicit F: Apply[F]): F[A] = F.productL[A, B](fa)(fb)
-  @inline final def <*>[B, C](fa: F[B])(implicit ev$1: A <:< (B => C), F: Apply[F]): F[C] =
-    F.<*>[B, C](fa.asInstanceOf[F[B => C]])(fa)
-  @inline def *>[B](fb: F[B])(implicit F: Apply[F]): F[B] = F.*>[A, B](fa)(fb)
-  @inline def <*[B](fb: F[B])(implicit F: Apply[F]): F[A] = F.<*[A, B](fa)(fb)
-  def ap2[B, C, D](fa: F[B], fb: F[C])(implicit ev$1: A <:< ((B, C) => D), F: Apply[F]): F[D] =
-    F.ap2[B, C, D](fa.asInstanceOf[F[(B, C) => D]])(fa, fb)
-  def map2[B, C](fb: F[B])(f: (A, B) => C)(implicit F: Apply[F]): F[C] = F.map2[A, B, C](fa, fb)(f)
-  def map2Eval[B, C](fb: Eval[F[B]])(f: (A, B) => C)(implicit F: Apply[F]): Eval[F[C]] =
-    F.map2Eval[A, B, C](fa, fb)(f)
+private[syntax] trait ApplySyntaxBinCompat1 {
+  implicit final def applyFABOps[F[_], A, B](fab: F[A => B]): ApplyFABOps[F, A, B] =
+    new ApplyFABOps[F, A, B](fab)
+
+  implicit final def apply2Ops[F[_], A, B, C](ff: F[(A, B) => C]): Apply2Ops[F, A, B, C] =
+    new Apply2Ops[F, A, B, C](ff)
+
+  implicit final def productOps[F[_], A, B](fa: F[A]): ProductOps[F, A, B] =
+    new ProductOps[F, A, B](fa)
+
+  implicit final def map2Ops[F[_], A, B, C](fa: F[A]): Map2Ops[F, A, B, C] =
+    new Map2Ops[F, A, B, C](fa)
+}
+
+final class ApplyFABOps[F[_], A, B](private val fab: F[A => B]) extends AnyVal {
+  def ap(fa: F[A])(implicit F: Apply[F]): F[B] = F.ap(fab)(fa)
+
+  def <*>(fa: F[A])(implicit F: Apply[F]): F[B] = F.<*>[A, B](fab)(fa)
+}
+
+final class Apply2Ops[F[_], A, B, C](private val ff: F[(A, B) => C]) extends AnyVal {
+  def ap2(fa: F[A], fb: F[B])(implicit F: Apply[F]): F[C] = F.ap2(ff)(fa, fb)
+}
+
+final class ProductOps[F[_], A, B](private val fa: F[A]) extends AnyVal {
+  def productR(fb: F[B])(implicit F: Apply[F]): F[B] = F.productR(fa)(fb)
+
+  def productL(fb: F[B])(implicit F: Apply[F]): F[A] = F.productL(fa)(fb)
+
+  def *>(fb: F[B])(implicit F: Apply[F]): F[B] = F.*>(fa)(fb)
+
+  def <*(fb: F[B])(implicit F: Apply[F]): F[A] = F.<*(fa)(fb)
+}
+
+final class Map2Ops[F[_], A, B, C](private val fa: F[A]) extends AnyVal {
+  def map2(fb: F[B])(f: (A, B) => C)(implicit F: Apply[F]): F[C] =
+    F.map2(fa, fb)(f)
+
+  def map2Eval(fb: Eval[F[B]])(f: (A, B) => C)(implicit F: Apply[F]): Eval[F[C]] =
+    F.map2Eval(fa, fb)(f)
 }
 
 final class IfApplyOps[F[_]](private val fcond: F[Boolean]) extends AnyVal {
