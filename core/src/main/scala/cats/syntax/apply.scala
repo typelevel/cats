@@ -48,11 +48,11 @@ private[syntax] trait ApplySyntaxBinCompat1 {
   implicit final def catsSyntaxApply2Ops[F[_], A, B, C](ff: F[(A, B) => C]): Apply2Ops[F, A, B, C] =
     new Apply2Ops[F, A, B, C](ff)
 
-  implicit final def catsSyntaxProductOps[F[_], A, B](fa: F[A]): ProductOps[F, A, B] =
-    new ProductOps[F, A, B](fa)
+  implicit final def catsSyntaxProductOps[F[_], A](fa: F[A]): ProductOps[F, A] =
+    new ProductOps[F, A](fa)
 
-  implicit final def catsSyntaxMap2Ops[F[_], A, B, C](fa: F[A]): Map2Ops[F, A, B, C] =
-    new Map2Ops[F, A, B, C](fa)
+  implicit final def catsSyntaxMap2Ops[F[_], A, B, C](fa: F[A]): Map2Ops[F, A] =
+    new Map2Ops[F, A](fa)
 }
 
 final class ApplyFABOps[F[_], A, B](private val fab: F[A => B]) extends AnyVal {
@@ -122,7 +122,7 @@ final class Apply2Ops[F[_], A, B, C](private val ff: F[(A, B) => C]) extends Any
   def ap2(fa: F[A], fb: F[B])(implicit F: Apply[F]): F[C] = F.ap2(ff)(fa, fb)
 }
 
-final class ProductOps[F[_], A, B](private val fa: F[A]) extends AnyVal {
+final class ProductOps[F[_], A](private val fa: F[A]) extends AnyVal {
 
   /**
    * @see [[Apply.productR]].
@@ -153,7 +153,7 @@ final class ProductOps[F[_], A, B](private val fa: F[A]) extends AnyVal {
    * res3: ErrOr[Boolean] = Invalid(Invalid int.Invalid boolean.)
    * }}}    
    */
-  def productR(fb: F[B])(implicit F: Apply[F]): F[B] = F.productR(fa)(fb)
+  def productR[B](fb: F[B])(implicit F: Apply[F]): F[B] = F.productR(fa)(fb)
 
   /**
    * @see [[Apply.productL]].
@@ -184,20 +184,20 @@ final class ProductOps[F[_], A, B](private val fa: F[A]) extends AnyVal {
    * res3: ErrOr[Int] = Invalid(Invalid int.Invalid boolean.)
    * }}}    
    */
-  def productL(fb: F[B])(implicit F: Apply[F]): F[A] = F.productL(fa)(fb)
+  def productL[B](fb: F[B])(implicit F: Apply[F]): F[A] = F.productL(fa)(fb)
 
   /**
    * Alias for [[productR]].
    */
-  def *>(fb: F[B])(implicit F: Apply[F]): F[B] = F.*>(fa)(fb)
+  def *>[B](fb: F[B])(implicit F: Apply[F]): F[B] = F.*>(fa)(fb)
 
   /**
    * Alias for [[productL]].
    */
-  def <*(fb: F[B])(implicit F: Apply[F]): F[A] = F.<*(fa)(fb)
+  def <*[B](fb: F[B])(implicit F: Apply[F]): F[A] = F.<*(fa)(fb)
 }
 
-final class Map2Ops[F[_], A, B, C](private val fa: F[A]) extends AnyVal {
+final class Map2Ops[F[_], A](private val fa: F[A]) extends AnyVal {
 
   /**
    * @see [[Apply.map2]].
@@ -224,7 +224,7 @@ final class Map2Ops[F[_], A, B, C](private val fa: F[A]) extends AnyVal {
    * res0: Option[String] = None
    * }}} 
    */
-  def map2(fb: F[B])(f: (A, B) => C)(implicit F: Apply[F]): F[C] =
+  def map2[B, C](fb: F[B])(f: (A, B) => C)(implicit F: Apply[F]): F[C] =
     F.map2(fa, fb)(f)
 
   /**
@@ -242,7 +242,7 @@ final class Map2Ops[F[_], A, B, C](private val fa: F[A]) extends AnyVal {
    * res0: Option[Int] = None 
    * }}} 
    */
-  def map2Eval(fb: Eval[F[B]])(f: (A, B) => C)(implicit F: Apply[F]): Eval[F[C]] =
+  def map2Eval[B, C](fb: Eval[F[B]])(f: (A, B) => C)(implicit F: Apply[F]): Eval[F[C]] =
     F.map2Eval(fa, fb)(f)
 }
 
