@@ -48,11 +48,8 @@ private[syntax] trait ApplySyntaxBinCompat1 {
   implicit final def catsSyntaxApply2Ops[F[_], A, B, C](ff: F[(A, B) => C]): Apply2Ops[F, A, B, C] =
     new Apply2Ops[F, A, B, C](ff)
 
-  implicit final def catsSyntaxProductOps[F[_], A](fa: F[A]): ProductOps[F, A] =
-    new ProductOps[F, A](fa)
-
-  implicit final def catsSyntaxMap2Ops[F[_], A, B, C](fa: F[A]): Map2Ops[F, A] =
-    new Map2Ops[F, A](fa)
+  implicit final def catsSyntaxApplyOps2[F[_], A](fa: F[A]): ApplyOps2[F, A] =
+    new ApplyOps2[F, A](fa)
 }
 
 final class ApplyFABOps[F[_], A, B](private val fab: F[A => B]) extends AnyVal {
@@ -122,7 +119,7 @@ final class Apply2Ops[F[_], A, B, C](private val ff: F[(A, B) => C]) extends Any
   def ap2(fa: F[A], fb: F[B])(implicit F: Apply[F]): F[C] = F.ap2(ff)(fa, fb)
 }
 
-final class ProductOps[F[_], A](private val fa: F[A]) extends AnyVal {
+final class ApplyOps2[F[_], A](private val fa: F[A]) extends AnyVal {
 
   /**
    * @see [[Apply.productR]].
@@ -195,9 +192,6 @@ final class ProductOps[F[_], A](private val fa: F[A]) extends AnyVal {
    * Alias for [[productL]].
    */
   def <*[B](fb: F[B])(implicit F: Apply[F]): F[A] = F.<*(fa)(fb)
-}
-
-final class Map2Ops[F[_], A](private val fa: F[A]) extends AnyVal {
 
   /**
    * @see [[Apply.map2]].
