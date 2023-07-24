@@ -172,7 +172,7 @@ final class ApplyOps2[F[_], A](private val fa: F[A]) extends AnyVal {
    * res0: ErrOr[Int] = Valid(3)
    *
    * scala> invalidInt.productL(validBool)
-   * res1: ErrOr[Boolean] = Invalid(Invalid int.)
+   * res1: ErrOr[Int] = Invalid(Invalid int.)
    *
    * scala> validInt.productL(invalidBool)
    * res2: ErrOr[Int] = Invalid(Invalid boolean.)
