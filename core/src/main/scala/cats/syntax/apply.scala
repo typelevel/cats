@@ -233,7 +233,7 @@ final class ApplyOps2[F[_], A](private val fa: F[A]) extends AnyVal {
    * scala> val x: Option[Int] = None
    * 
    * scala> x.map2Eval(bomb)(_ + _).value
-   * res0: Option[Int] = None 
+   * res0: Option[Int] = None
    * }}} 
    */
   def map2Eval[B, C](fb: Eval[F[B]])(f: (A, B) => C)(implicit F: Apply[F]): Eval[F[C]] =
