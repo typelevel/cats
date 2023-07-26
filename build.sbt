@@ -10,9 +10,9 @@ val munitVersion = "1.0.0-M8"
 
 val PrimaryJava = JavaSpec.temurin("8")
 val LTSJava = JavaSpec.temurin("17")
-val GraalVM11 = JavaSpec.graalvm("17")
+val GraalVM = JavaSpec.graalvm("17")
 
-ThisBuild / githubWorkflowJavaVersions := Seq(PrimaryJava, LTSJava, GraalVM11)
+ThisBuild / githubWorkflowJavaVersions := Seq(PrimaryJava, LTSJava, GraalVM)
 
 val Scala212 = "2.12.18"
 val Scala213 = "2.13.11"
