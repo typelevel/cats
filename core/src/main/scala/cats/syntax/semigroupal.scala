@@ -24,7 +24,7 @@ package syntax
 
 trait SemigroupalSyntax {
   @deprecated("Use `catsSntaxSemigroupalOps2`", "2.10.0")
-  final def catsSyntaxSemigroupal[F[_], A](fa: F[A])(implicit F: Semigroupal[F]): SemigroupalOps[F, A] =
+  final def catsSyntaxSemigroupal[F[_], A](fa: F[A])(F: Semigroupal[F]): SemigroupalOps[F, A] =
     new SemigroupalOps[F, A] {
       type TypeClassType = Semigroupal[F]
 
