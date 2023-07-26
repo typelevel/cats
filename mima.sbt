@@ -150,11 +150,7 @@ ThisBuild / mimaBinaryIssueFilters ++= {
       exclude[MissingClassProblem]("cats.compat.compat$package"),
       exclude[MissingClassProblem]("cats.compat.compat$package$"),
       ProblemFilters.exclude[MissingClassProblem]("cats.compat.targetName")
-    )
-}
-
-ThisBuild / mimaBinaryIssueFilters ++= {
-  if (tlIsScala3.value)
+    ) ++ // scala 3 specific filters
     Seq(
       exclude[DirectMissingMethodProblem]("cats.free.ContravariantCoyoneda.unsafeApply"),
       exclude[DirectMissingMethodProblem]("cats.free.Coyoneda.unsafeApply")
@@ -162,5 +158,4 @@ ThisBuild / mimaBinaryIssueFilters ++= {
       ProblemFilters.exclude[MissingClassProblem]("cats.compat.package"),
       ProblemFilters.exclude[MissingClassProblem]("cats.compat.package$")
     )
-  else Nil
 }
