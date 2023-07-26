@@ -535,6 +535,15 @@ sealed abstract private[data] class WriterTInstances8 extends WriterTInstances9 
 }
 
 sealed abstract private[data] class WriterTInstances9 extends WriterTInstances10 {
+  implicit def catsDataNonEmptyAlternativeForWriterT[F[_], L](implicit
+    F: NonEmptyAlternative[F],
+    L: Monoid[L]
+  ): NonEmptyAlternative[WriterT[F, L, *]] =
+    new WriterTNonEmptyAlternative[F, L] {
+      implicit val F0: NonEmptyAlternative[F] = F
+      implicit val L0: Monoid[L] = L
+    }
+
   implicit def catsDataMonoidKForWriterT[F[_], L](implicit F: MonoidK[F]): MonoidK[WriterT[F, L, *]] =
     new WriterTMonoidK[F, L] {
       implicit val F0: MonoidK[F] = F
@@ -739,10 +748,23 @@ sealed private[data] trait WriterTMonoidK[F[_], L] extends MonoidK[WriterT[F, L,
   def empty[A]: WriterT[F, L, A] = WriterT(F0.empty)
 }
 
+sealed private[data] trait WriterTNonEmptyAlternative[F[_], L]
+    extends NonEmptyAlternative[WriterT[F, L, *]]
+    with WriterTSemigroupK[F, L]
+    with WriterTApplicative[F, L] {
+  implicit override def F0: NonEmptyAlternative[F]
+
+  override def prependK[A](a: A, fa: WriterT[F, L, A]): WriterT[F, L, A] =
+    WriterT(F0.prependK((L0.empty, a), fa.run))
+
+  override def appendK[A](fa: WriterT[F, L, A], a: A): WriterT[F, L, A] =
+    WriterT(F0.appendK(fa.run, (L0.empty, a)))
+}
+
 sealed private[data] trait WriterTAlternative[F[_], L]
     extends Alternative[WriterT[F, L, *]]
-    with WriterTMonoidK[F, L]
-    with WriterTApplicative[F, L] {
+    with WriterTNonEmptyAlternative[F, L]
+    with WriterTMonoidK[F, L] {
   implicit override def F0: Alternative[F]
 }
 

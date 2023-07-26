@@ -22,22 +22,27 @@
 package cats.tests
 
 import cats._
-import cats.arrow.{Profunctor, Strong}
-import cats.data.{EitherT, IRWST, IndexedReaderWriterStateT, ReaderWriterState, ReaderWriterStateT}
-import cats.kernel.{Eq, Monoid}
-import cats.laws.discipline._
-import cats.laws.discipline.eq._
-import cats.laws.discipline.arbitrary._
+import cats.arrow.Profunctor
+import cats.arrow.Strong
+import cats.data.EitherT
+import cats.data.IRWST
+import cats.data.IndexedReaderWriterStateT
+import cats.data.ReaderWriterState
+import cats.data.ReaderWriterStateT
+import cats.kernel.Eq
+import cats.kernel.Monoid
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
+import cats.laws.discipline._
+import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.eq._
 import cats.syntax.apply._
+import cats.syntax.eq._
 import cats.syntax.semigroup._
 import cats.syntax.traverse._
-import org.scalacheck.Arbitrary
-import cats.syntax.eq._
 import org.scalacheck.Prop._
 
-class ReaderWriterStateTSuite extends CatsSuite {
-  import ReaderWriterStateTSuite._
+class IndexedReaderWriterStateTSuite extends CatsSuite {
+  import IndexedReaderWriterStateTSuite._
 
   test("Basic ReaderWriterState usage") {
     forAll { (context: String, initial: Int) =>
@@ -266,7 +271,7 @@ class ReaderWriterStateTSuite extends CatsSuite {
        log: String
       ) =>
         val flatMap = rwst.flatMap { a =>
-          ReaderWriterStateT { (e, s) =>
+          ReaderWriterStateT { (_, s) =>
             f(a).map((log, s, _))
           }
         }
@@ -449,19 +454,38 @@ class ReaderWriterStateTSuite extends CatsSuite {
   }
 
   {
-    implicit val G: Monad[ListWrapper] = ListWrapper.monad
+    implicit val LWM: Monad[ListWrapper] = ListWrapper.monad
 
-    val SA = IRWST.catsDataAlternativeForIRWST[ListWrapper, Boolean, String, MiniInt](ListWrapper.monad,
-                                                                                      ListWrapper.alternative,
-                                                                                      Monoid[String]
-    )
+    val SA = {
+      implicit val LWA: NonEmptyAlternative[ListWrapper] = ListWrapper.nonEmptyAlternative
+      NonEmptyAlternative[IRWST[ListWrapper, Boolean, String, MiniInt, MiniInt, *]]
+    }
 
     checkAll(
-      "IndexedReaderWriterStateT[ListWrapper, String, String, Int, Int, *]",
-      AlternativeTests[IRWST[ListWrapper, Boolean, String, MiniInt, MiniInt, *]](SA).alternative[Int, Int, Int]
+      "IndexedReaderWriterStateT[ListWrapper, Boolean, String, MiniInt, MiniInt, *]",
+      NonEmptyAlternativeTests(SA).nonEmptyAlternative[Int, Int, Int]
     )
-    checkAll("Alternative[IndexedReaderWriterStateT[ListWrapper, String, String, Int, Int, *]]",
-             SerializableTests.serializable(SA)
+    checkAll(
+      "NonEmptyAlternativeTests[IndexedReaderWriterStateT[ListWrapper, Boolean, String, MiniInt, MiniInt, *]]",
+      SerializableTests.serializable(SA)
+    )
+  }
+
+  {
+    implicit val LWM: Monad[ListWrapper] = ListWrapper.monad
+
+    val SA = {
+      implicit val LWA: Alternative[ListWrapper] = ListWrapper.alternative
+      Alternative[IRWST[ListWrapper, Boolean, String, MiniInt, MiniInt, *]]
+    }
+
+    checkAll(
+      "IndexedReaderWriterStateT[ListWrapper, Boolean, String, MiniInt, MiniInt, *]",
+      AlternativeTests(SA).alternative[Int, Int, Int]
+    )
+    checkAll(
+      "Alternative[IndexedReaderWriterStateT[ListWrapper, Boolean, String, MiniInt, MiniInt, *]]",
+      SerializableTests.serializable(SA)
     )
   }
 
@@ -510,20 +534,19 @@ class ReaderWriterStateTSuite extends CatsSuite {
 
 }
 
-object ReaderWriterStateTSuite {
+object IndexedReaderWriterStateTSuite {
   def addAndLog(i: Int): ReaderWriterState[String, Vector[String], Int, Int] =
     ReaderWriterState { (context, state) =>
       (Vector(s"${context}: Added ${i}"), state + i, state + i)
     }
 
   def addLogUnit(i: Int): ReaderWriterState[String, Unit, Int, Int] =
-    ReaderWriterState { (context, state) =>
+    ReaderWriterState { (_, state) =>
       ((), state + i, state + i)
     }
 
   implicit def IRWSTEq[F[_], E, L, SA, SB, A](implicit
     SA: ExhaustiveCheck[SA],
-    SB: Arbitrary[SB],
     E: ExhaustiveCheck[E],
     FLSB: Eq[F[(L, SB, A)]],
     F: Monad[F]

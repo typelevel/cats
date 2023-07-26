@@ -510,6 +510,31 @@ class IndexedStateTSuite extends CatsSuite {
   }
 
   {
+    // F has an NonEmptyAlternative
+    implicit val G: Monad[ListWrapper] = ListWrapper.monad
+    implicit val F: NonEmptyAlternative[ListWrapper] = ListWrapper.nonEmptyAlternative
+    val SA =
+      IndexedStateT
+        .catsDataNonEmptyAlternativeForIndexedStateT[ListWrapper, MiniInt](ListWrapper.monad, ListWrapper.alternative)
+
+    implicit val f: Isomorphisms[IndexedStateT[ListWrapper, MiniInt, MiniInt, *]] = Isomorphisms.invariant(SA)
+
+    checkAll(
+      "IndexedStateT[ListWrapper, MiniInt, Int, Int]",
+      NonEmptyAlternativeTests[IndexedStateT[ListWrapper, MiniInt, MiniInt, *]](SA).nonEmptyAlternative[Int, Int, Int]
+    )
+    checkAll("Alternative[IndexedStateT[ListWrapper, Int, Int, *]]", SerializableTests.serializable(SA))
+
+    Monad[IndexedStateT[ListWrapper, Int, Int, *]]
+    FlatMap[IndexedStateT[ListWrapper, Int, Int, *]]
+    NonEmptyAlternative[IndexedStateT[ListWrapper, Int, Int, *]]
+    Applicative[IndexedStateT[ListWrapper, Int, Int, *]]
+    Apply[IndexedStateT[ListWrapper, Int, Int, *]]
+    // Functor[IndexedStateT[ListWrapper, Int, Int, *]]
+    SemigroupK[IndexedStateT[ListWrapper, Int, Int, *]]
+  }
+
+  {
     // F has an Alternative
     implicit val G: Monad[ListWrapper] = ListWrapper.monad
     implicit val F: Alternative[ListWrapper] = ListWrapper.alternative
@@ -526,6 +551,7 @@ class IndexedStateTSuite extends CatsSuite {
 
     Monad[IndexedStateT[ListWrapper, Int, Int, *]]
     FlatMap[IndexedStateT[ListWrapper, Int, Int, *]]
+    NonEmptyAlternative[IndexedStateT[ListWrapper, Int, Int, *]]
     Alternative[IndexedStateT[ListWrapper, Int, Int, *]]
     Applicative[IndexedStateT[ListWrapper, Int, Int, *]]
     Apply[IndexedStateT[ListWrapper, Int, Int, *]]

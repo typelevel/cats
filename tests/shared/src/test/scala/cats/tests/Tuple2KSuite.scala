@@ -40,6 +40,13 @@ class Tuple2KSuite extends CatsSuite {
            SerializableTests.serializable(Semigroupal[λ[α => Tuple2K[Option, List, α]]])
   )
 
+  checkAll("Tuple2K[Option, List, Int]",
+           NonEmptyAlternativeTests[λ[α => Tuple2K[Option, List, α]]].nonEmptyAlternative[Int, Int, Int]
+  )
+  checkAll("NonEmptyAlternative[Tuple2K[Option, List, Int]]",
+           SerializableTests.serializable(NonEmptyAlternative[λ[α => Tuple2K[Option, List, α]]])
+  )
+
   checkAll("Tuple2K[Option, List, Int]", AlternativeTests[λ[α => Tuple2K[Option, List, α]]].alternative[Int, Int, Int])
   checkAll("Alternative[Tuple2K[Option, List, Int]]",
            SerializableTests.serializable(Alternative[λ[α => Tuple2K[Option, List, α]]])
@@ -180,6 +187,18 @@ class Tuple2KSuite extends CatsSuite {
     )
     checkAll("Traverse[Tuple2K[ListWrapper, ListWrapper, *]]",
              SerializableTests.serializable(Traverse[Tuple2K[ListWrapper, ListWrapper, *]])
+    )
+  }
+
+  {
+    implicit val neAlternative: NonEmptyAlternative[ListWrapper] = ListWrapper.nonEmptyAlternative
+    implicit val iso: Isomorphisms[Tuple2K[ListWrapper, ListWrapper, *]] =
+      Isomorphisms.invariant[Tuple2K[ListWrapper, ListWrapper, *]]
+    checkAll("Tuple2K[ListWrapper, ListWrapper, *]",
+             NonEmptyAlternativeTests[Tuple2K[ListWrapper, ListWrapper, *]].nonEmptyAlternative[Int, Int, Int]
+    )
+    checkAll("NonEmptyAlternative[Tuple2K[ListWrapper, ListWrapper, *]]",
+             SerializableTests.serializable(NonEmptyAlternative[Tuple2K[ListWrapper, ListWrapper, *]])
     )
   }
 

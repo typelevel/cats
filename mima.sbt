@@ -149,6 +149,10 @@ ThisBuild / mimaBinaryIssueFilters ++= {
     Seq(
       exclude[MissingClassProblem]("cats.compat.compat$package"),
       exclude[MissingClassProblem]("cats.compat.compat$package$")
+    ) ++
+    Seq( // https://github.com/typelevel/cats/pull/4299
+      exclude[ReversedMissingMethodProblem]("cats.data.RWSTAlternative1.cats$data$RWSTAlternative1$$super$pure"),
+      exclude[ReversedMissingMethodProblem]("cats.data.RWSTAlternative1.cats$data$RWSTAlternative1$$super$ap")
     )
 }
 

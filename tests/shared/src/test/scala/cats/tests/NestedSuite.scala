@@ -206,6 +206,28 @@ class NestedSuite extends CatsSuite {
   }
 
   {
+    // NonEmptyAlternative composition
+    implicit val instance: NonEmptyAlternative[ListWrapper] = ListWrapper.nonEmptyAlternative
+    checkAll("Nested[List, ListWrapper, *]",
+             NonEmptyAlternativeTests[Nested[List, ListWrapper, *]].nonEmptyAlternative[Int, Int, Int]
+    )
+    checkAll("NonEmptyAlternative[Nested[List, ListWrapper, *]]",
+             SerializableTests.serializable(NonEmptyAlternative[Nested[List, ListWrapper, *]])
+    )
+  }
+
+  {
+    // NonEmptyAlternative for inner Alternative composition (implicits non-abmiguity check)
+    implicit val instance: Alternative[ListWrapper] = ListWrapper.alternative
+    checkAll("Nested[List, ListWrapper, *]",
+             NonEmptyAlternativeTests[Nested[List, ListWrapper, *]].nonEmptyAlternative[Int, Int, Int]
+    )
+    checkAll("NonEmptyAlternative[Nested[List, ListWrapper, *]]",
+             SerializableTests.serializable(NonEmptyAlternative[Nested[List, ListWrapper, *]])
+    )
+  }
+
+  {
     // Alternative composition
     implicit val instance: Alternative[ListWrapper] = ListWrapper.alternative
     checkAll("Nested[List, ListWrapper, *]", AlternativeTests[Nested[List, ListWrapper, *]].alternative[Int, Int, Int])
