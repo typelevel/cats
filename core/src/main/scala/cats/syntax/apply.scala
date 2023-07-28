@@ -23,7 +23,7 @@ package cats
 package syntax
 
 trait ApplySyntax extends TupleSemigroupalSyntax {
-  @deprecated("Use `ApplySyntaxBinCompat1`", "2.10.0")
+  @deprecated("Kept for binary compatibility", "2.10.0")
   final def catsSyntaxApply[F[_], A](fa: F[A], F: Apply[F]): Apply.Ops[F, A] =
     new Apply.Ops[F, A] {
       type TypeClassType = Apply[F]
@@ -34,6 +34,14 @@ trait ApplySyntax extends TupleSemigroupalSyntax {
 
   implicit final def catsSyntaxApplyOps[F[_], A](fa: F[A]): ApplyOps[F, A] =
     new ApplyOps(fa)
+
+  implicit final def catsSyntaxApply2Ops[F[_], A, B, C](ff: F[(A, B) => C]): Apply2Ops[F, A, B, C] =
+    new Apply2Ops[F, A, B, C](ff)
+  implicit final def catsSyntaxApplyFABOps[F[_], A, B](fab: F[A => B]): ApplyFABOps[F, A, B] =
+    new ApplyFABOps[F, A, B](fab)
+
+  implicit final def catsSyntaxApplyOps2[F[_], A](fa: F[A]): ApplyOps2[F, A] =
+    new ApplyOps2[F, A](fa)
 }
 
 private[syntax] trait ApplySyntaxBinCompat0 {
@@ -41,18 +49,7 @@ private[syntax] trait ApplySyntaxBinCompat0 {
     new IfApplyOps[F](fa)
 }
 
-private[syntax] trait ApplySyntaxBinCompat1 {
-  implicit final def catsSyntaxApplyFABOps[F[_], A, B](fab: F[A => B]): ApplyFABOps[F, A, B] =
-    new ApplyFABOps[F, A, B](fab)
-
-  implicit final def catsSyntaxApply2Ops[F[_], A, B, C](ff: F[(A, B) => C]): Apply2Ops[F, A, B, C] =
-    new Apply2Ops[F, A, B, C](ff)
-
-  implicit final def catsSyntaxApplyOps2[F[_], A](fa: F[A]): ApplyOps2[F, A] =
-    new ApplyOps2[F, A](fa)
-}
-
-final class ApplyFABOps[F[_], A, B](private val fab: F[A => B]) extends AnyVal {
+final class ApplyFABOps[F[_], A, B](private val fab: F[A => B]) extends AnyVal with Serializable {
 
   /**
    * @see [[Apply.ap]].
