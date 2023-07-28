@@ -35,6 +35,11 @@ trait InvariantSemigroupalLaws[F[_]] extends InvariantLaws[F] with SemigroupalLa
       .product(fb)
       .product(fc)
       .imap { case ((a, b), c) => (a, (b, c)) } { case (a, (b, c)) => ((a, b), c) }
+
+  def aa[A, B, C](fa: F[A], fb: F[B], fc: F[C]) = {
+    fa.product(fb.product(fc))
+    fa |@| fb
+  }
 }
 
 object InvariantSemigroupalLaws {
