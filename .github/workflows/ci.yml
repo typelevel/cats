@@ -29,25 +29,25 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         scala: [2.12.18, 2.13.11, 3.3.0]
-        java: [temurin@8, temurin@17, graalvm@11]
+        java: [temurin@8, temurin@17, graalvm@17]
         project: [rootJS, rootJVM, rootNative]
         exclude:
           - scala: 2.12.18
             java: temurin@17
           - scala: 2.12.18
-            java: graalvm@11
+            java: graalvm@17
           - scala: 3.3.0
             java: temurin@17
           - scala: 3.3.0
-            java: graalvm@11
+            java: graalvm@17
           - project: rootJS
             java: temurin@17
           - project: rootJS
-            java: graalvm@11
+            java: graalvm@17
           - project: rootNative
             java: temurin@17
           - project: rootNative
-            java: graalvm@11
+            java: graalvm@17
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout current branch (full)
@@ -87,21 +87,21 @@ jobs:
           java-version: 17
           jdkFile: ${{ steps.download-java-temurin-17.outputs.jdkFile }}
 
-      - name: Download Java (graalvm@11)
-        id: download-java-graalvm-11
-        if: matrix.java == 'graalvm@11'
+      - name: Download Java (graalvm@17)
+        id: download-java-graalvm-17
+        if: matrix.java == 'graalvm@17'
         uses: typelevel/download-java@v2
         with:
           distribution: graalvm
-          java-version: 11
+          java-version: 17
 
-      - name: Setup Java (graalvm@11)
-        if: matrix.java == 'graalvm@11'
+      - name: Setup Java (graalvm@17)
+        if: matrix.java == 'graalvm@17'
         uses: actions/setup-java@v3
         with:
           distribution: jdkfile
-          java-version: 11
-          jdkFile: ${{ steps.download-java-graalvm-11.outputs.jdkFile }}
+          java-version: 17
+          jdkFile: ${{ steps.download-java-graalvm-17.outputs.jdkFile }}
 
       - name: Cache sbt
         uses: actions/cache@v3
@@ -203,21 +203,21 @@ jobs:
           java-version: 17
           jdkFile: ${{ steps.download-java-temurin-17.outputs.jdkFile }}
 
-      - name: Download Java (graalvm@11)
-        id: download-java-graalvm-11
-        if: matrix.java == 'graalvm@11'
+      - name: Download Java (graalvm@17)
+        id: download-java-graalvm-17
+        if: matrix.java == 'graalvm@17'
         uses: typelevel/download-java@v2
         with:
           distribution: graalvm
-          java-version: 11
+          java-version: 17
 
-      - name: Setup Java (graalvm@11)
-        if: matrix.java == 'graalvm@11'
+      - name: Setup Java (graalvm@17)
+        if: matrix.java == 'graalvm@17'
         uses: actions/setup-java@v3
         with:
           distribution: jdkfile
-          java-version: 11
-          jdkFile: ${{ steps.download-java-graalvm-11.outputs.jdkFile }}
+          java-version: 17
+          jdkFile: ${{ steps.download-java-graalvm-17.outputs.jdkFile }}
 
       - name: Cache sbt
         uses: actions/cache@v3
@@ -397,21 +397,21 @@ jobs:
           java-version: 17
           jdkFile: ${{ steps.download-java-temurin-17.outputs.jdkFile }}
 
-      - name: Download Java (graalvm@11)
-        id: download-java-graalvm-11
-        if: matrix.java == 'graalvm@11'
+      - name: Download Java (graalvm@17)
+        id: download-java-graalvm-17
+        if: matrix.java == 'graalvm@17'
         uses: typelevel/download-java@v2
         with:
           distribution: graalvm
-          java-version: 11
+          java-version: 17
 
-      - name: Setup Java (graalvm@11)
-        if: matrix.java == 'graalvm@11'
+      - name: Setup Java (graalvm@17)
+        if: matrix.java == 'graalvm@17'
         uses: actions/setup-java@v3
         with:
           distribution: jdkfile
-          java-version: 11
-          jdkFile: ${{ steps.download-java-graalvm-11.outputs.jdkFile }}
+          java-version: 17
+          jdkFile: ${{ steps.download-java-graalvm-17.outputs.jdkFile }}
 
       - name: Cache sbt
         uses: actions/cache@v3
@@ -475,21 +475,21 @@ jobs:
           java-version: 17
           jdkFile: ${{ steps.download-java-temurin-17.outputs.jdkFile }}
 
-      - name: Download Java (graalvm@11)
-        id: download-java-graalvm-11
-        if: matrix.java == 'graalvm@11'
+      - name: Download Java (graalvm@17)
+        id: download-java-graalvm-17
+        if: matrix.java == 'graalvm@17'
         uses: typelevel/download-java@v2
         with:
           distribution: graalvm
-          java-version: 11
+          java-version: 17
 
-      - name: Setup Java (graalvm@11)
-        if: matrix.java == 'graalvm@11'
+      - name: Setup Java (graalvm@17)
+        if: matrix.java == 'graalvm@17'
         uses: actions/setup-java@v3
         with:
           distribution: jdkfile
-          java-version: 11
-          jdkFile: ${{ steps.download-java-graalvm-11.outputs.jdkFile }}
+          java-version: 17
+          jdkFile: ${{ steps.download-java-graalvm-17.outputs.jdkFile }}
 
       - name: Cache sbt
         uses: actions/cache@v3
