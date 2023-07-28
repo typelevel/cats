@@ -23,7 +23,7 @@ package cats
 package syntax
 
 trait SemigroupalSyntax {
-  @deprecated("Use `catsSntaxSemigroupalOps2`", "2.10.0")
+  @deprecated("Use `catsSyntaxSemigroupalOps2`", "2.10.0")
   final def catsSyntaxSemigroupal[F[_], A](fa: F[A])(F: Semigroupal[F]): SemigroupalOps[F, A] =
     new SemigroupalOps[F, A] {
       type TypeClassType = Semigroupal[F]
@@ -32,7 +32,7 @@ trait SemigroupalSyntax {
       val typeClassInstance = F
     }
 
-  implicit def catsSntaxSemigroupalOps2[F[_], A](fa: F[A]): SemigroupalOps2[F, A] =
+  implicit def catsSytaxSemigroupalOps2[F[_], A](fa: F[A]): SemigroupalOps2[F, A] =
     new SemigroupalOps2[F, A](fa)
 
 }
