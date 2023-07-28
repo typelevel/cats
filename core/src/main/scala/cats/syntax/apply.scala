@@ -35,8 +35,9 @@ trait ApplySyntax extends TupleSemigroupalSyntax {
   implicit final def catsSyntaxApplyOps[F[_], A](fa: F[A]): ApplyOps[F, A] =
     new ApplyOps(fa)
 
-  implicit final def catsSyntaxApply2Ops[F[_], A, B, C](ff: F[(A, B) => C]): Apply2Ops[F, A, B, C] =
-    new Apply2Ops[F, A, B, C](ff)
+  implicit final def catsSyntaxApply2Ops[F[_], A, B, C](ff: F[(A, B) => C]): ApplyFABCOps[F, A, B, C] =
+    new ApplyFABCOps[F, A, B, C](ff)
+
   implicit final def catsSyntaxApplyFABOps[F[_], A, B](fab: F[A => B]): ApplyFABOps[F, A, B] =
     new ApplyFABOps[F, A, B](fab)
 
@@ -84,7 +85,7 @@ final class ApplyFABOps[F[_], A, B](private val fab: F[A => B]) extends AnyVal w
   def <*>(fa: F[A])(implicit F: Apply[F]): F[B] = F.<*>[A, B](fab)(fa)
 }
 
-final class Apply2Ops[F[_], A, B, C](private val ff: F[(A, B) => C]) extends AnyVal {
+final class ApplyFABCOps[F[_], A, B, C](private val ff: F[(A, B) => C]) extends AnyVal {
 
   /**
    * @see [[Apply.ap2]].
@@ -114,6 +115,29 @@ final class Apply2Ops[F[_], A, B, C](private val ff: F[(A, B) => C]) extends Any
    * 
    */
   def ap2(fa: F[A], fb: F[B])(implicit F: Apply[F]): F[C] = F.ap2(ff)(fa, fb)
+}
+
+final class IfApplyOps[F[_]](private val fcond: F[Boolean]) extends AnyVal {
+
+  @deprecated("Dangerous method, use ifM (a flatMap) or ifF (a map) instead", "2.6.2")
+  def ifA[A](ifTrue: F[A], ifFalse: F[A])(implicit F: Apply[F]): F[A] = F.ifA(fcond)(ifTrue, ifFalse)
+}
+
+final class ApplyOps[F[_], A](private val fa: F[A]) extends AnyVal {
+
+  /**
+   * Alias for [[Apply.productR]].
+   */
+  @deprecated("Use *> or productR instead.", "1.0.0-RC2")
+  @inline private[syntax] def followedBy[B](fb: F[B])(implicit F: Apply[F]): F[B] =
+    F.productR(fa)(fb)
+
+  /**
+   * Alias for [[Apply.productL]].
+   */
+  @deprecated("Use <* or productL instead.", "1.0.0-RC2")
+  @inline private[syntax] def forEffect[B](fb: F[B])(implicit F: Apply[F]): F[A] =
+    F.productL(fa)(fb)
 }
 
 final class ApplyOps2[F[_], A](private val fa: F[A]) extends AnyVal {
@@ -235,27 +259,4 @@ final class ApplyOps2[F[_], A](private val fa: F[A]) extends AnyVal {
    */
   def map2Eval[B, C](fb: Eval[F[B]])(f: (A, B) => C)(implicit F: Apply[F]): Eval[F[C]] =
     F.map2Eval(fa, fb)(f)
-}
-
-final class IfApplyOps[F[_]](private val fcond: F[Boolean]) extends AnyVal {
-
-  @deprecated("Dangerous method, use ifM (a flatMap) or ifF (a map) instead", "2.6.2")
-  def ifA[A](ifTrue: F[A], ifFalse: F[A])(implicit F: Apply[F]): F[A] = F.ifA(fcond)(ifTrue, ifFalse)
-}
-
-final class ApplyOps[F[_], A](private val fa: F[A]) extends AnyVal {
-
-  /**
-   * Alias for [[Apply.productR]].
-   */
-  @deprecated("Use *> or productR instead.", "1.0.0-RC2")
-  @inline private[syntax] def followedBy[B](fb: F[B])(implicit F: Apply[F]): F[B] =
-    F.productR(fa)(fb)
-
-  /**
-   * Alias for [[Apply.productL]].
-   */
-  @deprecated("Use <* or productL instead.", "1.0.0-RC2")
-  @inline private[syntax] def forEffect[B](fb: F[B])(implicit F: Apply[F]): F[A] =
-    F.productL(fa)(fb)
 }
