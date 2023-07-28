@@ -27,8 +27,9 @@ import cats.ContravariantMonoidal
 trait ContravariantMonoidalSyntax {
   @deprecated("Kept for binary compatibility", "2.10.0")
   final def catsSyntaxContravariantMonoidal[F[_], A](
-    fa: F[A]
-  )(F: ContravariantMonoidal[F]): ContravariantMonoidalOps[F, A] =
+    fa: F[A],
+    F: ContravariantMonoidal[F]
+  ): ContravariantMonoidalOps[F, A] =
     new ContravariantMonoidalOps[F, A] {
       type TypeClassType = ContravariantMonoidal[F]
 

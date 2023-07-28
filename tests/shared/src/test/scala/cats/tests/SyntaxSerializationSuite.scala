@@ -37,7 +37,7 @@ class SyntaxSerializationSuite extends CatsSuite {
   )
 
   checkAll("SemigroupalOps[Option, Int]",
-           SerializableTests.serializable(cats.syntax.all.catsSyntaxSemigroupal[Option, Int](None)(Semigroupal[Option]))
+           SerializableTests.serializable(cats.syntax.all.catsSyntaxSemigroupal[Option, Int](None, Semigroupal[Option]))
   )
 
   checkAll(
