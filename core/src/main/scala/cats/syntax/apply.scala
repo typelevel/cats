@@ -32,14 +32,14 @@ trait ApplySyntax extends TupleSemigroupalSyntax {
       val typeClassInstance = F
     }
 
-  implicit final def catsSyntaxApplyOps[F[_], A](fa: F[A]): ApplyOps[F, A] =
-    new ApplyOps(fa)
-
-  implicit final def catsSyntaxApply2Ops[F[_], A, B, C](ff: F[(A, B) => C]): ApplyFABCOps[F, A, B, C] =
-    new ApplyFABCOps[F, A, B, C](ff)
-
   implicit final def catsSyntaxApplyFABOps[F[_], A, B](fab: F[A => B]): ApplyFABOps[F, A, B] =
     new ApplyFABOps[F, A, B](fab)
+
+  implicit final def catsSyntaxApplyFABCOps[F[_], A, B, C](ff: F[(A, B) => C]): ApplyFABCOps[F, A, B, C] =
+    new ApplyFABCOps[F, A, B, C](ff)
+
+  implicit final def catsSyntaxApplyOps[F[_], A](fa: F[A]): ApplyOps[F, A] =
+    new ApplyOps(fa)
 
   implicit final def catsSyntaxApplyOps2[F[_], A](fa: F[A]): ApplyOps2[F, A] =
     new ApplyOps2[F, A](fa)
