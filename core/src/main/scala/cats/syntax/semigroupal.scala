@@ -32,7 +32,7 @@ trait SemigroupalSyntax {
       val typeClassInstance = F
     }
 
-  implicit def catsSytaxSemigroupalOps2[F[_], A](fa: F[A]): SemigroupalOps2[F, A] =
+  implicit def catsSyntaxSemigroupalOps2[F[_], A](fa: F[A]): SemigroupalOps2[F, A] =
     new SemigroupalOps2[F, A](fa)
 
 }
