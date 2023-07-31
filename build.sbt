@@ -10,9 +10,9 @@ val munitVersion = "1.0.0-M8"
 
 val PrimaryJava = JavaSpec.temurin("8")
 val LTSJava = JavaSpec.temurin("17")
-val GraalVM11 = JavaSpec.graalvm("11")
+val GraalVM = JavaSpec.graalvm("17")
 
-ThisBuild / githubWorkflowJavaVersions := Seq(PrimaryJava, LTSJava, GraalVM11)
+ThisBuild / githubWorkflowJavaVersions := Seq(PrimaryJava, LTSJava, GraalVM)
 
 val Scala212 = "2.12.18"
 val Scala213 = "2.13.11"
@@ -22,7 +22,6 @@ ThisBuild / crossScalaVersions := Seq(Scala212, Scala213, Scala3)
 ThisBuild / scalaVersion := Scala213
 
 ThisBuild / tlFatalWarnings := false
-ThisBuild / tlFatalWarningsInCi := false
 
 ThisBuild / githubWorkflowAddedJobs ++= Seq(
   WorkflowJob(
@@ -32,7 +31,7 @@ ThisBuild / githubWorkflowAddedJobs ++= Seq(
       WorkflowStep.Run(List("cd scalafix", "sbt test"), name = Some("Scalafix tests"))
     ),
     javas = List(PrimaryJava),
-    scalas = List((ThisBuild / scalaVersion).value)
+    scalas = Nil
   )
 )
 
@@ -136,7 +135,7 @@ lazy val algebra = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .crossType(CrossType.Pure)
   .in(file("algebra-core"))
   .dependsOn(kernel)
-  .settings(moduleName := "algebra", name := "Cats algebra")
+  .settings(moduleName := "algebra", name := "Cats algebra", scalacOptions -= "-Xsource:3")
   .settings(Compile / sourceGenerators += (Compile / sourceManaged).map(AlgebraBoilerplate.gen).taskValue)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
@@ -151,7 +150,7 @@ lazy val algebra = crossProject(JSPlatform, JVMPlatform, NativePlatform)
 lazy val algebraLaws = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .in(file("algebra-laws"))
   .dependsOn(kernelLaws, algebra)
-  .settings(moduleName := "algebra-laws", name := "Cats algebra laws")
+  .settings(moduleName := "algebra-laws", name := "Cats algebra laws", scalacOptions -= "-Xsource:3")
   .settings(disciplineDependencies)
   .settings(testingDependencies)
   .jsSettings(commonJsSettings)
@@ -300,11 +299,6 @@ lazy val docs = project
           )
         )
     },
-    tlSiteRelatedProjects := Seq(
-      TypelevelProject.CatsEffect,
-      "Mouse" -> url("https://typelevel.org/mouse"),
-      TypelevelProject.Discipline
-    ),
     libraryDependencies ++= Seq(
       "org.typelevel" %%% "discipline-munit" % disciplineMunitVersion
     )

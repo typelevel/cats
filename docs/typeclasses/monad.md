@@ -31,7 +31,7 @@ the identity function `x => x` (i.e. `flatMap(_)(x => x)`).
 ```scala mdoc:silent
 import cats._
 
-implicit def optionMonad(implicit app: Applicative[Option]) =
+implicit def optionMonad(implicit app: Applicative[Option]): Monad[Option] =
   new Monad[Option] {
     // Define flatMap using Option's flatten method
     override def flatMap[A, B](fa: Option[A])(f: A => Option[B]): Option[B] =
@@ -88,7 +88,7 @@ and therefore stack safe implementation of `tailRecM`.
 import cats.Monad
 import scala.annotation.tailrec
 
-implicit val optionMonad = new Monad[Option] {
+implicit val optionMonad: Monad[Option] = new Monad[Option] {
   def flatMap[A, B](fa: Option[A])(f: A => Option[B]): Option[B] = fa.flatMap(f)
   def pure[A](a: A): Option[A] = Some(a)
 

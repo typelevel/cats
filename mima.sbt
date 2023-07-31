@@ -148,15 +148,14 @@ ThisBuild / mimaBinaryIssueFilters ++= {
     ) ++ // https://github.com/typelevel/cats/pull/4315
     Seq(
       exclude[MissingClassProblem]("cats.compat.compat$package"),
-      exclude[MissingClassProblem]("cats.compat.compat$package$")
-    )
-}
-
-ThisBuild / mimaBinaryIssueFilters ++= {
-  if (tlIsScala3.value)
+      exclude[MissingClassProblem]("cats.compat.compat$package$"),
+      ProblemFilters.exclude[MissingClassProblem]("cats.compat.targetName")
+    ) ++ // scala 3 specific filters
     Seq(
       exclude[DirectMissingMethodProblem]("cats.free.ContravariantCoyoneda.unsafeApply"),
       exclude[DirectMissingMethodProblem]("cats.free.Coyoneda.unsafeApply")
+    ) ++ Seq(
+      ProblemFilters.exclude[MissingClassProblem]("cats.compat.package"),
+      ProblemFilters.exclude[MissingClassProblem]("cats.compat.package$")
     )
-  else Nil
 }

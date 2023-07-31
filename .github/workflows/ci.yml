@@ -15,12 +15,12 @@ on:
     tags: [v*]
 
 env:
-  PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
-  SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
-  SONATYPE_CREDENTIAL_HOST: ${{ secrets.SONATYPE_CREDENTIAL_HOST }}
-  SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
-  PGP_SECRET: ${{ secrets.PGP_SECRET }}
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+concurrency:
+  group: ${{ github.workflow }} @ ${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -28,92 +28,72 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        scala: [2.12.18, 2.13.11, 3.3.0]
-        java: [temurin@8, temurin@17, graalvm@11]
+        scala: [2.12, 2.13, 3]
+        java: [temurin@8, temurin@17, graalvm@17]
         project: [rootJS, rootJVM, rootNative]
         exclude:
-          - scala: 2.12.18
+          - scala: 2.12
             java: temurin@17
-          - scala: 2.12.18
-            java: graalvm@11
-          - scala: 3.3.0
+          - scala: 2.12
+            java: graalvm@17
+          - scala: 3
             java: temurin@17
-          - scala: 3.3.0
-            java: graalvm@11
+          - scala: 3
+            java: graalvm@17
           - project: rootJS
             java: temurin@17
           - project: rootJS
-            java: graalvm@11
+            java: graalvm@17
           - project: rootNative
             java: temurin@17
           - project: rootNative
-            java: graalvm@11
+            java: graalvm@17
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
     steps:
       - name: Checkout current branch (full)
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
-      - name: Download Java (temurin@8)
-        id: download-java-temurin-8
-        if: matrix.java == 'temurin@8'
-        uses: typelevel/download-java@v2
-        with:
-          distribution: temurin
-          java-version: 8
-
       - name: Setup Java (temurin@8)
+        id: setup-java-temurin-8
         if: matrix.java == 'temurin@8'
         uses: actions/setup-java@v3
         with:
-          distribution: jdkfile
-          java-version: 8
-          jdkFile: ${{ steps.download-java-temurin-8.outputs.jdkFile }}
-
-      - name: Download Java (temurin@17)
-        id: download-java-temurin-17
-        if: matrix.java == 'temurin@17'
-        uses: typelevel/download-java@v2
-        with:
           distribution: temurin
-          java-version: 17
+          java-version: 8
+          cache: sbt
+
+      - name: sbt update
+        if: matrix.java == 'temurin@8' && steps.setup-java-temurin-8.outputs.cache-hit == 'false'
+        run: sbt 'project ${{ matrix.project }}' '++ ${{ matrix.scala }}' reload +update
 
       - name: Setup Java (temurin@17)
+        id: setup-java-temurin-17
         if: matrix.java == 'temurin@17'
         uses: actions/setup-java@v3
         with:
-          distribution: jdkfile
+          distribution: temurin
           java-version: 17
-          jdkFile: ${{ steps.download-java-temurin-17.outputs.jdkFile }}
+          cache: sbt
 
-      - name: Download Java (graalvm@11)
-        id: download-java-graalvm-11
-        if: matrix.java == 'graalvm@11'
-        uses: typelevel/download-java@v2
+      - name: sbt update
+        if: matrix.java == 'temurin@17' && steps.setup-java-temurin-17.outputs.cache-hit == 'false'
+        run: sbt 'project ${{ matrix.project }}' '++ ${{ matrix.scala }}' reload +update
+
+      - name: Setup Java (graalvm@17)
+        id: setup-java-graalvm-17
+        if: matrix.java == 'graalvm@17'
+        uses: graalvm/setup-graalvm@v1
         with:
           distribution: graalvm
-          java-version: 11
+          java-version: 17
+          cache: sbt
 
-      - name: Setup Java (graalvm@11)
-        if: matrix.java == 'graalvm@11'
-        uses: actions/setup-java@v3
-        with:
-          distribution: jdkfile
-          java-version: 11
-          jdkFile: ${{ steps.download-java-graalvm-11.outputs.jdkFile }}
-
-      - name: Cache sbt
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.sbt
-            ~/.ivy2/cache
-            ~/.coursier/cache/v1
-            ~/.cache/coursier/v1
-            ~/AppData/Local/Coursier/Cache/v1
-            ~/Library/Caches/Coursier/v1
-          key: ${{ runner.os }}-sbt-cache-v2-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
+      - name: sbt update
+        if: matrix.java == 'graalvm@17' && steps.setup-java-graalvm-17.outputs.cache-hit == 'false'
+        run: sbt 'project ${{ matrix.project }}' '++ ${{ matrix.scala }}' reload +update
 
       - name: Check that workflows are up to date
         run: sbt githubWorkflowCheck
@@ -143,11 +123,11 @@ jobs:
 
       - name: Make target directories
         if: github.event_name != 'pull_request' && (startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/main')
-        run: mkdir -p algebra-laws/jvm/target free/.js/target testkit/.native/target target testkit/.js/target unidocs/target .js/target core/.native/target site/target free/.jvm/target free/.native/target alleycats-laws/native/target laws/.native/target alleycats-core/.js/target alleycats-laws/js/target kernel/.jvm/target core/.js/target kernel/.js/target algebra-laws/native/target kernel-laws/native/target laws/.js/target core/.jvm/target tests/js/target .jvm/target alleycats-core/.native/target .native/target kernel/.native/target algebra-core/.jvm/target kernel-laws/jvm/target algebra-core/.js/target alleycats-laws/jvm/target laws/.jvm/target tests/jvm/target algebra-core/.native/target alleycats-core/.jvm/target kernel-laws/js/target testkit/.jvm/target binCompatTest/target algebra-laws/js/target tests/native/target bench/target project/target
+        run: mkdir -p algebra-laws/jvm/target free/.js/target testkit/.native/target testkit/.js/target unidocs/target core/.native/target free/.jvm/target free/.native/target alleycats-laws/native/target laws/.native/target alleycats-core/.js/target alleycats-laws/js/target kernel/.jvm/target core/.js/target kernel/.js/target algebra-laws/native/target kernel-laws/native/target laws/.js/target core/.jvm/target alleycats-core/.native/target kernel/.native/target algebra-core/.jvm/target kernel-laws/jvm/target algebra-core/.js/target alleycats-laws/jvm/target laws/.jvm/target algebra-core/.native/target alleycats-core/.jvm/target kernel-laws/js/target testkit/.jvm/target algebra-laws/js/target project/target
 
       - name: Compress target directories
         if: github.event_name != 'pull_request' && (startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/main')
-        run: tar cf targets.tar algebra-laws/jvm/target free/.js/target testkit/.native/target target testkit/.js/target unidocs/target .js/target core/.native/target site/target free/.jvm/target free/.native/target alleycats-laws/native/target laws/.native/target alleycats-core/.js/target alleycats-laws/js/target kernel/.jvm/target core/.js/target kernel/.js/target algebra-laws/native/target kernel-laws/native/target laws/.js/target core/.jvm/target tests/js/target .jvm/target alleycats-core/.native/target .native/target kernel/.native/target algebra-core/.jvm/target kernel-laws/jvm/target algebra-core/.js/target alleycats-laws/jvm/target laws/.jvm/target tests/jvm/target algebra-core/.native/target alleycats-core/.jvm/target kernel-laws/js/target testkit/.jvm/target binCompatTest/target algebra-laws/js/target tests/native/target bench/target project/target
+        run: tar cf targets.tar algebra-laws/jvm/target free/.js/target testkit/.native/target testkit/.js/target unidocs/target core/.native/target free/.jvm/target free/.native/target alleycats-laws/native/target laws/.native/target alleycats-core/.js/target alleycats-laws/js/target kernel/.jvm/target core/.js/target kernel/.js/target algebra-laws/native/target kernel-laws/native/target laws/.js/target core/.jvm/target alleycats-core/.native/target kernel/.native/target algebra-core/.jvm/target kernel-laws/jvm/target algebra-core/.js/target alleycats-laws/jvm/target laws/.jvm/target algebra-core/.native/target alleycats-core/.jvm/target kernel-laws/js/target testkit/.jvm/target algebra-laws/js/target project/target
 
       - name: Upload target directories
         if: github.event_name != 'pull_request' && (startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/main')
@@ -171,169 +151,217 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Download Java (temurin@8)
-        id: download-java-temurin-8
-        if: matrix.java == 'temurin@8'
-        uses: typelevel/download-java@v2
-        with:
-          distribution: temurin
-          java-version: 8
-
       - name: Setup Java (temurin@8)
+        id: setup-java-temurin-8
         if: matrix.java == 'temurin@8'
         uses: actions/setup-java@v3
         with:
-          distribution: jdkfile
-          java-version: 8
-          jdkFile: ${{ steps.download-java-temurin-8.outputs.jdkFile }}
-
-      - name: Download Java (temurin@17)
-        id: download-java-temurin-17
-        if: matrix.java == 'temurin@17'
-        uses: typelevel/download-java@v2
-        with:
           distribution: temurin
-          java-version: 17
+          java-version: 8
+          cache: sbt
+
+      - name: sbt update
+        if: matrix.java == 'temurin@8' && steps.setup-java-temurin-8.outputs.cache-hit == 'false'
+        run: sbt reload +update
 
       - name: Setup Java (temurin@17)
+        id: setup-java-temurin-17
         if: matrix.java == 'temurin@17'
         uses: actions/setup-java@v3
         with:
-          distribution: jdkfile
+          distribution: temurin
           java-version: 17
-          jdkFile: ${{ steps.download-java-temurin-17.outputs.jdkFile }}
+          cache: sbt
 
-      - name: Download Java (graalvm@11)
-        id: download-java-graalvm-11
-        if: matrix.java == 'graalvm@11'
-        uses: typelevel/download-java@v2
+      - name: sbt update
+        if: matrix.java == 'temurin@17' && steps.setup-java-temurin-17.outputs.cache-hit == 'false'
+        run: sbt reload +update
+
+      - name: Setup Java (graalvm@17)
+        id: setup-java-graalvm-17
+        if: matrix.java == 'graalvm@17'
+        uses: graalvm/setup-graalvm@v1
         with:
           distribution: graalvm
-          java-version: 11
+          java-version: 17
+          cache: sbt
 
-      - name: Setup Java (graalvm@11)
-        if: matrix.java == 'graalvm@11'
-        uses: actions/setup-java@v3
-        with:
-          distribution: jdkfile
-          java-version: 11
-          jdkFile: ${{ steps.download-java-graalvm-11.outputs.jdkFile }}
+      - name: sbt update
+        if: matrix.java == 'graalvm@17' && steps.setup-java-graalvm-17.outputs.cache-hit == 'false'
+        run: sbt reload +update
 
-      - name: Cache sbt
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.sbt
-            ~/.ivy2/cache
-            ~/.coursier/cache/v1
-            ~/.cache/coursier/v1
-            ~/AppData/Local/Coursier/Cache/v1
-            ~/Library/Caches/Coursier/v1
-          key: ${{ runner.os }}-sbt-cache-v2-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
-
-      - name: Download target directories (2.12.18, rootJS)
+      - name: Download target directories (2.12, rootJS)
         uses: actions/download-artifact@v3
         with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-2.12.18-rootJS
+          name: target-${{ matrix.os }}-${{ matrix.java }}-2.12-rootJS
 
-      - name: Inflate target directories (2.12.18, rootJS)
+      - name: Inflate target directories (2.12, rootJS)
         run: |
           tar xf targets.tar
           rm targets.tar
 
-      - name: Download target directories (2.12.18, rootJVM)
+      - name: Download target directories (2.12, rootJVM)
         uses: actions/download-artifact@v3
         with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-2.12.18-rootJVM
+          name: target-${{ matrix.os }}-${{ matrix.java }}-2.12-rootJVM
 
-      - name: Inflate target directories (2.12.18, rootJVM)
+      - name: Inflate target directories (2.12, rootJVM)
         run: |
           tar xf targets.tar
           rm targets.tar
 
-      - name: Download target directories (2.12.18, rootNative)
+      - name: Download target directories (2.12, rootNative)
         uses: actions/download-artifact@v3
         with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-2.12.18-rootNative
+          name: target-${{ matrix.os }}-${{ matrix.java }}-2.12-rootNative
 
-      - name: Inflate target directories (2.12.18, rootNative)
+      - name: Inflate target directories (2.12, rootNative)
         run: |
           tar xf targets.tar
           rm targets.tar
 
-      - name: Download target directories (2.13.11, rootJS)
+      - name: Download target directories (2.13, rootJS)
         uses: actions/download-artifact@v3
         with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-2.13.11-rootJS
+          name: target-${{ matrix.os }}-${{ matrix.java }}-2.13-rootJS
 
-      - name: Inflate target directories (2.13.11, rootJS)
+      - name: Inflate target directories (2.13, rootJS)
         run: |
           tar xf targets.tar
           rm targets.tar
 
-      - name: Download target directories (2.13.11, rootJVM)
+      - name: Download target directories (2.13, rootJVM)
         uses: actions/download-artifact@v3
         with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-2.13.11-rootJVM
+          name: target-${{ matrix.os }}-${{ matrix.java }}-2.13-rootJVM
 
-      - name: Inflate target directories (2.13.11, rootJVM)
+      - name: Inflate target directories (2.13, rootJVM)
         run: |
           tar xf targets.tar
           rm targets.tar
 
-      - name: Download target directories (2.13.11, rootNative)
+      - name: Download target directories (2.13, rootNative)
         uses: actions/download-artifact@v3
         with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-2.13.11-rootNative
+          name: target-${{ matrix.os }}-${{ matrix.java }}-2.13-rootNative
 
-      - name: Inflate target directories (2.13.11, rootNative)
+      - name: Inflate target directories (2.13, rootNative)
         run: |
           tar xf targets.tar
           rm targets.tar
 
-      - name: Download target directories (3.3.0, rootJS)
+      - name: Download target directories (3, rootJS)
         uses: actions/download-artifact@v3
         with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-3.3.0-rootJS
+          name: target-${{ matrix.os }}-${{ matrix.java }}-3-rootJS
 
-      - name: Inflate target directories (3.3.0, rootJS)
+      - name: Inflate target directories (3, rootJS)
         run: |
           tar xf targets.tar
           rm targets.tar
 
-      - name: Download target directories (3.3.0, rootJVM)
+      - name: Download target directories (3, rootJVM)
         uses: actions/download-artifact@v3
         with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-3.3.0-rootJVM
+          name: target-${{ matrix.os }}-${{ matrix.java }}-3-rootJVM
 
-      - name: Inflate target directories (3.3.0, rootJVM)
+      - name: Inflate target directories (3, rootJVM)
         run: |
           tar xf targets.tar
           rm targets.tar
 
-      - name: Download target directories (3.3.0, rootNative)
+      - name: Download target directories (3, rootNative)
         uses: actions/download-artifact@v3
         with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-3.3.0-rootNative
+          name: target-${{ matrix.os }}-${{ matrix.java }}-3-rootNative
 
-      - name: Inflate target directories (3.3.0, rootNative)
+      - name: Inflate target directories (3, rootNative)
         run: |
           tar xf targets.tar
           rm targets.tar
 
       - name: Import signing key
         if: env.PGP_SECRET != '' && env.PGP_PASSPHRASE == ''
+        env:
+          PGP_SECRET: ${{ secrets.PGP_SECRET }}
+          PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
         run: echo $PGP_SECRET | base64 -di | gpg --import
 
       - name: Import signing key and strip passphrase
         if: env.PGP_SECRET != '' && env.PGP_PASSPHRASE != ''
+        env:
+          PGP_SECRET: ${{ secrets.PGP_SECRET }}
+          PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
         run: |
           echo "$PGP_SECRET" | base64 -di > /tmp/signing-key.gpg
           echo "$PGP_PASSPHRASE" | gpg --pinentry-mode loopback --passphrase-fd 0 --import /tmp/signing-key.gpg
           (echo "$PGP_PASSPHRASE"; echo; echo) | gpg --command-fd 0 --pinentry-mode loopback --change-passphrase $(gpg --list-secret-keys --with-colons 2> /dev/null | grep '^sec:' | cut --delimiter ':' --fields 5 | tail -n 1)
 
       - name: Publish
+        env:
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+          SONATYPE_CREDENTIAL_HOST: ${{ secrets.SONATYPE_CREDENTIAL_HOST }}
         run: sbt tlCiRelease
+
+  dependency-submission:
+    name: Submit Dependencies
+    if: github.event_name != 'pull_request'
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        java: [temurin@8]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout current branch (full)
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Java (temurin@8)
+        id: setup-java-temurin-8
+        if: matrix.java == 'temurin@8'
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 8
+          cache: sbt
+
+      - name: sbt update
+        if: matrix.java == 'temurin@8' && steps.setup-java-temurin-8.outputs.cache-hit == 'false'
+        run: sbt reload +update
+
+      - name: Setup Java (temurin@17)
+        id: setup-java-temurin-17
+        if: matrix.java == 'temurin@17'
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: sbt
+
+      - name: sbt update
+        if: matrix.java == 'temurin@17' && steps.setup-java-temurin-17.outputs.cache-hit == 'false'
+        run: sbt reload +update
+
+      - name: Setup Java (graalvm@17)
+        id: setup-java-graalvm-17
+        if: matrix.java == 'graalvm@17'
+        uses: graalvm/setup-graalvm@v1
+        with:
+          distribution: graalvm
+          java-version: 17
+          cache: sbt
+
+      - name: sbt update
+        if: matrix.java == 'graalvm@17' && steps.setup-java-graalvm-17.outputs.cache-hit == 'false'
+        run: sbt reload +update
+
+      - name: Submit Dependencies
+        uses: scalacenter/sbt-dependency-submission@v2
+        with:
+          modules-ignore: rootjs_2.12 rootjs_2.13 rootjs_3 docs_2.12 docs_2.13 docs_3 cats-tests_sjs1_2.12 cats-tests_sjs1_2.13 cats-tests_sjs1_3 rootjvm_2.12 rootjvm_2.13 rootjvm_3 rootnative_2.12 rootnative_2.13 rootnative_3 cats-tests_2.12 cats-tests_2.13 cats-tests_3 bincompattest_2.12 bincompattest_2.13 bincompattest_3 cats-tests_native0.4_2.12 cats-tests_native0.4_2.13 cats-tests_native0.4_3 cats-bench_2.12 cats-bench_2.13 cats-bench_3
+          configs-ignore: test scala-tool scala-doc-tool test-internal
 
   validate-steward:
     name: Validate Steward Config
@@ -356,7 +384,6 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        scala: [2.13.11]
         java: [temurin@8]
     runs-on: ${{ matrix.os }}
     steps:
@@ -365,65 +392,44 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Download Java (temurin@8)
-        id: download-java-temurin-8
-        if: matrix.java == 'temurin@8'
-        uses: typelevel/download-java@v2
-        with:
-          distribution: temurin
-          java-version: 8
-
       - name: Setup Java (temurin@8)
+        id: setup-java-temurin-8
         if: matrix.java == 'temurin@8'
         uses: actions/setup-java@v3
         with:
-          distribution: jdkfile
-          java-version: 8
-          jdkFile: ${{ steps.download-java-temurin-8.outputs.jdkFile }}
-
-      - name: Download Java (temurin@17)
-        id: download-java-temurin-17
-        if: matrix.java == 'temurin@17'
-        uses: typelevel/download-java@v2
-        with:
           distribution: temurin
-          java-version: 17
+          java-version: 8
+          cache: sbt
+
+      - name: sbt update
+        if: matrix.java == 'temurin@8' && steps.setup-java-temurin-8.outputs.cache-hit == 'false'
+        run: sbt '++ ${{ matrix.scala }}' reload +update
 
       - name: Setup Java (temurin@17)
+        id: setup-java-temurin-17
         if: matrix.java == 'temurin@17'
         uses: actions/setup-java@v3
         with:
-          distribution: jdkfile
+          distribution: temurin
           java-version: 17
-          jdkFile: ${{ steps.download-java-temurin-17.outputs.jdkFile }}
+          cache: sbt
 
-      - name: Download Java (graalvm@11)
-        id: download-java-graalvm-11
-        if: matrix.java == 'graalvm@11'
-        uses: typelevel/download-java@v2
+      - name: sbt update
+        if: matrix.java == 'temurin@17' && steps.setup-java-temurin-17.outputs.cache-hit == 'false'
+        run: sbt '++ ${{ matrix.scala }}' reload +update
+
+      - name: Setup Java (graalvm@17)
+        id: setup-java-graalvm-17
+        if: matrix.java == 'graalvm@17'
+        uses: graalvm/setup-graalvm@v1
         with:
           distribution: graalvm
-          java-version: 11
+          java-version: 17
+          cache: sbt
 
-      - name: Setup Java (graalvm@11)
-        if: matrix.java == 'graalvm@11'
-        uses: actions/setup-java@v3
-        with:
-          distribution: jdkfile
-          java-version: 11
-          jdkFile: ${{ steps.download-java-graalvm-11.outputs.jdkFile }}
-
-      - name: Cache sbt
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.sbt
-            ~/.ivy2/cache
-            ~/.coursier/cache/v1
-            ~/.cache/coursier/v1
-            ~/AppData/Local/Coursier/Cache/v1
-            ~/Library/Caches/Coursier/v1
-          key: ${{ runner.os }}-sbt-cache-v2-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
+      - name: sbt update
+        if: matrix.java == 'graalvm@17' && steps.setup-java-graalvm-17.outputs.cache-hit == 'false'
+        run: sbt '++ ${{ matrix.scala }}' reload +update
 
       - name: Scalafix tests
         run: |
@@ -443,72 +449,51 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Download Java (temurin@8)
-        id: download-java-temurin-8
-        if: matrix.java == 'temurin@8'
-        uses: typelevel/download-java@v2
-        with:
-          distribution: temurin
-          java-version: 8
-
       - name: Setup Java (temurin@8)
+        id: setup-java-temurin-8
         if: matrix.java == 'temurin@8'
         uses: actions/setup-java@v3
         with:
-          distribution: jdkfile
-          java-version: 8
-          jdkFile: ${{ steps.download-java-temurin-8.outputs.jdkFile }}
-
-      - name: Download Java (temurin@17)
-        id: download-java-temurin-17
-        if: matrix.java == 'temurin@17'
-        uses: typelevel/download-java@v2
-        with:
           distribution: temurin
-          java-version: 17
+          java-version: 8
+          cache: sbt
+
+      - name: sbt update
+        if: matrix.java == 'temurin@8' && steps.setup-java-temurin-8.outputs.cache-hit == 'false'
+        run: sbt reload +update
 
       - name: Setup Java (temurin@17)
+        id: setup-java-temurin-17
         if: matrix.java == 'temurin@17'
         uses: actions/setup-java@v3
         with:
-          distribution: jdkfile
+          distribution: temurin
           java-version: 17
-          jdkFile: ${{ steps.download-java-temurin-17.outputs.jdkFile }}
+          cache: sbt
 
-      - name: Download Java (graalvm@11)
-        id: download-java-graalvm-11
-        if: matrix.java == 'graalvm@11'
-        uses: typelevel/download-java@v2
+      - name: sbt update
+        if: matrix.java == 'temurin@17' && steps.setup-java-temurin-17.outputs.cache-hit == 'false'
+        run: sbt reload +update
+
+      - name: Setup Java (graalvm@17)
+        id: setup-java-graalvm-17
+        if: matrix.java == 'graalvm@17'
+        uses: graalvm/setup-graalvm@v1
         with:
           distribution: graalvm
-          java-version: 11
+          java-version: 17
+          cache: sbt
 
-      - name: Setup Java (graalvm@11)
-        if: matrix.java == 'graalvm@11'
-        uses: actions/setup-java@v3
-        with:
-          distribution: jdkfile
-          java-version: 11
-          jdkFile: ${{ steps.download-java-graalvm-11.outputs.jdkFile }}
-
-      - name: Cache sbt
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.sbt
-            ~/.ivy2/cache
-            ~/.coursier/cache/v1
-            ~/.cache/coursier/v1
-            ~/AppData/Local/Coursier/Cache/v1
-            ~/Library/Caches/Coursier/v1
-          key: ${{ runner.os }}-sbt-cache-v2-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
+      - name: sbt update
+        if: matrix.java == 'graalvm@17' && steps.setup-java-graalvm-17.outputs.cache-hit == 'false'
+        run: sbt reload +update
 
       - name: Generate site
         run: sbt docs/tlSite
 
       - name: Publish site
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
-        uses: peaceiris/actions-gh-pages@v3.9.0
+        uses: peaceiris/actions-gh-pages@v3.9.3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: site/target/docs/site

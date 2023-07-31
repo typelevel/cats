@@ -27,7 +27,7 @@ import cats._
 import cats.data._
 import cats.syntax.all._
 
-implicit val nelBimonad =
+implicit val nelBimonad: Bimonad[NonEmptyList] =
   new Bimonad[NonEmptyList] {
 
     // in order to have a lawful bimonad `pure` and `extract` need to respect: `nelBimonad.extract(nelBimonad.pure(a)) <-> a`
