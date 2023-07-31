@@ -1,231 +1,241 @@
 <!DOCTYPE html>
 <html lang="en">
+  
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Laika 0.18.1 + Helium Theme" />
-    <title>Free Monad</title>
-    
-      <meta name="author" content="Cody Allen"/>
-    
-      <meta name="author" content="Ross Baker"/>
-    
-      <meta name="author" content="Arman Bilge"/>
-    
-      <meta name="author" content="P. Oscar Boykin"/>
-    
-      <meta name="author" content="Travis Brown"/>
-    
-      <meta name="author" content="Adelbert Chang"/>
-    
-      <meta name="author" content="Daniel Esik"/>
-    
-      <meta name="author" content="Peter Neyens"/>
-    
-      <meta name="author" content="Rob Norris"/>
-    
-      <meta name="author" content="Erik Osheim"/>
-    
-      <meta name="author" content="LukaJCB"/>
-    
-      <meta name="author" content="Michael Pilquist"/>
-    
-      <meta name="author" content="Miles Sabin"/>
-    
-      <meta name="author" content="Daniel Spiewak"/>
-    
-      <meta name="author" content="Frank Thomas"/>
-    
-      <meta name="author" content="Sergey Torgashov"/>
-    
-      <meta name="author" content="Julien Truffaut"/>
-    
-      <meta name="author" content="Kailuo Wang"/>
-    
-    
-      <meta name="description" content="docs"/>
-    
-    
-      <link rel="icon" sizes="32x32" type="image/png" href="https://typelevel.org/img/favicon.png"/>
-    
-    
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700">
-    
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira+Mono:500">
-    
-    <link rel="stylesheet" type="text/css" href="../helium/icofont.min.css" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="generator" content="Typelevel Laika + Helium Theme" />
+  <title>Free Monad</title>
+  
+  <meta name="author" content="cats contributors"/>
+  
+  <meta name="author" content="Cody Allen"/>
+  
+  <meta name="author" content="Ross Baker"/>
+  
+  <meta name="author" content="Arman Bilge"/>
+  
+  <meta name="author" content="P. Oscar Boykin"/>
+  
+  <meta name="author" content="Travis Brown"/>
+  
+  <meta name="author" content="Adelbert Chang"/>
+  
+  <meta name="author" content="Daniel Esik"/>
+  
+  <meta name="author" content="Peter Neyens"/>
+  
+  <meta name="author" content="Rob Norris"/>
+  
+  <meta name="author" content="Erik Osheim"/>
+  
+  <meta name="author" content="LukaJCB"/>
+  
+  <meta name="author" content="Michael Pilquist"/>
+  
+  <meta name="author" content="Miles Sabin"/>
+  
+  <meta name="author" content="Daniel Spiewak"/>
+  
+  <meta name="author" content="Frank Thomas"/>
+  
+  <meta name="author" content="Sergey Torgashov"/>
+  
+  <meta name="author" content="Julien Truffaut"/>
+  
+  <meta name="author" content="Kailuo Wang"/>
+  
+  
+  <meta name="description" content="docs"/>
+  
+  
+  
+  <link rel="icon" sizes="32x32" type="image/png" href="https://typelevel.org/img/favicon.png"/>
+  
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700">
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira+Mono:500">
+  
+  <link rel="stylesheet" type="text/css" href="../helium/icofont.min.css" />
     <link rel="stylesheet" type="text/css" href="../helium/laika-helium.css" />
-    <link rel="stylesheet" type="text/css" href="../site/styles.css" />
-    <script src="../helium/laika-helium.js"></script>
+  <script src="../helium/laika-helium.js"></script>
     <script src="../js/sponsors.js"></script>
-    
-    
-    <script> /* for avoiding page load transitions */ </script>
-  </head>
+  
+  
+  <script> /* for avoiding page load transitions */ </script>
+</head>
 
   <body>
 
-    <header id="top-bar">
+    <header id="top-bar" class="light-default dark-default">
 
-      <div class="row">
-        <a id="nav-icon">
-          <i class="icofont-laika" title="Navigation">&#xefa2;</i>
-        </a>
-        
-      </div>
+  <div class="row">
+    <a id="nav-icon">
+      <i class="icofont-laika navigationMenu" title="Navigation">&#xefa2;</i>
+    </a>
+    
+    
+  </div>
 
-      <a class="image-link" href="https://typelevel.org"><img src="https://typelevel.org/img/logo.svg"></a>
+  <a class="image-link" href="https://typelevel.org"><img src="https://typelevel.org/img/logo.svg"></a>
 
-      <span class="row links"><a class="icon-link svg-link" href="https://www.javadoc.io/doc/org.typelevel/cats-docs_2.13/2.9.0/"><span title="API"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <div class="row links">
+    
+    <a class="icon-link svg-link" href="https://www.javadoc.io/doc/org.typelevel/cats-docs_2.13/2.9.0/"><span class="api" title="API"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
   <g class="svg-shape">
     <path d="M75,47.5c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm-50,-0c13.246,-0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,-0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm2.705,16.735l7.239,0l0.622,-4.904l-21.833,0l-0,4.904l7.589,0l0,22.067l6.383,0l-0,-22.067Zm58.076,7.265c-0,-8.757 -3.698,-14.166 -10.781,-14.166c-7.083,-0 -10.781,5.604 -10.781,14.166c0,8.757 3.698,14.166 10.781,14.166c7.083,0 10.781,-5.604 10.781,-14.166Zm-6.539,0c0,6.538 -1.128,9.496 -4.242,9.496c-2.997,0 -4.242,-2.88 -4.242,-9.496c-0,-6.616 1.206,-9.496 4.242,-9.496c3.036,-0 4.242,2.88 4.242,9.496Zm-29.242,-67c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm0.512,9.834c-7.122,-0 -12.609,5.098 -12.609,14.127c-0,9.263 5.215,14.205 12.532,14.205c4.164,0 7.083,-1.634 9.068,-3.658l-2.88,-3.697c-1.518,1.206 -3.153,2.413 -5.838,2.413c-3.697,-0 -6.266,-2.763 -6.266,-9.263c-0,-6.616 2.724,-9.379 6.149,-9.379c2.102,-0 3.892,0.778 5.371,1.984l3.113,-3.775c-2.257,-1.868 -4.748,-2.957 -8.64,-2.957Z"/>
   </g>
-</svg></span></a><a class="icon-link svg-link" href="https://github.com/typelevel/cats"><span title="Source Code"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+</svg></span></a>
+    
+    <a class="icon-link svg-link" href="https://github.com/typelevel/cats"><span class="github" title="Source Code"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
   <g class="svg-shape">
     <path d="M49.995,1c-27.609,-0 -49.995,22.386 -49.995,50.002c-0,22.09 14.325,40.83 34.194,47.444c2.501,0.458 3.413,-1.086 3.413,-2.412c0,-1.185 -0.043,-4.331 -0.067,-8.503c-13.908,3.021 -16.843,-6.704 -16.843,-6.704c-2.274,-5.773 -5.552,-7.311 -5.552,-7.311c-4.54,-3.103 0.344,-3.042 0.344,-3.042c5.018,0.356 7.658,5.154 7.658,5.154c4.46,7.64 11.704,5.433 14.552,4.156c0.454,-3.232 1.744,-5.436 3.174,-6.685c-11.102,-1.262 -22.775,-5.553 -22.775,-24.713c-0,-5.457 1.949,-9.92 5.147,-13.416c-0.516,-1.265 -2.231,-6.348 0.488,-13.233c0,0 4.199,-1.344 13.751,5.126c3.988,-1.108 8.266,-1.663 12.518,-1.682c4.245,0.019 8.523,0.574 12.517,1.682c9.546,-6.47 13.736,-5.126 13.736,-5.126c2.728,6.885 1.013,11.968 0.497,13.233c3.204,3.496 5.141,7.959 5.141,13.416c0,19.209 -11.691,23.436 -22.83,24.673c1.795,1.544 3.394,4.595 3.394,9.26c0,6.682 -0.061,12.076 -0.061,13.715c0,1.338 0.899,2.894 3.438,2.406c19.853,-6.627 34.166,-25.354 34.166,-47.438c-0,-27.616 -22.389,-50.002 -50.005,-50.002"/>
   </g>
-</svg></span></a><a class="icon-link" href="https://discord.gg/XF3CXcMzqD"><i class="icofont-laika" title="Chat">&#xeed5;</i></a><a class="icon-link" href="https://fosstodon.org/@typelevel"><span class="mastodon" title="Mastodon"><svg class="svg-icon svg-link" width="100%" height="100%" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+</svg></span></a>
+    
+    <a class="icon-link glyph-link" href="https://discord.gg/XF3CXcMzqD"><i class="icofont-laika chat" title="Chat">&#xeed5;</i></a>
+    
+    <a class="icon-link svg-link" href="https://fosstodon.org/@typelevel"><span class="mastodon" title="Mastodon"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg">
   <g class="svg-shape">
     <path d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z"/>
   </g>
-</svg>
-</span></a></span>
+</svg></span></a>
+    
+  </div>  
 
-    </header>
-
+</header>
+    
     <nav id="sidebar">
 
-      <div class="row">
-        <a class="icon-link svg-link" href="https://www.javadoc.io/doc/org.typelevel/cats-docs_2.13/2.9.0/"><span title="API"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <div class="row">
+    
+    <a class="icon-link svg-link" href="https://www.javadoc.io/doc/org.typelevel/cats-docs_2.13/2.9.0/"><span class="api" title="API"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
   <g class="svg-shape">
     <path d="M75,47.5c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm-50,-0c13.246,-0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,-0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm2.705,16.735l7.239,0l0.622,-4.904l-21.833,0l-0,4.904l7.589,0l0,22.067l6.383,0l-0,-22.067Zm58.076,7.265c-0,-8.757 -3.698,-14.166 -10.781,-14.166c-7.083,-0 -10.781,5.604 -10.781,14.166c0,8.757 3.698,14.166 10.781,14.166c7.083,0 10.781,-5.604 10.781,-14.166Zm-6.539,0c0,6.538 -1.128,9.496 -4.242,9.496c-2.997,0 -4.242,-2.88 -4.242,-9.496c-0,-6.616 1.206,-9.496 4.242,-9.496c3.036,-0 4.242,2.88 4.242,9.496Zm-29.242,-67c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm0.512,9.834c-7.122,-0 -12.609,5.098 -12.609,14.127c-0,9.263 5.215,14.205 12.532,14.205c4.164,0 7.083,-1.634 9.068,-3.658l-2.88,-3.697c-1.518,1.206 -3.153,2.413 -5.838,2.413c-3.697,-0 -6.266,-2.763 -6.266,-9.263c-0,-6.616 2.724,-9.379 6.149,-9.379c2.102,-0 3.892,0.778 5.371,1.984l3.113,-3.775c-2.257,-1.868 -4.748,-2.957 -8.64,-2.957Z"/>
   </g>
-</svg></span></a><a class="icon-link svg-link" href="https://github.com/typelevel/cats"><span title="Source Code"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+</svg></span></a>
+    
+    <a class="icon-link svg-link" href="https://github.com/typelevel/cats"><span class="github" title="Source Code"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
   <g class="svg-shape">
     <path d="M49.995,1c-27.609,-0 -49.995,22.386 -49.995,50.002c-0,22.09 14.325,40.83 34.194,47.444c2.501,0.458 3.413,-1.086 3.413,-2.412c0,-1.185 -0.043,-4.331 -0.067,-8.503c-13.908,3.021 -16.843,-6.704 -16.843,-6.704c-2.274,-5.773 -5.552,-7.311 -5.552,-7.311c-4.54,-3.103 0.344,-3.042 0.344,-3.042c5.018,0.356 7.658,5.154 7.658,5.154c4.46,7.64 11.704,5.433 14.552,4.156c0.454,-3.232 1.744,-5.436 3.174,-6.685c-11.102,-1.262 -22.775,-5.553 -22.775,-24.713c-0,-5.457 1.949,-9.92 5.147,-13.416c-0.516,-1.265 -2.231,-6.348 0.488,-13.233c0,0 4.199,-1.344 13.751,5.126c3.988,-1.108 8.266,-1.663 12.518,-1.682c4.245,0.019 8.523,0.574 12.517,1.682c9.546,-6.47 13.736,-5.126 13.736,-5.126c2.728,6.885 1.013,11.968 0.497,13.233c3.204,3.496 5.141,7.959 5.141,13.416c0,19.209 -11.691,23.436 -22.83,24.673c1.795,1.544 3.394,4.595 3.394,9.26c0,6.682 -0.061,12.076 -0.061,13.715c0,1.338 0.899,2.894 3.438,2.406c19.853,-6.627 34.166,-25.354 34.166,-47.438c-0,-27.616 -22.389,-50.002 -50.005,-50.002"/>
   </g>
-</svg></span></a><a class="icon-link" href="https://discord.gg/XF3CXcMzqD"><i class="icofont-laika" title="Chat">&#xeed5;</i></a><a class="icon-link" href="https://fosstodon.org/@typelevel"><span class="mastodon" title="Mastodon"><svg class="svg-icon svg-link" width="100%" height="100%" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+</svg></span></a>
+    
+    <a class="icon-link glyph-link" href="https://discord.gg/XF3CXcMzqD"><i class="icofont-laika chat" title="Chat">&#xeed5;</i></a>
+    
+    <a class="icon-link svg-link" href="https://fosstodon.org/@typelevel"><span class="mastodon" title="Mastodon"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg">
   <g class="svg-shape">
     <path d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z"/>
   </g>
-</svg>
-</span></a>
-      </div>
+</svg></span></a>
+    
+  </div>
 
-      <ul class="nav-list">
-        <li class="level1"><a href="../index.html">Cats</a></li>
-        <li class="level1"><a href="../typeclasses.html">Type Classes</a></li>
-        <li class="level1"><a href="../datatypes.html">Data Types</a></li>
-        <li class="level1"><a href="../algebra.html">Algebra</a></li>
-        <li class="level1"><a href="../alleycats.html">Alleycats</a></li>
-        <li class="level1"><a href="../motivations.html">Motivations</a></li>
-        <li class="level1"><a href="../resources_for_learners.html">Resources for Learners</a></li>
-        <li class="level1"><a href="../jump_start_guide.html">Jump Start Guide</a></li>
-        <li class="level1"><a href="../imports.html">Imports</a></li>
-        <li class="level1"><a href="../faq.html">FAQ</a></li>
-        <li class="level1"><a href="../CONTRIBUTING.html">Contributor guide</a></li>
-        <li class="level1"><a href="../ADOPTERS.html">Adopters</a></li>
-        <li class="level1"><a href="../colophon.html">Colophon</a></li>
-        <li class="level1"><a href="../nomenclature.html">Glossary</a></li>
-        <li class="level1"><a href="../guidelines.html">Guidelines</a></li>
-        <li class="level1"><a href="../typelevelEcosystem.html">Typelevel Ecosystem</a></li>
-        <li class="level1 nav-header">Type Classes</li>
-        <li class="level2"><a href="../typeclasses/alternative.html">Alternative</a></li>
-        <li class="level2"><a href="../typeclasses/applicative.html">Applicative</a></li>
-        <li class="level2"><a href="../typeclasses/applicativemonaderror.html">ApplicativeError and MonadError</a></li>
-        <li class="level2"><a href="../typeclasses/applicativetraverse.html">Applicative and Traversable Functors</a></li>
-        <li class="level2"><a href="../typeclasses/arrow.html">Arrow</a></li>
-        <li class="level2"><a href="../typeclasses/arrowchoice.html">Arrow Choice</a></li>
-        <li class="level2"><a href="../typeclasses/bifoldable.html">Bifoldable</a></li>
-        <li class="level2"><a href="../typeclasses/bifunctor.html">Bifunctor</a></li>
-        <li class="level2"><a href="../typeclasses/bimonad.html">Bimonad</a></li>
-        <li class="level2"><a href="../typeclasses/comonad.html">Comonad</a></li>
-        <li class="level2"><a href="../typeclasses/contravariant.html">Contravariant</a></li>
-        <li class="level2"><a href="../typeclasses/contravariantmonoidal.html">Contravariant Monoidal</a></li>
-        <li class="level2"><a href="../typeclasses/eq.html">Eq</a></li>
-        <li class="level2"><a href="../typeclasses/foldable.html">Foldable</a></li>
-        <li class="level2"><a href="../typeclasses/functor.html">Functor</a></li>
-        <li class="level2"><a href="../typeclasses/invariant.html">Invariant</a></li>
-        <li class="level2"><a href="../typeclasses/invariantmonoidal.html">Invariant Monoidal</a></li>
-        <li class="level2"><a href="../typeclasses/lawtesting.html">Law testing</a></li>
-        <li class="level2"><a href="../typeclasses/monad.html">Monad</a></li>
-        <li class="level2"><a href="../typeclasses/monoid.html">Monoid</a></li>
-        <li class="level2"><a href="../typeclasses/monoidk.html">MonoidK</a></li>
-        <li class="level2"><a href="../typeclasses/nonemptytraverse.html">NonEmptyTraverse</a></li>
-        <li class="level2"><a href="../typeclasses/parallel.html">Parallel</a></li>
-        <li class="level2"><a href="../typeclasses/reducible.html">Reducible</a></li>
-        <li class="level2"><a href="../typeclasses/semigroup.html">Semigroup</a></li>
-        <li class="level2"><a href="../typeclasses/semigroupk.html">SemigroupK</a></li>
-        <li class="level2"><a href="../typeclasses/show.html">Show</a></li>
-        <li class="level2"><a href="../typeclasses/traverse.html">Traverse</a></li>
-        <li class="level1 nav-header">Data Types</li>
-        <li class="level2"><a href="chain.html">Chain</a></li>
-        <li class="level2"><a href="const.html">Const</a></li>
-        <li class="level2"><a href="contt.html">ContT</a></li>
-        <li class="level2"><a href="either.html">Either</a></li>
-        <li class="level2"><a href="eithert.html">EitherT</a></li>
-        <li class="level2"><a href="eval.html">Eval</a></li>
-        <li class="level2"><a href="freeapplicative.html">Free Applicative</a></li>
-        <li class="level2 active"><a href="#">Free Monad</a></li>
-        <li class="level2"><a href="functionk.html">FunctionK</a></li>
-        <li class="level2"><a href="id.html">Id</a></li>
-        <li class="level2"><a href="ior.html">Ior</a></li>
-        <li class="level2"><a href="iort.html">IorT</a></li>
-        <li class="level2"><a href="kleisli.html">Kleisli</a></li>
-        <li class="level2"><a href="nel.html">NonEmptyList</a></li>
-        <li class="level2"><a href="nested.html">Nested</a></li>
-        <li class="level2"><a href="oneand.html">OneAnd</a></li>
-        <li class="level2"><a href="optiont.html">OptionT</a></li>
-        <li class="level2"><a href="state.html">State</a></li>
-        <li class="level2"><a href="statet.html">StateT</a></li>
-        <li class="level2"><a href="validated.html">Validated</a></li>
-        <li class="level2"><a href="writer.html">Writer</a></li>
-        <li class="level2"><a href="writert.html">WriterT</a></li>
-      </ul>
+  <ul class="nav-list">
+    <li class="level1 nav-leaf"><a href="../">Cats</a></li>
+    <li class="level1 nav-leaf"><a href="../typeclasses.html">Type Classes</a></li>
+    <li class="level1 nav-leaf"><a href="../datatypes.html">Data Types</a></li>
+    <li class="level1 nav-leaf"><a href="../algebra.html">Algebra</a></li>
+    <li class="level1 nav-leaf"><a href="../alleycats.html">Alleycats</a></li>
+    <li class="level1 nav-leaf"><a href="../motivations.html">Motivations</a></li>
+    <li class="level1 nav-leaf"><a href="../resources_for_learners.html">Resources for Learners</a></li>
+    <li class="level1 nav-leaf"><a href="../jump_start_guide.html">Jump Start Guide</a></li>
+    <li class="level1 nav-leaf"><a href="../imports.html">Imports</a></li>
+    <li class="level1 nav-leaf"><a href="../faq.html">FAQ</a></li>
+    <li class="level1 nav-leaf"><a href="../CONTRIBUTING.html">Contributor guide</a></li>
+    <li class="level1 nav-leaf"><a href="../ADOPTERS.html">Adopters</a></li>
+    <li class="level1 nav-leaf"><a href="../colophon.html">Colophon</a></li>
+    <li class="level1 nav-leaf"><a href="../nomenclature.html">Glossary</a></li>
+    <li class="level1 nav-leaf"><a href="../guidelines.html">Guidelines</a></li>
+    <li class="level1 nav-leaf"><a href="../typelevelEcosystem.html">Typelevel Ecosystem</a></li>
+    <li class="level1 nav-header">Type Classes</li>
+    <li class="level2 nav-leaf"><a href="../typeclasses/alternative.html">Alternative</a></li>
+    <li class="level2 nav-leaf"><a href="../typeclasses/applicative.html">Applicative</a></li>
+    <li class="level2 nav-leaf"><a href="../typeclasses/applicativemonaderror.html">ApplicativeError and MonadError</a></li>
+    <li class="level2 nav-leaf"><a href="../typeclasses/applicativetraverse.html">Applicative and Traversable Functors</a></li>
+    <li class="level2 nav-leaf"><a href="../typeclasses/arrow.html">Arrow</a></li>
+    <li class="level2 nav-leaf"><a href="../typeclasses/arrowchoice.html">Arrow Choice</a></li>
+    <li class="level2 nav-leaf"><a href="../typeclasses/bifoldable.html">Bifoldable</a></li>
+    <li class="level2 nav-leaf"><a href="../typeclasses/bifunctor.html">Bifunctor</a></li>
+    <li class="level2 nav-leaf"><a href="../typeclasses/bimonad.html">Bimonad</a></li>
+    <li class="level2 nav-leaf"><a href="../typeclasses/comonad.html">Comonad</a></li>
+    <li class="level2 nav-leaf"><a href="../typeclasses/contravariant.html">Contravariant</a></li>
+    <li class="level2 nav-leaf"><a href="../typeclasses/contravariantmonoidal.html">Contravariant Monoidal</a></li>
+    <li class="level2 nav-leaf"><a href="../typeclasses/eq.html">Eq</a></li>
+    <li class="level2 nav-leaf"><a href="../typeclasses/foldable.html">Foldable</a></li>
+    <li class="level2 nav-leaf"><a href="../typeclasses/functor.html">Functor</a></li>
+    <li class="level2 nav-leaf"><a href="../typeclasses/invariant.html">Invariant</a></li>
+    <li class="level2 nav-leaf"><a href="../typeclasses/invariantmonoidal.html">Invariant Monoidal</a></li>
+    <li class="level2 nav-leaf"><a href="../typeclasses/lawtesting.html">Law testing</a></li>
+    <li class="level2 nav-leaf"><a href="../typeclasses/monad.html">Monad</a></li>
+    <li class="level2 nav-leaf"><a href="../typeclasses/monoid.html">Monoid</a></li>
+    <li class="level2 nav-leaf"><a href="../typeclasses/monoidk.html">MonoidK</a></li>
+    <li class="level2 nav-leaf"><a href="../typeclasses/nonemptytraverse.html">NonEmptyTraverse</a></li>
+    <li class="level2 nav-leaf"><a href="../typeclasses/parallel.html">Parallel</a></li>
+    <li class="level2 nav-leaf"><a href="../typeclasses/reducible.html">Reducible</a></li>
+    <li class="level2 nav-leaf"><a href="../typeclasses/semigroup.html">Semigroup</a></li>
+    <li class="level2 nav-leaf"><a href="../typeclasses/semigroupk.html">SemigroupK</a></li>
+    <li class="level2 nav-leaf"><a href="../typeclasses/show.html">Show</a></li>
+    <li class="level2 nav-leaf"><a href="../typeclasses/traverse.html">Traverse</a></li>
+    <li class="level1 nav-header">Data Types</li>
+    <li class="level2 nav-leaf"><a href="chain.html">Chain</a></li>
+    <li class="level2 nav-leaf"><a href="const.html">Const</a></li>
+    <li class="level2 nav-leaf"><a href="contt.html">ContT</a></li>
+    <li class="level2 nav-leaf"><a href="eithert.html">EitherT</a></li>
+    <li class="level2 nav-leaf"><a href="eval.html">Eval</a></li>
+    <li class="level2 nav-leaf"><a href="freeapplicative.html">Free Applicative</a></li>
+    <li class="level2 active nav-leaf"><a href="#">Free Monad</a></li>
+    <li class="level2 nav-leaf"><a href="functionk.html">FunctionK</a></li>
+    <li class="level2 nav-leaf"><a href="id.html">Id</a></li>
+    <li class="level2 nav-leaf"><a href="ior.html">Ior</a></li>
+    <li class="level2 nav-leaf"><a href="iort.html">IorT</a></li>
+    <li class="level2 nav-leaf"><a href="kleisli.html">Kleisli</a></li>
+    <li class="level2 nav-leaf"><a href="nel.html">NonEmptyList</a></li>
+    <li class="level2 nav-leaf"><a href="nested.html">Nested</a></li>
+    <li class="level2 nav-leaf"><a href="oneand.html">OneAnd</a></li>
+    <li class="level2 nav-leaf"><a href="optiont.html">OptionT</a></li>
+    <li class="level2 nav-leaf"><a href="state.html">State</a></li>
+    <li class="level2 nav-leaf"><a href="statet.html">StateT</a></li>
+    <li class="level2 nav-leaf"><a href="validated.html">Validated</a></li>
+    <li class="level2 nav-leaf"><a href="writer.html">Writer</a></li>
+    <li class="level2 nav-leaf"><a href="writert.html">WriterT</a></li>
+  </ul>
 
-      <ul class="nav-list">
-        <li class="level1 nav-header">Related Projects</li>
-        
-          <li class="level2"><a href="https://typelevel.org/cats-effect/">cats-effect</a></li>
-        
-          <li class="level2"><a href="https://typelevel.org/mouse">Mouse</a></li>
-        
-          <li class="level2"><a href="https://github.com/typelevel/discipline/">discipline</a></li>
-        
-      </ul>
-
-    </nav>
+</nav>
 
     <div id="container">
 
-      <nav id="page-nav">
-        <p class="header"><a href="#">Free Monad</a></p>
+      
+<nav id="page-nav">
+  <p class="header"><a href="#">Free Monad</a></p>
 
-        <ul class="nav-list">
-          <li class="level1"><a href="#what-is-it">What is it?</a></li>
-          <li class="level1"><a href="#using-free-monads">Using Free Monads</a></li>
-          <li class="level2"><a href="#study-your-topic">Study your topic</a></li>
-          <li class="level2"><a href="#study-your-grammar">Study your grammar</a></li>
-          <li class="level2"><a href="#create-an-adt-representing-your-grammar">Create an ADT representing your grammar</a></li>
-          <li class="level2"><a href="#free-your-adt">Free your ADT</a></li>
-          <li class="level1"><a href="#composing-free-monads-adts">Composing Free monads ADTs.</a></li>
-          <li class="level1"><a href="#for-the-curious-ones-what-is-free-in-theory">For the curious ones: what is Free in theory?</a></li>
-          <li class="level2"><a href="#for-the-very-curious-ones">For the very curious ones</a></li>
-          <li class="level1"><a href="#freet">FreeT</a></li>
-          <li class="level1"><a href="#future-work-todo">Future Work (TODO)</a></li>
-          <li class="level1"><a href="#credits">Credits</a></li>
-        </ul>
+  <ul class="nav-list">
+    <li class="level1 nav-leaf"><a href="#what-is-it">What is it?</a></li>
+    <li class="level1 nav-node"><a href="#using-free-monads">Using Free Monads</a></li>
+    <li class="level2 nav-leaf"><a href="#study-your-topic">Study your topic</a></li>
+    <li class="level2 nav-leaf"><a href="#study-your-grammar">Study your grammar</a></li>
+    <li class="level2 nav-leaf"><a href="#create-an-adt-representing-your-grammar">Create an ADT representing your grammar</a></li>
+    <li class="level2 nav-leaf"><a href="#free-your-adt">Free your ADT</a></li>
+    <li class="level1 nav-leaf"><a href="#composing-free-monads-adts">Composing Free monads ADTs.</a></li>
+    <li class="level1 nav-node"><a href="#for-the-curious-ones-what-is-free-in-theory">For the curious ones: what is Free in theory?</a></li>
+    <li class="level2 nav-leaf"><a href="#for-the-very-curious-ones">For the very curious ones</a></li>
+    <li class="level1 nav-leaf"><a href="#freet">FreeT</a></li>
+    <li class="level1 nav-leaf"><a href="#future-work-todo">Future Work (TODO)</a></li>
+    <li class="level1 nav-leaf"><a href="#credits">Credits</a></li>
+  </ul>
 
-        <p class="footer"></p>
-      </nav>
+  <p class="footer"></p>
+</nav>
+
 
       <main class="content">
 
         <h1 id="free-monad" class="title">Free Monad</h1>
-        <p>API Documentation: <a href="https://www.javadoc.io/doc/org.typelevel/cats-docs_2.13/2.9.0/cats/free/Free.html">Free</a></p>
+        <p>API Documentation: <a class="api" href="https://www.javadoc.io/doc/org.typelevel/cats-docs_2.13/2.9.0/cats/free/Free.html">Free</a></p>
         
-        <h2 id="what-is-it" class="section">What is it?<a class="anchor-link right" href="#what-is-it"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <h2 id="what-is-it" class="section"><a class="anchor-link left" href="#what-is-it"><i class="icofont-laika link">&#xef71;</i></a>What is it?</h2>
         <p>A <em>free monad</em> is a construction which allows you to build a <em>monad</em>
         from any <em>Functor</em>. Like other <em>monads</em>, it is a pure way to represent
         and manipulate computations.</p>
@@ -244,7 +254,7 @@
         </ul>
         <blockquote>(In Cats, the type representing a <em>free monad</em> is abbreviated as <code>Free[_]</code>.)</blockquote>
         
-        <h2 id="using-free-monads" class="section">Using Free Monads<a class="anchor-link right" href="#using-free-monads"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <h2 id="using-free-monads" class="section"><a class="anchor-link left" href="#using-free-monads"><i class="icofont-laika link">&#xef71;</i></a>Using Free Monads</h2>
         <p>If you&#39;d like to use Cats&#39; free monad, you&#39;ll need to add a library dependency
         for the <code>cats-free</code> module.</p>
         <p>A good way to get a sense for how <em>free monads</em> work is to see them in
@@ -254,7 +264,7 @@
         <a href="#for-the-curious-ones-what-is-free-in-theory">What is Free in theory?</a> section discusses free monads
         in terms of category theory.</p>
         
-        <h3 id="study-your-topic" class="section">Study your topic<a class="anchor-link right" href="#study-your-topic"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <h3 id="study-your-topic" class="section"><a class="anchor-link left" href="#study-your-topic"><i class="icofont-laika link">&#xef71;</i></a>Study your topic</h3>
         <p>Let&#39;s imagine that we want to create a DSL for a key-value store. We
         want to be able to do three things with keys:</p>
         <ul>
@@ -284,7 +294,7 @@
           <li>to be able to support many different methods of execution</li>
         </ul>
         
-        <h3 id="study-your-grammar" class="section">Study your grammar<a class="anchor-link right" href="#study-your-grammar"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <h3 id="study-your-grammar" class="section"><a class="anchor-link left" href="#study-your-grammar"><i class="icofont-laika link">&#xef71;</i></a>Study your grammar</h3>
         <p>We have 3 commands to interact with our KeyValue store:</p>
         <ul>
           <li><code>Put</code> a value associated with a key into the store</li>
@@ -292,7 +302,7 @@
           <li><code>Delete</code> a value associated with a key from the store</li>
         </ul>
         
-        <h3 id="create-an-adt-representing-your-grammar" class="section">Create an ADT representing your grammar<a class="anchor-link right" href="#create-an-adt-representing-your-grammar"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <h3 id="create-an-adt-representing-your-grammar" class="section"><a class="anchor-link left" href="#create-an-adt-representing-your-grammar"><i class="icofont-laika link">&#xef71;</i></a>Create an ADT representing your grammar</h3>
         <p>ADT stands for <em>Algebraic Data Type</em>. In this context, it refers to a
         closed set of types which can be combined to build up complex,
         recursive values.</p>
@@ -302,7 +312,7 @@
 </span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Get</span><span>[</span><span class="type-name">T</span><span>](</span><span class="identifier">key</span><span>: </span><span class="type-name">String</span><span>) </span><span class="keyword">extends</span><span> </span><span class="type-name">KVStoreA</span><span>[</span><span class="type-name">Option</span><span>[</span><span class="type-name">T</span><span>]]
 </span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Delete</span><span>(</span><span class="identifier">key</span><span>: </span><span class="type-name">String</span><span>) </span><span class="keyword">extends</span><span> </span><span class="type-name">KVStoreA</span><span>[</span><span class="type-name">Unit</span><span>]</span></code></pre>
         
-        <h3 id="free-your-adt" class="section">Free your ADT<a class="anchor-link right" href="#free-your-adt"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <h3 id="free-your-adt" class="section"><a class="anchor-link left" href="#free-your-adt"><i class="icofont-laika link">&#xef71;</i></a>Free your ADT</h3>
         <p>There are five basic steps to &quot;freeing&quot; the ADT:</p>
         <ol class="arabic">
           <li>Create a type based on <code>Free[_]</code> and <code>KVStoreA[_]</code>.</li>
@@ -312,12 +322,12 @@
           <li>Execute our compiled program.</li>
         </ol>
         
-        <h4 id="_1-create-a-free-type-based-on-your-adt" class="section">1. Create a <code>Free</code> type based on your ADT<a class="anchor-link right" href="#_1-create-a-free-type-based-on-your-adt"><i class="icofont-laika">&#xef71;</i></a></h4>
+        <h4 id="_1-create-a-free-type-based-on-your-adt" class="section"><a class="anchor-link left" href="#_1-create-a-free-type-based-on-your-adt"><i class="icofont-laika link">&#xef71;</i></a>1. Create a <code>Free</code> type based on your ADT</h4>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">free</span><span>.</span><span class="type-name">Free</span><span>
 
 </span><span class="keyword">type</span><span> </span><span class="type-name">KVStore</span><span>[</span><span class="type-name">A</span><span>] = </span><span class="type-name">Free</span><span>[</span><span class="type-name">KVStoreA</span><span>, </span><span class="type-name">A</span><span>]</span></code></pre>
         
-        <h4 id="_2-create-smart-constructors-using-liftf" class="section">2. Create smart constructors using <code>liftF</code><a class="anchor-link right" href="#_2-create-smart-constructors-using-liftf"><i class="icofont-laika">&#xef71;</i></a></h4>
+        <h4 id="_2-create-smart-constructors-using-liftf" class="section"><a class="anchor-link left" href="#_2-create-smart-constructors-using-liftf"><i class="icofont-laika link">&#xef71;</i></a>2. Create smart constructors using <code>liftF</code></h4>
         <p>These methods will make working with our DSL a lot nicer, and will
         lift <code>KVStoreA[_]</code> values into our <code>KVStore[_]</code> monad (note the
         missing &quot;A&quot; in the second type).</p>
@@ -342,7 +352,7 @@
     </span><span class="identifier">_</span><span> &lt;- </span><span class="identifier">vMaybe</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">v</span><span> =&gt; </span><span class="identifier">put</span><span>[</span><span class="type-name">T</span><span>](</span><span class="identifier">key</span><span>, </span><span class="identifier">f</span><span>(</span><span class="identifier">v</span><span>))).</span><span class="identifier">getOrElse</span><span>(</span><span class="type-name">Free</span><span>.</span><span class="identifier">pure</span><span>(()))
   } </span><span class="keyword">yield</span><span> ()</span></code></pre>
         
-        <h4 id="_3-build-a-program" class="section">3. Build a program<a class="anchor-link right" href="#_3-build-a-program"><i class="icofont-laika">&#xef71;</i></a></h4>
+        <h4 id="_3-build-a-program" class="section"><a class="anchor-link left" href="#_3-build-a-program"><i class="icofont-laika link">&#xef71;</i></a>3. Build a program</h4>
         <p>Now that we can construct <code>KVStore[_]</code> values we can use our DSL to
         write &quot;programs&quot; using a <em>for-comprehension</em>:</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">def</span><span> </span><span class="declaration-name">program</span><span>: </span><span class="type-name">KVStore</span><span>[</span><span class="type-name">Option</span><span>[</span><span class="type-name">Int</span><span>]] =
@@ -356,7 +366,7 @@
         <p>This looks like a monadic flow. However, it just builds a recursive
         data structure representing the sequence of operations.</p>
         
-        <h4 id="_4-write-a-compiler-for-your-program" class="section">4. Write a compiler for your program<a class="anchor-link right" href="#_4-write-a-compiler-for-your-program"><i class="icofont-laika">&#xef71;</i></a></h4>
+        <h4 id="_4-write-a-compiler-for-your-program" class="section"><a class="anchor-link left" href="#_4-write-a-compiler-for-your-program"><i class="icofont-laika link">&#xef71;</i></a>4. Write a compiler for your program</h4>
         <p>As you may have understood now, <code>Free[_]</code> is used to create an embedded
         DSL. By itself, this DSL only represents a sequence of operations
         (defined by a recursive data structure); it doesn&#39;t produce anything.</p>
@@ -425,7 +435,7 @@
           <li>and so on...</li>
         </ul>
         
-        <h4 id="_5-run-your-program" class="section">5. Run your program<a class="anchor-link right" href="#_5-run-your-program"><i class="icofont-laika">&#xef71;</i></a></h4>
+        <h4 id="_5-run-your-program" class="section"><a class="anchor-link left" href="#_5-run-your-program"><i class="icofont-laika link">&#xef71;</i></a>5. Run your program</h4>
         <p>The final step is naturally running your program after compiling it.</p>
         <p><code>Free[_]</code> is just a recursive structure that can be seen as sequence
         of operations producing other operations. In this way it is similar to
@@ -468,7 +478,7 @@
         stack-safety provides the reliability required to use <code>Free[_]</code> for
         data-intensive tasks, as well as infinite processes such as streams.</p>
         
-        <h4 id="_6-use-a-pure-compiler-optional" class="section">6. Use a pure compiler (optional)<a class="anchor-link right" href="#_6-use-a-pure-compiler-optional"><i class="icofont-laika">&#xef71;</i></a></h4>
+        <h4 id="_6-use-a-pure-compiler-optional" class="section"><a class="anchor-link left" href="#_6-use-a-pure-compiler-optional"><i class="icofont-laika link">&#xef71;</i></a>6. Use a pure compiler (optional)</h4>
         <p>The previous examples used an effectful natural transformation. This
         works, but you might prefer folding your <code>Free</code> in a &quot;purer&quot; way. The
         <a href="state.html">State</a> data structure can be used to keep track of the program
@@ -494,7 +504,7 @@
 //   Some(value = 14)
 // )</span></code></pre>
         
-        <h2 id="composing-free-monads-adts" class="section">Composing Free monads ADTs.<a class="anchor-link right" href="#composing-free-monads-adts"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <h2 id="composing-free-monads-adts" class="section"><a class="anchor-link left" href="#composing-free-monads-adts"><i class="icofont-laika link">&#xef71;</i></a>Composing Free monads ADTs.</h2>
         <p>Real world applications often time combine different algebras.
         The injection type class described by Swierstra in <a href="http://www.staff.science.uu.nl/~swier004/publications/2008-jfp.pdf">Data types à la carte</a>
         lets us compose different algebras in the context of <code>Free</code>.</p>
@@ -573,7 +583,7 @@
 </span><span class="comment">// What&#39;s the kitty&#39;s name?
 // List(snuggles)</span></code></pre>
         
-        <h2 id="for-the-curious-ones-what-is-free-in-theory" class="section">For the curious ones: what is Free in theory?<a class="anchor-link right" href="#for-the-curious-ones-what-is-free-in-theory"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <h2 id="for-the-curious-ones-what-is-free-in-theory" class="section"><a class="anchor-link left" href="#for-the-curious-ones-what-is-free-in-theory"><i class="icofont-laika link">&#xef71;</i></a>For the curious ones: what is Free in theory?</h2>
         <p>Mathematically-speaking, a <em>free monad</em> (at least in the programming
         language context) is a construction that is left adjoint to a
         forgetful functor whose domain is the category of Monads and whose
@@ -636,7 +646,7 @@
         function calls would. This provides the stack-safety we heard about
         earlier, allowing very large <code>Free</code> structures to be evaluated safely.</p>
         
-        <h3 id="for-the-very-curious-ones" class="section">For the very curious ones<a class="anchor-link right" href="#for-the-very-curious-ones"><i class="icofont-laika">&#xef71;</i></a></h3>
+        <h3 id="for-the-very-curious-ones" class="section"><a class="anchor-link left" href="#for-the-very-curious-ones"><i class="icofont-laika link">&#xef71;</i></a>For the very curious ones</h3>
         <p>If you look at implementation in cats, you will see another member of
         the <code>Free[_]</code> ADT:</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">FlatMapped</span><span>[</span><span class="type-name">S</span><span>[</span><span class="identifier">_</span><span>], </span><span class="type-name">B</span><span>, </span><span class="type-name">C</span><span>](</span><span class="identifier">c</span><span>: </span><span class="type-name">Free</span><span>[</span><span class="type-name">S</span><span>, </span><span class="type-name">C</span><span>], </span><span class="identifier">f</span><span>: </span><span class="type-name">C</span><span> =&gt; </span><span class="type-name">Free</span><span>[</span><span class="type-name">S</span><span>, </span><span class="type-name">B</span><span>]) </span><span class="keyword">extends</span><span> </span><span class="type-name">Free</span><span>[</span><span class="type-name">S</span><span>, </span><span class="type-name">B</span><span>]</span></code></pre>
@@ -651,7 +661,7 @@
         &quot;through&quot; the structure will be. With <code>FlatMapped</code>, <code>Free</code> becomes a
         right-associated structure not subject to quadratic complexity.</p>
         
-        <h2 id="freet" class="section">FreeT<a class="anchor-link right" href="#freet"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <h2 id="freet" class="section"><a class="anchor-link left" href="#freet"><i class="icofont-laika link">&#xef71;</i></a>FreeT</h2>
         <p>Often times we want to interleave the syntax tree when building a Free monad
         with some other effect not declared as part of the ADT.
         FreeT solves this problem by allowing us to mix building steps of the AST
@@ -709,7 +719,7 @@
 </span><span class="keyword">import</span><span> </span><span class="type-name">TeletypeOps</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="keyword">val</span><span> </span><span class="identifier">state</span><span> = </span><span class="identifier">program</span><span>.</span><span class="identifier">foldMap</span><span>(</span><span class="identifier">interpreter</span><span>)
-</span><span class="comment">// state: TeletypeState[Unit] = cats.data.IndexedStateT@77b4fbb6
+</span><span class="comment">// state: TeletypeState[Unit] = cats.data.IndexedStateT@3c405187
 </span><span class="keyword">val</span><span> </span><span class="identifier">initialState</span><span> = </span><span class="type-name">Nil</span><span>
 </span><span class="comment">// initialState: Nil.type = List()
 </span><span class="keyword">val</span><span> (</span><span class="identifier">stored</span><span>, </span><span class="identifier">_</span><span>) = </span><span class="identifier">state</span><span>.</span><span class="identifier">run</span><span>(</span><span class="identifier">initialState</span><span>).</span><span class="identifier">value</span><span>
@@ -774,20 +784,20 @@
 }
 
 </span><span class="keyword">val</span><span> </span><span class="identifier">hoisted</span><span> = </span><span class="identifier">opComplete</span><span>.</span><span class="identifier">hoist</span><span>(</span><span class="identifier">optTryLift</span><span>)
-</span><span class="comment">// hoisted: FreeT[Ctx, OptTry[A], Int] = FlatMapped(
+</span><span class="comment">// hoisted: FreeT[Ctx, [A]OptTry[A], Int] = FlatMapped(
 //   a0 = Suspend(
 //     a = OptionT(
 //       value = Success(value = Some(value = Left(value = Action(value = 7))))
 //     )
 //   ),
-//   f0 = scala.Function1$$Lambda$13826/852467124@4e58534b
+//   f0 = scala.Function1$$Lambda$10861/1679243958@5c601f97
 // )
 </span><span class="keyword">val</span><span> </span><span class="identifier">evaluated</span><span> = </span><span class="identifier">hoisted</span><span>.</span><span class="identifier">foldMap</span><span>(</span><span class="identifier">tryInterpreter</span><span>)
 </span><span class="comment">// evaluated: OptTry[Int] = OptionT(value = Success(value = Some(value = 12)))
 </span><span class="keyword">val</span><span> </span><span class="identifier">result</span><span> = </span><span class="identifier">evaluated</span><span>.</span><span class="identifier">value</span><span>
 </span><span class="comment">// result: Try[Option[Int]] = Success(value = Some(value = 12))</span></code></pre>
         
-        <h2 id="future-work-todo" class="section">Future Work (TODO)<a class="anchor-link right" href="#future-work-todo"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <h2 id="future-work-todo" class="section"><a class="anchor-link left" href="#future-work-todo"><i class="icofont-laika link">&#xef71;</i></a>Future Work (TODO)</h2>
         <p>There are many remarkable uses of <code>Free[_]</code>. In the future, we will
         include some here, such as:</p>
         <ul>
@@ -807,19 +817,22 @@
         </ul>
         <p>We will also discuss the <em>Coyoneda Trick</em>.</p>
         
-        <h2 id="credits" class="section">Credits<a class="anchor-link right" href="#credits"><i class="icofont-laika">&#xef71;</i></a></h2>
+        <h2 id="credits" class="section"><a class="anchor-link left" href="#credits"><i class="icofont-laika link">&#xef71;</i></a>Credits</h2>
         <p>This article was written by
         <a href="https://github.com/mandubian">Pascal Voitot</a> and edited by other
         members of the Cats community.</p>
 
-        <hr style="margin-top: 30px"/>
-        <footer style="font-size: 90%; text-align: center">
-          cats is a <a href="https://typelevel.org/">Typelevel</a> project distributed under the <a href="https://opensource.org/licenses/MIT">MIT</a> license.
-        </footer>
+        
+<hr class="footer-rule"/>
+<footer>
+  cats is a <a href="https://typelevel.org/">Typelevel</a> project distributed under the <a href="https://opensource.org/licenses/MIT">MIT</a> license.
+</footer>
+
 
       </main>
 
     </div>
 
   </body>
+
 </html>
