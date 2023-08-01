@@ -368,10 +368,19 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
+        java: [temurin@11]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout current branch (fast)
         uses: actions/checkout@v3
+
+      - name: Setup Java (temurin@11)
+        id: setup-java-temurin-11
+        if: matrix.java == 'temurin@11'
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 11
 
       - uses: coursier/setup-action@v1
         with:
