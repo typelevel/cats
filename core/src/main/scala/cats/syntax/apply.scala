@@ -41,8 +41,6 @@ trait ApplySyntax extends TupleSemigroupalSyntax {
   implicit final def catsSyntaxApplyOps[F[_], A](fa: F[A]): ApplyOps[F, A] =
     new ApplyOps(fa)
 
-  implicit final def catsSyntaxApplyOps2[F[_], A](fa: F[A]): ApplyOps2[F, A] =
-    new ApplyOps2[F, A](fa)
 }
 
 private[syntax] trait ApplySyntaxBinCompat0 {
@@ -138,9 +136,6 @@ final class ApplyOps[F[_], A](private val fa: F[A]) extends AnyVal {
   @deprecated("Use <* or productL instead.", "1.0.0-RC2")
   @inline private[syntax] def forEffect[B](fb: F[B])(implicit F: Apply[F]): F[A] =
     F.productL(fa)(fb)
-}
-
-final class ApplyOps2[F[_], A](private val fa: F[A]) extends AnyVal {
 
   /**
    * @see [[Apply.productR]].
