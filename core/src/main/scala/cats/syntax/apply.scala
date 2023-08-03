@@ -40,7 +40,6 @@ trait ApplySyntax extends TupleSemigroupalSyntax {
 
   implicit final def catsSyntaxApplyOps[F[_], A](fa: F[A]): ApplyOps[F, A] =
     new ApplyOps(fa)
-
 }
 
 private[syntax] trait ApplySyntaxBinCompat0 {
