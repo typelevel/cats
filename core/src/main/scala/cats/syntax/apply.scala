@@ -47,7 +47,7 @@ private[syntax] trait ApplySyntaxBinCompat0 {
     new IfApplyOps[F](fa)
 }
 
-final class ApplyFABOps[F[_], A, B](private val fab: F[A => B]) extends AnyVal with Serializable {
+final class ApplyFABOps[F[_], A, B](private val fab: F[A => B]) extends AnyVal {
 
   /**
    * @see [[Apply.ap]].
