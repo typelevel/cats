@@ -67,7 +67,7 @@ jobs:
 
       - name: sbt update
         if: matrix.java == 'temurin@8' && steps.setup-java-temurin-8.outputs.cache-hit == 'false'
-        run: sbt 'project ${{ matrix.project }}' '++ ${{ matrix.scala }}' reload +update
+        run: sbt +update
 
       - name: Setup Java (temurin@17)
         id: setup-java-temurin-17
@@ -80,7 +80,7 @@ jobs:
 
       - name: sbt update
         if: matrix.java == 'temurin@17' && steps.setup-java-temurin-17.outputs.cache-hit == 'false'
-        run: sbt 'project ${{ matrix.project }}' '++ ${{ matrix.scala }}' reload +update
+        run: sbt +update
 
       - name: Setup Java (graalvm@17)
         id: setup-java-graalvm-17
@@ -93,7 +93,7 @@ jobs:
 
       - name: sbt update
         if: matrix.java == 'graalvm@17' && steps.setup-java-graalvm-17.outputs.cache-hit == 'false'
-        run: sbt 'project ${{ matrix.project }}' '++ ${{ matrix.scala }}' reload +update
+        run: sbt +update
 
       - name: Check that workflows are up to date
         run: sbt githubWorkflowCheck
@@ -162,7 +162,7 @@ jobs:
 
       - name: sbt update
         if: matrix.java == 'temurin@8' && steps.setup-java-temurin-8.outputs.cache-hit == 'false'
-        run: sbt reload +update
+        run: sbt +update
 
       - name: Setup Java (temurin@17)
         id: setup-java-temurin-17
@@ -175,7 +175,7 @@ jobs:
 
       - name: sbt update
         if: matrix.java == 'temurin@17' && steps.setup-java-temurin-17.outputs.cache-hit == 'false'
-        run: sbt reload +update
+        run: sbt +update
 
       - name: Setup Java (graalvm@17)
         id: setup-java-graalvm-17
@@ -188,7 +188,7 @@ jobs:
 
       - name: sbt update
         if: matrix.java == 'graalvm@17' && steps.setup-java-graalvm-17.outputs.cache-hit == 'false'
-        run: sbt reload +update
+        run: sbt +update
 
       - name: Download target directories (2.12, rootJS)
         uses: actions/download-artifact@v3
@@ -329,7 +329,7 @@ jobs:
 
       - name: sbt update
         if: matrix.java == 'temurin@8' && steps.setup-java-temurin-8.outputs.cache-hit == 'false'
-        run: sbt reload +update
+        run: sbt +update
 
       - name: Setup Java (temurin@17)
         id: setup-java-temurin-17
@@ -342,7 +342,7 @@ jobs:
 
       - name: sbt update
         if: matrix.java == 'temurin@17' && steps.setup-java-temurin-17.outputs.cache-hit == 'false'
-        run: sbt reload +update
+        run: sbt +update
 
       - name: Setup Java (graalvm@17)
         id: setup-java-graalvm-17
@@ -355,7 +355,7 @@ jobs:
 
       - name: sbt update
         if: matrix.java == 'graalvm@17' && steps.setup-java-graalvm-17.outputs.cache-hit == 'false'
-        run: sbt reload +update
+        run: sbt +update
 
       - name: Submit Dependencies
         uses: scalacenter/sbt-dependency-submission@v2
@@ -412,7 +412,7 @@ jobs:
 
       - name: sbt update
         if: matrix.java == 'temurin@8' && steps.setup-java-temurin-8.outputs.cache-hit == 'false'
-        run: sbt '++ ${{ matrix.scala }}' reload +update
+        run: sbt +update
 
       - name: Setup Java (temurin@17)
         id: setup-java-temurin-17
@@ -425,7 +425,7 @@ jobs:
 
       - name: sbt update
         if: matrix.java == 'temurin@17' && steps.setup-java-temurin-17.outputs.cache-hit == 'false'
-        run: sbt '++ ${{ matrix.scala }}' reload +update
+        run: sbt +update
 
       - name: Setup Java (graalvm@17)
         id: setup-java-graalvm-17
@@ -438,7 +438,7 @@ jobs:
 
       - name: sbt update
         if: matrix.java == 'graalvm@17' && steps.setup-java-graalvm-17.outputs.cache-hit == 'false'
-        run: sbt '++ ${{ matrix.scala }}' reload +update
+        run: sbt +update
 
       - name: Scalafix tests
         run: |
@@ -469,7 +469,7 @@ jobs:
 
       - name: sbt update
         if: matrix.java == 'temurin@8' && steps.setup-java-temurin-8.outputs.cache-hit == 'false'
-        run: sbt reload +update
+        run: sbt +update
 
       - name: Setup Java (temurin@17)
         id: setup-java-temurin-17
@@ -482,7 +482,7 @@ jobs:
 
       - name: sbt update
         if: matrix.java == 'temurin@17' && steps.setup-java-temurin-17.outputs.cache-hit == 'false'
-        run: sbt reload +update
+        run: sbt +update
 
       - name: Setup Java (graalvm@17)
         id: setup-java-graalvm-17
@@ -495,7 +495,7 @@ jobs:
 
       - name: sbt update
         if: matrix.java == 'graalvm@17' && steps.setup-java-graalvm-17.outputs.cache-hit == 'false'
-        run: sbt reload +update
+        run: sbt +update
 
       - name: Generate site
         run: sbt docs/tlSite
