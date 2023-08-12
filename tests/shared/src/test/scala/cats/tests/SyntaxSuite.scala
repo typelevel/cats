@@ -368,6 +368,8 @@ object SyntaxSuite {
     val f = mock[(A, B, C) => Z]
     val ff = mock[F[(A, B, C) => Z]]
 
+    fa.productR(fb)
+    fa.productL(fb)
     fa *> fb
     fb <* fc
 
@@ -394,6 +396,19 @@ object SyntaxSuite {
 
     thabcde.imapN(f5)(g5)
     (ha, hb, hc, hd, he).imapN(f5)(g5)
+
+    val tfab = mock[F[A => B]]
+    tfab.ap(fa)
+    tfab <*> fa
+
+    val tabcf = mock[F[(A, B) => C]]
+    tabcf.ap2(fa, fb)
+
+    val tabc = mock[(A, B) => C]
+    fa.map2(fb)(tabc)
+
+    val tEvalfb = mock[Eval[F[B]]]
+    fa.map2Eval(tEvalfb)(tabc)
   }
 
   def testBifoldable[F[_, _]: Bifoldable, A, B, C, D: Monoid]: Unit = {
@@ -687,5 +702,13 @@ object SyntaxSuite {
     val f = mock[PartialFunction[A, Option[B]]]
 
     val result: Option[List[B]] = list.traverseCollect(f)
+  }
+
+  def testSemigroupal[F[_]: Semigroupal, A, B]: Unit = {
+    val fa = mock[F[A]]
+    val fb = mock[F[B]]
+
+    fa.product(fb)
+    fa |@| fb
   }
 }
