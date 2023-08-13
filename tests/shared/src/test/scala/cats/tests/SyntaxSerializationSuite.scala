@@ -23,6 +23,7 @@ package cats.tests
 
 import cats.laws.discipline.SerializableTests
 import cats.syntax.either._
+import cats.Semigroupal
 
 /**
  * Test that our syntax implicits are serializable.
@@ -36,7 +37,7 @@ class SyntaxSerializationSuite extends CatsSuite {
   )
 
   checkAll("SemigroupalOps[Option, Int]",
-           SerializableTests.serializable(cats.syntax.all.catsSyntaxSemigroupal[Option, Int](None))
+           SerializableTests.serializable(cats.syntax.all.catsSyntaxSemigroupal[Option, Int](None, Semigroupal[Option]))
   )
 
   checkAll(
