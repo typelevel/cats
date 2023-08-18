@@ -120,11 +120,25 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
       def traverse[G[_], A, B](fa: List[A])(f: A => G[B])(implicit G: Applicative[G]): G[List[B]] =
         if (fa.isEmpty) G.pure(Nil)
         else
-          G.map(Chain.traverseViaChain {
-            val as = collection.mutable.ArrayBuffer[A]()
-            as ++= fa
-            wrapMutableIndexedSeq(as)
-          }(f))(_.toList)
+          G match {
+            case x: StackSafeMonad[G] => traverseDirectly[G, A, B](fa)(f)(x)
+            case _ =>
+              G.map(Chain.traverseViaChain {
+                val as = collection.mutable.ArrayBuffer[A]()
+                as ++= fa
+                wrapMutableIndexedSeq(as)
+              }(f))(_.toList)
+          }
+
+      private def traverseDirectly[G[_], A, B](fa: List[A])(f: A => G[B])(implicit G: StacksafeMonad[G]): G[List[B]] =
+        G.map(fa.foldLeft(G.pure(ListBuffer.empty[B])) { case (accG, a) =>
+          G.flatMap(accG) { acc =>
+            G.map(f(a)) { a =>
+              acc += a
+              acc
+            }
+          }
+        })(_.toList)
 
       /**
        * This avoids making a very deep stack by building a tree instead
