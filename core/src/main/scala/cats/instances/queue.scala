@@ -121,12 +121,16 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
       def traverse[G[_], A, B](fa: Queue[A])(f: A => G[B])(implicit G: Applicative[G]): G[Queue[B]] =
         if (fa.isEmpty) G.pure(Queue.empty[B])
         else
-          G.map(Chain.traverseViaChain {
-            val as = collection.mutable.ArrayBuffer[A]()
-            as ++= fa
-            wrapMutableIndexedSeq(as)
-          }(f)) { chain =>
-            chain.foldLeft(Queue.empty[B])(_ :+ _)
+          G match {
+            case x: StackSafeMonad[G] => Traverse.traverseDirectly(Queue.newBuilder[B])(fa)(f)(x)
+            case _ =>
+              G.map(Chain.traverseViaChain {
+                val as = collection.mutable.ArrayBuffer[A]()
+                as ++= fa
+                wrapMutableIndexedSeq(as)
+              }(f)) { chain =>
+                chain.foldLeft(Queue.empty[B])(_ :+ _)
+              }
           }
 
       override def mapAccumulate[S, A, B](init: S, fa: Queue[A])(f: (S, A) => (S, B)): (S, Queue[B]) =
