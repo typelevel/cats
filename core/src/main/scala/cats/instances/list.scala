@@ -23,6 +23,7 @@ package cats
 package instances
 
 import cats.data.{Chain, Ior, ZipList}
+import cats.StackSafeMonad
 import cats.instances.StaticMethods.appendAll
 import cats.kernel.compat.scalaVersionSpecific._
 import cats.kernel.instances.StaticMethods.wrapMutableIndexedSeq
@@ -121,7 +122,7 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
         if (fa.isEmpty) G.pure(Nil)
         else
           G match {
-            case x: StackSafeMonad[G] => traverseDirectly[G, A, B](fa)(f)(x)
+            case x: StackSafeMonad[G] => Traverse.traverseDirectly[List, G, A, B](ListBuffer.empty[B])(fa)(f)(x)
             case _ =>
               G.map(Chain.traverseViaChain {
                 val as = collection.mutable.ArrayBuffer[A]()
@@ -129,16 +130,6 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
                 wrapMutableIndexedSeq(as)
               }(f))(_.toList)
           }
-
-      private def traverseDirectly[G[_], A, B](fa: List[A])(f: A => G[B])(implicit G: StacksafeMonad[G]): G[List[B]] =
-        G.map(fa.foldLeft(G.pure(ListBuffer.empty[B])) { case (accG, a) =>
-          G.flatMap(accG) { acc =>
-            G.map(f(a)) { a =>
-              acc += a
-              acc
-            }
-          }
-        })(_.toList)
 
       /**
        * This avoids making a very deep stack by building a tree instead
