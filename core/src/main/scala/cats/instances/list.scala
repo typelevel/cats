@@ -315,11 +315,15 @@ private[instances] trait ListInstancesBinCompat0 {
     def traverseFilter[G[_], A, B](fa: List[A])(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[List[B]] =
       if (fa.isEmpty) G.pure(Nil)
       else
-        G.map(Chain.traverseFilterViaChain {
-          val as = collection.mutable.ArrayBuffer[A]()
-          as ++= fa
-          wrapMutableIndexedSeq(as)
-        }(f))(_.toList)
+        G match {
+          case x: StackSafeMonad[G] => TraverseFilter.traverseFilterDirectly(List.newBuilder[B])(fa)(f)(x)
+          case _ =>
+            G.map(Chain.traverseFilterViaChain {
+              val as = collection.mutable.ArrayBuffer[A]()
+              as ++= fa
+              wrapMutableIndexedSeq(as)
+            }(f))(_.toList)
+        }
 
     override def filterA[G[_], A](fa: List[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[List[A]] =
       traverse
