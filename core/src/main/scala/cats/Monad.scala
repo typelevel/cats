@@ -43,14 +43,12 @@ trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
    *
    * Example:
    * {{{
-   * scala> import cats.{Id, Monad}
-   * scala> import cats.data.StateT
+   * scala> import cats.data.State
    * scala> import cats.syntax.all._
-   * scala> val appendStr: StateT[Id, String, Unit] = StateT.modify(_ + "a")
-   * scala> val appendStrAndGet: StateT[Id, String, String] = appendStr *> StateT.get
-   * scala> val (result, agg) = appendStrAndGet.whileM[Vector](StateT.inspect(i => !(i.length >= 5))).run("")
+   * scala> val appendStr = State { i: String  => (i+"a", i)}
+   * scala> val (result, agg) = appendStr.whileM[Vector](State.inspect(i => !(i.length >= 5))).run("").value
    * result: String = aaaaa
-   * agg: Vector[String] = Vector(a, aa, aaa, aaaa, aaaaa)
+   * agg: Vector[String] = Vector("", a, aa, aaa, aaaa)
    * }}}
    */
 
@@ -75,11 +73,10 @@ trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
    *
    * Example:
    * {{{
-   * scala> import cats.{Id, Monad}
-   * scala> import cats.data.StateT
+   * scala> import cats.data.State
    * scala> import cats.syntax.all._
-   * scala> val appendStr: StateT[Id, String, Unit] = StateT.modify(_ + "a")
-   * scala> val (result, _) = appendStr.whileM_(StateT.inspect(i => !(i.length >= 3))).run("")
+   * scala> val appendStr = State { i: String  => (i+"a", i)}
+   * scala> val (result, _) = appendStr.whileM_(State.inspect(i => !(i.length >= 3))).run("").value
    * result: String = aaa
    * }}}
    */
@@ -105,14 +102,12 @@ trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
    *
    * Example:
    * {{{
-   * scala> import cats.{Id, Monad}
-   * scala> import cats.data.StateT
+   * scala> import cats.data.State
    * scala> import cats.syntax.all._
-   * scala> val increment: StateT[Id, Int, Unit] = StateT.modify(_ + 1)
-   * scala> val incrementAndGet: StateT[Id, Int, Int] = increment *> StateT.get
-   * scala> val (result, aggregation) = incrementAndGet.untilM[Vector](StateT.inspect(_ >= 5)).run(-1)
+   * scala> val increment = State { i: Int  => (i+1, i)}
+   * scala> val (result, aggregation) = increment.untilM[Vector](State.inspect(_ >= 5)).run(-1).value
    * result: Int = 5
-   * aggregation: Vector[Int] = Vector(0, 1, 2, 3, 4, 5)
+   * aggregation: Vector[Int] = Vector(-1, 0, 1, 2, 3, 4)
    * }}}
    */
   def untilM[G[_], A](f: F[A])(cond: => F[Boolean])(implicit G: Alternative[G]): F[G[A]] = {
@@ -126,11 +121,10 @@ trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
    * 
    * Example:
    * {{{
-   * scala> import cats.{Id, Monad}
-   * scala> import cats.data.StateT
+   * scala> import cats.data.State
    * scala> import cats.syntax.all._
-   * scala> val increment: StateT[Id, Int, Unit] = StateT.modify(_ + 1)
-   * scala> val (result, _) = increment.untilM_(StateT.inspect(_ >= 5)).run(-1)
+   * scala> val increment = State { i: Int  => (i+1, i)}
+   * scala> val (result, _) = increment.untilM_(State.inspect(_ >= 5)).run(-1).value
    * result: Int = 5
    * }}}
    */
@@ -145,13 +139,12 @@ trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
    * 
    * Example:
    * {{{
-   * scala> import cats.{Id, Monad}
-   * scala> import cats.data.StateT
+   * scala> import cats.data.State
    * scala> import cats.syntax.all._
-   * scala> val increment: StateT[Id, Int, Unit] = StateT.modify(_ + 1)
-   * scala> val incrementAndGet: StateT[Id, Int, Int] = increment *> StateT.get
-   * scala> val (result, _) = incrementAndGet.iterateWhile(_ < 5).run(-1)
-   * result: Int = 5
+   * scala> val increment = State { i: Int  => (i+1, i)}
+   * scala> val (result, agg) = increment.iterateWhile(_ < 5).run(-1).value
+   * result: Int = 6
+   * agg: Int = 5
    * }}}
    */
   def iterateWhile[A](f: F[A])(p: A => Boolean): F[A] =
@@ -165,13 +158,12 @@ trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
    *
    * Example:
    * {{{
-   * scala> import cats.{Id, Monad}
-   * scala> import cats.data.StateT
+   * scala> import cats.data.State
    * scala> import cats.syntax.all._
-   * scala> val increment: StateT[Id, Int, Unit] = StateT.modify(_ + 1)
-   * scala> val incrementAndGet: StateT[Id, Int, Int] = increment *> StateT.get
-   * scala> val (result, _) = incrementAndGet.iterateUntil(_ == 5).run(-1)
-   * result: Int = 5
+   * scala> val increment = State { i: Int  => (i+1, i)}
+   * scala> val (result, agg) = increment.iterateUntil(_ == 5).run(-1).value
+   * result: Int = 6
+   * agg: Int = 5
    * }}}
    */
   def iterateUntil[A](f: F[A])(p: A => Boolean): F[A] =
@@ -185,13 +177,11 @@ trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
    *
    * Example:
    * {{{
-   * scala> import cats.{Id, Monad}
-   * scala> import cats.data.StateT
+   * scala> import cats.data.State
    * scala> import cats.syntax.all._
-   * scala> val increment: StateT[Id, Int, Unit] = StateT.modify(_ + 1)
-   * scala> val incrementAndGet: StateT[Id, Int, Int] = increment *> StateT.get
-   * scala> val (n, sum) = 0.iterateWhileM(s => incrementAndGet.map(_ + s))(_ < 5).run(0)
-   * n: Int = 3
+   * scala> val increment = State { i: Int  => (i+1, i)}
+   * scala> val (n, sum) = 0.iterateWhileM(s => increment.map(_ + s))(_ < 5).run(0).value
+   * n: Int = 4
    * sum: Int = 6
    * }}}
    */
@@ -209,13 +199,11 @@ trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
    *
    * Example:
    * {{{
-   * scala> import cats.{Id, Monad}
-   * scala> import cats.data.StateT
+   * scala> import cats.data.State
    * scala> import cats.syntax.all._
-   * scala> val increment: StateT[Id, Int, Unit] = StateT.modify(_ + 1)
-   * scala> val incrementAndGet: StateT[Id, Int, Int] = increment *> StateT.get
-   * scala> val (n, sum) = 0.iterateUntilM(s => incrementAndGet.map(_ + s))(_ > 5).run(0)
-   * n: Int = 3
+   * scala> val increment = State { i: Int  => (i+1, i)}
+   * scala> val (n, sum) = 0.iterateUntilM(s => increment.map(_ + s))(_ > 5).run(0).value
+   * n: Int = 4
    * sum: Int = 6
    * }}}
    */
