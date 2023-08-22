@@ -303,4 +303,18 @@ object Traverse {
     })(_.result())
   }
 
+  private[cats] def traverse_Directly[G[_], A, B](
+    fa: IterableOnce[A]
+  )(f: A => G[B])(implicit G: StackSafeMonad[G]): G[Unit] = {
+    val iter = fa.iterator
+    if (iter.hasNext) {
+      val first = iter.next()
+      G.map(iter.foldLeft(f(first)) { case (g, a) =>
+        G.flatMap(g) { _ =>
+          f(a)
+        }
+      })(_ => ())
+    } else G.unit
+  }
+
 }
