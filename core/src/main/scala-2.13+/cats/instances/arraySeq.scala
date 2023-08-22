@@ -102,7 +102,13 @@ private[cats] object ArraySeqInstances {
         B.combineAll(fa.iterator.map(f))
 
       def traverse[G[_], A, B](fa: ArraySeq[A])(f: A => G[B])(implicit G: Applicative[G]): G[ArraySeq[B]] =
-        G.map(Chain.traverseViaChain(fa)(f))(_.iterator.to(ArraySeq.untagged))
+        G match {
+          case x: StackSafeMonad[G] =>
+            x.map(Traverse.traverseDirectly(Vector.newBuilder[B])(fa.iterator)(f)(x))(_.to(ArraySeq.untagged))
+          case _ =>
+            G.map(Chain.traverseViaChain(fa)(f))(_.iterator.to(ArraySeq.untagged))
+
+        }
 
       override def mapAccumulate[S, A, B](init: S, fa: ArraySeq[A])(f: (S, A) => (S, B)): (S, ArraySeq[B]) =
         StaticMethods.mapAccumulateFromStrictFunctor(init, fa, f)(this)
