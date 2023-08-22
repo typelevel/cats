@@ -1241,11 +1241,16 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
       def traverse[G[_], A, B](fa: Chain[A])(f: A => G[B])(implicit G: Applicative[G]): G[Chain[B]] =
         if (fa.isEmpty) G.pure(Chain.nil)
         else
-          traverseViaChain {
-            val as = collection.mutable.ArrayBuffer[A]()
-            as ++= fa.iterator
-            KernelStaticMethods.wrapMutableIndexedSeq(as)
-          }(f)
+          G match {
+            case x: StackSafeMonad[G] =>
+              x.map(Traverse.traverseDirectly(List.newBuilder[B])(fa.iterator)(f)(x))(Chain.fromSeq(_))
+            case _ =>
+              traverseViaChain {
+                val as = collection.mutable.ArrayBuffer[A]()
+                as ++= fa.iterator
+                KernelStaticMethods.wrapMutableIndexedSeq(as)
+              }(f)
+          }
 
       override def mapAccumulate[S, A, B](init: S, fa: Chain[A])(f: (S, A) => (S, B)): (S, Chain[B]) =
         StaticMethods.mapAccumulateFromStrictFunctor(init, fa, f)(this)
