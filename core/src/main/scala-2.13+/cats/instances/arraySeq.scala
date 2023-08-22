@@ -220,9 +220,17 @@ private[cats] object ArraySeqInstances {
       def traverseFilter[G[_], A, B](
         fa: ArraySeq[A]
       )(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[ArraySeq[B]] =
-        fa.foldRight(Eval.now(G.pure(ArraySeq.untagged.empty[B]))) { case (x, xse) =>
-          G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o))
-        }.value
+        G match {
+          case x: StackSafeMonad[G] =>
+            x.map(TraverseFilter.traverseFilterDirectly(Vector.newBuilder[B])(fa.iterator)(f)(x))(
+              _.to(ArraySeq.untagged)
+            )
+          case _ =>
+            fa.foldRight(Eval.now(G.pure(ArraySeq.untagged.empty[B]))) { case (x, xse) =>
+              G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o))
+            }.value
+
+        }
 
       override def filterA[G[_], A](fa: ArraySeq[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[ArraySeq[A]] =
         fa.foldRight(Eval.now(G.pure(ArraySeq.untagged.empty[A]))) { case (x, xse) =>

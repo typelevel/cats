@@ -198,7 +198,11 @@ trait SeqInstances extends cats.kernel.instances.SeqInstances {
     override def flattenOption[A](fa: Seq[Option[A]]): Seq[A] = fa.flatten
 
     def traverseFilter[G[_], A, B](fa: Seq[A])(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[Seq[B]] =
-      G.map(Chain.traverseFilterViaChain(fa.toIndexedSeq)(f))(_.toVector)
+      G match {
+        case x: StackSafeMonad[G] => TraverseFilter.traverseFilterDirectly(Seq.newBuilder[B])(fa)(f)(x)
+        case _ =>
+          G.map(Chain.traverseFilterViaChain(fa.toIndexedSeq)(f))(_.toVector)
+      }
 
     override def filterA[G[_], A](fa: Seq[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[Seq[A]] =
       traverse

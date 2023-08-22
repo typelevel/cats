@@ -266,7 +266,11 @@ private[instances] trait VectorInstancesBinCompat0 {
     override def flattenOption[A](fa: Vector[Option[A]]): Vector[A] = fa.flatten
 
     def traverseFilter[G[_], A, B](fa: Vector[A])(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[Vector[B]] =
-      G.map(Chain.traverseFilterViaChain(fa)(f))(_.toVector)
+      G match {
+        case x: StackSafeMonad[G] => TraverseFilter.traverseFilterDirectly(Vector.newBuilder[B])(fa)(f)(x)
+        case _ =>
+          G.map(Chain.traverseFilterViaChain(fa)(f))(_.toVector)
+      }
 
     override def filterA[G[_], A](fa: Vector[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[Vector[A]] =
       traverse

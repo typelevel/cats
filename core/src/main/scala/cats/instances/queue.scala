@@ -227,12 +227,16 @@ private object QueueInstances {
     def traverseFilter[G[_], A, B](fa: Queue[A])(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[Queue[B]] =
       if (fa.isEmpty) G.pure(Queue.empty[B])
       else
-        G.map(Chain.traverseFilterViaChain {
-          val as = collection.mutable.ArrayBuffer[A]()
-          as ++= fa
-          wrapMutableIndexedSeq(as)
-        }(f)) { chain =>
-          chain.foldLeft(Queue.empty[B])(_ :+ _)
+        G match {
+          case x: StackSafeMonad[G] => TraverseFilter.traverseFilterDirectly(Queue.newBuilder[B])(fa)(f)(x)
+          case _ =>
+            G.map(Chain.traverseFilterViaChain {
+              val as = collection.mutable.ArrayBuffer[A]()
+              as ++= fa
+              wrapMutableIndexedSeq(as)
+            }(f)) { chain =>
+              chain.foldLeft(Queue.empty[B])(_ :+ _)
+            }
         }
 
     override def filterA[G[_], A](fa: Queue[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[Queue[A]] =
