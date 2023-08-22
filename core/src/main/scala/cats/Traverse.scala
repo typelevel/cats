@@ -288,7 +288,11 @@ object Traverse {
 
   private[cats] def traverseDirectly[Coll[x] <: IterableOnce[x], G[_], A, B](
     builder: mutable.Builder[B, Coll[B]]
-  )(fa: IterableOnce[A])(f: A => G[B])(implicit G: StackSafeMonad[G]): G[Coll[B]] =
+  )(fa: IterableOnce[A])(f: A => G[B])(implicit G: StackSafeMonad[G]): G[Coll[B]] = {
+    val size = fa.knownSize
+    if (size >= 0) {
+      builder.sizeHint(size)
+    }
     G.map(fa.iterator.foldLeft(G.pure(builder)) { case (accG, a) =>
       G.flatMap(accG) { acc =>
         G.map(f(a)) { a =>
@@ -297,5 +301,6 @@ object Traverse {
         }
       }
     })(_.result())
+  }
 
 }
