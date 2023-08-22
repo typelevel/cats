@@ -1359,11 +1359,16 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
     def traverseFilter[G[_], A, B](fa: Chain[A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Chain[B]] =
       if (fa.isEmpty) G.pure(Chain.nil)
       else
-        traverseFilterViaChain {
-          val as = collection.mutable.ArrayBuffer[A]()
-          as ++= fa.iterator
-          KernelStaticMethods.wrapMutableIndexedSeq(as)
-        }(f)
+        G match {
+          case x: StackSafeMonad[G] =>
+            G.map(TraverseFilter.traverseFilterDirectly(List.newBuilder[B])(fa.iterator)(f)(x))(Chain.fromSeq(_))
+          case _ =>
+            traverseFilterViaChain {
+              val as = collection.mutable.ArrayBuffer[A]()
+              as ++= fa.iterator
+              KernelStaticMethods.wrapMutableIndexedSeq(as)
+            }(f)
+        }
 
     override def filterA[G[_], A](fa: Chain[A])(f: A => G[Boolean])(implicit G: Applicative[G]): G[Chain[A]] =
       traverse
