@@ -110,6 +110,17 @@ private[cats] object ArraySeqInstances {
 
         }
 
+      override def traverse_[G[_], A, B](fa: ArraySeq[A])(f: A => G[B])(implicit G: Applicative[G]): G[Unit] =
+        G match {
+          case x: StackSafeMonad[G] => Traverse.traverse_Directly(fa)(f)(x)
+          case _ =>
+            foldRight(fa, Always(G.pure(()))) { (a, acc) =>
+              G.map2Eval(f(a), acc) { (_, _) =>
+                ()
+              }
+            }.value
+        }
+
       override def mapAccumulate[S, A, B](init: S, fa: ArraySeq[A])(f: (S, A) => (S, B)): (S, ArraySeq[B]) =
         StaticMethods.mapAccumulateFromStrictFunctor(init, fa, f)(this)
 

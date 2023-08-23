@@ -1252,6 +1252,17 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
               }(f)
           }
 
+      override def traverse_[G[_], A, B](fa: Chain[A])(f: A => G[B])(implicit G: Applicative[G]): G[Unit] =
+        G match {
+          case x: StackSafeMonad[G] => Traverse.traverse_Directly(fa.iterator)(f)(x)
+          case _ =>
+            foldRight(fa, Always(G.pure(()))) { (a, acc) =>
+              G.map2Eval(f(a), acc) { (_, _) =>
+                ()
+              }
+            }.value
+        }
+
       override def mapAccumulate[S, A, B](init: S, fa: Chain[A])(f: (S, A) => (S, B)): (S, Chain[B]) =
         StaticMethods.mapAccumulateFromStrictFunctor(init, fa, f)(this)
 

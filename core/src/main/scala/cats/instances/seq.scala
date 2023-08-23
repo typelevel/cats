@@ -134,6 +134,17 @@ trait SeqInstances extends cats.kernel.instances.SeqInstances {
             G.map(Chain.traverseViaChain(fa.toIndexedSeq)(f))(_.toVector)
         }
 
+      override def traverse_[G[_], A, B](fa: Seq[A])(f: A => G[B])(implicit G: Applicative[G]): G[Unit] =
+        G match {
+          case x: StackSafeMonad[G] => Traverse.traverse_Directly(fa)(f)(x)
+          case _ =>
+            foldRight(fa, Always(G.pure(()))) { (a, acc) =>
+              G.map2Eval(f(a), acc) { (_, _) =>
+                ()
+              }
+            }.value
+        }
+
       override def mapWithIndex[A, B](fa: Seq[A])(f: (A, Int) => B): Seq[B] =
         fa.zipWithIndex.map(ai => f(ai._1, ai._2))
 
