@@ -22,6 +22,7 @@
 package cats
 
 import cats.data.State
+import cats.kernel.compat.scalaVersionSpecific._
 
 import scala.collection.immutable.{IntMap, TreeSet}
 import scala.collection.mutable

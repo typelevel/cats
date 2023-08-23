@@ -23,6 +23,7 @@ package cats
 
 import cats.data.State
 import cats.data.StateT
+import cats.kernel.compat.scalaVersionSpecific._
 import cats.StackSafeMonad
 import scala.collection.mutable
 
