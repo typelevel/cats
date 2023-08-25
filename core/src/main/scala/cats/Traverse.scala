@@ -310,11 +310,11 @@ object Traverse {
     val iter = fa.iterator
     if (iter.hasNext) {
       val first = iter.next()
-      G.map(iter.foldLeft(f(first)) { case (g, a) =>
+      G.void(iter.foldLeft(f(first)) { case (g, a) =>
         G.flatMap(g) { _ =>
           f(a)
         }
-      })(_ => ())
+      })
     } else G.unit
   }
 
