@@ -85,19 +85,19 @@ object NonEmptyLazyList extends NonEmptyLazyListInstances {
 
     def #::[B >: A](elem: => B): NonEmptyLazyList[B] =
       create(elem #:: ll)
-    def #:::[B >: A](prefix: => NonEmptyLazyList[B]): NonEmptyLazyList[B] =
-      create(prefix.toLazyList #::: ll)
     def #:::[B >: A](prefix: => LazyList[B]): Maybe[B] =
       new Maybe(() => prefix #::: ll)
+    def #:::[B >: A](prefix: => NonEmptyLazyList[B])(implicit d: DummyImplicit): NonEmptyLazyList[B] =
+      create(prefix.toLazyList #::: ll)
   }
 
   final class Deferrer[A] private[NonEmptyLazyList] (private val nell: () => NonEmptyLazyList[A]) extends AnyVal {
     def #::[B >: A](elem: => B): NonEmptyLazyList[B] =
       create(elem #:: nell().toLazyList)
-    def #:::[B >: A](prefix: => NonEmptyLazyList[B]): NonEmptyLazyList[B] =
-      create(prefix.toLazyList #::: nell().toLazyList)
     def #:::[B >: A](prefix: => LazyList[B]): NonEmptyLazyList[B] =
       create(prefix #::: nell().toLazyList)
+    def #:::[B >: A](prefix: => NonEmptyLazyList[B])(implicit d: DummyImplicit): NonEmptyLazyList[B] =
+      create(prefix.toLazyList #::: nell().toLazyList)
   }
 
   implicit def toDeferrer[A](nell: => NonEmptyLazyList[A]): Deferrer[A] =
@@ -187,7 +187,7 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
   /**
    * Alias for `concatNell`
    */
-  final def ++[AA >: A](nell: => NonEmptyLazyList[AA]): NonEmptyLazyList[AA] =
+  final def ++[AA >: A](nell: => NonEmptyLazyList[AA])(implicit d: DummyImplicit): NonEmptyLazyList[AA] =
     concatNell(nell)
 
   /**
@@ -211,7 +211,7 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
   /**
    * Alias for `appendNell`
    */
-  final def :++[AA >: A](nell: => NonEmptyLazyList[AA]): NonEmptyLazyList[AA] =
+  final def :++[AA >: A](nell: => NonEmptyLazyList[AA])(implicit d: DummyImplicit): NonEmptyLazyList[AA] =
     appendNell(nell)
 
   /**
@@ -235,7 +235,7 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
   /**
    * Alias for `prependNell`
    */
-  final def ++:[AA >: A](nell: => NonEmptyLazyList[AA]): NonEmptyLazyList[AA] =
+  final def ++:[AA >: A](nell: => NonEmptyLazyList[AA])(implicit d: DummyImplicit): NonEmptyLazyList[AA] =
     prependNell(nell)
 
   /**
