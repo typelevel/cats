@@ -74,14 +74,10 @@ object NonEmptyLazyList extends NonEmptyLazyListInstances {
   // allows the creation of fully lazy `NonEmptyLazyList`s by prepending to this
   def maybe[A](ll: => LazyList[A]): Maybe[A] = new Maybe(() => ll)
 
-  final class Maybe[A] private[NonEmptyLazyList] (private[this] var mkLL: () => LazyList[A]) {
+  final class Maybe[A] private[NonEmptyLazyList] (mkLL: () => LazyList[A]) {
     // because instances of this class are created explicitly, they might be
     // reused, and we don't want to re-evaluate `mkLL`
-    private[this] lazy val ll = {
-      val res = mkLL()
-      mkLL = null // allow GC
-      res
-    }
+    private[this] lazy val ll = mkLL()
 
     def #::[B >: A](elem: => B): NonEmptyLazyList[B] =
       create(elem #:: ll)
