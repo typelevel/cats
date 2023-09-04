@@ -87,20 +87,20 @@ object NonEmptyLazyList extends NonEmptyLazyListInstances {
     // reused, and we don't want to re-evaluate `mkLL`
     private[this] lazy val ll = mkLL()
 
-    def #::[B >: A](elem: => B): NonEmptyLazyList[B] =
+    def #::[AA >: A](elem: => AA): NonEmptyLazyList[AA] =
       create(elem #:: ll)
-    def #:::[B >: A](prefix: => LazyList[B]): Maybe[B] =
+    def #:::[AA >: A](prefix: => LazyList[AA]): Maybe[AA] =
       new Maybe(() => prefix #::: ll)
-    def #:::[B >: A](prefix: => NonEmptyLazyList[B])(implicit d: DummyImplicit): NonEmptyLazyList[B] =
+    def #:::[AA >: A](prefix: => NonEmptyLazyList[AA])(implicit d: DummyImplicit): NonEmptyLazyList[AA] =
       create(prefix.toLazyList #::: ll)
   }
 
   final class Deferrer[A] private[NonEmptyLazyList] (private val nell: () => NonEmptyLazyList[A]) extends AnyVal {
-    def #::[B >: A](elem: => B): NonEmptyLazyList[B] =
+    def #::[AA >: A](elem: => AA): NonEmptyLazyList[AA] =
       create(elem #:: nell().toLazyList)
-    def #:::[B >: A](prefix: => LazyList[B]): NonEmptyLazyList[B] =
+    def #:::[AA >: A](prefix: => LazyList[AA]): NonEmptyLazyList[AA] =
       create(prefix #::: nell().toLazyList)
-    def #:::[B >: A](prefix: => NonEmptyLazyList[B])(implicit d: DummyImplicit): NonEmptyLazyList[B] =
+    def #:::[AA >: A](prefix: => NonEmptyLazyList[AA])(implicit d: DummyImplicit): NonEmptyLazyList[AA] =
       create(prefix.toLazyList #::: nell().toLazyList)
   }
 
@@ -155,7 +155,7 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
     prepend(a)
 
   @deprecated("use Deferrer construction instead")
-  final def #::[AA >: A](a: AA): NonEmptyLazyList[AA] =
+  final def #::[AA >: A]()(a: AA): NonEmptyLazyList[AA] =
     prepend(a)
 
   /**
