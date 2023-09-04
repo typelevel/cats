@@ -65,8 +65,16 @@ object NonEmptyLazyList extends NonEmptyLazyListInstances {
   def fromLazyListPrepend[A](a: => A, ll: => LazyList[A]): NonEmptyLazyList[A] =
     create(a #:: ll)
 
+  @deprecated("Use overload with by-name args", "2.11.0")
+  def fromLazyListPrepend[A]()(a: A, ll: LazyList[A]): NonEmptyLazyList[A] =
+    fromLazyListPrepend(a, ll)
+
   def fromLazyListAppend[A](ll: => LazyList[A], a: => A): NonEmptyLazyList[A] =
     create(ll #::: a #:: LazyList.empty)
+
+  @deprecated("Use overload with by-name args", "2.11.0")
+  def fromLazyListAppend[A]()(ll: LazyList[A], a: A): NonEmptyLazyList[A] =
+    fromLazyListAppend(ll, a)
 
   def apply[A](a: => A, as: A*): NonEmptyLazyList[A] =
     create(a #:: LazyList.from(as))
@@ -168,6 +176,10 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
   final def concat[AA >: A](ll: => LazyList[AA]): NonEmptyLazyList[AA] =
     appendLazyList(ll)
 
+  @deprecated("Use overload with by-name args", "2.11.0")
+  final private[data] def concat[AA >: A]()(ll: LazyList[AA]): NonEmptyLazyList[AA] =
+    concat(ll)
+
   /**
    * Alias for `concat`
    */
@@ -180,11 +192,19 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
   final def concatNell[AA >: A](nell: => NonEmptyLazyList[AA]): NonEmptyLazyList[AA] =
     appendNell(nell)
 
+  @deprecated("Use overload with by-name args", "2.11.0")
+  final private[data] def concatNell[AA >: A]()(nell: NonEmptyLazyList[AA]): NonEmptyLazyList[AA] =
+    concatNell(nell)
+
   /**
    * Alias for `concatNell`
    */
   final def ++[AA >: A](nell: => NonEmptyLazyList[AA])(implicit d: DummyImplicit): NonEmptyLazyList[AA] =
     concatNell(nell)
+
+  @deprecated("Use overload with by-name args", "2.11.0")
+  final private[data] def ++[AA >: A]()(ll: NonEmptyLazyList[AA]): NonEmptyLazyList[AA] =
+    ++(ll)
 
   /**
    * Appends the given LazyList
@@ -192,10 +212,18 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
   final def appendLazyList[AA >: A](ll: => LazyList[AA]): NonEmptyLazyList[AA] =
     create(toLazyList #::: ll)
 
+  @deprecated("Use overload with by-name args", "2.11.0")
+  final private[data] def appendLazyList[AA >: A]()(ll: LazyList[AA]): NonEmptyLazyList[AA] =
+    appendLazyList(ll)
+
   /**
    * Alias for `appendLazyList`
    */
   final def :++[AA >: A](ll: => LazyList[AA]): NonEmptyLazyList[AA] =
+    appendLazyList(ll)
+
+  @deprecated("Use overload with by-name args", "2.11.0")
+  final private[data] def :++[AA >: A]()(ll: LazyList[AA]): NonEmptyLazyList[AA] =
     appendLazyList(ll)
 
   /**
@@ -210,11 +238,19 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
   final def :++[AA >: A](nell: => NonEmptyLazyList[AA])(implicit d: DummyImplicit): NonEmptyLazyList[AA] =
     appendNell(nell)
 
+  @deprecated("Use overload with by-name args", "2.11.0")
+  final private[data] def ++:[AA >: A]()(ll: NonEmptyLazyList[AA]): NonEmptyLazyList[AA] =
+    ++:(ll)
+
   /**
    * Prepends the given LazyList
    */
   final def prependLazyList[AA >: A](ll: => LazyList[AA]): NonEmptyLazyList[AA] =
     create(ll #::: toLazyList)
+
+  @deprecated("Use overload with by-name args", "2.11.0")
+  final private[data] def prependLazyList[AA >: A]()(ll: LazyList[AA]): NonEmptyLazyList[AA] =
+    prependLazyList(ll)
 
   /**
    * Alias for `prependLazyList`
@@ -227,6 +263,10 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
    */
   final def prependNell[AA >: A](nell: => NonEmptyLazyList[AA]): NonEmptyLazyList[AA] =
     create(nell.toLazyList #::: toLazyList)
+
+  @deprecated("Use overload with by-name args", "2.11.0")
+  final private[data] def prependNell[AA >: A]()(nell: NonEmptyLazyList[AA]): NonEmptyLazyList[AA] =
+    prependNell(nell)
 
   /**
    * Alias for `prependNell`
