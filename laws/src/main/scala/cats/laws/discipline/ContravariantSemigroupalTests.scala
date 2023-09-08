@@ -26,7 +26,8 @@ package discipline
 import cats.ContravariantSemigroupal
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import org.scalacheck.{Arbitrary, Cogen}
-import org.scalacheck.Prop._
+import org.scalacheck.Prop.*
+import org.typelevel.discipline.Laws
 
 trait ContravariantSemigroupalTests[F[_]] extends ContravariantTests[F] with SemigroupalTests[F] {
   def laws: ContravariantSemigroupalLaws[F]
@@ -47,7 +48,7 @@ trait ContravariantSemigroupalTests[F[_]] extends ContravariantTests[F] with Sem
     new RuleSet {
       val name = "contravariantSemigroupal"
       val parents = Seq(contravariant[A, B, C], semigroupal[A, B, C])
-      val bases = Seq.empty
+      val bases: Seq[(String, Laws#RuleSet)] = Seq.empty
       val props = Seq(
         "contravariantSemigroupal contramap2 delta associates" ->
           forAll(laws.contravariantSemigroupalContramap2DiagonalAssociates[A] _)

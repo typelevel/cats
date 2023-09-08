@@ -909,7 +909,9 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
 @suppressUnusedImportWarningForScalaVersionSpecific
 object Chain extends ChainInstances with ChainCompanionCompat {
 
-  private val sentinel: Function1[Any, Any] = new scala.runtime.AbstractFunction1[Any, Any] { def apply(a: Any) = this }
+  private val sentinel: Function1[Any, Any] = new scala.runtime.AbstractFunction1[Any, Any] {
+    def apply(a: Any): Any = this
+  }
 
   sealed abstract private[data] class NonEmpty[A] extends Chain[A]
 

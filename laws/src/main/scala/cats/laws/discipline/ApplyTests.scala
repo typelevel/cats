@@ -25,7 +25,8 @@ package discipline
 
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import org.scalacheck.{Arbitrary, Cogen, Prop}
-import Prop._
+import Prop.*
+import org.typelevel.discipline.Laws
 
 trait ApplyTests[F[_]] extends FunctorTests[F] with SemigroupalTests[F] {
   def laws: ApplyLaws[F]
@@ -47,7 +48,7 @@ trait ApplyTests[F[_]] extends FunctorTests[F] with SemigroupalTests[F] {
     new RuleSet {
       val name = "apply"
       val parents = Seq(functor[A, B, C], semigroupal[A, B, C])
-      val bases = Seq.empty
+      val bases: Seq[(String, Laws#RuleSet)] = Seq.empty
       val props = Seq(
         "apply composition" -> forAll(laws.applyComposition[A, B, C] _),
         "map2/product-map consistency" -> forAll(laws.map2ProductConsistency[A, B, C] _),
