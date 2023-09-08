@@ -26,7 +26,8 @@ package discipline
 import cats.ContravariantMonoidal
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import org.scalacheck.{Arbitrary, Cogen}
-import org.scalacheck.Prop._
+import org.scalacheck.Prop.*
+import org.typelevel.discipline.Laws
 
 trait ContravariantMonoidalTests[F[_]] extends ContravariantSemigroupalTests[F] {
   def laws: ContravariantMonoidalLaws[F]
@@ -47,7 +48,7 @@ trait ContravariantMonoidalTests[F[_]] extends ContravariantSemigroupalTests[F] 
     new RuleSet {
       val name = "contravariantMonoidal"
       val parents = Seq(contravariantSemigroupal[A, B, C])
-      val bases = Seq.empty
+      val bases: Seq[(String, Laws#RuleSet)] = Seq.empty
       val props = Seq(
         "contravariantMonoidal right unit" ->
           forAll(laws.contravariantMonoidalUnitRight[A] _),

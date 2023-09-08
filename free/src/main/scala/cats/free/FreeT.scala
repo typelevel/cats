@@ -275,7 +275,7 @@ sealed abstract private[free] class FreeTInstances extends FreeTInstances0 {
     E: MonadError[M, E]
   ): MonadError[FreeT[S, M, *], E] =
     new MonadError[FreeT[S, M, *], E] with FreeTMonad[S, M] {
-      override def M = E
+      override def M: Applicative[M] = E
       override def handleErrorWith[A](fa: FreeT[S, M, A])(f: E => FreeT[S, M, A]) =
         FreeT.liftT[S, M, FreeT[S, M, A]](E.handleErrorWith(fa.toM)(f.andThen(_.toM)))(M).flatMap(identity)
       override def raiseError[A](e: E) =
@@ -294,7 +294,7 @@ sealed abstract private[free] class FreeTInstances extends FreeTInstances0 {
     S: Functor[S]
   ): MonadError[FreeT[S, M, *], E] =
     new MonadError[FreeT[S, M, *], E] with FreeTMonad[S, M] {
-      override def M = E
+      override def M: Applicative[M] = E
 
       private[this] val RealDefer = catsDeferForFreeT[S, M]
 
@@ -362,8 +362,8 @@ sealed abstract private[free] class FreeTInstances1 extends FreeTInstances2 {
 sealed abstract private[free] class FreeTInstances2 extends FreeTInstances3 {
   implicit def catsFreeAlternativeForFreeT[S[_], M[_]: Alternative: Monad]: Alternative[FreeT[S, M, *]] =
     new Alternative[FreeT[S, M, *]] with FreeTMonad[S, M] with FreeTMonoidK[S, M] {
-      override def M = Alternative[M]
-      override def M1 = Alternative[M]
+      override def M: Applicative[M] = Alternative[M]
+      override def M1: MonoidK[M] = Alternative[M]
     }
 }
 

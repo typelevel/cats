@@ -947,7 +947,9 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
 }
 
 object Foldable {
-  private val sentinel: Function1[Any, Any] = new scala.runtime.AbstractFunction1[Any, Any] { def apply(a: Any) = this }
+  private val sentinel: Function1[Any, Any] = new scala.runtime.AbstractFunction1[Any, Any] {
+    def apply(a: Any): Any = this
+  }
 
   def iterateRight[A, B](iterable: Iterable[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = {
     def loop(it: Iterator[A]): Eval[B] =
@@ -979,12 +981,12 @@ object Foldable {
 
   private[cats] object Source {
     val Empty: Source[Nothing] = new Source[Nothing] {
-      def uncons = None
+      def uncons: Option[(Nothing, Eval[Source[Nothing]])] = None
     }
 
     def cons[A](a: A, src: Eval[Source[A]]): Source[A] =
       new Source[A] {
-        def uncons = Some((a, src))
+        def uncons: Option[(A, Eval[Source[A]])] = Some((a, src))
       }
 
     def fromFoldable[F[_], A](fa: F[A])(implicit F: Foldable[F]): Source[A] =

@@ -102,7 +102,7 @@ object BoundedEnumerableLaws {
     new BoundedEnumerableLaws[A] {
       val B: LowerBounded[A] with UpperBounded[A] = ev
       val E = ev.order
-      val N = ev
-      val P = ev
+      val N: PartialNext[A] = ev
+      val P: PartialPrevious[A] = ev
     }
 }

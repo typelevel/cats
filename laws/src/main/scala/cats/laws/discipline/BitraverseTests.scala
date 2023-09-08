@@ -25,6 +25,7 @@ package discipline
 
 import org.scalacheck.{Arbitrary, Cogen}
 import org.scalacheck.Prop.forAll
+import org.typelevel.discipline.Laws
 
 trait BitraverseTests[F[_, _]] extends BifoldableTests[F] with BifunctorTests[F] {
   def laws: BitraverseLaws[F]
@@ -59,7 +60,7 @@ trait BitraverseTests[F[_, _]] extends BifoldableTests[F] with BifunctorTests[F]
     new RuleSet {
       val name = "bitraverse"
       val parents = Seq(bifoldable[A, B, C], bifunctor[A, B, C, D, E, H])
-      val bases = Seq.empty
+      val bases: Seq[(String, Laws#RuleSet)] = Seq.empty
       val props = Seq(
         "bitraverse identity" -> forAll(laws.bitraverseIdentity[A, B] _),
         "bitraverse composition" -> forAll(laws.bitraverseCompose[G, A, B, C, D, E, H] _)
