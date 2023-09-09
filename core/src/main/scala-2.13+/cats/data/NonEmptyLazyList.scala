@@ -49,9 +49,11 @@ object NonEmptyLazyList extends NonEmptyLazyListInstances {
   def fromLazyList[A](as: LazyList[A]): Option[NonEmptyLazyList[A]] =
     if (as.nonEmpty) Some(create(as)) else None
 
-  def fromLazyListUnsafe[A](ll: LazyList[A]): NonEmptyLazyList[A] =
-    if (ll.nonEmpty) create(ll)
-    else throw new IllegalArgumentException("Cannot create NonEmptyLazyList from empty LazyList")
+  def fromLazyListUnsafe[A](ll: LazyList[A]): NonEmptyLazyList[A] = {
+    @inline def ex = new IllegalArgumentException("Cannot create NonEmptyLazyList from empty LazyList")
+    if (ll.knownSize == 0) throw ex
+    else create({ if (ll.isEmpty) throw ex else ll } #::: LazyList.empty)
+  }
 
   def fromNonEmptyList[A](as: NonEmptyList[A]): NonEmptyLazyList[A] =
     create(LazyList.from(as.toList))
