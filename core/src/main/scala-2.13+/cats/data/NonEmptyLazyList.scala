@@ -112,6 +112,7 @@ object NonEmptyLazyList extends NonEmptyLazyListInstances {
   }
 
   final class Deferrer[A] private[NonEmptyLazyList] (private val nell: () => NonEmptyLazyList[A]) extends AnyVal {
+
     /** Prepends a single element. */
     def #::[AA >: A](elem: => AA): NonEmptyLazyList[AA] =
       create(elem #:: nell().toLazyList)
