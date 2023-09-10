@@ -52,7 +52,7 @@ object NonEmptyLazyList extends NonEmptyLazyListInstances {
   def fromLazyListUnsafe[A](ll: LazyList[A]): NonEmptyLazyList[A] = {
     @inline def ex = new IllegalArgumentException("Cannot create NonEmptyLazyList from empty LazyList")
     if (ll.knownSize == 0) throw ex
-    else create({ if (ll.isEmpty) throw ex else ll } #::: LazyList.empty)
+    else create(LazyList.empty #::: { if (ll.isEmpty) throw ex else ll })
   }
 
   def fromNonEmptyList[A](as: NonEmptyList[A]): NonEmptyLazyList[A] =
@@ -72,7 +72,7 @@ object NonEmptyLazyList extends NonEmptyLazyListInstances {
     fromLazyListPrepend(a, ll)
 
   def fromLazyListAppend[A](ll: => LazyList[A], a: => A): NonEmptyLazyList[A] =
-    create(ll #::: a #:: LazyList.empty)
+    create(LazyList.empty #::: ll #::: a #:: LazyList.empty)
 
   @deprecated("Use overload with by-name args", "2.11.0")
   def fromLazyListAppend[A]()(ll: LazyList[A], a: A): NonEmptyLazyList[A] =
@@ -86,17 +86,14 @@ object NonEmptyLazyList extends NonEmptyLazyListInstances {
    * elements or `NonEmptyLazyList`s can be prepended to it to construct a
    * result that is guaranteed not to be empty without evaluating any elements.
    */
-  def maybe[A](ll: => LazyList[A]): Maybe[A] = new Maybe(() => ll)
+  def maybe[A](ll: => LazyList[A]): Maybe[A] = new Maybe(LazyList.empty #::: ll)
 
   /**
    * Wrapper around a `LazyList` that may or may not be empty so that individual
    * elements or `NonEmptyLazyList`s can be prepended to it to construct a
    * result that is guaranteed not to be empty without evaluating any elements.
    */
-  final class Maybe[A] private[NonEmptyLazyList] (mkLL: () => LazyList[A]) {
-    // because instances of this class are created explicitly, they might be
-    // reused, and we don't want to re-evaluate `mkLL`
-    private[this] lazy val ll = mkLL()
+  final class Maybe[A] private[NonEmptyLazyList] (private val ll: LazyList[A]) extends AnyVal {
 
     /** Prepends a single element, yielding a `NonEmptyLazyList`. */
     def #::[AA >: A](elem: => AA): NonEmptyLazyList[AA] =
@@ -104,11 +101,11 @@ object NonEmptyLazyList extends NonEmptyLazyListInstances {
 
     /** Prepends a `LazyList`, yielding another [[Maybe]]. */
     def #:::[AA >: A](prefix: => LazyList[AA]): Maybe[AA] =
-      new Maybe(() => prefix #::: ll)
+      new Maybe(LazyList.empty #::: prefix #::: ll)
 
     /** Prepends a `NonEmptyLazyList`, yielding a `NonEmptyLazyList`. */
     def #:::[AA >: A](prefix: => NonEmptyLazyList[AA])(implicit d: DummyImplicit): NonEmptyLazyList[AA] =
-      create(prefix.toLazyList #::: ll)
+      create(LazyList.empty #::: prefix.toLazyList #::: ll)
   }
 
   final class Deferrer[A] private[NonEmptyLazyList] (private val nell: () => NonEmptyLazyList[A]) extends AnyVal {
@@ -119,11 +116,11 @@ object NonEmptyLazyList extends NonEmptyLazyListInstances {
 
     /** Prepends a `LazyList`. */
     def #:::[AA >: A](prefix: => LazyList[AA]): NonEmptyLazyList[AA] =
-      create(prefix #::: nell().toLazyList)
+      create(LazyList.empty #::: prefix #::: nell().toLazyList)
 
     /** Prepends a `NonEmptyLazyList`. */
     def #:::[AA >: A](prefix: => NonEmptyLazyList[AA])(implicit d: DummyImplicit): NonEmptyLazyList[AA] =
-      create(prefix.toLazyList #::: nell().toLazyList)
+      create(LazyList.empty #::: prefix.toLazyList #::: nell().toLazyList)
   }
 
   implicit def toDeferrer[A](nell: => NonEmptyLazyList[A]): Deferrer[A] =
@@ -268,7 +265,7 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
    * Prepends the given LazyList
    */
   final def prependLazyList[AA >: A](ll: => LazyList[AA]): NonEmptyLazyList[AA] =
-    create(ll #::: toLazyList)
+    create(LazyList.empty #::: ll #::: toLazyList)
 
   @deprecated("Use overload with by-name args", "2.11.0")
   final private[data] def prependLazyList[AA >: A]()(ll: LazyList[AA]): NonEmptyLazyList[AA] =
@@ -284,7 +281,7 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
    * Prepends the given NonEmptyLazyList
    */
   final def prependNell[AA >: A](nell: => NonEmptyLazyList[AA]): NonEmptyLazyList[AA] =
-    create(nell.toLazyList #::: toLazyList)
+    create(LazyList.empty #::: nell.toLazyList #::: toLazyList)
 
   @deprecated("Use overload with by-name args", "2.11.0")
   final private[data] def prependNell[AA >: A]()(nell: NonEmptyLazyList[AA]): NonEmptyLazyList[AA] =
