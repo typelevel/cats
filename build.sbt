@@ -15,7 +15,7 @@ val GraalVM = JavaSpec.graalvm("17")
 ThisBuild / githubWorkflowJavaVersions := Seq(PrimaryJava, LTSJava, GraalVM)
 
 val Scala212 = "2.12.18"
-val Scala213 = "2.13.11"
+val Scala213 = "2.13.12"
 val Scala3 = "3.3.1"
 
 ThisBuild / crossScalaVersions := Seq(Scala212, Scala213, Scala3)
@@ -166,8 +166,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .settings(macroSettings)
   .settings(Compile / sourceGenerators += (Compile / sourceManaged).map(Boilerplate.gen).taskValue)
   .settings(
-    libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % Test,
-    Compile / doc / scalacOptions ~= { _.filterNot(_.startsWith("-W")) } // weird bug
+    libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % Test
   )
   .settings(testingDependencies)
   .jsSettings(commonJsSettings)
@@ -246,7 +245,6 @@ lazy val unidocs = project
                                                              alleycatsLaws.jvm,
                                                              testkit.jvm
     ),
-    scalacOptions ~= { _.filterNot(_.startsWith("-W")) }, // weird nsc bug
     ScalaUnidoc / unidoc / scalacOptions ++= Seq("-groups", "-diagrams")
   )
 
