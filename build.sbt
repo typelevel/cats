@@ -245,7 +245,6 @@ lazy val unidocs = project
                                                              alleycatsLaws.jvm,
                                                              testkit.jvm
     ),
-    scalacOptions ~= { _.filterNot(_.startsWith("-W")) }, // weird nsc bug
     ScalaUnidoc / unidoc / scalacOptions ++= Seq("-groups", "-diagrams")
   )
 
