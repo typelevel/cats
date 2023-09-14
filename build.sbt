@@ -6,7 +6,7 @@ val disciplineVersion = "1.5.1"
 
 val disciplineMunitVersion = "2.0.0-M3"
 
-val munitVersion = "1.0.0-M8"
+val munitVersion = "1.0.0-M9"
 
 val PrimaryJava = JavaSpec.temurin("8")
 val LTSJava = JavaSpec.temurin("17")
