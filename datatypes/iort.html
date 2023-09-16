@@ -60,8 +60,10 @@
   
   <link rel="stylesheet" type="text/css" href="../helium/icofont.min.css" />
     <link rel="stylesheet" type="text/css" href="../helium/laika-helium.css" />
+  
   <script src="../helium/laika-helium.js"></script>
     <script src="../js/sponsors.js"></script>
+  
   
   
   <script> /* for avoiding page load transitions */ </script>
@@ -384,13 +386,15 @@
 // )</span></code></pre>
         <p>Looking back at the implementation of <code>parseStreet</code> the return type could be
         <code>Either[Logs, String]</code> instead. Thinking of situations like this, where not all
-        the types match, <code>IorT</code> provides factory methods of <code>IorT[F, A, B]</code> from:
-        * <code>A</code>, <code>B</code> or both
-        * <code>F[A]</code>, <code>F[B]</code> or both
-        * <code>Ior[A, B]</code> or <code>F[Ior[A, B]]</code>
-        * <code>Either[A, B]</code> or <code>F[Either[A, B]]</code>
-        * <code>Option[B]</code> or <code>F[Option[B]]</code>
-        * A <code>Boolean</code> test</p>
+        the types match, <code>IorT</code> provides factory methods of <code>IorT[F, A, B]</code> from:</p>
+        <ul>
+          <li><code>A</code>, <code>B</code> or both</li>
+          <li><code>F[A]</code>, <code>F[B]</code> or both</li>
+          <li><code>Ior[A, B]</code> or <code>F[Ior[A, B]]</code></li>
+          <li><code>Either[A, B]</code> or <code>F[Either[A, B]]</code></li>
+          <li><code>Option[B]</code> or <code>F[Option[B]]</code></li>
+          <li>A <code>Boolean</code> test</li>
+        </ul>
         
         <h2 id="from-a-and-or-b-to-iort-f-a-b" class="section"><a class="anchor-link left" href="#from-a-and-or-b-to-iort-f-a-b"><i class="icofont-laika link">&#xef71;</i></a>From <code>A</code> and/or <code>B</code> to <code>IorT[F, A, B]</code></h2>
         <p>To obtain a left version of <code>IorT</code> when given an <code>A</code> use <code>IorT.leftT</code>. When

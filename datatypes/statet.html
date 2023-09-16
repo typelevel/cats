@@ -60,8 +60,10 @@
   
   <link rel="stylesheet" type="text/css" href="../helium/icofont.min.css" />
     <link rel="stylesheet" type="text/css" href="../helium/laika-helium.css" />
+  
   <script src="../helium/laika-helium.js"></script>
     <script src="../js/sponsors.js"></script>
+  
   
   
   <script> /* for avoiding page load transitions */ </script>
@@ -274,14 +276,16 @@
 
 </span><span class="keyword">type</span><span> </span><span class="type-name">ThrowableOr</span><span>[</span><span class="type-name">A</span><span>] = </span><span class="type-name">Either</span><span>[</span><span class="type-name">Throwable</span><span>, </span><span class="type-name">A</span><span>]</span></code></pre>
         <p>We will use an <code>Either[Throwable, A]</code> to model either success <code>Right(a)</code> or failure <code>Left(ex)</code>.</p>
-        <p>Now, we need to implement/define:
-        - The type representing the reservation.
-        - The type representing the state of the Table Reservation System. It
-          will wrap around a collection of Reservations.
-        - An initial state, that will be just empty (no reservations).
-        - A custom <code>Throwable</code> to be used in case of an error.
-        - The logic for the booking insertion. We can take advantage of the
-        method <code>modifyF</code> later on to apply it to the system state.</p>
+        <p>Now, we need to implement/define:</p>
+        <ul>
+          <li>The type representing the reservation.</li>
+          <li>The type representing the state of the Table Reservation System. It
+          will wrap around a collection of Reservations.</li>
+          <li>An initial state, that will be just empty (no reservations).</li>
+          <li>A custom <code>Throwable</code> to be used in case of an error.</li>
+          <li>The logic for the booking insertion. We can take advantage of the
+          method <code>modifyF</code> later on to apply it to the system state.</li>
+        </ul>
         <p>In addition, we can implement a simple function that will evaluate a
         <code>NonEmptyList</code> of reservations, inserting them one by one.</p>
         <pre><code class="nohighlight"><span class="keyword">object</span><span> </span><span class="type-name">TableReservationSystem</span><span> {

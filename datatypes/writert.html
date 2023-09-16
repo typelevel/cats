@@ -60,8 +60,10 @@
   
   <link rel="stylesheet" type="text/css" href="../helium/icofont.min.css" />
     <link rel="stylesheet" type="text/css" href="../helium/laika-helium.css" />
+  
   <script src="../helium/laika-helium.js"></script>
     <script src="../js/sponsors.js"></script>
+  
   
   
   <script> /* for avoiding page load transitions */ </script>
@@ -354,10 +356,12 @@ V)]</code>. Speaking technically, it is a monad transformer for <a href="writer.
 // )</span></code></pre>
         <p><code>liftF[F[_], L, V](fv: F[V])(implicit monoidL: Monoid[L], F: Applicative[F]): WriterT[F, L, V]</code>
         :  This function allows you to build the datatype starting from the
-        value <code>V</code> wrapped into an <code>F</code>. Notice how it requires:
-        * <a href="../typeclasses/monoid.html"><code>Monoid[L]</code></a>, since it uses the <code>empty</code> value from the typeclass.
-        to fill the <code>L</code> value not specified in the input.
-        * <a href="../typeclasses/applicative.html"><code>Applicative[F]</code></a> to modify the inner value.</p>
+        value <code>V</code> wrapped into an <code>F</code>. Notice how it requires:</p>
+        <ul>
+          <li><a href="../typeclasses/monoid.html"><code>Monoid[L]</code></a>, since it uses the <code>empty</code> value from the typeclass.
+          to fill the <code>L</code> value not specified in the input.</li>
+          <li><a href="../typeclasses/applicative.html"><code>Applicative[F]</code></a> to modify the inner value.</li>
+        </ul>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">instances</span><span>.</span><span class="identifier">option</span><span>.</span><span class="identifier">_</span><span>
 
   </span><span class="keyword">val</span><span> </span><span class="identifier">value</span><span> : </span><span class="type-name">Option</span><span>[</span><span class="type-name">Int</span><span>] = </span><span class="type-name">Some</span><span>(</span><span class="number-literal">123</span><span>)

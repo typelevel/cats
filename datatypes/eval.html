@@ -60,8 +60,10 @@
   
   <link rel="stylesheet" type="text/css" href="../helium/icofont.min.css" />
     <link rel="stylesheet" type="text/css" href="../helium/laika-helium.css" />
+  
   <script src="../helium/laika-helium.js"></script>
     <script src="../js/sponsors.js"></script>
+  
   
   
   <script> /* for avoiding page load transitions */ </script>
@@ -258,7 +260,7 @@
   </span><span class="identifier">println</span><span>(</span><span class="string-literal">&quot;Running expensive calculation...&quot;</span><span>)
   </span><span class="number-literal">1</span><span> + </span><span class="number-literal">2</span><span> * </span><span class="number-literal">3</span><span>
 }
-</span><span class="comment">// lazyEval: Eval[Int] = cats.Later@7910d470
+</span><span class="comment">// lazyEval: Eval[Int] = cats.Later@39c7f885
 </span><span>
 </span><span class="identifier">lazyEval</span><span>.</span><span class="identifier">value</span><span>
 </span><span class="comment">// Running expensive calculation...
@@ -277,7 +279,7 @@
   </span><span class="identifier">println</span><span>(</span><span class="string-literal">&quot;Running expensive calculation...&quot;</span><span>)
   </span><span class="number-literal">1</span><span> + </span><span class="number-literal">2</span><span> * </span><span class="number-literal">3</span><span>
 }
-</span><span class="comment">// always: Eval[Int] = cats.Always@3206fa5a
+</span><span class="comment">// always: Eval[Int] = cats.Always@1985011
 </span><span>
 </span><span class="identifier">always</span><span>.</span><span class="identifier">value</span><span>
 </span><span class="comment">// Running expensive calculation...

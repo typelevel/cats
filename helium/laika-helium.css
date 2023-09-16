@@ -425,6 +425,16 @@ p.title {
   page-break-inside: avoid;
 }
 
+/* mermaid diagrams ==================== */
+
+pre.mermaid {
+  color: var(--bg-color); /* avoiding page load flicker */
+  background-color: var(--bg-color);
+  border: 1px solid var(--primary-medium);
+  text-align: center;
+}
+
+
 
 
 /* top navigation bar =========================================== */
@@ -613,6 +623,10 @@ header .row.links .row.links {
   font-weight: normal;
 }
 
+.nav-list li a code {
+  color: var(--primary-color); /* ensures that code is the same colour as the rest of the text, for consistency */
+}
+
 /* left navigation bar =========================================== */
 
 #sidebar {
@@ -754,8 +768,10 @@ ul.nav-list, #page-nav ul {
 }
 
 .nav-list .active a,
+.nav-list .active code,
 .nav-list .active a:hover,
 #page-nav .header a,
+#page-nav .header code,
 #page-nav .header a:hover {
   color: var(--bg-color);
   background-color: var(--primary-color);
@@ -802,6 +818,7 @@ ul.nav-list, #page-nav ul {
 .icofont-laika {
   font-size: 1.75em;
 }
+
 
 pre {
   display: block;

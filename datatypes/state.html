@@ -60,8 +60,10 @@
   
   <link rel="stylesheet" type="text/css" href="../helium/icofont.min.css" />
     <link rel="stylesheet" type="text/css" href="../helium/laika-helium.css" />
+  
   <script src="../helium/laika-helium.js"></script>
     <script src="../js/sponsors.js"></script>
+  
   
   
   <script> /* for avoiding page load transitions */ </script>
@@ -280,7 +282,7 @@
 //   model = &quot;borg&quot;
 // )</span></code></pre>
         <p>But now the output of our program has changed! We used to have a replicant robot named Catherine, but now we have a borg robot named Carlos. It might not have been obvious, but the <code>nextBoolean</code> calls we were making had the side effect of mutating internal RNG state, and we were depending on that behavior.</p>
-        <p>When we can&#39;t freely refactor identical code into a common variable, the code becomes harder to reason about. In functional programming lingo, one might say that such code lacks <a href="https://en.wikipedia.org/wiki/Referential_transparency_(computer_science">referential transparency</a>).</p>
+        <p>When we can&#39;t freely refactor identical code into a common variable, the code becomes harder to reason about. In functional programming lingo, one might say that such code lacks <a href="https://en.wikipedia.org/wiki/Referential_transparency_(computer_science)">referential transparency</a>.</p>
         
         <h2 id="purely-functional-pseudorandom-values" class="section"><a class="anchor-link left" href="#purely-functional-pseudorandom-values"><i class="icofont-laika link">&#xef71;</i></a>Purely functional pseudorandom values</h2>
         <p>Since mutating state caused us trouble, let&#39;s create an RNG that is immutable.</p>
@@ -475,7 +477,7 @@
   </span><span class="identifier">_</span><span> &lt;- </span><span class="identifier">close</span><span>
   </span><span class="identifier">_</span><span> &lt;- </span><span class="identifier">open</span><span>
 } </span><span class="keyword">yield</span><span> ()
-</span><span class="comment">// valid: IndexedStateT[Eval, Closed.type, Open.type, Unit] = cats.data.IndexedStateT@7238857</span></code></pre>
+</span><span class="comment">// valid: IndexedStateT[Eval, Closed.type, Open.type, Unit] = cats.data.IndexedStateT@5f94547</span></code></pre>
         <p>Note that the inferred type of <code>valid</code> correctly models that this computation can be executed only with an initial <code>Closed</code> state.</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">valid</span><span>.</span><span class="identifier">run</span><span>(</span><span class="type-name">Open</span><span>)
 </span><span class="comment">// error: type mismatch;
@@ -484,7 +486,7 @@
 // valid.run(Open)
 //           ^^^^</span></code></pre>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">valid</span><span>.</span><span class="identifier">run</span><span>(</span><span class="type-name">Closed</span><span>)
-</span><span class="comment">// res6: Eval[(Open.type, Unit)] = cats.Eval$$anon$1@61c3c2c</span></code></pre>
+</span><span class="comment">// res6: Eval[(Open.type, Unit)] = cats.Eval$$anon$1@61cd19d9</span></code></pre>
 
         
 <hr class="footer-rule"/>
