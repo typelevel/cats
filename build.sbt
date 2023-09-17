@@ -284,8 +284,8 @@ lazy val docs = project
       laikaConfig.value.withRawContent
         .withConfigValue("version", mdocVariables.value("VERSION"))
         .withConfigValue(
-          LinkConfig(apiLinks =
-            List(
+          LinkConfig.empty
+            .addApiLinks(
               ApiLinks(
                 baseUri = s"https://www.javadoc.io/doc/org.typelevel/cats-docs_2.13/${mdocVariables.value("VERSION")}/"
               ),
@@ -294,7 +294,6 @@ lazy val docs = project
                 packagePrefix = "scala"
               )
             )
-          )
         )
     },
     libraryDependencies ++= Seq(
