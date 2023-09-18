@@ -85,6 +85,11 @@ object NonEmptyLazyList extends NonEmptyLazyListInstances {
    * Wraps a `LazyList` to be used as the tail of a `NonEmptyLazyList`,
    * so that individual elements or `NonEmptyLazyList`s can be prepended to it
    * to construct a non-empty result without evaluating any elements.
+   * 
+   * @example
+   * {{{
+   *   val nell: NonEmptyLazyList[Int] = 4 #:: NonEmptyLazyList.tail(LazyList.from(5))
+   * }}}
    */
   def tail[A](ll: => LazyList[A]): Tail[A] = new Tail(LazyList.empty #::: ll)
 
@@ -92,6 +97,11 @@ object NonEmptyLazyList extends NonEmptyLazyListInstances {
    * A wrapped empty `LazyList` to be used as the tail of a `NonEmptyLazyList`,
    * so that individual elements or `NonEmptyLazyList`s can be prepended to it
    * to construct a non-empty result without evaluating any elements.
+   *
+   * @example
+   * {{{
+   *   val nell: NonEmptyLazyList[Int] = 4 #:: NonEmptyLazyList.emptyTail
+   * }}}
    */
   def emptyTail[A]: Tail[A] = new Tail(LazyList.empty)
 
@@ -107,7 +117,7 @@ object NonEmptyLazyList extends NonEmptyLazyListInstances {
       create(elem #:: ll)
 
     /** Prepends a `NonEmptyLazyList`, yielding a `NonEmptyLazyList`. */
-    def #:::[AA >: A](prefix: => NonEmptyLazyList[AA])(implicit d: DummyImplicit): NonEmptyLazyList[AA] =
+    def #:::[AA >: A](prefix: => NonEmptyLazyList[AA]): NonEmptyLazyList[AA] =
       create(LazyList.empty #::: prefix.toLazyList #::: ll)
   }
 
