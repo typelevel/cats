@@ -82,26 +82,29 @@ object NonEmptyLazyList extends NonEmptyLazyListInstances {
     create(a #:: LazyList.from(as))
 
   /**
-   * Wraps a `LazyList` that may or may not be empty so that individual
-   * elements or `NonEmptyLazyList`s can be prepended to it to construct a
-   * result that is guaranteed not to be empty without evaluating any elements.
+   * Wraps a `LazyList` to be used as the tail of a `NonEmptyLazyList`,
+   * so that individual elements or `NonEmptyLazyList`s can be prepended to it
+   * to construct a non-empty result without evaluating any elements.
    */
-  def maybe[A](ll: => LazyList[A]): Maybe[A] = new Maybe(LazyList.empty #::: ll)
+  def tail[A](ll: => LazyList[A]): Tail[A] = new Tail(LazyList.empty #::: ll)
 
   /**
-   * Wrapper around a `LazyList` that may or may not be empty so that individual
-   * elements or `NonEmptyLazyList`s can be prepended to it to construct a
-   * result that is guaranteed not to be empty without evaluating any elements.
+   * A wrapped empty `LazyList` to be used as the tail of a `NonEmptyLazyList`,
+   * so that individual elements or `NonEmptyLazyList`s can be prepended to it
+   * to construct a non-empty result without evaluating any elements.
    */
-  final class Maybe[A] private[NonEmptyLazyList] (private val ll: LazyList[A]) extends AnyVal {
+  def emptyTail[A]: Tail[A] = new Tail(LazyList.empty)
+
+  /**
+   * Wrapper around a `LazyList` to be used as the tail of a `NonEmptyLazyList`,
+   * so that individual elements or `NonEmptyLazyList`s can be prepended to it
+   * to construct a non-empty result without evaluating any elements.
+   */
+  final class Tail[A] private[NonEmptyLazyList] (private val ll: LazyList[A]) extends AnyVal {
 
     /** Prepends a single element, yielding a `NonEmptyLazyList`. */
     def #::[AA >: A](elem: => AA): NonEmptyLazyList[AA] =
       create(elem #:: ll)
-
-    /** Prepends a `LazyList`, yielding another [[Maybe]]. */
-    def #:::[AA >: A](prefix: => LazyList[AA]): Maybe[AA] =
-      new Maybe(LazyList.empty #::: prefix #::: ll)
 
     /** Prepends a `NonEmptyLazyList`, yielding a `NonEmptyLazyList`. */
     def #:::[AA >: A](prefix: => NonEmptyLazyList[AA])(implicit d: DummyImplicit): NonEmptyLazyList[AA] =
