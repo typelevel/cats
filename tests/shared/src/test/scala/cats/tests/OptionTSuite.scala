@@ -421,6 +421,21 @@ class OptionTSuite extends CatsSuite {
     }
   }
 
+  test("OptionT.unlessM[Id, A] consistent with Option.unless") {
+    // Option.unless is inlined here because it is not available before Scala 2.13
+    def unless[A]: (Boolean, A) => Option[A] = (c: Boolean, a: A) => if (!c) Some(a) else None
+
+    forAll { (i: Int, b: Boolean) =>
+      assert(OptionT.unlessM[Id, Int](b)(i).value === (unless(b, i)))
+    }
+  }
+
+  test("OptionT.unlessF and OptionT.unlessM consistent") {
+    forAll { (li: List[Int], bs: List[Boolean]) =>
+      assert(bs.flatMap(OptionT.unlessF(_)(li).value) === OptionT.unlessM(bs)(li).value)
+    }
+  }
+
   test("OptionT.unlessK and OptionT.unlessF consistent") {
     forAll { (li: List[Int], b: Boolean) =>
       assert(IdT(li).mapK(OptionT.unlessK(b)).value === (OptionT.unlessF(b)(li)))
