@@ -1,6 +1,8 @@
 {% laika.title = Resources for Learners %}
 
-# Books
+# Resources for Learners
+
+## Books
  * [Functional Programming in Scala](https://www.manning.com/books/functional-programming-in-scala)
    by Paul Chiusano and Rúnar Bjarnason - While this book does not
    specifically cover Cats, it is a great introduction to functional
@@ -12,18 +14,21 @@
    as a way to structure program design, and to explain how these 
    concepts are implemented in Cats.
 
-# Tutorials
+## Courses
+ * [Scala with Cats course](https://rockthejvm.com/p/cats/) by Daniel Ciocîrlan of [Rock the JVM](https://rockthejvm.com/) - This course is specifically designed for Cats and explores all the major data types and type classes from Cats in detail with practice exercises. It has all the required theory for understanding the mental model of Cats, it's pragmatic and focused on code with realistic scenarios.
+
+## Tutorials
  * [herding cats](http://eed3si9n.com/herding-cats/) by Eugene Yokota
  * [Scala Exercises](https://www.scala-exercises.org/cats) by 47 Degrees 
    offers multiple online exercises to learn about the type classes and 
    datatypes included in Cats.
 
-# Example Projects
+## Example Projects
  * [Scala Pet Store](https://github.com/pauljamescleary/scala-pet-store) 
    Demonstrates FP techniques while maintaining approachability for people with an OO background. Uses tagless final for the core domain, and popular Typelevel libraries including Cats, Http4s, Circe and Doobie.
    
    
-# Videos
+## Videos
  * [Functional Structures in Scala](https://www.youtube.com/playlist?list=PLFrwDVdSrYE6dy14XCmUtRAJuhCxuzJp0) 
    by [Michael Pilquist](https://github.com/MPilquist) offers a series
    of lectures about basic functional structures. 
@@ -39,6 +44,6 @@
 * [Easy and efficient data validation with Cats](https://www.youtube.com/watch?v=P8nGAo3Jp-Q) by [Daniela Sfregola](https://danielasfregola.com/)  this talk introduces Cats, and some of its most interesting components for data validation. In particular, we’ll discuss some options to achieve efficient and expressive data validation. We will also argue that, compared to other options in the language, Cats is particularly suited for the task thanks to its easy-to-use data types and more approachable syntax.
 * [Cats by example](https://www.youtube.com/playlist?list=PLy4hTMY6erDBmvZiEDjtCTP8XCdhaXc2c) by [Thomas Höfer](https://twitter.com/TomTriple) provides a beginner series on various datatypes from Cats. 
 
-# Social network
+## Social network
 * [@impurepics](https://twitter.com/impurepics) regularly tweet informative and kawaii educational pieces about Cats and FP in Scala.  
    
