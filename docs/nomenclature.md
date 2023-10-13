@@ -206,7 +206,7 @@ For convenience, in these types we use the symbol `OT` to abbreviate `OptionT`.
 | `OT[F, A] => (A => Option[B]) => OT[F, B]` | `mapFilter` | `F: Functor`
 | `OT[F, A] => B => (A => B) => F[B]` | `fold` or `cata`
 | `OT[F, A] => (A => OT[F, B]) => OT[F,B]` | `flatMap`
-| `OT[F, A] => (A => F[Option[B]]) => F[B]` | `flatMapF`  | `F: Monad` |
+| `OT[F, A] => (A => F[Option[B]]) => OT[F,B]` | `flatMapF`  | `F: Monad` |
 | `OT[F, A] => A => F[A]` | `getOrElse` | `F: Functor`  |
 | `OT[F, A] => F[A] => F[A]` | `getOrElseF` | `F: Monad`  |
 | `OT[F, A] => OT[F, A] => OT[F, A]` |
