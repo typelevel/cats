@@ -279,20 +279,15 @@ lazy val docs = project
     mdocVariables += ("API_LINK_BASE" -> s"https://www.javadoc.io/doc/org.typelevel/cats-docs_2.13/${mdocVariables
         .value("VERSION")}/"),
     laikaConfig := {
-      import laika.rewrite.link._
+      import laika.config._
 
       laikaConfig.value.withRawContent
         .withConfigValue("version", mdocVariables.value("VERSION"))
         .withConfigValue(
           LinkConfig.empty
             .addApiLinks(
-              ApiLinks(
-                baseUri = s"https://www.javadoc.io/doc/org.typelevel/cats-docs_2.13/${mdocVariables.value("VERSION")}/"
-              ),
-              ApiLinks(
-                baseUri = s"https://www.scala-lang.org/api/$Scala213/",
-                packagePrefix = "scala"
-              )
+              ApiLinks(s"https://www.javadoc.io/doc/org.typelevel/cats-docs_2.13/${mdocVariables.value("VERSION")}/"),
+              ApiLinks(s"https://www.scala-lang.org/api/$Scala213/").withPackagePrefix("scala")
             )
         )
     },
