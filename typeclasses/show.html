@@ -58,12 +58,9 @@
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira+Mono:500">
   
-  <link rel="stylesheet" type="text/css" href="../helium/icofont.min.css" />
-    <link rel="stylesheet" type="text/css" href="../helium/laika-helium.css" />
-  
-  <script src="../helium/laika-helium.js"></script>
-    <script src="../js/sponsors.js"></script>
-  
+  <link rel="stylesheet" type="text/css" href="../helium/site/icofont.min.css" />
+    <link rel="stylesheet" type="text/css" href="../helium/site/laika-helium.css" />
+  <script src="../helium/site/laika-helium.js"></script>
   
   
   <script> /* for avoiding page load transitions */ </script>
@@ -232,7 +229,7 @@
         Most often, this is unwanted behaviour, as the standard implementation of <code>toString</code> on non case classes is mostly gibberish.
         Consider the following example:</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span>(</span><span class="keyword">new</span><span> {}).</span><span class="identifier">toString</span><span>
-</span><span class="comment">// res0: String = &quot;repl.MdocSession$MdocApp$$anon$1@19bb6d36&quot;</span></code></pre>
+</span><span class="comment">// res0: String = &quot;repl.MdocSession$MdocApp$$anon$1@720145ae&quot;</span></code></pre>
         <p>The fact that this code compiles is a design flaw of the Java API.
         We want to make things like this impossible, by offering the <code>toString</code> equivalent as a type class, instead of the root of the class hierarchy.
         In short, <code>Show</code> allows us to only have String-conversions defined for the data types we actually want.</p>
@@ -248,12 +245,12 @@
 </span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Person</span><span>(</span><span class="identifier">name</span><span>: </span><span class="type-name">String</span><span>, </span><span class="identifier">age</span><span>: </span><span class="type-name">Int</span><span>)
 
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">showPerson</span><span>: </span><span class="type-name">Show</span><span>[</span><span class="type-name">Person</span><span>] = </span><span class="type-name">Show</span><span>.</span><span class="identifier">show</span><span>(</span><span class="identifier">person</span><span> =&gt; </span><span class="identifier">person</span><span>.</span><span class="identifier">name</span><span>)
-</span><span class="comment">// showPerson: Show[Person] = cats.Show$$$Lambda$11571/1249727449@5b914326
+</span><span class="comment">// showPerson: Show[Person] = cats.Show$$$Lambda$11589/1580443736@2e9e41c0
 </span><span>
 </span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Department</span><span>(</span><span class="identifier">id</span><span>: </span><span class="type-name">Int</span><span>, </span><span class="identifier">name</span><span>: </span><span class="type-name">String</span><span>)
 
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">showDep</span><span>: </span><span class="type-name">Show</span><span>[</span><span class="type-name">Department</span><span>] = </span><span class="type-name">Show</span><span>.</span><span class="identifier">fromToString</span><span>
-</span><span class="comment">// showDep: Show[Department] = cats.Show$$$Lambda$10646/281547092@9ffc81b</span></code></pre>
+</span><span class="comment">// showDep: Show[Department] = cats.Show$$$Lambda$10658/1865207435@714f4b5</span></code></pre>
         <p>This still may not seem useful to you, because case classes already automatically implement <code>toString</code>, while <code>show</code> would have to be implemented manually for each case class.
         Thankfully with the help of a small library called <a href="https://github.com/typelevel/kittens">kittens</a> a lot of type class instances including <code>Show</code> can be derived automatically!</p>
         <p>Cats also offers <code>Show</code> syntax to make working with it easier.

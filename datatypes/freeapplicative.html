@@ -58,12 +58,9 @@
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira+Mono:500">
   
-  <link rel="stylesheet" type="text/css" href="../helium/icofont.min.css" />
-    <link rel="stylesheet" type="text/css" href="../helium/laika-helium.css" />
-  
-  <script src="../helium/laika-helium.js"></script>
-    <script src="../js/sponsors.js"></script>
-  
+  <link rel="stylesheet" type="text/css" href="../helium/site/icofont.min.css" />
+    <link rel="stylesheet" type="text/css" href="../helium/site/laika-helium.css" />
+  <script src="../helium/site/laika-helium.js"></script>
   
   
   <script> /* for avoiding page load transitions */ </script>
@@ -278,7 +275,7 @@
     }
 }</span></code></pre>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">validator</span><span> = </span><span class="identifier">prog</span><span>.</span><span class="identifier">foldMap</span><span>[</span><span class="type-name">FromString</span><span>](</span><span class="identifier">compiler</span><span>)
-</span><span class="comment">// validator: FromString[Boolean] = cats.instances.Function1Instances$$anon$7$$Lambda$10807/1537738971@73d0b8fb
+</span><span class="comment">// validator: FromString[Boolean] = cats.instances.Function1Instances$$anon$7$$Lambda$10819/665533245@188258dd
 </span><span class="identifier">validator</span><span>(</span><span class="string-literal">&quot;1234&quot;</span><span>)
 </span><span class="comment">// res0: Boolean = false
 </span><span class="identifier">validator</span><span>(</span><span class="string-literal">&quot;12345&quot;</span><span>)

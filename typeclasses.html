@@ -58,12 +58,9 @@
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira+Mono:500">
   
-  <link rel="stylesheet" type="text/css" href="helium/icofont.min.css" />
-    <link rel="stylesheet" type="text/css" href="helium/laika-helium.css" />
-  
-  <script src="helium/laika-helium.js"></script>
-    <script src="js/sponsors.js"></script>
-  
+  <link rel="stylesheet" type="text/css" href="helium/site/icofont.min.css" />
+    <link rel="stylesheet" type="text/css" href="helium/site/laika-helium.css" />
+  <script src="helium/site/laika-helium.js"></script>
   
   
   <script> /* for avoiding page load transitions */ </script>
@@ -404,174 +401,174 @@ combine(x, id) = combine(id, x) = x</code></pre>
           <thead>
             <tr>
               <th>Type</th>
-              <th class="align-center">Functor</th>
-              <th class="align-center">Apply</th>
-              <th class="align-center">Applicative</th>
-              <th class="align-center">Monad</th>
-              <th class="align-center">MonoidK</th>
-              <th class="align-center">ApplicativeError</th>
-              <th class="align-center">MonadError</th>
-              <th class="align-center">CoflatMap</th>
-              <th class="align-center">Comonad</th>
-              <th class="align-center">Bimonad</th>
+              <th>Functor</th>
+              <th>Apply</th>
+              <th>Applicative</th>
+              <th>Monad</th>
+              <th>MonoidK</th>
+              <th>ApplicativeError</th>
+              <th>MonadError</th>
+              <th>CoflatMap</th>
+              <th>Comonad</th>
+              <th>Bimonad</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td><code>Id[A]</code></td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✗</td>
-              <td class="align-center">✗</td>
-              <td class="align-center">✗</td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✔</td>
+              <td>✔</td>
+              <td>✔</td>
+              <td>✔</td>
+              <td>✔</td>
+              <td>✗</td>
+              <td>✗</td>
+              <td>✗</td>
+              <td>✔</td>
+              <td>✔</td>
+              <td>✔</td>
             </tr>
             <tr>
               <td><code>Eval[A]</code></td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✗</td>
-              <td class="align-center">✗</td>
-              <td class="align-center">✗</td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✔</td>
+              <td>✔</td>
+              <td>✔</td>
+              <td>✔</td>
+              <td>✔</td>
+              <td>✗</td>
+              <td>✗</td>
+              <td>✗</td>
+              <td>✔</td>
+              <td>✔</td>
+              <td>✔</td>
             </tr>
             <tr>
               <td><code>Option[A]</code></td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✗</td>
-              <td class="align-center">✗</td>
+              <td>✔</td>
+              <td>✔</td>
+              <td>✔</td>
+              <td>✔</td>
+              <td>✔</td>
+              <td>✔</td>
+              <td>✔</td>
+              <td>✔</td>
+              <td>✗</td>
+              <td>✗</td>
             </tr>
             <tr>
               <td><code>Const[K, A]</code></td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✔ (<code>K:Monoid</code>)</td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✗</td>
-              <td class="align-center">✗</td>
-              <td class="align-center">✗</td>
-              <td class="align-center">✗</td>
-              <td class="align-center">✗</td>
-              <td class="align-center">✗</td>
-              <td class="align-center">✗</td>
+              <td>✔</td>
+              <td>✔ (<code>K:Monoid</code>)</td>
+              <td>✔</td>
+              <td>✗</td>
+              <td>✗</td>
+              <td>✗</td>
+              <td>✗</td>
+              <td>✗</td>
+              <td>✗</td>
+              <td>✗</td>
             </tr>
             <tr>
               <td><code>Either[E, A]</code></td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✗</td>
-              <td class="align-center">✗</td>
-              <td class="align-center">✗</td>
+              <td>✔</td>
+              <td>✔</td>
+              <td>✔</td>
+              <td>✔</td>
+              <td>✔</td>
+              <td>✔</td>
+              <td>✔</td>
+              <td>✗</td>
+              <td>✗</td>
+              <td>✗</td>
             </tr>
             <tr>
               <td><code>List[A]</code></td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✗</td>
-              <td class="align-center">✗</td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✗</td>
-              <td class="align-center">✗</td>
+              <td>✔</td>
+              <td>✔</td>
+              <td>✔</td>
+              <td>✔</td>
+              <td>✔</td>
+              <td>✗</td>
+              <td>✗</td>
+              <td>✔</td>
+              <td>✗</td>
+              <td>✗</td>
             </tr>
             <tr>
               <td><code>NonEmptyList[A]</code></td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✗</td>
-              <td class="align-center">✗</td>
-              <td class="align-center">✗</td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✔</td>
+              <td>✔</td>
+              <td>✔</td>
+              <td>✔</td>
+              <td>✔</td>
+              <td>✗</td>
+              <td>✗</td>
+              <td>✗</td>
+              <td>✔</td>
+              <td>✔</td>
+              <td>✔</td>
             </tr>
             <tr>
               <td><code>Stream[A]</code></td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✗</td>
-              <td class="align-center">✗</td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✗</td>
-              <td class="align-center">✗</td>
+              <td>✔</td>
+              <td>✔</td>
+              <td>✔</td>
+              <td>✔</td>
+              <td>✔</td>
+              <td>✗</td>
+              <td>✗</td>
+              <td>✔</td>
+              <td>✗</td>
+              <td>✗</td>
             </tr>
             <tr>
               <td><code>Map[K, A]</code></td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✗</td>
-              <td class="align-center">✗</td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✗</td>
-              <td class="align-center">✗</td>
-              <td class="align-center">✗</td>
-              <td class="align-center">✗</td>
-              <td class="align-center">✗</td>
+              <td>✔</td>
+              <td>✔</td>
+              <td>✗</td>
+              <td>✗</td>
+              <td>✔</td>
+              <td>✗</td>
+              <td>✗</td>
+              <td>✗</td>
+              <td>✗</td>
+              <td>✗</td>
             </tr>
             <tr>
               <td><code>Validated[E, A]</code></td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✔ (<code>E: Semigroup</code>)</td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✗</td>
-              <td class="align-center">✗</td>
-              <td class="align-center">✔ (<code>E: Semigroup</code>)</td>
-              <td class="align-center">✗</td>
-              <td class="align-center">✗</td>
-              <td class="align-center">✗</td>
-              <td class="align-center">✗</td>
+              <td>✔</td>
+              <td>✔ (<code>E: Semigroup</code>)</td>
+              <td>✔</td>
+              <td>✗</td>
+              <td>✗</td>
+              <td>✔ (<code>E: Semigroup</code>)</td>
+              <td>✗</td>
+              <td>✗</td>
+              <td>✗</td>
+              <td>✗</td>
             </tr>
             <tr>
               <td><code>Reader[E, A]</code></td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✗</td>
-              <td class="align-center">✗</td>
-              <td class="align-center">✗</td>
-              <td class="align-center">✗</td>
-              <td class="align-center">✗</td>
-              <td class="align-center">✗</td>
+              <td>✔</td>
+              <td>✔</td>
+              <td>✔</td>
+              <td>✔</td>
+              <td>✗</td>
+              <td>✗</td>
+              <td>✗</td>
+              <td>✗</td>
+              <td>✗</td>
+              <td>✗</td>
             </tr>
             <tr>
               <td><code>Writer[E, A]</code></td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✔ (<code>E:Monoid</code>)</td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✗</td>
-              <td class="align-center">✗</td>
-              <td class="align-center">✗</td>
-              <td class="align-center">✔</td>
-              <td class="align-center">✗</td>
-              <td class="align-center">✗</td>
+              <td>✔</td>
+              <td>✔ (<code>E:Monoid</code>)</td>
+              <td>✔</td>
+              <td>✔</td>
+              <td>✗</td>
+              <td>✗</td>
+              <td>✗</td>
+              <td>✔</td>
+              <td>✗</td>
+              <td>✗</td>
             </tr>
           </tbody>
         </table>

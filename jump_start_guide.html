@@ -58,12 +58,9 @@
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira+Mono:500">
   
-  <link rel="stylesheet" type="text/css" href="helium/icofont.min.css" />
-    <link rel="stylesheet" type="text/css" href="helium/laika-helium.css" />
-  
-  <script src="helium/laika-helium.js"></script>
-    <script src="js/sponsors.js"></script>
-  
+  <link rel="stylesheet" type="text/css" href="helium/site/icofont.min.css" />
+    <link rel="stylesheet" type="text/css" href="helium/site/laika-helium.css" />
+  <script src="helium/site/laika-helium.js"></script>
   
   
   <script> /* for avoiding page load transitions */ </script>
@@ -404,31 +401,31 @@
         <table>
           <thead>
             <tr>
-              <th class="align-center">Method</th>
-              <th class="align-center">Takes</th>
-              <th class="align-center">Returns</th>
+              <th>Method</th>
+              <th>Takes</th>
+              <th>Returns</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td class="align-center"><code>OptionT.apply</code> or <code>OptionT(...)</code></td>
-              <td class="align-center"><code>F[Option[A]]</code></td>
-              <td class="align-center"><code>OptionT[F, A]</code></td>
+              <td><code>OptionT.apply</code> or <code>OptionT(...)</code></td>
+              <td><code>F[Option[A]]</code></td>
+              <td><code>OptionT[F, A]</code></td>
             </tr>
             <tr>
-              <td class="align-center"><code>OptionT.fromOption</code></td>
-              <td class="align-center"><code>Option[A]</code></td>
-              <td class="align-center"><code>OptionT[F, A]</code></td>
+              <td><code>OptionT.fromOption</code></td>
+              <td><code>Option[A]</code></td>
+              <td><code>OptionT[F, A]</code></td>
             </tr>
             <tr>
-              <td class="align-center"><code>OptionT.liftF</code></td>
-              <td class="align-center"><code>F[A]</code></td>
-              <td class="align-center"><code>OptionT[F, A]</code></td>
+              <td><code>OptionT.liftF</code></td>
+              <td><code>F[A]</code></td>
+              <td><code>OptionT[F, A]</code></td>
             </tr>
             <tr>
-              <td class="align-center"><code>OptionT.pure</code></td>
-              <td class="align-center"><code>A</code></td>
-              <td class="align-center"><code>OptionT[F, A]</code></td>
+              <td><code>OptionT.pure</code></td>
+              <td><code>A</code></td>
+              <td><code>OptionT[F, A]</code></td>
             </tr>
           </tbody>
         </table>
@@ -440,36 +437,36 @@
         <table>
           <thead>
             <tr>
-              <th class="align-center">Method</th>
-              <th class="align-center">Takes</th>
-              <th class="align-center">Returns</th>
+              <th>Method</th>
+              <th>Takes</th>
+              <th>Returns</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td class="align-center"><code>map[B]</code></td>
-              <td class="align-center"><code>A =&gt; B</code></td>
-              <td class="align-center"><code>OptionT[F, B]</code></td>
+              <td><code>map[B]</code></td>
+              <td><code>A =&gt; B</code></td>
+              <td><code>OptionT[F, B]</code></td>
             </tr>
             <tr>
-              <td class="align-center"><code>subflatMap[B]</code></td>
-              <td class="align-center"><code>A =&gt; Option[B]</code></td>
-              <td class="align-center"><code>OptionT[F, B]</code></td>
+              <td><code>subflatMap[B]</code></td>
+              <td><code>A =&gt; Option[B]</code></td>
+              <td><code>OptionT[F, B]</code></td>
             </tr>
             <tr>
-              <td class="align-center"><code>semiflatMap[B]</code></td>
-              <td class="align-center"><code>A =&gt; F[B]</code></td>
-              <td class="align-center"><code>OptionT[F, B]</code></td>
+              <td><code>semiflatMap[B]</code></td>
+              <td><code>A =&gt; F[B]</code></td>
+              <td><code>OptionT[F, B]</code></td>
             </tr>
             <tr>
-              <td class="align-center"><code>flatMapF[B]</code></td>
-              <td class="align-center"><code>A =&gt; F[Option[B]]</code></td>
-              <td class="align-center"><code>OptionT[F, B]</code></td>
+              <td><code>flatMapF[B]</code></td>
+              <td><code>A =&gt; F[Option[B]]</code></td>
+              <td><code>OptionT[F, B]</code></td>
             </tr>
             <tr>
-              <td class="align-center"><code>flatMap[B]</code></td>
-              <td class="align-center"><code>A =&gt; OptionT[F, B]</code></td>
-              <td class="align-center"><code>OptionT[F, B]</code></td>
+              <td><code>flatMap[B]</code></td>
+              <td><code>A =&gt; OptionT[F, B]</code></td>
+              <td><code>OptionT[F, B]</code></td>
             </tr>
           </tbody>
         </table>
@@ -499,36 +496,36 @@
         <table>
           <thead>
             <tr>
-              <th class="align-center">Method</th>
-              <th class="align-center">Takes</th>
-              <th class="align-center">Returns</th>
+              <th>Method</th>
+              <th>Takes</th>
+              <th>Returns</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td class="align-center"><code>EitherT.apply</code> or <code>EitherT(...)</code></td>
-              <td class="align-center"><code>F[Either[A, B]]</code></td>
-              <td class="align-center"><code>EitherT[F, A, B]</code></td>
+              <td><code>EitherT.apply</code> or <code>EitherT(...)</code></td>
+              <td><code>F[Either[A, B]]</code></td>
+              <td><code>EitherT[F, A, B]</code></td>
             </tr>
             <tr>
-              <td class="align-center"><code>EitherT.fromEither</code></td>
-              <td class="align-center"><code>Either[A, B]</code></td>
-              <td class="align-center"><code>EitherT[F, A, B]</code> (wraps the provided <code>Either</code> value into <code>F</code>)</td>
+              <td><code>EitherT.fromEither</code></td>
+              <td><code>Either[A, B]</code></td>
+              <td><code>EitherT[F, A, B]</code> (wraps the provided <code>Either</code> value into <code>F</code>)</td>
             </tr>
             <tr>
-              <td class="align-center"><code>EitherT.right</code> or <code>EitherT.liftF</code></td>
-              <td class="align-center"><code>F[B]</code></td>
-              <td class="align-center"><code>EitherT[F, A, B]</code> (wraps value inside <code>F[B]</code> into <code>Right</code>)</td>
+              <td><code>EitherT.right</code> or <code>EitherT.liftF</code></td>
+              <td><code>F[B]</code></td>
+              <td><code>EitherT[F, A, B]</code> (wraps value inside <code>F[B]</code> into <code>Right</code>)</td>
             </tr>
             <tr>
-              <td class="align-center"><code>EitherT.left</code></td>
-              <td class="align-center"><code>F[A]</code></td>
-              <td class="align-center"><code>EitherT[F, A, B]</code> (wraps value inside <code>F[B]</code> into <code>Left</code>)</td>
+              <td><code>EitherT.left</code></td>
+              <td><code>F[A]</code></td>
+              <td><code>EitherT[F, A, B]</code> (wraps value inside <code>F[B]</code> into <code>Left</code>)</td>
             </tr>
             <tr>
-              <td class="align-center"><code>EitherT.pure</code></td>
-              <td class="align-center"><code>A</code></td>
-              <td class="align-center"><code>EitherT[F, A, B]</code> (wraps value into <code>Right</code> and then into <code>F</code>)</td>
+              <td><code>EitherT.pure</code></td>
+              <td><code>A</code></td>
+              <td><code>EitherT[F, A, B]</code> (wraps value into <code>Right</code> and then into <code>F</code>)</td>
             </tr>
           </tbody>
         </table>
@@ -559,34 +556,34 @@
         <table>
           <thead>
             <tr>
-              <th class="align-center">Method</th>
+              <th>Method</th>
               <th>Takes</th>
               <th>Returns</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td class="align-center"><code>map[D]</code></td>
+              <td><code>map[D]</code></td>
               <td><code>B =&gt; D</code></td>
               <td><code>EitherT[F, A, D]</code></td>
             </tr>
             <tr>
-              <td class="align-center"><code>subflatMap[D]</code></td>
+              <td><code>subflatMap[D]</code></td>
               <td><code>B =&gt; Either[A, D]</code></td>
               <td><code>EitherT[F, A, D]</code></td>
             </tr>
             <tr>
-              <td class="align-center"><code>semiflatMap[D]</code></td>
+              <td><code>semiflatMap[D]</code></td>
               <td><code>B =&gt; F[D]</code></td>
               <td><code>EitherT[F, A, D]</code></td>
             </tr>
             <tr>
-              <td class="align-center"><code>flatMapF[D]</code></td>
+              <td><code>flatMapF[D]</code></td>
               <td><code>B =&gt; F[Either[A, D]]</code></td>
               <td><code>EitherT[F, A, D]</code></td>
             </tr>
             <tr>
-              <td class="align-center"><code>flatMap[D]</code></td>
+              <td><code>flatMap[D]</code></td>
               <td><code>B =&gt; EitherT[F, A, D]</code></td>
               <td><code>EitherT[F, A, D]</code></td>
             </tr>

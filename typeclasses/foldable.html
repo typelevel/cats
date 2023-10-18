@@ -58,12 +58,9 @@
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira+Mono:500">
   
-  <link rel="stylesheet" type="text/css" href="../helium/icofont.min.css" />
-    <link rel="stylesheet" type="text/css" href="../helium/laika-helium.css" />
-  
-  <script src="../helium/laika-helium.js"></script>
-    <script src="../js/sponsors.js"></script>
-  
+  <link rel="stylesheet" type="text/css" href="../helium/site/icofont.min.css" />
+    <link rel="stylesheet" type="text/css" href="../helium/site/laika-helium.css" />
+  <script src="../helium/site/laika-helium.js"></script>
   
   
   <script> /* for avoiding page load transitions */ </script>
@@ -304,7 +301,7 @@
 </span><span class="comment">// res23: Option[Boolean] = Some(value = true)
 </span><span>
 </span><span class="keyword">val</span><span> </span><span class="identifier">prints</span><span>: </span><span class="type-name">Eval</span><span>[</span><span class="type-name">Unit</span><span>] = </span><span class="type-name">List</span><span>(</span><span class="type-name">Eval</span><span>.</span><span class="identifier">always</span><span>(</span><span class="identifier">println</span><span>(</span><span class="number-literal">1</span><span>)), </span><span class="type-name">Eval</span><span>.</span><span class="identifier">always</span><span>(</span><span class="identifier">println</span><span>(</span><span class="number-literal">2</span><span>))).</span><span class="identifier">sequence_</span><span>
-</span><span class="comment">// prints: Eval[Unit] = cats.Eval$$anon$4@56ffdc15
+</span><span class="comment">// prints: Eval[Unit] = cats.Eval$$anon$4@6a348808
 </span><span class="identifier">prints</span><span>.</span><span class="identifier">value</span><span>
 
 </span><span class="type-name">Foldable</span><span>[</span><span class="type-name">List</span><span>].</span><span class="identifier">dropWhile_</span><span>(</span><span class="type-name">List</span><span>[</span><span class="type-name">Int</span><span>](</span><span class="number-literal">2</span><span>,</span><span class="number-literal">4</span><span>,</span><span class="number-literal">5</span><span>,</span><span class="number-literal">6</span><span>,</span><span class="number-literal">7</span><span>))(</span><span class="identifier">_</span><span> % </span><span class="number-literal">2</span><span> == </span><span class="number-literal">0</span><span>)

@@ -58,12 +58,9 @@
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira+Mono:500">
   
-  <link rel="stylesheet" type="text/css" href="../helium/icofont.min.css" />
-    <link rel="stylesheet" type="text/css" href="../helium/laika-helium.css" />
-  
-  <script src="../helium/laika-helium.js"></script>
-    <script src="../js/sponsors.js"></script>
-  
+  <link rel="stylesheet" type="text/css" href="../helium/site/icofont.min.css" />
+    <link rel="stylesheet" type="text/css" href="../helium/site/laika-helium.css" />
+  <script src="../helium/site/laika-helium.js"></script>
   
   
   <script> /* for avoiding page load transitions */ </script>
@@ -721,7 +718,7 @@
 </span><span class="keyword">import</span><span> </span><span class="type-name">TeletypeOps</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="keyword">val</span><span> </span><span class="identifier">state</span><span> = </span><span class="identifier">program</span><span>.</span><span class="identifier">foldMap</span><span>(</span><span class="identifier">interpreter</span><span>)
-</span><span class="comment">// state: TeletypeState[Unit] = cats.data.IndexedStateT@4aa79418
+</span><span class="comment">// state: TeletypeState[Unit] = cats.data.IndexedStateT@2bf9492f
 </span><span class="keyword">val</span><span> </span><span class="identifier">initialState</span><span> = </span><span class="type-name">Nil</span><span>
 </span><span class="comment">// initialState: Nil.type = List()
 </span><span class="keyword">val</span><span> (</span><span class="identifier">stored</span><span>, </span><span class="identifier">_</span><span>) = </span><span class="identifier">state</span><span>.</span><span class="identifier">run</span><span>(</span><span class="identifier">initialState</span><span>).</span><span class="identifier">value</span><span>
@@ -792,7 +789,7 @@
 //       value = Success(value = Some(value = Left(value = Action(value = 7))))
 //     )
 //   ),
-//   f0 = scala.Function1$$Lambda$10648/1808762807@4c0ea15d
+//   f0 = scala.Function1$$Lambda$10660/449988494@2de2d932
 // )
 </span><span class="keyword">val</span><span> </span><span class="identifier">evaluated</span><span> = </span><span class="identifier">hoisted</span><span>.</span><span class="identifier">foldMap</span><span>(</span><span class="identifier">tryInterpreter</span><span>)
 </span><span class="comment">// evaluated: OptTry[Int] = OptionT(value = Success(value = Some(value = 12)))
