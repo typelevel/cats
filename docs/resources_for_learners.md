@@ -2,7 +2,7 @@
 
 # Books
  * [Functional Programming in Scala](https://www.manning.com/books/functional-programming-in-scala-second-edition)
-   by Paul Chiusano and Rúnar Bjarnason - While this book does not
+   by Michael Pilquist, Rúnar Bjarnason, and Paul Chiusano - While this book does not
    specifically cover Cats, it is a great introduction to functional
    programming in Scala in general and covers some of the abstractions
    that can be found in Cats.
