@@ -24,8 +24,6 @@ package cats
 import cats.data.State
 import cats.data.StateT
 import cats.kernel.compat.scalaVersionSpecific._
-import cats.StackSafeMonad
-import scala.collection.mutable
 
 /**
  * Traverse, also known as Traversable.
@@ -287,21 +285,16 @@ object Traverse {
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToTraverseOps
 
-  private[cats] def traverseDirectly[Coll[x] <: IterableOnce[x], G[_], A, B](
-    builder: mutable.Builder[B, Coll[B]]
-  )(fa: IterableOnce[A])(f: A => G[B])(implicit G: StackSafeMonad[G]): G[Coll[B]] = {
-    val size = fa.knownSize
-    if (size >= 0) {
-      builder.sizeHint(size)
-    }
-    G.map(fa.iterator.foldLeft(G.pure(builder)) { case (accG, a) =>
+  private[cats] def traverseDirectly[G[_], A, B](
+    fa: IterableOnce[A]
+  )(f: A => G[B])(implicit G: StackSafeMonad[G]): G[Vector[B]] = {
+    fa.iterator.foldLeft(G.pure(Vector.empty[B])) { case (accG, a) =>
       G.flatMap(accG) { acc =>
-        G.map(f(a)) { a =>
-          acc += a
-          acc
+        G.map(f(a)) { b =>
+          acc :+ b
         }
       }
-    })(_.result())
+    }
   }
 
   private[cats] def traverse_Directly[G[_], A, B](

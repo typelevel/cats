@@ -122,7 +122,8 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
         if (fa.isEmpty) G.pure(Queue.empty[B])
         else
           G match {
-            case x: StackSafeMonad[G] => Traverse.traverseDirectly(Queue.newBuilder[B])(fa)(f)(x)
+            case x: StackSafeMonad[G] =>
+              G.map(Traverse.traverseDirectly(fa)(f)(x))(fromIterableOnce(_))
             case _ =>
               G.map(Chain.traverseViaChain {
                 val as = collection.mutable.ArrayBuffer[A]()
@@ -222,7 +223,7 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
 @suppressUnusedImportWarningForScalaVersionSpecific
 private object QueueInstances {
   private val catsStdTraverseFilterForQueue: TraverseFilter[Queue] = new TraverseFilter[Queue] {
-    val traverse: Traverse[Queue] = cats.instances.queue.catsStdInstancesForQueue
+    val traverse: Traverse[Queue] with Alternative[Queue] = cats.instances.queue.catsStdInstancesForQueue
 
     override def mapFilter[A, B](fa: Queue[A])(f: (A) => Option[B]): Queue[B] =
       fa.collect(Function.unlift(f))
@@ -239,7 +240,8 @@ private object QueueInstances {
       if (fa.isEmpty) G.pure(Queue.empty[B])
       else
         G match {
-          case x: StackSafeMonad[G] => TraverseFilter.traverseFilterDirectly(Queue.newBuilder[B])(fa)(f)(x)
+          case x: StackSafeMonad[G] =>
+            x.map(TraverseFilter.traverseFilterDirectly(fa)(f)(x))(traverse.fromIterableOnce(_))
           case _ =>
             G.map(Chain.traverseFilterViaChain {
               val as = collection.mutable.ArrayBuffer[A]()

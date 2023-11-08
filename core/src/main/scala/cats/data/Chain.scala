@@ -1243,7 +1243,7 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
         else
           G match {
             case x: StackSafeMonad[G] =>
-              x.map(Traverse.traverseDirectly(List.newBuilder[B])(fa.iterator)(f)(x))(Chain.fromSeq(_))
+              x.map(Traverse.traverseDirectly(fa.iterator)(f)(x))(Chain.fromSeq(_))
             case _ =>
               traverseViaChain {
                 val as = collection.mutable.ArrayBuffer[A]()
@@ -1372,7 +1372,7 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
       else
         G match {
           case x: StackSafeMonad[G] =>
-            G.map(TraverseFilter.traverseFilterDirectly(List.newBuilder[B])(fa.iterator)(f)(x))(Chain.fromSeq(_))
+            G.map(TraverseFilter.traverseFilterDirectly(fa.iterator)(f)(x))(Chain.fromSeq(_))
           case _ =>
             traverseFilterViaChain {
               val as = collection.mutable.ArrayBuffer[A]()

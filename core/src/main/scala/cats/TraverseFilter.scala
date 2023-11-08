@@ -25,7 +25,6 @@ import cats.data.State
 import cats.kernel.compat.scalaVersionSpecific._
 
 import scala.collection.immutable.{IntMap, TreeSet}
-import scala.collection.mutable
 
 /**
  * `TraverseFilter`, also known as `Witherable`, represents list-like structures
@@ -205,21 +204,17 @@ object TraverseFilter {
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToTraverseFilterOps
 
-  private[cats] def traverseFilterDirectly[Coll[x] <: IterableOnce[x], G[_], A, B](
-    builder: mutable.Builder[B, Coll[B]]
-  )(fa: IterableOnce[A])(f: A => G[Option[B]])(implicit G: StackSafeMonad[G]): G[Coll[B]] = {
-    val size = fa.knownSize
-    if (size >= 0) {
-      builder.sizeHint(size)
-    }
-    G.map(fa.iterator.foldLeft(G.pure(builder)) { case (bldrG, a) =>
-      G.flatMap(bldrG) { bldr =>
+  private[cats] def traverseFilterDirectly[G[_], A, B](
+    fa: IterableOnce[A]
+  )(f: A => G[Option[B]])(implicit G: StackSafeMonad[G]): G[Vector[B]] = {
+    fa.iterator.foldLeft(G.pure(Vector.empty[B])) { case (bldrG, a) =>
+      G.flatMap(bldrG) { acc =>
         G.map(f(a)) {
-          case Some(b) => bldr += b
-          case None    => bldr
+          case Some(b) => acc :+ b
+          case None    => acc
         }
       }
-    })(_.result())
+    }
   }
 
 }
