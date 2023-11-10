@@ -126,7 +126,7 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
 
       final override def traverse[G[_], A, B](fa: Vector[A])(f: A => G[B])(implicit G: Applicative[G]): G[Vector[B]] =
         G match {
-          case x: StackSafeMonad[G] => Traverse.traverseDirectly(fa)(f)(x)
+          case x: StackSafeMonad[G] => x.map(Traverse.traverseDirectly(fa)(f)(x))(_.toVector)
           case _                    => G.map(Chain.traverseViaChain(fa)(f))(_.toVector)
         }
 

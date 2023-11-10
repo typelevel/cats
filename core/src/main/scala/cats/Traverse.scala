@@ -287,14 +287,14 @@ object Traverse {
 
   private[cats] def traverseDirectly[G[_], A, B](
     fa: IterableOnce[A]
-  )(f: A => G[B])(implicit G: StackSafeMonad[G]): G[Vector[B]] = {
-    fa.iterator.foldLeft(G.pure(Vector.empty[B])) { case (accG, a) =>
+  )(f: A => G[B])(implicit G: StackSafeMonad[G]): G[List[B]] = {
+    G.map(fa.iterator.foldLeft(G.pure(List.empty[B])) { case (accG, a) =>
       G.flatMap(accG) { acc =>
         G.map(f(a)) { b =>
-          acc :+ b
+          b :: acc
         }
       }
-    }
+    })(_.reverse)
   }
 
   private[cats] def traverse_Directly[G[_], A, B](
