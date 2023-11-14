@@ -289,10 +289,8 @@ object Traverse {
     fa: IterableOnce[A]
   )(f: A => G[B])(implicit G: StackSafeMonad[G]): G[List[B]] = {
     G.map(fa.iterator.foldLeft(G.pure(List.empty[B])) { case (accG, a) =>
-      G.flatMap(accG) { acc =>
-        G.map(f(a)) { b =>
-          b :: acc
-        }
+      G.map2(accG, f(a)) { case (acc, x) =>
+        x :: acc
       }
     })(_.reverse)
   }
@@ -304,9 +302,7 @@ object Traverse {
     if (iter.hasNext) {
       val first = iter.next()
       G.void(iter.foldLeft(f(first)) { case (g, a) =>
-        G.flatMap(g) { _ =>
-          f(a)
-        }
+        G.productR(g)(f(a))
       })
     } else G.unit
   }

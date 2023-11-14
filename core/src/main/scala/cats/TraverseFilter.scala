@@ -208,11 +208,9 @@ object TraverseFilter {
     fa: IterableOnce[A]
   )(f: A => G[Option[B]])(implicit G: StackSafeMonad[G]): G[Vector[B]] = {
     fa.iterator.foldLeft(G.pure(Vector.empty[B])) { case (bldrG, a) =>
-      G.flatMap(bldrG) { acc =>
-        G.map(f(a)) {
-          case Some(b) => acc :+ b
-          case None    => acc
-        }
+      G.map2(bldrG, f(a)) {
+        case (acc, Some(b)) => acc :+ b
+        case (acc, None)    => acc
       }
     }
   }
