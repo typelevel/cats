@@ -122,7 +122,7 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
         if (fa.isEmpty) G.pure(Nil)
         else
           G match {
-            case x: StackSafeMonad[G] => Traverse.traverseDirectly[G, A, B](fa)(f)(x)
+            case x: StackSafeMonad[G] => x.map(Traverse.traverseDirectly[G, A, B](fa)(f)(x))(_.toList)
             case _ =>
               G.map(Chain.traverseViaChain {
                 val as = collection.mutable.ArrayBuffer[A]()

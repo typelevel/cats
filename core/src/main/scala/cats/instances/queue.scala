@@ -123,7 +123,7 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
         else
           G match {
             case x: StackSafeMonad[G] =>
-              G.map(Traverse.traverseDirectly(fa)(f)(x))(fromIterableOnce(_))
+              G.map(Traverse.traverseDirectly(fa)(f)(x))(c => fromIterableOnce(c.iterator))
             case _ =>
               G.map(Chain.traverseViaChain {
                 val as = collection.mutable.ArrayBuffer[A]()

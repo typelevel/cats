@@ -129,7 +129,7 @@ trait SeqInstances extends cats.kernel.instances.SeqInstances {
       final override def traverse[G[_], A, B](fa: Seq[A])(f: A => G[B])(implicit G: Applicative[G]): G[Seq[B]] =
         G match {
           case x: StackSafeMonad[G] =>
-            x.map(Traverse.traverseDirectly(fa)(f)(x))(_.toSeq)
+            x.map(Traverse.traverseDirectly(fa)(f)(x))(_.toList)
           case _ =>
             G.map(Chain.traverseViaChain(fa.toIndexedSeq)(f))(_.toVector)
         }

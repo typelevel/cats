@@ -104,7 +104,7 @@ private[cats] object ArraySeqInstances {
       def traverse[G[_], A, B](fa: ArraySeq[A])(f: A => G[B])(implicit G: Applicative[G]): G[ArraySeq[B]] =
         G match {
           case x: StackSafeMonad[G] =>
-            x.map(Traverse.traverseDirectly(fa.iterator)(f)(x))(_.to(ArraySeq.untagged))
+            x.map(Traverse.traverseDirectly(fa.iterator)(f)(x))(_.iterator.to(ArraySeq.untagged))
           case _ =>
             G.map(Chain.traverseViaChain(fa)(f))(_.iterator.to(ArraySeq.untagged))
 

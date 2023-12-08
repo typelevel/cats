@@ -1243,7 +1243,7 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
         else
           G match {
             case x: StackSafeMonad[G] =>
-              x.map(Traverse.traverseDirectly(fa.iterator)(f)(x))(Chain.fromSeq(_))
+              Traverse.traverseDirectly(fa.iterator)(f)(x)
             case _ =>
               traverseViaChain {
                 val as = collection.mutable.ArrayBuffer[A]()

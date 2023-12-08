@@ -21,6 +21,7 @@
 
 package cats
 
+import cats.data.Chain
 import cats.data.State
 import cats.data.StateT
 import cats.kernel.compat.scalaVersionSpecific._
@@ -287,12 +288,12 @@ object Traverse {
 
   private[cats] def traverseDirectly[G[_], A, B](
     fa: IterableOnce[A]
-  )(f: A => G[B])(implicit G: StackSafeMonad[G]): G[List[B]] = {
-    G.map(fa.iterator.foldLeft(G.pure(List.empty[B])) { case (accG, a) =>
+  )(f: A => G[B])(implicit G: StackSafeMonad[G]): G[Chain[B]] = {
+    fa.iterator.foldLeft(G.pure(Chain.empty[B])) { case (accG, a) =>
       G.map2(accG, f(a)) { case (acc, x) =>
-        x :: acc
+        acc :+ x
       }
-    })(_.reverse)
+    }
   }
 
   private[cats] def traverse_Directly[G[_], A, B](
