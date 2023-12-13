@@ -234,7 +234,7 @@ private[cats] object ArraySeqInstances {
         G match {
           case x: StackSafeMonad[G] =>
             x.map(TraverseFilter.traverseFilterDirectly(fa.iterator)(f)(x))(
-              _.to(ArraySeq.untagged)
+              _.iterator.to(ArraySeq.untagged)
             )
           case _ =>
             fa.foldRight(Eval.now(G.pure(ArraySeq.untagged.empty[B]))) { case (x, xse) =>

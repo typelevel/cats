@@ -210,7 +210,7 @@ trait SeqInstances extends cats.kernel.instances.SeqInstances {
 
     def traverseFilter[G[_], A, B](fa: Seq[A])(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[Seq[B]] =
       G match {
-        case x: StackSafeMonad[G] => x.map(TraverseFilter.traverseFilterDirectly(fa)(f)(x))(_.toSeq)
+        case x: StackSafeMonad[G] => x.map(TraverseFilter.traverseFilterDirectly(fa)(f)(x))(_.toVector)
         case _ =>
           G.map(Chain.traverseFilterViaChain(fa.toIndexedSeq)(f))(_.toVector)
       }

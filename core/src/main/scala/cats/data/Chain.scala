@@ -1372,7 +1372,7 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
       else
         G match {
           case x: StackSafeMonad[G] =>
-            G.map(TraverseFilter.traverseFilterDirectly(fa.iterator)(f)(x))(Chain.fromSeq(_))
+            TraverseFilter.traverseFilterDirectly(fa.iterator)(f)(x)
           case _ =>
             traverseFilterViaChain {
               val as = collection.mutable.ArrayBuffer[A]()

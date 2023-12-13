@@ -241,7 +241,7 @@ private object QueueInstances {
       else
         G match {
           case x: StackSafeMonad[G] =>
-            x.map(TraverseFilter.traverseFilterDirectly(fa)(f)(x))(traverse.fromIterableOnce(_))
+            x.map(TraverseFilter.traverseFilterDirectly(fa)(f)(x))(c => traverse.fromIterableOnce(c.iterator))
           case _ =>
             G.map(Chain.traverseFilterViaChain {
               val as = collection.mutable.ArrayBuffer[A]()
