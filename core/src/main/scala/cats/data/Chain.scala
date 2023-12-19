@@ -1243,7 +1243,7 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
         else
           G match {
             case x: StackSafeMonad[G] =>
-              Traverse.traverseDirectly(fa.iterator)(f)(x)
+              x.map(Traverse.traverseDirectly(fa.iterator)(f)(x))(fromIterableOnce(_))
             case _ =>
               traverseViaChain {
                 val as = collection.mutable.ArrayBuffer[A]()
@@ -1355,7 +1355,7 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
     }
 
   implicit val catsDataTraverseFilterForChain: TraverseFilter[Chain] = new TraverseFilter[Chain] {
-    def traverse: Traverse[Chain] = Chain.catsDataInstancesForChain
+    def traverse: Traverse[Chain] with Alternative[Chain] = Chain.catsDataInstancesForChain
 
     override def filter[A](fa: Chain[A])(f: A => Boolean): Chain[A] = fa.filter(f)
 
@@ -1372,7 +1372,7 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
       else
         G match {
           case x: StackSafeMonad[G] =>
-            TraverseFilter.traverseFilterDirectly(fa.iterator)(f)(x)
+            x.map(TraverseFilter.traverseFilterDirectly(fa.iterator)(f)(x))(traverse.fromIterableOnce(_))
           case _ =>
             traverseFilterViaChain {
               val as = collection.mutable.ArrayBuffer[A]()
