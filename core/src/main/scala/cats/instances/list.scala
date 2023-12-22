@@ -23,7 +23,6 @@ package cats
 package instances
 
 import cats.data.{Chain, Ior, ZipList}
-import cats.StackSafeMonad
 import cats.instances.StaticMethods.appendAll
 import cats.kernel.compat.scalaVersionSpecific._
 import cats.kernel.instances.StaticMethods.wrapMutableIndexedSeq
@@ -122,7 +121,6 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
         if (fa.isEmpty) G.pure(Nil)
         else
           G match {
-            case x: StackSafeMonad[G] => x.map(Traverse.traverseDirectly[G, A, B](fa)(f)(x))(_.toList)
             case _ =>
               G.map(Chain.traverseViaChain {
                 val as = collection.mutable.ArrayBuffer[A]()
@@ -136,8 +134,7 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
        */
       override def traverse_[G[_], A, B](fa: List[A])(f: A => G[B])(implicit G: Applicative[G]): G[Unit] = {
         G match {
-          case x: StackSafeMonad[G] => Traverse.traverse_Directly(fa)(f)(x)
-          case _                    =>
+          case _ =>
             // the cost of this is O(size log size)
             // c(n) = n + 2 * c(n/2) = n + 2(n/2 log (n/2)) = n + n (logn - 1) = n log n
             // invariant: size >= 1
@@ -320,7 +317,6 @@ private[instances] trait ListInstancesBinCompat0 {
       if (fa.isEmpty) G.pure(Nil)
       else
         G match {
-          case x: StackSafeMonad[G] => x.map(TraverseFilter.traverseFilterDirectly(fa)(f)(x))(_.toList)
           case _ =>
             G.map(Chain.traverseFilterViaChain {
               val as = collection.mutable.ArrayBuffer[A]()
