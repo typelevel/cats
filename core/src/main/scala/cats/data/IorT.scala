@@ -78,7 +78,7 @@ final case class IorT[F[_], A, B](value: F[Ior[A, B]]) {
    * res0: Try[Int] = Failure(java.lang.RuntimeException: ERROR!)
    * }}}
    */
-  def getOrRaise[E](e: => E)(implicit F: MonadError[F, _ >: E]): F[B] =
+  def getOrRaise[E](e: => E)(implicit F: MonadError[F, ? >: E]): F[B] =
     getOrElseF(F.raiseError(e))
 
   def valueOr[BB >: B](f: A => BB)(implicit F: Functor[F], BB: Semigroup[BB]): F[BB] = F.map(value)(_.valueOr(f))

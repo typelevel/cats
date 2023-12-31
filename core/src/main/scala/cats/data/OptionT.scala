@@ -315,7 +315,7 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
    * res0: Try[Int] = Failure(java.lang.RuntimeException: ERROR!)
    * }}}
    */
-  def getOrRaise[E](e: => E)(implicit F: MonadError[F, _ >: E]): F[A] =
+  def getOrRaise[E](e: => E)(implicit F: MonadError[F, ? >: E]): F[A] =
     getOrElseF(F.raiseError(e))
 
   /**
