@@ -77,7 +77,7 @@ object Decoder {
 Then, we can implement an `Alternative` instance for this type like so:
 
 ```scala mdoc:silent
-implicit val decoderAlternative = new Alternative[Decoder] {
+implicit val decoderAlternative: Alternative[Decoder] = new Alternative[Decoder] {
   def pure[A](a: A) = Decoder.from(Function.const(Right(a)))
 
   def empty[A] = Decoder.from(Function.const(Left(new Error("No dice."))))

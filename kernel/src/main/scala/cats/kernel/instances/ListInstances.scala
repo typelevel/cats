@@ -126,7 +126,7 @@ class ListMonoid[A] extends Monoid[List[A]] { self =>
           item ::: acc
         }
 
-      override def reverse = self
+      override def reverse: Monoid[List[A]] = self
     }
 }
 

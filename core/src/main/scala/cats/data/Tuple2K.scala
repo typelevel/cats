@@ -142,7 +142,7 @@ sealed abstract private[data] class Tuple2KInstances1 extends Tuple2KInstances2 
     new Representable[Tuple2K[F, G, *]] {
       type Representation = Either[FF.Representation, GG.Representation]
 
-      val F = new Tuple2KFunctor[F, G] {
+      val F: Functor[Tuple2K[F, G, *]] = new Tuple2KFunctor[F, G] {
         val F = FF.F
         val G = GG.F
       }

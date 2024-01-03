@@ -25,9 +25,10 @@ import cats.{Contravariant, Show}
 import cats.Show.ContravariantShow
 import cats.kernel.Order
 import cats.syntax.show._
-import cats.laws.discipline.{ContravariantTests, MiniInt, SerializableTests}
+import cats.laws.discipline.{ContravariantTests, DeferTests, MiniInt, SerializableTests}
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
+
 import java.util.concurrent.TimeUnit
 import scala.collection.immutable.Seq
 import scala.concurrent.duration.{Duration, FiniteDuration}
@@ -35,6 +36,7 @@ import scala.concurrent.duration.{Duration, FiniteDuration}
 class ShowSuite extends CatsSuite {
   checkAll("Contravariant[Show]", ContravariantTests[Show].contravariant[MiniInt, Int, Boolean])
   checkAll("Contravariant[Show]", SerializableTests.serializable(Contravariant[Show]))
+  checkAll("Defer[Show]", DeferTests[Show].defer[MiniInt])
 
   sealed trait TimeOfDay
   case object Morning extends TimeOfDay

@@ -61,6 +61,7 @@ trait AllInstances
     with SetInstances
     with SortedMapInstances
     with SortedSetInstances
+    with ShowInstances
     with StreamInstances
     with StringInstances
     with SymbolInstances

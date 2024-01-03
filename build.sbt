@@ -1,4 +1,4 @@
-ThisBuild / tlBaseVersion := "2.10"
+ThisBuild / tlBaseVersion := "2.11"
 
 val scalaCheckVersion = "1.17.0"
 
@@ -6,23 +6,22 @@ val disciplineVersion = "1.5.1"
 
 val disciplineMunitVersion = "2.0.0-M3"
 
-val munitVersion = "1.0.0-M8"
+val munitVersion = "1.0.0-M10"
 
 val PrimaryJava = JavaSpec.temurin("8")
 val LTSJava = JavaSpec.temurin("17")
-val GraalVM11 = JavaSpec.graalvm("11")
+val GraalVM = JavaSpec.graalvm("17")
 
-ThisBuild / githubWorkflowJavaVersions := Seq(PrimaryJava, LTSJava, GraalVM11)
+ThisBuild / githubWorkflowJavaVersions := Seq(PrimaryJava, LTSJava, GraalVM)
 
 val Scala212 = "2.12.18"
-val Scala213 = "2.13.11"
-val Scala3 = "3.3.0"
+val Scala213 = "2.13.12"
+val Scala3 = "3.3.1"
 
 ThisBuild / crossScalaVersions := Seq(Scala212, Scala213, Scala3)
 ThisBuild / scalaVersion := Scala213
 
 ThisBuild / tlFatalWarnings := false
-ThisBuild / tlFatalWarningsInCi := false
 
 ThisBuild / githubWorkflowAddedJobs ++= Seq(
   WorkflowJob(
@@ -32,7 +31,7 @@ ThisBuild / githubWorkflowAddedJobs ++= Seq(
       WorkflowStep.Run(List("cd scalafix", "sbt test"), name = Some("Scalafix tests"))
     ),
     javas = List(PrimaryJava),
-    scalas = List((ThisBuild / scalaVersion).value)
+    scalas = Nil
   )
 )
 
@@ -136,7 +135,7 @@ lazy val algebra = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .crossType(CrossType.Pure)
   .in(file("algebra-core"))
   .dependsOn(kernel)
-  .settings(moduleName := "algebra", name := "Cats algebra")
+  .settings(moduleName := "algebra", name := "Cats algebra", scalacOptions -= "-Xsource:3")
   .settings(Compile / sourceGenerators += (Compile / sourceManaged).map(AlgebraBoilerplate.gen).taskValue)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
@@ -151,7 +150,7 @@ lazy val algebra = crossProject(JSPlatform, JVMPlatform, NativePlatform)
 lazy val algebraLaws = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .in(file("algebra-laws"))
   .dependsOn(kernelLaws, algebra)
-  .settings(moduleName := "algebra-laws", name := "Cats algebra laws")
+  .settings(moduleName := "algebra-laws", name := "Cats algebra laws", scalacOptions -= "-Xsource:3")
   .settings(disciplineDependencies)
   .settings(testingDependencies)
   .jsSettings(commonJsSettings)
@@ -167,8 +166,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .settings(macroSettings)
   .settings(Compile / sourceGenerators += (Compile / sourceManaged).map(Boilerplate.gen).taskValue)
   .settings(
-    libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % Test,
-    Compile / doc / scalacOptions ~= { _.filterNot(_.startsWith("-W")) } // weird bug
+    libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % Test
   )
   .settings(testingDependencies)
   .jsSettings(commonJsSettings)
@@ -247,7 +245,6 @@ lazy val unidocs = project
                                                              alleycatsLaws.jvm,
                                                              testkit.jvm
     ),
-    scalacOptions ~= { _.filterNot(_.startsWith("-W")) }, // weird nsc bug
     ScalaUnidoc / unidoc / scalacOptions ++= Seq("-groups", "-diagrams")
   )
 
@@ -282,29 +279,18 @@ lazy val docs = project
     mdocVariables += ("API_LINK_BASE" -> s"https://www.javadoc.io/doc/org.typelevel/cats-docs_2.13/${mdocVariables
         .value("VERSION")}/"),
     laikaConfig := {
-      import laika.rewrite.link._
+      import laika.config._
 
       laikaConfig.value.withRawContent
         .withConfigValue("version", mdocVariables.value("VERSION"))
         .withConfigValue(
-          LinkConfig(apiLinks =
-            List(
-              ApiLinks(
-                baseUri = s"https://www.javadoc.io/doc/org.typelevel/cats-docs_2.13/${mdocVariables.value("VERSION")}/"
-              ),
-              ApiLinks(
-                baseUri = s"https://www.scala-lang.org/api/$Scala213/",
-                packagePrefix = "scala"
-              )
+          LinkConfig.empty
+            .addApiLinks(
+              ApiLinks(s"https://www.javadoc.io/doc/org.typelevel/cats-docs_2.13/${mdocVariables.value("VERSION")}/"),
+              ApiLinks(s"https://www.scala-lang.org/api/$Scala213/").withPackagePrefix("scala")
             )
-          )
         )
     },
-    tlSiteRelatedProjects := Seq(
-      TypelevelProject.CatsEffect,
-      "Mouse" -> url("https://typelevel.org/mouse"),
-      TypelevelProject.Discipline
-    ),
     libraryDependencies ++= Seq(
       "org.typelevel" %%% "discipline-munit" % disciplineMunitVersion
     )

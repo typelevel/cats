@@ -21,6 +21,8 @@
 
 package cats
 
+import org.typelevel.scalaccompat.annotation.uncheckedVariance2
+
 import scala.annotation.tailrec
 
 /**
@@ -102,20 +104,20 @@ sealed abstract class Eval[+A] extends Serializable { self =>
             new Eval.FlatMap[B] {
               type Start = A
               val start = () => c.run(s)
-              val run = f
+              val run: (Start => Eval[B]) @uncheckedVariance2 = f
             }
         }
       case c: Eval.Defer[A] =>
         new Eval.FlatMap[B] {
           type Start = A
           val start = c.thunk
-          val run = f
+          val run: (Start => Eval[B]) @uncheckedVariance2 = f
         }
       case _ =>
         new Eval.FlatMap[B] {
           type Start = A
           val start = () => self
-          val run = f
+          val run: (Start => Eval[B]) @uncheckedVariance2 = f
         }
     }
 

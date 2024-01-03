@@ -22,6 +22,8 @@
 package cats
 package instances
 
+import scala.annotation.tailrec
+
 trait EquivInstances {
   implicit val catsContravariantMonoidalForEquiv: ContravariantMonoidal[Equiv] =
     new ContravariantMonoidal[Equiv] {
@@ -51,5 +53,30 @@ trait EquivInstances {
           def equiv(l: (A, B), r: (A, B)): Boolean =
             fa.equiv(l._1, r._1) && fb.equiv(l._2, r._2)
         }
+    }
+
+  implicit def catsDeferForEquiv: Defer[Equiv] = EquivInstances.catsDeferForEquivCache
+}
+object EquivInstances {
+  private val catsDeferForEquivCache: Defer[Equiv] =
+    new Defer[Equiv] {
+      case class Deferred[A](fa: () => Equiv[A]) extends Equiv[A] {
+        private lazy val resolved: Equiv[A] = {
+          @tailrec
+          def loop(f: () => Equiv[A]): Equiv[A] =
+            f() match {
+              case Deferred(f) => loop(f)
+              case next        => next
+            }
+
+          loop(fa)
+        }
+        override def equiv(x: A, y: A): Boolean = resolved.equiv(x, y)
+      }
+
+      override def defer[A](fa: => Equiv[A]): Equiv[A] = {
+        lazy val cachedFa = fa
+        Deferred(() => cachedFa)
+      }
     }
 }

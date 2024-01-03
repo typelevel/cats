@@ -26,6 +26,7 @@ import cats.data.{Const, NonEmptyList}
 import cats.kernel.Semigroup
 import cats.kernel.laws.discipline.{
   EqTests,
+  HashTests,
   LowerBoundedTests,
   MonoidTests,
   OrderTests,
@@ -33,12 +34,12 @@ import cats.kernel.laws.discipline.{
   SemigroupTests,
   UpperBoundedTests
 }
-import cats.laws.discipline._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
+import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
-import cats.syntax.show._
-import cats.tests.Helpers.{CMono, CSemi}
 import cats.syntax.eq._
+import cats.syntax.show._
+import cats.tests.Helpers.{CMono, CSemi, Semi}
 import org.scalacheck.Prop._
 
 class ConstSuite extends CatsSuite {
@@ -100,9 +101,16 @@ class ConstSuite extends CatsSuite {
   checkAll("Const[String, Int]", ContravariantTests[Const[String, *]].contravariant[Int, Int, Int])
   checkAll("Contravariant[Const[String, *]]", SerializableTests.serializable(Contravariant[Const[String, *]]))
 
-  checkAll("Const[String, Int]", ContravariantMonoidalTests[Const[String, *]].contravariantMonoidal[Int, Int, Int])
-  checkAll("ContravariantMonoidal[Const[String, *]]",
-           SerializableTests.serializable(ContravariantMonoidal[Const[String, *]])
+  checkAll("ContravariantMonoidal[Const[Int, *]]",
+           ContravariantMonoidalTests[Const[Int, *]].contravariantMonoidal[Int, Int, Int]
+  )
+  checkAll("ContravariantMonoidal[Const[Int, *]]", SerializableTests.serializable(ContravariantMonoidal[Const[Int, *]]))
+
+  checkAll("ContravariantSemigroupal[Const[Semi, *]]",
+           ContravariantSemigroupalTests[Const[Semi, *]].contravariantSemigroupal[Int, Int, Int]
+  )
+  checkAll("ContravariantSemigroupal[Const[Semi, *]]",
+           SerializableTests.serializable(ContravariantSemigroupal[Const[Semi, *]])
   )
 
   checkAll("Const[*, *]", BifoldableTests[Const].bifoldable[Int, Int, Int])
@@ -120,8 +128,8 @@ class ConstSuite extends CatsSuite {
     forAll { (const: Const[Int, String]) =>
       assert(const.show.startsWith("Const(") === true)
       const.show.contains(const.getConst.show)
-      assert(const.show === (implicitly[Show[Const[Int, String]]].show(const)))
-      assert(const.show === (const.retag[Boolean].show))
+      assert(const.show === Show[Const[Int, String]].show(const))
+      assert(const.show === const.retag[Boolean].show)
     }
   }
 
@@ -130,7 +138,7 @@ class ConstSuite extends CatsSuite {
 
   {
     implicit val iso: Isomorphisms[Const[CMono, *]] =
-      Isomorphisms.invariant[Const[CMono, *]](Const.catsDataFunctorForConst)
+      Isomorphisms.invariant[Const[CMono, *]](Const.catsDataTraverseForConst)
     checkAll("Const[CMono, Int]", CommutativeApplicativeTests[Const[CMono, *]].commutativeApplicative[Int, Int, Int])
     checkAll("CommutativeApplicative[Const[CMono, *]]",
              SerializableTests.serializable(CommutativeApplicative[Const[CMono, *]])
@@ -139,4 +147,23 @@ class ConstSuite extends CatsSuite {
 
   checkAll("Const[CSemi, Int]", CommutativeApplyTests[Const[CSemi, *]].commutativeApply[Int, Int, Int])
   checkAll("CommutativeApply[Const[CSemi, *]]", SerializableTests.serializable(CommutativeApply[Const[CSemi, *]]))
+
+  checkAll("Hash[Const[Int, String]]", HashTests[Const[Int, String]].hash)
+  checkAll("Hash[Const[Int, String]]", SerializableTests.serializable(Hash[Const[Int, String]]))
+
+  checkAll("MonoidK[Const[Int, *]]", MonoidKTests[Const[Int, *]].monoidK[Int])
+  checkAll("MonoidK[Const[Int, *]]", SerializableTests.serializable(MonoidK[Const[Int, *]]))
+
+  checkAll("SemigroupK[Const[Int, *]]", SemigroupKTests[Const[Semi, *]].semigroupK[Int])
+  checkAll("SemigroupK[Const[Int, *]]", SerializableTests.serializable(SemigroupK[Const[Semi, *]]))
+}
+
+object ConstSuite {
+  def summonInstances[A, B: Hash](): Unit = {
+    InvariantMonoidal[Const[Int, *]]
+    Invariant[Const[A, *]]
+    Functor[Const[A, *]]
+    Eq[Const[B, Int]]
+    ()
+  }
 }

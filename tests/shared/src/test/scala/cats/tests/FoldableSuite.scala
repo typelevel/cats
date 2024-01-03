@@ -749,7 +749,7 @@ class FoldableIdTSuite extends FoldableSuite[IdT[Option, *]]("idT") {
 }
 
 class FoldableConstSuite extends FoldableSuite[Const[Int, *]]("const") {
-  def iterator[T](const: Const[Int, T]) = None.iterator
+  def iterator[T](const: Const[Int, T]): Iterator[T] = None.iterator
 }
 
 class FoldableTuple2Suite extends FoldableSuite[(Int, *)]("tuple2") {
