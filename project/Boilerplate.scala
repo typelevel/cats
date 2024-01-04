@@ -649,11 +649,13 @@ object Boilerplate {
       |
       |private[syntax] final class Function1ApplyOps[T, A0](private val f: Function1[A0, T]) extends Serializable {
       |  def liftN[F[_]: Functor](a0: F[A0]): F[T] = Functor[F].map(a0)(f)
+      |  def parLiftN[F[_]: Functor](a0: F[A0]): F[T] = Functor[F].map(a0)(f)
       |  def tupledF[F[_]: Functor](t: F[A0]): F[T] = Functor[F].map(t)(f)
       |}
       |
          -private[syntax] final class Function${arity}ApplyOps[T, ${`A..N`}](private val f: $function) extends Serializable {
           - def liftN[F[_]: Functor: Semigroupal]($typedParams): F[T] = Semigroupal.map$arity(${`a..n`})(f)
+          - def parLiftN[F[_]: Parallel]($typedParams): F[T] = Parallel.parMap$arity(${`a..n`})(f)
           - def tupledF[F[_]: Functor](t: F[${`(A..N)`}]): F[T] = Functor[F].map(t)(f.tupled)
          -}
       """

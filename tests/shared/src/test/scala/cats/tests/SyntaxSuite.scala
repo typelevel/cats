@@ -286,7 +286,7 @@ object SyntaxSuite {
     tfa.parFlatMap(mfone)
   }
 
-  def testliftN[F[_]: Apply, A, B, C, T] = {
+  def testLiftN[F[_]: Apply, A, B, C, T] = {
     val fa = mock[F[A]]
     val fb = mock[F[B]]
     val fc = mock[F[C]]
@@ -308,12 +308,50 @@ object SyntaxSuite {
     val result3 = fapply3.liftN(fa, fb, fc)
 
     result3: F[T]
+  }
+
+  def testParLiftN[F[_]: Parallel: Functor, A, B, C, T] = {
+    val fa = mock[F[A]]
+    val fb = mock[F[B]]
+    val fc = mock[F[C]]
+
+    val fapply1 = mock[A => T]
+
+    val result1 = fapply1.parLiftN(fa)
+
+    result1: F[T]
+
+    val fapply2 = mock[(A, B) => T]
+
+    val result2 = fapply2.parLiftN(fa, fb)
+
+    result2: F[T]
+
+    val fapply3 = mock[(A, B, C) => T]
+
+    val result3 = fapply3.parLiftN(fa, fb, fc)
+
+    result3: F[T]
+  }
+
+  def testTupledF[F[_]: Apply, A, B, C, T] = {
+    val fa = mock[F[A]]
+    val fab = mock[F[(A, B)]]
+    val fabc = mock[F[(A, B, C)]]
+
+    val fapply1 = mock[A => T]
+    val fapply2 = mock[(A, B) => T]
+    val fapply3 = mock[(A, B, C) => T]
 
     val result1Tupled = fapply1.tupledF(fa)
 
     result1Tupled: F[T]
 
-    val result3Tupled = fapply3.tupledF((fa, fb, fc).tupled)
+    val result2Tupled = fapply2.tupledF(fab)
+
+    result2Tupled: F[T]
+
+    val result3Tupled = fapply3.tupledF(fabc)
 
     result3Tupled: F[T]
   }
