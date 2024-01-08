@@ -23,7 +23,10 @@ package cats.kernel
 
 import scala.{specialized => sp}
 
-trait BoundedSemilattice[@sp(Byte, Char, Int, Long, Float, Double) A] extends Any with Semilattice[A] with CommutativeMonoid[A] {
+trait BoundedSemilattice[@sp(Byte, Char, Int, Long, Float, Double) A]
+    extends Any
+    with Semilattice[A]
+    with CommutativeMonoid[A] {
   override def combineN(a: A, n: Int): A =
     if (n < 0) throw new IllegalArgumentException("Repeated combining for monoids must have n >= 0")
     else if (n == 0) empty
@@ -35,7 +38,9 @@ object BoundedSemilattice extends SemilatticeFunctions[BoundedSemilattice] {
   /**
    * Access an implicit `BoundedSemilattice[A]`.
    */
-  @inline final def apply[@sp(Byte, Char, Int, Long, Float, Double) A](implicit ev: BoundedSemilattice[A]): BoundedSemilattice[A] =
+  @inline final def apply[@sp(Byte, Char, Int, Long, Float, Double) A](implicit
+    ev: BoundedSemilattice[A]
+  ): BoundedSemilattice[A] =
     ev
 
   /**
