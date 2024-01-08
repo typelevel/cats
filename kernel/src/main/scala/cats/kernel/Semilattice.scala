@@ -27,7 +27,7 @@ import scala.{specialized => sp}
  * Semilattices are commutative semigroups whose operation
  * (i.e. combine) is also idempotent.
  */
-trait Semilattice[@sp(Int, Long, Float, Double) A] extends Any with Band[A] with CommutativeSemigroup[A] { self =>
+trait Semilattice[@sp(Byte, Char, Int, Long, Float, Double) A] extends Any with Band[A] with CommutativeSemigroup[A] { self =>
 
   /**
    * Given Eq[A], return a PartialOrder[A] using the `combine`
@@ -80,7 +80,7 @@ object Semilattice extends SemilatticeFunctions[Semilattice] {
   /**
    * Access an implicit `Semilattice[A]`.
    */
-  @inline final def apply[@sp(Int, Long, Float, Double) A](implicit ev: Semilattice[A]): Semilattice[A] = ev
+  @inline final def apply[@sp(Byte, Char, Int, Long, Float, Double) A](implicit ev: Semilattice[A]): Semilattice[A] = ev
 
   /**
    * Create a `Semilattice` instance from the given function.

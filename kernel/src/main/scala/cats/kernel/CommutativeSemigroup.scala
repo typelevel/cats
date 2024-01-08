@@ -28,7 +28,7 @@ import scala.{specialized => sp}
  *
  * A semigroup is commutative if for all x and y, x |+| y === y |+| x.
  */
-trait CommutativeSemigroup[@sp(Int, Long, Float, Double) A] extends Any with Semigroup[A] { self =>
+trait CommutativeSemigroup[@sp(Byte, Char, Int, Long, Float, Double) A] extends Any with Semigroup[A] { self =>
   override def reverse: CommutativeSemigroup[A] = self
   override def intercalate(middle: A): CommutativeSemigroup[A] =
     new CommutativeSemigroup[A] {

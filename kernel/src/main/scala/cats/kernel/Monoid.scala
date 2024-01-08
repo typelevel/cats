@@ -30,7 +30,7 @@ import compat.scalaVersionSpecific._
  * `combine(x, empty) == combine(empty, x) == x`. For example, if we have `Monoid[String]`,
  * with `combine` as string concatenation, then `empty = ""`.
  */
-trait Monoid[@sp(Int, Long, Float, Double) A] extends Any with Semigroup[A] { self =>
+trait Monoid[@sp(Byte, Char, Int, Long, Float, Double) A] extends Any with Semigroup[A] { self =>
 
   /**
    * Return the identity element for this monoid.
@@ -117,13 +117,13 @@ trait Monoid[@sp(Int, Long, Float, Double) A] extends Any with Semigroup[A] { se
 
 @suppressUnusedImportWarningForScalaVersionSpecific
 abstract class MonoidFunctions[M[T] <: Monoid[T]] extends SemigroupFunctions[M] {
-  def empty[@sp(Int, Long, Float, Double) A](implicit ev: M[A]): A =
+  def empty[@sp(Byte, Char, Int, Long, Float, Double) A](implicit ev: M[A]): A =
     ev.empty
 
-  def isEmpty[@sp(Int, Long, Float, Double) A](a: A)(implicit m: M[A], ev: Eq[A]): Boolean =
+  def isEmpty[@sp(Byte, Char, Int, Long, Float, Double) A](a: A)(implicit m: M[A], ev: Eq[A]): Boolean =
     m.isEmpty(a)
 
-  def combineAll[@sp(Int, Long, Float, Double) A](as: IterableOnce[A])(implicit ev: M[A]): A =
+  def combineAll[@sp(Byte, Char, Int, Long, Float, Double) A](as: IterableOnce[A])(implicit ev: M[A]): A =
     ev.combineAll(as)
 }
 

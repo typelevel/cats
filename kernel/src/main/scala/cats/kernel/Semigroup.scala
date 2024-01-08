@@ -32,7 +32,7 @@ import compat.scalaVersionSpecific._
 /**
  * A semigroup is any set `A` with an associative operation (`combine`).
  */
-trait Semigroup[@sp(Int, Long, Float, Double) A] extends Any with Serializable { self =>
+trait Semigroup[@sp(Byte, Char, Int, Long, Float, Double) A] extends Any with Serializable { self =>
 
   /**
    * Associative operation which combines two values.
@@ -124,16 +124,16 @@ trait Semigroup[@sp(Int, Long, Float, Double) A] extends Any with Serializable {
 }
 
 abstract class SemigroupFunctions[S[T] <: Semigroup[T]] {
-  def combine[@sp(Int, Long, Float, Double) A](x: A, y: A)(implicit ev: S[A]): A =
+  def combine[@sp(Byte, Char, Int, Long, Float, Double) A](x: A, y: A)(implicit ev: S[A]): A =
     ev.combine(x, y)
 
-  def maybeCombine[@sp(Int, Long, Float, Double) A](ox: Option[A], y: A)(implicit ev: S[A]): A =
+  def maybeCombine[@sp(Byte, Char, Int, Long, Float, Double) A](ox: Option[A], y: A)(implicit ev: S[A]): A =
     ox match {
       case Some(x) => ev.combine(x, y)
       case None    => y
     }
 
-  def maybeCombine[@sp(Int, Long, Float, Double) A](x: A, oy: Option[A])(implicit ev: S[A]): A =
+  def maybeCombine[@sp(Byte, Char, Int, Long, Float, Double) A](x: A, oy: Option[A])(implicit ev: S[A]): A =
     oy match {
       case Some(y) => ev.combine(x, y)
       case None    => x
@@ -145,7 +145,7 @@ abstract class SemigroupFunctions[S[T] <: Semigroup[T]] {
   def isIdempotent[A](implicit ev: S[A]): Boolean =
     ev.isInstanceOf[Band[_]]
 
-  def combineN[@sp(Int, Long, Float, Double) A](a: A, n: Int)(implicit ev: S[A]): A =
+  def combineN[@sp(Byte, Char, Int, Long, Float, Double) A](a: A, n: Int)(implicit ev: S[A]): A =
     ev.combineN(a, n)
 
   def combineAllOption[A](as: IterableOnce[A])(implicit ev: S[A]): Option[A] =
