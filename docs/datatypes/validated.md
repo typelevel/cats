@@ -298,9 +298,9 @@ But, what about if we want _another_ way of combining? We can provide our custom
 Cats offers you a nice set of combinators for transforming your `Validated` based approach to an `Either` one and vice-versa.
 We've used `.toValidated` in our second example, now let's see how to use `.toEither`.
 
-#### From `Validated` to `Either`
+#### From `Validated` to `Either`/`EitherT`
 
-To do this, simply use `.toEither` combinator:
+To do this, simply use `.toEither`/`.toEitherT` combinator:
 
 ```scala mdoc
 // Successful case
@@ -319,7 +319,7 @@ FormValidatorNec.validateForm(
   firstName = "John",
   lastName = "Doe",
   age = 5
-).toEither
+).toEitherT[Future]
 ```
 
 With this conversion, as you can see, we got an `Either` with a `NonEmptyChain` detailing the possible validation errors or our `RegistrationData` object.
@@ -591,7 +591,7 @@ validatedMonad.tuple2(Validated.invalidNec[String, Int]("oops"), Validated.inval
 ```
 
 This one short circuits! Therefore, if we were to define a `Monad` (or `FlatMap`) instance for `Validated` we would
-have to override `ap` to get the behavior we want. 
+have to override `ap` to get the behavior we want.
 
 ```scala mdoc:silent:nest
 import cats.Monad
@@ -629,14 +629,14 @@ But then the behavior of `flatMap` would be inconsistent with that of `ap`, and 
 ```scala
 // the `<->` operator means "is equivalent to" and returns a data structure
 // `IsEq` that is used to verify the equivalence of the two expressions
-def flatMapConsistentApply[A, B](fa: F[A], fab: F[A => B]): IsEq[F[B]] = 
+def flatMapConsistentApply[A, B](fa: F[A], fab: F[A => B]): IsEq[F[B]] =
   fab.ap(fa) <-> fab.flatMap(f => fa.map(f))
 ```
 
 ```scala mdoc:silent
 import cats.laws._
 
-val flatMapLawsForAccumulatingValidatedMonad = 
+val flatMapLawsForAccumulatingValidatedMonad =
   FlatMapLaws[Validated[NonEmptyChain[String], *]](accumulatingValidatedMonad)
 
 val fa  = Validated.invalidNec[String, Int]("oops")

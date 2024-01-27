@@ -266,6 +266,30 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
     }
 
   /**
+   * Converts the value to an Either[F, E, A]
+   *
+   * Example:
+   * {{{
+   * scala> import cats.syntax.all._
+   * scala> given ExecutionContext = ExecutionContext.global
+   *
+   * scala> val v1 = "error".invalid[Int]
+   * scala> val v2 = 123.valid[String]
+   *
+   * scala> v1.toEitherT[Future]
+   * res0: EitherT[Future, String, Int] = EitherT(Future(Left(error)))
+   *
+   * scala> v2.toEither
+   * res1: EitherT[Future, String, Int] = EitherT(Future(Right(123)))
+   * }}}
+   */
+  def toEitherT[F[_]: Applicative]: EitherT[F, E, A] =
+    this match {
+      case Invalid(e) => EitherT.leftT(e)
+      case Valid(a)   => EitherT.rightT(a)
+    }
+
+  /**
    * Returns Valid values wrapped in Some, and None for Invalid values
    *
    * Example:
