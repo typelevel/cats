@@ -266,7 +266,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
     }
 
   /**
-   * Converts the value to an Either[F, E, A]
+   * Converts the value to an EitherT[F, E, A]
    *
    * Example:
    * {{{
@@ -276,11 +276,11 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    * scala> val v1 = "error".invalid[Int]
    * scala> val v2 = 123.valid[String]
    *
-   * scala> v1.toEitherT[Future]
-   * res0: EitherT[Future, String, Int] = EitherT(Future(Left(error)))
+   * scala> v1.toEitherT[Future].value
+   * res0: Future[Either[String, Int]] = Future(Left(error))
    *
-   * scala> v2.toEither
-   * res1: EitherT[Future, String, Int] = EitherT(Future(Right(123)))
+   * scala> v2.toEitherT[Future].value
+   * res1: Future[Either[String, Int]] = Future(Right(123))
    * }}}
    */
   def toEitherT[F[_]: Applicative]: EitherT[F, E, A] =
