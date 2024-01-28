@@ -41,7 +41,7 @@ trait ValidatedExtensionSyntax {
 }
 
 final class ValidatedExtension[E, A](private val self: Validated[E, A]) extends AnyVal {
-  def liftTo[F[_]](implicit F: ApplicativeError[F, _ >: E]): F[A] =
+  def liftTo[F[_]](implicit F: ApplicativeError[F, ? >: E]): F[A] =
     F.fromValidated(self)
 }
 

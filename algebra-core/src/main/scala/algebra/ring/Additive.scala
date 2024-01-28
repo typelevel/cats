@@ -155,7 +155,7 @@ trait AdditiveCommutativeGroup[@sp(Int, Long, Float, Double) A]
 trait AdditiveSemigroupFunctions[S[T] <: AdditiveSemigroup[T]] {
 
   def isAdditiveCommutative[A](implicit ev: S[A]): Boolean =
-    ev.isInstanceOf[AdditiveCommutativeSemigroup[_]]
+    ev.isInstanceOf[AdditiveCommutativeSemigroup[?]]
 
   def plus[@sp(Int, Long, Float, Double) A](x: A, y: A)(implicit ev: S[A]): A =
     ev.plus(x, y)

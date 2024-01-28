@@ -150,7 +150,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
    * res0: Try[Int] = Failure(java.lang.RuntimeException: ERROR!)
    * }}}
    */
-  def getOrRaise[E](e: => E)(implicit F: MonadError[F, _ >: E]): F[B] =
+  def getOrRaise[E](e: => E)(implicit F: MonadError[F, ? >: E]): F[B] =
     getOrElseF(F.raiseError(e))
 
   /**
@@ -248,7 +248,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
    * res3: util.Try[String] = Failure(java.lang.Exception: sad cats)
    * }}}
    */
-  def rethrowT(implicit F: MonadError[F, _ >: A]): F[B] =
+  def rethrowT(implicit F: MonadError[F, ? >: A]): F[B] =
     F.rethrow(value)
 
   /**

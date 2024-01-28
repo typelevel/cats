@@ -352,7 +352,7 @@ final class EitherOps[A, B](private val eab: Either[A, B]) extends AnyVal {
    * res0: cats.data.EitherT[Option, CharSequence, Int] = EitherT(Some(Right(3)))
    * }}}
    */
-  def liftTo[F[_]](implicit F: ApplicativeError[F, _ >: A]): F[B] = F.fromEither(eab)
+  def liftTo[F[_]](implicit F: ApplicativeError[F, ? >: A]): F[B] = F.fromEither(eab)
 }
 
 final class EitherObjectOps(private val either: Either.type) extends AnyVal {
