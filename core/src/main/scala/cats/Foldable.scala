@@ -589,7 +589,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * needed.
    */
   def traverse_[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Applicative[G]): G[Unit] =
-    foldRight(fa, Always(G.pure(()))) { (a, acc) =>
+    foldRight(fa, Always(G.unit)) { (a, acc) =>
       G.map2Eval(f(a), acc) { (_, _) =>
         ()
       }
