@@ -70,7 +70,7 @@ object NonEmptyMapImpl extends NonEmptyMapInstances with Newtype2 {
 
 }
 
-sealed class NonEmptyMapOps[K, A](val value: NonEmptyMap[K, A]) {
+sealed class NonEmptyMapOps[K, A](private[data] val value: NonEmptyMap[K, A]) {
 
   /**
    * Converts this map to a `SortedMap`.
