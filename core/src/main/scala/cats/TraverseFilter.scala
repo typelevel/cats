@@ -122,6 +122,9 @@ trait TraverseFilter[F[_]] extends FunctorFilter[F] {
   override def mapFilter[A, B](fa: F[A])(f: A => Option[B]): F[B] =
     traverseFilter[Id, A, B](fa)(f)
 
+  def mapAccumulateFilter[S, A, B](init: S, fa: F[A])(f: (S, A) => (S, Option[B])): (S, F[B]) =
+    traverseFilter(fa)(a => State(s => f(s, a))).run(init).value
+
   /**
    * Removes duplicate elements from a list, keeping only the first occurrence.
    */
@@ -184,6 +187,8 @@ object TraverseFilter {
       typeClassInstance.filterA[G, A](self)(f)(G)
     def traverseEither[G[_], B, C](f: A => G[Either[C, B]])(g: (A, C) => G[Unit])(implicit G: Monad[G]): G[F[B]] =
       typeClassInstance.traverseEither[G, A, B, C](self)(f)(g)(G)
+    def mapAccumulateFilter[S, B](init: S)(f: (S, A) => (S, Option[B])): (S, F[B]) =
+      typeClassInstance.mapAccumulateFilter[S, A, B](init, self)(f)
     def ordDistinct(implicit O: Order[A]): F[A] = typeClassInstance.ordDistinct(self)
     def hashDistinct(implicit H: Hash[A]): F[A] = typeClassInstance.hashDistinct(self)
   }
