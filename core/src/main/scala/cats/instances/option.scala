@@ -284,7 +284,7 @@ private[instances] trait OptionInstancesBinCompat0 {
         case None    => G.pure(Option.empty[A])
         case Some(a) => G.map(f(a))(b => if (b) Some(a) else None)
       }
-  
+
     override def mapAccumulateFilter[S, A, B](init: S, fa: Option[A])(f: (S, A) => (S, Option[B])): (S, Option[B]) =
       fa match {
         case Some(a) => f(init, a)
