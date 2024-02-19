@@ -161,10 +161,13 @@ h1, h2, h3 {
 
 h1 {
   font-size: var(--title-font-size);
+  margin-top: calc(var(--block-spacing) * 3.5);
+  margin-bottom: calc(var(--block-spacing) * 1.2);
 }
 h1.title {
   padding-top: calc(40px + var(--top-bar-height));
   padding-bottom: 10px;
+  margin-top: 0;
   margin-bottom: calc(var(--block-spacing) * 3);
   border-bottom: 1px solid var(--component-border);
 }
@@ -557,7 +560,7 @@ header .row.links .row.links {
   z-index: 5000;
   left: 20px;
   top: calc(var(--top-bar-height) - 10px);
-  background-color: white;
+  background-color: var(--bg-color);
   border: 1px solid var(--component-border);
   border-radius: 5px;
   white-space: nowrap;
@@ -621,10 +624,6 @@ header .row.links .row.links {
   padding: 3px 15px 4px 15px;
   color: var(--primary-color);
   font-weight: normal;
-}
-
-.nav-list li a code {
-  color: var(--primary-color); /* ensures that code is the same colour as the rest of the text, for consistency */
 }
 
 /* left navigation bar =========================================== */
@@ -768,10 +767,8 @@ ul.nav-list, #page-nav ul {
 }
 
 .nav-list .active a,
-.nav-list .active code,
 .nav-list .active a:hover,
 #page-nav .header a,
-#page-nav .header code,
 #page-nav .header a:hover {
   color: var(--bg-color);
   background-color: var(--primary-color);
@@ -838,6 +835,9 @@ code {
   font-weight: 500;
   white-space: nowrap;
   padding: 0 0.1em;
+}
+a code {
+  color: inherit;
 }
 pre code {
   color: var(--syntax-base5);

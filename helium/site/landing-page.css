@@ -63,7 +63,7 @@ p {
   margin: 0;
   padding: 0;
 }
-ul {
+#header ul {
   list-style: none;
   display: block;
   margin: 0;
@@ -82,7 +82,7 @@ ul {
   background-color: var(--subtle-highlight);
   margin-bottom: 5px;
 }
-li {
+#header li {
   padding: 0 10px 0 10px;
   display: block;
   font-size: 16px;
@@ -306,4 +306,29 @@ li {
   left: 0;
   right: 0;
   margin: auto;
+}
+
+/* content from landing-page.md =================================================== */
+
+main {
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+  margin-bottom: 70px;
+  padding: 15px;
+}
+
+@media (min-width: 1020px) {
+  main {
+    max-width: var(--content-width);
+    padding: 15px 30px;
+  }
+}
+
+h1.title {
+  padding-top: 30px;
+}
+
+main p {
+  margin: 0 0 var(--block-spacing);
 }
