@@ -20,44 +20,21 @@
  */
 
 package cats.kernel
-package instances
+package laws
 
-trait AllInstances
-    extends BigDecimalInstances
-    with BigIntInstances
-    with BitSetInstances
-    with BooleanInstances
-    with ByteInstances
-    with CharInstances
-    with CurrencyInstances
-    with DoubleInstances
-    with EqInstances
-    with EitherInstances
-    with DurationInstances
-    with FloatInstances
-    with FunctionInstances
-    with HashInstances
-    with IntInstances
-    with ListInstances
-    with LongInstances
-    with MapInstances
-    with OptionInstances
-    with OrderInstances
-    with PartialOrderInstances
-    with QueueInstances
-    with SetInstances
-    with SeqInstances
-    with ShortInstances
-    with StreamInstances
-    with StringInstances
-    with SymbolInstances
-    with TupleInstances
-    with UnitInstances
-    with UUIDInstances
-    with VectorInstances
+import cats.kernel.instances.currency.*
+import cats.kernel.laws.discipline.*
+import munit.DisciplineSuite
+import java.util.Currency
+import org.scalacheck.{Arbitrary, Cogen, Gen}
+import scala.jdk.CollectionConverters.*
 
-private[instances] trait AllInstancesBinCompat0 extends FiniteDurationInstances
+class JvmLawTests extends TestsConfig with DisciplineSuite {
+  implicit private val arbitraryCurrency: Arbitrary[Currency] = Arbitrary(
+    Gen.oneOf(Currency.getAvailableCurrencies().asScala)
+  )
+  implicit private val cogenCurrency: Cogen[Currency] = Cogen[String].contramap(_.getCurrencyCode())
 
-private[instances] trait AllInstancesBinCompat1 extends SortedMapInstances with SortedSetInstances
-
-private[instances] trait AllInstancesBinCompat2 extends DeadlineInstances
+  checkAll("Eq[Currency]", EqTests[Currency].eqv)
+  checkAll("Hash[Currency]", HashTests[Currency].hash)
+}

@@ -22,42 +22,13 @@
 package cats.kernel
 package instances
 
-trait AllInstances
-    extends BigDecimalInstances
-    with BigIntInstances
-    with BitSetInstances
-    with BooleanInstances
-    with ByteInstances
-    with CharInstances
-    with CurrencyInstances
-    with DoubleInstances
-    with EqInstances
-    with EitherInstances
-    with DurationInstances
-    with FloatInstances
-    with FunctionInstances
-    with HashInstances
-    with IntInstances
-    with ListInstances
-    with LongInstances
-    with MapInstances
-    with OptionInstances
-    with OrderInstances
-    with PartialOrderInstances
-    with QueueInstances
-    with SetInstances
-    with SeqInstances
-    with ShortInstances
-    with StreamInstances
-    with StringInstances
-    with SymbolInstances
-    with TupleInstances
-    with UnitInstances
-    with UUIDInstances
-    with VectorInstances
+import java.util.Currency
 
-private[instances] trait AllInstancesBinCompat0 extends FiniteDurationInstances
+trait CurrencyInstances {
+  implicit def catsKernelStdHashForCurrency: Hash[Currency] = new CurrencyHash
+}
 
-private[instances] trait AllInstancesBinCompat1 extends SortedMapInstances with SortedSetInstances
-
-private[instances] trait AllInstancesBinCompat2 extends DeadlineInstances
+class CurrencyHash extends Hash[Currency] {
+  override def eqv(x: Currency, y: Currency): Boolean = x.getCurrencyCode().equals(y.getCurrencyCode())
+  override def hash(x: Currency): Int = x.getCurrencyCode().hashCode()
+}

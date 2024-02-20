@@ -39,6 +39,7 @@ trait AllInstances
     with BigIntInstances
     with BigDecimalInstances
     with BitSetInstances
+    with CurrencyInstances
     with EitherInstances
     with EqInstances
     with EquivInstances

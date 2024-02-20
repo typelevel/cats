@@ -30,6 +30,7 @@ trait AllInstances
     with BooleanInstances
     with ByteInstances
     with CharInstances
+    with CurrencyInstances
     with DoubleInstances
     with EqInstances
     with EitherInstances
