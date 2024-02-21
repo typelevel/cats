@@ -34,6 +34,7 @@ abstract class AllInstancesBinCompat
     with AllInstancesBinCompat7
     with AllInstancesBinCompat8
     with AllInstancesBinCompat9
+    with AllInstancesBinCompat11
 
 trait AllInstances
     extends AnyValInstances
@@ -41,7 +42,6 @@ trait AllInstances
     with BigIntInstances
     with BigDecimalInstances
     with BitSetInstances
-    with CurrencyInstances
     with EitherInstances
     with EqInstances
     with EquivInstances
@@ -100,3 +100,5 @@ trait AllInstancesBinCompat8 extends InvariantInstances
 trait AllInstancesBinCompat9 extends DeadlineInstances
 
 trait AllInstancesBinCompat10 extends InvariantInstancesBinCompat0
+
+trait AllInstancesBinCompat11 extends CurrencyInstances
