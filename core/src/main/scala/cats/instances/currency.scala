@@ -25,6 +25,5 @@ package instances
 import java.util.Currency
 
 trait CurrencyInstances extends cats.kernel.instances.CurrencyInstances {
-  implicit val catsStdShowForCurrency: Show[Currency] =
-    Show.fromToString[Currency]
+  implicit val catsStdShowForCurrency: Show[Currency] = Show.fromToString[Currency]
 }

@@ -27,3 +27,4 @@ package object all
     with AllInstancesBinCompat0
     with AllInstancesBinCompat1
     with AllInstancesBinCompat2
+    with AllInstancesBinCompat3
