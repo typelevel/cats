@@ -124,7 +124,6 @@ lazy val kernelLaws = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .settings(testingDependencies)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
-  .jvmSettings(libraryDependencies += "org.scala-lang.modules" %% "scala-collection-compat" % "2.11.0" % Test)
   .nativeSettings(commonNativeSettings)
 
 lazy val algebraSettings = Seq[Setting[?]](

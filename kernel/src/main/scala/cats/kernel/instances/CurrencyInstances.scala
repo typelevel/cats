@@ -25,10 +25,5 @@ package instances
 import java.util.Currency
 
 trait CurrencyInstances {
-  implicit def catsKernelStdHashForCurrency: Hash[Currency] = new CurrencyHash
-}
-
-class CurrencyHash extends Hash[Currency] {
-  override def eqv(x: Currency, y: Currency): Boolean = x.getCurrencyCode().equals(y.getCurrencyCode())
-  override def hash(x: Currency): Int = x.getCurrencyCode().hashCode()
+  implicit val catsKernelStdHashForCurrency: Hash[Currency] = Hash.fromUniversalHashCode[Currency]
 }
