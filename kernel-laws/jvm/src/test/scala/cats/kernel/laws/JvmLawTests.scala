@@ -22,12 +22,12 @@
 package cats.kernel
 package laws
 
+import cats.kernel.compat.scalaVersionSpecific.*
 import cats.kernel.instances.currency.*
 import cats.kernel.laws.discipline.*
 import munit.DisciplineSuite
 import java.util.Currency
 import org.scalacheck.{Arbitrary, Cogen, Gen}
-import scala.jdk.CollectionConverters.*
 
 class JvmLawTests extends TestsConfig with DisciplineSuite {
   implicit private val arbitraryCurrency: Arbitrary[Currency] = Arbitrary(
