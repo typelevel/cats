@@ -52,7 +52,7 @@ private[cats] object scalaVersionSpecific {
     )(implicit w1: A => TraversableLike[El1, Repr1], w2: T => IterableLike[El2, Repr2]) = (a, that).zipped
   }
 
-  implicit class setExtension[A](private val a: A) extends AnyVal {
-    def asScala(s: java.util.Set[A]): mutable.Set[A] = `set asScala`(s)
+  implicit class setExtension[A](private val s: java.util.Set[A]) extends AnyVal {
+    def asScala: mutable.Set[A] = `set asScala`(s)
   }
 }
