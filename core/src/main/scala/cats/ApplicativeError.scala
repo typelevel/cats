@@ -365,7 +365,7 @@ object ApplicativeError {
   def apply[F[_], E](implicit F: ApplicativeError[F, E]): ApplicativeError[F, E] = F
 
   final private[cats] class LiftFromOptionPartially[F[_]](private val dummy: Boolean = true) extends AnyVal {
-    def apply[E, A](oa: Option[A], ifEmpty: => E)(implicit F: ApplicativeError[F, _ >: E]): F[A] =
+    def apply[E, A](oa: Option[A], ifEmpty: => E)(implicit F: ApplicativeError[F, ? >: E]): F[A] =
       oa match {
         case Some(a) => F.pure(a)
         case None    => F.raiseError(ifEmpty)

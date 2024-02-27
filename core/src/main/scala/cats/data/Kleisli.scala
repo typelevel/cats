@@ -76,7 +76,7 @@ final case class Kleisli[F[_], -A, B](run: A => F[B]) { self =>
     }
 
   def flatMapF[C](f: B => F[C])(implicit F: FlatMap[F]): Kleisli[F, A, C] = run match {
-    case run: StrictConstFunction1[_] => Kleisli(run.andThen(F.flatMap(_: F[B])(f)))
+    case run: StrictConstFunction1[?] => Kleisli(run.andThen(F.flatMap(_: F[B])(f)))
     case _                            => Kleisli.shift(a => F.flatMap(run(a))(f))
   }
 

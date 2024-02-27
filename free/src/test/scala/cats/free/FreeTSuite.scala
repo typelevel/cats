@@ -72,7 +72,7 @@ class FreeTSuite extends CatsSuite {
   checkAll("FreeT[Option, Option, Int", DeferTests[FreeTOption].defer[Int])
 
   test("FlatMap stack safety tested with 50k flatMaps") {
-    val expected = Applicative[FreeTOption].pure(())
+    val expected = Applicative[FreeTOption].unit
     val result =
       Monad[FreeTOption].tailRecM(0)((i: Int) =>
         if (i < 50000)
@@ -85,9 +85,9 @@ class FreeTSuite extends CatsSuite {
   }
 
   test("Stack safe with 50k left-associated flatMaps") {
-    val expected = Applicative[FreeTOption].pure(())
+    val expected = Applicative[FreeTOption].unit
     val result =
-      (0 until 50000).foldLeft(Applicative[FreeTOption].pure(()))((fu, i) =>
+      (0 until 50000).foldLeft(Applicative[FreeTOption].unit)((fu, i) =>
         fu.flatMap(u => Applicative[FreeTOption].pure(u))
       )
 
@@ -95,7 +95,7 @@ class FreeTSuite extends CatsSuite {
   }
 
   test("Stack safe with flatMap followed by 50k maps") {
-    val expected = Applicative[FreeTOption].pure(())
+    val expected = Applicative[FreeTOption].unit
     val result =
       (0 until 50000).foldLeft(().pure[FreeTOption].flatMap(_.pure[FreeTOption]))((fu, i) => fu.map(identity))
 
@@ -110,7 +110,7 @@ class FreeTSuite extends CatsSuite {
   }
 
   test("mapK stack-safety") {
-    val a = (0 until 50000).foldLeft(Applicative[FreeTOption].pure(()))((fu, i) =>
+    val a = (0 until 50000).foldLeft(Applicative[FreeTOption].unit)((fu, i) =>
       fu.flatMap(u => Applicative[FreeTOption].pure(u))
     )
     val b = a.mapK(FunctionK.id)
@@ -126,7 +126,7 @@ class FreeTSuite extends CatsSuite {
   }
 
   test("compile stack-safety") {
-    val a = (0 until 50000).foldLeft(Applicative[FreeTOption].pure(()))((fu, i) =>
+    val a = (0 until 50000).foldLeft(Applicative[FreeTOption].unit)((fu, i) =>
       fu.flatMap(u => Applicative[FreeTOption].pure(u))
     )
     val b = a.compile(FunctionK.id) // used to overflow
@@ -147,7 +147,7 @@ class FreeTSuite extends CatsSuite {
     type F[A] = FreeT[Id, Option, A]
     val F = MonadError[F, Unit]
 
-    val eff = F.flatMap(F.pure(()))(_ => F.raiseError[String](()))
+    val eff = F.flatMap(F.unit)(_ => F.raiseError[String](()))
     assert(F.attempt(eff).runM(Some(_)) === Some(Left(())))
   }
 

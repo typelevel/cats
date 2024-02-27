@@ -6,7 +6,7 @@ val disciplineVersion = "1.5.1"
 
 val disciplineMunitVersion = "2.0.0-M3"
 
-val munitVersion = "1.0.0-M10"
+val munitVersion = "1.0.0-M11"
 
 val PrimaryJava = JavaSpec.temurin("8")
 val LTSJava = JavaSpec.temurin("17")
@@ -121,12 +121,12 @@ lazy val kernelLaws = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .jvmSettings(commonJvmSettings)
   .nativeSettings(commonNativeSettings)
 
-lazy val algebraSettings = Seq[Setting[_]](
+lazy val algebraSettings = Seq[Setting[?]](
   tlMimaPreviousVersions += "2.2.3",
   tlVersionIntroduced := List("2.12", "2.13", "3").map(_ -> "2.7.0").toMap
 )
 
-lazy val algebraNativeSettings = Seq[Setting[_]](
+lazy val algebraNativeSettings = Seq[Setting[?]](
   tlMimaPreviousVersions ~= (_ - "2.2.3"),
   tlVersionIntroduced += ("3" -> "2.8.0")
 )

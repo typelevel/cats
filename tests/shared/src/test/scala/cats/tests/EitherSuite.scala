@@ -108,9 +108,9 @@ class EitherSuite extends CatsSuite {
 
   test("implicit instances resolve specifically") {
     val eq = cats.kernel.instances.either.catsStdEqForEither[Int, String]
-    assert(!eq.isInstanceOf[PartialOrder[_]])
-    assert(!eq.isInstanceOf[Order[_]])
-    assert(!partialOrder.isInstanceOf[Order[_]])
+    assert(!eq.isInstanceOf[PartialOrder[?]])
+    assert(!eq.isInstanceOf[Order[?]])
+    assert(!partialOrder.isInstanceOf[Order[?]])
   }
 
   test("show isn't empty") {
