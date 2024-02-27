@@ -334,28 +334,6 @@ object SyntaxSuite {
     result3: F[T]
   }
 
-  def testTupledF[F[_]: Apply, A, B, C, T] = {
-    val fa = mock[F[A]]
-    val fab = mock[F[(A, B)]]
-    val fabc = mock[F[(A, B, C)]]
-
-    val fapply1 = mock[A => T]
-    val fapply2 = mock[(A, B) => T]
-    val fapply3 = mock[(A, B, C) => T]
-
-    val result1Tupled = fapply1.tupledF(fa)
-
-    result1Tupled: F[T]
-
-    val result2Tupled = fapply2.tupledF(fab)
-
-    result2Tupled: F[T]
-
-    val result3Tupled = fapply3.tupledF(fabc)
-
-    result3Tupled: F[T]
-  }
-
   def testParallelBi[M[_], F[_], T[_, _]: Bitraverse, A, B, C, D](implicit P: Parallel.Aux[M, F]): Unit = {
     val tab = mock[T[A, B]]
     val f = mock[A => M[C]]
