@@ -126,7 +126,8 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
 
       final override def traverse[G[_], A, B](fa: Vector[A])(f: A => G[B])(implicit G: Applicative[G]): G[Vector[B]] =
         G match {
-          case _ => G.map(Chain.traverseViaChain(fa)(f))(_.toVector)
+          case x: StackSafeMonad[G] => x.map(Traverse.traverseDirectly(fa)(f)(x))(_.toVector)
+          case _                    => G.map(Chain.traverseViaChain(fa)(f))(_.toVector)
         }
 
       final override def updated_[A, B >: A](fa: Vector[A], idx: Long, b: B): Option[Vector[B]] =
@@ -141,7 +142,8 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
        */
       override def traverse_[G[_], A, B](fa: Vector[A])(f: A => G[B])(implicit G: Applicative[G]): G[Unit] = {
         G match {
-          case _ =>
+          case x: StackSafeMonad[G] => Traverse.traverse_Directly(fa)(f)(x)
+          case _                    =>
             // the cost of this is O(size)
             // c(n) = 1 + 2 * c(n/2)
             // invariant: size >= 1
@@ -269,6 +271,7 @@ private[instances] trait VectorInstancesBinCompat0 {
 
     def traverseFilter[G[_], A, B](fa: Vector[A])(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[Vector[B]] =
       G match {
+        case x: StackSafeMonad[G] => TraverseFilter.traverseFilterDirectly(fa)(f)(x)
         case _ =>
           G.map(Chain.traverseFilterViaChain(fa)(f))(_.toVector)
       }
