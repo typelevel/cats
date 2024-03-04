@@ -138,7 +138,7 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
         G match {
           case x: StackSafeMonad[G] => Traverse.traverse_Directly(fa)(f)(x)
           case _ =>
-            foldRight(fa, Always(G.pure(()))) { (a, acc) =>
+            foldRight(fa, Eval.now(G.unit)) { (a, acc) =>
               G.map2Eval(f(a), acc) { (_, _) =>
                 ()
               }
