@@ -140,10 +140,10 @@ abstract class SemigroupFunctions[S[T] <: Semigroup[T]] {
     }
 
   def isCommutative[A](implicit ev: S[A]): Boolean =
-    ev.isInstanceOf[CommutativeSemigroup[_]]
+    ev.isInstanceOf[CommutativeSemigroup[?]]
 
   def isIdempotent[A](implicit ev: S[A]): Boolean =
-    ev.isInstanceOf[Band[_]]
+    ev.isInstanceOf[Band[?]]
 
   def combineN[@sp(Int, Long, Float, Double) A](a: A, n: Int)(implicit ev: S[A]): A =
     ev.combineN(a, n)

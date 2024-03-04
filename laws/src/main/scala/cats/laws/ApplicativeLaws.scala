@@ -66,10 +66,10 @@ trait ApplicativeLaws[F[_]] extends ApplyLaws[F] {
   // Semigroupal's associativity law.
 
   def monoidalLeftIdentity[A](fa: F[A]): (F[(Unit, A)], F[A]) =
-    (F.product(F.pure(()), fa), fa)
+    (F.product(F.unit, fa), fa)
 
   def monoidalRightIdentity[A](fa: F[A]): (F[(A, Unit)], F[A]) =
-    (F.product(fa, F.pure(())), fa)
+    (F.product(fa, F.unit), fa)
 }
 
 object ApplicativeLaws {

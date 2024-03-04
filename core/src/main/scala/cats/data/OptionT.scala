@@ -315,7 +315,7 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
    * res0: Try[Int] = Failure(java.lang.RuntimeException: ERROR!)
    * }}}
    */
-  def getOrRaise[E](e: => E)(implicit F: MonadError[F, _ >: E]): F[A] =
+  def getOrRaise[E](e: => E)(implicit F: MonadError[F, ? >: E]): F[A] =
     getOrElseF(F.raiseError(e))
 
   /**
@@ -786,6 +786,14 @@ object OptionT extends OptionTInstances {
    */
   def unlessF[F[_], A](cond: Boolean)(fa: => F[A])(implicit F: Applicative[F]): OptionT[F, A] =
     OptionT.whenF(!cond)(fa)
+
+  /**
+   * Creates a non-empty `OptionT[F, A]` from an `F[A]` value if the given F-condition is considered `false`.
+   * Otherwise, `none[F, A]` is returned. Analogous to `Option.unless` but for effectful conditions.
+   */
+  def unlessM[F[_], A](cond: F[Boolean])(fa: => F[A])(implicit F: Monad[F]): OptionT[F, A] = OptionT(
+    F.ifM(cond)(ifTrue = F.pure(None), ifFalse = F.map(fa)(Some(_)))
+  )
 
   /**
    * Same as `unlessF`, but expressed as a FunctionK for use with mapK.

@@ -52,14 +52,14 @@ jobs:
     timeout-minutes: 60
     steps:
       - name: Checkout current branch (full)
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Setup Java (temurin@8)
         id: setup-java-temurin-8
         if: matrix.java == 'temurin@8'
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 8
@@ -72,7 +72,7 @@ jobs:
       - name: Setup Java (temurin@17)
         id: setup-java-temurin-17
         if: matrix.java == 'temurin@17'
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 17
@@ -131,7 +131,7 @@ jobs:
 
       - name: Upload target directories
         if: github.event_name != 'pull_request' && (startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/main')
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: target-${{ matrix.os }}-${{ matrix.java }}-${{ matrix.scala }}-${{ matrix.project }}
           path: targets.tar
@@ -147,14 +147,14 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout current branch (full)
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Setup Java (temurin@8)
         id: setup-java-temurin-8
         if: matrix.java == 'temurin@8'
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 8
@@ -167,7 +167,7 @@ jobs:
       - name: Setup Java (temurin@17)
         id: setup-java-temurin-17
         if: matrix.java == 'temurin@17'
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 17
@@ -191,7 +191,7 @@ jobs:
         run: sbt +update
 
       - name: Download target directories (2.12, rootJS)
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: target-${{ matrix.os }}-${{ matrix.java }}-2.12-rootJS
 
@@ -201,7 +201,7 @@ jobs:
           rm targets.tar
 
       - name: Download target directories (2.12, rootJVM)
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: target-${{ matrix.os }}-${{ matrix.java }}-2.12-rootJVM
 
@@ -211,7 +211,7 @@ jobs:
           rm targets.tar
 
       - name: Download target directories (2.12, rootNative)
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: target-${{ matrix.os }}-${{ matrix.java }}-2.12-rootNative
 
@@ -221,7 +221,7 @@ jobs:
           rm targets.tar
 
       - name: Download target directories (2.13, rootJS)
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: target-${{ matrix.os }}-${{ matrix.java }}-2.13-rootJS
 
@@ -231,7 +231,7 @@ jobs:
           rm targets.tar
 
       - name: Download target directories (2.13, rootJVM)
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: target-${{ matrix.os }}-${{ matrix.java }}-2.13-rootJVM
 
@@ -241,7 +241,7 @@ jobs:
           rm targets.tar
 
       - name: Download target directories (2.13, rootNative)
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: target-${{ matrix.os }}-${{ matrix.java }}-2.13-rootNative
 
@@ -251,7 +251,7 @@ jobs:
           rm targets.tar
 
       - name: Download target directories (3, rootJS)
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: target-${{ matrix.os }}-${{ matrix.java }}-3-rootJS
 
@@ -261,7 +261,7 @@ jobs:
           rm targets.tar
 
       - name: Download target directories (3, rootJVM)
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: target-${{ matrix.os }}-${{ matrix.java }}-3-rootJVM
 
@@ -271,7 +271,7 @@ jobs:
           rm targets.tar
 
       - name: Download target directories (3, rootNative)
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: target-${{ matrix.os }}-${{ matrix.java }}-3-rootNative
 
@@ -285,7 +285,7 @@ jobs:
         env:
           PGP_SECRET: ${{ secrets.PGP_SECRET }}
           PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
-        run: echo $PGP_SECRET | base64 -di | gpg --import
+        run: echo $PGP_SECRET | base64 -d -i - | gpg --import
 
       - name: Import signing key and strip passphrase
         if: env.PGP_SECRET != '' && env.PGP_PASSPHRASE != ''
@@ -293,7 +293,7 @@ jobs:
           PGP_SECRET: ${{ secrets.PGP_SECRET }}
           PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
         run: |
-          echo "$PGP_SECRET" | base64 -di > /tmp/signing-key.gpg
+          echo "$PGP_SECRET" | base64 -d -i - > /tmp/signing-key.gpg
           echo "$PGP_PASSPHRASE" | gpg --pinentry-mode loopback --passphrase-fd 0 --import /tmp/signing-key.gpg
           (echo "$PGP_PASSPHRASE"; echo; echo) | gpg --command-fd 0 --pinentry-mode loopback --change-passphrase $(gpg --list-secret-keys --with-colons 2> /dev/null | grep '^sec:' | cut --delimiter ':' --fields 5 | tail -n 1)
 
@@ -314,14 +314,14 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout current branch (full)
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Setup Java (temurin@8)
         id: setup-java-temurin-8
         if: matrix.java == 'temurin@8'
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 8
@@ -334,7 +334,7 @@ jobs:
       - name: Setup Java (temurin@17)
         id: setup-java-temurin-17
         if: matrix.java == 'temurin@17'
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 17
@@ -372,12 +372,12 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout current branch (fast)
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Java (temurin@11)
         id: setup-java-temurin-11
         if: matrix.java == 'temurin@11'
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 11
@@ -397,14 +397,14 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout current branch (full)
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Setup Java (temurin@8)
         id: setup-java-temurin-8
         if: matrix.java == 'temurin@8'
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 8
@@ -417,7 +417,7 @@ jobs:
       - name: Setup Java (temurin@17)
         id: setup-java-temurin-17
         if: matrix.java == 'temurin@17'
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 17
@@ -450,18 +450,18 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        java: [temurin@8]
+        java: [temurin@17]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout current branch (full)
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Setup Java (temurin@8)
         id: setup-java-temurin-8
         if: matrix.java == 'temurin@8'
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 8
@@ -474,7 +474,7 @@ jobs:
       - name: Setup Java (temurin@17)
         id: setup-java-temurin-17
         if: matrix.java == 'temurin@17'
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 17

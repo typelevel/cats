@@ -169,7 +169,7 @@ def combineAll[A: Semigroup](as: List[A]): A =
 ```
 
 `Semigroup` isn't powerful enough for us to implement this function - namely, it doesn't give us an identity
-or fallback value if the list is empty. We need a power expressive abstraction, which we can find in the
+or fallback value if the list is empty. We need a more powerfully expressive abstraction, which we can find in the
 `Monoid` type class.
 
 N.B.

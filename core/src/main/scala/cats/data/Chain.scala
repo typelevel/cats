@@ -165,7 +165,7 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
   /**
    * Returns true if there are no elements in this collection.
    */
-  def isEmpty: Boolean = !this.isInstanceOf[Chain.NonEmpty[_]]
+  def isEmpty: Boolean = !this.isInstanceOf[Chain.NonEmpty[?]]
 
   /**
    * Returns false if there are no elements in this collection.
@@ -174,7 +174,7 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
 
   // Quick check whether the chain is either empty or contains one element only.
   @inline private def isEmptyOrSingleton: Boolean =
-    isEmpty || this.isInstanceOf[Chain.Singleton[_]]
+    isEmpty || this.isInstanceOf[Chain.Singleton[?]]
 
   /**
    * Concatenates this with `c` in O(1) runtime.
@@ -863,7 +863,7 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
 
   override def equals(o: Any): Boolean =
     o match {
-      case thatChain: Chain[_] =>
+      case thatChain: Chain[?] =>
         (this: Chain[Any]).===(thatChain: Chain[Any])(Eq.fromUniversalEquals[Any])
       case _ => false
     }
@@ -909,7 +909,9 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
 @suppressUnusedImportWarningForScalaVersionSpecific
 object Chain extends ChainInstances with ChainCompanionCompat {
 
-  private val sentinel: Function1[Any, Any] = new scala.runtime.AbstractFunction1[Any, Any] { def apply(a: Any) = this }
+  private val sentinel: Function1[Any, Any] = new scala.runtime.AbstractFunction1[Any, Any] {
+    def apply(a: Any): Any = this
+  }
 
   sealed abstract private[data] class NonEmpty[A] extends Chain[A]
 

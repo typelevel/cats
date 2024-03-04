@@ -25,7 +25,8 @@ package discipline
 
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import org.scalacheck.{Arbitrary, Cogen}
-import org.scalacheck.Prop._
+import org.scalacheck.Prop.*
+import org.typelevel.discipline.Laws
 
 trait InvariantMonoidalTests[F[_]] extends InvariantSemigroupalTests[F] {
   def laws: InvariantMonoidalLaws[F]
@@ -47,7 +48,7 @@ trait InvariantMonoidalTests[F[_]] extends InvariantSemigroupalTests[F] {
     new RuleSet {
       val name = "invariantMonoidal"
       val parents = Seq(invariantSemigroupal[A, B, C])
-      val bases = Seq.empty
+      val bases: Seq[(String, Laws#RuleSet)] = Seq.empty
       val props = Seq(
         "invariant monoidal left identity" -> forAll((fa: F[A]) => laws.invariantMonoidalLeftIdentity(fa)),
         "invariant monoidal right identity" -> forAll((fa: F[A]) => laws.invariantMonoidalRightIdentity(fa))

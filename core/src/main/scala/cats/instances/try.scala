@@ -37,20 +37,20 @@ trait TryInstances extends TryInstances1 {
       override def product[A, B](ta: Try[A], tb: Try[B]): Try[(A, B)] =
         (ta, tb) match {
           case (Success(a), Success(b)) => Success((a, b))
-          case (f: Failure[_], _)       => castFailure[(A, B)](f)
-          case (_, f: Failure[_])       => castFailure[(A, B)](f)
+          case (f: Failure[?], _)       => castFailure[(A, B)](f)
+          case (_, f: Failure[?])       => castFailure[(A, B)](f)
         }
 
       override def map2[A, B, Z](ta: Try[A], tb: Try[B])(f: (A, B) => Z): Try[Z] =
         (ta, tb) match {
           case (Success(a), Success(b)) => Try(f(a, b))
-          case (f: Failure[_], _)       => castFailure[Z](f)
-          case (_, f: Failure[_])       => castFailure[Z](f)
+          case (f: Failure[?], _)       => castFailure[Z](f)
+          case (_, f: Failure[?])       => castFailure[Z](f)
         }
 
       override def map2Eval[A, B, Z](ta: Try[A], tb: Eval[Try[B]])(f: (A, B) => Z): Eval[Try[Z]] =
         ta match {
-          case f: Failure[_] => Now(castFailure[Z](f))
+          case f: Failure[?] => Now(castFailure[Z](f))
           case Success(a)    => tb.map(_.map(f(a, _)))
         }
 
@@ -71,7 +71,7 @@ trait TryInstances extends TryInstances1 {
       def traverse[G[_], A, B](fa: Try[A])(f: A => G[B])(implicit G: Applicative[G]): G[Try[B]] =
         fa match {
           case Success(a)    => G.map(f(a))(Success(_))
-          case f: Failure[_] => G.pure(castFailure[B](f))
+          case f: Failure[?] => G.pure(castFailure[B](f))
         }
 
       override def mapAccumulate[S, A, B](init: S, fa: Try[A])(f: (S, A) => (S, B)): (S, Try[B]) = {
@@ -79,13 +79,13 @@ trait TryInstances extends TryInstances1 {
           case Success(a) =>
             val (snext, b) = f(init, a)
             (snext, Success(b))
-          case f: Failure[_] => (init, castFailure[B](f))
+          case f: Failure[?] => (init, castFailure[B](f))
         }
       }
 
       @tailrec final def tailRecM[B, C](b: B)(f: B => Try[Either[B, C]]): Try[C] =
         f(b) match {
-          case f: Failure[_]     => castFailure[C](f)
+          case f: Failure[?]     => castFailure[C](f)
           case Success(Left(b1)) => tailRecM(b1)(f)
           case Success(Right(c)) => Success(c)
         }
@@ -200,7 +200,7 @@ private[instances] object TryInstances {
    * A `Failure` can be statically typed as `Try[A]` for all `A`, because it
    * does not actually contain an `A` value (as `Success[A]` does).
    */
-  @inline final def castFailure[A](f: Failure[_]): Try[A] = f.asInstanceOf[Try[A]]
+  @inline final def castFailure[A](f: Failure[?]): Try[A] = f.asInstanceOf[Try[A]]
 }
 
 sealed private[instances] trait TryInstances1 extends TryInstances2 {

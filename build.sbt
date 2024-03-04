@@ -6,7 +6,7 @@ val disciplineVersion = "1.5.1"
 
 val disciplineMunitVersion = "2.0.0-M3"
 
-val munitVersion = "1.0.0-M8"
+val munitVersion = "1.0.0-M11"
 
 val PrimaryJava = JavaSpec.temurin("8")
 val LTSJava = JavaSpec.temurin("17")
@@ -14,9 +14,9 @@ val GraalVM = JavaSpec.graalvm("17")
 
 ThisBuild / githubWorkflowJavaVersions := Seq(PrimaryJava, LTSJava, GraalVM)
 
-val Scala212 = "2.12.18"
-val Scala213 = "2.13.11"
-val Scala3 = "3.3.0"
+val Scala212 = "2.12.19"
+val Scala213 = "2.13.13"
+val Scala3 = "3.3.3"
 
 ThisBuild / crossScalaVersions := Seq(Scala212, Scala213, Scala3)
 ThisBuild / scalaVersion := Scala213
@@ -121,12 +121,12 @@ lazy val kernelLaws = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .jvmSettings(commonJvmSettings)
   .nativeSettings(commonNativeSettings)
 
-lazy val algebraSettings = Seq[Setting[_]](
+lazy val algebraSettings = Seq[Setting[?]](
   tlMimaPreviousVersions += "2.2.3",
   tlVersionIntroduced := List("2.12", "2.13", "3").map(_ -> "2.7.0").toMap
 )
 
-lazy val algebraNativeSettings = Seq[Setting[_]](
+lazy val algebraNativeSettings = Seq[Setting[?]](
   tlMimaPreviousVersions ~= (_ - "2.2.3"),
   tlVersionIntroduced += ("3" -> "2.8.0")
 )
@@ -166,8 +166,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .settings(macroSettings)
   .settings(Compile / sourceGenerators += (Compile / sourceManaged).map(Boilerplate.gen).taskValue)
   .settings(
-    libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % Test,
-    Compile / doc / scalacOptions ~= { _.filterNot(_.startsWith("-W")) } // weird bug
+    libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % Test
   )
   .settings(testingDependencies)
   .jsSettings(commonJsSettings)
@@ -246,7 +245,6 @@ lazy val unidocs = project
                                                              alleycatsLaws.jvm,
                                                              testkit.jvm
     ),
-    scalacOptions ~= { _.filterNot(_.startsWith("-W")) }, // weird nsc bug
     ScalaUnidoc / unidoc / scalacOptions ++= Seq("-groups", "-diagrams")
   )
 
@@ -281,22 +279,16 @@ lazy val docs = project
     mdocVariables += ("API_LINK_BASE" -> s"https://www.javadoc.io/doc/org.typelevel/cats-docs_2.13/${mdocVariables
         .value("VERSION")}/"),
     laikaConfig := {
-      import laika.rewrite.link._
+      import laika.config._
 
       laikaConfig.value.withRawContent
         .withConfigValue("version", mdocVariables.value("VERSION"))
         .withConfigValue(
-          LinkConfig(apiLinks =
-            List(
-              ApiLinks(
-                baseUri = s"https://www.javadoc.io/doc/org.typelevel/cats-docs_2.13/${mdocVariables.value("VERSION")}/"
-              ),
-              ApiLinks(
-                baseUri = s"https://www.scala-lang.org/api/$Scala213/",
-                packagePrefix = "scala"
-              )
+          LinkConfig.empty
+            .addApiLinks(
+              ApiLinks(s"https://www.javadoc.io/doc/org.typelevel/cats-docs_2.13/${mdocVariables.value("VERSION")}/"),
+              ApiLinks(s"https://www.scala-lang.org/api/$Scala213/").withPackagePrefix("scala")
             )
-          )
         )
     },
     libraryDependencies ++= Seq(

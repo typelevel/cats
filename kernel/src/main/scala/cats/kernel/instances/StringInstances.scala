@@ -65,6 +65,6 @@ class StringMonoid extends Monoid[String] { self =>
         self.combineAll(revStrings)
       }
 
-      override def reverse = self
+      override def reverse: Monoid[String] = self
     }
 }

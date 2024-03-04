@@ -26,6 +26,7 @@ package discipline
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import org.scalacheck.Prop.forAll
 import org.scalacheck.{Arbitrary, Cogen}
+import org.typelevel.discipline.Laws
 
 trait InvariantSemigroupalTests[F[_]] extends InvariantTests[F] with SemigroupalTests[F] {
   def laws: InvariantSemigroupalLaws[F]
@@ -47,7 +48,7 @@ trait InvariantSemigroupalTests[F[_]] extends InvariantTests[F] with Semigroupal
     new RuleSet {
       val name = "invariantSemigroupal"
       val parents = Seq(invariant[A, B, C], semigroupal[A, B, C])
-      val bases = Nil
+      val bases: Seq[(String, Laws#RuleSet)] = Nil
       val props = Seq(
         "invariant semigroupal associativity" -> forAll((fa: F[A], fb: F[B], fc: F[C]) =>
           laws.invariantSemigroupalAssociativity(fa, fb, fc)
