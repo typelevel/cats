@@ -25,16 +25,32 @@ import compat.scalaVersionSpecific._
 
 @suppressUnusedImportWarningForScalaVersionSpecific
 trait UnitInstances {
-  implicit val catsKernelStdOrderForUnit: Order[Unit] with Hash[Unit] with BoundedEnumerable[Unit] =
+  implicit val catsKernelStdBoundableEnumerableForUnit: Order[Unit] with Hash[Unit] with BoundableEnumerable[Unit] with BoundedEnumerable[Unit] =
     new UnitOrder
 
   implicit val catsKernelStdAlgebraForUnit: BoundedSemilattice[Unit] with CommutativeGroup[Unit] =
     new UnitAlgebra
+
+  @deprecated(message = "Please use catsKernelStdBoundableEnumerableForUnit", since = "2.10.0")
+  def catsKernelStdOrderForUnit: Order[Unit] with Hash[Unit] with BoundedEnumerable[Unit] =
+    catsKernelStdBoundableEnumerableForUnit
 }
 
+@deprecated(message = "Please use BoundableEnumerable.", since = "2.10.0")
 trait UnitEnumerable extends BoundedEnumerable[Unit] {
   override def partialNext(x: Unit): Option[Unit] = None
   override def partialPrevious(x: Unit): Option[Unit] = None
+}
+
+private[instances] trait UnitBoundableEnumerable extends BoundableEnumerable[Unit] {
+  override final val size: BigInt = BigInt(0)
+  override final def fromEnum(a: Unit): BigInt = BigInt(0)
+  override final def toEnumOpt(i: BigInt): Option[Unit] =
+    if (i == BigInt(0)) {
+      Some(())
+    } else {
+      None
+    }
 }
 
 trait UnitBounded extends LowerBounded[Unit] with UpperBounded[Unit] {
@@ -42,7 +58,7 @@ trait UnitBounded extends LowerBounded[Unit] with UpperBounded[Unit] {
   override def maxBound: Unit = ()
 }
 
-class UnitOrder extends Order[Unit] with Hash[Unit] with UnitBounded with UnitEnumerable { self =>
+class UnitOrder extends Order[Unit] with Hash[Unit] with UnitBounded with UnitEnumerable with UnitBoundableEnumerable { self =>
   def compare(x: Unit, y: Unit): Int = 0
 
   def hash(x: Unit): Int = 0 // ().hashCode() == 0
