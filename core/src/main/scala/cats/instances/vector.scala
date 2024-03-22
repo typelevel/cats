@@ -271,7 +271,7 @@ private[instances] trait VectorInstancesBinCompat0 {
 
     def traverseFilter[G[_], A, B](fa: Vector[A])(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[Vector[B]] =
       G match {
-        case x: StackSafeMonad[G] => TraverseFilter.traverseFilterDirectly(fa)(f)(x)
+        case x: StackSafeMonad[G] => x.map(TraverseFilter.traverseFilterDirectly(fa)(f)(x))(_.toVector)
         case _ =>
           G.map(Chain.traverseFilterViaChain(fa)(f))(_.toVector)
       }
