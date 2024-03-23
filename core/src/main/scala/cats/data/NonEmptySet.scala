@@ -62,7 +62,7 @@ object NonEmptySetImpl extends NonEmptySetInstances with Newtype {
 }
 
 @suppressUnusedImportWarningForScalaVersionSpecific
-sealed class NonEmptySetOps[A](val value: NonEmptySet[A]) {
+sealed class NonEmptySetOps[A](private[data] val value: NonEmptySet[A]) {
 
   implicit private val ordering: Ordering[A] = toSortedSet.ordering
   implicit private val order: Order[A] = Order.fromOrdering
