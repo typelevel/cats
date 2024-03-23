@@ -38,6 +38,12 @@ class EitherTSuite extends CatsSuite {
   implicit val iso: Isomorphisms[EitherT[ListWrapper, String, *]] = Isomorphisms
     .invariant[EitherT[ListWrapper, String, *]](EitherT.catsDataFunctorForEitherT(ListWrapper.functor))
 
+  // Test instance summoning
+  def summon[F[_]: Traverse](): Unit = {
+    Bifunctor[EitherT[F, *, *]]
+    Bifoldable[EitherT[F, *, *]]
+  }
+
   checkAll("EitherT[Eval, String, *]", DeferTests[EitherT[Eval, String, *]].defer[Int])
 
   {
@@ -75,6 +81,20 @@ class EitherTSuite extends CatsSuite {
   }
 
   {
+    // if a Foldable for F is defined
+    implicit val F: Foldable[ListWrapper] = ListWrapper.foldable
+
+    checkAll("EitherT[ListWrapper, Int, *]", FoldableTests[EitherT[ListWrapper, Int, *]].foldable[Int, Int])
+    checkAll("Foldable[EitherT[ListWrapper, Int, *]]",
+             SerializableTests.serializable(Foldable[EitherT[ListWrapper, Int, *]])
+    )
+    checkAll("EitherT[ListWrapper, *, *]", BifoldableTests[EitherT[ListWrapper, *, *]].bifoldable[Int, Int, Int])
+    checkAll("Bifoldable[EitherT[ListWrapper, *, *]]",
+             SerializableTests.serializable(Bifoldable[EitherT[ListWrapper, *, *]])
+    )
+  }
+
+  {
     // if a Traverse for F is defined
     implicit val F: Traverse[ListWrapper] = ListWrapper.traverse
 
@@ -90,7 +110,6 @@ class EitherTSuite extends CatsSuite {
     checkAll("Bitraverse[EitherT[ListWrapper, *, *]]",
              SerializableTests.serializable(Bitraverse[EitherT[ListWrapper, *, *]])
     )
-
   }
 
   {

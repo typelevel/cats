@@ -965,10 +965,8 @@ abstract private[data] class EitherTInstances extends EitherTInstances1 {
   implicit def catsDataShowForEitherT[F[_], L, R](implicit sh: Show[F[Either[L, R]]]): Show[EitherT[F, L, R]] =
     Contravariant[Show].contramap(sh)(_.value)
 
-  implicit def catsDataBifunctorForEitherT[F[_]](implicit F: Functor[F]): Bifunctor[EitherT[F, *, *]] =
-    new EitherTBifunctor[F] {
-      val F0: Functor[F] = F
-    }
+  implicit def catsDataBitraverseForEitherT[F[_]](implicit F: Traverse[F]): Bitraverse[EitherT[F, *, *]] =
+    new EitherTBitraverse[F] { val F0 = F }
 
   implicit def catsDataTraverseForEitherT[F[_], L](implicit FF: Traverse[F]): Traverse[EitherT[F, L, *]] =
     new EitherTTraverse[F, L] with EitherTFunctor[F, L] {
@@ -1093,10 +1091,11 @@ abstract private[data] class EitherTInstances1 extends EitherTInstances2 {
       val F0: PartialOrder[F[Either[L, R]]] = F
     }
 
-  implicit def catsDataBitraverseForEitherT[F[_]](implicit F: Traverse[F]): Bitraverse[EitherT[F, *, *]] =
-    new EitherTBitraverse[F] with EitherTBifunctor[F] {
-      val F0: Traverse[F] = F
-    }
+  implicit def catsDataBifunctorForEitherT[F[_]](implicit F: Functor[F]): Bifunctor[EitherT[F, *, *]] =
+    new EitherTBifunctor[F] { val F0 = F }
+
+  implicit def catsDataBifoldableForEitherT[F[_]](implicit F: Foldable[F]): Bifoldable[EitherT[F, *, *]] =
+    new EitherTBifoldable[F] { val F0 = F }
 
   implicit def catsDataMonadErrorForEitherT[F[_], L](implicit F0: Monad[F]): MonadError[EitherT[F, L, *], L] =
     new EitherTMonadError[F, L] {
