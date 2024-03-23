@@ -237,5 +237,8 @@ private object QueueInstances {
           G.map2Eval(f(x), xse)((b, queue) => if (b) x +: queue else queue)
         )
         .value
+
+    override def mapAccumulateFilter[S, A, B](init: S, fa: Queue[A])(f: (S, A) => (S, Option[B])): (S, Queue[B]) =
+      StaticMethods.mapAccumulateFilterFromStrictFunctorFilter(init, fa, f)(this)
   }
 }
