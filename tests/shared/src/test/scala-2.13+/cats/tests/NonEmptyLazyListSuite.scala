@@ -199,6 +199,26 @@ class NonEmptyLazyListSuite extends NonEmptyCollectionSuite[LazyList, NonEmptyLa
 
     (1 to 100).sum === sum
   }
+
+  test("NonEmptyLazyList#appendLazyList is properly lazy") {
+    var evaluated = false
+    val ll = { evaluated = true; 1 } #:: LazyList.empty
+    val _ = NonEmptyLazyList(0).appendLazyList(ll)
+    assert(!evaluated)
+  }
+
+  test("NonEmptyLazyList#prependLazyList is properly lazy") {
+    var evaluated = false
+    val ll = { evaluated = true; 0 } #:: LazyList.empty
+    val _ = NonEmptyLazyList(1).prependLazyList(ll)
+    assert(!evaluated)
+  }
+
+  test("NonEmptyLazyList.apply is properly lazy") {
+    var evaluated = false
+    val _ = NonEmptyLazyList({ evaluated = true; 0 }, Nil: _*)
+    assert(!evaluated)
+  }
 }
 
 class ReducibleNonEmptyLazyListSuite extends ReducibleSuite[NonEmptyLazyList]("NonEmptyLazyList") {
