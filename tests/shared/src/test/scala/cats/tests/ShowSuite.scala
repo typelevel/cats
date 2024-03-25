@@ -24,13 +24,15 @@ package cats.tests
 import cats.{Contravariant, Show}
 import cats.Show.ContravariantShow
 import cats.kernel.Order
-import cats.syntax.show._
+import cats.syntax.show.*
 import cats.laws.discipline.{ContravariantTests, DeferTests, MiniInt, SerializableTests}
-import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.eq._
-
+import cats.laws.discipline.arbitrary.*
+import cats.laws.discipline.eq.*
 import java.util.concurrent.TimeUnit
+import scala.collection.immutable.BitSet
 import scala.collection.immutable.Seq
+import scala.collection.immutable.SortedMap
+import scala.collection.immutable.SortedSet
 import scala.concurrent.duration.{Duration, FiniteDuration}
 
 class ShowSuite extends CatsSuite {
@@ -82,6 +84,34 @@ class ShowSuite extends CatsSuite {
     assertEquals(show"$goodmornings", "List(guten Tag, good morning, bonjour)")
     assertEquals(show"${goodmornings.toList}", "List(guten Tag, good morning, bonjour)")
     assertEquals(show"${goodmornings.toVector}", "Vector(guten Tag, good morning, bonjour)")
+  }
+
+  test("show interpolation with Set subtypes isn't ambiguous") {
+    implicitly[ContravariantShow[Set[Int]]]
+    implicitly[ContravariantShow[SortedSet[Int]]]
+    implicitly[ContravariantShow[BitSet]]
+
+    val numbers: Set[Int] = Set(4, 2, 1, 3)
+    // relies on the implementation of Set for <= 4 elements, maybe replace the rhs with numbers.mkString(...)?
+    assertEquals(show"$numbers", "Set(4, 2, 1, 3)")
+
+    val numbersSorted: SortedSet[Int] = SortedSet(4, 2, 1, 3)
+    assertEquals(show"$numbersSorted", "SortedSet(1, 2, 3, 4)")
+
+    val numbersBitSet: BitSet = BitSet(4, 2, 1, 3)
+    assertEquals(show"$numbersBitSet", "BitSet(1, 2, 3, 4)")
+  }
+
+  test("show interpolation with Map subtypes isn't ambiguous") {
+    implicitly[ContravariantShow[Map[Int, String]]]
+    implicitly[ContravariantShow[SortedMap[Int, String]]]
+
+    val map: Map[Int, String] = Map(3 -> "three", 1 -> "one", 4 -> "four", 2 -> "two")
+    // same thing as with Set, relies on an implementation detail of Map
+    assertEquals(show"$map", "Map(3 -> three, 1 -> one, 4 -> four, 2 -> two)")
+
+    val mapSorted: SortedMap[Int, String] = SortedMap(3 -> "three", 1 -> "one", 4 -> "four", 2 -> "two")
+    assertEquals(show"$mapSorted", "SortedMap(1 -> one, 2 -> two, 3 -> three, 4 -> four)")
   }
 }
 
