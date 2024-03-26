@@ -43,7 +43,9 @@ class ChainSuite extends CatsSuite {
   checkAll("Chain[Int]", AlternativeTests[Chain].alternative[Int, Int, Int])
   checkAll("Alternative[Chain]", SerializableTests.serializable(Alternative[Chain]))
 
+  // Traverse behaviour discriminates on the Runtime type of the Applicative
   checkAll("Chain[Int] with Option", TraverseTests[Chain].traverse[Int, Int, Int, Set[Int], Option, Option])
+  checkAll("Chain[Int] with Eval", TraverseTests[Chain].traverse[Int, Int, Int, Set[Int], Eval, Eval])
   checkAll("Traverse[Chain]", SerializableTests.serializable(Traverse[Chain]))
 
   checkAll("Chain[Int]", MonadTests[Chain].monad[Int, Int, Int])

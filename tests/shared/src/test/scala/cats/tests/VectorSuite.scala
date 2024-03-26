@@ -21,7 +21,7 @@
 
 package cats.tests
 
-import cats.{Align, Alternative, CoflatMap, Monad, Semigroupal, Traverse, TraverseFilter}
+import cats.{Align, Alternative, CoflatMap, Eval, Monad, Semigroupal, Traverse, TraverseFilter}
 import cats.data.{NonEmptyVector, ZipVector}
 import cats.laws.discipline.{
   AlignTests,
@@ -51,7 +51,9 @@ class VectorSuite extends CatsSuite {
   checkAll("Vector[Int]", AlternativeTests[Vector].alternative[Int, Int, Int])
   checkAll("Alternative[Vector]", SerializableTests.serializable(Alternative[Vector]))
 
+  // TraverseFilter behaviour discriminates on the Runtime type of the Applicative
   checkAll("Vector[Int] with Option", TraverseTests[Vector].traverse[Int, Int, Int, Set[Int], Option, Option])
+  checkAll("Vector[Int] with Eval", TraverseTests[Vector].traverse[Int, Int, Int, Set[Int], Eval, Eval])
   checkAll("Traverse[Vector]", SerializableTests.serializable(Traverse[Vector]))
 
   checkAll("Vector[Int]", MonadTests[Vector].monad[Int, Int, Int])

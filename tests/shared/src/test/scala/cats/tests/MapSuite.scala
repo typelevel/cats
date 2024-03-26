@@ -21,7 +21,7 @@
 
 package cats.tests
 
-import cats.{Align, FlatMap, FunctorFilter, MonoidK, Semigroupal, Show, UnorderedTraverse}
+import cats.{Align, Eval, FlatMap, FunctorFilter, MonoidK, Semigroupal, Show, UnorderedTraverse}
 import cats.arrow.Compose
 import cats.kernel.{CommutativeMonoid, Monoid}
 import cats.kernel.instances.StaticMethods.wrapMutableMap
@@ -48,9 +48,11 @@ class MapSuite extends CatsSuite {
   checkAll("Map[Int, Int]", FlatMapTests[Map[Int, *]].flatMap[Int, Int, Int])
   checkAll("FlatMap[Map[Int, *]]", SerializableTests.serializable(FlatMap[Map[Int, *]]))
 
+  // Traverse behaviour discriminates on the Runtime type of the Applicative
   checkAll("Map[Int, Int] with Option",
            UnorderedTraverseTests[Map[Int, *]].unorderedTraverse[Int, Int, Int, Option, Option]
   )
+  checkAll("Map[Int, Int] with Eval", UnorderedTraverseTests[Map[Int, *]].unorderedTraverse[Int, Int, Int, Eval, Eval])
   checkAll("UnorderedTraverse[Map[Int, *]]", SerializableTests.serializable(UnorderedTraverse[Map[Int, *]]))
 
   checkAll("Map[Int, Int]", FunctorFilterTests[Map[Int, *]].functorFilter[Int, Int, Int])

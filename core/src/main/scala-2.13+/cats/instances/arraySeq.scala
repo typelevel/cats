@@ -102,7 +102,24 @@ private[cats] object ArraySeqInstances {
         B.combineAll(fa.iterator.map(f))
 
       def traverse[G[_], A, B](fa: ArraySeq[A])(f: A => G[B])(implicit G: Applicative[G]): G[ArraySeq[B]] =
-        G.map(Chain.traverseViaChain(fa)(f))(_.iterator.to(ArraySeq.untagged))
+        G match {
+          case x: StackSafeMonad[G] =>
+            x.map(Traverse.traverseDirectly(fa.iterator)(f)(x))(_.iterator.to(ArraySeq.untagged))
+          case _ =>
+            G.map(Chain.traverseViaChain(fa)(f))(_.iterator.to(ArraySeq.untagged))
+
+        }
+
+      override def traverse_[G[_], A, B](fa: ArraySeq[A])(f: A => G[B])(implicit G: Applicative[G]): G[Unit] =
+        G match {
+          case x: StackSafeMonad[G] => Traverse.traverse_Directly(fa)(f)(x)
+          case _ =>
+            foldRight(fa, Eval.now(G.unit)) { (a, acc) =>
+              G.map2Eval(f(a), acc) { (_, _) =>
+                ()
+              }
+            }.value
+        }
 
       override def mapAccumulate[S, A, B](init: S, fa: ArraySeq[A])(f: (S, A) => (S, B)): (S, ArraySeq[B]) =
         StaticMethods.mapAccumulateFromStrictFunctor(init, fa, f)(this)
@@ -214,9 +231,17 @@ private[cats] object ArraySeqInstances {
       def traverseFilter[G[_], A, B](
         fa: ArraySeq[A]
       )(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[ArraySeq[B]] =
-        fa.foldRight(Eval.now(G.pure(ArraySeq.untagged.empty[B]))) { case (x, xse) =>
-          G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o))
-        }.value
+        G match {
+          case x: StackSafeMonad[G] =>
+            x.map(TraverseFilter.traverseFilterDirectly(fa.iterator)(f)(x))(
+              _.iterator.to(ArraySeq.untagged)
+            )
+          case _ =>
+            fa.foldRight(Eval.now(G.pure(ArraySeq.untagged.empty[B]))) { case (x, xse) =>
+              G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o))
+            }.value
+
+        }
 
       override def filterA[G[_], A](fa: ArraySeq[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[ArraySeq[A]] =
         fa.foldRight(Eval.now(G.pure(ArraySeq.untagged.empty[A]))) { case (x, xse) =>

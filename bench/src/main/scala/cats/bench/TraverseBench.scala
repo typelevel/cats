@@ -24,14 +24,18 @@ package cats.bench
 import cats.{Eval, Traverse, TraverseFilter}
 import org.openjdk.jmh.annotations.{Benchmark, Param, Scope, Setup, State}
 import org.openjdk.jmh.infra.Blackhole
+import cats.data.Chain
 
 @State(Scope.Benchmark)
 class TraverseBench {
   val listT: Traverse[List] = Traverse[List]
   val listTFilter: TraverseFilter[List] = TraverseFilter[List]
+  val chainTFilter: TraverseFilter[Chain] = TraverseFilter[Chain]
 
   val vectorT: Traverse[Vector] = Traverse[Vector]
   val vectorTFilter: TraverseFilter[Vector] = TraverseFilter[Vector]
+
+  val chainT: Traverse[Chain] = Traverse[Chain]
 
   // the unit of CPU work per iteration
   private[this] val Work: Long = 10
@@ -43,11 +47,13 @@ class TraverseBench {
 
   var list: List[Int] = _
   var vector: Vector[Int] = _
+  var chain: Chain[Int] = _
 
   @Setup
   def setup(): Unit = {
     list = 0.until(length).toList
     vector = 0.until(length).toVector
+    chain = Chain.fromSeq(0.until(length))
   }
 
   @Benchmark
@@ -81,6 +87,18 @@ class TraverseBench {
     } catch {
       case Failure => ()
     }
+  }
+
+  @Benchmark
+  def traverse_List(bh: Blackhole) = {
+    val result = listT.traverse_(list) { i =>
+      Eval.later {
+        Blackhole.consumeCPU(Work)
+        i * 2
+      }
+    }
+
+    bh.consume(result.value)
   }
 
   @Benchmark
@@ -128,6 +146,18 @@ class TraverseBench {
   @Benchmark
   def traverseVector(bh: Blackhole) = {
     val result = vectorT.traverse(vector) { i =>
+      Eval.later {
+        Blackhole.consumeCPU(Work)
+        i * 2
+      }
+    }
+
+    bh.consume(result.value)
+  }
+
+  @Benchmark
+  def traverse_Vector(bh: Blackhole) = {
+    val result = vectorT.traverse_(vector) { i =>
       Eval.later {
         Blackhole.consumeCPU(Work)
         i * 2
@@ -198,5 +228,62 @@ class TraverseBench {
     }
 
     bh.consume(results)
+  }
+
+  @Benchmark
+  def traverseChain(bh: Blackhole) = {
+    val result = chainT.traverse(chain) { i =>
+      Eval.later {
+        Blackhole.consumeCPU(Work)
+        i * 2
+      }
+    }
+
+    bh.consume(result.value)
+  }
+
+  @Benchmark
+  def traverse_Chain(bh: Blackhole) = {
+    val result = chainT.traverse_(chain) { i =>
+      Eval.later {
+        Blackhole.consumeCPU(Work)
+        i * 2
+      }
+    }
+
+    bh.consume(result.value)
+  }
+
+  @Benchmark
+  def traverseChainError(bh: Blackhole) = {
+    val result = chainT.traverse(chain) { i =>
+      Eval.later {
+        Blackhole.consumeCPU(Work)
+
+        if (i == length * 0.3) {
+          throw Failure
+        }
+
+        i * 2
+      }
+    }
+
+    try {
+      bh.consume(result.value)
+    } catch {
+      case Failure => ()
+    }
+  }
+
+  @Benchmark
+  def traverseFilterChain(bh: Blackhole) = {
+    val result = chainTFilter.traverseFilter(chain) { i =>
+      Eval.later {
+        Blackhole.consumeCPU(Work)
+        if (i % 2 == 0) Some(i * 2) else None
+      }
+    }
+
+    bh.consume(result.value)
   }
 }

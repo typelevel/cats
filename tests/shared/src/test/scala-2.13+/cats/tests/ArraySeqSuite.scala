@@ -21,7 +21,7 @@
 
 package cats.tests
 
-import cats.{Align, Alternative, CoflatMap, Monad, MonoidK, Traverse, TraverseFilter}
+import cats.{Align, Alternative, CoflatMap, Eval, Monad, MonoidK, Traverse, TraverseFilter}
 import cats.kernel.{Eq, Hash, Monoid, Order, PartialOrder}
 import cats.kernel.laws.discipline.{EqTests, HashTests, MonoidTests, OrderTests, PartialOrderTests}
 import cats.laws.discipline.{
@@ -52,7 +52,9 @@ class ArraySeqSuite extends CatsSuite {
   checkAll("ArraySeq[Int]", AlternativeTests[ArraySeq].alternative[Int, Int, Int])
   checkAll("Alternative[ArraySeq]", SerializableTests.serializable(Alternative[ArraySeq]))
 
+  // Traverse behaviour discriminates on the Runtime type of the Applicative
   checkAll("ArraySeq[Int] with Option", TraverseTests[ArraySeq].traverse[Int, Int, Int, Set[Int], Option, Option])
+  checkAll("ArraySeq[Int] with Eval", TraverseTests[ArraySeq].traverse[Int, Int, Int, Set[Int], Eval, Eval])
   checkAll("Traverse[ArraySeq]", SerializableTests.serializable(Traverse[ArraySeq]))
 
   checkAll("ArraySeq[Int]", MonadTests[ArraySeq].monad[Int, Int, Int])
