@@ -718,7 +718,7 @@
 </span><span class="keyword">import</span><span> </span><span class="type-name">TeletypeOps</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="keyword">val</span><span> </span><span class="identifier">state</span><span> = </span><span class="identifier">program</span><span>.</span><span class="identifier">foldMap</span><span>(</span><span class="identifier">interpreter</span><span>)
-</span><span class="comment">// state: TeletypeState[Unit] = cats.data.IndexedStateT@5645dfd0
+</span><span class="comment">// state: TeletypeState[Unit] = cats.data.IndexedStateT@5e46aeef
 </span><span class="keyword">val</span><span> </span><span class="identifier">initialState</span><span> = </span><span class="type-name">Nil</span><span>
 </span><span class="comment">// initialState: Nil.type = List()
 </span><span class="keyword">val</span><span> (</span><span class="identifier">stored</span><span>, </span><span class="identifier">_</span><span>) = </span><span class="identifier">state</span><span>.</span><span class="identifier">run</span><span>(</span><span class="identifier">initialState</span><span>).</span><span class="identifier">value</span><span>
@@ -789,7 +789,7 @@
 //       value = Success(value = Some(value = Left(value = Action(value = 7))))
 //     )
 //   ),
-//   f0 = scala.Function1$$Lambda$14191/0x00007f2fd85f3b20@1d51871b
+//   f0 = scala.Function1$$Lambda$14181/0x00007f3cd85fb840@30831cf6
 // )
 </span><span class="keyword">val</span><span> </span><span class="identifier">evaluated</span><span> = </span><span class="identifier">hoisted</span><span>.</span><span class="identifier">foldMap</span><span>(</span><span class="identifier">tryInterpreter</span><span>)
 </span><span class="comment">// evaluated: OptTry[Int] = OptionT(value = Success(value = Some(value = 12)))
