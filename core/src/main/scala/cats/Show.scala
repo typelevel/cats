@@ -107,9 +107,6 @@ object Show extends ScalaVersionSpecificShowInstances with ShowInstances {
   implicit def catsShowForQueue[A: Show]: Show[Queue[A]] = cats.instances.queue.catsStdShowForQueue[A]
   implicit def catsShowForEither[A: Show, B: Show]: Show[Either[A, B]] =
     cats.instances.either.catsStdShowForEither[A, B]
-  implicit def catsShowForSet[A: Show]: Show[Set[A]] = cats.instances.set.catsStdShowForSet[A]
-  implicit def catsShowForMap[K: Show, V: Show]: Show[Map[K, V]] = cats.instances.map.catsStdShowForMap[K, V]
-  implicit def catsShowForSortedSet[A: Show]: Show[SortedSet[A]] = cats.instances.sortedSet.catsStdShowForSortedSet[A]
   implicit def catsShowForSortedMap[K: Show, V: Show]: Show[SortedMap[K, V]] =
     cats.instances.sortedMap.catsStdShowForSortedMap[K, V]
 
@@ -120,8 +117,12 @@ object Show extends ScalaVersionSpecificShowInstances with ShowInstances {
 private[cats] trait ShowInstances extends cats.instances.NTupleShowInstances with ShowInstances0 {
   implicit def catsShowForFiniteDuration: Show[FiniteDuration] =
     cats.instances.finiteDuration.catsStdShowForFiniteDurationUnambiguous
+
+  implicit def catsShowForSortedSet[A: Show]: Show[SortedSet[A]] = cats.instances.sortedSet.catsStdShowForSortedSet[A]
 }
 
 private[cats] trait ShowInstances0 {
   implicit def catsShowForSeq[A: Show]: Show[Seq[A]] = cats.instances.seq.catsStdShowForSeq[A]
+  implicit def catsShowForMap[K: Show, V: Show]: Show[Map[K, V]] = cats.instances.map.catsStdShowForMap[K, V]
+  implicit def catsShowForSet[A: Show]: Show[Set[A]] = cats.instances.set.catsStdShowForSet[A]
 }
