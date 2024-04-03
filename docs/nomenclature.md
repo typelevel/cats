@@ -283,7 +283,7 @@ Here, we use `Ki` as a short-hand for `Kleisli`.
 | `F[A, B] => F[C, A] => F[C, B]` | `compose` | `<<<` |
 | `F[A, B] => F[B, C] => F[A, C]` | `andThen` | `>>>` |
 | `=> F[A,A]` | `id`  |
-| `F[A, B] => F[C, B] => F[Either[A, C], B]` | `choice` | `|||`
+| `F[A, B] => F[C, B] => F[Either[A, C], B]` | `choice` | `|||` |
 | `=> F[ Either[A, A], A]` | `codiagonal` |
 
 #### Arrow
