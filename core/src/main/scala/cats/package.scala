@@ -31,7 +31,7 @@ import cats.data.Ior
  * For each type class, `cats` provides three pieces:
  * - Its '''signature''': a trait that is polymorphic on a type parameter.
  *   Type class traits inherit from other type classes to indicate that any implementation of the lower type class (e.g. `Applicative`)
- *   can also serve as an instance for the higuer type class (e.g. `Functor`).
+ *   can also serve as an instance for the higher type class (e.g. `Functor`).
  * - Type class ''''instances''', which are classes and objects that implement one or more type class signatures for some specific types.
  *   Type class instances for several data types from the Java or Scala standard libraries are declared in the subpackage `cats.instances`.
  * - '''Syntax extensions''', each of which provides the methods of the type class defines as extension methods
