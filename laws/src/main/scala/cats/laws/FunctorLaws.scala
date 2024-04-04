@@ -33,6 +33,9 @@ trait FunctorLaws[F[_]] extends InvariantLaws[F] {
   def covariantIdentity[A](fa: F[A]): IsEq[F[A]] =
     fa.map(identity) <-> fa
 
+  def mapOrKeepToMapEquivalence[A, A1 >: A](fa: F[A], pf: PartialFunction[A, A1]): IsEq[F[A1]] =
+    fa.mapOrKeep(pf) <-> fa.map(a => pf.applyOrElse(a, identity[A1]))
+
   def covariantComposition[A, B, C](fa: F[A], f: A => B, g: B => C): IsEq[F[C]] =
     fa.map(f).map(g) <-> fa.map(f.andThen(g))
 }

@@ -178,6 +178,19 @@ trait Functor[F[_]] extends Invariant[F] { self =>
   def tupleRight[A, B](fa: F[A], b: B): F[(A, B)] = map(fa)(a => (a, b))
 
   /**
+   * Modifies the `A` value in `F[A]` with the supplied function, if the function is defined for the value.
+   * Example:
+   * {{{
+   * scala> import cats.Functor
+   * scala> import cats.implicits.catsStdInstancesForList
+   *
+   * scala> Functor[List].mapOrKeep(List(1, 2, 3)) { case 2 => 42 }
+   * res0: List[Int] = List(1, 42, 3)
+   * }}}
+   */
+  def mapOrKeep[A, A1 >: A](fa: F[A])(pf: PartialFunction[A, A1]): F[A1] = map(fa)(a => pf.applyOrElse(a, identity[A1]))
+
+  /**
    * Un-zips an `F[(A, B)]` consisting of element pairs or Tuple2 into two separate F's tupled.
    *
    * NOTE: Check for effect duplication, possibly memoize before
@@ -258,6 +271,7 @@ object Functor {
     def as[B](b: B): F[B] = typeClassInstance.as[A, B](self, b)
     def tupleLeft[B](b: B): F[(B, A)] = typeClassInstance.tupleLeft[A, B](self, b)
     def tupleRight[B](b: B): F[(A, B)] = typeClassInstance.tupleRight[A, B](self, b)
+    def mapOrKeep[A1 >: A](pf: PartialFunction[A, A1]): F[A1] = typeClassInstance.mapOrKeep[A, A1](self)(pf)
   }
   trait AllOps[F[_], A] extends Ops[F, A] with Invariant.AllOps[F, A] {
     type TypeClassType <: Functor[F]

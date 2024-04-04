@@ -14,16 +14,17 @@ _WARNING_: this page is written manually, and not automatically generated, so ma
 
 ### Functor
 
-| Type          | Method Name  |
-| ------------- |--------------|
-| `F[A] => F[Unit]`  | `void`   |
-| `F[A] => B => F[B]`  | `as`   |
-| `F[A] => (A => B) => F[B]` | `map`   |
-| `F[A] => (A => B) => F[(A,B)]` | `fproduct`   |
-| `F[A] => (A => B) => F[(B,A)]` | `fproductLeft`   |
-| `F[A] => B => F[(B, A)]`  | `tupleLeft`  |
-| `F[A] => B => F[(A, B)]`  | `tupleRight` |
-| `(A => B) => (F[A] => F[B])` | `lift`   |
+| Type                           | Method Name    | Notes |
+|--------------------------------|----------------|-------|
+| `F[A] => F[Unit]`              | `void`         |
+| `F[A] => B => F[B]`            | `as`           |
+| `F[A] => (A => B) => F[B]`     | `map`          |
+| `F[A] => (A => A1) => F[A1])`  | `mapOrKeep`    | A1 >: A, the (A => A1) is a PartialFunction
+| `F[A] => (A => B) => F[(A,B)]` | `fproduct`     |
+| `F[A] => (A => B) => F[(B,A)]` | `fproductLeft` |
+| `F[A] => B => F[(B, A)]`       | `tupleLeft`    |
+| `F[A] => B => F[(A, B)]`       | `tupleRight`   |
+| `(A => B) => (F[A] => F[B])`   | `lift`         |
 
 ### Apply
 
