@@ -122,6 +122,18 @@ trait TraverseFilter[F[_]] extends FunctorFilter[F] {
   override def mapFilter[A, B](fa: F[A])(f: A => Option[B]): F[B] =
     traverseFilter[Id, A, B](fa)(f)
 
+  /**
+  * Like [[mapAccumulate]], but allows `Option` in supplied accumulating function,
+  * keeping only `Some`s.
+  *
+  * Example:
+  * {{{
+  * scala> import cats.syntax.all._
+  * scala> val sumAllAndKeepOdd = (s: Int, n: Int) => (s + n, Option.when(n % 2 == 1)(n))
+  * scala> List(1, 2, 3, 4).mapAccumulateFilter(0, sumAllAndKeepOdd)
+  * res1: (Int, List[Int]) = (10, List(1, 3))
+  * }}}
+  */
   def mapAccumulateFilter[S, A, B](init: S, fa: F[A])(f: (S, A) => (S, Option[B])): (S, F[B]) =
     traverseFilter(fa)(a => State(s => f(s, a))).run(init).value
 
