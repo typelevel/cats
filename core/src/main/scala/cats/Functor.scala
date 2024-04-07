@@ -64,12 +64,11 @@ trait Functor[F[_]] extends Invariant[F] { self =>
    *
    * Example:
    * {{{
-   * scala> import cats.Functor
-   * scala> import cats.implicits.catsStdInstancesForOption
+   * scala> import cats.syntax.all._
    *
-   * scala> val s = Some(42)
-   * scala> Functor[Option].widen(s)
-   * res0: Option[Int] = Some(42)
+   * scala> val l = List(Some(42))
+   * scala> l.widen[Option[Int]]
+   * res0: List[Option[Int]] = List(Some(42))
    * }}}
    */
   def widen[A, B >: A](fa: F[A]): F[B] = fa.asInstanceOf[F[B]]
@@ -94,10 +93,9 @@ trait Functor[F[_]] extends Invariant[F] { self =>
    *
    * Example:
    * {{{
-   * scala> import cats.Functor
-   * scala> import cats.implicits.catsStdInstancesForList
+   * scala> import cats.syntax.all._
    *
-   * scala> Functor[List].void(List(1,2,3))
+   * scala> List(1,2,3).void
    * res0: List[Unit] = List((), (), ())
    * }}}
    */
@@ -109,10 +107,9 @@ trait Functor[F[_]] extends Invariant[F] { self =>
    *
    * Example:
    * {{{
-   * scala> import cats.Functor
-   * scala> import cats.implicits.catsStdInstancesForOption
+   * scala> import cats.syntax.all._
    *
-   * scala> Functor[Option].fproduct(Option(42))(_.toString)
+   * scala> Option(42).fproduct(_.toString)
    * res0: Option[(Int, String)] = Some((42,42))
    * }}}
    */
@@ -123,10 +120,9 @@ trait Functor[F[_]] extends Invariant[F] { self =>
    *
    * Example:
    * {{{
-   * scala> import cats.Functor
-   * scala> import cats.implicits.catsStdInstancesForOption
+   * scala> import cats.syntax.all._
    *
-   * scala> Functor[Option].fproductLeft(Option(42))(_.toString)
+   * scala> Option(42).fproductLeft(_.toString)
    * res0: Option[(String, Int)] = Some((42,42))
    * }}}
    */
@@ -138,10 +134,9 @@ trait Functor[F[_]] extends Invariant[F] { self =>
    * Example:
    *
    * {{{
-   * scala> import cats.Functor
-   * scala> import cats.implicits.catsStdInstancesForList
+   * scala> import cats.syntax.all._
    *
-   * scala> Functor[List].as(List(1,2,3), "hello")
+   * scala> List(1,2,3).as("hello")
    * res0: List[String] = List(hello, hello, hello)
    * }}}
    */
@@ -153,10 +148,9 @@ trait Functor[F[_]] extends Invariant[F] { self =>
    * Example:
    * {{{
    * scala> import scala.collection.immutable.Queue
-   * scala> import cats.Functor
-   * scala> import cats.implicits.catsStdInstancesForQueue
+   * scala> import cats.syntax.all._
    *
-   * scala> Functor[Queue].tupleLeft(Queue("hello", "world"), 42)
+   * scala> Queue("hello", "world").tupleLeft(42)
    * res0: scala.collection.immutable.Queue[(Int, String)] = Queue((42,hello), (42,world))
    * }}}
    */
@@ -168,10 +162,9 @@ trait Functor[F[_]] extends Invariant[F] { self =>
    * Example:
    * {{{
    * scala> import scala.collection.immutable.Queue
-   * scala> import cats.Functor
-   * scala> import cats.implicits.catsStdInstancesForQueue
+   * scala> import cats.syntax.all._
    *
-   * scala> Functor[Queue].tupleRight(Queue("hello", "world"), 42)
+   * scala> Queue("hello", "world").tupleRight(42)
    * res0: scala.collection.immutable.Queue[(String, Int)] = Queue((hello,42), (world,42))
    * }}}
    */
@@ -181,10 +174,9 @@ trait Functor[F[_]] extends Invariant[F] { self =>
    * Modifies the `A` value in `F[A]` with the supplied function, if the function is defined for the value.
    * Example:
    * {{{
-   * scala> import cats.Functor
-   * scala> import cats.implicits.catsStdInstancesForList
+   * scala> import cats.syntax.all._
    *
-   * scala> Functor[List].mapOrKeep(List(1, 2, 3)) { case 2 => 42 }
+   * scala> List(1, 2, 3).mapOrKeep { case 2 => 42 }
    * res0: List[Int] = List(1, 42, 3)
    * }}}
    */
@@ -203,7 +195,6 @@ trait Functor[F[_]] extends Invariant[F] { self =>
    * res0: (List[Int], List[Int]) = (List(1, 3),List(2, 4))
    * }}}
    */
-
   def unzip[A, B](fab: F[(A, B)]): (F[A], F[B]) = (map(fab)(_._1), map(fab)(_._2))
 
   /**
@@ -218,7 +209,6 @@ trait Functor[F[_]] extends Invariant[F] { self =>
    * res0: List[Int] = List(1, 0, 0)
    * }}}
    */
-
   def ifF[A](fb: F[Boolean])(ifTrue: => A, ifFalse: => A): F[A] = map(fb)(x => if (x) ifTrue else ifFalse)
 
   def compose[G[_]: Functor]: Functor[λ[α => F[G[α]]]] =
