@@ -161,6 +161,20 @@ trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
 
     tailRecM(branches.toList)(step)
   }
+
+  /**
+   * Modifies the `A` value in `F[A]` with the supplied function, if the function is defined for the value.
+   * Example:
+   * {{{
+   * scala> import cats.syntax.all._
+   *
+   * scala> List(1, 2, 3).flatMapOrKeep{ case 2 => List(2, 22, 222) }
+   * res0: List[Int] = List(1, 2, 22, 222, 3)
+   * }}}
+   */
+  def flatMapOrKeep[A, A1 >: A](fa: F[A])(pfa: PartialFunction[A, F[A1]]): F[A1] =
+    flatMap(fa)(a => pfa.applyOrElse(a, pure[A1]))
+
 }
 
 object Monad {
