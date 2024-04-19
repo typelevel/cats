@@ -48,9 +48,11 @@ final class ApplicativeOps[F[_], A](private val fa: F[A]) extends AnyVal {
 final class ApplicativeByValueOps[F[_], A](private val fa: F[A]) extends AnyVal {
   def replicateA(n: Int)(implicit F: Applicative[F]): F[List[A]] = F.replicateA(n, fa)
   def replicateA_(n: Int)(implicit F: Applicative[F]): F[Unit] = F.replicateA_(n, fa)
+  def elseA(cond: Boolean)(other: F[A])(implicit F: Applicative[F]): F[A] = F.elseA(cond)(fa)(other)
 }
 
 final class ApplicativeByNameOps[F[_], A](private val fa: () => F[A]) extends AnyVal {
   def unlessA(cond: Boolean)(implicit F: Applicative[F]): F[Unit] = F.unlessA(cond)(fa())
   def whenA(cond: Boolean)(implicit F: Applicative[F]): F[Unit] = F.whenA(cond)(fa())
+  def elseA(cond: Boolean)(other: () => F[A])(implicit F: Applicative[F]): F[A] = F.elseA(cond)(fa())(other())
 }

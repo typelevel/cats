@@ -88,6 +88,18 @@ class ApplicativeSuite extends CatsSuite {
     assertEquals(j, 0)
   }
 
+  test("elseA return given argument when cond is true") {
+    forAll { (l: List[Int]) =>
+      assert(l.elseA(true)(Nil) === List.fill(l.length)(()))
+    }
+  }
+
+  test("elseA return given argument when cond is false") {
+    forAll { (l: List[Int]) =>
+      assert(l.elseA(false)(Nil) === Nil)
+    }
+  }
+
   {
     implicit val optionMonoid: Monoid[Option[Int]] = Applicative.monoid[Option, Int]
     checkAll("Applicative[Option].monoid", MonoidTests[Option[Int]](optionMonoid).monoid)

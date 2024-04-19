@@ -263,6 +263,9 @@ trait Applicative[F[_]] extends Apply[F] with InvariantMonoidal[F] { self =>
   def whenA[A](cond: Boolean)(f: => F[A]): F[Unit] =
     if (cond) void(f) else unit
 
+  def elseA[A](cond: Boolean)(f: => F[A])(other: => F[A]): F[A] =
+    if (cond) f else other
+
 }
 
 object Applicative {

@@ -126,6 +126,8 @@ trait Parallel[M[_]] extends NonEmptyParallel[M] {
       override def unlessA[A](cond: Boolean)(f: => F[A]): F[Unit] = applicative.unlessA(cond)(f)
 
       override def whenA[A](cond: Boolean)(f: => F[A]): F[Unit] = applicative.whenA(cond)(f)
+
+      override def elseA[A](cond: Boolean)(f: => F[A])(other: => F[A]): F[A] = applicative.elseA(cond)(f)(other)
     }
 }
 
