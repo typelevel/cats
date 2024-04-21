@@ -873,6 +873,13 @@ code .type-name, code .tag-name, code .xml-dtd-tag-name, code .markup-fence {
   color: var(--syntax-wheel5);
 }
 
+code .diff-added {
+  background-color: rgb(0 175 0 / 40%);
+}
+code .diff-removed {
+  background-color: rgb(250 0 0 / 40%);
+}
+
 
 
 ul.toc, .toc ul {
