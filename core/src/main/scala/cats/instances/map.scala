@@ -44,9 +44,16 @@ trait MapInstances extends cats.kernel.instances.MapInstances {
       )(f: A => G[B])(implicit G: CommutativeApplicative[G]): G[Map[K, B]] = {
         if (fa.isEmpty) G.pure(Map.empty[K, B])
         else
-          G.map(Chain.traverseViaChain(fa.toIndexedSeq) { case (k, a) =>
-            G.map(f(a))((k, _))
-          })(_.iterator.toMap)
+          G match {
+            case x: StackSafeMonad[G] =>
+              fa.iterator.foldLeft(G.pure(Map.empty[K, B])) { case (accG, (k, a)) =>
+                x.map2(accG, f(a)) { case (acc, b) => acc + (k -> b) }
+              }
+            case _ =>
+              G.map(Chain.traverseViaChain(fa.toIndexedSeq) { case (k, a) =>
+                G.map(f(a))((k, _))
+              })(_.iterator.toMap)
+          }
       }
 
       override def map[A, B](fa: Map[K, A])(f: A => B): Map[K, B] =

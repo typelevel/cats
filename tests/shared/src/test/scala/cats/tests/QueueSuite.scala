@@ -21,7 +21,7 @@
 
 package cats.tests
 
-import cats.{Alternative, CoflatMap, Monad, Semigroupal, Traverse, TraverseFilter}
+import cats.{Alternative, CoflatMap, Eval, Monad, Semigroupal, Traverse, TraverseFilter}
 import cats.laws.discipline.{
   AlternativeTests,
   CoflatMapTests,
@@ -50,7 +50,9 @@ class QueueSuite extends CatsSuite {
   checkAll("Queue[Int]", MonadTests[Queue].monad[Int, Int, Int])
   checkAll("Monad[Queue]", SerializableTests.serializable(Monad[Queue]))
 
+  // Traverse behaviour discriminates on the Runtime type of the Applicative
   checkAll("Queue[Int] with Option", TraverseTests[Queue].traverse[Int, Int, Int, Set[Int], Option, Option])
+  checkAll("Queue[Int] with Eval", TraverseTests[Queue].traverse[Int, Int, Int, Set[Int], Eval, Eval])
   checkAll("Traverse[Queue]", SerializableTests.serializable(Traverse[Queue]))
 
   checkAll("Queue[Int]", TraverseFilterTests[Queue].traverseFilter[Int, Int, Int])

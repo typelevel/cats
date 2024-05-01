@@ -34,6 +34,8 @@ private[cats] object scalaVersionSpecific {
 
   implicit class traversableOnceExtension[A](private val to: TraversableOnce[A]) extends AnyVal {
     def iterator: Iterator[A] = to.toIterator
+
+    def knownSize: Int = -1
   }
 
   implicit class doubleExtension(private val double: Double) extends AnyVal {

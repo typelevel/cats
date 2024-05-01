@@ -1243,11 +1243,27 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
       def traverse[G[_], A, B](fa: Chain[A])(f: A => G[B])(implicit G: Applicative[G]): G[Chain[B]] =
         if (fa.isEmpty) G.pure(Chain.nil)
         else
-          traverseViaChain {
-            val as = collection.mutable.ArrayBuffer[A]()
-            as ++= fa.iterator
-            KernelStaticMethods.wrapMutableIndexedSeq(as)
-          }(f)
+          G match {
+            case x: StackSafeMonad[G] =>
+              Traverse.traverseDirectly(fa.iterator)(f)(x)
+            case _ =>
+              traverseViaChain {
+                val as = collection.mutable.ArrayBuffer[A]()
+                as ++= fa.iterator
+                KernelStaticMethods.wrapMutableIndexedSeq(as)
+              }(f)
+          }
+
+      override def traverse_[G[_], A, B](fa: Chain[A])(f: A => G[B])(implicit G: Applicative[G]): G[Unit] =
+        G match {
+          case x: StackSafeMonad[G] => Traverse.traverse_Directly(fa.iterator)(f)(x)
+          case _ =>
+            foldRight(fa, Eval.now(G.unit)) { (a, acc) =>
+              G.map2Eval(f(a), acc) { (_, _) =>
+                ()
+              }
+            }.value
+        }
 
       override def mapAccumulate[S, A, B](init: S, fa: Chain[A])(f: (S, A) => (S, B)): (S, Chain[B]) =
         StaticMethods.mapAccumulateFromStrictFunctor(init, fa, f)(this)
@@ -1341,7 +1357,7 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
     }
 
   implicit val catsDataTraverseFilterForChain: TraverseFilter[Chain] = new TraverseFilter[Chain] {
-    def traverse: Traverse[Chain] = Chain.catsDataInstancesForChain
+    def traverse: Traverse[Chain] with Alternative[Chain] = Chain.catsDataInstancesForChain
 
     override def filter[A](fa: Chain[A])(f: A => Boolean): Chain[A] = fa.filter(f)
 
@@ -1356,11 +1372,16 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
     def traverseFilter[G[_], A, B](fa: Chain[A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Chain[B]] =
       if (fa.isEmpty) G.pure(Chain.nil)
       else
-        traverseFilterViaChain {
-          val as = collection.mutable.ArrayBuffer[A]()
-          as ++= fa.iterator
-          KernelStaticMethods.wrapMutableIndexedSeq(as)
-        }(f)
+        G match {
+          case x: StackSafeMonad[G] =>
+            TraverseFilter.traverseFilterDirectly(fa.iterator)(f)(x)
+          case _ =>
+            traverseFilterViaChain {
+              val as = collection.mutable.ArrayBuffer[A]()
+              as ++= fa.iterator
+              KernelStaticMethods.wrapMutableIndexedSeq(as)
+            }(f)
+        }
 
     override def filterA[G[_], A](fa: Chain[A])(f: A => G[Boolean])(implicit G: Applicative[G]): G[Chain[A]] =
       traverse

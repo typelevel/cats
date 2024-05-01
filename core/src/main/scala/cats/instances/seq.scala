@@ -127,7 +127,23 @@ trait SeqInstances extends cats.kernel.instances.SeqInstances {
       }
 
       final override def traverse[G[_], A, B](fa: Seq[A])(f: A => G[B])(implicit G: Applicative[G]): G[Seq[B]] =
-        G.map(Chain.traverseViaChain(fa.toIndexedSeq)(f))(_.toVector)
+        G match {
+          case x: StackSafeMonad[G] =>
+            x.map(Traverse.traverseDirectly(fa)(f)(x))(_.toList)
+          case _ =>
+            G.map(Chain.traverseViaChain(fa.toIndexedSeq)(f))(_.toList)
+        }
+
+      override def traverse_[G[_], A, B](fa: Seq[A])(f: A => G[B])(implicit G: Applicative[G]): G[Unit] =
+        G match {
+          case x: StackSafeMonad[G] => Traverse.traverse_Directly(fa)(f)(x)
+          case _ =>
+            foldRight(fa, Eval.now(G.unit)) { (a, acc) =>
+              G.map2Eval(f(a), acc) { (_, _) =>
+                ()
+              }
+            }.value
+        }
 
       override def mapWithIndex[A, B](fa: Seq[A])(f: (A, Int) => B): Seq[B] =
         fa.zipWithIndex.map(ai => f(ai._1, ai._2))
@@ -193,7 +209,11 @@ trait SeqInstances extends cats.kernel.instances.SeqInstances {
     override def flattenOption[A](fa: Seq[Option[A]]): Seq[A] = fa.flatten
 
     def traverseFilter[G[_], A, B](fa: Seq[A])(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[Seq[B]] =
-      G.map(Chain.traverseFilterViaChain(fa.toIndexedSeq)(f))(_.toVector)
+      G match {
+        case x: StackSafeMonad[G] => x.map(TraverseFilter.traverseFilterDirectly(fa)(f)(x))(_.toVector)
+        case _ =>
+          G.map(Chain.traverseFilterViaChain(fa.toIndexedSeq)(f))(_.toVector)
+      }
 
     override def filterA[G[_], A](fa: Seq[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[Seq[A]] =
       traverse

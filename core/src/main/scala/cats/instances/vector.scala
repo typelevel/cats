@@ -125,7 +125,10 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
       }
 
       final override def traverse[G[_], A, B](fa: Vector[A])(f: A => G[B])(implicit G: Applicative[G]): G[Vector[B]] =
-        G.map(Chain.traverseViaChain(fa)(f))(_.toVector)
+        G match {
+          case x: StackSafeMonad[G] => x.map(Traverse.traverseDirectly(fa)(f)(x))(_.toVector)
+          case _                    => G.map(Chain.traverseViaChain(fa)(f))(_.toVector)
+        }
 
       final override def updated_[A, B >: A](fa: Vector[A], idx: Long, b: B): Option[Vector[B]] =
         if (idx >= 0L && idx < fa.size.toLong) {
@@ -138,38 +141,42 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
        * This avoids making a very deep stack by building a tree instead
        */
       override def traverse_[G[_], A, B](fa: Vector[A])(f: A => G[B])(implicit G: Applicative[G]): G[Unit] = {
-        // the cost of this is O(size)
-        // c(n) = 1 + 2 * c(n/2)
-        // invariant: size >= 1
-        def runHalf(size: Int, idx: Int): Eval[G[Unit]] =
-          if (size > 1) {
-            val leftSize = size / 2
-            val rightSize = size - leftSize
-            runHalf(leftSize, idx)
-              .flatMap { left =>
-                val right = runHalf(rightSize, idx + leftSize)
-                G.map2Eval(left, right) { (_, _) => () }
+        G match {
+          case x: StackSafeMonad[G] => Traverse.traverse_Directly(fa)(f)(x)
+          case _                    =>
+            // the cost of this is O(size)
+            // c(n) = 1 + 2 * c(n/2)
+            // invariant: size >= 1
+            def runHalf(size: Int, idx: Int): Eval[G[Unit]] =
+              if (size > 1) {
+                val leftSize = size / 2
+                val rightSize = size - leftSize
+                runHalf(leftSize, idx)
+                  .flatMap { left =>
+                    val right = runHalf(rightSize, idx + leftSize)
+                    G.map2Eval(left, right) { (_, _) => () }
+                  }
+              } else {
+                val a = fa(idx)
+                // we evaluate this at most one time,
+                // always is a bit cheaper in such cases
+                //
+                // Here is the point of the laziness using Eval:
+                // we avoid calling f(a) or G.void in the
+                // event that the computation has already
+                // failed. We do not use laziness to avoid
+                // traversing fa, which we will do fully
+                // in all cases.
+                Eval.always {
+                  val gb = f(a)
+                  G.void(gb)
+                }
               }
-          } else {
-            val a = fa(idx)
-            // we evaluate this at most one time,
-            // always is a bit cheaper in such cases
-            //
-            // Here is the point of the laziness using Eval:
-            // we avoid calling f(a) or G.void in the
-            // event that the computation has already
-            // failed. We do not use laziness to avoid
-            // traversing fa, which we will do fully
-            // in all cases.
-            Eval.always {
-              val gb = f(a)
-              G.void(gb)
-            }
-          }
 
-        val len = fa.length
-        if (len == 0) G.unit
-        else runHalf(len, 0).value
+            val len = fa.length
+            if (len == 0) G.unit
+            else runHalf(len, 0).value
+        }
       }
 
       override def mapAccumulate[S, A, B](init: S, fa: Vector[A])(f: (S, A) => (S, B)): (S, Vector[B]) =
@@ -263,7 +270,11 @@ private[instances] trait VectorInstancesBinCompat0 {
     override def flattenOption[A](fa: Vector[Option[A]]): Vector[A] = fa.flatten
 
     def traverseFilter[G[_], A, B](fa: Vector[A])(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[Vector[B]] =
-      G.map(Chain.traverseFilterViaChain(fa)(f))(_.toVector)
+      G match {
+        case x: StackSafeMonad[G] => x.map(TraverseFilter.traverseFilterDirectly(fa)(f)(x))(_.toVector)
+        case _ =>
+          G.map(Chain.traverseFilterViaChain(fa)(f))(_.toVector)
+      }
 
     override def filterA[G[_], A](fa: Vector[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[Vector[A]] =
       traverse

@@ -21,8 +21,10 @@
 
 package cats
 
+import cats.data.Chain
 import cats.data.State
 import cats.data.StateT
+import cats.kernel.compat.scalaVersionSpecific._
 
 /**
  * Traverse, also known as Traversable.
@@ -283,5 +285,27 @@ object Traverse {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToTraverseOps
+
+  private[cats] def traverseDirectly[G[_], A, B](
+    fa: IterableOnce[A]
+  )(f: A => G[B])(implicit G: StackSafeMonad[G]): G[Chain[B]] = {
+    fa.iterator.foldLeft(G.pure(Chain.empty[B])) { case (accG, a) =>
+      G.map2(accG, f(a)) { case (acc, x) =>
+        acc :+ x
+      }
+    }
+  }
+
+  private[cats] def traverse_Directly[G[_], A, B](
+    fa: IterableOnce[A]
+  )(f: A => G[B])(implicit G: StackSafeMonad[G]): G[Unit] = {
+    val iter = fa.iterator
+    if (iter.hasNext) {
+      val first = iter.next()
+      G.void(iter.foldLeft(f(first)) { case (g, a) =>
+        G.productR(g)(f(a))
+      })
+    } else G.unit
+  }
 
 }

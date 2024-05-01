@@ -21,7 +21,8 @@
 
 package cats
 
-import cats.data.State
+import cats.data.{Chain, State}
+import cats.kernel.compat.scalaVersionSpecific._
 
 import scala.collection.immutable.{IntMap, TreeSet}
 
@@ -202,5 +203,16 @@ object TraverseFilter {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToTraverseFilterOps
+
+  private[cats] def traverseFilterDirectly[G[_], A, B](
+    fa: IterableOnce[A]
+  )(f: A => G[Option[B]])(implicit G: StackSafeMonad[G]): G[Chain[B]] = {
+    fa.iterator.foldLeft(G.pure(Chain.empty[B])) { case (bldrG, a) =>
+      G.map2(bldrG, f(a)) {
+        case (acc, Some(b)) => acc :+ b
+        case (acc, None)    => acc
+      }
+    }
+  }
 
 }
