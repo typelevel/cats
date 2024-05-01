@@ -41,7 +41,8 @@ trait FunctorTests[F[_]] extends InvariantTests[F] {
       name = "functor",
       parent = Some(invariant[A, B, C]),
       "covariant identity" -> forAll(laws.covariantIdentity[A] _),
-      "covariant composition" -> forAll(laws.covariantComposition[A, B, C] _)
+      "covariant composition" -> forAll(laws.covariantComposition[A, B, C] _),
+      "mapOrKeepToMapEquivalence" -> forAll(laws.mapOrKeepToMapEquivalence[A, A] _)
     )
 }
 
