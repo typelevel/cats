@@ -302,6 +302,17 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
   final def foldLeft[B](b: B)(f: (B, A) => B): B =
     toChain.foldLeft(b)(f)
 
+  final def scanLeft[B](b: B)(f: (B, A) => B): NonEmptyChain[B] = {
+    var current = b
+    var result = Chain.one[B](b)
+    val iter = toChain.iterator
+    while (iter.hasNext) {
+      current = f(current, iter.next())
+      result = result :+ current
+    }
+    create(result)
+  }
+
   /**
    * Right-associative fold using f.
    */

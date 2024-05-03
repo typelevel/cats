@@ -188,6 +188,9 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
   def foldLeft[B](b: B)(f: (B, A) => B): B =
     toVector.foldLeft(b)(f)
 
+  def scanLeft[B](b: B)(f: (B, A) => B): NonEmptyVector[B] =
+    NonEmptyVector.fromVectorUnsafe(toVector.scanLeft(b)(f))
+
   /**
    * Right-associative fold using f.
    */
