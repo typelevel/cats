@@ -47,6 +47,7 @@ private[cats] trait NonEmptyCollection[+A, U[+_], NE[+_]] extends Any {
 
   def foldLeft[B](b: B)(f: (B, A) => B): B
   def scanLeft[B](b: B)(f: (B, A) => B): NE[B]
+  def scanLeftTail[B](b: B)(f: (B, A) => B): NE[B]
   def reduce[AA >: A](implicit S: Semigroup[AA]): AA
 
   def zipWith[B, C](b: NE[B])(f: (A, B) => C): NE[C]

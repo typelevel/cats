@@ -181,6 +181,9 @@ final class NonEmptySeq[+A] private (val toSeq: Seq[A]) extends AnyVal with NonE
   def scanLeft[B](b: B)(f: (B, A) => B): NonEmptySeq[B] =
     new NonEmptySeq(toSeq.scanLeft(b)(f))
 
+  def scanLeftTail[B](b: B)(f: (B, A) => B): NonEmptySeq[B] =
+    new NonEmptySeq(toSeq.scanLeft(b)(f).tail)
+
   /**
    * Right-associative fold using f.
    */

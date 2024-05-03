@@ -305,6 +305,9 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
   def scanLeft[B](b: B)(f: (B, A) => B): NonEmptyList[B] =
     NonEmptyList(b, tail.scanLeft(f(b, head))(f))
 
+  def scanLeftTail[B](b: B)(f: (B, A) => B): NonEmptyList[B] =
+    NonEmptyList.fromListUnsafe(tail.scanLeft(f(b, head))(f))
+
   /**
    * Left-associative reduce using f.
    */

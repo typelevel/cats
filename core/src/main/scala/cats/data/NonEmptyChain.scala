@@ -313,6 +313,9 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
     create(result)
   }
 
+  final def scanLeftTail[B](b: B)(f: (B, A) => B): NonEmptyChain[B] =
+    create(scanLeft(b)(f).tail)
+
   /**
    * Right-associative fold using f.
    */
