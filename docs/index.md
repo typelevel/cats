@@ -201,6 +201,6 @@ http://opensource.org/licenses/mit-license.php and also in the
 [COPYING](https://github.com/typelevel/cats/blob/main/COPYING) file. The design is informed by many other
 projects, in particular [Scalaz](https://github.com/scalaz/scalaz).
 
-Copyright the maintainers, 2015-2023.
+Copyright the maintainers, 2015-2024.
 
 [Adopters page]: ADOPTERS.md
