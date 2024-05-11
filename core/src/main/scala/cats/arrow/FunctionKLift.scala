@@ -22,18 +22,24 @@
 package cats
 package arrow
 
-private[arrow] class FunctionKMacroMethods extends FunctionKLift {
+private[arrow] trait FunctionKLift {
+  protected type τ[F[_], G[_]]
 
   /**
-   * Lifts function `f` of `[X] => F[X] => G[X]` into a `FunctionK[F, G]`.
+   * Lifts function `f` of `F[A] => G[A]` into a `FunctionK[F, G]`.
    *
    * {{{
-   *   val headOptionK = FunctionK.lift[List, Option]([X] => (_: List[X]).headOption)
+   *   def headOption[A](list: List[A]): Option[A] = list.headOption
+   *   val lifted = FunctionK.liftFunction[List, Option](headOption)
    * }}}
+   *
+   * Note: The weird `τ[F, G]` parameter is there to compensate for
+   * the lack of polymorphic function types in Scala 2.
+   * 
+   * It is present in the Scala 3 API to simplify cross-compilation.
    */
-  def lift[F[_], G[_]](f: [X] => F[X] => G[X]): FunctionK[F, G] =
+  def liftFunction[F[_], G[_]](f: F[τ[F, G]] => G[τ[F, G]]): FunctionK[F, G] =
     new FunctionK[F, G] {
-      def apply[A](fa: F[A]): G[A] = f(fa)
+      def apply[A](fa: F[A]): G[A] = f.asInstanceOf[F[A] => G[A]](fa)
     }
-
 }

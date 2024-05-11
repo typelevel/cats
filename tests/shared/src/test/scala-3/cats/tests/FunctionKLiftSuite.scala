@@ -34,4 +34,12 @@ class FunctionKLiftSuite extends CatsSuite {
       assert(fHeadOption(a) === a.headOption)
     }
   }
+
+  test("lift a function directly using Scala 2 compatible syntax") {
+    def headOption[A](list: List[A]): Option[A] = list.headOption
+    val fHeadOption = FunctionK.liftFunction[List, Option](headOption)
+    forAll { (a: List[Int]) =>
+      assert(fHeadOption(a) === a.headOption)
+    }
+  }
 }
