@@ -24,12 +24,11 @@ package cats.tests
 import cats.arrow.FunctionK
 import cats.syntax.all._
 import org.scalacheck.Prop._
-import cats.laws.discipline.arbitrary._
 
-class FunctionKLiftSuite extends CatsSuite {
-
-  test("lift a polymorphic function directly") {
-    val fHeadOption = FunctionK.lift[List, Option]([X] => (_: List[X]).headOption)
+class FunctionKLiftFunctionSuite extends CatsSuite {
+  test("lift a function directly") {
+    def headOption[A](list: List[A]): Option[A] = list.headOption
+    val fHeadOption = FunctionK.liftFunction[List, Option](headOption)
     forAll { (a: List[Int]) =>
       assert(fHeadOption(a) === a.headOption)
     }
