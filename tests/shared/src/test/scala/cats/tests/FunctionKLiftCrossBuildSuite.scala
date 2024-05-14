@@ -25,7 +25,7 @@ import cats.arrow.FunctionK
 import cats.syntax.all._
 import org.scalacheck.Prop._
 
-class FunctionKLiftFunctionSuite extends CatsSuite {
+class FunctionKLiftCrossBuildSuite extends CatsSuite {
   test("lift a function directly") {
     def headOption[A](list: List[A]): Option[A] = list.headOption
     val fHeadOption = FunctionK.liftFunction[List, Option](headOption)
