@@ -19,21 +19,18 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package cats
-package arrow
+package cats.tests
 
-private[arrow] class FunctionKMacroMethods extends FunctionKLift {
+import cats.arrow.FunctionK
+import cats.syntax.all._
+import org.scalacheck.Prop._
 
-  /**
-   * Lifts function `f` of `[X] => F[X] => G[X]` into a `FunctionK[F, G]`.
-   *
-   * {{{
-   *   val headOptionK = FunctionK.lift[List, Option]([X] => (_: List[X]).headOption)
-   * }}}
-   */
-  def lift[F[_], G[_]](f: [X] => F[X] => G[X]): FunctionK[F, G] =
-    new FunctionK[F, G] {
-      def apply[A](fa: F[A]): G[A] = f(fa)
+class FunctionKLiftCrossBuildSuite extends CatsSuite {
+  test("lift a function directly") {
+    def headOption[A](list: List[A]): Option[A] = list.headOption
+    val fHeadOption = FunctionK.liftFunction[List, Option](headOption)
+    forAll { (a: List[Int]) =>
+      assert(fHeadOption(a) === a.headOption)
     }
-
+  }
 }
