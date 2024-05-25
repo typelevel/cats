@@ -30,4 +30,6 @@ final class MonadOps[F[_], A](private val fa: F[A]) extends AnyVal {
   def untilM_(using M: Monad[F])(p: F[Boolean]): F[Unit] = M.untilM_(fa)(p)
   def iterateWhile(using M: Monad[F])(p: A => Boolean): F[A] = M.iterateWhile(fa)(p)
   def iterateUntil(using M: Monad[F])(p: A => Boolean): F[A] = M.iterateUntil(fa)(p)
+  def flatMapOrKeep[A1 >: A](using M: Monad[F])(pfa: PartialFunction[A, F[A1]]): F[A1] =
+    M.flatMapOrKeep[A, A1](fa)(pfa)
 }

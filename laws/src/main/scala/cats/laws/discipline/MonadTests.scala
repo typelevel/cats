@@ -55,7 +55,8 @@ trait MonadTests[F[_]] extends ApplicativeTests[F] with FlatMapTests[F] {
         Seq(
           "monad left identity" -> forAll(laws.monadLeftIdentity[A, B] _),
           "monad right identity" -> forAll(laws.monadRightIdentity[A] _),
-          "map flatMap coherence" -> forAll(laws.mapFlatMapCoherence[A, B] _)
+          "map flatMap coherence" -> forAll(laws.mapFlatMapCoherence[A, B] _),
+          "flatMapOrKeep flatMap coherence" -> forAll(laws.flatMapOrKeepToFlatMapCoherence[A, A] _)
         ) ++ (if (Platform.isJvm) Seq[(String, Prop)]("tailRecM stack safety" -> Prop.lzy(laws.tailRecMStackSafety))
               else Seq.empty)
     }
@@ -84,7 +85,8 @@ trait MonadTests[F[_]] extends ApplicativeTests[F] with FlatMapTests[F] {
         Seq(
           "monad left identity" -> forAll(laws.monadLeftIdentity[A, B] _),
           "monad right identity" -> forAll(laws.monadRightIdentity[A] _),
-          "map flatMap coherence" -> forAll(laws.mapFlatMapCoherence[A, B] _)
+          "map flatMap coherence" -> forAll(laws.mapFlatMapCoherence[A, B] _),
+          "flatMapOrKeep flatMap coherence" -> forAll(laws.flatMapOrKeepToFlatMapCoherence[A, A] _)
         )
     }
 }
