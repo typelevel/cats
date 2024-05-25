@@ -1,10 +1,10 @@
 ThisBuild / tlBaseVersion := "2.11"
 
-val scalaCheckVersion = "1.17.1"
+val scalaCheckVersion = "1.18.0"
 
-val disciplineVersion = "1.6.0"
+val disciplineVersion = "1.7.0"
 
-val disciplineMunitVersion = "2.0.0-M3"
+val disciplineMunitVersion = "2.0.0-M4"
 
 val munitVersion = "1.0.0"
 
@@ -65,9 +65,14 @@ lazy val commonJsSettings = Seq(
 )
 
 Global / concurrentRestrictions += Tags.limit(NativeTags.Link, 1)
-lazy val commonNativeSettings = Seq(
+
+// Cats 2.11.0 switches to Scala Native 0.5.
+// Therefore `tlVersionIntroduced` should be reset to 2.11.0 for all scala versions in all native cross-projects.
+val commonNativeTlVersionIntroduced = List("2.12", "2.13", "3").map(_ -> "2.11.0").toMap
+
+lazy val commonNativeSettings = Seq[Setting[?]](
   doctestGenTests := Seq.empty,
-  tlVersionIntroduced ++= List("2.12", "2.13").map(_ -> "2.4.0").toMap + ("3" -> "2.8.0")
+  tlVersionIntroduced := commonNativeTlVersionIntroduced
 )
 
 lazy val disciplineDependencies = Seq(
@@ -127,8 +132,10 @@ lazy val algebraSettings = Seq[Setting[?]](
 )
 
 lazy val algebraNativeSettings = Seq[Setting[?]](
-  tlMimaPreviousVersions ~= (_ - "2.2.3"),
-  tlVersionIntroduced += ("3" -> "2.8.0")
+  // Reset to auto-populate from `tlVersionIntroduced` below.
+  tlMimaPreviousVersions := Set.empty,
+  // Should be reset to the common setting value, because `algebraSettings` re-defines it.
+  tlVersionIntroduced := commonNativeTlVersionIntroduced
 )
 
 lazy val algebra = crossProject(JSPlatform, JVMPlatform, NativePlatform)
