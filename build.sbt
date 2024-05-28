@@ -1,4 +1,4 @@
-ThisBuild / tlBaseVersion := "2.11"
+ThisBuild / tlBaseVersion := "2.12"
 
 val scalaCheckVersion = "1.18.0"
 
@@ -66,9 +66,9 @@ lazy val commonJsSettings = Seq(
 
 Global / concurrentRestrictions += Tags.limit(NativeTags.Link, 1)
 
-// Cats 2.11.0 switches to Scala Native 0.5.
-// Therefore `tlVersionIntroduced` should be reset to 2.11.0 for all scala versions in all native cross-projects.
-val commonNativeTlVersionIntroduced = List("2.12", "2.13", "3").map(_ -> "2.11.0").toMap
+// Cats 2.12.0 switches to Scala Native 0.5.
+// Therefore `tlVersionIntroduced` should be reset to 2.12.0 for all scala versions in all native cross-projects.
+val commonNativeTlVersionIntroduced = List("2.12", "2.13", "3").map(_ -> "2.12.0").toMap
 
 lazy val commonNativeSettings = Seq[Setting[?]](
   doctestGenTests := Seq.empty,
