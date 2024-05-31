@@ -345,14 +345,17 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
   /**
    * Remove duplicates. Duplicates are checked using `Order[_]` instance.
    */
-  def distinct[AA >: A](implicit O: Order[AA]): NonEmptyLazyList[AA] = {
-    implicit val ord: Ordering[AA] = O.toOrdering
+  override def distinct[AA >: A](implicit O: Order[AA]): NonEmptyLazyList[AA] = distinctBy(identity[AA])
+
+  override def distinctBy[AA >: A, B](f: A => B)(implicit O: Order[B]): NonEmptyLazyList[AA] = {
+    implicit val ord: Ordering[B] = O.toOrdering
 
     val buf = LazyList.newBuilder[AA]
-    toLazyList.foldLeft(TreeSet.empty[AA]) { (elementsSoFar, a) =>
-      if (elementsSoFar(a)) elementsSoFar
+    toLazyList.foldLeft(TreeSet.empty[B]) { (elementsSoFar, a) =>
+      val b = f(a)
+      if (elementsSoFar(b)) elementsSoFar
       else {
-        buf += a; elementsSoFar + a
+        buf += a; elementsSoFar + b
       }
     }
 

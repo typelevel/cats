@@ -203,6 +203,12 @@ class NonEmptyChainSuite extends NonEmptyCollectionSuite[Chain, NonEmptyChain, N
     }
   }
 
+  test("NonEmptyChain#distinctBy is consistent with List#distinctBy") {
+    forAll { (ci: NonEmptyChain[Int], f: Int => String) =>
+      assert(ci.distinctBy(f).toList === (ci.toList.distinctBy(f)))
+    }
+  }
+
   test("NonEmptyChain#distinct is consistent with List#distinct") {
     forAll { (ci: NonEmptyChain[Int]) =>
       assert(ci.distinct.toList === (ci.toList.distinct))

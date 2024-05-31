@@ -296,6 +296,12 @@ class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonE
     }
   }
 
+  test("NonEmptyList#distinctBy is consistent with List#distinctBy") {
+    forAll { (nel: NonEmptyList[Int], f: Int => String) =>
+      assert(nel.distinctBy(f).toList === (nel.toList.distinctBy(f)))
+    }
+  }
+
   test("NonEmptyList#reverse is consistent with List#reverse") {
     forAll { (nel: NonEmptyList[Int]) =>
       assert(nel.reverse.toList === (nel.toList.reverse))

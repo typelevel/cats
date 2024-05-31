@@ -359,6 +359,12 @@ class NonEmptyVectorSuite extends NonEmptyCollectionSuite[Vector, NonEmptyVector
     assert(compileErrors("val bad: NonEmptyVector[Int] = NonEmptyVector(Vector.empty[Int])").nonEmpty)
   }
 
+  test("NonEmptyVector#distinctBy is consistent with Vector#distinctBy") {
+    forAll { (nonEmptyVector: NonEmptyVector[Int], f: Int => String) =>
+      assert(nonEmptyVector.distinctBy(f).toVector === (nonEmptyVector.toVector.distinctBy(f)))
+    }
+  }
+
   test("NonEmptyVector#distinct is consistent with Vector#distinct") {
     forAll { (nonEmptyVector: NonEmptyVector[Int]) =>
       assert(nonEmptyVector.distinct.toVector === (nonEmptyVector.toVector.distinct))

@@ -50,6 +50,7 @@ class NonEmptyLazyListSuite extends NonEmptyCollectionSuite[LazyList, NonEmptyLa
   checkAll(s"Hash[NonEmptyLazyList[Int]]", SerializableTests.serializable(Hash[NonEmptyLazyList[Int]]))
 
   checkAll("NonEmptyLazyList[Int]", NonEmptyAlternativeTests[NonEmptyLazyList].nonEmptyAlternative[Int, Int, Int])
+  checkAll("NonEmptyLazyList[Int]", NonEmptyAlternativeTests[NonEmptyLazyList].nonEmptyAlternative[Int, Int, Int])
   checkAll("NonEmptyAlternative[NonEmptyLazyList]",
            SerializableTests.serializable(NonEmptyAlternative[NonEmptyLazyList])
   )
@@ -172,6 +173,12 @@ class NonEmptyLazyListSuite extends NonEmptyCollectionSuite[LazyList, NonEmptyLa
   test("reverse consistent with LazyList#reverse") {
     forAll { (ci: NonEmptyLazyList[Int]) =>
       assert(ci.reverse.toLazyList === (ci.toLazyList.reverse))
+    }
+  }
+
+  test("NonEmptyLazyList#distinctBy is consistent with List#distinctBy") {
+    forAll { (ci: NonEmptyLazyList[Int], f: Int => String) =>
+      assert(ci.distinctBy(f).toList === (ci.toList.distinctBy(f)))
     }
   }
 

@@ -340,14 +340,17 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
   /**
    * Remove duplicates. Duplicates are checked using `Order[_]` instance.
    */
-  def distinct[AA >: A](implicit O: Order[AA]): NonEmptyList[AA] = {
-    implicit val ord: Ordering[AA] = O.toOrdering
+  override def distinct[AA >: A](implicit O: Order[AA]): NonEmptyList[AA] = distinctBy(identity[AA])
+
+  override def distinctBy[AA >: A, B](f: A => B)(implicit O: Order[B]): NonEmptyList[AA] = {
+    implicit val ord: Ordering[B] = O.toOrdering
 
     val buf = ListBuffer.empty[AA]
-    tail.foldLeft(TreeSet(head: AA)) { (elementsSoFar, b) =>
+    tail.foldLeft(TreeSet(f(head): B)) { (elementsSoFar, a) =>
+      val b = f(a)
       if (elementsSoFar(b)) elementsSoFar
       else {
-        buf += b; elementsSoFar + b
+        buf += a; elementsSoFar + b
       }
     }
 
