@@ -50,7 +50,6 @@ class NonEmptyLazyListSuite extends NonEmptyCollectionSuite[LazyList, NonEmptyLa
   checkAll(s"Hash[NonEmptyLazyList[Int]]", SerializableTests.serializable(Hash[NonEmptyLazyList[Int]]))
 
   checkAll("NonEmptyLazyList[Int]", NonEmptyAlternativeTests[NonEmptyLazyList].nonEmptyAlternative[Int, Int, Int])
-  checkAll("NonEmptyLazyList[Int]", NonEmptyAlternativeTests[NonEmptyLazyList].nonEmptyAlternative[Int, Int, Int])
   checkAll("NonEmptyAlternative[NonEmptyLazyList]",
            SerializableTests.serializable(NonEmptyAlternative[NonEmptyLazyList])
   )

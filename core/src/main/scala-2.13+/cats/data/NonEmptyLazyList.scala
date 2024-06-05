@@ -347,10 +347,10 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
    */
   override def distinct[AA >: A](implicit O: Order[AA]): NonEmptyLazyList[AA] = distinctBy(identity[AA])
 
-  override def distinctBy[AA >: A, B](f: A => B)(implicit O: Order[B]): NonEmptyLazyList[AA] = {
+  override def distinctBy[B](f: A => B)(implicit O: Order[B]): NonEmptyLazyList[A] = {
     implicit val ord: Ordering[B] = O.toOrdering
 
-    val buf = LazyList.newBuilder[AA]
+    val buf = LazyList.newBuilder[A]
     toLazyList.foldLeft(TreeSet.empty[B]) { (elementsSoFar, a) =>
       val b = f(a)
       if (elementsSoFar(b)) elementsSoFar
