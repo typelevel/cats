@@ -604,7 +604,12 @@ sealed abstract private[data] class NonEmptyVectorInstances0 extends NonEmptyVec
     }
 }
 
-sealed abstract private[data] class NonEmptyVectorInstances1 {
+sealed abstract private[data] class NonEmptyVectorInstances1 extends NonEmptyVectorInstances2 {
+  implicit def catsDataPartialOrderForNonEmptyVector[A: PartialOrder]: PartialOrder[NonEmptyVector[A]] =
+    PartialOrder.by[NonEmptyVector[A], Vector[A]](_.toVector)
+}
+
+sealed abstract private[data] class NonEmptyVectorInstances2 {
   implicit def catsDataEqForNonEmptyVector[A: Eq]: Eq[NonEmptyVector[A]] = _ === _
 }
 
