@@ -387,7 +387,7 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
 }
 
 @suppressUnusedImportWarningForScalaVersionSpecific
-sealed abstract private[data] class NonEmptyVectorInstances {
+sealed abstract private[data] class NonEmptyVectorInstances extends NonEmptyVectorInstances0 {
 
   @deprecated(
     "maintained for the sake of binary compatibility only - use catsDataInstancesForNonEmptyChainBinCompat1 instead",
@@ -564,7 +564,11 @@ sealed abstract private[data] class NonEmptyVectorInstances {
         NonEmptyVector.fromVectorUnsafe(Align[Vector].alignWith(fa.toVector, fb.toVector)(f))
     }
 
-  implicit def catsDataEqForNonEmptyVector[A: Eq]: Eq[NonEmptyVector[A]] = _ === _
+  implicit def catsDataOrderForNonEmptyVector[A: Order]: Order[NonEmptyVector[A]] =
+    new Order[NonEmptyVector[A]] {
+      override def compare(x: NonEmptyVector[A], y: NonEmptyVector[A]): Int =
+        Order[Vector[A]].compare(x.toVector, y.toVector)
+    }
 
   implicit def catsDataShowForNonEmptyVector[A: Show]: Show[NonEmptyVector[A]] = _.show
 
@@ -587,6 +591,21 @@ sealed abstract private[data] class NonEmptyVectorInstances {
         }
     }
 
+}
+
+sealed abstract private[data] class NonEmptyVectorInstances0 extends NonEmptyVectorInstances1 {
+  implicit def catsDataHashForNonEmptyVector[A: Hash]: Hash[NonEmptyVector[A]] =
+    new Hash[NonEmptyVector[A]] {
+      override def hash(x: NonEmptyVector[A]): Int =
+        Hash[Vector[A]].hash(x.toVector)
+
+      override def eqv(x: NonEmptyVector[A], y: NonEmptyVector[A]): Boolean =
+        Hash[Vector[A]].eqv(x.toVector, y.toVector)
+    }
+}
+
+sealed abstract private[data] class NonEmptyVectorInstances1 {
+  implicit def catsDataEqForNonEmptyVector[A: Eq]: Eq[NonEmptyVector[A]] = _ === _
 }
 
 object NonEmptyVector extends NonEmptyVectorInstances with Serializable {

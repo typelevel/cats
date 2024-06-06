@@ -26,6 +26,8 @@ import cats.data.NonEmptyVector
 import cats.data.NonEmptyVector.ZipNonEmptyVector
 import cats.kernel.instances.order.catsKernelOrderingForOrder
 import cats.kernel.laws.discipline.EqTests
+import cats.kernel.laws.discipline.HashTests
+import cats.kernel.laws.discipline.OrderTests
 import cats.kernel.laws.discipline.SemigroupTests
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
@@ -49,6 +51,8 @@ class NonEmptyVectorSuite extends NonEmptyCollectionSuite[Vector, NonEmptyVector
     Parameters.default.withMinSuccessfulTests(20).withMaxSize(Parameters.default.minSize + 5)
 
   checkAll("NonEmptyVector[Int]", EqTests[NonEmptyVector[Int]].eqv)
+  checkAll("NonEmptyVector[Int]", OrderTests[NonEmptyVector[Int]].order)
+  checkAll("NonEmptyVector[Int]", HashTests[NonEmptyVector[Int]].hash)
 
   checkAll("NonEmptyVector[Int] with Option",
            NonEmptyTraverseTests[NonEmptyVector].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option]
