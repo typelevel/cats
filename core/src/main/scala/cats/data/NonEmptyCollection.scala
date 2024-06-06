@@ -52,6 +52,7 @@ private[cats] trait NonEmptyCollection[+A, U[+_], NE[+_]] extends Any {
   def zipWithIndex: NE[(A, Int)]
 
   def distinct[AA >: A](implicit O: Order[AA]): NE[AA]
+  def distinctBy[B](f: A => B)(implicit O: Order[B]): NE[A]
   def sortBy[B](f: A => B)(implicit B: Order[B]): NE[A]
   def sorted[AA >: A](implicit AA: Order[AA]): NE[AA]
   def groupByNem[B](f: A => B)(implicit B: Order[B]): NonEmptyMap[B, NE[A]]

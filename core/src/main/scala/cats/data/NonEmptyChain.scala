@@ -603,7 +603,10 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
    * Remove duplicates. Duplicates are checked using `Order[_]` instance.
    */
   final def distinct[AA >: A](implicit O: Order[AA]): NonEmptyChain[AA] =
-    create(toChain.distinct[AA])
+    distinctBy(identity[AA])
+
+  final def distinctBy[B](f: A => B)(implicit O: Order[B]): NonEmptyChain[A] =
+    create(toChain.distinctBy[B](f))
 
   final def sortBy[B](f: A => B)(implicit B: Order[B]): NonEmptyChain[A] = create(toChain.sortBy(f))
   final def sorted[AA >: A](implicit AA: Order[AA]): NonEmptyChain[AA] = create(toChain.sorted[AA])

@@ -90,4 +90,16 @@ class NonEmptySeqSuite extends NonEmptyCollectionSuite[Seq, NonEmptySeq, NonEmpt
       assert(a.zip(b).toSeq === (a.toSeq.zip(b.toSeq)))
     }
   }
+
+  test("NonEmptySeq#distinct is consistent with List#distinct") {
+    forAll { (nes: NonEmptySeq[Int]) =>
+      assert(nes.distinct.toList === (nes.toList.distinct))
+    }
+  }
+
+  test("NonEmptySeq#distinctBy is consistent with List#distinctBy") {
+    forAll { (nes: NonEmptySeq[Int], f: Int => String) =>
+      assert(nes.distinctBy(f).toList === (nes.toList.distinctBy(f)))
+    }
+  }
 }

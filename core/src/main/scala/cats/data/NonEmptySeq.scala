@@ -236,14 +236,17 @@ final class NonEmptySeq[+A] private (val toSeq: Seq[A]) extends AnyVal with NonE
   /**
    * Remove duplicates. Duplicates are checked using `Order[_]` instance.
    */
-  def distinct[AA >: A](implicit O: Order[AA]): NonEmptySeq[AA] = {
-    implicit val ord: Ordering[AA] = O.toOrdering
+  override def distinct[AA >: A](implicit O: Order[AA]): NonEmptySeq[AA] = distinctBy(identity[AA])
 
-    val buf = Seq.newBuilder[AA]
-    tail.foldLeft(TreeSet(head: AA)) { (elementsSoFar, a) =>
-      if (elementsSoFar(a)) elementsSoFar
+  override def distinctBy[B](f: A => B)(implicit O: Order[B]): NonEmptySeq[A] = {
+    implicit val ord: Ordering[B] = O.toOrdering
+
+    val buf = Seq.newBuilder[A]
+    tail.foldLeft(TreeSet(f(head): B)) { (elementsSoFar, a) =>
+      val b = f(a)
+      if (elementsSoFar(b)) elementsSoFar
       else {
-        buf += a; elementsSoFar + a
+        buf += a; elementsSoFar + b
       }
     }
 

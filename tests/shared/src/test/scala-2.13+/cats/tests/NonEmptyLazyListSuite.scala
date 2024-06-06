@@ -175,6 +175,12 @@ class NonEmptyLazyListSuite extends NonEmptyCollectionSuite[LazyList, NonEmptyLa
     }
   }
 
+  test("NonEmptyLazyList#distinctBy is consistent with List#distinctBy") {
+    forAll { (ci: NonEmptyLazyList[Int], f: Int => String) =>
+      assert(ci.distinctBy(f).toList === (ci.toList.distinctBy(f)))
+    }
+  }
+
   test("NonEmptyLazyList#distinct is consistent with List#distinct") {
     forAll { (ci: NonEmptyLazyList[Int]) =>
       assert(ci.distinct.toList === (ci.toList.distinct))
