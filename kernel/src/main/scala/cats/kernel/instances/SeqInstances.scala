@@ -22,10 +22,10 @@
 package cats.kernel
 package instances
 
-import compat.scalaVersionSpecific._
-
 import scala.annotation.nowarn
 import scala.collection.immutable.Seq
+
+import compat.scalaVersionSpecific._
 
 @suppressUnusedImportWarningForScalaVersionSpecific
 trait SeqInstances extends SeqInstances1 {
@@ -83,7 +83,9 @@ class SeqMonoid[A] extends Monoid[Seq[A]] {
 }
 
 object SeqMonoid {
-  @nowarn("msg=deprecated")
+  @nowarn("cat=deprecation")
   private[this] val singleton: Monoid[Seq[Any]] = new SeqMonoid[Any]
+
+  @nowarn("cat=deprecation")
   def apply[A]: SeqMonoid[A] = singleton.asInstanceOf[SeqMonoid[A]]
 }
