@@ -32,7 +32,7 @@ trait OrderTests[A] extends PartialOrderTests[A] {
 
   def laws: OrderLaws[A]
 
-  def order(implicit arbA: Arbitrary[A], arbF: Arbitrary[A => A], eqOA: Eq[Option[A]], eqA: Eq[A]): RuleSet =
+  def order(implicit arbA: Arbitrary[A], arbF: Arbitrary[A => A]): RuleSet =
     new DefaultRuleSet(
       "order",
       Some(partialOrder),
@@ -42,6 +42,9 @@ trait OrderTests[A] extends PartialOrderTests[A] {
       "min" -> forAll(laws.min _)
     )
 
+  @deprecated("use `order` without `Eq` parameters", "2.12.1")
+  def order(arbA: Arbitrary[A], arbF: Arbitrary[A => A], eqOA: Eq[Option[A]], eqA: Eq[A]): RuleSet =
+    order(arbA, arbF)
 }
 
 object OrderTests {

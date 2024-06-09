@@ -35,7 +35,7 @@ trait MonoidLaws[A] extends SemigroupLaws[A] {
   def repeat0(x: A): IsEq[A] =
     S.combineN(x, 0) <-> S.empty
 
-  def collect0(x: A): IsEq[A] =
+  def collect0: IsEq[A] =
     S.combineAll(Nil) <-> S.empty
 
   def combineAll(xs: Vector[A]): IsEq[A] =
@@ -44,6 +44,8 @@ trait MonoidLaws[A] extends SemigroupLaws[A] {
   def isId(x: A, eqv: Eq[A]): IsEq[Boolean] =
     eqv.eqv(x, S.empty) <-> S.isEmpty(x)(eqv)
 
+  @deprecated("use `collect0` without parameters", "2.12.1")
+  def collect0(x: A): IsEq[A] = collect0
 }
 
 object MonoidLaws {

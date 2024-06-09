@@ -22,8 +22,6 @@
 package cats.kernel
 package laws
 
-import cats.kernel.Order
-
 trait OrderLaws[A] extends PartialOrderLaws[A] {
 
   implicit override def E: Order[A]

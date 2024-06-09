@@ -32,7 +32,7 @@ trait PartialNextTests[A] extends PartialOrderTests[A] {
 
   def laws: PartialNextLaws[A]
 
-  def partialNext(implicit arbA: Arbitrary[A], arbF: Arbitrary[A => A], eqOA: Eq[Option[A]], eqA: Eq[A]): RuleSet =
+  def partialNext(implicit arbA: Arbitrary[A], arbF: Arbitrary[A => A]): RuleSet =
     new DefaultRuleSet(
       "partialNext",
       Some(partialOrder),
@@ -40,13 +40,16 @@ trait PartialNextTests[A] extends PartialOrderTests[A] {
       "forall a, b. if a < b. next(a) <= b" -> forAll(laws.nextOrderStrong _)
     )
 
+  @deprecated("use `partialNext` without `Eq` parameters", "2.12.1")
+  def partialNext(arbA: Arbitrary[A], arbF: Arbitrary[A => A], eqOA: Eq[Option[A]], eqA: Eq[A]): RuleSet =
+    partialNext(arbA, arbF)
 }
 
 trait PartialPreviousTests[A] extends PartialOrderTests[A] {
 
   def laws: PartialPreviousLaws[A]
 
-  def partialPrevious(implicit arbA: Arbitrary[A], arbF: Arbitrary[A => A], eqOA: Eq[Option[A]], eqA: Eq[A]): RuleSet =
+  def partialPrevious(implicit arbA: Arbitrary[A], arbF: Arbitrary[A => A]): RuleSet =
     new DefaultRuleSet(
       "partialPrevious",
       Some(partialOrder),
@@ -54,18 +57,16 @@ trait PartialPreviousTests[A] extends PartialOrderTests[A] {
       "forall a, b. if a < b. next(a) <= b" -> forAll(laws.previousOrderStrong _)
     )
 
+  @deprecated("use `partialPrevious` without `Eq` parameters", "2.12.1")
+  def partialPrevious(arbA: Arbitrary[A], arbF: Arbitrary[A => A], eqOA: Eq[Option[A]], eqA: Eq[A]): RuleSet =
+    partialPrevious(arbA, arbF)
 }
 
 trait BoundedEnumerableTests[A] extends OrderTests[A] with PartialNextTests[A] with PartialPreviousTests[A] {
 
   def laws: BoundedEnumerableLaws[A]
 
-  def boundedEnumerable(implicit
-    arbA: Arbitrary[A],
-    arbF: Arbitrary[A => A],
-    eqOA: Eq[Option[A]],
-    eqA: Eq[A]
-  ): RuleSet =
+  def boundedEnumerable(implicit arbA: Arbitrary[A], arbF: Arbitrary[A => A], eqOA: Eq[Option[A]]): RuleSet =
     new RuleSet {
       val name: String = "boundedEnumerable"
       val bases: Seq[(String, RuleSet)] = Nil
@@ -78,6 +79,14 @@ trait BoundedEnumerableTests[A] extends OrderTests[A] with PartialNextTests[A] w
       )
     }
 
+  @deprecated("use `boundedEnumerable` without `Eq[A]` parameter", "2.12.1")
+  def boundedEnumerable(
+    arbA: Arbitrary[A],
+    arbF: Arbitrary[A => A],
+    eqOA: Eq[Option[A]],
+    eqA: Eq[A]
+  ): RuleSet =
+    boundedEnumerable(arbA, arbF, eqOA)
 }
 
 object BoundedEnumerableTests {
