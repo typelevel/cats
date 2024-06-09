@@ -261,16 +261,16 @@ With the methods that we will compose in place let's create a method that will
 compose the above methods using a for comprehension which
 interprets to a `flatMap`-`map` combination.  
 
-`getTemperatureFromByCoordinates` parameterized type 
-`[F[_]:MonadError[*[_], String]` injects `F[_]` into `MonadError[*[_], String]`
+`getTemperatureByCoordinates`'s parameterized type
+`[F[_]:MonadError[*[_], String]` injects `F[_]` into `MonadError[*[_], String]`;
 thus if the "error type" you wish to use is `Either[String, *]`, the `Either`
 would be placed in the hole of `MonadError`, in this case, 
 `MonadError[Either[String, *], String]`
 
-`getTemperatureFromByCoordinates` accepts a `Tuple2` of `Int` and `Int`, and we
-return `F` which represents our `MonadError` which can be a type like `Either` or
-`Validated`. In the method, since either `getCityClosestToCoordinate` and
-`getTemperatureByCity` both return potential error types and they are monadic we can
+`getTemperatureByCoordinates` accepts a `Tuple2` of `Int` and `Int` and
+returns `F`, which represents our `MonadError`, which can be a type like `Either` or
+`Validated`. In the method, since `getCityClosestToCoordinate` and
+`getTemperatureByCity` both return potential error types and they are monadic, we can
 compose them with a for comprehension.
 
 ```scala mdoc:silent
@@ -280,17 +280,14 @@ def getTemperatureByCoordinates[F[_]: MonadError[*[_], String]](x: (Int, Int)): 
 }
 ``` 
 
-Invoking `getTemperatureByCoordinates` we can call it with the following sample, 
-which will return `78`. 
-
-NOTE: infix `->` creates a `Tuple2`. `1 -> "Bob"` is the same as `(1, "Bob")`
+We can call `getTemperatureByCoordinates` with the following sample, which will return `78`.
 
 ```scala mdoc:silent
 type MyEither[A] = Either[String, A]
-getTemperatureByCoordinates[MyEither](44 -> 93)
+getTemperatureByCoordinates[MyEither]((44, 93))
 ```
 
-With TypeLevel Cats, how you structure your methods is up to you, if you wanted to
+With TypeLevel Cats, how you structure your methods is up to you: if you wanted to
 create `getTemperatureByCoordinates` without a Scala 
 [context bound](https://docs.scala-lang.org/tutorials/FAQ/context-bounds.html) for `MonadError`,
 but create an `implicit` parameter for your `MonadError` you can have access to some 
@@ -302,7 +299,7 @@ specialized methods, like `raiseError`, to raise an error representation
 when things go wrong.
 
 ```scala mdoc:silent
-def getTemperatureFromByCoordinatesAlternate[F[_]](x: (Int, Int))(implicit me: MonadError[F, String]): F[Int] = {
+def getTemperatureByCoordinatesAlternate[F[_]](x: (Int, Int))(implicit me: MonadError[F, String]): F[Int] = {
   if (x._1 < 0 || x._2 < 0) me.raiseError("Invalid Coordinates")
   else for { c <- getCityClosestToCoordinate[F](x)
         t <- getTemperatureByCity[F](c) } yield t
