@@ -21,7 +21,7 @@
 
 package cats
 
-import cats.ApplicativeError.CatchOnlyPartiallyApplied
+import cats.ApplicativeError.{CatchOnlyAsPartiallyApplied, CatchOnlyPartiallyApplied}
 import cats.data.{EitherT, Validated}
 import cats.data.Validated.{Invalid, Valid}
 
@@ -288,6 +288,26 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
     new CatchOnlyPartiallyApplied[T, F, E](this)
 
   /**
+   * Often E can be created from Throwable. Here we try to call pure or
+   * catch, adapt into E, and raise.
+   *
+   * Exceptions that cannot be adapted to E will be propagated
+   */
+  def catchNonFatalAs[A](adaptIfPossible: Throwable => Option[E])(a: => A): F[A] =
+    try pure(a)
+    catch {
+      case e if NonFatal(e) => adaptIfPossible(e).map(raiseError[A]).getOrElse(throw e)
+    }
+
+  /**
+   * Evaluates the specified block, catching exceptions of the specified type and attempting to map them to `E`.
+   *
+   * Uncaught exceptions and those that cannot be adapted to E will be propagated.
+   */
+  def catchOnlyAs[T >: Null <: Throwable]: CatchOnlyAsPartiallyApplied[T, F, E] =
+    new CatchOnlyAsPartiallyApplied[T, F, E](this)
+
+  /**
    * If the error type is Throwable, we can convert from a scala.util.Try
    */
   def fromTry[A](t: Try[A])(implicit ev: Throwable <:< E): F[A] =
@@ -380,6 +400,16 @@ object ApplicativeError {
       } catch {
         case t if CT.runtimeClass.isInstance(t) =>
           F.raiseError(t)
+      }
+  }
+
+  final private[cats] class CatchOnlyAsPartiallyApplied[T >: Null <: Throwable, F[_], E](
+    private val F: ApplicativeError[F, E]
+  ) extends AnyVal {
+    def apply[A](adaptIfPossible: T => Option[E])(f: => A)(implicit CT: ClassTag[T], NT: NotNull[T]): F[A] =
+      try F.pure(f)
+      catch {
+        case CT(t) => adaptIfPossible(t).map(F.raiseError[A]).getOrElse(throw t)
       }
   }
 
