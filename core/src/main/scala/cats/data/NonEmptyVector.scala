@@ -593,26 +593,6 @@ sealed abstract private[data] class NonEmptyVectorInstances extends NonEmptyVect
 
 }
 
-sealed abstract private[data] class NonEmptyVectorInstances0 extends NonEmptyVectorInstances1 {
-  implicit def catsDataHashForNonEmptyVector[A: Hash]: Hash[NonEmptyVector[A]] =
-    new Hash[NonEmptyVector[A]] {
-      override def hash(x: NonEmptyVector[A]): Int =
-        Hash[Vector[A]].hash(x.toVector)
-
-      override def eqv(x: NonEmptyVector[A], y: NonEmptyVector[A]): Boolean =
-        Hash[Vector[A]].eqv(x.toVector, y.toVector)
-    }
-}
-
-sealed abstract private[data] class NonEmptyVectorInstances1 extends NonEmptyVectorInstances2 {
-  implicit def catsDataPartialOrderForNonEmptyVector[A: PartialOrder]: PartialOrder[NonEmptyVector[A]] =
-    PartialOrder.by[NonEmptyVector[A], Vector[A]](_.toVector)
-}
-
-sealed abstract private[data] class NonEmptyVectorInstances2 {
-  implicit def catsDataEqForNonEmptyVector[A: Eq]: Eq[NonEmptyVector[A]] = _ === _
-}
-
 object NonEmptyVector extends NonEmptyVectorInstances with Serializable {
 
   def apply[A](head: A, tail: Vector[A]): NonEmptyVector[A] =
@@ -660,4 +640,18 @@ object NonEmptyVector extends NonEmptyVectorInstances with Serializable {
 
     implicit def catsDataEqForZipNonEmptyVector[A: Eq]: Eq[ZipNonEmptyVector[A]] = Eq.by(_.value)
   }
+}
+
+sealed abstract private[data] class NonEmptyVectorInstances0 extends NonEmptyVectorInstances1 {
+  implicit def catsDataPartialOrderForNonEmptyVector[A: PartialOrder]: PartialOrder[NonEmptyVector[A]] =
+    PartialOrder.by[NonEmptyVector[A], Vector[A]](_.toVector)
+}
+
+sealed abstract private[data] class NonEmptyVectorInstances1 extends NonEmptyVectorInstances2 {
+  implicit def catsDataHashForNonEmptyVector[A: Hash]: Hash[NonEmptyVector[A]] =
+    Hash.by(_.toVector)
+}
+
+sealed abstract private[data] class NonEmptyVectorInstances2 {
+  implicit def catsDataEqForNonEmptyVector[A: Eq]: Eq[NonEmptyVector[A]] = _ === _
 }
