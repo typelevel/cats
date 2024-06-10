@@ -425,26 +425,24 @@
         <p>With the methods that we will compose in place let&#39;s create a method that will
         compose the above methods using a for comprehension which
         interprets to a <code>flatMap</code>-<code>map</code> combination.<br></p>
-        <p><code>getTemperatureFromByCoordinates</code> parameterized type 
-        <code>[F[_]:MonadError[*[_], String]</code> injects <code>F[_]</code> into <code>MonadError[*[_], String]</code>
+        <p><code>getTemperatureByCoordinates</code>&#39;s parameterized type
+        <code>[F[_]:MonadError[*[_], String]</code> injects <code>F[_]</code> into <code>MonadError[*[_], String]</code>;
         thus if the &quot;error type&quot; you wish to use is <code>Either[String, *]</code>, the <code>Either</code>
         would be placed in the hole of <code>MonadError</code>, in this case, 
         <code>MonadError[Either[String, *], String]</code></p>
-        <p><code>getTemperatureFromByCoordinates</code> accepts a <code>Tuple2</code> of <code>Int</code> and <code>Int</code>, and we
-        return <code>F</code> which represents our <code>MonadError</code> which can be a type like <code>Either</code> or
-        <code>Validated</code>. In the method, since either <code>getCityClosestToCoordinate</code> and
-        <code>getTemperatureByCity</code> both return potential error types and they are monadic we can
+        <p><code>getTemperatureByCoordinates</code> accepts a <code>Tuple2</code> of <code>Int</code> and <code>Int</code> and
+        returns <code>F</code>, which represents our <code>MonadError</code>, which can be a type like <code>Either</code> or
+        <code>Validated</code>. In the method, since <code>getCityClosestToCoordinate</code> and
+        <code>getTemperatureByCity</code> both return potential error types and they are monadic, we can
         compose them with a for comprehension.</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">def</span><span> </span><span class="declaration-name">getTemperatureByCoordinates</span><span>[</span><span class="type-name">F</span><span>[</span><span class="identifier">_</span><span>]: </span><span class="type-name">MonadError</span><span>[*[</span><span class="identifier">_</span><span>], </span><span class="type-name">String</span><span>]](</span><span class="identifier">x</span><span>: (</span><span class="type-name">Int</span><span>, </span><span class="type-name">Int</span><span>)): </span><span class="type-name">F</span><span>[</span><span class="type-name">Int</span><span>] = {
   </span><span class="keyword">for</span><span> { </span><span class="identifier">c</span><span> &lt;- </span><span class="identifier">getCityClosestToCoordinate</span><span>[</span><span class="type-name">F</span><span>](</span><span class="identifier">x</span><span>)
         </span><span class="identifier">t</span><span> &lt;- </span><span class="identifier">getTemperatureByCity</span><span>[</span><span class="type-name">F</span><span>](</span><span class="identifier">c</span><span>) } </span><span class="keyword">yield</span><span> </span><span class="identifier">t</span><span>
 }</span></code></pre>
-        <p>Invoking <code>getTemperatureByCoordinates</code> we can call it with the following sample, 
-        which will return <code>78</code>. </p>
-        <p>NOTE: infix <code>-&gt;</code> creates a <code>Tuple2</code>. <code>1 -&gt; &quot;Bob&quot;</code> is the same as <code>(1, &quot;Bob&quot;)</code></p>
+        <p>We can call <code>getTemperatureByCoordinates</code> with the following sample, which will return <code>78</code>.</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">type</span><span> </span><span class="type-name">MyEither</span><span>[</span><span class="type-name">A</span><span>] = </span><span class="type-name">Either</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">A</span><span>]
-</span><span class="identifier">getTemperatureByCoordinates</span><span>[</span><span class="type-name">MyEither</span><span>](</span><span class="number-literal">44</span><span> -&gt; </span><span class="number-literal">93</span><span>)</span></code></pre>
-        <p>With TypeLevel Cats, how you structure your methods is up to you, if you wanted to
+</span><span class="identifier">getTemperatureByCoordinates</span><span>[</span><span class="type-name">MyEither</span><span>]((</span><span class="number-literal">44</span><span>, </span><span class="number-literal">93</span><span>))</span></code></pre>
+        <p>With TypeLevel Cats, how you structure your methods is up to you: if you wanted to
         create <code>getTemperatureByCoordinates</code> without a Scala 
         <a href="https://docs.scala-lang.org/tutorials/FAQ/context-bounds.html">context bound</a> for <code>MonadError</code>,
         but create an <code>implicit</code> parameter for your <code>MonadError</code> you can have access to some 
@@ -453,7 +451,7 @@
         and call it <code>me</code>. Using the <code>me</code> reference, we can call any one of its 
         specialized methods, like <code>raiseError</code>, to raise an error representation
         when things go wrong.</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">def</span><span> </span><span class="declaration-name">getTemperatureFromByCoordinatesAlternate</span><span>[</span><span class="type-name">F</span><span>[</span><span class="identifier">_</span><span>]](</span><span class="identifier">x</span><span>: (</span><span class="type-name">Int</span><span>, </span><span class="type-name">Int</span><span>))(</span><span class="keyword">implicit</span><span> </span><span class="identifier">me</span><span>: </span><span class="type-name">MonadError</span><span>[</span><span class="type-name">F</span><span>, </span><span class="type-name">String</span><span>]): </span><span class="type-name">F</span><span>[</span><span class="type-name">Int</span><span>] = {
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">def</span><span> </span><span class="declaration-name">getTemperatureByCoordinatesAlternate</span><span>[</span><span class="type-name">F</span><span>[</span><span class="identifier">_</span><span>]](</span><span class="identifier">x</span><span>: (</span><span class="type-name">Int</span><span>, </span><span class="type-name">Int</span><span>))(</span><span class="keyword">implicit</span><span> </span><span class="identifier">me</span><span>: </span><span class="type-name">MonadError</span><span>[</span><span class="type-name">F</span><span>, </span><span class="type-name">String</span><span>]): </span><span class="type-name">F</span><span>[</span><span class="type-name">Int</span><span>] = {
   </span><span class="keyword">if</span><span> (</span><span class="identifier">x</span><span class="number-literal">._1</span><span> &lt; </span><span class="number-literal">0</span><span> || </span><span class="identifier">x</span><span class="number-literal">._2</span><span> &lt; </span><span class="number-literal">0</span><span>) </span><span class="identifier">me</span><span>.</span><span class="identifier">raiseError</span><span>(</span><span class="string-literal">&quot;Invalid Coordinates&quot;</span><span>)
   </span><span class="keyword">else</span><span> </span><span class="keyword">for</span><span> { </span><span class="identifier">c</span><span> &lt;- </span><span class="identifier">getCityClosestToCoordinate</span><span>[</span><span class="type-name">F</span><span>](</span><span class="identifier">x</span><span>)
         </span><span class="identifier">t</span><span> &lt;- </span><span class="identifier">getTemperatureByCity</span><span>[</span><span class="type-name">F</span><span>](</span><span class="identifier">c</span><span>) } </span><span class="keyword">yield</span><span> </span><span class="identifier">t</span><span>
