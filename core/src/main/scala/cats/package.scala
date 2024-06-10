@@ -26,32 +26,36 @@ import cats.data.Ior
  * The `cats` root package contains all the trait signatures of most Scala type classes.
  *
  * Cats type classes are implemented using the approach from the
- *  [[https://ropas.snu.ac.kr/~bruno/papers/TypeClasses.pdf Type classes as objects and implicits]] article.
+ * "[[https://i.cs.hku.hk/~bruno/papers/TypeClasses.pdf Type classes as objects and implicits]]" article.
  *
- * For each type class, `cats` provides three pieces:
- * - Its '''signature''': a trait that is polymorphic on a type parameter.
- *   Type class traits inherit from other type classes to indicate that any implementation of the lower type class (e.g. `Applicative`)
- *   can also serve as an instance for the higher type class (e.g. `Functor`).
- * - Type class ''''instances''', which are classes and objects that implement one or more type class signatures for some specific types.
- *   Type class instances for several data types from the Java or Scala standard libraries are declared in the subpackage `cats.instances`.
- * - '''Syntax extensions''', each of which provides the methods of the type class defines as extension methods
- *   (which in Scala 2 are encoded as implicit classes) for values of any type `F`; given that an instance of the type class
- *   for the receiver type (`this`) is in the implicit scope.
- *   Syntax extensions are declared in the `cats.syntax` package.
- * - A set of '''laws''', that are also generic on the type of the class, and are only defined on the operations of the type class.
- *   The purpose of these laws is to declare some algebraic relations (equations) between Scala expressions involving the operations
- *   of the type class, and test (but not verify) that implemented instances satisfy those equations.
- *   Laws are defined in the `cats-laws` package.
+ * For each type class, `cats` provides four pieces:
+ *   - Its '''signature''': a trait that is polymorphic on a type parameter.
+ *     Type class traits inherit from other type classes to indicate that any implementation of the lower type class
+ *     (e.g. [[Applicative `Applicative`]])
+ *     can also serve as an instance for the higher type class (e.g. [[Functor `Functor`]]).
+ *   - Type class '''instances''', which are classes and objects that implement one or more type class signatures for some specific types.
+ *     Type class instances for several data types from the Java or Scala standard libraries are declared
+ *     in the subpackage [[cats.instances `cats.instances`]].
+ *   - '''Syntax extensions''', each of which provides the methods of the type class defined as extension methods
+ *     (which in Scala 2 are encoded as implicit classes) for values of any type `F`; given that an instance of the type class
+ *     for the receiver type (`this`) is in the implicit scope.
+ *     Syntax extensions are declared in the [[cats.syntax `cats.syntax`]] package.
+ *   - A set of '''laws''', that are also generic on the type of the class, and are only defined on the operations of the type class.
+ *     The purpose of these laws is to declare some algebraic relations (equations) between Scala expressions involving the operations
+ *     of the type class, and test (but not verify) that implemented instances satisfy those equations.
+ *     Laws are defined in the [[cats.laws `cats.laws`]] package.
  *
  * Although most of cats type classes are declared in this package, some are declared in other packages:
- * - type classes that operate on base types (kind `*`), and their implementations for standard library types,
- *   are contained in `cats.kernel`, which is a different SBT project. However, they are re-exported from this package.
- * - type classes of kind `F[_, _]`, such as [[cats.arrow.Profunctor]]" or [[cats.arrow.Arrow]], which are relevant for
- *   Functional Reactive Programming or optics, are declared in the `cats.arrow` package.
- * - Also, those type classes that abstract over (pure or impure) functional runtime effects are declared
- *   in the [[https://typelevel.org/cats-effect/ cats-effect library]].
- * - Some type classes for which no laws can be provided are left out of the main road, in a small and dirty alley.
- *   These are the `alleycats`.
+ *   - type classes that operate on base types (kind `*`), and their implementations for standard library types,
+ *     are contained in [[cats.kernel `cats.kernel`]], which is a different SBT project. However, they are re-exported from this package.
+ *   - type classes of kind `F[_, _]`,
+ *     such as [[cats.arrow.Profunctor `cats.arrow.Profunctor`]] or [[cats.arrow.Arrow `cats.arrow.Arrow`]],
+ *     which are relevant for
+ *     Functional Reactive Programming or optics, are declared in the [[cats.arrow `cats.arrow`]] package.
+ *   - Also, those type classes that abstract over (pure or impure) functional runtime effects are declared
+ *     in the [[https://typelevel.org/cats-effect/ cats-effect library]].
+ *   - Some type classes for which no laws can be provided are left out of the main road, in a small and dirty alley.
+ *     These are the [[alleycats `alleycats`]].
  */
 package object cats {
 
