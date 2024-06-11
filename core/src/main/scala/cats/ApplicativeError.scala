@@ -291,7 +291,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    * Often E can be created from Throwable. Here we try to call pure or
    * catch, adapt into E, and raise.
    *
-   * Exceptions that cannot be adapted to E will be propagated
+   * Exceptions that cannot be adapted to E will be propagated outside of `F`
    */
   def catchNonFatalAs[A](adaptIfPossible: Throwable => Option[E])(a: => A): F[A] =
     try pure(a)
@@ -300,9 +300,13 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
     }
 
   /**
-   * Evaluates the specified block, catching exceptions of the specified type and attempting to map them to `E`.
+   * Evaluates the specified block, catching exceptions of the specified type and maps them to `E`.
    *
-   * Uncaught exceptions and those that cannot be adapted to E will be propagated.
+   * Uncaught exceptions will be propagated outside of `F`
+   *
+   * Note: `catchOnlyAs` assumes that, if a specific exception type `T` is expected, there
+   * exists a mapping from `T` to `E`. If this is not the case, consider either manually
+   * rethrowing inside the mapping function, or using `catchNonFatalAs`
    */
   def catchOnlyAs[T >: Null <: Throwable]: CatchOnlyAsPartiallyApplied[T, F, E] =
     new CatchOnlyAsPartiallyApplied[T, F, E](this)
@@ -406,10 +410,10 @@ object ApplicativeError {
   final private[cats] class CatchOnlyAsPartiallyApplied[T >: Null <: Throwable, F[_], E](
     private val F: ApplicativeError[F, E]
   ) extends AnyVal {
-    def apply[A](adaptIfPossible: T => Option[E])(f: => A)(implicit CT: ClassTag[T], NT: NotNull[T]): F[A] =
+    def apply[A](adapt: T => E)(f: => A)(implicit CT: ClassTag[T], NT: NotNull[T]): F[A] =
       try F.pure(f)
       catch {
-        case CT(t) => adaptIfPossible(t).map(F.raiseError[A]).getOrElse(throw t)
+        case CT(t) => F.raiseError(adapt(t))
       }
   }
 

@@ -148,24 +148,17 @@ class EitherSuite extends CatsSuite {
     }
   }
 
-  test("ApplicativeError instance catchOnlyAs maps exceptions to E") {
+  test("ApplicativeError instance catchOnlyAs maps exceptions of the specified type to E") {
     val res =
       ApplicativeError[Either[String, *], String]
-        .catchOnlyAs[NumberFormatException](_.getMessage.some)("foo".toInt)
+        .catchOnlyAs[NumberFormatException](_.getMessage)("foo".toInt)
     assert(res === Left("For input string: \"foo\""))
-  }
-
-  test("ApplicativeError instance catchOnlyAs propagates unmappable exceptions") {
-    val _ = intercept[NumberFormatException] {
-      ApplicativeError[Either[String, *], String]
-        .catchOnlyAs[NumberFormatException](_ => none[String])("foo".toInt)
-    }
   }
 
   test("ApplicativeError instance catchOnlyAs propagates non-matching exceptions") {
     val _ = intercept[NumberFormatException] {
       ApplicativeError[Either[String, *], String]
-        .catchOnlyAs[IndexOutOfBoundsException](_.getMessage.some)("foo".toInt)
+        .catchOnlyAs[IndexOutOfBoundsException](_.getMessage)("foo".toInt)
     }
   }
 
