@@ -22,11 +22,18 @@
 package cats.kernel
 package instances
 
+import scala.annotation.nowarn
+
 trait BooleanInstances {
-  implicit val catsKernelStdOrderForBoolean: Order[Boolean] with Hash[Boolean] with BoundedEnumerable[Boolean] =
+  implicit val catsKernelStdBoundableEnumerableForBoolean: Order[Boolean] with Hash[Boolean] with BoundableEnumerable[Boolean] =
+    new BooleanOrder
+
+  @deprecated(message = "Please use catsKernelStdBoundableEnumerableForBoolean", since = "2.10.0")
+  val catsKernelStdOrderForBoolean: Order[Boolean] with Hash[Boolean] with BoundedEnumerable[Boolean] =
     new BooleanOrder
 }
 
+@deprecated(message = "Please use BooleanBoundableEnumerable.", since = "2.10.0")
 trait BooleanEnumerable extends BoundedEnumerable[Boolean] {
   override def partialNext(a: Boolean): Option[Boolean] =
     if (!a) Some(true) else None
@@ -34,12 +41,33 @@ trait BooleanEnumerable extends BoundedEnumerable[Boolean] {
     if (a) Some(false) else None
 }
 
+private[instances] trait BooleanBoundableEnumerable extends BoundableEnumerable[Boolean] {
+  override final val size: BigInt = BigInt(2)
+
+  override final def fromEnum(a: Boolean): BigInt =
+    if (a) {
+      BigInt(1)
+    } else {
+      BigInt(0)
+    }
+
+  override final def toEnumOpt(i: BigInt): Option[Boolean] =
+    if (i == BigInt(0)) {
+      Some(false)
+    } else if (i == BigInt(1)) {
+      Some(true)
+    } else {
+      None
+    }
+}
+
 trait BooleanBounded extends LowerBounded[Boolean] with UpperBounded[Boolean] {
   override def minBound: Boolean = false
   override def maxBound: Boolean = true
 }
 
-class BooleanOrder extends Order[Boolean] with Hash[Boolean] with BooleanBounded with BooleanEnumerable { self =>
+@nowarn("msg=BooleanBoundableEnumerable")
+class BooleanOrder extends Order[Boolean] with Hash[Boolean] with BooleanBounded with BooleanEnumerable with BooleanBoundableEnumerable { self =>
 
   def hash(x: Boolean): Int = x.hashCode()
   def compare(x: Boolean, y: Boolean): Int =

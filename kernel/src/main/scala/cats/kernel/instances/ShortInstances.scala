@@ -22,9 +22,18 @@
 package cats.kernel
 package instances
 
+import scala.annotation.nowarn
+
 trait ShortInstances {
-  implicit val catsKernelStdOrderForShort: Order[Short] with Hash[Short] with BoundedEnumerable[Short] = new ShortOrder
+
+  implicit val catsKernelStdBoundableEnumerableForShort: Order[Short] with Hash[Short] with BoundableEnumerable[Short] =
+    new ShortOrder
+
   implicit val catsKernelStdGroupForShort: CommutativeGroup[Short] = new ShortGroup
+
+  @deprecated(message = "Please use catsKernelStdBoundableEnumerableForShort", since = "2.10.0")
+  val catsKernelStdOrderForShort: Order[Short] with Hash[Short] with BoundedEnumerable[Short] =
+    new ShortOrder
 }
 
 class ShortGroup extends CommutativeGroup[Short] {
@@ -34,6 +43,7 @@ class ShortGroup extends CommutativeGroup[Short] {
   override def remove(x: Short, y: Short): Short = (x - y).toShort
 }
 
+@deprecated(message = "Please use ShortBoundableEnumerable.", since = "2.10.0")
 trait ShortEnumerable extends BoundedEnumerable[Short] {
   override def partialNext(a: Short): Option[Short] =
     if (order.eqv(a, maxBound)) None else Some((a + 1).toShort)
@@ -41,12 +51,28 @@ trait ShortEnumerable extends BoundedEnumerable[Short] {
     if (order.eqv(a, minBound)) None else Some((a - 1).toShort)
 }
 
+private[instances] trait ShortBoundableEnumerable extends BoundableEnumerable[Short] {
+  override final val size: BigInt =
+    (BigInt(maxBound.toInt) - BigInt(minBound.toInt)) + BigInt(1)
+
+  override final def fromEnum(a: Short): BigInt =
+    BigInt(a.toInt)
+
+  override final def toEnumOpt(i: BigInt): Option[Short] =
+    if (i >= BigInt(minBound.toInt) && i <= BigInt(maxBound.toInt)) {
+      Some(i.toShort)
+    } else {
+      None
+    }
+}
+
 trait ShortBounded extends LowerBounded[Short] with UpperBounded[Short] {
   override def minBound: Short = Short.MinValue
   override def maxBound: Short = Short.MaxValue
 }
 
-class ShortOrder extends Order[Short] with Hash[Short] with ShortBounded with ShortEnumerable { self =>
+@nowarn("msg=ShortBoundableEnumerable")
+class ShortOrder extends Order[Short] with Hash[Short] with ShortBounded with ShortEnumerable with ShortBoundableEnumerable { self =>
 
   def hash(x: Short): Int = x.hashCode()
   // use java.lang.Short.compare if we can rely on java >= 1.7
