@@ -3,6 +3,7 @@
 .metals
 project/boot
 target
+**/src/*/managed
 .ensime
 .ensime_lucene
 .ensime_cache
