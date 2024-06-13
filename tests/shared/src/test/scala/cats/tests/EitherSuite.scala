@@ -138,27 +138,59 @@ class EitherSuite extends CatsSuite {
   }
 
   test("ApplicativeError instance catchNonFatalAs maps exceptions to E") {
-    val res = ApplicativeError[Either[String, *], String].catchNonFatalAs(_.getMessage.some)("foo".toInt)
+    val res =
+      ApplicativeError[Either[String, *], String]
+        .catchNonFatalAs[Either[Throwable, *], Int](_.getMessage.some)("foo".toInt)
+        .leftMap(0 -> _.getMessage)
+    assert(res === Right(Left("For input string: \"foo\"")))
+  }
+
+  test("ApplicativeError instance catchNonFatalAs raises unmappable exceptions in G") {
+    val res =
+      ApplicativeError[Either[String, *], String]
+        .catchNonFatalAs[Either[Throwable, *], Int](_ => none[String])("foo".toInt)
+        .leftMap(0 -> _.getMessage)
+    assert(res === Left(0 -> "For input string: \"foo\""))
+  }
+
+  test("ApplicativeError instance catchNonFatalAsUnsafe maps exceptions to E") {
+    val res = ApplicativeError[Either[String, *], String].catchNonFatalAsUnsafe(_.getMessage.some)("foo".toInt)
     assert(res === Left("For input string: \"foo\""))
   }
 
-  test("ApplicativeError instance catchNonFatalAs propagates unmappable exceptions") {
+  test("ApplicativeError instance catchNonFatalAsUnsafe rethrows unmappable exceptions") {
     val _ = intercept[NumberFormatException] {
-      ApplicativeError[Either[String, *], String].catchNonFatalAs(_ => none[String])("foo".toInt)
+      ApplicativeError[Either[String, *], String].catchNonFatalAsUnsafe(_ => none[String])("foo".toInt)
     }
   }
 
   test("ApplicativeError instance catchOnlyAs maps exceptions of the specified type to E") {
     val res =
       ApplicativeError[Either[String, *], String]
-        .catchOnlyAs[NumberFormatException](_.getMessage)("foo".toInt)
+        .catchOnlyAs[Either[Throwable, *], NumberFormatException](_.getMessage)("foo".toInt)
+        .leftMap(0 -> _.getMessage)
+    assert(res === Right(Left("For input string: \"foo\"")))
+  }
+
+  test("ApplicativeError instance catchOnlyAs raises non-matching exceptions in G") {
+    val res =
+      ApplicativeError[Either[String, *], String]
+        .catchOnlyAs[Either[Throwable, *], IndexOutOfBoundsException](_.getMessage)("foo".toInt)
+        .leftMap(0 -> _.getMessage)
+    assert(res === Left(0 -> "For input string: \"foo\""))
+  }
+
+  test("ApplicativeError instance catchOnlyAsUnsafe maps exceptions of the specified type to E") {
+    val res =
+      ApplicativeError[Either[String, *], String]
+        .catchOnlyAsUnsafe[NumberFormatException](_.getMessage)("foo".toInt)
     assert(res === Left("For input string: \"foo\""))
   }
 
-  test("ApplicativeError instance catchOnlyAs propagates non-matching exceptions") {
+  test("ApplicativeError instance catchOnlyAsUnsafe propagates non-matching exceptions") {
     val _ = intercept[NumberFormatException] {
       ApplicativeError[Either[String, *], String]
-        .catchOnlyAs[IndexOutOfBoundsException](_.getMessage)("foo".toInt)
+        .catchOnlyAsUnsafe[IndexOutOfBoundsException](_.getMessage)("foo".toInt)
     }
   }
 

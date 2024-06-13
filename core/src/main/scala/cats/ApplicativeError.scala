@@ -21,7 +21,12 @@
 
 package cats
 
-import cats.ApplicativeError.{CatchOnlyAsPartiallyApplied, CatchOnlyPartiallyApplied}
+import cats.ApplicativeError.{
+  CatchOnlyAsPartiallyApplied,
+  CatchOnlyAsUnsafePartiallyApplied,
+  CatchOnlyPartiallyApplied,
+  CatchOnlySafePartiallyApplied
+}
 import cats.data.{EitherT, Validated}
 import cats.data.Validated.{Invalid, Valid}
 
@@ -264,6 +269,8 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
   /**
    * Often E is Throwable. Here we try to call pure or catch
    * and raise.
+   *
+   * Note: fatal exceptions (as defined by `scala.util.control.NonFatal`) will be propagated
    */
   def catchNonFatal[A](a: => A)(implicit ev: Throwable <:< E): F[A] =
     try pure(a)
@@ -274,6 +281,8 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
   /**
    * Often E is Throwable. Here we try to call pure or catch
    * and raise
+   *
+   * Note: fatal exceptions (as defined by `scala.util.control.NonFatal`) will be propagated
    */
   def catchNonFatalEval[A](a: Eval[A])(implicit ev: Throwable <:< E): F[A] =
     try pure(a.value)
@@ -282,34 +291,84 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
     }
 
   /**
-   * Evaluates the specified block, catching exceptions of the specified type. Uncaught exceptions are propagated.
+   * Evaluates the specified block, catching exceptions of the specified type.
+   *
+   * This method is considered unsafe because uncaught exceptions are propagated
+   * outside of `F`. While the name does not currently reflect this, this may change
+   * at a future date.
    */
   def catchOnly[T >: Null <: Throwable]: CatchOnlyPartiallyApplied[T, F, E] =
     new CatchOnlyPartiallyApplied[T, F, E](this)
 
   /**
+   * Evaluates the specified block, catching exceptions of the specified type.
+   *
+   * Exceptions of type `T` are raised in `F`, other non-fatal exceptions are raised in `G`
+   *
+   * Note: fatal exceptions (as defined by `scala.util.control.NonFatal`) will be propagated
+   */
+  def catchOnlySafe[G[_], T >: Null <: Throwable]: CatchOnlySafePartiallyApplied[T, G, F, E] =
+    new CatchOnlySafePartiallyApplied[T, G, F, E](this)
+
+  /**
    * Often E can be created from Throwable. Here we try to call pure or
    * catch, adapt into E, and raise.
    *
-   * Exceptions that cannot be adapted to E will be propagated outside of `F`
+   * Exceptions that cannot be adapted to E and raised in `F` will be raised in `G`
+   *
+   * Note: fatal exceptions (as defined by `scala.util.control.NonFatal`) will be propagated
    */
-  def catchNonFatalAs[A](adaptIfPossible: Throwable => Option[E])(a: => A): F[A] =
+  def catchNonFatalAs[G[_], A](adaptIfPossible: Throwable => Option[E])(a: => A)(implicit
+    G: ApplicativeThrow[G]
+  ): G[F[A]] =
+    try G.pure(pure(a))
+    catch {
+      case t if NonFatal(t) =>
+        adaptIfPossible(t).fold(G.raiseError[F[A]](t))(e => G.pure(raiseError[A](e)))
+    }
+
+  /**
+   * Often E can be created from Throwable. Here we try to call pure or
+   * catch, adapt into E, and raise.
+   *
+   * This method is considered unsafe because exceptions that cannot be
+   * adapted to E will be rethrown outside of `F`
+   *
+   * Note: fatal exceptions (as defined by `scala.util.control.NonFatal`) will be propagated
+   */
+  def catchNonFatalAsUnsafe[A](adaptIfPossible: Throwable => Option[E])(a: => A): F[A] =
     try pure(a)
     catch {
       case e if NonFatal(e) => adaptIfPossible(e).map(raiseError[A]).getOrElse(throw e)
     }
 
   /**
-   * Evaluates the specified block, catching exceptions of the specified type and maps them to `E`.
+   * Evaluates the specified block, catching exceptions of the specified type.
    *
-   * Uncaught exceptions will be propagated outside of `F`
+   * Caught exceptions are mapped to `E` and raised in `F`.
+   * Uncaught non-fatal exceptions will be raised in `G`.
+   * Fatal exceptions (as defined by `scala.util.control.NonFatal`) will be propagated
    *
    * Note: `catchOnlyAs` assumes that, if a specific exception type `T` is expected, there
    * exists a mapping from `T` to `E`. If this is not the case, consider either manually
    * rethrowing inside the mapping function, or using `catchNonFatalAs`
    */
-  def catchOnlyAs[T >: Null <: Throwable]: CatchOnlyAsPartiallyApplied[T, F, E] =
-    new CatchOnlyAsPartiallyApplied[T, F, E](this)
+  def catchOnlyAs[G[_], T >: Null <: Throwable]: CatchOnlyAsPartiallyApplied[T, G, F, E] =
+    new CatchOnlyAsPartiallyApplied[T, G, F, E](this)
+
+  /**
+   * Evaluates the specified block, catching exceptions of the specified type.
+   *
+   * Caught exceptions are mapped to `E` and raised in `F`.
+   *
+   * This method is considered unsafe because uncaught exceptions will be propagated outside of `F`
+   *
+   * Note: `catchOnlyAsUnsafe` assumes that, if a specific exception type `T` is expected, there
+   * exists a mapping from `T` to `E`. If this is not the case, consider either manually
+   * rethrowing inside the mapping function, or using `catchNonFatalAsUnsafe`
+   */
+  def catchOnlyAsUnsafe[T >: Null <: Throwable]: CatchOnlyAsUnsafePartiallyApplied[T, F, E] =
+    new CatchOnlyAsUnsafePartiallyApplied[T, F, E](this)
 
   /**
    * If the error type is Throwable, we can convert from a scala.util.Try
@@ -407,7 +466,30 @@ object ApplicativeError {
       }
   }
 
-  final private[cats] class CatchOnlyAsPartiallyApplied[T >: Null <: Throwable, F[_], E](
+  final private[cats] class CatchOnlySafePartiallyApplied[T, G[_], F[_], E](private val F: ApplicativeError[F, E])
+      extends AnyVal {
+    def apply[A](
+      f: => A
+    )(implicit CT: ClassTag[T], NT: NotNull[T], ev: Throwable <:< E, G: ApplicativeThrow[G]): G[F[A]] =
+      try G.pure(F.pure(f))
+      catch {
+        case t if CT.runtimeClass.isInstance(t) => G.pure(F.raiseError(t))
+        case t if NonFatal(t)                   => G.raiseError(t)
+      }
+  }
+
+  final private[cats] class CatchOnlyAsPartiallyApplied[T >: Null <: Throwable, G[_], F[_], E](
+    private val F: ApplicativeError[F, E]
+  ) extends AnyVal {
+    def apply[A](adapt: T => E)(f: => A)(implicit CT: ClassTag[T], NT: NotNull[T], G: ApplicativeThrow[G]): G[F[A]] =
+      try G.pure(F.pure(f))
+      catch {
+        case CT(t)            => G.pure(F.raiseError(adapt(t)))
+        case t if NonFatal(t) => G.raiseError[F[A]](t)
+      }
+  }
+
+  final private[cats] class CatchOnlyAsUnsafePartiallyApplied[T >: Null <: Throwable, F[_], E](
     private val F: ApplicativeError[F, E]
   ) extends AnyVal {
     def apply[A](adapt: T => E)(f: => A)(implicit CT: ClassTag[T], NT: NotNull[T]): F[A] =
