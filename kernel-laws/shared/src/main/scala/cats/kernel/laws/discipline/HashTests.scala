@@ -34,13 +34,16 @@ trait HashTests[A] extends EqTests[A] {
 
   def laws: HashLaws[A]
 
-  def hash(implicit arbA: Arbitrary[A], arbF: Arbitrary[A => A], eqA: Eq[A], hashA: Hashing[A]): RuleSet =
+  def hash(implicit arbA: Arbitrary[A], arbF: Arbitrary[A => A]): RuleSet =
     new DefaultRuleSet(
       "hash",
       Some(eqv),
       "hash compatibility" -> forAll(laws.hashCompatibility _)
     )
 
+  @deprecated("use `hash` without `Hashing` parameter", "2.12.1")
+  def hash(arbA: Arbitrary[A], arbF: Arbitrary[A => A], eqA: Eq[A], hashA: Hashing[A]): RuleSet =
+    hash(arbA, arbF)
 }
 
 object HashTests {

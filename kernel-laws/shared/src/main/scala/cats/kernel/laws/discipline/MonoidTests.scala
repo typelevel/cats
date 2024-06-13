@@ -26,6 +26,7 @@ package discipline
 
 import cats.kernel.instances.boolean._
 import org.scalacheck.Arbitrary
+import org.scalacheck.Prop
 import org.scalacheck.Prop.forAll
 
 trait MonoidTests[A] extends SemigroupTests[A] {
@@ -39,7 +40,7 @@ trait MonoidTests[A] extends SemigroupTests[A] {
       "left identity" -> forAll(laws.leftIdentity _),
       "right identity" -> forAll(laws.rightIdentity _),
       "combine all" -> forAll(laws.combineAll _),
-      "collect0" -> forAll(laws.collect0 _),
+      "collect0" -> (laws.collect0: Prop),
       "is id" -> forAll((a: A) => laws.isId(a, eqA)),
       "repeat0" -> forAll(laws.repeat0 _)
     )
