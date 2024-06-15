@@ -133,7 +133,7 @@ builds:
 
 ### Write code
 
-[See guidelines](guidelines.md).
+[See guidelines](docs/guidelines.md).
 
 ### Attributions
 
