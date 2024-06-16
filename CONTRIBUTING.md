@@ -133,7 +133,7 @@ builds:
 
 ### Write code
 
-[See guidelines](docs/guidelines.md).
+[See guidelines](https://typelevel.org/cats/guidelines.html).
 
 ### Attributions
 
