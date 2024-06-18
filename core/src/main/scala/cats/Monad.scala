@@ -162,9 +162,17 @@ trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
     tailRecM(branches.toList)(step)
   }
 
+  /**
+   * Returns the given argument (mapped to Unit) if `cond` evaluates to `false`, otherwise,
+   * unit lifted into F.
+   */
   def unlessM[A](f: F[A])(cond: F[Boolean]): F[Unit] =
     flatMap(cond)(bool => if (bool) unit else void(f))
 
+  /**
+   * Returns the given argument (mapped to Unit) if `cond` evaluates to `true`, otherwise,
+   * unit lifted into F.
+   */
   def whenM[A](f: F[A])(cond: F[Boolean]): F[Unit] = 
     flatMap(cond)(bool => if(bool) void(f) else unit)
 
