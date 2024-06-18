@@ -173,8 +173,8 @@ trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
    * Returns the given argument (mapped to Unit) if `cond` evaluates to `true`, otherwise,
    * unit lifted into F.
    */
-  def whenM[A](f: F[A])(cond: F[Boolean]): F[Unit] = 
-    flatMap(cond)(bool => if(bool) void(f) else unit)
+  def whenM[A](f: F[A])(cond: F[Boolean]): F[Unit] =
+    flatMap(cond)(bool => if (bool) void(f) else unit)
 
   /**
    * Modifies the `A` value in `F[A]` with the supplied function, if the function is defined for the value.
