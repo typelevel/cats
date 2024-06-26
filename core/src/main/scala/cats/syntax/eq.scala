@@ -31,7 +31,7 @@ trait EqSyntax {
     new EqOps[A](a)
 }
 
-final class EqOps[A: Eq](lhs: A) {
+final class EqOps[A: Eq](val lhs: A) extends AnyVal {
   def ===(rhs: A): Boolean = Eq[A].eqv(lhs, rhs)
   def =!=(rhs: A): Boolean = Eq[A].neqv(lhs, rhs)
   def eqv(rhs: A): Boolean = Eq[A].eqv(lhs, rhs)
