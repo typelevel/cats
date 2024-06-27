@@ -22,7 +22,7 @@
 package cats
 package syntax
 
-trait ApplySyntax extends TupleSemigroupalSyntax {
+trait ApplySyntax extends TupleSemigroupalSyntax with FunctionApplySyntax {
   @deprecated("Kept for binary compatibility", "2.10.0")
   final def catsSyntaxApply[F[_], A](fa: F[A], F: Apply[F]): Apply.Ops[F, A] =
     new Apply.Ops[F, A] {
@@ -51,7 +51,7 @@ final class ApplyFABOps[F[_], A, B](private val fab: F[A => B]) extends AnyVal {
 
   /**
    * @see [[Apply.ap]].
-   * 
+   *
    * Example:
    * {{{
    * scala> import cats.syntax.all._
@@ -86,7 +86,7 @@ final class ApplyFABCOps[F[_], A, B, C](private val ff: F[(A, B) => C]) extends 
 
   /**
    * @see [[Apply.ap2]].
-   * 
+   *
    * Example:
    * {{{
    * scala> import cats.syntax.all._
@@ -109,7 +109,7 @@ final class ApplyFABCOps[F[_], A, B, C](private val ff: F[(A, B) => C]) extends 
    * scala> noneF.ap2(noneInt, noneInt)
    * res3: Option[Long] = None
    * }}}
-   * 
+   *
    */
   def ap2(fa: F[A], fb: F[B])(implicit F: Apply[F]): F[C] = F.ap2(ff)(fa, fb)
 }
@@ -138,7 +138,7 @@ final class ApplyOps[F[_], A](private val fa: F[A]) extends AnyVal {
 
   /**
    * @see [[Apply.productR]].
-   * 
+   *
    * Example:
    * {{{
    * scala> import cats.syntax.all._
@@ -163,13 +163,13 @@ final class ApplyOps[F[_], A](private val fa: F[A]) extends AnyVal {
    *
    * scala> invalidInt.productR(invalidBool)
    * res3: ErrOr[Boolean] = Invalid(Invalid int.Invalid boolean.)
-   * }}}    
+   * }}}
    */
   def productR[B](fb: F[B])(implicit F: Apply[F]): F[B] = F.productR(fa)(fb)
 
   /**
    * @see [[Apply.productL]].
-   * 
+   *
    * Example:
    * {{{
    * scala> import cats.syntax.all._
@@ -194,7 +194,7 @@ final class ApplyOps[F[_], A](private val fa: F[A]) extends AnyVal {
    *
    * scala> invalidInt.productL(invalidBool)
    * res3: ErrOr[Int] = Invalid(Invalid int.Invalid boolean.)
-   * }}}    
+   * }}}
    */
   def productL[B](fb: F[B])(implicit F: Apply[F]): F[A] = F.productL(fa)(fb)
 
@@ -210,7 +210,7 @@ final class ApplyOps[F[_], A](private val fa: F[A]) extends AnyVal {
 
   /**
    * @see [[Apply.map2]].
-   * 
+   *
    * Example:
    * {{{
    * scala> import cats.syntax.all._
@@ -231,25 +231,25 @@ final class ApplyOps[F[_], A](private val fa: F[A]) extends AnyVal {
    *
    * scala> noneInt.map2(someLong)((i, l) => i.toString + l.toString)
    * res0: Option[String] = None
-   * }}} 
+   * }}}
    */
   def map2[B, C](fb: F[B])(f: (A, B) => C)(implicit F: Apply[F]): F[C] =
     F.map2(fa, fb)(f)
 
   /**
    * @see [[Apply.map2Eval]].
-   * 
+   *
    * Example:
    * {{{
    * scala> import cats.{Eval, Later}
    * scala> import cats.syntax.all._
-   * 
+   *
    * scala> val bomb: Eval[Option[Int]] = Later(sys.error("boom"))
    * scala> val x: Option[Int] = None
-   * 
+   *
    * scala> x.map2Eval(bomb)(_ + _).value
    * res0: Option[Int] = None
-   * }}} 
+   * }}}
    */
   def map2Eval[B, C](fb: Eval[F[B]])(f: (A, B) => C)(implicit F: Apply[F]): Eval[F[C]] =
     F.map2Eval(fa, fb)(f)
