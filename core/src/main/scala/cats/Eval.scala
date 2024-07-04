@@ -157,7 +157,7 @@ final case class Now[A](value: A) extends Eval.Leaf[A] {
  * by the closure) will not be retained, and will be available for
  * garbage collection.
  */
-final class Later[A](f: () => A) extends Eval.Leaf[A] {
+final class Later[+A](f: () => A) extends Eval.Leaf[A] {
   private[this] var thunk: () => A = f
 
   // The idea here is that `f` may have captured very large
@@ -206,7 +206,7 @@ object Eval extends EvalInstances {
    * so calling .value does not trigger
    * any flatMaps or defers
    */
-  sealed abstract class Leaf[A] extends Eval[A]
+  sealed abstract class Leaf[+A] extends Eval[A]
 
   /**
    * Construct an eager Eval[A] value (i.e. Now[A]).
