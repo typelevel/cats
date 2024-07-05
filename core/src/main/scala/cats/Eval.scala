@@ -139,7 +139,7 @@ sealed abstract class Eval[+A] extends Serializable { self =>
  * This type should be used when an A value is already in hand, or
  * when the computation to produce an A value is pure and very fast.
  */
-final case class Now[A](value: A) extends Eval.Leaf[A] {
+final case class Now[+A](value: A) extends Eval.Leaf[A] {
   def memoize: Eval[A] = this
 }
 
@@ -190,7 +190,7 @@ object Later {
  * required. It should be avoided except when laziness is required and
  * caching must be avoided. Generally, prefer Later.
  */
-final class Always[A](f: () => A) extends Eval.Leaf[A] {
+final class Always[+A](f: () => A) extends Eval.Leaf[A] {
   def value: A = f()
   def memoize: Eval[A] = new Later(f)
 }
