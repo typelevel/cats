@@ -139,7 +139,7 @@ trait TraverseFilter[F[_]] extends FunctorFilter[F] {
 
   /**
    * Removes duplicate elements from a list, keeping only the first occurrence.
-   * This is usually faster than ordDistinct, especially for things that have a slow comparion (like String).
+   * This is usually faster than ordDistinct, especially for things that have a slow comparison (like String).
    */
   def hashDistinct[A](fa: F[A])(implicit H: Hash[A]): F[A] =
     traverseFilter(fa) { a =>
