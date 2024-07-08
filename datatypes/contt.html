@@ -286,7 +286,7 @@ Eval[UserUpdateResult]</code> as the continuation:</p>
     </span><span class="type-name">Succeeded</span><span>(</span><span class="identifier">user</span><span>.</span><span class="identifier">id</span><span>)
   }
 }
-</span><span class="comment">// eval: Eval[UserUpdateResult] = cats.Later@11309c10</span></code></pre>
+</span><span class="comment">// eval: Eval[UserUpdateResult] = cats.Later@563b68c6</span></code></pre>
         <p>Finally we can run the resulting <code>Eval</code> to actually execute the computation:</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">eval</span><span>.</span><span class="identifier">value</span><span>
 </span><span class="comment">// Persisting updated user to the DB: User(100,Bob,150)
@@ -308,7 +308,7 @@ Eval[UserUpdateResult]</code> as the continuation:</p>
 }
 </span><span class="comment">// anotherComputation: ContT[Eval, UserUpdateResult, Map[String, String]] = FromFn(
 //   runAndThen = Single(
-//     f = cats.data.ContT$$Lambda$11922/0x00007f17b00061c0@3a37bbbb,
+//     f = cats.data.ContT$$Lambda$11895/0x00007f4f1eff9428@7fcdaf54,
 //     index = 0
 //   )
 // )
@@ -319,7 +319,7 @@ Eval[UserUpdateResult]</code> as the continuation:</p>
     </span><span class="type-name">Succeeded</span><span>(</span><span class="identifier">userFields</span><span>(</span><span class="string-literal">&quot;id&quot;</span><span>).</span><span class="identifier">toInt</span><span>)
   }
 }
-</span><span class="comment">// anotherEval: Eval[UserUpdateResult] = cats.Eval$$anon$5@1f18a94
+</span><span class="comment">// anotherEval: Eval[UserUpdateResult] = cats.Eval$$anon$5@7378844e
 </span><span>
 </span><span class="identifier">anotherEval</span><span>.</span><span class="identifier">value</span><span>
 </span><span class="comment">// Persisting these fields to the DB: Map(id -&gt; 100, name -&gt; Bob, age -&gt; 150)
@@ -336,7 +336,7 @@ Eval[UserUpdateResult]</code> as the continuation:</p>
   }
 </span><span class="comment">// updateUserModel: ContT[Eval, UserUpdateResult, User] = FromFn(
 //   runAndThen = Single(
-//     f = cats.data.ContT$$Lambda$11922/0x00007f17b00061c0@6663205,
+//     f = cats.data.ContT$$Lambda$11895/0x00007f4f1eff9428@5ad2af77,
 //     index = 0
 //   )
 // )
@@ -370,7 +370,7 @@ Eval[UserUpdateResult]</code> as the continuation:</p>
   </span><span class="identifier">updateUserModel</span><span> </span><span class="identifier">flatMap</span><span> </span><span class="identifier">persistToDb</span><span> </span><span class="identifier">flatMap</span><span> </span><span class="identifier">publishEvent</span><span>
 </span><span class="comment">// chainOfContinuations: ContT[Eval, UserUpdateResult, UserUpdateResult] = FromFn(
 //   runAndThen = Single(
-//     f = cats.data.ContT$$Lambda$11926/0x00007f17b0006b48@48f99fcf,
+//     f = cats.data.ContT$$Lambda$11899/0x00007f4f1eff9db0@1a6aae5e,
 //     index = 0
 //   )
 // )
@@ -381,7 +381,7 @@ Eval[UserUpdateResult]</code> as the continuation:</p>
     </span><span class="identifier">finalResult</span><span>
   }
 }
-</span><span class="comment">// eval: Eval[UserUpdateResult] = cats.Eval$$anon$5@6d1b2979
+</span><span class="comment">// eval: Eval[UserUpdateResult] = cats.Eval$$anon$5@58c850dd
 </span><span>
 </span><span class="identifier">eval</span><span>.</span><span class="identifier">value</span><span>
 </span><span class="comment">// Updated user model
