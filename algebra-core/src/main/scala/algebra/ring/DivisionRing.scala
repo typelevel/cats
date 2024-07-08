@@ -31,7 +31,7 @@ trait DivisionRing[@sp(Byte, Short, Int, Long, Float, Double) A] extends Any wit
    * This is implemented in terms of basic Ring ops. However, this is
    * probably significantly less efficient than can be done with a
    * specific type. So, it is recommended that this method be
-   * overriden.
+   * overridden.
    *
    * This is possible because a Double is a rational number.
    */
