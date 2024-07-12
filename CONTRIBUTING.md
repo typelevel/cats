@@ -96,7 +96,7 @@ git clone git@github.com:typelevel/cats.git
 ```
 
 To build Cats you should have
-[sbt](http://www.scala-sbt.org/0.13/tutorial/Setup.html) and [Node.js](https://nodejs.org/)
+[sbt](https://www.scala-sbt.org/1.x/docs/Setup.html) and [Node.js](https://nodejs.org/)
  installed. If you'd like, you can use the [Nix Cats development environment](#nix-cats-development-environment).
 
  Run `sbt`, and then use any of the following commands:
@@ -133,7 +133,7 @@ builds:
 
 ### Write code
 
-[See guidelines](guidelines.md).
+[See guidelines](https://typelevel.org/cats/guidelines.html).
 
 ### Attributions
 

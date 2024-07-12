@@ -43,9 +43,11 @@ package compat
  * limitations under the License.
  */
 
+import scala.annotation.nowarn
+
 private[kernel] class HashCompat {
   // Adapted from scala.util.hashing.MurmurHash#productHash.
-  private[kernel] def product1HashWithPrefix(_1Hash: Int, prefix: String): Int = {
+  private[kernel] def product1HashWithPrefix(_1Hash: Int, @nowarn("cat=unused") prefix: String): Int = {
     import scala.util.hashing.MurmurHash3._
     var h = productSeed
     h = mix(h, _1Hash)
@@ -53,7 +55,7 @@ private[kernel] class HashCompat {
   }
 
   // Adapted from scala.util.hashing.MurmurHash#productHash.
-  private[cats] def product2HashWithPrefix(_1Hash: Int, _2Hash: Int, prefix: String): Int = {
+  private[cats] def product2HashWithPrefix(_1Hash: Int, _2Hash: Int, @nowarn("cat=unused") prefix: String): Int = {
     import scala.util.hashing.MurmurHash3._
     var h = productSeed
     h = mix(h, _1Hash)

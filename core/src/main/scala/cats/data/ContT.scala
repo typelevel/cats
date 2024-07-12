@@ -141,7 +141,7 @@ object ContT {
    *     _ <- ContT.callCC( (k: Unit => ContT[IO, Unit, Unit]) =>
    *       ContT.liftF(IO.println("this will print first")) >>
    *         k(()) >>
-   *         ContT.liftF(IO.println("this will NOT print as we short-circuit to the contination"))
+   *         ContT.liftF(IO.println("this will NOT print as we short-circuit to the continuation"))
    *     )
    *     _ <- ContT.liftF(IO.println("this will print second")])
    *   } yield ()

@@ -31,12 +31,16 @@ import org.scalacheck.Prop.forAll
 trait LowerBoundedTests[A] extends PartialOrderTests[A] {
   def laws: LowerBoundedLaws[A]
 
-  def lowerBounded(implicit arbA: Arbitrary[A], arbF: Arbitrary[A => A], eqOA: Eq[Option[A]], eqA: Eq[A]): RuleSet =
+  def lowerBounded(implicit arbA: Arbitrary[A], arbF: Arbitrary[A => A]): RuleSet =
     new DefaultRuleSet(
       "lowerBounded",
       Some(partialOrder),
       "bound is less than or equals" -> forAll(laws.boundLteqv _)
     )
+
+  @deprecated("use `lowerBounded` without `Eq` parameters", "2.12.1")
+  def lowerBounded(arbA: Arbitrary[A], arbF: Arbitrary[A => A], eqOA: Eq[Option[A]], eqA: Eq[A]): RuleSet =
+    lowerBounded(arbA, arbF)
 }
 
 object LowerBoundedTests {
@@ -47,12 +51,16 @@ object LowerBoundedTests {
 trait UpperBoundedTests[A] extends PartialOrderTests[A] {
   def laws: UpperBoundedLaws[A]
 
-  def upperBounded(implicit arbA: Arbitrary[A], arbF: Arbitrary[A => A], eqOA: Eq[Option[A]], eqA: Eq[A]): RuleSet =
+  def upperBounded(implicit arbA: Arbitrary[A], arbF: Arbitrary[A => A]): RuleSet =
     new DefaultRuleSet(
       "upperBounded",
       Some(partialOrder),
       "bound is greater than or equals" -> forAll(laws.boundGteqv _)
     )
+
+  @deprecated("use `upperBounded` without `Eq` parameters", "2.12.1")
+  def upperBounded(arbA: Arbitrary[A], arbF: Arbitrary[A => A], eqOA: Eq[Option[A]], eqA: Eq[A]): RuleSet =
+    upperBounded(arbA, arbF)
 }
 
 object UpperBoundedTests {
