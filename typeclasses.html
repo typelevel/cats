@@ -291,9 +291,7 @@
 // Missing implementations for 2 members of trait Monoid.
 //   def combine(x: Pair[A,B], y: Pair[A,B]): Pair[A,B] = ??? // implements `def combine(x: A, y: A): A`
 //   def empty: Pair[A,B] = ??? // implements `def empty: A`
-// 
-// final case class Pair[A, B](first: A, second: B) extends Monoid[Pair[A, B]] {
-//                  ^^^^</span></code></pre>
+//</span></code></pre>
         <p>But now these don&#39;t conform to the interface of <code>Monoid</code> due to the implicit constraints.</p>
         
         <h3 id="implicit-derivation" class="section"><a class="anchor-link left" href="#implicit-derivation"><i class="icofont-laika link">&#xef71;</i></a>Implicit derivation</h3>
