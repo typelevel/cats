@@ -35,6 +35,6 @@ final class MonadOps[F[_], A](private val fa: F[A]) extends AnyVal {
     M.flatMapOrKeep[A, A1](fa)(pfa)
   def ifTrueM[B: Monoid](ifTrue: => F[B])(implicit env: F[A] <:< F[Boolean], M: Monad[F]): F[B] =
     M.ifTrueM(fa)(ifTrue)
-  def ifFalseM[B: Monoid](ifFalse: => F[B])(implicit env: F[A] <:< F[Boolean],M: Monad[F]): F[B] =
+  def ifFalseM[B: Monoid](ifFalse: => F[B])(implicit env: F[A] <:< F[Boolean], M: Monad[F]): F[B] =
     M.ifFalseM(fa)(ifFalse)
 }

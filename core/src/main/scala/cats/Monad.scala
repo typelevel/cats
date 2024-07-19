@@ -168,7 +168,7 @@ trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
    * If the `F[Boolean]` is `true` then return `ifTrue` otherwise return `ifFalse`
    */
   def ifTrueM[B: Monoid](fa: F[Boolean])(ifTrue: => F[B]): F[B] =
-   ifM(fa)(ifTrue, pure(Monoid[B].empty))
+    ifM(fa)(ifTrue, pure(Monoid[B].empty))
 
   /**
    * If the `F[Boolean]` is `false` then return `ifFalse` otherwise return `Monoid[A].empty`

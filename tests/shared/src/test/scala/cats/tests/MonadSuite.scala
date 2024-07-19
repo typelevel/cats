@@ -154,7 +154,7 @@ class MonadSuite extends CatsSuite {
     assert(actual.value === 2)
   }
 
-  test("ifTrueM"){
+  test("ifTrueM") {
     val actual1: Eval[Int] = Eval.later(true).ifTrueM(Eval.later(1))
     assert(actual1.value === 1)
 
@@ -162,7 +162,7 @@ class MonadSuite extends CatsSuite {
     assert(actual2.value === 0)
   }
 
-  test("ifFalseM"){
+  test("ifFalseM") {
     val actual1: Eval[Int] = Eval.later(true).ifFalseM(Eval.later(1))
     assert(actual1.value === 0)
 
