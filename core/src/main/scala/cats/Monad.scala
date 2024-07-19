@@ -21,6 +21,8 @@
 
 package cats
 
+import cats.kernel.Monoid
+
 /**
  * Monad.
  *
@@ -161,6 +163,18 @@ trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
 
     tailRecM(branches.toList)(step)
   }
+
+  /**
+   * If the `F[Boolean]` is `true` then return `ifTrue` otherwise return `ifFalse`
+   */
+  def ifTrueM[B: Monoid](fa: F[Boolean])(ifTrue: => F[B]): F[B] =
+   ifM(fa)(ifTrue, pure(Monoid[B].empty))
+
+  /**
+   * If the `F[Boolean]` is `false` then return `ifFalse` otherwise return `Monoid[A].empty`
+   */
+  def ifFalseM[B: Monoid](fa: F[Boolean])(ifFalse: => F[B]): F[B] =
+    ifM(fa)(pure(Monoid[B].empty), ifFalse)
 
   /**
    * Modifies the `A` value in `F[A]` with the supplied function, if the function is defined for the value.

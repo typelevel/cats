@@ -95,4 +95,14 @@ class MonadErrorSuite extends CatsSuite {
   test("rethrow returns the successful value, when applied to a Right of a specialized successful value") {
     assert(successful.attempt.asInstanceOf[Try[Either[IllegalArgumentException, Int]]].rethrow === successful)
   }
+
+  test("ensureTrue raise an error only when the value is true") {
+    Try(true).ensureTrue(failedValue) === Failure(failedValue)
+    Try(false).ensureTrue(failedValue) === Success(false)
+  }
+
+  test("ensureFalse raise an error only when the value is false") {
+    Try(true).ensureFalse(failedValue) === Success(true)
+    Try(false).ensureFalse(failedValue) === Failure(failedValue)
+  }
 }
