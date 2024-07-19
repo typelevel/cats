@@ -96,13 +96,13 @@ class MonadErrorSuite extends CatsSuite {
     assert(successful.attempt.asInstanceOf[Try[Either[IllegalArgumentException, Int]]].rethrow === successful)
   }
 
-  test("ensureTrue raise an error only when the value is true") {
-    Try(true).ensureTrue(failedValue) === Failure(failedValue)
-    Try(false).ensureTrue(failedValue) === Success(false)
+  test("ensureTrue raise an error only when the value is false") {
+    Try(true).ensureTrue(failedValue) === Success(true)
+    Try(false).ensureTrue(failedValue) === Failure(failedValue)
   }
 
-  test("ensureFalse raise an error only when the value is false") {
-    Try(true).ensureFalse(failedValue) === Success(true)
-    Try(false).ensureFalse(failedValue) === Failure(failedValue)
+  test("ensureFalse raise an error only when the value is true") {
+    Try(true).ensureFalse(failedValue) === Failure(failedValue)
+    Try(false).ensureFalse(failedValue) === Success(true)
   }
 }
