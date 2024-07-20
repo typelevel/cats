@@ -415,6 +415,25 @@ class EitherSuite extends CatsSuite {
     }
   }
 
+  test("leftFlatMapOrKeep consistent with leftMapOrKeep") {
+    forAll { (either: Either[String, Int], pf: PartialFunction[String, String]) =>
+      val liftedPF: PartialFunction[String, Either[String, Int]] = { case a =>
+        Either.left[String, Int](pf.applyOrElse(a, identity[String]))
+      }
+      assert(either.leftFlatMapOrKeep(liftedPF) === either.leftMapOrKeep(pf))
+    }
+  }
+
+  test("leftFlatMapOrKeep consistent with swap and then flatMapOrKeep") {
+    import cats.syntax.monad._
+
+    forAll { (either: Either[String, Int], pf: PartialFunction[String, Either[String, Int]]) =>
+      assert(either.leftFlatMapOrKeep(pf) === either.swap.flatMapOrKeep { case a =>
+        pf.applyOrElse(a, (_: String) => either).swap
+      }.swap)
+    }
+  }
+
   test("raiseWhen raises when true") {
     val result = Either.raiseWhen(true)("ok")
     assert(result === Left("ok"))
