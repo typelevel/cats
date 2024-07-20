@@ -194,6 +194,12 @@ final class EitherOps[A, B](private val eab: Either[A, B]) extends AnyVal {
       case r @ Right(_) => EitherUtil.leftCast(r)
     }
 
+  def leftMapOrKeep[AA >: A](pf: PartialFunction[A, AA]): Either[AA, B] =
+    eab match {
+      case Left(a)      => Left(pf.applyOrElse(a, identity[AA]))
+      case r @ Right(_) => r
+    }
+
   @deprecated("Included in the standard library", "2.1.0-RC1")
   private[syntax] def flatMap[AA >: A, D](f: B => Either[AA, D]): Either[AA, D] =
     eab match {
