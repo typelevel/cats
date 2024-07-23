@@ -28,6 +28,44 @@ import cats.kernel.instances.boolean._
 import org.scalacheck.{Arbitrary, Prop}
 import org.scalacheck.Prop.forAll
 
+trait EnumerableTests[A] extends PartialNextTests[A] with PartialPreviousTests[A] {
+  def laws: EnumerableLaws[A]
+
+  def enumerable(implicit arbA: Arbitrary[A], arbF: Arbitrary[A => A], eqOA: Eq[Option[A]], eqA: Eq[A]): RuleSet =
+    new RuleSet {
+      override val name: String = "enumerable"
+      override val bases: Seq[(String, RuleSet)] = Nil
+      override val parents: Seq[RuleSet] = Seq(partialNext, partialPrevious, partialOrder)
+      override val props: Seq[(String, Prop)] = Seq(
+        "injective to the natural numbers" -> forAll(laws.injectiveToNaturalNumbers _)
+      )
+    }
+}
+
+object BoundlessEnumerableTests {
+  def apply[A: BoundlessEnumerable]: BoundlessEnumerableTests[A] =
+    new BoundlessEnumerableTests[A] { def laws: BoundlessEnumerableLaws[A] = BoundlessEnumerableLaws[A] }
+}
+
+trait BoundlessEnumerableTests[A] extends EnumerableTests[A] {
+  def laws: BoundlessEnumerableLaws[A]
+
+  def boundlessEnumerable(implicit arbA: Arbitrary[A], arbF: Arbitrary[A => A], eqOA: Eq[Option[A]], eqA: Eq[A]): RuleSet =
+    new RuleSet {
+      override val name: String = "boundlessEnumerable"
+      override val bases: Seq[(String, RuleSet)] = Nil
+      override val parents: Seq[RuleSet] = Seq(partialNext, partialPrevious, partialOrder, enumerable)
+      override val props: Seq[(String, Prop)] = Seq(
+        "bijective to the natural numbers" -> forAll(laws.bijectiveToNaturalNumbers _)
+      )
+    }
+}
+
+object EnumerableTests {
+  def apply[A: Enumerable]: EnumerableTests[A] =
+    new EnumerableTests[A] { def laws: EnumerableLaws[A] = EnumerableLaws[A] }
+}
+
 trait PartialNextTests[A] extends PartialOrderTests[A] {
 
   def laws: PartialNextLaws[A]
@@ -62,6 +100,7 @@ trait PartialPreviousTests[A] extends PartialOrderTests[A] {
     partialPrevious(arbA, arbF)
 }
 
+@deprecated(message = "Please use BoundableEnumerable and BoundableEnumerableTests", since = "2.10.0")
 trait BoundedEnumerableTests[A] extends OrderTests[A] with PartialNextTests[A] with PartialPreviousTests[A] {
 
   def laws: BoundedEnumerableLaws[A]
@@ -90,6 +129,7 @@ trait BoundedEnumerableTests[A] extends OrderTests[A] with PartialNextTests[A] w
 }
 
 object BoundedEnumerableTests {
+  @deprecated(message = "Please use BoundableEnumerable and BoundableEnumerableTests", since = "2.10.0")
   def apply[A: BoundedEnumerable]: BoundedEnumerableTests[A] =
     new BoundedEnumerableTests[A] { def laws: BoundedEnumerableLaws[A] = BoundedEnumerableLaws[A] }
 }
