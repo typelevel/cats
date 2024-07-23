@@ -153,7 +153,9 @@ object Eq
     cats.kernel.instances.bitSet.catsKernelStdOrderForBitSet
   implicit def catsKernelPartialOrderForSet[A]: PartialOrder[Set[A]] =
     cats.kernel.instances.set.catsKernelStdPartialOrderForSet[A]
-  implicit def catsKernelOrderForEither[A: Order, B: Order]: Order[Either[A, B]] =
+
+  @deprecated(message = "Please use Order.catsKernelOrder2ForEither instead", since = "2.8.0")
+  def catsKernelOrderForEither[A: Order, B: Order]: Order[Either[A, B]] =
     cats.kernel.instances.either.catsStdOrderForEither[A, B]
 
   implicit def catsKernelInstancesForUnit: Order[Unit] with Hash[Unit] =
@@ -263,7 +265,9 @@ private[kernel] trait HashInstances extends HashInstances0 {
     cats.kernel.instances.map.catsKernelStdHashForMap[K, V]
   implicit def catsKernelHashForSortedMap[K: Hash, V: Hash]: Hash[SortedMap[K, V]] =
     cats.kernel.instances.sortedMap.catsKernelStdHashForSortedMap[K, V]
-  implicit def catsKernelHashForEither[A: Hash, B: Hash]: Hash[Either[A, B]] =
+
+  @deprecated(message = "Please use catsStdOrder2AndHash2ForEither", since = "2.8.0")
+  def catsKernelHashForEither[A: Hash, B: Hash]: Hash[Either[A, B]] =
     cats.kernel.instances.either.catsStdHashForEither[A, B]
 }
 
@@ -280,10 +284,24 @@ private[kernel] trait EqInstances extends EqInstances0 {
   implicit def catsKernelEqForMap[K, V: Eq]: Eq[Map[K, V]] = cats.kernel.instances.map.catsKernelStdEqForMap[K, V]
   implicit def catsKernelEqForSortedMap[K, V: Eq]: Eq[SortedMap[K, V]] =
     cats.kernel.instances.sortedMap.catsKernelStdEqForSortedMap[K, V]
-  implicit def catsKernelEqForEither[A: Eq, B: Eq]: Eq[Either[A, B]] =
+
+  @deprecated(message = "Please use Order.catsKernelEq2ForEither instead", since = "2.8.0")
+  def catsKernelEqForEither[A: Eq, B: Eq]: Eq[Either[A, B]] =
     cats.kernel.instances.either.catsStdEqForEither[A, B]
 }
 
-private[kernel] trait EqInstances0 {
+private[kernel] trait EqInstances0 extends EqLowPriorityInstances0 {
   implicit def catsKernelEqForSeq[A: Eq]: Eq[Seq[A]] = cats.kernel.instances.seq.catsKernelStdEqForSeq[A]
+}
+
+private[kernel] trait EqLowPriorityInstances0 {
+
+  /**
+   * Derive an [[Eq]] instance from an [[Eq1]] instance.
+   */
+  implicit def eq1ToEq[F[_], A](implicit F: Eq1[F], A: Eq[A]): Eq[F[A]] =
+    new Eq[F[A]] {
+      override def eqv(x: F[A], y: F[A]): Boolean =
+        F.liftEq[A, A](A.eqv, x, y)
+    }
 }
