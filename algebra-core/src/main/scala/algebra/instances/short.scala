@@ -41,7 +41,7 @@ class ShortAlgebra extends CommutativeRing[Short] with Serializable {
   def one: Short = 1
 
   def plus(x: Short, y: Short): Short = (x + y).toShort
-  def negate(x: Short): Short = (-x).toShort
+  def negate(x: Short): Short = -x.toShort
   override def minus(x: Short, y: Short): Short = (x - y).toShort
 
   def times(x: Short, y: Short): Short = (x * y).toShort

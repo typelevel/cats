@@ -30,7 +30,7 @@ trait ShortInstances {
 class ShortGroup extends CommutativeGroup[Short] {
   def combine(x: Short, y: Short): Short = (x + y).toShort
   def empty: Short = 0
-  def inverse(x: Short): Short = (-x).toShort
+  def inverse(x: Short): Short = -x.toShort
   override def remove(x: Short, y: Short): Short = (x - y).toShort
 }
 

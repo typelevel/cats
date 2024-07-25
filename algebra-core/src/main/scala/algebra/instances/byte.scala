@@ -40,7 +40,7 @@ class ByteAlgebra extends CommutativeRing[Byte] with Serializable {
   def one: Byte = 1
 
   def plus(x: Byte, y: Byte): Byte = (x + y).toByte
-  def negate(x: Byte): Byte = (-x).toByte
+  def negate(x: Byte): Byte = -x.toByte
   override def minus(x: Byte, y: Byte): Byte = (x - y).toByte
 
   def times(x: Byte, y: Byte): Byte = (x * y).toByte
