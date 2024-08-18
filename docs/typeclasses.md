@@ -233,7 +233,7 @@ From [cats-infographic by @tpolecat](https://github.com/tpolecat/cats-infographi
 
 ## Incomplete type class instances in cats
 
-Originally from [@alexknvl](https://gist.github.com/alexknvl/d63508ddb6a728015ace53cb70a1fd5d)
+Originally from [@hobwekiva](https://gist.github.com/hobwekiva/d63508ddb6a728015ace53cb70a1fd5d)
 
 
 | Type            | Functor | Apply             | Applicative | Monad | MonoidK | ApplicativeError  | MonadError | CoflatMap | Comonad | Bimonad |
