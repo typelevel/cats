@@ -30,7 +30,7 @@ jobs:
         os: [ubuntu-latest]
         scala: [2.12, 2.13, 3]
         java: [temurin@8, temurin@17, graalvm@17]
-        project: [rootJS, rootJVM, rootNative]
+        project: [catsNative, catsJS, catsJVM]
         exclude:
           - scala: 2.12
             java: temurin@17
@@ -40,13 +40,13 @@ jobs:
             java: temurin@17
           - scala: 3
             java: graalvm@17
-          - project: rootJS
+          - project: catsNative
             java: temurin@17
-          - project: rootJS
+          - project: catsNative
             java: graalvm@17
-          - project: rootNative
+          - project: catsJS
             java: temurin@17
-          - project: rootNative
+          - project: catsJS
             java: graalvm@17
     runs-on: ${{ matrix.os }}
     timeout-minutes: 60
@@ -106,13 +106,13 @@ jobs:
         if: matrix.java == 'temurin@8' && matrix.os == 'ubuntu-latest'
         run: sbt 'project ${{ matrix.project }}' '++ ${{ matrix.scala }}' headerCheckAll scalafmtCheckAll 'project /' scalafmtSbtCheck
 
-      - name: scalaJSLink
-        if: matrix.project == 'rootJS'
-        run: sbt 'project ${{ matrix.project }}' '++ ${{ matrix.scala }}' Test/scalaJSLinkerResult
-
       - name: nativeLink
-        if: matrix.project == 'rootNative'
+        if: matrix.project == 'catsNative'
         run: sbt 'project ${{ matrix.project }}' '++ ${{ matrix.scala }}' Test/nativeLink
+
+      - name: scalaJSLink
+        if: matrix.project == 'catsJS'
+        run: sbt 'project ${{ matrix.project }}' '++ ${{ matrix.scala }}' Test/scalaJSLinkerResult
 
       - name: Test
         run: sbt 'project ${{ matrix.project }}' '++ ${{ matrix.scala }}' test
@@ -198,92 +198,92 @@ jobs:
         if: matrix.java == 'graalvm@17' && steps.setup-java-graalvm-17.outputs.cache-hit == 'false'
         run: sbt +update
 
-      - name: Download target directories (2.12, rootJS)
+      - name: Download target directories (2.12, catsNative)
         uses: actions/download-artifact@v4
         with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-2.12-rootJS
+          name: target-${{ matrix.os }}-${{ matrix.java }}-2.12-catsNative
 
-      - name: Inflate target directories (2.12, rootJS)
+      - name: Inflate target directories (2.12, catsNative)
         run: |
           tar xf targets.tar
           rm targets.tar
 
-      - name: Download target directories (2.12, rootJVM)
+      - name: Download target directories (2.12, catsJS)
         uses: actions/download-artifact@v4
         with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-2.12-rootJVM
+          name: target-${{ matrix.os }}-${{ matrix.java }}-2.12-catsJS
 
-      - name: Inflate target directories (2.12, rootJVM)
+      - name: Inflate target directories (2.12, catsJS)
         run: |
           tar xf targets.tar
           rm targets.tar
 
-      - name: Download target directories (2.12, rootNative)
+      - name: Download target directories (2.12, catsJVM)
         uses: actions/download-artifact@v4
         with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-2.12-rootNative
+          name: target-${{ matrix.os }}-${{ matrix.java }}-2.12-catsJVM
 
-      - name: Inflate target directories (2.12, rootNative)
+      - name: Inflate target directories (2.12, catsJVM)
         run: |
           tar xf targets.tar
           rm targets.tar
 
-      - name: Download target directories (2.13, rootJS)
+      - name: Download target directories (2.13, catsNative)
         uses: actions/download-artifact@v4
         with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-2.13-rootJS
+          name: target-${{ matrix.os }}-${{ matrix.java }}-2.13-catsNative
 
-      - name: Inflate target directories (2.13, rootJS)
+      - name: Inflate target directories (2.13, catsNative)
         run: |
           tar xf targets.tar
           rm targets.tar
 
-      - name: Download target directories (2.13, rootJVM)
+      - name: Download target directories (2.13, catsJS)
         uses: actions/download-artifact@v4
         with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-2.13-rootJVM
+          name: target-${{ matrix.os }}-${{ matrix.java }}-2.13-catsJS
 
-      - name: Inflate target directories (2.13, rootJVM)
+      - name: Inflate target directories (2.13, catsJS)
         run: |
           tar xf targets.tar
           rm targets.tar
 
-      - name: Download target directories (2.13, rootNative)
+      - name: Download target directories (2.13, catsJVM)
         uses: actions/download-artifact@v4
         with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-2.13-rootNative
+          name: target-${{ matrix.os }}-${{ matrix.java }}-2.13-catsJVM
 
-      - name: Inflate target directories (2.13, rootNative)
+      - name: Inflate target directories (2.13, catsJVM)
         run: |
           tar xf targets.tar
           rm targets.tar
 
-      - name: Download target directories (3, rootJS)
+      - name: Download target directories (3, catsNative)
         uses: actions/download-artifact@v4
         with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-3-rootJS
+          name: target-${{ matrix.os }}-${{ matrix.java }}-3-catsNative
 
-      - name: Inflate target directories (3, rootJS)
+      - name: Inflate target directories (3, catsNative)
         run: |
           tar xf targets.tar
           rm targets.tar
 
-      - name: Download target directories (3, rootJVM)
+      - name: Download target directories (3, catsJS)
         uses: actions/download-artifact@v4
         with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-3-rootJVM
+          name: target-${{ matrix.os }}-${{ matrix.java }}-3-catsJS
 
-      - name: Inflate target directories (3, rootJVM)
+      - name: Inflate target directories (3, catsJS)
         run: |
           tar xf targets.tar
           rm targets.tar
 
-      - name: Download target directories (3, rootNative)
+      - name: Download target directories (3, catsJVM)
         uses: actions/download-artifact@v4
         with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-3-rootNative
+          name: target-${{ matrix.os }}-${{ matrix.java }}-3-catsJVM
 
-      - name: Inflate target directories (3, rootNative)
+      - name: Inflate target directories (3, catsJVM)
         run: |
           tar xf targets.tar
           rm targets.tar
@@ -372,7 +372,7 @@ jobs:
       - name: Submit Dependencies
         uses: scalacenter/sbt-dependency-submission@v2
         with:
-          modules-ignore: rootjs_2.12 rootjs_2.13 rootjs_3 docs_2.12 docs_2.13 docs_3 cats-tests_sjs1_2.12 cats-tests_sjs1_2.13 cats-tests_sjs1_3 rootjvm_2.12 rootjvm_2.13 rootjvm_3 rootnative_2.12 rootnative_2.13 rootnative_3 cats-tests_2.12 cats-tests_2.13 cats-tests_3 bincompattest_2.12 bincompattest_2.13 bincompattest_3 cats-tests_native0.5_2.12 cats-tests_native0.5_2.13 cats-tests_native0.5_3 cats-bench_2.12 cats-bench_2.13 cats-bench_3
+          modules-ignore: catsnative_2.12 catsnative_2.13 catsnative_3 docs_2.12 docs_2.13 docs_3 cats-tests_sjs1_2.12 cats-tests_sjs1_2.13 cats-tests_sjs1_3 cats-tests_2.12 cats-tests_2.13 cats-tests_3 catsjs_2.12 catsjs_2.13 catsjs_3 catsjvm_2.12 catsjvm_2.13 catsjvm_3 bincompattest_2.12 bincompattest_2.13 bincompattest_3 cats-tests_native0.5_2.12 cats-tests_native0.5_2.13 cats-tests_native0.5_3 cats-bench_2.12 cats-bench_2.13 cats-bench_3
           configs-ignore: test scala-tool scala-doc-tool test-internal
 
   validate-steward:
@@ -399,67 +399,6 @@ jobs:
           apps: scala-steward
 
       - run: scala-steward validate-repo-config .scala-steward.conf
-
-  scalafix:
-    name: Scalafix
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        java: [temurin@8]
-    runs-on: ${{ matrix.os }}
-    steps:
-      - name: Install sbt
-        if: contains(runner.os, 'macos')
-        run: brew install sbt
-
-      - name: Checkout current branch (full)
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Setup Java (temurin@8)
-        id: setup-java-temurin-8
-        if: matrix.java == 'temurin@8'
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 8
-          cache: sbt
-
-      - name: sbt update
-        if: matrix.java == 'temurin@8' && steps.setup-java-temurin-8.outputs.cache-hit == 'false'
-        run: sbt +update
-
-      - name: Setup Java (temurin@17)
-        id: setup-java-temurin-17
-        if: matrix.java == 'temurin@17'
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 17
-          cache: sbt
-
-      - name: sbt update
-        if: matrix.java == 'temurin@17' && steps.setup-java-temurin-17.outputs.cache-hit == 'false'
-        run: sbt +update
-
-      - name: Setup Java (graalvm@17)
-        id: setup-java-graalvm-17
-        if: matrix.java == 'graalvm@17'
-        uses: graalvm/setup-graalvm@v1
-        with:
-          distribution: graalvm
-          java-version: 17
-          cache: sbt
-
-      - name: sbt update
-        if: matrix.java == 'graalvm@17' && steps.setup-java-graalvm-17.outputs.cache-hit == 'false'
-        run: sbt +update
-
-      - name: Scalafix tests
-        run: |
-          cd scalafix
-          sbt test
 
   site:
     name: Generate Site
@@ -527,3 +466,64 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: site/target/docs/site
           keep_files: true
+
+  scalafix:
+    name: Scalafix
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        java: [temurin@8]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Install sbt
+        if: contains(runner.os, 'macos')
+        run: brew install sbt
+
+      - name: Checkout current branch (full)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Java (temurin@8)
+        id: setup-java-temurin-8
+        if: matrix.java == 'temurin@8'
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 8
+          cache: sbt
+
+      - name: sbt update
+        if: matrix.java == 'temurin@8' && steps.setup-java-temurin-8.outputs.cache-hit == 'false'
+        run: sbt +update
+
+      - name: Setup Java (temurin@17)
+        id: setup-java-temurin-17
+        if: matrix.java == 'temurin@17'
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: sbt
+
+      - name: sbt update
+        if: matrix.java == 'temurin@17' && steps.setup-java-temurin-17.outputs.cache-hit == 'false'
+        run: sbt +update
+
+      - name: Setup Java (graalvm@17)
+        id: setup-java-graalvm-17
+        if: matrix.java == 'graalvm@17'
+        uses: graalvm/setup-graalvm@v1
+        with:
+          distribution: graalvm
+          java-version: 17
+          cache: sbt
+
+      - name: sbt update
+        if: matrix.java == 'graalvm@17' && steps.setup-java-graalvm-17.outputs.cache-hit == 'false'
+        run: sbt +update
+
+      - name: Scalafix tests
+        run: |
+          cd scalafix
+          sbt test

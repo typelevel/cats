@@ -88,7 +88,7 @@ lazy val testingDependencies = Seq(
   )
 )
 
-lazy val root = tlCrossRootProject
+lazy val cats = tlCrossRootProject
   .aggregate(
     kernel,
     kernelLaws,
