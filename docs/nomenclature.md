@@ -111,7 +111,7 @@ Like the previous section, we use the `E` for the error parameter type.
 | Type          | Method Name  | Constraints
 | ------------- |--------------|-----------
 | `F[A] => A` | `fold` | `A: Monoid`
-| `F[A] => B => ((B,A) => B) => F[B]` | `foldLeft`
+| `F[A] => B => ((B,A) => B) => B` | `foldLeft`
 | `F[A] => (A => B) => B` | `foldMap` | `B: Monoid`
 | `F[A] => (A => G[B]) => G[B]` | `foldMapM` | `G: Monad` and `B: Monoid`
 | `F[A] => (A => B) => Option[B]` | `collectFirst` | The `A => B` is a `PartialFunction`
