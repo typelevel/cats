@@ -97,6 +97,7 @@ lazy val commonNativeSettings = {
     doctestGenTests := Seq.empty,
     tlVersionIntroduced := commonNativeTlVersionIntroduced,
     Test / fork := true,
+    Test / testForkedParallel := true,
     Test / testGrouping :=
       divideOnTwoGroups((Test / definedTests).value),
     Global / concurrentRestrictions :=
