@@ -1,3 +1,5 @@
+import sbt.Tests.{Group, SubProcess}
+
 ThisBuild / tlBaseVersion := "2.12"
 
 val scalaCheckVersion = "1.18.0"
@@ -70,10 +72,37 @@ Global / concurrentRestrictions += Tags.limit(NativeTags.Link, 1)
 // Therefore `tlVersionIntroduced` should be reset to 2.12.0 for all scala versions in all native cross-projects.
 val commonNativeTlVersionIntroduced = List("2.12", "2.13", "3").map(_ -> "2.12.0").toMap
 
-lazy val commonNativeSettings = Seq[Setting[?]](
-  doctestGenTests := Seq.empty,
-  tlVersionIntroduced := commonNativeTlVersionIntroduced
-)
+lazy val commonNativeSettings = {
+  def divideOnTwoGroups(tests: Seq[TestDefinition]) = {
+    val options = ForkOptions().withRunJVMOptions(
+      Vector(
+        "-Xmx6G",
+        "-Xss8m",
+        "-XX:+UseG1GC",
+        "-XX:ReservedCodeCacheSize=256m",
+        "-XX:MaxMetaspaceSize=512M"
+      )
+    )
+
+    val (tests1, tests2) = tests.splitAt(tests.length / 2 + 1)
+    Seq(
+      new Group("Global-Native-1", tests1, SubProcess(options)),
+      new Group("Global-Native-2", tests2, SubProcess(options))
+    )
+  }
+
+  // We want to divide all tests into two groups, per unit time,
+  // a single-forked JVM will run tests in parallel within the group.
+  Seq[Setting[?]](
+    doctestGenTests := Seq.empty,
+    tlVersionIntroduced := commonNativeTlVersionIntroduced,
+    Test / fork := true,
+    Test / testGrouping :=
+      divideOnTwoGroups((Test / definedTests).value),
+    Global / concurrentRestrictions :=
+      Tags.limit(Tags.ForkedTestGroup, 1) :: Nil
+  )
+}
 
 lazy val disciplineDependencies = Seq(
   libraryDependencies ++= Seq(
