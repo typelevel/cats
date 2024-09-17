@@ -22,10 +22,18 @@
 package cats.kernel
 package instances
 
+import scala.annotation.nowarn
+
 trait CharInstances {
-  implicit val catsKernelStdOrderForChar: CharOrder with Hash[Char] with BoundedEnumerable[Char] = new CharOrder
+  implicit val catsKernelStdBoundableEnumerableForChar: CharOrder with Hash[Char] with BoundableEnumerable[Char] =
+    new CharOrder
+
+  @deprecated(message = "Please use catsKernelStdBoundableEnumerableForChar instead.", since = "2.10.0")
+  def catsKernelStdOrderForChar: CharOrder with Hash[Char] with BoundedEnumerable[Char] =
+    catsKernelStdBoundableEnumerableForChar
 }
 
+@deprecated(message = "Please use CharBoundableEnumerable.", since = "2.10.0")
 trait CharEnumerable extends BoundedEnumerable[Char] {
   override def partialNext(a: Char): Option[Char] =
     if (a == maxBound) None else Some((a + 1).toChar)
@@ -33,12 +41,28 @@ trait CharEnumerable extends BoundedEnumerable[Char] {
     if (a == minBound) None else Some((a - 1).toChar)
 }
 
+private[instances] trait CharBoundableEnumerable extends BoundableEnumerable[Char] {
+  override final def size: BigInt =
+    BigInt(maxBound.toInt)
+
+  override final def fromEnum(a: Char): BigInt =
+    BigInt(a.toInt)
+
+  override final def toEnumOpt(i: BigInt): Option[Char] =
+    if (i >= BigInt(minBound.toInt) && i <= BigInt(maxBound.toInt)) {
+      Some(i.toChar)
+    } else {
+      None
+    }
+}
+
 trait CharBounded extends LowerBounded[Char] with UpperBounded[Char] {
   override def minBound: Char = Char.MinValue
   override def maxBound: Char = Char.MaxValue
 }
 
-class CharOrder extends Order[Char] with Hash[Char] with CharBounded with CharEnumerable { self =>
+@nowarn("msg=CharBoundableEnumerable")
+class CharOrder extends Order[Char] with Hash[Char] with CharBounded with CharEnumerable with CharBoundableEnumerable { self =>
   def hash(x: Char): Int = x.hashCode()
   def compare(x: Char, y: Char): Int =
     if (x < y) -1 else if (x > y) 1 else 0

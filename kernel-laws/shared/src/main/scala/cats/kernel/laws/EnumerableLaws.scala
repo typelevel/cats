@@ -22,6 +22,66 @@
 package cats.kernel
 package laws
 
+trait EnumerableLaws[A] extends PartialNextLaws[A] with PartialPreviousLaws[A] {
+  implicit def En: Enumerable[A] // Not E to avoid conflict with
+                                 // PartialOrderLaws
+
+  // Note, we use integer numbers as a proxy for the natural numbers
+  // here. Since integer numbers have a bijective, e.g. one to one,
+  // correspondence with the natural numbers, and we have no good
+  // representation for a true Natural number in cats or the Scala stdlib.
+
+  def injectiveToNaturalNumbers(xs: Set[A]): IsEq[Int] =
+    xs.map(En.fromEnum).size <-> xs.size
+
+  def hasTheSameOrderAsBigInt(x: A, y: A): IsEq[Comparison] =
+    En.order.comparison(x, y) <-> Order[BigInt].comparison(En.fromEnum(x), En.fromEnum(y))
+
+  def bigIntHasTheSameOrderAsA(xi: BigInt, yi: BigInt): IsEq[Boolean] =
+    En.toEnumOpt(xi).flatMap(x =>
+      En.toEnumOpt(yi).map(y =>
+        Order[BigInt].comparison(xi, yi) == En.order.comparison(x, y)
+      )
+    ).fold(
+      true <-> true
+    )(
+      _ <-> true
+    )
+}
+
+object EnumerableLaws {
+  def apply[A](implicit ev: Enumerable[A]): EnumerableLaws[A] =
+    new EnumerableLaws[A] {
+      override implicit val E: Order[A] = ev.order
+      override implicit val En: Enumerable[A] = ev
+      override implicit val N: PartialNext[A] = ev
+      override implicit val P: PartialPrevious[A] = ev
+    }
+}
+
+trait BoundlessEnumerableLaws[A] extends EnumerableLaws[A] {
+  implicit def En: BoundlessEnumerable[A] // Not E to avoid conflict with
+                                          // PartialOrderLaws
+
+  // Note, we use integer numbers as a proxy for the natural numbers
+  // here. Since integer numbers have a bijective, e.g. one to one,
+  // correspondence with the natural numbers, and we have no good
+  // representation for a true Natural number in cats or the Scala stdlib.
+
+  def bijectiveToNaturalNumbers(xs: Set[BigInt]): IsEq[Int] =
+    xs.map(En.toEnum).size <-> xs.size
+}
+
+object BoundlessEnumerableLaws {
+  def apply[A](implicit ev: BoundlessEnumerable[A]): BoundlessEnumerableLaws[A] =
+    new BoundlessEnumerableLaws[A] {
+      override implicit val E: Order[A] = ev.order
+      override implicit val En: BoundlessEnumerable[A] = ev
+      override implicit val N: PartialNext[A] = ev
+      override implicit val P: PartialPrevious[A] = ev
+    }
+}
+
 trait PartialPreviousLaws[A] extends PartialOrderLaws[A] {
 
   implicit def P: PartialPrevious[A]
