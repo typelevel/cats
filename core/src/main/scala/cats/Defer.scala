@@ -91,7 +91,7 @@ trait Defer[F[_]] extends Serializable {
    */
   def recursiveFn[A, B](fn: (A => F[B]) => (A => F[B])): A => F[B] =
     new Function1[A, F[B]] { self =>
-      lazy val loopFn: A => F[B] = fn(self)
+      val loopFn: A => F[B] = fn(self)
 
       def apply(a: A): F[B] = defer(loopFn(a))
     }
