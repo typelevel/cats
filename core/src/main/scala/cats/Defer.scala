@@ -72,6 +72,29 @@ trait Defer[F[_]] extends Serializable {
     lazy val res: F[A] = fn(defer(res))
     res
   }
+
+  /**
+   * Useful when you want a recursive function that returns F where
+   * F[_]: Defer. Examples include IO, Eval, or transformers such
+   * as EitherT or OptionT.
+   * 
+   * example:
+   *
+   * val sumTo: Int => Eval[Int] =
+   *   Defer[Eval].recursiveFn[Int, Int] { recur =>
+   *     
+   *     { i =>
+   *       if (i > 0) recur(i - 1).map(_ + i)
+   *       else Eval.now(0)
+   *     }
+   *   }
+   */
+  def recursiveFn[A, B](fn: (A => F[B]) => (A => F[B])): A => F[B] =
+    new Function1[A, F[B]] { self =>
+      val loopFn: A => F[B] = fn(self)
+
+      def apply(a: A): F[B] = defer(loopFn(a))
+    }
 }
 
 object Defer {

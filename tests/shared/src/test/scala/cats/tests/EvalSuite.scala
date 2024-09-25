@@ -297,4 +297,17 @@ class EvalSuite extends CatsSuite {
       assert(n2 == 1)
     }
   }
+
+  test("test Defer.recursiveFn example") {
+    val sumTo: Int => Eval[Int] =
+      cats.Defer[Eval].recursiveFn[Int, Int] { recur =>
+
+        { i =>
+          if (i > 0) recur(i - 1).map(_ + i)
+          else Eval.now(0)
+        }
+      }
+
+    assert(sumTo(300000).value == (0 to 300000).sum)
+  }
 }
