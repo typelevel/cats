@@ -79,7 +79,7 @@ trait Functor[F[_]] extends Invariant[F] { self =>
    * Example:
    * {{{
    * scala> import cats.Functor
-   * scala> import cats.implicits.catsStdInstancesForOption
+   * scala> import cats.syntax.all._
    *
    * scala> val o = Option(42)
    * scala> Functor[Option].lift((x: Int) => x + 10)(o)
@@ -189,7 +189,7 @@ trait Functor[F[_]] extends Invariant[F] { self =>
    *
    * {{{
    * scala> import cats.Functor
-   * scala> import cats.implicits.catsStdInstancesForList
+   * scala> import cats.syntax.all._
    *
    * scala> Functor[List].unzip(List((1,2), (3, 4)))
    * res0: (List[Int], List[Int]) = (List(1, 3),List(2, 4))
@@ -203,7 +203,7 @@ trait Functor[F[_]] extends Invariant[F] { self =>
    * Example:
    * {{{
    * scala> import cats.Functor
-   * scala> import cats.implicits.catsStdInstancesForList
+   * scala> import cats.syntax.all._
    *
    * scala> Functor[List].ifF(List(true, false, false))(1, 0)
    * res0: List[Int] = List(1, 0, 0)
