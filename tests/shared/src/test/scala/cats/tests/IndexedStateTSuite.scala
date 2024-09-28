@@ -350,7 +350,6 @@ class IndexedStateTSuite extends CatsSuite {
 
   test("fromState correctly turns State[A, F[B]] into StateT[F, A, B]") {
     val state: State[Int, Option[Int]] = add1.map(Some.apply)
-    import cats.implicits.catsStdInstancesForOption
     forAll { (initial: Int) =>
       assert(StateT.fromState(state).run(initial).get === {
         val (s, Some(result)) = state.run(initial).value: @unchecked // non-exhaustive match warning

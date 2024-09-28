@@ -80,7 +80,7 @@ trait Bifunctor[F[_, _]] extends Serializable { self =>
    * Lift left into F using Applicative.
    * * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.syntax.all._
    * scala> val x0: Either[String, Int] = Either.left("foo")
    * scala> val x1: Either[List[String], Int] = x0.leftLiftTo[List]
    * }}}
