@@ -647,12 +647,12 @@ object Boilerplate {
          -  implicit def catsSyntaxFunction${arity}Apply[T, ${`A..N`}](f: $function): Function${arity}ApplyOps[T, ${`A..N`}] = new Function${arity}ApplyOps(f)
       |}
       |
-      |private[syntax] final class Function1ApplyOps[T, A0](private val f: Function1[A0, T]) extends Serializable {
+      |private[syntax] final class Function1ApplyOps[T, A0](private val f: Function1[A0, T]) extends AnyVal with Serializable {
       |  def liftN[F[_]: Functor](a0: F[A0]): F[T] = Functor[F].map(a0)(f)
       |  def parLiftN[F[_]: Functor](a0: F[A0]): F[T] = Functor[F].map(a0)(f)
       |}
       |
-         -private[syntax] final class Function${arity}ApplyOps[T, ${`A..N`}](private val f: $function) extends Serializable {
+         -private[syntax] final class Function${arity}ApplyOps[T, ${`A..N`}](private val f: $function) extends AnyVal with Serializable {
           - def liftN[F[_]: Functor: Semigroupal]($typedParams): F[T] = Semigroupal.map$arity(${`a..n`})(f)
           - def parLiftN[F[_]: Parallel]($typedParams): F[T] = Parallel.parMap$arity(${`a..n`})(f)
          -}
