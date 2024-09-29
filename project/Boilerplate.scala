@@ -32,6 +32,7 @@ object Boilerplate {
     GenParallelArityFunctions,
     GenParallelArityFunctions2,
     GenFoldableArityFunctions,
+    GenFunctionSyntax,
     GenTupleParallelSyntax,
     GenTupleShowInstances,
     GenTupleMonadInstances,
@@ -594,7 +595,7 @@ object Boilerplate {
       | * @groupname FoldableSlidingN foldable arity
       | * @groupdesc FoldableSlidingN
       | *   Group sequential elements into fixed sized tuples by passing a "sliding window" over them.
-      | * 
+      | *
       | *   A foldable with fewer elements than the window size will return an empty list unlike `Iterable#sliding(size: Int)`.
       | *   Example:
       | *   {{{
@@ -604,12 +605,12 @@ object Boilerplate {
       | *
       | *   scala> Foldable[List].sliding4((1 to 10).toList)
       | *   val res1: List[(Int, Int, Int, Int)] = List((1,2,3,4), (2,3,4,5), (3,4,5,6), (4,5,6,7), (5,6,7,8), (6,7,8,9), (7,8,9,10))
-      | *   
+      | *
       | *   scala> Foldable[List].sliding4((1 to 2).toList)
       | *   val res2: List[(Int, Int, Int, Int)] = List()
       | *
       | *   }}}
-      | *   
+      | *
       | * @groupprio FoldableSlidingN 999
       | *
       | */
@@ -618,6 +619,43 @@ object Boilerplate {
         -  def sliding$arity[A](fa: F[A]): List[$tupleTpe] =
         -    toIterable(fa).iterator.sliding($arity).withPartial(false).map(x => $tupleXN).toList
       |}
+      """
+    }
+  }
+
+  object GenFunctionSyntax extends Template {
+    def filename(root: File) = root / "cats" / "syntax" / "FunctionApplySyntax.scala"
+
+    override def range = 2 to maxArity
+
+    def content(tv: TemplateVals) = {
+      import tv._
+
+      val function = s"Function$arity[${`A..N`}, T]"
+
+      val typedParams = synVals.zip(synTypes).map { case (v, t) => s"$v: F[$t]" }.mkString(", ")
+
+      block"""
+      |package cats
+      |package syntax
+      |
+      |import cats.Functor
+      |import cats.Semigroupal
+      |
+      |trait FunctionApplySyntax {
+      |  implicit def catsSyntaxFunction1Apply[T, A0](f: Function1[A0, T]): Function1ApplyOps[T, A0] = new Function1ApplyOps(f)
+         -  implicit def catsSyntaxFunction${arity}Apply[T, ${`A..N`}](f: $function): Function${arity}ApplyOps[T, ${`A..N`}] = new Function${arity}ApplyOps(f)
+      |}
+      |
+      |private[syntax] final class Function1ApplyOps[T, A0](private val f: Function1[A0, T]) extends AnyVal with Serializable {
+      |  def liftN[F[_]: Functor](a0: F[A0]): F[T] = Functor[F].map(a0)(f)
+      |  def parLiftN[F[_]: Functor](a0: F[A0]): F[T] = Functor[F].map(a0)(f)
+      |}
+      |
+         -private[syntax] final class Function${arity}ApplyOps[T, ${`A..N`}](private val f: $function) extends AnyVal with Serializable {
+          - def liftN[F[_]: Functor: Semigroupal]($typedParams): F[T] = Semigroupal.map$arity(${`a..n`})(f)
+          - def parLiftN[F[_]: Parallel]($typedParams): F[T] = Parallel.parMap$arity(${`a..n`})(f)
+         -}
       """
     }
   }

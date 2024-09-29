@@ -286,6 +286,54 @@ object SyntaxSuite {
     tfa.parFlatMap(mfone)
   }
 
+  def testLiftN[F[_]: Apply, A, B, C, T] = {
+    val fa = mock[F[A]]
+    val fb = mock[F[B]]
+    val fc = mock[F[C]]
+
+    val fapply1 = mock[A => T]
+
+    val result1 = fapply1.liftN(fa)
+
+    result1: F[T]
+
+    val fapply2 = mock[(A, B) => T]
+
+    val result2 = fapply2.liftN(fa, fb)
+
+    result2: F[T]
+
+    val fapply3 = mock[(A, B, C) => T]
+
+    val result3 = fapply3.liftN(fa, fb, fc)
+
+    result3: F[T]
+  }
+
+  def testParLiftN[F[_]: Parallel: Functor, A, B, C, T] = {
+    val fa = mock[F[A]]
+    val fb = mock[F[B]]
+    val fc = mock[F[C]]
+
+    val fapply1 = mock[A => T]
+
+    val result1 = fapply1.parLiftN(fa)
+
+    result1: F[T]
+
+    val fapply2 = mock[(A, B) => T]
+
+    val result2 = fapply2.parLiftN(fa, fb)
+
+    result2: F[T]
+
+    val fapply3 = mock[(A, B, C) => T]
+
+    val result3 = fapply3.parLiftN(fa, fb, fc)
+
+    result3: F[T]
+  }
+
   def testParallelBi[M[_], F[_], T[_, _]: Bitraverse, A, B, C, D](implicit P: Parallel.Aux[M, F]): Unit = {
     val tab = mock[T[A, B]]
     val f = mock[A => M[C]]
