@@ -38,11 +38,11 @@ var sponsors = async function () {
         for (i = 0; i < members.length; i++) {
             var member = members[i];
             switch (member.tier ? member.tier.name : null) {
-                case 'platinum-sponsor':
+                case 'Platinum Sponsor':
                     addSponsor('platinum-sponsors', member.account, PlatinumSize);
-                case 'gold-sponsor':
+                case 'Gold Sponsor':
                     addSponsor('gold-sponsors', member.account, GoldSize);
-                case 'silver-sponsor':
+                case 'Silver Sponsor':
                     addSponsor('silver-sponsors', member.account, SilverSize);
                 case 'backer':
                     addSponsor('backers', member.account, BackerSize);
