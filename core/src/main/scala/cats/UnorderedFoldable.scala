@@ -47,7 +47,7 @@ trait UnorderedFoldable[F[_]] extends Serializable {
    *      |   i => if (i % 2 == 0) Some(i) else None
    * scala> UnorderedFoldable[Set].unorderedFoldMapA(evenNumbers)(evenOpt)
    * res0: Option[Int] = Some(30)
-   * scala> UnorderedFoldable[Set].unorderedFoldMapA(evenNumbers :+ 11)(evenOpt)
+   * scala> UnorderedFoldable[Set].unorderedFoldMapA(evenNumbers + 11)(evenOpt)
    * res1: Option[Int] = None
    * }}}
    */
