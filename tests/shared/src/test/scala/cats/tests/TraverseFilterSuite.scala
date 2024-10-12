@@ -38,6 +38,19 @@ abstract class TraverseFilterSuite[F[_]: TraverseFilter](name: String)(implicit
 
   implicit def T: Traverse[F] = implicitly[TraverseFilter[F]].traverse
 
+  test(s"TraverseFilter[$name].mapAccumulateFilter") {
+    forAll { (init: Int, fa: F[Int], fn: ((Int, Int)) => (Int, Option[Int])) =>
+      val lhs = fa.mapAccumulateFilter(init)((s, a) => fn((s, a)))
+
+      val rhs = fa.foldLeft((init, List.empty[Int])) { case ((s1, acc), a) =>
+        val (s2, b) = fn((s1, a))
+        (s2, b.fold(acc)(_ :: acc))
+      }
+
+      assert(lhs.map(_.toList) === rhs.map(_.reverse))
+    }
+  }
+
   test(s"TraverseFilter[$name].ordDistinct") {
     forAll { (fa: F[Int]) =>
       fa.ordDistinct.toList === fa.toList.distinct
