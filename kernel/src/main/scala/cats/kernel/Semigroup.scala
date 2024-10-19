@@ -178,6 +178,11 @@ object Semigroup
    */
   @inline def last[A]: Semigroup[A] = (_, y) => y
 
+  @inline def reverse[A](implicit ev: Semigroup[A]): Semigroup[A] = ev.reverse
+
+  @inline def intercalate[A](sep: A)(implicit ev: Semigroup[A]): Semigroup[A] =
+    ev.intercalate(sep)
+
   implicit def catsKernelBoundedSemilatticeForBitSet: BoundedSemilattice[BitSet] =
     cats.kernel.instances.bitSet.catsKernelStdSemilatticeForBitSet
   implicit def catsKernelInstancesForUnit: BoundedSemilattice[Unit] with CommutativeGroup[Unit] =
