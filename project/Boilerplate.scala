@@ -583,8 +583,9 @@ object Boilerplate {
     def content(tv: TemplateVals) = {
       import tv._
 
-      val tupleTpe = Iterator.fill(arity)("A").mkString("(", ", ", ")")
-      val tupleXN = Iterator.tabulate(arity)(i => s"x($i)").mkString("(", ", ", ")")
+      val tupleTpe = (1 to arity).map(_ => "A").mkString("(", ", ", ")")
+      def listXN(range: Range) = range.map("x" + _).mkString(" :: ")
+      val tupleXN = (1 to arity).map("x" + _).mkString("(", ", ", ")")
 
       block"""
       |package cats
@@ -617,7 +618,15 @@ object Boilerplate {
       |trait FoldableNFunctions[F[_]] { self: Foldable[F] =>
         -  /** @group FoldableSlidingN */
         -  def sliding$arity[A](fa: F[A]): List[$tupleTpe] =
-        -    toIterable(fa).iterator.sliding($arity).withPartial(false).map(x => $tupleXN).toList
+        -    foldRight(fa, Now((List.empty[$tupleTpe], List.empty[A]))) { (x1, eval) =>
+        -      val (acc, l) = eval.value
+        -      l match {
+        -        case ${listXN(2 to arity)} :: Nil =>
+        -          Now(($tupleXN :: acc, ${listXN(1 until arity)} :: Nil))
+        -        case l =>
+        -          Now((acc, x1 :: l))
+        -      }
+        -    }.value._1
       |}
       """
     }
