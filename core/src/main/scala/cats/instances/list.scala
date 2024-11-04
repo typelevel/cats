@@ -134,9 +134,9 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
       /**
        * This avoids making a very deep stack by building a tree instead
        */
-      override def traverse_[G[_], A, B](fa: List[A])(f: A => G[B])(implicit G: Applicative[G]): G[Unit] = {
+      override def traverseVoid[G[_], A, B](fa: List[A])(f: A => G[B])(implicit G: Applicative[G]): G[Unit] = {
         G match {
-          case x: StackSafeMonad[G] => Traverse.traverse_Directly(fa)(f)(x)
+          case x: StackSafeMonad[G] => Traverse.traverseVoidDirectly(fa)(f)(x)
           case _                    =>
             // the cost of this is O(size log size)
             // c(n) = n + 2 * c(n/2) = n + 2(n/2 log (n/2)) = n + n (logn - 1) = n log n
