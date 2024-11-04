@@ -157,5 +157,8 @@ ThisBuild / mimaBinaryIssueFilters ++= {
     ) ++ Seq(
       ProblemFilters.exclude[MissingClassProblem]("cats.compat.package"),
       ProblemFilters.exclude[MissingClassProblem]("cats.compat.package$")
+    ) ++ Seq( // PR#4682
+      // Renamed to `cats.Traverse.traverseVoidDirectly`
+      ProblemFilters.exclude[DirectMissingMethodProblem]("cats.Traverse.traverse_Directly")
     )
 }
