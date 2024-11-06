@@ -42,7 +42,7 @@ object NonEmptyChainImpl extends NonEmptyChainInstances with ScalaVersionSpecifi
   private[data] type Base
   private[data] trait Tag extends Any
   /* aliased in data package as NonEmptyChain */
-  type Type[+A] <: Base with Tag
+  type Type[+A] <: Base & Tag
 
   private[data] def create[A](s: Chain[A]): Type[A] =
     s.asInstanceOf[Type[A]]
@@ -624,16 +624,16 @@ sealed abstract private[data] class NonEmptyChainInstances extends NonEmptyChain
     "maintained for the sake of binary compatibility only, use catsDataInstancesForNonEmptyChainBinCompat1 instead",
     "2.9.0"
   )
-  def catsDataInstancesForNonEmptyChain: SemigroupK[NonEmptyChain]
-    with NonEmptyTraverse[NonEmptyChain]
-    with Bimonad[NonEmptyChain]
-    with Align[NonEmptyChain] =
+  def catsDataInstancesForNonEmptyChain
+    : SemigroupK[NonEmptyChain] & NonEmptyTraverse[NonEmptyChain] & Bimonad[NonEmptyChain] & Align[
+      NonEmptyChain
+    ] =
     catsDataInstancesForNonEmptyChainBinCompat1
 
-  implicit val catsDataInstancesForNonEmptyChainBinCompat1: Align[NonEmptyChain]
-    with Bimonad[NonEmptyChain]
-    with NonEmptyAlternative[NonEmptyChain]
-    with NonEmptyTraverse[NonEmptyChain] =
+  implicit val catsDataInstancesForNonEmptyChainBinCompat1
+    : Align[NonEmptyChain] & Bimonad[NonEmptyChain] & NonEmptyAlternative[NonEmptyChain] & NonEmptyTraverse[
+      NonEmptyChain
+    ] =
     new AbstractNonEmptyInstances[Chain, NonEmptyChain] with Align[NonEmptyChain] {
       def extract[A](fa: NonEmptyChain[A]): A = fa.head
 

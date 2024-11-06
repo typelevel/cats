@@ -24,13 +24,13 @@ import cats.arrow.{ArrowChoice, CommutativeArrow}
 
 trait PartialFunctionInstances {
 
-  implicit def catsStdInstancesForPartialFunction: ArrowChoice[PartialFunction] with CommutativeArrow[PartialFunction] =
+  implicit def catsStdInstancesForPartialFunction: ArrowChoice[PartialFunction] & CommutativeArrow[PartialFunction] =
     PartialFunctionInstances.instance
 }
 
 private object PartialFunctionInstances {
 
-  private val instance: ArrowChoice[PartialFunction] with CommutativeArrow[PartialFunction] =
+  private val instance: ArrowChoice[PartialFunction] & CommutativeArrow[PartialFunction] =
     new ArrowChoice[PartialFunction] with CommutativeArrow[PartialFunction] {
 
       /**

@@ -55,7 +55,7 @@ trait SetInstances {
   // If we accept Monad for Set, we can also have Alternative, as
   // Alternative only requires MonoidK (already accepted by cats-core) and
   // the Applicative that comes from Monad.
-  implicit val alleyCatsStdSetMonad: Monad[Set] with Alternative[Set] =
+  implicit val alleyCatsStdSetMonad: Monad[Set] & Alternative[Set] =
     new Monad[Set] with Alternative[Set] {
       def pure[A](a: A): Set[A] = Set(a)
       override def map[A, B](fa: Set[A])(f: A => B): Set[B] = fa.map(f)

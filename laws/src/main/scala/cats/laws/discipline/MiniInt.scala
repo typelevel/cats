@@ -72,7 +72,7 @@ object MiniInt {
 
   val allValues: List[MiniInt] = (minIntValue to maxIntValue).map(unsafeFromInt).toList
 
-  implicit val catsLawsEqInstancesForMiniInt: Order[MiniInt] with Hash[MiniInt] =
+  implicit val catsLawsEqInstancesForMiniInt: Order[MiniInt] & Hash[MiniInt] =
     new Order[MiniInt] with Hash[MiniInt] {
       def hash(x: MiniInt): Int = Hash[Int].hash(x.intBits)
 

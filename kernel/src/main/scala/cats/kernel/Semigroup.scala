@@ -180,7 +180,7 @@ object Semigroup
 
   implicit def catsKernelBoundedSemilatticeForBitSet: BoundedSemilattice[BitSet] =
     cats.kernel.instances.bitSet.catsKernelStdSemilatticeForBitSet
-  implicit def catsKernelInstancesForUnit: BoundedSemilattice[Unit] with CommutativeGroup[Unit] =
+  implicit def catsKernelInstancesForUnit: BoundedSemilattice[Unit] & CommutativeGroup[Unit] =
     cats.kernel.instances.unit.catsKernelStdAlgebraForUnit
   implicit def catsKernelCommutativeGroupForByte: CommutativeGroup[Byte] =
     cats.kernel.instances.byte.catsKernelStdGroupForByte

@@ -23,7 +23,7 @@ package cats.kernel
 package instances
 
 trait DoubleInstances {
-  implicit val catsKernelStdOrderForDouble: Order[Double] with Hash[Double] = new DoubleOrder
+  implicit val catsKernelStdOrderForDouble: Order[Double] & Hash[Double] = new DoubleOrder
   implicit val catsKernelStdGroupForDouble: CommutativeGroup[Double] = new DoubleGroup
 }
 

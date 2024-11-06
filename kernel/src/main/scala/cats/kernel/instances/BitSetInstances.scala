@@ -25,7 +25,7 @@ package instances
 import scala.collection.immutable.BitSet
 
 trait BitSetInstances {
-  implicit val catsKernelStdOrderForBitSet: PartialOrder[BitSet] with Hash[BitSet] =
+  implicit val catsKernelStdOrderForBitSet: PartialOrder[BitSet] & Hash[BitSet] =
     new BitSetPartialOrder
 
   implicit val catsKernelStdSemilatticeForBitSet: BoundedSemilattice[BitSet] =

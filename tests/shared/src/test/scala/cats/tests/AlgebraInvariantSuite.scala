@@ -174,8 +174,7 @@ class AlgebraInvariantSuite extends CatsSuite with ScalaVersionSpecificAlgebraIn
   implicit private val arbCommutativeGroupInt: Arbitrary[CommutativeGroup[Int]] =
     Arbitrary(genCommutativeGroupInt)
 
-  protected val integralForMiniInt: Numeric[MiniInt] with Integral[MiniInt] = new MiniIntNumeric
-    with Integral[MiniInt] {
+  protected val integralForMiniInt: Numeric[MiniInt] & Integral[MiniInt] = new MiniIntNumeric with Integral[MiniInt] {
     def quot(x: MiniInt, y: MiniInt): MiniInt = MiniInt.unsafeFromInt(x.toInt / y.toInt)
     def rem(x: MiniInt, y: MiniInt): MiniInt = MiniInt.unsafeFromInt(x.toInt % y.toInt)
   }
