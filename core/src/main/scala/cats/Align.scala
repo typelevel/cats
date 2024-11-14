@@ -84,7 +84,7 @@ trait Align[F[_]] extends Serializable {
    * }}}
    */
   def alignMergeWith[A](fa1: F[A], fa2: F[A])(f: (A, A) => A): F[A] =
-    functor.map(align(fa1, fa2))(_.mergeWith(f))
+    alignWith(fa1, fa2)(_.mergeWith(f))
 
   /**
    * Same as `align`, but forgets from the type that one of the two elements must be present.
