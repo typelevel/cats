@@ -23,20 +23,20 @@ package cats.free
 
 import cats.{~>, Comonad, Eval, Id, Reducible, Traverse}
 import cats.data.{NonEmptyList, OptionT}
-import cats.instances.all._
+import cats.instances.all.*
 import cats.kernel.Eq
 import cats.laws.discipline.{ComonadTests, ReducibleTests, SerializableTests, TraverseTests}
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import cats.syntax.list._
+import cats.syntax.list.*
 import cats.tests.{CatsSuite, Spooky}
 import org.scalacheck.{Arbitrary, Cogen, Gen}
-import cats.syntax.eq._
+import cats.syntax.eq.*
 
 import scala.annotation.tailrec
 
 class CofreeSuite extends CatsSuite {
 
-  import CofreeSuite._
+  import CofreeSuite.*
 
   implicit val iso: Isomorphisms[Cofree[Option, *]] = Isomorphisms.invariant[Cofree[Option, *]]
 

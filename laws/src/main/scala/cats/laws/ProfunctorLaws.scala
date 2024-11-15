@@ -23,7 +23,7 @@ package cats
 package laws
 
 import cats.arrow.Profunctor
-import cats.syntax.profunctor._
+import cats.syntax.profunctor.*
 
 /**
  * Laws that must be obeyed by any `cats.functor.Profunctor`.

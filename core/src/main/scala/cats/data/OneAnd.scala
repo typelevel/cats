@@ -23,7 +23,7 @@ package cats
 package data
 
 import scala.annotation.tailrec
-import kernel.compat.scalaVersionSpecific._
+import kernel.compat.scalaVersionSpecific.*
 
 /**
  * A data type which represents a single element (head) and some other
@@ -310,7 +310,7 @@ sealed abstract private[data] class OneAndLowPriority0 extends OneAndLowPriority
   ): NonEmptyTraverse[OneAnd[F, *]] =
     new NonEmptyReducible[OneAnd[F, *], F] with NonEmptyTraverse[OneAnd[F, *]] {
       def nonEmptyTraverse[G[_], A, B](fa: OneAnd[F, A])(f: (A) => G[B])(implicit G: Apply[G]): G[OneAnd[F, B]] = {
-        import syntax.foldable._
+        import syntax.foldable.*
 
         def loop(head: A, tail: Iterator[A]): Eval[G[OneAnd[F, B]]] =
           if (tail.hasNext) {

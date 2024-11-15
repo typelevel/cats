@@ -21,12 +21,12 @@
 
 package cats.tests
 
-import cats._
-import cats.data._
-import cats.laws.discipline._
-import cats.laws.discipline.SemigroupalTests.Isomorphisms._
-import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.eq._
+import cats.*
+import cats.data.*
+import cats.laws.discipline.*
+import cats.laws.discipline.SemigroupalTests.Isomorphisms.*
+import cats.laws.discipline.arbitrary.*
+import cats.laws.discipline.eq.*
 import org.scalacheck.Test.Parameters
 import org.scalacheck.Arbitrary
 
@@ -276,7 +276,7 @@ class NestedSuite extends CatsSuite {
   }
 
   {
-    import cats.laws.discipline.eq._
+    import cats.laws.discipline.eq.*
     // Distributive composition
     checkAll(
       "Nested[Function1[MiniInt, *], Function0, *]",

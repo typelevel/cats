@@ -22,7 +22,7 @@
 package alleycats
 package std
 
-import alleycats.compat.scalaVersionSpecific._
+import alleycats.compat.scalaVersionSpecific.*
 import cats.{Alternative, Always, Applicative, Eval, Foldable, Monad, Monoid, Traverse, TraverseFilter}
 
 import scala.annotation.tailrec
@@ -31,7 +31,7 @@ object set extends SetInstances
 
 @suppressUnusedImportWarningForScalaVersionSpecific
 trait SetInstances {
-  import SetInstances._
+  import SetInstances.*
 
   // We use a def instead of val here as a workaround to the MiMa
   // 'ReversedMissingMethodProblem' error.

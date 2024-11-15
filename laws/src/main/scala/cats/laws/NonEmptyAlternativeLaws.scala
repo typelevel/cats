@@ -22,7 +22,7 @@
 package cats
 package laws
 
-import cats.syntax.all._
+import cats.syntax.all.*
 
 trait NonEmptyAlternativeLaws[F[_]] extends ApplicativeLaws[F] with SemigroupKLaws[F] {
   implicit override def F: NonEmptyAlternative[F]

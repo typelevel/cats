@@ -22,8 +22,8 @@
 package cats
 package laws
 
-import cats.syntax.align._
-import cats.syntax.functor._
+import cats.syntax.align.*
+import cats.syntax.functor.*
 
 import cats.data.Ior
 import cats.data.Ior.{Both, Left, Right}

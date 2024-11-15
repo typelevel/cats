@@ -21,23 +21,23 @@
 
 package cats.free
 
-import cats._
+import cats.*
 import cats.arrow.FunctionK
 import cats.data.EitherK
-import cats.instances.all._
+import cats.instances.all.*
 import cats.kernel.Eq
-import cats.syntax.eq._
+import cats.syntax.eq.*
 import cats.laws.discipline.{DeferTests, FoldableTests, MonadTests, SerializableTests, TraverseTests}
 import cats.laws.discipline.arbitrary.catsLawsArbitraryForFn0
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import cats.syntax.apply._
+import cats.syntax.apply.*
 import cats.tests.CatsSuite
 import org.scalacheck.{Arbitrary, Cogen, Gen}
 import org.scalacheck.Arbitrary.arbFunction1
-import org.scalacheck.Prop._
+import org.scalacheck.Prop.*
 
 class FreeSuite extends CatsSuite {
-  import FreeSuite._
+  import FreeSuite.*
 
   implicit val iso: Isomorphisms[Free[Option, *]] = Isomorphisms.invariant[Free[Option, *]]
 

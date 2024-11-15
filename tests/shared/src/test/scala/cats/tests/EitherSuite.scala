@@ -21,18 +21,18 @@
 
 package cats.tests
 
-import cats._
+import cats.*
 import cats.data.{EitherT, NonEmptyChain, NonEmptyList, NonEmptySet, NonEmptyVector, Validated}
-import cats.syntax.bifunctor._
+import cats.syntax.bifunctor.*
 import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
-import cats.laws.discipline._
-import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.*
+import cats.laws.discipline.arbitrary.*
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import cats.syntax.either._
+import cats.syntax.either.*
 
 import scala.util.Try
-import cats.syntax.eq._
-import org.scalacheck.Prop._
+import cats.syntax.eq.*
+import org.scalacheck.Prop.*
 
 class EitherSuite extends CatsSuite {
   implicit val iso: Isomorphisms[Either[Int, *]] = Isomorphisms.invariant[Either[Int, *]]
@@ -425,7 +425,7 @@ class EitherSuite extends CatsSuite {
   }
 
   test("leftFlatMapOrKeep consistent with swap and then flatMapOrKeep") {
-    import cats.syntax.monad._
+    import cats.syntax.monad.*
 
     forAll { (either: Either[String, Int], pf: PartialFunction[String, Either[String, Int]]) =>
       assert(either.leftFlatMapOrKeep(pf) === either.swap.flatMapOrKeep { case a =>
@@ -448,8 +448,8 @@ class EitherSuite extends CatsSuite {
 final class EitherInstancesSuite extends munit.FunSuite {
 
   test("parallel instance in cats.instances.either") {
-    import cats.instances.either._
-    import cats.syntax.parallel._
+    import cats.instances.either.*
+    import cats.syntax.parallel.*
 
     def either: Either[String, Int] = Left("Test")
     (either, either).parTupled

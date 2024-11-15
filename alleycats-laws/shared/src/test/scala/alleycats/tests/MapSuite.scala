@@ -22,8 +22,8 @@
 package alleycats.tests
 
 import cats.Traverse
-import cats.instances.all._
-import cats.laws.discipline.arbitrary._
+import cats.instances.all.*
+import cats.laws.discipline.arbitrary.*
 import cats.laws.discipline.{SerializableTests, ShortCircuitingTests, TraverseFilterTests}
 
 class MapSuite extends AlleycatsSuite {

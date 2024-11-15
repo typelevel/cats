@@ -25,9 +25,9 @@ import cats.{MonoidK, Show, UnorderedTraverse}
 import cats.data.Validated
 import cats.kernel.laws.discipline.MonoidTests
 import cats.laws.discipline.{MonoidKTests, SerializableTests, UnorderedTraverseTests}
-import cats.laws.discipline.arbitrary._
-import cats.syntax.show._
-import cats.syntax.eq._
+import cats.laws.discipline.arbitrary.*
+import cats.syntax.show.*
+import cats.syntax.eq.*
 
 class SetSuite extends CatsSuite {
   checkAll("Set[Int]", MonoidTests[Set[Int]].monoid)

@@ -74,7 +74,7 @@ class SortedSetOrder[A: Order] extends Order[SortedSet[A]] {
 
 // FIXME use context bound in 3.x
 class SortedSetHash[A](implicit hashA: Hash[A]) extends Hash[SortedSet[A]] {
-  import scala.util.hashing.MurmurHash3._
+  import scala.util.hashing.MurmurHash3.*
 
   @deprecated("Use the constructor _without_ Order instead, since Order is not required", "2.1.0")
   private[instances] def this(o: Order[A], h: Hash[A]) = this()(h)

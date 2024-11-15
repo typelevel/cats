@@ -23,8 +23,8 @@ package cats
 package instances
 
 import cats.data.{Ior, ZipStream}
-import cats.kernel.compat.scalaVersionSpecific._
-import cats.syntax.show._
+import cats.kernel.compat.scalaVersionSpecific.*
+import cats.syntax.show.*
 
 import scala.annotation.tailrec
 

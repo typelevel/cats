@@ -22,7 +22,7 @@
 package cats.kernel
 package laws
 
-import cats.kernel.laws.discipline._
+import cats.kernel.laws.discipline.*
 import cats.platform.Platform
 import munit.DisciplineSuite
 import org.scalacheck.{Arbitrary, Cogen, Gen, Prop}
@@ -35,7 +35,7 @@ import scala.collection.immutable.{BitSet, Queue, SortedMap, SortedSet}
 import scala.util.Random
 import java.util.UUID
 import java.util.concurrent.TimeUnit.{DAYS, HOURS, MICROSECONDS, MILLISECONDS, MINUTES, NANOSECONDS, SECONDS}
-import compat.scalaVersionSpecific._
+import compat.scalaVersionSpecific.*
 import munit.ScalaCheckSuite
 import org.scalacheck.Test.Parameters
 
@@ -132,7 +132,7 @@ class TestsConfig extends ScalaCheckSuite {
 
 class Tests extends TestsConfig with DisciplineSuite {
 
-  import KernelCheck._
+  import KernelCheck.*
 
   test("The instances in scope are not ambiguous") {
     implicitly[Monoid[Option[String]]]
@@ -527,7 +527,7 @@ final class LongRunningTests extends ScalaCheckSuite with DisciplineSuite {
       .withMaxSize(PropMaxSize)
       .withWorkers(PropWorkers)
 
-  import KernelCheck._
+  import KernelCheck.*
 
   checkAll("Deeper test of Eq[Duration]", EqTests[Duration].eqv)
   checkAll("Deeper test of Eq[FiniteDuration]", EqTests[FiniteDuration].eqv)

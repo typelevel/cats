@@ -35,7 +35,7 @@ import cats.{
   Semigroupal
 }
 import cats.arrow.{ArrowChoice, Choice, CommutativeArrow}
-import cats.kernel._
+import cats.kernel.*
 import cats.kernel.laws.discipline.{
   BandTests,
   BoundedSemilatticeTests,
@@ -52,17 +52,17 @@ import cats.kernel.laws.discipline.{
   SemilatticeTests,
   SerializableTests
 }
-import cats.laws.discipline._
+import cats.laws.discipline.*
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import cats.laws.discipline.eq._
-import cats.laws.discipline.arbitrary._
-import cats.syntax.foldable._
+import cats.laws.discipline.eq.*
+import cats.laws.discipline.arbitrary.*
+import cats.syntax.foldable.*
 import org.scalacheck.Gen
-import org.scalacheck.Prop._
+import org.scalacheck.Prop.*
 
 class FunctionSuite extends CatsSuite {
 
-  import Helpers._
+  import Helpers.*
 
   checkAll("Function0[Int]", SemigroupalTests[Function0].semigroupal[Int, Int, Int])
   checkAll("Semigroupal[Function0]", SerializableTests.serializable(Semigroupal[Function0]))

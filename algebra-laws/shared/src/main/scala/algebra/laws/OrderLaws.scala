@@ -21,14 +21,14 @@
 
 package algebra.laws
 
-import cats.kernel._
+import cats.kernel.*
 
 import org.typelevel.discipline.Laws
 
 import org.scalacheck.{Arbitrary, Cogen, Prop}
-import org.scalacheck.Prop._
+import org.scalacheck.Prop.*
 
-import cats.kernel.instances.all._
+import cats.kernel.instances.all.*
 import algebra.ring.Signed
 import algebra.ring.CommutativeRing
 import algebra.ring.TruncatedDivision

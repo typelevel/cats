@@ -22,7 +22,7 @@
 package cats.evidence
 
 import cats.Id
-import cats.arrow._
+import cats.arrow.*
 
 /**
  * A value of `A Is B` is proof that the types `A` and `B` are the same. More
@@ -96,7 +96,7 @@ abstract class Is[A, B] extends Serializable {
 }
 
 sealed abstract class IsInstances {
-  import Is._
+  import Is.*
 
   /**
    * The category instance on Leibniz categories.

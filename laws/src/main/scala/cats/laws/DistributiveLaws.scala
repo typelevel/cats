@@ -24,7 +24,7 @@ package laws
 
 import cats.Id
 import cats.data.Nested
-import cats.syntax.distributive._
+import cats.syntax.distributive.*
 
 trait DistributiveLaws[F[_]] extends FunctorLaws[F] {
   implicit override def F: Distributive[F]

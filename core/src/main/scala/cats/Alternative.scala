@@ -21,7 +21,7 @@
 
 package cats
 
-import cats.kernel.compat.scalaVersionSpecific._
+import cats.kernel.compat.scalaVersionSpecific.*
 
 trait Alternative[F[_]] extends NonEmptyAlternative[F] with MonoidK[F] { self =>
 

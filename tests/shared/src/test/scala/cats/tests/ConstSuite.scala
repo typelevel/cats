@@ -21,7 +21,7 @@
 
 package cats.tests
 
-import cats._
+import cats.*
 import cats.data.{Const, NonEmptyList}
 import cats.kernel.Semigroup
 import cats.kernel.laws.discipline.{
@@ -35,12 +35,12 @@ import cats.kernel.laws.discipline.{
   UpperBoundedTests
 }
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import cats.laws.discipline._
-import cats.laws.discipline.arbitrary._
-import cats.syntax.eq._
-import cats.syntax.show._
+import cats.laws.discipline.*
+import cats.laws.discipline.arbitrary.*
+import cats.syntax.eq.*
+import cats.syntax.show.*
 import cats.tests.Helpers.{CMono, CSemi, Semi}
-import org.scalacheck.Prop._
+import org.scalacheck.Prop.*
 
 class ConstSuite extends CatsSuite {
 

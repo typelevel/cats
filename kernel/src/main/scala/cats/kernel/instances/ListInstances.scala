@@ -23,7 +23,7 @@ package cats.kernel
 package instances
 
 import scala.annotation.{nowarn, tailrec}
-import compat.scalaVersionSpecific._
+import compat.scalaVersionSpecific.*
 
 @suppressUnusedImportWarningForScalaVersionSpecific
 trait ListInstances extends ListInstances1 {

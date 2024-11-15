@@ -23,7 +23,7 @@ package cats.bench
 
 import cats.Eval
 import cats.data.StateT
-import org.openjdk.jmh.annotations._
+import org.openjdk.jmh.annotations.*
 
 /**
  * To run:

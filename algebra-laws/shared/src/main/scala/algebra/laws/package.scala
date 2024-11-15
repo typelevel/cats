@@ -21,7 +21,7 @@
 
 package algebra
 
-import org.scalacheck._
+import org.scalacheck.*
 import org.scalacheck.util.Pretty
 import Prop.{False, Proof, Result}
 

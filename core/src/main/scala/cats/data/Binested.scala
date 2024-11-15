@@ -22,7 +22,7 @@
 package cats
 package data
 
-import cats.arrow._
+import cats.arrow.*
 
 /**
  * Compose a two-slot type constructor `F[_, _]` with two single-slot type constructors

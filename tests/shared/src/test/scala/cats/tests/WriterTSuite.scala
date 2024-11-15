@@ -21,16 +21,16 @@
 
 package cats.tests
 
-import cats._
+import cats.*
 import cats.data.{Const, EitherT, Validated, Writer, WriterT}
 import cats.kernel.laws.discipline.{EqTests, MonoidTests, SemigroupTests}
-import cats.laws.discipline._
+import cats.laws.discipline.*
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.eq._
-import cats.syntax.option._
-import cats.syntax.eq._
-import org.scalacheck.Prop._
+import cats.laws.discipline.arbitrary.*
+import cats.laws.discipline.eq.*
+import cats.syntax.option.*
+import cats.syntax.eq.*
+import org.scalacheck.Prop.*
 import org.scalacheck.Test.Parameters
 import cats.kernel.laws.discipline.OrderTests
 

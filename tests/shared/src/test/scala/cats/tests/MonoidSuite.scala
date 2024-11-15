@@ -23,7 +23,7 @@ package cats.tests
 
 import cats.{Invariant, InvariantSemigroupal}
 import cats.kernel.Monoid
-import cats.syntax.eq._
+import cats.syntax.eq.*
 
 class MonoidSuite extends CatsSuite {
   {

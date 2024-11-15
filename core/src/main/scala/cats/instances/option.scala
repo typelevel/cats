@@ -24,7 +24,7 @@ package instances
 
 import scala.annotation.tailrec
 import cats.data.Ior
-import cats.kernel.compat.scalaVersionSpecific._
+import cats.kernel.compat.scalaVersionSpecific.*
 
 trait OptionInstances extends cats.kernel.instances.OptionInstances {
 

@@ -46,7 +46,7 @@ package compat
 private[kernel] class HashCompat {
   // Adapted from scala.util.hashing.MurmurHash#productHash.
   private[kernel] def product1HashWithPrefix(_1Hash: Int, prefix: String): Int = {
-    import scala.util.hashing.MurmurHash3._
+    import scala.util.hashing.MurmurHash3.*
     var h = productSeed
     h = mix(h, prefix.hashCode)
     h = mix(h, _1Hash)
@@ -55,7 +55,7 @@ private[kernel] class HashCompat {
 
   // Adapted from scala.util.hashing.MurmurHash#productHash.
   private[cats] def product2HashWithPrefix(_1Hash: Int, _2Hash: Int, prefix: String): Int = {
-    import scala.util.hashing.MurmurHash3._
+    import scala.util.hashing.MurmurHash3.*
     var h = productSeed
     h = mix(h, prefix.hashCode)
     h = mix(h, _1Hash)

@@ -46,7 +46,7 @@ import org.typelevel.scalaccompat.annotation.unused
 
 import scala.collection.mutable
 
-import compat.scalaVersionSpecific._
+import compat.scalaVersionSpecific.*
 
 @suppressUnusedImportWarningForScalaVersionSpecific
 trait MapInstances extends MapInstances1 {
@@ -67,7 +67,7 @@ private[instances] trait MapInstances1 {
 class MapHash[K, V](implicit V: Hash[V]) extends MapEq[K, V]()(V) with Hash[Map[K, V]] {
   // adapted from [[scala.util.hashing.MurmurHash3]],
   // but modified standard `Any#hashCode` to `ev.hash`.
-  import scala.util.hashing.MurmurHash3._
+  import scala.util.hashing.MurmurHash3.*
   def hash(x: Map[K, V]): Int = {
     var a, b, n = 0
     var c = 1

@@ -22,7 +22,7 @@
 package cats
 package data
 
-import kernel.compat.scalaVersionSpecific._
+import kernel.compat.scalaVersionSpecific.*
 
 class ZipList[A](val value: List[A]) extends AnyVal
 

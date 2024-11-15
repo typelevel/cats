@@ -22,7 +22,7 @@
 package cats
 package data
 
-import cats.arrow._
+import cats.arrow.*
 
 /**
  * The dual category of some other category, `Arr`.

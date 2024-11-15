@@ -22,7 +22,7 @@
 package cats.bench
 
 import cats.data.Chain
-import cats.syntax.all._
+import cats.syntax.all.*
 import org.openjdk.jmh.annotations.{Benchmark, Scope, State}
 
 @State(Scope.Thread)

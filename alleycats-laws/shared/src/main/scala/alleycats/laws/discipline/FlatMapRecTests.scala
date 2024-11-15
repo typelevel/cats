@@ -21,11 +21,11 @@
 
 package alleycats.laws.discipline
 
-import cats._
+import cats.*
 import cats.laws.FlatMapLaws
-import cats.laws.discipline._
+import cats.laws.discipline.*
 import org.scalacheck.Arbitrary
-import org.scalacheck.Prop._
+import org.scalacheck.Prop.*
 import org.typelevel.discipline.Laws
 
 trait FlatMapRecTests[F[_]] extends Laws {

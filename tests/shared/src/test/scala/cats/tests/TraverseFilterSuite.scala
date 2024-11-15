@@ -25,7 +25,7 @@ import cats.Traverse
 import cats.TraverseFilter
 import cats.data.Chain
 import cats.laws.discipline.arbitrary.catsLawsArbitraryForChain
-import cats.syntax.all._
+import cats.syntax.all.*
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop.forAll
 

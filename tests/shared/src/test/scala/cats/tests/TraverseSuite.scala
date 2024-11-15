@@ -21,11 +21,11 @@
 
 package cats.tests
 
-import cats._
-import cats.kernel.compat.scalaVersionSpecific._
-import cats.syntax.all._
+import cats.*
+import cats.kernel.compat.scalaVersionSpecific.*
+import cats.syntax.all.*
 import org.scalacheck.Arbitrary
-import org.scalacheck.Prop._
+import org.scalacheck.Prop.*
 
 @suppressUnusedImportWarningForScalaVersionSpecific
 abstract class TraverseSuite[F[_]: Traverse](name: String)(implicit ArbFInt: Arbitrary[F[Int]]) extends CatsSuite {

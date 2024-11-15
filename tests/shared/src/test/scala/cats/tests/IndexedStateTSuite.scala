@@ -21,7 +21,7 @@
 
 package cats.tests
 
-import cats._
+import cats.*
 import cats.arrow.Profunctor
 import cats.arrow.Strong
 import cats.data.EitherT
@@ -29,12 +29,12 @@ import cats.data.IndexedStateT
 import cats.data.State
 import cats.data.StateT
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import cats.laws.discipline._
-import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.eq._
+import cats.laws.discipline.*
+import cats.laws.discipline.arbitrary.*
+import cats.laws.discipline.eq.*
 import cats.platform.Platform
-import cats.syntax.all._
-import org.scalacheck.Prop._
+import cats.syntax.all.*
+import org.scalacheck.Prop.*
 import org.scalacheck.Test.Parameters
 
 class IndexedStateTSuite extends CatsSuite {
@@ -42,7 +42,7 @@ class IndexedStateTSuite extends CatsSuite {
   implicit override val scalaCheckTestParameters: Parameters =
     checkConfiguration.withMaxSize(checkConfiguration.minSize + 5)
 
-  import IndexedStateTSuite._
+  import IndexedStateTSuite.*
 
   test("basic state usage") {
     assert(add1.run(1).value === (2 -> 1))

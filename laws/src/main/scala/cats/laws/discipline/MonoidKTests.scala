@@ -23,7 +23,7 @@ package cats
 package laws
 package discipline
 
-import org.scalacheck.Prop._
+import org.scalacheck.Prop.*
 import org.scalacheck.Arbitrary
 
 trait MonoidKTests[F[_]] extends SemigroupKTests[F] {

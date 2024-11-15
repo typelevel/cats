@@ -24,10 +24,10 @@ package cats.tests
 import cats.ApplicativeError
 import cats.data.EitherT
 import cats.kernel.Eq
-import cats.syntax.applicativeError._
-import cats.syntax.either._
-import cats.syntax.option._
-import cats.syntax.eq._
+import cats.syntax.applicativeError.*
+import cats.syntax.either.*
+import cats.syntax.option.*
+import cats.syntax.eq.*
 
 class ApplicativeErrorSuite extends CatsSuite {
   val failed: Option[Int] =

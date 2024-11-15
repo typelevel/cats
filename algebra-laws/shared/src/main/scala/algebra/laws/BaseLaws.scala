@@ -21,7 +21,7 @@
 
 package algebra.laws
 
-import cats.kernel._
+import cats.kernel.*
 
 import org.typelevel.discipline.Laws
 

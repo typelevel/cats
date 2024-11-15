@@ -25,7 +25,7 @@ import scala.annotation.tailrec
 import scala.collection.immutable.{Seq, SortedMap, SortedSet}
 
 import cats.data.Ior
-import cats.kernel.compat.scalaVersionSpecific._
+import cats.kernel.compat.scalaVersionSpecific.*
 
 /**
  * SemigroupK is a universal semigroup which operates on kinds.

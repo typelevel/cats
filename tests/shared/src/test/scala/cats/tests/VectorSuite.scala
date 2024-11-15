@@ -35,11 +35,11 @@ import cats.laws.discipline.{
   TraverseFilterTests,
   TraverseTests
 }
-import cats.laws.discipline.arbitrary._
-import cats.syntax.show._
-import cats.syntax.vector._
-import cats.syntax.eq._
-import org.scalacheck.Prop._
+import cats.laws.discipline.arbitrary.*
+import cats.syntax.show.*
+import cats.syntax.vector.*
+import cats.syntax.eq.*
+import org.scalacheck.Prop.*
 
 class VectorSuite extends CatsSuite {
   checkAll("Vector[Int]", SemigroupalTests[Vector].semigroupal[Int, Int, Int])
@@ -128,8 +128,8 @@ class VectorSuite extends CatsSuite {
 final class VectorInstancesSuite extends munit.FunSuite {
 
   test("NonEmptyParallel instance in cats.instances.vector") {
-    import cats.instances.vector._
-    import cats.syntax.parallel._
+    import cats.instances.vector.*
+    import cats.syntax.parallel.*
 
     (Vector(1, 2, 3), Vector("A", "B", "C")).parTupled
   }

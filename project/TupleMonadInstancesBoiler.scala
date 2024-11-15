@@ -1,6 +1,6 @@
-import sbt._
+import sbt.*
 
-import Boilerplate._
+import Boilerplate.*
 import Boilerplate.{Template, TemplateVals}
 import sbt.File
 
@@ -10,7 +10,7 @@ object GenTupleMonadInstances extends Template {
     root / "cats" / "instances" / "NTupleMonadInstances.scala"
 
   override def content(tv: TemplateVals): String = {
-    import tv._
+    import tv.*
 
     val `b..(n - 1)` = for (n <- 0 until arity - 1) yield s"b$n"
     val `b:A..(n - 1):(N - 1)` = (for ((v, t) <- `b..(n - 1)`.zip(`A..(N - 1)`)) yield s"$v: $t").mkString(", ")

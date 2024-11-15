@@ -48,7 +48,7 @@ import scala.annotation.nowarn
 private[kernel] class HashCompat {
   // Adapted from scala.util.hashing.MurmurHash#productHash.
   private[kernel] def product1HashWithPrefix(_1Hash: Int, @nowarn("cat=unused") prefix: String): Int = {
-    import scala.util.hashing.MurmurHash3._
+    import scala.util.hashing.MurmurHash3.*
     var h = productSeed
     h = mix(h, _1Hash)
     finalizeHash(h, 1)
@@ -56,7 +56,7 @@ private[kernel] class HashCompat {
 
   // Adapted from scala.util.hashing.MurmurHash#productHash.
   private[cats] def product2HashWithPrefix(_1Hash: Int, _2Hash: Int, @nowarn("cat=unused") prefix: String): Int = {
-    import scala.util.hashing.MurmurHash3._
+    import scala.util.hashing.MurmurHash3.*
     var h = productSeed
     h = mix(h, _1Hash)
     h = mix(h, _2Hash)
@@ -68,7 +68,7 @@ private[kernel] class HashCompat {
   // adapted from [[scala.util.hashing.MurmurHash3]],
   // but modified standard `Any#hashCode` to `ev.hash`.
   def listHash[A](x: List[A])(implicit A: Hash[A]): Int = {
-    import scala.util.hashing.MurmurHash3._
+    import scala.util.hashing.MurmurHash3.*
     var n = 0
     var h = seqSeed
     var elems = x
@@ -84,7 +84,7 @@ private[kernel] class HashCompat {
 
   // adapted from scala.util.hashing.MurmurHash3
   def orderedHash[A](xs: TraversableOnce[A])(implicit A: Hash[A]): Int = {
-    import scala.util.hashing.MurmurHash3._
+    import scala.util.hashing.MurmurHash3.*
     var n = 0
     var h = seqSeed
     xs.foreach { x =>

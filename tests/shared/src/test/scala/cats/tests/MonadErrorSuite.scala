@@ -22,10 +22,10 @@
 package cats.tests
 
 import cats.kernel.Eq
-import cats.syntax.applicativeError._
-import cats.syntax.monadError._
+import cats.syntax.applicativeError.*
+import cats.syntax.monadError.*
 import scala.util.{Failure, Success, Try}
-import cats.syntax.eq._
+import cats.syntax.eq.*
 
 class MonadErrorSuite extends CatsSuite {
 

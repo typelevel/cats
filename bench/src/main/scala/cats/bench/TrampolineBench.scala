@@ -23,8 +23,8 @@ package cats.bench
 
 import org.openjdk.jmh.annotations.{Benchmark, Scope, State}
 
-import cats._
-import cats.syntax.all._
+import cats.*
+import cats.syntax.all.*
 import cats.free.Trampoline
 import scala.util.control.TailCalls
 

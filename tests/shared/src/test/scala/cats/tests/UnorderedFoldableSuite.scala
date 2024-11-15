@@ -24,10 +24,10 @@ package cats.tests
 import cats.UnorderedFoldable
 import cats.kernel.CommutativeMonoid
 import cats.laws.discipline.UnorderedFoldableTests
-import cats.syntax.unorderedFoldable._
+import cats.syntax.unorderedFoldable.*
 import org.scalacheck.Arbitrary
-import cats.syntax.eq._
-import org.scalacheck.Prop._
+import cats.syntax.eq.*
+import org.scalacheck.Prop.*
 
 sealed abstract class UnorderedFoldableSuite[F[_]](name: String)(implicit
   ArbFString: Arbitrary[F[String]],

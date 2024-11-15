@@ -32,7 +32,7 @@ import cats.arrow.FunctionK
  */
 final case class EitherK[F[_], G[_], A](run: Either[F[A], G[A]]) {
 
-  import EitherK._
+  import EitherK.*
 
   def map[B](f: A => B)(implicit F: Functor[F], G: Functor[G]): EitherK[F, G, B] =
     EitherK(

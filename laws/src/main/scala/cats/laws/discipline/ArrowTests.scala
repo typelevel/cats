@@ -25,7 +25,7 @@ package discipline
 
 import cats.arrow.Arrow
 import org.scalacheck.{Arbitrary, Cogen, Prop}
-import Prop._
+import Prop.*
 
 trait ArrowTests[F[_, _]] extends CategoryTests[F] with StrongTests[F] {
   def laws: ArrowLaws[F]

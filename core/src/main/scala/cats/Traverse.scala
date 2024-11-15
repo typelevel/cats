@@ -24,7 +24,7 @@ package cats
 import cats.data.Chain
 import cats.data.State
 import cats.data.StateT
-import cats.kernel.compat.scalaVersionSpecific._
+import cats.kernel.compat.scalaVersionSpecific.*
 
 /**
  * Traverse, also known as Traversable.

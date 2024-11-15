@@ -1,4 +1,4 @@
-import sbt._
+import sbt.*
 
 /**
  * Generate a range of boilerplate classes that would be tedious to write and maintain by hand.
@@ -10,7 +10,7 @@ import sbt._
  * @author Kevin Wright
  */
 object KernelBoiler {
-  import scala.StringContext._
+  import scala.StringContext.*
 
   implicit final class BlockHelper(private val sc: StringContext) extends AnyVal {
     def block(args: Any*): String = {
@@ -79,7 +79,7 @@ object KernelBoiler {
   }
 
   abstract class TemplatedBlock(tv: TemplateVals) {
-    import tv._
+    import tv.*
 
     def constraints(constraint: String): String =
       synTypes.map(tpe => s"$tpe: $constraint[$tpe]").mkString(", ")
@@ -138,7 +138,7 @@ object KernelBoiler {
           trait TupleInstances extends TupleInstances1 {""",
           tv =>
             new TemplatedBlock(tv) {
-              import tv._
+              import tv.*
               def content =
                 block"""
                 |  implicit def catsKernelStdCommutativeGroupForTuple$arity[${`A..N`}](
@@ -161,7 +161,7 @@ object KernelBoiler {
           private[instances] trait TupleInstances1 extends TupleInstances2 {""",
           tv =>
             new TemplatedBlock(tv) {
-              import tv._
+              import tv.*
               def content =
                 block"""
                 |  implicit def catsKernelStdSemilatticeForTuple$arity[${`A..N`}](
@@ -192,7 +192,7 @@ object KernelBoiler {
           private[instances] trait TupleInstances2 extends TupleInstances3 {""",
           tv =>
             new TemplatedBlock(tv) {
-              import tv._
+              import tv.*
               def content =
                 block"""
                 |  implicit def catsKernelStdBandForTuple$arity[${`A..N`}](
@@ -215,7 +215,7 @@ object KernelBoiler {
           private[instances] trait TupleInstances3 {""",
           tv =>
             new TemplatedBlock(tv) {
-              import tv._
+              import tv.*
               def content =
                 block"""
                 |  implicit def catsKernelStdSemigroupForTuple$arity[${`A..N`}](
@@ -233,7 +233,7 @@ object KernelBoiler {
           "private[kernel] trait TupleBandInstances extends TupleSemigroupInstances {",
           tv =>
             new TemplatedBlock(tv) {
-              import tv._
+              import tv.*
               def content =
                 block"""
                 |  implicit def catsKernelBandForTuple$arity[${`A..N`}](
@@ -247,7 +247,7 @@ object KernelBoiler {
           "private[kernel] trait TupleBoundedSemilatticeInstances extends TupleGroupInstances {",
           tv =>
             new TemplatedBlock(tv) {
-              import tv._
+              import tv.*
               def content =
                 block"""
                 |  implicit def catsKernelBoundedSemilatticeForTuple$arity[${`A..N`}](
@@ -262,7 +262,7 @@ object KernelBoiler {
           "private[kernel] trait TupleCommutativeGroupInstances extends TupleBoundedSemilatticeInstances {",
           tv =>
             new TemplatedBlock(tv) {
-              import tv._
+              import tv.*
               def content =
                 block"""
                 |  implicit def catsKernelCommutativeGroupForTuple$arity[${`A..N`}](
@@ -278,7 +278,7 @@ object KernelBoiler {
           "private[kernel] trait TupleCommutativeMonoidInstances extends TupleSemilatticeInstances {",
           tv =>
             new TemplatedBlock(tv) {
-              import tv._
+              import tv.*
               def content =
                 block"""
                 |  implicit def catsKernelCommutativeMonoidForTuple$arity[${`A..N`}](
@@ -293,7 +293,7 @@ object KernelBoiler {
           "private[kernel] trait TupleCommutativeSemigroupInstances extends TupleBandInstances {",
           tv =>
             new TemplatedBlock(tv) {
-              import tv._
+              import tv.*
               def content =
                 block"""
                 |  implicit def catsKernelCommutativeSemigroupForTuple$arity[${`A..N`}](
@@ -307,7 +307,7 @@ object KernelBoiler {
           "private[kernel] trait TupleEqInstances {",
           tv =>
             new TemplatedBlock(tv) {
-              import tv._
+              import tv.*
               def content =
                 block"""
                 |  implicit def catsKernelEqForTuple$arity[${`A..N`}](
@@ -321,7 +321,7 @@ object KernelBoiler {
           "private[kernel] trait TupleGroupInstances extends TupleCommutativeMonoidInstances {",
           tv =>
             new TemplatedBlock(tv) {
-              import tv._
+              import tv.*
               def content =
                 block"""
                 |  implicit def catsKernelGroupForTuple$arity[${`A..N`}](
@@ -337,7 +337,7 @@ object KernelBoiler {
           "private[kernel] trait TupleHashInstances extends TupleEqInstances {",
           tv =>
             new TemplatedBlock(tv) {
-              import tv._
+              import tv.*
               def content =
                 block"""
                 |  implicit def catsKernelHashForTuple$arity[${`A..N`}](
@@ -354,7 +354,7 @@ object KernelBoiler {
           "private[kernel] trait TupleMonoidInstances extends TupleCommutativeSemigroupInstances {",
           tv =>
             new TemplatedBlock(tv) {
-              import tv._
+              import tv.*
               def content =
                 block"""
                 |  implicit def catsKernelMonoidForTuple$arity[${`A..N`}](
@@ -369,7 +369,7 @@ object KernelBoiler {
           "private[kernel] trait TupleOrderInstances extends TuplePartialOrderInstances {",
           tv =>
             new TemplatedBlock(tv) {
-              import tv._
+              import tv.*
               def content =
                 block"""
                 |  implicit def catsKernelOrderForTuple$arity[${`A..N`}](
@@ -383,7 +383,7 @@ object KernelBoiler {
           "private[kernel] trait TuplePartialOrderInstances extends TupleHashInstances {",
           tv =>
             new TemplatedBlock(tv) {
-              import tv._
+              import tv.*
               def content =
                 block"""
                 |  implicit def catsKernelPartialOrderForTuple$arity[${`A..N`}](
@@ -397,7 +397,7 @@ object KernelBoiler {
           "private[kernel] trait TupleSemigroupInstances {",
           tv =>
             new TemplatedBlock(tv) {
-              import tv._
+              import tv.*
               def content =
                 block"""
                 |  implicit def catsKernelSemigroupForTuple$arity[${`A..N`}](
@@ -411,7 +411,7 @@ object KernelBoiler {
           "private[kernel] trait TupleSemilatticeInstances extends TupleMonoidInstances {",
           tv =>
             new TemplatedBlock(tv) {
-              import tv._
+              import tv.*
               def content =
                 block"""
                 |  implicit def catsKernelSemilatticeForTuple$arity[${`A..N`}](

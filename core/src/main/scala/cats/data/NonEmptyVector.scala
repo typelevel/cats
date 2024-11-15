@@ -24,7 +24,7 @@ package data
 
 import cats.data.NonEmptyVector.ZipNonEmptyVector
 import cats.instances.StaticMethods
-import cats.kernel.compat.scalaVersionSpecific._
+import cats.kernel.compat.scalaVersionSpecific.*
 
 import scala.annotation.tailrec
 import scala.collection.mutable

@@ -25,13 +25,13 @@ import cats.{Bifoldable, Bifunctor, Bitraverse, Foldable, Functor, Traverse}
 import cats.arrow.Profunctor
 import cats.data.Binested
 import cats.kernel.Eq
-import cats.laws.discipline._
-import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.eq._
-import cats.syntax.bifunctor._
-import cats.syntax.binested._
-import cats.syntax.eq._
-import org.scalacheck.Prop._
+import cats.laws.discipline.*
+import cats.laws.discipline.arbitrary.*
+import cats.laws.discipline.eq.*
+import cats.syntax.bifunctor.*
+import cats.syntax.binested.*
+import cats.syntax.eq.*
+import org.scalacheck.Prop.*
 import org.scalacheck.Test.Parameters
 
 class BinestedSuite extends CatsSuite {

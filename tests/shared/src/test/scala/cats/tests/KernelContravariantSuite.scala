@@ -23,9 +23,9 @@ package cats.tests
 
 import cats.{Contravariant, ContravariantSemigroupal, Invariant, Semigroupal}
 import cats.kernel.{Eq, Hash, Order, PartialOrder}
-import cats.laws.discipline.arbitrary._
-import cats.laws.discipline._
-import cats.laws.discipline.eq._
+import cats.laws.discipline.arbitrary.*
+import cats.laws.discipline.*
+import cats.laws.discipline.eq.*
 
 class KernelContravariantSuite extends CatsSuite {
   Invariant[Eq]

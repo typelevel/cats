@@ -21,7 +21,7 @@
 
 package cats.tests
 
-import cats.kernel._
+import cats.kernel.*
 import org.scalacheck.{Arbitrary, Cogen}
 import org.scalacheck.Arbitrary.arbitrary
 

@@ -37,7 +37,7 @@ import cats.arrow.FunctionK
  * originally written by Brian McKenna.
  */
 sealed abstract class FreeT[S[_], M[_], A] extends Product with Serializable {
-  import FreeT._
+  import FreeT.*
 
   final def map[B](f: A => B)(implicit M: Applicative[M]): FreeT[S, M, B] =
     flatMap(a => pure(f(a)))

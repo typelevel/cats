@@ -28,7 +28,7 @@ import scala.concurrent.{ExecutionContext => E}
 import scala.concurrent.duration.FiniteDuration
 
 import cats.instances.FutureCoflatMap
-import cats.syntax.all._
+import cats.syntax.all.*
 
 object future extends FutureInstances0
 

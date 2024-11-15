@@ -22,9 +22,9 @@
 package cats.bench
 
 import cats.{Bitraverse, Parallel, Traverse}
-import cats.instances.int._
-import cats.instances.either._
-import cats.instances.vector._
+import cats.instances.int.*
+import cats.instances.either.*
+import cats.instances.vector.*
 import org.openjdk.jmh.annotations.{Benchmark, Scope, State}
 
 /**

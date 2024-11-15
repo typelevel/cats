@@ -22,11 +22,11 @@
 package cats.tests
 
 import cats.data.{IndexedStateT, StateT}
-import cats.syntax.apply._
-import cats.syntax.eq._
-import cats.syntax.monad._
+import cats.syntax.apply.*
+import cats.syntax.eq.*
+import cats.syntax.monad.*
 import cats.{Eval, Id, Monad}
-import org.scalacheck.Prop._
+import org.scalacheck.Prop.*
 import org.scalacheck.{Arbitrary, Gen}
 
 class MonadSuite extends CatsSuite {
