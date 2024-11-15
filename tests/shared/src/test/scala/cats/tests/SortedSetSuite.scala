@@ -25,13 +25,13 @@ import cats.{SemigroupK, Semigroupal, Show}
 import cats.kernel.{Order, PartialOrder}
 import cats.kernel.laws.discipline.{BoundedSemilatticeTests, HashTests, OrderTests, PartialOrderTests}
 import cats.kernel.{BoundedSemilattice, Semilattice}
-import cats.laws._
+import cats.laws.*
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.arbitrary.*
 import cats.laws.discipline.{FoldableTests, SemigroupKTests, SemigroupalTests, SerializableTests, ShortCircuitingTests}
-import cats.syntax.show._
+import cats.syntax.show.*
 import scala.collection.immutable.SortedSet
-import cats.syntax.eq._
+import cats.syntax.eq.*
 
 class SortedSetSuite extends CatsSuite {
   implicit val iso: Isomorphisms[SortedSet] = SortedSetIsomorphism

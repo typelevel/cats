@@ -22,10 +22,10 @@
 package cats.tests
 
 import cats.data.Writer
-import cats.syntax.applicative._
-import cats.syntax.writer._
-import cats.syntax.eq._
-import org.scalacheck.Prop._
+import cats.syntax.applicative.*
+import cats.syntax.writer.*
+import cats.syntax.eq.*
+import org.scalacheck.Prop.*
 
 class WriterSuite extends CatsSuite {
   test("pure syntax creates a writer with an empty log") {

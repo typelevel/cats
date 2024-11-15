@@ -21,7 +21,7 @@
 
 package cats.tests
 
-import cats.syntax.arrow._
+import cats.syntax.arrow.*
 
 class SplitSuite extends CatsSuite {
   test("syntax") {

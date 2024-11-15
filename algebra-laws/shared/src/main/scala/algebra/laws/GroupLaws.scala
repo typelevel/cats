@@ -21,13 +21,13 @@
 
 package algebra.laws
 
-import cats.kernel._
-import cats.kernel.instances.option._
+import cats.kernel.*
+import cats.kernel.instances.option.*
 
 import org.typelevel.discipline.Laws
 
 import org.scalacheck.{Arbitrary, Prop}
-import org.scalacheck.Prop._
+import org.scalacheck.Prop.*
 
 @deprecated("Provided by cats.kernel.laws", since = "2.7.0")
 object GroupLaws {

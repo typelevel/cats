@@ -25,7 +25,7 @@ package instances
 import scala.annotation.nowarn
 import scala.collection.immutable.Seq
 
-import compat.scalaVersionSpecific._
+import compat.scalaVersionSpecific.*
 
 @suppressUnusedImportWarningForScalaVersionSpecific
 trait SeqInstances extends SeqInstances1 {

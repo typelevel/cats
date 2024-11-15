@@ -23,7 +23,7 @@ package alleycats.laws.discipline
 
 import cats.kernel.{Eq, Hash}
 import cats.kernel.laws.HashLaws
-import cats.kernel.laws.discipline._
+import cats.kernel.laws.discipline.*
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop.forAll
 

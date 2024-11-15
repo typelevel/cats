@@ -23,7 +23,7 @@ package alleycats
 package syntax
 
 import cats.Foldable
-import cats.syntax.foldable._
+import cats.syntax.foldable.*
 
 object foldable extends FoldableSyntax
 

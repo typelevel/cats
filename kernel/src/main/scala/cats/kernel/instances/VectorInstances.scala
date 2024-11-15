@@ -21,7 +21,7 @@
 
 package cats.kernel
 package instances
-import compat.scalaVersionSpecific._
+import compat.scalaVersionSpecific.*
 
 import scala.annotation.nowarn
 

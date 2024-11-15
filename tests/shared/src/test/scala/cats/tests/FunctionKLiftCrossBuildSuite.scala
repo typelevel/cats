@@ -22,8 +22,8 @@
 package cats.tests
 
 import cats.arrow.FunctionK
-import cats.syntax.all._
-import org.scalacheck.Prop._
+import cats.syntax.all.*
+import org.scalacheck.Prop.*
 
 class FunctionKLiftCrossBuildSuite extends CatsSuite {
   test("lift a function directly") {

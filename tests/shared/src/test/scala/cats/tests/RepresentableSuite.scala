@@ -21,12 +21,12 @@
 
 package cats.tests
 
-import cats._
+import cats.*
 import cats.data.Kleisli
 import cats.kernel.Monoid
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.eq._
+import cats.laws.discipline.arbitrary.*
+import cats.laws.discipline.eq.*
 import cats.laws.discipline.{
   BimonadTests,
   DistributiveTests,
@@ -35,7 +35,7 @@ import cats.laws.discipline.{
   RepresentableTests,
   SerializableTests
 }
-import cats.syntax.representable._
+import cats.syntax.representable.*
 import org.scalacheck.Arbitrary
 
 class RepresentableSuite extends CatsSuite {

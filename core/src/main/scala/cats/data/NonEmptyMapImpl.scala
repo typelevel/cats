@@ -22,9 +22,9 @@
 package cats
 package data
 
-import cats.kernel._
+import cats.kernel.*
 
-import scala.collection.immutable._
+import scala.collection.immutable.*
 
 /**
  * Actual implementation for [[cats.data.NonEmptyMap]]

@@ -34,10 +34,10 @@ import cats.laws.discipline.{
   TraverseTests
 }
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import cats.laws.discipline.arbitrary._
-import org.scalacheck.Arbitrary._
-import cats.syntax.eq._
-import org.scalacheck.Prop._
+import cats.laws.discipline.arbitrary.*
+import org.scalacheck.Arbitrary.*
+import cats.syntax.eq.*
+import org.scalacheck.Prop.*
 
 class IorSuite extends CatsSuite {
 

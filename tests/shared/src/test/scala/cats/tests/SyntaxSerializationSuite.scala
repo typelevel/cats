@@ -22,7 +22,7 @@
 package cats.tests
 
 import cats.laws.discipline.SerializableTests
-import cats.syntax.either._
+import cats.syntax.either.*
 import cats.Semigroupal
 
 /**

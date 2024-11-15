@@ -22,7 +22,7 @@
 package cats.kernel
 package instances
 
-import cats.kernel.compat.scalaVersionSpecific._
+import cats.kernel.compat.scalaVersionSpecific.*
 import scala.util.control.TailCalls.{done, tailcall, TailRec}
 
 @suppressUnusedImportWarningForScalaVersionSpecific

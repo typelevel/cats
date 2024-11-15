@@ -24,7 +24,7 @@ package laws
 package discipline
 
 import org.scalacheck.{Arbitrary, Cogen, Prop}
-import Prop._
+import Prop.*
 import org.typelevel.discipline.Laws
 
 trait CoflatMapTests[F[_]] extends Laws with FunctorTests[F] {

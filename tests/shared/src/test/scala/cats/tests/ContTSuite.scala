@@ -26,11 +26,11 @@ import java.util.concurrent.atomic.AtomicInteger
 import cats.Eval
 import cats.data.ContT
 import cats.kernel.Eq
-import cats.laws.discipline._
-import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.*
+import cats.laws.discipline.arbitrary.*
 import org.scalacheck.{Arbitrary, Gen}
-import cats.syntax.all._
-import org.scalacheck.Prop._
+import cats.syntax.all.*
+import org.scalacheck.Prop.*
 
 class ContTSuite extends CatsSuite {
 

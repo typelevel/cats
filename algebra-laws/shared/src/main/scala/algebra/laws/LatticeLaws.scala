@@ -21,11 +21,11 @@
 
 package algebra.laws
 
-import algebra._
-import algebra.lattice._
+import algebra.*
+import algebra.lattice.*
 
 import org.scalacheck.{Arbitrary, Prop}
-import org.scalacheck.Prop._
+import org.scalacheck.Prop.*
 import scala.annotation.nowarn
 
 object LatticeLaws {

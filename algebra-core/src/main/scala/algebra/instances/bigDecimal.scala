@@ -24,7 +24,7 @@ package instances
 
 import java.math.MathContext
 
-import algebra.ring._
+import algebra.ring.*
 
 package object bigDecimal extends BigDecimalInstances
 

@@ -22,7 +22,7 @@
 package alleycats
 
 import cats.{Eq, Monoid}
-import cats.syntax.eq._
+import cats.syntax.eq.*
 
 trait Empty[A] extends Serializable {
   def empty: A

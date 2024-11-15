@@ -21,7 +21,7 @@
 
 package cats.tests
 
-import cats._
+import cats.*
 import cats.data.NonEmptyVector
 import cats.data.NonEmptyVector.ZipNonEmptyVector
 import cats.kernel.instances.order.catsKernelOrderingForOrder
@@ -30,14 +30,14 @@ import cats.kernel.laws.discipline.HashTests
 import cats.kernel.laws.discipline.OrderTests
 import cats.kernel.laws.discipline.SemigroupTests
 import cats.kernel.laws.discipline.PartialOrderTests
-import cats.laws.discipline._
-import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.*
+import cats.laws.discipline.arbitrary.*
 import cats.platform.Platform
-import cats.syntax.eq._
-import cats.syntax.foldable._
-import cats.syntax.reducible._
-import cats.syntax.show._
-import org.scalacheck.Prop._
+import cats.syntax.eq.*
+import cats.syntax.foldable.*
+import cats.syntax.reducible.*
+import cats.syntax.show.*
+import org.scalacheck.Prop.*
 import org.scalacheck.Test.Parameters
 
 import scala.util.Properties

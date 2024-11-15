@@ -23,8 +23,8 @@ package cats
 package laws
 package discipline
 
-import cats.instances.all._
-import cats.laws.discipline.arbitrary._
+import cats.instances.all.*
+import cats.laws.discipline.arbitrary.*
 import munit.DisciplineSuite
 
 class MonadTestsTests extends DisciplineSuite {

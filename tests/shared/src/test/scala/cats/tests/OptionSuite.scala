@@ -21,12 +21,12 @@
 
 package cats.tests
 
-import cats.laws.discipline._
-import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.*
+import cats.laws.discipline.arbitrary.*
 import cats.laws.{ApplicativeLaws, CoflatMapLaws, FlatMapLaws, MonadLaws}
-import cats.syntax.apply._
-import cats.syntax.option._
-import cats.syntax.show._
+import cats.syntax.apply.*
+import cats.syntax.option.*
+import cats.syntax.show.*
 import cats.{
   Align,
   Alternative,
@@ -39,8 +39,8 @@ import cats.{
   Traverse,
   TraverseFilter
 }
-import cats.syntax.eq._
-import org.scalacheck.Prop._
+import cats.syntax.eq.*
+import org.scalacheck.Prop.*
 
 class OptionSuite extends CatsSuite {
   checkAll("Option[Int]", SemigroupalTests[Option].semigroupal[Int, Int, Int])

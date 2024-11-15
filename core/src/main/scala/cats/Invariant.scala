@@ -22,9 +22,9 @@
 package cats
 
 import cats.arrow.Arrow
-import cats.kernel._
+import cats.kernel.*
 
-import cats.kernel.compat.scalaVersionSpecific._
+import cats.kernel.compat.scalaVersionSpecific.*
 import org.typelevel.scalaccompat.annotation.targetName3
 import scala.collection.immutable.{Queue, Seq, SortedMap}
 import scala.concurrent.{ExecutionContext, Future}

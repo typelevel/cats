@@ -45,7 +45,7 @@ package instances
 
 import scala.collection.immutable.{IndexedSeq => ImIndexedSeq}
 import scala.collection.mutable
-import compat.scalaVersionSpecific._
+import compat.scalaVersionSpecific.*
 
 @suppressUnusedImportWarningForScalaVersionSpecific
 object StaticMethods extends cats.kernel.compat.HashCompat {
@@ -140,7 +140,7 @@ object StaticMethods extends cats.kernel.compat.HashCompat {
 
   // Adapted from scala.util.hashing.MurmurHash#productHash.
   def product1Hash(_1Hash: Int): Int = {
-    import scala.util.hashing.MurmurHash3._
+    import scala.util.hashing.MurmurHash3.*
     var h = productSeed
     h = mix(h, _1Hash)
     finalizeHash(h, 1)
@@ -148,7 +148,7 @@ object StaticMethods extends cats.kernel.compat.HashCompat {
 
   // Adapted from scala.util.hashing.MurmurHash#productHash.
   def product2Hash(_1Hash: Int, _2Hash: Int): Int = {
-    import scala.util.hashing.MurmurHash3._
+    import scala.util.hashing.MurmurHash3.*
     var h = productSeed
     h = mix(h, _1Hash)
     h = mix(h, _2Hash)

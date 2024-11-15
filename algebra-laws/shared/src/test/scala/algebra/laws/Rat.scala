@@ -23,7 +23,7 @@ package algebra
 package laws
 
 import algebra.lattice.DistributiveLattice
-import algebra.ring._
+import algebra.ring.*
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalacheck.Arbitrary.arbitrary
 

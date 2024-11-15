@@ -24,7 +24,7 @@ package instances
 
 import scala.collection.immutable.BitSet
 
-import algebra.lattice._
+import algebra.lattice.*
 
 package object bitSet extends BitSetInstances
 
