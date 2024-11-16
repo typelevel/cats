@@ -54,12 +54,9 @@ trait AlignTests[F[_]] extends Laws {
       name = "align",
       parent = None,
       "align associativity" -> forAll(laws.alignAssociativity[A, B, C] _),
-      "align homomorphism" -> forAll { (fa: F[A], fb: F[B], f: A => C, g: B => D) =>
-        laws.alignHomomorphism[A, B, C, D](fa, fb, f, g)
-      },
-      "alignWith consistent" -> forAll { (fa: F[A], fb: F[B], f: A Ior B => C) =>
-        laws.alignWithConsistent[A, B, C](fa, fb, f)
-      }
+      "align homomorphism" -> forAll(laws.alignHomomorphism[A, B, C, D] _),
+      "alignWith consistent" -> forAll(laws.alignWithConsistent[A, B, C] _),
+      "alignMergeWith consistent" -> forAll(laws.alignMergeWithConsistent[A] _)
     )
 }
 
