@@ -30,7 +30,20 @@ import scala.annotation.tailrec
 object set extends SetInstances
 
 @suppressUnusedImportWarningForScalaVersionSpecific
-trait SetInstances {
+trait SetInstances extends SetInstances0 {
+
+  implicit val alleyCatsSetTraverseFilter: TraverseFilter[Set] =
+    new TraverseFilter[Set] {
+      val traverse: Traverse[Set] = alleyCatsSetTraverse
+
+      def traverseFilter[G[_], A, B](fa: Set[A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Set[B]] =
+        traverse
+          .foldRight(fa, Eval.now(G.pure(Set.empty[B])))((x, xse) => G.map2Eval(f(x), xse)((i, o) => i.fold(o)(o + _)))
+          .value
+    }
+}
+
+private[std] trait SetInstances0 extends SetInstances1 {
   // Monad advertises parametricity, but Set relies on using
   // universal hash codes and equality, which hurts our ability to
   // rely on free theorems.
@@ -99,6 +112,9 @@ trait SetInstances {
 
       override def appendK[A](fa: Set[A], a: A): Set[A] = fa + a
     }
+}
+
+private[std] trait SetInstances1 {
 
   // Since iteration order is not guaranteed for sets, folds and other
   // traversals may produce different results for input sets which
@@ -171,15 +187,5 @@ trait SetInstances {
 
       override def collectFirstSome[A, B](fa: Set[A])(f: A => Option[B]): Option[B] =
         fa.collectFirst(Function.unlift(f))
-    }
-
-  implicit val alleyCatsSetTraverseFilter: TraverseFilter[Set] =
-    new TraverseFilter[Set] {
-      val traverse: Traverse[Set] = alleyCatsSetTraverse
-
-      def traverseFilter[G[_], A, B](fa: Set[A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Set[B]] =
-        traverse
-          .foldRight(fa, Eval.now(G.pure(Set.empty[B])))((x, xse) => G.map2Eval(f(x), xse)((i, o) => i.fold(o)(o + _)))
-          .value
     }
 }
