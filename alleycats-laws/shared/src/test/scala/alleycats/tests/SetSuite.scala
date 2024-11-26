@@ -31,7 +31,7 @@ import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.{AlternativeTests, FunctorTests, ShortCircuitingTests, TraverseFilterTests}
 
 class SetSuite extends AlleycatsSuite {
-  implicit val iso: Isomorphisms[Set] = Isomorphisms.invariant[Set](alleyCatsStdSetMonad)
+  implicit val iso: Isomorphisms[Set] = Isomorphisms.invariant[Set](alleycatsStdInstancesForSet)
 
   checkAll("FlatMapRec[Set]", FlatMapRecTests[Set].tailRecM[Int])
 
