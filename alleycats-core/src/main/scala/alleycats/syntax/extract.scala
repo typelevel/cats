@@ -27,7 +27,9 @@ import alleycats.Extract
 object extract extends ExtractSyntax
 
 trait ExtractSyntax {
-  implicit final class ExtractOps[F[_], A](private val fa: F[A]) extends AnyVal {
-    def extract(implicit ev: Extract[F]): A = ev.extract(fa)
-  }
+  implicit final def catsSyntaxExtract[F[_], A](fa: F[A]): ExtractOps[F, A] = new ExtractOps[F, A](fa)
+}
+
+final private[alleycats] class ExtractOps[F[_], A](private val fa: F[A]) extends AnyVal {
+  def extract(implicit F: Extract[F]): A = F.extract(fa)
 }
