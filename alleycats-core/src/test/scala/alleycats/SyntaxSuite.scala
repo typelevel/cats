@@ -22,7 +22,7 @@
 package alleycats
 
 import cats.{Eq, Foldable}
-import alleycats.syntax.all.{EmptyOps, ExtraFoldableOps, catsSyntaxExtract}
+import alleycats.syntax.all.{catsSyntaxExtract, EmptyOps, ExtraFoldableOps}
 
 /**
  * Test that our syntax implicits are working.
