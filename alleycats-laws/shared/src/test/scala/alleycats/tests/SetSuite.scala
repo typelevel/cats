@@ -28,10 +28,10 @@ import cats.instances.all._
 import cats.kernel.laws.discipline.SerializableTests
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.{AlternativeTests, ShortCircuitingTests, TraverseFilterTests}
+import cats.laws.discipline.{AlternativeTests, FunctorTests, ShortCircuitingTests, TraverseFilterTests}
 
 class SetSuite extends AlleycatsSuite {
-  implicit val iso: Isomorphisms[Set] = Isomorphisms.invariant[Set](alleyCatsStdSetMonad)
+  implicit val iso: Isomorphisms[Set] = Isomorphisms.invariant[Set](alleycatsStdInstancesForSet)
 
   checkAll("FlatMapRec[Set]", FlatMapRecTests[Set].tailRecM[Int])
 
@@ -40,6 +40,9 @@ class SetSuite extends AlleycatsSuite {
   checkAll("TraverseFilter[Set]", TraverseFilterTests[Set].traverseFilter[Int, Int, Int])
 
   checkAll("Set[Int]", AlternativeTests[Set].alternative[Int, Int, Int])
+
+  checkAll("Functor[Int]", FunctorTests[Set].functor[Int, Int, Int])
+
   checkAll("Alternative[Set]", SerializableTests.serializable(Alternative[Set]))
 
   checkAll("Set[Int]", ShortCircuitingTests[Set].traverseFilter[Int])
