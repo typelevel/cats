@@ -31,6 +31,8 @@ object set extends SetInstances
 
 @suppressUnusedImportWarningForScalaVersionSpecific
 trait SetInstances {
+  import SetInstances._
+
   // Monad advertises parametricity, but Set relies on using
   // universal hash codes and equality, which hurts our ability to
   // rely on free theorems.
@@ -55,7 +57,20 @@ trait SetInstances {
   // If we accept Monad for Set, we can also have Alternative, as
   // Alternative only requires MonoidK (already accepted by cats-core) and
   // the Applicative that comes from Monad.
-  implicit val alleycatsStdInstancesForSet
+  implicit def alleycatsStdInstancesForSet
+    : Monad[Set] with Alternative[Set] with Traverse[Set] with TraverseFilter[Set] =
+    alleycatsStdInstancesForSet_
+
+  @deprecated("Use alleycatsStdInstancesForSet", "2.13.0")
+  val alleyCatsSetTraverse: Traverse[Set] = alleycatsStdInstancesForSet_
+  @deprecated("Use alleycatsStdInstancesForSet", "2.13.0")
+  val alleyCatsStdSetMonad: Monad[Set] with Alternative[Set] = alleycatsStdInstancesForSet_
+  @deprecated("Use alleycatsStdInstancesForSet", "2.13.0")
+  val alleyCatsSetTraverseFilter: TraverseFilter[Set] = alleycatsStdInstancesForSet_
+}
+
+private[alleycats] object SetInstances {
+  private val alleycatsStdInstancesForSet_
     : Monad[Set] with Alternative[Set] with Traverse[Set] with TraverseFilter[Set] =
     new Monad[Set] with Alternative[Set] with Traverse[Set] with TraverseFilter[Set] {
       val traverse: Traverse[Set] = this
@@ -77,7 +92,7 @@ trait SetInstances {
         if (fa.isEmpty) Eval.now(Set.empty[Z]) // no need to evaluate fb
         else fb.map(fb => map2(fa, fb)(f))
 
-      def tailRecM[A, B](a: A)(f: (A) => Set[Either[A, B]]): Set[B] = {
+      def tailRecM[A, B](a: A)(f: A => Set[Either[A, B]]): Set[B] = {
         val bldr = Set.newBuilder[B]
 
         @tailrec def go(set: Set[Either[A, B]]): Unit = {
@@ -174,11 +189,4 @@ trait SetInstances {
       override def collectFirstSome[A, B](fa: Set[A])(f: A => Option[B]): Option[B] =
         fa.collectFirst(Function.unlift(f))
     }
-
-  @deprecated("Use alleycatsStdInstancesForSet", "2.13.0")
-  val alleyCatsSetTraverse: Traverse[Set] = alleycatsStdInstancesForSet
-  @deprecated("Use alleycatsStdInstancesForSet", "2.13.0")
-  val alleyCatsStdSetMonad: Monad[Set] with Alternative[Set] = alleycatsStdInstancesForSet
-  @deprecated("Use alleycatsStdInstancesForSet", "2.13.0")
-  val alleyCatsSetTraverseFilter: TraverseFilter[Set] = alleycatsStdInstancesForSet
 }
