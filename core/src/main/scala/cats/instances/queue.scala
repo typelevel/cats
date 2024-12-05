@@ -33,8 +33,7 @@ import scala.util.Try
 
 trait QueueInstances extends cats.kernel.instances.QueueInstances {
 
-  implicit val catsStdInstancesForQueue
-    : Traverse[Queue] with Alternative[Queue] with Monad[Queue] with CoflatMap[Queue] =
+  implicit val catsStdInstancesForQueue: Traverse[Queue] & Alternative[Queue] & Monad[Queue] & CoflatMap[Queue] =
     new Traverse[Queue] with Alternative[Queue] with Monad[Queue] with CoflatMap[Queue] {
       def empty[A]: Queue[A] = Queue.empty
 
@@ -223,7 +222,7 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
 @suppressUnusedImportWarningForScalaVersionSpecific
 private object QueueInstances {
   private val catsStdTraverseFilterForQueue: TraverseFilter[Queue] = new TraverseFilter[Queue] {
-    val traverse: Traverse[Queue] with Alternative[Queue] = cats.instances.queue.catsStdInstancesForQueue
+    val traverse: Traverse[Queue] & Alternative[Queue] = cats.instances.queue.catsStdInstancesForQueue
 
     override def mapFilter[A, B](fa: Queue[A])(f: (A) => Option[B]): Queue[B] =
       fa.collect(Function.unlift(f))

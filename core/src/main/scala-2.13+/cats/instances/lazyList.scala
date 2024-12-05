@@ -34,7 +34,7 @@ import scala.annotation.tailrec
 trait LazyListInstances extends cats.kernel.instances.LazyListInstances {
 
   implicit val catsStdInstancesForLazyList
-    : Traverse[LazyList] with Alternative[LazyList] with Monad[LazyList] with CoflatMap[LazyList] with Align[LazyList] =
+    : Traverse[LazyList] & Alternative[LazyList] & Monad[LazyList] & CoflatMap[LazyList] & Align[LazyList] =
     new Traverse[LazyList]
       with Alternative[LazyList]
       with Monad[LazyList]

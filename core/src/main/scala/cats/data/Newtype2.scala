@@ -30,5 +30,5 @@ package data
 private[data] trait Newtype2 { self =>
   private[data] type Base
   private[data] trait Tag extends Any
-  type Type[A, +B] <: Base with Tag
+  type Type[A, +B] <: Base & Tag
 }

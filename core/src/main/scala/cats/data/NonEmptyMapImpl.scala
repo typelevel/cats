@@ -296,7 +296,7 @@ sealed class NonEmptyMapOps[K, A](private[data] val value: NonEmptyMap[K, A]) {
 sealed abstract private[data] class NonEmptyMapInstances extends NonEmptyMapInstances0 {
 
   implicit def catsDataInstancesForNonEmptyMap[K]
-    : SemigroupK[NonEmptyMap[K, *]] with NonEmptyTraverse[NonEmptyMap[K, *]] with Align[NonEmptyMap[K, *]] =
+    : SemigroupK[NonEmptyMap[K, *]] & NonEmptyTraverse[NonEmptyMap[K, *]] & Align[NonEmptyMap[K, *]] =
     new SemigroupK[NonEmptyMap[K, *]] with NonEmptyTraverse[NonEmptyMap[K, *]] with Align[NonEmptyMap[K, *]] {
 
       override def map[A, B](fa: NonEmptyMap[K, A])(f: A => B): NonEmptyMap[K, B] =
@@ -354,7 +354,7 @@ sealed abstract private[data] class NonEmptyMapInstances extends NonEmptyMapInst
   @deprecated("Use catsDataInstancesForNonEmptyMap override without Order", "2.2.0-M3")
   def catsDataInstancesForNonEmptyMap[K](
     orderK: Order[K]
-  ): SemigroupK[NonEmptyMap[K, *]] with NonEmptyTraverse[NonEmptyMap[K, *]] with Align[NonEmptyMap[K, *]] =
+  ): SemigroupK[NonEmptyMap[K, *]] & NonEmptyTraverse[NonEmptyMap[K, *]] & Align[NonEmptyMap[K, *]] =
     catsDataInstancesForNonEmptyMap[K]
 
   implicit def catsDataHashForNonEmptyMap[K: Hash, A: Hash]: Hash[NonEmptyMap[K, A]] =

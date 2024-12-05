@@ -36,7 +36,7 @@ trait MapInstances extends cats.kernel.instances.MapInstances {
       .map { case (a, b) => showA.show(a) + " -> " + showB.show(b) }
       .mkString("Map(", ", ", ")")
 
-  implicit def catsStdInstancesForMap[K]: UnorderedTraverse[Map[K, *]] with FlatMap[Map[K, *]] with Align[Map[K, *]] =
+  implicit def catsStdInstancesForMap[K]: UnorderedTraverse[Map[K, *]] & FlatMap[Map[K, *]] & Align[Map[K, *]] =
     new UnorderedTraverse[Map[K, *]] with FlatMap[Map[K, *]] with Align[Map[K, *]] {
 
       def unorderedTraverse[G[_], A, B](

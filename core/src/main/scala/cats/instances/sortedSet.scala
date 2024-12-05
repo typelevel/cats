@@ -28,7 +28,7 @@ import scala.annotation.tailrec
 
 trait SortedSetInstances extends SortedSetInstances1 {
 
-  implicit val catsStdInstancesForSortedSet: Foldable[SortedSet] with SemigroupK[SortedSet] =
+  implicit val catsStdInstancesForSortedSet: Foldable[SortedSet] & SemigroupK[SortedSet] =
     new Foldable[SortedSet] with SemigroupK[SortedSet] {
 
       def combineK[A](x: SortedSet[A], y: SortedSet[A]): SortedSet[A] = x | y

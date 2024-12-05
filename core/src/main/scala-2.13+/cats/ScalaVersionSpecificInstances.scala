@@ -67,13 +67,13 @@ private[cats] trait ScalaVersionSpecificParallelInstances {
 
 private[cats] trait ScalaVersionSpecificInvariantInstances {
   @deprecated("Use catsInstancesForLazyList", "3.0.0")
-  implicit def catsInstancesForStream: Monad[Stream] with Alternative[Stream] with CoflatMap[Stream] =
+  implicit def catsInstancesForStream: Monad[Stream] & Alternative[Stream] & CoflatMap[Stream] =
     cats.instances.stream.catsStdInstancesForStream
 
-  implicit def catsInstancesForLazyList: Monad[LazyList] with Alternative[LazyList] with CoflatMap[LazyList] =
+  implicit def catsInstancesForLazyList: Monad[LazyList] & Alternative[LazyList] & CoflatMap[LazyList] =
     cats.instances.lazyList.catsStdInstancesForLazyList
 
-  implicit def catsInstancesForArraySeq: Monad[ArraySeq] with Alternative[ArraySeq] with CoflatMap[ArraySeq] =
+  implicit def catsInstancesForArraySeq: Monad[ArraySeq] & Alternative[ArraySeq] & CoflatMap[ArraySeq] =
     cats.instances.arraySeq.catsStdInstancesForArraySeq
 }
 

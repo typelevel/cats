@@ -124,8 +124,7 @@ trait Invariant[F[_]] extends Serializable { self =>
 
 @suppressUnusedImportWarningForScalaVersionSpecific
 object Invariant extends ScalaVersionSpecificInvariantInstances with InvariantInstances0 {
-  implicit def catsInstancesForId
-    : Distributive[Id] with Bimonad[Id] with CommutativeMonad[Id] with NonEmptyTraverse[Id] =
+  implicit def catsInstancesForId: Distributive[Id] & Bimonad[Id] & CommutativeMonad[Id] & NonEmptyTraverse[Id] =
     cats.catsInstancesForId
   @deprecated("Added for bincompat", "2.8.0")
   @targetName3("catsInstancesForId")
@@ -134,13 +133,13 @@ object Invariant extends ScalaVersionSpecificInvariantInstances with InvariantIn
   implicit def catsMonadErrorForEither[A]: MonadError[Either[A, *], A] =
     cats.instances.either.catsStdInstancesForEither[A]
   implicit def catsInstancesForOption
-    : MonadError[Option, Unit] with Alternative[Option] with CoflatMap[Option] with CommutativeMonad[Option] =
+    : MonadError[Option, Unit] & Alternative[Option] & CoflatMap[Option] & CommutativeMonad[Option] =
     cats.instances.option.catsStdInstancesForOption
-  implicit def catsInstancesForList: Monad[List] with Alternative[List] with CoflatMap[List] =
+  implicit def catsInstancesForList: Monad[List] & Alternative[List] & CoflatMap[List] =
     cats.instances.list.catsStdInstancesForList
-  implicit def catsInstancesForVector: Monad[Vector] with Alternative[Vector] with CoflatMap[Vector] =
+  implicit def catsInstancesForVector: Monad[Vector] & Alternative[Vector] & CoflatMap[Vector] =
     cats.instances.vector.catsStdInstancesForVector
-  implicit def catsInstancesForQueue: Monad[Queue] with Alternative[Queue] with CoflatMap[Queue] =
+  implicit def catsInstancesForQueue: Monad[Queue] & Alternative[Queue] & CoflatMap[Queue] =
     cats.instances.queue.catsStdInstancesForQueue
   implicit def catsMonadForTailRec: Monad[TailRec] = cats.instances.tailRec.catsInstancesForTailRec
 
@@ -152,7 +151,7 @@ object Invariant extends ScalaVersionSpecificInvariantInstances with InvariantIn
     cats.instances.function.catsStdContravariantMonoidalForFunction1[R]
   implicit def catsFunctorForPair: Functor[λ[P => (P, P)]] = cats.instances.tuple.catsDataFunctorForPair
 
-  implicit def catsInstancesForTry: MonadThrow[Try] with CoflatMap[Try] =
+  implicit def catsInstancesForTry: MonadThrow[Try] & CoflatMap[Try] =
     cats.instances.try_.catsStdInstancesForTry
 
   /**
@@ -166,7 +165,7 @@ object Invariant extends ScalaVersionSpecificInvariantInstances with InvariantIn
    */
   implicit def catsInstancesForFuture(implicit
     ec: ExecutionContext
-  ): MonadThrow[Future] with CoflatMap[Future] =
+  ): MonadThrow[Future] & CoflatMap[Future] =
     cats.instances.future.catsStdInstancesForFuture(ec)
 
   implicit def catsContravariantMonoidalForOrder: ContravariantMonoidal[Order] =
@@ -339,7 +338,7 @@ private trait InvariantInstances1 extends InvariantInstances2 {
 private[cats] trait InvariantInstances2 extends cats.instances.NTupleMonadInstances with TupleInstances0 {
   implicit def catsApplicativeForArrow[F[_, _], A](implicit F: Arrow[F]): Applicative[F[A, *]] =
     new ArrowApplicative[F, A](F)
-  implicit def catsInstancesForSeq: Monad[Seq] with Alternative[Seq] with CoflatMap[Seq] =
+  implicit def catsInstancesForSeq: Monad[Seq] & Alternative[Seq] & CoflatMap[Seq] =
     cats.instances.seq.catsStdInstancesForSeq
 }
 
