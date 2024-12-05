@@ -54,10 +54,10 @@ trait ReducibleLaws[F[_]] extends FoldableLaws[F] {
     fa.reduce <-> fa.reduceLeft(B.combine)
 
   def traverseConsistent[G[_]: Applicative, A, B](fa: F[A], f: A => G[B]): IsEq[G[Unit]] =
-    fa.nonEmptyTraverse_(f) <-> fa.traverse_(f)
+    fa.nonEmptyTraverseVoid(f) <-> fa.traverseVoid(f)
 
   def sequenceConsistent[G[_]: Applicative, A](fa: F[G[A]]): IsEq[G[Unit]] =
-    fa.nonEmptySequence_ <-> fa.sequence_
+    fa.nonEmptySequenceVoid <-> fa.sequenceVoid
 
   def sizeConsistent[A](fa: F[A]): IsEq[Long] =
     fa.size <-> fa.reduceMap(_ => 1L)
