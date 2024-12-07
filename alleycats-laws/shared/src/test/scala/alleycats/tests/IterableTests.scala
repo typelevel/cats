@@ -21,9 +21,9 @@
 
 package alleycats.tests
 
-import alleycats.std.all._
+import alleycats.std.all.*
 import cats.{Eval, Foldable}
-import cats.instances.all._
+import cats.instances.all.*
 import cats.laws.discipline.{TraverseFilterTests, TraverseTests}
 
 class IterableTests extends AlleycatsSuite {

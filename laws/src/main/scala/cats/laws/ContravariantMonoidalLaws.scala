@@ -23,8 +23,8 @@ package cats
 package laws
 
 import cats.ContravariantMonoidal
-import cats.syntax.contravariant._
-import cats.syntax.contravariantSemigroupal._
+import cats.syntax.contravariant.*
+import cats.syntax.contravariantSemigroupal.*
 
 /**
  * Laws that must hold for any `cats.ContravariantMonoidal`.

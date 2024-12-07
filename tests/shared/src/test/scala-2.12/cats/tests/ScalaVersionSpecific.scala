@@ -23,8 +23,8 @@ package cats.tests
 
 import cats.kernel.{Eq, Order}
 import cats.laws.discipline.{ExhaustiveCheck, MiniInt}
-import cats.laws.discipline.MiniInt._
-import cats.laws.discipline.eq._
+import cats.laws.discipline.MiniInt.*
+import cats.laws.discipline.eq.*
 
 trait ScalaVersionSpecificFoldableSuite
 trait ScalaVersionSpecificParallelSuite

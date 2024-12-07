@@ -22,8 +22,8 @@
 package cats
 package laws
 
-import cats.syntax.all._
-import cats.kernel.compat.scalaVersionSpecific._
+import cats.syntax.all.*
+import cats.kernel.compat.scalaVersionSpecific.*
 
 trait AlternativeLaws[F[_]] extends NonEmptyAlternativeLaws[F] with MonoidKLaws[F] {
   implicit override def F: Alternative[F]

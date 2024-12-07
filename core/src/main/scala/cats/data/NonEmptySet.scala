@@ -22,11 +22,11 @@
 package cats
 package data
 
-import cats.kernel._
+import cats.kernel.*
 
-import scala.collection.immutable._
+import scala.collection.immutable.*
 
-import kernel.compat.scalaVersionSpecific._
+import kernel.compat.scalaVersionSpecific.*
 
 /**
  * Actual implementation for [[cats.data.NonEmptySet]]

@@ -21,14 +21,14 @@
 
 package cats.tests
 
-import cats._
+import cats.*
 import cats.data.{Ior, IorT}
 import cats.kernel.{Eq, Monoid, Order, Semigroup}
 import cats.kernel.laws.discipline.{EqTests, MonoidTests, SemigroupTests}
-import cats.laws.discipline._
-import cats.laws.discipline.arbitrary._
-import cats.syntax.eq._
-import org.scalacheck.Prop._
+import cats.laws.discipline.*
+import cats.laws.discipline.arbitrary.*
+import cats.syntax.eq.*
+import org.scalacheck.Prop.*
 import cats.kernel.laws.discipline.OrderTests
 
 class IorTSuite extends CatsSuite {

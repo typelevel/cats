@@ -22,7 +22,7 @@
 package cats
 package laws
 
-import cats.syntax.functor._
+import cats.syntax.functor.*
 
 /**
  * Laws that must be obeyed by any `Functor`.

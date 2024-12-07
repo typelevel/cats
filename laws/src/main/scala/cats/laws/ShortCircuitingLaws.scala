@@ -23,11 +23,11 @@ package cats.laws
 
 import java.util.concurrent.atomic.AtomicLong
 
-import cats.instances.option._
-import cats.syntax.foldable._
-import cats.syntax.traverse._
-import cats.syntax.nonEmptyTraverse._
-import cats.syntax.traverseFilter._
+import cats.instances.option.*
+import cats.syntax.foldable.*
+import cats.syntax.traverse.*
+import cats.syntax.nonEmptyTraverse.*
+import cats.syntax.traverseFilter.*
 import cats.{Applicative, Foldable, MonoidK, NonEmptyTraverse, Traverse, TraverseFilter}
 
 trait ShortCircuitingLaws[F[_]] {

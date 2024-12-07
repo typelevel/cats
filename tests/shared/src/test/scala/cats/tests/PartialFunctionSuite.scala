@@ -22,8 +22,8 @@
 package cats.tests
 import cats.arrow.{ArrowChoice, CommutativeArrow}
 import cats.kernel.laws.discipline.SerializableTests
-import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.eq._
+import cats.laws.discipline.arbitrary.*
+import cats.laws.discipline.eq.*
 import cats.laws.discipline.{ArrowChoiceTests, CommutativeArrowTests, MiniInt}
 
 class PartialFunctionSuite extends CatsSuite {

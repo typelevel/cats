@@ -23,7 +23,7 @@ package cats.kernel
 
 import java.lang.Double.isNaN
 import scala.{specialized => sp}
-import compat.scalaVersionSpecific._
+import compat.scalaVersionSpecific.*
 
 /**
  * The `PartialOrder` type class is used to define a partial ordering on some type `A`.

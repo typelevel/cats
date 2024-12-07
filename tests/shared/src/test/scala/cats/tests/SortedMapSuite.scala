@@ -35,10 +35,10 @@ import cats.laws.discipline.{
   TraverseTests
 }
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import cats.laws.discipline.arbitrary._
-import cats.syntax.show._
-import cats.syntax.eq._
-import org.scalacheck.Prop._
+import cats.laws.discipline.arbitrary.*
+import cats.syntax.show.*
+import cats.syntax.eq.*
+import org.scalacheck.Prop.*
 
 import scala.collection.immutable.SortedMap
 

@@ -23,8 +23,8 @@ package cats
 package laws
 
 import cats.arrow.CommutativeArrow
-import cats.syntax.compose._
-import cats.syntax.strong._
+import cats.syntax.compose.*
+import cats.syntax.strong.*
 
 /**
  * Reference: "Causal Commutative Arrows", Journal of Functional Programming

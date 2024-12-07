@@ -22,7 +22,7 @@
 package alleycats
 package std
 
-import alleycats.compat.scalaVersionSpecific._
+import alleycats.compat.scalaVersionSpecific.*
 import cats.{Alternative, Always, Applicative, Eval, Foldable, Monad, Monoid, Traverse, TraverseFilter}
 
 import scala.annotation.tailrec

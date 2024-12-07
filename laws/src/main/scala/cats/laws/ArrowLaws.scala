@@ -23,10 +23,10 @@ package cats
 package laws
 
 import cats.arrow.Arrow
-import cats.instances.function._
-import cats.syntax.arrow._
-import cats.syntax.compose._
-import cats.syntax.strong._
+import cats.instances.function.*
+import cats.syntax.arrow.*
+import cats.syntax.compose.*
+import cats.syntax.strong.*
 
 /**
  * Laws that must be obeyed by any `cats.arrow.Arrow`.

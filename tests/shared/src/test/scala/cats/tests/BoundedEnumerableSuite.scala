@@ -22,7 +22,7 @@
 package cats.tests
 
 import cats.kernel.BoundedEnumerable
-import cats.syntax.eq._
+import cats.syntax.eq.*
 
 class BoundedEnumerableSuite extends CatsSuite {
 

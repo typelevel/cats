@@ -24,7 +24,7 @@ package cats.laws.discipline
 import cats.{Bifunctor, Eq}
 import cats.laws.BifunctorLaws
 import org.scalacheck.Arbitrary
-import org.scalacheck.Prop._
+import org.scalacheck.Prop.*
 import org.typelevel.discipline.Laws
 
 trait BifunctorTests[F[_, _]] extends Laws {

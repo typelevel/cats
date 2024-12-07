@@ -36,17 +36,17 @@ import cats.data.{EitherT, Ior, NonEmptyChain, NonEmptyList, Validated, Validate
 import cats.data.Validated.{Invalid, Valid}
 import cats.kernel.{Eq, Order, PartialOrder, Semigroup}
 import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
-import cats.laws.discipline._
+import cats.laws.discipline.*
 import cats.laws.discipline.SemigroupKTests
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import cats.laws.discipline.arbitrary._
-import cats.syntax.apply._
-import cats.syntax.either._
-import cats.syntax.validated._
-import org.scalacheck.Arbitrary._
+import cats.laws.discipline.arbitrary.*
+import cats.syntax.apply.*
+import cats.syntax.either.*
+import cats.syntax.validated.*
+import org.scalacheck.Arbitrary.*
 import scala.util.Try
-import cats.syntax.eq._
-import org.scalacheck.Prop._
+import cats.syntax.eq.*
+import org.scalacheck.Prop.*
 
 class ValidatedSuite extends CatsSuite {
   implicit val iso: Isomorphisms[Validated[String, *]] = Isomorphisms.invariant[Validated[String, *]]

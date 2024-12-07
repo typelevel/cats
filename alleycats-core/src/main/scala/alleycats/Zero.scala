@@ -22,7 +22,7 @@
 package alleycats
 
 import cats.Eq
-import cats.syntax.eq._
+import cats.syntax.eq.*
 
 trait Zero[A] extends Serializable {
   def zero: A

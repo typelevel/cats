@@ -23,7 +23,7 @@ package cats
 package data
 
 import scala.collection.immutable.Seq
-import kernel.compat.scalaVersionSpecific._
+import kernel.compat.scalaVersionSpecific.*
 
 class ZipSeq[A](val value: Seq[A]) extends AnyVal
 

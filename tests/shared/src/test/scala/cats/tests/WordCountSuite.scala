@@ -23,7 +23,7 @@ package cats.tests
 
 import cats.data.{AppFunc, Const}
 import cats.data.Func.appFunc
-import cats.syntax.eq._
+import cats.syntax.eq.*
 
 /*
  * This an example of applicative function composition.

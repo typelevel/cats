@@ -24,9 +24,9 @@ package cats.tests
 import cats.{Contravariant, Invariant}
 import cats.kernel.Hash
 import cats.laws.discipline.{DeferTests, MiniInt}
-import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.eq._
-import cats.syntax.hash._
+import cats.laws.discipline.arbitrary.*
+import cats.laws.discipline.eq.*
+import cats.syntax.hash.*
 
 class HashSuite extends CatsSuite {
 

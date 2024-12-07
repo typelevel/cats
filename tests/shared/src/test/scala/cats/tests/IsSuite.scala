@@ -21,7 +21,7 @@
 
 package cats.tests
 
-import cats.arrow._
+import cats.arrow.*
 import cats.evidence.{Is, Leibniz}
 import cats.kernel.Eq
 import cats.kernel.laws.discipline.SerializableTests

@@ -23,7 +23,7 @@ package cats
 package laws
 
 import cats.ContravariantSemigroupal
-import cats.syntax.contravariantSemigroupal._
+import cats.syntax.contravariantSemigroupal.*
 
 /**
  * Laws that are expected for any `cats.ContravariantSemigroupal`.

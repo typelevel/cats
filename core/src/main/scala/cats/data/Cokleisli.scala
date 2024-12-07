@@ -22,7 +22,7 @@
 package cats
 package data
 
-import cats.arrow._
+import cats.arrow.*
 import cats.{CoflatMap, Comonad, Contravariant, Functor, Monad}
 
 import scala.annotation.tailrec

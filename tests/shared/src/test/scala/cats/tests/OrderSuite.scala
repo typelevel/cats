@@ -25,11 +25,11 @@ import cats.{Contravariant, ContravariantMonoidal, Invariant}
 import cats.kernel.{Order, PartialOrder}
 import cats.kernel.laws.discipline.{OrderTests, SerializableTests}
 import cats.laws.discipline.{ContravariantMonoidalTests, DeferTests, MiniInt}
-import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.eq._
+import cats.laws.discipline.arbitrary.*
+import cats.laws.discipline.eq.*
 import cats.tests.Helpers.Ord
-import cats.syntax.all._
-import org.scalacheck.Prop._
+import cats.syntax.all.*
+import org.scalacheck.Prop.*
 
 class OrderSuite extends CatsSuite {
   {

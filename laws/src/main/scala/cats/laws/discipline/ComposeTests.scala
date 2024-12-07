@@ -26,7 +26,7 @@ package discipline
 import cats.arrow.Compose
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop
-import Prop._
+import Prop.*
 import org.typelevel.discipline.Laws
 
 trait ComposeTests[F[_, _]] extends Laws {

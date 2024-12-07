@@ -21,14 +21,14 @@
 
 package cats.tests
 
-import cats._
-import cats.data._
-import cats.instances.order._
-import cats.kernel.compat.scalaVersionSpecific._
-import cats.laws.discipline.arbitrary._
-import cats.syntax.all._
+import cats.*
+import cats.data.*
+import cats.instances.order.*
+import cats.kernel.compat.scalaVersionSpecific.*
+import cats.laws.discipline.arbitrary.*
+import cats.syntax.all.*
 import org.scalacheck.Arbitrary
-import org.scalacheck.Prop._
+import org.scalacheck.Prop.*
 
 import scala.collection.immutable.SortedMap
 import scala.collection.immutable.SortedSet

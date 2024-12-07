@@ -24,18 +24,18 @@ package cats.free
 import cats.{~>, Applicative, Apply, Id}
 import cats.arrow.FunctionK
 import cats.data.State
-import cats.instances.all._
+import cats.instances.all.*
 import cats.kernel.Eq
 import cats.laws.discipline.{ApplicativeTests, SerializableTests}
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import cats.syntax.apply._
-import cats.syntax.eq._
-import org.scalacheck.Prop._
+import cats.syntax.apply.*
+import cats.syntax.eq.*
+import org.scalacheck.Prop.*
 import cats.tests.CatsSuite
 import org.scalacheck.{Arbitrary, Gen}
 
 class FreeApplicativeSuite extends CatsSuite {
-  import FreeApplicativeSuite._
+  import FreeApplicativeSuite.*
 
   implicit val iso: Isomorphisms[FreeApplicative[Option, *]] = Isomorphisms.invariant[FreeApplicative[Option, *]]
 

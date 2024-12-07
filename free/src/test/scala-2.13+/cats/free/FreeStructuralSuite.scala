@@ -23,7 +23,7 @@ package cats.free
 
 import cats.{Applicative, Eq, Eval, Functor, Show, Traverse}
 import cats.kernel.laws.discipline.{EqTests, HashTests, PartialOrderTests}
-import cats.syntax.all._
+import cats.syntax.all.*
 import cats.tests.CatsSuite
 
 import org.scalacheck.{Arbitrary, Cogen, Gen}
@@ -31,7 +31,7 @@ import org.scalacheck.{Arbitrary, Cogen, Gen}
 // this functionality doesn't exist on Scala 2.12
 class FreeStructuralSuite extends CatsSuite {
   import FreeSuite.freeArbitrary
-  import FreeStructuralSuite._
+  import FreeStructuralSuite.*
 
   implicit def freeCogen[S[_]: Functor, A](implicit S: => Cogen[S[Free[S, A]]], A: Cogen[A]): Cogen[Free[S, A]] =
     Cogen { (seed, f) =>

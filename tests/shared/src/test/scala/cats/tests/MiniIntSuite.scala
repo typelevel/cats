@@ -22,13 +22,13 @@
 package cats.tests
 
 import cats.kernel.{BoundedSemilattice, CommutativeGroup, CommutativeMonoid, Hash, Order}
-import cats.kernel.laws.discipline._
+import cats.kernel.laws.discipline.*
 import cats.laws.discipline.MiniInt
-import cats.laws.discipline.MiniInt._
-import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.MiniInt.*
+import cats.laws.discipline.arbitrary.*
 import org.scalacheck.Gen
-import cats.syntax.eq._
-import org.scalacheck.Prop._
+import cats.syntax.eq.*
+import org.scalacheck.Prop.*
 
 class MiniIntSuite extends CatsSuite {
   checkAll("MiniInt", OrderTests[MiniInt].order)

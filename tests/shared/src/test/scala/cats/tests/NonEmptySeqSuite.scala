@@ -21,13 +21,13 @@
 
 package cats.tests
 
-import cats._
+import cats.*
 import cats.data.NonEmptySeq
 import cats.kernel.laws.discipline.SemigroupTests
-import cats.laws.discipline._
-import cats.laws.discipline.arbitrary._
-import cats.syntax.all._
-import org.scalacheck.Prop._
+import cats.laws.discipline.*
+import cats.laws.discipline.arbitrary.*
+import cats.syntax.all.*
+import org.scalacheck.Prop.*
 
 import scala.collection.immutable.Seq
 

@@ -23,7 +23,7 @@ package cats
 package laws
 
 import cats.Invariant
-import cats.syntax.invariant._
+import cats.syntax.invariant.*
 
 /**
  * Laws that must be obeyed by any `cats.Invariant`.

@@ -23,7 +23,7 @@ package cats
 package data
 
 import cats.data.NonEmptySeq.ZipNonEmptySeq
-import cats.kernel.compat.scalaVersionSpecific._
+import cats.kernel.compat.scalaVersionSpecific.*
 
 import scala.annotation.tailrec
 import scala.collection.mutable

@@ -22,11 +22,11 @@
 package cats
 package syntax
 
-import cats.data._
+import cats.data.*
 
 import scala.reflect.ClassTag
 import scala.util.{Failure, Success, Try}
-import EitherSyntax._
+import EitherSyntax.*
 
 trait EitherSyntax {
   implicit final def catsSyntaxEither[A, B](eab: Either[A, B]): EitherOps[A, B] = new EitherOps(eab)

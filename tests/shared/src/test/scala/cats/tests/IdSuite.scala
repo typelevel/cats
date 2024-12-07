@@ -21,12 +21,12 @@
 
 package cats.tests
 
-import cats.laws.discipline._
-import cats.laws.discipline.arbitrary._
-import cats.syntax.applicative._
-import cats.syntax.eq._
+import cats.laws.discipline.*
+import cats.laws.discipline.arbitrary.*
+import cats.syntax.applicative.*
+import cats.syntax.eq.*
 import cats.{Bimonad, CommutativeMonad, Id, Reducible, Semigroupal, Traverse}
-import org.scalacheck.Prop._
+import org.scalacheck.Prop.*
 import cats.Align
 
 class IdSuite extends CatsSuite {

@@ -117,7 +117,7 @@ class SortedMapHash[K, V](implicit V: Hash[V], K: Hash[K]) extends SortedMapEq[K
 
   // adapted from [[scala.util.hashing.MurmurHash3]],
   // but modified standard `Any#hashCode` to `ev.hash`.
-  import scala.util.hashing.MurmurHash3._
+  import scala.util.hashing.MurmurHash3.*
   def hash(x: SortedMap[K, V]): Int = {
     var a, b, n = 0
     var c = 1

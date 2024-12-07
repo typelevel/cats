@@ -24,7 +24,7 @@ package laws
 package discipline
 
 import org.scalacheck.{Arbitrary, Prop}
-import Prop._
+import Prop.*
 import org.typelevel.discipline.Laws
 
 trait DeferTests[F[_]] extends Laws {

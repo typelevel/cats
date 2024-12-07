@@ -57,7 +57,7 @@ private[arrow] object FunctionKMacros {
     c.Expr[FunctionK[F, G]](new Lifter[c.type](c).lift[F, G](f.tree))
 
   private class Lifter[C <: blackbox.Context](val c: C) {
-    import c.universe._
+    import c.universe.*
 
     def lift[F[_], G[_]](tree: Tree)(implicit evF: c.WeakTypeTag[F[Any]], evG: c.WeakTypeTag[G[Any]]): Tree = {
       def liftFunction(function: Tree): Tree =

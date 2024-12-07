@@ -21,7 +21,7 @@
 
 package cats.bench
 
-import org.openjdk.jmh.annotations._
+import org.openjdk.jmh.annotations.*
 import cats.{CommutativeApplicative, Eval, UnorderedTraverse}
 import java.util.concurrent.TimeUnit
 import cats.data.Chain

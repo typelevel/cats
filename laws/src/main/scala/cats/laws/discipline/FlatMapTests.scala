@@ -23,11 +23,11 @@ package cats
 package laws
 package discipline
 
-import cats.instances.eq._
+import cats.instances.eq.*
 
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import org.scalacheck.{Arbitrary, Cogen, Prop}
-import Prop._
+import Prop.*
 
 trait FlatMapTests[F[_]] extends ApplyTests[F] {
   def laws: FlatMapLaws[F]
